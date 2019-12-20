@@ -269,6 +269,11 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             const newApprover = {
                 id: 234,
                 text: 'bcd',
+                item: {
+                    id: 234,
+                    name: 'bcd',
+                    type: 'user',
+                },
             };
             const expectedNewApprover = {
                 id: '',
@@ -513,6 +518,11 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             const newApprover = {
                 id: 456,
                 text: 'bcd',
+                item: {
+                    id: 456,
+                    name: 'bcd',
+                    type: 'user',
+                },
             };
             const dueDate = new Date('2019-04-12');
 

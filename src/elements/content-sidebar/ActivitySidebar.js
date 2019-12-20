@@ -37,7 +37,7 @@ import type {
 import type { FocusableFeedItemType, FeedItems } from '../../common/types/feed';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
-import type { SelectorItems, User, BoxItem, BoxItemPermission } from '../../common/types/core';
+import type { SelectorItems, User, UserMini, GroupMini, BoxItem, BoxItemPermission } from '../../common/types/core';
 import type { GetProfileUrlCallback } from '../common/flowTypes';
 import type { Translations, Collaborators, Errors } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
@@ -73,11 +73,11 @@ type Props = {
 
 type State = {
     activityFeedError?: Errors,
-    approverSelectorContacts: SelectorItems,
+    approverSelectorContacts: SelectorItems<UserMini | GroupMini>,
     currentUser?: User,
     currentUserError?: Errors,
     feedItems?: FeedItems,
-    mentionSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems<UserMini>,
 };
 
 export const activityFeedInlineError: Errors = {
@@ -165,7 +165,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     createTask = (
         message: string,
-        assignees: SelectorItems,
+        assignees: SelectorItems<>,
         taskType: TaskType,
         dueAt: ?string,
         completionRule: TaskCompletionRule,
@@ -443,7 +443,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {BoxItemCollection} collaborators - Collaborators response data
      * @return {void}
      */
-    getApproverContactsSuccessCallback = (collaborators: Collaborators): void => {
+    getApproverContactsSuccessCallback = (collaborators: { entries: SelectorItems<> }): void => {
         const { entries } = collaborators;
         this.setState({ approverSelectorContacts: entries });
     };
@@ -455,7 +455,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {BoxItemCollection} collaborators - Collaborators response data
      * @return {void}
      */
-    getMentionContactsSuccessCallback = (collaborators: Collaborators): void => {
+    getMentionContactsSuccessCallback = (collaborators: { entries: SelectorItems<> }): void => {
         const { entries } = collaborators;
         this.setState({ mentionSelectorContacts: entries });
     };
@@ -468,7 +468,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     getApproverWithQuery = debounce(
-        this.getCollaborators.bind(this, this.getApproverContactsSuccessCallback, this.errorCallback),
+        (searchStr: string) =>
+            this.getCollaborators(this.getApproverContactsSuccessCallback, this.errorCallback, searchStr, {
+                includeGroups: isFeatureEnabled(this.props.features, 'activityFeed.tasks.assignToGroup'),
+            }),
         DEFAULT_COLLAB_DEBOUNCE,
     );
 
@@ -480,7 +483,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     getMentionWithQuery = debounce(
-        this.getCollaborators.bind(this, this.getMentionContactsSuccessCallback, this.errorCallback),
+        (searchStr: string) =>
+            this.getCollaborators(this.getMentionContactsSuccessCallback, this.errorCallback, searchStr),
         DEFAULT_COLLAB_DEBOUNCE,
     );
 
@@ -490,9 +494,16 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
      * @param {string} searchStr - the search string
+     * @param {Object} [options]
+     * @param {boolean} [options.includeGroups] - return groups as well as users
      * @return {void}
      */
-    getCollaborators(successCallback: Function, errorCallback: ElementsErrorCallback, searchStr: string): void {
+    getCollaborators(
+        successCallback: Collaborators => void,
+        errorCallback: ElementsErrorCallback,
+        searchStr: string,
+        { includeGroups = false }: { includeGroups: boolean } = {},
+    ): void {
         // Do not fetch without filter
         const { file, api } = this.props;
         if (!searchStr || searchStr.trim() === '') {
@@ -501,6 +512,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         api.getFileCollaboratorsAPI(true).getFileCollaborators(file.id, successCallback, errorCallback, {
             filter_term: searchStr,
+            include_groups: includeGroups,
         });
     }
 

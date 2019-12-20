@@ -43,6 +43,8 @@ import type { ElementsXhrError, ErrorResponseData, APIOptions } from '../common/
 import type {
     SelectorItems,
     SelectorItem,
+    UserMini,
+    GroupMini,
     BoxItem,
     BoxItemPermission,
     BoxItemVersion,
@@ -403,8 +405,7 @@ class Feed extends Base {
         try {
             await Promise.all(
                 task.addedAssignees.map(assignee =>
-                    // $FlowFixMe
-                    assignee.type === 'group'
+                    assignee.item && assignee.item.type === 'group'
                         ? this.createTaskCollaboratorsforGroup(file, task, assignee)
                         : this.createTaskCollaborator(file, task, assignee),
                 ),
@@ -529,7 +530,7 @@ class Feed extends Base {
         file: BoxItem,
         currentUser: User,
         message: string,
-        assignees: SelectorItems,
+        assignees: SelectorItems<>,
         taskType: TaskType,
         dueAt: ?string,
         completionRule: TaskCompletionRule,
@@ -565,7 +566,7 @@ class Feed extends Base {
             description: message,
             type: TASK,
             assigned_to: {
-                entries: assignees.map((assignee: SelectorItem) => ({
+                entries: assignees.map((assignee: SelectorItem<UserMini | GroupMini>) => ({
                     id: uniqueId(),
                     target: { ...assignee, avatar_url: '', type: 'user' },
                     status: TASK_NEW_INITIAL_STATUS,
@@ -643,7 +644,7 @@ class Feed extends Base {
         file: BoxItem,
         id: string,
         task: Task,
-        assignees: SelectorItems,
+        assignees: SelectorItems<UserMini | GroupMini>,
         successCallback: Function,
         errorCallback: ErrorCallback,
     ) {
@@ -663,9 +664,10 @@ class Feed extends Base {
             -use result of filter to process each group sequentially */
             const taskAssignments: Array<TaskCollabAssignee> = flatten<TaskCollabAssignee, TaskCollabAssignee>(
                 await Promise.all(
-                    assignees.map((assignee: SelectorItem): Promise<Array<TaskCollabAssignee> | TaskCollabAssignee> =>
-                        // $FlowFixMe
-                        assignee.type === 'group'
+                    assignees.map((assignee: SelectorItem<UserMini | GroupMini>): Promise<
+                        Array<TaskCollabAssignee> | TaskCollabAssignee,
+                    > =>
+                        assignee.item && assignee.item.type === 'group'
                             ? this.createTaskCollaboratorsforGroup(file, task, assignee)
                             : this.createTaskCollaborator(file, task, assignee),
                     ),
@@ -706,7 +708,7 @@ class Feed extends Base {
     createTaskCollaboratorsforGroup(
         file: BoxItem,
         task: Task | TaskUpdatePayload,
-        assignee: SelectorItem,
+        assignee: SelectorItem<UserMini | GroupMini>,
     ): Promise<Array<TaskCollabAssignee>> {
         if (!file.id) {
             throw getBadItemError();
@@ -741,7 +743,7 @@ class Feed extends Base {
     createTaskCollaborator(
         file: BoxItem,
         task: Task | TaskUpdatePayload,
-        assignee: SelectorItem,
+        assignee: SelectorItem<UserMini | GroupMini>,
     ): Promise<TaskCollabAssignee> {
         if (!file.id) {
             throw getBadItemError();

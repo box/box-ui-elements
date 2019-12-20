@@ -1,6 +1,6 @@
 // @flow
 import type { MessageDescriptor } from 'react-intl';
-import type { SelectorItem } from '../../common/types/core';
+import type { SelectorItem, UserMini, GroupMini } from '../../common/types/core';
 
 type ClassificationInfo = {
     definition?: string,
@@ -24,7 +24,7 @@ type Translations = {
 };
 
 type Collaborators = {
-    entries: Array<SelectorItem>,
+    entries: Array<SelectorItem<UserMini | GroupMini>>,
     next_marker: ?string,
 };
 

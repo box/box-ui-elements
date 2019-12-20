@@ -79,6 +79,11 @@ const messages = defineMessages({
             'Selecting this option will require only one assignee to complete this task. This will include assignees across all groups.',
         description: 'Text in tooltip explaining completion rule for an any assignee task (with optional groups).',
     },
+    taskCreateGroupLabel: {
+        id: 'be.contentSidebar.activityFeed.taskForm.taskCreateGroupLabel',
+        description: 'Subheading for dropdown where user can select assignees and the item is a group',
+        defaultMessage: 'Group',
+    },
 });
 
 export default messages;

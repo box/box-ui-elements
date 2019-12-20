@@ -41,6 +41,7 @@ describe('api/FileCollaborators', () => {
                         item: {
                             id: 123,
                             name: 'Kanye West',
+                            login: 'foo@bar.com',
                             email: 'foo@bar.com',
                         },
                     },

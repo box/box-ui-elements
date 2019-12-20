@@ -591,6 +591,7 @@ describe('api/Feed', () => {
                             id: '3086276240',
                             name: 'Test User',
                             login: 'testuser@foo.com',
+                            type: 'user',
                         },
                     },
                     {
@@ -602,6 +603,7 @@ describe('api/Feed', () => {
                             id: '89321113453',
                             name: 'Test Group',
                             login: null,
+                            type: 'group',
                         },
                     },
                 ],
