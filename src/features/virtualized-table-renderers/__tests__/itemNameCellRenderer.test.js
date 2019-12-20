@@ -14,9 +14,11 @@ describe('features/virtualized-table-renderers/itemNameCellRenderer', () => {
     beforeEach(() => {
         cellRendererParams = {
             cellData: {
-                id: '123',
                 name: 'fancy.jpg',
                 type: 'file',
+                dataAttributes: {
+                    'data-resin-target': 'file',
+                },
             },
         };
         intl = {
@@ -38,8 +40,14 @@ describe('features/virtualized-table-renderers/itemNameCellRenderer', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render a span when type is file', () => {
+    test('should render correct data and a span when type is file', () => {
         wrapper = getWrapper(cellRendererParams);
+
+        const content = wrapper.find('.bdl-ItemNameCell-name');
+
+        expect(content.text()).toBe('fancy.jpg');
+        expect(content.props()['data-resin-target']).toBe('file');
+
         expect(wrapper.find(PlainButton)).toHaveLength(0);
         expect(wrapper.find('span')).toHaveLength(2);
     });

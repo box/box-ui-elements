@@ -16,7 +16,7 @@ const itemNameCellRenderer = (intl: IntlShape, onClick?: Function = noop) => (
     cellRendererParams: ItemNameCellRendererParams,
 ) =>
     baseCellRenderer(cellRendererParams, (cellValue: ItemNameCellRendererCellData) => {
-        const { name, type, isExternal } = cellValue;
+        const { name, type, isExternal, dataAttributes } = cellValue;
         const extension = getFileExtension(name);
         const displayName = isExternal ? intl.formatMessage(messages.externalFile) : name;
         const isFolder = type === 'folder';
@@ -30,14 +30,21 @@ const itemNameCellRenderer = (intl: IntlShape, onClick?: Function = noop) => (
                 {isFolder ? (
                     <>
                         <FolderIcon dimension={32} isExternal={isExternal} />
-                        <PlainButton className={itemNameCellClass} onClick={() => onClick(cellValue)} type="button">
+                        <PlainButton
+                            className={itemNameCellClass}
+                            onClick={() => onClick(cellValue)}
+                            type="button"
+                            {...dataAttributes}
+                        >
                             {displayName}
                         </PlainButton>
                     </>
                 ) : (
                     <>
                         <FileIcon dimension={32} extension={extension} />
-                        <span className={itemNameCellClass}>{displayName}</span>
+                        <span className={itemNameCellClass} {...dataAttributes}>
+                            {displayName}
+                        </span>
                     </>
                 )}
             </span>
