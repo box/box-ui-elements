@@ -122,7 +122,42 @@ jest.mock('../tasks/TasksNew', () => {
 jest.mock('../tasks/TaskCollaborators', () =>
     jest.fn().mockImplementation(() => ({
         createTaskCollaborator: jest.fn().mockImplementation(({ successCallback }) => {
-            successCallback();
+            successCallback([
+                {
+                    type: 'task_collaborator',
+                    id: '1',
+                    status: 'NOT_STARTED',
+                    role: 'ASSIGNEE',
+                    target: {
+                        type: 'user',
+                        id: '00000001',
+                        name: 'Box One',
+                        login: 'boxOne@box.com',
+                    },
+                    permissions: {
+                        can_update: true,
+                        can_delete: true,
+                    },
+                },
+            ]);
+        }),
+        createTaskCollaboratorsforGroup: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback({
+                type: 'task_collaborator',
+                id: '2',
+                status: 'NOT_STARTED',
+                role: 'ASSIGNEE',
+                target: {
+                    type: 'user',
+                    id: '00000002',
+                    name: 'Box two',
+                    login: 'boxTwo@box.com',
+                },
+                permissions: {
+                    can_update: true,
+                    can_delete: true,
+                },
+            });
         }),
         updateTaskCollaborator: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
@@ -534,6 +569,58 @@ describe('api/Feed', () => {
         });
     });
 
+    describe('createTaskNewSuccessCallback()', () => {
+        beforeEach(() => {
+            feed.updateFeedItem = jest.fn();
+        });
+
+        test('should flatten result of group assignments into task collaborators', async () => {
+            const mockSuccessCallback = jest.fn();
+
+            const task = {
+                id: '1',
+                description: 'updated description',
+                assignees: [
+                    {
+                        id: '3086276240',
+                        name: 'Test User',
+                        login: 'testuser@foo.com',
+                        item: {
+                            type: 'user',
+                            id: '3086276240',
+                            name: 'Test User',
+                            login: 'testuser@foo.com',
+                        },
+                    },
+                    {
+                        id: '89321113453',
+                        name: 'Test Group',
+                        login: null,
+                        item: {
+                            type: 'group',
+                            id: '89321113453',
+                            name: 'Test Group',
+                            login: null,
+                        },
+                    },
+                ],
+            };
+
+            feed.createTaskNewSuccessCallback(file, 'kj', task, task.assignees, mockSuccessCallback, jest.fn());
+
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(feed.taskCollaboratorsAPI.pop().createTaskCollaboratorsforGroup).toBeCalled();
+            expect(feed.updateFeedItem).toBeCalled();
+            expect(mockSuccessCallback).toBeCalledWith(
+                expect.objectContaining({
+                    assignees: expect.arrayContaining([expect.objectContaining({ id: '89321113453' })]),
+                }),
+            );
+            /* TODO: add mock implementation for createTaskCollaboratorsforGroup and check that result is flattened */
+        });
+    });
+
     describe('updateTaskNew()', () => {
         beforeEach(() => {
             feed.updateFeedItem = jest.fn();
@@ -543,6 +630,36 @@ describe('api/Feed', () => {
             expect.assertions(1);
             const updatedTask = feed.updateTaskNew({});
             await expect(updatedTask).rejects.toEqual(Error(fileError));
+        });
+
+        test.skip('should flatten result of group assignments into task collaborators', async () => {
+            const successCallback = jest.fn();
+            const task = {
+                id: '1',
+                description: 'updated description',
+                addedAssignees: [
+                    {
+                        type: 'user',
+                        id: '3086276240',
+                        name: 'Test User',
+                        login: 'testuser@foo.com',
+                    },
+                    {
+                        type: 'group',
+                        id: '89321113453',
+                        name: 'Test Group',
+                        login: null,
+                    },
+                ],
+                removedAssignees: [],
+            };
+
+            feed.updateTaskNew(file, task, successCallback, jest.fn());
+
+            await new Promise(r => setTimeout(r, 0));
+            expect(feed.taskCollaboratorsAPI.createTaskCollaboratorsForGroup).toBeCalled();
+            expect(feed.updateFeedItem).toBeCalled();
+            expect(successCallback).toBeCalled();
         });
 
         test('should call the error handling when unable to create new task collaborator', async () => {

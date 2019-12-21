@@ -5,6 +5,7 @@
  */
 import uniqueId from 'lodash/uniqueId';
 import noop from 'lodash/noop';
+import flatten from 'lodash/flatten';
 import type { MessageDescriptor } from 'react-intl';
 import { getBadItemError, getBadUserError, isUserCorrectableError } from '../utils/error';
 import commonMessages from '../elements/common/messages';
@@ -401,6 +402,7 @@ class Feed extends Base {
 
         try {
             await Promise.all(task.addedAssignees.map(assignee => this.createTaskCollaborator(file, task, assignee)));
+
             await new Promise((resolve, reject) => {
                 this.tasksNewAPI.updateTask({
                     file,
@@ -645,10 +647,15 @@ class Feed extends Base {
 
         try {
             const taskLink = await this.createTaskLink(file, task);
-            const taskAssignments: Array<TaskCollabAssignee> = await Promise.all(
-                assignees.map((assignee: SelectorItem) => {
-                    return this.createTaskCollaborator(file, task, assignee);
-                }),
+            const taskAssignments: Array<TaskCollabAssignee> = flatten<TaskCollabAssignee, TaskCollabAssignee>(
+                await Promise.all(
+                    assignees.map((assignee: SelectorItem): Promise<Array<TaskCollabAssignee> | TaskCollabAssignee> => {
+                        if (assignee.item.type === 'group') {
+                            return this.createTaskCollaboratorsforGroup(file, task, assignee);
+                        }
+                        return this.createTaskCollaborator(file, task, assignee);
+                    }),
+                ),
             );
 
             this.updateFeedItem(
@@ -672,6 +679,41 @@ class Feed extends Base {
         } catch (err) {
             this.feedErrorCallback(false, err, ERROR_CODE_CREATE_TASK);
         }
+    }
+
+    /**
+     * Creates a task group via the API.
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {Task|TaskUpdatePayload} task - The newly created or existing task from the API
+     * @param {SelectorItem} assignee - The user assigned to this task
+     * @param {Function} errorCallback - Task create error callback
+     * @return {Promise<TaskAssignment>}
+     */
+    createTaskCollaboratorsforGroup(
+        file: BoxItem,
+        task: Task | TaskUpdatePayload,
+        assignee: SelectorItem,
+    ): Promise<Array<TaskCollabAssignee>> {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        return new Promise((resolve, reject) => {
+            const taskCollaboratorsAPI = new TaskCollaboratorsAPI(this.options);
+            this.taskCollaboratorsAPI.push(taskCollaboratorsAPI);
+
+            taskCollaboratorsAPI.createTaskCollaboratorsforGroup({
+                file,
+                task,
+                group: assignee,
+                successCallback: resolve,
+                errorCallback: (e: ElementsXhrError) => {
+                    reject(e);
+                },
+            });
+        });
     }
 
     /**
