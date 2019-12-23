@@ -57,6 +57,9 @@ type RowClickParams = {
 };
 
 type ItemNameCellRendererCellData = {
+    dataAttributes?: {
+        [string]: string,
+    },
     id?: string,
     isExternal?: boolean,
     name: string,

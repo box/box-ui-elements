@@ -11,6 +11,7 @@ exports[`features/virtualized-table-renderers/itemNameCellRenderer should render
   />
   <span
     className="bdl-ItemNameCell-name"
+    data-resin-target="file"
   >
     fancy.jpg
   </span>
