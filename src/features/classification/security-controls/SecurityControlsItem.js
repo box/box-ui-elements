@@ -6,7 +6,11 @@ import type { MessageDescriptor } from 'react-intl';
 
 import Tooltip from '../../../components/tooltip';
 import IconInfo from '../../../icons/general/IconInfo';
-import { bdlBoxBlue } from '../../../styles/variables';
+import { bdlBoxBlue, bdlYellorange } from '../../../styles/variables';
+// import { Modal, ModalActions } from '../../../components/modal';
+
+import IconSecurityClassification from '../../../icons/general/IconSecurityClassification';
+// import messages from './messages';
 
 import './SecurityControlsItem.scss';
 
@@ -30,6 +34,13 @@ const SecurityControlsItem = ({ message, tooltipItems }: Props) => {
 
     return (
         <li className="bdl-SecurityControlsItem">
+            <IconSecurityClassification
+                color={bdlYellorange}
+                height={11}
+                width={11}
+                strokeWidth={3}
+                className="reverse"
+            />
             <FormattedMessage {...message} />
             {isTooltipEnabled && (
                 <Tooltip className="bdl-SecurityControlsItem-tooltip" text={tooltipContent} position="middle-left">

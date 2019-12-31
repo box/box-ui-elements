@@ -23,4 +23,17 @@ describe('icons/general/IconSecurityClassification', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should correctly render icon with className specified as reverse ', () => {
+        const wrapper = getWrapper({
+            className: 'reverse',
+            color: '#987654',
+            height: 100,
+            strokeWidth: 1,
+            title: 'title',
+            width: 200,
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
 });
