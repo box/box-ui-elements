@@ -4,6 +4,17 @@ import * as React from 'react';
 import AccessibleSVG from '../../icons/accessible-svg';
 import type { Icon } from '../../icons/flowTypes';
 
+/**
+ * This is an auto-generated component and should not be edited
+ * manually in contributor pull requests.
+ *
+ * If you have problems with this component:
+ * - https://github.com/box/box-ui-elements/issues/new?template=Bug_report.md
+ *
+ * If there are missing features in this component:
+ * - https://github.com/box/box-ui-elements/issues/new?template=Feature_request.md
+ */
+
 const FileText32 = (props: Icon) => (
     <AccessibleSVG width={32} height={32} viewBox="0 0 32 32" {...props}>
         <g fill="none" fillRule="evenodd">
