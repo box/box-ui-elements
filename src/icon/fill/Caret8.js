@@ -5,6 +5,17 @@ import * as vars from '../../styles/variables';
 import AccessibleSVG from '../../icons/accessible-svg';
 import type { Icon } from '../../icons/flowTypes';
 
+/**
+ * This is an auto-generated component and should not be edited
+ * manually in contributor pull requests.
+ *
+ * If you have problems with this component:
+ * - https://github.com/box/box-ui-elements/issues/new?template=Bug_report.md
+ *
+ * If there are missing features in this component:
+ * - https://github.com/box/box-ui-elements/issues/new?template=Feature_request.md
+ */
+
 const Caret8 = (props: Icon) => (
     <AccessibleSVG width={8} height={8} viewBox="0 0 8 8" {...props}>
         <path
