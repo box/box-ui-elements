@@ -1,6 +1,7 @@
 // @flow
 /* eslint-disable react/jsx-sort-props */
 import * as React from 'react';
+import * as vars from '../../styles/variables';
 import AccessibleSVG from '../../icons/accessible-svg';
 import type { Icon } from '../../icons/flowTypes';
 
@@ -20,7 +21,7 @@ const FolderPersonal32 = (props: Icon) => (
         <g fill="none" fillRule="evenodd">
             <path fill="gold" d="M6 6h6c2 0 1.5 2 4 2h10a3 3 0 013 3v13a3 3 0 01-3 3H6a3 3 0 01-3-3V9a3 3 0 013-3z" />
             <path
-                fill="#FFF"
+                fill={vars.white}
                 fillOpacity={0.5}
                 d="M6 11h20a3 3 0 013 3v10a3 3 0 01-3 3H6a3 3 0 01-3-3V14a3 3 0 013-3z"
             />
