@@ -1,13 +1,14 @@
 // @flow
 /* eslint-disable react/jsx-sort-props */
 import * as React from 'react';
+import * as vars from '../../styles/variables';
 import AccessibleSVG from '../../icons/accessible-svg';
 import type { Icon } from '../../icons/flowTypes';
 
 const FileDefault16 = (props: Icon) => (
     <AccessibleSVG width={16} height={16} viewBox="0 0 16 16" {...props}>
         <path
-            fill="#909090"
+            fill={vars.bdlGray50}
             d="M4.15 1h5.272c.146 0 .286.057.389.158l3.528 3.454a.533.533 0 01.161.38v8.393c0 .892-.74 1.615-1.65 1.615h-7.7c-.911 0-1.65-.723-1.65-1.615V2.615C2.5 1.723 3.239 1 4.15 1z"
         />
     </AccessibleSVG>
