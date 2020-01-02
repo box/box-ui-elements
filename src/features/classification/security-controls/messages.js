@@ -187,6 +187,33 @@ const messages = defineMessages({
             'Bullet point that summarizes desktop download restrictions applied to classification, when restriction applies to external users. Box Drive is a product name and not translated',
         id: 'boxui.securityControls.downloadExternal',
     },
+    // Security Constrols Modal
+    viewAll: {
+        defaultMessage: 'View All',
+        description: 'Button to display security controls modal',
+        id: 'boxui.securityControls.viewAll',
+    },
+    modalTitle: {
+        defaultMessage: "View Classification for '{itemName}'",
+        description: 'Title for modal to display classification and security controls details',
+        id: 'boxui.securityControls.modalTitle',
+    },
+    modalDescription: {
+        defaultMessage:
+            'Classification labels defined by your administrator can be used to label content and apply security policies. {learnMoreLink}',
+        description: 'Description for modal to display classification and security controls details',
+        id: 'boxui.securityControls.modalDescription',
+    },
+    learnMoreLink: {
+        defaultMessage: 'Learn more.',
+        description: 'Text of the link that contains further information about security controls',
+        id: 'boxui.securityControls.learnMoreLink',
+    },
+    gotItButtonText: {
+        defaultMessage: 'Got It',
+        description: 'Text for button to confirm modal information',
+        id: 'boxui.securityControls.gotItButtonText',
+    },
 });
 
 export default messages;

@@ -4,12 +4,10 @@ const DEFAULT_MAX_APP_COUNT = 3;
 const SECURITY_CONTROLS_FORMAT: {
     FULL: 'full',
     SHORT: 'short',
-    SHORT_WITH_BTN: 'shortWithBtn', // will remove after eua release
-    SHORT_WITH_TOOLTIP: 'shortWithTooltip',
+    SHORT_WITH_BTN: 'shortWithBtn',
 } = {
     FULL: 'full',
     SHORT: 'short',
-    SHORT_WITH_TOOLTIP: 'shortWithTooltip', // will remove after eua release
     SHORT_WITH_BTN: 'shortWithBtn',
 };
 
@@ -67,8 +65,11 @@ const SHARED_LINK_ACCESS_LEVEL: {
     PUBLIC: 'public',
 };
 
+const CLASSIFICATION_COMMUNITY_URL = 'https://community.box.com/t5/Box-Community/ct-p/English';
+
 export {
     ACCESS_POLICY_RESTRICTION,
+    CLASSIFICATION_COMMUNITY_URL,
     DEFAULT_MAX_APP_COUNT,
     DOWNLOAD_CONTROL,
     LIST_ACCESS_LEVEL,

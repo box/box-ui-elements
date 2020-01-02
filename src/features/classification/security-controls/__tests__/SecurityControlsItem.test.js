@@ -6,8 +6,7 @@ describe('features/classification/security-controls/SecurityControlsItem', () =>
     let wrapper;
     let message;
 
-    const getWrapper = (props = {}) =>
-        shallow(<SecurityControlsItem message={message} tooltipItems={[]} tooltipPosition="middle-left" {...props} />);
+    const getWrapper = (props = {}) => shallow(<SecurityControlsItem message={message} {...props} />);
 
     beforeEach(() => {
         message = {
@@ -18,22 +17,6 @@ describe('features/classification/security-controls/SecurityControlsItem', () =>
     });
 
     test('should render a SecurityControlsItem with a message', () => {
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should render a SecurityControlsItem item with a message and a tooltip when tooltip items are provided', () => {
-        const tooltipItems = [
-            {
-                id: 'item1',
-                defaultMessage: 'item1',
-            },
-            {
-                id: 'item2',
-                defaultMessage: 'item2',
-            },
-        ];
-
-        wrapper.setProps({ tooltipItems });
         expect(wrapper).toMatchSnapshot();
     });
 });

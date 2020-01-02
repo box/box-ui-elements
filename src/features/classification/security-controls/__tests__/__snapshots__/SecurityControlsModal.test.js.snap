@@ -1,0 +1,102 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/classification/security-controls/SecurityControlsModal should render a SecurityControlsModal 1`] = `
+<Modal
+  className="bdl-SecurityControlsModal"
+  isOpen={false}
+  onRequestClose={[MockFunction]}
+  style={
+    Object {
+      "backdrop": Object {},
+      "dialog": Object {},
+    }
+  }
+  title={
+    <FormattedMessage
+      defaultMessage="View Classification for '{itemName}'"
+      id="boxui.securityControls.modalTitle"
+      values={
+        Object {
+          "itemName": "welcome.pdf",
+        }
+      }
+    />
+  }
+>
+  <p>
+    <FormattedMessage
+      defaultMessage="Classification labels defined by your administrator can be used to label content and apply security policies. {learnMoreLink}"
+      id="boxui.securityControls.modalDescription"
+      values={
+        Object {
+          "learnMoreLink": <Link
+            className=""
+            data-resin-target="communityUrl"
+            href="https://community.box.com/t5/Box-Community/ct-p/English"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <FormattedMessage
+              defaultMessage="Learn more."
+              id="boxui.securityControls.learnMoreLink"
+            />
+          </Link>,
+        }
+      }
+    />
+  </p>
+  <ClassifiedBadge
+    name="internal"
+  />
+  <Label
+    text={
+      <FormattedMessage
+        defaultMessage="Definition"
+        id="boxui.classification.definition"
+      />
+    }
+  >
+    <p
+      className="bdl-Classification-definition"
+    >
+      classification definition
+    </p>
+  </Label>
+  <ul
+    className="bdl-SecurityControls"
+  >
+    <SecurityControlsItem
+      key="0"
+      message={
+        Object {
+          "defaultMessage": "message1",
+          "id": "msg1",
+        }
+      }
+    />
+    <SecurityControlsItem
+      key="1"
+      message={
+        Object {
+          "defaultMessage": "message2",
+          "id": "msg2",
+        }
+      }
+    />
+  </ul>
+  <ModalActions>
+    <Button
+      className=""
+      isLoading={false}
+      onClick={[MockFunction]}
+      showRadar={false}
+      type="submit"
+    >
+      <FormattedMessage
+        defaultMessage="Got It"
+        id="boxui.securityControls.gotItButtonText"
+      />
+    </Button>
+  </ModalActions>
+</Modal>
+`;

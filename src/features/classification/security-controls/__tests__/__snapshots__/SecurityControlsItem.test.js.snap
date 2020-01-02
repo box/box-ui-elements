@@ -1,54 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/classification/security-controls/SecurityControlsItem should render a SecurityControlsItem item with a message and a tooltip when tooltip items are provided 1`] = `
-<li
-  className="bdl-SecurityControlsItem"
->
-  <FormattedMessage
-    defaultMessage="message"
-    id="msg1"
-  />
-  <Tooltip
-    className="bdl-SecurityControlsItem-tooltip"
-    constrainToScrollParent={false}
-    constrainToWindow={true}
-    isDisabled={false}
-    position="middle-left"
-    text={
-      <div
-        className="bdl-SecurityControlsItem-tooltipContent"
-      >
-        <FormattedMessage
-          defaultMessage="item1"
-          id="item1"
-          tagName="p"
-        />
-        <FormattedMessage
-          defaultMessage="item2"
-          id="item2"
-          tagName="p"
-        />
-      </div>
-    }
-    theme="default"
-  >
-    <span
-      className="bdl-SecurityControlsItem-tooltipIcon"
-    >
-      <IconInfo
-        color="#0061d5"
-        height={16}
-        width={16}
-      />
-    </span>
-  </Tooltip>
-</li>
-`;
-
 exports[`features/classification/security-controls/SecurityControlsItem should render a SecurityControlsItem with a message 1`] = `
 <li
   className="bdl-SecurityControlsItem"
 >
+  <IconSecurityClassification
+    className="reverse"
+    color="#f5b31b"
+    height={11}
+    strokeWidth={3}
+    width={11}
+  />
   <FormattedMessage
     defaultMessage="message"
     id="msg1"

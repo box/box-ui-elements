@@ -1,0 +1,33 @@
+@import '../../../styles/variables';
+@import './mixins.scss';
+
+.bdl-SecurityControlsModal {
+    .link {
+        color: $bdl-box-blue !important;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .label {
+        margin-top: 19px;
+    }
+
+    .bdl-SecurityControls,
+    .bdl-Classification-definition {
+        @include BackgroundlessScrollbar;
+
+        overflow-y: auto;
+        line-height: $bdl-line-height;
+    }
+
+    .bdl-Classification-definition {
+        max-height: $bdl-line-height * 3;
+    }
+
+    .bdl-SecurityControls {
+        max-height: $bdl-line-height * 7;
+    }
+}

@@ -1,0 +1,20 @@
+@import '../../../styles/variables';
+
+$scrollbar-width: 7px;
+
+@mixin BackgroundlessScrollbar {
+    // Currently only supported by Firefox.
+    // For Chrome/Safari we use the styles below
+    scrollbar-color: $bdl-gray-50 transparent;
+    scrollbar-width: $scrollbar-width;
+
+    &::-webkit-scrollbar {
+        width: $scrollbar-width;
+        -webkit-appearance: none; /* stylelint-disable-line property-no-vendor-prefix */
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $bdl-gray-50;
+        border-radius: $bdl-border-radius-size;
+    }
+}

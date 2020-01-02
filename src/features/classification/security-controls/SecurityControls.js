@@ -1,62 +1,102 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
+import { FormattedMessage } from 'react-intl';
 
 import type { Controls, ControlsFormat } from '../flowTypes';
 
 import SecurityControlsItem from './SecurityControlsItem';
 import { getShortSecurityControlsMessage, getFullSecurityControlsMessages } from './utils';
 import { DEFAULT_MAX_APP_COUNT, SECURITY_CONTROLS_FORMAT } from '../constants';
+import SecurityControlsModal from './SecurityControlsModal';
+import PlainButton from '../../../components/plain-button';
+import messages from './messages';
 
 import './SecurityControls.scss';
 
-// will remove SHORT_WITH_TOOLTIP after eua release
-const { FULL, SHORT, SHORT_WITH_TOOLTIP, SHORT_WITH_BTN } = SECURITY_CONTROLS_FORMAT;
+const { FULL, SHORT, SHORT_WITH_BTN } = SECURITY_CONTROLS_FORMAT;
 
 type Props = {
+    classificationName?: string,
     controls: Controls,
     controlsFormat: ControlsFormat,
-    maxAppCount: number,
+    definition?: string,
+    itemName?: string,
+    maxAppCount?: number,
 };
 
-const SecurityControls = ({ controls, controlsFormat, maxAppCount }: Props) => {
-    let items = [];
-    let tooltipItems;
+type State = {
+    isSecurityControlsModalOpen: boolean,
+};
 
-    if (controlsFormat === FULL) {
-        items = getFullSecurityControlsMessages(controls, maxAppCount);
-    } else {
-        const shortMessage = getShortSecurityControlsMessage(controls);
-        items = shortMessage ? [shortMessage] : [];
+class SecurityControls extends React.Component<Props, State> {
+    static defaultProps = {
+        classificationName: '',
+        controls: {},
+        controlsFormat: SHORT,
+        definition: '',
+        itemName: '',
+        maxAppCount: DEFAULT_MAX_APP_COUNT,
+    };
 
-        // will remove SHORT_WITH_TOOLTIP after eua release
-        if (items.length && (controlsFormat === SHORT_WITH_TOOLTIP || controlsFormat === SHORT_WITH_BTN)) {
-            tooltipItems = getFullSecurityControlsMessages(controls, maxAppCount);
+    state = {
+        isSecurityControlsModalOpen: false,
+    };
+
+    openModal = () => this.setState({ isSecurityControlsModalOpen: true });
+
+    closeModal = () => this.setState({ isSecurityControlsModalOpen: false });
+
+    render() {
+        const { classificationName, controls, controlsFormat, definition, itemName, maxAppCount } = this.props;
+        let items = [];
+        let modalItems;
+
+        if (controlsFormat === FULL) {
+            items = getFullSecurityControlsMessages(controls, maxAppCount);
+        } else {
+            const shortMessage = getShortSecurityControlsMessage(controls);
+            items = shortMessage ? [shortMessage] : [];
+
+            if (items.length && controlsFormat === SHORT_WITH_BTN) {
+                modalItems = getFullSecurityControlsMessages(controls, maxAppCount);
+            }
         }
+
+        if (!items.length) {
+            return null;
+        }
+
+        const className = classNames('bdl-SecurityControls', {
+            'bdl-SecurityControls--summarized': controlsFormat !== FULL,
+        });
+
+        return (
+            <>
+                <ul className={className}>
+                    {items.map((item, index) => (
+                        <SecurityControlsItem key={index} message={item} />
+                    ))}
+                </ul>
+                {controlsFormat === SHORT_WITH_BTN && (
+                    <>
+                        <PlainButton className="lnk" onClick={this.openModal}>
+                            <FormattedMessage {...messages.viewAll} />
+                        </PlainButton>
+                        <SecurityControlsModal
+                            classificationName={classificationName}
+                            closeModal={this.closeModal}
+                            definition={definition}
+                            itemName={itemName}
+                            isSecurityControlsModalOpen={this.state.isSecurityControlsModalOpen}
+                            modalItems={modalItems}
+                        />
+                    </>
+                )}
+            </>
+        );
     }
-
-    if (!items.length) {
-        return null;
-    }
-
-    const className = classNames('bdl-SecurityControls', {
-        'bdl-SecurityControls--summarized': controlsFormat !== FULL,
-    });
-
-    return (
-        <ul className={className}>
-            {items.map((item, index) => (
-                <SecurityControlsItem key={index} message={item} tooltipItems={tooltipItems} />
-            ))}
-        </ul>
-    );
-};
-
-SecurityControls.defaultProps = {
-    controls: {},
-    controlsFormat: SHORT,
-    maxAppCount: DEFAULT_MAX_APP_COUNT,
-};
+}
 
 export type { Props as SecurityControlsProps };
 export default SecurityControls;
