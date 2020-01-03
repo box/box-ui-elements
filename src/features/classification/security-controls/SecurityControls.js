@@ -10,7 +10,8 @@ import { DEFAULT_MAX_APP_COUNT, SECURITY_CONTROLS_FORMAT } from '../constants';
 
 import './SecurityControls.scss';
 
-const { FULL, SHORT, SHORT_WITH_TOOLTIP } = SECURITY_CONTROLS_FORMAT;
+// will remove SHORT_WITH_TOOLTIP after eua release
+const { FULL, SHORT, SHORT_WITH_TOOLTIP, SHORT_WITH_BTN } = SECURITY_CONTROLS_FORMAT;
 
 type Props = {
     controls: Controls,
@@ -28,7 +29,8 @@ const SecurityControls = ({ controls, controlsFormat, maxAppCount }: Props) => {
         const shortMessage = getShortSecurityControlsMessage(controls);
         items = shortMessage ? [shortMessage] : [];
 
-        if (items.length && controlsFormat === SHORT_WITH_TOOLTIP) {
+        // will remove SHORT_WITH_TOOLTIP after eua release
+        if (items.length && (controlsFormat === SHORT_WITH_TOOLTIP || controlsFormat === SHORT_WITH_BTN)) {
             tooltipItems = getFullSecurityControlsMessages(controls, maxAppCount);
         }
     }

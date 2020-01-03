@@ -50,6 +50,45 @@ exports[`features/classification/security-controls/SecurityControls should rende
 </ul>
 `;
 
+exports[`features/classification/security-controls/SecurityControls should render SecurityControls with single SecurityControlsItem and tooltip items when using SHORT_WITH_BTN controlsFormat 1`] = `
+<ul
+  className="bdl-SecurityControls bdl-SecurityControls--summarized"
+>
+  <SecurityControlsItem
+    key="0"
+    message={
+      Object {
+        "defaultMessage": "Sharing, download and app restrictions apply",
+        "id": "boxui.securityControls.shortAllRestrictions",
+      }
+    }
+    tooltipItems={
+      Array [
+        Object {
+          "defaultMessage": "Shared links allowed for collaborators only.",
+          "id": "boxui.securityControls.sharingCollabOnly",
+        },
+        Object {
+          "defaultMessage": "External collaboration limited to approved domains.",
+          "id": "boxui.securityControls.externalCollabDomainList",
+        },
+        Object {
+          "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners.",
+          "id": "boxui.securityControls.desktopDownloadOwners",
+        },
+        Object {
+          "defaultMessage": "Only select applications are allowed: {appNames}",
+          "id": "boxui.securityControls.appDownloadWhitelist",
+          "values": Object {
+            "appNames": "",
+          },
+        },
+      ]
+    }
+  />
+</ul>
+`;
+
 exports[`features/classification/security-controls/SecurityControls should render SecurityControls with single SecurityControlsItem and tooltip items when using SHORT_WITH_TOOLTIP controlsFormat 1`] = `
 <ul
   className="bdl-SecurityControls bdl-SecurityControls--summarized"
