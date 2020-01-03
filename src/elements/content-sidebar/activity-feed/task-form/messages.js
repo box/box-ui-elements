@@ -73,6 +73,12 @@ const messages = defineMessages({
             'By default, all assignees are required to take action before a task is complete. Selecting this option will require only one assignee to complete this task.',
         description: 'Text in tooltip explaining completion rule for an any assignee task.',
     },
+    taskAnyInfoGroupTooltip: {
+        id: 'be.contentSidebar.activityFeed.taskForm.taskAnyInfoGroupTooltip',
+        defaultMessage:
+            'Selecting this option will require only one assignee to complete this task. This will include assignees across all groups.',
+        description: 'Text in tooltip explaining completion rule for an any assignee task (with optional groups).',
+    },
 });
 
 export default messages;
