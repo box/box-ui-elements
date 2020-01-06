@@ -22,6 +22,7 @@ const defaultFeatures = {
     activityFeed: {
         tasks: {
             anyTask: true,
+            assignToGroup: false,
         },
     },
 };
@@ -439,36 +440,46 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             );
         });
 
-        test('should not show completion rule checkbox when feature is off', () => {
-            const approvers = new Array(3).fill().map(() => ({
-                id: '',
-                target: {
-                    id: 123 * Math.random(),
-                    name: 'abc',
-                    type: 'user',
-                },
-                role: 'ASSIGNEE',
-                type: 'task_collaborator',
-                status: 'NOT_STARTED',
-                permissions: { can_delete: false, can_update: false },
-            }));
-            const wrapper = renderWithFeatures(
-                {
-                    activityFeed: {
-                        tasks: {
-                            anyTask: true,
+        test.each`
+            anyTaskFeature | assignToGroupFeature | numCheckboxes | checkboxTestId
+            ${false}       | ${false}             | ${0}          | ${'task-form-completion-rule-checkbox'}
+            ${false}       | ${true}              | ${0}          | ${'task-form-completion-rule-checkbox-group'}
+            ${true}        | ${false}             | ${1}          | ${'task-form-completion-rule-checkbox'}
+            ${true}        | ${true}              | ${1}          | ${'task-form-completion-rule-checkbox-group'}
+        `(
+            'Given 3 approvers, $numCheckboxes checkboxes are shown when any task is $anyTaskFeature and assign to group is $assignToGroupFeature (using test id $checkboxTestId)',
+            ({ anyTaskFeature, assignToGroupFeature, numCheckboxes, checkboxTestId }) => {
+                const approvers = new Array(3).fill().map(() => ({
+                    id: '',
+                    target: {
+                        id: 123 * Math.random(),
+                        name: 'abc',
+                        type: 'user',
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                    status: 'NOT_STARTED',
+                    permissions: { can_delete: false, can_update: false },
+                }));
+                const wrapper = renderWithFeatures(
+                    {
+                        approvers,
+                    },
+                    {
+                        activityFeed: {
+                            tasks: {
+                                anyTask: anyTaskFeature,
+                                assignToGroup: assignToGroupFeature,
+                            },
                         },
                     },
-                },
-                {
-                    approvers,
-                },
-            );
-            const container = wrapper.render();
-            const checkbox = container.find('[data-testid="task-form-completion-rule-checkbox"]');
+                );
+                const container = wrapper.render();
+                const checkbox = container.find(`[data-testid="${checkboxTestId}"]`);
 
-            expect(checkbox.length).toBe(0);
-        });
+                expect(checkbox.length).toBe(numCheckboxes);
+            },
+        );
     });
 
     describe('addResinInfo()', () => {
