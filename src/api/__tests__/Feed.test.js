@@ -620,44 +620,6 @@ describe('api/Feed', () => {
             );
             /* TODO: add mock implementation for createTaskCollaboratorsforGroup and check that result is flattened */
         });
-
-        test('should fail to create groups when given invalid group data', async () => {
-            const mockSuccessCallback = jest.fn();
-
-            const task = {
-                id: '1',
-                description: 'updated description',
-                assignees: [
-                    {
-                        id: '3086276240',
-                        type: 'user',
-                        name: 'Test User',
-                        login: 'testuser@foo.com',
-                        item: {
-                            id: '3086276240',
-                            name: 'Test User',
-                            login: 'testuser@foo.com',
-                        },
-                    },
-                    {
-                        id: '89321113453',
-                        name: 'Test Group',
-                        login: null,
-                        type: 'grouppppp',
-                        item: {
-                            id: '89321113453',
-                            name: 'Test Group',
-                            login: null,
-                        },
-                    },
-                ],
-            };
-            feed.createTaskNewSuccessCallback(file, 'kj', task, task.assignees, mockSuccessCallback, jest.fn());
-
-            await new Promise(r => setTimeout(r, 0));
-
-            expect(feed.feedErrorCallback).toBeCalled();
-        });
     });
 
     describe('updateTaskNew()', () => {
@@ -784,6 +746,12 @@ describe('api/Feed', () => {
                 addedAssignees: [
                     {
                         type: 'user',
+                        id: '3086276240',
+                        name: 'Test User',
+                        login: 'testuser@foo.com',
+                    },
+                    {
+                        type: 'group',
                         id: '3086276240',
                         name: 'Test User',
                         login: 'testuser@foo.com',

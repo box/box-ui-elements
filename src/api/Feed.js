@@ -401,7 +401,13 @@ class Feed extends Base {
         this.updateFeedItem({ isPending: true }, task.id);
 
         try {
-            await Promise.all(task.addedAssignees.map(assignee => this.createTaskCollaborator(file, task, assignee)));
+            await Promise.all(
+                task.addedAssignees.map(assignee =>
+                    assignee.type === 'group'
+                        ? this.createTaskCollaboratorsforGroup(file, task, assignee)
+                        : this.createTaskCollaborator(file, task, assignee),
+                ),
+            );
 
             await new Promise((resolve, reject) => {
                 this.tasksNewAPI.updateTask({
@@ -657,17 +663,11 @@ class Feed extends Base {
 
             const taskAssignments: Array<TaskCollabAssignee> = flatten<TaskCollabAssignee, TaskCollabAssignee>(
                 await Promise.all(
-                    assignees.map((assignee: SelectorItem): Promise<Array<TaskCollabAssignee> | TaskCollabAssignee> => {
-                        // $FlowFixMe
-                        switch (assignee.type) {
-                            case 'group':
-                                return this.createTaskCollaboratorsforGroup(file, task, assignee);
-                            case 'user':
-                                return this.createTaskCollaborator(file, task, assignee);
-                            default:
-                                return Promise.reject(getBadUserError());
-                        }
-                    }),
+                    assignees.map((assignee: SelectorItem): Promise<Array<TaskCollabAssignee> | TaskCollabAssignee> =>
+                        assignee.type === 'group'
+                            ? this.createTaskCollaboratorsforGroup(file, task, assignee)
+                            : this.createTaskCollaborator(file, task, assignee),
+                    ),
                 ),
             );
             this.updateFeedItem(
