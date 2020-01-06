@@ -788,6 +788,12 @@ describe('api/Feed', () => {
                         name: 'Test User',
                         login: 'testuser@foo.com',
                     },
+                    {
+                        type: 'group',
+                        id: '3086276240',
+                        name: 'Test User',
+                        login: 'testuser@foo.com',
+                    },
                 ],
                 removedAssignees: [
                     {

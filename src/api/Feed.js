@@ -401,7 +401,13 @@ class Feed extends Base {
         this.updateFeedItem({ isPending: true }, task.id);
 
         try {
-            await Promise.all(task.addedAssignees.map(assignee => this.createTaskCollaborator(file, task, assignee)));
+            await Promise.all(
+                task.addedAssignees.map(assignee =>
+                    assignee.type === 'group'
+                        ? this.createTaskCollaboratorsforGroup(file, task, assignee)
+                        : this.createTaskCollaborator(file, task, assignee),
+                ),
+            );
 
             await new Promise((resolve, reject) => {
                 this.tasksNewAPI.updateTask({
@@ -654,7 +660,6 @@ class Feed extends Base {
             -use the result of filter to store the task collaborators in parallel
             -filter out the groups from assignees
             -use result of filter to process each group sequentially */
-
             const taskAssignments: Array<TaskCollabAssignee> = flatten<TaskCollabAssignee, TaskCollabAssignee>(
                 await Promise.all(
                     assignees.map((assignee: SelectorItem): Promise<Array<TaskCollabAssignee> | TaskCollabAssignee> => {
