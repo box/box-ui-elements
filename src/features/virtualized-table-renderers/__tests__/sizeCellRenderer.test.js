@@ -21,10 +21,10 @@ describe('features/virtualized-table-renderers/sizeCellRenderer', () => {
 
     test('should render a dash when cellData is missing', () => {
         cellRendererParams.cellData = null;
-        expect(sizeCellRenderer()(cellRendererParams)).toBe('—');
+        expect(sizeCellRenderer()(cellRendererParams)).toBe('--');
     });
 
-    test('should render a PrettyBytesCell', () => {
+    test('should render a sizeCell', () => {
         expect(sizeCellRenderer()(cellRendererParams)).toMatchSnapshot();
     });
 

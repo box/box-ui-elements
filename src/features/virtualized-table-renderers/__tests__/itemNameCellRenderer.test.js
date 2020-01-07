@@ -32,7 +32,7 @@ describe('features/virtualized-table-renderers/itemNameCellRenderer', () => {
 
     test('should render a dash when cellData is missing', () => {
         cellRendererParams.cellData = null;
-        expect(itemNameCellRenderer(intl)(cellRendererParams)).toBe('—');
+        expect(itemNameCellRenderer(intl)(cellRendererParams)).toBe('--');
     });
 
     test('should render a itemNameCell', () => {
