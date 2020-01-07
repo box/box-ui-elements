@@ -16,6 +16,6 @@ describe('features/virtualized-table-renderers/readableTimeCellRenderer', () => 
 
     test('should render a dash when cellData is missing', () => {
         cellRendererParams.cellData = null;
-        expect(readableTimeCellRenderer(cellRendererParams)).toBe('—');
+        expect(readableTimeCellRenderer(cellRendererParams)).toBe('--');
     });
 });
