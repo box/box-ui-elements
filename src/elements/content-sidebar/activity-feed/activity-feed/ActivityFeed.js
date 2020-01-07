@@ -67,12 +67,12 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
-        const { feedItems: prevFeedItems } = prevProps;
+        const { currentUser: prevCurrentUser, feedItems: prevFeedItems } = prevProps;
         const { feedItems: currFeedItems, activeFeedEntryId } = this.props;
         const { isInputOpen: prevIsInputOpen } = prevState;
         const { isInputOpen: currIsInputOpen } = this.state;
 
-        const hasLoaded = this.hasLoaded();
+        const hasLoaded = this.hasLoaded(prevCurrentUser, prevFeedItems);
         const hasMoreItems = prevFeedItems && currFeedItems && prevFeedItems.length < currFeedItems.length;
         const didLoadFeedItems = prevFeedItems === undefined && currFeedItems !== undefined;
         const hasInputOpened = currIsInputOpen !== prevIsInputOpen;
@@ -118,8 +118,16 @@ class ActivityFeed extends React.Component<Props, State> {
         return feedItems.length === 0 || (feedItems.length === 1 && feedItems[0].type === ItemTypes.fileVersion);
     };
 
-    hasLoaded = ({ currentUser, feedItems }: Props = this.props): boolean =>
-        currentUser !== undefined && feedItems !== undefined;
+    /**
+     * Determines whether currentUser and feedItems have loaded.
+     * @param prevCurrentUser - The previous value of the currentUser prop
+     * @param prevFeedItems - The previous value of the feedItems prop
+     * @returns {boolean}
+     */
+    hasLoaded = (prevCurrentUser?: User, prevFeedItems?: FeedItems): boolean => {
+        const { currentUser, feedItems } = this.props;
+        return currentUser !== undefined && feedItems !== undefined && (!prevCurrentUser || !prevFeedItems);
+    };
 
     /**
      * Scrolls the container to the bottom

@@ -391,15 +391,28 @@ class TaskForm extends React.Component<Props, State> {
 
                         {shouldShowCompletionRule && (
                             <FeatureFlag feature="activityFeed.tasks.anyTask">
-                                <Checkbox
-                                    data-testid="task-form-completion-rule-checkbox"
-                                    isChecked={isCompletionRuleCheckboxChecked}
-                                    isDisabled={isCompletionRuleCheckboxDisabled || isForbiddenErrorOnEdit}
-                                    label={<FormattedMessage {...messages.taskAnyCheckboxLabel} />}
-                                    tooltip={intl.formatMessage(messages.taskAnyInfoTooltip)}
-                                    name="completionRule"
-                                    onChange={this.handleCompletionRuleChange}
-                                />
+                                <FeatureFlag feature="activityFeed.tasks.assignToGroup">
+                                    <Checkbox
+                                        data-testid="task-form-completion-rule-checkbox-group"
+                                        isChecked={isCompletionRuleCheckboxChecked}
+                                        isDisabled={isCompletionRuleCheckboxDisabled || isForbiddenErrorOnEdit}
+                                        label={<FormattedMessage {...messages.taskAnyCheckboxLabel} />}
+                                        tooltip={intl.formatMessage(messages.taskAnyInfoGroupTooltip)}
+                                        name="completionRule"
+                                        onChange={this.handleCompletionRuleChange}
+                                    />
+                                </FeatureFlag>
+                                <FeatureFlag not feature="activityFeed.tasks.assignToGroup">
+                                    <Checkbox
+                                        data-testid="task-form-completion-rule-checkbox"
+                                        isChecked={isCompletionRuleCheckboxChecked}
+                                        isDisabled={isCompletionRuleCheckboxDisabled || isForbiddenErrorOnEdit}
+                                        label={<FormattedMessage {...messages.taskAnyCheckboxLabel} />}
+                                        tooltip={intl.formatMessage(messages.taskAnyInfoTooltip)}
+                                        name="completionRule"
+                                        onChange={this.handleCompletionRuleChange}
+                                    />
+                                </FeatureFlag>
                             </FeatureFlag>
                         )}
 
