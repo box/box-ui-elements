@@ -25,24 +25,8 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
 >
   <p>
     <FormattedMessage
-      defaultMessage="Classification labels defined by your administrator can be used to label content and apply security policies. {learnMoreLink}"
+      defaultMessage="Classification labels defined by your administrator can be used to label content and apply security policies."
       id="boxui.securityControls.modalDescription"
-      values={
-        Object {
-          "learnMoreLink": <Link
-            className=""
-            data-resin-target="communityUrl"
-            href="https://community.box.com/t5/Box-Community/ct-p/English"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <FormattedMessage
-              defaultMessage="Learn more."
-              id="boxui.securityControls.learnMoreLink"
-            />
-          </Link>,
-        }
-      }
     />
   </p>
   <ClassifiedBadge
@@ -57,16 +41,16 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
     }
   >
     <p
-      className="bdl-Classification-definition"
+      className="bdl-SecurityControlsModal-definition"
     >
       classification definition
     </p>
   </Label>
   <ul
-    className="bdl-SecurityControls"
+    className="bdl-SecurityControlsModal-controlsItemList"
   >
     <SecurityControlsItem
-      key="0"
+      key="msg1"
       message={
         Object {
           "defaultMessage": "message1",
@@ -75,7 +59,7 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
       }
     />
     <SecurityControlsItem
-      key="1"
+      key="msg2"
       message={
         Object {
           "defaultMessage": "message2",
@@ -90,11 +74,11 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
       isLoading={false}
       onClick={[MockFunction]}
       showRadar={false}
-      type="submit"
+      type="button"
     >
       <FormattedMessage
-        defaultMessage="Got It"
-        id="boxui.securityControls.gotItButtonText"
+        defaultMessage="Close"
+        id="boxui.core.close"
       />
     </Button>
   </ModalActions>

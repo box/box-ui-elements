@@ -3,7 +3,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 import AccessibleSVG from '../accessible-svg';
-import { bdlGray } from '../../styles/variables';
+import { bdlGray, white } from '../../styles/variables';
 
 type Props = {
     className?: string,
@@ -15,7 +15,7 @@ type Props = {
     width?: number,
 };
 
-const IconSecurityClassification = ({
+const IconSecurityClassificationSolid = ({
     className = '',
     height = 32,
     color = bdlGray,
@@ -23,7 +23,7 @@ const IconSecurityClassification = ({
     strokeWidth = 2,
     width = 32,
 }: Props) => {
-    const classes = classNames('bdl-IconSecurityClassification', className);
+    const classes = classNames('bdl-IconSecurityClassificationSolid', className);
 
     return (
         <AccessibleSVG className={classes} height={height} title={title} viewBox="0 0 32 32" width={width}>
@@ -31,11 +31,11 @@ const IconSecurityClassification = ({
                 d="M17,2 L5,8 L5,15 C5,21.4214876 10.6933333,29.5421488 17,31 C23.3066667,29.5421488 29,21.4214876 29,15 L29,8 L17,2 Z"
                 stroke={color}
                 strokeWidth={strokeWidth}
-                fill="none"
+                fill={color}
             />
             <path
                 d="M23,11 L23,19"
-                stroke={color}
+                stroke={white}
                 strokeWidth={strokeWidth}
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -45,4 +45,4 @@ const IconSecurityClassification = ({
     );
 };
 
-export default IconSecurityClassification;
+export default IconSecurityClassificationSolid;

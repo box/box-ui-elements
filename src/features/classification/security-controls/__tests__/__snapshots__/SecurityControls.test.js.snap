@@ -6,7 +6,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     className="bdl-SecurityControls"
   >
     <SecurityControlsItem
-      key="0"
+      key="boxui.securityControls.sharingCollabOnly"
       message={
         Object {
           "defaultMessage": "Shared links allowed for collaborators only.",
@@ -15,7 +15,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     />
     <SecurityControlsItem
-      key="1"
+      key="boxui.securityControls.externalCollabDomainList"
       message={
         Object {
           "defaultMessage": "External collaboration limited to approved domains.",
@@ -24,7 +24,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     />
     <SecurityControlsItem
-      key="2"
+      key="boxui.securityControls.desktopDownloadOwners"
       message={
         Object {
           "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners.",
@@ -33,7 +33,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     />
     <SecurityControlsItem
-      key="3"
+      key="boxui.securityControls.appDownloadWhitelist"
       message={
         Object {
           "defaultMessage": "Only select applications are allowed: {appNames}",
@@ -54,7 +54,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     className="bdl-SecurityControls bdl-SecurityControls--summarized"
   >
     <SecurityControlsItem
-      key="0"
+      key="boxui.securityControls.shortAllRestrictions"
       message={
         Object {
           "defaultMessage": "Sharing, download and app restrictions apply",
@@ -66,6 +66,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
   <PlainButton
     className="lnk"
     onClick={[Function]}
+    type="button"
   >
     <FormattedMessage
       defaultMessage="View All"
@@ -111,7 +112,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     className="bdl-SecurityControls bdl-SecurityControls--summarized"
   >
     <SecurityControlsItem
-      key="0"
+      key="boxui.securityControls.shortAllRestrictions"
       message={
         Object {
           "defaultMessage": "Sharing, download and app restrictions apply",

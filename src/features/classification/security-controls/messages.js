@@ -200,19 +200,9 @@ const messages = defineMessages({
     },
     modalDescription: {
         defaultMessage:
-            'Classification labels defined by your administrator can be used to label content and apply security policies. {learnMoreLink}',
+            'Classification labels defined by your administrator can be used to label content and apply security policies.',
         description: 'Description for modal to display classification and security controls details',
         id: 'boxui.securityControls.modalDescription',
-    },
-    learnMoreLink: {
-        defaultMessage: 'Learn more.',
-        description: 'Text of the link that contains further information about security controls',
-        id: 'boxui.securityControls.learnMoreLink',
-    },
-    gotItButtonText: {
-        defaultMessage: 'Got It',
-        description: 'Text for button to confirm modal information',
-        id: 'boxui.securityControls.gotItButtonText',
     },
 });
 

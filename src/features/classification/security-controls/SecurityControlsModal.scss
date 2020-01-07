@@ -1,5 +1,4 @@
 @import '../../../styles/variables';
-@import './mixins.scss';
 
 .bdl-SecurityControlsModal {
     .link {
@@ -14,20 +13,20 @@
     .label {
         margin-top: 19px;
     }
+}
 
-    .bdl-SecurityControls,
-    .bdl-Classification-definition {
-        @include BackgroundlessScrollbar;
+.bdl-SecurityControlsModal-controlsItemList,
+.bdl-SecurityControlsModal-definition {
+    overflow-y: auto;
+    line-height: $bdl-line-height;
+}
 
-        overflow-y: auto;
-        line-height: $bdl-line-height;
-    }
+.bdl-SecurityControlsModal-definition {
+    max-height: $bdl-line-height * 3;
+}
 
-    .bdl-Classification-definition {
-        max-height: $bdl-line-height * 3;
-    }
-
-    .bdl-SecurityControls {
-        max-height: $bdl-line-height * 7;
-    }
+.bdl-SecurityControlsModal-controlsItemList {
+    max-height: $bdl-line-height * 7;
+    margin: 0;
+    list-style: none;
 }

@@ -3,14 +3,13 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
-import type { Controls, ControlsFormat } from '../flowTypes';
-
-import SecurityControlsItem from './SecurityControlsItem';
-import { getShortSecurityControlsMessage, getFullSecurityControlsMessages } from './utils';
 import { DEFAULT_MAX_APP_COUNT, SECURITY_CONTROLS_FORMAT } from '../constants';
-import SecurityControlsModal from './SecurityControlsModal';
-import PlainButton from '../../../components/plain-button';
+import { getShortSecurityControlsMessage, getFullSecurityControlsMessages } from './utils';
 import messages from './messages';
+import PlainButton from '../../../components/plain-button';
+import SecurityControlsItem from './SecurityControlsItem';
+import SecurityControlsModal from './SecurityControlsModal';
+import type { Controls, ControlsFormat } from '../flowTypes';
 
 import './SecurityControls.scss';
 
@@ -31,11 +30,8 @@ type State = {
 
 class SecurityControls extends React.Component<Props, State> {
     static defaultProps = {
-        classificationName: '',
         controls: {},
         controlsFormat: SHORT,
-        definition: '',
-        itemName: '',
         maxAppCount: DEFAULT_MAX_APP_COUNT,
     };
 
@@ -74,13 +70,13 @@ class SecurityControls extends React.Component<Props, State> {
         return (
             <>
                 <ul className={className}>
-                    {items.map((item, index) => (
-                        <SecurityControlsItem key={index} message={item} />
+                    {items.map(item => (
+                        <SecurityControlsItem key={item.id} message={item} />
                     ))}
                 </ul>
                 {controlsFormat === SHORT_WITH_BTN && (
                     <>
-                        <PlainButton className="lnk" onClick={this.openModal}>
+                        <PlainButton className="lnk" onClick={this.openModal} type="button">
                             <FormattedMessage {...messages.viewAll} />
                         </PlainButton>
                         <SecurityControlsModal

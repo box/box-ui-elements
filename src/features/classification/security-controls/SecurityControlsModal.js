@@ -1,17 +1,15 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
-import type { MessageDescriptor } from 'react-intl';
+import { FormattedMessage, type MessageDescriptor } from 'react-intl';
 
 import { Modal, ModalActions } from '../../../components/modal';
+import commonMessages from '../../../common/messages';
 import Button from '../../../components/button';
+import classificationMessages from '../messages';
 import ClassifiedBadge from '../ClassifiedBadge';
 import Label from '../../../components/label/Label';
-import SecurityControlsItem from './SecurityControlsItem';
-import { CLASSIFICATION_COMMUNITY_URL } from '../constants';
-import { Link } from '../../../components/link';
 import messages from './messages';
-import classificationMessages from '../messages';
+import SecurityControlsItem from './SecurityControlsItem';
 import './SecurityControlsModal.scss';
 
 type Props = {
@@ -33,17 +31,6 @@ const SecurityControlsModal = ({
 }: Props) => {
     const title = <FormattedMessage {...messages.modalTitle} values={{ itemName }} />;
 
-    const learnMoreLink = (
-        <Link
-            data-resin-target="communityUrl"
-            href={CLASSIFICATION_COMMUNITY_URL}
-            rel="noopener noreferrer"
-            target="_blank"
-        >
-            <FormattedMessage {...messages.learnMoreLink} />
-        </Link>
-    );
-
     return (
         <Modal
             className="bdl-SecurityControlsModal"
@@ -52,20 +39,20 @@ const SecurityControlsModal = ({
             isOpen={isSecurityControlsModalOpen}
         >
             <p>
-                <FormattedMessage {...messages.modalDescription} values={{ learnMoreLink }} />
+                <FormattedMessage {...messages.modalDescription} />
             </p>
             <ClassifiedBadge name={((classificationName: any): string)} />
             <Label text={<FormattedMessage {...classificationMessages.definition} />}>
-                <p className="bdl-Classification-definition">{definition}</p>
+                <p className="bdl-SecurityControlsModal-definition">{definition}</p>
             </Label>
-            <ul className="bdl-SecurityControls">
-                {modalItems.map((item, index) => (
-                    <SecurityControlsItem key={index} message={item} />
+            <ul className="bdl-SecurityControlsModal-controlsItemList">
+                {modalItems.map(item => (
+                    <SecurityControlsItem key={item.id} message={item} />
                 ))}
             </ul>
             <ModalActions>
-                <Button onClick={closeModal}>
-                    <FormattedMessage {...messages.gotItButtonText} />
+                <Button onClick={closeModal} type="button">
+                    <FormattedMessage {...commonMessages.close} />
                 </Button>
             </ModalActions>
         </Modal>
@@ -73,11 +60,7 @@ const SecurityControlsModal = ({
 };
 
 SecurityControlsModal.defaultProps = {
-    closeModal: () => {},
-    definition: '',
-    classificationName: '',
     isSecurityControlsModalOpen: false,
-    itemName: '',
     modalItems: [],
 };
 

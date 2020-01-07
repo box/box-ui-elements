@@ -65,11 +65,8 @@ const SHARED_LINK_ACCESS_LEVEL: {
     PUBLIC: 'public',
 };
 
-const CLASSIFICATION_COMMUNITY_URL = 'https://community.box.com/t5/Box-Community/ct-p/English';
-
 export {
     ACCESS_POLICY_RESTRICTION,
-    CLASSIFICATION_COMMUNITY_URL,
     DEFAULT_MAX_APP_COUNT,
     DOWNLOAD_CONTROL,
     LIST_ACCESS_LEVEL,
