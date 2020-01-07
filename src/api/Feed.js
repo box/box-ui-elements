@@ -403,6 +403,7 @@ class Feed extends Base {
         try {
             await Promise.all(
                 task.addedAssignees.map(assignee =>
+                    // $FlowFixMe
                     assignee.type === 'group'
                         ? this.createTaskCollaboratorsforGroup(file, task, assignee)
                         : this.createTaskCollaborator(file, task, assignee),
@@ -660,10 +661,10 @@ class Feed extends Base {
             -use the result of filter to store the task collaborators in parallel
             -filter out the groups from assignees
             -use result of filter to process each group sequentially */
-
             const taskAssignments: Array<TaskCollabAssignee> = flatten<TaskCollabAssignee, TaskCollabAssignee>(
                 await Promise.all(
                     assignees.map((assignee: SelectorItem): Promise<Array<TaskCollabAssignee> | TaskCollabAssignee> =>
+                        // $FlowFixMe
                         assignee.type === 'group'
                             ? this.createTaskCollaboratorsforGroup(file, task, assignee)
                             : this.createTaskCollaborator(file, task, assignee),
