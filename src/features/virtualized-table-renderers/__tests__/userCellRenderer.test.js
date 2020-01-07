@@ -25,7 +25,7 @@ describe('features/virtualized-table-renderers/userCellRenderer', () => {
 
     test('should render a dash when cellData is missing', () => {
         cellRendererParams.cellData = null;
-        expect(userCellRenderer(intl)(cellRendererParams)).toBe('—');
+        expect(userCellRenderer(intl)(cellRendererParams)).toBe('--');
     });
 
     test('should fall back to login when email is not provided', () => {
