@@ -29,6 +29,10 @@ class TaskCollaborators extends TasksBase {
         return `${this.getBaseApiUrl()}/undoc/task_collaborators/${id}`;
     }
 
+    getUrlForTaskGroupCreate(): string {
+        return `${this.getBaseApiUrl()}/undoc/task_collaborators/expand_group`;
+    }
+
     createTaskCollaborator({
         errorCallback,
         file,
@@ -60,6 +64,43 @@ class TaskCollaborators extends TasksBase {
         this.post({
             id: file.id,
             url: this.getUrlForTaskCollaboratorCreate(),
+            data: { ...requestData },
+            successCallback,
+            errorCallback,
+        });
+    }
+
+    createTaskCollaboratorsforGroup({
+        errorCallback,
+        file,
+        successCallback,
+        task,
+        group,
+    }: {
+        errorCallback: ElementsErrorCallback,
+        file: BoxItem,
+        group: { id: string },
+        successCallback: Function,
+        task: { id: string },
+    }): void {
+        this.errorCode = ERROR_CODE_CREATE_TASK_COLLABORATOR;
+
+        const requestData = {
+            data: {
+                task: {
+                    type: 'task',
+                    id: task.id,
+                },
+                target: {
+                    type: 'group',
+                    id: group.id,
+                },
+            },
+        };
+
+        this.post({
+            id: file.id,
+            url: this.getUrlForTaskGroupCreate(),
             data: { ...requestData },
             successCallback,
             errorCallback,
