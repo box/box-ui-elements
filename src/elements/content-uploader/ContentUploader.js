@@ -961,7 +961,6 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     handleUploadProgress = (item: UploadItem, event: any) => {
-        const { onProgress } = this.props;
         if (!event.total || item.status === STATUS_COMPLETE || item.status === STATUS_STAGED) {
             return;
         }
@@ -969,6 +968,7 @@ class ContentUploader extends Component<Props, State> {
         item.progress = Math.min(Math.round((event.loaded / event.total) * 100), 100);
         item.status = item.progress === 100 ? STATUS_STAGED : STATUS_IN_PROGRESS;
 
+        const { onProgress } = this.props;
         onProgress(item);
 
         const { items } = this.state;
