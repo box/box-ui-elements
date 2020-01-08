@@ -100,6 +100,7 @@ const allSections = [
             '../src/components/text-area/TextArea.js',
             '../src/components/text-input/TextInput.js',
             '../src/components/text-input-with-copy-button/TextInputWithCopyButton.js',
+            '../src/components/theme/index.js',
             '../src/components/thumbnail-card/ThumbnailCard.js',
             '../src/components/toggle/Toggle.js',
             '../src/components/tooltip/Tooltip.js',
