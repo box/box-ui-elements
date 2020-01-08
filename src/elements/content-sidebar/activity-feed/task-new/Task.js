@@ -55,7 +55,7 @@ import './Task.scss';
 type Props = {|
     ...TaskNew,
     api: API,
-    approverSelectorContacts: SelectorItems,
+    approverSelectorContacts: SelectorItems<>,
     currentUser: User,
     error?: ActionItemError,
     features?: FeatureConfig,
