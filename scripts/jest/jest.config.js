@@ -17,4 +17,5 @@ module.exports = {
         '<rootDir>/scripts/jest/visual-adapter.js',
     ],
     rootDir: path.join(__dirname, '../..'),
+    roots: ['src'],
 };

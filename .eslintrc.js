@@ -26,6 +26,7 @@ module.exports = {
             globals: {
                 shallow: true,
                 mount: true,
+                takeModalScreenshot: true,
                 takeScreenshot: true,
                 takeScreenshotAfterInput: true,
             },
