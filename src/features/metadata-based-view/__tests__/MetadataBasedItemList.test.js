@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import FileIcon from '../../../icons/file-icon';
-import IconPencil from '../../../icons/general/IconPencil';
 import PlainButton from '../../../components/plain-button';
-import Tooltip from '../../../components/tooltip';
 
 import MetadataBasedItemList from '../MetadataBasedItemList';
 
@@ -14,7 +12,6 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
     let instance;
     const intl = { formatMessage: jest.fn().mockReturnValue('Name') };
     const onItemClick = jest.fn();
-    const onMetadataUpdate = jest.fn();
     const onClick = expect.any(Function);
     const currentCollection = {
         items: [
@@ -85,15 +82,6 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         metadataColumnsToShow,
         intl,
         onItemClick,
-        onMetadataUpdate,
-    };
-
-    const initialState = {
-        editedColumnIndex: -1,
-        editedRowIndex: -1,
-        hoveredRowIndex: -1,
-        hoveredColumnIndex: -1,
-        valueBeingEdited: null,
     };
 
     const getWrapper = (props = defaultProps) => mount(<MetadataBasedItemList {...props} />);
@@ -101,25 +89,6 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
     beforeEach(() => {
         wrapper = getWrapper();
         instance = wrapper.instance();
-    });
-
-    describe('componentDidUpdate()', () => {
-        test('should call setState() when component gets updated with different props', () => {
-            const updatedProps = {
-                currentCollection: [],
-                metadataColumnsToShow,
-                intl,
-                onItemClick,
-            };
-            instance.setState = jest.fn();
-            wrapper.setProps(updatedProps);
-            expect(instance.setState).toHaveBeenCalledWith(initialState);
-        });
-        test('should not call setState() when component receives same props again', () => {
-            instance.setState = jest.fn();
-            wrapper.setProps(defaultProps);
-            expect(instance.setState).not.toHaveBeenCalled();
-        });
     });
 
     describe('getColumnWidth(columnIndex)', () => {
@@ -132,12 +101,6 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             const availableWidth = 500; // width provided to AutoSizer Component
             const getWidth = instance.getColumnWidth(availableWidth);
             expect(getWidth({ index: columnIndex })).toBe(columnWidth);
-        });
-    });
-
-    describe('getInitialState()', () => {
-        test('should return the initial state object when called the method', () => {
-            expect(instance.getInitialState()).toEqual(initialState);
         });
     });
 
@@ -161,20 +124,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             }
 
             const data = instance.getGridCellData(columnIndex, rowIndex);
-            if (columnIndex < 2) {
-                // i.e. FileIcon and FileName columns
-                expect(data).toEqual(cellData);
-                return;
-            }
-
-            const wrap = mount(data);
-            expect(wrap.contains(cellData.toString())).toBe(true);
-
-            if (columnIndex === editableColumnIndex) {
-                // Expect edit icon for editable column
-                expect(wrap.contains(Tooltip)).toBe(true);
-                expect(wrap.contains(IconPencil)).toBe(true);
-            }
+            expect(data).toEqual(cellData);
         });
     });
 
@@ -208,23 +158,11 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         });
     });
 
-    describe('handleEditIconClick()', () => {
-        test('should setState of the component with edit values for column, row, and value', () => {
-            const editedColumnIndex = 4;
-            const editedRowIndex = 2;
-            const valueBeingEdited = 200.55;
-            const editState = { editedColumnIndex, editedRowIndex, valueBeingEdited };
-            instance.setState = jest.fn();
-            instance.handleEditIconClick(editedColumnIndex, editedRowIndex, valueBeingEdited);
-            expect(instance.setState).toHaveBeenCalledWith(editState);
-        });
-    });
-
     describe('handleItemClick(item)', () => {
         test('should invoke the onItemClick after adding can_preview permissions', () => {
-            const permissions = { can_preview: true, can_upload: true };
+            const permissions = { can_preview: true };
             const item = currentCollection.items[0];
-            const itemWithPreviewPermission = { ...item, ...{ permissions } };
+            const itemWithPreviewPermission = { ...item, permissions };
             instance.handleItemClick(item);
             expect(onItemClick).toHaveBeenCalledWith(itemWithPreviewPermission);
         });
@@ -233,7 +171,6 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
     describe('handleMouseEnter()', () => {
         test('should handle mouse over event by setting state accordingly', () => {
             instance.handleMouseEnter(5, 8);
-            expect(instance.state.hoveredColumnIndex).toBe(5);
             expect(instance.state.hoveredRowIndex).toBe(8);
         });
     });
@@ -242,24 +179,6 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         test('should handle mouse leave event by setting state accordingly', () => {
             instance.handleMouseLeave();
             expect(instance.state.hoveredRowIndex).toBe(-1);
-        });
-    });
-
-    describe('handleSave()', () => {
-        test('should call onMetadataUpdate from props to update metadata with relevant params', () => {
-            const item = currentCollection.items[0];
-            const itemWithPermission = { ...item, permissions: {} };
-            const field = 'amount';
-            const currentValue = 111.22;
-            const editedValue = 333.66;
-            instance.getItemWithPermissions = jest.fn().mockReturnValue(itemWithPermission);
-            instance.handleSave(item, field, currentValue, editedValue);
-            expect(instance.props.onMetadataUpdate).toHaveBeenCalledWith(
-                itemWithPermission,
-                field,
-                currentValue,
-                editedValue,
-            );
         });
     });
 

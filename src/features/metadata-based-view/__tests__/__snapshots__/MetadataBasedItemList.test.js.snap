@@ -68,7 +68,6 @@ exports[`features/metadata-based-view/MetadataBasedItemList render() should rend
     ]
   }
   onItemClick={[MockFunction]}
-  onMetadataUpdate={[MockFunction]}
 >
   <Component>
     AutoSizer
