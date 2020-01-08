@@ -120,7 +120,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
 
             if (columnIndex === editableColumnIndex) {
                 // Set state reflecting mouse-over action for every cell in editable column
-                instance.handleMouseEnter(columnIndex, rowIndex);
+                instance.handleMouseEnter(rowIndex);
             }
 
             const data = instance.getGridCellData(columnIndex, rowIndex);
@@ -170,7 +170,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
 
     describe('handleMouseEnter()', () => {
         test('should handle mouse over event by setting state accordingly', () => {
-            instance.handleMouseEnter(5, 8);
+            instance.handleMouseEnter(8);
             expect(instance.state.hoveredRowIndex).toBe(8);
         });
     });
@@ -195,8 +195,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
 
         test('should have hovered class for adding background color on row hover', () => {
             const hoverRowIndex = 1;
-            const hoverColumnIndex = 1;
-            instance.handleMouseEnter(hoverColumnIndex, hoverRowIndex); // Hover over row
+            instance.handleMouseEnter(hoverRowIndex); // Hover over row
 
             const cell = shallow(
                 instance.cellRenderer({ columnIndex: 0, rowIndex: hoverRowIndex, key: 'key', style: {} }),

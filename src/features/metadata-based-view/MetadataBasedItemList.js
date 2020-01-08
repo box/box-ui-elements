@@ -93,7 +93,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         onItemClick(this.getItemWithPermissions(item));
     }
 
-    handleMouseEnter = (columnIndex: number, rowIndex: number): void => this.setState({ hoveredRowIndex: rowIndex });
+    handleMouseEnter = (rowIndex: number): void => this.setState({ hoveredRowIndex: rowIndex });
 
     handleMouseLeave = (): void => this.setState({ hoveredRowIndex: -1 });
 
@@ -160,11 +160,11 @@ class MetadataBasedItemList extends React.Component<Props, State> {
 
         return (
             <div
-                key={key}
                 className={classes}
-                style={style}
+                key={key}
+                onMouseEnter={() => this.handleMouseEnter(rowIndex)}
                 onMouseLeave={this.handleMouseLeave}
-                onMouseEnter={() => this.handleMouseEnter(columnIndex, rowIndex)}
+                style={style}
             >
                 {data}
             </div>
