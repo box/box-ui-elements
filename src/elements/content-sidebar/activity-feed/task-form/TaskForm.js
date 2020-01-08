@@ -333,9 +333,9 @@ class TaskForm extends React.Component<Props, State> {
 
         // filter out selected approvers
         // map to datalist item format
-        const approverOptions = approverSelectorContacts
-            .filter(({ id }) => !selectedApprovers.find(({ value }) => value === id))
-            .map(({ id, item = {} }) => ({ ...item, text: item.name, value: id, item }));
+        const approverOptions = approverSelectorContacts.filter(
+            ({ id }) => !selectedApprovers.find(({ value }) => value === id),
+        );
 
         const pillSelectorOverlayClasses = classNames({
             scrollable: approverOptions.length > 4,
