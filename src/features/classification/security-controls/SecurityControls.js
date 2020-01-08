@@ -30,6 +30,9 @@ type State = {
 
 class SecurityControls extends React.Component<Props, State> {
     static defaultProps = {
+        classificationName: '',
+        definition: '',
+        itemName: '',
         controls: {},
         controlsFormat: SHORT,
         maxAppCount: DEFAULT_MAX_APP_COUNT,
@@ -67,6 +70,10 @@ class SecurityControls extends React.Component<Props, State> {
             'bdl-SecurityControls--summarized': controlsFormat !== FULL,
         });
 
+        const { isSecurityControlsModalOpen } = this.state;
+        const shouldShowSecurityControlsModal =
+            controlsFormat === SHORT_WITH_BTN && !!itemName && !!classificationName && !!definition;
+
         return (
             <>
                 <ul className={className}>
@@ -74,7 +81,7 @@ class SecurityControls extends React.Component<Props, State> {
                         <SecurityControlsItem key={item.id} message={item} />
                     ))}
                 </ul>
-                {controlsFormat === SHORT_WITH_BTN && (
+                {shouldShowSecurityControlsModal && (
                     <>
                         <PlainButton className="lnk" onClick={this.openModal} type="button">
                             <FormattedMessage {...messages.viewAll} />
@@ -84,7 +91,7 @@ class SecurityControls extends React.Component<Props, State> {
                             closeModal={this.closeModal}
                             definition={definition}
                             itemName={itemName}
-                            isSecurityControlsModalOpen={this.state.isSecurityControlsModalOpen}
+                            isSecurityControlsModalOpen={isSecurityControlsModalOpen}
                             modalItems={modalItems}
                         />
                     </>

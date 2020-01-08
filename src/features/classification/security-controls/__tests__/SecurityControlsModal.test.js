@@ -28,11 +28,13 @@ describe('features/classification/security-controls/SecurityControlsModal', () =
         wrapper = getWrapper();
     });
 
-    afterEach(() => {
-        jest.resetAllMocks();
+    test('should return null if itemName is not provided', () => {
+        wrapper = getWrapper({ itemName: undefined });
+
+        expect(wrapper.type()).toBeNull();
     });
 
-    test('should render a SecurityControlsModal', () => {
+    test('should render a SecurityControlsModal when itemName, classificationName, and definition are provided', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -42,7 +44,8 @@ describe('features/classification/security-controls/SecurityControlsModal', () =
             { id: 'msg2', defaultMessage: 'message2' },
             { id: 'msg3', defaultMessage: 'message3' },
         ];
-        wrapper.setProps({ modalItems });
+        wrapper = getWrapper({ modalItems, itemName: 'welcome.pdf' });
+
         expect(wrapper.find(SecurityControlsItem)).toHaveLength(3);
     });
 });

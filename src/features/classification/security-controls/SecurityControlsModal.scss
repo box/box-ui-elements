@@ -1,15 +1,6 @@
 @import '../../../styles/variables';
 
 .bdl-SecurityControlsModal {
-    .link {
-        color: $bdl-box-blue !important;
-        text-decoration: none;
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
-
     .label {
         margin-top: 19px;
     }
@@ -26,7 +17,7 @@
 }
 
 .bdl-SecurityControlsModal-controlsItemList {
-    max-height: $bdl-line-height * 7;
+    max-height: $bdl-line-height * 12;
     margin: 0;
     list-style: none;
 }

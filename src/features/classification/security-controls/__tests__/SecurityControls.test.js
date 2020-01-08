@@ -43,7 +43,7 @@ describe('features/classification/security-controls/SecurityControls', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render SecurityControls with single SecurityControlsItem and modal items when using SHORT_WITH_BTN controlsFormat', () => {
+    test('should render SecurityControls with single SecurityControlsItem and modal items when using SHORT_WITH_BTN controlsFormat and item, classification data is provided', () => {
         wrapper.setProps({
             controlsFormat: SHORT_WITH_BTN,
             classificationName: 'internal only',

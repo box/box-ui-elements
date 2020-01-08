@@ -13,11 +13,11 @@ import SecurityControlsItem from './SecurityControlsItem';
 import './SecurityControlsModal.scss';
 
 type Props = {
-    classificationName: string,
+    classificationName?: string,
     closeModal: Function,
-    definition: string,
+    definition?: string,
     isSecurityControlsModalOpen: boolean,
-    itemName: string,
+    itemName?: string,
     modalItems: Array<MessageDescriptor>,
 };
 
@@ -29,6 +29,10 @@ const SecurityControlsModal = ({
     itemName,
     modalItems,
 }: Props) => {
+    if (!itemName || !classificationName || !definition) {
+        return null;
+    }
+
     const title = <FormattedMessage {...messages.modalTitle} values={{ itemName }} />;
 
     return (

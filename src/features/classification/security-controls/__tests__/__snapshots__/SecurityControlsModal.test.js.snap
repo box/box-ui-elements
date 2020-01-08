@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/classification/security-controls/SecurityControlsModal should render a SecurityControlsModal 1`] = `
+exports[`features/classification/security-controls/SecurityControlsModal should render a SecurityControlsModal when itemName, classificationName, and definition are provided 1`] = `
 <Modal
   className="bdl-SecurityControlsModal"
   isOpen={false}

@@ -48,7 +48,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
 </Fragment>
 `;
 
-exports[`features/classification/security-controls/SecurityControls should render SecurityControls with single SecurityControlsItem and modal items when using SHORT_WITH_BTN controlsFormat 1`] = `
+exports[`features/classification/security-controls/SecurityControls should render SecurityControls with single SecurityControlsItem and modal items when using SHORT_WITH_BTN controlsFormat and item, classification data is provided 1`] = `
 <Fragment>
   <ul
     className="bdl-SecurityControls bdl-SecurityControls--summarized"
