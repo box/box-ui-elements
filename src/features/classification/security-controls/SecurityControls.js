@@ -78,7 +78,7 @@ class SecurityControls extends React.Component<Props, State> {
             <>
                 <ul className={className}>
                     {items.map(item => (
-                        <SecurityControlsItem key={item.id} message={item} />
+                        <SecurityControlsItem key={item.id} message={item} controlsFormat={controlsFormat} />
                     ))}
                 </ul>
                 {shouldShowSecurityControlsModal && (

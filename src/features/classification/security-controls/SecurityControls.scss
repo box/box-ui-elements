@@ -5,18 +5,10 @@
     list-style: none;
 }
 
-.bdl-IconSecurityClassificationSolid {
-    display: none;
-}
-
 .bdl-SecurityControls--summarized {
     .bdl-SecurityControlsItem {
         &::before {
             display: none;
         }
-    }
-
-    .bdl-IconSecurityClassificationSolid {
-        display: inline;
     }
 }

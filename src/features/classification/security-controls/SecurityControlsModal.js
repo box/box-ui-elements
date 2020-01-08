@@ -9,6 +9,7 @@ import classificationMessages from '../messages';
 import ClassifiedBadge from '../ClassifiedBadge';
 import Label from '../../../components/label/Label';
 import messages from './messages';
+import { SECURITY_CONTROLS_FORMAT } from '../constants';
 import SecurityControlsItem from './SecurityControlsItem';
 import './SecurityControlsModal.scss';
 
@@ -51,7 +52,7 @@ const SecurityControlsModal = ({
             </Label>
             <ul className="bdl-SecurityControlsModal-controlsItemList">
                 {modalItems.map(item => (
-                    <SecurityControlsItem key={item.id} message={item} />
+                    <SecurityControlsItem key={item.id} message={item} controlsFormat={SECURITY_CONTROLS_FORMAT.FULL} />
                 ))}
             </ul>
             <ModalActions>
