@@ -3,7 +3,7 @@ import * as React from 'react';
 import { IntlProvider } from 'react-intl';
 
 import ModalDialog from '../ModalDialog';
-import notes from './ModalActions.stories.md';
+import notes from './ModalDialog.stories.md';
 
 export const basic = () => (
     <IntlProvider locale="en" textComponent={React.Fragment}>
