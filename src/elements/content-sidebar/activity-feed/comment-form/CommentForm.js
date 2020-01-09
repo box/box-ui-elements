@@ -30,7 +30,7 @@ type Props = {
     isDisabled?: boolean,
     isEditing?: boolean,
     isOpen: boolean,
-    mentionSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems<>,
     onCancel: Function,
     onFocus: Function,
     onSubmit?: Function,

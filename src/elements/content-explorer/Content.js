@@ -48,7 +48,6 @@ type Props = {
     onItemRename: Function,
     onItemSelect: Function,
     onItemShare: Function,
-    onMetadataUpdate: Function,
     onSortChange: Function,
     rootElement?: HTMLElement,
     rootId: string,

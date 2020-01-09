@@ -5,6 +5,8 @@ import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySi
 
 const { defaultErrorMaskSubHeaderMessage, currentUserErrorHeaderMessage } = messages;
 
+jest.mock('lodash/debounce', () => jest.fn(i => i));
+
 describe('elements/content-sidebar/ActivitySidebar', () => {
     const feedAPI = {
         feedItems: jest.fn(),
@@ -441,6 +443,70 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
+    describe('getApproverWithQuery()', () => {
+        let instance;
+        let wrapper;
+        let getCollaboratorsSpy;
+
+        test('should get collaborators with groups if FF is passed', () => {
+            wrapper = getWrapper({
+                features: {
+                    activityFeed: {
+                        tasks: {
+                            assignToGroup: true,
+                        },
+                    },
+                },
+            });
+            instance = wrapper.instance();
+            getCollaboratorsSpy = jest.spyOn(instance, 'getCollaborators');
+
+            const search = 'Santa Claus';
+            instance.getApproverWithQuery(search);
+
+            expect(getCollaboratorsSpy).toBeCalledWith(
+                instance.getApproverContactsSuccessCallback,
+                instance.errorCallback,
+                search,
+                { includeGroups: true },
+            );
+            expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(
+                file.id,
+                instance.getApproverContactsSuccessCallback,
+                instance.errorCallback,
+                {
+                    filter_term: search,
+                    include_groups: true,
+                },
+            );
+        });
+
+        test('should get collaborators without groups if FF is not passed', () => {
+            wrapper = getWrapper({ features: {} });
+            instance = wrapper.instance();
+            getCollaboratorsSpy = jest.spyOn(instance, 'getCollaborators');
+
+            const search = 'Santa Claus';
+            instance.getApproverWithQuery(search);
+
+            expect(getCollaboratorsSpy).toBeCalledWith(
+                instance.getApproverContactsSuccessCallback,
+                instance.errorCallback,
+                search,
+                { includeGroups: false },
+            );
+            expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(
+                file.id,
+                instance.getApproverContactsSuccessCallback,
+                instance.errorCallback,
+                {
+                    filter_term: search,
+                    include_groups: false,
+                },
+            );
+        });
+    });
+
     describe('getApproverContactsSuccessCallback()', () => {
         let instance;
         let wrapper;
@@ -456,6 +522,37 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(instance.setState).toBeCalledWith({
                 approverSelectorContacts: collaborators.entries,
             });
+        });
+    });
+
+    describe('getMentionWithQuery()', () => {
+        let instance;
+        let wrapper;
+        let getCollaboratorsSpy;
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            getCollaboratorsSpy = jest.spyOn(instance, 'getCollaborators');
+        });
+
+        test('should get collaborators without groups', () => {
+            const search = 'Santa Claus';
+            instance.getMentionWithQuery(search);
+            expect(getCollaboratorsSpy).toBeCalledWith(
+                instance.getMentionContactsSuccessCallback,
+                instance.errorCallback,
+                search,
+            );
+            expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(
+                file.id,
+                instance.getMentionContactsSuccessCallback,
+                instance.errorCallback,
+                {
+                    filter_term: search,
+                    include_groups: false,
+                },
+            );
         });
     });
 
@@ -540,11 +637,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(fileCollaboratorsAPI.getFileCollaborators).not.toHaveBeenCalled();
         });
 
-        test('should get the collaborators', () => {
+        test('should call the file collaborators api', () => {
             const searchStr = 'foo';
             instance.getCollaborators(successCb, errorCb, searchStr);
             expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(file.id, successCb, errorCb, {
                 filter_term: searchStr,
+                include_groups: false,
             });
         });
     });

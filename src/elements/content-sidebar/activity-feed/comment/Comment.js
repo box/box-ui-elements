@@ -36,7 +36,7 @@ type Props = {
     id: string,
     isDisabled?: boolean,
     isPending?: boolean,
-    mentionSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems<>,
     modified_at?: string | number,
     onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any,
     onEdit: (id: string, text: string, hasMention: boolean, permissions?: BoxCommentPermission) => any,

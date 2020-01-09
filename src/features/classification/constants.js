@@ -4,11 +4,11 @@ const DEFAULT_MAX_APP_COUNT = 3;
 const SECURITY_CONTROLS_FORMAT: {
     FULL: 'full',
     SHORT: 'short',
-    SHORT_WITH_TOOLTIP: 'shortWithTooltip',
+    SHORT_WITH_BTN: 'shortWithBtn',
 } = {
     FULL: 'full',
     SHORT: 'short',
-    SHORT_WITH_TOOLTIP: 'shortWithTooltip',
+    SHORT_WITH_BTN: 'shortWithBtn',
 };
 
 const ACCESS_POLICY_RESTRICTION: {

@@ -5,6 +5,7 @@
  */
 import uniqueId from 'lodash/uniqueId';
 import noop from 'lodash/noop';
+import flatten from 'lodash/flatten';
 import type { MessageDescriptor } from 'react-intl';
 import { getBadItemError, getBadUserError, isUserCorrectableError } from '../utils/error';
 import commonMessages from '../elements/common/messages';
@@ -42,6 +43,8 @@ import type { ElementsXhrError, ErrorResponseData, APIOptions } from '../common/
 import type {
     SelectorItems,
     SelectorItem,
+    UserMini,
+    GroupMini,
     BoxItem,
     BoxItemPermission,
     BoxItemVersion,
@@ -400,7 +403,14 @@ class Feed extends Base {
         this.updateFeedItem({ isPending: true }, task.id);
 
         try {
-            await Promise.all(task.addedAssignees.map(assignee => this.createTaskCollaborator(file, task, assignee)));
+            await Promise.all(
+                task.addedAssignees.map(assignee =>
+                    assignee.item && assignee.item.type === 'group'
+                        ? this.createTaskCollaboratorsforGroup(file, task, assignee)
+                        : this.createTaskCollaborator(file, task, assignee),
+                ),
+            );
+
             await new Promise((resolve, reject) => {
                 this.tasksNewAPI.updateTask({
                     file,
@@ -520,7 +530,7 @@ class Feed extends Base {
         file: BoxItem,
         currentUser: User,
         message: string,
-        assignees: SelectorItems,
+        assignees: SelectorItems<>,
         taskType: TaskType,
         dueAt: ?string,
         completionRule: TaskCompletionRule,
@@ -556,7 +566,7 @@ class Feed extends Base {
             description: message,
             type: TASK,
             assigned_to: {
-                entries: assignees.map((assignee: SelectorItem) => ({
+                entries: assignees.map((assignee: SelectorItem<UserMini | GroupMini>) => ({
                     id: uniqueId(),
                     target: { ...assignee, avatar_url: '', type: 'user' },
                     status: TASK_NEW_INITIAL_STATUS,
@@ -634,7 +644,7 @@ class Feed extends Base {
         file: BoxItem,
         id: string,
         task: Task,
-        assignees: SelectorItems,
+        assignees: SelectorItems<UserMini | GroupMini>,
         successCallback: Function,
         errorCallback: ErrorCallback,
     ) {
@@ -645,12 +655,24 @@ class Feed extends Base {
 
         try {
             const taskLink = await this.createTaskLink(file, task);
-            const taskAssignments: Array<TaskCollabAssignee> = await Promise.all(
-                assignees.map((assignee: SelectorItem) => {
-                    return this.createTaskCollaborator(file, task, assignee);
-                }),
-            );
 
+            /* TODO: change block to process users in parallel and process groups sequentially
+            -check if length of users + groups = assignees (if not throw an error)
+            -filter out the users from assignees
+            -use the result of filter to store the task collaborators in parallel
+            -filter out the groups from assignees
+            -use result of filter to process each group sequentially */
+            const taskAssignments: Array<TaskCollabAssignee> = flatten<TaskCollabAssignee, TaskCollabAssignee>(
+                await Promise.all(
+                    assignees.map((assignee: SelectorItem<UserMini | GroupMini>): Promise<
+                        Array<TaskCollabAssignee> | TaskCollabAssignee,
+                    > =>
+                        assignee.item && assignee.item.type === 'group'
+                            ? this.createTaskCollaboratorsforGroup(file, task, assignee)
+                            : this.createTaskCollaborator(file, task, assignee),
+                    ),
+                ),
+            );
             this.updateFeedItem(
                 {
                     ...task,
@@ -675,6 +697,41 @@ class Feed extends Base {
     }
 
     /**
+     * Creates a task group via the API.
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {Task|TaskUpdatePayload} task - The newly created or existing task from the API
+     * @param {SelectorItem} assignee - The user assigned to this task
+     * @param {Function} errorCallback - Task create error callback
+     * @return {Promise<TaskAssignment>}
+     */
+    createTaskCollaboratorsforGroup(
+        file: BoxItem,
+        task: Task | TaskUpdatePayload,
+        assignee: SelectorItem<UserMini | GroupMini>,
+    ): Promise<Array<TaskCollabAssignee>> {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        return new Promise((resolve, reject) => {
+            const taskCollaboratorsAPI = new TaskCollaboratorsAPI(this.options);
+            this.taskCollaboratorsAPI.push(taskCollaboratorsAPI);
+
+            taskCollaboratorsAPI.createTaskCollaboratorsforGroup({
+                file,
+                task,
+                group: assignee,
+                successCallback: resolve,
+                errorCallback: (e: ElementsXhrError) => {
+                    reject(e);
+                },
+            });
+        });
+    }
+
+    /**
      * Creates a task collaborator via the API.
      *
      * @param {BoxItem} file - The file to which the task is assigned
@@ -686,7 +743,7 @@ class Feed extends Base {
     createTaskCollaborator(
         file: BoxItem,
         task: Task | TaskUpdatePayload,
-        assignee: SelectorItem,
+        assignee: SelectorItem<UserMini | GroupMini>,
     ): Promise<TaskCollabAssignee> {
         if (!file.id) {
             throw getBadItemError();

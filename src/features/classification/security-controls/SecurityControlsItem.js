@@ -1,49 +1,30 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, type MessageDescriptor } from 'react-intl';
 
-import type { MessageDescriptor } from 'react-intl';
-
-import Tooltip from '../../../components/tooltip';
-import IconInfo from '../../../icons/general/IconInfo';
-import { bdlBoxBlue } from '../../../styles/variables';
+import { bdlYellorange } from '../../../styles/variables';
+import IconSecurityClassificationSolid from '../../../icons/general/IconSecurityClassificationSolid';
+import { SECURITY_CONTROLS_FORMAT } from '../constants';
+import type { ControlsFormat } from '../flowTypes';
 
 import './SecurityControlsItem.scss';
 
-const ICON_SIZE = 16;
-
 type Props = {
+    controlsFormat: ControlsFormat,
     message: MessageDescriptor,
-    tooltipItems: Array<MessageDescriptor>,
 };
 
-const SecurityControlsItem = ({ message, tooltipItems }: Props) => {
-    const isTooltipEnabled = tooltipItems.length > 0;
-
-    const tooltipContent = (
-        <div className="bdl-SecurityControlsItem-tooltipContent">
-            {tooltipItems.map((itemMessage, index) => (
-                <FormattedMessage key={index} tagName="p" {...itemMessage} />
-            ))}
-        </div>
-    );
+const SecurityControlsItem = ({ controlsFormat, message }: Props) => {
+    const shouldRenderIcon = controlsFormat !== SECURITY_CONTROLS_FORMAT.FULL;
 
     return (
         <li className="bdl-SecurityControlsItem">
-            <FormattedMessage {...message} />
-            {isTooltipEnabled && (
-                <Tooltip className="bdl-SecurityControlsItem-tooltip" text={tooltipContent} position="middle-left">
-                    <span className="bdl-SecurityControlsItem-tooltipIcon">
-                        <IconInfo color={bdlBoxBlue} width={ICON_SIZE} height={ICON_SIZE} />
-                    </span>
-                </Tooltip>
+            {shouldRenderIcon && (
+                <IconSecurityClassificationSolid color={bdlYellorange} height={11} width={11} strokeWidth={3} />
             )}
+            <FormattedMessage {...message} />
         </li>
     );
-};
-
-SecurityControlsItem.defaultProps = {
-    tooltipItems: [],
 };
 
 export default SecurityControlsItem;

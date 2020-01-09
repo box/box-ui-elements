@@ -351,6 +351,7 @@ class MultiputPart extends BaseMultiput {
      * @return {void}
      */
     pause(): void {
+        clearTimeout(this.retryTimeout); // Cancel timeout so that we don't keep retrying while paused
         this.isPaused = true;
         this.state = PART_STATE_DIGEST_READY;
         this.xhr.abort(); //  This calls the error handler.
