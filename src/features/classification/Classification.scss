@@ -8,7 +8,10 @@
 }
 
 .bdl-Classification-definition {
+    max-height: $bdl-line-height * 5;
     margin-top: 3px;
+    overflow-y: auto;
+    line-height: $bdl-line-height;
 }
 
 .bdl-Classification-missingMessage {

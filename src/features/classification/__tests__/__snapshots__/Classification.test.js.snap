@@ -79,6 +79,7 @@ exports[`features/classification/Classification should render a classified badge
     </p>
   </Label>
   <SecurityControls
+    classificationName="Confidential"
     controls={
       Object {
         "sharedLink": Object {
@@ -87,6 +88,8 @@ exports[`features/classification/Classification should render a classified badge
       }
     }
     controlsFormat="short"
+    definition="fubar"
+    itemName=""
     maxAppCount={3}
   />
 </article>
