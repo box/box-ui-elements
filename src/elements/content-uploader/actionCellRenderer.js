@@ -5,11 +5,12 @@
 
 import React from 'react';
 import ItemAction from './ItemAction';
+import type { UploadItem } from '../../common/types/upload';
 
 type Props = {
     rowData: UploadItem,
 };
 
-export default (onClick: Function) => ({ rowData }: Props) => (
-    <ItemAction {...rowData} onClick={() => onClick(rowData)} />
+export default (isResumableUploadsEnabled: boolean, onClick: Function) => ({ rowData }: Props) => (
+    <ItemAction {...rowData} isResumableUploadsEnabled={isResumableUploadsEnabled} onClick={() => onClick(rowData)} />
 );

@@ -18,15 +18,16 @@ const OptionalFormattedMessage = () => (
 
 type Props = {
     children: React.Node,
+    /** Whether the text of the label should be accessibly hidden */
     hideLabel?: boolean,
     infoIconProps?: Object,
-    /** The label text */
+    /** Tooltip text for the info icon */
     infoTooltip?: React.Node,
     /** Whether to show the `(Optional)` text next to the label for an optional field */
     showOptionalText?: boolean,
-    /** Tooltip text for the label */
+    /** The label text */
     text: React.Node,
-    /** Whether the text of the label should be accessibly hidden */
+    /** Tooltip text for the label */
     tooltip?: React.Node,
 };
 

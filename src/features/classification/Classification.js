@@ -2,49 +2,86 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import Label from '../../components/label/Label';
+import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import ClassifiedBadge from './ClassifiedBadge';
-import AddClassificationBadge from './AddClassificationBadge';
+import SecurityControls from './security-controls';
 import messages from './messages';
 import './Classification.scss';
+
+import type { Controls, ControlsFormat } from './flowTypes';
 
 const STYLE_INLINE: 'inline' = 'inline';
 const STYLE_TOOLTIP: 'tooltip' = 'tooltip';
 
 type Props = {
-    advisoryMessage?: string,
     className?: string,
+    controls?: Controls,
+    controlsFormat?: ControlsFormat,
+    definition?: string,
+    isLoadingControls?: boolean,
+    itemName?: string,
+    maxAppCount?: number,
     messageStyle?: typeof STYLE_INLINE | typeof STYLE_TOOLTIP,
     name?: string,
+    onClick?: (event: SyntheticEvent<HTMLButtonElement>) => void,
 };
 
-const Classification = ({ advisoryMessage, className = '', messageStyle, name }: Props) => {
+const Classification = ({
+    definition,
+    className = '',
+    controls,
+    controlsFormat,
+    isLoadingControls,
+    maxAppCount,
+    messageStyle,
+    name,
+    itemName = '',
+    onClick,
+}: Props) => {
     const isClassified = !!name;
-    const hasMessage = !!advisoryMessage;
-
-    const isTooltipMessageEnabled = isClassified && hasMessage && messageStyle === STYLE_TOOLTIP;
-    const isInlineMessageEnabled = isClassified && hasMessage && messageStyle === STYLE_INLINE;
-
-    // Either the add classification badge should be visible or the "not classified" text or neither
-    const isAddClassificationBadgeVisible = !isClassified && !messageStyle;
+    const hasDefinition = !!definition;
+    const hasSecurityControls = !!controls;
+    const isTooltipMessageEnabled = isClassified && hasDefinition && messageStyle === STYLE_TOOLTIP;
+    const isInlineMessageEnabled = isClassified && hasDefinition && messageStyle === STYLE_INLINE;
     const isNotClassifiedMessageVisible = !isClassified && messageStyle === STYLE_INLINE;
+    const isControlsIndicatorEnabled = isClassified && isLoadingControls && messageStyle === STYLE_INLINE;
+    const isSecurityControlsEnabled =
+        isClassified && !isLoadingControls && hasSecurityControls && messageStyle === STYLE_INLINE;
 
     return (
         <article className={`bdl-Classification ${className}`}>
             {isClassified && (
                 <ClassifiedBadge
                     name={((name: any): string)}
-                    tooltipText={isTooltipMessageEnabled ? advisoryMessage : undefined}
+                    onClick={onClick}
+                    tooltipText={isTooltipMessageEnabled ? definition : undefined}
                 />
             )}
-            {isAddClassificationBadgeVisible && <AddClassificationBadge />}
-            {isInlineMessageEnabled && <p className="bdl-Classification-advisoryMessage">{advisoryMessage}</p>}
+            {isInlineMessageEnabled && (
+                <Label text={<FormattedMessage {...messages.definition} />}>
+                    <p className="bdl-Classification-definition">{definition}</p>
+                </Label>
+            )}
             {isNotClassifiedMessageVisible && (
                 <span className="bdl-Classification-missingMessage">
                     <FormattedMessage {...messages.missing} />
                 </span>
             )}
+            {isSecurityControlsEnabled && (
+                <SecurityControls
+                    classificationName={name}
+                    controls={controls}
+                    controlsFormat={controlsFormat}
+                    definition={definition}
+                    itemName={itemName}
+                    maxAppCount={maxAppCount}
+                />
+            )}
+            {isControlsIndicatorEnabled && <LoadingIndicator />}
         </article>
     );
 };
 
+export { STYLE_INLINE, STYLE_TOOLTIP };
 export default Classification;

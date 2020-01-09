@@ -34,6 +34,9 @@ import {
     TYPE_FILE,
     TYPE_FOLDER,
 } from '../../constants';
+import type { Alignment } from '../common/flowTypes';
+import type { ExecuteAPI, Integration } from '../../common/types/integrations';
+import type { StringMap, Token, BoxItem } from '../../common/types/core';
 
 const UNSUPPORTED_INVOCATION_METHOD_TYPE = 'Integration invocation using this HTTP method type is not supported';
 const BLACKLISTED_ERROR_MESSAGE_KEY = 'boxToolsBlacklistedError';
@@ -323,16 +326,6 @@ class ContentOpenWith extends PureComponent<Props, State> {
     };
 
     /**
-     * Called when the Open With button gets new properties
-     *
-     * @private
-     * @return {void}
-     */
-    componentWillReceiveProps(): void {
-        /* no-op */
-    }
-
-    /**
      * Click handler when an integration is clicked
      *
      * @private
@@ -358,9 +351,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
         }
 
         // These window features will open the new window directly on top of the current window at the same
-        const windowFeatures = `left=${window.screenX},top=${window.screenY},height=${window.outerHeight},width=${
-            window.innerWidth
-        },toolbar=0`;
+        const windowFeatures = `left=${window.screenX},top=${window.screenY},height=${window.outerHeight},width=${window.innerWidth},toolbar=0`;
 
         // window.open() is immediately invoked to avoid popup-blockers
         // The name is included to be the target of a form if the integration is a POST integration.

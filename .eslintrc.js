@@ -5,12 +5,11 @@ module.exports = {
     rules: {
         camelcase: 'off',
         'class-methods-use-this': 'off',
+        'formatjs/enforce-description': 'error', // fixme
         'jsx-a11y/label-has-associated-control': 'off',
         'import/no-extraneous-dependencies': 'off', // fixme
-        'prefer-destructuring': 'off', // fixme
         'react/default-props-match-prop-types': 'off', // fixme
         'react/destructuring-assignment': 'off', // fixme
-        'react/display-name': 'off',
         'react/forbid-prop-types': 'off', // fixme
         'react/jsx-sort-props': 'off', // fixme
         'react/jsx-no-bind': 'off', // fixme
@@ -20,8 +19,17 @@ module.exports = {
         'react/no-array-index-key': 'off', // fixme
         'react/no-this-in-sfc': 'off',
     },
-    globals: {
-        shallow: true,
-        mount: true,
-    },
+    plugins: ['formatjs'],
+    overrides: [
+        {
+            files: ['*.test.js'],
+            globals: {
+                shallow: true,
+                mount: true,
+                takeModalScreenshot: true,
+                takeScreenshot: true,
+                takeScreenshotAfterInput: true,
+            },
+        }
+    ]
 };

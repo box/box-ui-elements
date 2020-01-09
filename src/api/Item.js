@@ -17,6 +17,9 @@ import {
     ERROR_CODE_RENAME_ITEM,
     ERROR_CODE_SHARE_ITEM,
 } from '../constants';
+import type { ElementsErrorCallback } from '../common/types/api';
+import type { BoxItem, FlattenedBoxItemCollection, FlattenedBoxItem, BoxItemPermission } from '../common/types/core';
+import type APICache from '../utils/Cache';
 
 class Item extends Base {
     /**

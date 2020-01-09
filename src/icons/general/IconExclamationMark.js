@@ -3,16 +3,9 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconExclamationMark = ({ className = '', color = '#999', height = 20, title, width = 20 }: Props) => (
+const IconExclamationMark = ({ className = '', color = '#999', height = 20, title, width = 20 }: Icon) => (
     <AccessibleSVG
         className={`icon-exclamation-mark ${className}`}
         height={height}

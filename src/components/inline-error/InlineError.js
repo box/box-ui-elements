@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import InlineNotice from '../inline-notice';
 
 type Props = {
     children: React.Node,
@@ -8,11 +9,6 @@ type Props = {
     title: React.Node,
 };
 
-const InlineError = ({ children, className = '', title }: Props) => (
-    <div className={`inline-alert inline-alert-visible inline-alert-error ${className}`}>
-        <b>{title}</b>
-        <div>{children}</div>
-    </div>
-);
+const InlineError = (props: Props) => <InlineNotice {...props} type="error" />;
 
 export default InlineError;

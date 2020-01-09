@@ -53,8 +53,6 @@ type Props = {
     changeSharedLinkPermissionLevel: (
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
-    /** If item is classified this property contains the classification name */
-    classificationName?: string,
     /** Message warning about restrictions regarding inviting collaborators to the item */
     collaborationRestrictionWarning: React.Node,
     /** List of existing collaborators */
@@ -92,6 +90,8 @@ type Props = {
     onRequestClose?: Function,
     /** Handler function for clicks on the settings icon. If not provided, the settings icon won't be rendered. */
     onSettingsClick?: Function,
+    /** Shows a callout tooltip next to the names / email addresses input field explaining pre-populated recommendation */
+    recommendedSharingTooltipCalloutName: ?string,
     /**
      * Function to send collab invitations based on the given parameters object.
      * This function should return a Promise.
@@ -463,6 +463,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
             contactLimit,
             getCollaboratorContacts,
             item,
+            recommendedSharingTooltipCalloutName = null,
             sendInvitesError,
             showEnterEmailsCallout = false,
             showCalloutForUser = false,
@@ -513,17 +514,19 @@ class UnifiedShareModal extends React.Component<Props, State> {
                 </div>
             </div>
         );
+        const ftuxTooltipProps = {
+            className: 'usm-ftux-tooltip',
+            // don't want ftux tooltip to show if the recommended sharing tooltip callout is showing
+            isShown: !recommendedSharingTooltipCalloutName && shouldRenderFTUXTooltip && showCalloutForUser,
+            position: 'middle-left',
+            showCloseButton: true,
+            text: ftuxTooltipText,
+            theme: 'callout',
+        };
 
         return (
-            <React.Fragment>
-                <Tooltip
-                    className="usm-ftux-tooltip"
-                    isShown={shouldRenderFTUXTooltip && showCalloutForUser}
-                    position="middle-left"
-                    showCloseButton
-                    text={ftuxTooltipText}
-                    theme="callout"
-                >
+            <>
+                <Tooltip {...ftuxTooltipProps}>
                     <div className="invite-collaborator-container">
                         <EmailForm
                             contactLimit={contactLimit}
@@ -540,6 +543,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
                             onRequestClose={this.closeInviteCollaborators}
                             onSubmit={this.handleSendInvites}
                             openInviteCollaboratorsSection={this.openInviteCollaboratorsSection}
+                            recommendedSharingTooltipCalloutName={recommendedSharingTooltipCalloutName}
                             showEnterEmailsCallout={showEnterEmailsCallout}
                             submitting={submitting}
                             selectedContacts={this.state.inviteCollabsContacts}
@@ -552,7 +556,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
                         </EmailForm>
                     </div>
                 </Tooltip>
-            </React.Fragment>
+            </>
         );
     }
 
@@ -649,7 +653,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
         const {
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
-            classificationName,
             focusSharedLinkOnLoad,
             item,
             onSettingsClick,
@@ -689,7 +692,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
         // focus logic at modal level
         const extendedModalProps = {
             focusElementSelector: canInvite
-                ? '.pill-selector-input' // focus on invite collabs field
+                ? '.bdl-PillSelector-input' // focus on invite collabs field
                 : '.toggle-simple', // focus on shared link toggle
             ...modalProps,
         };
@@ -718,7 +721,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
                                 triggerCopyOnLoad={focusSharedLinkOnLoad}
                                 changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                                 changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
-                                classificationName={classificationName}
                                 intl={intl}
                                 item={item}
                                 itemType={item.type}

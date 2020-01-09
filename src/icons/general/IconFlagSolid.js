@@ -3,16 +3,9 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconFlagSolid = ({ className = '', color = '#979797', height = 18, title, width = 18 }: Props) => (
+const IconFlagSolid = ({ className = '', color = '#979797', height = 18, title, width = 18 }: Icon) => (
     <AccessibleSVG
         className={`icon-flag-solid ${className}`}
         height={height}

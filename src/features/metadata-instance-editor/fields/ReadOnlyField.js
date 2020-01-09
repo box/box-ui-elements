@@ -6,6 +6,7 @@ import { convertISOStringToUTCDate } from '../../../utils/datetime';
 
 import { FIELD_TYPE_DATE } from '../constants';
 import messages from '../messages';
+import type { MetadataFieldValue, MetadataFieldType } from '../../../common/types/metadata';
 import './ReadOnlyField.scss';
 
 type Props = {

@@ -73,6 +73,7 @@ VanityNameSection.propTypes = {
     vanityNameInputProps: PropTypes.object,
     serverURL: PropTypes.string.isRequired,
     onChange: PropTypes.func,
+    onCheckboxChange: PropTypes.func,
 };
 
 export { VanityNameSection as VanityNameSectionBase };

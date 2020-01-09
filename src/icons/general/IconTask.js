@@ -4,16 +4,9 @@ import * as React from 'react';
 import AccessibleSVG from '../accessible-svg';
 import { bdlBoxBlue } from '../../styles/variables';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it is not purely decorative for accessibility */
-    title?: string,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconTask = ({ className = '', color = bdlBoxBlue, height = 16, title, width = 18 }: Props) => (
+const IconTask = ({ className = '', color = bdlBoxBlue, height = 16, title, width = 18 }: Icon) => (
     <AccessibleSVG className={className} height={height} title={title} viewBox="0 0 16 18" width={width}>
         <g fill="none" fillRule="evenodd" stroke="none" strokeWidth="1">
             <g className="fill-color" fill={color} fillRule="nonzero" transform="translate(0, 0)">

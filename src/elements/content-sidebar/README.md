@@ -10,13 +10,13 @@ var ContentSidebar = require('./ContentSidebar').default;
             hasAccessStats: true,
             hasClassification: true,
             hasRetentionPolicy: true,
-            hasVersions: true,
         }}
         features={FEATURES}
         fileId={FILE_ID}
         hasActivityFeed
         hasMetadata
         hasSkills
+        hasVersions
         token={TOKEN}
         {...PROPS}
     />
@@ -37,6 +37,7 @@ var ContentSidebar = require('./ContentSidebar').default;
 | hasActivityFeed | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
 | hasMetadata | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
 | hasSkills | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
+| hasVersions | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
 | language | string | `en-US` | *See the [Internationalization](../README.md#internationalization) section* |
 | messages | Map<string, string> |  | *See the [Internationalization](../README.md#internationalization) section* |
 | metadataSidebarProps | MetadataSidebarProps | `{}` | *See below* |
@@ -56,12 +57,16 @@ var ContentSidebar = require('./ContentSidebar').default;
 | hasAccessStats | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
 | hasNotices | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
 | hasProperties | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
-| hasVersions | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
 
 #### MetadataSidebarProps
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| *tbd* | - | - | - |
+| selectedTemplateKey | `string`         |  | `templateKey` for the template to show. If provided, |
+|                     |                  |  | no other templates will be visible. |
+| templateFilters     | `Array<string>`  |  | Template field IDs for fields that should be visible and editable. |
+|                     | or `string`      |  | To show a single field, pass the ID as a string; to show multiple |
+|                     |                  |  | fields, pass an array of IDs as strings. If no `templateFilters` are |
+|                     |                  |  | provided, then all fields will be visible and editable. |
 
 #### SkillsSidebarProps
 | Prop | Type | Default | Description |

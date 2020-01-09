@@ -4,16 +4,9 @@ import * as React from 'react';
 import { bdlBoxBlue } from '../../styles/variables';
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const SetDefaultAppState = ({ className = '', color = bdlBoxBlue, height = 160, title, width = 305 }: Props) => (
+const SetDefaultAppState = ({ className = '', color = bdlBoxBlue, height = 160, title, width = 305 }: Icon) => (
     <AccessibleSVG
         className={`icon-set-default-app ${className}`}
         height={height}

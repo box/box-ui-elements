@@ -3,19 +3,19 @@
     .bdl-ItemSubDetails-size {
         display: block;
         overflow: hidden;
-        text-overflow: ellipsis;
         white-space: nowrap;
+        text-overflow: ellipsis;
     }
 }
 
 .bce-item-row {
     .bdl-ItemSubDetails-size {
         &::before {
-            content: '•';
-            font-size: 8px;
-            padding-left: 3px;
             padding-right: 3px;
+            padding-left: 3px;
+            font-size: 8px;
             vertical-align: middle;
+            content: '•';
         }
     }
 }

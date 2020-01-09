@@ -135,12 +135,12 @@ class ContentExplorer extends Component {
         document.addEventListener('click', this.handleDocumentClick, true);
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate({ initialFoldersPath: prevInitialFoldersPath }) {
         const { initialFoldersPath } = this.props;
 
-        if (nextProps.initialFoldersPath !== initialFoldersPath) {
+        if (prevInitialFoldersPath !== initialFoldersPath) {
             this.setState({
-                foldersPath: nextProps.initialFoldersPath,
+                foldersPath: initialFoldersPath,
             });
         }
     }

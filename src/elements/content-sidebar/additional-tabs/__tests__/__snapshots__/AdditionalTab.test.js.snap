@@ -1,0 +1,88 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render disabled button when blocked by shield access policy 1`] = `
+<Tooltip
+  position="middle-left"
+  text={
+    <FormattedMessage
+      defaultMessage="Use of this app has been disabled by the applied access policy"
+      id="be.additionalTab.blockedByShieldAccessPolicy"
+    />
+  }
+>
+  <PlainButton
+    className="bdl-AdditionalTab bdl-is-disabled"
+    data-testid="additionaltab"
+    isDisabled={true}
+    onClick={[Function]}
+    type="button"
+  >
+    <img
+      alt="test title"
+      className="bdl-AdditionalTab-icon"
+      onError={[Function]}
+      src="https://foo.com/image"
+    />
+  </PlainButton>
+</Tooltip>
+`;
+
+exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render the more icon ellipsis if no valid id and icon URL are provided 1`] = `
+<Tooltip
+  position="middle-left"
+  text="test title"
+>
+  <PlainButton
+    className="bdl-AdditionalTab"
+    data-testid="additionaltab"
+    isDisabled={false}
+    onClick={[Function]}
+    type="button"
+  >
+    <IconEllipsis
+      color="#909090"
+    />
+  </PlainButton>
+</Tooltip>
+`;
+
+exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render the placeholder when an error occurs 1`] = `
+<Tooltip
+  position="middle-left"
+  text="test title"
+>
+  <PlainButton
+    className="bdl-AdditionalTab"
+    data-testid="additionaltab"
+    isDisabled={false}
+    onClick={[Function]}
+    type="button"
+  >
+    <AdditionalTabPlaceholder
+      isLoading={false}
+    />
+  </PlainButton>
+</Tooltip>
+`;
+
+exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render the tooltip and button contents 1`] = `
+<Tooltip
+  position="middle-left"
+  text="test title"
+>
+  <PlainButton
+    className="bdl-AdditionalTab"
+    data-testid="additionaltab"
+    isDisabled={false}
+    onClick={[Function]}
+    type="button"
+  >
+    <img
+      alt="test title"
+      className="bdl-AdditionalTab-icon"
+      onError={[Function]}
+      src="https://foo.com/image"
+    />
+  </PlainButton>
+</Tooltip>
+`;

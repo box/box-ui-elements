@@ -2,31 +2,19 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
-import { bdlGray } from '../../styles/variables';
+import { bdlGray80 } from '../../styles/variables';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconAdd = ({ className = '', color = bdlGray, height = 32, title, width = 32 }: Props) => (
+const IconAdd = ({ className = '', color = bdlGray80, height = 16, title, width = 16 }: Icon) => (
     <AccessibleSVG
         className={`bdl-IconAdd ${className}`}
         height={height}
         title={title}
-        viewBox="0 0 32 32"
+        viewBox="0 0 16 16"
         width={width}
     >
-        <path
-            className="fill-color"
-            d="M18 14h9a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-9v9a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-9H5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1h9V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v9z"
-            fill={color}
-            fillRule="nonzero"
-        />
+        <path className="fill-color" d="M8.5 2v5.5H14v1H8.5V14h-1V8.5H2v-1h5.5V2z" fill={color} fillRule="evenodd" />
     </AccessibleSVG>
 );
 

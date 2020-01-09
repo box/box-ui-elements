@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/unified-share-modal/HeaderTitle should render classifiction label with title 1`] = `
+<span
+  className="bdl-UnifiedShareModalTitle"
+>
+  <FormattedMessage
+    defaultMessage="Share '{itemName}'"
+    id="boxui.unifiedShare.modalTitle"
+    values={
+      Object {
+        "itemName": "test file",
+      }
+    }
+  />
+  <Classification
+    className="bdl-UnifiedShareModalTitle-classification"
+    definition="test"
+    messageStyle="tooltip"
+    name="internal"
+  />
+</span>
+`;

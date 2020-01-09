@@ -6,26 +6,26 @@
  **************************************/
 
 .date-picker-wrapper {
-    margin: 0 0 20px;
     position: relative;
+    margin: 0 0 20px;
 
     button:focus {
         outline: none;
     }
 
     .date-picker-icon-holder {
-        display: inline-block;
         position: relative;
+        display: inline-block;
     }
 
     .date-picker-description {
-        color: $bdl-gray-62;
         display: block;
+        color: $bdl-gray-62;
     }
 
     .date-picker-input {
-        margin-bottom: 0;
         margin-top: 5px;
+        margin-bottom: 0;
         padding-right: 30px;
         text-overflow: ellipsis;
     }
@@ -36,19 +36,19 @@
     }
 
     .date-picker-open-btn {
+        position: absolute;
+        right: 7px;
         bottom: 10px;
         display: inline-block;
         height: 17px;
-        position: absolute;
-        right: 7px;
     }
 
     .date-picker-clear-btn,
     .date-picker-icon-alert {
-        bottom: 10px;
-        display: inline-block;
         position: absolute;
         right: 30px;
+        bottom: 10px;
+        display: inline-block;
 
         span {
             display: inline-block;
@@ -67,8 +67,8 @@
 
     .date-picker-clear-btn {
         path {
-            fill: $bdl-gray-40;
             transition: fill linear .1s;
+            fill: $bdl-gray-40;
         }
     }
 

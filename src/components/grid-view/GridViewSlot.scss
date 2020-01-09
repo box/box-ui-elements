@@ -3,15 +3,15 @@
 
 .bdl-GridViewSlot {
     flex: 0 1 auto;
-    overflow: hidden;
     padding: 5px;
+    overflow: hidden;
     white-space: normal;
 }
 
 .bdl-GridViewSlot-content {
+    height: 100%;
     border: 1px solid $bdl-gray-10;
     box-shadow: 0 1px 5px rgba(50, 50, 50, .1);
-    height: 100%;
 
     &:hover,
     &:active,

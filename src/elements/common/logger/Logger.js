@@ -5,6 +5,8 @@ import uuidv4 from 'uuid/v4';
 import { isMarkSupported } from '../../../utils/performance';
 import { EVENT_JS_READY } from './constants';
 import { METRIC_TYPE_PREVIEW, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../../constants';
+import type { ElementOrigin } from '../flowTypes';
+import type { MetricType, ElementsLoadMetricData, LoggerProps } from '../../../common/types/logging';
 
 type ElementsMetric = {
     component: ElementOrigin,

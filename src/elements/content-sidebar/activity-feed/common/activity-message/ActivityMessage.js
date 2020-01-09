@@ -5,6 +5,7 @@ import LoadingIndicator from '../../../../../components/loading-indicator';
 import formatTaggedMessage from '../../utils/formatTaggedMessage';
 import ShowOriginalButton from './ShowOriginalButton';
 import TranslateButton from './TranslateButton';
+import type { GetProfileUrlCallback } from '../../../../common/flowTypes';
 import './ActivityMessage.scss';
 
 type Props = {
@@ -32,8 +33,14 @@ class ActivityMessage extends React.Component<Props, State> {
         isTranslation: false,
     };
 
-    componentWillReceiveProps(nextProps: Props): void {
-        const { translatedTaggedMessage, translationFailed } = nextProps;
+    componentDidUpdate(prevProps: Props): void {
+        const { translatedTaggedMessage, translationFailed } = this.props;
+        const { translatedTaggedMessage: prevTaggedMessage, translationFailed: prevTranslationFailed } = prevProps;
+
+        if (prevTaggedMessage === translatedTaggedMessage || prevTranslationFailed === translationFailed) {
+            return;
+        }
+
         if (translatedTaggedMessage || translationFailed) {
             this.setState({ isLoading: false });
         }

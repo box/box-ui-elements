@@ -103,7 +103,7 @@ const messages = defineMessages({
         id: 'boxui.contentExplorer.emptyFolder',
     },
     newFolderModalTitle: {
-        defaultMessage: 'Create a New Folder in "{ parentFolderName }"',
+        defaultMessage: 'Create a New Folder in "{parentFolderName}"',
         description:
             'Title shown in the modal used to create a new folder. "parentFolderName" should not be translated',
         id: 'boxui.newFolderModal.title',

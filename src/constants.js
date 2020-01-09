@@ -10,9 +10,10 @@ import Browser from './utils/Browser';
 export const API_PAGE_LIMIT = 1000; // default limit for paginated api calls
 
 /* ----------------------- Size ---------------------------- */
-export const SIZE_SMALL: 'small' = 'small';
 export const SIZE_LARGE: 'large' = 'large';
 export const SIZE_MEDIUM: 'medium' = 'medium';
+export const SIZE_SMALL: 'small' = 'small';
+export const SIZE_VERY_LARGE: 'very_large' = 'very_large';
 
 /* ----------------------- Views ---------------------------- */
 export const VIEW_FOLDER: 'folder' = 'folder';
@@ -23,6 +24,7 @@ export const VIEW_ERROR: 'error' = 'error';
 export const VIEW_UPLOAD_EMPTY: 'upload-empty' = 'upload-empty';
 export const VIEW_UPLOAD_IN_PROGRESS: 'upload-inprogress' = 'upload-inprogress';
 export const VIEW_UPLOAD_SUCCESS: 'upload-success' = 'upload-success';
+export const VIEW_METADATA: 'metadata' = 'metadata';
 
 /* ----------------------- ViewModes ---------------------------- */
 export const VIEW_MODE_LIST: 'list' = 'list';
@@ -91,6 +93,7 @@ export const FIELD_PATH_COLLECTION = 'path_collection';
 export const FIELD_CONTENT_CREATED_AT: 'content_created_at' = 'content_created_at';
 export const FIELD_CONTENT_MODIFIED_AT: 'content_modified_at' = 'content_modified_at';
 export const FIELD_MODIFIED_AT: 'modified_at' = 'modified_at';
+export const FIELD_RESTORED_AT = 'restored_at';
 export const FIELD_RESTORED_FROM = 'restored_from';
 export const FIELD_CREATED_AT = 'created_at';
 export const FIELD_INTERACTED_AT: 'interacted_at' = 'interacted_at';
@@ -106,6 +109,8 @@ export const FIELD_URL = 'url';
 export const FIELD_CREATED_BY = 'created_by';
 export const FIELD_MODIFIED_BY = 'modified_by';
 export const FIELD_OWNED_BY = 'owned_by';
+export const FIELD_RESTORED_BY = 'restored_by';
+export const FIELD_TRASHED_BY = 'trashed_by';
 export const FIELD_DESCRIPTION = 'description';
 export const FIELD_REPRESENTATIONS = 'representations';
 export const FIELD_SHA1 = 'sha1';
@@ -133,6 +138,7 @@ export const FIELD_ACTIVITY_TEMPLATE: 'activity_template' = 'activity_template';
 export const FIELD_APP: 'app' = 'app';
 export const FIELD_OCCURRED_AT: 'occurred_at' = 'occurred_at';
 export const FIELD_RENDERED_TEXT: 'rendered_text' = 'rendered_text';
+export const FIELD_RETENTION: 'retention' = 'retention';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
@@ -150,7 +156,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '2.5.1';
+export const DEFAULT_PREVIEW_VERSION = '2.29.0';
 export const DEFAULT_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
@@ -169,6 +175,7 @@ export const DEFAULT_FETCH_START = 0;
 export const DEFAULT_FETCH_END = 1000;
 export const DEFAULT_VIEW_FILES: 'files' = 'files';
 export const DEFAULT_VIEW_RECENTS: 'recents' = 'recents';
+export const DEFAULT_VIEW_METADATA: 'metadata' = 'metadata';
 export const CLIENT_NAME_CONTENT_PICKER = 'ContentPicker';
 export const CLIENT_NAME_FILE_PICKER = 'FilePicker';
 export const CLIENT_NAME_FOLDER_PICKER = 'FolderPicker';
@@ -181,6 +188,7 @@ export const CLIENT_NAME_OPEN_WITH = 'ContentOpenWith';
 /* ---------------------- Statuses -------------------------- */
 export const STATUS_PENDING: 'pending' = 'pending';
 export const STATUS_IN_PROGRESS: 'inprogress' = 'inprogress';
+export const STATUS_STAGED: 'staged' = 'staged';
 export const STATUS_COMPLETE: 'complete' = 'complete';
 export const STATUS_ERROR: 'error' = 'error';
 
@@ -207,9 +215,10 @@ export const ERROR_CODE_UPLOAD_PENDING_APP_FOLDER_SIZE_LIMIT = 'pending_app_fold
 export const ERROR_CODE_FETCH_FILE = 'fetch_file_error';
 export const ERROR_CODE_FETCH_FILE_DUE_TO_POLICY = 'forbidden_by_policy';
 export const ERROR_CODE_FETCH_FOLDER = 'fetch_folder_error';
+export const ERROR_CODE_FETCH_WEBLINK = 'fetch_weblink_error';
 export const ERROR_CODE_FETCH_CLASSIFICATION = 'fetch_classification_error';
 export const ERROR_CODE_FETCH_COMMENTS = 'fetch_comments_error';
-export const ERROR_CODE_FETCH_CURRENT_VERSION = 'fetch_current_version_error';
+export const ERROR_CODE_FETCH_VERSION = 'fetch_version_error';
 export const ERROR_CODE_FETCH_VERSIONS = 'fetch_versions_error';
 export const ERROR_CODE_FETCH_TASKS = 'fetch_tasks_error';
 export const ERROR_CODE_FETCH_CURRENT_USER = 'fetch_current_user_error';
@@ -276,7 +285,7 @@ export const METRIC_TYPE_ELEMENTS_LOAD_METRIC: 'elements_load_metric' = 'element
 export const IS_ERROR_DISPLAYED = 'isErrorDisplayed'; // used to determine if user will see some error state or message
 
 /* ------------- Representation Hints ------------------- */
-const X_REP_HINT_BASE = '[3d][pdf][text][mp3]';
+const X_REP_HINT_BASE = '[3d][pdf][text][mp3][json]';
 const X_REP_HINT_DOC_THUMBNAIL = '[jpg?dimensions=1024x1024&paged=false]';
 const X_REP_HINT_IMAGE = '[jpg?dimensions=2048x2048,png?dimensions=2048x2048]';
 const X_REP_HINT_VIDEO_DASH = '[dash,mp4][filmstrip]';
@@ -351,34 +360,34 @@ export const HTTP_STATUS_CODE_SERVICE_UNAVAILABLE: 503 = 503;
 export const HTTP_STATUS_CODE_GATEWAY_TIMEOUT: 504 = 504;
 
 /* ------------------ Version Action Types  ---------------------- */
-export const VERSION_RESTORE_ACTION = 'restore';
-export const VERSION_DELETE_ACTION = 'delete';
-export const VERSION_UPLOAD_ACTION = 'upload';
+export const VERSION_DELETE_ACTION: 'delete' = 'delete';
+export const VERSION_PROMOTE_ACTION: 'promote' = 'promote';
+export const VERSION_RESTORE_ACTION: 'restore' = 'restore';
+export const VERSION_UPLOAD_ACTION: 'upload' = 'upload';
+
+/* ------------------ Version Retention Policy Action Types  ---------------------- */
+export const VERSION_RETENTION_DELETE_ACTION: 'permanently_delete' = 'permanently_delete';
+export const VERSION_RETENTION_REMOVE_ACTION: 'remove_retention' = 'remove_retention';
+export const VERSION_RETENTION_INDEFINITE: 'indefinite' = 'indefinite';
 
 /* ------------------ Placeholder Feed Items ------------------------- */
 export const PLACEHOLDER_USER = { type: 'user', id: '2', name: '' };
 
 /* ------------------ Open With ------------------------- */
-export const APP_INTEGRATION = 'app_integration';
+export const APP_INTEGRATION: 'app_integration' = 'app_integration';
 export const BOX_EDIT_INTEGRATION_ID = '1338';
 export const BOX_EDIT_SFC_INTEGRATION_ID = '13418';
 export const OPEN_WITH_BUTTON_ICON_SIZE = 26;
 export const OPEN_WITH_MENU_ITEM_ICON_SIZE = 30;
 
-/* ------------------ Legacy Task Assignment Statuses ----------------- */
-export const TASK_APPROVED: 'approved' = 'approved';
-export const TASK_COMPLETED: 'completed' = 'completed';
-export const TASK_INCOMPLETE: 'incomplete' = 'incomplete';
-export const TASK_REJECTED: 'rejected' = 'rejected';
-
-/* ------------------ New Task Statuses ----------------- */
+/* ------------------ Task Statuses ----------------- */
 export const TASK_NEW_APPROVED: 'APPROVED' = 'APPROVED';
 export const TASK_NEW_COMPLETED: 'COMPLETED' = 'COMPLETED';
 export const TASK_NEW_NOT_STARTED: 'NOT_STARTED' = 'NOT_STARTED';
 export const TASK_NEW_IN_PROGRESS: 'IN_PROGRESS' = 'IN_PROGRESS';
 export const TASK_NEW_REJECTED: 'REJECTED' = 'REJECTED';
 
-/* ------------------ New Task types ----------------- */
+/* ------------------ Task types ----------------- */
 export const TASK_TYPE_GENERAL: 'GENERAL' = 'GENERAL';
 export const TASK_TYPE_APPROVAL: 'APPROVAL' = 'APPROVAL';
 
@@ -389,10 +398,6 @@ export const TASK_COMPLETION_RULE_ANY: 'ANY_ASSIGNEE' = 'ANY_ASSIGNEE';
 /* ----------------- Task Edit modes ---------------- */
 export const TASK_EDIT_MODE_CREATE: 'CREATE' = 'CREATE';
 export const TASK_EDIT_MODE_EDIT: 'EDIT' = 'EDIT';
-
-/* ------------------ Comment types ----------------- */
-export const COMMENT_TYPE_DEFAULT: 'comment' = 'comment';
-export const COMMENT_TYPE_TASK: 'task' = 'task';
 
 /* ------------------ Keyboard Events ----------------- */
 export const KEYS = {

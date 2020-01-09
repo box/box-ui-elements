@@ -13,6 +13,8 @@ import {
     ERROR_CODE_DELETE_TASK_COLLABORATOR,
     API_PAGE_LIMIT,
 } from '../../constants';
+import type { ElementsErrorCallback } from '../../common/types/api';
+import type { BoxItem } from '../../common/types/core';
 
 class TaskCollaborators extends TasksBase {
     getUrlForTaskCollaborators(taskId: string): string {
@@ -25,6 +27,10 @@ class TaskCollaborators extends TasksBase {
 
     getUrlForTaskCollaborator(id: string): string {
         return `${this.getBaseApiUrl()}/undoc/task_collaborators/${id}`;
+    }
+
+    getUrlForTaskGroupCreate(): string {
+        return `${this.getBaseApiUrl()}/undoc/task_collaborators/expand_group`;
     }
 
     createTaskCollaborator({
@@ -58,6 +64,43 @@ class TaskCollaborators extends TasksBase {
         this.post({
             id: file.id,
             url: this.getUrlForTaskCollaboratorCreate(),
+            data: { ...requestData },
+            successCallback,
+            errorCallback,
+        });
+    }
+
+    createTaskCollaboratorsforGroup({
+        errorCallback,
+        file,
+        successCallback,
+        task,
+        group,
+    }: {
+        errorCallback: ElementsErrorCallback,
+        file: BoxItem,
+        group: { id: string },
+        successCallback: Function,
+        task: { id: string },
+    }): void {
+        this.errorCode = ERROR_CODE_CREATE_TASK_COLLABORATOR;
+
+        const requestData = {
+            data: {
+                task: {
+                    type: 'task',
+                    id: task.id,
+                },
+                target: {
+                    type: 'group',
+                    id: group.id,
+                },
+            },
+        };
+
+        this.post({
+            id: file.id,
+            url: this.getUrlForTaskGroupCreate(),
             data: { ...requestData },
             successCallback,
             errorCallback,

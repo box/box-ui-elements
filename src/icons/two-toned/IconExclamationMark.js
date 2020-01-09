@@ -3,9 +3,9 @@ import * as React from 'react';
 
 import { bdlBoxBlue } from '../../styles/variables';
 import AccessibleSVG from '../accessible-svg';
-import type { Icon } from '../flowTypes';
+import type { TwoTonedIcon } from '../flowTypes';
 
-const IconExclamationMark = ({ className = '', height = 24, title, width = 24 }: Icon) => (
+const IconExclamationMark = ({ className = '', height = 24, title, width = 24 }: TwoTonedIcon) => (
     <AccessibleSVG
         className={`icon-exclamation-mark-2 ${className}`}
         title={title}

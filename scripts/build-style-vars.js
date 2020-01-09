@@ -13,8 +13,9 @@ const outputJs = process.argv[3] || `${moduleName}.js`;
 const outputJson = process.argv[4] || `${moduleName}.json`;
 
 const moduleHeader = `
-// @flow
-// File auto-generated
+/* @flow */
+/* File auto-generated */
+/* eslint-disable */
 
 `;
 
@@ -23,10 +24,20 @@ async function main() {
     const jsData = parse(scssData, {
         camelCase: false,
     });
-    const moduleString = Object.entries(jsData)
+
+    // Parse Sass lists
+    const formattedData = Object.entries(jsData).map(([k, v]) => (v.indexOf(', ') >= 0 ? [k, v.split(', ')] : [k, v]));
+
+    const moduleString = formattedData
         .map(([k, v]) => `export const ${camelCase(k)} = ${JSON.stringify(v)}; // ${k}`)
         .join('\n');
-    const jsonString = JSON.stringify(jsData, null, 2);
+
+    // Recreate literal object before stringifying
+    const newJson = formattedData.reduce((prev, [k, v]) => {
+        prev[k] = v;
+        return prev;
+    }, {});
+    const jsonString = JSON.stringify(newJson, null, 2);
 
     // Don't write the files again if nothing has changed
     let priorJson;
@@ -36,7 +47,7 @@ async function main() {
         priorJson = {};
     }
 
-    if (!isEqual(priorJson, jsData)) {
+    if (!isEqual(priorJson, newJson)) {
         await writeFile(outputJs, `${moduleHeader}${moduleString}`);
         await writeFile(outputJson, jsonString);
     }

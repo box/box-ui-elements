@@ -44,7 +44,7 @@ const SuggestedPill = ({ email, id, name, onAdd }: Props) => {
                 onKeyDown={handleKeyPress}
                 type="button"
             >
-                <span className="pill-text suggested-pill">{name}</span>
+                <span className="bdl-Pill-text pill-text suggested-pill">{name}</span>
             </PlainButton>
         </Tooltip>
     );

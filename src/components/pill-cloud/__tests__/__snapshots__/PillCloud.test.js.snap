@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/pill-cloud/PillCloud should render pills 1`] = `
+<div
+  className="bdl-PillCloud pill-cloud-container"
+>
+  <Button
+    className="bdl-Pill bdl-PillCloud-button pill pill-cloud-button"
+    isLoading={false}
+    key="1"
+    showRadar={false}
+    type="submit"
+  >
+    Hello
+  </Button>
+  <Button
+    className="bdl-Pill bdl-PillCloud-button pill pill-cloud-button"
+    isLoading={false}
+    key="2"
+    showRadar={false}
+    type="submit"
+  >
+    There
+  </Button>
+  <Button
+    className="bdl-Pill bdl-PillCloud-button pill pill-cloud-button"
+    isLoading={false}
+    key="3"
+    showRadar={false}
+    type="submit"
+  >
+    Sir
+  </Button>
+</div>
+`;

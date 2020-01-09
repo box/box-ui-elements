@@ -6,22 +6,29 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
+import { FormattedMessage } from 'react-intl';
+
 import { bdlGray50 } from '../../../styles/variables';
 import Tooltip from '../../common/Tooltip';
 import PlainButton from '../../../components/plain-button/PlainButton';
 import IconEllipsis from '../../../icons/general/IconEllipsis';
 import AdditionalTabPlaceholder from './AdditionalTabPlaceholder';
+import messages from './messages';
+import type { AdditionalSidebarTab } from '../flowTypes';
 
 import './AdditionalTab.scss';
 
 type Props = {
     isLoading: boolean,
     onImageLoad: () => void,
+    status?: string,
 } & AdditionalSidebarTab;
 
 type State = {
     isErrored: boolean,
 };
+
+const BLOCKED_BY_SHEILD = 'BLOCKED_BY_SHIELD_ACCESS_POLICY';
 
 class AdditionalTab extends React.PureComponent<Props, State> {
     state = {
@@ -33,10 +40,27 @@ class AdditionalTab extends React.PureComponent<Props, State> {
         this.setState({ isErrored: true });
     };
 
-    render() {
-        const { callback: callbackFn, id, isLoading, iconUrl, onImageLoad, title, ...rest } = this.props;
+    isDisabled() {
+        const { status } = this.props;
+        return status === BLOCKED_BY_SHEILD;
+    }
+
+    getDisabledReason() {
+        let reason = '';
+        const { status } = this.props;
+        switch (status) {
+            case BLOCKED_BY_SHEILD:
+                reason = <FormattedMessage {...messages.blockedByShieldAccessPolicy} />;
+                break;
+            default:
+            // noop
+        }
+        return reason;
+    }
+
+    getTabIcon() {
+        const { id, iconUrl, onImageLoad, title } = this.props;
         const { isErrored } = this.state;
-        const className = classNames('bdl-AdditionalTab', { 'bdl-AdditionalTab--hidden': isLoading });
 
         let TabIcon;
 
@@ -56,15 +80,31 @@ class AdditionalTab extends React.PureComponent<Props, State> {
             TabIcon = <IconEllipsis color={bdlGray50} />;
         }
 
+        return TabIcon;
+    }
+
+    render() {
+        const { callback: callbackFn, id, isLoading, iconUrl, onImageLoad, title, ...rest } = this.props;
+
+        const isDisabled = this.isDisabled();
+
+        const className = classNames('bdl-AdditionalTab', {
+            'bdl-is-hidden': isLoading,
+            'bdl-is-disabled': isDisabled,
+        });
+
+        const tooltipText = isDisabled ? this.getDisabledReason() : title;
+
         return (
-            <Tooltip position="middle-left" text={title}>
+            <Tooltip position="middle-left" text={tooltipText}>
                 <PlainButton
                     className={className}
                     data-testid="additionaltab"
                     type="button"
+                    isDisabled={isDisabled}
                     onClick={() => callbackFn({ id, callbackData: rest })}
                 >
-                    {TabIcon}
+                    {this.getTabIcon()}
                 </PlainButton>
             </Tooltip>
         );

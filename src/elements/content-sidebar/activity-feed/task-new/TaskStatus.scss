@@ -1,6 +1,7 @@
 @import '../../../common/variables';
 
 .bcs-TaskStatus {
+    display: inline-block;
     color: $bdl-gray-62;
     font-weight: bold;
 }

@@ -1,5 +1,4 @@
 @import '../../../common/variables';
-@import './mixins';
 
 $bcs-AssigneeList-avatar-size: 28px;
 
@@ -9,29 +8,21 @@ $bcs-AssigneeList-avatar-size: 28px;
 }
 
 .bcs-AssigneeList-listItem {
-    align-items: center;
     display: flex;
+    align-items: center;
     margin: 6px 0 0 0;
     padding: 3px 0;
 }
 
 .bcs-AssigneeList-listItemAvatar {
-    font-size: 9px;
+    width: $bcs-AssigneeList-avatar-size;
     height: $bcs-AssigneeList-avatar-size;
     margin-right: 10px;
-    width: $bcs-AssigneeList-avatar-size;
-}
-
-.bcs-AssigneeList-listItemDetails {
-    line-height: 16px;
-}
-
-.bcs-AssigneeList-detailsStatus {
-    color: $bdl-gray-62;
+    font-size: 9px;
 }
 
 .bcs-AssigneeList-toggleBtn {
-    color: $bdl-box-blue;
-    margin-left: $bcs-AssigneeList-avatar-size + 10px;
     margin-top: 10px;
+    margin-left: $bcs-AssigneeList-avatar-size + 10px;
+    color: $bdl-box-blue;
 }

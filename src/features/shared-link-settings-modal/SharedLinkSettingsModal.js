@@ -8,6 +8,7 @@ import { Modal, ModalActions } from '../../components/modal';
 import InlineNotice from '../../components/inline-notice';
 import Link from '../../components/link/LinkBase';
 import commonMessages from '../../common/messages';
+import Classification from '../classification';
 
 import VanityNameSection from './VanityNameSection';
 import PasswordSection from './PasswordSection';
@@ -52,6 +53,7 @@ class SharedLinkSettingsModal extends Component {
         isOpen: PropTypes.bool,
         onRequestClose: PropTypes.func,
         submitting: PropTypes.bool,
+        warnOnPublic: PropTypes.bool,
         /** Function called on form submission. Format is:
          * ({
          *      expirationTimestamp: number (in milliseconds),
@@ -108,6 +110,11 @@ class SharedLinkSettingsModal extends Component {
         isDirectLinkAvailable: PropTypes.bool.isRequired,
         /** Whether or not direct link is unavailable only due to download setting */
         isDirectLinkUnavailableDueToDownloadSettings: PropTypes.bool.isRequired,
+        /** Whether or not direct link is unavailable only due to access policy setting */
+        isDirectLinkUnavailableDueToAccessPolicy: PropTypes.bool.isRequired,
+
+        // Classification props
+        item: PropTypes.object,
 
         // Hooks for resin
         cancelButtonProps: PropTypes.object,
@@ -145,13 +152,13 @@ class SharedLinkSettingsModal extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { expirationError, passwordError, vanityNameError } = nextProps;
+    componentDidUpdate(prevProps) {
+        const { expirationError, passwordError, vanityNameError } = this.props;
 
         if (
-            this.props.expirationError !== expirationError ||
-            this.props.passwordError !== passwordError ||
-            this.props.vanityNameError !== vanityNameError
+            prevProps.expirationError !== expirationError ||
+            prevProps.passwordError !== passwordError ||
+            prevProps.vanityNameError !== vanityNameError
         ) {
             this.setState({
                 expirationError,
@@ -315,22 +322,45 @@ class SharedLinkSettingsModal extends Component {
             downloadCheckboxProps,
             isDirectLinkAvailable,
             isDirectLinkUnavailableDueToDownloadSettings,
+            isDirectLinkUnavailableDueToAccessPolicy,
             isDownloadAvailable,
+            item,
         } = this.props;
+
         const { isDownloadEnabled } = this.state;
+        const { classification } = item;
 
         return (
             <AllowDownloadSection
                 canChangeDownload={canChangeDownload}
+                classification={classification}
                 directLink={directLink}
                 directLinkInputProps={directLinkInputProps}
                 downloadCheckboxProps={downloadCheckboxProps}
                 isDirectLinkAvailable={isDirectLinkAvailable}
                 isDirectLinkUnavailableDueToDownloadSettings={isDirectLinkUnavailableDueToDownloadSettings}
+                isDirectLinkUnavailableDueToAccessPolicy={isDirectLinkUnavailableDueToAccessPolicy}
                 isDownloadAvailable={isDownloadAvailable}
                 isDownloadEnabled={isDownloadEnabled}
                 onChange={this.onAllowDownloadChange}
             />
+        );
+    }
+
+    renderModalTitle() {
+        const { item } = this.props;
+        const { bannerPolicy, classification } = item;
+
+        return (
+            <span className="bdl-SharedLinkSettingsModal-title">
+                <FormattedMessage {...messages.modalTitle} />
+                <Classification
+                    definition={bannerPolicy ? bannerPolicy.body : undefined}
+                    messageStyle="tooltip"
+                    name={classification}
+                    className="bdl-SharedLinkSettingsModal-classification"
+                />
+            </span>
         );
     }
 
@@ -356,13 +386,12 @@ class SharedLinkSettingsModal extends Component {
         );
 
         const disableSaveBtn = !(canChangeDownload || canChangeExpiration || canChangePassword || canChangeVanityName);
-
         return (
             <Modal
                 className="shared-link-settings-modal"
                 isOpen={isOpen}
                 onRequestClose={submitting ? undefined : onRequestClose}
-                title={<FormattedMessage {...messages.modalTitle} />}
+                title={this.renderModalTitle()}
                 {...modalProps}
             >
                 <form onSubmit={this.onSubmit}>

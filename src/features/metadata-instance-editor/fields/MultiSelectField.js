@@ -8,6 +8,8 @@ import type { SelectOptionProp } from '../../../components/select-field/props';
 
 import messages from '../messages';
 
+import type { MetadataFieldValue, MetadataTemplateFieldOption } from '../../../common/types/metadata';
+
 import './MultiSelectField.scss';
 
 type Props = {
@@ -36,9 +38,14 @@ const MultiSelectField = ({
             <Label text={displayName}>
                 {!!description && <i className="metadata-instance-editor-field-multi-select-desc">{description}</i>}
                 <MultiSelect
+                    isEscapedWithReference
+                    isScrollable
                     onChange={(selectedOptions: Array<SelectOptionProp>) => {
                         if (selectedOptions.length) {
-                            onChange(dataKey, selectedOptions.map(({ value }) => value));
+                            onChange(
+                                dataKey,
+                                selectedOptions.map(({ value }) => value),
+                            );
                         } else {
                             onRemove(dataKey);
                         }

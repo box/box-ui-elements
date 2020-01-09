@@ -36,19 +36,26 @@ import type { TaskAssigneeCollection, TaskNew, TaskType } from '../../../../comm
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { bdlGray80 } from '../../../../styles/variables';
 import TaskActions from './TaskActions';
+import TaskCompletionRuleIcon from './TaskCompletionRuleIcon';
 import TaskDueDate from './TaskDueDate';
 import TaskStatus from './TaskStatus';
 import AssigneeList from './AssigneeList';
 import TaskModal from '../../TaskModal';
 import commonMessages from '../../../common/messages';
 import messages from './messages';
+import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { ElementsXhrError } from '../../../../common/types/api';
+import type { SelectorItems, User } from '../../../../common/types/core';
+import type { ActionItemError } from '../../../../common/types/feed';
+import type { Translations } from '../../flowTypes';
+import type { FeatureConfig } from '../../../common/feature-checking';
 
 import './Task.scss';
 
 type Props = {|
     ...TaskNew,
     api: API,
-    approverSelectorContacts: SelectorItems,
+    approverSelectorContacts: SelectorItems<>,
     currentUser: User,
     error?: ActionItemError,
     features?: FeatureConfig,
@@ -140,15 +147,6 @@ class Task extends React.Component<Props, State> {
     handleEditModalClose = () => {
         const { onModalClose } = this.props;
         this.setState({ isEditing: false, modalError: undefined });
-
-        if (onModalClose) {
-            onModalClose();
-        }
-    };
-
-    handleEditSubmitSuccess = () => {
-        this.setState({ isEditing: false });
-        const { onModalClose } = this.props;
 
         if (onModalClose) {
             onModalClose();
@@ -264,6 +262,7 @@ class Task extends React.Component<Props, State> {
 
         return (
             <div className="bcs-Task">
+                {/* $FlowFixMe */}
                 {inlineError ? <ActivityError {...inlineError} /> : null}
                 <Media
                     className={classNames('bcs-Task-media', {
@@ -283,10 +282,16 @@ class Task extends React.Component<Props, State> {
                                 constraints={[{ to: 'scrollParent', attachment: 'together' }]}
                                 targetAttachment="bottom right"
                             >
-                                <Media.Menu isDisabled={isConfirmingDelete} data-testid="task-actions-menu">
+                                <Media.Menu
+                                    isDisabled={isConfirmingDelete}
+                                    data-testid="task-actions-menu"
+                                    menuProps={{
+                                        'data-resin-component': ACTIVITY_TARGETS.TASK_OPTIONS,
+                                    }}
+                                >
                                     {permissions.can_update && (
                                         <MenuItem
-                                            data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
+                                            data-resin-target={ACTIVITY_TARGETS.TASK_OPTIONS_EDIT}
                                             data-testid="edit-task"
                                             onClick={this.handleEditClick}
                                         >
@@ -296,7 +301,7 @@ class Task extends React.Component<Props, State> {
                                     )}
                                     {permissions.can_delete && (
                                         <MenuItem
-                                            data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE}
+                                            data-resin-target={ACTIVITY_TARGETS.TASK_OPTIONS_DELETE}
                                             data-testid="delete-task"
                                             onClick={this.handleDeleteClick}
                                         >
@@ -307,6 +312,7 @@ class Task extends React.Component<Props, State> {
                                 </Media.Menu>
                                 {isConfirmingDelete && (
                                     <DeleteConfirmation
+                                        data-resin-component={ACTIVITY_TARGETS.TASK_OPTIONS}
                                         isOpen={isConfirmingDelete}
                                         message={messages.taskDeletePrompt}
                                         onDeleteCancel={this.handleDeleteCancel}
@@ -315,7 +321,7 @@ class Task extends React.Component<Props, State> {
                                 )}
                             </TetherComponent>
                         )}
-                        <div>
+                        <div className="bcs-Task-headline">
                             <FormattedMessage
                                 {...getMessageForTask(!!currentUserAssignment, task_type)}
                                 values={{
@@ -345,6 +351,7 @@ class Task extends React.Component<Props, State> {
                         <div className="bcs-Task-statusContainer">
                             {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
                             <TaskStatus status={status} />
+                            <TaskCompletionRuleIcon completionRule={completion_rule} />
                         </div>
                         <div className="bcs-Task-assigneeListContainer">
                             <AssigneeList
@@ -397,7 +404,7 @@ class Task extends React.Component<Props, State> {
                     error={modalError}
                     feedbackUrl={getFeatureConfig(features, 'activityFeed.tasks').feedbackUrl || ''}
                     onSubmitError={this.handleEditSubmitError}
-                    onSubmitSuccess={this.handleEditSubmitSuccess}
+                    onSubmitSuccess={this.handleEditModalClose}
                     onModalClose={this.handleEditModalClose}
                     isTaskFormOpen={isEditing}
                     taskFormProps={{

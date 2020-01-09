@@ -87,6 +87,16 @@ const messages = defineMessages({
         description: 'Label for remove action.',
         defaultMessage: 'Remove',
     },
+    resume: {
+        id: 'be.resume',
+        description: 'Label for resume action for a single file.',
+        defaultMessage: 'Resume',
+    },
+    resumeAll: {
+        id: 'be.resumeAll',
+        description: 'Label for resume action for multiple files.',
+        defaultMessage: 'Resume All',
+    },
     retry: {
         id: 'be.retry',
         description: 'Label for retry action.',
@@ -136,6 +146,16 @@ const messages = defineMessages({
         id: 'be.gridView',
         description: 'Label for switching to grid view',
         defaultMessage: 'Switch to Grid View',
+    },
+    gridViewIncreaseColumnSize: {
+        id: 'be.gridView.increaseColumnSize',
+        description: 'Label for increasing the size of columns in grid view',
+        defaultMessage: 'Increase column size',
+    },
+    gridViewDecreaseColumnSize: {
+        id: 'be.gridView.decreaseColumnSize',
+        description: 'Label for decreasing the size of columns in grid view',
+        defaultMessage: 'Decrease column size',
     },
     listView: {
         id: 'be.listView',
@@ -592,6 +612,11 @@ const messages = defineMessages({
         description: 'Message shown when there are no folder items.',
         defaultMessage: 'There are no items in this folder.',
     },
+    metadataState: {
+        id: 'be.metadataState',
+        description: 'Message shown when there are no items for provided metadata query.',
+        defaultMessage: 'There are no items in this folder.',
+    },
     recentsState: {
         id: 'be.recentsState',
         description: 'Message shown when there are no recent items.',
@@ -714,7 +739,7 @@ const messages = defineMessages({
     },
     keywordsList: {
         id: 'be.keywordsList',
-        defaultMessage: 'Keywords: { words }',
+        defaultMessage: 'Keywords: {words}',
         description: 'Label for a list of keywords. {words} are the list of keywords.',
     },
     noActivity: {
@@ -729,33 +754,39 @@ const messages = defineMessages({
     },
     versionDeleted: {
         id: 'be.versionDeleted',
-        defaultMessage: '{ name } deleted version { version_number }',
+        defaultMessage: '{name} deleted v{version_number}',
         description:
-            'Message displayed in the activity feed for a deleted version. {name} is the user who performed the action. { version_number } is the file version string.',
+            'Message displayed in the activity feed for a deleted version. {name} is the user who performed the action. {version_number} is the file version string.',
+    },
+    versionPromoted: {
+        id: 'be.versionPromoted',
+        defaultMessage: '{name} promoted v{version_promoted} to v{version_number}',
+        description:
+            'Message displayed in the activity feed for a promoted version. {name} is the user who performed the action. {version_promoted} is the originating file version string. {version_number} is the file version string.',
     },
     versionRestored: {
         id: 'be.versionRestored',
-        defaultMessage: '{ name } restored version { version_number }',
+        defaultMessage: '{name} restored v{version_number}',
         description:
-            'Message displayed in the activity feed for a restored version. {name} is the user who performed the action. { version_number } is the file version string.',
+            'Message displayed in the activity feed for a restored version. {name} is the user who performed the action. {version_number} is the file version string.',
     },
     versionMultipleUsersUploaded: {
         id: 'be.versionMultipleUsersUploaded',
-        defaultMessage: '{ numberOfCollaborators } collaborators uploaded versions { versions }',
+        defaultMessage: '{numberOfCollaborators} collaborators uploaded v{versions}',
         description:
-            'Message displayed in the activity feed to represent the range of versions uploaded by multiple users. { numberOfCollaborators } is a number and { versions } is a range of versions.',
+            'Message displayed in the activity feed to represent the range of versions uploaded by multiple users. {numberOfCollaborators} is a number and {versions} is a range of versions.',
     },
     versionUploadCollapsed: {
         id: 'be.versionUploadCollapsed',
-        defaultMessage: '{ name } uploaded versions { versions }',
+        defaultMessage: '{name} uploaded v{versions}',
         description:
-            'Message displayed in the activity feed to represent the range of versions uploaded by a single user. { name } is the user who uploaded. { versions } is a range of versions.',
+            'Message displayed in the activity feed to represent the range of versions uploaded by a single user. {name} is the user who uploaded. {versions} is a range of versions.',
     },
     versionUploaded: {
         id: 'be.versionUploaded',
-        defaultMessage: '{ name } uploaded version { version_number }',
+        defaultMessage: '{name} uploaded v{version_number}',
         description:
-            'Message displayed in the activity feed for a newly uploaded version. {name} is the user who performed the action. { version_number } is the file version string.',
+            'Message displayed in the activity feed for a newly uploaded version. {name} is the user who performed the action. {version_number} is the file version string.',
     },
     defaultInlineErrorContentMessage: {
         id: 'be.defaultInlineErrorContentMessage',

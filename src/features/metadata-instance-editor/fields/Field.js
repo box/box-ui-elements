@@ -12,6 +12,11 @@ import IntegerField from './IntegerField';
 import MultiSelectField from './MultiSelectField';
 import ReadOnlyField from './ReadOnlyField';
 import messages from '../messages';
+import type {
+    MetadataFieldValue,
+    MetadataTemplateFieldOption,
+    MetadataFieldType,
+} from '../../../common/types/metadata';
 
 import {
     FIELD_TYPE_ENUM,

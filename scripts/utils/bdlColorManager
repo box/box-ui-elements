@@ -43,8 +43,10 @@ const conversionMap = {
     'dtwo': 'bdl-gray-20',
     'efive': 'bdl-gray-10',
     'ffive': 'bdl-gray-05',
+    'fivef': 'bdl-gray-05',
     'fnine': 'bdl-gray-02',
     'seesee': 'bdl-gray-20',
+    'see-see': 'bdl-gray-20',
     'haze': 'bdl-gray-02',
     'off-white': 'bdl-gray-10',
     'sf-fog': 'bdl-gray-30',
@@ -55,9 +57,10 @@ const conversionMap = {
     'better-black': 'bdl-gray-80',
     'downtown-grey': 'bdl-gray-50',
     'twos': 'bdl-gray',
+    'threes': 'bdl-gray',
     'fours': 'bdl-gray-80',
     'sevens': 'bdl-gray-62',
-    'eights': 'bdl-gray-50',
+    'eights': 'bdl-gray-50', // can cause false positives with words like "heights"
     'nines': 'bdl-gray-50',
     'eees': 'bdl-gray-10',
     'tendemob-grey': 'bdl-gray-62',
@@ -79,6 +82,8 @@ function printHelp() {
     console.log('\nSupported operations:');
     console.log('\tcheck\t\tcheck to see if a file contains deprecated values (returns error if it does)');
     console.log('\tswap\t\treplace known-deprecated variable names in a JS or SCSS file');
+    console.log('\nExample:\n\n');
+    console.log(`\tfind src -name '*.scss' -exec ./scripts/utils/bdlColorManager swap {} \;`);
 }
 
 async function main() {
@@ -96,8 +101,11 @@ async function main() {
     const fileType = fileName.split('.').pop();
     const verboseMode = process.argv[4] === '--verbose';
 
-    const converter = fileType === 'js' ? camelCase : identity;
-    const reBadName = new RegExp(Object.keys(conversionMap).map(entry => converter(entry)).join('|'), 'g');
+    const toRegExp = fileType === 'js' ? identity : entity => `\\\$${entity}(?!-)`;
+    const caseConverter = fileType === 'js' ? camelCase : kebabCase;
+    const toTargetLanguage = fileType === 'js' ? camelCase : entity => `$${kebabCase(entity)}`;
+
+    const reBadName = new RegExp(Object.keys(conversionMap).map(entry => toRegExp(caseConverter(entry))).join('|'), 'g');
 
     try {
         const fileToParse = await readFile(fileName, { encoding: 'utf8' });
@@ -118,10 +126,10 @@ async function main() {
             case 'swap':
                 // find, then swap in the proper new name
                 const matches = [...new Set(fileToParse.match(reBadName))];
-                const replacements = matches.map(entry => converter(conversionMap[kebabCase(entry)]));
                 let replacementFile = fileToParse;
 
                 if (verboseMode) {
+                    const replacements = matches.map(entry => caseConverter(conversionMap[kebabCase(entry)]));
                     console.log(colors.cyan('File name:'), colors.white(fileName));
                     console.log(colors.cyan('Found:'), matches);
                     console.log(colors.cyan('Replace with:'), replacements);
@@ -129,7 +137,7 @@ async function main() {
 
                 matches.forEach(match => {
                     if (fileType === 'js' || fileType === 'scss') {
-                        replacementFile = replacementFile.replace(new RegExp(converter(match), 'g'), converter(conversionMap[kebabCase(match)]));
+                        replacementFile = replacementFile.replace(new RegExp(toRegExp(caseConverter(match)), 'g'), toTargetLanguage(conversionMap[kebabCase(match)]));
                     } else {
                         console.error(colors.yellow('Unrecognized file type for conversion. skipping', fileName, '...'));
                         process.exit(0);

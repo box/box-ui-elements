@@ -4,15 +4,9 @@ import classNames from 'classnames';
 import AccessibleSVG from '../accessible-svg';
 import { bdlBoxBlue } from '../../styles/variables';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconPuzzlePieceCircle = ({ className = '', color = bdlBoxBlue, height = 32, title, width = 32 }: Props) => (
+const IconPuzzlePieceCircle = ({ className = '', color = bdlBoxBlue, height = 32, title, width = 32 }: Icon) => (
     <AccessibleSVG
         className={classNames('bdl-IconPuzzlePieceCircle', className)}
         height={height}

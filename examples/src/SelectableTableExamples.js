@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'; // eslint-disable-line max-classes-per-file
 import PropTypes from 'prop-types';
 import { Set } from 'immutable';
 

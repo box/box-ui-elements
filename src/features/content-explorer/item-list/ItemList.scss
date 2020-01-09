@@ -3,8 +3,8 @@
 .content-explorer-item-list {
     .table-header-item {
         color: $bdl-gray-62;
+        font-weight: normal;
         font-size: 14px;
-        font-weight: 400;
         letter-spacing: .035em;
         text-transform: none;
     }
@@ -34,21 +34,21 @@
     }
 
     .item-list-name-container {
-        align-items: center;
         display: flex;
+        align-items: center;
 
         .icon-chevron {
-            margin-left: 7px;
             margin-top: 1px;
+            margin-left: 7px;
         }
     }
 
     .item-list-name {
-        align-items: center;
-        color: $bdl-gray;
         display: flex;
-        font-size: 14px;
+        align-items: center;
         padding-right: 1px;
+        color: $bdl-gray;
+        font-size: 14px;
 
         &.link:hover {
             color: $bdl-box-blue;
@@ -67,17 +67,17 @@
     }
 
     .item-list-name-label {
-        color: $bdl-box-blue;
-        font-size: 11px;
-        font-weight: bold;
         margin-left: 15px;
+        color: $bdl-box-blue;
+        font-weight: bold;
+        font-size: 11px;
         text-transform: uppercase;
     }
 
     .item-list-loading-placeholder {
+        width: 75%;
+        height: 12px;
         background-color: $bdl-gray-30;
         border-radius: 3px;
-        height: 12px;
-        width: 75%;
     }
 }

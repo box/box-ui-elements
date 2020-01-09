@@ -19,6 +19,10 @@ body {
     @include common-typography;
 }
 
+body.is-deja-blue {
+    @include bdl-commonTypography-dejaBlue;
+}
+
 p {
     margin: 0 0 20px;
 }
@@ -29,11 +33,11 @@ h3,
 h4,
 h5,
 h6 {
-    color: inherit;
-    font-family: inherit;
-    font-weight: 400;
-    line-height: 20px;
     margin: 8px 0;
+    color: inherit;
+    font-weight: normal;
+    font-family: inherit;
+    line-height: 20px;
     text-rendering: optimizeLegibility;
 }
 
@@ -66,7 +70,7 @@ h6 {
 
 .strong,
 strong {
-    font-weight: 700;
+    font-weight: bold;
 }
 
 .em,
@@ -142,6 +146,6 @@ textarea {
 .txt-ellipsis {
     max-width: 100%;
     overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
+    text-overflow: ellipsis;
 }

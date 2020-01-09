@@ -5,6 +5,7 @@
  */
 import { getTypedFileId } from '../utils/file';
 import Base from './Base';
+import type { ElementsErrorCallback } from '../common/types/api';
 
 type Params = {
     limit: number,
@@ -88,14 +89,14 @@ class MarkerBasedApi extends Base {
 
     /**
      * Marker based API get
-     *
-     * @param {string} id the file id
-     * @param {Function} successCallback the success callback
-     * @param {Function} errorCallback the error callback
-     * @param {string} marker the marker from the start to start fetching at
-     * @param {number} limit the number of items to fetch
-     * @param {Object} params the request query params
-     * @param {boolean} shouldFetchAll true if should get all the pages before calling the sucessCallback
+     * @param {Object} options
+     * @param {string} options.id the file id
+     * @param {Function} options.successCallback the success callback
+     * @param {Function} options.errorCallback the error callback
+     * @param {string} [options.marker] the marker from the start to start fetching at
+     * @param {number} [options.limit] the number of items to fetch
+     * @param {Object} options.requestData the request query params
+     * @param {boolean} [options.shouldFetchAll] true if should get all the pages before calling the sucessCallback
      */
     async markerGet({
         id,

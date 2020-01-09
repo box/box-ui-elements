@@ -48,14 +48,25 @@ class ProgressBar extends PureComponent<Props, State> {
     }
 
     /**
+     * Starts progress on mount
+     */
+
+    componentDidMount() {
+        this.startProgress();
+    }
+
+    /**
      * Updates state from new props
      *
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props) {
-        this.clearTimeoutAndInterval();
-        const { percent }: Props = nextProps;
-        this.setState({ percent }, this.startProgress);
+    componentDidUpdate(prevProps: Props): void {
+        const { percent }: Props = this.props;
+
+        if (prevProps.percent !== percent) {
+            this.clearTimeoutAndInterval();
+            this.setState({ percent }, this.startProgress);
+        }
     }
 
     /**

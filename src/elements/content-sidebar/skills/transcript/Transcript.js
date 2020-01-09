@@ -21,6 +21,7 @@ import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 import messages from '../../../common/messages';
 import { isValidTimeSlice } from './timeSliceUtils';
 import TranscriptRow from './TranscriptRow';
+import type { SkillCardEntry, SkillCard, SkillCardEntryTimeSlice } from '../../../../common/types/skills';
 import './Transcript.scss';
 
 type Props = {
@@ -55,7 +56,11 @@ class Transcript extends React.PureComponent<Props, State> {
      * @private
      * @return {void}
      */
-    componentWillReceiveProps(): void {
+    componentDidUpdate(prevProps: Props): void {
+        if (prevProps === this.props) {
+            return;
+        }
+
         const wasEditing = typeof this.state.isEditingIndex === 'number';
         this.setState({
             isEditingIndex: wasEditing ? -1 : undefined,

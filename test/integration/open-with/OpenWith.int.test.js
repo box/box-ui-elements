@@ -79,9 +79,6 @@ describe('OpenWith', () => {
 
             // Tooltip should be hidden
             cy.get('@tooltip').should('not.be.visible');
-
-            // The Box Edit entry should be using the word document icon
-            cy.get('.icon-file-word-document');
         });
 
         [

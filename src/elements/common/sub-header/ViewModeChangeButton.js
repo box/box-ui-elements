@@ -1,8 +1,10 @@
 // @flow
 
 import React from 'react';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import classNames from 'classnames';
+import noop from 'lodash/noop';
 
 import Button from '../../../components/button';
 import IconGridViewInverted from '../../../icons/general/IconGridViewInverted';
@@ -16,24 +18,21 @@ import './ViewModeChangeButton.scss';
 
 type Props = {
     className?: string,
-    onViewModeChange: (viewMode: ViewMode) => void,
+    onViewModeChange?: (viewMode: ViewMode) => void,
     viewMode: ViewMode,
 } & InjectIntlProvidedProps;
 
-const ViewModeChangeButton = ({ className = '', onViewModeChange, intl, viewMode, ...rest }: Props) => {
+const ViewModeChangeButton = ({ className = '', onViewModeChange = noop, intl, viewMode, ...rest }: Props) => {
     const isGridView = viewMode === VIEW_MODE_GRID;
-
+    const viewMessage = isGridView ? intl.formatMessage(messages.listView) : intl.formatMessage(messages.gridView);
     const onClick = () => {
         onViewModeChange(isGridView ? VIEW_MODE_LIST : VIEW_MODE_GRID);
     };
 
     return (
-        <Tooltip
-            text={
-                isGridView ? <FormattedMessage {...messages.listView} /> : <FormattedMessage {...messages.gridView} />
-            }
-        >
+        <Tooltip text={viewMessage}>
             <Button
+                aria-label={viewMessage}
                 data-testid="view-mode-change-button"
                 className={classNames('bdl-ViewModeChangeButton', className)}
                 type="button"

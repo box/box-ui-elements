@@ -125,7 +125,7 @@ type Props = {
     isDisabled?: boolean,
     /** Is input required */
     isRequired?: boolean,
-    /** Is user allowed to manually input a value */
+    /** Is user allowed to manually input a value (WARNING: this doesn't work with internationalization) */
     isTextInputAllowed?: boolean,
     /** Label displayed for the text input */
     label: React.Node,
@@ -205,7 +205,7 @@ class DatePicker extends React.Component<Props> {
         }
     }
 
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const { value: nextValue, minDate: nextMinDate, maxDate: nextMaxDate } = nextProps;
         const { value, minDate, maxDate, isTextInputAllowed } = this.props;
 

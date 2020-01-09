@@ -5,18 +5,18 @@
 
     .be-transcript-actions {
         position: absolute;
-        right: 15px;
         top: -46px;
+        right: 15px;
     }
 
     .btn-plain.be-transcript-edit,
     .btn-plain.be-transcript-copy,
     .btn-plain.be-transcript-expand {
-        border-radius: 3px;
+        width: 24px;
         height: 24px;
         margin-left: 7px;
         padding-top: 1px;
-        width: 24px;
+        border-radius: 3px;
 
         &:hover svg path {
             fill: $bdl-gray;
@@ -26,7 +26,7 @@
             background-color: $bdl-gray-10;
 
             .icon-edit > .fill-color {
-                fill: $fivef;
+                fill: $bdl-gray-05;
             }
         }
     }
@@ -41,8 +41,8 @@
     }
 
     .be-transcript-edit-message {
-        color: $bdl-gray-62;
         margin-bottom: 15px;
+        color: $bdl-gray-62;
     }
 
     .be-transcript-content-collapsed {

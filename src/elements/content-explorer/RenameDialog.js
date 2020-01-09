@@ -7,6 +7,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import PrimaryButton from '../../components/primary-button/PrimaryButton';
 import Button from '../../components/button/Button';
 import messages from '../common/messages';
@@ -17,6 +18,7 @@ import {
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     ERROR_CODE_ITEM_NAME_IN_USE,
 } from '../../constants';
+import type { BoxItem } from '../../common/types/core';
 
 type Props = {
     appElement: HTMLElement,

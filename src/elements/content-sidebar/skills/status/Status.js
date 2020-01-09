@@ -18,6 +18,7 @@ import {
     SKILLS_STATUS_PENDING,
     SKILLS_STATUS_INVOKED,
 } from '../../../../constants';
+import type { SkillCard, SkillCardLocalizableType } from '../../../../common/types/skills';
 
 type Props = {
     card: SkillCard,

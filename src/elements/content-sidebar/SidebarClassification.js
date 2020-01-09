@@ -12,6 +12,8 @@ import Classification, { classificationMessages, EditClassificationButton } from
 import { INTERACTION_TARGET, SECTION_TARGETS } from '../common/interactionTargets';
 import Collapsible from '../../components/collapsible';
 import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../constants';
+import type { ClassificationInfo } from './flowTypes';
+import type { BoxItem } from '../../common/types/core';
 import './SidebarClassification.scss';
 
 type OnEdit = (e: SyntheticEvent<HTMLButtonElement>) => void;

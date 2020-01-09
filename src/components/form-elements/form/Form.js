@@ -61,11 +61,14 @@ class Form extends Component {
         };
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        if (nextProps.formValidityState) {
-            Object.keys(nextProps.formValidityState).forEach(key => {
-                if (nextState.registeredInputs[key]) {
-                    nextState.registeredInputs[key](nextProps.formValidityState[key]);
+    componentDidUpdate({ formValidityState: prevFormValidityState }) {
+        const { formValidityState } = this.props;
+        const { registeredInputs } = this.state;
+
+        if (formValidityState !== prevFormValidityState) {
+            Object.keys(formValidityState).forEach(key => {
+                if (registeredInputs[key]) {
+                    registeredInputs[key](formValidityState[key]);
                 }
             });
         }

@@ -21,6 +21,7 @@ import makeResponsive from '../common/makeResponsive';
 import openUrlInsideIframe from '../../utils/iframe';
 import Internationalize from '../common/Internationalize';
 import API from '../../api';
+import MetadataQueryAPIHelper from '../../features/metadata-based-view/MetadataQueryAPIHelper';
 import Footer from './Footer';
 import PreviewDialog from './PreviewDialog';
 import ShareDialog from './ShareDialog';
@@ -30,12 +31,7 @@ import Content from './Content';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH, FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import LocalStore from '../../utils/LocalStore';
-import {
-    isFeatureEnabled,
-    withFeatureConsumer,
-    withFeatureProvider,
-    type FeatureConfig,
-} from '../common/feature-checking';
+import { withFeatureConsumer, withFeatureProvider, type FeatureConfig } from '../common/feature-checking';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -44,12 +40,12 @@ import {
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
     FIELD_NAME,
-    FIELD_REPRESENTATIONS,
     DEFAULT_ROOT,
     VIEW_SEARCH,
     VIEW_FOLDER,
     VIEW_ERROR,
     VIEW_RECENTS,
+    VIEW_METADATA,
     VIEW_MODE_LIST,
     TYPE_FILE,
     TYPE_WEBLINK,
@@ -59,15 +55,33 @@ import {
     DEFAULT_PAGE_SIZE,
     DEFAULT_VIEW_FILES,
     DEFAULT_VIEW_RECENTS,
+    DEFAULT_VIEW_METADATA,
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     TYPED_ID_FOLDER_PREFIX,
 } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
+import type { MetadataQuery, MetadataColumnsToShow } from '../../common/types/metadataQueries';
+import type {
+    View,
+    DefaultView,
+    StringMap,
+    SortBy,
+    SortDirection,
+    Token,
+    Access,
+    Collection,
+    BoxItemPermission,
+    BoxItem,
+} from '../../common/types/core';
+
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentExplorer.scss';
+
+const GRID_VIEW_MAX_COLUMNS = 7;
+const GRID_VIEW_MIN_COLUMNS = 1;
 
 type Props = {
     apiHost: string,
@@ -92,10 +106,13 @@ type Props = {
     isMedium: boolean,
     isSmall: boolean,
     isTouch: boolean,
+    isVeryLarge: boolean,
     language?: string,
     logoUrl?: string,
     measureRef?: Function,
     messages?: StringMap,
+    metadataColumnsToShow: MetadataColumnsToShow,
+    metadataQuery: MetadataQuery,
     onCreate: Function,
     onDelete: Function,
     onDownload: Function,
@@ -122,6 +139,7 @@ type State = {
     currentPageSize: number,
     errorCode: string,
     focusedRow: number,
+    gridColumnCount: number,
     isCreateFolderModalOpen: boolean,
     isDeleteModalOpen: boolean,
     isLoading: boolean,
@@ -159,6 +177,8 @@ class ContentExplorer extends Component<Props, State> {
     firstLoad: boolean = true; // Keeps track of very 1st load
 
     store: LocalStore = new LocalStore();
+
+    metadataQueryAPIHelper: MetadataQueryAPIHelper;
 
     static defaultProps = {
         rootFolderId: DEFAULT_ROOT,
@@ -240,6 +260,7 @@ class ContentExplorer extends Component<Props, State> {
             currentPageSize: initialPageSize,
             errorCode: '',
             focusedRow: 0,
+            gridColumnCount: 4,
             isCreateFolderModalOpen: false,
             isDeleteModalOpen: false,
             isLoading: false,
@@ -288,10 +309,15 @@ class ContentExplorer extends Component<Props, State> {
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
-        if (defaultView === DEFAULT_VIEW_RECENTS) {
-            this.showRecents();
-        } else {
-            this.fetchFolder(currentFolderId);
+        switch (defaultView) {
+            case DEFAULT_VIEW_RECENTS:
+                this.showRecents();
+                break;
+            case DEFAULT_VIEW_METADATA:
+                this.showMetadataQueryResults();
+                break;
+            default:
+                this.fetchFolder(currentFolderId);
         }
     }
 
@@ -303,15 +329,59 @@ class ContentExplorer extends Component<Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props) {
-        const { currentFolderId }: Props = nextProps;
+    componentDidUpdate({ currentFolderId: prevFolderId }: Props, prevState: State): void {
+        const { currentFolderId }: Props = this.props;
         const {
             currentCollection: { id },
-        }: State = this.state;
+        }: State = prevState;
+
+        if (prevFolderId === currentFolderId) {
+            return;
+        }
 
         if (typeof currentFolderId === 'string' && id !== currentFolderId) {
             this.fetchFolder(currentFolderId);
         }
+    }
+
+    /**
+     * Metadata queries success callback
+     *
+     * @private
+     * @param {Object} metadataQueryCollection - Metadata query response collection
+     * @return {void}
+     */
+    showMetadataQueryResultsSuccessCallback = (metadataQueryCollection: Collection): void => {
+        const { currentCollection }: State = this.state;
+        this.setState({
+            currentCollection: {
+                ...currentCollection,
+                ...metadataQueryCollection,
+                percentLoaded: 100,
+            },
+        });
+    };
+
+    /**
+     * Queries metadata_queries/execute API and fetches the result
+     *
+     * @private
+     * @return {void}
+     */
+    showMetadataQueryResults() {
+        const { metadataQuery }: Props = this.props;
+        // Reset search state, the view and show busy indicator
+        this.setState({
+            searchQuery: '',
+            currentCollection: this.currentUnloadedCollection(),
+            view: VIEW_METADATA,
+        });
+        this.metadataQueryAPIHelper = new MetadataQueryAPIHelper(this.api);
+        this.metadataQueryAPIHelper.fetchMetadataQueryResults(
+            metadataQuery,
+            this.showMetadataQueryResultsSuccessCallback,
+            this.errorCallback,
+        );
     }
 
     /**
@@ -394,13 +464,6 @@ class ContentExplorer extends Component<Props, State> {
         }
     };
 
-    getFolderFields = () => {
-        const { features } = this.props;
-        return isFeatureEnabled(features, 'contentExplorer.gridView.enabled')
-            ? [...FOLDER_FIELDS_TO_FETCH, FIELD_REPRESENTATIONS]
-            : FOLDER_FIELDS_TO_FETCH;
-    };
-
     /**
      * Folder fetch success callback
      *
@@ -481,7 +544,7 @@ class ContentExplorer extends Component<Props, State> {
                 this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            { fields: this.getFolderFields(), forceFetch: true },
+            { fields: FOLDER_FIELDS_TO_FETCH, forceFetch: true },
         );
     };
 
@@ -544,7 +607,7 @@ class ContentExplorer extends Component<Props, State> {
         this.api
             .getSearchAPI()
             .search(id, query, currentPageSize, currentOffset, this.searchSuccessCallback, this.errorCallback, {
-                fields: this.getFolderFields(),
+                fields: FOLDER_FIELDS_TO_FETCH,
                 forceFetch: true,
             });
     }, DEFAULT_SEARCH_DEBOUNCE);
@@ -640,7 +703,7 @@ class ContentExplorer extends Component<Props, State> {
                 this.recentsSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            { fields: this.getFolderFields(), forceFetch: true },
+            { fields: FOLDER_FIELDS_TO_FETCH, forceFetch: true },
         );
     }
 
@@ -746,28 +809,20 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     async updateCollection(collection: Collection, selectedItem: ?BoxItem, callback: Function = noop): Object {
-        const { features } = this.props;
         const { items = [] } = collection;
+        const fileAPI = this.api.getFileAPI(false);
         const newCollection: Collection = { ...collection };
         const selectedId = selectedItem ? selectedItem.id : null;
+        const thumbnails = await Promise.all(items.map(item => fileAPI.getThumbnailUrl(item)));
         let newSelectedItem: ?BoxItem;
-
-        const isGridViewEnabled = isFeatureEnabled(features, 'contentExplorer.gridView.enabled');
-
-        let itemThumbnails = [];
-        if (isGridViewEnabled) {
-            const fileAPI = this.api.getFileAPI(false);
-            itemThumbnails = await Promise.all(items.map(item => fileAPI.getThumbnailUrl(item)));
-        }
 
         newCollection.items = items.map((obj, index) => {
             const isSelected = obj.id === selectedId;
             const currentItem = isSelected ? selectedItem : obj;
-            const thumbnailUrl = isGridViewEnabled ? itemThumbnails[index] : null;
             const newItem = {
                 ...currentItem,
                 selected: isSelected,
-                thumbnailUrl,
+                thumbnailUrl: thumbnails[index],
             };
 
             // Only if selectedItem is in the current collection do we want to set selected state
@@ -1116,6 +1171,9 @@ class ContentExplorer extends Component<Props, State> {
                     .getFile(id, this.handleSharedLinkSuccess, noop, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
                 break;
             case TYPE_WEBLINK:
+                this.api
+                    .getWebLinkAPI()
+                    .getWeblink(id, this.handleSharedLinkSuccess, noop, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
                 break;
             default:
                 throw new Error('Unknown Type');
@@ -1280,11 +1338,30 @@ class ContentExplorer extends Component<Props, State> {
         this.setState({ currentOffset: newOffset }, this.refreshCollection);
     };
 
-    getViewMode = (): ViewMode => {
-        const { features }: Props = this.props;
-        const viewModePreference = this.store.getItem(localStoreViewMode);
-        const isGridViewEnabled = isFeatureEnabled(features, 'contentExplorer.gridView.enabled');
-        return isGridViewEnabled && viewModePreference ? viewModePreference : VIEW_MODE_LIST;
+    /**
+     * Get the current viewMode, checking local store if applicable
+     *
+     * @return {ViewMode}
+     */
+    getViewMode = (): ViewMode => this.store.getItem(localStoreViewMode) || VIEW_MODE_LIST;
+
+    /**
+     * Get the maximum number of grid view columns based on the current width of the
+     * content explorer.
+     *
+     * @return {number}
+     */
+    getMaxNumberOfGridViewColumnsForWidth = (): number => {
+        const { isSmall, isMedium, isLarge } = this.props;
+        let maxWidthColumns = GRID_VIEW_MAX_COLUMNS;
+        if (isSmall) {
+            maxWidthColumns = 1;
+        } else if (isMedium) {
+            maxWidthColumns = 3;
+        } else if (isLarge) {
+            maxWidthColumns = 5;
+        }
+        return maxWidthColumns;
     };
 
     /**
@@ -1294,12 +1371,21 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     changeViewMode = (viewMode: ViewMode): void => {
-        const { features }: Props = this.props;
+        this.store.setItem(localStoreViewMode, viewMode);
+        this.forceUpdate();
+    };
 
-        if (isFeatureEnabled(features, 'contentExplorer.gridView.enabled')) {
-            this.store.setItem(localStoreViewMode, viewMode);
-            this.forceUpdate();
-        }
+    /**
+     * Callback for when value of GridViewSlider changes
+     *
+     * @param {number} sliderValue - value of slider
+     * @return {void}
+     */
+    onGridViewSliderChange = (sliderValue: number): void => {
+        // need to do this calculation since lowest value of grid view slider
+        // means highest number of columns
+        const gridColumnCount = GRID_VIEW_MAX_COLUMNS - sliderValue + 1;
+        this.setState({ gridColumnCount });
     };
 
     /**
@@ -1341,6 +1427,7 @@ class ContentExplorer extends Component<Props, State> {
             requestInterceptor,
             responseInterceptor,
             contentPreviewProps,
+            metadataColumnsToShow,
         }: Props = this.props;
 
         const {
@@ -1349,6 +1436,7 @@ class ContentExplorer extends Component<Props, State> {
             currentCollection,
             currentPageSize,
             searchQuery,
+            gridColumnCount,
             isDeleteModalOpen,
             isRenameModalOpen,
             isShareModalOpen,
@@ -1366,8 +1454,10 @@ class ContentExplorer extends Component<Props, State> {
         const styleClassName = classNames('be bce', className);
         const allowUpload: boolean = canUpload && !!can_upload;
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
+        const hasHeader: boolean = view !== VIEW_METADATA; // Show Header and SubHeader when it's not metadata view
 
         const viewMode = this.getViewMode();
+        const maxGridColumnCount = this.getMaxNumberOfGridViewColumnsForWidth();
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -1375,53 +1465,64 @@ class ContentExplorer extends Component<Props, State> {
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
                     <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
-                        <Header
-                            view={view}
-                            isSmall={isSmall}
-                            searchQuery={searchQuery}
-                            logoUrl={logoUrl}
-                            onSearch={this.search}
-                        />
-                        <SubHeader
-                            view={view}
-                            viewMode={viewMode}
-                            rootId={rootFolderId}
-                            isSmall={isSmall}
-                            rootName={rootName}
-                            currentCollection={currentCollection}
-                            canUpload={allowUpload}
-                            canCreateNewFolder={allowCreate}
-                            onUpload={this.upload}
-                            onCreate={this.createFolder}
-                            onItemClick={this.fetchFolder}
-                            onSortChange={this.sort}
-                            onViewModeChange={this.changeViewMode}
-                        />
+                        {hasHeader && (
+                            <>
+                                <Header
+                                    view={view}
+                                    isSmall={isSmall}
+                                    searchQuery={searchQuery}
+                                    logoUrl={logoUrl}
+                                    onSearch={this.search}
+                                />
+                                <SubHeader
+                                    view={view}
+                                    viewMode={viewMode}
+                                    rootId={rootFolderId}
+                                    isSmall={isSmall}
+                                    rootName={rootName}
+                                    currentCollection={currentCollection}
+                                    canUpload={allowUpload}
+                                    canCreateNewFolder={allowCreate}
+                                    gridColumnCount={gridColumnCount}
+                                    gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
+                                    gridMinColumns={GRID_VIEW_MIN_COLUMNS}
+                                    maxGridColumnCountForWidth={maxGridColumnCount}
+                                    onUpload={this.upload}
+                                    onCreate={this.createFolder}
+                                    onGridViewSliderChange={this.onGridViewSliderChange}
+                                    onItemClick={this.fetchFolder}
+                                    onSortChange={this.sort}
+                                    onViewModeChange={this.changeViewMode}
+                                />
+                            </>
+                        )}
                         <Content
-                            view={view}
-                            viewMode={viewMode}
-                            rootId={rootFolderId}
-                            isSmall={isSmall}
-                            isMedium={isMedium}
-                            isTouch={isTouch}
-                            rootElement={this.rootElement}
-                            focusedRow={focusedRow}
+                            canDelete={canDelete}
+                            canDownload={canDownload}
+                            canPreview={canPreview}
+                            canRename={canRename}
                             canSetShareAccess={canSetShareAccess}
                             canShare={canShare}
-                            canPreview={canPreview}
-                            canDelete={canDelete}
-                            canRename={canRename}
-                            canDownload={canDownload}
                             currentCollection={currentCollection}
-                            tableRef={this.tableRef}
-                            onItemSelect={this.select}
+                            focusedRow={focusedRow}
+                            gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
+                            isMedium={isMedium}
+                            isSmall={isSmall}
+                            isTouch={isTouch}
+                            metadataColumnsToShow={metadataColumnsToShow}
                             onItemClick={this.onItemClick}
                             onItemDelete={this.delete}
                             onItemDownload={this.download}
-                            onItemRename={this.rename}
-                            onItemShare={this.share}
                             onItemPreview={this.preview}
+                            onItemRename={this.rename}
+                            onItemSelect={this.select}
+                            onItemShare={this.share}
                             onSortChange={this.sort}
+                            rootElement={this.rootElement}
+                            rootId={rootFolderId}
+                            tableRef={this.tableRef}
+                            view={view}
+                            viewMode={viewMode}
                         />
                         <Footer>
                             <Pagination

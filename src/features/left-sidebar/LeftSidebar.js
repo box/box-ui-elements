@@ -13,9 +13,10 @@ import CopyrightFooter from './CopyrightFooter';
 import InstantLogin from './InstantLogin';
 import LeftSidebarDropWrapper from './LeftSidebarDropWrapper';
 import LeftSidebarIconWrapper from './LeftSidebarIconWrapper';
-import LeftSidebarLink from './LeftSidebarLink';
 import NewItemsIndicator from './NewItemsIndicator';
+import defaultNavLinkRenderer from './defaultNavLinkRenderer';
 
+import type { Props as LeftSidebarLinkProps } from './LeftSidebarLink';
 import type { Callout } from './Callout';
 
 import './styles/LeftSidebar.scss';
@@ -39,6 +40,8 @@ type SubMenuItem = {
     id: string,
     /** Localized text string to use for individual menu items */
     message: string,
+    /** Optional left side bar link renderer. Defaults to defaultNavLinkRenderer */
+    navLinkRenderer?: (props: LeftSidebarLinkProps) => React.Node,
     /** Whether we should show a badge marking new item content */
     newItemBadge?: boolean,
     /** Optional remove link click handler */
@@ -51,6 +54,8 @@ type SubMenuItem = {
     scaleIcon?: boolean,
     /** Whether the current page is associated with the current link */
     selected?: boolean,
+    /** Whether to show drop zone only when hovered over */
+    showDropZoneOnHover?: boolean,
     /** Whether the tooltip should be shown */
     showTooltip?: boolean,
 };
@@ -78,6 +83,8 @@ type MenuItem = {
     menuItems?: Array<SubMenuItem>,
     /** Localized text string to use for individual menu items */
     message: string,
+    /** Optional left side bar link renderer. Defaults to defaultNavLinkRenderer */
+    navLinkRenderer?: (props: LeftSidebarLinkProps) => React.Node,
     /** Whether we should show a badge marking new item content */
     newItemBadge?: boolean,
     /** Optional remove link click handler */
@@ -95,6 +102,8 @@ type MenuItem = {
     selected?: boolean,
     /** Whether child icons of this menu item should be shown */
     showChildIcons?: boolean,
+    /** Whether to show drop zone only when hovered over */
+    showDropZoneOnHover?: boolean,
     /** Whether to show a loading indicator on the list */
     showLoadingIndicator?: boolean,
     /** Whether the tooltip should be shown */
@@ -176,7 +185,7 @@ class LeftSidebar extends React.Component<Props, State> {
 
     getIcon(
         iconElement?: ?React.Element<any>,
-        IconComponent?: ?React.ComponentType<any>,
+        IconComponent?: ?React.ComponentType<any>, // eslint-disable-line
         customTheme?: Object = {},
         selected?: boolean,
         scaleIcon?: boolean,
@@ -220,6 +229,7 @@ class LeftSidebar extends React.Component<Props, State> {
             id,
             menuItems,
             placeholder,
+            showDropZoneOnHover,
         } = headerLinkProps;
 
         const heading = onToggleCollapse ? (
@@ -236,6 +246,8 @@ class LeftSidebar extends React.Component<Props, State> {
             );
 
         const classes = classNames('left-sidebar-list', className, {
+            'is-loading-empty': showLoadingIndicator && menuItems && menuItems.length === 0,
+            'is-loading': showLoadingIndicator && menuItems && menuItems.length > 0,
             'lsb-scrollable-shadow-top': this.state.isScrollableAbove,
             'lsb-scrollable-shadow-bottom': this.state.isScrollableBelow,
         });
@@ -263,7 +275,11 @@ class LeftSidebar extends React.Component<Props, State> {
         );
 
         return canReceiveDrop ? (
-            <LeftSidebarDropWrapper isDragging={leftSidebarProps.isDragging} dropTargetRef={dropTargetRef}>
+            <LeftSidebarDropWrapper
+                isDragging={leftSidebarProps.isDragging}
+                dropTargetRef={dropTargetRef}
+                showDropZoneOnHover={showDropZoneOnHover}
+            >
                 {builtNavList}
             </LeftSidebarDropWrapper>
         ) : (
@@ -282,6 +298,7 @@ class LeftSidebar extends React.Component<Props, State> {
             iconElement,
             id,
             message,
+            navLinkRenderer,
             newItemBadge,
             onClickRemove,
             removeButtonHtmlAttributes,
@@ -290,32 +307,31 @@ class LeftSidebar extends React.Component<Props, State> {
             scaleIcon,
             selected = false,
             showTooltip,
+            showDropZoneOnHover,
         } = props;
 
         const linkClassNames = classNames('left-sidebar-link', className, {
             'is-selected': selected,
         });
 
-        const builtLink = (
-            <LeftSidebarLink
-                callout={callout}
-                canReceiveDrop={canReceiveDrop}
-                className={linkClassNames}
-                customTheme={leftSidebarProps.customTheme}
-                onClickRemove={onClickRemove}
-                htmlAttributes={htmlAttributes}
-                icon={this.getIcon(iconElement, iconComponent, leftSidebarProps.customTheme, selected, scaleIcon)}
-                isScrolling={this.state.isScrolling}
-                key={`link-${id}`}
-                message={message}
-                newItemBadge={this.getNewItemBadge(newItemBadge, leftSidebarProps.customTheme)}
-                removeButtonHtmlAttributes={removeButtonHtmlAttributes}
-                routerLink={routerLink}
-                routerProps={routerProps}
-                selected={selected}
-                showTooltip={showTooltip}
-            />
-        );
+        const linkProps = {
+            callout,
+            className: linkClassNames,
+            customTheme: leftSidebarProps.customTheme,
+            onClickRemove,
+            htmlAttributes,
+            icon: this.getIcon(iconElement, iconComponent, leftSidebarProps.customTheme, selected, scaleIcon),
+            isScrolling: this.state.isScrolling,
+            message,
+            newItemBadge: this.getNewItemBadge(newItemBadge, leftSidebarProps.customTheme),
+            removeButtonHtmlAttributes,
+            routerLink,
+            routerProps,
+            selected,
+            showTooltip,
+        };
+
+        const builtLink = navLinkRenderer ? navLinkRenderer(linkProps) : defaultNavLinkRenderer(linkProps);
 
         // Check for menu items on links so we don't double-highlight groups
         return canReceiveDrop && !props.menuItems ? (
@@ -323,11 +339,12 @@ class LeftSidebar extends React.Component<Props, State> {
                 isDragging={leftSidebarProps.isDragging}
                 dropTargetRef={dropTargetRef}
                 key={`link-${id}`}
+                showDropZoneOnHover={showDropZoneOnHover}
             >
                 {builtLink}
             </LeftSidebarDropWrapper>
         ) : (
-            builtLink
+            <React.Fragment key={`link-${id}`}>{builtLink}</React.Fragment>
         );
     }
 

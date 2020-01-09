@@ -3,28 +3,21 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 import AccessibleSVG from '../accessible-svg';
-import { bdlNeutral03 } from '../../styles/variables';
+import { bdlGray80 } from '../../styles/variables';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconCollectionsAdd = ({ className = '', color = bdlNeutral03, height = 32, title, width = 32 }: Props) => (
+const IconCollectionsAdd = ({ className = '', color = bdlGray80, height = 16, title, width = 16 }: Icon) => (
     <AccessibleSVG
         className={classNames('bdl-IconCollectionsAdd', className)}
         height={height}
         title={title}
-        viewBox="0 0 32 32"
+        viewBox="0 0 16 16"
         width={width}
     >
         <path
             className="fill-color"
-            d="M7.896 0h21.642A2.462 2.462 0 0 1 32 2.462v21.642a2.462 2.462 0 0 1-2.462 2.462H7.896a2.462 2.462 0 0 1-2.462-2.462V2.462A2.462 2.462 0 0 1 7.896 0zm.615 23.49h20.412V3.076H8.511v20.412zM1.509 13.282c.834 0 1.51.676 1.51 1.51V26.52a2.462 2.462 0 0 0 2.461 2.46h11.728a1.51 1.51 0 0 1 0 3.019H4.923A4.923 4.923 0 0 1 0 27.077V14.792a1.51 1.51 0 0 1 1.51-1.509zm18.313-1.105h5.57c.251 0 .454.203.454.454v1.813c0 .25-.203.454-.453.454h-5.571v5.57a.454.454 0 0 1-.454.454h-1.813a.453.453 0 0 1-.454-.453v-5.571h-5.57a.453.453 0 0 1-.454-.454v-1.813c0-.25.203-.454.453-.454h5.571v-5.57c0-.251.203-.454.454-.454h1.813c.25 0 .454.203.454.453v5.571z"
+            d="M1.5 7c.25 0 .5.135.5.5v5.103C2 13.504 2.5 14 3.397 14H8.5c.358.01.5.25.5.5s-.142.49-.5.5H3.154A2.154 2.154 0 0 1 1 12.847V7.5c0-.364.25-.5.5-.5zm12.388-6C14.502 1 15 1.498 15 2.112v9.776c0 .614-.498 1.112-1.112 1.112H4.112A1.112 1.112 0 0 1 3 11.888V2.112C3 1.498 3.498 1 4.112 1h9.776zM14 2H4v10h10V2zM9.5 4v2.5H12v1H9.5V10h-1V7.5H6v-1h2.5V4h1z"
             fill={color}
             fillRule="nonzero"
         />

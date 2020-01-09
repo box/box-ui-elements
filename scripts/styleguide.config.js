@@ -47,6 +47,7 @@ const allSections = [
             '../src/components/dropdown-menu/DropdownMenu.js',
             '../src/components/error-mask/ErrorMask.js',
             '../src/components/flyout/Flyout.js',
+            '../src/components/ghost/Ghost.js',
             '../src/components/flyout/Overlay.js',
             '../src/components/focus-trap/FocusTrap.js',
             '../src/components/footer-indicator/FooterIndicator.js',
@@ -77,6 +78,7 @@ const allSections = [
             '../src/components/pill-cloud/PillCloud.js',
             '../src/components/pill-selector-dropdown/PillSelectorDropdown.js',
             '../src/components/plain-button/PlainButton.js',
+            '../src/components/popper/PopperComponent.js',
             '../src/components/primary-button/PrimaryButton.js',
             '../src/components/progress-bar/ProgressBar.js',
             '../src/components/radar/RadarAnimation.js',
@@ -156,7 +158,7 @@ const allSections = [
             },
             {
                 name: 'General',
-                components: '../src/icons/general/[A-Z]*.js',
+                content: '../src/icons/general/README.md',
             },
             {
                 name: 'Google Docs',
@@ -168,7 +170,7 @@ const allSections = [
             },
             {
                 name: 'Items',
-                components: ['../src/icons/bookmark-icon/BookmarkIcon.js', '../src/icons/item-icon/ItemIcon.js'],
+                components: ['../src/icons/item-icon/ItemIcon.js'],
             },
             {
                 name: 'iWork',
@@ -232,7 +234,6 @@ const allSections = [
             '../src/features/shared-link-modal/SharedLinkModal.js',
             '../src/features/shared-link-settings-modal/SharedLinkSettingsModal.js',
             '../src/features/unified-share-modal/UnifiedShareModal.js',
-            '../src/features/version-history-modal/VersionHistoryModal.js',
         ],
         sections: [
             {
@@ -284,6 +285,7 @@ module.exports = {
     },
     pagePerSection: true,
     require: [path.resolve(__dirname, 'styleguide.setup.js'), path.resolve(__dirname, 'styleguide.styles.scss')],
+    showSidebar: process.env.BROWSERSLIST_ENV !== 'test',
     styleguideDir: path.join(__dirname, '../styleguide'),
     sections: allSections,
     styles: {

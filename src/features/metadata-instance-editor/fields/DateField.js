@@ -4,8 +4,8 @@ import { injectIntl } from 'react-intl';
 
 import DatePicker from '../../../components/date-picker';
 import { convertISOStringToUTCDate } from '../../../utils/datetime';
-
 import messages from '../messages';
+import type { MetadataFieldValue } from '../../../common/types/metadata';
 import './DateField.scss';
 
 type Props = {

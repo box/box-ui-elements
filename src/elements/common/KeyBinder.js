@@ -7,6 +7,7 @@
 import React, { PureComponent } from 'react';
 import noop from 'lodash/noop';
 import { isInputElement } from '../../utils/dom';
+import type { BoxItem } from '../../common/types/core';
 
 type Props = {
     children: Function,
@@ -28,6 +29,9 @@ type Props = {
 
 type State = {
     focusOnRender: boolean,
+    prevId: string | void,
+    prevScrollToColumn: number,
+    prevScrollToRow: number,
     scrollToColumn: number,
     scrollToRow: number,
 };
@@ -57,6 +61,45 @@ class KeyBinder extends PureComponent<Props, State> {
     };
 
     /**
+     * Resets scroll position if props change
+     * @private
+     * @inheritdoc
+     * @return {State|null}
+     */
+    static getDerivedStateFromProps(props: Props, state: State) {
+        const { prevId, prevScrollToColumn, prevScrollToRow }: State = state;
+        const { id, scrollToColumn: scrollToColumnProp, scrollToRow: scrollToRowProp }: Props = props;
+
+        if (id !== prevId) {
+            return {
+                focusOnRender: false,
+                prevId: id,
+                prevScrollToColumn: 0,
+                prevScrollToRow: 0,
+                scrollToColumn: 0,
+                scrollToRow: 0,
+            };
+        }
+
+        const newState = {};
+
+        if (prevScrollToColumn !== scrollToColumnProp && prevScrollToRow !== scrollToRowProp) {
+            newState.prevScrollToColumn = scrollToColumnProp;
+            newState.prevScrollToRow = scrollToRowProp;
+            newState.scrollToColumn = scrollToColumnProp;
+            newState.scrollToRow = scrollToRowProp;
+        } else if (scrollToRowProp !== prevScrollToRow) {
+            newState.prevScrollToRow = scrollToRowProp;
+            newState.scrollToRow = scrollToRowProp;
+        } else if (scrollToColumnProp !== prevScrollToColumn) {
+            newState.prevScrollToColumn = scrollToColumnProp;
+            newState.scrollToColumn = scrollToColumnProp;
+        }
+
+        return Object.keys(newState).length ? newState : null;
+    }
+
+    /**
      * [constructor]
      *
      * @private
@@ -65,51 +108,20 @@ class KeyBinder extends PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
 
+        const { id, scrollToRow, scrollToColumn }: Props = props;
         this.state = {
-            scrollToColumn: props.scrollToColumn,
-            scrollToRow: props.scrollToRow,
             focusOnRender: false,
+            prevId: id,
+            prevScrollToColumn: scrollToColumn,
+            prevScrollToRow: scrollToRow,
+            scrollToColumn,
+            scrollToRow,
         };
 
         this.columnStartIndex = 0;
         this.columnStopIndex = 0;
         this.rowStartIndex = 0;
         this.rowStopIndex = 0;
-    }
-
-    /**
-     * Resets scroll states and sets new states if
-     * needed specially when collection changes
-     *
-     * @private
-     * @inheritdoc
-     * @return {void}
-     */
-    componentWillReceiveProps(nextProps: Props): void {
-        const { id, scrollToColumn, scrollToRow }: Props = nextProps;
-        const { id: prevId }: Props = this.props;
-        const { scrollToColumn: prevScrollToColumn, scrollToRow: prevScrollToRow }: State = this.state;
-        const newState = {};
-
-        if (id !== prevId) {
-            // Only when the entire collection changes
-            // like folder navigate, reset the scroll states
-            newState.scrollToColumn = 0;
-            newState.scrollToRow = 0;
-            newState.focusOnRender = false;
-        } else if (prevScrollToColumn !== scrollToColumn && prevScrollToRow !== scrollToRow) {
-            newState.scrollToColumn = scrollToColumn;
-            newState.scrollToRow = scrollToRow;
-        } else if (prevScrollToColumn !== scrollToColumn) {
-            newState.scrollToColumn = scrollToColumn;
-        } else if (prevScrollToRow !== scrollToRow) {
-            newState.scrollToRow = scrollToRow;
-        }
-
-        // Only update the state if there is something to set
-        if (Object.keys(newState).length) {
-            this.setState(newState);
-        }
     }
 
     /**

@@ -5,6 +5,7 @@
  */
 import API from '../../../api';
 import { FILE_VERSION_FIELDS_TO_FETCH } from '../../../utils/fields';
+import type { BoxItem, FileVersions, BoxItemVersion } from '../../../common/types/core';
 
 export type fetchPayload = [BoxItem, FileVersions];
 
@@ -51,7 +52,7 @@ export default class VersionsSidebarAPI {
         const { file_version = {} } = fileResponse;
 
         return new Promise((resolve, reject) =>
-            this.api.getVersionsAPI(false).getCurrentVersion(
+            this.api.getVersionsAPI(false).getVersion(
                 this.fileId,
                 file_version.id,
                 (currentVersionResponse: BoxItemVersion) => {
@@ -64,6 +65,12 @@ export default class VersionsSidebarAPI {
                 },
                 reject,
             ),
+        );
+    };
+
+    fetchVersion = (versionId: string): Promise<BoxItemVersion> => {
+        return new Promise((resolve, reject) =>
+            this.api.getVersionsAPI(false).getVersion(this.fileId, versionId, resolve, reject),
         );
     };
 

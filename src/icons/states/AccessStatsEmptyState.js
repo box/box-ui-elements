@@ -3,16 +3,9 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const AccessStatsEmptyState = ({ className = '', color = '#333', height = 131, title, width = 145 }: Props) => (
+const AccessStatsEmptyState = ({ className = '', color = '#333', height = 131, title, width = 145 }: Icon) => (
     <AccessibleSVG className={`access-stats-empty-state ${className}`} height={height} title={title} width={width}>
         <g fill="none" fillRule="evenodd">
             <path

@@ -1,5 +1,4 @@
 @import '../common/variables';
-@import '~react-virtualized/styles.css';
 
 .bcp-item-grid {
     flex: 1;
@@ -11,9 +10,9 @@
 }
 
 .bcp-item-row {
+    border-top: 1px solid $bdl-gray-10;
     border-bottom: 1px solid transparent;
     border-left: 2px solid transparent;
-    border-top: 1px solid $bdl-gray-10;
     outline: none;
 
     &.bcp-item-row-selected {
@@ -52,17 +51,18 @@
 
             &:active,
             &:focus {
+                color: $blue;
                 background-color: $white;
                 background-image: linear-gradient(45deg, transparent 50%, $blue 50%), linear-gradient(135deg, $blue 50%, transparent 50%);
                 border-color: $blue;
-                color: $blue;
                 outline: none;
             }
         }
     }
 
-    .checkbox-container {
-        margin: 0;
+    .checkbox-container,
+    .radio-container {
+        margin: 0 0 0 1px;
 
         span,
         input {
@@ -80,7 +80,7 @@
             &.bcp-shared-access-select {
                 background-color: $white;
                 background-image: linear-gradient(45deg, transparent 50%, $bdl-gray-62 50%), linear-gradient(135deg, $bdl-gray-62 50%, transparent 50%);
-                border-color: $see-see;
+                border-color: $bdl-gray-20;
             }
         }
 

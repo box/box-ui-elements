@@ -5,6 +5,7 @@
  */
 
 import Cache from './Cache';
+import type APICache from './Cache';
 
 const KEY_PREFIX = 'localStore';
 const SERVICE_VERSION = '0';

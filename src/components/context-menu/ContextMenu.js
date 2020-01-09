@@ -32,32 +32,37 @@ class ContextMenu extends React.Component<Props, State> {
         constraints: [],
     };
 
+    constructor(props: Props) {
+        super(props);
+
+        this.menuID = uniqueId('contextmenu');
+        this.menuTargetID = uniqueId('contextmenutarget');
+    }
+
     state = {
         isOpen: false,
         targetOffset: '',
     };
 
-    componentWillMount() {
-        this.menuID = uniqueId('contextmenu');
-        this.menuTargetID = uniqueId('contextmenutarget');
-    }
+    componentDidUpdate(prevProps: Props, prevState: State): void {
+        const { isOpen } = this.state;
+        const { isOpen: prevIsOpen } = prevState;
+        const { isDisabled: prevIsDisabled } = prevProps;
+        const { isDisabled } = this.props;
 
-    componentWillReceiveProps(nextProps: Props) {
-        // if the menu becomes disabled while it is open, we should close it
-        if (!this.props.isDisabled && nextProps.isDisabled && this.state.isOpen) {
-            this.handleMenuClose();
-        }
-    }
-
-    componentDidUpdate(prevProps: Props, prevState: State) {
-        if (!prevState.isOpen && this.state.isOpen) {
+        if (!prevIsOpen && isOpen) {
             // When menu is being opened
             document.addEventListener('click', this.handleDocumentClick, true);
             document.addEventListener('contextmenu', this.handleDocumentClick, true);
-        } else if (prevState.isOpen && !this.state.isOpen) {
+        } else if (prevIsOpen && !isOpen) {
             // When menu is being closed
             document.removeEventListener('contextmenu', this.handleDocumentClick, true);
             document.removeEventListener('click', this.handleDocumentClick, true);
+        }
+
+        // if the menu becomes disabled while it is open, we should close it
+        if (!isDisabled && prevIsDisabled && isOpen) {
+            this.handleMenuClose();
         }
     }
 

@@ -2,16 +2,18 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
-import GridViewWrapper from '../../components/grid-view/GridViewWrapper';
+import GridView from '../../components/grid-view/GridView';
 import ItemGridCell from './ItemGridCell';
 import type { ItemGridProps } from './flowTypes';
+import type { BoxItem, Collection } from '../../common/types/core';
 
 type Props = {
     currentCollection: Collection,
+    gridColumnCount: number,
     ...$Exact<ItemGridProps>,
 };
 
-const ItemGrid = ({ currentCollection, rootId, ...rest }: Props) => {
+const ItemGrid = ({ currentCollection, gridColumnCount, rootId, ...rest }: Props) => {
     /**
      * Renderer used for cards in grid view
      *
@@ -27,7 +29,8 @@ const ItemGrid = ({ currentCollection, rootId, ...rest }: Props) => {
     return (
         <AutoSizer>
             {({ height, width }) => (
-                <GridViewWrapper
+                <GridView
+                    columnCount={gridColumnCount}
                     currentCollection={currentCollection}
                     height={height}
                     slotRenderer={slotRenderer}

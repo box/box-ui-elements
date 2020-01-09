@@ -6,6 +6,7 @@
 
 import React from 'react';
 import MoreOptions from './MoreOptions';
+import type { BoxItem } from '../../common/types/core';
 
 export default (
     canPreview: boolean,

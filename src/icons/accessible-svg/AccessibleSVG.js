@@ -10,11 +10,7 @@ type Props = {
 };
 
 class AccessibleSVG extends React.Component<Props> {
-    componentWillMount() {
-        this.id = uniqueId('icon');
-    }
-
-    id: string;
+    id: string = uniqueId('icon');
 
     render() {
         const { children, title, ...rest } = this.props;

@@ -1,9 +1,8 @@
 .bcu-item-progress {
-    align-items: center;
     display: flex;
+    align-items: center;
 }
 
 .bcu-progress-label {
-    min-width: 40px; // 100% takes up 31px + 9px padding
-    padding-right: 9px;
+    min-width: 31px; // 100% takes up 31px
 }

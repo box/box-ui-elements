@@ -183,15 +183,13 @@ class Flyout extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
+
+        this.overlayID = uniqueId('overlay');
+        this.overlayButtonID = uniqueId('flyoutbutton');
         this.state = {
             isVisible: props.isVisibleByDefault,
             isButtonClicked: false,
         };
-    }
-
-    componentWillMount() {
-        this.overlayID = uniqueId('overlay');
-        this.overlayButtonID = uniqueId('flyoutbutton');
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {

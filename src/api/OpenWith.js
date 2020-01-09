@@ -6,6 +6,8 @@
 
 import Base from './Base';
 import { ERROR_CODE_FETCH_INTEGRATIONS, BOX_EDIT_INTEGRATION_ID, BOX_EDIT_SFC_INTEGRATION_ID } from '../constants';
+import type { ElementsErrorCallback } from '../common/types/api';
+import type { Integration, OpenWithAPI } from '../common/types/integrations';
 
 class OpenWith extends Base {
     /**

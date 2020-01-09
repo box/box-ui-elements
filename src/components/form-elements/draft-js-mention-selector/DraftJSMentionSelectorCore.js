@@ -10,6 +10,8 @@ import SelectorDropdown from '../../selector-dropdown';
 
 import messages from './messages';
 
+import type { SelectorItems } from '../../../common/types/core';
+
 import './MentionSelector.scss';
 
 type DefaultSelectorRowProps = {
@@ -35,7 +37,7 @@ const MentionStartState = ({ message }: MentionStartStateProps) => <div classNam
 
 type Props = {
     className?: string,
-    contacts: SelectorItems,
+    contacts: SelectorItems<>,
     editorState: EditorState,
     error?: ?Object,
     hideLabel?: boolean,
@@ -82,21 +84,16 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
     }
 
     /**
-     * Lifecycle method that gets called when a component is receiving new props
-     * @param {object} nextProps Props the component is receiving
+     * Lifecycle method that gets called immediately after an update
+     * @param {object} lastProps Props the component is receiving
      * @returns {void}
      */
-    componentWillReceiveProps(nextProps: Props, nextState: State) {
-        const { contacts: newContacts } = nextProps;
+    componentDidUpdate(prevProps: Props) {
+        const { contacts: prevContacts } = prevProps;
         const { contacts: currentContacts } = this.props;
-        const { activeMention } = nextState;
+        const { activeMention } = this.state;
 
-        if (
-            activeMention !== null &&
-            !newContacts.length &&
-            newContacts !== currentContacts &&
-            newContacts.length !== currentContacts.length
-        ) {
+        if (activeMention !== null && !currentContacts.length && prevContacts !== currentContacts) {
             // if empty set of contacts get passed in, set active mention to null
             this.setState({
                 activeMention: null,

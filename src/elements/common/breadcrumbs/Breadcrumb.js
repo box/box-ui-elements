@@ -7,6 +7,7 @@
 import React from 'react';
 import PlainButton from '../../../components/plain-button/PlainButton';
 import BreadcrumbDelimiter from './BreadcrumbDelimiter';
+import type { Delimiter } from '../../../common/types/core';
 import './Breadcrumb.scss';
 
 type Props = {

@@ -1,12 +1,15 @@
 // @flow
 import * as React from 'react';
+import { withRouter, type RouterHistory } from 'react-router-dom';
 import AddTaskMenu from './AddTaskMenu';
 import TaskModal from './TaskModal';
 import { TASK_TYPE_APPROVAL } from '../../constants';
 import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
 import type { TaskType } from '../../common/types/tasks';
+import type { ElementsXhrError } from '../../common/types/api';
 
 type Props = {|
+    history: RouterHistory,
     isDisabled: boolean,
     onTaskModalClose: () => void,
     taskFormProps: TaskFormProps,
@@ -29,14 +32,20 @@ class AddTaskButton extends React.Component<Props, State> {
         isDisabled: false,
     };
 
-    handleClickMenuItem = (taskType: TaskType) => this.setState({ isTaskFormOpen: true, taskType });
-
-    handleModalClose = () => {
-        this.props.onTaskModalClose();
-        this.setState({ isTaskFormOpen: false, error: null });
+    /*
+    1. Pushing the open state into history keeps the sidebar open upon resize and refresh
+    2. Preventing the sidebar from closing keeps the task modal open upon edit and resize
+    */
+    handleClickMenuItem = (taskType: TaskType) => {
+        this.props.history.replace({ state: { open: true } });
+        this.setState({ isTaskFormOpen: true, taskType });
     };
 
-    handleSubmitSuccess = () => this.setState({ isTaskFormOpen: false, error: null });
+    handleModalClose = () => {
+        const { onTaskModalClose } = this.props;
+        this.setState({ isTaskFormOpen: false, error: null });
+        onTaskModalClose();
+    };
 
     handleSubmitError = (e: ElementsXhrError) => this.setState({ error: e });
 
@@ -45,20 +54,21 @@ class AddTaskButton extends React.Component<Props, State> {
         const { isTaskFormOpen, taskType, error } = this.state;
 
         return (
-            <React.Fragment>
+            <>
                 <AddTaskMenu isDisabled={isDisabled} onMenuItemClick={this.handleClickMenuItem} />
                 <TaskModal
                     error={error}
                     onSubmitError={this.handleSubmitError}
-                    onSubmitSuccess={this.handleSubmitSuccess}
+                    onSubmitSuccess={this.handleModalClose}
                     onModalClose={this.handleModalClose}
                     isTaskFormOpen={isTaskFormOpen}
                     taskFormProps={taskFormProps}
                     taskType={taskType}
                 />
-            </React.Fragment>
+            </>
         );
     }
 }
 
-export default AddTaskButton;
+export { AddTaskButton as AddTaskButtonComponent };
+export default withRouter(AddTaskButton);

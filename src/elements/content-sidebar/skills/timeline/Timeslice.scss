@@ -1,12 +1,12 @@
 @import '../../../common/variables';
 
 .be .btn-plain.be-timeline-time {
+    position: absolute;
+    height: 6px;
     background-color: $blue;
     border-radius: 6px;
     cursor: pointer;
-    height: 6px;
     opacity: .6;
-    position: absolute;
 
     &:focus,
     &:active,

@@ -10,6 +10,7 @@ import { SKILLS_TARGETS, INTERACTION_TARGET } from '../../../common/interactionT
 import Timeline from '../timeline';
 import getPills from './keywordUtils';
 import type { Pill, Pills } from './flowTypes';
+import type { SkillCardEntry } from '../../../../common/types/skills';
 import './ReadOnlyKeywords.scss';
 
 type Props = {
@@ -58,7 +59,7 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
         const pillCloudProps = selected ? { selectedOptions: [options[selectedIndex]] } : {};
 
         return (
-            <React.Fragment>
+            <>
                 <PillCloud
                     onSelect={this.onSelect}
                     options={options}
@@ -76,7 +77,7 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
                         timeslices={selected.appears}
                     />
                 )}
-            </React.Fragment>
+            </>
         );
     }
 }

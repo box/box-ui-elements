@@ -4,18 +4,18 @@
     .be-transcript-row,
     .btn-plain.be-transcript-row {
         display: flex;
-        line-height: 20px;
+        width: 100%;
         margin-bottom: 10px;
         overflow: visible;
-        text-align: left;
+        line-height: 20px;
         white-space: normal;
-        width: 100%;
+        text-align: left;
 
         &:hover,
         &:focus,
         &:active {
-            background: $selected-blue-background;
             text-decoration: none;
+            background: $selected-blue-background;
         }
     }
 

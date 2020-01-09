@@ -13,12 +13,12 @@ type Props = {
 };
 
 const OpenWithButtonContents = ({ children }: Props) => (
-    <React.Fragment>
+    <>
         {children}
         <span className="bcow-btn-header-text">
             <FormattedMessage {...messages.open} />
         </span>
-    </React.Fragment>
+    </>
 );
 
 export default OpenWithButtonContents;

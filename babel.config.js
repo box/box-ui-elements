@@ -15,22 +15,19 @@ module.exports = {
         '@babel/plugin-transform-object-assign',
         '@babel/plugin-proposal-class-properties',
         '@babel/plugin-proposal-object-rest-spread',
+        [
+            'react-intl',
+            {
+                messagesDir: './i18n/json',
+            },
+        ],
     ],
     env: {
-        dev: {
+        development: {
             plugins: ['flow-react-proptypes'],
         },
         npm: {
-            plugins: [
-                ['react-remove-properties', { properties: ['data-testid'] }],
-                [
-                    'react-intl',
-                    {
-                        enforceDescriptions: true,
-                        messagesDir: './i18n/json',
-                    },
-                ],
-            ],
+            plugins: [['react-remove-properties', { properties: ['data-testid'] }]],
         },
         production: {
             plugins: [['react-remove-properties', { properties: ['data-resin-target', 'data-testid'] }]],
@@ -39,12 +36,6 @@ module.exports = {
             plugins: [
                 '@babel/plugin-transform-modules-commonjs',
                 'dynamic-import-node', // https://github.com/facebook/jest/issues/5920
-                [
-                    'react-intl',
-                    {
-                        enforceDescriptions: false,
-                    },
-                ],
             ],
         },
     },

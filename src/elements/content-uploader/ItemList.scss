@@ -1,7 +1,10 @@
 @import '../common/variables';
-@import '~react-virtualized/styles.css';
 
 .bcu-item-row {
     border-bottom: 1px solid $lighter-grey-blue;
     outline: none;
+}
+
+.bcu-item-list-action-column:last-child {
+    margin-right: 18px;
 }

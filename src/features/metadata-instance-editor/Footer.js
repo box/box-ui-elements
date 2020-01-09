@@ -12,10 +12,10 @@ import './Footer.scss';
 type Props = {
     onCancel: () => void,
     onRemove: () => void,
-    onSave?: () => void,
+    showSave: boolean,
 };
 
-const Footer = ({ onCancel, onRemove, onSave }: Props) => (
+const Footer = ({ onCancel, onRemove, showSave }: Props) => (
     <div className="metadata-instance-editor-footer">
         <div className="metadata-instance-editor-footer-delete">
             <PlainButton data-resin-target="metadata-instanceremove" onClick={onRemove} type="button">
@@ -26,8 +26,8 @@ const Footer = ({ onCancel, onRemove, onSave }: Props) => (
             <Button data-resin-target="metadata-instancecancel" onClick={onCancel} type="button">
                 <FormattedMessage {...messages.metadataCancel} />
             </Button>
-            {onSave && (
-                <PrimaryButton data-resin-target="metadata-instancesave" onClick={onSave} type="button">
+            {showSave && (
+                <PrimaryButton data-resin-target="metadata-instancesave">
                     <FormattedMessage {...messages.metadataSave} />
                 </PrimaryButton>
             )}

@@ -1,0 +1,62 @@
+@import '../../styles/variables';
+
+.bdl-MetadataBasedItemList {
+    // sass-lint:disable class-name-format
+    .ReactVirtualized__Grid {
+        outline: none;
+    }
+}
+
+.bdl-MetadataBasedItemList-cell {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: $bdl-gray-62;
+    border-bottom: 1px solid $bdl-gray-10;
+
+    & .icon-pencil {
+        margin-left: 10px;
+    }
+}
+
+.bdl-MetadataBasedItemList-cell--edit {
+    display: flex;
+    height: 32px;
+    background-color: $white;
+    border: 1px solid $bdl-gray-20;
+    border-radius: 3px;
+
+    .bdl-MetadataBasedItemList-cell--cancelIcon,
+    .bdl-MetadataBasedItemList-cell--saveIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-left: 1px solid $bdl-gray-20;
+    }
+}
+
+.bdl-MetadataBasedItemList-cell--filename {
+    color: $bdl-gray;
+
+    & .btn-plain {
+        outline: none;
+    }
+}
+
+.bdl-MetadataBasedItemList-cell--hover {
+    background-color: $bdl-light-blue-10;
+}
+
+.bdl-MetadataBasedItemList-cell--fileIcon {
+    border-left: 2px solid transparent;
+
+    &.bdl-MetadataBasedItemList-cell--hover {
+        border-left-color: $bdl-dark-blue;
+    }
+
+    svg {
+        margin: 0 10px;
+    }
+}

@@ -5,6 +5,7 @@
  */
 
 import { TYPE_FILE } from '../../constants';
+import type { BoxItem } from '../../common/types/core';
 
 function isRowSelectable(
     selectableType: string,

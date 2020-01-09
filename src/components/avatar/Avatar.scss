@@ -5,21 +5,21 @@
  **************************************/
 
 .avatar {
-    display: inline-block;
-    height: 32px;
     position: relative;
-    user-select: none;
+    display: inline-block;
     width: 32px;
+    height: 32px;
+    user-select: none;
 
     %circle {
-        backface-visibility: hidden;
-        border-radius: 100%;
-        height: 100%;
-        left: 0;
         position: absolute;
         top: 0;
-        transition: transform .3s;
+        left: 0;
         width: 100%;
+        height: 100%;
+        border-radius: 100%;
+        backface-visibility: hidden;
+        transition: transform .3s;
     }
 
     .avatar-icon,
@@ -30,17 +30,23 @@
     .avatar-initials {
         @extend %circle;
 
-        align-items: center;
-        color: $white;
         display: flex;
-        font-weight: bold;
+        align-items: center;
         justify-content: center;
+        color: $white;
+        font-weight: bold;
         line-height: 1;
     }
 
+    @for $i from 1 through length($avatar-colors) {
+        .avatar-initials[data-bg-idx='#{$i - 1}'] {
+            background-color: nth($avatar-colors, $i);
+        }
+    }
+
     &.avatar--large {
-        height: 44px;
         width: 44px;
+        height: 44px;
 
         .avatar-initials {
             font-size: 14px;
