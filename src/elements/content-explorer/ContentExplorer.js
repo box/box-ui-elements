@@ -11,7 +11,6 @@ import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
-import getProp from 'lodash/get';
 import uniqueid from 'lodash/uniqueId';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import UploadDialog from '../common/upload-dialog';
@@ -63,7 +62,6 @@ import {
 } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
 import type { MetadataQuery, MetadataColumnsToShow } from '../../common/types/metadataQueries';
-import type { MetadataFieldValue } from '../../common/types/metadata';
 import type {
     View,
     DefaultView,
@@ -1391,57 +1389,6 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
-     * Function to update metadata field value in metadata based view
-     * @param {BoxItem} item - file item whose metadata is being changed
-     * @param {string} field - metadata template field name
-     * @param {MetadataFieldValue} oldValue - current value
-     * @param {MetadataFieldValue} newVlaue - new value the field to be updated to
-     */
-    updateMetadata = (
-        item: BoxItem,
-        field: string,
-        oldValue: ?MetadataFieldValue,
-        newValue: ?MetadataFieldValue,
-    ): void => {
-        this.setState({ isLoading: true });
-        this.metadataQueryAPIHelper.updateMetadata(
-            item,
-            field,
-            oldValue,
-            newValue,
-            () => {
-                this.updateMetadataSuccessCallback(item, field, newValue);
-            },
-            this.errorCallback,
-        );
-    };
-
-    updateMetadataSuccessCallback = (item: BoxItem, field: string, newValue: ?MetadataFieldValue): void => {
-        const { currentCollection }: State = this.state;
-        const { items = [], nextMarker } = currentCollection;
-        const updatedItems = items.map(collectionItem => {
-            const clonedItem = cloneDeep(collectionItem);
-            if (item.id === clonedItem.id) {
-                const fields = getProp(clonedItem, 'metadata.enterprise.fields', []);
-                fields.forEach(itemField => {
-                    if (itemField.name === field) {
-                        itemField.value = newValue; // set updated metadata value to correct item in currentCollection
-                    }
-                });
-            }
-            return clonedItem;
-        });
-
-        this.setState({
-            currentCollection: {
-                items: updatedItems,
-                nextMarker,
-                percentLoaded: 100,
-            },
-        });
-    };
-
-    /**
      * Renders the file picker
      *
      * @private
@@ -1570,7 +1517,6 @@ class ContentExplorer extends Component<Props, State> {
                             onItemRename={this.rename}
                             onItemSelect={this.select}
                             onItemShare={this.share}
-                            onMetadataUpdate={this.updateMetadata}
                             onSortChange={this.sort}
                             rootElement={this.rootElement}
                             rootId={rootFolderId}
