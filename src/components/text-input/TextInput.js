@@ -56,10 +56,13 @@ const TextInput = ({
     });
 
     const errorMessageID = React.useRef(uniqueId('errorMessage')).current;
+    const descriptionID = React.useRef(uniqueId('description')).current;
+
     const ariaAttrs = {
         'aria-invalid': hasError,
         'aria-required': isRequired,
         'aria-errormessage': errorMessageID,
+        'aria-describedby': description ? descriptionID : undefined,
     };
 
     return (
@@ -70,7 +73,11 @@ const TextInput = ({
                 text={label}
                 tooltip={labelTooltip}
             >
-                {!!description && <i className="text-input-description">{description}</i>}
+                {!!description && (
+                    <i id={descriptionID} className="text-input-description">
+                        {description}
+                    </i>
+                )}
                 <Tooltip isShown={hasError} position={errorPosition || 'middle-right'} text={error || ''} theme="error">
                     <input ref={inputRef} required={isRequired} {...ariaAttrs} {...rest} />
                 </Tooltip>
