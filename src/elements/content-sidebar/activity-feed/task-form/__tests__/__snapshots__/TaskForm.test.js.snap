@@ -20,6 +20,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
     data-resin-isediting={true}
     data-resin-numassigneesadded={1}
     data-resin-numassigneesremoved={1}
+    data-resin-numgroupssadded={0}
     data-resin-target="activityfeed-approvalformcancel"
     data-resin-taskid={12345678}
     data-testid="task-form-cancel-button"
@@ -45,6 +46,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
       data-resin-isediting={true}
       data-resin-numassigneesadded={1}
       data-resin-numassigneesremoved={1}
+      data-resin-numgroupssadded={0}
       data-resin-target="activityfeed-approvalformcancel"
       data-resin-taskid={12345678}
       data-testid="task-form-cancel-button"
@@ -79,6 +81,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
     data-resin-isediting={true}
     data-resin-numassigneesadded={1}
     data-resin-numassigneesremoved={1}
+    data-resin-numgroupssadded={0}
     data-resin-target="activityfeed-approvalformpost"
     data-resin-taskid={12345678}
     data-testid="task-form-submit-button"
@@ -101,6 +104,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
       data-resin-isediting={true}
       data-resin-numassigneesadded={1}
       data-resin-numassigneesremoved={1}
+      data-resin-numgroupssadded={0}
       data-resin-target="activityfeed-approvalformpost"
       data-resin-taskid={12345678}
       data-testid="task-form-submit-button"
@@ -125,6 +129,7 @@ exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo(
         data-resin-isediting={true}
         data-resin-numassigneesadded={1}
         data-resin-numassigneesremoved={1}
+        data-resin-numgroupssadded={0}
         data-resin-target="activityfeed-approvalformpost"
         data-resin-taskid={12345678}
         data-testid="task-form-submit-button"

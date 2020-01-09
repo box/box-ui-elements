@@ -37,7 +37,7 @@ const MentionStartState = ({ message }: MentionStartStateProps) => <div classNam
 
 type Props = {
     className?: string,
-    contacts: SelectorItems,
+    contacts: SelectorItems<>,
     editorState: EditorState,
     error?: ?Object,
     hideLabel?: boolean,

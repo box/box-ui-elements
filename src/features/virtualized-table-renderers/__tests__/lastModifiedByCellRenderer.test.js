@@ -37,7 +37,7 @@ describe('features/virtualized-table-renderers/lastModifiedByCellRenderer', () =
 
     test('should render a dash when cellData is missing', () => {
         cellRendererParams.cellData = null;
-        expect(lastModifiedByCellRenderer(intl)(cellRendererParams)).toBe('—');
+        expect(lastModifiedByCellRenderer(intl)(cellRendererParams)).toBe('--');
     });
 
     test('should render a LastModifiedByCell', () => {

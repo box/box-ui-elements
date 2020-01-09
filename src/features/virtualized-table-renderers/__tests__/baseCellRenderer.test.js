@@ -16,15 +16,15 @@ describe('features/virtualized-table-renderers/baseCellRenderer', () => {
 
         cellRendererParams.cellData = undefined;
         result = baseCellRenderer(cellRendererParams, renderValue);
-        expect(result).toBe('—');
+        expect(result).toBe('--');
 
         cellRendererParams.cellData = null;
         result = baseCellRenderer(cellRendererParams, renderValue);
-        expect(result).toBe('—');
+        expect(result).toBe('--');
 
         cellRendererParams.cellData = '';
         result = baseCellRenderer(cellRendererParams, renderValue);
-        expect(result).toBe('—');
+        expect(result).toBe('--');
 
         expect(renderValue).toHaveBeenCalledTimes(0);
     });
