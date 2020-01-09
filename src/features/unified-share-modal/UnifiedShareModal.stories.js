@@ -209,26 +209,26 @@ export const basic = () => {
                         {state.isOpen && (
                             <UnifiedShareModal
                                 canInvite
-                                changeSharedLinkAccessLevel={newLevel =>
-                                    fakeRequest().then(() => {
-                                        componentStore.set({
+                                changeSharedLinkAccessLevel={newLevel => {
+                                    return fakeRequest().then(() => {
+                                        return componentStore.set({
                                             sharedLink: {
                                                 ...state.sharedLink,
                                                 accessLevel: newLevel,
                                             },
                                         });
-                                    })
-                                }
-                                changeSharedLinkPermissionLevel={newLevel =>
-                                    fakeRequest().then(() => {
-                                        componentStore.set({
+                                    });
+                                }}
+                                changeSharedLinkPermissionLevel={newLevel => {
+                                    return fakeRequest().then(() => {
+                                        return componentStore.set({
                                             sharedLink: {
                                                 ...state.sharedLink,
                                                 permissionLevel: newLevel,
                                             },
                                         });
-                                    })
-                                }
+                                    });
+                                }}
                                 collaboratorsList={state.collaboratorsList}
                                 collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
                                 currentUserID="0"
@@ -240,18 +240,18 @@ export const basic = () => {
                                 }}
                                 getInitialData={getInitialData}
                                 inviteePermissions={[
-                                    { value: 'Co-owner', text: 'Co-owner' },
-                                    { value: 'Editor', text: 'Editor' },
-                                    { value: 'Viewer Uploader', text: 'Viewer Uploader' },
-                                    { value: 'Previewer Uploader', text: 'Previewer Uploader' },
-                                    { value: 'Viewer', text: 'Viewer' },
-                                    { value: 'Previewer', text: 'Previewer' },
-                                    { value: 'Uploader', text: 'Uploader' },
+                                    { default: false, text: 'Co-owner', value: 'Co-owner' },
+                                    { default: true, text: 'Editor', value: 'Editor' },
+                                    { default: false, text: 'Viewer Uploader', value: 'Viewer Uploader' },
+                                    { default: false, text: 'Previewer Uploader', value: 'Previewer Uploader' },
+                                    { default: false, text: 'Viewer', value: 'Viewer' },
+                                    { default: false, text: 'Previewer', value: 'Previewer' },
+                                    { default: false, text: 'Uploader', value: 'Uploader' },
                                 ]}
                                 isOpen={state.isOpen}
                                 isToggleEnabled
                                 item={state.item}
-                                onAddLink={() =>
+                                onAddLink={() => {
                                     fakeRequest().then(() => {
                                         componentStore.set({
                                             sharedLink: {
@@ -270,19 +270,20 @@ export const basic = () => {
                                                 url: 'https://box.com/s/abcdefg',
                                             },
                                         });
-                                    })
-                                }
-                                onRemoveLink={() =>
+                                    });
+                                }}
+                                onRemoveLink={() => {
                                     fakeRequest().then(() => {
                                         componentStore.set({
                                             sharedLink: DEFAULT_SHARED_LINK_STATE,
                                         });
                                         closeModal();
-                                    })
-                                }
+                                    });
+                                }}
                                 onRequestClose={closeModal}
                                 /* eslint-disable-next-line no-alert */
                                 onSettingsClick={() => alert('hi!')}
+                                recommendedSharingTooltipCalloutName=""
                                 sendInvites={() =>
                                     fakeRequest().then(() => {
                                         closeModal();
@@ -300,18 +301,19 @@ export const basic = () => {
                                 showUpgradeOptions
                                 submitting={state.submitting}
                                 suggestedCollaborators={{
-                                    '2': { id: 2, userScore: '.1' },
-                                    '5': { id: 5, userScore: '0.2' },
-                                    '1': { id: 1, userScore: '0.5' },
-                                    '3': { id: 3, userScore: '2' },
+                                    '2': { id: '2', userScore: 0.1 },
+                                    '5': { id: '5', userScore: 0.2 },
+                                    '1': { id: '1', userScore: 0.5 },
+                                    '3': { id: '3', userScore: 2 },
                                 }}
                                 trackingProps={{
+                                    collaboratorListTracking: {},
                                     inviteCollabsEmailTracking: {},
-                                    sharedLinkEmailTracking: {},
-                                    sharedLinkTracking: {},
                                     inviteCollabTracking: {},
                                     modalTracking: {},
-                                    collaboratorListTracking: {},
+                                    removeLinkConfirmModalTracking: {},
+                                    sharedLinkEmailTracking: {},
+                                    sharedLinkTracking: {},
                                 }}
                             />
                         )}
@@ -389,26 +391,26 @@ export const withSharedLink = () => {
                         {state.isOpen && (
                             <UnifiedShareModal
                                 canInvite
-                                changeSharedLinkAccessLevel={newLevel =>
-                                    fakeRequest().then(() => {
-                                        componentStore.set({
+                                changeSharedLinkAccessLevel={newLevel => {
+                                    return fakeRequest().then(() => {
+                                        return componentStore.set({
                                             sharedLink: {
                                                 ...state.sharedLink,
                                                 accessLevel: newLevel,
                                             },
                                         });
-                                    })
-                                }
-                                changeSharedLinkPermissionLevel={newLevel =>
-                                    fakeRequest().then(() => {
-                                        componentStore.set({
+                                    });
+                                }}
+                                changeSharedLinkPermissionLevel={newLevel => {
+                                    return fakeRequest().then(() => {
+                                        return componentStore.set({
                                             sharedLink: {
                                                 ...state.sharedLink,
                                                 permissionLevel: newLevel,
                                             },
                                         });
-                                    })
-                                }
+                                    });
+                                }}
                                 collaboratorsList={state.collaboratorsList}
                                 collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
                                 currentUserID="0"
@@ -421,18 +423,18 @@ export const withSharedLink = () => {
                                 }}
                                 getInitialData={getInitialData}
                                 inviteePermissions={[
-                                    { value: 'Co-owner', text: 'Co-owner' },
-                                    { value: 'Editor', text: 'Editor' },
-                                    { value: 'Viewer Uploader', text: 'Viewer Uploader' },
-                                    { value: 'Previewer Uploader', text: 'Previewer Uploader' },
-                                    { value: 'Viewer', text: 'Viewer' },
-                                    { value: 'Previewer', text: 'Previewer' },
-                                    { value: 'Uploader', text: 'Uploader' },
+                                    { default: false, text: 'Co-owner', value: 'Co-owner' },
+                                    { default: true, text: 'Editor', value: 'Editor' },
+                                    { default: false, text: 'Viewer Uploader', value: 'Viewer Uploader' },
+                                    { default: false, text: 'Previewer Uploader', value: 'Previewer Uploader' },
+                                    { default: false, text: 'Viewer', value: 'Viewer' },
+                                    { default: false, text: 'Previewer', value: 'Previewer' },
+                                    { default: false, text: 'Uploader', value: 'Uploader' },
                                 ]}
                                 isOpen={state.isOpen}
                                 isToggleEnabled
                                 item={state.item}
-                                onAddLink={() =>
+                                onAddLink={() => {
                                     fakeRequest().then(() => {
                                         componentStore.set({
                                             sharedLink: {
@@ -451,19 +453,20 @@ export const withSharedLink = () => {
                                                 url: 'https://box.com/s/abcdefg',
                                             },
                                         });
-                                    })
-                                }
-                                onRemoveLink={() =>
+                                    });
+                                }}
+                                onRemoveLink={() => {
                                     fakeRequest().then(() => {
                                         componentStore.set({
                                             sharedLink: DEFAULT_SHARED_LINK_STATE,
                                         });
                                         closeModal();
-                                    })
-                                }
+                                    });
+                                }}
                                 onRequestClose={closeModal}
                                 /* eslint-disable-next-line no-alert */
                                 onSettingsClick={() => alert('hi!')}
+                                recommendedSharingTooltipCalloutName=""
                                 sendInvites={() =>
                                     fakeRequest().then(() => {
                                         closeModal();
@@ -481,18 +484,19 @@ export const withSharedLink = () => {
                                 showUpgradeOptions
                                 submitting={state.submitting}
                                 suggestedCollaborators={{
-                                    '2': { id: 2, userScore: '.1' },
-                                    '5': { id: 5, userScore: '0.2' },
-                                    '1': { id: 1, userScore: '0.5' },
-                                    '3': { id: 3, userScore: '2' },
+                                    '2': { id: '2', userScore: 0.1 },
+                                    '5': { id: '5', userScore: 0.2 },
+                                    '1': { id: '1', userScore: 0.5 },
+                                    '3': { id: '3', userScore: 2 },
                                 }}
                                 trackingProps={{
+                                    collaboratorListTracking: {},
                                     inviteCollabsEmailTracking: {},
-                                    sharedLinkEmailTracking: {},
-                                    sharedLinkTracking: {},
                                     inviteCollabTracking: {},
                                     modalTracking: {},
-                                    collaboratorListTracking: {},
+                                    removeLinkConfirmModalTracking: {},
+                                    sharedLinkEmailTracking: {},
+                                    sharedLinkTracking: {},
                                 }}
                             />
                         )}
@@ -570,26 +574,26 @@ export const withAutofocusedSharedLink = () => {
                         {state.isOpen && (
                             <UnifiedShareModal
                                 canInvite
-                                changeSharedLinkAccessLevel={newLevel =>
-                                    fakeRequest().then(() => {
-                                        componentStore.set({
+                                changeSharedLinkAccessLevel={newLevel => {
+                                    return fakeRequest().then(() => {
+                                        return componentStore.set({
                                             sharedLink: {
                                                 ...state.sharedLink,
                                                 accessLevel: newLevel,
                                             },
                                         });
-                                    })
-                                }
-                                changeSharedLinkPermissionLevel={newLevel =>
-                                    fakeRequest().then(() => {
-                                        componentStore.set({
+                                    });
+                                }}
+                                changeSharedLinkPermissionLevel={newLevel => {
+                                    return fakeRequest().then(() => {
+                                        return componentStore.set({
                                             sharedLink: {
                                                 ...state.sharedLink,
                                                 permissionLevel: newLevel,
                                             },
                                         });
-                                    })
-                                }
+                                    });
+                                }}
                                 collaboratorsList={state.collaboratorsList}
                                 collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
                                 currentUserID="0"
@@ -602,18 +606,18 @@ export const withAutofocusedSharedLink = () => {
                                 }}
                                 getInitialData={getInitialData}
                                 inviteePermissions={[
-                                    { value: 'Co-owner', text: 'Co-owner' },
-                                    { value: 'Editor', text: 'Editor' },
-                                    { value: 'Viewer Uploader', text: 'Viewer Uploader' },
-                                    { value: 'Previewer Uploader', text: 'Previewer Uploader' },
-                                    { value: 'Viewer', text: 'Viewer' },
-                                    { value: 'Previewer', text: 'Previewer' },
-                                    { value: 'Uploader', text: 'Uploader' },
+                                    { default: false, text: 'Co-owner', value: 'Co-owner' },
+                                    { default: true, text: 'Editor', value: 'Editor' },
+                                    { default: false, text: 'Viewer Uploader', value: 'Viewer Uploader' },
+                                    { default: false, text: 'Previewer Uploader', value: 'Previewer Uploader' },
+                                    { default: false, text: 'Viewer', value: 'Viewer' },
+                                    { default: false, text: 'Previewer', value: 'Previewer' },
+                                    { default: false, text: 'Uploader', value: 'Uploader' },
                                 ]}
                                 isOpen={state.isOpen}
                                 isToggleEnabled
                                 item={state.item}
-                                onAddLink={() =>
+                                onAddLink={() => {
                                     fakeRequest().then(() => {
                                         componentStore.set({
                                             sharedLink: {
@@ -632,19 +636,20 @@ export const withAutofocusedSharedLink = () => {
                                                 url: 'https://box.com/s/abcdefg',
                                             },
                                         });
-                                    })
-                                }
-                                onRemoveLink={() =>
+                                    });
+                                }}
+                                onRemoveLink={() => {
                                     fakeRequest().then(() => {
                                         componentStore.set({
                                             sharedLink: DEFAULT_SHARED_LINK_STATE,
                                         });
                                         closeModal();
-                                    })
-                                }
+                                    });
+                                }}
                                 onRequestClose={closeModal}
                                 /* eslint-disable-next-line no-alert */
                                 onSettingsClick={() => alert('hi!')}
+                                recommendedSharingTooltipCalloutName=""
                                 sendInvites={() =>
                                     fakeRequest().then(() => {
                                         closeModal();
@@ -662,18 +667,19 @@ export const withAutofocusedSharedLink = () => {
                                 showUpgradeOptions
                                 submitting={state.submitting}
                                 suggestedCollaborators={{
-                                    '2': { id: 2, userScore: '.1' },
-                                    '5': { id: 5, userScore: '0.2' },
-                                    '1': { id: 1, userScore: '0.5' },
-                                    '3': { id: 3, userScore: '2' },
+                                    '2': { id: '2', userScore: 0.1 },
+                                    '5': { id: '5', userScore: 0.2 },
+                                    '1': { id: '1', userScore: 0.5 },
+                                    '3': { id: '3', userScore: 2 },
                                 }}
                                 trackingProps={{
+                                    collaboratorListTracking: {},
                                     inviteCollabsEmailTracking: {},
-                                    sharedLinkEmailTracking: {},
-                                    sharedLinkTracking: {},
                                     inviteCollabTracking: {},
                                     modalTracking: {},
-                                    collaboratorListTracking: {},
+                                    removeLinkConfirmModalTracking: {},
+                                    sharedLinkEmailTracking: {},
+                                    sharedLinkTracking: {},
                                 }}
                             />
                         )}
