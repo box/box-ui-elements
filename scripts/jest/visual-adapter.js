@@ -25,3 +25,16 @@ global.takeScreenshotAfterInput = async (id, selector, action = 'click', userInp
     await global.page[action](selector, userInput);
     return global.page.screenshot();
 };
+
+const MODAL_LOADING_ANIMATION_TIME = 2000;
+const BUTTON_SELECTOR = 'button';
+
+// Takes image screenshots for modals
+global.takeModalScreenshot = async id => {
+    await global.page.setViewport({ width: 800, height: 800 });
+    await global.page.goto(`http://localhost:6061/iframe.html?id=${id}`);
+    await global.page.waitForSelector(BUTTON_SELECTOR);
+    await global.page.click(BUTTON_SELECTOR);
+    await global.page.waitFor(MODAL_LOADING_ANIMATION_TIME); // wait for modal loading animation to finish
+    return global.page.screenshot();
+};

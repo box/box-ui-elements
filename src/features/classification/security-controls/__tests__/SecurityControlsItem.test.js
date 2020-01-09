@@ -1,13 +1,13 @@
 import React from 'react';
 
 import SecurityControlsItem from '../SecurityControlsItem';
+import IconSecurityClassificationSolid from '../../../../icons/general/IconSecurityClassificationSolid';
 
 describe('features/classification/security-controls/SecurityControlsItem', () => {
     let wrapper;
     let message;
 
-    const getWrapper = (props = {}) =>
-        shallow(<SecurityControlsItem message={message} tooltipItems={[]} tooltipPosition="middle-left" {...props} />);
+    const getWrapper = (props = {}) => shallow(<SecurityControlsItem message={message} {...props} />);
 
     beforeEach(() => {
         message = {
@@ -18,22 +18,15 @@ describe('features/classification/security-controls/SecurityControlsItem', () =>
     });
 
     test('should render a SecurityControlsItem with a message', () => {
+        wrapper = getWrapper({ controlsFormat: 'shortWithBtn' });
+
         expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(IconSecurityClassificationSolid)).toHaveLength(1);
     });
 
-    test('should render a SecurityControlsItem item with a message and a tooltip when tooltip items are provided', () => {
-        const tooltipItems = [
-            {
-                id: 'item1',
-                defaultMessage: 'item1',
-            },
-            {
-                id: 'item2',
-                defaultMessage: 'item2',
-            },
-        ];
+    test('should not render IconSecurityClassificationSolid if controlsFormat is FULL', () => {
+        wrapper = getWrapper({ controlsFormat: 'full' });
 
-        wrapper.setProps({ tooltipItems });
-        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(IconSecurityClassificationSolid)).toHaveLength(0);
     });
 });

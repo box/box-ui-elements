@@ -103,14 +103,7 @@ type UserMini = {
     type: 'user',
 };
 
-type User = {
-    avatar_url?: string,
-    email?: string,
-    id: string,
-    login?: string,
-    name: string,
-    type: 'user',
-};
+type User = UserMini;
 
 type UserCollection = {
     entries?: Array<User>,
@@ -123,6 +116,12 @@ type UserCollection = {
     total_count?: number,
 };
 
+type GroupMini = {
+    id: string,
+    name: string,
+    type: 'group',
+};
+
 type ISODate = string;
 
 type MarkerPaginatedCollection<T> = {
@@ -131,14 +130,16 @@ type MarkerPaginatedCollection<T> = {
     next_marker: ?string,
 };
 
-type SelectorItem = {
+// Used for things like collaborator search
+// NOTE: PillSelectorDropdown requires an additional "text" or "displayText" field
+type SelectorItem<T: any = any> = {
     id: string,
-    item: Object,
+    item?: T, // ie UserMini or GroupMini
     name: string,
     value?: any,
 };
 
-type SelectorItems = Array<SelectorItem>;
+type SelectorItems<T: any = any> = Array<SelectorItem<T>>;
 
 type Crumb = {
     id?: string,
@@ -371,6 +372,7 @@ export type {
     UserMini,
     User,
     UserCollection,
+    GroupMini,
     ISODate,
     MarkerPaginatedCollection,
     SelectorItem,

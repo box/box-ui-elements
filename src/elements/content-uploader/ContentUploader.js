@@ -80,6 +80,7 @@ type Props = {
     onComplete: Function,
     onError: Function,
     onMinimize?: Function,
+    onProgress: Function,
     onResume: Function,
     onUpload: Function,
     overwrite: boolean,
@@ -136,6 +137,7 @@ class ContentUploader extends Component<Props, State> {
         onError: noop,
         onResume: noop,
         onUpload: noop,
+        onProgress: noop,
         overwrite: true,
         useUploadsManager: false,
         files: [],
@@ -965,6 +967,9 @@ class ContentUploader extends Component<Props, State> {
 
         item.progress = Math.min(Math.round((event.loaded / event.total) * 100), 100);
         item.status = item.progress === 100 ? STATUS_STAGED : STATUS_IN_PROGRESS;
+
+        const { onProgress } = this.props;
+        onProgress(item);
 
         const { items } = this.state;
         items[items.indexOf(item)] = item;

@@ -6,12 +6,9 @@ import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import classNames from 'classnames';
 import find from 'lodash/find';
 import getProp from 'lodash/get';
-import isEqual from 'lodash/isEqual';
 import MultiGrid from 'react-virtualized/dist/es/MultiGrid/MultiGrid';
 
-import Field from '../metadata-instance-editor/fields/Field';
 import FileIcon from '../../icons/file-icon';
-import IconWithTooltip from './IconWithTooltip';
 import PlainButton from '../../components/plain-button';
 
 import { getFileExtension } from '../../utils/file';
@@ -20,12 +17,9 @@ import messages from '../../elements/common/messages';
 import './MetadataBasedItemList.scss';
 
 import type { MetadataColumnConfig, MetadataColumnsToShow } from '../../common/types/metadataQueries';
-import type { MetadataFieldValue } from '../../common/types/metadata';
 import type { StringAnyMap, Collection, BoxItem } from '../../common/types/core';
 
 import {
-    CANCEL_ICON_TYPE,
-    EDIT_ICON_TYPE,
     FILE_ICON_COLUMN_INDEX,
     FILE_ICON_COLUMN_WIDTH,
     FILE_ICON_SIZE,
@@ -35,22 +29,14 @@ import {
     FIXED_ROW_NUMBER,
     HEADER_ROW_INDEX,
     MIN_METADATA_COLUMN_WIDTH,
-    SAVE_ICON_TYPE,
 } from './constants';
 
-type State = {
-    editedColumnIndex: number,
-    editedRowIndex: number,
-    hoveredColumnIndex: number,
-    hoveredRowIndex: number,
-    valueBeingEdited: ?MetadataFieldValue,
-};
+type State = { hoveredRowIndex: number };
 
 type Props = {
     currentCollection: Collection,
     metadataColumnsToShow: MetadataColumnsToShow,
     onItemClick: BoxItem => void,
-    onMetadataUpdate: (BoxItem, string, ?MetadataFieldValue, ?MetadataFieldValue) => void,
 };
 
 type CellRendererArgs = {
@@ -68,18 +54,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-
-        this.state = this.getInitialState();
-    }
-
-    componentDidUpdate(prevProps: Props) {
-        const prevItems = getProp(prevProps, 'currentCollection.items');
-        const currentItems = getProp(this.props, 'currentCollection.items');
-
-        if (!isEqual(currentItems, prevItems)) {
-            // Either the view was refreshed or metadata was updated, reset the state to initial values
-            this.setState(this.getInitialState());
-        }
+        this.state = { hoveredRowIndex: -1 };
     }
 
     getColumnWidth(width: number): ColumnWidthCallback {
@@ -100,27 +75,12 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         };
     }
 
-    getInitialState = () => {
-        return {
-            // initial MultiGrid load
-            editedColumnIndex: -1,
-            editedRowIndex: -1,
-            hoveredRowIndex: -1,
-            hoveredColumnIndex: -1,
-            valueBeingEdited: null,
-        };
-    };
-
     getItemWithPermissions = (item: BoxItem): BoxItem => {
         /*
             - @TODO: Remove permissions object once its part of API response.
             - add "can_preview: true" so that users can click to launch the Preview modal. If users don't have access, they will see the error when Preview loads.
-            - add "can_upload: true" so that users can update the metadata values.
         */
-        const permissions = {
-            can_preview: true,
-            can_upload: true,
-        };
+        const permissions = { can_preview: true };
         return { ...item, permissions };
     };
 
@@ -133,61 +93,18 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         onItemClick(this.getItemWithPermissions(item));
     }
 
-    handleEditIconClick(columnIndex: number, rowIndex: number, value: string): void {
-        this.setState({
-            editedColumnIndex: columnIndex,
-            editedRowIndex: rowIndex,
-            valueBeingEdited: value,
-        });
-    }
+    handleMouseEnter = (rowIndex: number): void => this.setState({ hoveredRowIndex: rowIndex });
 
-    handleCancelEdit = (): void => {
-        this.setState({
-            editedColumnIndex: -1,
-            editedRowIndex: -1,
-        });
-    };
-
-    handleSave = (
-        item: BoxItem,
-        field: string,
-        currentValue: ?MetadataFieldValue,
-        editedValue: ?MetadataFieldValue,
-    ): void => {
-        const { onMetadataUpdate } = this.props;
-        onMetadataUpdate(this.getItemWithPermissions(item), field, currentValue, editedValue);
-    };
-
-    handleMouseEnter = (columnIndex: number, rowIndex: number): void =>
-        this.setState({
-            hoveredColumnIndex: columnIndex,
-            hoveredRowIndex: rowIndex,
-        });
-
-    handleMouseLeave = (): void =>
-        this.setState({
-            hoveredRowIndex: -1,
-            hoveredColumnIndex: -1,
-        });
+    handleMouseLeave = (): void => this.setState({ hoveredRowIndex: -1 });
 
     getGridCellData(columnIndex: number, rowIndex: number): GridCellData | void {
         const {
             currentCollection: { items = [] },
             metadataColumnsToShow,
         }: Props = this.props;
-        const {
-            hoveredColumnIndex,
-            hoveredRowIndex,
-            editedColumnIndex,
-            editedRowIndex,
-            valueBeingEdited,
-        }: State = this.state;
-        const isCellBeingEdited = columnIndex === editedColumnIndex && rowIndex === editedRowIndex;
-        const isCellHovered = columnIndex === hoveredColumnIndex && rowIndex === hoveredRowIndex;
         const metadataColumn = metadataColumnsToShow[columnIndex - FIXED_COLUMNS_NUMBER];
-        const isCellEditable = !isCellBeingEdited && isCellHovered && !!getProp(metadataColumn, 'canEdit', false);
         const item = items[rowIndex - 1];
-        const { id, name } = item;
+        const { name } = item;
         const fields = getProp(item, 'metadata.enterprise.fields', []);
         let cellData;
 
@@ -208,51 +125,8 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                 if (!field) {
                     return cellData;
                 }
-                const { type, value, options = [] } = field;
-                cellData = (
-                    <>
-                        {!isCellBeingEdited && value}
-                        {value && isCellEditable && (
-                            <IconWithTooltip
-                                type={EDIT_ICON_TYPE}
-                                tooltipText={<FormattedMessage {...messages.editLabel} />}
-                                onClick={() => this.handleEditIconClick(columnIndex, rowIndex, value)}
-                            />
-                        )}
-                        {isCellBeingEdited && valueBeingEdited && (
-                            <div className="bdl-MetadataBasedItemList-cell--edit">
-                                <Field
-                                    canEdit
-                                    dataKey={`${id}${mdFieldName}`}
-                                    dataValue={valueBeingEdited}
-                                    displayName=""
-                                    type={type}
-                                    onChange={(key, changedValue) => {
-                                        this.setState({
-                                            valueBeingEdited: changedValue,
-                                        });
-                                    }}
-                                    onRemove={() => {
-                                        /* implement me */
-                                    }}
-                                    options={options}
-                                />
-                                <IconWithTooltip
-                                    className="bdl-MetadataBasedItemList-cell--cancelIcon"
-                                    onClick={this.handleCancelEdit}
-                                    tooltipText={<FormattedMessage {...messages.cancel} />}
-                                    type={CANCEL_ICON_TYPE}
-                                />
-                                <IconWithTooltip
-                                    className="bdl-MetadataBasedItemList-cell--saveIcon"
-                                    onClick={() => this.handleSave(item, mdFieldName, value, valueBeingEdited)}
-                                    tooltipText={<FormattedMessage {...messages.save} />}
-                                    type={SAVE_ICON_TYPE}
-                                />
-                            </div>
-                        )}
-                    </>
-                );
+                const { value } = field;
+                cellData = value;
             }
         }
 
@@ -285,7 +159,13 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         });
 
         return (
-            <div key={key} className={classes} style={style}>
+            <div
+                className={classes}
+                key={key}
+                onMouseEnter={() => this.handleMouseEnter(rowIndex)}
+                onMouseLeave={this.handleMouseLeave}
+                style={style}
+            >
                 {data}
             </div>
         );

@@ -20,6 +20,7 @@ type Props = {
     controlsFormat?: ControlsFormat,
     definition?: string,
     isLoadingControls?: boolean,
+    itemName?: string,
     maxAppCount?: number,
     messageStyle?: typeof STYLE_INLINE | typeof STYLE_TOOLTIP,
     name?: string,
@@ -35,6 +36,7 @@ const Classification = ({
     maxAppCount,
     messageStyle,
     name,
+    itemName = '',
     onClick,
 }: Props) => {
     const isClassified = !!name;
@@ -67,7 +69,14 @@ const Classification = ({
                 </span>
             )}
             {isSecurityControlsEnabled && (
-                <SecurityControls controls={controls} controlsFormat={controlsFormat} maxAppCount={maxAppCount} />
+                <SecurityControls
+                    classificationName={name}
+                    controls={controls}
+                    controlsFormat={controlsFormat}
+                    definition={definition}
+                    itemName={itemName}
+                    maxAppCount={maxAppCount}
+                />
             )}
             {isControlsIndicatorEnabled && <LoadingIndicator />}
         </article>

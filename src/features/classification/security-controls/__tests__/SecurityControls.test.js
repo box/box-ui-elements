@@ -4,22 +4,14 @@ import SecurityControlsItem from '../SecurityControlsItem';
 import SecurityControls from '../SecurityControls';
 import { SECURITY_CONTROLS_FORMAT } from '../../constants';
 
-const { FULL, SHORT, SHORT_WITH_TOOLTIP, SHORT_WITH_BTN } = SECURITY_CONTROLS_FORMAT;
+const { FULL, SHORT, SHORT_WITH_BTN } = SECURITY_CONTROLS_FORMAT;
 
 describe('features/classification/security-controls/SecurityControls', () => {
     let wrapper;
     let controls;
 
     const getWrapper = (props = {}) =>
-        shallow(
-            <SecurityControls
-                controls={controls}
-                controlsFormat={SHORT}
-                maxAppCount={3}
-                tooltipPosition="middle-left"
-                {...props}
-            />,
-        );
+        shallow(<SecurityControls controls={controls} controlsFormat={SHORT} maxAppCount={3} {...props} />);
 
     beforeEach(() => {
         controls = {
@@ -51,14 +43,13 @@ describe('features/classification/security-controls/SecurityControls', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    // will remove after eua release
-    test('should render SecurityControls with single SecurityControlsItem and tooltip items when using SHORT_WITH_TOOLTIP controlsFormat', () => {
-        wrapper.setProps({ controlsFormat: SHORT_WITH_TOOLTIP });
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should render SecurityControls with single SecurityControlsItem and tooltip items when using SHORT_WITH_BTN controlsFormat', () => {
-        wrapper.setProps({ controlsFormat: SHORT_WITH_BTN });
+    test('should render SecurityControls with single SecurityControlsItem and modal items when using SHORT_WITH_BTN controlsFormat and item, classification data is provided', () => {
+        wrapper.setProps({
+            controlsFormat: SHORT_WITH_BTN,
+            classificationName: 'internal only',
+            definition: 'classification definition',
+            itemName: 'welcome.pdf',
+        });
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -69,16 +60,18 @@ describe('features/classification/security-controls/SecurityControls', () => {
 
     test('should set summarized class when not using FULL controlsFormat', () => {
         wrapper.setProps({ controlsFormat: FULL });
-        expect(wrapper.hasClass('bdl-SecurityControls--summarized')).toBe(false);
+        expect(wrapper.find('ul').hasClass('bdl-SecurityControls--summarized')).toBe(false);
 
         wrapper.setProps({ controlsFormat: SHORT });
-        expect(wrapper.hasClass('bdl-SecurityControls--summarized')).toBe(true);
-        // will remove after eua release
-        wrapper.setProps({ controlsFormat: SHORT_WITH_TOOLTIP });
-        expect(wrapper.hasClass('bdl-SecurityControls--summarized')).toBe(true);
+        expect(wrapper.find('ul').hasClass('bdl-SecurityControls--summarized')).toBe(true);
 
-        wrapper.setProps({ controlsFormat: SHORT_WITH_BTN });
-        expect(wrapper.hasClass('bdl-SecurityControls--summarized')).toBe(true);
+        wrapper.setProps({
+            controlsFormat: SHORT_WITH_BTN,
+            classificationName: 'internal only',
+            definition: 'classification definition',
+            itemName: 'welcome.pdf',
+        });
+        expect(wrapper.find('ul').hasClass('bdl-SecurityControls--summarized')).toBe(true);
     });
 
     test('should restrict displayed app names to maxAppCount', () => {

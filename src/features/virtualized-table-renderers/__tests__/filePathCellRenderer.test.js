@@ -17,7 +17,7 @@ describe('features/virtualized-table-renderers/filePathCellRenderer', () => {
     });
 
     test('should render a dash when cellData is missing', () => {
-        expect(filePathCellRenderer(intl)({ cellData: null })).toBe('—');
+        expect(filePathCellRenderer(intl)({ cellData: null })).toBe('--');
     });
 
     test('should render a FilePathCell when all fields are available', () => {
