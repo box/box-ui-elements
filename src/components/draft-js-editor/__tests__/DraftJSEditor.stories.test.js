@@ -3,7 +3,7 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
 
     test(`looks visually correct when using story ${DRAFT_JS_EDITOR_STORY}`, async () => {
         const image = await takeScreenshot(DRAFT_JS_EDITOR_STORY);
-        expect(image).toMatchImageSnapshot();
+        return expect(image).toMatchImageSnapshot();
     });
 
     test('looks visually correct when typing', async () => {
@@ -13,6 +13,6 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
             'type',
             'Cool ',
         );
-        expect(image).toMatchImageSnapshot();
+        return expect(image).toMatchImageSnapshot();
     });
 });
