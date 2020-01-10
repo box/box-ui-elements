@@ -18,7 +18,7 @@ exports[`components/text-area/TextArea should not show optional text when hideOp
       theme="error"
     >
       <textarea
-        aria-errormessage="errorMessage10"
+        aria-errormessage="errorMessage19"
         aria-invalid={false}
         style={
           Object {
@@ -29,7 +29,50 @@ exports[`components/text-area/TextArea should not show optional text when hideOp
     </Tooltip>
     <span
       className="accessibility-hidden"
-      id="errorMessage10"
+      id="errorMessage19"
+      role="alert"
+    />
+  </Label>
+</div>
+`;
+
+exports[`components/text-area/TextArea should render text area with description 1`] = `
+<div
+  className="text-area-container"
+>
+  <Label
+    showOptionalText={true}
+    text="label"
+  >
+    <i
+      className="text-area-description"
+      id="description24"
+    >
+      some description
+    </i>
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      isShown={false}
+      position="bottom-left"
+      text=""
+      theme="error"
+    >
+      <textarea
+        aria-describedby="description24"
+        aria-errormessage="errorMessage23"
+        aria-invalid={false}
+        style={
+          Object {
+            "resize": "none",
+          }
+        }
+      />
+    </Tooltip>
+    <span
+      className="accessibility-hidden"
+      id="errorMessage23"
       role="alert"
     />
   </Label>
@@ -54,7 +97,7 @@ exports[`components/text-area/TextArea should show optional text when hideOption
       theme="error"
     >
       <textarea
-        aria-errormessage="errorMessage11"
+        aria-errormessage="errorMessage21"
         aria-invalid={false}
         style={
           Object {
@@ -65,7 +108,7 @@ exports[`components/text-area/TextArea should show optional text when hideOption
     </Tooltip>
     <span
       className="accessibility-hidden"
-      id="errorMessage11"
+      id="errorMessage21"
       role="alert"
     />
   </Label>
