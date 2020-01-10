@@ -9,6 +9,7 @@ exports[`components/text-input/TextInput should render text input with descripti
   >
     <i
       className="text-input-description"
+      id="description36"
     >
       some description
     </i>
@@ -22,13 +23,14 @@ exports[`components/text-input/TextInput should render text input with descripti
       theme="error"
     >
       <input
-        aria-errormessage="errorMessage20"
+        aria-describedby="description36"
+        aria-errormessage="errorMessage35"
         aria-invalid={false}
       />
     </Tooltip>
     <span
       className="accessibility-hidden"
-      id="errorMessage20"
+      id="errorMessage35"
       role="alert"
     />
   </Label>
