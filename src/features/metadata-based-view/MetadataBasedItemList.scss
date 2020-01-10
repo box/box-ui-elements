@@ -1,5 +1,8 @@
 @import '../../styles/variables';
 
+$inset-shadow-left: -4px 0 2px -2px $bdl-gray-10 inset;
+$inset-shadow-right: 3px 0 3px -2px $bdl-gray-10 inset;
+
 .bdl-MetadataBasedItemList {
     // sass-lint:disable class-name-format
     .ReactVirtualized__Grid {
@@ -59,4 +62,19 @@
     svg {
         margin: 0 10px;
     }
+}
+
+.bdl-MetadataBasedItemList-bottomRightGrid.is-scrolledRight,
+.bdl-MetadataBasedItemList-topRightGrid.is-scrolledRight {
+    box-shadow: $inset-shadow-right;
+}
+
+.bdl-MetadataBasedItemList-bottomRightGrid.is-scrolledLeft,
+.bdl-MetadataBasedItemList-topRightGrid.is-scrolledLeft {
+    box-shadow: $inset-shadow-left;
+}
+
+.bdl-MetadataBasedItemList-bottomRightGrid.is-scrolledMiddle,
+.bdl-MetadataBasedItemList-topRightGrid.is-scrolledMiddle {
+    box-shadow: $inset-shadow-left, $inset-shadow-right;
 }
