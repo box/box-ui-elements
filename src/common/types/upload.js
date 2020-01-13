@@ -56,6 +56,7 @@ type FolderUploadItem = {
 type UploadItem = {
     api: PlainUploadAPI | MultiputUploadAPI,
     boxFile?: BoxItem,
+    bytesUploadedOnLastResume?: number,
     error?: Object,
     extension: string,
     file: UploadFile,

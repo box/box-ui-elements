@@ -212,6 +212,92 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
     });
 
+    describe('onClick()', () => {
+        test.each([
+            [
+                'should set bytesUploadedOnLastResume when status is error and item is resumable',
+                {
+                    api: { sessionId: 123, totalUploadedBytes: 123456 },
+                    status: STATUS_ERROR,
+                    file: { size: CHUNKED_UPLOAD_MIN_SIZE_BYTES + 1 },
+                },
+                true,
+                true,
+            ],
+            [
+                'should not set bytesUploadedOnLastResume when file size <= CHUNKED_UPLOAD_MIN_SIZE_BYTES',
+                {
+                    api: { sessionId: 123, totalUploadedBytes: 123456 },
+                    status: STATUS_ERROR,
+                    file: { size: CHUNKED_UPLOAD_MIN_SIZE_BYTES },
+                },
+                true,
+                true,
+            ],
+            [
+                'should not set bytesUploadedOnLastResume when resumable uploads is not enabled',
+                {
+                    api: { sessionId: 123, totalUploadedBytes: 123456 },
+                    status: STATUS_ERROR,
+                    file: { size: CHUNKED_UPLOAD_MIN_SIZE_BYTES + 1 },
+                },
+                false,
+                true,
+            ],
+            [
+                'should not set bytesUploadedOnLastResume when not chunked upload',
+                {
+                    api: { sessionId: 123, totalUploadedBytes: 123456 },
+                    status: STATUS_ERROR,
+                    file: { size: CHUNKED_UPLOAD_MIN_SIZE_BYTES + 1 },
+                },
+                true,
+                false,
+            ],
+            [
+                'should not set bytesUploadedOnLastResume when item api has no session id',
+                {
+                    api: { sessionId: undefined, totalUploadedBytes: 123456 },
+                    status: STATUS_ERROR,
+                    file: { size: CHUNKED_UPLOAD_MIN_SIZE_BYTES + 1 },
+                },
+                true,
+                true,
+            ],
+            [
+                'should not set bytesUploadedOnLastResume when status is not error',
+                {
+                    api: { sessionId: 123, totalUploadedBytes: 123456 },
+                    status: STATUS_COMPLETE,
+                    file: { size: CHUNKED_UPLOAD_MIN_SIZE_BYTES + 1 },
+                },
+                true,
+                true,
+            ],
+        ])('%o', (test, item, isResumableUploadsEnabled, chunked) => {
+            jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => true);
+            const isChunkedUpload = chunked && item.file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES;
+            const isResumable = isResumableUploadsEnabled && isChunkedUpload && item.api.sessionId;
+            const wrapper = getWrapper({
+                chunked,
+                isResumableUploadsEnabled,
+            });
+            const instance = wrapper.instance();
+            instance.removeFileFromUploadQueue = jest.fn();
+            instance.resumeFile = jest.fn();
+            instance.resetFile = jest.fn();
+            instance.uploadFile = jest.fn();
+
+            instance.onClick(item);
+
+            if (item.status === STATUS_ERROR && isResumable) {
+                expect(item.bytesUploadedOnLastResume).toBe(item.api.totalUploadedBytes);
+            } else {
+                expect(item.bytesUploadedOnLastResume).toBe(undefined);
+            }
+        });
+    });
+
     describe('clickAllWithStatus()', () => {
         test('should call onClick for all items', () => {
             const wrapper = getWrapper();
