@@ -31,7 +31,7 @@ import {
     MIN_METADATA_COLUMN_WIDTH,
 } from './constants';
 
-type State = { hoveredRowIndex: number };
+type State = { hoveredRowIndex: number, scrollLeftOffset: number, scrollRightOffset: number };
 
 type Props = {
     currentCollection: Collection,
@@ -49,12 +49,24 @@ type CellRendererArgs = {
 type ColumnWidthCallback = ({ index: number }) => number;
 type GridCellData = Element<typeof FileIcon | typeof PlainButton | typeof Fragment>;
 
+type ScrollPositionClasses = {
+    'is-scrolledLeft': boolean,
+    'is-scrolledMiddle': boolean,
+    'is-scrolledRight': boolean,
+};
+
+type ScrollEventData = {
+    clientWidth: number,
+    scrollLeft: number,
+    scrollWidth: number,
+};
+
 class MetadataBasedItemList extends React.Component<Props, State> {
     props: Props;
 
     constructor(props: Props) {
         super(props);
-        this.state = { hoveredRowIndex: -1 };
+        this.state = { hoveredRowIndex: -1, scrollLeftOffset: 0, scrollRightOffset: 0 };
     }
 
     getColumnWidth(width: number): ColumnWidthCallback {
@@ -96,6 +108,13 @@ class MetadataBasedItemList extends React.Component<Props, State> {
     handleMouseEnter = (rowIndex: number): void => this.setState({ hoveredRowIndex: rowIndex });
 
     handleMouseLeave = (): void => this.setState({ hoveredRowIndex: -1 });
+
+    handleContentScroll = ({ clientWidth, scrollLeft, scrollWidth }: ScrollEventData): void => {
+        this.setState({
+            scrollLeftOffset: scrollLeft,
+            scrollRightOffset: scrollWidth - clientWidth - scrollLeft,
+        });
+    };
 
     getGridCellData(columnIndex: number, rowIndex: number): GridCellData | void {
         const {
@@ -171,29 +190,61 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         );
     };
 
+    getScrollPositionClasses(width: number): ScrollPositionClasses {
+        const { scrollLeftOffset, scrollRightOffset } = this.state;
+        const isViewScrolledLeft = this.calculateContentWidth() > width && scrollRightOffset > 0;
+        const isViewScrolledRight = scrollLeftOffset > 0;
+        const isViewScrolledInMiddle = isViewScrolledLeft && isViewScrolledRight;
+
+        return {
+            'is-scrolledLeft': isViewScrolledLeft && !isViewScrolledInMiddle, // content scrolled all the way to the left
+            'is-scrolledRight': isViewScrolledRight && !isViewScrolledInMiddle, // content scrolled all the way to the right
+            'is-scrolledMiddle': isViewScrolledInMiddle, // content scrolled somewhere in between
+        };
+    }
+
+    calculateContentWidth(): number {
+        const { metadataColumnsToShow }: Props = this.props;
+        // total width = sum of widths of sticky & non-sticky columns
+        return (
+            FILE_ICON_COLUMN_WIDTH + FILE_NAME_COLUMN_WIDTH + metadataColumnsToShow.length * MIN_METADATA_COLUMN_WIDTH
+        );
+    }
+
     render() {
         const { currentCollection, metadataColumnsToShow }: Props = this.props;
         const rowCount = currentCollection.items ? currentCollection.items.length : 0;
 
         return (
             <AutoSizer>
-                {({ width, height }) => (
-                    <div className="bdl-MetadataBasedItemList">
-                        <MultiGrid
-                            cellRenderer={this.cellRenderer}
-                            columnCount={metadataColumnsToShow.length + FIXED_COLUMNS_NUMBER}
-                            columnWidth={this.getColumnWidth(width)}
-                            fixedColumnCount={FIXED_COLUMNS_NUMBER}
-                            fixedRowCount={FIXED_ROW_NUMBER}
-                            height={height}
-                            hideBottomLeftGridScrollbar
-                            hideTopRightGridScrollbar
-                            rowCount={rowCount + FIXED_ROW_NUMBER}
-                            rowHeight={50}
-                            width={width}
-                        />
-                    </div>
-                )}
+                {({ width, height }) => {
+                    const scrollClasses = this.getScrollPositionClasses(width);
+                    const classesTopRightGrid = classNames('bdl-MetadataBasedItemList-topRightGrid', scrollClasses);
+                    const classesBottomRightGrid = classNames(
+                        'bdl-MetadataBasedItemList-bottomRightGrid',
+                        scrollClasses,
+                    );
+                    return (
+                        <div className="bdl-MetadataBasedItemList">
+                            <MultiGrid
+                                cellRenderer={this.cellRenderer}
+                                classNameBottomRightGrid={classesBottomRightGrid}
+                                classNameTopRightGrid={classesTopRightGrid}
+                                columnCount={metadataColumnsToShow.length + FIXED_COLUMNS_NUMBER}
+                                columnWidth={this.getColumnWidth(width)}
+                                fixedColumnCount={FIXED_COLUMNS_NUMBER}
+                                fixedRowCount={FIXED_ROW_NUMBER}
+                                height={height}
+                                hideBottomLeftGridScrollbar
+                                hideTopRightGridScrollbar
+                                rowCount={rowCount + FIXED_ROW_NUMBER}
+                                rowHeight={50}
+                                width={width}
+                                onScroll={this.handleContentScroll}
+                            />
+                        </div>
+                    );
+                }}
             </AutoSizer>
         );
     }
