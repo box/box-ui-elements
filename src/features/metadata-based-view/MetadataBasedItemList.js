@@ -190,9 +190,9 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         );
     };
 
-    scrollPositionClasses(width: number): ScrollPositionClasses {
+    getScrollPositionClasses(width: number): ScrollPositionClasses {
         const { scrollLeftOffset, scrollRightOffset } = this.state;
-        const isViewScrolledLeft = this.totalContentWidth() > width && scrollRightOffset > 0;
+        const isViewScrolledLeft = this.calculateContentWidth() > width && scrollRightOffset > 0;
         const isViewScrolledRight = scrollLeftOffset > 0;
         const isViewScrolledInMiddle = isViewScrolledLeft && isViewScrolledRight;
 
@@ -203,7 +203,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         };
     }
 
-    totalContentWidth(): number {
+    calculateContentWidth(): number {
         const { metadataColumnsToShow }: Props = this.props;
         // total width = sum of widths of sticky & non-sticky columns
         return (
@@ -218,7 +218,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         return (
             <AutoSizer>
                 {({ width, height }) => {
-                    const scrollClasses = this.scrollPositionClasses(width);
+                    const scrollClasses = this.getScrollPositionClasses(width);
                     const classesTopRightGrid = classNames('bdl-MetadataBasedItemList-topRightGrid', scrollClasses);
                     const classesBottomRightGrid = classNames(
                         'bdl-MetadataBasedItemList-bottomRightGrid',

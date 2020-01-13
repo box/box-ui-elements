@@ -1,7 +1,7 @@
 @import '../../styles/variables';
 
-$inset-shadow-left: -4px 0 2px -2px $bdl-gray-10 inset;
-$inset-shadow-right: 3px 0 3px -2px $bdl-gray-10 inset;
+$bdl-MetadataBasedItemList-insetShadowLeft: -4px 0 2px -2px $bdl-gray-10 inset;
+$bdl-MetadataBasedItemList-insetShadowRight: 3px 0 3px -2px $bdl-gray-10 inset;
 
 .bdl-MetadataBasedItemList {
     // sass-lint:disable class-name-format
@@ -66,15 +66,15 @@ $inset-shadow-right: 3px 0 3px -2px $bdl-gray-10 inset;
 
 .bdl-MetadataBasedItemList-bottomRightGrid.is-scrolledRight,
 .bdl-MetadataBasedItemList-topRightGrid.is-scrolledRight {
-    box-shadow: $inset-shadow-right;
+    box-shadow: $bdl-MetadataBasedItemList-insetShadowRight;
 }
 
 .bdl-MetadataBasedItemList-bottomRightGrid.is-scrolledLeft,
 .bdl-MetadataBasedItemList-topRightGrid.is-scrolledLeft {
-    box-shadow: $inset-shadow-left;
+    box-shadow: $bdl-MetadataBasedItemList-insetShadowLeft;
 }
 
 .bdl-MetadataBasedItemList-bottomRightGrid.is-scrolledMiddle,
 .bdl-MetadataBasedItemList-topRightGrid.is-scrolledMiddle {
-    box-shadow: $inset-shadow-left, $inset-shadow-right;
+    box-shadow: $bdl-MetadataBasedItemList-insetShadowLeft, $bdl-MetadataBasedItemList-insetShadowRight;
 }

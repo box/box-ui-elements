@@ -184,7 +184,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         });
     });
     describe('handleContentScroll()', () => {
-        test('should handle content scroll in right grids', () => {
+        test('should handle content scroll in non-sticky columns', () => {
             const clientWidth = 50;
             const scrollLeft = 10;
             const scrollWidth = 100;
@@ -220,7 +220,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         });
     });
 
-    describe('scrollPositionClasses(width)', () => {
+    describe('getScrollPositionClasses(width)', () => {
         test.each`
             scrollLeftOffset | scrollRightOffset | scrolledLeft | scrolledRight | scrolledMiddle | desc
             ${0}             | ${100}            | ${true}      | ${false}      | ${false}       | ${'all the way to the left'}
@@ -229,9 +229,9 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         `(
             'should return correct classes when content is scrolled $desc',
             ({ scrollLeftOffset, scrollRightOffset, scrolledLeft, scrolledRight, scrolledMiddle }) => {
-                instance.totalContentWidth = jest.fn().mockReturnValue(600);
+                instance.calculateContentWidth = jest.fn().mockReturnValue(600);
                 wrapper.setState({ scrollLeftOffset, scrollRightOffset });
-                const classes = instance.scrollPositionClasses(500);
+                const classes = instance.getScrollPositionClasses(500);
                 expect(classes['is-scrolledLeft']).toBe(scrolledLeft);
                 expect(classes['is-scrolledRight']).toBe(scrolledRight);
                 expect(classes['is-scrolledMiddle']).toBe(scrolledMiddle);
@@ -239,14 +239,14 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         );
     });
 
-    describe('totalContentWidth()', () => {
+    describe('calculateContentWidth()', () => {
         test('should return total width of the content', () => {
             const width =
                 FILE_ICON_COLUMN_WIDTH +
                 FILE_NAME_COLUMN_WIDTH +
                 metadataColumnsToShow.length * MIN_METADATA_COLUMN_WIDTH;
 
-            expect(instance.totalContentWidth()).toBe(width);
+            expect(instance.calculateContentWidth()).toBe(width);
         });
     });
 
