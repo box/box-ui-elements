@@ -2,13 +2,9 @@
 {
     "flow.useNPMPackagedFlow": true,
     "flow.enabled": true,
-    "eslint.autoFixOnSave": true,
     "javascript.validate.enable": false,
     "typescript.validate.enable": true,
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        { "language": "typescript", "autoFix": true },
-        { "language": "typescriptreact", "autoFix": true }
-    ]
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    }
 }
