@@ -1,3 +1,4 @@
 // @flow
-export { default as TargetingContext } from './src/TargetingContext';
-export { default as FtuxContext } from './src/FtuxContext';
+export * from './contexts';
+
+export * from './types';
