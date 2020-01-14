@@ -1,6 +1,6 @@
 // @flow
-export * from './constants';
-export * from './types';
-export * from './message-api';
-export * from './targeting-api';
-export * from './contexts';
+export type { MessageApi } from './MessageApi';
+export type { TargetingApi } from './TargetingApi';
+export { default as MessageContextProvider } from './MessageContextProvider';
+export { default as useMessage } from './useMessage';
+export { default as useSetEligibleMessageIDMap } from './useSetEligibleMessageIDMap';
