@@ -1,16 +1,17 @@
 // @flow
 import * as React from 'react';
+import { boolean } from '@storybook/addon-knobs';
 import { State, Store } from '@sambego/storybook-state';
 
-import Link from '../link/Link';
-import MenuItem from './MenuItem';
-import MenuLinkItem from './MenuLinkItem';
-import MenuSectionHeader from './MenuSectionHeader';
-import MenuSeparator from './MenuSeparator';
-import SelectMenuLinkItem from './SelectMenuLinkItem';
-import SubmenuItem from './SubmenuItem';
+import Link from '../../link/Link';
+import MenuItem from '../MenuItem';
+import MenuLinkItem from '../MenuLinkItem';
+import MenuSectionHeader from '../MenuSectionHeader';
+import MenuSeparator from '../MenuSeparator';
+import SelectMenuLinkItem from '../SelectMenuLinkItem';
+import SubmenuItem from '../SubmenuItem';
 
-import Menu from './Menu';
+import Menu from '../Menu';
 import notes from './Menu.stories.md';
 
 export const basic = () => (
@@ -60,7 +61,7 @@ export const withSubmenuFlip = () => (
 
 export const withSelectMenu = () => (
     <Menu>
-        <SelectMenuLinkItem isSelected>
+        <SelectMenuLinkItem isSelected={boolean('isSelected', true)}>
             <Link href="http://opensource.box.com/box-ui-elements/storybook">View Profile</Link>
         </SelectMenuLinkItem>
         <SelectMenuLinkItem>
