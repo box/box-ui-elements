@@ -58,6 +58,36 @@ describe('components/collapsible/Collapsible', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should handle focus event and show edit button', () => {
+        wrapper = shallow(
+            <Collapsible
+                headerActionItems={<Button className="collapsible-card-action-items">Click Here</Button>}
+                isOpen={false}
+                title="foo"
+            >
+                <span className="test-content">foobar</span>
+            </Collapsible>,
+        );
+        wrapper.find('.collapsible-card-header').simulate('focus');
+        expect(wrapper.state('isHovered')).toBeTruthy();
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should handle blur event and hide edit button', () => {
+        wrapper = shallow(
+            <Collapsible
+                headerActionItems={<Button className="collapsible-card-action-items">Click Here</Button>}
+                isOpen={false}
+                title="foo"
+            >
+                <span className="test-content">foobar</span>
+            </Collapsible>,
+        );
+        wrapper.find('.collapsible-card-header').simulate('blur');
+        expect(wrapper.state('isHovered')).toBeFalsy();
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('should apply correct border class', () => {
         wrapper = shallow(
             <Collapsible isBordered isOpen title="foo">

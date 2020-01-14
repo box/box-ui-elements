@@ -82,6 +82,14 @@ class Collapsible extends React.PureComponent<Props, State> {
         this.setState({ isHovered: false });
     };
 
+    handleFocus = () => {
+        this.setState({ isHovered: true });
+    };
+
+    handleBlur = () => {
+        this.setState({ isHovered: false });
+    };
+
     render() {
         const { isHovered, isOpen }: State = this.state;
         const {
@@ -119,8 +127,12 @@ class Collapsible extends React.PureComponent<Props, State> {
             <div className={sectionClassName}>
                 <div
                     className={buttonClassName}
+                    onBlur={this.handleBlur}
+                    onFocus={this.handleFocus}
                     onMouseEnter={this.handleMouseEnter}
                     onMouseLeave={this.handleMouseLeave}
+                    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                    tabIndex="0"
                 >
                     <PlainButton
                         {...modifiedButtonProps}
