@@ -15,15 +15,16 @@ type Props = {
     isLoading: boolean,
     /** Callback to load more entities */
     onLoadMore: () => void,
-    /** React ref of the scroll container
-     * Used to listen to scroll events and calculate onLoadMore calls
-     * Set useWindow to true to use the window as scroll container
+    /** React ref of the scroll container.
+     * Used to listen to scroll events and calculate onLoadMore calls.
+     * Set useWindow to true to use the window as scroll container.
      */
     scrollContainerNode?: ?HTMLElement,
     /** Scroll threshold */
     threshold: number,
     /** Throttle rate */
     throttle: number,
+    /** Set useWindow to true to use the window as scroll container. If set to true, will ignore scrollContainerRef. */
     useWindow: boolean,
 };
 
