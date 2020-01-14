@@ -16,6 +16,20 @@ const config = {
             },
         ],
         [
+            '@semantic-release/changelog',
+            {
+                changelogFile: 'CHANGELOG.md',
+            },
+        ],
+        [
+            '@semantic-release/git',
+            {
+                assets: ['CHANGELOG.md'],
+                // eslint-disable-next-line no-template-curly-in-string
+                message: 'chore(release): Update Changelog for ${nextRelease.version} [skip ci]\n\n',
+            },
+        ],
+        [
             '@semantic-release/github',
             {
                 failComment: false,
