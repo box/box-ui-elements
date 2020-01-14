@@ -1,6 +1,7 @@
 import React from 'react';
 import sinon from 'sinon';
 
+import Button from '../../button/Button';
 import PlainButton from '../../plain-button/PlainButton';
 import Collapsible from '..';
 
@@ -25,6 +26,36 @@ describe('components/collapsible/Collapsible', () => {
 
         wrapper.find('.collapsible-card-title').simulate('click');
         expect(wrapper.state('isOpen')).toBeTruthy();
+    });
+
+    test('should handle mouse enter event and show edit button', () => {
+        wrapper = shallow(
+            <Collapsible
+                headerActionItems={<Button className="collapsible-card-action-items">Click Here</Button>}
+                isOpen={false}
+                title="foo"
+            >
+                <span className="test-content">foobar</span>
+            </Collapsible>,
+        );
+        wrapper.find('.collapsible-card-header').simulate('mouseEnter');
+        expect(wrapper.state('isHovered')).toBeTruthy();
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should handle mouse leave event and hide edit button', () => {
+        wrapper = shallow(
+            <Collapsible
+                headerActionItems={<Button className="collapsible-card-action-items">Click Here</Button>}
+                isOpen={false}
+                title="foo"
+            >
+                <span className="test-content">foobar</span>
+            </Collapsible>,
+        );
+        wrapper.find('.collapsible-card-header').simulate('mouseLeave');
+        expect(wrapper.state('isHovered')).toBeFalsy();
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should apply correct border class', () => {

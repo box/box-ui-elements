@@ -37,6 +37,7 @@ type Props = {
 };
 
 type State = {
+    isHovered: boolean,
     isOpen: boolean,
 };
 
@@ -51,6 +52,7 @@ class Collapsible extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
+            isHovered: false,
             isOpen: props.isOpen,
         };
     }
@@ -72,8 +74,16 @@ class Collapsible extends React.PureComponent<Props, State> {
         );
     };
 
+    handleMouseEnter = () => {
+        this.setState({ isHovered: true });
+    };
+
+    handleMouseLeave = () => {
+        this.setState({ isHovered: false });
+    };
+
     render() {
-        const { isOpen }: State = this.state;
+        const { isHovered, isOpen }: State = this.state;
         const {
             animationDuration,
             buttonProps = {},
@@ -107,7 +117,11 @@ class Collapsible extends React.PureComponent<Props, State> {
 
         return (
             <div className={sectionClassName}>
-                <div className={buttonClassName}>
+                <div
+                    className={buttonClassName}
+                    onMouseEnter={this.handleMouseEnter}
+                    onMouseLeave={this.handleMouseLeave}
+                >
                     <PlainButton
                         {...modifiedButtonProps}
                         className="collapsible-card-title"
@@ -117,7 +131,7 @@ class Collapsible extends React.PureComponent<Props, State> {
                         {title}
                         <IconCaretDown className="collapsible-card-header-caret" color={bdlGray50} width={8} />
                     </PlainButton>
-                    {isOpen && headerActionItems}
+                    {(isOpen && headerActionItems) || (!isOpen && isHovered && headerActionItems)}
                 </div>
                 <AnimateHeight duration={animationDuration} height={isOpen ? 'auto' : 0}>
                     <div className="collapsible-card-content">{children}</div>
