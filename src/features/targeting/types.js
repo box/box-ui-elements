@@ -14,10 +14,8 @@ export type MessageEvent = $Values<typeof MESSAGE_EVENTS>;
 export type MessageStateMap = $ReadOnly<{ [MessageName]: MessageState }>;
 
 export type MessageContextValue = {|
-    eligibleMessageIDMap: EligibleMessageIDMap,
     messageApi: MessageApi,
     messageStateMap: MessageStateMap,
-    setEligibleMessageIDMap: EligibleMessageIDMap => void,
     setMessageStateMap: MessageStateMap => void,
 |};
 
