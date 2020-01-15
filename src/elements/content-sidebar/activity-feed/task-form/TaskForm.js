@@ -43,6 +43,7 @@ import type { SelectorItems, SelectorItem, UserMini, GroupMini } from '../../../
 import './TaskForm.scss';
 
 type TaskFormProps = {|
+    /* error needs to take in a string or message as well */
     error?: { status: number }, // TODO: update to ElementsXhrError once API supports it
     isDisabled?: boolean,
     onCancel: () => any,
@@ -189,6 +190,7 @@ class TaskForm extends React.Component<Props, State> {
     };
 
     handleSubmitError = (e: ElementsXhrError) => {
+        // debugger;
         const { onSubmitError } = this.props;
         onSubmitError(e);
         this.setState({ isLoading: false });
@@ -349,6 +351,7 @@ class TaskForm extends React.Component<Props, State> {
         const isCompletionRuleCheckboxChecked = completionRule === TASK_COMPLETION_RULE_ANY;
         const isForbiddenErrorOnEdit = isLoading || (getProp(error, 'status') === 403 && !isCreateEditMode);
 
+        console.log('Task Error object: ', error);
         return (
             <div className={inputContainerClassNames} data-resin-component="taskform">
                 <div className="bcs-task-input-form-container">
