@@ -999,6 +999,7 @@ class ContentUploader extends Component<Props, State> {
                 break;
             case STATUS_ERROR:
                 if (isResumable) {
+                    item.bytesUploadedOnLastResume = item.api.totalUploadedBytes;
                     this.resumeFile(item);
                 } else {
                     this.resetFile(item);
