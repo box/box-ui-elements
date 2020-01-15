@@ -24,6 +24,7 @@ module.exports = {
         {
             files: ['*.test.js'],
             globals: {
+                blurInput: true,
                 shallow: true,
                 mount: true,
                 takeModalScreenshot: true,

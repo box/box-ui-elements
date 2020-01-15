@@ -5,8 +5,8 @@ import { boolean } from '@storybook/addon-knobs';
 
 import TextInput from '../../text-input/TextInput';
 import TextArea from '../../text-area/TextAreaField';
-import Toggle from '../../toggle/Toggle';
-import Checkbox from '../../checkbox/Checkbox';
+import Toggle from '../../toggle/ToggleField';
+import Checkbox from '../../checkbox/CheckboxField';
 import SelectField from '../../select-field/SelectField';
 import PillSelectorDropdownField from '../../pill-selector-dropdown/PillSelectorDropdownField';
 import DatalistItem from '../../datalist-item/DatalistItem';
@@ -14,8 +14,6 @@ import DatalistItem from '../../datalist-item/DatalistItem';
 import { RadioButton, RadioButtonField, RadioGroup } from '../../radio';
 
 import notes from './Formik.stories.md';
-
-import '../../../styles/constants/_colors.scss';
 
 export const basic = () => {
     const pillSelectorValidator = option => {
@@ -177,7 +175,7 @@ export const basic = () => {
 };
 
 export default {
-    title: 'Components|Formik',
+    title: 'Components|Formik Elements',
     parameters: {
         notes,
     },

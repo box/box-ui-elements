@@ -15,7 +15,10 @@ describe('components/form-elements/text-area/TextArea', () => {
     });
 
     test.each(['abcde', 'www'])('validates text when given input %s', async userInput => {
-        const image = await takeScreenshotAfterInput(TEXTAREA_STORIES[1], userInput);
+        await global.page.waitForSelector(TEXTAREA_STORIES[1]);
+        await global.page.type(TEXTAREA_STORIES[1], userInput);
+        await blurInput(TEXTAREA_STORIES[1]);
+        const image = await global.page.screenshot();
         return expect(image).toMatchImageSnapshot();
     });
 });
