@@ -78,4 +78,10 @@ describe('components/text-area/TextArea', () => {
         const wrapper = shallow(<TextArea label="label" />);
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should render text area with description', () => {
+        const wrapper = shallow(<TextArea label="label" description="some description" />);
+
+        expect(wrapper).toMatchSnapshot();
+    });
 });

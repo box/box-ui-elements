@@ -18,11 +18,10 @@ import type { Icon } from '../../icons/flowTypes';
 
 const InfoBadge16 = (props: Icon) => (
     <AccessibleSVG width={16} height={16} viewBox="0 0 16 16" {...props}>
-        <path
-            fill={vars.bdlGray}
-            fillRule="evenodd"
-            d="M8 0c4.4 0 8 3.6 8 8s-3.6 8-8 8-8-3.6-8-8 3.6-8 8-8zm0 1C4.1 1 1 4.1 1 8s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7zm1 7c.6 0 1 .4 1 1v3c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9c0-.6.4-1 1-1h2zm0 1H7v3h2V9zM8 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm0 1c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1z"
-        />
+        <g fill={vars.bdlGray} fillRule="evenodd">
+            <path fillRule="nonzero" d="M8 1a7 7 0 110 14A7 7 0 018 1zm0 1a6 6 0 100 12A6 6 0 008 2z" />
+            <path d="M7 12a.5.5 0 110-1h.5V8H7a.5.5 0 010-1h1.5a.5.5 0 01.488.611A.782.782 0 019 7.75V11h.5a.5.5 0 110 1H7zm1-8a1 1 0 110 2 1 1 0 010-2z" />
+        </g>
     </AccessibleSVG>
 );
 

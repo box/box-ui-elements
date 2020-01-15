@@ -5,6 +5,8 @@ import PlainButton from '../../../components/plain-button';
 
 import MetadataBasedItemList from '../MetadataBasedItemList';
 
+import { FILE_ICON_COLUMN_WIDTH, FILE_NAME_COLUMN_WIDTH, MIN_METADATA_COLUMN_WIDTH } from '../constants';
+
 jest.mock('react-virtualized/dist/es/AutoSizer', () => () => 'AutoSizer');
 
 describe('features/metadata-based-view/MetadataBasedItemList', () => {
@@ -181,6 +183,20 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             expect(instance.state.hoveredRowIndex).toBe(-1);
         });
     });
+    describe('handleContentScroll()', () => {
+        test('should handle content scroll in non-sticky columns', () => {
+            const clientWidth = 50;
+            const scrollLeft = 10;
+            const scrollWidth = 100;
+            instance.setState = jest.fn();
+
+            instance.handleContentScroll({ clientWidth, scrollLeft, scrollWidth });
+            expect(instance.setState).toHaveBeenCalledWith({
+                scrollLeftOffset: scrollLeft,
+                scrollRightOffset: scrollWidth - clientWidth - scrollLeft,
+            });
+        });
+    });
 
     describe('cellRenderer()', () => {
         test.each([
@@ -201,6 +217,36 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
                 instance.cellRenderer({ columnIndex: 0, rowIndex: hoverRowIndex, key: 'key', style: {} }),
             );
             expect(cell.hasClass('bdl-MetadataBasedItemList-cell--hover')).toBe(true);
+        });
+    });
+
+    describe('getScrollPositionClasses(width)', () => {
+        test.each`
+            scrollLeftOffset | scrollRightOffset | scrolledLeft | scrolledRight | scrolledMiddle | desc
+            ${0}             | ${100}            | ${true}      | ${false}      | ${false}       | ${'all the way to the left'}
+            ${100}           | ${0}              | ${false}     | ${true}       | ${false}       | ${'all the way to the right'}
+            ${50}            | ${50}             | ${false}     | ${false}      | ${true}        | ${'in the middle'}
+        `(
+            'should return correct classes when content is scrolled $desc',
+            ({ scrollLeftOffset, scrollRightOffset, scrolledLeft, scrolledRight, scrolledMiddle }) => {
+                instance.calculateContentWidth = jest.fn().mockReturnValue(600);
+                wrapper.setState({ scrollLeftOffset, scrollRightOffset });
+                const classes = instance.getScrollPositionClasses(500);
+                expect(classes['is-scrolledLeft']).toBe(scrolledLeft);
+                expect(classes['is-scrolledRight']).toBe(scrolledRight);
+                expect(classes['is-scrolledMiddle']).toBe(scrolledMiddle);
+            },
+        );
+    });
+
+    describe('calculateContentWidth()', () => {
+        test('should return total width of the content', () => {
+            const width =
+                FILE_ICON_COLUMN_WIDTH +
+                FILE_NAME_COLUMN_WIDTH +
+                metadataColumnsToShow.length * MIN_METADATA_COLUMN_WIDTH;
+
+            expect(instance.calculateContentWidth()).toBe(width);
         });
     });
 

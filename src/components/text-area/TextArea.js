@@ -10,6 +10,7 @@ import './TextArea.scss';
 
 type Props = {
     className?: string,
+    description?: React.Node,
     error?: React.Node,
     /** Hides the label */
     hideLabel?: boolean,
@@ -26,6 +27,7 @@ type Props = {
 
 const TextArea = ({
     className = '',
+    description,
     error,
     hideLabel,
     hideOptionalLabel,
@@ -41,15 +43,23 @@ const TextArea = ({
     });
 
     const errorMessageID = React.useRef(uniqueId('errorMessage')).current;
+    const descriptionID = React.useRef(uniqueId('description')).current;
+
     const ariaAttrs = {
         'aria-invalid': hasError,
         'aria-required': isRequired,
         'aria-errormessage': errorMessageID,
+        'aria-describedby': description ? descriptionID : undefined,
     };
 
     return (
         <div className={classes}>
             <Label hideLabel={hideLabel} showOptionalText={!hideOptionalLabel && !isRequired} text={label}>
+                {!!description && (
+                    <i id={descriptionID} className="text-area-description">
+                        {description}
+                    </i>
+                )}
                 <Tooltip isShown={hasError} position="bottom-left" text={error || ''} theme="error">
                     <textarea
                         ref={textareaRef}
