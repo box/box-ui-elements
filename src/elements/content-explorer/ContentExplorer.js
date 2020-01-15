@@ -136,6 +136,7 @@ type Props = {
 type State = {
     currentCollection: Collection,
     currentOffset: number,
+    currentPageNumber: number,
     currentPageSize: number,
     errorCode: string,
     focusedRow: number,
@@ -147,6 +148,7 @@ type State = {
     isRenameModalOpen: boolean,
     isShareModalOpen: boolean,
     isUploadModalOpen: boolean,
+    markers: Array<?string>,
     rootName: string,
     searchQuery: string,
     selected?: BoxItem,
@@ -258,6 +260,7 @@ class ContentExplorer extends Component<Props, State> {
             currentCollection: {},
             currentOffset: initialPageSize * (initialPage - 1),
             currentPageSize: initialPageSize,
+            currentPageNumber: 0,
             errorCode: '',
             focusedRow: 0,
             gridColumnCount: 4,
@@ -268,6 +271,7 @@ class ContentExplorer extends Component<Props, State> {
             isRenameModalOpen: false,
             isShareModalOpen: false,
             isUploadModalOpen: false,
+            markers: [],
             rootName: '',
             searchQuery: '',
             sortBy,
@@ -352,13 +356,19 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     showMetadataQueryResultsSuccessCallback = (metadataQueryCollection: Collection): void => {
-        const { currentCollection }: State = this.state;
+        const { nextMarker } = metadataQueryCollection;
+        const { currentCollection, currentPageNumber, markers }: State = this.state;
+        const cloneMarkers = [...markers];
+        if (nextMarker) {
+            cloneMarkers[currentPageNumber + 1] = nextMarker;
+        }
         this.setState({
             currentCollection: {
                 ...currentCollection,
                 ...metadataQueryCollection,
                 percentLoaded: 100,
             },
+            markers: cloneMarkers,
         });
     };
 
@@ -370,6 +380,23 @@ class ContentExplorer extends Component<Props, State> {
      */
     showMetadataQueryResults() {
         const { metadataQuery }: Props = this.props;
+        const { currentPageNumber, markers }: State = this.state;
+        const metadataQueryClone = cloneDeep(metadataQuery);
+
+        if (currentPageNumber === 0) {
+            // Preserve the marker as part of the original query
+            markers[currentPageNumber] = metadataQueryClone.marker;
+        }
+
+        if (typeof markers[currentPageNumber] === 'string') {
+            // Set marker to the query to get next set of results
+            metadataQueryClone.marker = markers[currentPageNumber];
+        }
+
+        if (typeof metadataQueryClone.limit !== 'number') {
+            // Set limit to the query for pagination support
+            metadataQueryClone.limit = DEFAULT_PAGE_SIZE;
+        }
         // Reset search state, the view and show busy indicator
         this.setState({
             searchQuery: '',
@@ -378,7 +405,7 @@ class ContentExplorer extends Component<Props, State> {
         });
         this.metadataQueryAPIHelper = new MetadataQueryAPIHelper(this.api);
         this.metadataQueryAPIHelper.fetchMetadataQueryResults(
-            metadataQuery,
+            metadataQueryClone,
             this.showMetadataQueryResultsSuccessCallback,
             this.errorCallback,
         );
@@ -459,6 +486,8 @@ class ContentExplorer extends Component<Props, State> {
             this.showRecents(false);
         } else if (view === VIEW_SEARCH && searchQuery) {
             this.search(searchQuery);
+        } else if (view === VIEW_METADATA) {
+            this.showMetadataQueryResults();
         } else {
             throw new Error('Cannot refresh incompatible view!');
         }
@@ -1330,12 +1359,26 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
-     * Handle pagination changes
+     * Handle pagination changes for offset based pagination
      *
      * @param {number} newOffset - the new page offset value
      */
     paginate = (newOffset: number) => {
         this.setState({ currentOffset: newOffset }, this.refreshCollection);
+    };
+
+    /**
+     * Handle pagination changes for marker based pagination
+     * @param {number} newOffset - the new page offset value
+     */
+    markerBasedPaginate = (newOffset: number) => {
+        const { currentPageNumber } = this.state;
+        this.setState(
+            {
+                currentPageNumber: currentPageNumber + newOffset, // newOffset could be negative
+            },
+            this.refreshCollection,
+        );
     };
 
     /**
@@ -1397,56 +1440,59 @@ class ContentExplorer extends Component<Props, State> {
      */
     render() {
         const {
-            language,
-            messages,
-            rootFolderId,
-            logoUrl,
-            canUpload,
-            canCreateNewFolder,
-            canSetShareAccess,
-            canDelete,
-            canRename,
-            canDownload,
-            canPreview,
-            canShare,
-            token,
-            sharedLink,
-            sharedLinkPassword,
             apiHost,
             appHost,
-            staticHost,
-            uploadHost,
-            isSmall,
-            isMedium,
-            isTouch,
+            canCreateNewFolder,
+            canDelete,
+            canDownload,
+            canPreview,
+            canRename,
+            canSetShareAccess,
+            canShare,
+            canUpload,
             className,
+            contentPreviewProps,
+            defaultView,
+            isMedium,
+            isSmall,
+            isTouch,
+            language,
+            logoUrl,
             measureRef,
-            onPreview,
+            messages,
+            metadataColumnsToShow,
             onDownload,
+            onPreview,
             onUpload,
             requestInterceptor,
             responseInterceptor,
-            contentPreviewProps,
-            metadataColumnsToShow,
+            rootFolderId,
+            sharedLink,
+            sharedLinkPassword,
+            staticHost,
+            token,
+            uploadHost,
         }: Props = this.props;
 
         const {
-            view,
-            rootName,
             currentCollection,
+            currentPageNumber,
             currentPageSize,
-            searchQuery,
+            errorCode,
+            focusedRow,
             gridColumnCount,
+            isCreateFolderModalOpen,
             isDeleteModalOpen,
+            isLoading,
+            isPreviewModalOpen,
             isRenameModalOpen,
             isShareModalOpen,
             isUploadModalOpen,
-            isPreviewModalOpen,
-            isCreateFolderModalOpen,
+            markers,
+            rootName,
+            searchQuery,
             selected,
-            isLoading,
-            errorCode,
-            focusedRow,
+            view,
         }: State = this.state;
 
         const { id, offset, permissions, totalCount }: Collection = currentCollection;
@@ -1454,7 +1500,8 @@ class ContentExplorer extends Component<Props, State> {
         const styleClassName = classNames('be bce', className);
         const allowUpload: boolean = canUpload && !!can_upload;
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
-        const hasHeader: boolean = view !== VIEW_METADATA; // Show Header and SubHeader when it's not metadata view
+        const isDefaultViewMetadata: boolean = defaultView === DEFAULT_VIEW_METADATA;
+        const isErrorView: boolean = view === VIEW_ERROR;
 
         const viewMode = this.getViewMode();
         const maxGridColumnCount = this.getMaxNumberOfGridViewColumnsForWidth();
@@ -1465,7 +1512,7 @@ class ContentExplorer extends Component<Props, State> {
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
                     <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
-                        {hasHeader && (
+                        {!isDefaultViewMetadata && (
                             <>
                                 <Header
                                     view={view}
@@ -1524,14 +1571,19 @@ class ContentExplorer extends Component<Props, State> {
                             view={view}
                             viewMode={viewMode}
                         />
-                        <Footer>
-                            <Pagination
-                                offset={offset}
-                                onChange={this.paginate}
-                                pageSize={currentPageSize}
-                                totalCount={totalCount}
-                            />
-                        </Footer>
+                        {!isErrorView && (
+                            <Footer>
+                                <Pagination
+                                    hasNextMarker={!!markers[currentPageNumber + 1]}
+                                    hasPrevMarker={currentPageNumber === 1 || !!markers[currentPageNumber - 1]}
+                                    offset={offset}
+                                    onOffsetChange={this.paginate}
+                                    pageSize={currentPageSize}
+                                    totalCount={totalCount}
+                                    onMarkerBasedPageChange={this.markerBasedPaginate}
+                                />
+                            </Footer>
+                        )}
                     </div>
                     {allowUpload && !!this.appElement ? (
                         <UploadDialog
