@@ -15,6 +15,7 @@ import Base from './Base';
 import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';
 import TasksNewAPI from './tasks/TasksNew';
+import GroupsAPI from './Groups';
 import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
 import TaskLinksAPI from './tasks/TaskLinks';
 import AppActivityAPI from './AppActivity';
@@ -403,6 +404,7 @@ class Feed extends Base {
         this.updateFeedItem({ isPending: true }, task.id);
 
         try {
+            // look at this ila
             await Promise.all(
                 task.addedAssignees.map(assignee =>
                     assignee.item && assignee.item.type === 'group'
@@ -459,6 +461,7 @@ class Feed extends Base {
                 successCallback();
             }
         } catch (e) {
+            // debugger;
             this.updateFeedItem({ isPending: false }, task.id);
             this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
         }
@@ -526,8 +529,9 @@ class Feed extends Base {
      * @param {Function} errorCallback - the function which will be called on error
      * @return {void}
      */
-    createTaskNew = (
+    createTaskNew = async (
         file: BoxItem,
+        group: { id: string },
         currentUser: User,
         message: string,
         assignees: SelectorItems<>,
@@ -536,7 +540,7 @@ class Feed extends Base {
         completionRule: TaskCompletionRule,
         successCallback: Function,
         errorCallback: ErrorCallback,
-    ): void => {
+    ): Promise<void> => {
         if (!file.id) {
             throw getBadItemError();
         }
@@ -615,6 +619,44 @@ class Feed extends Base {
             completion_rule: completionRule,
         };
 
+        /* Need to call group count endpoint to check which group exceeds 250 */
+        this.groupsAPI = new GroupsAPI(this.options);
+        // Pull out groups from assignees
+        const groups = assignees.filter(
+            (assignee: SelectorItem<UserMini | GroupMini>) => (assignee.item && assignee.item.type) === 'group',
+        );
+        console.log('Groups: ', groups);
+
+        // for (const element of groups) {
+        //     const group = element;
+        //     console.log(group);
+        // }
+
+        // Use groupsAPI function on group array for each id
+        // this.groupsAPI.getGroupCount({
+        //     file,
+        //     group: { id: groups },
+        //     successCallback: console.log,
+        //     errorCallback: console.error,
+        // });
+
+        // Request the size of each group
+
+        // return an array of group sizes
+
+        // Fetch each group's size in parallel
+        // apply groupsAPI to array of groups to return size of each group
+
+        // const groupCount = Promise.all().then(this.groupsAPI.getGroupCount());
+
+        // console.log('Group count: ', groupCount);
+
+        // If any group exceeds 250, throw an error
+
+        // If all group sizes are less than 250, continue making the task
+
+        /* Have an array of groups with total_count. Go through each group and check total_count > 250 then return error */
+
         this.tasksNewAPI = new TasksNewAPI(this.options);
         this.tasksNewAPI.createTask({
             file,
@@ -692,6 +734,8 @@ class Feed extends Base {
             );
             successCallback(task);
         } catch (err) {
+            // console.log('this is where the error is handled: ', err);
+            // debugger;
             this.feedErrorCallback(false, err, ERROR_CODE_CREATE_TASK);
         }
     }
@@ -718,7 +762,12 @@ class Feed extends Base {
         return new Promise((resolve, reject) => {
             const taskCollaboratorsAPI = new TaskCollaboratorsAPI(this.options);
             this.taskCollaboratorsAPI.push(taskCollaboratorsAPI);
-
+            // let testmode;
+            // testmode = false;
+            // debugger;
+            // if (testmode) {
+            //     reject(new Error('group_exceeds_limit'));
+            // }
             taskCollaboratorsAPI.createTaskCollaboratorsforGroup({
                 file,
                 task,

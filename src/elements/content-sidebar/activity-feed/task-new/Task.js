@@ -153,6 +153,7 @@ class Task extends React.Component<Props, State> {
         }
     };
 
+    /* controls task error being shown */
     handleEditSubmitError = (error: ElementsXhrError) => {
         this.setState({ modalError: error });
     };
