@@ -28,52 +28,29 @@ describe('components/collapsible/Collapsible', () => {
         expect(wrapper.state('isOpen')).toBeTruthy();
     });
 
-    test('should handle mouse enter event and show edit button', () => {
+    test('should call onFocusStub when focused', () => {
+        const onFocusStub = sinon.spy();
         wrapper = shallow(
-            <Collapsible
-                headerActionItems={<Button className="collapsible-card-action-items">Click Here</Button>}
-                isOpen={false}
-                title="foo"
-            >
-                <span className="test-content">foobar</span>
-            </Collapsible>,
-        );
-        wrapper.find('.collapsible-card-header').simulate('mouseEnter');
-        expect(wrapper.state('isHovered')).toBeTruthy();
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should handle mouse leave event and hide edit button', () => {
-        wrapper = shallow(
-            <Collapsible
-                headerActionItems={<Button className="collapsible-card-action-items">Click Here</Button>}
-                isOpen={false}
-                title="foo"
-            >
-                <span className="test-content">foobar</span>
-            </Collapsible>,
-        );
-        wrapper.find('.collapsible-card-header').simulate('mouseLeave');
-        expect(wrapper.state('isHovered')).toBeFalsy();
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should handle focus event and show edit button', () => {
-        wrapper = shallow(
-            <Collapsible
-                headerActionItems={<Button className="collapsible-card-action-items">Click Here</Button>}
-                isOpen={false}
-                title="foo"
-            >
+            <Collapsible isOpen onFocus={onFocusStub} title="foo">
                 <span className="test-content">foobar</span>
             </Collapsible>,
         );
         wrapper.find('.collapsible-card-header').simulate('focus');
-        expect(wrapper.state('isHovered')).toBeTruthy();
-        expect(wrapper).toMatchSnapshot();
+        expect(onFocusStub.calledOnce).toBe(true);
     });
 
-    test('should handle blur event and hide edit button', () => {
+    test('should call onBlurStub when unfocused', () => {
+        const onBlurStub = sinon.spy();
+        wrapper = shallow(
+            <Collapsible isOpen onBlur={onBlurStub} title="foo">
+                <span className="test-content">foobar</span>
+            </Collapsible>,
+        );
+        wrapper.find('.collapsible-card-header').simulate('blur');
+        expect(onBlurStub.calledOnce).toBe(true);
+    });
+
+    test('should render with handleActionItems', () => {
         wrapper = shallow(
             <Collapsible
                 headerActionItems={<Button className="collapsible-card-action-items">Click Here</Button>}
@@ -83,8 +60,6 @@ describe('components/collapsible/Collapsible', () => {
                 <span className="test-content">foobar</span>
             </Collapsible>,
         );
-        wrapper.find('.collapsible-card-header').simulate('blur');
-        expect(wrapper.state('isHovered')).toBeFalsy();
         expect(wrapper).toMatchSnapshot();
     });
 

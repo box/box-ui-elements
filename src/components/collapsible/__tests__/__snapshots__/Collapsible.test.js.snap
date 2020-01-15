@@ -6,10 +6,6 @@ exports[`components/collapsible/Collapsible should apply buttonProps correctly 1
 >
   <div
     className="collapsible-card-header"
-    onBlur={[Function]}
-    onFocus={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
     tabIndex="0"
   >
     <PlainButton
@@ -67,10 +63,6 @@ exports[`components/collapsible/Collapsible should apply correct border class 1`
 >
   <div
     className="collapsible-card-header"
-    onBlur={[Function]}
-    onFocus={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
     tabIndex="0"
   >
     <PlainButton
@@ -126,10 +118,6 @@ exports[`components/collapsible/Collapsible should apply correct isOpen state 1`
 >
   <div
     className="collapsible-card-header"
-    onBlur={[Function]}
-    onFocus={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
     tabIndex="0"
   >
     <PlainButton
@@ -179,276 +167,12 @@ exports[`components/collapsible/Collapsible should apply correct isOpen state 1`
 </div>
 `;
 
-exports[`components/collapsible/Collapsible should handle blur event and hide edit button 1`] = `
-<div
-  className="collapsible-card"
->
-  <div
-    className="collapsible-card-header"
-    onBlur={[Function]}
-    onFocus={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    tabIndex="0"
-  >
-    <PlainButton
-      className="collapsible-card-title"
-      onClick={[Function]}
-      type="button"
-    >
-      foo
-      <IconCaretDown
-        className="collapsible-card-header-caret"
-        color="#909090"
-        width={8}
-      />
-    </PlainButton>
-  </div>
-  <AnimateHeight
-    animateOpacity={false}
-    animationStateClasses={
-      Object {
-        "animating": "rah-animating",
-        "animatingDown": "rah-animating--down",
-        "animatingToHeightAuto": "rah-animating--to-height-auto",
-        "animatingToHeightSpecific": "rah-animating--to-height-specific",
-        "animatingToHeightZero": "rah-animating--to-height-zero",
-        "animatingUp": "rah-animating--up",
-        "static": "rah-static",
-        "staticHeightAuto": "rah-static--height-auto",
-        "staticHeightSpecific": "rah-static--height-specific",
-        "staticHeightZero": "rah-static--height-zero",
-      }
-    }
-    applyInlineTransitions={true}
-    delay={0}
-    duration={100}
-    easing="ease"
-    height={0}
-    style={Object {}}
-  >
-    <div
-      className="collapsible-card-content"
-    >
-      <span
-        className="test-content"
-      >
-        foobar
-      </span>
-    </div>
-  </AnimateHeight>
-</div>
-`;
-
-exports[`components/collapsible/Collapsible should handle focus event and show edit button 1`] = `
-<div
-  className="collapsible-card"
->
-  <div
-    className="collapsible-card-header"
-    onBlur={[Function]}
-    onFocus={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    tabIndex="0"
-  >
-    <PlainButton
-      className="collapsible-card-title"
-      onClick={[Function]}
-      type="button"
-    >
-      foo
-      <IconCaretDown
-        className="collapsible-card-header-caret"
-        color="#909090"
-        width={8}
-      />
-    </PlainButton>
-    <Button
-      className="collapsible-card-action-items"
-      isLoading={false}
-      showRadar={false}
-      type="submit"
-    >
-      Click Here
-    </Button>
-  </div>
-  <AnimateHeight
-    animateOpacity={false}
-    animationStateClasses={
-      Object {
-        "animating": "rah-animating",
-        "animatingDown": "rah-animating--down",
-        "animatingToHeightAuto": "rah-animating--to-height-auto",
-        "animatingToHeightSpecific": "rah-animating--to-height-specific",
-        "animatingToHeightZero": "rah-animating--to-height-zero",
-        "animatingUp": "rah-animating--up",
-        "static": "rah-static",
-        "staticHeightAuto": "rah-static--height-auto",
-        "staticHeightSpecific": "rah-static--height-specific",
-        "staticHeightZero": "rah-static--height-zero",
-      }
-    }
-    applyInlineTransitions={true}
-    delay={0}
-    duration={100}
-    easing="ease"
-    height={0}
-    style={Object {}}
-  >
-    <div
-      className="collapsible-card-content"
-    >
-      <span
-        className="test-content"
-      >
-        foobar
-      </span>
-    </div>
-  </AnimateHeight>
-</div>
-`;
-
-exports[`components/collapsible/Collapsible should handle mouse enter event and show edit button 1`] = `
-<div
-  className="collapsible-card"
->
-  <div
-    className="collapsible-card-header"
-    onBlur={[Function]}
-    onFocus={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    tabIndex="0"
-  >
-    <PlainButton
-      className="collapsible-card-title"
-      onClick={[Function]}
-      type="button"
-    >
-      foo
-      <IconCaretDown
-        className="collapsible-card-header-caret"
-        color="#909090"
-        width={8}
-      />
-    </PlainButton>
-    <Button
-      className="collapsible-card-action-items"
-      isLoading={false}
-      showRadar={false}
-      type="submit"
-    >
-      Click Here
-    </Button>
-  </div>
-  <AnimateHeight
-    animateOpacity={false}
-    animationStateClasses={
-      Object {
-        "animating": "rah-animating",
-        "animatingDown": "rah-animating--down",
-        "animatingToHeightAuto": "rah-animating--to-height-auto",
-        "animatingToHeightSpecific": "rah-animating--to-height-specific",
-        "animatingToHeightZero": "rah-animating--to-height-zero",
-        "animatingUp": "rah-animating--up",
-        "static": "rah-static",
-        "staticHeightAuto": "rah-static--height-auto",
-        "staticHeightSpecific": "rah-static--height-specific",
-        "staticHeightZero": "rah-static--height-zero",
-      }
-    }
-    applyInlineTransitions={true}
-    delay={0}
-    duration={100}
-    easing="ease"
-    height={0}
-    style={Object {}}
-  >
-    <div
-      className="collapsible-card-content"
-    >
-      <span
-        className="test-content"
-      >
-        foobar
-      </span>
-    </div>
-  </AnimateHeight>
-</div>
-`;
-
-exports[`components/collapsible/Collapsible should handle mouse leave event and hide edit button 1`] = `
-<div
-  className="collapsible-card"
->
-  <div
-    className="collapsible-card-header"
-    onBlur={[Function]}
-    onFocus={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    tabIndex="0"
-  >
-    <PlainButton
-      className="collapsible-card-title"
-      onClick={[Function]}
-      type="button"
-    >
-      foo
-      <IconCaretDown
-        className="collapsible-card-header-caret"
-        color="#909090"
-        width={8}
-      />
-    </PlainButton>
-  </div>
-  <AnimateHeight
-    animateOpacity={false}
-    animationStateClasses={
-      Object {
-        "animating": "rah-animating",
-        "animatingDown": "rah-animating--down",
-        "animatingToHeightAuto": "rah-animating--to-height-auto",
-        "animatingToHeightSpecific": "rah-animating--to-height-specific",
-        "animatingToHeightZero": "rah-animating--to-height-zero",
-        "animatingUp": "rah-animating--up",
-        "static": "rah-static",
-        "staticHeightAuto": "rah-static--height-auto",
-        "staticHeightSpecific": "rah-static--height-specific",
-        "staticHeightZero": "rah-static--height-zero",
-      }
-    }
-    applyInlineTransitions={true}
-    delay={0}
-    duration={100}
-    easing="ease"
-    height={0}
-    style={Object {}}
-  >
-    <div
-      className="collapsible-card-content"
-    >
-      <span
-        className="test-content"
-      >
-        foobar
-      </span>
-    </div>
-  </AnimateHeight>
-</div>
-`;
-
 exports[`components/collapsible/Collapsible should not render a PlainButton if a button is not passed in 1`] = `
 <div
   className="collapsible-card is-open"
 >
   <div
     className="collapsible-card-header"
-    onBlur={[Function]}
-    onFocus={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
     tabIndex="0"
   >
     <PlainButton
@@ -504,10 +228,6 @@ exports[`components/collapsible/Collapsible should render a PlainButton if a but
 >
   <div
     className="collapsible-card-header"
-    onBlur={[Function]}
-    onFocus={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
     tabIndex="0"
   >
     <PlainButton
@@ -563,10 +283,6 @@ exports[`components/collapsible/Collapsible should render component correctly 1`
 >
   <div
     className="collapsible-card-header"
-    onBlur={[Function]}
-    onFocus={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
     tabIndex="0"
   >
     <PlainButton
@@ -603,6 +319,75 @@ exports[`components/collapsible/Collapsible should render component correctly 1`
     duration={100}
     easing="ease"
     height="auto"
+    style={Object {}}
+  >
+    <div
+      className="collapsible-card-content"
+    >
+      <span
+        className="test-content"
+      >
+        foobar
+      </span>
+    </div>
+  </AnimateHeight>
+</div>
+`;
+
+exports[`components/collapsible/Collapsible should render with handleActionItems 1`] = `
+<div
+  className="collapsible-card"
+>
+  <div
+    className="collapsible-card-header"
+    tabIndex="0"
+  >
+    <PlainButton
+      className="collapsible-card-title"
+      onClick={[Function]}
+      type="button"
+    >
+      foo
+      <IconCaretDown
+        className="collapsible-card-header-caret"
+        color="#909090"
+        width={8}
+      />
+    </PlainButton>
+    <span
+      className="collapsible-card-header-actionItems"
+    >
+      <Button
+        className="collapsible-card-action-items"
+        isLoading={false}
+        showRadar={false}
+        type="submit"
+      >
+        Click Here
+      </Button>
+    </span>
+  </div>
+  <AnimateHeight
+    animateOpacity={false}
+    animationStateClasses={
+      Object {
+        "animating": "rah-animating",
+        "animatingDown": "rah-animating--down",
+        "animatingToHeightAuto": "rah-animating--to-height-auto",
+        "animatingToHeightSpecific": "rah-animating--to-height-specific",
+        "animatingToHeightZero": "rah-animating--to-height-zero",
+        "animatingUp": "rah-animating--up",
+        "static": "rah-static",
+        "staticHeightAuto": "rah-static--height-auto",
+        "staticHeightSpecific": "rah-static--height-specific",
+        "staticHeightZero": "rah-static--height-zero",
+      }
+    }
+    applyInlineTransitions={true}
+    delay={0}
+    duration={100}
+    easing="ease"
+    height={0}
     style={Object {}}
   >
     <div

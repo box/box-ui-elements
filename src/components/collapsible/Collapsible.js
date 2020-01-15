@@ -28,8 +28,12 @@ type Props = {
     isBordered?: boolean,
     /** Initial state of the collapsible card */
     isOpen: boolean,
+    /** callback called when collapsible is unfocused */
+    onBlur?: Function,
     /** callback called when collapsible is opened */
     onClose?: Function,
+    /** callback called when collapsible is focused */
+    onFocus?: Function,
     /** callback called when collapsible is collapsed */
     onOpen?: Function,
     /** Title string or component */
@@ -37,7 +41,6 @@ type Props = {
 };
 
 type State = {
-    isHovered: boolean,
     isOpen: boolean,
 };
 
@@ -52,7 +55,6 @@ class Collapsible extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            isHovered: false,
             isOpen: props.isOpen,
         };
     }
@@ -74,24 +76,8 @@ class Collapsible extends React.PureComponent<Props, State> {
         );
     };
 
-    handleMouseEnter = () => {
-        this.setState({ isHovered: true });
-    };
-
-    handleMouseLeave = () => {
-        this.setState({ isHovered: false });
-    };
-
-    handleFocus = () => {
-        this.setState({ isHovered: true });
-    };
-
-    handleBlur = () => {
-        this.setState({ isHovered: false });
-    };
-
     render() {
-        const { isHovered, isOpen }: State = this.state;
+        const { isOpen }: State = this.state;
         const {
             animationDuration,
             buttonProps = {},
@@ -100,6 +86,8 @@ class Collapsible extends React.PureComponent<Props, State> {
             isBordered,
             hasStickyHeader,
             headerActionItems,
+            onBlur,
+            onFocus,
             title,
         }: Props = this.props;
 
@@ -127,10 +115,8 @@ class Collapsible extends React.PureComponent<Props, State> {
             <div className={sectionClassName}>
                 <div
                     className={buttonClassName}
-                    onBlur={this.handleBlur}
-                    onFocus={this.handleFocus}
-                    onMouseEnter={this.handleMouseEnter}
-                    onMouseLeave={this.handleMouseLeave}
+                    onBlur={onBlur}
+                    onFocus={onFocus}
                     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                     tabIndex="0"
                 >
@@ -143,7 +129,9 @@ class Collapsible extends React.PureComponent<Props, State> {
                         {title}
                         <IconCaretDown className="collapsible-card-header-caret" color={bdlGray50} width={8} />
                     </PlainButton>
-                    {(isOpen && headerActionItems) || (!isOpen && isHovered && headerActionItems)}
+                    {!!headerActionItems && (
+                        <span className="collapsible-card-header-actionItems">{headerActionItems}</span>
+                    )}
                 </div>
                 <AnimateHeight duration={animationDuration} height={isOpen ? 'auto' : 0}>
                     <div className="collapsible-card-content">{children}</div>
