@@ -24,12 +24,14 @@ export const basic = () => {
     return (
         <Formik
             initialValues={{
-                textinput: 'textinput',
-                textarea: 'textarea',
-                toggle: true,
                 checkbox: true,
+                pillselector: [],
                 radiogroup: 'red',
+                textarea: 'textarea',
+                textinput: 'textinput',
+                toggle: true,
             }}
+            onSubmit={() => null}
             validate={values => {
                 const errors = {};
                 const { textinput, textarea, pillselector } = values;
