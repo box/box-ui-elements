@@ -38,14 +38,31 @@
         width: 100%;
         padding: 10px 0;
         text-align: left;
+
+        + .collapsible-card-header-actionItems {
+            display: none;
+        }
+
+        &:focus,
+        &:hover {
+            + .collapsible-card-header-actionItems {
+                display: block;
+            }
+        }
     }
 
     .collapsible-card-content {
         padding: 10px 0;
     }
 
-    &.is-open .collapsible-card-header-caret {
-        transform: rotateZ(180deg);
+    &.is-open {
+        .collapsible-card-header-caret {
+            transform: rotateZ(180deg);
+        }
+
+        .collapsible-card-title + .collapsible-card-header-actionItems {
+            display: block;
+        }
     }
 
     &.is-bordered {
