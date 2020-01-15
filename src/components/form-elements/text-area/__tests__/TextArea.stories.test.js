@@ -1,4 +1,5 @@
 describe('components/form-elements/text-area/TextArea', () => {
+    const TEXTAREA_SELECTOR = 'textarea';
     const TEXTAREA_STORIES = [
         'components-form-elements-textarea--basic',
         'components-form-elements-textarea--with-validation',
@@ -10,14 +11,15 @@ describe('components/form-elements/text-area/TextArea', () => {
     });
 
     test('shows text after typing', async () => {
-        const image = await takeScreenshotAfterInput(TEXTAREA_STORIES[0], 'textarea', 'type', 'zyxwv');
+        const image = await takeScreenshotAfterInput(TEXTAREA_STORIES[0], TEXTAREA_SELECTOR, 'type', 'zyxwv');
         return expect(image).toMatchImageSnapshot();
     });
 
     test.each(['abcde', 'www'])('validates text when given input %s', async userInput => {
-        await global.page.waitForSelector(TEXTAREA_STORIES[1]);
-        await global.page.type(TEXTAREA_STORIES[1], userInput);
-        await blurInput(TEXTAREA_STORIES[1]);
+        await global.page.goto(`http://localhost:6061/iframe.html?id=${TEXTAREA_STORIES[1]}`);
+        await global.page.waitForSelector(TEXTAREA_SELECTOR);
+        await global.page.type(TEXTAREA_SELECTOR, userInput);
+        await blurInput(TEXTAREA_SELECTOR);
         const image = await global.page.screenshot();
         return expect(image).toMatchImageSnapshot();
     });
