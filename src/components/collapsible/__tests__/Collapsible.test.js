@@ -28,13 +28,9 @@ describe('components/collapsible/Collapsible', () => {
         expect(wrapper.state('isOpen')).toBeTruthy();
     });
 
-    test('should render with handleActionItems', () => {
+    test('should render with headerActionItems', () => {
         wrapper = shallow(
-            <Collapsible
-                headerActionItems={<Button className="collapsible-card-action-items">Click Here</Button>}
-                isOpen={false}
-                title="foo"
-            >
+            <Collapsible headerActionItems={<Button>Click Here</Button>} isOpen={false} title="foo">
                 <span className="test-content">foobar</span>
             </Collapsible>,
         );

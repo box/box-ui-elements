@@ -328,7 +328,7 @@ exports[`components/collapsible/Collapsible should render component correctly 1`
 </div>
 `;
 
-exports[`components/collapsible/Collapsible should render with handleActionItems 1`] = `
+exports[`components/collapsible/Collapsible should render with headerActionItems 1`] = `
 <div
   className="collapsible-card"
 >
@@ -351,7 +351,7 @@ exports[`components/collapsible/Collapsible should render with handleActionItems
       className="bdl-collapsible-actionItems"
     >
       <Button
-        className="collapsible-card-action-items"
+        className=""
         isLoading={false}
         showRadar={false}
         type="submit"
