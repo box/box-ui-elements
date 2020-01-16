@@ -1,4 +1,6 @@
 const path = require('path');
+// const typescriptDocGen = require('react-docgen-typescript');
+// const reactDocGen = require('react-docgen');
 const webpackConf = require('./webpack.config.js');
 
 const webpackConfig = Array.isArray(webpackConf) ? webpackConf[0] : webpackConf;
@@ -31,11 +33,11 @@ const allSections = [
     {
         name: 'Components',
         components: () => [
-            '../src/components/avatar/Avatar.js',
+            '../src/components/avatar/Avatar.tsx',
             '../src/components/badge/Badge.js',
             '../src/components/badgeable/Badgeable.js',
             '../src/components/breadcrumb/Breadcrumb.js',
-            '../src/components/button/Button.js',
+            '../src/components/button/Button.tsx',
             '../src/components/button-group/ButtonGroup.js',
             '../src/components/checkbox/Checkbox.js',
             '../src/components/collapsible/Collapsible.js',
@@ -64,8 +66,8 @@ const allSections = [
             '../src/components/link/LinkButton.js',
             '../src/components/link/LinkGroup.js',
             '../src/components/link/LinkPrimaryButton.js',
-            '../src/components/loading-indicator/LoadingIndicator.js',
-            '../src/components/loading-indicator/LoadingIndicatorWrapper.js',
+            '../src/components/loading-indicator/LoadingIndicator.tsx',
+            '../src/components/loading-indicator/LoadingIndicatorWrapper.tsx',
             '../src/components/logo/Logo.js',
             '../src/components/menu/Menu.js',
             '../src/components/menu/SelectMenuLinkItem.js',
@@ -81,7 +83,7 @@ const allSections = [
             '../src/components/popper/PopperComponent.js',
             '../src/components/primary-button/PrimaryButton.js',
             '../src/components/progress-bar/ProgressBar.js',
-            '../src/components/radar/RadarAnimation.js',
+            '../src/components/radar/RadarAnimation.tsx',
             '../src/components/radio/RadioButton.js',
             '../src/components/radio/RadioGroup.js',
             '../src/components/time/ReadableTime.js',
@@ -278,7 +280,8 @@ const allSections = [
 
 module.exports = {
     getComponentPathLine(componentPath) {
-        const name = path.basename(componentPath, '.js');
+        const extension = path.extname(componentPath);
+        const name = path.basename(componentPath, extension);
         const dir = path.dirname(componentPath);
         const packageRelativePath = dir.replace(/.*\/src\//, '');
         return `import ${name} from 'box-ui-elements/es/${packageRelativePath}/${name}';`;
@@ -288,6 +291,13 @@ module.exports = {
     showSidebar: process.env.BROWSERSLIST_ENV !== 'test',
     styleguideDir: path.join(__dirname, '../styleguide'),
     sections: allSections,
+    // Default exports are not supported by typescript DocGen
+    // propsParser(filePath, source, resolver, handlers) {
+    //     const extension = path.extname(filePath);
+    //     return extension === '.js'
+    //         ? reactDocGen.parse(source, resolver, handlers)
+    //         : typescriptDocGen.withDefaultConfig({}).parse(source, resolver, handlers);
+    // },
     styles: {
         Heading: {
             heading: {

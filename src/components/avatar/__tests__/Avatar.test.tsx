@@ -1,12 +1,8 @@
 import React from 'react';
+import { shallow, mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
 import Avatar from '../Avatar';
-
-function MockAvatarImage() {
-    return <div className="avatar-image" />;
-}
-
-jest.mock('../AvatarImage', () => MockAvatarImage);
+import AvatarImage from '../AvatarImage';
 
 const testDataURI = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
@@ -22,13 +18,15 @@ describe('components/avatar/Avatar', () => {
     });
 
     test('should not allow unknown sizes', () => {
+        // eslint-disable-next-line
+        // @ts-ignore
         const wrapper = shallow(<Avatar name="hello" size="WRONG" />);
         expect(wrapper.is('span.avatar.avatar--WRONG')).toBe(false);
     });
 
     test('should render an AvatarImage when avatarUrl is passed in', () => {
         const wrapper = shallow(<Avatar avatarUrl={testDataURI} />);
-        const avatarImage = wrapper.find(MockAvatarImage);
+        const avatarImage = wrapper.find(AvatarImage);
         expect(avatarImage.length).toEqual(1);
         expect(avatarImage.prop('url')).toEqual(testDataURI);
     });
@@ -58,8 +56,9 @@ describe('components/avatar/Avatar', () => {
     test('should fall back to AvatarInitials when there is an error in AvatarImage', () => {
         const wrapper = shallow(<Avatar avatarUrl="http://foo.bar/baz123_invalid" id="1" name="hello world" />);
 
-        const avatarImage = wrapper.find(MockAvatarImage);
-        avatarImage.prop('onError')();
+        const avatarImage = wrapper.find(AvatarImage);
+        const onError = avatarImage.prop('onError') as Function;
+        onError();
 
         const avatarInitials = wrapper.find('AvatarInitials');
         expect(avatarInitials.length).toEqual(1);
@@ -72,18 +71,16 @@ describe('components/avatar/Avatar', () => {
             avatarUrl: 'http://foo.bar/baz123_invalid',
         };
 
-        let wrapper;
-        act(() => {
-            wrapper = mount(<Avatar {...props} />);
-        });
-        expect(wrapper.find(MockAvatarImage).length).toEqual(1);
+        const wrapper = mount(<Avatar {...props} />);
+        expect(wrapper.find(AvatarImage).length).toEqual(1);
 
         act(() => {
-            const avatarImage = wrapper.find(MockAvatarImage);
-            avatarImage.prop('onError')();
+            const avatarImage = wrapper.find(AvatarImage);
+            const onError = avatarImage.prop('onError') as Function;
+            onError();
         });
         wrapper.update();
-        expect(wrapper.find(MockAvatarImage).length).toEqual(0);
+        expect(wrapper.find(AvatarImage).length).toEqual(0);
         expect(wrapper.find('AvatarInitials').length).toEqual(1);
 
         act(() => {
@@ -93,6 +90,6 @@ describe('components/avatar/Avatar', () => {
             });
         });
         wrapper.update();
-        expect(wrapper.find(MockAvatarImage).length).toEqual(1);
+        expect(wrapper.find(AvatarImage).length).toEqual(1);
     });
 });

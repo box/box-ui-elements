@@ -2,7 +2,6 @@
 /* File auto-generated */
 /* eslint-disable */
 
-export const bdlTransitionDuration200Ms = "0.2s"; // bdl-transition-duration-200ms
 export const white = "#fff"; // white
 export const black = "#000"; // black
 export const bdlBoxBlue = "#0061d5"; // bdl-box-blue
@@ -64,13 +63,14 @@ export const bdlWatermelonRed50 = "#f69bab"; // bdl-watermelon-red-50
 export const bdlWatermelonRed10 = "#fdebee"; // bdl-watermelon-red-10
 export const bdlWatermelonRed05 = "#fef5f6"; // bdl-watermelon-red-05
 export const bdlWatermelonRed02 = "#fffbfc"; // bdl-watermelon-red-02
+export const bdlLineHeight = "20px"; // bdl-line-height
+export const bdlFontSize = "13px"; // bdl-fontSize
+export const bdlFontSizeDejaBlue = "14px"; // bdl-fontSize--dejaBlue
+export const avatarColors = ["#2486fc","#0061d5","#003c84","#767676","#26c281","#f5b31b","#4826c2","#9f3fed","#ed3757"]; // avatar-colors
 export const modalDialogZIndex = "160"; // modal-dialog-z-index
 export const menuZIndex = "170"; // menu-z-index
 export const notificationsWrapperZIndex = "180"; // notifications-wrapper-z-index
 export const overlayZIndex = "190"; // overlay-z-index
 export const tooltipZIndex = "190"; // tooltip-z-index
 export const bdlBorderRadiusSize = "4px"; // bdl-border-radius-size
-export const avatarColors = ["#2486fc","#0061d5","#003c84","#767676","#26c281","#f5b31b","#4826c2","#9f3fed","#ed3757"]; // avatar-colors
-export const bdlLineHeight = "20px"; // bdl-line-height
-export const bdlFontSize = "13px"; // bdl-fontSize
-export const bdlFontSizeDejaBlue = "14px"; // bdl-fontSize--dejaBlue
+export const bdlTransitionDuration200Ms = "0.2s"; // bdl-transition-duration-200ms

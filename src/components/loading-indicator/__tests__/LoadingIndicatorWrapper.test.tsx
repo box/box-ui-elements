@@ -1,11 +1,14 @@
-// @flow
 import * as React from 'react';
-
-import LoadingIndicatorWrapper from '../LoadingIndicatorWrapper';
+import { shallow } from 'enzyme';
+import LoadingIndicatorWrapper, { LoadingIndicatorWrapperPosition } from '../LoadingIndicatorWrapper';
 
 describe('components/loading-indicator/LoadingIndicatorWrapper', () => {
     test('should render with default properties intact', () => {
-        const wrapper = shallow(<LoadingIndicatorWrapper />);
+        const wrapper = shallow(
+            <LoadingIndicatorWrapper>
+                <div />
+            </LoadingIndicatorWrapper>,
+        );
 
         expect(wrapper).toMatchSnapshot();
     });
@@ -19,7 +22,7 @@ describe('components/loading-indicator/LoadingIndicatorWrapper', () => {
 
     test('should render loader properly when specificed', () => {
         const child = <div>child</div>;
-        const wrapper = shallow(<LoadingIndicatorWrapper isLoading="true">{child}</LoadingIndicatorWrapper>);
+        const wrapper = shallow(<LoadingIndicatorWrapper isLoading>{child}</LoadingIndicatorWrapper>);
 
         expect(wrapper).toMatchSnapshot();
     });
@@ -27,7 +30,7 @@ describe('components/loading-indicator/LoadingIndicatorWrapper', () => {
     test('should allow custom classnames on wrapper', () => {
         const child = <div>child</div>;
         const wrapper = shallow(
-            <LoadingIndicatorWrapper className="test-name" isLoading="true">
+            <LoadingIndicatorWrapper className="test-name" isLoading>
                 {child}
             </LoadingIndicatorWrapper>,
         );
@@ -38,7 +41,11 @@ describe('components/loading-indicator/LoadingIndicatorWrapper', () => {
     test('should take in crawler position top', () => {
         const child = <div>child</div>;
         const wrapper = shallow(
-            <LoadingIndicatorWrapper className="test-name" crawlerPosition="top" isLoading="true">
+            <LoadingIndicatorWrapper
+                className="test-name"
+                crawlerPosition={LoadingIndicatorWrapperPosition.TOP}
+                isLoading
+            >
                 {child}
             </LoadingIndicatorWrapper>,
         );
@@ -48,14 +55,20 @@ describe('components/loading-indicator/LoadingIndicatorWrapper', () => {
 
     test('should pass thru any rest properties', () => {
         const wrapper = shallow(
-            <LoadingIndicatorWrapper className="test-name" data-resin-target="test" isLoading="true" />,
+            <LoadingIndicatorWrapper className="test-name" data-resin-target="test" isLoading>
+                <div />
+            </LoadingIndicatorWrapper>,
         );
 
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should hide content', () => {
-        const wrapper = shallow(<LoadingIndicatorWrapper className="test-name" hideContent isLoading="true" />);
+        const wrapper = shallow(
+            <LoadingIndicatorWrapper className="test-name" hideContent isLoading>
+                <div />
+            </LoadingIndicatorWrapper>,
+        );
 
         expect(wrapper).toMatchSnapshot();
     });

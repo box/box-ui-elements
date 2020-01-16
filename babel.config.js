@@ -9,6 +9,27 @@ module.exports = {
         '@babel/preset-react',
         '@babel/preset-flow',
     ],
+    overrides: [
+        {
+            test: ['./src/**/*.ts', './src/**/*.tsx'],
+            presets: [
+                [
+                    '@babel/preset-env',
+                    {
+                        modules: false,
+                    },
+                ],
+                '@babel/preset-react',
+                [
+                    '@babel/preset-typescript',
+                    {
+                        isTSX: true,
+                        allExtensions: true,
+                    },
+                ],
+            ],
+        },
+    ],
     plugins: [
         '@babel/plugin-syntax-dynamic-import',
         '@babel/plugin-transform-flow-strip-types',

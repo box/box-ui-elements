@@ -1,5 +1,6 @@
 import React from 'react';
 import sinon from 'sinon';
+import { shallow } from 'enzyme';
 
 import Button from '..';
 
@@ -30,11 +31,7 @@ describe('components/button/Button', () => {
     test('simulates click events', () => {
         const onClickHandler = sinon.spy();
 
-        const wrapper = shallow(<Button onClick={onClickHandler} />);
-
-        const contains = sinon.stub();
-        contains.withArgs('is-disabled').returns(false);
-        wrapper.instance().btnElement = { classList: { contains } };
+        const wrapper = shallow<Button>(<Button onClick={onClickHandler} />);
 
         wrapper.find('button').simulate('click');
         expect(onClickHandler.calledOnce).toBe(true);
@@ -45,11 +42,7 @@ describe('components/button/Button', () => {
         const preventDefault = sinon.spy();
         const stopPropagation = sinon.spy();
 
-        const wrapper = shallow(<Button isDisabled onClick={onClickHandler} />);
-
-        const contains = sinon.stub();
-        contains.withArgs('is-disabled').returns(true);
-        wrapper.instance().btnElement = { classList: { contains } };
+        const wrapper = shallow<Button>(<Button isDisabled onClick={onClickHandler} />);
 
         wrapper.find('button').simulate('click', { preventDefault, stopPropagation });
         sinon.assert.notCalled(onClickHandler);
@@ -62,11 +55,11 @@ describe('components/button/Button', () => {
         const preventDefault = sinon.spy();
         const stopPropagation = sinon.spy();
 
-        const wrapper = shallow(<Button className="is-disabled" onClick={onClickHandler} />);
+        const wrapper = shallow<Button>(<Button className="is-disabled" onClick={onClickHandler} />);
 
         const contains = sinon.stub();
         contains.withArgs('is-disabled').returns(true);
-        wrapper.instance().btnElement = { classList: { contains } };
+        wrapper.instance().btnElement = { classList: { contains } } as any; // eslint-disable-line
 
         wrapper.find('button').simulate('click', { preventDefault, stopPropagation });
         sinon.assert.notCalled(onClickHandler);
