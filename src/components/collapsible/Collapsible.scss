@@ -38,14 +38,40 @@
         width: 100%;
         padding: 10px 0;
         text-align: left;
+
+        + .bdl-Collapsible-actionItems {
+            display: none;
+        }
+
+        &:focus,
+        &:hover {
+            text-decoration: underline;
+
+            + .bdl-Collapsible-actionItems {
+                display: block;
+            }
+        }
     }
 
     .collapsible-card-content {
         padding: 10px 0;
     }
 
-    &.is-open .collapsible-card-header-caret {
-        transform: rotateZ(180deg);
+    &.is-open {
+        .collapsible-card-header-caret {
+            transform: rotateZ(180deg);
+        }
+
+        .btn-plain.collapsible-card-title {
+            &:focus,
+            &:hover {
+                text-decoration: none;
+            }
+
+            + .bdl-Collapsible-actionItems {
+                display: block;
+            }
+        }
     }
 
     &.is-bordered {

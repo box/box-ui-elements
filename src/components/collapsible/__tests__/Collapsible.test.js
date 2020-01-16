@@ -1,6 +1,7 @@
 import React from 'react';
 import sinon from 'sinon';
 
+import Button from '../../button/Button';
 import PlainButton from '../../plain-button/PlainButton';
 import Collapsible from '..';
 
@@ -25,6 +26,15 @@ describe('components/collapsible/Collapsible', () => {
 
         wrapper.find('.collapsible-card-title').simulate('click');
         expect(wrapper.state('isOpen')).toBeTruthy();
+    });
+
+    test('should render with headerActionItems', () => {
+        wrapper = shallow(
+            <Collapsible headerActionItems={<Button>Click Here</Button>} isOpen={false} title="foo">
+                <span className="test-content">foobar</span>
+            </Collapsible>,
+        );
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should apply correct border class', () => {
