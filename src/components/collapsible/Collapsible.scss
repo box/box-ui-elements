@@ -39,7 +39,7 @@
         padding: 10px 0;
         text-align: left;
 
-        + .bdl-collapsible-actionItems {
+        + .bdl-Collapsible-actionItems {
             display: none;
         }
 
@@ -47,7 +47,7 @@
         &:hover {
             text-decoration: underline;
 
-            + .bdl-collapsible-actionItems {
+            + .bdl-Collapsible-actionItems {
                 display: block;
             }
         }
@@ -62,13 +62,13 @@
             transform: rotateZ(180deg);
         }
 
-        .collapsible-card-title {
+        .btn-plain.collapsible-card-title {
             &:focus,
             &:hover {
                 text-decoration: none;
             }
 
-            + .bdl-collapsible-actionItems {
+            + .bdl-Collapsible-actionItems {
                 display: block;
             }
         }

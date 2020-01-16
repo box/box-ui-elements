@@ -117,7 +117,7 @@ class Collapsible extends React.PureComponent<Props, State> {
                         {title}
                         <IconCaretDown className="collapsible-card-header-caret" color={bdlGray50} width={8} />
                     </PlainButton>
-                    {!!headerActionItems && <span className="bdl-collapsible-actionItems">{headerActionItems}</span>}
+                    {!!headerActionItems && <span className="bdl-Collapsible-actionItems">{headerActionItems}</span>}
                 </div>
                 <AnimateHeight duration={animationDuration} height={isOpen ? 'auto' : 0}>
                     <div className="collapsible-card-content">{children}</div>
