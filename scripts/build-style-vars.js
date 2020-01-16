@@ -3,6 +3,7 @@ const { promisify } = require('util');
 const { parse } = require('sass-variable-parser');
 const camelCase = require('lodash/camelCase');
 const isEqual = require('lodash/isEqual');
+const { execSync } = require('child_process');
 
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
@@ -10,6 +11,7 @@ const writeFile = promisify(fs.writeFile);
 const inputFile = process.argv[2];
 const moduleName = inputFile.split('.scss')[0];
 const outputJs = process.argv[3] || `${moduleName}.js`;
+const outputTs = process.argv[3] || `${moduleName}.ts`;
 const outputJson = process.argv[4] || `${moduleName}.json`;
 
 const moduleHeader = `
@@ -17,6 +19,9 @@ const moduleHeader = `
 /* File auto-generated */
 /* eslint-disable */
 
+`;
+
+const moduleTSHeader = `/* File auto-generated */
 `;
 
 async function main() {
@@ -48,7 +53,9 @@ async function main() {
     }
 
     if (!isEqual(priorJson, newJson)) {
-        await writeFile(outputJs, `${moduleHeader}${moduleString}`);
+        await writeFile(outputJs, `${moduleHeader}${moduleString}`); // deprecate eventually
+        await writeFile(outputTs, `${moduleTSHeader}${moduleString}`);
+        execSync(`yarn eslint --fix ${outputTs}`);
         await writeFile(outputJson, jsonString);
     }
 }

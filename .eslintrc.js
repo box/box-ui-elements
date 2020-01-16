@@ -5,7 +5,6 @@ module.exports = {
     rules: {
         camelcase: 'off',
         'class-methods-use-this': 'off',
-        'formatjs/enforce-description': 'error', // fixme
         'jsx-a11y/label-has-associated-control': 'off',
         'import/no-extraneous-dependencies': 'off', // fixme
         'react/default-props-match-prop-types': 'off', // fixme
@@ -18,11 +17,11 @@ module.exports = {
         'react/no-access-state-in-setstate': 'off', // fixme
         'react/no-array-index-key': 'off', // fixme
         'react/no-this-in-sfc': 'off',
+        'import/no-unresolved': 'off', // fixme
     },
-    plugins: ['formatjs'],
     overrides: [
         {
-            files: ['*.test.js'],
+            files: ['*.test.js', '*.test.tsx'],
             globals: {
                 blurInput: true,
                 shallow: true,
@@ -31,6 +30,12 @@ module.exports = {
                 takeScreenshot: true,
                 takeScreenshotAfterInput: true,
             },
+        },
+        {
+            files: ['*.ts', '*.tsx'],
+            rules: {
+                '@typescript-eslint/explicit-function-return-type': 'off', // fixme
+            }
         }
     ]
 };

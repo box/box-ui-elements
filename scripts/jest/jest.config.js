@@ -11,7 +11,7 @@ module.exports = {
     },
     transformIgnorePatterns: ['node_modules/(?!(react-virtualized/dist/es))'],
     preset: 'jest-puppeteer',
-    testRegex: '(.*)?__tests__\\/.*\\.stories\\.test\\.js$',
+    testRegex: '(.*)?__tests__\\/.*\\.stories\\.test\\.(js|tsx)$',
     setupFilesAfterEnv: [
         '<rootDir>/node_modules/regenerator-runtime/runtime.js',
         '<rootDir>/scripts/jest/visual-adapter.js',
