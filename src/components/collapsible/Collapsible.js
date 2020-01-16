@@ -28,12 +28,8 @@ type Props = {
     isBordered?: boolean,
     /** Initial state of the collapsible card */
     isOpen: boolean,
-    /** callback called when collapsible is unfocused */
-    onBlur?: Function,
     /** callback called when collapsible is opened */
     onClose?: Function,
-    /** callback called when collapsible is focused */
-    onFocus?: Function,
     /** callback called when collapsible is collapsed */
     onOpen?: Function,
     /** Title string or component */
@@ -86,8 +82,6 @@ class Collapsible extends React.PureComponent<Props, State> {
             isBordered,
             hasStickyHeader,
             headerActionItems,
-            onBlur,
-            onFocus,
             title,
         }: Props = this.props;
 
@@ -113,7 +107,7 @@ class Collapsible extends React.PureComponent<Props, State> {
 
         return (
             <div className={sectionClassName}>
-                <div className={buttonClassName} onBlur={onBlur} onFocus={onFocus}>
+                <div className={buttonClassName}>
                     <PlainButton
                         {...modifiedButtonProps}
                         className="collapsible-card-title"

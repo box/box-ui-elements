@@ -28,28 +28,6 @@ describe('components/collapsible/Collapsible', () => {
         expect(wrapper.state('isOpen')).toBeTruthy();
     });
 
-    test('should call onFocusStub when focused', () => {
-        const onFocusStub = sinon.spy();
-        wrapper = shallow(
-            <Collapsible isOpen onFocus={onFocusStub} title="foo">
-                <span className="test-content">foobar</span>
-            </Collapsible>,
-        );
-        wrapper.find('.collapsible-card-header').simulate('focus');
-        expect(onFocusStub.calledOnce).toBe(true);
-    });
-
-    test('should call onBlurStub when unfocused', () => {
-        const onBlurStub = sinon.spy();
-        wrapper = shallow(
-            <Collapsible isOpen onBlur={onBlurStub} title="foo">
-                <span className="test-content">foobar</span>
-            </Collapsible>,
-        );
-        wrapper.find('.collapsible-card-header').simulate('blur');
-        expect(onBlurStub.calledOnce).toBe(true);
-    });
-
     test('should render with handleActionItems', () => {
         wrapper = shallow(
             <Collapsible

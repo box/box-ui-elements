@@ -62,8 +62,15 @@
             transform: rotateZ(180deg);
         }
 
-        .collapsible-card-title + .bdl-collapsible-actionItems {
-            display: block;
+        .collapsible-card-title {
+            &:focus,
+            &:hover {
+                text-decoration: none;
+            }
+
+            + .bdl-collapsible-actionItems {
+                display: block;
+            }
         }
     }
 
