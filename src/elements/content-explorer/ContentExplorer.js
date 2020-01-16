@@ -1506,6 +1506,9 @@ class ContentExplorer extends Component<Props, State> {
         const viewMode = this.getViewMode();
         const maxGridColumnCount = this.getMaxNumberOfGridViewColumnsForWidth();
 
+        const hasNextMarker: boolean = !!markers[currentPageNumber + 1];
+        const hasPreviousMarker: boolean = currentPageNumber === 1 || !!markers[currentPageNumber - 1];
+
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
@@ -1574,8 +1577,8 @@ class ContentExplorer extends Component<Props, State> {
                         {!isErrorView && (
                             <Footer>
                                 <Pagination
-                                    hasNextMarker={!!markers[currentPageNumber + 1]}
-                                    hasPrevMarker={currentPageNumber === 1 || !!markers[currentPageNumber - 1]}
+                                    hasNextMarker={hasNextMarker}
+                                    hasPrevMarker={hasPreviousMarker}
                                     offset={offset}
                                     onOffsetChange={this.paginate}
                                     pageSize={currentPageSize}

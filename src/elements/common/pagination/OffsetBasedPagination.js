@@ -5,28 +5,15 @@
  */
 
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
-import Button from '../../../components/button';
-import ButtonGroup from '../../../components/button-group';
-import IconPageBack from '../../../icons/general/IconPageBack';
-import IconPageForward from '../../../icons/general/IconPageForward';
-import PaginationMenu from './PaginationMenu';
-import Tooltip from '../Tooltip';
-import messages from '../messages';
+import PaginationControls from './PaginationControls';
 import { DEFAULT_PAGE_SIZE } from '../../../constants';
-import './Pagination.scss';
 
 type Props = {
     offset?: number,
     onOffsetChange?: Function,
     pageSize?: number,
     totalCount?: number,
-};
-
-const PAGE_ICON_STYLE = {
-    height: 9,
-    width: 6,
 };
 
 const OffsetBasedPagination = ({
@@ -66,24 +53,16 @@ const OffsetBasedPagination = ({
     };
 
     return (
-        <div className="be-pagination">
-            <div className="be-pagination-count">
-                <PaginationMenu onPageClick={updateOffset} pageCount={pageCount} pageNumber={pageNumber} />
-            </div>
-
-            <ButtonGroup className="be-pagination-nav">
-                <Tooltip isDisabled={!hasPreviousPage} text={<FormattedMessage {...messages.previousPage} />}>
-                    <Button isDisabled={!hasPreviousPage} onClick={handlePreviousClick}>
-                        <IconPageBack {...PAGE_ICON_STYLE} />
-                    </Button>
-                </Tooltip>
-                <Tooltip isDisabled={!hasNextPage} text={<FormattedMessage {...messages.nextPage} />}>
-                    <Button isDisabled={!hasNextPage} onClick={handleNextClick}>
-                        <IconPageForward {...PAGE_ICON_STYLE} />
-                    </Button>
-                </Tooltip>
-            </ButtonGroup>
-        </div>
+        <PaginationControls
+            handleNextClick={handleNextClick}
+            handlePreviousClick={handlePreviousClick}
+            hasNextPage={hasNextPage}
+            hasPreviousPage={hasPreviousPage}
+            isOffsetBasedPagination
+            onPageClick={updateOffset}
+            pageCount={pageCount}
+            pageNumber={pageNumber}
+        />
     );
 };
 
