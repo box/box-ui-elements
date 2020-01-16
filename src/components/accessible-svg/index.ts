@@ -1,2 +1,1 @@
-export { default } from './AccessibleSVG';
-export * from './AccessibleSVG';
+export { default, SVGProps, AccessibleSVGProps } from './AccessibleSVG';
