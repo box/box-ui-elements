@@ -38,3 +38,6 @@ global.takeModalScreenshot = async id => {
     await global.page.waitFor(MODAL_LOADING_ANIMATION_TIME); // wait for modal loading animation to finish
     return global.page.screenshot();
 };
+
+// Blurs an input field
+global.blurInput = async selector => global.page.$eval(selector, e => e.blur());
