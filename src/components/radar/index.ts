@@ -1,2 +1,1 @@
-export { default } from './RadarAnimation';
-export * from './RadarAnimation';
+export { default, RadarAnimationPosition, RadarAnimationProps } from './RadarAnimation';
