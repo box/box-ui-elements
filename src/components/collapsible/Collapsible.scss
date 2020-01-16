@@ -45,6 +45,8 @@
 
         &:focus,
         &:hover {
+            text-decoration: underline;
+
             + .collapsible-card-header-actionItems {
                 display: block;
             }
