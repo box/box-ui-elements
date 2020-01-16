@@ -348,7 +348,7 @@ exports[`components/collapsible/Collapsible should render with handleActionItems
       />
     </PlainButton>
     <span
-      className="collapsible-card-header-actionItems"
+      className="bdl-collapsible-actionItems"
     >
       <Button
         className="collapsible-card-action-items"
