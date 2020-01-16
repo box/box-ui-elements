@@ -1,9 +1,10 @@
 import React from 'react';
-
+import { shallow } from 'enzyme';
 import makeLoadable from '../makeLoadable';
+import { LoadingIndicatorProps } from '../LoadingIndicator';
 
 describe('components/loading-indicator/makeLoadable', () => {
-    let TestComponent;
+    let TestComponent: React.ComponentType;
 
     beforeEach(() => {
         TestComponent = () => <div className="test-component">blah</div>;
@@ -19,7 +20,11 @@ describe('components/loading-indicator/makeLoadable', () => {
 
     test('should pass props down to BaseComponent', () => {
         const LoadableComponent = makeLoadable(TestComponent);
-        const wrapper = shallow(<LoadableComponent className="foo" hello="123" isLoading={false} />);
+        const props = {
+            className: 'foo',
+            hello: '123',
+        };
+        const wrapper = shallow(<LoadableComponent isLoading={false} {...props} />);
 
         expect(wrapper.find('TestComponent').prop('hello')).toEqual('123');
         expect(wrapper.find('TestComponent').prop('className')).toEqual('foo');
@@ -35,7 +40,9 @@ describe('components/loading-indicator/makeLoadable', () => {
 
     test('should pass loadingIndicatorPorps to LoadingIndicator', () => {
         const LoadableComponent = makeLoadable(TestComponent);
-        const wrapper = shallow(<LoadableComponent isLoading loadingIndicatorProps={{ className: 'foobar' }} />);
+        const wrapper = shallow(
+            <LoadableComponent isLoading loadingIndicatorProps={{ className: 'foobar' } as LoadingIndicatorProps} />,
+        );
 
         expect(wrapper.find('LoadingIndicator').prop('className')).toEqual('foobar');
     });

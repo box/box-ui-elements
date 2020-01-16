@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { shallow } from 'enzyme';
 import PrimaryButton from '..';
 import Button from '../../button';
 
