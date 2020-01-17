@@ -7,12 +7,12 @@ exports[`components/text-input/TextInput should render text input with descripti
   <Label
     showOptionalText={true}
   >
-    <i
+    <div
       className="text-input-description"
       id="description36"
     >
       some description
-    </i>
+    </div>
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
