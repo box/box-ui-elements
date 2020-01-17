@@ -18,14 +18,18 @@
             z-index: 1; // required by sticky position
         }
 
+        .bdl-Collapsible-actionItems {
+            display: none;
+        }
+
         &:focus,
         &:hover {
             .btn-plain.collapsible-card-title {
                 text-decoration: underline;
+            }
 
-                + .bdl-Collapsible-actionItems {
-                    display: block;
-                }
+            .bdl-Collapsible-actionItems {
+                display: block;
             }
         }
     }
@@ -49,10 +53,6 @@
         width: 100%;
         padding: 10px 0;
         text-align: left;
-
-        + .bdl-Collapsible-actionItems {
-            display: none;
-        }
     }
 
     .collapsible-card-content {
