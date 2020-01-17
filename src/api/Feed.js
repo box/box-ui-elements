@@ -466,7 +466,6 @@ class Feed extends Base {
                 successCallback();
             }
         } catch (e) {
-            // debugger;
             this.updateFeedItem({ isPending: false }, task.id);
             this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
         }
