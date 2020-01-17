@@ -6,7 +6,6 @@ exports[`components/collapsible/Collapsible should apply buttonProps correctly 1
 >
   <div
     className="collapsible-card-header"
-    tabIndex="0"
   >
     <PlainButton
       a={1}
@@ -63,7 +62,6 @@ exports[`components/collapsible/Collapsible should apply correct border class 1`
 >
   <div
     className="collapsible-card-header"
-    tabIndex="0"
   >
     <PlainButton
       className="collapsible-card-title"
@@ -118,7 +116,6 @@ exports[`components/collapsible/Collapsible should apply correct isOpen state 1`
 >
   <div
     className="collapsible-card-header"
-    tabIndex="0"
   >
     <PlainButton
       className="collapsible-card-title"
@@ -173,7 +170,6 @@ exports[`components/collapsible/Collapsible should not render a PlainButton if a
 >
   <div
     className="collapsible-card-header"
-    tabIndex="0"
   >
     <PlainButton
       className="collapsible-card-title"
@@ -228,7 +224,6 @@ exports[`components/collapsible/Collapsible should render a PlainButton if a but
 >
   <div
     className="collapsible-card-header"
-    tabIndex="0"
   >
     <PlainButton
       className="collapsible-card-title"
@@ -283,7 +278,6 @@ exports[`components/collapsible/Collapsible should render component correctly 1`
 >
   <div
     className="collapsible-card-header"
-    tabIndex="0"
   >
     <PlainButton
       className="collapsible-card-title"
@@ -340,7 +334,6 @@ exports[`components/collapsible/Collapsible should render with headerActionItems
 >
   <div
     className="collapsible-card-header"
-    tabIndex="0"
   >
     <PlainButton
       className="collapsible-card-title"
