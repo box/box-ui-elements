@@ -28,11 +28,11 @@ etc... which increases the scope of this ticket. */
 const TaskError = ({ editMode, error, taskType }: Props) => {
     const isEditMode = editMode === TASK_EDIT_MODE_EDIT;
     const isForbiddenErrorOnEdit = getProp(error, 'status') === 403 && isEditMode;
-    // // error handling for assigning tasks to groups
-    // const taskError = getProp(error, 'code') === 'group_exceeds_limit';
+    // error handling for assigning tasks to groups
+    const taskGroupExceedsError = getProp(error, 'code') === 'group_exceeds_limit';
+
     const errorTitle = isForbiddenErrorOnEdit ? messages.taskEditWarningTitle : messages.taskCreateErrorTitle;
     let errorMessage = isEditMode ? messages.taskUpdateErrorMessage : apiMessages.taskCreateErrorMessage;
-
     if (!error) {
         return null;
     }
@@ -52,9 +52,22 @@ const TaskError = ({ editMode, error, taskType }: Props) => {
     }
 
     return (
-        <InlineNotice type="error" title={<FormattedMessage {...errorTitle} />}>
-            <FormattedMessage {...errorMessage} />
-        </InlineNotice>
+        <div>
+            {taskGroupExceedsError ? (
+                <InlineNotice
+                    type="warning"
+                    title={<FormattedMessage {...messages.taskGroupExceedsLimitWarningTitle} />}
+                >
+                    <FormattedMessage {...apiMessages.taskGroupExceedsLimitWarningMessage} />
+                </InlineNotice>
+            ) : null}
+
+            {isForbiddenErrorOnEdit ? (
+                <InlineNotice type="error" title={<FormattedMessage {...errorTitle} />}>
+                    <FormattedMessage {...errorMessage} />
+                </InlineNotice>
+            ) : null}
+        </div>
     );
 };
 

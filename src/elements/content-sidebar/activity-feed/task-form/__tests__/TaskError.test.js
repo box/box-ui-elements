@@ -11,6 +11,7 @@ describe('components/content-sidebar/activity-feed/task-form/TaskError', () => {
         ['GENERAL', 'CREATE', undefined, 0],
         ['GENERAL', 'CREATE', { status: 403 }, 1],
         ['GENERAL', 'CREATE', { status: 404 }, 1],
+        ['GENERAL', 'CREATE', { code: 'group_exceeds_limit' }, 1],
         ['APPROVAL', 'EDIT', undefined, 0],
         ['APPROVAL', 'EDIT', { status: 403 }, 1],
         ['APPROVAL', 'EDIT', { status: 404 }, 1],

@@ -5,7 +5,6 @@
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
-import { ERROR_CODE_GROUP_COUNT } from '../constants';
 import type { ElementsErrorCallback } from '../common/types/api';
 
 class Groups extends OffsetBasedAPI {
@@ -38,18 +37,25 @@ class Groups extends OffsetBasedAPI {
         file: { id: string },
         group: { id: string },
         successCallback: Function,
-    }): Promise<any> {
-        this.errorCode = ERROR_CODE_GROUP_COUNT;
+    }): Promise<{ total_count: number }> {
         const requestData = {
             data: { limit: 1 },
         };
-        return this.get({
-            id: file.id,
-            url: this.getUrlForGroupCount(group.id),
-            successCallback,
-            errorCallback,
-            data: { ...requestData },
-        });
+        return new Promise((resolve, reject) =>
+            this.get({
+                id: file.id,
+                url: this.getUrlForGroupCount(group.id),
+                successCallback: (...args) => {
+                    successCallback(...args);
+                    resolve(...args);
+                },
+                errorCallback: (...args) => {
+                    errorCallback(...args);
+                    reject();
+                },
+                data: { ...requestData },
+            }),
+        );
     }
 }
 
