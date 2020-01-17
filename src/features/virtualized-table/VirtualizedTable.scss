@@ -19,6 +19,7 @@
     }
 
     .ReactVirtualized__Table__sortableHeaderColumn {
+        display: flex;
         user-select: none;
 
         &:focus,
