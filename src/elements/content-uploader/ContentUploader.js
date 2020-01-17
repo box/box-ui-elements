@@ -141,7 +141,6 @@ class ContentUploader extends Component<Props, State> {
         onClose: noop,
         onComplete: noop,
         onError: noop,
-        onItemActionClick: noop,
         onResume: noop,
         onUpload: noop,
         onProgress: noop,
