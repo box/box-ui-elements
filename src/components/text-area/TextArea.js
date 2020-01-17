@@ -56,9 +56,9 @@ const TextArea = ({
         <div className={classes}>
             <Label hideLabel={hideLabel} showOptionalText={!hideOptionalLabel && !isRequired} text={label}>
                 {!!description && (
-                    <i id={descriptionID} className="text-area-description">
+                    <div id={descriptionID} className="text-area-description">
                         {description}
-                    </i>
+                    </div>
                 )}
                 <Tooltip isShown={hasError} position="bottom-left" text={error || ''} theme="error">
                     <textarea

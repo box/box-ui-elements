@@ -74,9 +74,9 @@ const TextInput = ({
                 tooltip={labelTooltip}
             >
                 {!!description && (
-                    <i id={descriptionID} className="text-input-description">
+                    <div id={descriptionID} className="text-input-description">
                         {description}
-                    </i>
+                    </div>
                 )}
                 <Tooltip isShown={hasError} position={errorPosition || 'middle-right'} text={error || ''} theme="error">
                     <input ref={inputRef} required={isRequired} {...ariaAttrs} {...rest} />

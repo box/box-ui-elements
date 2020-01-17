@@ -44,12 +44,12 @@ exports[`components/text-area/TextArea should render text area with description 
     showOptionalText={true}
     text="label"
   >
-    <i
+    <div
       className="text-area-description"
       id="description24"
     >
       some description
-    </i>
+    </div>
     <Tooltip
       constrainToScrollParent={false}
       constrainToWindow={true}
