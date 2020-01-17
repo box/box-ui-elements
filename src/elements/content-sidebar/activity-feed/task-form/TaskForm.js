@@ -350,7 +350,6 @@ class TaskForm extends React.Component<Props, State> {
         const isCompletionRuleCheckboxChecked = completionRule === TASK_COMPLETION_RULE_ANY;
         const isForbiddenErrorOnEdit = isLoading || (getProp(error, 'status') === 403 && !isCreateEditMode);
 
-        console.log('Task Error object: ', error);
         return (
             <div className={inputContainerClassNames} data-resin-component="taskform">
                 <div className="bcs-task-input-form-container">
