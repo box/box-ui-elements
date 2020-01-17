@@ -1,8 +1,7 @@
-export { default as makeLoadable } from './makeLoadable';
-export * from './makeLoadable';
-
-export { default as LoadingIndicatorWrapper } from './LoadingIndicatorWrapper';
-export * from './LoadingIndicatorWrapper';
-
-export { default } from './LoadingIndicator';
-export * from './LoadingIndicator';
+export { default as makeLoadable, MakeLoadableProps } from './makeLoadable';
+export {
+    default as LoadingIndicatorWrapper,
+    LoadingIndicatorWrapperPosition,
+    LoadingIndicatorWrapperProps,
+} from './LoadingIndicatorWrapper';
+export { default, LoadingIndicatorSize, LoadingIndicatorProps } from './LoadingIndicator';
