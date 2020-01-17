@@ -22,7 +22,6 @@
             display: none;
         }
 
-        &:focus,
         &:hover {
             .btn-plain.collapsible-card-title {
                 text-decoration: underline;
@@ -53,6 +52,14 @@
         width: 100%;
         padding: 10px 0;
         text-align: left;
+
+        &:focus {
+            text-decoration: underline;
+
+            + .bdl-Collapsible-actionItems {
+                display: block;
+            }
+        }
     }
 
     .collapsible-card-content {
@@ -65,7 +72,6 @@
         }
 
         .collapsible-card-header {
-            &:focus,
             &:hover {
                 .btn-plain.collapsible-card-title {
                     text-decoration: none;
@@ -73,6 +79,16 @@
             }
 
             .bdl-Collapsible-actionItems {
+                display: block;
+            }
+        }
+
+        .btn-plain.collapsible-card-title {
+            &:focus {
+                text-decoration: none;
+            }
+
+            + .bdl-Collapsible-actionItems {
                 display: block;
             }
         }

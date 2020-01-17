@@ -107,11 +107,7 @@ class Collapsible extends React.PureComponent<Props, State> {
 
         return (
             <div className={sectionClassName}>
-                <div
-                    className={buttonClassName}
-                    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-                    tabIndex="0"
-                >
+                <div className={buttonClassName}>
                     <PlainButton
                         {...modifiedButtonProps}
                         className="collapsible-card-title"
