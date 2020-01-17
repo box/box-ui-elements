@@ -76,6 +76,9 @@ type Props = {
     messages?: StringMap,
     onBeforeUpload: (file: Array<UploadFileWithAPIOptions | File>) => void,
     onCancel: Function,
+    onClickCancel: UploadItem => void,
+    onClickResume: UploadItem => void,
+    onClickRetry: UploadItem => void,
     onClose: Function,
     onComplete: Function,
     onError: Function,
@@ -132,6 +135,9 @@ class ContentUploader extends Component<Props, State> {
         fileLimit: FILE_LIMIT_DEFAULT,
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         onBeforeUpload: noop,
+        onClickCancel: noop,
+        onClickResume: noop,
+        onClickRetry: noop,
         onClose: noop,
         onComplete: noop,
         onError: noop,
@@ -985,7 +991,7 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     onClick = (item: UploadItem) => {
-        const { chunked, isResumableUploadsEnabled } = this.props;
+        const { chunked, isResumableUploadsEnabled, onClickCancel, onClickResume, onClickRetry } = this.props;
         const { status, file } = item;
         const isChunkedUpload = chunked && file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES && isMultiputSupported();
         const isResumable = isResumableUploadsEnabled && isChunkedUpload && item.api.sessionId;
@@ -996,14 +1002,17 @@ class ContentUploader extends Component<Props, State> {
             case STATUS_COMPLETE:
             case STATUS_PENDING:
                 this.removeFileFromUploadQueue(item);
+                onClickCancel(item);
                 break;
             case STATUS_ERROR:
                 if (isResumable) {
                     item.bytesUploadedOnLastResume = item.api.totalUploadedBytes;
                     this.resumeFile(item);
+                    onClickResume(item);
                 } else {
                     this.resetFile(item);
                     this.uploadFile(item);
+                    onClickRetry(item);
                 }
                 break;
             default:
