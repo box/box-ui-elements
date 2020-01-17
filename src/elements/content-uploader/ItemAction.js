@@ -14,7 +14,6 @@ import LoadingIndicator from '../../components/loading-indicator';
 import PlainButton from '../../components/plain-button/PlainButton';
 import Tooltip from '../../components/tooltip';
 import messages from '../common/messages';
-import { RESIN_TAG_TARGET } from '../../common/variables';
 import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_STAGED, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
 import type { UploadStatus } from '../../common/types/upload';
 
@@ -31,8 +30,6 @@ type Props = {
 
 const ItemAction = ({ status, onClick, intl, isResumableUploadsEnabled, isFolder = false }: Props) => {
     let icon = <IconClose />;
-    let target = null;
-    let resin = {};
     let tooltip;
 
     if (isFolder && status !== STATUS_PENDING) {
@@ -49,7 +46,6 @@ const ItemAction = ({ status, onClick, intl, isResumableUploadsEnabled, isFolder
         case STATUS_ERROR:
             icon = <IconRetry height={24} width={24} />;
             tooltip = isResumableUploadsEnabled ? messages.resume : messages.retry;
-            target = isResumableUploadsEnabled ? 'uploadresume' : 'uploadretry';
             break;
         case STATUS_IN_PROGRESS:
         case STATUS_STAGED:
@@ -58,7 +54,6 @@ const ItemAction = ({ status, onClick, intl, isResumableUploadsEnabled, isFolder
             } else {
                 icon = <IconInProgress />;
                 tooltip = messages.uploadsCancelButtonTooltip;
-                target = 'uploadcancel';
             }
             break;
         case STATUS_PENDING:
@@ -71,15 +66,11 @@ const ItemAction = ({ status, onClick, intl, isResumableUploadsEnabled, isFolder
             break;
     }
 
-    if (target) {
-        resin = { [RESIN_TAG_TARGET]: target };
-    }
-
     return (
         <div className="bcu-item-action">
             {tooltip ? (
                 <Tooltip position="top-left" text={intl.formatMessage(tooltip)}>
-                    <PlainButton onClick={onClick} type="button" isDisabled={status === STATUS_STAGED} {...resin}>
+                    <PlainButton onClick={onClick} type="button" isDisabled={status === STATUS_STAGED}>
                         {icon}
                     </PlainButton>
                 </Tooltip>

@@ -60,7 +60,6 @@ exports[`elements/content-uploader/ItemAction should render correctly with error
     theme="default"
   >
     <PlainButton
-      data-resin-target="uploadretry"
       isDisabled={false}
       onClick={[Function]}
       type="button"
@@ -92,7 +91,6 @@ exports[`elements/content-uploader/ItemAction should render correctly with error
     theme="default"
   >
     <PlainButton
-      data-resin-target="uploadresume"
       isDisabled={false}
       onClick={[Function]}
       type="button"
@@ -124,7 +122,6 @@ exports[`elements/content-uploader/ItemAction should render correctly with inpro
     theme="default"
   >
     <PlainButton
-      data-resin-target="uploadcancel"
       isDisabled={false}
       onClick={[Function]}
       type="button"
@@ -197,7 +194,6 @@ exports[`elements/content-uploader/ItemAction should render correctly with stage
     theme="default"
   >
     <PlainButton
-      data-resin-target="uploadcancel"
       isDisabled={true}
       onClick={[Function]}
       type="button"
