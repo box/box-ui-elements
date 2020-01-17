@@ -17,6 +17,11 @@ const messages = defineMessages({
         description: 'Title shown above warning message when a task create/edit partially fails',
         defaultMessage: 'Task Updated with Errors',
     },
+    taskGroupExceedsLimitWarningTitle: {
+        id: 'be.contentSidebar.activityFeed.taskForm.taskGroupExceedsWarningTitle',
+        description: 'Title shown above warning message when task group exceeds limit',
+        defaultMessage: 'Exceeded max assignees per group',
+    },
     taskUpdateErrorMessage: {
         id: 'be.contentSidebar.activityFeed.taskForm.taskUpdateErrorMessage',
         description: 'Error message when a task edit fails',

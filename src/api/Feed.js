@@ -22,6 +22,7 @@ import AppActivityAPI from './AppActivity';
 import {
     ERROR_CODE_CREATE_TASK,
     ERROR_CODE_UPDATE_TASK,
+    ERROR_CODE_GROUP_EXCEEDS_LIMIT,
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
     TASK_NEW_APPROVED,
@@ -79,6 +80,11 @@ class Feed extends Base {
      * @property {AppActivityAPI}
      */
     appActivityAPI: AppActivityAPI;
+
+    /**
+     * @property {GroupsAPI}
+     */
+    groupsAPI: GroupsAPI;
 
     /**
      * @property {TasksNewAPI}
@@ -404,7 +410,6 @@ class Feed extends Base {
         this.updateFeedItem({ isPending: true }, task.id);
 
         try {
-            // look at this ila
             await Promise.all(
                 task.addedAssignees.map(assignee =>
                     assignee.item && assignee.item.type === 'group'
@@ -531,7 +536,6 @@ class Feed extends Base {
      */
     createTaskNew = async (
         file: BoxItem,
-        group: { id: string },
         currentUser: User,
         message: string,
         assignees: SelectorItems<>,
@@ -619,55 +623,63 @@ class Feed extends Base {
             completion_rule: completionRule,
         };
 
-        /* Need to call group count endpoint to check which group exceeds 250 */
-        this.groupsAPI = new GroupsAPI(this.options);
         // Pull out groups from assignees
-        const groups = assignees.filter(
+        const groupAssignees = assignees.filter(
             (assignee: SelectorItem<UserMini | GroupMini>) => (assignee.item && assignee.item.type) === 'group',
         );
-        console.log('Groups: ', groups);
 
-        // for (const element of groups) {
-        //     const group = element;
-        //     console.log(group);
-        // }
+        // Pull out group id from groupAssignees array
+        const groupIds = groupAssignees.map(assignee => assignee.id);
 
-        // Use groupsAPI function on group array for each id
-        // this.groupsAPI.getGroupCount({
-        //     file,
-        //     group: { id: groups },
-        //     successCallback: console.log,
-        //     errorCallback: console.error,
-        // });
+        // run API call against each id --> returns an array of API calls (promises)
+        this.groupsAPI = new GroupsAPI(this.options);
+        const groupInfoPromises: Array<Promise<any>> = groupIds.map(groupId =>
+            this.groupsAPI.getGroupCount({
+                file,
+                group: { id: groupId },
+                successCallback: console.log,
+                errorCallback: (e: ElementsXhrError, code: string) => {
+                    this.feedErrorCallback(true, e, code);
+                },
+            }),
+        );
 
-        // Request the size of each group
-
-        // return an array of group sizes
-
-        // Fetch each group's size in parallel
-        // apply groupsAPI to array of groups to return size of each group
-
-        // const groupCount = Promise.all().then(this.groupsAPI.getGroupCount());
-
-        // console.log('Group count: ', groupCount);
-
-        // If any group exceeds 250, throw an error
-
-        // If all group sizes are less than 250, continue making the task
-
-        /* Have an array of groups with total_count. Go through each group and check total_count > 250 then return error */
-
-        this.tasksNewAPI = new TasksNewAPI(this.options);
-        this.tasksNewAPI.createTask({
-            file,
-            task: taskPayload,
-            successCallback: (taskData: Task) => {
-                this.addPendingItem(this.file.id, currentUser, pendingTask);
-                this.createTaskNewSuccessCallback(file, uuid, taskData, assignees, successCallback, errorCallback);
-            },
-            errorCallback: (e: ElementsXhrError, code: string) => {
-                this.feedErrorCallback(false, e, code);
-            },
+        // Fetch each group size in parallel --> return an array of group sizes
+        Promise.all(groupInfoPromises).then((groupCounts: Array<{ total_count: number }>) => {
+            const maxCount = 3;
+            const hasAnyGroupCountExceeded: boolean = groupCounts.some(groupInfo => groupInfo.total_count > maxCount);
+            const warning = {
+                code: ERROR_CODE_GROUP_EXCEEDS_LIMIT,
+                help_url: 'http://developers.box.com/docs/#errors',
+                message: 'Group Exceeds Limit',
+                request_id: '123',
+                status: 400,
+                type: 'warning',
+            };
+            // If any group count exceeds 250, throw an error
+            if (hasAnyGroupCountExceeded) {
+                this.feedErrorCallback(false, warning, ERROR_CODE_GROUP_EXCEEDS_LIMIT);
+            } else {
+                this.tasksNewAPI = new TasksNewAPI(this.options);
+                this.tasksNewAPI.createTask({
+                    file,
+                    task: taskPayload,
+                    successCallback: (taskData: Task) => {
+                        this.addPendingItem(this.file.id, currentUser, pendingTask);
+                        this.createTaskNewSuccessCallback(
+                            file,
+                            uuid,
+                            taskData,
+                            assignees,
+                            successCallback,
+                            errorCallback,
+                        );
+                    },
+                    errorCallback: (e: ElementsXhrError, code: string) => {
+                        this.feedErrorCallback(false, e, code);
+                    },
+                });
+            }
         });
     };
 
@@ -734,8 +746,6 @@ class Feed extends Base {
             );
             successCallback(task);
         } catch (err) {
-            // console.log('this is where the error is handled: ', err);
-            // debugger;
             this.feedErrorCallback(false, err, ERROR_CODE_CREATE_TASK);
         }
     }
@@ -762,12 +772,6 @@ class Feed extends Base {
         return new Promise((resolve, reject) => {
             const taskCollaboratorsAPI = new TaskCollaboratorsAPI(this.options);
             this.taskCollaboratorsAPI.push(taskCollaboratorsAPI);
-            // let testmode;
-            // testmode = false;
-            // debugger;
-            // if (testmode) {
-            //     reject(new Error('group_exceeds_limit'));
-            // }
             taskCollaboratorsAPI.createTaskCollaboratorsforGroup({
                 file,
                 task,

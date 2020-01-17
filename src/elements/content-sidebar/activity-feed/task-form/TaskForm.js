@@ -190,7 +190,6 @@ class TaskForm extends React.Component<Props, State> {
     };
 
     handleSubmitError = (e: ElementsXhrError) => {
-        // debugger;
         const { onSubmitError } = this.props;
         onSubmitError(e);
         this.setState({ isLoading: false });
