@@ -17,6 +17,17 @@
             top: 0; // required by sticky position
             z-index: 1; // required by sticky position
         }
+
+        &:focus,
+        &:hover {
+            .btn-plain.collapsible-card-title {
+                text-decoration: underline;
+
+                + .bdl-Collapsible-actionItems {
+                    display: block;
+                }
+            }
+        }
     }
 
     .collapsible-card-action-items {
@@ -42,15 +53,6 @@
         + .bdl-Collapsible-actionItems {
             display: none;
         }
-
-        &:focus,
-        &:hover {
-            text-decoration: underline;
-
-            + .bdl-Collapsible-actionItems {
-                display: block;
-            }
-        }
     }
 
     .collapsible-card-content {
@@ -62,13 +64,15 @@
             transform: rotateZ(180deg);
         }
 
-        .btn-plain.collapsible-card-title {
+        .collapsible-card-header {
             &:focus,
             &:hover {
-                text-decoration: none;
+                .btn-plain.collapsible-card-title {
+                    text-decoration: none;
+                }
             }
 
-            + .bdl-Collapsible-actionItems {
+            .bdl-Collapsible-actionItems {
                 display: block;
             }
         }
