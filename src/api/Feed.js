@@ -466,7 +466,6 @@ class Feed extends Base {
                 successCallback();
             }
         } catch (e) {
-            // debugger;
             this.updateFeedItem({ isPending: false }, task.id);
             this.feedErrorCallback(false, e, ERROR_CODE_UPDATE_TASK);
         }
@@ -637,25 +636,23 @@ class Feed extends Base {
             this.groupsAPI.getGroupCount({
                 file,
                 group: { id: groupId },
-                successCallback: console.log,
+                successCallback: noop,
                 errorCallback: (e: ElementsXhrError, code: string) => {
-                    this.feedErrorCallback(true, e, code);
+                    this.feedErrorCallback(false, e, code);
                 },
             }),
         );
 
         // Fetch each group size in parallel --> return an array of group sizes
         Promise.all(groupInfoPromises).then((groupCounts: Array<{ total_count: number }>) => {
-            const maxCount = 3;
-            const hasAnyGroupCountExceeded: boolean = groupCounts.some(groupInfo => groupInfo.total_count > maxCount);
+            const hasAnyGroupCountExceeded: boolean = groupCounts.some(
+                groupInfo => groupInfo.total_count > this.groupsAPI.MAX_GROUP_ASSIGNEES,
+            );
             const warning = {
                 code: ERROR_CODE_GROUP_EXCEEDS_LIMIT,
-                help_url: 'http://developers.box.com/docs/#errors',
-                message: 'Group Exceeds Limit',
-                request_id: '123',
-                status: 400,
                 type: 'warning',
             };
+
             // If any group count exceeds 250, throw an error
             if (hasAnyGroupCountExceeded) {
                 this.feedErrorCallback(false, warning, ERROR_CODE_GROUP_EXCEEDS_LIMIT);

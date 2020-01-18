@@ -8,6 +8,8 @@ import OffsetBasedAPI from './OffsetBasedAPI';
 import type { ElementsErrorCallback } from '../common/types/api';
 
 class Groups extends OffsetBasedAPI {
+    MAX_GROUP_ASSIGNEES: 1 = 1;
+
     /**
      * API URL to get group count
      *
