@@ -4,6 +4,7 @@ import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import Pikaday from 'pikaday';
 import range from 'lodash/range';
+import uniqueId from 'lodash/uniqueId';
 
 import { RESIN_TAG_TARGET } from '../../common/variables';
 import IconAlert from '../../icons/general/IconAlert';
@@ -162,6 +163,10 @@ class DatePicker extends React.Component<Props> {
         isTextInputAllowed: false,
         yearRange: 10,
     };
+
+    errorMessageID = uniqueId('errorMessage');
+
+    descriptionID = uniqueId('description');
 
     componentDidMount() {
         const { dateFormat, intl, maxDate, minDate, value, yearRange, isTextInputAllowed } = this.props;
@@ -386,6 +391,15 @@ class DatePicker extends React.Component<Props> {
             'show-error': !!error,
         });
 
+        const hasError = !!error;
+
+        const ariaAttrs = {
+            'aria-invalid': hasError,
+            'aria-required': isRequired,
+            'aria-errormessage': this.errorMessageID,
+            'aria-describedby': description ? this.descriptionID : undefined,
+        };
+
         const resinTargetAttr = resinTarget ? { [RESIN_TAG_TARGET]: resinTarget } : {};
 
         const valueAttr = isTextInputAllowed
@@ -402,7 +416,11 @@ class DatePicker extends React.Component<Props> {
             <div className={classes}>
                 <span className="date-picker-icon-holder">
                     <Label hideLabel={hideLabel} showOptionalText={!hideOptionalLabel && !isRequired} text={label}>
-                        {!!description && <i className="date-picker-description">{description}</i>}
+                        {!!description && (
+                            <div id={this.descriptionID} className="date-picker-description">
+                                {description}
+                            </div>
+                        )}
                         <Tooltip
                             className="date-picker-error-tooltip"
                             isShown={!!error}
@@ -424,10 +442,14 @@ class DatePicker extends React.Component<Props> {
                                 onFocus={onFocus}
                                 onKeyDown={this.handleInputKeyDown}
                                 {...resinTargetAttr}
+                                {...ariaAttrs}
                                 {...inputProps}
                                 {...valueAttr}
                             />
                         </Tooltip>
+                        <span id={this.errorMessageID} className="accessibility-hidden" role="alert">
+                            {error}
+                        </span>
                     </Label>
                     {isClearable && !!value && !isDisabled ? (
                         <PlainButton
