@@ -1,6 +1,6 @@
 // @flow
+import { MESSAGE_STATES, MESSAGE_EVENTS } from './constants';
 import type { MessageApi } from './MessageApi';
-import { MESSAGE_STATES } from './constants';
 
 export type MessageID = number;
 export type MessageName = string;
@@ -8,6 +8,8 @@ export type MessageName = string;
 export type EligibleMessageIDMap = $ReadOnly<{ [MessageName]: MessageID }>;
 
 export type MessageState = $Values<typeof MESSAGE_STATES>;
+
+export type MessageEvent = $Values<typeof MESSAGE_EVENTS>;
 
 export type MessageStateMap = $ReadOnly<{ [MessageName]: MessageState }>;
 

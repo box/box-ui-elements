@@ -6,7 +6,7 @@ import { MessageContextProvider, useMessage, useSetEligibleMessageIDMap } from '
 
 const TargetedComponent = () => {
     const { canShow, onClose, onShow } = useMessage('msg');
-    if (canShow) {
+    if (canShow()) {
         onShow();
         return <button onClick={onClose} type="button" />;
     }

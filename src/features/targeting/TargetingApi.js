@@ -4,11 +4,15 @@
  * basis. Currently, useMessage can provide targeting from MessageContext.
  */
 
+import type { MessageEvent } from './types';
+
 export type TargetingApi = $ReadOnly<{
     // is true if message is eligible to show and not yet closed
-    canShow: boolean,
-    // call onClose just before message should be closed, to cause canShow to be false
+    canShow: () => boolean,
+    // shorthand for onEvent('close'), should call to cause canShow to be false to close message
     onClose: () => void,
-    // call onShow when message is shown
+    // any event
+    onEvent: MessageEvent => void,
+    // shorthand for onEvent('show'), should call when message is rendered
     onShow: () => void,
 }>;
