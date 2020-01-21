@@ -57,6 +57,13 @@ const messages = defineMessages({
         description: 'Error message when a task creation fails',
         defaultMessage: 'An error occurred while creating this task. Please try again.',
     },
+    taskGroupExceedsLimitWarningMessage: {
+        id: 'be.api.taskGroupExceedsWarningTitle',
+        description:
+            'Warning message showing that, while the task was being created, the group assignee limit was exceeded by 250',
+        defaultMessage:
+            'One or more groups did not receive this task as the group size exceeded the task limit of 250 assignees per group.',
+    },
 });
 
 export default messages;

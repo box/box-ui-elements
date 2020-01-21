@@ -15,12 +15,14 @@ import Base from './Base';
 import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';
 import TasksNewAPI from './tasks/TasksNew';
+import GroupsAPI from './Groups';
 import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
 import TaskLinksAPI from './tasks/TaskLinks';
 import AppActivityAPI from './AppActivity';
 import {
     ERROR_CODE_CREATE_TASK,
     ERROR_CODE_UPDATE_TASK,
+    ERROR_CODE_GROUP_EXCEEDS_LIMIT,
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
     TASK_NEW_APPROVED,
@@ -78,6 +80,11 @@ class Feed extends Base {
      * @property {AppActivityAPI}
      */
     appActivityAPI: AppActivityAPI;
+
+    /**
+     * @property {GroupsAPI}
+     */
+    groupsAPI: GroupsAPI;
 
     /**
      * @property {TasksNewAPI}
@@ -526,7 +533,7 @@ class Feed extends Base {
      * @param {Function} errorCallback - the function which will be called on error
      * @return {void}
      */
-    createTaskNew = (
+    createTaskNew = async (
         file: BoxItem,
         currentUser: User,
         message: string,
@@ -536,7 +543,7 @@ class Feed extends Base {
         completionRule: TaskCompletionRule,
         successCallback: Function,
         errorCallback: ErrorCallback,
-    ): void => {
+    ): Promise<void> => {
         if (!file.id) {
             throw getBadItemError();
         }
@@ -615,17 +622,61 @@ class Feed extends Base {
             completion_rule: completionRule,
         };
 
-        this.tasksNewAPI = new TasksNewAPI(this.options);
-        this.tasksNewAPI.createTask({
-            file,
-            task: taskPayload,
-            successCallback: (taskData: Task) => {
-                this.addPendingItem(this.file.id, currentUser, pendingTask);
-                this.createTaskNewSuccessCallback(file, uuid, taskData, assignees, successCallback, errorCallback);
-            },
-            errorCallback: (e: ElementsXhrError, code: string) => {
-                this.feedErrorCallback(false, e, code);
-            },
+        // Pull out groups from assignees
+        const groupAssignees = assignees.filter(
+            (assignee: SelectorItem<UserMini | GroupMini>) => (assignee.item && assignee.item.type) === 'group',
+        );
+
+        // Pull out group id from groupAssignees array
+        const groupIds = groupAssignees.map(assignee => assignee.id);
+
+        // run API call against each id --> returns an array of API calls (promises)
+        this.groupsAPI = new GroupsAPI(this.options);
+        const groupInfoPromises: Array<Promise<any>> = groupIds.map(groupId =>
+            this.groupsAPI.getGroupCount({
+                file,
+                group: { id: groupId },
+                successCallback: noop,
+                errorCallback: (e: ElementsXhrError, code: string) => {
+                    this.feedErrorCallback(false, e, code);
+                },
+            }),
+        );
+
+        // Fetch each group size in parallel --> return an array of group sizes
+        Promise.all(groupInfoPromises).then((groupCounts: Array<{ total_count: number }>) => {
+            const hasAnyGroupCountExceeded: boolean = groupCounts.some(
+                groupInfo => groupInfo.total_count > this.groupsAPI.MAX_GROUP_ASSIGNEES,
+            );
+            const warning = {
+                code: ERROR_CODE_GROUP_EXCEEDS_LIMIT,
+                type: 'warning',
+            };
+
+            // If any group count exceeds 250, throw an error
+            if (hasAnyGroupCountExceeded) {
+                this.feedErrorCallback(false, warning, ERROR_CODE_GROUP_EXCEEDS_LIMIT);
+            } else {
+                this.tasksNewAPI = new TasksNewAPI(this.options);
+                this.tasksNewAPI.createTask({
+                    file,
+                    task: taskPayload,
+                    successCallback: (taskData: Task) => {
+                        this.addPendingItem(this.file.id, currentUser, pendingTask);
+                        this.createTaskNewSuccessCallback(
+                            file,
+                            uuid,
+                            taskData,
+                            assignees,
+                            successCallback,
+                            errorCallback,
+                        );
+                    },
+                    errorCallback: (e: ElementsXhrError, code: string) => {
+                        this.feedErrorCallback(false, e, code);
+                    },
+                });
+            }
         });
     };
 
@@ -718,7 +769,6 @@ class Feed extends Base {
         return new Promise((resolve, reject) => {
             const taskCollaboratorsAPI = new TaskCollaboratorsAPI(this.options);
             this.taskCollaboratorsAPI.push(taskCollaboratorsAPI);
-
             taskCollaboratorsAPI.createTaskCollaboratorsforGroup({
                 file,
                 task,

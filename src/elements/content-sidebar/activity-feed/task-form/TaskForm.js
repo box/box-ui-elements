@@ -43,6 +43,7 @@ import type { SelectorItems, SelectorItem, UserMini, GroupMini } from '../../../
 import './TaskForm.scss';
 
 type TaskFormProps = {|
+    /* error needs to take in a string or message as well */
     error?: { status: number }, // TODO: update to ElementsXhrError once API supports it
     isDisabled?: boolean,
     onCancel: () => any,
