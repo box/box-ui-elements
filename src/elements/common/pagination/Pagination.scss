@@ -1,9 +1,9 @@
 @import '../variables';
 
-.be-pagination {
+.bdl-Pagination {
     display: flex;
 
-    .be-pagination-count {
+    .bdl-Pagination-count {
         display: flex;
         align-items: center;
 
@@ -12,7 +12,7 @@
         }
     }
 
-    .be-pagination-toggle {
+    .bdl-Pagination-toggle {
         margin-right: 5px;
         margin-left: 5px;
     }

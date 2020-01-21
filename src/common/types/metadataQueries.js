@@ -30,7 +30,6 @@ type MetadataQuery = {
     from: string,
     limit?: number,
     marker?: string,
-    next_marker?: string,
     order_by?: Array<MetadataQueryOrderByClause>,
     query?: string,
     query_params?: {

@@ -20,11 +20,11 @@ type Props = {
 };
 
 const PaginationMenu = ({ onPageClick, pageCount = 0, pageNumber = 0 }: Props) => (
-    <DropdownMenu className="be-pagination-dropdown" constrainToWindow isRightAligned>
-        <Button className="be-pagination-toggle">
+    <DropdownMenu className="bdl-Pagination-dropdown" constrainToWindow isRightAligned>
+        <Button className="bdl-Pagination-toggle">
             <FormattedMessage {...messages.pageStatus} values={{ pageNumber, pageCount }} />
         </Button>
-        <Menu className="be-pagination-dropdown-menu">
+        <Menu className="bdl-Pagination-dropdownMenu">
             {range(1, pageCount + 1).map(page => (
                 <MenuItem key={page} isDisabled={page === pageNumber} onClick={() => onPageClick(page)}>
                     {page}
