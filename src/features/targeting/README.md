@@ -1,23 +1,12 @@
 ### Description
-Model to providing Targeting Feature
+Model to providing Targeting Feature that exports:
+1. MessageContextProvider(MessagaeApi) to provide context
+2. useSetEligibleMessageIDMap hook to send provide message to context
+3. useMessage hook to get TargetingApi for the message
 
-The TargetingContextProvider consumes MessageAPI and provides TargetingAPI for each message.
+Please check the test for an example
 
-### Examples
-Targeting Api is provided for each message. It can be consumed by the below pseudo code:
-```
-function SharedLinkPreviewModal() {
-  const { getTargetingApi } = useContext(TargetingContext);
-
-  const { shouldShow, onClose, onSeen } = getTargetingApi('adhoc_shared_link_preview');
-
-  if (shouldShow()) {
-    onSeen();
-    return <Modal><button onClick={onClose}></button><Model/>
-  }
-}
-```
-### Note
-* onSeen can only be called once when shouldShow() return true, or it will be ignored.
-* onClose can only be called once when shouldShow() return true and onSeen is already called, or it
-will be ignored.
+### Special Note
+It is intentional that only MessageApi, TargetingApi, MessageContextProvider, 
+useMessage, useSetEligibleMessageIDMap are exported, because the internal datastructure of the 
+context value is not exposed to user, and user should call hooks to use TargetingApi.
