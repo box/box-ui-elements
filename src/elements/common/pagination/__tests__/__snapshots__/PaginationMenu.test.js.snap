@@ -2,13 +2,13 @@
 
 exports[`elements/Pagination/PaginationMenu should render a button and menu with 1 menu items 1`] = `
 <DropdownMenu
-  className="be-pagination-dropdown"
+  className="bdl-Pagination-dropdown"
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={true}
 >
   <Button
-    className="be-pagination-toggle"
+    className="bdl-Pagination-toggle"
     isLoading={false}
     showRadar={false}
     type="submit"
@@ -25,7 +25,7 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
     />
   </Button>
   <Menu
-    className="be-pagination-dropdown-menu"
+    className="bdl-Pagination-dropdownMenu"
     isHidden={false}
     isSubmenu={false}
   >
@@ -42,13 +42,13 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
 
 exports[`elements/Pagination/PaginationMenu should render a button and menu with 5 menu items 1`] = `
 <DropdownMenu
-  className="be-pagination-dropdown"
+  className="bdl-Pagination-dropdown"
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={true}
 >
   <Button
-    className="be-pagination-toggle"
+    className="bdl-Pagination-toggle"
     isLoading={false}
     showRadar={false}
     type="submit"
@@ -65,7 +65,7 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
     />
   </Button>
   <Menu
-    className="be-pagination-dropdown-menu"
+    className="bdl-Pagination-dropdownMenu"
     isHidden={false}
     isSubmenu={false}
   >
@@ -110,13 +110,13 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
 
 exports[`elements/Pagination/PaginationMenu should render a button and menu with 10 menu items 1`] = `
 <DropdownMenu
-  className="be-pagination-dropdown"
+  className="bdl-Pagination-dropdown"
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={true}
 >
   <Button
-    className="be-pagination-toggle"
+    className="bdl-Pagination-toggle"
     isLoading={false}
     showRadar={false}
     type="submit"
@@ -133,7 +133,7 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
     />
   </Button>
   <Menu
-    className="be-pagination-dropdown-menu"
+    className="bdl-Pagination-dropdownMenu"
     isHidden={false}
     isSubmenu={false}
   >
