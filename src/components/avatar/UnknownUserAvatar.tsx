@@ -1,5 +1,5 @@
 import * as React from 'react';
-import AccessibleSVG, { SVGProps } from '../accessible-svg';
+import AccessibleSVG, { SVGProps } from '../accessible-svg/AccessibleSVG';
 
 const UnknownUserAvatar = ({ className = '', height = 28, title, width = 28 }: SVGProps) => (
     <AccessibleSVG

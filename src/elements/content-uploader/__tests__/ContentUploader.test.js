@@ -278,9 +278,15 @@ describe('elements/content-uploader/ContentUploader', () => {
             jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => true);
             const isChunkedUpload = chunked && item.file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES;
             const isResumable = isResumableUploadsEnabled && isChunkedUpload && item.api.sessionId;
+            const onClickCancel = jest.fn();
+            const onClickResume = jest.fn();
+            const onClickRetry = jest.fn();
             const wrapper = getWrapper({
                 chunked,
                 isResumableUploadsEnabled,
+                onClickCancel,
+                onClickResume,
+                onClickRetry,
             });
             const instance = wrapper.instance();
             instance.removeFileFromUploadQueue = jest.fn();
@@ -292,8 +298,12 @@ describe('elements/content-uploader/ContentUploader', () => {
 
             if (item.status === STATUS_ERROR && isResumable) {
                 expect(item.bytesUploadedOnLastResume).toBe(item.api.totalUploadedBytes);
+                expect(onClickResume.mock.calls.length).toBe(1);
+            } else if (item.status === STATUS_ERROR) {
+                expect(onClickRetry.mock.calls.length).toBe(1);
             } else {
                 expect(item.bytesUploadedOnLastResume).toBe(undefined);
+                expect(onClickCancel.mock.calls.length).toBe(1);
             }
         });
     });
