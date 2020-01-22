@@ -400,6 +400,9 @@ export const TASK_COMPLETION_RULE_ANY: 'ANY_ASSIGNEE' = 'ANY_ASSIGNEE';
 export const TASK_EDIT_MODE_CREATE: 'CREATE' = 'CREATE';
 export const TASK_EDIT_MODE_EDIT: 'EDIT' = 'EDIT';
 
+/* ----------------- Task Validation ---------------- */
+export const TASK_MAX_GROUP_ASSIGNEES: 250 = 250;
+
 /* ------------------ Keyboard Events ----------------- */
 export const KEYS = {
     arrowDown: 'ArrowDown',

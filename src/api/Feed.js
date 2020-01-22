@@ -30,6 +30,7 @@ import {
     TASK_NEW_REJECTED,
     TASK_NEW_NOT_STARTED,
     TYPED_ID_FEED_PREFIX,
+    TASK_MAX_GROUP_ASSIGNEES,
 } from '../constants';
 import type {
     TaskCompletionRule,
@@ -631,53 +632,54 @@ class Feed extends Base {
         const groupIds = groupAssignees.map(assignee => assignee.id);
 
         // run API call against each id --> returns an array of API calls (promises)
-        this.groupsAPI = new GroupsAPI(this.options);
-        const groupInfoPromises: Array<Promise<any>> = groupIds.map(groupId =>
-            this.groupsAPI.getGroupCount({
+
+        const groupInfoPromises: Array<Promise<any>> = groupIds.map(groupId => {
+            const groupsAPI = new GroupsAPI(this.options);
+            return groupsAPI.getGroupCount({
                 file,
                 group: { id: groupId },
-                successCallback: noop,
-                errorCallback: (e: ElementsXhrError, code: string) => {
-                    this.feedErrorCallback(false, e, code);
-                },
-            }),
-        );
+            });
+        });
 
         // Fetch each group size in parallel --> return an array of group sizes
-        Promise.all(groupInfoPromises).then((groupCounts: Array<{ total_count: number }>) => {
-            const hasAnyGroupCountExceeded: boolean = groupCounts.some(
-                groupInfo => groupInfo.total_count > this.groupsAPI.MAX_GROUP_ASSIGNEES,
-            );
-            const warning = {
-                code: ERROR_CODE_GROUP_EXCEEDS_LIMIT,
-                type: 'warning',
-            };
+        return Promise.all(groupInfoPromises)
+            .then((groupCounts: Array<{ total_count: number }>) => {
+                const hasAnyGroupCountExceeded: boolean = groupCounts.some(
+                    groupInfo => groupInfo.total_count > TASK_MAX_GROUP_ASSIGNEES,
+                );
+                const warning = {
+                    code: ERROR_CODE_GROUP_EXCEEDS_LIMIT,
+                    type: 'warning',
+                };
 
-            // If any group count exceeds 250, throw an error
-            if (hasAnyGroupCountExceeded) {
-                this.feedErrorCallback(false, warning, ERROR_CODE_GROUP_EXCEEDS_LIMIT);
-            } else {
-                this.tasksNewAPI = new TasksNewAPI(this.options);
-                this.tasksNewAPI.createTask({
-                    file,
-                    task: taskPayload,
-                    successCallback: (taskData: Task) => {
-                        this.addPendingItem(this.file.id, currentUser, pendingTask);
-                        this.createTaskNewSuccessCallback(
-                            file,
-                            uuid,
-                            taskData,
-                            assignees,
-                            successCallback,
-                            errorCallback,
-                        );
-                    },
-                    errorCallback: (e: ElementsXhrError, code: string) => {
-                        this.feedErrorCallback(false, e, code);
-                    },
-                });
-            }
-        });
+                // If any group count exceeds 250, throw an error
+                if (hasAnyGroupCountExceeded) {
+                    this.feedErrorCallback(false, warning, ERROR_CODE_GROUP_EXCEEDS_LIMIT);
+                } else {
+                    this.tasksNewAPI = new TasksNewAPI(this.options);
+                    this.tasksNewAPI.createTask({
+                        file,
+                        task: taskPayload,
+                        successCallback: (taskData: Task) => {
+                            this.addPendingItem(this.file.id, currentUser, pendingTask);
+                            this.createTaskNewSuccessCallback(
+                                file,
+                                uuid,
+                                taskData,
+                                assignees,
+                                successCallback,
+                                errorCallback,
+                            );
+                        },
+                        errorCallback: (e: ElementsXhrError, code: string) => {
+                            this.feedErrorCallback(false, e, code);
+                        },
+                    });
+                }
+            })
+            .catch(error => {
+                this.feedErrorCallback(false, error);
+            });
     };
 
     /**

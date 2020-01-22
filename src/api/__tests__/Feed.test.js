@@ -2,7 +2,7 @@ import commonMessages from '../../elements/common/messages';
 import messages from '../messages';
 import * as sorter from '../../utils/sorter';
 import * as error from '../../utils/error';
-import { IS_ERROR_DISPLAYED, TASK_NEW_NOT_STARTED } from '../../constants';
+import { IS_ERROR_DISPLAYED, TASK_NEW_NOT_STARTED, TASK_MAX_GROUP_ASSIGNEES } from '../../constants';
 import Feed from '../Feed';
 
 const mockTask = {
@@ -100,12 +100,14 @@ const versionsWithCurrent = {
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
+const mockCreateTask = jest.fn().mockImplementation(({ successCallback }) => {
+    successCallback();
+});
+
 jest.mock('../tasks/TasksNew', () => {
     const task = mockTask;
     return jest.fn().mockImplementation(() => ({
-        createTask: jest.fn().mockImplementation(({ successCallback }) => {
-            successCallback();
-        }),
+        createTask: mockCreateTask,
         updateTask: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
         }),
@@ -192,6 +194,15 @@ jest.mock('../tasks/TaskLinks', () =>
         }),
     })),
 );
+
+const mockGetGroupCount = jest.fn();
+
+jest.mock('../Groups', () => {
+    const GroupAPI = jest.fn().mockImplementation(() => ({
+        getGroupCount: mockGetGroupCount,
+    }));
+    return GroupAPI;
+});
 
 jest.mock('../Comments', () =>
     jest.fn().mockImplementation(() => ({
@@ -566,6 +577,84 @@ describe('api/Feed', () => {
             expect(feed.tasksNewAPI.getTask).toBeCalled();
             expect(feed.updateFeedItem).toBeCalledWith({ isPending: false }, taskId);
             expect(successCb).toBeCalled();
+        });
+    });
+
+    describe('createTaskNew()', () => {
+        const currentUser = {
+            id: 'bar',
+        };
+        const message = 'hi';
+        const assignees = [
+            {
+                id: '3086276240',
+                type: 'group',
+                name: 'Test Group',
+                item: {
+                    id: '3086276240',
+                    name: 'Test User',
+                    type: 'group',
+                },
+            },
+        ];
+        const taskType = 'GENERAL';
+        const taskCompletionRule = 'ALL_ASSIGNEES';
+        const dueAt = null;
+
+        const code = 'group_exceeds_limit';
+        const hasError = false;
+        beforeEach(() => {
+            feed.feedErrorCallback = jest.fn();
+        });
+
+        test('should check group size by calling groups endpoint', async () => {
+            const mockSuccessCallback = jest.fn();
+            const mockErrorCallback = jest.fn();
+            mockGetGroupCount.mockResolvedValueOnce({ total_count: TASK_MAX_GROUP_ASSIGNEES - 1 });
+            feed.createTaskNew(
+                file,
+                currentUser,
+                message,
+                assignees,
+                taskType,
+                dueAt,
+                taskCompletionRule,
+                mockSuccessCallback,
+                mockErrorCallback,
+            );
+            expect(feed.file.id).toBe(file.id);
+
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(mockGetGroupCount).toBeCalled();
+        });
+
+        test('should call error handling when group size exceeds limit', async () => {
+            const mockSuccessCallback = jest.fn();
+            const mockErrorCallback = jest.fn();
+            mockGetGroupCount.mockResolvedValueOnce({ total_count: TASK_MAX_GROUP_ASSIGNEES + 1 });
+            await feed.createTaskNew(
+                file,
+                currentUser,
+                message,
+                assignees,
+                taskType,
+                dueAt,
+                taskCompletionRule,
+                mockSuccessCallback,
+                mockErrorCallback,
+            );
+
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(feed.file.id).toBe(file.id);
+            expect(mockGetGroupCount).toBeCalled();
+            expect(mockCreateTask).not.toBeCalled();
+            expect(feed.feedErrorCallback).toBeCalledWith(
+                hasError,
+                { code: 'group_exceeds_limit', type: 'warning' },
+                code,
+            );
         });
     });
 
