@@ -3,12 +3,12 @@
  * @file Helper for the box Groups API
  * @author Box
  */
-
-import OffsetBasedAPI from './OffsetBasedAPI';
+import noop from 'lodash/noop';
+import Base from './Base';
 import type { ElementsErrorCallback } from '../common/types/api';
 
-class Groups extends OffsetBasedAPI {
-    MAX_GROUP_ASSIGNEES: 1 = 1;
+class Groups extends Base {
+    static MAX_GROUP_ASSIGNEES: 1 = 1;
 
     /**
      * API URL to get group count
@@ -30,8 +30,8 @@ class Groups extends OffsetBasedAPI {
      */
 
     getGroupCount({
-        errorCallback,
-        successCallback,
+        errorCallback = noop,
+        successCallback = noop,
         group,
         file,
     }: {
@@ -40,9 +40,6 @@ class Groups extends OffsetBasedAPI {
         group: { id: string },
         successCallback: Function,
     }): Promise<{ total_count: number }> {
-        const requestData = {
-            data: { limit: 1 },
-        };
         return new Promise((resolve, reject) =>
             this.get({
                 id: file.id,
@@ -55,7 +52,7 @@ class Groups extends OffsetBasedAPI {
                     errorCallback(...args);
                     reject();
                 },
-                data: { ...requestData },
+                requestData: { params: { limit: 1 } },
             }),
         );
     }

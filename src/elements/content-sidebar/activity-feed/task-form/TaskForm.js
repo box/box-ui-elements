@@ -187,12 +187,14 @@ class TaskForm extends React.Component<Props, State> {
 
         this.clearForm();
         this.setState({ isLoading: false });
+        console.log('isLoading: ', false);
     };
 
     handleSubmitError = (e: ElementsXhrError) => {
         const { onSubmitError } = this.props;
         onSubmitError(e);
         this.setState({ isLoading: false });
+        console.log('isLoading: ', false);
     };
 
     addResinInfo = (): Object => {
@@ -238,6 +240,7 @@ class TaskForm extends React.Component<Props, State> {
         if (!isValid) return;
 
         this.setState({ isLoading: true });
+        console.log('isLoading: ', true);
 
         if (editMode === TASK_EDIT_MODE_EDIT && editTask) {
             editTask(
@@ -253,6 +256,7 @@ class TaskForm extends React.Component<Props, State> {
                 this.handleSubmitError,
             );
         } else {
+            console.log('Task creation process has begun');
             createTask(
                 message,
                 convertAssigneesToSelectorItems(currentApprovers),
