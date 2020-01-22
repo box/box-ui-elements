@@ -7,7 +7,7 @@
 import React from 'react';
 import noop from 'lodash/noop';
 import PaginationControls from './PaginationControls';
-import { DEFAULT_PAGE_SIZE } from '../../../constants';
+import { DEFAULT_PAGE_SIZE } from '../../constants';
 
 type Props = {
     offset?: number,
