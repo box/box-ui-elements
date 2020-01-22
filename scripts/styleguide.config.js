@@ -33,11 +33,9 @@ const allSections = [
     {
         name: 'Components',
         components: () => [
-            '../src/components/avatar/Avatar.tsx',
             '../src/components/badge/Badge.js',
             '../src/components/badgeable/Badgeable.js',
             '../src/components/breadcrumb/Breadcrumb.js',
-            '../src/components/button/Button.tsx',
             '../src/components/button-group/ButtonGroup.js',
             '../src/components/checkbox/Checkbox.js',
             '../src/components/collapsible/Collapsible.js',
