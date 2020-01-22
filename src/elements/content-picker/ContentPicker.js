@@ -17,7 +17,7 @@ import UploadDialog from '../common/upload-dialog';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import Internationalize from '../common/Internationalize';
 import makeResponsive from '../common/makeResponsive';
-import Pagination from '../common/pagination/Pagination';
+import Pagination from '../../features/pagination';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import API from '../../api';
 import Content from './Content';
