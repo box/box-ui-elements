@@ -4,9 +4,9 @@
  */
 
 import type { TargetingApi } from './TargetingApi';
-import type { MessageEvent } from './types';
 
 export type StateMachineApi<State> = {
     canShow: (TargetingApi, State) => boolean,
-    onEvent: (TargetingApi, State, MessageEvent) => State,
+    onClose: (TargetingApi, State) => State,
+    onShow: (TargetingApi, State) => State,
 };
