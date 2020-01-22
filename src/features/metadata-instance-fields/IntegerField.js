@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import TextField from './TextField';
 import { isValidValue } from './validateField';
-import type { MetadataFieldValue } from '../../../common/types/metadata';
+import type { MetadataFieldValue } from '../../common/types/metadata';
 
 type Props = {
     dataKey: string,
@@ -16,7 +16,7 @@ type Props = {
     type: string,
 };
 
-const FloatField = ({ dataKey, dataValue, displayName, description, error, onChange, onRemove, type }: Props) => (
+const IntegerField = ({ dataKey, dataValue, displayName, description, error, onChange, onRemove, type }: Props) => (
     <TextField
         dataKey={dataKey}
         dataValue={dataValue}
@@ -32,4 +32,4 @@ const FloatField = ({ dataKey, dataValue, displayName, description, error, onCha
     />
 );
 
-export default FloatField;
+export default IntegerField;

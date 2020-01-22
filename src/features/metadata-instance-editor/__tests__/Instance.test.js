@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { TEMPLATE_CUSTOM_PROPERTIES } from '../constants';
+import TEMPLATE_CUSTOM_PROPERTIES from '../constants';
 import Instance from '../Instance';
-import { isValidValue } from '../fields/validateField';
+import { isValidValue } from '../../metadata-instance-fields/validateField';
 
-jest.mock('../fields/validateField');
+jest.mock('../../metadata-instance-fields/validateField');
 
 const data = {
     stringfield: 'some string',

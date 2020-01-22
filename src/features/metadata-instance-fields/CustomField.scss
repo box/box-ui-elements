@@ -1,6 +1,6 @@
-@import '../../../styles/variables';
+@import '../../styles/variables';
 
-.metadata-instance-editor-field-custom {
+.metadata-instance-field-custom {
     display: flex;
     align-items: center;
 
@@ -16,12 +16,12 @@
         }
     }
 
-    &:last-child .metadata-instance-editor-field-read-only {
+    &:last-child .metadata-instance-field-read-only {
         margin-bottom: 0;
     }
 }
 
-.metadata-instance-editor-field-custom-actions {
+.metadata-instance-field-custom-actions {
     margin: 5px 0 0 10px;
 
     .btn {

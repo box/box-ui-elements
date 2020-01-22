@@ -1,6 +1,6 @@
 // @flow
 import { isValidValue } from '../validateField';
-import { FIELD_TYPE_FLOAT, FIELD_TYPE_INTEGER } from '../../constants';
+import { FIELD_TYPE_FLOAT, FIELD_TYPE_INTEGER } from '../constants';
 
 [
     {

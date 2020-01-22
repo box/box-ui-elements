@@ -2,11 +2,11 @@
 import * as React from 'react';
 import { FormattedMessage, FormattedDate } from 'react-intl';
 
-import { convertISOStringToUTCDate } from '../../../utils/datetime';
+import { convertISOStringToUTCDate } from '../../utils/datetime';
 
-import { FIELD_TYPE_DATE } from '../constants';
-import messages from '../messages';
-import type { MetadataFieldValue, MetadataFieldType } from '../../../common/types/metadata';
+import { FIELD_TYPE_DATE } from './constants';
+import messages from './messages';
+import type { MetadataFieldValue, MetadataFieldType } from '../../common/types/metadata';
 import './ReadOnlyField.scss';
 
 type Props = {
@@ -32,9 +32,9 @@ const ReadOnlyField = ({ dataValue, description, displayName, type }: Props) => 
     }
 
     return (
-        <dl className="metadata-instance-editor-field-read-only">
+        <dl className="metadata-instance-field-read-only">
             <dt>{displayName}</dt>
-            {!!description && <i className="metadata-instance-editor-field-read-only-desc">{description}</i>}
+            {!!description && <i className="metadata-instance-field-read-only-desc">{description}</i>}
             <dd>{value}</dd>
         </dl>
     );

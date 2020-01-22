@@ -2,7 +2,7 @@
 
 exports[`features/metadata-instance-editor/fields/MultiSelectField should correctly render 1`] = `
 <div
-  className="metadata-instance-editor-field-multi-select"
+  className="metadata-instance-field-multi-select"
 >
   <Label>
     <MultiSelectField
@@ -28,11 +28,11 @@ exports[`features/metadata-instance-editor/fields/MultiSelectField should correc
 
 exports[`features/metadata-instance-editor/fields/MultiSelectField should correctly render with description 1`] = `
 <div
-  className="metadata-instance-editor-field-multi-select"
+  className="metadata-instance-field-multi-select"
 >
   <Label>
     <i
-      className="metadata-instance-editor-field-multi-select-desc"
+      className="metadata-instance-field-multi-select-desc"
     >
       description
     </i>

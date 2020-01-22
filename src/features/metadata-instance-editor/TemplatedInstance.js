@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Field from './fields/Field';
+import Field from '../metadata-instance-fields/Field';
 import messages from './messages';
 import { isHidden } from './metadataUtil';
 import type { MetadataFields, MetadataTemplate, MetadataFieldValue } from '../../common/types/metadata';

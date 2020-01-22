@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import InlineError from '../../../components/inline-error/InlineError';
+import InlineError from '../../components/inline-error/InlineError';
 
 import TextField from './TextField';
 import EnumField from './EnumField';
@@ -11,12 +11,8 @@ import FloatField from './FloatField';
 import IntegerField from './IntegerField';
 import MultiSelectField from './MultiSelectField';
 import ReadOnlyField from './ReadOnlyField';
-import messages from '../messages';
-import type {
-    MetadataFieldValue,
-    MetadataTemplateFieldOption,
-    MetadataFieldType,
-} from '../../../common/types/metadata';
+import messages from './messages';
+import type { MetadataFieldValue, MetadataTemplateFieldOption, MetadataFieldType } from '../../common/types/metadata';
 
 import {
     FIELD_TYPE_ENUM,
@@ -25,7 +21,7 @@ import {
     FIELD_TYPE_STRING,
     FIELD_TYPE_DATE,
     FIELD_TYPE_MULTISELECT,
-} from '../constants';
+} from './constants';
 
 type Props = {
     canEdit: boolean,

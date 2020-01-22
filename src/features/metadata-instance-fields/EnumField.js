@@ -2,10 +2,10 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 
-import Label from '../../../components/label/Label';
-import SingleSelectField from '../../../components/select-field/SingleSelectField';
-import messages from '../messages';
-import type { MetadataFieldValue, MetadataTemplateFieldOption } from '../../../common/types/metadata';
+import Label from '../../components/label/Label';
+import SingleSelectField from '../../components/select-field/SingleSelectField';
+import messages from './messages';
+import type { MetadataFieldValue, MetadataTemplateFieldOption } from '../../common/types/metadata';
 import './EnumField.scss';
 
 type Option = {
@@ -41,9 +41,9 @@ const EnumField = ({ dataKey, dataValue, displayName, description, intl, onChang
     });
 
     return (
-        <div className="metadata-instance-editor-field-enum">
+        <div className="metadata-instance-field-enum">
             <Label text={displayName}>
-                {!!description && <i className="metadata-instance-editor-field-enum-desc">{description}</i>}
+                {!!description && <i className="metadata-instance-field-enum-desc">{description}</i>}
                 <SingleSelectField
                     isEscapedWithReference
                     isScrollable

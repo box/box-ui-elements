@@ -2,13 +2,13 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 
-import Button from '../../../components/button/Button';
-import ButtonGroup from '../../../components/button-group/ButtonGroup';
-import IconMinus from '../../../icons/general/IconMinusThin';
-import IconPlus from '../../../icons/general/IconPlusThin';
+import Button from '../../components/button/Button';
+import ButtonGroup from '../../components/button-group/ButtonGroup';
+import IconMinus from '../../icons/general/IconMinusThin';
+import IconPlus from '../../icons/general/IconPlusThin';
 import Field from './Field';
-import messages from '../messages';
-import type { MetadataFieldValue } from '../../../common/types/metadata';
+import messages from './messages';
+import type { MetadataFieldValue } from '../../common/types/metadata';
 import './CustomField.scss';
 
 type Props = {
@@ -52,7 +52,7 @@ const CustomField = ({ intl, canEdit, isLast, dataKey, dataValue, onAdd, onChang
     );
 
     return (
-        <div className="metadata-instance-editor-field-custom">
+        <div className="metadata-instance-field-custom">
             <Field
                 canEdit={canEdit}
                 dataKey={dataKey}
@@ -64,7 +64,7 @@ const CustomField = ({ intl, canEdit, isLast, dataKey, dataValue, onAdd, onChang
                 type="string"
             />
             {canEdit && (
-                <div className="metadata-instance-editor-field-custom-actions">
+                <div className="metadata-instance-field-custom-actions">
                     {isLast ? (
                         <ButtonGroup>
                             {removeBtn}

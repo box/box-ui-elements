@@ -1,6 +1,6 @@
-@import '../../../styles/variables';
+@import '../../styles/variables';
 
-.metadata-instance-editor-field-enum {
+.metadata-instance-field-enum {
     margin: 0 0 20px;
 
     .label {
@@ -9,7 +9,6 @@
 
     label .select-container {
         display: block;
-        margin-top: 5px;
 
         .datalist-item.select-option:first-child {
             color: $bdl-gray-62;
@@ -20,7 +19,9 @@
         }
     }
 
-    .metadata-instance-editor-field-enum-desc {
+    .metadata-instance-field-enum-desc {
+        display: inline-block;
+        margin-bottom: 5px;
         color: $bdl-gray-62;
         word-wrap: break-word;
     }

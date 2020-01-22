@@ -2,7 +2,7 @@
 
 exports[`features/metadata-instance-editor/fields/EnumField should correctly render an enum field 1`] = `
 <div
-  className="metadata-instance-editor-field-enum"
+  className="metadata-instance-field-enum"
 >
   <Label>
     <SingleSelectField
@@ -41,11 +41,11 @@ exports[`features/metadata-instance-editor/fields/EnumField should correctly ren
 
 exports[`features/metadata-instance-editor/fields/EnumField should correctly render an enum field with description 1`] = `
 <div
-  className="metadata-instance-editor-field-enum"
+  className="metadata-instance-field-enum"
 >
   <Label>
     <i
-      className="metadata-instance-editor-field-enum-desc"
+      className="metadata-instance-field-enum-desc"
     >
       description
     </i>

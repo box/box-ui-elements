@@ -23,14 +23,15 @@ import CustomInstance from './CustomInstance';
 import MetadataInstanceConfirmDialog from './MetadataInstanceConfirmDialog';
 import Footer from './Footer';
 import messages from './messages';
-import { FIELD_TYPE_FLOAT, FIELD_TYPE_INTEGER, TEMPLATE_CUSTOM_PROPERTIES } from './constants';
+import { FIELD_TYPE_FLOAT, FIELD_TYPE_INTEGER } from '../metadata-instance-fields/constants';
+import TEMPLATE_CUSTOM_PROPERTIES from './constants';
 import {
     JSON_PATCH_OP_REMOVE,
     JSON_PATCH_OP_ADD,
     JSON_PATCH_OP_REPLACE,
     JSON_PATCH_OP_TEST,
 } from '../../common/constants';
-import { isValidValue } from './fields/validateField';
+import { isValidValue } from '../metadata-instance-fields/validateField';
 import { isHidden } from './metadataUtil';
 import { RESIN_TAG_TARGET } from '../../common/variables';
 import type {

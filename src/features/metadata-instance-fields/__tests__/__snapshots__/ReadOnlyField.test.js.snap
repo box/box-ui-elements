@@ -2,7 +2,7 @@
 
 exports[`features/metadata-instance-editor/fields/ReadOnlyField should correctly render a date field 1`] = `
 <dl
-  className="metadata-instance-editor-field-read-only"
+  className="metadata-instance-field-read-only"
 >
   <dt />
   <dd>
@@ -18,7 +18,7 @@ exports[`features/metadata-instance-editor/fields/ReadOnlyField should correctly
 
 exports[`features/metadata-instance-editor/fields/ReadOnlyField should correctly render a string field 1`] = `
 <dl
-  className="metadata-instance-editor-field-read-only"
+  className="metadata-instance-field-read-only"
 >
   <dt />
   <dd>
@@ -29,11 +29,11 @@ exports[`features/metadata-instance-editor/fields/ReadOnlyField should correctly
 
 exports[`features/metadata-instance-editor/fields/ReadOnlyField should correctly render multi select field 1`] = `
 <dl
-  className="metadata-instance-editor-field-read-only"
+  className="metadata-instance-field-read-only"
 >
   <dt />
   <i
-    className="metadata-instance-editor-field-read-only-desc"
+    className="metadata-instance-field-read-only-desc"
   >
     description
   </i>
@@ -45,11 +45,11 @@ exports[`features/metadata-instance-editor/fields/ReadOnlyField should correctly
 
 exports[`features/metadata-instance-editor/fields/ReadOnlyField should correctly render with description 1`] = `
 <dl
-  className="metadata-instance-editor-field-read-only"
+  className="metadata-instance-field-read-only"
 >
   <dt />
   <i
-    className="metadata-instance-editor-field-read-only-desc"
+    className="metadata-instance-field-read-only-desc"
   >
     description
   </i>

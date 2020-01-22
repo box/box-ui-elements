@@ -1,6 +1,6 @@
-@import '../../../styles/variables';
+@import '../../styles/variables';
 
-.metadata-instance-editor-field-read-only {
+.metadata-instance-field-read-only {
     margin: 0 0 20px;
     word-wrap: break-word;
 
@@ -8,7 +8,7 @@
         margin-bottom: 0;
     }
 
-    .metadata-instance-editor-field-custom:not(:last-child) & {
+    .metadata-instance-field-custom:not(:last-child) & {
         margin-bottom: 20px;
     }
 
@@ -20,7 +20,7 @@
         line-height: 16px;
     }
 
-    .metadata-instance-editor-field-read-only-desc {
+    .metadata-instance-field-read-only-desc {
         color: $bdl-gray-62;
     }
 }

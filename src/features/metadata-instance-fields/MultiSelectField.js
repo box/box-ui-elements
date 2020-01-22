@@ -2,13 +2,13 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Label from '../../../components/label/Label';
-import MultiSelect from '../../../components/select-field/MultiSelectField';
-import type { SelectOptionProp } from '../../../components/select-field/props';
+import Label from '../../components/label/Label';
+import MultiSelect from '../../components/select-field/MultiSelectField';
+import type { SelectOptionProp } from '../../components/select-field/props';
 
-import messages from '../messages';
+import messages from './messages';
 
-import type { MetadataFieldValue, MetadataTemplateFieldOption } from '../../../common/types/metadata';
+import type { MetadataFieldValue, MetadataTemplateFieldOption } from '../../common/types/metadata';
 
 import './MultiSelectField.scss';
 
@@ -34,9 +34,9 @@ const MultiSelectField = ({
     const placeholder = <FormattedMessage {...messages.metadataFieldMultiSelectValue} />;
 
     return (
-        <div className="metadata-instance-editor-field-multi-select">
+        <div className="metadata-instance-field-multi-select">
             <Label text={displayName}>
-                {!!description && <i className="metadata-instance-editor-field-multi-select-desc">{description}</i>}
+                {!!description && <i className="metadata-instance-field-multi-select-desc">{description}</i>}
                 <MultiSelect
                     isEscapedWithReference
                     isScrollable

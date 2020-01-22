@@ -2,10 +2,10 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 
-import DatePicker from '../../../components/date-picker';
-import { convertISOStringToUTCDate } from '../../../utils/datetime';
-import messages from '../messages';
-import type { MetadataFieldValue } from '../../../common/types/metadata';
+import DatePicker from '../../components/date-picker';
+import { convertISOStringToUTCDate } from '../../utils/datetime';
+import messages from './messages';
+import type { MetadataFieldValue } from '../../common/types/metadata';
 import './DateField.scss';
 
 type Props = {
@@ -20,7 +20,7 @@ type Props = {
 
 const DateField = ({ dataKey, dataValue, displayName, description, intl, onChange, onRemove }: Props) => (
     <DatePicker
-        className="metadata-instance-editor-field-date"
+        className="metadata-instance-field-date"
         dateFormat="utcISOString"
         description={description}
         displayFormat={{
