@@ -185,6 +185,7 @@
         "babel-preset-react-app": "^9.1.0",
         "camelcase": "^5.3.1",
         "circular-dependency-plugin": "^5.2.0",
+        "cldr-data": "^34.0.0",
         "classnames": "^2.2.6",
         "color": "^3.1.2",
         "colors": "^1.4.0",
@@ -346,5 +347,6 @@
             "@hapi/address": "Version 2.1.2+ requires a polyfill for TextEncoder. Pinning to version 2.1.1 prevents IE11 from breaking.",
             "react-tether": "Version 2.x has too many breaking changes and requires forwardRef on all components"
         }
-    }
+    },
+    "cldr-data-coverage": "full"
 }
