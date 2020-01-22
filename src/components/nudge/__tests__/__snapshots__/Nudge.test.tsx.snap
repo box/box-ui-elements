@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/nudge/Nudge should correctly render Nudge 1`] = `
+<div
+  className="Nudge"
+>
+  <button
+    aria-label="close-nudge"
+    className="Nudge-closeButton"
+    onClick={[Function]}
+  >
+    <X16
+      height={18}
+      width={18}
+    />
+  </button>
+  <div
+    className="Nudge-illustration"
+  >
+    <RelayPlanet140
+      height={170}
+      width={170}
+    />
+  </div>
+  <div
+    className="Nudge-header"
+  >
+    <h3>
+      Heading goes here
+    </h3>
+  </div>
+  <div
+    className="Nudge-content"
+  >
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque quis rutrum turpis.
+    </p>
+  </div>
+  <div
+    className="Nudge-button"
+  >
+    <PrimaryButton>
+      <span>
+        Pellentesque in port
+      </span>
+    </PrimaryButton>
+  </div>
+</div>
+`;
