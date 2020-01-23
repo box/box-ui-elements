@@ -83,11 +83,6 @@ class Feed extends Base {
     appActivityAPI: AppActivityAPI;
 
     /**
-     * @property {GroupsAPI}
-     */
-    groupsAPI: GroupsAPI;
-
-    /**
      * @property {TasksNewAPI}
      */
     tasksNewAPI: TasksNewAPI;
@@ -534,7 +529,7 @@ class Feed extends Base {
      * @param {Function} errorCallback - the function which will be called on error
      * @return {void}
      */
-    createTaskNew = async (
+    createTaskNew = (
         file: BoxItem,
         currentUser: User,
         message: string,
@@ -544,7 +539,7 @@ class Feed extends Base {
         completionRule: TaskCompletionRule,
         successCallback: Function,
         errorCallback: ErrorCallback,
-    ): Promise<void> => {
+    ): void => {
         if (!file.id) {
             throw getBadItemError();
         }
@@ -632,7 +627,6 @@ class Feed extends Base {
         const groupIds = groupAssignees.map(assignee => assignee.id);
 
         // run API call against each id --> returns an array of API calls (promises)
-
         const groupInfoPromises: Array<Promise<any>> = groupIds.map(groupId => {
             const groupsAPI = new GroupsAPI(this.options);
             return groupsAPI.getGroupCount({
@@ -651,8 +645,6 @@ class Feed extends Base {
                     code: ERROR_CODE_GROUP_EXCEEDS_LIMIT,
                     type: 'warning',
                 };
-
-                // If any group count exceeds 250, throw an error
                 if (hasAnyGroupCountExceeded) {
                     this.feedErrorCallback(false, warning, ERROR_CODE_GROUP_EXCEEDS_LIMIT);
                 } else {

@@ -30,7 +30,7 @@ describe('api/Groups', () => {
         });
 
         describe('getGroupCount()', () => {
-            test('should get a well formed', () => {
+            test('should get group data from the groups endpoint', () => {
                 const expectedRequestData = {
                     data: {
                         limit: 1,
