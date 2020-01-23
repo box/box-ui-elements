@@ -9,7 +9,9 @@ export enum LoadingIndicatorSize {
 }
 
 export interface LoadingIndicatorProps {
+    /** Custom class for the loading indicator */
     className?: string;
+    /** Size of the loading indicator - small, medium, large, default */
     size?: LoadingIndicatorSize;
 }
 
