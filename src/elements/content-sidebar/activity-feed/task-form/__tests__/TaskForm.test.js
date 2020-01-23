@@ -390,6 +390,71 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             },
         );
 
+        test.each`
+            numGroupAssignees | shouldShowCheckbox | checkBoxDisabled
+            ${0}              | ${false}           | ${undefined}
+            ${1}              | ${true}            | ${false}
+            ${2}              | ${true}            | ${false}
+        `(
+            'checkbox should be shown correctly when number of group assignees is $numGroupAssignees',
+            ({ numGroupAssignees, shouldShowCheckbox, checkBoxDisabled }) => {
+                const approvers = new Array(numGroupAssignees).fill().map(() => ({
+                    id: '',
+                    target: {
+                        id: 123 * Math.random(),
+                        name: 'abc',
+                        type: 'group',
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                    status: 'NOT_STARTED',
+                    permissions: { can_delete: false, can_update: false },
+                }));
+                const wrapper = renderWithFeatures({ approvers });
+                const container = wrapper.render();
+                const checkbox = container.find('[data-testid="task-form-completion-rule-checkbox"]');
+
+                expect(checkbox.length === 1).toBe(shouldShowCheckbox);
+                expect(checkbox.prop('disabled')).toBe(checkBoxDisabled);
+            },
+        );
+
+        test('should enable checkbox when there is one type of each assignee', () => {
+            const approvers = [
+                {
+                    id: '',
+                    target: {
+                        id: 123 * Math.random(),
+                        name: 'abc',
+                        type: 'group',
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                    status: 'NOT_STARTED',
+                    permissions: { can_delete: false, can_update: false },
+                },
+                {
+                    id: '',
+                    target: {
+                        id: 123 * Math.random(),
+                        name: 'abc',
+                        type: 'user',
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                    status: 'NOT_STARTED',
+                    permissions: { can_delete: false, can_update: false },
+                },
+            ];
+
+            const wrapper = renderWithFeatures({ approvers });
+            const container = wrapper.render();
+            const checkbox = container.find('[data-testid="task-form-completion-rule-checkbox"]');
+
+            expect(checkbox.length === 1).toBe(true);
+            expect(checkbox.prop('disabled')).toBe(false);
+        });
+
         test('should call createTask with any assignee param when checkbox is checked', () => {
             const createTaskSpy = jest.fn();
             const message = 'hey';
