@@ -117,7 +117,7 @@
         }
     },
     "engines": {
-        "node": ">=8.x",
+        "node": ">=10.x",
         "yarn": ">=1.10.0"
     },
     "devDependencies": {
