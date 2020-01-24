@@ -41,3 +41,6 @@ global.takeModalScreenshot = async id => {
 
 // Blurs an input field
 global.blurInput = async selector => global.page.$eval(selector, e => e.blur());
+
+// Visual tests can take longer
+jest.setTimeout(60000);
