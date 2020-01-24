@@ -1,7 +1,9 @@
 import * as React from 'react';
 
+import Link from './Link';
+
 export interface LinkGroupProps {
-    children: React.ReactNode;
+    children: Array<React.ReactElement<Link>>;
     className: string;
     title?: React.ReactNode;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { shallow } from 'enzyme';
 import LabelPrimitive from '../LabelPrimitive';
 
 const labelContent = ['My Label'];
@@ -34,12 +34,14 @@ describe('components/label/LabelPrimitive', () => {
     test('should fire passed mouse enter handler', () => {
         let firedCount = 0;
 
-        function onMouseEnter() {
-            firedCount += 1;
-        }
+        const rest = {
+            onMouseEnter: () => {
+                firedCount += 1;
+            },
+        };
 
         const wrapper = shallow(
-            <LabelPrimitive labelContent={labelContent} onMouseEnter={onMouseEnter}>
+            <LabelPrimitive labelContent={labelContent} {...rest}>
                 <input type="text" />
             </LabelPrimitive>,
         );
@@ -53,12 +55,14 @@ describe('components/label/LabelPrimitive', () => {
     test('should fire passed mouse leave handler', () => {
         let firedCount = 0;
 
-        function onMouseLeave() {
-            firedCount += 1;
-        }
+        const rest = {
+            onMouseLeave: () => {
+                firedCount += 1;
+            },
+        };
 
         const wrapper = shallow(
-            <LabelPrimitive labelContent={labelContent} onMouseLeave={onMouseLeave}>
+            <LabelPrimitive labelContent={labelContent} {...rest}>
                 <input type="text" />
             </LabelPrimitive>,
         );

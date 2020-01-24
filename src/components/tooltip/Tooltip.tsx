@@ -63,7 +63,7 @@ const positions = {
 export interface TooltipProps {
     bodyElement?: HTMLElement;
     /** A React element to put the tooltip on */
-    children: React.ReactNode;
+    children: React.ReactChild;
     /** A CSS class for the tooltip */
     className?: string;
     /** Whether to constrain the tooltip to the element's scroll parent. Defaults to `false` */

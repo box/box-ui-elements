@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { shallow } from 'enzyme';
 import StandardLabel from '../StandardLabel';
 
 const labelContent = ['My Label'];
@@ -13,8 +13,7 @@ describe('components/label/StandardLabel', () => {
             </StandardLabel>,
         );
 
-        expect(wrapper.find('LabelPrimitive').length).toEqual(1);
-        expect(wrapper.find('LabelPrimitive').prop('labelContent')[0]).toEqual(labelContent[0]);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render text tooltip when specified', () => {
