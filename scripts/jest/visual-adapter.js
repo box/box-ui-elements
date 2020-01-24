@@ -12,6 +12,9 @@ type TakeScreenshotParams = {
 
 // testing utility functions
 
+// Visual tests can take longer
+jest.setTimeout(60000);
+
 // Takes image screenshots
 global.takeScreenshot = async id => {
     await global.page.goto(`http://localhost:6061/iframe.html?id=${id}`);
@@ -42,5 +45,9 @@ global.takeModalScreenshot = async id => {
 // Blurs an input field
 global.blurInput = async selector => global.page.$eval(selector, e => e.blur());
 
-// Visual tests can take longer
-jest.setTimeout(60000);
+// Clears an input field - workaround from https://evanhalley.dev/post/clearing-input-field-puppeteer/
+global.clearInput = async selector => {
+    const inputElement = await global.page.$(selector);
+    await inputElement.click({ clickCount: 3 });
+    await inputElement.press('Backspace');
+};

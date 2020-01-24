@@ -22,6 +22,7 @@ describe('components/form-elements/form/Form', () => {
     `('$description', async ({ selector, userInput }) => {
         await global.page.goto(`http://localhost:6061/iframe.html?id=${FORM_STORY}`);
         await global.page.waitForSelector(REQUIRED_FIELD_SELECTOR);
+        await clearInput(REQUIRED_FIELD_SELECTOR);
         await global.page.type(REQUIRED_FIELD_SELECTOR, 'zyxwv');
         await global.page.waitForSelector(selector);
         await global.page.type(selector, userInput);

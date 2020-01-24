@@ -28,6 +28,7 @@ describe('components/form-elements/text-input/TextInput', () => {
     `('$description for $userInput', async ({ storyId, userInput }) => {
         await global.page.goto(`http://localhost:6061/iframe.html?id=${storyId}`);
         await global.page.waitForSelector(INPUT_SELECTOR);
+        await clearInput(INPUT_SELECTOR);
         await global.page.type(INPUT_SELECTOR, userInput);
         await blurInput(INPUT_SELECTOR);
         const image = await global.page.screenshot();
