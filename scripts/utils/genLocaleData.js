@@ -24,6 +24,7 @@ const boxLocales = languages.filter(function(locale) {
 const categories = ["zero", "one", "two", "few", "many"];
 const zeros = "000000000000000";
 
+// convert to intl-messageformat's template format
 function massageFormats(formats) {
     let newFormats = [];
 
@@ -76,9 +77,7 @@ function getFormats(main, locale) {
     for (let j = 0; j < main.length; j++) {
         let top = main[j].main[locale];
         if (typeof(top["numbers"]) !== 'undefined' && typeof(top.numbers["defaultNumberingSystem"]) !== 'undefined') {
-            console.log(`Found numbers at ${j} for ${locale}`);
             let numberingSystem = top.numbers.defaultNumberingSystem;
-            console.log(`Uses numbering system ${numberingSystem}`);
             let formats = top.numbers[`decimalFormats-numberSystem-${numberingSystem}`];
             numFmts[locale] = {
                 long: massageFormats(formats.long.decimalFormat),

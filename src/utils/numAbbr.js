@@ -54,6 +54,20 @@ function abbr(num: number, options?: NumAbbrOptions): string {
  */
 export default function(num: number, options?: NumAbbrOptions): string {
     if (!num) return '0';
+
+    // process locale fallbacks
+    let { locale } = options || {};
+    if (!locale) locale = 'en';
+    if (!localedata[locale]) {
+        // try fallback to language and script, or just language only
+        locale = locale.length > 5 ? locale.substring(0, locale.length - 3) : locale.substring(0, 2);
+    }
+    if (!localedata[locale]) {
+        // fall back to English if there is no appropriate locale data
+        locale = 'en';
+    }
+    options = { ...options, locale };
+
     switch (typeof num) {
         case 'boolean':
             num = num ? 1 : 0;

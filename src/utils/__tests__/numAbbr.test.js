@@ -296,4 +296,24 @@ describe('util/num', () => {
     test('should work in Japanese larger than max long', () => {
         expect(numAbbr(1000000000000000000, { locale: 'ja', length: 'long' })).toBe('1,000,000兆');
     });
+
+    // test locale fallbacks
+    test('should fall back to en', () => {
+        expect(numAbbr(10000000, { locale: 'en-NZ' })).toBe('10M');
+    });
+    test('should fall back to ja', () => {
+        expect(numAbbr(1000000000, { locale: 'ja-JP' })).toBe('10億');
+    });
+    test('should fall back to de', () => {
+        expect(numAbbr(100000, { locale: 'de-CH', length: 'long' })).toBe('100 Tausend');
+    });
+    test('should fall back to zh-Hans', () => {
+        expect(numAbbr(100000, { locale: 'zh-Hans-SG', length: 'long' })).toBe('10万');
+    });
+    test('should fall back to zh-Hant', () => {
+        expect(numAbbr(100000, { locale: 'zh-Hant-HK', length: 'long' })).toBe('10萬');
+    });
+    test('should fall back to en as the default', () => {
+        expect(numAbbr(10000000, { locale: 'kk-KZ' })).toBe('10M');
+    });
 });
