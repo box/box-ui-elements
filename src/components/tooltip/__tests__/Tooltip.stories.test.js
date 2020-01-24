@@ -11,7 +11,7 @@ describe('components/tooltip/Tooltip', () => {
         ['components-tooltip--bottom-center'],
         ['components-tooltip--bottom-right'],
     ])('looks visually correct when using story %s', async id => {
-        const image = await takeScreenshot(id);
+        const image = await takeScreenshotAfterInput(id, 'button', 'focus');
         return expect(image).toMatchImageSnapshot();
     });
 });
