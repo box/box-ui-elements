@@ -9,7 +9,7 @@ import getProp from 'lodash/get';
 
 import messages from './messages';
 import apiMessages from '../../../../api/messages';
-import { TASK_EDIT_MODE_EDIT, TASK_MAX_GROUP_ASSIGNEES } from '../../../../constants';
+import { TASK_EDIT_MODE_EDIT, TASK_MAX_GROUP_ASSIGNEES, ERROR_CODE_GROUP_EXCEEDS_LIMIT } from '../../../../constants';
 import InlineNotice from '../../../../components/inline-notice/InlineNotice';
 
 import type { TaskType, TaskEditMode } from '../../../../common/types/tasks';
@@ -22,7 +22,7 @@ type Props = {
 const TaskError = ({ editMode, error, taskType }: Props) => {
     const isEditMode = editMode === TASK_EDIT_MODE_EDIT;
     const isForbiddenErrorOnEdit = getProp(error, 'status') === 403 && isEditMode;
-    const taskGroupExceedsError = getProp(error, 'code') === 'group_exceeds_limit';
+    const taskGroupExceedsError = getProp(error, 'code') === ERROR_CODE_GROUP_EXCEEDS_LIMIT;
 
     const errorTitle = isForbiddenErrorOnEdit ? messages.taskEditWarningTitle : messages.taskCreateErrorTitle;
     let errorMessage = isEditMode ? messages.taskUpdateErrorMessage : apiMessages.taskCreateErrorMessage;
