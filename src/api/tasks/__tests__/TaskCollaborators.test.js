@@ -16,10 +16,13 @@ describe('api/TaskCollaborators', () => {
             id: 'foo',
             permissions: {},
         };
-
+        const groupId = '456';
         const taskId = '123';
         const message = 'hello world';
         const dueAt = '2018-09-06';
+        const group = {
+            id: groupId,
+        };
         const task = {
             id: taskId,
             name: message,
@@ -68,6 +71,40 @@ describe('api/TaskCollaborators', () => {
                 expect(taskCollaborators.post).toBeCalledWith({
                     id: FILE_ID,
                     url: `${BASE_URL}/undoc/task_collaborators`,
+                    data: expectedRequestData,
+                    successCallback,
+                    errorCallback,
+                });
+            });
+        });
+
+        describe('createTaskCollaboratorsforGroup()', () => {
+            test('should post a well formed payload to the taskCollaborators endpoint for groups', () => {
+                const expectedRequestData = {
+                    data: {
+                        task: {
+                            id: taskId,
+                            type: 'task',
+                        },
+                        target: {
+                            id: groupId,
+                            type: 'group',
+                        },
+                    },
+                };
+
+                taskCollaborators.createTaskCollaboratorsforGroup({
+                    file,
+                    task,
+                    group,
+                    user,
+                    successCallback,
+                    errorCallback,
+                });
+
+                expect(taskCollaborators.post).toBeCalledWith({
+                    id: FILE_ID,
+                    url: `${BASE_URL}/undoc/task_collaborators/expand_group`,
                     data: expectedRequestData,
                     successCallback,
                     errorCallback,
