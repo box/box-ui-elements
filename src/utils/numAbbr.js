@@ -4,7 +4,13 @@
  * @author Box
  */
 
-import { formatNumber } from 'react-intl';
+import IntlMessageFormat from 'intl-messageformat';
+import localedata from './localedata';
+
+interface NumAbbrOptions {
+    locale: string;
+    length: string;
+}
 
 /**
  * Gets the number in abbreviated form in a locale-sensitive manner. This function
@@ -21,16 +27,19 @@ import { formatNumber } from 'react-intl';
  * For locales that have complex plurals, such as Russian or Polish, this function
  * returns the correctly pluralized suffix/prefix to go along with the scaled number.
  *
- * @param {number} size the number to abbreviate
- * @param {Object} options options governing how the output is generated
- * @param {boolean} digital if true, calculate the sizes based on 1024 = K. If false, then 1000 = K. Default is non digital.
- * @return {string} size in abbreviated form
+ * @param {number} num the number to abbreviate
+ * @param {NumAbbrOptions=} options options governing how the output is generated
+ * @return {string} the number in abbreviated form as a string
  */
-export default function(size?: number, digital?: boolean, locale?: string): string {
-    if (!size) return '0';
-    const kilo: number = digital ? 1024 : 1000;
-    const decimals: number = 2;
-    const sizes: string[] = ['', 'K', 'M', 'B'];
-    const exp: number = Math.floor(Math.log(size) / Math.log(kilo));
-    return `${parseFloat((size / kilo ** exp).toFixed(decimals))} ${sizes[exp]}`;
+export default function(num: number, options?: NumAbbrOptions): string {
+    if (!num) return '0';
+    let { locale, length } = options || {};
+    locale = locale || "en";
+    length = length || "short";
+    const exponent: number = Math.floor(num).toString().length - 1;
+    const formats = localedata[locale][length];
+    const digits: number = (exponent >= formats.length) ? (exponent - formats.length + 3) : formats[exponent].digits;
+    const count: number = Math.round(num / (10 ** (exponent - digits + 1)));
+    const template = new IntlMessageFormat(formats[(exponent > formats.length) ? formats.length-1 : exponent].msg, locale);
+    return template.format({count});
 }

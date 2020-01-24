@@ -1,4 +1,4 @@
-import numAbbr from '../num';
+import numAbbr from '../numAbbr';
 
 describe('util/num', () => {
     test('should work in English 1', () => {
@@ -77,19 +77,19 @@ describe('util/num', () => {
         expect(numAbbr(100000, { locale: 'de' })).toBe('100.000');
     });
     test('should work in German 1000000', () => {
-        expect(numAbbr(1000000, { locale: 'de' })).toBe('1 Mio.');
+        expect(numAbbr(1000000, { locale: 'de' })).toBe('1 Mio.');
     });
     test('should work in German 10000000', () => {
-        expect(numAbbr(10000000, { locale: 'de' })).toBe('10 Mio.');
+        expect(numAbbr(10000000, { locale: 'de' })).toBe('10 Mio.');
     });
     test('should work in German 1000000000', () => {
-        expect(numAbbr(1000000000, { locale: 'de' })).toBe('1 Mrd.');
+        expect(numAbbr(1000000000, { locale: 'de' })).toBe('1 Mrd.');
     });
     test('should work in German 1000000000000', () => {
-        expect(numAbbr(1000000000000, { locale: 'de' })).toBe('1 Bio.');
+        expect(numAbbr(1000000000000, { locale: 'de' })).toBe('1 Bio.');
     });
     test('should work in German larger than max', () => {
-        expect(numAbbr(1000000000000000000, { locale: 'de' })).toBe('1.000.000 Bio.');
+        expect(numAbbr(1000000000000000000, { locale: 'de' })).toBe('1.000.000 Bio.');
     });
 
     test('should work in German 1 long', () => {
@@ -124,28 +124,28 @@ describe('util/num', () => {
         expect(numAbbr(1, { locale: 'ru' })).toBe('1');
     });
     test('should work in Russian 1000', () => {
-        expect(numAbbr(1000, { locale: 'ru' })).toBe('1 тыс.');
+        expect(numAbbr(1000, { locale: 'ru' })).toBe('1 тыс.');
     });
     test('should work in Russian 10000', () => {
-        expect(numAbbr(10000, { locale: 'ru' })).toBe('10 тыс.');
+        expect(numAbbr(10000, { locale: 'ru' })).toBe('10 тыс.');
     });
     test('should work in Russian 100000', () => {
-        expect(numAbbr(100000, { locale: 'ru' })).toBe('100 тыс.');
+        expect(numAbbr(100000, { locale: 'ru' })).toBe('100 тыс.');
     });
     test('should work in Russian 1000000', () => {
-        expect(numAbbr(1000000, { locale: 'ru' })).toBe('1 млн');
+        expect(numAbbr(1000000, { locale: 'ru' })).toBe('1 млн');
     });
     test('should work in Russian 10000000', () => {
-        expect(numAbbr(10000000, { locale: 'ru' })).toBe('10 млн');
+        expect(numAbbr(10000000, { locale: 'ru' })).toBe('10 млн');
     });
     test('should work in Russian 1000000000', () => {
-        expect(numAbbr(1000000000, { locale: 'ru' })).toBe('1 млрд');
+        expect(numAbbr(1000000000, { locale: 'ru' })).toBe('1 млрд');
     });
     test('should work in Russian 1000000000000', () => {
-        expect(numAbbr(1000000000000, { locale: 'ru' })).toBe('1 трлн');
+        expect(numAbbr(1000000000000, { locale: 'ru' })).toBe('1 трлн');
     });
     test('should work in Russian larger than max', () => {
-        expect(numAbbr(1000000000000000000, { locale: 'ru' })).toBe('1.000.000 трлн');
+        expect(numAbbr(1000000000000000000, { locale: 'ru' })).toBe('1 000 000 трлн');
     });
 
     test('should work in Russian 1 long', () => {
@@ -185,6 +185,6 @@ describe('util/num', () => {
         expect(numAbbr(1000000000000, { locale: 'ru', length: 'long' })).toBe('1 триллион');
     });
     test('should work in Russian larger than max long', () => {
-        expect(numAbbr(1000000000000000000, { locale: 'ru', length: 'long' })).toBe('1.000.000 триллионов');
+        expect(numAbbr(1000000000000000000, { locale: 'ru', length: 'long' })).toBe('1 000 000 триллионов');
     });
 });
