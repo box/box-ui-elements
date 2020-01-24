@@ -8,8 +8,27 @@ import IntlMessageFormat from 'intl-messageformat';
 import localedata from './localedata';
 
 interface NumAbbrOptions {
-    locale: string;
     length: string;
+    locale: string;
+}
+
+function abbr(num: number, options?: NumAbbrOptions): string {
+    if (!num) return '0';
+    let { locale, length } = options || {};
+    locale = locale || 'en';
+    length = length || 'short';
+    let exponent: number = Math.floor(num).toString().length - 1;
+    if (num < 0) {
+        exponent -= 1; // take care of the negative sign
+    }
+    const formats = localedata[locale][length];
+    const digits: number = exponent >= formats.length ? exponent - formats.length + 3 : formats[exponent].digits;
+    const count: number = Math.round(num / 10 ** (exponent - digits + 1));
+    const template = new IntlMessageFormat(
+        formats[exponent > formats.length ? formats.length - 1 : exponent].msg,
+        locale,
+    );
+    return template.format({ count });
 }
 
 /**
@@ -27,19 +46,34 @@ interface NumAbbrOptions {
  * For locales that have complex plurals, such as Russian or Polish, this function
  * returns the correctly pluralized suffix/prefix to go along with the scaled number.
  *
- * @param {number} num the number to abbreviate
+ * @param {*} num the number or numbers to abbreviate. (also accepts numbers in string form,
+ * or an array of numbers).
  * @param {NumAbbrOptions=} options options governing how the output is generated
- * @return {string} the number in abbreviated form as a string
+ * @return {string} the number in abbreviated form as a string, or '0' if there was
+ * invalid input such as null instead of a number
  */
 export default function(num: number, options?: NumAbbrOptions): string {
     if (!num) return '0';
-    let { locale, length } = options || {};
-    locale = locale || "en";
-    length = length || "short";
-    const exponent: number = Math.floor(num).toString().length - 1;
-    const formats = localedata[locale][length];
-    const digits: number = (exponent >= formats.length) ? (exponent - formats.length + 3) : formats[exponent].digits;
-    const count: number = Math.round(num / (10 ** (exponent - digits + 1)));
-    const template = new IntlMessageFormat(formats[(exponent > formats.length) ? formats.length-1 : exponent].msg, locale);
-    return template.format({count});
+    switch (typeof num) {
+        case 'boolean':
+            num = num ? 1 : 0;
+            break;
+
+        case 'string':
+            num = parseInt(num, 10);
+            if (Number.isNaN(num)) return '0';
+            break;
+
+        case 'object':
+            return Array.isArray(num)
+                ? num.map(n => {
+                      return abbr(n, options);
+                  })
+                : '0';
+
+        default:
+            break;
+    }
+
+    return abbr(num, options);
 }

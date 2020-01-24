@@ -29,13 +29,6 @@ describe('util/num', () => {
         expect(numAbbr(1000000000000000000)).toBe('1,000,000T');
     });
 
-    test('should work in English 12345678 with rounding', () => {
-        expect(numAbbr(12345678)).toBe('12M');
-    });
-    test('should work in English 87654321 with rounding', () => {
-        expect(numAbbr(87654321)).toBe('88M');
-    });
-
     test('should work in English 1 long', () => {
         expect(numAbbr(1, { length: 'long' })).toBe('1');
     });
@@ -62,6 +55,59 @@ describe('util/num', () => {
     });
     test('should work in English larger than max long', () => {
         expect(numAbbr(1000000000000000000, { length: 'long' })).toBe('1,000,000 trillion');
+    });
+
+    test('should work in English 12345678 with rounding', () => {
+        expect(numAbbr(12345678)).toBe('12M');
+    });
+    test('should work in English 87654321 with rounding', () => {
+        expect(numAbbr(87654321)).toBe('88M');
+    });
+
+    test('should work when passing in a number as a string', () => {
+        expect(numAbbr('3230000')).toBe('3M');
+    });
+    test('should not crap out when passing in a string that does not contain a number', () => {
+        expect(numAbbr('asdf')).toBe('0');
+    });
+    test('should not crap out when passing in an empty string', () => {
+        expect(numAbbr('')).toBe('0');
+    });
+    test('should not crap out when passing in a boolean false', () => {
+        expect(numAbbr(false)).toBe('0');
+    });
+    test('should not crap out when passing in a boolean true', () => {
+        expect(numAbbr(true)).toBe('1');
+    });
+    test('should not crap out when passing in a null', () => {
+        expect(numAbbr(null)).toBe('0');
+    });
+    test('should not crap out when passing in undefined', () => {
+        expect(numAbbr(undefined)).toBe('0');
+    });
+    test('should not crap out when passing in an object', () => {
+        expect(numAbbr({ foo: 2, bar: 4 })).toBe('0');
+    });
+    test('should work when passing in a floating point number', () => {
+        expect(numAbbr(24734.45674)).toBe('25K');
+    });
+    test('should work when passing in a small negative number', () => {
+        expect(numAbbr(-24)).toBe('-24');
+    });
+    test('should abbreviate when passing in a medium negative number', () => {
+        expect(numAbbr(-24567)).toBe('-25K');
+    });
+    test('should abbreviate when passing in a large negative number', () => {
+        expect(numAbbr(-24567000000)).toBe('-25B');
+    });
+    test('should work with 0', () => {
+        expect(numAbbr(0)).toBe('0');
+    });
+    test('should work when passing an array of numbers', () => {
+        expect(numAbbr([34534, 333000000, 34])).toStrictEqual(['35K', '333M', '34']);
+    });
+    test('should work when passing an array of mixed types', () => {
+        expect(numAbbr([34534, '333000000', 34])).toStrictEqual(['35K', '333M', '34']);
     });
 
     test('should work in German 1', () => {
@@ -186,5 +232,68 @@ describe('util/num', () => {
     });
     test('should work in Russian larger than max long', () => {
         expect(numAbbr(1000000000000000000, { locale: 'ru', length: 'long' })).toBe('1 000 000 триллионов');
+    });
+
+    test('should work in Japanese 1', () => {
+        expect(numAbbr(1, { locale: 'ja' })).toBe('1');
+    });
+    test('should work in Japanese 1000', () => {
+        expect(numAbbr(1000, { locale: 'ja' })).toBe('1,000');
+    });
+    test('should work in Japanese 10000', () => {
+        expect(numAbbr(10000, { locale: 'ja' })).toBe('1万');
+    });
+    test('should work in Japanese 100000', () => {
+        expect(numAbbr(100000, { locale: 'ja' })).toBe('10万');
+    });
+    test('should work in Japanese 1000000', () => {
+        expect(numAbbr(1000000, { locale: 'ja' })).toBe('100万');
+    });
+    test('should work in Japanese 100000000', () => {
+        expect(numAbbr(100000000, { locale: 'ja' })).toBe('1億');
+    });
+    test('should work in Japanese 1000000000', () => {
+        expect(numAbbr(1000000000, { locale: 'ja' })).toBe('10億');
+    });
+    test('should work in Japanese 100000000000', () => {
+        expect(numAbbr(100000000000, { locale: 'ja' })).toBe('1,000億');
+    });
+    test('should work in Japanese 1000000000000', () => {
+        expect(numAbbr(1000000000000, { locale: 'ja' })).toBe('1兆');
+    });
+    test('should work in Japanese larger than max', () => {
+        expect(numAbbr(1000000000000000000, { locale: 'ja' })).toBe('1,000,000兆');
+    });
+
+    // short and long are the same for Japanese
+    test('should work in Japanese 1 long', () => {
+        expect(numAbbr(1, { locale: 'ja' })).toBe('1');
+    });
+    test('should work in Japanese 1000 long', () => {
+        expect(numAbbr(1000, { locale: 'ja', length: 'long' })).toBe('1,000');
+    });
+    test('should work in Japanese 10000 long', () => {
+        expect(numAbbr(10000, { locale: 'ja', length: 'long' })).toBe('1万');
+    });
+    test('should work in Japanese 100000 long', () => {
+        expect(numAbbr(100000, { locale: 'ja', length: 'long' })).toBe('10万');
+    });
+    test('should work in Japanese 1000000 long', () => {
+        expect(numAbbr(1000000, { locale: 'ja', length: 'long' })).toBe('100万');
+    });
+    test('should work in Japanese 100000000 long', () => {
+        expect(numAbbr(100000000, { locale: 'ja', length: 'long' })).toBe('1億');
+    });
+    test('should work in Japanese 1000000000 long', () => {
+        expect(numAbbr(1000000000, { locale: 'ja', length: 'long' })).toBe('10億');
+    });
+    test('should work in Japanese 100000000000 long', () => {
+        expect(numAbbr(100000000000, { locale: 'ja', length: 'long' })).toBe('1,000億');
+    });
+    test('should work in Japanese 1000000000000 long', () => {
+        expect(numAbbr(1000000000000, { locale: 'ja', length: 'long' })).toBe('1兆');
+    });
+    test('should work in Japanese larger than max long', () => {
+        expect(numAbbr(1000000000000000000, { locale: 'ja', length: 'long' })).toBe('1,000,000兆');
     });
 });
