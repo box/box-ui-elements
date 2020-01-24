@@ -73,6 +73,7 @@ function getConfig(isReactExternalized) {
                 examples: path.join(__dirname, '../examples/src'), // for examples only
                 'react-intl-locale-data': path.resolve(`node_modules/react-intl/locale-data/${locale}`),
                 'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
+                'box-locale-data': path.resolve(`i18n/data/${language}`),
                 'rsg-components/Wrapper': path.join(__dirname, '../examples/Wrapper'), // for examples only
             },
         },

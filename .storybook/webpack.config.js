@@ -13,6 +13,7 @@ module.exports = async ({ config }) => {
         ...config.resolve.alias,
         'react-intl-locale-data': path.resolve(`node_modules/react-intl/locale-data/${locale}`),
         'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
+        'box-locale-data': path.resolve(`i18n/data/${language}`),
     };
     config.module.rules.push(
         {
