@@ -24,7 +24,6 @@
 .stylelintignore
 .sublime-project
 .swp
-.travis.yml
 .vimrc
 .vscode
 .yarnrc
