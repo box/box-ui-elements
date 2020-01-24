@@ -7,6 +7,7 @@ export interface ButtonGroupProps {
     children: React.ReactNode;
     /** Class name for ButtonGroup */
     className?: string;
+    /** Boolean describing whether the button is disabled or not */
     isDisabled?: boolean;
 }
 
