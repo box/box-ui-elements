@@ -45,7 +45,7 @@ global.takeModalScreenshot = async id => {
 // Blurs an input field
 global.blurInput = async selector => global.page.$eval(selector, e => e.blur());
 
-// Clears an input field - workaround from https://evanhalley.dev/post/clearing-input-field-puppeteer/
+// Clears an input field - https://evanhalley.dev/post/clearing-input-field-puppeteer/
 global.clearInput = async selector => {
     const inputElement = await global.page.$(selector);
     await inputElement.click({ clickCount: 3 });
