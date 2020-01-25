@@ -1,6 +1,6 @@
 @import '../../styles/variables';
 
-.metadata-instance-field-multi-select {
+.bdl-MultiSelectField {
     margin: 0 0 20px;
 
     .label {
@@ -14,11 +14,11 @@
             z-index: inherit;
         }
     }
+}
 
-    &-desc {
-        display: inline-block;
-        margin-bottom: 5px;
-        color: $bdl-gray-62;
-        word-wrap: break-word;
-    }
+.bdl-MultiSelectField-desc {
+    display: inline-block;
+    margin-bottom: 5px;
+    color: $bdl-gray-62;
+    word-wrap: break-word;
 }

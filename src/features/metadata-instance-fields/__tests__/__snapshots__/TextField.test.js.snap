@@ -2,7 +2,7 @@
 
 exports[`features/metadata-instance-editor/fields/TextField should correctly render a number field 1`] = `
 <TextInput
-  className="metadata-instance-field-text"
+  className="bdl-TextField"
   hideOptionalLabel={true}
   onChange={[Function]}
   type="number"
@@ -12,7 +12,7 @@ exports[`features/metadata-instance-editor/fields/TextField should correctly ren
 
 exports[`features/metadata-instance-editor/fields/TextField should correctly render a text field 1`] = `
 <TextInput
-  className="metadata-instance-field-text"
+  className="bdl-TextField"
   hideOptionalLabel={true}
   onChange={[Function]}
   type="text"
@@ -22,7 +22,7 @@ exports[`features/metadata-instance-editor/fields/TextField should correctly ren
 
 exports[`features/metadata-instance-editor/fields/TextField should correctly render a zero in a number field 1`] = `
 <TextInput
-  className="metadata-instance-field-text"
+  className="bdl-TextField"
   hideOptionalLabel={true}
   onChange={[Function]}
   type="number"

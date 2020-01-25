@@ -1,6 +1,6 @@
 @import '../../styles/variables';
 
-.metadata-instance-field-enum {
+.bdl-EnumField {
     margin: 0 0 20px;
 
     .label {
@@ -19,7 +19,7 @@
         }
     }
 
-    .metadata-instance-field-enum-desc {
+    .bdl-EnumField-desc {
         display: inline-block;
         margin-bottom: 5px;
         color: $bdl-gray-62;

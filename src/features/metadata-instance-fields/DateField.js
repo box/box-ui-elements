@@ -20,7 +20,7 @@ type Props = {
 
 const DateField = ({ dataKey, dataValue, displayName, description, intl, onChange, onRemove }: Props) => (
     <DatePicker
-        className="metadata-instance-field-date"
+        className="bdl-DateField"
         dateFormat="utcISOString"
         description={description}
         displayFormat={{

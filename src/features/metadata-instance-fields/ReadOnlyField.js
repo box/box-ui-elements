@@ -32,9 +32,9 @@ const ReadOnlyField = ({ dataValue, description, displayName, type }: Props) => 
     }
 
     return (
-        <dl className="metadata-instance-field-read-only">
+        <dl className="bdl-ReadOnlyField">
             <dt>{displayName}</dt>
-            {!!description && <i className="metadata-instance-field-read-only-desc">{description}</i>}
+            {!!description && <i className="bdl-ReadOnlyField-desc">{description}</i>}
             <dd>{value}</dd>
         </dl>
     );

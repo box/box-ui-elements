@@ -52,7 +52,7 @@ const CustomField = ({ intl, canEdit, isLast, dataKey, dataValue, onAdd, onChang
     );
 
     return (
-        <div className="metadata-instance-field-custom">
+        <div className="bdl-CustomField">
             <Field
                 canEdit={canEdit}
                 dataKey={dataKey}
@@ -64,7 +64,7 @@ const CustomField = ({ intl, canEdit, isLast, dataKey, dataValue, onAdd, onChang
                 type="string"
             />
             {canEdit && (
-                <div className="metadata-instance-field-custom-actions">
+                <div className="bdl-CustomField-customActions">
                     {isLast ? (
                         <ButtonGroup>
                             {removeBtn}

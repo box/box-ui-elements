@@ -34,9 +34,9 @@ const MultiSelectField = ({
     const placeholder = <FormattedMessage {...messages.metadataFieldMultiSelectValue} />;
 
     return (
-        <div className="metadata-instance-field-multi-select">
+        <div className="bdl-MultiSelectField">
             <Label text={displayName}>
-                {!!description && <i className="metadata-instance-field-multi-select-desc">{description}</i>}
+                {!!description && <i className="bdl-MultiSelectField-desc">{description}</i>}
                 <MultiSelect
                     isEscapedWithReference
                     isScrollable

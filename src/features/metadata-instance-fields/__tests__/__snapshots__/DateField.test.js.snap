@@ -2,7 +2,7 @@
 
 exports[`features/metadata-instance-editor/fields/DateField should correctly render a date field 1`] = `
 <DatePicker
-  className="metadata-instance-field-date"
+  className="bdl-DateField"
   dateFormat="utcISOString"
   displayFormat={
     Object {

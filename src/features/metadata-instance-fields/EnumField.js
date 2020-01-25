@@ -41,9 +41,9 @@ const EnumField = ({ dataKey, dataValue, displayName, description, intl, onChang
     });
 
     return (
-        <div className="metadata-instance-field-enum">
+        <div className="bdl-EnumField">
             <Label text={displayName}>
-                {!!description && <i className="metadata-instance-field-enum-desc">{description}</i>}
+                {!!description && <i className="bdl-EnumField-desc">{description}</i>}
                 <SingleSelectField
                     isEscapedWithReference
                     isScrollable

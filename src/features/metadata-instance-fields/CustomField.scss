@@ -1,6 +1,6 @@
 @import '../../styles/variables';
 
-.metadata-instance-field-custom {
+.bdl-CustomField {
     display: flex;
     align-items: center;
 
@@ -16,12 +16,12 @@
         }
     }
 
-    &:last-child .metadata-instance-field-read-only {
+    &:last-child .bdl-ReadOnlyField {
         margin-bottom: 0;
     }
 }
 
-.metadata-instance-field-custom-actions {
+.bdl-CustomField-customActions {
     margin: 5px 0 0 10px;
 
     .btn {

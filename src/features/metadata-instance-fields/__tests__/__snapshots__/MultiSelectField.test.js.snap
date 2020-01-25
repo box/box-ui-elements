@@ -2,7 +2,7 @@
 
 exports[`features/metadata-instance-editor/fields/MultiSelectField should correctly render 1`] = `
 <div
-  className="metadata-instance-field-multi-select"
+  className="bdl-MultiSelectField"
 >
   <Label>
     <MultiSelectField
@@ -13,7 +13,7 @@ exports[`features/metadata-instance-editor/fields/MultiSelectField should correc
       placeholder={
         <FormattedMessage
           defaultMessage="Select Values"
-          id="boxui.metadataInstanceEditor.fieldMultiSelectValue"
+          id="boxui.metadataInstanceFields.fieldMultiSelectValue"
         />
       }
       selectedValues={
@@ -28,11 +28,11 @@ exports[`features/metadata-instance-editor/fields/MultiSelectField should correc
 
 exports[`features/metadata-instance-editor/fields/MultiSelectField should correctly render with description 1`] = `
 <div
-  className="metadata-instance-field-multi-select"
+  className="bdl-MultiSelectField"
 >
   <Label>
     <i
-      className="metadata-instance-field-multi-select-desc"
+      className="bdl-MultiSelectField-desc"
     >
       description
     </i>
@@ -44,7 +44,7 @@ exports[`features/metadata-instance-editor/fields/MultiSelectField should correc
       placeholder={
         <FormattedMessage
           defaultMessage="Select Values"
-          id="boxui.metadataInstanceEditor.fieldMultiSelectValue"
+          id="boxui.metadataInstanceFields.fieldMultiSelectValue"
         />
       }
       selectedValues={

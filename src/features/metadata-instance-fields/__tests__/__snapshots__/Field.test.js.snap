@@ -59,7 +59,7 @@ exports[`features/metadata-instance-editor/fields/Field should correctly render 
 >
   <FormattedMessage
     defaultMessage="Invalid metadata field type!"
-    id="boxui.metadataInstanceEditor.invalidMetadataFieldType"
+    id="boxui.metadataInstanceFields.invalidMetadataFieldType"
   />
 </InlineError>
 `;

@@ -2,7 +2,7 @@
 
 exports[`features/metadata-instance-editor/fields/CustomField should correctly render a custom field is last 1`] = `
 <div
-  className="metadata-instance-field-custom"
+  className="bdl-CustomField"
 >
   <Field
     dataValue="value"
@@ -14,7 +14,7 @@ exports[`features/metadata-instance-editor/fields/CustomField should correctly r
 
 exports[`features/metadata-instance-editor/fields/CustomField should correctly render a custom field when editable 1`] = `
 <div
-  className="metadata-instance-field-custom"
+  className="bdl-CustomField"
 >
   <Field
     canEdit={true}
@@ -23,7 +23,7 @@ exports[`features/metadata-instance-editor/fields/CustomField should correctly r
     type="string"
   />
   <div
-    className="metadata-instance-field-custom-actions"
+    className="bdl-CustomField-customActions"
   >
     <Button
       className=""
@@ -43,7 +43,7 @@ exports[`features/metadata-instance-editor/fields/CustomField should correctly r
 
 exports[`features/metadata-instance-editor/fields/CustomField should correctly render a custom field when not editable 1`] = `
 <div
-  className="metadata-instance-field-custom"
+  className="bdl-CustomField"
 >
   <Field
     dataValue="value"

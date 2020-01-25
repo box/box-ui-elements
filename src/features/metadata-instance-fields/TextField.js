@@ -41,7 +41,7 @@ const TextField = ({
 
     return (
         <TextInput
-            className="metadata-instance-field-text"
+            className="bdl-TextField"
             description={description}
             error={error}
             hideOptionalLabel
