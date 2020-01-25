@@ -41,7 +41,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         background-color: $bdl-watermelon-red-10;
         border: 1px solid $bdl-watermelon-red-50;
 
-        .tooltip-close-button .icon-close .fill-color {
+        .tooltip-close-button .bdl-Tooltip-iconClose path {
             fill: $bdl-gray;
         }
     }
@@ -63,12 +63,13 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
         position: absolute;
         top: 9px;
         right: 3px;
+        width: 22px;
         cursor: pointer;
 
-        .icon-close {
+        .bdl-Tooltip-iconClose {
             height: 16px;
 
-            .fill-color {
+            path {
                 fill: $white;
             }
         }
