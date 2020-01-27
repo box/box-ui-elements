@@ -8,7 +8,10 @@ const defaultProps = {
     buttonText: <span>Pellentesque in port</span>,
     content: <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque quis rutrum turpis.</p>,
     illustration: <RelayPlanet140 height={170} width={170} />,
+    isNudgeShown: true,
     header: <h3>Heading goes here</h3>,
+    onButtonClick: jest.fn(),
+    onNudgeCloseClick: jest.fn(),
 };
 
 const getWrapper = (props?: NudgeProps) => shallow(<Nudge {...defaultProps} {...props} />);
@@ -17,7 +20,7 @@ describe('components/nudge/Nudge', () => {
     test('should correctly render Nudge', () => {
         const wrapper = getWrapper();
 
-        expect(wrapper.hasClass('Nudge')).toBe(true);
+        expect(wrapper.hasClass('bdl-Nudge')).toBe(true);
         expect(wrapper).toMatchSnapshot();
     });
 });

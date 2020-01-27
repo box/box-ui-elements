@@ -15,39 +15,44 @@ export interface NudgeProps {
     content: React.ReactNode;
     /** DOM element for the illustration image */
     illustration: React.ReactNode;
+    /** Boolean value from the parent to determine if the nudge is shown */
+    isNudgeShown: boolean;
     /** DOM element for the header of the nudge */
     header: React.ReactNode;
     /** onClick callback for the nudge button */
-    onButtonClick?: () => void;
+    onButtonClick: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
+    /** onClick callback for the nudge closure button */
+    onNudgeCloseClick: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
 }
 
-function Nudge({ buttonText, className, content, illustration, header, onButtonClick }: NudgeProps) {
-    const [isClosed, setIsClosed] = React.useState<boolean>(false);
-    const classes = classNames(['Nudge', className], { 'Nudge--isClosed': isClosed });
+function Nudge({
+    buttonText,
+    className,
+    content,
+    illustration,
+    isNudgeShown,
+    header,
+    onButtonClick,
+    onNudgeCloseClick,
+}: NudgeProps) {
+    const classes = classNames(['bdl-Nudge', className], { 'bdl-is-closed': !isNudgeShown });
 
     const closeButton = (
-        // eslint-disable-next-line react/button-has-type
-        <button
-            aria-label="close-nudge"
-            className="Nudge-closeButton"
-            onClick={() => {
-                setIsClosed(true);
-            }}
-        >
+        <button aria-label="close-nudge" type="button" className="bdl-Nudge-closeButton" onClick={onNudgeCloseClick}>
             <X16 height={18} width={18} />
         </button>
     );
 
     return (
-        <div className={classes}>
+        <section className={classes}>
             {closeButton}
-            <div className="Nudge-illustration">{illustration}</div>
-            <div className="Nudge-header">{header}</div>
-            <div className="Nudge-content">{content}</div>
-            <div className="Nudge-button">
+            <div className="bdl-Nudge-illustration">{illustration}</div>
+            <h1 className="bdl-Nudge-header">{header}</h1>
+            <p className="bdl-Nudge-content">{content}</p>
+            <div className="bdl-Nudge-button">
                 <PrimaryButton onClick={onButtonClick}>{buttonText}</PrimaryButton>
             </div>
-        </div>
+        </section>
     );
 }
 

@@ -1,45 +1,41 @@
 @import '../../styles/variables';
 
-/**************************************
- * Nudge
- **************************************/
-
-.Nudge {
+.bdl-Nudge {
     position: fixed;
     right: 20px;
     bottom: 40px;
     z-index: 40;
     width: 221px;
-    max-height: 450px;
+    min-height: 450px;
     padding: 25px;
     background-color: $white;
     border: solid 1px $bdl-gray-02;
     border-radius: 30px;
-    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, .1);
+    box-shadow: 0 3px 6px 0 rgba($black, .1);
 
-    &--isClosed {
+    &.bdl-is-closed {
         display: none;
     }
+}
 
-    &-button button {
-        width: 100%;
-        margin: 0;
-        line-height: 15px;
-        white-space: normal;
-    }
+.bdl-Nudge-button button {
+    width: 100%;
+    margin: 0;
+    line-height: 15px;
+    white-space: normal;
+}
 
-    &-closeButton {
-        float: right;
-        padding: 0;
-        background-color: initial;
-        border: 0;
-    }
+.bdl-Nudge-closeButton {
+    float: right;
+    padding: 0;
+    background-color: initial;
+    border: 0;
+}
 
-    &-header {
-        margin-bottom: 10px;
-    }
+.bdl-Nudge-header {
+    margin-bottom: 20px;
+}
 
-    &-illustration {
-        margin-bottom: 20px;
-    }
+.bdl-Nudge-illustration {
+    margin-bottom: 20px;
 }

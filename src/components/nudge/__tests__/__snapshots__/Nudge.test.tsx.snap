@@ -1,13 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/nudge/Nudge should correctly render Nudge 1`] = `
-<div
-  className="Nudge"
+<section
+  className="bdl-Nudge"
 >
   <button
     aria-label="close-nudge"
-    className="Nudge-closeButton"
-    onClick={[Function]}
+    className="bdl-Nudge-closeButton"
+    onClick={[MockFunction]}
+    type="button"
   >
     <X16
       height={18}
@@ -15,35 +16,37 @@ exports[`components/nudge/Nudge should correctly render Nudge 1`] = `
     />
   </button>
   <div
-    className="Nudge-illustration"
+    className="bdl-Nudge-illustration"
   >
     <RelayPlanet140
       height={170}
       width={170}
     />
   </div>
-  <div
-    className="Nudge-header"
+  <h1
+    className="bdl-Nudge-header"
   >
     <h3>
       Heading goes here
     </h3>
-  </div>
-  <div
-    className="Nudge-content"
+  </h1>
+  <p
+    className="bdl-Nudge-content"
   >
     <p>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque quis rutrum turpis.
     </p>
-  </div>
+  </p>
   <div
-    className="Nudge-button"
+    className="bdl-Nudge-button"
   >
-    <PrimaryButton>
+    <PrimaryButton
+      onClick={[MockFunction]}
+    >
       <span>
         Pellentesque in port
       </span>
     </PrimaryButton>
   </div>
-</div>
+</section>
 `;
