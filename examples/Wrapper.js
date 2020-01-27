@@ -12,10 +12,6 @@ type Props = {
     children: React.Node,
 };
 
-const Wrapper = ({ children }: Props) => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
-        {children}
-    </IntlProvider>
-);
+const Wrapper = ({ children }: Props) => <IntlProvider locale="en">{children}</IntlProvider>;
 
 export default Wrapper;

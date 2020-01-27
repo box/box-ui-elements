@@ -6,13 +6,13 @@ import ContentExplorer from '../ContentExplorer';
 import notes from './ContentExplorer.notes.md';
 
 export const withPreview = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <ContentExplorer features={global.FEATURES} rootFolderId={global.FOLDER_ID} token={global.TOKEN} />
     </IntlProvider>
 );
 
 export const withPreviewSidebar = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <ContentExplorer
             contentPreviewProps={{
                 contentSidebarProps: {

@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import type { IntlShape } from 'react-intl';
+
 import { TYPE_FOLDER, DEFAULT_ROOT } from '../../constants';
 import messages from './messages';
 import Breadcrumb from '../../components/breadcrumb';
@@ -13,7 +13,7 @@ import baseCellRenderer from './baseCellRenderer';
 import type { FilePathCellRendererCellData, FilePathCellRendererParams, FileItemPath } from './flowTypes';
 import './FilePathCell.scss';
 
-const getName = ({ name, type, isExternal, id }: FileItemPath = {}, intl: IntlShape): string => {
+const getName = ({ name, type, isExternal, id }: FileItemPath = {}, intl: any): string => {
     if (id === DEFAULT_ROOT) {
         return intl.formatMessage(messages.allFiles);
     }
@@ -26,7 +26,7 @@ const getName = ({ name, type, isExternal, id }: FileItemPath = {}, intl: IntlSh
     return name || id;
 };
 
-const fileNameCellRenderer = (intl: IntlShape) => (cellRendererParams: FilePathCellRendererParams) =>
+const fileNameCellRenderer = (intl: any) => (cellRendererParams: FilePathCellRendererParams) =>
     baseCellRenderer(cellRendererParams, (cellValue: FilePathCellRendererCellData) => {
         const { id, name = '', size, itemPath = [], itemType, isExternal } = cellValue;
         const extension = getFileExtension(name);

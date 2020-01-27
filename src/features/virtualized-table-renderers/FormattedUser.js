@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import type { IntlShape } from 'react-intl';
 import messages from './messages';
 import { ANONYMOUS_USER_ID } from './constants';
 
@@ -11,7 +10,7 @@ type Props = {
     name?: string,
 };
 
-const formatUser = ({ email, id, name }: Props, intl?: IntlShape, isComponent: boolean = false) => {
+const formatUser = ({ email, id, name }: Props, intl?: any, isComponent: boolean = false) => {
     const { anonymousUser, unknownUser } = messages;
 
     let targetUser = isComponent || !intl ? <FormattedMessage {...unknownUser} /> : intl.formatMessage(unknownUser);

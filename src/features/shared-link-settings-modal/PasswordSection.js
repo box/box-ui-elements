@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import Checkbox from '../../components/checkbox';
 import TextInput from '../../components/text-input';
@@ -63,7 +63,7 @@ const PasswordSection = ({
 PasswordSection.propTypes = {
     canChangePassword: PropTypes.bool.isRequired,
     error: PropTypes.string,
-    intl: intlShape.isRequired,
+    intl: PropTypes.any,
     isPasswordAvailable: PropTypes.bool.isRequired,
     isPasswordEnabled: PropTypes.bool.isRequired,
     isPasswordInitiallyEnabled: PropTypes.bool.isRequired,

@@ -6,7 +6,7 @@ import ModalDialog from '../ModalDialog';
 import notes from './ModalDialog.stories.md';
 
 export const basic = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <ModalDialog title="Static ModalDialog">
             <p>I can be rendered statically! Because I’m not in a portal!</p>
             <p>

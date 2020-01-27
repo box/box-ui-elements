@@ -2,7 +2,7 @@
 ```jsx
 var ContentSidebar = require('./ContentSidebar').default;
 
-<IntlProvider locale="en" textComponent={React.Fragment}>
+<IntlProvider locale="en">
     <ContentSidebar
         detailsSidebarProps={{
             hasProperties: true,

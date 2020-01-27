@@ -9,7 +9,7 @@ import Breadcrumb from './Breadcrumb';
 import notes from './Breadcrumb.stories.md';
 
 export const regular = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <Breadcrumb label="Breadcrumb">
             <IconHome />
             <Link href="#foo">Box Engineering</Link>
@@ -18,7 +18,7 @@ export const regular = () => (
 );
 
 export const withMultipleCrumbs = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <Breadcrumb label="Breadcrumb">
             <IconHome />
             <Link href="#foo">Box Engineering</Link>

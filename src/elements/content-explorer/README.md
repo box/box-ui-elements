@@ -2,7 +2,7 @@
 ```jsx
 var ContentExplorer = require('./ContentExplorer').default;
 
-<IntlProvider locale="en" textComponent={React.Fragment}>
+<IntlProvider locale="en">
     <ContentExplorer
         contentPreviewProps={{
             contentSidebarProps: {

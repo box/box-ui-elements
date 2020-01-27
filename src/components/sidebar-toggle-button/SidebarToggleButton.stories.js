@@ -6,19 +6,19 @@ import SidebarToggleButton from './SidebarToggleButton';
 import notes from './SidebarToggleButton.stories.md';
 
 export const open = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <SidebarToggleButton isOpen />
     </IntlProvider>
 );
 
 export const closed = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <SidebarToggleButton isOpen={false} />
     </IntlProvider>
 );
 
 export const leftFacing = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <SidebarToggleButton direction="left" isOpen />
     </IntlProvider>
 );

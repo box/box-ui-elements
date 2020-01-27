@@ -2,7 +2,7 @@
 ```jsx
 var ContentUploader = require('./ContentUploader').default;
 
-<IntlProvider locale="en" textComponent={React.Fragment}>
+<IntlProvider locale="en">
     <ContentUploader
         features={FEATURES}
         rootFolderId={FOLDER_ID}
