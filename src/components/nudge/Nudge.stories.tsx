@@ -13,10 +13,10 @@ const onButtonClick = () => {
 
 export const regular = () => {
     const componentStore = new Store({
-        isNudgeShown: true,
+        isShown: true,
     });
 
-    const onNudgeClose = () => componentStore.set({ isNudgeShown: false });
+    const onNudgeClose = () => componentStore.set({ isShown: false });
 
     return (
         <State store={componentStore}>
@@ -29,10 +29,10 @@ export const regular = () => {
                         </span>
                     }
                     illustration={<RelayPlanet140 height={170} width={170} />}
-                    isNudgeShown={state.isNudgeShown}
+                    isShown={state.isShown}
                     header={<span>Heading goes here</span>}
                     onButtonClick={onButtonClick}
-                    onNudgeCloseClick={onNudgeClose}
+                    onCloseButtonClick={onNudgeClose}
                 />
             )}
         </State>

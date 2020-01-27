@@ -1,6 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
+import Button from '../button';
 import PrimaryButton from '../primary-button';
 import X16 from '../../icon/fill/X16';
 
@@ -16,13 +17,13 @@ export interface NudgeProps {
     /** DOM element for the illustration image */
     illustration: React.ReactNode;
     /** Boolean value from the parent to determine if the nudge is shown */
-    isNudgeShown: boolean;
+    isShown: boolean;
     /** DOM element for the header of the nudge */
     header: React.ReactNode;
     /** onClick callback for the nudge button */
     onButtonClick: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
     /** onClick callback for the nudge closure button */
-    onNudgeCloseClick: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
+    onCloseButtonClick: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
 }
 
 function Nudge({
@@ -30,29 +31,29 @@ function Nudge({
     className,
     content,
     illustration,
-    isNudgeShown,
+    isShown,
     header,
     onButtonClick,
-    onNudgeCloseClick,
+    onCloseButtonClick,
 }: NudgeProps) {
-    const classes = classNames(['bdl-Nudge', className], { 'bdl-is-closed': !isNudgeShown });
+    const classes = classNames(['bdl-Nudge', className], { 'bdl-is-closed': !isShown });
 
     const closeButton = (
-        <button aria-label="close-nudge" type="button" className="bdl-Nudge-closeButton" onClick={onNudgeCloseClick}>
+        <Button aria-label="close-nudge" className="bdl-Nudge-closeButton" onClick={onCloseButtonClick}>
             <X16 height={18} width={18} />
-        </button>
+        </Button>
     );
 
     return (
-        <section className={classes}>
+        <article className={classes}>
             {closeButton}
             <div className="bdl-Nudge-illustration">{illustration}</div>
-            <h1 className="bdl-Nudge-header">{header}</h1>
+            <h2 className="bdl-Nudge-header">{header}</h2>
             <p className="bdl-Nudge-content">{content}</p>
             <div className="bdl-Nudge-button">
                 <PrimaryButton onClick={onButtonClick}>{buttonText}</PrimaryButton>
             </div>
-        </section>
+        </article>
     );
 }
 

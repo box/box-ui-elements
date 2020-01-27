@@ -1,20 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/nudge/Nudge should correctly render Nudge 1`] = `
-<section
+<article
   className="bdl-Nudge"
 >
-  <button
+  <Button
     aria-label="close-nudge"
     className="bdl-Nudge-closeButton"
+    isLoading={false}
     onClick={[MockFunction]}
-    type="button"
+    showRadar={false}
+    type="submit"
   >
     <X16
       height={18}
       width={18}
     />
-  </button>
+  </Button>
   <div
     className="bdl-Nudge-illustration"
   >
@@ -23,13 +25,13 @@ exports[`components/nudge/Nudge should correctly render Nudge 1`] = `
       width={170}
     />
   </div>
-  <h1
+  <h2
     className="bdl-Nudge-header"
   >
     <h3>
       Heading goes here
     </h3>
-  </h1>
+  </h2>
   <p
     className="bdl-Nudge-content"
   >
@@ -48,5 +50,5 @@ exports[`components/nudge/Nudge should correctly render Nudge 1`] = `
       </span>
     </PrimaryButton>
   </div>
-</section>
+</article>
 `;
