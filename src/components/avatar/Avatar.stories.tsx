@@ -1,6 +1,4 @@
-// @flow
 import * as React from 'react';
-
 import Avatar from './Avatar';
 import notes from './Avatar.stories.md';
 

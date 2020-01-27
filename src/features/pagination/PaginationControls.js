@@ -7,12 +7,12 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PaginationMenu from './PaginationMenu';
-import Button from '../../../components/button';
-import ButtonGroup from '../../../components/button-group';
-import IconPageBack from '../../../icons/general/IconPageBack';
-import IconPageForward from '../../../icons/general/IconPageForward';
-import Tooltip from '../Tooltip';
-import messages from '../messages';
+import Button from '../../components/button';
+import ButtonGroup from '../../components/button-group';
+import IconPageBack from '../../icons/general/IconPageBack';
+import IconPageForward from '../../icons/general/IconPageForward';
+import Tooltip from '../../elements/common/Tooltip';
+import messages from '../../elements/common/messages';
 
 type Props = {
     handleNextClick: () => void,

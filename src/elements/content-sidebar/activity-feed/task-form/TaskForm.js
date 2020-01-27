@@ -345,7 +345,14 @@ class TaskForm extends React.Component<Props, State> {
             ? messages.tasksAddTaskFormSubmitLabel
             : messages.tasksEditTaskFormSubmitLabel;
         const shouldShowCompletionRule = approvers.length > 0;
-        const isCompletionRuleCheckboxDisabled = approvers.length <= 1;
+
+        // Enable checkbox when there is a group or multiple users being assigned
+        // TODO: consider setting contants for assignee types to src/constants.js
+        // - move from src/features/collaborator-avatars/constants.js
+        const isCompletionRuleCheckboxDisabled =
+            approvers.filter(approver => approver.target.type === 'group').length <= 0 &&
+            approvers.filter(approver => approver.target.type === 'user').length <= 1;
+
         const isCompletionRuleCheckboxChecked = completionRule === TASK_COMPLETION_RULE_ANY;
         const isForbiddenErrorOnEdit = isLoading || (getProp(error, 'status') === 403 && !isCreateEditMode);
 

@@ -184,7 +184,11 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
       className="tooltip-close-button"
       onClick={[Function]}
     >
-      <IconClose />
+      <X16
+        className="bdl-Tooltip-iconClose"
+        height={14}
+        width={14}
+      />
     </PlainButton>
   </div>
 </TetherComponent>

@@ -8,11 +8,17 @@ export enum LoadingIndicatorWrapperPosition {
     TOP = 'top',
 }
 export interface LoadingIndicatorWrapperProps {
+    /** The content to wrap */
     children: React.ReactNode;
+    /** Custom class for the loading indicator wrapper */
     className?: string;
+    /** Location of the loading indicator - top, center */
     crawlerPosition?: LoadingIndicatorWrapperPosition;
+    /** Size of the loading indicator - small, medium, large, default */
     crawlerSize?: LoadingIndicatorSize;
+    /** Makes the background white hiding the content */
     hideContent?: boolean;
+    /** Indicates whether loading indicator should show */
     isLoading?: boolean;
 }
 

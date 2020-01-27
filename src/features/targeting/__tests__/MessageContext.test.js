@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 
-import { MessageContextProvider, useMessage, useSetEligibleMessageIDMap } from '..';
+import { MessageContextProvider, useMessage, type MessageApi } from '..';
 
 const TargetedComponent = () => {
     const { canShow, onClose, onShow } = useMessage('msg');
@@ -13,27 +13,23 @@ const TargetedComponent = () => {
     return null;
 };
 
-// MessageProvider is anything that provides eligibleMessageMap, currently it is Context.js in EUA
-const MessageProvider = ({ eligibleMessageIDap }) => {
-    useSetEligibleMessageIDMap(eligibleMessageIDap);
-    return null;
-};
-
-const ComponentForTest = (messageApi, eligibleMessageIDap = {}) =>
-    mount(
+const ComponentForTest = ({ messageApi }: { messageApi: MessageApi }) => {
+    return (
         <MessageContextProvider messageApi={messageApi}>
             <TargetedComponent />
-            <MessageProvider {...{ eligibleMessageIDap }} />
-        </MessageContextProvider>,
+        </MessageContextProvider>
     );
+};
 
 describe('features/targeting/MessageContext', () => {
     const markMessageAsClosed = jest.fn();
     const markMessageAsSeen = jest.fn();
 
-    const messageApi = { markMessageAsClosed, markMessageAsSeen };
+    const getWrapper = (eligibleMessageIDMap = {}) => {
+        const messageApi = { eligibleMessageIDMap, markMessageAsClosed, markMessageAsSeen };
 
-    const getWrapper = (eligibleMessageIDMap = {}) => ComponentForTest(messageApi, eligibleMessageIDMap);
+        return mount(<ComponentForTest messageApi={messageApi} />);
+    };
 
     test('should not render button when not eligible', () => {
         const wrapper = getWrapper();

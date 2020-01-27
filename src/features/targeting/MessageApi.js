@@ -1,5 +1,5 @@
 // @flow
-import type { MessageID } from './types';
+import type { MessageID, EligibleMessageIDMap } from './types';
 
 /**
  * Message API is provided to MessageContext as a set of persistence API that inlcudes
@@ -8,6 +8,7 @@ import type { MessageID } from './types';
  * 3) markMessageAsSeen
  */
 export type MessageApi = $ReadOnly<{|
+    eligibleMessageIDMap: EligibleMessageIDMap,
     markMessageAsClosed: MessageID => void,
     markMessageAsSeen: MessageID => void,
 |}>;

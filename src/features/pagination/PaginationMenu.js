@@ -7,10 +7,10 @@
 import React from 'react';
 import range from 'lodash/range';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../../components/button';
-import DropdownMenu from '../../../components/dropdown-menu';
-import { Menu, MenuItem } from '../../../components/menu';
-import messages from '../messages';
+import Button from '../../components/button';
+import DropdownMenu from '../../components/dropdown-menu';
+import { Menu, MenuItem } from '../../components/menu';
+import messages from '../../elements/common/messages';
 import './PaginationMenu.scss';
 
 type Props = {

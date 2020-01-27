@@ -186,6 +186,54 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
 />
 `;
 
+exports[`components/content-sidebar/activity-feed/task-form/TaskError when type is GENERAL and edit mode is CREATE, with error obj { code: 'group_exceeds_limit' }, we show the proper inline error 1`] = `
+<TaskError
+  editMode="CREATE"
+  error={
+    Object {
+      "code": "group_exceeds_limit",
+    }
+  }
+  taskType="GENERAL"
+>
+  <InlineNotice
+    title={
+      <FormattedMessage
+        defaultMessage="Exceeded max assignees per group"
+        id="be.contentSidebar.activityFeed.taskForm.taskGroupExceedsWarningTitle"
+      />
+    }
+    type="warning"
+  >
+    <div
+      className="inline-alert inline-alert-visible inline-alert-warning"
+    >
+      <strong>
+        <FormattedMessage
+          defaultMessage="Exceeded max assignees per group"
+          id="be.contentSidebar.activityFeed.taskForm.taskGroupExceedsWarningTitle"
+        >
+          <div />
+        </FormattedMessage>
+      </strong>
+      <div>
+        <FormattedMessage
+          defaultMessage="One or more groups can not receive this task as a group size cannot exceed the limit of {max} assignees per group."
+          id="be.api.taskGroupExceedsWarningTitle"
+          values={
+            Object {
+              "max": 250,
+            }
+          }
+        >
+          <div />
+        </FormattedMessage>
+      </div>
+    </div>
+  </InlineNotice>
+</TaskError>
+`;
+
 exports[`components/content-sidebar/activity-feed/task-form/TaskError when type is GENERAL and edit mode is CREATE, with error obj { status: 403 }, we show the proper inline error 1`] = `
 <TaskError
   editMode="CREATE"

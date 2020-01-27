@@ -15,12 +15,14 @@ import Base from './Base';
 import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';
 import TasksNewAPI from './tasks/TasksNew';
+import GroupsAPI from './Groups';
 import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
 import TaskLinksAPI from './tasks/TaskLinks';
 import AppActivityAPI from './AppActivity';
 import {
     ERROR_CODE_CREATE_TASK,
     ERROR_CODE_UPDATE_TASK,
+    ERROR_CODE_GROUP_EXCEEDS_LIMIT,
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
     TASK_NEW_APPROVED,
@@ -28,6 +30,7 @@ import {
     TASK_NEW_REJECTED,
     TASK_NEW_NOT_STARTED,
     TYPED_ID_FEED_PREFIX,
+    TASK_MAX_GROUP_ASSIGNEES,
 } from '../constants';
 import type {
     TaskCompletionRule,
@@ -403,6 +406,34 @@ class Feed extends Base {
         this.updateFeedItem({ isPending: true }, task.id);
 
         try {
+            // create request for the size of each group by ID
+            // TODO: use async/await for both creating and editing tasks
+            const groupInfoPromises: Array<Promise<any>> = task.addedAssignees
+                .filter(
+                    (assignee: SelectorItem<UserMini | GroupMini>) => assignee.item && assignee.item.type === 'group',
+                )
+                .map(assignee => assignee.id)
+                .map(groupId => {
+                    return new GroupsAPI(this.options).getGroupCount({
+                        file,
+                        group: { id: groupId },
+                    });
+                });
+
+            const groupCounts: Array<{ total_count: number }> = await Promise.all(groupInfoPromises);
+            const hasAnyGroupCountExceeded: boolean = groupCounts.some(
+                groupInfo => groupInfo.total_count > TASK_MAX_GROUP_ASSIGNEES,
+            );
+            const warning = {
+                code: ERROR_CODE_GROUP_EXCEEDS_LIMIT,
+                type: 'warning',
+            };
+
+            if (hasAnyGroupCountExceeded) {
+                this.feedErrorCallback(false, warning, ERROR_CODE_GROUP_EXCEEDS_LIMIT);
+                return;
+            }
+
             await Promise.all(
                 task.addedAssignees.map(assignee =>
                     assignee.item && assignee.item.type === 'group'
@@ -615,18 +646,55 @@ class Feed extends Base {
             completion_rule: completionRule,
         };
 
-        this.tasksNewAPI = new TasksNewAPI(this.options);
-        this.tasksNewAPI.createTask({
-            file,
-            task: taskPayload,
-            successCallback: (taskData: Task) => {
-                this.addPendingItem(this.file.id, currentUser, pendingTask);
-                this.createTaskNewSuccessCallback(file, uuid, taskData, assignees, successCallback, errorCallback);
-            },
-            errorCallback: (e: ElementsXhrError, code: string) => {
-                this.feedErrorCallback(false, e, code);
-            },
-        });
+        // create request for the size of each group by ID
+        const groupInfoPromises: Array<Promise<any>> = assignees
+            .filter((assignee: SelectorItem<UserMini | GroupMini>) => (assignee.item && assignee.item.type) === 'group')
+            .map(assignee => assignee.id)
+            .map(groupId => {
+                return new GroupsAPI(this.options).getGroupCount({
+                    file,
+                    group: { id: groupId },
+                });
+            });
+
+        // Fetch each group size in parallel --> return an array of group sizes
+        Promise.all(groupInfoPromises)
+            .then((groupCounts: Array<{ total_count: number }>) => {
+                const hasAnyGroupCountExceeded: boolean = groupCounts.some(
+                    groupInfo => groupInfo.total_count > TASK_MAX_GROUP_ASSIGNEES,
+                );
+                const warning = {
+                    code: ERROR_CODE_GROUP_EXCEEDS_LIMIT,
+                    type: 'warning',
+                };
+                if (hasAnyGroupCountExceeded) {
+                    this.feedErrorCallback(false, warning, ERROR_CODE_GROUP_EXCEEDS_LIMIT);
+                    return;
+                }
+
+                this.tasksNewAPI = new TasksNewAPI(this.options);
+                this.tasksNewAPI.createTask({
+                    file,
+                    task: taskPayload,
+                    successCallback: (taskData: Task) => {
+                        this.addPendingItem(this.file.id, currentUser, pendingTask);
+                        this.createTaskNewSuccessCallback(
+                            file,
+                            uuid,
+                            taskData,
+                            assignees,
+                            successCallback,
+                            errorCallback,
+                        );
+                    },
+                    errorCallback: (e: ElementsXhrError, code: string) => {
+                        this.feedErrorCallback(false, e, code);
+                    },
+                });
+            })
+            .catch(error => {
+                this.feedErrorCallback(false, error, ERROR_CODE_CREATE_TASK);
+            });
     };
 
     /**
@@ -718,7 +786,6 @@ class Feed extends Base {
         return new Promise((resolve, reject) => {
             const taskCollaboratorsAPI = new TaskCollaboratorsAPI(this.options);
             this.taskCollaboratorsAPI.push(taskCollaboratorsAPI);
-
             taskCollaboratorsAPI.createTaskCollaboratorsforGroup({
                 file,
                 task,

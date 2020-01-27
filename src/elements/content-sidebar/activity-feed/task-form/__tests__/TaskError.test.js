@@ -17,6 +17,7 @@ describe('components/content-sidebar/activity-feed/task-form/TaskError', () => {
         ['APPROVAL', 'CREATE', undefined, 0],
         ['APPROVAL', 'CREATE', { status: 403 }, 1],
         ['APPROVAL', 'CREATE', { status: 404 }, 1],
+        ['GENERAL', 'CREATE', { code: 'group_exceeds_limit' }, 1],
     ])(
         'when type is %s and edit mode is %s, with error obj %o, we show the proper inline error',
         (taskType, editMode, error) => {

@@ -1,27 +1,26 @@
-// @flow
 import * as React from 'react';
-import * as colors from './variables';
+import * as variables from './variables';
 import mdNotes from './colors.md';
 
-const bdlColors = {};
-Object.keys(colors).forEach(colorKey => {
+const bdlColors: { [k: string]: Array<Array<string>> } = {};
+
+Object.keys(variables).forEach(colorKey => {
+    const color = (variables as { [k: string]: string | Array<string> })[colorKey];
     if (
         colorKey.startsWith('bdl') &&
         !colorKey.includes('Neutral') &&
         colorKey !== 'bdlSecondaryBlue' &&
-        // $FlowFixMe value will a string
-        colors[colorKey].startsWith('#')
+        !Array.isArray(color) &&
+        color.startsWith('#')
     ) {
-        // $FlowFixMe match will not return null
-        const colorNameBreakDown = colorKey.match(/(bdl)|([A-Z][a-z]+)|(\d+)/g).join('-');
-        // $FlowFixMe match will not return null
-        const allowColorKey = colorKey.match(/[A-Z][a-z]+/g).join(' ');
+        const colorNameBreakDown = (colorKey.match(/(bdl)|([A-Z][a-z]+)|(\d+)/g) as Array<string>).join('-');
+        const allowColorKey = (colorKey.match(/[A-Z][a-z]+/g) as Array<string>).join(' ');
 
         if (!bdlColors[allowColorKey]) {
             bdlColors[allowColorKey] = [];
         }
 
-        bdlColors[allowColorKey].push([colorNameBreakDown, colors[colorKey], colorKey]);
+        bdlColors[allowColorKey].push([colorNameBreakDown, color, colorKey]);
     }
 });
 
@@ -29,7 +28,7 @@ const wrapper = {
     margin: '20px',
 };
 
-const palette = {
+const palette: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
