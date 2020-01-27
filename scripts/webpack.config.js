@@ -26,7 +26,6 @@ const token = process.env.TOKEN; // used for examples only
 const folderId = process.env.FOLDERID; // used for examples only
 const fileId = process.env.FILEID; // used for examples only
 const outputDir = process.env.OUTPUT;
-const locale = language ? language.substr(0, language.indexOf('-')) : 'en';
 const version = isRelease ? packageJSON.version : 'dev';
 const outputPath = outputDir ? path.resolve(outputDir) : path.resolve('dist', version, language);
 const Translations = new TranslationsPlugin();
@@ -71,7 +70,6 @@ function getConfig(isReactExternalized) {
             alias: {
                 'box-ui-elements/es': path.join(__dirname, '../src'), // for examples only
                 examples: path.join(__dirname, '../examples/src'), // for examples only
-                'react-intl-locale-data': path.resolve(`node_modules/react-intl/locale-data/${locale}`),
                 'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
                 'rsg-components/Wrapper': path.join(__dirname, '../examples/Wrapper'), // for examples only
             },

@@ -27,8 +27,6 @@ export const defineMessages = (messages: {
 }) => messages;
 export const intlShape = PropTypes.any;
 
-export const addLocaleData = () => {};
-
 type Props = {
     locale: string,
 };
