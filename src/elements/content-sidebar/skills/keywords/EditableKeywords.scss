@@ -5,7 +5,7 @@
         margin: 7px -5px 0 0;
         text-align: right;
 
-        .btn {
+        .bdl-Button {
             margin: 0 0 0 5px;
         }
     }
@@ -27,4 +27,21 @@
             }
         }
     }
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.pill-selector-input {
+    @extend .bdl-PillSelector-input;
+}
+
+.pill-selector-input-wrapper {
+    @extend .bdl-PillSelector;
+}
+
+.btn {
+    @extend .bdl-Button;
 }

@@ -65,12 +65,12 @@
         }
 
         .select-field {
-            .select-button {
+            .bdl-SelectButton {
                 width: 160px;
                 border-radius: 5px;
             }
 
-            .select-button.placeholder {
+            .bdl-SelectButton.placeholder {
                 color: $bdl-gray-62;
             }
         }
@@ -88,7 +88,7 @@
             padding-right: 10px;
             padding-left: 10px;
 
-            .select-button {
+            .bdl-SelectButton {
                 border-radius: 5px;
             }
         }
@@ -138,12 +138,12 @@
         .select-container {
             width: 100%;
 
-            .select-button {
+            .bdl-SelectButton {
                 width: 160px;
                 border-radius: 5px;
             }
 
-            .select-button.placeholder {
+            .bdl-SelectButton.placeholder {
                 color: $bdl-gray-62;
             }
         }
@@ -151,7 +151,7 @@
 
     .condition-value-dropdown-container.show-error {
         .select-container {
-            button.select-button {
+            button.bdl-SelectButton {
                 @include error-border();
             }
         }
@@ -166,7 +166,7 @@
             @include error-border();
         }
 
-        .select-button.placeholder {
+        .bdl-SelectButton.placeholder {
             @include error-border();
         }
     }
@@ -184,4 +184,13 @@
             }
         }
     }
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.select-button {
+    @extend .bdl-SelectButton;
 }

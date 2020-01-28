@@ -21,7 +21,8 @@
     animation: crawler .66s infinite ease-in-out;
 }
 
-.btn-primary .crawler div {
+.btn-primary .crawler div,
+.bdl-Button--primary .crawler div {
     background-color: $white;
 }
 

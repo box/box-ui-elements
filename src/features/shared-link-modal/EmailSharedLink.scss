@@ -33,3 +33,16 @@
         }
     }
 }
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.pill-selector-wrapper {
+    @extend .bdl-PillSelectorDropdown;
+}
+
+.pill-selector-input-wrapper {
+    @extend .bdl-PillSelector;
+}

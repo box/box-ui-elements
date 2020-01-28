@@ -8,7 +8,7 @@
         flex: 1;
         overflow-x: hidden;
 
-        .label {
+        .bdl-Label {
             width: 100%;
             overflow: hidden;
             white-space: nowrap;
@@ -24,7 +24,7 @@
 .bdl-CustomMetadataField-customActions {
     margin: 5px 0 0 10px;
 
-    .btn {
+    .bdl-Button {
         width: 32px;
         height: 32px;
         margin: 0 0 0 -1px;
@@ -34,4 +34,17 @@
             display: flex;
         }
     }
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.btn {
+    @extend .bdl-Button;
+}
+
+.label {
+    @extend .bdl-Label;
 }

@@ -33,7 +33,16 @@
     margin: 20px 0 0;
     text-align: right;
 
-    .btn {
+    .bdl-Button {
         margin: 0 0 0 10px;
     }
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.btn {
+    @extend .bdl-Button;
 }

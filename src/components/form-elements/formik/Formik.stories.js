@@ -131,7 +131,7 @@ export const basic = () => {
                         <br />
                         <Field
                             label="Pill Selector Field"
-                            name="pillselector"
+                            name="pill bdl-Pillselector"
                             placeholder="Colors"
                             component={PillSelectorDropdownField}
                             validator={pillSelectorValidator}
@@ -140,7 +140,7 @@ export const basic = () => {
                         <br />
                         <Field
                             label="Pill Selector Field With Dropdown"
-                            name="pillselectordropdown"
+                            name="pill bdl-Pillselectordropdown"
                             placeholder="Colors"
                             options={[
                                 { displayText: 'Red', value: 'red' },

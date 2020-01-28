@@ -14,7 +14,16 @@
         text-align: center;
     }
 
-    .bcu-footer-right .btn {
+    .bcu-footer-right .bdl-Button {
         margin-left: 8px;
     }
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.btn {
+    @extend .bdl-Button;
 }

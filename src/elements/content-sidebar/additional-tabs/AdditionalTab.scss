@@ -28,3 +28,12 @@
     width: 24px;
     height: 24px;
 }
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.is-disabled {
+    @extend .bdl-is-disabled;
+}

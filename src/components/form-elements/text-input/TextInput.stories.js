@@ -47,7 +47,7 @@ export const withMaximumLength = () => (
 
 export const withTooltipOnHover = () => (
     <TextInput
-        name="tooltipCheck"
+        name="tooltip"
         label="Tooltip on hover"
         labelTooltip="I am the tooltip"
         placeholder="Hover over the label"

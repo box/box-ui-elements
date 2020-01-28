@@ -1,7 +1,7 @@
 @import '../../styles/variables';
 
 .bdl-Classification {
-    .label {
+    .bdl-Label {
         margin-top: 12px;
         font-weight: normal;
     }
@@ -16,4 +16,13 @@
 
 .bdl-Classification-missingMessage {
     color: $bdl-gray-50;
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.label {
+    @extend .bdl-Label;
 }

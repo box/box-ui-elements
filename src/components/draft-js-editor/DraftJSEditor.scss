@@ -4,7 +4,8 @@
     margin: 8px 10px;
 }
 
-.is-disabled .public-DraftStyleDefault-block {
+.is-disabled .public-DraftStyleDefault-block,
+.bdl-is-disabled .public-DraftStyleDefault-block {
     width: 262px;
     padding: 8px 10px;
     border: 1px solid $bdl-gray-20;

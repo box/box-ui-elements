@@ -111,11 +111,13 @@
     margin-top: 30px;
     text-align: right;
 
-    .btn:last-of-type {
+    .btn:last-of-type,
+    .bdl-Button:last-of-type {
         margin-right: 0;
     }
 
-    .btn {
+    .btn,
+    .bdl-Button {
         margin-top: 0;
         margin-bottom: 0;
     }

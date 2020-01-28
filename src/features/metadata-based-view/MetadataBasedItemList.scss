@@ -43,7 +43,7 @@ $bdl-MetadataBasedItemList-insetShadowRight: 3px 0 3px -2px $bdl-gray-10 inset;
 .bdl-MetadataBasedItemList-cell--filename {
     color: $bdl-gray;
 
-    & .btn-plain {
+    & .bdl-Button--plain {
         outline: none;
     }
 }
@@ -77,4 +77,13 @@ $bdl-MetadataBasedItemList-insetShadowRight: 3px 0 3px -2px $bdl-gray-10 inset;
 .bdl-MetadataBasedItemList-bottomRightGrid.is-scrolledMiddle,
 .bdl-MetadataBasedItemList-topRightGrid.is-scrolledMiddle {
     box-shadow: $bdl-MetadataBasedItemList-insetShadowLeft, $bdl-MetadataBasedItemList-insetShadowRight;
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.btn-plain {
+    @extend .bdl-Button--plain;
 }

@@ -112,7 +112,7 @@
         }
     }
 
-    .btn-plain.metadata-template-dropdown-select-template {
+    .bdl-Button--plain.metadata-template-dropdown-select-template {
         display: flex;
         align-items: center;
         width: 100%;
@@ -152,4 +152,13 @@
             justify-content: center;
         }
     }
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.btn-plain {
+    @extend .bdl-Button--plain;
 }

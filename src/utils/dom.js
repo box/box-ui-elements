@@ -51,7 +51,7 @@ export function isFocusableElement(element: HTMLElement | EventTarget | null): b
 
     const isButton =
         element.classList.contains('btn-content') ||
-        (element.parentElement instanceof HTMLElement ? element.parentElement.classList.contains('btn') : false);
+        (element.parentElement instanceof HTMLElement ? element.parentElement.classList.contains('btn bdl-Button') : false);
 
     return isInputElement(element) || tag === 'button' || tag === 'a' || tag === 'option' || isCheckbox || isButton;
 }

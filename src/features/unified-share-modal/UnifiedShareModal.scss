@@ -137,7 +137,7 @@
             color: $bdl-gray-50;
         }
 
-        &.is-disabled {
+        &.bdl-is-disabled {
             color: $bdl-gray-30;
             background-color: $bdl-gray-02;
             box-shadow: none;
@@ -214,7 +214,7 @@
     }
 
     .shared-link-access-row {
-        .btn-plain {
+        .bdl-Button--plain {
             margin-right: 10px;
 
             &.can-edit-btn {
@@ -268,4 +268,29 @@
         margin: -5px 0 10px 0;
         color: $bdl-box-blue;
     }
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.pill-selector-wrapper {
+    @extend .bdl-PillSelectorDropdown;
+}
+
+.pill-selector-input {
+    @extend .bdl-PillSelector-input;
+}
+
+.btn-plain {
+    @extend .bdl-Button--plain;
+}
+
+.pill-selector-input-wrapper {
+    @extend .bdl-PillSelector;
+}
+
+.is-disabled {
+    @extend .bdl-is-disabled;
 }

@@ -20,7 +20,7 @@
     }
 }
 
-.btn-plain.metadata-instance-editor-instance-edit {
+.bdl-Button--plain.metadata-instance-editor-instance-edit {
     position: absolute;
     top: 8px;
     right: 25px;
@@ -39,4 +39,13 @@
     &.metadata-instance-editor-instance-is-editing {
         background-color: $bdl-gray-10;
     }
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.btn-plain {
+    @extend .bdl-Button--plain;
 }

@@ -5,7 +5,7 @@
 $pillTextColorDark: lighten($black, 31%);
 
 .bdl-Pill,
-.btn.bdl-Pill {
+.bdl-Button.bdl-Pill {
     display: flex;
     flex: none;
     align-items: center;
@@ -39,7 +39,7 @@ $pillTextColorDark: lighten($black, 31%);
         cursor: pointer;
     }
 
-    &.is-disabled {
+    &.bdl-is-disabled {
         opacity: .5;
 
         .close-btn {
@@ -87,7 +87,7 @@ $pillTextColorDark: lighten($black, 31%);
         box-shadow: none;
     }
 
-    &:not(.is-disabled) {
+    &:not(.bdl-is-disabled) {
         &:focus {
             border-color: darken($primary-color, 8%);
             box-shadow: 0 1px 2px fade-out($black, .9);
@@ -105,6 +105,35 @@ $pillTextColorDark: lighten($black, 31%);
 * Section below is for bdl-namespace backwards compatibility.
 * Do not add changes below this line.
 */
+.bdl-PillCloud-button {
+    @extend .bdl-PillCloud-button;
+}
+
+.bdl-Pill-warning {
+    @extend .bdl-Pill-warning;
+}
+
+.bdl-Pill--error {
+    @extend .bdl-Pill--error;
+}
+
+.bdl-PillCloud {
+    @extend .bdl-PillCloud;
+}
+
+.bdl-Pill-text {
+    @extend .bdl-Pill-text;
+}
+
+.bdl-Pill {
+    @extend .bdl-Pill;
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
 .pill-cloud-button {
     @extend .bdl-PillCloud-button;
 }
@@ -117,12 +146,20 @@ $pillTextColorDark: lighten($black, 31%);
     @extend .bdl-Pill--error;
 }
 
+.is-disabled {
+    @extend .bdl-is-disabled;
+}
+
 .pill-cloud-container {
     @extend .bdl-PillCloud;
 }
 
 .pill-text {
     @extend .bdl-Pill-text;
+}
+
+.btn {
+    @extend .bdl-Button;
 }
 
 .pill {

@@ -1,7 +1,16 @@
 .bcu-uploads-manager-action {
     margin: 5px -20px 5px 5px;
 
-    .btn-primary {
+    .bdl-Button--primary {
         display: flex;
     }
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.btn-primary {
+    @extend .bdl-Button--primary;
 }

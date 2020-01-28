@@ -45,6 +45,7 @@ const Select = ({
     const classes = classNames(className, 'select-input-container', {
         'show-error': !!error || showErrorOutline,
         'is-disabled': isDisabled,
+        'bdl-is-disabled': isDisabled,
     });
 
     return (

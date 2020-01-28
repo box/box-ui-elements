@@ -1,7 +1,7 @@
 @import '../../../styles/variables';
 
 .bdl-SecurityControlsModal {
-    .label {
+    .bdl-Label {
         margin-top: 19px;
     }
 }
@@ -20,4 +20,13 @@
     max-height: $bdl-line-height * 12;
     margin: 0;
     list-style: none;
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.label {
+    @extend .bdl-Label;
 }

@@ -9,13 +9,13 @@ $assignee-dropdown-height: 215px;
         display: block;
         text-align: right;
 
-        .btn {
+        .bdl-Button {
             margin-top: 0;
             margin-right: 0;
             margin-bottom: 10px;
         }
 
-        .btn:last-child {
+        .bdl-Button:last-child {
             margin-left: 10px;
         }
     }
@@ -80,4 +80,25 @@ $assignee-dropdown-height: 215px;
     .inline-alert {
         margin: 0 0 20px 0;
     }
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.pill-selector-hidden-input {
+    @extend .bdl-PillSelector-input--hidden;
+}
+
+.pill-selector-wrapper {
+    @extend .bdl-PillSelectorDropdown;
+}
+
+.pill-selector-input-wrapper {
+    @extend .bdl-PillSelector;
+}
+
+.btn {
+    @extend .bdl-Button;
 }

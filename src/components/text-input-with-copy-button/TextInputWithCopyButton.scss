@@ -17,6 +17,7 @@
         }
     }
 
+    .bdl-Button,
     .btn {
         min-width: 80px;
         margin: 0;
@@ -27,6 +28,10 @@
     }
 
     &.copy-success {
+        .bdl-Button,
+        .bdl-Button:hover,
+        .bdl-Button:active,
+        .bdl-Button:active:hover,
         .btn,
         .btn:hover,
         .btn:active,

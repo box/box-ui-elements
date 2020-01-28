@@ -10,7 +10,7 @@ type Props = {
 
 const LabelPrimitive = ({ children, className, labelContent, ...rest }: Props) => (
     <label>
-        <span className={classNames('label', className)} {...rest}>
+        <span className={classNames('label bdl-Label', className)} {...rest}>
             {labelContent}
         </span>
         {children}

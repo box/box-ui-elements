@@ -31,8 +31,12 @@
     // float is used to reflow content instead of pushing it to the left
     float: right;
 
-    // overrides for .btn-plain's margin resets on focus states
+    // overrides for .bdl-Button--plain's margin resets on focus states
     &,
+    &.bdl-Button--plain,
+    &.bdl-Button--plain:active,
+    &.bdl-Button--plain:hover,
+    &.bdl-Button--plain:focus,
     &.btn-plain,
     &.btn-plain:active,
     &.btn-plain:hover,

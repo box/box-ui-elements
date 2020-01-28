@@ -9,7 +9,7 @@
         min-width: 64px;
     }
 
-    .be & .btn-plain {
+    .be & .bdl-Button--plain {
         color: $bdl-gray-62;
 
         &:last-child {
@@ -28,4 +28,13 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.btn-plain {
+    @extend .bdl-Button--plain;
 }

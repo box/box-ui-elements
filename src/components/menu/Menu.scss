@@ -40,6 +40,9 @@
     cursor: pointer;
 
     &,
+    &.bdl-Button--plain,
+    &.bdl-Button--plain:hover,
+    &.bdl-Button--plain:active,
     &.btn-plain,
     &.btn-plain:hover,
     &.btn-plain:active {

@@ -23,7 +23,8 @@
         }
 
         &:hover {
-            .btn-plain.collapsible-card-title {
+            .btn-plain.collapsible-card-title,
+            .bdl-Button--plain.collapsible-card-title {
                 text-decoration: underline;
             }
 
@@ -45,7 +46,8 @@
         transition: transform $bdl-transition-duration-200ms;
     }
 
-    .btn-plain.collapsible-card-title {
+    .btn-plain.collapsible-card-title,
+    .bdl-Button--plain.collapsible-card-title {
         position: relative;
         display: flex;
         align-items: center;
@@ -73,7 +75,7 @@
 
         .collapsible-card-header {
             &:hover {
-                .btn-plain.collapsible-card-title {
+                .bdl-Button--plain.collapsible-card-title {
                     text-decoration: none;
                 }
             }
@@ -83,7 +85,8 @@
             }
         }
 
-        .btn-plain.collapsible-card-title {
+        .btn-plain.collapsible-card-title,
+        .bdl-Button--plain.collapsible-card-title {
             &:focus {
                 text-decoration: none;
             }
@@ -101,12 +104,13 @@
             background-color: $white;
         }
 
-        .btn-plain.collapsible-card-title,
+        .bdl-Button--plain.collapsible-card-title,
         .collapsible-card-content {
             padding: 10px;
         }
 
-        &.is-open .btn-plain.collapsible-card-title {
+        &.is-open .btn-plain.collapsible-card-title,
+        &.is-open .bdl-Button--plain.collapsible-card-title {
             border-bottom: 1px solid $bdl-gray-10;
         }
 
@@ -116,7 +120,8 @@
     }
 
     &:not(.is-bordered) {
-        .btn-plain.collapsible-card-title {
+        .btn-plain.collapsible-card-title,
+        .bdl-Button--plain.collapsible-card-title {
             border-bottom: 1px solid $bdl-gray-10;
 
             &:hover,

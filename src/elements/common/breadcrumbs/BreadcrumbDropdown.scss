@@ -1,10 +1,19 @@
 @import '../variables';
 
-.be .btn-plain.be-breadcrumbs-drop-down {
+.be .bdl-Button--plain.be-breadcrumbs-drop-down {
     color: $bdl-gray-62;
     letter-spacing: 1.5px;
 
     &.be-breadcrumbs-condensed {
         letter-spacing: inherit;
     }
+}
+
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.btn-plain {
+    @extend .bdl-Button--plain;
 }

@@ -1,6 +1,6 @@
-@import '../../styles/variables';
+@import '../../../styles/variables';
 
-.bdl-EnumMetadataField {
+.metadata-instance-editor-field-multi-select {
     margin: 0 0 20px;
 
     .bdl-Label {
@@ -9,19 +9,14 @@
 
     label .select-container {
         display: block;
+        margin-top: 5px;
 
-        .datalist-item.select-option:first-child {
-            color: $bdl-gray-62;
-
-            .select-option-check-icon {
-                visibility: hidden;
-            }
+        .bdl-SelectButton {
+            z-index: inherit;
         }
     }
 
-    .bdl-EnumMetadataField-desc {
-        display: inline-block;
-        margin-bottom: 5px;
+    &-desc {
         color: $bdl-gray-62;
         word-wrap: break-word;
     }
@@ -32,6 +27,10 @@
 * Section below is for bdl-namespace backwards compatibility.
 * Do not add changes below this line.
 */
+.select-button {
+    @extend .bdl-SelectButton;
+}
+
 .label {
     @extend .bdl-Label;
 }

@@ -16,6 +16,7 @@ const Pill = ({ isDisabled = false, isSelected = false, isValid = true, onRemove
         'is-selected': isSelected && !isDisabled,
         'is-invalid': !isValid,
         'is-disabled': isDisabled,
+        'bdl-is-disabled': isDisabled,
     });
     const onClick = isDisabled ? noop : onRemove;
 
