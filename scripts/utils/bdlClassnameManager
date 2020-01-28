@@ -218,7 +218,7 @@ async function main() {
                 .join('|'),
             'g',
         );
-    } else if (jsExtensions.has(fileType) || fileType === '') {
+    } else if (jsExtensions.has(fileType)) {
         // The majority of .js classnames are surrounded by quotation marks
         // Restrict to those prefixes to avoid overrwriting variable names
         const converter = entry => jsPrefixes.map(prefix => `${prefix}${entry}`).join('|');
