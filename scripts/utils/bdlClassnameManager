@@ -29,6 +29,7 @@ const writeFile = promisify(fs.writeFile);
 */
 
 const conversionMap = {
+    // 'btn': 'bdl-Button',
     // 'btn-group': 'bdl-ButtonGroup',
     // 'btn-plain': 'bdl-Button--plain',
     // 'btn-primary': 'bdl-Button--primary',
