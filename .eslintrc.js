@@ -24,6 +24,7 @@ module.exports = {
             files: ['*.test.js', '*.test.tsx'],
             globals: {
                 blurInput: true,
+                clearInput: true,
                 shallow: true,
                 mount: true,
                 takeModalScreenshot: true,
