@@ -13,7 +13,7 @@ const messages = defineMessages({
     },
     invalidMetadataFieldType: {
         defaultMessage: 'Invalid metadata field type!',
-        description: 'Error message displayed if the template has an field type we dont recognize',
+        description: "Error message displayed if the template has an field type we don't recognize",
         id: 'boxui.metadataInstanceFields.invalidMetadataFieldType',
     },
     metadataFieldNoValue: {
@@ -28,7 +28,7 @@ const messages = defineMessages({
     },
     metadataFieldMultiSelectValue: {
         defaultMessage: 'Select Values',
-        description: 'Text to indicate to select one or more values from drop down list',
+        description: 'Text to indicate to select one or more values from dropdown list',
         id: 'boxui.metadataInstanceFields.fieldMultiSelectValue',
     },
     metadataFieldSetValue: {

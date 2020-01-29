@@ -15,7 +15,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
 
 exports[`features/metadata-instance-editor/fields/TemplatedInstance should correctly render fields that are visible 1`] = `
 <Fragment>
-  <Field
+  <MetadataField
     dataKey="hiddenfield"
     displayName="String Field that is hidden"
     isHidden={true}
@@ -24,7 +24,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     onRemove={[Function]}
     type="string"
   />
-  <Field
+  <MetadataField
     dataKey="nodescfield"
     displayName="No Description Field"
     isHidden={false}
@@ -33,7 +33,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     onRemove={[Function]}
     type="string"
   />
-  <Field
+  <MetadataField
     dataKey="stringfield"
     dataValue="some string"
     description="example of a string field"
@@ -44,7 +44,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     onRemove={[Function]}
     type="string"
   />
-  <Field
+  <MetadataField
     dataKey="emptystring"
     description="example of an empty string field"
     displayName="Empty String Field"
@@ -54,7 +54,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     onRemove={[Function]}
     type="string"
   />
-  <Field
+  <MetadataField
     dataKey="floatfield"
     dataValue={1}
     description="example of a float field"
@@ -65,7 +65,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     onRemove={[Function]}
     type="float"
   />
-  <Field
+  <MetadataField
     dataKey="emptyfloat"
     description="example of an empty float field"
     displayName="Empty Float Field"
@@ -75,7 +75,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     onRemove={[Function]}
     type="float"
   />
-  <Field
+  <MetadataField
     dataKey="enumfield"
     dataValue="yes"
     description="example of a enum field"
@@ -96,7 +96,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     }
     type="enum"
   />
-  <Field
+  <MetadataField
     dataKey="emptyenumfield"
     description="example of an empty enum field"
     displayName="Empty Enum Field"
@@ -116,7 +116,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     }
     type="enum"
   />
-  <Field
+  <MetadataField
     dataKey="datefield"
     dataValue="2018-06-20T00:00:00.000Z"
     description="example of a date field"
@@ -127,7 +127,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     onRemove={[Function]}
     type="date"
   />
-  <Field
+  <MetadataField
     dataKey="emptydatefield"
     description="example of an empty date field"
     displayName="Empty Date Field"
@@ -137,7 +137,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     onRemove={[Function]}
     type="date"
   />
-  <Field
+  <MetadataField
     dataKey="hiddenfield"
     displayName="Another string Field that is hidden"
     isHidden={true}

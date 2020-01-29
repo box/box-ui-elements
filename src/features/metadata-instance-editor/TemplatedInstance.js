@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Field from '../metadata-instance-fields/Field';
+import MetadataField from '../metadata-instance-fields/MetadataField';
 import messages from './messages';
 import { isHidden } from './metadataUtil';
 import type { MetadataFields, MetadataTemplate, MetadataFieldValue } from '../../common/types/metadata';
@@ -28,7 +28,7 @@ const TemplatedInstance = ({ canEdit, data = {}, errors, onFieldChange, onFieldR
         <>
             {hasVisibleFields &&
                 fields.map(field => (
-                    <Field
+                    <MetadataField
                         key={field.id}
                         canEdit={canEdit}
                         dataKey={field.key}

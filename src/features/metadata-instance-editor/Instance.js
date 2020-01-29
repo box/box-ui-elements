@@ -31,7 +31,7 @@ import {
     JSON_PATCH_OP_REPLACE,
     JSON_PATCH_OP_TEST,
 } from '../../common/constants';
-import { isValidValue } from '../metadata-instance-fields/validateField';
+import { isValidValue } from '../metadata-instance-fields/validateMetadataField';
 import { isHidden } from './metadataUtil';
 import { RESIN_TAG_TARGET } from '../../common/variables';
 import type {
