@@ -9,7 +9,7 @@ dist
 es
 i18n/*.js
 i18n/json
-i18n/data
+i18n/locale-data
 node_modules
 npm-debug.log
 npm-error.log

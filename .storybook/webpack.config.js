@@ -12,7 +12,7 @@ module.exports = async ({ config }) => {
     config.resolve.alias = {
         ...config.resolve.alias,
         'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
-        'box-locale-data': path.resolve(`i18n/data/${language}`),
+        'box-locale-data': path.resolve(`i18n/locale-data/${language}`),
     };
     config.module.rules.push(
         {

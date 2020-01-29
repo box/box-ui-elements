@@ -28,7 +28,9 @@ const fileId = process.env.FILEID; // used for examples only
 const outputDir = process.env.OUTPUT;
 const version = isRelease ? packageJSON.version : 'dev';
 const outputPath = outputDir ? path.resolve(outputDir) : path.resolve('dist', version, language);
-const Translations = new TranslationsPlugin();
+const Translations = new TranslationsPlugin({
+    generateLocaleData: true,
+});
 const entries = {
     picker: path.resolve('src/elements/wrappers/ContentPickers.js'),
     uploader: path.resolve('src/elements/wrappers/ContentUploader.js'),
@@ -71,7 +73,7 @@ function getConfig(isReactExternalized) {
                 'box-ui-elements/es': path.join(__dirname, '../src'), // for examples only
                 examples: path.join(__dirname, '../examples/src'), // for examples only
                 'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
-                'box-locale-data': path.resolve(`i18n/data/${language}`),
+                'box-locale-data': path.resolve(`i18n/locale-data/${language}`),
                 'rsg-components/Wrapper': path.join(__dirname, '../examples/Wrapper'), // for examples only
             },
         },

@@ -45,8 +45,7 @@
         "build:dev:dist": "LANGUAGE=en-US BABEL_ENV=development NODE_ENV=development webpack --config scripts/webpack.config.js --mode development --progress --colors",
         "build:dev:es": "BABEL_ENV=development NODE_ENV=development yarn build:es --copy-files --source-maps inline --watch --ignore \"**/*.d.ts,**/__tests__/**,**/__mocks__/**\"",
         "build:es": "babel src --extensions '.js,.tsx,.ts' --out-dir es",
-        "build:i18n-data": "node ./scripts/i18n/build-locale-data.js",
-        "build:i18n": "props2es",
+        "build:i18n": "props2es; node ./scripts/build_locale_data.js",
         "build:npm": "npm-run-all clean build:i18n build:prod:npm build:prod:es",
         "build:prod:analyze": "BUNDLE_ANALYSIS=true npm-run-all setup build:prod:npm",
         "build:prod:es": "BABEL_ENV=npm NODE_ENV=production yarn build:es --source-maps --ignore \"**/*.d.ts,**/__tests__/**,**/__mocks__/**\"",
@@ -57,7 +56,7 @@
         "build:sync": "LANGUAGE=en-US BABEL_ENV=development NODE_ENV=development RSYNC=true webpack --config scripts/webpack.config.js --mode development",
         "build:variables": "cat `find src/styles/constants -name '*.scss'` > src/styles/variables.scss | node ./scripts/build-style-vars.js src/styles/variables.scss && rm src/styles/variables.scss",
         "build:assets": "./scripts/asset-import/cli.js",
-        "clean": "rm -rf dist es i18n/data i18n/json i18n/*.js reports styleguide",
+        "clean": "rm -rf dist es i18n/json i18n/*.js i18n/locale-data reports styleguide",
         "copy:flow": "flow-copy-source --ignore \"**/__tests__/**\" --ignore \"**/__mocks__/**\" --ignore \"**/*.ts\" ./src ./es && copyfiles './src/**/*.js.flow' es --up 1",
         "copy:styles": "copyfiles './src/**/*.scss' es --up 1",
         "cy:open": "yarn cy:wait; yarn cypress open",
@@ -187,7 +186,6 @@
         "camelcase": "^5.3.1",
         "circular-dependency-plugin": "^5.2.0",
         "classnames": "^2.2.6",
-        "cldr-data": "^34.0.0",
         "color": "^3.1.2",
         "colors": "^1.4.0",
         "conventional-changelog": "^3.1.18",
@@ -348,6 +346,5 @@
             "@hapi/address": "Version 2.1.2+ requires a polyfill for TextEncoder. Pinning to version 2.1.1 prevents IE11 from breaking.",
             "react-tether": "Version 2.x has too many breaking changes and requires forwardRef on all components"
         }
-    },
-    "cldr-data-coverage": "full"
+    }
 }
