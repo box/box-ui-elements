@@ -15,3 +15,6 @@ export * from './avatar';
 
 export { default as AccessibleSVG } from './accessible-svg';
 export * from './accessible-svg';
+
+export { default as ButtonGroup } from './button-group';
+export * from './button-group';
