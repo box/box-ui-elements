@@ -21,6 +21,7 @@ describe('components/form-elements/text-area/TextArea', () => {
         await global.page.type(TEXTAREA_SELECTOR, userInput);
         await blurInput(TEXTAREA_SELECTOR);
         const image = await global.page.screenshot();
+        await clearInput(TEXTAREA_SELECTOR);
         return expect(image).toMatchImageSnapshot();
     });
 });
