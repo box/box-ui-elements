@@ -1,4 +1,5 @@
 describe('components/date-picker/DatePicker', () => {
+    const INPUT_SELECTOR = 'input';
     const DATEPICKER_STORIES = [
         'components-datepicker--basic',
         'components-datepicker--with-description',
@@ -23,7 +24,11 @@ describe('components/date-picker/DatePicker', () => {
     });
 
     test(`allows editing in story ${DATEPICKER_STORIES[2]}`, async () => {
-        const image = await takeScreenshotAfterInput(DATEPICKER_STORIES[2], 'input', 'type', '1/28/2020');
+        await global.page.goto(`http://localhost:6061/iframe.html?id=${DATEPICKER_STORIES[2]}`);
+        await global.page.waitForSelector(INPUT_SELECTOR);
+        await clearInput(INPUT_SELECTOR);
+        await global.page.type(INPUT_SELECTOR, '1/28/2020');
+        const image = await global.page.screenshot();
         return expect(image).toMatchImageSnapshot();
     });
 });

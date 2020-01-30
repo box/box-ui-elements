@@ -8,7 +8,7 @@ import notes from './DatePicker.stories.md';
 
 export const basic = () => {
     const MIN_TIME = new Date(0);
-    const TODAY = new Date();
+    const TODAY = new Date('July 18, 2018');
     const yearRange = [MIN_TIME.getFullYear(), TODAY.getFullYear()];
     const componentStore = new Store({
         date: new Date('July 9, 2018'),
@@ -49,7 +49,7 @@ export const withDescription = () => (
 
 export const manuallyEditable = () => (
     <IntlProvider locale="en" textComponent={React.Fragment}>
-        <DatePicker isTextInputAllowed placeholder="Date" label="Date Picker" />
+        <DatePicker isTextInputAllowed placeholder="Date" label="Date Picker" value={new Date('September 27, 2019')} />
     </IntlProvider>
 );
 
