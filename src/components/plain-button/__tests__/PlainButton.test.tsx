@@ -1,6 +1,6 @@
 import React from 'react';
-
-import PlainButton from '..';
+import { shallow } from 'enzyme';
+import PlainButton from '../PlainButton';
 
 describe('components/plain-button/PlainButton', () => {
     const getWrapper = (props = {}) => shallow(<PlainButton {...props} />);

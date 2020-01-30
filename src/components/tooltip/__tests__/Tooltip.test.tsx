@@ -1,15 +1,16 @@
 /* eslint-disable react/button-has-type */
 
-import React from 'react';
+import * as React from 'react';
 import sinon from 'sinon';
-
-import Tooltip from '../Tooltip';
+import { shallow } from 'enzyme';
+import Tooltip, { TooltipPosition, TooltipTheme } from '../Tooltip';
 
 const sandbox = sinon.sandbox.create();
 
 describe('components/tooltip/Tooltip', () => {
-    const getWrapper = props =>
-        shallow(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const getWrapper = (props: Record<string, any>) =>
+        shallow<Tooltip>(
             <Tooltip text="hi" {...props}>
                 <div>Hello</div>
             </Tooltip>,
@@ -152,7 +153,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should render correct attachments when position is specified', () => {
             const wrapper = shallow(
-                <Tooltip position="middle-right" text="hi">
+                <Tooltip position={TooltipPosition.MIDDLE_RIGHT} text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -175,6 +176,8 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should render TetherComponent in the body if invalid body element is specified', () => {
             const wrapper = shallow(
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                // @ts-ignore testing a wrong value for the bodyElement prop
                 <Tooltip bodyElement="foo" text="hi">
                     <button />
                 </Tooltip>,
@@ -207,7 +210,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should render error class when theme is error', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi" theme="error">
+                <Tooltip isShown text="hi" theme={TooltipTheme.ERROR}>
                     <button />
                 </Tooltip>,
             );
@@ -234,7 +237,7 @@ describe('components/tooltip/Tooltip', () => {
 
     describe('closeTooltip()', () => {
         test('should update the wasClosedByUser state', () => {
-            const wrapper = shallow(
+            const wrapper = shallow<Tooltip>(
                 <Tooltip text="hi">
                     <button />
                 </Tooltip>,
@@ -247,7 +250,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should call onDismiss if provided', () => {
             const onDismissMock = jest.fn();
-            const wrapper = shallow(
+            const wrapper = shallow<Tooltip>(
                 <Tooltip text="hi" onDismiss={onDismissMock}>
                     <button />
                 </Tooltip>,
@@ -363,6 +366,8 @@ describe('components/tooltip/Tooltip', () => {
             const positionTetherMock = jest.fn();
 
             const wrapper = getWrapper({ isShown });
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore: react-tether shenanigans
             wrapper.instance().tetherRef = { current: { position: positionTetherMock } };
 
             wrapper.instance().position();
