@@ -10,12 +10,17 @@ describe('components/text-input/TextInput', () => {
     ];
 
     test.each(TEXTINPUT_STORIES)('looks visually correct when using story %s', async id => {
-        const image = await takeScreenshot(id);
+        const image = await BoxVisualTestUtils.takeScreenshot(id);
         return expect(image).toMatchImageSnapshot();
     });
 
     test('clears required tooltip after entering text', async () => {
-        const image = await takeScreenshotAfterInput(TEXTINPUT_STORIES[6], 'input', 'type', 'abc@xyz.com');
+        const image = await BoxVisualTestUtils.takeScreenshotAfterInput(
+            TEXTINPUT_STORIES[6],
+            'input',
+            'type',
+            'abc@xyz.com',
+        );
         return expect(image).toMatchImageSnapshot();
     });
 });
