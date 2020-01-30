@@ -2,7 +2,7 @@ describe('components/context-menu/ContextMenu', () => {
     const CONTEXT_MENU_STORIES = ['components-contextmenu--basic', 'components-contextmenu--with-submenu'];
 
     test.each(CONTEXT_MENU_STORIES)('looks visually correct when using story %s', async id => {
-        const image = await takeScreenshot(id);
+        const image = await BoxVisualTestUtils.takeScreenshot(id);
         return expect(image).toMatchImageSnapshot();
     });
 

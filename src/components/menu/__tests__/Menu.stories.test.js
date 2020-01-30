@@ -10,14 +10,14 @@ describe('components/menu/Menu', () => {
         MENU_STORY_WITH_SELECT_MENU,
         MENU_STORY_WITH_CHILD_ON_RESIZE,
     ])('looks visually correct when using story %s', async id => {
-        const image = await takeScreenshot(id);
+        const image = await BoxVisualTestUtils.takeScreenshot(id);
         return expect(image).toMatchImageSnapshot();
     });
 
     test.each([MENU_STORY_WITH_SUBMENU, MENU_STORY_WITH_SUBMENU_FLIP])(
         'displays a submenu on hover in story %s',
         async id => {
-            const image = await takeScreenshotAfterInput(id, '.submenu-target', 'hover');
+            const image = await BoxVisualTestUtils.takeScreenshotAfterInput(id, '.submenu-target', 'hover');
             return expect(image).toMatchImageSnapshot();
         },
     );
