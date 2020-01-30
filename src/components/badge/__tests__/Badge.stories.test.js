@@ -11,7 +11,7 @@ describe('components/badge/Badge', () => {
         ['components-badge--trial-badge'],
         ['components-badge--upgrade-badge'],
     ])('looks visually correct when using story %s', async id => {
-        const image = await takeScreenshot(id);
+        const image = await BoxVisualTestUtils.takeScreenshot(id);
         return expect(image).toMatchImageSnapshot();
     });
 });

@@ -12,7 +12,7 @@ describe('components/form-elements/text-input/TextInput', () => {
     ];
 
     test.each(TEXT_INPUT_STORIES)('looks visually correct when using story %s', async id => {
-        const image = await takeScreenshot(id);
+        const image = await BoxVisualTestUtils.takeScreenshot(id);
         return expect(image).toMatchImageSnapshot();
     });
 
@@ -28,9 +28,9 @@ describe('components/form-elements/text-input/TextInput', () => {
     `('$description for $userInput', async ({ storyId, userInput }) => {
         await global.page.goto(`http://localhost:6061/iframe.html?id=${storyId}`);
         await global.page.waitForSelector(INPUT_SELECTOR);
-        await clearInput(INPUT_SELECTOR);
+        await BoxVisualTestUtils.clearInput(INPUT_SELECTOR);
         await global.page.type(INPUT_SELECTOR, userInput);
-        await blurInput(INPUT_SELECTOR);
+        await BoxVisualTestUtils.blurInput(INPUT_SELECTOR);
         const image = await global.page.screenshot();
         return expect(image).toMatchImageSnapshot();
     });
@@ -40,7 +40,12 @@ describe('components/form-elements/text-input/TextInput', () => {
         ${'abcde'}   | ${'abcde'}
         ${'abcdef'}  | ${'abcde'}
     `('displays $displayedInput when given $enteredInput', async ({ enteredInput }) => {
-        const image = await takeScreenshotAfterInput(TEXT_INPUT_STORIES[4], INPUT_SELECTOR, 'type', enteredInput);
+        const image = await BoxVisualTestUtils.takeScreenshotAfterInput(
+            TEXT_INPUT_STORIES[4],
+            INPUT_SELECTOR,
+            'type',
+            enteredInput,
+        );
         return expect(image).toMatchImageSnapshot();
     });
 });
