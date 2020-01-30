@@ -7,6 +7,7 @@ import UnifiedShareModalTitle from '../UnifiedShareModalTitle';
 describe('features/unified-share-modal/HeaderTitle', () => {
     let wrapper;
     const defaultItem = {
+        canUserSeeClassification: false,
         classification: 'internal',
         bannerPolicy: {
             body: 'test',
@@ -28,7 +29,17 @@ describe('features/unified-share-modal/HeaderTitle', () => {
         wrapper = getWrapper();
     });
 
-    test('should render classifiction label with title', () => {
+    test('should not render classifiction label when canUserSeeClassification is false', () => {
+        expect(wrapper.find('Classification').length).toBe(0);
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render classifiction label when canUserSeeClassification is true', () => {
+        const itemWithSeeClassification = {
+            ...defaultItem,
+            canUserSeeClassification: true,
+        };
+        wrapper = shallow(<UnifiedShareModalTitle item={itemWithSeeClassification} />);
+        expect(wrapper.find('Classification').length).toBe(1);
     });
 });
