@@ -1,5 +1,7 @@
 // @flow
 import * as React from 'react';
+import uniqueId from 'lodash/uniqueId';
+import classNames from 'classnames';
 
 import CheckboxTooltip from './CheckboxTooltip';
 
@@ -35,48 +37,59 @@ type Props = {
     value?: any,
 };
 
-const Checkbox = ({
-    className = '',
-    description,
-    fieldLabel,
-    hideLabel,
-    id,
-    isChecked,
-    isDisabled,
-    label,
-    name,
-    onChange,
-    subsection,
-    tooltip,
-    ...rest // @TODO: eventually remove `rest` in favor of explicit props
-}: Props) => {
-    const checkboxLabel = (
-        // eslint-disable-next-line jsx-a11y/label-has-for
-        <label className="checkbox-label">
-            <input
-                checked={isChecked}
-                disabled={isDisabled}
-                id={id}
-                name={name}
-                onChange={onChange}
-                type="checkbox"
-                {...rest}
-            />
-            {/* This span is used for the before/after checkbox styles, mouse clicks will target this element */}
-            <span className="checkbox-pointer-target" />
-            <span className={hideLabel ? 'accessibility-hidden' : ''}>{label}</span>
-        </label>
-    );
+class Checkbox extends React.Component<Props> {
+    checkboxID = uniqueId('checkbox');
 
-    return (
-        <div className={`checkbox-container ${className} ${isDisabled ? 'is-disabled' : ''}`}>
-            {fieldLabel && <div className="label">{fieldLabel}</div>}
-            {tooltip ? <CheckboxTooltip label={checkboxLabel} tooltip={tooltip} /> : checkboxLabel}
-            {description ? <div className="checkbox-description">{description}</div> : null}
-            {subsection ? <div className="checkbox-subsection">{subsection}</div> : null}
-        </div>
-    );
-};
+    render() {
+        const {
+            className,
+            description,
+            fieldLabel,
+            hideLabel,
+            id,
+            isChecked,
+            isDisabled,
+            label,
+            name,
+            onChange,
+            subsection,
+            tooltip,
+            ...rest // @TODO: eventually remove `rest` in favor of explicit props
+        } = this.props;
+
+        const inputID = id || this.checkboxID;
+
+        const checkboxAndLabel = (
+            <span className="checkbox-label">
+                <input
+                    checked={isChecked}
+                    disabled={isDisabled}
+                    id={inputID}
+                    name={name}
+                    onChange={onChange}
+                    type="checkbox"
+                    {...rest}
+                />
+                {/* This span is used for the before/after custom checkbox styles, but mouse clicks will pass through this element
+                    to the underlying <input> */}
+                <span className="checkbox-pointer-target" />
+                <span className={classNames('checkbox-label-tooltip-wrapper', { 'accessibility-hidden': hideLabel })}>
+                    <label htmlFor={inputID}>{label}</label>
+                    {tooltip && <CheckboxTooltip tooltip={tooltip} />}
+                </span>
+            </span>
+        );
+
+        return (
+            <div className={classNames('checkbox-container', className, { 'is-disabled': isDisabled })}>
+                {fieldLabel && <div className="label">{fieldLabel}</div>}
+                {checkboxAndLabel}
+                {description ? <div className="checkbox-description">{description}</div> : null}
+                {subsection ? <div className="checkbox-subsection">{subsection}</div> : null}
+            </div>
+        );
+    }
+}
 
 export type CheckboxProps = Props;
 export default Checkbox;
