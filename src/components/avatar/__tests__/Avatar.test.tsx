@@ -19,7 +19,7 @@ describe('components/avatar/Avatar', () => {
 
     test('should not allow unknown sizes', () => {
         // eslint-disable-next-line
-        // @ts-ignore
+        // @ts-ignore testing a wrong value for the size prop
         const wrapper = shallow(<Avatar name="hello" size="WRONG" />);
         expect(wrapper.is('span.avatar.avatar--WRONG')).toBe(false);
     });

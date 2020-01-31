@@ -57,6 +57,7 @@ export type item = {
         body: string,
         title: string,
     },
+    canUserSeeClassification: boolean,
     classification?: string,
     description: string,
     extension: string,

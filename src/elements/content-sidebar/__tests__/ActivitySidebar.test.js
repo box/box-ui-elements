@@ -477,6 +477,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 {
                     filter_term: search,
                     include_groups: true,
+                    include_uploader_collabs: false,
                 },
             );
         });
@@ -502,6 +503,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 {
                     filter_term: search,
                     include_groups: false,
+                    include_uploader_collabs: false,
                 },
             );
         });
@@ -551,6 +553,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 {
                     filter_term: search,
                     include_groups: false,
+                    include_uploader_collabs: false,
                 },
             );
         });
@@ -643,6 +646,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(file.id, successCb, errorCb, {
                 filter_term: searchStr,
                 include_groups: false,
+                include_uploader_collabs: false,
             });
         });
     });

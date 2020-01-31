@@ -4,7 +4,7 @@ describe('components/label/Label', () => {
         ['components-label--with-optional-text'],
         ['components-label--with-info-tooltip'],
     ])('looks visually correct when using story %s', async id => {
-        const image = await takeScreenshot(id);
+        const image = await BoxVisualTestUtils.takeScreenshot(id);
         return expect(image).toMatchImageSnapshot();
     });
 });
