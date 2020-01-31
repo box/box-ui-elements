@@ -16,6 +16,7 @@ import PlainButton from '../plain-button';
 import Tooltip from '../tooltip';
 
 import { convertDateToUnixMidnightTime } from '../../utils/datetime';
+import { get as getCookie } from '../../api/box-edit/cookies';
 
 import './DatePicker.scss';
 
@@ -46,6 +47,8 @@ const messages = defineMessages({
         id: 'boxui.datePicker.chooseDate',
     },
 });
+
+const localesWhereWeekStartsOnSunday = ['en-US', 'en-CA', 'jp-JP'];
 
 const TOGGLE_DELAY_MS = 300;
 const ISO_STRING_DATE_FORMAT = 'isoString';
@@ -195,6 +198,7 @@ class DatePicker extends React.Component<Props> {
             setDefaultDate: true,
             defaultDate: defaultValue,
             field: this.dateInputEl,
+            firstDay: localesWhereWeekStartsOnSunday.includes(getCookie('lang') || 'en-US') ? 0 : 1,
             maxDate,
             minDate,
             position: 'bottom left',
