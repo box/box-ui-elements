@@ -5,7 +5,7 @@ import {
     FIELD_TYPE_FLOAT,
     FIELD_TYPE_MULTISELECT,
     FIELD_TYPE_STRING,
-} from '../../features/metadata-instance-editor/constants';
+} from '../../features/metadata-instance-fields/constants';
 import type { SkillCards } from './skills';
 
 type MetadataFieldType =
