@@ -4,6 +4,7 @@ import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 
 import { Link, LinkGroup, LinkButton, LinkPrimaryButton } from '..';
+import { LinkBaseProps } from '../LinkBase';
 
 const sandbox = sinon.sandbox.create();
 
@@ -53,14 +54,13 @@ describe('components/link/Link', () => {
     });
 
     test('should use "component" prop for element if passed', () => {
-        /* eslint-disable react/prop-types */
-        const MyLink = ({ to, children, ...rest }) => (
-            <a {...rest} href={to}>
+        const MyLink = ({ href, children, ...rest }: LinkBaseProps) => (
+            <a {...rest} href={href}>
                 {children}
             </a>
         );
         const wrapper = mount(
-            <Link component={MyLink} to="my-route">
+            <Link component={MyLink} href="my-route">
                 a link
             </Link>,
         );
@@ -74,7 +74,7 @@ describe('components/link/Link', () => {
     test('should use "refProp" prop for element if passed', () => {
         const linkRef = jest.fn();
         mount(
-            <Link linkRef={linkRef} refProp="ref" to="my-route">
+            <Link linkRef={linkRef} refProp="ref" href="my-route">
                 a link
             </Link>,
         );

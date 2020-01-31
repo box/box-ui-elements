@@ -11,6 +11,24 @@ exports[`components/radio/RadioButtonField should render isSelected=false with v
 />
 `;
 
+exports[`components/radio/RadioButtonField should render isSelected=false with value=pumpkin 1`] = `
+<RadioButton
+  isSelected={false}
+  label="Red Velvet"
+  meta={
+    Object {
+      "initialTouched": false,
+      "touched": false,
+      "value": "redVelvet",
+    }
+  }
+  name="redVelvet"
+  onBlur={[Function]}
+  onChange={[Function]}
+  value="redVelvet"
+/>
+`;
+
 exports[`components/radio/RadioButtonField should render isSelected=false with value=undefined 1`] = `
 <RadioButton
   isSelected={false}
@@ -30,6 +48,24 @@ exports[`components/radio/RadioButtonField should render isSelected=false with v
   onBlur="onblur"
   onChange="onchange"
   value="radioValue"
+/>
+`;
+
+exports[`components/radio/RadioButtonField should render isSelected=true with value=chocolate 1`] = `
+<RadioButton
+  isSelected={false}
+  label="Red Velvet"
+  meta={
+    Object {
+      "initialTouched": false,
+      "touched": false,
+      "value": "redVelvet",
+    }
+  }
+  name="redVelvet"
+  onBlur={[Function]}
+  onChange={[Function]}
+  value="redVelvet"
 />
 `;
 
