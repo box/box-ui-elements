@@ -37,11 +37,16 @@
 .bcs-VersionsItem-details {
     flex: 1 1 100%;
     overflow: hidden;
+
+    & > :not(.bcs-VersionsItem-info) {
+        margin-right: 35px; // Avoid flowing under action toggle button
+    }
 }
 
-.bcs-VersionsItem-footer {
-    color: $bdl-gray-62;
-    font-size: 12px;
+.bcs-VersionsItem-log {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .bcs-VersionsItem-info {
@@ -51,11 +56,16 @@
     white-space: nowrap;
 }
 
-.bcs-VersionsItem-log {
-    margin-right: 35px; // Avoid flowing under action toggle button
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+.bcs-VersionsItem-retention {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    color: $bdl-gray-62;
+}
+
+.bcs-VersionsItem-footer {
+    color: $bdl-gray-62;
+    font-size: 12px;
 }
 
 .bcs-VersionsItem-size {

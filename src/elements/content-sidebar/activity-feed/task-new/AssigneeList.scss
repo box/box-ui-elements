@@ -1,5 +1,4 @@
 @import '../../../common/variables';
-@import './mixins';
 
 $bcs-AssigneeList-avatar-size: 28px;
 
@@ -20,14 +19,6 @@ $bcs-AssigneeList-avatar-size: 28px;
     height: $bcs-AssigneeList-avatar-size;
     margin-right: 10px;
     font-size: 9px;
-}
-
-.bcs-AssigneeList-listItemDetails {
-    line-height: 16px;
-}
-
-.bcs-AssigneeList-detailsStatus {
-    color: $bdl-gray-62;
 }
 
 .bcs-AssigneeList-toggleBtn {

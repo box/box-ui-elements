@@ -5,6 +5,8 @@
  */
 import * as React from 'react';
 import AvatarComponent from '../../../components/avatar';
+import type { GetAvatarUrlCallback } from '../../common/flowTypes';
+import type { User } from '../../../common/types/core';
 
 type Props = {
     className?: string,

@@ -49,24 +49,24 @@ class TabViewPrimitive extends React.Component<Props, State> {
         }
     }
 
-    componentWillReceiveProps(nextProps: Props) {
-        const { focusedIndex, isDynamic, selectedIndex } = nextProps;
-        if (isDynamic) {
-            if (focusedIndex !== this.props.focusedIndex) {
+    componentDidUpdate(prevProps: Props) {
+        const { focusedIndex: prevFocusedIndex, selectedIndex: prevSelectedIndex } = prevProps;
+        const { focusedIndex, selectedIndex } = this.props;
+
+        if (this.props.isDynamic) {
+            if (prevFocusedIndex !== focusedIndex) {
                 this.scrollToTab(focusedIndex);
-            } else {
-                // update tabsContainerOffsetLeft state when receiving a new prop
+            }
+
+            // update tabsContainerOffsetLeft state when receiving a new prop
+            if (prevSelectedIndex !== selectedIndex) {
                 this.scrollToTab(selectedIndex);
             }
         }
-    }
 
-    componentDidUpdate(prevProps: Props) {
-        const { focusedIndex } = prevProps;
-
-        if (focusedIndex !== this.props.focusedIndex) {
+        if (prevFocusedIndex !== focusedIndex) {
             // have to focus after render otherwise, the focus will be lost
-            this.focusOnTabElement(this.props.focusedIndex);
+            this.focusOnTabElement(focusedIndex);
         }
     }
 
@@ -222,9 +222,7 @@ class TabViewPrimitive extends React.Component<Props, State> {
                     const ariaControls = `${this.tabviewID}-panel-${i + 1}`;
                     const ariaSelected = i === selectedIndex;
                     const id = `${this.tabviewID}-tab-${i + 1}`;
-                    const href = tab.props.href;
-                    const component = tab.props.component;
-                    const refProp = tab.props.refProp;
+                    const { href, component, refProp } = tab.props;
 
                     const tabIndex = i === selectedIndex ? '0' : '-1';
 

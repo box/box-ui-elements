@@ -43,13 +43,19 @@ import AssigneeList from './AssigneeList';
 import TaskModal from '../../TaskModal';
 import commonMessages from '../../../common/messages';
 import messages from './messages';
+import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { ElementsXhrError } from '../../../../common/types/api';
+import type { SelectorItems, User } from '../../../../common/types/core';
+import type { ActionItemError } from '../../../../common/types/feed';
+import type { Translations } from '../../flowTypes';
+import type { FeatureConfig } from '../../../common/feature-checking';
 
 import './Task.scss';
 
 type Props = {|
     ...TaskNew,
     api: API,
-    approverSelectorContacts: SelectorItems,
+    approverSelectorContacts: SelectorItems<>,
     currentUser: User,
     error?: ActionItemError,
     features?: FeatureConfig,
@@ -141,15 +147,6 @@ class Task extends React.Component<Props, State> {
     handleEditModalClose = () => {
         const { onModalClose } = this.props;
         this.setState({ isEditing: false, modalError: undefined });
-
-        if (onModalClose) {
-            onModalClose();
-        }
-    };
-
-    handleEditSubmitSuccess = () => {
-        this.setState({ isEditing: false });
-        const { onModalClose } = this.props;
 
         if (onModalClose) {
             onModalClose();
@@ -265,6 +262,7 @@ class Task extends React.Component<Props, State> {
 
         return (
             <div className="bcs-Task">
+                {/* $FlowFixMe */}
                 {inlineError ? <ActivityError {...inlineError} /> : null}
                 <Media
                     className={classNames('bcs-Task-media', {
@@ -323,7 +321,7 @@ class Task extends React.Component<Props, State> {
                                 )}
                             </TetherComponent>
                         )}
-                        <div>
+                        <div className="bcs-Task-headline">
                             <FormattedMessage
                                 {...getMessageForTask(!!currentUserAssignment, task_type)}
                                 values={{
@@ -406,7 +404,7 @@ class Task extends React.Component<Props, State> {
                     error={modalError}
                     feedbackUrl={getFeatureConfig(features, 'activityFeed.tasks').feedbackUrl || ''}
                     onSubmitError={this.handleEditSubmitError}
-                    onSubmitSuccess={this.handleEditSubmitSuccess}
+                    onSubmitSuccess={this.handleEditModalClose}
                     onModalClose={this.handleEditModalClose}
                     isTaskFormOpen={isEditing}
                     taskFormProps={{

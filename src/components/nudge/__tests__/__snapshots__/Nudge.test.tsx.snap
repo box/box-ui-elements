@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/nudge/Nudge should correctly render Nudge 1`] = `
+<article
+  className="bdl-Nudge"
+>
+  <Button
+    aria-label="close-nudge"
+    className="bdl-Nudge-closeButton"
+    isLoading={false}
+    onClick={[MockFunction]}
+    showRadar={false}
+    type="submit"
+  >
+    <X16
+      height={18}
+      width={18}
+    />
+  </Button>
+  <div
+    className="bdl-Nudge-illustration"
+  >
+    <RelayPlanet140
+      height={170}
+      width={170}
+    />
+  </div>
+  <h2
+    className="bdl-Nudge-header"
+  >
+    <h3>
+      Heading goes here
+    </h3>
+  </h2>
+  <p
+    className="bdl-Nudge-content"
+  >
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque quis rutrum turpis.
+    </p>
+  </p>
+  <div
+    className="bdl-Nudge-button"
+  >
+    <PrimaryButton
+      onClick={[MockFunction]}
+    >
+      <span>
+        Pellentesque in port
+      </span>
+    </PrimaryButton>
+  </div>
+</article>
+`;

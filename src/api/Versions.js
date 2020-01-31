@@ -11,13 +11,15 @@ import {
     DEFAULT_FETCH_END,
     DEFAULT_FETCH_START,
     ERROR_CODE_DELETE_VERSION,
-    ERROR_CODE_FETCH_CURRENT_VERSION,
+    ERROR_CODE_FETCH_VERSION,
     ERROR_CODE_FETCH_VERSIONS,
     ERROR_CODE_PROMOTE_VERSION,
     ERROR_CODE_RESTORE_VERSION,
     PERMISSION_CAN_DELETE,
     PERMISSION_CAN_UPLOAD,
 } from '../constants';
+import type { ElementsErrorCallback } from '../common/types/api';
+import type { BoxItem, FileVersions, BoxItemVersionPermission, BoxItemVersion } from '../common/types/core';
 
 class Versions extends OffsetBasedAPI {
     /**
@@ -153,7 +155,7 @@ class Versions extends OffsetBasedAPI {
     }
 
     /**
-     * API for fetching the current version for a file
+     * API for fetching a certain version for a file
      *
      * @param {string} fileId - a box file id
      * @param {string} fileVersionId - a box file version id
@@ -161,13 +163,14 @@ class Versions extends OffsetBasedAPI {
      * @param {Function} errorCallback - the error callback
      * @returns {void}
      */
-    getCurrentVersion(
+    getVersion(
         fileId: string,
         fileVersionId: string,
         successCallback: BoxItemVersion => void,
         errorCallback: ElementsErrorCallback,
     ): void {
-        this.errorCode = ERROR_CODE_FETCH_CURRENT_VERSION;
+        this.errorCode = ERROR_CODE_FETCH_VERSION;
+
         this.get({
             id: fileId,
             successCallback,
@@ -184,7 +187,8 @@ class Versions extends OffsetBasedAPI {
     /**
      * Decorates the current version and adds it to an existing FileVersions object
      *
-     * @param {BoxItemVersion} version - a box version
+     * @param {BoxItemVersion} currentVersion - a box version
+     * @param {FileVersions} versions - versions response
      * @param {BoxItem} file - a box file
      * @returns {FileVersions} - a FileVersions object containing the decorated current version
      */
@@ -197,11 +201,11 @@ class Versions extends OffsetBasedAPI {
             return { entries: [currentVersion], total_count: 1 };
         }
 
-        const restoredFromId = getProp(file, 'restored_from.id');
-        const restoredVersion = versions.entries.find(version => version.id === restoredFromId);
+        const promotedFromId = getProp(file, 'restored_from.id');
+        const promotedVersion = versions.entries.find(version => version.id === promotedFromId);
 
-        if (restoredVersion) {
-            currentVersion.version_restored = restoredVersion.version_number;
+        if (promotedVersion) {
+            currentVersion.version_promoted = promotedVersion.version_number;
         }
 
         return { entries: [...versions.entries, currentVersion], total_count: versions.total_count + 1 };

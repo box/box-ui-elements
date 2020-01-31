@@ -71,12 +71,16 @@ class SearchForm extends React.Component<Props, State> {
         isEmpty: true,
     };
 
-    componentWillReceiveProps(nextProps) {
-        const { value } = nextProps;
-        // update state if input is controlled and becomes empty
-        if (typeof value !== 'undefined' && !value.trim()) {
-            this.setState({ isEmpty: true });
+    static getDerivedStateFromProps(props: Props): any {
+        const { value } = props;
+
+        if (value && !!value.trim()) {
+            return {
+                isEmpty: true,
+            };
         }
+
+        return null;
     }
 
     onClearHandler = (event: SyntheticEvent<>) => {

@@ -1,5 +1,13 @@
 // @flow
-import type { FileMini, FolderMini, ISODate, UserMini, MarkerPaginatedCollection } from './core';
+import type {
+    FileMini,
+    FolderMini,
+    ISODate,
+    UserMini,
+    GroupMini,
+    MarkerPaginatedCollection,
+    SelectorItems,
+} from './core';
 
 type ID = string;
 
@@ -86,7 +94,7 @@ type TaskPayload = {
 };
 
 type TaskUpdatePayload = {
-    addedAssignees: SelectorItems,
+    addedAssignees: SelectorItems<UserMini | GroupMini>,
     completion_rule: TaskCompletionRule,
     description: string,
     due_at?: ?string,

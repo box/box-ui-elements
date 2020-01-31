@@ -1,0 +1,19 @@
+@import '../../styles/variables';
+
+.bdl-Pagination {
+    display: flex;
+
+    .bdl-Pagination-count {
+        display: flex;
+        align-items: center;
+
+        .be-is-small & {
+            display: none;
+        }
+    }
+
+    .bdl-Pagination-toggle {
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+}

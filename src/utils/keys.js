@@ -23,7 +23,7 @@ function decode(event: KeyboardEvent | SyntheticKeyboardEvent<HTMLElement>) {
     // KeyboardEvent.keyIdentifier is the old spec supported in Safari.
     // Priority is given to the new spec.
     // $FlowFixMe
-    const keyIdentifier = event.keyIdentifier;
+    const { keyIdentifier } = event;
     let key: string = event.key || keyIdentifier || '';
 
     // Get the modifiers on their own

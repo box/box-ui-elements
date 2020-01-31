@@ -12,6 +12,11 @@
         display: block;
     }
 
+    .text-area-description {
+        color: $bdl-gray-62;
+        word-wrap: break-word;
+    }
+
     textarea {
         margin-top: 5px;
         font-family: inherit;

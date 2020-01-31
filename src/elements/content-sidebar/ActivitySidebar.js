@@ -6,31 +6,46 @@
 
 import * as React from 'react';
 import debounce from 'lodash/debounce';
-import noop from 'lodash/noop';
 import flow from 'lodash/flow';
+import noop from 'lodash/noop';
+import { FormattedMessage } from 'react-intl';
+import ActivityFeed from './activity-feed';
+import AddTaskButton from './AddTaskButton';
+import API from '../../api';
 import messages from '../common/messages';
+import SidebarContent from './SidebarContent';
+import { EVENT_JS_READY } from '../common/logger/constants';
+import { getBadUserError, getBadItemError } from '../../utils/error';
+import { mark } from '../../utils/performance';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
-import { getBadUserError, getBadItemError } from '../../utils/error';
-import API from '../../api';
 import { withLogger } from '../common/logger';
-import { mark } from '../../utils/performance';
-import { EVENT_JS_READY } from '../common/logger/constants';
-import ActivityFeed from './activity-feed';
-import SidebarContent from './SidebarContent';
-import AddTaskButton from './AddTaskButton';
-import SidebarUtils from './SidebarUtils';
 import {
     DEFAULT_COLLAB_DEBOUNCE,
     ORIGIN_ACTIVITY_SIDEBAR,
     SIDEBAR_VIEW_ACTIVITY,
     TASK_COMPLETION_RULE_ALL,
 } from '../../constants';
-import type { TaskCompletionRule, TaskType, TaskNew, TaskUpdatePayload } from '../../common/types/tasks';
+import type {
+    TaskCompletionRule,
+    TaskType,
+    TaskNew,
+    TaskUpdatePayload,
+    TaskCollabStatus,
+} from '../../common/types/tasks';
+import type { FocusableFeedItemType, FeedItems } from '../../common/types/feed';
+import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
+import type { WithLoggerProps } from '../../common/types/logging';
+import type { SelectorItems, User, UserMini, GroupMini, BoxItem, BoxItemPermission } from '../../common/types/core';
+import type { GetProfileUrlCallback } from '../common/flowTypes';
+import type { Translations, Collaborators, Errors } from './flowTypes';
+import type { FeatureConfig } from '../common/feature-checking';
 import './ActivitySidebar.scss';
 
 type ExternalProps = {
+    activeFeedEntryId?: string,
+    activeFeedEntryType?: FocusableFeedItemType,
     currentUser?: User,
     getUserProfileUrl?: GetProfileUrlCallback,
     onCommentCreate: Function,
@@ -43,6 +58,7 @@ type ExternalProps = {
 } & ErrorContextProps;
 
 type PropsWithoutContext = {
+    elementId: string,
     file: BoxItem,
     isDisabled: boolean,
     onVersionHistoryClick?: Function,
@@ -57,11 +73,11 @@ type Props = {
 
 type State = {
     activityFeedError?: Errors,
-    approverSelectorContacts: SelectorItems,
+    approverSelectorContacts: SelectorItems<UserMini | GroupMini>,
     currentUser?: User,
     currentUserError?: Errors,
     feedItems?: FeedItems,
-    mentionSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems<UserMini>,
 };
 
 export const activityFeedInlineError: Errors = {
@@ -149,7 +165,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     createTask = (
         message: string,
-        assignees: SelectorItems,
+        assignees: SelectorItems<>,
         taskType: TaskType,
         dueAt: ?string,
         completionRule: TaskCompletionRule,
@@ -231,7 +247,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.fetchFeedItems();
     };
 
-    updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: TaskAssignmentStatus): void => {
+    updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: TaskCollabStatus): void => {
         const { file, api } = this.props;
 
         api.getFeedAPI(false).updateTaskCollaborator(
@@ -355,7 +371,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     fetchFeedItems(shouldRefreshCache: boolean = false, shouldDestroy: boolean = false) {
         const { file, api, features } = this.props;
-        const shouldShowNewTasks = true;
         const shouldShowAppActivity = isFeatureEnabled(features, 'activityFeed.appActivity.enabled');
         api.getFeedAPI(shouldDestroy).feedItems(
             file,
@@ -363,8 +378,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             this.fetchFeedItemsSuccessCallback,
             this.fetchFeedItemsErrorCallback,
             this.errorCallback,
-            shouldShowNewTasks,
-            shouldShowAppActivity,
+            { shouldShowAppActivity },
         );
     }
 
@@ -429,7 +443,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {BoxItemCollection} collaborators - Collaborators response data
      * @return {void}
      */
-    getApproverContactsSuccessCallback = (collaborators: Collaborators): void => {
+    getApproverContactsSuccessCallback = (collaborators: { entries: SelectorItems<> }): void => {
         const { entries } = collaborators;
         this.setState({ approverSelectorContacts: entries });
     };
@@ -441,7 +455,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {BoxItemCollection} collaborators - Collaborators response data
      * @return {void}
      */
-    getMentionContactsSuccessCallback = (collaborators: Collaborators): void => {
+    getMentionContactsSuccessCallback = (collaborators: { entries: SelectorItems<> }): void => {
         const { entries } = collaborators;
         this.setState({ mentionSelectorContacts: entries });
     };
@@ -454,7 +468,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     getApproverWithQuery = debounce(
-        this.getCollaborators.bind(this, this.getApproverContactsSuccessCallback, this.errorCallback),
+        (searchStr: string) =>
+            this.getCollaborators(this.getApproverContactsSuccessCallback, this.errorCallback, searchStr, {
+                includeGroups: isFeatureEnabled(this.props.features, 'activityFeed.tasks.assignToGroup'),
+            }),
         DEFAULT_COLLAB_DEBOUNCE,
     );
 
@@ -466,7 +483,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     getMentionWithQuery = debounce(
-        this.getCollaborators.bind(this, this.getMentionContactsSuccessCallback, this.errorCallback),
+        (searchStr: string) =>
+            this.getCollaborators(this.getMentionContactsSuccessCallback, this.errorCallback, searchStr),
         DEFAULT_COLLAB_DEBOUNCE,
     );
 
@@ -476,9 +494,16 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
      * @param {string} searchStr - the search string
+     * @param {Object} [options]
+     * @param {boolean} [options.includeGroups] - return groups as well as users
      * @return {void}
      */
-    getCollaborators(successCallback: Function, errorCallback: ElementsErrorCallback, searchStr: string): void {
+    getCollaborators(
+        successCallback: Collaborators => void,
+        errorCallback: ElementsErrorCallback,
+        searchStr: string,
+        { includeGroups = false }: { includeGroups: boolean } = {},
+    ): void {
         // Do not fetch without filter
         const { file, api } = this.props;
         if (!searchStr || searchStr.trim() === '') {
@@ -487,6 +512,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         api.getFileCollaboratorsAPI(true).getFileCollaborators(file.id, successCallback, errorCallback, {
             filter_term: searchStr,
+            include_groups: includeGroups,
+            include_uploader_collabs: false,
         });
     }
 
@@ -540,10 +567,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const { isDisabled } = this.props;
         const { approverSelectorContacts } = this.state;
         const { getApproverWithQuery, getAvatarUrl, createTask, onTaskModalClose } = this;
-        const props = {
-            isDisabled,
-            onTaskModalClose,
-        };
         const taskFormProps = {
             approverSelectorContacts,
             completionRule: TASK_COMPLETION_RULE_ALL,
@@ -554,11 +577,21 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             message: '',
             approvers: [],
         };
-        return <AddTaskButton {...props} taskFormProps={taskFormProps} />;
+        return (
+            <AddTaskButton isDisabled={isDisabled} onTaskModalClose={onTaskModalClose} taskFormProps={taskFormProps} />
+        );
     };
 
     render() {
-        const { file, isDisabled = false, onVersionHistoryClick, getUserProfileUrl } = this.props;
+        const {
+            elementId,
+            file,
+            isDisabled = false,
+            onVersionHistoryClick,
+            getUserProfileUrl,
+            activeFeedEntryId,
+            activeFeedEntryType,
+        } = this.props;
         const {
             currentUser,
             approverSelectorContacts,
@@ -570,9 +603,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         return (
             <SidebarContent
-                className="bcs-activity"
-                title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_ACTIVITY)}
                 actions={this.renderAddTaskButton()}
+                className="bcs-activity"
+                elementId={elementId}
+                sidebarView={SIDEBAR_VIEW_ACTIVITY}
+                title={<FormattedMessage {...messages.sidebarActivityTitle} />}
             >
                 <ActivityFeed
                     file={file}
@@ -597,6 +632,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     getUserProfileUrl={getUserProfileUrl}
                     feedItems={feedItems}
                     currentUserError={currentUserError}
+                    activeFeedEntryId={activeFeedEntryId}
+                    activeFeedEntryType={activeFeedEntryType}
                 />
             </SidebarContent>
         );

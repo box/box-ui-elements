@@ -53,6 +53,7 @@ class SharedLinkSettingsModal extends Component {
         isOpen: PropTypes.bool,
         onRequestClose: PropTypes.func,
         submitting: PropTypes.bool,
+        warnOnPublic: PropTypes.bool,
         /** Function called on form submission. Format is:
          * ({
          *      expirationTimestamp: number (in milliseconds),
@@ -151,13 +152,13 @@ class SharedLinkSettingsModal extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { expirationError, passwordError, vanityNameError } = nextProps;
+    componentDidUpdate(prevProps) {
+        const { expirationError, passwordError, vanityNameError } = this.props;
 
         if (
-            this.props.expirationError !== expirationError ||
-            this.props.passwordError !== passwordError ||
-            this.props.vanityNameError !== vanityNameError
+            prevProps.expirationError !== expirationError ||
+            prevProps.passwordError !== passwordError ||
+            prevProps.vanityNameError !== vanityNameError
         ) {
             this.setState({
                 expirationError,

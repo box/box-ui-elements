@@ -4,7 +4,8 @@ import { FormattedMessage } from 'react-intl';
 
 import Field from './fields/Field';
 import messages from './messages';
-import isHidden from './metadataUtil';
+import { isHidden } from './metadataUtil';
+import type { MetadataFields, MetadataTemplate, MetadataFieldValue } from '../../common/types/metadata';
 import './TemplatedInstance.scss';
 
 type Props = {
@@ -24,7 +25,7 @@ const TemplatedInstance = ({ canEdit, data = {}, errors, onFieldChange, onFieldR
     const showHiddenFieldsMessage = hasFields && !hasVisibleFields;
 
     return (
-        <React.Fragment>
+        <>
             {hasVisibleFields &&
                 fields.map(field => (
                     <Field
@@ -60,7 +61,7 @@ const TemplatedInstance = ({ canEdit, data = {}, errors, onFieldChange, onFieldR
                     <FormattedMessage {...messages.noAttributesForTemplate} />
                 </div>
             )}
-        </React.Fragment>
+        </>
     );
 };
 

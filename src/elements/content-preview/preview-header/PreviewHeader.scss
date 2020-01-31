@@ -3,12 +3,23 @@
 .bcpr-PreviewHeader {
     display: flex;
     flex: 0 0 60px;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 15px;
+    padding: 0;
     font-size: 13px;
-    background-color: $bdl-gray-02;
-    border-bottom: 1px solid $bdl-gray-10;
+
+    .bcpr-PreviewHeader-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 15px;
+        background-color: $bdl-gray-02;
+        border-bottom: 1px solid $bdl-gray-10;
+    }
+
+    // Box Annotations selector
+    .bp-header {
+        flex: 1;
+        height: 60px;
+    }
 
     // Box Annotations overrides
     button.ba-btn-annotate-point-exit,
@@ -34,6 +45,7 @@
     .ba-point-post-cancel-container,
     .ba-draw-post-cancel-container {
         position: absolute;
+        top: 6px;
         right: 0;
         margin-right: 20px;
 
@@ -65,9 +77,11 @@
 }
 
 .bcpr-PreviewHeader--basic {
-    color: $bdl-gray-02;
-    background: $bdl-gray;
-    border-bottom: 1px solid $bdl-gray;
+    .bcpr-PreviewHeader-content {
+        color: $bdl-gray-02;
+        background: $bdl-gray;
+        border-bottom: 1px solid $bdl-gray;
+    }
 }
 
 .bcpr-PreviewHeader-controls {
@@ -87,8 +101,14 @@
 
 .bcpr-PreviewHeader-button.btn-plain {
     display: flex;
-    padding: 5px 10px;
+    align-items: center;
     color: $bdl-gray-02;
+
+    &,
+    &:hover,
+    &:active {
+        padding: 5px 10px;
+    }
 
     &:focus,
     &:hover {

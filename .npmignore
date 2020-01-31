@@ -13,16 +13,17 @@
 .github
 .gitignore
 .idea
+.jest
 .mergify.yml
 .npmignore
 .npmrc
 .nvmrc
 .prettierignore
 .prettierrc.js
+.storybook
 .stylelintignore
 .sublime-project
 .swp
-.travis.yml
 .vimrc
 .vscode
 .yarnrc
@@ -36,6 +37,8 @@ desktop.ini
 examples
 flow/
 flow-typed/npm/
+i18n/json
+jest.config.js
 jsconfig.json
 npm-debug.log
 npm-error.log
@@ -47,6 +50,7 @@ styleguide
 stylelint.config.js
 test
 Thumbs.db
+tsconfig.json
 yarn-debug.log
 yarn-error.log
 yarn.lock

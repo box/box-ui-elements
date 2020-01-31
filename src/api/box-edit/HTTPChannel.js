@@ -201,9 +201,7 @@ class HTTPChannel extends Channel {
         browserToComServerTimeoutMS: number,
         comServerToApplicationTimeoutSec: number,
     ): Promise<any> => {
-        const url = `${this.url}${this.currentPort}/application_request?application=${this.appName}&com=${
-            this.comChannelName
-        }&timeout=${comServerToApplicationTimeoutSec}`;
+        const url = `${this.url}${this.currentPort}/application_request?application=${this.appName}&com=${this.comChannelName}&timeout=${comServerToApplicationTimeoutSec}`;
         return this.sendComServerRequest(POST, url, data, browserToComServerTimeoutMS).then(results => {
             // TODO: does the error object need to be richer?
             const response = JSON.parse(results.responseText);
@@ -219,9 +217,7 @@ class HTTPChannel extends Channel {
         browserToComServerTimeoutMS: number,
         comServerToApplicationTimeoutSec: number,
     ): Promise<any> => {
-        const url = `${this.url}${this.currentPort}/application_command?application=${this.appName}&com=${
-            this.comChannelName
-        }&timeout=${comServerToApplicationTimeoutSec}`;
+        const url = `${this.url}${this.currentPort}/application_command?application=${this.appName}&com=${this.comChannelName}&timeout=${comServerToApplicationTimeoutSec}`;
         return this.sendComServerRequest(POST, url, data, browserToComServerTimeoutMS).then(results => {
             return JSON.parse(results.responseText);
         });

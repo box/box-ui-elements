@@ -6,6 +6,8 @@ import ScrollWrapper from '../../components/scroll-wrapper';
 import Header from './Header';
 import Instances from './Instances';
 import EmptyContent from './EmptyContent';
+import type { MetadataEditor, MetadataTemplate, MetadataCascadingPolicyData } from '../../common/types/metadata';
+import type { JSONPatchOperations } from '../../common/types/api';
 import './MetadataInstanceEditor.scss';
 
 type Props = {
@@ -22,6 +24,8 @@ type Props = {
         cascadingPolicy?: MetadataCascadingPolicyData,
         rawData: Object,
     ) => void,
+    selectedTemplateKey?: string,
+    templateFilters?: Array<string> | string,
     templates: Array<MetadataTemplate>,
     title?: React.Node,
 };
@@ -35,6 +39,7 @@ const MetadataInstanceEditor = ({
     onRemove,
     onAdd,
     onSave,
+    selectedTemplateKey,
     templates,
     title,
 }: Props) => (
@@ -57,6 +62,7 @@ const MetadataInstanceEditor = ({
                     onModification={onModification}
                     onRemove={onRemove}
                     onSave={onSave}
+                    selectedTemplateKey={selectedTemplateKey}
                 />
             </ScrollWrapper>
         )}

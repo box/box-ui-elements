@@ -19,6 +19,10 @@ import CommentForm from '../comment-form';
 import { bdlGray80 } from '../../../../styles/variables';
 import { PLACEHOLDER_USER } from '../../../../constants';
 import messages from './messages';
+import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { Translations } from '../../flowTypes';
+import type { SelectorItems, User } from '../../../../common/types/core';
+import type { BoxCommentPermission, ActionItemError } from '../../../../common/types/feed';
 import './Comment.scss';
 
 type Props = {
@@ -32,11 +36,11 @@ type Props = {
     id: string,
     isDisabled?: boolean,
     isPending?: boolean,
-    mentionSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems<>,
     modified_at?: string | number,
-    onDelete: ({ id: string, permissions?: BoxItemPermission }) => any,
-    onEdit: (id: string, text: string, hasMention: boolean, permissions?: BoxItemPermission) => any,
-    permissions?: BoxItemPermission,
+    onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any,
+    onEdit: (id: string, text: string, hasMention: boolean, permissions?: BoxCommentPermission) => any,
+    permissions?: BoxCommentPermission,
     tagged_message: string,
     translatedTaggedMessage?: string,
     translations?: Translations,
@@ -172,7 +176,7 @@ class Comment extends React.Component<Props, State> {
                                 )}
                             </TetherComponent>
                         )}
-                        <div>
+                        <div className="bcs-Comment-headline">
                             <UserLink
                                 data-resin-target={ACTIVITY_TARGETS.PROFILE}
                                 id={createdByUser.id}
@@ -191,6 +195,7 @@ class Comment extends React.Component<Props, State> {
                                 })}
                                 updateComment={this.handleUpdate}
                                 isOpen={isInputOpen}
+                                // $FlowFixMe
                                 user={currentUser}
                                 onCancel={this.commentFormCancelHandler}
                                 onFocus={this.commentFormFocusHandler}
@@ -213,6 +218,7 @@ class Comment extends React.Component<Props, State> {
                         )}
                     </Media.Body>
                 </Media>
+                {/* $FlowFixMe */}
                 {error ? <ActivityError {...error} /> : null}
             </div>
         );

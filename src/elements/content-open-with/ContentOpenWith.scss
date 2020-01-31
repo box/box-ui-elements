@@ -12,10 +12,6 @@
         align-items: center;
     }
 
-    .bcow-btn-header-text {
-        padding-left: 3px;
-    }
-
     .bcow-integration-icon {
         padding: 3px;
     }
@@ -25,7 +21,7 @@
     .bcow-menu-item-title {
         margin: 0;
         overflow: hidden;
-        color: $threes;
+        color: $bdl-gray;
         font-weight: bold;
         text-overflow: ellipsis;
     }

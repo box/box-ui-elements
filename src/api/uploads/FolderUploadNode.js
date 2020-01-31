@@ -12,6 +12,12 @@ import {
     ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED,
     ERROR_CODE_ITEM_NAME_IN_USE,
 } from '../../constants';
+import type {
+    UploadFileWithAPIOptions,
+    FileSystemFileEntry,
+    FolderUploadItem,
+    DirectoryReader,
+} from '../../common/types/upload';
 
 class FolderUploadNode {
     addFolderToUploadQueue: Function;

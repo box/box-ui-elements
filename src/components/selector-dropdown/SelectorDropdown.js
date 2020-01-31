@@ -62,10 +62,8 @@ class SelectorDropdown extends React.Component<Props, State> {
         this.selectorDropdownRef = React.createRef();
     }
 
-    UNSAFE_componentWillReceiveProps(nextProps: Props) {
-        const { shouldSetActiveItemOnOpen } = this.props;
-
-        if (this.haveChildrenChanged(nextProps.children)) {
+    componentDidUpdate({ shouldSetActiveItemOnOpen, children }: Props) {
+        if (this.haveChildrenChanged(children)) {
             // For UX purposes filtering the items is equivalent
             // to re-opening the dropdown. In such cases we highlight
             // the first item when configured to do so
@@ -113,12 +111,12 @@ class SelectorDropdown extends React.Component<Props, State> {
 
     selectorDropdownRef: { current: null | HTMLDivElement };
 
-    haveChildrenChanged = (nextChildren?: React.Node) => {
+    haveChildrenChanged = (prevChildren?: React.Node) => {
         const { children } = this.props;
         const childrenCount = React.Children.count(children);
-        const nextChildrenCount = React.Children.count(nextChildren);
+        const prevChildrenCount = React.Children.count(prevChildren);
 
-        if (childrenCount !== nextChildrenCount) {
+        if (childrenCount !== prevChildrenCount) {
             return true;
         }
 
@@ -127,8 +125,8 @@ class SelectorDropdown extends React.Component<Props, State> {
         }
 
         const childrenKeys = React.Children.map(children, child => child.key);
-        const nextChildrenKeys = React.Children.map(nextChildren, child => child.key);
-        return childrenKeys.some((childKey, index) => childKey !== nextChildrenKeys[index]);
+        const prevChildrenKeys = React.Children.map(prevChildren, child => child.key);
+        return childrenKeys.some((childKey, index) => childKey !== prevChildrenKeys[index]);
     };
 
     resetActiveItem = () => {
@@ -285,10 +283,10 @@ class SelectorDropdown extends React.Component<Props, State> {
                     const hasDivider = index === dividerIndex;
 
                     return (
-                        <React.Fragment>
+                        <>
                             {hasDivider && <hr className="SelectorDropdown-divider" />}
                             {React.cloneElement(item, itemProps)}
-                        </React.Fragment>
+                        </>
                     );
                 })}
             </ul>

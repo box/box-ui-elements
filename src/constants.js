@@ -24,6 +24,7 @@ export const VIEW_ERROR: 'error' = 'error';
 export const VIEW_UPLOAD_EMPTY: 'upload-empty' = 'upload-empty';
 export const VIEW_UPLOAD_IN_PROGRESS: 'upload-inprogress' = 'upload-inprogress';
 export const VIEW_UPLOAD_SUCCESS: 'upload-success' = 'upload-success';
+export const VIEW_METADATA: 'metadata' = 'metadata';
 
 /* ----------------------- ViewModes ---------------------------- */
 export const VIEW_MODE_LIST: 'list' = 'list';
@@ -137,6 +138,7 @@ export const FIELD_ACTIVITY_TEMPLATE: 'activity_template' = 'activity_template';
 export const FIELD_APP: 'app' = 'app';
 export const FIELD_OCCURRED_AT: 'occurred_at' = 'occurred_at';
 export const FIELD_RENDERED_TEXT: 'rendered_text' = 'rendered_text';
+export const FIELD_RETENTION: 'retention' = 'retention';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
@@ -154,7 +156,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '2.16.0';
+export const DEFAULT_PREVIEW_VERSION = '2.33.1';
 export const DEFAULT_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
@@ -173,6 +175,7 @@ export const DEFAULT_FETCH_START = 0;
 export const DEFAULT_FETCH_END = 1000;
 export const DEFAULT_VIEW_FILES: 'files' = 'files';
 export const DEFAULT_VIEW_RECENTS: 'recents' = 'recents';
+export const DEFAULT_VIEW_METADATA: 'metadata' = 'metadata';
 export const CLIENT_NAME_CONTENT_PICKER = 'ContentPicker';
 export const CLIENT_NAME_FILE_PICKER = 'FilePicker';
 export const CLIENT_NAME_FOLDER_PICKER = 'FolderPicker';
@@ -215,7 +218,7 @@ export const ERROR_CODE_FETCH_FOLDER = 'fetch_folder_error';
 export const ERROR_CODE_FETCH_WEBLINK = 'fetch_weblink_error';
 export const ERROR_CODE_FETCH_CLASSIFICATION = 'fetch_classification_error';
 export const ERROR_CODE_FETCH_COMMENTS = 'fetch_comments_error';
-export const ERROR_CODE_FETCH_CURRENT_VERSION = 'fetch_current_version_error';
+export const ERROR_CODE_FETCH_VERSION = 'fetch_version_error';
 export const ERROR_CODE_FETCH_VERSIONS = 'fetch_versions_error';
 export const ERROR_CODE_FETCH_TASKS = 'fetch_tasks_error';
 export const ERROR_CODE_FETCH_CURRENT_USER = 'fetch_current_user_error';
@@ -243,6 +246,7 @@ export const ERROR_CODE_DELETE_TASK_COLLABORATOR = 'delete_task_collaborator_err
 export const ERROR_CODE_DELETE_ITEM = 'delete_item_error';
 export const ERROR_CODE_DELETE_METADATA = 'delete_metadata_error';
 export const ERROR_CODE_DELETE_VERSION = 'delete_version_error';
+export const ERROR_CODE_GROUP_EXCEEDS_LIMIT = 'group_exceeds_limit';
 export const ERROR_CODE_PROMOTE_VERSION = 'promote_version_error';
 export const ERROR_CODE_RESTORE_VERSION = 'restore_version_error';
 export const ERROR_CODE_UPDATE_TASK = 'update_task_error';
@@ -282,7 +286,7 @@ export const METRIC_TYPE_ELEMENTS_LOAD_METRIC: 'elements_load_metric' = 'element
 export const IS_ERROR_DISPLAYED = 'isErrorDisplayed'; // used to determine if user will see some error state or message
 
 /* ------------- Representation Hints ------------------- */
-const X_REP_HINT_BASE = '[3d][pdf][text][mp3]';
+const X_REP_HINT_BASE = '[3d][pdf][text][mp3][json]';
 const X_REP_HINT_DOC_THUMBNAIL = '[jpg?dimensions=1024x1024&paged=false]';
 const X_REP_HINT_IMAGE = '[jpg?dimensions=2048x2048,png?dimensions=2048x2048]';
 const X_REP_HINT_VIDEO_DASH = '[dash,mp4][filmstrip]';
@@ -358,33 +362,33 @@ export const HTTP_STATUS_CODE_GATEWAY_TIMEOUT: 504 = 504;
 
 /* ------------------ Version Action Types  ---------------------- */
 export const VERSION_DELETE_ACTION: 'delete' = 'delete';
+export const VERSION_PROMOTE_ACTION: 'promote' = 'promote';
 export const VERSION_RESTORE_ACTION: 'restore' = 'restore';
 export const VERSION_UPLOAD_ACTION: 'upload' = 'upload';
 
+/* ------------------ Version Retention Policy Action Types  ---------------------- */
+export const VERSION_RETENTION_DELETE_ACTION: 'permanently_delete' = 'permanently_delete';
+export const VERSION_RETENTION_REMOVE_ACTION: 'remove_retention' = 'remove_retention';
+export const VERSION_RETENTION_INDEFINITE: 'indefinite' = 'indefinite';
+
 /* ------------------ Placeholder Feed Items ------------------------- */
-export const PLACEHOLDER_USER: User = { type: 'user', id: '2', name: '' };
+export const PLACEHOLDER_USER = { type: 'user', id: '2', name: '' };
 
 /* ------------------ Open With ------------------------- */
-export const APP_INTEGRATION = 'app_integration';
+export const APP_INTEGRATION: 'app_integration' = 'app_integration';
 export const BOX_EDIT_INTEGRATION_ID = '1338';
 export const BOX_EDIT_SFC_INTEGRATION_ID = '13418';
 export const OPEN_WITH_BUTTON_ICON_SIZE = 26;
 export const OPEN_WITH_MENU_ITEM_ICON_SIZE = 30;
 
-/* ------------------ Legacy Task Assignment Statuses ----------------- */
-export const TASK_APPROVED: 'approved' = 'approved';
-export const TASK_COMPLETED: 'completed' = 'completed';
-export const TASK_INCOMPLETE: 'incomplete' = 'incomplete';
-export const TASK_REJECTED: 'rejected' = 'rejected';
-
-/* ------------------ New Task Statuses ----------------- */
+/* ------------------ Task Statuses ----------------- */
 export const TASK_NEW_APPROVED: 'APPROVED' = 'APPROVED';
 export const TASK_NEW_COMPLETED: 'COMPLETED' = 'COMPLETED';
 export const TASK_NEW_NOT_STARTED: 'NOT_STARTED' = 'NOT_STARTED';
 export const TASK_NEW_IN_PROGRESS: 'IN_PROGRESS' = 'IN_PROGRESS';
 export const TASK_NEW_REJECTED: 'REJECTED' = 'REJECTED';
 
-/* ------------------ New Task types ----------------- */
+/* ------------------ Task types ----------------- */
 export const TASK_TYPE_GENERAL: 'GENERAL' = 'GENERAL';
 export const TASK_TYPE_APPROVAL: 'APPROVAL' = 'APPROVAL';
 
@@ -396,9 +400,8 @@ export const TASK_COMPLETION_RULE_ANY: 'ANY_ASSIGNEE' = 'ANY_ASSIGNEE';
 export const TASK_EDIT_MODE_CREATE: 'CREATE' = 'CREATE';
 export const TASK_EDIT_MODE_EDIT: 'EDIT' = 'EDIT';
 
-/* ------------------ Comment types ----------------- */
-export const COMMENT_TYPE_DEFAULT: 'comment' = 'comment';
-export const COMMENT_TYPE_TASK: 'task' = 'task';
+/* ----------------- Task Validation ---------------- */
+export const TASK_MAX_GROUP_ASSIGNEES: 250 = 250;
 
 /* ------------------ Keyboard Events ----------------- */
 export const KEYS = {

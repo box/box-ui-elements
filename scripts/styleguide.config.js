@@ -1,4 +1,6 @@
 const path = require('path');
+// const typescriptDocGen = require('react-docgen-typescript');
+// const reactDocGen = require('react-docgen');
 const webpackConf = require('./webpack.config.js');
 
 const webpackConfig = Array.isArray(webpackConf) ? webpackConf[0] : webpackConf;
@@ -31,12 +33,9 @@ const allSections = [
     {
         name: 'Components',
         components: () => [
-            '../src/components/avatar/Avatar.js',
             '../src/components/badge/Badge.js',
             '../src/components/badgeable/Badgeable.js',
             '../src/components/breadcrumb/Breadcrumb.js',
-            '../src/components/button/Button.js',
-            '../src/components/button-group/ButtonGroup.js',
             '../src/components/checkbox/Checkbox.js',
             '../src/components/collapsible/Collapsible.js',
             '../src/components/context-menu/ContextMenu.js',
@@ -64,8 +63,6 @@ const allSections = [
             '../src/components/link/LinkButton.js',
             '../src/components/link/LinkGroup.js',
             '../src/components/link/LinkPrimaryButton.js',
-            '../src/components/loading-indicator/LoadingIndicator.js',
-            '../src/components/loading-indicator/LoadingIndicatorWrapper.js',
             '../src/components/logo/Logo.js',
             '../src/components/menu/Menu.js',
             '../src/components/menu/SelectMenuLinkItem.js',
@@ -77,10 +74,9 @@ const allSections = [
             '../src/components/notification/NotificationsWrapper.js',
             '../src/components/pill-cloud/PillCloud.js',
             '../src/components/pill-selector-dropdown/PillSelectorDropdown.js',
-            '../src/components/plain-button/PlainButton.js',
+            '../src/components/popper/PopperComponent.js',
             '../src/components/primary-button/PrimaryButton.js',
             '../src/components/progress-bar/ProgressBar.js',
-            '../src/components/radar/RadarAnimation.js',
             '../src/components/radio/RadioButton.js',
             '../src/components/radio/RadioGroup.js',
             '../src/components/time/ReadableTime.js',
@@ -97,9 +93,17 @@ const allSections = [
             '../src/components/text-area/TextArea.js',
             '../src/components/text-input/TextInput.js',
             '../src/components/text-input-with-copy-button/TextInputWithCopyButton.js',
+            '../src/components/theme/index.js',
             '../src/components/thumbnail-card/ThumbnailCard.js',
             '../src/components/toggle/Toggle.js',
-            '../src/components/tooltip/Tooltip.js',
+
+            '../src/components/avatar/Avatar.tsx',
+            '../src/components/button/Button.tsx',
+            '../src/components/button-group/ButtonGroup.tsx',
+            '../src/components/loading-indicator/LoadingIndicator.tsx',
+            '../src/components/plain-button/PlainButton.tsx',
+            '../src/components/primary-button/PrimaryButton.tsx',
+            '../src/components/tooltip/Tooltip.tsx',
         ],
         description: 'Box UI Elements components implement the reusable building blocks of the Box Design Language',
         sectionDepth: 2,
@@ -157,7 +161,7 @@ const allSections = [
             },
             {
                 name: 'General',
-                components: '../src/icons/general/[A-Z]*.js',
+                content: '../src/icons/general/README.md',
             },
             {
                 name: 'Google Docs',
@@ -169,7 +173,7 @@ const allSections = [
             },
             {
                 name: 'Items',
-                components: ['../src/icons/bookmark-icon/BookmarkIcon.js', '../src/icons/item-icon/ItemIcon.js'],
+                components: ['../src/icons/item-icon/ItemIcon.js'],
             },
             {
                 name: 'iWork',
@@ -233,7 +237,6 @@ const allSections = [
             '../src/features/shared-link-modal/SharedLinkModal.js',
             '../src/features/shared-link-settings-modal/SharedLinkSettingsModal.js',
             '../src/features/unified-share-modal/UnifiedShareModal.js',
-            '../src/features/version-history-modal/VersionHistoryModal.js',
         ],
         sections: [
             {
@@ -278,7 +281,8 @@ const allSections = [
 
 module.exports = {
     getComponentPathLine(componentPath) {
-        const name = path.basename(componentPath, '.js');
+        const extension = path.extname(componentPath);
+        const name = path.basename(componentPath, extension);
         const dir = path.dirname(componentPath);
         const packageRelativePath = dir.replace(/.*\/src\//, '');
         return `import ${name} from 'box-ui-elements/es/${packageRelativePath}/${name}';`;
@@ -288,6 +292,13 @@ module.exports = {
     showSidebar: process.env.BROWSERSLIST_ENV !== 'test',
     styleguideDir: path.join(__dirname, '../styleguide'),
     sections: allSections,
+    // Default exports are not supported by typescript DocGen
+    // propsParser(filePath, source, resolver, handlers) {
+    //     const extension = path.extname(filePath);
+    //     return extension === '.js'
+    //         ? reactDocGen.parse(source, resolver, handlers)
+    //         : typescriptDocGen.withDefaultConfig({}).parse(source, resolver, handlers);
+    // },
     styles: {
         Heading: {
             heading: {

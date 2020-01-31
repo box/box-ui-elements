@@ -6,6 +6,9 @@
 import MarkerBasedAPI from './MarkerBasedAPI';
 import { ERROR_CODE_DELETE_APP_ACTIVITY, HTTP_STATUS_CODE_NOT_FOUND } from '../constants';
 import { APP_ACTIVITY_FIELDS_TO_FETCH } from '../utils/fields';
+import type { ElementsErrorCallback } from '../common/types/api';
+import type { AppActivityAPIItem, AppActivityAPIItems, AppActivityItem } from '../common/types/feed';
+import type { BoxItemPermission } from '../common/types/core';
 
 class AppActivity extends MarkerBasedAPI {
     /** @property {BoxItemPermission} - Placeholder permissions object to determine if app activity can be deleted */

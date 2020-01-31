@@ -22,6 +22,9 @@ import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
+import type { AdditionalSidebarTab } from './flowTypes';
+import type { MetadataEditor } from '../../common/types/metadata';
+import type { BoxItem, User } from '../../common/types/core';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -101,6 +104,11 @@ class Sidebar extends React.Component<Props, State> {
         }
     }
 
+    getUrlPrefix = (pathname: string) => {
+        const basePath = pathname.substring(1).split('/')[0];
+        return basePath;
+    };
+
     /**
      * Handle version history click
      *
@@ -112,11 +120,13 @@ class Sidebar extends React.Component<Props, State> {
         const { file_version: currentVersion } = file;
         const fileVersionSlug = currentVersion ? `/${currentVersion.id}` : '';
 
+        const urlPrefix = this.getUrlPrefix(history.location.pathname);
+
         if (event.preventDefault) {
             event.preventDefault();
         }
 
-        history.push(`${history.location.pathname}/versions${fileVersionSlug}`);
+        history.push(`/${urlPrefix}/versions${fileVersionSlug}`);
     };
 
     /**
@@ -225,9 +235,10 @@ class Sidebar extends React.Component<Props, State> {
                         <LoadingIndicator />
                     </div>
                 ) : (
-                    <React.Fragment>
+                    <>
                         <SidebarNav
                             additionalTabs={additionalTabs}
+                            elementId={this.id}
                             fileId={fileId}
                             hasActivity={hasActivity}
                             hasAdditionalTabs={hasAdditionalTabs}
@@ -239,6 +250,7 @@ class Sidebar extends React.Component<Props, State> {
                         <SidebarPanels
                             activitySidebarProps={activitySidebarProps}
                             currentUser={currentUser}
+                            elementId={this.id}
                             detailsSidebarProps={detailsSidebarProps}
                             file={file}
                             fileId={fileId}
@@ -257,7 +269,7 @@ class Sidebar extends React.Component<Props, State> {
                             ref={this.sidebarPanels}
                             versionsSidebarProps={versionsSidebarProps}
                         />
-                    </React.Fragment>
+                    </>
                 )}
             </aside>
         );

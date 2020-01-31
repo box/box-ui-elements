@@ -90,7 +90,7 @@ const ContentExplorerActionButtons = ({
                 onClick={onCancelClick}
                 {...cancelButtonProps}
             >
-                {<FormattedMessage {...messages.cancel} />}
+                <FormattedMessage {...messages.cancel} />
             </Button>
             {(contentExplorerMode === ContentExplorerModes.SELECT_FILE ||
                 contentExplorerMode === ContentExplorerModes.SELECT_FOLDER ||

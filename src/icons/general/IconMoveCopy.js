@@ -2,35 +2,23 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
+import { bdlGray80 } from '../../styles/variables';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconMoveCopy = ({ className = '', color = '#444', height = 14, title, width = 13 }: Props) => (
+const IconMoveCopy = ({ className = '', color = bdlGray80, height = 16, title, width = 16 }: Icon) => (
     <AccessibleSVG
         className={`icon-move-copy ${className}`}
         height={height}
         title={title}
-        viewBox="0 0 13 14"
+        viewBox="0 0 16 16"
         width={width}
     >
         <path
             className="fill-color"
-            d="M3 2.5h-.5V14h10V3c0-.6-.4-1-1-1h-9v.5H3V3h8.5v10h-8V2.5H3V3v-.5z"
             fill={color}
-        />
-        <path className="fill-color" d="M.5 0h1v11h-1z" fill={color} />
-        <path className="fill-color" d="M.5 0h9v1h-9z" fill={color} />
-        <path
-            className="fill-color"
-            d="M6 6h3c.3 0 .5.2.5.5S9.3 7 9 7H6c-.3 0-.5-.2-.5-.5S5.7 6 6 6zm0 3h3c.3 0 .5.2.5.5s-.2.5-.5.5H6c-.3 0-.5-.2-.5-.5S5.7 9 6 9z"
-            fill={color}
+            fillRule="evenodd"
+            d="M4 3h9c.557 0 .942.345.994.875L14 4v11H4V3h9zm9 1H5v10h8V4zm-2-3v1H3v10H2V1h9zm-.5 9c.3 0 .5.2.5.5s-.2.5-.5.5h-3c-.3 0-.5-.2-.5-.5s.2-.5.5-.5h3zm0-3c.3 0 .5.2.5.5s-.2.5-.5.5h-3c-.3 0-.5-.2-.5-.5s.2-.5.5-.5h3z"
         />
     </AccessibleSVG>
 );

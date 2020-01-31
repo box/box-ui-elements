@@ -28,6 +28,17 @@ import {
     ERROR_CODE_FETCH_SKILLS,
 } from '../constants';
 
+import type { FetchOptions, ElementsErrorCallback, JSONPatchOperations } from '../common/types/api';
+import type {
+    MetadataTemplateSchemaResponse,
+    MetadataTemplate,
+    MetadataInstanceV2,
+    MetadataEditor,
+    MetadataFields,
+} from '../common/types/metadata';
+import type { BoxItem } from '../common/types/core';
+import type APICache from '../utils/Cache';
+
 class Metadata extends File {
     /**
      * Creates a key for the metadata cache
@@ -92,6 +103,16 @@ class Metadata extends File {
      */
     getMetadataTemplateUrlForInstance(id: string): string {
         return `${this.getMetadataTemplateUrl()}?metadata_instance_id=${id}`;
+    }
+
+    /**
+     * API URL for getting metadata template schema by template key
+     *
+     * @param {string} templateKey - metadata template key
+     * @return {string} API url for getting template schema by template key
+     */
+    getMetadataTemplateSchemaUrl(templateKey: string): string {
+        return `${this.getMetadataTemplateUrl()}/enterprise/${templateKey}/schema`;
     }
 
     /**
@@ -177,6 +198,17 @@ class Metadata extends File {
         }
 
         return getProp(templates, 'data.entries', []);
+    }
+
+    /**
+     * Gets metadata template schema by template key
+     *
+     * @param {string} templateKey - template key
+     * @return {Promise} Promise object of metadata template
+     */
+    getSchemaByTemplateKey(templateKey: string): Promise<MetadataTemplateSchemaResponse> {
+        const url = this.getMetadataTemplateSchemaUrl(templateKey);
+        return this.xhr.get({ url });
     }
 
     /**
@@ -555,11 +587,13 @@ class Metadata extends File {
                 const key = this.getMetadataCacheKey(id);
                 const cachedMetadata = cache.get(key);
                 const editor = this.createEditor(metadata.data, template, canEdit);
-                cachedMetadata.editors.splice(
-                    cachedMetadata.editors.findIndex(({ instance }) => instance.id === editor.instance.id),
-                    1,
-                    editor,
-                );
+                if (cachedMetadata && cachedMetadata.editors) {
+                    cachedMetadata.editors.splice(
+                        cachedMetadata.editors.findIndex(({ instance }) => instance.id === editor.instance.id),
+                        1,
+                        editor,
+                    );
+                }
                 this.successHandler(editor);
             }
         } catch (e) {

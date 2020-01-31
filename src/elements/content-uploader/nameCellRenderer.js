@@ -5,9 +5,12 @@
 
 import React from 'react';
 import IconName from './IconName';
+import type { UploadItem } from '../../common/types/upload';
 
 type Props = {
     rowData: UploadItem,
 };
 
-export default () => ({ rowData }: Props) => <IconName {...rowData} />;
+export default (isResumableUploadsEnabled: boolean) => ({ rowData }: Props) => (
+    <IconName isResumableUploadsEnabled={isResumableUploadsEnabled} {...rowData} />
+);

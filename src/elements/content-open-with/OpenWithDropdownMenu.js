@@ -9,6 +9,8 @@ import DropdownMenu from '../../components/dropdown-menu/DropdownMenu';
 import Menu from '../../components/menu/Menu';
 import OpenWithDropdownMenuItem from './OpenWithDropdownMenuItem';
 import MultipleIntegrationsOpenWithButton from './MultipleIntegrationsOpenWithButton';
+import type { Alignment } from '../common/flowTypes';
+import type { Integration } from '../../common/types/integrations';
 
 type Props = {
     dropdownAlignment: Alignment,

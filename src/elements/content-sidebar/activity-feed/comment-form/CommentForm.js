@@ -7,6 +7,7 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import Avatar from '../Avatar';
 import CommentFormControls from './CommentFormControls';
 import DraftJSMentionSelector, {
@@ -15,6 +16,8 @@ import DraftJSMentionSelector, {
 import Form from '../../../../components/form-elements/form/Form';
 import Media from '../../../../components/media';
 import messages from './messages';
+import type { GetAvatarUrlCallback } from '../../../common/flowTypes';
+import type { SelectorItems, User } from '../../../../common/types/core';
 
 import './CommentForm.scss';
 
@@ -27,10 +30,10 @@ type Props = {
     isDisabled?: boolean,
     isEditing?: boolean,
     isOpen: boolean,
-    mentionSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems<>,
     onCancel: Function,
     onFocus: Function,
-    onSubmit: Function,
+    onSubmit?: Function,
     tagged_message?: string,
     updateComment?: Function,
     user: User,
@@ -49,10 +52,10 @@ class CommentForm extends React.Component<Props, State> {
         commentEditorState: createMentionSelectorState(this.props.tagged_message),
     };
 
-    componentWillReceiveProps(nextProps: Props): void {
-        const { isOpen } = nextProps;
+    componentDidUpdate({ isOpen: prevIsOpen }: Props): void {
+        const { isOpen } = this.props;
 
-        if (isOpen !== this.props.isOpen && !isOpen) {
+        if (isOpen !== prevIsOpen && !isOpen) {
             this.setState({
                 commentEditorState: createMentionSelectorState(),
             });

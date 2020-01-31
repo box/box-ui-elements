@@ -6,14 +6,6 @@ const selectedRowClassName = 'bce-item-row-selected';
 const listViewClass = 'bce-item-grid';
 const gridViewClass = 'bdl-GridView';
 
-const gridViewOn = {
-    contentExplorer: {
-        gridView: {
-            enabled: true,
-        },
-    },
-};
-
 const helpers = {
     load({ props, features } = {}) {
         cy.visit('/Elements/ContentExplorer', {
@@ -200,14 +192,14 @@ describe('ContentExplorer', () => {
             helpers.checkRowSelections(1);
             helpers.selectRow(4);
             helpers.checkRowSelections(4);
-            helpers.previewItemFromRow(2);
-            helpers.getClosePreviewButton(2).click();
-            helpers.checkRowSelections(2);
-            helpers.selectRow(5);
+            helpers.previewItemFromRow(5);
+            helpers.getClosePreviewButton(5).click();
             helpers.checkRowSelections(5);
+            helpers.selectRow(6);
+            helpers.checkRowSelections(6);
             helpers.openUploadModal();
             helpers.getCloseButton().click();
-            helpers.checkRowSelections(5);
+            helpers.checkRowSelections(6);
             helpers.selectRow(3);
             helpers.checkRowSelections(3);
             helpers.getShareButton(2).click();
@@ -229,7 +221,7 @@ describe('ContentExplorer', () => {
 
     describe('Grid View', () => {
         beforeEach(() => {
-            helpers.load({ features: gridViewOn });
+            helpers.load();
             helpers
                 .getViewModeChangeButton()
                 .click()

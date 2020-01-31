@@ -18,6 +18,7 @@ import {
     STATUS_IN_PROGRESS,
     STATUS_STAGED,
 } from '../../constants';
+import type { UploadItem } from '../../common/types/upload';
 
 type Props = {
     rowData: UploadItem,

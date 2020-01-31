@@ -1,29 +1,29 @@
 // @flow
 import * as React from 'react';
+import classNames from 'classnames';
 
 import AccessibleSVG from '../accessible-svg';
+import type { Icon } from '../flowTypes';
+import { bdlGray50 } from '../../styles/variables';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
-
-const IconClock = ({ className = '', color = '#979797', height = 16, title, width = 16 }: Props) => (
+const IconClock = ({ className = '', color = bdlGray50, height = 16, title, width = 16 }: Icon) => (
     <AccessibleSVG
-        className={`icon-clock ${className}`}
+        className={classNames('bdl-IconClock', className)}
         height={height}
         title={title}
-        viewBox="0 0 15 15"
+        viewBox="0 0 16 16"
         width={width}
     >
-        <g className="fill-color" fill={color}>
-            <path d="M7.5 1C3.9 1 1 3.9 1 7.5S3.9 14 7.5 14 14 11.1 14 7.5 11.1 1 7.5 1zm0 12C4.5 13 2 10.5 2 7.5S4.5 2 7.5 2 13 4.5 13 7.5 10.5 13 7.5 13z" />
-            <path d="M10.5 8H8V3.5c0-.3-.2-.5-.5-.5s-.5.2-.5.5V9h3.5c.3 0 .5-.2.5-.5s-.2-.5-.5-.5z" />
-        </g>
+        <path
+            className="fill-color"
+            fill={color}
+            d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"
+        />
+        <path
+            className="fill-color"
+            fill={color}
+            d="M8 2.5a.5.5 0 0 1 .5.5v4.486l3.208 1.687a.5.5 0 0 1 .244.592l-.034.083a.5.5 0 0 1-.676.21L7.767 8.23a.5.5 0 0 1-.267-.442V3a.5.5 0 0 1 .5-.5z"
+        />
     </AccessibleSVG>
 );
 

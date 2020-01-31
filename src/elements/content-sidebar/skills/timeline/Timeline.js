@@ -13,6 +13,7 @@ import messages from '../../../common/messages';
 import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 import Timeslice from './Timeslice';
 import { isValidStartTime } from '../transcript/timeSliceUtils';
+import type { SkillCardEntryTimeSlice, SkillCardEntryType } from '../../../../common/types/skills';
 
 import './Timeline.scss';
 

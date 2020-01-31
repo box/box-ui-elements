@@ -3,16 +3,9 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    height?: number,
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconMetadata = ({ className = '', color = '#333', title, width = 14, height = 14 }: Props) => (
+const IconMetadata = ({ className = '', color = '#333', title, width = 14, height = 14 }: Icon) => (
     <AccessibleSVG
         className={`icon-metadata ${className}`}
         height={height}

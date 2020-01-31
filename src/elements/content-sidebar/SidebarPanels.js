@@ -23,11 +23,13 @@ import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
+import type { User, BoxItem } from '../../common/types/core';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
     currentUser?: User,
     detailsSidebarProps: DetailsSidebarProps,
+    elementId: string,
     file: BoxItem,
     fileId: string,
     getPreview: Function,
@@ -55,6 +57,8 @@ const MARK_NAME_JS_LOADING_ACTIVITY = `${ORIGIN_ACTIVITY_SIDEBAR}${BASE_EVENT_NA
 const MARK_NAME_JS_LOADING_SKILLS = `${ORIGIN_SKILLS_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_METADATA = `${ORIGIN_METADATA_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_VERSIONS = `${ORIGIN_VERSIONS_SIDEBAR}${BASE_EVENT_NAME}`;
+
+const URL_TO_FEED_ITEM_TYPE = { comments: 'comment', tasks: 'task' };
 
 const LoadableDetailsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DETAILS, MARK_NAME_JS_LOADING_DETAILS);
 const LoadableActivitySidebar = SidebarUtils.getAsyncSidebarContent(
@@ -112,6 +116,7 @@ class SidebarPanels extends React.Component<Props> {
             activitySidebarProps,
             currentUser,
             detailsSidebarProps,
+            elementId,
             file,
             fileId,
             getPreview,
@@ -128,7 +133,7 @@ class SidebarPanels extends React.Component<Props> {
             versionsSidebarProps,
         }: Props = this.props;
 
-        if (!isOpen) {
+        if (!isOpen || (!hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
             return null;
         }
 
@@ -140,6 +145,7 @@ class SidebarPanels extends React.Component<Props> {
                         path={`/${SIDEBAR_VIEW_SKILLS}`}
                         render={() => (
                             <LoadableSkillsSidebar
+                                elementId={elementId}
                                 key={file.id}
                                 file={file}
                                 getPreview={getPreview}
@@ -149,20 +155,34 @@ class SidebarPanels extends React.Component<Props> {
                         )}
                     />
                 )}
+                {/* This handles both the default activity sidebar and the activity sidebar with a
+                comment or task deeplink.  */}
                 {hasActivity && (
                     <Route
                         exact
-                        path={`/${SIDEBAR_VIEW_ACTIVITY}`}
-                        render={() => (
-                            <LoadableActivitySidebar
-                                currentUser={currentUser}
-                                file={file}
-                                onVersionHistoryClick={onVersionHistoryClick}
-                                ref={this.activitySidebar}
-                                startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
-                                {...activitySidebarProps}
-                            />
-                        )}
+                        path={[
+                            `/${SIDEBAR_VIEW_ACTIVITY}`,
+                            `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(comments|tasks)/:activeFeedEntryId?`,
+                        ]}
+                        render={({ match }) => {
+                            const matchEntryType = match.params.activeFeedEntryType;
+                            const activeFeedEntryType = matchEntryType
+                                ? URL_TO_FEED_ITEM_TYPE[matchEntryType]
+                                : undefined;
+                            return (
+                                <LoadableActivitySidebar
+                                    elementId={elementId}
+                                    currentUser={currentUser}
+                                    file={file}
+                                    onVersionHistoryClick={onVersionHistoryClick}
+                                    ref={this.activitySidebar}
+                                    startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
+                                    activeFeedEntryId={match.params.activeFeedEntryId}
+                                    activeFeedEntryType={activeFeedEntryType}
+                                    {...activitySidebarProps}
+                                />
+                            );
+                        }}
                     />
                 )}
                 {hasDetails && (
@@ -171,6 +191,7 @@ class SidebarPanels extends React.Component<Props> {
                         path={`/${SIDEBAR_VIEW_DETAILS}`}
                         render={() => (
                             <LoadableDetailsSidebar
+                                elementId={elementId}
                                 fileId={fileId}
                                 key={fileId}
                                 hasVersions={hasVersions}
@@ -188,6 +209,7 @@ class SidebarPanels extends React.Component<Props> {
                         path={`/${SIDEBAR_VIEW_METADATA}`}
                         render={() => (
                             <LoadableMetadataSidebar
+                                elementId={elementId}
                                 fileId={fileId}
                                 ref={this.metadataSidebar}
                                 startMarkName={MARK_NAME_JS_LOADING_METADATA}
@@ -198,7 +220,7 @@ class SidebarPanels extends React.Component<Props> {
                 )}
                 {hasVersions && (
                     <Route
-                        path="/:sidebar/versions/:versionId?"
+                        path="/:sidebar(activity|details)/versions/:versionId?"
                         render={({ match }) => (
                             <LoadableVersionsSidebar
                                 fileId={fileId}

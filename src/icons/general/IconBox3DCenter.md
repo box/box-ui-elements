@@ -1,3 +1,0 @@
-```js
-<IconBox3DCenter />
-```

@@ -6,7 +6,7 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import IconFileDefault from '../../icons/file/IconFileDefault';
+import IconFileDefault from '../../icon/content/FileDefault32';
 import SecurityBlockedState from '../../icons/states/SecurityBlockedState';
 import makeLoadable from '../../components/loading-indicator/makeLoadable';
 import messages from '../common/messages';

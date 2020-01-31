@@ -24,3 +24,12 @@
     line-height: 15px;
     text-align: left;
 }
+
+.bcu-icon-badge {
+    .badges {
+        .bottom-right-badge {
+            bottom: -4px;
+            left: calc(100% - 16px);
+        }
+    }
+}

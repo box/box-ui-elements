@@ -185,7 +185,7 @@ class LeftSidebar extends React.Component<Props, State> {
 
     getIcon(
         iconElement?: ?React.Element<any>,
-        IconComponent?: ?React.ComponentType<any>,
+        IconComponent?: ?React.ComponentType<any>, // eslint-disable-line
         customTheme?: Object = {},
         selected?: boolean,
         scaleIcon?: boolean,

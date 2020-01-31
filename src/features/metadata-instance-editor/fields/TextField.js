@@ -5,6 +5,7 @@ import { injectIntl } from 'react-intl';
 import TextInput from '../../../components/text-input';
 
 import messages from '../messages';
+import type { MetadataFieldValue } from '../../../common/types/metadata';
 import './TextField.scss';
 
 type Props = {
@@ -45,6 +46,7 @@ const TextField = ({
             error={error}
             hideOptionalLabel
             label={displayName}
+            name={dataKey}
             onChange={(event: SyntheticKeyboardEvent<HTMLInputElement>) => {
                 const currentTarget = (event.currentTarget: HTMLInputElement);
                 if (currentTarget.value) {

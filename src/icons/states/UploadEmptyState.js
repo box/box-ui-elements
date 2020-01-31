@@ -4,16 +4,9 @@ import * as React from 'react';
 import AccessibleSVG from '../accessible-svg';
 import { bdlBoxBlue } from '../../styles/variables';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const UploadEmptyState = ({ className = '', color = bdlBoxBlue, height = 55, title, width = 46 }: Props) => (
+const UploadEmptyState = ({ className = '', color = bdlBoxBlue, height = 55, title, width = 46 }: Icon) => (
     <AccessibleSVG
         className={`upload-empty-state ${className}`}
         height={height}

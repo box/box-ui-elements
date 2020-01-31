@@ -40,7 +40,6 @@ type Props = {
     changeSharedLinkPermissionLevel: (
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
-    classificationName?: string,
     intl: IntlShape,
     item: itemtype,
     itemType: ItemType,
@@ -74,7 +73,6 @@ class SharedLinkSection extends React.Component<Props> {
             autofocusSharedLink,
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
-            classificationName,
             item,
             itemType,
             onDismissTooltip,
@@ -87,6 +85,7 @@ class SharedLinkSection extends React.Component<Props> {
         } = this.props;
         const {
             accessLevel,
+            accessLevelsDisabledReason,
             allowedAccessLevels,
             canChangeAccessLevel,
             enterpriseName,
@@ -121,7 +120,7 @@ class SharedLinkSection extends React.Component<Props> {
         }
 
         return (
-            <React.Fragment>
+            <>
                 <div className="shared-link-field-row">
                     <Tooltip
                         className="usm-ftux-tooltip"
@@ -160,9 +159,9 @@ class SharedLinkSection extends React.Component<Props> {
                 <div className="shared-link-access-row">
                     <SharedLinkAccessMenu
                         accessLevel={accessLevel}
+                        accessLevelsDisabledReason={accessLevelsDisabledReason}
                         allowedAccessLevels={allowedAccessLevels}
                         changeAccessLevel={changeSharedLinkAccessLevel}
-                        classificationName={classificationName}
                         enterpriseName={enterpriseName}
                         itemType={itemType}
                         onDismissTooltip={() => onDismissTooltip('shared-link-access-menu')}
@@ -203,7 +202,7 @@ class SharedLinkSection extends React.Component<Props> {
                         <FormattedMessage {...messages.sharedLinkPubliclyAvailable} />
                     </div>
                 )}
-            </React.Fragment>
+            </>
         );
     }
 

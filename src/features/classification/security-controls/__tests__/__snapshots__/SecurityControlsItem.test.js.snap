@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/classification/security-controls/SecurityControlsItem should render a SecurityControlsItem with a message 1`] = `
+<li
+  className="bdl-SecurityControlsItem"
+>
+  <IconSecurityClassificationSolid
+    color="#f5b31b"
+    height={11}
+    strokeWidth={3}
+    width={11}
+  />
+  <FormattedMessage
+    defaultMessage="message"
+    id="msg1"
+  />
+</li>
+`;

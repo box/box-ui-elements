@@ -63,7 +63,6 @@ class TextInputWithCopyButton extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        // $FlowFixMe https://github.com/facebook/flow/issues/4335
         this.isCopyCommandSupported = document.queryCommandSupported('copy');
 
         this.state = {

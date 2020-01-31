@@ -9,9 +9,9 @@ import Sort from './Sort';
 import Add from './Add';
 import GridViewSlider from '../../../components/grid-view/GridViewSlider';
 import ViewModeChangeButton from './ViewModeChangeButton';
-import { FeatureFlag } from '../feature-checking';
 import { VIEW_FOLDER, VIEW_MODE_GRID } from '../../../constants';
 import type { ViewMode } from '../flowTypes';
+import type { View, Collection } from '../../../common/types/core';
 import './SubHeaderRight.scss';
 
 type Props = {
@@ -39,35 +39,34 @@ const SubHeaderRight = ({
     gridMaxColumns,
     gridMinColumns,
     maxGridColumnCountForWidth,
-    onGridViewSliderChange,
     onCreate,
-    onViewModeChange,
+    onGridViewSliderChange,
     onSortChange,
     onUpload,
+    onViewModeChange,
     view,
     viewMode,
 }: Props) => {
     const { sortBy, sortDirection, items = [] }: Collection = currentCollection;
+    const hasGridView: boolean = !!gridColumnCount;
     const hasItems: boolean = items.length > 0;
     const isFolder: boolean = view === VIEW_FOLDER;
     const showSort: boolean = isFolder && hasItems;
     const showAdd: boolean = (!!canUpload || !!canCreateNewFolder) && isFolder;
-
     return (
         <div className="be-sub-header-right">
-            <FeatureFlag feature="contentExplorer.gridView.enabled">
-                {hasItems && viewMode === VIEW_MODE_GRID && (
-                    <GridViewSlider
-                        columnCount={gridColumnCount}
-                        gridMaxColumns={gridMaxColumns}
-                        gridMinColumns={gridMinColumns}
-                        maxColumnCount={maxGridColumnCountForWidth}
-                        onChange={onGridViewSliderChange}
-                    />
-                )}
-                {hasItems && <ViewModeChangeButton viewMode={viewMode} onViewModeChange={onViewModeChange} />}
-            </FeatureFlag>
-
+            {hasItems && viewMode === VIEW_MODE_GRID && (
+                <GridViewSlider
+                    columnCount={gridColumnCount}
+                    gridMaxColumns={gridMaxColumns}
+                    gridMinColumns={gridMinColumns}
+                    maxColumnCount={maxGridColumnCountForWidth}
+                    onChange={onGridViewSliderChange}
+                />
+            )}
+            {hasItems && hasGridView && (
+                <ViewModeChangeButton viewMode={viewMode} onViewModeChange={onViewModeChange} />
+            )}
             {showSort && !!sortBy && !!sortDirection && (
                 <Sort onSortChange={onSortChange} sortBy={sortBy} sortDirection={sortDirection} />
             )}

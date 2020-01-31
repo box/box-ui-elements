@@ -12,6 +12,7 @@ import messages from '../common/messages';
 import { OPEN_WITH_MENU_ITEM_ICON_SIZE } from '../../constants';
 import getIcon from './IconFileMap';
 import utils from './openWithUtils';
+import type { Integration, DisabledReason } from '../../common/types/integrations';
 import './OpenWithDropdownMenuItem.scss';
 
 type Props = {
@@ -19,7 +20,7 @@ type Props = {
     onClick: Function,
 };
 
-function getErrorMessage(disabledReasons: Array<string> = []): React.Node {
+function getErrorMessage(disabledReasons: Array<DisabledReason> = []): React.Node {
     let message;
     // Use the first disabled reason as the description if the integration is disabled.
     const code = disabledReasons[0];

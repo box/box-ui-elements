@@ -1,3 +1,4 @@
+// @flow strict
 export const SIDEBAR_NAV_TARGETS = {
     ACTIVITY: 'sidebaractivity',
     DETAILS: 'sidebardetails',

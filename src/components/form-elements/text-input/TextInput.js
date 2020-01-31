@@ -60,17 +60,17 @@ class TextInput extends React.Component<Props, State> {
         };
     }
 
-    componentWillReceiveProps(nextProps: Props) {
+    componentDidUpdate(prevProps: Props) {
         // If a new value is passed by prop, set it
-        if (nextProps.value !== this.props.value) {
+        if (prevProps.value !== this.props.value) {
             this.setState({
-                value: nextProps.value,
+                value: this.props.value,
             });
         }
     }
 
     onChange = ({ currentTarget }: SyntheticEvent<HTMLInputElement>) => {
-        const value = currentTarget.value;
+        const { value } = currentTarget;
         if (this.state.error) {
             this.setState(
                 {
@@ -101,7 +101,6 @@ class TextInput extends React.Component<Props, State> {
             customError,
             patternMismatch,
             tooLong,
-            // $FlowFixMe
             tooShort,
             typeMismatch,
             valid,

@@ -53,8 +53,6 @@ type Props = {
     changeSharedLinkPermissionLevel: (
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
-    /** If item is classified this property contains the classification name */
-    classificationName?: string,
     /** Message warning about restrictions regarding inviting collaborators to the item */
     collaborationRestrictionWarning: React.Node,
     /** List of existing collaborators */
@@ -527,7 +525,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
         };
 
         return (
-            <React.Fragment>
+            <>
                 <Tooltip {...ftuxTooltipProps}>
                     <div className="invite-collaborator-container">
                         <EmailForm
@@ -558,7 +556,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
                         </EmailForm>
                     </div>
                 </Tooltip>
-            </React.Fragment>
+            </>
         );
     }
 
@@ -655,7 +653,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
         const {
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
-            classificationName,
             focusSharedLinkOnLoad,
             item,
             onSettingsClick,
@@ -695,7 +692,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
         // focus logic at modal level
         const extendedModalProps = {
             focusElementSelector: canInvite
-                ? '.pill-selector-input' // focus on invite collabs field
+                ? '.bdl-PillSelector-input' // focus on invite collabs field
                 : '.toggle-simple', // focus on shared link toggle
             ...modalProps,
         };
@@ -724,7 +721,6 @@ class UnifiedShareModal extends React.Component<Props, State> {
                                 triggerCopyOnLoad={focusSharedLinkOnLoad}
                                 changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                                 changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
-                                classificationName={classificationName}
                                 intl={intl}
                                 item={item}
                                 itemType={item.type}

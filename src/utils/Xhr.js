@@ -24,6 +24,8 @@ import {
     HTTP_HEAD,
     HTTP_STATUS_CODE_RATE_LIMIT,
 } from '../constants';
+import type { Method, APIOptions } from '../common/types/api';
+import type { Token, StringAnyMap, StringMap } from '../common/types/core';
 
 type PayloadType = StringAnyMap | Array<StringAnyMap>;
 
@@ -94,7 +96,7 @@ class Xhr {
         requestInterceptor,
         retryableStatusCodes = [HTTP_STATUS_CODE_RATE_LIMIT],
         shouldRetry = true,
-    }: Options = {}) {
+    }: APIOptions = {}) {
         this.clientName = clientName;
         this.id = id;
         this.language = language;
@@ -212,13 +214,11 @@ class Xhr {
      * @return {Object} Headers
      */
     async getHeaders(id?: string, args: StringMap = {}) {
-        const headers: StringMap = Object.assign(
-            {
-                Accept: 'application/json',
-                [HEADER_CONTENT_TYPE]: 'application/json',
-            },
-            args,
-        );
+        const headers: StringMap = {
+            Accept: 'application/json',
+            [HEADER_CONTENT_TYPE]: 'application/json',
+            ...args,
+        };
 
         if (this.language && !headers[HEADER_ACCEPT_LANGUAGE]) {
             headers[HEADER_ACCEPT_LANGUAGE] = this.language;
@@ -474,7 +474,6 @@ class Xhr {
                         progressHandler(event);
                     };
                 }
-
                 this.axios({
                     url,
                     data,
@@ -527,6 +526,7 @@ class Xhr {
         }
         if (this.axiosSource) {
             this.axiosSource.cancel();
+            this.axiosSource = axios.CancelToken.source();
         }
     }
 }

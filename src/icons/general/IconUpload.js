@@ -1,27 +1,24 @@
 // @flow
 import * as React from 'react';
-
+import { bdlGray80 } from '../../styles/variables';
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconUpload = ({ className = '', color = '#444444', height = 14, title, width = 12 }: Props) => (
+const IconUpload = ({ className = '', color = bdlGray80, height = 16, title, width = 16 }: Icon) => (
     <AccessibleSVG
         className={`icon-upload ${className}`}
         height={height}
         title={title}
-        viewBox="0 0 12 14"
+        viewBox="0 0 16 16"
         width={width}
     >
-        <path className="stroke-color" d="M3.5 10.4h5v-5h2.3L6 .6 1.2 5.4h2.3v5z" fill="none" stroke={color} />
-        <path className="stroke-color" d="M12 13.5H0" fill="none" stroke={color} />
+        <path
+            className="fill-color"
+            fill={color}
+            fillRule="evenodd"
+            d="M14 14v1H2v-1h12zM8 1l6 6.003h-3.004V12H5.004V7.003H2L8 1zm0 1.413l-3.589 3.59h1.591v4.998h3.996V6.004h1.59L8 2.414z"
+        />
     </AccessibleSVG>
 );
 

@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/metadata-based-view/MetadataBasedItemList render() should render a default component correctly 1`] = `
+<MetadataBasedItemList
+  currentCollection={
+    Object {
+      "items": Array [
+        Object {
+          "id": "1",
+          "metadata": Object {
+            "enterprise": Object {
+              "fields": Array [
+                Object {
+                  "name": "type",
+                  "type": "string",
+                  "value": "bill",
+                },
+                Object {
+                  "name": "amount",
+                  "type": "float",
+                  "value": 100.12,
+                },
+              ],
+              "id": "11",
+            },
+          },
+          "name": "name1.pdf",
+          "size": "123",
+        },
+        Object {
+          "id": "2",
+          "metadata": Object {
+            "enterprise": Object {
+              "fields": Array [
+                Object {
+                  "name": "type",
+                  "type": "string",
+                  "value": "receipt",
+                },
+                Object {
+                  "name": "amount",
+                  "type": "float",
+                  "value": 200.88,
+                },
+              ],
+              "id": "22",
+            },
+          },
+          "name": "name2.mp4",
+          "size": "456",
+        },
+      ],
+      "nextMarker": "abc",
+    }
+  }
+  intl={
+    Object {
+      "formatMessage": [MockFunction],
+    }
+  }
+  metadataColumnsToShow={
+    Array [
+      "type",
+      Object {
+        "canEdit": true,
+        "name": "amount",
+      },
+    ]
+  }
+  onItemClick={[MockFunction]}
+>
+  <Component>
+    AutoSizer
+  </Component>
+</MetadataBasedItemList>
+`;

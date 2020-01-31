@@ -3,16 +3,9 @@ import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
 
-type Props = {
-    className?: string,
-    color?: string,
-    height?: number,
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.Element<any>,
-    width?: number,
-};
+import type { Icon } from '../flowTypes';
 
-const IconSort = ({ className = '', color = '#222222', height = 13, title, width = 17 }: Props) => (
+const IconSort = ({ className = '', color = '#222222', height = 13, title, width = 17 }: Icon) => (
     <AccessibleSVG
         className={`icon-sort ${className}`}
         height={height}

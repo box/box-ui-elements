@@ -46,8 +46,14 @@ import {
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
-import type { ErrorType } from '../common/flowTypes';
+import type { ErrorType, AdditionalVersionInfo } from '../common/flowTypes';
+import type { WithLoggerProps } from '../../common/types/logging';
+import type { FetchOptions, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
+import type { StringMap, Token, BoxItem, BoxItemVersion } from '../../common/types/core';
 import type { VersionChangeCallback } from '../content-sidebar/versions';
+import type { FeatureConfig } from '../common/feature-checking';
+import type APICache from '../../utils/Cache';
+
 import '../common/fonts.scss';
 import '../common/base.scss';
 import './ContentPreview.scss';
@@ -700,8 +706,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         const fileOpts = { ...fileOptions };
-        const typedId: string = getTypedFileId(fileId);
-        const token: TokenLiteral = await TokenService.getReadToken(typedId, tokenOrTokenFunction);
+        const token = typedId => TokenService.getReadTokens(typedId, tokenOrTokenFunction);
 
         if (selectedVersion) {
             fileOpts[fileId] = fileOpts[fileId] || {};
@@ -1117,6 +1122,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             history,
             isLarge,
             isVeryLarge,
+            logoUrl,
             onClose,
             measureRef,
             sharedLink,
@@ -1159,6 +1165,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                     {hasHeader && (
                         <PreviewHeader
                             file={file}
+                            logoUrl={logoUrl}
                             token={token}
                             onClose={onHeaderClose}
                             onPrint={this.print}
@@ -1189,6 +1196,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                             <PreviewNavigation
                                 collection={collection}
                                 currentIndex={this.getFileIndex()}
+                                history={history}
                                 onNavigateLeft={this.navigateLeft}
                                 onNavigateRight={this.navigateRight}
                             />

@@ -9,6 +9,7 @@ import EmptyState from '../common/empty-state';
 import ProgressBar from '../common/progress-bar';
 import ItemList from './ItemList';
 import { VIEW_ERROR, VIEW_SELECTED } from '../../constants';
+import type { View, Collection } from '../../common/types/core';
 
 import './Content.scss';
 
@@ -18,6 +19,7 @@ type Props = {
     extensionsWhitelist: string[],
     focusedRow: number,
     hasHitSelectionLimit: boolean,
+    isSingleSelect: boolean,
     isSmall: boolean,
     onFocusChange: Function,
     onItemClick: Function,
@@ -53,6 +55,7 @@ const Content = ({
     currentCollection,
     tableRef,
     canSetShareAccess,
+    isSingleSelect,
     onItemClick,
     onItemSelect,
     onShareAccessChange,
@@ -76,6 +79,7 @@ const Content = ({
                 tableRef={tableRef}
                 canSetShareAccess={canSetShareAccess}
                 hasHitSelectionLimit={hasHitSelectionLimit}
+                isSingleSelect={isSingleSelect}
                 selectableType={selectableType}
                 onItemSelect={onItemSelect}
                 onItemClick={onItemClick}

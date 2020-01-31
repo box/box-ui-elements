@@ -20,6 +20,9 @@ import {
 } from '../constants';
 import Item from './Item';
 import TokenService from '../utils/TokenService';
+import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
+import type { BoxItem, BoxItemVersion } from '../common/types/core';
+import type APICache from '../utils/Cache';
 
 class File extends Item {
     /**

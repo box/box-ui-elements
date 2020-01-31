@@ -13,6 +13,7 @@ import messages from '../../../common/messages';
 import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 import getPills from './keywordUtils';
 import type { Pill, Pills } from './flowTypes';
+import type { SkillCardEntry } from '../../../../common/types/skills';
 import './EditableKeywords.scss';
 
 type Props = {
@@ -57,8 +58,12 @@ class EditableKeywords extends React.PureComponent<Props, State> {
      * @param {Object} nextProps - component props
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props): void {
-        this.setState({ pills: getPills(nextProps.keywords), keyword: '' });
+    componentDidUpdate({ keywords: prevKeywords }: Props): void {
+        const { keywords } = this.props;
+
+        if (prevKeywords !== keywords) {
+            this.setState({ pills: getPills(keywords), keyword: '' });
+        }
     }
 
     /**
@@ -70,7 +75,8 @@ class EditableKeywords extends React.PureComponent<Props, State> {
      * @param {number} index - pill index
      * @return {void}
      */
-    onRemove = (option: Pill, index: number): void => { // eslint-disable-line
+    onRemove = (option: Pill, index: number): void => {
+        // eslint-disable-line
         const { onDelete, keywords }: Props = this.props;
         onDelete(keywords[index]);
     };
@@ -150,7 +156,7 @@ class EditableKeywords extends React.PureComponent<Props, State> {
         const { onSave, onCancel }: Props = this.props;
         const { pills, keyword }: State = this.state;
         return (
-            <span className="pill-selector-wrapper">
+            <span className="bdl-EditableKeywords">
                 <PillSelector
                     onBlur={this.onBlur}
                     onCompositionEnd={this.onCompositionEnd}

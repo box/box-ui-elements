@@ -13,7 +13,7 @@ import API from '../../api';
 import APIContext from '../common/api-context';
 import Internationalize from '../common/Internationalize';
 import Sidebar from './Sidebar';
-import SidebarRouter from './SidebarRouter';
+import NavRouter from '../common/nav-router';
 import SidebarUtils from './SidebarUtils';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, ORIGIN_CONTENT_SIDEBAR } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
@@ -27,6 +27,14 @@ import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
+import type { WithLoggerProps } from '../../common/types/logging';
+import type { ElementsXhrError, FetchOptions, ErrorContextProps } from '../../common/types/api';
+import type { MetadataEditor } from '../../common/types/metadata';
+import type { StringMap, Token, User, BoxItem } from '../../common/types/core';
+import type { AdditionalSidebarTab } from './flowTypes';
+import type { FeatureConfig } from '../common/feature-checking';
+import type APICache from '../../utils/Cache';
+
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
@@ -338,7 +346,7 @@ class ContentSidebar extends React.Component<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <APIContext.Provider value={(this.api: any)}>
-                    <SidebarRouter history={history} initialEntries={[initialPath]}>
+                    <NavRouter history={history} initialEntries={[initialPath]}>
                         <Sidebar
                             activitySidebarProps={activitySidebarProps}
                             additionalTabs={additionalTabs}
@@ -365,7 +373,7 @@ class ContentSidebar extends React.Component<Props, State> {
                                 this.sidebarRef = ref;
                             }}
                         />
-                    </SidebarRouter>
+                    </NavRouter>
                 </APIContext.Provider>
             </Internationalize>
         );

@@ -9,6 +9,7 @@ import getProp from 'lodash/get';
 import ShareAccessSelect from '../common/share-access-select';
 import isRowSelectable from './cellRendererHelper';
 import LoadingIndicator from '../../components/loading-indicator';
+import type { BoxItem } from '../../common/types/core';
 
 export default (
     onChange: Function,

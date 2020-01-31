@@ -9,6 +9,8 @@ import TokenService from '../utils/TokenService';
 import { getTypedFileId } from '../utils/file';
 import Base from './Base';
 import { ERROR_CODE_FETCH_CURRENT_USER } from '../constants';
+import type { ElementsErrorCallback } from '../common/types/api';
+import type { TokenLiteral } from '../common/types/core';
 
 class Users extends Base {
     /**

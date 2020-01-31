@@ -5,12 +5,19 @@
 
 import * as React from 'react';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import IconInfoInverted from '../../../../icons/general/IconInfoInverted';
 import messages from '../../../common/messages';
 import PlainButton from '../../../../components/plain-button';
 import selectors from '../../../common/selectors/version';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import { VERSION_UPLOAD_ACTION, VERSION_DELETE_ACTION, VERSION_RESTORE_ACTION } from '../../../../constants';
+import {
+    VERSION_UPLOAD_ACTION,
+    VERSION_DELETE_ACTION,
+    VERSION_PROMOTE_ACTION,
+    VERSION_RESTORE_ACTION,
+} from '../../../../constants';
+import type { User } from '../../../../common/types/core';
 import './Version.scss';
 
 type Props = {
@@ -18,18 +25,21 @@ type Props = {
     modified_by: User,
     onInfo?: Function,
     version_number: string,
-    version_restored?: string,
+    version_promoted?: string,
 } & InjectIntlProvidedProps;
 
 const ACTION_MAP = {
     [VERSION_DELETE_ACTION]: messages.versionDeleted,
+    [VERSION_PROMOTE_ACTION]: messages.versionPromoted,
     [VERSION_RESTORE_ACTION]: messages.versionRestored,
     [VERSION_UPLOAD_ACTION]: messages.versionUploaded,
 };
 
 const Version = (props: Props): React.Node => {
+    // $FlowFixMe
     const action = selectors.getVersionAction(props);
-    const { id, intl, onInfo, version_number, version_restored } = props;
+    const { id, intl, onInfo, version_number, version_promoted } = props;
+    // $FlowFixMe
     const { name } = selectors.getVersionUser(props);
 
     return (
@@ -39,7 +49,8 @@ const Version = (props: Props): React.Node => {
                     {...ACTION_MAP[action]}
                     values={{
                         name: <strong>{name}</strong>,
-                        version_number: version_restored || version_number,
+                        version_number,
+                        version_promoted,
                     }}
                 />
             </span>

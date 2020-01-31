@@ -14,8 +14,6 @@ import SearchAPI from './Search';
 import RecentsAPI from './Recents';
 import VersionsAPI from './Versions';
 import CommentsAPI from './Comments';
-import TasksAPI from './tasks/Tasks';
-import TaskAssignmentsAPI from './tasks/TaskAssignments';
 import TasksNewAPI from './tasks/TasksNew';
 import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
 import TaskLinksAPI from './tasks/TaskLinks';
@@ -29,12 +27,17 @@ import OpenWithAPI from './OpenWith';
 import MetadataQueryAPI from './MetadataQuery';
 import BoxEditAPI from './box-edit';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
+import type { ItemType } from '../common/types/core';
+import type { APIOptions } from '../common/types/api';
+import type APICache from '../utils/Cache';
+
+type ItemAPI = FolderAPI | FileAPI | WebLinkAPI;
 
 class APIFactory {
     /**
      * @property {*}
      */
-    options: Options;
+    options: APIOptions;
 
     /**
      * @property {FileAPI}
@@ -80,16 +83,6 @@ class APIFactory {
      * @property {CommentsAPI}
      */
     commentsAPI: CommentsAPI;
-
-    /**
-     * @property {TasksAPI}
-     */
-    tasksAPI: TasksAPI;
-
-    /**
-     * @property {TaskAssignmentsAPI}
-     */
-    taskAssignmentsAPI: TaskAssignmentsAPI;
 
     /**
      * @property {TasksNewAPI}
@@ -163,13 +156,14 @@ class APIFactory {
      * @param {string} [options.uploadHost] - Upload host name
      * @return {API} Api instance
      */
-    constructor(options: Options) {
-        this.options = Object.assign({}, options, {
+    constructor(options: APIOptions) {
+        this.options = {
+            ...options,
             apiHost: options.apiHost || DEFAULT_HOSTNAME_API,
             uploadHost: options.uploadHost || DEFAULT_HOSTNAME_UPLOAD,
             cache: options.cache || new Cache(),
             language: options.language,
-        });
+        };
     }
 
     /**
@@ -222,11 +216,6 @@ class APIFactory {
         if (this.fileAccessStatsAPI) {
             this.fileAccessStatsAPI.destroy();
             delete this.fileAccessStatsAPI;
-        }
-
-        if (this.tasksAPI) {
-            this.tasksAPI.destroy();
-            delete this.tasksAPI;
         }
 
         if (this.tasksNewAPI) {
@@ -442,36 +431,6 @@ class APIFactory {
 
         this.commentsAPI = new CommentsAPI(this.options);
         return this.commentsAPI;
-    }
-
-    /**
-     * API for tasks
-     *
-     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
-     * @return {TasksAPI} TasksAPI instance
-     */
-    getTasksAPI(shouldDestroy: boolean): TasksAPI {
-        if (shouldDestroy) {
-            this.destroy();
-        }
-
-        this.tasksAPI = new TasksAPI(this.options);
-        return this.tasksAPI;
-    }
-
-    /**
-     * API for tasks
-     *
-     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
-     * @return {TasksAPI} TaskAssignmentsAPI instance
-     */
-    getTaskAssignmentsAPI(shouldDestroy: boolean): TaskAssignmentsAPI {
-        if (shouldDestroy) {
-            this.destroy();
-        }
-
-        this.taskAssignmentsAPI = new TaskAssignmentsAPI(this.options);
-        return this.taskAssignmentsAPI;
     }
 
     /**

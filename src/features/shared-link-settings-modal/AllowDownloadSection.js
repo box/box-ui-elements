@@ -88,10 +88,12 @@ const AllowDownloadSection = ({
 
 AllowDownloadSection.propTypes = {
     canChangeDownload: PropTypes.bool.isRequired,
+    classification: PropTypes.object,
     directLink: PropTypes.string.isRequired,
     directLinkInputProps: PropTypes.object,
     downloadCheckboxProps: PropTypes.object,
     isDirectLinkAvailable: PropTypes.bool.isRequired,
+    isDirectLinkUnavailableDueToAccessPolicy: PropTypes.bool,
     isDirectLinkUnavailableDueToDownloadSettings: PropTypes.bool.isRequired,
     isDownloadAvailable: PropTypes.bool.isRequired,
     isDownloadEnabled: PropTypes.bool.isRequired,
