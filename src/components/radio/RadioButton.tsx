@@ -4,6 +4,7 @@ import './RadioButton.scss';
 
 // @NOTE: readonly is not a valid attribute for input type radio so
 // this avoids the propType error that "checked" is set without "onChange"
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 const onChangeStub = () => {};
 
 export interface RadioButtonProps {

@@ -1,13 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`components/radio/RadioButtonField should render a basic RadioButton when no field property is provided 1`] = `
+<RadioButton
+  label="Pistachio"
+  value="pistachio"
+/>
+`;
+
+exports[`components/radio/RadioButtonField should render isSelected=false with value=chocolate 1`] = `
+<RadioButton
+  isSelected={false}
+  label="Red Velvet"
+  name="redVelvet"
+  onBlur={[Function]}
+  onChange={[Function]}
+  value="redVelvet"
+/>
+`;
+
 exports[`components/radio/RadioButtonField should render isSelected=false with value=null 1`] = `
 <RadioButton
   isSelected={false}
-  label="Enter things"
-  name="radiobutton"
-  onBlur="onblur"
-  onChange="onchange"
-  value="radioValue"
+  label="Red Velvet"
+  name="redVelvet"
+  onBlur={[Function]}
+  onChange={[Function]}
+  value="redVelvet"
 />
 `;
 
@@ -15,13 +33,6 @@ exports[`components/radio/RadioButtonField should render isSelected=false with v
 <RadioButton
   isSelected={false}
   label="Red Velvet"
-  meta={
-    Object {
-      "initialTouched": false,
-      "touched": false,
-      "value": "redVelvet",
-    }
-  }
   name="redVelvet"
   onBlur={[Function]}
   onChange={[Function]}
@@ -32,36 +43,7 @@ exports[`components/radio/RadioButtonField should render isSelected=false with v
 exports[`components/radio/RadioButtonField should render isSelected=false with value=undefined 1`] = `
 <RadioButton
   isSelected={false}
-  label="Enter things"
-  name="radiobutton"
-  onBlur="onblur"
-  onChange="onchange"
-  value="radioValue"
-/>
-`;
-
-exports[`components/radio/RadioButtonField should render isSelected=false with value=value 1`] = `
-<RadioButton
-  isSelected={false}
-  label="Enter things"
-  name="radiobutton"
-  onBlur="onblur"
-  onChange="onchange"
-  value="radioValue"
-/>
-`;
-
-exports[`components/radio/RadioButtonField should render isSelected=true with value=chocolate 1`] = `
-<RadioButton
-  isSelected={false}
   label="Red Velvet"
-  meta={
-    Object {
-      "initialTouched": false,
-      "touched": false,
-      "value": "redVelvet",
-    }
-  }
   name="redVelvet"
   onBlur={[Function]}
   onChange={[Function]}
@@ -69,13 +51,13 @@ exports[`components/radio/RadioButtonField should render isSelected=true with va
 />
 `;
 
-exports[`components/radio/RadioButtonField should render isSelected=true with value=radioValue 1`] = `
+exports[`components/radio/RadioButtonField should render isSelected=true with value=redVelvet 1`] = `
 <RadioButton
   isSelected={true}
-  label="Enter things"
-  name="radiobutton"
-  onBlur="onblur"
-  onChange="onchange"
-  value="radioValue"
+  label="Red Velvet"
+  name="redVelvet"
+  onBlur={[Function]}
+  onChange={[Function]}
+  value="redVelvet"
 />
 `;
