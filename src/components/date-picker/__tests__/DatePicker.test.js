@@ -1,29 +1,14 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
-import Pikaday from 'pikaday';
+import Pikaday, { setDate as mockSetDate } from 'pikaday';
 
 import DatePicker, { DatePickerBase } from '../DatePicker';
 
 const sandbox = sinon.sandbox.create();
 let clock;
 
-const mockSetDate = jest.fn();
-jest.mock('pikaday', () => {
-    return jest.fn().mockImplementation(() => {
-        return {
-            getDate: () => {},
-            gotoDate: () => {},
-            setDate: mockSetDate,
-            setMaxDate: () => {},
-            setMinDate: () => {},
-            isVisible: () => false,
-            show: () => {},
-            hide: () => {},
-            destroy: () => {},
-        };
-    });
-});
+jest.mock('pikaday');
 
 describe('components/date-picker/DatePicker', () => {
     const getWrapper = (props = {}) =>
