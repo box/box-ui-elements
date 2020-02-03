@@ -1,1 +1,1 @@
-`import LinkButton from 'box-ui-elements/es/components/link/LinkButton';`
+`import { LinkButton } from 'box-ui-elements/es/components/link';`

@@ -4,7 +4,7 @@ import LinkButton from './LinkButton';
 import { LinkBaseProps } from './LinkBase';
 
 export interface LinkPrimaryButtonProps extends LinkBaseProps {
-    children: React.ReactNode;
+    children: React.ReactChild;
     className?: string;
 }
 

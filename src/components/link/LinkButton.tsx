@@ -1,9 +1,8 @@
 import * as React from 'react';
-
 import LinkBase, { LinkBaseProps } from './LinkBase';
 
 export interface LinkButtonProps extends LinkBaseProps {
-    children: React.ReactNode;
+    children: React.ReactChild;
     className?: string;
 }
 

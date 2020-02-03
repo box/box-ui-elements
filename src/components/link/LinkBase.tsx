@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 export interface LinkBaseProps {
-    children: React.ReactNode;
+    children: React.ReactChild;
     className?: string;
     component?: React.ElementType;
     href?: string;
@@ -15,9 +15,7 @@ const LinkBase = ({ children, href = '#', linkRef, target, rel, component, refPr
     // Automatically append rel="noopener" for external links
     // (security fix) if no `rel` was passed
     const linkRel = target === '_blank' && !rel ? 'noopener' : rel;
-
     const LinkComponent = component || 'a';
-
     const ref = { [refProp || 'ref']: linkRef };
 
     return (

@@ -1,1 +1,1 @@
-`import RadioGroup from 'box-ui-elements/es/components/radio/RadioGroup';`
+`import { RadioGroup } from 'box-ui-elements/es/components/radio';`

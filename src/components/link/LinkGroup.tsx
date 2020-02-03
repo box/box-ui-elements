@@ -6,6 +6,7 @@ export interface LinkGroupProps {
     title?: React.ReactNode;
 }
 
+// TODO: convert to stateless function
 // eslint-disable-next-line react/prefer-stateless-function
 class LinkGroup extends React.Component<LinkGroupProps> {
     static defaultProps = {

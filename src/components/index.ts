@@ -13,17 +13,8 @@ export * from './button-group';
 export { default as Fieldset } from './fieldset';
 export * from './fieldset';
 
-export { default as Link } from './link/Link';
-export * from './link/Link';
-
-export { default as LinkButton } from './link/LinkButton';
-export * from './link/LinkButton';
-
-export { default as LinkGroup } from './link/LinkGroup';
-export * from './link/LinkGroup';
-
-export { default as LinkPrimaryButton } from './link/LinkPrimaryButton';
-export * from './link/LinkPrimaryButton';
+export { default as Link } from './link';
+export * from './link';
 
 export { default as LoadingIndicator } from './loading-indicator';
 export * from './loading-indicator';
@@ -37,17 +28,7 @@ export * from './primary-button';
 export { default as RadarAnimation } from './radar';
 export * from './radar';
 
-export { default as RadioButton } from './radio/RadioButton';
-export * from './radio/RadioButton';
-
-export { default as RadioButtonField } from './radio/RadioButtonField';
-export * from './radio/RadioButtonField';
-
-export { default as RadioGroup } from './radio/RadioGroup';
-export * from './radio/RadioGroup';
-
-export { default as RadioGroupField } from './radio/RadioGroupField';
-export * from './radio/RadioGroupField';
+export * from './radio';
 
 export { default as Tooltip } from './tooltip';
 export * from './tooltip';
