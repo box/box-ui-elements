@@ -94,7 +94,7 @@
         cursor: pointer;
         transition: transform .2s ease-out;
 
-        &.is-descending {
+        &.is-ascending {
             transform: rotate(180deg);
         }
     }
