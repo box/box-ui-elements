@@ -1,11 +1,29 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
+import Pikaday from 'pikaday';
 
 import DatePicker, { DatePickerBase } from '../DatePicker';
 
 const sandbox = sinon.sandbox.create();
 let clock;
+
+const mockSetDate = jest.fn();
+jest.mock('pikaday', () => {
+    return jest.fn().mockImplementation(() => {
+        return {
+            getDate: () => {},
+            gotoDate: () => {},
+            setDate: mockSetDate,
+            setMaxDate: () => {},
+            setMinDate: () => {},
+            isVisible: () => false,
+            show: () => {},
+            hide: () => {},
+            destroy: () => {},
+        };
+    });
+});
 
 describe('components/date-picker/DatePicker', () => {
     const getWrapper = (props = {}) =>
@@ -18,18 +36,6 @@ describe('components/date-picker/DatePicker', () => {
     afterEach(() => {
         sandbox.verifyAndRestore();
         clock.restore();
-    });
-
-    test('should correctly render children in DatePicker', () => {
-        const wrapper = getWrapper();
-
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should correctly render description in DatePicker', () => {
-        const wrapper = getWrapper({ description: 'some description' });
-
-        expect(wrapper).toMatchSnapshot();
     });
 
     test('should pass hideLabel to Label', () => {
@@ -161,18 +167,6 @@ describe('components/date-picker/DatePicker', () => {
         expect(tooltip.prop('className')).toEqual('date-picker-error-tooltip');
     });
 
-    test('should not have a change handler if isTextInputAllowed is true', () => {
-        const wrapper = getWrapper({ isTextInputAllowed: true });
-
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should have a change handler if isTextInputAllowed is false', () => {
-        const wrapper = getWrapper({ isTextInputAllowed: false });
-
-        expect(wrapper).toMatchSnapshot();
-    });
-
     test('should fire the onChange prop on blur if isTextInputAllowed is true', () => {
         const mockOnChangeHandler = jest.fn();
         const wrapper = getWrapper({
@@ -187,7 +181,6 @@ describe('components/date-picker/DatePicker', () => {
     });
 
     describe('Stub Pikaday', () => {
-        let setDateSpy;
         let intlFake;
 
         const renderDatepicker = (props = {}) =>
@@ -204,37 +197,32 @@ describe('components/date-picker/DatePicker', () => {
             );
 
         beforeEach(() => {
-            setDateSpy = sandbox.spy();
-            class PikadayFake {
-                getDate = () => {};
-
-                gotoDate = () => {};
-
-                setDate = setDateSpy;
-
-                setMaxDate = () => {};
-
-                setMinDate = () => {};
-
-                isVisible = () => false;
-
-                show = () => {};
-
-                hide = () => {};
-
-                destroy = () => {};
-            }
-
-            DatePicker.__Rewire__('Pikaday', PikadayFake);
+            Pikaday.mockClear();
 
             intlFake = {
                 formatMessage: message => message.defaultMessage || message.message,
                 formatDate: date => date,
+                locale: 'en-US',
             };
         });
 
-        afterEach(() => {
-            DatePicker.__ResetDependency__('Pikaday');
+        describe('componentDidMount()', () => {
+            test('should set first day of week to Monday if locale is not US, CA, or JP', () => {
+                renderDatepicker();
+                expect(Pikaday).toBeCalledWith(
+                    expect.objectContaining({
+                        firstDay: 0,
+                    }),
+                );
+
+                intlFake.locale = 'en-UK';
+                renderDatepicker();
+                expect(Pikaday).toBeCalledWith(
+                    expect.objectContaining({
+                        firstDay: 1,
+                    }),
+                );
+            });
         });
 
         describe('onSelectHandler()', () => {
@@ -523,7 +511,7 @@ describe('components/date-picker/DatePicker', () => {
                     value: nextValue,
                 });
 
-                expect(setDateSpy.calledWith(nextValue)).toBe(true);
+                expect(mockSetDate).toBeCalledWith(nextValue);
             });
 
             test('should call setMinDate() when minDate prop is set after being null', () => {
