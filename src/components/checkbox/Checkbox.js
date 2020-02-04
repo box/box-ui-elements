@@ -37,59 +37,55 @@ type Props = {
     value?: any,
 };
 
-class Checkbox extends React.Component<Props> {
-    checkboxID = uniqueId('checkbox');
+const Checkbox = ({
+    className = '',
+    description,
+    fieldLabel,
+    hideLabel,
+    id,
+    isChecked,
+    isDisabled,
+    label,
+    name,
+    onChange,
+    subsection,
+    tooltip,
+    ...rest // @TODO: eventually remove `rest` in favor of explicit props
+}: Props) => {
+    const generatedID = React.useRef(uniqueId('checkbox')).current;
+    // use passed in ID from props, otherwise generated one
+    const inputID = id || generatedID;
 
-    render() {
-        const {
-            className,
-            description,
-            fieldLabel,
-            hideLabel,
-            id,
-            isChecked,
-            isDisabled,
-            label,
-            name,
-            onChange,
-            subsection,
-            tooltip,
-            ...rest // @TODO: eventually remove `rest` in favor of explicit props
-        } = this.props;
-
-        const inputID = id || this.checkboxID;
-
-        const checkboxAndLabel = (
-            <span className="checkbox-label">
-                <input
-                    checked={isChecked}
-                    disabled={isDisabled}
-                    id={inputID}
-                    name={name}
-                    onChange={onChange}
-                    type="checkbox"
-                    {...rest}
-                />
-                {/* This span is used for the before/after custom checkbox styles, but mouse clicks will pass through this element
+    const checkboxAndLabel = (
+        <span className="checkbox-label">
+            <input
+                checked={isChecked}
+                disabled={isDisabled}
+                id={inputID}
+                name={name}
+                onChange={onChange}
+                type="checkbox"
+                {...rest}
+            />
+            {/* This span is used for the before/after custom checkbox styles, but mouse clicks will pass through this element
                     to the underlying <input> */}
-                <span className="checkbox-pointer-target" />
-                <span className={classNames('checkbox-label-tooltip-wrapper', { 'accessibility-hidden': hideLabel })}>
-                    <label htmlFor={inputID}>{label}</label>
-                    {tooltip && <CheckboxTooltip tooltip={tooltip} />}
-                </span>
+            <span className="checkbox-pointer-target" />
+            <span className={classNames('bdl-Checkbox-labelTooltipWrapper', { 'accessibility-hidden': hideLabel })}>
+                <label htmlFor={inputID}>{label}</label>
+                {tooltip && <CheckboxTooltip tooltip={tooltip} />}
             </span>
-        );
+        </span>
+    );
 
-        return (
-            <div className={classNames('checkbox-container', className, { 'is-disabled': isDisabled })}>
-                {fieldLabel && <div className="label">{fieldLabel}</div>}
-                {checkboxAndLabel}
-                {description ? <div className="checkbox-description">{description}</div> : null}
-                {subsection ? <div className="checkbox-subsection">{subsection}</div> : null}
-            </div>
-        );
-    }
-}
+    return (
+        <div className={classNames('checkbox-container', className, { 'is-disabled': isDisabled })}>
+            {fieldLabel && <div className="label">{fieldLabel}</div>}
+            {checkboxAndLabel}
+            {description ? <div className="checkbox-description">{description}</div> : null}
+            {subsection ? <div className="checkbox-subsection">{subsection}</div> : null}
+        </div>
+    );
+};
 
 export type CheckboxProps = Props;
 export default Checkbox;
