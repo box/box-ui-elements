@@ -3,19 +3,22 @@ import sinon from 'sinon';
 
 import HotkeyRecord from '../HotkeyRecord';
 import HotkeyLayer from '../HotkeyLayer';
+import HotkeyService from '../HotkeyService';
 
 const sandbox = sinon.sandbox.create();
+
+jest.mock('../HotkeyService');
 
 describe('components/hotkeys/HotkeyLayer', () => {
     beforeEach(() => {
         // This is required to prevent actually invoking HotkeyService, which causes
         // HotkeyService tests to fail
-        HotkeyLayer.__Rewire__('HotkeyService', class {});
+        HotkeyService.mockImplementation(() => {});
     });
 
     afterEach(() => {
         sandbox.verifyAndRestore();
-        HotkeyLayer.__ResetDependency__('HotkeyService');
+        HotkeyService.mockReset();
     });
 
     describe('getChildContext()', () => {

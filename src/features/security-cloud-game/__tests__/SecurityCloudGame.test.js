@@ -2,9 +2,13 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 
+import DragCloud from '../DragCloud';
+import DropCloud from '../DropCloud';
 import SecurityCloudGame from '../SecurityCloudGame';
 
 const sandbox = sinon.sandbox.create();
+jest.mock('../DragCloud');
+jest.mock('../DropCloud');
 
 describe('features/security-cloud-game/SecurityCloudGame', () => {
     let clock;
@@ -14,16 +18,14 @@ describe('features/security-cloud-game/SecurityCloudGame', () => {
 
     beforeEach(() => {
         clock = sandbox.useFakeTimers();
-        SecurityCloudGame.__Rewire__('makeDroppable', () => component => component);
-        SecurityCloudGame.__Rewire__('DragCloud', DragCloudMock);
-        SecurityCloudGame.__Rewire__('DropCloud', DropCloudMock);
+        DragCloud.mockImplementation(DragCloudMock);
+        DropCloud.mockImplementation(DropCloudMock);
     });
 
     afterEach(() => {
         sandbox.verifyAndRestore();
-        SecurityCloudGame.__ResetDependency__('makeDroppable');
-        SecurityCloudGame.__ResetDependency__('DragCloud');
-        SecurityCloudGame.__ResetDependency__('DropCloud');
+        DragCloud.mockReset();
+        DropCloud.mockReset();
     });
 
     test('should correctly render', () => {
@@ -101,15 +103,15 @@ describe('features/security-cloud-game/SecurityCloudGame', () => {
 
         const component = mount(<SecurityCloudGame cloudSize={10} height={100} width={100} />);
 
-        expect(component.find(DragCloudMock).length).toEqual(1);
-        expect(component.find(DragCloudMock).prop('cloudSize')).toEqual(10);
-        expect(component.find(DragCloudMock).prop('position')).toEqual({
+        expect(component.find(DragCloud).length).toEqual(1);
+        expect(component.find(DragCloud).prop('cloudSize')).toEqual(10);
+        expect(component.find(DragCloud).prop('position')).toEqual({
             x: 5,
             y: 5,
         });
-        expect(component.find(DropCloudMock).length).toEqual(1);
-        expect(component.find(DropCloudMock).prop('cloudSize')).toEqual(10);
-        expect(component.find(DropCloudMock).prop('position')).toEqual({
+        expect(component.find(DropCloud).length).toEqual(1);
+        expect(component.find(DropCloud).prop('cloudSize')).toEqual(10);
+        expect(component.find(DropCloud).prop('position')).toEqual({
             x: 10,
             y: 10,
         });
@@ -128,12 +130,12 @@ describe('features/security-cloud-game/SecurityCloudGame', () => {
             isValidDrop: true,
         });
 
-        expect(component.find(DragCloudMock).length).toEqual(1);
-        expect(component.find(DragCloudMock).prop('position')).toEqual({
+        expect(component.find(DragCloud).length).toEqual(1);
+        expect(component.find(DragCloud).prop('position')).toEqual({
             x: 5,
             y: 5,
         });
-        expect(component.find(DropCloudMock).length).toEqual(0);
+        expect(component.find(DropCloud).length).toEqual(0);
     });
 
     test('should render an instructional message when renderMessage is called', () => {
