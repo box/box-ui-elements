@@ -141,7 +141,7 @@
         "@box/languages": "^1.0.0",
         "@commitlint/cli": "^8.3.5",
         "@commitlint/config-conventional": "^8.3.4",
-        "@hapi/address": "^2.0.0",
+        "@hapi/address": "2.1.1",
         "@sambego/storybook-state": "^2.0.1",
         "@storybook/addon-actions": "^5.3.9",
         "@storybook/addon-docs": "^5.3.9",
@@ -303,7 +303,7 @@
         "yargs": "^15.1.0"
     },
     "peerDependencies": {
-        "@hapi/address": "^2.0.0",
+        "@hapi/address": ">=2.0.0 <2.1.2",
         "axios": "^0.18.1",
         "classnames": "^2.2.5",
         "color": "^3.1.2",
@@ -338,5 +338,11 @@
         "scroll-into-view-if-needed": "^2.2.20",
         "tabbable": "^1.1.2",
         "uuid": "^3.3.2"
+    },
+    "comments": {
+        "dependencies": {
+            "@hapi/address": "Version 2.1.2+ requires a polyfill for TextEncoder. Pinning to version 2.1.1 prevents IE11 from breaking.",
+            "react-tether": "Version 2.x has too many breaking changes and requires forwardRef on all components"
+        }
     }
 }
