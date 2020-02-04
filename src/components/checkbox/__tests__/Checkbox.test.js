@@ -1,5 +1,4 @@
 import React from 'react';
-import sinon from 'sinon';
 
 import Checkbox from '..';
 
@@ -8,7 +7,7 @@ describe('components/checkbox/Checkbox', () => {
     let onChange;
 
     beforeEach(() => {
-        onChange = sinon.spy();
+        onChange = jest.fn();
         wrapper = shallow(<Checkbox id="1" label="Check things" name="name" onChange={onChange} />);
     });
 
@@ -17,15 +16,18 @@ describe('components/checkbox/Checkbox', () => {
         expect(wrapper.find('input').prop('id')).toEqual('1');
         expect(wrapper.find('input').prop('name')).toEqual('name');
         expect(wrapper.find('input').prop('type')).toEqual('checkbox');
-        expect(
-            wrapper
-                .find('span')
-                .at(0)
-                .prop('className'),
-        ).toEqual('checkbox-pointer-target');
+        expect(wrapper.find('.checkbox-pointer-target').length).toBe(1);
         expect(wrapper.find('label').text()).toEqual('Check things');
         expect(wrapper.find('input').prop('checked')).toBeFalsy();
         expect(wrapper.find('.label').length).toBe(0);
+    });
+
+    test('should generate an ID if one is not passed in', () => {
+        wrapper.setProps({
+            id: undefined,
+        });
+
+        expect(wrapper.find('input').prop('id')).toBeDefined();
     });
 
     test('should pass rest of props to input', () => {
@@ -42,7 +44,6 @@ describe('components/checkbox/Checkbox', () => {
 
         const tooltipIcon = wrapper.find('CheckboxTooltip');
         expect(tooltipIcon.length).toBeTruthy();
-        expect(tooltipIcon.prop('label').type).toEqual('label');
         expect(tooltipIcon.prop('tooltip')).toEqual(tooltip);
     });
 
@@ -65,7 +66,7 @@ describe('components/checkbox/Checkbox', () => {
             },
         };
         wrapper.find('input').simulate('change', event);
-        sinon.assert.calledWithMatch(onChange, event);
+        expect(onChange).toBeCalledWith(event);
     });
 
     test('should render a hidden label when hideLabel is specified', () => {

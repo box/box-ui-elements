@@ -11,7 +11,7 @@ describe('components/radio/RadioGroup', () => {
         sandbox.verifyAndRestore();
     });
 
-    const renderRadioButtons = onChange =>
+    const renderRadioButtons = (onChange?: Function) =>
         mount(
             <RadioGroup name="radiogroup" onChange={onChange} value="radio3">
                 <RadioButton
@@ -83,7 +83,7 @@ describe('components/radio/RadioGroup', () => {
     test('should call onChange callback when onchange triggers', () => {
         const onChange = sandbox.spy();
         const component = renderRadioButtons(onChange);
-        const inputEl = component
+        const inputEl: HTMLInputElement = component
             .find('input')
             .at(0)
             .getDOMNode();
@@ -97,7 +97,7 @@ describe('components/radio/RadioGroup', () => {
 
     test('should update state when change event is fired', () => {
         const component = renderRadioButtons();
-        const inputEl = component
+        const inputEl: HTMLInputElement = component
             .find('input')
             .at(0)
             .getDOMNode();
