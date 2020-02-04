@@ -1,9 +1,10 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
-import { RadioButton } from '..';
+import RadioButton from '../RadioButton';
 
 describe('components/radio/RadioButton', () => {
-    const renderRadioButtons = props => (
+    const renderRadioButtons = (props?: Record<string, string | boolean>) => (
         <RadioButton description="radio1desc" label="Select things" name="name1" value="1" {...props} />
     );
 
