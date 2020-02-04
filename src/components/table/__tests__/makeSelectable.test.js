@@ -3,9 +3,11 @@ import { Set } from 'immutable';
 import sinon from 'sinon';
 
 import makeSelectable from '../makeSelectable';
+import shiftSelect from '../shiftSelect';
 
 const sandbox = sinon.sandbox.create();
 
+jest.mock('../shiftSelect');
 jest.useFakeTimers();
 
 describe('components/table/makeSelectable', () => {
@@ -130,7 +132,7 @@ describe('components/table/makeSelectable', () => {
 
     describe('selectRange()', () => {
         afterEach(() => {
-            makeSelectable.__ResetDependency__('shiftSelect');
+            shiftSelect.mockReset();
         });
 
         test('should call shiftSelect with correct args', () => {
@@ -142,17 +144,7 @@ describe('components/table/makeSelectable', () => {
             // expected computed value
             const selectedRows = new Set([0, 1, 2]);
 
-            makeSelectable.__Rewire__(
-                'shiftSelect',
-                (selectedRowsArg, focusedIndexArg, rowIndexArg, anchorIndexArg) => {
-                    expect(selectedRowsArg.equals(selectedRows)).toBe(true);
-                    expect(focusedIndexArg).toEqual(focusedIndex);
-                    expect(rowIndexArg).toEqual(rowIndex);
-                    expect(anchorIndexArg).toEqual(anchorIndex);
-
-                    return new Set([1, 2, 3]);
-                },
-            );
+            shiftSelect.mockImplementation(() => new Set([1, 2, 3]));
 
             const wrapper = getWrapper({
                 selectedItems,
@@ -168,16 +160,16 @@ describe('components/table/makeSelectable', () => {
             };
 
             instance.selectRange(rowIndex);
+            expect(shiftSelect).toHaveBeenCalledWith(selectedRows, focusedIndex, rowIndex, anchorIndex);
         });
 
         test('should not change selection if clicking on same row', () => {
-            makeSelectable.__Rewire__('shiftSelect', sandbox.mock().never());
-
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.previousIndex = 1;
 
             instance.selectRange(1);
+            expect(shiftSelect).not.toHaveBeenCalled();
         });
     });
 
