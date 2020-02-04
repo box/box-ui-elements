@@ -3,7 +3,7 @@
 // ${(props) => props.theme}
 // Or using import { withTheme } from 'styled-components';
 
-import * as vars from '../../styles/variables';
+import * as vars from './variables';
 
 const theme = {
     base: {
@@ -12,8 +12,6 @@ const theme = {
         backgroundActive: vars.bdlGray10,
         foreground: vars.bdlGray,
         border: vars.bdlGray30,
-        borderHover: vars.bdlGray30,
-        borderActive: vars.bdlGray30,
 
         buttonForeground: vars.black,
         buttonBackground: vars.white,
@@ -27,20 +25,19 @@ const theme = {
     // Primary or brand color
     primary: {
         background: vars.bdlBoxBlue,
-        backgroundHover: '#006FF3',
-        backgroundActive: '#0049A0',
-        foreground: vars.white,
+        backgroundActive: '#004eac',
+        backgroundGradient: '#0055bc',
+        backgroundHover: '#006ae9',
         border: vars.bdlBoxBlue,
-        borderHover: '#006FF3',
-        borderActive: '#0049A0',
 
-        buttonForeground: vars.white,
         buttonBackground: vars.bdlBoxBlue,
-        buttonBackgroundHover: '#006FF3',
-        buttonBackgroundActive: '#0049A0',
+        buttonBackgroundActive: '#004eac',
+        buttonBackgroundHover: '#006ae9',
         buttonBorder: vars.bdlBoxBlue,
-        buttonBorderHover: '#006FF3',
-        buttonBorderActive: '#0049A0',
+        buttonBorderActive: '#004eac',
+        buttonBorderHover: '#006ae9',
+        buttonForeground: vars.white,
+        foreground: vars.white,
     },
 
     // TODO(akahn): Should be the same keys as the default if applicable
