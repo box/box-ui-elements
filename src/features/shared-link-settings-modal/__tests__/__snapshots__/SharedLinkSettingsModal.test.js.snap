@@ -11,7 +11,7 @@ exports[` 1`] = `
   <Classification
     className="bdl-SharedLinkSettingsModal-classification"
     definition="test"
-    messageStyle="tooltip"
+    messageStyle="tooltip bdl-Tooltip"
     name="internal"
   />
 </span>

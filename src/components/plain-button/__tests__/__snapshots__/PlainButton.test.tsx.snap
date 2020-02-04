@@ -3,7 +3,7 @@
 exports[`components/plain-button/PlainButton should render component correctly and prevent onClick when isDisabled is true 1`] = `
 <button
   aria-disabled={true}
-  className="btn-plain "
+  className="btn-plain bdl-Button--plain "
   onClick={[Function]}
   type="submit"
 />
@@ -11,7 +11,7 @@ exports[`components/plain-button/PlainButton should render component correctly a
 
 exports[`components/plain-button/PlainButton should render component correctly and trigger onClick when isDisabled is false 1`] = `
 <button
-  className="btn-plain "
+  className="btn-plain bdl-Button--plain "
   onClick={
     [MockFunction] {
       "calls": Array [

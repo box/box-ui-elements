@@ -12,7 +12,7 @@ import './Classification.scss';
 import type { Controls, ControlsFormat } from './flowTypes';
 
 const STYLE_INLINE: 'inline' = 'inline';
-const STYLE_TOOLTIP: 'tooltip bdl-Tooltip' = 'tooltip bdl-Tooltip';
+const STYLE_TOOLTIP: 'tooltip' = 'tooltip';
 
 type Props = {
     className?: string,
