@@ -3,8 +3,8 @@ import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 import TetherComponent from 'react-tether';
 
-import IconClose from '../../icon/fill/X16';
-import PlainButton from '../plain-button';
+import IconClose from '../../../icon/fill/X16';
+import PlainButton from '../../plain-button';
 
 import './Tooltip.scss';
 

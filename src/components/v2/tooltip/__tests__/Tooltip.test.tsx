@@ -7,7 +7,7 @@ import Tooltip, { TooltipPosition, TooltipTheme } from '../Tooltip';
 
 const sandbox = sinon.sandbox.create();
 
-describe('components/tooltip/Tooltip', () => {
+describe('components/v2/tooltip/Tooltip', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const getWrapper = (props: Record<string, any>) =>
         shallow<Tooltip>(

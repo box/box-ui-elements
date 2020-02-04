@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { boolean } from '@storybook/addon-knobs';
 
-import Button from '../button/Button';
+import Button from '../../button/Button';
 import Tooltip, { TooltipPosition, TooltipTheme } from './Tooltip';
 import notes from './Tooltip.stories.md';
 

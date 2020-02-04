@@ -4,8 +4,8 @@ import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 import TetherComponent from 'react-tether';
 
-import IconClose from '../../icons/general/IconClose';
-import PlainButton from '../plain-button';
+import IconClose from '../../../icons/general/IconClose';
+import PlainButton from '../../plain-button';
 
 import './Tooltip.scss';
 

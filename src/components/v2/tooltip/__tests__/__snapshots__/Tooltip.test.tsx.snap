@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/tooltip/Tooltip render() should not render the close button if wasClosedByUser state is true 1`] = `
+exports[`components/v2/tooltip/Tooltip render() should not render the close button if wasClosedByUser state is true 1`] = `
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
@@ -24,7 +24,7 @@ exports[`components/tooltip/Tooltip render() should not render the close button 
 </TetherComponent>
 `;
 
-exports[`components/tooltip/Tooltip render() should not render with close button if isShown is false 1`] = `
+exports[`components/v2/tooltip/Tooltip render() should not render with close button if isShown is false 1`] = `
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
@@ -48,7 +48,7 @@ exports[`components/tooltip/Tooltip render() should not render with close button
 </TetherComponent>
 `;
 
-exports[`components/tooltip/Tooltip render() should not render with close button if showCloseButton is false 1`] = `
+exports[`components/v2/tooltip/Tooltip render() should not render with close button if showCloseButton is false 1`] = `
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
@@ -81,13 +81,13 @@ exports[`components/tooltip/Tooltip render() should not render with close button
 </TetherComponent>
 `;
 
-exports[`components/tooltip/Tooltip render() should render children only when tooltip is disabled 1`] = `
+exports[`components/v2/tooltip/Tooltip render() should render children only when tooltip is disabled 1`] = `
 <div>
   Hello
 </div>
 `;
 
-exports[`components/tooltip/Tooltip render() should render children wrapped in tether when tooltip has text missing 1`] = `
+exports[`components/v2/tooltip/Tooltip render() should render children wrapped in tether when tooltip has text missing 1`] = `
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
@@ -118,7 +118,7 @@ exports[`components/tooltip/Tooltip render() should render children wrapped in t
 </TetherComponent>
 `;
 
-exports[`components/tooltip/Tooltip render() should render correctly with callout theme 1`] = `
+exports[`components/v2/tooltip/Tooltip render() should render correctly with callout theme 1`] = `
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
@@ -151,7 +151,7 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
 </TetherComponent>
 `;
 
-exports[`components/tooltip/Tooltip render() should render with close button if isShown and showCloseButton are true 1`] = `
+exports[`components/v2/tooltip/Tooltip render() should render with close button if isShown and showCloseButton are true 1`] = `
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
