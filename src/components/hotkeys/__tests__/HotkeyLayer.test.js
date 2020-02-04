@@ -8,17 +8,14 @@ import HotkeyService from '../HotkeyService';
 const sandbox = sinon.sandbox.create();
 
 jest.mock('../HotkeyService');
-
 describe('components/hotkeys/HotkeyLayer', () => {
-    beforeEach(() => {
-        // This is required to prevent actually invoking HotkeyService, which causes
-        // HotkeyService tests to fail
-        HotkeyService.mockImplementation(() => {});
-    });
+    // This is required to prevent actually invoking HotkeyService, which causes
+    // HotkeyService tests to fail
+    HotkeyService.mockImplementation(() => {});
 
     afterEach(() => {
         sandbox.verifyAndRestore();
-        HotkeyService.mockReset();
+        HotkeyService.mockClear();
     });
 
     describe('getChildContext()', () => {

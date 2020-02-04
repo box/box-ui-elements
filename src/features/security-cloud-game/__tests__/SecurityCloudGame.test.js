@@ -15,17 +15,17 @@ describe('features/security-cloud-game/SecurityCloudGame', () => {
 
     const DragCloudMock = () => <div />;
     const DropCloudMock = () => <div />;
+    DragCloud.mockImplementation(DragCloudMock);
+    DropCloud.mockImplementation(DropCloudMock);
 
     beforeEach(() => {
         clock = sandbox.useFakeTimers();
-        DragCloud.mockImplementation(DragCloudMock);
-        DropCloud.mockImplementation(DropCloudMock);
     });
 
     afterEach(() => {
         sandbox.verifyAndRestore();
-        DragCloud.mockReset();
-        DropCloud.mockReset();
+        DragCloud.mockClear();
+        DropCloud.mockClear();
     });
 
     test('should correctly render', () => {
