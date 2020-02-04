@@ -403,6 +403,14 @@ export const TASK_EDIT_MODE_EDIT: 'EDIT' = 'EDIT';
 /* ----------------- Task Validation ---------------- */
 export const TASK_MAX_GROUP_ASSIGNEES: 250 = 250;
 
+/* ----------------- Theme ---------------------------*/
+export const THEME_VERY_DARK = 'vDark';
+export const THEME_DARK = 'dark';
+export const THEME_MID_DARK = 'midDark';
+export const THEME_MIDTONE = 'midTone';
+export const THEME_MID_LIGHT = 'midLight';
+export const THEME_VERY_LIGHT = 'vLight';
+
 /* ------------------ Keyboard Events ----------------- */
 export const KEYS = {
     arrowDown: 'ArrowDown',

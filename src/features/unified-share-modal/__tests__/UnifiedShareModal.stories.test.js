@@ -6,12 +6,12 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
     ];
 
     test.each(USM_STORIES)('looks visually correct when using story %s', async id => {
-        const image = await takeScreenshot(id);
+        const image = await BoxVisualTestUtils.takeScreenshot(id);
         return expect(image).toMatchImageSnapshot();
     });
 
     test.each(USM_STORIES)('looks visually correct when button is clicked in story %s', async id => {
-        const image = await takeModalScreenshot(id);
+        const image = await BoxVisualTestUtils.takeModalScreenshot(id);
         return expect(image).toMatchImageSnapshot();
     });
 });

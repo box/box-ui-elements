@@ -513,6 +513,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         api.getFileCollaboratorsAPI(true).getFileCollaborators(file.id, successCallback, errorCallback, {
             filter_term: searchStr,
             include_groups: includeGroups,
+            include_uploader_collabs: false,
         });
     }
 

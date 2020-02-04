@@ -66,40 +66,10 @@ const messages = defineMessages({
         description: 'Error message displayed if the user enters a badly formatted value in metadata text box',
         id: 'boxui.metadataInstanceEditor.invalidValue',
     },
-    invalidMetadataFieldType: {
-        defaultMessage: 'Invalid metadata field type!',
-        description: 'Error message displayed if the template has an field type we dont recognize',
-        id: 'boxui.metadataInstanceEditor.invalidMetadataFieldType',
-    },
     metadataEditTooltip: {
         defaultMessage: 'Edit Metadata',
         description: 'Text that shows in a tooltip above the edit pencil button.',
         id: 'boxui.metadataInstanceEditor.editTooltip',
-    },
-    metadataFieldNoValue: {
-        defaultMessage: 'No Value',
-        description: 'Text to indicate no value exists',
-        id: 'boxui.metadataInstanceEditor.fieldNoValue',
-    },
-    metadataFieldSelectValue: {
-        defaultMessage: 'Select Value',
-        description: 'Text to indicate to select a value from drop down list',
-        id: 'boxui.metadataInstanceEditor.fieldSelectValue',
-    },
-    metadataFieldMultiSelectValue: {
-        defaultMessage: 'Select Values',
-        description: 'Text to indicate to select one or more values from drop down list',
-        id: 'boxui.metadataInstanceEditor.fieldMultiSelectValue',
-    },
-    metadataFieldSetValue: {
-        defaultMessage: 'Set Value',
-        description: 'Text to indicate to set a value',
-        id: 'boxui.metadataInstanceEditor.fieldSetValue',
-    },
-    metadataFieldSetDate: {
-        defaultMessage: 'Set Date',
-        description: 'Text to indicate to set a date',
-        id: 'boxui.metadataInstanceEditor.fieldSetDate',
     },
     metadataRemoveTemplate: {
         defaultMessage: 'Remove',
