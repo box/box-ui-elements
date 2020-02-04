@@ -15,5 +15,4 @@ export { default as SecurityCloudGameExamples } from './SecurityCloudGameExample
 export { default as SelectableTableExamples } from './SelectableTableExamples';
 export { default as SelectorDropdownExamples } from './SelectorDropdownExamples';
 export { default as MetadataExamples } from './MetadataExamples';
-export { default as ThemeExample } from './ThemeExample';
 export { default as ThumbnailCardExamples } from './ThumbnailCardExamples';
