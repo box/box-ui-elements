@@ -39,7 +39,9 @@ a,
 a:focus,
 .lnk:focus,
 a.bdl-is-disabled:focus,
-.lnk.bdl-is-disabled:focus {
+.lnk.bdl-is-disabled:focus,
+a.is-disabled:focus,
+.lnk.is-disabled:focus {
     text-decoration: underline;
 }
 
@@ -48,7 +50,13 @@ a.bdl-is-disabled:hover,
 a.bdl-is-disabled:active,
 .lnk.bdl-is-disabled,
 .lnk.bdl-is-disabled:hover,
-.lnk.bdl-is-disabled:active {
+.lnk.bdl-is-disabled:active,
+a.is-disabled,
+a.is-disabled:hover,
+a.is-disabled:active,
+.lnk.is-disabled,
+.lnk.is-disabled:hover,
+.lnk.is-disabled:active {
     color: $bdl-gray-50;
     text-decoration: none;
     cursor: default;
@@ -65,7 +73,10 @@ a.bdl-is-disabled:active,
 
 .lnk-plain.bdl-is-disabled,
 .lnk-plain.bdl-is-disabled:hover,
-.lnk-plain.bdl-is-disabled:active {
+.lnk-plain.bdl-is-disabled:active,
+.lnk-plain.is-disabled,
+.lnk-plain.is-disabled:hover,
+.lnk-plain.is-disabled:active {
     color: $bdl-gray-50;
 }
 
@@ -97,13 +108,4 @@ a svg {
     line-height: 28px;
     letter-spacing: .1em;
     text-transform: uppercase;
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.is-disabled {
-    @extend .bdl-is-disabled;
 }

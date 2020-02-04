@@ -21,7 +21,8 @@
     .bce-more-options {
         opacity: 0;
 
-        .bdl-Button {
+        .bdl-Button,
+        .btn {
             margin-left: 8px;
             background-color: transparent;
         }
@@ -42,7 +43,8 @@
         }
 
         .bce-item-coloumn,
-        .be & .bdl-Button--plain {
+        .be & .bdl-Button--plain,
+        .be & .btn-plain {
             color: $dark-cerulean;
             outline: none;
         }
@@ -57,7 +59,8 @@
         }
 
         .bce-item-coloumn,
-        .be & .bdl-Button--plain {
+        .be & .bdl-Button--plain,
+        .be & .btn-plain {
             color: $dark-cerulean;
         }
     }
@@ -101,17 +104,4 @@
             outline: none;
         }
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn-plain {
-    @extend .bdl-Button--plain;
-}
-
-.btn {
-    @extend .bdl-Button;
 }

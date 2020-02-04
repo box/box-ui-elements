@@ -37,17 +37,20 @@
     }
 
     .bcp-footer-actions {
-        .bdl-Button {
+        .bdl-Button,
+        .btn {
             width: 40px;
             height: 32px;
             padding: 0;
         }
 
-        .bdl-Button:first-child {
+        .bdl-Button:first-child,
+        .btn:first-child {
             border-right: 0;
         }
 
-        .bdl-Button--primary svg {
+        .bdl-Button--primary svg,
+        .btn-primary svg {
             fill: #fff;
         }
     }
@@ -57,7 +60,8 @@
         flex: 1 0 auto;
     }
 
-    .bdl-ButtonGroup {
+    .bdl-ButtonGroup,
+    .btn-group {
         margin-right: 5px;
         margin-left: 5px;
     }
@@ -72,21 +76,4 @@
     50% {
         transform: scale(1.2);
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn-primary {
-    @extend .bdl-Button--primary;
-}
-
-.btn-group {
-    @extend .bdl-ButtonGroup;
-}
-
-.btn {
-    @extend .bdl-Button;
 }

@@ -92,6 +92,7 @@
     }
 
     .bdl-PillSelectorDropdown .bdl-PillSelector, // need both selectors for specificity
+    .pill-selector-wrapper .pill-selector-input-wrapper,
     textarea {
         /* override for DOM element in `TextArea` which provides no id/class for targeting */
         width: 100%;
@@ -129,20 +130,24 @@
         }
     }
 
-    .bdl-PillSelector {
+    .bdl-PillSelector,
+    .pill-selector-input-wrapper {
         margin-top: 10px;
         border: 1px solid $bdl-gray-20;
 
-        .bdl-PillSelector-input::placeholder {
+        .bdl-PillSelector-input::placeholder,
+        .pill-selector-input::placeholder {
             color: $bdl-gray-50;
         }
 
-        &.bdl-is-disabled {
+        &.bdl-is-disabled,
+        &.is-disabled {
             color: $bdl-gray-30;
             background-color: $bdl-gray-02;
             box-shadow: none;
 
-            .bdl-PillSelector-input::placeholder {
+            .bdl-PillSelector-input::placeholder,
+            .pill-selector-input::placeholder {
                 color: $bdl-gray-50;
             }
 
@@ -214,7 +219,8 @@
     }
 
     .shared-link-access-row {
-        .bdl-Button--plain {
+        .bdl-Button--plain,
+        .btn-plain {
             margin-right: 10px;
 
             &.can-edit-btn {
@@ -268,29 +274,4 @@
         margin: -5px 0 10px 0;
         color: $bdl-box-blue;
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.pill-selector-wrapper {
-    @extend .bdl-PillSelectorDropdown;
-}
-
-.pill-selector-input {
-    @extend .bdl-PillSelector-input;
-}
-
-.btn-plain {
-    @extend .bdl-Button--plain;
-}
-
-.pill-selector-input-wrapper {
-    @extend .bdl-PillSelector;
-}
-
-.is-disabled {
-    @extend .bdl-is-disabled;
 }

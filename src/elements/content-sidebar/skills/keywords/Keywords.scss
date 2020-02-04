@@ -3,7 +3,8 @@
 .be-keywords {
     position: relative;
 
-    .bdl-Button--plain.be-keyword-edit {
+    .bdl-Button--plain.be-keyword-edit,
+    .btn-plain.be-keyword-edit {
         position: absolute;
         top: -46px;
         right: 15px;
@@ -24,13 +25,4 @@
             }
         }
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn-plain {
-    @extend .bdl-Button--plain;
 }

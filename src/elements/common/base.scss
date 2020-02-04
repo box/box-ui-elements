@@ -40,10 +40,12 @@
     }
 
     .bdl-Button--plain,
+    .bdl-SelectButton,
+    .btn-plain,
     input,
     textarea,
     select,
-    .bdl-SelectButton {
+    .select-button {
         font: inherit;
     }
 }
@@ -117,17 +119,4 @@
 
 .be-hidden {
     display: none;
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn-plain {
-    @extend .bdl-Button--plain;
-}
-
-.select-button {
-    @extend .bdl-SelectButton;
 }

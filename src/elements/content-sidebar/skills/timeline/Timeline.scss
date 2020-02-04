@@ -37,17 +37,9 @@
             margin-left: 10px;
         }
 
-        .bdl-Button--plain:hover svg path {
+        .bdl-Button--plain:hover svg path,
+        .btn-plain:hover svg path {
             fill: $bdl-gray;
         }
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn-plain {
-    @extend .bdl-Button--plain;
 }

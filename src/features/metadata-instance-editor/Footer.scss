@@ -6,24 +6,13 @@
     justify-content: space-between;
     margin-top: 10px;
 
-    .metadata-instance-editor-footer-delete .bdl-Button--plain {
+    .metadata-instance-editor-footer-delete .bdl-Button--plain,
+    .metadata-instance-editor-footer-delete .btn-plain {
         color: $bdl-watermelon-red;
     }
 
-    .metadata-instance-editor-footer-save-cancel .bdl-Button:last-child {
+    .metadata-instance-editor-footer-save-cancel .bdl-Button:last-child,
+    .metadata-instance-editor-footer-save-cancel .btn:last-child {
         margin-right: 0;
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn-plain {
-    @extend .bdl-Button--plain;
-}
-
-.btn {
-    @extend .bdl-Button;
 }

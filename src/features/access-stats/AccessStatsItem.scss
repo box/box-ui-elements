@@ -7,7 +7,10 @@
         &,
         &.bdl-Button--plain,
         &.bdl-Button--plain:focus,
-        &.bdl-Button--plain:hover {
+        &.bdl-Button--plain:hover,
+        &.btn-plain,
+        &.btn-plain:focus,
+        &.btn-plain:hover {
             display: flex;
             align-items: center;
             width: 100%;
@@ -21,7 +24,9 @@
         }
 
         &.bdl-Button--plain:focus,
-        &.bdl-Button--plain:hover {
+        &.bdl-Button--plain:hover,
+        &.btn-plain:focus,
+        &.btn-plain:hover {
             .access-stats-label {
                 text-decoration: underline;
             }
@@ -35,13 +40,4 @@
     svg {
         margin-right: 8px;
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn-plain {
-    @extend .bdl-Button--plain;
 }

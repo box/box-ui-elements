@@ -1,7 +1,8 @@
 @import '../../styles/variables';
 
 .invite-collaborators-modal {
-    .bdl-Label {
+    .bdl-Label,
+    .label {
         color: $bdl-gray-62;
         font-weight: bold;
     }
@@ -47,7 +48,8 @@
             overflow: auto;
         }
 
-        .bdl-PillSelector {
+        .bdl-PillSelector,
+        .pill-selector-input-wrapper {
             width: 100%;
             height: 60px;
         }
@@ -61,17 +63,4 @@
         display: block;
         margin-bottom: 15px;
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.pill-selector-input-wrapper {
-    @extend .bdl-PillSelector;
-}
-
-.label {
-    @extend .bdl-Label;
 }

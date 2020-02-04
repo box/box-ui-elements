@@ -1,6 +1,7 @@
 .new-folder-modal {
     .folder-name-input {
-        .bdl-Label {
+        .bdl-Label,
+        .label {
             white-space: pre-wrap;
             word-wrap: break-word;
         }
@@ -9,13 +10,4 @@
             width: 100%;
         }
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.label {
-    @extend .bdl-Label;
 }

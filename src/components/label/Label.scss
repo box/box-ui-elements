@@ -9,8 +9,8 @@
     color: $bdl-gray-62;
     font-weight: bold;
 
-    .label-optional,
-    .bdl-Label-optional {
+    .bdl-Label-optional,
+    .label-optional {
         padding-left: 3px;
     }
 
@@ -23,7 +23,6 @@
         }
     }
 }
-
 
 /*
 * Section below is for bdl-namespace backwards compatibility.

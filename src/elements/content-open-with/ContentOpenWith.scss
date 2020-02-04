@@ -3,7 +3,8 @@
 .be.bcow {
     font-family: $font;
 
-    .bdl-Button {
+    .bdl-Button,
+    .btn {
         padding: 3px 13px 3px 10px;
     }
 
@@ -55,13 +56,4 @@
         margin: 0 auto;
         font-size: 16px;
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn {
-    @extend .bdl-Button;
 }

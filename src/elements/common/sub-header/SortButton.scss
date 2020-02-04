@@ -1,4 +1,5 @@
-.bdl-Button.be-btn-sort {
+.bdl-Button.be-btn-sort,
+.btn.be-btn-sort {
     padding: 7px 6px;
 
     .bce:not(.be-is-small) & {
@@ -8,13 +9,4 @@
     svg {
         display: block;
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn {
-    @extend .bdl-Button;
 }

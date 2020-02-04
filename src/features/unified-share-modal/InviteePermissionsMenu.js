@@ -89,7 +89,8 @@ class InviteePermissionsMenu extends Component<Props> {
         const plainButton = (
             <PlainButton
                 className={classNames('lnk', {
-                    'is-disabled bdl-is-disabled': disabled,
+                    'is-disabled': disabled,
+                    'bdl-is-disabled': disabled,
                 })}
                 disabled={disabled}
                 {...inviteePermissionsButtonProps}

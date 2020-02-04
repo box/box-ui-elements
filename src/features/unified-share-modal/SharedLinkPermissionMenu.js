@@ -67,7 +67,8 @@ class SharedLinkPermissionMenu extends Component<Props> {
             <DropdownMenu constrainToWindow>
                 <PlainButton
                     className={classNames('lnk', {
-                        'is-disabled bdl-is-disabled': submitting,
+                        'is-disabled': submitting,
+                        'bdl-is-disabled': submitting,
                     })}
                     disabled={submitting}
                     {...sharedLinkPermissionsMenuButtonProps}

@@ -15,7 +15,8 @@
             min-width: 43px;
         }
 
-        .be & .bdl-Button--plain {
+        .be & .bdl-Button--plain,
+        .be & .btn-plain {
             color: inherit;
             font-size: 11px;
         }
@@ -24,13 +25,4 @@
     .be-breadcrumb-more {
         min-width: 16px;
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn-plain {
-    @extend .bdl-Button--plain;
 }

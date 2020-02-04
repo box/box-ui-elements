@@ -1,5 +1,6 @@
 .email-shared-link {
-    .bdl-PillSelectorDropdown {
+    .bdl-PillSelectorDropdown,
+    .pill-selector-wrapper {
         margin: 0;
     }
 
@@ -15,6 +16,7 @@
     }
 
     .bdl-PillSelector,
+    .pill-selector-input-wrapper,
     textarea {
         width: 100%;
     }
@@ -28,21 +30,9 @@
             height: 100px;
         }
 
-        .bdl-PillSelector {
+        .bdl-PillSelector,
+        .pill-selector-input-wrapper {
             height: 58px;
         }
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.pill-selector-wrapper {
-    @extend .bdl-PillSelectorDropdown;
-}
-
-.pill-selector-input-wrapper {
-    @extend .bdl-PillSelector;
 }

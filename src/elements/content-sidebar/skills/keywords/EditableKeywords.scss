@@ -5,7 +5,8 @@
         margin: 7px -5px 0 0;
         text-align: right;
 
-        .bdl-Button {
+        .bdl-Button,
+        .btn {
             margin: 0 0 0 5px;
         }
     }
@@ -13,11 +14,13 @@
     .bdl-EditableKeywords {
         margin: 0;
 
-        .bdl-PillSelector {
+        .bdl-PillSelector,
+        .pill-selector-input-wrapper {
             width: 100%;
             margin: 0;
 
-            input[type='text'].bdl-PillSelector-input {
+            input[type='text'].bdl-PillSelector-input,
+            input[type='text'].pill-selector-input {
                 min-width: 97%;
                 height: 24px;
                 margin: 2px 0 0 2px;
@@ -27,21 +30,4 @@
             }
         }
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.pill-selector-input {
-    @extend .bdl-PillSelector-input;
-}
-
-.pill-selector-input-wrapper {
-    @extend .bdl-PillSelector;
-}
-
-.btn {
-    @extend .bdl-Button;
 }

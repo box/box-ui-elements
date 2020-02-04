@@ -3,7 +3,8 @@
 .bdl-EnumMetadataField {
     margin: 0 0 20px;
 
-    .bdl-Label {
+    .bdl-Label,
+    .label {
         word-wrap: break-word;
     }
 
@@ -25,13 +26,4 @@
         color: $bdl-gray-62;
         word-wrap: break-word;
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.label {
-    @extend .bdl-Label;
 }

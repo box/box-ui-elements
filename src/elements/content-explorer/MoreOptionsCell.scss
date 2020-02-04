@@ -1,12 +1,4 @@
-.bdl-Button.bce-btn-more-options {
+.bdl-Button.bce-btn-more-options,
+.btn.bce-btn-more-options {
     letter-spacing: 1.5px;
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn {
-    @extend .bdl-Button;
 }

@@ -9,13 +9,15 @@ $assignee-dropdown-height: 215px;
         display: block;
         text-align: right;
 
-        .bdl-Button {
+        .bdl-Button,
+        .btn {
             margin-top: 0;
             margin-right: 0;
             margin-bottom: 10px;
         }
 
-        .bdl-Button:last-child {
+        .bdl-Button:last-child,
+        .btn:last-child {
             margin-left: 10px;
         }
     }
@@ -50,15 +52,18 @@ $assignee-dropdown-height: 215px;
             margin-bottom: 15px;
         }
 
-        input.bdl-PillSelector-input--hidden {
+        input.bdl-PillSelector-input--hidden,
+        input.pill-selector-hidden-input {
             width: 1px;
         }
 
-        .bdl-PillSelectorDropdown {
+        .bdl-PillSelectorDropdown,
+        .pill-selector-wrapper {
             width: 100%;
             margin-left: 0;
 
-            .bdl-PillSelector {
+            .bdl-PillSelector,
+            .pill-selector-input-wrapper {
                 width: auto;
             }
 
@@ -80,25 +85,4 @@ $assignee-dropdown-height: 215px;
     .inline-alert {
         margin: 0 0 20px 0;
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.pill-selector-hidden-input {
-    @extend .bdl-PillSelector-input--hidden;
-}
-
-.pill-selector-wrapper {
-    @extend .bdl-PillSelectorDropdown;
-}
-
-.pill-selector-input-wrapper {
-    @extend .bdl-PillSelector;
-}
-
-.btn {
-    @extend .bdl-Button;
 }

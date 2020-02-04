@@ -15,17 +15,9 @@
         flex-basis: 0;
     }
 
-    .bdl-ButtonGroup {
+    .bdl-ButtonGroup,
+    .btn-group {
         margin-right: 5px;
         margin-left: 5px;
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn-group {
-    @extend .bdl-ButtonGroup;
 }

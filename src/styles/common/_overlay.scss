@@ -48,7 +48,8 @@ $transform-duration: .125s;
 }
 
 .toggle-overlay-container {
-    > .bdl-Button {
+    > .bdl-Button,
+    > .btn {
         margin-bottom: 0;
         margin-left: 0;
     }
@@ -58,13 +59,4 @@ $transform-duration: .125s;
     .overlay {
         margin-top: 5px;
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn {
-    @extend .bdl-Button;
 }

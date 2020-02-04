@@ -20,6 +20,7 @@
         border-top-color: $grey-blue;
 
         .be & .bdl-Button--plain,
+        .be & .btn-plain,
         .be-item-label {
             color: $dark-cerulean;
             outline: none;
@@ -85,6 +86,7 @@
         }
 
         .be & .bdl-Button--plain,
+        .be & .btn-plain,
         .be-item-label {
             color: $dark-cerulean;
         }
@@ -93,13 +95,4 @@
     &.bcp-item-row-selected + & {
         border-top-color: $grey-blue;
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn-plain {
-    @extend .bdl-Button--plain;
 }

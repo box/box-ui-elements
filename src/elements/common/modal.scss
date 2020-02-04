@@ -7,7 +7,8 @@
         justify-content: center;
         padding: 15px 0 0;
 
-        .bdl-Button {
+        .bdl-Button,
+        .btn {
             margin-left: 8px;
         }
     }
@@ -64,13 +65,4 @@
     @extend .be-modal-wrapper-overlay;
 
     position: absolute;
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn {
-    @extend .bdl-Button;
 }

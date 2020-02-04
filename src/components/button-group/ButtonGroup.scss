@@ -9,8 +9,8 @@
     .toggle-overlay {
         display: inline;
 
-        > .btn,
-        > .bdl-Button {
+        > .bdl-Button,
+        > .btn {
             margin-left: 0;
             padding-right: 11px;
             padding-left: 11px;
@@ -41,11 +41,13 @@
         }
     }
 
-    > .bdl-Button {
+    > .bdl-Button,
+    > .btn {
         margin: 5px 0 5px -1px;
         border-radius: 0;
 
-        &.bdl-Button--primary {
+        &.bdl-Button--primary,
+        &.btn-primary {
             margin: 5px 0;
             border-right-color: darken($primary-color, 10%);
 
@@ -62,20 +64,20 @@
         }
     }
 
-    > .btn:first-child,
-    > .bdl-Button:first-child {
+    > .bdl-Button:first-child,
+    > .btn:first-child {
         border-top-left-radius: 4px;
         border-bottom-left-radius: 4px;
     }
 
-    > .btn:last-child,
-    > .bdl-Button:last-child {
+    > .bdl-Button:last-child,
+    > .btn:last-child {
         border-top-right-radius: 4px;
         border-bottom-right-radius: 4px;
     }
 
-    > .btn.is-selected,
-    > .bdl-Button.is-selected {
+    > .bdl-Button.is-selected,
+    > .btn.is-selected {
         z-index: 2; /* place on top of siblings */
         color: $bdl-gray-80;
         background-color: $bdl-gray-10;
@@ -88,7 +90,8 @@
         z-index: 3; /* place on top of all other buttons for accessibility */
     }
 
-    &.bdl-is-disabled {
+    &.bdl-is-disabled,
+    &.is-disabled {
         > .btn,
         > .bdl-Button {
             color: $bdl-gray-62;
@@ -113,15 +116,10 @@
     }
 }
 
-
 /*
 * Section below is for bdl-namespace backwards compatibility.
 * Do not add changes below this line.
 */
-.is-disabled {
-    @extend .bdl-is-disabled;
-}
-
 .btn-group {
     @extend .bdl-ButtonGroup;
 }

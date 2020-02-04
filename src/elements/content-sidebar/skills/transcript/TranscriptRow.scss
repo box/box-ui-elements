@@ -2,7 +2,8 @@
 
 .be-transcript {
     .be-transcript-row,
-    .bdl-Button--plain.be-transcript-row {
+    .bdl-Button--plain.be-transcript-row,
+    .btn-plain.be-transcript-row {
         display: flex;
         width: 100%;
         margin-bottom: 10px;
@@ -33,13 +34,4 @@
             padding-right: 10px;
         }
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn-plain {
-    @extend .bdl-Button--plain;
 }

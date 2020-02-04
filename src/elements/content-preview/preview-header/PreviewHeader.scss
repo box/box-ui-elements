@@ -63,7 +63,9 @@
         button.ba-btn-annotate-draw-redo,
         button.ba-btn-annotate-draw-undo,
         .bdl-is-disabled.ba-btn-annotate-draw-redo,
-        .bdl-is-disabled.ba-btn-annotate-draw-undo {
+        .bdl-is-disabled.ba-btn-annotate-draw-undo,
+        .is-disabled.ba-btn-annotate-draw-redo,
+        .is-disabled.ba-btn-annotate-draw-undo {
             margin: 5px;
             background: none;
             border: none;
@@ -99,7 +101,8 @@
     }
 }
 
-.bcpr-PreviewHeader-button.bdl-Button--plain {
+.bcpr-PreviewHeader-button.bdl-Button--plain,
+.bcpr-PreviewHeader-button.btn-plain {
     display: flex;
     align-items: center;
     color: $bdl-gray-02;
@@ -120,23 +123,11 @@
     }
 }
 
-.bcpr-PreviewHeader-button-close.bdl-Button--plain {
+.bcpr-PreviewHeader-button-close.bdl-Button--plain,
+.bcpr-PreviewHeader-button-close.btn-plain {
     font-weight: bold;
 
     .icon-close {
         margin: -3px; // Close icon has more padding than print/download
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn-plain {
-    @extend .bdl-Button--plain;
-}
-
-.is-disabled {
-    @extend .bdl-is-disabled;
 }

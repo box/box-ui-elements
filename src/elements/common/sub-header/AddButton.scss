@@ -1,17 +1,9 @@
-.bdl-Button.be-btn-add {
+.bdl-Button.be-btn-add,
+.btn.be-btn-add {
     margin-left: 7px;
     padding: 5px 6px;
 
     svg {
         display: block;
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn {
-    @extend .bdl-Button;
 }

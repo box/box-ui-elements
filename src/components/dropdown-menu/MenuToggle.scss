@@ -23,13 +23,13 @@
         }
     }
 
-    .btn-primary & .fill-color,
-    .bdl-Button--primary & .fill-color {
+    .bdl-Button--primary & .fill-color,
+    .btn-primary & .fill-color {
         fill: $white;
     }
 
-    .lnk.is-disabled & .fill-color,
-    .lnk.bdl-is-disabled & .fill-color {
+    .lnk.bdl-is-disabled & .fill-color,
+    .lnk.is-disabled & .fill-color {
         fill: $bdl-gray-50;
     }
 }

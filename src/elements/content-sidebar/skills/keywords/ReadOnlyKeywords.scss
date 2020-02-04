@@ -1,12 +1,14 @@
 @import '../../../common/variables';
 
 .be-keywords {
-    .bdl-PillCloud {
+    .bdl-PillCloud,
+    .pill-cloud-container {
         padding: 0;
         overflow: hidden;
         border: 0 none;
 
-        .bdl-Button.bdl-Pill.bdl-PillCloud-button {
+        .bdl-Button.bdl-Pill.bdl-PillCloud-button,
+        .btn.pill.pill-cloud-button {
             margin: 0 5px 5px 0;
             color: inherit;
             border: 1px solid $bdl-gray-20;
@@ -19,25 +21,4 @@
             }
         }
     }
-}
-
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.pill-cloud-button {
-    @extend .bdl-PillCloud-button;
-}
-
-.pill-cloud-container {
-    @extend .bdl-PillCloud;
-}
-
-.btn {
-    @extend .bdl-Button;
-}
-
-.pill {
-    @extend .bdl-Pill;
 }
