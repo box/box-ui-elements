@@ -18,7 +18,7 @@ export const basic = () => {
     return (
         <State store={componentStore}>
             {state => (
-                <IntlProvider locale="en" textComponent={React.Fragment}>
+                <IntlProvider locale="en">
                     <DatePicker
                         className="date-picker-example"
                         displayFormat={{
@@ -42,19 +42,19 @@ export const basic = () => {
 };
 
 export const withDescription = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <DatePicker placeholder="Date" description="Date of your birth" label="Date Picker" />
     </IntlProvider>
 );
 
 export const manuallyEditable = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <DatePicker isTextInputAllowed placeholder="Date" label="Date Picker" value={new Date('September 27, 2019')} />
     </IntlProvider>
 );
 
 export const disabledWithErrorMessage = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <DatePicker
             isDisabled
             error="Error Message"
@@ -66,7 +66,7 @@ export const disabledWithErrorMessage = () => (
 );
 
 export const customErrorTooltipPosition = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <DatePicker
             error="Error Message"
             errorTooltipPosition="middle-right"
@@ -89,7 +89,7 @@ export const withRange = () => {
     return (
         <State store={componentStore}>
             {state => (
-                <IntlProvider locale="en" textComponent={React.Fragment}>
+                <IntlProvider locale="en">
                     <div>
                         <DatePicker
                             className="date-picker-example"

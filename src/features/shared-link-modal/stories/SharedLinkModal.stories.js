@@ -66,7 +66,7 @@ export const basic = () => {
     return (
         <State store={componentStore}>
             {state => (
-                <IntlProvider locale="en" textComponent={React.Fragment}>
+                <IntlProvider locale="en">
                     <div>
                         {state.isOpen && (
                             <SharedLinkModal

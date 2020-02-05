@@ -1,11 +1,7 @@
 // @flow
 
-'no babel-plugin-flow-react-proptypes';
-
-// turn off this plugin because it breaks the IntlShape flow type
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import type { IntlShape } from 'react-intl';
 
 import PlainButton from '../../components/plain-button';
 import Button from '../../components/button';
@@ -40,7 +36,7 @@ type Props = {
     changeSharedLinkPermissionLevel: (
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
-    intl: IntlShape,
+    intl: any,
     item: itemtype,
     itemType: ItemType,
     onDismissTooltip: (componentIdentifier: tooltipComponentIdentifierType) => void,

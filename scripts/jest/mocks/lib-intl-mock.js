@@ -3,5 +3,4 @@ const intlMock = {
     formatDate: date => date,
 };
 
-export const addLocaleData = () => {};
 export default intlMock;

@@ -14,7 +14,7 @@ describe('elements/Internationalize', () => {
 
         const intlProvider = wrapper.find('IntlProvider');
         expect(intlProvider.length).toBe(1);
-        expect(intlProvider.prop('locale')).toBe('fr');
+        expect(intlProvider.prop('locale')).toBe('fr-CA');
         expect(intlProvider.prop('messages')).toBe(messages);
     });
 
