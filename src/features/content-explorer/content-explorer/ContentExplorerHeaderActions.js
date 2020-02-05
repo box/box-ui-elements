@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import ContentExplorerSearch from './ContentExplorerSearch';
 import ContentExplorerNewFolderButton from './ContentExplorerNewFolderButton';
@@ -19,7 +19,7 @@ class ContentExplorerHeaderActions extends Component {
         contentExplorerMode: ContentExplorerModePropType.isRequired,
         customInput: PropTypes.func,
         foldersPath: FoldersPathPropType.isRequired,
-        intl: intlShape.isRequired,
+        intl: PropTypes.any,
         onFoldersPathUpdated: PropTypes.func.isRequired,
         onEnterFolder: PropTypes.func.isRequired,
         onCreateNewFolderButtonClick: PropTypes.func,

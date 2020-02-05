@@ -5,8 +5,7 @@
  */
 
 import React from 'react';
-import { injectIntl, type IntlShape } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import Logo from './Logo';
 import messages from '../messages';
 import { VIEW_FOLDER, VIEW_SEARCH } from '../../../constants';
@@ -15,13 +14,13 @@ import type { View } from '../../../common/types/core';
 import './Header.scss';
 
 type Props = {
-    intl: IntlShape,
+    intl: any,
     isSmall: boolean,
     logoUrl?: string,
     onSearch: Function,
     searchQuery: string,
     view: View,
-} & InjectIntlProvidedProps;
+};
 
 // eslint-disable-next-line react/prop-types
 const Header = ({ view, isSmall, searchQuery, onSearch, logoUrl, intl }: Props) => {

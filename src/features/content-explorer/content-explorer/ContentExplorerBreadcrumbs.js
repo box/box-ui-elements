@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import Button from '../../../components/button';
 import PlainButton from '../../../components/plain-button';
@@ -46,7 +46,7 @@ const ContentExplorerBreadcrumbs = ({
 
 ContentExplorerBreadcrumbs.propTypes = {
     foldersPath: FoldersPathPropType.isRequired,
-    intl: intlShape.isRequired,
+    intl: PropTypes.any,
     isUpButtonDisabled: PropTypes.bool,
     onUpButtonClick: PropTypes.func,
     onBreadcrumbClick: PropTypes.func,
