@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import throttle from 'lodash/throttle';
 import isEmpty from 'lodash/isEmpty';
 import classnames from 'classnames';
@@ -37,6 +37,8 @@ class PresenceDropdown extends React.Component<Props> {
         inviteCallback: PropTypes.func,
         /* Callback for Dropdown onScroll event */
         onScroll: PropTypes.func,
+        /* Intl object */
+        intl: PropTypes.any,
     };
 
     state = {
@@ -97,12 +99,17 @@ class PresenceDropdown extends React.Component<Props> {
 
     renderTimestampMessage = (interactedAt, interactionType) => {
         const lastActionMessage = determineInteractionMessage(interactionType, interactedAt);
+        const { intl } = this.props;
+        const timeAgo = intl.formatRelativeTime
+            ? intl.formatRelativeTime(interactedAt - Date.now())
+            : intl.formatRelative(interactedAt);
+
         if (lastActionMessage) {
             return (
                 <FormattedMessage
                     {...lastActionMessage}
                     values={{
-                        timeAgo: <FormattedRelative value={interactedAt} />,
+                        timeAgo,
                     }}
                 />
             );
@@ -198,4 +205,5 @@ class PresenceDropdown extends React.Component<Props> {
     }
 }
 
-export default PresenceDropdown;
+export { PresenceDropdown as PresenceDropdownComponent };
+export default injectIntl(PresenceDropdown);

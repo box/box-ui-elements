@@ -27,6 +27,7 @@
                 border: 1px solid $bdl-gray-50;
                 border-radius: 2px;
                 content: '';
+                pointer-events: none;
             }
 
             &::after {
@@ -41,6 +42,7 @@
                 backface-visibility: hidden;
                 transition: transform .1s ease;
                 content: '';
+                pointer-events: none;
             }
         }
 
@@ -62,19 +64,20 @@
                 border-color: $bdl-gray-30;
             }
         }
-
-        + span + span {
-            margin-left: 10px;
-        }
     }
 }
 
+.bdl-Checkbox-labelTooltipWrapper {
+    margin-left: 10px;
+}
+
 .checkbox-tooltip-wrapper {
-    display: flex;
-    align-items: center;
+    display: inline-flex;
+    vertical-align: text-bottom;
 
     > .info-tooltip {
         position: relative;
+        display: inline-block;
         flex: none;
         width: 16px;
         height: 16px;

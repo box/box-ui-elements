@@ -1,6 +1,8 @@
 import { OrderedSet } from 'immutable';
 import sinon from 'sinon';
 
+import Mousetrap from 'mousetrap';
+
 import HotkeyService from '../HotkeyService';
 import HotkeyRecord from '../HotkeyRecord';
 import HotkeyManager from '../HotkeyManager';
@@ -10,6 +12,8 @@ jest.mock('../HotkeyManager', () => ({
     setActiveLayer: jest.fn(),
     removeLayer: jest.fn(),
 }));
+jest.mock('mousetrap');
+
 const sandbox = sinon.sandbox.create();
 
 describe('components/hotkeys/HotkeyService', () => {
@@ -19,28 +23,24 @@ describe('components/hotkeys/HotkeyService', () => {
     beforeEach(() => {
         callbackSpy = jest.fn();
 
-        class MousetrapMock {
-            constructor(el) {
-                el.addEventListener('keydown', callbackSpy);
-                return {
-                    bind: sandbox.spy(),
-                    unbind: sandbox.spy(),
-                    reset: sandbox.spy(),
-                };
-            }
-        }
+        const MousetrapMock = el => {
+            el.addEventListener('keydown', callbackSpy);
+            return {
+                bind: sandbox.spy(),
+                unbind: sandbox.spy(),
+                reset: sandbox.spy(),
+            };
+        };
 
-        HotkeyService.__Rewire__('Mousetrap', MousetrapMock);
+        Mousetrap.mockImplementation(MousetrapMock);
 
         instance = new HotkeyService();
     });
 
     afterEach(() => {
-        HotkeyService.__ResetDependency__('Mousetrap');
-
         sandbox.verifyAndRestore();
         jest.resetModules();
-        jest.clearAllMocks();
+        jest.resetAllMocks();
     });
 
     describe('constructor()', () => {
@@ -226,7 +226,7 @@ describe('components/hotkeys/HotkeyService', () => {
         test('should remove hotkey config when called', () => {
             instance.deregisterHotkey(hotkeyConfigB);
 
-            const hotkeys = instance.hotkeys;
+            const { hotkeys } = instance;
             expect(hotkeys.size).toEqual(2);
             expect(hotkeys.includes(hotkeyConfigB)).toBe(false);
         });

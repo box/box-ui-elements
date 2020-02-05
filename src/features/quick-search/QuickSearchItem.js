@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import { injectIntl, type IntlShape, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { RecordOf } from 'immutable';
 
 import type { ItemType } from '../../common/types/core';
@@ -33,7 +33,7 @@ type QuickSearchItemData = {
 type Props = {
     className?: string,
     closeDropdown?: Function,
-    intl: IntlShape,
+    intl: any,
     itemData: QuickSearchItemData | RecordOf<QuickSearchItemData>,
     parentFolderRenderer?: Function,
     shouldNavigateOnItemClick?: boolean,

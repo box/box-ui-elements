@@ -1,9 +1,10 @@
 import React from 'react';
 import sinon from 'sinon';
-
-import { ReadableTime } from '..';
+import { createIntl } from 'react-intl';
+import { ReadableTimeComponent as ReadableTime } from '../ReadableTime';
 
 const sandbox = sinon.sandbox.create();
+const intl = createIntl({});
 
 describe('components/time/ReadableTime', () => {
     const TEST_TIMESTAMP = 1506551456000; // Some random timestamp [09/27/2017 @ 10:33pm (UTC)]
@@ -64,7 +65,7 @@ describe('components/time/ReadableTime', () => {
         },
     ].forEach(({ timestamp, hasFormattedRelativeComp, hasFormattedMessageComp, expectedValue }) => {
         test('should render comment posted time when component is rendered with different times', () => {
-            const wrapper = shallow(<ReadableTime relativeThreshold={oneHourInMs} timestamp={timestamp} />);
+            const wrapper = shallow(<ReadableTime intl={intl} relativeThreshold={oneHourInMs} timestamp={timestamp} />);
 
             expect(wrapper.find('FormattedRelative').length === 1).toEqual(hasFormattedRelativeComp);
             expect(wrapper.find('FormattedMessage').length === 1).toEqual(hasFormattedMessageComp);
@@ -123,6 +124,7 @@ describe('components/time/ReadableTime', () => {
             test(description, () => {
                 const wrapper = shallow(
                     <ReadableTime
+                        intl={intl}
                         allowFutureTimestamps={allowFutureTimestamps}
                         alwaysShowTime={alwaysShowTime}
                         relativeThreshold={oneHourInMs}
@@ -137,8 +139,7 @@ describe('components/time/ReadableTime', () => {
     );
 
     test('should use default relative threshold if not provided', () => {
-        const wrapper = shallow(<ReadableTime timestamp={withinRelativeThresholdAhead} />);
-
-        expect(wrapper.find('FormattedRelative')).toHaveLength(1);
+        const wrapper = shallow(<ReadableTime intl={intl} timestamp={withinRelativeThresholdAhead} />);
+        expect(wrapper).toMatchSnapshot();
     });
 });

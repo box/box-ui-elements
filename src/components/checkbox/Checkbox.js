@@ -1,5 +1,7 @@
 // @flow
 import * as React from 'react';
+import uniqueId from 'lodash/uniqueId';
+import classNames from 'classnames';
 
 import CheckboxTooltip from './CheckboxTooltip';
 
@@ -50,28 +52,35 @@ const Checkbox = ({
     tooltip,
     ...rest // @TODO: eventually remove `rest` in favor of explicit props
 }: Props) => {
-    const checkboxLabel = (
-        // eslint-disable-next-line jsx-a11y/label-has-for
-        <label className="checkbox-label">
+    const generatedID = React.useRef(uniqueId('checkbox')).current;
+    // use passed in ID from props, otherwise generated one
+    const inputID = id || generatedID;
+
+    const checkboxAndLabel = (
+        <span className="checkbox-label">
             <input
                 checked={isChecked}
                 disabled={isDisabled}
-                id={id}
+                id={inputID}
                 name={name}
                 onChange={onChange}
                 type="checkbox"
                 {...rest}
             />
-            {/* This span is used for the before/after checkbox styles, mouse clicks will target this element */}
+            {/* This span is used for the before/after custom checkbox styles, but mouse clicks will pass through this element
+                    to the underlying <input> */}
             <span className="checkbox-pointer-target" />
-            <span className={hideLabel ? 'accessibility-hidden' : ''}>{label}</span>
-        </label>
+            <span className={classNames('bdl-Checkbox-labelTooltipWrapper', { 'accessibility-hidden': hideLabel })}>
+                <label htmlFor={inputID}>{label}</label>
+                {tooltip && <CheckboxTooltip tooltip={tooltip} />}
+            </span>
+        </span>
     );
 
     return (
-        <div className={`checkbox-container ${className} ${isDisabled ? 'is-disabled bdl-is-disabled' : ''}`}>
-            {fieldLabel && <div className="label bdl-Label">{fieldLabel}</div>}
-            {tooltip ? <CheckboxTooltip label={checkboxLabel} tooltip={tooltip} /> : checkboxLabel}
+        <div className={classNames('checkbox-container', className, { 'is-disabled bdl-is-disabled': isDisabled })}>
+            {fieldLabel && <div className="label">{fieldLabel}</div>}
+            {checkboxAndLabel}
             {description ? <div className="checkbox-description">{description}</div> : null}
             {subsection ? <div className="checkbox-subsection">{subsection}</div> : null}
         </div>

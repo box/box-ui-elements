@@ -47,9 +47,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastPreviewed"
                 values={
                   Object {
-                    "timeAgo": <FormattedRelative
-                      value={999}
-                    />,
+                    "timeAgo": "1 second ago",
                   }
                 }
               />
@@ -97,9 +95,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastModified"
                 values={
                   Object {
-                    "timeAgo": <FormattedRelative
-                      value={999}
-                    />,
+                    "timeAgo": "1 second ago",
                   }
                 }
               />
@@ -147,9 +143,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastCommented"
                 values={
                   Object {
-                    "timeAgo": <FormattedRelative
-                      value={999}
-                    />,
+                    "timeAgo": "1 second ago",
                   }
                 }
               />
@@ -280,9 +274,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastPreviewed"
                 values={
                   Object {
-                    "timeAgo": <FormattedRelative
-                      value={999}
-                    />,
+                    "timeAgo": "1 second ago",
                   }
                 }
               />
@@ -330,9 +322,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastModified"
                 values={
                   Object {
-                    "timeAgo": <FormattedRelative
-                      value={999}
-                    />,
+                    "timeAgo": "1 second ago",
                   }
                 }
               />
@@ -380,9 +370,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastCommented"
                 values={
                   Object {
-                    "timeAgo": <FormattedRelative
-                      value={999}
-                    />,
+                    "timeAgo": "1 second ago",
                   }
                 }
               />
@@ -555,9 +543,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastPreviewed"
                 values={
                   Object {
-                    "timeAgo": <FormattedRelative
-                      value={999}
-                    />,
+                    "timeAgo": "1 second ago",
                   }
                 }
               />
@@ -605,9 +591,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastModified"
                 values={
                   Object {
-                    "timeAgo": <FormattedRelative
-                      value={999}
-                    />,
+                    "timeAgo": "1 second ago",
                   }
                 }
               />
@@ -655,9 +639,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastCommented"
                 values={
                   Object {
-                    "timeAgo": <FormattedRelative
-                      value={999}
-                    />,
+                    "timeAgo": "1 second ago",
                   }
                 }
               />
@@ -797,9 +779,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastPreviewed"
                 values={
                   Object {
-                    "timeAgo": <FormattedRelative
-                      value={999}
-                    />,
+                    "timeAgo": "1 second ago",
                   }
                 }
               />
@@ -847,9 +827,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastModified"
                 values={
                   Object {
-                    "timeAgo": <FormattedRelative
-                      value={999}
-                    />,
+                    "timeAgo": "1 second ago",
                   }
                 }
               />
@@ -897,9 +875,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
                 id="boxui.presence.timeSinceLastCommented"
                 values={
                   Object {
-                    "timeAgo": <FormattedRelative
-                      value={999}
-                    />,
+                    "timeAgo": "1 second ago",
                   }
                 }
               />

@@ -42,6 +42,7 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render a
       Object {
         "formatDate": [Function],
         "formatMessage": [Function],
+        "formatRelativeTime": [Function],
       }
     }
   />

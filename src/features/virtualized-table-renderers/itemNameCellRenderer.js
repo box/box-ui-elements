@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import type { IntlShape } from 'react-intl';
+
 import noop from 'lodash/noop';
 import { getFileExtension } from '../../utils/file';
 import messages from './messages';
@@ -12,7 +12,7 @@ import baseCellRenderer from './baseCellRenderer';
 import type { ItemNameCellRendererCellData, ItemNameCellRendererParams } from './flowTypes';
 import './ItemNameCell.scss';
 
-const itemNameCellRenderer = (intl: IntlShape, onClick?: Function = noop) => (
+const itemNameCellRenderer = (intl: any, onClick?: Function = noop) => (
     cellRendererParams: ItemNameCellRendererParams,
 ) =>
     baseCellRenderer(cellRendererParams, (cellValue: ItemNameCellRendererCellData) => {

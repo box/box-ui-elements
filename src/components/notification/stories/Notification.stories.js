@@ -8,13 +8,13 @@ import Notification from '../Notification';
 import notes from './Notification.stories.md';
 
 export const basic = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <Notification>This is a default notification.</Notification>
     </IntlProvider>
 );
 
 export const info = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <Notification type="info">
             <span>This is an info notification with a button.</span>
             <Button>Click me</Button>
@@ -23,7 +23,7 @@ export const info = () => (
 );
 
 export const warn = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <Notification type="warn">
             <span>This is a warning notification with two buttons.</span>
             <Button>Click me</Button>
@@ -33,7 +33,7 @@ export const warn = () => (
 );
 
 export const error = () => (
-    <IntlProvider locale="en" textComponent={React.Fragment}>
+    <IntlProvider locale="en">
         <Notification type="error">
             <span>This is an error notification.</span>
         </Notification>
