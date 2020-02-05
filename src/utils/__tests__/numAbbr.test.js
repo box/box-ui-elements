@@ -1,4 +1,12 @@
-import numAbbr from '../numAbbr';
+import numAbbr, { numAbbrWithLocale } from '../numAbbr';
+
+/**
+ * load locale data manually that is not the current locale so that
+ * we can use it for unit testing
+ */
+const germanLocaleData = require('box-cldr-data/locale-data/de-DE.js').numbers;
+const russianLocaleData = require('box-cldr-data/locale-data/ru-RU.js').numbers;
+const japaneseLocaleData = require('box-cldr-data/locale-data/ja-JP.js').numbers;
 
 describe('util/num', () => {
     test('should work in English 1', () => {
@@ -111,209 +119,195 @@ describe('util/num', () => {
     });
 
     test('should work in German 1', () => {
-        expect(numAbbr(1, { locale: 'de' })).toBe('1');
+        expect(numAbbrWithLocale(germanLocaleData, 1, 'de-DE')).toBe('1');
     });
     test('should work in German 1000', () => {
-        expect(numAbbr(1000, { locale: 'de' })).toBe('1.000');
+        expect(numAbbrWithLocale(germanLocaleData, 1000, 'de-DE')).toBe('1.000');
     });
     test('should work in German 10000', () => {
-        expect(numAbbr(10000, { locale: 'de' })).toBe('10.000');
+        expect(numAbbrWithLocale(germanLocaleData, 10000, 'de-DE')).toBe('10.000');
     });
     test('should work in German 100000', () => {
-        expect(numAbbr(100000, { locale: 'de' })).toBe('100.000');
+        expect(numAbbrWithLocale(germanLocaleData, 100000, 'de-DE')).toBe('100.000');
     });
     test('should work in German 1000000', () => {
-        expect(numAbbr(1000000, { locale: 'de' })).toBe('1 Mio.');
+        expect(numAbbrWithLocale(germanLocaleData, 1000000, 'de-DE')).toBe('1 Mio.');
     });
     test('should work in German 10000000', () => {
-        expect(numAbbr(10000000, { locale: 'de' })).toBe('10 Mio.');
+        expect(numAbbrWithLocale(germanLocaleData, 10000000, 'de-DE')).toBe('10 Mio.');
     });
     test('should work in German 1000000000', () => {
-        expect(numAbbr(1000000000, { locale: 'de' })).toBe('1 Mrd.');
+        expect(numAbbrWithLocale(germanLocaleData, 1000000000, 'de-DE')).toBe('1 Mrd.');
     });
     test('should work in German 1000000000000', () => {
-        expect(numAbbr(1000000000000, { locale: 'de' })).toBe('1 Bio.');
+        expect(numAbbrWithLocale(germanLocaleData, 1000000000000, 'de-DE')).toBe('1 Bio.');
     });
     test('should work in German larger than max', () => {
-        expect(numAbbr(1000000000000000000, { locale: 'de' })).toBe('1.000.000 Bio.');
+        expect(numAbbrWithLocale(germanLocaleData, 1000000000000000000, 'de-DE')).toBe('1.000.000 Bio.');
     });
 
     test('should work in German 1 long', () => {
-        expect(numAbbr(1, { locale: 'de', length: 'long' })).toBe('1');
+        expect(numAbbrWithLocale(germanLocaleData, 1, 'de-DE', { length: 'long' })).toBe('1');
     });
     test('should work in German 1000 long', () => {
-        expect(numAbbr(1000, { locale: 'de', length: 'long' })).toBe('1 Tausend');
+        expect(numAbbrWithLocale(germanLocaleData, 1000, 'de-DE', { length: 'long' })).toBe('1 Tausend');
     });
     test('should work in German 10000 long', () => {
-        expect(numAbbr(10000, { locale: 'de', length: 'long' })).toBe('10 Tausend');
+        expect(numAbbrWithLocale(germanLocaleData, 10000, 'de-DE', { length: 'long' })).toBe('10 Tausend');
     });
     test('should work in German 100000 long', () => {
-        expect(numAbbr(100000, { locale: 'de', length: 'long' })).toBe('100 Tausend');
+        expect(numAbbrWithLocale(germanLocaleData, 100000, 'de-DE', { length: 'long' })).toBe('100 Tausend');
     });
     test('should work in German 1000000 long', () => {
-        expect(numAbbr(1000000, { locale: 'de', length: 'long' })).toBe('1 Million');
+        expect(numAbbrWithLocale(germanLocaleData, 1000000, 'de-DE', { length: 'long' })).toBe('1 Million');
     });
     test('should work in German 10000000 long', () => {
-        expect(numAbbr(10000000, { locale: 'de', length: 'long' })).toBe('10 Millionen');
+        expect(numAbbrWithLocale(germanLocaleData, 10000000, 'de-DE', { length: 'long' })).toBe('10 Millionen');
     });
     test('should work in German 1000000000 long', () => {
-        expect(numAbbr(1000000000, { locale: 'de', length: 'long' })).toBe('1 Milliarde');
+        expect(numAbbrWithLocale(germanLocaleData, 1000000000, 'de-DE', { length: 'long' })).toBe('1 Milliarde');
     });
     test('should work in German 1000000000000 long', () => {
-        expect(numAbbr(1000000000000, { locale: 'de', length: 'long' })).toBe('1 Billion');
+        expect(numAbbrWithLocale(germanLocaleData, 1000000000000, 'de-DE', { length: 'long' })).toBe('1 Billion');
     });
     test('should work in German larger than max long', () => {
-        expect(numAbbr(1000000000000000000, { locale: 'de', length: 'long' })).toBe('1.000.000 Billionen');
+        expect(numAbbrWithLocale(germanLocaleData, 1000000000000000000, 'de-DE', { length: 'long' })).toBe(
+            '1.000.000 Billionen',
+        );
     });
 
     test('should work in Russian 1', () => {
-        expect(numAbbr(1, { locale: 'ru' })).toBe('1');
+        expect(numAbbrWithLocale(russianLocaleData, 1, 'ru-RU')).toBe('1');
     });
     test('should work in Russian 1000', () => {
-        expect(numAbbr(1000, { locale: 'ru' })).toBe('1 тыс.');
+        expect(numAbbrWithLocale(russianLocaleData, 1000, 'ru-RU')).toBe('1 тыс.');
     });
     test('should work in Russian 10000', () => {
-        expect(numAbbr(10000, { locale: 'ru' })).toBe('10 тыс.');
+        expect(numAbbrWithLocale(russianLocaleData, 10000, 'ru-RU')).toBe('10 тыс.');
     });
     test('should work in Russian 100000', () => {
-        expect(numAbbr(100000, { locale: 'ru' })).toBe('100 тыс.');
+        expect(numAbbrWithLocale(russianLocaleData, 100000, 'ru-RU')).toBe('100 тыс.');
     });
     test('should work in Russian 1000000', () => {
-        expect(numAbbr(1000000, { locale: 'ru' })).toBe('1 млн');
+        expect(numAbbrWithLocale(russianLocaleData, 1000000, 'ru-RU')).toBe('1 млн');
     });
     test('should work in Russian 10000000', () => {
-        expect(numAbbr(10000000, { locale: 'ru' })).toBe('10 млн');
+        expect(numAbbrWithLocale(russianLocaleData, 10000000, 'ru-RU')).toBe('10 млн');
     });
     test('should work in Russian 1000000000', () => {
-        expect(numAbbr(1000000000, { locale: 'ru' })).toBe('1 млрд');
+        expect(numAbbrWithLocale(russianLocaleData, 1000000000, 'ru-RU')).toBe('1 млрд');
     });
     test('should work in Russian 1000000000000', () => {
-        expect(numAbbr(1000000000000, { locale: 'ru' })).toBe('1 трлн');
+        expect(numAbbrWithLocale(russianLocaleData, 1000000000000, 'ru-RU')).toBe('1 трлн');
     });
     test('should work in Russian larger than max', () => {
-        expect(numAbbr(1000000000000000000, { locale: 'ru' })).toBe('1 000 000 трлн');
+        expect(numAbbrWithLocale(russianLocaleData, 1000000000000000000, 'ru-RU')).toBe('1 000 000 трлн');
     });
 
     test('should work in Russian 1 long', () => {
-        expect(numAbbr(1, { locale: 'ru', length: 'long' })).toBe('1');
+        expect(numAbbrWithLocale(russianLocaleData, 1, 'ru-RU', { length: 'long' })).toBe('1');
     });
     test('should work in Russian 1000 long', () => {
-        expect(numAbbr(1000, { locale: 'ru', length: 'long' })).toBe('1 тысяча');
+        expect(numAbbrWithLocale(russianLocaleData, 1000, 'ru-RU', { length: 'long' })).toBe('1 тысяча');
     });
     test('should work in Russian 2000', () => {
-        expect(numAbbr(2000, { locale: 'ru', length: 'long' })).toBe('2 тысячи');
+        expect(numAbbrWithLocale(russianLocaleData, 2000, 'ru-RU', { length: 'long' })).toBe('2 тысячи');
     });
     test('should work in Russian 5000', () => {
-        expect(numAbbr(5000, { locale: 'ru', length: 'long' })).toBe('5 тысяч');
+        expect(numAbbrWithLocale(russianLocaleData, 5000, 'ru-RU', { length: 'long' })).toBe('5 тысяч');
     });
     test('should work in Russian 10000 long', () => {
-        expect(numAbbr(10000, { locale: 'ru', length: 'long' })).toBe('10 тысяч');
+        expect(numAbbrWithLocale(russianLocaleData, 10000, 'ru-RU', { length: 'long' })).toBe('10 тысяч');
     });
     test('should work in Russian 100000 long', () => {
-        expect(numAbbr(100000, { locale: 'ru', length: 'long' })).toBe('100 тысяч');
+        expect(numAbbrWithLocale(russianLocaleData, 100000, 'ru-RU', { length: 'long' })).toBe('100 тысяч');
     });
     test('should work in Russian 1000000 long', () => {
-        expect(numAbbr(1000000, { locale: 'ru', length: 'long' })).toBe('1 миллион');
+        expect(numAbbrWithLocale(russianLocaleData, 1000000, 'ru-RU', { length: 'long' })).toBe('1 миллион');
     });
     test('should work in Russian 2000000 long', () => {
-        expect(numAbbr(2000000, { locale: 'ru', length: 'long' })).toBe('2 миллиона');
+        expect(numAbbrWithLocale(russianLocaleData, 2000000, 'ru-RU', { length: 'long' })).toBe('2 миллиона');
     });
     test('should work in Russian 5000000 long', () => {
-        expect(numAbbr(5000000, { locale: 'ru', length: 'long' })).toBe('5 миллионов');
+        expect(numAbbrWithLocale(russianLocaleData, 5000000, 'ru-RU', { length: 'long' })).toBe('5 миллионов');
     });
     test('should work in Russian 10000000 long', () => {
-        expect(numAbbr(10000000, { locale: 'ru', length: 'long' })).toBe('10 миллионов');
+        expect(numAbbrWithLocale(russianLocaleData, 10000000, 'ru-RU', { length: 'long' })).toBe('10 миллионов');
     });
     test('should work in Russian 1000000000 long', () => {
-        expect(numAbbr(1000000000, { locale: 'ru', length: 'long' })).toBe('1 миллиард');
+        expect(numAbbrWithLocale(russianLocaleData, 1000000000, 'ru-RU', { length: 'long' })).toBe('1 миллиард');
     });
     test('should work in Russian 1000000000000 long', () => {
-        expect(numAbbr(1000000000000, { locale: 'ru', length: 'long' })).toBe('1 триллион');
+        expect(numAbbrWithLocale(russianLocaleData, 1000000000000, 'ru-RU', { length: 'long' })).toBe('1 триллион');
     });
     test('should work in Russian larger than max long', () => {
-        expect(numAbbr(1000000000000000000, { locale: 'ru', length: 'long' })).toBe('1 000 000 триллионов');
+        expect(numAbbrWithLocale(russianLocaleData, 1000000000000000000, 'ru-RU', { length: 'long' })).toBe(
+            '1 000 000 триллионов',
+        );
     });
 
     test('should work in Japanese 1', () => {
-        expect(numAbbr(1, { locale: 'ja' })).toBe('1');
+        expect(numAbbrWithLocale(japaneseLocaleData, 1, 'ja-JP')).toBe('1');
     });
     test('should work in Japanese 1000', () => {
-        expect(numAbbr(1000, { locale: 'ja' })).toBe('1,000');
+        expect(numAbbrWithLocale(japaneseLocaleData, 1000, 'ja-JP')).toBe('1,000');
     });
     test('should work in Japanese 10000', () => {
-        expect(numAbbr(10000, { locale: 'ja' })).toBe('1万');
+        expect(numAbbrWithLocale(japaneseLocaleData, 10000, 'ja-JP')).toBe('1万');
     });
     test('should work in Japanese 100000', () => {
-        expect(numAbbr(100000, { locale: 'ja' })).toBe('10万');
+        expect(numAbbrWithLocale(japaneseLocaleData, 100000, 'ja-JP')).toBe('10万');
     });
     test('should work in Japanese 1000000', () => {
-        expect(numAbbr(1000000, { locale: 'ja' })).toBe('100万');
+        expect(numAbbrWithLocale(japaneseLocaleData, 1000000, 'ja-JP')).toBe('100万');
     });
     test('should work in Japanese 100000000', () => {
-        expect(numAbbr(100000000, { locale: 'ja' })).toBe('1億');
+        expect(numAbbrWithLocale(japaneseLocaleData, 100000000, 'ja-JP')).toBe('1億');
     });
     test('should work in Japanese 1000000000', () => {
-        expect(numAbbr(1000000000, { locale: 'ja' })).toBe('10億');
+        expect(numAbbrWithLocale(japaneseLocaleData, 1000000000, 'ja-JP')).toBe('10億');
     });
     test('should work in Japanese 100000000000', () => {
-        expect(numAbbr(100000000000, { locale: 'ja' })).toBe('1,000億');
+        expect(numAbbrWithLocale(japaneseLocaleData, 100000000000, 'ja-JP')).toBe('1,000億');
     });
     test('should work in Japanese 1000000000000', () => {
-        expect(numAbbr(1000000000000, { locale: 'ja' })).toBe('1兆');
+        expect(numAbbrWithLocale(japaneseLocaleData, 1000000000000, 'ja-JP')).toBe('1兆');
     });
     test('should work in Japanese larger than max', () => {
-        expect(numAbbr(1000000000000000000, { locale: 'ja' })).toBe('1,000,000兆');
+        expect(numAbbrWithLocale(japaneseLocaleData, 1000000000000000000, 'ja-JP')).toBe('1,000,000兆');
     });
 
     // short and long are the same for Japanese
     test('should work in Japanese 1 long', () => {
-        expect(numAbbr(1, { locale: 'ja' })).toBe('1');
+        expect(numAbbrWithLocale(japaneseLocaleData, 1, 'ja-JP')).toBe('1');
     });
     test('should work in Japanese 1000 long', () => {
-        expect(numAbbr(1000, { locale: 'ja', length: 'long' })).toBe('1,000');
+        expect(numAbbrWithLocale(japaneseLocaleData, 1000, 'ja-JP', { length: 'long' })).toBe('1,000');
     });
     test('should work in Japanese 10000 long', () => {
-        expect(numAbbr(10000, { locale: 'ja', length: 'long' })).toBe('1万');
+        expect(numAbbrWithLocale(japaneseLocaleData, 10000, 'ja-JP', { length: 'long' })).toBe('1万');
     });
     test('should work in Japanese 100000 long', () => {
-        expect(numAbbr(100000, { locale: 'ja', length: 'long' })).toBe('10万');
+        expect(numAbbrWithLocale(japaneseLocaleData, 100000, 'ja-JP', { length: 'long' })).toBe('10万');
     });
     test('should work in Japanese 1000000 long', () => {
-        expect(numAbbr(1000000, { locale: 'ja', length: 'long' })).toBe('100万');
+        expect(numAbbrWithLocale(japaneseLocaleData, 1000000, 'ja-JP', { length: 'long' })).toBe('100万');
     });
     test('should work in Japanese 100000000 long', () => {
-        expect(numAbbr(100000000, { locale: 'ja', length: 'long' })).toBe('1億');
+        expect(numAbbrWithLocale(japaneseLocaleData, 100000000, 'ja-JP', { length: 'long' })).toBe('1億');
     });
     test('should work in Japanese 1000000000 long', () => {
-        expect(numAbbr(1000000000, { locale: 'ja', length: 'long' })).toBe('10億');
+        expect(numAbbrWithLocale(japaneseLocaleData, 1000000000, 'ja-JP', { length: 'long' })).toBe('10億');
     });
     test('should work in Japanese 100000000000 long', () => {
-        expect(numAbbr(100000000000, { locale: 'ja', length: 'long' })).toBe('1,000億');
+        expect(numAbbrWithLocale(japaneseLocaleData, 100000000000, 'ja-JP', { length: 'long' })).toBe('1,000億');
     });
     test('should work in Japanese 1000000000000 long', () => {
-        expect(numAbbr(1000000000000, { locale: 'ja', length: 'long' })).toBe('1兆');
+        expect(numAbbrWithLocale(japaneseLocaleData, 1000000000000, 'ja-JP', { length: 'long' })).toBe('1兆');
     });
     test('should work in Japanese larger than max long', () => {
-        expect(numAbbr(1000000000000000000, { locale: 'ja', length: 'long' })).toBe('1,000,000兆');
-    });
-
-    // test locale fallbacks
-    test('should fall back to en', () => {
-        expect(numAbbr(10000000, { locale: 'en-NZ' })).toBe('10M');
-    });
-    test('should fall back to ja', () => {
-        expect(numAbbr(1000000000, { locale: 'ja-JP' })).toBe('10億');
-    });
-    test('should fall back to de', () => {
-        expect(numAbbr(100000, { locale: 'de-CH', length: 'long' })).toBe('100 Tausend');
-    });
-    test('should fall back to zh-Hans', () => {
-        expect(numAbbr(100000, { locale: 'zh-Hans-SG', length: 'long' })).toBe('10万');
-    });
-    test('should fall back to zh-Hant', () => {
-        expect(numAbbr(100000, { locale: 'zh-Hant-HK', length: 'long' })).toBe('10萬');
-    });
-    test('should fall back to en as the default', () => {
-        expect(numAbbr(10000000, { locale: 'kk-KZ' })).toBe('10M');
+        expect(numAbbrWithLocale(japaneseLocaleData, 1000000000000000000, 'ja-JP', { length: 'long' })).toBe(
+            '1,000,000兆',
+        );
     });
 });

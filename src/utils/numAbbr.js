@@ -5,23 +5,22 @@
  */
 
 import IntlMessageFormat from 'intl-messageformat';
-import localedata from './localedata';
+import { languages, numbers } from 'box-locale-data';
 
 interface NumAbbrOptions {
     length: string;
     locale: string;
 }
 
-function abbr(num: number, options?: NumAbbrOptions): string {
+export function numAbbrWithLocale(localedata: object, num: number, locale: string, options?: NumAbbrOptions): string {
     if (!num) return '0';
-    let { locale, length } = options || {};
-    locale = locale || 'en';
+    let { length } = options || {};
     length = length || 'short';
     let exponent: number = Math.floor(num).toString().length - 1;
     if (num < 0) {
         exponent -= 1; // take care of the negative sign
     }
-    const formats = localedata[locale][length];
+    const formats = localedata[length];
     const digits: number = exponent >= formats.length ? exponent - formats.length + 3 : formats[exponent].digits;
     const count: number = Math.round(num / 10 ** (exponent - digits + 1));
     const template = new IntlMessageFormat(
@@ -55,18 +54,8 @@ function abbr(num: number, options?: NumAbbrOptions): string {
 export default function(num: number, options?: NumAbbrOptions): string {
     if (!num) return '0';
 
-    // process locale fallbacks
-    let { locale } = options || {};
-    if (!locale) locale = 'en';
-    if (!localedata[locale]) {
-        // try fallback to language and script, or just language only
-        locale = locale.length > 5 ? locale.substring(0, locale.length - 3) : locale.substring(0, 2);
-    }
-    if (!localedata[locale]) {
-        // fall back to English if there is no appropriate locale data
-        locale = 'en';
-    }
-    options = { ...options, locale };
+    // languages contains info about the current locale
+    const locale = languages.bcp47Tag || 'en-US';
 
     switch (typeof num) {
         case 'boolean':
@@ -81,7 +70,7 @@ export default function(num: number, options?: NumAbbrOptions): string {
         case 'object':
             return Array.isArray(num)
                 ? num.map(n => {
-                      return abbr(n, options);
+                      return numAbbrWithLocale(numbers, n, locale, options);
                   })
                 : '0';
 
@@ -89,5 +78,5 @@ export default function(num: number, options?: NumAbbrOptions): string {
             break;
     }
 
-    return abbr(num, options);
+    return numAbbrWithLocale(numbers, num, locale, options);
 }
