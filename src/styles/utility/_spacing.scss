@@ -1,0 +1,180 @@
+/*
+Generates utility classes for spacing (margin and padding)
+
+The convention is ".bdl-u-pv-0"
+  .bdl-u- SUIT namespace prefix
+  m margin, p padding
+  null, t, r, b, l, v, h ("all", sides, "horizontal", "vertical")
+  0,1,2... multiplier for grid units, + "px" for 1 pixel
+
+Margins
+  .bdl-u-m-0, .bdl-u-mh-1, .bdl-u-mt-3, ...
+
+Padding
+  .bdl-u-p-1, .bdl-pv-2, .bdl-u-pr-3, ...
+*/
+@import '../constants/layout';
+@import './generate-utility';
+
+$spacers: () !default;
+$spacers: map-merge(
+    (
+        0: 0,
+        px: 1px,
+        1: $grid-unit * 1,
+        2: $grid-unit * 2,
+        3: $grid-unit * 3,
+        4: $grid-unit * 4,
+        5: $grid-unit * 5,
+        6: $grid-unit * 6,
+        8: $grid-unit * 8,
+        10: $grid-unit * 10,
+        12: $grid-unit * 12,
+        16: $grid-unit * 16,
+        20: $grid-unit * 20,
+        24: $grid-unit * 24,
+        32: $grid-unit * 32,
+        40: $grid-unit * 40,
+        48: $grid-unit * 48,
+        56: $grid-unit * 56,
+        64: $grid-unit * 64,
+    ),
+    $spacers
+);
+
+$spacing-utilities: () !default;
+$spacing-utilities: map-merge(
+    (
+        'margin': (
+            responsive: false,
+            property: margin,
+            class: m,
+            values:
+            map-merge(
+                $spacers,
+                (
+                    auto: auto,
+                )
+            ),
+        ),
+        'margin-x': (
+            responsive: false,
+            property: margin-right margin-left,
+            class: mh,
+            values:
+            map-merge(
+                $spacers,
+                (
+                    auto: auto,
+                )
+            ),
+        ),
+        'margin-y': (
+            responsive: false,
+            property: margin-top margin-bottom,
+            class: mv,
+            values:
+            map-merge(
+                $spacers,
+                (
+                    auto: auto,
+                )
+            ),
+        ),
+        'margin-top': (
+            responsive: false,
+            property: margin-top,
+            class: mt,
+            values:
+            map-merge(
+                $spacers,
+                (
+                    auto: auto,
+                )
+            ),
+        ),
+        'margin-right': (
+            responsive: false,
+            property: margin-right,
+            class: mr,
+            values:
+            map-merge(
+                $spacers,
+                (
+                    auto: auto,
+                )
+            ),
+        ),
+        'margin-bottom': (
+            responsive: false,
+            property: margin-bottom,
+            class: mb,
+            values:
+            map-merge(
+                $spacers,
+                (
+                    auto: auto,
+                )
+            ),
+        ),
+        'margin-left': (
+            responsive: false,
+            property: margin-left,
+            class: ml,
+            values:
+            map-merge(
+                $spacers,
+                (
+                    auto: auto,
+                )
+            ),
+        ),
+        'padding': (
+            responsive: false,
+            property: padding,
+            class: p,
+            values: $spacers,
+        ),
+        'padding-x': (
+            responsive: false,
+            property: padding-right padding-left,
+            class: ph,
+            values: $spacers,
+        ),
+        'padding-y': (
+            responsive: false,
+            property: padding-top padding-bottom,
+            class: pv,
+            values: $spacers,
+        ),
+        'padding-top': (
+            responsive: false,
+            property: padding-top,
+            class: pt,
+            values: $spacers,
+        ),
+        'padding-right': (
+            responsive: false,
+            property: padding-right,
+            class: pr,
+            values: $spacers,
+        ),
+        'padding-bottom': (
+            responsive: false,
+            property: padding-bottom,
+            class: pb,
+            values: $spacers,
+        ),
+        'padding-left': (
+            responsive: false,
+            property: padding-left,
+            class: pl,
+            values: $spacers,
+        ),
+    ),
+    $spacing-utilities
+);
+
+@each $key, $utility in $spacing-utilities {
+    @include generate-utility($utility, '');
+}

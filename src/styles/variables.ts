@@ -81,3 +81,4 @@ export const overlayZIndex = '190'; // overlay-z-index
 export const tooltipZIndex = '190'; // tooltip-z-index
 export const bdlBorderRadiusSize = '4px'; // bdl-border-radius-size
 export const bdlTransitionDurationBase = '0.15s'; // bdl-transitionDurationBase
+export const gridUnit = '4px'; // grid-unit

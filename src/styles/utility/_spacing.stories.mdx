@@ -1,0 +1,100 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as stories from './_spacing.stories.tsx';
+import LabelPill from '../../../src/components/label-pill';
+import Avatar from '../../../src/components/avatar';
+import Badge from '../../../src/components/badge';
+import Ghost from '../../../src/components/ghost';
+import * as variables from '../variables';
+
+<Meta title="Utility|Spacing" component={stories.spacing} />
+
+## Spacing Utility Classes
+
+<Story name="Spacing">{stories.spacing()}</Story>
+
+## When to use
+
+The main use case for utility classes is for building layouts around existing components, like buttons and form fields.
+Using utility classes means you can avoid naming a CSS class and creating a CSS file for things like wrappers/containers and other
+one-off elements. The values for the classes are derived from the `$grid-unit` variable to make it easy to keep in sync with design
+expectations.
+
+Example:
+
+<div className="bdl-u-p-4" style={{ background: variables.bdlBoxBlue20 }}>
+    <Ghost style={{float: 'right'}} width="1em" height="1em" />
+    <Ghost width={450} className="bdl-u-mr-2"/> <Ghost width="3em" height="1em" /><br />
+    <Ghost width={450} className="bdl-u-mt-1"/>
+    <div>
+        <Ghost width={200} className="bdl-u-mv-8" style={{ height: variables.gridUnit }}/>
+    </div>
+    <Ghost width={50} height={50}  className="" />
+    <span className="bdl-u-mt-1 bdl-u-ml-4">
+        <Ghost width={250} height={50} className="" />
+    </span>
+</div>
+
+
+
+```jsx
+<div className="bdl-u-p-4">
+    <Ghost style={{float: 'right'}} width="1em" height="1em" />
+    <Ghost width={450} className="bdl-u-mr-2"/> <Ghost width="3em" height="1em" /><br />
+    <Ghost width={450} className="bdl-u-mt-1"/>
+    <div>
+        <Ghost width={200} className="bdl-u-mv-8" style={{ height: variables.gridUnit }}/>
+    </div>
+    <Ghost width={50} height={50}  className="" />
+    <span className="bdl-u-mt-1 bdl-u-ml-4">
+        <Ghost width={250} height={50} className="" />
+    </span>
+</div>
+```
+
+## Conventions
+
+The convention is `.bdl-u-pt-0` (prefix-class-modifier-scale)
+
+-   `.bdl-u-` SUIT CSS prefix
+-   `m` margin or `p` padding
+-   null, `t`, `r`, `b`, `l`, `h`, `v`, ("all", sides, "horizontal", "vertical")
+-   0..N multipliers for grid units (scale below), & `px` for 1 pixel
+
+For example:
+
+| Class         | CSS                                  |
+| ------------- | ------------------------------------ |
+| `bdl-u-p-3`   | `padding: 16px`                      |
+| `bdl-u-ph-0`  | `padding-left: 0; padding-right: 0;` |
+| `bdl-u-mr-px` | `margin-right: 1px;`                 |
+| `bdl-u-mt-1`  | `margin-top: 4px`                    |
+
+## Scale
+
+Grid is based on 4px and uses scaling factors inspired by the [Tailwinds](https://tailwindcss.com/docs/customizing-spacing/) framework.
+
+The `$grid-unit` constant is also available to be imported in SCSS and JS (as `gridUnit`), for cases when you are not using utilities.
+
+<Story name="Scale">{stories.scale()}</Story>
+
+```ascii
+0:  0,
+px: 1px,
+1:  $grid-unit * 1,
+2:  $grid-unit * 2,
+3:  $grid-unit * 3,
+4:  $grid-unit * 4,
+5:  $grid-unit * 5,
+6:  $grid-unit * 6,
+8:  $grid-unit * 8,
+10: $grid-unit * 10,
+12: $grid-unit * 12,
+16: $grid-unit * 16,
+20: $grid-unit * 20,
+24: $grid-unit * 24,
+32: $grid-unit * 32,
+40: $grid-unit * 40,
+48: $grid-unit * 48,
+56: $grid-unit * 56,
+64: $grid-unit * 64,
+```
