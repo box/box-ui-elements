@@ -4,9 +4,9 @@ import numAbbr, { numAbbrWithLocale } from '../numAbbr';
  * load locale data manually that is not the current locale so that
  * we can use it for unit testing
  */
-const germanLocaleData = require('box-cldr-data/locale-data/de-DE.js').numbers;
-const russianLocaleData = require('box-cldr-data/locale-data/ru-RU.js').numbers;
-const japaneseLocaleData = require('box-cldr-data/locale-data/ja-JP.js').numbers;
+const germanLocaleData = require('@box/cldr-data/locale-data/de-DE.js').numbers;
+const russianLocaleData = require('@box/cldr-data/locale-data/ru-RU.js').numbers;
+const japaneseLocaleData = require('@box/cldr-data/locale-data/ja-JP.js').numbers;
 
 describe('util/num', () => {
     test('should work in English 1', () => {
