@@ -1447,7 +1447,6 @@ class ContentExplorer extends Component<Props, State> {
         oldValue: ?MetadataFieldValue,
         newValue: ?MetadataFieldValue,
     ): void => {
-        this.setState({ isLoading: true });
         this.metadataQueryAPIHelper.updateMetadata(
             item,
             field,

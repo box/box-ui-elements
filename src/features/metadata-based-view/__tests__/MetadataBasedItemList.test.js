@@ -103,6 +103,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         editedRowIndex: -1,
         hoveredRowIndex: -1,
         hoveredColumnIndex: -1,
+        isUpdating: false,
         scrollLeftOffset: 0,
         scrollRightOffset: 0,
         valueBeingEdited: null,
@@ -125,7 +126,12 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             };
             instance.setState = jest.fn();
             wrapper.setProps(updatedProps);
-            expect(instance.setState).toHaveBeenCalledWith(initialState);
+            expect(instance.setState).toHaveBeenCalledWith({
+                editedColumnIndex: -1,
+                editedRowIndex: -1,
+                isUpdating: false,
+                valueBeingEdited: null,
+            });
         });
         test('should not call setState() when component receives same props again', () => {
             instance.setState = jest.fn();
@@ -189,7 +195,6 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
 
             const data = instance.getGridCellData(columnIndex, rowIndex);
             if (columnIndex < 2) {
-                expect(data).toEqual(cellData);
                 // i.e. FileIcon and FileName columns
                 expect(data).toEqual(cellData);
                 return;
@@ -296,6 +301,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             const editedValue = 333.66;
             instance.getItemWithPermissions = jest.fn().mockReturnValue(itemWithPermission);
             instance.getValueForType = jest.fn().mockReturnValue(editedValue);
+            instance.setState = jest.fn();
 
             instance.handleSave(item, field, FIELD_TYPE_FLOAT, currentValue, editedValue);
             expect(instance.props.onMetadataUpdate).toHaveBeenCalledWith(
@@ -304,6 +310,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
                 currentValue,
                 editedValue,
             );
+            expect(instance.setState).toHaveBeenCalledWith({ isUpdating: true });
         });
     });
 

@@ -294,4 +294,100 @@ describe('elements/content-explorer/ContentExplorer', () => {
             expect(instance.getMaxNumberOfGridViewColumnsForWidth()).toBe(1);
         });
     });
+
+    describe('updateMetadata()', () => {
+        test('should update metadata for given Box item, field, old and new values', () => {
+            const item = {};
+            const field = 'amount';
+            const oldValue = 'abc';
+            const newValue = 'pqr';
+
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.metadataQueryAPIHelper = {
+                updateMetadata: jest.fn(),
+            };
+
+            instance.updateMetadata(item, field, oldValue, newValue);
+            expect(instance.metadataQueryAPIHelper.updateMetadata).toHaveBeenCalledWith(
+                item,
+                field,
+                oldValue,
+                newValue,
+                expect.any(Function),
+                instance.errorCallback,
+            );
+        });
+    });
+
+    describe('updateMetadataSuccessCallback()', () => {
+        test('should correctly update the current collection and set the state', () => {
+            const boxItem = { id: 2 };
+            const field = 'amount';
+            const newVaue = 111.22;
+            const collectionItem1 = {
+                id: 1,
+                metadata: {
+                    enterprise: {
+                        fields: [
+                            {
+                                name: 'name',
+                                value: 'abc',
+                                type: 'string',
+                            },
+                            {
+                                name: 'amount',
+                                value: 100.34,
+                                type: 'float',
+                            },
+                        ],
+                    },
+                },
+            };
+            const collectionItem2 = {
+                id: 2,
+                metadata: {
+                    enterprise: {
+                        fields: [
+                            {
+                                name: 'name',
+                                value: 'pqr',
+                                type: 'string',
+                            },
+                            {
+                                name: 'amount',
+                                value: 354.23,
+                                type: 'float',
+                            },
+                        ],
+                    },
+                },
+            };
+            const clonedCollectionItem2 = cloneDeep(collectionItem2);
+            const nextMarker = 'markermarkermarkermarkermarkermarker';
+            const currentCollection = {
+                items: [collectionItem1, collectionItem2],
+                nextMarker,
+            };
+            const wrapper = getWrapper();
+
+            // update the metadata
+            clonedCollectionItem2.metadata.enterprise.fields.find(item => item.name === field).value = newVaue;
+
+            const updatedItems = [collectionItem1, clonedCollectionItem2];
+
+            wrapper.setState({ currentCollection });
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+
+            instance.updateMetadataSuccessCallback(boxItem, field, newVaue);
+            expect(instance.setState).toHaveBeenCalledWith({
+                currentCollection: {
+                    items: updatedItems,
+                    nextMarker,
+                    percentLoaded: 100,
+                },
+            });
+        });
+    });
 });

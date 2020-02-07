@@ -4,6 +4,7 @@ $bdl-MetadataBasedItemList-insetShadowLeft: -4px 0 2px -2px $bdl-gray-10 inset;
 $bdl-MetadataBasedItemList-insetShadowRight: 3px 0 3px -2px $bdl-gray-10 inset;
 
 @mixin bdl-MetadataBasedItemList-editCellReset {
+    width: 165px;
     height: 30px;
     margin: 0;
     border: 1px solid transparent;
@@ -52,7 +53,11 @@ $bdl-MetadataBasedItemList-insetShadowRight: 3px 0 3px -2px $bdl-gray-10 inset;
         justify-content: center;
         width: 30px;
         height: 30px;
+        margin: 0;
+        padding: 0;
+        border: 0;
         border-left: 1px solid $bdl-gray-20;
+        border-radius: 0;
     }
 
     .text-input-container {

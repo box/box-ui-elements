@@ -45,6 +45,7 @@ type State = {
     editedRowIndex: number,
     hoveredColumnIndex: number,
     hoveredRowIndex: number,
+    isUpdating: boolean,
     scrollLeftOffset: number,
     scrollRightOffset: number,
     valueBeingEdited: ?MetadataFieldValue,
@@ -93,6 +94,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
             editedRowIndex: -1,
             hoveredRowIndex: -1,
             hoveredColumnIndex: -1,
+            isUpdating: false,
             scrollLeftOffset: 0,
             scrollRightOffset: 0,
             valueBeingEdited: null,
@@ -104,8 +106,13 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         const currentItems = getProp(this.props, 'currentCollection.items');
 
         if (!isEqual(currentItems, prevItems)) {
-            // Either the view was refreshed or metadata was updated, reset the state to initial values
-            this.setState(this.getInitialState());
+            // Either the view was refreshed or metadata was updated, reset edit part of the state to initial values
+            this.setState({
+                editedColumnIndex: -1,
+                editedRowIndex: -1,
+                isUpdating: false,
+                valueBeingEdited: null,
+            });
         }
     }
 
@@ -175,6 +182,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
             currentValue,
             this.getValueForType(type, editedValue),
         );
+        this.setState({ isUpdating: true });
     };
 
     handleMouseEnter = (columnIndex: number, rowIndex: number): void =>
@@ -216,10 +224,11 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         }: Props = this.props;
 
         const {
-            hoveredColumnIndex,
-            hoveredRowIndex,
             editedColumnIndex,
             editedRowIndex,
+            hoveredColumnIndex,
+            hoveredRowIndex,
+            isUpdating,
             valueBeingEdited,
         }: State = this.state;
         const isCellBeingEdited = columnIndex === editedColumnIndex && rowIndex === editedRowIndex;
@@ -292,6 +301,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                                         }
                                         tooltipText={<FormattedMessage {...messages.save} />}
                                         type={SAVE_ICON_TYPE}
+                                        isUpdating={isUpdating}
                                     />
                                 )}
                             </div>
