@@ -52,18 +52,15 @@ $assignee-dropdown-height: 215px;
             margin-bottom: 15px;
         }
 
-        input.bdl-PillSelector-input--hidden,
-        input.pill-selector-hidden-input {
+        input.bdl-PillSelector-input--hidden {
             width: 1px;
         }
 
-        .bdl-PillSelectorDropdown,
-        .pill-selector-wrapper {
+        .bdl-PillSelectorDropdown {
             width: 100%;
             margin-left: 0;
 
-            .bdl-PillSelector,
-            .pill-selector-input-wrapper {
+            .bdl-PillSelector {
                 width: auto;
             }
 

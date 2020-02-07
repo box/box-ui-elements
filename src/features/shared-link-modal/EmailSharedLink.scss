@@ -1,6 +1,5 @@
 .email-shared-link {
-    .bdl-PillSelectorDropdown,
-    .pill-selector-wrapper {
+    .bdl-PillSelectorDropdown {
         margin: 0;
     }
 
@@ -16,7 +15,6 @@
     }
 
     .bdl-PillSelector,
-    .pill-selector-input-wrapper,
     textarea {
         width: 100%;
     }
@@ -30,8 +28,7 @@
             height: 100px;
         }
 
-        .bdl-PillSelector,
-        .pill-selector-input-wrapper {
+        .bdl-PillSelector {
             height: 58px;
         }
     }

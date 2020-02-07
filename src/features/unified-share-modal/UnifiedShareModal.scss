@@ -92,7 +92,6 @@
     }
 
     .bdl-PillSelectorDropdown .bdl-PillSelector, // need both selectors for specificity
-    .pill-selector-wrapper .pill-selector-input-wrapper,
     textarea {
         /* override for DOM element in `TextArea` which provides no id/class for targeting */
         width: 100%;
@@ -130,13 +129,11 @@
         }
     }
 
-    .bdl-PillSelector,
-    .pill-selector-input-wrapper {
+    .bdl-PillSelector {
         margin-top: 10px;
         border: 1px solid $bdl-gray-20;
 
-        .bdl-PillSelector-input::placeholder,
-        .pill-selector-input::placeholder {
+        .bdl-PillSelector-input::placeholder {
             color: $bdl-gray-50;
         }
 
@@ -146,8 +143,7 @@
             background-color: $bdl-gray-02;
             box-shadow: none;
 
-            .bdl-PillSelector-input::placeholder,
-            .pill-selector-input::placeholder {
+            .bdl-PillSelector-input::placeholder {
                 color: $bdl-gray-50;
             }
 
