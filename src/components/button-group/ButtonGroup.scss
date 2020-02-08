@@ -9,15 +9,13 @@
     .toggle-overlay {
         display: inline;
 
-        > .bdl-Button,
         > .btn {
             margin-left: 0;
             padding-right: 11px;
             padding-left: 11px;
             border-radius: 0 4px 4px 0;
 
-            &.btn-primary,
-            &.bdl-Button--primary {
+            &.btn-primary {
                 border-left-color: darken($primary-color, 10%);
             }
         }
@@ -41,12 +39,10 @@
         }
     }
 
-    > .bdl-Button,
     > .btn {
         margin: 5px 0 5px -1px;
         border-radius: 0;
 
-        &.bdl-Button--primary,
         &.btn-primary {
             margin: 5px 0;
             border-right-color: darken($primary-color, 10%);
@@ -64,19 +60,16 @@
         }
     }
 
-    > .bdl-Button:first-child,
     > .btn:first-child {
         border-top-left-radius: 4px;
         border-bottom-left-radius: 4px;
     }
 
-    > .bdl-Button:last-child,
     > .btn:last-child {
         border-top-right-radius: 4px;
         border-bottom-right-radius: 4px;
     }
 
-    > .bdl-Button.is-selected,
     > .btn.is-selected {
         z-index: 2; /* place on top of siblings */
         color: $bdl-gray-80;
@@ -85,8 +78,7 @@
         box-shadow: none;
     }
 
-    > .btn:focus,
-    > .bdl-Button:focus {
+    > .btn:focus {
         z-index: 3; /* place on top of all other buttons for accessibility */
     }
 
@@ -102,8 +94,7 @@
             opacity: .4;
         }
 
-        > .btn-primary,
-        > .bdl-Button--primary {
+        > .btn-primary {
             color: $white;
             background-color: $primary-color;
             border-color: $primary-color;

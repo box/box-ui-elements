@@ -9,14 +9,12 @@ $assignee-dropdown-height: 215px;
         display: block;
         text-align: right;
 
-        .bdl-Button,
         .btn {
             margin-top: 0;
             margin-right: 0;
             margin-bottom: 10px;
         }
 
-        .bdl-Button:last-child,
         .btn:last-child {
             margin-left: 10px;
         }

@@ -5,9 +5,6 @@
 
     .access-stats-item-content {
         &,
-        &.bdl-Button--plain,
-        &.bdl-Button--plain:focus,
-        &.bdl-Button--plain:hover,
         &.btn-plain,
         &.btn-plain:focus,
         &.btn-plain:hover {
@@ -23,8 +20,6 @@
             border-radius: 2px;
         }
 
-        &.bdl-Button--plain:focus,
-        &.bdl-Button--plain:hover,
         &.btn-plain:focus,
         &.btn-plain:hover {
             .access-stats-label {

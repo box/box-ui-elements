@@ -23,7 +23,6 @@
         }
 
         &:hover {
-            .bdl-Button--plain.collapsible-card-title,
             .btn-plain.collapsible-card-title {
                 text-decoration: underline;
             }
@@ -46,7 +45,6 @@
         transition: transform $bdl-transition-duration-200ms;
     }
 
-    .bdl-Button--plain.collapsible-card-title,
     .btn-plain.collapsible-card-title {
         position: relative;
         display: flex;
@@ -75,7 +73,6 @@
 
         .collapsible-card-header {
             &:hover {
-                .bdl-Button--plain.collapsible-card-title,
                 .btn-plain.collapsible-card-title {
                     text-decoration: none;
                 }
@@ -86,7 +83,6 @@
             }
         }
 
-        .bdl-Button--plain.collapsible-card-title,
         .btn-plain.collapsible-card-title {
             &:focus {
                 text-decoration: none;
@@ -105,13 +101,11 @@
             background-color: $white;
         }
 
-        .bdl-Button--plain.collapsible-card-title,
         .btn-plain.collapsible-card-title,
         .collapsible-card-content {
             padding: 10px;
         }
 
-        &.is-open .bdl-Button--plain.collapsible-card-title,
         &.is-open .btn-plain.collapsible-card-title {
             border-bottom: 1px solid $bdl-gray-10;
         }
@@ -122,7 +116,7 @@
     }
 
     &:not(.is-bordered) {
-        .bdl-Button--plain.collapsible-card-title,
+        .bdl-PlainButton.collapsible-card-title,
         .btn-plain.collapsible-card-title {
             border-bottom: 1px solid $bdl-gray-10;
 

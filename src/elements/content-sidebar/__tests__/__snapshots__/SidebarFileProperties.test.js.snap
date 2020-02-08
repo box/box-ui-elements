@@ -144,7 +144,7 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render r
                 onClick={[MockFunction]}
               >
                 <button
-                  className="btn-plain bdl-Button--plain lnk"
+                  className="btn-plain lnk"
                   onClick={[MockFunction]}
                   type="submit"
                 >

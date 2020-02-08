@@ -53,7 +53,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
         >
           <button
             aria-label="Show Sidebar"
-            className="btn-plain bdl-Button--plain bdl-SidebarToggleButton bdl-is-collapsed"
+            className="btn-plain bdl-SidebarToggleButton bdl-is-collapsed"
             onBlur={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}
@@ -151,7 +151,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
         >
           <button
             aria-label="Show Sidebar"
-            className="btn-plain bdl-Button--plain bdl-SidebarToggleButton bdl-is-collapsed"
+            className="btn-plain bdl-SidebarToggleButton bdl-is-collapsed"
             onBlur={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}
@@ -249,7 +249,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
         >
           <button
             aria-label="Hide Sidebar"
-            className="btn-plain bdl-Button--plain bdl-SidebarToggleButton"
+            className="btn-plain bdl-SidebarToggleButton"
             onBlur={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}
@@ -345,7 +345,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
         >
           <button
             aria-label="Hide Sidebar"
-            className="btn-plain bdl-Button--plain bdl-SidebarToggleButton"
+            className="btn-plain bdl-SidebarToggleButton"
             onBlur={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}

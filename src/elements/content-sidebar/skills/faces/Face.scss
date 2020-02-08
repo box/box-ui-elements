@@ -7,7 +7,6 @@
         margin: 0 10px 10px 0;
     }
 
-    .bdl-Button--plain.be-face,
     .btn-plain.be-face {
         overflow: hidden;
         border-radius: 100%;
@@ -39,13 +38,11 @@
         }
     }
 
-    .be-face-unselected .bdl-Button--plain.be-face img,
     .be-face-unselected .btn-plain.be-face img {
         opacity: .4;
         filter: none;
     }
 
-    .bdl-Button--plain.be-face-delete,
     .btn-plain.be-face-delete {
         position: absolute;
         top: -3px;
@@ -59,7 +56,6 @@
     }
 
     &.be-faces-is-editing {
-        .bdl-Button--plain.be-face:hover img,
         .btn-plain.be-face:hover img {
             transform: none;
             cursor: default;

@@ -37,19 +37,16 @@
     }
 
     .bcp-footer-actions {
-        .bdl-Button,
         .btn {
             width: 40px;
             height: 32px;
             padding: 0;
         }
 
-        .bdl-Button:first-child,
         .btn:first-child {
             border-right: 0;
         }
 
-        .bdl-Button--primary svg,
         .btn-primary svg {
             fill: #fff;
         }

@@ -9,9 +9,6 @@
         right: 15px;
     }
 
-    .bdl-Button--plain.be-transcript-edit,
-    .bdl-Button--plain.be-transcript-copy,
-    .bdl-Button--plain.be-transcript-expand,
     .btn-plain.be-transcript-edit,
     .btn-plain.be-transcript-copy,
     .btn-plain.be-transcript-expand {
@@ -34,7 +31,6 @@
         }
     }
 
-    .bdl-Button--plain.be-transcript-copy.be-transcript-copied,
     .btn-plain.be-transcript-copy.be-transcript-copied {
         background-color: $bdl-gray-10;
         transition: background-color 1s;

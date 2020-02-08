@@ -203,13 +203,11 @@
     text-align: right;
 }
 
-.presence-autofly-first-load .bdl-Button--primary,
 .presence-autofly-first-load .btn-primary {
     margin-top: 16px;
     margin-left: 0;
 }
 
-.presence-autofly-first-load .bdl-Button--primary:not(.bdl-is-disabled):focus,
 .presence-autofly-first-load .btn-primary:not(.is-disabled):focus {
     box-shadow: none;
 }

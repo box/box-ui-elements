@@ -18,7 +18,7 @@ type Props = {
 
 const UploadStateContent = ({ fileInputLabel, folderInputLabel, message, onChange, useButton = false }: Props) => {
     const messageContent = message ? <div className="bcu-upload-state-message">{message}</div> : null;
-    const inputLabelClass = useButton ? 'btn bdl-Button btn-primary bdl-Button--primary be-input-btn' : 'be-input-link';
+    const inputLabelClass = useButton ? 'btn btn-primary be-input-btn' : 'be-input-link';
     const shouldShowFolderUploadInput = !useButton && !!folderInputLabel;
 
     const handleChange = (event: SyntheticInputEvent<HTMLInputElement>) => {

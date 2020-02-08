@@ -2,7 +2,7 @@
  * Buttons
  **************************************/
 
-.bdl-Button {
+.btn {
     position: relative;
     display: inline-block;
     box-sizing: border-box;
@@ -85,9 +85,9 @@
     }
 }
 
-.bdl-Button--plain,
-.bdl-Button--plain:hover,
-.bdl-Button--plain:active {
+.btn-plain,
+.btn-plain:hover,
+.btn-plain:active {
     margin: 0;
     padding: 0;
     font-weight: normal;
@@ -95,16 +95,15 @@
     cursor: pointer;
 }
 
-.bdl-Button--plain,
-.bdl-Button--plain:hover,
-.bdl-Button--plain:active,
-.bdl-Button--plain:focus {
+.btn-plain,
+.btn-plain:hover,
+.btn-plain:active,
+.btn-plain:focus {
     background: transparent;
     box-shadow: none;
 }
 
 /* This setting is being used to override the dotted border on a firefox button */
-button.bdl-Button--plain::-moz-focus-inner,
 button.btn-plain::-moz-focus-inner {
     border: 0 none;
 }
@@ -113,7 +112,7 @@ button svg {
     pointer-events: none;
 }
 
-.bdl-Button--primary {
+.btn-primary {
     color: $white;
     background-color: $primary-color;
     border-color: $primary-color;
@@ -143,24 +142,4 @@ button svg {
             background-color: $bdl-gray-30;
         }
     }
-}
-
-/*
-* Section below is for bdl-namespace backwards compatibility.
-* Do not add changes below this line.
-*/
-.btn-primary {
-    @extend .bdl-Button--primary;
-}
-
-.btn-plain {
-    @extend .bdl-Button--plain;
-}
-
-.is-disabled {
-    @extend .bdl-is-disabled;
-}
-
-.btn {
-    @extend .bdl-Button;
 }

@@ -29,10 +29,10 @@ const writeFile = promisify(fs.writeFile);
 */
 
 const conversionMap = {
-    btn: 'bdl-Button',
+    // 'btn': 'bdl-Button',
     'btn-group': 'bdl-ButtonGroup',
-    'btn-plain': 'bdl-Button--plain',
-    'btn-primary': 'bdl-Button--primary',
+    // 'btn-plain': 'bdl-Button--plain',
+    // 'btn-primary': 'bdl-Button--primary',
     'is-disabled': 'bdl-is-disabled',
     label: 'bdl-Label',
     pill: 'bdl-Pill',
