@@ -51,7 +51,7 @@ const messages = defineMessages({
         id: 'boxui.unifiedShare.ftuxConfirmLabel',
     },
     collaboratorListTitle: {
-        defaultMessage: "People in '{itemName}'",
+        defaultMessage: 'People in ‘{itemName}’',
         description: 'Title for collaborator list modal',
         id: 'boxui.unifiedShare.collaboratorListTitle',
     },
@@ -66,12 +66,12 @@ const messages = defineMessages({
         id: 'boxui.unifiedShare.groupLabel',
     },
     modalTitle: {
-        defaultMessage: "Share '{itemName}'",
+        defaultMessage: 'Share ‘{itemName}’',
         description: 'Title of the Unified Share Modal. {itemName} is the name of the file / folder being shared',
         id: 'boxui.unifiedShare.modalTitle',
     },
     emailModalTitle: {
-        defaultMessage: "Send Link to '{itemName}'",
+        defaultMessage: 'Send Link to ‘{itemName}’',
         description:
             'The message to show when you have clicked the button to send the email to a new collaborator (title case)',
         id: 'boxui.unifiedShare.emailModalTitle',
