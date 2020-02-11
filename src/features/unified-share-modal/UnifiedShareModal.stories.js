@@ -27,6 +27,7 @@ const INITIAL_STATE = {
         bannerPolicy: {
             body: 'test',
         },
+        canUserSeeClassification: true,
         classification: 'internal',
         grantedPermissions: {
             itemShare: true,

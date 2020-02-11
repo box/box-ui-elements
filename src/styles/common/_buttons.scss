@@ -37,6 +37,7 @@
         outline: none;
     }
 
+    &:not(.bdl-is-disabled),
     &:not(.is-disabled) {
         &:hover {
             background-color: darken($white, 3%);
@@ -53,6 +54,7 @@
         }
     }
 
+    &.bdl-is-disabled,
     &.is-disabled,
     &.is-loading {
         top: 0; /* prevents disabled button from being depressed on click */
@@ -76,6 +78,7 @@
         }
     }
 
+    &.bdl-is-disabled,
     &.is-disabled {
         box-shadow: none;
         opacity: .4;
@@ -115,6 +118,7 @@ button svg {
     border-color: $primary-color;
     -webkit-font-smoothing: antialiased;
 
+    &:not(.bdl-is-disabled),
     &:not(.is-disabled) {
         &:focus {
             border-color: $primary-color;

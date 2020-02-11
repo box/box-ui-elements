@@ -28,7 +28,7 @@ describe('components/label/LabelPrimitive', () => {
             </LabelPrimitive>,
         );
 
-        expect(wrapper.find('.label').prop('className')).toEqual('label this is a test');
+        expect(wrapper.find('.label').prop('className')).toEqual('label bdl-Label this is a test');
     });
 
     test('should fire passed mouse enter handler', () => {

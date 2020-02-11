@@ -35,6 +35,7 @@
             border: 1px solid darken($primary-color, 10%);
         }
 
+        &.bdl-is-disabled,
         &.is-disabled {
             color: $bdl-gray-30;
             background-color: $bdl-gray-02;
@@ -77,6 +78,7 @@
             }
         }
 
+        .bdl-Tooltip,
         .tooltip {
             top: calc(100% - 5px) !important;
             right: 10px !important;

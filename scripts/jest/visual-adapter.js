@@ -14,6 +14,11 @@ const BUTTON_SELECTOR = 'button';
 // Set of comming utils for visual testing
 // When updating, also update .storybook/typings.d.ts
 global.BoxVisualTestUtils = {
+    // Removes animations
+    resetCSS: async () => {
+        await global.page.addStyleTag({ path: './scripts/jest/visual-test-reset.css' });
+    },
+
     // Takes image screenshots
     takeScreenshot: async id => {
         await global.page.goto(`http://localhost:6061/iframe.html?id=${id}`);

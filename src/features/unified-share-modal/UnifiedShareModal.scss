@@ -137,6 +137,7 @@
             color: $bdl-gray-50;
         }
 
+        &.bdl-is-disabled,
         &.is-disabled {
             color: $bdl-gray-30;
             background-color: $bdl-gray-02;

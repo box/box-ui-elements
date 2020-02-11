@@ -65,11 +65,13 @@
         }
 
         .select-field {
+            .bdl-SelectButton,
             .select-button {
                 width: 160px;
                 border-radius: 5px;
             }
 
+            .bdl-SelectButton.placeholder,
             .select-button.placeholder {
                 color: $bdl-gray-62;
             }
@@ -88,6 +90,7 @@
             padding-right: 10px;
             padding-left: 10px;
 
+            .bdl-SelectButton,
             .select-button {
                 border-radius: 5px;
             }
@@ -138,11 +141,13 @@
         .select-container {
             width: 100%;
 
+            .bdl-SelectButton,
             .select-button {
                 width: 160px;
                 border-radius: 5px;
             }
 
+            .bdl-SelectButton.placeholder,
             .select-button.placeholder {
                 color: $bdl-gray-62;
             }
@@ -151,6 +156,7 @@
 
     .condition-value-dropdown-container.show-error {
         .select-container {
+            button.bdl-SelectButton,
             button.select-button {
                 @include error-border();
             }
@@ -166,6 +172,7 @@
             @include error-border();
         }
 
+        .bdl-SelectButton.placeholder,
         .select-button.placeholder {
             @include error-border();
         }

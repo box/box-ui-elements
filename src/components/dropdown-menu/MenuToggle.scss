@@ -27,6 +27,7 @@
         fill: $white;
     }
 
+    .lnk.bdl-is-disabled & .fill-color,
     .lnk.is-disabled & .fill-color {
         fill: $bdl-gray-50;
     }

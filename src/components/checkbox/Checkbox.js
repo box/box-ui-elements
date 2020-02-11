@@ -78,7 +78,7 @@ const Checkbox = ({
     );
 
     return (
-        <div className={classNames('checkbox-container', className, { 'is-disabled': isDisabled })}>
+        <div className={classNames('checkbox-container', className, { 'is-disabled bdl-is-disabled': isDisabled })}>
             {fieldLabel && <div className="label">{fieldLabel}</div>}
             {checkboxAndLabel}
             {description ? <div className="checkbox-description">{description}</div> : null}

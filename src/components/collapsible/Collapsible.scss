@@ -116,6 +116,7 @@
     }
 
     &:not(.is-bordered) {
+        .bdl-PlainButton.collapsible-card-title,
         .btn-plain.collapsible-card-title {
             border-bottom: 1px solid $bdl-gray-10;
 
