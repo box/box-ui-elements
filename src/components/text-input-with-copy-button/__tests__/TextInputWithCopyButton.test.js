@@ -8,6 +8,7 @@ const sandbox = sinon.sandbox.create();
 
 document.execCommand = () => {};
 document.queryCommandSupported = () => false;
+jest.useFakeTimers();
 
 describe('components/text-input-with-copy-button/TextInputWithCopyButton', () => {
     afterEach(() => {
@@ -78,6 +79,8 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
 
             instance.componentDidMount();
 
+            jest.runAllTimers();
+
             expect(selectMock).toHaveBeenCalled();
         });
 
@@ -96,6 +99,8 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
             wrapper.setProps({
                 value: 'http://example.com/',
             });
+
+            jest.runAllTimers();
 
             expect(selectMock.mock.calls.length).toBe(1);
         });
@@ -191,14 +196,16 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
         test('should select input text and copy text when called', () => {
             const wrapper = renderComponent();
             const instance = wrapper.instance();
-
+            const selectMock = jest.fn();
             instance.copyInputRef = {
-                select: sandbox.mock(),
+                select: selectMock,
             };
             instance.copySelectedText = sandbox.mock();
             wrapper.setProps({});
 
             instance.handleCopyButtonClick();
+            jest.runAllTimers();
+            expect(selectMock).toHaveBeenCalled();
         });
 
         test('should call clearCopySuccessTimeout() when called', () => {
@@ -278,13 +285,16 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
             const wrapper = renderComponent({
                 onFocus: sandbox.mock(),
             });
+            const selectMock = jest.fn();
             const instance = wrapper.instance();
 
             instance.copyInputRef = {
-                select: sandbox.mock(),
+                select: selectMock,
             };
 
             instance.handleFocus({});
+            jest.runAllTimers();
+            expect(selectMock).toHaveBeenCalled();
         });
     });
 });
