@@ -18,11 +18,12 @@ export enum LabelPillStatus {
 export interface LabelPillProps {
     children: Array<React.ReactChild> | React.ReactChild;
     type?: LabelPillStatus;
+    className?: string;
 }
 
 const LabelPillContainer = React.forwardRef((props: LabelPillProps, ref: React.Ref<HTMLSpanElement>) => {
-    const { children, type = LabelPillStatus.DEFAULT, ...rest } = props;
-    const labelPillClasses = classNames('bdl-LabelPill', {
+    const { children, type = LabelPillStatus.DEFAULT, className, ...rest } = props;
+    const labelPillClasses = classNames('bdl-LabelPill', className, {
         [`bdl-LabelPill--${type}`]: type !== LabelPillStatus.DEFAULT,
     });
     return (
