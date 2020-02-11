@@ -15,7 +15,12 @@
     }
 
     .checkbox-subsection {
+        max-width: 400px;
         margin-left: 0;
+
+        .custom-url-preview {
+            overflow: hidden;
+        }
     }
 
     .vanity-name-section {
