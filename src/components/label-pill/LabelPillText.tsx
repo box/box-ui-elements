@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 export interface LabelPillTextProps {
+    /** Text content, ie string or FormattedMessage */
     children: React.ReactChild;
 }
 

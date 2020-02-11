@@ -2,6 +2,7 @@ import * as React from 'react';
 import { SVGProps } from '../../components/accessible-svg/AccessibleSVG';
 
 export interface LabelPillIconProps {
+    /** Icon component */
     Component: React.FunctionComponent<SVGProps>;
 }
 

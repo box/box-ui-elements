@@ -16,8 +16,11 @@ export enum LabelPillStatus {
 }
 
 export interface LabelPillProps {
+    /** Content, wrapped in either LabelPill.Text or LabelPill.Icon */
     children: Array<React.ReactChild> | React.ReactChild;
+    /** Type of pill */
     type?: LabelPillStatus;
+    /** Additional CSS classname(s) */
     className?: string;
 }
 
