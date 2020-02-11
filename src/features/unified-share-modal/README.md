@@ -222,10 +222,10 @@ class USMExample extends React.Component {
                     showUpgradeOptions
                     submitting={ this.state.submitting }
                     suggestedCollaborators={{
-                        '2': { id: 2, userScore: '.1' },
-                        '5': { id: 5, userScore: '0.2' },
-                        '1': { id: 1, userScore: '0.5' },
-                        '3': { id: 3, userScore: '2' }
+                        '2': { id: 2, userScore: '.1', name: 'David', email: 'dt@example.com', },
+                        '5': { id: 5, userScore: '0.2', name: 'Will', email: 'wy@example.com', },
+                        '1': { id: 1, userScore: '0.5', name: 'Jeff', email: 'jt@example.com', },
+                        '3': { id: 3, userScore: '2', name: 'Yang', email: 'yz@example.com', }
                     }}
                     trackingProps={ {
                         inviteCollabsEmailTracking: {},

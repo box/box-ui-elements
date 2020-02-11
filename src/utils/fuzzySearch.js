@@ -18,7 +18,10 @@
  * @param {number} maxGaps Approximate maximum number of gaps in the search string to tune fuzzyness, default 2
  * @returns {boolean} If a match is found
  */
-const fuzzySearch = (search: string, content: string, minCharacters: number = 3, maxGaps: number = 2) => {
+const fuzzySearch = (search: string, content: ?string, minCharacters: number = 3, maxGaps: number = 2): boolean => {
+    if (!content) {
+        return false;
+    }
     const uniformContent = content.toLowerCase().replace(/\s/g, '');
     const uniformSearch = search.toLowerCase().replace(/\s/g, '');
     const contentLength = uniformContent.length;

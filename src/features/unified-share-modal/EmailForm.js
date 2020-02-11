@@ -18,7 +18,7 @@ import IconGlobe from '../../icons/general/IconGlobe';
 
 import ContactsField from './ContactsField';
 import messages from './messages';
-import type { contactType as Contact, suggestedCollaboratorsType } from './flowTypes';
+import type { SuggestedCollabLookup, contactType as Contact } from './flowTypes';
 import type { SelectOptionProp } from '../../components/select-field/props';
 
 type Props = {
@@ -50,7 +50,7 @@ type Props = {
     sendButtonProps?: Object,
     showEnterEmailsCallout: boolean,
     submitting: boolean,
-    suggestedCollaborators?: suggestedCollaboratorsType,
+    suggestedCollaborators?: SuggestedCollabLookup,
     updateSelectedContacts: Function,
 };
 
