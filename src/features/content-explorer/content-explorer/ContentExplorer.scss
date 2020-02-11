@@ -6,6 +6,10 @@
         align-items: center;
         height: 38px;
         margin-top: 20px;
+
+        .quick-search .overlay {
+            max-height: 345px;
+        }
     }
 
     .content-explorer-search-container {
