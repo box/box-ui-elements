@@ -36,7 +36,12 @@ export type accessLevelsDisabledReasonType = {
 };
 
 export type contactType = {
+    avatarUrls?: {
+        large: string,
+        small: string,
+    },
     email?: string,
+    hasCustomAvatar?: boolean,
     id: number | string,
     isExternalUser?: boolean,
     name?: string,

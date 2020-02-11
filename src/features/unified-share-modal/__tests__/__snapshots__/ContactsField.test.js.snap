@@ -30,7 +30,9 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   selectorOptions={
     Array [
       Object {
+        "avatarUrls": Object {},
         "email": "x@example.com",
+        "hasCustomAvatar": false,
         "id": "12345",
         "isExternalUser": false,
         "text": "X User",
@@ -38,7 +40,12 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "x@example.com",
       },
       Object {
+        "avatarUrls": Object {
+          "large": "default_avatar.png",
+          "small": "default_avatar.png",
+        },
         "email": "y@example.com",
+        "hasCustomAvatar": false,
         "id": "23456",
         "isExternalUser": true,
         "text": "Y User",
@@ -46,7 +53,12 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "y@example.com",
       },
       Object {
+        "avatarUrls": Object {
+          "large": "large_avatar.png",
+          "small": "small_avatar.png",
+        },
         "email": "z@example.com",
+        "hasCustomAvatar": true,
         "id": "34567",
         "isExternalUser": false,
         "text": "Z User",
@@ -54,7 +66,9 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "z@example.com",
       },
       Object {
+        "avatarUrls": Object {},
         "email": "a@example.com",
+        "hasCustomAvatar": false,
         "id": "12",
         "isExternalUser": true,
         "text": "a b",
@@ -62,7 +76,9 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "a@example.com",
       },
       Object {
+        "avatarUrls": Object {},
         "email": "b@example.com",
+        "hasCustomAvatar": false,
         "id": "13",
         "isExternalUser": false,
         "text": "a b",
@@ -70,7 +86,9 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "b@example.com",
       },
       Object {
+        "avatarUrls": Object {},
         "email": "c@example.com",
+        "hasCustomAvatar": false,
         "id": "14",
         "isExternalUser": true,
         "text": "a c",
@@ -78,7 +96,9 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "c@example.com",
       },
       Object {
+        "avatarUrls": Object {},
         "email": "d@example.com",
+        "hasCustomAvatar": false,
         "id": "14",
         "isExternalUser": false,
         "text": "a d",
@@ -86,7 +106,9 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "d@example.com",
       },
       Object {
+        "avatarUrls": Object {},
         "email": "e@example.com",
+        "hasCustomAvatar": false,
         "id": "14",
         "isExternalUser": true,
         "text": "a e",
@@ -101,50 +123,74 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   validator={[MockFunction]}
 >
   <ContactDatalistItem
+    avatarUrl={null}
+    id="12345"
     key="12345"
     name="X User"
+    showAvatar={false}
     subtitle="x@example.com"
     title="X User"
   />
   <ContactDatalistItem
+    avatarUrl={null}
+    id="23456"
     key="23456"
     name="Y User"
+    showAvatar={false}
     subtitle="y@example.com"
     title="Y User"
   />
   <ContactDatalistItem
+    avatarUrl="large_avatar.png"
+    id="34567"
     key="34567"
     name="Z User"
+    showAvatar={false}
     subtitle="z@example.com"
     title="Z User"
   />
   <ContactDatalistItem
+    avatarUrl={null}
+    id="12"
     key="12"
     name="a b"
+    showAvatar={false}
     subtitle="a@example.com"
     title="a b"
   />
   <ContactDatalistItem
+    avatarUrl={null}
+    id="13"
     key="13"
     name="a b"
+    showAvatar={false}
     subtitle="b@example.com"
     title="a b"
   />
   <ContactDatalistItem
+    avatarUrl={null}
+    id="14"
     key="14"
     name="a c"
+    showAvatar={false}
     subtitle="c@example.com"
     title="a c"
   />
   <ContactDatalistItem
+    avatarUrl={null}
+    id="14"
     key="14"
     name="a d"
+    showAvatar={false}
     subtitle="d@example.com"
     title="a d"
   />
   <ContactDatalistItem
+    avatarUrl={null}
+    id="14"
     key="14"
     name="a e"
+    showAvatar={false}
     subtitle="e@example.com"
     title="a e"
   />
@@ -180,7 +226,9 @@ exports[`features/unified-share-modal/ContactsField render should render default
   selectedOptions={
     Array [
       Object {
+        "avatarUrls": Object {},
         "email": "x@example.com",
+        "hasCustomAvatar": false,
         "id": "12345",
         "isExternalUser": false,
         "text": "X User",
@@ -188,7 +236,12 @@ exports[`features/unified-share-modal/ContactsField render should render default
         "value": "x@example.com",
       },
       Object {
+        "avatarUrls": Object {
+          "large": "default_avatar.png",
+          "small": "default_avatar.png",
+        },
         "email": "y@example.com",
+        "hasCustomAvatar": false,
         "id": "23456",
         "isExternalUser": true,
         "text": "Y User",
@@ -196,7 +249,12 @@ exports[`features/unified-share-modal/ContactsField render should render default
         "value": "y@example.com",
       },
       Object {
+        "avatarUrls": Object {
+          "large": "large_avatar.png",
+          "small": "small_avatar.png",
+        },
         "email": "z@example.com",
+        "hasCustomAvatar": true,
         "id": "34567",
         "isExternalUser": false,
         "text": "Z User",

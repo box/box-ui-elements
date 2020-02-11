@@ -27,6 +27,7 @@ type Props = {
     onInput?: Function,
     onPillCreate?: (pills: Array<SelectOptionProp | Contact>) => void,
     selectedContacts: Array<Contact>,
+    showAvatars?: boolean,
     suggestedCollaborators?: suggestedCollaboratorsType,
     validateForError: Function,
     validator: Function,
@@ -43,6 +44,10 @@ const isSubstring = (value, searchString) => {
 };
 
 class ContactsField extends React.Component<Props, State> {
+    static defaultProps = {
+        showAvatars: false,
+    };
+
     constructor(props: Props) {
         super(props);
 
@@ -91,9 +96,11 @@ class ContactsField extends React.Component<Props, State> {
                     // filter contacts who have already been selected
                     ({ email, id }) => !selectedContacts.find(({ value }) => value === email || value === id),
                 )
-                .map<Object>(({ email, id, isExternalUser, name, type }) => ({
+                .map<Object>(({ avatarUrls = {}, email, hasCustomAvatar = false, id, isExternalUser, name, type }) => ({
                     // map to standardized DatalistItem format
+                    avatarUrls,
                     email,
+                    hasCustomAvatar,
                     id,
                     isExternalUser,
                     text: name,
@@ -159,6 +166,7 @@ class ContactsField extends React.Component<Props, State> {
             fieldRef,
             label,
             selectedContacts,
+            showAvatars,
             onContactAdd,
             onContactRemove,
             onPillCreate,
@@ -197,8 +205,16 @@ class ContactsField extends React.Component<Props, State> {
                 validateForError={validateForError}
                 validator={validator}
             >
-                {contacts.map(({ email, text = null, id }) => (
-                    <ContactDatalistItem key={id} name={text} subtitle={email || groupLabel} title={text} />
+                {contacts.map(({ email, text = null, id, avatarUrls, hasCustomAvatar }) => (
+                    <ContactDatalistItem
+                        key={id}
+                        id={id}
+                        name={text}
+                        subtitle={email || groupLabel}
+                        title={text}
+                        avatarUrl={hasCustomAvatar ? avatarUrls.large || avatarUrls.small : null}
+                        showAvatar={showAvatars}
+                    />
                 ))}
             </PillSelectorDropdown>
         );
