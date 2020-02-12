@@ -96,9 +96,9 @@ class ContactsField extends React.Component<Props, State> {
                     // filter contacts who have already been selected
                     ({ email, id }) => !selectedContacts.find(({ value }) => value === email || value === id),
                 )
-                .map<Object>(({ avatarUrls = {}, email, hasCustomAvatar = false, id, isExternalUser, name, type }) => ({
+                .map<Object>(({ avatarURLs = {}, email, hasCustomAvatar = false, id, isExternalUser, name, type }) => ({
                     // map to standardized DatalistItem format
-                    avatarUrls,
+                    avatarURLs,
                     email,
                     hasCustomAvatar,
                     id,
@@ -206,14 +206,14 @@ class ContactsField extends React.Component<Props, State> {
                 validateForError={validateForError}
                 validator={validator}
             >
-                {contacts.map(({ email, text = null, id, avatarUrls, hasCustomAvatar }) => (
+                {contacts.map(({ email, text = null, id, avatarURLs, hasCustomAvatar }) => (
                     <ContactDatalistItem
                         key={id}
                         id={id}
                         name={text}
                         subtitle={email || groupLabel}
                         title={text}
-                        avatarUrl={hasCustomAvatar ? avatarUrls.large || avatarUrls.small : null}
+                        avatarUrl={hasCustomAvatar ? avatarURLs.large || avatarURLs.small : null}
                         showAvatar={showInviteeAvatars}
                     />
                 ))}

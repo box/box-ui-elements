@@ -7,7 +7,7 @@ import messages from '../messages';
 describe('features/unified-share-modal/ContactsField', () => {
     const contactsFromServer = [
         {
-            avatarUrls: {},
+            avatarURLs: {},
             email: 'x@example.com',
             hasCustomAvatar: false,
             id: '12345',
@@ -16,7 +16,7 @@ describe('features/unified-share-modal/ContactsField', () => {
             type: 'group',
         },
         {
-            avatarUrls: {
+            avatarURLs: {
                 small: 'default_avatar.png',
                 large: 'default_avatar.png',
             },
@@ -28,7 +28,7 @@ describe('features/unified-share-modal/ContactsField', () => {
             type: 'user',
         },
         {
-            avatarUrls: {
+            avatarURLs: {
                 small: 'small_avatar.png',
                 large: 'large_avatar.png',
             },
@@ -43,7 +43,7 @@ describe('features/unified-share-modal/ContactsField', () => {
 
     const expectedContacts = [
         {
-            avatarUrls: {},
+            avatarURLs: {},
             email: 'x@example.com',
             hasCustomAvatar: false,
             id: '12345',
@@ -53,7 +53,7 @@ describe('features/unified-share-modal/ContactsField', () => {
             value: 'x@example.com',
         },
         {
-            avatarUrls: {
+            avatarURLs: {
                 small: 'default_avatar.png',
                 large: 'default_avatar.png',
             },
@@ -66,7 +66,7 @@ describe('features/unified-share-modal/ContactsField', () => {
             value: 'y@example.com',
         },
         {
-            avatarUrls: {
+            avatarURLs: {
                 small: 'small_avatar.png',
                 large: 'large_avatar.png',
             },
