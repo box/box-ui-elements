@@ -1,0 +1,5 @@
+@mixin bdl-transition($time-length, $properties...) {
+    transition-timing-function: cubic-bezier(0, 0, .6, 1);
+    transition-duration: $time-length;
+    transition-property: $properties;
+}

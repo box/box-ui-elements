@@ -90,9 +90,10 @@
     }
 
     .VirtualizedTable-sortIcon {
+        @include bdl-transition($bdl-transition-duration-base * 1, transform);
+
         margin: 0 4px;
         cursor: pointer;
-        transition: transform .2s ease-out;
 
         &.is-ascending {
             transform: rotate(180deg);
