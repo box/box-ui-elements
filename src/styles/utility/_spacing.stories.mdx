@@ -16,7 +16,7 @@ import * as variables from '../variables';
 
 The main use case for utility classes is for building layouts around existing components, like buttons and form fields.
 Using utility classes means you can avoid naming a CSS class and creating a CSS file for things like wrappers/containers and other
-one-off elements. The values for the classes are derived from the `$grid-unit` variable to make it easy to keep in sync with design
+one-off elements. The values for the classes are derived from the `$bdl-grid-unit` variable to make it easy to keep in sync with design
 expectations.
 
 Example:
@@ -73,28 +73,28 @@ For example:
 
 Grid is based on 4px and uses scaling factors inspired by the [Tailwinds](https://tailwindcss.com/docs/customizing-spacing/) framework.
 
-The `$grid-unit` constant is also available to be imported in SCSS and JS (as `gridUnit`), for cases when you are not using utilities.
+The `$bdl-grid-unit` constant is also available to be imported in SCSS and JS (as `bdlGridUnit`), for cases when you are not using utilities.
 
 <Story name="Scale">{stories.scale()}</Story>
 
 ```ascii
 0:  0,
 px: 1px,
-1:  $grid-unit * 1,
-2:  $grid-unit * 2,
-3:  $grid-unit * 3,
-4:  $grid-unit * 4,
-5:  $grid-unit * 5,
-6:  $grid-unit * 6,
-8:  $grid-unit * 8,
-10: $grid-unit * 10,
-12: $grid-unit * 12,
-16: $grid-unit * 16,
-20: $grid-unit * 20,
-24: $grid-unit * 24,
-32: $grid-unit * 32,
-40: $grid-unit * 40,
-48: $grid-unit * 48,
-56: $grid-unit * 56,
-64: $grid-unit * 64,
+1:  $bdl-grid-unit * 1,
+2:  $bdl-grid-unit * 2,
+3:  $bdl-grid-unit * 3,
+4:  $bdl-grid-unit * 4,
+5:  $bdl-grid-unit * 5,
+6:  $bdl-grid-unit * 6,
+8:  $bdl-grid-unit * 8,
+10: $bdl-grid-unit * 10,
+12: $bdl-grid-unit * 12,
+16: $bdl-grid-unit * 16,
+20: $bdl-grid-unit * 20,
+24: $bdl-grid-unit * 24,
+32: $bdl-grid-unit * 32,
+40: $bdl-grid-unit * 40,
+48: $bdl-grid-unit * 48,
+56: $bdl-grid-unit * 56,
+64: $bdl-grid-unit * 64,
 ```

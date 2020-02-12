@@ -81,5 +81,5 @@
     "tooltip-z-index": "190",
     "bdl-border-radius-size": "4px",
     "bdl-transitionDurationBase": "0.15s",
-    "grid-unit": "4px"
+    "bdl-grid-unit": "4px"
 }
