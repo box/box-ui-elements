@@ -14,7 +14,7 @@
     }
 
     ul.overlay {
-        @include bdl-transition($bdl-transition-duration-base * 1, transform);
+        @include bdl-transition($bdl-transitionDurationBase, transform);
 
         padding: 0;
         overflow-x: hidden;

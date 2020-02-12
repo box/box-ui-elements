@@ -5,7 +5,7 @@
     align-items: center;
 
     > .toggle-arrow {
-        @include bdl-transition($bdl-transition-duration-base, transform);
+        @include bdl-transition($bdl-transitionDurationBase, transform);
 
         flex: none;
         margin-left: 5px;

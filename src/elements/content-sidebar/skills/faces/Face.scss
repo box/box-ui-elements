@@ -12,7 +12,7 @@
         border-radius: 100%;
 
         img {
-            @include bdl-transition($bdl-transition-duration-base * 2, transform);
+            @include bdl-transition($bdl-transitionDurationBase * 2, transform);
 
             width: 45px;
             height: 45px;

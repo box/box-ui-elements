@@ -40,7 +40,7 @@
     }
 
     .collapsible-card-header-caret {
-        @include bdl-transition($bdl-transition-duration-base, transform);
+        @include bdl-transition($bdl-transitionDurationBase, transform);
 
         position: absolute;
         right: 0;

@@ -19,7 +19,7 @@
     border-bottom: 1px solid $bdl-gray-10;
 
     .icon-caret-down {
-        @include bdl-transition($bdl-transition-duration-base, transform);
+        @include bdl-transition($bdl-transitionDurationBase, transform);
     }
 
     &:active,
