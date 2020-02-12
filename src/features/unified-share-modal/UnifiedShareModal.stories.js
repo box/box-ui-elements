@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { IntlProvider } from 'react-intl';
 import { State, Store } from '@sambego/storybook-state';
-
+import { boolean } from '@storybook/addon-knobs';
 import Button from '../../components/button/Button';
 
 import UnifiedShareModal from './UnifiedShareModal';
@@ -299,6 +299,7 @@ export const basic = () => {
                                 sendSharedLinkError=""
                                 sharedLink={state.sharedLink}
                                 showCalloutForUser
+                                showInviteeAvatars={boolean('showInviteeAvatars', false)}
                                 showUpgradeOptions
                                 submitting={state.submitting}
                                 suggestedCollaborators={{
@@ -482,6 +483,7 @@ export const withSharedLink = () => {
                                 sendSharedLinkError=""
                                 sharedLink={state.sharedLink}
                                 showCalloutForUser
+                                showInviteeAvatars={boolean('showInviteeAvatars', false)}
                                 showUpgradeOptions
                                 submitting={state.submitting}
                                 suggestedCollaborators={{
@@ -665,6 +667,7 @@ export const withAutofocusedSharedLink = () => {
                                 sendSharedLinkError=""
                                 sharedLink={state.sharedLink}
                                 showCalloutForUser
+                                showInviteeAvatars={boolean('showInviteeAvatars', false)}
                                 showUpgradeOptions
                                 submitting={state.submitting}
                                 suggestedCollaborators={{

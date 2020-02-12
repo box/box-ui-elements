@@ -37,6 +37,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
         onContactRemove={[Function]}
         onInput={[Function]}
         selectedContacts={Array []}
+        showInviteeAvatars={false}
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -82,6 +83,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
         onContactRemove={[Function]}
         onInput={[Function]}
         selectedContacts={Array []}
+        showInviteeAvatars={false}
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -132,6 +134,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactRemove={[Function]}
         onInput={[Function]}
         selectedContacts={Array []}
+        showInviteeAvatars={false}
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -185,6 +188,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
           onContactRemove={[Function]}
           onInput={[Function]}
           selectedContacts={Array []}
+          showInviteeAvatars={false}
           validateForError={[Function]}
           validator={[Function]}
         />
@@ -267,6 +271,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactRemove={[Function]}
         onInput={[Function]}
         selectedContacts={Array []}
+        showInviteeAvatars={false}
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -348,6 +353,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactRemove={[Function]}
         onInput={[Function]}
         selectedContacts={Array []}
+        showInviteeAvatars={false}
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -398,6 +404,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactRemove={[Function]}
         onInput={[Function]}
         selectedContacts={Array []}
+        showInviteeAvatars={false}
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -484,6 +491,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactRemove={[Function]}
         onInput={[Function]}
         selectedContacts={Array []}
+        showInviteeAvatars={false}
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -565,6 +573,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactRemove={[Function]}
         onInput={[Function]}
         selectedContacts={Array []}
+        showInviteeAvatars={false}
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -665,6 +674,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         onContactRemove={[Function]}
         onInput={[Function]}
         selectedContacts={Array []}
+        showInviteeAvatars={false}
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -710,6 +720,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         onContactRemove={[Function]}
         onInput={[Function]}
         selectedContacts={Array []}
+        showInviteeAvatars={false}
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -755,6 +766,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         onContactRemove={[Function]}
         onInput={[Function]}
         selectedContacts={Array []}
+        showInviteeAvatars={false}
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -800,6 +812,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         onContactRemove={[Function]}
         onInput={[Function]}
         selectedContacts={Array []}
+        showInviteeAvatars={false}
         validateForError={[Function]}
         validator={[Function]}
       />

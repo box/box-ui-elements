@@ -27,7 +27,7 @@ type Props = {
     onInput?: Function,
     onPillCreate?: (pills: Array<SelectOptionProp | Contact>) => void,
     selectedContacts: Array<Contact>,
-    showAvatars?: boolean,
+    showInviteeAvatars?: boolean,
     suggestedCollaborators?: suggestedCollaboratorsType,
     validateForError: Function,
     validator: Function,
@@ -45,7 +45,7 @@ const isSubstring = (value, searchString) => {
 
 class ContactsField extends React.Component<Props, State> {
     static defaultProps = {
-        showAvatars: false,
+        showInviteeAvatars: false,
     };
 
     constructor(props: Props) {
@@ -166,10 +166,10 @@ class ContactsField extends React.Component<Props, State> {
             fieldRef,
             label,
             selectedContacts,
-            showAvatars,
             onContactAdd,
             onContactRemove,
             onPillCreate,
+            showInviteeAvatars,
             validateForError,
             validator,
         } = this.props;
@@ -202,6 +202,7 @@ class ContactsField extends React.Component<Props, State> {
                 ref={fieldRef}
                 selectedOptions={selectedContacts}
                 selectorOptions={contacts}
+                showRoundedPills={showInviteeAvatars}
                 validateForError={validateForError}
                 validator={validator}
             >
@@ -213,7 +214,7 @@ class ContactsField extends React.Component<Props, State> {
                         subtitle={email || groupLabel}
                         title={text}
                         avatarUrl={hasCustomAvatar ? avatarUrls.large || avatarUrls.small : null}
-                        showAvatar={showAvatars}
+                        showAvatar={showInviteeAvatars}
                     />
                 ))}
             </PillSelectorDropdown>

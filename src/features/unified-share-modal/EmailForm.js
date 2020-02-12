@@ -49,6 +49,7 @@ type Props = {
     selectedContacts: Array<Contact>,
     sendButtonProps?: Object,
     showEnterEmailsCallout: boolean,
+    showInviteeAvatars?: boolean,
     submitting: boolean,
     suggestedCollaborators?: suggestedCollaboratorsType,
     updateSelectedContacts: Function,
@@ -63,6 +64,7 @@ class EmailForm extends React.Component<Props, State> {
     static defaultProps = {
         messageProps: {},
         contactsFieldDisabledTooltip: null,
+        showInviteeAvatars: false,
     };
 
     constructor(props: Props) {
@@ -234,6 +236,7 @@ class EmailForm extends React.Component<Props, State> {
             recommendedSharingTooltipCalloutName,
             sendButtonProps,
             showEnterEmailsCallout,
+            showInviteeAvatars,
             selectedContacts,
             submitting,
             suggestedCollaborators,
@@ -278,6 +281,7 @@ class EmailForm extends React.Component<Props, State> {
                         onInput={this.handleContactInput}
                         onPillCreate={onPillCreate}
                         selectedContacts={selectedContacts}
+                        showInviteeAvatars={showInviteeAvatars}
                         suggestedCollaborators={suggestedCollaborators}
                         validateForError={this.validateContactField}
                         validator={this.isValidEmail}

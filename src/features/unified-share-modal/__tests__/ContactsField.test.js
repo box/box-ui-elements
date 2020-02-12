@@ -95,7 +95,7 @@ describe('features/unified-share-modal/ContactsField', () => {
                 onContactRemove={jest.fn()}
                 onInput={jest.fn()}
                 selectedContacts={expectedContacts}
-                showAvatars={false}
+                showInviteeAvatars={false}
                 validateForError={jest.fn()}
                 validator={jest.fn()}
                 {...props}

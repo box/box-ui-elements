@@ -110,6 +110,8 @@ type Props = {
     showCalloutForUser?: boolean,
     /** Shows a callout tooltip next to the names / email addresses input field encouraging users to fill out coworkers contact info */
     showEnterEmailsCallout?: boolean,
+    /** Show avatars in collab invite selector */
+    showInviteeAvatars?: boolean,
     /** Shows a callout tooltip next gear icon with info about what can be customized */
     showSharedLinkSettingsCallout?: boolean,
     /**
@@ -145,6 +147,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
     static defaultProps = {
         initiallySelectedContacts: [],
         focusSharedLinkOnLoad: false,
+        showInviteeAvatars: false,
         trackingProps: {
             inviteCollabsEmailTracking: {},
             sharedLinkEmailTracking: {},
@@ -464,6 +467,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
             showEnterEmailsCallout = false,
             showCalloutForUser = false,
             showUpgradeOptions,
+            showInviteeAvatars,
             submitting,
             suggestedCollaborators,
             trackingProps,
@@ -543,6 +547,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
                             showEnterEmailsCallout={showEnterEmailsCallout}
                             submitting={submitting}
                             selectedContacts={this.state.inviteCollabsContacts}
+                            showInviteeAvatars={showInviteeAvatars}
                             suggestedCollaborators={suggestedCollaborators}
                             updateSelectedContacts={this.updateInviteCollabsContacts}
                             {...inviteCollabsEmailTracking}
