@@ -80,5 +80,6 @@
     "overlay-z-index": "190",
     "tooltip-z-index": "190",
     "bdl-border-radius-size": "4px",
+    "bdl-grid-unit": "4px",
     "bdl-transition-duration-200ms": "0.2s"
 }

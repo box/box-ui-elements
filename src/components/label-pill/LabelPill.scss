@@ -1,14 +1,27 @@
 @import '../../styles/variables';
 
 .bdl-LabelPill {
-    padding: 3px;
     color: $bdl-gray;
-    font-size: 10px;
-    line-height: 10px;
-    background-color: $bdl-gray-10;
     border: 1px solid;
-    border-color: $bdl-gray-20;
-    border-radius: 10px;
+
+    &.bdl-LabelPill--sizeRegular {
+        padding: 3px;
+        font-size: 10px;
+        line-height: 10px;
+        border-radius: 10px;
+    }
+
+    &.bdl-LabelPill--sizeLarge {
+        padding: $bdl-grid-unit;
+        font-size: $bdl-fontSize;
+        line-height: $bdl-line-height;
+        border-radius: $bdl-line-height;
+    }
+
+    &.bdl-LabelPill--default {
+        background-color: $bdl-gray-10;
+        border-color: $bdl-gray-20;
+    }
 
     &.bdl-LabelPill--warning {
         background-color: $bdl-yellorange-10;
@@ -44,6 +57,12 @@
 .bdl-LabelPill-iconContent {
     position: relative;
     top: .125em;
+}
+
+.bdl-LabelPill--sizeLarge {
+    .bdl-LabelPill-textContent {
+        margin: 0 $bdl-grid-unit;
+    }
 }
 
 .bdl-LabelPill-textContent {

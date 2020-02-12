@@ -73,4 +73,5 @@ export const notificationsWrapperZIndex = "180"; // notifications-wrapper-z-inde
 export const overlayZIndex = "190"; // overlay-z-index
 export const tooltipZIndex = "190"; // tooltip-z-index
 export const bdlBorderRadiusSize = "4px"; // bdl-border-radius-size
+export const bdlGridUnit = "4px"; // bdl-grid-unit
 export const bdlTransitionDuration200Ms = "0.2s"; // bdl-transition-duration-200ms
