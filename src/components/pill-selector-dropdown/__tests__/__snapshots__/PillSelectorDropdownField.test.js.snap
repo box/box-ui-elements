@@ -38,6 +38,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
   }
   shouldClearUnmatchedInput={false}
   shouldSetActiveItemOnOpen={true}
+  showRoundedPills={false}
   validator={[Function]}
 >
   <DatalistItem
@@ -81,6 +82,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
   selectorOptions={Array []}
   shouldClearUnmatchedInput={false}
   shouldSetActiveItemOnOpen={true}
+  showRoundedPills={false}
   validator={[Function]}
 />
 `;
@@ -108,6 +110,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
   selectorOptions={Array []}
   shouldClearUnmatchedInput={false}
   shouldSetActiveItemOnOpen={true}
+  showRoundedPills={false}
   validator={[Function]}
 />
 `;

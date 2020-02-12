@@ -6,6 +6,7 @@ import uniqueId from 'lodash/uniqueId';
 import Tooltip from '../tooltip';
 import { KEYS } from '../../constants';
 
+import AvatarPill from './AvatarPill';
 import Pill from './Pill';
 import SuggestedPillsRow from './SuggestedPillsRow';
 import type { Option, OptionValue, SelectedOptions, SuggestedPillsFilter } from './flowTypes';
@@ -26,6 +27,8 @@ type Props = {
     onSuggestedPillAdd?: Function,
     placeholder: string,
     selectedOptions: SelectedOptions,
+    /** Whether to use rounded style for pills */
+    showRoundedPills?: boolean,
     suggestedPillsData?: Array<Object>,
     suggestedPillsFilter?: SuggestedPillsFilter,
     suggestedPillsTitle?: string,
@@ -45,6 +48,7 @@ class PillSelector extends React.Component<Props, State> {
         inputProps: {},
         placeholder: '',
         selectedOptions: [],
+        showRoundedPills: false,
         validator: () => true,
     };
 
@@ -168,6 +172,7 @@ class PillSelector extends React.Component<Props, State> {
             onSuggestedPillAdd,
             placeholder,
             selectedOptions,
+            showRoundedPills,
             suggestedPillsData,
             suggestedPillsFilter,
             suggestedPillsTitle,
@@ -189,6 +194,8 @@ class PillSelector extends React.Component<Props, State> {
             'aria-errormessage': this.errorMessageID,
         };
 
+        const PillComponent = showRoundedPills ? AvatarPill : Pill;
+
         return (
             <Tooltip isShown={hasError} text={error || ''} position="middle-right" theme="error">
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
@@ -200,7 +207,7 @@ class PillSelector extends React.Component<Props, State> {
                     onKeyDown={this.handleKeyDown}
                 >
                     {selectedOptions.map((option: Option, index: number) => (
-                        <Pill
+                        <PillComponent
                             isValid={allowInvalidPills ? validator(option) : true}
                             isDisabled={disabled}
                             isSelected={index === selectedIndex}
@@ -224,7 +231,9 @@ class PillSelector extends React.Component<Props, State> {
                         {...rest}
                         {...inputProps}
                         autoComplete="off"
-                        className={classNames('bdl-PillSelector-input', 'pill-selector-input', className)}
+                        className={classNames('bdl-PillSelector-input', 'pill-selector-input', className, {
+                            'bdl-PillSelector-input--showAvatars': showRoundedPills,
+                        })}
                         disabled={disabled}
                         onInput={onInput}
                         placeholder={this.getNumSelected() === 0 ? placeholder : ''}

@@ -9,8 +9,8 @@ export interface LabelPillIconProps {
     className?: string;
 }
 
-const LabelPillIcon = ({ Component, className }: LabelPillIconProps) => (
-    <Component className={classNames('bdl-LabelPill-iconContent', className)} width={10} height={10} />
+const LabelPillIcon = ({ Component, className, ...rest }: LabelPillIconProps) => (
+    <Component className={classNames('bdl-LabelPill-iconContent', className)} width={10} height={10} {...rest} />
 );
 
 export default LabelPillIcon;

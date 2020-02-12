@@ -24,6 +24,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdown render() should 
         onRemove={[MockFunction]}
         placeholder=""
         selectedOptions={Array []}
+        showRoundedPills={false}
         validator={[Function]}
         value=""
       />

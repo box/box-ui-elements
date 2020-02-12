@@ -151,6 +151,51 @@ export const withPills = () => {
     );
 };
 
+export const showRoundedPills = () => {
+    const storeWithPills = new Store({
+        error: '',
+        selectedOptions: [
+            {
+                displayText: users[2].name,
+                value: users[2].name,
+            },
+            {
+                displayText: users[1].name,
+                value: users[1].name,
+            },
+            {
+                displayText: users[4].name,
+                value: users[4].name,
+            },
+        ],
+        selectorOptions: [],
+    });
+    const { handleInput, handleRemove, handleSelect, validator, validateForError } = generateProps(storeWithPills);
+    return (
+        <State store={storeWithPills}>
+            {state => (
+                <PillSelectorDropdown
+                    allowCustomPills
+                    error={state.error}
+                    placeholder="Names or email addresses"
+                    onInput={handleInput}
+                    onRemove={handleRemove}
+                    onSelect={handleSelect}
+                    selectedOptions={state.selectedOptions}
+                    selectorOptions={state.selectorOptions}
+                    showRoundedPills
+                    validateForError={validateForError}
+                    validator={validator}
+                >
+                    {state.selectorOptions.map(option => (
+                        <DatalistItem key={option.value}>{option.displayText}</DatalistItem>
+                    ))}
+                </PillSelectorDropdown>
+            )}
+        </State>
+    );
+};
+
 export default {
     title: 'Components|PillSelectorDropdown',
     component: PillSelectorDropdown,

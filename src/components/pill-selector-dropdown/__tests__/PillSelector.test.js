@@ -79,6 +79,20 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             expect(wrapper.find('Pill').length).toBe(2);
         });
 
+        test('should render AvatarPill instead of standard Pill when showRoundedPills prop is true', () => {
+            const options = [{ text: 'test', value: 'test' }];
+            const wrapper = shallow(
+                <PillSelector
+                    onInput={onInputStub}
+                    onRemove={onRemoveStub}
+                    selectedOptions={options}
+                    showRoundedPills
+                />,
+            );
+
+            expect(wrapper.find('AvatarPill').length).toBe(1);
+        });
+
         test('should render pills when there are selected options', () => {
             const options = [
                 { displayText: 'test', value: 'test' },

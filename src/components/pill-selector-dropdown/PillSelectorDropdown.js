@@ -62,6 +62,8 @@ type Props = {
     shouldClearUnmatchedInput?: boolean,
     /** Determines whether or not the first item is highlighted automatically when the dropdown opens */
     shouldSetActiveItemOnOpen?: boolean,
+    /** Use rounded style for pills */
+    showRoundedPills?: boolean,
     /** Array of suggested collaborators */
     suggestedPillsData?: Array<Object>,
     /** String decribes the datapoint to filter by so that items in the form are not shown in suggestions. */
@@ -94,6 +96,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         selectorOptions: [],
         shouldClearUnmatchedInput: false,
         shouldSetActiveItemOnOpen: false,
+        showRoundedPills: false,
         validator: () => true,
     };
 
@@ -235,6 +238,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             overlayTitle,
             placeholder,
             selectedOptions,
+            showRoundedPills,
             suggestedPillsData,
             suggestedPillsFilter,
             suggestedPillsTitle,
@@ -268,6 +272,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                             onSuggestedPillAdd={onSuggestedPillAdd}
                             placeholder={placeholder}
                             selectedOptions={selectedOptions}
+                            showRoundedPills={showRoundedPills}
                             suggestedPillsData={suggestedPillsData}
                             suggestedPillsFilter={suggestedPillsFilter}
                             suggestedPillsTitle={suggestedPillsTitle}

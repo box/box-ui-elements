@@ -29,6 +29,7 @@ exports[`elements/content-sidebar/Skills/Keywords/EditableKeywords should correc
         },
       ]
     }
+    showRoundedPills={false}
     validator={[Function]}
     value=""
   />

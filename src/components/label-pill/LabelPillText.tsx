@@ -8,8 +8,10 @@ export interface LabelPillTextProps {
     className?: string;
 }
 
-const LabelPillText = ({ children, className }: LabelPillTextProps) => (
-    <span className={classNames('bdl-LabelPill-textContent', className)}>{children}</span>
+const LabelPillText = ({ children, className, ...rest }: LabelPillTextProps) => (
+    <span className={classNames('bdl-LabelPill-textContent', className)} {...rest}>
+        {children}
+    </span>
 );
 
 export default LabelPillText;
