@@ -44,6 +44,15 @@
         }
     }
 
+    &.avatar--small {
+        width: 24px;
+        height: 24px;
+
+        .avatar-initials {
+            font-size: 13px;
+        }
+    }
+
     &.avatar--large {
         width: 44px;
         height: 44px;

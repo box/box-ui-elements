@@ -6,7 +6,7 @@ import UnknownUserAvatar from './UnknownUserAvatar';
 
 import './Avatar.scss';
 
-const SIZES = { large: true };
+const SIZES = { small: true, large: true };
 
 export interface AvatarProps {
     /**
