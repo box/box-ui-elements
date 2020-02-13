@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import camelCase from 'lodash/camelCase';
 import {
     TASK_NEW_APPROVED,
     TASK_NEW_REJECTED,
@@ -42,7 +41,7 @@ const Status = React.memo<Props>(({ status }: Props) => (
         values={{
             taskStatus: (
                 <LabelPill.Pill type={typeKeyMap[status]}>
-                    <span className={`bcs-TaskStatus-message ${camelCase(status)}`}>
+                    <span>
                         <FormattedMessage {...statusMessageKeyMap[status]} />
                     </span>
                 </LabelPill.Pill>
