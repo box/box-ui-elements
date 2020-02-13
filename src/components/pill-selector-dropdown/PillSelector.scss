@@ -118,7 +118,8 @@
         // when using the larger pills with user avatars,
         // increase textarea line height to align text with pill content
         .bdl-AvatarPill ~ .bdl-PillSelector-input {
-            line-height: $bdl-line-height + $bdl-grid-unit;
+            height: $bdl-line-height + $bdl-grid-unit * 2;
+            line-height: $bdl-line-height + $bdl-grid-unit * 2;
         }
     }
 }

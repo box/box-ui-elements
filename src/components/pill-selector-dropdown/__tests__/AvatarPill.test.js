@@ -31,26 +31,27 @@ describe('components/AvatarPill-selector-dropdown/AvatarPill', () => {
         const wrapper = shallow(<AvatarPill onRemove={onRemoveStub} showAvatar text="box" />);
 
         expect(wrapper).toMatchInlineSnapshot(`
-            <LabelPill
-              className="bdl-AvatarPill"
-              size="large"
-            >
-              <Avatar
-                name="box"
-                size="small"
-              />
-              <LabelPillText
-                className="bdl-AvatarPill-text"
-              >
-                box
-              </LabelPillText>
-              <LabelPillIcon
-                Component={[Function]}
-                className="bdl-AvatarPill-closeBtn"
-                onClick={[MockFunction]}
-              />
-            </LabelPill>
-        `);
+<LabelPill
+  className="bdl-AvatarPill"
+  size="large"
+>
+  <Avatar
+    className="bdl-AvatarPill-avatar"
+    name="box"
+    size="small"
+  />
+  <LabelPillText
+    className="bdl-AvatarPill-text"
+  >
+    box
+  </LabelPillText>
+  <LabelPillIcon
+    Component={[Function]}
+    className="bdl-AvatarPill-closeBtn"
+    onClick={[MockFunction]}
+  />
+</LabelPill>
+`);
 
         expect(wrapper.find('Avatar')).toHaveLength(1);
     });

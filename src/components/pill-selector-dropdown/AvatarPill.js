@@ -56,7 +56,11 @@ const AvatarPill = ({
 
     const handleClickRemove = isDisabled ? noop : onRemove;
 
-    const avatar = showAvatar ? <Avatar name={text} size="small" avatarUrl={avatarUrl} id={id} /> : undefined;
+    const avatar = showAvatar ? (
+        <Avatar className="bdl-AvatarPill-avatar" name={text} size="small" avatarUrl={avatarUrl} id={id} />
+    ) : (
+        undefined
+    );
 
     return (
         <LabelPill.Pill size="large" className={styles} type={pillType}>
