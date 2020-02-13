@@ -40,9 +40,10 @@
     }
 
     .collapsible-card-header-caret {
+        @include bdl-transition($bdl-transitionDurationBase, transform);
+
         position: absolute;
         right: 0;
-        transition: transform $bdl-transition-duration-200ms;
     }
 
     .btn-plain.collapsible-card-title {

@@ -57,7 +57,7 @@
         padding: 0 5px;
 
         > svg {
-            transition: transform 100ms ease-in-out;
+            @include bdl-transition($bdl-transitionDurationBase, transform);
         }
     }
 

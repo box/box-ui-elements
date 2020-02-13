@@ -80,4 +80,4 @@ export const notificationsWrapperZIndex = '180'; // notifications-wrapper-z-inde
 export const overlayZIndex = '190'; // overlay-z-index
 export const tooltipZIndex = '190'; // tooltip-z-index
 export const bdlBorderRadiusSize = '4px'; // bdl-border-radius-size
-export const bdlTransitionDuration200Ms = '0.2s'; // bdl-transition-duration-200ms
+export const bdlTransitionDurationBase = '0.15s'; // bdl-transitionDurationBase

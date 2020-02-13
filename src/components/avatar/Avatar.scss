@@ -12,6 +12,8 @@
     user-select: none;
 
     %circle {
+        @include bdl-transition($bdl-transitionDurationBase * 2, transform);
+
         position: absolute;
         top: 0;
         left: 0;
@@ -19,7 +21,6 @@
         height: 100%;
         border-radius: 100%;
         backface-visibility: hidden;
-        transition: transform .3s;
     }
 
     .avatar-icon,
