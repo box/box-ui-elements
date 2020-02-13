@@ -43,9 +43,8 @@ describe('features/unified-share-modal/ContactsField', () => {
 
     const expectedContacts = [
         {
-            avatarURLs: {},
+            avatarUrl: null,
             email: 'x@example.com',
-            hasCustomAvatar: false,
             id: '12345',
             isExternalUser: false,
             text: 'X User',
@@ -53,12 +52,8 @@ describe('features/unified-share-modal/ContactsField', () => {
             value: 'x@example.com',
         },
         {
-            avatarURLs: {
-                small: 'default_avatar.png',
-                large: 'default_avatar.png',
-            },
+            avatarUrl: 'default_avatar.png',
             email: 'y@example.com',
-            hasCustomAvatar: false,
             id: '23456',
             isExternalUser: true,
             text: 'Y User',
@@ -66,12 +61,8 @@ describe('features/unified-share-modal/ContactsField', () => {
             value: 'y@example.com',
         },
         {
-            avatarURLs: {
-                small: 'small_avatar.png',
-                large: 'large_avatar.png',
-            },
+            avatarUrl: 'large_avatar.png',
             email: 'z@example.com',
-            hasCustomAvatar: true,
             id: '34567',
             isExternalUser: false,
             text: 'Z User',

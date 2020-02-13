@@ -27,6 +27,8 @@ type Props = {
     onSuggestedPillAdd?: Function,
     placeholder: string,
     selectedOptions: SelectedOptions,
+    /** Whether to show avatars in pills (if rounded style is enabled) */
+    showAvatars?: boolean,
     /** Whether to use rounded style for pills */
     showRoundedPills?: boolean,
     suggestedPillsData?: Array<Object>,
@@ -173,6 +175,7 @@ class PillSelector extends React.Component<Props, State> {
             placeholder,
             selectedOptions,
             showRoundedPills,
+            showAvatars,
             suggestedPillsData,
             suggestedPillsFilter,
             suggestedPillsTitle,
@@ -206,17 +209,24 @@ class PillSelector extends React.Component<Props, State> {
                     onFocus={this.handleFocus}
                     onKeyDown={this.handleKeyDown}
                 >
-                    {selectedOptions.map((option: Option, index: number) => (
-                        <PillComponent
-                            isValid={allowInvalidPills ? validator(option) : true}
-                            isDisabled={disabled}
-                            isSelected={index === selectedIndex}
-                            key={option.value}
-                            onRemove={onRemove.bind(this, option, index)}
-                            // $FlowFixMe option.text is for backwards compatibility
-                            text={option.displayText || option.text}
-                        />
-                    ))}
+                    {selectedOptions.map((option: Option, index: number) => {
+                        const pillProps = showAvatars
+                            ? { showAvatar: true, id: option.id, avatarUrl: option.avatarUrl }
+                            : {};
+
+                        return (
+                            <PillComponent
+                                isValid={allowInvalidPills ? validator(option) : true}
+                                isDisabled={disabled}
+                                isSelected={index === selectedIndex}
+                                key={option.value}
+                                onRemove={onRemove.bind(this, option, index)}
+                                // $FlowFixMe option.text is for backwards compatibility
+                                text={option.displayText || option.text}
+                                {...pillProps}
+                            />
+                        );
+                    })}
                     {/* hidden element for focus/key events during pill selection */}
                     <span
                         aria-hidden="true"

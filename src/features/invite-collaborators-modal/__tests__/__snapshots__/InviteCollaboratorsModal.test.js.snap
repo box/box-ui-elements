@@ -52,6 +52,7 @@ exports[`features/invite-collaborators-modal/InviteCollaboratorsModal render() s
     selectorOptions={Array []}
     shouldClearUnmatchedInput={false}
     shouldSetActiveItemOnOpen={false}
+    showAvatars={false}
     showRoundedPills={false}
     validateForError={[Function]}
     validator={[Function]}

@@ -240,6 +240,7 @@ exports[`features/unified-share-modal/UnifiedShareModal openEmailSharedLinkForm(
         onSubmit={[Function]}
         selectedContacts={Array []}
         showEnterEmailsCallout={false}
+        showInviteeAvatars={true}
         updateSelectedContacts={[Function]}
       />
     </LoadingIndicatorWrapper>

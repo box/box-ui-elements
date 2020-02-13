@@ -8,10 +8,20 @@
     justify-content: center;
     max-width: 100%;
     margin: 1px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 1px;
+    line-height: 24px;
 
     &.bdl-AvatarPill-isSelected {
         box-shadow: inset 0 0 0 1px $white;
     }
+}
+
+.bdl-AvatarPill--noAvatar {
+    padding-top: $bdl-grid-unit -1px;
+    padding-bottom: $bdl-grid-unit -1px;
+    padding-left: $bdl-grid-unit;
 }
 
 .bdl-AvatarPill-text {
@@ -27,7 +37,8 @@
     top: unset;
     flex-grow: 0;
     flex-shrink: 0;
-    height: $bdl-line-height;
+    height: $bdl-line-height + $bdl-grid-unit;
+    margin-right: $bdl-grid-unit;
     margin-left: $bdl-grid-unit;
     cursor: pointer;
 }

@@ -30,9 +30,8 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   selectorOptions={
     Array [
       Object {
-        "avatarURLs": Object {},
+        "avatarUrl": null,
         "email": "x@example.com",
-        "hasCustomAvatar": false,
         "id": "12345",
         "isExternalUser": false,
         "text": "X User",
@@ -40,12 +39,8 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "x@example.com",
       },
       Object {
-        "avatarURLs": Object {
-          "large": "default_avatar.png",
-          "small": "default_avatar.png",
-        },
+        "avatarUrl": null,
         "email": "y@example.com",
-        "hasCustomAvatar": false,
         "id": "23456",
         "isExternalUser": true,
         "text": "Y User",
@@ -53,12 +48,8 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "y@example.com",
       },
       Object {
-        "avatarURLs": Object {
-          "large": "large_avatar.png",
-          "small": "small_avatar.png",
-        },
+        "avatarUrl": "large_avatar.png",
         "email": "z@example.com",
-        "hasCustomAvatar": true,
         "id": "34567",
         "isExternalUser": false,
         "text": "Z User",
@@ -66,9 +57,8 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "z@example.com",
       },
       Object {
-        "avatarURLs": Object {},
+        "avatarUrl": null,
         "email": "a@example.com",
-        "hasCustomAvatar": false,
         "id": "12",
         "isExternalUser": true,
         "text": "a b",
@@ -76,9 +66,8 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "a@example.com",
       },
       Object {
-        "avatarURLs": Object {},
+        "avatarUrl": null,
         "email": "b@example.com",
-        "hasCustomAvatar": false,
         "id": "13",
         "isExternalUser": false,
         "text": "a b",
@@ -86,9 +75,8 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "b@example.com",
       },
       Object {
-        "avatarURLs": Object {},
+        "avatarUrl": null,
         "email": "c@example.com",
-        "hasCustomAvatar": false,
         "id": "14",
         "isExternalUser": true,
         "text": "a c",
@@ -96,9 +84,8 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "c@example.com",
       },
       Object {
-        "avatarURLs": Object {},
+        "avatarUrl": null,
         "email": "d@example.com",
-        "hasCustomAvatar": false,
         "id": "14",
         "isExternalUser": false,
         "text": "a d",
@@ -106,9 +93,8 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
         "value": "d@example.com",
       },
       Object {
-        "avatarURLs": Object {},
+        "avatarUrl": null,
         "email": "e@example.com",
-        "hasCustomAvatar": false,
         "id": "14",
         "isExternalUser": true,
         "text": "a e",
@@ -119,6 +105,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   }
   shouldClearUnmatchedInput={false}
   shouldSetActiveItemOnOpen={false}
+  showAvatars={false}
   showRoundedPills={false}
   validateForError={[MockFunction]}
   validator={[MockFunction]}
@@ -227,9 +214,8 @@ exports[`features/unified-share-modal/ContactsField render should render default
   selectedOptions={
     Array [
       Object {
-        "avatarURLs": Object {},
+        "avatarUrl": null,
         "email": "x@example.com",
-        "hasCustomAvatar": false,
         "id": "12345",
         "isExternalUser": false,
         "text": "X User",
@@ -237,12 +223,8 @@ exports[`features/unified-share-modal/ContactsField render should render default
         "value": "x@example.com",
       },
       Object {
-        "avatarURLs": Object {
-          "large": "default_avatar.png",
-          "small": "default_avatar.png",
-        },
+        "avatarUrl": "default_avatar.png",
         "email": "y@example.com",
-        "hasCustomAvatar": false,
         "id": "23456",
         "isExternalUser": true,
         "text": "Y User",
@@ -250,12 +232,8 @@ exports[`features/unified-share-modal/ContactsField render should render default
         "value": "y@example.com",
       },
       Object {
-        "avatarURLs": Object {
-          "large": "large_avatar.png",
-          "small": "small_avatar.png",
-        },
+        "avatarUrl": "large_avatar.png",
         "email": "z@example.com",
-        "hasCustomAvatar": true,
         "id": "34567",
         "isExternalUser": false,
         "text": "Z User",
@@ -267,6 +245,7 @@ exports[`features/unified-share-modal/ContactsField render should render default
   selectorOptions={Array []}
   shouldClearUnmatchedInput={false}
   shouldSetActiveItemOnOpen={false}
+  showAvatars={false}
   showRoundedPills={false}
   validateForError={[MockFunction]}
   validator={[MockFunction]}

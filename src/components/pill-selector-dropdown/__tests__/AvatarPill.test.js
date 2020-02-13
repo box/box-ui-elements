@@ -10,7 +10,7 @@ describe('components/AvatarPill-selector-dropdown/AvatarPill', () => {
 
         expect(wrapper).toMatchInlineSnapshot(`
             <LabelPill
-              className="bdl-AvatarPill"
+              className="bdl-AvatarPill bdl-AvatarPill--noAvatar"
               size="large"
             >
               <LabelPillText
@@ -25,6 +25,34 @@ describe('components/AvatarPill-selector-dropdown/AvatarPill', () => {
               />
             </LabelPill>
         `);
+    });
+
+    test('should render avatar if showAvatar prop is true', () => {
+        const wrapper = shallow(<AvatarPill onRemove={onRemoveStub} showAvatar text="box" />);
+
+        expect(wrapper).toMatchInlineSnapshot(`
+            <LabelPill
+              className="bdl-AvatarPill"
+              size="large"
+            >
+              <Avatar
+                name="box"
+                size="small"
+              />
+              <LabelPillText
+                className="bdl-AvatarPill-text"
+              >
+                box
+              </LabelPillText>
+              <LabelPillIcon
+                Component={[Function]}
+                className="bdl-AvatarPill-closeBtn"
+                onClick={[MockFunction]}
+              />
+            </LabelPill>
+        `);
+
+        expect(wrapper.find('Avatar')).toHaveLength(1);
     });
 
     test('should have the selected class when isSelected is true', () => {

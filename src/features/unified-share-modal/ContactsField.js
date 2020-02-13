@@ -98,9 +98,8 @@ class ContactsField extends React.Component<Props, State> {
                 )
                 .map<Object>(({ avatarURLs = {}, email, hasCustomAvatar = false, id, isExternalUser, name, type }) => ({
                     // map to standardized DatalistItem format
-                    avatarURLs,
+                    avatarUrl: hasCustomAvatar ? avatarURLs.large || avatarURLs.small : null,
                     email,
-                    hasCustomAvatar,
                     id,
                     isExternalUser,
                     text: name,
@@ -203,17 +202,18 @@ class ContactsField extends React.Component<Props, State> {
                 selectedOptions={selectedContacts}
                 selectorOptions={contacts}
                 showRoundedPills={showInviteeAvatars}
+                showAvatars={showInviteeAvatars}
                 validateForError={validateForError}
                 validator={validator}
             >
-                {contacts.map(({ email, text = null, id, avatarURLs, hasCustomAvatar }) => (
+                {contacts.map(({ email, text = null, id, avatarUrl }) => (
                     <ContactDatalistItem
                         key={id}
                         id={id}
                         name={text}
                         subtitle={email || groupLabel}
                         title={text}
-                        avatarUrl={hasCustomAvatar ? avatarURLs.large || avatarURLs.small : null}
+                        avatarUrl={avatarUrl}
                         showAvatar={showInviteeAvatars}
                     />
                 ))}

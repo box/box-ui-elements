@@ -661,6 +661,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
             intl,
             onDismissTooltip = () => {},
             showEnterEmailsCallout = false,
+            showInviteeAvatars,
             showSharedLinkSettingsCallout = false,
             submitting,
             tooltips = {},
@@ -752,6 +753,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
                                 onRequestClose={this.closeEmailSharedLinkForm}
                                 onSubmit={this.handleSendSharedLink}
                                 showEnterEmailsCallout={showEnterEmailsCallout}
+                                showInviteeAvatars
                                 submitting={submitting}
                                 selectedContacts={this.state.emailSharedLinkContacts}
                                 updateSelectedContacts={this.updateEmailSharedLinkContacts}
