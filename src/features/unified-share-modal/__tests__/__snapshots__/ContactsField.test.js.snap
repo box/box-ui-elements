@@ -32,6 +32,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "avatarUrl": null,
         "email": "x@example.com",
+        "hasWarning": false,
         "id": "12345",
         "isExternalUser": false,
         "text": "X User",
@@ -41,6 +42,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "avatarUrl": null,
         "email": "y@example.com",
+        "hasWarning": true,
         "id": "23456",
         "isExternalUser": true,
         "text": "Y User",
@@ -50,6 +52,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "avatarUrl": "large_avatar.png",
         "email": "z@example.com",
+        "hasWarning": false,
         "id": "34567",
         "isExternalUser": false,
         "text": "Z User",
@@ -59,6 +62,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "avatarUrl": null,
         "email": "a@example.com",
+        "hasWarning": true,
         "id": "12",
         "isExternalUser": true,
         "text": "a b",
@@ -68,6 +72,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "avatarUrl": null,
         "email": "b@example.com",
+        "hasWarning": false,
         "id": "13",
         "isExternalUser": false,
         "text": "a b",
@@ -77,6 +82,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "avatarUrl": null,
         "email": "c@example.com",
+        "hasWarning": true,
         "id": "14",
         "isExternalUser": true,
         "text": "a c",
@@ -86,6 +92,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "avatarUrl": null,
         "email": "d@example.com",
+        "hasWarning": false,
         "id": "14",
         "isExternalUser": false,
         "text": "a d",
@@ -95,6 +102,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       Object {
         "avatarUrl": null,
         "email": "e@example.com",
+        "hasWarning": true,
         "id": "14",
         "isExternalUser": true,
         "text": "a e",
@@ -216,6 +224,7 @@ exports[`features/unified-share-modal/ContactsField render should render default
       Object {
         "avatarUrl": null,
         "email": "x@example.com",
+        "hasWarning": false,
         "id": "12345",
         "isExternalUser": false,
         "text": "X User",
@@ -225,6 +234,7 @@ exports[`features/unified-share-modal/ContactsField render should render default
       Object {
         "avatarUrl": "default_avatar.png",
         "email": "y@example.com",
+        "hasWarning": true,
         "id": "23456",
         "isExternalUser": true,
         "text": "Y User",
@@ -234,6 +244,7 @@ exports[`features/unified-share-modal/ContactsField render should render default
       Object {
         "avatarUrl": "large_avatar.png",
         "email": "z@example.com",
+        "hasWarning": false,
         "id": "34567",
         "isExternalUser": false,
         "text": "Z User",

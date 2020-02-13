@@ -27,6 +27,7 @@ import type {
     inviteePermissionType as InviteePermissions,
     item as ItemType,
     contactType as Contact,
+    contactApiResponseType,
     tooltipComponentIdentifierType,
     trackingPropsType,
     sharedLinkType,
@@ -60,13 +61,13 @@ type Props = {
     /** Whether the modal should focus the shared link after the URL is resolved */
     focusSharedLinkOnLoad?: boolean,
     /** Handler function for when the user types into invite collaborators field to fetch contacts. */
-    getCollaboratorContacts: (query: string) => Promise<Array<Contact>>,
+    getCollaboratorContacts: (query: string) => Promise<Array<contactApiResponseType>>,
     /** Handler function that gets contacts by a list of emails */
     getContactsByEmail?: ({ emails: Array<string>, itemTypedID?: string }) => Promise<Object>,
     /** Handler function for getting intial data for modal */
     getInitialData: Function,
     /** Handler function for when the user types into email shared link field to fetch contacts. */
-    getSharedLinkContacts: (query: string) => Promise<Array<Contact>>,
+    getSharedLinkContacts: (query: string) => Promise<Array<contactApiResponseType>>,
     /** An array of initially selected contacts. If none are initially selected, an empty array. */
     initiallySelectedContacts: Array<Contact>,
     intl: any,

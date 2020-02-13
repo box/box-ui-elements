@@ -12,6 +12,7 @@ import './AvatarPill.scss';
 type Props = {
     avatarUrl?: string,
     className?: string,
+    hasWarning?: boolean,
     id?: string | number,
     isDisabled?: boolean,
     isSelected?: boolean,
@@ -28,6 +29,7 @@ const RemoveButton = ({ onClick, ...rest }: { onClick: () => any }) => (
 const AvatarPill = ({
     isDisabled = false,
     isSelected = false,
+    hasWarning = false,
     isValid = true,
     onRemove,
     text,
@@ -43,6 +45,10 @@ const AvatarPill = ({
     });
 
     let pillType;
+
+    if (hasWarning) {
+        pillType = 'warning';
+    }
 
     if (!isValid) {
         pillType = 'error';

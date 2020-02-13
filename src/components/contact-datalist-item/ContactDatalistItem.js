@@ -10,7 +10,7 @@ type Props = {
     avatarUrl?: string | null,
     id?: string | number | null,
     name: ?string,
-    showAvatar: ?boolean,
+    showAvatar?: boolean,
     subtitle?: React.Node,
 };
 

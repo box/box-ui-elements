@@ -61,10 +61,16 @@ describe('components/AvatarPill-selector-dropdown/AvatarPill', () => {
         expect(wrapper.hasClass('bdl-AvatarPill-isSelected')).toBe(true);
     });
 
-    test('should generate LabelPill with error type when AvatarPill is not valid', () => {
-        const wrapper = shallow(<AvatarPill isValid={false} isSelected onRemove={onRemoveStub} text="box" />);
+    test('should generate LabelPill with error type when isValid prop is false', () => {
+        const wrapper = shallow(<AvatarPill isValid={false} onRemove={onRemoveStub} text="box" />);
 
         expect(wrapper.find('LabelPill').prop('type')).toBe('error');
+    });
+
+    test('should generate LabelPill with warning type when hasWarning prop is true', () => {
+        const wrapper = shallow(<AvatarPill hasWarning onRemove={onRemoveStub} text="box" />);
+
+        expect(wrapper.find('LabelPill').prop('type')).toBe('warning');
     });
 
     test('should disable click handler and add class when disabled', () => {

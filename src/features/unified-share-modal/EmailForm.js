@@ -18,7 +18,7 @@ import IconGlobe from '../../icons/general/IconGlobe';
 
 import ContactsField from './ContactsField';
 import messages from './messages';
-import type { contactType as Contact, suggestedCollaboratorsType } from './flowTypes';
+import type { contactType as Contact, contactApiResponseType, suggestedCollaboratorsType } from './flowTypes';
 import type { SelectOptionProp } from '../../components/select-field/props';
 
 type Props = {
@@ -28,7 +28,7 @@ type Props = {
     contactsFieldAvatars?: React.Node,
     contactsFieldDisabledTooltip: React.Node,
     contactsFieldLabel: React.Node,
-    getContacts: (query: string) => Promise<Array<Contact>>,
+    getContacts: (query: string) => Promise<Array<contactApiResponseType>>,
     inlineNotice: {
         content: React.Node,
         type: InlineNoticeType,

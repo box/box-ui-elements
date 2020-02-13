@@ -211,7 +211,12 @@ class PillSelector extends React.Component<Props, State> {
                 >
                     {selectedOptions.map((option: Option, index: number) => {
                         const pillProps = showAvatars
-                            ? { showAvatar: true, id: option.id, avatarUrl: option.avatarUrl }
+                            ? {
+                                  showAvatar: true,
+                                  id: option.id,
+                                  avatarUrl: option.avatarUrl,
+                                  hasWarning: option.hasWarning,
+                              }
                             : {};
 
                         return (

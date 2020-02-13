@@ -35,13 +35,23 @@ export type accessLevelsDisabledReasonType = {
     peopleWithTheLink?: 'access_policy' | null,
 };
 
-export type contactType = {
+export type contactApiResponseType = {
     avatarURLs?: {
         large: string,
         small: string,
     },
     email?: string,
     hasCustomAvatar?: boolean,
+    id: number | string,
+    isExternalUser?: boolean,
+    name?: string,
+    type: string,
+};
+
+export type contactType = {
+    avatarUrl?: string,
+    email?: string,
+    hasWarning?: boolean,
     id: number | string,
     isExternalUser?: boolean,
     name?: string,

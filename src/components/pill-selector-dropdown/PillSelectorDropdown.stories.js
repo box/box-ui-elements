@@ -7,14 +7,14 @@ import PillSelectorDropdown from './PillSelectorDropdown';
 import notes from './PillSelectorDropdown.notes.md';
 
 const users = [
-    { id: 0, name: 'bob@foo.bar' },
-    { id: 1, name: 'sally@foo.bar' },
-    { id: 2, name: 'jean@foo.bar' },
-    { id: 3, name: 'longlonglonglonglonglonglonglonglonglonglonglongemail@foo.bar' },
-    { id: 4, name: 'anotherlonglonglonglonglonglonglonglonglonglonglonglongemail@foo.bar' },
-    { id: 5, name: 'aaa@foo.bar' },
-    { id: 6, name: 'bbb@foo.bar' },
-    { id: 7, name: 'ccc@foo.bar' },
+    { id: 0, name: 'bob@foo.bar', isExternalUser: false },
+    { id: 1, name: 'sally@foo.bar', isExternalUser: true },
+    { id: 2, name: 'jean@foo.bar', isExternalUser: false },
+    { id: 3, name: 'longlonglonglonglonglonglonglonglonglonglonglongemail@foo.bar', isExternalUser: false },
+    { id: 4, name: 'anotherlonglonglonglonglonglonglonglonglonglonglonglongemail@foo.bar', isExternalUser: false },
+    { id: 5, name: 'aaa@foo.bar', isExternalUser: false },
+    { id: 6, name: 'bbb@foo.bar', isExternalUser: false },
+    { id: 7, name: 'ccc@foo.bar', isExternalUser: false },
 ];
 
 function generateProps(store) {
@@ -26,6 +26,7 @@ function generateProps(store) {
                     selectorOptions.push({
                         displayText: user.name,
                         value: user.id,
+                        hasWarning: user.isExternalUser, // Demo of validation state for pills for contacts
                     });
                 }
             });
@@ -209,6 +210,7 @@ export const showAvatars = () => {
                 text: users[1].name,
                 value: users[1].name,
                 id: users[1].id,
+                hasWarning: users[1].isExternalUser,
             },
             {
                 text: users[4].name,

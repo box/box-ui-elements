@@ -12,14 +12,14 @@ import parseEmails from '../../utils/parseEmails';
 import commonMessages from '../../common/messages';
 
 import messages from './messages';
-import type { contactType as Contact, suggestedCollaboratorsType } from './flowTypes';
+import type { contactType as Contact, contactApiResponseType, suggestedCollaboratorsType } from './flowTypes';
 import type { SelectOptionProp } from '../../components/select-field/props';
 
 type Props = {
     disabled: boolean,
     error: string,
     fieldRef?: Object,
-    getContacts: (query: string) => Promise<Array<Contact>>,
+    getContacts: (query: string) => Promise<Array<contactApiResponseType>>,
     intl: any,
     label: React.Node,
     onContactAdd: Function,
@@ -81,7 +81,7 @@ class ContactsField extends React.Component<Props, State> {
         return [...suggestedSelectorOptions, ...selectorOptionsParsed];
     };
 
-    filterContacts = (contacts: Array<Contact>) => {
+    filterContacts = (contacts: Array<contactApiResponseType>): Array<Contact> => {
         const { pillSelectorInputValue } = this.state;
         const { selectedContacts, suggestedCollaborators } = this.props;
 
@@ -96,12 +96,13 @@ class ContactsField extends React.Component<Props, State> {
                     // filter contacts who have already been selected
                     ({ email, id }) => !selectedContacts.find(({ value }) => value === email || value === id),
                 )
-                .map<Object>(({ avatarURLs = {}, email, hasCustomAvatar = false, id, isExternalUser, name, type }) => ({
+                .map<any>(({ avatarURLs = {}, email, hasCustomAvatar = false, id, isExternalUser, name, type }) => ({
                     // map to standardized DatalistItem format
                     avatarUrl: hasCustomAvatar ? avatarURLs.large || avatarURLs.small : null,
                     email,
                     id,
                     isExternalUser,
+                    hasWarning: isExternalUser, // will highlight externals with "showInviteeAvatars" enabled
                     text: name,
                     type,
                     value: email || id, // if email doesn't exist, contact is a group, use id
