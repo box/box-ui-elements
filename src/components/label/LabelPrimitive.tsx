@@ -12,7 +12,7 @@ export interface LabelPrimitiveProps {
 
 const LabelPrimitive = ({ children, className, labelContent, ...rest }: LabelPrimitiveProps) => (
     <label>
-        <span className={classNames('label', className)} {...rest}>
+        <span className={classNames('label bdl-Label', className)} {...rest}>
             {labelContent}
         </span>
         {children}

@@ -7,7 +7,6 @@ import notes from './LinkGroup.stories.md';
 
 export const basic = () => (
     <LinkGroup>
-        <button type="button">foo</button>
         <Link href="https://www.box.com/platform">A Link</Link>
         <Link href="https://developer.box.com">B Link</Link>
         <Link href="https://github.com/box/box-ui-elements">C Link</Link>
