@@ -31,7 +31,7 @@ const messages = defineMessages({
     },
     taskDueDateLabel: {
         id: 'be.contentSidebar.activityFeed.taskNew.taskDueDateLabel',
-        defaultMessage: 'Due: {date}',
+        defaultMessage: 'DUE: {date}',
         description: 'Label and date for task due date',
     },
     tasksFeedApproveAction: {
@@ -51,13 +51,18 @@ const messages = defineMessages({
     },
     tasksFeedStatusLabel: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel',
-        defaultMessage: 'Status: {taskStatus}',
+        defaultMessage: '{taskStatus}',
         description: 'Label for the task status',
     },
     tasksFeedCompletedLabel: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedLabel',
         defaultMessage: 'Completed',
         description: 'Label for a completed task',
+    },
+    taskFeedCompletedUppercaseLabel: {
+        id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedUppercaseLabel',
+        defaultMessage: 'COMPLETED',
+        description: 'Label for an completed task (in upper-case in supported language)',
     },
     tasksFeedApprovedLabel: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedApprovedLabel',

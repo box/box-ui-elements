@@ -5,6 +5,8 @@ import { FormattedMessage } from 'react-intl';
 
 import messages from './messages';
 import { ReadableTime } from '../../../../components/time';
+// $FlowFixMe
+import LabelPill from '../../../../components/label-pill';
 
 import { TASK_NEW_NOT_STARTED } from '../../../../constants';
 
@@ -29,12 +31,14 @@ const TaskDueDate = ({ dueDate, status }: Props): React.Node => {
             })}
             data-testid="task-due-date"
         >
-            <FormattedMessage
-                {...messages.taskDueDateLabel}
-                values={{
-                    date: <ReadableTime alwaysShowTime timestamp={fullDueDate.getTime()} />,
-                }}
-            />
+            <LabelPill.Pill type={isOverdue ? 'error' : 'default'}>
+                <FormattedMessage
+                    {...messages.taskDueDateLabel}
+                    values={{
+                        date: <ReadableTime alwaysShowTime timestamp={fullDueDate.getTime()} />,
+                    }}
+                />
+            </LabelPill.Pill>
         </div>
     );
 };

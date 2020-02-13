@@ -338,6 +338,11 @@ class Task extends React.Component<Props, State> {
                         <div>
                             <ActivityTimestamp date={createdAtTimestamp} />
                         </div>
+                        <div className="bcs-Task-statusContainer">
+                            <TaskStatus status={status} />
+                            <TaskCompletionRuleIcon completionRule={completion_rule} />
+                            {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
+                        </div>
                         <div>
                             <ActivityMessage
                                 id={id}
@@ -347,11 +352,6 @@ class Task extends React.Component<Props, State> {
                                 translationFailed={error ? true : null}
                                 getUserProfileUrl={getUserProfileUrl}
                             />
-                        </div>
-                        <div className="bcs-Task-statusContainer">
-                            {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
-                            <TaskStatus status={status} />
-                            <TaskCompletionRuleIcon completionRule={completion_rule} />
                         </div>
                         <div className="bcs-Task-assigneeListContainer">
                             <AssigneeList
