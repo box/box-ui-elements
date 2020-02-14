@@ -341,6 +341,8 @@ class Task extends React.Component<Props, State> {
                         <div className="bcs-Task-statusContainer">
                             <TaskStatus status={status} />
                             <TaskCompletionRuleIcon completionRule={completion_rule} />
+                        </div>
+                        <div className="bcs-Task-dueDateContainer">
                             {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
                         </div>
                         <div>

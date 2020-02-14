@@ -8,12 +8,12 @@ const messages = defineMessages({
         id: 'boxui.readableTime.eventTime',
     },
     eventTimeToday: {
-        defaultMessage: 'Today at {time, time, short}',
+        defaultMessage: 'TODAY at {time, time, short}',
         description: 'The time that an event occurred today',
         id: 'boxui.readableTime.eventTimeToday',
     },
     eventTimeYesterday: {
-        defaultMessage: 'Yesterday at {time, time, short}',
+        defaultMessage: 'YESTERDAY at {time, time, short}',
         description: 'The time that an event occurred yesterday',
         id: 'boxui.readableTime.eventTimeYesterday',
     },

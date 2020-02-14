@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
 import messages from './messages';
@@ -25,12 +24,7 @@ const TaskDueDate = ({ dueDate, status }: Props): React.Node => {
     const fullDueDate = new Date(dueDate);
 
     return (
-        <div
-            className={classNames('bcs-TaskDueDate', {
-                'bcs-is-taskOverdue': isOverdue,
-            })}
-            data-testid="task-due-date"
-        >
+        <div data-testid="task-due-date">
             <LabelPill.Pill type={isOverdue ? 'error' : 'default'}>
                 <FormattedMessage
                     {...messages.taskDueDateLabel}

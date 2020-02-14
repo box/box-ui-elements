@@ -39,6 +39,11 @@ $bcs-task-left-offset: 10 * $bcs-task-grid + 2px;
 
 .bcs-Task-statusContainer {
     margin-top: 2 * $bcs-task-grid;
+    margin-bottom: 10px;
+}
+
+.bcs-Task-dueDateContainer {
+    margin-bottom: 13px;
 }
 
 .bcs-Task-assigneeListContainer {
