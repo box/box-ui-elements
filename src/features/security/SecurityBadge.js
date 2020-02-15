@@ -8,12 +8,18 @@ import './SecurityBadge.scss';
 
 type Props = {
     className?: string,
+    fillColor?: string,
     icon?: React.Node,
     message: React.Node,
+    strokeColor?: string,
 };
 
-const SecurityBadge = ({ className, icon, message, ...rest }: Props) => (
-    <h1 className={classNames('bdl-SecurityBadge', className)} {...rest}>
+const SecurityBadge = ({ className, fillColor, icon, message, strokeColor, ...rest }: Props) => (
+    <h1
+        className={classNames('bdl-SecurityBadge', className)}
+        style={{ backgroundColor: fillColor, borderColor: strokeColor }}
+        {...rest}
+    >
         {icon}
         <span className="bdl-SecurityBadge-name">{message}</span>
     </h1>

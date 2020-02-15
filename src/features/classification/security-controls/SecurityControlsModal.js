@@ -17,18 +17,22 @@ type Props = {
     classificationName?: string,
     closeModal: Function,
     definition?: string,
+    fillColor?: string,
     isSecurityControlsModalOpen: boolean,
     itemName?: string,
     modalItems: Array<MessageDescriptor>,
+    strokeColor?: string,
 };
 
 const SecurityControlsModal = ({
     closeModal,
     definition,
+    fillColor,
     classificationName,
     isSecurityControlsModalOpen,
     itemName,
     modalItems,
+    strokeColor,
 }: Props) => {
     if (!itemName || !classificationName || !definition) {
         return null;
@@ -46,7 +50,11 @@ const SecurityControlsModal = ({
             <p>
                 <FormattedMessage {...messages.modalDescription} />
             </p>
-            <ClassifiedBadge name={((classificationName: any): string)} />
+            <ClassifiedBadge
+                strokeColor={strokeColor}
+                fillColor={fillColor}
+                name={((classificationName: any): string)}
+            />
             <Label text={<FormattedMessage {...classificationMessages.definition} />}>
                 <p className="bdl-SecurityControlsModal-definition">{definition}</p>
             </Label>
