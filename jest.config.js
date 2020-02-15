@@ -9,7 +9,7 @@ module.exports = {
             '<rootDir>/scripts/jest/mocks/fileMock.js',
         '\\.(css|less|scss|md)$': '<rootDir>/scripts/jest/mocks/styleMock.js',
     },
-    transformIgnorePatterns: ['node_modules/(?!(react-virtualized/dist/es))'],
+    transformIgnorePatterns: ['node_modules/(?!(react-virtualized/dist/es|@box/cldr-data))'],
     testPathIgnorePatterns: ['/node_modules/', 'stories.test.js$', 'stories.test.tsx$'],
     collectCoverage: false,
     coverageDirectory: '<rootDir>/reports',

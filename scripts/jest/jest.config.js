@@ -8,7 +8,7 @@ module.exports = {
         '\\.(css|less|scss|md)$': '<rootDir>/scripts/jest/mocks/styleMock.js',
         'react-virtualized/dist/es': 'react-virtualized/dist/commonjs',
     },
-    transformIgnorePatterns: ['node_modules/(?!(react-virtualized/dist/es))'],
+    transformIgnorePatterns: ['node_modules/(?!(react-virtualized/dist/es|@box/cldr-data))'],
     preset: 'jest-puppeteer',
     testRegex: '(.*)?__tests__\\/.*\\.stories\\.test\\.(js|tsx)$',
     setupFilesAfterEnv: [
