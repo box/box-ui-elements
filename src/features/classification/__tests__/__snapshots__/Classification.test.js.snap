@@ -5,7 +5,9 @@ exports[`features/classification/Classification should render a classified badge
   className="bdl-Classification "
 >
   <ClassifiedBadge
+    fillColor="#fef7e8"
     name="Confidential"
+    strokeColor="#f5b31b"
   />
   <Label
     text={
@@ -29,8 +31,10 @@ exports[`features/classification/Classification should render a classified badge
   className="bdl-Classification "
 >
   <ClassifiedBadge
+    fillColor="#fef7e8"
     name="Confidential"
     onClick={[Function]}
+    strokeColor="#f5b31b"
     tooltipText="fubar"
   />
 </article>
@@ -41,7 +45,9 @@ exports[`features/classification/Classification should render a classified badge
   className="bdl-Classification "
 >
   <ClassifiedBadge
+    fillColor="#fef7e8"
     name="Confidential"
+    strokeColor="#f5b31b"
     tooltipText="fubar"
   />
 </article>
@@ -52,7 +58,9 @@ exports[`features/classification/Classification should render a classified badge
   className="bdl-Classification "
 >
   <ClassifiedBadge
+    fillColor="#fef7e8"
     name="Confidential"
+    strokeColor="#f5b31b"
   />
 </article>
 `;
@@ -62,7 +70,9 @@ exports[`features/classification/Classification should render a classified badge
   className="bdl-Classification "
 >
   <ClassifiedBadge
+    fillColor="#fef7e8"
     name="Confidential"
+    strokeColor="#f5b31b"
   />
   <Label
     text={
