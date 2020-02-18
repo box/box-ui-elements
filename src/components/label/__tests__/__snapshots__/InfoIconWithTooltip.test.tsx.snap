@@ -16,12 +16,10 @@ exports[`components/label/InfoIconWithTooltip should render correctly 1`] = `
     <span
       className="info-icon-container"
     >
-      <IconInfo
+      <Info16
         a="a"
         b="b"
         c="c"
-        height={16}
-        width={16}
       />
     </span>
   </Tooltip>
