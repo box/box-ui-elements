@@ -90,6 +90,7 @@ export interface TooltipProps {
 
 type State = {
     isShown: boolean;
+    hasRendered: boolean;
     wasClosedByUser: boolean;
 };
 
@@ -105,7 +106,11 @@ class Tooltip extends React.Component<TooltipProps, State> {
     constructor(props: TooltipProps) {
         super(props);
 
-        this.state = { isShown: !!props.isShown, wasClosedByUser: false };
+        this.state = { isShown: !!props.isShown, hasRendered: false, wasClosedByUser: false };
+    }
+
+    componentDidMount() {
+        this.setState({ hasRendered: true });
     }
 
     tooltipID = uniqueId('tooltip');
@@ -173,7 +178,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
 
         const isShown = isControlled ? isShownProp : this.state.isShown;
 
-        const showTooltip = isShown && !this.state.wasClosedByUser;
+        const showTooltip = isShown && !this.state.wasClosedByUser && this.state.hasRendered;
 
         return showTooltip;
     };
