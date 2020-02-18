@@ -18,8 +18,8 @@ export interface SVGProps {
 }
 
 export interface AccessibleSVGProps {
-    /** Children for the component */
-    children: React.ReactNode;
+    /** SVG dom elements for the component */
+    children: React.ReactElement | Array<React.ReactElement>;
     /** A text-only string describing the icon if it's not purely decorative for accessibility */
     title?: React.ReactNode;
 }
