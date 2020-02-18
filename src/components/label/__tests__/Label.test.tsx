@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 
 import InfoIconWithTooltip from '../InfoIconWithTooltip';
-import Label from '..';
+import Label from '../Label';
 
 const text = 'My Label';
 
@@ -12,7 +12,8 @@ describe('components/label/Label', () => {
         text: 'My Label',
     };
 
-    const getMountedWrapper = props => mount(<Label {...defaultProps} {...props} />);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const getMountedWrapper = (props: any) => mount(<Label {...defaultProps} {...props} />);
 
     test('should correctly render default element', () => {
         const wrapper = shallow(
@@ -20,10 +21,7 @@ describe('components/label/Label', () => {
                 <input type="text" />
             </Label>,
         );
-
-        expect(wrapper.find('StandardLabel').length).toEqual(1);
-        expect(wrapper.find('HiddenLabel').length).toEqual(0);
-        expect(wrapper.find('StandardLabel').prop('labelContent')[0].props.children).toEqual(text);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render the hidden label when hideLabel is set', () => {
@@ -32,10 +30,7 @@ describe('components/label/Label', () => {
                 <input type="text" />
             </Label>,
         );
-
-        expect(wrapper.find('HiddenLabel').length).toEqual(1);
-        expect(wrapper.find('StandardLabel').length).toEqual(0);
-        expect(wrapper.find('HiddenLabel').prop('labelContent')[0].props.children).toEqual(text);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render optional text when specified', () => {

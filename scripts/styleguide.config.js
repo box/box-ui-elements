@@ -58,7 +58,6 @@ const allSections = [
             '../src/components/infinite-scroll/InfiniteScroll.js',
             '../src/components/inline-error/InlineError.js',
             '../src/components/inline-notice/InlineNotice.js',
-            '../src/components/label/Label.js',
             '../src/components/logo/Logo.js',
             '../src/components/menu/Menu.js',
             '../src/components/menu/SelectMenuLinkItem.js',
@@ -91,6 +90,7 @@ const allSections = [
             '../src/components/toggle/Toggle.js',
 
             '../src/components/avatar/Avatar.tsx',
+            '../src/components/label/Label.tsx',
             '../src/components/button/Button.tsx',
             '../src/components/button-group/ButtonGroup.tsx',
             '../src/components/link/Link.tsx',
