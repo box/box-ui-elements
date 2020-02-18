@@ -12,7 +12,7 @@ describe('components/avatar/Avatar', () => {
         'looks visually correct when using story %s',
         async id => {
             const image = await BoxVisualTestUtils.takeScreenshot(id);
-            await BoxVisualTestUtils.sleep(); // lets url load
+            await BoxVisualTestUtils.sleep(100); // lets url load (race condition, wait for URL to 404)
             return expect(image).toMatchImageSnapshot();
         },
     );
