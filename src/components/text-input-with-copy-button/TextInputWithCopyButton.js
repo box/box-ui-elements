@@ -168,11 +168,8 @@ class TextInputWithCopyButton extends React.PureComponent<Props, State> {
     performAutofocus = () => {
         const { copyInputRef } = this;
         if (copyInputRef) {
-            // using setTimeout to fix intermittent issues with text selection
-            setTimeout(() => {
-                copyInputRef.select();
-                copyInputRef.scrollLeft = 0;
-            }, 0);
+            copyInputRef.select();
+            copyInputRef.scrollLeft = 0;
         }
     };
 
