@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import { shallow } from 'enzyme';
 
@@ -11,9 +10,8 @@ describe('components/label/InfoIconWithTooltip', () => {
         tooltipText: 'I am a tooltip',
     };
 
-    const getWrapper = props => shallow(<InfoIconWithTooltip {...defaultProps} {...props} />);
-
     test('should render correctly', () => {
-        expect(getWrapper()).toMatchSnapshot();
+        const wrapper = shallow(<InfoIconWithTooltip {...defaultProps} />);
+        expect(wrapper).toMatchSnapshot();
     });
 });

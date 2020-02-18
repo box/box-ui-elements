@@ -9,7 +9,7 @@
     padding: 25px;
     background-color: $white;
     border: solid 1px $bdl-gray-02;
-    border-radius: 30px;
+    border-radius: $bdl-border-radius-size;
     box-shadow: 0 3px 6px 0 rgba($black, .1);
 
     &.bdl-is-closed {
