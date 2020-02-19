@@ -2,25 +2,27 @@
 *                                           @box/webapp
 
 # Root
-/*                                          @box/foundation @box/webapp
+/*                                          @box/foundation
 /LICENSE                                    @box/ui-elements
-/scripts/                                   @box/foundation @box/webapp
 /THIRD_PARTY_LICENSES                       @box/ui-elements
 
+# Build
+/scripts/                                   @box/foundation
+
 # Source
-/src/                                       @box/foundation @box/webapp
-/src/*                                      @box/create-communicate @box/preview @box/ui-elements
-/src/api/                                   @box/create-communicate @box/preview @box/ui-elements
-/src/api/Feed.js                            @box/collab @box/preview
+/src/                                       @box/webapp
+/src/*                                      @box/preview @box/ui-elements
+/src/api/                                   @box/preview @box/ui-elements
 /src/api/box-edit/                          @box/partners
-/src/api/tasks                              @box/collab @box/preview
-/src/elements/                              @box/create-communicate @box/preview @box/ui-elements
+/src/api/Feed.js                            @box/preview
+/src/api/tasks/                             @box/collab
+/src/api/uploads/                           @box/create-communicate
+/src/elements/                              @box/preview @box/ui-elements
 /src/elements/content-explorer/             @box/ui-elements
 /src/elements/content-open-with/            @box/partners
 /src/elements/content-picker/               @box/ui-elements
 /src/elements/content-preview/              @box/preview
 /src/elements/content-sidebar/              @box/preview
-/src/elements/content-sidebar/activity-feed @box/collab @box/preview
 /src/elements/content-uploader/             @box/create-communicate
 /src/elements/wrappers/                     @box/ui-elements
 /src/features/                              @box/webapp
@@ -30,7 +32,7 @@
 /src/features/metadata-instance-editor/     @box/ui-elements
 
 # Tests
-/test/                                      @box/foundation @box/webapp
+/test/                                      @box/webapp
 /test/integration/                          @box/webapp
 /test/integration/content-explorer/         @box/ui-elements
 /test/integration/content-open-with/        @box/partners
@@ -38,3 +40,9 @@
 /test/integration/content-preview/          @box/preview
 /test/integration/content-sidebar/          @box/preview
 /test/integration/content-uploader/         @box/create-communicate
+
+# Features
+/src/elements/content-sidebar/activity-feed/comment/    @box/collab @box/preview
+/src/elements/content-sidebar/activity-feed/task/       @box/collab @box/preview
+/src/elements/content-sidebar/activity-feed/task-form/  @box/collab @box/preview
+/src/elements/content-sidebar/activity-feed/task-new/   @box/collab @box/preview
