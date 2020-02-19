@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage, type MessageDescriptor } from 'react-intl';
 
-import { bdlYellorange } from '../../../styles/variables';
+import { bdlYellorange, bdlYellorange10 } from '../../../styles/variables';
 import IconSecurityClassificationSolid from '../../../icons/general/IconSecurityClassificationSolid';
 import { SECURITY_CONTROLS_FORMAT } from '../constants';
 import type { ControlsFormat } from '../flowTypes';
@@ -11,20 +11,37 @@ import './SecurityControlsItem.scss';
 
 type Props = {
     controlsFormat: ControlsFormat,
+    fillColor?: string,
     message: MessageDescriptor,
+    strokeColor?: string,
 };
 
-const SecurityControlsItem = ({ controlsFormat, message }: Props) => {
+const ICON_SIZE = 13;
+
+const SecurityControlsItem = ({ controlsFormat, fillColor, message, strokeColor }: Props) => {
     const shouldRenderIcon = controlsFormat !== SECURITY_CONTROLS_FORMAT.FULL;
 
     return (
         <li className="bdl-SecurityControlsItem">
             {shouldRenderIcon && (
-                <IconSecurityClassificationSolid color={bdlYellorange} height={11} width={11} strokeWidth={3} />
+                <span className="bdl-SecurityControlsItem-icon">
+                    <IconSecurityClassificationSolid
+                        fillColor={fillColor}
+                        strokeColor={strokeColor}
+                        height={ICON_SIZE}
+                        width={ICON_SIZE}
+                        strokeWidth={3}
+                    />
+                </span>
             )}
             <FormattedMessage {...message} />
         </li>
     );
+};
+
+SecurityControlsItem.defaultProps = {
+    fillColor: bdlYellorange10,
+    strokeColor: bdlYellorange,
 };
 
 export default SecurityControlsItem;

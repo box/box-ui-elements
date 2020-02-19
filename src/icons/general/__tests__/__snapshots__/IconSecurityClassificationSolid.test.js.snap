@@ -5,46 +5,48 @@ exports[`icons/general/IconSecurityClassification should correctly render icon w
   className="bdl-IconSecurityClassificationSolid test"
   height={100}
   title="title"
-  viewBox="0 0 32 32"
+  viewBox="0 0 16 16"
   width={200}
 >
-  <path
-    d="M17,2 L5,8 L5,15 C5,21.4214876 10.6933333,29.5421488 17,31 C23.3066667,29.5421488 29,21.4214876 29,15 L29,8 L17,2 Z"
-    fill="#987654"
-    stroke="#987654"
-    strokeWidth={1}
-  />
-  <path
-    d="M23,11 L23,19"
+  <g
     fill="none"
-    stroke="#fff"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth={1}
-  />
+    fillRule="evenodd"
+    stroke="#222"
+  >
+    <path
+      d="M14.122 7.425a8.724 8.724 0 0 1-1.692 5.12c-1.065 1.452-2.56 2.534-4.265 2.96-2.036-.426-3.53-1.508-4.595-2.96a8.724 8.724 0 0 1-1.692-5.12V3.277L8 .495l6.122 2.782v4.148z"
+      fill="#d3d3d3"
+    />
+    <path
+      d="M11.4 5.323v5.441-5.441z"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </g>
 </AccessibleSVG>
 `;
 
 exports[`icons/general/IconSecurityClassification should correctly render icon with default values 1`] = `
 <AccessibleSVG
   className="bdl-IconSecurityClassificationSolid"
-  height={32}
-  viewBox="0 0 32 32"
-  width={32}
+  height={16}
+  viewBox="0 0 16 16"
+  width={16}
 >
-  <path
-    d="M17,2 L5,8 L5,15 C5,21.4214876 10.6933333,29.5421488 17,31 C23.3066667,29.5421488 29,21.4214876 29,15 L29,8 L17,2 Z"
-    fill="#222"
-    stroke="#222"
-    strokeWidth={2}
-  />
-  <path
-    d="M23,11 L23,19"
+  <g
     fill="none"
-    stroke="#fff"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth={2}
-  />
+    fillRule="evenodd"
+    stroke="#222"
+  >
+    <path
+      d="M14.122 7.425a8.724 8.724 0 0 1-1.692 5.12c-1.065 1.452-2.56 2.534-4.265 2.96-2.036-.426-3.53-1.508-4.595-2.96a8.724 8.724 0 0 1-1.692-5.12V3.277L8 .495l6.122 2.782v4.148z"
+      fill="#d3d3d3"
+    />
+    <path
+      d="M11.4 5.323v5.441-5.441z"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </g>
 </AccessibleSVG>
 `;

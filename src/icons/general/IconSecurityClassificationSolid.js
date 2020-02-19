@@ -3,13 +3,14 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 import AccessibleSVG from '../accessible-svg';
-import { bdlGray, white } from '../../styles/variables';
+import { bdlGray, bdlGray20 } from '../../styles/variables';
 
 type Props = {
     className?: string,
     color?: string,
+    fillColor?: string,
     height?: number,
-    strokeWidth?: number,
+    strokeColor?: string,
     /** A text-only string describing the icon if it's not purely decorative for accessibility */
     title?: string | React.Element<any>,
     width?: number,
@@ -17,30 +18,23 @@ type Props = {
 
 const IconSecurityClassificationSolid = ({
     className = '',
-    height = 32,
-    color = bdlGray,
+    fillColor = bdlGray20,
+    height = 16,
+    strokeColor = bdlGray,
     title,
-    strokeWidth = 2,
-    width = 32,
+    width = 16,
 }: Props) => {
     const classes = classNames('bdl-IconSecurityClassificationSolid', className);
 
     return (
-        <AccessibleSVG className={classes} height={height} title={title} viewBox="0 0 32 32" width={width}>
-            <path
-                d="M17,2 L5,8 L5,15 C5,21.4214876 10.6933333,29.5421488 17,31 C23.3066667,29.5421488 29,21.4214876 29,15 L29,8 L17,2 Z"
-                stroke={color}
-                strokeWidth={strokeWidth}
-                fill={color}
-            />
-            <path
-                d="M23,11 L23,19"
-                stroke={white}
-                strokeWidth={strokeWidth}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                fill="none"
-            />
+        <AccessibleSVG className={classes} height={height} title={title} viewBox="0 0 16 16" width={width}>
+            <g stroke={strokeColor} fill="none" fillRule="evenodd">
+                <path
+                    fill={fillColor}
+                    d="M14.122 7.425a8.724 8.724 0 0 1-1.692 5.12c-1.065 1.452-2.56 2.534-4.265 2.96-2.036-.426-3.53-1.508-4.595-2.96a8.724 8.724 0 0 1-1.692-5.12V3.277L8 .495l6.122 2.782v4.148z"
+                />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M11.4 5.323v5.441-5.441z" />
+            </g>
         </AccessibleSVG>
     );
 };

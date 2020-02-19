@@ -20,6 +20,6 @@
 .bdl-SecurityBadge-name {
     @include bdl-SecurityBadge-name;
 
-    color: $bdl-gray !important; // To inhibit overriding
+    color: $bdl-gray-80 !important; // To inhibit overriding
     text-transform: uppercase;
 }

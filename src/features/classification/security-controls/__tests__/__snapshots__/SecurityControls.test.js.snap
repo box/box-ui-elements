@@ -7,6 +7,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
   >
     <SecurityControlsItem
       controlsFormat="full"
+      fillColor="#fef7e8"
       key="boxui.securityControls.sharingCollabOnly"
       message={
         Object {
@@ -14,9 +15,11 @@ exports[`features/classification/security-controls/SecurityControls should rende
           "id": "boxui.securityControls.sharingCollabOnly",
         }
       }
+      strokeColor="#f5b31b"
     />
     <SecurityControlsItem
       controlsFormat="full"
+      fillColor="#fef7e8"
       key="boxui.securityControls.externalCollabDomainList"
       message={
         Object {
@@ -24,9 +27,11 @@ exports[`features/classification/security-controls/SecurityControls should rende
           "id": "boxui.securityControls.externalCollabDomainList",
         }
       }
+      strokeColor="#f5b31b"
     />
     <SecurityControlsItem
       controlsFormat="full"
+      fillColor="#fef7e8"
       key="boxui.securityControls.desktopDownloadOwners"
       message={
         Object {
@@ -34,9 +39,11 @@ exports[`features/classification/security-controls/SecurityControls should rende
           "id": "boxui.securityControls.desktopDownloadOwners",
         }
       }
+      strokeColor="#f5b31b"
     />
     <SecurityControlsItem
       controlsFormat="full"
+      fillColor="#fef7e8"
       key="boxui.securityControls.appDownloadWhitelist"
       message={
         Object {
@@ -47,6 +54,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
           },
         }
       }
+      strokeColor="#f5b31b"
     />
   </ul>
 </Fragment>
@@ -59,6 +67,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
   >
     <SecurityControlsItem
       controlsFormat="shortWithBtn"
+      fillColor="#fef7e8"
       key="boxui.securityControls.shortAllRestrictions"
       message={
         Object {
@@ -66,6 +75,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
           "id": "boxui.securityControls.shortAllRestrictions",
         }
       }
+      strokeColor="#f5b31b"
     />
   </ul>
   <PlainButton
@@ -118,6 +128,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
   >
     <SecurityControlsItem
       controlsFormat="short"
+      fillColor="#fef7e8"
       key="boxui.securityControls.shortAllRestrictions"
       message={
         Object {
@@ -125,6 +136,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
           "id": "boxui.securityControls.shortAllRestrictions",
         }
       }
+      strokeColor="#f5b31b"
     />
   </ul>
 </Fragment>

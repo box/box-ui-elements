@@ -8,14 +8,19 @@
     &::before {
         display: inline-block;
         width: 1em;
-        color: $bdl-yellorange;
+        color: $bdl-gray-30;
         font-weight: bold;
         font-style: normal;
         content: '\2022';
     }
 
-    .bdl-IconSecurityClassificationSolid {
+    .bdl-SecurityControlsItem-icon {
+        display: inline-flex;
+        align-items: center;
+        height: 13px;
         margin-right: 3px;
+        margin-bottom: 3px;
+        vertical-align: middle;
     }
 }
 

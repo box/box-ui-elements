@@ -12,6 +12,7 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
 >
   <SecurityBadge
     className="bdl-ClassifiedBadge"
+    fillColor="#fef7e8"
     icon={
       <IconSecurityClassification
         color="#f5b31b"
@@ -21,6 +22,7 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
       />
     }
     message="Confidential"
+    strokeColor="#f5b31b"
   />
 </Tooltip>
 `;
@@ -36,6 +38,7 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
 >
   <SecurityBadge
     className="bdl-ClassifiedBadge"
+    fillColor="#fef7e8"
     icon={
       <IconSecurityClassification
         color="#f5b31b"
@@ -45,6 +48,7 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
       />
     }
     message="Confidential"
+    strokeColor="#f5b31b"
   />
 </Tooltip>
 `;
@@ -67,6 +71,7 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
   >
     <SecurityBadge
       className="bdl-ClassifiedBadge"
+      fillColor="#fef7e8"
       icon={
         <IconSecurityClassification
           color="#f5b31b"
@@ -76,6 +81,7 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
         />
       }
       message="Confidential"
+      strokeColor="#f5b31b"
     />
   </PlainButton>
 </Tooltip>

@@ -3,6 +3,12 @@
 exports[`features/security/SecurityBadge should render a classified badge with a custom icon 1`] = `
 <h1
   className="bdl-SecurityBadge"
+  style={
+    Object {
+      "backgroundColor": undefined,
+      "borderColor": undefined,
+    }
+  }
 >
   <span>
     Custom Icon
@@ -18,6 +24,12 @@ exports[`features/security/SecurityBadge should render a classified badge with a
 exports[`features/security/SecurityBadge should render a classified badge with default icon (IconAlertDefault) 1`] = `
 <h1
   className="bdl-SecurityBadge"
+  style={
+    Object {
+      "backgroundColor": undefined,
+      "borderColor": undefined,
+    }
+  }
 >
   <IconAlertDefault
     color="#f5b31b"
