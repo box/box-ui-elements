@@ -19,21 +19,21 @@ type Props = {
 const IconSecurityClassificationSolid = ({
     className = '',
     fillColor = bdlGray20,
-    height = 13,
+    height = 16,
     strokeColor = bdlGray,
     title,
-    width = 13,
+    width = 16,
 }: Props) => {
     const classes = classNames('bdl-IconSecurityClassificationSolid', className);
 
     return (
-        <AccessibleSVG className={classes} height={height} title={title} viewBox="0 0 10 13" width={width}>
+        <AccessibleSVG className={classes} height={height} title={title} viewBox="0 0 16 16" width={width}>
             <g stroke={strokeColor} fill="none" fillRule="evenodd">
                 <path
                     fill={fillColor}
-                    d="M9.5 6.545a6.413 6.413 0 0 1-1.244 3.765c-.782 1.068-1.88 1.863-3.135 2.176a5.458 5.458 0 0 1-3.377-2.176A6.413 6.413 0 0 1 .5 6.545V3.496L5 1.451l4.5 2.045v3.05z"
+                    d="M14.122 7.425a8.724 8.724 0 0 1-1.692 5.12c-1.065 1.452-2.56 2.534-4.265 2.96-2.036-.426-3.53-1.508-4.595-2.96a8.724 8.724 0 0 1-1.692-5.12V3.277L8 .495l6.122 2.782v4.148z"
                 />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 5v4-4z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M11.4 5.323v5.441-5.441z" />
             </g>
         </AccessibleSVG>
     );
