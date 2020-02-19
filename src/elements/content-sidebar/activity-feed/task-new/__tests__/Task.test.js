@@ -109,7 +109,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 status="NOT_STARTED"
             />,
         );
-        expect(incompleteWrapper.find('.bcs-is-taskOverdue')).toHaveLength(1);
+        expect(incompleteWrapper.find('.bcs-TaskDueDate')).toHaveLength(1);
     });
 
     test('due date should not have overdue class if task is complete and due date is in past', () => {

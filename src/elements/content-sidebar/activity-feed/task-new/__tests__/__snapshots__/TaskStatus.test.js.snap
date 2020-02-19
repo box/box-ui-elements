@@ -5,18 +5,20 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
   status="APPROVED"
 >
   <FormattedMessage
-    defaultMessage="Status: {taskStatus}"
+    defaultMessage="{taskStatus}"
     id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
     values={
       Object {
-        "taskStatus": <span
-          className="bcs-TaskStatus-message approved"
+        "taskStatus": <LabelPill
+          type="success"
         >
-          <FormattedMessage
-            defaultMessage="Approved"
-            id="be.contentSidebar.activityFeed.taskNew.tasksFeedApprovedLabel"
-          />
-        </span>,
+          <span>
+            <FormattedMessage
+              defaultMessage="APPROVED"
+              id="be.contentSidebar.activityFeed.taskNew.tasksFeedApprovedUppercaseLabel"
+            />
+          </span>
+        </LabelPill>,
       }
     }
   >
@@ -30,18 +32,20 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
   status="COMPLETED"
 >
   <FormattedMessage
-    defaultMessage="Status: {taskStatus}"
+    defaultMessage="{taskStatus}"
     id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
     values={
       Object {
-        "taskStatus": <span
-          className="bcs-TaskStatus-message completed"
+        "taskStatus": <LabelPill
+          type="success"
         >
-          <FormattedMessage
-            defaultMessage="Completed"
-            id="be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedLabel"
-          />
-        </span>,
+          <span>
+            <FormattedMessage
+              defaultMessage="COMPLETED"
+              id="be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedUppercaseLabel"
+            />
+          </span>
+        </LabelPill>,
       }
     }
   >
@@ -55,18 +59,20 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
   status="IN_PROGRESS"
 >
   <FormattedMessage
-    defaultMessage="Status: {taskStatus}"
+    defaultMessage="{taskStatus}"
     id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
     values={
       Object {
-        "taskStatus": <span
-          className="bcs-TaskStatus-message inProgress"
+        "taskStatus": <LabelPill
+          type="default"
         >
-          <FormattedMessage
-            defaultMessage="In Progress"
-            id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressLabel"
-          />
-        </span>,
+          <span>
+            <FormattedMessage
+              defaultMessage="IN PROGRESS"
+              id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressUppercaseLabel"
+            />
+          </span>
+        </LabelPill>,
       }
     }
   >
@@ -80,18 +86,20 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
   status="NOT_STARTED"
 >
   <FormattedMessage
-    defaultMessage="Status: {taskStatus}"
+    defaultMessage="{taskStatus}"
     id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
     values={
       Object {
-        "taskStatus": <span
-          className="bcs-TaskStatus-message notStarted"
+        "taskStatus": <LabelPill
+          type="default"
         >
-          <FormattedMessage
-            defaultMessage="In Progress"
-            id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressLabel"
-          />
-        </span>,
+          <span>
+            <FormattedMessage
+              defaultMessage="IN PROGRESS"
+              id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressUppercaseLabel"
+            />
+          </span>
+        </LabelPill>,
       }
     }
   >
@@ -105,18 +113,20 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
   status="REJECTED"
 >
   <FormattedMessage
-    defaultMessage="Status: {taskStatus}"
+    defaultMessage="{taskStatus}"
     id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
     values={
       Object {
-        "taskStatus": <span
-          className="bcs-TaskStatus-message rejected"
+        "taskStatus": <LabelPill
+          type="error"
         >
-          <FormattedMessage
-            defaultMessage="Rejected"
-            id="be.contentSidebar.activityFeed.taskNew.tasksFeedRejectedLabel"
-          />
-        </span>,
+          <span>
+            <FormattedMessage
+              defaultMessage="REJECTED"
+              id="be.contentSidebar.activityFeed.taskNew.tasksFeedRejectedUppercaseLabel"
+            />
+          </span>
+        </LabelPill>,
       }
     }
   >
