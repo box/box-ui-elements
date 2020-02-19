@@ -18,13 +18,13 @@ type Props = {|
 
 const TaskCompletionRuleIcon = ({ completionRule }: Props): React.Node =>
     completionRule === TASK_COMPLETION_RULE_ANY && (
-        <LabelPill.Pill>
-            <Tooltip position="top-center" text={<FormattedMessage {...messages.taskAnyAffordanceTooltip} />}>
-                <span>
-                    <IconAnyTask height={11} width={11} className="bcs-TaskCompletionRuleIcon" />{' '}
-                </span>
-            </Tooltip>
-        </LabelPill.Pill>
+        <span className="bcs-TaskCompletionRuleIcon">
+            <LabelPill.Pill>
+                <Tooltip position="top-center" text={<FormattedMessage {...messages.taskAnyAffordanceTooltip} />}>
+                    <LabelPill.Icon Component={IconAnyTask} />
+                </Tooltip>
+            </LabelPill.Pill>
+        </span>
     );
 
 export default TaskCompletionRuleIcon;

@@ -2,17 +2,5 @@
 
 .bcs-TaskStatus {
     display: inline-block;
-    color: $bdl-gray-62;
     font-weight: bold;
-}
-
-.bcs-TaskStatus-message {
-    &.completed,
-    &.approved {
-        color: $bdl-green-light;
-    }
-
-    &.rejected {
-        color: $bdl-watermelon-red;
-    }
 }

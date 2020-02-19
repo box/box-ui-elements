@@ -32,7 +32,7 @@ import {
     PLACEHOLDER_USER,
     TASK_EDIT_MODE_EDIT,
 } from '../../../../constants';
-import type { TaskAssigneeCollection, TaskNew, TaskType } from '../../../../common/types/tasks';
+import type { TaskAssigneeCollection, TaskNew } from '../../../../common/types/tasks';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { bdlGray80 } from '../../../../styles/variables';
 import TaskActions from './TaskActions';
@@ -81,20 +81,6 @@ type State = {
     isLoading: boolean,
     loadCollabError: ?ActionItemError,
     modalError: ?ElementsXhrError,
-};
-
-const getMessageForTask = (isCurrentUser: boolean, taskType: TaskType) => {
-    if (isCurrentUser) {
-        if (taskType === TASK_TYPE_APPROVAL) {
-            return messages.tasksFeedHeadlineApprovalCurrentUser;
-        }
-        return messages.tasksFeedHeadlineGeneralCurrentUser;
-    }
-
-    if (taskType === TASK_TYPE_APPROVAL) {
-        return messages.tasksFeedHeadlineApproval;
-    }
-    return messages.tasksFeedHeadlineGeneral;
 };
 
 class Task extends React.Component<Props, State> {
@@ -323,7 +309,7 @@ class Task extends React.Component<Props, State> {
                         )}
                         <div className="bcs-Task-headline">
                             <FormattedMessage
-                                {...getMessageForTask(!!currentUserAssignment, task_type)}
+                                {...messages.taskFeedHeadlinePreviewCurrentUser}
                                 values={{
                                     user: (
                                         <UserLink
@@ -340,6 +326,7 @@ class Task extends React.Component<Props, State> {
                         </div>
                         <div className="bcs-Task-statusContainer">
                             <TaskStatus status={status} />
+
                             <TaskCompletionRuleIcon completionRule={completion_rule} />
                         </div>
                         <div className="bcs-Task-dueDateContainer">

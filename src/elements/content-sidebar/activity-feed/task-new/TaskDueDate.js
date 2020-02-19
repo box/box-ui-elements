@@ -24,7 +24,7 @@ const TaskDueDate = ({ dueDate, status }: Props): React.Node => {
     const fullDueDate = new Date(dueDate);
 
     return (
-        <div data-testid="task-due-date">
+        <div data-testid="task-due-date" className="bcs-TaskDueDate">
             <LabelPill.Pill type={isOverdue ? 'error' : 'default'}>
                 <FormattedMessage
                     {...messages.taskDueDateLabel}

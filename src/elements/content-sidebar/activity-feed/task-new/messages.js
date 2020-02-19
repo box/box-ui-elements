@@ -94,6 +94,11 @@ const messages = defineMessages({
         defaultMessage: 'IN PROGRESS',
         description: 'Label for a task in progress (in upper-case in supported language)',
     },
+    taskFeedHeadlinePreviewCurrentUser: {
+        id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlinePreviewCurrentUser',
+        defaultMessage: '{user}',
+        description: 'Headline for a task assigned to a current user',
+    },
     tasksFeedHeadlineApprovalCurrentUser: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineApprovalCurrentUser',
         defaultMessage: '{user} assigned you an Approval Task',
