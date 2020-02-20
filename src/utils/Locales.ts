@@ -1,17 +1,17 @@
 /**
- * @file Used to get the list of locales supported by Box
+ * @file Functions to return the list of locales supported by Box
  * @author Box
  */
-import loadLocaleData from '@box/cldr-data';
-import { LocaleData, LanguagesData } from '@box/cldr-data/types';
+import data from 'box-locale-data';
 
 export interface BoxLanguage {
     id: number;
     name: string;
 }
 
-const DEFAULT_LOCALE = 'en-US';
-const DEFAULT_DISPLAY_NAMES: Array<BoxLanguage> = [
+const { languages } = data;
+
+const defaultDisplayNames: Array<BoxLanguage> = [
     { id: 4, name: 'English (US)' },
     { id: 59, name: 'English (UK)' },
     { id: 68, name: 'Dansk' },
@@ -39,75 +39,53 @@ const DEFAULT_DISPLAY_NAMES: Array<BoxLanguage> = [
     { id: 55, name: '한국어' },
 ];
 
-class Locales {
-    locale: string;
+/**
+ * Compararator for language names
+ *
+ * @param  {BoxLanguage} locale1
+ * @param  {BoxLanguage} locale2
+ *
+ * @return {Array<string>}
+ */
+const localeComparator = (locale1: BoxLanguage, locale2: BoxLanguage) =>
+    locale1.name.localeCompare(locale2.name, languages.bcp47Tag);
 
-    localeData: LocaleData;
-
-    languages: LanguagesData;
-
-    /**
-     * [constructor]
-     *
-     * @return {void}
-     */
-    constructor(locale?: string) {
-        this.locale = locale || DEFAULT_LOCALE;
-        this.localeData = loadLocaleData(this.locale);
-        this.languages = this.localeData.languages;
-    }
-
-    /**
-     * Compararator for language names
-     *
-     * @param  {BoxLanguage} locale1
-     * @param  {BoxLanguage} locale2
-     *
-     * @return {Array<string>}
-     */
-    localeComparator = (locale1: BoxLanguage, locale2: BoxLanguage) => locale1.name.localeCompare(locale2.name);
-
-    /**
-     * Returns list of language names for display (in their native languages)
-     *
-     * @return {Array<string>}
-     */
-    getDisplayNames(): Array<string> {
-        const displayNames: Array<string> = [];
-        DEFAULT_DISPLAY_NAMES.forEach(locale => displayNames.push(locale.name));
-        return displayNames;
-    }
-
-    /**
-     * Returns list of language names for display (in their native languages) with ids
-     *
-     * @return {Array<BoxLanguage>}
-     */
-    getDisplayNamesWithIds(): Array<BoxLanguage> {
-        return DEFAULT_DISPLAY_NAMES;
-    }
-
-    /**
-     * Returns list of localized language names
-     *
-     * @return {Array<string>}
-     */
-    getLocalizedNames(): Array<string> {
-        const sorted: Array<BoxLanguage> = this.languages.localizedNameList.sort(this.localeComparator);
-        const localizedNames: Array<string> = [];
-        sorted.forEach(locale => localizedNames.push(locale.name));
-        return localizedNames;
-    }
-
-    /**
-     * Returns list of localized language names with ids
-     *
-     * @return {Array<BoxLanguage>}
-     */
-    getLocalizedNamesWithIds(): Array<BoxLanguage> {
-        const localizedNames: Array<BoxLanguage> = this.languages.localizedNameList.sort(this.localeComparator);
-        return localizedNames;
-    }
+/**
+ * Returns list of language names for display (in their native languages)
+ *
+ * @return {Array<string>}
+ */
+function getDisplayNames(): Array<string> {
+    return defaultDisplayNames.map(locale => locale.name);
 }
 
-export default Locales;
+/**
+ * Returns list of language names for display (in their native languages) with ids
+ *
+ * @return {Array<BoxLanguage>}
+ */
+function getDisplayNamesWithIds(): Array<BoxLanguage> {
+    return defaultDisplayNames;
+}
+
+/**
+ * Returns list of localized language names
+ *
+ * @return {Array<string>}
+ */
+function getLocalizedNames(): Array<string> {
+    const sorted: Array<BoxLanguage> = languages.localizedNameList.sort(localeComparator);
+    return sorted.map(locale => locale.name);
+}
+
+/**
+ * Returns list of localized language names with ids
+ *
+ * @return {Array<BoxLanguage>}
+ */
+function getLocalizedNamesWithIds(): Array<BoxLanguage> {
+    const localizedNames = languages.localizedNameList.sort(localeComparator);
+    return localizedNames;
+}
+
+export { getDisplayNames, getDisplayNamesWithIds, getLocalizedNames, getLocalizedNamesWithIds };
