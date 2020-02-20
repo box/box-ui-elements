@@ -7,8 +7,12 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
     });
 
     test('updates copy button on click', async () => {
-        const image = await BoxVisualTestUtils.takeScreenshotAfterInput(STORY, 'button');
-        await BoxVisualTestUtils.sleep(1000); // wait for background color animation to finish
+        const selector = 'button';
+        await global.page.goto(`http://localhost:6061/iframe.html?id=${STORY}`);
+        await BoxVisualTestUtils.resetCSS();
+        await global.page.waitForSelector(selector);
+        await global.page.click(selector);
+        const image = await global.page.screenshot();
         return expect(image).toMatchImageSnapshot();
     });
 });

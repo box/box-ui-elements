@@ -1,8 +1,8 @@
-// @flow
 /* eslint-disable import/no-extraneous-dependencies */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import IntlMessageFormat from 'intl-messageformat';
+import IntlRelativeTimeFormat from '@formatjs/intl-relativetimeformat';
 
 export const FormattedDate = () => <div />;
 FormattedDate.displayName = 'FormattedDate';
@@ -10,8 +10,8 @@ FormattedDate.displayName = 'FormattedDate';
 export const FormattedTime = () => <div />;
 FormattedTime.displayName = 'FormattedTime';
 
-export const FormattedRelative = () => <div />;
-FormattedRelative.displayName = 'FormattedRelative';
+export const FormattedRelativeTime = () => <div />;
+FormattedRelativeTime.displayName = 'FormattedRelativeTime';
 
 export const FormattedMessage = () => <div />;
 FormattedMessage.displayName = 'FormattedMessage';
@@ -22,31 +22,31 @@ FormattedNumber.displayName = 'FormattedNumber';
 export const IntlProvider = () => <div />;
 IntlProvider.displayName = 'IntlProvider';
 
-export const defineMessages = (messages: {
-    [key: string]: { defaultMessage: string, description: string, id: string },
-}) => messages;
+export const defineMessages = messages => messages;
 export const intlShape = PropTypes.any;
 
-export const addLocaleData = () => {};
+export const createIntl = ({ locale = 'en' }) => ({
+    formatMessage: (message, values) => {
+        const imf = new IntlMessageFormat(message.defaultMessage || message.message, locale);
+        return imf.format(values);
+    },
+    formatDate: date => date,
+    formatRelativeTime: (value, unit = 'second', options = {}) => {
+        // eslint-disable-next-line
+        IntlRelativeTimeFormat.__addLocaleData(
+            // eslint-disable-next-line
+            require(`@formatjs/intl-relativetimeformat/dist/locale-data/${locale}.json`),
+        );
+        const rtf = new IntlRelativeTimeFormat(locale, options);
+        return rtf.format(value, unit);
+    },
+});
 
-type Props = {
-    locale: string,
-};
-
-export const injectIntl = (Component: React.ComponentType<any>) => {
-    const WrapperComponent = (props: Props) => {
+export const injectIntl = Component => {
+    const WrapperComponent = props => {
         const injectedProps = {
             ...props,
-            intl: {
-                formatMessage: (message, values) => {
-                    const imf = new IntlMessageFormat(
-                        message.defaultMessage || message.message,
-                        props.locale || 'en-US',
-                    );
-                    return imf.format(values);
-                },
-                formatDate: date => date,
-            },
+            intl: createIntl({ locale: props.locale }), // eslint-disable-line react/prop-types
         };
         return <Component {...{ ...injectedProps }} />;
     };

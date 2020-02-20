@@ -29,12 +29,12 @@ describe('features/unified-share-modal/HeaderTitle', () => {
         wrapper = getWrapper();
     });
 
-    test('should not render classifiction label when canUserSeeClassification is false', () => {
+    test('should not render classification label when canUserSeeClassification is false', () => {
         expect(wrapper.find('Classification').length).toBe(0);
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render classifiction label when canUserSeeClassification is true', () => {
+    test('should render classification label when canUserSeeClassification is true', () => {
         const itemWithSeeClassification = {
             ...defaultItem,
             canUserSeeClassification: true,

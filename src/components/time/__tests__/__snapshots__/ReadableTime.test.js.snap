@@ -40,17 +40,9 @@ exports[`components/time/ReadableTime should render with distant past format "mm
 />
 `;
 
-exports[`components/time/ReadableTime should render with format "30 minutes ago" when timestamp is within relative threshold (behind) 1`] = `
-<FormattedRelative
-  value={1506549656000}
-/>
-`;
+exports[`components/time/ReadableTime should render with format "30 minutes ago" when timestamp is within relative threshold (behind) 1`] = `"1,800,000 seconds ago"`;
 
-exports[`components/time/ReadableTime should render with format "Today at hh:mm" when \`allowFutureTimestamps\` is false 1`] = `
-<FormattedRelative
-  value={1506547856000}
-/>
-`;
+exports[`components/time/ReadableTime should render with format "Today at hh:mm" when \`allowFutureTimestamps\` is false 1`] = `"3,600,000 seconds ago"`;
 
 exports[`components/time/ReadableTime should render with format "Today at hh:mm" when there is a future time stamp 1`] = `
 <FormattedMessage
@@ -80,11 +72,7 @@ exports[`components/time/ReadableTime should render with format "Yesterday at hh
 />
 `;
 
-exports[`components/time/ReadableTime should render with format "in 30 minutes" when timestamp is within relative threshold (ahead) 1`] = `
-<FormattedRelative
-  value={1506553256000}
-/>
-`;
+exports[`components/time/ReadableTime should render with format "in 30 minutes" when timestamp is within relative threshold (ahead) 1`] = `"in 1,800,000 seconds"`;
 
 exports[`components/time/ReadableTime should render with weekday when we show weekday 1`] = `
 <FormattedMessage
@@ -102,3 +90,5 @@ exports[`components/time/ReadableTime should render with weekday when we show we
   }
 />
 `;
+
+exports[`components/time/ReadableTime should use default relative threshold if not provided 1`] = `"in 1,800,000 seconds"`;

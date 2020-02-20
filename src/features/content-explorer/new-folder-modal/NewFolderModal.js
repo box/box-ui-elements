@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { Modal, ModalActions } from '../../../components/modal';
 import TextInput from '../../../components/text-input';
@@ -16,7 +16,7 @@ class NewFolderModal extends Component {
     static propTypes = {
         /** Adds class name to modal. */
         className: PropTypes.string,
-        intl: intlShape.isRequired,
+        intl: PropTypes.any,
         /** Opens the modal. */
         isOpen: PropTypes.bool,
         /** Called when the modal is requested to be closed. */

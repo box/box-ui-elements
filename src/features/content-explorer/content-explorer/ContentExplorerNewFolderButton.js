@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import Button from '../../../components/button';
 
@@ -35,7 +35,7 @@ const ContentExplorerNewFolderButton = ({
 
 ContentExplorerNewFolderButton.propTypes = {
     contentExplorerMode: ContentExplorerModePropType.isRequired,
-    intl: intlShape.isRequired,
+    intl: PropTypes.any,
     onClick: PropTypes.func,
     isDisabled: PropTypes.bool,
     isCreateNewFolderAllowed: PropTypes.bool,

@@ -12,7 +12,9 @@ type Props = {
 };
 
 const ButtonGroup = ({ children, className = '', isDisabled }: Props) => (
-    <div className={`btn-group ${className} ${isDisabled ? 'is-disabled' : ''}`}>{children}</div>
+    <div className={`btn-group bdl-ButtonGroup ${className} ${isDisabled ? 'is-disabled bdl-is-disabled' : ''}`}>
+        {children}
+    </div>
 );
 
 export default ButtonGroup;

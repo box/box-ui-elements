@@ -1,11 +1,7 @@
 // @flow
 
-'no babel-plugin-flow-react-proptypes';
-
-// turn off this plugin because it breaks the IntlShape flow type
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import type { IntlShape } from 'react-intl';
 
 import PlainButton from '../../components/plain-button';
 import Button from '../../components/button';
@@ -40,7 +36,7 @@ type Props = {
     changeSharedLinkPermissionLevel: (
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
-    intl: IntlShape,
+    intl: any,
     item: itemtype,
     itemType: ItemType,
     onDismissTooltip: (componentIdentifier: tooltipComponentIdentifierType) => void,
@@ -348,7 +344,7 @@ class SharedLinkSection extends React.Component<Props> {
                 <hr />
                 {/* eslint-disable-next-line jsx-a11y/label-has-for */}
                 <label>
-                    <span className="label">
+                    <span className="label bdl-Label">
                         <FormattedMessage {...messages.sharedLinkSectionLabel} />
                     </span>
                 </label>

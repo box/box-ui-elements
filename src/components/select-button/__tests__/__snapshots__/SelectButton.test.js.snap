@@ -10,7 +10,7 @@ exports[`components/select-button/SelectButton should not show error tooltip on 
   theme="error"
 >
   <button
-    className="select-button"
+    className="select-button bdl-SelectButton"
     disabled={false}
     type="button"
   >
@@ -30,7 +30,7 @@ exports[`components/select-button/SelectButton should show error tooltip on butt
   theme="error"
 >
   <button
-    className="select-button is-invalid"
+    className="select-button bdl-SelectButton is-invalid"
     disabled={false}
     type="button"
   >

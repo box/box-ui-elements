@@ -4,7 +4,6 @@ module.exports = {
     clearMocks: true,
     restoreMocks: true,
     moduleNameMapper: {
-        'react-intl-locale-data': '<rootDir>/node_modules/react-intl/locale-data/en.js',
         'box-ui-elements-locale-data': '<rootDir>/i18n/en-US.js',
         '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
             '<rootDir>/scripts/jest/mocks/fileMock.js',

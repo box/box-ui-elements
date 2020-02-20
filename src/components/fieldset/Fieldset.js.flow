@@ -11,7 +11,7 @@ type Props = {
 
 const Fieldset = ({ children, className = '', title, ...rest }: Props) => (
     <fieldset className={`fieldset ${className}`} {...rest}>
-        <legend className="label">{title}</legend>
+        <legend className="label bdl-Label">{title}</legend>
         {children}
     </fieldset>
 );

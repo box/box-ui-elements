@@ -20,8 +20,10 @@ type Props = {
     controls: Controls,
     controlsFormat: ControlsFormat,
     definition?: string,
+    fillColor?: string,
     itemName?: string,
     maxAppCount?: number,
+    strokeColor?: string,
 };
 
 type State = {
@@ -47,7 +49,17 @@ class SecurityControls extends React.Component<Props, State> {
     closeModal = () => this.setState({ isSecurityControlsModalOpen: false });
 
     render() {
-        const { classificationName, controls, controlsFormat, definition, itemName, maxAppCount } = this.props;
+        const {
+            classificationName,
+            controls,
+            controlsFormat,
+            definition,
+            fillColor,
+            itemName,
+            maxAppCount,
+            strokeColor,
+        } = this.props;
+
         let items = [];
         let modalItems;
 
@@ -78,7 +90,13 @@ class SecurityControls extends React.Component<Props, State> {
             <>
                 <ul className={className}>
                     {items.map(item => (
-                        <SecurityControlsItem key={item.id} message={item} controlsFormat={controlsFormat} />
+                        <SecurityControlsItem
+                            fillColor={fillColor}
+                            strokeColor={strokeColor}
+                            key={item.id}
+                            message={item}
+                            controlsFormat={controlsFormat}
+                        />
                     ))}
                 </ul>
                 {shouldShowSecurityControlsModal && (
@@ -87,6 +105,8 @@ class SecurityControls extends React.Component<Props, State> {
                             <FormattedMessage {...messages.viewAll} />
                         </PlainButton>
                         <SecurityControlsModal
+                            fillColor={fillColor}
+                            strokeColor={strokeColor}
                             classificationName={classificationName}
                             closeModal={this.closeModal}
                             definition={definition}

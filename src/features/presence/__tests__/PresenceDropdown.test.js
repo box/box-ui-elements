@@ -1,6 +1,6 @@
 import React from 'react';
-
-import PresenceDropdown from '../PresenceDropdown';
+import { createIntl } from 'react-intl';
+import { PresenceDropdownComponent as PresenceDropdown } from '../PresenceDropdown';
 
 const collaboratorList = [
     // user item preview
@@ -50,6 +50,8 @@ const collaboratorList = [
         profileUrl: 'www.box.com',
     },
 ];
+
+const intl = createIntl({});
 
 describe('features/presence/PresenceDropdown', () => {
     describe('componentDidMount()', () => {
@@ -116,9 +118,12 @@ describe('features/presence/PresenceDropdown', () => {
         ].forEach(({ isScrollableAbove, isScrollableBelow }) => {
             test('should calculate, call onScroll and set overflow state', () => {
                 const onScrollSpy = jest.fn();
-                const wrapper = shallow(<PresenceDropdown collaborators={collaboratorList} onScroll={onScrollSpy} />, {
-                    disableLifecycleMethods: true,
-                });
+                const wrapper = shallow(
+                    <PresenceDropdown intl={intl} collaborators={collaboratorList} onScroll={onScrollSpy} />,
+                    {
+                        disableLifecycleMethods: true,
+                    },
+                );
                 const instance = wrapper.instance();
                 const calculateOverflowSpy = jest.fn().mockReturnValue({
                     isScrollableBelow,
@@ -170,9 +175,10 @@ describe('features/presence/PresenceDropdown', () => {
             });
         });
     });
+
     describe('renderTimestampMessage()', () => {
         test('should return null when interactionType is an unkown type', () => {
-            const wrapper = shallow(<PresenceDropdown collaborators={collaboratorList} />, {
+            const wrapper = shallow(<PresenceDropdown intl={intl} collaborators={collaboratorList} />, {
                 disableLifecycleMethods: true,
             });
             const instance = wrapper.instance();
@@ -181,7 +187,7 @@ describe('features/presence/PresenceDropdown', () => {
         });
 
         test('should not return null when interactionType is a known type', () => {
-            const wrapper = shallow(<PresenceDropdown collaborators={collaboratorList} />, {
+            const wrapper = shallow(<PresenceDropdown intl={intl} collaborators={collaboratorList} />, {
                 disableLifecycleMethods: true,
             });
             const instance = wrapper.instance();
@@ -194,7 +200,7 @@ describe('features/presence/PresenceDropdown', () => {
         test('should correctly render an empty PresenceDropdown', () => {
             const collaborators = [];
 
-            const wrapper = shallow(<PresenceDropdown collaborators={collaborators} />, {
+            const wrapper = shallow(<PresenceDropdown intl={intl} collaborators={collaborators} />, {
                 disableLifecycleMethods: true,
             });
 
@@ -212,7 +218,7 @@ describe('features/presence/PresenceDropdown', () => {
         });
 
         test('should correctly render collaborators', () => {
-            const wrapper = shallow(<PresenceDropdown collaborators={collaboratorList} />, {
+            const wrapper = shallow(<PresenceDropdown intl={intl} collaborators={collaboratorList} />, {
                 disableLifecycleMethods: true,
             });
 
@@ -223,6 +229,7 @@ describe('features/presence/PresenceDropdown', () => {
         test('should correctly render dropdownActions', () => {
             const wrapper = shallow(
                 <PresenceDropdown
+                    intl={intl}
                     collaborators={collaboratorList}
                     getLinkCallback={() => {}}
                     inviteCallback={() => {}}

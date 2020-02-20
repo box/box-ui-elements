@@ -30,6 +30,7 @@
     }
 
     .date-picker-input:focus ~ .tooltip,
+    .date-picker-input:focus ~ .bdl-Tooltip,
     .date-picker-unix-time-input {
         display: none;
     }

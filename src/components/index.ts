@@ -13,6 +13,12 @@ export * from './button-group';
 export { default as Fieldset } from './fieldset';
 export * from './fieldset';
 
+export { default as Label } from './label';
+export * from './label';
+
+export { default as LabelPill } from './label-pill';
+export * from './label-pill';
+
 export { default as Link } from './link';
 export * from './link';
 

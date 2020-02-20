@@ -3,10 +3,23 @@
 $bdl-MetadataBasedItemList-insetShadowLeft: -4px 0 2px -2px $bdl-gray-10 inset;
 $bdl-MetadataBasedItemList-insetShadowRight: 3px 0 3px -2px $bdl-gray-10 inset;
 
+@mixin bdl-MetadataBasedItemList-editCellReset {
+    width: 165px;
+    height: 30px;
+    margin: 0;
+    border: 1px solid transparent;
+    box-shadow: none;
+}
+
 .bdl-MetadataBasedItemList {
     // sass-lint:disable class-name-format
     .ReactVirtualized__Grid {
         outline: none;
+    }
+
+    // stylelint-disable declaration-no-important
+    .ReactVirtualized__Grid__innerScrollContainer {
+        overflow: visible !important;
     }
 }
 
@@ -19,6 +32,10 @@ $bdl-MetadataBasedItemList-insetShadowRight: 3px 0 3px -2px $bdl-gray-10 inset;
 
     & .icon-pencil {
         margin-left: 10px;
+    }
+
+    .bdl-ReadOnlyMetadataField {
+        margin-bottom: 0;
     }
 }
 
@@ -36,7 +53,35 @@ $bdl-MetadataBasedItemList-insetShadowRight: 3px 0 3px -2px $bdl-gray-10 inset;
         justify-content: center;
         width: 30px;
         height: 30px;
+        margin: 0;
+        padding: 0;
+        border: 0;
         border-left: 1px solid $bdl-gray-20;
+        border-radius: 0;
+    }
+
+    .text-input-container {
+        input[type='text'] {
+            @include bdl-MetadataBasedItemList-editCellReset;
+        }
+    }
+
+    .select-container {
+        .select-button {
+            @include bdl-MetadataBasedItemList-editCellReset;
+        }
+    }
+
+    .date-picker-icon-holder {
+        .date-picker-input {
+            padding-right: 40px;
+
+            &:hover {
+                box-shadow: none;
+            }
+
+            @include bdl-MetadataBasedItemList-editCellReset;
+        }
     }
 }
 

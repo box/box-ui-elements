@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import TetherComponent from 'react-tether';
-import { FormattedMessage, injectIntl, type IntlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import DeleteConfirmation from '../common/delete-confirmation';
 import ActivityTimestamp from '../common/activity-timestamp';
@@ -30,7 +30,7 @@ type Props = {
     currentUser?: User,
     error?: ActionItemError,
     id: string,
-    intl: IntlShape,
+    intl: any,
     isPending?: boolean,
     onDelete: ({ id: string, permissions?: {} }) => void,
     permissions?: BoxItemPermission,

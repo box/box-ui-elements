@@ -72,7 +72,7 @@ exports[`components/tooltip/Tooltip render() should not render with close button
     Hello
   </div>
   <div
-    className="tooltip"
+    className="tooltip bdl-Tooltip"
     id="tooltip3"
     role="tooltip"
   >
@@ -142,7 +142,7 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
     Hello
   </div>
   <div
-    className="tooltip is-callout"
+    className="tooltip bdl-Tooltip is-callout"
     id="tooltip5"
     role="tooltip"
   >
@@ -175,7 +175,7 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
     Hello
   </div>
   <div
-    className="tooltip with-close-button"
+    className="tooltip bdl-Tooltip with-close-button"
     id="tooltip1"
     role="tooltip"
   >

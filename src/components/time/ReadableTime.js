@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { FormattedMessage, FormattedRelative, FormattedDate } from 'react-intl';
+import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl';
 
 import { ONE_HOUR_MS } from '../../constants';
 import { isToday, isYesterday, isCurrentYear } from '../../utils/datetime';
@@ -12,6 +12,8 @@ type Props = {
     allowFutureTimestamps?: boolean,
     /** A boolean that will include the time alongside the date, if the date is shown */
     alwaysShowTime?: boolean,
+    /** intl object */
+    intl: any,
     /** The number of milliseconds before now that a relative (vs. absolute) time should be displayed (Default: 1 hour) */
     relativeThreshold?: number,
     /** A boolean that will include the weekday alongside the date, if the date is shown */
@@ -21,6 +23,7 @@ type Props = {
 };
 
 const ReadableTime = ({
+    intl,
     timestamp,
     relativeThreshold = ONE_HOUR_MS,
     allowFutureTimestamps = true,
@@ -65,11 +68,19 @@ const ReadableTime = ({
 
     // if the time stamp is within +/- the relative threshold for the current time,
     // print the default time format
-    if (Math.abs(Date.now() - timestamp) <= relativeThreshold) {
-        output = <FormattedRelative value={timestamp} />;
+    const timeDiff = timestamp - Date.now();
+    if (Math.abs(timeDiff) <= relativeThreshold) {
+        if (intl.formatRelativeTime) {
+            // react-intl v3
+            output = intl.formatRelativeTime(timeDiff);
+        } else {
+            // react-intl v2
+            output = intl.formatRelative(timestamp);
+        }
     }
 
     return output;
 };
 
-export default ReadableTime;
+export { ReadableTime as ReadableTimeComponent };
+export default injectIntl(ReadableTime);

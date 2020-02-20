@@ -4,12 +4,16 @@ exports[`features/classification/security-controls/SecurityControlsItem should r
 <li
   className="bdl-SecurityControlsItem"
 >
-  <IconSecurityClassificationSolid
-    color="#f5b31b"
-    height={11}
-    strokeWidth={3}
-    width={11}
-  />
+  <span
+    className="bdl-SecurityControlsItem-icon"
+  >
+    <IconSecurityClassificationSolid
+      fillColor="#fef7e8"
+      height={13}
+      strokeColor="#f5b31b"
+      width={13}
+    />
+  </span>
   <FormattedMessage
     defaultMessage="message"
     id="msg1"

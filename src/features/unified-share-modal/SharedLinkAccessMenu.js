@@ -121,6 +121,7 @@ class SharedLinkAccessMenu extends React.Component<Props> {
                     <PlainButton
                         className={classNames('lnk', {
                             'is-disabled': submitting,
+                            'bdl-is-disabled': submitting,
                         })}
                         disabled={submitting}
                         {...sharedLinkAccessMenuButtonProps}

@@ -27,6 +27,7 @@ const INITIAL_STATE = {
         bannerPolicy: {
             body: 'test',
         },
+        canUserSeeClassification: true,
         classification: 'internal',
         grantedPermissions: {
             itemShare: true,
@@ -204,7 +205,7 @@ export const basic = () => {
     return (
         <State store={componentStore}>
             {state => (
-                <IntlProvider locale="en" textComponent={React.Fragment}>
+                <IntlProvider locale="en">
                     <div>
                         {state.isOpen && (
                             <UnifiedShareModal
@@ -386,7 +387,7 @@ export const withSharedLink = () => {
     return (
         <State store={componentStore}>
             {state => (
-                <IntlProvider locale="en" textComponent={React.Fragment}>
+                <IntlProvider locale="en">
                     <div>
                         {state.isOpen && (
                             <UnifiedShareModal
@@ -569,7 +570,7 @@ export const withAutofocusedSharedLink = () => {
     return (
         <State store={componentStore}>
             {state => (
-                <IntlProvider locale="en" textComponent={React.Fragment}>
+                <IntlProvider locale="en">
                     <div>
                         {state.isOpen && (
                             <UnifiedShareModal

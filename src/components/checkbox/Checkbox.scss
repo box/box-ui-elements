@@ -31,6 +31,8 @@
             }
 
             &::after {
+                @include bdl-transition($bdl-transitionDurationBase, transform);
+
                 position: absolute;
                 top: 6px;
                 left: 5px;
@@ -40,7 +42,6 @@
                 border-bottom: 2px solid $primary-color;
                 transform: rotate(45deg) scale(0) translate3d(0, 0, 0);
                 backface-visibility: hidden;
-                transition: transform .1s ease;
                 content: '';
                 pointer-events: none;
             }
@@ -92,10 +93,12 @@
 .checkbox-container {
     margin: 0 0 20px;
 
+    &.bdl-is-disabled .checkbox-label,
     &.is-disabled .checkbox-label {
         color: $bdl-gray-50;
     }
 
+    > .bdl-Label,
     > .label {
         margin: 8px 0;
     }

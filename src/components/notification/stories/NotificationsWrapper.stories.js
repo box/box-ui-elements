@@ -42,7 +42,7 @@ export const example = () => {
     return (
         <State store={componentStore}>
             {state => (
-                <IntlProvider locale="en" textComponent={React.Fragment}>
+                <IntlProvider locale="en">
                     <div>
                         <NotificationsWrapper>{[...state.notifications.values()]}</NotificationsWrapper>
                         <Button onClick={() => addNotification('short', 'info')}>Display timed notification</Button>

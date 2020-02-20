@@ -67,9 +67,11 @@ exports[`features/metadata-based-view/IconWithTooltip should get IconSave with T
   }
   theme="default"
 >
-  <PlainButton
+  <Button
     className="bdl-MetadataBasedItemList-cell--saveIcon"
+    isLoading={false}
     onClick={[Function]}
+    showRadar={false}
     type="button"
   >
     <IconCheck
@@ -77,6 +79,6 @@ exports[`features/metadata-based-view/IconWithTooltip should get IconSave with T
       height={16}
       width={16}
     />
-  </PlainButton>
+  </Button>
 </Tooltip>
 `;

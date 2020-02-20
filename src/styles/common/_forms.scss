@@ -150,6 +150,7 @@ textarea {
 /* Select component with container */
 
 .select-container select,
+.select-container .bdl-SelectButton,
 .select-container .select-button {
     position: relative;
     z-index: 1; /* captures click */
@@ -170,6 +171,7 @@ textarea {
     border: none;
 }
 
+.select-container .bdl-SelectButton:disabled,
 .select-container .select-button:disabled,
 .select-container select:disabled {
     cursor: default;
@@ -180,6 +182,7 @@ textarea {
     display: inline-block;
 }
 
+.select-container .bdl-SelectButton,
 .select-container .select-button,
 .select-container .select-container-inner {
     display: inline-block;
@@ -203,6 +206,7 @@ textarea {
 }
 
 .select-container .select-overlay,
+.select-container .bdl-SelectButton,
 .select-container .select-button {
     background-color: $white;
     border: 1px solid $bdl-gray-20;
@@ -213,6 +217,7 @@ textarea {
 }
 
 .select-container .select-overlay::before,
+.select-container .bdl-SelectButton::before,
 .select-container .select-button::before {
     position: absolute;
     top: 15px;
@@ -222,40 +227,47 @@ textarea {
     border-top: 3px solid $bdl-gray-80;
     border-right: 3px solid transparent;
     border-left: 3px solid transparent;
-    transition: transform $bdl-transition-duration-200ms;
+    transition: transform $bdl-transitionDurationBase;
     content: '';
 }
 
+.select-container .bdl-SelectButton[aria-expanded='true']::before,
 .select-container .select-button[aria-expanded='true']::before {
     transform: rotateZ(180deg);
 }
 
+.select-container .bdl-SelectButton,
 .select-container .select-button {
     padding-right: 25px;
     color: $bdl-gray;
 }
 
+.select-container .bdl-SelectButton:focus,
 .select-container .select-button:focus,
 .select-container select:focus {
     outline: none;
 }
 
+.select-container .bdl-SelectButton:focus,
 .select-container .select-button:focus,
 .select-container select:focus ~ .select-overlay {
     border: 1px solid $primary-color;
 }
 
+.select-container .bdl-SelectButton:hover,
 .select-container .select-button:hover,
 .select-container select:hover ~ .select-overlay {
     border: 1px solid #4c4c4c;
     box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .1);
 }
 
+.select-container .bdl-SelectButton:disabled,
 .select-container .select-button:disabled,
 .select-container select:disabled {
     color: $bdl-gray-30;
 }
 
+.select-container .bdl-SelectButton:disabled,
 .select-container .select-button:disabled,
 .select-container select:disabled ~ .select-overlay {
     background-color: $bdl-gray-02;
@@ -263,23 +275,27 @@ textarea {
     box-shadow: none;
 }
 
+.select-container .bdl-SelectButton:disabled:hover,
 .select-container .select-button:disabled:hover,
 .select-container select:disabled:hover ~ .select-overlay {
     box-shadow: none;
 }
 
+.select-container .bdl-SelectButton:disabled::before,
 .select-container .select-button:disabled::before,
 .select-container select:disabled ~ .select-overlay::before {
     border-top: 3px solid #d5d5d5;
 }
 
 .select-container.is-invalid select + .select-overlay,
+.select-container.is-invalid .bdl-SelectButton:focus ~ .select-overlay,
 .select-container.is-invalid .select-button:focus ~ .select-overlay,
 .select-container.is-invalid select:focus ~ .select-overlay,
 .select-container.is-invalid select:hover + .select-overlay {
     border: 1px solid $bdl-watermelon-red;
 }
 
+.select-container .bdl-SelectButton:active,
 .select-container .select-button:active {
     background-color: $bdl-gray-10;
 }
