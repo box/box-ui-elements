@@ -7,7 +7,7 @@ import UnknownUserAvatar from '../../icons/avatars/UnknownUserAvatar';
 
 import './Avatar.scss';
 
-const SIZES = { large: true };
+const SIZES = { small: true, large: true };
 
 type Props = {
     /**
