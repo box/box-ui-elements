@@ -5,6 +5,7 @@ export { default as ClassifiedBadge } from './ClassifiedBadge';
 export { default as classificationMessages } from './messages';
 export { default as EditClassificationButton } from './EditClassificationButton';
 export { default as SecurityControls } from './security-controls';
+export { default as classificationColorsMap } from './classificationColorsMap';
 export * from './constants';
 
 export type {
