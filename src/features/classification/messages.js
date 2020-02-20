@@ -26,6 +26,47 @@ const messages = defineMessages({
         description: 'Default message for classification in the sidebar when there is none',
         id: 'boxui.classification.missing',
     },
+    // Classification Colors
+    classificationYellow: {
+        defaultMessage: 'Yellow',
+        description: 'Classification label color name as yellow',
+        id: 'boxui.classification.classificationYellow',
+    },
+    classificationOrange: {
+        defaultMessage: 'Orange',
+        description: 'Classification label color name as orange',
+        id: 'boxui.classification.classificationOrange',
+    },
+    classificationRed: {
+        defaultMessage: 'Red',
+        description: 'Classification label color name as red',
+        id: 'boxui.classification.classificationRed',
+    },
+    classificationPurple: {
+        defaultMessage: 'Purple',
+        description: 'Classification label color name as purple',
+        id: 'boxui.classification.classificationPurple',
+    },
+    classificationLightBlue: {
+        defaultMessage: 'Light Blue',
+        description: 'Classification label color name as light blue',
+        id: 'boxui.classification.classificationLightBlue',
+    },
+    classificationDarkBlue: {
+        defaultMessage: 'Dark Blue',
+        description: 'Classification label color name as dark blue',
+        id: 'boxui.classification.classificationDarkBlue',
+    },
+    classificationGreen: {
+        defaultMessage: 'Green',
+        description: 'Classification label color name as green',
+        id: 'boxui.classification.classificationGreen',
+    },
+    classificationGrey: {
+        defaultMessage: 'Grey',
+        description: 'Classification label color name as grey',
+        id: 'boxui.classification.classificationGrey',
+    },
 });
 
 export default messages;
