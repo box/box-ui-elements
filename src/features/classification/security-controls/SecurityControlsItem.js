@@ -30,7 +30,6 @@ const SecurityControlsItem = ({ controlsFormat, fillColor, message, strokeColor 
                         strokeColor={strokeColor}
                         height={ICON_SIZE}
                         width={ICON_SIZE}
-                        strokeWidth={3}
                     />
                 </span>
             )}

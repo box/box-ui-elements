@@ -11,7 +11,6 @@ exports[`features/classification/security-controls/SecurityControlsItem should r
       fillColor="#fef7e8"
       height={13}
       strokeColor="#f5b31b"
-      strokeWidth={3}
       width={13}
     />
   </span>
