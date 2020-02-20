@@ -54,7 +54,7 @@
         "build:prod:npm": "BABEL_ENV=production OUTPUT=dist LANGUAGE=en-US REACT=true yarn build:prod:dist",
         "build:prod:storybook": "LANGUAGE=en-US REACT=true BROWSERSLIST_ENV=production BABEL_ENV=development NODE_ENV=development build-storybook -c .storybook -o styleguide/storybook",
         "build:sync": "LANGUAGE=en-US BABEL_ENV=development NODE_ENV=development RSYNC=true webpack --config scripts/webpack.config.js --mode development",
-        "build:variables": "cat `find src/styles/constants -name '*.scss'` > src/styles/variables.scss | node ./scripts/build-style-vars.js src/styles/variables.scss && rm src/styles/variables.scss",
+        "build:variables": "cat `find -s src/styles/constants -name '*.scss'` > src/styles/variables.scss | node ./scripts/build-style-vars.js src/styles/variables.scss && rm src/styles/variables.scss",
         "build:assets": "./scripts/asset-import/cli.js",
         "clean": "rm -rf dist es i18n/json i18n/*.js reports styleguide",
         "copy:flow": "flow-copy-source --ignore \"**/__tests__/**\" --ignore \"**/__mocks__/**\" --ignore \"**/*.ts\" ./src ./es && copyfiles './src/**/*.js.flow' es --up 1",
