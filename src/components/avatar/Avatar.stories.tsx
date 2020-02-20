@@ -4,6 +4,10 @@ import notes from './Avatar.stories.md';
 
 export const regular = () => <Avatar id={1} name="Aaron Levie" />;
 
+export const small = () => <Avatar id={1} name="Aaron Levie" size="small" />;
+
+export const large = () => <Avatar id={1} name="Aaron Levie" size="large" />;
+
 export const withAvatarUrl = () => (
     <Avatar
         id={1}

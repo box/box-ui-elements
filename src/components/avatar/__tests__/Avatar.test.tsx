@@ -12,7 +12,12 @@ describe('components/avatar/Avatar', () => {
         expect(wrapper.is('span.avatar.test-avatar')).toBe(true);
     });
 
-    test('should add size class based on prop', () => {
+    test('should add small size class based on prop', () => {
+        const wrapper = shallow(<Avatar name="hello" size="small" />);
+        expect(wrapper.is('span.avatar.avatar--small')).toBe(true);
+    });
+
+    test('should add large size class based on prop', () => {
         const wrapper = shallow(<Avatar name="hello" size="large" />);
         expect(wrapper.is('span.avatar.avatar--large')).toBe(true);
     });

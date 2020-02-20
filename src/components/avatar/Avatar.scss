@@ -7,6 +7,8 @@
 .avatar {
     position: relative;
     display: inline-block;
+    flex-grow: 0;
+    flex-shrink: 0;
     width: 32px;
     height: 32px;
     user-select: none;
@@ -42,6 +44,15 @@
     @for $i from 1 through length($avatar-colors) {
         .avatar-initials[data-bg-idx='#{$i - 1}'] {
             background-color: nth($avatar-colors, $i);
+        }
+    }
+
+    &.avatar--small {
+        width: 24px;
+        height: 24px;
+
+        .avatar-initials {
+            font-size: 11px;
         }
     }
 
