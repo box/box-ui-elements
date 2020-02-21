@@ -10,29 +10,33 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskDueDate should rende
     data-testid="task-due-date"
   >
     <LabelPill
+      data-testid="task-overdue-date"
       type="error"
     >
       <span
-        className="bdl-LabelPill bdl-LabelPill--error"
+        className="bdl-LabelPill bdl-LabelPill--error bdl-LabelPill--sizeRegular"
+        data-testid="task-overdue-date"
       >
-        <span
-          className="bdl-LabelPill-content"
-        >
-          <FormattedMessage
-            defaultMessage="DUE: {date}"
-            id="be.contentSidebar.activityFeed.taskNew.taskDueDateLabel"
-            values={
-              Object {
-                "date": <ReadableTime
-                  alwaysShowTime={true}
-                  timestamp={987654321000}
-                />,
-              }
-            }
+        <LabelPillText>
+          <span
+            className="bdl-LabelPill-textContent"
           >
-            <div />
-          </FormattedMessage>
-        </span>
+            <FormattedMessage
+              defaultMessage="DUE {dateTime}"
+              id="be.contentSidebar.activityFeed.taskNew.taskFeedStatusDue"
+              values={
+                Object {
+                  "dateTime": <ReadableTime
+                    alwaysShowTime={true}
+                    timestamp={987654321000}
+                  />,
+                }
+              }
+            >
+              <div />
+            </FormattedMessage>
+          </span>
+        </LabelPillText>
       </span>
     </LabelPill>
   </div>

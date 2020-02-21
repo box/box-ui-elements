@@ -22,16 +22,18 @@ type Props = {
 const TaskDueDate = ({ dueDate, status }: Props): React.Node => {
     const isOverdue = dueDate ? status === TASK_NEW_NOT_STARTED && new Date(dueDate) < Date.now() : false;
     const fullDueDate = new Date(dueDate);
-
+    const pillProps = isOverdue ? { 'data-testid': 'task-overdue-date', type: 'error' } : { type: 'default' };
     return (
         <div data-testid="task-due-date" className="bcs-TaskDueDate">
-            <LabelPill.Pill type={isOverdue ? 'error' : 'default'}>
-                <FormattedMessage
-                    {...messages.taskDueDateLabel}
-                    values={{
-                        date: <ReadableTime alwaysShowTime timestamp={fullDueDate.getTime()} />,
-                    }}
-                />
+            <LabelPill.Pill {...pillProps}>
+                <LabelPill.Text>
+                    <FormattedMessage
+                        {...messages.taskFeedStatusDue}
+                        values={{
+                            dateTime: <ReadableTime alwaysShowTime timestamp={fullDueDate.getTime()} />,
+                        }}
+                    />
+                </LabelPill.Text>
             </LabelPill.Pill>
         </div>
     );

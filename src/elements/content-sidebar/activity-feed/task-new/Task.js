@@ -308,28 +308,21 @@ class Task extends React.Component<Props, State> {
                             </TetherComponent>
                         )}
                         <div className="bcs-Task-headline">
-                            <FormattedMessage
-                                {...messages.taskFeedHeadlinePreviewCurrentUser}
-                                values={{
-                                    user: (
-                                        <UserLink
-                                            {...createdByUser}
-                                            data-resin-target={ACTIVITY_TARGETS.PROFILE}
-                                            getUserProfileUrl={getUserProfileUrl}
-                                        />
-                                    ),
-                                }}
+                            <UserLink
+                                {...createdByUser}
+                                data-resin-target={ACTIVITY_TARGETS.PROFILE}
+                                getUserProfileUrl={getUserProfileUrl}
                             />
                         </div>
                         <div>
                             <ActivityTimestamp date={createdAtTimestamp} />
                         </div>
-                        <div className="bcs-Task-statusContainer">
+                        <div className="bcs-Task-status">
                             <TaskStatus status={status} />
 
                             <TaskCompletionRuleIcon completionRule={completion_rule} />
                         </div>
-                        <div className="bcs-Task-dueDateContainer">
+                        <div className="bcs-Task-dueDate">
                             {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
                         </div>
                         <div>

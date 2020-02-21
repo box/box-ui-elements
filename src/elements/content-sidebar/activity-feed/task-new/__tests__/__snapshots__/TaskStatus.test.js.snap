@@ -4,26 +4,26 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
 <Memo()
   status="APPROVED"
 >
-  <FormattedMessage
-    defaultMessage="{taskStatus}"
-    id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
-    values={
-      Object {
-        "taskStatus": <LabelPill
-          type="success"
-        >
-          <span>
-            <FormattedMessage
-              defaultMessage="APPROVED"
-              id="be.contentSidebar.activityFeed.taskNew.tasksFeedApprovedUppercaseLabel"
-            />
-          </span>
-        </LabelPill>,
-      }
-    }
+  <LabelPill
+    type="success"
   >
-    <div />
-  </FormattedMessage>
+    <span
+      className="bdl-LabelPill bdl-LabelPill--success bdl-LabelPill--sizeRegular"
+    >
+      <LabelPillText>
+        <span
+          className="bdl-LabelPill-textContent"
+        >
+          <FormattedMessage
+            defaultMessage="APPROVED"
+            id="be.contentSidebar.activityFeed.taskNew.tasksFeedApprovedUppercaseLabel"
+          >
+            <div />
+          </FormattedMessage>
+        </span>
+      </LabelPillText>
+    </span>
+  </LabelPill>
 </Memo()>
 `;
 
@@ -31,26 +31,26 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
 <Memo()
   status="COMPLETED"
 >
-  <FormattedMessage
-    defaultMessage="{taskStatus}"
-    id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
-    values={
-      Object {
-        "taskStatus": <LabelPill
-          type="success"
-        >
-          <span>
-            <FormattedMessage
-              defaultMessage="COMPLETED"
-              id="be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedUppercaseLabel"
-            />
-          </span>
-        </LabelPill>,
-      }
-    }
+  <LabelPill
+    type="success"
   >
-    <div />
-  </FormattedMessage>
+    <span
+      className="bdl-LabelPill bdl-LabelPill--success bdl-LabelPill--sizeRegular"
+    >
+      <LabelPillText>
+        <span
+          className="bdl-LabelPill-textContent"
+        >
+          <FormattedMessage
+            defaultMessage="COMPLETED"
+            id="be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedUppercaseLabel"
+          >
+            <div />
+          </FormattedMessage>
+        </span>
+      </LabelPillText>
+    </span>
+  </LabelPill>
 </Memo()>
 `;
 
@@ -58,26 +58,26 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
 <Memo()
   status="IN_PROGRESS"
 >
-  <FormattedMessage
-    defaultMessage="{taskStatus}"
-    id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
-    values={
-      Object {
-        "taskStatus": <LabelPill
-          type="default"
-        >
-          <span>
-            <FormattedMessage
-              defaultMessage="IN PROGRESS"
-              id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressUppercaseLabel"
-            />
-          </span>
-        </LabelPill>,
-      }
-    }
+  <LabelPill
+    type="default"
   >
-    <div />
-  </FormattedMessage>
+    <span
+      className="bdl-LabelPill bdl-LabelPill--default bdl-LabelPill--sizeRegular"
+    >
+      <LabelPillText>
+        <span
+          className="bdl-LabelPill-textContent"
+        >
+          <FormattedMessage
+            defaultMessage="IN PROGRESS"
+            id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressUppercaseLabel"
+          >
+            <div />
+          </FormattedMessage>
+        </span>
+      </LabelPillText>
+    </span>
+  </LabelPill>
 </Memo()>
 `;
 
@@ -85,26 +85,26 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
 <Memo()
   status="NOT_STARTED"
 >
-  <FormattedMessage
-    defaultMessage="{taskStatus}"
-    id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
-    values={
-      Object {
-        "taskStatus": <LabelPill
-          type="default"
-        >
-          <span>
-            <FormattedMessage
-              defaultMessage="IN PROGRESS"
-              id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressUppercaseLabel"
-            />
-          </span>
-        </LabelPill>,
-      }
-    }
+  <LabelPill
+    type="default"
   >
-    <div />
-  </FormattedMessage>
+    <span
+      className="bdl-LabelPill bdl-LabelPill--default bdl-LabelPill--sizeRegular"
+    >
+      <LabelPillText>
+        <span
+          className="bdl-LabelPill-textContent"
+        >
+          <FormattedMessage
+            defaultMessage="IN PROGRESS"
+            id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressUppercaseLabel"
+          >
+            <div />
+          </FormattedMessage>
+        </span>
+      </LabelPillText>
+    </span>
+  </LabelPill>
 </Memo()>
 `;
 
@@ -112,25 +112,25 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
 <Memo()
   status="REJECTED"
 >
-  <FormattedMessage
-    defaultMessage="{taskStatus}"
-    id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel"
-    values={
-      Object {
-        "taskStatus": <LabelPill
-          type="error"
-        >
-          <span>
-            <FormattedMessage
-              defaultMessage="REJECTED"
-              id="be.contentSidebar.activityFeed.taskNew.tasksFeedRejectedUppercaseLabel"
-            />
-          </span>
-        </LabelPill>,
-      }
-    }
+  <LabelPill
+    type="error"
   >
-    <div />
-  </FormattedMessage>
+    <span
+      className="bdl-LabelPill bdl-LabelPill--error bdl-LabelPill--sizeRegular"
+    >
+      <LabelPillText>
+        <span
+          className="bdl-LabelPill-textContent"
+        >
+          <FormattedMessage
+            defaultMessage="REJECTED"
+            id="be.contentSidebar.activityFeed.taskNew.tasksFeedRejectedUppercaseLabel"
+          >
+            <div />
+          </FormattedMessage>
+        </span>
+      </LabelPillText>
+    </span>
+  </LabelPill>
 </Memo()>
 `;

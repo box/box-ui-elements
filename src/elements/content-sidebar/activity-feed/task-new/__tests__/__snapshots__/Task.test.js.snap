@@ -85,19 +85,11 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       <div
         className="bcs-Task-headline"
       >
-        <FormattedMessage
-          defaultMessage="{user}"
-          id="be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlinePreviewCurrentUser"
-          values={
-            Object {
-              "user": <UserLink
-                data-resin-target="activityfeed-profilelink"
-                id="1"
-                name="Jake Thomas"
-                type="user"
-              />,
-            }
-          }
+        <UserLink
+          data-resin-target="activityfeed-profilelink"
+          id="1"
+          name="Jake Thomas"
+          type="user"
         />
       </div>
       <div>
@@ -106,7 +98,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
         />
       </div>
       <div
-        className="bcs-Task-statusContainer"
+        className="bcs-Task-status"
       >
         <Memo()
           status="NOT_STARTED"
@@ -116,7 +108,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
         />
       </div>
       <div
-        className="bcs-Task-dueDateContainer"
+        className="bcs-Task-dueDate"
       />
       <div>
         <ActivityMessage

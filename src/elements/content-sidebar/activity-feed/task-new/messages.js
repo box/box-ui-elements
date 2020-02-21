@@ -31,7 +31,7 @@ const messages = defineMessages({
     },
     taskDueDateLabel: {
         id: 'be.contentSidebar.activityFeed.taskNew.taskDueDateLabel',
-        defaultMessage: 'DUE: {date}',
+        defaultMessage: 'Due: {date}',
         description: 'Label and date for task due date',
     },
     tasksFeedApproveAction: {
@@ -48,11 +48,6 @@ const messages = defineMessages({
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedRejectAction',
         defaultMessage: 'Reject',
         description: 'Reject option for an approval task',
-    },
-    tasksFeedStatusLabel: {
-        id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel',
-        defaultMessage: '{taskStatus}',
-        description: 'Label for the task status',
     },
     tasksFeedCompletedLabel: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedLabel',
@@ -93,11 +88,6 @@ const messages = defineMessages({
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressUppercaseLabel',
         defaultMessage: 'IN PROGRESS',
         description: 'Label for a task in progress (in upper-case in supported language)',
-    },
-    taskFeedHeadlinePreviewCurrentUser: {
-        id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlinePreviewCurrentUser',
-        defaultMessage: '{user}',
-        description: 'Headline for a task assigned to a current user',
     },
     tasksFeedHeadlineApprovalCurrentUser: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineApprovalCurrentUser',

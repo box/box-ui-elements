@@ -109,7 +109,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 status="NOT_STARTED"
             />,
         );
-        expect(incompleteWrapper.find('.bcs-TaskDueDate')).toHaveLength(1);
+        expect(incompleteWrapper.render().find('[data-testid="task-overdue-date"]')).toHaveLength(1);
     });
 
     test('due date should not have overdue class if task is complete and due date is in past', () => {
@@ -123,7 +123,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 status="COMPLETED"
             />,
         );
-        expect(completeWrapper.find('.bcs-is-taskOverdue')).toHaveLength(0);
+        expect(completeWrapper.find('[data-testid="task-overdue-date"]')).toHaveLength(0);
     });
 
     test('should add pending class for isPending prop', () => {
