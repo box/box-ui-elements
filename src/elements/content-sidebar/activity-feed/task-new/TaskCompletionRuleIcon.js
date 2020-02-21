@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import { TASK_COMPLETION_RULE_ANY } from '../../../../constants';
 import messages from './messages';
 import Tooltip from '../../../../components/tooltip';
-// $FlowFixMe LabelPill is in typescript
 import LabelPill from '../../../../components/label-pill';
 
 import Avatar16 from '../../../../icon/line/Avatar16';

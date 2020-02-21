@@ -12,7 +12,6 @@ import messages from './messages';
 import type { TaskStatus } from '../../../../common/types/tasks';
 
 import './TaskStatus.scss';
-// $FlowFixMe LabelPill is in typescript
 import LabelPill from '../../../../components/label-pill';
 
 type Props = {|
@@ -39,7 +38,7 @@ const Status = React.memo<Props>(({ status }: Props) => (
     <LabelPill.Pill type={typeKeyMap[status]}>
         <LabelPill.Text>
             <FormattedMessage {...statusMessageKeyMap[status]}>
-                {(...msg: Array<React.Node>): React.Node => <div className="bcs-TaskStatus">{msg}</div>}
+                {(...msg: Array<React.Node>): React.Node => <span className="bcs-TaskStatus">{msg}</span>}
             </FormattedMessage>
         </LabelPill.Text>
     </LabelPill.Pill>
