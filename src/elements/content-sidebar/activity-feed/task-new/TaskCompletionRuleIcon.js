@@ -3,9 +3,9 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { TASK_COMPLETION_RULE_ANY } from '../../../../constants';
 import messages from './messages';
-import Tooltip from '../../../../components/tooltip';
+// $FlowFixMe LabelPill is in typescript
 import LabelPill from '../../../../components/label-pill';
-
+import Tooltip from '../../../../components/tooltip';
 import Avatar16 from '../../../../icon/line/Avatar16';
 import type { TaskCompletionRule } from '../../../../common/types/tasks';
 
@@ -21,7 +21,7 @@ const TaskCompletionRuleIcon = ({ completionRule }: Props): React.Node =>
             <Tooltip position="top-center" text={<FormattedMessage {...messages.taskAnyAffordanceTooltip} />}>
                 <LabelPill.Pill>
                     <LabelPill.Icon Component={Avatar16} />
-                    <span>1</span>
+                    <span className="bcs-TaskCompletionRuleIcon-oneSize">1</span>
                 </LabelPill.Pill>
             </Tooltip>
         </span>

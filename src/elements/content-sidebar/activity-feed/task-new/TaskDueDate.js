@@ -3,9 +3,9 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import messages from './messages';
-import { ReadableTime } from '../../../../components/time';
+// $FlowFixMe LabelPill is in typescript
 import LabelPill from '../../../../components/label-pill';
-
+import { ReadableTime } from '../../../../components/time';
 import { TASK_NEW_NOT_STARTED } from '../../../../constants';
 
 import type { TaskStatus } from '../../../../common/types/tasks';
