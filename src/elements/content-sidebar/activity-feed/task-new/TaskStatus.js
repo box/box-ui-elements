@@ -13,8 +13,6 @@ import messages from './messages';
 import LabelPill from '../../../../components/label-pill';
 import type { TaskStatus } from '../../../../common/types/tasks';
 
-import './TaskStatus.scss';
-
 type Props = {|
     status: TaskStatus,
 |};
@@ -38,9 +36,7 @@ const typeKeyMap = {
 const Status = React.memo<Props>(({ status }: Props) => (
     <LabelPill.Pill type={typeKeyMap[status]}>
         <LabelPill.Text>
-            <span className="bcs-TaskStatus">
-                <FormattedMessage {...statusMessageKeyMap[status]} />
-            </span>
+            <FormattedMessage {...statusMessageKeyMap[status]} />
         </LabelPill.Text>
     </LabelPill.Pill>
 ));

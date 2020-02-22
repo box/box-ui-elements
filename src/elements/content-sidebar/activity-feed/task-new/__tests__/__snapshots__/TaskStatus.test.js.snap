@@ -14,16 +14,12 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
         <span
           className="bdl-LabelPill-textContent"
         >
-          <span
-            className="bcs-TaskStatus"
+          <FormattedMessage
+            defaultMessage="APPROVED"
+            id="be.contentSidebar.activityFeed.taskNew.tasksFeedApprovedUppercaseLabel"
           >
-            <FormattedMessage
-              defaultMessage="APPROVED"
-              id="be.contentSidebar.activityFeed.taskNew.tasksFeedApprovedUppercaseLabel"
-            >
-              <div />
-            </FormattedMessage>
-          </span>
+            <div />
+          </FormattedMessage>
         </span>
       </LabelPillText>
     </span>
@@ -45,16 +41,12 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
         <span
           className="bdl-LabelPill-textContent"
         >
-          <span
-            className="bcs-TaskStatus"
+          <FormattedMessage
+            defaultMessage="COMPLETED"
+            id="be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedUppercaseLabel"
           >
-            <FormattedMessage
-              defaultMessage="COMPLETED"
-              id="be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedUppercaseLabel"
-            >
-              <div />
-            </FormattedMessage>
-          </span>
+            <div />
+          </FormattedMessage>
         </span>
       </LabelPillText>
     </span>
@@ -76,16 +68,12 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
         <span
           className="bdl-LabelPill-textContent"
         >
-          <span
-            className="bcs-TaskStatus"
+          <FormattedMessage
+            defaultMessage="IN PROGRESS"
+            id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressUppercaseLabel"
           >
-            <FormattedMessage
-              defaultMessage="IN PROGRESS"
-              id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressUppercaseLabel"
-            >
-              <div />
-            </FormattedMessage>
-          </span>
+            <div />
+          </FormattedMessage>
         </span>
       </LabelPillText>
     </span>
@@ -107,16 +95,12 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
         <span
           className="bdl-LabelPill-textContent"
         >
-          <span
-            className="bcs-TaskStatus"
+          <FormattedMessage
+            defaultMessage="IN PROGRESS"
+            id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressUppercaseLabel"
           >
-            <FormattedMessage
-              defaultMessage="IN PROGRESS"
-              id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressUppercaseLabel"
-            >
-              <div />
-            </FormattedMessage>
-          </span>
+            <div />
+          </FormattedMessage>
         </span>
       </LabelPillText>
     </span>
@@ -138,16 +122,12 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
         <span
           className="bdl-LabelPill-textContent"
         >
-          <span
-            className="bcs-TaskStatus"
+          <FormattedMessage
+            defaultMessage="REJECTED"
+            id="be.contentSidebar.activityFeed.taskNew.tasksFeedRejectedUppercaseLabel"
           >
-            <FormattedMessage
-              defaultMessage="REJECTED"
-              id="be.contentSidebar.activityFeed.taskNew.tasksFeedRejectedUppercaseLabel"
-            >
-              <div />
-            </FormattedMessage>
-          </span>
+            <div />
+          </FormattedMessage>
         </span>
       </LabelPillText>
     </span>

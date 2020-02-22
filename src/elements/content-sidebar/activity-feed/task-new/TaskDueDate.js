@@ -11,8 +11,6 @@ import { TASK_NEW_NOT_STARTED } from '../../../../constants';
 import type { TaskStatus } from '../../../../common/types/tasks';
 import type { ISODate } from '../../../../common/types/core';
 
-import './TaskDueDate.scss';
-
 type Props = {
     dueDate: ISODate,
     status: TaskStatus,
@@ -23,7 +21,7 @@ const TaskDueDate = ({ dueDate, status }: Props): React.Node => {
     const fullDueDate = new Date(dueDate);
     const pillProps = isOverdue ? { 'data-testid': 'task-overdue-date', type: 'error' } : { type: 'default' };
     return (
-        <div data-testid="task-due-date" className="bcs-TaskDueDate">
+        <div data-testid="task-due-date">
             <LabelPill.Pill {...pillProps}>
                 <LabelPill.Text>
                     <FormattedMessage

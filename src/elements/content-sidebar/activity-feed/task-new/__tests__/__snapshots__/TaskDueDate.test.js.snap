@@ -6,7 +6,6 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskDueDate should rende
   status="NOT_STARTED"
 >
   <div
-    className="bcs-TaskDueDate"
     data-testid="task-due-date"
   >
     <LabelPill
