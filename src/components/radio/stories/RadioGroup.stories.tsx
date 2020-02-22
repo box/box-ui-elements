@@ -3,7 +3,6 @@ import { boolean } from '@storybook/addon-knobs';
 
 import { bdlGray20, bdlPurpleRain } from '../../../styles/variables';
 import RadioButton, { RadioButtonProps } from '../RadioButton';
-
 import RadioGroup from '../RadioGroup';
 import notes from './RadioGroup.stories.md';
 
@@ -18,15 +17,8 @@ export const basic = () => (
 );
 
 export const withCustomRadioButtonComponent = () => {
-    const CustomRadioButton = ({ isSelected, name, value }: RadioButtonProps) => (
-        <span style={{ marginRight: '8px', position: 'relative' }}>
-            <input
-                checked={isSelected}
-                name={name}
-                type="radio"
-                value={value}
-                style={{ height: '20px', opacity: 0, width: '20px' }}
-            />
+    const CustomRadioButton = ({ isSelected, label, name, value }: RadioButtonProps) => (
+        <span style={{ marginRight: '15px', position: 'relative' }} title={String(label)}>
             <span
                 style={{
                     backgroundColor: isSelected ? bdlPurpleRain : bdlGray20,
@@ -36,8 +28,14 @@ export const withCustomRadioButtonComponent = () => {
                     left: '0px',
                     position: 'absolute',
                     width: '20px',
-                    zIndex: -1,
                 }}
+            />
+            <input
+                checked={isSelected}
+                name={name}
+                type="radio"
+                value={value}
+                style={{ cursor: 'pointer', height: '20px', opacity: 0, width: '20px' }}
             />
         </span>
     );
