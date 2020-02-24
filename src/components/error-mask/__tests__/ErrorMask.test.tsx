@@ -1,8 +1,9 @@
 import React from 'react';
+import { shallow, ShallowWrapper } from 'enzyme';
 
 import ErrorMask from '..';
 
-let component;
+let component: ShallowWrapper;
 
 describe('components/error-mask/ErrorMask', () => {
     beforeEach(() => {
