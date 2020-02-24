@@ -1,5 +1,4 @@
 // @flow
-// @deprecated, use FormattedMessage from react-intl v3 instead
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import isNaN from 'lodash/isNaN';
@@ -77,6 +76,10 @@ class FormattedCompMessage extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
+
+        console.warn(
+            "box-ui-elements: the FormattedCompMessage component is deprecated! Use react-intl's FormattedMessage instead.",
+        );
 
         // these parameters echo the ones in react-intl's FormattedMessage
         // component, plus a few extra

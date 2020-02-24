@@ -47,6 +47,10 @@ type Props = {
  * See the [Unicode CLDR description of plural category
  * rules](http://cldr.unicode.org/index/cldr-spec/plural-rules) for more details.
  */
-const Plural = ({ children }: Props) => children;
+const Plural = ({ children }: Props) => {
+    console.warn("box-ui-elements: the Plural component is deprecated! Use react-intl's FormattedPlural instead.");
+
+    return children;
+};
 
 export default Plural;
