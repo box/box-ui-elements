@@ -21,7 +21,7 @@ const TaskCompletionRuleIcon = ({ completionRule }: Props): React.Node =>
             <Tooltip position="top-center" text={<FormattedMessage {...messages.taskAnyAffordanceTooltip} />}>
                 <LabelPill.Pill>
                     <LabelPill.Icon Component={Avatar16} />
-                    <span className="bcs-TaskCompletionRuleIcon-oneSize">1</span>
+                    <LabelPill.Text className="bcs-TaskCompletionRuleIcon-oneSize">1</LabelPill.Text>
                 </LabelPill.Pill>
             </Tooltip>
         </span>
