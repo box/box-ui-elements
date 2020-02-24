@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 
 import IconCollections from './IconCollections';
@@ -19,7 +18,7 @@ const icon = {
     'margin-right': '20px',
 };
 
-const Icon = ({ children, name }: { children: React.Node, name: string }) => {
+const Icon = ({ children, name }: { children: React.ReactChild; name: string }) => {
     return (
         <div style={icon}>
             {children}
