@@ -1,17 +1,18 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
-import IconAlertCircle from '../IconAlertCircle';
+import IconBell from '../IconBell';
 
-describe('icons/general/IconAlertCircle', () => {
+describe('icons/general/IconBell', () => {
     test('should correctly render default icon', () => {
-        const wrapper = shallow(<IconAlertCircle />);
+        const wrapper = shallow(<IconBell />);
 
-        expect(wrapper.hasClass('icon-alert-circle')).toBe(true);
+        expect(wrapper.hasClass('icon-bell')).toBe(true);
     });
 
     test('should correctly render icon with specified color', () => {
         const color = '#ffffff';
-        const wrapper = shallow(<IconAlertCircle color={color} />);
+        const wrapper = shallow(<IconBell color={color} />);
 
         expect(
             wrapper
@@ -23,15 +24,16 @@ describe('icons/general/IconAlertCircle', () => {
             wrapper
                 .find('circle')
                 .at(1)
-                .prop('fill'),
+                .prop('stroke'),
         ).toEqual(color);
-        expect(wrapper.find('rect').prop('fill')).toEqual(color);
+        expect(wrapper.find('path').prop('stroke')).toEqual(color);
+        expect(wrapper.find('path').prop('fill')).toEqual(color);
     });
 
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconAlertCircle height={height} width={width} />);
+        const wrapper = shallow(<IconBell height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);
@@ -39,7 +41,7 @@ describe('icons/general/IconAlertCircle', () => {
 
     test('should correctly render icon with title', () => {
         const title = 'fool';
-        const wrapper = shallow(<IconAlertCircle title={title} />);
+        const wrapper = shallow(<IconBell title={title} />);
 
         expect(wrapper.find('AccessibleSVG').prop('title')).toEqual(title);
     });
