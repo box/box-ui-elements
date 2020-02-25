@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
-import { FileIcon, TwoTonedIcon } from '../iconTypes';
+import { TwoTonedIcon } from '../iconTypes';
 
 const IconMetadataView = ({ className = '', height = 16, title, width = 16 }: TwoTonedIcon) => (
     <AccessibleSVG
