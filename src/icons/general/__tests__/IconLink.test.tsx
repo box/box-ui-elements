@@ -1,30 +1,37 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
-import IconInviteCollaborators from '../IconInviteCollaborators';
+import IconLink from '../IconLink';
 
-describe('icons/general/IconInviteCollaborators', () => {
+describe('icons/general/IconLink', () => {
     test('should correctly render default icon', () => {
-        const wrapper = shallow(<IconInviteCollaborators />);
+        const wrapper = shallow(<IconLink />);
 
-        expect(wrapper.hasClass('icon-invite-collaborators')).toBe(true);
+        expect(wrapper.hasClass('icon-link')).toEqual(true);
     });
 
     test('should correctly render icon with specified color', () => {
         const color = '#ffffff';
-        const wrapper = shallow(<IconInviteCollaborators color={color} />);
+        const wrapper = shallow(<IconLink color={color} />);
 
         expect(
             wrapper
                 .find('path')
                 .at(0)
-                .prop('stroke'),
+                .prop('fill'),
+        ).toEqual(color);
+        expect(
+            wrapper
+                .find('path')
+                .at(1)
+                .prop('fill'),
         ).toEqual(color);
     });
 
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconInviteCollaborators height={height} width={width} />);
+        const wrapper = shallow(<IconLink height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);
@@ -32,7 +39,7 @@ describe('icons/general/IconInviteCollaborators', () => {
 
     test('should correctly render icon with title', () => {
         const title = 'fool';
-        const wrapper = shallow(<IconInviteCollaborators title={title} />);
+        const wrapper = shallow(<IconLink title={title} />);
 
         expect(wrapper.find('AccessibleSVG').prop('title')).toEqual(title);
     });

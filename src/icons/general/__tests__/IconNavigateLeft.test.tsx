@@ -1,9 +1,10 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
-import IconMail from '../IconMail';
+import IconNavigateLeft from '../IconNavigateLeft';
 
-describe('icons/general/IconMail', () => {
-    const getWrapper = (props = {}) => shallow(<IconMail {...props} />);
+describe('icons/general/IconNavigateLeft', () => {
+    const getWrapper = (props = {}) => shallow(<IconNavigateLeft {...props} />);
 
     test('should correctly render default icon', () => {
         const wrapper = getWrapper();
@@ -11,10 +12,9 @@ describe('icons/general/IconMail', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render icon with additional props', () => {
+    test('should correctly render icon with specified props', () => {
         const wrapper = getWrapper({
-            className: 'class',
-            color: '#000',
+            className: 'test',
             height: 100,
             title: 'title',
             width: 200,
