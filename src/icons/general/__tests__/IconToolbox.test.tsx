@@ -1,9 +1,9 @@
 import React from 'react';
+import { shallow } from 'enzyme';
+import IconToolbox from '../IconToolbox';
 
-import IconTrackNext from '../IconTrackNext';
-
-describe('icons/general/IconTrackNext', () => {
-    const getWrapper = (props = {}) => shallow(<IconTrackNext {...props} />);
+describe('icons/general/IconToolbox', () => {
+    const getWrapper = (props = {}) => shallow(<IconToolbox {...props} />);
 
     test('should correctly render default icon', () => {
         const wrapper = getWrapper();
@@ -13,6 +13,7 @@ describe('icons/general/IconTrackNext', () => {
     test('should correctly render icon with specified props', () => {
         const wrapper = getWrapper({
             className: 'test',
+            color: '#222',
             height: 100,
             title: 'title',
             width: 200,

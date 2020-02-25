@@ -1,23 +1,22 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
-import IconWatermark from '../IconWatermark';
+import IconTrophyCup from '../IconTrophyCup';
 
-describe('icons/general/IconWatermark', () => {
-    const getWrapper = (props = {}) => shallow(<IconWatermark {...props} />);
+describe('icons/general/IconTrophyCup', () => {
+    const getWrapper = (props = {}) => shallow(<IconTrophyCup {...props} />);
 
     test('should correctly render default icon', () => {
         const wrapper = getWrapper();
-
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render icon with specified props', () => {
         const wrapper = getWrapper({
             className: 'test',
-            color: '#000',
-            height: 150,
+            height: 15,
             title: 'title',
-            width: 160,
+            width: 18,
         });
 
         expect(wrapper).toMatchSnapshot();
