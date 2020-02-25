@@ -25,7 +25,7 @@ export const withCustomRadioButtonComponent = () => {
                     borderRadius: '50%',
                     display: 'inline-block',
                     height: '20px',
-                    left: '0px',
+                    left: '0',
                     position: 'absolute',
                     width: '20px',
                 }}
