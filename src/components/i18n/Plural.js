@@ -48,7 +48,9 @@ type Props = {
  * rules](http://cldr.unicode.org/index/cldr-spec/plural-rules) for more details.
  */
 const Plural = ({ children }: Props) => {
+    /* eslint-disable no-console */
     console.warn("box-ui-elements: the Plural component is deprecated! Use react-intl's FormattedPlural instead.");
+    /* eslint-enable no-console */
 
     return children;
 };

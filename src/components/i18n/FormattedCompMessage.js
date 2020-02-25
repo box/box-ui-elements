@@ -77,9 +77,11 @@ class FormattedCompMessage extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
+        /* eslint-disable no-console */
         console.warn(
             "box-ui-elements: the FormattedCompMessage component is deprecated! Use react-intl's FormattedMessage instead.",
         );
+        /* eslint-enable no-console */
 
         // these parameters echo the ones in react-intl's FormattedMessage
         // component, plus a few extra
