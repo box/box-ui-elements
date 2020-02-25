@@ -1,9 +1,10 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
-import IconShield2 from '../IconShield2';
+import IconSidebarLeft from '../IconSidebarLeft';
 
-describe('icons/general/IconShield2', () => {
-    const getWrapper = (props = {}) => shallow(<IconShield2 {...props} />);
+describe('icons/general/IconSidebarLeft', () => {
+    const getWrapper = (props = {}) => shallow(<IconSidebarLeft {...props} />);
 
     test('should correctly render default icon', () => {
         const wrapper = getWrapper();
@@ -13,9 +14,9 @@ describe('icons/general/IconShield2', () => {
     test('should correctly render icon with specified props', () => {
         const wrapper = getWrapper({
             className: 'test',
-            height: 15,
+            height: 100,
             title: 'title',
-            width: 15,
+            width: 200,
         });
 
         expect(wrapper).toMatchSnapshot();
