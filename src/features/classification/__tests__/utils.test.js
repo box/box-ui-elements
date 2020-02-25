@@ -4,7 +4,7 @@ import { DEFAULT_CLASSIFICATION_COLOR_ID } from '../constants';
 
 import { getClassificationLabelColors } from '../utils';
 
-describe('features/classification/security-controls/utils', () => {
+describe('features/classification/utils', () => {
     describe('getClassificationLabelColors()', () => {
         test('should return the fill and stroke colors that match the given color id', () => {
             const colorID = 6;
