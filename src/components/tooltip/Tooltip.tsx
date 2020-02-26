@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 import TetherComponent from 'react-tether';
 
+import TetherPosition from '../../common/tether-positions';
 import IconClose from '../../icon/fill/X16';
 import PlainButton from '../plain-button';
 
@@ -25,38 +26,43 @@ export enum TooltipPosition {
     TOP_RIGHT = 'top-right',
 }
 
+export type TooltipCustomPostion = {
+    attachment: TetherPosition;
+    targetAttachment: TetherPosition;
+};
+
 const positions = {
     [TooltipPosition.BOTTOM_CENTER]: {
-        attachment: 'top center',
-        targetAttachment: 'bottom center',
+        attachment: TetherPosition.TOP_CENTER,
+        targetAttachment: TetherPosition.BOTTOM_CENTER,
     },
     [TooltipPosition.BOTTOM_LEFT]: {
-        attachment: 'top right',
-        targetAttachment: 'bottom right',
+        attachment: TetherPosition.TOP_RIGHT,
+        targetAttachment: TetherPosition.BOTTOM_RIGHT,
     },
     [TooltipPosition.BOTTOM_RIGHT]: {
-        attachment: 'top left',
-        targetAttachment: 'bottom left',
+        attachment: TetherPosition.TOP_LEFT,
+        targetAttachment: TetherPosition.BOTTOM_LEFT,
     },
     [TooltipPosition.MIDDLE_LEFT]: {
-        attachment: 'middle right',
-        targetAttachment: 'middle left',
+        attachment: TetherPosition.MIDDLE_RIGHT,
+        targetAttachment: TetherPosition.MIDDLE_LEFT,
     },
     [TooltipPosition.MIDDLE_RIGHT]: {
-        attachment: 'middle left',
-        targetAttachment: 'middle right',
+        attachment: TetherPosition.MIDDLE_LEFT,
+        targetAttachment: TetherPosition.MIDDLE_RIGHT,
     },
     [TooltipPosition.TOP_CENTER]: {
-        attachment: 'bottom center',
-        targetAttachment: 'top center',
+        attachment: TetherPosition.BOTTOM_CENTER,
+        targetAttachment: TetherPosition.TOP_CENTER,
     },
     [TooltipPosition.TOP_LEFT]: {
-        attachment: 'bottom right',
-        targetAttachment: 'top right',
+        attachment: TetherPosition.BOTTOM_RIGHT,
+        targetAttachment: TetherPosition.TOP_RIGHT,
     },
     [TooltipPosition.TOP_RIGHT]: {
-        attachment: 'bottom left',
-        targetAttachment: 'top left',
+        attachment: TetherPosition.BOTTOM_LEFT,
+        targetAttachment: TetherPosition.TOP_LEFT,
     },
 };
 
@@ -79,7 +85,7 @@ export interface TooltipProps {
     /** Function called if the user manually dismisses the tooltip - only applies if showCloseButton is true */
     onDismiss?: () => void;
     /** Where to position the tooltip relative to the wrapped component */
-    position: TooltipPosition;
+    position: TooltipPosition | TooltipCustomPostion;
     /** Shows an X button to close the tooltip. Useful when tooltips are force shown with the isShown prop. */
     showCloseButton?: boolean;
     /** Text to show in the tooltip */
@@ -207,7 +213,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
         const showTooltip = this.isShown();
 
         const withCloseButton = showCloseButton && isControlled;
-        const tetherPosition = positions[position];
+        const tetherPosition = typeof position === 'string' ? positions[position] : position;
         const constraints = [];
         const componentProps: {
             [key: string]:
