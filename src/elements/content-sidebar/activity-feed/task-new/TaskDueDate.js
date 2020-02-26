@@ -27,7 +27,7 @@ const TaskDueDate = ({ dueDate, status }: Props): React.Node => {
                     <FormattedMessage
                         {...messages.taskFeedStatusDue}
                         values={{
-                            dateTime: <ReadableTime alwaysShowTime timestamp={fullDueDate.getTime()} />,
+                            dateTime: <ReadableTime alwaysShowTime uppercase timestamp={fullDueDate.getTime()} />,
                         }}
                     />
                 </LabelPill.Text>
