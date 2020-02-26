@@ -7,9 +7,20 @@ import { TaskFormUnwrapped as TaskForm } from '..';
 import commonMessages from '../../../../../common/messages';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
-jest.mock('../../../../../components/date-picker/DatePicker', () => props => (
-    <input type="date" {...props} {...props.inputProps} /> // eslint-disable-line react/prop-types
-));
+jest.mock('../../../../../components/date-picker/DatePicker', () => props => {
+    // only spread `input` attritutes to the input field
+    const { name, value = '', className, onChange, placeholder } = props;
+    const localInputProps = {
+        name,
+        value,
+        className,
+        onChange,
+        placeholder,
+    };
+    return (
+        <input type="date" {...localInputProps} {...props.inputProps} /> // eslint-disable-line react/prop-types
+    );
+});
 
 const mockIntl = {
     formatMessage: message => message.defaultMessage,
