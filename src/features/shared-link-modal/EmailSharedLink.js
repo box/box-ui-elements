@@ -66,11 +66,12 @@ class EmailSharedLink extends Component {
                 )
                 .map(({ email, id, name, type }) => ({
                     // map to standardized DatalistItem format
+                    // TODO: refactor this so inline conversions aren't required at every usage
                     email,
                     id,
                     text: name,
                     type,
-                    value: email,
+                    value: email || id, // if email doesn't exist, contact is a group, use id
                 }));
         }
 
