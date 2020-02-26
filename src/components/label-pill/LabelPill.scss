@@ -2,6 +2,7 @@
 
 .bdl-LabelPill {
     color: $bdl-gray;
+    font-weight: bold;
     border: 1px solid;
 }
 
@@ -56,12 +57,16 @@
 
 .bdl-LabelPill-iconContent {
     position: relative;
-    top: .125em;
+    top: 2px;
 }
 
 .bdl-LabelPill--sizeLarge {
     .bdl-LabelPill-textContent {
         margin: 0 $bdl-grid-unit;
+    }
+
+    .bdl-LabelPill-iconContent {
+        top: 1px;
     }
 }
 
