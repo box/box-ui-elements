@@ -32,7 +32,7 @@ import {
     PLACEHOLDER_USER,
     TASK_EDIT_MODE_EDIT,
 } from '../../../../constants';
-import type { TaskAssigneeCollection, TaskNew, TaskType } from '../../../../common/types/tasks';
+import type { TaskAssigneeCollection, TaskNew } from '../../../../common/types/tasks';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { bdlGray80 } from '../../../../styles/variables';
 import TaskActions from './TaskActions';
@@ -81,20 +81,6 @@ type State = {
     isLoading: boolean,
     loadCollabError: ?ActionItemError,
     modalError: ?ElementsXhrError,
-};
-
-const getMessageForTask = (isCurrentUser: boolean, taskType: TaskType) => {
-    if (isCurrentUser) {
-        if (taskType === TASK_TYPE_APPROVAL) {
-            return messages.tasksFeedHeadlineApprovalCurrentUser;
-        }
-        return messages.tasksFeedHeadlineGeneralCurrentUser;
-    }
-
-    if (taskType === TASK_TYPE_APPROVAL) {
-        return messages.tasksFeedHeadlineApproval;
-    }
-    return messages.tasksFeedHeadlineGeneral;
 };
 
 class Task extends React.Component<Props, State> {
@@ -322,21 +308,22 @@ class Task extends React.Component<Props, State> {
                             </TetherComponent>
                         )}
                         <div className="bcs-Task-headline">
-                            <FormattedMessage
-                                {...getMessageForTask(!!currentUserAssignment, task_type)}
-                                values={{
-                                    user: (
-                                        <UserLink
-                                            {...createdByUser}
-                                            data-resin-target={ACTIVITY_TARGETS.PROFILE}
-                                            getUserProfileUrl={getUserProfileUrl}
-                                        />
-                                    ),
-                                }}
+                            <UserLink
+                                {...createdByUser}
+                                data-resin-target={ACTIVITY_TARGETS.PROFILE}
+                                getUserProfileUrl={getUserProfileUrl}
                             />
                         </div>
                         <div>
                             <ActivityTimestamp date={createdAtTimestamp} />
+                        </div>
+                        <div className="bcs-Task-status">
+                            <TaskStatus status={status} />
+
+                            <TaskCompletionRuleIcon completionRule={completion_rule} />
+                        </div>
+                        <div className="bcs-Task-dueDate">
+                            {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
                         </div>
                         <div>
                             <ActivityMessage
@@ -347,11 +334,6 @@ class Task extends React.Component<Props, State> {
                                 translationFailed={error ? true : null}
                                 getUserProfileUrl={getUserProfileUrl}
                             />
-                        </div>
-                        <div className="bcs-Task-statusContainer">
-                            {!!due_at && <TaskDueDate dueDate={due_at} status={status} />}
-                            <TaskStatus status={status} />
-                            <TaskCompletionRuleIcon completionRule={completion_rule} />
                         </div>
                         <div className="bcs-Task-assigneeListContainer">
                             <AssigneeList
