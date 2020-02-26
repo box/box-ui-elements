@@ -18,6 +18,7 @@ const ItemListButton = ({ contentExplorerMode, id = '', isDisabled = false, isSe
                 isDisabled={isDisabled}
                 label={<FormattedMessage {...messages.selectItem} values={{ name }} />}
                 name="item"
+                readOnly
                 value={id}
             />
         );
