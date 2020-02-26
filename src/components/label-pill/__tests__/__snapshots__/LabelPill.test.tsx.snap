@@ -34,13 +34,13 @@ exports[`components/label-pill/LabelPill should render default DOM with icon com
     >
       <MockIcon
         className="bdl-LabelPill-iconContent"
-        height={10}
-        width={10}
+        height={12}
+        width={12}
       >
         <svg
           className="bdl-LabelPill-iconContent"
-          height={10}
-          width={10}
+          height={12}
+          width={12}
         >
           <g />
         </svg>

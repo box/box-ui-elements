@@ -252,9 +252,14 @@ describe('features/metadata-instance-editor/fields/', () => {
 
     test('componentDidUpdate()', () => {
         const wrapper = getWrapper({ templates: [], usedTemplates: [] });
-        const mockTemplates = { templates: ['test'] };
+        const template = {
+            id: 'test-template1',
+            templateKey: 'test-template1',
+            displayName: 'test-template1 title',
+        };
+        const mockTemplates = { templates: [template] };
 
         wrapper.setProps(mockTemplates);
-        expect(wrapper.state('templates')).toEqual(['test']);
+        expect(wrapper.state('templates')).toEqual([template]);
     });
 });
