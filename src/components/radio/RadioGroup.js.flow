@@ -1,8 +1,6 @@
 // @flow
 import * as React from 'react';
 
-import RadioButton from './RadioButton';
-
 type Props = {
     children: React.Node,
     className: string,
@@ -52,9 +50,12 @@ class RadioGroup extends React.Component<Props, State> {
         return (
             <div className={`radio-group ${className}`} onChange={this.onChangeHandler}>
                 {React.Children.map(children, radio => {
-                    const { value, ...rest } = radio.props;
+                    const { value } = radio.props;
 
-                    return <RadioButton isSelected={value === stateValue} name={name} value={value} {...rest} />;
+                    return React.cloneElement(radio, {
+                        name,
+                        isSelected: value === stateValue,
+                    });
                 })}
             </div>
         );
