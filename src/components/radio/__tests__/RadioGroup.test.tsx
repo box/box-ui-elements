@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 
@@ -11,20 +11,26 @@ describe('components/radio/RadioGroup', () => {
         sandbox.verifyAndRestore();
     });
 
-    const renderRadioButtons = (onChange?: Function) =>
-        mount(
+    const renderRadioButtons = (onChange?: Function, children?: Array<React.ReactElement> | React.ReactElement) => {
+        children = children || [
+            <RadioButton
+                key="1"
+                data-resin-target="resin1"
+                description="radio1desc"
+                label="Radio Button 1"
+                value="radio1"
+            />,
+            <RadioButton key="2" label="Radio Button 2" value="radio2" />,
+            <RadioButton key="3" description="radio3desc" label="Radio Button 3" value="radio3" />,
+            <RadioButton key="4" label="Radio Button 4" value="radio4" />,
+        ];
+
+        return mount(
             <RadioGroup name="radiogroup" onChange={onChange} value="radio3">
-                <RadioButton
-                    data-resin-target="resin1"
-                    description="radio1desc"
-                    label="Radio Button 1"
-                    value="radio1"
-                />
-                <RadioButton label="Radio Button 2" value="radio2" />
-                <RadioButton description="radio3desc" label="Radio Button 3" value="radio3" />
-                <RadioButton label="Radio Button 4" value="radio4" />
+                {children}
             </RadioGroup>,
         );
+    };
 
     test('should correctly render component with radio buttons', () => {
         const component = renderRadioButtons();
@@ -120,5 +126,29 @@ describe('components/radio/RadioGroup', () => {
                 .at(3)
                 .prop('checked'),
         ).toEqual(true);
+    });
+
+    test('should preserve radio button component type and props', () => {
+        const radioButtonProps = {
+            'data-resin-target': 'resinTarget',
+            description: 'description',
+            label: 'label',
+            randomProp: true,
+            value: 'radio3',
+        };
+
+        const CustomRadioButton = () => <span />;
+        const component = renderRadioButtons(jest.fn(), <CustomRadioButton {...radioButtonProps} />);
+
+        expect(
+            component
+                .find(CustomRadioButton)
+                .at(0)
+                .props(),
+        ).toEqual({
+            ...radioButtonProps,
+            isSelected: true,
+            name: 'radiogroup',
+        });
     });
 });
