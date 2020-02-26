@@ -1,9 +1,10 @@
 import React from 'react';
 import sinon from 'sinon';
-import '@formatjs/intl-relativetimeformat/polyfill';
-import '@formatjs/intl-relativetimeformat/dist/locale-data/en';
-
+import 'full-icu';
 import { createIntl } from 'react-intl';
+import russianMessages from '../../../../i18n/ru-RU.js';
+import japaneseMessages from '../../../../i18n/ja-JP.js';
+
 import { ReadableTimeComponent as ReadableTime } from '../ReadableTime';
 
 jest.unmock('react-intl');
@@ -71,11 +72,9 @@ describe('components/time/ReadableTime', () => {
         const wrapper = shallow(<ReadableTime intl={intl} timestamp={withinRelativeThresholdAhead} />);
         expect(wrapper).toMatchSnapshot();
     });
-    test('should not uppercase locales that do not have uppercase grammar', () => {
-        const ruIntl = createIntl({ locale: 'ru', messages: {} });
-        // [React Intl] Missing locale data for locale: "ru". Using default locale: "en" as fallback.
-        // workaround manual set value
-        ruIntl.locale = 'ru';
+    test('should not uppercase locales that do not have uppercase grammar (e.g. russian)', () => {
+        const ruIntl = createIntl({ locale: 'ru', messages: russianMessages });
+
         const wrapperUppercase = mount(
             <ReadableTime intl={ruIntl} timestamp={withinRelativeThresholdAhead} uppercase />,
         );
@@ -84,5 +83,17 @@ describe('components/time/ReadableTime', () => {
         );
 
         expect(wrapperUppercase.text()).toEqual(wrapperLowercase.text());
+    });
+    test('CJK languages should look the same for uppercase and lowercase (e.g. japanese)', () => {
+        const jaIntl = createIntl({ locale: 'ja', messages: japaneseMessages });
+
+        const wrapperUppercaseJa = mount(
+            <ReadableTime intl={jaIntl} timestamp={withinRelativeThresholdAhead} uppercase />,
+        );
+        const wrapperLowercaseJa = mount(
+            <ReadableTime intl={jaIntl} timestamp={withinRelativeThresholdAhead} uppercase={false} />,
+        );
+
+        expect(wrapperUppercaseJa.text()).toEqual(wrapperLowercaseJa.text());
     });
 });
