@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 import { TASK_COMPLETION_RULE_ALL, TASK_COMPLETION_RULE_ANY, TASK_NEW_IN_PROGRESS } from '../../../../../constants';
-import IconAnyTask from '../../../../../icons/general/IconAnyTask';
+
+import Avatar16 from '../../../../../icon/line/Avatar16';
+
 import TaskCompletionRuleIcon from '../TaskCompletionRuleIcon';
 
 const getWrapper = props => mount(<TaskCompletionRuleIcon {...props} />);
@@ -18,6 +20,6 @@ describe('elements/content-sidebar/ActivityFeed/task-new/TaskCompletionRuleIcon'
             completionRule,
         });
 
-        expect(wrapper.find(IconAnyTask).length).toBe(iconLength);
+        expect(wrapper.find(Avatar16).length).toBe(iconLength);
     });
 });

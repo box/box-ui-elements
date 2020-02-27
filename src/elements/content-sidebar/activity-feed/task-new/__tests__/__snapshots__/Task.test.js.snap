@@ -85,19 +85,11 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       <div
         className="bcs-Task-headline"
       >
-        <FormattedMessage
-          defaultMessage="{user} assigned you a Task"
-          id="be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineGeneralCurrentUser"
-          values={
-            Object {
-              "user": <UserLink
-                data-resin-target="activityfeed-profilelink"
-                id="1"
-                name="Jake Thomas"
-                type="user"
-              />,
-            }
-          }
+        <UserLink
+          data-resin-target="activityfeed-profilelink"
+          id="1"
+          name="Jake Thomas"
+          type="user"
         />
       </div>
       <div>
@@ -105,22 +97,25 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
           date={1262304000000}
         />
       </div>
-      <div>
-        <ActivityMessage
-          id="123125"
-          tagged_message="This is where we tell each other what we need to do"
-          translationEnabled={false}
-          translationFailed={null}
-        />
-      </div>
       <div
-        className="bcs-Task-statusContainer"
+        className="bcs-Task-status"
       >
         <Memo()
           status="NOT_STARTED"
         />
         <TaskCompletionRuleIcon
           completionRule="ALL_ASSIGNEES"
+        />
+      </div>
+      <div
+        className="bcs-Task-dueDate"
+      />
+      <div>
+        <ActivityMessage
+          id="123125"
+          tagged_message="This is where we tell each other what we need to do"
+          translationEnabled={false}
+          translationFailed={null}
         />
       </div>
       <div

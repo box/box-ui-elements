@@ -37,6 +37,7 @@ describe('elements/content-sidebar/ActivityFeed/Avatar', () => {
         wrapper.instance().getAvatarUrlHandler('foo');
         wrapper.update();
         expect(wrapper).toMatchSnapshot();
+        expect(wrapper.instance().isMounted).toBe(true);
     });
 
     test('should set the avatarUrl state by calling getAvatarUrl function prop', () => {
@@ -50,23 +51,19 @@ describe('elements/content-sidebar/ActivityFeed/Avatar', () => {
             });
     });
 
-    test('should set the avatarUrl state from user prop', () => {
+    test('should set the avatarUrl state from user prop', async () => {
         const completeUser = { ...user, avatar_url: 'bar' };
         const wrapper = getWrapper({ user: completeUser });
         expect(wrapper.state('avatarUrl')).toBe(null);
-        wrapper
-            .instance()
-            .getAvatarUrl()
-            .then(() => {
-                expect(wrapper.state('avatarUrl')).toBe('bar');
-            });
+        await wrapper.instance().getAvatarUrl();
+        expect(wrapper.state('avatarUrl')).toBe('bar');
         expect(getAvatarUrl).not.toBeCalledWith(user.id);
     });
 
-    test('should set the avatarUrl state from user prop', () => {
+    test('should set the avatarUrl state from user prop', async () => {
         const wrapper = getWrapper({ user });
         expect(wrapper.state('avatarUrl')).toBe(null);
-        wrapper.instance().getAvatarUrl();
+        await wrapper.instance().getAvatarUrl();
         wrapper.update();
         expect(getAvatarUrl).not.toBeCalledWith(user.id);
         expect(wrapper.dive()).toMatchSnapshot();

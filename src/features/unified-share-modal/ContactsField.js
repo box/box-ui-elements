@@ -93,6 +93,7 @@ class ContactsField extends React.Component<Props, State> {
                 )
                 .map<Object>(({ email, id, isExternalUser, name, type }) => ({
                     // map to standardized DatalistItem format
+                    // TODO: refactor this so inline conversions aren't required at every usage
                     email,
                     id,
                     isExternalUser,
