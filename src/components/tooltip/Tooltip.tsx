@@ -231,6 +231,9 @@ class Tooltip extends React.Component<TooltipProps, State> {
 
         if (showTooltip) {
             componentProps['aria-describedby'] = this.tooltipID;
+            if (theme === TooltipTheme.ERROR) {
+                componentProps['aria-errormessage'] = this.tooltipID;
+            }
         }
         if (!isControlled) {
             componentProps.onBlur = this.handleBlur;
@@ -266,7 +269,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             <TetherComponent ref={this.tetherRef} {...tetherProps}>
                 {React.cloneElement(React.Children.only(children) as React.ReactElement, componentProps)}
                 {showTooltip && (
-                    <div className={classes} id={this.tooltipID} role="tooltip">
+                    <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite">
                         {text}
                         {withCloseButton && (
                             <PlainButton className="tooltip-close-button" onClick={this.closeTooltip}>
