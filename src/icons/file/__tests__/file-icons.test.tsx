@@ -1,4 +1,5 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
 import IconFileAudio from '../IconFileAudio';
 import IconFileBoxNote from '../IconFileBoxNote';
