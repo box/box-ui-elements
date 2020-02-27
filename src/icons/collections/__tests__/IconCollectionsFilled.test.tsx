@@ -1,9 +1,10 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
-import IconCollectionsAdd from '../IconCollectionsAdd';
+import IconCollectionsFilled from '../IconCollectionsFilled';
 
-describe('icons/collections/IconCollectionsAdd', () => {
-    const getWrapper = (props = {}) => shallow(<IconCollectionsAdd {...props} />);
+describe('icons/collections/IconCollectionsFilled', () => {
+    const getWrapper = (props = {}) => shallow(<IconCollectionsFilled {...props} />);
 
     test('should correctly render default icon', () => {
         const wrapper = getWrapper();
