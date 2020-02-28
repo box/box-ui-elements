@@ -26,7 +26,7 @@ export enum TooltipPosition {
     TOP_RIGHT = 'top-right',
 }
 
-export type TooltipCustomPostion = {
+export type TooltipCustomPosition = {
     attachment: TetherPosition;
     targetAttachment: TetherPosition;
 };
@@ -85,7 +85,7 @@ export interface TooltipProps {
     /** Function called if the user manually dismisses the tooltip - only applies if showCloseButton is true */
     onDismiss?: () => void;
     /** Where to position the tooltip relative to the wrapped component */
-    position: TooltipPosition | TooltipCustomPostion;
+    position: TooltipPosition | TooltipCustomPosition;
     /** Shows an X button to close the tooltip. Useful when tooltips are force shown with the isShown prop. */
     showCloseButton?: boolean;
     /** Text to show in the tooltip */
