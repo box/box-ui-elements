@@ -1,25 +1,26 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
-import IconAllFiles from '../IconAllFiles';
+import IconAdd from '../IconAdd';
 
-describe('icons/general/IconAllFiles', () => {
+describe('icons/general/IconAdd', () => {
     test('should correctly render default icon', () => {
-        const wrapper = shallow(<IconAllFiles />);
+        const wrapper = shallow(<IconAdd />);
 
-        expect(wrapper.hasClass('icon-all-files')).toEqual(true);
+        expect(wrapper.hasClass('bdl-IconAdd')).toEqual(true);
     });
 
     test('should correctly render icon with specified color', () => {
         const color = '#ffffff';
-        const wrapper = shallow(<IconAllFiles color={color} />);
+        const wrapper = shallow(<IconAdd color={color} />);
 
-        expect(wrapper.find('g').prop('fill')).toEqual(color);
+        expect(wrapper.find('path').prop('fill')).toEqual(color);
     });
 
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconAllFiles height={height} width={width} />);
+        const wrapper = shallow(<IconAdd height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);
@@ -27,7 +28,7 @@ describe('icons/general/IconAllFiles', () => {
 
     test('should correctly render icon with title', () => {
         const title = 'fool';
-        const wrapper = shallow(<IconAllFiles title={title} />);
+        const wrapper = shallow(<IconAdd title={title} />);
 
         expect(wrapper.find('AccessibleSVG').prop('title')).toEqual(title);
     });

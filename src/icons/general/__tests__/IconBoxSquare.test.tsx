@@ -1,4 +1,5 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
 import { bdlBoxBlue, white } from '../../../styles/variables';
 import IconBoxSquare from '../IconBoxSquare';
