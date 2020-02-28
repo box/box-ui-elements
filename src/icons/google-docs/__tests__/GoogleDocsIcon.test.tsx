@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { shallow } from 'enzyme';
 import GoogleDocsIcon from '../GoogleDocsIcon';
 
 describe('icons/google-docs/GoogleDocsIcon', () => {

@@ -1,15 +1,15 @@
 import React from 'react';
+import { shallow } from 'enzyme';
+import IconIWorkKeynote from '../IconIWorkKeynote';
 
-import IconIWorkNumbers from '../IconIWorkNumbers';
-
-describe('icons/iwork/IconIWorkNumbers', () => {
-    const getWrapper = (props = {}) => shallow(<IconIWorkNumbers {...props} />);
+describe('icons/iwork/IconIWorkKeynote', () => {
+    const getWrapper = (props = {}) => shallow(<IconIWorkKeynote {...props} />);
 
     test('should correctly render default icon', () => {
         const wrapper = getWrapper();
 
         expect(wrapper.is('AccessibleSVG')).toBe(true);
-        expect(wrapper.hasClass('icon-iwork-numbers')).toBe(true);
+        expect(wrapper.hasClass('icon-iwork-keynote')).toBe(true);
         expect(wrapper.prop('height')).toEqual(30);
         expect(wrapper.prop('width')).toEqual(30);
     });

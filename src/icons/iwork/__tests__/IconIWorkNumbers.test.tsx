@@ -1,15 +1,15 @@
 import React from 'react';
+import { shallow } from 'enzyme';
+import IconIWorkNumbers from '../IconIWorkNumbers';
 
-import IconGoogleDocs from '../IconGoogleDocs';
-
-describe('icons/google-docs/IconGoogleDocs', () => {
-    const getWrapper = (props = {}) => shallow(<IconGoogleDocs {...props} />);
+describe('icons/iwork/IconIWorkNumbers', () => {
+    const getWrapper = (props = {}) => shallow(<IconIWorkNumbers {...props} />);
 
     test('should correctly render default icon', () => {
         const wrapper = getWrapper();
 
         expect(wrapper.is('AccessibleSVG')).toBe(true);
-        expect(wrapper.hasClass('icon-google-docs')).toBe(true);
+        expect(wrapper.hasClass('icon-iwork-numbers')).toBe(true);
         expect(wrapper.prop('height')).toEqual(30);
         expect(wrapper.prop('width')).toEqual(30);
     });

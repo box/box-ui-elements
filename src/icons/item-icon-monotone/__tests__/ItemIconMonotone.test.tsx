@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { shallow } from 'enzyme';
 import ItemIconMonotone from '../ItemIconMonotone';
 
 describe('icons/item-icon-monotone/ItemIconMonotone', () => {

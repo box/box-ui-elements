@@ -1,4 +1,5 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
 import IconFolderCollab from '../IconFolderCollab';
 import IconFolderExternal from '../IconFolderExternal';
