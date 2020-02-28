@@ -189,9 +189,9 @@ const allSections = [
             {
                 name: 'Microsoft Office',
                 components: () => [
-                    '../src/icons/microsoft-office/IconOfficeWordmark.js',
-                    '../src/icons/microsoft-office/OfficeOnlineIcon.js',
-                    '../src/icons/microsoft-office/OfficeDesktopIcon.js',
+                    '../src/icons/microsoft-office/IconOfficeWordmark.tsx',
+                    '../src/icons/microsoft-office/OfficeOnlineIcon.tsx',
+                    '../src/icons/microsoft-office/OfficeDesktopIcon.tsx',
                 ],
             },
             {
