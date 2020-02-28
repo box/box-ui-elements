@@ -13,6 +13,6 @@ describe('elements/content-sidebar/ActivityFeed/task-new/TaskDueDate', () => {
     test('should add proper class when past due date', () => {
         const dueDate = shallow(<TaskDueDate dueDate={new Date() - 1000} status="NOT_STARTED" />);
 
-        expect(dueDate.find('.bcs-is-taskOverdue')).toHaveLength(1);
+        expect(dueDate.find('[data-testid="task-overdue-date"]')).toHaveLength(1);
     });
 });
