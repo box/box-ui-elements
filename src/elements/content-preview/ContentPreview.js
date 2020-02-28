@@ -100,6 +100,7 @@ type Props = {
     WithLoggerProps;
 
 type State = {
+    canPrint?: boolean,
     currentFileId?: string,
     error?: ErrorType,
     file?: BoxItem,
@@ -177,6 +178,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
     updateVersionToCurrent: ?() => void;
 
     initialState: State = {
+        canPrint: false,
         error: undefined,
         isReloadNotificationVisible: false,
         isThumbnailSidebarOpen: false,
@@ -646,6 +648,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
         if (this.preview && filesToPrefetch.length > 1) {
             this.prefetch(filesToPrefetch);
         }
+
+        this.handleCanPrint();
     };
 
     /**
@@ -684,6 +688,14 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const hasViewAllPermissions = getProp(file, 'permissions.can_view_annotations_all', false);
         const hasViewSelfPermissions = getProp(file, 'permissions.can_view_annotations_self', false);
         return !!showAnnotations && (this.canAnnotate() || hasViewAllPermissions || hasViewSelfPermissions);
+    }
+
+    handleCanPrint() {
+        const preview = this.getPreview();
+
+        if (preview?.canPrint && typeof preview.canPrint === 'function') {
+            this.setState({ canPrint: preview.canPrint() });
+        }
     }
 
     /**
@@ -1132,6 +1144,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }: Props = this.props;
 
         const {
+            canPrint,
             error,
             file,
             isReloadNotificationVisible,
@@ -1170,6 +1183,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                             onClose={onHeaderClose}
                             onPrint={this.print}
                             canDownload={this.canDownload()}
+                            canPrint={canPrint}
                             onDownload={this.download}
                             contentOpenWithProps={contentOpenWithProps}
                             canAnnotate={this.canAnnotate()}
