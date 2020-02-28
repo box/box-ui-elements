@@ -1,9 +1,9 @@
 import React from 'react';
+import { shallow } from 'enzyme';
+import BoxDriveSyncIllustration from '../BoxDriveSyncIllustration';
 
-import FileCircleIllustration from '../FileCircleIllustration';
-
-describe('icons/illustrations/FileCircleIllustration', () => {
-    const getWrapper = (props = {}) => shallow(<FileCircleIllustration {...props} />);
+describe('icons/illustrations/BoxDriveSyncIllustration', () => {
+    const getWrapper = (props = {}) => shallow(<BoxDriveSyncIllustration {...props} />);
 
     test('should correctly render default component', () => {
         const wrapper = getWrapper();

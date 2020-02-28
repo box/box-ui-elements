@@ -1,9 +1,9 @@
 import React from 'react';
+import { shallow } from 'enzyme';
+import FolderCircleIllustration from '../FolderCircleIllustration';
 
-import AcrossDevicesIllustration from '../AcrossDevicesIllustration';
-
-describe('icons/illustrations/AcrossDevicesIllustration', () => {
-    const getWrapper = (props = {}) => shallow(<AcrossDevicesIllustration {...props} />);
+describe('icons/illustrations/FolderCircleIllustration', () => {
+    const getWrapper = (props = {}) => shallow(<FolderCircleIllustration {...props} />);
 
     test('should correctly render default component', () => {
         const wrapper = getWrapper();

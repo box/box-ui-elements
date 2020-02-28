@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { shallow } from 'enzyme';
 import IWorkIcon from '../IWorkIcon';
 
 describe('icons/iwork/IWorkIcon', () => {

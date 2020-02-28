@@ -1,9 +1,9 @@
 import React from 'react';
+import { shallow } from 'enzyme';
+import PeopleOpeningEnvelopeIllustration from '../PeopleOpeningEnvelopeIllustration';
 
-import CloudFileLaptopIllustration from '../CloudFileLaptopIllustration';
-
-describe('icons/illustrations/CloudFileLaptopIllustration', () => {
-    const getWrapper = (props = {}) => shallow(<CloudFileLaptopIllustration {...props} />);
+describe('icons/Illustrations/PeopleOpeningEnvelopeIllustration', () => {
+    const getWrapper = (props = {}) => shallow(<PeopleOpeningEnvelopeIllustration {...props} />);
 
     test('should correctly render default component', () => {
         const wrapper = getWrapper();

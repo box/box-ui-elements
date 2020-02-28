@@ -1,9 +1,9 @@
 import React from 'react';
+import { shallow } from 'enzyme';
+import CloudFileLaptopIllustration from '../CloudFileLaptopIllustration';
 
-import BoxDriveSyncIllustration from '../BoxDriveSyncIllustration';
-
-describe('icons/illustrations/BoxDriveSyncIllustration', () => {
-    const getWrapper = (props = {}) => shallow(<BoxDriveSyncIllustration {...props} />);
+describe('icons/illustrations/CloudFileLaptopIllustration', () => {
+    const getWrapper = (props = {}) => shallow(<CloudFileLaptopIllustration {...props} />);
 
     test('should correctly render default component', () => {
         const wrapper = getWrapper();
