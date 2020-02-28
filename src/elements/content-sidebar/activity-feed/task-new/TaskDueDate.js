@@ -1,17 +1,15 @@
 // @flow
 import * as React from 'react';
-import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
 import messages from './messages';
+// $FlowFixMe LabelPill is in typescript
+import LabelPill from '../../../../components/label-pill';
 import { ReadableTime } from '../../../../components/time';
-
 import { TASK_NEW_NOT_STARTED } from '../../../../constants';
 
 import type { TaskStatus } from '../../../../common/types/tasks';
 import type { ISODate } from '../../../../common/types/core';
-
-import './TaskDueDate.scss';
 
 type Props = {
     dueDate: ISODate,
@@ -21,20 +19,19 @@ type Props = {
 const TaskDueDate = ({ dueDate, status }: Props): React.Node => {
     const isOverdue = dueDate ? status === TASK_NEW_NOT_STARTED && new Date(dueDate) < Date.now() : false;
     const fullDueDate = new Date(dueDate);
-
+    const pillProps = isOverdue ? { 'data-testid': 'task-overdue-date', type: 'error' } : { type: 'default' };
     return (
-        <div
-            className={classNames('bcs-TaskDueDate', {
-                'bcs-is-taskOverdue': isOverdue,
-            })}
-            data-testid="task-due-date"
-        >
-            <FormattedMessage
-                {...messages.taskDueDateLabel}
-                values={{
-                    date: <ReadableTime alwaysShowTime timestamp={fullDueDate.getTime()} />,
-                }}
-            />
+        <div data-testid="task-due-date">
+            <LabelPill.Pill {...pillProps}>
+                <LabelPill.Text>
+                    <FormattedMessage
+                        {...messages.taskFeedStatusDue}
+                        values={{
+                            dateTime: <ReadableTime alwaysShowTime uppercase timestamp={fullDueDate.getTime()} />,
+                        }}
+                    />
+                </LabelPill.Text>
+            </LabelPill.Pill>
         </div>
     );
 };
