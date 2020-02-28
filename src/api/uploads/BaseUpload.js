@@ -18,6 +18,8 @@ class BaseUpload extends Base {
 
     fileName: string;
 
+    fileDescription: ?string;
+
     folderId: string;
 
     overwrite: boolean;
@@ -49,6 +51,7 @@ class BaseUpload extends Base {
         const attributes = {
             name: this.fileName || name,
             parent: { id: this.folderId },
+            description: this.fileDescription,
             size,
         };
 
