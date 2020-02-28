@@ -36,6 +36,7 @@ describe('api/uploads/BaseUpload', () => {
                 name: 'zavala',
             };
             upload.folderId = '123';
+            upload.fileDescription = 'ronaldo';
             upload.xhr = {
                 options: jest.fn(),
             };
@@ -49,6 +50,7 @@ describe('api/uploads/BaseUpload', () => {
                         id: upload.folderId,
                     },
                     size: upload.file.size,
+                    description: upload.fileDescription,
                 },
                 successHandler: upload.preflightSuccessHandler,
                 errorHandler: upload.preflightErrorHandler,
