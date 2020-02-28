@@ -77,6 +77,7 @@ class PlainUpload extends BaseUpload {
         const attributes = JSON.stringify({
             name: this.fileName,
             parent: { id: this.folderId },
+            description: this.fileDescription,
             content_modified_at: getFileLastModifiedAsISONoMSIfPossible(this.file),
         });
 
@@ -121,6 +122,7 @@ class PlainUpload extends BaseUpload {
         folderId,
         fileId,
         file,
+        fileDescription,
         successCallback = noop,
         errorCallback = noop,
         progressCallback = noop,
@@ -128,6 +130,7 @@ class PlainUpload extends BaseUpload {
     }: {
         errorCallback: Function,
         file: File,
+        fileDescription: ?string,
         fileId: ?string,
         folderId: string,
         overwrite: boolean,
@@ -142,6 +145,7 @@ class PlainUpload extends BaseUpload {
         this.folderId = folderId;
         this.fileId = fileId;
         this.file = file;
+        this.fileDescription = fileDescription;
         this.fileName = this.file.name;
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
