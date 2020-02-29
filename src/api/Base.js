@@ -85,6 +85,7 @@ class Base {
      * @param {string} [options.sharedLinkPassword] - Shared link password
      * @param {string} [options.apiHost] - Api host
      * @param {string} [options.uploadHost] - Upload host name
+     * @param {string} [options.apiVersion] - optional api Version
      * @return {Base} Base instance
      */
     constructor(options: APIOptions) {
@@ -143,7 +144,8 @@ class Base {
      * @return {string} base url
      */
     getBaseApiUrl(): string {
-        const suffix: string = this.apiHost.endsWith('/') ? '2.0' : '/2.0';
+        const apiVersion = this.options.apiVersion || '2.0';
+        const suffix: string = this.apiHost.endsWith('/') ? apiVersion : `/${apiVersion}`;
         return `${this.apiHost}${suffix}`;
     }
 
@@ -153,7 +155,8 @@ class Base {
      * @return {string} base url
      */
     getBaseUploadUrl(): string {
-        const suffix: string = this.uploadHost.endsWith('/') ? 'api/2.0' : '/api/2.0';
+        const apiVersion = this.options.apiVersion || '2.0';
+        const suffix: string = this.uploadHost.endsWith('/') ? `api/${apiVersion}` : `/api/${apiVersion}`;
         return `${this.uploadHost}${suffix}`;
     }
 

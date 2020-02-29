@@ -94,6 +94,23 @@ describe('api/Base', () => {
             });
             expect(base.getBaseApiUrl()).toBe('apiHost/2.0');
         });
+        describe('with optional apiVersion', () => {
+            const apiVersion = '2.1';
+            test('should return correct api url', () => {
+                base = new Base({
+                    apiHost: 'apiHost',
+                    apiVersion,
+                });
+                expect(base.getBaseApiUrl()).toBe(`apiHost/${apiVersion}`);
+            });
+            test('should return correct api url with trailing /', () => {
+                base = new Base({
+                    apiHost: 'apiHost/',
+                    apiVersion,
+                });
+                expect(base.getBaseApiUrl()).toBe(`apiHost/${apiVersion}`);
+            });
+        });
     });
 
     describe('getBaseUploadUrl()', () => {
@@ -108,6 +125,23 @@ describe('api/Base', () => {
                 uploadHost: 'uploadHost/',
             });
             expect(base.getBaseUploadUrl()).toBe('uploadHost/api/2.0');
+        });
+        describe('with optional apiVersion', () => {
+            const apiVersion = '2.1';
+            test('should return correct api upload url', () => {
+                base = new Base({
+                    uploadHost: 'uploadHost',
+                    apiVersion,
+                });
+                expect(base.getBaseUploadUrl()).toBe(`uploadHost/api/${apiVersion}`);
+            });
+            test('should return correct api upload url with trailing /', () => {
+                base = new Base({
+                    uploadHost: 'uploadHost/',
+                    apiVersion,
+                });
+                expect(base.getBaseUploadUrl()).toBe(`uploadHost/api/${apiVersion}`);
+            });
         });
     });
 
