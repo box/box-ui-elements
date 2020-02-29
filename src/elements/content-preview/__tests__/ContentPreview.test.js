@@ -192,6 +192,16 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(canPrintMock).toBeCalled();
             expect(wrapper.state('canPrint')).toEqual(expected);
         });
+
+        it('should show print icon if printCheck is not available', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            wrapper.setState({ file });
+            instance.handleCanPrint();
+
+            expect(wrapper.state('canPrint')).toEqual(true);
+        });
     });
 
     describe('loadPreview()', () => {
