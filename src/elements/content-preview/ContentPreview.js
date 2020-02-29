@@ -693,7 +693,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
     handleCanPrint() {
         const preview = this.getPreview();
 
-        if (preview?.canPrint && typeof preview.canPrint === 'function') {
+        if (preview && typeof preview.canPrint === 'function') {
             this.setState({ canPrint: preview.canPrint() });
         }
     }
