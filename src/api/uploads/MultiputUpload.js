@@ -208,6 +208,7 @@ class MultiputUpload extends BaseMultiput {
      */
     upload({
         file,
+        fileDescription,
         folderId,
         errorCallback,
         progressCallback,
@@ -217,6 +218,7 @@ class MultiputUpload extends BaseMultiput {
     }: {
         errorCallback?: Function,
         file: File,
+        fileDescription: ?string,
         fileId: ?string,
         folderId: string,
         overwrite?: boolean,
@@ -239,6 +241,7 @@ class MultiputUpload extends BaseMultiput {
 
         this.overwrite = overwrite;
         this.fileId = fileId;
+        this.fileDescription = fileDescription;
 
         this.makePreflightRequest();
     }
@@ -920,6 +923,9 @@ class MultiputUpload extends BaseMultiput {
         const fileLastModified = getFileLastModifiedAsISONoMSIfPossible(this.file);
         if (fileLastModified) {
             data.attributes.content_modified_at = fileLastModified;
+        }
+        if (this.fileDescription) {
+            data.attributes.description = this.fileDescription;
         }
 
         const clientEventInfo = {
