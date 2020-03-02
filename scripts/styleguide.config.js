@@ -164,7 +164,7 @@ const allSections = [
             },
             {
                 name: 'Google Docs',
-                components: '../src/icons/google-docs/GoogleDocsIcon.js',
+                components: '../src/icons/google-docs/GoogleDocsIcon.tsx',
             },
             {
                 name: 'Illustrations',
@@ -172,14 +172,14 @@ const allSections = [
             },
             {
                 name: 'Items',
-                components: ['../src/icons/item-icon/ItemIcon.js'],
+                components: ['../src/icons/item-icon/ItemIcon.tsx'],
             },
             {
                 name: 'iWork',
                 components: () => [
-                    '../src/icons/iwork/IconIWorkTrio.js',
-                    '../src/icons/iwork/IWorkIcon.js',
-                    '../src/icons/iwork/IWorkDesktopIcon.js',
+                    '../src/icons/iwork/IconIWorkTrio.tsx',
+                    '../src/icons/iwork/IWorkIcon.tsx',
+                    '../src/icons/iwork/IWorkDesktopIcon.tsx',
                 ],
             },
             {
@@ -189,9 +189,9 @@ const allSections = [
             {
                 name: 'Microsoft Office',
                 components: () => [
-                    '../src/icons/microsoft-office/IconOfficeWordmark.js',
-                    '../src/icons/microsoft-office/OfficeOnlineIcon.js',
-                    '../src/icons/microsoft-office/OfficeDesktopIcon.js',
+                    '../src/icons/microsoft-office/IconOfficeWordmark.tsx',
+                    '../src/icons/microsoft-office/OfficeOnlineIcon.tsx',
+                    '../src/icons/microsoft-office/OfficeDesktopIcon.tsx',
                 ],
             },
             {
