@@ -643,7 +643,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         onLoad(loadData);
         this.focusPreview();
-        if (this.preview && filesToPrefetch.length > 1) {
+        if (this.preview && filesToPrefetch.length) {
             this.prefetch(filesToPrefetch);
         }
     };
