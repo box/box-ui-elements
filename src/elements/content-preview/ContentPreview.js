@@ -690,24 +690,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         return !!showAnnotations && (this.canAnnotate() || hasViewAllPermissions || hasViewSelfPermissions);
     }
 
-    /**
-     * Returns whether a preview viewer supports printing
-     *
-     * @return {boolean}
-     */
     handleCanPrint() {
-        /*
-        Setting this as default so older preview versions can still print documents without having the
-        default state have the print icon.
-         */
-        let canPrint = true;
         const preview = this.getPreview();
-
-        if (preview && typeof preview.canPrint === 'function') {
-            canPrint = preview.canPrint();
-        }
-
-        return this.setState({ canPrint });
+        this.setState({ canPrint: !!preview && preview.canPrint && preview.canPrint() });
     }
 
     /**
