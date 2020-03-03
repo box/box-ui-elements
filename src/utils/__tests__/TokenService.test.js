@@ -127,9 +127,11 @@ describe('util/Tokenservice', () => {
 
     describe('getReadTokens()', () => {
         test('should call Tokenservice.getReadToken', () => {
+            const origGetReadToken = Tokenservice.getReadToken;
             Tokenservice.getReadToken = jest.fn();
             return Tokenservice.getReadTokens('file_123', readTokenGenerator).then(() => {
                 expect(Tokenservice.getReadToken).toHaveBeenCalledWith('file_123', readTokenGenerator);
+                Tokenservice.getReadToken = origGetReadToken;
             });
         });
         test('should return a token map', () => {
