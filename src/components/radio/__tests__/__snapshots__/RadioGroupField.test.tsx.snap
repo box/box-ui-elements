@@ -10,7 +10,6 @@ exports[`components/radio/RadioGroupField should render a basic RadioGroup when 
 exports[`components/radio/RadioGroupField should render properly 1`] = `
 <RadioGroup
   className="bdl-CupcakeFlavors"
-  key="value"
   name="Cupcake Flavors"
   onBlur={[Function]}
   onChange={[Function]}

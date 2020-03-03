@@ -9,8 +9,7 @@ const RadioGroupField = ({ field, ...rest }: RadioGroupFieldProps) => {
     if (!field) {
         return <RadioGroupPrimitive value="" {...rest} />;
     }
-    const { value } = field;
-    return <RadioGroupPrimitive key={value} {...field} {...rest} />;
+    return <RadioGroupPrimitive {...field} {...rest} />;
 };
 
 export default RadioGroupField;
