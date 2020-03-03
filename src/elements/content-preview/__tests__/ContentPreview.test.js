@@ -164,6 +164,46 @@ describe('elements/content-preview/ContentPreview', () => {
         });
     });
 
+    describe('handleCanPrint()', () => {
+        beforeEach(() => {
+            file = {
+                id: '123',
+                permissions: {
+                    can_download: true,
+                },
+                is_download_available: true,
+            };
+        });
+        test.each([
+            [true, true],
+            [false, false],
+        ])('should set canPrint to %s when ability to print is %s', (expected, value) => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const canPrintMock = jest.fn().mockReturnValue(value);
+
+            wrapper.setState({ file });
+            instance.preview = {
+                canPrint: canPrintMock,
+            };
+
+            instance.handleCanPrint();
+
+            expect(canPrintMock).toBeCalled();
+            expect(wrapper.state('canPrint')).toEqual(expected);
+        });
+
+        it('should show print icon if printCheck is not available', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.preview = {};
+            wrapper.setState({ file });
+            instance.handleCanPrint();
+
+            expect(wrapper.state('canPrint')).toEqual(true);
+        });
+    });
+
     describe('loadPreview()', () => {
         beforeEach(() => {
             // Fresh global preview object
@@ -565,12 +605,14 @@ describe('elements/content-preview/ContentPreview', () => {
 
         beforeEach(() => {
             props = {
-                token: 'token',
+                collection: [{}, {}],
                 fileId: file.id,
                 onLoad: jest.fn(),
+                token: 'token',
             };
             const wrapper = getWrapper(props);
             instance = wrapper.instance();
+            instance.preview = {};
             instance.focusPreview = jest.fn();
             instance.prefetch = jest.fn();
             instance.getFileIndex = jest.fn().mockReturnValue(0);
@@ -586,6 +628,11 @@ describe('elements/content-preview/ContentPreview', () => {
                     time: totalTimeMetrics,
                 },
             });
+        });
+
+        test('should call prefetch if filesToPrefetch is not empty', () => {
+            instance.onPreviewLoad(data);
+            expect(instance.prefetch).toBeCalled();
         });
     });
 

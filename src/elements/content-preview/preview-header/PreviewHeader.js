@@ -27,6 +27,7 @@ import './PreviewHeader.scss';
 type Props = {
     canAnnotate: boolean,
     canDownload: boolean,
+    canPrint?: boolean,
     contentOpenWithProps?: ContentOpenWithProps,
     file?: BoxItem,
     logoUrl?: string,
@@ -44,6 +45,7 @@ const LoadableContentOpenWith = AsyncLoad({
 const PreviewHeader = ({
     canAnnotate,
     canDownload,
+    canPrint,
     contentOpenWithProps = {},
     file,
     intl,
@@ -113,7 +115,7 @@ const PreviewHeader = ({
                                     </PlainButton>
                                 </>
                             )}
-                            {canDownload && (
+                            {canPrint && (
                                 <PlainButton
                                     aria-label={printMsg}
                                     className="bcpr-PreviewHeader-button"
