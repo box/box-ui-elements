@@ -1,9 +1,10 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
-import IconListView from '../IconListView';
+import IconMail from '../IconMail';
 
-describe('icons/general/IconListView', () => {
-    const getWrapper = (props = {}) => shallow(<IconListView {...props} />);
+describe('icons/general/IconMail', () => {
+    const getWrapper = (props = {}) => shallow(<IconMail {...props} />);
 
     test('should correctly render default icon', () => {
         const wrapper = getWrapper();
@@ -11,12 +12,11 @@ describe('icons/general/IconListView', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render icon with specified props', () => {
+    test('should correctly render icon with additional props', () => {
         const wrapper = getWrapper({
-            className: 'test',
-            color: '#444',
+            className: 'class',
+            color: '#000',
             height: 100,
-            opacity: 0.2,
             title: 'title',
             width: 200,
         });

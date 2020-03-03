@@ -1,13 +1,13 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
-import IconNavigateLeft from '../IconNavigateLeft';
+import IconMetadataThick from '../IconMetadataThick';
 
-describe('icons/general/IconNavigateLeft', () => {
-    const getWrapper = (props = {}) => shallow(<IconNavigateLeft {...props} />);
+describe('icons/general/IconMetadataThick', () => {
+    const getWrapper = (props = {}) => shallow(<IconMetadataThick {...props} />);
 
     test('should correctly render default icon', () => {
         const wrapper = getWrapper();
-
         expect(wrapper).toMatchSnapshot();
     });
 
