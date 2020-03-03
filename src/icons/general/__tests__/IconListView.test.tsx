@@ -1,9 +1,10 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
-import IconMinusThin from '../IconMinusThin';
+import IconListView from '../IconListView';
 
-describe('icons/general/IconMinusThin', () => {
-    const getWrapper = (props = {}) => shallow(<IconMinusThin {...props} />);
+describe('icons/general/IconListView', () => {
+    const getWrapper = (props = {}) => shallow(<IconListView {...props} />);
 
     test('should correctly render default icon', () => {
         const wrapper = getWrapper();
@@ -16,6 +17,7 @@ describe('icons/general/IconMinusThin', () => {
             className: 'test',
             color: '#444',
             height: 100,
+            opacity: 0.2,
             title: 'title',
             width: 200,
         });
