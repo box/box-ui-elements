@@ -193,14 +193,14 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(wrapper.state('canPrint')).toEqual(expected);
         });
 
-        it('should not show print icon if printCheck is not available', () => {
+        it('should show print icon if printCheck is not available', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
-
+            instance.preview = {};
             wrapper.setState({ file });
             instance.handleCanPrint();
 
-            expect(wrapper.state('canPrint')).toEqual(false);
+            expect(wrapper.state('canPrint')).toEqual(true);
         });
     });
 
