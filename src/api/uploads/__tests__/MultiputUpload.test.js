@@ -365,8 +365,12 @@ describe('api/uploads/MultiputUpload', () => {
             multiputUploadTest.getBaseUploadUrlFromPreflightResponse = jest
                 .fn()
                 .mockReturnValueOnce('fupload-ec2usw1.app.box.com');
+            multiputUploadTest.xhr.post = jest.fn().mockReturnValueOnce({ data: {} });
+            multiputUploadTest.createSessionSuccessHandler = jest.fn();
+
             await multiputUploadTest.preflightSuccessHandler();
             expect(multiputUploadTest.config.parallelism).toBe(1);
+            expect(multiputUploadTest.createSessionSuccessHandler).toBeCalledTimes(1);
         });
 
         test('should call createSessionSuccessHandler when the session is created successfully', async () => {
