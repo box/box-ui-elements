@@ -605,12 +605,14 @@ describe('elements/content-preview/ContentPreview', () => {
 
         beforeEach(() => {
             props = {
-                token: 'token',
+                collection: [{}, {}],
                 fileId: file.id,
                 onLoad: jest.fn(),
+                token: 'token',
             };
             const wrapper = getWrapper(props);
             instance = wrapper.instance();
+            instance.preview = {};
             instance.focusPreview = jest.fn();
             instance.prefetch = jest.fn();
             instance.getFileIndex = jest.fn().mockReturnValue(0);
@@ -626,6 +628,11 @@ describe('elements/content-preview/ContentPreview', () => {
                     time: totalTimeMetrics,
                 },
             });
+        });
+
+        test('should call prefetch if filesToPrefetch is not empty', () => {
+            instance.onPreviewLoad(data);
+            expect(instance.prefetch).toBeCalled();
         });
     });
 
