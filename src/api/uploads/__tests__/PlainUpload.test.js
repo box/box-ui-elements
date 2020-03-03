@@ -78,7 +78,7 @@ describe('api/uploads/PlainUpload', () => {
                 name: 'zavala',
             };
             upload.folderId = '123';
-
+            upload.fileDescription = 'ronaldo';
             upload.xhr = {
                 options: jest.fn(),
             };
@@ -92,6 +92,7 @@ describe('api/uploads/PlainUpload', () => {
                         id: upload.folderId,
                     },
                     size: upload.file.size,
+                    description: upload.fileDescription,
                 },
                 successHandler: expect.any(Function),
                 errorHandler: expect.any(Function),
@@ -149,6 +150,7 @@ describe('api/uploads/PlainUpload', () => {
             upload.file = {
                 name: 'warlock',
             };
+            upload.fileDescription = 'ronaldo';
             upload.fileName = 'warlock-152340';
             upload.folderId = '123';
             upload.xhr = {
@@ -159,7 +161,7 @@ describe('api/uploads/PlainUpload', () => {
                 expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
                     url: `${upload.uploadHost}/api/2.0/files/content`,
                     data: {
-                        attributes: `{"name":"warlock-152340","parent":{"id":"123"},"content_modified_at":${MODIFIED_AT}}`,
+                        attributes: `{"name":"${upload.fileName}","parent":{"id":"${upload.folderId}"},"description":"${upload.fileDescription}","content_modified_at":${MODIFIED_AT}}`,
                         file: upload.file,
                     },
                     headers: {
@@ -237,6 +239,7 @@ describe('api/uploads/PlainUpload', () => {
 
         test('should set properties and make preflight request', () => {
             const folderId = '123';
+            const fileDescription = 'ronaldo';
             const file = {};
             const successCallback = () => {};
             const errorCallback = () => {};
@@ -248,6 +251,7 @@ describe('api/uploads/PlainUpload', () => {
             upload.upload({
                 folderId,
                 file,
+                fileDescription,
                 successCallback,
                 errorCallback,
                 progressCallback,
@@ -256,6 +260,7 @@ describe('api/uploads/PlainUpload', () => {
 
             expect(upload.folderId).toBe(folderId);
             expect(upload.file).toBe(file);
+            expect(upload.fileDescription).toBe(fileDescription);
             expect(upload.successCallback).toBe(successCallback);
             expect(upload.errorCallback).toBe(errorCallback);
             expect(upload.progressCallback).toBe(progressCallback);
