@@ -1,30 +1,26 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
-import IconSharedLinkRestricted from '../IconSharedLinkRestricted';
+import IconSync from '../IconSync';
 
-describe('icons/general/IconSharedLinkRestricted', () => {
+describe('icons/general/IconSync', () => {
     test('should correctly render default icon', () => {
-        const wrapper = shallow(<IconSharedLinkRestricted />);
+        const wrapper = shallow(<IconSync />);
 
-        expect(wrapper.hasClass('icon-shared-link-restricted')).toEqual(true);
+        expect(wrapper.hasClass('icon-sync')).toEqual(true);
     });
 
     test('should correctly render icon with specified color', () => {
         const color = '#ffffff';
-        const wrapper = shallow(<IconSharedLinkRestricted color={color} />);
+        const wrapper = shallow(<IconSync color={color} />);
 
-        expect(
-            wrapper
-                .find('g')
-                .at(0)
-                .prop('fill'),
-        ).toEqual(color);
+        expect(wrapper.find('g').prop('stroke')).toEqual(color);
     });
 
     test('should correctly render icon with specified width and height', () => {
         const width = 16;
         const height = 17;
-        const wrapper = shallow(<IconSharedLinkRestricted height={height} width={width} />);
+        const wrapper = shallow(<IconSync height={height} width={width} />);
 
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);
@@ -32,7 +28,7 @@ describe('icons/general/IconSharedLinkRestricted', () => {
 
     test('should correctly render icon with title', () => {
         const title = 'fool';
-        const wrapper = shallow(<IconSharedLinkRestricted title={title} />);
+        const wrapper = shallow(<IconSync title={title} />);
 
         expect(wrapper.find('AccessibleSVG').prop('title')).toEqual(title);
     });
