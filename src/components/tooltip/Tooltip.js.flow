@@ -1,5 +1,11 @@
 // @flow
 import * as React from 'react';
+import { type TetherPosition } from '../../common/tether-positions';
+
+export type CustomPosition = {
+    attachment: TetherPosition,
+    targetAttachment: TetherPosition,
+};
 
 const TOP_CENTER = 'top-center';
 const DEFAULT_THEME = 'default';
@@ -33,7 +39,7 @@ type Props = {
     /** Function called if the user manually dismisses the tooltip - only applies if showCloseButton is true */
     onDismiss?: () => void,
     /** Where to position the tooltip relative to the wrapped component */
-    position: Position,
+    position?: Position | CustomPosition,
     /** Shows an X button to close the tooltip. Useful when tooltips are force shown with the isShown prop. */
     showCloseButton?: boolean,
     /** Text to show in the tooltip */
