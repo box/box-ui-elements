@@ -4,6 +4,7 @@ import * as React from 'react';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import Tooltip, { TooltipPosition, TooltipTheme } from '../Tooltip';
+import TetherPosition from '../../../common/tether-positions';
 
 const sandbox = sinon.sandbox.create();
 
@@ -160,6 +161,21 @@ describe('components/tooltip/Tooltip', () => {
 
             expect(wrapper.prop('attachment')).toEqual('middle left');
             expect(wrapper.prop('targetAttachment')).toEqual('middle right');
+        });
+
+        test('should render correct attachments when custom position is specified', () => {
+            const customPosition = {
+                attachment: TetherPosition.TOP_LEFT,
+                targetAttachment: TetherPosition.BOTTOM_RIGHT,
+            };
+            const wrapper = shallow(
+                <Tooltip position={customPosition} text="hi">
+                    <button />
+                </Tooltip>,
+            );
+
+            expect(wrapper.prop('attachment')).toEqual('top left');
+            expect(wrapper.prop('targetAttachment')).toEqual('bottom right');
         });
 
         test('should render with a specific body element', () => {
