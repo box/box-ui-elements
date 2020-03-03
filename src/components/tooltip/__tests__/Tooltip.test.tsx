@@ -221,6 +221,7 @@ describe('components/tooltip/Tooltip', () => {
             expect(tooltip.is('div')).toBe(true);
             expect(tooltip.hasClass('tooltip')).toBe(true);
             expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
+            expect(component.prop('aria-errormessage')).toBeFalsy();
             expect(tooltip.text()).toEqual('hi');
         });
 
@@ -230,8 +231,12 @@ describe('components/tooltip/Tooltip', () => {
                     <button />
                 </Tooltip>,
             );
+            const component = wrapper.childAt(0);
+            const tooltip = wrapper.childAt(1);
 
             expect(wrapper.find('[role="tooltip"]').hasClass('is-error')).toBe(true);
+            expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
+            expect(component.prop('aria-errormessage')).toEqual(tooltip.prop('id'));
         });
 
         test('should render children only when tooltip is disabled', () => {
