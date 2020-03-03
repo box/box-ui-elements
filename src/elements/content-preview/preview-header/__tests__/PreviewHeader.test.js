@@ -18,4 +18,12 @@ describe('elements/content-preview/preview-header/PreviewHeader', () => {
         expect(wrapper.exists('Logo')).toBe(false);
         expect(wrapper.exists('FileInfo')).toBe(true);
     });
+
+    test.each([
+        [true, true],
+        [false, false],
+    ])(`print button should be %s if canPrint is %s `, (expected, value) => {
+        const wrapper = getWrapper({ canPrint: value });
+        expect(wrapper.exists('[title="Print"]')).toBe(expected);
+    });
 });
