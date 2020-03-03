@@ -397,6 +397,7 @@ describe('util/Xhr', () => {
         });
 
         test('should not retry the request before calling the error interceptor', () => {
+            expect.assertions(3);
             const response = {
                 data: {
                     foo: 'bar',
