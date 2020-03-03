@@ -1,9 +1,10 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
-import IconSecurityClassification from '../IconSecurityClassification';
+import IconSecurityClassificationSolid from '../IconSecurityClassificationSolid';
 
 describe('icons/general/IconSecurityClassification', () => {
-    const getWrapper = (props = {}) => shallow(<IconSecurityClassification {...props} />);
+    const getWrapper = (props = {}) => shallow(<IconSecurityClassificationSolid {...props} />);
 
     test('should correctly render icon with default values', () => {
         const wrapper = getWrapper();

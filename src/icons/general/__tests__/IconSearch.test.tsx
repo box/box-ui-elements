@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import { shallow } from 'enzyme';
 import IconSearch from '../IconSearch';
 import { bdlGray40 } from '../../../styles/variables';
 
