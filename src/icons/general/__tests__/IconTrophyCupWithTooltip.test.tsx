@@ -1,9 +1,10 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
-import IconTrophyCup from '../IconTrophyCup';
+import IconTrophyCupWithTooltip from '../IconTrophyCupWithTooltip';
 
-describe('icons/general/IconTrophyCup', () => {
-    const getWrapper = (props = {}) => shallow(<IconTrophyCup {...props} />);
+describe('icons/general/IconTrophyCupWithTooltip', () => {
+    const getWrapper = (props = {}) => shallow(<IconTrophyCupWithTooltip {...props} />);
 
     test('should correctly render default icon', () => {
         const wrapper = getWrapper();
@@ -13,9 +14,11 @@ describe('icons/general/IconTrophyCup', () => {
     test('should correctly render icon with specified props', () => {
         const wrapper = getWrapper({
             className: 'test',
-            height: 15,
+            height: 27,
             title: 'title',
-            width: 18,
+            tooltipColor: '#6d83ff',
+            tooltipText: 'text',
+            width: 30,
         });
 
         expect(wrapper).toMatchSnapshot();
