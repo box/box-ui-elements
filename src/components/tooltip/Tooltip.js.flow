@@ -46,6 +46,8 @@ type Props = {
     text?: React.Node,
     /** Tooltip theme */
     theme: 'callout' | 'default' | 'error',
+    /** Should click|keypress propagation be stopped */
+    shouldStopEventPropagation?: boolean;
 };
 
 type State = {

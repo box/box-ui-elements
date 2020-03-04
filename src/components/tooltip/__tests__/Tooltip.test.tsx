@@ -256,6 +256,29 @@ describe('components/tooltip/Tooltip', () => {
         });
     });
 
+    describe.each([[true], [false]])('with shouldStopEventPropagation being %o', shouldStopEventPropagation => {
+        describe.each([['click', 'keypress']])('simulate event %o', event => {
+            test('should stop event propagation as configured', () => {
+                const wrapper = shallow(
+                    <Tooltip isShown text="hi" shouldStopEventPropagation={shouldStopEventPropagation}>
+                        <button />
+                    </Tooltip>,
+                );
+                const instance = wrapper.instance();
+                const stop = jest.fn();
+                const nativeStop = jest.fn();
+                wrapper.find('div').simulate(event, {
+                    stopPropagation: stop,
+                    nativeEvent: {
+                        stopImmediatePropagation: nativeStop,
+                    },
+                });
+                expect(stop).toHaveBeenCalledTimes(shouldStopEventPropagation ? 1 : 0);
+                expect(nativeStop).toHaveBeenCalledTimes(shouldStopEventPropagation ? 1 : 0);
+            });
+        });
+    });
+
     describe('closeTooltip()', () => {
         test('should update the wasClosedByUser state', () => {
             const wrapper = shallow<Tooltip>(

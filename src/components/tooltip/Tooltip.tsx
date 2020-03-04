@@ -92,6 +92,8 @@ export interface TooltipProps {
     text?: React.ReactNode;
     /** Tooltip theme */
     theme: TooltipTheme;
+    /** Should click|keypress propagation be stopped */
+    shouldStopEventPropagation?: boolean;
 }
 
 type State = {
@@ -143,6 +145,14 @@ class Tooltip extends React.Component<TooltipProps, State> {
         const handler = (children as React.ReactElement).props[type];
         if (handler) {
             handler(event);
+        }
+    };
+
+    handleTooltipEvent = (event: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>) => {
+        const { shouldStopEventPropagation } = this.props;
+        if (shouldStopEventPropagation) {
+            event.stopPropagation();
+            event.nativeEvent.stopImmediatePropagation();
         }
     };
 
@@ -275,7 +285,15 @@ class Tooltip extends React.Component<TooltipProps, State> {
             <TetherComponent ref={this.tetherRef} {...tetherProps}>
                 {React.cloneElement(React.Children.only(children) as React.ReactElement, componentProps)}
                 {showTooltip && (
-                    <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite">
+                    /* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */
+                    <div
+                        className={classes}
+                        id={this.tooltipID}
+                        role="tooltip"
+                        aria-live="polite"
+                        onClick={this.handleTooltipEvent}
+                        onKeyPress={this.handleTooltipEvent}
+                    >
                         {text}
                         {withCloseButton && (
                             <PlainButton className="tooltip-close-button" onClick={this.closeTooltip}>
