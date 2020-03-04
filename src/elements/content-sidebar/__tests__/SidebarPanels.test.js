@@ -4,29 +4,8 @@ import { MemoryRouter } from 'react-router-dom';
 
 import SidebarPanels from '../SidebarPanels';
 
+// mock lazy imports
 jest.mock('../SidebarUtils');
-// mock lazy import paths onto regular imports
-// jest.mock('../SidebarUtils', () => ({
-//     getAsyncSidebarContent: jest.fn(panelName => {
-//         return {
-//             details: function DetailsSidebar() {
-//                 return <div data-testid="details-sidebar" />;
-//             },
-//             metadata: function MetadataSidebar() {
-//                 return <div data-testid="metadata-sidebar" />;
-//             },
-//             skills: function SkillsSidebar() {
-//                 return <div data-testid="skills-sidebar" />;
-//             },
-//             activity: function ActivitySidebar() {
-//                 return <div data-testid="activity-sidebar" />;
-//             },
-//             versions: function VersionsSidebar() {
-//                 return <div data-testid="versions-sidebar" />;
-//             },
-//         }[panelName];
-//     }),
-// }));
 
 describe('elements/content-sidebar/SidebarPanels', () => {
     const getWrapper = ({ path = '/', ...rest } = {}) =>
