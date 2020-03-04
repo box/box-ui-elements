@@ -3,7 +3,12 @@ import { FieldProps } from 'formik';
 
 import CheckboxPrimitive, { CheckboxProps } from './Checkbox';
 
-const CheckboxField = ({ field, ...rest }: CheckboxProps & FieldProps) => {
+export type CheckboxFieldProps = Partial<FieldProps> & CheckboxProps;
+
+const CheckboxField = ({ field, ...rest }: CheckboxFieldProps) => {
+    if (!field) {
+        return <CheckboxPrimitive {...rest} />;
+    }
     const { value } = field;
     return <CheckboxPrimitive {...field} {...rest} isChecked={!!value} />;
 };

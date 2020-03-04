@@ -13,13 +13,11 @@ const messages = defineMessages({
 });
 
 export interface CheckboxTooltipProps {
-    label: React.ReactNode;
     tooltip: string;
 }
 
-const CheckboxTooltip = ({ label, tooltip }: CheckboxTooltipProps) => (
+const CheckboxTooltip = ({ tooltip }: CheckboxTooltipProps) => (
     <div className="checkbox-tooltip-wrapper">
-        {label}
         <Tooltip text={tooltip}>
             <div className="info-tooltip">
                 <IconInfo

@@ -1,14 +1,14 @@
 import React from 'react';
+import { shallow, ShallowWrapper } from 'enzyme';
 
 import CheckboxTooltip from '../CheckboxTooltip';
 
 describe('components/checkbox/CheckboxTooltip', () => {
-    let wrapper;
+    let wrapper: ShallowWrapper;
     let tooltip;
 
     beforeEach(() => {
-        // eslint-disable-next-line jsx-a11y/label-has-for
-        wrapper = shallow(<CheckboxTooltip label={<label />} tooltip="foobar" />);
+        wrapper = shallow(<CheckboxTooltip tooltip="foobar" />);
         tooltip = wrapper.find('Tooltip');
     });
 
