@@ -21,6 +21,7 @@ type Props = {
     onMenuClose?: (event: SyntheticEvent<>) => void,
     /** Handler for dropdown menu open events */
     onMenuOpen?: () => void,
+    shouldCloseOnEventBubbling?: boolean,
 };
 
 type State = {
@@ -45,10 +46,11 @@ class DropdownMenu extends React.Component<Props, State> {
     };
 
     componentDidUpdate(prevProps: Props, prevState: State) {
+        const { shouldCloseOnEventBubbling } = this.props;
         if (!prevState.isOpen && this.state.isOpen) {
             // When menu is being opened
-            document.addEventListener('click', this.handleDocumentClick);
-            document.addEventListener('contextmenu', this.handleDocumentClick);
+            document.addEventListener('click', this.handleDocumentClick, !shouldCloseOnEventBubbling);
+            document.addEventListener('contextmenu', this.handleDocumentClick, !shouldCloseOnEventBubbling);
 
             const { onMenuOpen } = this.props;
             if (onMenuOpen) {
@@ -56,16 +58,17 @@ class DropdownMenu extends React.Component<Props, State> {
             }
         } else if (prevState.isOpen && !this.state.isOpen) {
             // When menu is being closed
-            document.removeEventListener('contextmenu', this.handleDocumentClick);
-            document.removeEventListener('click', this.handleDocumentClick);
+            document.removeEventListener('contextmenu', this.handleDocumentClick, !shouldCloseOnEventBubbling);
+            document.removeEventListener('click', this.handleDocumentClick, !shouldCloseOnEventBubbling);
         }
     }
 
     componentWillUnmount() {
+        const { shouldCloseOnEventBubbling } = this.props;
         if (this.state.isOpen) {
             // Clean-up global click handlers
-            document.removeEventListener('contextmenu', this.handleDocumentClick);
-            document.removeEventListener('click', this.handleDocumentClick);
+            document.removeEventListener('contextmenu', this.handleDocumentClick, !shouldCloseOnEventBubbling);
+            document.removeEventListener('click', this.handleDocumentClick, !shouldCloseOnEventBubbling);
         }
     }
 

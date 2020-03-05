@@ -21,12 +21,13 @@ describe('components/tooltip/Tooltip', () => {
         sandbox.verifyAndRestore();
     });
 
-    describe('render()', () => {
+    describe.each([[true], [false]])('render() shouldStopEventPropagation=%o', shouldStopEventPropagation => {
         test('should render with close button if isShown and showCloseButton are true', () => {
             expect(
                 getWrapper({
                     isShown: true,
                     showCloseButton: true,
+                    shouldStopEventPropagation,
                 }),
             ).toMatchSnapshot();
         });
@@ -256,26 +257,37 @@ describe('components/tooltip/Tooltip', () => {
         });
     });
 
-    describe.each([[true], [false]])('with shouldStopEventPropagation being %o', shouldStopEventPropagation => {
-        describe.each([['click', 'keypress']])('simulate event %o', event => {
-            test('should stop event propagation as configured', () => {
-                const wrapper = shallow(
-                    <Tooltip isShown text="hi" shouldStopEventPropagation={shouldStopEventPropagation}>
-                        <button />
-                    </Tooltip>,
-                );
-                const instance = wrapper.instance();
-                const stop = jest.fn();
-                const nativeStop = jest.fn();
-                wrapper.find('div').simulate(event, {
-                    stopPropagation: stop,
-                    nativeEvent: {
-                        stopImmediatePropagation: nativeStop,
-                    },
-                });
-                expect(stop).toHaveBeenCalledTimes(shouldStopEventPropagation ? 1 : 0);
-                expect(nativeStop).toHaveBeenCalledTimes(shouldStopEventPropagation ? 1 : 0);
+    test('event capture div is not present when shouldStopEventPropagation is not set', () => {
+        const wrapper = shallow(
+            <Tooltip isShown text="hi">
+                <button />
+            </Tooltip>,
+        );
+        expect(wrapper.find('div[role="presentation"]').length).toBe(0);
+    });
+
+    describe.each([['onClick', 'onKeyPress']])('%o', callbackProp => {
+        test('should stop event propagation when shouldStopEventPropagation is set', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="hi" shouldStopEventPropagation>
+                    <button />
+                </Tooltip>,
+            );
+            const stop = jest.fn();
+            const nativeStop = jest.fn();
+            expect(wrapper.find('div[role="presentation"]').length).toBe(1);
+            const handler: Function = wrapper
+                .find('div[role="presentation"]')
+                .at(0)
+                .prop(callbackProp);
+            handler({
+                stopPropagation: stop,
+                nativeEvent: {
+                    stopImmediatePropagation: nativeStop,
+                },
             });
+            expect(stop).toHaveBeenCalledTimes(1);
+            expect(nativeStop).toHaveBeenCalledTimes(1);
         });
     });
 

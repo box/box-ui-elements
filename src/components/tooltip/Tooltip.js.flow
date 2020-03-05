@@ -40,19 +40,19 @@ type Props = {
     onDismiss?: () => void,
     /** Where to position the tooltip relative to the wrapped component */
     position?: Position | CustomPosition,
+    /** Should click|keypress propagation be stopped */
+    shouldStopEventPropagation?: boolean,
     /** Shows an X button to close the tooltip. Useful when tooltips are force shown with the isShown prop. */
     showCloseButton?: boolean,
     /** Text to show in the tooltip */
     text?: React.Node,
     /** Tooltip theme */
     theme: 'callout' | 'default' | 'error',
-    /** Should click|keypress propagation be stopped */
-    shouldStopEventPropagation?: boolean;
 };
 
 type State = {
-    isShown: boolean,
     hasRendered: boolean,
+    isShown: boolean,
     wasClosedByUser: boolean,
 };
 

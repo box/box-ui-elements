@@ -149,11 +149,8 @@ class Tooltip extends React.Component<TooltipProps, State> {
     };
 
     handleTooltipEvent = (event: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>) => {
-        const { shouldStopEventPropagation } = this.props;
-        if (shouldStopEventPropagation) {
-            event.stopPropagation();
-            event.nativeEvent.stopImmediatePropagation();
-        }
+        event.stopPropagation();
+        event.nativeEvent.stopImmediatePropagation();
     };
 
     handleMouseEnter = (event: React.SyntheticEvent<HTMLElement>) => {
@@ -210,6 +207,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             isTabbable = true,
             position,
             showCloseButton,
+            shouldStopEventPropagation,
             text,
             theme,
         } = this.props;
@@ -284,24 +282,32 @@ class Tooltip extends React.Component<TooltipProps, State> {
         return (
             <TetherComponent ref={this.tetherRef} {...tetherProps}>
                 {React.cloneElement(React.Children.only(children) as React.ReactElement, componentProps)}
-                {showTooltip && (
-                    /* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */
-                    <div
-                        className={classes}
-                        id={this.tooltipID}
-                        role="tooltip"
-                        aria-live="polite"
-                        onClick={this.handleTooltipEvent}
-                        onKeyPress={this.handleTooltipEvent}
-                    >
-                        {text}
-                        {withCloseButton && (
-                            <PlainButton className="tooltip-close-button" onClick={this.closeTooltip}>
-                                <IconClose className="bdl-Tooltip-iconClose" width={14} height={14} />
-                            </PlainButton>
-                        )}
-                    </div>
-                )}
+                {showTooltip &&
+                    (shouldStopEventPropagation ? (
+                        <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite">
+                            <div
+                                role="presentation"
+                                onClick={this.handleTooltipEvent}
+                                onKeyPress={this.handleTooltipEvent}
+                            >
+                                {text}
+                                {withCloseButton && (
+                                    <PlainButton className="tooltip-close-button" onClick={this.closeTooltip}>
+                                        <IconClose className="bdl-Tooltip-iconClose" width={14} height={14} />
+                                    </PlainButton>
+                                )}
+                            </div>
+                        </div>
+                    ) : (
+                        <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite">
+                            {text}
+                            {withCloseButton && (
+                                <PlainButton className="tooltip-close-button" onClick={this.closeTooltip}>
+                                    <IconClose className="bdl-Tooltip-iconClose" width={14} height={14} />
+                                </PlainButton>
+                            )}
+                        </div>
+                    ))}
             </TetherComponent>
         );
     }
