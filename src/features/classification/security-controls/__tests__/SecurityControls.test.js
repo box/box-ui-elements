@@ -58,22 +58,6 @@ describe('features/classification/security-controls/SecurityControls', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should set summarized class when not using FULL controlsFormat', () => {
-        wrapper.setProps({ controlsFormat: FULL });
-        expect(wrapper.find('ul').hasClass('bdl-SecurityControls--summarized')).toBe(false);
-
-        wrapper.setProps({ controlsFormat: SHORT });
-        expect(wrapper.find('ul').hasClass('bdl-SecurityControls--summarized')).toBe(true);
-
-        wrapper.setProps({
-            controlsFormat: SHORT_WITH_BTN,
-            classificationName: 'internal only',
-            definition: 'classification definition',
-            itemName: 'welcome.pdf',
-        });
-        expect(wrapper.find('ul').hasClass('bdl-SecurityControls--summarized')).toBe(true);
-    });
-
     test('should restrict displayed app names to maxAppCount', () => {
         controls.app.apps = [
             { displayText: 'App 1' },
