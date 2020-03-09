@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=false should not render the close button if wasClosedByUser state is true 1`] = `
+exports[`components/tooltip/Tooltip render() should not render the close button if wasClosedByUser state is true 1`] = `
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
@@ -24,7 +24,7 @@ exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=false sh
 </TetherComponent>
 `;
 
-exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=false should not render with close button if isShown is false 1`] = `
+exports[`components/tooltip/Tooltip render() should not render with close button if isShown is false 1`] = `
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
@@ -48,204 +48,7 @@ exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=false sh
 </TetherComponent>
 `;
 
-exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=false should not render with close button if showCloseButton is false 1`] = `
-<TetherComponent
-  attachment="bottom center"
-  bodyElement={<body />}
-  classPrefix="tooltip"
-  constraints={
-    Array [
-      Object {
-        "attachment": "together",
-        "to": "window",
-      },
-    ]
-  }
-  enabled={true}
-  renderElementTag="div"
-  renderElementTo={null}
-  targetAttachment="top center"
->
-  <div
-    aria-describedby="tooltip21"
-  >
-    Hello
-  </div>
-  <div
-    aria-live="polite"
-    className="tooltip bdl-Tooltip"
-    id="tooltip21"
-    role="tooltip"
-  >
-    hi
-  </div>
-</TetherComponent>
-`;
-
-exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=false should render children only when tooltip is disabled 1`] = `
-<div>
-  Hello
-</div>
-`;
-
-exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=false should render children wrapped in tether when tooltip has text missing 1`] = `
-<TetherComponent
-  attachment="bottom center"
-  bodyElement={<body />}
-  classPrefix="tooltip"
-  constraints={
-    Array [
-      Object {
-        "attachment": "together",
-        "to": "window",
-      },
-    ]
-  }
-  enabled={false}
-  renderElementTag="div"
-  renderElementTo={null}
-  targetAttachment="top center"
->
-  <div
-    onBlur={[Function]}
-    onFocus={[Function]}
-    onKeyDown={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    tabIndex="0"
-  >
-    Hello
-  </div>
-</TetherComponent>
-`;
-
-exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=false should render correctly with callout theme 1`] = `
-<TetherComponent
-  attachment="bottom center"
-  bodyElement={<body />}
-  classPrefix="tooltip"
-  constraints={
-    Array [
-      Object {
-        "attachment": "together",
-        "to": "window",
-      },
-    ]
-  }
-  enabled={true}
-  renderElementTag="div"
-  renderElementTo={null}
-  targetAttachment="top center"
->
-  <div
-    aria-describedby="tooltip23"
-  >
-    Hello
-  </div>
-  <div
-    aria-live="polite"
-    className="tooltip bdl-Tooltip is-callout"
-    id="tooltip23"
-    role="tooltip"
-  >
-    hi
-  </div>
-</TetherComponent>
-`;
-
-exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=false should render with close button if isShown and showCloseButton are true 1`] = `
-<TetherComponent
-  attachment="bottom center"
-  bodyElement={<body />}
-  classPrefix="tooltip"
-  constraints={
-    Array [
-      Object {
-        "attachment": "together",
-        "to": "window",
-      },
-    ]
-  }
-  enabled={true}
-  renderElementTag="div"
-  renderElementTo={null}
-  targetAttachment="top center"
->
-  <div
-    aria-describedby="tooltip19"
-  >
-    Hello
-  </div>
-  <div
-    aria-live="polite"
-    className="tooltip bdl-Tooltip with-close-button"
-    id="tooltip19"
-    role="tooltip"
-  >
-    hi
-    <PlainButton
-      className="tooltip-close-button"
-      onClick={[Function]}
-    >
-      <X16
-        className="bdl-Tooltip-iconClose"
-        height={14}
-        width={14}
-      />
-    </PlainButton>
-  </div>
-</TetherComponent>
-`;
-
-exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=true should not render the close button if wasClosedByUser state is true 1`] = `
-<TetherComponent
-  attachment="bottom center"
-  bodyElement={<body />}
-  classPrefix="tooltip"
-  constraints={
-    Array [
-      Object {
-        "attachment": "together",
-        "to": "window",
-      },
-    ]
-  }
-  enabled={false}
-  renderElementTag="div"
-  renderElementTo={null}
-  targetAttachment="top center"
->
-  <div>
-    Hello
-  </div>
-</TetherComponent>
-`;
-
-exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=true should not render with close button if isShown is false 1`] = `
-<TetherComponent
-  attachment="bottom center"
-  bodyElement={<body />}
-  classPrefix="tooltip"
-  constraints={
-    Array [
-      Object {
-        "attachment": "together",
-        "to": "window",
-      },
-    ]
-  }
-  enabled={false}
-  renderElementTag="div"
-  renderElementTo={null}
-  targetAttachment="top center"
->
-  <div>
-    Hello
-  </div>
-</TetherComponent>
-`;
-
-exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=true should not render with close button if showCloseButton is false 1`] = `
+exports[`components/tooltip/Tooltip render() should not render with close button if showCloseButton is false 1`] = `
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
@@ -279,13 +82,13 @@ exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=true sho
 </TetherComponent>
 `;
 
-exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=true should render children only when tooltip is disabled 1`] = `
+exports[`components/tooltip/Tooltip render() should render children only when tooltip is disabled 1`] = `
 <div>
   Hello
 </div>
 `;
 
-exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=true should render children wrapped in tether when tooltip has text missing 1`] = `
+exports[`components/tooltip/Tooltip render() should render children wrapped in tether when tooltip has text missing 1`] = `
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
@@ -316,7 +119,7 @@ exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=true sho
 </TetherComponent>
 `;
 
-exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=true should render correctly with callout theme 1`] = `
+exports[`components/tooltip/Tooltip render() should render correctly with callout theme 1`] = `
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
@@ -350,7 +153,7 @@ exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=true sho
 </TetherComponent>
 `;
 
-exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=true should render with close button if isShown and showCloseButton are true 1`] = `
+exports[`components/tooltip/Tooltip render() should render with close button if isShown and showCloseButton are true 1`] = `
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
@@ -379,23 +182,35 @@ exports[`components/tooltip/Tooltip render() shouldStopEventPropagation=true sho
     id="tooltip1"
     role="tooltip"
   >
-    <div
+    hi
+    <PlainButton
+      className="tooltip-close-button"
       onClick={[Function]}
-      onKeyPress={[Function]}
-      role="presentation"
     >
-      hi
-      <PlainButton
-        className="tooltip-close-button"
-        onClick={[Function]}
-      >
-        <X16
-          className="bdl-Tooltip-iconClose"
-          height={14}
-          width={14}
-        />
-      </PlainButton>
-    </div>
+      <X16
+        className="bdl-Tooltip-iconClose"
+        height={14}
+        width={14}
+      />
+    </PlainButton>
   </div>
 </TetherComponent>
+`;
+
+exports[`components/tooltip/Tooltip should match snapshot when stopBubble is set 1`] = `
+<div
+  aria-live="polite"
+  className="tooltip bdl-Tooltip"
+  id="tooltip19"
+  role="tooltip"
+>
+  <div
+    onClick={[Function]}
+    onContextMenu={[Function]}
+    onKeyPress={[Function]}
+    role="presentation"
+  >
+    hi
+  </div>
+</div>
 `;

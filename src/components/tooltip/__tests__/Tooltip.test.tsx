@@ -21,13 +21,12 @@ describe('components/tooltip/Tooltip', () => {
         sandbox.verifyAndRestore();
     });
 
-    describe.each([[true], [false]])('render() shouldStopEventPropagation=%o', shouldStopEventPropagation => {
+    describe('render()', () => {
         test('should render with close button if isShown and showCloseButton are true', () => {
             expect(
                 getWrapper({
                     isShown: true,
                     showCloseButton: true,
-                    shouldStopEventPropagation,
                 }),
             ).toMatchSnapshot();
         });
@@ -257,29 +256,35 @@ describe('components/tooltip/Tooltip', () => {
         });
     });
 
-    test('event capture div is not present when shouldStopEventPropagation is not set', () => {
+    test('should match snapshot when stopBubble is set', () => {
+        const wrapper = shallow(
+            <Tooltip isShown stopBubble text="hi">
+                <button />
+            </Tooltip>,
+        );
+        expect(wrapper.find('div.tooltip')).toMatchSnapshot();
+    });
+
+    test('event capture div is not present when stopBubble is not set', () => {
         const wrapper = shallow(
             <Tooltip isShown text="hi">
                 <button />
             </Tooltip>,
         );
-        expect(wrapper.find('div[role="presentation"]').length).toBe(0);
+        expect(wrapper.find('div[role="presentation"]').exists()).toBe(false);
     });
 
-    describe.each([['onClick', 'onKeyPress']])('%o', callbackProp => {
-        test('should stop event propagation when shouldStopEventPropagation is set', () => {
+    describe('should stop event propagation when stopBubble is set', () => {
+        test.each([['onClick', 'onContextMenu', 'onKeyPress']])('when %o', onEvent => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi" shouldStopEventPropagation>
+                <Tooltip isShown text="hi" stopBubble>
                     <button />
                 </Tooltip>,
             );
             const stop = jest.fn();
             const nativeStop = jest.fn();
             expect(wrapper.find('div[role="presentation"]').length).toBe(1);
-            const handler: Function = wrapper
-                .find('div[role="presentation"]')
-                .at(0)
-                .prop(callbackProp);
+            const handler: Function = wrapper.find('div[role="presentation"]').prop(onEvent);
             handler({
                 stopPropagation: stop,
                 nativeEvent: {
