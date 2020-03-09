@@ -7,36 +7,37 @@ import CheckboxTooltip from './CheckboxTooltip';
 import './Checkbox.scss';
 
 export interface CheckboxProps {
+    /** Class name for the checkbox */
     className?: string;
-    /** Description to the checkbox */
+    /** Description for the checkbox */
     description?: React.ReactNode;
-    /** Label for the field shown on top of the checkbox */
+    /** fieldLabel - label for the field shown on top of the checkbox */
     fieldLabel?: React.ReactNode;
-    /** Hides the checkbox label when true */
+    /** hideLabel - whether the checkbox label is hidden or not */
     hideLabel?: boolean;
-    /** Unique `id` for the input */
+    /** id - Unique `id` for the input */
     id?: string;
-    /** Checkbox checked state */
+    /** isChecked - whether the checkbox is checked or not */
     isChecked?: boolean; // @TODO: eventually call this `checked`
-    /** Checkbox disabled state */
+    /** isDisabled - whether the checkbox is disabled or not */
     isDisabled?: boolean; // @TODO: eventually call this `disabled`
     /** Label displayed for the input */
     label: React.ReactNode;
     /** Name of the input */
     name: string;
-    /** blur callback function called with event as the argument */
+    /** onBlur - blur callback function that takes the event as the argument */
     onBlur?:
         | ((e: React.SyntheticEvent<HTMLInputElement, Event>) => React.ReactText)
         | {
               (e: React.FocusEvent<HTMLInputElement>): void;
           };
-    /** change callback function called with event as the argument */
+    /** onChange - change callback function that takes the event as the argument */
     onChange?: (e: React.SyntheticEvent<HTMLInputElement, Event>) => string | number | boolean | void;
     /** Subsection below the checkbox */
     subsection?: React.ReactNode;
-    /** Info tooltip text next to the checkbox label */
+    /** Tooltip text next to the checkbox label */
     tooltip?: string;
-    /** optional value for the checkbox */
+    /** Value for the checkbox */
     value?: string | number | string[];
 }
 

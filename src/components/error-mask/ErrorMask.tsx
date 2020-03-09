@@ -14,7 +14,9 @@ const messages = defineMessages({
 });
 
 export interface ErrorMaskProps {
+    /** Text or element displayed in the header of the error mask */
     errorHeader: React.ReactChild;
+    /** Text or element displayed in the subheader of the error mask */
     errorSubHeader?: React.ReactChild;
 }
 
