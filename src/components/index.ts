@@ -10,6 +10,12 @@ export * from './button';
 export { default as ButtonGroup } from './button-group';
 export * from './button-group';
 
+export { default as Checkbox } from './checkbox';
+export * from './checkbox';
+
+export { default as ErrorMask } from './error-mask';
+export * from './error-mask';
+
 export { default as Fieldset } from './fieldset';
 export * from './fieldset';
 
