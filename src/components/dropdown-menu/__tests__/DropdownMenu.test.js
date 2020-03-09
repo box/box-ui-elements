@@ -450,8 +450,8 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         });
     });
 
-    describe.each([[false], [true]])('when useBubble=%o', useBubble => {
-        describe('componentDidUpdate()', () => {
+    describe('componentDidUpdate()', () => {
+        describe.each([[false], [true]])('when useBubble=%o', useBubble => {
             test('should add click and contextmenu listeners when opening menu', () => {
                 const wrapper = mount(
                     <DropdownMenu useBubble={useBubble}>
@@ -496,8 +496,10 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 instance.openMenuAndSetFocusIndex(1);
             });
         });
+    });
 
-        describe('componentWillUnmount()', () => {
+    describe('componentWillUnmount()', () => {
+        describe.each([[false], [true]])('when useBubble=%o', useBubble => {
             test('should not do anything when menu is closed', () => {
                 const wrapper = mount(
                     <DropdownMenu useBubble={useBubble}>
