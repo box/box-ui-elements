@@ -451,126 +451,80 @@ describe('components/dropdown-menu/DropdownMenu', () => {
     });
 
     describe('componentDidUpdate()', () => {
-        test('should add click and contextmenu listeners when opening menu', () => {
-            const wrapper = mount(
-                <DropdownMenu>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
-
-            const instance = wrapper.instance();
-
-            const documentMock = sandbox.mock(document);
-            documentMock.expects('addEventListener').withArgs('click');
-            documentMock.expects('addEventListener').withArgs('contextmenu');
-            instance.openMenuAndSetFocusIndex(0);
-        });
-
-        test('should call onMenuOpen() when specified and menu is opening', () => {
-            const onMenuOpen = jest.fn();
-            const wrapper = getWrapper({
-                onMenuOpen,
+        describe.each([[false], [true]])('when useBubble=%o', useBubble => {
+            test('should add click and contextmenu listeners when opening menu', () => {
+                const wrapper = mount(
+                    <DropdownMenu useBubble={useBubble}>
+                        <FakeButton />
+                        <FakeMenu />
+                    </DropdownMenu>,
+                );
+                const instance = wrapper.instance();
+                const documentMock = sandbox.mock(document);
+                documentMock.expects('addEventListener').withArgs('click', sinon.match.any, !useBubble);
+                documentMock.expects('addEventListener').withArgs('contextmenu', sinon.match.any, !useBubble);
+                documentMock.expects('removeEventListener').never();
+                instance.openMenuAndSetFocusIndex(0);
             });
-            document.addEventListener = jest.fn();
-            document.removeEventListener = jest.fn();
-
-            wrapper.setState({ isOpen: true }); // called when false => true
-            wrapper.setState({ isOpen: true }); // not called when true => true
-            wrapper.setState({ isOpen: false }); // not called when true => false
-
-            expect(onMenuOpen).toHaveBeenCalledTimes(1);
-        });
-
-        test('should remove click and contextmenu listeners when closing menu', () => {
-            const wrapper = mount(
-                <DropdownMenu>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
-
-            const instance = wrapper.instance();
-            instance.openMenuAndSetFocusIndex(0);
-
-            const documentMock = sandbox.mock(document);
-            documentMock.expects('removeEventListener').withArgs('contextmenu');
-            documentMock.expects('removeEventListener').withArgs('click');
-
-            instance.closeMenu();
-        });
-
-        test('should not do anything opening a menu when menu is already open', () => {
-            const wrapper = mount(
-                <DropdownMenu>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
-
-            const instance = wrapper.instance();
-            instance.openMenuAndSetFocusIndex(0);
-
-            const documentMock = sandbox.mock(document);
-            documentMock
-                .expects('addEventListener')
-                .withArgs('click')
-                .never();
-            documentMock
-                .expects('addEventListener')
-                .withArgs('contextmenu')
-                .never();
-            documentMock
-                .expects('removeEventListener')
-                .withArgs('contextmenu')
-                .never();
-            documentMock
-                .expects('removeEventListener')
-                .withArgs('click')
-                .never();
-
-            instance.openMenuAndSetFocusIndex(1);
+            test('should remove click and contextmenu listeners when closing menu', () => {
+                const wrapper = mount(
+                    <DropdownMenu useBubble={useBubble}>
+                        <FakeButton />
+                        <FakeMenu />
+                    </DropdownMenu>,
+                );
+                const instance = wrapper.instance();
+                instance.openMenuAndSetFocusIndex(0);
+                const documentMock = sandbox.mock(document);
+                documentMock.expects('removeEventListener').withArgs('contextmenu', sinon.match.any, !useBubble);
+                documentMock.expects('removeEventListener').withArgs('click', sinon.match.any, !useBubble);
+                documentMock.expects('addEventListener').never();
+                instance.closeMenu();
+            });
+            test('should not do anything opening a menu when menu is already open', () => {
+                const wrapper = mount(
+                    <DropdownMenu useBubble={useBubble}>
+                        <FakeButton />
+                        <FakeMenu />
+                    </DropdownMenu>,
+                );
+                const instance = wrapper.instance();
+                const documentMock = sandbox.mock(document);
+                instance.openMenuAndSetFocusIndex(0);
+                documentMock.expects('addEventListener').never();
+                documentMock.expects('removeEventListener').never();
+                instance.openMenuAndSetFocusIndex(1);
+            });
         });
     });
 
     describe('componentWillUnmount()', () => {
-        test('should not do anything when menu is closed', () => {
-            const wrapper = mount(
-                <DropdownMenu>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
-
-            const documentMock = sandbox.mock(document);
-            documentMock
-                .expects('removeEventListener')
-                .withArgs('contextmenu')
-                .never();
-            documentMock
-                .expects('removeEventListener')
-                .withArgs('click')
-                .never();
-
-            wrapper.unmount();
-        });
-
-        test('should remove listeners when menu is open', () => {
-            const wrapper = mount(
-                <DropdownMenu>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
-
-            const instance = wrapper.instance();
-            instance.openMenuAndSetFocusIndex(0);
-
-            const documentMock = sandbox.mock(document);
-            documentMock.expects('removeEventListener').withArgs('contextmenu');
-            documentMock.expects('removeEventListener').withArgs('click');
-
-            wrapper.unmount();
+        describe.each([[false], [true]])('when useBubble=%o', useBubble => {
+            test('should not do anything when menu is closed', () => {
+                const wrapper = mount(
+                    <DropdownMenu useBubble={useBubble}>
+                        <FakeButton />
+                        <FakeMenu />
+                    </DropdownMenu>,
+                );
+                const documentMock = sandbox.mock(document);
+                documentMock.expects('removeEventListener').never();
+                wrapper.unmount();
+            });
+            test('should remove listeners when menu is open', () => {
+                const wrapper = mount(
+                    <DropdownMenu useBubble={useBubble}>
+                        <FakeButton />
+                        <FakeMenu />
+                    </DropdownMenu>,
+                );
+                const documentMock = sandbox.mock(document);
+                const instance = wrapper.instance();
+                instance.openMenuAndSetFocusIndex(0);
+                documentMock.expects('removeEventListener').withArgs('contextmenu', sinon.match.any, !useBubble);
+                documentMock.expects('removeEventListener').withArgs('click', sinon.match.any, !useBubble);
+                wrapper.unmount();
+            });
         });
     });
 
