@@ -21,7 +21,6 @@ type Props = {
     onMenuClose?: (event: SyntheticEvent<>) => void,
     /** Handler for dropdown menu open events */
     onMenuOpen?: () => void,
-    useBubble?: boolean,
 };
 
 type State = {
@@ -46,11 +45,10 @@ class DropdownMenu extends React.Component<Props, State> {
     };
 
     componentDidUpdate(prevProps: Props, prevState: State) {
-        const { useBubble } = this.props;
         if (!prevState.isOpen && this.state.isOpen) {
             // When menu is being opened
-            document.addEventListener('click', this.handleDocumentClick, !useBubble);
-            document.addEventListener('contextmenu', this.handleDocumentClick, !useBubble);
+            document.addEventListener('click', this.handleDocumentClick, true);
+            document.addEventListener('contextmenu', this.handleDocumentClick, true);
 
             const { onMenuOpen } = this.props;
             if (onMenuOpen) {
@@ -58,17 +56,16 @@ class DropdownMenu extends React.Component<Props, State> {
             }
         } else if (prevState.isOpen && !this.state.isOpen) {
             // When menu is being closed
-            document.removeEventListener('contextmenu', this.handleDocumentClick, !useBubble);
-            document.removeEventListener('click', this.handleDocumentClick, !useBubble);
+            document.removeEventListener('contextmenu', this.handleDocumentClick, true);
+            document.removeEventListener('click', this.handleDocumentClick, true);
         }
     }
 
     componentWillUnmount() {
-        const { useBubble } = this.props;
         if (this.state.isOpen) {
             // Clean-up global click handlers
-            document.removeEventListener('contextmenu', this.handleDocumentClick, !useBubble);
-            document.removeEventListener('click', this.handleDocumentClick, !useBubble);
+            document.removeEventListener('contextmenu', this.handleDocumentClick, true);
+            document.removeEventListener('click', this.handleDocumentClick, true);
         }
     }
 
