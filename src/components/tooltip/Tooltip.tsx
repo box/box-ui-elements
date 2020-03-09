@@ -88,6 +88,8 @@ export interface TooltipProps {
     position: TooltipPosition | TooltipCustomPosition;
     /** Shows an X button to close the tooltip. Useful when tooltips are force shown with the isShown prop. */
     showCloseButton?: boolean;
+    /** stop click|keypress event bubbling */
+    stopBubble?: boolean;
     /** Text to show in the tooltip */
     text?: React.ReactNode;
     /** Tooltip theme */
@@ -146,6 +148,11 @@ class Tooltip extends React.Component<TooltipProps, State> {
         }
     };
 
+    handleTooltipEvent = (event: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>) => {
+        event.stopPropagation();
+        event.nativeEvent.stopImmediatePropagation();
+    };
+
     handleMouseEnter = (event: React.SyntheticEvent<HTMLElement>) => {
         this.setState({ isShown: true });
         this.fireChildEvent('onMouseEnter', event);
@@ -200,6 +207,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             isTabbable = true,
             position,
             showCloseButton,
+            stopBubble,
             text,
             theme,
         } = this.props;
@@ -237,6 +245,9 @@ class Tooltip extends React.Component<TooltipProps, State> {
 
         if (showTooltip) {
             componentProps['aria-describedby'] = this.tooltipID;
+            if (theme === TooltipTheme.ERROR) {
+                componentProps['aria-errormessage'] = this.tooltipID;
+            }
         }
         if (!isControlled) {
             componentProps.onBlur = this.handleBlur;
@@ -268,17 +279,34 @@ class Tooltip extends React.Component<TooltipProps, State> {
             targetAttachment: tetherPosition.targetAttachment,
         };
 
+        const tooltip = (
+            <>
+                {text}
+                {withCloseButton && (
+                    <PlainButton className="tooltip-close-button" onClick={this.closeTooltip}>
+                        <IconClose className="bdl-Tooltip-iconClose" width={14} height={14} />
+                    </PlainButton>
+                )}
+            </>
+        );
+
+        const tooltipWithStopBubble = (
+            <div
+                role="presentation"
+                onClick={this.handleTooltipEvent}
+                onContextMenu={this.handleTooltipEvent}
+                onKeyPress={this.handleTooltipEvent}
+            >
+                {tooltip}
+            </div>
+        );
+
         return (
             <TetherComponent ref={this.tetherRef} {...tetherProps}>
                 {React.cloneElement(React.Children.only(children) as React.ReactElement, componentProps)}
                 {showTooltip && (
-                    <div className={classes} id={this.tooltipID} role="tooltip">
-                        {text}
-                        {withCloseButton && (
-                            <PlainButton className="tooltip-close-button" onClick={this.closeTooltip}>
-                                <IconClose className="bdl-Tooltip-iconClose" width={14} height={14} />
-                            </PlainButton>
-                        )}
+                    <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite">
+                        {stopBubble ? tooltipWithStopBubble : tooltip}
                     </div>
                 )}
             </TetherComponent>

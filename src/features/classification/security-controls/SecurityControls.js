@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
 import { DEFAULT_MAX_APP_COUNT, SECURITY_CONTROLS_FORMAT } from '../constants';
@@ -78,25 +77,15 @@ class SecurityControls extends React.Component<Props, State> {
             return null;
         }
 
-        const className = classNames('bdl-SecurityControls', {
-            'bdl-SecurityControls--summarized': controlsFormat !== FULL,
-        });
-
         const { isSecurityControlsModalOpen } = this.state;
         const shouldShowSecurityControlsModal =
             controlsFormat === SHORT_WITH_BTN && !!itemName && !!classificationName && !!definition;
 
         return (
             <>
-                <ul className={className}>
+                <ul className="bdl-SecurityControls">
                     {items.map(item => (
-                        <SecurityControlsItem
-                            fillColor={fillColor}
-                            strokeColor={strokeColor}
-                            key={item.id}
-                            message={item}
-                            controlsFormat={controlsFormat}
-                        />
+                        <SecurityControlsItem key={item.id} message={item} />
                     ))}
                 </ul>
                 {shouldShowSecurityControlsModal && (

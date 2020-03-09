@@ -4,11 +4,3 @@
     margin: 0;
     list-style: none;
 }
-
-.bdl-SecurityControls--summarized {
-    .bdl-SecurityControlsItem {
-        &::before {
-            display: none;
-        }
-    }
-}

@@ -55,13 +55,11 @@ const TextInput = ({
         'show-error': hasError,
     });
 
-    const errorMessageID = React.useRef(uniqueId('errorMessage')).current;
     const descriptionID = React.useRef(uniqueId('description')).current;
 
     const ariaAttrs = {
         'aria-invalid': hasError,
         'aria-required': isRequired,
-        'aria-errormessage': errorMessageID,
         'aria-describedby': description ? descriptionID : undefined,
     };
 
@@ -83,9 +81,6 @@ const TextInput = ({
                 </Tooltip>
                 {isLoading && !isValid && <LoadingIndicator className="text-input-loading" />}
                 {isValid && !isLoading && <IconVerified className="text-input-verified" />}
-                <span id={errorMessageID} className="accessibility-hidden" role="alert">
-                    {error}
-                </span>
             </Label>
         </div>
     );
