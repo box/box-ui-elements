@@ -256,6 +256,46 @@ describe('components/tooltip/Tooltip', () => {
         });
     });
 
+    test('should match snapshot when stopBubble is set', () => {
+        const wrapper = shallow(
+            <Tooltip isShown stopBubble text="hi">
+                <button />
+            </Tooltip>,
+        );
+        expect(wrapper.find('div.tooltip')).toMatchSnapshot();
+    });
+
+    test('event capture div is not present when stopBubble is not set', () => {
+        const wrapper = shallow(
+            <Tooltip isShown text="hi">
+                <button />
+            </Tooltip>,
+        );
+        expect(wrapper.find('div[role="presentation"]').exists()).toBe(false);
+    });
+
+    describe('should stop event propagation when stopBubble is set', () => {
+        test.each([['onClick', 'onContextMenu', 'onKeyPress']])('when %o', onEvent => {
+            const wrapper = shallow(
+                <Tooltip isShown text="hi" stopBubble>
+                    <button />
+                </Tooltip>,
+            );
+            const stop = jest.fn();
+            const nativeStop = jest.fn();
+            expect(wrapper.find('div[role="presentation"]').length).toBe(1);
+            const handler: Function = wrapper.find('div[role="presentation"]').prop(onEvent);
+            handler({
+                stopPropagation: stop,
+                nativeEvent: {
+                    stopImmediatePropagation: nativeStop,
+                },
+            });
+            expect(stop).toHaveBeenCalledTimes(1);
+            expect(nativeStop).toHaveBeenCalledTimes(1);
+        });
+    });
+
     describe('closeTooltip()', () => {
         test('should update the wasClosedByUser state', () => {
             const wrapper = shallow<Tooltip>(

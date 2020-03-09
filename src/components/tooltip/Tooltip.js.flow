@@ -42,6 +42,8 @@ type Props = {
     position?: Position | CustomPosition,
     /** Shows an X button to close the tooltip. Useful when tooltips are force shown with the isShown prop. */
     showCloseButton?: boolean,
+    /** stop click|keypress event bubbling */
+    stopBubble?: boolean,
     /** Text to show in the tooltip */
     text?: React.Node,
     /** Tooltip theme */
@@ -49,8 +51,8 @@ type Props = {
 };
 
 type State = {
-    isShown: boolean,
     hasRendered: boolean,
+    isShown: boolean,
     wasClosedByUser: boolean,
 };
 
