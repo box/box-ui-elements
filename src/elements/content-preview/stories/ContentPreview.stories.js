@@ -1,15 +1,34 @@
 // @flow
 import * as React from 'react';
 import { IntlProvider } from 'react-intl';
+import { text } from '@storybook/addon-knobs';
 
 import ContentPreview from '../ContentPreview';
 import notes from './ContentPreview.notes.md';
 
 export const Preview = () => (
     <IntlProvider locale="en">
-        <ContentPreview hasHeader features={global.FEATURES} fileId={global.FILE_ID} token={global.TOKEN} />
+        <ContentPreview
+            features={global.FEATURES}
+            fileId={text('File ID', global.FILE_ID)}
+            token={text('Token', global.TOKEN)}
+        />
     </IntlProvider>
 );
+
+export const PreviewWithAnnotations = () => {
+    return (
+        <IntlProvider locale="en">
+            <ContentPreview
+                features={global.FEATURES}
+                fileId={text('File ID', global.FILE_ID)}
+                hasHeader
+                showAnnotations
+                token={text('Access Token', global.TOKEN)}
+            />
+        </IntlProvider>
+    );
+};
 
 export const PreviewWithSidebar = () => (
     <IntlProvider locale="en">
@@ -29,10 +48,10 @@ export const PreviewWithSidebar = () => (
                 hasSkills: true,
                 hasVersions: true,
             }}
-            hasHeader
             features={global.FEATURES}
-            fileId={global.FILE_ID}
-            token={global.TOKEN}
+            fileId={text('File ID', global.FILE_ID)}
+            hasHeader
+            token={text('Token', global.TOKEN)}
         />
     </IntlProvider>
 );

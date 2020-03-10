@@ -217,14 +217,16 @@ describe('elements/content-preview/ContentPreview', () => {
             };
 
             file = { id: '123' };
-        });
-
-        test('should bind onPreviewError prop to preview "preview_error" event', async () => {
             props = {
-                onError: jest.fn(),
+                onMetric: jest.fn(),
                 token: 'token',
                 fileId: file.id,
             };
+        });
+
+        test('should bind onPreviewError prop to preview "preview_error" event', async () => {
+            props.onError = jest.fn();
+
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
             const instance = wrapper.instance();
@@ -234,11 +236,6 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         test('should bind onPreviewMetric prop to preview "preview_metric" event', async () => {
-            props = {
-                onMetric: jest.fn(),
-                token: 'token',
-                fileId: file.id,
-            };
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
             const instance = wrapper.instance();
@@ -248,11 +245,6 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         test('should bind onPreviewLoad method to preview "load" event', async () => {
-            props = {
-                onMetric: jest.fn(),
-                token: 'token',
-                fileId: file.id,
-            };
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
             const instance = wrapper.instance();
@@ -261,11 +253,6 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         test('should call preview show with correct params', async () => {
-            props = {
-                onMetric: jest.fn(),
-                token: 'token',
-                fileId: file.id,
-            };
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
             const instance = wrapper.instance();
@@ -284,11 +271,6 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         test('should call preview show with file version params if provided', async () => {
-            props = {
-                onMetric: jest.fn(),
-                token: 'token',
-                fileId: file.id,
-            };
             const wrapper = getWrapper(props);
             wrapper.setState({
                 file,
@@ -312,6 +294,25 @@ describe('elements/content-preview/ContentPreview', () => {
                             fileVersionId: '12345',
                         },
                     },
+                }),
+            );
+        });
+
+        test('should use boxAnnotations instance if provided', async () => {
+            const boxAnnotations = jest.fn();
+            const wrapper = getWrapper({ ...props, boxAnnotations });
+
+            wrapper.setState({ file });
+
+            const instance = wrapper.instance();
+
+            await instance.loadPreview();
+
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({
+                    boxAnnotations,
                 }),
             );
         });
