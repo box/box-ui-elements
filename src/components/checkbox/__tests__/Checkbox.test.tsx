@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
+import { shallow, ShallowWrapper } from 'enzyme';
 
 import Checkbox from '..';
 
 describe('components/checkbox/Checkbox', () => {
-    let wrapper;
-    let onChange;
+    let wrapper: ShallowWrapper;
+    let onChange: (e: SyntheticEvent<HTMLInputElement, Event>) => string | number | boolean | void;
 
     beforeEach(() => {
         onChange = jest.fn();
