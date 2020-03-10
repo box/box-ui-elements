@@ -20,4 +20,20 @@ describe('elements/content-sidebar/AddTaskButton', () => {
 
         expect(historyMock.replace).toHaveBeenCalledWith({ state: { open: true } });
     });
+
+    test('should set state.isTaskFormOpen to false and call onTaskModalClose when task modal is closed', () => {
+        const onTaskModalCloseMock = jest.fn();
+        const mockButtonRef = {
+            focus: jest.fn(),
+        };
+        const wrapper = shallow(<AddTaskButton onTaskModalClose={onTaskModalCloseMock} />);
+        wrapper.instance().buttonRef = mockButtonRef;
+        wrapper.setState({ isTaskFormOpen: true });
+
+        wrapper.instance().handleModalClose();
+
+        expect(wrapper.state('isTaskFormOpen')).toBe(false);
+        expect(mockButtonRef.focus).toHaveBeenCalledTimes(1);
+        expect(onTaskModalCloseMock).toHaveBeenCalledTimes(1);
+    });
 });
