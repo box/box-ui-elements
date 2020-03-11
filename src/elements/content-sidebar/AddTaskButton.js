@@ -22,7 +22,7 @@ type State = {
 };
 
 class AddTaskButton extends React.Component<Props, State> {
-    buttonRef: { current: null | HTMLButtonElement, focus: Function };
+    buttonRef = React.createRef<HTMLButtonElement>();
 
     state = {
         error: null,
@@ -46,16 +46,16 @@ class AddTaskButton extends React.Component<Props, State> {
     handleModalClose = () => {
         const { onTaskModalClose } = this.props;
         this.setState({ isTaskFormOpen: false, error: null });
-        if (this.buttonRef) {
-            this.buttonRef.focus();
+        if (this.buttonRef.current) {
+            this.buttonRef.current.focus();
         }
         onTaskModalClose();
     };
 
     handleSubmitError = (e: ElementsXhrError) => this.setState({ error: e });
 
-    setAddTaskButtonRef = (ref: { current: null | HTMLButtonElement, focus: Function }) => {
-        this.buttonRef = ref;
+    setAddTaskButtonRef = (element: HTMLButtonElement) => {
+        this.buttonRef.current = element;
     };
 
     render() {
