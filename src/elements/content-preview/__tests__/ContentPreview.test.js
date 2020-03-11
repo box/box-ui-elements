@@ -225,9 +225,7 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         test('should bind onPreviewError prop to preview "preview_error" event', async () => {
-            props.onError = jest.fn();
-
-            const wrapper = getWrapper(props);
+            const wrapper = getWrapper({ ...props, onError: jest.fn() });
             wrapper.setState({ file });
             const instance = wrapper.instance();
             instance.onPreviewError = jest.fn();

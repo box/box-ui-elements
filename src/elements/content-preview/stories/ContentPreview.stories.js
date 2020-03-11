@@ -11,7 +11,8 @@ export const Preview = () => (
         <ContentPreview
             features={global.FEATURES}
             fileId={text('File ID', global.FILE_ID)}
-            token={text('Token', global.TOKEN)}
+            hasHeader
+            token={text('Access Token', global.TOKEN)}
         />
     </IntlProvider>
 );
@@ -51,7 +52,7 @@ export const PreviewWithSidebar = () => (
             features={global.FEATURES}
             fileId={text('File ID', global.FILE_ID)}
             hasHeader
-            token={text('Token', global.TOKEN)}
+            token={text('Access Token', global.TOKEN)}
         />
     </IntlProvider>
 );
