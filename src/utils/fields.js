@@ -55,6 +55,7 @@ import {
     FIELD_OCCURRED_AT,
     FIELD_RENDERED_TEXT,
     FIELD_RETENTION,
+    FIELD_URL,
     PLACEHOLDER_USER,
 } from '../constants';
 
@@ -77,6 +78,7 @@ const FOLDER_FIELDS_TO_FETCH = [
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_IS_DOWNLOAD_AVAILABLE,
     FIELD_REPRESENTATIONS,
+    FIELD_URL,
 ];
 
 // Fields needed for the sidebar
