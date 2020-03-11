@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 
 import Menu from '../menu/Menu';

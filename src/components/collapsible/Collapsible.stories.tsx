@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 
 import Button from '../button/Button';
@@ -7,13 +6,13 @@ import Collapsible from './Collapsible';
 import notes from './Collapsible.stories.md';
 
 export const withBorder = () => {
-    const onOpen = arg => {
+    const onOpen = () => {
         // eslint-disable-next-line no-console
-        console.log('opened', arg);
+        console.log('opened');
     };
-    const onClose = arg => {
+    const onClose = () => {
         // eslint-disable-next-line no-console
-        console.log('closed', arg);
+        console.log('closed');
     };
     return (
         <Collapsible isOpen onOpen={onOpen} onClose={onClose} isBordered title="Collapsible card title">
