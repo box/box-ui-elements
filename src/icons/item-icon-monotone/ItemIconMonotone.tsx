@@ -31,8 +31,8 @@ import IconFileZip from '../../icon/fill/FileZip16';
 import BookmarkIcon from '../../icon/fill/FileBookmark16';
 
 import IconFolderCollab from '../../icon/fill/FolderShared16';
-import IconFolderExternal from '../../icon/fill/FolderPersonal16'; // eslint-disable-line import/no-duplicates
-import IconFolderPersonal from '../../icon/fill/FolderPersonal16'; // eslint-disable-line import/no-duplicates
+import IconFolderExternal from '../../icon/fill/FolderExternal16';
+import IconFolderPersonal from '../../icon/fill/FolderPersonal16';
 
 const itemIconTable = {
     audio: IconFileAudio,
