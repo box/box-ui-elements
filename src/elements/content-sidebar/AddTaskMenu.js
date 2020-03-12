@@ -17,7 +17,7 @@ import './AddTaskMenu.scss';
 type Props = {
     isDisabled: boolean,
     onMenuItemClick: (taskType: TaskType) => void,
-    setAddTaskButtonRef?: Function,
+    setAddTaskButtonRef?: (element: HTMLButtonElement) => void,
 };
 
 const AddTaskMenu = (props: Props) => (
