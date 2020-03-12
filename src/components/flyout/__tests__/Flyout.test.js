@@ -27,6 +27,7 @@ describe('components/flyout/Flyout', () => {
     const FakeOverlay = ({
         onClick = () => {},
         onClose = () => {},
+        shouldDefaultFocus = false,
         ...rest
     }) => (
         <div {...rest} className="overlay-wrapper is-visible">

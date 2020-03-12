@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import RadioButton from './RadioButton';
-
 export interface RadioGroupProps {
     children: Array<React.ReactElement> | React.ReactElement;
     className: string;
@@ -50,9 +48,12 @@ class RadioGroup extends React.Component<RadioGroupProps, RadioGroupState> {
         return (
             <div className={`radio-group ${className}`} onChange={this.onChangeHandler}>
                 {React.Children.map(children, (radio: React.ReactElement) => {
-                    const { value, ...rest } = radio.props;
+                    const { value } = radio.props;
 
-                    return <RadioButton isSelected={value === stateValue} name={name} value={value} {...rest} />;
+                    return React.cloneElement(radio, {
+                        name,
+                        isSelected: value === stateValue,
+                    });
                 })}
             </div>
         );

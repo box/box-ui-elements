@@ -401,7 +401,7 @@ class TaskForm extends React.Component<Props, State> {
                         </PillSelectorDropdown>
 
                         {shouldShowCompletionRule && (
-                            <FeatureFlag feature="activityFeed.tasks.anyTask">
+                            <>
                                 <FeatureFlag feature="activityFeed.tasks.assignToGroup">
                                     <Checkbox
                                         data-testid="task-form-completion-rule-checkbox-group"
@@ -424,7 +424,7 @@ class TaskForm extends React.Component<Props, State> {
                                         onChange={this.handleCompletionRuleChange}
                                     />
                                 </FeatureFlag>
-                            </FeatureFlag>
+                            </>
                         )}
 
                         <TextArea

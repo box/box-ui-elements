@@ -4,6 +4,7 @@ import * as React from 'react';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import Tooltip, { TooltipPosition, TooltipTheme } from '../Tooltip';
+import TetherPosition from '../../../common/tether-positions';
 
 const sandbox = sinon.sandbox.create();
 
@@ -162,6 +163,21 @@ describe('components/tooltip/Tooltip', () => {
             expect(wrapper.prop('targetAttachment')).toEqual('middle right');
         });
 
+        test('should render correct attachments when custom position is specified', () => {
+            const customPosition = {
+                attachment: TetherPosition.TOP_LEFT,
+                targetAttachment: TetherPosition.BOTTOM_RIGHT,
+            };
+            const wrapper = shallow(
+                <Tooltip position={customPosition} text="hi">
+                    <button />
+                </Tooltip>,
+            );
+
+            expect(wrapper.prop('attachment')).toEqual('top left');
+            expect(wrapper.prop('targetAttachment')).toEqual('bottom right');
+        });
+
         test('should render with a specific body element', () => {
             const bodyEl = document.createElement('div');
 
@@ -205,6 +221,7 @@ describe('components/tooltip/Tooltip', () => {
             expect(tooltip.is('div')).toBe(true);
             expect(tooltip.hasClass('tooltip')).toBe(true);
             expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
+            expect(component.prop('aria-errormessage')).toBeFalsy();
             expect(tooltip.text()).toEqual('hi');
         });
 
@@ -214,8 +231,12 @@ describe('components/tooltip/Tooltip', () => {
                     <button />
                 </Tooltip>,
             );
+            const component = wrapper.childAt(0);
+            const tooltip = wrapper.childAt(1);
 
             expect(wrapper.find('[role="tooltip"]').hasClass('is-error')).toBe(true);
+            expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
+            expect(component.prop('aria-errormessage')).toEqual(tooltip.prop('id'));
         });
 
         test('should render children only when tooltip is disabled', () => {
@@ -232,6 +253,46 @@ describe('components/tooltip/Tooltip', () => {
                     text: null,
                 }),
             ).toMatchSnapshot();
+        });
+    });
+
+    test('should match snapshot when stopBubble is set', () => {
+        const wrapper = shallow(
+            <Tooltip isShown stopBubble text="hi">
+                <button />
+            </Tooltip>,
+        );
+        expect(wrapper.find('div.tooltip')).toMatchSnapshot();
+    });
+
+    test('event capture div is not present when stopBubble is not set', () => {
+        const wrapper = shallow(
+            <Tooltip isShown text="hi">
+                <button />
+            </Tooltip>,
+        );
+        expect(wrapper.find('div[role="presentation"]').exists()).toBe(false);
+    });
+
+    describe('should stop event propagation when stopBubble is set', () => {
+        test.each([['onClick', 'onContextMenu', 'onKeyPress']])('when %o', onEvent => {
+            const wrapper = shallow(
+                <Tooltip isShown text="hi" stopBubble>
+                    <button />
+                </Tooltip>,
+            );
+            const stop = jest.fn();
+            const nativeStop = jest.fn();
+            expect(wrapper.find('div[role="presentation"]').length).toBe(1);
+            const handler: Function = wrapper.find('div[role="presentation"]').prop(onEvent);
+            handler({
+                stopPropagation: stop,
+                nativeEvent: {
+                    stopImmediatePropagation: nativeStop,
+                },
+            });
+            expect(stop).toHaveBeenCalledTimes(1);
+            expect(nativeStop).toHaveBeenCalledTimes(1);
         });
     });
 

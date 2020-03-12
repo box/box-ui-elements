@@ -52,8 +52,6 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
     className="bdl-SecurityControlsModal-controlsItemList"
   >
     <SecurityControlsItem
-      controlsFormat="full"
-      fillColor="#fef7e8"
       key="msg1"
       message={
         Object {
@@ -61,11 +59,8 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
           "id": "msg1",
         }
       }
-      strokeColor="#f5b31b"
     />
     <SecurityControlsItem
-      controlsFormat="full"
-      fillColor="#fef7e8"
       key="msg2"
       message={
         Object {
@@ -73,7 +68,6 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
           "id": "msg2",
         }
       }
-      strokeColor="#f5b31b"
     />
   </ul>
   <ModalActions>

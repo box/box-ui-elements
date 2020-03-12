@@ -5,9 +5,15 @@ import classNames from 'classnames';
 
 import './Menu.scss';
 
+/**
+ * The selectors are used to identify the menu item that is selected. We need to eventually
+ * rewrite this logic as there seem to be strong coupling between the selector and MenuItem
+ * that we want to decouple. The span is here to allow Menu to recognize MenuItem even if it is
+ * wrapped by a span coming from a tooltip.
+ */
 const MENU_ITEM_SELECTOR = '.menu-item:not([aria-disabled])';
-const TOP_LEVEL_MENU_ITEM_SELECTOR = `ul:not(.submenu) > ${MENU_ITEM_SELECTOR}, ul:not(.submenu) > li > ${MENU_ITEM_SELECTOR}`;
-const SUBMENU_ITEM_SELECTOR = `ul.submenu > ${MENU_ITEM_SELECTOR}, ul.submenu > li > ${MENU_ITEM_SELECTOR}`;
+const TOP_LEVEL_MENU_ITEM_SELECTOR = `ul:not(.submenu) > ${MENU_ITEM_SELECTOR}, ul:not(.submenu) > li > ${MENU_ITEM_SELECTOR}, ul:not(.submenu) > span > ${MENU_ITEM_SELECTOR}`;
+const SUBMENU_ITEM_SELECTOR = `ul.submenu > ${MENU_ITEM_SELECTOR}, ul.submenu > li > ${MENU_ITEM_SELECTOR}, ul.submenu > span > ${MENU_ITEM_SELECTOR}`;
 
 function stopPropagationAndPreventDefault(event) {
     event.stopPropagation();

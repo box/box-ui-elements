@@ -124,8 +124,8 @@ const allSections = [
     {
         name: 'Icons',
         components: () => [
-            '../src/icons/adobe-sign/IconAdobeSign.js',
-            '../src/icons/autocad/IconAutoCAD.js',
+            '../src/icons/adobe-sign/IconAdobeSign.tsx',
+            '../src/icons/autocad/IconAutoCAD.tsx',
             // try not to add to this list but instead add new icons into the
             // families of icons below (or create new families where appropriate)
         ],
@@ -164,7 +164,7 @@ const allSections = [
             },
             {
                 name: 'Google Docs',
-                components: '../src/icons/google-docs/GoogleDocsIcon.js',
+                components: '../src/icons/google-docs/GoogleDocsIcon.tsx',
             },
             {
                 name: 'Illustrations',
@@ -172,14 +172,14 @@ const allSections = [
             },
             {
                 name: 'Items',
-                components: ['../src/icons/item-icon/ItemIcon.js'],
+                components: ['../src/icons/item-icon/ItemIcon.tsx'],
             },
             {
                 name: 'iWork',
                 components: () => [
-                    '../src/icons/iwork/IconIWorkTrio.js',
-                    '../src/icons/iwork/IWorkIcon.js',
-                    '../src/icons/iwork/IWorkDesktopIcon.js',
+                    '../src/icons/iwork/IconIWorkTrio.tsx',
+                    '../src/icons/iwork/IWorkIcon.tsx',
+                    '../src/icons/iwork/IWorkDesktopIcon.tsx',
                 ],
             },
             {
@@ -189,9 +189,9 @@ const allSections = [
             {
                 name: 'Microsoft Office',
                 components: () => [
-                    '../src/icons/microsoft-office/IconOfficeWordmark.js',
-                    '../src/icons/microsoft-office/OfficeOnlineIcon.js',
-                    '../src/icons/microsoft-office/OfficeDesktopIcon.js',
+                    '../src/icons/microsoft-office/IconOfficeWordmark.tsx',
+                    '../src/icons/microsoft-office/OfficeOnlineIcon.tsx',
+                    '../src/icons/microsoft-office/OfficeDesktopIcon.tsx',
                 ],
             },
             {

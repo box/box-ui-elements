@@ -6,23 +6,39 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskDueDate should rende
   status="NOT_STARTED"
 >
   <div
-    className="bcs-TaskDueDate bcs-is-taskOverdue"
     data-testid="task-due-date"
   >
-    <FormattedMessage
-      defaultMessage="Due: {date}"
-      id="be.contentSidebar.activityFeed.taskNew.taskDueDateLabel"
-      values={
-        Object {
-          "date": <ReadableTime
-            alwaysShowTime={true}
-            timestamp={987654321000}
-          />,
-        }
-      }
+    <LabelPill
+      data-testid="task-overdue-date"
+      type="error"
     >
-      <div />
-    </FormattedMessage>
+      <span
+        className="bdl-LabelPill bdl-LabelPill--error bdl-LabelPill--sizeRegular"
+        data-testid="task-overdue-date"
+      >
+        <LabelPillText>
+          <span
+            className="bdl-LabelPill-textContent"
+          >
+            <FormattedMessage
+              defaultMessage="DUE {dateTime}"
+              id="be.contentSidebar.activityFeed.taskNew.taskFeedStatusDue"
+              values={
+                Object {
+                  "dateTime": <ReadableTime
+                    alwaysShowTime={true}
+                    timestamp={987654321000}
+                    uppercase={true}
+                  />,
+                }
+              }
+            >
+              <div />
+            </FormattedMessage>
+          </span>
+        </LabelPillText>
+      </span>
+    </LabelPill>
   </div>
 </TaskDueDate>
 `;
