@@ -62,6 +62,7 @@ type Props = {
     apiHost: string,
     appHost: string,
     autoFocus: boolean,
+    boxAnnotations?: Object,
     cache?: APICache,
     canDownload?: boolean,
     className: string,
@@ -840,7 +841,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         id: ?string,
         successCallback?: Function,
         errorCallback?: Function,
-        fetchOptions?: FetchOptions = {},
+        fetchOptions: FetchOptions = {},
     ): void {
         if (!id) {
             return;
@@ -1080,7 +1081,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @param {string} [version] - The version that is now previewed
      * @param {object} [additionalVersionInfo] - extra info about the version
      */
-    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo?: AdditionalVersionInfo = {}): void => {
+    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo: AdditionalVersionInfo = {}): void => {
         const { onVersionChange }: Props = this.props;
         this.updateVersionToCurrent = additionalVersionInfo.updateVersionToCurrent;
 
@@ -1121,6 +1122,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
     render() {
         const {
             apiHost,
+            collection,
             token,
             language,
             messages,
@@ -1149,7 +1151,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             isThumbnailSidebarOpen,
             selectedVersion,
         }: State = this.state;
-        const { collection }: Props = this.props;
+
         const styleClassName = classNames(
             'be bcpr',
             {
