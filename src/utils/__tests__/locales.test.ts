@@ -1,6 +1,25 @@
-import { getDisplayNames, getDisplayNamesWithIds, getLocalizedNames, getLocalizedNamesWithIds } from '../locales';
+import {
+    getDisplayName,
+    getDisplayNames,
+    getDisplayNamesWithIds,
+    getLocalizedName,
+    getLocalizedNames,
+    getLocalizedNamesWithIds,
+} from '../locales';
 
 describe('util/locales', () => {
+    describe.each([
+        [4, 'English (US)'],
+        [59, 'English (UK)'],
+        [10, 'Español'],
+        [21, 'Français'],
+        [19, '日本語'],
+        [6, '简体中文'],
+    ])('%o', (id, expected) => {
+        test('should return display name given the id', () => {
+            expect(getDisplayName(id)).toEqual(expected);
+        });
+    });
     test('should return display names in order', () => {
         expect(getDisplayNames()).toEqual([
             'English (US)',
@@ -59,7 +78,19 @@ describe('util/locales', () => {
             { id: 55, name: '한국어' },
         ]);
     });
-    test('should return display names with ids in order', () => {
+    describe.each([
+        [4, 'English'],
+        [59, 'British English'],
+        [10, 'Spanish'],
+        [21, 'French'],
+        [19, 'Japanese'],
+        [6, 'Simplified Chinese'],
+    ])('%o', (id, expected) => {
+        test('should return display name given the id', () => {
+            expect(getLocalizedName(id)).toEqual(expected);
+        });
+    });
+    test('should return localized names in order', () => {
         expect(getLocalizedNames()).toEqual([
             'Australian English',
             'Bangla',
@@ -88,7 +119,7 @@ describe('util/locales', () => {
             'Turkish',
         ]);
     });
-    test('should return display names with ids in order', () => {
+    test('should return localized names with ids in order', () => {
         expect(getLocalizedNamesWithIds()).toEqual([
             { id: 67, name: 'Australian English' },
             { id: 70, name: 'Bangla' },

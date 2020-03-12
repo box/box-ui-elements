@@ -51,6 +51,21 @@ const localeComparator = (locale1: BoxLanguage, locale2: BoxLanguage) =>
     locale1.name.localeCompare(locale2.name, languages.bcp47Tag);
 
 /**
+ * Given the language id, returns the name for display (in its native languages)
+ *
+ * @param  {number} id
+ *
+ * @return string
+ */
+function getDisplayName(id: number): string {
+    const lang: BoxLanguage | undefined = defaultDisplayNames.find(locale => locale.id === id);
+    if (lang) {
+        return lang.name;
+    }
+    throw new Error('Invalid Box language id!');
+}
+
+/**
  * Returns list of language names for display (in their native languages)
  *
  * @return {Array<string>}
@@ -88,4 +103,26 @@ function getLocalizedNamesWithIds(): Array<BoxLanguage> {
     return localizedNames;
 }
 
-export { getDisplayNames, getDisplayNamesWithIds, getLocalizedNames, getLocalizedNamesWithIds };
+/**
+ * Given the language id, returns the localized language name
+ *
+ * @param  {number} id
+ *
+ * @return string
+ */
+function getLocalizedName(id: number): string {
+    const lang: BoxLanguage | undefined = getLocalizedNamesWithIds().find(locale => locale.id === id);
+    if (lang) {
+        return lang.name;
+    }
+    throw new Error('Invalid Box language id!');
+}
+
+export {
+    getDisplayName,
+    getDisplayNames,
+    getDisplayNamesWithIds,
+    getLocalizedName,
+    getLocalizedNames,
+    getLocalizedNamesWithIds,
+};
