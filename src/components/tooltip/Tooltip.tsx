@@ -279,36 +279,40 @@ class Tooltip extends React.Component<TooltipProps, State> {
             targetAttachment: tetherPosition.targetAttachment,
         };
 
-        const tooltip = (
-            <>
+        const renderTooltip = () => (
+            <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite">
                 {text}
                 {withCloseButton && (
                     <PlainButton className="tooltip-close-button" onClick={this.closeTooltip}>
                         <IconClose className="bdl-Tooltip-iconClose" width={14} height={14} />
                     </PlainButton>
                 )}
-            </>
+            </div>
         );
 
-        const tooltipWithStopBubble = (
+        const renderTooltipWithStopBubble = () => (
             <div
+                className={classes}
                 role="presentation"
                 onClick={this.handleTooltipEvent}
                 onContextMenu={this.handleTooltipEvent}
                 onKeyPress={this.handleTooltipEvent}
             >
-                {tooltip}
+                <div id={this.tooltipID} role="tooltip" aria-live="polite">
+                    {text}
+                    {withCloseButton && (
+                        <PlainButton className="tooltip-close-button" onClick={this.closeTooltip}>
+                            <IconClose className="bdl-Tooltip-iconClose" width={14} height={14} />
+                        </PlainButton>
+                    )}
+                </div>
             </div>
         );
 
         return (
             <TetherComponent ref={this.tetherRef} {...tetherProps}>
                 {React.cloneElement(React.Children.only(children) as React.ReactElement, componentProps)}
-                {showTooltip && (
-                    <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite">
-                        {stopBubble ? tooltipWithStopBubble : tooltip}
-                    </div>
-                )}
+                {showTooltip && (stopBubble ? renderTooltipWithStopBubble() : renderTooltip())}
             </TetherComponent>
         );
     }
