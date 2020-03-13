@@ -20,6 +20,9 @@ describe('util/locales', () => {
             expect(getDisplayName(id)).toEqual(expected);
         });
     });
+    test('should throw error when given the invalid id', () => {
+        expect(() => getDisplayName(12345)).toThrow(/Invalid Box language id/);
+    });
     test('should return display names in order', () => {
         expect(getDisplayNames()).toEqual([
             'English (US)',
@@ -89,6 +92,9 @@ describe('util/locales', () => {
         test('should return display name given the id', () => {
             expect(getLocalizedName(id)).toEqual(expected);
         });
+    });
+    test('should throw error when given the invalid id', () => {
+        expect(() => getLocalizedName(12345)).toThrow(/Invalid Box language id/);
     });
     test('should return localized names in order', () => {
         expect(getLocalizedNames()).toEqual([
