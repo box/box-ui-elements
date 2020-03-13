@@ -3,6 +3,7 @@
 exports[`components/nudge/Nudge should correctly render Nudge 1`] = `
 <article
   className="bdl-Nudge"
+  data-resin-component="nudge"
 >
   <Button
     aria-label="close-nudge"
@@ -43,6 +44,7 @@ exports[`components/nudge/Nudge should correctly render Nudge 1`] = `
     className="bdl-Nudge-button"
   >
     <PrimaryButton
+      data-resin-target="nudgeButton"
       onClick={[MockFunction]}
     >
       <span>
