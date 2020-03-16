@@ -279,7 +279,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             targetAttachment: tetherPosition.targetAttachment,
         };
 
-        const tooltip = (
+        const tooltipInner = (
             <>
                 {text}
                 {withCloseButton && (
@@ -290,25 +290,29 @@ class Tooltip extends React.Component<TooltipProps, State> {
             </>
         );
 
-        const tooltipWithStopBubble = (
+        const tooltip = stopBubble ? (
             <div
+                className={classes}
+                id={this.tooltipID}
                 role="presentation"
                 onClick={this.handleTooltipEvent}
                 onContextMenu={this.handleTooltipEvent}
                 onKeyPress={this.handleTooltipEvent}
             >
-                {tooltip}
+                <div role="tooltip" aria-live="polite">
+                    {tooltipInner}
+                </div>
+            </div>
+        ) : (
+            <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite">
+                {tooltipInner}
             </div>
         );
 
         return (
             <TetherComponent ref={this.tetherRef} {...tetherProps}>
                 {React.cloneElement(React.Children.only(children) as React.ReactElement, componentProps)}
-                {showTooltip && (
-                    <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite">
-                        {stopBubble ? tooltipWithStopBubble : tooltip}
-                    </div>
-                )}
+                {showTooltip && tooltip}
             </TetherComponent>
         );
     }
