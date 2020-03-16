@@ -290,30 +290,29 @@ class Tooltip extends React.Component<TooltipProps, State> {
             </>
         );
 
-        const renderTooltip = () => (
-            <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite">
-                {tooltipInner}
-            </div>
-        );
-
-        const renderTooltipWithStopBubble = () => (
+        const tooltip = stopBubble ? (
             <div
                 className={classes}
+                id={this.tooltipID}
                 role="presentation"
                 onClick={this.handleTooltipEvent}
                 onContextMenu={this.handleTooltipEvent}
                 onKeyPress={this.handleTooltipEvent}
             >
-                <div id={this.tooltipID} role="tooltip" aria-live="polite">
+                <div role="tooltip" aria-live="polite">
                     {tooltipInner}
                 </div>
+            </div>
+        ) : (
+            <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite">
+                {tooltipInner}
             </div>
         );
 
         return (
             <TetherComponent ref={this.tetherRef} {...tetherProps}>
                 {React.cloneElement(React.Children.only(children) as React.ReactElement, componentProps)}
-                {showTooltip && (stopBubble ? renderTooltipWithStopBubble() : renderTooltip())}
+                {showTooltip && tooltip}
             </TetherComponent>
         );
     }
