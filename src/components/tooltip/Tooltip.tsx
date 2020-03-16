@@ -279,14 +279,20 @@ class Tooltip extends React.Component<TooltipProps, State> {
             targetAttachment: tetherPosition.targetAttachment,
         };
 
-        const renderTooltip = () => (
-            <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite">
+        const tooltipInner = (
+            <>
                 {text}
                 {withCloseButton && (
                     <PlainButton className="tooltip-close-button" onClick={this.closeTooltip}>
                         <IconClose className="bdl-Tooltip-iconClose" width={14} height={14} />
                     </PlainButton>
                 )}
+            </>
+        );
+
+        const renderTooltip = () => (
+            <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite">
+                {tooltipInner}
             </div>
         );
 
@@ -299,12 +305,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 onKeyPress={this.handleTooltipEvent}
             >
                 <div id={this.tooltipID} role="tooltip" aria-live="polite">
-                    {text}
-                    {withCloseButton && (
-                        <PlainButton className="tooltip-close-button" onClick={this.closeTooltip}>
-                            <IconClose className="bdl-Tooltip-iconClose" width={14} height={14} />
-                        </PlainButton>
-                    )}
+                    {tooltipInner}
                 </div>
             </div>
         );
