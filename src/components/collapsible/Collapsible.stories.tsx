@@ -6,13 +6,13 @@ import Collapsible from './Collapsible';
 import notes from './Collapsible.stories.md';
 
 export const withBorder = () => {
-    const onOpen = () => {
+    const onOpen = (arg?: boolean | string | number) => {
         // eslint-disable-next-line no-console
-        console.log('opened');
+        console.log('opened', arg);
     };
-    const onClose = () => {
+    const onClose = (arg?: boolean | string | number) => {
         // eslint-disable-next-line no-console
-        console.log('closed');
+        console.log('closed', arg);
     };
     return (
         <Collapsible isOpen onOpen={onOpen} onClose={onClose} isBordered title="Collapsible card title">
