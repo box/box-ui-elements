@@ -1,4 +1,4 @@
-// @flow
+// @ts-nocheck
 import React from 'react';
 import styled, { ThemeProvider, keyframes } from 'styled-components';
 import merge from 'lodash/merge';
