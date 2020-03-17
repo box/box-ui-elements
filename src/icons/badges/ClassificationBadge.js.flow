@@ -1,0 +1,7 @@
+// @flow
+import type { Icon } from '../flowTypes';
+
+// eslint-disable-next-line no-unused-vars
+const ClassificationBadge = (props: Icon) => null;
+
+export default ClassificationBadge;

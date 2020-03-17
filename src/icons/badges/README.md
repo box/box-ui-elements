@@ -5,6 +5,10 @@ const IconsExample = require('../../../examples/src/IconsExample').default;
 
 const icons = [
     {
+        name: 'ClassificationBadge',
+        component: require('./ClassificationBadge').default,
+    },
+    {
         name: 'CoauthoringBadge',
         component: require('./CoauthoringBadge').default,
     },

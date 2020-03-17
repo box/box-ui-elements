@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`icons/badges/ClassificationBadge should correctly render default icon 1`] = `
+<AccessibleSVG
+  className="bdl-ClassificationBadge"
+  height={16}
+  viewBox="0 0 16 16"
+  width={16}
+>
+  <g
+    fill="none"
+    fillRule="evenodd"
+    stroke="#0061d5"
+  >
+    <circle
+      cx="8"
+      cy="8"
+      r="7.5"
+    />
+    <path
+      d="M8 3.213L4.206 4.987v2.628c0 1.178.388 2.317 1.037 3.228.657.921 1.58 1.606 2.881 1.877 1.053-.27 1.976-.956 2.633-1.877.649-.91 1.037-2.05 1.037-3.228V4.987L8 3.213z"
+    />
+    <path
+      d="M9.882 6.588L9.882 9.412"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </g>
+</AccessibleSVG>
+`;
