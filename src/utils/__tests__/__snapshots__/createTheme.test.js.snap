@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/theme should contain default Box theme 1`] = `
+exports[`components/theme should generate accessible palette for dark primary 1`] = `
 Object {
   "base": Object {
     "background": "#fff",
@@ -23,28 +23,6 @@ Object {
     "dark": Object {},
   },
   "primary": Object {
-    "background": "#0061d5",
-    "backgroundActive": "#004eac",
-    "backgroundGradient": "#0055bc",
-    "backgroundHover": "#006ae9",
-    "border": "#0061d5",
-    "buttonBackground": "#0061d5",
-    "buttonBackgroundActive": "#004eac",
-    "buttonBackgroundHover": "#006ae9",
-    "buttonBorder": "#0061d5",
-    "buttonBorderActive": "#004eac",
-    "buttonBorderHover": "#006ae9",
-    "buttonForeground": "#fff",
-    "foreground": "#fff",
-    "progressBarBackground": "#006ae9",
-    "scrollShadowRgba": "rgba(0, 0, 0, 0.2)",
-  },
-}
-`;
-
-exports[`components/theme should generate accessible palette for dark primary 1`] = `
-Object {
-  "primary": Object {
     "background": "#000000",
     "backgroundActive": "#262626",
     "backgroundGradient": "#1a1a1a",
@@ -66,6 +44,26 @@ Object {
 
 exports[`components/theme should generate accessible palette for light primary 1`] = `
 Object {
+  "base": Object {
+    "background": "#fff",
+    "backgroundActive": "#e8e8e8",
+    "backgroundHover": "#f4f4f4",
+    "border": "#bcbcbc",
+    "buttonBackground": "#fff",
+    "buttonBackgroundActive": "#e8e8e8",
+    "buttonBackgroundHover": "#f4f4f4",
+    "buttonBorder": "#bcbcbc",
+    "buttonBorderActive": "#bcbcbc",
+    "buttonBorderHover": "#bcbcbc",
+    "buttonForeground": "#000",
+    "foreground": "#222",
+    "progressBarBackground": "#a7a7a7",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.2)",
+  },
+  "modes": Object {
+    "admin": Object {},
+    "dark": Object {},
+  },
   "primary": Object {
     "background": "#ffffff",
     "backgroundActive": "#ebebeb",
@@ -88,6 +86,26 @@ Object {
 
 exports[`components/theme should generate accessible palette for midtone grey 1`] = `
 Object {
+  "base": Object {
+    "background": "#fff",
+    "backgroundActive": "#e8e8e8",
+    "backgroundHover": "#f4f4f4",
+    "border": "#bcbcbc",
+    "buttonBackground": "#fff",
+    "buttonBackgroundActive": "#e8e8e8",
+    "buttonBackgroundHover": "#f4f4f4",
+    "buttonBorder": "#bcbcbc",
+    "buttonBorderActive": "#bcbcbc",
+    "buttonBorderHover": "#bcbcbc",
+    "buttonForeground": "#000",
+    "foreground": "#222",
+    "progressBarBackground": "#a7a7a7",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.2)",
+  },
+  "modes": Object {
+    "admin": Object {},
+    "dark": Object {},
+  },
   "primary": Object {
     "background": "#6a6c6e",
     "backgroundActive": "#565859",
@@ -110,6 +128,26 @@ Object {
 
 exports[`components/theme should generate accessible palette using color string 1`] = `
 Object {
+  "base": Object {
+    "background": "#fff",
+    "backgroundActive": "#e8e8e8",
+    "backgroundHover": "#f4f4f4",
+    "border": "#bcbcbc",
+    "buttonBackground": "#fff",
+    "buttonBackgroundActive": "#e8e8e8",
+    "buttonBackgroundHover": "#f4f4f4",
+    "buttonBorder": "#bcbcbc",
+    "buttonBorderActive": "#bcbcbc",
+    "buttonBorderHover": "#bcbcbc",
+    "buttonForeground": "#000",
+    "foreground": "#222",
+    "progressBarBackground": "#a7a7a7",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.2)",
+  },
+  "modes": Object {
+    "admin": Object {},
+    "dark": Object {},
+  },
   "primary": Object {
     "background": "#ffc0cb",
     "backgroundActive": "#ff738c",
@@ -126,28 +164,6 @@ Object {
     "foreground": "#000",
     "progressBarBackground": "#909090",
     "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
-  },
-}
-`;
-
-exports[`components/theme should generate box brand colors 1`] = `
-Object {
-  "primary": Object {
-    "background": "#0061d5",
-    "backgroundActive": "#004eac",
-    "backgroundGradient": "#0055bc",
-    "backgroundHover": "#006ae9",
-    "border": "#0061d5",
-    "buttonBackground": "#0061d5",
-    "buttonBackgroundActive": "#004eac",
-    "buttonBackgroundHover": "#006ae9",
-    "buttonBorder": "#0061d5",
-    "buttonBorderActive": "#004eac",
-    "buttonBorderHover": "#006ae9",
-    "buttonForeground": "#fff",
-    "foreground": "#fff",
-    "progressBarBackground": "#006ae9",
-    "scrollShadowRgba": "rgba(0, 0, 0, 0.2)",
   },
 }
 `;

@@ -3,6 +3,7 @@
 import Color from 'color';
 import type { ColorType } from 'color';
 import method from 'lodash/method';
+import merge from 'lodash/merge';
 import mapValues from 'lodash/mapValues';
 
 import {
@@ -13,6 +14,7 @@ import {
     THEME_MID_LIGHT,
     THEME_VERY_LIGHT,
 } from '../constants';
+import defaultTheme from '../styles/theme';
 import * as vars from '../styles/variables';
 
 // When converting from rgb/hsl to hex there is potential for
@@ -184,10 +186,12 @@ function createTheme(colorKey: string) {
         scrollShadowRgba,
     };
 
-    return {
+    const dynamicTheme = {
         // To avoid a mixture of casing, we force all values to lower
         primary: mapValues(colorValues, method('toLowerCase')),
     };
+
+    return merge({}, defaultTheme, dynamicTheme);
 }
 
 export { createTheme };

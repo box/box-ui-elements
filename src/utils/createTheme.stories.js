@@ -1,13 +1,11 @@
 // @ts-nocheck
 import React from 'react';
 import styled, { ThemeProvider, keyframes } from 'styled-components';
-import merge from 'lodash/merge';
 import { select } from '@storybook/addon-knobs';
 
 import * as vars from '../styles/variables';
 import BoxButton from '../components/button';
 import BoxLogo from '../icon/logo/BoxLogo';
-import defaultTheme from '../styles/theme';
 import { createTheme } from './createTheme';
 import notes from './createTheme.stories.md';
 
@@ -191,8 +189,7 @@ const Footer = styled.div`
 
 export const ThemeExample = () => {
     const colorKey = select('Primary Color', options);
-    const dynamicTheme = colorKey ? createTheme(colorKey) : {};
-    const theme = merge({}, defaultTheme, dynamicTheme);
+    const theme = colorKey ? createTheme(colorKey) : {};
 
     return (
         <ThemeProvider theme={theme}>
