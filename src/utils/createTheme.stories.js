@@ -91,11 +91,6 @@ const ThemeDemo = styled.div`
 
     border: 1px solid ${p => p.theme.primary.border};
     background: ${p => p.theme.primary.background};
-    /* background-image: linear-gradient(
-        to bottom,
-        ${props => props.theme.primary.background} 50%,
-        ${props => props.theme.primary.backgroundGradient} 100%
-    ); */
 `;
 
 const ThemeDemoMenuItem = styled.div`
