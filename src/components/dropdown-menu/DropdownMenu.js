@@ -145,11 +145,14 @@ class DropdownMenu extends React.Component<Props, State> {
         }
     };
 
-    handleMenuClose = (isKeyboardEvent: boolean, event: SyntheticEvent<>) => {
+    handleMenuClose = (isKeyboardEvent: boolean, event: SyntheticEvent<>, shouldFocus: boolean = true) => {
         const { onMenuClose } = this.props;
 
         this.closeMenu();
-        this.focusButton();
+
+        if (shouldFocus) {
+            this.focusButton();
+        }
 
         if (onMenuClose) {
             onMenuClose(event);
@@ -168,7 +171,7 @@ class DropdownMenu extends React.Component<Props, State> {
             !menuEl.contains(event.target) &&
             !menuButtonEl.contains(event.target)
         ) {
-            this.closeMenu();
+            this.handleMenuClose(false, event, false);
         }
     };
 
