@@ -10,8 +10,10 @@ import type { Callout } from './Callout';
 import './styles/LeftSidebarLinkCallout.scss';
 
 type Props = {
+    attachmentPosition?: string,
     callout: Callout,
     children: React.Node,
+    targetAttachmentPosition?: string,
 };
 
 type State = {
@@ -34,14 +36,20 @@ class LeftSidebarLinkCallout extends React.Component<Props, State> {
 
     render() {
         const {
+            attachmentPosition = 'middle left',
             children,
             callout: { content },
+            targetAttachmentPosition = 'middle right',
         } = this.props;
 
         const { isShown } = this.state;
 
         return (
-            <TetherComponent attachment="middle left" classPrefix="nav-link-callout" targetAttachment="middle right">
+            <TetherComponent
+                attachment={attachmentPosition}
+                classPrefix="nav-link-callout"
+                targetAttachment={targetAttachmentPosition}
+            >
                 {React.Children.only(children)}
                 {isShown && (
                     <div className="nav-link-callout">
