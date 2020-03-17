@@ -4,16 +4,18 @@ import TetherComponent from 'react-tether';
 
 import PlainButton from '../../components/plain-button';
 import IconClose from '../../icons/general/IconClose';
+import TETHER_POSITIONS from '../../common/tether-positions';
 
+import type { TetherPosition } from '../../common/tether-positions';
 import type { Callout } from './Callout';
 
 import './styles/LeftSidebarLinkCallout.scss';
 
 type Props = {
-    attachmentPosition?: string,
+    attachmentPosition?: TetherPosition,
     callout: Callout,
     children: React.Node,
-    targetAttachmentPosition?: string,
+    targetAttachmentPosition?: TetherPosition,
 };
 
 type State = {
@@ -36,10 +38,10 @@ class LeftSidebarLinkCallout extends React.Component<Props, State> {
 
     render() {
         const {
-            attachmentPosition = 'middle left',
+            attachmentPosition = TETHER_POSITIONS.MIDDLE_LEFT,
             children,
             callout: { content },
-            targetAttachmentPosition = 'middle right',
+            targetAttachmentPosition = TETHER_POSITIONS.MIDDLE_RIGHT,
         } = this.props;
 
         const { isShown } = this.state;
