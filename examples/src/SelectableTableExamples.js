@@ -128,6 +128,7 @@ class SelectableTableExamples extends Component {
                 <SelectableTable
                     data={data.map(user => user[2])}
                     enableHotkeys
+                    enableBlurDetection
                     hotkeyType="Item Selection"
                     // eslint-disable-next-line react/no-unused-state
                     onSelect={(selectedItems, focusedItem) => this.setState({ selectedItems, focusedItem })}

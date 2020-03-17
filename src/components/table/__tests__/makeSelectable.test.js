@@ -313,6 +313,58 @@ describe('components/table/makeSelectable', () => {
         });
     });
 
+    describe('clearFocus()', () => {
+        test('should clear focus', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            wrapper.setState({ focusedIndex: 1 });
+
+            instance.clearFocus();
+
+            expect(wrapper.state('focusedIndex')).toBeUndefined();
+        });
+    });
+
+    describe('blur detection', () => {
+        test('should not set timer when table does not have focus', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.clearFocus = jest.fn();
+            wrapper.setState({ focusedIndex: undefined });
+
+            instance.handleTableBlur();
+            jest.runAllTimers();
+
+            expect(instance.blurTimerID).toBeNull();
+            expect(instance.clearFocus).toBeCalledTimes(0);
+        });
+
+        test('should clear focus after timeout expires', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.clearFocus = jest.fn();
+            wrapper.setState({ focusedIndex: 1 });
+
+            instance.handleTableBlur();
+            jest.runAllTimers();
+
+            expect(instance.clearFocus).toBeCalledTimes(1);
+        });
+
+        test('should not clear focus if focus is regained before timeout expires', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.clearFocus = jest.fn();
+            wrapper.setState({ focusedIndex: 1 });
+
+            instance.handleTableBlur();
+            instance.handleTableFocus(); // regain focus
+            jest.runAllTimers();
+
+            expect(instance.clearFocus).toBeCalledTimes(0);
+        });
+    });
+
     describe('keyboard shortcuts', () => {
         test('should set and return this.hotkeys when this.hotkeys is null', () => {
             const instance = getWrapper({}).instance();
@@ -665,6 +717,23 @@ describe('components/table/makeSelectable', () => {
             expect(table.prop('onRowFocus')).toEqual(wrapper.instance().handleRowFocus);
             expect(table.prop('focusedItem')).toEqual('b');
             expect(table.prop('focusedIndex')).toEqual(1);
+        });
+
+        test('should wrap in div for blur detection if enabled', () => {
+            const wrapper = getWrapper({ enableBlurDetection: true });
+            const instance = wrapper.instance();
+
+            const div = wrapper.find('div');
+            expect(div).toHaveLength(1);
+            expect(div.prop('onBlur')).toBe(instance.handleTableBlur);
+            expect(div.prop('onFocus')).toBe(instance.handleTableFocus);
+        });
+
+        test('should not wrap in div for blur detection if disabled', () => {
+            const wrapper = getWrapper();
+
+            const div = wrapper.find('div');
+            expect(div).toHaveLength(0);
         });
     });
 });
