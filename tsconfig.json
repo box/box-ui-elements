@@ -3,8 +3,8 @@
     "compilerOptions": {
         "baseUrl": ".",
         "outDir": "es",
-        "rootDir": "src"
+        "rootDir": "."
     },
     "files": [".storybook/typings.d.ts"],
-    "include": ["src/**/*.ts", "src/**/*.tsx"]
+    "include": ["src/**/*.ts", "src/**/*.tsx", "examples/src/**.tsx", "types.ts"]
 }
