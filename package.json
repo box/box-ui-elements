@@ -164,6 +164,7 @@
         "@types/jest-image-snapshot": "^2.11.0",
         "@types/lodash": "^4.14.149",
         "@types/node": "^13.5.2",
+        "@types/puppeteer": "^2.0.1",
         "@types/react": "^16.9.18",
         "@types/react-dom": "^16.9.5",
         "@types/react-router-dom": "^5.1.3",
