@@ -709,6 +709,7 @@ describe('components/table/makeSelectable', () => {
     describe('render()', () => {
         test('should add "is-selectable" class and pass props to table', () => {
             const wrapper = getWrapper({});
+            const instance = wrapper.instance();
             wrapper.setState({ focusedIndex: 1 });
 
             const table = wrapper.find('Table');
@@ -717,23 +718,8 @@ describe('components/table/makeSelectable', () => {
             expect(table.prop('onRowFocus')).toEqual(wrapper.instance().handleRowFocus);
             expect(table.prop('focusedItem')).toEqual('b');
             expect(table.prop('focusedIndex')).toEqual(1);
-        });
-
-        test('should wrap in div for blur detection if enabled', () => {
-            const wrapper = getWrapper({ enableBlurDetection: true });
-            const instance = wrapper.instance();
-
-            const div = wrapper.find('div');
-            expect(div).toHaveLength(1);
-            expect(div.prop('onBlur')).toBe(instance.handleTableBlur);
-            expect(div.prop('onFocus')).toBe(instance.handleTableFocus);
-        });
-
-        test('should not wrap in div for blur detection if disabled', () => {
-            const wrapper = getWrapper();
-
-            const div = wrapper.find('div');
-            expect(div).toHaveLength(0);
+            expect(table.prop('onTableBlur')).toBe(instance.handleTableBlur);
+            expect(table.prop('onTableFocus')).toBe(instance.handleTableFocus);
         });
     });
 });

@@ -39,7 +39,6 @@ function makeSelectable(BaseTable) {
              */
             selectedItems: PropTypes.oneOfType([PropTypes.array, ImmutablePropTypes.set]),
             enableHotkeys: PropTypes.bool,
-            enableBlurDetection: PropTypes.bool,
             /** Translated type for hotkeys. If not provided, then the hotkeys will not appear in the help modal. */
             hotkeyType: PropTypes.string,
         };
@@ -370,30 +369,24 @@ function makeSelectable(BaseTable) {
         };
 
         render() {
-            const { className, data, enableBlurDetection } = this.props;
+            const { className, data } = this.props;
             const { focusedIndex } = this.state;
             const focusedItem = data[focusedIndex];
 
-            let table = (
-                <BaseTable
-                    {...this.props}
-                    className={classNames(className, 'is-selectable')}
-                    focusedIndex={focusedIndex}
-                    focusedItem={focusedItem}
-                    onRowClick={this.handleRowClick}
-                    onRowFocus={this.handleRowFocus}
-                />
+            return (
+                <Hotkeys configs={this.getHotkeyConfigs()}>
+                    <BaseTable
+                        {...this.props}
+                        className={classNames(className, 'is-selectable')}
+                        focusedIndex={focusedIndex}
+                        focusedItem={focusedItem}
+                        onRowClick={this.handleRowClick}
+                        onRowFocus={this.handleRowFocus}
+                        onTableBlur={this.handleTableBlur}
+                        onTableFocus={this.handleTableFocus}
+                    />
+                </Hotkeys>
             );
-
-            if (enableBlurDetection) {
-                table = (
-                    <div onBlur={this.handleTableBlur} onFocus={this.handleTableFocus}>
-                        {table}
-                    </div>
-                );
-            }
-
-            return <Hotkeys configs={this.getHotkeyConfigs()}>{table}</Hotkeys>;
         }
     };
 }
