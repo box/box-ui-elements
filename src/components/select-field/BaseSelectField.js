@@ -208,6 +208,11 @@ class BaseSelectField extends React.Component<Props, State> {
                     this.closeDropdown();
                 }
                 break;
+            case 'Tab':
+                if (isOpen) {
+                    this.closeDropdown();
+                }
+                break;
             default: {
                 stopDefaultEvent(event);
                 const lowerCaseKey = key.toLowerCase();
