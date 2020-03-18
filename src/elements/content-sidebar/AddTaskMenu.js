@@ -17,11 +17,12 @@ import './AddTaskMenu.scss';
 type Props = {
     isDisabled: boolean,
     onMenuItemClick: (taskType: TaskType) => void,
+    setAddTaskButtonRef?: (element: HTMLButtonElement) => void,
 };
 
 const AddTaskMenu = (props: Props) => (
     <DropdownMenu constrainToScrollParent isRightAligned>
-        <Button isDisabled={props.isDisabled} type="button">
+        <Button isDisabled={props.isDisabled} type="button" setRef={props.setAddTaskButtonRef}>
             <MenuToggle>
                 <FormattedMessage {...messages.tasksAddTask} />
             </MenuToggle>
