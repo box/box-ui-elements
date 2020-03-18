@@ -430,14 +430,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
     });
 
     describe('handleMenuClose()', () => {
-        const closeMenuSpy = jest.fn();
-        const focusButtonSpy = jest.fn();
-        const onMenuCloseSpy = jest.fn();
-        const handleMenuCloseEvent = {
-            target: document.createElement('div'),
-        };
-
-        test('should call closeMenu() and focusButton() only when shouldFocus is true and onMenuClose() is not provided', () => {
+        test('should call closeMenu() and focusButton() when called', () => {
             const wrapper = shallow(
                 <DropdownMenu>
                     <FakeButton />
@@ -446,49 +439,10 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             );
 
             const instance = wrapper.instance();
-            instance.closeMenu = closeMenuSpy;
-            instance.focusButton = focusButtonSpy;
+            sandbox.mock(instance).expects('closeMenu');
+            sandbox.mock(instance).expects('focusButton');
+
             instance.handleMenuClose();
-
-            expect(closeMenuSpy).toHaveBeenCalled();
-            expect(focusButtonSpy).toHaveBeenCalled();
-            expect(onMenuCloseSpy).not.toHaveBeenCalled();
-        });
-
-        test('should call closeMenu() and onMenuClose() only when shouldFocus is false and onMenuClose() is provided', () => {
-            const wrapper = shallow(
-                <DropdownMenu onMenuClose={onMenuCloseSpy}>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
-
-            const instance = wrapper.instance();
-            instance.closeMenu = closeMenuSpy;
-            instance.focusButton = focusButtonSpy;
-            instance.handleMenuClose(false, handleMenuCloseEvent, false);
-
-            expect(closeMenuSpy).toHaveBeenCalled();
-            expect(onMenuCloseSpy).toHaveBeenCalled();
-            expect(focusButtonSpy).not.toHaveBeenCalled();
-        });
-
-        test('should call closeMenu(), focusButton(), and onMenuClose() when shouldFocus is true and onMenuClose() is provided', () => {
-            const wrapper = shallow(
-                <DropdownMenu onMenuClose={onMenuCloseSpy}>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
-
-            const instance = wrapper.instance();
-            instance.closeMenu = closeMenuSpy;
-            instance.focusButton = focusButtonSpy;
-            instance.handleMenuClose();
-
-            expect(closeMenuSpy).toHaveBeenCalled();
-            expect(focusButtonSpy).toHaveBeenCalled();
-            expect(onMenuCloseSpy).toHaveBeenCalled();
         });
     });
 
@@ -601,8 +555,8 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         });
 
         describe('handleDocumentClick()', () => {
-            const handleMenuCloseSpy = jest.fn();
-            test('should call handleMenuClose() when event target is not within the menu or button', () => {
+            const closeMenuSpy = jest.fn();
+            test('should call closeMenu() when event target is not within the menu or button', () => {
                 mountToBody(
                     <DropdownMenu>
                         <FakeButton />
@@ -612,13 +566,34 @@ describe('components/dropdown-menu/DropdownMenu', () => {
 
                 const instance = wrapper.instance();
                 instance.openMenuAndSetFocusIndex(0);
-                instance.handleMenuClose = handleMenuCloseSpy;
+                instance.closeMenu = closeMenuSpy;
                 const handleDocumentClickEvent = {
                     target: document.createElement('div'),
                 };
                 instance.handleDocumentClick(handleDocumentClickEvent);
 
-                expect(handleMenuCloseSpy).toHaveBeenCalledWith(false, handleDocumentClickEvent, false);
+                expect(closeMenuSpy).toHaveBeenCalled();
+            });
+
+            test('should call onMenuClose() when provided', () => {
+                const onMenuCloseSpy = jest.fn();
+                mountToBody(
+                    <DropdownMenu onMenuClose={onMenuCloseSpy}>
+                        <FakeButton />
+                        <FakeMenu />
+                    </DropdownMenu>,
+                );
+
+                const instance = wrapper.instance();
+                instance.openMenuAndSetFocusIndex(0);
+                instance.closeMenu = closeMenuSpy;
+                const handleDocumentClickEvent = {
+                    target: document.createElement('div'),
+                };
+                instance.handleDocumentClick(handleDocumentClickEvent);
+
+                expect(closeMenuSpy).toHaveBeenCalled();
+                expect(onMenuCloseSpy).toHaveBeenCalled();
             });
 
             test.each`
@@ -635,13 +610,13 @@ describe('components/dropdown-menu/DropdownMenu', () => {
 
                 const instance = wrapper.instance();
                 instance.openMenuAndSetFocusIndex(0);
-                instance.handleMenuClose = handleMenuCloseSpy;
+                instance.closeMenu = closeMenuSpy;
                 const handleDocumentClickEvent = {
                     target: document.getElementById(instance[elementID]),
                 };
 
                 instance.handleDocumentClick(handleDocumentClickEvent);
-                expect(handleMenuCloseSpy).not.toHaveBeenCalled();
+                expect(closeMenuSpy).not.toHaveBeenCalled();
             });
         });
 

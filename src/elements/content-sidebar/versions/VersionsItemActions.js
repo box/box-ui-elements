@@ -36,7 +36,7 @@ type Props = {
     showRestore?: boolean,
 };
 
-const handleMenuClose = (event: SyntheticEvent<>) => {
+const handleMenuClose = (event: SyntheticEvent<> | MouseEvent) => {
     event.stopPropagation();
 };
 

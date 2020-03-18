@@ -18,7 +18,7 @@ type Props = {
     /** Function called when menu is opened */
     isRightAligned: boolean,
     /** Handler for dropdown menu close events */
-    onMenuClose?: (event: SyntheticEvent<>) => void,
+    onMenuClose?: (event: SyntheticEvent<> | MouseEvent) => void,
     /** Handler for dropdown menu open events */
     onMenuOpen?: () => void,
     /** Set true to close dropdown menu on event bubble instead of event capture */
@@ -145,14 +145,11 @@ class DropdownMenu extends React.Component<Props, State> {
         }
     };
 
-    handleMenuClose = (isKeyboardEvent: boolean, event: SyntheticEvent<>, shouldFocus: boolean = true) => {
+    handleMenuClose = (isKeyboardEvent: boolean, event: SyntheticEvent<> | MouseEvent) => {
         const { onMenuClose } = this.props;
 
         this.closeMenu();
-
-        if (shouldFocus) {
-            this.focusButton();
-        }
+        this.focusButton();
 
         if (onMenuClose) {
             onMenuClose(event);
@@ -171,7 +168,13 @@ class DropdownMenu extends React.Component<Props, State> {
             !menuEl.contains(event.target) &&
             !menuButtonEl.contains(event.target)
         ) {
-            this.handleMenuClose(false, event, false);
+            const { onMenuClose } = this.props;
+
+            this.closeMenu();
+
+            if (onMenuClose) {
+                onMenuClose(event);
+            }
         }
     };
 
