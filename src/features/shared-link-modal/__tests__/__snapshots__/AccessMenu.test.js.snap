@@ -6,7 +6,6 @@ exports[`features/shared-link-modal/AccessMenu render() should render component 
     constrainToScrollParent={false}
     constrainToWindow={true}
     isRightAligned={false}
-    onMenuClose={[Function]}
   >
     <PlainButton
       className="lnk"

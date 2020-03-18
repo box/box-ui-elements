@@ -33,7 +33,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             constrainToScrollParent={false}
             constrainToWindow={true}
             isRightAligned={true}
-            onMenuClose={[Function]}
           >
             <TetherComponent
               attachment="top right"
@@ -301,7 +300,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             constrainToScrollParent={false}
             constrainToWindow={true}
             isRightAligned={true}
-            onMenuClose={[Function]}
           >
             <TetherComponent
               attachment="top right"
@@ -569,7 +567,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             constrainToScrollParent={false}
             constrainToWindow={true}
             isRightAligned={true}
-            onMenuClose={[Function]}
           >
             <TetherComponent
               attachment="top right"
@@ -837,7 +834,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             constrainToScrollParent={false}
             constrainToWindow={true}
             isRightAligned={true}
-            onMenuClose={[Function]}
           >
             <TetherComponent
               attachment="top right"
@@ -1149,7 +1145,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             constrainToScrollParent={false}
             constrainToWindow={true}
             isRightAligned={true}
-            onMenuClose={[Function]}
           >
             <TetherComponent
               attachment="top right"
@@ -1461,7 +1456,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             constrainToScrollParent={false}
             constrainToWindow={true}
             isRightAligned={true}
-            onMenuClose={[Function]}
           >
             <TetherComponent
               attachment="top right"

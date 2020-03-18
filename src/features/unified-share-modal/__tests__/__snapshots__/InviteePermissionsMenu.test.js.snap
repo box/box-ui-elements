@@ -8,7 +8,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     constrainToScrollParent={false}
     constrainToWindow={false}
     isRightAligned={false}
-    onMenuClose={[Function]}
   >
     <Tooltip
       constrainToScrollParent={false}
@@ -134,7 +133,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     constrainToScrollParent={false}
     constrainToWindow={false}
     isRightAligned={false}
-    onMenuClose={[Function]}
   >
     <PlainButton
       className="lnk"
@@ -242,7 +240,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     constrainToScrollParent={false}
     constrainToWindow={false}
     isRightAligned={false}
-    onMenuClose={[Function]}
   >
     <Tooltip
       constrainToScrollParent={false}
@@ -368,7 +365,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     constrainToScrollParent={false}
     constrainToWindow={false}
     isRightAligned={false}
-    onMenuClose={[Function]}
   >
     <PlainButton
       className="lnk"
@@ -476,7 +472,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     constrainToScrollParent={false}
     constrainToWindow={false}
     isRightAligned={false}
-    onMenuClose={[Function]}
   >
     <Tooltip
       constrainToScrollParent={false}
@@ -602,7 +597,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     constrainToScrollParent={false}
     constrainToWindow={false}
     isRightAligned={false}
-    onMenuClose={[Function]}
   >
     <PlainButton
       className="lnk"
@@ -710,7 +704,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     constrainToScrollParent={false}
     constrainToWindow={false}
     isRightAligned={false}
-    onMenuClose={[Function]}
   >
     <Tooltip
       constrainToScrollParent={false}
@@ -836,7 +829,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     constrainToScrollParent={false}
     constrainToWindow={false}
     isRightAligned={false}
-    onMenuClose={[Function]}
   >
     <PlainButton
       className="lnk"
@@ -944,7 +936,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     constrainToScrollParent={false}
     constrainToWindow={false}
     isRightAligned={false}
-    onMenuClose={[Function]}
   >
     <Tooltip
       constrainToScrollParent={false}
@@ -1070,7 +1061,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     constrainToScrollParent={false}
     constrainToWindow={false}
     isRightAligned={false}
-    onMenuClose={[Function]}
   >
     <PlainButton
       className="lnk"
@@ -1178,7 +1168,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     constrainToScrollParent={false}
     constrainToWindow={false}
     isRightAligned={false}
-    onMenuClose={[Function]}
   >
     <Tooltip
       constrainToScrollParent={false}
@@ -1304,7 +1293,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     constrainToScrollParent={false}
     constrainToWindow={false}
     isRightAligned={false}
-    onMenuClose={[Function]}
   >
     <PlainButton
       className="lnk"
@@ -1412,7 +1400,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     constrainToScrollParent={false}
     constrainToWindow={false}
     isRightAligned={false}
-    onMenuClose={[Function]}
   >
     <PlainButton
       className="lnk"
@@ -1520,7 +1507,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     constrainToScrollParent={false}
     constrainToWindow={false}
     isRightAligned={false}
-    onMenuClose={[Function]}
   >
     <Tooltip
       constrainToScrollParent={false}

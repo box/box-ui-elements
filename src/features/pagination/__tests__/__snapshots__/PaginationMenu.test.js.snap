@@ -6,7 +6,6 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={true}
-  onMenuClose={[Function]}
 >
   <Button
     className="bdl-Pagination-toggle"
@@ -47,7 +46,6 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={true}
-  onMenuClose={[Function]}
 >
   <Button
     className="bdl-Pagination-toggle"
@@ -116,7 +114,6 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={true}
-  onMenuClose={[Function]}
 >
   <Button
     className="bdl-Pagination-toggle"

@@ -5,7 +5,6 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={false}
-  onMenuClose={[Function]}
 >
   <PlainButton
     className="lnk is-disabled bdl-is-disabled"
@@ -80,7 +79,6 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={false}
-  onMenuClose={[Function]}
 >
   <PlainButton
     className="lnk"
@@ -155,7 +153,6 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={false}
-  onMenuClose={[Function]}
 >
   <PlainButton
     className="lnk is-disabled bdl-is-disabled"
@@ -230,7 +227,6 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={false}
-  onMenuClose={[Function]}
 >
   <PlainButton
     className="lnk"
