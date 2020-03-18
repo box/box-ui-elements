@@ -4,6 +4,7 @@ import styled, { ThemeProvider, keyframes } from 'styled-components';
 import { select } from '@storybook/addon-knobs';
 
 import * as vars from '../styles/variables';
+import defaultTheme from '../styles/theme';
 import BoxButton from '../components/button';
 import BoxLogo from '../icon/logo/BoxLogo';
 import { createTheme } from './createTheme';
@@ -189,7 +190,7 @@ const Footer = styled.div`
 
 export const ThemeExample = () => {
     const colorKey = select('Primary Color', options);
-    const theme = colorKey ? createTheme(colorKey) : {};
+    const theme = colorKey ? createTheme(colorKey) : defaultTheme;
 
     return (
         <ThemeProvider theme={theme}>
