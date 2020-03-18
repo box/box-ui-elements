@@ -1,12 +1,13 @@
 import React from 'react';
 import sinon from 'sinon';
+import { shallow, ShallowWrapper } from 'enzyme';
 
 import Button from '../../button/Button';
 import PlainButton from '../../plain-button/PlainButton';
 import Collapsible from '..';
 
 describe('components/collapsible/Collapsible', () => {
-    let wrapper;
+    let wrapper: ShallowWrapper;
 
     beforeEach(() => {
         wrapper = shallow(
@@ -79,7 +80,7 @@ describe('components/collapsible/Collapsible', () => {
 
     test('should not render a PlainButton if a button is not passed in', () => {
         wrapper = shallow(
-            <Collapsible headerButton={null} title="foo">
+            <Collapsible title="foo">
                 <span>foobar</span>
             </Collapsible>,
         );

@@ -14,6 +14,8 @@ export interface NudgeProps {
     className?: string;
     /** DOM element for the content of the nudge. */
     content: React.ReactNode;
+    /** String for the Resin target value */
+    dataResinTarget?: string;
     /** DOM element for the illustration image */
     illustration: React.ReactNode;
     /** Boolean value from the parent to determine if the nudge is shown */
@@ -30,6 +32,7 @@ function Nudge({
     buttonText,
     className,
     content,
+    dataResinTarget = 'nudgeButton',
     illustration,
     isShown,
     header,
@@ -45,13 +48,15 @@ function Nudge({
     );
 
     return (
-        <article className={classes}>
+        <article className={classes} data-resin-component="nudge">
             {closeButton}
             <div className="bdl-Nudge-illustration">{illustration}</div>
             <h2 className="bdl-Nudge-header">{header}</h2>
             <p className="bdl-Nudge-content">{content}</p>
             <div className="bdl-Nudge-button">
-                <PrimaryButton onClick={onButtonClick}>{buttonText}</PrimaryButton>
+                <PrimaryButton data-resin-target={dataResinTarget} onClick={onButtonClick}>
+                    {buttonText}
+                </PrimaryButton>
             </div>
         </article>
     );

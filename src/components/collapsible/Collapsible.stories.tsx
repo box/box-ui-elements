@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 
 import Button from '../button/Button';
@@ -7,11 +6,11 @@ import Collapsible from './Collapsible';
 import notes from './Collapsible.stories.md';
 
 export const withBorder = () => {
-    const onOpen = arg => {
+    const onOpen = (arg?: boolean | string | number) => {
         // eslint-disable-next-line no-console
         console.log('opened', arg);
     };
-    const onClose = arg => {
+    const onClose = (arg?: boolean | string | number) => {
         // eslint-disable-next-line no-console
         console.log('closed', arg);
     };

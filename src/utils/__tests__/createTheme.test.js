@@ -1,4 +1,3 @@
-import merge from 'lodash/merge';
 import Color from 'color';
 import randomSwatches from '../../../test/fixtures/theme/colors';
 import defaultTheme from '../../styles/theme';
@@ -24,21 +23,11 @@ describe('components/theme', () => {
         });
     });
 
-    test('should contain default Box theme', () => {
-        expect(defaultTheme).toMatchSnapshot();
-    });
-
-    test('should generate box brand colors', () => {
-        const dynamicTheme = createTheme(vars.bdlBoxBlue);
-
-        expect(dynamicTheme).toMatchSnapshot();
-    });
-
     test('should generate box brand colors and merge into base theme', () => {
         const dynamicTheme = createTheme(vars.bdlBoxBlue);
-        const baseTheme = defaultTheme;
 
-        expect(merge(baseTheme, dynamicTheme)).toMatchSnapshot();
+        expect(dynamicTheme).toMatchObject(defaultTheme);
+        expect(dynamicTheme).toMatchSnapshot();
     });
 
     test('should generate accessible palette for midtone grey', () => {

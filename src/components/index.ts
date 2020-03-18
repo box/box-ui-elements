@@ -13,6 +13,12 @@ export * from './button-group';
 export { default as Checkbox } from './checkbox';
 export * from './checkbox';
 
+export { default as Collapsible } from './collapsible';
+export * from './collapsible';
+
+export { default as ContextMenu } from './context-menu';
+export * from './context-menu';
+
 export { default as ErrorMask } from './error-mask';
 export * from './error-mask';
 
@@ -30,6 +36,9 @@ export * from './link';
 
 export { default as LoadingIndicator } from './loading-indicator';
 export * from './loading-indicator';
+
+export { default as Menu } from './menu';
+export * from './menu';
 
 export { default as PlainButton } from './plain-button';
 export * from './plain-button';

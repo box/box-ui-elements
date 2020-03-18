@@ -199,16 +199,16 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
 
 exports[`components/tooltip/Tooltip should match snapshot when stopBubble is set 1`] = `
 <div
-  aria-live="polite"
   className="tooltip bdl-Tooltip"
   id="tooltip19"
-  role="tooltip"
+  onClick={[Function]}
+  onContextMenu={[Function]}
+  onKeyPress={[Function]}
+  role="presentation"
 >
   <div
-    onClick={[Function]}
-    onContextMenu={[Function]}
-    onKeyPress={[Function]}
-    role="presentation"
+    aria-live="polite"
+    role="tooltip"
   >
     hi
   </div>
