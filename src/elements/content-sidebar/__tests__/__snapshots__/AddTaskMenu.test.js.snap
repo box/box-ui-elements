@@ -5,6 +5,7 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
   constrainToScrollParent={true}
   constrainToWindow={false}
   isRightAligned={true}
+  onMenuClose={[Function]}
 >
   <Button
     className=""
