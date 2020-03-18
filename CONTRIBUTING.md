@@ -50,11 +50,19 @@ include BREAKING CHANGE keyword for breaking changes.
 
 The message summary should be a one-sentence description of the change, and it must be 72 characters in length or shorter. For a list of tags, please [click here](https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional#type-enum). We use the angular style for tags. See the [default release rules](https://github.com/semantic-release/commit-analyzer/blob/master/lib/default-release-rules.js) based on the commit tag. Shown below is an example of the release type that will be done based on a commit message.
 
+In most cases, commits will be a `feat` or `fix`. Make sure to include the `BREAKING CHANGE` string in the summary if there are non-backwards-compatible changes in the commit.
+
+The tags for `refactor`, `chore`, `perf`, `docs` signal that there are **no external changes to _any_ APIs** (including non-breaking ones), and **release notes are not generated** for these tags.
+
 | Commit message                                                                                                                                          | Release type               |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `fix(preview): fullscreen behavior in ie11`                                                                                                             | Patch Release              |
 | `feat(preview): add ability to fullscreen`                                                                                                              | ~~Minor~~ Feature Release  |
 | `feat(preview): remove fullscreen ability`<br><br>`BREAKING CHANGE: The fullscreen ability has been removed due to poor support of the fullscreen api.` | ~~Major~~ Breaking Release |
+| `docs(preview): document fullscreen api`                                                                                                                | No Release Needed          |
+| `chore(preview): remove commented code from preview`                                                                                                    | No Release Needed          |
+| `refactor(preview): extract helper functions`                                                                                                           | No Release Needed          |
+| `perf(preview): improve preview data structures`                                                                                                        | No Release Needed          |
 
 ### Step 5: Rebase
 
