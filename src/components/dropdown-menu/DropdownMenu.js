@@ -36,6 +36,7 @@ class DropdownMenu extends React.Component<Props, State> {
         constrainToScrollParent: false,
         constrainToWindow: false,
         isRightAligned: false,
+        onMenuClose: noop,
     };
 
     menuID = uniqueId('menu');
@@ -148,13 +149,9 @@ class DropdownMenu extends React.Component<Props, State> {
 
     handleMenuClose = (isKeyboardEvent: boolean, event: SyntheticEvent<> | MouseEvent) => {
         const { onMenuClose } = this.props;
-
         this.closeMenu();
         this.focusButton();
-
-        if (onMenuClose) {
-            onMenuClose(event);
-        }
+        onMenuClose(event);
     };
 
     handleDocumentClick = (event: MouseEvent) => {
@@ -169,7 +166,7 @@ class DropdownMenu extends React.Component<Props, State> {
             !menuEl.contains(event.target) &&
             !menuButtonEl.contains(event.target)
         ) {
-            const { onMenuClose = noop } = this.props;
+            const { onMenuClose } = this.props;
             this.closeMenu();
             onMenuClose(event);
         }
