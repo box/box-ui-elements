@@ -2,6 +2,7 @@
 import * as React from 'react';
 import TetherComponent from 'react-tether';
 import uniqueId from 'lodash/uniqueId';
+import noop from 'lodash/noop';
 
 import { KEYS } from '../../constants';
 import './DropdownMenu.scss';
@@ -168,13 +169,9 @@ class DropdownMenu extends React.Component<Props, State> {
             !menuEl.contains(event.target) &&
             !menuButtonEl.contains(event.target)
         ) {
-            const { onMenuClose } = this.props;
-
+            const { onMenuClose = noop } = this.props;
             this.closeMenu();
-
-            if (onMenuClose) {
-                onMenuClose(event);
-            }
+            onMenuClose(event);
         }
     };
 
