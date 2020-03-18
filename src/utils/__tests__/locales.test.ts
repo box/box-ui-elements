@@ -7,6 +7,115 @@ import {
     getLocalizedNamesWithIds,
 } from '../locales';
 
+const japaneseLanguagesData = {
+    id: 19,
+    bcp47Tag: 'ja-JP',
+    name: 'Japanese',
+    localizedName: '日本語',
+    localizedNameList: [
+        {
+            id: 4,
+            name: '英語',
+        },
+        {
+            id: 6,
+            name: '簡体中国語',
+        },
+        {
+            id: 8,
+            name: 'ロシア語',
+        },
+        {
+            id: 10,
+            name: 'スペイン語',
+        },
+        {
+            id: 14,
+            name: 'ポルトガル語',
+        },
+        {
+            id: 16,
+            name: 'イタリア語',
+        },
+        {
+            id: 18,
+            name: 'ドイツ語',
+        },
+        {
+            id: 19,
+            name: '日本語',
+        },
+        {
+            id: 21,
+            name: 'フランス語',
+        },
+        {
+            id: 24,
+            name: 'オランダ語',
+        },
+        {
+            id: 30,
+            name: 'ポーランド語',
+        },
+        {
+            id: 49,
+            name: 'トルコ語',
+        },
+        {
+            id: 55,
+            name: '韓国語',
+        },
+        {
+            id: 57,
+            name: 'スウェーデン語',
+        },
+        {
+            id: 59,
+            name: 'イギリス英語',
+        },
+        {
+            id: 61,
+            name: 'フィンランド語',
+        },
+        {
+            id: 63,
+            name: '繁体中国語',
+        },
+        {
+            id: 65,
+            name: 'フランス語 (カナダ)',
+        },
+        {
+            id: 66,
+            name: 'カナダ英語',
+        },
+        {
+            id: 67,
+            name: 'オーストラリア英語',
+        },
+        {
+            id: 68,
+            name: 'デンマーク語',
+        },
+        {
+            id: 69,
+            name: 'ノルウェー語(ブークモール)',
+        },
+        {
+            id: 70,
+            name: 'ベンガル語',
+        },
+        {
+            id: 71,
+            name: 'ヒンディー語',
+        },
+        {
+            id: 72,
+            name: 'スペイン語 (ラテンアメリカ)',
+        },
+    ],
+};
+
 describe('util/locales', () => {
     describe.each([
         [4, 'English (US)'],
@@ -93,6 +202,18 @@ describe('util/locales', () => {
             expect(getLocalizedName(id)).toEqual(expected);
         });
     });
+    describe.each([
+        [4, '英語'],
+        [59, 'イギリス英語'],
+        [10, 'スペイン語'],
+        [21, 'フランス語'],
+        [19, '日本語'],
+        [6, '簡体中国語'],
+    ])('%o', (id, expected) => {
+        test('should return display name given the id and Japanese languages data', () => {
+            expect(getLocalizedName(id, japaneseLanguagesData)).toEqual(expected);
+        });
+    });
     test('should throw error when given the invalid id', () => {
         expect(() => getLocalizedName(12345)).toThrow(/Invalid Box language id/);
     });
@@ -125,6 +246,35 @@ describe('util/locales', () => {
             'Turkish',
         ]);
     });
+    test('should return localized names in order in Japanese', () => {
+        expect(getLocalizedNames(japaneseLanguagesData)).toEqual([
+            'イギリス英語',
+            'イタリア語',
+            'オーストラリア英語',
+            'オランダ語',
+            'カナダ英語',
+            'スウェーデン語',
+            'スペイン語',
+            'スペイン語 (ラテンアメリカ)',
+            'デンマーク語',
+            'ドイツ語',
+            'トルコ語',
+            'ノルウェー語(ブークモール)',
+            'ヒンディー語',
+            'フィンランド語',
+            'フランス語',
+            'フランス語 (カナダ)',
+            'ベンガル語',
+            'ポーランド語',
+            'ポルトガル語',
+            'ロシア語',
+            '日本語',
+            '簡体中国語',
+            '繁体中国語',
+            '英語',
+            '韓国語',
+        ]);
+    });
     test('should return localized names with ids in order', () => {
         expect(getLocalizedNamesWithIds()).toEqual([
             { id: 67, name: 'Australian English' },
@@ -152,6 +302,35 @@ describe('util/locales', () => {
             { id: 57, name: 'Swedish' },
             { id: 63, name: 'Traditional Chinese' },
             { id: 49, name: 'Turkish' },
+        ]);
+    });
+    test('should return localized names with ids in order in Japanese', () => {
+        expect(getLocalizedNamesWithIds(japaneseLanguagesData)).toEqual([
+            { id: 59, name: 'イギリス英語' },
+            { id: 16, name: 'イタリア語' },
+            { id: 67, name: 'オーストラリア英語' },
+            { id: 24, name: 'オランダ語' },
+            { id: 66, name: 'カナダ英語' },
+            { id: 57, name: 'スウェーデン語' },
+            { id: 10, name: 'スペイン語' },
+            { id: 72, name: 'スペイン語 (ラテンアメリカ)' },
+            { id: 68, name: 'デンマーク語' },
+            { id: 18, name: 'ドイツ語' },
+            { id: 49, name: 'トルコ語' },
+            { id: 69, name: 'ノルウェー語(ブークモール)' },
+            { id: 71, name: 'ヒンディー語' },
+            { id: 61, name: 'フィンランド語' },
+            { id: 21, name: 'フランス語' },
+            { id: 65, name: 'フランス語 (カナダ)' },
+            { id: 70, name: 'ベンガル語' },
+            { id: 30, name: 'ポーランド語' },
+            { id: 14, name: 'ポルトガル語' },
+            { id: 8, name: 'ロシア語' },
+            { id: 19, name: '日本語' },
+            { id: 6, name: '簡体中国語' },
+            { id: 63, name: '繁体中国語' },
+            { id: 4, name: '英語' },
+            { id: 55, name: '韓国語' },
         ]);
     });
 });

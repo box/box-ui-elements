@@ -2,7 +2,7 @@
  * @file Functions to return the list of locales supported by Box
  * @author Box
  */
-import data from 'box-locale-data';
+import data, { LanguagesData } from 'box-locale-data';
 
 export interface BoxLanguage {
     id: number;
@@ -86,32 +86,39 @@ function getDisplayNamesWithIds(): Array<BoxLanguage> {
 /**
  * Returns list of localized language names
  *
+ * @param {LanguagesData} languagesData optional language data to be used to look up localized names instead of the default one
+ *
  * @return {Array<string>}
  */
-function getLocalizedNames(): Array<string> {
-    const sorted: Array<BoxLanguage> = languages.localizedNameList.sort(localeComparator);
+function getLocalizedNames(languagesData?: LanguagesData): Array<string> {
+    const langData: LanguagesData = languagesData || languages;
+    const sorted: Array<BoxLanguage> = langData.localizedNameList.sort(localeComparator);
     return sorted.map(locale => locale.name);
 }
 
 /**
  * Returns list of localized language names with ids
  *
+ * @param {LanguagesData} languagesData optional language data to be used to look up localized names instead of the default one
+ *
  * @return {Array<BoxLanguage>}
  */
-function getLocalizedNamesWithIds(): Array<BoxLanguage> {
-    const localizedNames = languages.localizedNameList.sort(localeComparator);
+function getLocalizedNamesWithIds(languagesData?: LanguagesData): Array<BoxLanguage> {
+    const langData: LanguagesData = languagesData || languages;
+    const localizedNames = langData.localizedNameList.sort(localeComparator);
     return localizedNames;
 }
 
 /**
  * Given the language id, returns the localized language name
  *
- * @param  {number} id
+ * @param {number} id
+ * @param {LanguagesData} languagesData optional language data to be used to look up localized name instead of the default one
  *
  * @return string
  */
-function getLocalizedName(id: number): string {
-    const lang: BoxLanguage | undefined = getLocalizedNamesWithIds().find(locale => locale.id === id);
+function getLocalizedName(id: number, languagesData?: LanguagesData): string {
+    const lang: BoxLanguage | undefined = getLocalizedNamesWithIds(languagesData).find(locale => locale.id === id);
     if (lang) {
         return lang.name;
     }
