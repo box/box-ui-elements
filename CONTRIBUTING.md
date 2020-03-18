@@ -52,7 +52,7 @@ The message summary should be a one-sentence description of the change, and it m
 
 #### Semantic Versioning
 
-"Semantic release" means that changes to the version number of the package (e.g. `3.42.11` to `3.43.0`) are done according to rules that indicate how the change will affect consumers.
+"Semantic versioning" means that changes to the version number of the package (e.g. `3.42.11` to `3.43.0`) are done according to rules that indicate how the change will affect consumers. Read more on the [npm page](https://docs.npmjs.com/about-semantic-versioning).
 
 The version number is broken into 3 positions &mdash; `Major.Minor.Patch`. In semantic release terms, changes to the numbers follow `Breaking.Feature.Fix`.
 
