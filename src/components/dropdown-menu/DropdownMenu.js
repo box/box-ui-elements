@@ -21,7 +21,7 @@ type Props = {
     /** Handler for dropdown menu close events */
     onMenuClose?: (event: SyntheticEvent<> | MouseEvent) => void,
     /** Handler for dropdown menu open events */
-    onMenuOpen?: () => void,
+    onMenuOpen: () => void,
     /** Set true to close dropdown menu on event bubble instead of event capture */
     useBubble?: boolean,
 };
