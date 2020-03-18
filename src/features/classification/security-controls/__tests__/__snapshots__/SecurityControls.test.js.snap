@@ -6,6 +6,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     className="bdl-SecurityControls"
   >
     <SecurityControlsItem
+      appNames={null}
       key="boxui.securityControls.sharingCollabOnly"
       message={
         Object {
@@ -15,6 +16,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     />
     <SecurityControlsItem
+      appNames={null}
       key="boxui.securityControls.externalCollabDomainList"
       message={
         Object {
@@ -24,6 +26,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     />
     <SecurityControlsItem
+      appNames={null}
       key="boxui.securityControls.desktopDownloadOwners"
       message={
         Object {
@@ -33,6 +36,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     />
     <SecurityControlsItem
+      appNames={null}
       key="boxui.securityControls.appDownloadWhitelist"
       message={
         Object {
@@ -54,6 +58,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     className="bdl-SecurityControls"
   >
     <SecurityControlsItem
+      appNames={null}
       key="boxui.securityControls.shortAllRestrictions"
       message={
         Object {
@@ -74,6 +79,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     />
   </PlainButton>
   <SecurityControlsModal
+    appNames={null}
     classificationName="internal only"
     closeModal={[Function]}
     definition="classification definition"

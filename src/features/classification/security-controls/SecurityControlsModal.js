@@ -13,6 +13,7 @@ import SecurityControlsItem from './SecurityControlsItem';
 import './SecurityControlsModal.scss';
 
 type Props = {
+    appNames: ?MessageDescriptor,
     classificationName?: string,
     closeModal: Function,
     definition?: string,
@@ -24,6 +25,7 @@ type Props = {
 };
 
 const SecurityControlsModal = ({
+    appNames,
     closeModal,
     definition,
     fillColor,
@@ -59,7 +61,7 @@ const SecurityControlsModal = ({
             </Label>
             <ul className="bdl-SecurityControlsModal-controlsItemList">
                 {modalItems.map(item => (
-                    <SecurityControlsItem key={item.id} message={item} />
+                    <SecurityControlsItem appNames={appNames} key={item.id} message={item} />
                 ))}
             </ul>
             <ModalActions>

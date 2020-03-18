@@ -90,6 +90,11 @@ const messages = defineMessages({
             'Bullet point that summarizes application download restriction applied to classification. This variation is used when the list of applications is longer than the configured threshold',
         id: 'boxui.securityControls.appDownloadWhitelistOverflow',
     },
+    allAppNames: {
+        defaultMessage: 'All applications: {appsList}',
+        description: 'Name list of all applications download restriction applied to classification',
+        id: 'boxui.securityControls.allAppNames',
+    },
     // Web Download Restrictions
     webDownloadOwners: {
         defaultMessage: 'Download restricted on web, except Owners/Co-Owners.',

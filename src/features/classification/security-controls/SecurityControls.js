@@ -3,7 +3,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { DEFAULT_MAX_APP_COUNT, SECURITY_CONTROLS_FORMAT } from '../constants';
-import { getShortSecurityControlsMessage, getFullSecurityControlsMessages } from './utils';
+import { getAppsTooltip, getShortSecurityControlsMessage, getFullSecurityControlsMessages } from './utils';
 import messages from './messages';
 import PlainButton from '../../../components/plain-button';
 import SecurityControlsItem from './SecurityControlsItem';
@@ -61,6 +61,7 @@ class SecurityControls extends React.Component<Props, State> {
 
         let items = [];
         let modalItems;
+        let appNames;
 
         if (controlsFormat === FULL) {
             items = getFullSecurityControlsMessages(controls, maxAppCount);
@@ -77,6 +78,11 @@ class SecurityControls extends React.Component<Props, State> {
             return null;
         }
 
+        // get applications name list for use in classify modal and security controls modal
+        if (controlsFormat !== SHORT) {
+            appNames = getAppsTooltip(controls, maxAppCount);
+        }
+
         const { isSecurityControlsModalOpen } = this.state;
         const shouldShowSecurityControlsModal =
             controlsFormat === SHORT_WITH_BTN && !!itemName && !!classificationName && !!definition;
@@ -85,7 +91,7 @@ class SecurityControls extends React.Component<Props, State> {
             <>
                 <ul className="bdl-SecurityControls">
                     {items.map(item => (
-                        <SecurityControlsItem key={item.id} message={item} />
+                        <SecurityControlsItem key={item.id} message={item} appNames={appNames} />
                     ))}
                 </ul>
                 {shouldShowSecurityControlsModal && (
@@ -94,6 +100,7 @@ class SecurityControls extends React.Component<Props, State> {
                             <FormattedMessage {...messages.viewAll} />
                         </PlainButton>
                         <SecurityControlsModal
+                            appNames={appNames}
                             fillColor={fillColor}
                             strokeColor={strokeColor}
                             classificationName={classificationName}

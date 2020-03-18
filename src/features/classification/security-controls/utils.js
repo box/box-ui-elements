@@ -123,6 +123,24 @@ const getAppDownloadMessages = (controls: Controls, maxAppCount?: number): Array
     return items;
 };
 
+const getAppsTooltip = (controls: Controls, maxAppCount?: number): ?MessageDescriptor => {
+    let appNames = null;
+    const accessLevel = getProp(controls, `${APP}.accessLevel`);
+
+    if (accessLevel === WHITELIST || accessLevel === BLACKLIST) {
+        const apps = getProp(controls, `${APP}.apps`, []);
+        maxAppCount = isNil(maxAppCount) ? apps.length : maxAppCount;
+        if (apps.length > maxAppCount) {
+            const appsList = apps.map(({ displayText }) => displayText).join(', ');
+            appNames = {
+                ...messages.allAppNames,
+                values: { appsList },
+            };
+        }
+    }
+    return appNames;
+};
+
 const getDownloadMessages = (controls: Controls): Array<MessageDescriptor> => {
     const items = [];
     const { web, mobile, desktop } = getProp(controls, DOWNLOAD, {});
@@ -172,4 +190,4 @@ const getFullSecurityControlsMessages = (controls: Controls, maxAppCount?: numbe
     return items;
 };
 
-export { getShortSecurityControlsMessage, getFullSecurityControlsMessages };
+export { getAppsTooltip, getShortSecurityControlsMessage, getFullSecurityControlsMessages };

@@ -6,10 +6,12 @@ import SecurityControlsItem from '../SecurityControlsItem';
 describe('features/classification/security-controls/SecurityControlsModal', () => {
     let wrapper;
     let modalItems;
+    let appNames;
 
     const getWrapper = props =>
         shallow(
             <SecurityControlsModal
+                appNames={null}
                 closeModal={jest.fn()}
                 definition="classification definition"
                 classificationName="internal"
@@ -47,5 +49,17 @@ describe('features/classification/security-controls/SecurityControlsModal', () =
         wrapper = getWrapper({ modalItems, itemName: 'welcome.pdf' });
 
         expect(wrapper.find(SecurityControlsItem)).toHaveLength(3);
+    });
+
+    test('should pass appNames to SecurityControlsItem', () => {
+        appNames = '123';
+
+        wrapper.setProps({ appNames });
+        expect(
+            wrapper
+                .find(SecurityControlsItem)
+                .findWhere(item => item.props().message.id === 'msg1')
+                .props().appNames,
+        ).toEqual('123');
     });
 });

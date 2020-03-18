@@ -1,7 +1,7 @@
 import messages from '../messages';
 import appRestrictionsMessageMap from '../appRestrictionsMessageMap';
 import downloadRestrictionsMessageMap from '../downloadRestrictionsMessageMap';
-import { getShortSecurityControlsMessage, getFullSecurityControlsMessages } from '../utils';
+import { getAppsTooltip, getShortSecurityControlsMessage, getFullSecurityControlsMessages } from '../utils';
 import {
     DOWNLOAD_CONTROL,
     LIST_ACCESS_LEVEL,
@@ -19,6 +19,30 @@ describe('features/classification/security-controls/utils', () => {
 
     beforeEach(() => {
         accessPolicy = {};
+    });
+
+    describe('getAppsTooltip()', () => {
+        test('should return null when there are no restrictions', () => {
+            expect(getAppsTooltip({})).toBeNull();
+        });
+        test('should return allAppNames message all conditions met', () => {
+            accessPolicy = {
+                app: {
+                    accessLevel: BLACKLIST,
+                    apps: [
+                        { displayText: 'a' },
+                        { displayText: 'b' },
+                        { displayText: 'c' },
+                        { displayText: 'd' },
+                        { displayText: 'e' },
+                    ],
+                },
+            };
+            expect(getAppsTooltip(accessPolicy, 3)).toEqual({
+                ...messages.allAppNames,
+                values: { appsList: 'a, b, c, d, e' },
+            });
+        });
     });
 
     describe('getShortSecurityControlsMessage()', () => {
