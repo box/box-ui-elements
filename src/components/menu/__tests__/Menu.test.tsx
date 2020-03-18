@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 
 import Menu from '../Menu';
@@ -14,7 +14,7 @@ describe('components/menu/Menu', () => {
 
     describe('render()', () => {
         test('should render a unordered list with correct props when called', () => {
-            const wrapper = mount(
+            const wrapper = mount<Menu>(
                 <Menu className="awesome-menu">
                     <li />
                     <li />
@@ -30,7 +30,7 @@ describe('components/menu/Menu', () => {
 
     describe('setInitialFocusIndex()', () => {
         test('should set internal menuItemEls to valid items after mount', () => {
-            const wrapper = mount(
+            const wrapper = mount<Menu>(
                 <Menu>
                     <li className="menu-item" role="menuitem" />
                     <li role="separator" />
@@ -51,7 +51,7 @@ describe('components/menu/Menu', () => {
 
         test('should call setFocus() asynchronously when initialFocusIndex is set to 0', () => {
             const clock = sandbox.useFakeTimers();
-            const wrapper = shallow(
+            const wrapper = shallow<Menu>(
                 <Menu initialFocusIndex={0}>
                     <li role="menuitem" />
                 </Menu>,
@@ -70,7 +70,7 @@ describe('components/menu/Menu', () => {
 
         test('should call setFocus() asynchronously when initialFocusIndex is set to -1', () => {
             const clock = sandbox.useFakeTimers();
-            const wrapper = shallow(
+            const wrapper = shallow<Menu>(
                 <Menu initialFocusIndex={-1}>
                     <li role="menuitem" />
                 </Menu>,
@@ -89,7 +89,7 @@ describe('components/menu/Menu', () => {
 
         test('should not call setFocus() when no initialFocusIndex prop is passed', () => {
             const clock = sandbox.useFakeTimers();
-            const wrapper = shallow(
+            const wrapper = shallow<Menu>(
                 <Menu>
                     <li role="menuitem" />
                 </Menu>,
@@ -109,7 +109,7 @@ describe('components/menu/Menu', () => {
 
     describe('componentDidMount()', () => {
         test('should call setInitialFocusIndex()', () => {
-            const wrapper = shallow(
+            const wrapper = shallow<Menu>(
                 <Menu className="awesome-menu">
                     <li />
                 </Menu>,
@@ -421,7 +421,7 @@ describe('components/menu/Menu', () => {
 
     describe('setFocus()', () => {
         test('should not do anything when there are no valid menu items', () => {
-            const wrapper = mount(
+            const wrapper = mount<Menu>(
                 <Menu>
                     <li role="separator" />
                 </Menu>,
@@ -435,7 +435,7 @@ describe('components/menu/Menu', () => {
         });
 
         test('should wrap to beginning when index is greater than number of items', () => {
-            const wrapper = mount(
+            const wrapper = mount<Menu>(
                 <Menu>
                     <li className="menu-item" role="menuitem" />
                     <li className="menu-item" role="menuitem" />
@@ -452,7 +452,7 @@ describe('components/menu/Menu', () => {
         });
 
         test('should wrap to end when index is less than 0', () => {
-            const wrapper = mount(
+            const wrapper = mount<Menu>(
                 <Menu>
                     <li className="menu-item" role="menuitem" />
                     <li className="menu-item" role="menuitem" />
@@ -469,7 +469,7 @@ describe('components/menu/Menu', () => {
         });
 
         test('should move to specific index when index is in bounds', () => {
-            const wrapper = mount(
+            const wrapper = mount<Menu>(
                 <Menu>
                     <li className="menu-item" role="menuitem" />
                     <li className="menu-item" role="menuitem" />
@@ -488,7 +488,7 @@ describe('components/menu/Menu', () => {
 
     describe('focusFirstItem()', () => {
         test('should call setFocus(0) when called', () => {
-            const wrapper = mount(
+            const wrapper = mount<Menu>(
                 <Menu>
                     <li role="menuitem" />
                 </Menu>,
@@ -504,7 +504,7 @@ describe('components/menu/Menu', () => {
 
     describe('focusLastItem()', () => {
         test('should call setFocus(-1) when called', () => {
-            const wrapper = mount(
+            const wrapper = mount<Menu>(
                 <Menu>
                     <li role="menuitem" />
                     <li role="menuitem" />
@@ -522,7 +522,7 @@ describe('components/menu/Menu', () => {
 
     describe('focusNextItem()', () => {
         test('should call setFocus(current+1) when called', () => {
-            const wrapper = mount(
+            const wrapper = mount<Menu>(
                 <Menu>
                     <li role="menuitem" />
                     <li role="menuitem" />
@@ -541,7 +541,7 @@ describe('components/menu/Menu', () => {
 
     describe('focusPreviousItem()', () => {
         test('should call setFocus(current-1) when called', () => {
-            const wrapper = mount(
+            const wrapper = mount<Menu>(
                 <Menu>
                     <li role="menuitem" />
                     <li role="menuitem" />
@@ -560,7 +560,7 @@ describe('components/menu/Menu', () => {
 
     describe('getMenuItemElFromEventTarget()', () => {
         test('should return valid menu item when target is contained in a menu item', () => {
-            const wrapper = mount(
+            const wrapper = mount<Menu>(
                 <Menu>
                     <li className="menu-item" role="menuitem" />
                     <li className="menu-item" role="menuitem">
@@ -582,7 +582,7 @@ describe('components/menu/Menu', () => {
         });
 
         test('should return null when target is not in a valid menu item', () => {
-            const wrapper = mount(
+            const wrapper = mount<Menu>(
                 <Menu>
                     <li role="menuitem" />
                     <li role="menuitem" />
@@ -601,7 +601,7 @@ describe('components/menu/Menu', () => {
 
     describe('fireOnCloseHandler()', () => {
         test('should call onClose() when prop exists', () => {
-            const wrapper = mount(
+            const wrapper = mount<Menu>(
                 <Menu onClose={sandbox.mock()}>
                     <li role="menuitem" />
                 </Menu>,
