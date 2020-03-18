@@ -518,6 +518,38 @@ describe('components/select-field/BaseSelectField', () => {
         });
     });
 
+    describe('onTab', () => {
+        test('should not close dropdown when dropdown is closed nor stop default event ', () => {
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            const instanceMock = sandbox.mock(instance);
+            wrapper.setState({ isOpen: false });
+
+            instanceMock.expects('closeDropdown').never();
+
+            wrapper.simulate('keyDown', {
+                key: 'Tab',
+                preventDefault: sandbox.mock().never(),
+                stopPropagation: sandbox.mock().never(),
+            });
+        });
+
+        test('should close dropdown when dropdown is open and should not stop default event', () => {
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            const instanceMock = sandbox.mock(instance);
+            wrapper.setState({ isOpen: true });
+
+            instanceMock.expects('closeDropdown');
+
+            wrapper.simulate('keyDown', {
+                key: 'Tab',
+                preventDefault: sandbox.mock().never(),
+                stopPropagation: sandbox.mock().never(),
+            });
+        });
+    });
+
     describe('onAnyKey', () => {
         test('should set the active item based on letter', () => {
             const wrapper = shallowRenderSelectField();
