@@ -28,6 +28,10 @@ export const basic = () => (
             /* eslint-disable-next-line no-console */
             console.log('menu opened');
         }}
+        onMenuClose={() => {
+            /* eslint-disable-next-line no-console */
+            console.log('menu closed');
+        }}
     >
         <PlainButton className="dropdown-menu-example-button" type="button">
             <MenuToggle>

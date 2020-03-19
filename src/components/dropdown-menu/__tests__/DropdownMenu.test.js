@@ -13,11 +13,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
     FakeButton.displayName = 'FakeButton';
 
     /* eslint-disable */
-    const FakeMenu = ({
-        initialFocusIndex = 0,
-        onClose = () => {},
-        ...rest
-    }) => (
+    const FakeMenu = ({ initialFocusIndex = 0, onClose = () => {}, ...rest }) => (
         <ul {...rest} role="menu">
             Some Menu
         </ul>
@@ -559,6 +555,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         });
 
         describe('handleDocumentClick()', () => {
+            const closeMenuSpy = jest.fn();
             test('should call closeMenu() when event target is not within the menu or button', () => {
                 mountToBody(
                     <DropdownMenu>
@@ -569,14 +566,41 @@ describe('components/dropdown-menu/DropdownMenu', () => {
 
                 const instance = wrapper.instance();
                 instance.openMenuAndSetFocusIndex(0);
-                sandbox.mock(instance).expects('closeMenu');
-
-                instance.handleDocumentClick({
+                instance.closeMenu = closeMenuSpy;
+                const handleDocumentClickEvent = {
                     target: document.createElement('div'),
-                });
+                };
+                instance.handleDocumentClick(handleDocumentClickEvent);
+
+                expect(closeMenuSpy).toHaveBeenCalled();
             });
 
-            test('should not call closeMenu() when event target is within the button', () => {
+            test('should call onMenuClose() when provided', () => {
+                const onMenuCloseSpy = jest.fn();
+                mountToBody(
+                    <DropdownMenu onMenuClose={onMenuCloseSpy}>
+                        <FakeButton />
+                        <FakeMenu />
+                    </DropdownMenu>,
+                );
+
+                const instance = wrapper.instance();
+                instance.openMenuAndSetFocusIndex(0);
+                instance.closeMenu = closeMenuSpy;
+                const handleDocumentClickEvent = {
+                    target: document.createElement('div'),
+                };
+                instance.handleDocumentClick(handleDocumentClickEvent);
+
+                expect(closeMenuSpy).toHaveBeenCalled();
+                expect(onMenuCloseSpy).toHaveBeenCalled();
+            });
+
+            test.each`
+                elementID         | description
+                ${'menuButtonID'} | ${'button'}
+                ${'menuID'}       | ${'menu'}
+            `('should not call handleMenuClose() when event target is within the $description', ({ elementID }) => {
                 mountToBody(
                     <DropdownMenu>
                         <FakeButton />
@@ -586,34 +610,13 @@ describe('components/dropdown-menu/DropdownMenu', () => {
 
                 const instance = wrapper.instance();
                 instance.openMenuAndSetFocusIndex(0);
-                sandbox
-                    .mock(instance)
-                    .expects('closeMenu')
-                    .never();
+                instance.closeMenu = closeMenuSpy;
+                const handleDocumentClickEvent = {
+                    target: document.getElementById(instance[elementID]),
+                };
 
-                instance.handleDocumentClick({
-                    target: document.getElementById(instance.menuButtonID),
-                });
-            });
-
-            test('should not call closeMenu() when event target is within the menu', () => {
-                mountToBody(
-                    <DropdownMenu>
-                        <FakeButton />
-                        <FakeMenu />
-                    </DropdownMenu>,
-                );
-
-                const instance = wrapper.instance();
-                instance.openMenuAndSetFocusIndex(0);
-                sandbox
-                    .mock(instance)
-                    .expects('closeMenu')
-                    .never();
-
-                instance.handleDocumentClick({
-                    target: document.getElementById(instance.menuID),
-                });
+                instance.handleDocumentClick(handleDocumentClickEvent);
+                expect(closeMenuSpy).not.toHaveBeenCalled();
             });
         });
 
