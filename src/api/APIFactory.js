@@ -277,8 +277,11 @@ class APIFactory {
      *
      * @param {Token} token - token used to make requests
      */
-    updateToken(token: Token = ''): void {
-        this.options.token = token;
+    setToken(token: Token): void {
+        if (token) {
+            this.destroy();
+            this.options = { ...this.options, token };
+        }
     }
 
     /**

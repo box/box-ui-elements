@@ -82,13 +82,13 @@ describe('api/APIFactory', () => {
         });
     });
 
-    describe('updateToken()', () => {
-        test('should update token', () => {
+    describe('setToken()', () => {
+        test('should set new token', () => {
             const token = '123ABC';
             const newToken = 'ABC1234678910';
             const instance = new APIFactory({ token });
 
-            instance.updateToken(newToken);
+            instance.setToken(newToken);
 
             expect(instance.options.token).toEqual(newToken);
         });
