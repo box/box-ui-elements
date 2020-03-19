@@ -82,6 +82,18 @@ describe('api/APIFactory', () => {
         });
     });
 
+    describe('updateToken()', () => {
+        test('should update token', () => {
+            const token = '123ABC';
+            const newToken = 'ABC1234678910';
+            const instance = new APIFactory({ token });
+
+            instance.updateToken(newToken);
+
+            expect(instance.options.token).toEqual(newToken);
+        });
+    });
+
     describe('getAPI()', () => {
         test('should return file api when type is file', () => {
             expect(factory.getAPI('file')).toBeInstanceOf(FileAPI);

@@ -339,6 +339,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.loadPreview();
         } else if (hasTokenChanged) {
             this.updatePreviewToken();
+            this.api.updateToken(token);
+            this.fetchFile(currentFileId);
         }
     }
 
