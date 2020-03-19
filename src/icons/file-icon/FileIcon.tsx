@@ -143,7 +143,21 @@ const EXTENSIONS: { [key: string]: { [key: string]: string } } = {
     IconFileKeynote: mirror(['key']),
     IconFileNumbers: mirror(['numbers']),
     IconFilePages: mirror(['pages']),
-    IconFileImage: mirror(['bmp', 'gif', 'gdraw', 'jpeg', 'jpg', 'png', 'ps', 'svs', 'svg', 'tif', 'tiff']),
+    IconFileImage: mirror([
+        'bmp',
+        'gif',
+        'gdraw',
+        'jpeg',
+        'jpg',
+        'png',
+        'ps',
+        'svs',
+        'svg',
+        'tif',
+        'tiff',
+        'heic',
+        'heif',
+    ]),
     IconFilePDF: mirror(['pdf']),
     IconFilePresentation: mirror(['odp', 'otp', 'pot', 'potx']),
     IconFilePowerpointPresentation: mirror(['ppt', 'pptx', 'pptm']),
@@ -190,7 +204,7 @@ interface FileIconProps {
 }
 
 const FileIcon = ({ dimension = 32, extension = '', title }: FileIconProps) => {
-    const IconComponent = Components[getFileIconComponent(extension)];
+    const IconComponent = Components[getFileIconComponent(extension.toLowerCase())];
     return <IconComponent height={dimension} title={title} width={dimension} />;
 };
 
