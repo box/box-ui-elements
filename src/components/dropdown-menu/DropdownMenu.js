@@ -2,6 +2,7 @@
 import * as React from 'react';
 import TetherComponent from 'react-tether';
 import uniqueId from 'lodash/uniqueId';
+import noop from 'lodash/noop';
 
 import { KEYS } from '../../constants';
 import './DropdownMenu.scss';
@@ -18,7 +19,7 @@ type Props = {
     /** Function called when menu is opened */
     isRightAligned: boolean,
     /** Handler for dropdown menu close events */
-    onMenuClose?: (event: SyntheticEvent<>) => void,
+    onMenuClose?: (event: SyntheticEvent<> | MouseEvent) => void,
     /** Handler for dropdown menu open events */
     onMenuOpen?: () => void,
     /** Set true to close dropdown menu on event bubble instead of event capture */
@@ -145,15 +146,11 @@ class DropdownMenu extends React.Component<Props, State> {
         }
     };
 
-    handleMenuClose = (isKeyboardEvent: boolean, event: SyntheticEvent<>) => {
-        const { onMenuClose } = this.props;
-
+    handleMenuClose = (isKeyboardEvent: boolean, event: SyntheticEvent<> | MouseEvent) => {
+        const { onMenuClose = noop } = this.props;
         this.closeMenu();
         this.focusButton();
-
-        if (onMenuClose) {
-            onMenuClose(event);
-        }
+        onMenuClose(event);
     };
 
     handleDocumentClick = (event: MouseEvent) => {
@@ -168,7 +165,9 @@ class DropdownMenu extends React.Component<Props, State> {
             !menuEl.contains(event.target) &&
             !menuButtonEl.contains(event.target)
         ) {
+            const { onMenuClose = noop } = this.props;
             this.closeMenu();
+            onMenuClose(event);
         }
     };
 
