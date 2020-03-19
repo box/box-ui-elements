@@ -82,7 +82,7 @@ exports[`icons/item-icon-monotone/ItemIconMonotone render() should render compon
 `;
 
 exports[`icons/item-icon-monotone/ItemIconMonotone render() should render component with additional props 10`] = `
-<FolderPersonal16
+<FolderExternal16
   className="test"
   height={10}
   title="title"
@@ -361,7 +361,7 @@ exports[`icons/item-icon-monotone/ItemIconMonotone render() should render defaul
 `;
 
 exports[`icons/item-icon-monotone/ItemIconMonotone render() should render default component 10`] = `
-<FolderPersonal16
+<FolderExternal16
   height={32}
   width={32}
 />
