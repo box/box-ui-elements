@@ -185,4 +185,21 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             expect(wrapper).toMatchSnapshot();
         });
     });
+
+    test('should render disabled create shared link message when item share is false and url is empty', () => {
+        const sharedLink = { url: '', canChangeAccessLevel: true };
+        const item = { grantedPermissions: { itemShare: false } };
+        const wrapper = getWrapper({ sharedLink, item });
+        const tooltip = wrapper.find('.usm-disabled-message-tooltip');
+
+        expect(tooltip).toMatchSnapshot();
+    });
+
+    test('should render disabled remove shared link message when url is not empty and canChangeAccessLevel is false', () => {
+        const sharedLink = { url: 'https://example.com/shared-link', canChangeAccessLevel: false };
+        const wrapper = getWrapper({ sharedLink });
+        const tooltip = wrapper.find('.usm-disabled-message-tooltip');
+
+        expect(tooltip).toMatchSnapshot();
+    });
 });
