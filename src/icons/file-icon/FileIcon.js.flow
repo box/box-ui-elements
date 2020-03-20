@@ -186,9 +186,9 @@ const EXTENSIONS = {
     IconFileZip: mirror(['rar', 'tgz', 'zip']),
 };
 
-const getFileIconComponent = extension => {
+const getFileIconComponent = (extension = '') => {
     const extensionComponentName = Object.keys(EXTENSIONS).filter(
-        extensionComponent => !!EXTENSIONS[extensionComponent][extension],
+        extensionComponent => !!EXTENSIONS[extensionComponent][extension.toLowerCase()],
     )[0];
     return extensionComponentName || 'IconFileDefault';
 };
@@ -203,7 +203,7 @@ type Props = {
 };
 
 const FileIcon = ({ dimension = 32, extension = '', title }: Props) => {
-    const IconComponent = Components[getFileIconComponent(extension.toLowerCase())];
+    const IconComponent = Components[getFileIconComponent(extension)];
     return <IconComponent height={dimension} title={title} width={dimension} />;
 };
 
