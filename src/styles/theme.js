@@ -23,7 +23,7 @@ const theme = {
 
         progressBarBackground: vars.bdlGray40,
 
-        scrollShadowRgba: 'rgba(0, 0, 0, 0.2)',
+        scrollShadowRgba: 'rgba(0, 0, 0, 0.12)',
     },
 
     // Primary or brand color
@@ -45,7 +45,7 @@ const theme = {
 
         progressBarBackground: '#006ae9',
 
-        scrollShadowRgba: 'rgba(0, 0, 0, 0.2)',
+        scrollShadowRgba: 'rgba(0, 0, 0, 0.12)',
     },
 
     // TODO(akahn): Should be the same keys as the default if applicable

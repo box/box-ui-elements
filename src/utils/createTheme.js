@@ -148,11 +148,11 @@ function createTheme(colorKey: string) {
             ? modifiedColors.active
             : modifiedColors.activeInverse || adjustLightness(colorKeyObj, -colorRangeConfig.modifiers.active);
 
-    let scrollShadowRgba = 'rgba(0, 0, 0, 0.2)';
+    let scrollShadowRgba = 'rgba(0, 0, 0, 0.12)';
     if (exceedsLightThreshold) {
-        scrollShadowRgba = 'rgba(0, 0, 0, 0.12)';
+        scrollShadowRgba = 'rgba(0, 0, 0, 0.08)';
     } else if (exceedsDarkThreshold) {
-        scrollShadowRgba = 'rgba(0, 0, 0, 0.6)';
+        scrollShadowRgba = 'rgba(0, 0, 0, 0.4)';
     }
 
     // Converting color objects to hex for return value
@@ -188,7 +188,7 @@ function createTheme(colorKey: string) {
 
     const dynamicTheme = {
         // To avoid a mixture of casing, we force all values to lower
-        primary: mapValues(colorValues, method('toLowerCase')),
+        primary: { ...mapValues(colorValues, method('toLowerCase')), _debug: { colorRange } },
     };
 
     return merge({}, defaultTheme, dynamicTheme);

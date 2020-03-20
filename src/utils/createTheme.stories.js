@@ -1,7 +1,8 @@
+/* eslint-disable no-underscore-dangle */
 // @ts-nocheck
 import React from 'react';
 import styled, { ThemeProvider, keyframes } from 'styled-components';
-import { select } from '@storybook/addon-knobs';
+import { color, text } from '@storybook/addon-knobs';
 
 import * as vars from '../styles/variables';
 import defaultTheme from '../styles/theme';
@@ -16,21 +17,6 @@ import IconRecents from '../features/left-sidebar/icons/IconRecents';
 import IconTrash from '../features/left-sidebar/icons/IconTrash';
 import IconFavorites from '../features/left-sidebar/icons/IconFavorites';
 import IconDevConsole from '../features/left-sidebar/icons/IconDevConsole';
-
-const options = {
-    Default: null,
-    Black: '#000000',
-    White: '#ffffff',
-    'Dark Gray': '#444444',
-    'Light Gray': '#eeeeee',
-    Blue: '#1122cc',
-    Red: '#cc1100',
-    Yellow: '#ffdd11',
-    Green: '#118811',
-    'Light Green': '#44cc77',
-    Salmon: '#ff6666',
-    Peach: '#ffe1cc',
-};
 
 const Swatch = styled.div`
     display: inline-block;
@@ -189,19 +175,26 @@ const Footer = styled.div`
 `;
 
 export const ThemeExample = () => {
-    const colorKey = select('Primary Color', options);
-    const theme = colorKey ? createTheme(colorKey) : defaultTheme;
+    const colorText = text('Primary Color Hex');
+    const colorMap = color('Primary Color', '#0061d5');
+
+    const colorHex = /^#[0-9A-F]{6}$/i.test(colorText) ? colorText : colorMap;
+
+    const theme = colorHex ? createTheme(colorHex) : defaultTheme;
 
     return (
         <ThemeProvider theme={theme}>
             <div style={{ float: 'right' }}>
                 <section>
                     <h4>theme.primary</h4>
-                    {Object.entries(theme.primary).map(([key, val]) => (
-                        <div key={key}>
-                            <Swatch color={val} /> {key} <code>{val}</code>
-                        </div>
-                    ))}
+                    {Object.entries(theme.primary)
+                        .filter(([key]) => key !== '_debug')
+                        .map(([key, val]) => (
+                            <div key={key}>
+                                <Swatch color={val} /> {key} <code>{val}</code>
+                            </div>
+                        ))}
+                    <span>Theme Color Range: {theme.primary._debug.colorRange}</span>
                     <br />
                     <h4>theme.base</h4>
                     {Object.entries(theme.base).map(([key, val]) => (
