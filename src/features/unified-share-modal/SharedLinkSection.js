@@ -244,10 +244,12 @@ class SharedLinkSection extends React.Component<Props> {
 
     renderToggle() {
         const { item, onDismissTooltip, onToggleSharedLink, sharedLink, submitting, tooltips } = this.props;
+        const { canChangeAccessLevel, expirationTimestamp, url } = sharedLink;
+        const isSharedLinkEnabled = !!url;
+        const canAddSharedLink = this.canAddSharedLink(isSharedLinkEnabled, item.grantedPermissions.itemShare);
+        const canRemoveSharedLink = this.canRemoveSharedLink(isSharedLinkEnabled, canChangeAccessLevel);
+        const isToggleEnabled = (canAddSharedLink || canRemoveSharedLink) && !submitting;
 
-        const { canChangeAccessLevel, expirationTimestamp } = sharedLink;
-
-        const isSharedLinkEnabled = !!sharedLink.url;
         let linkText;
 
         if (isSharedLinkEnabled) {
@@ -278,11 +280,6 @@ class SharedLinkSection extends React.Component<Props> {
             linkText = <FormattedMessage {...messages.linkShareOff} />;
         }
 
-        const isToggleEnabled =
-            (this.canAddSharedLink(isSharedLinkEnabled, item.grantedPermissions.itemShare) ||
-                this.canRemoveSharedLink(isSharedLinkEnabled, canChangeAccessLevel)) &&
-            !submitting;
-
         const toggleComponent = (
             <div className="share-toggle-container">
                 <Toggle
@@ -296,7 +293,7 @@ class SharedLinkSection extends React.Component<Props> {
         );
 
         if (!submitting) {
-            if (this.canAddSharedLink(isSharedLinkEnabled, item.grantedPermissions.itemShare)) {
+            if (canAddSharedLink) {
                 const sharedLinkToggleTooltip = tooltips['shared-link-toggle'];
                 if (sharedLinkToggleTooltip) {
                     return (
@@ -323,9 +320,17 @@ class SharedLinkSection extends React.Component<Props> {
                 );
             }
 
-            if (!this.canRemoveSharedLink(isSharedLinkEnabled, canChangeAccessLevel)) {
+            if (!isToggleEnabled) {
+                const tooltipDisabledMessage = isSharedLinkEnabled
+                    ? messages.removeLinkTooltip
+                    : messages.disabledCreateLinkTooltip;
+
                 return (
-                    <Tooltip position="top-right" text={<FormattedMessage {...messages.removeLinkTooltip} />}>
+                    <Tooltip
+                        className="usm-disabled-message-tooltip"
+                        position="top-right"
+                        text={<FormattedMessage {...tooltipDisabledMessage} />}
+                    >
                         {toggleComponent}
                     </Tooltip>
                 );
