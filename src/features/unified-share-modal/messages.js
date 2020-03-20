@@ -167,7 +167,7 @@ const messages = defineMessages({
     },
     disabledCreateLinkTooltip: {
         defaultMessage: 'You do not have permission to create the link.',
-        description: 'Tooltip description for not having access to create link',
+        description: 'Tooltip description for users who do not have permission for link creation',
         id: 'boxui.unifiedShare.disabledCreateLinkTooltip',
     },
     sendSharedLink: {

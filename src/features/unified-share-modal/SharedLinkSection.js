@@ -326,7 +326,11 @@ class SharedLinkSection extends React.Component<Props> {
                     : messages.disabledCreateLinkTooltip;
 
                 return (
-                    <Tooltip position="top-right" text={<FormattedMessage {...tooltipDisabledMessage} />}>
+                    <Tooltip
+                        className="usm-disabled-message-tooltip"
+                        position="top-right"
+                        text={<FormattedMessage {...tooltipDisabledMessage} />}
+                    >
                         {toggleComponent}
                     </Tooltip>
                 );
