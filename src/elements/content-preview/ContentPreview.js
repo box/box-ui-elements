@@ -339,7 +339,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.loadPreview();
         } else if (hasTokenChanged) {
             this.updatePreviewToken();
-            this.updateApiToken();
         }
     }
 
@@ -351,16 +350,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
     updatePreviewToken(shouldReload: boolean = false) {
         if (this.preview) {
             this.preview.updateToken(this.props.token, shouldReload);
-        }
-    }
-
-    /**
-     * Updates the access token used by preview library
-     *
-     */
-    updateApiToken() {
-        if (this.api) {
-            this.api.setToken(this.props.token);
         }
     }
 

@@ -1,38 +1,34 @@
 // @flow
 import * as React from 'react';
 import BoxAnnotations from 'box-annotations';
-import { button, text } from '@storybook/addon-knobs';
+import { text } from '@storybook/addon-knobs';
 import { IntlProvider } from 'react-intl';
 import ContentPreview from '../ContentPreview';
 import notes from './ContentPreview.notes.md';
 
-// Used to re-render the story with props from the knobs
-let key = 0;
-
-const reRender = () => {
-    key += 1;
-};
-
 export const Preview = () => {
-    button('Refresh Story', reRender);
+    const fileId = text('File ID', global.FILE_ID);
+    const token = text('Access Token', global.TOKEN);
 
     return (
-        <IntlProvider locale="en" key={key}>
+        <IntlProvider locale="en">
             <ContentPreview
                 features={global.FEATURES}
-                fileId={text('File ID', global.FILE_ID)}
+                fileId={fileId}
                 hasHeader
-                token={text('Access Token', global.TOKEN)}
+                key={`${fileId}-${token}`}
+                token={token}
             />
         </IntlProvider>
     );
 };
 
 export const PreviewWithAnnotations = () => {
-    button('Refresh Story', reRender);
+    const fileId = text('File ID', global.FILE_ID);
+    const token = text('Access Token', global.TOKEN);
 
     return (
-        <IntlProvider locale="en" key={key}>
+        <IntlProvider locale="en">
             <ContentPreview
                 boxAnnotations={new BoxAnnotations()}
                 contentSidebarProps={{
@@ -51,20 +47,22 @@ export const PreviewWithAnnotations = () => {
                     hasVersions: true,
                 }}
                 features={global.FEATURES}
-                fileId={text('File ID', global.FILE_ID)}
+                fileId={fileId}
                 hasHeader
+                key={`${fileId}-${token}`}
                 showAnnotations
-                token={text('Access Token', global.TOKEN)}
+                token={token}
             />
         </IntlProvider>
     );
 };
 
 export const PreviewWithSidebar = () => {
-    button('Refresh Story', reRender);
+    const fileId = text('File ID', global.FILE_ID);
+    const token = text('Access Token', global.TOKEN);
 
     return (
-        <IntlProvider locale="en" key={key}>
+        <IntlProvider locale="en">
             <ContentPreview
                 contentSidebarProps={{
                     detailsSidebarProps: {
@@ -82,9 +80,10 @@ export const PreviewWithSidebar = () => {
                     hasVersions: true,
                 }}
                 features={global.FEATURES}
-                fileId={text('File ID', global.FILE_ID)}
+                fileId={fileId}
                 hasHeader
-                token={text('Access Token', global.TOKEN)}
+                key={`${fileId}-${token}`}
+                token={token}
             />
         </IntlProvider>
     );

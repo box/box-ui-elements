@@ -27,7 +27,7 @@ import OpenWithAPI from './OpenWith';
 import MetadataQueryAPI from './MetadataQuery';
 import BoxEditAPI from './box-edit';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
-import type { ItemType, Token } from '../common/types/core';
+import type { ItemType } from '../common/types/core';
 import type { APIOptions } from '../common/types/api';
 import type APICache from '../utils/Cache';
 
@@ -271,19 +271,6 @@ class APIFactory {
         if (destroyCache) {
             this.options.cache = new Cache();
         }
-    }
-
-    /**
-     * Sets a new token in the options object
-     * @param {Token} token - token used to make requests
-     */
-    setToken(token: Token): void {
-        if (!token) {
-            return;
-        }
-
-        this.destroy();
-        this.options = { ...this.options, token };
     }
 
     /**
