@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import BoxAnnotations from 'box-annotations';
 import { text } from '@storybook/addon-knobs';
 import { IntlProvider } from 'react-intl';
 import ContentPreview from '../ContentPreview';
@@ -30,7 +29,6 @@ export const PreviewWithAnnotations = () => {
     return (
         <IntlProvider locale="en">
             <ContentPreview
-                boxAnnotations={new BoxAnnotations()}
                 contentSidebarProps={{
                     detailsSidebarProps: {
                         hasAccessStats: true,
