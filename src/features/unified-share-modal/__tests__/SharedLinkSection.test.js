@@ -185,4 +185,17 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             expect(wrapper).toMatchSnapshot();
         });
     });
+
+    test('should render disabled create share link message', () => {
+        const sharedLink = { url: '', canChangeAccessLevel: true };
+        const item = { grantedPermissions: { itemShare: false } };
+
+        expect(getWrapper({ sharedLink, item })).toMatchSnapshot();
+    });
+
+    test('should render disabled remove share link message', () => {
+        const sharedLink = { url: 'https://example.com/shared-link', canChangeAccessLevel: false };
+
+        expect(getWrapper({ sharedLink })).toMatchSnapshot();
+    });
 });
