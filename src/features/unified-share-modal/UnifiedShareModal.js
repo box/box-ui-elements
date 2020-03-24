@@ -41,6 +41,8 @@ const INVITE_COLLABS_CONTACTS_TYPE = 'inviteCollabsContacts';
 const EMAIL_SHARED_LINK_CONTACTS_TYPE = 'emailSharedLinkContacts';
 
 type Props = {
+    /** inline message for the USM modal */
+    allShareRestrictionWarning: React.Node,
     /** Flag to determine whether to enable invite collaborators section */
     canInvite: boolean,
     /** Handler function that changes shared link access level */
@@ -659,6 +661,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
             showSharedLinkSettingsCallout = false,
             submitting,
             tooltips = {},
+            allShareRestrictionWarning,
             ...rest
         } = this.props;
         const {
@@ -685,6 +688,13 @@ class UnifiedShareModal extends React.Component<Props, State> {
             showCollaboratorList,
         } = this.state;
 
+        // Only show the restriction warning on the main page of the USM where the email and share link option is available
+        const showShareRestrictionWarning =
+            !isEmailLinkSectionExpanded &&
+            !isInviteSectionExpanded &&
+            !showCollaboratorList &&
+            allShareRestrictionWarning;
+
         // focus logic at modal level
         const extendedModalProps = {
             focusElementSelector: canInvite
@@ -709,6 +719,8 @@ class UnifiedShareModal extends React.Component<Props, State> {
                     {...extendedModalProps}
                 >
                     <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
+                        {showShareRestrictionWarning && allShareRestrictionWarning}
+
                         {!isEmailLinkSectionExpanded && !showCollaboratorList && this.renderInviteSection()}
 
                         {!isEmailLinkSectionExpanded && !isInviteSectionExpanded && !showCollaboratorList && (

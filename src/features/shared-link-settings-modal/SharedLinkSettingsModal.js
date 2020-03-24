@@ -112,6 +112,8 @@ class SharedLinkSettingsModal extends Component {
         isDirectLinkUnavailableDueToDownloadSettings: PropTypes.bool.isRequired,
         /** Whether or not direct link is unavailable only due to access policy setting */
         isDirectLinkUnavailableDueToAccessPolicy: PropTypes.bool.isRequired,
+        /** Whether or not direct link is unavailable only due to malicious content policy */
+        isDirectLinkUnavailableDueToMaliciousContent: PropTypes.bool.isRequired,
 
         // Classification props
         item: PropTypes.object,
@@ -323,6 +325,7 @@ class SharedLinkSettingsModal extends Component {
             isDirectLinkAvailable,
             isDirectLinkUnavailableDueToDownloadSettings,
             isDirectLinkUnavailableDueToAccessPolicy,
+            isDirectLinkUnavailableDueToMaliciousContent,
             isDownloadAvailable,
             item,
         } = this.props;
@@ -340,6 +343,7 @@ class SharedLinkSettingsModal extends Component {
                 isDirectLinkAvailable={isDirectLinkAvailable}
                 isDirectLinkUnavailableDueToDownloadSettings={isDirectLinkUnavailableDueToDownloadSettings}
                 isDirectLinkUnavailableDueToAccessPolicy={isDirectLinkUnavailableDueToAccessPolicy}
+                isDirectLinkUnavailableDueToMaliciousContent={isDirectLinkUnavailableDueToMaliciousContent}
                 isDownloadAvailable={isDownloadAvailable}
                 isDownloadEnabled={isDownloadEnabled}
                 onChange={this.onAllowDownloadChange}
