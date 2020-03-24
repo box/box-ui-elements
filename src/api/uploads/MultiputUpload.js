@@ -173,8 +173,10 @@ class MultiputUpload extends BaseMultiput {
         progressCallback,
         successCallback,
         overwrite = true,
+        conflictCallback,
         fileId,
     }: {
+        conflictCallback?: Function,
         errorCallback?: Function,
         file: File,
         fileId: ?string,
@@ -190,6 +192,7 @@ class MultiputUpload extends BaseMultiput {
         this.progressCallback = progressCallback || noop;
         this.successCallback = successCallback || noop;
         this.overwrite = overwrite;
+        this.conflictCallback = conflictCallback;
         this.fileId = fileId;
     }
 
@@ -214,8 +217,10 @@ class MultiputUpload extends BaseMultiput {
         progressCallback,
         successCallback,
         overwrite = true,
+        conflictCallback,
         fileId,
     }: {
+        conflictCallback?: Function,
         errorCallback?: Function,
         file: File,
         fileDescription: ?string,
@@ -239,6 +244,7 @@ class MultiputUpload extends BaseMultiput {
         this.sha1Worker = createWorker();
         this.sha1Worker.addEventListener('message', this.onWorkerMessage);
 
+        this.conflictCallback = conflictCallback;
         this.overwrite = overwrite;
         this.fileId = fileId;
         this.fileDescription = fileDescription;
@@ -420,6 +426,7 @@ class MultiputUpload extends BaseMultiput {
      * @param {Function} [options.errorCallback]
      * @param {Function} [options.progressCallback]
      * @param {Function} [options.successCallback]
+     * @param {Function} [options.conflictCallback]
      * @return {void}
      */
     resume({
@@ -430,8 +437,10 @@ class MultiputUpload extends BaseMultiput {
         sessionId,
         successCallback,
         overwrite = true,
+        conflictCallback,
         fileId,
     }: {
+        conflictCallback?: Function,
         errorCallback?: Function,
         file: File,
         fileId: ?string,
@@ -441,7 +450,16 @@ class MultiputUpload extends BaseMultiput {
         sessionId: string,
         successCallback?: Function,
     }): void {
-        this.setFileInfo({ file, folderId, errorCallback, progressCallback, successCallback, overwrite, fileId });
+        this.setFileInfo({
+            file,
+            folderId,
+            errorCallback,
+            progressCallback,
+            successCallback,
+            conflictCallback,
+            overwrite,
+            fileId,
+        });
         this.sessionId = sessionId;
 
         if (!this.sha1Worker) {
@@ -1218,6 +1236,10 @@ class MultiputUpload extends BaseMultiput {
     async resolveConflict(data: Object): Promise<any> {
         if (this.overwrite && data.context_info) {
             this.fileId = data.context_info.conflicts.id;
+            return;
+        }
+        if (this.conflictCallback) {
+            this.fileName = this.conflictCallback(this.fileName);
             return;
         }
 
