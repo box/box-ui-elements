@@ -42,7 +42,7 @@ const EMAIL_SHARED_LINK_CONTACTS_TYPE = 'emailSharedLinkContacts';
 
 type Props = {
     /** inline message for the USM modal */
-    allShareRestrictionWarning: React.Node,
+    allShareRestrictionWarning?: React.Node,
     /** Flag to determine whether to enable invite collaborators section */
     canInvite: boolean,
     /** Handler function that changes shared link access level */
