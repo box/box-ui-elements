@@ -616,14 +616,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
 </div>
 `;
 
-exports[`features/unified-share-modal/UnifiedShareModal render() should render a allShareRestrictionWarning message when it is available 1`] = `
-<div
-  className="test-class"
->
-  Sharing is prohibited
-</div>
-`;
-
 exports[`features/unified-share-modal/UnifiedShareModal render() should render a component with autofocus set for shared link when focusSharedLinkOnLoad is enabled and there is a shared link 1`] = `
 <div>
   <Modal
@@ -3206,6 +3198,14 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       </Tooltip>
     </LoadingIndicatorWrapper>
   </Modal>
+</div>
+`;
+
+exports[`features/unified-share-modal/UnifiedShareModal render() should render an allShareRestrictionWarning message when it is available 1`] = `
+<div
+  className="test-class"
+>
+  Sharing is prohibited
 </div>
 `;
 

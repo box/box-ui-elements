@@ -41,7 +41,7 @@ const INVITE_COLLABS_CONTACTS_TYPE = 'inviteCollabsContacts';
 const EMAIL_SHARED_LINK_CONTACTS_TYPE = 'emailSharedLinkContacts';
 
 type Props = {
-    /** inline message for the USM modal */
+    /** Inline message for the USM modal */
     allShareRestrictionWarning?: React.Node,
     /** Flag to determine whether to enable invite collaborators section */
     canInvite: boolean,

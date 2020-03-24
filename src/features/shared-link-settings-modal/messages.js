@@ -24,7 +24,7 @@ const messages = defineMessages({
     },
     directDownloadBlockedByMaliciousContent: {
         defaultMessage: 'Download for this content has been disabled due to a security policy',
-        description: 'Text to show that direct link download is disabled due to content marked as malicious content',
+        description: 'Text to show that direct link download is disabled due security policy',
         id: 'boxui.share.sharedLinkSettings.directDownloadBlockedByMaliciousContent',
     },
     directDownloadBlockedByAccessPolicyWithoutClassification: {

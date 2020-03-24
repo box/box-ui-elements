@@ -53,7 +53,7 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test.only('should render a allShareRestrictionWarning message when it is available', () => {
+        test('should render an allShareRestrictionWarning message when it is available', () => {
             const SharingRestrictionWarning = <div className="test-class">Sharing is prohibited</div>;
             const wrapper = getWrapper({ allShareRestrictionWarning: SharingRestrictionWarning });
 
