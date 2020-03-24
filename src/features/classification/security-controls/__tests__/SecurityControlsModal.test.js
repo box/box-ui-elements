@@ -6,12 +6,10 @@ import SecurityControlsItem from '../SecurityControlsItem';
 describe('features/classification/security-controls/SecurityControlsModal', () => {
     let wrapper;
     let modalItems;
-    let appNames;
 
     const getWrapper = props =>
         shallow(
             <SecurityControlsModal
-                appNames={null}
                 closeModal={jest.fn()}
                 definition="classification definition"
                 classificationName="internal"
@@ -24,8 +22,8 @@ describe('features/classification/security-controls/SecurityControlsModal', () =
 
     beforeEach(() => {
         modalItems = [
-            { id: 'msg1', defaultMessage: 'message1' },
-            { id: 'msg2', defaultMessage: 'message2' },
+            { message: { id: 'msg1', defaultMessage: 'message1' } },
+            { message: { id: 'msg2', defaultMessage: 'message2' } },
         ];
         wrapper = getWrapper();
     });
@@ -42,9 +40,9 @@ describe('features/classification/security-controls/SecurityControlsModal', () =
 
     test('should render with correct number of security controls items', () => {
         modalItems = [
-            { id: 'msg1', defaultMessage: 'message1' },
-            { id: 'msg2', defaultMessage: 'message2' },
-            { id: 'msg3', defaultMessage: 'message3' },
+            { message: { id: 'msg1', defaultMessage: 'message1' } },
+            { message: { id: 'msg2', defaultMessage: 'message2' } },
+            { message: { id: 'msg3', defaultMessage: 'message3' } },
         ];
         wrapper = getWrapper({ modalItems, itemName: 'welcome.pdf' });
 
@@ -52,14 +50,20 @@ describe('features/classification/security-controls/SecurityControlsModal', () =
     });
 
     test('should pass appNames to SecurityControlsItem', () => {
-        appNames = '123';
-
-        wrapper.setProps({ appNames });
+        const tooltipMessage = { tooltipMessage: { id: 'msg3', defaultMessage: 'message3' } };
+        modalItems = [
+            { message: { id: 'msg1', defaultMessage: 'message1' } },
+            {
+                message: { id: 'msg2', defaultMessage: 'message2' },
+                tooltipMessage,
+            },
+        ];
+        wrapper.setProps({ modalItems });
         expect(
             wrapper
                 .find(SecurityControlsItem)
-                .findWhere(item => item.props().message.id === 'msg1')
+                .findWhere(item => item.props().message.id === 'msg2')
                 .props().appNames,
-        ).toEqual('123');
+        ).toEqual(tooltipMessage);
     });
 });

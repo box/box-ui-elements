@@ -12,7 +12,7 @@ describe('features/classification/security-controls/SecurityControlsItem', () =>
 
     beforeEach(() => {
         message = {
-            id: 'boxui.securityControls.appDownloadWhitelistOverflow',
+            id: 'id1',
             defaultMessage: 'message',
         };
         appNames = {
@@ -29,17 +29,7 @@ describe('features/classification/security-controls/SecurityControlsItem', () =>
     });
 
     test('should not render Tooltip if appNames is received as null', () => {
-        wrapper.setProps({ appNames: null });
-        expect(wrapper.find(Tooltip).length).toBe(0);
-        expect(wrapper.find(IconInfo).length).toBe(0);
-    });
-
-    test('should not render Tooltip if not related to app restriction', () => {
-        message = {
-            id: 'id1',
-            defaultMessage: 'message1',
-        };
-        wrapper.setProps({ message });
+        wrapper = getWrapper({ message });
         expect(wrapper.find(Tooltip).length).toBe(0);
         expect(wrapper.find(IconInfo).length).toBe(0);
     });

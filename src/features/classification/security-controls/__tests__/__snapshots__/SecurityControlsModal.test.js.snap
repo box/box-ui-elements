@@ -52,7 +52,6 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
     className="bdl-SecurityControlsModal-controlsItemList"
   >
     <SecurityControlsItem
-      appNames={null}
       key="msg1"
       message={
         Object {
@@ -62,7 +61,6 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
       }
     />
     <SecurityControlsItem
-      appNames={null}
       key="msg2"
       message={
         Object {

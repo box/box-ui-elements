@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage, type MessageDescriptor } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { Modal, ModalActions } from '../../../components/modal';
 import commonMessages from '../../../common/messages';
@@ -11,21 +11,20 @@ import Label from '../../../components/label/Label';
 import messages from './messages';
 import SecurityControlsItem from './SecurityControlsItem';
 import './SecurityControlsModal.scss';
+import type { MessageItem } from './utils';
 
 type Props = {
-    appNames: ?MessageDescriptor,
     classificationName?: string,
     closeModal: Function,
     definition?: string,
     fillColor?: string,
     isSecurityControlsModalOpen: boolean,
     itemName?: string,
-    modalItems: Array<MessageDescriptor>,
+    modalItems: Array<MessageItem>,
     strokeColor?: string,
 };
 
 const SecurityControlsModal = ({
-    appNames,
     closeModal,
     definition,
     fillColor,
@@ -40,6 +39,12 @@ const SecurityControlsModal = ({
     }
 
     const title = <FormattedMessage {...messages.modalTitle} values={{ itemName }} />;
+    const securityControlsItems = modalItems.map(({ message, tooltipMessage }) => {
+        if (message) {
+            return <SecurityControlsItem key={message.id} message={message} appNames={tooltipMessage} />;
+        }
+        return null;
+    });
 
     return (
         <Modal
@@ -59,11 +64,7 @@ const SecurityControlsModal = ({
             <Label text={<FormattedMessage {...classificationMessages.definition} />}>
                 <p className="bdl-SecurityControlsModal-definition">{definition}</p>
             </Label>
-            <ul className="bdl-SecurityControlsModal-controlsItemList">
-                {modalItems.map(item => (
-                    <SecurityControlsItem appNames={appNames} key={item.id} message={item} />
-                ))}
-            </ul>
+            <ul className="bdl-SecurityControlsModal-controlsItemList">{securityControlsItems}</ul>
             <ModalActions>
                 <Button onClick={closeModal} type="button">
                     <FormattedMessage {...commonMessages.close} />

@@ -10,58 +10,63 @@ import downloadRestrictionsMessageMap from './downloadRestrictionsMessageMap';
 import messages from './messages';
 import { ACCESS_POLICY_RESTRICTION, DOWNLOAD_CONTROL, LIST_ACCESS_LEVEL, SHARED_LINK_ACCESS_LEVEL } from '../constants';
 
+type MessageItem = {
+    message: ?MessageDescriptor,
+    tooltipMessage?: MessageDescriptor,
+};
+
 const { SHARED_LINK, DOWNLOAD, EXTERNAL_COLLAB, APP } = ACCESS_POLICY_RESTRICTION;
 const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
 const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
 const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY, PUBLIC } = SHARED_LINK_ACCESS_LEVEL;
 
-const getShortSecurityControlsMessage = (controls: Controls): ?MessageDescriptor => {
+const getShortSecurityControlsMessage = (controls: Controls): MessageItem => {
     const { sharedLink, download, externalCollab, app } = controls;
     // Shared link and external collab restrictions are grouped
     // together as generic "sharing" restrictions
     const sharing = (sharedLink && sharedLink.accessLevel !== PUBLIC) || externalCollab;
 
     if (sharing && download && app) {
-        return messages.shortAllRestrictions;
+        return { message: messages.shortAllRestrictions };
     }
 
     if (sharing && download) {
-        return messages.shortSharingDownload;
+        return { message: messages.shortSharingDownload };
     }
 
     if (sharing && app) {
-        return messages.shortSharingApp;
+        return { message: messages.shortSharingApp };
     }
 
     if (download && app) {
-        return messages.shortDownloadApp;
+        return { message: messages.shortDownloadApp };
     }
 
     if (sharing) {
-        return messages.shortSharing;
+        return { message: messages.shortSharing };
     }
 
     if (download) {
-        return messages.shortDownload;
+        return { message: messages.shortDownload };
     }
 
     if (app) {
-        return messages.shortApp;
+        return { message: messages.shortApp };
     }
 
-    return null;
+    return { message: null };
 };
 
-const getSharedLinkMessages = (controls: Controls): Array<MessageDescriptor> => {
+const getSharedLinkMessages = (controls: Controls): Array<MessageItem> => {
     const items = [];
     const accessLevel = getProp(controls, `${SHARED_LINK}.accessLevel`);
 
     switch (accessLevel) {
         case COLLAB_ONLY:
-            items.push(messages.sharingCollabOnly);
+            items.push({ message: messages.sharingCollabOnly });
             break;
         case COLLAB_AND_COMPANY_ONLY:
-            items.push(messages.sharingCollabAndCompanyOnly);
+            items.push({ message: messages.sharingCollabAndCompanyOnly });
             break;
         default:
             // no-op
@@ -70,17 +75,17 @@ const getSharedLinkMessages = (controls: Controls): Array<MessageDescriptor> => 
     return items;
 };
 
-const getExternalCollabMessages = (controls: Controls): Array<MessageDescriptor> => {
+const getExternalCollabMessages = (controls: Controls): Array<MessageItem> => {
     const items = [];
     const accessLevel = getProp(controls, `${EXTERNAL_COLLAB}.accessLevel`);
 
     switch (accessLevel) {
         case BLOCK:
-            items.push(messages.externalCollabBlock);
+            items.push({ message: messages.externalCollabBlock });
             break;
         case WHITELIST:
         case BLACKLIST:
-            items.push(messages.externalCollabDomainList);
+            items.push({ message: messages.externalCollabDomainList });
             break;
         default:
             // no-op
@@ -89,13 +94,13 @@ const getExternalCollabMessages = (controls: Controls): Array<MessageDescriptor>
     return items;
 };
 
-const getAppDownloadMessages = (controls: Controls, maxAppCount?: number): Array<MessageDescriptor> => {
+const getAppDownloadMessages = (controls: Controls, maxAppCount?: number): Array<MessageItem> => {
     const items = [];
     const accessLevel = getProp(controls, `${APP}.accessLevel`);
 
     switch (accessLevel) {
         case BLOCK:
-            items.push(messages.appDownloadBlock);
+            items.push({ message: messages.appDownloadBlock });
             break;
         case WHITELIST:
         case BLACKLIST: {
@@ -107,12 +112,25 @@ const getAppDownloadMessages = (controls: Controls, maxAppCount?: number): Array
             const appNames = appsToDisplay.map(({ displayText }) => displayText).join(', ');
 
             if (remainingAppCount) {
+                const appsList = apps.map(({ displayText }) => displayText).join(', ');
+
                 items.push({
-                    ...appRestrictionsMessageMap[accessLevel].overflow,
-                    values: { appNames, remainingAppCount },
+                    message: {
+                        ...appRestrictionsMessageMap[accessLevel].overflow,
+                        values: { appNames, remainingAppCount },
+                    },
+                    tooltipMessage: {
+                        ...messages.allAppNames,
+                        values: { appsList },
+                    },
                 });
             } else {
-                items.push({ ...appRestrictionsMessageMap[accessLevel].default, values: { appNames } });
+                items.push({
+                    message: {
+                        ...appRestrictionsMessageMap[accessLevel].default,
+                        values: { appNames },
+                    },
+                });
             }
             break;
         }
@@ -123,25 +141,7 @@ const getAppDownloadMessages = (controls: Controls, maxAppCount?: number): Array
     return items;
 };
 
-const getAppsTooltip = (controls: Controls, maxAppCount?: number): ?MessageDescriptor => {
-    let appNames = null;
-    const accessLevel = getProp(controls, `${APP}.accessLevel`);
-
-    if (accessLevel === WHITELIST || accessLevel === BLACKLIST) {
-        const apps = getProp(controls, `${APP}.apps`, []);
-        maxAppCount = isNil(maxAppCount) ? apps.length : maxAppCount;
-        if (apps.length > maxAppCount) {
-            const appsList = apps.map(({ displayText }) => displayText).join(', ');
-            appNames = {
-                ...messages.allAppNames,
-                values: { appsList },
-            };
-        }
-    }
-    return appNames;
-};
-
-const getDownloadMessages = (controls: Controls): Array<MessageDescriptor> => {
+const getDownloadMessages = (controls: Controls): Array<MessageItem> => {
     const items = [];
     const { web, mobile, desktop } = getProp(controls, DOWNLOAD, {});
 
@@ -169,18 +169,18 @@ const getDownloadMessages = (controls: Controls): Array<MessageDescriptor> => {
         const { restrictExternalUsers, restrictManagedUsers } = restrictions;
 
         if (restrictManagedUsers && restrictExternalUsers) {
-            items.push(downloadRestrictionsMessageMap[platform].externalRestricted[restrictManagedUsers]);
+            items.push({ message: downloadRestrictionsMessageMap[platform].externalRestricted[restrictManagedUsers] });
         } else if (restrictManagedUsers) {
-            items.push(downloadRestrictionsMessageMap[platform].externalAllowed[restrictManagedUsers]);
+            items.push({ message: downloadRestrictionsMessageMap[platform].externalAllowed[restrictManagedUsers] });
         } else if (restrictExternalUsers) {
-            items.push(downloadRestrictionsMessageMap[platform].externalRestricted.default);
+            items.push({ message: downloadRestrictionsMessageMap[platform].externalRestricted.default });
         }
     });
 
     return items;
 };
 
-const getFullSecurityControlsMessages = (controls: Controls, maxAppCount?: number): Array<MessageDescriptor> => {
+const getFullSecurityControlsMessages = (controls: Controls, maxAppCount?: number): Array<MessageItem> => {
     const items = [
         ...getSharedLinkMessages(controls),
         ...getExternalCollabMessages(controls),
@@ -190,4 +190,6 @@ const getFullSecurityControlsMessages = (controls: Controls, maxAppCount?: numbe
     return items;
 };
 
-export { getAppsTooltip, getShortSecurityControlsMessage, getFullSecurityControlsMessages };
+export { getShortSecurityControlsMessage, getFullSecurityControlsMessages };
+
+export type { MessageItem };

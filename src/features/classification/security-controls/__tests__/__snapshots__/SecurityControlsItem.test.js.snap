@@ -6,7 +6,7 @@ exports[`features/classification/security-controls/SecurityControlsItem should r
 >
   <FormattedMessage
     defaultMessage="message"
-    id="boxui.securityControls.appDownloadWhitelistOverflow"
+    id="id1"
   />
   <Tooltip
     className="bdl-SecurityControlsItem-tooltip"
@@ -16,14 +16,10 @@ exports[`features/classification/security-controls/SecurityControlsItem should r
     isTabbable={false}
     position="middle-right"
     text={
-      <div
-        className="bdl-SecurityControlsItem-tooltipContent"
-      >
-        <FormattedMessage
-          defaultMessage="message2"
-          id="id2"
-        />
-      </div>
+      <FormattedMessage
+        defaultMessage="message2"
+        id="id2"
+      />
     }
     theme="default"
   >

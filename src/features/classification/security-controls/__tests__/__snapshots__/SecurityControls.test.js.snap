@@ -6,7 +6,6 @@ exports[`features/classification/security-controls/SecurityControls should rende
     className="bdl-SecurityControls"
   >
     <SecurityControlsItem
-      appNames={null}
       key="boxui.securityControls.sharingCollabOnly"
       message={
         Object {
@@ -16,7 +15,6 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     />
     <SecurityControlsItem
-      appNames={null}
       key="boxui.securityControls.externalCollabDomainList"
       message={
         Object {
@@ -26,7 +24,6 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     />
     <SecurityControlsItem
-      appNames={null}
       key="boxui.securityControls.desktopDownloadOwners"
       message={
         Object {
@@ -36,7 +33,6 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     />
     <SecurityControlsItem
-      appNames={null}
       key="boxui.securityControls.appDownloadWhitelist"
       message={
         Object {
@@ -58,7 +54,6 @@ exports[`features/classification/security-controls/SecurityControls should rende
     className="bdl-SecurityControls"
   >
     <SecurityControlsItem
-      appNames={null}
       key="boxui.securityControls.shortAllRestrictions"
       message={
         Object {
@@ -79,7 +74,6 @@ exports[`features/classification/security-controls/SecurityControls should rende
     />
   </PlainButton>
   <SecurityControlsModal
-    appNames={null}
     classificationName="internal only"
     closeModal={[Function]}
     definition="classification definition"
@@ -88,22 +82,30 @@ exports[`features/classification/security-controls/SecurityControls should rende
     modalItems={
       Array [
         Object {
-          "defaultMessage": "Shared links allowed for collaborators only.",
-          "id": "boxui.securityControls.sharingCollabOnly",
+          "message": Object {
+            "defaultMessage": "Shared links allowed for collaborators only.",
+            "id": "boxui.securityControls.sharingCollabOnly",
+          },
         },
         Object {
-          "defaultMessage": "External collaboration limited to approved domains.",
-          "id": "boxui.securityControls.externalCollabDomainList",
+          "message": Object {
+            "defaultMessage": "External collaboration limited to approved domains.",
+            "id": "boxui.securityControls.externalCollabDomainList",
+          },
         },
         Object {
-          "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners.",
-          "id": "boxui.securityControls.desktopDownloadOwners",
+          "message": Object {
+            "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners.",
+            "id": "boxui.securityControls.desktopDownloadOwners",
+          },
         },
         Object {
-          "defaultMessage": "Only select applications are allowed: {appNames}",
-          "id": "boxui.securityControls.appDownloadWhitelist",
-          "values": Object {
-            "appNames": "",
+          "message": Object {
+            "defaultMessage": "Only select applications are allowed: {appNames}",
+            "id": "boxui.securityControls.appDownloadWhitelist",
+            "values": Object {
+              "appNames": "",
+            },
           },
         },
       ]
