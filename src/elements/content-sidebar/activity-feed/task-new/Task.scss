@@ -40,6 +40,10 @@ $bcs-task-left-offset: 10 * $bcs-task-grid + 2px;
 .bcs-Task-status {
     margin-top: 3 * $bcs-task-grid;
     margin-bottom: 2 * $bcs-task-grid;
+
+    & > * {
+        margin-right: 4px;
+    }
 }
 
 .bcs-Task-dueDate {

@@ -9,6 +9,8 @@ import TetherComponent from 'react-tether';
 import { withFeatureConsumer, getFeatureConfig } from '../../../common/feature-checking';
 import { withAPIContext } from '../../../common/api-context';
 import Avatar from '../Avatar';
+// $FlowFixMe LabelPill is in typescript
+import LabelPill from '../../../../components/label-pill';
 import Media from '../../../../components/media';
 import { MenuItem } from '../../../../components/menu';
 import ActivityError from '../common/activity-error';
@@ -19,6 +21,7 @@ import IconTaskApproval from '../../../../icons/two-toned/IconTaskApproval';
 import IconTaskGeneral from '../../../../icons/two-toned/IconTaskGeneral';
 import IconTrash from '../../../../icons/general/IconTrash';
 import IconPencil from '../../../../icons/general/IconPencil';
+import MoveCopy16 from '../../../../icon/line/MoveCopy16';
 import UserLink from '../common/user-link';
 import API from '../../../../api/APIFactory';
 import {
@@ -51,6 +54,7 @@ import type { Translations } from '../../flowTypes';
 import type { FeatureConfig } from '../../../common/feature-checking';
 
 import './Task.scss';
+import PrimaryButton from '../../../../components/primary-button';
 
 type Props = {|
     ...TaskNew,
@@ -68,6 +72,7 @@ type Props = {|
     onDelete?: Function,
     onEdit?: Function,
     onModalClose?: Function,
+    onView?: Function,
     translatedTaggedMessage?: string,
     translations?: Translations,
 |};
@@ -207,8 +212,10 @@ class Task extends React.Component<Props, State> {
             isPending,
             description,
             onEdit,
+            onView,
             permissions,
             status,
+            task_links,
             task_type,
             translatedTaggedMessage,
             translations,
@@ -235,12 +242,24 @@ class Task extends React.Component<Props, State> {
 
         const createdAtTimestamp = new Date(created_at).getTime();
 
-        const shouldShowActions =
-            currentUserAssignment &&
-            currentUserAssignment.permissions &&
-            currentUserAssignment.permissions.can_update &&
-            currentUserAssignment.status === TASK_NEW_NOT_STARTED &&
-            (status === TASK_NEW_NOT_STARTED || status === TASK_NEW_IN_PROGRESS);
+        const isTaskCompleted = !(status === TASK_NEW_NOT_STARTED || status === TASK_NEW_IN_PROGRESS);
+
+        const isCreator = created_by.target.id === currentUser.id;
+
+        const isMultiFile = task_links.entries.length > 1;
+
+        let shouldShowActions;
+        if (isTaskCompleted) {
+            shouldShowActions = false;
+        } else if (isMultiFile && isCreator) {
+            shouldShowActions = true;
+        } else {
+            shouldShowActions =
+                currentUserAssignment &&
+                currentUserAssignment.permissions &&
+                currentUserAssignment.permissions.can_update &&
+                currentUserAssignment.status === TASK_NEW_NOT_STARTED;
+        }
 
         const TaskTypeIcon = task_type === TASK_TYPE_APPROVAL ? IconTaskApproval : IconTaskGeneral;
 
@@ -319,7 +338,11 @@ class Task extends React.Component<Props, State> {
                         </div>
                         <div className="bcs-Task-status">
                             <TaskStatus status={status} />
-
+                            {isMultiFile && (
+                                <LabelPill.Pill data-testid="multifile-badge">
+                                    <LabelPill.Icon Component={MoveCopy16} />
+                                </LabelPill.Pill>
+                            )}
                             <TaskCompletionRuleIcon completionRule={completion_rule} />
                         </div>
                         <div className="bcs-Task-dueDate">
@@ -345,38 +368,53 @@ class Task extends React.Component<Props, State> {
                                 users={isAssigneeListOpen ? assignedToFull : assigned_to}
                             />
                         </div>
-                        {currentUserAssignment && shouldShowActions && (
+                        {shouldShowActions && (
                             <div className="bcs-Task-actionsContainer">
-                                <TaskActions
-                                    taskType={task_type}
-                                    onTaskApproval={
-                                        isPending
-                                            ? noop
-                                            : () => {
-                                                  this.handleTaskAction(
-                                                      id,
-                                                      currentUserAssignment.id,
-                                                      TASK_NEW_APPROVED,
-                                                  );
+                                {isMultiFile
+                                    ? onView && (
+                                          <PrimaryButton
+                                              onClick={() => onView(id, isCreator)}
+                                              data-testid="view-details-button"
+                                          >
+                                              <FormattedMessage {...messages.tasksFeedViewDetailsAction} />
+                                          </PrimaryButton>
+                                      )
+                                    : currentUserAssignment && (
+                                          <TaskActions
+                                              taskType={task_type}
+                                              onTaskApproval={
+                                                  isPending
+                                                      ? noop
+                                                      : () => {
+                                                            this.handleTaskAction(
+                                                                id,
+                                                                currentUserAssignment.id,
+                                                                TASK_NEW_APPROVED,
+                                                            );
+                                                        }
                                               }
-                                    }
-                                    onTaskReject={
-                                        isPending
-                                            ? noop
-                                            : () =>
-                                                  this.handleTaskAction(id, currentUserAssignment.id, TASK_NEW_REJECTED)
-                                    }
-                                    onTaskComplete={
-                                        isPending
-                                            ? noop
-                                            : () =>
-                                                  this.handleTaskAction(
-                                                      id,
-                                                      currentUserAssignment.id,
-                                                      TASK_NEW_COMPLETED,
-                                                  )
-                                    }
-                                />
+                                              onTaskReject={
+                                                  isPending
+                                                      ? noop
+                                                      : () =>
+                                                            this.handleTaskAction(
+                                                                id,
+                                                                currentUserAssignment.id,
+                                                                TASK_NEW_REJECTED,
+                                                            )
+                                              }
+                                              onTaskComplete={
+                                                  isPending
+                                                      ? noop
+                                                      : () =>
+                                                            this.handleTaskAction(
+                                                                id,
+                                                                currentUserAssignment.id,
+                                                                TASK_NEW_COMPLETED,
+                                                            )
+                                              }
+                                          />
+                                      )}
                             </div>
                         )}
                     </Media.Body>

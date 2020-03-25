@@ -55,6 +55,7 @@ type ExternalProps = {
     onTaskCreate: Function,
     onTaskDelete: (id: string) => any,
     onTaskUpdate: () => any,
+    onTaskView: (id: string, isCreator: boolean) => any,
 } & ErrorContextProps;
 
 type PropsWithoutContext = {
@@ -591,6 +592,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             getUserProfileUrl,
             activeFeedEntryId,
             activeFeedEntryType,
+            onTaskView,
         } = this.props;
         const {
             currentUser,
@@ -623,6 +625,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     onTaskCreate={this.createTask}
                     onTaskDelete={this.deleteTask}
                     onTaskUpdate={this.updateTask}
+                    onTaskView={onTaskView}
                     onTaskModalClose={this.onTaskModalClose}
                     onTaskAssignmentUpdate={this.updateTaskAssignment}
                     getApproverWithQuery={this.getApproverWithQuery}

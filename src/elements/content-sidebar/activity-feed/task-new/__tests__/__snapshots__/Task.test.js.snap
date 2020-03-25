@@ -16,8 +16,8 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       <Avatar
         user={
           Object {
-            "id": "1",
-            "name": "Jake Thomas",
+            "id": "5",
+            "name": "Steven Yang",
             "type": "user",
           }
         }
@@ -87,8 +87,8 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       >
         <UserLink
           data-resin-target="activityfeed-profilelink"
-          id="1"
-          name="Jake Thomas"
+          id="5"
+          name="Steven Yang"
           type="user"
         />
       </div>

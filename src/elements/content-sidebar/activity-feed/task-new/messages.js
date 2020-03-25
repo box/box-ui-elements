@@ -49,6 +49,11 @@ const messages = defineMessages({
         defaultMessage: 'Reject',
         description: 'Reject option for an approval task',
     },
+    tasksFeedViewDetailsAction: {
+        id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedViewDetailsAction',
+        defaultMessage: 'View Task Details',
+        description: 'View the details for a task',
+    },
     tasksFeedCompletedLabel: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedLabel',
         defaultMessage: 'Completed',
