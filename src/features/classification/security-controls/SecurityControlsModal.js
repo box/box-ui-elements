@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage, type MessageDescriptor } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { Modal, ModalActions } from '../../../components/modal';
 import commonMessages from '../../../common/messages';
@@ -11,6 +11,7 @@ import Label from '../../../components/label/Label';
 import messages from './messages';
 import SecurityControlsItem from './SecurityControlsItem';
 import './SecurityControlsModal.scss';
+import type { MessageItem } from '../flowTypes';
 
 type Props = {
     classificationName?: string,
@@ -19,7 +20,7 @@ type Props = {
     fillColor?: string,
     isSecurityControlsModalOpen: boolean,
     itemName?: string,
-    modalItems: Array<MessageDescriptor>,
+    modalItems: Array<MessageItem>,
     strokeColor?: string,
 };
 
@@ -58,8 +59,8 @@ const SecurityControlsModal = ({
                 <p className="bdl-SecurityControlsModal-definition">{definition}</p>
             </Label>
             <ul className="bdl-SecurityControlsModal-controlsItemList">
-                {modalItems.map(item => (
-                    <SecurityControlsItem key={item.id} message={item} />
+                {modalItems.map(({ message, tooltipMessage }) => (
+                    <SecurityControlsItem key={message.id} message={message} tooltipMessage={tooltipMessage} />
                 ))}
             </ul>
             <ModalActions>

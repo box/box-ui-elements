@@ -22,8 +22,8 @@ describe('features/classification/security-controls/SecurityControlsModal', () =
 
     beforeEach(() => {
         modalItems = [
-            { id: 'msg1', defaultMessage: 'message1' },
-            { id: 'msg2', defaultMessage: 'message2' },
+            { message: { id: 'msg1', defaultMessage: 'message1' } },
+            { message: { id: 'msg2', defaultMessage: 'message2' } },
         ];
         wrapper = getWrapper();
     });
@@ -40,12 +40,30 @@ describe('features/classification/security-controls/SecurityControlsModal', () =
 
     test('should render with correct number of security controls items', () => {
         modalItems = [
-            { id: 'msg1', defaultMessage: 'message1' },
-            { id: 'msg2', defaultMessage: 'message2' },
-            { id: 'msg3', defaultMessage: 'message3' },
+            { message: { id: 'msg1', defaultMessage: 'message1' } },
+            { message: { id: 'msg2', defaultMessage: 'message2' } },
+            { message: { id: 'msg3', defaultMessage: 'message3' } },
         ];
         wrapper = getWrapper({ modalItems, itemName: 'welcome.pdf' });
 
         expect(wrapper.find(SecurityControlsItem)).toHaveLength(3);
+    });
+
+    test('should pass tooltipMessage to SecurityControlsItem', () => {
+        const tooltipMessage = { tooltipMessage: { id: 'msg3', defaultMessage: 'message3' } };
+        modalItems = [
+            { message: { id: 'msg1', defaultMessage: 'message1' } },
+            {
+                message: { id: 'msg2', defaultMessage: 'message2' },
+                tooltipMessage,
+            },
+        ];
+        wrapper.setProps({ modalItems });
+        expect(
+            wrapper
+                .find(SecurityControlsItem)
+                .findWhere(item => item.props().message.id === 'msg2')
+                .props().tooltipMessage,
+        ).toEqual(tooltipMessage);
     });
 });
