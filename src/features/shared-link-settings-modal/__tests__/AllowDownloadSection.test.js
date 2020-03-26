@@ -78,15 +78,61 @@ describe('features/shared-link-settings-modal/AllowDownloadSection', () => {
             expect(wrapper.find('TextInputWithCopyButton').length).toBe(0);
         });
 
-        test('should render tooltip when direct download is disabled', () => {
-            const wrapper = getWrapper({ isDirectLinkUnavailableDueToAccessPolicy: true });
-            expect(wrapper.find('Tooltip').length).toBe(1);
-        });
+        test.each`
+            isAccessPolicy | isMaliciousContent | tooltipIsDisabled
+            ${true}        | ${true}            | ${false}
+            ${false}       | ${false}           | ${true}
+            ${false}       | ${true}            | ${false}
+            ${true}        | ${false}           | ${false}
+        `(
+            'should have tooltip isDisabled set to $tooltipIsDisabled when isDirectLinkUnavailableDueToAccessPolicy is $isAccessPolicy, and isDirectLinkUnavailableDueToMaliciousContent is $isMaliciousContent',
+            ({ isAccessPolicy, isMaliciousContent, tooltipIsDisabled }) => {
+                const wrapper = getWrapper({
+                    isDirectLinkUnavailableDueToAccessPolicy: isAccessPolicy,
+                    isDirectLinkUnavailableDueToMaliciousContent: isMaliciousContent,
+                });
+                const tooltip = wrapper.find('Tooltip');
 
-        test('should render disabled state when direct download is disabled', () => {
-            const wrapper = getWrapper({ isDirectLinkUnavailableDueToAccessPolicy: true });
-            expect(wrapper.find('.bdl-is-disabled').length).toBe(1);
-        });
+                expect(tooltip.prop('isDisabled')).toBe(tooltipIsDisabled);
+            },
+        );
+
+        test.each`
+            isAccessPolicy | isMaliciousContent | componentLength
+            ${true}        | ${true}            | ${1}
+            ${false}       | ${false}           | ${0}
+            ${false}       | ${true}            | ${1}
+            ${true}        | ${false}           | ${1}
+        `(
+            'should have found className .bdl-is-disabled when isDirectLinkUnavailableDueToAccessPolicy is $isAccessPolicy, and isDirectLinkUnavailableDueToMaliciousContent is $isMaliciousContent',
+            ({ isAccessPolicy, isMaliciousContent, componentLength }) => {
+                const wrapper = getWrapper({
+                    isDirectLinkUnavailableDueToAccessPolicy: isAccessPolicy,
+                    isDirectLinkUnavailableDueToMaliciousContent: isMaliciousContent,
+                });
+
+                expect(wrapper.find('.bdl-is-disabled').length).toBe(componentLength);
+            },
+        );
+
+        test.each`
+            isAccessPolicy | isMaliciousContent | classification
+            ${true}        | ${true}            | ${undefined}
+            ${true}        | ${false}           | ${undefined}
+            ${true}        | ${true}            | ${'foo'}
+            ${true}        | ${false}           | ${'foo'}
+        `(
+            'should render correct tooltip message when isDirectLinkUnavailableDueToAccessPolicy is $isAccessPolicy, isDirectLinkUnavailableDueToMaliciousContent is $isMaliciousContent and classification is set to $classification',
+            ({ isAccessPolicy, isMaliciousContent, classification }) => {
+                const wrapper = getWrapper({
+                    isDirectLinkUnavailableDueToAccessPolicy: isAccessPolicy,
+                    isDirectLinkUnavailableDueToMaliciousContent: isMaliciousContent,
+                    classification,
+                });
+
+                expect(wrapper.find('Tooltip').prop('text')).toMatchSnapshot();
+            },
+        );
     });
 
     describe('isDownloadAvailable === false', () => {

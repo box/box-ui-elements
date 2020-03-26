@@ -245,6 +245,7 @@ describe('api/uploads/PlainUpload', () => {
             const errorCallback = () => {};
             const progressCallback = () => {};
             const overwrite = true;
+            const conflictCallback = () => {};
 
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
             upload.makePreflightRequest = jest.fn();
@@ -256,6 +257,7 @@ describe('api/uploads/PlainUpload', () => {
                 errorCallback,
                 progressCallback,
                 overwrite,
+                conflictCallback,
             });
 
             expect(upload.folderId).toBe(folderId);
@@ -265,6 +267,7 @@ describe('api/uploads/PlainUpload', () => {
             expect(upload.errorCallback).toBe(errorCallback);
             expect(upload.progressCallback).toBe(progressCallback);
             expect(upload.overwrite).toBe(overwrite);
+            expect(upload.conflictCallback).toBe(conflictCallback);
         });
     });
 

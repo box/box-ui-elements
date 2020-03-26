@@ -62,6 +62,21 @@ describe('features/unified-share-modal/SharedLinkAccessMenu', () => {
             });
             expect(sharedLinkAccessMenu).toMatchSnapshot();
         });
+
+        test('should render tooltips for access level menu items if disabled by malicious content', () => {
+            const sharedLinkAccessMenu = getWrapper({
+                accessLevelsDisabledReason: {
+                    peopleInYourCompany: 'malicious_content',
+                    peopleWithTheLink: 'malicious_content',
+                },
+                allowedAccessLevels: {
+                    peopleInThisItem: true,
+                    peopleInYourCompany: false,
+                    peopleWithTheLink: false,
+                },
+            });
+            expect(sharedLinkAccessMenu).toMatchSnapshot();
+        });
     });
 
     describe('onChangeAccessLevel()', () => {

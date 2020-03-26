@@ -16,13 +16,16 @@ Object {
     "buttonForeground": "#000",
     "foreground": "#222",
     "progressBarBackground": "#a7a7a7",
-    "scrollShadowRgba": "rgba(0, 0, 0, 0.2)",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
   "modes": Object {
     "admin": Object {},
     "dark": Object {},
   },
   "primary": Object {
+    "_debug": Object {
+      "colorRange": "vDark",
+    },
     "background": "#000000",
     "backgroundActive": "#262626",
     "backgroundGradient": "#1a1a1a",
@@ -37,7 +40,7 @@ Object {
     "buttonForeground": "#fff",
     "foreground": "#fff",
     "progressBarBackground": "#1a1a1a",
-    "scrollShadowRgba": "rgba(0, 0, 0, 0.6)",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.4)",
   },
 }
 `;
@@ -58,13 +61,16 @@ Object {
     "buttonForeground": "#000",
     "foreground": "#222",
     "progressBarBackground": "#a7a7a7",
-    "scrollShadowRgba": "rgba(0, 0, 0, 0.2)",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
   "modes": Object {
     "admin": Object {},
     "dark": Object {},
   },
   "primary": Object {
+    "_debug": Object {
+      "colorRange": "vLight",
+    },
     "background": "#ffffff",
     "backgroundActive": "#ebebeb",
     "backgroundGradient": "#f2f2f2",
@@ -79,7 +85,7 @@ Object {
     "buttonForeground": "#fff",
     "foreground": "#000",
     "progressBarBackground": "#909090",
-    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.08)",
   },
 }
 `;
@@ -100,13 +106,16 @@ Object {
     "buttonForeground": "#000",
     "foreground": "#222",
     "progressBarBackground": "#a7a7a7",
-    "scrollShadowRgba": "rgba(0, 0, 0, 0.2)",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
   "modes": Object {
     "admin": Object {},
     "dark": Object {},
   },
   "primary": Object {
+    "_debug": Object {
+      "colorRange": "midDark",
+    },
     "background": "#6a6c6e",
     "backgroundActive": "#565859",
     "backgroundGradient": "#5d5f61",
@@ -121,7 +130,7 @@ Object {
     "buttonForeground": "#fff",
     "foreground": "#fff",
     "progressBarBackground": "#606264",
-    "scrollShadowRgba": "rgba(0, 0, 0, 0.2)",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
 }
 `;
@@ -142,13 +151,16 @@ Object {
     "buttonForeground": "#000",
     "foreground": "#222",
     "progressBarBackground": "#a7a7a7",
-    "scrollShadowRgba": "rgba(0, 0, 0, 0.2)",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
   "modes": Object {
     "admin": Object {},
     "dark": Object {},
   },
   "primary": Object {
+    "_debug": Object {
+      "colorRange": "midLight",
+    },
     "background": "#ffc0cb",
     "backgroundActive": "#ff738c",
     "backgroundGradient": "#ff8da1",
@@ -163,7 +175,7 @@ Object {
     "buttonForeground": "#fff",
     "foreground": "#000",
     "progressBarBackground": "#909090",
-    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.08)",
   },
 }
 `;
@@ -184,13 +196,16 @@ Object {
     "buttonForeground": "#000",
     "foreground": "#222",
     "progressBarBackground": "#a7a7a7",
-    "scrollShadowRgba": "rgba(0, 0, 0, 0.2)",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
   "modes": Object {
     "admin": Object {},
     "dark": Object {},
   },
   "primary": Object {
+    "_debug": Object {
+      "colorRange": "midDark",
+    },
     "background": "#0061d5",
     "backgroundActive": "#004eac",
     "backgroundGradient": "#0055bc",
@@ -205,7 +220,7 @@ Object {
     "buttonForeground": "#fff",
     "foreground": "#fff",
     "progressBarBackground": "#006ae9",
-    "scrollShadowRgba": "rgba(0, 0, 0, 0.2)",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
 }
 `;
