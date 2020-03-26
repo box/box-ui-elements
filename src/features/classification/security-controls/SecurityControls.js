@@ -66,7 +66,7 @@ class SecurityControls extends React.Component<Props, State> {
             items = getFullSecurityControlsMessages(controls, maxAppCount);
         } else {
             const shortMessage = getShortSecurityControlsMessage(controls);
-            items = shortMessage.message ? [shortMessage] : [];
+            items = shortMessage ? [shortMessage] : [];
 
             if (items.length && controlsFormat === SHORT_WITH_BTN) {
                 modalItems = getFullSecurityControlsMessages(controls, maxAppCount);
@@ -80,16 +80,14 @@ class SecurityControls extends React.Component<Props, State> {
         const { isSecurityControlsModalOpen } = this.state;
         const shouldShowSecurityControlsModal =
             controlsFormat === SHORT_WITH_BTN && !!itemName && !!classificationName && !!definition;
-        const securityControlsItems = items.map(({ message, tooltipMessage }) => {
-            if (message) {
-                return <SecurityControlsItem key={message.id} message={message} appNames={tooltipMessage} />;
-            }
-            return null;
-        });
 
         return (
             <>
-                <ul className="bdl-SecurityControls">{securityControlsItems}</ul>
+                <ul className="bdl-SecurityControls">
+                    {items.map(({ message, tooltipMessage }) => (
+                        <SecurityControlsItem key={message.id} message={message} tooltipMessage={tooltipMessage} />
+                    ))}
+                </ul>
                 {shouldShowSecurityControlsModal && (
                     <>
                         <PlainButton className="lnk" onClick={this.openModal} type="button">

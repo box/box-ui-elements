@@ -2,25 +2,19 @@
 import getProp from 'lodash/get';
 import isNil from 'lodash/isNil';
 
-import type { MessageDescriptor } from 'react-intl';
-import type { Controls } from '../flowTypes';
+import type { Controls, MessageItem } from '../flowTypes';
 
 import appRestrictionsMessageMap from './appRestrictionsMessageMap';
 import downloadRestrictionsMessageMap from './downloadRestrictionsMessageMap';
 import messages from './messages';
 import { ACCESS_POLICY_RESTRICTION, DOWNLOAD_CONTROL, LIST_ACCESS_LEVEL, SHARED_LINK_ACCESS_LEVEL } from '../constants';
 
-type MessageItem = {
-    message: ?MessageDescriptor,
-    tooltipMessage?: MessageDescriptor,
-};
-
 const { SHARED_LINK, DOWNLOAD, EXTERNAL_COLLAB, APP } = ACCESS_POLICY_RESTRICTION;
 const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
 const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
 const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY, PUBLIC } = SHARED_LINK_ACCESS_LEVEL;
 
-const getShortSecurityControlsMessage = (controls: Controls): MessageItem => {
+const getShortSecurityControlsMessage = (controls: Controls): ?MessageItem => {
     const { sharedLink, download, externalCollab, app } = controls;
     // Shared link and external collab restrictions are grouped
     // together as generic "sharing" restrictions
@@ -54,7 +48,7 @@ const getShortSecurityControlsMessage = (controls: Controls): MessageItem => {
         return { message: messages.shortApp };
     }
 
-    return { message: null };
+    return null;
 };
 
 const getSharedLinkMessages = (controls: Controls): Array<MessageItem> => {
@@ -191,5 +185,3 @@ const getFullSecurityControlsMessages = (controls: Controls, maxAppCount?: numbe
 };
 
 export { getShortSecurityControlsMessage, getFullSecurityControlsMessages };
-
-export type { MessageItem };

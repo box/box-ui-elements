@@ -79,7 +79,7 @@ describe('features/classification/security-controls/SecurityControls', () => {
         });
     });
 
-    test('should pass appNames to SecurityControlsItem if exceeds maxAppCount', () => {
+    test('should pass tooltipMessage to SecurityControlsItem if exceeds maxAppCount', () => {
         controls.app.apps = [{ displayText: 'App 1' }, { displayText: 'App 2' }, { displayText: 'App 3' }];
         wrapper.setProps({ controlsFormat: FULL, controls, maxAppCount: 2 });
 
@@ -87,7 +87,7 @@ describe('features/classification/security-controls/SecurityControls', () => {
             wrapper
                 .find(SecurityControlsItem)
                 .findWhere(item => item.props().message.id === 'boxui.securityControls.appDownloadWhitelistOverflow')
-                .props().appNames,
+                .props().tooltipMessage,
         ).toEqual({
             ...messages.allAppNames,
             values: { appsList: 'App 1, App 2, App 3' },

@@ -11,7 +11,7 @@ import Label from '../../../components/label/Label';
 import messages from './messages';
 import SecurityControlsItem from './SecurityControlsItem';
 import './SecurityControlsModal.scss';
-import type { MessageItem } from './utils';
+import type { MessageItem } from '../flowTypes';
 
 type Props = {
     classificationName?: string,
@@ -39,12 +39,6 @@ const SecurityControlsModal = ({
     }
 
     const title = <FormattedMessage {...messages.modalTitle} values={{ itemName }} />;
-    const securityControlsItems = modalItems.map(({ message, tooltipMessage }) => {
-        if (message) {
-            return <SecurityControlsItem key={message.id} message={message} appNames={tooltipMessage} />;
-        }
-        return null;
-    });
 
     return (
         <Modal
@@ -64,7 +58,11 @@ const SecurityControlsModal = ({
             <Label text={<FormattedMessage {...classificationMessages.definition} />}>
                 <p className="bdl-SecurityControlsModal-definition">{definition}</p>
             </Label>
-            <ul className="bdl-SecurityControlsModal-controlsItemList">{securityControlsItems}</ul>
+            <ul className="bdl-SecurityControlsModal-controlsItemList">
+                {modalItems.map(({ message, tooltipMessage }) => (
+                    <SecurityControlsItem key={message.id} message={message} tooltipMessage={tooltipMessage} />
+                ))}
+            </ul>
             <ModalActions>
                 <Button onClick={closeModal} type="button">
                     <FormattedMessage {...commonMessages.close} />

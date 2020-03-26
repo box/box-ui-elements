@@ -22,13 +22,13 @@ describe('features/classification/security-controls/utils', () => {
     });
 
     describe('getShortSecurityControlsMessage()', () => {
-        test('should return null message when there are no restrictions', () => {
-            expect(getShortSecurityControlsMessage({}).message).toBeNull();
+        test('should return null when there are no restrictions', () => {
+            expect(getShortSecurityControlsMessage({})).toBeNull();
         });
 
         test('should not return messages when shared link restriction has a "public" access level', () => {
             accessPolicy = { sharedLink: { accessLevel: PUBLIC } };
-            expect(getShortSecurityControlsMessage(accessPolicy).message).toBeNull();
+            expect(getShortSecurityControlsMessage(accessPolicy)).toBeNull();
         });
 
         test('should return all restrictions message when all restrictions are present', () => {

@@ -49,7 +49,7 @@ describe('features/classification/security-controls/SecurityControlsModal', () =
         expect(wrapper.find(SecurityControlsItem)).toHaveLength(3);
     });
 
-    test('should pass appNames to SecurityControlsItem', () => {
+    test('should pass tooltipMessage to SecurityControlsItem', () => {
         const tooltipMessage = { tooltipMessage: { id: 'msg3', defaultMessage: 'message3' } };
         modalItems = [
             { message: { id: 'msg1', defaultMessage: 'message1' } },
@@ -63,7 +63,7 @@ describe('features/classification/security-controls/SecurityControlsModal', () =
             wrapper
                 .find(SecurityControlsItem)
                 .findWhere(item => item.props().message.id === 'msg2')
-                .props().appNames,
+                .props().tooltipMessage,
         ).toEqual(tooltipMessage);
     });
 });
