@@ -18,6 +18,17 @@ import {
     FIELD_REPRESENTATIONS,
     X_REP_HINT_HEADER_DIMENSIONS_DEFAULT,
 } from '../constants';
+import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
+import type {
+    SortBy,
+    SortDirection,
+    FlattenedBoxItem,
+    FlattenedBoxItemCollection,
+    Collection,
+    BoxItem,
+    BoxItemCollection,
+} from '../common/types/core';
+import type APICache from '../utils/Cache';
 
 class Folder extends Item {
     /**
@@ -168,14 +179,10 @@ class Folder extends Item {
         );
         this.itemCache = (this.itemCache || []).concat(flattened);
 
-        this.getCache().set(
-            this.key,
-            Object.assign({}, data, {
-                item_collection: Object.assign({}, item_collection, {
-                    entries: this.itemCache,
-                }),
-            }),
-        );
+        this.getCache().set(this.key, {
+            ...data,
+            item_collection: { ...item_collection, entries: this.itemCache },
+        });
 
         this.finish();
     };
@@ -217,13 +224,14 @@ class Folder extends Item {
         this.errorCode = ERROR_CODE_FETCH_FOLDER;
         let params = { fields: requestFields.toString() };
         if (!noPagination) {
-            params = Object.assign({}, params, {
+            params = {
+                ...params,
                 direction: this.sortDirection.toLowerCase(),
                 limit: this.limit,
                 offset: this.offset,
                 fields: requestFields.toString(),
                 sort: this.sortBy.toLowerCase(),
-            });
+            };
         }
 
         return this.xhr

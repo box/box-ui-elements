@@ -1,11 +1,7 @@
 // @flow
 
-'no babel-plugin-flow-react-proptypes';
-
-// turn off this plugin because it breaks the IntlShape flow type
 import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import type { IntlShape } from 'react-intl';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
@@ -24,7 +20,7 @@ type Props = {
     error: string,
     fieldRef?: Object,
     getContacts: (query: string) => Promise<Array<Contact>>,
-    intl: IntlShape,
+    intl: any,
     label: React.Node,
     onContactAdd: Function,
     onContactRemove: Function,
@@ -62,7 +58,7 @@ class ContactsField extends React.Component<Props, State> {
 
         const suggestedSelectorOptions = contacts
             .filter(option => {
-                const id = option.id;
+                const { id } = option;
                 return id && suggestedCollaborators[id.toString()];
             })
             .sort((optionA, optionB) => {
@@ -97,6 +93,7 @@ class ContactsField extends React.Component<Props, State> {
                 )
                 .map<Object>(({ email, id, isExternalUser, name, type }) => ({
                     // map to standardized DatalistItem format
+                    // TODO: refactor this so inline conversions aren't required at every usage
                     email,
                     id,
                     isExternalUser,

@@ -1,14 +1,15 @@
 @import '../../styles/variables';
 
 .invite-collaborators-modal {
+    .bdl-Label,
     .label {
         color: $bdl-gray-62;
-        font-weight: 700;
+        font-weight: bold;
     }
 
     .icon-info {
-        bottom: 2px;
         position: relative;
+        bottom: 2px;
         vertical-align: middle;
     }
 
@@ -18,8 +19,8 @@
 
     .text-area-container {
         display: block;
-        margin-left: 0;
         width: 100%;
+        margin-left: 0;
     }
 
     textarea {
@@ -47,9 +48,9 @@
             overflow: auto;
         }
 
-        .pill-selector-input-wrapper {
-            height: 60px;
+        .bdl-PillSelector {
             width: 100%;
+            height: 60px;
         }
     }
 

@@ -6,6 +6,7 @@
 
 import React from 'react';
 import VersionsList from './VersionsList';
+import type { BoxItemVersion } from '../../../common/types/core';
 import './VersionsGroup.scss';
 
 type Props = {

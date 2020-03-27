@@ -3,6 +3,7 @@
  * @file Transcript utils
  * @author Box
  */
+import type { SkillCardEntryTimeSlice } from '../../../../common/types/skills';
 
 /**
  * Returns true if there is a valid start time

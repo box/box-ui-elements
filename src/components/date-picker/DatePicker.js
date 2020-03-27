@@ -1,9 +1,11 @@
 // @flow
 import * as React from 'react';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import classNames from 'classnames';
 import Pikaday from 'pikaday';
 import range from 'lodash/range';
+import uniqueId from 'lodash/uniqueId';
 
 import { RESIN_TAG_TARGET } from '../../common/variables';
 import IconAlert from '../../icons/general/IconAlert';
@@ -91,6 +93,8 @@ function getFormattedDate(date, format) {
     }
 }
 
+const localesWhereWeekStartsOnSunday = ['en-US', 'en-CA', 'jp-JP'];
+
 type Props = {
     /** Add a css class to the component */
     className?: string,
@@ -118,14 +122,13 @@ type Props = {
     hideOptionalLabel?: boolean,
     /** Props that will be applied on the input element */
     inputProps?: Object,
-    intl: Object,
     /** Is input clearable */
     isClearable?: boolean,
     /** Is input disabled */
     isDisabled?: boolean,
     /** Is input required */
     isRequired?: boolean,
-    /** Is user allowed to manually input a value */
+    /** Is user allowed to manually input a value (WARNING: this doesn't work with internationalization) */
     isTextInputAllowed?: boolean,
     /** Label displayed for the text input */
     label: React.Node,
@@ -148,7 +151,7 @@ type Props = {
     /** Date to set the input */
     value?: Date,
     yearRange?: number | Array<number>,
-};
+} & InjectIntlProvidedProps;
 
 class DatePicker extends React.Component<Props> {
     static defaultProps = {
@@ -162,6 +165,10 @@ class DatePicker extends React.Component<Props> {
         isTextInputAllowed: false,
         yearRange: 10,
     };
+
+    errorMessageID = uniqueId('errorMessage');
+
+    descriptionID = uniqueId('description');
 
     componentDidMount() {
         const { dateFormat, intl, maxDate, minDate, value, yearRange, isTextInputAllowed } = this.props;
@@ -190,6 +197,7 @@ class DatePicker extends React.Component<Props> {
             setDefaultDate: true,
             defaultDate: defaultValue,
             field: this.dateInputEl,
+            firstDay: localesWhereWeekStartsOnSunday.includes(intl.locale) ? 0 : 1,
             maxDate,
             minDate,
             position: 'bottom left',
@@ -205,7 +213,7 @@ class DatePicker extends React.Component<Props> {
         }
     }
 
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const { value: nextValue, minDate: nextMinDate, maxDate: nextMaxDate } = nextProps;
         const { value, minDate, maxDate, isTextInputAllowed } = this.props;
 
@@ -386,6 +394,15 @@ class DatePicker extends React.Component<Props> {
             'show-error': !!error,
         });
 
+        const hasError = !!error;
+
+        const ariaAttrs = {
+            'aria-invalid': hasError,
+            'aria-required': isRequired,
+            'aria-errormessage': this.errorMessageID,
+            'aria-describedby': description ? this.descriptionID : undefined,
+        };
+
         const resinTargetAttr = resinTarget ? { [RESIN_TAG_TARGET]: resinTarget } : {};
 
         const valueAttr = isTextInputAllowed
@@ -402,7 +419,11 @@ class DatePicker extends React.Component<Props> {
             <div className={classes}>
                 <span className="date-picker-icon-holder">
                     <Label hideLabel={hideLabel} showOptionalText={!hideOptionalLabel && !isRequired} text={label}>
-                        {!!description && <i className="date-picker-description">{description}</i>}
+                        {!!description && (
+                            <div id={this.descriptionID} className="date-picker-description">
+                                {description}
+                            </div>
+                        )}
                         <Tooltip
                             className="date-picker-error-tooltip"
                             isShown={!!error}
@@ -424,10 +445,14 @@ class DatePicker extends React.Component<Props> {
                                 onFocus={onFocus}
                                 onKeyDown={this.handleInputKeyDown}
                                 {...resinTargetAttr}
+                                {...ariaAttrs}
                                 {...inputProps}
                                 {...valueAttr}
                             />
                         </Tooltip>
+                        <span id={this.errorMessageID} className="accessibility-hidden" role="alert">
+                            {error}
+                        </span>
                     </Label>
                     {isClearable && !!value && !isDisabled ? (
                         <PlainButton

@@ -77,6 +77,12 @@ class FormattedCompMessage extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
+        /* eslint-disable no-console */
+        console.warn(
+            "box-ui-elements: the FormattedCompMessage component is deprecated! Use react-intl's FormattedMessage instead.",
+        );
+        /* eslint-enable no-console */
+
         // these parameters echo the ones in react-intl's FormattedMessage
         // component, plus a few extra
         const {
@@ -159,14 +165,12 @@ class FormattedCompMessage extends React.Component<Props, State> {
         }
 
         // react-intl will do the correct plurals if necessary
-        const translation = intl.formatMessage(
-            {
-                id,
-                defaultMessage: source,
-                description,
-            },
-            values,
-        );
+        const descriptor = {
+            id,
+            defaultMessage: source,
+            description,
+        };
+        const translation = intl.formatMessage(descriptor, values);
 
         // always wrap the translated string in a tag to contain everything
         // and to give us a spot to record the id. The resource id is the

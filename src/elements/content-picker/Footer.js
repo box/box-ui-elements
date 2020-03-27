@@ -20,6 +20,7 @@ type Props = {
     children?: any,
     chooseButtonLabel?: string,
     hasHitSelectionLimit: boolean,
+    isSingleSelect: boolean,
     onCancel: Function,
     onChoose: Function,
     onSelectedClick: Function,
@@ -30,6 +31,7 @@ const Footer = ({
     selectedCount,
     onSelectedClick,
     hasHitSelectionLimit,
+    isSingleSelect,
     onCancel,
     onChoose,
     chooseButtonLabel,
@@ -38,18 +40,20 @@ const Footer = ({
 }: Props) => (
     <footer className="bcp-footer">
         <div className="bcp-footer-left">
-            <Button className="bcp-selected" onClick={onSelectedClick} type="button">
-                <FormattedMessage
-                    className="bcp-selected-count"
-                    {...messages.selected}
-                    values={{ count: selectedCount }}
-                />
-                {hasHitSelectionLimit && (
-                    <span className="bcp-selected-max">
-                        (<FormattedMessage {...messages.max} />)
-                    </span>
-                )}
-            </Button>
+            {!isSingleSelect && (
+                <Button className="bcp-selected" onClick={onSelectedClick} type="button">
+                    <FormattedMessage
+                        className="bcp-selected-count"
+                        {...messages.selected}
+                        values={{ count: selectedCount }}
+                    />
+                    {hasHitSelectionLimit && (
+                        <span className="bcp-selected-max">
+                            (<FormattedMessage {...messages.max} />)
+                        </span>
+                    )}
+                </Button>
+            )}
         </div>
         <div className="bcp-footer-right">
             {children}

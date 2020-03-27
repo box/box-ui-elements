@@ -115,13 +115,13 @@ class ContentExplorerModalContainer extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate({ initialFoldersPath: prevInitialFoldersPath }) {
         const { initialFoldersPath } = this.props;
 
-        if (nextProps.initialFoldersPath !== initialFoldersPath) {
+        if (prevInitialFoldersPath !== initialFoldersPath) {
             // Close the new folder modal when the folders path has changed
             this.setState({
-                foldersPath: nextProps.initialFoldersPath,
+                foldersPath: initialFoldersPath,
                 isNewFolderModalOpen: false,
             });
         }

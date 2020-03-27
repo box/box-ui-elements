@@ -12,6 +12,8 @@ import { addTime } from '../../utils/datetime';
 
 import DateField from '../common/date';
 
+import type { BoxItem } from '../../common/types/core';
+
 const ONE_MINUTE_IN_MS = 60000;
 
 const NOTICE_DATE_FORMAT = {
@@ -33,11 +35,12 @@ const SidebarNotices = ({ file }: Props) => {
     }
 
     return (
-        <React.Fragment>
+        <>
             {!!itemExpiration && (
                 <ItemExpirationNotice
                     expiration={
                         <DateField
+                            // $FlowFixMe
                             date={addTime(new Date(itemExpiration), ONE_MINUTE_IN_MS)}
                             dateFormat={NOTICE_DATE_FORMAT}
                             relative={false}
@@ -50,6 +53,7 @@ const SidebarNotices = ({ file }: Props) => {
                 <SharedLinkExpirationNotice
                     expiration={
                         <DateField
+                            // $FlowFixMe
                             date={addTime(new Date(sharedLinkExpiration), ONE_MINUTE_IN_MS)}
                             dateFormat={NOTICE_DATE_FORMAT}
                             relative={false}
@@ -57,7 +61,7 @@ const SidebarNotices = ({ file }: Props) => {
                     }
                 />
             )}
-        </React.Fragment>
+        </>
     );
 };
 

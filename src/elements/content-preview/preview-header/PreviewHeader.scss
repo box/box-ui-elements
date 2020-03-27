@@ -1,21 +1,32 @@
 @import '../../common/variables';
 
 .bcpr-PreviewHeader {
-    align-items: center;
-    background-color: $bdl-gray-02;
-    border-bottom: 1px solid $bdl-gray-10;
     display: flex;
     flex: 0 0 60px;
+    padding: 0;
     font-size: 13px;
-    justify-content: space-between;
-    padding: 0 15px;
+
+    .bcpr-PreviewHeader-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 15px;
+        background-color: $bdl-gray-02;
+        border-bottom: 1px solid $bdl-gray-10;
+    }
+
+    // Box Annotations selector
+    .bp-header {
+        flex: 1;
+        height: 60px;
+    }
 
     // Box Annotations overrides
     button.ba-btn-annotate-point-exit,
     button.ba-btn-annotate-draw-cancel {
+        color: $bdl-gray-10;
         background-color: $bdl-gray;
         border: solid $bdl-gray-10 1px;
-        color: $bdl-gray-10;
 
         &:hover {
             background-color: $black;
@@ -23,8 +34,8 @@
     }
 
     button.ba-btn-annotate-draw-post {
-        background-color: $bdl-gray-10;
         color: $bdl-gray;
+        background-color: $bdl-gray-10;
 
         &:hover {
             background-color: $white;
@@ -33,9 +44,10 @@
 
     .ba-point-post-cancel-container,
     .ba-draw-post-cancel-container {
-        margin-right: 20px;
         position: absolute;
+        top: 6px;
         right: 0;
+        margin-right: 20px;
 
         button {
             height: 32px;
@@ -50,24 +62,28 @@
         .ba-btn-annotate-draw-undo,
         button.ba-btn-annotate-draw-redo,
         button.ba-btn-annotate-draw-undo,
+        .bdl-is-disabled.ba-btn-annotate-draw-redo,
+        .bdl-is-disabled.ba-btn-annotate-draw-undo,
         .is-disabled.ba-btn-annotate-draw-redo,
         .is-disabled.ba-btn-annotate-draw-undo {
+            margin: 5px;
             background: none;
             border: none;
-            margin: 5px;
 
             svg {
-                fill: $bdl-gray-10;
                 vertical-align: middle;
+                fill: $bdl-gray-10;
             }
         }
     }
 }
 
 .bcpr-PreviewHeader--basic {
-    background: $bdl-gray;
-    border-bottom: 1px solid $bdl-gray;
-    color: $bdl-gray-02;
+    .bcpr-PreviewHeader-content {
+        color: $bdl-gray-02;
+        background: $bdl-gray;
+        border-bottom: 1px solid $bdl-gray;
+    }
 }
 
 .bcpr-PreviewHeader-controls {
@@ -86,9 +102,15 @@
 }
 
 .bcpr-PreviewHeader-button.btn-plain {
-    color: $bdl-gray-02;
     display: flex;
-    padding: 5px 10px;
+    align-items: center;
+    color: $bdl-gray-02;
+
+    &,
+    &:hover,
+    &:active {
+        padding: 5px 10px;
+    }
 
     &:focus,
     &:hover {

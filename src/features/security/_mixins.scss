@@ -1,0 +1,17 @@
+@import '../../styles/variables';
+
+@mixin bdl-SecurityBadge {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+    padding: 0 5px;
+    border: 1px solid;
+    border-radius: $bdl-border-radius-size;
+}
+
+@mixin bdl-SecurityBadge-name {
+    margin-left: 5px;
+    font-weight: bold;
+    font-size: 10px !important; // To inhibit overriding
+    line-height: 16px;
+}

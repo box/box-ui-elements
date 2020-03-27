@@ -29,6 +29,12 @@ export type allowedAccessLevelsType = {
     peopleWithTheLink?: boolean,
 };
 
+export type accessLevelsDisabledReasonType = {
+    peopleInThisItem?: 'access_policy' | null,
+    peopleInYourCompany?: 'access_policy' | null,
+    peopleWithTheLink?: 'access_policy' | null,
+};
+
 export type contactType = {
     email?: string,
     id: number | string,
@@ -49,8 +55,10 @@ export type inviteePermissionType = {
 export type item = {
     bannerPolicy?: {
         body: string,
+        colorID?: number,
         title: string,
     },
+    canUserSeeClassification: boolean,
     classification?: string,
     description: string,
     extension: string,
@@ -123,6 +131,7 @@ export type trackingPropsType = {
 // this type is a strict subset of the SharedLinkRecord data returned from the server
 export type sharedLinkType = {
     accessLevel: accessLevelType,
+    accessLevelsDisabledReason?: accessLevelsDisabledReasonType,
     allowedAccessLevels: allowedAccessLevelsType,
     canChangeAccessLevel: boolean,
     enterpriseName: string,

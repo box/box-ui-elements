@@ -7,10 +7,13 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import cloneDeep from 'lodash/cloneDeep';
 import messages from '../common/messages';
 import ContentPreview from '../content-preview';
 import { TYPE_FILE, CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
+import type { Token, BoxItem, Collection } from '../../common/types/core';
+import type APICache from '../../utils/Cache';
 
 type Props = {
     apiHost: string,

@@ -29,8 +29,11 @@ class EditableDescription extends React.PureComponent<Props, State> {
         };
     }
 
-    componentWillReceiveProps(nextProps: Props): void {
-        this.setState({ value: nextProps.value });
+    componentDidUpdate({ value: prevValue }: Props): void {
+        const { value } = this.props;
+        if (prevValue !== value) {
+            this.setState({ value });
+        }
     }
 
     handleBlur = (): void => {

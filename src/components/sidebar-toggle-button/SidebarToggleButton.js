@@ -2,6 +2,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 
 import IconHide from '../../icons/general/IconHide';
 import IconShow from '../../icons/general/IconShow';

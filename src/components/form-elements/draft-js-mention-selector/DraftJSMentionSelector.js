@@ -7,6 +7,7 @@ import DraftJSMentionSelectorCore from './DraftJSMentionSelectorCore';
 import DraftMentionItem from './DraftMentionItem';
 import FormInput from '../form/FormInput';
 import * as messages from '../input-messages';
+import type { SelectorItems } from '../../../common/types/core';
 
 /**
  * Scans a Draft ContentBlock for entity ranges, so they can be annotated
@@ -26,7 +27,7 @@ const mentionStrategy = (contentBlock, callback, contentState) => {
 
 type Props = {
     className?: string,
-    contacts: SelectorItems,
+    contacts: SelectorItems<>,
     editorState?: EditorState,
     hideLabel?: boolean,
     isDisabled?: boolean,
@@ -47,7 +48,7 @@ type Props = {
 };
 
 type State = {
-    contacts: SelectorItems,
+    contacts: SelectorItems<>,
     error: ?Object,
     internalEditorState: ?EditorState,
     isTouched: boolean,
@@ -163,10 +164,10 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         // manually check for content length if isRequired is true
         const editorState: EditorState = internalEditorState || externalEditorState;
-        const length = editorState
+        const { length } = editorState
             .getCurrentContent()
             .getPlainText()
-            .trim().length;
+            .trim();
 
         if (isRequired && !length) {
             return messages.valueMissing();

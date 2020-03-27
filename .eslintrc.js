@@ -7,10 +7,8 @@ module.exports = {
         'class-methods-use-this': 'off',
         'jsx-a11y/label-has-associated-control': 'off',
         'import/no-extraneous-dependencies': 'off', // fixme
-        'prefer-destructuring': 'off', // fixme
         'react/default-props-match-prop-types': 'off', // fixme
         'react/destructuring-assignment': 'off', // fixme
-        'react/display-name': 'off',
         'react/forbid-prop-types': 'off', // fixme
         'react/jsx-sort-props': 'off', // fixme
         'react/jsx-no-bind': 'off', // fixme
@@ -19,9 +17,22 @@ module.exports = {
         'react/no-access-state-in-setstate': 'off', // fixme
         'react/no-array-index-key': 'off', // fixme
         'react/no-this-in-sfc': 'off',
+        'import/no-unresolved': 'off', // fixme
     },
-    globals: {
-        shallow: true,
-        mount: true,
-    },
+    overrides: [
+        {
+            files: ['*.test.js', '*.test.tsx'],
+            globals: {
+                BoxVisualTestUtils: true,
+                shallow: true,
+                mount: true,
+            },
+        },
+        {
+            files: ['*.ts', '*.tsx'],
+            rules: {
+                '@typescript-eslint/explicit-function-return-type': 'off', // fixme
+            }
+        }
+    ]
 };

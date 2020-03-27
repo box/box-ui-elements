@@ -37,6 +37,11 @@ check_and_commit_updated_translations() {
 
 # lint, test, and build assets to update translations
 prepush() {
+    printf "${blue}--------------------------------------${end}"
+    printf "${blue}Checking react-intl v3 usage${end}"
+    printf "${blue}--------------------------------------${end}"
+    ./scripts/findReactIntlViolators.js || exit 1
+
     printf "${blue}-------------------------------------------------------------${end}"
     printf "${blue}Building all sources, this will update i18n/json${end}"
     printf "${blue}-------------------------------------------------------------${end}"

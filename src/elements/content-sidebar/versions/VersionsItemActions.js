@@ -15,6 +15,7 @@ import IconTrash from '../../../icons/general/IconTrash';
 import IconUpload from '../../../icons/general/IconUpload';
 import messages from './messages';
 import PlainButton from '../../../components/plain-button';
+import Tooltip from '../../../components/tooltip/Tooltip';
 import VersionsItemAction from './VersionsItemAction';
 import { Menu } from '../../../components/menu';
 import './VersionsItemActions.scss';
@@ -22,6 +23,7 @@ import './VersionsItemActions.scss';
 type Props = {
     fileId: string,
     isCurrent?: boolean,
+    isRetained?: boolean,
     onDelete?: () => void,
     onDownload?: () => void,
     onPreview?: () => void,
@@ -34,9 +36,7 @@ type Props = {
     showRestore?: boolean,
 };
 
-const ICON_SIZE = { height: 12, width: 12 };
-
-const handleMenuClose = (event: SyntheticEvent<>) => {
+const handleMenuClose = (event: SyntheticEvent<> | MouseEvent) => {
     event.stopPropagation();
 };
 
@@ -47,6 +47,7 @@ const handleToggleClick = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
 const VersionsItemActions = ({
     fileId,
     isCurrent = false,
+    isRetained = false,
     onDelete,
     onDownload,
     onPreview,
@@ -80,7 +81,7 @@ const VersionsItemActions = ({
             >
                 <IconEllipsis height={4} width={14} />
                 <FormattedMessage {...messages.versionActionToggle}>
-                    {text => <span className="accessibility-hidden">{text}</span>}
+                    {(text: string) => <span className="accessibility-hidden">{text}</span>}
                 </FormattedMessage>
             </PlainButton>
 
@@ -91,20 +92,20 @@ const VersionsItemActions = ({
             >
                 {showPreview && (
                     <VersionsItemAction action="preview" fileId={fileId} isCurrent={isCurrent} onClick={onPreview}>
-                        <IconOpenWith {...ICON_SIZE} />
+                        <IconOpenWith />
                         <FormattedMessage {...messages.versionActionPreview} />
                     </VersionsItemAction>
                 )}
 
                 {showDownload && (
                     <VersionsItemAction action="download" fileId={fileId} isCurrent={isCurrent} onClick={onDownload}>
-                        <IconDownload {...ICON_SIZE} />
+                        <IconDownload />
                         <FormattedMessage {...messages.versionActionDownload} />
                     </VersionsItemAction>
                 )}
                 {showPromote && (
                     <VersionsItemAction action="promote" fileId={fileId} isCurrent={isCurrent} onClick={onPromote}>
-                        <IconUpload {...ICON_SIZE} />
+                        <IconUpload />
                         <FormattedMessage {...messages.versionActionPromote} />
                     </VersionsItemAction>
                 )}
@@ -115,10 +116,23 @@ const VersionsItemActions = ({
                     </VersionsItemAction>
                 )}
                 {showDelete && (
-                    <VersionsItemAction action="remove" fileId={fileId} isCurrent={isCurrent} onClick={onDelete}>
-                        <IconTrash {...ICON_SIZE} />
-                        <FormattedMessage {...messages.versionActionDelete} />
-                    </VersionsItemAction>
+                    <Tooltip
+                        position="middle-left"
+                        text={<FormattedMessage {...messages.versionActionDisabledRetention} />}
+                        isTabbable={false}
+                        isDisabled={!isRetained}
+                    >
+                        <VersionsItemAction
+                            action="remove"
+                            fileId={fileId}
+                            isCurrent={isCurrent}
+                            isDisabled={isRetained}
+                            onClick={onDelete}
+                        >
+                            <IconTrash />
+                            <FormattedMessage {...messages.versionActionDelete} />
+                        </VersionsItemAction>
+                    </Tooltip>
                 )}
             </Menu>
         </DropdownMenu>

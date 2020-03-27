@@ -24,6 +24,9 @@ import {
 import Item from './Item';
 import { retryNumOfTimes } from '../utils/function';
 import TokenService from '../utils/TokenService';
+import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
+import type { BoxItem, BoxItemVersion, FileRepresentation } from '../common/types/core';
+import type APICache from '../utils/Cache';
 
 class File extends Item {
     /**

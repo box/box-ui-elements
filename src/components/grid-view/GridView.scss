@@ -13,16 +13,16 @@
         padding: 5px 10px;
 
         .btn-content {
-            align-items: center;
             display: flex;
+            align-items: center;
             justify-content: center;
         }
     }
 }
 
 .bdl-GridView-body {
-    outline: none;
     padding: 5px;
+    outline: none;
 }
 
 .bdl-GridView-row {
@@ -31,7 +31,7 @@
 }
 
 .bdl-GridView-tableRow {
-    border: none;
-    padding-right: 0 !important;
     width: 100% !important;
+    padding-right: 0 !important;
+    border: none;
 }

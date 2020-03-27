@@ -15,9 +15,9 @@ input[type='tel'],
 input[type='number'],
 div[contentEditable='true'],
 textarea {
-    @include box-inputs;
-
     width: 262px;
+
+    @include box-inputs;
 }
 
 input[type='text']:hover,
@@ -83,10 +83,10 @@ input[type='tel']:disabled,
 input[type='number']:disabled,
 div[contentEditable='true']:disabled,
 textarea:disabled {
+    color: $bdl-gray-30;
     background-color: $bdl-gray-02;
     border-color: $bdl-gray-10;
     box-shadow: none;
-    color: $bdl-gray-30;
 
     &:hover {
         border-color: $bdl-gray-10;
@@ -95,12 +95,12 @@ textarea:disabled {
 
 /* safari does't treat search input like a normal textfield */
 input[type='search'] {
+    -webkit-appearance: textfield;
+
     &::-webkit-search-cancel-button,
     &::-webkit-search-results-button {
         display: none;
     }
-
-    -webkit-appearance: textfield;
 }
 
 /* IE10+ adds a new x to the inputs to clear it, hiding it for now */
@@ -150,59 +150,63 @@ textarea {
 /* Select component with container */
 
 .select-container select,
+.select-container .bdl-SelectButton,
 .select-container .select-button {
+    position: relative;
+    z-index: 1; /* captures click */
+    display: inline-block;
+    width: 100%;
+    height: 34px;
+    padding: 5px 0 5px 10px;
+    cursor: pointer;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    cursor: pointer;
-    display: inline-block;
-    height: 34px;
-    padding: 5px 0 5px 10px;
-    position: relative;
-    width: 100%;
-    z-index: 1; /* captures click */
 }
 
 .select-container select {
+    padding-right: 25px;
+    color: $bdl-gray;
     background: none;
     border: none;
-    color: $bdl-gray;
-    padding-right: 25px;
 }
 
+.select-container .bdl-SelectButton:disabled,
 .select-container .select-button:disabled,
 .select-container select:disabled {
     cursor: default;
 }
 
 .select-container {
-    display: inline-block;
     position: relative;
+    display: inline-block;
 }
 
+.select-container .bdl-SelectButton,
 .select-container .select-button,
 .select-container .select-container-inner {
     display: inline-block;
+    width: 100%;
     overflow: hidden;
+    white-space: nowrap;
     text-align: left;
     text-overflow: ellipsis;
     vertical-align: top;
-    white-space: nowrap;
-    width: 100%;
 }
 
 .select-container .select-overlay {
-    box-sizing: border-box;
-    height: 100%;
-    left: 0;
-    margin: 0;
-    padding: 0;
     position: absolute;
     top: 0;
+    left: 0;
+    box-sizing: border-box;
     width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .select-container .select-overlay,
+.select-container .bdl-SelectButton,
 .select-container .select-button {
     background-color: $white;
     border: 1px solid $bdl-gray-20;
@@ -213,49 +217,57 @@ textarea {
 }
 
 .select-container .select-overlay::before,
+.select-container .bdl-SelectButton::before,
 .select-container .select-button::before {
-    border-left: 3px solid transparent;
-    border-right: 3px solid transparent;
-    border-top: 3px solid $bdl-gray-80;
-    content: '';
-    height: 0;
     position: absolute;
-    right: 11px;
     top: 15px;
-    transition: transform $bdl-transition-duration-200ms;
+    right: 11px;
     width: 0;
+    height: 0;
+    border-top: 3px solid $bdl-gray-80;
+    border-right: 3px solid transparent;
+    border-left: 3px solid transparent;
+    transition: transform $bdl-transitionDurationBase;
+    content: '';
 }
 
+.select-container .bdl-SelectButton[aria-expanded='true']::before,
 .select-container .select-button[aria-expanded='true']::before {
     transform: rotateZ(180deg);
 }
 
+.select-container .bdl-SelectButton,
 .select-container .select-button {
-    color: $bdl-gray;
     padding-right: 25px;
+    color: $bdl-gray;
 }
 
+.select-container .bdl-SelectButton:focus,
 .select-container .select-button:focus,
 .select-container select:focus {
     outline: none;
 }
 
+.select-container .bdl-SelectButton:focus,
 .select-container .select-button:focus,
 .select-container select:focus ~ .select-overlay {
     border: 1px solid $primary-color;
 }
 
+.select-container .bdl-SelectButton:hover,
 .select-container .select-button:hover,
 .select-container select:hover ~ .select-overlay {
     border: 1px solid #4c4c4c;
     box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .1);
 }
 
+.select-container .bdl-SelectButton:disabled,
 .select-container .select-button:disabled,
 .select-container select:disabled {
     color: $bdl-gray-30;
 }
 
+.select-container .bdl-SelectButton:disabled,
 .select-container .select-button:disabled,
 .select-container select:disabled ~ .select-overlay {
     background-color: $bdl-gray-02;
@@ -263,23 +275,27 @@ textarea {
     box-shadow: none;
 }
 
+.select-container .bdl-SelectButton:disabled:hover,
 .select-container .select-button:disabled:hover,
 .select-container select:disabled:hover ~ .select-overlay {
     box-shadow: none;
 }
 
+.select-container .bdl-SelectButton:disabled::before,
 .select-container .select-button:disabled::before,
 .select-container select:disabled ~ .select-overlay::before {
     border-top: 3px solid #d5d5d5;
 }
 
 .select-container.is-invalid select + .select-overlay,
+.select-container.is-invalid .bdl-SelectButton:focus ~ .select-overlay,
 .select-container.is-invalid .select-button:focus ~ .select-overlay,
 .select-container.is-invalid select:focus ~ .select-overlay,
 .select-container.is-invalid select:hover + .select-overlay {
     border: 1px solid $bdl-watermelon-red;
 }
 
+.select-container .bdl-SelectButton:active,
 .select-container .select-button:active {
     background-color: $bdl-gray-10;
 }

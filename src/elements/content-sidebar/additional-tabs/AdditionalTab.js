@@ -14,6 +14,7 @@ import PlainButton from '../../../components/plain-button/PlainButton';
 import IconEllipsis from '../../../icons/general/IconEllipsis';
 import AdditionalTabPlaceholder from './AdditionalTabPlaceholder';
 import messages from './messages';
+import type { AdditionalSidebarTab } from '../flowTypes';
 
 import './AdditionalTab.scss';
 

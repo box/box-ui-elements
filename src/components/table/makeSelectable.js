@@ -59,6 +59,8 @@ function makeSelectable(BaseTable) {
             // will be fired before the click event; thus, in the click handler,
             // the focusedItem will already be the new item
             this.previousIndex = 0;
+
+            this.blurTimerID = null;
         }
 
         state = {
@@ -69,14 +71,15 @@ function makeSelectable(BaseTable) {
             document.addEventListener('keypress', this.handleKeyboardSearch);
         }
 
-        componentWillUpdate(nextProps, nextState) {
-            if (nextState.focusedIndex !== this.state.focusedIndex && this.props.onFocus) {
-                this.props.onFocus(nextState.focusedIndex);
+        componentDidUpdate(prevProps, prevState) {
+            if (prevState.focusedIndex !== this.state.focusedIndex && this.props.onFocus) {
+                this.props.onFocus(this.state.focusedIndex);
             }
         }
 
         componentWillUnmount() {
             document.removeEventListener('keypress', this.handleKeyboardSearch);
+            clearTimeout(this.blurTimerID);
         }
 
         onSelect = (selectedItems, newFocusedIndex) => {
@@ -265,6 +268,12 @@ function makeSelectable(BaseTable) {
             this.anchorIndex = rowIndex;
         };
 
+        clearFocus = () => {
+            this.setState({
+                focusedIndex: undefined,
+            });
+        };
+
         handleRowClick = (event, index) => {
             if (event.metaKey || event.ctrlKey) {
                 this.selectToggle(index);
@@ -278,6 +287,18 @@ function makeSelectable(BaseTable) {
         handleRowFocus = (event, index) => {
             const { selectedItems } = this.getProcessedProps();
             this.onSelect(selectedItems, index);
+        };
+
+        handleTableBlur = () => {
+            const { focusedIndex } = this.state;
+            if (focusedIndex !== undefined) {
+                // table may get focus back right away in the same tick, in which case we shouldn't clear focus
+                this.blurTimerID = setTimeout(this.clearFocus);
+            }
+        };
+
+        handleTableFocus = () => {
+            clearTimeout(this.blurTimerID);
         };
 
         handleShiftKeyDown = (newFocusedIndex, boundary) => {
@@ -361,6 +382,8 @@ function makeSelectable(BaseTable) {
                         focusedItem={focusedItem}
                         onRowClick={this.handleRowClick}
                         onRowFocus={this.handleRowFocus}
+                        onTableBlur={this.handleTableBlur}
+                        onTableFocus={this.handleTableFocus}
                     />
                 </Hotkeys>
             );

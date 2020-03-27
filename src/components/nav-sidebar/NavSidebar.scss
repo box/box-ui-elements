@@ -1,24 +1,24 @@
 @import '../../styles/variables';
 
 .nav-sidebar {
-    background-color: $bdl-gray-02;
-    border-right: 1px solid $bdl-gray-10;
+    z-index: 2;
+    width: 200px;
+    padding: 25px 10px 0 20px;
     overflow-x: hidden;
     overflow-y: auto;
-    padding: 25px 10px 0 20px;
-    width: 200px;
-    z-index: 2;
+    background-color: $bdl-gray-02;
+    border-right: 1px solid $bdl-gray-10;
 }
 
 .nav-list {
     margin-bottom: 20px;
 
     > h2 {
+        margin: 0;
         color: $bdl-gray-40;
         font-size: 10px;
-        letter-spacing: .1em;
         line-height: 28px;
-        margin: 0;
+        letter-spacing: .1em;
         text-transform: uppercase;
     }
 
@@ -31,9 +31,9 @@
     }
 
     > .placeholder {
-        color: $bdl-gray-30;
-        padding: 0 18px 0 28px;
         width: 180px;
+        padding: 0 18px 0 28px;
+        color: $bdl-gray-30;
     }
 
     a {
@@ -41,23 +41,23 @@
     }
 
     .nav-list-collapse-header {
-        align-items: center;
-        display: flex;
         position: relative;
+        display: flex;
+        align-items: center;
     }
 
     .nav-list-collapse {
-        align-items: center;
-        display: flex;
-        height: calc(100% - 10px);
-        justify-content: center;
-        margin: 5px;
-        padding: 0 5px;
         position: absolute;
         right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: calc(100% - 10px);
+        margin: 5px;
+        padding: 0 5px;
 
         > svg {
-            transition: transform 100ms ease-in-out;
+            @include bdl-transition($bdl-transitionDurationBase, transform);
         }
     }
 

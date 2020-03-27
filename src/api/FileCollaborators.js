@@ -6,6 +6,13 @@
 
 import MarkerBasedAPI from './MarkerBasedAPI';
 import { DEFAULT_MAX_COLLABORATORS } from '../constants';
+import type { ElementsErrorCallback } from '../common/types/api';
+import type { SelectorItem, SelectorItems, UserMini, GroupMini } from '../common/types/core';
+
+type CollaboratorsAPIResponse = {
+    entries: Array<GroupMini | UserMini>,
+    next_marker: ?string,
+};
 
 class FileCollaborators extends MarkerBasedAPI {
     /**
@@ -23,26 +30,34 @@ class FileCollaborators extends MarkerBasedAPI {
     }
 
     /**
-     * Generic success handler
+     * Transform result of API response
      *
      * @param {Object} data the response data
      */
-    successHandler = (data: any): void => {
+    successHandler = (data: CollaboratorsAPIResponse): void => {
         if (this.isDestroyed() || typeof this.successCallback !== 'function') {
             return;
         }
 
-        const { entries } = data;
-        const collaborators = entries.map(collab => {
-            const { id, name, login } = collab;
-            return {
-                id,
-                name,
-                item: { id, name, email: login },
-            };
-        });
+        // Transform into "mention selector" format:
+        const collaboratorSelectorItems: SelectorItems<UserMini | GroupMini> = data.entries.map(
+            (collab: UserMini | GroupMini) => {
+                let item;
+                if (collab.type === 'group') {
+                    item = collab; // flow needs assignment to happen after type refinement
+                } else {
+                    item = collab;
+                    item.email = item.login; // transform user object
+                }
+                return {
+                    id: collab.id,
+                    name: collab.name,
+                    item,
+                };
+            },
+        );
 
-        this.successCallback({ ...data, entries: collaborators });
+        this.successCallback({ ...data, entries: collaboratorSelectorItems });
     };
 
     /**
@@ -57,11 +72,13 @@ class FileCollaborators extends MarkerBasedAPI {
      */
     getFileCollaborators(
         id: string,
-        successCallback: Function,
+        successCallback: ({ entries: Array<SelectorItem<UserMini | GroupMini>>, next_marker: ?string }) => void,
         errorCallback: ElementsErrorCallback,
         requestData: Object = {},
         limit: number = DEFAULT_MAX_COLLABORATORS,
     ): void {
+        // NOTE: successCallback is called with the result
+        // of this.successHandler, not the API response!
         this.markerGet({
             id,
             limit,

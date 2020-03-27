@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import classnames from 'classnames';
 
 import { Flyout, Overlay } from '../../components/flyout';
@@ -65,6 +65,7 @@ class Presence extends Component {
         constrainToWindow: PropTypes.bool,
         /** Closes the flyout when window loses focus */
         closeOnWindowBlur: PropTypes.bool,
+        intl: PropTypes.any,
     };
 
     static defaultProps = {
@@ -159,6 +160,11 @@ class Presence extends Component {
 
     _renderTimestampMessage = (interactedAt, interactionType, isActive) => {
         const lastActionMessage = determineInteractionMessage(interactionType);
+        const { intl } = this.props;
+        const timeAgo = intl.formatRelativeTime
+            ? intl.formatRelativeTime(interactedAt - Date.now())
+            : intl.formatRelative(interactedAt);
+
         if (lastActionMessage) {
             return (
                 <div>
@@ -169,7 +175,7 @@ class Presence extends Component {
                             <FormattedMessage
                                 {...lastActionMessage}
                                 values={{
-                                    timeAgo: <FormattedRelative value={interactedAt} />,
+                                    timeAgo,
                                 }}
                             />
                         )}
@@ -239,12 +245,12 @@ class Presence extends Component {
         });
 
         const overlayContent = showActivityPrompt ? (
-            <React.Fragment>
+            <>
                 <FormattedMessage {...messages.previewPresenceFlyoutCopy} />
                 <Button className="btn-primary" onClick={this._showRecentsFlyout}>
                     <FormattedMessage {...messages.previewPresenceFlyoutActivityCTA} />
                 </Button>
-            </React.Fragment>
+            </>
         ) : (
             <PresenceDropdown
                 className="presence-dropdown"
@@ -315,4 +321,5 @@ class Presence extends Component {
     }
 }
 
-export default Presence;
+export { Presence as PresenceComponent };
+export default injectIntl(Presence);

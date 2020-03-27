@@ -1,35 +1,6 @@
 @import '../../styles/variables';
 @import '../../styles/inputs';
 
-$blue: #0061d5 !default;
-$light-blue: #e4f4ff !default;
-$grey-blue: #bed4de !default;
-$dark-cerulean: #1a5976 !default;
-$downtown-grey: #999ea4 !default;
-$white: #fff !default;
-$black: #000 !default;
-$twos: #222 !default;
-$threes: #333 !default;
-$off-white: $bdl-neutral-04 !default;
-$sevens: #777 !default;
-$almost-white: #fcfcfc !default;
-$red: #c82341 !default;
-$see-see: #ccc !default;
-$bfive: #b5b5b5 !default;
-$efive: #e5e5e5 !default;
-$ffive: #f5f5f5 !default;
-$haze: #fafafa !default;
-$grey: #bdc3c7 !default;
-$fivef: #5f5f5f !default;
-
-$transparent-black: rgba($threes, .04) !default;
-$lightest-black: rgba($threes, .1) !default;
-$lighter-black: rgba($threes, .2) !default;
-$darker-black: rgba($threes, .4) !default;
-$lighter-white: rgba($white, .9) !default;
-$lighter-grey-blue: rgba($grey-blue, .4) !default;
-$lighter-light-blue: rgba($light-blue, .4) !default;
-
 $font: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
 $minimumWidth: 300px;
@@ -46,9 +17,9 @@ $sidebarContentWidth: 340px;
 
     /* stylelint-disable declaration-no-important */
     box-sizing: border-box !important;
+    font-size: 13px;
     /* stylelint-enable declaration-no-important */
     font-family: $font;
-    font-size: 13px;
 
     * {
         @include rendering;
@@ -69,7 +40,7 @@ $sidebarContentWidth: 340px;
 }
 
 @mixin placeholder {
+    font-weight: normal;
     font-family: $font;
-    font-weight: 200;
     opacity: .6;
 }

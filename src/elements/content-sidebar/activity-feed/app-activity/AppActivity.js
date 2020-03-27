@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import TetherComponent from 'react-tether';
-import { FormattedMessage, injectIntl, type IntlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import DeleteConfirmation from '../common/delete-confirmation';
 import ActivityTimestamp from '../common/activity-timestamp';
@@ -18,6 +18,8 @@ import messages from './messages';
 import { bdlGray80 } from '../../../../styles/variables';
 import { Link } from '../../../../components/link';
 import { MenuItem } from '../../../../components/menu';
+import type { AppItem, ActivityTemplateItem, ActionItemError } from '../../../../common/types/feed';
+import type { User, BoxItemPermission } from '../../../../common/types/core';
 import './AppActivity.scss';
 
 type Props = {
@@ -25,11 +27,11 @@ type Props = {
     app: AppItem,
     created_at: string,
     created_by: User,
-    currentUser: User,
+    currentUser?: User,
     error?: ActionItemError,
     id: string,
-    intl: IntlShape,
-    isPending: boolean,
+    intl: any,
+    isPending?: boolean,
     onDelete: ({ id: string, permissions?: {} }) => void,
     permissions?: BoxItemPermission,
     rendered_text: string,
@@ -112,7 +114,7 @@ class AppActivity extends React.PureComponent<Props, State> {
             permissions,
         } = this.props;
 
-        const canDelete = getProp(permissions, 'can_delete', false) || currentUser.id === createdBy.id;
+        const canDelete = getProp(permissions, 'can_delete', false) || (currentUser && currentUser.id === createdBy.id);
         const createdAtTimestamp = new Date(createdAt).getTime();
         const isMenuVisible = canDelete && !isPending;
         const { isConfirmingDelete } = this.state;

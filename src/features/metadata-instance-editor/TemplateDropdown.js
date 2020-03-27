@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
+import isEqual from 'lodash/isEqual';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import DatalistItem from '../../components/datalist-item';
@@ -12,7 +13,8 @@ import { Flyout, Overlay } from '../../components/flyout';
 
 import MenuToggle from '../../components/dropdown-menu/MenuToggle';
 import messages from './messages';
-import { TEMPLATE_CUSTOM_PROPERTIES } from './constants';
+import TEMPLATE_CUSTOM_PROPERTIES from './constants';
+import type { MetadataTemplate } from '../../common/types/metadata';
 import './TemplateDropdown.scss';
 
 type Props = {
@@ -67,13 +69,17 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
     /**
      * Updates the state
      *
-     * @param {Object} nextProps - next props
+     * @param {Object} prevProps - next props
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props) {
-        this.setState({
-            templates: getAvailableTemplates(nextProps.templates, nextProps.usedTemplates),
-        });
+    componentDidUpdate({ templates: prevTemplates, usedTemplates: prevUsedTemplates }: Props) {
+        const { templates, usedTemplates } = this.props;
+
+        if (!isEqual(prevTemplates, templates) || !isEqual(prevUsedTemplates, usedTemplates)) {
+            this.setState({
+                templates: getAvailableTemplates(templates, usedTemplates),
+            });
+        }
     }
 
     getDropdown = () => {
@@ -134,7 +140,7 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
         });
 
         return (
-            <React.Fragment>
+            <>
                 <SelectorDropdown
                     className="metadata-instance-editor-template-dropdown-menu"
                     title={title}
@@ -148,7 +154,7 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
                     {indicatorOrMessage ? null : renderedTemplates}
                 </SelectorDropdown>
                 {indicatorOrMessage}
-            </React.Fragment>
+            </>
         );
     };
 

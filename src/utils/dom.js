@@ -51,7 +51,9 @@ export function isFocusableElement(element: HTMLElement | EventTarget | null): b
 
     const isButton =
         element.classList.contains('btn-content') ||
-        (element.parentElement instanceof HTMLElement ? element.parentElement.classList.contains('btn') : false);
+        (element.parentElement instanceof HTMLElement && element.parentElement.classList.contains('btn')) ||
+        (element.parentElement instanceof HTMLElement && element.parentElement.classList.contains('bdl-Button')) ||
+        false;
 
     return isInputElement(element) || tag === 'button' || tag === 'a' || tag === 'option' || isCheckbox || isButton;
 }
@@ -113,15 +115,10 @@ export function scrollIntoView(itemEl: ?HTMLElement, options?: Object = {}): voi
     // @NOTE: breaks encapsulation but alternative is unknown child ref
     if (itemEl) {
         const parentEl = itemEl.closest(`.body, .modal, .${OVERLAY_WRAPPER_CLASS}`);
-        scrollIntoViewIfNeeded(
-            itemEl,
-            Object.assign(
-                {
-                    scrollMode: 'if-needed',
-                    boundary: parentEl,
-                },
-                options,
-            ),
-        );
+        scrollIntoViewIfNeeded(itemEl, {
+            scrollMode: 'if-needed',
+            boundary: parentEl,
+            ...options,
+        });
     }
 }

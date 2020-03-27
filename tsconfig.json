@@ -1,0 +1,10 @@
+{
+    "extends": "@box/frontend/ts/tsconfig",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "outDir": "es",
+        "rootDir": "."
+    },
+    "files": [".storybook/typings.d.ts"],
+    "include": ["src/**/*.ts", "src/**/*.tsx", "examples/src/**.tsx", "types.ts"]
+}

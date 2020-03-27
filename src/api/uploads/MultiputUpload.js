@@ -5,6 +5,7 @@
  */
 
 import noop from 'lodash/noop';
+import isNaN from 'lodash/isNaN';
 import { getFileLastModifiedAsISONoMSIfPossible, getBoundedExpBackoffRetryDelay } from '../../utils/uploads';
 import { retryNumOfTimes } from '../../utils/function';
 import { digest } from '../../utils/webcrypto';
@@ -14,9 +15,18 @@ import {
     DEFAULT_RETRY_DELAY_MS,
     ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED,
     HTTP_STATUS_CODE_FORBIDDEN,
+    MS_IN_S,
 } from '../../constants';
-import MultiputPart, { PART_STATE_UPLOADED, PART_STATE_DIGEST_READY, PART_STATE_NOT_STARTED } from './MultiputPart';
+import MultiputPart, {
+    PART_STATE_UPLOADED,
+    PART_STATE_UPLOADING,
+    PART_STATE_DIGEST_READY,
+    PART_STATE_NOT_STARTED,
+} from './MultiputPart';
 import BaseMultiput from './BaseMultiput';
+import type { MultiputConfig } from '../../common/types/upload';
+import type { StringAnyMap } from '../../common/types/core';
+import type { APIOptions } from '../../common/types/api';
 
 // Constants used for specifying log event types.
 
@@ -50,11 +60,13 @@ class MultiputUpload extends BaseMultiput {
 
     initialFileSize: number;
 
+    isResumableUploadsEnabled: boolean;
+
     successCallback: Function;
 
     progressCallback: Function;
 
-    options: Options;
+    options: APIOptions;
 
     partSize: number;
 
@@ -69,6 +81,8 @@ class MultiputUpload extends BaseMultiput {
     numPartsUploaded: number;
 
     numPartsUploading: number;
+
+    numResumeRetries: number;
 
     sessionEndpoints: Object;
 
@@ -88,7 +102,7 @@ class MultiputUpload extends BaseMultiput {
      * @param {Options} options
      * @param {MultiputConfig} [config]
      */
-    constructor(options: Options, config?: MultiputConfig) {
+    constructor(options: APIOptions, config?: MultiputConfig) {
         super(
             options,
             {
@@ -115,6 +129,71 @@ class MultiputUpload extends BaseMultiput {
         this.partSize = 0;
         this.commitRetryCount = 0;
         this.clientId = null;
+        this.isResumableUploadsEnabled = false;
+        this.numResumeRetries = 0;
+    }
+
+    /**
+     * Reset values for uploading process.
+     */
+    reset() {
+        this.parts = [];
+        this.fileSha1 = null;
+        this.totalUploadedBytes = 0;
+        this.numPartsNotStarted = 0; // # of parts yet to be processed
+        this.numPartsDigestComputing = 0; // # of parts sent to the digest worker
+        this.numPartsDigestReady = 0; // # of parts with digest finished that are waiting to be uploaded.
+        this.numPartsUploading = 0; // # of parts with upload requests currently inflight
+        this.numPartsUploaded = 0; // # of parts successfully uploaded
+        this.firstUnuploadedPartIndex = 0; // Index of first part that hasn't been uploaded yet.
+        this.createSessionNumRetriesPerformed = 0;
+        this.partSize = 0;
+        this.commitRetryCount = 0;
+        this.numResumeRetries = 0;
+    }
+
+    /**
+     * Set information about file being uploaded
+     *
+     *
+     * @param {Object} options
+     * @param {File} options.file
+     * @param {string} options.folderId - Untyped folder id (e.g. no "folder_" prefix)
+     * @param {string} [options.fileId] - Untyped file id (e.g. no "file_" prefix)
+     * @param {string} options.sessionId
+     * @param {Function} [options.errorCallback]
+     * @param {Function} [options.progressCallback]
+     * @param {Function} [options.successCallback]
+     * @return {void}
+     */
+    setFileInfo({
+        file,
+        folderId,
+        errorCallback,
+        progressCallback,
+        successCallback,
+        overwrite = true,
+        conflictCallback,
+        fileId,
+    }: {
+        conflictCallback?: Function,
+        errorCallback?: Function,
+        file: File,
+        fileId: ?string,
+        folderId: string,
+        overwrite?: boolean,
+        progressCallback?: Function,
+        successCallback?: Function,
+    }): void {
+        this.file = file;
+        this.fileName = this.file.name;
+        this.folderId = folderId;
+        this.errorCallback = errorCallback || noop;
+        this.progressCallback = progressCallback || noop;
+        this.successCallback = successCallback || noop;
+        this.overwrite = overwrite;
+        this.conflictCallback = conflictCallback;
+        this.fileId = fileId;
     }
 
     /**
@@ -132,15 +211,19 @@ class MultiputUpload extends BaseMultiput {
      */
     upload({
         file,
+        fileDescription,
         folderId,
         errorCallback,
         progressCallback,
         successCallback,
         overwrite = true,
+        conflictCallback,
         fileId,
     }: {
+        conflictCallback?: Function,
         errorCallback?: Function,
         file: File,
+        fileDescription: ?string,
         fileId: ?string,
         folderId: string,
         overwrite?: boolean,
@@ -161,8 +244,10 @@ class MultiputUpload extends BaseMultiput {
         this.sha1Worker = createWorker();
         this.sha1Worker.addEventListener('message', this.onWorkerMessage);
 
+        this.conflictCallback = conflictCallback;
         this.overwrite = overwrite;
         this.fileId = fileId;
+        this.fileDescription = fileDescription;
 
         this.makePreflightRequest();
     }
@@ -241,8 +326,8 @@ class MultiputUpload extends BaseMultiput {
 
             if (
                 (errorData &&
-                    (errorData.status === HTTP_STATUS_CODE_FORBIDDEN &&
-                        errorData.code === ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED)) ||
+                    errorData.status === HTTP_STATUS_CODE_FORBIDDEN &&
+                    errorData.code === ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED) ||
                 (errorData.status === HTTP_STATUS_CODE_FORBIDDEN &&
                     errorData.code === 'access_denied_insufficient_permissions')
             ) {
@@ -330,6 +415,165 @@ class MultiputUpload extends BaseMultiput {
     }
 
     /**
+     * Resume uploading the given file
+     *
+     *
+     * @param {Object} options
+     * @param {File} options.file
+     * @param {string} options.folderId - Untyped folder id (e.g. no "folder_" prefix)
+     * @param {string} [options.fileId] - Untyped file id (e.g. no "file_" prefix)
+     * @param {string} options.sessionId
+     * @param {Function} [options.errorCallback]
+     * @param {Function} [options.progressCallback]
+     * @param {Function} [options.successCallback]
+     * @param {Function} [options.conflictCallback]
+     * @return {void}
+     */
+    resume({
+        file,
+        folderId,
+        errorCallback,
+        progressCallback,
+        sessionId,
+        successCallback,
+        overwrite = true,
+        conflictCallback,
+        fileId,
+    }: {
+        conflictCallback?: Function,
+        errorCallback?: Function,
+        file: File,
+        fileId: ?string,
+        folderId: string,
+        overwrite?: boolean,
+        progressCallback?: Function,
+        sessionId: string,
+        successCallback?: Function,
+    }): void {
+        this.setFileInfo({
+            file,
+            folderId,
+            errorCallback,
+            progressCallback,
+            successCallback,
+            conflictCallback,
+            overwrite,
+            fileId,
+        });
+        this.sessionId = sessionId;
+
+        if (!this.sha1Worker) {
+            this.sha1Worker = createWorker();
+        }
+        this.sha1Worker.addEventListener('message', this.onWorkerMessage);
+
+        this.getSessionInfo();
+    }
+
+    /**
+     * Get session information from API.
+     * Uses session info to commit a complete session or continue an in-progress session.
+     *
+     * @private
+     * @return {void}
+     */
+    getSessionInfo = async (): Promise<any> => {
+        const uploadUrl = this.getBaseUploadUrl();
+        const sessionUrl = `${uploadUrl}/files/upload_sessions/${this.sessionId}`;
+        try {
+            const response = await this.xhr.get({ url: sessionUrl });
+            this.getSessionSuccessHandler(response.data);
+        } catch (error) {
+            this.getSessionErrorHandler(error);
+        }
+    };
+
+    /**
+     * Handles a getSessionInfo success and either commits the session or continues to process
+     * the parts that still need to be uploaded.
+     *
+     * @param response
+     * @return {void}
+     */
+    getSessionSuccessHandler(data: any): void {
+        const { part_size, session_endpoints } = data;
+
+        // Set session information gotten from API response
+        this.partSize = part_size;
+        this.sessionEndpoints = {
+            ...this.sessionEndpoints,
+            uploadPart: session_endpoints.upload_part,
+            listParts: session_endpoints.list_parts,
+            commit: session_endpoints.commit,
+            abort: session_endpoints.abort,
+            logEvent: session_endpoints.log_event,
+        };
+
+        this.processNextParts();
+    }
+
+    /**
+     * Handle error from getting upload session.
+     * Restart uploads without valid sessions from the beginning of the upload process.
+     *
+     * @param error
+     * @return {void}
+     */
+    getSessionErrorHandler(error: Error): void {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        const errorData = this.getErrorResponse(error);
+        if (this.numResumeRetries > this.config.retries) {
+            this.errorCallback(errorData);
+            return;
+        }
+
+        if (errorData && errorData.status === 429) {
+            let retryAfterMs = DEFAULT_RETRY_DELAY_MS;
+            if (errorData.headers) {
+                const retryAfterSec = parseInt(
+                    errorData.headers['retry-after'] || errorData.headers.get('Retry-After'),
+                    10,
+                );
+                if (!isNaN(retryAfterSec)) {
+                    retryAfterMs = retryAfterSec * MS_IN_S;
+                }
+            }
+            this.retryTimeout = setTimeout(this.getSessionInfo, retryAfterMs);
+            this.numResumeRetries += 1;
+        } else if (errorData && errorData.status >= 400 && errorData.status < 500) {
+            // Restart upload process for errors resulting from invalid/expired session or no permission
+            this.parts.forEach(part => {
+                part.cancel();
+            });
+            this.reset();
+
+            // Abort session
+            clearTimeout(this.createSessionTimeout);
+            clearTimeout(this.commitSessionTimeout);
+            this.abortSession();
+            // Restart the uploading process from the beginning
+            const uploadOptions: Object = {
+                file: this.file,
+                folderId: this.folderId,
+                errorCallback: this.errorCallback,
+                progressCallback: this.progressCallback,
+                successCallback: this.successCallback,
+                overwrite: this.overwrite,
+                fileId: this.fileId,
+            };
+            this.upload(uploadOptions);
+        } else {
+            // Handle internet disconnects (error.request && !error.response) and (!error.request)
+            // Also handle any 500 error messages
+            this.retryTimeout = setTimeout(this.getSessionInfo, 2 ** this.numResumeRetries * MS_IN_S);
+            this.numResumeRetries += 1;
+        }
+    }
+
+    /**
      * Session error handler.
      * Retries the create session request or fails the upload.
      *
@@ -340,7 +584,9 @@ class MultiputUpload extends BaseMultiput {
      * @return {Promise}
      */
     async sessionErrorHandler(error: ?Error, logEventType: string, logMessage?: string): Promise<any> {
-        this.destroy();
+        if (!this.isResumableUploadsEnabled) {
+            this.destroy();
+        }
         const errorData = this.getErrorResponse(error);
         this.errorCallback(errorData);
 
@@ -358,10 +604,13 @@ class MultiputUpload extends BaseMultiput {
                 this.config.retries,
                 this.config.initialRetryDelayMs,
             );
-
-            this.abortSession();
+            if (!this.isResumableUploadsEnabled) {
+                this.abortSession();
+            }
         } catch (err) {
-            this.abortSession();
+            if (!this.isResumableUploadsEnabled) {
+                this.abortSession();
+            }
         }
     }
 
@@ -411,6 +660,23 @@ class MultiputUpload extends BaseMultiput {
      */
     partUploadErrorHandler = (error: Error, eventInfo: string): void => {
         this.sessionErrorHandler(error, LOG_EVENT_TYPE_PART_UPLOAD_RETRIES_EXCEEDED, eventInfo);
+        // Pause the rest of the parts.
+        // can't cancel parts because cancel destroys the part and parts are only created in createSession call
+        if (this.isResumableUploadsEnabled) {
+            // Reset uploading process for parts that were in progress when the upload failed
+            let nextUploadIndex = this.firstUnuploadedPartIndex;
+            while (this.numPartsUploading > 0) {
+                const part = this.parts[nextUploadIndex];
+                if (part && part.state === PART_STATE_UPLOADING) {
+                    part.reset();
+                    part.pause();
+
+                    this.numPartsUploading -= 1;
+                    this.numPartsDigestReady += 1;
+                }
+                nextUploadIndex += 1;
+            }
+        }
     };
 
     /**
@@ -676,6 +942,9 @@ class MultiputUpload extends BaseMultiput {
         if (fileLastModified) {
             data.attributes.content_modified_at = fileLastModified;
         }
+        if (this.fileDescription) {
+            data.attributes.description = this.fileDescription;
+        }
 
         const clientEventInfo = {
             avg_part_read_time: Math.round(stats.totalPartReadTime / this.parts.length),
@@ -812,7 +1081,11 @@ class MultiputUpload extends BaseMultiput {
                 // can get called on retries
                 this.numPartsDigestReady -= 1;
                 this.numPartsUploading += 1;
-                part.upload();
+                if (part.isPaused) {
+                    part.unpause();
+                } else {
+                    part.upload();
+                }
                 break;
             }
         }
@@ -963,6 +1236,10 @@ class MultiputUpload extends BaseMultiput {
     async resolveConflict(data: Object): Promise<any> {
         if (this.overwrite && data.context_info) {
             this.fileId = data.context_info.conflicts.id;
+            return;
+        }
+        if (this.conflictCallback) {
+            this.fileName = this.conflictCallback(this.fileName);
             return;
         }
 

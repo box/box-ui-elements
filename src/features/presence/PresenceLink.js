@@ -39,13 +39,11 @@ class PresenceLink extends Component {
                     <PlainButton>{children}</PlainButton>
                 </div>
                 <Overlay shouldDefaultFocus={false}>
-                    {
-                        <PresenceDropdown
-                            className="presence-dropdown"
-                            collaborators={collaborators}
-                            onScroll={onFlyoutScroll}
-                        />
-                    }
+                    <PresenceDropdown
+                        className="presence-dropdown"
+                        collaborators={collaborators}
+                        onScroll={onFlyoutScroll}
+                    />
                 </Overlay>
             </Flyout>
         );

@@ -14,19 +14,20 @@
     }
 
     .crawler {
-        align-items: center;
         display: flex;
+        align-items: center;
         height: 50px;
     }
 }
 
 .bcs-Versions-content {
     height: 100%;
-    padding-left: 25px;
     padding-right: 25px;
+    padding-left: 25px;
 }
 
-.bcs-Versions-empty {
+.bcs-Versions-empty,
+.bcs-Versions-maxEntries {
     padding-top: 10px;
     text-align: center;
 }

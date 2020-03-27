@@ -78,7 +78,8 @@ declare module "react-intl" {
 
   declare type $npm$ReactIntl$RelativeFormatOptions = {
     style?: "best fit" | "numeric",
-    units?: "second" | "minute" | "hour" | "day" | "month" | "year"
+    units?: "second" | "minute" | "hour" | "day" | "month" | "year" | "second-short"
+        | "minute-short" | "hour-short" | "day-short" | "month-short" | "year-short"
   };
 
   declare type $npm$ReactIntl$NumberFormatOptions = {
@@ -197,7 +198,7 @@ declare module "react-intl" {
     $npm$ReactIntl$MessageDescriptor & {
       values?: Object,
       tagName?: string,
-      children?: 
+      children?:
         | ((...formattedMessage: Array<React$Node>) => React$Node)
         | (string => React$Node)
     }

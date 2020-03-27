@@ -19,41 +19,41 @@
 
 .be-modal-wrapper-content,
 .be-modal-dialog-content-full-bleed {
-    background-color: $white;
-    border: 0 none;
-    border-radius: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
     bottom: 0;
     left: 0;
     margin: 0;
-    outline: none;
     padding: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
+    background-color: $white;
+    border: 0 none;
+    border-radius: 0;
+    outline: none;
 }
 
 .be-modal-wrapper-overlay {
-    background-color: $darker-black;
+    position: fixed;
+    top: 0;
+    right: 0;
     bottom: 0;
     left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
+    background-color: $darker-black;
 }
 
 .be-modal-dialog-content {
     @extend .be-modal-wrapper-content;
 
-    border-radius: 4px;
+    position: absolute;
+    top: 50%;
+    right: auto;
     bottom: auto;
     left: 50%;
+    width: 400px;
     margin-right: -50%;
     padding: 25px;
-    position: absolute;
-    right: auto;
-    top: 50%;
+    border-radius: 4px;
     transform: translate(-50%, -50%);
-    width: 400px;
 
     .be-is-small & {
         width: 340px;

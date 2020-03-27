@@ -5,6 +5,8 @@
  */
 import * as React from 'react';
 import AvatarComponent from '../../../components/avatar';
+import type { GetAvatarUrlCallback } from '../../common/flowTypes';
+import type { User } from '../../../common/types/core';
 
 type Props = {
     className?: string,
@@ -21,15 +23,19 @@ class Avatar extends React.PureComponent<Props, State> {
         avatarUrl: null,
     };
 
+    isMounted: boolean = false;
+
     /**
      * Success handler for getting avatar url
      *
      * @param {string} avatarUrl the user avatar url
      */
     getAvatarUrlHandler = (avatarUrl: ?string) => {
-        this.setState({
-            avatarUrl,
-        });
+        if (this.isMounted) {
+            this.setState({
+                avatarUrl,
+            });
+        }
     };
 
     /**
@@ -46,7 +52,12 @@ class Avatar extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
+        this.isMounted = true;
         this.getAvatarUrl();
+    }
+
+    componentWillUnmount() {
+        this.isMounted = false;
     }
 
     render() {

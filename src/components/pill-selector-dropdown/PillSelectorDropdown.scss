@@ -1,8 +1,16 @@
 @import '../../styles/variables';
 @import 'PillSelector';
 
-.pill-selector-input-wrapper {
+.bdl-PillSelector {
     &.show-error {
         border-color: $bdl-watermelon-red;
     }
+}
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.pill-selector-input-wrapper {
+    @extend .bdl-PillSelector;
 }

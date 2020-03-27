@@ -2,8 +2,8 @@
 
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
-    color: $bdl-gray-62;
     display: block;
+    color: $bdl-gray-62;
     font-size: 12px;
 }
 
@@ -12,12 +12,12 @@
     padding: 20px;
 
     .ftux-tooltip-title {
-        font-weight: 700;
+        font-weight: bold;
     }
 
     .tooltip-close-button {
-        right: 4px;
         top: 8px;
+        right: 4px;
     }
 
     .ftux-tooltip-controls {
@@ -31,8 +31,8 @@
 
     .ftux-tooltip-link {
         color: $white;
-        text-decoration: underline;
         white-space: normal;
+        text-decoration: underline;
     }
 
     h4 {
@@ -87,26 +87,26 @@
 
     /*** Email form ***/
     .inline-alert {
-        margin-bottom: 20px;
         margin-top: 0;
+        margin-bottom: 20px;
     }
 
-    .pill-selector-wrapper .pill-selector-input-wrapper, // need both selectors for specificity
+    .bdl-PillSelectorDropdown .bdl-PillSelector, // need both selectors for specificity
     textarea {
         /* override for DOM element in `TextArea` which provides no id/class for targeting */
         width: 100%;
     }
 
-    .pill-selector-wrapper {
+    .bdl-PillSelectorDropdown {
         margin-bottom: 10px;
     }
 
-    .pill-selector-wrapper.scrollable {
+    .bdl-PillSelectorDropdown.scrollable {
         .overlay-wrapper {
-            border: 1px solid $bdl-gray-30;
+            position: absolute;
             height: 280px;
             overflow-y: scroll;
-            position: absolute;
+            border: 1px solid $bdl-gray-30;
         }
 
         .overlay {
@@ -116,33 +116,34 @@
 
     .is-expanded {
         .text-area-container {
-            margin: 20px 0 0;
             min-height: 89px;
+            margin: 20px 0 0;
         }
 
         .text-area-container textarea::placeholder {
             color: $bdl-gray-50;
         }
 
-        .pill-selector-input-wrapper {
+        .bdl-PillSelector {
             min-height: 68px;
         }
     }
 
-    .pill-selector-input-wrapper {
-        border: 1px solid $bdl-gray-20;
+    .bdl-PillSelector {
         margin-top: 10px;
+        border: 1px solid $bdl-gray-20;
 
-        .pill-selector-input::placeholder {
+        .bdl-PillSelector-input::placeholder {
             color: $bdl-gray-50;
         }
 
+        &.bdl-is-disabled,
         &.is-disabled {
+            color: $bdl-gray-30;
             background-color: $bdl-gray-02;
             box-shadow: none;
-            color: $bdl-gray-30;
 
-            .pill-selector-input::placeholder {
+            .bdl-PillSelector-input::placeholder {
                 color: $bdl-gray-50;
             }
 
@@ -154,8 +155,8 @@
 
     /*** Shared link section ***/
     .shared-link-toggle-row {
-        align-items: center;
         display: flex;
+        align-items: center;
         justify-content: space-between;
         margin-top: 10px;
 
@@ -179,8 +180,9 @@
             text-align: right;
 
             .shared-link-settings-btn {
-                color: $primary-color;
                 margin-left: 5px;
+                color: $primary-color;
+                white-space: nowrap;
             }
         }
     }
@@ -190,8 +192,8 @@
         margin: 10px 0;
 
         .shared-link-field-container {
-            align-items: center;
             flex: 1;
+            align-items: center;
         }
 
         .text-input-with-copy-button-container {
@@ -208,7 +210,7 @@
 
         .email-shared-link-btn {
             margin: 0 0 0 5px;
-            padding: 10px 10px 9px;
+            padding: 6px 10px 6px;
         }
     }
 
@@ -223,8 +225,8 @@
     }
 
     .security-indicator-note {
-        color: $bdl-gray-62;
         margin-top: 10px;
+        color: $bdl-gray-62;
 
         .security-indicator-icon-globe {
             padding-right: 5px;
@@ -249,22 +251,22 @@
     }
 
     .upgrade-description {
-        margin-bottom: 20px;
         margin-top: 15px;
+        margin-bottom: 20px;
     }
 
     .shared-link-expiration-badge {
         padding: 0 5px;
 
-        .icon-clock {
+        .bdl-IconClock {
             display: inline-block;
             margin-bottom: -3px;
         }
     }
 
     .manage-all-btn {
-        color: $bdl-box-blue;
         float: right;
         margin: -5px 0 10px 0;
+        color: $bdl-box-blue;
     }
 }

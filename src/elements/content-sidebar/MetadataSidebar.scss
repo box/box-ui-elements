@@ -34,8 +34,8 @@
     .metadata-instance-editor-instance-title-text {
         max-width: 210px;
         overflow: hidden;
-        text-overflow: ellipsis;
         white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     .collapsible-card.is-open .metadata-instance-editor-instance-title-text {

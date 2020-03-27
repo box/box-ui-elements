@@ -11,7 +11,8 @@ import FolderEmptyState from '../../../icons/states/FolderEmptyState';
 import SelectedItemsEmptyState from '../../../icons/states/SelectedItemsEmptyState';
 import SearchEmptyState from '../../../icons/states/SearchEmptyState';
 import messages from '../messages';
-import { VIEW_ERROR, VIEW_FOLDER, VIEW_SEARCH, VIEW_SELECTED } from '../../../constants';
+import { VIEW_ERROR, VIEW_FOLDER, VIEW_METADATA, VIEW_SEARCH, VIEW_SELECTED } from '../../../constants';
+import type { View } from '../../../common/types/core';
 
 import './EmptyState.scss';
 
@@ -23,7 +24,7 @@ type Props = {
 const EmptyState = ({ view, isLoading }: Props) => {
     let type;
     const message =
-        isLoading && view === VIEW_FOLDER ? (
+        isLoading && (view === VIEW_FOLDER || view === VIEW_METADATA) ? (
             <FormattedMessage {...messages.loadingState} />
         ) : (
             <FormattedMessage {...messages[`${view}State`]} />

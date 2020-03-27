@@ -90,6 +90,7 @@ class InviteePermissionsMenu extends Component<Props> {
             <PlainButton
                 className={classNames('lnk', {
                     'is-disabled': disabled,
+                    'bdl-is-disabled': disabled,
                 })}
                 disabled={disabled}
                 {...inviteePermissionsButtonProps}

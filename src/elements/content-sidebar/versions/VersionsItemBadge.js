@@ -5,12 +5,11 @@
  */
 import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import type { intlShape } from 'react-intl';
 import messages from './messages';
 import './VersionsItemBadge.scss';
 
 type Props = {
-    intl: intlShape,
+    intl: any,
     versionNumber: string,
 };
 

@@ -8,6 +8,7 @@ import messages from './messages';
 import { TASK_EDIT_MODE_CREATE, TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
 import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
 import type { TaskType, TaskEditMode } from '../../common/types/tasks';
+import type { ElementsXhrError } from '../../common/types/api';
 
 type TaskModalProps = {
     editMode?: TaskEditMode,
@@ -60,6 +61,7 @@ const TaskModal = (props: TaskModalProps) => {
             <div className="be">
                 <TaskForm
                     editMode={editMode}
+                    // $FlowFixMe
                     error={error}
                     onCancel={onModalClose}
                     onSubmitError={onSubmitError}

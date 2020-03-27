@@ -1,14 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import { injectIntl, intlShape } from 'react-intl';
-
+import { injectIntl } from 'react-intl';
 import SearchForm from '../../../components/search-form';
 
 import messages from '../messages';
 
 class ContentExplorerSearch extends PureComponent {
     static propTypes = {
-        intl: intlShape.isRequired,
+        intl: PropTypes.any,
         inputValue: PropTypes.string,
         onSubmit: PropTypes.func,
         onInput: PropTypes.func,

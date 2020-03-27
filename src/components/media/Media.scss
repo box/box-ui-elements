@@ -2,14 +2,14 @@
 
 // the outermost element
 .bdl-Media {
-    align-items: flex-start;
     display: flex;
+    align-items: flex-start;
 }
 
 // the media content, ie, an avatar
 .bdl-Media-figure {
-    align-self: flex-start;
     flex: 0 0 auto;
+    align-self: flex-start;
     justify-self: flex-start;
     margin: 0 10px 0 0;
     padding: 0;
@@ -18,11 +18,12 @@
 // the main content, e.g. title and message
 .bdl-Media-body {
     flex: 1 1 100%;
+    min-width: 0; // Prevents overflow with long text strings in MS Edge
+    word-wrap: break-word; // old IE
+    word-break: break-word; // CJK scripts
     // handle wrapping long words in text content without breaking
     // float position of menu
     overflow-wrap: break-word;
-    word-break: break-word; // CJK scripts
-    word-wrap: break-word; // old IE
 }
 
 // the "..." menu button, meant to be used inside Media-body

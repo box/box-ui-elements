@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/ActivitySidebar render() should render the activity feed sidebar 1`] = `
+<SidebarContent
+  actions={
+    <withRouter(AddTaskButton)
+      isDisabled={false}
+      onTaskModalClose={[Function]}
+      taskFormProps={
+        Object {
+          "approverSelectorContacts": undefined,
+          "approvers": Array [],
+          "completionRule": "ALL_ASSIGNEES",
+          "createTask": [Function],
+          "getApproverWithQuery": [Function],
+          "getAvatarUrl": [Function],
+          "id": "",
+          "message": "",
+        }
+      }
+    />
+  }
+  className="bcs-activity"
+  elementId=""
+  sidebarView="activity"
+  title={
+    <FormattedMessage
+      defaultMessage="Activity"
+      id="be.sidebarActivityTitle"
+    />
+  }
+>
+  <ActivityFeed
+    file={
+      Object {
+        "id": "I_AM_A_FILE",
+      }
+    }
+    getApproverWithQuery={[Function]}
+    getAvatarUrl={[Function]}
+    getMentionWithQuery={[Function]}
+    isDisabled={false}
+    onAppActivityDelete={[Function]}
+    onCommentCreate={[Function]}
+    onCommentDelete={[Function]}
+    onCommentUpdate={[Function]}
+    onTaskAssignmentUpdate={[Function]}
+    onTaskCreate={[Function]}
+    onTaskDelete={[Function]}
+    onTaskModalClose={[Function]}
+    onTaskUpdate={[Function]}
+  />
+</SidebarContent>
+`;

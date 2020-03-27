@@ -2,7 +2,7 @@
 ```jsx
 var ContentExplorer = require('./ContentExplorer').default;
 
-<IntlProvider locale="en" textComponent={React.Fragment}>
+<IntlProvider locale="en">
     <ContentExplorer
         contentPreviewProps={{
             contentSidebarProps: {
@@ -12,12 +12,12 @@ var ContentExplorer = require('./ContentExplorer').default;
                     hasAccessStats: true,
                     hasClassification: true,
                     hasRetentionPolicy: true,
-                    hasVersions: true,
                 },
                 features: FEATURES,
                 hasActivityFeed: true,
                 hasMetadata: true,
                 hasSkills: true,
+                hasVersions: true,
             },
         }}
         features={FEATURES}

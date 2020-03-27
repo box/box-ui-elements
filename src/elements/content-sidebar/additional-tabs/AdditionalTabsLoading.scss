@@ -11,10 +11,10 @@ $bdl-AdditionalTabs-fade-in-time: .5s;
 .bdl-AdditionalTabPlaceholder-icon {
     @include bdl-fadeIn($bdl-AdditionalTabs-fade-in-time);
 
+    width: 24px;
+    height: 24px;
     background-color: $bdl-gray-50;
     border-radius: 5px;
-    height: 24px;
-    width: 24px;
 }
 
 .bdl-AdditionalTabPlaceholder-icon--loading {

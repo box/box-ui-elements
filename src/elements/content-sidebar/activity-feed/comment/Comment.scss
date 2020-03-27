@@ -16,6 +16,14 @@
     }
 }
 
+.bcs-Comment-headline {
+    // target only Edge because this breaks other browsers
+    // but fixes Edge
+    @supports (-ms-ime-align: auto) {
+        word-break: break-all;
+    }
+}
+
 // tethered styles for delete confirmation modal
 .bcs-Comment-deleteConfirmationModal {
     z-index: $overlay-z-index;
@@ -24,8 +32,8 @@
 // override for activity feed defaults
 .be {
     .bcs-Comment-editor.bcs-CommentForm {
-        border-top: none;
         margin-top: 20px;
         padding: 0;
+        border-top: none;
     }
 }

@@ -1,4 +1,6 @@
 const path = require('path');
+// const typescriptDocGen = require('react-docgen-typescript');
+// const reactDocGen = require('react-docgen');
 const webpackConf = require('./webpack.config.js');
 
 const webpackConfig = Array.isArray(webpackConf) ? webpackConf[0] : webpackConf;
@@ -31,15 +33,10 @@ const allSections = [
     {
         name: 'Components',
         components: () => [
-            '../src/components/avatar/Avatar.js',
             '../src/components/badge/Badge.js',
             '../src/components/badgeable/Badgeable.js',
             '../src/components/breadcrumb/Breadcrumb.js',
-            '../src/components/button/Button.js',
-            '../src/components/button-group/ButtonGroup.js',
             '../src/components/checkbox/Checkbox.js',
-            '../src/components/collapsible/Collapsible.js',
-            '../src/components/context-menu/ContextMenu.js',
             '../src/components/count-badge/CountBadge.js',
             '../src/components/datalist-item/DatalistItem.js',
             '../src/components/date-picker/DatePicker.js',
@@ -59,16 +56,7 @@ const allSections = [
             '../src/components/infinite-scroll/InfiniteScroll.js',
             '../src/components/inline-error/InlineError.js',
             '../src/components/inline-notice/InlineNotice.js',
-            '../src/components/label/Label.js',
-            '../src/components/link/Link.js',
-            '../src/components/link/LinkButton.js',
-            '../src/components/link/LinkGroup.js',
-            '../src/components/link/LinkPrimaryButton.js',
-            '../src/components/loading-indicator/LoadingIndicator.js',
-            '../src/components/loading-indicator/LoadingIndicatorWrapper.js',
             '../src/components/logo/Logo.js',
-            '../src/components/menu/Menu.js',
-            '../src/components/menu/SelectMenuLinkItem.js',
             '../src/components/modal/Modal.js',
             '../src/components/modal/ModalActions.js',
             '../src/components/modal/ModalDialog.js',
@@ -77,12 +65,9 @@ const allSections = [
             '../src/components/notification/NotificationsWrapper.js',
             '../src/components/pill-cloud/PillCloud.js',
             '../src/components/pill-selector-dropdown/PillSelectorDropdown.js',
-            '../src/components/plain-button/PlainButton.js',
+            '../src/components/popper/PopperComponent.js',
             '../src/components/primary-button/PrimaryButton.js',
             '../src/components/progress-bar/ProgressBar.js',
-            '../src/components/radar/RadarAnimation.js',
-            '../src/components/radio/RadioButton.js',
-            '../src/components/radio/RadioGroup.js',
             '../src/components/time/ReadableTime.js',
             '../src/components/scroll-wrapper/ScrollWrapper.js',
             '../src/components/search-form/SearchForm.js',
@@ -99,7 +84,25 @@ const allSections = [
             '../src/components/text-input-with-copy-button/TextInputWithCopyButton.js',
             '../src/components/thumbnail-card/ThumbnailCard.js',
             '../src/components/toggle/Toggle.js',
-            '../src/components/tooltip/Tooltip.js',
+
+            '../src/components/avatar/Avatar.tsx',
+            '../src/components/label/Label.tsx',
+            '../src/components/button/Button.tsx',
+            '../src/components/button-group/ButtonGroup.tsx',
+            '../src/components/collapsible/Collapsible.tsx',
+            '../src/components/context-menu/ContextMenu.tsx',
+            '../src/components/link/Link.tsx',
+            '../src/components/link/LinkButton.tsx',
+            '../src/components/link/LinkGroup.tsx',
+            '../src/components/link/LinkPrimaryButton.tsx',
+            '../src/components/loading-indicator/LoadingIndicator.tsx',
+            '../src/components/menu/Menu.tsx',
+            '../src/components/plain-button/PlainButton.tsx',
+            '../src/components/primary-button/PrimaryButton.tsx',
+            '../src/components/radio/RadioButton.tsx',
+            '../src/components/radio/RadioGroup.tsx',
+            '../src/components/menu/SelectMenuLinkItem.tsx',
+            '../src/components/tooltip/Tooltip.tsx',
         ],
         description: 'Box UI Elements components implement the reusable building blocks of the Box Design Language',
         sectionDepth: 2,
@@ -121,8 +124,8 @@ const allSections = [
     {
         name: 'Icons',
         components: () => [
-            '../src/icons/adobe-sign/IconAdobeSign.js',
-            '../src/icons/autocad/IconAutoCAD.js',
+            '../src/icons/adobe-sign/IconAdobeSign.tsx',
+            '../src/icons/autocad/IconAutoCAD.tsx',
             // try not to add to this list but instead add new icons into the
             // families of icons below (or create new families where appropriate)
         ],
@@ -157,11 +160,11 @@ const allSections = [
             },
             {
                 name: 'General',
-                components: '../src/icons/general/[A-Z]*.js',
+                content: '../src/icons/general/README.md',
             },
             {
                 name: 'Google Docs',
-                components: '../src/icons/google-docs/GoogleDocsIcon.js',
+                components: '../src/icons/google-docs/GoogleDocsIcon.tsx',
             },
             {
                 name: 'Illustrations',
@@ -169,14 +172,14 @@ const allSections = [
             },
             {
                 name: 'Items',
-                components: ['../src/icons/bookmark-icon/BookmarkIcon.js', '../src/icons/item-icon/ItemIcon.js'],
+                components: ['../src/icons/item-icon/ItemIcon.tsx'],
             },
             {
                 name: 'iWork',
                 components: () => [
-                    '../src/icons/iwork/IconIWorkTrio.js',
-                    '../src/icons/iwork/IWorkIcon.js',
-                    '../src/icons/iwork/IWorkDesktopIcon.js',
+                    '../src/icons/iwork/IconIWorkTrio.tsx',
+                    '../src/icons/iwork/IWorkIcon.tsx',
+                    '../src/icons/iwork/IWorkDesktopIcon.tsx',
                 ],
             },
             {
@@ -186,9 +189,9 @@ const allSections = [
             {
                 name: 'Microsoft Office',
                 components: () => [
-                    '../src/icons/microsoft-office/IconOfficeWordmark.js',
-                    '../src/icons/microsoft-office/OfficeOnlineIcon.js',
-                    '../src/icons/microsoft-office/OfficeDesktopIcon.js',
+                    '../src/icons/microsoft-office/IconOfficeWordmark.tsx',
+                    '../src/icons/microsoft-office/OfficeOnlineIcon.tsx',
+                    '../src/icons/microsoft-office/OfficeDesktopIcon.tsx',
                 ],
             },
             {
@@ -233,7 +236,6 @@ const allSections = [
             '../src/features/shared-link-modal/SharedLinkModal.js',
             '../src/features/shared-link-settings-modal/SharedLinkSettingsModal.js',
             '../src/features/unified-share-modal/UnifiedShareModal.js',
-            '../src/features/version-history-modal/VersionHistoryModal.js',
         ],
         sections: [
             {
@@ -278,15 +280,24 @@ const allSections = [
 
 module.exports = {
     getComponentPathLine(componentPath) {
-        const name = path.basename(componentPath, '.js');
+        const extension = path.extname(componentPath);
+        const name = path.basename(componentPath, extension);
         const dir = path.dirname(componentPath);
         const packageRelativePath = dir.replace(/.*\/src\//, '');
         return `import ${name} from 'box-ui-elements/es/${packageRelativePath}/${name}';`;
     },
     pagePerSection: true,
     require: [path.resolve(__dirname, 'styleguide.setup.js'), path.resolve(__dirname, 'styleguide.styles.scss')],
+    showSidebar: process.env.BROWSERSLIST_ENV !== 'test',
     styleguideDir: path.join(__dirname, '../styleguide'),
     sections: allSections,
+    // Default exports are not supported by typescript DocGen
+    // propsParser(filePath, source, resolver, handlers) {
+    //     const extension = path.extname(filePath);
+    //     return extension === '.js'
+    //         ? reactDocGen.parse(source, resolver, handlers)
+    //         : typescriptDocGen.withDefaultConfig({}).parse(source, resolver, handlers);
+    // },
     styles: {
         Heading: {
             heading: {

@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import type { MessageDescriptor } from 'react-intl';
 import classnames from 'classnames';
 import InlineError from '../../../../../components/inline-error';
 import PlainButton from '../../../../../components/plain-button';
@@ -21,7 +22,9 @@ const ActivityError = ({ action, message, title, className, ...rest }: Props): R
         className={classnames('bcs-ActivityError', className)}
         title={<FormattedMessage {...title} {...rest} />}
     >
-        <div>{<FormattedMessage {...message} />}</div>
+        <div>
+            <FormattedMessage {...message} />
+        </div>
         {action ? (
             <PlainButton className="bcs-ActivityError-action lnk" onClick={action.onAction} type="button">
                 {action.text}

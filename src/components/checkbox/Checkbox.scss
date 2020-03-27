@@ -5,42 +5,45 @@
  **************************************/
 
 .checkbox-label {
-    display: inline-flex;
     position: relative;
+    display: inline-flex;
     user-select: none;
 
     > input[type='checkbox'] {
         flex: none;
+        width: 14px;
         height: 14px;
         margin: 3px 0 0;
         opacity: 0;
-        width: 14px;
 
         + span {
             &::before {
+                position: absolute;
+                top: 3px;
+                left: 0;
+                width: 14px;
+                height: 14px;
                 background: $white;
                 border: 1px solid $bdl-gray-50;
                 border-radius: 2px;
                 content: '';
-                height: 14px;
-                left: 0;
-                position: absolute;
-                top: 3px;
-                width: 14px;
+                pointer-events: none;
             }
 
             &::after {
-                backface-visibility: hidden;
-                border-bottom: 2px solid $primary-color;
-                border-right: 2px solid $primary-color;
-                content: '';
-                height: 7px;
-                left: 5px;
+                @include bdl-transition($bdl-transitionDurationBase, transform);
+
                 position: absolute;
                 top: 6px;
-                transform: rotate(45deg) scale(0) translate3d(0, 0, 0);
-                transition: transform .1s ease;
+                left: 5px;
                 width: 4px;
+                height: 7px;
+                border-right: 2px solid $primary-color;
+                border-bottom: 2px solid $primary-color;
+                transform: rotate(45deg) scale(0) translate3d(0, 0, 0);
+                backface-visibility: hidden;
+                content: '';
+                pointer-events: none;
             }
         }
 
@@ -62,23 +65,24 @@
                 border-color: $bdl-gray-30;
             }
         }
-
-        + span + span {
-            margin-left: 10px;
-        }
     }
 }
 
+.bdl-Checkbox-labelTooltipWrapper {
+    margin-left: 10px;
+}
+
 .checkbox-tooltip-wrapper {
-    align-items: center;
-    display: flex;
+    display: inline-flex;
+    vertical-align: text-bottom;
 
     > .info-tooltip {
+        position: relative;
+        display: inline-block;
         flex: none;
+        width: 16px;
         height: 16px;
         margin-left: 5px;
-        position: relative;
-        width: 16px;
 
         > svg path {
             fill: $primary-color;
@@ -89,10 +93,12 @@
 .checkbox-container {
     margin: 0 0 20px;
 
+    &.bdl-is-disabled .checkbox-label,
     &.is-disabled .checkbox-label {
         color: $bdl-gray-50;
     }
 
+    > .bdl-Label,
     > .label {
         margin: 8px 0;
     }
@@ -100,8 +106,8 @@
 
 .checkbox-subsection,
 .checkbox-description {
-    margin-left: 24px;
     margin-top: 2px;
+    margin-left: 24px;
 }
 
 .checkbox-description {

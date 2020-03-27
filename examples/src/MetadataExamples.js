@@ -885,7 +885,7 @@ const templatesOnServer = [
     ...getExtraTemplates(1),
 ];
 
-// State of instnaces from server
+// State of instances from server
 const editorsOnServer = [
     editor0,
     editor1,
@@ -955,7 +955,7 @@ class MetadataExamples extends React.PureComponent {
     };
 
     onSave = (id, ops, cascadePolicy = {}) => {
-        // Whats being sent to the server to show in the examples page
+        // What's being sent to the server to show in the examples page
         document.querySelector('.metadata-operations').textContent = JSON.stringify(ops, null, 2);
         document.querySelector('.metadata-cascading-policy').textContent = JSON.stringify(cascadePolicy, null, 2);
 

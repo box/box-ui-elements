@@ -17,7 +17,7 @@ import UploadDialog from '../common/upload-dialog';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import Internationalize from '../common/Internationalize';
 import makeResponsive from '../common/makeResponsive';
-import Pagination from '../common/pagination/Pagination';
+import Pagination from '../../features/pagination';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import API from '../../api';
 import Content from './Content';
@@ -49,6 +49,21 @@ import {
     VIEW_SELECTED,
 } from '../../constants';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
+import type { ElementsXhrError } from '../../common/types/api';
+import type {
+    View,
+    DefaultView,
+    StringAnyMap,
+    StringMap,
+    SortBy,
+    SortDirection,
+    Token,
+    Access,
+    BoxItemPermission,
+    BoxItem,
+    Collection,
+} from '../../common/types/core';
+
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
@@ -258,11 +273,15 @@ class ContentPicker extends Component<Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props) {
-        const { currentFolderId }: Props = nextProps;
+    componentDidUpdate({ currentFolderId: prevFolderId }: Props, prevState: State): void {
+        const { currentFolderId }: Props = this.props;
         const {
             currentCollection: { id },
-        }: State = this.state;
+        }: State = prevState;
+
+        if (prevFolderId === currentFolderId) {
+            return;
+        }
 
         if (typeof currentFolderId === 'string' && id !== currentFolderId) {
             this.fetchFolder(currentFolderId);
@@ -284,7 +303,7 @@ class ContentPicker extends Component<Props, State> {
         const { selected }: State = this.state;
         const { onChoose }: Props = this.props;
         const results: BoxItem[] = Object.keys(selected).map(key => {
-            const clone: BoxItem = Object.assign({}, selected[key]);
+            const clone: BoxItem = { ...selected[key] };
             delete clone.selected;
             return clone;
         });
@@ -856,6 +875,9 @@ class ContentPicker extends Component<Props, State> {
                     .getFile(id, this.handleSharedLinkSuccess, noop, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
                 break;
             case TYPE_WEBLINK:
+                this.api
+                    .getWebLinkAPI()
+                    .getWeblink(id, this.handleSharedLinkSuccess, noop, { fields: FILE_SHARED_LINK_FIELDS_TO_FETCH });
                 break;
             default:
                 throw new Error('Unknown Type');
@@ -872,10 +894,12 @@ class ContentPicker extends Component<Props, State> {
     handleSharedLinkSuccess = (item: BoxItem) => {
         // if no shared link currently exists, create a shared link with enterprise default
         if (!item[FIELD_SHARED_LINK]) {
+            // $FlowFixMe
             this.changeShareAccess(null, item);
         } else {
             const { selected } = this.state;
             const { id, type } = item;
+            // $FlowFixMe
             const cacheKey = this.api.getAPI(type).getCacheKey(id);
             // if shared link already exists, update the collection in state
             this.updateItemInCollection(item);
@@ -1146,7 +1170,8 @@ class ContentPicker extends Component<Props, State> {
         const { id, offset, permissions, totalCount }: Collection = currentCollection;
         const { can_upload }: BoxItemPermission = permissions || {};
         const selectedCount: number = Object.keys(selected).length;
-        const hasHitSelectionLimit: boolean = selectedCount === maxSelectable && maxSelectable !== 1;
+        const isSingleSelect = maxSelectable === 1;
+        const hasHitSelectionLimit: boolean = selectedCount === maxSelectable && !isSingleSelect;
         const allowUpload: boolean = canUpload && !!can_upload;
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
         const styleClassName = classNames('be bcp', className);
@@ -1188,6 +1213,7 @@ class ContentPicker extends Component<Props, State> {
                             extensionsWhitelist={extensions}
                             hasHitSelectionLimit={hasHitSelectionLimit}
                             currentCollection={currentCollection}
+                            isSingleSelect={isSingleSelect}
                             tableRef={this.tableRef}
                             onItemSelect={this.select}
                             onItemClick={this.onItemClick}
@@ -1197,6 +1223,7 @@ class ContentPicker extends Component<Props, State> {
                         <Footer
                             selectedCount={selectedCount}
                             hasHitSelectionLimit={hasHitSelectionLimit}
+                            isSingleSelect={isSingleSelect}
                             onSelectedClick={this.showSelected}
                             onChoose={this.choose}
                             onCancel={this.cancel}

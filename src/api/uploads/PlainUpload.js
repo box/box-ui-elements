@@ -8,6 +8,7 @@ import noop from 'lodash/noop';
 import { digest } from '../../utils/webcrypto';
 import { getFileLastModifiedAsISONoMSIfPossible } from '../../utils/uploads';
 import BaseUpload from './BaseUpload';
+import type { BoxItem } from '../../common/types/core';
 
 const CONTENT_MD5_HEADER = 'Content-MD5';
 
@@ -76,6 +77,7 @@ class PlainUpload extends BaseUpload {
         const attributes = JSON.stringify({
             name: this.fileName,
             parent: { id: this.folderId },
+            description: this.fileDescription,
             content_modified_at: getFileLastModifiedAsISONoMSIfPossible(this.file),
         });
 
@@ -113,6 +115,7 @@ class PlainUpload extends BaseUpload {
      * @param {Function} [options.successCallback] - Function to call with response
      * @param {Function} [options.errorCallback] - Function to call with errors
      * @param {Function} [options.progressCallback] - Function to call with progress
+     * @param {Function} [options.conflictCallback] - Function to call on conflicting file names
      * @param {boolean} [overwrite] - Should upload overwrite file with same name
      * @return {void}
      */
@@ -120,13 +123,17 @@ class PlainUpload extends BaseUpload {
         folderId,
         fileId,
         file,
+        fileDescription,
         successCallback = noop,
         errorCallback = noop,
         progressCallback = noop,
+        conflictCallback,
         overwrite = true,
     }: {
+        conflictCallback?: Function,
         errorCallback: Function,
         file: File,
+        fileDescription: ?string,
         fileId: ?string,
         folderId: string,
         overwrite: boolean,
@@ -141,11 +148,13 @@ class PlainUpload extends BaseUpload {
         this.folderId = folderId;
         this.fileId = fileId;
         this.file = file;
+        this.fileDescription = fileDescription;
         this.fileName = this.file.name;
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
         this.progressCallback = progressCallback;
         this.overwrite = overwrite;
+        this.conflictCallback = conflictCallback;
 
         this.makePreflightRequest();
     }

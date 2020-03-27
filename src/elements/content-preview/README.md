@@ -4,7 +4,7 @@
 ```jsx
 var ContentPreview = require('./ContentPreview').default;
 
-<IntlProvider locale="en" textComponent={React.Fragment}>
+<IntlProvider locale="en">
     <ContentPreview
         contentSidebarProps={{
             detailsSidebarProps: {
@@ -15,10 +15,11 @@ var ContentPreview = require('./ContentPreview').default;
                 hasRetentionPolicy: true,
                 hasVersions: true,
             },
-            features: FEATURES,            
+            features: FEATURES,
             hasActivityFeed: true,
             hasMetadata: true,
             hasSkills: true,
+            hasVersions: true,
         }}
         hasHeader={true}
         features={FEATURES}

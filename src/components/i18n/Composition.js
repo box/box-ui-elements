@@ -27,7 +27,7 @@ class Composition {
                 if (Array.isArray(element)) {
                     element.forEach(subelement => this.recompose(subelement));
                 } else if (element) {
-                    if (element.type === 'Param') {
+                    if (element.type === 'Param' || element.type.name === 'Param') {
                         this.ma.addParam(element);
                     } else {
                         this.ma.push(element);
@@ -87,11 +87,12 @@ class Composition {
 
         const el = node.extra;
         if (children.length === 0 && el && el.props) {
-            children = el.props.children;
+            const { temp } = el.props;
+            children = temp;
         }
 
         if (children && children.length === 1 && typeof children[0] === 'string') {
-            children = children[0];
+            [children] = children;
         }
 
         if (el) {

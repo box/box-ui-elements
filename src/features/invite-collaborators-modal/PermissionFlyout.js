@@ -1,5 +1,6 @@
 import React from 'react';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import PropTypes from 'prop-types';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from '../../components/table';
 import { Flyout, Overlay } from '../../components/flyout';
@@ -60,7 +61,7 @@ const PermissionFlyout = ({ intl: { formatMessage } }) => {
 
 PermissionFlyout.displayName = 'PermissionFlyout';
 PermissionFlyout.propTypes = {
-    intl: intlShape.isRequired,
+    intl: PropTypes.any,
 };
 
 export { PermissionFlyout as PermissionFlyoutBase };

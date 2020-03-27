@@ -1,13 +1,14 @@
 @import '../../styles/variables';
 
 .menu-toggle {
-    align-items: center;
     display: flex;
+    align-items: center;
 
     > .toggle-arrow {
+        @include bdl-transition($bdl-transitionDurationBase, transform);
+
         flex: none;
         margin-left: 5px;
-        transition: transform $bdl-transition-duration-200ms ease-in;
 
         .dropdown-menu-enabled &,
         .is-toggled & {
@@ -27,6 +28,7 @@
         fill: $white;
     }
 
+    .lnk.bdl-is-disabled & .fill-color,
     .lnk.is-disabled & .fill-color {
         fill: $bdl-gray-50;
     }

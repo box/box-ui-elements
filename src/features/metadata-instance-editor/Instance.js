@@ -4,8 +4,10 @@ import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
+import noop from 'lodash/noop';
 
 import Collapsible from '../../components/collapsible/Collapsible';
+import Form from '../../components/form-elements/form/Form';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
 import PlainButton from '../../components/plain-button/PlainButton';
 import Tooltip from '../../components/tooltip';
@@ -21,18 +23,26 @@ import CustomInstance from './CustomInstance';
 import MetadataInstanceConfirmDialog from './MetadataInstanceConfirmDialog';
 import Footer from './Footer';
 import messages from './messages';
+import { FIELD_TYPE_FLOAT, FIELD_TYPE_INTEGER } from '../metadata-instance-fields/constants';
+import TEMPLATE_CUSTOM_PROPERTIES from './constants';
 import {
-    FIELD_TYPE_FLOAT,
-    FIELD_TYPE_INTEGER,
-    TEMPLATE_CUSTOM_PROPERTIES,
     JSON_PATCH_OP_REMOVE,
     JSON_PATCH_OP_ADD,
     JSON_PATCH_OP_REPLACE,
     JSON_PATCH_OP_TEST,
-} from './constants';
-import { isValidValue } from './fields/validateField';
-import isHidden from './metadataUtil';
+} from '../../common/constants';
+import { isValidValue } from '../metadata-instance-fields/validateMetadataField';
+import { isHidden } from './metadataUtil';
 import { RESIN_TAG_TARGET } from '../../common/variables';
+import type {
+    MetadataFields,
+    MetadataTemplate,
+    MetadataCascadePolicy,
+    MetadataCascadingPolicyData,
+    MetadataTemplateField,
+    MetadataFieldValue,
+} from '../../common/types/metadata';
+import type { JSONPatchOperations } from '../../common/types/api';
 import './Instance.scss';
 
 type Props = {
@@ -99,23 +109,25 @@ class Instance extends React.PureComponent<Props, State> {
         this.fieldKeyToTypeMap = createFieldKeyToTypeMap(props.template.fields);
     }
 
-    componentWillReceiveProps(nextProps: Props) {
-        const { hasError, isDirty }: Props = nextProps;
-        const { isEditing }: State = this.state;
+    componentDidUpdate({ hasError: prevHasError, isDirty: prevIsDirty }: Props, prevState: State): void {
+        const currentElement = this.collapsibleRef.current;
+        const { hasError, isDirty }: Props = this.props;
+        const { isEditing }: State = prevState;
 
-        // This only handles cases when an error occurred
-        // or when the dirty state of the instance has changed.
-        // The dirty state can change when either
-        // the metadata was saved OR when the metadata manually
-        // reverted to its original state.
+        if (currentElement && this.state.shouldConfirmRemove) {
+            scrollIntoView(currentElement, {
+                block: 'start',
+                behavior: 'smooth',
+            });
+        }
 
-        if (hasError) {
+        if (hasError && hasError !== prevHasError) {
             // If hasError is true, which means an error occurred while
             // doing a network operation and hence hide the busy indicator
             // Saving also disables isEditing, so need to enable that back.
             // isDirty remains as it was before.
             this.setState({ isBusy: false, isEditing: true });
-        } else if (this.props.isDirty && !isDirty) {
+        } else if (prevIsDirty && !isDirty) {
             // If the form was dirty and now its not dirty
             // we know a successful save may have happened.
             // We don't modify isEditing here because we maintain the
@@ -128,16 +140,6 @@ class Instance extends React.PureComponent<Props, State> {
                 // For a successfull save we reset cascading overwrite radio
                 this.setState({ isBusy: false, isCascadingOverwritten: false });
             }
-        }
-    }
-
-    componentDidUpdate() {
-        const element = this.collapsibleRef.current;
-        if (element && this.state.shouldConfirmRemove) {
-            scrollIntoView(element, {
-                block: 'start',
-                behavior: 'smooth',
-            });
         }
     }
 
@@ -618,43 +620,45 @@ class Instance extends React.PureComponent<Props, State> {
                     )}
                     {!shouldConfirmRemove && (
                         <LoadingIndicatorWrapper isLoading={isBusy}>
-                            <div className="metadata-instance-editor-instance">
-                                {isCascadingPolicyApplicable && (
-                                    <CascadePolicy
-                                        canEdit={isEditing && !!cascadePolicy.canEdit}
-                                        isCascadingEnabled={isCascadingEnabled}
-                                        isCascadingOverwritten={isCascadingOverwritten}
-                                        isCustomMetadata={isProperties}
-                                        onCascadeModeChange={this.onCascadeModeChange}
-                                        onCascadeToggle={this.onCascadeToggle}
-                                        shouldShowCascadeOptions={shouldShowCascadeOptions}
+                            <Form onValidSubmit={isDirty ? this.onSave : noop}>
+                                <div className="metadata-instance-editor-instance">
+                                    {isCascadingPolicyApplicable && (
+                                        <CascadePolicy
+                                            canEdit={isEditing && !!cascadePolicy.canEdit}
+                                            isCascadingEnabled={isCascadingEnabled}
+                                            isCascadingOverwritten={isCascadingOverwritten}
+                                            isCustomMetadata={isProperties}
+                                            onCascadeModeChange={this.onCascadeModeChange}
+                                            onCascadeToggle={this.onCascadeToggle}
+                                            shouldShowCascadeOptions={shouldShowCascadeOptions}
+                                        />
+                                    )}
+                                    {isProperties ? (
+                                        <CustomInstance
+                                            canEdit={isEditing}
+                                            data={data}
+                                            onFieldChange={this.onFieldChange}
+                                            onFieldRemove={this.onFieldRemove}
+                                        />
+                                    ) : (
+                                        <TemplatedInstance
+                                            canEdit={isEditing}
+                                            data={data}
+                                            errors={errors}
+                                            onFieldChange={this.onFieldChange}
+                                            onFieldRemove={this.onFieldRemove}
+                                            template={template}
+                                        />
+                                    )}
+                                </div>
+                                {isEditing && (
+                                    <Footer
+                                        onCancel={this.onCancel}
+                                        onRemove={this.onConfirmRemove}
+                                        showSave={isDirty}
                                     />
                                 )}
-                                {isProperties ? (
-                                    <CustomInstance
-                                        canEdit={isEditing}
-                                        data={data}
-                                        onFieldChange={this.onFieldChange}
-                                        onFieldRemove={this.onFieldRemove}
-                                    />
-                                ) : (
-                                    <TemplatedInstance
-                                        canEdit={isEditing}
-                                        data={data}
-                                        errors={errors}
-                                        onFieldChange={this.onFieldChange}
-                                        onFieldRemove={this.onFieldRemove}
-                                        template={template}
-                                    />
-                                )}
-                            </div>
-                            {isEditing && (
-                                <Footer
-                                    onCancel={this.onCancel}
-                                    onRemove={this.onConfirmRemove}
-                                    onSave={isDirty ? this.onSave : undefined}
-                                />
-                            )}
+                            </Form>
                         </LoadingIndicatorWrapper>
                     )}
                 </Collapsible>

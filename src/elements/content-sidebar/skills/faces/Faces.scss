@@ -8,13 +8,13 @@
     }
 
     .btn-plain.be-face-edit {
-        border-radius: 3px;
+        position: absolute;
+        top: -46px;
+        right: 15px;
+        width: 24px;
         height: 24px;
         padding-top: 1px;
-        position: absolute;
-        right: 15px;
-        top: -46px;
-        width: 24px;
+        border-radius: 3px;
 
         &:hover svg path {
             fill: $bdl-gray;
@@ -24,7 +24,7 @@
             background-color: $bdl-gray-10;
 
             .icon-edit > .fill-color {
-                fill: $fivef;
+                fill: $bdl-gray-05;
             }
         }
     }

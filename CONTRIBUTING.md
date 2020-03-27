@@ -6,7 +6,7 @@ All contributions are welcome to this project.
 
 Before a contribution can be merged into this project, please fill out the Contributor License Agreement (CLA) located at:
 
-https://developer.box.com/docs/box-sdk-cla
+https://cla-assistant.io/box/box-ui-elements
 
 To learn more about CLAs and why they are important to the UI Element projects, please see the [Wikipedia entry](http://en.wikipedia.org/wiki/Contributor_License_Agreement).
 
@@ -48,13 +48,35 @@ longer description here if necessary.
 include BREAKING CHANGE keyword for breaking changes.
 ```
 
-The message summary should be a one-sentence description of the change, and it must be 72 characters in length or shorter. For a list of tags, please [click here](https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional#type-enum). We use the angular style for tags. See the [default release rules](https://github.com/semantic-release/commit-analyzer/blob/master/lib/default-release-rules.js) based on the commit tag. Shown below is an example of the release type that will be done based on a commit message.
+The message summary should be a one-sentence description of the change, and it must be 72 characters in length or shorter. For a list of tags, please [click here](https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional#type-enum). We use the angular style for tags. See the [default release rules](https://github.com/semantic-release/commit-analyzer/blob/master/lib/default-release-rules.js) based on the commit tag. Shown below are examples of the release type that will be done based on a commit message.
 
-| Commit message                                                                                                                                          | Release type               |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `fix(preview): fullscreen behavior in ie11`                                                                                                             | Patch Release              |
-| `feat(preview): add ability to fullscreen`                                                                                                              | ~~Minor~~ Feature Release  |
-| `feat(preview): remove fullscreen ability`<br><br>`BREAKING CHANGE: The fullscreen ability has been removed due to poor support of the fullscreen api.` | ~~Major~~ Breaking Release |
+#### Commit Types
+
+"Semantic versioning" means that changes to the version number of the package (e.g. `3.42.11` to `3.43.0`) are done according to rules that indicate how the change will affect consumers. Read more on the [npm page](https://docs.npmjs.com/about-semantic-versioning).
+
+The version number is broken into 3 positions &mdash; `Major.Minor.Patch`. In semantic release terms, changes to the numbers follow `Breaking.Feature.Fix`. The `semantic-release` script parses commit messages and decides what type of release to make based on the types of commits detected since the last release.
+
+The rules for commit types are:
+
+- Anything that changes or removes an API, option, or output format is a `BREAKING CHANGE`.
+- Anything that adds new functionality in a backwards-compatible way is a feature (`feat`). Consumers have to upgrade to the new version to use the feature, but nothing will break if they do so.
+- Bugfixes (`fix`) for existing behavior are a patch. Consumers don't have to do anything but upgrade.
+  - Performance fixes (`perf`) and reverts (`revert`) are treated as patch releases.
+  - Automated commits from Box's internalization team cause a patch because they will use the format `fix(moji): ***`.
+- Other prefixes, such as `docs`, don't trigger releases and don't appear in the changelog. These tags signal that there are **no external changes to _any_ APIs** (including non-breaking ones).
+  Changes from these types of commits will get released only when the release script detects other releasable commits (feat/fix) going out at the same time.
+  - `build`, `ci`, `chore`, `docs`, `refactor`, `style`, `test`
+
+In most cases, commits will be a `feat` or `fix`. Make sure to include the `BREAKING CHANGE` string in the summary if there are non-backwards-compatible changes in the commit.
+
+| Commit message                                                                                                                                          | Release type       | New version |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----------- |
+| `feat(preview): remove fullscreen ability`<br><br>`BREAKING CHANGE: The fullscreen ability has been removed due to poor support of the fullscreen api.` | Major ("breaking") | `X+1.0.0`   |
+| `feat(preview): add ability to fullscreen`                                                                                                              | Minor ("feature")  | `X.Y+1.0`   |
+| `fix(preview): fullscreen behavior in ie11`                                                                                                             | Patch ("fix")      | `X.Y.Z+1`   |
+| `docs(preview): document fullscreen api`                                                                                                                | No release         | `X.Y.Z`     |
+| `chore(preview): remove commented code from preview`                                                                                                    | No release         | `X.Y.Z`     |
+| `refactor(preview): rename a variable (invisible change)`                                                                                               | No release         | `X.Y.Z`     |
 
 ### Step 5: Rebase
 

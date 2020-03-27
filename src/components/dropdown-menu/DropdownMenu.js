@@ -2,7 +2,9 @@
 import * as React from 'react';
 import TetherComponent from 'react-tether';
 import uniqueId from 'lodash/uniqueId';
+import noop from 'lodash/noop';
 
+import { KEYS } from '../../constants';
 import './DropdownMenu.scss';
 
 type Props = {
@@ -17,9 +19,11 @@ type Props = {
     /** Function called when menu is opened */
     isRightAligned: boolean,
     /** Handler for dropdown menu close events */
-    onMenuClose?: (event: SyntheticEvent<>) => void,
+    onMenuClose?: (event: SyntheticEvent<> | MouseEvent) => void,
     /** Handler for dropdown menu open events */
     onMenuOpen?: () => void,
+    /** Set true to close dropdown menu on event bubble instead of event capture */
+    useBubble?: boolean,
 };
 
 type State = {
@@ -34,21 +38,21 @@ class DropdownMenu extends React.Component<Props, State> {
         isRightAligned: false,
     };
 
+    menuID = uniqueId('menu');
+
+    menuButtonID = uniqueId('menubutton');
+
     state = {
         initialFocusIndex: null,
         isOpen: false,
     };
 
-    componentWillMount() {
-        this.menuID = uniqueId('menu');
-        this.menuButtonID = uniqueId('menubutton');
-    }
-
     componentDidUpdate(prevProps: Props, prevState: State) {
+        const { useBubble } = this.props;
         if (!prevState.isOpen && this.state.isOpen) {
             // When menu is being opened
-            document.addEventListener('click', this.handleDocumentClick, true);
-            document.addEventListener('contextmenu', this.handleDocumentClick, true);
+            document.addEventListener('click', this.handleDocumentClick, !useBubble);
+            document.addEventListener('contextmenu', this.handleDocumentClick, !useBubble);
 
             const { onMenuOpen } = this.props;
             if (onMenuOpen) {
@@ -56,16 +60,17 @@ class DropdownMenu extends React.Component<Props, State> {
             }
         } else if (prevState.isOpen && !this.state.isOpen) {
             // When menu is being closed
-            document.removeEventListener('contextmenu', this.handleDocumentClick, true);
-            document.removeEventListener('click', this.handleDocumentClick, true);
+            document.removeEventListener('contextmenu', this.handleDocumentClick, !useBubble);
+            document.removeEventListener('click', this.handleDocumentClick, !useBubble);
         }
     }
 
     componentWillUnmount() {
+        const { useBubble } = this.props;
         if (this.state.isOpen) {
             // Clean-up global click handlers
-            document.removeEventListener('contextmenu', this.handleDocumentClick, true);
-            document.removeEventListener('click', this.handleDocumentClick, true);
+            document.removeEventListener('contextmenu', this.handleDocumentClick, !useBubble);
+            document.removeEventListener('click', this.handleDocumentClick, !useBubble);
         }
     }
 
@@ -108,25 +113,30 @@ class DropdownMenu extends React.Component<Props, State> {
     };
 
     handleButtonKeyDown = (event: SyntheticKeyboardEvent<>) => {
+        const { isOpen } = this.state;
+
         switch (event.key) {
-            case ' ': // Spacebar
-            case 'Enter':
-            case 'ArrowDown':
+            case KEYS.space:
+            case KEYS.enter:
+            case KEYS.arrowDown:
                 event.stopPropagation();
                 event.preventDefault();
 
                 this.openMenuAndSetFocusIndex(0);
                 break;
 
-            case 'ArrowUp':
+            case KEYS.arrowUp:
                 event.stopPropagation();
                 event.preventDefault();
 
                 this.openMenuAndSetFocusIndex(-1);
                 break;
 
-            case 'Escape':
-                event.stopPropagation();
+            case KEYS.escape:
+                if (isOpen) {
+                    event.stopPropagation();
+                }
+
                 event.preventDefault();
                 this.closeMenu();
                 break;
@@ -136,15 +146,11 @@ class DropdownMenu extends React.Component<Props, State> {
         }
     };
 
-    handleMenuClose = (isKeyboardEvent: boolean, event: SyntheticEvent<>) => {
-        const { onMenuClose } = this.props;
-
+    handleMenuClose = (isKeyboardEvent: boolean, event: SyntheticEvent<> | MouseEvent) => {
+        const { onMenuClose = noop } = this.props;
         this.closeMenu();
         this.focusButton();
-
-        if (onMenuClose) {
-            onMenuClose(event);
-        }
+        onMenuClose(event);
     };
 
     handleDocumentClick = (event: MouseEvent) => {
@@ -159,7 +165,9 @@ class DropdownMenu extends React.Component<Props, State> {
             !menuEl.contains(event.target) &&
             !menuButtonEl.contains(event.target)
         ) {
+            const { onMenuClose = noop } = this.props;
             this.closeMenu();
+            onMenuClose(event);
         }
     };
 

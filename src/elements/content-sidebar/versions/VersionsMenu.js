@@ -6,15 +6,16 @@
 
 import React from 'react';
 import last from 'lodash/last';
-import { injectIntl, type intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import * as util from '../../../utils/datetime';
 import messages from './messages';
 import VersionsGroup from './VersionsGroup';
+import type { BoxItemVersion } from '../../../common/types/core';
 import './VersionsMenu.scss';
 
 type Props = {
     fileId: string,
-    intl: intlShape,
+    intl: any,
     versionCount: number,
     versionLimit: number,
     versions: Array<BoxItemVersion>,
@@ -22,7 +23,7 @@ type Props = {
 
 type VersionGroups = Array<{ groupHeading: string, groupVersions: Array<BoxItemVersion> }>;
 
-const getHeading = ({ intl, version }: { intl: intlShape, version: BoxItemVersion }): string => {
+const getHeading = ({ intl, version }: { intl: any, version: BoxItemVersion }): string => {
     const { created_at: createdAt } = version;
     const currentDate = new Date();
     const currentDay = currentDate.getDay();
@@ -67,7 +68,6 @@ const VersionsMenu = React.memo<Props>(({ intl, versions, ...rest }: Props) => {
 
         // Push the sorted version to the newest group's versions collection
         last(groups).groupVersions.push(version);
-
         return groups;
     }, []);
 

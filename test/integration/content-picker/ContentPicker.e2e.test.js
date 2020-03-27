@@ -10,22 +10,22 @@ const helpers = {
         cy.getByTestId('be-sub-header').contains('Codepen');
     },
     getRow: rowNum => cy.getByTestId('content-picker').find(`.bcp-item-row-${rowNum}`),
-    selectRow(rowNum) {
+    selectRow(rowNum, rowType = 'checkbox') {
         this.getRow(rowNum)
             .as('row')
             .click()
-            .find('input[type="checkbox"]')
+            .find(`input[type="${rowType}"]`)
             .should('be.checked');
 
         cy.get('@row').find('.bcp-shared-access-select');
 
         return cy.get('@row');
     },
-    unselectRow(rowNum) {
+    unselectRow(rowNum, rowType = 'checkbox') {
         this.getRow(rowNum)
             .as('row')
             .click()
-            .find('input[type="checkbox"]')
+            .find(`input[type="${rowType}"]`)
             .should('not.be.checked');
 
         cy.get('@row')
@@ -148,29 +148,25 @@ describe('ContentPicker', () => {
             helpers
                 .getRow(2)
                 .as('rowTwo')
-                .find('input[type="checkbox"]')
+                .find('input[type="radio"]')
                 .should('not.be.checked');
-            helpers.selectRow(2);
+            helpers.selectRow(2, 'radio');
 
             // Select row 3
             helpers
                 .getRow(3)
                 .as('rowThree')
-                .find('input[type="checkbox"]')
+                .find('input[type="radio"]')
                 .should('not.be.checked');
-            helpers.selectRow(3);
+            helpers.selectRow(3, 'radio');
 
             // Row 2 should now be unchecked
             cy.get('@rowTwo')
-                .find('input[type="checkbox"]')
+                .find('input[type="radio"]')
                 .should('not.be.checked');
 
-            cy.contains('1 Selected');
-
             // Unselect row 3
-            helpers.unselectRow(3);
-
-            cy.contains('0 Selected');
+            helpers.unselectRow(3, 'radio');
         });
     });
 });

@@ -5,8 +5,10 @@
  */
 
 import Base from './Base';
-import type { MetadataQuery as MetadataQueryType, MetadataQueryResponse } from '../common/types/metadataQueries';
 import { CACHE_PREFIX_METADATA_QUERY, ERROR_CODE_METADATA_QUERY } from '../constants';
+import type { ElementsErrorCallback } from '../common/types/api';
+import type { MetadataQuery as MetadataQueryType, MetadataQueryResponseData } from '../common/types/metadataQueries';
+import type APICache from '../utils/Cache';
 
 class MetadataQuery extends Base {
     /**
@@ -39,7 +41,7 @@ class MetadataQuery extends Base {
      * @return {string} base url for files
      */
     getUrl(): string {
-        return `${this.getBaseApiUrl()}/metadata_queries/execute`;
+        return `${this.getBaseApiUrl()}/metadata_queries/execute_read`;
     }
 
     /**
@@ -70,7 +72,7 @@ class MetadataQuery extends Base {
     /**
      * @param {Object} response
      */
-    queryMetadataSuccessHandler = ({ data }: { data: MetadataQueryResponse }): void => {
+    queryMetadataSuccessHandler = ({ data }: { data: MetadataQueryResponseData }): void => {
         const cache: APICache = this.getCache();
         cache.set(this.key, data);
         this.finish();

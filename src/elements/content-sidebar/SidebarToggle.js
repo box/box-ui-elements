@@ -19,6 +19,7 @@ const SidebarToggle = ({ history, isOpen }: Props) => {
         <SidebarToggleButton
             data-resin-target={SIDEBAR_NAV_TARGETS.TOGGLE}
             data-testid="sidebartoggle"
+            // $FlowFixMe
             isOpen={isOpen}
             onClick={event => {
                 event.preventDefault();

@@ -6,9 +6,9 @@
 
 import EventEmitter from 'events';
 import ReactDOM from 'react-dom';
-import { addLocaleData } from 'react-intl';
 import i18n from '../common/i18n';
 import { DEFAULT_CONTAINER } from '../../constants';
+import type { Token, StringMap } from '../../common/types/core';
 
 declare var __VERSION__: string;
 
@@ -46,28 +46,12 @@ class ES6Wrapper extends EventEmitter {
     /**
      * @property {Object}
      */
-    localeData: any = i18n.localeData;
-
-    /**
-     * @property {Object}
-     */
     messages: StringMap = i18n.messages;
 
     /**
      * @property {Element}
      */
     component: any;
-
-    /**
-     * [constructor]
-     *
-     * @private
-     * @return {ES6Wrapper}
-     */
-    constructor() {
-        super();
-        addLocaleData(this.localeData);
-    }
 
     /**
      * Shows the content picker.

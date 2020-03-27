@@ -8,12 +8,8 @@
     }
 
     .btn-content {
-        align-items: center;
         display: flex;
-    }
-
-    .bcow-btn-header-text {
-        padding-left: 3px;
+        align-items: center;
     }
 
     .bcow-integration-icon {
@@ -23,29 +19,29 @@
 
 .bcow-menu {
     .bcow-menu-item-title {
-        color: $threes;
-        font-weight: 700;
         margin: 0;
         overflow: hidden;
+        color: $bdl-gray;
+        font-weight: bold;
         text-overflow: ellipsis;
     }
 
     .bcow-menu-item-description {
+        max-width: 200px;
+        margin: 0;
         color: $bdl-gray-62;
         font-size: 11px;
         line-height: 14px;
-        margin: 0;
-        max-width: 200px;
         white-space: normal;
         word-wrap: break-word;
     }
 }
 
 .bcow-portal-container {
-    align-items: center;
     display: flex;
-    height: 100vh;
+    align-items: center;
     width: 100vw;
+    height: 100vh;
 
     .bcow-portal-loading-indicator {
         div {
@@ -55,8 +51,8 @@
     }
 
     .error-mask {
-        font-size: 16px;
-        margin: 0 auto;
         max-width: 650px;
+        margin: 0 auto;
+        font-size: 16px;
     }
 }

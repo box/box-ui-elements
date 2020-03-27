@@ -1,12 +1,8 @@
 // @flow
 
-'no babel-plugin-flow-react-proptypes';
-
-// this plugin breaks the IntlShape type
 import * as React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import type { IntlShape } from 'react-intl';
 
 import TextArea from '../../components/text-area';
 import PrimaryButton from '../../components/primary-button';
@@ -37,7 +33,7 @@ type Props = {
         content: React.Node,
         type: InlineNoticeType,
     },
-    intl: IntlShape,
+    intl: any,
     isContactsFieldEnabled: boolean,
     isExpanded: boolean,
     isExternalUserSelected: boolean,
@@ -338,7 +334,7 @@ class EmailForm extends React.Component<Props, State> {
                             <FormattedMessage {...commonMessages.cancel} />
                         </Button>
                         <PrimaryButton
-                            isDisabled={submitting || selectedContacts.length === 0 || contactsFieldError} // Check selectedContacts.length === 0 for initial render when contactsFieldError is empty
+                            isDisabled={submitting}
                             isLoading={submitting}
                             type="submit"
                             {...sendButtonProps}

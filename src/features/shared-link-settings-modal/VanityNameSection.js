@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { bdlGray62 } from '../../styles/variables';
 
@@ -67,12 +67,13 @@ const VanityNameSection = ({
 VanityNameSection.propTypes = {
     canChangeVanityName: PropTypes.bool.isRequired,
     error: PropTypes.string,
-    intl: intlShape.isRequired,
+    intl: PropTypes.any,
     isVanityEnabled: PropTypes.bool.isRequired,
     vanityName: PropTypes.string.isRequired,
     vanityNameInputProps: PropTypes.object,
     serverURL: PropTypes.string.isRequired,
     onChange: PropTypes.func,
+    onCheckboxChange: PropTypes.func,
 };
 
 export { VanityNameSection as VanityNameSectionBase };

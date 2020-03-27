@@ -23,6 +23,16 @@ class ProgressBar extends PureComponent<Props, State> {
         percent: 0,
     };
 
+    static getDerivedStateFromProps({ percent }: Props, state: State): any {
+        if (percent !== state.percent) {
+            return {
+                percent,
+            };
+        }
+
+        return null;
+    }
+
     /**
      * [constructor]
      *
@@ -32,16 +42,6 @@ class ProgressBar extends PureComponent<Props, State> {
         super(props);
         const { percent } = props;
         this.state = { percent };
-    }
-
-    /**
-     * Updates state from new props
-     *
-     * @return {void}
-     */
-    componentWillReceiveProps(nextProps: Props) {
-        const { percent } = nextProps;
-        this.setState({ percent });
     }
 
     /**

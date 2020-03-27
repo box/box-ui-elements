@@ -2,7 +2,6 @@
 
 # Temp version
 VERSION="XXX"
-DISTTAG="XXX"
 
 # Styling variables
 red=$"\n\e[1;31m(✖) "
@@ -45,43 +44,30 @@ fetch_and_prune_tags() {
 }
 
 checkout_branch() {
-    printf "${blue}Determining dist-tag and checking out ${BRANCH}...${end}"
-    if [[ "$HOTFIX" == true ]] && [[ "$BRANCH" != "" ]] && [[ "$BRANCH" != "master" ]] && [[ "$BRANCH" != "release" ]]; then
-        printf "${blue}This is a hotfix release, using latest dist-tag...${end}"
-        DISTTAG='latest'
-        printf "${blue}Checking out ${BRANCH}...${end}"
-        git checkout $BRANCH || return 1
-        GIT_BRANCH=$BRANCH
-    elif [[ "$HOTFIX" != true ]] && [[ "$BRANCH" == "master" ]]; then
-        printf "${blue}This is a master branch release, using beta dist-tag...${end}"
-        DISTTAG='beta'
-        printf "${blue}Checking out master...${end}"
-        git checkout master || return 1
-        GIT_BRANCH=master
-        printf "${blue}Resetting to remote release/master...${end}"
-        git reset --hard release/master || return 1
-    elif [[ "$HOTFIX" != true ]] && [[ "$BRANCH" == "release" ]]; then
-        printf "${blue}This is a stable branch release, using latest dist-tag...${end}"
-        DISTTAG='latest'
-        printf "${blue}Checking out release...${end}"
-        git checkout release || return 1
-        GIT_BRANCH=release
-        printf "${blue}Resetting to remote release/master...${end}"
-        git reset --hard release/master || return 1
-        printf "${blue}Updating remote release branch with latest from master...${end}"
-        git push release release --force --no-verify || return 1
-    fi
-
-    if [[ "$DISTTAG" == "XXX" ]]; then
-        printf "${red}Could not determine a dist-tag based on the provided branch=${BRANCH}${end}"
+    printf "${blue}Determining dist-tag and branch...${end}"
+    if [[ "$DIST" == "" ]]; then
+        printf "${red}Could not determine a dist-tag, it should be either beta, latest, next or another string${end}"
+        return 1
+    elif [[ "$BRANCH" == "" ]]; then
+        printf "${red}Could not determine the branch, it should be a valid branch like master, next or a tag${end}"
         if [[ "$HOTFIX" == true ]]; then
             printf "${red}For hotfix you must pass in the git tag branch, eg: BRANCH=vX.X.X yarn release:hotfix${end}"
-        else
-            printf "${red}Branch can only be master or release${end}"
         fi
         return 1
     else
-        printf "${green}${BRANCH} checkout complete and dist-tag determined!${end}"
+        GIT_BRANCH=$BRANCH
+        if [[ "$HOTFIX" == true ]]; then
+            printf "${blue}This is a hotfix release from ${BRANCH}...${end}"
+            git checkout $BRANCH || return 1
+        elif [[ "$BRANCH" == 'master' ]]; then
+            printf "${blue}This is a ${DIST} release, resetting hard from master...${end}"
+            git checkout master || return 1
+            git reset --hard release/master || return 1
+        else
+            printf "${blue}This is a ${DIST} release, resetting hard from ${BRANCH}...${end}"
+            git checkout -t release/$BRANCH || return 1
+        fi
+        printf "${green}${BRANCH} checkout complete and dist-tag=${DIST} determined!${end}"
     fi
 }
 
@@ -140,7 +126,7 @@ build_assets() {
 
 push_to_npm() {
     printf "${blue}Publishing assets to npmjs...${end}"
-    npm publish --access public --tag "$DISTTAG" || return 1
+    npm publish --access public --tag "$DIST" || return 1
     printf "${green}Published npm using dist-tag=${DISTTAG}!${end}"
 }
 
@@ -148,6 +134,9 @@ build_examples() {
     printf "${blue}Building styleguide...${end}"
     yarn build:prod:examples || return 1
     printf "${green}Built styleguide!${end}"
+    printf "${blue}Building storybook...${end}"
+    yarn build:prod:storybook || return 1
+    printf "${green}Built storybook!${end}"
 }
 
 push_to_gh_pages() {
@@ -250,7 +239,7 @@ push_new_release() {
     check_untracked_files || return 1
 
     # Run the release
-    if ! HUSKY_SKIP_HOOKS=1 yarn semantic-release --no-ci; then
+    if ! HUSKY_SKIP_HOOKS=1 BRANCH=$BRANCH DIST=$DIST yarn semantic-release --no-ci; then
         printf "${red}Failed semantic release!${end}"
         return 1
     fi

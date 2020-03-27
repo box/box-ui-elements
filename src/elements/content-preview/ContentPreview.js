@@ -46,8 +46,14 @@ import {
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
-import type { ErrorType } from '../common/flowTypes';
+import type { ErrorType, AdditionalVersionInfo } from '../common/flowTypes';
+import type { WithLoggerProps } from '../../common/types/logging';
+import type { FetchOptions, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
+import type { StringMap, Token, BoxItem, BoxItemVersion } from '../../common/types/core';
 import type { VersionChangeCallback } from '../content-sidebar/versions';
+import type { FeatureConfig } from '../common/feature-checking';
+import type APICache from '../../utils/Cache';
+
 import '../common/fonts.scss';
 import '../common/base.scss';
 import './ContentPreview.scss';
@@ -56,13 +62,13 @@ type Props = {
     apiHost: string,
     appHost: string,
     autoFocus: boolean,
+    boxAnnotations?: Object,
     cache?: APICache,
     canDownload?: boolean,
     className: string,
     collection: Array<string | BoxItem>,
     contentOpenWithProps: ContentOpenWithProps,
     contentSidebarProps: ContentSidebarProps,
-    contentSidebarRef: React.Ref<any>,
     enableThumbnailsSidebar: boolean,
     features?: FeatureConfig,
     fileId?: string,
@@ -71,6 +77,7 @@ type Props = {
     hasHeader?: boolean,
     history?: RouterHistory,
     isLarge: boolean,
+    isVeryLarge?: boolean,
     language: string,
     logoUrl?: string,
     measureRef: Function,
@@ -94,6 +101,7 @@ type Props = {
     WithLoggerProps;
 
 type State = {
+    canPrint?: boolean,
     currentFileId?: string,
     error?: ErrorType,
     file?: BoxItem,
@@ -157,6 +165,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     api: API;
 
+    // Defines a generic type for ContentSidebar, since an import would interfere with code splitting
+    contentSidebar: { current: null | { refresh: Function } } = React.createRef();
+
     previewContainer: ?HTMLDivElement;
 
     mouseMoveTimeoutID: TimeoutID;
@@ -168,6 +179,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
     updateVersionToCurrent: ?() => void;
 
     initialState: State = {
+        canPrint: false,
         error: undefined,
         isReloadNotificationVisible: false,
         isThumbnailSidebarOpen: false,
@@ -634,9 +646,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         onLoad(loadData);
         this.focusPreview();
-        if (this.preview && filesToPrefetch.length > 1) {
+        if (this.preview && filesToPrefetch.length) {
             this.prefetch(filesToPrefetch);
         }
+
+        this.handleCanPrint();
     };
 
     /**
@@ -677,6 +691,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
         return !!showAnnotations && (this.canAnnotate() || hasViewAllPermissions || hasViewSelfPermissions);
     }
 
+    handleCanPrint() {
+        const preview = this.getPreview();
+        this.setState({ canPrint: !!preview && (!preview.canPrint || preview.canPrint()) });
+    }
+
     /**
      * Loads preview in the component using the preview library.
      *
@@ -697,8 +716,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         const fileOpts = { ...fileOptions };
-        const typedId: string = getTypedFileId(fileId);
-        const token: TokenLiteral = await TokenService.getReadToken(typedId, tokenOrTokenFunction);
+        const token = typedId => TokenService.getReadTokens(typedId, tokenOrTokenFunction);
 
         if (selectedVersion) {
             fileOpts[fileId] = fileOpts[fileId] || {};
@@ -823,7 +841,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         id: ?string,
         successCallback?: Function,
         errorCallback?: Function,
-        fetchOptions?: FetchOptions = {},
+        fetchOptions: FetchOptions = {},
     ): void {
         if (!id) {
             return;
@@ -1063,7 +1081,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @param {string} [version] - The version that is now previewed
      * @param {object} [additionalVersionInfo] - extra info about the version
      */
-    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo?: AdditionalVersionInfo = {}): void => {
+    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo: AdditionalVersionInfo = {}): void => {
         const { onVersionChange }: Props = this.props;
         this.updateVersionToCurrent = additionalVersionInfo.updateVersionToCurrent;
 
@@ -1083,6 +1101,19 @@ class ContentPreview extends React.PureComponent<Props, State> {
     };
 
     /**
+     * Refreshes the content sidebar panel
+     *
+     * @return {void}
+     */
+    refreshSidebar(): void {
+        const { current: contentSidebar } = this.contentSidebar;
+
+        if (contentSidebar) {
+            contentSidebar.refresh();
+        }
+    }
+
+    /**
      * Renders the file preview
      *
      * @inheritdoc
@@ -1091,16 +1122,18 @@ class ContentPreview extends React.PureComponent<Props, State> {
     render() {
         const {
             apiHost,
-            isLarge,
+            collection,
             token,
             language,
             messages,
             className,
             contentSidebarProps,
-            contentSidebarRef,
             contentOpenWithProps,
             hasHeader,
             history,
+            isLarge,
+            isVeryLarge,
+            logoUrl,
             onClose,
             measureRef,
             sharedLink,
@@ -1110,6 +1143,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }: Props = this.props;
 
         const {
+            canPrint,
             error,
             file,
             isReloadNotificationVisible,
@@ -1117,7 +1151,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             isThumbnailSidebarOpen,
             selectedVersion,
         }: State = this.state;
-        const { collection }: Props = this.props;
+
         const styleClassName = classNames(
             'be bcpr',
             {
@@ -1143,10 +1177,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
                     {hasHeader && (
                         <PreviewHeader
                             file={file}
+                            logoUrl={logoUrl}
                             token={token}
                             onClose={onHeaderClose}
                             onPrint={this.print}
                             canDownload={this.canDownload()}
+                            canPrint={canPrint}
                             onDownload={this.download}
                             contentOpenWithProps={contentOpenWithProps}
                             canAnnotate={this.canAnnotate()}
@@ -1173,6 +1209,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                             <PreviewNavigation
                                 collection={collection}
                                 currentIndex={this.getFileIndex()}
+                                history={history}
                                 onNavigateLeft={this.navigateLeft}
                                 onNavigateRight={this.navigateRight}
                             />
@@ -1180,7 +1217,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
                         {file && (
                             <LoadableSidebar
                                 {...contentSidebarProps}
-                                isLarge={isLarge}
                                 apiHost={apiHost}
                                 token={token}
                                 cache={this.api.getCache()}
@@ -1188,8 +1224,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                 getPreview={this.getPreview}
                                 getViewer={this.getViewer}
                                 history={history}
+                                isDefaultOpen={isLarge || isVeryLarge}
                                 language={language}
-                                ref={contentSidebarRef}
+                                ref={this.contentSidebar}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
                                 requestInterceptor={requestInterceptor}

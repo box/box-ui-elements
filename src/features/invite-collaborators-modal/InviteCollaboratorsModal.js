@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import omit from 'lodash/omit';
 import throttle from 'lodash/throttle';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { UpgradeBadge } from '../../components/badge';
 import Button from '../../components/button';
@@ -53,7 +53,7 @@ class InviteCollaboratorsModal extends Component {
          * Only applicable to non-file item types.
          * */
         defaultPersonalMessage: PropTypes.node,
-        intl: intlShape.isRequired,
+        intl: PropTypes.any,
         /** Props for the invite button */
         inviteButtonProps: PropTypes.object,
         /** An array of invitee permissions */
@@ -127,6 +127,7 @@ class InviteCollaboratorsModal extends Component {
                 )
                 .map(({ email, id, name, type }) => ({
                     // map to standardized DatalistItem format
+                    // TODO: refactor this so inline conversions aren't required at every usage
                     email,
                     id,
                     text: name,

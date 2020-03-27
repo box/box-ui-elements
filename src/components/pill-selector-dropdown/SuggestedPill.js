@@ -20,6 +20,7 @@ const SuggestedPill = ({ email, id, name, onAdd }: Props) => {
     const addSuggestedPill = (event: SyntheticEvent<HTMLButtonElement>) => {
         event.preventDefault();
 
+        // TODO: refactor this so inline conversions aren't required at every usage
         onAdd({
             email,
             id,
@@ -44,7 +45,7 @@ const SuggestedPill = ({ email, id, name, onAdd }: Props) => {
                 onKeyDown={handleKeyPress}
                 type="button"
             >
-                <span className="pill-text suggested-pill">{name}</span>
+                <span className="bdl-Pill-text pill-text suggested-pill">{name}</span>
             </PlainButton>
         </Tooltip>
     );

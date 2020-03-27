@@ -5,7 +5,7 @@ For more information on this element, see this [documentation](https://developer
 ```jsx
 var ContentOpenWith = require('./ContentOpenWith').default;
 
-<IntlProvider locale="en" textComponent={React.Fragment}>
+<IntlProvider locale="en">
     <ContentOpenWith
         features={FEATURES}
         fileId={FILE_ID}

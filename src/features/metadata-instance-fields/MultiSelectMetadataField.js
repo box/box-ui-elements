@@ -1,0 +1,66 @@
+// @flow
+import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
+
+import Label from '../../components/label/Label';
+import MultiSelect from '../../components/select-field/MultiSelectField';
+import type { SelectOptionProp } from '../../components/select-field/props';
+
+import messages from './messages';
+
+import type { MetadataFieldValue, MetadataTemplateFieldOption } from '../../common/types/metadata';
+
+import './MultiSelectMetadataField.scss';
+
+type Props = {
+    dataKey: string,
+    dataValue?: MetadataFieldValue,
+    description?: string,
+    displayName: string,
+    onChange: (key: string, value: MetadataFieldValue) => void,
+    onRemove: (key: string) => void,
+    options?: Array<MetadataTemplateFieldOption>,
+};
+
+const MultiSelectMetadataField = ({
+    dataKey,
+    dataValue,
+    displayName,
+    description,
+    onChange,
+    onRemove,
+    options = [],
+}: Props) => {
+    const placeholder = <FormattedMessage {...messages.metadataFieldMultiSelectValue} />;
+
+    return (
+        <div className="bdl-MultiSelectMetadataField">
+            <Label text={displayName}>
+                {!!description && <i className="bdl-MultiSelectMetadataField-desc">{description}</i>}
+                <MultiSelect
+                    isEscapedWithReference
+                    isScrollable
+                    onChange={(selectedOptions: Array<SelectOptionProp>) => {
+                        if (selectedOptions.length) {
+                            onChange(
+                                dataKey,
+                                selectedOptions.map(({ value }) => value),
+                            );
+                        } else {
+                            onRemove(dataKey);
+                        }
+                    }}
+                    options={options.map(option => ({
+                        displayText: option.key,
+                        value: option.key,
+                    }))}
+                    placeholder={placeholder}
+                    selectedValues={dataValue}
+                />
+            </Label>
+        </div>
+    );
+};
+
+export { MultiSelectMetadataField as MultiSelectMetadataFieldBase };
+export default MultiSelectMetadataField;

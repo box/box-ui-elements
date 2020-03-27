@@ -11,22 +11,39 @@ $bcs-task-left-offset: 10 * $bcs-task-grid + 2px;
     &.bcs-is-pending {
         opacity: .4;
     }
+
+    .bdl-Media-body {
+        overflow: hidden;
+    }
 }
 
 .bcs-Task-avatar {
-    height: 100%;
     position: relative;
+    height: 100%;
 }
 
 .bcs-Task-avatarBadge {
     @include avatar-badge-icon;
 
-    border-width: 2px;
     right: -4px;
+    border-width: 2px;
 }
 
-.bcs-Task-statusContainer {
-    margin-top: 2 * $bcs-task-grid;
+.bcs-Task-headline {
+    // target only Edge because this breaks other browsers
+    // but fixes Edge
+    @supports (-ms-ime-align: auto) {
+        word-break: break-all;
+    }
+}
+
+.bcs-Task-status {
+    margin-top: 3 * $bcs-task-grid;
+    margin-bottom: 2 * $bcs-task-grid;
+}
+
+.bcs-Task-dueDate {
+    margin-bottom: 3 * $bcs-task-grid;
 }
 
 .bcs-Task-assigneeListContainer {

@@ -1,11 +1,11 @@
 @import '../common/variables';
 
 .be.bcu-uploads-manager-container {
-    bottom: 0;
-    max-height: 0;
     position: fixed;
-    transition: max-height .5s;
+    bottom: 0;
     width: 100%;
+    max-height: 0;
+    transition: max-height .5s;
 
     .bcu-progress-container {
         margin-right: 0;
@@ -35,38 +35,38 @@
     }
 
     .bcu-uploads-manager-toggle {
-        background: 0 0;
-        border: 0;
+        position: absolute;
+        top: 0;
+        right: 26px;
         bottom: 0;
+        width: 10px;
         height: 10px;
         margin: auto 0;
-        position: absolute;
-        right: 30px;
-        top: 0;
         vertical-align: middle;
-        width: 10px;
+        background: 0 0;
+        border: 0;
 
         &::before,
         &::after {
-            border: 0 solid $white;
-            content: '';
-            height: 6px;
             position: absolute;
             width: 6px;
+            height: 6px;
+            border: 0 solid $white;
+            content: '';
         }
 
         &::before {
-            border-bottom-width: 2px;
-            border-left-width: 2px;
             bottom: 0;
             left: 0;
+            border-bottom-width: 2px;
+            border-left-width: 2px;
         }
 
         &::after {
-            border-right-width: 2px;
-            border-top-width: 2px;
-            right: 0;
             top: 0;
+            right: 0;
+            border-top-width: 2px;
+            border-right-width: 2px;
         }
     }
 
@@ -84,8 +84,8 @@
             }
 
             &::after {
-                right: 7px;
                 top: 7px;
+                right: 7px;
             }
         }
     }
@@ -97,8 +97,8 @@
         }
 
         &::after {
-            right: -3px;
             top: -3px;
+            right: -3px;
         }
     }
 
@@ -109,8 +109,8 @@
         }
 
         &::after {
-            right: 6px;
             top: 6px;
+            right: 6px;
         }
     }
 

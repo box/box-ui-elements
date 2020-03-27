@@ -1,0 +1,28 @@
+// @flow
+/* eslint-disable react/jsx-sort-props */
+import * as React from 'react';
+import * as vars from '../../styles/variables';
+import AccessibleSVG from '../../icons/accessible-svg';
+import type { Icon } from '../../icons/flowTypes';
+
+/**
+ * This is an auto-generated component and should not be edited
+ * manually in contributor pull requests.
+ *
+ * If you have problems with this component:
+ * - https://github.com/box/box-ui-elements/issues/new?template=Bug_report.md
+ *
+ * If there are missing features in this component:
+ * - https://github.com/box/box-ui-elements/issues/new?template=Feature_request.md
+ */
+
+const FileKeynote16 = (props: Icon) => (
+    <AccessibleSVG width={16} height={16} viewBox="0 0 16 16" {...props}>
+        <path
+            fill={vars.bdlGray50}
+            d="M9.422 1c.146 0 .286.057.389.158l3.528 3.454a.533.533 0 01.161.38v8.393c0 .892-.74 1.615-1.65 1.615h-7.7c-.911 0-1.65-.723-1.65-1.615V2.615C2.5 1.723 3.239 1 4.15 1h5.272zm-1.45 8.924h-.479v2.108h-.956a.237.237 0 00-.24.234c0 .13.108.234.24.234h2.39a.237.237 0 00.24-.234.237.237 0 00-.24-.234h-.956V9.924zm2.528-.702H5.002v.28a.234.234 0 000 .066.24.24 0 00.1.099h5.25l.057-.042a.206.206 0 00.043-.057.225.225 0 00.048-.065v-.281zM7.804 6h-.66l-.076.023a.228.228 0 00-.058.047l-.076.103a.073.073 0 01-.062 0h-.708a.456.456 0 00-.234.103.386.386 0 00-.12.23.872.872 0 000 .122v.262h-.368a.315.315 0 00-.167.08.31.31 0 00-.058.074.3.3 0 00-.028.09.66.66 0 000 .093v.187c-.02.398-.086 1.574-.086 1.574v.01h5.268s-.086-1.303-.086-1.607v-.15a.541.541 0 000-.094.3.3 0 00-.029-.089.29.29 0 00-.134-.126.315.315 0 00-.09-.028H6.078v-.267a.486.486 0 010-.084.147.147 0 010-.047.166.166 0 01.067-.066h.74a.082.082 0 01.058.033l.077.08.048.032c.024.011.05.02.076.024h.66l.076-.028a.27.27 0 00.115-.113.268.268 0 00.029-.075.459.459 0 000-.107.326.326 0 000-.075.273.273 0 00-.029-.075.244.244 0 00-.115-.113L7.804 6z"
+        />
+    </AccessibleSVG>
+);
+
+export default FileKeynote16;

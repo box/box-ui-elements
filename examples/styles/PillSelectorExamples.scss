@@ -1,5 +1,5 @@
-.pill-selector-wrapper {
-    div.pill-selector-input-wrapper {
+.bdl-PillSelectorDropdown {
+    div.bdl-PillSelector {
         width: 360px;
     }
 
@@ -8,7 +8,7 @@
     }
 }
 
-.pill.pill-cloud-button.is-selected {
-    background-color: #0061d5;
+.bdl-Pill.bdl-PillCloud-button.is-selected {
     color: #fff;
+    background-color: #0061d5;
 }

@@ -5,47 +5,94 @@
     border-radius: $bdl-border-radius-size;
 
     .collapsible-card-header {
-        align-items: center;
-        border-radius: $bdl-border-radius-size;
+        position: relative; // for action items
         display: flex;
         flex-direction: row;
-        position: relative; // for action items
+        align-items: center;
         width: 100%;
+        border-radius: $bdl-border-radius-size;
 
         &.has-sticky-header {
             position: sticky;
             top: 0; // required by sticky position
             z-index: 1; // required by sticky position
         }
+
+        .bdl-Collapsible-actionItems {
+            display: none;
+        }
+
+        &:hover {
+            .btn-plain.collapsible-card-title {
+                text-decoration: underline;
+            }
+
+            .bdl-Collapsible-actionItems {
+                display: block;
+            }
+        }
     }
 
     .collapsible-card-action-items {
-        bottom: 0;
         position: absolute;
         right: 34px;
+        bottom: 0;
     }
 
     .collapsible-card-header-caret {
+        @include bdl-transition($bdl-transitionDurationBase, transform);
+
         position: absolute;
         right: 0;
-        transition: transform $bdl-transition-duration-200ms;
     }
 
     .btn-plain.collapsible-card-title {
-        align-items: center;
-        display: flex;
-        padding: 10px 0;
         position: relative;
-        text-align: left;
+        display: flex;
+        align-items: center;
         width: 100%;
+        padding: 10px 0;
+        text-align: left;
+
+        &:focus {
+            text-decoration: underline;
+
+            + .bdl-Collapsible-actionItems {
+                display: block;
+            }
+        }
     }
 
     .collapsible-card-content {
         padding: 10px 0;
     }
 
-    &.is-open .collapsible-card-header-caret {
-        transform: rotateZ(180deg);
+    &.is-open {
+        .collapsible-card-header-caret {
+            transform: rotateZ(180deg);
+        }
+
+        .collapsible-card-header {
+            &:hover {
+                .btn-plain.collapsible-card-title {
+                    text-decoration: none;
+                }
+            }
+
+            .bdl-Collapsible-actionItems {
+                display: block;
+            }
+        }
+
+        .btn-plain.collapsible-card-title {
+            &:focus {
+                text-decoration: none;
+            }
+
+            + .bdl-Collapsible-actionItems {
+                display: block;
+            }
+        }
     }
 
     &.is-bordered {
@@ -70,14 +117,15 @@
     }
 
     &:not(.is-bordered) {
+        .bdl-PlainButton.collapsible-card-title,
         .btn-plain.collapsible-card-title {
             border-bottom: 1px solid $bdl-gray-10;
 
             &:hover,
             &:active,
             &:focus {
-                border-bottom-color: $bdl-box-blue;
                 text-decoration: none;
+                border-bottom-color: $bdl-box-blue;
             }
         }
     }

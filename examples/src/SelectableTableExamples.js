@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'; // eslint-disable-line max-classes-per-file
 import PropTypes from 'prop-types';
 import { Set } from 'immutable';
 
@@ -73,48 +73,50 @@ class FocusableTableRow extends Component {
     }
 }
 
-const SelectableTable = makeSelectable(({ className, onRowClick, onRowFocus, focusedItem, selectedItems }) => {
-    return (
-        <Table className={`has-hover-styles ${className}`}>
-            <TableHeader>
-                {columnHeaders.map(header => (
-                    <TableHeaderCell key={header}>{header}</TableHeaderCell>
-                ))}
-                <TableHeaderCell>Actions</TableHeaderCell>
-            </TableHeader>
-            <TableBody>
-                {data.map((row, index) => (
-                    <ContextMenu key={index}>
-                        <FocusableTableRow
-                            className={selectedItems.has(row[2]) ? 'is-selected ' : ''}
-                            isFocused={row[2] === focusedItem}
-                            onClick={event => onRowClick(event, index)}
-                            onFocus={event => onRowFocus(event, index)}
-                            tabIndex={0}
-                        >
-                            {row.map(cell => (
-                                <TableCell key={cell}>{cell}</TableCell>
-                            ))}
-                            <TableCell>
-                                <DropdownMenu className="dropdown-menu-test">
-                                    <Button type="button">•••</Button>
-                                    <Menu>
-                                        <MenuItem>View Profile</MenuItem>
-                                        <MenuItem>Help</MenuItem>
-                                    </Menu>
-                                </DropdownMenu>
-                            </TableCell>
-                        </FocusableTableRow>
-                        <Menu>
-                            <MenuItem>View Profile</MenuItem>
-                            <MenuItem>Help</MenuItem>
-                        </Menu>
-                    </ContextMenu>
-                ))}
-            </TableBody>
-        </Table>
-    );
-});
+const SelectableTable = makeSelectable(
+    ({ className, onRowClick, onRowFocus, focusedItem, selectedItems, onTableBlur, onTableFocus }) => {
+        return (
+            <Table className={`has-hover-styles ${className}`} onBlur={onTableBlur} onFocus={onTableFocus}>
+                <TableHeader>
+                    {columnHeaders.map(header => (
+                        <TableHeaderCell key={header}>{header}</TableHeaderCell>
+                    ))}
+                    <TableHeaderCell>Actions</TableHeaderCell>
+                </TableHeader>
+                <TableBody>
+                    {data.map((row, index) => (
+                        <ContextMenu key={index}>
+                            <FocusableTableRow
+                                className={selectedItems.has(row[2]) ? 'is-selected ' : ''}
+                                isFocused={row[2] === focusedItem}
+                                onClick={event => onRowClick(event, index)}
+                                onFocus={event => onRowFocus(event, index)}
+                                tabIndex={0}
+                            >
+                                {row.map(cell => (
+                                    <TableCell key={cell}>{cell}</TableCell>
+                                ))}
+                                <TableCell>
+                                    <DropdownMenu className="dropdown-menu-test">
+                                        <Button type="button">•••</Button>
+                                        <Menu>
+                                            <MenuItem>View Profile</MenuItem>
+                                            <MenuItem>Help</MenuItem>
+                                        </Menu>
+                                    </DropdownMenu>
+                                </TableCell>
+                            </FocusableTableRow>
+                            <Menu>
+                                <MenuItem>View Profile</MenuItem>
+                                <MenuItem>Help</MenuItem>
+                            </Menu>
+                        </ContextMenu>
+                    ))}
+                </TableBody>
+            </Table>
+        );
+    },
+);
 
 // eslint-disable-next-line
 class SelectableTableExamples extends Component {

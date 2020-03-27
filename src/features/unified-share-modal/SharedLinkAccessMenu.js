@@ -12,15 +12,15 @@ import type { ItemType } from '../../common/types/core';
 import SharedLinkAccessLabel from './SharedLinkAccessLabel';
 import { ANYONE_WITH_LINK, ANYONE_IN_COMPANY, PEOPLE_IN_ITEM } from './constants';
 import messages from './messages';
-import type { accessLevelType, allowedAccessLevelsType } from './flowTypes';
+import type { accessLevelType, accessLevelsDisabledReasonType, allowedAccessLevelsType } from './flowTypes';
 
 const accessLevels = [ANYONE_WITH_LINK, ANYONE_IN_COMPANY, PEOPLE_IN_ITEM];
 
 type Props = {
     accessLevel?: accessLevelType,
+    accessLevelsDisabledReason: accessLevelsDisabledReasonType,
     allowedAccessLevels: allowedAccessLevelsType,
     changeAccessLevel: (newAccessLevel: accessLevelType) => Promise<{ accessLevel: accessLevelType }>,
-    classificationName?: string,
     enterpriseName?: string,
     itemType: ItemType,
     onDismissTooltip: () => void,
@@ -35,6 +35,7 @@ type Props = {
 
 class SharedLinkAccessMenu extends React.Component<Props> {
     static defaultProps = {
+        accessLevelsDisabledReason: {},
         allowedAccessLevels: {},
         trackingProps: {},
     };
@@ -53,16 +54,32 @@ class SharedLinkAccessMenu extends React.Component<Props> {
     };
 
     renderMenu() {
-        const { accessLevel, allowedAccessLevels, classificationName, enterpriseName, itemType } = this.props;
-
+        const { accessLevel, accessLevelsDisabledReason, allowedAccessLevels, enterpriseName, itemType } = this.props;
         return (
             <Menu className="usm-share-access-menu">
                 {accessLevels.map(level => {
                     const isDisabled = !allowedAccessLevels[level];
-                    const isDisabledByClassification = isDisabled && classificationName;
-                    let menuItem = null;
-                    if (!isDisabled || isDisabledByClassification) {
-                        menuItem = (
+                    const isDisabledByAccessPolicy = accessLevelsDisabledReason[level] === 'access_policy';
+                    const isDisabledByMaliciousContent = accessLevelsDisabledReason[level] === 'malicious_content';
+                    const isDisabledByPolicy = isDisabledByAccessPolicy || isDisabledByMaliciousContent;
+                    const tooltipMessage = isDisabledByMaliciousContent
+                        ? messages.disabledMaliciousContentShareLinkPermission
+                        : messages.disabledShareLinkPermission;
+
+                    // If an access level is disabled for reasons other than access policy enforcement
+                    // then we just don't show that menu item. If it is disabled because of an access policy
+                    // instead, then we show the menu item in a disabled state and with a tooltip.
+                    if (isDisabled && !isDisabledByPolicy) {
+                        return null;
+                    }
+
+                    return (
+                        <Tooltip
+                            isDisabled={!isDisabledByPolicy}
+                            key={`tooltip-${level}`}
+                            position="top-center"
+                            text={<FormattedMessage {...tooltipMessage} />}
+                        >
                             <SelectMenuItem
                                 key={level}
                                 isDisabled={isDisabled}
@@ -76,27 +93,8 @@ class SharedLinkAccessMenu extends React.Component<Props> {
                                     itemType={itemType}
                                 />
                             </SelectMenuItem>
-                        );
-                    }
-                    if (menuItem && isDisabledByClassification) {
-                        return (
-                            <Tooltip
-                                key={`tooltip-${level}`}
-                                position="top-center"
-                                text={
-                                    <FormattedMessage
-                                        {...messages.disabledShareLinkPermission}
-                                        values={{
-                                            classification: classificationName,
-                                        }}
-                                    />
-                                }
-                            >
-                                {menuItem}
-                            </Tooltip>
-                        );
-                    }
-                    return menuItem;
+                        </Tooltip>
+                    );
                 })}
             </Menu>
         );
@@ -128,6 +126,7 @@ class SharedLinkAccessMenu extends React.Component<Props> {
                     <PlainButton
                         className={classNames('lnk', {
                             'is-disabled': submitting,
+                            'bdl-is-disabled': submitting,
                         })}
                         disabled={submitting}
                         {...sharedLinkAccessMenuButtonProps}

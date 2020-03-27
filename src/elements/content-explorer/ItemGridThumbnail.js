@@ -2,6 +2,7 @@
 import * as React from 'react';
 import isThumbnailReady from './utils';
 import { getIcon } from '../common/item/iconCellRenderer';
+import type { BoxItem } from '../../common/types/core';
 import './ItemGridThumbnail.scss';
 
 type Props = {

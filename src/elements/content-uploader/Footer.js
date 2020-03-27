@@ -15,13 +15,14 @@ type Props = {
     errorCode?: string,
     fileLimit: number,
     hasFiles: boolean,
+    isDone: boolean,
     isLoading: boolean,
     onCancel: Function,
     onClose?: Function,
     onUpload: Function,
 };
 
-const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, fileLimit }: Props) => {
+const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, fileLimit, isDone }: Props) => {
     let message;
     switch (errorCode) {
         case ERROR_CODE_UPLOAD_FILE_LIMIT:
@@ -42,7 +43,7 @@ const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, f
             </div>
             {message && <div className="bcu-footer-message">{message}</div>}
             <div className="bcu-footer-right">
-                <Button isDisabled={!hasFiles} onClick={onCancel} type="button">
+                <Button isDisabled={!hasFiles || isDone} onClick={onCancel} type="button">
                     <FormattedMessage {...messages.cancel} />
                 </Button>
                 <PrimaryButton isDisabled={!hasFiles} isLoading={isLoading} onClick={onUpload} type="button">

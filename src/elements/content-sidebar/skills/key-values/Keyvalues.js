@@ -6,6 +6,8 @@
 
 import React from 'react';
 
+import type { SkillCardEntry, SkillCard } from '../../../../common/types/skills';
+
 import './Keyvalues.scss';
 
 type Props = {

@@ -7,6 +7,7 @@
 import React from 'react';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
+import merge from 'lodash/merge';
 import noop from 'lodash/noop';
 import { generatePath, withRouter } from 'react-router-dom';
 import type { Match, RouterHistory } from 'react-router-dom';
@@ -18,6 +19,7 @@ import VersionsSidebar from './VersionsSidebar';
 import VersionsSidebarAPI from './VersionsSidebarAPI';
 import { withAPIContext } from '../../common/api-context';
 import type { VersionActionCallback, VersionChangeCallback } from './flowTypes';
+import type { BoxItemVersion, BoxItem, FileVersions } from '../../../common/types/core';
 
 type Props = {
     api: API,
@@ -31,7 +33,6 @@ type Props = {
     onVersionPromote: VersionActionCallback,
     onVersionRestore: VersionActionCallback,
     parentName: string,
-    refreshIdentity?: boolean,
     versionId?: string,
 };
 
@@ -74,12 +75,11 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.fetchData();
     }
 
-    componentDidUpdate({ fileId: prevFileId, refreshIdentity: prevRefreshIdentity, versionId: prevVersionId }: Props) {
-        const { fileId, refreshIdentity, versionId } = this.props;
+    componentDidUpdate({ fileId: prevFileId, versionId: prevVersionId }: Props) {
+        const { fileId, versionId } = this.props;
 
-        if (fileId !== prevFileId || refreshIdentity !== prevRefreshIdentity) {
-            this.initialize();
-            this.setState({ isLoading: true }, this.fetchData);
+        if (fileId !== prevFileId) {
+            this.refresh();
         }
 
         if (versionId !== prevVersionId) {
@@ -97,9 +97,8 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
         return this.api
             .deleteVersion(this.findVersion(versionId))
-            .then(this.api.fetchData)
-            .then(this.handleFetchSuccess)
-            .then(() => this.handleDeleteSuccess(versionId))
+            .then(() => this.api.fetchVersion(versionId))
+            .then(this.handleDeleteSuccess)
             .then(() => this.props.onVersionDelete(versionId))
             .catch(() => this.handleActionError(messages.versionActionDeleteError));
     };
@@ -134,8 +133,8 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
         return this.api
             .restoreVersion(this.findVersion(versionId))
-            .then(this.api.fetchData)
-            .then(this.handleFetchSuccess)
+            .then(() => this.api.fetchVersion(versionId))
+            .then(this.handleRestoreSuccess)
             .then(() => this.props.onVersionRestore(versionId))
             .catch(() => this.handleActionError(messages.versionActionRestoreError));
     };
@@ -147,13 +146,20 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         });
     };
 
-    handleDeleteSuccess = (versionId: string) => {
+    handleDeleteSuccess = (data: BoxItemVersion): void => {
         const { versionId: selectedVersionId } = this.props;
+        const { id: versionId } = data;
+
+        this.mergeResponse(data);
 
         // Bump the user to the current version if they deleted their selected version
         if (versionId === selectedVersionId) {
             this.updateVersionToCurrent();
         }
+    };
+
+    handleRestoreSuccess = (data: BoxItemVersion): void => {
+        this.mergeResponse(data);
     };
 
     handleFetchError = (): void => {
@@ -218,6 +224,27 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         const { versions } = this.state;
         return versions[0] ? versions[0].id : null;
     };
+
+    mergeVersions = (newVersion: BoxItemVersion): Array<BoxItemVersion> => {
+        const { versions } = this.state;
+        const newVersionId = newVersion ? newVersion.id : '';
+        return versions.map(version => (version.id === newVersionId ? merge({ ...version }, newVersion) : version));
+    };
+
+    mergeResponse = (data: BoxItemVersion): void => {
+        const newVersions = this.mergeVersions(data);
+
+        this.setState({
+            error: undefined,
+            isLoading: false,
+            versions: newVersions,
+        });
+    };
+
+    refresh(): void {
+        this.initialize();
+        this.setState({ isLoading: true }, this.fetchData);
+    }
 
     sortVersions(versions?: Array<BoxItemVersion> = []): Array<BoxItemVersion> {
         return [...versions].sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));

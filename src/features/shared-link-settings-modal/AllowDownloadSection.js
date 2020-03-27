@@ -1,20 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import classNames from 'classnames';
 
 import Checkbox from '../../components/checkbox';
 import TextInputWithCopyButton from '../../components/text-input-with-copy-button';
 import Fieldset from '../../components/fieldset';
+import Tooltip from '../../components/tooltip';
 
 import messages from './messages';
 
 const AllowDownloadSection = ({
     canChangeDownload,
+    classification,
     directLink,
     directLinkInputProps = {},
     downloadCheckboxProps = {},
     isDirectLinkAvailable,
     isDirectLinkUnavailableDueToDownloadSettings,
+    isDirectLinkUnavailableDueToAccessPolicy,
+    isDirectLinkUnavailableDueToMaliciousContent,
     isDownloadAvailable,
     isDownloadEnabled,
     onChange,
@@ -34,24 +39,48 @@ const AllowDownloadSection = ({
             />
         </div>
     );
+    const isDirectLinkUnavailable =
+        isDirectLinkUnavailableDueToAccessPolicy || isDirectLinkUnavailableDueToMaliciousContent;
+    const allowDownloadSectionClass = classNames('bdl-AllowDownloadSection', {
+        'bdl-is-disabled': isDirectLinkUnavailable,
+    });
+    const isDirectLinkSectionVisible =
+        (isDirectLinkAvailable || isDirectLinkUnavailableDueToDownloadSettings) && isDownloadEnabled;
+
+    let tooltipMessage = null;
+
+    if (isDirectLinkUnavailableDueToMaliciousContent) {
+        tooltipMessage = { ...messages.directDownloadBlockedByMaliciousContent };
+    } else if (classification) {
+        tooltipMessage = { ...messages.directDownloadBlockedByAccessPolicyWithClassification };
+    } else {
+        tooltipMessage = { ...messages.directDownloadBlockedByAccessPolicyWithoutClassification };
+    }
 
     if (isDownloadAvailable) {
         return (
-            <div>
+            <div className={allowDownloadSectionClass}>
                 <hr />
-                <Fieldset title={<FormattedMessage {...messages.allowDownloadTitle} />}>
-                    <Checkbox
-                        isChecked={isDownloadEnabled}
-                        isDisabled={!canChangeDownload}
-                        label={<FormattedMessage {...messages.allowDownloadLabel} />}
-                        name="isDownloadEnabled"
-                        onChange={onChange}
-                        {...downloadCheckboxProps}
-                    />
-                    {(isDirectLinkAvailable || isDirectLinkUnavailableDueToDownloadSettings) && isDownloadEnabled
-                        ? directLinkSection
-                        : null}
-                </Fieldset>
+                <Tooltip
+                    isDisabled={!isDirectLinkUnavailable}
+                    text={<FormattedMessage {...tooltipMessage} />}
+                    position="middle-left"
+                >
+                    <Fieldset
+                        disabled={isDirectLinkUnavailable}
+                        title={<FormattedMessage {...messages.allowDownloadTitle} />}
+                    >
+                        <Checkbox
+                            isChecked={isDownloadEnabled}
+                            isDisabled={!canChangeDownload || isDirectLinkUnavailable}
+                            label={<FormattedMessage {...messages.allowDownloadLabel} />}
+                            name="isDownloadEnabled"
+                            onChange={onChange}
+                            {...downloadCheckboxProps}
+                        />
+                        {isDirectLinkSectionVisible && directLinkSection}
+                    </Fieldset>
+                </Tooltip>
             </div>
         );
     }
@@ -67,10 +96,13 @@ const AllowDownloadSection = ({
 
 AllowDownloadSection.propTypes = {
     canChangeDownload: PropTypes.bool.isRequired,
+    classification: PropTypes.string,
     directLink: PropTypes.string.isRequired,
     directLinkInputProps: PropTypes.object,
     downloadCheckboxProps: PropTypes.object,
     isDirectLinkAvailable: PropTypes.bool.isRequired,
+    isDirectLinkUnavailableDueToMaliciousContent: PropTypes.bool,
+    isDirectLinkUnavailableDueToAccessPolicy: PropTypes.bool,
     isDirectLinkUnavailableDueToDownloadSettings: PropTypes.bool.isRequired,
     isDownloadAvailable: PropTypes.bool.isRequired,
     isDownloadEnabled: PropTypes.bool.isRequired,

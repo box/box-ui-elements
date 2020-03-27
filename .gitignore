@@ -4,6 +4,7 @@
 .DS_Store
 .idea
 _site
+__diff_output__
 dist
 es
 i18n/*.js
@@ -12,6 +13,7 @@ node_modules
 npm-debug.log
 npm-error.log
 reports
+scripts/rsync.json
 styleguide
 test/screenshots
 test/videos

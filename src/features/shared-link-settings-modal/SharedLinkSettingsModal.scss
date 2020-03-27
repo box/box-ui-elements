@@ -15,7 +15,12 @@
     }
 
     .checkbox-subsection {
+        max-width: 400px;
         margin-left: 0;
+
+        .custom-url-preview {
+            overflow: hidden;
+        }
     }
 
     .vanity-name-section {
@@ -48,4 +53,14 @@
     .link-settings-modal-notice {
         color: $bdl-gray-62;
     }
+}
+
+/** title and classifiction label */
+.bdl-SharedLinkSettingsModal-title {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.bdl-SharedLinkSettingsModal-classification {
+    margin-left: 6px;
 }

@@ -14,9 +14,9 @@
 }
 
 .tbl th {
-    background: $bdl-gray-10;
     color: $bdl-gray;
     font-weight: bold;
+    background: $bdl-gray-10;
 }
 
 .tbl td {
@@ -45,8 +45,8 @@
 
 /* box-ui-elements styles.  TODO: MERGE THIS */
 .table {
-    font-size: inherit;
     width: 100%;
+    font-size: inherit;
 
     // Compact table overrides
     &.is-compact .table-body {
@@ -70,26 +70,26 @@
 }
 
 .table-row {
+    position: relative;
     display: flex;
     height: 52px; // Extra 2px for border box
-    position: relative;
 
     .table-header & {
-        border-bottom: 1px solid $bdl-gray-10;
         height: 40px;
+        border-bottom: 1px solid $bdl-gray-10;
     }
 }
 
 .table-cell {
-    align-content: center;
-    align-items: center;
     display: flex;
     flex: 1;
+    align-content: center;
+    align-items: center;
     min-width: 0; // Tells flexbox to respect overflow
-    overflow: hidden;
     padding: 10px;
-    text-overflow: ellipsis;
+    overflow: hidden;
     white-space: nowrap;
+    text-overflow: ellipsis;
 
     &.is-fixed-width {
         flex: none;
@@ -101,9 +101,9 @@
 
     .table.has-hover-styles &:not(.is-selected):hover,
     .table.has-hover-styles &:not(.is-selected).hover-styles {
+        color: darken($primary-color, 25%);
         background-color: $hover-blue-background;
         border-top: 1px solid $hover-blue-border;
-        color: darken($primary-color, 25%);
 
         & + .table-row:not(.is-selected) {
             border-top: 1px solid $hover-blue-border;
@@ -119,9 +119,9 @@
     }
 
     .table &.is-selected {
+        color: darken($primary-color, 25%);
         background-color: $selected-blue-background;
         border-top: 1px solid $selected-blue-border;
-        color: darken($primary-color, 25%);
 
         a {
             color: inherit;
@@ -146,12 +146,12 @@
         outline: none;
 
         &::before {
-            background-color: $bdl-gray-30;
-            bottom: 0;
-            content: ' ';
             position: absolute;
             top: 0;
+            bottom: 0;
             width: 2px;
+            background-color: $bdl-gray-30;
+            content: ' ';
         }
     }
 
@@ -167,14 +167,14 @@
 // Filter and sortable header styles
 .table-filterable-header,
 .table-sortable-header {
-    appearance: none;
-    background: transparent;
-    border: 0;
-    cursor: pointer;
+    width: 100%;
     height: 100%;
     padding: 0;
     text-align: left;
-    width: 100%;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    appearance: none;
 
     &:focus {
         outline: none;
@@ -188,7 +188,7 @@
         path {
             transform: rotate(0deg);
             transform-origin: 50% 50%;
-            transition: transform $bdl-transition-duration-200ms;
+            transition: transform $bdl-transitionDurationBase;
         }
     }
 }
@@ -210,9 +210,9 @@
 
 // Waypoint loader
 .table-waypoint {
-    cursor: default;
-    outline: 0;
     text-align: center;
+    outline: 0;
+    cursor: default;
 
     .crawler {
         margin: 20px auto;

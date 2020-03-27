@@ -1,10 +1,12 @@
 // @flow
 import * as React from 'react';
+import isEqual from 'lodash/isEqual';
 
 import CustomNewField from './CustomInstanceNewField';
-import CustomField from './fields/CustomField';
+import CustomMetadataField from '../metadata-instance-fields/CustomMetadataField';
 import EmptyContent from './EmptyContent';
-import { FIELD_TYPE_STRING } from './constants';
+import { FIELD_TYPE_STRING } from '../metadata-instance-fields/constants';
+import type { MetadataFieldValue, MetadataFields } from '../../common/types/metadata';
 
 type Props = {
     canEdit: boolean,
@@ -24,19 +26,22 @@ class CustomInstance extends React.PureComponent<Props, State> {
         data: {},
     };
 
+    static getDerivedStateFromProps({ data }: Props, { properties }: State): any {
+        if (!isEqual(data, properties)) {
+            return {
+                properties: { ...data },
+            };
+        }
+
+        return null;
+    }
+
     constructor(props: Props) {
         super(props);
         this.state = {
             isAddFieldVisible: false,
             properties: { ...props.data },
         };
-    }
-
-    componentWillReceiveProps(nextProps: Props) {
-        this.setState({
-            isAddFieldVisible: false,
-            properties: { ...nextProps.data },
-        });
     }
 
     /**
@@ -85,9 +90,9 @@ class CustomInstance extends React.PureComponent<Props, State> {
         const canAddFields = canEdit && (isAddFieldVisible || fields.length === 0);
 
         return (
-            <React.Fragment>
+            <>
                 {fields.map((key, index) => (
-                    <CustomField
+                    <CustomMetadataField
                         key={key}
                         canEdit={canEdit}
                         dataKey={key}
@@ -107,7 +112,7 @@ class CustomInstance extends React.PureComponent<Props, State> {
                         properties={this.props.data}
                     />
                 )}
-            </React.Fragment>
+            </>
         );
     }
 }

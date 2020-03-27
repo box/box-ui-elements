@@ -6,6 +6,7 @@
 
 import React, { Children } from 'react';
 import { IntlProvider } from 'react-intl';
+import type { StringMap } from '../../common/types/core';
 
 type Props = {
     children?: any,
@@ -17,9 +18,8 @@ const Internationalize = ({ language, messages, children }: Props) => {
     const shouldInternationalize: boolean = !!language && !!messages;
 
     if (shouldInternationalize) {
-        const locale = language && language.substr(0, language.indexOf('-'));
         return (
-            <IntlProvider locale={locale} messages={messages}>
+            <IntlProvider locale={language} messages={messages}>
                 {children}
             </IntlProvider>
         );

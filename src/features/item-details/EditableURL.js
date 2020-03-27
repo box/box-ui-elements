@@ -32,9 +32,9 @@ class EditableURL extends React.Component<Props, State> {
         value: this.props.value,
     };
 
-    componentWillReceiveProps(nextProps: Props) {
-        const { value } = nextProps;
-        if (value !== this.props.value) {
+    componentDidUpdate({ value: prevValue }: Props) {
+        const { value } = this.props;
+        if (prevValue !== value) {
             this.setState({ value });
         }
     }

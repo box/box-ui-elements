@@ -5,16 +5,21 @@
  **************************************/
 
 .text-area-container {
-    margin: 0 0 20px;
     position: relative;
+    margin: 0 0 20px;
 
     label {
         display: block;
     }
 
+    .text-area-description {
+        color: $bdl-gray-62;
+        word-wrap: break-word;
+    }
+
     textarea {
-        font-family: inherit;
         margin-top: 5px;
+        font-family: inherit;
     }
 
     &:not(.show-error) {
