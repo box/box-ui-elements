@@ -116,8 +116,13 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     });
 
     test('should show multifile badge if task has multiple files', () => {
-        const wrapper = shallow(<Task currentUser={currentUser} {...taskMultifile} />);
-        expect(wrapper.find('[data-testid="multifile-badge"]')).toHaveLength(1);
+        const wrapper = mount(<Task currentUser={currentUser} {...taskMultifile} />);
+        expect(wrapper.find('[data-testid="multifile-badge"]').hostNodes()).toHaveLength(1);
+    });
+
+    test('should not show multifile badge if task does not have multiple files', () => {
+        const wrapper = mount(<Task currentUser={currentUser} {...task} />);
+        expect(wrapper.find('[data-testid="multifile-badge"]').hostNodes()).toHaveLength(0);
     });
 
     test('should not show due date container if not set', () => {
@@ -182,7 +187,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             const wrapper = shallow(
                 <Task currentUser={currentUser} {...eachTask} isPending={false} onAssignmentUpdate={jest.fn()} />,
             );
-            expect(wrapper.find('.bcs-Task-actionsContainer')).toHaveLength(1);
+            expect(wrapper.find('TaskActions')).toHaveLength(1);
         });
     });
 
@@ -197,7 +202,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                     status="COMPLETED"
                 />,
             );
-            expect(wrapper.find('.bcs-Task-actionsContainer')).toHaveLength(0);
+            expect(wrapper.find('TaskActions')).toHaveLength(0);
         });
     });
 
@@ -211,7 +216,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                     onAssignmentUpdate={jest.fn()}
                 />,
             );
-            expect(wrapper.find('.bcs-Task-actionsContainer')).toHaveLength(0);
+            expect(wrapper.find('TaskActions')).toHaveLength(0);
         });
     });
 
@@ -219,9 +224,9 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         eachTask         | expected
         ${task}          | ${0}
         ${taskMultifile} | ${1}
-    `('should show action for creator of task when task is multifile : $testcase', ({ eachTask, expected }) => {
+    `('should show action for creator of task when task is multifile', ({ eachTask, expected }) => {
         const wrapper = shallow(<Task {...eachTask} currentUser={creatorUser} />);
-        expect(wrapper.find('.bcs-Task-actionsContainer')).toHaveLength(expected);
+        expect(wrapper.find('[data-testid="action-container"]')).toHaveLength(expected);
     });
 
     test('should show actions for task type', () => {
@@ -263,14 +268,17 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
 
     test('should call onView when view-task-details button is clicked for multifile task', () => {
         const onViewSpy = jest.fn();
-        const wrapper = shallow(<Task {...taskMultifile} currentUser={currentUser} onView={onViewSpy} />);
-        wrapper.find('[data-testid="view-details-button"]').simulate('click');
+        const wrapper = mount(<Task {...taskMultifile} currentUser={currentUser} onView={onViewSpy} />);
+        wrapper
+            .find('[data-testid="view-task"]')
+            .hostNodes()
+            .simulate('click');
         expect(onViewSpy).toHaveBeenCalledWith(taskId, false);
     });
 
     test('should not show view-task-details button for multifile task when onView callback is undefined', () => {
-        const wrapper = shallow(<Task {...taskMultifile} currentUser={currentUser} />);
-        expect(wrapper.find('[data-testid="view-details-button"]')).toHaveLength(0);
+        const wrapper = mount(<Task {...taskMultifile} currentUser={currentUser} />);
+        expect(wrapper.find('[data-testid="view-task"]').hostNodes()).toHaveLength(0);
     });
 
     test('should not allow user to delete if the task permissions do not allow it', () => {
