@@ -123,8 +123,10 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       created_at="2018-07-03T14:43:52-07:00"
       created_by={
         Object {
-          "id": 11,
-          "name": "Akon",
+          "target": Object {
+            "id": 11,
+            "name": "Akon",
+          },
         }
       }
       currentUser={

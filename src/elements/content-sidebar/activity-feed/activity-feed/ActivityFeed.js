@@ -45,6 +45,7 @@ type Props = {
     onTaskDelete?: Function,
     onTaskModalClose?: Function,
     onTaskUpdate?: Function,
+    onTaskView?: Function,
     onVersionHistoryClick?: Function,
     translations?: Translations,
 };
@@ -203,6 +204,7 @@ class ActivityFeed extends React.Component<Props, State> {
             onCommentUpdate,
             onTaskDelete,
             onTaskUpdate,
+            onTaskView,
             onTaskAssignmentUpdate,
             onTaskModalClose,
             feedItems,
@@ -259,6 +261,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
                             onTaskDelete={onTaskDelete}
                             onTaskEdit={onTaskUpdate}
+                            onTaskView={onTaskView}
                             onTaskModalClose={onTaskModalClose}
                             onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
                             translations={translations}
