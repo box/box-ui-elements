@@ -47,7 +47,6 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
             expect(wrapper.hasClass('copy-success')).toBe(true);
             expect(textInputComponent.length).toBe(1);
             expect(textInputComponent.prop('readOnly')).toBe(true);
-            expect(textInputComponent.prop('aria-label')).toBe('URL');
             expect(typeof textInputComponent.prop('inputRef')).toBe('function');
             expect(textInputComponent.prop('hideOptionalLabel')).toBe(true);
             expect(textInputComponent.prop('type')).toEqual('text');

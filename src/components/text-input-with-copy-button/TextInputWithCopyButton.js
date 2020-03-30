@@ -215,7 +215,7 @@ class TextInputWithCopyButton extends React.PureComponent<Props, State> {
 
         return (
             <div className={wrapperClasses} {...copyEvent}>
-                <TextInput {...inputProps} onFocus={this.handleFocus} aria-label="URL" />
+                <TextInput {...inputProps} onFocus={this.handleFocus} />
                 {this.renderCopyButton()}
             </div>
         );

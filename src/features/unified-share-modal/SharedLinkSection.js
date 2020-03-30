@@ -71,6 +71,7 @@ class SharedLinkSection extends React.Component<Props> {
             changeSharedLinkPermissionLevel,
             item,
             itemType,
+            intl,
             onDismissTooltip,
             onEmailSharedLinkClick,
             sharedLink,
@@ -128,6 +129,7 @@ class SharedLinkSection extends React.Component<Props> {
                         theme="callout"
                     >
                         <TextInputWithCopyButton
+                            aria-label={intl.formatMessage(messages.sharedLinkURLLabel)}
                             autofocus={autofocusSharedLink}
                             buttonProps={copyButtonProps}
                             className="shared-link-field-container"
