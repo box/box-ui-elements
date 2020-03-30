@@ -3201,6 +3201,14 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
 </div>
 `;
 
+exports[`features/unified-share-modal/UnifiedShareModal render() should render an allShareRestrictionWarning message when it is available 1`] = `
+<div
+  className="test-class"
+>
+  Sharing is prohibited
+</div>
+`;
+
 exports[`features/unified-share-modal/UnifiedShareModal renderCollaboratorAvatars() should filter out current user 1`] = `
 <CollaboratorAvatars
   collaborators={

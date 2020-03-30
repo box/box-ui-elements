@@ -12,6 +12,11 @@ const messages = defineMessages({
             'Tooltip text for when shared permission option is not available due to restriction or classification',
         id: 'boxui.unifiedShare.disabledShareLinkPermission',
     },
+    disabledMaliciousContentShareLinkPermission: {
+        defaultMessage: 'This option isn’t available for this item due to a security policy.',
+        description: 'Tooltip text for when shared permission option is not available due to security policy',
+        id: 'boxui.unifiedShare.disabledMaliciousContentShareLinkPermission',
+    },
     enterAtLeastOneEmailError: {
         defaultMessage: 'Enter at least one valid email',
         description: 'Error message when user tries to send Shared Link as email without entering any recipients',
@@ -164,6 +169,11 @@ const messages = defineMessages({
         defaultMessage: 'You do not have permission to remove the link.',
         description: 'Tooltip description for not having access to remove link',
         id: 'boxui.unifiedShare.removeLinkTooltip',
+    },
+    disabledCreateLinkTooltip: {
+        defaultMessage: 'You do not have permission to create the link.',
+        description: 'Tooltip description for users who do not have permission for link creation',
+        id: 'boxui.unifiedShare.disabledCreateLinkTooltip',
     },
     sendSharedLink: {
         defaultMessage: 'Send Shared Link',

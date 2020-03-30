@@ -177,6 +177,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
     className="shared-link-toggle-row"
   >
     <Tooltip
+      className="usm-disabled-message-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
@@ -518,6 +519,72 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
 </div>
 `;
 
+exports[`features/unified-share-modal/SharedLinkSection should render disabled create shared link message when item share is false and url is empty 1`] = `
+<Tooltip
+  className="usm-disabled-message-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
+  position="top-right"
+  text={
+    <FormattedMessage
+      defaultMessage="You do not have permission to create the link."
+      id="boxui.unifiedShare.disabledCreateLinkTooltip"
+    />
+  }
+  theme="default"
+>
+  <div
+    className="share-toggle-container"
+  >
+    <Toggle
+      isDisabled={true}
+      isOn={false}
+      label={
+        <FormattedMessage
+          defaultMessage="Enable shared link"
+          id="boxui.unifiedShare.linkShareOff"
+        />
+      }
+      name="toggle"
+    />
+  </div>
+</Tooltip>
+`;
+
+exports[`features/unified-share-modal/SharedLinkSection should render disabled remove shared link message when url is not empty and canChangeAccessLevel is false 1`] = `
+<Tooltip
+  className="usm-disabled-message-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
+  position="top-right"
+  text={
+    <FormattedMessage
+      defaultMessage="You do not have permission to remove the link."
+      id="boxui.unifiedShare.removeLinkTooltip"
+    />
+  }
+  theme="default"
+>
+  <div
+    className="share-toggle-container"
+  >
+    <Toggle
+      isDisabled={true}
+      isOn={true}
+      label={
+        <FormattedMessage
+          defaultMessage="Shared link is enabled"
+          id="boxui.unifiedShare.linkShareOn"
+        />
+      }
+      name="toggle"
+    />
+  </div>
+</Tooltip>
+`;
+
 exports[`features/unified-share-modal/SharedLinkSection should render proper dropdown override when viewing an editable box note 1`] = `
 <div>
   <hr />
@@ -535,6 +602,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
     className="shared-link-toggle-row"
   >
     <Tooltip
+      className="usm-disabled-message-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
