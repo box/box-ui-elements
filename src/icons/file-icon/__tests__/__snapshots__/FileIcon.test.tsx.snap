@@ -133,6 +133,34 @@ exports[`icons/file-icon/FileIcon should render the expected icon when extension
 />
 `;
 
+exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 18`] = `
+<FileImage32
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 19`] = `
+<FileImage32
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 20`] = `
+<FileImage32
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/file-icon/FileIcon should render the expected icon when extension is defined 21`] = `
+<FileImage32
+  height={32}
+  width={32}
+/>
+`;
+
 exports[`icons/file-icon/FileIcon should render title when title is defined 1`] = `
 <FileDefault32
   height={32}

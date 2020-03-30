@@ -5,8 +5,8 @@
     right: 20px;
     bottom: 40px;
     z-index: 40;
-    width: 221px;
-    padding: 25px;
+    width: 220px;
+    padding: 16px;
     background-color: $white;
     border: solid 1px $bdl-gray-02;
     border-radius: $bdl-border-radius-size;
@@ -17,11 +17,16 @@
     }
 }
 
-.bdl-Nudge-button button {
-    width: 100%;
-    margin: 0;
-    line-height: 15px;
-    white-space: normal;
+.bdl-Nudge-button {
+    margin: 0 8px 8px;
+
+    button {
+        width: 100%;
+        margin: 0;
+        font-weight: bold;
+        line-height: 15px;
+        white-space: normal;
+    }
 }
 
 .bdl-Nudge-closeButton.btn {
@@ -32,14 +37,19 @@
 }
 
 .bdl-Nudge-header {
-    margin-bottom: 15px;
-    font-size: 22px;
+    margin: 0 8px 8px;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 24px;
 }
 
 .bdl-Nudge-content {
-    margin-bottom: 30px;
+    margin: 8px 8px 24px;
+    color: $bdl-gray-80;
+    font-size: 13px;
+    line-height: 20px;
 }
 
 .bdl-Nudge-illustration {
-    margin-bottom: 20px;
+    margin: 24px;
 }
