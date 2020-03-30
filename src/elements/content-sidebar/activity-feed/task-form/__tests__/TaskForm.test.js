@@ -7,9 +7,20 @@ import { TaskFormUnwrapped as TaskForm } from '..';
 import commonMessages from '../../../../../common/messages';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
-jest.mock('../../../../../components/date-picker/DatePicker', () => props => (
-    <input type="date" {...props} {...props.inputProps} /> // eslint-disable-line react/prop-types
-));
+jest.mock('../../../../../components/date-picker/DatePicker', () => props => {
+    // only spread `input` attritutes to the input field
+    const { name, value = '', className, onChange, placeholder } = props;
+    const localInputProps = {
+        name,
+        value,
+        className,
+        onChange,
+        placeholder,
+    };
+    return (
+        <input type="date" {...localInputProps} {...props.inputProps} /> // eslint-disable-line react/prop-types
+    );
+});
 
 const mockIntl = {
     formatMessage: message => message.defaultMessage,
@@ -21,7 +32,6 @@ const render = props =>
 const defaultFeatures = {
     activityFeed: {
         tasks: {
-            anyTask: true,
             assignToGroup: false,
         },
     },
@@ -390,6 +400,71 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             },
         );
 
+        test.each`
+            numGroupAssignees | shouldShowCheckbox | checkBoxDisabled
+            ${0}              | ${false}           | ${undefined}
+            ${1}              | ${true}            | ${false}
+            ${2}              | ${true}            | ${false}
+        `(
+            'checkbox should be shown correctly when number of group assignees is $numGroupAssignees',
+            ({ numGroupAssignees, shouldShowCheckbox, checkBoxDisabled }) => {
+                const approvers = new Array(numGroupAssignees).fill().map(() => ({
+                    id: '',
+                    target: {
+                        id: 123 * Math.random(),
+                        name: 'abc',
+                        type: 'group',
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                    status: 'NOT_STARTED',
+                    permissions: { can_delete: false, can_update: false },
+                }));
+                const wrapper = renderWithFeatures({ approvers });
+                const container = wrapper.render();
+                const checkbox = container.find('[data-testid="task-form-completion-rule-checkbox"]');
+
+                expect(checkbox.length === 1).toBe(shouldShowCheckbox);
+                expect(checkbox.prop('disabled')).toBe(checkBoxDisabled);
+            },
+        );
+
+        test('should enable checkbox when there is one type of each assignee', () => {
+            const approvers = [
+                {
+                    id: '',
+                    target: {
+                        id: 123 * Math.random(),
+                        name: 'abc',
+                        type: 'group',
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                    status: 'NOT_STARTED',
+                    permissions: { can_delete: false, can_update: false },
+                },
+                {
+                    id: '',
+                    target: {
+                        id: 123 * Math.random(),
+                        name: 'abc',
+                        type: 'user',
+                    },
+                    role: 'ASSIGNEE',
+                    type: 'task_collaborator',
+                    status: 'NOT_STARTED',
+                    permissions: { can_delete: false, can_update: false },
+                },
+            ];
+
+            const wrapper = renderWithFeatures({ approvers });
+            const container = wrapper.render();
+            const checkbox = container.find('[data-testid="task-form-completion-rule-checkbox"]');
+
+            expect(checkbox.length === 1).toBe(true);
+            expect(checkbox.prop('disabled')).toBe(false);
+        });
+
         test('should call createTask with any assignee param when checkbox is checked', () => {
             const createTaskSpy = jest.fn();
             const message = 'hey';
@@ -446,14 +521,12 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
         });
 
         test.each`
-            anyTaskFeature | assignToGroupFeature | numCheckboxes | checkboxTestId
-            ${false}       | ${false}             | ${0}          | ${'task-form-completion-rule-checkbox'}
-            ${false}       | ${true}              | ${0}          | ${'task-form-completion-rule-checkbox-group'}
-            ${true}        | ${false}             | ${1}          | ${'task-form-completion-rule-checkbox'}
-            ${true}        | ${true}              | ${1}          | ${'task-form-completion-rule-checkbox-group'}
+            assignToGroupFeature | numCheckboxes | checkboxTestId
+            ${false}             | ${1}          | ${'task-form-completion-rule-checkbox'}
+            ${true}              | ${1}          | ${'task-form-completion-rule-checkbox-group'}
         `(
             'Given 3 approvers, $numCheckboxes checkboxes are shown when any task is $anyTaskFeature and assign to group is $assignToGroupFeature (using test id $checkboxTestId)',
-            ({ anyTaskFeature, assignToGroupFeature, numCheckboxes, checkboxTestId }) => {
+            ({ assignToGroupFeature, numCheckboxes, checkboxTestId }) => {
                 const approvers = new Array(3).fill().map(() => ({
                     id: '',
                     target: {
@@ -473,7 +546,6 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
                     {
                         activityFeed: {
                             tasks: {
-                                anyTask: anyTaskFeature,
                                 assignToGroup: assignToGroupFeature,
                             },
                         },

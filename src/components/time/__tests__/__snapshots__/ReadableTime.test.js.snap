@@ -1,104 +1,39 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/time/ReadableTime should render two days ago with format "mm dd at hh:mm" when we show the time 1`] = `
-<FormattedMessage
-  defaultMessage="{date} at {time, time, short}"
-  id="boxui.readableTime.eventTimeDateShort"
-  values={
-    Object {
-      "date": <FormattedDate
-        day="numeric"
-        month="short"
-        value={1506378656000}
-      />,
-      "time": 1506378656000,
-      "weekday": null,
-    }
-  }
-/>
-`;
+exports[`components/time/ReadableTime should use default relative threshold if not provided 1`] = `"in 1,800,000 seconds"`;
 
-exports[`components/time/ReadableTime should render two days ago with format "mm dd" 1`] = `
-<FormattedDate
-  day="numeric"
-  month="short"
-  value={1506378656000}
-/>
-`;
+exports[`components/time/ReadableTime timestamp: ms1HourInFuture | allowFutureTimestamps: false | alwaysShowTime: false | showWeekday: false | Today at hh:mm 1`] = `"3,600,000 seconds ago"`;
 
-exports[`components/time/ReadableTime should render with distant past format "mm dd yy at hh:mm" 1`] = `
-<FormattedMessage
-  defaultMessage="{time, date, medium}"
-  id="boxui.readableTime.eventTime"
-  values={
-    Object {
-      "date": null,
-      "time": 946627200000,
-      "weekday": null,
-    }
-  }
-/>
-`;
+exports[`components/time/ReadableTime timestamp: ms1HourInFuture | allowFutureTimestamps: false | alwaysShowTime: false | showWeekday: false | Today at hh:mm: uppercase 1`] = `"3,600,000 SECONDS AGO"`;
 
-exports[`components/time/ReadableTime should render with format "30 minutes ago" when timestamp is within relative threshold (behind) 1`] = `
-<FormattedRelative
-  value={1506549656000}
-/>
-`;
+exports[`components/time/ReadableTime timestamp: msBeginningOfCenturyTime | allowFutureTimestamps: true | alwaysShowTime: false | showWeekday: false | mm dd yy at hh:mm 1`] = `"Dec 31, 1999"`;
 
-exports[`components/time/ReadableTime should render with format "Today at hh:mm" when \`allowFutureTimestamps\` is false 1`] = `
-<FormattedRelative
-  value={1506547856000}
-/>
-`;
+exports[`components/time/ReadableTime timestamp: msBeginningOfCenturyTime | allowFutureTimestamps: true | alwaysShowTime: false | showWeekday: false | mm dd yy at hh:mm: uppercase 1`] = `"DEC 31, 1999"`;
 
-exports[`components/time/ReadableTime should render with format "Today at hh:mm" when there is a future time stamp 1`] = `
-<FormattedMessage
-  defaultMessage="Today at {time, time, short}"
-  id="boxui.readableTime.eventTimeToday"
-  values={
-    Object {
-      "date": null,
-      "time": 1506558656000,
-      "weekday": null,
-    }
-  }
-/>
-`;
+exports[`components/time/ReadableTime timestamp: msTwoDaysAgo | allowFutureTimestamps: true | alwaysShowTime: false | showWeekday: false | mm dd 1`] = `"Sep 25"`;
 
-exports[`components/time/ReadableTime should render with format "Yesterday at hh:mm" 1`] = `
-<FormattedMessage
-  defaultMessage="Yesterday at {time, time, short}"
-  id="boxui.readableTime.eventTimeYesterday"
-  values={
-    Object {
-      "date": null,
-      "time": 1506465056000,
-      "weekday": null,
-    }
-  }
-/>
-`;
+exports[`components/time/ReadableTime timestamp: msTwoDaysAgo | allowFutureTimestamps: true | alwaysShowTime: false | showWeekday: false | mm dd: uppercase 1`] = `"SEP 25"`;
 
-exports[`components/time/ReadableTime should render with format "in 30 minutes" when timestamp is within relative threshold (ahead) 1`] = `
-<FormattedRelative
-  value={1506553256000}
-/>
-`;
+exports[`components/time/ReadableTime timestamp: msTwoDaysAgo | allowFutureTimestamps: true | alwaysShowTime: false | showWeekday: true | Weekday 1`] = `"Monday, Sep 25, 2017"`;
 
-exports[`components/time/ReadableTime should render with weekday when we show weekday 1`] = `
-<FormattedMessage
-  defaultMessage="{weekday}, {time, date, medium}"
-  id="boxui.readableTime.eventTimeWeekdayLong"
-  values={
-    Object {
-      "date": null,
-      "time": 1506378656000,
-      "weekday": <FormattedDate
-        value={1506378656000}
-        weekday="long"
-      />,
-    }
-  }
-/>
-`;
+exports[`components/time/ReadableTime timestamp: msTwoDaysAgo | allowFutureTimestamps: true | alwaysShowTime: false | showWeekday: true | Weekday: uppercase 1`] = `"MONDAY, SEP 25, 2017"`;
+
+exports[`components/time/ReadableTime timestamp: msTwoDaysAgo | allowFutureTimestamps: true | alwaysShowTime: true | showWeekday: false | mm dd at hh:mm when we show the time 1`] = `"Sep 25 at 3:30 PM"`;
+
+exports[`components/time/ReadableTime timestamp: msTwoDaysAgo | allowFutureTimestamps: true | alwaysShowTime: true | showWeekday: false | mm dd at hh:mm when we show the time: uppercase 1`] = `"SEP 25 AT 3:30 PM"`;
+
+exports[`components/time/ReadableTime timestamp: relativeThreshold * 2 + now | allowFutureTimestamps: true | alwaysShowTime: false | showWeekday: false | Today at hh:mm 1`] = `"Today at 5:30 PM"`;
+
+exports[`components/time/ReadableTime timestamp: relativeThreshold * 2 + now | allowFutureTimestamps: true | alwaysShowTime: false | showWeekday: false | Today at hh:mm: uppercase 1`] = `"TODAY AT 5:30 PM"`;
+
+exports[`components/time/ReadableTime timestamp: withinRelativeThresholdAhead | allowFutureTimestamps: true | alwaysShowTime: false | showWeekday: false | in 30 minutes 1`] = `"in 1,800,000 seconds"`;
+
+exports[`components/time/ReadableTime timestamp: withinRelativeThresholdAhead | allowFutureTimestamps: true | alwaysShowTime: false | showWeekday: false | in 30 minutes: uppercase 1`] = `"IN 1,800,000 SECONDS"`;
+
+exports[`components/time/ReadableTime timestamp: withinRelativeThresholdBehind | allowFutureTimestamps: true | alwaysShowTime: false | showWeekday: false | 30 minutes ago 1`] = `"1,800,000 seconds ago"`;
+
+exports[`components/time/ReadableTime timestamp: withinRelativeThresholdBehind | allowFutureTimestamps: true | alwaysShowTime: false | showWeekday: false | 30 minutes ago: uppercase 1`] = `"1,800,000 SECONDS AGO"`;
+
+exports[`components/time/ReadableTime timestamp: yesterday | allowFutureTimestamps: true | alwaysShowTime: false | showWeekday: false | Yesterday at hh:mm 1`] = `"Yesterday at 3:30 PM"`;
+
+exports[`components/time/ReadableTime timestamp: yesterday | allowFutureTimestamps: true | alwaysShowTime: false | showWeekday: false | Yesterday at hh:mm: uppercase 1`] = `"YESTERDAY AT 3:30 PM"`;

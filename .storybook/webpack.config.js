@@ -2,16 +2,16 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpackConf = require('../scripts/webpack.config.js');
 
+const shouldIncludeAllSupportedBrowsers =
+    process.env.NODE_ENV === 'production' || process.env.BROWSERSLIST_ENV === 'production';
 const language = process.env.LANGUAGE;
 const webpackConfig = Array.isArray(webpackConf) ? webpackConf[0] : webpackConf;
-const locale = language ? language.substr(0, language.indexOf('-')) : 'en';
 
 module.exports = async ({ config }) => {
     config.plugins = [...webpackConfig.plugins, ...config.plugins];
     config.resolve.extensions = [...config.resolve.extensions, ...webpackConfig.resolve.extensions];
     config.resolve.alias = {
         ...config.resolve.alias,
-        'react-intl-locale-data': path.resolve(`node_modules/react-intl/locale-data/${locale}`),
         'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
     };
     config.module.rules.push(
@@ -20,13 +20,33 @@ module.exports = async ({ config }) => {
             use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
         },
         {
-            test: /\.(ts|tsx)$/,
+            test: /\.tsx?$/,
             exclude: /node_modules/,
-            use: [
-                { loader: 'babel-loader' },
-                { loader: 'react-docgen-typescript-loader' }
-            ]
+            use: [{ loader: 'babel-loader' }, { loader: 'react-docgen-typescript-loader' }],
+        },
+        {
+            test: /\.(js?|ts?)$/,
+            exclude: /node_modules\/(?!(box-annotations)\/).*/,
+            loader: 'source-map-loader',
+            enforce: 'pre',
         },
     );
+    if (shouldIncludeAllSupportedBrowsers) {
+        config.module.rules.push({
+            test: /\.(js|ts|tsx)$/,
+            include: [
+                /node_modules\/@hapi\/address/,
+                /node_modules\/react-intl/,
+                /node_modules\/intl-messageformat-parser/,
+                /node_modules\/intl-messageformat/,
+            ],
+            loader: 'babel-loader',
+            options: {
+                babelrc: false,
+                compact: false,
+                configFile: path.resolve('babel.config.js'),
+            },
+        });
+    }
     return config;
 };

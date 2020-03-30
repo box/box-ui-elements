@@ -35,7 +35,7 @@ const PermissionMenu = (props: Props) => {
         <DropdownMenu>
             <PlainButton
                 className={classNames('lnk', {
-                    'is-disabled': submitting,
+                    'is-disabled bdl-is-disabled': submitting,
                 })}
                 disabled={submitting}
             >

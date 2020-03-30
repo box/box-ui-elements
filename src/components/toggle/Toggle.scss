@@ -15,7 +15,7 @@
     }
 }
 
-.toggle {
+.bdl-Toggle {
     display: none;
 
     &,
@@ -206,4 +206,12 @@ $width: $height * 2;
             border-color: $primary-color;
         }
     }
+}
+
+/*
+* Section below is for bdl-namespace backwards compatibility.
+* Do not add changes below this line.
+*/
+.toggle {
+    @extend .bdl-Toggle;
 }

@@ -2,7 +2,7 @@
 ```jsx
 var ContentPicker = require('./ContentPicker').default;
 
-<IntlProvider locale="en" textComponent={React.Fragment}>
+<IntlProvider locale="en">
     <ContentPicker
         features={FEATURES}
         rootFolderId={FOLDER_ID}

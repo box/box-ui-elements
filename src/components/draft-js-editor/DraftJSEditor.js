@@ -87,7 +87,7 @@ class DraftJSEditor extends React.Component<Props> {
 
         const classes = classNames({
             'draft-js-editor': true,
-            'is-disabled': isDisabled,
+            'is-disabled bdl-is-disabled': isDisabled,
             'show-error': !!error,
         });
 

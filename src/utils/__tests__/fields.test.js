@@ -54,6 +54,7 @@ import {
     FIELD_STATUS,
     FIELD_RESTORED_FROM,
     FIELD_RETENTION,
+    FIELD_URL,
     PLACEHOLDER_USER,
 } from '../../constants';
 
@@ -77,6 +78,7 @@ describe('util/fields', () => {
             FIELD_AUTHENTICATED_DOWNLOAD_URL,
             FIELD_IS_DOWNLOAD_AVAILABLE,
             FIELD_REPRESENTATIONS,
+            FIELD_URL,
         ]);
     });
 

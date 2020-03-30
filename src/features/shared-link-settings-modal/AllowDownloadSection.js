@@ -19,6 +19,7 @@ const AllowDownloadSection = ({
     isDirectLinkAvailable,
     isDirectLinkUnavailableDueToDownloadSettings,
     isDirectLinkUnavailableDueToAccessPolicy,
+    isDirectLinkUnavailableDueToMaliciousContent,
     isDownloadAvailable,
     isDownloadEnabled,
     onChange,
@@ -38,33 +39,40 @@ const AllowDownloadSection = ({
             />
         </div>
     );
-
-    const tooltipMessage = classification
-        ? { ...messages.directDownloadBlockedByAccessPolicyWithClassification }
-        : { ...messages.directDownloadBlockedByAccessPolicyWithoutClassification };
-
+    const isDirectLinkUnavailable =
+        isDirectLinkUnavailableDueToAccessPolicy || isDirectLinkUnavailableDueToMaliciousContent;
     const allowDownloadSectionClass = classNames('bdl-AllowDownloadSection', {
-        'bdl-is-disabled': isDirectLinkUnavailableDueToAccessPolicy,
+        'bdl-is-disabled': isDirectLinkUnavailable,
     });
     const isDirectLinkSectionVisible =
         (isDirectLinkAvailable || isDirectLinkUnavailableDueToDownloadSettings) && isDownloadEnabled;
+
+    let tooltipMessage = null;
+
+    if (isDirectLinkUnavailableDueToMaliciousContent) {
+        tooltipMessage = { ...messages.directDownloadBlockedByMaliciousContent };
+    } else if (classification) {
+        tooltipMessage = { ...messages.directDownloadBlockedByAccessPolicyWithClassification };
+    } else {
+        tooltipMessage = { ...messages.directDownloadBlockedByAccessPolicyWithoutClassification };
+    }
 
     if (isDownloadAvailable) {
         return (
             <div className={allowDownloadSectionClass}>
                 <hr />
                 <Tooltip
-                    isDisabled={!isDirectLinkUnavailableDueToAccessPolicy}
+                    isDisabled={!isDirectLinkUnavailable}
                     text={<FormattedMessage {...tooltipMessage} />}
                     position="middle-left"
                 >
                     <Fieldset
-                        disabled={isDirectLinkUnavailableDueToAccessPolicy}
+                        disabled={isDirectLinkUnavailable}
                         title={<FormattedMessage {...messages.allowDownloadTitle} />}
                     >
                         <Checkbox
                             isChecked={isDownloadEnabled}
-                            isDisabled={!canChangeDownload || isDirectLinkUnavailableDueToAccessPolicy}
+                            isDisabled={!canChangeDownload || isDirectLinkUnavailable}
                             label={<FormattedMessage {...messages.allowDownloadLabel} />}
                             name="isDownloadEnabled"
                             onChange={onChange}
@@ -88,11 +96,12 @@ const AllowDownloadSection = ({
 
 AllowDownloadSection.propTypes = {
     canChangeDownload: PropTypes.bool.isRequired,
-    classification: PropTypes.object,
+    classification: PropTypes.string,
     directLink: PropTypes.string.isRequired,
     directLinkInputProps: PropTypes.object,
     downloadCheckboxProps: PropTypes.object,
     isDirectLinkAvailable: PropTypes.bool.isRequired,
+    isDirectLinkUnavailableDueToMaliciousContent: PropTypes.bool,
     isDirectLinkUnavailableDueToAccessPolicy: PropTypes.bool,
     isDirectLinkUnavailableDueToDownloadSettings: PropTypes.bool.isRequired,
     isDownloadAvailable: PropTypes.bool.isRequired,

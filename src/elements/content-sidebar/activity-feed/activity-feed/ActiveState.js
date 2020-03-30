@@ -34,6 +34,7 @@ type Props = {
     onTaskDelete?: Function,
     onTaskEdit?: Function,
     onTaskModalClose?: Function,
+    onTaskView?: Function,
     onVersionInfo?: Function,
     translations?: Translations,
 };
@@ -52,6 +53,7 @@ const ActiveState = ({
     onCommentEdit,
     onTaskDelete,
     onTaskEdit,
+    onTaskView,
     onTaskAssignmentUpdate,
     onTaskModalClose,
     onVersionInfo,
@@ -112,6 +114,7 @@ const ActiveState = ({
                                     onAssignmentUpdate={onTaskAssignmentUpdate}
                                     onDelete={onTaskDelete}
                                     onEdit={onTaskEdit}
+                                    onView={onTaskView}
                                     onModalClose={onTaskModalClose}
                                     translations={translations}
                                 />

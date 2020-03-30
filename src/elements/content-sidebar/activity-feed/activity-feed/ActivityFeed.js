@@ -45,6 +45,7 @@ type Props = {
     onTaskDelete?: Function,
     onTaskModalClose?: Function,
     onTaskUpdate?: Function,
+    onTaskView?: Function,
     onVersionHistoryClick?: Function,
     translations?: Translations,
 };
@@ -203,6 +204,7 @@ class ActivityFeed extends React.Component<Props, State> {
             onCommentUpdate,
             onTaskDelete,
             onTaskUpdate,
+            onTaskView,
             onTaskAssignmentUpdate,
             onTaskModalClose,
             feedItems,
@@ -257,10 +259,9 @@ class ActivityFeed extends React.Component<Props, State> {
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
-                            // We don't know task edit/delete specific permissions,
-                            // but you must at least be able to comment to do these operations.
-                            onTaskDelete={hasCommentPermission ? onTaskDelete : noop}
-                            onTaskEdit={hasCommentPermission ? onTaskUpdate : noop}
+                            onTaskDelete={onTaskDelete}
+                            onTaskEdit={onTaskUpdate}
+                            onTaskView={onTaskView}
                             onTaskModalClose={onTaskModalClose}
                             onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
                             translations={translations}

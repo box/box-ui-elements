@@ -12,12 +12,13 @@
         border-radius: 100%;
 
         img {
+            @include bdl-transition($bdl-transitionDurationBase * 2, transform);
+
             width: 45px;
             height: 45px;
             object-fit: cover;
             vertical-align: middle;
             filter: brightness(1.5);
-            transition: transform .3s;
         }
 
         .icon-minus {

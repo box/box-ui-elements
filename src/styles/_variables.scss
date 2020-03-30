@@ -7,5 +7,6 @@
 @import './deprecated'; // <<< Deprecated
 
 // Mixins
+@import './mixins/animation';
 @import './mixins/layout';
 @import './mixins/typography';

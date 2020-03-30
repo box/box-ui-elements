@@ -1,11 +1,7 @@
 // @flow
 
-'no babel-plugin-flow-react-proptypes';
-
-// turn off this plugin because it breaks the IntlShape flow type
 import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import type { IntlShape } from 'react-intl';
 
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
 import { Modal } from '../../components/modal';
@@ -45,6 +41,8 @@ const INVITE_COLLABS_CONTACTS_TYPE = 'inviteCollabsContacts';
 const EMAIL_SHARED_LINK_CONTACTS_TYPE = 'emailSharedLinkContacts';
 
 type Props = {
+    /** Inline message for the USM modal */
+    allShareRestrictionWarning?: React.Node,
     /** Flag to determine whether to enable invite collaborators section */
     canInvite: boolean,
     /** Handler function that changes shared link access level */
@@ -73,7 +71,7 @@ type Props = {
     getSharedLinkContacts: (query: string) => Promise<Array<Contact>>,
     /** An array of initially selected contacts. If none are initially selected, an empty array. */
     initiallySelectedContacts: Array<Contact>,
-    intl: IntlShape,
+    intl: any,
     /** An array of invitee permissions */
     inviteePermissions: Array<InviteePermissions>,
     /** Flag to set whether the unified share modal is open */
@@ -663,6 +661,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
             showSharedLinkSettingsCallout = false,
             submitting,
             tooltips = {},
+            allShareRestrictionWarning,
             ...rest
         } = this.props;
         const {
@@ -689,6 +688,13 @@ class UnifiedShareModal extends React.Component<Props, State> {
             showCollaboratorList,
         } = this.state;
 
+        // Only show the restriction warning on the main page of the USM where the email and share link option is available
+        const showShareRestrictionWarning =
+            !isEmailLinkSectionExpanded &&
+            !isInviteSectionExpanded &&
+            !showCollaboratorList &&
+            allShareRestrictionWarning;
+
         // focus logic at modal level
         const extendedModalProps = {
             focusElementSelector: canInvite
@@ -713,6 +719,8 @@ class UnifiedShareModal extends React.Component<Props, State> {
                     {...extendedModalProps}
                 >
                     <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
+                        {showShareRestrictionWarning && allShareRestrictionWarning}
+
                         {!isEmailLinkSectionExpanded && !showCollaboratorList && this.renderInviteSection()}
 
                         {!isEmailLinkSectionExpanded && !isInviteSectionExpanded && !showCollaboratorList && (

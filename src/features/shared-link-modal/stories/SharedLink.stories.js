@@ -30,7 +30,7 @@ export const basic = () => {
     return (
         <State store={componentStore}>
             {state => (
-                <IntlProvider locale="en" textComponent={React.Fragment}>
+                <IntlProvider locale="en">
                     <Flyout
                         className="shared-link-flyout"
                         closeOnClick={boolean('closeOnClick', false)}

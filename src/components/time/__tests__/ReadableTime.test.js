@@ -1,9 +1,15 @@
 import React from 'react';
 import sinon from 'sinon';
+import 'full-icu';
+import { createIntl } from 'react-intl';
+import russianMessages from '../../../../i18n/ru-RU.js';
+import japaneseMessages from '../../../../i18n/ja-JP.js';
 
-import { ReadableTime } from '..';
+import { ReadableTimeComponent as ReadableTime } from '../ReadableTime';
 
+jest.unmock('react-intl');
 const sandbox = sinon.sandbox.create();
+const intl = createIntl({ locale: 'en' });
 
 describe('components/time/ReadableTime', () => {
     const TEST_TIMESTAMP = 1506551456000; // Some random timestamp [09/27/2017 @ 10:33pm (UTC)]
@@ -31,114 +37,63 @@ describe('components/time/ReadableTime', () => {
     const withinRelativeThresholdAhead = now + relativeThreshold / 2;
     const withinRelativeThresholdBehind = now - relativeThreshold / 2;
 
-    [
-        // {
-        //     timestamp: now,
-        //     hasFormattedRelativeComp: true,
-        //     hasFormattedMessageComp: false,
-        //     expectedValue: now,
-        // },
-        // {
-        //     timestamp: ms10SecsAgo,
-        //     hasFormattedRelativeComp: true,
-        //     hasFormattedMessageComp: false,
-        //     expectedValue: ms10SecsAgo,
-        // },
-        // {
-        //     timestamp: ms10MinsAgo,
-        //     hasFormattedRelativeComp: true,
-        //     hasFormattedMessageComp: false,
-        //     expectedValue: ms10MinsAgo,
-        // },
-        {
-            timestamp: msYesterday,
-            hasFormattedRelativeComp: false,
-            hasFormattedMessageComp: true,
-            expectedValue: 'Yesterday at {time, time, short}',
-        },
-        {
-            timestamp: msBeginningOfCenturyTime,
-            hasFormattedRelativeComp: false,
-            hasFormattedMessageComp: true,
-            expectedValue: '{time, date, medium}',
-        },
-    ].forEach(({ timestamp, hasFormattedRelativeComp, hasFormattedMessageComp, expectedValue }) => {
-        test('should render comment posted time when component is rendered with different times', () => {
-            const wrapper = shallow(<ReadableTime relativeThreshold={oneHourInMs} timestamp={timestamp} />);
+    test.each`
+        timestamp                        | timestampName                      | allowFutureTimestamps | alwaysShowTime | showWeekday | description
+        ${msYesterday}                   | ${'yesterday'}                     | ${true}               | ${false}       | ${false}    | ${'Yesterday at hh:mm'}
+        ${msBeginningOfCenturyTime}      | ${'msBeginningOfCenturyTime'}      | ${true}               | ${false}       | ${false}    | ${'mm dd yy at hh:mm'}
+        ${msTwoDaysAgo}                  | ${'msTwoDaysAgo'}                  | ${true}               | ${false}       | ${false}    | ${'mm dd'}
+        ${msTwoDaysAgo}                  | ${'msTwoDaysAgo'}                  | ${true}               | ${true}        | ${false}    | ${'mm dd at hh:mm when we show the time'}
+        ${msTwoDaysAgo}                  | ${'msTwoDaysAgo'}                  | ${true}               | ${false}       | ${true}     | ${'Weekday'}
+        ${relativeThreshold * 2 + now}   | ${'relativeThreshold * 2 + now'}   | ${true}               | ${false}       | ${false}    | ${'Today at hh:mm'}
+        ${ms1HourInFuture}               | ${'ms1HourInFuture'}               | ${false}              | ${false}       | ${false}    | ${'Today at hh:mm'}
+        ${withinRelativeThresholdAhead}  | ${'withinRelativeThresholdAhead'}  | ${true}               | ${false}       | ${false}    | ${'in 30 minutes'}
+        ${withinRelativeThresholdBehind} | ${'withinRelativeThresholdBehind'} | ${true}               | ${false}       | ${false}    | ${'30 minutes ago'}
+    `(
+        'timestamp: $timestampName | allowFutureTimestamps: $allowFutureTimestamps | alwaysShowTime: $alwaysShowTime | showWeekday: $showWeekday | $description',
+        ({ timestamp, allowFutureTimestamps = true, alwaysShowTime = false, showWeekday = false }) => {
+            const wrapper = mount(
+                <ReadableTime
+                    intl={intl}
+                    allowFutureTimestamps={allowFutureTimestamps}
+                    alwaysShowTime={alwaysShowTime}
+                    relativeThreshold={oneHourInMs}
+                    showWeekday={showWeekday}
+                    timestamp={timestamp}
+                />,
+            );
 
-            expect(wrapper.find('FormattedRelative').length === 1).toEqual(hasFormattedRelativeComp);
-            expect(wrapper.find('FormattedMessage').length === 1).toEqual(hasFormattedMessageComp);
-
-            if (hasFormattedRelativeComp) {
-                expect(wrapper.find('FormattedRelative').prop('value')).toEqual(expectedValue);
-            } else {
-                expect(wrapper.find('FormattedMessage').prop('defaultMessage')).toEqual(expectedValue);
-            }
-        });
-    });
-    [
-        {
-            description: 'should render with format "Yesterday at hh:mm"',
-            timestamp: msYesterday,
-        },
-        {
-            description: 'should render with distant past format "mm dd yy at hh:mm"',
-            timestamp: msBeginningOfCenturyTime,
-        },
-        {
-            description: 'should render two days ago with format "mm dd"',
-            timestamp: msTwoDaysAgo,
-        },
-        {
-            description: 'should render two days ago with format "mm dd at hh:mm" when we show the time',
-            timestamp: msTwoDaysAgo,
-            alwaysShowTime: true,
-        },
-        {
-            description: 'should render with weekday when we show weekday',
-            timestamp: msTwoDaysAgo,
-            showWeekday: true,
-        },
-        {
-            description: 'should render with format "Today at hh:mm" when there is a future time stamp',
-            timestamp: relativeThreshold * 2 + now,
-        },
-        {
-            description: 'should render with format "Today at hh:mm" when `allowFutureTimestamps` is false',
-            timestamp: ms1HourInFuture,
-            allowFutureTimestamps: false,
-        },
-        {
-            description:
-                'should render with format "in 30 minutes" when timestamp is within relative threshold (ahead)',
-            timestamp: withinRelativeThresholdAhead,
-        },
-        {
-            description:
-                'should render with format "30 minutes ago" when timestamp is within relative threshold (behind)',
-            timestamp: withinRelativeThresholdBehind,
-        },
-    ].forEach(
-        ({ description, timestamp, allowFutureTimestamps = true, alwaysShowTime = false, showWeekday = false }) => {
-            test(description, () => {
-                const wrapper = shallow(
-                    <ReadableTime
-                        allowFutureTimestamps={allowFutureTimestamps}
-                        alwaysShowTime={alwaysShowTime}
-                        relativeThreshold={oneHourInMs}
-                        showWeekday={showWeekday}
-                        timestamp={timestamp}
-                    />,
-                );
-
-                expect(wrapper).toMatchSnapshot();
-            });
+            expect(wrapper.children()).toMatchSnapshot();
+            wrapper.setProps({ uppercase: true });
+            expect(wrapper.children()).toMatchSnapshot('uppercase');
         },
     );
 
     test('should use default relative threshold if not provided', () => {
-        const wrapper = shallow(<ReadableTime timestamp={withinRelativeThresholdAhead} />);
+        const wrapper = shallow(<ReadableTime intl={intl} timestamp={withinRelativeThresholdAhead} />);
+        expect(wrapper).toMatchSnapshot();
+    });
+    test('should not uppercase locales that do not have uppercase grammar (e.g. russian)', () => {
+        const ruIntl = createIntl({ locale: 'ru', messages: russianMessages });
 
-        expect(wrapper.find('FormattedRelative')).toHaveLength(1);
+        const wrapperUppercase = mount(
+            <ReadableTime intl={ruIntl} timestamp={withinRelativeThresholdAhead} uppercase />,
+        );
+        const wrapperLowercase = mount(
+            <ReadableTime intl={ruIntl} timestamp={withinRelativeThresholdAhead} uppercase={false} />,
+        );
+
+        expect(wrapperUppercase.text()).toEqual(wrapperLowercase.text());
+    });
+    test('CJK languages should look the same for uppercase and lowercase (e.g. japanese)', () => {
+        const jaIntl = createIntl({ locale: 'ja', messages: japaneseMessages });
+
+        const wrapperUppercaseJa = mount(
+            <ReadableTime intl={jaIntl} timestamp={withinRelativeThresholdAhead} uppercase />,
+        );
+        const wrapperLowercaseJa = mount(
+            <ReadableTime intl={jaIntl} timestamp={withinRelativeThresholdAhead} uppercase={false} />,
+        );
+
+        expect(wrapperUppercaseJa.text()).toEqual(wrapperLowercaseJa.text());
     });
 });

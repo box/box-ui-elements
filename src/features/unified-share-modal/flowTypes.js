@@ -55,8 +55,10 @@ export type inviteePermissionType = {
 export type item = {
     bannerPolicy?: {
         body: string,
+        colorID?: number,
         title: string,
     },
+    canUserSeeClassification: boolean,
     classification?: string,
     description: string,
     extension: string,

@@ -156,7 +156,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '2.32.2';
+export const DEFAULT_PREVIEW_VERSION = '2.37.0';
 export const DEFAULT_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
@@ -246,6 +246,7 @@ export const ERROR_CODE_DELETE_TASK_COLLABORATOR = 'delete_task_collaborator_err
 export const ERROR_CODE_DELETE_ITEM = 'delete_item_error';
 export const ERROR_CODE_DELETE_METADATA = 'delete_metadata_error';
 export const ERROR_CODE_DELETE_VERSION = 'delete_version_error';
+export const ERROR_CODE_GROUP_EXCEEDS_LIMIT = 'group_exceeds_limit';
 export const ERROR_CODE_PROMOTE_VERSION = 'promote_version_error';
 export const ERROR_CODE_RESTORE_VERSION = 'restore_version_error';
 export const ERROR_CODE_UPDATE_TASK = 'update_task_error';
@@ -398,6 +399,17 @@ export const TASK_COMPLETION_RULE_ANY: 'ANY_ASSIGNEE' = 'ANY_ASSIGNEE';
 /* ----------------- Task Edit modes ---------------- */
 export const TASK_EDIT_MODE_CREATE: 'CREATE' = 'CREATE';
 export const TASK_EDIT_MODE_EDIT: 'EDIT' = 'EDIT';
+
+/* ----------------- Task Validation ---------------- */
+export const TASK_MAX_GROUP_ASSIGNEES: 250 = 250;
+
+/* ----------------- Theme ---------------------------*/
+export const THEME_VERY_DARK = 'vDark';
+export const THEME_DARK = 'dark';
+export const THEME_MID_DARK = 'midDark';
+export const THEME_MIDTONE = 'midTone';
+export const THEME_MID_LIGHT = 'midLight';
+export const THEME_VERY_LIGHT = 'vLight';
 
 /* ------------------ Keyboard Events ----------------- */
 export const KEYS = {

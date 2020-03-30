@@ -1,8 +1,7 @@
 @import '../../../common/variables';
 @import './mixins';
 
-$bcs-task-grid: 4px;
-$bcs-task-left-offset: 10 * $bcs-task-grid + 2px;
+$bcs-task-left-offset: 10 * $bdl-grid-unit + 2px;
 
 .bcs-Task-media {
     opacity: 1;
@@ -37,16 +36,25 @@ $bcs-task-left-offset: 10 * $bcs-task-grid + 2px;
     }
 }
 
-.bcs-Task-statusContainer {
-    margin-top: 2 * $bcs-task-grid;
+.bcs-Task-status {
+    margin-top: 3 * $bdl-grid-unit;
+    margin-bottom: 2 * $bdl-grid-unit;
+
+    & > * {
+        margin-right: $bdl-grid-unit;
+    }
+}
+
+.bcs-Task-dueDate {
+    margin-bottom: 3 * $bdl-grid-unit;
 }
 
 .bcs-Task-assigneeListContainer {
-    margin-top: $bcs-task-grid;
+    margin-top: $bdl-grid-unit;
 }
 
 .bcs-Task-actionsContainer {
-    margin-top: 5 * $bcs-task-grid;
+    margin-top: 5 * $bdl-grid-unit;
 }
 
 // tethered styles for delete confirmation modal

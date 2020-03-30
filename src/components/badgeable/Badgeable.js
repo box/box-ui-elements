@@ -4,16 +4,16 @@ import * as React from 'react';
 import './Badgeable.scss';
 
 type Props = {
-    /** the item(s) to receive the badge */
-    bottomLeft?: React.Node,
-    bottomRight?: React.Node,
-    /** Component to render when badging the top left corner of the rendered container */
-    children: React.Node,
-    /** Component to render when badging the top right corner of the rendered container */
-    className?: string,
     /** Component to render when badging the bottom left corner of the rendered container */
-    topLeft?: React.Node,
+    bottomLeft?: React.Node,
     /** Component to render when badging the bottom right corner of the rendered container */
+    bottomRight?: React.Node,
+    /** the item(s) to receive the badge */
+    children: React.Node,
+    className?: string,
+    /** Component to render when badging the top left corner of the rendered container */
+    topLeft?: React.Node,
+    /** Component to render when badging the top right corner of the rendered container */
     topRight?: React.Node,
 };
 

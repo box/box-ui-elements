@@ -365,8 +365,12 @@ describe('api/uploads/MultiputUpload', () => {
             multiputUploadTest.getBaseUploadUrlFromPreflightResponse = jest
                 .fn()
                 .mockReturnValueOnce('fupload-ec2usw1.app.box.com');
+            multiputUploadTest.xhr.post = jest.fn().mockReturnValueOnce({ data: {} });
+            multiputUploadTest.createSessionSuccessHandler = jest.fn();
+
             await multiputUploadTest.preflightSuccessHandler();
             expect(multiputUploadTest.config.parallelism).toBe(1);
+            expect(multiputUploadTest.createSessionSuccessHandler).toBeCalledTimes(1);
         });
 
         test('should call createSessionSuccessHandler when the session is created successfully', async () => {
@@ -454,6 +458,52 @@ describe('api/uploads/MultiputUpload', () => {
                 'create_session_misc_error',
                 JSON.stringify(error),
             );
+        });
+
+        describe('resolveConflict', () => {
+            test('should overwrite if overwrite is set to true and has context_info', async () => {
+                const data = { status: 409, context_info: { conflicts: { id: '30' } } };
+                const error = {
+                    response: {
+                        data,
+                    },
+                };
+
+                multiputUploadTest.getErrorResponse = jest.fn().mockReturnValueOnce(data);
+                multiputUploadTest.sessionErrorHandler = jest.fn();
+                multiputUploadTest.xhr.post = jest.fn().mockReturnValueOnce(Promise.reject(error));
+                multiputUploadTest.getBaseUploadUrlFromPreflightResponse = jest.fn().mockReturnValueOnce(uploadHost);
+                multiputUploadTest.overwrite = true;
+                multiputUploadTest.conflictCallback = jest.fn();
+                multiputUploadTest.createSessionRetry = jest.fn();
+
+                await multiputUploadTest.preflightSuccessHandler(preflightResponse);
+
+                expect(multiputUploadTest.sessionErrorHandler).not.toHaveBeenCalled();
+                expect(multiputUploadTest.conflictCallback).not.toHaveBeenCalled();
+                expect(multiputUploadTest.createSessionRetry).toHaveBeenCalled();
+            });
+            test('should invoke conflictCallback if exists', async () => {
+                const data = { status: 409 };
+                const error = {
+                    response: {
+                        data,
+                    },
+                };
+
+                multiputUploadTest.getErrorResponse = jest.fn().mockReturnValueOnce(data);
+                multiputUploadTest.sessionErrorHandler = jest.fn();
+                multiputUploadTest.xhr.post = jest.fn().mockReturnValueOnce(Promise.reject(error));
+                multiputUploadTest.getBaseUploadUrlFromPreflightResponse = jest.fn().mockReturnValueOnce(uploadHost);
+                multiputUploadTest.conflictCallback = jest.fn();
+                multiputUploadTest.createSessionRetry = jest.fn();
+
+                await multiputUploadTest.preflightSuccessHandler(preflightResponse);
+
+                expect(multiputUploadTest.sessionErrorHandler).not.toHaveBeenCalled();
+                expect(multiputUploadTest.conflictCallback).toHaveBeenCalled();
+                expect(multiputUploadTest.createSessionRetry).toHaveBeenCalled();
+            });
         });
     });
 

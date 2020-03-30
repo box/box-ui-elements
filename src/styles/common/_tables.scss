@@ -188,7 +188,7 @@
         path {
             transform: rotate(0deg);
             transform-origin: 50% 50%;
-            transition: transform $bdl-transition-duration-200ms;
+            transition: transform $bdl-transitionDurationBase;
         }
     }
 }

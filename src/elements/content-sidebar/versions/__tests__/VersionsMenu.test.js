@@ -20,7 +20,9 @@ describe('elements/content-sidebar/versions/VersionsMenu', () => {
     const getWrapper = (props = {}) =>
         shallow(<VersionsMenu {...props} />, {
             wrappingComponent: wrapperProps => <IntlProvider locale="en" messages={messages} {...wrapperProps} />,
-        }).shallow();
+        })
+            .shallow() // <Memo .../>
+            .dive(); // <ul .../>
     const GlobalDate = Date;
 
     beforeEach(() => {

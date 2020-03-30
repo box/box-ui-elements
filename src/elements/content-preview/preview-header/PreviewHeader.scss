@@ -45,6 +45,7 @@
     .ba-point-post-cancel-container,
     .ba-draw-post-cancel-container {
         position: absolute;
+        top: 6px;
         right: 0;
         margin-right: 20px;
 
@@ -61,6 +62,8 @@
         .ba-btn-annotate-draw-undo,
         button.ba-btn-annotate-draw-redo,
         button.ba-btn-annotate-draw-undo,
+        .bdl-is-disabled.ba-btn-annotate-draw-redo,
+        .bdl-is-disabled.ba-btn-annotate-draw-undo,
         .is-disabled.ba-btn-annotate-draw-redo,
         .is-disabled.ba-btn-annotate-draw-undo {
             margin: 5px;

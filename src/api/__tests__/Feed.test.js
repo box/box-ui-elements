@@ -2,7 +2,7 @@ import commonMessages from '../../elements/common/messages';
 import messages from '../messages';
 import * as sorter from '../../utils/sorter';
 import * as error from '../../utils/error';
-import { IS_ERROR_DISPLAYED, TASK_NEW_NOT_STARTED } from '../../constants';
+import { IS_ERROR_DISPLAYED, TASK_NEW_NOT_STARTED, TASK_MAX_GROUP_ASSIGNEES } from '../../constants';
 import Feed from '../Feed';
 
 const mockTask = {
@@ -100,12 +100,14 @@ const versionsWithCurrent = {
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
+const mockCreateTask = jest.fn().mockImplementation(({ successCallback }) => {
+    successCallback();
+});
+
 jest.mock('../tasks/TasksNew', () => {
     const task = mockTask;
     return jest.fn().mockImplementation(() => ({
-        createTask: jest.fn().mockImplementation(({ successCallback }) => {
-            successCallback();
-        }),
+        createTask: mockCreateTask,
         updateTask: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
         }),
@@ -192,6 +194,15 @@ jest.mock('../tasks/TaskLinks', () =>
         }),
     })),
 );
+
+const mockGetGroupCount = jest.fn();
+
+jest.mock('../Groups', () => {
+    const GroupAPI = jest.fn().mockImplementation(() => ({
+        getGroupCount: mockGetGroupCount,
+    }));
+    return GroupAPI;
+});
 
 jest.mock('../Comments', () =>
     jest.fn().mockImplementation(() => ({
@@ -569,6 +580,84 @@ describe('api/Feed', () => {
         });
     });
 
+    describe('createTaskNew()', () => {
+        const currentUser = {
+            id: 'bar',
+        };
+        const message = 'hi';
+        const assignees = [
+            {
+                id: '3086276240',
+                type: 'group',
+                name: 'Test Group',
+                item: {
+                    id: '3086276240',
+                    name: 'Test User',
+                    type: 'group',
+                },
+            },
+        ];
+        const taskType = 'GENERAL';
+        const taskCompletionRule = 'ALL_ASSIGNEES';
+        const dueAt = null;
+
+        const code = 'group_exceeds_limit';
+        const hasError = false;
+        beforeEach(() => {
+            feed.feedErrorCallback = jest.fn();
+        });
+
+        test('should check group size by calling groups endpoint', async () => {
+            const mockSuccessCallback = jest.fn();
+            const mockErrorCallback = jest.fn();
+            mockGetGroupCount.mockResolvedValueOnce({ total_count: TASK_MAX_GROUP_ASSIGNEES - 1 });
+            feed.createTaskNew(
+                file,
+                currentUser,
+                message,
+                assignees,
+                taskType,
+                dueAt,
+                taskCompletionRule,
+                mockSuccessCallback,
+                mockErrorCallback,
+            );
+            expect(feed.file.id).toBe(file.id);
+
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(mockGetGroupCount).toBeCalled();
+        });
+
+        test('should call error handling when group size exceeds limit', async () => {
+            const mockSuccessCallback = jest.fn();
+            const mockErrorCallback = jest.fn();
+            mockGetGroupCount.mockResolvedValueOnce({ total_count: TASK_MAX_GROUP_ASSIGNEES + 1 });
+            await feed.createTaskNew(
+                file,
+                currentUser,
+                message,
+                assignees,
+                taskType,
+                dueAt,
+                taskCompletionRule,
+                mockSuccessCallback,
+                mockErrorCallback,
+            );
+
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(feed.file.id).toBe(file.id);
+            expect(mockGetGroupCount).toBeCalled();
+            expect(mockCreateTask).not.toBeCalled();
+            expect(feed.feedErrorCallback).toBeCalledWith(
+                hasError,
+                { code: 'group_exceeds_limit', type: 'warning' },
+                code,
+            );
+        });
+    });
+
     describe('createTaskNewSuccessCallback()', () => {
         beforeEach(() => {
             feed.updateFeedItem = jest.fn();
@@ -625,6 +714,9 @@ describe('api/Feed', () => {
     });
 
     describe('updateTaskNew()', () => {
+        const code = 'group_exceeds_limit';
+        const hasError = false;
+
         beforeEach(() => {
             feed.updateFeedItem = jest.fn();
         });
@@ -633,6 +725,78 @@ describe('api/Feed', () => {
             expect.assertions(1);
             const updatedTask = feed.updateTaskNew({});
             await expect(updatedTask).rejects.toEqual(Error(fileError));
+        });
+
+        test('should check group size by calling groups endpoint', async () => {
+            const mockSuccessCallback = jest.fn();
+            const mockErrorCallback = jest.fn();
+            mockGetGroupCount.mockResolvedValueOnce({ total_count: TASK_MAX_GROUP_ASSIGNEES - 1 });
+
+            const task = {
+                id: '1',
+                description: 'updated description',
+                addedAssignees: [
+                    {
+                        type: 'task_collaborator',
+                        id: '19283765',
+                        item: { type: 'group', id: '19283765', name: 'adding a group', login: '' },
+                        role: 'ASSIGNEE',
+                        permissions: {
+                            can_delete: true,
+                            can_update: true,
+                        },
+                        status: 'incomplete',
+                    },
+                ],
+            };
+
+            feed.updateTaskNew(file, task, mockSuccessCallback, mockErrorCallback);
+            expect(feed.file.id).toBe(file.id);
+
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(mockGetGroupCount).toBeCalled();
+        });
+
+        test('should call the feed error handling when group size exceeds limit on update', async () => {
+            const mockSuccessCallback = jest.fn();
+            const mockErrorCallback = jest.fn();
+            feed.feedErrorCallback = jest.fn();
+            feed.createTaskCollaborator = jest.fn();
+            feed.createTaskCollaboratorsforGroup = jest.fn();
+            mockGetGroupCount.mockResolvedValueOnce({ total_count: TASK_MAX_GROUP_ASSIGNEES + 1 });
+
+            const task = {
+                id: '1',
+                description: 'updated description',
+                addedAssignees: [
+                    {
+                        type: 'task_collaborator',
+                        id: '19283765',
+                        item: { type: 'group', id: '19283765', name: 'adding a group', login: '' },
+                        role: 'ASSIGNEE',
+                        permissions: {
+                            can_delete: true,
+                            can_update: true,
+                        },
+                        status: 'incomplete',
+                    },
+                ],
+            };
+
+            feed.updateTaskNew(file, task, mockSuccessCallback, mockErrorCallback);
+            expect(feed.file.id).toBe(file.id);
+
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(mockGetGroupCount).toBeCalled();
+            expect(feed.feedErrorCallback).toBeCalledWith(
+                hasError,
+                { code: 'group_exceeds_limit', type: 'warning' },
+                code,
+            );
+            expect(feed.createTaskCollaboratorsforGroup).not.toBeCalled();
+            expect(feed.createTaskCollaborator).not.toBeCalled();
         });
 
         test('should call the error handling when unable to create new task collaborator', async () => {

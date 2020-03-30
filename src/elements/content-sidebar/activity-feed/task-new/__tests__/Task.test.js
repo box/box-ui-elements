@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { TaskComponent as Task } from '..';
 
@@ -18,7 +19,8 @@ const approverSelectorContacts = [];
 describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     const currentUser = { name: 'Jake Thomas', id: '1', type: 'user' };
     const otherUser = { name: 'Patrick Paul', id: '3', type: 'user' };
-
+    const creatorUser = { name: 'Steven Yang', id: '5', type: 'user' };
+    const taskId = '123125';
     const task = {
         assigned_to: {
             entries: [
@@ -50,9 +52,9 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         },
         completion_rule: 'ALL_ASSIGNEES',
         created_at: '2010-01-01',
-        created_by: { id: '0', target: currentUser, role: 'CREATOR', status: 'NOT_STARTED', type: 'task_collaborator' },
+        created_by: { id: '0', target: creatorUser, role: 'CREATOR', status: 'NOT_STARTED', type: 'task_collaborator' },
         due_at: null,
-        id: '123125',
+        id: taskId,
         description: 'This is where we tell each other what we need to do',
         status: 'NOT_STARTED',
         permissions: {
@@ -62,13 +64,46 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             can_create_task_link: true,
         },
         task_links: {
-            entries: [],
+            entries: [
+                {
+                    type: 'task_link',
+                    id: '6231775',
+                    task: { id: taskId, type: 'task', due_at: null },
+                    target: {
+                        type: 'file',
+                        id: '7895970959',
+                        sequence_id: '1',
+                        etag: '1',
+                        sha1: '6cdf9453724469d11469d4f7c2f21dcb828073d5',
+                        name: 'file1.csv',
+                    },
+                    description: '',
+                    permissions: { can_update: true, can_delete: true },
+                },
+            ],
             limit: 1000,
             next_marker: null,
         },
         task_type: 'GENERAL',
         type: 'task',
     };
+
+    const taskMultifile = cloneDeep(task);
+    taskMultifile.task_links.entries.push({
+        type: 'task_link',
+        id: taskId,
+        task: { id: '16431755', type: 'task', due_at: null },
+        target: {
+            type: 'file',
+            id: '7895975164',
+            sequence_id: '1',
+            etag: '1',
+            sha1: 'b02ef8e024b1e654d050733c5bb12e6c83a5586c',
+            name: 'skynet-file2.csv',
+        },
+        description: '',
+        permissions: { can_update: true, can_delete: true },
+    });
 
     test('should correctly render task', () => {
         const wrapper = shallow(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...task} />);
@@ -78,6 +113,16 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     test('should show assignment status badges for each assignee', () => {
         const wrapper = mount(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...task} />);
         expect(wrapper.find('[data-testid="avatar-group-avatar-container"]')).toHaveLength(2);
+    });
+
+    test('should show multifile badge if task has multiple files', () => {
+        const wrapper = mount(<Task currentUser={currentUser} {...taskMultifile} />);
+        expect(wrapper.find('[data-testid="multifile-badge"]').hostNodes()).toHaveLength(1);
+    });
+
+    test('should not show multifile badge if task does not have multiple files', () => {
+        const wrapper = mount(<Task currentUser={currentUser} {...task} />);
+        expect(wrapper.find('[data-testid="multifile-badge"]').hostNodes()).toHaveLength(0);
     });
 
     test('should not show due date container if not set', () => {
@@ -109,7 +154,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 status="NOT_STARTED"
             />,
         );
-        expect(incompleteWrapper.find('.bcs-is-taskOverdue')).toHaveLength(1);
+        expect(incompleteWrapper.render().find('[data-testid="task-overdue-date"]')).toHaveLength(1);
     });
 
     test('due date should not have overdue class if task is complete and due date is in past', () => {
@@ -123,7 +168,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 status="COMPLETED"
             />,
         );
-        expect(completeWrapper.find('.bcs-is-taskOverdue')).toHaveLength(0);
+        expect(completeWrapper.find('[data-testid="task-overdue-date"]')).toHaveLength(0);
     });
 
     test('should add pending class for isPending prop', () => {
@@ -138,38 +183,50 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     });
 
     test('should show actions when current user is assigned and task is incomplete', () => {
-        const wrapper = shallow(
-            <Task currentUser={currentUser} {...task} isPending={false} onAssignmentUpdate={jest.fn()} />,
-        );
-
-        expect(wrapper.find('TaskActions')).toHaveLength(1);
+        [task, taskMultifile].forEach(eachTask => {
+            const wrapper = shallow(
+                <Task currentUser={currentUser} {...eachTask} isPending={false} onAssignmentUpdate={jest.fn()} />,
+            );
+            expect(wrapper.find('TaskActions')).toHaveLength(1);
+        });
     });
 
     test('should not show actions when current user is assigned and task is complete', () => {
-        const wrapper = shallow(
-            <Task
-                currentUser={currentUser}
-                {...task}
-                isPending={false}
-                onAssignmentUpdate={jest.fn()}
-                status="COMPLETED"
-            />,
-        );
-
-        expect(wrapper.find('TaskActions')).toHaveLength(0);
+        [task, taskMultifile].forEach(eachTask => {
+            const wrapper = shallow(
+                <Task
+                    currentUser={currentUser}
+                    {...eachTask}
+                    isPending={false}
+                    onAssignmentUpdate={jest.fn()}
+                    status="COMPLETED"
+                />,
+            );
+            expect(wrapper.find('TaskActions')).toHaveLength(0);
+        });
     });
 
     test('should not show actions when current user is not assigned', () => {
-        const wrapper = shallow(
-            <Task
-                currentUser={{ ...currentUser, id: 'something-else-1' }}
-                {...task}
-                isPending={false}
-                onAssignmentUpdate={jest.fn()}
-            />,
-        );
+        [task, taskMultifile].forEach(eachTask => {
+            const wrapper = shallow(
+                <Task
+                    currentUser={{ ...currentUser, id: 'something-else-1' }}
+                    {...eachTask}
+                    isPending={false}
+                    onAssignmentUpdate={jest.fn()}
+                />,
+            );
+            expect(wrapper.find('TaskActions')).toHaveLength(0);
+        });
+    });
 
-        expect(wrapper.find('TaskActions')).toHaveLength(0);
+    test.each`
+        eachTask         | expected
+        ${task}          | ${0}
+        ${taskMultifile} | ${1}
+    `('should show action for creator of task when task is multifile', ({ eachTask, expected }) => {
+        const wrapper = shallow(<Task {...eachTask} currentUser={creatorUser} />);
+        expect(wrapper.find('[data-testid="action-container"]')).toHaveLength(expected);
     });
 
     test('should show actions for task type', () => {
@@ -206,7 +263,22 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         const checkButton = wrapper.find('[data-testid="complete-task"]').hostNodes();
         checkButton.simulate('click');
 
-        expect(onAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 'current-user-assignment-id', 'COMPLETED');
+        expect(onAssignmentUpdateSpy).toHaveBeenCalledWith(taskId, 'current-user-assignment-id', 'COMPLETED');
+    });
+
+    test('should call onView when view-task-details button is clicked for multifile task', () => {
+        const onViewSpy = jest.fn();
+        const wrapper = mount(<Task {...taskMultifile} currentUser={currentUser} onView={onViewSpy} />);
+        wrapper
+            .find('[data-testid="view-task"]')
+            .hostNodes()
+            .simulate('click');
+        expect(onViewSpy).toHaveBeenCalledWith(taskId, false);
+    });
+
+    test('should not show view-task-details button for multifile task when onView callback is undefined', () => {
+        const wrapper = mount(<Task {...taskMultifile} currentUser={currentUser} />);
+        expect(wrapper.find('[data-testid="view-task"]').hostNodes()).toHaveLength(0);
     });
 
     test('should not allow user to delete if the task permissions do not allow it', () => {

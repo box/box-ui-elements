@@ -49,30 +49,50 @@ const messages = defineMessages({
         defaultMessage: 'Reject',
         description: 'Reject option for an approval task',
     },
-    tasksFeedStatusLabel: {
-        id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedStatusLabel',
-        defaultMessage: 'Status: {taskStatus}',
-        description: 'Label for the task status',
+    tasksFeedViewDetailsAction: {
+        id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedViewDetailsAction',
+        defaultMessage: 'View Task Details',
+        description: 'View the details for a task',
     },
     tasksFeedCompletedLabel: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedLabel',
         defaultMessage: 'Completed',
         description: 'Label for a completed task',
     },
+    taskFeedCompletedUppercaseLabel: {
+        id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedUppercaseLabel',
+        defaultMessage: 'COMPLETED',
+        description: 'Label for an completed task (in upper-case in supported language)',
+    },
     tasksFeedApprovedLabel: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedApprovedLabel',
         defaultMessage: 'Approved',
         description: 'Label for an approved task',
+    },
+    taskFeedApprovedUppercaseLabel: {
+        id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedApprovedUppercaseLabel',
+        defaultMessage: 'APPROVED',
+        description: 'Label for an approved task (in upper-case in supported language)',
     },
     tasksFeedRejectedLabel: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedRejectedLabel',
         defaultMessage: 'Rejected',
         description: 'Label for a rejected task',
     },
+    taskFeedRejectedUppercaseLabel: {
+        id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedRejectedUppercaseLabel',
+        defaultMessage: 'REJECTED',
+        description: 'Label for a task rejected (in upper-case in supported language)',
+    },
     tasksFeedInProgressLabel: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressLabel',
         defaultMessage: 'In Progress',
         description: 'Label for a task in progress',
+    },
+    taskFeedInProgressUppercaseLabel: {
+        id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressUppercaseLabel',
+        defaultMessage: 'IN PROGRESS',
+        description: 'Label for a task in progress (in upper-case in supported language)',
     },
     tasksFeedHeadlineApprovalCurrentUser: {
         id: 'be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineApprovalCurrentUser',
@@ -119,6 +139,12 @@ const messages = defineMessages({
         defaultMessage: 'Completed {dateTime}',
         description: 'Completed task status, where dateTime is a readable time like "Today at 2pm"',
     },
+    taskFeedStatusDue: {
+        id: 'be.contentSidebar.activityFeed.taskNew.taskFeedStatusDue',
+        defaultMessage: 'DUE {dateTime}',
+        description:
+            'Text for due date description formatted with relative date and relative time. (Upper-case in supported languages)',
+    },
     taskAssignmentCompleted: {
         id: 'be.contentSidebar.activityFeed.taskNew.taskAssignmentCompleted',
         defaultMessage: 'Completed',
@@ -143,6 +169,11 @@ const messages = defineMessages({
         id: 'be.contentSidebar.activityFeed.task.taskAnyAffordanceTooltip',
         defaultMessage: 'Only one assignee is required to complete this task',
         description: 'Tooltip text for any task icon, explaining that the task only needs one assignee to complete.',
+    },
+    taskMultipleFilesAffordanceTooltip: {
+        id: 'be.contentSidebar.activityFeed.task.taskMultipleFilesAffordanceTooltip',
+        defaultMessage: 'There are multiple files associated with this task',
+        description: 'Tooltip text for multi-file icon, explaining that the task involves multiple files',
     },
 });
 

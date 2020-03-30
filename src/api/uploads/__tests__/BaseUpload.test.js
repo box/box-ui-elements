@@ -36,6 +36,7 @@ describe('api/uploads/BaseUpload', () => {
                 name: 'zavala',
             };
             upload.folderId = '123';
+            upload.fileDescription = 'ronaldo';
             upload.xhr = {
                 options: jest.fn(),
             };
@@ -49,6 +50,7 @@ describe('api/uploads/BaseUpload', () => {
                         id: upload.folderId,
                     },
                     size: upload.file.size,
+                    description: upload.fileDescription,
                 },
                 successHandler: upload.preflightSuccessHandler,
                 errorHandler: upload.preflightErrorHandler,
@@ -117,7 +119,27 @@ describe('api/uploads/BaseUpload', () => {
             expect(upload.makePreflightRequest).toHaveBeenCalled();
         });
 
-        test('should append timestamp and re-upload on 409 if overwrite property is false', () => {
+        test('should call callback on file on 409 if overwrite property is false and conflictCallback exists', () => {
+            upload.fileId = '123';
+            upload.overwrite = false;
+            upload.makePreflightRequest = jest.fn();
+            upload.conflictCallback = jest.fn().mockImplementation(name => `${name}_CONFLICT`);
+
+            upload.preflightErrorHandler({
+                status: 409,
+                context_info: {
+                    conflicts: {
+                        id: upload.fileId,
+                    },
+                },
+            });
+
+            expect(upload.makePreflightRequest).toHaveBeenCalled();
+            expect(upload.conflictCallback).toHaveBeenCalled();
+            expect(upload.fileName).toEqual('foo_CONFLICT');
+        });
+
+        test('should append timestamp and re-upload on 409 if overwrite property is false and no conflictCallback', () => {
             upload.file.name = 'foo.bar';
             upload.overwrite = false;
             Date.now = jest.fn().mockReturnValueOnce('1969-07-16');

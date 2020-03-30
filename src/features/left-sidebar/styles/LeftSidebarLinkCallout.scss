@@ -29,6 +29,17 @@ $arrow-size: 6px;
             border-right-color: inherit;
         }
     }
+
+    .nav-link-callout-target-attached-bottom.nav-link-callout-target-attached-right > & {
+        left: 10px;
+
+        &::before {
+            top: 85%;
+            right: 100%;
+            margin-top: -$arrow-size;
+            border-right-color: inherit;
+        }
+    }
 }
 
 .nav-link-callout-close-button {

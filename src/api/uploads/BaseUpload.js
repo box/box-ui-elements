@@ -18,9 +18,13 @@ class BaseUpload extends Base {
 
     fileName: string;
 
+    fileDescription: ?string;
+
     folderId: string;
 
     overwrite: boolean;
+
+    conflictCallback: ?(fileName: string) => string;
 
     preflightSuccessHandler: Function;
 
@@ -49,6 +53,7 @@ class BaseUpload extends Base {
         const attributes = {
             name: this.fileName || name,
             parent: { id: this.folderId },
+            description: this.fileDescription,
             size,
         };
 
@@ -85,22 +90,23 @@ class BaseUpload extends Base {
             // Automatically handle name conflict errors
         } else if (errorData && errorData.status === 409) {
             if (this.overwrite) {
+                // Error response contains file ID to upload a new file version for
                 const conflictFileId = errorData.context_info.conflicts.id;
                 if (!this.fileId && !!conflictFileId) {
                     this.fileId = conflictFileId;
                 }
-
-                // Error response contains file ID to upload a new file version for
-                this.makePreflightRequest();
+            } else if (this.conflictCallback) {
+                // conflictCallback handler for setting new file name
+                this.fileName = this.conflictCallback(this.fileName);
             } else {
                 // Otherwise, reupload and append timestamp
                 // 'test.jpg' becomes 'test-TIMESTAMP.jpg'
                 const extension = this.fileName.substr(this.fileName.lastIndexOf('.')) || '';
                 this.fileName = `${this.fileName.substr(0, this.fileName.lastIndexOf('.'))}-${Date.now()}${extension}`;
-                this.makePreflightRequest();
             }
-
+            this.makePreflightRequest();
             this.retryCount += 1;
+
             // When rate limited, retry after interval defined in header
         } else if (errorData && (errorData.status === 429 || errorData.code === 'too_many_requests')) {
             let retryAfterMs = DEFAULT_RETRY_DELAY_MS;

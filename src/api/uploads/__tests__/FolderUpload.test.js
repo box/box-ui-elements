@@ -16,14 +16,20 @@ describe('api/uploads/FolderUpload', () => {
     });
 
     describe('upload()', () => {
-        test('should upload folder node', () => {
+        test('should upload folder node', async () => {
             const upload1 = jest.fn();
+            const successCallbackMock = jest.fn();
             const errorCallback = () => 'errorCallback';
-            folderUploadInstance.folder = { upload: upload1 };
+            folderUploadInstance.folder = { upload: upload1, getFolderId: jest.fn(() => 'f_123') };
 
-            folderUploadInstance.upload({ errorCallback, noop });
+            await folderUploadInstance.upload({ errorCallback, successCallback: successCallbackMock });
 
             expect(upload1).toHaveBeenCalledWith(destinationFolderID, errorCallback, true);
+            expect(successCallbackMock).toHaveBeenCalledWith([
+                {
+                    id: 'f_123',
+                },
+            ]);
         });
     });
 

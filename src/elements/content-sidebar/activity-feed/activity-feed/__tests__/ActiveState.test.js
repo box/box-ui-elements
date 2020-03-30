@@ -31,7 +31,7 @@ const taskWithAssignment = {
     type: 'task',
     id: 't_345',
     created_at: '2018-07-03T14:43:52-07:00',
-    created_by: otherUser,
+    created_by: { target: otherUser },
     modified_at: '2018-07-03T14:43:52-07:00',
     description: 'test',
     due_at: '2018-07-03T14:43:52-07:00',

@@ -8,14 +8,10 @@
     &::before {
         display: inline-block;
         width: 1em;
-        color: $bdl-yellorange;
+        color: $bdl-gray-30;
         font-weight: bold;
         font-style: normal;
         content: '\2022';
-    }
-
-    .bdl-IconSecurityClassificationSolid {
-        margin-right: 3px;
     }
 }
 

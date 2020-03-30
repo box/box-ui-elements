@@ -14,11 +14,12 @@
     }
 
     ul.overlay {
+        @include bdl-transition($bdl-transitionDurationBase, transform);
+
         padding: 0;
         overflow-x: hidden;
         overflow-y: auto;
         transform: scaleY(0);
-        transition: transform .2s ease;
     }
 
     .is-visible > ul.overlay {

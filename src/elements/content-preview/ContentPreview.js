@@ -62,6 +62,7 @@ type Props = {
     apiHost: string,
     appHost: string,
     autoFocus: boolean,
+    boxAnnotations?: Object,
     cache?: APICache,
     canDownload?: boolean,
     className: string,
@@ -100,6 +101,7 @@ type Props = {
     WithLoggerProps;
 
 type State = {
+    canPrint?: boolean,
     currentFileId?: string,
     error?: ErrorType,
     file?: BoxItem,
@@ -177,6 +179,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
     updateVersionToCurrent: ?() => void;
 
     initialState: State = {
+        canPrint: false,
         error: undefined,
         isReloadNotificationVisible: false,
         isThumbnailSidebarOpen: false,
@@ -643,9 +646,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         onLoad(loadData);
         this.focusPreview();
-        if (this.preview && filesToPrefetch.length > 1) {
+        if (this.preview && filesToPrefetch.length) {
             this.prefetch(filesToPrefetch);
         }
+
+        this.handleCanPrint();
     };
 
     /**
@@ -684,6 +689,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const hasViewAllPermissions = getProp(file, 'permissions.can_view_annotations_all', false);
         const hasViewSelfPermissions = getProp(file, 'permissions.can_view_annotations_self', false);
         return !!showAnnotations && (this.canAnnotate() || hasViewAllPermissions || hasViewSelfPermissions);
+    }
+
+    handleCanPrint() {
+        const preview = this.getPreview();
+        this.setState({ canPrint: !!preview && (!preview.canPrint || preview.canPrint()) });
     }
 
     /**
@@ -831,7 +841,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         id: ?string,
         successCallback?: Function,
         errorCallback?: Function,
-        fetchOptions?: FetchOptions = {},
+        fetchOptions: FetchOptions = {},
     ): void {
         if (!id) {
             return;
@@ -1071,7 +1081,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @param {string} [version] - The version that is now previewed
      * @param {object} [additionalVersionInfo] - extra info about the version
      */
-    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo?: AdditionalVersionInfo = {}): void => {
+    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo: AdditionalVersionInfo = {}): void => {
         const { onVersionChange }: Props = this.props;
         this.updateVersionToCurrent = additionalVersionInfo.updateVersionToCurrent;
 
@@ -1112,6 +1122,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
     render() {
         const {
             apiHost,
+            collection,
             token,
             language,
             messages,
@@ -1132,6 +1143,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }: Props = this.props;
 
         const {
+            canPrint,
             error,
             file,
             isReloadNotificationVisible,
@@ -1139,7 +1151,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             isThumbnailSidebarOpen,
             selectedVersion,
         }: State = this.state;
-        const { collection }: Props = this.props;
+
         const styleClassName = classNames(
             'be bcpr',
             {
@@ -1170,6 +1182,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                             onClose={onHeaderClose}
                             onPrint={this.print}
                             canDownload={this.canDownload()}
+                            canPrint={canPrint}
                             onDownload={this.download}
                             contentOpenWithProps={contentOpenWithProps}
                             canAnnotate={this.canAnnotate()}

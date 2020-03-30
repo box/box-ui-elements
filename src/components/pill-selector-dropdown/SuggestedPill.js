@@ -20,6 +20,7 @@ const SuggestedPill = ({ email, id, name, onAdd }: Props) => {
     const addSuggestedPill = (event: SyntheticEvent<HTMLButtonElement>) => {
         event.preventDefault();
 
+        // TODO: refactor this so inline conversions aren't required at every usage
         onAdd({
             email,
             id,

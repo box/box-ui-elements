@@ -4,12 +4,12 @@ describe('components/form-elements/form/Form', () => {
     const BUTTON_SELECTOR = 'button';
 
     test(`looks visually correct when using story ${FORM_STORY}`, async () => {
-        const image = await takeScreenshot(FORM_STORY);
+        const image = await BoxVisualTestUtils.takeScreenshot(FORM_STORY);
         return expect(image).toMatchImageSnapshot();
     });
 
     test('shows a required field error', async () => {
-        const image = await takeScreenshotAfterInput(FORM_STORY, BUTTON_SELECTOR);
+        const image = await BoxVisualTestUtils.takeScreenshotAfterInput(FORM_STORY, BUTTON_SELECTOR);
         return expect(image).toMatchImageSnapshot();
     });
 
@@ -22,6 +22,7 @@ describe('components/form-elements/form/Form', () => {
     `('$description', async ({ selector, userInput }) => {
         await global.page.goto(`http://localhost:6061/iframe.html?id=${FORM_STORY}`);
         await global.page.waitForSelector(REQUIRED_FIELD_SELECTOR);
+        await BoxVisualTestUtils.clearInput(REQUIRED_FIELD_SELECTOR);
         await global.page.type(REQUIRED_FIELD_SELECTOR, 'zyxwv');
         await global.page.waitForSelector(selector);
         await global.page.type(selector, userInput);

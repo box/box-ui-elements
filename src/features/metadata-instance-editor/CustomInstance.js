@@ -3,9 +3,9 @@ import * as React from 'react';
 import isEqual from 'lodash/isEqual';
 
 import CustomNewField from './CustomInstanceNewField';
-import CustomField from './fields/CustomField';
+import CustomMetadataField from '../metadata-instance-fields/CustomMetadataField';
 import EmptyContent from './EmptyContent';
-import { FIELD_TYPE_STRING } from './constants';
+import { FIELD_TYPE_STRING } from '../metadata-instance-fields/constants';
 import type { MetadataFieldValue, MetadataFields } from '../../common/types/metadata';
 
 type Props = {
@@ -92,7 +92,7 @@ class CustomInstance extends React.PureComponent<Props, State> {
         return (
             <>
                 {fields.map((key, index) => (
-                    <CustomField
+                    <CustomMetadataField
                         key={key}
                         canEdit={canEdit}
                         dataKey={key}

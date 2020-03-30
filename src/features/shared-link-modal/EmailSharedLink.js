@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import PillSelectorDropdown from '../../components/pill-selector-dropdown';
 import ContactDatalistItem from '../../components/contact-datalist-item';
@@ -28,7 +28,7 @@ class EmailSharedLink extends Component {
         ).isRequired,
         defaultEmailMessage: PropTypes.string,
         emailMessageProps: PropTypes.object,
-        intl: intlShape.isRequired,
+        intl: PropTypes.any,
         getContacts: PropTypes.func.isRequired,
         isExpanded: PropTypes.bool,
         onExpand: PropTypes.func.isRequired,
@@ -66,11 +66,12 @@ class EmailSharedLink extends Component {
                 )
                 .map(({ email, id, name, type }) => ({
                     // map to standardized DatalistItem format
+                    // TODO: refactor this so inline conversions aren't required at every usage
                     email,
                     id,
                     text: name,
                     type,
-                    value: email,
+                    value: email || id, // if email doesn't exist, contact is a group, use id
                 }));
         }
 

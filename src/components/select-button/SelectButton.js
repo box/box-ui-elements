@@ -16,7 +16,7 @@ const SelectButton = React.forwardRef<Props, HTMLButtonElement>(
     ({ children, className = '', error, isDisabled = false, ...rest }: Props, ref) => (
         <Tooltip isShown={!!error} position="middle-right" text={error} theme="error">
             <button
-                className={classNames(className, 'select-button', {
+                className={classNames(className, 'select-button', 'bdl-SelectButton', {
                     'is-invalid': !!error,
                 })}
                 disabled={isDisabled}
