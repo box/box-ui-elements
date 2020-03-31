@@ -99,6 +99,7 @@ type Props = {
     canUpload: boolean,
     className: string,
     contentPreviewProps: ContentPreviewProps,
+    contentUploaderProps: ContentUploaderProps,
     currentFolderId?: string,
     defaultView: DefaultView,
     features: FeatureConfig,
@@ -216,6 +217,7 @@ class ContentExplorer extends Component<Props, State> {
         contentPreviewProps: {
             contentSidebarProps: {},
         },
+        contentUploaderProps: {},
     };
 
     /**
@@ -1505,6 +1507,7 @@ class ContentExplorer extends Component<Props, State> {
             canUpload,
             className,
             contentPreviewProps,
+            contentUploaderProps,
             defaultView,
             isMedium,
             isSmall,
@@ -1655,6 +1658,7 @@ class ContentExplorer extends Component<Props, State> {
                             parentElement={this.rootElement}
                             appElement={this.appElement}
                             onUpload={onUpload}
+                            contentUploaderProps={contentUploaderProps}
                             requestInterceptor={requestInterceptor}
                             responseInterceptor={responseInterceptor}
                         />
