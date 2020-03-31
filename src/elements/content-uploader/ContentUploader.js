@@ -1215,5 +1215,6 @@ class ContentUploader extends Component<Props, State> {
     }
 }
 
+export type ContentUploaderProps = Props;
 export default makeResponsive(ContentUploader);
 export { ContentUploader as ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES };

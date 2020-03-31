@@ -79,6 +79,7 @@ type Props = {
     chooseButtonLabel?: string,
     className: string,
     clientName: string,
+    contentUploaderProps: ContentUploaderProps,
     currentFolderId?: string,
     defaultView: DefaultView,
     extensions: string[],
@@ -164,6 +165,7 @@ class ContentPicker extends Component<Props, State> {
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         clientName: CLIENT_NAME_CONTENT_PICKER,
         defaultView: DEFAULT_VIEW_FILES,
+        contentUploaderProps: {},
     };
 
     /**
@@ -1138,6 +1140,7 @@ class ContentPicker extends Component<Props, State> {
             canUpload,
             canSetShareAccess,
             canCreateNewFolder,
+            contentUploaderProps,
             extensions,
             maxSelectable,
             type,
@@ -1250,6 +1253,7 @@ class ContentPicker extends Component<Props, State> {
                             onClose={this.uploadSuccessHandler}
                             parentElement={this.rootElement}
                             appElement={this.appElement}
+                            contentUploaderProps={contentUploaderProps}
                             requestInterceptor={requestInterceptor}
                             responseInterceptor={responseInterceptor}
                         />
