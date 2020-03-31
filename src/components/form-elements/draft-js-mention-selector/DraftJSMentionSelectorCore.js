@@ -36,14 +36,13 @@ type MentionStartStateProps = {
 const MentionStartState = ({ message }: MentionStartStateProps) => <div className="mention-start-state">{message}</div>;
 
 type Props = {
+    ariaLabel?: string,
     className?: string,
     contacts: SelectorItems<>,
     editorState: EditorState,
     error?: ?Object,
-    hideLabel?: boolean,
     isDisabled?: boolean,
     isRequired?: boolean,
-    label: React.Node,
     mentionTriggers: Array<string>,
     onBlur?: Function,
     onChange?: Function,
@@ -304,14 +303,13 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
     render() {
         const {
+            ariaLabel,
             className,
             contacts,
             editorState,
             error,
-            hideLabel,
             isDisabled,
             isRequired,
-            label,
             onReturn,
             placeholder,
             selectorRow,
@@ -330,13 +328,12 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                     onSelect={this.handleContactSelected}
                     selector={
                         <DraftJSEditor
+                            ariaLabel={ariaLabel}
                             editorState={editorState}
                             error={error}
-                            hideLabel={hideLabel}
                             isDisabled={isDisabled}
                             isFocused={isFocused}
                             isRequired={isRequired}
-                            label={label}
                             onBlur={this.handleBlur}
                             onFocus={this.handleFocus}
                             onChange={this.handleChange}
