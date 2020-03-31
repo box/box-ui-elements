@@ -170,9 +170,11 @@ class CommentForm extends React.Component<Props, State> {
                             className="bcs-CommentForm-input"
                             contacts={isOpen ? mentionSelectorContacts : []}
                             editorState={commentEditorState}
+                            hideLabel
                             isDisabled={isDisabled}
                             isRequired={isOpen}
                             name="commentText"
+                            label="Comment"
                             onChange={this.onMentionSelectorChangeHandler}
                             onFocus={onFocus}
                             onMention={getMentionWithQuery}

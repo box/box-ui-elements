@@ -30,8 +30,10 @@ type Props = {
     className?: string,
     contacts: SelectorItems<>,
     editorState?: EditorState,
+    hideLabel?: boolean,
     isDisabled?: boolean,
     isRequired?: boolean,
+    label: React.Node,
     maxLength?: number,
     mentionTriggers?: Array<string>,
     minLength?: number,
@@ -246,8 +248,10 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             ariaLabel,
             className = '',
             editorState: externalEditorState,
+            hideLabel,
             isDisabled,
             isRequired,
+            label,
             mentionTriggers,
             name,
             onMention,
@@ -273,8 +277,10 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                         contacts={contacts}
                         editorState={editorState}
                         error={error}
+                        hideLabel={hideLabel}
                         isDisabled={isDisabled}
                         isRequired={isRequired}
+                        label={label}
                         mentionTriggers={mentionTriggers}
                         onBlur={handleBlur}
                         onChange={handleChange}

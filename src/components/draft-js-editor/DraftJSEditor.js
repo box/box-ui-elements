@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import { Editor } from 'draft-js';
 import type { EditorState } from 'draft-js';
+import Label from '../label';
 import 'draft-js/dist/Draft.css';
 
 import Tooltip from '../tooltip';
@@ -14,8 +15,11 @@ type Props = {
     ariaLabel?: string,
     editorState: EditorState,
     error?: ?Object,
+    hideLabel?: boolean,
     inputProps: Object,
     isDisabled?: boolean,
+    isRequired?: boolean,
+    label: React.Node,
     onBlur: Function,
     onChange: Function,
     onFocus: Function,
@@ -26,6 +30,7 @@ type Props = {
 class DraftJSEditor extends React.Component<Props> {
     static defaultProps = {
         inputProps: {},
+        isRequired: false,
         isFocused: false,
     };
 
@@ -67,7 +72,18 @@ class DraftJSEditor extends React.Component<Props> {
     };
 
     render() {
-        const { ariaLabel, editorState, error, inputProps, isDisabled, onFocus, placeholder } = this.props;
+        const {
+            ariaLabel,
+            editorState,
+            error,
+            hideLabel,
+            inputProps,
+            isDisabled,
+            isRequired,
+            label,
+            onFocus,
+            placeholder,
+        } = this.props;
 
         const { handleBlur, handleChange } = this;
 
@@ -90,23 +106,25 @@ class DraftJSEditor extends React.Component<Props> {
 
         return (
             <div className={classes}>
-                <Tooltip isShown={!!error} position="bottom-left" text={error ? error.message : ''} theme="error">
-                    {/* need div so tooltip can set aria-describedby */}
-                    <div>
-                        <Editor
-                            {...a11yProps}
-                            ariaLabel={ariaLabel === undefined ? placeholder : ariaLabel}
-                            editorState={editorState}
-                            handleReturn={this.handleReturn}
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            onFocus={onFocus}
-                            placeholder={placeholder}
-                            readOnly={isDisabled}
-                            stripPastedStyles
-                        />
-                    </div>
-                </Tooltip>
+                <Label hideLabel={hideLabel} showOptionalText={!isRequired} text={label}>
+                    <Tooltip isShown={!!error} position="bottom-left" text={error ? error.message : ''} theme="error">
+                        {/* need div so tooltip can set aria-describedby */}
+                        <div>
+                            <Editor
+                                {...a11yProps}
+                                ariaLabel={ariaLabel}
+                                editorState={editorState}
+                                handleReturn={this.handleReturn}
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                onFocus={onFocus}
+                                placeholder={placeholder}
+                                readOnly={isDisabled}
+                                stripPastedStyles
+                            />
+                        </div>
+                    </Tooltip>
+                </Label>
             </div>
         );
     }
