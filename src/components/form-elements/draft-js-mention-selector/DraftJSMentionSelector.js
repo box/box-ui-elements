@@ -26,7 +26,6 @@ const mentionStrategy = (contentBlock, callback, contentState) => {
 };
 
 type Props = {
-    ariaLabel?: string,
     className?: string,
     contacts: SelectorItems<>,
     editorState?: EditorState,
@@ -245,7 +244,6 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
     render() {
         const {
-            ariaLabel,
             className = '',
             editorState: externalEditorState,
             hideLabel,
@@ -273,7 +271,6 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             >
                 <FormInput name={name} onValidityStateUpdate={this.handleValidityStateUpdateHandler}>
                     <DraftJSMentionSelectorCore
-                        ariaLabel={ariaLabel}
                         contacts={contacts}
                         editorState={editorState}
                         error={error}

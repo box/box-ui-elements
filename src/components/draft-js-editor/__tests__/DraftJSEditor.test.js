@@ -30,6 +30,18 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
             expect(wrapper.find(Editor).length).toBe(1);
         });
 
+        test('should hide label when specified', () => {
+            const wrapper = shallow(<DraftJSEditor {...requiredProps} hideLabel />);
+
+            expect(wrapper.find('.bdl-Label').hasClass('accessibility-hidden')).toBe(true);
+        });
+
+        test('should render optional message', () => {
+            const wrapper = shallow(<DraftJSEditor {...requiredProps} isRequired={false} />);
+
+            expect(wrapper.find('OptionalFormattedMessage').exists()).toBe(true);
+        });
+
         test('should call handleChange when <Editor /> onchange called', () => {
             const wrapper = shallow(<DraftJSEditor {...requiredProps} />);
 

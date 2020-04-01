@@ -1,18 +1,24 @@
 // @flow
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
+import uniqueId from 'lodash/uniqueId';
 
 import { Editor } from 'draft-js';
 import type { EditorState } from 'draft-js';
-import Label from '../label';
 import 'draft-js/dist/Draft.css';
 
 import Tooltip from '../tooltip';
 
+import commonMessages from '../../common/messages';
 import './DraftJSEditor.scss';
 
+const OptionalFormattedMessage = () => (
+    <span className="bdl-Label-optional">
+        (<FormattedMessage {...commonMessages.optional} />)
+    </span>
+);
 type Props = {
-    ariaLabel?: string,
     editorState: EditorState,
     error?: ?Object,
     hideLabel?: boolean,
@@ -71,9 +77,10 @@ class DraftJSEditor extends React.Component<Props> {
         return 'not-handled';
     };
 
+    labelID = uniqueId('label');
+
     render() {
         const {
-            ariaLabel,
             editorState,
             error,
             hideLabel,
@@ -106,25 +113,28 @@ class DraftJSEditor extends React.Component<Props> {
 
         return (
             <div className={classes}>
-                <Label hideLabel={hideLabel} showOptionalText={!isRequired} text={label}>
-                    <Tooltip isShown={!!error} position="bottom-left" text={error ? error.message : ''} theme="error">
-                        {/* need div so tooltip can set aria-describedby */}
-                        <div>
-                            <Editor
-                                {...a11yProps}
-                                ariaLabel={ariaLabel}
-                                editorState={editorState}
-                                handleReturn={this.handleReturn}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                onFocus={onFocus}
-                                placeholder={placeholder}
-                                readOnly={isDisabled}
-                                stripPastedStyles
-                            />
-                        </div>
-                    </Tooltip>
-                </Label>
+                <span className={classNames('bdl-Label', { 'accessibility-hidden': hideLabel })} id={this.labelID}>
+                    {label}
+                    {!isRequired && <OptionalFormattedMessage />}
+                </span>
+
+                <Tooltip isShown={!!error} position="bottom-left" text={error ? error.message : ''} theme="error">
+                    {/* need div so tooltip can set aria-describedby */}
+                    <div>
+                        <Editor
+                            {...a11yProps}
+                            ariaLabelledBy={this.labelID}
+                            editorState={editorState}
+                            handleReturn={this.handleReturn}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            onFocus={onFocus}
+                            placeholder={placeholder}
+                            readOnly={isDisabled}
+                            stripPastedStyles
+                        />
+                    </div>
+                </Tooltip>
             </div>
         );
     }

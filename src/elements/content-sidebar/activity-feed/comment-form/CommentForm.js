@@ -166,7 +166,6 @@ class CommentForm extends React.Component<Props, State> {
                 <Media.Body className="bcs-CommentForm-body" data-testid="bcs-CommentForm-body">
                     <Form onValidSubmit={this.onFormValidSubmitHandler}>
                         <DraftJSMentionSelector
-                            ariaLabel={formatMessage(messages.commentLabel)}
                             className="bcs-CommentForm-input"
                             contacts={isOpen ? mentionSelectorContacts : []}
                             editorState={commentEditorState}
@@ -174,7 +173,7 @@ class CommentForm extends React.Component<Props, State> {
                             isDisabled={isDisabled}
                             isRequired={isOpen}
                             name="commentText"
-                            label="Comment"
+                            label={formatMessage(messages.commentLabel)}
                             onChange={this.onMentionSelectorChangeHandler}
                             onFocus={onFocus}
                             onMention={getMentionWithQuery}
