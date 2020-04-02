@@ -173,7 +173,7 @@ class CommentForm extends React.Component<Props, State> {
                             isDisabled={isDisabled}
                             isRequired={isOpen}
                             name="commentText"
-                            label="Comment"
+                            label={formatMessage(messages.commentLabel)}
                             onChange={this.onMentionSelectorChangeHandler}
                             onFocus={onFocus}
                             onMention={getMentionWithQuery}
