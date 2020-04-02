@@ -1,6 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { ContentPickerComponent as ContentPicker } from '../ContentPicker';
+import UploadDialog from '../../common/upload-dialog';
 
 jest.mock('../../common/header/Header', () => 'mock-header');
 jest.mock('../../common/sub-header/SubHeader', () => 'mock-subheader');
@@ -15,6 +16,7 @@ describe('elements/content-picker/ContentPicker', () => {
 
     beforeEach(() => {
         rootElement = document.createElement('div');
+        rootElement.appendChild(document.createElement('div'));
         document.body.appendChild(rootElement);
     });
 
@@ -34,6 +36,26 @@ describe('elements/content-picker/ContentPicker', () => {
             instance.fetchFolder = jest.fn();
             instance.uploadSuccessHandler();
             expect(instance.fetchFolder).toHaveBeenCalledWith('123', false);
+        });
+    });
+
+    describe('render()', () => {
+        test('should render UploadDialog with contentUploaderProps', () => {
+            const contentUploaderProps = {
+                apiHost: 'https://api.box.com',
+                chunked: false,
+            };
+            const wrapper = getWrapper({ canUpload: true, contentUploaderProps });
+            wrapper.setState({
+                currentCollection: {
+                    permissions: {
+                        can_upload: true,
+                    },
+                },
+            });
+            const uploadDialogElement = wrapper.find(UploadDialog);
+            expect(uploadDialogElement.length).toBe(1);
+            expect(uploadDialogElement.prop('contentUploaderProps')).toEqual(contentUploaderProps);
         });
     });
 });
