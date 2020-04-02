@@ -118,9 +118,7 @@ describe('api/File', () => {
 
         test('should throw from get if initial xhr request is rejected', () => {
             file.xhr = {
-                get: jest.fn().mockImplementation(() => {
-                    throw new Error();
-                }),
+                get: jest.fn().mockRejectedValue(new Error()),
             };
 
             utils.retryNumOfTimes = jest.fn();
@@ -133,7 +131,7 @@ describe('api/File', () => {
 
         test('should throw from retryNumOfTimes if xhr successful but retryNumOfTimes unsuccessful throws error', () => {
             file.xhr = {
-                get: jest.fn().mockReturnValue(Promise.resolve('data')),
+                get: jest.fn().mockResolvedValue('data'),
             };
 
             utils.retryNumOfTimes = jest.fn().mockImplementation(() => {
@@ -141,7 +139,6 @@ describe('api/File', () => {
             });
 
             return file.generateRepresentation(representation).catch(() => {
-                expect(file.xhr.get).toHaveBeenCalled();
                 expect(utils.retryNumOfTimes).toThrow();
             });
         });
@@ -149,13 +146,12 @@ describe('api/File', () => {
         test('should return updated representation if successful', () => {
             const updatedRepresentation = 'updatedRepresentation';
             file.xhr = {
-                get: jest.fn().mockReturnValue(Promise.resolve('data')),
+                get: jest.fn().mockResolvedValue('data'),
             };
 
             utils.retryNumOfTimes = jest.fn().mockReturnValue(updatedRepresentation);
 
             return file.generateRepresentation(representation).then(result => {
-                expect(file.xhr.get).toHaveBeenCalled();
                 expect(utils.retryNumOfTimes).toHaveBeenCalled();
                 expect(result).toBe(updatedRepresentation);
             });

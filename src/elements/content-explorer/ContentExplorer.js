@@ -841,17 +841,13 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     async updateCollection(collection: Collection, selectedItem: ?BoxItem, callback: Function = noop): Object {
-        // const { features } = this.props;
         const { items = [] } = collection;
         const fileAPI = this.api.getFileAPI(false);
         const newCollection: Collection = { ...collection };
         const selectedId = selectedItem ? selectedItem.id : null;
-        // const thumbnails = await Promise.all(items.map(item => fileAPI.getThumbnailUrl(item)));
         let newSelectedItem: ?BoxItem;
 
-        let itemThumbnails = [];
-        // const fileAPI = this.api.getFileAPI(false);
-        itemThumbnails = await Promise.all(
+        const itemThumbnails = await Promise.all(
             items.map(item => {
                 return item.type === TYPE_FILE ? fileAPI.getThumbnailUrl(item) : null;
             }),

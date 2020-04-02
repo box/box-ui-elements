@@ -1,3 +1,4 @@
+import sinon from 'sinon';
 import { retryNumOfTimes } from '../function';
 
 const sandbox = sinon.sandbox.create();
@@ -11,7 +12,7 @@ describe('util/function', () => {
     describe('retryNumOfTimes()', () => {
         test('should create a promise that resolves when the wrapped promise resolves', () => {
             const inner = sandbox.mock();
-            const promise = retryNumOfTimes((resolve) => {
+            const promise = retryNumOfTimes(resolve => {
                 inner();
                 resolve();
             }, 2);

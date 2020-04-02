@@ -86,47 +86,49 @@ class File extends Item {
     }
 
     /**
+     * Determines whether the call to the file representations API has completed
+     *
+     * @param {data: { FileRepresentation }} response
+     * @return {boolean}
+     */
+    isRepresentationsCallComplete(response: { data: FileRepresentation }): boolean {
+        const status = getProp(response, 'data.status.state');
+        return (
+            !status ||
+            status === REPRESENTATIONS_RESPONSE_ERROR ||
+            status === REPRESENTATIONS_RESPONSE_SUCCESS ||
+            status === REPRESENTATIONS_RESPONSE_VIEWABLE
+        );
+    }
+
+    /**
      * Polls a representation's infoUrl, attempting to generate a representation
      *
-     * @param {FileRepresentation} representation - representation that should have it's info.url polled
+     * @param {FileRepresentation} representation - representation that should have its info.url polled
      * @return {Promise<FileRepresentation>} - representation updated with most current status
      */
     async generateRepresentation(representation: FileRepresentation): Promise<FileRepresentation> {
         const infoUrl = getProp(representation, 'info.url');
 
-        const numOfTries = 4;
-        const initialTimeout = 2000;
-        const backoffFactor = 2;
-
         if (!infoUrl) {
             return representation;
         }
 
-        const isStatusSuccess = response => {
-            const status = getProp(response, 'data.status.state');
-            return (
-                !status ||
-                status === REPRESENTATIONS_RESPONSE_ERROR ||
-                status === REPRESENTATIONS_RESPONSE_SUCCESS ||
-                status === REPRESENTATIONS_RESPONSE_VIEWABLE
-            );
-        };
-
-        return this.xhr.get({ url: infoUrl }).then(() =>
-            retryNumOfTimes(
-                (successCallback, errorCallback) =>
-                    this.xhr
-                        .get({ url: infoUrl })
-                        .then(response =>
-                            isStatusSuccess(response) ? successCallback(response.data) : errorCallback(response.data),
-                        )
-                        .catch(e => {
-                            errorCallback(e);
-                        }),
-                numOfTries,
-                initialTimeout,
-                backoffFactor,
-            ),
+        return retryNumOfTimes(
+            (successCallback, errorCallback) =>
+                this.xhr
+                    .get({ successCallback, errorCallback, url: infoUrl })
+                    .then(response =>
+                        this.isRepresentationsCallComplete(response)
+                            ? successCallback(response.data)
+                            : errorCallback(response.data),
+                    )
+                    .catch(e => {
+                        errorCallback(e);
+                    }),
+            4,
+            2000,
+            2,
         );
     }
 
