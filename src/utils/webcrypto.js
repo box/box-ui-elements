@@ -46,7 +46,6 @@ function digest(algorithm: string, buffer: ArrayBuffer): Promise<ArrayBuffer> {
             cryptoOperation.oncomplete = event => {
                 resolve(event.target.result);
             };
-
             cryptoOperation.onerror = reject;
         }
     });
