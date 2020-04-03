@@ -1,3 +1,4 @@
+import sha1 from 'js-sha1';
 /**
  * @flow
  * @file Wrapper to provide a consistent interface for the webcrypto API
@@ -31,13 +32,22 @@ function digest(algorithm: string, buffer: ArrayBuffer): Promise<ArrayBuffer> {
     // IE11 implements an early version of the SubtleCrypto interface which doesn't use Promises
     // See http://web-developer-articles.blogspot.com/2015/05/web-cryptography-api.html
     return new Promise((resolve, reject) => {
-        const cryptoOperation = cryptoRef.subtle.digest({ name: algorithm }, buffer);
+        // Microsoft has dropped support for SHA-1 and so SHA-1 needs to be calculated differently
+        if (algorithm === 'SHA-1') {
+            try {
+                const hashBuffer = sha1.arrayBuffer(buffer);
+                resolve(hashBuffer);
+            } catch (e) {
+                reject(e);
+            }
+        } else {
+            const cryptoOperation = cryptoRef.subtle.digest({ name: algorithm }, buffer);
 
-        cryptoOperation.oncomplete = event => {
-            resolve(event.target.result);
-        };
-
-        cryptoOperation.onerror = reject;
+            cryptoOperation.oncomplete = event => {
+                resolve(event.target.result);
+            };
+            cryptoOperation.onerror = reject;
+        }
     });
 }
 

@@ -23,12 +23,8 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
     describe('render()', () => {
         test('should correctly render the component', () => {
             const wrapper = shallow(<DraftJSEditor {...requiredProps} />);
-            const label = wrapper.find('Label');
             const tooltip = wrapper.find('Tooltip');
             expect(wrapper.hasClass('draft-js-editor')).toBe(true);
-
-            expect(label.length).toBe(1);
-            expect(label.prop('hideLabel')).toBeFalsy();
             expect(tooltip.length).toBe(1);
             expect(tooltip.children().is('div')).toBe(true);
             expect(wrapper.find(Editor).length).toBe(1);
@@ -36,7 +32,14 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
 
         test('should hide label when specified', () => {
             const wrapper = shallow(<DraftJSEditor {...requiredProps} hideLabel />);
-            expect(wrapper.find('Label').prop('hideLabel')).toBe(true);
+
+            expect(wrapper.find('.bdl-Label').hasClass('accessibility-hidden')).toBe(true);
+        });
+
+        test('should render optional message', () => {
+            const wrapper = shallow(<DraftJSEditor {...requiredProps} isRequired={false} />);
+
+            expect(wrapper.find('OptionalFormattedMessage').exists()).toBe(true);
         });
 
         test('should call handleChange when <Editor /> onchange called', () => {

@@ -12,6 +12,11 @@ const messages = defineMessages({
         defaultMessage: 'Cancel',
         description: 'Text for cancel button',
     },
+    commentLabel: {
+        id: 'be.contentSidebar.activityFeed.commentForm.commentLabel',
+        defaultMessage: 'Comment',
+        description: 'Accessible label for comment input field',
+    },
     commentPost: {
         id: 'be.contentSidebar.activityFeed.commentForm.commentPost',
         defaultMessage: 'Post',
@@ -22,7 +27,6 @@ const messages = defineMessages({
         defaultMessage: 'Write a comment',
         description: 'Placeholder for comment input',
     },
-
     approvalAddAssignee: {
         id: 'be.contentSidebar.activityFeed.commentForm.approvalAddAssignee',
         defaultMessage: 'Add an assignee',

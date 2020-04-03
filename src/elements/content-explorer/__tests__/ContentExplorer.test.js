@@ -4,6 +4,7 @@ import { mount } from 'enzyme';
 import noop from 'lodash/noop';
 import * as utils from '../utils';
 import { ContentExplorerComponent as ContentExplorer } from '../ContentExplorer';
+import UploadDialog from '../../common/upload-dialog';
 import { FOLDER_FIELDS_TO_FETCH } from '../../../utils/fields';
 import { VIEW_MODE_GRID } from '../../../constants';
 
@@ -23,6 +24,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
 
     beforeEach(() => {
         rootElement = document.createElement('div');
+        rootElement.appendChild(document.createElement('div'));
         document.body.appendChild(rootElement);
     });
 
@@ -550,6 +552,26 @@ describe('elements/content-explorer/ContentExplorer', () => {
                     percentLoaded: 100,
                 },
             });
+        });
+    });
+
+    describe('render()', () => {
+        test('should render UploadDialog with contentUploaderProps', () => {
+            const contentUploaderProps = {
+                apiHost: 'https://api.box.com',
+                chunked: false,
+            };
+            const wrapper = getWrapper({ canUpload: true, contentUploaderProps });
+            wrapper.setState({
+                currentCollection: {
+                    permissions: {
+                        can_upload: true,
+                    },
+                },
+            });
+            const uploadDialogElement = wrapper.find(UploadDialog);
+            expect(uploadDialogElement.length).toBe(1);
+            expect(uploadDialogElement.prop('contentUploaderProps')).toEqual(contentUploaderProps);
         });
     });
 });

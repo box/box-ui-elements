@@ -62,6 +62,18 @@ describe('icons/file-icon/FileIcon', () => {
         {
             extension: 'zip',
         },
+        {
+            extension: 'heic',
+        },
+        {
+            extension: 'heif',
+        },
+        {
+            extension: 'HEIC',
+        },
+        {
+            extension: 'HEIF',
+        },
     ].forEach(({ extension }) => {
         test('should render the expected icon when extension is defined', () => {
             const wrapper = getWrapper({ extension });
