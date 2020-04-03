@@ -21,6 +21,7 @@ import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
+import { withAnnotatorContext } from '../common/annotator-context';
 import {
     DEFAULT_COLLAB_DEBOUNCE,
     ORIGIN_ACTIVITY_SIDEBAR,
@@ -118,6 +119,28 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const { currentUser } = this.props;
         this.fetchFeedItems(true);
         this.fetchCurrentUser(currentUser);
+    }
+
+    componentDidUpdate(prevProps: Props) {
+        const {
+            annotation: prevAnnotation,
+            annotationIsPending: prevAnnotationIsPending,
+            annotationOperation: prevAnnotationOperation,
+        } = prevProps;
+        const { annotation, annotationIsPending, annotationOperation } = this.props;
+
+        if (annotationOperation === 'create' && annotationIsPending && prevAnnotation !== annotation) {
+            this.props.api.feedItemsAPI(false).addFeedItem(annotation);
+        }
+
+        if (
+            annotationOperation === 'create' &&
+            prevAnnotationOperation === 'create' &&
+            prevAnnotationIsPending &&
+            !annotationIsPending
+        ) {
+            this.props.api.feedItemsAPI(false).updateFeedItem(annotation);
+        }
     }
 
     /**
@@ -650,4 +673,5 @@ export default flow([
     withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR),
     withAPIContext,
     withFeatureConsumer,
+    withAnnotatorContext,
 ])(ActivitySidebar);
