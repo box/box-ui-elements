@@ -216,6 +216,9 @@ type FileRepresentation = {
     content?: {
         url_template: string,
     },
+    info?: {
+        url: string,
+    },
     properties?: {
         dimensions: string,
         paged: string,
@@ -223,7 +226,7 @@ type FileRepresentation = {
     },
     representation?: string,
     status: {
-        state: string,
+        state: ?string,
     },
 };
 
@@ -390,4 +393,5 @@ export type {
     Recent,
     RecentCollection,
     FileVersions,
+    FileRepresentation,
 };
