@@ -34,7 +34,7 @@ import API from '../../api';
 import PreviewHeader from './preview-header';
 import PreviewNavigation from './PreviewNavigation';
 import PreviewLoading from './PreviewLoading';
-import AnnotatorContext from '../common/annotator-context/AnnotatorContext';
+import { withAnnotations } from '../common/annotator-context';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -83,6 +83,7 @@ type Props = {
     logoUrl?: string,
     measureRef: Function,
     messages?: StringMap,
+    onAnnotationCreate: Function,
     onClose?: Function,
     onDownload: Function,
     onLoad: Function,
@@ -101,18 +102,7 @@ type Props = {
 } & ErrorContextProps &
     WithLoggerProps;
 
-const CREATE: 'create' = 'create';
-type AnnotationOperation = typeof CREATE;
-type AnnotatorState = {
-    activeAnnotationId?: string,
-    annotation?: Object,
-    isPending?: boolean,
-    operation?: AnnotationOperation,
-    selectAnnotation: (annotationId?: string) => void,
-};
-
 type State = {
-    annotatorState?: AnnotatorState,
     canPrint?: boolean,
     currentFileId?: string,
     error?: ErrorType,
@@ -191,7 +181,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
     updateVersionToCurrent: ?() => void;
 
     initialState: State = {
-        annotatorState: {},
         canPrint: false,
         error: undefined,
         isReloadNotificationVisible: false,
@@ -210,6 +199,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         enableThumbnailsSidebar: false,
         hasHeader: false,
         language: DEFAULT_LOCALE,
+        onAnnotationCreate: noop,
         onDownload: noop,
         onError: noop,
         onLoad: noop,
@@ -709,30 +699,19 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.setState({ canPrint: !!preview && (!preview.canPrint || preview.canPrint()) });
     }
 
-    handleAnnotatorLoad = annotator => {
-        const { annotatorState } = this.state;
-        this.setState({
-            annotatorState: { ...annotatorState, selectAnnotation: annotationId => annotator.selectById(annotationId) },
-        });
-    };
-
-    handleAnnotationPending = annotation => {
-        const { annotatorState } = this.state;
-        this.setState({ annotatorState: { ...annotatorState, annotation, isPending: true, operation: CREATE } });
-    };
-
-    handleAnnotationSaved = annotation => {
-        const { annotatorState } = this.state;
-        this.setState({ annotatorState: { ...annotatorState, annotation, isPending: false } });
-    };
-
     /**
      * Loads preview in the component using the preview library.
      *
      * @return {void}
      */
     loadPreview = async (): Promise<void> => {
-        const { enableThumbnailsSidebar, fileOptions, token: tokenOrTokenFunction, ...rest }: Props = this.props;
+        const {
+            enableThumbnailsSidebar,
+            fileOptions,
+            onAnnotationCreate,
+            token: tokenOrTokenFunction,
+            ...rest
+        }: Props = this.props;
         const { file, selectedVersion }: State = this.state;
 
         if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction) {
@@ -774,9 +753,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.preview.addListener('thumbnailsClose', () => this.setState({ isThumbnailSidebarOpen: false }));
 
         if (previewOptions.showAnnotationsControls) {
-            this.preview.addListener('annotator', this.handleAnnotatorLoad);
-            this.preview.addListener('annotationpending', this.handleAnnotationPending);
-            this.preview.addListener('annotationsaved', this.handleAnnotationSaved);
+            this.preview.addListener('annotationCreate', onAnnotationCreate);
         }
 
         this.preview.updateFileCache([file]);
@@ -1181,7 +1158,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }: Props = this.props;
 
         const {
-            annotatorState,
             canPrint,
             error,
             file,
@@ -1211,87 +1187,74 @@ class ContentPreview extends React.PureComponent<Props, State> {
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
-            <AnnotatorContext.Provider value={annotatorState}>
-                <Internationalize language={language} messages={messages}>
-                    <div
-                        id={this.id}
-                        className={styleClassName}
-                        ref={measureRef}
-                        onKeyDown={this.onKeyDown}
-                        tabIndex={0}
-                    >
-                        {hasHeader && (
-                            <PreviewHeader
-                                file={file}
-                                logoUrl={logoUrl}
-                                token={token}
-                                onClose={onHeaderClose}
-                                onPrint={this.print}
-                                canDownload={this.canDownload()}
-                                canPrint={canPrint}
-                                onDownload={this.download}
-                                contentOpenWithProps={contentOpenWithProps}
-                                canAnnotate={this.canAnnotate()}
-                                selectedVersion={selectedVersion}
-                            />
-                        )}
-                        <div className="bcpr-body">
-                            <div className="bcpr-container" onMouseMove={this.onMouseMove} ref={this.containerRef}>
-                                {file ? (
-                                    <Measure bounds onResize={this.onResize}>
-                                        {({ measureRef: previewRef }) => (
-                                            <div ref={previewRef} className="bcpr-content" />
-                                        )}
-                                    </Measure>
-                                ) : (
-                                    <div className="bcpr-loading-wrapper">
-                                        <PreviewLoading
-                                            errorCode={errorCode}
-                                            isLoading={!errorCode}
-                                            loadingIndicatorProps={{
-                                                size: 'large',
-                                            }}
-                                        />
-                                    </div>
-                                )}
-                                <PreviewNavigation
-                                    collection={collection}
-                                    currentIndex={this.getFileIndex()}
-                                    history={history}
-                                    onNavigateLeft={this.navigateLeft}
-                                    onNavigateRight={this.navigateRight}
-                                />
-                            </div>
-                            {file && (
-                                <LoadableSidebar
-                                    {...contentSidebarProps}
-                                    apiHost={apiHost}
-                                    token={token}
-                                    cache={this.api.getCache()}
-                                    fileId={currentFileId}
-                                    getPreview={this.getPreview}
-                                    getViewer={this.getViewer}
-                                    history={history}
-                                    isDefaultOpen={isLarge || isVeryLarge}
-                                    language={language}
-                                    ref={this.contentSidebar}
-                                    sharedLink={sharedLink}
-                                    sharedLinkPassword={sharedLinkPassword}
-                                    requestInterceptor={requestInterceptor}
-                                    responseInterceptor={responseInterceptor}
-                                    onVersionChange={this.onVersionChange}
-                                />
+            <Internationalize language={language} messages={messages}>
+                <div id={this.id} className={styleClassName} ref={measureRef} onKeyDown={this.onKeyDown} tabIndex={0}>
+                    {hasHeader && (
+                        <PreviewHeader
+                            file={file}
+                            logoUrl={logoUrl}
+                            token={token}
+                            onClose={onHeaderClose}
+                            onPrint={this.print}
+                            canDownload={this.canDownload()}
+                            canPrint={canPrint}
+                            onDownload={this.download}
+                            contentOpenWithProps={contentOpenWithProps}
+                            canAnnotate={this.canAnnotate()}
+                            selectedVersion={selectedVersion}
+                        />
+                    )}
+                    <div className="bcpr-body">
+                        <div className="bcpr-container" onMouseMove={this.onMouseMove} ref={this.containerRef}>
+                            {file ? (
+                                <Measure bounds onResize={this.onResize}>
+                                    {({ measureRef: previewRef }) => <div ref={previewRef} className="bcpr-content" />}
+                                </Measure>
+                            ) : (
+                                <div className="bcpr-loading-wrapper">
+                                    <PreviewLoading
+                                        errorCode={errorCode}
+                                        isLoading={!errorCode}
+                                        loadingIndicatorProps={{
+                                            size: 'large',
+                                        }}
+                                    />
+                                </div>
                             )}
+                            <PreviewNavigation
+                                collection={collection}
+                                currentIndex={this.getFileIndex()}
+                                history={history}
+                                onNavigateLeft={this.navigateLeft}
+                                onNavigateRight={this.navigateRight}
+                            />
                         </div>
-                        {isReloadNotificationVisible && (
-                            <ReloadNotification
-                                onClose={this.closeReloadNotification}
-                                onClick={this.loadFileFromStage}
+                        {file && (
+                            <LoadableSidebar
+                                {...contentSidebarProps}
+                                apiHost={apiHost}
+                                token={token}
+                                cache={this.api.getCache()}
+                                fileId={currentFileId}
+                                getPreview={this.getPreview}
+                                getViewer={this.getViewer}
+                                history={history}
+                                isDefaultOpen={isLarge || isVeryLarge}
+                                language={language}
+                                ref={this.contentSidebar}
+                                sharedLink={sharedLink}
+                                sharedLinkPassword={sharedLinkPassword}
+                                requestInterceptor={requestInterceptor}
+                                responseInterceptor={responseInterceptor}
+                                onVersionChange={this.onVersionChange}
                             />
                         )}
                     </div>
-                </Internationalize>
-            </AnnotatorContext.Provider>
+                    {isReloadNotificationVisible && (
+                        <ReloadNotification onClose={this.closeReloadNotification} onClick={this.loadFileFromStage} />
+                    )}
+                </div>
+            </Internationalize>
         );
         /* eslint-enable jsx-a11y/no-static-element-interactions */
         /* eslint-enable jsx-a11y/no-noninteractive-tabindex */
@@ -1305,4 +1268,5 @@ export default flow([
     withFeatureProvider,
     withLogger(ORIGIN_CONTENT_PREVIEW),
     withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
+    withAnnotations,
 ])(ContentPreview);
