@@ -6,6 +6,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
 import AppActivity from '../app-activity';
+import AnnotationActivity from '../annotations';
 import Comment from '../comment';
 import TaskNew from '../task-new';
 import Version, { CollapsedVersion } from '../version';
@@ -27,6 +28,9 @@ type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems<>,
+    onAnnotationDelete?: Function,
+    onAnnotationEdit?: Function,
+    onAnnotationSelect?: Function,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
     onCommentEdit?: Function,
@@ -48,6 +52,9 @@ const ActiveState = ({
     items,
     mentionSelectorContacts,
     getMentionWithQuery,
+    onAnnotationDelete,
+    onAnnotationEdit,
+    onAnnotationSelect,
     onAppActivityDelete,
     onCommentDelete,
     onCommentEdit,
@@ -140,6 +147,23 @@ const ActiveState = ({
                                 data-testid="app-activity"
                             >
                                 <AppActivity currentUser={currentUser} onDelete={onAppActivityDelete} {...item} />
+                            </li>
+                        );
+                    case 'annotation':
+                        return (
+                            <li
+                                key={item.type + item.id}
+                                className="bcs-activity-feed-annotation-activity"
+                                data-testid="annotation-activity"
+                            >
+                                <AnnotationActivity
+                                    currentUser={currentUser}
+                                    onDelete={onAnnotationDelete}
+                                    onEdit={onAnnotationEdit}
+                                    onSelect={onAnnotationSelect}
+                                    translations={translations}
+                                    {...item}
+                                />
                             </li>
                         );
                     default:

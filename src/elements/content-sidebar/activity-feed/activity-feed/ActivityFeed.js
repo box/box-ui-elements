@@ -36,6 +36,9 @@ type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
     isDisabled?: boolean,
     mentionSelectorContacts?: SelectorItems<User>,
+    onAnnotationDelete?: Function,
+    onAnnotationEdit?: Function,
+    onAnnotationSelect?: Function,
     onAppActivityDelete?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
@@ -194,6 +197,9 @@ class ActivityFeed extends React.Component<Props, State> {
             getAvatarUrl,
             getUserProfileUrl,
             file,
+            onAnnotationDelete,
+            onAnnotationEdit,
+            onAnnotationSelect,
             onAppActivityDelete,
             onCommentCreate,
             getApproverWithQuery,
@@ -256,6 +262,9 @@ class ActivityFeed extends React.Component<Props, State> {
                             isDisabled={isDisabled}
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                            onAnnotationDelete={onAnnotationDelete}
+                            onAnnotationEdit={onAnnotationEdit}
+                            onAnnotationSelect={onAnnotationSelect}
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}

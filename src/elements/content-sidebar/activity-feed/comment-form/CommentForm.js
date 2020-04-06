@@ -34,6 +34,7 @@ type Props = {
     onCancel: Function,
     onFocus: Function,
     onSubmit?: Function,
+    showTip: boolean,
     tagged_message?: string,
     updateComment?: Function,
     user: User,
@@ -149,6 +150,7 @@ class CommentForm extends React.Component<Props, State> {
             isEditing,
             tagged_message,
             getAvatarUrl,
+            showTip = true,
         } = this.props;
         const { commentEditorState } = this.state;
         const inputContainerClassNames = classNames('bcs-CommentForm', className, {
@@ -180,9 +182,11 @@ class CommentForm extends React.Component<Props, State> {
                             placeholder={tagged_message ? undefined : formatMessage(messages.commentWrite)}
                             validateOnBlur={false}
                         />
-                        <aside className="bcs-CommentForm-tip">
-                            <FormattedMessage {...messages.atMentionTip} />
-                        </aside>
+                        {showTip && (
+                            <aside className="bcs-CommentForm-tip">
+                                <FormattedMessage {...messages.atMentionTip} />
+                            </aside>
+                        )}
 
                         {isOpen && <CommentFormControls onCancel={onCancel} />}
                     </Form>
