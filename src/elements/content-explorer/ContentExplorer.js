@@ -134,7 +134,7 @@ type Props = {
     sortBy: SortBy,
     sortDirection: SortDirection,
     staticHost: string,
-    staticPath: String,
+    staticPath: string,
     token: Token,
     uploadHost: string,
 };
