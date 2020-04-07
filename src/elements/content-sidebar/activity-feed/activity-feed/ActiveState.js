@@ -158,6 +158,8 @@ const ActiveState = ({
                             >
                                 <AnnotationActivity
                                     currentUser={currentUser}
+                                    getAvatarUrl={getAvatarUrl}
+                                    getUserProfileUrl={getUserProfileUrl}
                                     onDelete={onAnnotationDelete}
                                     onEdit={onAnnotationEdit}
                                     onSelect={onAnnotationSelect}

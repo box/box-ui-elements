@@ -1,5 +1,6 @@
 // @flow
-import type { BoxCommentPermission } from 'common/types/feed';
+import type { User } from '../../../../common/types/core';
+import type { BoxCommentPermission } from '../../../../common/types/feed';
 
 type Rect = {
     fill: {
@@ -32,14 +33,13 @@ type AnnotationFileVersion = {
 
 type AnnotationActivity = {
     created_at: string,
-    created_by: string,
-    description: object,
+    created_by: User,
+    description: string,
     file_version: AnnotationFileVersion,
     id: string,
     modified_at: string,
     modified_by: User,
     permissions: BoxCommentPermission,
-    replies: object,
     status: 'deleted' | 'open' | 'resolved',
     target: AnnotationRegionTarget,
     type: 'annotation',

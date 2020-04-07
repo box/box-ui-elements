@@ -262,8 +262,8 @@ class ActivityFeed extends React.Component<Props, State> {
                             isDisabled={isDisabled}
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={onTaskAssignmentUpdate}
-                            onAnnotationDelete={onAnnotationDelete}
-                            onAnnotationEdit={onAnnotationEdit}
+                            onAnnotationDelete={hasCommentPermission ? onAnnotationDelete : noop}
+                            onAnnotationEdit={hasCommentPermission ? onAnnotationEdit : noop}
                             onAnnotationSelect={onAnnotationSelect}
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}

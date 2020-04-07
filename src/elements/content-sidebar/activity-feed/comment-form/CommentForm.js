@@ -34,7 +34,7 @@ type Props = {
     onCancel: Function,
     onFocus: Function,
     onSubmit?: Function,
-    showTip: boolean,
+    showTip?: boolean,
     tagged_message?: string,
     updateComment?: Function,
     user: User,

@@ -20,6 +20,7 @@ import CommentForm from '../comment-form';
 import { bdlGray } from '../../../../styles/variables';
 import { PLACEHOLDER_USER } from '../../../../constants';
 import messages from './messages';
+import type { AnnotationRegionTarget } from './types';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
@@ -41,12 +42,12 @@ type Props = {
     isPending?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     modified_at?: string | number,
-    onDelete: ({ id: string, permissions: BoxCommentPermission }) => void,
-    onEdit: (id: string, text: string, hasMention: boolean, permissions?: BoxCommentPermission) => any,
-    onSelect: (id: string) => void,
+    onDelete?: ({ id: string, permissions?: BoxCommentPermission }) => any,
+    onEdit?: (id: string, text: string, hasMention: boolean, permissions?: BoxCommentPermission) => any,
+    onSelect?: (id: string) => any,
     permissions?: BoxCommentPermission,
-    tagged_message: string,
-    target?: object,
+    tagged_message?: string,
+    target?: AnnotationRegionTarget,
     translatedTaggedMessage?: string,
     translations?: Translations,
 };
@@ -78,7 +79,17 @@ const AnnotationActivity = (props: Props) => {
     const [isInputOpen, setIsInputOpen] = useState(false);
 
     const handleDeleteConfirm = (): void => {
+        if (!onDelete) {
+            return;
+        }
         onDelete({ id, permissions });
+    };
+
+    const handleOnSelect = () => {
+        if (!onSelect) {
+            return;
+        }
+        onSelect(id);
     };
 
     const handleDeleteCancel = (): void => {
@@ -107,7 +118,10 @@ const AnnotationActivity = (props: Props) => {
     };
 
     const handleUpdate = ({ text, hasMention }: { hasMention: boolean, id: string, text: string }): void => {
-        onEdit(id, text, hasMention, permissions);
+        if (onEdit) {
+            onEdit(id, text, hasMention, permissions);
+        }
+
         commentFormSubmitHandler();
     };
 
@@ -193,6 +207,7 @@ const AnnotationActivity = (props: Props) => {
                             })}
                             updateComment={handleUpdate}
                             isOpen={isInputOpen}
+                            // $FlowFixMe
                             user={currentUser}
                             onCancel={commentFormCancelHandler}
                             onFocus={commentFormFocusHandler}
@@ -218,10 +233,11 @@ const AnnotationActivity = (props: Props) => {
                         href={`/activity/annotations/${id}`}
                         id={id}
                         message={{ ...messages.annotationActivityPageItem, values: { number: 1 } }}
-                        onClick={onSelect}
+                        onClick={handleOnSelect}
                     />
                 </Media.Body>
             </Media>
+            {/* $FlowFixMe */}
             {error ? <ActivityError {...error} /> : null}
         </div>
     );
