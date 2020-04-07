@@ -95,6 +95,7 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     showAnnotations?: boolean,
+    showAnnotationsControls?: boolean,
     staticHost: string,
     staticPath: string,
     token: Token,
@@ -709,6 +710,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             enableThumbnailsSidebar,
             fileOptions,
             onAnnotationCreate,
+            showAnnotationsControls,
             token: tokenOrTokenFunction,
             ...rest
         }: Props = this.props;
@@ -738,8 +740,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
             fileOptions: fileOpts,
             header: 'none',
             headerElement: `#${this.id} .bcpr-PreviewHeader`,
-            showAnnotations: true,
-            showAnnotationsControls: true,
+            showAnnotations: this.canViewAnnotations(),
+            showAnnotationsControls,
             showDownload: this.canDownload(),
             skipServerUpdate: true,
             useHotkeys: false,
