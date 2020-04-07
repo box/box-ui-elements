@@ -83,6 +83,35 @@ const handleChange = selectedOption => {
 </Label>
 ```
 
+Header Content
+
+```
+initialState = {
+    selectedValue: 'b',
+};
+
+const options = [
+    { displayText: 'Option A', value: 'a' },
+    { displayText: 'Option B', value: 'b' },
+    { displayText: 'Option C', value: 'c' },
+    { displayText: 'Option D', value: 'd' },
+    { displayText: 'Option E', value: 'e' },
+];
+
+const handleChange = selectedOption => {
+    setState({
+        selectedValue: selectedOption.value,
+    });
+};
+
+<SingleSelectField
+    headerContent={'Header Title'}
+    onChange={ handleChange }
+    options={ options }
+    selectedValue={ state.selectedValue }
+/>
+```
+
 Invalid
 
 ```

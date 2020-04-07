@@ -38,6 +38,8 @@ type Props = {
     defaultValue?: SelectOptionValueProp,
     /** An optional error to show within a tooltip. */
     error?: React.Node,
+    /** An optional header section to show within the dropdown list */
+    headerContent?: React.Node,
     /** The select button is disabled if true */
     isDisabled?: boolean,
     /** Whether to allow the dropdown to overflow its boundaries and remain attached to its reference */
@@ -400,6 +402,7 @@ class BaseSelectField extends React.Component<Props, State> {
     render() {
         const {
             className,
+            headerContent,
             multiple,
             isEscapedWithReference,
             isRightAligned,
@@ -434,6 +437,7 @@ class BaseSelectField extends React.Component<Props, State> {
                         selectedValues={selectedValues}
                         selectFieldID={this.selectFieldID}
                     >
+                        {headerContent}
                         {this.renderSelectOptions()}
                     </SelectFieldDropdown>
                 </PopperComponent>

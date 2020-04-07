@@ -35,6 +35,22 @@ describe('components/select-field/BaseSelectField', () => {
             />,
         );
 
+    describe('renderHeaderContent', () => {
+        test('should render header content when dropdown is open', () => {
+            const headerContent = 'Header Title';
+            const wrapper = shallowRenderSelectField({
+                headerContent,
+            });
+            const instance = wrapper.instance();
+
+            instance.setState({
+                isOpen: true,
+            });
+
+            expect(wrapper.find('.overlay').props().children[0]).toBe(headerContent);
+        });
+    });
+
     describe('renderButtonText()', () => {
         test('should render placeholder when there are no selected items and placeholder has been specified', () => {
             const wrapper = shallowRenderSelectField({
