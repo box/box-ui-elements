@@ -125,6 +125,7 @@ type Props = {
     onRename: Function,
     onSelect: Function,
     onUpload: Function,
+    previewLibraryVersion: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     rootFolderId: string,
@@ -133,6 +134,7 @@ type Props = {
     sortBy: SortBy,
     sortDirection: SortDirection,
     staticHost: string,
+    staticPath: String,
     token: Token,
     uploadHost: string,
 };
@@ -1577,6 +1579,8 @@ class ContentExplorer extends Component<Props, State> {
             sharedLink,
             sharedLinkPassword,
             staticHost,
+            staticPath,
+            previewLibraryVersion,
             token,
             uploadHost,
         }: Props = this.props;
@@ -1777,6 +1781,8 @@ class ContentExplorer extends Component<Props, State> {
                             apiHost={apiHost}
                             appHost={appHost}
                             staticHost={staticHost}
+                            staticPath={staticPath}
+                            previewLibraryVersion={previewLibraryVersion}
                             sharedLink={sharedLink}
                             sharedLinkPassword={sharedLinkPassword}
                             contentPreviewProps={contentPreviewProps}
