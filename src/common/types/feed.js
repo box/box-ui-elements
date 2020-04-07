@@ -1,5 +1,6 @@
 // @flow strict
 import type { MessageDescriptor } from 'react-intl';
+import type { AnnotationActivity } from '../../elements/content-sidebar/activity-feed/annotations/types';
 import type { User, BoxItemPermission, BoxItemVersion } from './core';
 
 // Feed item types that can receive deeplinks inline in the feed
@@ -87,8 +88,7 @@ type AppActivityItems = {
     entries: Array<AppActivityItem>,
     total_count: number,
 };
-
-type FeedItem = Comment | Task | BoxItemVersion | AppActivityItem;
+type FeedItem = Comment | Task | BoxItemVersion | AppActivityItem | AnnotationActivity;
 
 type FeedItems = Array<FeedItem>;
 

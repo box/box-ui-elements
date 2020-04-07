@@ -125,9 +125,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      *
      * @private
      * @param {User} [user] - Box User. If missing, gets user that the current token was generated for.
+     * @param {boolean} shouldDestroy
      * @return {void}
      */
-    fetchCurrentUser(user?: User, shouldDestroy?: boolean = false): void {
+    fetchCurrentUser(user?: User, shouldDestroy: boolean = false): void {
         const { api, file } = this.props;
 
         if (!file) {
