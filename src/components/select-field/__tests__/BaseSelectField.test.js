@@ -195,6 +195,20 @@ describe('components/select-field/BaseSelectField', () => {
             expect(wrapper.hasClass(className)).toBe(true);
         });
 
+        test('should render header content in overlay', () => {
+            const headerContent = 'Header Title';
+            const wrapper = shallowRenderSelectField({
+                headerContent,
+            });
+            const overlay = wrapper
+                .find('PopperComponent')
+                .childAt(1)
+                .dive()
+                .dive();
+
+            expect(overlay.props().children[0]).toBe(headerContent);
+        });
+
         test('should render a listbox in overlay with options', () => {
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();

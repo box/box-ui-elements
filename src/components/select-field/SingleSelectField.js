@@ -8,6 +8,8 @@ import type { SelectOptionValueProp, SelectOptionProp } from './props';
 type Props = {
     /** The type of the field */
     fieldType?: string,
+    /** An optional header section to show within the ul */
+    headerContent?: React.Node,
     /** The select field is disabled if true */
     isDisabled?: boolean,
     /** The select field overlay (dropdown) will have a scrollbar and max-height if true * */
@@ -31,7 +33,7 @@ class SingleSelectField extends React.Component<Props> {
     };
 
     render() {
-        const { isDisabled, selectedValue, placeholder, ...rest } = this.props;
+        const { headerContent, isDisabled, selectedValue, placeholder, ...rest } = this.props;
 
         // @TODO: Invariant testing
         // 1) selectedValue is required to be contained in the options
@@ -47,6 +49,7 @@ class SingleSelectField extends React.Component<Props> {
         return (
             <BaseSelectField
                 className={!isFieldSelected && placeholder ? 'placeholder' : ''}
+                headerContent={headerContent}
                 isDisabled={isDisabled}
                 onChange={this.handleChange}
                 placeholder={placeholder}
