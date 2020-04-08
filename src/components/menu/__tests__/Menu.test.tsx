@@ -49,6 +49,30 @@ describe('components/menu/Menu', () => {
             expect(instance.menuItemEls.length).toBe(3);
         });
 
+        test('should set internal menuItemEls with specified menu item selector after mount', () => {
+            const selector = 'div .customized-menu-item:not([aria-disabled])';
+            const wrapper = mount<Menu>(
+                <Menu menuItemSelector={selector}>
+                    <div className="wrapper">
+                        <div className="customized-menu-item" role="menuitem" />
+                        <div role="separator" />
+                        <div className="customized-menu-item" role="menuitem" />
+                        <div aria-disabled="true" className="customized-menu-item" role="menuitem" />
+                        <div>
+                            <a className="customized-menu-item" role="menuitem">
+                                Link
+                            </a>
+                        </div>
+                        <div className="menu-item" role="menuitem" />
+                    </div>
+                </Menu>,
+            );
+
+            const instance = wrapper.instance();
+            // Should have 3 items (li, li, a)
+            expect(instance.menuItemEls.length).toBe(3);
+        });
+
         test('should call setFocus() asynchronously when initialFocusIndex is set to 0', () => {
             const clock = sandbox.useFakeTimers();
             const wrapper = shallow<Menu>(
