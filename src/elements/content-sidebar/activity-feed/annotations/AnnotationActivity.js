@@ -221,7 +221,6 @@ const AnnotationActivity = (props: Props) => {
                         <ActivityMessage id={id} tagged_message={message} getUserProfileUrl={getUserProfileUrl} />
                     )}
                     <AnnotationActivityLink
-                        href={`/activity/annotations/${id}`}
                         id={id}
                         message={{
                             ...messages.annotationActivityPageItem,

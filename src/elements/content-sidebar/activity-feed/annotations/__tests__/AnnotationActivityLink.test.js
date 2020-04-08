@@ -13,7 +13,7 @@ describe('elements/content-sidebar/ActivityFeed/annotation/AnnotationActivity', 
             />,
         );
 
-        expect(wrapper.find('Link').length).toEqual(1);
+        expect(wrapper.find('PlainButton').length).toEqual(1);
         expect(wrapper).toMatchSnapshot();
     });
 

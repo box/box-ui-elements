@@ -23,6 +23,10 @@
 .bcs-AnnotationActivity-link {
     display: inline-block;
     margin-top: 8px;
+
+    &:hover {
+        margin-top: 8px;
+    }
 }
 
 .bcs-AnnotationActivity-headline {

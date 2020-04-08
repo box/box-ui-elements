@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-sidebar/ActivityFeed/annotation/AnnotationActivity should correctly render annotation activity item 1`] = `
-<Link
+<PlainButton
   className="bcs-AnnotationActivity-link"
   onClick={[Function]}
 >
@@ -10,5 +10,5 @@ exports[`elements/content-sidebar/ActivityFeed/annotation/AnnotationActivity sho
     id="be.contentSidebar.activityFeed.annotationActivityPageItem"
     value={1}
   />
-</Link>
+</PlainButton>
 `;
