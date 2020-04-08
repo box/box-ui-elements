@@ -160,10 +160,10 @@ const ActiveState = ({
                                     currentUser={currentUser}
                                     getAvatarUrl={getAvatarUrl}
                                     getUserProfileUrl={getUserProfileUrl}
+                                    mentionSelectorContacts={mentionSelectorContacts}
                                     onDelete={onAnnotationDelete}
                                     onEdit={onAnnotationEdit}
                                     onSelect={onAnnotationSelect}
-                                    translations={translations}
                                     {...item}
                                 />
                             </li>

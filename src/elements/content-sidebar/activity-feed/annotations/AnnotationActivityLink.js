@@ -12,7 +12,7 @@ type Props = {
     onClick: (id: string) => void,
 };
 
-const AnnotationActivityItem = ({ href, id, message, onClick = noop }: Props): React.Node => {
+const AnnotationActivityLink = ({ href, id, message, onClick = noop }: Props): React.Node => {
     const handleClick = event => {
         event.preventDefault();
 
@@ -25,4 +25,4 @@ const AnnotationActivityItem = ({ href, id, message, onClick = noop }: Props): R
     );
 };
 
-export default AnnotationActivityItem;
+export default AnnotationActivityLink;

@@ -29,24 +29,27 @@ export const DETAILS_TARGETS = {
 };
 
 export const ACTIVITY_TARGETS = {
-    INLINE_DELETE_CONFIRM: 'activityfeed-delete-confirm',
-    INLINE_DELETE_CANCEL: 'activityfeed-delete-cancel',
+    ANNOTATION_OPTIONS_DELETE: 'activityfeed-annotationactivity-delete',
+    ANNOTATION_OPTIONS_EDIT: 'activityfeed-annotationactivity-edit',
+    ANNOTATION_OPTIONS: 'activityfeed-annotationactivity',
     APPROVAL_FORM_ADD_TASK: 'activityfeed-apporvalformaddtask',
     APPROVAL_FORM_CANCEL: 'activityfeed-approvalformcancel',
     APPROVAL_FORM_POST: 'activityfeed-approvalformpost',
-    PROFILE: 'activityfeed-profilelink',
-    MENTION: 'activityfeed-mentionlink',
-    VERSION_CARD: 'activityfeed-versioninfo',
-    TASK_DATE_PICKER: 'activityfeed-taskdatepicker',
-    TASK_APPROVE: 'activityfeed-taskapprove',
-    TASK_COMPLETE: 'activityfeed-taskcomplete',
-    TASK_REJECT: 'activityfeed-taskreject',
-    TASK_OPTIONS: 'activityfeedtask', // component
-    TASK_OPTIONS_DELETE: 'activityfeed-task-delete',
-    TASK_OPTIONS_EDIT: 'activityfeed-task-edit',
     COMMENT_OPTIONS: 'activityfeedcomment', // component
     COMMENT_OPTIONS_DELETE: 'activityfeed-comment-delete',
     COMMENT_OPTIONS_EDIT: 'activityfeed-comment-edit',
+    INLINE_DELETE_CANCEL: 'activityfeed-delete-cancel',
+    INLINE_DELETE_CONFIRM: 'activityfeed-delete-confirm',
+    MENTION: 'activityfeed-mentionlink',
+    PROFILE: 'activityfeed-profilelink',
+    TASK_APPROVE: 'activityfeed-taskapprove',
+    TASK_COMPLETE: 'activityfeed-taskcomplete',
+    TASK_DATE_PICKER: 'activityfeed-taskdatepicker',
+    TASK_OPTIONS: 'activityfeedtask', // component
+    TASK_OPTIONS_DELETE: 'activityfeed-task-delete',
+    TASK_OPTIONS_EDIT: 'activityfeed-task-edit',
+    TASK_REJECT: 'activityfeed-taskreject',
+    VERSION_CARD: 'activityfeed-versioninfo',
 };
 
 export const SKILLS_TARGETS = {

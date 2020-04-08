@@ -1,6 +1,10 @@
 // @flow strict
 import type { MessageDescriptor } from 'react-intl';
-import type { AnnotationActivity } from '../../elements/content-sidebar/activity-feed/annotations/types';
+import type {
+    AnnotationFileVersion,
+    AnnotationRegionTarget,
+    AnnotationReply,
+} from '../../elements/content-sidebar/activity-feed/annotations/types';
 import type { User, BoxItemPermission, BoxItemVersion } from './core';
 
 // Feed item types that can receive deeplinks inline in the feed
@@ -88,6 +92,22 @@ type AppActivityItems = {
     entries: Array<AppActivityItem>,
     total_count: number,
 };
+
+type AnnotationActivity = {
+    created_at: string,
+    created_by: User,
+    description?: AnnotationReply,
+    file_version: AnnotationFileVersion,
+    id: string,
+    modified_at: string,
+    modified_by: User,
+    permissions: BoxCommentPermission,
+    replies?: Array<AnnotationReply>,
+    status: 'deleted' | 'open' | 'resolved',
+    target: AnnotationRegionTarget,
+    type: 'annotation',
+};
+
 type FeedItem = Comment | Task | BoxItemVersion | AppActivityItem | AnnotationActivity;
 
 type FeedItems = Array<FeedItem>;
@@ -102,19 +122,22 @@ type ActionItemError = {
 };
 
 export type {
-    FocusableFeedItemType,
-    BoxCommentPermission,
-    Task,
-    Tasks,
-    Comment,
-    Comments,
+    ActionItemError,
     ActivityTemplateItem,
-    AppItem,
+    AnnotationActivity,
+    AnnotationRegionTarget,
+    AnnotationReply,
     AppActivityAPIItem,
     AppActivityAPIItems,
     AppActivityItem,
     AppActivityItems,
+    AppItem,
+    BoxCommentPermission,
+    Comment,
+    Comments,
     FeedItem,
     FeedItems,
-    ActionItemError,
+    FocusableFeedItemType,
+    Task,
+    Tasks,
 };

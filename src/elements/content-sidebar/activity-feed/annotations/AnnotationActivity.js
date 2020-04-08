@@ -1,30 +1,33 @@
 // @flow
-import React, { useState } from 'react';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
-import { FormattedMessage } from 'react-intl';
+import React, { useState } from 'react';
 import TetherComponent from 'react-tether';
-import Avatar from '../Avatar';
-import Media from '../../../../components/media';
-import { MenuItem } from '../../../../components/menu';
-import IconTrash from '../../../../icons/general/IconTrash';
-import IconPencil from '../../../../icons/general/IconPencil';
-import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import DeleteConfirmation from '../common/delete-confirmation';
-import ActivityTimestamp from '../common/activity-timestamp';
-import UserLink from '../common/user-link';
+import { FormattedMessage } from 'react-intl';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
-import AnnotationActivityItem from './AnnotationActivityItem';
+import ActivityTimestamp from '../common/activity-timestamp';
+import AnnotationActivityLink from './AnnotationActivityLink';
+import Avatar from '../Avatar';
 import CommentForm from '../comment-form';
-import { bdlGray } from '../../../../styles/variables';
-import { PLACEHOLDER_USER } from '../../../../constants';
+import DeleteConfirmation from '../common/delete-confirmation';
+import IconPencil from '../../../../icons/general/IconPencil';
+import IconTrash from '../../../../icons/general/IconTrash';
+import Media from '../../../../components/media';
 import messages from './messages';
-import type { AnnotationRegionTarget } from './types';
+import type {
+    ActionItemError,
+    AnnotationReply,
+    AnnotationRegionTarget,
+    BoxCommentPermission,
+} from '../../../../common/types/feed';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
-import type { Translations } from '../../flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
-import type { BoxCommentPermission, ActionItemError } from '../../../../common/types/feed';
+import UserLink from '../common/user-link';
+import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
+import { bdlGray } from '../../../../styles/variables';
+import { MenuItem } from '../../../../components/menu';
+import { PLACEHOLDER_USER } from '../../../../constants';
 
 import './AnnotationActivity.scss';
 
@@ -32,6 +35,7 @@ type Props = {
     created_at: string | number,
     created_by: User,
     currentUser?: User,
+    description?: AnnotationReply,
     error?: ActionItemError,
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
@@ -46,10 +50,7 @@ type Props = {
     onEdit?: (id: string, text: string, hasMention: boolean, permissions?: BoxCommentPermission) => any,
     onSelect?: (id: string) => any,
     permissions?: BoxCommentPermission,
-    tagged_message?: string,
     target?: AnnotationRegionTarget,
-    translatedTaggedMessage?: string,
-    translations?: Translations,
 };
 
 const AnnotationActivity = (props: Props) => {
@@ -57,6 +58,7 @@ const AnnotationActivity = (props: Props) => {
         created_at,
         created_by,
         currentUser,
+        description,
         error,
         getAvatarUrl,
         getMentionWithQuery,
@@ -70,9 +72,6 @@ const AnnotationActivity = (props: Props) => {
         onEdit,
         onSelect,
         permissions = {},
-        tagged_message = '',
-        translatedTaggedMessage,
-        translations,
     } = props;
     const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -130,11 +129,12 @@ const AnnotationActivity = (props: Props) => {
     const canEdit = onEdit !== noop && permissions.can_edit;
     const canDelete = permissions.can_delete;
     const isMenuVisible = (canDelete || canEdit) && !isPending;
+    const message = (description && description.message) || '';
 
     return (
-        <div className={`bcs-AnnotationActivity ${isActive ? 'is-active' : ''}`}>
+        <div className={`bcs-AnnotationActivity ${classNames({ 'is-active': isActive })}`}>
             <Media
-                className={classNames('bcs-Comment-media', {
+                className={classNames('bcs-AnnotationActivity-media', {
                     'bcs-is-pending': isPending || error,
                 })}
             >
@@ -145,21 +145,21 @@ const AnnotationActivity = (props: Props) => {
                     {isMenuVisible && (
                         <TetherComponent
                             attachment="top right"
-                            className="bcs-Comment-deleteConfirmationModal"
+                            className="bcs-AnnotationActivity-deleteConfirmationModal"
                             constraints={[{ to: 'scrollParent', attachment: 'together' }]}
                             targetAttachment="bottom right"
                         >
                             <Media.Menu
                                 isDisabled={isConfirmingDelete}
-                                data-testid="comment-actions-menu"
+                                data-testid="annotationActivity-actions-menu"
                                 menuProps={{
-                                    'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS,
+                                    'data-resin-component': ACTIVITY_TARGETS.ANNOTATION_OPTIONS,
                                 }}
                             >
                                 {canEdit && (
                                     <MenuItem
-                                        data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
-                                        data-testid="edit-comment"
+                                        data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_EDIT}
+                                        data-testid="edit-annotation-activity"
                                         onClick={handleEditClick}
                                     >
                                         <IconPencil color={bdlGray} />
@@ -168,8 +168,8 @@ const AnnotationActivity = (props: Props) => {
                                 )}
                                 {canDelete && (
                                     <MenuItem
-                                        data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_DELETE}
-                                        data-testid="delete-comment"
+                                        data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_DELETE}
+                                        data-testid="delete-annotation-activity"
                                         onClick={handleDeleteClick}
                                     >
                                         <IconTrash color={bdlGray} />
@@ -179,7 +179,7 @@ const AnnotationActivity = (props: Props) => {
                             </Media.Menu>
                             {isConfirmingDelete && (
                                 <DeleteConfirmation
-                                    data-resin-component={ACTIVITY_TARGETS.COMMENT_OPTIONS}
+                                    data-resin-component={ACTIVITY_TARGETS.ANNOTATION_OPTIONS}
                                     isOpen={isConfirmingDelete}
                                     message={messages.annotationActivityDeletePrompt}
                                     onDeleteCancel={handleDeleteCancel}
@@ -191,9 +191,9 @@ const AnnotationActivity = (props: Props) => {
                     <div className="bcs-AnnotationActivity-headline">
                         <UserLink
                             data-resin-target={ACTIVITY_TARGETS.PROFILE}
+                            getUserProfileUrl={getUserProfileUrl}
                             id={createdByUser.id}
                             name={createdByUser.name}
-                            getUserProfileUrl={getUserProfileUrl}
                         />
                     </div>
                     <div>
@@ -201,35 +201,28 @@ const AnnotationActivity = (props: Props) => {
                     </div>
                     {isEditing ? (
                         <CommentForm
-                            isDisabled={isDisabled}
                             className={classNames('bcs-AnnotationActivity-editor', {
                                 'bcs-is-disabled': isDisabled,
                             })}
-                            updateComment={handleUpdate}
+                            entityId={id}
+                            getAvatarUrl={getAvatarUrl}
+                            getMentionWithQuery={getMentionWithQuery}
+                            isDisabled={isDisabled}
+                            isEditing={isEditing}
                             isOpen={isInputOpen}
-                            // $FlowFixMe
-                            user={currentUser}
+                            mentionSelectorContacts={mentionSelectorContacts}
                             onCancel={commentFormCancelHandler}
                             onFocus={commentFormFocusHandler}
-                            isEditing={isEditing}
-                            entityId={id}
                             showTip={false}
-                            tagged_message={tagged_message}
-                            getAvatarUrl={getAvatarUrl}
-                            mentionSelectorContacts={mentionSelectorContacts}
-                            getMentionWithQuery={getMentionWithQuery}
+                            tagged_message={message}
+                            updateComment={handleUpdate}
+                            // $FlowFixMe
+                            user={currentUser}
                         />
                     ) : (
-                        <ActivityMessage
-                            id={id}
-                            tagged_message={tagged_message}
-                            translatedTaggedMessage={translatedTaggedMessage}
-                            {...translations}
-                            translationFailed={error ? true : null}
-                            getUserProfileUrl={getUserProfileUrl}
-                        />
+                        <ActivityMessage id={id} tagged_message={message} getUserProfileUrl={getUserProfileUrl} />
                     )}
-                    <AnnotationActivityItem
+                    <AnnotationActivityLink
                         href={`/activity/annotations/${id}`}
                         id={id}
                         message={{ ...messages.annotationActivityPageItem, values: { number: 1 } }}

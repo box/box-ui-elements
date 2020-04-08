@@ -1,13 +1,12 @@
 // @flow
 import type { User } from '../../../../common/types/core';
-import type { BoxCommentPermission } from '../../../../common/types/feed';
 
 type Rect = {
-    fill: {
+    fill?: {
         color: string,
     },
     height: number,
-    stroke: {
+    stroke?: {
         color: string,
         size: number,
     },
@@ -16,6 +15,7 @@ type Rect = {
     x: number,
     y: number,
 };
+
 type AnnotationRegionTarget = {
     location: {
         type: 'page',
@@ -31,18 +31,16 @@ type AnnotationFileVersion = {
     version_number: string,
 };
 
-type AnnotationActivity = {
-    created_at: string,
-    created_by: User,
-    description: string,
-    file_version: AnnotationFileVersion,
+type AnnotationReply = {
+    createdAt: Date,
+    createdBy: User,
     id: string,
-    modified_at: string,
-    modified_by: User,
-    permissions: BoxCommentPermission,
-    status: 'deleted' | 'open' | 'resolved',
-    target: AnnotationRegionTarget,
-    type: 'annotation',
+    message: string,
+    parent: {
+        id: string,
+        type: string,
+    },
+    type: 'reply',
 };
 
-export type { AnnotationActivity, AnnotationFileVersion, AnnotationRegionTarget };
+export type { AnnotationReply, AnnotationRegionTarget, AnnotationFileVersion, Rect };
