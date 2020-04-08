@@ -11,7 +11,7 @@ import Comment from '../comment';
 import TaskNew from '../task-new';
 import Version, { CollapsedVersion } from '../version';
 import withErrorHandling from '../../withErrorHandling';
-import type { FocusableFeedItemType, FeedItem, FeedItems } from '../../../../common/types/feed';
+import type { FocusableFeedItemType, FeedItem, FeedItems, BoxCommentPermission } from '../../../../common/types/feed';
 import type { SelectorItems, User } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
@@ -28,9 +28,9 @@ type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems<>,
-    onAnnotationDelete?: Function,
-    onAnnotationEdit?: Function,
-    onAnnotationSelect?: Function,
+    onAnnotationDelete?: ({ id: string, permissions?: BoxCommentPermission }) => any,
+    onAnnotationEdit?: ({ hasMention: boolean, id: string, permissions?: BoxCommentPermission, text: string }) => any,
+    onAnnotationSelect?: (id: string) => any,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
     onCommentEdit?: Function,

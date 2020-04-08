@@ -44,7 +44,7 @@ type Props = {
     mentionSelectorContacts?: SelectorItems<>,
     modified_at?: string | number,
     onDelete?: ({ id: string, permissions?: BoxCommentPermission }) => any,
-    onEdit?: (id: string, text: string, hasMention: boolean, permissions?: BoxCommentPermission) => any,
+    onEdit?: ({ hasMention: boolean, id: string, permissions?: BoxCommentPermission, text: string }) => any,
     onSelect?: (id: string) => any,
     permissions?: BoxCommentPermission,
     target: Target,
@@ -116,7 +116,7 @@ const AnnotationActivity = (props: Props) => {
 
     const handleUpdate = ({ text, hasMention }: { hasMention: boolean, id: string, text: string }): void => {
         if (onEdit) {
-            onEdit(id, text, hasMention, permissions);
+            onEdit({ id, hasMention, text });
         }
 
         commentFormSubmitHandler();
