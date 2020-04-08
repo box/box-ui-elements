@@ -81,7 +81,6 @@ exports[`elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity sh
         translationEnabled={false}
       />
       <AnnotationActivityLink
-        href="/activity/annotations/123"
         id="123"
         message={
           Object {
@@ -140,7 +139,6 @@ exports[`elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity sh
         translationEnabled={false}
       />
       <AnnotationActivityLink
-        href="/activity/annotations/123"
         id="123"
         message={
           Object {
@@ -203,7 +201,6 @@ exports[`elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity sh
         translationEnabled={false}
       />
       <AnnotationActivityLink
-        href="/activity/annotations/123"
         id="123"
         message={
           Object {
