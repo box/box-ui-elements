@@ -1,4 +1,3 @@
-// @flow
 export { default as AnnotatorContext } from './AnnotatorContext';
 export {
     default as withAnnotations,
