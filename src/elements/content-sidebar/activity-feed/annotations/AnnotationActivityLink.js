@@ -2,7 +2,6 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import { FormattedMessage, type MessageDescriptor } from 'react-intl';
-import NavButton from '../../../common/nav-button';
 import { Link } from '../../../../components/link';
 
 type Props = {
@@ -19,9 +18,9 @@ const AnnotationActivityLink = ({ href, id, message, onClick = noop }: Props): R
         onClick(id);
     };
     return (
-        <NavButton component={Link} className="bcs-AnnotationActivity-link" onClick={handleClick} href={href}>
+        <Link className="bcs-AnnotationActivity-link" onClick={handleClick} href={href}>
             <FormattedMessage {...message} />
-        </NavButton>
+        </Link>
     );
 };
 

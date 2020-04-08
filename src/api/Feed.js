@@ -114,12 +114,17 @@ class Feed extends Base {
     }
 
     addFeedItem(id: string, item: FeedItem) {
-        if (!id) {
+        if (!id || !item) {
             return;
         }
 
         const cachedItems = this.getCachedItems(id);
         const feedItems = cachedItems ? cachedItems.items : [];
+
+        if (feedItems.some(feedItem => feedItem.id === item.id)) {
+            return;
+        }
+
         const updatedItems = [...feedItems, item].sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at));
 
         this.setCachedItems(id, updatedItems);

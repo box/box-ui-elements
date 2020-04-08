@@ -5,6 +5,7 @@
     z-index: 1;
 
     &.is-active {
+        background-color: $bdl-box-blue-05;
         border-left: 4px solid $bdl-yellorange;
     }
 }

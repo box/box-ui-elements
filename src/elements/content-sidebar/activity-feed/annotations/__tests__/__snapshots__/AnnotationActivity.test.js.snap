@@ -1,0 +1,222 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity should correctly render annotation activity 1`] = `
+<div
+  className="bcs-AnnotationActivity "
+>
+  <Media
+    as="div"
+    className="bcs-AnnotationActivity-media"
+  >
+    <MediaFigure
+      as="figure"
+    >
+      <Component
+        user={
+          Object {
+            "id": 10,
+            "name": "50 Cent",
+          }
+        }
+      />
+    </MediaFigure>
+    <MediaBody>
+      <TetherComponent
+        attachment="top right"
+        className="bcs-AnnotationActivity-deleteConfirmationModal"
+        constraints={
+          Array [
+            Object {
+              "attachment": "together",
+              "to": "scrollParent",
+            },
+          ]
+        }
+        renderElementTag="div"
+        renderElementTo={null}
+        targetAttachment="bottom right"
+      >
+        <MediaMenu
+          data-testid="annotation-activity-actions-menu"
+          dropdownProps={Object {}}
+          isDisabled={false}
+          menuProps={
+            Object {
+              "data-resin-component": "activityfeed-annotationactivity",
+            }
+          }
+        >
+          <MenuItem
+            data-resin-target="activityfeed-annotationactivity-delete"
+            data-testid="delete-annotation-activity"
+            onClick={[Function]}
+          >
+            <IconTrash
+              color="#222"
+            />
+            <FormattedMessage
+              defaultMessage="Delete"
+              id="be.contentSidebar.activityFeed.annotationActivity.annotationActivityDeleteMenuItem"
+            />
+          </MenuItem>
+        </MediaMenu>
+      </TetherComponent>
+      <div
+        className="bcs-AnnotationActivity-headline"
+      >
+        <UserLink
+          data-resin-target="activityfeed-profilelink"
+          id={10}
+          name="50 Cent"
+        />
+      </div>
+      <div>
+        <ActivityTimestamp
+          date={1506534041000}
+        />
+      </div>
+      <ActivityMessage
+        id="123"
+        tagged_message="test"
+        translationEnabled={false}
+      />
+      <AnnotationActivityLink
+        href="/activity/annotations/123"
+        id="123"
+        message={
+          Object {
+            "defaultMessage": "Page {number}",
+            "id": "be.contentSidebar.activityFeed.annotationActivityPageItem",
+            "values": Object {
+              "number": 1,
+            },
+          }
+        }
+        onClick={[Function]}
+      />
+    </MediaBody>
+  </Media>
+</div>
+`;
+
+exports[`elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity should render an error when one is defined 1`] = `
+<div
+  className="bcs-AnnotationActivity "
+>
+  <Media
+    as="div"
+    className="bcs-AnnotationActivity-media bcs-is-pending"
+  >
+    <MediaFigure
+      as="figure"
+    >
+      <Component
+        user={
+          Object {
+            "id": 10,
+            "name": "50 Cent",
+          }
+        }
+      />
+    </MediaFigure>
+    <MediaBody>
+      <div
+        className="bcs-AnnotationActivity-headline"
+      >
+        <UserLink
+          data-resin-target="activityfeed-profilelink"
+          id={10}
+          name="50 Cent"
+        />
+      </div>
+      <div>
+        <ActivityTimestamp
+          date={1506534041000}
+        />
+      </div>
+      <ActivityMessage
+        id="123"
+        tagged_message="test"
+        translationEnabled={false}
+      />
+      <AnnotationActivityLink
+        href="/activity/annotations/123"
+        id="123"
+        message={
+          Object {
+            "defaultMessage": "Page {number}",
+            "id": "be.contentSidebar.activityFeed.annotationActivityPageItem",
+            "values": Object {
+              "number": 1,
+            },
+          }
+        }
+        onClick={[Function]}
+      />
+    </MediaBody>
+  </Media>
+  <ActivityError
+    message="This is an error message"
+    title="error"
+  />
+</div>
+`;
+
+exports[`elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity should render commenter as a link 1`] = `
+<div
+  className="bcs-AnnotationActivity "
+>
+  <Media
+    as="div"
+    className="bcs-AnnotationActivity-media"
+  >
+    <MediaFigure
+      as="figure"
+    >
+      <Component
+        user={
+          Object {
+            "id": 10,
+            "name": "50 Cent",
+          }
+        }
+      />
+    </MediaFigure>
+    <MediaBody>
+      <div
+        className="bcs-AnnotationActivity-headline"
+      >
+        <UserLink
+          data-resin-target="activityfeed-profilelink"
+          id={10}
+          name="50 Cent"
+        />
+      </div>
+      <div>
+        <ActivityTimestamp
+          date={1506534041000}
+        />
+      </div>
+      <ActivityMessage
+        id="123"
+        tagged_message="test"
+        translationEnabled={false}
+      />
+      <AnnotationActivityLink
+        href="/activity/annotations/123"
+        id="123"
+        message={
+          Object {
+            "defaultMessage": "Page {number}",
+            "id": "be.contentSidebar.activityFeed.annotationActivityPageItem",
+            "values": Object {
+              "number": 1,
+            },
+          }
+        }
+        onClick={[Function]}
+      />
+    </MediaBody>
+  </Media>
+</div>
+`;

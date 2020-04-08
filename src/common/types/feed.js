@@ -2,8 +2,8 @@
 import type { MessageDescriptor } from 'react-intl';
 import type {
     AnnotationFileVersion,
-    AnnotationRegionTarget,
     AnnotationReply,
+    Target,
 } from '../../elements/content-sidebar/activity-feed/annotations/types';
 import type { User, BoxItemPermission, BoxItemVersion } from './core';
 
@@ -103,8 +103,8 @@ type AnnotationActivity = {
     modified_by: User,
     permissions: BoxCommentPermission,
     replies?: Array<AnnotationReply>,
-    status: 'deleted' | 'open' | 'resolved',
-    target: AnnotationRegionTarget,
+    status?: 'deleted' | 'open' | 'resolved',
+    target: Target,
     type: 'annotation',
 };
 
@@ -125,8 +125,6 @@ export type {
     ActionItemError,
     ActivityTemplateItem,
     AnnotationActivity,
-    AnnotationRegionTarget,
-    AnnotationReply,
     AppActivityAPIItem,
     AppActivityAPIItems,
     AppActivityItem,

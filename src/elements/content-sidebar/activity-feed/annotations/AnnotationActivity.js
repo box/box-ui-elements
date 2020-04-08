@@ -15,12 +15,8 @@ import IconPencil from '../../../../icons/general/IconPencil';
 import IconTrash from '../../../../icons/general/IconTrash';
 import Media from '../../../../components/media';
 import messages from './messages';
-import type {
-    ActionItemError,
-    AnnotationReply,
-    AnnotationRegionTarget,
-    BoxCommentPermission,
-} from '../../../../common/types/feed';
+import type { AnnotationReply, AnnotationFileVersion, Target } from './types';
+import type { ActionItemError, BoxCommentPermission } from '../../../../common/types/feed';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
 import UserLink from '../common/user-link';
@@ -37,6 +33,7 @@ type Props = {
     currentUser?: User,
     description?: AnnotationReply,
     error?: ActionItemError,
+    file_version: AnnotationFileVersion,
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
@@ -50,7 +47,7 @@ type Props = {
     onEdit?: (id: string, text: string, hasMention: boolean, permissions?: BoxCommentPermission) => any,
     onSelect?: (id: string) => any,
     permissions?: BoxCommentPermission,
-    target?: AnnotationRegionTarget,
+    target: Target,
 };
 
 const AnnotationActivity = (props: Props) => {
@@ -68,10 +65,11 @@ const AnnotationActivity = (props: Props) => {
         isDisabled,
         isPending,
         mentionSelectorContacts,
-        onDelete,
-        onEdit,
-        onSelect,
+        onDelete = noop,
+        onEdit = noop,
+        onSelect = noop,
         permissions = {},
+        target,
     } = props;
     const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -151,7 +149,7 @@ const AnnotationActivity = (props: Props) => {
                         >
                             <Media.Menu
                                 isDisabled={isConfirmingDelete}
-                                data-testid="annotationActivity-actions-menu"
+                                data-testid="annotation-activity-actions-menu"
                                 menuProps={{
                                     'data-resin-component': ACTIVITY_TARGETS.ANNOTATION_OPTIONS,
                                 }}
@@ -225,7 +223,10 @@ const AnnotationActivity = (props: Props) => {
                     <AnnotationActivityLink
                         href={`/activity/annotations/${id}`}
                         id={id}
-                        message={{ ...messages.annotationActivityPageItem, values: { number: 1 } }}
+                        message={{
+                            ...messages.annotationActivityPageItem,
+                            values: { number: target.location.value },
+                        }}
                         onClick={handleOnSelect}
                     />
                 </Media.Body>

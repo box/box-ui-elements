@@ -1,6 +1,11 @@
 // @flow
 import type { User } from '../../../../common/types/core';
 
+type Stroke = {
+    color: string,
+    size: number,
+};
+
 type Rect = {
     fill?: {
         color: string,
@@ -16,13 +21,9 @@ type Rect = {
     y: number,
 };
 
-type AnnotationRegionTarget = {
-    location: {
-        type: 'page',
-        value: number,
-    },
-    shape: Rect,
-    type: 'region',
+type Page = {
+    type: 'page',
+    value: number,
 };
 
 type AnnotationFileVersion = {
@@ -43,4 +44,42 @@ type AnnotationReply = {
     type: 'reply',
 };
 
-export type { AnnotationReply, AnnotationRegionTarget, AnnotationFileVersion, Rect };
+type TargetDrawing = {
+    location: Page,
+    paths: [
+        {
+            points: [
+                {
+                    x: number,
+                    y: number,
+                },
+            ],
+        },
+    ],
+    stroke: Stroke,
+    type: 'drawing',
+};
+
+type TargetHighlight = {
+    location: Page,
+    shapes: Array<Rect>,
+    text: string,
+    type: 'highlight',
+};
+
+type TargetPoint = {
+    location: Page,
+    type: 'point',
+    x: number,
+    y: number,
+};
+
+type TargetRegion = {
+    location: Page,
+    shape?: Rect,
+    type: 'region',
+};
+
+type Target = TargetDrawing | TargetHighlight | TargetPoint | TargetRegion;
+
+export type { AnnotationFileVersion, AnnotationReply, Rect, Target };

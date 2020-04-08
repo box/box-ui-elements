@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/ActivityFeed/annotation/AnnotationActivity should correctly render annotation activity item 1`] = `
+<Link
+  className="bcs-AnnotationActivity-link"
+  onClick={[Function]}
+>
+  <FormattedMessage
+    defaultMessage="Page {number}"
+    id="be.contentSidebar.activityFeed.annotationActivityPageItem"
+    value={1}
+  />
+</Link>
+`;
