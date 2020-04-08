@@ -200,7 +200,6 @@ describe('components/select-field/BaseSelectField', () => {
             const wrapper = shallowRenderSelectField({
                 headerContent,
             });
-
             const overlay = wrapper
                 .find('PopperComponent')
                 .childAt(1)
