@@ -314,6 +314,33 @@ describe('elements/content-preview/ContentPreview', () => {
                 }),
             );
         });
+
+        test.each`
+            called   | showAnnotationsControls
+            ${true}  | ${true}
+            ${false} | ${false}
+        `(
+            'should call onAnnotationCreate $called if showAnnotationsControls is $showAnnotationsControls',
+            async ({ called, showAnnotationsControls }) => {
+                const onAnnotationCreate = jest.fn();
+                const wrapper = getWrapper({ ...props, showAnnotationsControls, onAnnotationCreate });
+
+                wrapper.setState({ file });
+
+                const instance = wrapper.instance();
+
+                await instance.loadPreview();
+
+                if (called) {
+                    expect(instance.preview.addListener).toHaveBeenCalledWith('annotationCreate', onAnnotationCreate);
+                } else {
+                    expect(instance.preview.addListener).not.toHaveBeenCalledWith(
+                        'annotationCreate',
+                        onAnnotationCreate,
+                    );
+                }
+            },
+        );
     });
 
     describe('fetchFile()', () => {

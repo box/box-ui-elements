@@ -2,32 +2,36 @@ import * as React from 'react';
 import AnnotatorContext from './AnnotatorContext';
 import { Action, AnnotationActionEvent, AnnotatorState, Status } from './types';
 
-type WrapperProps = {
-    showAnnotationControls: boolean;
-};
+export interface WithAnnotationsProps {
+    onAnnotationCreate: Function;
+}
 
-type WrapperReturn<P> = React.ComponentClass<P & WrapperProps>;
+export interface ComponentWithAnnotations {
+    getAction: Function;
+    handleAnnotationCreate: Function;
+}
+
+export type WithAnnotationsComponent<P> = React.ComponentClass<P & WithAnnotationsProps>;
 
 export default function withAnnotations<P extends object>(
-    WrappedComponent: React.ComponentType<P & WrapperProps>,
-): WrapperReturn<P> {
-    class ComponentWithAnnotations extends React.Component<P & WrapperProps, AnnotatorState> {
+    WrappedComponent: React.ComponentType<P>,
+): WithAnnotationsComponent<P> {
+    class ComponentWithAnnotations extends React.Component<P & WithAnnotationsProps, AnnotatorState> {
         static displayName: string;
 
         state: AnnotatorState = {
-            annotation: null,
-            action: null,
-            error: null,
+            annotation: undefined,
+            action: undefined,
+            error: undefined,
         };
 
-        getActionSuffix(status: Status) {
-            return status === Status.SUCCESS || status === Status.ERROR ? 'end' : 'start';
+        getAction({ meta: { status }, error }: AnnotationActionEvent): Action {
+            return status === Status.SUCCESS || error ? Action.CREATE_END : Action.CREATE_START;
         }
 
-        handleAnnotationCreate = ({ annotation, error, meta }: AnnotationActionEvent): void => {
-            const { status } = meta;
-            const actionSuffix = this.getActionSuffix(status);
-            const action = `create_${actionSuffix}` as Action;
+        handleAnnotationCreate = (eventData: AnnotationActionEvent): void => {
+            const { annotation, error } = eventData;
+            const action = this.getAction(eventData);
             this.setState({ ...this.state, annotation, action, error });
         };
 

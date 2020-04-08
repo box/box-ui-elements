@@ -754,7 +754,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.preview.addListener('thumbnailsOpen', () => this.setState({ isThumbnailSidebarOpen: true }));
         this.preview.addListener('thumbnailsClose', () => this.setState({ isThumbnailSidebarOpen: false }));
 
-        if (previewOptions.showAnnotationsControls) {
+        if (showAnnotationsControls) {
             this.preview.addListener('annotationCreate', onAnnotationCreate);
         }
 
