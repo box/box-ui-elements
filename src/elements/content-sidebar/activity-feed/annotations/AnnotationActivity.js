@@ -1,20 +1,24 @@
 // @flow
 import classNames from 'classnames';
 import noop from 'lodash/noop';
-import React, { useState } from 'react';
+import * as React from 'react';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
 import ActivityTimestamp from '../common/activity-timestamp';
 import AnnotationActivityLink from './AnnotationActivityLink';
 import AnnotationActivityMenu from './AnnotationActivityMenu';
 import Avatar from '../Avatar';
-import CommentForm from '../comment-form';
 import Media from '../../../../components/media';
 import messages from './messages';
-import type { AnnotationReply, AnnotationFileVersion, Target } from './types';
-import type { ActionItemError, BoxCommentPermission } from '../../../../common/types/feed';
+import type {
+    ActionItemError,
+    BoxAnnotationPermission,
+    Reply,
+    BoxItemVersionMini,
+    Target,
+} from '../../../../common/types/feed';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
-import type { SelectorItems, User } from '../../../../common/types/core';
+import type { User } from '../../../../common/types/core';
 import UserLink from '../common/user-link';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { PLACEHOLDER_USER } from '../../../../constants';
@@ -25,22 +29,19 @@ type Props = {
     created_at: string | number,
     created_by: User,
     currentUser?: User,
-    description?: AnnotationReply,
+    description?: Reply,
     error?: ActionItemError,
-    file_version: AnnotationFileVersion,
+    file_version: BoxItemVersionMini,
     getAvatarUrl: GetAvatarUrlCallback,
-    getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
     id: string,
     isActive?: boolean,
     isDisabled?: boolean,
     isPending?: boolean,
-    mentionSelectorContacts?: SelectorItems<>,
     modified_at?: string | number,
-    onDelete?: ({ id: string, permissions?: BoxCommentPermission }) => any,
-    onEdit?: ({ hasMention: boolean, id: string, permissions?: BoxCommentPermission, text: string }) => any,
+    onDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => any,
     onSelect?: (id: string) => any,
-    permissions?: BoxCommentPermission,
+    permissions?: BoxAnnotationPermission,
     target: Target,
 };
 
@@ -48,25 +49,18 @@ const AnnotationActivity = (props: Props) => {
     const {
         created_at,
         created_by,
-        currentUser,
         description,
         error,
         getAvatarUrl,
-        getMentionWithQuery,
         getUserProfileUrl,
         id,
         isActive = false,
-        isDisabled,
         isPending,
-        mentionSelectorContacts,
         onDelete = noop,
-        onEdit = noop,
         onSelect = noop,
         permissions = {},
         target,
     } = props;
-    const [isEditing, setIsEditing] = useState(false);
-    const [isInputOpen, setIsInputOpen] = useState(false);
 
     const handleDeleteConfirm = (): void => {
         if (!onDelete) {
@@ -82,36 +76,10 @@ const AnnotationActivity = (props: Props) => {
         onSelect(id);
     };
 
-    const handleEditClick = (): void => {
-        setIsEditing(true);
-        setIsInputOpen(true);
-    };
-
-    const commentFormFocusHandler = (): void => setIsInputOpen(true);
-
-    const commentFormCancelHandler = (): void => {
-        setIsInputOpen(false);
-        setIsEditing(false);
-    };
-
-    const commentFormSubmitHandler = (): void => {
-        setIsInputOpen(false);
-        setIsEditing(false);
-    };
-
-    const handleUpdate = ({ text, hasMention }: { hasMention: boolean, id: string, text: string }): void => {
-        if (onEdit) {
-            onEdit({ id, hasMention, text });
-        }
-
-        commentFormSubmitHandler();
-    };
-
     const createdAtTimestamp = new Date(created_at).getTime();
     const createdByUser = created_by || PLACEHOLDER_USER;
-    const canEdit = onEdit !== noop && permissions.can_edit;
     const canDelete = permissions.can_delete;
-    const isMenuVisible = (canDelete || canEdit) && !isPending;
+    const isMenuVisible = canDelete && !isPending;
     const message = (description && description.message) || '';
 
     return (
@@ -126,12 +94,7 @@ const AnnotationActivity = (props: Props) => {
                 </Media.Figure>
                 <Media.Body>
                     {isMenuVisible && (
-                        <AnnotationActivityMenu
-                            canDelete={canDelete}
-                            canEdit={canEdit}
-                            handleDeleteConfirm={handleDeleteConfirm}
-                            handleEditClick={handleEditClick}
-                        />
+                        <AnnotationActivityMenu canDelete={canDelete} handleDeleteConfirm={handleDeleteConfirm} />
                     )}
                     <div className="bcs-AnnotationActivity-headline">
                         <UserLink
@@ -144,29 +107,7 @@ const AnnotationActivity = (props: Props) => {
                     <div>
                         <ActivityTimestamp date={createdAtTimestamp} />
                     </div>
-                    {isEditing ? (
-                        <CommentForm
-                            className={classNames('bcs-AnnotationActivity-editor', {
-                                'bcs-is-disabled': isDisabled,
-                            })}
-                            entityId={id}
-                            getAvatarUrl={getAvatarUrl}
-                            getMentionWithQuery={getMentionWithQuery}
-                            isDisabled={isDisabled}
-                            isEditing={isEditing}
-                            isOpen={isInputOpen}
-                            mentionSelectorContacts={mentionSelectorContacts}
-                            onCancel={commentFormCancelHandler}
-                            onFocus={commentFormFocusHandler}
-                            showTip={false}
-                            tagged_message={message}
-                            updateComment={handleUpdate}
-                            // $FlowFixMe
-                            user={currentUser}
-                        />
-                    ) : (
-                        <ActivityMessage id={id} tagged_message={message} getUserProfileUrl={getUserProfileUrl} />
-                    )}
+                    <ActivityMessage id={id} tagged_message={message} getUserProfileUrl={getUserProfileUrl} />
                     <AnnotationActivityLink
                         id={id}
                         message={{

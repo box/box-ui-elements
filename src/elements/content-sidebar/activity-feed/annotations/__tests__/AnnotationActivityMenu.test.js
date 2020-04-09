@@ -7,18 +7,17 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
     const getWrapper = (props = {}) => shallow(<AnnotationActivityMenu {...props} />);
 
     test.each`
-        permissions                             | showDelete | showEdit
-        ${{ canDelete: true, canEdit: false }}  | ${true}    | ${false}
-        ${{ canDelete: false, canEdit: true }}  | ${false}   | ${true}
-        ${{ canDelete: false, canEdit: true }}  | ${false}   | ${true}
-        ${{ canDelete: false, canEdit: false }} | ${false}   | ${false}
+        permissions             | showDelete
+        ${{ canDelete: true }}  | ${true}
+        ${{ canDelete: false }} | ${false}
+        ${{ canDelete: false }} | ${false}
+        ${{ canDelete: false }} | ${false}
     `(
         `for an activity with permissions $permissions and onEdit ($onEdit), should showDelete: $showDelete, showEdit: $showEdit`,
-        ({ permissions, onEdit, showDelete, showEdit }) => {
-            const wrapper = getWrapper({ onEdit, ...permissions });
+        ({ permissions, showDelete }) => {
+            const wrapper = getWrapper({ ...permissions });
 
             expect(wrapper.find('[data-testid="delete-annotation-activity"]').length).toEqual(showDelete ? 1 : 0);
-            expect(wrapper.find('[data-testid="edit-annotation-activity"]').length).toEqual(showEdit ? 1 : 0);
         },
     );
 

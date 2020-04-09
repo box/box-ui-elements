@@ -11,7 +11,12 @@ import Comment from '../comment';
 import TaskNew from '../task-new';
 import Version, { CollapsedVersion } from '../version';
 import withErrorHandling from '../../withErrorHandling';
-import type { FocusableFeedItemType, FeedItem, FeedItems, BoxCommentPermission } from '../../../../common/types/feed';
+import type {
+    BoxAnnotationPermission,
+    FeedItem,
+    FeedItems,
+    FocusableFeedItemType,
+} from '../../../../common/types/feed';
 import type { SelectorItems, User } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
@@ -28,9 +33,8 @@ type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems<>,
-    onAnnotationDelete?: ({ id: string, permissions?: BoxCommentPermission }) => any,
-    onAnnotationEdit?: ({ hasMention: boolean, id: string, permissions?: BoxCommentPermission, text: string }) => any,
-    onAnnotationSelect?: (id: string) => any,
+    onAnnotationDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => void,
+    onAnnotationSelect?: (id: string) => void,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
     onCommentEdit?: Function,
@@ -53,7 +57,6 @@ const ActiveState = ({
     mentionSelectorContacts,
     getMentionWithQuery,
     onAnnotationDelete,
-    onAnnotationEdit,
     onAnnotationSelect,
     onAppActivityDelete,
     onCommentDelete,
@@ -162,7 +165,6 @@ const ActiveState = ({
                                     getUserProfileUrl={getUserProfileUrl}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     onDelete={onAnnotationDelete}
-                                    onEdit={onAnnotationEdit}
                                     onSelect={onAnnotationSelect}
                                     {...item}
                                 />

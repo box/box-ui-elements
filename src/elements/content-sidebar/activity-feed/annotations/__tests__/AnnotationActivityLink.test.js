@@ -3,15 +3,16 @@ import { shallow } from 'enzyme';
 import AnnotationActivityLink from '../AnnotationActivityLink';
 import messages from '../messages';
 
-describe('elements/content-sidebar/ActivityFeed/annotation/AnnotationActivity', () => {
-    test('should correctly render annotation activity item', () => {
-        const wrapper = shallow(
-            <AnnotationActivityLink
-                id="123"
-                message={{ ...messages.annotationActivityPageItem, value: 1 }}
-                onClick={jest.fn()}
-            />,
-        );
+describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLink', () => {
+    const wrapperProps = {
+        id: '123',
+        message: { ...messages.annotationActivityPageItem, value: 1 },
+    };
+
+    const getWrapper = (props = {}) => shallow(<AnnotationActivityLink {...wrapperProps} {...props} />);
+
+    test('should correctly render annotation activity link', () => {
+        const wrapper = getWrapper();
 
         expect(wrapper.find('PlainButton').length).toEqual(1);
         expect(wrapper).toMatchSnapshot();
@@ -19,19 +20,11 @@ describe('elements/content-sidebar/ActivityFeed/annotation/AnnotationActivity', 
 
     test('should fire onClick when link is followed', () => {
         const onClickFn = jest.fn();
-        const preventDefault = jest.fn();
-        const wrapper = shallow(
-            <AnnotationActivityLink
-                id="123"
-                message={{ ...messages.annotationActivityPageItem, value: 1 }}
-                onClick={onClickFn}
-            />,
-        );
+        const wrapper = getWrapper({ onClick: onClickFn });
         const onClick = wrapper.prop('onClick');
 
-        onClick({ preventDefault });
+        onClick();
 
-        expect(preventDefault).toHaveBeenCalled();
         expect(onClickFn).toHaveBeenCalledWith('123');
     });
 });

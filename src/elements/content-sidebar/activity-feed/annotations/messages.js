@@ -11,11 +11,6 @@ const messages = defineMessages({
         defaultMessage: 'Are you sure you want to permanently delete this comment?',
         description: 'Confirmation prompt text to delete the annotation',
     },
-    annotationActivityEditMenuItem: {
-        id: 'be.contentSidebar.activityFeed.annotationActivity.annotationActivityEditMenuItem',
-        defaultMessage: 'Modify',
-        description: 'Text to show on menu item to edit an annotation',
-    },
     annotationActivityPostedFullDateTime: {
         id: 'be.contentSidebar.activityFeed.annotationActivity.annotationActivityPostedFullDateTime',
         defaultMessage: '{time, date, full} at {time, time, short}',

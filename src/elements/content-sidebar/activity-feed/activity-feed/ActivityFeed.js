@@ -16,7 +16,7 @@ import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import InlineError from '../../../../components/inline-error/InlineError';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import messages from './messages';
-import type { FocusableFeedItemType, FeedItems } from '../../../../common/types/feed';
+import type { FocusableFeedItemType, FeedItems, BoxAnnotationPermission } from '../../../../common/types/feed';
 import type { SelectorItems, User, GroupMini, BoxItem } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations, Errors } from '../../flowTypes';
@@ -36,9 +36,8 @@ type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
     isDisabled?: boolean,
     mentionSelectorContacts?: SelectorItems<User>,
-    onAnnotationDelete?: Function,
-    onAnnotationEdit?: Function,
-    onAnnotationSelect?: Function,
+    onAnnotationDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => void,
+    onAnnotationSelect?: (id: string) => void,
     onAppActivityDelete?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
@@ -198,7 +197,6 @@ class ActivityFeed extends React.Component<Props, State> {
             getUserProfileUrl,
             file,
             onAnnotationDelete,
-            onAnnotationEdit,
             onAnnotationSelect,
             onAppActivityDelete,
             onCommentCreate,
@@ -219,6 +217,7 @@ class ActivityFeed extends React.Component<Props, State> {
         } = this.props;
         const { isInputOpen } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
+        const hasDeletePermission = getProp(file, 'permissions.can_delete', false);
         const showCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate && feedItems);
 
         const isEmpty = this.isEmpty(this.props);
@@ -262,8 +261,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             isDisabled={isDisabled}
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={onTaskAssignmentUpdate}
-                            onAnnotationDelete={hasCommentPermission ? onAnnotationDelete : noop}
-                            onAnnotationEdit={hasCommentPermission ? onAnnotationEdit : noop}
+                            onAnnotationDelete={hasDeletePermission ? onAnnotationDelete : noop}
                             onAnnotationSelect={onAnnotationSelect}
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}

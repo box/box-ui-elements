@@ -40,23 +40,20 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
     test('should correctly render annotation activity', () => {
         const unixTime = new Date(TIME_STRING_SEPT_27_2017).getTime();
         const activity = {
-            permissions: { can_delete: true, can_edit: true },
+            permissions: { can_delete: true },
         };
 
         const wrapper = getWrapper(activity);
 
         expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
         expect(wrapper.find('AnnotationActivityLink').length).toEqual(1);
+        expect(wrapper.find('AnnotationActivityMenu').length).toEqual(1);
         expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(mockActivity.description.message);
-
-        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render commenter as a link', () => {
         const wrapper = getWrapper();
         expect(wrapper.find('UserLink').prop('name')).toEqual(mockActivity.created_by.name);
-
-        expect(wrapper).toMatchSnapshot();
     });
 
     test('should not show actions menu when annotation activity is pending', () => {
@@ -81,8 +78,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         };
 
         const wrapper = getWrapper(activity);
-
-        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find('ActivityError').length).toEqual(1);
     });
 
     test('should render an error cta when an action is defined', () => {
