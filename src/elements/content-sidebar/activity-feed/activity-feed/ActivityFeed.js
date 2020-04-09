@@ -217,7 +217,6 @@ class ActivityFeed extends React.Component<Props, State> {
         } = this.props;
         const { isInputOpen } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
-        const hasDeletePermission = getProp(file, 'permissions.can_delete', false);
         const showCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate && feedItems);
 
         const isEmpty = this.isEmpty(this.props);
@@ -261,7 +260,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             isDisabled={isDisabled}
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={onTaskAssignmentUpdate}
-                            onAnnotationDelete={hasDeletePermission ? onAnnotationDelete : noop}
+                            onAnnotationDelete={onAnnotationDelete}
                             onAnnotationSelect={onAnnotationSelect}
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}

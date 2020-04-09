@@ -9,7 +9,11 @@ exports[`elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLin
   <FormattedMessage
     defaultMessage="Page {number}"
     id="be.contentSidebar.activityFeed.annotationActivityPageItem"
-    value={1}
+    values={
+      Object {
+        "number": 1,
+      }
+    }
   />
 </PlainButton>
 `;

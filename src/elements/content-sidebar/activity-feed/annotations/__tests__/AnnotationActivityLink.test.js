@@ -6,7 +6,7 @@ import messages from '../messages';
 describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLink', () => {
     const wrapperProps = {
         id: '123',
-        message: { ...messages.annotationActivityPageItem, value: 1 },
+        message: { ...messages.annotationActivityPageItem, values: { number: 1 } },
     };
 
     const getWrapper = (props = {}) => shallow(<AnnotationActivityLink {...wrapperProps} {...props} />);

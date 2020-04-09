@@ -10,12 +10,12 @@ import AnnotationActivityMenu from './AnnotationActivityMenu';
 import Avatar from '../Avatar';
 import Media from '../../../../components/media';
 import messages from './messages';
-import type { ActionItemError, AnnotationActivityItem, BoxAnnotationPermission } from '../../../../common/types/feed';
-import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
-import type { User } from '../../../../common/types/core';
 import UserLink from '../common/user-link';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { PLACEHOLDER_USER } from '../../../../constants';
+import type { ActionItemError, AnnotationActivityItem, BoxAnnotationPermission } from '../../../../common/types/feed';
+import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { User } from '../../../../common/types/core';
 
 import './AnnotationActivity.scss';
 
@@ -49,16 +49,10 @@ const AnnotationActivity = (props: Props) => {
     } = props;
 
     const handleDeleteConfirm = (): void => {
-        if (!onDelete) {
-            return;
-        }
         onDelete({ id, permissions });
     };
 
     const handleOnSelect = () => {
-        if (!onSelect) {
-            return;
-        }
         onSelect(id);
     };
 

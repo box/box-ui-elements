@@ -128,7 +128,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {boolean} shouldDestroy
      * @return {void}
      */
-    fetchCurrentUser(user?: User, shouldDestroy: boolean = false): void {
+    fetchCurrentUser(user?: User, shouldDestroy?: boolean = false): void {
         const { api, file } = this.props;
 
         if (!file) {

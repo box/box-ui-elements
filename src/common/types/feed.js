@@ -97,8 +97,8 @@ type AppActivityItems = {
 };
 
 type Reply = {
-    createdAt: Date,
-    createdBy: User,
+    created_at: Date,
+    created_by: User,
     id: string,
     message: string,
     parent: {

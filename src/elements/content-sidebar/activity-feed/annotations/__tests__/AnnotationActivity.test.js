@@ -22,7 +22,7 @@ const allHandlers = {
 describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity', () => {
     const mockActivity = {
         created_at: TIME_STRING_SEPT_27_2017,
-        created_by: { name: '50 Cent', id: 10 },
+        created_by: { name: 'Jane Doe', id: 10 },
         currentUser,
         description: { message: 'test' },
         handlers: allHandlers,
