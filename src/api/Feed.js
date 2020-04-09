@@ -113,21 +113,6 @@ class Feed extends Base {
         this.taskLinksAPI = [];
     }
 
-    addFeedItem(fileId: string, feedItem: FeedItem) {
-        const cachedItems = this.getCachedItems(fileId);
-        const feedItems = cachedItems ? cachedItems.items : [];
-
-        if (feedItems.some(({ id: feedId }) => feedId === feedItem.id)) {
-            return;
-        }
-
-        const updatedItems = [...feedItems, feedItem].sort(
-            (a, b) => Date.parse(a.created_at) - Date.parse(b.created_at),
-        );
-
-        this.setCachedItems(fileId, updatedItems);
-    }
-
     /**
      * Creates a key for the cache
      *

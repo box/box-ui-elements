@@ -12,10 +12,10 @@ import { MenuItem } from '../../../../components/menu';
 
 type AnnotationActivityMenuProps = {
     canDelete?: boolean,
-    handleDeleteConfirm: () => void,
+    onDeleteConfirm: () => void,
 };
 
-const AnnotationActivityMenu = ({ canDelete, handleDeleteConfirm }: AnnotationActivityMenuProps) => {
+const AnnotationActivityMenu = ({ canDelete, onDeleteConfirm }: AnnotationActivityMenuProps) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
 
     const handleDeleteCancel = (): void => {
@@ -24,6 +24,11 @@ const AnnotationActivityMenu = ({ canDelete, handleDeleteConfirm }: AnnotationAc
 
     const handleDeleteClick = () => {
         setIsConfirmingDelete(true);
+    };
+
+    const handleDeleteConfirm = () => {
+        setIsConfirmingDelete(false);
+        onDeleteConfirm();
     };
 
     const tetherProps = {

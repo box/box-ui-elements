@@ -1,6 +1,7 @@
 // @flow strict
 import type { MessageDescriptor } from 'react-intl';
-import type { User, BoxItemPermission, BoxItemVersion } from './core';
+import type { BoxItemPermission, BoxItemVersion, BoxItemVersionMini, User } from './core';
+import type { Target } from './annotations';
 
 // Feed item types that can receive deeplinks inline in the feed
 type FocusableFeedItemType = 'task' | 'comment';
@@ -20,11 +21,15 @@ type BoxTaskPermission = {
     can_update?: boolean,
 };
 
-// this is a subset of TaskNew, which imports as `any`
-type Task = {
+type BaseFeedItem = {|
     created_at: string,
     created_by: User,
     id: string,
+|};
+
+// this is a subset of TaskNew, which imports as `any`
+type Task = {
+    ...BaseFeedItem,
     permissions: BoxTaskPermission,
     type: 'task',
 };
@@ -35,9 +40,7 @@ type Tasks = {
 };
 
 type Comment = {
-    created_at: string,
-    created_by: User,
-    id: string,
+    ...BaseFeedItem,
     is_reply_comment?: boolean,
     message?: string,
     modified_at: string,
@@ -93,12 +96,6 @@ type AppActivityItems = {
     total_count: number,
 };
 
-type BoxItemVersionMini = {
-    id: string,
-    type: 'version',
-    version_number: string,
-};
-
 type Reply = {
     createdAt: Date,
     createdBy: User,
@@ -111,85 +108,20 @@ type Reply = {
     type: 'reply',
 };
 
-type Stroke = {
-    color: string,
-    size: number,
-};
-
-type Rect = {
-    fill?: {
-        color: string,
-    },
-    height: number,
-    stroke?: {
-        color: string,
-        size: number,
-    },
-    type: 'rect',
-    width: number,
-    x: number,
-    y: number,
-};
-
-type Page = {
-    type: 'page',
-    value: number,
-};
-
-type TargetDrawing = {
-    location: Page,
-    paths: [
-        {
-            points: [
-                {
-                    x: number,
-                    y: number,
-                },
-            ],
-        },
-    ],
-    stroke: Stroke,
-    type: 'drawing',
-};
-
-type TargetHighlight = {
-    location: Page,
-    shapes: Array<Rect>,
-    text: string,
-    type: 'highlight',
-};
-
-type TargetPoint = {
-    location: Page,
-    type: 'point',
-    x: number,
-    y: number,
-};
-
-type TargetRegion = {
-    location: Page,
-    shape?: Rect,
-    type: 'region',
-};
-
-type Target = TargetDrawing | TargetHighlight | TargetPoint | TargetRegion;
-
-type AnnotationActivity = {
-    created_at: string,
-    created_by: User,
+type AnnotationActivityItem = {
+    ...BaseFeedItem,
     description?: Reply,
     file_version: BoxItemVersionMini,
-    id: string,
     modified_at: string,
     modified_by: User,
-    permissions: BoxCommentPermission,
+    permissions: BoxAnnotationPermission,
     replies?: Array<Reply>,
     status?: 'deleted' | 'open' | 'resolved',
     target: Target,
     type: 'annotation',
 };
 
-type FeedItem = Comment | Task | BoxItemVersion | AppActivityItem | AnnotationActivity;
+type FeedItem = Comment | Task | BoxItemVersion | AppActivityItem | AnnotationActivityItem;
 
 type FeedItems = Array<FeedItem>;
 
@@ -205,7 +137,7 @@ type ActionItemError = {
 export type {
     ActionItemError,
     ActivityTemplateItem,
-    AnnotationActivity,
+    AnnotationActivityItem,
     AppActivityAPIItem,
     AppActivityAPIItems,
     AppActivityItem,
@@ -213,14 +145,12 @@ export type {
     AppItem,
     BoxAnnotationPermission,
     BoxCommentPermission,
-    BoxItemVersionMini,
     Comment,
     Comments,
     FeedItem,
     FeedItems,
     FocusableFeedItemType,
     Reply,
-    Target,
     Task,
     Tasks,
 };

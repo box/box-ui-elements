@@ -10,13 +10,7 @@ import AnnotationActivityMenu from './AnnotationActivityMenu';
 import Avatar from '../Avatar';
 import Media from '../../../../components/media';
 import messages from './messages';
-import type {
-    ActionItemError,
-    BoxAnnotationPermission,
-    Reply,
-    BoxItemVersionMini,
-    Target,
-} from '../../../../common/types/feed';
+import type { ActionItemError, AnnotationActivityItem, BoxAnnotationPermission } from '../../../../common/types/feed';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { User } from '../../../../common/types/core';
 import UserLink from '../common/user-link';
@@ -26,24 +20,16 @@ import { PLACEHOLDER_USER } from '../../../../constants';
 import './AnnotationActivity.scss';
 
 type Props = {
-    created_at: string | number,
-    created_by: User,
     currentUser?: User,
-    description?: Reply,
     error?: ActionItemError,
-    file_version: BoxItemVersionMini,
     getAvatarUrl: GetAvatarUrlCallback,
     getUserProfileUrl?: GetProfileUrlCallback,
-    id: string,
     isActive?: boolean,
     isDisabled?: boolean,
     isPending?: boolean,
-    modified_at?: string | number,
     onDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => any,
     onSelect?: (id: string) => any,
-    permissions?: BoxAnnotationPermission,
-    target: Target,
-};
+} & AnnotationActivityItem;
 
 const AnnotationActivity = (props: Props) => {
     const {
@@ -94,7 +80,7 @@ const AnnotationActivity = (props: Props) => {
                 </Media.Figure>
                 <Media.Body>
                     {isMenuVisible && (
-                        <AnnotationActivityMenu canDelete={canDelete} handleDeleteConfirm={handleDeleteConfirm} />
+                        <AnnotationActivityMenu canDelete={canDelete} onDeleteConfirm={handleDeleteConfirm} />
                     )}
                     <div className="bcs-AnnotationActivity-headline">
                         <UserLink
