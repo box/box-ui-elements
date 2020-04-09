@@ -2,17 +2,13 @@
 import classNames from 'classnames';
 import noop from 'lodash/noop';
 import React, { useState } from 'react';
-import TetherComponent from 'react-tether';
-import { FormattedMessage } from 'react-intl';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
 import ActivityTimestamp from '../common/activity-timestamp';
 import AnnotationActivityLink from './AnnotationActivityLink';
+import AnnotationActivityMenu from './AnnotationActivityMenu';
 import Avatar from '../Avatar';
 import CommentForm from '../comment-form';
-import DeleteConfirmation from '../common/delete-confirmation';
-import IconPencil from '../../../../icons/general/IconPencil';
-import IconTrash from '../../../../icons/general/IconTrash';
 import Media from '../../../../components/media';
 import messages from './messages';
 import type { AnnotationReply, AnnotationFileVersion, Target } from './types';
@@ -21,8 +17,6 @@ import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../commo
 import type { SelectorItems, User } from '../../../../common/types/core';
 import UserLink from '../common/user-link';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import { bdlGray } from '../../../../styles/variables';
-import { MenuItem } from '../../../../components/menu';
 import { PLACEHOLDER_USER } from '../../../../constants';
 
 import './AnnotationActivity.scss';
@@ -71,7 +65,6 @@ const AnnotationActivity = (props: Props) => {
         permissions = {},
         target,
     } = props;
-    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [isInputOpen, setIsInputOpen] = useState(false);
 
@@ -87,14 +80,6 @@ const AnnotationActivity = (props: Props) => {
             return;
         }
         onSelect(id);
-    };
-
-    const handleDeleteCancel = (): void => {
-        setIsConfirmingDelete(false);
-    };
-
-    const handleDeleteClick = () => {
-        setIsConfirmingDelete(true);
     };
 
     const handleEditClick = (): void => {
@@ -141,50 +126,12 @@ const AnnotationActivity = (props: Props) => {
                 </Media.Figure>
                 <Media.Body>
                     {isMenuVisible && (
-                        <TetherComponent
-                            attachment="top right"
-                            className="bcs-AnnotationActivity-deleteConfirmationModal"
-                            constraints={[{ to: 'scrollParent', attachment: 'together' }]}
-                            targetAttachment="bottom right"
-                        >
-                            <Media.Menu
-                                isDisabled={isConfirmingDelete}
-                                data-testid="annotation-activity-actions-menu"
-                                menuProps={{
-                                    'data-resin-component': ACTIVITY_TARGETS.ANNOTATION_OPTIONS,
-                                }}
-                            >
-                                {canEdit && (
-                                    <MenuItem
-                                        data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_EDIT}
-                                        data-testid="edit-annotation-activity"
-                                        onClick={handleEditClick}
-                                    >
-                                        <IconPencil color={bdlGray} />
-                                        <FormattedMessage {...messages.annotationActivityEditMenuItem} />
-                                    </MenuItem>
-                                )}
-                                {canDelete && (
-                                    <MenuItem
-                                        data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_DELETE}
-                                        data-testid="delete-annotation-activity"
-                                        onClick={handleDeleteClick}
-                                    >
-                                        <IconTrash color={bdlGray} />
-                                        <FormattedMessage {...messages.annotationActivityDeleteMenuItem} />
-                                    </MenuItem>
-                                )}
-                            </Media.Menu>
-                            {isConfirmingDelete && (
-                                <DeleteConfirmation
-                                    data-resin-component={ACTIVITY_TARGETS.ANNOTATION_OPTIONS}
-                                    isOpen={isConfirmingDelete}
-                                    message={messages.annotationActivityDeletePrompt}
-                                    onDeleteCancel={handleDeleteCancel}
-                                    onDeleteConfirm={handleDeleteConfirm}
-                                />
-                            )}
-                        </TetherComponent>
+                        <AnnotationActivityMenu
+                            canDelete={canDelete}
+                            canEdit={canEdit}
+                            handleDeleteConfirm={handleDeleteConfirm}
+                            handleEditClick={handleEditClick}
+                        />
                     )}
                     <div className="bcs-AnnotationActivity-headline">
                         <UserLink

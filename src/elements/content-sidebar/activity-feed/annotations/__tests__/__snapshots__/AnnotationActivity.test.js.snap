@@ -21,46 +21,12 @@ exports[`elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity sh
       />
     </MediaFigure>
     <MediaBody>
-      <TetherComponent
-        attachment="top right"
-        className="bcs-AnnotationActivity-deleteConfirmationModal"
-        constraints={
-          Array [
-            Object {
-              "attachment": "together",
-              "to": "scrollParent",
-            },
-          ]
-        }
-        renderElementTag="div"
-        renderElementTo={null}
-        targetAttachment="bottom right"
-      >
-        <MediaMenu
-          data-testid="annotation-activity-actions-menu"
-          dropdownProps={Object {}}
-          isDisabled={false}
-          menuProps={
-            Object {
-              "data-resin-component": "activityfeed-annotationactivity",
-            }
-          }
-        >
-          <MenuItem
-            data-resin-target="activityfeed-annotationactivity-delete"
-            data-testid="delete-annotation-activity"
-            onClick={[Function]}
-          >
-            <IconTrash
-              color="#222"
-            />
-            <FormattedMessage
-              defaultMessage="Delete"
-              id="be.contentSidebar.activityFeed.annotationActivity.annotationActivityDeleteMenuItem"
-            />
-          </MenuItem>
-        </MediaMenu>
-      </TetherComponent>
+      <AnnotationActivityMenu
+        canDelete={true}
+        canEdit={false}
+        handleDeleteConfirm={[Function]}
+        handleEditClick={[Function]}
+      />
       <div
         className="bcs-AnnotationActivity-headline"
       >

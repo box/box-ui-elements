@@ -63,29 +63,6 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         expect(wrapper).toMatchSnapshot();
     });
 
-    test.each`
-        permissions                               | onEdit       | showMenu | showDelete | showEdit
-        ${{ can_delete: true, can_edit: false }}  | ${jest.fn()} | ${true}  | ${true}    | ${false}
-        ${{ can_delete: false, can_edit: true }}  | ${jest.fn()} | ${true}  | ${false}   | ${true}
-        ${{ can_delete: false, can_edit: true }}  | ${undefined} | ${false} | ${false}   | ${false}
-        ${{ can_delete: false, can_edit: false }} | ${jest.fn()} | ${false} | ${false}   | ${false}
-    `(
-        `for an activity with permissions $permissions and onEdit ($onEdit), should showMenu: $showMenu, showDelete: $showDelete, showEdit: $showEdit`,
-        ({ permissions, onEdit, showMenu, showDelete, showEdit }) => {
-            const activity = {
-                onDelete: jest.fn(),
-                onEdit,
-                permissions,
-            };
-
-            const wrapper = getWrapper(activity);
-
-            expect(wrapper.find('[data-testid="delete-annotation-activity"]').length).toEqual(showDelete ? 1 : 0);
-            expect(wrapper.find('[data-testid="edit-annotation-activity"]').length).toEqual(showEdit ? 1 : 0);
-            expect(wrapper.find('[data-testid="annotation-activity-actions-menu"]').length).toEqual(showMenu ? 1 : 0);
-        },
-    );
-
     test('should not show actions menu when annotation activity is pending', () => {
         const activity = {
             permissions: { can_delete: true },
@@ -131,7 +108,9 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         const inlineErrorActionLink = wrapper.find('InlineError').find('button.bcs-ActivityError-action');
         expect(inlineErrorActionLink.length).toEqual(1);
 
-        inlineErrorActionLink.simulate('click');
+        const inlineErrorActionOnClick = inlineErrorActionLink.prop('onClick');
+
+        inlineErrorActionOnClick();
 
         expect(onActionSpy).toHaveBeenCalledTimes(1);
     });

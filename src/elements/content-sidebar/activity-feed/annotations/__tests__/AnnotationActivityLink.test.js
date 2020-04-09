@@ -27,7 +27,10 @@ describe('elements/content-sidebar/ActivityFeed/annotation/AnnotationActivity', 
                 onClick={onClickFn}
             />,
         );
-        wrapper.simulate('click', { preventDefault });
+        const onClick = wrapper.prop('onClick');
+
+        onClick({ preventDefault });
+
         expect(preventDefault).toHaveBeenCalled();
         expect(onClickFn).toHaveBeenCalledWith('123');
     });
