@@ -425,6 +425,8 @@ class BaseSelectField extends React.Component<Props, State> {
                 className={classNames(className, 'bdl-SelectField', 'select-container')}
                 onBlur={this.handleBlur}
                 onKeyDown={this.handleKeyDown}
+                // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                tabIndex="0"
             >
                 <PopperComponent placement={dropdownPlacement} isOpen={isOpen} modifiers={dropdownModifiers}>
                     {this.renderSelectButton()}
