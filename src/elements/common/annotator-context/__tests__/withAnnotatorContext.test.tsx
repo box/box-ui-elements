@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { withAnnotatorContext, WithAnnotatorContextProps } from '../index';
+import withAnnotatorContext, { WithAnnotatorContextProps } from '../withAnnotatorContext';
 import { Action } from '../types';
 
 const mockContext = jest.fn();

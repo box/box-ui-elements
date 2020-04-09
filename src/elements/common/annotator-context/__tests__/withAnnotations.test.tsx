@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
-import {
-    AnnotatorContext,
-    withAnnotations,
-    WithAnnotationsComponent,
-    WithAnnotationsProps,
-    ComponentWithAnnotations,
-} from '../index';
+import { AnnotatorContext, withAnnotations } from '../index';
+import { WithAnnotationsComponent, WithAnnotationsProps, ComponentWithAnnotations } from '../withAnnotations';
 import { AnnotatorState, Action } from '../types';
 
 type ComponentProps = {
