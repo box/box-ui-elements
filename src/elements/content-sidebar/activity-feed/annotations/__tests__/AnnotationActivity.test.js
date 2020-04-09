@@ -10,20 +10,17 @@ const currentUser = {
     name: 'testuser',
     id: 11,
 };
-const approverSelectorContacts = [];
 const mentionSelectorContacts = [];
 const TIME_STRING_SEPT_27_2017 = '2017-09-27T10:40:41-07:00';
 
 const allHandlers = {
     contacts: {
-        getApproverWithQuery: jest.fn(),
         getMentionWithQuery: jest.fn(),
     },
 };
 
 describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity', () => {
     const mockActivity = {
-        approverSelectorContacts,
         created_at: TIME_STRING_SEPT_27_2017,
         created_by: { name: '50 Cent', id: 10 },
         currentUser,
@@ -48,7 +45,6 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
         const wrapper = getWrapper(activity);
 
-        // validating that the Tooltip and the comment posted time are properly set
         expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
         expect(wrapper.find('AnnotationActivityLink').length).toEqual(1);
         expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(mockActivity.description.message);
