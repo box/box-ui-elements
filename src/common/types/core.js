@@ -207,6 +207,12 @@ type BoxItemVersion = {
     versions?: Array<BoxItemVersion>,
 };
 
+type BoxItemVersionMini = {
+    id: string,
+    type: 'version',
+    version_number: string,
+};
+
 type BoxPathCollection = {
     entries: Array<Crumb>,
     total_count: number,
@@ -385,6 +391,7 @@ export type {
     BoxItemVersionPermission,
     BoxItemVersionRetention,
     BoxItemVersion,
+    BoxItemVersionMini,
     BoxItem,
     BoxItemCollection,
     FlattenedBoxItemCollection,
