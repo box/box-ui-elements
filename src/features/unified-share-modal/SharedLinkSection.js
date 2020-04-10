@@ -31,6 +31,8 @@ import type {
 import { PEOPLE_IN_ITEM, ANYONE_WITH_LINK, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
 
 type Props = {
+    addSharedLink: () => void,
+    autoCreateSharedLink?: boolean,
     autofocusSharedLink?: boolean,
     changeSharedLinkAccessLevel: (newAccessLevel: accessLevelType) => Promise<{ accessLevel: accessLevelType }>,
     changeSharedLinkPermissionLevel: (
@@ -51,10 +53,42 @@ type Props = {
     triggerCopyOnLoad?: boolean,
 };
 
-class SharedLinkSection extends React.Component<Props> {
+type State = {
+    autoCreatingSharedLink: boolean,
+};
+
+class SharedLinkSection extends React.Component<Props, State> {
     static defaultProps = {
         trackingProps: {},
+        autoCreateSharedLink: false,
     };
+
+    constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            autoCreatingSharedLink: false,
+        };
+    }
+
+    componentDidUpdate(prevProps: Props) {
+        const { sharedLink, autoCreateSharedLink, addSharedLink, submitting } = this.props;
+
+        if (
+            autoCreateSharedLink &&
+            !this.state.autoCreatingSharedLink &&
+            !sharedLink.url &&
+            !submitting &&
+            !sharedLink.isNewSharedLink
+        ) {
+            this.setState({ autoCreatingSharedLink: true });
+            addSharedLink();
+        }
+
+        if (!prevProps.sharedLink.url && sharedLink.url) {
+            this.setState({ autoCreatingSharedLink: false });
+        }
+    }
 
     canAddSharedLink = (isSharedLinkEnabled: boolean, canAddLink: boolean) => {
         return !isSharedLinkEnabled && canAddLink;
@@ -66,6 +100,7 @@ class SharedLinkSection extends React.Component<Props> {
 
     renderSharedLink() {
         const {
+            autoCreateSharedLink,
             autofocusSharedLink,
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
@@ -103,6 +138,8 @@ class SharedLinkSection extends React.Component<Props> {
             sharedLinkPermissionsMenuButtonProps,
         } = trackingProps;
 
+        const shouldTriggerCopyOnLoad = autoCreateSharedLink ? false : triggerCopyOnLoad;
+
         const isEditableBoxNote = isBoxNote(convertToBoxItem(item)) && isEditAllowed;
         let allowedPermissionLevels = [CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];
 
@@ -136,7 +173,7 @@ class SharedLinkSection extends React.Component<Props> {
                             disabled={submitting}
                             label=""
                             onCopySuccess={onSharedLinkCopy}
-                            triggerCopyOnLoad={triggerCopyOnLoad}
+                            triggerCopyOnLoad={shouldTriggerCopyOnLoad}
                             type="url"
                             value={url}
                         />

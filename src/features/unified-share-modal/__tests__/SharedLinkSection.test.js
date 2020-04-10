@@ -202,4 +202,48 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
 
         expect(tooltip).toMatchSnapshot();
     });
+
+    describe('componentDidUpdate()', () => {
+        test('should call addSharedLink when modal is triggered to create a URL', () => {
+            const sharedLink = { url: '', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                submitting: true,
+                autoCreateSharedLink: true,
+                sharedLink,
+            });
+
+            expect(wrapper.state().autoCreatingSharedLink).toBe(false);
+
+            wrapper.setProps({ submitting: false });
+
+            expect(addSharedLink).toBeCalledTimes(1);
+            expect(wrapper.state().autoCreatingSharedLink).toBe(true);
+
+            wrapper.setProps({ sharedLink: { url: 'http://example.com/', isNewSharedLink: true } });
+
+            expect(wrapper.state().autoCreatingSharedLink).toBe(false);
+        });
+
+        test('should not call addSharedLink when modal is triggered to fetch existing URL', () => {
+            const sharedLink = { url: 'http://example.com/', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                submitting: true,
+                autoCreateSharedLink: true,
+                sharedLink,
+            });
+
+            expect(wrapper.state().autoCreatingSharedLink).toBe(false);
+
+            wrapper.setProps({ submitting: false });
+
+            expect(addSharedLink).toBeCalledTimes(0);
+            expect(wrapper.state().autoCreatingSharedLink).toBe(false);
+        });
+    });
 });

@@ -57,6 +57,8 @@ type Props = {
     collaboratorsList?: collaboratorsListType,
     /** Used to limit the number of contacts that can be added in the contacts field */
     contactLimit?: number,
+    /** Whether the modal should create a shared link on load */
+    createSharedLinkOnLoad?: boolean,
     /** User ID of currently logged in user */
     currentUserID: string,
     /** Whether the modal should focus the shared link after the URL is resolved */
@@ -146,6 +148,7 @@ type State = {
 class UnifiedShareModal extends React.Component<Props, State> {
     static defaultProps = {
         initiallySelectedContacts: [],
+        createSharedLinkOnLoad: false,
         focusSharedLinkOnLoad: false,
         trackingProps: {
             inviteCollabsEmailTracking: {},
@@ -649,8 +652,10 @@ class UnifiedShareModal extends React.Component<Props, State> {
     render() {
         // Shared link section props
         const {
+            onAddLink,
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
+            createSharedLinkOnLoad,
             focusSharedLinkOnLoad,
             item,
             onSettingsClick,
@@ -725,7 +730,9 @@ class UnifiedShareModal extends React.Component<Props, State> {
 
                         {!isEmailLinkSectionExpanded && !isInviteSectionExpanded && !showCollaboratorList && (
                             <SharedLinkSection
+                                addSharedLink={onAddLink}
                                 autofocusSharedLink={this.shouldAutoFocusSharedLink()}
+                                autoCreateSharedLink={createSharedLinkOnLoad}
                                 triggerCopyOnLoad={focusSharedLinkOnLoad}
                                 changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                                 changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
