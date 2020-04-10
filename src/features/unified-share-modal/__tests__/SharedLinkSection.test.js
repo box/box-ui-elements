@@ -215,16 +215,16 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
                 sharedLink,
             });
 
-            expect(wrapper.state().autoCreatingSharedLink).toBe(false);
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
 
             wrapper.setProps({ submitting: false });
 
             expect(addSharedLink).toBeCalledTimes(1);
-            expect(wrapper.state().autoCreatingSharedLink).toBe(true);
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(true);
 
             wrapper.setProps({ sharedLink: { url: 'http://example.com/', isNewSharedLink: true } });
 
-            expect(wrapper.state().autoCreatingSharedLink).toBe(false);
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
         });
 
         test('should not call addSharedLink when modal is triggered to fetch existing URL', () => {
@@ -238,12 +238,12 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
                 sharedLink,
             });
 
-            expect(wrapper.state().autoCreatingSharedLink).toBe(false);
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
 
             wrapper.setProps({ submitting: false });
 
             expect(addSharedLink).toBeCalledTimes(0);
-            expect(wrapper.state().autoCreatingSharedLink).toBe(false);
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
         });
     });
 });

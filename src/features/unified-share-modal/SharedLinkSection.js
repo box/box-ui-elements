@@ -54,7 +54,7 @@ type Props = {
 };
 
 type State = {
-    autoCreatingSharedLink: boolean,
+    isAutoCreatingSharedLink: boolean,
 };
 
 class SharedLinkSection extends React.Component<Props, State> {
@@ -67,7 +67,7 @@ class SharedLinkSection extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            autoCreatingSharedLink: false,
+            isAutoCreatingSharedLink: false,
         };
     }
 
@@ -76,17 +76,17 @@ class SharedLinkSection extends React.Component<Props, State> {
 
         if (
             autoCreateSharedLink &&
-            !this.state.autoCreatingSharedLink &&
+            !this.state.isAutoCreatingSharedLink &&
             !sharedLink.url &&
             !submitting &&
             !sharedLink.isNewSharedLink
         ) {
-            this.setState({ autoCreatingSharedLink: true });
+            this.setState({ isAutoCreatingSharedLink: true });
             addSharedLink();
         }
 
         if (!prevProps.sharedLink.url && sharedLink.url) {
-            this.setState({ autoCreatingSharedLink: false });
+            this.setState({ isAutoCreatingSharedLink: false });
         }
     }
 
