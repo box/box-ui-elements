@@ -258,4 +258,10 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
                 .prop('onMention'),
         ).toEqual(null);
     });
+
+    test('should not show mention tip is showTip is false', () => {
+        const wrapper = render({ showTip: false });
+
+        expect(wrapper.find('.bcs-CommentForm-tip').length).toEqual(0);
+    });
 });
