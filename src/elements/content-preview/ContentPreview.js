@@ -34,6 +34,7 @@ import API from '../../api';
 import PreviewHeader from './preview-header';
 import PreviewNavigation from './PreviewNavigation';
 import PreviewLoading from './PreviewLoading';
+import { withAnnotations } from '../common/annotator-context';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -82,6 +83,7 @@ type Props = {
     logoUrl?: string,
     measureRef: Function,
     messages?: StringMap,
+    onAnnotationCreate: Function,
     onClose?: Function,
     onDownload: Function,
     onLoad: Function,
@@ -93,6 +95,7 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     showAnnotations?: boolean,
+    showAnnotationsControls?: boolean,
     staticHost: string,
     staticPath: string,
     token: Token,
@@ -197,6 +200,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         enableThumbnailsSidebar: false,
         hasHeader: false,
         language: DEFAULT_LOCALE,
+        onAnnotationCreate: noop,
         onDownload: noop,
         onError: noop,
         onLoad: noop,
@@ -702,7 +706,14 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     loadPreview = async (): Promise<void> => {
-        const { enableThumbnailsSidebar, fileOptions, token: tokenOrTokenFunction, ...rest }: Props = this.props;
+        const {
+            enableThumbnailsSidebar,
+            fileOptions,
+            onAnnotationCreate,
+            showAnnotationsControls,
+            token: tokenOrTokenFunction,
+            ...rest
+        }: Props = this.props;
         const { file, selectedVersion }: State = this.state;
 
         if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction) {
@@ -730,6 +741,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             header: 'none',
             headerElement: `#${this.id} .bcpr-PreviewHeader`,
             showAnnotations: this.canViewAnnotations(),
+            showAnnotationsControls,
             showDownload: this.canDownload(),
             skipServerUpdate: true,
             useHotkeys: false,
@@ -741,6 +753,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.preview.addListener('preview_metric', this.onPreviewMetric);
         this.preview.addListener('thumbnailsOpen', () => this.setState({ isThumbnailSidebarOpen: true }));
         this.preview.addListener('thumbnailsClose', () => this.setState({ isThumbnailSidebarOpen: false }));
+
+        if (showAnnotationsControls) {
+            this.preview.addListener('annotationCreate', onAnnotationCreate);
+        }
+
         this.preview.updateFileCache([file]);
         this.preview.show(file.id, token, {
             ...previewOptions,
@@ -1253,4 +1270,5 @@ export default flow([
     withFeatureProvider,
     withLogger(ORIGIN_CONTENT_PREVIEW),
     withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
+    withAnnotations,
 ])(ContentPreview);

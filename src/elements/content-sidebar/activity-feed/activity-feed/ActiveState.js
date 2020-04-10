@@ -6,11 +6,17 @@ import * as React from 'react';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
 import AppActivity from '../app-activity';
+import AnnotationActivity from '../annotations';
 import Comment from '../comment';
 import TaskNew from '../task-new';
 import Version, { CollapsedVersion } from '../version';
 import withErrorHandling from '../../withErrorHandling';
-import type { FocusableFeedItemType, FeedItem, FeedItems } from '../../../../common/types/feed';
+import type {
+    BoxAnnotationPermission,
+    FeedItem,
+    FeedItems,
+    FocusableFeedItemType,
+} from '../../../../common/types/feed';
 import type { SelectorItems, User } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
@@ -27,6 +33,8 @@ type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems<>,
+    onAnnotationDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => void,
+    onAnnotationSelect?: (id: string) => void,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
     onCommentEdit?: Function,
@@ -48,6 +56,8 @@ const ActiveState = ({
     items,
     mentionSelectorContacts,
     getMentionWithQuery,
+    onAnnotationDelete,
+    onAnnotationSelect,
     onAppActivityDelete,
     onCommentDelete,
     onCommentEdit,
@@ -140,6 +150,24 @@ const ActiveState = ({
                                 data-testid="app-activity"
                             >
                                 <AppActivity currentUser={currentUser} onDelete={onAppActivityDelete} {...item} />
+                            </li>
+                        );
+                    case 'annotation':
+                        return (
+                            <li
+                                key={item.type + item.id}
+                                className="bcs-activity-feed-annotation-activity"
+                                data-testid="annotation-activity"
+                            >
+                                <AnnotationActivity
+                                    currentUser={currentUser}
+                                    getAvatarUrl={getAvatarUrl}
+                                    getUserProfileUrl={getUserProfileUrl}
+                                    mentionSelectorContacts={mentionSelectorContacts}
+                                    onDelete={onAnnotationDelete}
+                                    onSelect={onAnnotationSelect}
+                                    {...item}
+                                />
                             </li>
                         );
                     default:
