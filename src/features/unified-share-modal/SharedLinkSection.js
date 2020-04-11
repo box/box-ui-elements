@@ -71,6 +71,22 @@ class SharedLinkSection extends React.Component<Props, State> {
         };
     }
 
+    componentDidMount() {
+        const { sharedLink, autoCreateSharedLink, addSharedLink, submitting } = this.props;
+
+        if (
+            autoCreateSharedLink &&
+            !this.state.isAutoCreatingSharedLink &&
+            sharedLink &&
+            !sharedLink.url &&
+            !submitting &&
+            !sharedLink.isNewSharedLink
+        ) {
+            this.setState({ isAutoCreatingSharedLink: true });
+            addSharedLink();
+        }
+    }
+
     componentDidUpdate(prevProps: Props) {
         const { sharedLink, autoCreateSharedLink, addSharedLink, submitting } = this.props;
 
