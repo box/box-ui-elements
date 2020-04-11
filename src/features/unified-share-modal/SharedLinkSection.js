@@ -87,6 +87,14 @@ class SharedLinkSection extends React.Component<Props, State> {
         }
     }
 
+    // We handle didUpdate but not didMount because
+    // the component initially renders with empty data
+    // in order to start showing UI components.
+    // When getInitialData completes in the parent we
+    // rerender with correct sharedLink data and can
+    // check whether to auto create a new one.
+    // Note: we are assuming the 2nd render is safe
+    // to start doing this check.
     componentDidUpdate(prevProps: Props) {
         const { sharedLink, autoCreateSharedLink, addSharedLink, submitting } = this.props;
 
