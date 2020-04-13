@@ -202,4 +202,80 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
 
         expect(tooltip).toMatchSnapshot();
     });
+
+    describe('componentDidMount()', () => {
+        test('should attempt shared link creation when component is mounted with initial, empty shared link data', () => {
+            const sharedLink = { url: '', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                submitting: false,
+                autoCreateSharedLink: true,
+                sharedLink,
+            });
+
+            expect(addSharedLink).toBeCalledTimes(1);
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(true);
+        });
+
+        test('should note attempt shared link creation when component is mounted with a shared link', () => {
+            const sharedLink = { url: 'sftp://example.org/', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                submitting: false,
+                autoCreateSharedLink: true,
+                sharedLink,
+            });
+
+            expect(addSharedLink).toBeCalledTimes(0);
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
+        });
+    });
+
+    describe('componentDidUpdate()', () => {
+        test('should call addSharedLink when modal is triggered to create a URL', () => {
+            const sharedLink = { url: '', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                submitting: true,
+                autoCreateSharedLink: true,
+                sharedLink,
+            });
+
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
+
+            wrapper.setProps({ submitting: false });
+
+            expect(addSharedLink).toBeCalledTimes(1);
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(true);
+
+            wrapper.setProps({ sharedLink: { url: 'http://example.com/', isNewSharedLink: true } });
+
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
+        });
+
+        test('should not call addSharedLink when modal is triggered to fetch existing URL', () => {
+            const sharedLink = { url: 'http://example.com/', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                submitting: true,
+                autoCreateSharedLink: true,
+                sharedLink,
+            });
+
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
+
+            wrapper.setProps({ submitting: false });
+
+            expect(addSharedLink).toBeCalledTimes(0);
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
+        });
+    });
 });

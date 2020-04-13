@@ -31,6 +31,8 @@ import type {
 import { PEOPLE_IN_ITEM, ANYONE_WITH_LINK, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
 
 type Props = {
+    addSharedLink: () => void,
+    autoCreateSharedLink?: boolean,
     autofocusSharedLink?: boolean,
     changeSharedLinkAccessLevel: (newAccessLevel: accessLevelType) => Promise<{ accessLevel: accessLevelType }>,
     changeSharedLinkPermissionLevel: (
@@ -51,10 +53,66 @@ type Props = {
     triggerCopyOnLoad?: boolean,
 };
 
-class SharedLinkSection extends React.Component<Props> {
+type State = {
+    isAutoCreatingSharedLink: boolean,
+};
+
+class SharedLinkSection extends React.Component<Props, State> {
     static defaultProps = {
         trackingProps: {},
+        autoCreateSharedLink: false,
     };
+
+    constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            isAutoCreatingSharedLink: false,
+        };
+    }
+
+    componentDidMount() {
+        const { sharedLink, autoCreateSharedLink, addSharedLink, submitting } = this.props;
+
+        if (
+            autoCreateSharedLink &&
+            !this.state.isAutoCreatingSharedLink &&
+            sharedLink &&
+            !sharedLink.url &&
+            !submitting &&
+            !sharedLink.isNewSharedLink
+        ) {
+            this.setState({ isAutoCreatingSharedLink: true });
+            addSharedLink();
+        }
+    }
+
+    // We handle didUpdate but not didMount because
+    // the component initially renders with empty data
+    // in order to start showing UI components.
+    // When getInitialData completes in the parent we
+    // rerender with correct sharedLink data and can
+    // check whether to auto create a new one.
+    // Note: we are assuming the 2nd render is safe
+    // to start doing this check.
+    componentDidUpdate(prevProps: Props) {
+        const { sharedLink, autoCreateSharedLink, addSharedLink, submitting } = this.props;
+
+        if (
+            autoCreateSharedLink &&
+            !this.state.isAutoCreatingSharedLink &&
+            !sharedLink.url &&
+            !submitting &&
+            !sharedLink.isNewSharedLink
+        ) {
+            this.setState({ isAutoCreatingSharedLink: true });
+            addSharedLink();
+        }
+
+        if (!prevProps.sharedLink.url && sharedLink.url) {
+            this.setState({ isAutoCreatingSharedLink: false });
+        }
+    }
 
     canAddSharedLink = (isSharedLinkEnabled: boolean, canAddLink: boolean) => {
         return !isSharedLinkEnabled && canAddLink;
@@ -66,6 +124,7 @@ class SharedLinkSection extends React.Component<Props> {
 
     renderSharedLink() {
         const {
+            autoCreateSharedLink,
             autofocusSharedLink,
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
@@ -103,6 +162,8 @@ class SharedLinkSection extends React.Component<Props> {
             sharedLinkPermissionsMenuButtonProps,
         } = trackingProps;
 
+        const shouldTriggerCopyOnLoad = autoCreateSharedLink ? false : triggerCopyOnLoad;
+
         const isEditableBoxNote = isBoxNote(convertToBoxItem(item)) && isEditAllowed;
         let allowedPermissionLevels = [CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];
 
@@ -136,7 +197,7 @@ class SharedLinkSection extends React.Component<Props> {
                             disabled={submitting}
                             label=""
                             onCopySuccess={onSharedLinkCopy}
-                            triggerCopyOnLoad={triggerCopyOnLoad}
+                            triggerCopyOnLoad={shouldTriggerCopyOnLoad}
                             type="url"
                             value={url}
                         />
