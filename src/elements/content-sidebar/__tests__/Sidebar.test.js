@@ -117,6 +117,26 @@ describe('elements/content-sidebar/Sidebar', () => {
         });
     });
 
+    describe('handleAnnotationSelect', () => {
+        test('should handle updating url', () => {
+            const onAnnotationSelect = jest.fn();
+            const historyMock = {
+                replace: jest.fn(),
+                location: {
+                    pathname: '/activity',
+                },
+            };
+
+            const wrapper = getWrapper({ history: historyMock, file: { id: '1234' }, onAnnotationSelect });
+            const instance = wrapper.instance();
+
+            instance.handleAnnotationSelect('123');
+
+            expect(onAnnotationSelect).toHaveBeenCalled();
+            expect(historyMock.replace).toHaveBeenCalledWith('/activity/annotations/123');
+        });
+    });
+
     describe('isForced', () => {
         test('returns the current value from the localStore', () => {
             LocalStore.mockImplementationOnce(() => ({

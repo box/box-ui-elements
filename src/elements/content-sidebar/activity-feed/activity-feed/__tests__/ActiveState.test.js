@@ -10,6 +10,23 @@ const currentUser = {
 
 const otherUser = { name: 'Akon', id: 11 };
 
+const annotation = {
+    type: 'annotation',
+    id: 'anno_123',
+    created_at: '2018-07-03T14:43:52-07:00',
+    description: {
+        message: 'This is an annotation',
+    },
+    target: {
+        location: {
+            type: 'page',
+            value: 1,
+        },
+        type: 'region',
+    },
+    created_by: currentUser,
+};
+
 const comment = {
     type: 'comment',
     id: 'c_123',
@@ -95,7 +112,7 @@ const activityFeedError = { title: 't', content: 'm' };
 const getWrapper = (params = {}) =>
     mount(
         <ActiveState
-            items={[comment, fileVersion, taskWithAssignment, appActivity]}
+            items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
             currentUser={currentUser}
             {...params}
         />,
@@ -109,7 +126,10 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
 
     test('should render items', () => {
         const wrapper = shallow(
-            <ActiveState items={[comment, fileVersion, taskWithAssignment, appActivity]} currentUser={currentUser} />,
+            <ActiveState
+                items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
+                currentUser={currentUser}
+            />,
         ).dive();
 
         expect(wrapper).toMatchSnapshot();
@@ -121,6 +141,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         expect(wrapper.find('[data-testid="version"]')).toHaveLength(1);
         expect(wrapper.find('[data-testid="task"]')).toHaveLength(1);
         expect(wrapper.find('[data-testid="app-activity"]')).toHaveLength(1);
+        expect(wrapper.find('[data-testid="annotation-activity"]')).toHaveLength(1);
     });
 
     test('should correctly render with an inline error if some feed items fail to fetch', () => {
