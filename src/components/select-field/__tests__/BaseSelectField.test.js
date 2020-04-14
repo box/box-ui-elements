@@ -772,6 +772,16 @@ describe('components/select-field/BaseSelectField', () => {
 
             expect(wrapper.state('isOpen')).toBe(true);
         });
+
+        test('should add document click listener', () => {
+            document.addEventListener = jest.fn();
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+
+            instance.openDropdown();
+
+            expect(document.addEventListener).toHaveBeenCalled();
+        });
     });
 
     describe('closeDropdown()', () => {
@@ -789,6 +799,17 @@ describe('components/select-field/BaseSelectField', () => {
             expect(wrapper.state('isOpen')).toBe(false);
             expect(wrapper.state('activeItemID')).toEqual(null);
             expect(wrapper.state('activeItemIndex')).toEqual(-1);
+        });
+
+        test('should remove document click listener', () => {
+            document.removeEventListener = jest.fn();
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            wrapper.setState({ isOpen: true });
+
+            instance.closeDropdown();
+
+            expect(document.removeEventListener).toHaveBeenCalled();
         });
     });
 
@@ -947,6 +968,55 @@ describe('components/select-field/BaseSelectField', () => {
                 .withArgs(options[index]); // audio + video
 
             instance.selectMultiOption(index);
+        });
+    });
+
+    describe('handleDocumentClick', () => {
+        test('should close dropdown when click occurs outside of select field', () => {
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            instance.closeDropdown = jest.fn();
+            wrapper.setState({ isOpen: true });
+
+            instance.handleDocumentClick({
+                target: document.createElement('div'),
+            });
+
+            expect(instance.closeDropdown).toHaveBeenCalled();
+        });
+
+        test('should not close dropdown when click occurs on select field container', () => {
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            instance.closeDropdown = jest.fn();
+            wrapper.setState({ isOpen: true });
+
+            wrapper.simulate('click');
+
+            expect(instance.closeDropdown).not.toHaveBeenCalled();
+        });
+
+        test('should not close dropdown when click occurs on select field dropdown', () => {
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            instance.closeDropdown = jest.fn();
+            wrapper.setState({ isOpen: true });
+
+            instance.handleDocumentClick({
+                target: document.getElementById(instance.selectFieldID),
+            });
+
+            expect(instance.closeDropdown).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('componentWillUnmount()', () => {
+        test('should remove document click listener', () => {
+            document.removeEventListener = jest.fn();
+            const wrapper = shallowRenderSelectField();
+            wrapper.setState({ isOpen: true });
+            wrapper.unmount();
+            expect(document.removeEventListener).toHaveBeenCalled();
         });
     });
 });

@@ -98,6 +98,8 @@ class BaseSelectField extends React.Component<Props, State> {
 
         this.selectFieldID = uniqueId('selectfield');
 
+        this.selectFieldContainerRef = React.createRef();
+
         this.state = {
             activeItemID: null,
             activeItemIndex: -1,
@@ -105,6 +107,24 @@ class BaseSelectField extends React.Component<Props, State> {
             shouldScrollIntoView: false,
         };
     }
+
+    componentWillUnmount() {
+        if (this.state.isOpen) {
+            // Clean-up global click handlers
+            document.removeEventListener('click', this.handleDocumentClick);
+        }
+    }
+
+    handleDocumentClick = (event: MouseEvent) => {
+        const container = this.selectFieldContainerRef.current;
+        const isInside =
+            (container && event.target instanceof Node && container.contains(event.target)) ||
+            container === event.target;
+
+        if (!isInside) {
+            this.closeDropdown();
+        }
+    };
 
     setActiveItem = (index: number, shouldScrollIntoView?: boolean = true) => {
         this.setState({ activeItemIndex: index, shouldScrollIntoView });
@@ -125,6 +145,8 @@ class BaseSelectField extends React.Component<Props, State> {
     };
 
     selectFieldID: string;
+
+    selectFieldContainerRef: { current: null | HTMLDivElement };
 
     handleChange = (selectedItems: Array<SelectOptionProp>) => {
         const { onChange } = this.props;
@@ -230,6 +252,7 @@ class BaseSelectField extends React.Component<Props, State> {
     openDropdown = () => {
         if (!this.state.isOpen) {
             this.setState({ isOpen: true });
+            document.addEventListener('click', this.handleDocumentClick);
         }
     };
 
@@ -240,6 +263,7 @@ class BaseSelectField extends React.Component<Props, State> {
                 activeItemIndex: -1,
                 isOpen: false,
             });
+            document.removeEventListener('click', this.handleDocumentClick);
         }
     };
 
@@ -425,6 +449,7 @@ class BaseSelectField extends React.Component<Props, State> {
                 className={classNames(className, 'bdl-SelectField', 'select-container')}
                 onBlur={this.handleBlur}
                 onKeyDown={this.handleKeyDown}
+                ref={this.selectFieldContainerRef}
             >
                 <PopperComponent placement={dropdownPlacement} isOpen={isOpen} modifiers={dropdownModifiers}>
                     {this.renderSelectButton()}

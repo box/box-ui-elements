@@ -153,6 +153,7 @@ class USMExample extends React.Component {
                     collaboratorsList={this.state.collaboratorsList}
                     collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
                     currentUserID="0"
+                    createSharedLinkOnLoad={ this.props.shouldCreateSharedLinkOnLoad }
                     focusSharedLinkOnLoad={ this.props.shouldFocusSharedLinkOnLoad }
                     getCollaboratorContacts={ () => {
                         return Promise.resolve(this.contacts);
@@ -291,6 +292,11 @@ class USMSharedLinkExample extends USMExample {
     <div>
         This shows the Unified share modal when it has a shared link to fetch, and should auto-focus.
         <USMSharedLinkExample buttonText="Open USM Modal" shouldFocusSharedLinkOnLoad/>
+    </div>
+    <hr/>
+    <div>
+        This shows the Unified share modal when it needs to generate a shared link, and should auto-focus.
+        <USMExample buttonText="Open USM Modal" shouldFocusSharedLinkOnLoad shouldCreateSharedLinkOnLoad />
     </div>
 </div>
 
