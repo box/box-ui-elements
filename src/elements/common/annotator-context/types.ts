@@ -7,7 +7,7 @@ export enum Action {
 }
 
 export interface AnnotatorState {
-    activeAnnotationId?: string;
+    activeAnnotationId?: string | null;
     annotation?: object | undefined;
     action: Action | undefined;
     error: Error | undefined;
