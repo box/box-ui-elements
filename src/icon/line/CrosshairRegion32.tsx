@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-sort-props */
 import * as React from 'react';
-import * as vars from '../../styles/variables';
 import AccessibleSVG, { SVGProps } from '../../components/accessible-svg/AccessibleSVG';
 
 /**
@@ -14,14 +13,15 @@ import AccessibleSVG, { SVGProps } from '../../components/accessible-svg/Accessi
  * - https://github.com/box/box-ui-elements/issues/new?template=Feature_request.md
  */
 
-const FileDefault16 = (props: SVGProps) => (
-    <AccessibleSVG width={16} height={16} viewBox="0 0 16 16" {...props}>
-        <path
-            fill={vars.bdlGray50}
-            fillRule="evenodd"
-            d="M4.15 1h5.272c.146 0 .286.057.389.158l3.528 3.454a.53.53 0 01.161.38v8.393c0 .892-.74 1.615-1.65 1.615h-7.7c-.911 0-1.65-.723-1.65-1.615V2.615C2.5 1.723 3.239 1 4.15 1z"
-        />
+const CrosshairRegion32 = (props: SVGProps) => (
+    <AccessibleSVG viewBox="0 0 32 32" width={32} height={32} {...props}>
+        <g fillRule="nonzero" fill="none">
+            <path fill="#fff" d="M23 15h-6.01V9h-2.98v6H8v3h6.01v6h2.98v-6H23z" />
+            <path fill="#231F1F" d="M21.99 16.01h-6V10h-.98v6.01h-6v.98h6V23h.98v-6.01h6z" />
+            <path d="M27 5h-8v8h8V5zm-3 3v2h-2V8h2z" fill="#fff" />
+            <path d="M26 6h-6v6h6V6zm-1 1v4h-4V7h4z" fill="#231F1F" />
+        </g>
     </AccessibleSVG>
 );
 
-export default FileDefault16;
+export default CrosshairRegion32;
