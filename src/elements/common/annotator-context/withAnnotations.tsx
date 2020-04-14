@@ -22,9 +22,6 @@ export default function withAnnotations<P extends object>(
 
         state: AnnotatorState = {
             activeAnnotationId: null,
-            annotation: undefined,
-            action: undefined,
-            error: undefined,
         };
 
         getAction({ meta: { status }, error }: AnnotationActionEvent): Action {

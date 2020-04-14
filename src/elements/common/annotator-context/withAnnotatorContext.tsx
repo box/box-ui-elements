@@ -9,9 +9,7 @@ export interface WithAnnotatorContextProps {
 export default function withAnnotatorContext<P extends {}>(WrappedComponent: React.ComponentType<P>) {
     return React.forwardRef<React.RefForwardingComponent<React.ComponentType<P>>, P>((props, ref) => (
         <AnnotatorContext.Consumer>
-            {({ activeAnnotationId, ...rest }) => (
-                <WrappedComponent ref={ref} {...props} activeAnnotationId={activeAnnotationId} annotatorState={rest} />
-            )}
+            {annotatorState => <WrappedComponent ref={ref} {...props} annotatorState={annotatorState} />}
         </AnnotatorContext.Consumer>
     ));
 }

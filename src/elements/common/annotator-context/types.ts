@@ -8,9 +8,9 @@ export enum Action {
 
 export interface AnnotatorState {
     activeAnnotationId?: string | null;
-    annotation?: object | undefined;
-    action: Action | undefined;
-    error: Error | undefined;
+    annotation?: object;
+    action?: Action;
+    error?: Error;
 }
 
 export enum Status {
@@ -24,7 +24,7 @@ export interface Metadata {
 }
 
 export interface AnnotationActionEvent {
-    annotation: object | undefined;
-    error: Error | undefined;
+    annotation?: object;
+    error?: Error;
     meta: Metadata;
 }
