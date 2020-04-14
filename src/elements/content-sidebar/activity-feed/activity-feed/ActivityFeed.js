@@ -227,6 +227,7 @@ class ActivityFeed extends React.Component<Props, State> {
             feedItems.find(({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType);
 
         const errorMessageByEntryType = {
+            annotation: messages.annotationMissingError,
             comment: messages.commentMissingError,
             task: messages.taskMissingError,
         };
