@@ -1134,6 +1134,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
     }
 
+    handleAnnotationSelect = (): void => {
+        // TODO Call select annotation in preview
+    };
+
     /**
      * Renders the file preview
      *
@@ -1157,6 +1161,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             logoUrl,
             onClose,
             measureRef,
+            showAnnotationsControls,
             sharedLink,
             sharedLinkPassword,
             requestInterceptor,
@@ -1189,6 +1194,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const currentVersionId = getProp(file, 'file_version.id');
         const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
         const onHeaderClose = currentVersionId === selectedVersionId ? onClose : this.updateVersionToCurrent;
+        const handleAnnotationSelect = showAnnotationsControls ? this.handleAnnotationSelect : noop;
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -1252,6 +1258,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                 sharedLinkPassword={sharedLinkPassword}
                                 requestInterceptor={requestInterceptor}
                                 responseInterceptor={responseInterceptor}
+                                onAnnotationSelect={handleAnnotationSelect}
                                 onVersionChange={this.onVersionChange}
                             />
                         )}

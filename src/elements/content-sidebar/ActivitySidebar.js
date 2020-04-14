@@ -48,6 +48,7 @@ type ExternalProps = {
     activeFeedEntryType?: FocusableFeedItemType,
     currentUser?: User,
     getUserProfileUrl?: GetProfileUrlCallback,
+    onAnnotationSelect: (annotationId: string) => void,
     onCommentCreate: Function,
     onCommentDelete: (comment: Comment) => any,
     onCommentUpdate: () => any,
@@ -589,6 +590,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             elementId,
             file,
             isDisabled = false,
+            onAnnotationSelect,
             onVersionHistoryClick,
             getUserProfileUrl,
             activeFeedEntryId,
@@ -619,6 +621,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     mentionSelectorContacts={mentionSelectorContacts}
                     currentUser={currentUser}
                     isDisabled={isDisabled}
+                    onAnnotationSelect={onAnnotationSelect}
                     onAppActivityDelete={this.deleteAppActivity}
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}

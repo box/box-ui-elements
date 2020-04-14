@@ -4,7 +4,7 @@ import type { BoxItemPermission, BoxItemVersion, BoxItemVersionMini, User } from
 import type { Target } from './annotations';
 
 // Feed item types that can receive deeplinks inline in the feed
-type FocusableFeedItemType = 'task' | 'comment';
+type FocusableFeedItemType = 'annotation' | ' task' | 'comment';
 
 type BoxCommentPermission = {
     can_delete?: boolean,

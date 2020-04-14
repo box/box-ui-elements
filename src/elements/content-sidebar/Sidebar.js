@@ -48,6 +48,7 @@ type Props = {
     location: Location,
     metadataEditors?: Array<MetadataEditor>,
     metadataSidebarProps: MetadataSidebarProps,
+    onAnnotationSelect: (annotationId: string) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
@@ -107,6 +108,22 @@ class Sidebar extends React.Component<Props, State> {
     getUrlPrefix = (pathname: string) => {
         const basePath = pathname.substring(1).split('/')[0];
         return basePath;
+    };
+
+    /**
+     * Handle annotation selection
+     *
+     * @param {string} annotationId - The id of the annotation being selected
+     * @return {void}
+     */
+
+    handleAnnotationSelect = (annotationId: string): void => {
+        const { history, onAnnotationSelect } = this.props;
+
+        const urlPrefix = this.getUrlPrefix(history.location.pathname);
+        history.replace(`/${urlPrefix}/annotations/${annotationId}`);
+
+        onAnnotationSelect(annotationId);
     };
 
     /**
@@ -264,6 +281,7 @@ class Sidebar extends React.Component<Props, State> {
                             isOpen={isOpen}
                             key={file.id}
                             metadataSidebarProps={metadataSidebarProps}
+                            onAnnotationSelect={this.handleAnnotationSelect}
                             onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick}
                             ref={this.sidebarPanels}

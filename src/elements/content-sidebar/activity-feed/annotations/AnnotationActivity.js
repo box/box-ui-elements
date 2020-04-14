@@ -24,7 +24,6 @@ type Props = {
     error?: ActionItemError,
     getAvatarUrl: GetAvatarUrlCallback,
     getUserProfileUrl?: GetProfileUrlCallback,
-    isActive?: boolean,
     isDisabled?: boolean,
     isPending?: boolean,
     onDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => any,
@@ -40,7 +39,6 @@ const AnnotationActivity = (props: Props) => {
         getAvatarUrl,
         getUserProfileUrl,
         id,
-        isActive = false,
         isPending,
         onDelete = noop,
         onSelect = noop,
@@ -63,7 +61,7 @@ const AnnotationActivity = (props: Props) => {
     const message = (description && description.message) || '';
 
     return (
-        <div className={`bcs-AnnotationActivity ${classNames({ 'is-active': isActive })}`}>
+        <div className="bcs-AnnotationActivity">
             <Media
                 className={classNames('bcs-AnnotationActivity-media', {
                     'bcs-is-pending': isPending || error,
