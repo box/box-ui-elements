@@ -44,10 +44,13 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         const wrapper = getWrapper();
 
         const contextProvider = getContextProvider(wrapper);
+        const instance = wrapper.instance();
+
         expect(contextProvider.exists()).toBeTruthy();
         expect(contextProvider.prop('value')).toEqual({
             action: null,
             activeAnnotationId: null,
+            setActiveAnnotationId: instance.handleActiveChange,
             annotation: null,
             error: null,
         });
@@ -74,7 +77,10 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                     error,
                 };
 
-                wrapper.instance().handleAnnotationCreate(eventData);
+                const instance = wrapper.instance();
+
+                instance.handleAnnotationCreate(eventData);
+
                 const contextProvider = getContextProvider(wrapper);
                 expect(contextProvider.exists()).toBeTruthy();
                 expect(contextProvider.prop('value')).toEqual({
@@ -82,6 +88,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                     activeAnnotationId: null,
                     annotation: expectedAnnotation,
                     error: expectedError,
+                    setActiveAnnotationId: instance.handleActiveChange,
                 });
             },
         );
@@ -94,8 +101,10 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             ${'123'}     | ${'123'}
         `('should update activeAnnotationId state to reflect value $annotationId', ({ annotationId, expected }) => {
             const wrapper = getWrapper();
+            const instance = wrapper.instance();
 
-            wrapper.instance().handleActiveChange(annotationId);
+            instance.handleActiveChange(annotationId);
+
             const contextProvider = getContextProvider(wrapper);
             expect(contextProvider.exists()).toBeTruthy();
             expect(contextProvider.prop('value').activeAnnotationId).toEqual(expected);
