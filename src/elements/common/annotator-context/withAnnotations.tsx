@@ -3,13 +3,14 @@ import AnnotatorContext from './AnnotatorContext';
 import { Action, AnnotationActionEvent, AnnotatorState, Status } from './types';
 
 export interface WithAnnotationsProps {
-    onAnnotatorEvent: Function;
+    onAnnotatorEvent: ({ event, data }: { event: string; data: unknown }) => void;
 }
 
 export interface ComponentWithAnnotations {
-    getAction: Function;
-    handleActiveChange: Function;
-    handleAnnotationCreate: Function;
+    getAction: (eventData: AnnotationActionEvent) => Action;
+    handleActiveChange: (annotationId: string | null) => void;
+    handleAnnotationCreate: (eventData: AnnotationActionEvent) => void;
+    handleAnnotatorEvent: ({ event, data }: { event: string; data?: unknown }) => void;
 }
 
 export type WithAnnotationsComponent<P> = React.ComponentClass<P & WithAnnotationsProps>;

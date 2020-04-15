@@ -82,4 +82,43 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             },
         );
     });
+
+    describe('handleActiveChange()', () => {
+        test.each`
+            annotationId | expected
+            ${null}      | ${null}
+            ${'123'}     | ${'123'}
+        `('should update activeAnnotationId state to reflect value $annotationId', ({ annotationId, expected }) => {
+            const wrapper = getWrapper();
+
+            (wrapper.instance() as Component & ComponentWithAnnotations).handleActiveChange(annotationId);
+            const contextProvider = getContextProvider(wrapper);
+            expect(contextProvider.exists()).toBeTruthy();
+            expect((contextProvider.props() as ContextProviderProps).value).toEqual({
+                activeAnnotationId: expected,
+            });
+        });
+    });
+
+    describe('handleAnnotatorEvent()', () => {
+        test.each`
+            event                          | numCreateCalled | numActiveChangeCalled
+            ${'annotations_create'}        | ${1}            | ${0}
+            ${'annotations_active_change'} | ${0}            | ${1}
+            ${'foo'}                       | ${0}            | ${0}
+        `(
+            'should call appropriate handler based on event $event',
+            ({ event, numCreateCalled, numActiveChangeCalled }) => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance() as Component & ComponentWithAnnotations;
+                instance.handleAnnotationCreate = jest.fn();
+                instance.handleActiveChange = jest.fn();
+
+                instance.handleAnnotatorEvent({ event });
+
+                expect((instance.handleAnnotationCreate as jest.Mock).mock.calls.length).toBe(numCreateCalled);
+                expect((instance.handleActiveChange as jest.Mock).mock.calls.length).toBe(numActiveChangeCalled);
+            },
+        );
+    });
 });
