@@ -322,8 +322,8 @@ describe('elements/content-preview/ContentPreview', () => {
         `(
             'should call onAnnotationCreate $called if showAnnotationsControls is $showAnnotationsControls',
             async ({ called, showAnnotationsControls }) => {
-                const onAnnotationCreate = jest.fn();
-                const wrapper = getWrapper({ ...props, showAnnotationsControls, onAnnotationCreate });
+                const onAnnotatorEvent = jest.fn();
+                const wrapper = getWrapper({ ...props, showAnnotationsControls, onAnnotatorEvent });
 
                 wrapper.setState({ file });
 
@@ -332,12 +332,9 @@ describe('elements/content-preview/ContentPreview', () => {
                 await instance.loadPreview();
 
                 if (called) {
-                    expect(instance.preview.addListener).toHaveBeenCalledWith('annotationCreate', onAnnotationCreate);
+                    expect(instance.preview.addListener).toHaveBeenCalledWith('annotatorevent', onAnnotatorEvent);
                 } else {
-                    expect(instance.preview.addListener).not.toHaveBeenCalledWith(
-                        'annotationCreate',
-                        onAnnotationCreate,
-                    );
+                    expect(instance.preview.addListener).not.toHaveBeenCalledWith('annotatorevent', onAnnotatorEvent);
                 }
             },
         );
