@@ -196,7 +196,6 @@ class ActivityFeed extends React.Component<Props, State> {
             getUserProfileUrl,
             file,
             onAnnotationDelete,
-            onAnnotationSelect,
             onAppActivityDelete,
             onCommentCreate,
             getApproverWithQuery,
@@ -261,7 +260,6 @@ class ActivityFeed extends React.Component<Props, State> {
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                             onAnnotationDelete={onAnnotationDelete}
-                            onAnnotationSelect={onAnnotationSelect}
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
