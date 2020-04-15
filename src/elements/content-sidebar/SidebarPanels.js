@@ -41,7 +41,6 @@ type Props = {
     hasVersions: boolean,
     isOpen: boolean,
     metadataSidebarProps: MetadataSidebarProps,
-    onAnnotationSelect: (annotationId: string) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
@@ -129,7 +128,6 @@ class SidebarPanels extends React.Component<Props> {
             hasVersions,
             isOpen,
             metadataSidebarProps,
-            onAnnotationSelect,
             onVersionChange,
             onVersionHistoryClick,
             versionsSidebarProps,
@@ -176,7 +174,6 @@ class SidebarPanels extends React.Component<Props> {
                                     elementId={elementId}
                                     currentUser={currentUser}
                                     file={file}
-                                    onAnnotationSelect={onAnnotationSelect}
                                     onVersionHistoryClick={onVersionHistoryClick}
                                     ref={this.activitySidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}

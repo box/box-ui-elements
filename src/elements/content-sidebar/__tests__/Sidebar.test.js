@@ -12,7 +12,8 @@ jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 jest.mock('../../../utils/LocalStore');
 
 describe('elements/content-sidebar/Sidebar', () => {
-    const getWrapper = props => shallow(<Sidebar file={{ id: 'id' }} location={{ pathname: '/' }} {...props} />);
+    const getWrapper = props =>
+        shallow(<Sidebar file={{ id: 'id' }} annotatorState={{}} location={{ pathname: '/' }} {...props} />);
 
     beforeEach(() => {
         LocalStore.mockClear();
@@ -119,7 +120,6 @@ describe('elements/content-sidebar/Sidebar', () => {
 
     describe('handleAnnotationSelect', () => {
         test('should handle updating url', () => {
-            const onAnnotationSelect = jest.fn();
             const historyMock = {
                 replace: jest.fn(),
                 location: {
@@ -127,12 +127,11 @@ describe('elements/content-sidebar/Sidebar', () => {
                 },
             };
 
-            const wrapper = getWrapper({ history: historyMock, file: { id: '1234' }, onAnnotationSelect });
+            const wrapper = getWrapper({ history: historyMock, file: { id: '1234' } });
             const instance = wrapper.instance();
 
             instance.handleAnnotationSelect('123');
 
-            expect(onAnnotationSelect).toHaveBeenCalled();
             expect(historyMock.replace).toHaveBeenCalledWith('/activity/annotations/123');
         });
     });

@@ -37,7 +37,6 @@ type Props = {
     isDisabled?: boolean,
     mentionSelectorContacts?: SelectorItems<User>,
     onAnnotationDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => void,
-    onAnnotationSelect?: (id: string) => void,
     onAppActivityDelete?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,

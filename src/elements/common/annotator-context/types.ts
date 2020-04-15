@@ -11,6 +11,7 @@ export interface AnnotatorState {
     annotation?: object | null;
     action?: Action | null;
     error?: Error | null;
+    setActiveAnnotationId: (annotationId: string) => void;
 }
 
 export enum Status {

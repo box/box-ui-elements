@@ -14,6 +14,7 @@ import AddTaskButton from './AddTaskButton';
 import API from '../../api';
 import messages from '../common/messages';
 import SidebarContent from './SidebarContent';
+import { AnnotatorState, withAnnotatorContext } from '../common/annotator-context';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { getBadUserError, getBadItemError } from '../../utils/error';
 import { mark } from '../../utils/performance';
@@ -46,9 +47,9 @@ import './ActivitySidebar.scss';
 type ExternalProps = {
     activeFeedEntryId?: string,
     activeFeedEntryType?: FocusableFeedItemType,
+    annotatorState?: AnnotatorState,
     currentUser?: User,
     getUserProfileUrl?: GetProfileUrlCallback,
-    onAnnotationSelect: (annotationId: string) => void,
     onCommentCreate: Function,
     onCommentDelete: (comment: Comment) => any,
     onCommentUpdate: () => any,
@@ -590,12 +591,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             elementId,
             file,
             isDisabled = false,
-            onAnnotationSelect,
             onVersionHistoryClick,
             getUserProfileUrl,
             activeFeedEntryId,
             activeFeedEntryType,
             onTaskView,
+            annotatorState = {},
         } = this.props;
         const {
             currentUser,
@@ -621,7 +622,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     mentionSelectorContacts={mentionSelectorContacts}
                     currentUser={currentUser}
                     isDisabled={isDisabled}
-                    onAnnotationSelect={onAnnotationSelect}
+                    onAnnotationSelect={annotatorState.setActiveAnnotationId}
                     onAppActivityDelete={this.deleteAppActivity}
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
@@ -654,4 +655,5 @@ export default flow([
     withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR),
     withAPIContext,
     withFeatureConsumer,
+    withAnnotatorContext,
 ])(ActivitySidebar);
