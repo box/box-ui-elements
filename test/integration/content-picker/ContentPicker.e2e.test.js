@@ -34,32 +34,142 @@ const helpers = {
 
         return cy.get('@row');
     },
+    getPaginationArrows: () => {
+        return cy
+            .getByTestId('content-picker')
+            .find('.bdl-Pagination-nav')
+            .children();
+    },
+    getPaginationCountButton: () => {
+        return cy.getByTestId('content-picker').find('.bdl-Pagination-count');
+    },
+    getPaginationDropdown: () => {
+        return cy.get('.bdl-Pagination-dropdownMenu').first();
+    },
 };
 
 describe('ContentPicker', () => {
-    beforeEach(() => {
-        cy.server();
+    describe('Pagination', () => {
+        const FIRST_PAGE = 'fixture:content-picker/folder-page-1.json';
+        const SECOND_PAGE = 'fixture:content-picker/folder-page-2.json';
+        const FIRST_ITEM_OF_FIRST_PAGE = 'Another Sample Folder';
+        const FIRST_ITEM_OF_SECOND_PAGE = 'Sample Audio.mp3';
 
-        cy.route('GET', '**/folders/*', 'fixture:content-picker/root-folder.json');
+        beforeEach(() => {
+            cy.server();
 
-        ['319004423111', '308566419514', '308409990441'].forEach(fileId => {
-            cy.fixture('content-picker/get-sharedlink.json').then(getSharedLinkJson => {
-                cy.route('GET', `**/files/${fileId}?fields=allowed_shared_link_access_levels,shared_link`, {
-                    ...getSharedLinkJson,
-                    id: fileId,
+            cy.route('GET', '**/folders/*', FIRST_PAGE);
+        });
+
+        it('Should be able to navigate between pages using arrows', () => {
+            helpers.load({ initialPageSize: 3 });
+
+            // Confirm that the Content Picker shows the first page
+            helpers.getRow(0).contains(FIRST_ITEM_OF_FIRST_PAGE);
+
+            // Stub call to second page
+            cy.route('GET', '**/folders/*', SECOND_PAGE);
+
+            // Click the right arrow
+            helpers
+                .getPaginationArrows()
+                .eq(1)
+                .click();
+
+            // Confirm that the Content Picker now shows the second page
+            helpers.getRow(0).contains(FIRST_ITEM_OF_SECOND_PAGE);
+
+            // Stub call to first page
+            cy.route('GET', '**/folders/*', 'fixture:content-picker/folder-page-1.json');
+
+            // Click the left arrow
+            helpers
+                .getPaginationArrows()
+                .eq(0)
+                .click();
+
+            // Confirm that the Content Picker now shows the first page
+            helpers.getRow(0).contains(FIRST_ITEM_OF_FIRST_PAGE);
+        });
+
+        it('Should be able to navigate to the next page using count button', () => {
+            const COUNT_BUTTON_ON_FIRST_PAGE = '1 of 2';
+            const COUNT_BUTTON_ON_SECOND_PAGE = '2 of 2';
+
+            helpers.load({ initialPageSize: 3 });
+
+            // Confirm that the Content Picker shows the first page
+            helpers.getRow(0).contains(FIRST_ITEM_OF_FIRST_PAGE);
+
+            // Confirm that the pagination count button says "1 of 2", and click it
+            helpers
+                .getPaginationCountButton()
+                .contains(COUNT_BUTTON_ON_FIRST_PAGE)
+                .then($el => {
+                    $el.click();
                 });
-            });
 
-            cy.fixture('content-picker/create-sharedlink.json').then(createSharedLinkJson => {
-                cy.route('PUT', `**/files/${fileId}`, {
-                    ...createSharedLinkJson,
-                    id: fileId,
+            // Stub call to second page
+            cy.route('GET', '**/folders/*', SECOND_PAGE);
+
+            // Click the second option in the dropdown menu
+            helpers
+                .getPaginationDropdown()
+                .children()
+                .eq(1)
+                .click();
+
+            // Confirm that the Content Picker now shows the second page
+            helpers.getRow(0).contains(FIRST_ITEM_OF_SECOND_PAGE);
+
+            // Stub call to first page
+            cy.route('GET', '**/folders/*', FIRST_PAGE);
+
+            // Confirm that the pagination count button says "2 of 2", and click it
+            helpers
+                .getPaginationCountButton()
+                .contains(COUNT_BUTTON_ON_SECOND_PAGE)
+                .then($el => {
+                    $el.click();
                 });
-            });
+
+            // Click the first option in the dropdown menu
+            helpers
+                .getPaginationDropdown()
+                .children()
+                .eq(0)
+                .click();
+
+            // Confirm that the pagination count button says "1 of 2"
+            // and that the Content Picker now shows the first page
+            helpers.getPaginationCountButton().contains(COUNT_BUTTON_ON_FIRST_PAGE);
+            helpers.getRow(0).contains(FIRST_ITEM_OF_FIRST_PAGE);
         });
     });
 
     describe('Selection', () => {
+        beforeEach(() => {
+            cy.server();
+
+            cy.route('GET', '**/folders/*', 'fixture:content-picker/root-folder.json');
+
+            ['319004423111', '308566419514', '308409990441'].forEach(fileId => {
+                cy.fixture('content-picker/get-sharedlink.json').then(getSharedLinkJson => {
+                    cy.route('GET', `**/files/${fileId}?fields=allowed_shared_link_access_levels,shared_link`, {
+                        ...getSharedLinkJson,
+                        id: fileId,
+                    });
+                });
+
+                cy.fixture('content-picker/create-sharedlink.json').then(createSharedLinkJson => {
+                    cy.route('PUT', `**/files/${fileId}`, {
+                        ...createSharedLinkJson,
+                        id: fileId,
+                    });
+                });
+            });
+        });
+
         it('Should be able to select and deselect items', () => {
             helpers.load();
 

@@ -1235,7 +1235,7 @@ class ContentPicker extends Component<Props, State> {
                         >
                             <Pagination
                                 offset={offset}
-                                onChange={this.paginate}
+                                onOffsetChange={this.paginate}
                                 pageSize={currentPageSize}
                                 totalCount={totalCount}
                             />
