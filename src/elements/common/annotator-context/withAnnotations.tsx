@@ -36,7 +36,7 @@ export default function withAnnotations<P extends object>(
         };
 
         handleActiveChange = (annotationId: string | null): void => {
-            this.setState({ ...this.state, activeAnnotationId: annotationId });
+            this.setState({ activeAnnotationId: annotationId });
         };
 
         handleAnnotatorEvent = ({ event, data }: { event: string; data: unknown }): void => {
