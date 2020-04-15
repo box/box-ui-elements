@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
 import { AnnotatorContext, withAnnotations } from '../index';
-import { WithAnnotationsComponent, WithAnnotationsProps, ComponentWithAnnotations } from '../withAnnotations';
+import { WithAnnotationsProps, ComponentWithAnnotations } from '../withAnnotations';
 import { AnnotatorState, Action } from '../types';
 
 type ComponentProps = {
@@ -22,18 +22,21 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
     const defaultProps = { className: 'foo', onAnnotatorEvent: jest.fn() };
 
-    const getWrapper = (props: WrappedComponentProps = defaultProps) =>
-        shallow<WithAnnotationsComponent<WrappedComponentProps>>(<WrappedComponent {...props} />);
+    const getWrapper = (
+        props: WrappedComponentProps = defaultProps,
+    ): ShallowWrapper<WrappedComponentProps, {}, Component & ComponentWithAnnotations> =>
+        shallow<Component & ComponentWithAnnotations, WrappedComponentProps>(<WrappedComponent {...props} />);
 
-    const getContextProvider = (wrapper: ShallowWrapper<WithAnnotationsComponent<WrappedComponentProps>>) =>
-        wrapper.find(AnnotatorContext.Provider);
+    const getContextProvider = (
+        wrapper: ShallowWrapper<WrappedComponentProps, {}, Component & ComponentWithAnnotations>,
+    ) => wrapper.find<ContextProviderProps>(AnnotatorContext.Provider);
 
     test('should pass onAnnotatorEvent as a prop on the wrapped component', () => {
         const wrapper = getWrapper();
 
-        const wrappedComponent = wrapper.find(MockComponent);
+        const wrappedComponent = wrapper.find<WrappedComponentProps>(MockComponent);
         expect(wrappedComponent.exists()).toBeTruthy();
-        expect((wrappedComponent.props() as WrappedComponentProps).onAnnotatorEvent).toBeTruthy();
+        expect(wrappedComponent.props().onAnnotatorEvent).toBeTruthy();
     });
 
     test('should pass the state on to the AnnotatorContext.Provider', () => {
@@ -41,11 +44,8 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
         const contextProvider = getContextProvider(wrapper);
         expect(contextProvider.exists()).toBeTruthy();
-        expect((contextProvider.props() as ContextProviderProps).value).toEqual({
+        expect(contextProvider.props().value).toEqual({
             activeAnnotationId: null,
-            annotation: undefined,
-            action: undefined,
-            error: undefined,
         });
     });
 
@@ -70,10 +70,10 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                     error,
                 };
 
-                (wrapper.instance() as Component & ComponentWithAnnotations).handleAnnotationCreate(eventData);
+                wrapper.instance().handleAnnotationCreate(eventData);
                 const contextProvider = getContextProvider(wrapper);
                 expect(contextProvider.exists()).toBeTruthy();
-                expect((contextProvider.props() as ContextProviderProps).value).toEqual({
+                expect(contextProvider.props().value).toEqual({
                     activeAnnotationId: null,
                     annotation: expectedAnnotation,
                     action: expectedAction,
@@ -91,10 +91,10 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         `('should update activeAnnotationId state to reflect value $annotationId', ({ annotationId, expected }) => {
             const wrapper = getWrapper();
 
-            (wrapper.instance() as Component & ComponentWithAnnotations).handleActiveChange(annotationId);
+            wrapper.instance().handleActiveChange(annotationId);
             const contextProvider = getContextProvider(wrapper);
             expect(contextProvider.exists()).toBeTruthy();
-            expect((contextProvider.props() as ContextProviderProps).value).toEqual({
+            expect(contextProvider.props().value).toEqual({
                 activeAnnotationId: expected,
             });
         });
@@ -110,7 +110,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             'should call appropriate handler based on event $event',
             ({ event, numCreateCalled, numActiveChangeCalled }) => {
                 const wrapper = getWrapper();
-                const instance = wrapper.instance() as Component & ComponentWithAnnotations;
+                const instance = wrapper.instance();
                 instance.handleAnnotationCreate = jest.fn();
                 instance.handleActiveChange = jest.fn();
 
