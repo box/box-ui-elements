@@ -43,7 +43,7 @@ const PaginationControls = ({
     return (
         <div className="bdl-Pagination">
             {isOffsetBasedPagination && (
-                <div className="bdl-Pagination-count" data-testid="pagination-controls-count">
+                <div className="bdl-Pagination-count">
                     <PaginationMenu onPageClick={onPageClick} pageCount={pageCount} pageNumber={pageNumber} />
                 </div>
             )}
