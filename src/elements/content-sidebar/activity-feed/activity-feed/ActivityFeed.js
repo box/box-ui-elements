@@ -37,6 +37,7 @@ type Props = {
     isDisabled?: boolean,
     mentionSelectorContacts?: SelectorItems<User>,
     onAnnotationDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => void,
+    onAnnotationSelect?: (id: string) => void,
     onAppActivityDelete?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
@@ -201,6 +202,7 @@ class ActivityFeed extends React.Component<Props, State> {
             getApproverWithQuery,
             getMentionWithQuery,
             activityFeedError,
+            onAnnotationSelect,
             onVersionHistoryClick,
             onCommentDelete,
             onCommentUpdate,
@@ -259,6 +261,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             isDisabled={isDisabled}
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                            onAnnotationSelect={onAnnotationSelect}
                             onAnnotationDelete={onAnnotationDelete}
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}

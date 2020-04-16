@@ -131,7 +131,11 @@ class Sidebar extends React.Component<Props, State> {
      * @return {void}
      */
 
-    handleAnnotationSelect = (annotationId: string): void => {
+    handleAnnotationSelect = (annotationId: string | null): void => {
+        if (!annotationId) {
+            return;
+        }
+
         const { history } = this.props;
 
         const urlPrefix = this.getUrlPrefix(history.location.pathname);
