@@ -8,9 +8,9 @@ export enum Action {
 
 export interface AnnotatorState {
     activeAnnotationId?: string | null;
-    annotation?: object;
-    action?: Action;
-    error?: Error;
+    annotation?: object | null;
+    action?: Action | null;
+    error?: Error | null;
 }
 
 export enum Status {

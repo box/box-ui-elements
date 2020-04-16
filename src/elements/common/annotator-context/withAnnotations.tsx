@@ -17,22 +17,27 @@ export interface ComponentWithAnnotations {
 
 export type WithAnnotationsComponent<P> = React.ComponentClass<P & WithAnnotationsProps>;
 
+const defaultState: AnnotatorState = {
+    activeAnnotationId: null,
+    annotation: null,
+    action: null,
+    error: null,
+};
+
 export default function withAnnotations<P extends object>(
     WrappedComponent: React.ComponentType<P>,
 ): WithAnnotationsComponent<P> {
     class ComponentWithAnnotations extends React.Component<P & WithAnnotationsProps, AnnotatorState> {
         static displayName: string;
 
-        state: AnnotatorState = {
-            activeAnnotationId: null,
-        };
+        state = defaultState;
 
         getAction({ meta: { status }, error }: AnnotationActionEvent): Action {
             return status === Status.SUCCESS || error ? Action.CREATE_END : Action.CREATE_START;
         }
 
         handleAnnotationCreate = (eventData: AnnotationActionEvent): void => {
-            const { annotation, error } = eventData;
+            const { annotation = null, error = null } = eventData;
             const action = this.getAction(eventData);
             this.setState({ ...this.state, annotation, action, error });
         };
@@ -55,12 +60,7 @@ export default function withAnnotations<P extends object>(
         };
 
         handlePreviewDestroy = (): void => {
-            this.setState({
-                activeAnnotationId: null,
-                annotation: undefined,
-                action: undefined,
-                error: undefined,
-            });
+            this.setState(defaultState);
         };
 
         render(): JSX.Element {

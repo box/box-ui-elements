@@ -45,8 +45,11 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
         const contextProvider = getContextProvider(wrapper);
         expect(contextProvider.exists()).toBeTruthy();
-        expect(contextProvider.props().value).toEqual({
+        expect(contextProvider.prop('value')).toEqual({
+            action: null,
             activeAnnotationId: null,
+            annotation: null,
+            error: null,
         });
     });
 
@@ -56,8 +59,8 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
         test.each`
             status       | annotation        | error        | expectedAction         | expectedAnnotation | expectedError
-            ${'pending'} | ${mockAnnotation} | ${undefined} | ${Action.CREATE_START} | ${mockAnnotation}  | ${undefined}
-            ${'success'} | ${mockAnnotation} | ${undefined} | ${Action.CREATE_END}   | ${mockAnnotation}  | ${undefined}
+            ${'pending'} | ${mockAnnotation} | ${undefined} | ${Action.CREATE_START} | ${mockAnnotation}  | ${null}
+            ${'success'} | ${mockAnnotation} | ${undefined} | ${Action.CREATE_END}   | ${mockAnnotation}  | ${null}
             ${'error'}   | ${mockAnnotation} | ${mockError} | ${Action.CREATE_END}   | ${mockAnnotation}  | ${mockError}
         `(
             'should update the context provider value if $status status received',
@@ -74,10 +77,10 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                 wrapper.instance().handleAnnotationCreate(eventData);
                 const contextProvider = getContextProvider(wrapper);
                 expect(contextProvider.exists()).toBeTruthy();
-                expect(contextProvider.props().value).toEqual({
+                expect(contextProvider.prop('value')).toEqual({
+                    action: expectedAction,
                     activeAnnotationId: null,
                     annotation: expectedAnnotation,
-                    action: expectedAction,
                     error: expectedError,
                 });
             },
@@ -95,9 +98,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             wrapper.instance().handleActiveChange(annotationId);
             const contextProvider = getContextProvider(wrapper);
             expect(contextProvider.exists()).toBeTruthy();
-            expect(contextProvider.props().value).toEqual({
-                activeAnnotationId: expected,
-            });
+            expect(contextProvider.prop('value').activeAnnotationId).toEqual(expected);
         });
     });
 
@@ -129,15 +130,11 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
             wrapper.instance().handleActiveChange('123');
             let contextProvider = getContextProvider(wrapper);
-            expect(contextProvider.props().value).toEqual({
-                activeAnnotationId: '123',
-            });
+            expect(contextProvider.prop('value').activeAnnotationId).toEqual('123');
 
             wrapper.instance().handlePreviewDestroy();
             contextProvider = getContextProvider(wrapper);
-            expect(contextProvider.props().value).toEqual({
-                activeAnnotationId: null,
-            });
+            expect(contextProvider.prop('value').activeAnnotationId).toEqual(null);
         });
     });
 });
