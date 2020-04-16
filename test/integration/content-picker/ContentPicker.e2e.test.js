@@ -38,15 +38,20 @@ const helpers = {
     },
     getPaginationArrows: () => {
         return cy
-            .getByTestId('button-group')
-            .first()
+            .getByTestId('content-picker')
+            .find('.bdl-Pagination-nav')
             .children();
     },
-    getPaginationCountButton: () => {
-        return cy.getByTestId('pagination-controls-count');
+    getPaginationCountButton: pageNumber => {
+        return cy
+            .getByTestId('content-picker')
+            .contains(localize('be.pagination.pageStatus', { pageNumber, pageCount: 2 }));
     },
     getPaginationDropdown: () => {
-        return cy.getByTestId('menu').children();
+        return cy
+            .get('.bdl-Pagination-dropdownMenu')
+            .first()
+            .children();
     },
 };
 
@@ -95,19 +100,13 @@ describe('ContentPicker', () => {
         });
 
         it('Should be able to navigate to the next page using count button', () => {
-            const COUNT_BUTTON_ON_FIRST_PAGE = localize('be.pagination.pageStatus', { pageNumber: 1, pageCount: 2 });
-            const COUNT_BUTTON_ON_SECOND_PAGE = localize('be.pagination.pageStatus', { pageNumber: 2, pageCount: 2 });
-
             helpers.load({ initialPageSize: 3 });
 
             // Confirm that the Content Picker shows the first page
             helpers.getRow(0).contains(FIRST_ITEM_OF_FIRST_PAGE);
 
             // Confirm that the pagination count button says "1 of 2", and click it
-            helpers
-                .getPaginationCountButton()
-                .contains(COUNT_BUTTON_ON_FIRST_PAGE)
-                .click();
+            helpers.getPaginationCountButton(1).click();
 
             // Stub call to second page
             cy.route('GET', '**/folders/*', SECOND_PAGE);
@@ -125,10 +124,7 @@ describe('ContentPicker', () => {
             cy.route('GET', '**/folders/*', FIRST_PAGE);
 
             // Confirm that the pagination count button says "2 of 2", and click it
-            helpers
-                .getPaginationCountButton()
-                .contains(COUNT_BUTTON_ON_SECOND_PAGE)
-                .click();
+            helpers.getPaginationCountButton(2).click();
 
             // Click the first option in the dropdown menu
             helpers
@@ -138,7 +134,7 @@ describe('ContentPicker', () => {
 
             // Confirm that the pagination count button says "1 of 2"
             // and that the Content Picker now shows the first page
-            helpers.getPaginationCountButton().contains(COUNT_BUTTON_ON_FIRST_PAGE);
+            helpers.getPaginationCountButton(1);
             helpers.getRow(0).contains(FIRST_ITEM_OF_FIRST_PAGE);
         });
     });
