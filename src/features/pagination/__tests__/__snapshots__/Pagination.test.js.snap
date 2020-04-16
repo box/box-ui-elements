@@ -1,22 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/Pagination/Pagination should render correctly depending on the props passed for offsetBased or markerBased pagination 1`] = `<OffsetBasedPagination />`;
+exports[`features/pagination/Pagination should render OffsetBasedPagination when no markers are provided 1`] = `
+<OffsetBasedPagination
+  offset={0}
+  onOffsetChange={[Function]}
+  pageSize={10}
+  totalCount={100}
+/>
+`;
 
-exports[`elements/Pagination/Pagination should render correctly depending on the props passed for offsetBased or markerBased pagination 2`] = `
+exports[`features/pagination/Pagination should render correctly depending on the props passed for offsetBased or markerBased pagination 1`] = `<OffsetBasedPagination />`;
+
+exports[`features/pagination/Pagination should render correctly depending on the props passed for offsetBased or markerBased pagination 2`] = `
 <MarkerBasedPagination
   hasNextMarker={false}
   hasPrevMarker={true}
 />
 `;
 
-exports[`elements/Pagination/Pagination should render correctly depending on the props passed for offsetBased or markerBased pagination 3`] = `
+exports[`features/pagination/Pagination should render correctly depending on the props passed for offsetBased or markerBased pagination 3`] = `
 <MarkerBasedPagination
   hasNextMarker={true}
   hasPrevMarker={false}
 />
 `;
 
-exports[`elements/Pagination/Pagination should render correctly depending on the props passed for offsetBased or markerBased pagination 4`] = `
+exports[`features/pagination/Pagination should render correctly depending on the props passed for offsetBased or markerBased pagination 4`] = `
 <MarkerBasedPagination
   hasNextMarker={true}
   hasPrevMarker={true}
