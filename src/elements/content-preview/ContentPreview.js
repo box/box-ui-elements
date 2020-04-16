@@ -202,6 +202,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         enableThumbnailsSidebar: false,
         hasHeader: false,
         language: DEFAULT_LOCALE,
+        onAnnotator: noop,
         onAnnotatorEvent: noop,
         onDownload: noop,
         onError: noop,

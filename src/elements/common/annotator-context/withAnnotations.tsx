@@ -13,19 +13,11 @@ export interface ComponentWithAnnotations {
     handleAnnotationChangeEvent: (id: string | null) => void;
     handleAnnotationCreate: (eventData: AnnotationActionEvent) => void;
     handleAnnotatorEvent: ({ event, data }: { event: string; data?: unknown }) => void;
-    handlePreviewDestroy: () => void;
     handleOnAnnotator: (annotator: Annotator) => void;
+    handlePreviewDestroy: () => void;
 }
 
 export type WithAnnotationsComponent<P> = React.ComponentClass<P & WithAnnotationsProps>;
-
-const defaultState: AnnotatorState = {
-    activeAnnotationId: null,
-    annotation: null,
-    action: null,
-    error: null,
-    setActiveAnnotationId: id => {},
-};
 
 export default function withAnnotations<P extends object>(
     WrappedComponent: React.ComponentType<P>,
@@ -35,7 +27,7 @@ export default function withAnnotations<P extends object>(
 
         annotator: Annotator | undefined;
 
-        handleAnnotationChangeEvent = (id: string | null) => {
+        emitActiveChangeEvent = (id: string | null) => {
             if (!this.annotator) {
                 return;
             }
@@ -43,7 +35,15 @@ export default function withAnnotations<P extends object>(
             this.annotator.emit('annotations_active_change', id);
         };
 
-        state = defaultState;
+        defaultState: AnnotatorState = {
+            activeAnnotationId: null,
+            annotation: null,
+            action: null,
+            error: null,
+            setActiveAnnotationId: this.emitActiveChangeEvent,
+        };
+
+        state = this.defaultState;
 
         getAction({ meta: { status }, error }: AnnotationActionEvent): Action {
             return status === Status.SUCCESS || error ? Action.CREATE_END : Action.CREATE_START;
@@ -77,7 +77,8 @@ export default function withAnnotations<P extends object>(
         };
 
         handlePreviewDestroy = (): void => {
-            this.setState(defaultState);
+            this.setState(this.defaultState);
+            this.annotator = undefined;
         };
 
         render(): JSX.Element {
