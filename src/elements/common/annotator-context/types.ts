@@ -6,6 +6,10 @@ export enum Action {
     // Can extend to other actions: update_start, update_end, delete_start, delete_end
 }
 
+export interface Annotator {
+    emit: (event: string | symbol, ...args: any[]) => void;
+}
+
 export interface AnnotatorState {
     activeAnnotationId?: string | null;
     annotation?: object | null;

@@ -121,7 +121,7 @@ describe('elements/content-sidebar/Sidebar', () => {
     describe('handleAnnotationSelect', () => {
         test('should handle updating url', () => {
             const historyMock = {
-                replace: jest.fn(),
+                push: jest.fn(),
                 location: {
                     pathname: '/activity',
                 },
@@ -132,7 +132,23 @@ describe('elements/content-sidebar/Sidebar', () => {
 
             instance.handleAnnotationSelect('123');
 
-            expect(historyMock.replace).toHaveBeenCalledWith('/activity/annotations/123');
+            expect(historyMock.push).toHaveBeenCalledWith('/activity/annotations/123');
+        });
+
+        test('should handle setting url back to / if no id provided', () => {
+            const historyMock = {
+                push: jest.fn(),
+                location: {
+                    pathname: '/activity/annotations/123',
+                },
+            };
+
+            const wrapper = getWrapper({ history: historyMock, file: { id: '1234' } });
+            const instance = wrapper.instance();
+
+            instance.handleAnnotationSelect(null);
+
+            expect(historyMock.push).toHaveBeenCalledWith('/');
         });
     });
 

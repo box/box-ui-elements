@@ -14,7 +14,7 @@ import AddTaskButton from './AddTaskButton';
 import API from '../../api';
 import messages from '../common/messages';
 import SidebarContent from './SidebarContent';
-import { AnnotatorState, withAnnotatorContext } from '../common/annotator-context';
+import { WithAnnotatorContextProps, withAnnotatorContext } from '../common/annotator-context';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { getBadUserError, getBadItemError } from '../../utils/error';
 import { mark } from '../../utils/performance';
@@ -47,7 +47,6 @@ import './ActivitySidebar.scss';
 type ExternalProps = {
     activeFeedEntryId?: string,
     activeFeedEntryType?: FocusableFeedItemType,
-    annotatorState?: AnnotatorState,
     currentUser?: User,
     getUserProfileUrl?: GetProfileUrlCallback,
     onCommentCreate: Function,
@@ -58,7 +57,8 @@ type ExternalProps = {
     onTaskDelete: (id: string) => any,
     onTaskUpdate: () => any,
     onTaskView: (id: string, isCreator: boolean) => any,
-} & ErrorContextProps;
+} & ErrorContextProps &
+    WithAnnotatorContextProps;
 
 type PropsWithoutContext = {
     elementId: string,
@@ -96,6 +96,7 @@ mark(MARK_NAME_JS_READY);
 
 class ActivitySidebar extends React.PureComponent<Props, State> {
     static defaultProps = {
+        annotatorState: {},
         isDisabled: false,
         onCommentCreate: noop,
         onCommentDelete: noop,
@@ -596,7 +597,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             activeFeedEntryId,
             activeFeedEntryType,
             onTaskView,
-            annotatorState = {},
+            annotatorState,
         } = this.props;
         const {
             currentUser,

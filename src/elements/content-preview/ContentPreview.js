@@ -83,6 +83,8 @@ type Props = {
     logoUrl?: string,
     measureRef: Function,
     messages?: StringMap,
+    onAnnotator: Function,
+    onAnnotatorEvent: Function,
     onClose?: Function,
     onDownload: Function,
     onLoad: Function,
@@ -714,6 +716,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             enableThumbnailsSidebar,
             fileOptions,
             onAnnotatorEvent,
+            onAnnotator,
             showAnnotationsControls,
             token: tokenOrTokenFunction,
             ...rest
@@ -760,6 +763,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         if (showAnnotationsControls) {
             this.preview.addListener('annotatorevent', onAnnotatorEvent);
+            this.preview.addListener('annotator', onAnnotator);
         }
 
         this.preview.updateFileCache([file]);

@@ -50,9 +50,9 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         expect(contextProvider.prop('value')).toEqual({
             action: null,
             activeAnnotationId: null,
-            setActiveAnnotationId: instance.handleActiveChange,
             annotation: null,
             error: null,
+            setActiveAnnotationId: instance.handleAnnotationChangeEvent,
         });
     });
 
@@ -88,7 +88,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                     activeAnnotationId: null,
                     annotation: expectedAnnotation,
                     error: expectedError,
-                    setActiveAnnotationId: instance.handleActiveChange,
+                    setActiveAnnotationId: instance.handleAnnotationChangeEvent,
                 });
             },
         );
