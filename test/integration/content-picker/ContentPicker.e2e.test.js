@@ -1,3 +1,5 @@
+import localize from '../../support/i18n';
+
 // <reference types="Cypress" />
 const helpers = {
     load(additionalProps = {}) {
@@ -93,8 +95,8 @@ describe('ContentPicker', () => {
         });
 
         it('Should be able to navigate to the next page using count button', () => {
-            const COUNT_BUTTON_ON_FIRST_PAGE = '1 of 2';
-            const COUNT_BUTTON_ON_SECOND_PAGE = '2 of 2';
+            const COUNT_BUTTON_ON_FIRST_PAGE = localize('be.pagination.pageStatus', { pageNumber: 1, pageCount: 2 });
+            const COUNT_BUTTON_ON_SECOND_PAGE = localize('be.pagination.pageStatus', { pageNumber: 2, pageCount: 2 });
 
             helpers.load({ initialPageSize: 3 });
 
@@ -105,9 +107,7 @@ describe('ContentPicker', () => {
             helpers
                 .getPaginationCountButton()
                 .contains(COUNT_BUTTON_ON_FIRST_PAGE)
-                .then($el => {
-                    $el.click();
-                });
+                .click();
 
             // Stub call to second page
             cy.route('GET', '**/folders/*', SECOND_PAGE);
@@ -129,9 +129,7 @@ describe('ContentPicker', () => {
             helpers
                 .getPaginationCountButton()
                 .contains(COUNT_BUTTON_ON_SECOND_PAGE)
-                .then($el => {
-                    $el.click();
-                });
+                .click();
 
             // Click the first option in the dropdown menu
             helpers
