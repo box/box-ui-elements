@@ -31,12 +31,13 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         wrapper: ShallowWrapper<WrappedComponentProps, {}, Component & ComponentWithAnnotations>,
     ) => wrapper.find<ContextProviderProps>(AnnotatorContext.Provider);
 
-    test('should pass onAnnotatorEvent as a prop on the wrapped component', () => {
+    test('should pass onAnnotatorEvent and onPreviewDestroy as props on the wrapped component', () => {
         const wrapper = getWrapper();
 
         const wrappedComponent = wrapper.find<WrappedComponentProps>(MockComponent);
         expect(wrappedComponent.exists()).toBeTruthy();
         expect(wrappedComponent.props().onAnnotatorEvent).toBeTruthy();
+        expect(wrappedComponent.props().onPreviewDestroy).toBeTruthy();
     });
 
     test('should pass the state on to the AnnotatorContext.Provider', () => {
@@ -120,5 +121,23 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                 expect((instance.handleActiveChange as jest.Mock).mock.calls.length).toBe(numActiveChangeCalled);
             },
         );
+    });
+
+    describe('handlePreviewDestroy()', () => {
+        test('should reset state', () => {
+            const wrapper = getWrapper();
+
+            wrapper.instance().handleActiveChange('123');
+            let contextProvider = getContextProvider(wrapper);
+            expect(contextProvider.props().value).toEqual({
+                activeAnnotationId: '123',
+            });
+
+            wrapper.instance().handlePreviewDestroy();
+            contextProvider = getContextProvider(wrapper);
+            expect(contextProvider.props().value).toEqual({
+                activeAnnotationId: null,
+            });
+        });
     });
 });

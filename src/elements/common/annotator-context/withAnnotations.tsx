@@ -12,6 +12,7 @@ export interface ComponentWithAnnotations {
     handleActiveChange: (annotationId: string | null) => void;
     handleAnnotationCreate: (eventData: AnnotationActionEvent) => void;
     handleAnnotatorEvent: ({ event, data }: { event: string; data?: unknown }) => void;
+    handlePreviewDestroy: () => void;
 }
 
 export type WithAnnotationsComponent<P> = React.ComponentClass<P & WithAnnotationsProps>;
