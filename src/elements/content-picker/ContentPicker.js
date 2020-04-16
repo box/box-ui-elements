@@ -17,7 +17,7 @@ import UploadDialog from '../common/upload-dialog';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import Internationalize from '../common/Internationalize';
 import makeResponsive from '../common/makeResponsive';
-import Pagination from '../../features/pagination';
+import OffsetBasedPagination from '../../features/pagination/OffsetBasedPagination';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import API from '../../api';
 import Content from './Content';
@@ -1233,9 +1233,9 @@ class ContentPicker extends Component<Props, State> {
                             chooseButtonLabel={chooseButtonLabel}
                             cancelButtonLabel={cancelButtonLabel}
                         >
-                            <Pagination
+                            <OffsetBasedPagination
                                 offset={offset}
-                                onChange={this.paginate}
+                                onOffsetChange={this.paginate}
                                 pageSize={currentPageSize}
                                 totalCount={totalCount}
                             />
