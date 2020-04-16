@@ -14,6 +14,7 @@ export interface Annotator {
 export interface AnnotatorState {
     activeAnnotationId?: string | null;
     annotation?: object | null;
+    annotator: Annotator | null;
     action?: Action | null;
     error?: Error | null;
     setActiveAnnotationId: (annotationId: string) => void;

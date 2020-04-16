@@ -20,7 +20,12 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
     const WrappedComponent = withAnnotations(MockComponent);
 
-    const defaultProps = { className: 'foo', onAnnotatorEvent: jest.fn(), onPreviewDestroy: jest.fn() };
+    const defaultProps = {
+        className: 'foo',
+        onAnnotator: jest.fn(),
+        onAnnotatorEvent: jest.fn(),
+        onPreviewDestroy: jest.fn(),
+    };
 
     const getWrapper = (
         props: WrappedComponentProps = defaultProps,
@@ -36,6 +41,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
         const wrappedComponent = wrapper.find<WrappedComponentProps>(MockComponent);
         expect(wrappedComponent.exists()).toBeTruthy();
+        expect(wrappedComponent.props().onAnnotator).toBeTruthy();
         expect(wrappedComponent.props().onAnnotatorEvent).toBeTruthy();
         expect(wrappedComponent.props().onPreviewDestroy).toBeTruthy();
     });
@@ -51,8 +57,9 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             action: null,
             activeAnnotationId: null,
             annotation: null,
+            annotator: null,
             error: null,
-            setActiveAnnotationId: instance.handleAnnotationChangeEvent,
+            setActiveAnnotationId: instance.emitActiveChangeEvent,
         });
     });
 
@@ -87,8 +94,9 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                     action: expectedAction,
                     activeAnnotationId: null,
                     annotation: expectedAnnotation,
+                    annotator: null,
                     error: expectedError,
-                    setActiveAnnotationId: instance.handleAnnotationChangeEvent,
+                    setActiveAnnotationId: instance.emitActiveChangeEvent,
                 });
             },
         );
@@ -133,6 +141,36 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         );
     });
 
+    describe('handleOnAnnotator', () => {
+        test('should add annotator to state', () => {
+            const mockAnnotator = {
+                emit: jest.fn(),
+            };
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.handleOnAnnotator(mockAnnotator);
+
+            expect(wrapper.state('annotator')).toEqual(mockAnnotator);
+        });
+    });
+
+    describe('emitActiveChangeEvent', () => {
+        test('should call annotator emit on action', () => {
+            const mockAnnotator = {
+                emit: jest.fn(),
+            };
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            wrapper.setState({ annotator: mockAnnotator });
+            instance.emitActiveChangeEvent('123');
+
+            expect(mockAnnotator.emit).toBeCalled();
+            expect(mockAnnotator.emit).toBeCalledWith('annotations_active_change', '123');
+        });
+    });
+
     describe('handlePreviewDestroy()', () => {
         test('should reset state', () => {
             const wrapper = getWrapper();
@@ -144,6 +182,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             wrapper.instance().handlePreviewDestroy();
             contextProvider = getContextProvider(wrapper);
             expect(contextProvider.prop('value').activeAnnotationId).toEqual(null);
+            expect(contextProvider.prop('value').annotator).toEqual(null);
         });
     });
 });

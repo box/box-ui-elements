@@ -3,11 +3,13 @@ import AnnotatorContext from './AnnotatorContext';
 import { Action, Annotator, AnnotationActionEvent, AnnotatorState, Status } from './types';
 
 export interface WithAnnotationsProps {
+    onAnnotator: (annotator: Annotator) => void;
     onAnnotatorEvent: ({ event, data }: { event: string; data: unknown }) => void;
     onPreviewDestroy: () => void;
 }
 
 export interface ComponentWithAnnotations {
+    emitActiveChangeEvent: (id: string | null) => void;
     getAction: (eventData: AnnotationActionEvent) => Action;
     handleActiveChange: (annotationId: string | null) => void;
     handleAnnotationChangeEvent: (id: string | null) => void;
@@ -25,19 +27,20 @@ export default function withAnnotations<P extends object>(
     class ComponentWithAnnotations extends React.Component<P & WithAnnotationsProps, AnnotatorState> {
         static displayName: string;
 
-        annotator: Annotator | undefined;
-
         emitActiveChangeEvent = (id: string | null) => {
-            if (!this.annotator) {
+            const { annotator } = this.state;
+
+            if (!annotator || !annotator.emit) {
                 return;
             }
 
-            this.annotator.emit('annotations_active_change', id);
+            annotator.emit('annotations_active_change', id);
         };
 
         defaultState: AnnotatorState = {
             activeAnnotationId: null,
             annotation: null,
+            annotator: null,
             action: null,
             error: null,
             setActiveAnnotationId: this.emitActiveChangeEvent,
@@ -73,12 +76,11 @@ export default function withAnnotations<P extends object>(
         };
 
         handleOnAnnotator = (annotator: Annotator): void => {
-            this.annotator = annotator;
+            this.setState({ annotator });
         };
 
         handlePreviewDestroy = (): void => {
             this.setState(this.defaultState);
-            this.annotator = undefined;
         };
 
         render(): JSX.Element {
