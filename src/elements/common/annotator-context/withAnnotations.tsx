@@ -3,12 +3,14 @@ import AnnotatorContext from './AnnotatorContext';
 import { Action, AnnotationActionEvent, AnnotatorState, Status } from './types';
 
 export interface WithAnnotationsProps {
-    onAnnotationCreate: Function;
+    onAnnotatorEvent: ({ event, data }: { event: string; data: unknown }) => void;
 }
 
 export interface ComponentWithAnnotations {
-    getAction: Function;
-    handleAnnotationCreate: Function;
+    getAction: (eventData: AnnotationActionEvent) => Action;
+    handleActiveChange: (annotationId: string | null) => void;
+    handleAnnotationCreate: (eventData: AnnotationActionEvent) => void;
+    handleAnnotatorEvent: ({ event, data }: { event: string; data?: unknown }) => void;
 }
 
 export type WithAnnotationsComponent<P> = React.ComponentClass<P & WithAnnotationsProps>;
@@ -20,9 +22,7 @@ export default function withAnnotations<P extends object>(
         static displayName: string;
 
         state: AnnotatorState = {
-            annotation: undefined,
-            action: undefined,
-            error: undefined,
+            activeAnnotationId: null,
         };
 
         getAction({ meta: { status }, error }: AnnotationActionEvent): Action {
@@ -35,10 +35,27 @@ export default function withAnnotations<P extends object>(
             this.setState({ ...this.state, annotation, action, error });
         };
 
+        handleActiveChange = (annotationId: string | null): void => {
+            this.setState({ activeAnnotationId: annotationId });
+        };
+
+        handleAnnotatorEvent = ({ event, data }: { event: string; data: unknown }): void => {
+            switch (event) {
+                case 'annotations_create':
+                    this.handleAnnotationCreate(data as AnnotationActionEvent);
+                    break;
+                case 'annotations_active_change':
+                    this.handleActiveChange(data as string | null);
+                    break;
+                default:
+                    break;
+            }
+        };
+
         render(): JSX.Element {
             return (
                 <AnnotatorContext.Provider value={this.state}>
-                    <WrappedComponent {...this.props} onAnnotationCreate={this.handleAnnotationCreate} />
+                    <WrappedComponent {...this.props} onAnnotatorEvent={this.handleAnnotatorEvent} />
                 </AnnotatorContext.Provider>
             );
         }

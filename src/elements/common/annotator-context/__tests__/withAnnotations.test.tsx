@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
 import { AnnotatorContext, withAnnotations } from '../index';
-import { WithAnnotationsComponent, WithAnnotationsProps, ComponentWithAnnotations } from '../withAnnotations';
+import { WithAnnotationsProps, ComponentWithAnnotations } from '../withAnnotations';
 import { AnnotatorState, Action } from '../types';
 
 type ComponentProps = {
@@ -20,20 +20,23 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
     const WrappedComponent = withAnnotations(MockComponent);
 
-    const defaultProps = { className: 'foo', onAnnotationCreate: jest.fn() };
+    const defaultProps = { className: 'foo', onAnnotatorEvent: jest.fn() };
 
-    const getWrapper = (props: WrappedComponentProps = defaultProps) =>
-        shallow<WithAnnotationsComponent<WrappedComponentProps>>(<WrappedComponent {...props} />);
+    const getWrapper = (
+        props: WrappedComponentProps = defaultProps,
+    ): ShallowWrapper<WrappedComponentProps, {}, Component & ComponentWithAnnotations> =>
+        shallow<Component & ComponentWithAnnotations, WrappedComponentProps>(<WrappedComponent {...props} />);
 
-    const getContextProvider = (wrapper: ShallowWrapper<WithAnnotationsComponent<WrappedComponentProps>>) =>
-        wrapper.find(AnnotatorContext.Provider);
+    const getContextProvider = (
+        wrapper: ShallowWrapper<WrappedComponentProps, {}, Component & ComponentWithAnnotations>,
+    ) => wrapper.find<ContextProviderProps>(AnnotatorContext.Provider);
 
-    test('should pass onAnnotationCreate as a prop on the wrapped component', () => {
+    test('should pass onAnnotatorEvent as a prop on the wrapped component', () => {
         const wrapper = getWrapper();
 
-        const wrappedComponent = wrapper.find(MockComponent);
+        const wrappedComponent = wrapper.find<WrappedComponentProps>(MockComponent);
         expect(wrappedComponent.exists()).toBeTruthy();
-        expect((wrappedComponent.props() as WrappedComponentProps).onAnnotationCreate).toBeTruthy();
+        expect(wrappedComponent.props().onAnnotatorEvent).toBeTruthy();
     });
 
     test('should pass the state on to the AnnotatorContext.Provider', () => {
@@ -41,10 +44,8 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
         const contextProvider = getContextProvider(wrapper);
         expect(contextProvider.exists()).toBeTruthy();
-        expect((contextProvider.props() as ContextProviderProps).value).toEqual({
-            annotation: undefined,
-            action: undefined,
-            error: undefined,
+        expect(contextProvider.props().value).toEqual({
+            activeAnnotationId: null,
         });
     });
 
@@ -69,14 +70,54 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                     error,
                 };
 
-                (wrapper.instance() as Component & ComponentWithAnnotations).handleAnnotationCreate(eventData);
+                wrapper.instance().handleAnnotationCreate(eventData);
                 const contextProvider = getContextProvider(wrapper);
                 expect(contextProvider.exists()).toBeTruthy();
-                expect((contextProvider.props() as ContextProviderProps).value).toEqual({
+                expect(contextProvider.props().value).toEqual({
+                    activeAnnotationId: null,
                     annotation: expectedAnnotation,
                     action: expectedAction,
                     error: expectedError,
                 });
+            },
+        );
+    });
+
+    describe('handleActiveChange()', () => {
+        test.each`
+            annotationId | expected
+            ${null}      | ${null}
+            ${'123'}     | ${'123'}
+        `('should update activeAnnotationId state to reflect value $annotationId', ({ annotationId, expected }) => {
+            const wrapper = getWrapper();
+
+            wrapper.instance().handleActiveChange(annotationId);
+            const contextProvider = getContextProvider(wrapper);
+            expect(contextProvider.exists()).toBeTruthy();
+            expect(contextProvider.props().value).toEqual({
+                activeAnnotationId: expected,
+            });
+        });
+    });
+
+    describe('handleAnnotatorEvent()', () => {
+        test.each`
+            event                          | numCreateCalled | numActiveChangeCalled
+            ${'annotations_create'}        | ${1}            | ${0}
+            ${'annotations_active_change'} | ${0}            | ${1}
+            ${'foo'}                       | ${0}            | ${0}
+        `(
+            'should call appropriate handler based on event $event',
+            ({ event, numCreateCalled, numActiveChangeCalled }) => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                instance.handleAnnotationCreate = jest.fn();
+                instance.handleActiveChange = jest.fn();
+
+                instance.handleAnnotatorEvent({ event });
+
+                expect((instance.handleAnnotationCreate as jest.Mock).mock.calls.length).toBe(numCreateCalled);
+                expect((instance.handleActiveChange as jest.Mock).mock.calls.length).toBe(numActiveChangeCalled);
             },
         );
     });

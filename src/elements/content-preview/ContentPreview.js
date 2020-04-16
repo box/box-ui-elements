@@ -83,7 +83,7 @@ type Props = {
     logoUrl?: string,
     measureRef: Function,
     messages?: StringMap,
-    onAnnotationCreate: Function,
+    onAnnotatorEvent: Function,
     onClose?: Function,
     onDownload: Function,
     onLoad: Function,
@@ -200,7 +200,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         enableThumbnailsSidebar: false,
         hasHeader: false,
         language: DEFAULT_LOCALE,
-        onAnnotationCreate: noop,
+        onAnnotatorEvent: noop,
         onDownload: noop,
         onError: noop,
         onLoad: noop,
@@ -709,7 +709,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const {
             enableThumbnailsSidebar,
             fileOptions,
-            onAnnotationCreate,
+            onAnnotatorEvent,
             showAnnotationsControls,
             token: tokenOrTokenFunction,
             ...rest
@@ -755,7 +755,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.preview.addListener('thumbnailsClose', () => this.setState({ isThumbnailSidebarOpen: false }));
 
         if (showAnnotationsControls) {
-            this.preview.addListener('annotationCreate', onAnnotationCreate);
+            this.preview.addListener('annotatorevent', onAnnotatorEvent);
         }
 
         this.preview.updateFileCache([file]);
