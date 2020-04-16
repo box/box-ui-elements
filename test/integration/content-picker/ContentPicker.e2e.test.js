@@ -38,15 +38,15 @@ const helpers = {
     },
     getPaginationArrows: () => {
         return cy
-            .getByTestId('content-picker')
-            .find('.bdl-Pagination-nav')
+            .getByTestId('button-group')
+            .first()
             .children();
     },
     getPaginationCountButton: () => {
-        return cy.getByTestId('content-picker').find('.bdl-Pagination-count');
+        return cy.getByTestId('pagination-controls-count');
     },
     getPaginationDropdown: () => {
-        return cy.get('.bdl-Pagination-dropdownMenu').first();
+        return cy.getByTestId('menu').children();
     },
 };
 
@@ -115,7 +115,6 @@ describe('ContentPicker', () => {
             // Click the second option in the dropdown menu
             helpers
                 .getPaginationDropdown()
-                .children()
                 .eq(1)
                 .click();
 
@@ -134,7 +133,6 @@ describe('ContentPicker', () => {
             // Click the first option in the dropdown menu
             helpers
                 .getPaginationDropdown()
-                .children()
                 .eq(0)
                 .click();
 

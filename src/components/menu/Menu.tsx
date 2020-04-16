@@ -292,7 +292,11 @@ class Menu extends React.Component<MenuProps> {
         menuProps.onClick = this.handleClick;
         menuProps.onKeyDown = this.handleKeyDown;
 
-        return <ul {...menuProps}>{children}</ul>;
+        return (
+            <ul {...menuProps} data-testid="menu">
+                {children}
+            </ul>
+        );
     }
 }
 

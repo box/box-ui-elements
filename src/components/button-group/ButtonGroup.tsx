@@ -12,7 +12,9 @@ export interface ButtonGroupProps {
 }
 
 const ButtonGroup = ({ children, className = '', isDisabled }: ButtonGroupProps) => (
-    <div className={`btn-group ${className} ${isDisabled ? 'is-disabled' : ''}`}>{children}</div>
+    <div className={`btn-group ${className} ${isDisabled ? 'is-disabled' : ''}`} data-testid="button-group">
+        {children}
+    </div>
 );
 
 export default ButtonGroup;

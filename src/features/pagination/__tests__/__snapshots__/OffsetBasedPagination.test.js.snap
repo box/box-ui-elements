@@ -22,6 +22,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
     >
       <div
         className="bdl-Pagination-count"
+        data-testid="pagination-controls-count"
       >
         <PaginationMenu
           onPageClick={[Function]}
@@ -100,6 +101,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
       >
         <div
           className="btn-group bdl-Pagination-nav "
+          data-testid="button-group"
         >
           <Tooltip
             isDisabled={true}
@@ -289,6 +291,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
     >
       <div
         className="bdl-Pagination-count"
+        data-testid="pagination-controls-count"
       >
         <PaginationMenu
           onPageClick={[Function]}
@@ -367,6 +370,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
       >
         <div
           className="btn-group bdl-Pagination-nav "
+          data-testid="button-group"
         >
           <Tooltip
             isDisabled={true}
@@ -556,6 +560,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
     >
       <div
         className="bdl-Pagination-count"
+        data-testid="pagination-controls-count"
       >
         <PaginationMenu
           onPageClick={[Function]}
@@ -634,6 +639,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
       >
         <div
           className="btn-group bdl-Pagination-nav "
+          data-testid="button-group"
         >
           <Tooltip
             isDisabled={true}
@@ -823,6 +829,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
     >
       <div
         className="bdl-Pagination-count"
+        data-testid="pagination-controls-count"
       >
         <PaginationMenu
           onPageClick={[Function]}
@@ -901,6 +908,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
       >
         <div
           className="btn-group bdl-Pagination-nav "
+          data-testid="button-group"
         >
           <Tooltip
             isDisabled={false}
@@ -1134,6 +1142,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
     >
       <div
         className="bdl-Pagination-count"
+        data-testid="pagination-controls-count"
       >
         <PaginationMenu
           onPageClick={[Function]}
@@ -1212,6 +1221,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
       >
         <div
           className="btn-group bdl-Pagination-nav "
+          data-testid="button-group"
         >
           <Tooltip
             isDisabled={false}
@@ -1445,6 +1455,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
     >
       <div
         className="bdl-Pagination-count"
+        data-testid="pagination-controls-count"
       >
         <PaginationMenu
           onPageClick={[Function]}
@@ -1523,6 +1534,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
       >
         <div
           className="btn-group bdl-Pagination-nav "
+          data-testid="button-group"
         >
           <Tooltip
             isDisabled={false}

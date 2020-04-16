@@ -6,6 +6,7 @@ exports[`elements/Pagination/PaginationControls should render properly for offse
 >
   <div
     className="bdl-Pagination-count"
+    data-testid="pagination-controls-count"
   >
     <PaginationMenu
       onPageClick={[MockFunction]}
