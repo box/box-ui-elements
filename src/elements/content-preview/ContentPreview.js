@@ -34,7 +34,7 @@ import API from '../../api';
 import PreviewHeader from './preview-header';
 import PreviewNavigation from './PreviewNavigation';
 import PreviewLoading from './PreviewLoading';
-import { withAnnotations } from '../common/annotator-context';
+import { withAnnotations, WithAnnotationsProps } from '../common/annotator-context';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -83,7 +83,6 @@ type Props = {
     logoUrl?: string,
     measureRef: Function,
     messages?: StringMap,
-    onAnnotatorEvent: Function,
     onClose?: Function,
     onDownload: Function,
     onLoad: Function,
@@ -101,7 +100,8 @@ type Props = {
     token: Token,
     useHotkeys: boolean,
 } & ErrorContextProps &
-    WithLoggerProps;
+    WithLoggerProps &
+    WithAnnotationsProps;
 
 type State = {
     canPrint?: boolean,
@@ -205,6 +205,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         onError: noop,
         onLoad: noop,
         onNavigate: noop,
+        onPreviewDestroy: noop,
         onVersionChange: noop,
         previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
         showAnnotations: false,
@@ -281,11 +282,14 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * Cleans up the preview instance
      */
     destroyPreview() {
+        const { onPreviewDestroy } = this.props;
         if (this.preview) {
             this.preview.destroy();
             this.preview.removeAllListeners();
             this.preview = undefined;
         }
+
+        onPreviewDestroy();
 
         this.setState({ selectedVersion: undefined });
     }

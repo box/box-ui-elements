@@ -4,6 +4,7 @@ import { Action, AnnotationActionEvent, AnnotatorState, Status } from './types';
 
 export interface WithAnnotationsProps {
     onAnnotatorEvent: ({ event, data }: { event: string; data: unknown }) => void;
+    onPreviewDestroy: () => void;
 }
 
 export interface ComponentWithAnnotations {
@@ -11,9 +12,17 @@ export interface ComponentWithAnnotations {
     handleActiveChange: (annotationId: string | null) => void;
     handleAnnotationCreate: (eventData: AnnotationActionEvent) => void;
     handleAnnotatorEvent: ({ event, data }: { event: string; data?: unknown }) => void;
+    handlePreviewDestroy: () => void;
 }
 
 export type WithAnnotationsComponent<P> = React.ComponentClass<P & WithAnnotationsProps>;
+
+const defaultState: AnnotatorState = {
+    activeAnnotationId: null,
+    annotation: null,
+    action: null,
+    error: null,
+};
 
 export default function withAnnotations<P extends object>(
     WrappedComponent: React.ComponentType<P>,
@@ -21,16 +30,14 @@ export default function withAnnotations<P extends object>(
     class ComponentWithAnnotations extends React.Component<P & WithAnnotationsProps, AnnotatorState> {
         static displayName: string;
 
-        state: AnnotatorState = {
-            activeAnnotationId: null,
-        };
+        state = defaultState;
 
         getAction({ meta: { status }, error }: AnnotationActionEvent): Action {
             return status === Status.SUCCESS || error ? Action.CREATE_END : Action.CREATE_START;
         }
 
         handleAnnotationCreate = (eventData: AnnotationActionEvent): void => {
-            const { annotation, error } = eventData;
+            const { annotation = null, error = null } = eventData;
             const action = this.getAction(eventData);
             this.setState({ ...this.state, annotation, action, error });
         };
@@ -52,10 +59,18 @@ export default function withAnnotations<P extends object>(
             }
         };
 
+        handlePreviewDestroy = (): void => {
+            this.setState(defaultState);
+        };
+
         render(): JSX.Element {
             return (
                 <AnnotatorContext.Provider value={this.state}>
-                    <WrappedComponent {...this.props} onAnnotatorEvent={this.handleAnnotatorEvent} />
+                    <WrappedComponent
+                        {...this.props}
+                        onAnnotatorEvent={this.handleAnnotatorEvent}
+                        onPreviewDestroy={this.handlePreviewDestroy}
+                    />
                 </AnnotatorContext.Provider>
             );
         }
