@@ -7,6 +7,7 @@ export enum Action {
 }
 
 export interface Annotator {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     emit: (event: string | symbol, ...args: any[]) => void;
 }
 
