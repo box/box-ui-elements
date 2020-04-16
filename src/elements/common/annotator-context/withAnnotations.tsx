@@ -4,6 +4,7 @@ import { Action, AnnotationActionEvent, AnnotatorState, Status } from './types';
 
 export interface WithAnnotationsProps {
     onAnnotatorEvent: ({ event, data }: { event: string; data: unknown }) => void;
+    onPreviewDestroy: () => void;
 }
 
 export interface ComponentWithAnnotations {
@@ -52,10 +53,23 @@ export default function withAnnotations<P extends object>(
             }
         };
 
+        handlePreviewDestroy = (): void => {
+            this.setState({
+                activeAnnotationId: null,
+                annotation: undefined,
+                action: undefined,
+                error: undefined,
+            });
+        };
+
         render(): JSX.Element {
             return (
                 <AnnotatorContext.Provider value={this.state}>
-                    <WrappedComponent {...this.props} onAnnotatorEvent={this.handleAnnotatorEvent} />
+                    <WrappedComponent
+                        {...this.props}
+                        onAnnotatorEvent={this.handleAnnotatorEvent}
+                        onPreviewDestroy={this.handlePreviewDestroy}
+                    />
                 </AnnotatorContext.Provider>
             );
         }

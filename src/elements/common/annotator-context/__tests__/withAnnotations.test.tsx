@@ -20,7 +20,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
     const WrappedComponent = withAnnotations(MockComponent);
 
-    const defaultProps = { className: 'foo', onAnnotatorEvent: jest.fn() };
+    const defaultProps = { className: 'foo', onAnnotatorEvent: jest.fn(), onPreviewDestroy: jest.fn() };
 
     const getWrapper = (
         props: WrappedComponentProps = defaultProps,
