@@ -18,5 +18,18 @@ describe('components/select-field/MultiSelectField', () => {
             expect(baseSelectFieldWrapper.prop('options')).toBe(options);
             expect(baseSelectFieldWrapper.prop('multiple')).toBe(true);
         });
+
+        test('should render a BaseSelectField with an options prop containing a clear option if shouldShowClearOption is true', () => {
+            const wrapper = shallow(<MultiSelectField onChange={() => {}} options={options} shouldShowClearOption />);
+            const expectedOptions = options;
+            expectedOptions.unshift({
+                value: 'clear',
+                displayText: 'Clear All',
+            });
+
+            const baseSelectFieldWrapper = wrapper.find('BaseSelectField');
+            expect(baseSelectFieldWrapper.length).toBe(1);
+            expect(baseSelectFieldWrapper.prop('options')).toBe(expectedOptions);
+        });
     });
 });

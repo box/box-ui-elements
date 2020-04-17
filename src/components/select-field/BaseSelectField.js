@@ -38,8 +38,6 @@ type Props = {
     defaultValue?: SelectOptionValueProp,
     /** An optional error to show within a tooltip. */
     error?: React.Node,
-    /** An optional header section to show within the dropdown list */
-    headerContent?: React.Node,
     /** The select button is disabled if true */
     isDisabled?: boolean,
     /** Whether to allow the dropdown to overflow its boundaries and remain attached to its reference */
@@ -63,6 +61,8 @@ type Props = {
     selectedValues: Array<SelectOptionValueProp>,
     /** Array of ordered indices indicating where to insert separators (ex. index 2 means insert a separator after option 2) */
     separatorIndices: Array<number>,
+    /** Boolean to determine whether or not to show the clear option */
+    shouldShowClearOption: boolean,
     /** The select button text (by default, component will use comma separated list of all selected option displayText) */
     title?: string | React.Element<any>,
 };
@@ -93,6 +93,7 @@ class BaseSelectField extends React.Component<Props, State> {
         options: [],
         selectedValues: [],
         separatorIndices: [],
+        shouldShowClearOption: false,
     };
 
     constructor(props: Props) {
@@ -174,6 +175,10 @@ class BaseSelectField extends React.Component<Props, State> {
         }
     };
 
+    handleClearClick = () => {
+        this.handleChange([]);
+    };
+
     handleButtonKeyDown = (event: SyntheticKeyboardEvent<>) => {
         const { activeItemIndex } = this.state;
 
@@ -192,10 +197,9 @@ class BaseSelectField extends React.Component<Props, State> {
 
     handleKeyDown = (event: SyntheticKeyboardEvent<HTMLDivElement>) => {
         const { key } = event;
-        const { options } = this.props;
+        const { options, shouldShowClearOption } = this.props;
         const { activeItemIndex, isOpen } = this.state;
         const itemCount = options.length;
-
         switch (key) {
             case 'ArrowDown':
                 stopDefaultEvent(event);
@@ -219,7 +223,12 @@ class BaseSelectField extends React.Component<Props, State> {
             case ' ':
                 if (activeItemIndex !== -1 && isOpen) {
                     stopDefaultEvent(event);
-                    this.selectOption(activeItemIndex);
+
+                    if (shouldShowClearOption && activeItemIndex === 0) {
+                        this.handleClearClick();
+                    } else {
+                        this.selectOption(activeItemIndex);
+                    }
                     // Enter always closes dropdown (even for multiselect)
                     if (key === 'Enter') {
                         this.closeDropdown();
@@ -376,7 +385,7 @@ class BaseSelectField extends React.Component<Props, State> {
     };
 
     renderSelectOptions = () => {
-        const { optionRenderer, options, selectedValues, separatorIndices } = this.props;
+        const { optionRenderer, options, selectedValues, separatorIndices, shouldShowClearOption } = this.props;
         const { activeItemIndex } = this.state;
 
         const selectOptions = options.map<React.Element<typeof DatalistItem | 'li'>>((item, index) => {
@@ -384,14 +393,19 @@ class BaseSelectField extends React.Component<Props, State> {
 
             const isSelected = selectedValues.includes(value);
 
+            const isClearOption = shouldShowClearOption && index === 0;
+
             const itemProps: Object = {
-                className: 'select-option',
+                className: classNames('select-option', { 'is-clear-option': isClearOption }),
                 key: index,
                 /* preventDefault on click to prevent wrapping label from re-triggering the select button */
                 onClick: event => {
                     event.preventDefault();
-
-                    this.selectOption(index);
+                    if (index === 0 && shouldShowClearOption) {
+                        this.handleClearClick();
+                    } else {
+                        this.selectOption(index);
+                    }
                 },
                 onMouseEnter: () => {
                     this.setActiveItem(index, false);
@@ -426,7 +440,6 @@ class BaseSelectField extends React.Component<Props, State> {
     render() {
         const {
             className,
-            headerContent,
             multiple,
             isEscapedWithReference,
             isRightAligned,
@@ -462,7 +475,6 @@ class BaseSelectField extends React.Component<Props, State> {
                         selectedValues={selectedValues}
                         selectFieldID={this.selectFieldID}
                     >
-                        {headerContent}
                         {this.renderSelectOptions()}
                     </SelectFieldDropdown>
                 </PopperComponent>

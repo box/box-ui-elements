@@ -8,6 +8,20 @@ type Props = {
     onChange: Function,
 };
 
-const MultiSelectField = ({ ...rest }: Props) => <BaseSelectField {...rest} multiple />;
+const optionsWithClearOption = (options: Array<Object>, shouldShowClearOption: boolean) => {
+    if (shouldShowClearOption) {
+        const updatedOptions = options;
+        updatedOptions.unshift({
+            value: 'clear',
+            displayText: 'Clear All',
+        });
+        return updatedOptions;
+    }
+    return options;
+};
+
+const MultiSelectField = ({ ...rest }: Props) => (
+    <BaseSelectField options={optionsWithClearOption(rest.options, rest.shouldShowClearOption)} {...rest} multiple />
+);
 
 export default MultiSelectField;

@@ -31,6 +31,7 @@ describe('components/select-field/BaseSelectField', () => {
                 onChange={() => {}}
                 onOptionSelect={onOptionSelectSpy}
                 options={options}
+                shouldShowClearOption={false}
                 {...props}
             />,
         );
@@ -182,6 +183,13 @@ describe('components/select-field/BaseSelectField', () => {
             expect(optionRenderer).toHaveBeenCalledTimes(options.length);
             expect(itemsWrapper).toMatchSnapshot();
         });
+
+        test('should render a clear option if shouldShowClearOption is true', () => {
+            const wrapper = shallowRenderSelectField({ shouldShowClearOption: true });
+            const itemsWrapper = wrapper.find('DatalistItem');
+
+            expect(itemsWrapper.at(0).prop('className')).toEqual('select-option is-clear-option');
+        });
     });
 
     describe('render()', () => {
@@ -193,20 +201,6 @@ describe('components/select-field/BaseSelectField', () => {
 
             expect(wrapper.hasClass('select-container')).toBe(true);
             expect(wrapper.hasClass(className)).toBe(true);
-        });
-
-        test('should render header content in overlay', () => {
-            const headerContent = 'Header Title';
-            const wrapper = shallowRenderSelectField({
-                headerContent,
-            });
-            const overlay = wrapper
-                .find('PopperComponent')
-                .childAt(1)
-                .dive()
-                .dive();
-
-            expect(overlay.props().children[0]).toBe(headerContent);
         });
 
         test('should render a listbox in overlay with options', () => {
@@ -444,6 +438,24 @@ describe('components/select-field/BaseSelectField', () => {
                 stopPropagation: sandbox.mock(),
             });
         });
+
+        test('should call handleClearClick if shouldShowClearOption is true and activeItemIndex === 0', () => {
+            const activeItemIndex = 0;
+            const wrapper = shallowRenderSelectField({
+                shouldShowClearOption: true,
+            });
+
+            const instance = wrapper.instance();
+            wrapper.setState({ activeItemIndex, isOpen: true });
+
+            sandbox.mock(instance).expects('handleClearClick');
+
+            wrapper.simulate('keyDown', {
+                key: 'Enter',
+                preventDefault: sandbox.mock(),
+                stopPropagation: sandbox.mock(),
+            });
+        });
     });
 
     describe('onSpacebar', () => {
@@ -491,6 +503,24 @@ describe('components/select-field/BaseSelectField', () => {
                 .mock(instance)
                 .expects('selectOption')
                 .withArgs(activeItemIndex);
+
+            wrapper.simulate('keyDown', {
+                key: ' ',
+                preventDefault: sandbox.mock(),
+                stopPropagation: sandbox.mock(),
+            });
+        });
+
+        test('should call handleClearClick if shouldShowClearOption is true and activeItemIndex === 0', () => {
+            const activeItemIndex = 0;
+            const wrapper = shallowRenderSelectField({
+                shouldShowClearOption: true,
+            });
+
+            const instance = wrapper.instance();
+            wrapper.setState({ activeItemIndex, isOpen: true });
+
+            sandbox.mock(instance).expects('handleClearClick');
 
             wrapper.simulate('keyDown', {
                 key: ' ',
@@ -592,6 +622,17 @@ describe('components/select-field/BaseSelectField', () => {
         });
     });
 
+    describe('handleClearClick', () => {
+        test('should call handleChange with empty array', () => {
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+
+            sandbox.mock(instance).expects('handleChange');
+
+            instance.handleClearClick();
+        });
+    });
+
     describe('handleOptionSelect', () => {
         test('should call props.onOptionSelect with newly selected (or deselected) item', () => {
             const wrapper = shallowRenderSelectField();
@@ -684,6 +725,25 @@ describe('components/select-field/BaseSelectField', () => {
     });
 
     describe('onOptionClick', () => {
+        test('should call handleClearClick if index is 0 and shouldShowClearOption is true', () => {
+            const wrapper = shallowRenderSelectField({
+                shouldShowClearOption: true,
+            });
+            wrapper.setState({
+                activeItemIndex: 0,
+            });
+            const instance = wrapper.instance();
+
+            sandbox.mock(instance).expects('handleClearClick');
+
+            wrapper
+                .find('DatalistItem')
+                .at(0)
+                .simulate('click', {
+                    preventDefault: sandbox.mock(),
+                });
+        });
+
         test('should select item and close dropdown when item is clicked', () => {
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();

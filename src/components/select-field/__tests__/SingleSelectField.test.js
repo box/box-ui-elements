@@ -33,6 +33,27 @@ describe('components/select-field/SingleSelectField', () => {
             expect(baseSelectFieldWrapper.prop('isDisabled')).toEqual(false);
         });
 
+        test('should render a BaseSelectField with options that includes a clear option if shouldShowClearOption is true', () => {
+            const wrapper = shallow(
+                <SingleSelectField
+                    isDisabled={false}
+                    onChange={onChangeStub}
+                    options={options}
+                    selectedValue="bar"
+                    shouldShowClearOption
+                />,
+            );
+
+            const baseSelectFieldWrapper = wrapper.find('BaseSelectField');
+            const expectedOptions = options;
+            expectedOptions.unshift({
+                value: 'clear',
+                displayText: 'Clear All',
+            });
+
+            expect(baseSelectFieldWrapper.prop('options')).toEqual(expectedOptions);
+        });
+
         test('should strip out props that are multi-select specific when called', () => {
             const wrapper = shallow(
                 <SingleSelectField
@@ -56,8 +77,8 @@ describe('components/select-field/SingleSelectField', () => {
     });
 
     describe('handleChange()', () => {
-        test('should not call onChange() when there is no selected items', () => {
-            const onChangeMock = sandbox.mock().never();
+        test('should call onChange() with an object with value of null when there are no selected items', () => {
+            const onChangeMock = sandbox.mock().withArgs({ value: null });
             const wrapper = shallow(
                 <SingleSelectField onChange={onChangeMock} options={options} selectedValue="foo" />,
             );
