@@ -1,13 +1,17 @@
 // @flow
 import * as React from 'react';
 import omit from 'lodash/omit';
+import { injectIntl } from 'react-intl';
 
 import BaseSelectField from './BaseSelectField';
 import type { SelectOptionValueProp, SelectOptionProp } from './props';
+import messages from './messages';
 
 type Props = {
     /** The type of the field */
     fieldType?: string,
+    /* Intl object */
+    intl: Object,
     /** The select field is disabled if true */
     isDisabled?: boolean,
     /** The select field overlay (dropdown) will have a scrollbar and max-height if true * */
@@ -37,7 +41,7 @@ class SingleSelectField extends React.Component<Props> {
     };
 
     render() {
-        const { isDisabled, selectedValue, placeholder, shouldShowClearOption, options, ...rest } = this.props;
+        const { intl, isDisabled, selectedValue, placeholder, shouldShowClearOption, options, ...rest } = this.props;
 
         // @TODO: Invariant testing
         // 1) selectedValue is required to be contained in the options
@@ -54,7 +58,7 @@ class SingleSelectField extends React.Component<Props> {
         if (shouldShowClearOption) {
             optionsWithClearOption.unshift({
                 value: 'clear',
-                displayText: 'Clear All',
+                displayText: intl.formatMessage(messages.clearAll),
             });
         }
 
@@ -72,4 +76,4 @@ class SingleSelectField extends React.Component<Props> {
     }
 }
 
-export default SingleSelectField;
+export default injectIntl(SingleSelectField);

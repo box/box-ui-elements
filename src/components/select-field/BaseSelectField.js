@@ -62,7 +62,7 @@ type Props = {
     /** Array of ordered indices indicating where to insert separators (ex. index 2 means insert a separator after option 2) */
     separatorIndices: Array<number>,
     /** Boolean to determine whether or not to show the clear option */
-    shouldShowClearOption: boolean,
+    shouldShowClearOption?: boolean,
     /** The select button text (by default, component will use comma separated list of all selected option displayText) */
     title?: string | React.Element<any>,
 };
