@@ -65,6 +65,7 @@ export const SIDEBAR_FORCE_VALUE_OPEN: 'open' = 'open';
 
 class Sidebar extends React.Component<Props, State> {
     static defaultProps = {
+        annotatorState: {},
         isDefaultOpen: true,
         isLoading: false,
     };

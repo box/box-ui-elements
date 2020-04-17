@@ -188,32 +188,32 @@ class ActivityFeed extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
-            translations,
-            approverSelectorContacts,
-            mentionSelectorContacts,
-            currentUser,
-            isDisabled,
-            getAvatarUrl,
-            getUserProfileUrl,
-            file,
-            onAnnotationDelete,
-            onAppActivityDelete,
-            onCommentCreate,
-            getApproverWithQuery,
-            getMentionWithQuery,
-            activityFeedError,
-            onAnnotationSelect,
-            onVersionHistoryClick,
-            onCommentDelete,
-            onCommentUpdate,
-            onTaskDelete,
-            onTaskUpdate,
-            onTaskView,
-            onTaskAssignmentUpdate,
-            onTaskModalClose,
-            feedItems,
             activeFeedEntryId,
             activeFeedEntryType,
+            activityFeedError,
+            approverSelectorContacts,
+            currentUser,
+            feedItems,
+            file,
+            getApproverWithQuery,
+            getAvatarUrl,
+            getMentionWithQuery,
+            getUserProfileUrl,
+            isDisabled,
+            mentionSelectorContacts,
+            onAnnotationDelete,
+            onAnnotationSelect,
+            onAppActivityDelete,
+            onCommentCreate,
+            onCommentDelete,
+            onCommentUpdate,
+            onTaskAssignmentUpdate,
+            onTaskDelete,
+            onTaskModalClose,
+            onTaskUpdate,
+            onTaskView,
+            onVersionHistoryClick,
+            translations,
         } = this.props;
         const { isInputOpen } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
@@ -261,8 +261,8 @@ class ActivityFeed extends React.Component<Props, State> {
                             isDisabled={isDisabled}
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={onTaskAssignmentUpdate}
-                            onAnnotationSelect={onAnnotationSelect}
                             onAnnotationDelete={onAnnotationDelete}
+                            onAnnotationSelect={onAnnotationSelect}
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}

@@ -68,6 +68,19 @@ describe('elements/content-sidebar/Sidebar', () => {
             wrapper.setProps({ location: { pathname: '/', state: { open: false } } });
             expect(instance.isForced).toHaveBeenCalledWith(false);
         });
+
+        test('should call handleAnnotationSelect if active annotation has changed', () => {
+            const mockAnnotatorState = {
+                activeAnnotationId: '123',
+            };
+            const mockHandleAnnotationSelect = jest.fn();
+            const wrapper = getWrapper({ annotatorState: mockAnnotatorState });
+
+            wrapper.instance().handleAnnotationSelect = mockHandleAnnotationSelect;
+            wrapper.setProps({ annotatorState: '321' });
+
+            expect(mockHandleAnnotationSelect).toBeCalled();
+        });
     });
 
     describe('handleVersionHistoryClick', () => {

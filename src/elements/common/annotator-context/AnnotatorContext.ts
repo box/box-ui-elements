@@ -1,4 +1,4 @@
 import * as React from 'react';
-import { AnnotatorState } from './types';
+import { AnnotatorContext } from './types';
 
-export default React.createContext({} as AnnotatorState);
+export default React.createContext({} as AnnotatorContext);

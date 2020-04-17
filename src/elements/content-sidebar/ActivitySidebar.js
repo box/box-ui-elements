@@ -96,7 +96,7 @@ mark(MARK_NAME_JS_READY);
 
 class ActivitySidebar extends React.PureComponent<Props, State> {
     static defaultProps = {
-        annotatorState: {},
+        emitAnnotatorActiveChangeEvent: noop,
         isDisabled: false,
         onCommentCreate: noop,
         onCommentDelete: noop,
@@ -597,7 +597,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             activeFeedEntryId,
             activeFeedEntryType,
             onTaskView,
-            annotatorState,
+            emitAnnotatorActiveChangeEvent,
         } = this.props;
         const {
             currentUser,
@@ -623,7 +623,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     mentionSelectorContacts={mentionSelectorContacts}
                     currentUser={currentUser}
                     isDisabled={isDisabled}
-                    onAnnotationSelect={annotatorState.setActiveAnnotationId}
+                    onAnnotationSelect={emitAnnotatorActiveChangeEvent}
                     onAppActivityDelete={this.deleteAppActivity}
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}

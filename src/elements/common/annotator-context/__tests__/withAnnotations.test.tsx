@@ -3,7 +3,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 
 import { AnnotatorContext, withAnnotations } from '../index';
 import { WithAnnotationsProps, ComponentWithAnnotations } from '../withAnnotations';
-import { AnnotatorState, Action } from '../types';
+import { AnnotatorContext as AnnotatorContextType, Action } from '../types';
 
 type ComponentProps = {
     className: string;
@@ -12,7 +12,7 @@ type ComponentProps = {
 type WrappedComponentProps = ComponentProps & WithAnnotationsProps;
 
 type ContextProviderProps = {
-    value: AnnotatorState;
+    value: AnnotatorContextType;
 };
 
 describe('elements/common/annotator-context/withAnnotations', () => {
@@ -46,20 +46,35 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         expect(wrappedComponent.props().onPreviewDestroy).toBeTruthy();
     });
 
-    test('should pass the state on to the AnnotatorContext.Provider', () => {
+    test('should pass the context on to the AnnotatorContext.Provider', () => {
         const wrapper = getWrapper();
-
-        const contextProvider = getContextProvider(wrapper);
         const instance = wrapper.instance();
+        const contextProvider = getContextProvider(wrapper);
 
         expect(contextProvider.exists()).toBeTruthy();
-        expect(contextProvider.prop('value')).toEqual({
+        expect(contextProvider.prop('value').emitActiveChangeEvent).toEqual(instance.emitActiveChangeEvent);
+        expect(contextProvider.prop('value').state).toEqual({
             action: null,
             activeAnnotationId: null,
             annotation: null,
-            annotator: null,
             error: null,
-            setActiveAnnotationId: instance.emitActiveChangeEvent,
+        });
+    });
+
+    describe('emitActiveChangeEvent', () => {
+        test('should call annotator emit on action', () => {
+            const mockAnnotator = {
+                emit: jest.fn(),
+            };
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            // Set the annotator on the withAnnotations instance
+            instance.handleOnAnnotator(mockAnnotator);
+            instance.emitActiveChangeEvent('123');
+
+            expect(mockAnnotator.emit).toBeCalled();
+            expect(mockAnnotator.emit).toBeCalledWith('annotations_active_set', '123');
         });
     });
 
@@ -84,19 +99,14 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                     error,
                 };
 
-                const instance = wrapper.instance();
-
-                instance.handleAnnotationCreate(eventData);
-
+                wrapper.instance().handleAnnotationCreate(eventData);
                 const contextProvider = getContextProvider(wrapper);
                 expect(contextProvider.exists()).toBeTruthy();
-                expect(contextProvider.prop('value')).toEqual({
+                expect(contextProvider.prop('value').state).toEqual({
                     action: expectedAction,
                     activeAnnotationId: null,
                     annotation: expectedAnnotation,
-                    annotator: null,
                     error: expectedError,
-                    setActiveAnnotationId: instance.emitActiveChangeEvent,
                 });
             },
         );
@@ -109,13 +119,11 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             ${'123'}     | ${'123'}
         `('should update activeAnnotationId state to reflect value $annotationId', ({ annotationId, expected }) => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
 
-            instance.handleActiveChange(annotationId);
-
+            wrapper.instance().handleActiveChange(annotationId);
             const contextProvider = getContextProvider(wrapper);
             expect(contextProvider.exists()).toBeTruthy();
-            expect(contextProvider.prop('value').activeAnnotationId).toEqual(expected);
+            expect(contextProvider.prop('value').state.activeAnnotationId).toEqual(expected);
         });
     });
 
@@ -141,48 +149,17 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         );
     });
 
-    describe('handleOnAnnotator', () => {
-        test('should add annotator to state', () => {
-            const mockAnnotator = {
-                emit: jest.fn(),
-            };
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-
-            instance.handleOnAnnotator(mockAnnotator);
-
-            expect(wrapper.state('annotator')).toEqual(mockAnnotator);
-        });
-    });
-
-    describe('emitActiveChangeEvent', () => {
-        test('should call annotator emit on action', () => {
-            const mockAnnotator = {
-                emit: jest.fn(),
-            };
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-
-            wrapper.setState({ annotator: mockAnnotator });
-            instance.emitActiveChangeEvent('123');
-
-            expect(mockAnnotator.emit).toBeCalled();
-            expect(mockAnnotator.emit).toBeCalledWith('annotations_active_change', '123');
-        });
-    });
-
     describe('handlePreviewDestroy()', () => {
-        test('should reset state', () => {
+        test('should reset state and annotator', () => {
             const wrapper = getWrapper();
-
-            wrapper.instance().handleActiveChange('123');
+            const instance = wrapper.instance();
+            instance.handleActiveChange('123');
             let contextProvider = getContextProvider(wrapper);
-            expect(contextProvider.prop('value').activeAnnotationId).toEqual('123');
+            expect(contextProvider.prop('value').state.activeAnnotationId).toEqual('123');
 
             wrapper.instance().handlePreviewDestroy();
             contextProvider = getContextProvider(wrapper);
-            expect(contextProvider.prop('value').activeAnnotationId).toEqual(null);
-            expect(contextProvider.prop('value').annotator).toEqual(null);
+            expect(contextProvider.prop('value').state.activeAnnotationId).toEqual(null);
         });
     });
 });
