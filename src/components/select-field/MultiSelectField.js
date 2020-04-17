@@ -17,8 +17,7 @@ type Props = {
     shouldShowClearOption?: boolean,
 };
 
-const optionsWithClearOption = (options: Array<Object>, shouldShowClearOption?: boolean) => {
-    const { intl } = this.props;
+const optionsWithClearOption = (options: Array<Object>, shouldShowClearOption?: boolean, intl: Object) => {
     if (shouldShowClearOption) {
         const updatedOptions = options;
         updatedOptions.unshift({
@@ -30,8 +29,12 @@ const optionsWithClearOption = (options: Array<Object>, shouldShowClearOption?: 
     return options;
 };
 
-const MultiSelectField = ({ ...rest }: Props) => (
-    <BaseSelectField options={optionsWithClearOption(rest.options, rest.shouldShowClearOption)} {...rest} multiple />
+const MultiSelectField = ({ intl, ...rest }: Props) => (
+    <BaseSelectField
+        options={optionsWithClearOption(rest.options, rest.shouldShowClearOption, intl)}
+        {...rest}
+        multiple
+    />
 );
 
 export default injectIntl(MultiSelectField);

@@ -223,8 +223,8 @@ class BaseSelectField extends React.Component<Props, State> {
             case ' ':
                 if (activeItemIndex !== -1 && isOpen) {
                     stopDefaultEvent(event);
-
-                    if (shouldShowClearOption && activeItemIndex === 0) {
+                    const isClearOption = shouldShowClearOption && activeItemIndex === 0;
+                    if (isClearOption) {
                         this.handleClearClick();
                     } else {
                         this.selectOption(activeItemIndex);
@@ -401,7 +401,7 @@ class BaseSelectField extends React.Component<Props, State> {
                 /* preventDefault on click to prevent wrapping label from re-triggering the select button */
                 onClick: event => {
                     event.preventDefault();
-                    if (index === 0 && shouldShowClearOption) {
+                    if (isClearOption) {
                         this.handleClearClick();
                     } else {
                         this.selectOption(index);
