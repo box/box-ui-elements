@@ -94,6 +94,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
         label=""
         readOnly={true}
         successStateDuration={3000}
+        triggerCopyOnLoad={false}
         type="url"
         value="https://example.com/shared-link"
       />
@@ -241,6 +242,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
         label=""
         readOnly={true}
         successStateDuration={3000}
+        triggerCopyOnLoad={false}
         type="url"
         value="https://example.com/shared-link"
       />
@@ -418,6 +420,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
         label=""
         readOnly={true}
         successStateDuration={3000}
+        triggerCopyOnLoad={false}
         type="url"
         value="https://example.com/shared-link"
       />
@@ -666,6 +669,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
         label=""
         readOnly={true}
         successStateDuration={3000}
+        triggerCopyOnLoad={false}
         type="url"
         value="http://example.com/s/abc"
       />
@@ -804,6 +808,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         label=""
         readOnly={true}
         successStateDuration={3000}
+        triggerCopyOnLoad={false}
         type="url"
         value="https://example.com/shared-link"
       />
@@ -937,6 +942,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         label=""
         readOnly={true}
         successStateDuration={3000}
+        triggerCopyOnLoad={false}
         type="url"
         value="https://example.com/shared-link"
       />
@@ -1095,6 +1101,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
         label=""
         readOnly={true}
         successStateDuration={3000}
+        triggerCopyOnLoad={false}
         type="url"
         value="https://example.com/shared-link"
       />

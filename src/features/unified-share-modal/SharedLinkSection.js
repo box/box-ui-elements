@@ -15,6 +15,7 @@ import IconGlobe from '../../icons/general/IconGlobe';
 import { bdlWatermelonRed } from '../../styles/variables';
 import type { ItemType } from '../../common/types/core';
 import { isBoxNote } from '../../utils/file';
+import Browser from '../../utils/Browser';
 
 import convertToBoxItem from './utils/item';
 import SharedLinkAccessMenu from './SharedLinkAccessMenu';
@@ -41,6 +42,9 @@ type Props = {
     intl: any,
     item: itemtype,
     itemType: ItemType,
+    onCopyError?: () => void,
+    onCopyInit?: () => void,
+    onCopySuccess?: () => void,
     onDismissTooltip: (componentIdentifier: tooltipComponentIdentifierType) => void,
     onEmailSharedLinkClick: Function,
     onSettingsClick?: Function,
@@ -55,6 +59,7 @@ type Props = {
 
 type State = {
     isAutoCreatingSharedLink: boolean,
+    isCopySuccessful: ?boolean,
 };
 
 class SharedLinkSection extends React.Component<Props, State> {
@@ -68,6 +73,7 @@ class SharedLinkSection extends React.Component<Props, State> {
 
         this.state = {
             isAutoCreatingSharedLink: false,
+            isCopySuccessful: null,
         };
     }
 
@@ -96,11 +102,22 @@ class SharedLinkSection extends React.Component<Props, State> {
     // Note: we are assuming the 2nd render is safe
     // to start doing this check.
     componentDidUpdate(prevProps: Props) {
-        const { sharedLink, autoCreateSharedLink, addSharedLink, submitting } = this.props;
+        const {
+            sharedLink,
+            autoCreateSharedLink,
+            addSharedLink,
+            submitting,
+            triggerCopyOnLoad,
+            onCopyError = () => {},
+            onCopySuccess = () => {},
+            onCopyInit = () => {},
+        } = this.props;
+
+        const { isAutoCreatingSharedLink } = this.state;
 
         if (
             autoCreateSharedLink &&
-            !this.state.isAutoCreatingSharedLink &&
+            !isAutoCreatingSharedLink &&
             !sharedLink.url &&
             !submitting &&
             !sharedLink.isNewSharedLink
@@ -111,6 +128,20 @@ class SharedLinkSection extends React.Component<Props, State> {
 
         if (!prevProps.sharedLink.url && sharedLink.url) {
             this.setState({ isAutoCreatingSharedLink: false });
+        }
+
+        if (Browser.canWriteToClipboard() && triggerCopyOnLoad && !isAutoCreatingSharedLink && sharedLink.url) {
+            onCopyInit();
+            navigator.clipboard
+                .writeText(sharedLink.url)
+                .then(() => {
+                    this.setState({ isCopySuccessful: true });
+                    onCopySuccess();
+                })
+                .catch(() => {
+                    this.setState({ isCopySuccessful: false });
+                    onCopyError();
+                });
         }
     }
 
@@ -124,7 +155,6 @@ class SharedLinkSection extends React.Component<Props, State> {
 
     renderSharedLink() {
         const {
-            autoCreateSharedLink,
             autofocusSharedLink,
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
@@ -139,6 +169,9 @@ class SharedLinkSection extends React.Component<Props, State> {
             triggerCopyOnLoad,
             tooltips,
         } = this.props;
+
+        const { isCopySuccessful } = this.state;
+
         const {
             accessLevel,
             accessLevelsDisabledReason,
@@ -162,7 +195,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             sharedLinkPermissionsMenuButtonProps,
         } = trackingProps;
 
-        const shouldTriggerCopyOnLoad = autoCreateSharedLink ? false : triggerCopyOnLoad;
+        const shouldTriggerCopyOnLoad = !!triggerCopyOnLoad && !!isCopySuccessful;
 
         const isEditableBoxNote = isBoxNote(convertToBoxItem(item)) && isEditAllowed;
         let allowedPermissionLevels = [CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];

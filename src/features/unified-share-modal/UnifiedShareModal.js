@@ -82,6 +82,12 @@ type Props = {
     item: ItemType,
     /** Handler function that adds the shared link */
     onAddLink: () => void,
+    /** Handler for when there is an error copying to clipboard after modal open */
+    onCopyError?: () => void,
+    /** Handler for when we initiate copying from to clipboard on modal open */
+    onCopyInit?: () => void,
+    /** Handler for when successfully copying to clipboard after modal open */
+    onCopySuccess?: () => void,
     /** Handler function that gets called whenever the user dismisses a tooltip on the given component identifier */
     onDismissTooltip?: (componentIdentifier: tooltipComponentIdentifierType) => void,
     /** Handler function that removes the shared link */
@@ -658,6 +664,9 @@ class UnifiedShareModal extends React.Component<Props, State> {
             createSharedLinkOnLoad,
             focusSharedLinkOnLoad,
             item,
+            onCopyInit,
+            onCopySuccess,
+            onCopyError,
             onSettingsClick,
             sharedLink,
             intl,
@@ -733,7 +742,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
                                 addSharedLink={onAddLink}
                                 autofocusSharedLink={this.shouldAutoFocusSharedLink()}
                                 autoCreateSharedLink={createSharedLinkOnLoad}
-                                triggerCopyOnLoad={focusSharedLinkOnLoad}
+                                triggerCopyOnLoad={createSharedLinkOnLoad && focusSharedLinkOnLoad}
                                 changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                                 changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
                                 intl={intl}
@@ -743,6 +752,9 @@ class UnifiedShareModal extends React.Component<Props, State> {
                                 onEmailSharedLinkClick={this.openEmailSharedLinkForm}
                                 onSettingsClick={onSettingsClick}
                                 onToggleSharedLink={this.onToggleSharedLink}
+                                onCopyInit={onCopyInit}
+                                onCopySuccess={onCopySuccess}
+                                onCopyError={onCopyError}
                                 sharedLink={sharedLink}
                                 showSharedLinkSettingsCallout={showSharedLinkSettingsCallout}
                                 submitting={submitting || isFetching}

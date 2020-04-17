@@ -802,7 +802,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         submitting={true}
         tooltips={Object {}}
         trackingProps={Object {}}
-        triggerCopyOnLoad={true}
+        triggerCopyOnLoad={false}
       />
     </LoadingIndicatorWrapper>
   </Modal>
@@ -2496,7 +2496,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         submitting={true}
         tooltips={Object {}}
         trackingProps={Object {}}
-        triggerCopyOnLoad={true}
+        triggerCopyOnLoad={false}
       />
     </LoadingIndicatorWrapper>
   </Modal>
