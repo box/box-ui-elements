@@ -28,15 +28,22 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             annotation: { foo: 'bar' },
             action: Action.CREATE_START,
         };
+        const mockEmitAnnotatorChangeEvent = jest.fn();
 
-        mockContext.mockReturnValue(annotatorState);
+        mockContext.mockReturnValue({
+            state: annotatorState,
+            emitActiveChangeEvent: mockEmitAnnotatorChangeEvent,
+        });
 
         const wrapper = getWrapper();
         const wrappedComponent = wrapper.dive().find(Component);
+        const props = wrappedComponent.props() as WrappedComponentProps<HTMLDivElement>;
+
         expect(wrappedComponent.exists()).toBeTruthy();
-        expect((wrappedComponent.props() as WrappedComponentProps<HTMLDivElement>).annotatorState).toEqual({
+        expect(props.annotatorState).toEqual({
             annotation: { foo: 'bar' },
             action: Action.CREATE_START,
         });
+        expect(props.emitAnnotatorActiveChangeEvent).toEqual(mockEmitAnnotatorChangeEvent);
     });
 });

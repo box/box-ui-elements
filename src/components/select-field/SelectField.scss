@@ -18,6 +18,11 @@
     white-space: nowrap;
 }
 
+.select-option.is-clear-option {
+    color: $box-blue;
+    font-weight: bold;
+}
+
 .select-option-check-icon {
     flex: none;
     width: 20px;

@@ -6,11 +6,21 @@ export enum Action {
     // Can extend to other actions: update_start, update_end, delete_start, delete_end
 }
 
+export interface Annotator {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    emit: (event: string | symbol, ...args: any[]) => void;
+}
+
 export interface AnnotatorState {
     activeAnnotationId?: string | null;
-    annotation?: object;
-    action?: Action;
-    error?: Error;
+    annotation?: object | null;
+    action?: Action | null;
+    error?: Error | null;
+}
+
+export interface AnnotatorContext {
+    state: AnnotatorState;
+    emitActiveChangeEvent: (id: string) => void;
 }
 
 export enum Status {

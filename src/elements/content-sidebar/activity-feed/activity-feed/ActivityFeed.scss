@@ -72,6 +72,11 @@
             }
         }
 
+        .bcs-activity-feed-annotation-activity.bcs-is-focused {
+            padding-left: 21px;
+            border-left: 4px solid $bdl-yellorange;
+        }
+
         .bcs-activity-feed-task {
             padding-bottom: 28px;
         }

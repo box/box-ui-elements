@@ -3,11 +3,6 @@
 .bcs-AnnotationActivity {
     position: relative;
     z-index: 1;
-
-    &.is-active {
-        background-color: $bdl-box-blue-05;
-        border-left: 4px solid $bdl-yellorange;
-    }
 }
 
 // the comment activity item

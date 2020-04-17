@@ -156,7 +156,9 @@ const ActiveState = ({
                         return (
                             <li
                                 key={item.type + item.id}
-                                className="bcs-activity-feed-annotation-activity"
+                                className={classNames('bcs-activity-feed-annotation-activity', {
+                                    'bcs-is-focused': isFocused,
+                                })}
                                 data-testid="annotation-activity"
                             >
                                 <AnnotationActivity

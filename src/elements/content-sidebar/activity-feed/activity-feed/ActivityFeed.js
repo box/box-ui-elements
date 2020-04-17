@@ -188,32 +188,32 @@ class ActivityFeed extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
-            translations,
+            activeFeedEntryId,
+            activeFeedEntryType,
+            activityFeedError,
             approverSelectorContacts,
-            mentionSelectorContacts,
             currentUser,
-            isDisabled,
-            getAvatarUrl,
-            getUserProfileUrl,
+            feedItems,
             file,
+            getApproverWithQuery,
+            getAvatarUrl,
+            getMentionWithQuery,
+            getUserProfileUrl,
+            isDisabled,
+            mentionSelectorContacts,
             onAnnotationDelete,
             onAnnotationSelect,
             onAppActivityDelete,
             onCommentCreate,
-            getApproverWithQuery,
-            getMentionWithQuery,
-            activityFeedError,
-            onVersionHistoryClick,
             onCommentDelete,
             onCommentUpdate,
+            onTaskAssignmentUpdate,
             onTaskDelete,
+            onTaskModalClose,
             onTaskUpdate,
             onTaskView,
-            onTaskAssignmentUpdate,
-            onTaskModalClose,
-            feedItems,
-            activeFeedEntryId,
-            activeFeedEntryType,
+            onVersionHistoryClick,
+            translations,
         } = this.props;
         const { isInputOpen } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
@@ -227,6 +227,7 @@ class ActivityFeed extends React.Component<Props, State> {
             feedItems.find(({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType);
 
         const errorMessageByEntryType = {
+            annotation: messages.annotationMissingError,
             comment: messages.commentMissingError,
             task: messages.taskMissingError,
         };

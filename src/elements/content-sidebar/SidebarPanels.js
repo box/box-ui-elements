@@ -58,7 +58,7 @@ const MARK_NAME_JS_LOADING_SKILLS = `${ORIGIN_SKILLS_SIDEBAR}${BASE_EVENT_NAME}`
 const MARK_NAME_JS_LOADING_METADATA = `${ORIGIN_METADATA_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_VERSIONS = `${ORIGIN_VERSIONS_SIDEBAR}${BASE_EVENT_NAME}`;
 
-const URL_TO_FEED_ITEM_TYPE = { comments: 'comment', tasks: 'task' };
+const URL_TO_FEED_ITEM_TYPE = { annotations: 'annotation', comments: 'comment', tasks: 'task' };
 
 const LoadableDetailsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DETAILS, MARK_NAME_JS_LOADING_DETAILS);
 const LoadableActivitySidebar = SidebarUtils.getAsyncSidebarContent(
@@ -162,7 +162,7 @@ class SidebarPanels extends React.Component<Props> {
                         exact
                         path={[
                             `/${SIDEBAR_VIEW_ACTIVITY}`,
-                            `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(comments|tasks)/:activeFeedEntryId?`,
+                            `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(annotations|comments|tasks)/:activeFeedEntryId?`,
                         ]}
                         render={({ match }) => {
                             const matchEntryType = match.params.activeFeedEntryType;
