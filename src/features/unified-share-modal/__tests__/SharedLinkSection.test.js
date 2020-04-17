@@ -318,6 +318,38 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             }
         });
 
+        test('should only initiate copy when we specifically request a copy to be triggered', () => {
+            const sharedLink = { url: '', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+            const onCopyInitMock = jest.fn();
+            const onCopySuccessMock = jest.fn();
+            const onCopyErrorMock = jest.fn();
+            const writeTextSuccessMock = jest.fn(() => Promise.resolve());
+            navigator.clipboard = {
+                writeText: writeTextSuccessMock,
+            };
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                autoCreateSharedLink: true,
+                autofocusSharedLink: true,
+                onCopyError: onCopyErrorMock,
+                onCopyInit: onCopyInitMock,
+                onCopySuccess: onCopySuccessMock,
+                sharedLink,
+                submitting: true,
+                triggerCopyOnLoad: false,
+            });
+
+            wrapper.setProps({ submitting: false });
+            wrapper.setProps({ sharedLink: { url: 'http://example.com/', isNewSharedLink: true } });
+
+            expect(onCopyInitMock).toBeCalledTimes(0);
+            expect(writeTextSuccessMock).toBeCalledTimes(0);
+            expect(onCopySuccessMock).toBeCalledTimes(0);
+            expect(onCopyErrorMock).toBeCalledTimes(0);
+        });
+
         test('should handle attempt to copy when the clipboard request fails', async () => {
             expect.assertions(3);
             const sharedLink = { url: '', isNewSharedLink: false };
