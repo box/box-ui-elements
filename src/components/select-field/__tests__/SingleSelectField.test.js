@@ -1,7 +1,7 @@
 import React from 'react';
 import sinon from 'sinon';
 
-import SingleSelectField from '../SingleSelectField';
+import { SingleSelectFieldBase } from '../SingleSelectField';
 
 const sandbox = sinon.sandbox.create();
 
@@ -12,6 +12,10 @@ describe('components/select-field/SingleSelectField', () => {
 
     const onChangeStub = () => {};
 
+    const intl = {
+        formatMessage: jest.fn(),
+    };
+
     const options = [
         { displayText: 'Foo', value: 'foo' },
         { displayText: 'Bar', value: 'bar' },
@@ -21,7 +25,13 @@ describe('components/select-field/SingleSelectField', () => {
     describe('render()', () => {
         test('should render a BaseSelectField with a selectedValues prop matching passed in selected value when called', () => {
             const wrapper = shallow(
-                <SingleSelectField isDisabled={false} onChange={onChangeStub} options={options} selectedValue="bar" />,
+                <SingleSelectFieldBase
+                    intl={intl}
+                    isDisabled={false}
+                    onChange={onChangeStub}
+                    options={options}
+                    selectedValue="bar"
+                />,
             );
             const instance = wrapper.instance();
 
@@ -35,7 +45,8 @@ describe('components/select-field/SingleSelectField', () => {
 
         test('should render a BaseSelectField with options that includes a clear option if shouldShowClearOption is true', () => {
             const wrapper = shallow(
-                <SingleSelectField
+                <SingleSelectFieldBase
+                    intl={intl}
                     isDisabled={false}
                     onChange={onChangeStub}
                     options={options}
@@ -56,8 +67,9 @@ describe('components/select-field/SingleSelectField', () => {
 
         test('should strip out props that are multi-select specific when called', () => {
             const wrapper = shallow(
-                <SingleSelectField
+                <SingleSelectFieldBase
                     defaultValue="foo"
+                    intl={intl}
                     multiple
                     onChange={onChangeStub}
                     options={options}
@@ -80,7 +92,7 @@ describe('components/select-field/SingleSelectField', () => {
         test('should call onChange() with an object with value of null when there are no selected items', () => {
             const onChangeMock = sandbox.mock().withArgs({ value: null });
             const wrapper = shallow(
-                <SingleSelectField onChange={onChangeMock} options={options} selectedValue="foo" />,
+                <SingleSelectFieldBase intl={intl} onChange={onChangeMock} options={options} selectedValue="foo" />,
             );
             const instance = wrapper.instance();
 
@@ -90,7 +102,7 @@ describe('components/select-field/SingleSelectField', () => {
         test('should call onChange() when there is a selected item', () => {
             const onChangeMock = sandbox.mock().withArgs('foo');
             const wrapper = shallow(
-                <SingleSelectField onChange={onChangeMock} options={options} selectedValue="foo" />,
+                <SingleSelectFieldBase intl={intl} onChange={onChangeMock} options={options} selectedValue="foo" />,
             );
             const instance = wrapper.instance();
 
@@ -100,7 +112,7 @@ describe('components/select-field/SingleSelectField', () => {
         test('should not call onChange() when there are more than 1 selected items (potentially an error)', () => {
             const onChangeMock = sandbox.mock().never();
             const wrapper = shallow(
-                <SingleSelectField onChange={onChangeMock} options={options} selectedValue="foo" />,
+                <SingleSelectFieldBase intl={intl} onChange={onChangeMock} options={options} selectedValue="foo" />,
             );
             const instance = wrapper.instance();
 

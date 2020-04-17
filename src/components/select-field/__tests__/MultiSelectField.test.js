@@ -1,6 +1,6 @@
 import React from 'react';
 
-import MultiSelectField from '../MultiSelectField';
+import { MultiSelectFieldBase } from '../MultiSelectField';
 
 describe('components/select-field/MultiSelectField', () => {
     const options = [
@@ -9,9 +9,13 @@ describe('components/select-field/MultiSelectField', () => {
         { displayText: 'Baz', value: 'baz' },
     ];
 
+    const intl = {
+        formatMessage: jest.fn(),
+    };
+
     describe('MultiSelectField', () => {
         test('should render a BaseSelectField with a selectedValues prop matching passed in selected value when called', () => {
-            const wrapper = shallow(<MultiSelectField onChange={() => {}} options={options} />);
+            const wrapper = shallow(<MultiSelectFieldBase intl={intl} onChange={() => {}} options={options} />);
 
             const baseSelectFieldWrapper = wrapper.find('BaseSelectField');
             expect(baseSelectFieldWrapper.length).toBe(1);
@@ -20,7 +24,9 @@ describe('components/select-field/MultiSelectField', () => {
         });
 
         test('should render a BaseSelectField with an options prop containing a clear option if shouldShowClearOption is true', () => {
-            const wrapper = shallow(<MultiSelectField onChange={() => {}} options={options} shouldShowClearOption />);
+            const wrapper = shallow(
+                <MultiSelectFieldBase intl={intl} onChange={() => {}} options={options} shouldShowClearOption />,
+            );
             const expectedOptions = options;
             expectedOptions.unshift({
                 value: 'clear',

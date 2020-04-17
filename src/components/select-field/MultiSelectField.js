@@ -37,4 +37,5 @@ const MultiSelectField = ({ intl, ...rest }: Props) => (
     />
 );
 
+export { MultiSelectField as MultiSelectFieldBase };
 export default injectIntl(MultiSelectField);

@@ -76,4 +76,5 @@ class SingleSelectField extends React.Component<Props> {
     }
 }
 
+export { SingleSelectField as SingleSelectFieldBase };
 export default injectIntl(SingleSelectField);
