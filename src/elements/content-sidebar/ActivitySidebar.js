@@ -14,6 +14,7 @@ import AddTaskButton from './AddTaskButton';
 import API from '../../api';
 import messages from '../common/messages';
 import SidebarContent from './SidebarContent';
+import { WithAnnotatorContextProps, withAnnotatorContext } from '../common/annotator-context';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { getBadUserError, getBadItemError } from '../../utils/error';
 import { mark } from '../../utils/performance';
@@ -56,7 +57,8 @@ type ExternalProps = {
     onTaskDelete: (id: string) => any,
     onTaskUpdate: () => any,
     onTaskView: (id: string, isCreator: boolean) => any,
-} & ErrorContextProps;
+} & ErrorContextProps &
+    WithAnnotatorContextProps;
 
 type PropsWithoutContext = {
     elementId: string,
@@ -94,6 +96,7 @@ mark(MARK_NAME_JS_READY);
 
 class ActivitySidebar extends React.PureComponent<Props, State> {
     static defaultProps = {
+        emitAnnotatorActiveChangeEvent: noop,
         isDisabled: false,
         onCommentCreate: noop,
         onCommentDelete: noop,
@@ -594,6 +597,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             activeFeedEntryId,
             activeFeedEntryType,
             onTaskView,
+            emitAnnotatorActiveChangeEvent,
         } = this.props;
         const {
             currentUser,
@@ -619,6 +623,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     mentionSelectorContacts={mentionSelectorContacts}
                     currentUser={currentUser}
                     isDisabled={isDisabled}
+                    onAnnotationSelect={emitAnnotatorActiveChangeEvent}
                     onAppActivityDelete={this.deleteAppActivity}
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
@@ -651,4 +656,5 @@ export default flow([
     withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR),
     withAPIContext,
     withFeatureConsumer,
+    withAnnotatorContext,
 ])(ActivitySidebar);
