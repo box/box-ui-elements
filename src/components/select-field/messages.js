@@ -4,7 +4,7 @@ const messages = defineMessages({
     clearAll: {
         defaultMessage: 'Clear All',
         description: 'text shown on the Clear All option in the options list',
-        id: 'boxui.select-field.clearAll',
+        id: 'boxui.selectField.clearAll',
     },
 });
 
