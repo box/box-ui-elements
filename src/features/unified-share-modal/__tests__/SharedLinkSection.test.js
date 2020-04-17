@@ -236,6 +236,10 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
     });
 
     describe('componentDidUpdate()', () => {
+        afterEach(() => {
+            global.navigator.clipboard = undefined;
+        });
+
         test('should call addSharedLink when modal is triggered to create a URL', () => {
             const sharedLink = { url: '', isNewSharedLink: false };
             const addSharedLink = jest.fn();
@@ -276,6 +280,78 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
 
             expect(addSharedLink).toBeCalledTimes(0);
             expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
+        });
+
+        test('should handle attempt to copy when the clipboard API is available and request is successful', async () => {
+            expect.assertions(4);
+            const sharedLink = { url: '', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+            const onCopyInitMock = jest.fn();
+            const onCopySuccessMock = jest.fn();
+            const onCopyErrorMock = jest.fn();
+            const writeTextSuccessMock = jest.fn(() => Promise.resolve());
+            navigator.clipboard = {
+                writeText: writeTextSuccessMock,
+            };
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                autoCreateSharedLink: true,
+                onCopyError: onCopyErrorMock,
+                onCopyInit: onCopyInitMock,
+                onCopySuccess: onCopySuccessMock,
+                sharedLink,
+                submitting: true,
+                triggerCopyOnLoad: true,
+            });
+
+            wrapper.setProps({ submitting: false });
+            wrapper.setProps({ sharedLink: { url: 'http://example.com/', isNewSharedLink: true } });
+
+            expect(onCopyInitMock).toBeCalledTimes(1);
+            try {
+                await expect(writeTextSuccessMock).toBeCalledTimes(1);
+                expect(onCopySuccessMock).toBeCalledTimes(1);
+                expect(wrapper.find('TextInputWithCopyButton').prop('triggerCopyOnLoad')).toBe(true);
+            } catch (err) {
+                expect(onCopyErrorMock).toBeCalledTimes(0);
+            }
+        });
+
+        test('should handle attempt to copy when the clipboard request fails', async () => {
+            expect.assertions(3);
+            const sharedLink = { url: '', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+            const onCopyInitMock = jest.fn();
+            const onCopySuccessMock = jest.fn();
+            const onCopyErrorMock = jest.fn();
+            const writeTextSuccessMock = jest.fn(() => Promise.reject());
+            navigator.clipboard = {
+                writeText: writeTextSuccessMock,
+            };
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                autoCreateSharedLink: true,
+                onCopyError: onCopyErrorMock,
+                onCopyInit: onCopyInitMock,
+                onCopySuccess: onCopySuccessMock,
+                sharedLink,
+                submitting: true,
+                triggerCopyOnLoad: true,
+            });
+
+            wrapper.setProps({ submitting: false });
+            wrapper.setProps({ sharedLink: { url: 'http://example.com/', isNewSharedLink: true } });
+
+            expect(onCopyInitMock).toBeCalledTimes(1);
+            try {
+                await expect(writeTextSuccessMock).toBeCalledTimes(1);
+                expect(onCopySuccessMock).toBeCalledTimes(0);
+            } catch (err) {
+                expect(onCopyErrorMock).toBeCalledTimes(1);
+                expect(wrapper.find('TextInputWithCopyButton').prop('triggerCopyOnLoad')).toBe(false);
+            }
         });
     });
 });
