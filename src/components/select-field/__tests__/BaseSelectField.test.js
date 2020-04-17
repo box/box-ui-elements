@@ -627,7 +627,10 @@ describe('components/select-field/BaseSelectField', () => {
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();
 
-            sandbox.mock(instance).expects('handleChange');
+            sandbox
+                .mock(instance)
+                .expects('handleChange')
+                .withArgs([]);
 
             instance.handleClearClick();
         });
