@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
-import { AnnotatorContext, withAnnotations } from '../index';
+import { Annotator, AnnotatorContext, withAnnotations } from '../index';
 import { WithAnnotationsProps, ComponentWithAnnotations } from '../withAnnotations';
 import { AnnotatorContext as AnnotatorContextType, Action } from '../types';
 
@@ -23,7 +23,6 @@ describe('elements/common/annotator-context/withAnnotations', () => {
     const defaultProps = {
         className: 'foo',
         onAnnotator: jest.fn(),
-        onAnnotatorEvent: jest.fn(),
         onPreviewDestroy: jest.fn(),
     };
 
@@ -42,7 +41,6 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         const wrappedComponent = wrapper.find<WrappedComponentProps>(MockComponent);
         expect(wrappedComponent.exists()).toBeTruthy();
         expect(wrappedComponent.props().onAnnotator).toBeTruthy();
-        expect(wrappedComponent.props().onAnnotatorEvent).toBeTruthy();
         expect(wrappedComponent.props().onPreviewDestroy).toBeTruthy();
     });
 
@@ -63,14 +61,16 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
     describe('emitActiveChangeEvent', () => {
         test('should call annotator emit on action', () => {
-            const mockAnnotator = {
+            const mockAnnotator: Annotator = {
+                addListener: jest.fn(),
                 emit: jest.fn(),
+                removeListener: jest.fn(),
             };
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
             // Set the annotator on the withAnnotations instance
-            instance.handleOnAnnotator(mockAnnotator);
+            instance.handleAnnotator(mockAnnotator);
             instance.emitActiveChangeEvent('123');
 
             expect(mockAnnotator.emit).toBeCalled();

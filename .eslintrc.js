@@ -32,6 +32,7 @@ module.exports = {
             files: ['*.ts', '*.tsx'],
             rules: {
                 '@typescript-eslint/explicit-function-return-type': 'off', // fixme
+                '@typescript-eslint/no-explicit-any': ["error", { "ignoreRestArgs": true }],
             }
         }
     ]
