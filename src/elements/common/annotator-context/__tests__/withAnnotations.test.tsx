@@ -64,6 +64,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             const mockAnnotator: Annotator = {
                 addListener: jest.fn(),
                 emit: jest.fn(),
+                removeAllListeners: jest.fn(),
                 removeListener: jest.fn(),
             };
             const wrapper = getWrapper();
@@ -151,8 +152,16 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
     describe('handlePreviewDestroy()', () => {
         test('should reset state and annotator', () => {
+            const mockAnnotator: Annotator = {
+                addListener: jest.fn(),
+                emit: jest.fn(),
+                removeAllListeners: jest.fn(),
+                removeListener: jest.fn(),
+            };
+
             const wrapper = getWrapper();
             const instance = wrapper.instance();
+            instance.handleAnnotator(mockAnnotator);
             instance.handleActiveChange('123');
             let contextProvider = getContextProvider(wrapper);
             expect(contextProvider.prop('value').state.activeAnnotationId).toEqual('123');
@@ -160,6 +169,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             wrapper.instance().handlePreviewDestroy();
             contextProvider = getContextProvider(wrapper);
             expect(contextProvider.prop('value').state.activeAnnotationId).toEqual(null);
+            expect(mockAnnotator.removeAllListeners).toBeCalled();
         });
     });
 });

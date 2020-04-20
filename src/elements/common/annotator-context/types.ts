@@ -6,11 +6,14 @@ export enum Action {
     // Can extend to other actions: update_start, update_end, delete_start, delete_end
 }
 
+// eslint-disable @typescript-eslint/no-explicit-any
 export interface Annotator {
     addListener: (event: string | symbol, listener: (...args: any[]) => void) => void;
     emit: (event: string | symbol, ...args: any[]) => void;
+    removeAllListeners: () => void;
     removeListener: (event: string | symbol, listener: (...args: any[]) => void) => void;
 }
+// eslint-enable @typescript-eslint/no-explicit-any
 
 export interface AnnotatorState {
     activeAnnotationId?: string | null;

@@ -81,6 +81,11 @@ export default function withAnnotations<P extends object>(
 
         handlePreviewDestroy = (): void => {
             this.setState(defaultState);
+
+            if (this.annotator) {
+                this.annotator.removeAllListeners();
+            }
+
             this.annotator = null;
         };
 
