@@ -83,7 +83,7 @@ export default function withAnnotations<P extends object>(
             this.setState(defaultState);
 
             if (this.annotator) {
-                this.annotator.removeAllListeners();
+                this.annotator.removeListener('annotatorevent', this.handleAnnotatorEvent);
             }
 
             this.annotator = null;

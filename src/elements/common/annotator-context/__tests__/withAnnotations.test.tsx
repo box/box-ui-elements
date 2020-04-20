@@ -35,7 +35,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         wrapper: ShallowWrapper<WrappedComponentProps, {}, Component & ComponentWithAnnotations>,
     ) => wrapper.find<ContextProviderProps>(AnnotatorContext.Provider);
 
-    test('should pass onAnnotatorEvent and onPreviewDestroy as props on the wrapped component', () => {
+    test('should pass onAnnotator and onPreviewDestroy as props on the wrapped component', () => {
         const wrapper = getWrapper();
 
         const wrappedComponent = wrapper.find<WrappedComponentProps>(MockComponent);
@@ -169,7 +169,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             wrapper.instance().handlePreviewDestroy();
             contextProvider = getContextProvider(wrapper);
             expect(contextProvider.prop('value').state.activeAnnotationId).toEqual(null);
-            expect(mockAnnotator.removeAllListeners).toBeCalled();
+            expect(mockAnnotator.removeListener).toBeCalledWith('annotatorevent', instance.handleAnnotatorEvent);
         });
     });
 });
