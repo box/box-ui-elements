@@ -16,8 +16,8 @@ type ContextProviderProps = {
 };
 
 describe('elements/common/annotator-context/withAnnotations', () => {
+    let mockAnnotator = {} as Annotator;
     const MockComponent = (props: ComponentProps) => <div {...props} />;
-
     const WrappedComponent = withAnnotations(MockComponent);
 
     const defaultProps = {
@@ -34,6 +34,15 @@ describe('elements/common/annotator-context/withAnnotations', () => {
     const getContextProvider = (
         wrapper: ShallowWrapper<WrappedComponentProps, {}, Component & ComponentWithAnnotations>,
     ) => wrapper.find<ContextProviderProps>(AnnotatorContext.Provider);
+
+    beforeEach(() => {
+        mockAnnotator = {
+            addListener: jest.fn(),
+            emit: jest.fn(),
+            removeAllListeners: jest.fn(),
+            removeListener: jest.fn(),
+        };
+    });
 
     test('should pass onAnnotator and onPreviewDestroy as props on the wrapped component', () => {
         const wrapper = getWrapper();
@@ -61,12 +70,6 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
     describe('emitActiveChangeEvent', () => {
         test('should call annotator emit on action', () => {
-            const mockAnnotator: Annotator = {
-                addListener: jest.fn(),
-                emit: jest.fn(),
-                removeAllListeners: jest.fn(),
-                removeListener: jest.fn(),
-            };
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
@@ -152,13 +155,6 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
     describe('handlePreviewDestroy()', () => {
         test('should reset state and annotator', () => {
-            const mockAnnotator: Annotator = {
-                addListener: jest.fn(),
-                emit: jest.fn(),
-                removeAllListeners: jest.fn(),
-                removeListener: jest.fn(),
-            };
-
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.handleAnnotator(mockAnnotator);
