@@ -1,6 +1,6 @@
 import * as React from 'react';
 import AnnotatorContext from './AnnotatorContext';
-import { Action, Annotator, AnnotationActionEvent, AnnotatorState, Status } from './types';
+import { Action, AnnotationActionEvent, Annotator, AnnotatorState, Status } from './types';
 
 export interface WithAnnotationsProps {
     onAnnotator: (annotator: Annotator) => void;
@@ -21,10 +21,12 @@ export interface ComponentWithAnnotations {
 export type WithAnnotationsComponent<P> = React.ComponentClass<P & WithAnnotationsProps>;
 
 const defaultState: AnnotatorState = {
+    action: null,
     activeAnnotationId: null,
     annotation: null,
-    action: null,
     error: null,
+    isPending: false,
+    meta: null,
 };
 
 export default function withAnnotations<P extends object>(
@@ -52,9 +54,12 @@ export default function withAnnotations<P extends object>(
         }
 
         handleAnnotationCreate = (eventData: AnnotationActionEvent): void => {
-            const { annotation = null, error = null } = eventData;
+            const { annotation = null, error = null, meta = null } = eventData;
+
             const action = this.getAction(eventData);
-            this.setState({ ...this.state, annotation, action, error });
+            const isPending = action === Action.CREATE_START;
+
+            this.setState({ ...this.state, annotation, action, error, isPending, meta });
         };
 
         handleActiveChange = (annotationId: string | null): void => {

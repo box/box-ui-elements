@@ -96,6 +96,7 @@ mark(MARK_NAME_JS_READY);
 
 class ActivitySidebar extends React.PureComponent<Props, State> {
     static defaultProps = {
+        annotatorState: {},
         emitAnnotatorActiveChangeEvent: noop,
         isDisabled: false,
         onCommentCreate: noop,
@@ -121,6 +122,35 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const { currentUser } = this.props;
         this.fetchFeedItems(true);
         this.fetchCurrentUser(currentUser);
+    }
+
+    componentDidUpdate({ annotatorState: prevAnnotatorState }: Props): void {
+        const { action: prevAnnotatorAction } = prevAnnotatorState;
+        const {
+            annotatorState: { action: annotatorAction },
+        } = this.props;
+
+        if (annotatorAction !== prevAnnotatorAction) {
+            this.addAnnotation();
+        }
+    }
+
+    addAnnotation() {
+        const {
+            annotatorState: { annotation, isPending, meta },
+            api,
+            file,
+        } = this.props;
+        const { requestId } = meta || {};
+        const { currentUser } = this.state;
+
+        if (!currentUser) {
+            throw getBadUserError();
+        }
+
+        api.getFeedAPI(false).addAnnotation(file, currentUser, annotation, requestId, isPending);
+
+        this.fetchFeedItems();
     }
 
     /**
