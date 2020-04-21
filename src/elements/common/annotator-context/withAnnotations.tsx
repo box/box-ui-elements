@@ -4,7 +4,6 @@ import { Action, Annotator, AnnotationActionEvent, AnnotatorState, Status } from
 
 export interface WithAnnotationsProps {
     onAnnotator: (annotator: Annotator) => void;
-    onAnnotatorEvent: ({ event, data }: { event: string; data: unknown }) => void;
     onPreviewDestroy: () => void;
 }
 
@@ -14,8 +13,8 @@ export interface ComponentWithAnnotations {
     handleActiveChange: (annotationId: string | null) => void;
     handleAnnotationChangeEvent: (id: string | null) => void;
     handleAnnotationCreate: (eventData: AnnotationActionEvent) => void;
+    handleAnnotator: (annotator: Annotator) => void;
     handleAnnotatorEvent: ({ event, data }: { event: string; data?: unknown }) => void;
-    handleOnAnnotator: (annotator: Annotator) => void;
     handlePreviewDestroy: () => void;
 }
 
@@ -75,12 +74,18 @@ export default function withAnnotations<P extends object>(
             }
         };
 
-        handleOnAnnotator = (annotator: Annotator): void => {
+        handleAnnotator = (annotator: Annotator): void => {
             this.annotator = annotator;
+            this.annotator.addListener('annotatorevent', this.handleAnnotatorEvent);
         };
 
         handlePreviewDestroy = (): void => {
             this.setState(defaultState);
+
+            if (this.annotator) {
+                this.annotator.removeListener('annotatorevent', this.handleAnnotatorEvent);
+            }
+
             this.annotator = null;
         };
 
@@ -91,8 +96,7 @@ export default function withAnnotations<P extends object>(
                 >
                     <WrappedComponent
                         {...this.props}
-                        onAnnotator={this.handleOnAnnotator}
-                        onAnnotatorEvent={this.handleAnnotatorEvent}
+                        onAnnotator={this.handleAnnotator}
                         onPreviewDestroy={this.handlePreviewDestroy}
                     />
                 </AnnotatorContext.Provider>
