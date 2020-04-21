@@ -116,6 +116,26 @@ describe('api/uploads/FolderUploadNode', () => {
             expect(folderUploadNodeInstance.folderId).toBe(folderId);
         });
 
+        test('should not set error for non-root folders if error is ITEM_NAME_IN_USE', async () => {
+            const folderId = '1';
+            const errorCallback = jest.fn();
+            const isRoot = false;
+            const error = {
+                code: ERROR_CODE_ITEM_NAME_IN_USE,
+                context_info: { conflicts: [{ id: folderId }] },
+            };
+            folderUploadNodeInstance.name = name;
+            folderUploadNodeInstance.createFolder = jest.fn(() => ({
+                id: folderId,
+            }));
+            folderUploadNodeInstance.addFolderToUploadQueue = jest.fn();
+
+            await folderUploadNodeInstance.createAndUploadFolder(errorCallback, isRoot);
+
+            expect(errorCallback).not.toHaveBeenCalledWith(error);
+            expect(folderUploadNodeInstance.error).toBeUndefined();
+        });
+
         test('should call addFolderToUploadQueue when folder is created successfully for non-root folder', async () => {
             const folderId = '1';
             const errorCallback = () => 'errorCallback';

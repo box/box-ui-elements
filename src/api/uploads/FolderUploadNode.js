@@ -147,7 +147,7 @@ class FolderUploadNode {
             progress: 100,
         };
 
-        if (errorEncountered) {
+        if (errorEncountered && errorCode !== ERROR_CODE_ITEM_NAME_IN_USE) {
             folderObject.status = STATUS_ERROR;
             folderObject.error = { code: errorCode };
         }
