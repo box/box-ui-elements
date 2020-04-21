@@ -1,7 +1,7 @@
 // @flow strict
 import type { MessageDescriptor } from 'react-intl';
-import type { BoxItemPermission, BoxItemVersion, BoxItemVersionMini, User } from './core';
-import type { Target } from './annotations';
+import type { BoxItemPermission, BoxItemVersion, Reply, User } from './core';
+import type { Annotation } from './annotations';
 
 // Feed item types that can receive deeplinks inline in the feed
 type FocusableFeedItemType = 'task' | 'comment' | 'annotation';
@@ -96,32 +96,7 @@ type AppActivityItems = {
     total_count: number,
 };
 
-type Reply = {
-    created_at: Date,
-    created_by: User,
-    id: string,
-    message: string,
-    parent: {
-        id: string,
-        type: string,
-    },
-    type: 'reply',
-};
-
-type AnnotationActivityItem = {
-    ...BaseFeedItem,
-    description?: Reply,
-    file_version: BoxItemVersionMini,
-    modified_at: string,
-    modified_by: User,
-    permissions: BoxAnnotationPermission,
-    replies?: Array<Reply>,
-    status?: 'deleted' | 'open' | 'resolved',
-    target: Target,
-    type: 'annotation',
-};
-
-type FeedItem = Comment | Task | BoxItemVersion | AppActivityItem | AnnotationActivityItem;
+type FeedItem = Annotation | Comment | Task | BoxItemVersion | AppActivityItem;
 
 type FeedItems = Array<FeedItem>;
 
@@ -137,7 +112,7 @@ type ActionItemError = {
 export type {
     ActionItemError,
     ActivityTemplateItem,
-    AnnotationActivityItem,
+    Annotation,
     AppActivityAPIItem,
     AppActivityAPIItems,
     AppActivityItem,

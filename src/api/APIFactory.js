@@ -23,6 +23,7 @@ import MetadataAPI from './Metadata';
 import FileCollaboratorsAPI from './FileCollaborators';
 import FeedAPI from './Feed';
 import AppIntegrationsAPI from './AppIntegrations';
+import AnnotationsAPI from './Annotations';
 import OpenWithAPI from './OpenWith';
 import MetadataQueryAPI from './MetadataQuery';
 import BoxEditAPI from './box-edit';
@@ -143,6 +144,11 @@ class APIFactory {
      *
      */
     boxEditAPI: BoxEditAPI;
+
+    /**
+     * @property {AnnotationsAPI}
+     */
+    annotationsAPI: AnnotationsAPI;
 
     /**
      * [constructor]
@@ -266,6 +272,11 @@ class APIFactory {
         if (this.openWithAPI) {
             this.openWithAPI.destroy();
             delete this.openWithAPI;
+        }
+
+        if (this.annotationsAPI) {
+            this.annotationsAPI.destroy();
+            delete this.annotationsAPI;
         }
 
         if (destroyCache) {
@@ -591,6 +602,20 @@ class APIFactory {
     getBoxEditAPI(): BoxEditAPI {
         this.boxEditAPI = new BoxEditAPI();
         return this.boxEditAPI;
+    }
+
+    /**
+     * API for Annotations
+     *
+     * @return {AnnotationsAPI} AnnotationsAPI instance
+     */
+    getAnnotationsAPI(shouldDestroy: boolean): AnnotationsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.annotationsAPI = new AnnotationsAPI(this.options);
+        return this.annotationsAPI;
     }
 }
 
