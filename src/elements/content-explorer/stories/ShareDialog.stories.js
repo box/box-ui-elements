@@ -4,6 +4,7 @@ import { boolean } from '@storybook/addon-knobs';
 import { State, Store } from '@sambego/storybook-state';
 
 import PrimaryButton from '../../../components/primary-button/PrimaryButton';
+import { ACCESS_OPEN } from '../../../constants';
 
 import ShareDialog from '../ShareDialog';
 import notes from './ShareDialog.stories.md';
@@ -23,7 +24,9 @@ export const shareDialog = () => {
     const rootElement = document.createElement('div');
     const appElement = document.createElement('div');
     rootElement.appendChild(appElement);
-    document.body.appendChild(rootElement);
+    if (document.body) {
+        document.body.appendChild(rootElement);
+    }
 
     return (
         <State store={componentStore}>
@@ -35,7 +38,9 @@ export const shareDialog = () => {
                         isLoading={boolean('isLoading', false)}
                         isOpen={state.isModalOpen}
                         item={{
+                            id: 'abcdefg',
                             shared_link: {
+                                access: ACCESS_OPEN,
                                 url: 'https://cloud.box.com/s/abcdefg',
                             },
                         }}
