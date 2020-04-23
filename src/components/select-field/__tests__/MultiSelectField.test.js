@@ -36,7 +36,7 @@ describe('components/select-field/MultiSelectField', () => {
 
             const baseSelectFieldWrapper = wrapper.find('BaseSelectField');
             expect(baseSelectFieldWrapper.length).toBe(1);
-            expect(baseSelectFieldWrapper.prop('options')).toEqual(expectedOptions);
+            expect(baseSelectFieldWrapper.prop('options')).toStrictEqual(expectedOptions);
         });
     });
 });
