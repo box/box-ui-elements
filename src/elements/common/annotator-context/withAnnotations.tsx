@@ -1,6 +1,6 @@
 import * as React from 'react';
 import AnnotatorContext from './AnnotatorContext';
-import { Action, AnnotationActionEvent, Annotator, AnnotatorState, Status } from './types';
+import { Action, Annotator, AnnotationActionEvent, AnnotatorState, Status } from './types';
 
 export interface WithAnnotationsProps {
     onAnnotator: (annotator: Annotator) => void;
