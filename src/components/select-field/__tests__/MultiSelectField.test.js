@@ -1,4 +1,5 @@
 import React from 'react';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { MultiSelectFieldBase } from '../MultiSelectField';
 
@@ -10,7 +11,7 @@ describe('components/select-field/MultiSelectField', () => {
     ];
 
     const intl = {
-        formatMessage: jest.fn(),
+        formatMessage: jest.fn().mockReturnValue('Clear All'),
     };
 
     describe('MultiSelectField', () => {
@@ -27,7 +28,7 @@ describe('components/select-field/MultiSelectField', () => {
             const wrapper = shallow(
                 <MultiSelectFieldBase intl={intl} onChange={() => {}} options={options} shouldShowClearOption />,
             );
-            const expectedOptions = options;
+            const expectedOptions = cloneDeep(options);
             expectedOptions.unshift({
                 value: 'clear',
                 displayText: 'Clear All',
@@ -35,7 +36,7 @@ describe('components/select-field/MultiSelectField', () => {
 
             const baseSelectFieldWrapper = wrapper.find('BaseSelectField');
             expect(baseSelectFieldWrapper.length).toBe(1);
-            expect(baseSelectFieldWrapper.prop('options')).toBe(expectedOptions);
+            expect(baseSelectFieldWrapper.prop('options')).toEqual(expectedOptions);
         });
     });
 });
