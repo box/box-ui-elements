@@ -113,7 +113,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             onCopyInit = () => {},
         } = this.props;
 
-        const { isAutoCreatingSharedLink } = this.state;
+        const { isAutoCreatingSharedLink, isCopySuccessful } = this.state;
 
         if (
             autoCreateSharedLink &&
@@ -130,7 +130,13 @@ class SharedLinkSection extends React.Component<Props, State> {
             this.setState({ isAutoCreatingSharedLink: false });
         }
 
-        if (Browser.canWriteToClipboard() && triggerCopyOnLoad && !isAutoCreatingSharedLink && sharedLink.url) {
+        if (
+            Browser.canWriteToClipboard() &&
+            triggerCopyOnLoad &&
+            !isAutoCreatingSharedLink &&
+            sharedLink.url &&
+            isCopySuccessful === null
+        ) {
             onCopyInit();
             navigator.clipboard
                 .writeText(sharedLink.url)

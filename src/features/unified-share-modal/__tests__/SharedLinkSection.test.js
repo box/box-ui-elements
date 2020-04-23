@@ -283,7 +283,7 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
         });
 
         test('should handle attempt to copy when the clipboard API is available and request is successful', async () => {
-            expect.assertions(4);
+            expect.assertions(6);
             const sharedLink = { url: '', isNewSharedLink: false };
             const addSharedLink = jest.fn();
             const onCopyInitMock = jest.fn();
@@ -308,14 +308,14 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             wrapper.setProps({ submitting: false });
             wrapper.setProps({ sharedLink: { url: 'http://example.com/', isNewSharedLink: true } });
 
+            await new Promise(r => setTimeout(r, 0));
+
             expect(onCopyInitMock).toBeCalledTimes(1);
-            try {
-                await expect(writeTextSuccessMock).toBeCalledTimes(1);
-                expect(onCopySuccessMock).toBeCalledTimes(1);
-                expect(wrapper.find('TextInputWithCopyButton').prop('triggerCopyOnLoad')).toBe(true);
-            } catch (err) {
-                expect(onCopyErrorMock).toBeCalledTimes(0);
-            }
+            expect(writeTextSuccessMock).toBeCalledTimes(1);
+            expect(onCopySuccessMock).toBeCalledTimes(1);
+            expect(wrapper.find('TextInputWithCopyButton').prop('triggerCopyOnLoad')).toBe(true);
+            expect(wrapper.state('isCopySuccessful')).toEqual(true);
+            expect(onCopyErrorMock).toBeCalledTimes(0);
         });
 
         test('should only initiate copy when we specifically request a copy to be triggered', () => {
@@ -351,15 +351,15 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
         });
 
         test('should handle attempt to copy when the clipboard request fails', async () => {
-            expect.assertions(3);
+            expect.assertions(6);
             const sharedLink = { url: '', isNewSharedLink: false };
             const addSharedLink = jest.fn();
             const onCopyInitMock = jest.fn();
             const onCopySuccessMock = jest.fn();
             const onCopyErrorMock = jest.fn();
-            const writeTextSuccessMock = jest.fn(() => Promise.reject());
+            const writeTextRejectMock = jest.fn(() => Promise.reject());
             navigator.clipboard = {
-                writeText: writeTextSuccessMock,
+                writeText: writeTextRejectMock,
             };
 
             const wrapper = getWrapper({
@@ -376,14 +376,14 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             wrapper.setProps({ submitting: false });
             wrapper.setProps({ sharedLink: { url: 'http://example.com/', isNewSharedLink: true } });
 
+            await new Promise(r => setTimeout(r, 0));
+
             expect(onCopyInitMock).toBeCalledTimes(1);
-            try {
-                await expect(writeTextSuccessMock).toBeCalledTimes(1);
-                expect(onCopySuccessMock).toBeCalledTimes(0);
-            } catch (err) {
-                expect(onCopyErrorMock).toBeCalledTimes(1);
-                expect(wrapper.find('TextInputWithCopyButton').prop('triggerCopyOnLoad')).toBe(false);
-            }
+            expect(writeTextRejectMock).toBeCalledTimes(1);
+            expect(onCopySuccessMock).toBeCalledTimes(0);
+            expect(onCopyErrorMock).toBeCalledTimes(1);
+            expect(wrapper.find('TextInputWithCopyButton').prop('triggerCopyOnLoad')).toBe(false);
+            expect(wrapper.state('isCopySuccessful')).toEqual(false);
         });
     });
 });
