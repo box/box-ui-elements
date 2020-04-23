@@ -357,6 +357,18 @@ type FileVersions = {
     total_count: number,
 };
 
+type Reply = {
+    created_at: string,
+    created_by: User,
+    id: string,
+    message: string,
+    parent: {
+        id: string,
+        type: string,
+    },
+    type: 'reply',
+};
+
 export type {
     Token,
     TokenLiteral,
@@ -401,4 +413,5 @@ export type {
     RecentCollection,
     FileVersions,
     FileRepresentation,
+    Reply,
 };
