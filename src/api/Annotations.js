@@ -26,7 +26,7 @@ export default class Annotations extends MarkerBasedApi {
             },
             file_version: {
                 id: fileVersionId,
-                type: 'version',
+                type: 'file_version',
             },
             status: 'open',
             type: 'annotation',

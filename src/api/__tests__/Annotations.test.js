@@ -65,7 +65,7 @@ describe('api/Annotations', () => {
                         },
                         file_version: {
                             id: '67890',
-                            type: 'version',
+                            type: 'file_version',
                         },
                         status: 'open',
                         target: {
