@@ -20,7 +20,6 @@ export interface AnnotatorState {
     annotation?: object | null;
     action?: Action | null;
     error?: Error | null;
-    isPending: boolean;
     meta?: Metadata | null;
 }
 

@@ -125,24 +125,25 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     componentDidUpdate({ annotatorState: prevAnnotatorState }: Props): void {
-        const { action: prevAnnotatorAction } = prevAnnotatorState;
+        const { annotation: prevAnnotation } = prevAnnotatorState;
         const {
-            annotatorState: { action: annotatorAction },
+            annotatorState: { annotation },
         } = this.props;
 
-        if (annotatorAction !== prevAnnotatorAction) {
+        if (prevAnnotation !== annotation) {
             this.addAnnotation();
         }
     }
 
     addAnnotation() {
         const {
-            annotatorState: { annotation, isPending, meta },
+            annotatorState: { action, annotation, meta },
             api,
             file,
         } = this.props;
         const { requestId } = meta || {};
         const { currentUser } = this.state;
+        const isPending = action === 'create_start';
 
         if (!currentUser) {
             throw getBadUserError();

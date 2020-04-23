@@ -25,7 +25,6 @@ const defaultState: AnnotatorState = {
     activeAnnotationId: null,
     annotation: null,
     error: null,
-    isPending: false,
     meta: null,
 };
 
@@ -57,9 +56,8 @@ export default function withAnnotations<P extends object>(
             const { annotation = null, error = null, meta = null } = eventData;
 
             const action = this.getAction(eventData);
-            const isPending = action === Action.CREATE_START;
 
-            this.setState({ ...this.state, annotation, action, error, isPending, meta });
+            this.setState({ ...this.state, annotation, action, error, meta });
         };
 
         handleActiveChange = (annotationId: string | null): void => {

@@ -65,7 +65,6 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             activeAnnotationId: null,
             annotation: null,
             error: null,
-            isPending: false,
             meta: null,
         });
     });
@@ -89,13 +88,13 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         const mockError = new Error('boo');
 
         test.each`
-            status       | annotation        | error        | expectedAction         | expectedAnnotation | expectedError | expectedPending
-            ${'pending'} | ${mockAnnotation} | ${undefined} | ${Action.CREATE_START} | ${mockAnnotation}  | ${null}       | ${true}
-            ${'success'} | ${mockAnnotation} | ${undefined} | ${Action.CREATE_END}   | ${mockAnnotation}  | ${null}       | ${false}
-            ${'error'}   | ${mockAnnotation} | ${mockError} | ${Action.CREATE_END}   | ${mockAnnotation}  | ${mockError}  | ${false}
+            status       | annotation        | error        | expectedAction         | expectedAnnotation | expectedError
+            ${'pending'} | ${mockAnnotation} | ${undefined} | ${Action.CREATE_START} | ${mockAnnotation}  | ${null}
+            ${'success'} | ${mockAnnotation} | ${undefined} | ${Action.CREATE_END}   | ${mockAnnotation}  | ${null}
+            ${'error'}   | ${mockAnnotation} | ${mockError} | ${Action.CREATE_END}   | ${mockAnnotation}  | ${mockError}
         `(
             'should update the context provider value if $status status received',
-            ({ status, annotation, error, expectedAction, expectedAnnotation, expectedError, expectedPending }) => {
+            ({ status, annotation, error, expectedAction, expectedAnnotation, expectedError }) => {
                 const wrapper = getWrapper();
                 const eventData = {
                     annotation,
@@ -114,7 +113,6 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                     activeAnnotationId: null,
                     annotation: expectedAnnotation,
                     error: expectedError,
-                    isPending: expectedPending,
                     meta: {
                         status,
                         requestId: '123',

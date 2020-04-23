@@ -99,12 +99,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
     describe('componentDidUpdate', () => {
         test('should call addAnnotation if annotator action changes', () => {
-            const wrapper = getWrapper({ annotatorState: { action: 'create_start' } });
+            const wrapper = getWrapper({ annotatorState: { annotation: {} } });
             const instance = wrapper.instance();
 
             instance.addAnnotation = jest.fn();
 
-            wrapper.setProps({ annotatorState: { action: 'create_end' } });
+            wrapper.setProps({ annotatorState: { annotation: { id: '123' } } });
             expect(instance.addAnnotation).toBeCalled();
         });
     });
@@ -693,7 +693,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
         test.each([true, false])('should call feedApi with pending if action %s', isPending => {
             const annotatorStateMock = {
-                isPending,
+                action: isPending ? 'create_start' : null,
                 annotation: {},
                 meta: {
                     requestId: '123',

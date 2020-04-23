@@ -55,7 +55,7 @@ import type {
     User,
 } from '../common/types/core';
 import type {
-    AnnotationActivityItem,
+    Annotation,
     AppActivityItems,
     Comment,
     Comments,
@@ -126,18 +126,11 @@ class Feed extends Base {
      * Creates pending card on create_start action, then updates card on next call
      * @param {BoxItem} file - The file to which the annotation is assigned
      * @param {Object} currentUser - the user who performed the action
-     * @param {AnnotationActivityItem} annotation - the current annotation to be created
-     * @param {string} annotation - the current annotation to be created
+     * @param {Annotation} annotation - the current annotation to be created
      * @param {string} id - unique id for the incoming annotation
      * @param {boolean} isPending - indicates the current creation process of the annotation
      */
-    addAnnotation(
-        file: BoxItem,
-        currentUser: User,
-        annotation: AnnotationActivityItem,
-        id: string,
-        isPending: boolean,
-    ): void {
+    addAnnotation(file: BoxItem, currentUser: User, annotation: Annotation, id: string, isPending: boolean): void {
         if (!file.id) {
             throw getBadItemError();
         }
