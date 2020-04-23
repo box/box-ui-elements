@@ -15,6 +15,7 @@ import { INTERACTION_TARGET, DETAILS_TARGETS } from '../common/interactionTarget
 import withErrorHandling from './withErrorHandling';
 import type { ClassificationInfo } from './flowTypes';
 import type { BoxItem } from '../../common/types/core';
+import { PLACEHOLDER_USER } from '../../constants';
 
 type Props = {
     classification?: ClassificationInfo,
@@ -55,7 +56,12 @@ const SidebarFileProperties = ({
                     : {}
             }
             size={getFileSize(file.size, intl.locale)}
-            uploader={getProp(file, 'created_by.name')}
+            // use uploader_display_name if uploaded anonymously
+            uploader={
+                getProp(file, 'created_by.id') === PLACEHOLDER_USER.id
+                    ? getProp(file, 'uploader_display_name')
+                    : getProp(file, 'created_by.name')
+            }
         />
     </LoadingIndicatorWrapper>
 );
