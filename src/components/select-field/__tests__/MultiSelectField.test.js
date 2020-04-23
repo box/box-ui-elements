@@ -9,13 +9,9 @@ describe('components/select-field/MultiSelectField', () => {
         { displayText: 'Baz', value: 'baz' },
     ];
 
-    const intl = {
-        formatMessage: jest.fn().mockReturnValue('Clear All'),
-    };
-
     describe('MultiSelectField', () => {
         test('should render a BaseSelectField with a selectedValues prop matching passed in selected value when called', () => {
-            const wrapper = shallow(<MultiSelectFieldBase intl={intl} onChange={() => {}} options={options} />);
+            const wrapper = shallow(<MultiSelectFieldBase onChange={() => {}} options={options} />);
 
             const baseSelectFieldWrapper = wrapper.find('BaseSelectField');
             expect(baseSelectFieldWrapper.length).toBe(1);
@@ -24,6 +20,9 @@ describe('components/select-field/MultiSelectField', () => {
         });
 
         test('should render a BaseSelectField with an options prop containing a clear option if shouldShowClearOption is true', () => {
+            const intl = {
+                formatMessage: jest.fn().mockImplementationOnce(() => 'Clear All'),
+            };
             const wrapper = shallow(
                 <MultiSelectFieldBase intl={intl} onChange={() => {}} options={options} shouldShowClearOption />,
             );
