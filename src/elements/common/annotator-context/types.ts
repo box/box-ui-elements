@@ -20,6 +20,7 @@ export interface AnnotatorState {
     annotation?: object | null;
     action?: Action | null;
     error?: Error | null;
+    meta?: Metadata | null;
 }
 
 export interface AnnotatorContext {
@@ -34,6 +35,7 @@ export enum Status {
 }
 
 export interface Metadata {
+    requestId: string;
     status: Status;
 }
 

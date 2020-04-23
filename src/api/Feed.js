@@ -54,7 +54,16 @@ import type {
     FileVersions,
     User,
 } from '../common/types/core';
-import type { Comment, Comments, Tasks, Task, FeedItem, FeedItems, AppActivityItems } from '../common/types/feed';
+import type {
+    Annotation,
+    AppActivityItems,
+    Comment,
+    Comments,
+    FeedItem,
+    FeedItems,
+    Task,
+    Tasks,
+} from '../common/types/feed';
 
 const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
 const TASK = 'task';
@@ -111,6 +120,38 @@ class Feed extends Base {
         super(options);
         this.taskCollaboratorsAPI = [];
         this.taskLinksAPI = [];
+    }
+
+    /**
+     * Creates pending card on create_start action, then updates card on next call
+     * @param {BoxItem} file - The file to which the annotation is assigned
+     * @param {Object} currentUser - the user who performed the action
+     * @param {Annotation} annotation - the current annotation to be created
+     * @param {string} id - unique id for the incoming annotation
+     * @param {boolean} isPending - indicates the current creation process of the annotation
+     */
+    addAnnotation(file: BoxItem, currentUser: User, annotation: Annotation, id: string, isPending: boolean): void {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+
+        // Add the pending interstitial card
+        if (isPending) {
+            const newAnnotation = {
+                ...annotation,
+                created_by: currentUser,
+                id,
+                type: 'annotation',
+            };
+
+            this.addPendingItem(this.file.id, currentUser, newAnnotation);
+
+            return;
+        }
+        // Create action has completed, so update the existing pending item
+        this.updateFeedItem({ ...annotation, isPending: false }, id);
     }
 
     /**
