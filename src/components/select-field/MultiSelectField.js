@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { injectIntl } from 'react-intl';
+import cloneDeep from 'lodash/cloneDeep';
 
 import type { SelectOptionProp } from './props';
 import BaseSelectField from './BaseSelectField';
@@ -19,7 +20,7 @@ type Props = {
 
 const optionsWithClearOption = (options: Array<Object>, shouldShowClearOption?: boolean, intl: Object) => {
     if (shouldShowClearOption) {
-        const updatedOptions = options;
+        const updatedOptions = cloneDeep(options);
         updatedOptions.unshift({
             value: 'clear',
             displayText: intl.formatMessage(messages.clearAll),
@@ -31,8 +32,8 @@ const optionsWithClearOption = (options: Array<Object>, shouldShowClearOption?: 
 
 const MultiSelectField = ({ intl, ...rest }: Props) => (
     <BaseSelectField
-        options={optionsWithClearOption(rest.options, rest.shouldShowClearOption, intl)}
         {...rest}
+        options={optionsWithClearOption(rest.options, rest.shouldShowClearOption, intl)}
         multiple
     />
 );

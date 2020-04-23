@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import omit from 'lodash/omit';
+import cloneDeep from 'lodash/cloneDeep';
 import { injectIntl } from 'react-intl';
 
 import BaseSelectField from './BaseSelectField';
@@ -54,7 +55,7 @@ class SingleSelectField extends React.Component<Props> {
         const isFieldSelected = selectedValue !== null;
         selectFieldProps.selectedValues = !isFieldSelected ? [] : [selectedValue];
 
-        const optionsWithClearOption = options;
+        const optionsWithClearOption = cloneDeep(options);
         if (shouldShowClearOption) {
             optionsWithClearOption.unshift({
                 value: 'clear',
