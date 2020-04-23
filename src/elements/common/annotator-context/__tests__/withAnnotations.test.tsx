@@ -65,6 +65,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             activeAnnotationId: null,
             annotation: null,
             error: null,
+            meta: null,
         });
     });
 
@@ -99,6 +100,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                     annotation,
                     meta: {
                         status,
+                        requestId: '123',
                     },
                     error,
                 };
@@ -111,6 +113,10 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                     activeAnnotationId: null,
                     annotation: expectedAnnotation,
                     error: expectedError,
+                    meta: {
+                        status,
+                        requestId: '123',
+                    },
                 });
             },
         );

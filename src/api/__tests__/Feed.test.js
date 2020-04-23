@@ -1362,4 +1362,42 @@ describe('api/Feed', () => {
             expect(feed.feedErrorCallback).toHaveBeenCalledWith(shouldDisplayError, e, code);
         });
     });
+
+    describe('addAnnotation()', () => {
+        beforeEach(() => {
+            feed.addPendingItem = jest.fn();
+            feed.updateFeedItem = jest.fn();
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        test('should throw if no file id', () => {
+            expect(() => feed.addAnnotation({})).toThrow('Bad box item!');
+        });
+
+        test('should add pending feedItem item if annotation event isPending', () => {
+            const expectedAnnotation = {
+                created_by: user,
+                id: '123',
+                type: 'annotation',
+            };
+
+            feed.addAnnotation(file, user, {}, '123', true);
+            expect(feed.addPendingItem).toBeCalledWith(file.id, user, expectedAnnotation);
+            expect(feed.updateFeedItem).not.toBeCalled();
+        });
+
+        test('should update feedItem if annotation event is not pending', () => {
+            const expectedAnnotation = {
+                isPending: false,
+            };
+
+            feed.addAnnotation(file, user, {}, '123', false);
+
+            expect(feed.updateFeedItem).toBeCalledWith(expectedAnnotation, '123');
+            expect(feed.addPendingItem).not.toBeCalled();
+        });
+    });
 });

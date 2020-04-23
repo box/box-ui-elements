@@ -21,10 +21,11 @@ export interface ComponentWithAnnotations {
 export type WithAnnotationsComponent<P> = React.ComponentClass<P & WithAnnotationsProps>;
 
 const defaultState: AnnotatorState = {
+    action: null,
     activeAnnotationId: null,
     annotation: null,
-    action: null,
     error: null,
+    meta: null,
 };
 
 export default function withAnnotations<P extends object>(
@@ -52,9 +53,11 @@ export default function withAnnotations<P extends object>(
         }
 
         handleAnnotationCreate = (eventData: AnnotationActionEvent): void => {
-            const { annotation = null, error = null } = eventData;
+            const { annotation = null, error = null, meta = null } = eventData;
+
             const action = this.getAction(eventData);
-            this.setState({ ...this.state, annotation, action, error });
+
+            this.setState({ ...this.state, annotation, action, error, meta });
         };
 
         handleActiveChange = (annotationId: string | null): void => {
