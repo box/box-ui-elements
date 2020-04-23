@@ -288,6 +288,7 @@
         "source-map-loader": "^0.2.4",
         "start-server-and-test": "^1.10.8",
         "storybook": "^5.3.9",
+        "storybook-addon-intl": "^2.4.1",
         "string-replace-loader": "^2.2.0",
         "style-loader": "^1.0.0",
         "styled-components": "^5.0.0",
