@@ -1,8 +1,10 @@
+import set from 'lodash/set';
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import ItemProperties from '../../../features/item-details/ItemProperties';
 import InlineError from '../../../components/inline-error/InlineError';
 import SidebarFileProperties, { SidebarFilePropertiesComponent } from '../SidebarFileProperties';
+import { PLACEHOLDER_USER } from '../../../constants';
 
 describe('elements/content-sidebar/SidebarFileProperties', () => {
     const getWrapper = props => shallow(<SidebarFilePropertiesComponent {...props} />);
@@ -22,6 +24,7 @@ describe('elements/content-sidebar/SidebarFileProperties', () => {
             permissions: {
                 can_rename: true,
             },
+            uploader_display_name: 'File Request',
         },
         onDescriptionChange: jest.fn(),
         intl: {
@@ -49,6 +52,14 @@ describe('elements/content-sidebar/SidebarFileProperties', () => {
     describe('render()', () => {
         test('should render ItemProperties', () => {
             const wrapper = getWrapper(props);
+
+            expect(wrapper.find(ItemProperties)).toHaveLength(1);
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render ItemProperties for anonymous uploaders', () => {
+            const propsHere = set({ ...props }, 'file.created_by.id', PLACEHOLDER_USER.id);
+            const wrapper = getWrapper(propsHere);
 
             expect(wrapper.find(ItemProperties)).toHaveLength(1);
             expect(wrapper).toMatchSnapshot();
