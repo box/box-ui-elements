@@ -1,5 +1,4 @@
 import React from 'react';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { MultiSelectFieldBase } from '../MultiSelectField';
 
@@ -20,7 +19,7 @@ describe('components/select-field/MultiSelectField', () => {
 
             const baseSelectFieldWrapper = wrapper.find('BaseSelectField');
             expect(baseSelectFieldWrapper.length).toBe(1);
-            expect(baseSelectFieldWrapper.prop('options')).toBe(options);
+            expect(baseSelectFieldWrapper.prop('options')).toEqual(options);
             expect(baseSelectFieldWrapper.prop('multiple')).toBe(true);
         });
 
@@ -28,15 +27,17 @@ describe('components/select-field/MultiSelectField', () => {
             const wrapper = shallow(
                 <MultiSelectFieldBase intl={intl} onChange={() => {}} options={options} shouldShowClearOption />,
             );
-            const expectedOptions = cloneDeep(options);
-            expectedOptions.unshift({
-                value: 'clear',
-                displayText: 'Clear All',
-            });
+            const expectedOptions = [
+                {
+                    value: 'clear',
+                    displayText: 'Clear All',
+                },
+                ...options,
+            ];
 
             const baseSelectFieldWrapper = wrapper.find('BaseSelectField');
             expect(baseSelectFieldWrapper.length).toBe(1);
-            expect(baseSelectFieldWrapper.prop('options')).toStrictEqual(expectedOptions);
+            expect(baseSelectFieldWrapper.prop('options')).toEqual(expectedOptions);
         });
     });
 });

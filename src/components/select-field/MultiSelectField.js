@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import cloneDeep from 'lodash/cloneDeep';
 
 import type { SelectOptionProp } from './props';
 import BaseSelectField from './BaseSelectField';
@@ -19,19 +18,24 @@ type Props = {
 };
 
 const optionsWithClearOption = (options: Array<Object>, shouldShowClearOption?: boolean, intl: Object) => {
-    if (shouldShowClearOption) {
-        const updatedOptions = cloneDeep(options);
-        updatedOptions.unshift({
-            value: 'clear',
-            displayText: intl.formatMessage(messages.clearAll),
-        });
-        return updatedOptions;
-    }
-    return options;
+    return shouldShowClearOption
+        ? [
+              {
+                  value: 'clear',
+                  displayText: intl.formatMessage(messages.clearAll),
+              },
+              ...options,
+          ]
+        : options;
 };
 
 const MultiSelectField = ({ intl, options, shouldShowClearOption, ...rest }: Props) => (
-    <BaseSelectField {...rest} options={optionsWithClearOption(options, shouldShowClearOption, intl)} multiple />
+    <BaseSelectField
+        {...rest}
+        shouldShowClearOption={shouldShowClearOption}
+        options={optionsWithClearOption(options, shouldShowClearOption, intl)}
+        multiple
+    />
 );
 
 export { MultiSelectField as MultiSelectFieldBase };

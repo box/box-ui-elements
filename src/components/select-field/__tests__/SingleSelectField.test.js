@@ -37,7 +37,7 @@ describe('components/select-field/SingleSelectField', () => {
 
             const baseSelectFieldWrapper = wrapper.find('BaseSelectField');
             expect(baseSelectFieldWrapper.length).toBe(1);
-            expect(baseSelectFieldWrapper.prop('options')).toStrictEqual(options);
+            expect(baseSelectFieldWrapper.prop('options')).toBe(options);
             expect(baseSelectFieldWrapper.prop('onChange')).toBe(instance.handleChange);
             expect(baseSelectFieldWrapper.prop('selectedValues')).toEqual(['bar']);
             expect(baseSelectFieldWrapper.prop('isDisabled')).toEqual(false);
@@ -80,7 +80,7 @@ describe('components/select-field/SingleSelectField', () => {
 
             const baseSelectFieldWrapper = wrapper.find('BaseSelectField');
             expect(baseSelectFieldWrapper.length).toBe(1);
-            expect(baseSelectFieldWrapper.prop('options')).toStrictEqual(options);
+            expect(baseSelectFieldWrapper.prop('options')).toBe(options);
             expect(baseSelectFieldWrapper.prop('onChange')).not.toBe(onChangeStub);
             expect(baseSelectFieldWrapper.prop('defaultValue')).toBeFalsy();
             expect(baseSelectFieldWrapper.prop('placeholder')).toBe('Select something');
