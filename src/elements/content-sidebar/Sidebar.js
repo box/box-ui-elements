@@ -9,8 +9,7 @@ import classNames from 'classnames';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import uniqueid from 'lodash/uniqueId';
-import { withRouter } from 'react-router-dom';
-import type { Location, RouterHistory } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import LocalStore from '../../utils/LocalStore';
 import SidebarNav from './SidebarNav';
@@ -44,16 +43,14 @@ type Props = {
     hasMetadata: boolean,
     hasSkills: boolean,
     hasVersions: boolean,
-    history: RouterHistory,
     isDefaultOpen?: boolean,
     isLoading?: boolean,
-    location: Location,
     metadataEditors?: Array<MetadataEditor>,
     metadataSidebarProps: MetadataSidebarProps,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
-};
+} & RouteComponentProps;
 
 type State = {
     isDirty: boolean,
@@ -133,9 +130,12 @@ class Sidebar extends React.Component<Props, State> {
      */
 
     handleAnnotationSelect = (annotationId: string | null): void => {
-        const { history } = this.props;
+        const { file, history } = this.props;
         const urlPrefix = this.getUrlPrefix(history.location.pathname);
-        const annotationUrl = annotationId ? `/${urlPrefix}/annotations/${annotationId}` : `/${urlPrefix}`;
+        const currentFileVersionId = file.file_version.id;
+        const annotationUrl = annotationId
+            ? `/${urlPrefix}/annotations/${currentFileVersionId}/${annotationId}`
+            : `/${urlPrefix}`;
 
         history.push(annotationUrl);
     };
