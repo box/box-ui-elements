@@ -148,7 +148,7 @@ describe('elements/content-sidebar/Sidebar', () => {
             expect(historyMock.push).toHaveBeenCalledWith('/activity/annotations/123');
         });
 
-        test('should handle setting url back to / if no id provided', () => {
+        test('should handle setting url back to url prefix if no id provided', () => {
             const historyMock = {
                 push: jest.fn(),
                 location: {
@@ -161,7 +161,7 @@ describe('elements/content-sidebar/Sidebar', () => {
 
             instance.handleAnnotationSelect(null);
 
-            expect(historyMock.push).toHaveBeenCalledWith('/');
+            expect(historyMock.push).toHaveBeenCalledWith('/activity');
         });
     });
 
