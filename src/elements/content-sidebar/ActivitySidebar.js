@@ -125,7 +125,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         const { currentUser } = this.props;
-        this.fetchFeedItems(true, false, this.handleActiveAnnotation);
+        this.fetchFeedItems(true);
         this.fetchCurrentUser(currentUser);
     }
 
@@ -202,37 +202,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     feedErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => {
         this.errorCallback(e, code, contextInfo);
         this.fetchFeedItems();
-    };
-
-    handleActiveAnnotation = (feedItems: FeedItems): void => {
-        const { emitAnnotatorActiveChangeEvent, file, match, onVersionChange } = this.props;
-        const { annotatorState: { activeAnnotationId } = {} } = this.state;
-        const { annotationId } = match.params;
-        const { fileVersionId } = match.params;
-        const currentFileVersionId = file.file_version.id;
-
-        // If annotatorState does not have an activeAnnotationId but the router path has an annotationId,
-        // then we are dealing with a hard load of a deeply linked annotation
-        if (activeAnnotationId || !annotationId) {
-            return;
-        }
-
-        if (currentFileVersionId === fileVersionId) {
-            // If the pathname matched file version is the current version of the file, attempt to set
-            // the active annotation in box-annotations to the specified annotationId
-            emitAnnotatorActiveChangeEvent(annotationId);
-        } else {
-            // If the pathname matched file version is an older version of the file, call onVersionChange
-            // to signal that we need to change the version
-            const selectedVersion = feedItems.find(item => item.type === 'file_version' && item.id === fileVersionId);
-
-            if (selectedVersion) {
-                onVersionChange(selectedVersion, {
-                    currentVersionId: currentFileVersionId,
-                    activeAnnotationId: annotationId,
-                });
-            }
-        }
     };
 
     createTask = (
@@ -441,23 +410,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      *
      * @param {boolean} shouldDestroy true if the api factory should be destroyed
      */
-    fetchFeedItems(
-        shouldRefreshCache: boolean = false,
-        shouldDestroy: boolean = false,
-        successCallback: (feedItems: FeedItems) => void = noop,
-        errorCallback: (feedItems: FeedItems) => void = noop,
-    ) {
+    fetchFeedItems(shouldRefreshCache: boolean = false, shouldDestroy: boolean = false) {
         const { file, api, features } = this.props;
         const shouldShowAppActivity = isFeatureEnabled(features, 'activityFeed.appActivity.enabled');
-        const successWrapper = feedItems =>
-            [successCallback, this.fetchFeedItemsSuccessCallback].forEach(callback => callback(feedItems));
-        const errorWrapper = feedItems =>
-            [errorCallback, this.fetchFeedItemsErrorCallback].forEach(callback => callback(feedItems));
+
         api.getFeedAPI(shouldDestroy).feedItems(
             file,
             shouldRefreshCache,
-            successWrapper,
-            errorWrapper,
+            this.fetchFeedItemsSuccessCallback,
+            this.fetchFeedItemsErrorCallback,
             this.errorCallback,
             { shouldShowAppActivity },
         );

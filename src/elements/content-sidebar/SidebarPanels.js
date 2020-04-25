@@ -162,16 +162,14 @@ class SidebarPanels extends React.Component<Props> {
                         exact
                         path={[
                             `/${SIDEBAR_VIEW_ACTIVITY}`,
-                            `/${SIDEBAR_VIEW_ACTIVITY}/annotations/:fileVersionId/:annotationId`,
-                            `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(annotations|comments|tasks)/:activeFeedEntryId?`,
+                            `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(annotations)/:fileVersionId/:activeFeedEntryId?`,
+                            `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(comments|tasks)/:activeFeedEntryId?`,
                         ]}
                         render={({ match }) => {
-                            const matchAnnotationId = match.params.annotationId;
-                            const matchEntryType = matchAnnotationId ? 'annotations' : match.params.activeFeedEntryType;
+                            const matchEntryType = match.params.activeFeedEntryType;
                             const activeFeedEntryType = matchEntryType
                                 ? URL_TO_FEED_ITEM_TYPE[matchEntryType]
                                 : undefined;
-                            const activityFeedEntryId = match.params.activeFeedEntryId || matchAnnotationId;
                             return (
                                 <LoadableActivitySidebar
                                     elementId={elementId}
@@ -181,7 +179,7 @@ class SidebarPanels extends React.Component<Props> {
                                     onVersionHistoryClick={onVersionHistoryClick}
                                     ref={this.activitySidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
-                                    activeFeedEntryId={activityFeedEntryId}
+                                    activeFeedEntryId={match.params.activeFeedEntryId}
                                     activeFeedEntryType={activeFeedEntryType}
                                     {...activitySidebarProps}
                                 />
