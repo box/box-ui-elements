@@ -9,7 +9,6 @@ import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
 import ActivityFeed from './activity-feed';
 import AddTaskButton from './AddTaskButton';
 import API from '../../api';
@@ -59,8 +58,7 @@ type ExternalProps = {
     onTaskUpdate: () => any,
     onTaskView: (id: string, isCreator: boolean) => any,
 } & ErrorContextProps &
-    WithAnnotatorContextProps &
-    RouteComponentProps;
+    WithAnnotatorContextProps;
 
 type PropsWithoutContext = {
     elementId: string,
@@ -694,5 +692,4 @@ export default flow([
     withAPIContext,
     withFeatureConsumer,
     withAnnotatorContext,
-    withRouter,
 ])(ActivitySidebar);
