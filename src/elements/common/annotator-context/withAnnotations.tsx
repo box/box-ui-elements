@@ -36,8 +36,8 @@ type WithHistoryProps = {
 };
 
 type MatchParams = {
-    fileVersionId?: string;
     annotationId?: string;
+    fileVersionId?: string;
 };
 
 type ResultProps<P> = P & WithAnnotationsProps & WithHistoryProps;

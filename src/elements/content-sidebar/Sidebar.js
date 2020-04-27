@@ -9,7 +9,8 @@ import classNames from 'classnames';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import uniqueid from 'lodash/uniqueId';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import type { Location, RouterHistory } from 'react-router-dom';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import LocalStore from '../../utils/LocalStore';
 import SidebarNav from './SidebarNav';
@@ -43,14 +44,16 @@ type Props = {
     hasMetadata: boolean,
     hasSkills: boolean,
     hasVersions: boolean,
+    history: RouterHistory,
     isDefaultOpen?: boolean,
     isLoading?: boolean,
+    location: Location,
     metadataEditors?: Array<MetadataEditor>,
     metadataSidebarProps: MetadataSidebarProps,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
-} & RouteComponentProps;
+};
 
 type State = {
     isDirty: boolean,
