@@ -1,7 +1,6 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import { matchPath } from 'react-router-dom';
-import { History } from 'history';
 import AnnotatorContext from './AnnotatorContext';
 import { Action, Annotator, AnnotationActionEvent, AnnotatorState, Status } from './types';
 
