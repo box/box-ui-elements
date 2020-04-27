@@ -64,7 +64,6 @@ type PropsWithoutContext = {
     elementId: string,
     file: BoxItem,
     isDisabled: boolean,
-    onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     translations?: Translations,
 } & ExternalProps &
@@ -107,8 +106,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onTaskCreate: noop,
         onTaskDelete: noop,
         onTaskUpdate: noop,
-        onVersionChange: noop,
-        onVersionHistoryClick: noop,
     };
 
     constructor(props: Props) {

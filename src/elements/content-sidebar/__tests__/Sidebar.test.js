@@ -140,12 +140,12 @@ describe('elements/content-sidebar/Sidebar', () => {
                 },
             };
 
-            const wrapper = getWrapper({ history: historyMock, file: { id: '1234' } });
+            const wrapper = getWrapper({ history: historyMock, file: { file_version: { id: '456' }, id: '1234' } });
             const instance = wrapper.instance();
 
             instance.handleAnnotationSelect('123');
 
-            expect(historyMock.push).toHaveBeenCalledWith('/activity/annotations/123');
+            expect(historyMock.push).toHaveBeenCalledWith('/activity/annotations/456/123');
         });
 
         test('should handle setting url back to url prefix if no id provided', () => {

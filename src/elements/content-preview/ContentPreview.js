@@ -290,9 +290,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.preview.destroy();
             this.preview.removeAllListeners();
             this.preview = undefined;
-        }
 
-        onPreviewDestroy();
+            onPreviewDestroy();
+        }
 
         this.setState({ selectedVersion: undefined });
     }

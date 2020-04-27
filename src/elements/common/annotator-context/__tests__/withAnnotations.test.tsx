@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
+import { createMemoryHistory, History } from 'history';
 
 import { Annotator, AnnotatorContext, withAnnotations } from '../index';
 import { WithAnnotationsProps, ComponentWithAnnotations } from '../withAnnotations';
 import { AnnotatorContext as AnnotatorContextType, Action } from '../types';
 
 type ComponentProps = {
-    className: string;
+    className?: string;
+    history?: History;
 };
 
-type WrappedComponentProps = ComponentProps & WithAnnotationsProps;
+type WrappedComponentProps = ComponentProps & Partial<WithAnnotationsProps>;
 
 type ContextProviderProps = {
     value: AnnotatorContextType;
@@ -29,7 +31,9 @@ describe('elements/common/annotator-context/withAnnotations', () => {
     const getWrapper = (
         props: WrappedComponentProps = defaultProps,
     ): ShallowWrapper<WrappedComponentProps, {}, Component & ComponentWithAnnotations> =>
-        shallow<Component & ComponentWithAnnotations, WrappedComponentProps>(<WrappedComponent {...props} />);
+        shallow<Component & ComponentWithAnnotations, WrappedComponentProps>(
+            <WrappedComponent {...defaultProps} {...props} />,
+        );
 
     const getContextProvider = (
         wrapper: ShallowWrapper<WrappedComponentProps, {}, Component & ComponentWithAnnotations>,
@@ -42,6 +46,12 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             removeAllListeners: jest.fn(),
             removeListener: jest.fn(),
         };
+    });
+
+    test('should parse the history location pathname to initialize state with activeAnnotationId', () => {
+        const history = createMemoryHistory({ initialEntries: ['/activity/annotations/123/456'] }) as History;
+        const wrapper = getWrapper({ history });
+        expect(wrapper.state('activeAnnotationId')).toBe('456');
     });
 
     test('should pass onAnnotator and onPreviewDestroy as props on the wrapped component', () => {
