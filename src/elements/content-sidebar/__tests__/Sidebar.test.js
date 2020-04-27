@@ -152,7 +152,7 @@ describe('elements/content-sidebar/Sidebar', () => {
             const historyMock = {
                 push: jest.fn(),
                 location: {
-                    pathname: '/activity/annotations/123',
+                    pathname: '/activity/annotations/456/123',
                 },
             };
 

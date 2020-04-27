@@ -48,10 +48,18 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         };
     });
 
-    test('should parse the history location pathname to initialize state with activeAnnotationId', () => {
-        const history = createMemoryHistory({ initialEntries: ['/activity/annotations/123/456'] }) as History;
-        const wrapper = getWrapper({ history });
-        expect(wrapper.state('activeAnnotationId')).toBe('456');
+    describe('constructor', () => {
+        test('should parse the history location pathname to initialize state with activeAnnotationId', () => {
+            const history = createMemoryHistory({ initialEntries: ['/activity/annotations/123/456'] }) as History;
+            const wrapper = getWrapper({ history });
+            expect(wrapper.state('activeAnnotationId')).toBe('456');
+        });
+
+        test('should not initialize state with activeAnnotationId if history path does not match deeplink schema', () => {
+            const history = createMemoryHistory({ initialEntries: ['/activity/annotations/456'] }) as History;
+            const wrapper = getWrapper({ history });
+            expect(wrapper.state('activeAnnotationId')).toBe(null);
+        });
     });
 
     test('should pass onAnnotator and onPreviewDestroy as props on the wrapped component', () => {
