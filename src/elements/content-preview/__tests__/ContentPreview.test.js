@@ -305,11 +305,6 @@ describe('elements/content-preview/ContentPreview', () => {
                 file.id,
                 expect.any(Function),
                 expect.objectContaining({
-                    container: expect.stringContaining('.bcpr-content'),
-                    header: 'none',
-                    showDownload: false,
-                    skipServerUpdate: true,
-                    useHotkeys: false,
                     fileOptions: {
                         [file.id]: {
                             annotations: {

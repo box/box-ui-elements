@@ -58,7 +58,6 @@ export default function withAnnotations<P extends object>(
             const match = matchPath<MatchParams>(pathname, {
                 path: '/:sidebar/annotations/:fileVersionId/:annotationId',
                 exact: true,
-                strict: false,
             });
             const { params: { annotationId: activeAnnotationId = null } = {} } = match || {};
 
