@@ -127,6 +127,7 @@ export default function withAnnotations<P extends object>(
                 >
                     <WrappedComponent
                         {...this.props}
+                        annotatorState={this.state}
                         onAnnotator={this.handleAnnotator}
                         onPreviewDestroy={this.handlePreviewDestroy}
                     />

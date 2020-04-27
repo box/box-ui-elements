@@ -714,6 +714,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     loadPreview = async (): Promise<void> => {
         const {
+            annotatorState: { activeAnnotationId } = {},
             enableThumbnailsSidebar,
             fileOptions,
             onAnnotatorEvent,
@@ -740,6 +741,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
         if (selectedVersion) {
             fileOpts[fileId] = fileOpts[fileId] || {};
             fileOpts[fileId].fileVersionId = selectedVersion.id;
+        }
+
+        if (activeAnnotationId) {
+            fileOpts[fileId] = fileOpts[fileId] || {};
+            fileOpts[fileId].annotations = { activeId: activeAnnotationId };
         }
 
         const previewOptions = {
