@@ -261,7 +261,7 @@ class Feed extends Base {
         });
     }
 
-    fetchAnnotations(): Promise<?Annotations> {
+    fetchAnnotations(): Promise<?Annotation> {
         this.annotationsAPI = new AnnotationsAPI(this.options);
         return new Promise(resolve => {
             this.annotationsAPI.getAnnotations(
