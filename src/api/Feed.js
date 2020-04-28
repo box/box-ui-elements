@@ -12,6 +12,7 @@ import commonMessages from '../elements/common/messages';
 import messages from './messages';
 import { sortFeedItems } from '../utils/sorter';
 import Base from './Base';
+import AnnotationsAPI from './Annotations';
 import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';
 import TasksNewAPI from './tasks/TasksNew';
@@ -76,6 +77,11 @@ type FeedItemsCache = {
 type ErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
 class Feed extends Base {
+    /**
+     * @property {AnnotationsAPI}
+     */
+    annotationsAPI: AnnotationsAPI;
+
     /**
      * @property {VersionsAPI}
      */
@@ -227,26 +233,46 @@ class Feed extends Base {
         this.file = file;
         this.hasError = false;
         this.errorCallback = onError;
+        const annotationsPromise = this.fetchAnnotations();
         const versionsPromise = this.fetchVersions();
         const currentVersionPromise = this.fetchCurrentVersion();
         const commentsPromise = this.fetchComments(permissions);
         const tasksPromise = this.fetchTasksNew();
         const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
 
-        Promise.all([versionsPromise, currentVersionPromise, commentsPromise, tasksPromise, appActivityPromise]).then(
-            ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
-                const versionsWithCurrent = this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file);
-                const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
-                if (!this.isDestroyed()) {
-                    this.setCachedItems(id, sortedFeedItems);
-                    if (this.hasError) {
-                        errorCallback(sortedFeedItems);
-                    } else {
-                        successCallback(sortedFeedItems);
-                    }
+        Promise.all([
+            versionsPromise,
+            currentVersionPromise,
+            commentsPromise,
+            tasksPromise,
+            appActivityPromise,
+            annotationsPromise,
+        ]).then(([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
+            const versionsWithCurrent = this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file);
+            const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
+            if (!this.isDestroyed()) {
+                this.setCachedItems(id, sortedFeedItems);
+                if (this.hasError) {
+                    errorCallback(sortedFeedItems);
+                } else {
+                    successCallback(sortedFeedItems);
                 }
-            },
-        );
+            }
+        });
+    }
+
+    fetchAnnotations(): Promise<?Annotations> {
+        this.annotationsAPI = new AnnotationsAPI(this.options);
+        return new Promise(resolve => {
+            this.annotationsAPI.getAnnotations(
+                this.file.id,
+                undefined,
+                resolve,
+                this.fetchFeedItemErrorCallback.bind(this, resolve),
+                1000,
+                false,
+            );
+        });
     }
 
     /**

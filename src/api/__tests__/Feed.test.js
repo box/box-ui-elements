@@ -98,6 +98,38 @@ const versionsWithCurrent = {
     entries: [mockCurrentVersion, mockFirstVersion, deleted_version],
 };
 
+const mockAnnotation = {
+    created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
+    creatd_by: { name: 'John', id: '987' },
+    description: 'mock annotation',
+    file_version: {
+        id: '123',
+    },
+    id: '135',
+    modified_at: 'Thu Sep 20 33658 19:46:39 GMT-0600 (CST)',
+    modified_by: { name: 'John', id: '987' },
+    permissions: { can_delete: true, can_edit: true },
+    target: {
+        location: {
+            type: 'page',
+            value: 1,
+        },
+        shape: {
+            type: 'rect',
+            height: 10,
+            width: 10,
+            x: 1,
+            y: 1,
+        },
+        type: 'region',
+    },
+};
+
+const annotations = {
+    total_count: 1,
+    entries: [mockAnnotation],
+};
+
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
 const mockCreateTask = jest.fn().mockImplementation(({ successCallback }) => {
@@ -236,6 +268,12 @@ jest.mock('../Versions', () => {
         getVersion: jest.fn(() => mockCurrentVersion),
     }));
 });
+
+jest.mock('../Annotations', () =>
+    jest.fn().mockImplementation(() => ({
+        getAnnotations: jest.fn(),
+    })),
+);
 
 const MOCK_APP_ACTIVITY_ITEM = {
     activity_template: {
@@ -380,6 +418,7 @@ describe('api/Feed', () => {
             ...tasks.entries,
             ...comments.entries,
             ...appActivities.entries,
+            ...annotations.entries,
         ];
         let successCb;
         let errorCb;
@@ -390,6 +429,7 @@ describe('api/Feed', () => {
             feed.fetchTasksNew = jest.fn().mockResolvedValue(tasks);
             feed.fetchComments = jest.fn().mockResolvedValue(comments);
             feed.fetchAppActivity = jest.fn().mockReturnValue(appActivities);
+            feed.fetchAnnotations = jest.fn().mockReturnValue(annotations);
             feed.setCachedItems = jest.fn();
             feed.versionsAPI = {
                 getVersion: jest.fn().mockReturnValue(versions),
@@ -409,7 +449,13 @@ describe('api/Feed', () => {
             feed.feedItems(file, false, successCb, errorCb, jest.fn(), { shouldShowAppActivity: true });
             setImmediate(() => {
                 expect(feed.versionsAPI.addCurrentVersion).toHaveBeenCalledWith(mockCurrentVersion, versions, file);
-                expect(sorter.sortFeedItems).toHaveBeenCalledWith(versionsWithCurrent, comments, tasks, appActivities);
+                expect(sorter.sortFeedItems).toHaveBeenCalledWith(
+                    versionsWithCurrent,
+                    comments,
+                    tasks,
+                    appActivities,
+                    annotations,
+                );
                 expect(feed.setCachedItems).toHaveBeenCalledWith(file.id, sortedItems);
                 expect(successCb).toHaveBeenCalledWith(sortedItems);
                 done();
@@ -480,6 +526,19 @@ describe('api/Feed', () => {
                 expect(successCb).toHaveBeenCalledTimes(2);
                 done();
             });
+        });
+    });
+
+    describe('fetchAnnotations()', () => {
+        beforeEach(() => {
+            feed.file = file;
+            feed.fetchFeedItemErrorCallback = jest.fn();
+        });
+
+        test('should return a promise and call the annotations api', () => {
+            const annotationItems = feed.fetchAnnotations();
+            expect(annotationItems instanceof Promise).toBeTruthy();
+            expect(feed.annotationsAPI.getAnnotations).toBeCalled();
         });
     });
 
