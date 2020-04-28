@@ -1365,15 +1365,20 @@ describe('api/Feed', () => {
     });
 
     describe('destroy()', () => {
+        let annotationFn;
         let commentFn;
         let versionFn;
         let taskFn;
 
         beforeEach(() => {
+            annotationFn = jest.fn();
             commentFn = jest.fn();
             versionFn = jest.fn();
             taskFn = jest.fn();
 
+            feed.annotationsAPI = {
+                destroy: annotationFn,
+            };
             feed.tasksNewAPI = {
                 destroy: taskFn,
             };
@@ -1390,6 +1395,7 @@ describe('api/Feed', () => {
             expect(versionFn).toBeCalled();
             expect(commentFn).toBeCalled();
             expect(taskFn).toBeCalled();
+            expect(annotationFn).toBeCalled();
         });
     });
 

@@ -1366,6 +1366,11 @@ class Feed extends Base {
     destroy() {
         super.destroy();
 
+        if (this.annotationsAPI) {
+            this.annotationsAPI.destroy();
+            delete this.annotationsAPI;
+        }
+
         if (this.commentsAPI) {
             this.commentsAPI.destroy();
             delete this.commentsAPI;
