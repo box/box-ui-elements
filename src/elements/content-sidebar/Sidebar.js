@@ -133,9 +133,12 @@ class Sidebar extends React.Component<Props, State> {
      */
 
     handleAnnotationSelect = (annotationId: string | null): void => {
-        const { history } = this.props;
+        const { file, history } = this.props;
+        const { file_version: { id: currentFileVersionId } = {} } = file;
         const urlPrefix = this.getUrlPrefix(history.location.pathname);
-        const annotationUrl = annotationId ? `/${urlPrefix}/annotations/${annotationId}` : `/${urlPrefix}`;
+        const annotationUrl = annotationId
+            ? `/${urlPrefix}/annotations/${currentFileVersionId}/${annotationId}`
+            : `/${urlPrefix}`;
 
         history.push(annotationUrl);
     };

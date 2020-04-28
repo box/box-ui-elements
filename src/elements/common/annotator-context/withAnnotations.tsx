@@ -1,4 +1,6 @@
 import * as React from 'react';
+import getProp from 'lodash/get';
+import { matchPath } from 'react-router-dom';
 import AnnotatorContext from './AnnotatorContext';
 import { Action, Annotator, AnnotationActionEvent, AnnotatorState, Status } from './types';
 
@@ -28,15 +30,40 @@ const defaultState: AnnotatorState = {
     meta: null,
 };
 
+type WithHistoryProps = {
+    history?: History;
+};
+
+type MatchParams = {
+    annotationId?: string;
+    fileVersionId?: string;
+};
+
+type ResultProps<P> = P & WithAnnotationsProps & WithHistoryProps;
+
 export default function withAnnotations<P extends object>(
     WrappedComponent: React.ComponentType<P>,
 ): WithAnnotationsComponent<P> {
-    class ComponentWithAnnotations extends React.Component<P & WithAnnotationsProps, AnnotatorState> {
+    class ComponentWithAnnotations extends React.Component<ResultProps<P>, AnnotatorState> {
         static displayName: string;
 
         annotator: Annotator | null = null;
 
-        state = defaultState;
+        constructor(props: ResultProps<P>) {
+            super(props);
+
+            // Determine by url if there is already a deeply linked annotation
+            const { history } = props;
+            const pathname = getProp(history, 'location.pathname');
+            const match = matchPath<MatchParams>(pathname, {
+                path: '/:sidebar/annotations/:fileVersionId/:annotationId',
+                exact: true,
+            });
+            const { params: { annotationId: activeAnnotationId = null } = {} } = match || {};
+
+            // Seed the initial state with the activeAnnotationId if any from the location path
+            this.state = { ...defaultState, activeAnnotationId };
+        }
 
         emitActiveChangeEvent = (id: string | null) => {
             const { annotator } = this;
@@ -99,6 +126,7 @@ export default function withAnnotations<P extends object>(
                 >
                     <WrappedComponent
                         {...this.props}
+                        annotatorState={this.state}
                         onAnnotator={this.handleAnnotator}
                         onPreviewDestroy={this.handlePreviewDestroy}
                     />
