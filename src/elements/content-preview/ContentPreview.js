@@ -14,6 +14,7 @@ import omit from 'lodash/omit';
 import getProp from 'lodash/get';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
+import setProp from 'lodash/set';
 import Measure from 'react-measure';
 import type { RouterHistory } from 'react-router-dom';
 import { decode } from '../../utils/keys';
@@ -290,9 +291,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.preview.destroy();
             this.preview.removeAllListeners();
             this.preview = undefined;
-        }
 
-        onPreviewDestroy();
+            onPreviewDestroy();
+        }
 
         this.setState({ selectedVersion: undefined });
     }
@@ -714,6 +715,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     loadPreview = async (): Promise<void> => {
         const {
+            annotatorState: { activeAnnotationId } = {},
             enableThumbnailsSidebar,
             fileOptions,
             onAnnotatorEvent,
@@ -738,8 +740,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const token = typedId => TokenService.getReadTokens(typedId, tokenOrTokenFunction);
 
         if (selectedVersion) {
-            fileOpts[fileId] = fileOpts[fileId] || {};
-            fileOpts[fileId].fileVersionId = selectedVersion.id;
+            setProp(fileOpts, [fileId, 'fileVersionId'], selectedVersion.id);
+        }
+
+        if (activeAnnotationId) {
+            setProp(fileOpts, [fileId, 'annotations', 'activeId'], activeAnnotationId);
         }
 
         const previewOptions = {

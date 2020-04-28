@@ -140,19 +140,19 @@ describe('elements/content-sidebar/Sidebar', () => {
                 },
             };
 
-            const wrapper = getWrapper({ history: historyMock, file: { id: '1234' } });
+            const wrapper = getWrapper({ history: historyMock, file: { file_version: { id: '456' }, id: '1234' } });
             const instance = wrapper.instance();
 
             instance.handleAnnotationSelect('123');
 
-            expect(historyMock.push).toHaveBeenCalledWith('/activity/annotations/123');
+            expect(historyMock.push).toHaveBeenCalledWith('/activity/annotations/456/123');
         });
 
-        test('should handle setting url back to / if no id provided', () => {
+        test('should handle setting url back to url prefix if no id provided', () => {
             const historyMock = {
                 push: jest.fn(),
                 location: {
-                    pathname: '/activity/annotations/123',
+                    pathname: '/activity/annotations/456/123',
                 },
             };
 
@@ -161,7 +161,7 @@ describe('elements/content-sidebar/Sidebar', () => {
 
             instance.handleAnnotationSelect(null);
 
-            expect(historyMock.push).toHaveBeenCalledWith('/');
+            expect(historyMock.push).toHaveBeenCalledWith('/activity');
         });
     });
 

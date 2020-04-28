@@ -160,6 +160,7 @@
         "@svgr/plugin-svgo": "^5.1.0",
         "@types/classnames": "^2.2.9",
         "@types/enzyme": "^3.10.4",
+        "@types/history": "^4.7.5",
         "@types/jest": "^25.1.1",
         "@types/jest-image-snapshot": "^2.11.0",
         "@types/lodash": "^4.14.149",

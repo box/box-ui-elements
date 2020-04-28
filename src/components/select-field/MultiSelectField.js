@@ -18,21 +18,22 @@ type Props = {
 };
 
 const optionsWithClearOption = (options: Array<Object>, shouldShowClearOption?: boolean, intl: Object) => {
-    if (shouldShowClearOption) {
-        const updatedOptions = options;
-        updatedOptions.unshift({
-            value: 'clear',
-            displayText: intl.formatMessage(messages.clearAll),
-        });
-        return updatedOptions;
-    }
-    return options;
+    return shouldShowClearOption
+        ? [
+              {
+                  value: 'clear',
+                  displayText: intl.formatMessage(messages.clearAll),
+              },
+              ...options,
+          ]
+        : options;
 };
 
-const MultiSelectField = ({ intl, ...rest }: Props) => (
+const MultiSelectField = ({ intl, options, shouldShowClearOption, ...rest }: Props) => (
     <BaseSelectField
-        options={optionsWithClearOption(rest.options, rest.shouldShowClearOption, intl)}
         {...rest}
+        shouldShowClearOption={shouldShowClearOption}
+        options={optionsWithClearOption(options, shouldShowClearOption, intl)}
         multiple
     />
 );

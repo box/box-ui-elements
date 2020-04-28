@@ -54,13 +54,15 @@ class SingleSelectField extends React.Component<Props> {
         const isFieldSelected = selectedValue !== null;
         selectFieldProps.selectedValues = !isFieldSelected ? [] : [selectedValue];
 
-        const optionsWithClearOption = options;
-        if (shouldShowClearOption) {
-            optionsWithClearOption.unshift({
-                value: 'clear',
-                displayText: intl.formatMessage(messages.clearAll),
-            });
-        }
+        const optionsWithClearOption = shouldShowClearOption
+            ? [
+                  {
+                      value: 'clear',
+                      displayText: intl.formatMessage(messages.clearAll),
+                  },
+                  ...options,
+              ]
+            : options;
 
         return (
             <BaseSelectField
