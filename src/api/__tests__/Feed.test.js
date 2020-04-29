@@ -446,7 +446,10 @@ describe('api/Feed', () => {
         });
 
         test('should get feed items, sort, save to cache, and call the success callback', done => {
-            feed.feedItems(file, false, successCb, errorCb, jest.fn(), { shouldShowAppActivity: true });
+            feed.feedItems(file, false, successCb, errorCb, jest.fn(), {
+                shouldShowAnnotations: true,
+                shouldShowAppActivity: true,
+            });
             setImmediate(() => {
                 expect(feed.versionsAPI.addCurrentVersion).toHaveBeenCalledWith(mockCurrentVersion, versions, file);
                 expect(sorter.sortFeedItems).toHaveBeenCalledWith(
@@ -487,6 +490,22 @@ describe('api/Feed', () => {
             feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowAppActivity: false });
             setImmediate(() => {
                 expect(feed.fetchAppActivity).not.toHaveBeenCalled();
+                done();
+            });
+        });
+
+        test('should use the annotations api if shouldShowannotations is true', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowAnnotations: true });
+            setImmediate(() => {
+                expect(feed.fetchAnnotations).toHaveBeenCalled();
+                done();
+            });
+        });
+
+        test('should not use the annotations api if shouldShowannotations is false', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowAnnotations: false });
+            setImmediate(() => {
+                expect(feed.fetchAnnotations).not.toHaveBeenCalled();
                 done();
             });
         });

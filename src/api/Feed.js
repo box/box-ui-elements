@@ -57,6 +57,7 @@ import type {
 } from '../common/types/core';
 import type {
     Annotation,
+    Annotations,
     AppActivityItems,
     Comment,
     Comments,
@@ -213,7 +214,10 @@ class Feed extends Base {
         successCallback: Function,
         errorCallback: (feedItems: FeedItems) => void,
         onError: ErrorCallback,
-        { shouldShowAppActivity = false }: { shouldShowAppActivity?: boolean } = {},
+        {
+            shouldShowAnnotations = false,
+            shouldShowAppActivity = false,
+        }: { shouldShowAnnotations?: boolean, shouldShowAppActivity?: boolean } = {},
     ): void {
         const { id, permissions = {} } = file;
         const cachedItems = this.getCachedItems(id);
@@ -233,7 +237,7 @@ class Feed extends Base {
         this.file = file;
         this.hasError = false;
         this.errorCallback = onError;
-        const annotationsPromise = this.fetchAnnotations();
+        const annotationsPromise = shouldShowAnnotations ? this.fetchAnnotations() : Promise.resolve();
         const versionsPromise = this.fetchVersions();
         const currentVersionPromise = this.fetchCurrentVersion();
         const commentsPromise = this.fetchComments(permissions);
@@ -261,7 +265,7 @@ class Feed extends Base {
         });
     }
 
-    fetchAnnotations(): Promise<?Annotation> {
+    fetchAnnotations(): Promise<?Annotations> {
         this.annotationsAPI = new AnnotationsAPI(this.options);
         return new Promise(resolve => {
             this.annotationsAPI.getAnnotations(

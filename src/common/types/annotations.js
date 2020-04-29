@@ -46,6 +46,11 @@ export type Annotation = {
     type: 'annotation',
 };
 
+export type Annotations = {
+    entries: Array<Annotation>,
+    total_count: number,
+};
+
 export type NewReply = {
     message: string,
     type: 'reply',
