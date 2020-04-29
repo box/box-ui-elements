@@ -347,6 +347,41 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             instance.fetchFeedItems();
             expect(feedAPI.feedItems).toBeCalled();
         });
+
+        test.each`
+            annotationsEnabled | appActivityEnabled | expectedAnnotations | expectedAppActivity
+            ${false}           | ${false}           | ${false}            | ${false}
+            ${false}           | ${true}            | ${false}            | ${true}
+            ${true}            | ${false}           | ${true}             | ${false}
+            ${true}            | ${true}            | ${true}             | ${true}
+        `(
+            'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled and appActivityEnabled=$appActivityEnabled',
+            ({ annotationsEnabled, appActivityEnabled, expectedAnnotations, expectedAppActivity }) => {
+                wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            annotations: { enabled: annotationsEnabled },
+                            appActivity: { enabled: appActivityEnabled },
+                        },
+                    },
+                });
+
+                instance = wrapper.instance();
+                instance.errorCallback = jest.fn();
+                instance.fetchFeedItemsErrorCallback = jest.fn();
+                instance.fetchFeedItemsSuccessCallback = jest.fn();
+
+                instance.fetchFeedItems();
+                expect(feedAPI.feedItems).toHaveBeenCalledWith(
+                    file,
+                    false,
+                    instance.fetchFeedItemsSuccessCallback,
+                    instance.fetchFeedItemsErrorCallback,
+                    instance.errorCallback,
+                    { shouldShowAnnotations: expectedAnnotations, shouldShowAppActivity: expectedAppActivity },
+                );
+            },
+        );
     });
 
     describe('fetchFeedItemsSuccessCallback()', () => {
