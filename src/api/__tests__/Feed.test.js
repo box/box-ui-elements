@@ -4,6 +4,7 @@ import * as sorter from '../../utils/sorter';
 import * as error from '../../utils/error';
 import { IS_ERROR_DISPLAYED, TASK_NEW_NOT_STARTED, TASK_MAX_GROUP_ASSIGNEES } from '../../constants';
 import Feed from '../Feed';
+import mockAnnotation from '../../__mocks__/annotations';
 
 const mockTask = {
     created_by: {
@@ -96,33 +97,6 @@ const versions = {
 const versionsWithCurrent = {
     total_count: 3,
     entries: [mockCurrentVersion, mockFirstVersion, deleted_version],
-};
-
-const mockAnnotation = {
-    created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
-    creatd_by: { name: 'John', id: '987' },
-    description: 'mock annotation',
-    file_version: {
-        id: '123',
-    },
-    id: '135',
-    modified_at: 'Thu Sep 20 33658 19:46:39 GMT-0600 (CST)',
-    modified_by: { name: 'John', id: '987' },
-    permissions: { can_delete: true, can_edit: true },
-    target: {
-        location: {
-            type: 'page',
-            value: 1,
-        },
-        shape: {
-            type: 'rect',
-            height: 10,
-            width: 10,
-            x: 1,
-            y: 1,
-        },
-        type: 'region',
-    },
 };
 
 const annotations = {
