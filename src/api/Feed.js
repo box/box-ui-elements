@@ -273,8 +273,6 @@ class Feed extends Base {
                 undefined,
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
-                1000,
-                false,
             );
         });
     }
