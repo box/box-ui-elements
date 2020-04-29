@@ -1,7 +1,7 @@
 import Cache from '../Cache';
 import sort, { sortFeedItems } from '../sorter';
 import { SORT_ASC, SORT_DESC } from '../../constants';
-import mockAnnotation from '../../__mocks__/annotations';
+import { annotation as mockAnnotation } from '../../__mocks__/annotations';
 
 let cache;
 let item;

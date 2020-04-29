@@ -48,7 +48,8 @@ export type Annotation = {
 
 export type Annotations = {
     entries: Array<Annotation>,
-    total_count: number,
+    limit: number,
+    next_marker: string | null,
 };
 
 export type NewReply = {

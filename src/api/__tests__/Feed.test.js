@@ -4,7 +4,7 @@ import * as sorter from '../../utils/sorter';
 import * as error from '../../utils/error';
 import { IS_ERROR_DISPLAYED, TASK_NEW_NOT_STARTED, TASK_MAX_GROUP_ASSIGNEES } from '../../constants';
 import Feed from '../Feed';
-import mockAnnotation from '../../__mocks__/annotations';
+import { annotation as mockAnnotation } from '../../__mocks__/annotations';
 
 const mockTask = {
     created_by: {
@@ -100,8 +100,9 @@ const versionsWithCurrent = {
 };
 
 const annotations = {
-    total_count: 1,
     entries: [mockAnnotation],
+    limit: 1000,
+    next_marker: null,
 };
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
