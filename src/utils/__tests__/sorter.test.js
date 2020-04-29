@@ -297,7 +297,6 @@ describe('util/sorter', () => {
             ],
         };
         const annotations = {
-            total_count: 1,
             entries: [mockAnnotation],
         };
 
