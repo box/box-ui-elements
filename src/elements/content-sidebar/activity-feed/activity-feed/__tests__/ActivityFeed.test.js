@@ -173,92 +173,124 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(instance.feedContainer.scrollTop).toEqual(100);
     });
 
-    test('should set scrollTop to be the scrollHeight if feedContainer exists and prevProps feedItems is undefined and this.props.feedItems is defined', () => {
-        const wrapper = getWrapper({
-            feedItems: [{ type: 'comment' }],
-        });
-        const instance = wrapper.instance();
-        instance.feedContainer = {
-            scrollTop: 0,
-            scrollHeight: 100,
-        };
-
-        instance.componentDidUpdate(
-            {
-                feedItems: undefined,
-                currentUser,
-            },
-            { isInputOpen: false },
-        );
-
-        expect(instance.feedContainer.scrollTop).toEqual(100);
-    });
-
-    test('should set scrollTop to be the scrollHeight if more feedItems are added', () => {
-        const wrapper = getWrapper({
-            feedItems: [{ type: 'comment' }, { type: 'comment' }],
-        });
-
-        const instance = wrapper.instance();
-        instance.feedContainer = {
-            scrollTop: 0,
-            scrollHeight: 100,
-        };
-
-        instance.componentDidUpdate(
-            {
+    describe('componentDidUpdate()', () => {
+        test('should set scrollTop to be the scrollHeight if feedContainer exists and prevProps feedItems is undefined and this.props.feedItems is defined', () => {
+            const wrapper = getWrapper({
                 feedItems: [{ type: 'comment' }],
-                currentUser,
-            },
-            { isInputOpen: false },
-        );
+            });
+            const instance = wrapper.instance();
+            instance.feedContainer = {
+                scrollTop: 0,
+                scrollHeight: 100,
+            };
 
-        expect(instance.feedContainer.scrollTop).toEqual(100);
-    });
+            instance.componentDidUpdate(
+                {
+                    feedItems: undefined,
+                    currentUser,
+                },
+                { isInputOpen: false },
+            );
 
-    test('should set scrollTop to be the scrollHeight if the user becomes defined', () => {
-        const wrapper = getWrapper({
-            feedItems: [{ type: 'comment' }],
+            expect(instance.feedContainer.scrollTop).toEqual(100);
         });
-        const instance = wrapper.instance();
-        instance.feedContainer = {
-            scrollTop: 0,
-            scrollHeight: 100,
-        };
 
-        instance.componentDidUpdate(
-            {
+        test('should set scrollTop to be the scrollHeight if more feedItems are added', () => {
+            const wrapper = getWrapper({
+                feedItems: [{ type: 'comment' }, { type: 'comment' }],
+            });
+
+            const instance = wrapper.instance();
+            instance.feedContainer = {
+                scrollTop: 0,
+                scrollHeight: 100,
+            };
+
+            instance.componentDidUpdate(
+                {
+                    feedItems: [{ type: 'comment' }],
+                    currentUser,
+                },
+                { isInputOpen: false },
+            );
+
+            expect(instance.feedContainer.scrollTop).toEqual(100);
+        });
+
+        test('should set scrollTop to be the scrollHeight if the user becomes defined', () => {
+            const wrapper = getWrapper({
                 feedItems: [{ type: 'comment' }],
-                currentUser: undefined,
-            },
-            { isInputOpen: false },
-        );
+            });
+            const instance = wrapper.instance();
+            instance.feedContainer = {
+                scrollTop: 0,
+                scrollHeight: 100,
+            };
 
-        expect(instance.feedContainer.scrollTop).toEqual(100);
-    });
+            instance.componentDidUpdate(
+                {
+                    feedItems: [{ type: 'comment' }],
+                    currentUser: undefined,
+                },
+                { isInputOpen: false },
+            );
 
-    test('should set scrollTop to be the scrollHeight if input opens', () => {
-        const wrapper = getWrapper({
-            feedItems: [{ type: 'comment' }],
+            expect(instance.feedContainer.scrollTop).toEqual(100);
         });
-        wrapper.setState({
-            isInputOpen: true,
-        });
-        const instance = wrapper.instance();
-        instance.feedContainer = {
-            scrollTop: 0,
-            scrollHeight: 100,
-        };
 
-        instance.componentDidUpdate(
-            {
+        test('should set scrollTop to be the scrollHeight if input opens', () => {
+            const wrapper = getWrapper({
                 feedItems: [{ type: 'comment' }],
-                currentUser,
-            },
-            { isInputOpen: false },
-        );
+            });
+            wrapper.setState({
+                isInputOpen: true,
+            });
+            const instance = wrapper.instance();
+            instance.feedContainer = {
+                scrollTop: 0,
+                scrollHeight: 100,
+            };
 
-        expect(instance.feedContainer.scrollTop).toEqual(100);
+            instance.componentDidUpdate(
+                {
+                    feedItems: [{ type: 'comment' }],
+                    currentUser,
+                },
+                { isInputOpen: false },
+            );
+
+            expect(instance.feedContainer.scrollTop).toEqual(100);
+        });
+
+        test('should call scrollToActiveFeedItemOrErrorMessage if feed items loaded', () => {
+            const wrapper = getWrapper({ feedItems: [{ type: 'comment' }] });
+            const instance = wrapper.instance();
+            instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
+
+            instance.componentDidUpdate(
+                {
+                    feedItems: undefined,
+                },
+                { isInputOpen: false },
+            );
+
+            expect(instance.scrollToActiveFeedItemOrErrorMessage).toHaveBeenCalled();
+        });
+
+        test('should call scrollToActiveFeedItemOrErrorMessage if activeFeedEntryId changed', () => {
+            const wrapper = getWrapper({ activeFeedEntryId: '123' });
+            const instance = wrapper.instance();
+            instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
+
+            instance.componentDidUpdate(
+                {
+                    activeFeedEntryId: '456',
+                },
+                { isInputOpen: false },
+            );
+
+            expect(instance.scrollToActiveFeedItemOrErrorMessage).toHaveBeenCalled();
+        });
     });
 
     test('should pass activeFeedItemRef to the ActiveState', () => {
