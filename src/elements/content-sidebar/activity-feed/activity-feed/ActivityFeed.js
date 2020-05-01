@@ -83,7 +83,7 @@ class ActivityFeed extends React.Component<Props, State> {
         const hasMoreItems = prevFeedItems && currFeedItems && prevFeedItems.length < currFeedItems.length;
         const didLoadFeedItems = prevFeedItems === undefined && currFeedItems !== undefined;
         const hasInputOpened = currIsInputOpen !== prevIsInputOpen;
-        const hasActiveFeedEntryIdChanged = activeFeedEntryId && prevActiveFeedEntryId;
+        const hasActiveFeedEntryIdChanged = activeFeedEntryId !== prevActiveFeedEntryId;
 
         if ((hasLoaded || hasMoreItems || didLoadFeedItems || hasInputOpened) && activeFeedEntryId === undefined) {
             this.resetFeedScroll();
