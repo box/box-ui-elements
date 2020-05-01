@@ -89,7 +89,6 @@ class ActivityFeed extends React.Component<Props, State> {
             this.resetFeedScroll();
         }
 
-        // do the scroll only once after first fetch of feed items
         if (didLoadFeedItems || hasActiveFeedEntryIdChanged) {
             this.scrollToActiveFeedItemOrErrorMessage();
         }
