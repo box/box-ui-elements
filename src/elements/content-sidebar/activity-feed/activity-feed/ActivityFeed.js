@@ -70,7 +70,11 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
-        const { currentUser: prevCurrentUser, feedItems: prevFeedItems } = prevProps;
+        const {
+            activeFeedEntryId: prevActiveFeedEntryId,
+            currentUser: prevCurrentUser,
+            feedItems: prevFeedItems,
+        } = prevProps;
         const { feedItems: currFeedItems, activeFeedEntryId } = this.props;
         const { isInputOpen: prevIsInputOpen } = prevState;
         const { isInputOpen: currIsInputOpen } = this.state;
@@ -79,13 +83,13 @@ class ActivityFeed extends React.Component<Props, State> {
         const hasMoreItems = prevFeedItems && currFeedItems && prevFeedItems.length < currFeedItems.length;
         const didLoadFeedItems = prevFeedItems === undefined && currFeedItems !== undefined;
         const hasInputOpened = currIsInputOpen !== prevIsInputOpen;
+        const hasActiveFeedEntryIdChanged = activeFeedEntryId !== prevActiveFeedEntryId;
 
         if ((hasLoaded || hasMoreItems || didLoadFeedItems || hasInputOpened) && activeFeedEntryId === undefined) {
             this.resetFeedScroll();
         }
 
-        // do the scroll only once after first fetch of feed items
-        if (didLoadFeedItems) {
+        if (didLoadFeedItems || hasActiveFeedEntryIdChanged) {
             this.scrollToActiveFeedItemOrErrorMessage();
         }
     }
