@@ -3,7 +3,9 @@
  * @file File for some simple dom utilities
  * @author Box
  */
+import * as React from 'react';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
+
 import { KEYS, OVERLAY_WRAPPER_CLASS } from '../constants';
 import './domPolyfill';
 
@@ -121,4 +123,27 @@ export function scrollIntoView(itemEl: ?HTMLElement, options?: Object = {}): voi
             ...options,
         });
     }
+}
+
+/**
+ * A React hook that tells you if an element (passed in as a ref) has content that overflows its container,
+ * i.e., if the text is wider than the box around it.
+ *
+ * @param {React.Ref<HTMLElement>} contentRef
+ * @return {boolean}
+ */
+export function useIsContentOverflowed(contentRef): boolean {
+    const [isContentOverflowed, setIsContentOverflowed] = React.useState<boolean>(false);
+    const { current } = contentRef;
+    React.useLayoutEffect(() => {
+        if (!current) {
+            return;
+        }
+        const { offsetWidth, scrollWidth } = current;
+        if (offsetWidth < scrollWidth) {
+            setIsContentOverflowed(true);
+        }
+    }, [current]);
+
+    return isContentOverflowed;
 }

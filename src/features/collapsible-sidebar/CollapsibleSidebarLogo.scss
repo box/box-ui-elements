@@ -1,0 +1,20 @@
+@import '../../styles/variables';
+
+.bdl-CollapsibleSidebar-logo {
+    a {
+        display: flex;
+        flex: 1 0 auto;
+        max-width: 200px;
+        padding-right: $bdl-grid-unit * 5;
+    }
+}
+
+// Note: this doesn't match the grid at all
+.bdl-CollapsibleSidebar-trialIcon {
+    height: 14px;
+    margin-left: 4px;
+    padding: 0 5px 2px;
+    font-size: 8px;
+    line-height: 14px;
+    border-radius: 5px;
+}

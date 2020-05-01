@@ -170,6 +170,7 @@
         "@types/react-dom": "^16.9.5",
         "@types/react-router-dom": "^5.1.3",
         "@types/sinon": "^7.5.1",
+        "@types/styled-components": "^5.1.0",
         "@types/webpack": "^4.41.3",
         "@typescript-eslint/eslint-plugin": "^2.18.0",
         "@typescript-eslint/parser": "^2.18.0",
@@ -353,5 +354,8 @@
             "@hapi/address": "Version 2.1.2+ requires a polyfill for TextEncoder. Pinning to version 2.1.1 prevents IE11 from breaking.",
             "react-tether": "Version 2.x has too many breaking changes and requires forwardRef on all components"
         }
+    },
+    "dependencies": {
+        "react-scrollbars-custom": "^4.0.21"
     }
 }
