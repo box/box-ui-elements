@@ -7,7 +7,7 @@ import { EditorState } from 'draft-js';
 import DatalistItem from '../../datalist-item';
 import DraftJSEditor from '../../draft-js-editor';
 import SelectorDropdown from '../../selector-dropdown';
-import { getActiveMentionForEditorState, addMention } from './utils';
+import { addMention, defaultMentionPattern, getActiveMentionForEditorState } from './utils';
 
 import messages from './messages';
 
@@ -69,19 +69,23 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         contacts: [],
         isDisabled: false,
         isRequired: false,
-        mentionTriggers: ['@', '＠', '﹫'],
         selectorRow: <DefaultSelectorRow />,
         startMentionMessage: <DefaultStartMentionMessage />,
     };
 
     constructor(props: Props) {
         super(props);
-        const mentionTriggers = props.mentionTriggers.reduce((prev, current) => `${prev}\\${current}`, '');
+
+        let mentionPattern = defaultMentionPattern;
+        if (props.mentionTriggers) {
+            const mentionTriggers = props.mentionTriggers.reduce((prev, current) => `${prev}\\${current}`, '');
+            mentionPattern = new RegExp(`([${mentionTriggers}])([^${mentionTriggers}]*)$`);
+        }
 
         this.state = {
             activeMention: null,
             isFocused: false,
-            mentionPattern: new RegExp(`([${mentionTriggers}])([^${mentionTriggers}]*)$`),
+            mentionPattern,
         };
     }
 

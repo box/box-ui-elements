@@ -8,10 +8,17 @@ export type Mention = {
     mentionTrigger: string,
     start: number,
 };
+
+const defaultMentionTriggers = ['@', '＠', '﹫'].reduce((prev, current) => `${prev}\\${current}`, '');
+const defaultMentionPattern = new RegExp(`([${defaultMentionTriggers}])([^${defaultMentionTriggers}]*)$`);
+
 /**
  * Extracts the active mention from the editor state
  */
-function getActiveMentionForEditorState(editorState: EditorState, mentionPattern: RegExp): Mention | null {
+function getActiveMentionForEditorState(
+    editorState: EditorState,
+    mentionPattern: RegExp = defaultMentionPattern,
+): Mention | null {
     const contentState = editorState.getCurrentContent();
     const selectionState = editorState.getSelection();
 
@@ -97,4 +104,4 @@ function addMention(editorState: EditorState, activeMention: Mention | null, men
     return editorStateWithLink;
 }
 
-export { getActiveMentionForEditorState, addMention };
+export { addMention, defaultMentionPattern, getActiveMentionForEditorState };
