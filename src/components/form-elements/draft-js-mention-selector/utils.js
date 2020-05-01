@@ -9,8 +9,9 @@ export type Mention = {
     start: number,
 };
 
-const defaultMentionTriggers = ['@', '＠', '﹫'].reduce((prev, current) => `${prev}\\${current}`, '');
-const defaultMentionPattern = new RegExp(`([${defaultMentionTriggers}])([^${defaultMentionTriggers}]*)$`);
+const defaultMentionTriggers = ['@', '＠', '﹫'];
+const defaultMentionTriggersString = defaultMentionTriggers.reduce((prev, current) => `${prev}\\${current}`, '');
+const defaultMentionPattern = new RegExp(`([${defaultMentionTriggersString}])([^${defaultMentionTriggersString}]*)$`);
 
 /**
  * Extracts the active mention from the editor state
@@ -104,4 +105,4 @@ function addMention(editorState: EditorState, activeMention: Mention | null, men
     return editorStateWithLink;
 }
 
-export { addMention, defaultMentionPattern, getActiveMentionForEditorState };
+export { addMention, defaultMentionTriggers, defaultMentionPattern, getActiveMentionForEditorState };
