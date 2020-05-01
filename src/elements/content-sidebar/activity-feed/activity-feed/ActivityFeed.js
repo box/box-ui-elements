@@ -241,6 +241,7 @@ class ActivityFeed extends React.Component<Props, State> {
             : undefined;
 
         const isInlineFeedItemErrorVisible = !isLoading && activeFeedEntryType && !activeEntry;
+        const currentFileVersionId = getProp(file, 'file_version.id');
 
         return (
             // eslint-disable-next-line
@@ -264,6 +265,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             items={collapseFeedState(feedItems)}
                             isDisabled={isDisabled}
                             currentUser={currentUser}
+                            currentFileVersionId={currentFileVersionId}
                             onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                             onAnnotationDelete={onAnnotationDelete}
                             onAnnotationSelect={onAnnotationSelect}
