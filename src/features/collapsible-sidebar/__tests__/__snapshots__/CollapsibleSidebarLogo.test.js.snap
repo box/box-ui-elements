@@ -29,11 +29,13 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
         <LinkBase
           href="/"
         >
-          <Styled(BoxLogo)
-            className="bdl-CollapsibleSidebar-logoIcon"
-            height={32}
-            width={61}
-          />
+          <React.Fragment>
+            <Styled(BoxLogo)
+              className="bdl-CollapsibleSidebar-logoIcon"
+              height={32}
+              width={61}
+            />
+          </React.Fragment>
         </LinkBase>
       </React.Fragment>
     }
@@ -69,21 +71,13 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 2`] = `
         <LinkBase
           href="/"
         >
-          <Styled(BoxLogo)
-            className="bdl-CollapsibleSidebar-logoIcon"
-            height={32}
-            width={61}
-          />
-          <Badge
-            className="bdl-CollapsibleSidebar-trialIcon"
-            type="success"
-          >
-            <FormattedMessage
-              defaultMessage="TRIAL"
-              description="Header text shown next to Box logo when account is in a trial"
-              id="enduser.header.trial"
+          <React.Fragment>
+            <Styled(BoxLogo)
+              className="bdl-CollapsibleSidebar-logoIcon"
+              height={32}
+              width={61}
             />
-          </Badge>
+          </React.Fragment>
         </LinkBase>
       </React.Fragment>
     }
