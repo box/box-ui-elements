@@ -59,6 +59,14 @@
                 background-color: $bdl-box-blue-05;
                 border-bottom: none;
                 box-shadow: 0 $container-padding 0 -#{$container-padding - 1} $bdl-gray-10;
+            }
+        }
+
+        .bcs-activity-feed-task,
+        .bcs-activity-feed-task-new,
+        .bcs-activity-feed-comment,
+        .bcs-activity-feed-app-activity {
+            &.bcs-is-focused {
                 animation: fade-out 6s ease-out 2s 1 normal forwards;
 
                 @keyframes fade-out {
