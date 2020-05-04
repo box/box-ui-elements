@@ -4,8 +4,8 @@ import classNames from 'classnames';
 import './scrollShadow.scss';
 
 type scrollShadowState = {
-    isTopOverflowed?: boolean;
-    isBottomOverflowed?: boolean;
+    isBottomOverflowed?: boolean,
+    isTopOverflowed?: boolean,
 };
 
 const getScrollShadowState = (scrollTop: number, scrollHeight: number, clientHeight: number): scrollShadowState => {

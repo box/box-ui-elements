@@ -1,4 +1,6 @@
 /**
+ * @flow
+ *
  * A sidebar component that supports collapsed/expanded state for responsive sizing.
  * This component should be moved into BUIE when complete.
  * This component should NOT contain any reference to EUA specific patterns like Immutables and redux containers.
@@ -38,19 +40,21 @@ export const StyledScrollContainer = styled.div`
 
 type Props = {
     /** Primary content */
-    children?: React.ReactNode;
+    children?: React.Node,
 
     /** Additional classes */
-    className?: string;
+    className?: string,
 };
 
 type State = {
-    isScrolling: boolean;
-    scrollShadowClassName?: string;
+    isScrolling: boolean,
+    scrollShadowClassName?: string,
 };
 
 class CollapsibleSidebarNav extends React.Component<Props, State> {
-    scrollRef: React.RefObject<Scrollbar> & React.RefObject<HTMLDivElement> = React.createRef();
+    scrollRef: {
+        current: null | { clientHeight: number, scrollHeight: number, scrollTop: number },
+    } = React.createRef();
 
     constructor(props: Props) {
         super(props);
@@ -133,8 +137,8 @@ class CollapsibleSidebarNav extends React.Component<Props, State> {
                     }}
                     style={{ height: 'auto', width: '100%', flexGrow: 1 }}
                     thumbYProps={{
-                        renderer: props => {
-                            const { elementRef, style, ...restProps } = props;
+                        renderer: renderProps => {
+                            const { elementRef, style, ...restProps } = renderProps;
                             if (style && style.background) {
                                 delete style.background; // remove the hardcoded valued so that the theme value can be assigned
                             }

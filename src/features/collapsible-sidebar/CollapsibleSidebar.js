@@ -1,4 +1,5 @@
 /**
+ * @flow
  * @file Sidebar component that supports rendering different elements based on expand/collapse state
  * @author Box
  *
@@ -25,16 +26,16 @@ const StyledNav = styled.nav`
 
 type Props = {
     /** Primary content */
-    children?: React.ReactNode;
+    children?: React.Node,
 
     /** Additional classes */
-    className?: string;
+    className?: string,
 
     /** Controls whether or not the sidebar is expanded on the page */
-    expanded?: boolean;
+    expanded?: boolean,
 
     /** Optional HTML attributes to append to menu item */
-    htmlAttributes?: Record<string, any>;
+    htmlAttributes?: Object,
 };
 
 const CollapsibleSidebar = (props: Props = { expanded: false }) => {

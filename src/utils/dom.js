@@ -126,6 +126,7 @@ export function scrollIntoView(itemEl: ?HTMLElement, options?: Object = {}): voi
 }
 
 /**
+ *
  * A React hook that tells you if an element (passed in as a ref) has content that overflows its container,
  * i.e., if the text is wider than the box around it.
  *

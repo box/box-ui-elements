@@ -1,9 +1,8 @@
+// @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 
-// import messages from 'components/core/header/messages';
 import Logo from '../../icon/logo/BoxLogo';
 import PlainButton from '../../components/plain-button/PlainButton';
 import LinkBase from '../../components/link/LinkBase';
@@ -26,20 +25,20 @@ const StyledIconHamburger = styled(IconHamburger)`
 `;
 
 type Props = {
-    badge?: React.ReactNode;
+    badge?: React.Node,
 
     /** Flag for trial users */
-    canEndTrial: boolean;
+    canEndTrial: boolean,
 
     /** Additional classes */
-    className?: string;
+    className?: string,
 
     /** Controls whether or not the sidebar is expanded on the page */
-    expanded: boolean;
+    expanded: boolean,
 
-    onToggle: () => void;
+    onToggle: () => void,
 
-    resinTarget: string;
+    resinTarget: string,
 };
 
 function CollapsibleSidebarLogo(props: Props) {

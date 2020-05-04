@@ -1,6 +1,7 @@
+// @flow
 import * as React from 'react';
 
-import styled, { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { boolean } from '@storybook/addon-knobs';
 import noop from 'lodash/noop';
 

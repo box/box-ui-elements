@@ -1,3 +1,4 @@
+// @flow
 /**
  * A sidebar component that supports collapsed/expanded state for responsive sizing.
  * This component should NOT contain any reference to EUA specific patterns like Immutables and redux containers.
@@ -12,19 +13,19 @@ import LeftSidebarLinkCallout from '../left-sidebar/LeftSidebarLinkCallout';
 
 type Props = {
     /** Callout element used in the menu. */
-    callout?: Callout;
+    callout?: Callout,
 
     /** Element to be shown when component is collapsed */
-    collapsedElement: JSX.Element;
+    collapsedElement: JSX.Element,
 
     /** Controls whether or not the sidebar is expanded on the page */
-    expanded: boolean;
+    expanded: boolean,
 
     /** Element to be shown when component is expanded */
-    expandedElement: JSX.Element;
+    expandedElement: JSX.Element,
 
     /** Tooltip message to show for collapsed item */
-    tooltipMessage?: string;
+    tooltipMessage?: string,
 };
 
 function CollapsibleSidebarItem(props: Props) {

@@ -1,4 +1,6 @@
 /**
+ * @flow
+ *
  * A sidebar component that supports collapsed/expanded state for responsive sizing.
  * This component should be moved into BUIE when complete.
  * This component should NOT contain any reference to EUA specific patterns like Immutables and redux containers.
@@ -70,14 +72,15 @@ const StyledMenuItemLabel = styled.span`
 
 type Props = {
     /** Additional classes */
-    className?: string;
-    icon?: React.ReactNode;
-    overflowAction?: React.ReactNode;
-    text?: string;
+    className?: string,
+    icon?: React.Node,
+    overflowAction?: React.Node,
+    text?: string,
 };
+
 function CollapsibleSidebarMenuItem(props: Props) {
     const { className, icon, overflowAction, text, ...rest } = props;
-    const textRef = React.useRef<HTMLElement>(null);
+    const textRef = React.useRef<?HTMLElement>(null);
     const isTextOverflowed = useIsContentOverflowed(textRef);
     const { isScrolling } = React.useContext(CollapsibleSidebarContext);
 

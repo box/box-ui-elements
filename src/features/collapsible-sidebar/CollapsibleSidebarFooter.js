@@ -1,13 +1,14 @@
+// @flow
 import * as React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
 type Props = {
     /** Additional classes */
-    children?: React.ReactNode;
+    children?: React.Node,
 
     /** children components */
-    className?: string;
+    className?: string,
 };
 
 const StyledFooter = styled.div`
