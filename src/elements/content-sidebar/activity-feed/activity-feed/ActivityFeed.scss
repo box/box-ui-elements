@@ -52,6 +52,7 @@
                 $container-padding: 25px;
 
                 margin-right: -$container-padding;
+                margin-bottom: 1px;
                 margin-left: -$container-padding;
                 padding-right: $container-padding;
                 padding-left: $container-padding;
@@ -73,10 +74,8 @@
         }
 
         .bcs-activity-feed-annotation-activity.bcs-is-focused {
-            margin-bottom: 1px;
             padding-left: 21px;
             border-left: 4px solid $bdl-yellorange;
-            animation: none;
         }
 
         .bcs-activity-feed-task {
