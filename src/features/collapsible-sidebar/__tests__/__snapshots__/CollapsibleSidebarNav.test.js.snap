@@ -24,7 +24,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
       scrollerProps={Object {}}
       style={
         Object {
-          "flexGrow": "1",
+          "flexGrow": 1,
           "height": "auto",
           "width": "100%",
         }
@@ -54,7 +54,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
         className="ScrollbarsCustom foobar"
         style={
           Object {
-            "flexGrow": "1",
+            "flexGrow": 1,
             "height": "auto",
             "position": "relative",
             "width": "100%",
@@ -65,7 +65,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
           className="sc-AykKD cnzXiP ScrollbarsCustom foobar"
           style={
             Object {
-              "flexGrow": "1",
+              "flexGrow": 1,
               "height": "auto",
               "position": "relative",
               "width": "100%",

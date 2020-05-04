@@ -1,10 +1,10 @@
 import React from 'react';
-import { mountConnected } from 'test-utils/enzyme';
 import Scrollbar from 'react-scrollbars-custom';
+import { mountConnected } from '../../../test-utils/enzyme';
 
 import { getScrollShadowClassName } from '../utils/scrollShadow';
 import CollapsibleSidebarNav from '../CollapsibleSidebarNav';
-import { Provider } from '../CollapsibleSidebarContext';
+import CollapsibleSidebarContext from '../CollapsibleSidebarContext';
 
 jest.mock('../CollapsibleSidebarContext', () => ({
     Provider: jest.fn(),
@@ -21,7 +21,7 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebarNav', () => {
     };
 
     beforeEach(() => {
-        Provider.mockImplementation(({ children }) => children);
+        CollapsibleSidebarContext.Provider.mockImplementation(({ children }) => children);
         getScrollShadowClassName.mockImplementation(() => 'foobar');
     });
 

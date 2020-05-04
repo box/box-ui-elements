@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import LeftSidebarLinkCallout from 'box-ui-elements/es/features/left-sidebar/LeftSidebarLinkCallout';
-import Tooltip from 'box-ui-elements/es/components/tooltip';
+import LeftSidebarLinkCallout from '../../left-sidebar/LeftSidebarLinkCallout';
+import Tooltip from '../../../components/tooltip';
 
 import CollapsibleSidebarItem from '../CollapsibleSidebarItem';
 

@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { mountConnected } from 'test-utils/enzyme';
+import Tooltip from '../../../components/tooltip';
+import { mountConnected } from '../../../test-utils/enzyme';
 
-import Tooltip from 'box-ui-elements/es/components/tooltip';
-import * as libDom from 'lib/dom';
+import * as libDom from '../../../utils/dom';
 
 import CollapsibleSidebarMenuItem from '../CollapsibleSidebarMenuItem';
 import CollapsibleSidebarContext from '../CollapsibleSidebarContext';
 
-jest.mock('lib/dom', () => ({ useIsContentOverflowed: jest.fn() }));
+jest.mock('../../../utils/dom', () => ({ useIsContentOverflowed: jest.fn() }));
 
 describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuItem', () => {
     const getWrapper = (props, { isScrolling = false } = {}) => {
