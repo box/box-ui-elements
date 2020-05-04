@@ -33,6 +33,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     };
     const file = {
         id: 'I_AM_A_FILE',
+        file_version: {
+            id: '456',
+        },
     };
     let currentUser = {
         id: 'foo',
@@ -735,6 +738,8 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 },
             };
 
+            const patchedAnnotation = { ...annotatorStateMock.annotation, file_version: file.file_version };
+
             const wrapper = getWrapper({ annotatorState: annotatorStateMock, currentUser });
             const instance = wrapper.instance();
 
@@ -743,7 +748,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(api.getFeedAPI().addAnnotation).toBeCalledWith(
                 file,
                 currentUser,
-                annotatorStateMock.annotation,
+                patchedAnnotation,
                 annotatorStateMock.meta.requestId,
                 isPending,
             );
