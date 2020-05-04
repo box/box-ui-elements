@@ -4,6 +4,7 @@ import * as sorter from '../../utils/sorter';
 import * as error from '../../utils/error';
 import { IS_ERROR_DISPLAYED, TASK_NEW_NOT_STARTED, TASK_MAX_GROUP_ASSIGNEES } from '../../constants';
 import Feed from '../Feed';
+import { annotation as mockAnnotation } from '../../__mocks__/annotations';
 
 const mockTask = {
     created_by: {
@@ -96,6 +97,12 @@ const versions = {
 const versionsWithCurrent = {
     total_count: 3,
     entries: [mockCurrentVersion, mockFirstVersion, deleted_version],
+};
+
+const annotations = {
+    entries: [mockAnnotation],
+    limit: 1000,
+    next_marker: null,
 };
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
@@ -236,6 +243,12 @@ jest.mock('../Versions', () => {
         getVersion: jest.fn(() => mockCurrentVersion),
     }));
 });
+
+jest.mock('../Annotations', () =>
+    jest.fn().mockImplementation(() => ({
+        getAnnotations: jest.fn(),
+    })),
+);
 
 const MOCK_APP_ACTIVITY_ITEM = {
     activity_template: {
@@ -380,6 +393,7 @@ describe('api/Feed', () => {
             ...tasks.entries,
             ...comments.entries,
             ...appActivities.entries,
+            ...annotations.entries,
         ];
         let successCb;
         let errorCb;
@@ -390,6 +404,7 @@ describe('api/Feed', () => {
             feed.fetchTasksNew = jest.fn().mockResolvedValue(tasks);
             feed.fetchComments = jest.fn().mockResolvedValue(comments);
             feed.fetchAppActivity = jest.fn().mockReturnValue(appActivities);
+            feed.fetchAnnotations = jest.fn().mockReturnValue(annotations);
             feed.setCachedItems = jest.fn();
             feed.versionsAPI = {
                 getVersion: jest.fn().mockReturnValue(versions),
@@ -406,10 +421,19 @@ describe('api/Feed', () => {
         });
 
         test('should get feed items, sort, save to cache, and call the success callback', done => {
-            feed.feedItems(file, false, successCb, errorCb, jest.fn(), { shouldShowAppActivity: true });
+            feed.feedItems(file, false, successCb, errorCb, jest.fn(), {
+                shouldShowAnnotations: true,
+                shouldShowAppActivity: true,
+            });
             setImmediate(() => {
                 expect(feed.versionsAPI.addCurrentVersion).toHaveBeenCalledWith(mockCurrentVersion, versions, file);
-                expect(sorter.sortFeedItems).toHaveBeenCalledWith(versionsWithCurrent, comments, tasks, appActivities);
+                expect(sorter.sortFeedItems).toHaveBeenCalledWith(
+                    versionsWithCurrent,
+                    comments,
+                    tasks,
+                    appActivities,
+                    annotations,
+                );
                 expect(feed.setCachedItems).toHaveBeenCalledWith(file.id, sortedItems);
                 expect(successCb).toHaveBeenCalledWith(sortedItems);
                 done();
@@ -441,6 +465,22 @@ describe('api/Feed', () => {
             feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowAppActivity: false });
             setImmediate(() => {
                 expect(feed.fetchAppActivity).not.toHaveBeenCalled();
+                done();
+            });
+        });
+
+        test('should use the annotations api if shouldShowannotations is true', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowAnnotations: true });
+            setImmediate(() => {
+                expect(feed.fetchAnnotations).toHaveBeenCalled();
+                done();
+            });
+        });
+
+        test('should not use the annotations api if shouldShowannotations is false', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowAnnotations: false });
+            setImmediate(() => {
+                expect(feed.fetchAnnotations).not.toHaveBeenCalled();
                 done();
             });
         });
@@ -480,6 +520,19 @@ describe('api/Feed', () => {
                 expect(successCb).toHaveBeenCalledTimes(2);
                 done();
             });
+        });
+    });
+
+    describe('fetchAnnotations()', () => {
+        beforeEach(() => {
+            feed.file = file;
+            feed.fetchFeedItemErrorCallback = jest.fn();
+        });
+
+        test('should return a promise and call the annotations api', () => {
+            const annotationItems = feed.fetchAnnotations();
+            expect(annotationItems instanceof Promise).toBeTruthy();
+            expect(feed.annotationsAPI.getAnnotations).toBeCalled();
         });
     });
 
@@ -1306,15 +1359,20 @@ describe('api/Feed', () => {
     });
 
     describe('destroy()', () => {
+        let annotationFn;
         let commentFn;
         let versionFn;
         let taskFn;
 
         beforeEach(() => {
+            annotationFn = jest.fn();
             commentFn = jest.fn();
             versionFn = jest.fn();
             taskFn = jest.fn();
 
+            feed.annotationsAPI = {
+                destroy: annotationFn,
+            };
             feed.tasksNewAPI = {
                 destroy: taskFn,
             };
@@ -1331,6 +1389,7 @@ describe('api/Feed', () => {
             expect(versionFn).toBeCalled();
             expect(commentFn).toBeCalled();
             expect(taskFn).toBeCalled();
+            expect(annotationFn).toBeCalled();
         });
     });
 

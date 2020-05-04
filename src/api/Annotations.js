@@ -1,7 +1,7 @@
 // @flow
 import merge from 'lodash/merge';
 import MarkerBasedApi from './MarkerBasedAPI';
-import type { Annotation, NewAnnotation } from '../common/types/annotations';
+import type { Annotation, Annotations as AnnotationsType, NewAnnotation } from '../common/types/annotations';
 import type { ElementsXhrError } from '../common/types/api';
 
 export default class Annotations extends MarkerBasedApi {
@@ -74,7 +74,7 @@ export default class Annotations extends MarkerBasedApi {
     getAnnotations(
         fileId: string,
         fileVersionId?: string,
-        successCallback: (annotations: Annotation[]) => void,
+        successCallback: (annotations: AnnotationsType) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
         limit?: number,
         shouldFetchAll?: boolean,

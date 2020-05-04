@@ -46,6 +46,12 @@ export type Annotation = {
     type: 'annotation',
 };
 
+export type Annotations = {
+    entries: Array<Annotation>,
+    limit: number,
+    next_marker: string | null,
+};
+
 export type NewReply = {
     message: string,
     type: 'reply',

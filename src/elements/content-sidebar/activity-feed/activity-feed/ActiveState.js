@@ -160,6 +160,7 @@ const ActiveState = ({
                                     'bcs-is-focused': isFocused,
                                 })}
                                 data-testid="annotation-activity"
+                                ref={refValue}
                             >
                                 <AnnotationActivity
                                     currentUser={currentUser}
