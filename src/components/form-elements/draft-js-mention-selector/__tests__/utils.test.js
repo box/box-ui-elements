@@ -4,14 +4,17 @@ import { addMention, getActiveMentionForEditorState } from '../utils';
 const noMentionEditorState = EditorState.createWithContent(ContentState.createFromText('No mention here'));
 const oneMentionEditorState = EditorState.createWithContent(ContentState.createFromText('Hey @foo'));
 const twoMentionEditorState = EditorState.createWithContent(ContentState.createFromText('Hi @foo, meet @bar'));
+// one string beginning with "@"
 const oneMentionSelectionState = oneMentionEditorState.getSelection().merge({
     anchorOffset: 8,
     focusOffset: 8,
 });
+// two strings beginning with "@"
 const twoMentionSelectionState = twoMentionEditorState.getSelection().merge({
     anchorOffset: 18,
     focusOffset: 18,
 });
+// two strings beginning "@", cursor inside one
 const twoMentionSelectionStateCursorInside = twoMentionEditorState.getSelection().merge({
     anchorOffset: 17,
     focusOffset: 17,
@@ -35,68 +38,42 @@ const twoMentionCursorInsideExpectedMention = {
     end: 17,
 };
 
-describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelector', () => {
+describe('components/form-elements/draft-js-mention-selector/utils', () => {
     describe('getActiveMentionForEditorState()', () => {
-        // TESTS
-        [
-            // empty input
-            {
-                editorState: EditorState.createEmpty(),
-            },
-            // input has ne mention
-            {
-                editorState: noMentionEditorState,
-            },
-        ].forEach(({ editorState }) => {
-            test('should return null', () => {
-                expect(getActiveMentionForEditorState(editorState)).toBeNull();
-            });
+        test.each`
+            input                     | editorState
+            ${'input is empty'}       | ${EditorState.createEmpty()}
+            ${'input has no mention'} | ${noMentionEditorState}
+        `('should return null if $input', ({ editorState }) => {
+            expect(getActiveMentionForEditorState(editorState)).toBeNull();
         });
 
-        [
-            // one string beginning with "@"
-            {
-                editorState: oneMentionEditorState,
-                selectionState: oneMentionSelectionState,
-                expected: oneMentionExpectedMention,
-            },
-            // two strings beginning with "@"
-            {
-                editorState: twoMentionEditorState,
-                selectionState: twoMentionSelectionState,
-                expected: twoMentionExpectedMention,
-            },
-            // two strings beginning "@", cursor inside one
-            {
-                editorState: twoMentionEditorState,
-                selectionState: twoMentionSelectionStateCursorInside,
-                expected: twoMentionCursorInsideExpectedMention,
-            },
-        ].forEach(({ editorState, selectionState, expected }) => {
-            test('should return null when cursor is not over a mention', () => {
-                const selectionStateAtBeginning = editorState.getSelection().merge({
-                    anchorOffset: 0,
-                    focusOffset: 0,
-                });
-
-                const editorStateWithForcedSelection = EditorState.acceptSelection(
-                    editorState,
-                    selectionStateAtBeginning,
-                );
-
-                const result = getActiveMentionForEditorState(editorStateWithForcedSelection);
-
-                expect(result).toBeNull();
+        test('should return null when cursor is not over a mention', () => {
+            const editorState = oneMentionEditorState;
+            const selectionStateAtBeginning = editorState.getSelection().merge({
+                anchorOffset: 0,
+                focusOffset: 0,
             });
 
-            test('should return the selected mention when it is selected', () => {
-                const editorStateWithForcedSelection = EditorState.acceptSelection(editorState, selectionState);
+            const editorStateWithForcedSelection = EditorState.acceptSelection(editorState, selectionStateAtBeginning);
 
-                const result = getActiveMentionForEditorState(editorStateWithForcedSelection);
+            const result = getActiveMentionForEditorState(editorStateWithForcedSelection);
 
-                Object.keys(expected).forEach(key => {
-                    expect(result[key]).toEqual(expected[key]);
-                });
+            expect(result).toBeNull();
+        });
+
+        test.each`
+            editorState              | selectionState                          | expected
+            ${oneMentionEditorState} | ${oneMentionSelectionState}             | ${oneMentionExpectedMention}
+            ${twoMentionEditorState} | ${twoMentionSelectionState}             | ${twoMentionExpectedMention}
+            ${twoMentionEditorState} | ${twoMentionSelectionStateCursorInside} | ${twoMentionCursorInsideExpectedMention}
+        `('should return the selected mention when it is selected', ({ editorState, selectionState, expected }) => {
+            const editorStateWithForcedSelection = EditorState.acceptSelection(editorState, selectionState);
+
+            const result = getActiveMentionForEditorState(editorStateWithForcedSelection);
+
+            Object.keys(expected).forEach(key => {
+                expect(result[key]).toEqual(expected[key]);
             });
         });
     });
