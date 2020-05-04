@@ -15,6 +15,7 @@ import VersionsItemBadge from './VersionsItemBadge';
 import VersionsItemRetention from './VersionsItemRetention';
 import { ReadableTime } from '../../../components/time';
 import {
+    FILE_REQUEST_NAME,
     VERSION_DELETE_ACTION,
     VERSION_PROMOTE_ACTION,
     VERSION_RESTORE_ACTION,
@@ -85,7 +86,12 @@ const VersionsItem = ({
     const versionUserName = selectors.getVersionUser(version).name || (
         <FormattedMessage {...messages.versionUserUnknown} />
     );
-
+    const versionDisplayName =
+        versionUserName !== FILE_REQUEST_NAME ? (
+            versionUserName
+        ) : (
+            <FormattedMessage {...messages.fileRequestDisplayName} />
+        );
     // Version state helpers
     const isDeleted = versionAction === VERSION_DELETE_ACTION;
     const isDownloadable = !!is_download_available;
@@ -129,10 +135,10 @@ const VersionsItem = ({
                         </div>
                     )}
 
-                    <div className="bcs-VersionsItem-log" data-testid="bcs-VersionsItem-log" title={versionUserName}>
+                    <div className="bcs-VersionsItem-log" data-testid="bcs-VersionsItem-log" title={versionDisplayName}>
                         <FormattedMessage
                             {...ACTION_MAP[versionAction]}
-                            values={{ name: versionUserName, versionPromoted }}
+                            values={{ name: versionDisplayName, versionPromoted }}
                         />
                     </div>
 

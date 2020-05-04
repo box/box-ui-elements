@@ -200,6 +200,7 @@ type BoxItemVersion = {
     trashed_at: ?string,
     trashed_by?: ?User,
     type: 'file_version',
+    uploader_display_name?: string,
     version_end?: number,
     version_number: string,
     version_promoted?: string,

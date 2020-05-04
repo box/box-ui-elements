@@ -156,6 +156,7 @@ describe('util/fields', () => {
             FIELD_SIZE,
             FIELD_TRASHED_AT,
             FIELD_TRASHED_BY,
+            FIELD_UPLOADER_DISPLAY_NAME,
             FIELD_VERSION_NUMBER,
         ]);
     });
