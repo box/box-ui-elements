@@ -1,52 +1,13 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import { ContentState, EditorState } from 'draft-js';
+import { EditorState } from 'draft-js';
 import sinon from 'sinon';
 
+import * as utils from '../utils';
 import DraftJSEditor from '../../../draft-js-editor';
 import DraftJSMentionSelector from '../DraftJSMentionSelectorCore';
 
 const sandbox = sinon.sandbox.create();
-
-const noMentionEditorState = EditorState.createWithContent(ContentState.createFromText('No mention here'));
-const oneMentionEditorState = EditorState.createWithContent(ContentState.createFromText('Hey @foo'));
-const twoMentionEditorState = EditorState.createWithContent(ContentState.createFromText('Hi @foo, meet @bar'));
-
-const oneMentionSelectionState = oneMentionEditorState.getSelection().merge({
-    anchorOffset: 8,
-    focusOffset: 8,
-});
-
-const twoMentionSelectionState = twoMentionEditorState.getSelection().merge({
-    anchorOffset: 18,
-    focusOffset: 18,
-});
-
-const twoMentionSelectionStateCursorInside = twoMentionEditorState.getSelection().merge({
-    anchorOffset: 17,
-    focusOffset: 17,
-});
-
-const oneMentionExpectedMention = {
-    mentionString: 'foo',
-    mentionTrigger: '@',
-    start: 4,
-    end: 8,
-};
-
-const twoMentionExpectedMention = {
-    mentionString: 'bar',
-    mentionTrigger: '@',
-    start: 14,
-    end: 18,
-};
-
-const twoMentionCursorInsideExpectedMention = {
-    mentionString: 'ba',
-    mentionTrigger: '@',
-    start: 14,
-    end: 17,
-};
 
 describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelector', () => {
     afterEach(() => {
@@ -161,71 +122,16 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
     });
 
     describe('getActiveMentionForEditorState()', () => {
-        const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
+        test('should call getActiveMentionForEditorState from utils', () => {
+            const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
 
-        const instance = wrapper.instance();
+            wrapper.setState({ mentionPattern: 'testPattern' });
 
-        // TESTS
-        [
-            // empty input
-            {
-                editorState: EditorState.createEmpty(),
-            },
-            // input has ne mention
-            {
-                editorState: noMentionEditorState,
-            },
-        ].forEach(({ editorState }) => {
-            test('should return null', () => {
-                expect(instance.getActiveMentionForEditorState(editorState)).toBeNull();
-            });
-        });
+            const getMentionStub = sandbox.stub(utils, 'getActiveMentionForEditorState');
 
-        [
-            // one string beginning with "@"
-            {
-                editorState: oneMentionEditorState,
-                selectionState: oneMentionSelectionState,
-                expected: oneMentionExpectedMention,
-            },
-            // two strings beginning with "@"
-            {
-                editorState: twoMentionEditorState,
-                selectionState: twoMentionSelectionState,
-                expected: twoMentionExpectedMention,
-            },
-            // two strings beginning "@", cursor inside one
-            {
-                editorState: twoMentionEditorState,
-                selectionState: twoMentionSelectionStateCursorInside,
-                expected: twoMentionCursorInsideExpectedMention,
-            },
-        ].forEach(({ editorState, selectionState, expected }) => {
-            test('should return null when cursor is not over a mention', () => {
-                const selectionStateAtBeginning = editorState.getSelection().merge({
-                    anchorOffset: 0,
-                    focusOffset: 0,
-                });
+            wrapper.instance().getActiveMentionForEditorState('testState');
 
-                const editorStateWithForcedSelection = EditorState.acceptSelection(
-                    editorState,
-                    selectionStateAtBeginning,
-                );
-
-                const result = instance.getActiveMentionForEditorState(editorStateWithForcedSelection);
-
-                expect(result).toBeNull();
-            });
-
-            test('should return the selected mention when it is selected', () => {
-                const editorStateWithForcedSelection = EditorState.acceptSelection(editorState, selectionState);
-
-                const result = instance.getActiveMentionForEditorState(editorStateWithForcedSelection);
-
-                Object.keys(expected).forEach(key => {
-                    expect(result[key]).toEqual(expected[key]);
-                });
-            });
+            expect(getMentionStub.calledWith('testState', 'testPattern')).toBe(true);
         });
     });
 
@@ -368,24 +274,22 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
     });
 
     describe('addMention()', () => {
-        test('should null out activeMention and call handleChange with updated string (plus space) when called', () => {
-            const mention = { id: 1, name: 'Fool Name' };
-
-            const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} editorState={oneMentionEditorState} />);
+        test('should call addMention from utils', () => {
+            const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} editorState="testState" />);
 
             wrapper.setState({
-                activeMention: oneMentionExpectedMention,
+                activeMention: 'testActiveMention',
             });
 
             const instance = wrapper.instance();
-            const handleChangeMock = sandbox.mock(instance).expects('handleChange');
+            const addMentionStub = sandbox.stub(utils, 'addMention').returns('testReturn');
             const setStateSpy = sandbox.spy(instance, 'setState');
+            const handleChangeStub = sandbox.stub(instance, 'handleChange');
 
-            instance.addMention(mention);
+            instance.addMention('testMention');
+            expect(addMentionStub.calledWith('testState', 'testActiveMention', 'testMention')).toBe(true);
             expect(setStateSpy.calledWith({ activeMention: null })).toBe(true);
-
-            const editorStateCall = handleChangeMock.firstCall.args[0];
-            expect(editorStateCall.getCurrentContent().getPlainText()).toEqual('Hey @Fool Name ');
+            expect(handleChangeStub.calledWith('testReturn')).toBe(true);
         });
     });
 
@@ -400,7 +304,7 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} contacts={[contact]} />);
 
             wrapper.setState({
-                activeMention: oneMentionExpectedMention,
+                activeMention: {},
             });
 
             wrapper.setProps({ contacts: [] });
