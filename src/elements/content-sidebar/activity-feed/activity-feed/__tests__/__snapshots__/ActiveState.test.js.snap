@@ -65,7 +65,13 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
           "message": "This is an annotation",
         }
       }
+      file_version={
+        Object {
+          "id": "123",
+        }
+      }
       id="anno_123"
+      isCurrentVersion={true}
       target={
         Object {
           "location": Object {

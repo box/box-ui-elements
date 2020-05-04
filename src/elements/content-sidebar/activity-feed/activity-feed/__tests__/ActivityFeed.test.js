@@ -150,6 +150,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             feedItems,
         });
         expect(wrapper.find('ActiveState')).toHaveLength(1);
+        expect(wrapper.find('ActiveState').prop('currentFileVersionId')).toBe(987);
     });
 
     test('should not expose add approval ui if task submit handler is not passed', () => {

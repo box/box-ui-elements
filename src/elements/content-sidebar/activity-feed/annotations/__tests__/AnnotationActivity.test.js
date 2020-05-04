@@ -2,7 +2,9 @@ import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 
 import AnnotationActivity from '../AnnotationActivity';
+import AnnotationActivityLink from '../AnnotationActivityLink';
 import CommentForm from '../../comment-form/CommentForm';
+import messages from '../messages';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 
@@ -25,8 +27,13 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         created_by: { name: 'Jane Doe', id: 10 },
         currentUser,
         description: { message: 'test' },
+        file_version: {
+            id: '456',
+            version_number: '2',
+        },
         handlers: allHandlers,
         id: '123',
+        isCurrentVersion: true,
         mentionSelectorContacts,
         target: { location: { value: 1 } },
     };
@@ -44,11 +51,23 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         };
 
         const wrapper = getWrapper(activity);
+        const activityLink = wrapper.find(AnnotationActivityLink);
 
         expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
-        expect(wrapper.find('AnnotationActivityLink').length).toEqual(1);
+        expect(activityLink.length).toEqual(1);
+        expect(activityLink.prop('message')).toEqual({ ...messages.annotationActivityPageItem, values: { number: 1 } });
         expect(wrapper.find('AnnotationActivityMenu').length).toEqual(1);
         expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(mockActivity.description.message);
+    });
+
+    test('should correctly render annotation activity of another file version', () => {
+        const wrapper = getWrapper({ isCurrentVersion: false });
+        const activityLink = wrapper.find(AnnotationActivityLink);
+
+        expect(activityLink.prop('message')).toEqual({
+            ...messages.annotationActivityVersionLink,
+            values: { number: '2' },
+        });
     });
 
     test('should render commenter as a link', () => {

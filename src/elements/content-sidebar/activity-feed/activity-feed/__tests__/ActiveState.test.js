@@ -2,6 +2,7 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 
 import ActiveState from '../ActiveState';
+import AnnotationActivity from '../../annotations';
 
 const currentUser = {
     id: 'user_123445',
@@ -16,6 +17,9 @@ const annotation = {
     created_at: '2018-07-03T14:43:52-07:00',
     description: {
         message: 'This is an annotation',
+    },
+    file_version: {
+        id: '123',
     },
     target: {
         location: {
@@ -129,6 +133,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
             <ActiveState
                 items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
                 currentUser={currentUser}
+                currentFileVersionId="123"
             />,
         ).dive();
 
@@ -148,4 +153,28 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         const wrapper = shallow(<ActiveState inlineError={activityFeedError} items={[]} currentUser={currentUser} />);
         expect(wrapper).toMatchSnapshot();
     });
+
+    test.each`
+        currentFileVersionId | isCurrentVersion
+        ${'123'}             | ${true}
+        ${'456'}             | ${false}
+    `(
+        'should correctly reflect annotation activity isCurrentVersion as $isCurrentVersion based on file version id as $currentFileVersionId',
+        ({ currentFileVersionId, isCurrentVersion }) => {
+            const wrapper = shallow(
+                <ActiveState
+                    items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
+                    currentUser={currentUser}
+                    currentFileVersionId={currentFileVersionId}
+                />,
+            );
+
+            expect(
+                wrapper
+                    .dive()
+                    .find(AnnotationActivity)
+                    .prop('isCurrentVersion'),
+            ).toBe(isCurrentVersion);
+        },
+    );
 });
