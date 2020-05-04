@@ -2,7 +2,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Classification, { getClassificationLabelColors } from '../classification';
+import Classification, { getClassificationLabelColor } from '../classification';
 import messages from './messages';
 import type { item as ItemType } from './flowTypes';
 
@@ -51,7 +51,7 @@ function getTitle(isEmailLinkSectionExpanded, showCollaboratorList, item) {
 const UnifiedShareModalTitle = ({ isEmailLinkSectionExpanded, showCollaboratorList, item }: Props) => {
     const title = getTitle(isEmailLinkSectionExpanded, showCollaboratorList, item);
     const { bannerPolicy, canUserSeeClassification, classification } = item;
-    const { fillColor, strokeColor } = getClassificationLabelColors(bannerPolicy);
+    const classificationColor = getClassificationLabelColor(bannerPolicy);
 
     return (
         <span className="bdl-UnifiedShareModalTitle">
@@ -61,8 +61,7 @@ const UnifiedShareModalTitle = ({ isEmailLinkSectionExpanded, showCollaboratorLi
                     definition={bannerPolicy ? bannerPolicy.body : undefined}
                     messageStyle="tooltip"
                     name={classification}
-                    fillColor={fillColor}
-                    strokeColor={strokeColor}
+                    color={classificationColor}
                     className="bdl-UnifiedShareModalTitle-classification"
                 />
             )}
