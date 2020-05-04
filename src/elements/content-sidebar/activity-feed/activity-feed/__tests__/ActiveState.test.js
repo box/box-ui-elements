@@ -113,6 +113,15 @@ const appActivity = {
 };
 
 const activityFeedError = { title: 't', content: 'm' };
+const getShallowWrapper = (params = {}) =>
+    shallow(
+        <ActiveState
+            items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
+            currentUser={currentUser}
+            currentFileVersionId="123"
+            {...params}
+        />,
+    );
 const getWrapper = (params = {}) =>
     mount(
         <ActiveState
@@ -124,18 +133,12 @@ const getWrapper = (params = {}) =>
 
 describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () => {
     test('should render empty state', () => {
-        const wrapper = shallow(<ActiveState items={[]} currentUser={currentUser} />);
+        const wrapper = getShallowWrapper({ items: [] });
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should render items', () => {
-        const wrapper = shallow(
-            <ActiveState
-                items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
-                currentUser={currentUser}
-                currentFileVersionId="123"
-            />,
-        ).dive();
+        const wrapper = getShallowWrapper().dive();
 
         expect(wrapper).toMatchSnapshot();
     });
@@ -150,7 +153,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
     });
 
     test('should correctly render with an inline error if some feed items fail to fetch', () => {
-        const wrapper = shallow(<ActiveState inlineError={activityFeedError} items={[]} currentUser={currentUser} />);
+        const wrapper = getShallowWrapper({ inlineError: activityFeedError, items: [] });
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -161,13 +164,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
     `(
         'should correctly reflect annotation activity isCurrentVersion as $isCurrentVersion based on file version id as $currentFileVersionId',
         ({ currentFileVersionId, isCurrentVersion }) => {
-            const wrapper = shallow(
-                <ActiveState
-                    items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
-                    currentUser={currentUser}
-                    currentFileVersionId={currentFileVersionId}
-                />,
-            );
+            const wrapper = getShallowWrapper({ currentFileVersionId });
 
             expect(
                 wrapper

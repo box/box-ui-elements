@@ -14,6 +14,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
     />
   </InlineError>
   <ActiveState
+    currentFileVersionId="123"
     currentUser={
       Object {
         "id": "user_123445",
@@ -27,6 +28,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
 
 exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should render empty state 1`] = `
 <ActiveState
+  currentFileVersionId="123"
   currentUser={
     Object {
       "id": "user_123445",

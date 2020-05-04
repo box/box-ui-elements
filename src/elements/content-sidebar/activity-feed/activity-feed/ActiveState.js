@@ -81,7 +81,7 @@ const ActiveState = ({
             {items.map((item: FeedItem) => {
                 const isFocused = item === activeEntry;
                 const refValue = isFocused ? activeFeedItemRef : undefined;
-                const fileVersionId = getProp(item, 'file_version.id');
+                const itemFileVersionId = getProp(item, 'file_version.id');
 
                 switch (item.type) {
                     case 'comment':
@@ -169,7 +169,7 @@ const ActiveState = ({
                                     currentUser={currentUser}
                                     getAvatarUrl={getAvatarUrl}
                                     getUserProfileUrl={getUserProfileUrl}
-                                    isCurrentVersion={currentFileVersionId === fileVersionId}
+                                    isCurrentVersion={currentFileVersionId === itemFileVersionId}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     onDelete={onAnnotationDelete}
                                     onSelect={onAnnotationSelect}
