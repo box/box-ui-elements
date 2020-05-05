@@ -7,7 +7,6 @@
 import * as React from 'react';
 import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
-import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import ActivityFeed from './activity-feed';
@@ -145,15 +144,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const { requestId } = meta || {};
         const { currentUser } = this.state;
         const isPending = action === 'create_start';
-        const currentFileVersionId = getProp(file, 'file_version.id');
-        // Patch the pending annotation with the current file version id
-        const patchedAnnotation = { ...annotation, file_version: { id: currentFileVersionId } };
 
         if (!currentUser) {
             throw getBadUserError();
         }
 
-        api.getFeedAPI(false).addAnnotation(file, currentUser, patchedAnnotation, requestId, isPending);
+        api.getFeedAPI(false).addAnnotation(file, currentUser, annotation, requestId, isPending);
 
         this.fetchFeedItems();
     }

@@ -33,9 +33,6 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
   <ActivityFeed
     file={
       Object {
-        "file_version": Object {
-          "id": "456",
-        },
         "id": "I_AM_A_FILE",
       }
     }
