@@ -14,25 +14,23 @@ import './SecurityControlsModal.scss';
 import type { MessageItem } from '../flowTypes';
 
 type Props = {
+    classificationColor?: string,
     classificationName?: string,
     closeModal: Function,
     definition?: string,
-    fillColor?: string,
     isSecurityControlsModalOpen: boolean,
     itemName?: string,
     modalItems: Array<MessageItem>,
-    strokeColor?: string,
 };
 
 const SecurityControlsModal = ({
     closeModal,
     definition,
-    fillColor,
+    classificationColor,
     classificationName,
     isSecurityControlsModalOpen,
     itemName,
     modalItems,
-    strokeColor,
 }: Props) => {
     if (!itemName || !classificationName || !definition) {
         return null;
@@ -50,11 +48,7 @@ const SecurityControlsModal = ({
             <p>
                 <FormattedMessage {...messages.modalDescription} />
             </p>
-            <ClassifiedBadge
-                strokeColor={strokeColor}
-                fillColor={fillColor}
-                name={((classificationName: any): string)}
-            />
+            <ClassifiedBadge color={classificationColor} name={((classificationName: any): string)} />
             <Label text={<FormattedMessage {...classificationMessages.definition} />}>
                 <p className="bdl-SecurityControlsModal-definition">{definition}</p>
             </Label>
