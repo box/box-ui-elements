@@ -381,6 +381,7 @@ export const VERSION_RETENTION_INDEFINITE: 'indefinite' = 'indefinite';
 
 /* ------------------ Placeholder Feed Items ------------------------- */
 export const PLACEHOLDER_USER = { type: 'user', id: '2', name: '' };
+export const FILE_REQUEST_NAME = 'File Request';
 
 /* ------------------ Open With ------------------------- */
 export const APP_INTEGRATION: 'app_integration' = 'app_integration';
