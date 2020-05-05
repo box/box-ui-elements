@@ -54,7 +54,6 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         const activityLink = wrapper.find(AnnotationActivityLink);
 
         expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
-        expect(activityLink.length).toEqual(1);
         expect(activityLink.prop('message')).toEqual({ ...messages.annotationActivityPageItem, values: { number: 1 } });
         expect(wrapper.find('AnnotationActivityMenu').length).toEqual(1);
         expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(mockActivity.description.message);
@@ -62,9 +61,8 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
     test('should correctly render annotation activity of another file version', () => {
         const wrapper = getWrapper({ isCurrentVersion: false });
-        const activityLink = wrapper.find(AnnotationActivityLink);
 
-        expect(activityLink.prop('message')).toEqual({
+        expect(wrapper.find(AnnotationActivityLink).prop('message')).toEqual({
             ...messages.annotationActivityVersionLink,
             values: { number: '2' },
         });
