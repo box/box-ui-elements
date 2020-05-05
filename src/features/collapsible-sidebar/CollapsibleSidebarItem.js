@@ -10,7 +10,6 @@ import * as React from 'react';
 import Tooltip from '../../components/tooltip';
 
 import type { Callout } from '../left-sidebar/Callout';
-// eslint-disable-next-line import/no-named-as-default-member, import/no-named-as-default
 import LeftSidebarLinkCallout from '../left-sidebar/LeftSidebarLinkCallout';
 
 type Props = {

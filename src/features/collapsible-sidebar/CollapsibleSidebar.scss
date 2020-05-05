@@ -7,9 +7,6 @@ $collapsible-side-bar-collapsed-width: 68px;
 $collapsible-side-bar-h-padding: $bdl-grid-unit * 3;
 $collapsible-side-bar-v-padding: $bdl-grid-unit * 3;
 $left-sidebar-z-index: 40 !default;
-// Flat hex values were used since it's such a narrow case.
-$collapsible-side-bar-ie11-track-color: #0052b5;
-$collapsible-side-bar-ie11-face-color: #b3cff2;
 
 .bdl-CollapsibleSidebar-wrapper {
     position: relative;
@@ -89,31 +86,6 @@ $collapsible-side-bar-ie11-face-color: #b3cff2;
 
     .scroll-wrap-container {
         overflow-y: hidden;
-
-        // custom scrollbar for firefox
-        scrollbar-color: rgba($white, .5) transparent;
-        scrollbar-width: thin;
-        // custom scrollbar for IE11
-        scrollbar-face-color: $collapsible-side-bar-ie11-face-color;
-        scrollbar-arrow-color: $collapsible-side-bar-ie11-face-color;
-        scrollbar-track-color: $collapsible-side-bar-ie11-track-color;
-        scrollbar-shadow-color: $collapsible-side-bar-ie11-face-color;
-
-        // Custom scrollbar for Chrome, Safari
-        &::-webkit-scrollbar {
-            width: 12px;
-        }
-
-        &::-webkit-scrollbar-track {
-            background-color: transparent;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background-color: rgba($white, .5);
-            background-clip: padding-box;
-            border: 2px solid transparent;
-            border-radius: 8px;
-        }
 
         &:hover {
             overflow-y: auto;
