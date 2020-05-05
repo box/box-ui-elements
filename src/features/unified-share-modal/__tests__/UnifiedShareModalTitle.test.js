@@ -47,7 +47,7 @@ describe('features/unified-share-modal/HeaderTitle', () => {
 
     test('should render classification label with fill and stroke colors that match the classification color id', () => {
         const colorID = 3;
-        const { fillColor, strokeColor } = classificationColorsMap[colorID];
+        const { color } = classificationColorsMap[colorID];
 
         const item = {
             ...defaultItem,
@@ -56,7 +56,6 @@ describe('features/unified-share-modal/HeaderTitle', () => {
         };
 
         wrapper = shallow(<UnifiedShareModalTitle item={item} />);
-        expect(wrapper.find('Classification').props().fillColor).toBe(fillColor);
-        expect(wrapper.find('Classification').props().strokeColor).toBe(strokeColor);
+        expect(wrapper.find('Classification').props().color).toBe(color);
     });
 });
