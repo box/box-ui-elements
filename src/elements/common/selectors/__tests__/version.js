@@ -1,5 +1,6 @@
 import selectors from '../version';
 import {
+    FILE_REQUEST_NAME,
     PLACEHOLDER_USER,
     VERSION_DELETE_ACTION,
     VERSION_PROMOTE_ACTION,
@@ -35,20 +36,27 @@ describe('elements/common/selectors/version', () => {
 
     describe('getVersionUser()', () => {
         test.each`
-            modified_by    | restored_by    | trashed_by     | expected
-            ${null}        | ${null}        | ${null}        | ${PLACEHOLDER_USER}
-            ${defaultUser} | ${null}        | ${null}        | ${defaultUser}
-            ${defaultUser} | ${restoreUser} | ${null}        | ${restoreUser}
-            ${defaultUser} | ${restoreUser} | ${trashedUser} | ${restoreUser}
-            ${defaultUser} | ${null}        | ${trashedUser} | ${trashedUser}
-        `('should return the most relevant user', ({ expected, modified_by, restored_by, trashed_by }) => {
-            const version = {
-                modified_by,
-                restored_by,
-                trashed_by,
-            };
+            modified_by         | restored_by    | trashed_by     | uploader_display_name | expected
+            ${null}             | ${null}        | ${null}        | ${null}               | ${PLACEHOLDER_USER}
+            ${null}             | ${null}        | ${null}        | ${FILE_REQUEST_NAME}  | ${{ ...PLACEHOLDER_USER, name: FILE_REQUEST_NAME }}
+            ${PLACEHOLDER_USER} | ${null}        | ${null}        | ${null}               | ${PLACEHOLDER_USER}
+            ${PLACEHOLDER_USER} | ${null}        | ${null}        | ${FILE_REQUEST_NAME}  | ${{ ...PLACEHOLDER_USER, name: FILE_REQUEST_NAME }}
+            ${defaultUser}      | ${null}        | ${null}        | ${null}               | ${defaultUser}
+            ${defaultUser}      | ${restoreUser} | ${null}        | ${null}               | ${restoreUser}
+            ${defaultUser}      | ${restoreUser} | ${trashedUser} | ${null}               | ${restoreUser}
+            ${defaultUser}      | ${null}        | ${trashedUser} | ${null}               | ${trashedUser}
+        `(
+            'should return the most relevant user',
+            ({ expected, modified_by, restored_by, trashed_by, uploader_display_name }) => {
+                const version = {
+                    modified_by,
+                    restored_by,
+                    trashed_by,
+                    uploader_display_name,
+                };
 
-            expect(selectors.getVersionUser(version)).toEqual(expected);
-        });
+                expect(selectors.getVersionUser(version)).toEqual(expected);
+            },
+        );
     });
 });

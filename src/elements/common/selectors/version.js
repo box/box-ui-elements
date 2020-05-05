@@ -32,8 +32,15 @@ const getVersionAction = ({ restored_at, trashed_at, version_promoted }: $Shape<
     return action;
 };
 
-const getVersionUser = ({ modified_by, restored_by, trashed_by }: $Shape<BoxItemVersion>): User => {
-    return restored_by || trashed_by || modified_by || PLACEHOLDER_USER;
+const getVersionUser = ({
+    modified_by,
+    restored_by,
+    trashed_by,
+    uploader_display_name,
+}: $Shape<BoxItemVersion>): User => {
+    const { name, id, ...rest } = restored_by || trashed_by || modified_by || PLACEHOLDER_USER;
+    const isAnonymous = id === PLACEHOLDER_USER.id;
+    return { ...rest, id, name: isAnonymous && uploader_display_name ? uploader_display_name : name };
 };
 
 export default {

@@ -4,7 +4,7 @@
  */
 
 import * as React from 'react';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import type { InjectIntlProvidedProps } from 'react-intl';
 import IconInfoInverted from '../../../../icons/general/IconInfoInverted';
 import messages from '../../../common/messages';
@@ -12,6 +12,7 @@ import PlainButton from '../../../../components/plain-button';
 import selectors from '../../../common/selectors/version';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import {
+    FILE_REQUEST_NAME,
     VERSION_UPLOAD_ACTION,
     VERSION_DELETE_ACTION,
     VERSION_PROMOTE_ACTION,
@@ -40,8 +41,8 @@ const Version = (props: Props): React.Node => {
     const action = selectors.getVersionAction(props);
     const { id, intl, onInfo, version_number, version_promoted } = props;
     // $FlowFixMe
-    const { name } = selectors.getVersionUser(props);
-
+    const user = selectors.getVersionUser(props);
+    const name = user.name === FILE_REQUEST_NAME ? intl.formatMessage(messages.fileRequestDisplayName) : user.name;
     return (
         <div className="bcs-Version">
             <span className="bcs-Version-message">
