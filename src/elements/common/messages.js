@@ -788,6 +788,12 @@ const messages = defineMessages({
         description:
             'Message displayed in the activity feed for a newly uploaded version. {name} is the user who performed the action. {version_number} is the file version string.',
     },
+    fileRequestDisplayName: {
+        defaultMessage: 'File Request',
+        description:
+            'name of the File Request feature used to translate when a File Request is uploaded by the service',
+        id: 'be.fileRequestDisplayName',
+    },
     defaultInlineErrorContentMessage: {
         id: 'be.defaultInlineErrorContentMessage',
         description: 'Default bottom inline error message',
