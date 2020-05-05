@@ -5,22 +5,13 @@ exports[`icons/general/IconSecurityClassification should correctly render icon w
   className="bdl-IconSecurityClassification test"
   height={100}
   title="title"
-  viewBox="0 0 32 32"
+  viewBox="0 0 12 12"
   width={200}
 >
   <path
-    d="M17,2 L5,8 L5,15 C5,21.4214876 10.6933333,29.5421488 17,31 C23.3066667,29.5421488 29,21.4214876 29,15 L29,8 L17,2 Z"
-    fill="none"
-    stroke="#987654"
-    strokeWidth={1}
-  />
-  <path
-    d="M23,11 L23,19"
-    fill="none"
-    stroke="#987654"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth={1}
+    d="M6 0l4.875 2.438v2.856c0 2.645-2.309 5.792-4.79 6.366L6 11.68l-.084-.02c-2.482-.574-4.791-3.721-4.791-6.366V2.438L6 0zm0 .839L1.875 2.9v2.393c0 2.276 2.026 5.068 4.125 5.614 2.1-.546 4.125-3.338 4.125-5.614V2.901L6 .839zm2.25 2.58c.207 0 .375.168.375.375v3c0 .207-.168.375-.375.375s-.375-.168-.375-.375v-3c0-.207.168-.375.375-.375z"
+    fill="#987654"
+    fillRule="evenodd"
   />
 </AccessibleSVG>
 `;
@@ -28,23 +19,14 @@ exports[`icons/general/IconSecurityClassification should correctly render icon w
 exports[`icons/general/IconSecurityClassification should correctly render icon with default values 1`] = `
 <AccessibleSVG
   className="bdl-IconSecurityClassification"
-  height={32}
-  viewBox="0 0 32 32"
-  width={32}
+  height={12}
+  viewBox="0 0 12 12"
+  width={12}
 >
   <path
-    d="M17,2 L5,8 L5,15 C5,21.4214876 10.6933333,29.5421488 17,31 C23.3066667,29.5421488 29,21.4214876 29,15 L29,8 L17,2 Z"
-    fill="none"
-    stroke="#222"
-    strokeWidth={2}
-  />
-  <path
-    d="M23,11 L23,19"
-    fill="none"
-    stroke="#222"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth={2}
+    d="M6 0l4.875 2.438v2.856c0 2.645-2.309 5.792-4.79 6.366L6 11.68l-.084-.02c-2.482-.574-4.791-3.721-4.791-6.366V2.438L6 0zm0 .839L1.875 2.9v2.393c0 2.276 2.026 5.068 4.125 5.614 2.1-.546 4.125-3.338 4.125-5.614V2.901L6 .839zm2.25 2.58c.207 0 .375.168.375.375v3c0 .207-.168.375-.375.375s-.375-.168-.375-.375v-3c0-.207.168-.375.375-.375z"
+    fill="#222"
+    fillRule="evenodd"
   />
 </AccessibleSVG>
 `;
