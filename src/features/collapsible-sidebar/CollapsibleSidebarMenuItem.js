@@ -1,15 +1,16 @@
 /**
  * @flow
+ * @file Menu item with styles to be used for CollapsibleSidebar
+ * @author Box
  *
- * A sidebar component that supports collapsed/expanded state for responsive sizing.
- * This component should be moved into BUIE when complete.
- * This component should NOT contain any reference to EUA specific patterns like Immutables and redux containers.
+ * Menu item with styles to be used for CollapsibleSidebar.
+ * Will render different variations of icon and text based on props.
  */
 
 import * as React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
-import Tooltip, { TooltipPosition } from '../../components/tooltip';
+import Tooltip from '../../components/tooltip';
 import { useIsContentOverflowed } from '../../utils/dom';
 import CollapsibleSidebarContext from './CollapsibleSidebarContext';
 
@@ -108,7 +109,7 @@ function CollapsibleSidebarMenuItem(props: Props) {
             isDisabled={!isTextOverflowed}
             isShown={isScrolling ? false : undefined}
             isTabbable={false}
-            position={TooltipPosition.MIDDLE_RIGHT}
+            position="middle-right"
             text={text}
         >
             {renderMenuItem()}

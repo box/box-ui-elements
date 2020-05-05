@@ -1,7 +1,5 @@
 /**
- * A sidebar component that supports collapsed/expanded state for responsive sizing.
- * This component should be moved into BUIE when complete.
- * This component should NOT contain any reference to EUA specific patterns like Immutables and redux containers.
+ * Group of components that supports collapsed/expanded state for responsive sizing.
  */
 
 export { default as CollapsibleSidebar } from './CollapsibleSidebar';

@@ -22,7 +22,7 @@ const getScrollShadowState = (scrollTop: number, scrollHeight: number, clientHei
     return scrollState;
 };
 
-const getScrollShadowClassName = (scrollTop: number, scrollHeight: number, clientHeight: number): scrollShadowState => {
+const getScrollShadowClassName = (scrollTop: number, scrollHeight: number, clientHeight: number): string => {
     const scrollState = getScrollShadowState(scrollTop, scrollHeight, clientHeight);
 
     return classNames('scroll-shadow-container', {

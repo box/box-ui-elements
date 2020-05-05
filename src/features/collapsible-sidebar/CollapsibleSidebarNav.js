@@ -1,9 +1,10 @@
 /**
  * @flow
+ * @file Scroll container for lists to be used within CollapsibleSidebar component.
+ * @author Box
  *
- * A sidebar component that supports collapsed/expanded state for responsive sizing.
- * This component should be moved into BUIE when complete.
- * This component should NOT contain any reference to EUA specific patterns like Immutables and redux containers.
+ * A Scroll container for lists to be used within CollapsibleSidebar component.
+ * Applies scroll shadow in the container based on scroll position.
  */
 
 import * as React from 'react';

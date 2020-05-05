@@ -3,9 +3,7 @@
  * @file Sidebar component that supports rendering different elements based on expand/collapse state
  * @author Box
  *
- * A sidebar component that supports collapsed/expanded state for responsive sizing.
- * This component should be moved into BUIE when complete.
- * This component should NOT contain any reference to EUA specific patterns like Immutables and redux containers.
+ * A sidebar component that supports collapsed/expanded state and responsive sizing.
  */
 
 import * as React from 'react';
