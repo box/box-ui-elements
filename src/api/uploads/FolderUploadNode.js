@@ -121,8 +121,6 @@ class FolderUploadNode {
             if (error.code === ERROR_CODE_ITEM_NAME_IN_USE) {
                 this.folderId = error.context_info.conflicts[0].id;
             } else if (isRoot) {
-                errorEncountered = true;
-                errorCode = error.code;
                 errorCallback(error);
             } else {
                 // If this is a child folder of the folder being uploaded, this errorCallback will set
