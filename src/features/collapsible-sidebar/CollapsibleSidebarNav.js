@@ -17,7 +17,7 @@ import styled from 'styled-components';
 import CollapsibleSidebarContext from './CollapsibleSidebarContext';
 import { getScrollShadowClassName } from './utils/scrollShadow';
 
-export const StyledScrollThumb = styled.div`
+const StyledScrollThumb = styled.div`
     background: ${props => props.theme.primary.foreground};
     opacity: 0;
     transition: opacity 0.15s;
@@ -29,7 +29,7 @@ export const StyledScrollThumb = styled.div`
 `;
 
 // The following values match the derived values from scrollShadow.scss
-export const StyledScrollContainer = styled.div`
+const StyledScrollContainer = styled.div`
     &::before {
         box-shadow: 0 6px 6px -2px ${props => props.theme.primary.scrollShadowRgba};
     }

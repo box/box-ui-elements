@@ -76,23 +76,6 @@ $left-sidebar-z-index: 40 !default;
     fill: $white;
 }
 
-.bdl-CollapsibleSidebar-navScrollWrapper {
-    // Override BUIE default due to darkness of sidebar.
-    // Note: may need adjusting due to custom branding.
-    .scroll-wrap-container::before,
-    .scroll-wrap-container::after {
-        box-shadow: 0 0 20px 0 rgba(0, 0, 0, .2);
-    }
-
-    .scroll-wrap-container {
-        overflow-y: hidden;
-
-        &:hover {
-            overflow-y: auto;
-        }
-    }
-}
-
 .bdl-CollapsibleSidebar-nav {
     flex: 1;
     padding: 0 $collapsible-side-bar-h-padding;
