@@ -3,6 +3,7 @@
 import Color from 'color';
 import type { ColorType } from 'color';
 import method from 'lodash/method';
+import merge from 'lodash/merge';
 import mapValues from 'lodash/mapValues';
 
 import {
@@ -13,6 +14,7 @@ import {
     THEME_MID_LIGHT,
     THEME_VERY_LIGHT,
 } from '../constants';
+import defaultTheme from '../styles/theme';
 import * as vars from '../styles/variables';
 
 // When converting from rgb/hsl to hex there is potential for
@@ -126,7 +128,8 @@ function createTheme(colorKey: string) {
     }
 
     // If the color is too extreme on either end of the spectrum we need to change our rules.
-    const exceedsLightThreshold = colorRange === THEME_VERY_LIGHT;
+    const exceedsLightThreshold = colorRange === THEME_VERY_LIGHT || colorRange === THEME_MID_LIGHT;
+    const exceedsDarkThreshold = colorRange === THEME_VERY_DARK || colorRange === THEME_DARK;
 
     // Light or dark isn't sufficient for determining how the secondary or accent colors should
     // be calculated. In addition to that check, we will check the yiq value of the color to ensure
@@ -144,6 +147,13 @@ function createTheme(colorKey: string) {
         activeContrast >= MIN_CONTRAST + OFFSET_FACTOR && activeContrast !== 21
             ? modifiedColors.active
             : modifiedColors.activeInverse || adjustLightness(colorKeyObj, -colorRangeConfig.modifiers.active);
+
+    let scrollShadowRgba = 'rgba(0, 0, 0, 0.12)';
+    if (exceedsLightThreshold) {
+        scrollShadowRgba = 'rgba(0, 0, 0, 0.08)';
+    } else if (exceedsDarkThreshold) {
+        scrollShadowRgba = 'rgba(0, 0, 0, 0.4)';
+    }
 
     // Converting color objects to hex for return value
     const colorKeyHex = colorKeyObj.hex();
@@ -168,12 +178,20 @@ function createTheme(colorKey: string) {
         buttonBorder: exceedsLightThreshold ? vars.bdlGray : colorKeyHex,
         buttonBorderHover: exceedsLightThreshold ? vars.bdlGray80 : hoverHex,
         buttonBorderActive: exceedsLightThreshold ? vars.bdlGray62 : activeHex,
+
+        // ProgressBar overrides
+        progressBarBackground: exceedsLightThreshold ? vars.bdlGray50 : hoverHex,
+
+        // Scroll effect overrides for scrollable themed elements
+        scrollShadowRgba,
     };
 
-    return {
+    const dynamicTheme = {
         // To avoid a mixture of casing, we force all values to lower
-        primary: mapValues(colorValues, method('toLowerCase')),
+        primary: { ...mapValues(colorValues, method('toLowerCase')), _debug: { colorRange } },
     };
+
+    return merge({}, defaultTheme, dynamicTheme);
 }
 
 export { createTheme };

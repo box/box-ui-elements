@@ -1,0 +1,24 @@
+declare export var CREATE: "create";
+declare export var Action: {|
+  +CREATE_START: "create_start", // "create_start"
+  +CREATE_END: "create_end" // "create_end"
+|};
+export interface AnnotatorState {
+  activeAnnotationId?: string;
+  annotation?: { [key: string]: any } | void;
+  action: $Values<typeof Action> | void;
+  error: Error | void;
+}
+declare export var Status: {|
+  +ERROR: "error", // "error"
+  +PENDING: "pending", // "pending"
+  +SUCCESS: "success" // "success"
+|};
+export interface Metadata {
+  status: $Values<typeof Status>;
+}
+export interface AnnotationActionEvent {
+  annotation: { [key: string]: any } | void;
+  error: Error | void;
+  meta: Metadata;
+}

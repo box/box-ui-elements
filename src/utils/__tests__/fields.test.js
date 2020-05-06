@@ -54,6 +54,8 @@ import {
     FIELD_STATUS,
     FIELD_RESTORED_FROM,
     FIELD_RETENTION,
+    FIELD_URL,
+    FIELD_UPLOADER_DISPLAY_NAME,
     PLACEHOLDER_USER,
 } from '../../constants';
 
@@ -77,6 +79,7 @@ describe('util/fields', () => {
             FIELD_AUTHENTICATED_DOWNLOAD_URL,
             FIELD_IS_DOWNLOAD_AVAILABLE,
             FIELD_REPRESENTATIONS,
+            FIELD_URL,
         ]);
     });
 
@@ -122,6 +125,7 @@ describe('util/fields', () => {
             FIELD_RESTORED_FROM,
             FIELD_AUTHENTICATED_DOWNLOAD_URL,
             FIELD_IS_DOWNLOAD_AVAILABLE,
+            FIELD_UPLOADER_DISPLAY_NAME,
         ]);
     });
 
@@ -152,6 +156,7 @@ describe('util/fields', () => {
             FIELD_SIZE,
             FIELD_TRASHED_AT,
             FIELD_TRASHED_BY,
+            FIELD_UPLOADER_DISPLAY_NAME,
             FIELD_VERSION_NUMBER,
         ]);
     });

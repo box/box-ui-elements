@@ -32,7 +32,6 @@ const render = props =>
 const defaultFeatures = {
     activityFeed: {
         tasks: {
-            anyTask: true,
             assignToGroup: false,
         },
     },
@@ -522,14 +521,12 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
         });
 
         test.each`
-            anyTaskFeature | assignToGroupFeature | numCheckboxes | checkboxTestId
-            ${false}       | ${false}             | ${0}          | ${'task-form-completion-rule-checkbox'}
-            ${false}       | ${true}              | ${0}          | ${'task-form-completion-rule-checkbox-group'}
-            ${true}        | ${false}             | ${1}          | ${'task-form-completion-rule-checkbox'}
-            ${true}        | ${true}              | ${1}          | ${'task-form-completion-rule-checkbox-group'}
+            assignToGroupFeature | numCheckboxes | checkboxTestId
+            ${false}             | ${1}          | ${'task-form-completion-rule-checkbox'}
+            ${true}              | ${1}          | ${'task-form-completion-rule-checkbox-group'}
         `(
             'Given 3 approvers, $numCheckboxes checkboxes are shown when any task is $anyTaskFeature and assign to group is $assignToGroupFeature (using test id $checkboxTestId)',
-            ({ anyTaskFeature, assignToGroupFeature, numCheckboxes, checkboxTestId }) => {
+            ({ assignToGroupFeature, numCheckboxes, checkboxTestId }) => {
                 const approvers = new Array(3).fill().map(() => ({
                     id: '',
                     target: {
@@ -549,7 +546,6 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
                     {
                         activityFeed: {
                             tasks: {
-                                anyTask: anyTaskFeature,
                                 assignToGroup: assignToGroupFeature,
                             },
                         },

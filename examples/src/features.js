@@ -6,6 +6,6 @@ export default {
         },
     },
     tasks: {
-        anyTask: true,
+        assignToGroup: true,
     },
 };

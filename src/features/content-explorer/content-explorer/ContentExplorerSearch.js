@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { injectIntl } from 'react-intl';
-
 import SearchForm from '../../../components/search-form';
 
 import messages from '../messages';

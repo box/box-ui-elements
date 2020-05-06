@@ -15,3 +15,4 @@ import type PlainUploadAPI from '../src/api/uploads/PlainUpload';
 import type { ContentSidebarProps } from '../src/elements/content-sidebar';
 import type { ContentOpenWithProps } from '../src/elements/content-open-with';
 import type { ContentPreviewProps } from '../src/elements/content-preview';
+import type { ContentUploaderProps } from '../src/elements/content-uploader';

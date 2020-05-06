@@ -17,10 +17,15 @@ const messages = defineMessages({
         id: 'boxui.share.sharedLinkSettings.directLinkLabel',
     },
     directDownloadBlockedByAccessPolicyWithClassification: {
-        defaultMessage: 'Download has been disabled for content due to the classification',
+        defaultMessage: 'Download has been disabled for content due to the classification.',
         description:
             'Text to show that direct link download is disabled due to applied shield access policy with classification',
         id: 'boxui.share.sharedLinkSettings.directDownloadBlockedByAccessPolicyWithClassification',
+    },
+    directDownloadBlockedByMaliciousContent: {
+        defaultMessage: 'Download for this content has been disabled due to a security policy.',
+        description: 'Text to show that direct link download is disabled due to security policy',
+        id: 'boxui.share.sharedLinkSettings.directDownloadBlockedByMaliciousContent',
     },
     directDownloadBlockedByAccessPolicyWithoutClassification: {
         defaultMessage: 'Download has been disabled for content without classification.',

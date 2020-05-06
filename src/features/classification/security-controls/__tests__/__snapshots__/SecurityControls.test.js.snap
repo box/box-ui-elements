@@ -6,8 +6,6 @@ exports[`features/classification/security-controls/SecurityControls should rende
     className="bdl-SecurityControls"
   >
     <SecurityControlsItem
-      controlsFormat="full"
-      fillColor="#fef7e8"
       key="boxui.securityControls.sharingCollabOnly"
       message={
         Object {
@@ -15,11 +13,8 @@ exports[`features/classification/security-controls/SecurityControls should rende
           "id": "boxui.securityControls.sharingCollabOnly",
         }
       }
-      strokeColor="#f5b31b"
     />
     <SecurityControlsItem
-      controlsFormat="full"
-      fillColor="#fef7e8"
       key="boxui.securityControls.externalCollabDomainList"
       message={
         Object {
@@ -27,11 +22,8 @@ exports[`features/classification/security-controls/SecurityControls should rende
           "id": "boxui.securityControls.externalCollabDomainList",
         }
       }
-      strokeColor="#f5b31b"
     />
     <SecurityControlsItem
-      controlsFormat="full"
-      fillColor="#fef7e8"
       key="boxui.securityControls.desktopDownloadOwners"
       message={
         Object {
@@ -39,11 +31,8 @@ exports[`features/classification/security-controls/SecurityControls should rende
           "id": "boxui.securityControls.desktopDownloadOwners",
         }
       }
-      strokeColor="#f5b31b"
     />
     <SecurityControlsItem
-      controlsFormat="full"
-      fillColor="#fef7e8"
       key="boxui.securityControls.appDownloadWhitelist"
       message={
         Object {
@@ -54,7 +43,6 @@ exports[`features/classification/security-controls/SecurityControls should rende
           },
         }
       }
-      strokeColor="#f5b31b"
     />
   </ul>
 </Fragment>
@@ -63,11 +51,9 @@ exports[`features/classification/security-controls/SecurityControls should rende
 exports[`features/classification/security-controls/SecurityControls should render SecurityControls with single SecurityControlsItem and modal items when using SHORT_WITH_BTN controlsFormat and item, classification data is provided 1`] = `
 <Fragment>
   <ul
-    className="bdl-SecurityControls bdl-SecurityControls--summarized"
+    className="bdl-SecurityControls"
   >
     <SecurityControlsItem
-      controlsFormat="shortWithBtn"
-      fillColor="#fef7e8"
       key="boxui.securityControls.shortAllRestrictions"
       message={
         Object {
@@ -75,7 +61,6 @@ exports[`features/classification/security-controls/SecurityControls should rende
           "id": "boxui.securityControls.shortAllRestrictions",
         }
       }
-      strokeColor="#f5b31b"
     />
   </ul>
   <PlainButton
@@ -97,22 +82,30 @@ exports[`features/classification/security-controls/SecurityControls should rende
     modalItems={
       Array [
         Object {
-          "defaultMessage": "Shared links allowed for collaborators only.",
-          "id": "boxui.securityControls.sharingCollabOnly",
+          "message": Object {
+            "defaultMessage": "Shared links allowed for collaborators only.",
+            "id": "boxui.securityControls.sharingCollabOnly",
+          },
         },
         Object {
-          "defaultMessage": "External collaboration limited to approved domains.",
-          "id": "boxui.securityControls.externalCollabDomainList",
+          "message": Object {
+            "defaultMessage": "External collaboration limited to approved domains.",
+            "id": "boxui.securityControls.externalCollabDomainList",
+          },
         },
         Object {
-          "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners.",
-          "id": "boxui.securityControls.desktopDownloadOwners",
+          "message": Object {
+            "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners.",
+            "id": "boxui.securityControls.desktopDownloadOwners",
+          },
         },
         Object {
-          "defaultMessage": "Only select applications are allowed: {appNames}",
-          "id": "boxui.securityControls.appDownloadWhitelist",
-          "values": Object {
-            "appNames": "",
+          "message": Object {
+            "defaultMessage": "Only select applications are allowed: {appNames}",
+            "id": "boxui.securityControls.appDownloadWhitelist",
+            "values": Object {
+              "appNames": "",
+            },
           },
         },
       ]
@@ -124,11 +117,9 @@ exports[`features/classification/security-controls/SecurityControls should rende
 exports[`features/classification/security-controls/SecurityControls should render SecurityControls with single SecurityControlsItem when using SHORT controlsFormat 1`] = `
 <Fragment>
   <ul
-    className="bdl-SecurityControls bdl-SecurityControls--summarized"
+    className="bdl-SecurityControls"
   >
     <SecurityControlsItem
-      controlsFormat="short"
-      fillColor="#fef7e8"
       key="boxui.securityControls.shortAllRestrictions"
       message={
         Object {
@@ -136,7 +127,6 @@ exports[`features/classification/security-controls/SecurityControls should rende
           "id": "boxui.securityControls.shortAllRestrictions",
         }
       }
-      strokeColor="#f5b31b"
     />
   </ul>
 </Fragment>

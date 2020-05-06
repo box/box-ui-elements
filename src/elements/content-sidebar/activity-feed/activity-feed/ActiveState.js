@@ -6,11 +6,17 @@ import * as React from 'react';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
 import AppActivity from '../app-activity';
+import AnnotationActivity from '../annotations';
 import Comment from '../comment';
 import TaskNew from '../task-new';
 import Version, { CollapsedVersion } from '../version';
 import withErrorHandling from '../../withErrorHandling';
-import type { FocusableFeedItemType, FeedItem, FeedItems } from '../../../../common/types/feed';
+import type {
+    BoxAnnotationPermission,
+    FeedItem,
+    FeedItems,
+    FocusableFeedItemType,
+} from '../../../../common/types/feed';
 import type { SelectorItems, User } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
@@ -20,6 +26,7 @@ type Props = {
     activeFeedEntryType?: FocusableFeedItemType,
     activeFeedItemRef: { current: null | HTMLElement },
     approverSelectorContacts?: SelectorItems<>,
+    currentFileVersionId: string,
     currentUser?: User,
     getApproverWithQuery?: Function,
     getAvatarUrl: GetAvatarUrlCallback,
@@ -27,6 +34,8 @@ type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems<>,
+    onAnnotationDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => void,
+    onAnnotationSelect?: (id: string) => void,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
     onCommentEdit?: Function,
@@ -34,6 +43,7 @@ type Props = {
     onTaskDelete?: Function,
     onTaskEdit?: Function,
     onTaskModalClose?: Function,
+    onTaskView?: Function,
     onVersionInfo?: Function,
     translations?: Translations,
 };
@@ -43,15 +53,19 @@ const ActiveState = ({
     activeFeedEntryType,
     activeFeedItemRef,
     approverSelectorContacts,
+    currentFileVersionId,
     currentUser,
     items,
     mentionSelectorContacts,
     getMentionWithQuery,
+    onAnnotationDelete,
+    onAnnotationSelect,
     onAppActivityDelete,
     onCommentDelete,
     onCommentEdit,
     onTaskDelete,
     onTaskEdit,
+    onTaskView,
     onTaskAssignmentUpdate,
     onTaskModalClose,
     onVersionInfo,
@@ -67,6 +81,7 @@ const ActiveState = ({
             {items.map((item: FeedItem) => {
                 const isFocused = item === activeEntry;
                 const refValue = isFocused ? activeFeedItemRef : undefined;
+                const itemFileVersionId = getProp(item, 'file_version.id');
 
                 switch (item.type) {
                     case 'comment':
@@ -112,6 +127,7 @@ const ActiveState = ({
                                     onAssignmentUpdate={onTaskAssignmentUpdate}
                                     onDelete={onTaskDelete}
                                     onEdit={onTaskEdit}
+                                    onView={onTaskView}
                                     onModalClose={onTaskModalClose}
                                     translations={translations}
                                 />
@@ -137,6 +153,28 @@ const ActiveState = ({
                                 data-testid="app-activity"
                             >
                                 <AppActivity currentUser={currentUser} onDelete={onAppActivityDelete} {...item} />
+                            </li>
+                        );
+                    case 'annotation':
+                        return (
+                            <li
+                                key={item.type + item.id}
+                                className={classNames('bcs-activity-feed-annotation-activity', {
+                                    'bcs-is-focused': isFocused,
+                                })}
+                                data-testid="annotation-activity"
+                                ref={refValue}
+                            >
+                                <AnnotationActivity
+                                    currentUser={currentUser}
+                                    getAvatarUrl={getAvatarUrl}
+                                    getUserProfileUrl={getUserProfileUrl}
+                                    isCurrentVersion={currentFileVersionId === itemFileVersionId}
+                                    mentionSelectorContacts={mentionSelectorContacts}
+                                    onDelete={onAnnotationDelete}
+                                    onSelect={onAnnotationSelect}
+                                    {...item}
+                                />
                             </li>
                         );
                     default:

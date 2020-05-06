@@ -58,3 +58,37 @@ describe('util/Browser/canPlayDash()', () => {
         expect(isTypeSupportedMock).toHaveBeenCalledWith('video/mp4; codecs="avc1.64001E"');
     });
 });
+
+describe('Browser clipboard API', () => {
+    // @see https://caniuse.com/#search=clipboard
+    afterEach(() => {
+        global.navigator.clipboard = undefined;
+    });
+
+    test('should return false when clipboard is unavailable', () => {
+        expect(browser.canWriteToClipboard()).toBe(false);
+        expect(browser.canReadFromClipboard()).toBe(false);
+    });
+
+    test('should return false when clipboard is partially available', () => {
+        global.navigator.clipboard = {
+            read: jest.fn(),
+            write: jest.fn(),
+        };
+
+        expect(browser.canWriteToClipboard()).toBe(false);
+        expect(browser.canReadFromClipboard()).toBe(false);
+    });
+
+    test('should return true when clipboard is fully available', () => {
+        global.navigator.clipboard = {
+            read: jest.fn(),
+            write: jest.fn(),
+            readText: jest.fn(),
+            writeText: jest.fn(),
+        };
+
+        expect(browser.canWriteToClipboard()).toBe(true);
+        expect(browser.canReadFromClipboard()).toBe(true);
+    });
+});

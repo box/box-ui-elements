@@ -6,7 +6,7 @@
 
 import comparator from './comparator';
 import { getBadItemError } from './error';
-import type { Comments, Tasks, AppActivityItems, FeedItems } from '../common/types/feed';
+import type { Annotations, AppActivityItems, Comments, FeedItems, Tasks } from '../common/types/feed';
 import type {
     SortBy,
     SortDirection,
@@ -66,7 +66,9 @@ export default function(
  * type that is allowed in the feed.
  * @return {Array<?Comments | ?Tasks | ?FileVersions>} the sorted feed items
  */
-export function sortFeedItems(...args: Array<?Comments | ?Tasks | ?FileVersions | ?AppActivityItems>): FeedItems {
+export function sortFeedItems(
+    ...args: Array<?Comments | ?Tasks | ?FileVersions | ?AppActivityItems | ?Annotations>
+): FeedItems {
     const feedItems: FeedItems = args
         .reduce((items, itemContainer) => {
             if (itemContainer) {

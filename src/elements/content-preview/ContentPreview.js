@@ -14,6 +14,7 @@ import omit from 'lodash/omit';
 import getProp from 'lodash/get';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
+import setProp from 'lodash/set';
 import Measure from 'react-measure';
 import type { RouterHistory } from 'react-router-dom';
 import { decode } from '../../utils/keys';
@@ -34,6 +35,7 @@ import API from '../../api';
 import PreviewHeader from './preview-header';
 import PreviewNavigation from './PreviewNavigation';
 import PreviewLoading from './PreviewLoading';
+import { withAnnotations, WithAnnotationsProps } from '../common/annotator-context';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -62,6 +64,7 @@ type Props = {
     apiHost: string,
     appHost: string,
     autoFocus: boolean,
+    boxAnnotations?: Object,
     cache?: APICache,
     canDownload?: boolean,
     className: string,
@@ -81,6 +84,8 @@ type Props = {
     logoUrl?: string,
     measureRef: Function,
     messages?: StringMap,
+    onAnnotator: Function,
+    onAnnotatorEvent: Function,
     onClose?: Function,
     onDownload: Function,
     onLoad: Function,
@@ -92,12 +97,14 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     showAnnotations?: boolean,
+    showAnnotationsControls?: boolean,
     staticHost: string,
     staticPath: string,
     token: Token,
     useHotkeys: boolean,
 } & ErrorContextProps &
-    WithLoggerProps;
+    WithLoggerProps &
+    WithAnnotationsProps;
 
 type State = {
     canPrint?: boolean,
@@ -196,10 +203,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
         enableThumbnailsSidebar: false,
         hasHeader: false,
         language: DEFAULT_LOCALE,
+        onAnnotator: noop,
+        onAnnotatorEvent: noop,
         onDownload: noop,
         onError: noop,
         onLoad: noop,
         onNavigate: noop,
+        onPreviewDestroy: noop,
         onVersionChange: noop,
         previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
         showAnnotations: false,
@@ -276,10 +286,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * Cleans up the preview instance
      */
     destroyPreview() {
+        const { onPreviewDestroy } = this.props;
         if (this.preview) {
             this.preview.destroy();
             this.preview.removeAllListeners();
             this.preview = undefined;
+
+            onPreviewDestroy();
         }
 
         this.setState({ selectedVersion: undefined });
@@ -701,7 +714,16 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     loadPreview = async (): Promise<void> => {
-        const { enableThumbnailsSidebar, fileOptions, token: tokenOrTokenFunction, ...rest }: Props = this.props;
+        const {
+            annotatorState: { activeAnnotationId } = {},
+            enableThumbnailsSidebar,
+            fileOptions,
+            onAnnotatorEvent,
+            onAnnotator,
+            showAnnotationsControls,
+            token: tokenOrTokenFunction,
+            ...rest
+        }: Props = this.props;
         const { file, selectedVersion }: State = this.state;
 
         if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction) {
@@ -718,8 +740,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const token = typedId => TokenService.getReadTokens(typedId, tokenOrTokenFunction);
 
         if (selectedVersion) {
-            fileOpts[fileId] = fileOpts[fileId] || {};
-            fileOpts[fileId].fileVersionId = selectedVersion.id;
+            setProp(fileOpts, [fileId, 'fileVersionId'], selectedVersion.id);
+        }
+
+        if (activeAnnotationId) {
+            setProp(fileOpts, [fileId, 'annotations', 'activeId'], activeAnnotationId);
         }
 
         const previewOptions = {
@@ -729,6 +754,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             header: 'none',
             headerElement: `#${this.id} .bcpr-PreviewHeader`,
             showAnnotations: this.canViewAnnotations(),
+            showAnnotationsControls,
             showDownload: this.canDownload(),
             skipServerUpdate: true,
             useHotkeys: false,
@@ -740,6 +766,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.preview.addListener('preview_metric', this.onPreviewMetric);
         this.preview.addListener('thumbnailsOpen', () => this.setState({ isThumbnailSidebarOpen: true }));
         this.preview.addListener('thumbnailsClose', () => this.setState({ isThumbnailSidebarOpen: false }));
+
+        if (showAnnotationsControls) {
+            this.preview.addListener('annotator', onAnnotator);
+        }
+
         this.preview.updateFileCache([file]);
         this.preview.show(file.id, token, {
             ...previewOptions,
@@ -840,7 +871,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         id: ?string,
         successCallback?: Function,
         errorCallback?: Function,
-        fetchOptions?: FetchOptions = {},
+        fetchOptions: FetchOptions = {},
     ): void {
         if (!id) {
             return;
@@ -1080,7 +1111,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @param {string} [version] - The version that is now previewed
      * @param {object} [additionalVersionInfo] - extra info about the version
      */
-    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo?: AdditionalVersionInfo = {}): void => {
+    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo: AdditionalVersionInfo = {}): void => {
         const { onVersionChange }: Props = this.props;
         this.updateVersionToCurrent = additionalVersionInfo.updateVersionToCurrent;
 
@@ -1121,6 +1152,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
     render() {
         const {
             apiHost,
+            collection,
             token,
             language,
             messages,
@@ -1149,7 +1181,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             isThumbnailSidebarOpen,
             selectedVersion,
         }: State = this.state;
-        const { collection }: Props = this.props;
+
         const styleClassName = classNames(
             'be bcpr',
             {
@@ -1251,4 +1283,5 @@ export default flow([
     withFeatureProvider,
     withLogger(ORIGIN_CONTENT_PREVIEW),
     withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
+    withAnnotations,
 ])(ContentPreview);

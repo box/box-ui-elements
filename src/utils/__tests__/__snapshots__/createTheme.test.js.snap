@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/theme should contain default Box theme 1`] = `
+exports[`components/theme should generate accessible palette for dark primary 1`] = `
 Object {
   "base": Object {
     "background": "#fff",
@@ -15,32 +15,17 @@ Object {
     "buttonBorderHover": "#bcbcbc",
     "buttonForeground": "#000",
     "foreground": "#222",
+    "progressBarBackground": "#a7a7a7",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
   "modes": Object {
     "admin": Object {},
     "dark": Object {},
   },
   "primary": Object {
-    "background": "#0061d5",
-    "backgroundActive": "#004eac",
-    "backgroundGradient": "#0055bc",
-    "backgroundHover": "#006ae9",
-    "border": "#0061d5",
-    "buttonBackground": "#0061d5",
-    "buttonBackgroundActive": "#004eac",
-    "buttonBackgroundHover": "#006ae9",
-    "buttonBorder": "#0061d5",
-    "buttonBorderActive": "#004eac",
-    "buttonBorderHover": "#006ae9",
-    "buttonForeground": "#fff",
-    "foreground": "#fff",
-  },
-}
-`;
-
-exports[`components/theme should generate accessible palette for dark primary 1`] = `
-Object {
-  "primary": Object {
+    "_debug": Object {
+      "colorRange": "vDark",
+    },
     "background": "#000000",
     "backgroundActive": "#262626",
     "backgroundGradient": "#1a1a1a",
@@ -54,13 +39,38 @@ Object {
     "buttonBorderHover": "#1a1a1a",
     "buttonForeground": "#fff",
     "foreground": "#fff",
+    "progressBarBackground": "#1a1a1a",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.4)",
   },
 }
 `;
 
 exports[`components/theme should generate accessible palette for light primary 1`] = `
 Object {
+  "base": Object {
+    "background": "#fff",
+    "backgroundActive": "#e8e8e8",
+    "backgroundHover": "#f4f4f4",
+    "border": "#bcbcbc",
+    "buttonBackground": "#fff",
+    "buttonBackgroundActive": "#e8e8e8",
+    "buttonBackgroundHover": "#f4f4f4",
+    "buttonBorder": "#bcbcbc",
+    "buttonBorderActive": "#bcbcbc",
+    "buttonBorderHover": "#bcbcbc",
+    "buttonForeground": "#000",
+    "foreground": "#222",
+    "progressBarBackground": "#a7a7a7",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
+  },
+  "modes": Object {
+    "admin": Object {},
+    "dark": Object {},
+  },
   "primary": Object {
+    "_debug": Object {
+      "colorRange": "vLight",
+    },
     "background": "#ffffff",
     "backgroundActive": "#ebebeb",
     "backgroundGradient": "#f2f2f2",
@@ -74,13 +84,38 @@ Object {
     "buttonBorderHover": "#4e4e4e",
     "buttonForeground": "#fff",
     "foreground": "#000",
+    "progressBarBackground": "#909090",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.08)",
   },
 }
 `;
 
 exports[`components/theme should generate accessible palette for midtone grey 1`] = `
 Object {
+  "base": Object {
+    "background": "#fff",
+    "backgroundActive": "#e8e8e8",
+    "backgroundHover": "#f4f4f4",
+    "border": "#bcbcbc",
+    "buttonBackground": "#fff",
+    "buttonBackgroundActive": "#e8e8e8",
+    "buttonBackgroundHover": "#f4f4f4",
+    "buttonBorder": "#bcbcbc",
+    "buttonBorderActive": "#bcbcbc",
+    "buttonBorderHover": "#bcbcbc",
+    "buttonForeground": "#000",
+    "foreground": "#222",
+    "progressBarBackground": "#a7a7a7",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
+  },
+  "modes": Object {
+    "admin": Object {},
+    "dark": Object {},
+  },
   "primary": Object {
+    "_debug": Object {
+      "colorRange": "midDark",
+    },
     "background": "#6a6c6e",
     "backgroundActive": "#565859",
     "backgroundGradient": "#5d5f61",
@@ -94,46 +129,53 @@ Object {
     "buttonBorderHover": "#606264",
     "buttonForeground": "#fff",
     "foreground": "#fff",
+    "progressBarBackground": "#606264",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
 }
 `;
 
 exports[`components/theme should generate accessible palette using color string 1`] = `
 Object {
+  "base": Object {
+    "background": "#fff",
+    "backgroundActive": "#e8e8e8",
+    "backgroundHover": "#f4f4f4",
+    "border": "#bcbcbc",
+    "buttonBackground": "#fff",
+    "buttonBackgroundActive": "#e8e8e8",
+    "buttonBackgroundHover": "#f4f4f4",
+    "buttonBorder": "#bcbcbc",
+    "buttonBorderActive": "#bcbcbc",
+    "buttonBorderHover": "#bcbcbc",
+    "buttonForeground": "#000",
+    "foreground": "#222",
+    "progressBarBackground": "#a7a7a7",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
+  },
+  "modes": Object {
+    "admin": Object {},
+    "dark": Object {},
+  },
   "primary": Object {
+    "_debug": Object {
+      "colorRange": "midLight",
+    },
     "background": "#ffc0cb",
     "backgroundActive": "#ff738c",
     "backgroundGradient": "#ff8da1",
     "backgroundHover": "#fff3f5",
-    "border": "#ffc0cb",
-    "buttonBackground": "#ffc0cb",
-    "buttonBackgroundActive": "#ff738c",
-    "buttonBackgroundHover": "#fff3f5",
-    "buttonBorder": "#ffc0cb",
-    "buttonBorderActive": "#ff738c",
-    "buttonBorderHover": "#fff3f5",
-    "buttonForeground": "#000",
-    "foreground": "#000",
-  },
-}
-`;
-
-exports[`components/theme should generate box brand colors 1`] = `
-Object {
-  "primary": Object {
-    "background": "#0061d5",
-    "backgroundActive": "#004eac",
-    "backgroundGradient": "#0055bc",
-    "backgroundHover": "#006ae9",
-    "border": "#0061d5",
-    "buttonBackground": "#0061d5",
-    "buttonBackgroundActive": "#004eac",
-    "buttonBackgroundHover": "#006ae9",
-    "buttonBorder": "#0061d5",
-    "buttonBorderActive": "#004eac",
-    "buttonBorderHover": "#006ae9",
+    "border": "#e8e8e8",
+    "buttonBackground": "#222",
+    "buttonBackgroundActive": "#767676",
+    "buttonBackgroundHover": "#4e4e4e",
+    "buttonBorder": "#222",
+    "buttonBorderActive": "#767676",
+    "buttonBorderHover": "#4e4e4e",
     "buttonForeground": "#fff",
-    "foreground": "#fff",
+    "foreground": "#000",
+    "progressBarBackground": "#909090",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.08)",
   },
 }
 `;
@@ -153,12 +195,17 @@ Object {
     "buttonBorderHover": "#bcbcbc",
     "buttonForeground": "#000",
     "foreground": "#222",
+    "progressBarBackground": "#a7a7a7",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
   "modes": Object {
     "admin": Object {},
     "dark": Object {},
   },
   "primary": Object {
+    "_debug": Object {
+      "colorRange": "midDark",
+    },
     "background": "#0061d5",
     "backgroundActive": "#004eac",
     "backgroundGradient": "#0055bc",
@@ -172,6 +219,8 @@ Object {
     "buttonBorderHover": "#006ae9",
     "buttonForeground": "#fff",
     "foreground": "#fff",
+    "progressBarBackground": "#006ae9",
+    "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
 }
 `;

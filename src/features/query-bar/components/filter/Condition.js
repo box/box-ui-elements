@@ -228,7 +228,7 @@ const Condition = ({
                         fieldType={COLUMN}
                         isDisabled={false}
                         onChange={handleColumnChange}
-                        options={columnOptions}
+                        options={columnOptions || []}
                         selectedValue={columnId}
                     />
                 </div>

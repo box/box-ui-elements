@@ -1,12 +1,13 @@
-// @flow
+/* eslint-disable no-underscore-dangle */
+// @ts-nocheck
 import React from 'react';
-import styled, { ThemeProvider } from 'styled-components';
-import merge from 'lodash/merge';
-import { select } from '@storybook/addon-knobs';
+import styled, { ThemeProvider, keyframes } from 'styled-components';
+import { color, text } from '@storybook/addon-knobs';
 
+import * as vars from '../styles/variables';
+import defaultTheme from '../styles/theme';
 import BoxButton from '../components/button';
 import BoxLogo from '../icon/logo/BoxLogo';
-import defaultTheme from '../styles/theme';
 import { createTheme } from './createTheme';
 import notes from './createTheme.stories.md';
 
@@ -17,10 +18,24 @@ import IconTrash from '../features/left-sidebar/icons/IconTrash';
 import IconFavorites from '../features/left-sidebar/icons/IconFavorites';
 import IconDevConsole from '../features/left-sidebar/icons/IconDevConsole';
 
+const Swatch = styled.div`
+    display: inline-block;
+    background: ${p => p.color};
+    border: 1px solid ${vars.bdlGray30};
+    height: 1em;
+    width: 1em;
+    border-radius: 4px;
+`;
+
 const BaseButton = styled(BoxButton)`
     background: ${props => props.theme.base.buttonBackground};
     border-color: ${props => props.theme.base.buttonBorder};
     color: ${props => props.theme.base.buttonForeground};
+
+    font-weight: bold;
+    border-radius: 6px;
+    font-size: ${vars.bdlFontSizeDejaBlue};
+
     .btn:not(.is-disabled)&:hover {
         background: ${props => props.theme.base.buttonBackgroundHover};
         border-color: ${props => props.theme.base.buttonBorderHover};
@@ -35,6 +50,11 @@ const PrimaryButton = styled(BoxButton)`
     background: ${props => props.theme.primary.buttonBackground};
     border-color: ${props => props.theme.primary.buttonBorder};
     color: ${props => props.theme.primary.buttonForeground};
+
+    font-weight: bold;
+    border-radius: 6px;
+    font-size: ${vars.bdlFontSizeDejaBlue};
+
     .btn:not(.is-disabled)&:hover {
         background: ${props => props.theme.primary.buttonBackgroundHover};
         border-color: ${props => props.theme.primary.buttonBorderHover};
@@ -45,21 +65,10 @@ const PrimaryButton = styled(BoxButton)`
     }
 `;
 
-const options = {
-    Default: null,
-    Blue: '#1122cc',
-    Red: '#cc1100',
-    Yellow: '#ffdd11',
-    Green: '#118811',
-    Black: '#000000',
-    White: '#ffffff',
-};
-
 const ThemeDemo = styled.div`
     width: 200px;
     min-height: 500px;
     padding: 8px;
-    margin: 5px;
     border-radius: 4px;
     display: flex;
     flex-direction: column;
@@ -67,25 +76,72 @@ const ThemeDemo = styled.div`
 
     border: 1px solid ${p => p.theme.primary.border};
     background: ${p => p.theme.primary.background};
-    background-image: linear-gradient(
-        to bottom,
-        ${props => props.theme.primary.background} 50%,
-        ${props => props.theme.primary.backgroundGradient} 100%
-    );
 `;
 
 const ThemeDemoMenuItem = styled.div`
     cursor: pointer;
-    padding: 4px 8px;
-    margin: 4px;
-    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 2px 4px;
+    border-radius: 8px;
+    font-weight: bold;
     transition: 0.15s;
+    border: 1px solid;
+    border-color: transparent;
     &:hover {
         background: ${p => p.theme.primary.backgroundHover};
     }
     &.active,
     &:active {
         background: ${p => p.theme.primary.backgroundActive};
+    }
+
+    &:focus,
+    &:active {
+        border-color: ${p => p.theme.primary.foreground};
+    }
+
+    &.alt {
+        background: ${p => p.theme.primary.backgroundHover};
+
+        &:hover {
+            background: ${p => p.theme.primary.backgroundActive};
+        }
+    }
+`;
+
+const scroll = keyframes`
+    0% {
+        right: 100%;
+        left: 0%;
+    }
+
+    50% {
+        right: 0%;
+        left: 0%;
+    }
+
+    100% {
+        right: 0%;
+        left: 100%;
+    }
+`;
+
+const ThemeDemoProgressBar = styled.div`
+    position: relative;
+    display: inline-block;
+    height: 6px;
+    width: 300px;
+    padding: 0;
+
+    &::before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        content: '';
+        background-color: ${props => props.theme.primary.progressBarBackground};
+        will-change: left, right;
+        animation: 2s ${scroll} infinite;
     }
 `;
 
@@ -116,24 +172,46 @@ const Footer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-
-    & .item {
-        background-color: ${props => props.theme.primary.background};
-    }
 `;
 
 export const ThemeExample = () => {
-    const colorKey = select('Primary Color', options);
-    const dynamicTheme = colorKey ? createTheme(colorKey) : {};
-    const theme = merge({}, defaultTheme, dynamicTheme);
+    const colorText = text('Primary Color Hex');
+    const colorMap = color('Primary Color', '#0061d5');
+
+    const colorHex = /^#[0-9A-F]{6}$/i.test(colorText) ? colorText : colorMap;
+
+    const theme = colorHex ? createTheme(colorHex) : defaultTheme;
 
     return (
         <ThemeProvider theme={theme}>
-            <pre style={{ float: 'right' }}>
-                <code>{JSON.stringify(theme, null, 2)}</code>
-            </pre>
-            <BaseButton>Base</BaseButton>
-            <PrimaryButton>Primary</PrimaryButton>
+            <div style={{ float: 'right' }}>
+                <section>
+                    <h4>theme.primary</h4>
+                    {Object.entries(theme.primary)
+                        .filter(([key]) => key !== '_debug')
+                        .map(([key, val]) => (
+                            <div key={key}>
+                                <Swatch color={val} /> {key} <code>{val}</code>
+                            </div>
+                        ))}
+                    <span>Theme Color Range: {theme.primary._debug.colorRange}</span>
+                    <br />
+                    <h4>theme.base</h4>
+                    {Object.entries(theme.base).map(([key, val]) => (
+                        <div key={key}>
+                            <Swatch color={val} /> {key} <code>{val}</code>
+                        </div>
+                    ))}
+                </section>
+            </div>
+            <div style={{ marginLeft: -5 }}>
+                <BaseButton>Base</BaseButton>
+                <PrimaryButton>Primary</PrimaryButton>
+            </div>
+            <br />
+            <ThemeDemoProgressBar />
+            <br />
+            <br />
             <ThemeDemo>
                 <ThemeDemoLogo />
                 <ThemeDemoMenuItem className="active">
@@ -161,13 +239,13 @@ export const ThemeExample = () => {
                     Trash
                 </ThemeDemoMenuItem>
                 <Footer>
-                    <ThemeDemoMenuItem className="item">
+                    <ThemeDemoMenuItem className="alt">
                         <ThemeDemoIcon>
                             <IconNotes />
                         </ThemeDemoIcon>
                         Notes
                     </ThemeDemoMenuItem>
-                    <ThemeDemoMenuItem className="item">
+                    <ThemeDemoMenuItem className="alt">
                         <ThemeDemoIcon>
                             <IconDevConsole />
                         </ThemeDemoIcon>
@@ -175,6 +253,15 @@ export const ThemeExample = () => {
                     </ThemeDemoMenuItem>
                 </Footer>
             </ThemeDemo>
+            <br />
+            <section>
+                <details>
+                    <summary>JSON Theme</summary>
+                    <pre>
+                        <code>{JSON.stringify(theme, null, 2)}</code>
+                    </pre>
+                </details>
+            </section>
         </ThemeProvider>
     );
 };

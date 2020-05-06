@@ -20,6 +20,10 @@ const theme = {
         buttonBorder: vars.bdlGray30,
         buttonBorderHover: vars.bdlGray30,
         buttonBorderActive: vars.bdlGray30,
+
+        progressBarBackground: vars.bdlGray40,
+
+        scrollShadowRgba: 'rgba(0, 0, 0, 0.12)',
     },
 
     // Primary or brand color
@@ -38,6 +42,10 @@ const theme = {
         buttonBorderHover: '#006ae9',
         buttonForeground: vars.white,
         foreground: vars.white,
+
+        progressBarBackground: '#006ae9',
+
+        scrollShadowRgba: 'rgba(0, 0, 0, 0.12)',
     },
 
     // TODO(akahn): Should be the same keys as the default if applicable

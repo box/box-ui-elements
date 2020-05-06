@@ -53,6 +53,15 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
+        test('should render an allShareRestrictionWarning message when it is available', () => {
+            const SharingRestrictionWarning = <div className="test-class">Sharing is prohibited</div>;
+            const wrapper = getWrapper({ allShareRestrictionWarning: SharingRestrictionWarning });
+
+            wrapper.setState({ isFetching: false });
+
+            expect(wrapper.find('.test-class')).toMatchSnapshot();
+        });
+
         test('should render a default component in initial loading state', () => {
             const wrapper = getWrapper();
             wrapper.setState({ isFetching: true });

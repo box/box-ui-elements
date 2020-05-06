@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage, type MessageDescriptor } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { Modal, ModalActions } from '../../../components/modal';
 import commonMessages from '../../../common/messages';
@@ -9,30 +9,28 @@ import classificationMessages from '../messages';
 import ClassifiedBadge from '../ClassifiedBadge';
 import Label from '../../../components/label/Label';
 import messages from './messages';
-import { SECURITY_CONTROLS_FORMAT } from '../constants';
 import SecurityControlsItem from './SecurityControlsItem';
 import './SecurityControlsModal.scss';
+import type { MessageItem } from '../flowTypes';
 
 type Props = {
+    classificationColor?: string,
     classificationName?: string,
     closeModal: Function,
     definition?: string,
-    fillColor?: string,
     isSecurityControlsModalOpen: boolean,
     itemName?: string,
-    modalItems: Array<MessageDescriptor>,
-    strokeColor?: string,
+    modalItems: Array<MessageItem>,
 };
 
 const SecurityControlsModal = ({
     closeModal,
     definition,
-    fillColor,
+    classificationColor,
     classificationName,
     isSecurityControlsModalOpen,
     itemName,
     modalItems,
-    strokeColor,
 }: Props) => {
     if (!itemName || !classificationName || !definition) {
         return null;
@@ -50,17 +48,13 @@ const SecurityControlsModal = ({
             <p>
                 <FormattedMessage {...messages.modalDescription} />
             </p>
-            <ClassifiedBadge
-                strokeColor={strokeColor}
-                fillColor={fillColor}
-                name={((classificationName: any): string)}
-            />
+            <ClassifiedBadge color={classificationColor} name={((classificationName: any): string)} />
             <Label text={<FormattedMessage {...classificationMessages.definition} />}>
                 <p className="bdl-SecurityControlsModal-definition">{definition}</p>
             </Label>
             <ul className="bdl-SecurityControlsModal-controlsItemList">
-                {modalItems.map(item => (
-                    <SecurityControlsItem key={item.id} message={item} controlsFormat={SECURITY_CONTROLS_FORMAT.FULL} />
+                {modalItems.map(({ message, tooltipMessage }) => (
+                    <SecurityControlsItem key={message.id} message={message} tooltipMessage={tooltipMessage} />
                 ))}
             </ul>
             <ModalActions>

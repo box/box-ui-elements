@@ -29,6 +29,7 @@ import ShareDialog from './ShareDialog';
 import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
+import isThumbnailReady from './utils';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH, FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import LocalStore from '../../utils/LocalStore';
@@ -99,6 +100,7 @@ type Props = {
     canUpload: boolean,
     className: string,
     contentPreviewProps: ContentPreviewProps,
+    contentUploaderProps: ContentUploaderProps,
     currentFolderId?: string,
     defaultView: DefaultView,
     features: FeatureConfig,
@@ -123,6 +125,7 @@ type Props = {
     onRename: Function,
     onSelect: Function,
     onUpload: Function,
+    previewLibraryVersion: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     rootFolderId: string,
@@ -131,6 +134,7 @@ type Props = {
     sortBy: SortBy,
     sortDirection: SortDirection,
     staticHost: string,
+    staticPath: string,
     token: Token,
     uploadHost: string,
 };
@@ -216,6 +220,7 @@ class ContentExplorer extends Component<Props, State> {
         contentPreviewProps: {
             contentSidebarProps: {},
         },
+        contentUploaderProps: {},
     };
 
     /**
@@ -844,17 +849,28 @@ class ContentExplorer extends Component<Props, State> {
         const fileAPI = this.api.getFileAPI(false);
         const newCollection: Collection = { ...collection };
         const selectedId = selectedItem ? selectedItem.id : null;
-        const thumbnails = await Promise.all(items.map(item => fileAPI.getThumbnailUrl(item)));
         let newSelectedItem: ?BoxItem;
 
-        newCollection.items = items.map((obj, index) => {
-            const isSelected = obj.id === selectedId;
-            const currentItem = isSelected ? selectedItem : obj;
+        const itemThumbnails = await Promise.all(
+            items.map(item => {
+                return item.type === TYPE_FILE ? fileAPI.getThumbnailUrl(item) : null;
+            }),
+        );
+
+        newCollection.items = items.map((item, index) => {
+            const isSelected = item.id === selectedId;
+            const currentItem = isSelected ? selectedItem : item;
+            const thumbnailUrl = itemThumbnails[index];
+
             const newItem = {
                 ...currentItem,
                 selected: isSelected,
-                thumbnailUrl: thumbnails[index],
+                thumbnailUrl,
             };
+
+            if (item.type === TYPE_FILE && thumbnailUrl && !isThumbnailReady(newItem)) {
+                this.attemptThumbnailGeneration(newItem);
+            }
 
             // Only if selectedItem is in the current collection do we want to set selected state
             if (isSelected) {
@@ -865,6 +881,45 @@ class ContentExplorer extends Component<Props, State> {
         });
         this.setState({ currentCollection: newCollection, selected: newSelectedItem }, callback);
     }
+
+    /**
+     * Attempts to generate a thumbnail for the given item and assigns the
+     * item its thumbnail url if successful
+     *
+     * @param {BoxItem} item - item to generate thumbnail for
+     * @return {Promise<void>}
+     */
+    attemptThumbnailGeneration = async (item: BoxItem): Promise<void> => {
+        const entries = getProp(item, 'representations.entries');
+        const representation = getProp(entries, '[0]');
+
+        if (representation) {
+            const updatedRepresentation = await this.api.getFileAPI(false).generateRepresentation(representation);
+            if (updatedRepresentation !== representation) {
+                this.updateItemInCollection({
+                    ...cloneDeep(item),
+                    representations: {
+                        entries: [updatedRepresentation, ...entries.slice(1)],
+                    },
+                });
+            }
+        }
+    };
+
+    /**
+     * Update item in this.state.currentCollection
+     *
+     * @param {BoxItem} newItem - item with updated properties
+     * @return {void}
+     */
+    updateItemInCollection = (newItem: BoxItem): void => {
+        const { currentCollection } = this.state;
+        const { items = [] } = currentCollection;
+        const newCollection = { ...currentCollection };
+
+        newCollection.items = items.map(item => (item.id === newItem.id ? newItem : item));
+        this.setState({ currentCollection: newCollection });
+    };
 
     /**
      * Selects or unselects an item
@@ -1505,6 +1560,7 @@ class ContentExplorer extends Component<Props, State> {
             canUpload,
             className,
             contentPreviewProps,
+            contentUploaderProps,
             defaultView,
             isMedium,
             isSmall,
@@ -1523,6 +1579,8 @@ class ContentExplorer extends Component<Props, State> {
             sharedLink,
             sharedLinkPassword,
             staticHost,
+            staticPath,
+            previewLibraryVersion,
             token,
             uploadHost,
         }: Props = this.props;
@@ -1655,6 +1713,7 @@ class ContentExplorer extends Component<Props, State> {
                             parentElement={this.rootElement}
                             appElement={this.appElement}
                             onUpload={onUpload}
+                            contentUploaderProps={contentUploaderProps}
                             requestInterceptor={requestInterceptor}
                             responseInterceptor={responseInterceptor}
                         />
@@ -1722,6 +1781,8 @@ class ContentExplorer extends Component<Props, State> {
                             apiHost={apiHost}
                             appHost={appHost}
                             staticHost={staticHost}
+                            staticPath={staticPath}
+                            previewLibraryVersion={previewLibraryVersion}
                             sharedLink={sharedLink}
                             sharedLinkPassword={sharedLinkPassword}
                             contentPreviewProps={contentPreviewProps}

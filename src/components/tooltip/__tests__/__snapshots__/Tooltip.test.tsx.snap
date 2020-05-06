@@ -72,6 +72,7 @@ exports[`components/tooltip/Tooltip render() should not render with close button
     Hello
   </div>
   <div
+    aria-live="polite"
     className="tooltip bdl-Tooltip"
     id="tooltip3"
     role="tooltip"
@@ -142,6 +143,7 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
     Hello
   </div>
   <div
+    aria-live="polite"
     className="tooltip bdl-Tooltip is-callout"
     id="tooltip5"
     role="tooltip"
@@ -175,6 +177,7 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
     Hello
   </div>
   <div
+    aria-live="polite"
     className="tooltip bdl-Tooltip with-close-button"
     id="tooltip1"
     role="tooltip"
@@ -192,4 +195,22 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
     </PlainButton>
   </div>
 </TetherComponent>
+`;
+
+exports[`components/tooltip/Tooltip should match snapshot when stopBubble is set 1`] = `
+<div
+  className="tooltip bdl-Tooltip"
+  id="tooltip19"
+  onClick={[Function]}
+  onContextMenu={[Function]}
+  onKeyPress={[Function]}
+  role="presentation"
+>
+  <div
+    aria-live="polite"
+    role="tooltip"
+  >
+    hi
+  </div>
+</div>
 `;

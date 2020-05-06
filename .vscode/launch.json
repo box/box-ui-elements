@@ -7,19 +7,32 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Jest",
+            "name": "Test single file",
+            "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+            "cwd": "${workspaceRoot}",
+            "stopOnEntry": false,
+            "args": ["--runInBand", "${relativeFile}"],
+            "runtimeArgs": ["--nolazy"],
+            "env": {
+                "NODE_ENV": "test"
+            },
+            "console": "internalConsole",
+            "sourceMaps": true
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Test all",
             "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
             "cwd": "${workspaceRoot}",
             "stopOnEntry": false,
             "args": ["--runInBand"],
-            "runtimeArgs": [
-              "--nolazy"
-            ],
+            "runtimeArgs": ["--nolazy"],
             "env": {
-              "NODE_ENV": "test"
+                "NODE_ENV": "test"
             },
             "console": "internalConsole",
             "sourceMaps": true
-          }
+        }
     ]
 }

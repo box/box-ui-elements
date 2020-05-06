@@ -11,6 +11,7 @@ import type { SelectOptionValueProp, SelectOptionProp } from './props';
 
 type Props = {
     multiple?: boolean,
+    options: Array<SelectOptionProp>,
 } & FieldProps;
 
 function createFakeSyntheticEvent(name: string, value: SelectOptionValueProp | Array<SelectOptionValueProp>) {
@@ -38,6 +39,7 @@ const SelectField = ({ field, form, multiple, ...rest }: Props) => {
                 {...rest}
                 error={error}
                 onChange={options => onSelect(name, onChange, options)}
+                options={rest.options}
                 selectedValues={value || []}
             />
         );
@@ -49,6 +51,7 @@ const SelectField = ({ field, form, multiple, ...rest }: Props) => {
             {...rest}
             error={error}
             onChange={options => onSelect(name, onChange, options)}
+            options={rest.options}
             selectedValue={value || null}
         />
     );

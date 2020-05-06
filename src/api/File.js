@@ -16,12 +16,16 @@ import {
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_EXTENSION,
     FIELD_IS_DOWNLOAD_AVAILABLE,
+    REPRESENTATIONS_RESPONSE_ERROR,
+    REPRESENTATIONS_RESPONSE_SUCCESS,
+    REPRESENTATIONS_RESPONSE_VIEWABLE,
     X_REP_HINTS,
 } from '../constants';
 import Item from './Item';
+import { retryNumOfTimes } from '../utils/function';
 import TokenService from '../utils/TokenService';
 import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
-import type { BoxItem, BoxItemVersion } from '../common/types/core';
+import type { BoxItem, BoxItemVersion, FileRepresentation } from '../common/types/core';
 import type APICache from '../utils/Cache';
 
 class File extends Item {
@@ -82,6 +86,53 @@ class File extends Item {
     }
 
     /**
+     * Determines whether the call to the file representations API has completed
+     *
+     * @param {data: { FileRepresentation }} response
+     * @return {boolean}
+     */
+    isRepresentationsCallComplete(response: { data: FileRepresentation }): boolean {
+        const status = getProp(response, 'data.status.state');
+        return (
+            !status ||
+            status === REPRESENTATIONS_RESPONSE_ERROR ||
+            status === REPRESENTATIONS_RESPONSE_SUCCESS ||
+            status === REPRESENTATIONS_RESPONSE_VIEWABLE
+        );
+    }
+
+    /**
+     * Polls a representation's infoUrl, attempting to generate a representation
+     *
+     * @param {FileRepresentation} representation - representation that should have its info.url polled
+     * @return {Promise<FileRepresentation>} - representation updated with most current status
+     */
+    async generateRepresentation(representation: FileRepresentation): Promise<FileRepresentation> {
+        const infoUrl = getProp(representation, 'info.url');
+
+        if (!infoUrl) {
+            return representation;
+        }
+
+        return retryNumOfTimes(
+            (successCallback, errorCallback) =>
+                this.xhr
+                    .get({ successCallback, errorCallback, url: infoUrl })
+                    .then(response =>
+                        this.isRepresentationsCallComplete(response)
+                            ? successCallback(response.data)
+                            : errorCallback(response.data),
+                    )
+                    .catch(e => {
+                        errorCallback(e);
+                    }),
+            4,
+            2000,
+            2,
+        );
+    }
+
+    /**
      * API for getting a thumbnail URL for a BoxItem
      *
      * @param {BoxItem} item - BoxItem to get the thumbnail URL for
@@ -93,16 +144,14 @@ class File extends Item {
         const template = getProp(entry, 'content.url_template');
         const token = await TokenService.getReadToken(getTypedFileId(item.id), this.options.token);
 
-        if (getProp(entry, 'status.state') !== 'success' || !extension || !template || !token) {
+        if (!extension || !template || !token) {
             return null;
         }
 
         const thumbnailUrl = template.replace('{+asset_path}', extension === 'jpg' ? '' : '1.png');
-
         const { query, url: thumbnailBaseUrl } = queryString.parseUrl(thumbnailUrl);
         const thumbnailUrlParams = { ...query, access_token: token };
         const thumbnailUrlQuery = queryString.stringify(thumbnailUrlParams);
-
         return `${thumbnailBaseUrl}?${thumbnailUrlQuery}`;
     }
 

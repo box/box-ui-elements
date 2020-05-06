@@ -1,46 +1,34 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage, type MessageDescriptor } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
-import { bdlYellorange, bdlYellorange10 } from '../../../styles/variables';
-import IconSecurityClassificationSolid from '../../../icons/general/IconSecurityClassificationSolid';
-import { SECURITY_CONTROLS_FORMAT } from '../constants';
-import type { ControlsFormat } from '../flowTypes';
+import { bdlBoxBlue } from '../../../styles/variables';
+import Tooltip from '../../../components/tooltip';
+import IconInfo from '../../../icons/general/IconInfo';
+import type { MessageItem } from '../flowTypes';
 
 import './SecurityControlsItem.scss';
 
-type Props = {
-    controlsFormat: ControlsFormat,
-    fillColor?: string,
-    message: MessageDescriptor,
-    strokeColor?: string,
-};
+type Props = MessageItem;
 
 const ICON_SIZE = 13;
 
-const SecurityControlsItem = ({ controlsFormat, fillColor, message, strokeColor }: Props) => {
-    const shouldRenderIcon = controlsFormat !== SECURITY_CONTROLS_FORMAT.FULL;
-
-    return (
-        <li className="bdl-SecurityControlsItem">
-            {shouldRenderIcon && (
-                <span className="bdl-SecurityControlsItem-icon">
-                    <IconSecurityClassificationSolid
-                        fillColor={fillColor}
-                        strokeColor={strokeColor}
-                        height={ICON_SIZE}
-                        width={ICON_SIZE}
-                    />
+const SecurityControlsItem = ({ message, tooltipMessage }: Props) => (
+    <li className="bdl-SecurityControlsItem">
+        <FormattedMessage {...message} />
+        {tooltipMessage && (
+            <Tooltip
+                className="bdl-SecurityControlsItem-tooltip"
+                text={<FormattedMessage {...tooltipMessage} />}
+                position="middle-right"
+                isTabbable={false}
+            >
+                <span className="bdl-SecurityControlsItem-tooltipIcon">
+                    <IconInfo color={bdlBoxBlue} width={ICON_SIZE} height={ICON_SIZE} />
                 </span>
-            )}
-            <FormattedMessage {...message} />
-        </li>
-    );
-};
-
-SecurityControlsItem.defaultProps = {
-    fillColor: bdlYellorange10,
-    strokeColor: bdlYellorange,
-};
+            </Tooltip>
+        )}
+    </li>
+);
 
 export default SecurityControlsItem;

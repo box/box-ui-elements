@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
 import { DEFAULT_MAX_APP_COUNT, SECURITY_CONTROLS_FORMAT } from '../constants';
@@ -16,14 +15,13 @@ import './SecurityControls.scss';
 const { FULL, SHORT, SHORT_WITH_BTN } = SECURITY_CONTROLS_FORMAT;
 
 type Props = {
+    classificationColor?: string,
     classificationName?: string,
     controls: Controls,
     controlsFormat: ControlsFormat,
     definition?: string,
-    fillColor?: string,
     itemName?: string,
     maxAppCount?: number,
-    strokeColor?: string,
 };
 
 type State = {
@@ -50,14 +48,13 @@ class SecurityControls extends React.Component<Props, State> {
 
     render() {
         const {
+            classificationColor,
             classificationName,
             controls,
             controlsFormat,
             definition,
-            fillColor,
             itemName,
             maxAppCount,
-            strokeColor,
         } = this.props;
 
         let items = [];
@@ -78,25 +75,15 @@ class SecurityControls extends React.Component<Props, State> {
             return null;
         }
 
-        const className = classNames('bdl-SecurityControls', {
-            'bdl-SecurityControls--summarized': controlsFormat !== FULL,
-        });
-
         const { isSecurityControlsModalOpen } = this.state;
         const shouldShowSecurityControlsModal =
             controlsFormat === SHORT_WITH_BTN && !!itemName && !!classificationName && !!definition;
 
         return (
             <>
-                <ul className={className}>
-                    {items.map(item => (
-                        <SecurityControlsItem
-                            fillColor={fillColor}
-                            strokeColor={strokeColor}
-                            key={item.id}
-                            message={item}
-                            controlsFormat={controlsFormat}
-                        />
+                <ul className="bdl-SecurityControls">
+                    {items.map(({ message, tooltipMessage }) => (
+                        <SecurityControlsItem key={message.id} message={message} tooltipMessage={tooltipMessage} />
                     ))}
                 </ul>
                 {shouldShowSecurityControlsModal && (
@@ -105,8 +92,7 @@ class SecurityControls extends React.Component<Props, State> {
                             <FormattedMessage {...messages.viewAll} />
                         </PlainButton>
                         <SecurityControlsModal
-                            fillColor={fillColor}
-                            strokeColor={strokeColor}
+                            classificationColor={classificationColor}
                             classificationName={classificationName}
                             closeModal={this.closeModal}
                             definition={definition}
