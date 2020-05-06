@@ -3,6 +3,12 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    fileRequestDisplayName: {
+        defaultMessage: 'File Request',
+        description:
+            'name of the File Request feature used to translate when a File Request is uploaded by the service',
+        id: 'be.sidebarVersions.fileRequestDisplayName',
+    },
     versionsEmpty: {
         id: 'be.sidebarVersions.empty',
         description: 'Message to display when no versions are available',

@@ -117,8 +117,6 @@ class FolderUploadNode {
             const data = await this.createFolder();
             this.folderId = data.id;
         } catch (error) {
-            errorEncountered = true;
-            errorCode = error.code;
             // @TODO: Handle 429
             if (error.code === ERROR_CODE_ITEM_NAME_IN_USE) {
                 this.folderId = error.context_info.conflicts[0].id;
@@ -129,6 +127,8 @@ class FolderUploadNode {
                 // an error message on the root folder being uploaded. Set a generic messages saying that a
                 // child has caused the error. The child folder will be tagged with the error message in
                 // the call to this.addFolderToUploadQueue below
+                errorEncountered = true;
+                errorCode = error.code;
                 errorCallback({ code: ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED });
             }
         }

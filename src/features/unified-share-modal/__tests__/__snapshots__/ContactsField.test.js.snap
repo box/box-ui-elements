@@ -1,5 +1,34 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`features/unified-share-modal/ContactsField filterContacts() Should return contacts in the correct format 1`] = `
+Array [
+  Object {
+    "email": "y@example.com",
+    "id": "23456",
+    "isExternalUser": false,
+    "text": "Y User",
+    "type": "user",
+    "value": "y@example.com",
+  },
+  Object {
+    "email": "z@example.com",
+    "id": "34567",
+    "isExternalUser": true,
+    "text": "Z User",
+    "type": "user",
+    "value": "z@example.com",
+  },
+  Object {
+    "email": "x@example.com",
+    "id": "12345",
+    "isExternalUser": false,
+    "text": "X User",
+    "type": "group",
+    "value": "x@example.com",
+  },
+]
+`;
+
 exports[`features/unified-share-modal/ContactsField render should have scrollable dropdown if contacts > 5 1`] = `
 <PillSelectorDropdown
   allowCustomPills={true}

@@ -56,6 +56,27 @@ describe('features/unified-share-modal/ContactsField', () => {
         },
     ];
 
+    const suggestions = {
+        // expectedContacts[1]
+        '23456': {
+            id: '23456',
+            userScore: 0.5,
+            email: 'y@example.com',
+            name: 'Y User',
+            type: 'user',
+            isExternalUser: false,
+        },
+        // expectedContacts[2]
+        '34567': {
+            id: '34567',
+            userScore: 0.1,
+            email: 'z@example.com',
+            name: 'Z User',
+            type: 'user',
+            isExternalUser: true,
+        },
+    };
+
     const intl = { formatMessage: jest.fn() };
 
     const getWrapper = (props = {}) =>
@@ -78,19 +99,18 @@ describe('features/unified-share-modal/ContactsField', () => {
         );
 
     describe('addSuggestedContacts()', () => {
-        const suggestions = {
-            '23456': { id: '23456', userScore: 0.5 }, // expectedContacts[1]
-            '34567': { id: '34567', userScore: 0.1 }, // expectedContacts[2]
-        };
-
-        test('should sort suggestions by highest score', () => {
+        test('should sort suggestions by highest score without duplication', () => {
             const wrapper = getWrapper({
                 suggestedCollaborators: suggestions,
             });
 
             const result = wrapper.instance().addSuggestedContacts(expectedContacts);
 
-            expect(result).toEqual([expectedContacts[1], expectedContacts[2], expectedContacts[0]]);
+            expect(result.map(c => c.id)).toEqual([
+                expectedContacts[1].id,
+                expectedContacts[2].id,
+                expectedContacts[0].id,
+            ]);
         });
 
         test('should setState with number of suggested items showing', () => {
@@ -101,21 +121,6 @@ describe('features/unified-share-modal/ContactsField', () => {
             wrapper.instance().addSuggestedContacts(expectedContacts);
 
             expect(wrapper.state().numSuggestedShowing).toEqual(2);
-        });
-
-        test('should not add suggestions not in the contact list', () => {
-            const wrapper = getWrapper({
-                suggestedCollaborators: {
-                    '56789': { id: '56789', userScore: 1 },
-                    '67890': { id: '67890', userScore: 0.1 },
-                },
-            });
-
-            const result = wrapper.instance().addSuggestedContacts(expectedContacts);
-            const resultIDs = result.map(contact => contact.id);
-
-            expect(resultIDs).not.toContain('56789');
-            expect(resultIDs).not.toContain('67890');
         });
     });
 
@@ -160,7 +165,7 @@ describe('features/unified-share-modal/ContactsField', () => {
             const wrapper = getWrapper({
                 selectedContacts: [],
             });
-            const addSuggestedContactsMock = jest.fn();
+            const addSuggestedContactsMock = jest.fn(c => c);
 
             wrapper.setState({ pillSelectorInputValue: 'x@' });
             wrapper.instance().addSuggestedContacts = addSuggestedContactsMock;
@@ -173,7 +178,18 @@ describe('features/unified-share-modal/ContactsField', () => {
             });
 
             wrapper.instance().filterContacts(contactsFromServer);
-            expect(addSuggestedContactsMock).toHaveBeenCalledWith([expectedContacts[0]]);
+            expect(addSuggestedContactsMock).toHaveBeenCalled();
+        });
+
+        test('Should return contacts in the correct format', () => {
+            const wrapper = getWrapper({
+                selectedContacts: [],
+                suggestedCollaborators: suggestions,
+            });
+
+            wrapper.setState({ pillSelectorInputValue: 'user' });
+            const result = wrapper.instance().filterContacts(contactsFromServer);
+            expect(result).toMatchSnapshot();
         });
     });
 
