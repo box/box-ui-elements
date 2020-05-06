@@ -21,10 +21,20 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLi
     test('should fire onClick when link is followed', () => {
         const onClickFn = jest.fn();
         const wrapper = getWrapper({ onClick: onClickFn });
-        const onClick = wrapper.prop('onClick');
+        const onClick = wrapper.find('PlainButton').prop('onClick');
+        const event = {
+            preventDefault: jest.fn(),
+            stopPropagation: jest.fn(),
+            nativeEvent: {
+                stopImmediatePropagation: jest.fn(),
+            },
+        };
 
-        onClick();
+        onClick(event);
 
         expect(onClickFn).toHaveBeenCalledWith('123');
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+        expect(event.nativeEvent.stopImmediatePropagation).toHaveBeenCalled();
     });
 });

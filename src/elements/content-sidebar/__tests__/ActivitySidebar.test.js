@@ -107,6 +107,16 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             wrapper.setProps({ annotatorState: { annotation: { id: '123' } } });
             expect(instance.addAnnotation).toBeCalled();
         });
+
+        test('should call updateActiveAnnotation if activeAnnotationId changes', () => {
+            const wrapper = getWrapper({ annotatorState: { activeAnnotationId: '123' } });
+            const instance = wrapper.instance();
+
+            instance.updateActiveAnnotation = jest.fn();
+
+            wrapper.setProps({ annotatorState: { activeAnnotationId: '321' } });
+            expect(instance.updateActiveAnnotation).toBeCalled();
+        });
     });
 
     describe('render()', () => {
@@ -747,6 +757,99 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 annotatorStateMock.meta.requestId,
                 isPending,
             );
+        });
+    });
+
+    describe('updateActiveAnnotation()', () => {
+        test.each`
+            activeAnnotationId | fileVersionId | expectedPath
+            ${'234'}           | ${'456'}      | ${'/activity/annotations/456/234'}
+            ${'234'}           | ${undefined}  | ${'/activity/annotations/123/234'}
+            ${null}            | ${'456'}      | ${'/activity/'}
+        `(
+            'should set location path based on match param fileVersionId=$fileVersionId and activeAnnotationId=$activeAnnotationId',
+            ({ activeAnnotationId, fileVersionId, expectedPath }) => {
+                const annotatorState = {
+                    activeAnnotationId,
+                };
+                const getAnnotationsMatchPath = jest.fn().mockReturnValue({ params: { fileVersionId } });
+                const history = { push: jest.fn() };
+                const mockFile = { file_version: { id: '123' } };
+
+                const wrapper = getWrapper({ annotatorState, file: mockFile, getAnnotationsMatchPath, history });
+                const instance = wrapper.instance();
+
+                instance.updateActiveAnnotation();
+
+                expect(history.push).toHaveBeenCalledWith(expectedPath);
+            },
+        );
+    });
+
+    describe('handleAnnotationSelect()', () => {
+        const annotatorState = { activeAnnotationId: '123' };
+        const emitAnnotatorActiveChangeEvent = jest.fn();
+        const mockFile = { file_version: { id: '234' } };
+        const getAnnotationsMatchPath = jest.fn().mockReturnValue({ params: { fileVersionId: '456' } });
+        const history = {
+            push: jest.fn(),
+        };
+        const onAnnotationSelect = jest.fn();
+
+        const getAnnotationWrapper = () =>
+            getWrapper({
+                annotatorState,
+                emitAnnotatorActiveChangeEvent,
+                file: mockFile,
+                getAnnotationsMatchPath,
+                history,
+                onAnnotationSelect,
+            });
+
+        test('should call emitAnnotatorActiveChangeEvent and onAnnotatorSelect appropriately', () => {
+            const wrapper = getAnnotationWrapper();
+            const instance = wrapper.instance();
+            const annotation = { file_version: { id: '235' }, id: '124' };
+            const version = { type: 'file_version', id: '235' };
+            const feedItems = [version];
+
+            wrapper.setState({ feedItems });
+            instance.handleAnnotationSelect(annotation);
+
+            expect(emitAnnotatorActiveChangeEvent).toHaveBeenCalledWith('124');
+            expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, version);
+        });
+
+        test('should not call history.push if file versions are the same', () => {
+            const wrapper = getAnnotationWrapper();
+            const instance = wrapper.instance();
+            const annotation = { file_version: { id: '456' }, id: '124' };
+            const version = { type: 'file_version', id: '456' };
+            const feedItems = [version];
+
+            wrapper.setState({ feedItems });
+            instance.handleAnnotationSelect(annotation);
+
+            expect(emitAnnotatorActiveChangeEvent).toHaveBeenCalledWith('124');
+            expect(history.push).not.toHaveBeenCalled();
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, version);
+        });
+
+        test('should use current file version if match params returns null', () => {
+            const wrapper = getAnnotationWrapper();
+            const instance = wrapper.instance();
+            const annotation = { file_version: { id: '235' }, id: '124' };
+            const version = { type: 'file_version', id: '235' };
+            const feedItems = [version];
+            getAnnotationsMatchPath.mockReturnValue({ params: { fileVersionId: undefined } });
+
+            wrapper.setState({ feedItems });
+            instance.handleAnnotationSelect(annotation);
+
+            expect(emitAnnotatorActiveChangeEvent).toHaveBeenCalledWith('124');
+            expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, version);
         });
     });
 });

@@ -11,7 +11,14 @@ export interface AnnotationActivityLinkProps {
 }
 
 const AnnotationActivityLink = ({ id, message, onClick = noop }: AnnotationActivityLinkProps): JSX.Element => {
-    const handleClick = () => {
+    const handleClick = (event: React.SyntheticEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+        // Prevents document event handlers from executing because box-annotations relies on
+        // detecting clicks on the document outside of annotation targets to determine when to
+        // deselect annotations. This link also may represent that annotation target in the sidebar.
+        event.nativeEvent.stopImmediatePropagation();
+
         onClick(id);
     };
     return (

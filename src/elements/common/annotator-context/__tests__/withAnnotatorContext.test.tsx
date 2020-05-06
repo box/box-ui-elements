@@ -29,10 +29,12 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             action: Action.CREATE_START,
         };
         const mockEmitAnnotatorChangeEvent = jest.fn();
+        const mockGetAnnotationMatchPath = jest.fn();
 
         mockContext.mockReturnValue({
             state: annotatorState,
             emitActiveChangeEvent: mockEmitAnnotatorChangeEvent,
+            getAnnotationsMatchPath: mockGetAnnotationMatchPath,
         });
 
         const wrapper = getWrapper();
@@ -45,5 +47,6 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             action: Action.CREATE_START,
         });
         expect(props.emitAnnotatorActiveChangeEvent).toEqual(mockEmitAnnotatorChangeEvent);
+        expect(props.getAnnotationsMatchPath).toEqual(mockGetAnnotationMatchPath);
     });
 });

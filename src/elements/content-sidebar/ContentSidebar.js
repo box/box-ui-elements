@@ -64,6 +64,7 @@ type Props = {
     language?: string,
     messages?: StringMap,
     metadataSidebarProps: MetadataSidebarProps,
+    onAnnotationSelect?: Function,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     requestInterceptor?: Function,
@@ -332,6 +333,7 @@ class ContentSidebar extends React.Component<Props, State> {
             language,
             messages,
             metadataSidebarProps,
+            onAnnotationSelect,
             onVersionChange,
             onVersionHistoryClick,
             versionsSidebarProps,
@@ -366,6 +368,7 @@ class ContentSidebar extends React.Component<Props, State> {
                             isLoading={isLoading}
                             metadataEditors={metadataEditors}
                             metadataSidebarProps={metadataSidebarProps}
+                            onAnnotationSelect={onAnnotationSelect}
                             onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick}
                             versionsSidebarProps={versionsSidebarProps}

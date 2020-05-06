@@ -7,8 +7,10 @@
 import * as React from 'react';
 import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
+import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
+import { withRouter, type ContextRouter } from 'react-router-dom';
 import ActivityFeed from './activity-feed';
 import AddTaskButton from './AddTaskButton';
 import API from '../../api';
@@ -35,7 +37,7 @@ import type {
     TaskUpdatePayload,
     TaskCollabStatus,
 } from '../../common/types/tasks';
-import type { FocusableFeedItemType, FeedItems } from '../../common/types/feed';
+import type { Annotation, FocusableFeedItemType, FeedItems } from '../../common/types/feed';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { SelectorItems, User, UserMini, GroupMini, BoxItem, BoxItemPermission } from '../../common/types/core';
@@ -64,10 +66,13 @@ type PropsWithoutContext = {
     elementId: string,
     file: BoxItem,
     isDisabled: boolean,
+    onAnnotationSelect: Function,
+    onVersionChange: Function,
     onVersionHistoryClick?: Function,
     translations?: Translations,
 } & ExternalProps &
-    WithLoggerProps;
+    WithLoggerProps &
+    ContextRouter;
 
 type Props = {
     api: API,
@@ -98,7 +103,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     static defaultProps = {
         annotatorState: {},
         emitAnnotatorActiveChangeEvent: noop,
+        getAnnotationsMatchPath: noop,
         isDisabled: false,
+        onAnnotationSelect: noop,
         onCommentCreate: noop,
         onCommentDelete: noop,
         onCommentUpdate: noop,
@@ -106,6 +113,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onTaskCreate: noop,
         onTaskDelete: noop,
         onTaskUpdate: noop,
+        onVersionChange: noop,
+        onVersionHistoryClick: noop,
     };
 
     constructor(props: Props) {
@@ -125,13 +134,17 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     componentDidUpdate({ annotatorState: prevAnnotatorState }: Props): void {
-        const { annotation: prevAnnotation } = prevAnnotatorState;
+        const { activeAnnotationId: prevActiveAnnotationId, annotation: prevAnnotation } = prevAnnotatorState;
         const {
-            annotatorState: { annotation },
+            annotatorState: { activeAnnotationId, annotation },
         } = this.props;
 
         if (prevAnnotation !== annotation) {
             this.addAnnotation();
+        }
+
+        if (prevActiveAnnotationId !== activeAnnotationId) {
+            this.updateActiveAnnotation();
         }
     }
 
@@ -153,6 +166,17 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         this.fetchFeedItems();
     }
+
+    updateActiveAnnotation = () => {
+        const { annotatorState: { activeAnnotationId } = {}, file, getAnnotationsMatchPath, history } = this.props;
+        const match = getAnnotationsMatchPath(history);
+        const currentFileVersionId = getProp(file, 'file_version.id');
+        const fileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
+
+        history.push(
+            activeAnnotationId ? `/activity/annotations/${fileVersionId}/${activeAnnotationId}` : '/activity/',
+        );
+    };
 
     /**
      * Fetches a Users info
@@ -591,6 +615,35 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         return api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, file.id);
     };
 
+    handleAnnotationSelect = (annotation: Annotation): void => {
+        const {
+            file_version: { id: annotationFileVersionId },
+            id: nextActiveAnnotationId,
+        } = annotation;
+        const {
+            emitAnnotatorActiveChangeEvent,
+            file,
+            history,
+            getAnnotationsMatchPath,
+            onAnnotationSelect,
+        } = this.props;
+        const { feedItems = [] } = this.state;
+        const version = feedItems
+            .filter(item => item.type === 'file_version')
+            .find(item => item.id === annotationFileVersionId);
+        const currentFileVersionId = getProp(file, 'file_version.id');
+        const match = getAnnotationsMatchPath(history);
+        const selectedFileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
+
+        emitAnnotatorActiveChangeEvent(nextActiveAnnotationId);
+
+        if (annotationFileVersionId !== selectedFileVersionId) {
+            history.push(`/activity/annotations/${annotationFileVersionId}/${nextActiveAnnotationId}`);
+        }
+
+        onAnnotationSelect(annotation, version);
+    };
+
     onTaskModalClose = () => {
         this.setState({
             approverSelectorContacts: [],
@@ -630,7 +683,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             activeFeedEntryId,
             activeFeedEntryType,
             onTaskView,
-            emitAnnotatorActiveChangeEvent,
         } = this.props;
         const {
             currentUser,
@@ -656,7 +708,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     mentionSelectorContacts={mentionSelectorContacts}
                     currentUser={currentUser}
                     isDisabled={isDisabled}
-                    onAnnotationSelect={emitAnnotatorActiveChangeEvent}
+                    onAnnotationSelect={this.handleAnnotationSelect}
                     onAppActivityDelete={this.deleteAppActivity}
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
@@ -690,4 +742,5 @@ export default flow([
     withAPIContext,
     withFeatureConsumer,
     withAnnotatorContext,
+    withRouter,
 ])(ActivitySidebar);
