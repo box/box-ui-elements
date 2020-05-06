@@ -2,6 +2,7 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 
 import ActiveState from '../ActiveState';
+import AnnotationActivity from '../../annotations';
 
 const currentUser = {
     id: 'user_123445',
@@ -16,6 +17,9 @@ const annotation = {
     created_at: '2018-07-03T14:43:52-07:00',
     description: {
         message: 'This is an annotation',
+    },
+    file_version: {
+        id: '123',
     },
     target: {
         location: {
@@ -109,6 +113,15 @@ const appActivity = {
 };
 
 const activityFeedError = { title: 't', content: 'm' };
+const getShallowWrapper = (params = {}) =>
+    shallow(
+        <ActiveState
+            items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
+            currentUser={currentUser}
+            currentFileVersionId="123"
+            {...params}
+        />,
+    );
 const getWrapper = (params = {}) =>
     mount(
         <ActiveState
@@ -120,17 +133,12 @@ const getWrapper = (params = {}) =>
 
 describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () => {
     test('should render empty state', () => {
-        const wrapper = shallow(<ActiveState items={[]} currentUser={currentUser} />);
+        const wrapper = getShallowWrapper({ items: [] });
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should render items', () => {
-        const wrapper = shallow(
-            <ActiveState
-                items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
-                currentUser={currentUser}
-            />,
-        ).dive();
+        const wrapper = getShallowWrapper().dive();
 
         expect(wrapper).toMatchSnapshot();
     });
@@ -145,7 +153,25 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
     });
 
     test('should correctly render with an inline error if some feed items fail to fetch', () => {
-        const wrapper = shallow(<ActiveState inlineError={activityFeedError} items={[]} currentUser={currentUser} />);
+        const wrapper = getShallowWrapper({ inlineError: activityFeedError, items: [] });
         expect(wrapper).toMatchSnapshot();
     });
+
+    test.each`
+        currentFileVersionId | isCurrentVersion
+        ${'123'}             | ${true}
+        ${'456'}             | ${false}
+    `(
+        'should correctly reflect annotation activity isCurrentVersion as $isCurrentVersion based on file version id as $currentFileVersionId',
+        ({ currentFileVersionId, isCurrentVersion }) => {
+            const wrapper = getShallowWrapper({ currentFileVersionId });
+
+            expect(
+                wrapper
+                    .dive()
+                    .find(AnnotationActivity)
+                    .prop('isCurrentVersion'),
+            ).toBe(isCurrentVersion);
+        },
+    );
 });

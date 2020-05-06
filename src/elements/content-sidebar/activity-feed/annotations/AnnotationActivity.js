@@ -24,6 +24,7 @@ type Props = {
     error?: ActionItemError,
     getAvatarUrl: GetAvatarUrlCallback,
     getUserProfileUrl?: GetProfileUrlCallback,
+    isCurrentVersion: boolean,
     isDisabled?: boolean,
     isPending?: boolean,
     onDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => any,
@@ -38,7 +39,9 @@ const AnnotationActivity = (props: Props) => {
         error,
         getAvatarUrl,
         getUserProfileUrl,
+        file_version,
         id,
+        isCurrentVersion,
         isPending,
         onDelete = noop,
         onSelect = noop,
@@ -59,6 +62,8 @@ const AnnotationActivity = (props: Props) => {
     const canDelete = permissions.can_delete;
     const isMenuVisible = canDelete && !isPending;
     const message = (description && description.message) || '';
+    const linkMessage = isCurrentVersion ? messages.annotationActivityPageItem : messages.annotationActivityVersionLink;
+    const linkValue = isCurrentVersion ? target.location.value : file_version.version_number;
 
     return (
         <div className="bcs-AnnotationActivity">
@@ -89,8 +94,8 @@ const AnnotationActivity = (props: Props) => {
                     <AnnotationActivityLink
                         id={id}
                         message={{
-                            ...messages.annotationActivityPageItem,
-                            values: { number: target.location.value },
+                            ...linkMessage,
+                            values: { number: linkValue },
                         }}
                         onClick={handleOnSelect}
                     />

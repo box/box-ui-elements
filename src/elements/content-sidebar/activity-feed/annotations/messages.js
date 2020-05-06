@@ -21,6 +21,11 @@ const messages = defineMessages({
         defaultMessage: 'Page {number}',
         description: 'Annotation activity item link shown on annotation activity',
     },
+    annotationActivityVersionLink: {
+        id: 'be.contentSidebar.activityFeed.annotationActivityVersionLink',
+        defaultMessage: 'Version {number}',
+        description: 'Annotation activity item link shown on annotation activity for previous file version',
+    },
 });
 
 export default messages;
