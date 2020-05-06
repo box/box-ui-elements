@@ -302,10 +302,28 @@ export const basic = () => {
                                 showUpgradeOptions
                                 submitting={state.submitting}
                                 suggestedCollaborators={{
-                                    '2': { id: '2', userScore: 0.1 },
-                                    '5': { id: '5', userScore: 0.2 },
-                                    '1': { id: '1', userScore: 0.5 },
-                                    '3': { id: '3', userScore: 2 },
+                                    '2': {
+                                        id: '2',
+                                        userScore: 0.1,
+                                        name: 'David',
+                                        email: 'dt@example.com',
+                                        type: 'user',
+                                    },
+                                    '5': {
+                                        id: '5',
+                                        userScore: 0.2,
+                                        name: 'Will',
+                                        email: 'wy@example.com',
+                                        type: 'user',
+                                    },
+                                    '1': {
+                                        id: '1',
+                                        userScore: 0.5,
+                                        name: 'Jeff',
+                                        email: 'jt@example.com',
+                                        type: 'user',
+                                    },
+                                    '3': { id: '3', userScore: 2, name: 'Yang', email: 'yz@example.com', type: 'user' },
                                 }}
                                 trackingProps={{
                                     collaboratorListTracking: {},
@@ -485,10 +503,28 @@ export const withSharedLink = () => {
                                 showUpgradeOptions
                                 submitting={state.submitting}
                                 suggestedCollaborators={{
-                                    '2': { id: '2', userScore: 0.1 },
-                                    '5': { id: '5', userScore: 0.2 },
-                                    '1': { id: '1', userScore: 0.5 },
-                                    '3': { id: '3', userScore: 2 },
+                                    '2': {
+                                        id: '2',
+                                        userScore: 0.1,
+                                        name: 'David',
+                                        email: 'dt@example.com',
+                                        type: 'user',
+                                    },
+                                    '5': {
+                                        id: '5',
+                                        userScore: 0.2,
+                                        name: 'Will',
+                                        email: 'wy@example.com',
+                                        type: 'user',
+                                    },
+                                    '1': {
+                                        id: '1',
+                                        userScore: 0.5,
+                                        name: 'Jeff',
+                                        email: 'jt@example.com',
+                                        type: 'user',
+                                    },
+                                    '3': { id: '3', userScore: 2, name: 'Yang', email: 'yz@example.com', type: 'user' },
                                 }}
                                 trackingProps={{
                                     collaboratorListTracking: {},
@@ -668,10 +704,28 @@ export const withAutofocusedSharedLink = () => {
                                 showUpgradeOptions
                                 submitting={state.submitting}
                                 suggestedCollaborators={{
-                                    '2': { id: '2', userScore: 0.1 },
-                                    '5': { id: '5', userScore: 0.2 },
-                                    '1': { id: '1', userScore: 0.5 },
-                                    '3': { id: '3', userScore: 2 },
+                                    '2': {
+                                        id: '2',
+                                        userScore: 0.1,
+                                        name: 'David',
+                                        email: 'dt@example.com',
+                                        type: 'user',
+                                    },
+                                    '5': {
+                                        id: '5',
+                                        userScore: 0.2,
+                                        name: 'Will',
+                                        email: 'wy@example.com',
+                                        type: 'user',
+                                    },
+                                    '1': {
+                                        id: '1',
+                                        userScore: 0.5,
+                                        name: 'Jeff',
+                                        email: 'jt@example.com',
+                                        type: 'user',
+                                    },
+                                    '3': { id: '3', userScore: 2, name: 'Yang', email: 'yz@example.com', type: 'user' },
                                 }}
                                 trackingProps={{
                                     collaboratorListTracking: {},

@@ -8,11 +8,12 @@ import classNames from 'classnames';
 
 import PillSelectorDropdown from '../../components/pill-selector-dropdown';
 import ContactDatalistItem from '../../components/contact-datalist-item';
+import computeSuggestedCollabs from './utils/computeSuggestedCollabs';
 import parseEmails from '../../utils/parseEmails';
 import commonMessages from '../../common/messages';
 
 import messages from './messages';
-import type { contactType as Contact, suggestedCollaboratorsType } from './flowTypes';
+import type { SuggestedCollabLookup, contactType as Contact } from './flowTypes';
 import type { SelectOptionProp } from '../../components/select-field/props';
 
 type Props = {
@@ -27,7 +28,7 @@ type Props = {
     onInput?: Function,
     onPillCreate?: (pills: Array<SelectOptionProp | Contact>) => void,
     selectedContacts: Array<Contact>,
-    suggestedCollaborators?: suggestedCollaboratorsType,
+    suggestedCollaborators?: SuggestedCollabLookup,
     validateForError: Function,
     validator: Function,
 };
@@ -55,25 +56,15 @@ class ContactsField extends React.Component<Props, State> {
 
     addSuggestedContacts = (contacts: Array<Contact>) => {
         const { suggestedCollaborators = {} } = this.props;
+        const { pillSelectorInputValue } = this.state;
 
-        const suggestedSelectorOptions = contacts
-            .filter(option => {
-                const { id } = option;
-                return id && suggestedCollaborators[id.toString()];
-            })
-            .sort((optionA, optionB) => {
-                const currentSuggestedItemA = suggestedCollaborators[optionA.id.toString()];
-                const currentSuggestedItemB = suggestedCollaborators[optionB.id.toString()];
-                return currentSuggestedItemB.userScore - currentSuggestedItemA.userScore;
-            })
-            .slice(0, 3);
-
-        this.setState({ numSuggestedShowing: suggestedSelectorOptions.length });
-        const selectorOptionsParsed = contacts.filter(
-            option => !suggestedSelectorOptions.map(suggestion => suggestion.id).includes(option.id),
+        const [suggestedOptions, otherOptions] = computeSuggestedCollabs(
+            contacts,
+            suggestedCollaborators,
+            pillSelectorInputValue,
         );
-
-        return [...suggestedSelectorOptions, ...selectorOptionsParsed];
+        this.setState({ numSuggestedShowing: suggestedOptions.length });
+        return [...suggestedOptions, ...otherOptions];
     };
 
     filterContacts = (contacts: Array<Contact>) => {
@@ -81,7 +72,7 @@ class ContactsField extends React.Component<Props, State> {
         const { selectedContacts, suggestedCollaborators } = this.props;
 
         if (pillSelectorInputValue && contacts) {
-            const fullContacts = contacts
+            let fullContacts = contacts
                 .filter(
                     // filter contacts whose name or email don't match input value
                     ({ name, email }) =>
@@ -90,23 +81,22 @@ class ContactsField extends React.Component<Props, State> {
                 .filter(
                     // filter contacts who have already been selected
                     ({ email, id }) => !selectedContacts.find(({ value }) => value === email || value === id),
-                )
-                .map<Object>(({ email, id, isExternalUser, name, type }) => ({
-                    // map to standardized DatalistItem format
-                    // TODO: refactor this so inline conversions aren't required at every usage
-                    email,
-                    id,
-                    isExternalUser,
-                    text: name,
-                    type,
-                    value: email || id, // if email doesn't exist, contact is a group, use id
-                }));
+                );
 
             if (suggestedCollaborators) {
-                return this.addSuggestedContacts(fullContacts);
+                fullContacts = this.addSuggestedContacts(fullContacts);
             }
 
-            return fullContacts;
+            return fullContacts.map<Object>(({ email, id, isExternalUser, name, type }) => ({
+                // map to standardized DatalistItem format
+                // TODO: refactor this so inline conversions aren't required at every usage
+                email,
+                id,
+                isExternalUser,
+                text: name,
+                type,
+                value: email || id, // if email doesn't exist, contact is a group, use id
+            }));
         }
 
         // return empty selector options if input value is empty
@@ -168,7 +158,7 @@ class ContactsField extends React.Component<Props, State> {
         } = this.props;
         const { contacts, numSuggestedShowing } = this.state;
         const groupLabel = <FormattedMessage {...messages.groupLabel} />;
-        const shouldShowSuggested = numSuggestedShowing > 0 && contacts.length !== numSuggestedShowing;
+        const shouldShowSuggested = numSuggestedShowing > 0;
         const pillSelectorOverlayClasses = classNames({
             scrollable: contacts.length > 5,
         });
