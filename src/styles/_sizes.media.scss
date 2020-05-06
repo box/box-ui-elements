@@ -23,8 +23,8 @@ $preview-medium-width: 1000px;
     }
 }
 
-@mixin medium-plus-size {
-    @media (min-width: #{$small-width + 1px}) {
+@mixin medium-minus-size {
+    @media (max-width: #{$medium-width}) {
         @content;
     }
 }

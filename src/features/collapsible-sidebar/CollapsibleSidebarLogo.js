@@ -25,10 +25,8 @@ const StyledIconHamburger = styled(IconHamburger)`
 `;
 
 type Props = {
+    /** optional badge to be displayed next to logo */
     badge?: React.Node,
-
-    /** Flag for trial users */
-    canEndTrial: boolean,
 
     /** Additional classes */
     className?: string,

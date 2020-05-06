@@ -9,8 +9,8 @@ import * as React from 'react';
 
 import Tooltip from '../../components/tooltip';
 
-import type { Callout } from '../left-sidebar/Callout';
 import LeftSidebarLinkCallout from '../left-sidebar/LeftSidebarLinkCallout';
+import type { Callout } from '../left-sidebar/Callout';
 
 type Props = {
     /** Callout element used in the menu. */
@@ -45,15 +45,11 @@ function CollapsibleSidebarItem(props: Props) {
         );
     }
 
-    let wrappedCollapsedElement = collapsedElement;
-
-    if (tooltipMessage) {
-        wrappedCollapsedElement = (
-            <Tooltip isTabbable={false} position="middle-right" text={tooltipMessage}>
-                {collapsedElement}
-            </Tooltip>
-        );
-    }
+    const wrappedCollapsedElement = (
+        <Tooltip isTabbable={false} position="middle-right" text={tooltipMessage} isDisabled={!tooltipMessage}>
+            {collapsedElement}
+        </Tooltip>
+    );
 
     return expanded ? expandedElement : wrappedCollapsedElement;
 }

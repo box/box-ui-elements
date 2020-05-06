@@ -29,8 +29,8 @@ const renderFiles = () => {
     const items = [];
     for (let i = 0; i < 10; i += 1) {
         items.push(
-            <a href="/">
-                <li key={`djb-leftnav-menu-item-all-file-${i}`}>
+            <li key={`djb-leftnav-menu-item-all-file-${i}`}>
+                <a href="/">
                     <CollapsibleSidebarItem
                         collapsedElement={
                             <CollapsibleSidebarMenuItem icon={<FileDefault16 height={20} width={20} />} />
@@ -44,8 +44,8 @@ const renderFiles = () => {
                         }
                         tooltipMessage="File Link"
                     />
-                </li>
-            </a>,
+                </a>
+            </li>,
         );
     }
     return items;

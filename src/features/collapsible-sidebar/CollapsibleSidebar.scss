@@ -122,7 +122,7 @@ $left-sidebar-z-index: 40 !default;
     }
 }
 
-@include medium-plus-size {
+@include medium-minus-size {
     .bdl-CollapsibleSidebar-logo {
         .logo {
             margin-left: 7px;
