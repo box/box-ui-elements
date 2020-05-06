@@ -26,6 +26,7 @@ type Props = {
     activeFeedEntryType?: FocusableFeedItemType,
     activeFeedItemRef: { current: null | HTMLElement },
     approverSelectorContacts?: SelectorItems<>,
+    currentFileVersionId: string,
     currentUser?: User,
     getApproverWithQuery?: Function,
     getAvatarUrl: GetAvatarUrlCallback,
@@ -52,6 +53,7 @@ const ActiveState = ({
     activeFeedEntryType,
     activeFeedItemRef,
     approverSelectorContacts,
+    currentFileVersionId,
     currentUser,
     items,
     mentionSelectorContacts,
@@ -79,6 +81,7 @@ const ActiveState = ({
             {items.map((item: FeedItem) => {
                 const isFocused = item === activeEntry;
                 const refValue = isFocused ? activeFeedItemRef : undefined;
+                const itemFileVersionId = getProp(item, 'file_version.id');
 
                 switch (item.type) {
                     case 'comment':
@@ -166,6 +169,7 @@ const ActiveState = ({
                                     currentUser={currentUser}
                                     getAvatarUrl={getAvatarUrl}
                                     getUserProfileUrl={getUserProfileUrl}
+                                    isCurrentVersion={currentFileVersionId === itemFileVersionId}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     onDelete={onAnnotationDelete}
                                     onSelect={onAnnotationSelect}
