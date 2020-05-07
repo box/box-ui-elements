@@ -2,6 +2,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
+import { injectIntl } from 'react-intl';
 
 import { scrollIntoView } from '../../utils/dom';
 import IconCheck from '../../icons/general/IconCheck';
@@ -11,6 +12,9 @@ import PopperComponent from '../popper';
 import SelectFieldDropdown from './SelectFieldDropdown';
 import type { SelectOptionValueProp, SelectOptionProp } from './props';
 import { PLACEMENT_BOTTOM_END, PLACEMENT_BOTTOM_START } from '../popper/constants';
+import SearchForm from '../search-form/SearchForm';
+
+import messages from './messages';
 
 import './SelectField.scss';
 
@@ -38,6 +42,8 @@ type Props = {
     defaultValue?: SelectOptionValueProp,
     /** An optional error to show within a tooltip. */
     error?: React.Node,
+    /* Intl object */
+    intl: Object,
     /** The select button is disabled if true */
     isDisabled?: boolean,
     /** Whether to allow the dropdown to overflow its boundaries and remain attached to its reference */
@@ -63,6 +69,8 @@ type Props = {
     separatorIndices: Array<number>,
     /** Boolean to determine whether or not to show the clear option */
     shouldShowClearOption?: boolean,
+    /** Boolean to determine whether or not to show the search field */
+    shouldShowSearchInput?: boolean,
     /** The select button text (by default, component will use comma separated list of all selected option displayText) */
     title?: string | React.Element<any>,
 };
@@ -94,6 +102,7 @@ class BaseSelectField extends React.Component<Props, State> {
         selectedValues: [],
         separatorIndices: [],
         shouldShowClearOption: false,
+        shouldShowSearchInput: false,
     };
 
     constructor(props: Props) {
@@ -103,10 +112,13 @@ class BaseSelectField extends React.Component<Props, State> {
 
         this.selectFieldContainerRef = React.createRef();
 
+        this.searchInputRef = React.createRef();
+
         this.state = {
             activeItemID: null,
             activeItemIndex: -1,
             isOpen: false,
+            searchText: '',
             shouldScrollIntoView: false,
         };
     }
@@ -117,6 +129,21 @@ class BaseSelectField extends React.Component<Props, State> {
             document.removeEventListener('click', this.handleDocumentClick);
         }
     }
+
+    updateSearchText = (text: string) => {
+        const { options } = this.props;
+        const optionIndex = options.findIndex(element =>
+            element.displayText.toLowerCase().includes(text.toLowerCase()),
+        );
+
+        if (optionIndex >= 0) {
+            this.setActiveItem(optionIndex);
+        }
+
+        this.setState({
+            searchText: text,
+        });
+    };
 
     handleDocumentClick = (event: MouseEvent) => {
         const container = this.selectFieldContainerRef.current;
@@ -150,6 +177,8 @@ class BaseSelectField extends React.Component<Props, State> {
     selectFieldID: string;
 
     selectFieldContainerRef: { current: null | HTMLDivElement };
+
+    searchInputRef: { current: null | React.Element<any> };
 
     handleChange = (selectedItems: Array<SelectOptionProp>) => {
         const { onChange } = this.props;
@@ -188,16 +217,16 @@ class BaseSelectField extends React.Component<Props, State> {
         }
     };
 
-    handleBlur = () => {
+    handleBlur = (event: FocusEvent) => {
         const { isOpen } = this.state;
-        if (isOpen) {
+        if (isOpen && event.relatedTarget && event.relatedTarget.className !== 'search-input') {
             this.closeDropdown();
         }
     };
 
     handleKeyDown = (event: SyntheticKeyboardEvent<HTMLDivElement>) => {
         const { key } = event;
-        const { options, shouldShowClearOption } = this.props;
+        const { options, shouldShowClearOption, shouldShowSearchInput } = this.props;
         const { activeItemIndex, isOpen } = this.state;
         const itemCount = options.length;
         switch (key) {
@@ -221,6 +250,11 @@ class BaseSelectField extends React.Component<Props, State> {
                 break;
             case 'Enter':
             case ' ':
+                // When the search input is active, we want to allow space key presses in the search string
+                if (key === ' ' && shouldShowSearchInput) {
+                    break;
+                }
+
                 if (activeItemIndex !== -1 && isOpen) {
                     stopDefaultEvent(event);
                     const isClearOption = shouldShowClearOption && activeItemIndex === 0;
@@ -247,22 +281,25 @@ class BaseSelectField extends React.Component<Props, State> {
                 }
                 break;
             default: {
-                stopDefaultEvent(event);
-                const lowerCaseKey = key.toLowerCase();
-                const optionIndex = options.findIndex(
-                    option => option.displayText.toLowerCase().indexOf(lowerCaseKey) === 0,
-                );
+                if (!shouldShowSearchInput) {
+                    stopDefaultEvent(event);
+                    const lowerCaseKey = key.toLowerCase();
+                    const optionIndex = options.findIndex(
+                        option => option.displayText.toLowerCase().indexOf(lowerCaseKey) === 0,
+                    );
 
-                if (optionIndex >= 0) {
-                    this.setActiveItem(optionIndex);
+                    if (optionIndex >= 0) {
+                        this.setActiveItem(optionIndex);
+                    }
                 }
             }
         }
     };
 
     openDropdown = () => {
+        const { shouldShowSearchInput } = this.props;
         if (!this.state.isOpen) {
-            this.setState({ isOpen: true });
+            this.setState({ isOpen: true }, () => shouldShowSearchInput && this.searchInputRef.focus());
             document.addEventListener('click', this.handleDocumentClick);
         }
     };
@@ -356,6 +393,23 @@ class BaseSelectField extends React.Component<Props, State> {
         return selectedOptions.map(option => option.displayText).join(', ');
     };
 
+    renderSearchInput = () => {
+        const { intl } = this.props;
+        const { searchText } = this.state;
+        const getSearchInput = element => {
+            this.searchInputRef = element;
+        };
+
+        return (
+            <SearchForm
+                getSearchInput={getSearchInput}
+                onChange={this.updateSearchText}
+                placeholder={intl.formatMessage(messages.searchPlaceholder)}
+                value={searchText}
+            />
+        );
+    };
+
     renderSelectButton = () => {
         const { activeItemID, isOpen } = this.state;
         const { buttonProps: buttonElProps, isDisabled, className, error } = this.props;
@@ -445,6 +499,7 @@ class BaseSelectField extends React.Component<Props, State> {
             isRightAligned,
             isScrollable,
             selectedValues,
+            shouldShowSearchInput,
         } = this.props;
         const { isOpen } = this.state;
 
@@ -469,18 +524,22 @@ class BaseSelectField extends React.Component<Props, State> {
             >
                 <PopperComponent placement={dropdownPlacement} isOpen={isOpen} modifiers={dropdownModifiers}>
                     {this.renderSelectButton()}
-                    <SelectFieldDropdown
-                        isScrollable={isScrollable}
-                        multiple={multiple}
-                        selectedValues={selectedValues}
-                        selectFieldID={this.selectFieldID}
-                    >
-                        {this.renderSelectOptions()}
-                    </SelectFieldDropdown>
+                    <>
+                        <SelectFieldDropdown
+                            isScrollable={isScrollable}
+                            multiple={multiple}
+                            selectedValues={selectedValues}
+                            selectFieldID={this.selectFieldID}
+                        >
+                            {shouldShowSearchInput && this.renderSearchInput()}
+                            {this.renderSelectOptions()}
+                        </SelectFieldDropdown>
+                    </>
                 </PopperComponent>
             </div>
         );
     }
 }
 
-export default BaseSelectField;
+export { BaseSelectField as BaseSelectFieldBase };
+export default injectIntl(BaseSelectField);

@@ -12,6 +12,16 @@
     }
 }
 
+.search-input-container {
+    width: 100%;
+    padding-right: 5px;
+    padding-left: 5px;
+
+    input {
+        width: 100%;
+    }
+}
+
 .select-option {
     display: flex;
     align-items: center;
