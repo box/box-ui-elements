@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { MemoryRouter, MemoryRouterProps, Router } from 'react-router';
+import { MemoryRouter, Router } from 'react-router';
 import { History } from 'history';
 
 type Props = {
     children: React.ReactNode;
     history?: History;
-} & MemoryRouterProps;
+    initialEntries?: History.LocationDescriptor[];
+};
 
 const NavRouter = ({ children, history, ...rest }: Props) => {
     if (history) {

@@ -1,31 +1,11 @@
 import React from 'react';
-import { History } from 'history';
-import { MemoryRouterProps } from 'react-router';
-import NavRouter from '.';
+import NavRouter from './NavRouter';
+import { WithNavRouterProps } from './types';
 
-export type WithNavRouterProps = {
-    history?: History;
-} & MemoryRouterProps;
-
-export const withNavRouter = <P extends object>(
-    Component: React.ComponentType<P>,
-): React.FC<P & WithNavRouterProps> => {
-    function WithNavRouter({
-        getUserConfirmation,
-        history,
-        initialEntries,
-        initialIndex,
-        keyLength,
-        ...rest
-    }: P & WithNavRouterProps) {
+const withNavRouter = <P extends object>(Component: React.ComponentType<P>): React.FC<P & WithNavRouterProps> => {
+    function WithNavRouter({ history, initialEntries, ...rest }: P & WithNavRouterProps) {
         return (
-            <NavRouter
-                getUserConfirmation={getUserConfirmation}
-                history={history}
-                initialEntries={initialEntries}
-                initialIndex={initialIndex}
-                keyLength={keyLength}
-            >
+            <NavRouter history={history} initialEntries={initialEntries}>
                 <Component {...(rest as P)} />
             </NavRouter>
         );
@@ -35,3 +15,5 @@ export const withNavRouter = <P extends object>(
 
     return WithNavRouter;
 };
+
+export default withNavRouter;
