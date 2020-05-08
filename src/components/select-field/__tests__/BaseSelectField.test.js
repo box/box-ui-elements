@@ -1,9 +1,12 @@
 import React from 'react';
 import sinon from 'sinon';
+import { FormattedMessage } from 'react-intl';
 
 import { scrollIntoView } from '../../../utils/dom';
 import { BaseSelectFieldBase as BaseSelectField } from '../BaseSelectField';
 import { OVERLAY_SCROLLABLE_CLASS } from '../SelectFieldDropdown';
+
+import messages from '../messages';
 
 const sandbox = sinon.sandbox.create();
 
@@ -145,6 +148,34 @@ describe('components/select-field/BaseSelectField', () => {
     });
 
     describe('renderSelectOptions()', () => {
+        test('should render FormattedMessage if searchText is not a substring of any of the options', () => {
+            const searchText = 'abc';
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            instance.setState({
+                searchText,
+            });
+
+            const message = wrapper.find(FormattedMessage);
+
+            expect(message.props().id).toBe(messages.noResults.id);
+        });
+
+        test('should only render the option that matches the searchText substring', () => {
+            const searchText = 'Audio';
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            instance.setState({
+                searchText,
+            });
+
+            const itemsWrapper = wrapper.find('DatalistItem');
+            const option = itemsWrapper.at(0);
+
+            expect(itemsWrapper.length).toBe(1);
+            expect(option.find('.bdl-SelectField-optionText').props().title).toEqual(searchText);
+        });
+
         test('should render DatalistItems per option', () => {
             const wrapper = shallowRenderSelectField();
             const itemsWrapper = wrapper.find('DatalistItem');
@@ -302,7 +333,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
             const mockedEvent = {
                 relatedTarget: {
-                    className: '',
+                    classList: { contains: jest.fn() },
                 },
             };
 

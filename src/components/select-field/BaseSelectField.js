@@ -2,7 +2,8 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
-import { injectIntl } from 'react-intl';
+import findIndex from 'lodash/findIndex';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { scrollIntoView } from '../../utils/dom';
 import IconCheck from '../../icons/general/IconCheck';
@@ -79,6 +80,7 @@ type State = {
     activeItemID: ?string,
     activeItemIndex: number,
     isOpen: boolean,
+    searchText: string,
     shouldScrollIntoView: boolean,
 };
 
@@ -112,8 +114,6 @@ class BaseSelectField extends React.Component<Props, State> {
 
         this.selectFieldContainerRef = React.createRef();
 
-        this.searchInputRef = React.createRef();
-
         this.state = {
             activeItemID: null,
             activeItemIndex: -1,
@@ -132,7 +132,7 @@ class BaseSelectField extends React.Component<Props, State> {
 
     updateSearchText = (text: string) => {
         const { options } = this.props;
-        const optionIndex = options.findIndex(element =>
+        const optionIndex = findIndex(options, element =>
             element.displayText.toLowerCase().includes(text.toLowerCase()),
         );
 
@@ -178,7 +178,9 @@ class BaseSelectField extends React.Component<Props, State> {
 
     selectFieldContainerRef: { current: null | HTMLDivElement };
 
-    searchInputRef: { current: null | React.Element<any> };
+    searchInputRef: React.Element<any>;
+
+    searchInputRef: { focus: () => void };
 
     handleChange = (selectedItems: Array<SelectOptionProp>) => {
         const { onChange } = this.props;
@@ -217,9 +219,14 @@ class BaseSelectField extends React.Component<Props, State> {
         }
     };
 
-    handleBlur = (event: FocusEvent) => {
+    handleBlur = (event?: SyntheticFocusEvent<>) => {
         const { isOpen } = this.state;
-        if (isOpen && event.relatedTarget && event.relatedTarget.className !== 'search-input') {
+        if (
+            isOpen &&
+            event &&
+            event.relatedTarget &&
+            !(event.relatedTarget: window.HTMLInputElement).classList.contains('search-input')
+        ) {
             this.closeDropdown();
         }
     };
@@ -284,7 +291,8 @@ class BaseSelectField extends React.Component<Props, State> {
                 if (!shouldShowSearchInput) {
                     stopDefaultEvent(event);
                     const lowerCaseKey = key.toLowerCase();
-                    const optionIndex = options.findIndex(
+                    const optionIndex = findIndex(
+                        options,
                         option => option.displayText.toLowerCase().indexOf(lowerCaseKey) === 0,
                     );
 
@@ -299,7 +307,10 @@ class BaseSelectField extends React.Component<Props, State> {
     openDropdown = () => {
         const { shouldShowSearchInput } = this.props;
         if (!this.state.isOpen) {
-            this.setState({ isOpen: true }, () => shouldShowSearchInput && this.searchInputRef.focus());
+            this.setState(
+                { isOpen: true },
+                () => shouldShowSearchInput && this.searchInputRef && this.searchInputRef.focus(),
+            );
             document.addEventListener('click', this.handleDocumentClick);
         }
     };
@@ -353,7 +364,7 @@ class BaseSelectField extends React.Component<Props, State> {
 
         // Apply constraints if a defaultValue is specified
         if (hasDefaultValue) {
-            const defaultOptionIndex = options.findIndex(option => option.value === defaultValue);
+            const defaultOptionIndex = findIndex(options, option => option.value === defaultValue);
 
             if (defaultOptionIndex !== -1) {
                 if (newSelectedValues.length === 0) {
@@ -440,9 +451,18 @@ class BaseSelectField extends React.Component<Props, State> {
 
     renderSelectOptions = () => {
         const { optionRenderer, options, selectedValues, separatorIndices, shouldShowClearOption } = this.props;
-        const { activeItemIndex } = this.state;
+        const { activeItemIndex, searchText } = this.state;
 
-        const selectOptions = options.map<React.Element<typeof DatalistItem | 'li'>>((item, index) => {
+        let filteredOptions;
+        if (searchText === '') {
+            filteredOptions = options;
+        } else {
+            filteredOptions = options.filter(option =>
+                option.displayText.toLowerCase().includes(searchText.toLowerCase()),
+            );
+        }
+
+        const selectOptions = filteredOptions.map<React.Element<typeof DatalistItem | 'li'>>((item, index) => {
             const { value } = item;
 
             const isSelected = selectedValues.includes(value);
@@ -487,6 +507,14 @@ class BaseSelectField extends React.Component<Props, State> {
         separatorIndices.forEach((separatorIndex, index) => {
             selectOptions.splice(separatorIndex + index, 0, <li key={`separator${separatorIndex}`} role="separator" />);
         });
+
+        if (selectOptions.length === 0) {
+            return (
+                <div className="no-results">
+                    <FormattedMessage {...messages.noResults} />
+                </div>
+            );
+        }
 
         return selectOptions;
     };

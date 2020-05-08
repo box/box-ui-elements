@@ -11,6 +11,11 @@ const messages = defineMessages({
         description: 'Placeholder text shown in the search input',
         id: 'boxui.selectField.searchPlaceholder',
     },
+    noResults: {
+        defaultMessage: 'No Results',
+        description: 'Text shown in the select field dropdown when there are no options that match the search field',
+        id: 'boxui.selectField.noResults',
+    },
 });
 
 export default messages;

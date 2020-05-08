@@ -4,6 +4,7 @@
 .select-field {
     .overlay {
         min-width: 100%;
+        max-height: 300px;
     }
 
     li[role='separator'] {
@@ -14,12 +15,19 @@
 
 .search-input-container {
     width: 100%;
-    padding-right: 5px;
-    padding-left: 5px;
+    padding-right: $bdl-grid-unit;
+    padding-bottom: 8px;
+    padding-left: $bdl-grid-unit;
 
     input {
         width: 100%;
     }
+}
+
+.no-results {
+    padding-top: 5px;
+    padding-left: 8px;
+    font-size: 12px;
 }
 
 .select-option {
