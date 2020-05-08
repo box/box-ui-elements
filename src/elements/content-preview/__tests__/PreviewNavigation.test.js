@@ -1,4 +1,5 @@
 import React from 'react';
+import { Router } from 'react-router-dom';
 import noop from 'lodash/noop';
 import { mount } from 'enzyme';
 import { PreviewNavigationComponent as PreviewNavigation } from '../PreviewNavigation';
@@ -10,17 +11,20 @@ const historyMock = {
     entries: [{}],
 };
 
-const getWrapper = ({ onNavigateLeft = noop, onNavigateRight = noop, ...rest }) =>
+const getWrapper = ({ collection = ['a', 'b', 'c'], onNavigateLeft = noop, onNavigateRight = noop, ...rest }) =>
     mount(
-        <PreviewNavigation
-            intl={{
-                formatMessage: jest.fn(),
-            }}
-            onNavigateLeft={onNavigateLeft}
-            onNavigateRight={onNavigateRight}
-            history={historyMock}
-            {...rest}
-        />,
+        <Router history={historyMock}>
+            <PreviewNavigation
+                collection={collection}
+                intl={{
+                    formatMessage: jest.fn(),
+                }}
+                onNavigateLeft={onNavigateLeft}
+                onNavigateRight={onNavigateRight}
+                history={historyMock}
+                {...rest}
+            />
+        </Router>,
     );
 
 afterEach(() => {
@@ -47,18 +51,8 @@ describe('elements/content-preview/PreviewNavigation', () => {
 
         test('should render left navigation correctly from tasks deeplinked URL', () => {
             const onNavigateLeftMock = jest.fn();
-            const wrapper = mount(
-                <PreviewNavigation
-                    intl={{
-                        formatMessage: jest.fn(),
-                    }}
-                    collection={['a', 'b', 'c']}
-                    currentIndex={2}
-                    onNavigateLeft={onNavigateLeftMock}
-                    onNavigateRight={jest.fn()}
-                    history={historyMock}
-                />,
-            );
+            const wrapper = getWrapper({ currentIndex: 2, onNavigateLeft: onNavigateLeftMock });
+
             expect(wrapper.find('PlainButton')).toHaveLength(1);
             wrapper.find('PlainButton').simulate('click');
 
@@ -69,18 +63,8 @@ describe('elements/content-preview/PreviewNavigation', () => {
 
         test('should render right navigation correctly from tasks deeplinked URL ', () => {
             const onNavigateRightMock = jest.fn();
-            const wrapper = mount(
-                <PreviewNavigation
-                    intl={{
-                        formatMessage: jest.fn(),
-                    }}
-                    collection={['a', 'b', 'c']}
-                    currentIndex={0}
-                    onNavigateLeft={jest.fn()}
-                    onNavigateRight={onNavigateRightMock}
-                    history={historyMock}
-                />,
-            );
+            const wrapper = getWrapper({ currentIndex: 0, onNavigateRight: onNavigateRightMock });
+
             expect(wrapper.find('PlainButton')).toHaveLength(1);
             wrapper.find('PlainButton').simulate('click');
 
@@ -90,18 +74,8 @@ describe('elements/content-preview/PreviewNavigation', () => {
         });
         test('should render navigation correctly from comments deeplinked URL ', () => {
             const onNavigateRightMock = jest.fn();
-            const wrapper = mount(
-                <PreviewNavigation
-                    intl={{
-                        formatMessage: jest.fn(),
-                    }}
-                    collection={['a', 'b', 'c']}
-                    currentIndex={0}
-                    onNavigateLeft={jest.fn()}
-                    onNavigateRight={onNavigateRightMock}
-                    history={historyMock}
-                />,
-            );
+            const wrapper = getWrapper({ currentIndex: 0, onNavigateRight: onNavigateRightMock });
+
             expect(wrapper.find('PlainButton')).toHaveLength(1);
             wrapper.find('PlainButton').simulate('click');
 
