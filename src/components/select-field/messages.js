@@ -13,7 +13,8 @@ const messages = defineMessages({
     },
     noResults: {
         defaultMessage: 'No Results',
-        description: 'Text shown in the select field dropdown when there are no options that match the search field',
+        description:
+            'Text shown in the select field dropdown when there are no options that match the search field input',
         id: 'boxui.selectField.noResults',
     },
 });
