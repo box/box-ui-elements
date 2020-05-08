@@ -454,12 +454,15 @@ class BaseSelectField extends React.Component<Props, State> {
         const { optionRenderer, options, selectedValues, separatorIndices, shouldShowClearOption } = this.props;
         const { activeItemIndex, searchText } = this.state;
 
-        let filteredOptions;
-        if (searchText === '') {
-            filteredOptions = options;
-        } else {
-            filteredOptions = options.filter(option =>
-                option.displayText.toLowerCase().includes(searchText.toLowerCase()),
+        const filteredOptions = options.filter(option =>
+            searchText ? option.displayText.toLowerCase().includes(searchText.toLowerCase()) : true,
+        );
+
+        if (filteredOptions.length === 0) {
+            return (
+                <DatalistItem className="select-option is-disabled">
+                    <FormattedMessage {...messages.noResults} />
+                </DatalistItem>
             );
         }
 
@@ -508,14 +511,6 @@ class BaseSelectField extends React.Component<Props, State> {
         separatorIndices.forEach((separatorIndex, index) => {
             selectOptions.splice(separatorIndex + index, 0, <li key={`separator${separatorIndex}`} role="separator" />);
         });
-
-        if (selectOptions.length === 0) {
-            return (
-                <div className="no-results">
-                    <FormattedMessage {...messages.noResults} />
-                </div>
-            );
-        }
 
         return selectOptions;
     };
