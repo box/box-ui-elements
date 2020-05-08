@@ -230,10 +230,9 @@ class Task extends React.Component<Props, State> {
 
         const inlineError = loadCollabError || error;
 
-        const currentUserAssignment =
-            assigned_to && assigned_to.entries
-                ? assigned_to.entries.find(({ target }) => target.id === currentUser.id)
-                : null;
+        const assignments = assigned_to && assigned_to.entries;
+
+        const currentUserAssignment = assignments && assignments.find(({ target }) => target.id === currentUser.id);
 
         const createdByUser = created_by.target || PLACEHOLDER_USER;
 
@@ -263,7 +262,13 @@ class Task extends React.Component<Props, State> {
         const isMenuVisible = (permissions.can_delete || permissions.can_update) && !isPending;
 
         return (
-            <div className="bcs-Task">
+            <div
+                className="bcs-Task"
+                data-resin-feature="tasks"
+                data-resin-taskid={id}
+                data-resin-tasktype={task_type}
+                data-resin-numassignees={assignments && assignments.length}
+            >
                 {/* $FlowFixMe */}
                 {inlineError ? <ActivityError {...inlineError} /> : null}
                 <Media

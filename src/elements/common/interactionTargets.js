@@ -45,6 +45,7 @@ export const ACTIVITY_TARGETS = {
     TASK_APPROVE: 'activityfeed-taskapprove',
     TASK_COMPLETE: 'activityfeed-taskcomplete',
     TASK_DATE_PICKER: 'activityfeed-taskdatepicker',
+    TASK_VIEW_DETAILS: 'activityfeed-viewtaskdetails',
     TASK_OPTIONS: 'activityfeedtask', // component
     TASK_OPTIONS_DELETE: 'activityfeed-task-delete',
     TASK_OPTIONS_EDIT: 'activityfeed-task-edit',
