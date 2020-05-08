@@ -178,7 +178,7 @@ class BaseSelectField extends React.Component<Props, State> {
 
     selectFieldContainerRef: { current: null | HTMLDivElement };
 
-    searchInputRef: React.Element<any>;
+    searchInputRef: HTMLInputElement;
 
     searchInputRef: { focus: () => void };
 
