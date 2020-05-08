@@ -321,6 +321,7 @@ class BaseSelectField extends React.Component<Props, State> {
                 activeItemID: null,
                 activeItemIndex: -1,
                 isOpen: false,
+                searchText: '',
             });
             document.removeEventListener('click', this.handleDocumentClick);
         }

@@ -965,6 +965,7 @@ describe('components/select-field/BaseSelectField', () => {
             expect(wrapper.state('isOpen')).toBe(false);
             expect(wrapper.state('activeItemID')).toEqual(null);
             expect(wrapper.state('activeItemIndex')).toEqual(-1);
+            expect(wrapper.state('searchText')).toBe('');
         });
 
         test('should remove document click listener', () => {
