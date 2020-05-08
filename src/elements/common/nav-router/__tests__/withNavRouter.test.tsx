@@ -21,13 +21,21 @@ describe('src/eleemnts/common/nav-router/withNavRouter', () => {
         expect(wrapper.find(TestComponent)).toBeTruthy();
     });
 
-    test('should provide MemoryRouter props to NavRouter', () => {
+    test('should provide the appropriate props to NavRouter and the wrapped component', () => {
         const history = createMemoryHistory();
         const mockFn = jest.fn();
         const initialEntries = ['foo'];
         const initialIndex = 1;
         const keyLength = 2;
-        const wrapper = getWrapper({ getUserConfirmation: mockFn, history, initialEntries, initialIndex, keyLength });
+        const value = 'foo';
+        const wrapper = getWrapper({
+            getUserConfirmation: mockFn,
+            history,
+            initialEntries,
+            initialIndex,
+            keyLength,
+            value,
+        });
 
         const navRouter = wrapper.find(NavRouter);
         expect(navRouter.prop('getUserConfirmation')).toEqual(mockFn);
@@ -35,5 +43,7 @@ describe('src/eleemnts/common/nav-router/withNavRouter', () => {
         expect(navRouter.prop('initialEntries')).toEqual(initialEntries);
         expect(navRouter.prop('initialIndex')).toEqual(initialIndex);
         expect(navRouter.prop('keyLength')).toEqual(keyLength);
+
+        expect(wrapper.find(TestComponent).prop('value')).toEqual(value);
     });
 });
