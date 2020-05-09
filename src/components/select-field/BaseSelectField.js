@@ -180,8 +180,6 @@ class BaseSelectField extends React.Component<Props, State> {
 
     searchInputRef: HTMLInputElement;
 
-    searchInputRef: { focus: () => void };
-
     handleChange = (selectedItems: Array<SelectOptionProp>) => {
         const { onChange } = this.props;
 
