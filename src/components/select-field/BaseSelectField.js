@@ -546,17 +546,15 @@ class BaseSelectField extends React.Component<Props, State> {
             >
                 <PopperComponent placement={dropdownPlacement} isOpen={isOpen} modifiers={dropdownModifiers}>
                     {this.renderSelectButton()}
-                    <>
-                        <SelectFieldDropdown
-                            isScrollable={isScrollable}
-                            multiple={multiple}
-                            selectedValues={selectedValues}
-                            selectFieldID={this.selectFieldID}
-                        >
-                            {shouldShowSearchInput && this.renderSearchInput()}
-                            {this.renderSelectOptions()}
-                        </SelectFieldDropdown>
-                    </>
+                    <SelectFieldDropdown
+                        isScrollable={isScrollable}
+                        multiple={multiple}
+                        selectedValues={selectedValues}
+                        selectFieldID={this.selectFieldID}
+                    >
+                        {shouldShowSearchInput && this.renderSearchInput()}
+                        {this.renderSelectOptions()}
+                    </SelectFieldDropdown>
                 </PopperComponent>
             </div>
         );
