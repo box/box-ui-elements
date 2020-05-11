@@ -31,7 +31,12 @@ const TaskActions = ({
     let action = null;
     if (isMultiFile) {
         action = onTaskView && (
-            <PrimaryButton className="bcs-TaskActions-button" data-testid="view-task" onClick={onTaskView}>
+            <PrimaryButton
+                className="bcs-TaskActions-button"
+                data-testid="view-task"
+                onClick={onTaskView}
+                data-resin-target={ACTIVITY_TARGETS.TASK_VIEW_DETAILS}
+            >
                 <FormattedMessage {...messages.tasksFeedViewDetailsAction} />
             </PrimaryButton>
         );

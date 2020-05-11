@@ -8,7 +8,7 @@ import VersionsItemActions from '../VersionsItemActions';
 import VersionsItemButton from '../VersionsItemButton';
 import VersionsItemRetention from '../VersionsItemRetention';
 import { ReadableTime } from '../../../../components/time';
-import { PLACEHOLDER_USER, VERSION_UPLOAD_ACTION } from '../../../../constants';
+import { FILE_REQUEST_NAME, PLACEHOLDER_USER, VERSION_UPLOAD_ACTION } from '../../../../constants';
 
 jest.mock('../../../../utils/dom', () => ({
     ...jest.requireActual('../../../../utils/dom'),
@@ -123,6 +123,20 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             selectors.getVersionUser.mockReturnValue(versionUser);
 
             const wrapper = getWrapper();
+            const result = wrapper.find('[data-testid="bcs-VersionsItem-log"]').find('FormattedMessage');
+            expect(result.prop('values')).toEqual({ name: expected });
+        });
+
+        test.each`
+            versionUser                                         | expected
+            ${defaultUser}                                      | ${defaultUser.name}
+            ${restoreUser}                                      | ${restoreUser.name}
+            ${trashedUser}                                      | ${trashedUser.name}
+            ${{ ...PLACEHOLDER_USER, name: FILE_REQUEST_NAME }} | ${(<FormattedMessage {...messages.fileRequestDisplayName} />)}
+        `('should render the correct user name if uploader_user_name present', ({ expected, versionUser }) => {
+            selectors.getVersionUser.mockReturnValueOnce(versionUser);
+
+            const wrapper = getWrapper({ version: { ...defaults, uploader_display_name: FILE_REQUEST_NAME } });
             const result = wrapper.find('[data-testid="bcs-VersionsItem-log"]').find('FormattedMessage');
             expect(result.prop('values')).toEqual({ name: expected });
         });

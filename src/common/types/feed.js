@@ -1,7 +1,7 @@
 // @flow strict
 import type { MessageDescriptor } from 'react-intl';
 import type { BoxItemPermission, BoxItemVersion, Reply, User } from './core';
-import type { Annotation } from './annotations';
+import type { Annotation, Annotations } from './annotations';
 
 // Feed item types that can receive deeplinks inline in the feed
 type FocusableFeedItemType = 'task' | 'comment' | 'annotation';
@@ -113,6 +113,7 @@ export type {
     ActionItemError,
     ActivityTemplateItem,
     Annotation,
+    Annotations,
     AppActivityAPIItem,
     AppActivityAPIItems,
     AppActivityItem,

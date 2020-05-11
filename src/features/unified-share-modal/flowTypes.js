@@ -45,6 +45,14 @@ export type contactType = {
     value?: number | string,
 };
 
+export type SuggestedCollab = contactType & {
+    userScore: number,
+};
+
+export type SuggestedCollabLookup = {
+    [id: string]: SuggestedCollab,
+};
+
 export type inviteePermissionType = {
     default: boolean,
     disabled?: boolean,
@@ -163,5 +171,3 @@ export type tooltipComponentIdentifierType =
     | 'shared-link-copy-button'
     | 'shared-link-settings'
     | 'shared-link-toggle';
-
-export type suggestedCollaboratorsType = { [id: string]: { id: string, userScore: number } };

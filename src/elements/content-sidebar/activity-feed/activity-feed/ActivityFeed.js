@@ -70,7 +70,11 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
-        const { currentUser: prevCurrentUser, feedItems: prevFeedItems } = prevProps;
+        const {
+            activeFeedEntryId: prevActiveFeedEntryId,
+            currentUser: prevCurrentUser,
+            feedItems: prevFeedItems,
+        } = prevProps;
         const { feedItems: currFeedItems, activeFeedEntryId } = this.props;
         const { isInputOpen: prevIsInputOpen } = prevState;
         const { isInputOpen: currIsInputOpen } = this.state;
@@ -79,13 +83,13 @@ class ActivityFeed extends React.Component<Props, State> {
         const hasMoreItems = prevFeedItems && currFeedItems && prevFeedItems.length < currFeedItems.length;
         const didLoadFeedItems = prevFeedItems === undefined && currFeedItems !== undefined;
         const hasInputOpened = currIsInputOpen !== prevIsInputOpen;
+        const hasActiveFeedEntryIdChanged = activeFeedEntryId !== prevActiveFeedEntryId;
 
         if ((hasLoaded || hasMoreItems || didLoadFeedItems || hasInputOpened) && activeFeedEntryId === undefined) {
             this.resetFeedScroll();
         }
 
-        // do the scroll only once after first fetch of feed items
-        if (didLoadFeedItems) {
+        if (didLoadFeedItems || hasActiveFeedEntryIdChanged) {
             this.scrollToActiveFeedItemOrErrorMessage();
         }
     }
@@ -237,6 +241,7 @@ class ActivityFeed extends React.Component<Props, State> {
             : undefined;
 
         const isInlineFeedItemErrorVisible = !isLoading && activeFeedEntryType && !activeEntry;
+        const currentFileVersionId = getProp(file, 'file_version.id');
 
         return (
             // eslint-disable-next-line
@@ -260,6 +265,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             items={collapseFeedState(feedItems)}
                             isDisabled={isDisabled}
                             currentUser={currentUser}
+                            currentFileVersionId={currentFileVersionId}
                             onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                             onAnnotationDelete={onAnnotationDelete}
                             onAnnotationSelect={onAnnotationSelect}

@@ -162,7 +162,8 @@ class SidebarPanels extends React.Component<Props> {
                         exact
                         path={[
                             `/${SIDEBAR_VIEW_ACTIVITY}`,
-                            `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(annotations|comments|tasks)/:activeFeedEntryId?`,
+                            `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(annotations)/:fileVersionId/:activeFeedEntryId?`,
+                            `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(comments|tasks)/:activeFeedEntryId?`,
                         ]}
                         render={({ match }) => {
                             const matchEntryType = match.params.activeFeedEntryType;
@@ -174,6 +175,7 @@ class SidebarPanels extends React.Component<Props> {
                                     elementId={elementId}
                                     currentUser={currentUser}
                                     file={file}
+                                    onVersionChange={onVersionChange}
                                     onVersionHistoryClick={onVersionHistoryClick}
                                     ref={this.activitySidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}

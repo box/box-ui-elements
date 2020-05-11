@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
+<aside
+  className="bdl-CollapsibleSidebar-wrapper"
+>
+  <styled.nav
+    className="is-expanded bdl-CollapsibleSidebar foo"
+  >
+    <span
+      key="1"
+    >
+      abc
+    </span>
+    <span
+      key="2"
+    >
+      def
+    </span>
+  </styled.nav>
+</aside>
+`;

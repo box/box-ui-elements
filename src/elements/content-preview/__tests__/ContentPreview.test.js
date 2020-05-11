@@ -296,6 +296,26 @@ describe('elements/content-preview/ContentPreview', () => {
             );
         });
 
+        test('should call preview show with activeAnnotationId if provided', async () => {
+            const wrapper = getWrapper({ ...props, annotatorState: { activeAnnotationId: '123' } });
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({
+                    fileOptions: {
+                        [file.id]: {
+                            annotations: {
+                                activeId: '123',
+                            },
+                        },
+                    },
+                }),
+            );
+        });
+
         test('should use boxAnnotations instance if provided', async () => {
             const boxAnnotations = jest.fn();
             const wrapper = getWrapper({ ...props, boxAnnotations });

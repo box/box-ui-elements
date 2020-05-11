@@ -14,10 +14,13 @@ import omit from 'lodash/omit';
 import getProp from 'lodash/get';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
+import setProp from 'lodash/set';
 import Measure from 'react-measure';
-import type { RouterHistory } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import type { ContextRouter } from 'react-router-dom';
 import { decode } from '../../utils/keys';
 import makeResponsive from '../common/makeResponsive';
+import { withNavRouter } from '../common/nav-router';
 import Internationalize from '../common/Internationalize';
 import AsyncLoad from '../common/async-load';
 import TokenService from '../../utils/TokenService';
@@ -76,7 +79,6 @@ type Props = {
     fileOptions?: Object,
     getInnerRef: () => ?HTMLElement,
     hasHeader?: boolean,
-    history?: RouterHistory,
     isLarge: boolean,
     isVeryLarge?: boolean,
     language: string,
@@ -103,7 +105,8 @@ type Props = {
     useHotkeys: boolean,
 } & ErrorContextProps &
     WithLoggerProps &
-    WithAnnotationsProps;
+    WithAnnotationsProps &
+    ContextRouter;
 
 type State = {
     canPrint?: boolean,
@@ -290,9 +293,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.preview.destroy();
             this.preview.removeAllListeners();
             this.preview = undefined;
-        }
 
-        onPreviewDestroy();
+            onPreviewDestroy();
+        }
 
         this.setState({ selectedVersion: undefined });
     }
@@ -714,6 +717,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     loadPreview = async (): Promise<void> => {
         const {
+            annotatorState: { activeAnnotationId } = {},
             enableThumbnailsSidebar,
             fileOptions,
             onAnnotatorEvent,
@@ -738,8 +742,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const token = typedId => TokenService.getReadTokens(typedId, tokenOrTokenFunction);
 
         if (selectedVersion) {
-            fileOpts[fileId] = fileOpts[fileId] || {};
-            fileOpts[fileId].fileVersionId = selectedVersion.id;
+            setProp(fileOpts, [fileId, 'fileVersionId'], selectedVersion.id);
+        }
+
+        if (activeAnnotationId) {
+            setProp(fileOpts, [fileId, 'annotations', 'activeId'], activeAnnotationId);
         }
 
         const previewOptions = {
@@ -1234,7 +1241,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
                             <PreviewNavigation
                                 collection={collection}
                                 currentIndex={this.getFileIndex()}
-                                history={history}
                                 onNavigateLeft={this.navigateLeft}
                                 onNavigateRight={this.navigateRight}
                             />
@@ -1278,5 +1284,7 @@ export default flow([
     withFeatureProvider,
     withLogger(ORIGIN_CONTENT_PREVIEW),
     withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
+    withRouter,
     withAnnotations,
+    withNavRouter,
 ])(ContentPreview);

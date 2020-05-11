@@ -5,7 +5,4 @@ export default {
             enabled: false,
         },
     },
-    tasks: {
-        assignToGroup: true,
-    },
 };

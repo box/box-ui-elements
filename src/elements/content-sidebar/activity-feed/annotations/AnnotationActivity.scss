@@ -12,6 +12,7 @@
 
     &.bcs-is-pending {
         opacity: .4;
+        pointer-events: none;
     }
 }
 

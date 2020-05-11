@@ -3,6 +3,10 @@
 exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly render task 1`] = `
 <div
   className="bcs-Task"
+  data-resin-feature="tasks"
+  data-resin-numassignees={2}
+  data-resin-taskid="123125"
+  data-resin-tasktype="GENERAL"
 >
   <Media
     as="div"

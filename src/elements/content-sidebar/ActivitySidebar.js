@@ -96,6 +96,7 @@ mark(MARK_NAME_JS_READY);
 
 class ActivitySidebar extends React.PureComponent<Props, State> {
     static defaultProps = {
+        annotatorState: {},
         emitAnnotatorActiveChangeEvent: noop,
         isDisabled: false,
         onCommentCreate: noop,
@@ -121,6 +122,36 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const { currentUser } = this.props;
         this.fetchFeedItems(true);
         this.fetchCurrentUser(currentUser);
+    }
+
+    componentDidUpdate({ annotatorState: prevAnnotatorState }: Props): void {
+        const { annotation: prevAnnotation } = prevAnnotatorState;
+        const {
+            annotatorState: { annotation },
+        } = this.props;
+
+        if (prevAnnotation !== annotation) {
+            this.addAnnotation();
+        }
+    }
+
+    addAnnotation() {
+        const {
+            annotatorState: { action, annotation, meta },
+            api,
+            file,
+        } = this.props;
+        const { requestId } = meta || {};
+        const { currentUser } = this.state;
+        const isPending = action === 'create_start';
+
+        if (!currentUser) {
+            throw getBadUserError();
+        }
+
+        api.getFeedAPI(false).addAnnotation(file, currentUser, annotation, requestId, isPending);
+
+        this.fetchFeedItems();
     }
 
     /**
@@ -377,13 +408,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     fetchFeedItems(shouldRefreshCache: boolean = false, shouldDestroy: boolean = false) {
         const { file, api, features } = this.props;
         const shouldShowAppActivity = isFeatureEnabled(features, 'activityFeed.appActivity.enabled');
+        const shouldShowAnnotations = isFeatureEnabled(features, 'activityFeed.annotations.enabled');
+
         api.getFeedAPI(shouldDestroy).feedItems(
             file,
             shouldRefreshCache,
             this.fetchFeedItemsSuccessCallback,
             this.fetchFeedItemsErrorCallback,
             this.errorCallback,
-            { shouldShowAppActivity },
+            { shouldShowAnnotations, shouldShowAppActivity },
         );
     }
 
@@ -475,7 +508,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     getApproverWithQuery = debounce(
         (searchStr: string) =>
             this.getCollaborators(this.getApproverContactsSuccessCallback, this.errorCallback, searchStr, {
-                includeGroups: isFeatureEnabled(this.props.features, 'activityFeed.tasks.assignToGroup'),
+                includeGroups: true,
             }),
         DEFAULT_COLLAB_DEBOUNCE,
     );

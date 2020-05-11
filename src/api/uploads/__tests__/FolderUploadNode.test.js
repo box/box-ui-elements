@@ -1,7 +1,11 @@
 import noop from 'lodash/noop';
 import FolderUploadNode from '../FolderUploadNode';
 import FolderAPI from '../../Folder';
-import { ERROR_CODE_ITEM_NAME_IN_USE, STATUS_COMPLETE } from '../../../constants';
+import {
+    ERROR_CODE_ITEM_NAME_IN_USE,
+    STATUS_COMPLETE,
+    ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED,
+} from '../../../constants';
 
 jest.mock('../../Folder');
 jest.mock('../../../utils/uploads', () => ({
@@ -114,6 +118,32 @@ describe('api/uploads/FolderUploadNode', () => {
 
             expect(errorCallback).not.toHaveBeenCalledWith(error);
             expect(folderUploadNodeInstance.folderId).toBe(folderId);
+        });
+
+        test('should call addFolderToUploadQueue if the sub-folder(s) already exist', async () => {
+            const folderId = '1';
+            const errorCallback = jest.fn();
+            const isRoot = false;
+            const error = {
+                code: ERROR_CODE_ITEM_NAME_IN_USE,
+                context_info: { conflicts: [{ id: folderId }] },
+            };
+            folderUploadNodeInstance.name = name;
+            folderUploadNodeInstance.createFolder = jest.fn(() => Promise.reject(error));
+            folderUploadNodeInstance.addFolderToUploadQueue = jest.fn();
+
+            await folderUploadNodeInstance.createAndUploadFolder(errorCallback, isRoot);
+
+            expect(errorCallback).not.toHaveBeenCalledWith(error);
+            expect(errorCallback).not.toHaveBeenCalledWith({ code: ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED });
+            expect(folderUploadNodeInstance.addFolderToUploadQueue).toHaveBeenCalledWith({
+                extension: '',
+                name,
+                status: STATUS_COMPLETE,
+                isFolder: true,
+                size: 1,
+                progress: 100,
+            });
         });
 
         test('should call addFolderToUploadQueue when folder is created successfully for non-root folder', async () => {
