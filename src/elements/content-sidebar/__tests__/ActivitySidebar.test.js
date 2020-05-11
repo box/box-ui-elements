@@ -496,16 +496,8 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         let wrapper;
         let getCollaboratorsSpy;
 
-        test('should get collaborators with groups if FF is passed', () => {
-            wrapper = getWrapper({
-                features: {
-                    activityFeed: {
-                        tasks: {
-                            assignToGroup: true,
-                        },
-                    },
-                },
-            });
+        test('should get collaborators with groups', () => {
+            wrapper = getWrapper();
             instance = wrapper.instance();
             getCollaboratorsSpy = jest.spyOn(instance, 'getCollaborators');
 
@@ -525,32 +517,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 {
                     filter_term: search,
                     include_groups: true,
-                    include_uploader_collabs: false,
-                },
-            );
-        });
-
-        test('should get collaborators without groups if FF is not passed', () => {
-            wrapper = getWrapper({ features: {} });
-            instance = wrapper.instance();
-            getCollaboratorsSpy = jest.spyOn(instance, 'getCollaborators');
-
-            const search = 'Santa Claus';
-            instance.getApproverWithQuery(search);
-
-            expect(getCollaboratorsSpy).toBeCalledWith(
-                instance.getApproverContactsSuccessCallback,
-                instance.errorCallback,
-                search,
-                { includeGroups: false },
-            );
-            expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(
-                file.id,
-                instance.getApproverContactsSuccessCallback,
-                instance.errorCallback,
-                {
-                    filter_term: search,
-                    include_groups: false,
                     include_uploader_collabs: false,
                 },
             );
