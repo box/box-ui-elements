@@ -1,22 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with a filled collection 1`] = `
-<PreviewNavigation
-  collection={
-    Array [
-      "a",
-      "b",
-      "c",
-      "d",
-      "e",
-      "f",
-      "g",
-      "h",
-      "i",
-      "j",
-    ]
-  }
-  currentIndex={0}
+<Router
   history={
     Object {
       "entries": Array [
@@ -42,30 +27,23 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
       "push": [MockFunction],
     }
   }
-  intl={
-    Object {
-      "formatMessage": [MockFunction] {
-        "calls": Array [
-          Array [
-            Object {
-              "defaultMessage": "Next File",
-              "id": "be.nextFile",
-            },
-          ],
-        ],
-        "results": Array [
-          Object {
-            "type": "return",
-            "value": undefined,
-          },
-        ],
-      },
-    }
-  }
-  onNavigateLeft={[Function]}
-  onNavigateRight={[Function]}
 >
-  <NavRouter
+  <PreviewNavigation
+    collection={
+      Array [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+      ]
+    }
+    currentIndex={0}
     history={
       Object {
         "entries": Array [
@@ -91,107 +69,86 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
         "push": [MockFunction],
       }
     }
-  >
-    <Router
-      history={
-        Object {
-          "entries": Array [
-            Object {},
-          ],
-          "listen": [MockFunction] {
-            "calls": Array [
-              Array [
-                [Function],
-              ],
-            ],
-            "results": Array [
+    intl={
+      Object {
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
               Object {
-                "type": "return",
-                "value": undefined,
+                "defaultMessage": "Next File",
+                "id": "be.nextFile",
               },
             ],
-          },
-          "location": Object {
-            "hash": "",
-            "pathname": "/activity/tasks/1234",
-          },
-          "push": [MockFunction],
-        }
+          ],
+          "results": Array [
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+          ],
+        },
+      }
+    }
+    onNavigateLeft={[Function]}
+    onNavigateRight={[Function]}
+  >
+    <Route
+      path={
+        Array [
+          "/:activeTab/:deeplink",
+          "/",
+        ]
       }
     >
-      <Route
-        path={
-          Array [
-            "/:activeTab/:deeplink",
-            "/",
-          ]
-        }
+      <PlainButton
+        className="bcpr-navigate-right"
+        onClick={[Function]}
+        type="button"
       >
-        <PlainButton
-          className="bcpr-navigate-right"
+        <button
+          className="btn-plain bcpr-navigate-right"
           onClick={[Function]}
           type="button"
         >
-          <button
-            className="btn-plain bcpr-navigate-right"
-            onClick={[Function]}
-            type="button"
-          >
-            <IconNavigateRight>
-              <AccessibleSVG
+          <IconNavigateRight>
+            <AccessibleSVG
+              className="icon-navigate-right "
+              focusable="false"
+              height={48}
+              viewBox="0 0 48 48"
+              width={48}
+            >
+              <svg
                 className="icon-navigate-right "
                 focusable="false"
                 height={48}
+                role="presentation"
                 viewBox="0 0 48 48"
                 width={48}
               >
-                <svg
-                  className="icon-navigate-right "
-                  focusable="false"
-                  height={48}
-                  role="presentation"
-                  viewBox="0 0 48 48"
-                  width={48}
-                >
-                  <path
-                    d="M17.2,14.8l9.2,9.2l-9.2,9.2L20,36l12-12L20,12L17.2,14.8z"
-                    fill="#494949"
-                    stroke="#DCDCDC"
-                    strokeMiterlimit="10"
-                  />
-                  <path
-                    d="M48,48H0L0,0l48,0V48z"
-                    display="none"
-                    fill="none"
-                  />
-                </svg>
-              </AccessibleSVG>
-            </IconNavigateRight>
-          </button>
-        </PlainButton>
-      </Route>
-    </Router>
-  </NavRouter>
-</PreviewNavigation>
+                <path
+                  d="M17.2,14.8l9.2,9.2l-9.2,9.2L20,36l12-12L20,12L17.2,14.8z"
+                  fill="#494949"
+                  stroke="#DCDCDC"
+                  strokeMiterlimit="10"
+                />
+                <path
+                  d="M48,48H0L0,0l48,0V48z"
+                  display="none"
+                  fill="none"
+                />
+              </svg>
+            </AccessibleSVG>
+          </IconNavigateRight>
+        </button>
+      </PlainButton>
+    </Route>
+  </PreviewNavigation>
+</Router>
 `;
 
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with a filled collection 2`] = `
-<PreviewNavigation
-  collection={
-    Array [
-      "a",
-      "b",
-      "c",
-      "d",
-      "e",
-      "f",
-      "g",
-      "h",
-      "i",
-      "j",
-    ]
-  }
-  currentIndex={1}
+<Router
   history={
     Object {
       "entries": Array [
@@ -217,40 +174,23 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
       "push": [MockFunction],
     }
   }
-  intl={
-    Object {
-      "formatMessage": [MockFunction] {
-        "calls": Array [
-          Array [
-            Object {
-              "defaultMessage": "Previous File",
-              "id": "be.previousFile",
-            },
-          ],
-          Array [
-            Object {
-              "defaultMessage": "Next File",
-              "id": "be.nextFile",
-            },
-          ],
-        ],
-        "results": Array [
-          Object {
-            "type": "return",
-            "value": undefined,
-          },
-          Object {
-            "type": "return",
-            "value": undefined,
-          },
-        ],
-      },
-    }
-  }
-  onNavigateLeft={[Function]}
-  onNavigateRight={[Function]}
 >
-  <NavRouter
+  <PreviewNavigation
+    collection={
+      Array [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+      ]
+    }
+    currentIndex={1}
     history={
       Object {
         "entries": Array [
@@ -276,149 +216,138 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
         "push": [MockFunction],
       }
     }
-  >
-    <Router
-      history={
-        Object {
-          "entries": Array [
-            Object {},
-          ],
-          "listen": [MockFunction] {
-            "calls": Array [
-              Array [
-                [Function],
-              ],
-            ],
-            "results": Array [
+    intl={
+      Object {
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
               Object {
-                "type": "return",
-                "value": undefined,
+                "defaultMessage": "Previous File",
+                "id": "be.previousFile",
               },
             ],
-          },
-          "location": Object {
-            "hash": "",
-            "pathname": "/activity/tasks/1234",
-          },
-          "push": [MockFunction],
-        }
+            Array [
+              Object {
+                "defaultMessage": "Next File",
+                "id": "be.nextFile",
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+          ],
+        },
+      }
+    }
+    onNavigateLeft={[Function]}
+    onNavigateRight={[Function]}
+  >
+    <Route
+      path={
+        Array [
+          "/:activeTab/:deeplink",
+          "/",
+        ]
       }
     >
-      <Route
-        path={
-          Array [
-            "/:activeTab/:deeplink",
-            "/",
-          ]
-        }
+      <PlainButton
+        className="bcpr-navigate-left"
+        onClick={[Function]}
+        type="button"
       >
-        <PlainButton
-          className="bcpr-navigate-left"
+        <button
+          className="btn-plain bcpr-navigate-left"
           onClick={[Function]}
           type="button"
         >
-          <button
-            className="btn-plain bcpr-navigate-left"
-            onClick={[Function]}
-            type="button"
-          >
-            <IconNavigateLeft>
-              <AccessibleSVG
+          <IconNavigateLeft>
+            <AccessibleSVG
+              className="icon-navigate-left "
+              focusable="false"
+              height={48}
+              viewBox="0 0 48 48"
+              width={48}
+            >
+              <svg
                 className="icon-navigate-left "
                 focusable="false"
                 height={48}
+                role="presentation"
                 viewBox="0 0 48 48"
                 width={48}
               >
-                <svg
-                  className="icon-navigate-left "
-                  focusable="false"
-                  height={48}
-                  role="presentation"
-                  viewBox="0 0 48 48"
-                  width={48}
-                >
-                  <path
-                    d="M30.8,33.2L21.7,24l9.2-9.2L28,12L16,24l12,12L30.8,33.2z"
-                    fill="#494949"
-                    stroke="#DCDCDC"
-                    strokeMiterlimit="10"
-                  />
-                  <path
-                    d="M0,0h48v48H0V0z"
-                    display="none"
-                    fill="none"
-                  />
-                </svg>
-              </AccessibleSVG>
-            </IconNavigateLeft>
-          </button>
-        </PlainButton>
-        <PlainButton
-          className="bcpr-navigate-right"
+                <path
+                  d="M30.8,33.2L21.7,24l9.2-9.2L28,12L16,24l12,12L30.8,33.2z"
+                  fill="#494949"
+                  stroke="#DCDCDC"
+                  strokeMiterlimit="10"
+                />
+                <path
+                  d="M0,0h48v48H0V0z"
+                  display="none"
+                  fill="none"
+                />
+              </svg>
+            </AccessibleSVG>
+          </IconNavigateLeft>
+        </button>
+      </PlainButton>
+      <PlainButton
+        className="bcpr-navigate-right"
+        onClick={[Function]}
+        type="button"
+      >
+        <button
+          className="btn-plain bcpr-navigate-right"
           onClick={[Function]}
           type="button"
         >
-          <button
-            className="btn-plain bcpr-navigate-right"
-            onClick={[Function]}
-            type="button"
-          >
-            <IconNavigateRight>
-              <AccessibleSVG
+          <IconNavigateRight>
+            <AccessibleSVG
+              className="icon-navigate-right "
+              focusable="false"
+              height={48}
+              viewBox="0 0 48 48"
+              width={48}
+            >
+              <svg
                 className="icon-navigate-right "
                 focusable="false"
                 height={48}
+                role="presentation"
                 viewBox="0 0 48 48"
                 width={48}
               >
-                <svg
-                  className="icon-navigate-right "
-                  focusable="false"
-                  height={48}
-                  role="presentation"
-                  viewBox="0 0 48 48"
-                  width={48}
-                >
-                  <path
-                    d="M17.2,14.8l9.2,9.2l-9.2,9.2L20,36l12-12L20,12L17.2,14.8z"
-                    fill="#494949"
-                    stroke="#DCDCDC"
-                    strokeMiterlimit="10"
-                  />
-                  <path
-                    d="M48,48H0L0,0l48,0V48z"
-                    display="none"
-                    fill="none"
-                  />
-                </svg>
-              </AccessibleSVG>
-            </IconNavigateRight>
-          </button>
-        </PlainButton>
-      </Route>
-    </Router>
-  </NavRouter>
-</PreviewNavigation>
+                <path
+                  d="M17.2,14.8l9.2,9.2l-9.2,9.2L20,36l12-12L20,12L17.2,14.8z"
+                  fill="#494949"
+                  stroke="#DCDCDC"
+                  strokeMiterlimit="10"
+                />
+                <path
+                  d="M48,48H0L0,0l48,0V48z"
+                  display="none"
+                  fill="none"
+                />
+              </svg>
+            </AccessibleSVG>
+          </IconNavigateRight>
+        </button>
+      </PlainButton>
+    </Route>
+  </PreviewNavigation>
+</Router>
 `;
 
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with a filled collection 3`] = `
-<PreviewNavigation
-  collection={
-    Array [
-      "a",
-      "b",
-      "c",
-      "d",
-      "e",
-      "f",
-      "g",
-      "h",
-      "i",
-      "j",
-    ]
-  }
-  currentIndex={9}
+<Router
   history={
     Object {
       "entries": Array [
@@ -444,30 +373,23 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
       "push": [MockFunction],
     }
   }
-  intl={
-    Object {
-      "formatMessage": [MockFunction] {
-        "calls": Array [
-          Array [
-            Object {
-              "defaultMessage": "Previous File",
-              "id": "be.previousFile",
-            },
-          ],
-        ],
-        "results": Array [
-          Object {
-            "type": "return",
-            "value": undefined,
-          },
-        ],
-      },
-    }
-  }
-  onNavigateLeft={[Function]}
-  onNavigateRight={[Function]}
 >
-  <NavRouter
+  <PreviewNavigation
+    collection={
+      Array [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+      ]
+    }
+    currentIndex={9}
     history={
       Object {
         "entries": Array [
@@ -493,100 +415,104 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
         "push": [MockFunction],
       }
     }
-  >
-    <Router
-      history={
-        Object {
-          "entries": Array [
-            Object {},
-          ],
-          "listen": [MockFunction] {
-            "calls": Array [
-              Array [
-                [Function],
-              ],
-            ],
-            "results": Array [
+    intl={
+      Object {
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
               Object {
-                "type": "return",
-                "value": undefined,
+                "defaultMessage": "Previous File",
+                "id": "be.previousFile",
               },
             ],
-          },
-          "location": Object {
-            "hash": "",
-            "pathname": "/activity/tasks/1234",
-          },
-          "push": [MockFunction],
-        }
+          ],
+          "results": Array [
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+          ],
+        },
+      }
+    }
+    onNavigateLeft={[Function]}
+    onNavigateRight={[Function]}
+  >
+    <Route
+      path={
+        Array [
+          "/:activeTab/:deeplink",
+          "/",
+        ]
       }
     >
-      <Route
-        path={
-          Array [
-            "/:activeTab/:deeplink",
-            "/",
-          ]
-        }
+      <PlainButton
+        className="bcpr-navigate-left"
+        onClick={[Function]}
+        type="button"
       >
-        <PlainButton
-          className="bcpr-navigate-left"
+        <button
+          className="btn-plain bcpr-navigate-left"
           onClick={[Function]}
           type="button"
         >
-          <button
-            className="btn-plain bcpr-navigate-left"
-            onClick={[Function]}
-            type="button"
-          >
-            <IconNavigateLeft>
-              <AccessibleSVG
+          <IconNavigateLeft>
+            <AccessibleSVG
+              className="icon-navigate-left "
+              focusable="false"
+              height={48}
+              viewBox="0 0 48 48"
+              width={48}
+            >
+              <svg
                 className="icon-navigate-left "
                 focusable="false"
                 height={48}
+                role="presentation"
                 viewBox="0 0 48 48"
                 width={48}
               >
-                <svg
-                  className="icon-navigate-left "
-                  focusable="false"
-                  height={48}
-                  role="presentation"
-                  viewBox="0 0 48 48"
-                  width={48}
-                >
-                  <path
-                    d="M30.8,33.2L21.7,24l9.2-9.2L28,12L16,24l12,12L30.8,33.2z"
-                    fill="#494949"
-                    stroke="#DCDCDC"
-                    strokeMiterlimit="10"
-                  />
-                  <path
-                    d="M0,0h48v48H0V0z"
-                    display="none"
-                    fill="none"
-                  />
-                </svg>
-              </AccessibleSVG>
-            </IconNavigateLeft>
-          </button>
-        </PlainButton>
-      </Route>
-    </Router>
-  </NavRouter>
-</PreviewNavigation>
+                <path
+                  d="M30.8,33.2L21.7,24l9.2-9.2L28,12L16,24l12,12L30.8,33.2z"
+                  fill="#494949"
+                  stroke="#DCDCDC"
+                  strokeMiterlimit="10"
+                />
+                <path
+                  d="M0,0h48v48H0V0z"
+                  display="none"
+                  fill="none"
+                />
+              </svg>
+            </AccessibleSVG>
+          </IconNavigateLeft>
+        </button>
+      </PlainButton>
+    </Route>
+  </PreviewNavigation>
+</Router>
 `;
 
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with an empty collection 1`] = `
-<PreviewNavigation
-  collection={Array []}
-  currentIndex={0}
+<Router
   history={
     Object {
       "entries": Array [
         Object {},
       ],
-      "listen": [MockFunction],
+      "listen": [MockFunction] {
+        "calls": Array [
+          Array [
+            [Function],
+          ],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
       "location": Object {
         "hash": "",
         "pathname": "/activity/tasks/1234",
@@ -594,12 +520,42 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
       "push": [MockFunction],
     }
   }
-  intl={
-    Object {
-      "formatMessage": [MockFunction],
+>
+  <PreviewNavigation
+    collection={Array []}
+    currentIndex={0}
+    history={
+      Object {
+        "entries": Array [
+          Object {},
+        ],
+        "listen": [MockFunction] {
+          "calls": Array [
+            Array [
+              [Function],
+            ],
+          ],
+          "results": Array [
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+          ],
+        },
+        "location": Object {
+          "hash": "",
+          "pathname": "/activity/tasks/1234",
+        },
+        "push": [MockFunction],
+      }
     }
-  }
-  onNavigateLeft={[Function]}
-  onNavigateRight={[Function]}
-/>
+    intl={
+      Object {
+        "formatMessage": [MockFunction],
+      }
+    }
+    onNavigateLeft={[Function]}
+    onNavigateRight={[Function]}
+  />
+</Router>
 `;
