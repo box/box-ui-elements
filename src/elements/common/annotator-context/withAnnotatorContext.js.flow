@@ -1,0 +1,9 @@
+import * as React from "react";
+import AnnotatorContext from "./AnnotatorContext";
+import { AnnotatorState } from "./types";
+export interface WithAnnotatorContextProps {
+  annotatorState?: AnnotatorState;
+}
+declare export default function withAnnotatorContext<P: { ... }>(
+  WrappedComponent: React.ComponentType<P>
+): void;

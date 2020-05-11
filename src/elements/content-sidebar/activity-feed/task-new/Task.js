@@ -41,6 +41,7 @@ import TaskDueDate from './TaskDueDate';
 import TaskStatus from './TaskStatus';
 import AssigneeList from './AssigneeList';
 import TaskModal from '../../TaskModal';
+import TaskMultiFileIcon from './TaskMultiFileIcon';
 import commonMessages from '../../../common/messages';
 import messages from './messages';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
@@ -68,6 +69,7 @@ type Props = {|
     onDelete?: Function,
     onEdit?: Function,
     onModalClose?: Function,
+    onView?: Function,
     translatedTaggedMessage?: string,
     translations?: Translations,
 |};
@@ -207,8 +209,10 @@ class Task extends React.Component<Props, State> {
             isPending,
             description,
             onEdit,
+            onView,
             permissions,
             status,
+            task_links,
             task_type,
             translatedTaggedMessage,
             translations,
@@ -226,28 +230,45 @@ class Task extends React.Component<Props, State> {
 
         const inlineError = loadCollabError || error;
 
-        const currentUserAssignment =
-            assigned_to && assigned_to.entries
-                ? assigned_to.entries.find(({ target }) => target.id === currentUser.id)
-                : null;
+        const assignments = assigned_to && assigned_to.entries;
+
+        const currentUserAssignment = assignments && assignments.find(({ target }) => target.id === currentUser.id);
 
         const createdByUser = created_by.target || PLACEHOLDER_USER;
 
         const createdAtTimestamp = new Date(created_at).getTime();
 
-        const shouldShowActions =
-            currentUserAssignment &&
-            currentUserAssignment.permissions &&
-            currentUserAssignment.permissions.can_update &&
-            currentUserAssignment.status === TASK_NEW_NOT_STARTED &&
-            (status === TASK_NEW_NOT_STARTED || status === TASK_NEW_IN_PROGRESS);
+        const isTaskCompleted = !(status === TASK_NEW_NOT_STARTED || status === TASK_NEW_IN_PROGRESS);
+
+        const isCreator = created_by.target.id === currentUser.id;
+
+        const isMultiFile = task_links.entries.length > 1;
+
+        let shouldShowActions;
+        if (isTaskCompleted) {
+            shouldShowActions = false;
+        } else if (isMultiFile && isCreator) {
+            shouldShowActions = true;
+        } else {
+            shouldShowActions =
+                currentUserAssignment &&
+                currentUserAssignment.permissions &&
+                currentUserAssignment.permissions.can_update &&
+                currentUserAssignment.status === TASK_NEW_NOT_STARTED;
+        }
 
         const TaskTypeIcon = task_type === TASK_TYPE_APPROVAL ? IconTaskApproval : IconTaskGeneral;
 
         const isMenuVisible = (permissions.can_delete || permissions.can_update) && !isPending;
 
         return (
-            <div className="bcs-Task">
+            <div
+                className="bcs-Task"
+                data-resin-feature="tasks"
+                data-resin-taskid={id}
+                data-resin-tasktype={task_type}
+                data-resin-numassignees={assignments && assignments.length}
+            >
                 {/* $FlowFixMe */}
                 {inlineError ? <ActivityError {...inlineError} /> : null}
                 <Media
@@ -319,7 +340,7 @@ class Task extends React.Component<Props, State> {
                         </div>
                         <div className="bcs-Task-status">
                             <TaskStatus status={status} />
-
+                            <TaskMultiFileIcon isMultiFile={isMultiFile} />
                             <TaskCompletionRuleIcon completionRule={completion_rule} />
                         </div>
                         <div className="bcs-Task-dueDate">
@@ -345,25 +366,23 @@ class Task extends React.Component<Props, State> {
                                 users={isAssigneeListOpen ? assignedToFull : assigned_to}
                             />
                         </div>
-                        {currentUserAssignment && shouldShowActions && (
-                            <div className="bcs-Task-actionsContainer">
+                        {shouldShowActions && (
+                            <div className="bcs-Task-actionsContainer" data-testid="action-container">
                                 <TaskActions
+                                    isMultiFile={isMultiFile}
                                     taskType={task_type}
                                     onTaskApproval={
                                         isPending
                                             ? noop
-                                            : () => {
-                                                  this.handleTaskAction(
-                                                      id,
-                                                      currentUserAssignment.id,
-                                                      TASK_NEW_APPROVED,
-                                                  );
-                                              }
+                                            : () =>
+                                                  // $FlowFixMe checked by shouldShowActions
+                                                  this.handleTaskAction(id, currentUserAssignment.id, TASK_NEW_APPROVED)
                                     }
                                     onTaskReject={
                                         isPending
                                             ? noop
                                             : () =>
+                                                  // $FlowFixMe checked by shouldShowActions
                                                   this.handleTaskAction(id, currentUserAssignment.id, TASK_NEW_REJECTED)
                                     }
                                     onTaskComplete={
@@ -372,10 +391,12 @@ class Task extends React.Component<Props, State> {
                                             : () =>
                                                   this.handleTaskAction(
                                                       id,
+                                                      // $FlowFixMe checked by shouldShowActions
                                                       currentUserAssignment.id,
                                                       TASK_NEW_COMPLETED,
                                                   )
                                     }
+                                    onTaskView={onView && (() => onView(id, isCreator))}
                                 />
                             </div>
                         )}

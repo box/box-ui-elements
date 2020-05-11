@@ -14,7 +14,7 @@ const bcp47TagToDigitalUnits = {
  * @returns {string} The size as a localized string
  */
 const getFileSize = (size, locale = 'en') => {
-    const settings = { round: 1 };
+    const settings = { round: 1, locale };
 
     const localizedUnits = bcp47TagToDigitalUnits[locale];
     if (localizedUnits) {

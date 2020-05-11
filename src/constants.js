@@ -139,6 +139,7 @@ export const FIELD_APP: 'app' = 'app';
 export const FIELD_OCCURRED_AT: 'occurred_at' = 'occurred_at';
 export const FIELD_RENDERED_TEXT: 'rendered_text' = 'rendered_text';
 export const FIELD_RETENTION: 'retention' = 'retention';
+export const FIELD_UPLOADER_DISPLAY_NAME: 'uploader_display_name' = 'uploader_display_name';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
@@ -329,9 +330,16 @@ export const X_REP_HINT_JPG_DIMENSIONS_DEFAULT: '1024x1024' = '1024x1024';
 // available dimensions for PNG: "1024x1024", "2048x2048"
 export const X_REP_HINT_PNG_DIMENSIONS_DEFAULT: '1024x1024' = '1024x1024';
 
-// if unable to fetch jpg thumbnail, grab png rep of first page. Certain file types do
-// not have a thumbnail rep but do have a first page rep.
-export const X_REP_HINT_HEADER_DIMENSIONS_DEFAULT = `[jpg?dimensions=${X_REP_HINT_JPG_DIMENSIONS_DEFAULT}&paged=false,png?dimensions=${X_REP_HINT_PNG_DIMENSIONS_DEFAULT}]`;
+// If unable to fetch jpg thumbnail, grab png rep of first page. Certain file types do not have a thumbnail rep but do have a first page rep.
+// Get the PDF rep as well, which ensures that the Preview SDK loads linearized reps for customers with PDF optimization enabled.
+export const X_REP_HINT_HEADER_DIMENSIONS_DEFAULT = `[jpg?dimensions=${X_REP_HINT_JPG_DIMENSIONS_DEFAULT}&paged=false,png?dimensions=${X_REP_HINT_PNG_DIMENSIONS_DEFAULT}][pdf]`;
+
+/* ------------------ Representations Response ---------- */
+export const REPRESENTATIONS_RESPONSE_ERROR: 'error' = 'error';
+export const REPRESENTATIONS_RESPONSE_NONE: 'none' = 'none';
+export const REPRESENTATIONS_RESPONSE_PENDING: 'pending' = 'pending';
+export const REPRESENTATIONS_RESPONSE_SUCCESS: 'success' = 'success';
+export const REPRESENTATIONS_RESPONSE_VIEWABLE: 'viewable' = 'viewable';
 
 /* ------------------ Sidebar View ---------------------- */
 export const SIDEBAR_VIEW_SKILLS: 'skills' = 'skills';
@@ -373,6 +381,7 @@ export const VERSION_RETENTION_INDEFINITE: 'indefinite' = 'indefinite';
 
 /* ------------------ Placeholder Feed Items ------------------------- */
 export const PLACEHOLDER_USER = { type: 'user', id: '2', name: '' };
+export const FILE_REQUEST_NAME = 'File Request';
 
 /* ------------------ Open With ------------------------- */
 export const APP_INTEGRATION: 'app_integration' = 'app_integration';

@@ -31,6 +31,7 @@ describe('components/select-field/BaseSelectField', () => {
                 onChange={() => {}}
                 onOptionSelect={onOptionSelectSpy}
                 options={options}
+                shouldShowClearOption={false}
                 {...props}
             />,
         );
@@ -181,6 +182,13 @@ describe('components/select-field/BaseSelectField', () => {
 
             expect(optionRenderer).toHaveBeenCalledTimes(options.length);
             expect(itemsWrapper).toMatchSnapshot();
+        });
+
+        test('should render a clear option if shouldShowClearOption is true', () => {
+            const wrapper = shallowRenderSelectField({ shouldShowClearOption: true });
+            const itemsWrapper = wrapper.find('DatalistItem');
+
+            expect(itemsWrapper.at(0).prop('className')).toEqual('select-option is-clear-option');
         });
     });
 
@@ -430,6 +438,24 @@ describe('components/select-field/BaseSelectField', () => {
                 stopPropagation: sandbox.mock(),
             });
         });
+
+        test('should call handleClearClick if shouldShowClearOption is true and activeItemIndex === 0', () => {
+            const activeItemIndex = 0;
+            const wrapper = shallowRenderSelectField({
+                shouldShowClearOption: true,
+            });
+
+            const instance = wrapper.instance();
+            wrapper.setState({ activeItemIndex, isOpen: true });
+
+            sandbox.mock(instance).expects('handleClearClick');
+
+            wrapper.simulate('keyDown', {
+                key: 'Enter',
+                preventDefault: sandbox.mock(),
+                stopPropagation: sandbox.mock(),
+            });
+        });
     });
 
     describe('onSpacebar', () => {
@@ -477,6 +503,24 @@ describe('components/select-field/BaseSelectField', () => {
                 .mock(instance)
                 .expects('selectOption')
                 .withArgs(activeItemIndex);
+
+            wrapper.simulate('keyDown', {
+                key: ' ',
+                preventDefault: sandbox.mock(),
+                stopPropagation: sandbox.mock(),
+            });
+        });
+
+        test('should call handleClearClick if shouldShowClearOption is true and activeItemIndex === 0', () => {
+            const activeItemIndex = 0;
+            const wrapper = shallowRenderSelectField({
+                shouldShowClearOption: true,
+            });
+
+            const instance = wrapper.instance();
+            wrapper.setState({ activeItemIndex, isOpen: true });
+
+            sandbox.mock(instance).expects('handleClearClick');
 
             wrapper.simulate('keyDown', {
                 key: ' ',
@@ -578,6 +622,20 @@ describe('components/select-field/BaseSelectField', () => {
         });
     });
 
+    describe('handleClearClick', () => {
+        test('should call handleChange with empty array', () => {
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+
+            sandbox
+                .mock(instance)
+                .expects('handleChange')
+                .withArgs([]);
+
+            instance.handleClearClick();
+        });
+    });
+
     describe('handleOptionSelect', () => {
         test('should call props.onOptionSelect with newly selected (or deselected) item', () => {
             const wrapper = shallowRenderSelectField();
@@ -670,6 +728,25 @@ describe('components/select-field/BaseSelectField', () => {
     });
 
     describe('onOptionClick', () => {
+        test('should call handleClearClick if index is 0 and shouldShowClearOption is true', () => {
+            const wrapper = shallowRenderSelectField({
+                shouldShowClearOption: true,
+            });
+            wrapper.setState({
+                activeItemIndex: 0,
+            });
+            const instance = wrapper.instance();
+
+            sandbox.mock(instance).expects('handleClearClick');
+
+            wrapper
+                .find('DatalistItem')
+                .at(0)
+                .simulate('click', {
+                    preventDefault: sandbox.mock(),
+                });
+        });
+
         test('should select item and close dropdown when item is clicked', () => {
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();
@@ -772,6 +849,16 @@ describe('components/select-field/BaseSelectField', () => {
 
             expect(wrapper.state('isOpen')).toBe(true);
         });
+
+        test('should add document click listener', () => {
+            document.addEventListener = jest.fn();
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+
+            instance.openDropdown();
+
+            expect(document.addEventListener).toHaveBeenCalled();
+        });
     });
 
     describe('closeDropdown()', () => {
@@ -789,6 +876,17 @@ describe('components/select-field/BaseSelectField', () => {
             expect(wrapper.state('isOpen')).toBe(false);
             expect(wrapper.state('activeItemID')).toEqual(null);
             expect(wrapper.state('activeItemIndex')).toEqual(-1);
+        });
+
+        test('should remove document click listener', () => {
+            document.removeEventListener = jest.fn();
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            wrapper.setState({ isOpen: true });
+
+            instance.closeDropdown();
+
+            expect(document.removeEventListener).toHaveBeenCalled();
         });
     });
 
@@ -947,6 +1045,55 @@ describe('components/select-field/BaseSelectField', () => {
                 .withArgs(options[index]); // audio + video
 
             instance.selectMultiOption(index);
+        });
+    });
+
+    describe('handleDocumentClick', () => {
+        test('should close dropdown when click occurs outside of select field', () => {
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            instance.closeDropdown = jest.fn();
+            wrapper.setState({ isOpen: true });
+
+            instance.handleDocumentClick({
+                target: document.createElement('div'),
+            });
+
+            expect(instance.closeDropdown).toHaveBeenCalled();
+        });
+
+        test('should not close dropdown when click occurs on select field container', () => {
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            instance.closeDropdown = jest.fn();
+            wrapper.setState({ isOpen: true });
+
+            wrapper.simulate('click');
+
+            expect(instance.closeDropdown).not.toHaveBeenCalled();
+        });
+
+        test('should not close dropdown when click occurs on select field dropdown', () => {
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            instance.closeDropdown = jest.fn();
+            wrapper.setState({ isOpen: true });
+
+            instance.handleDocumentClick({
+                target: document.getElementById(instance.selectFieldID),
+            });
+
+            expect(instance.closeDropdown).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('componentWillUnmount()', () => {
+        test('should remove document click listener', () => {
+            document.removeEventListener = jest.fn();
+            const wrapper = shallowRenderSelectField();
+            wrapper.setState({ isOpen: true });
+            wrapper.unmount();
+            expect(document.removeEventListener).toHaveBeenCalled();
         });
     });
 });

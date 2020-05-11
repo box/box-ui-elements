@@ -2,7 +2,9 @@ import React from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import { mount } from 'enzyme';
 import noop from 'lodash/noop';
+import * as utils from '../utils';
 import { ContentExplorerComponent as ContentExplorer } from '../ContentExplorer';
+import UploadDialog from '../../common/upload-dialog';
 import { FOLDER_FIELDS_TO_FETCH } from '../../../utils/fields';
 import { VIEW_MODE_GRID } from '../../../constants';
 
@@ -22,6 +24,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
 
     beforeEach(() => {
         rootElement = document.createElement('div');
+        rootElement.appendChild(document.createElement('div'));
         document.body.appendChild(rootElement);
     });
 
@@ -209,7 +212,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
         });
 
         describe('thumbnails', () => {
-            const baseItem = { id: '1', selected: true };
+            const baseItem = { id: '1', selected: true, type: 'file' };
             const baseCollection = {
                 boxItem: {},
                 id: '0',
@@ -218,10 +221,6 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 selected: baseItem,
             };
             const thumbnailUrl = 'thumbnailUrl';
-            const getThumbnailUrl = jest.fn().mockReturnValue(thumbnailUrl);
-            const getFileAPI = jest.fn().mockReturnValue({
-                getThumbnailUrl,
-            });
             const callback = jest.fn();
 
             let wrapper;
@@ -235,6 +234,10 @@ describe('elements/content-explorer/ContentExplorer', () => {
             });
 
             test('should add thumbnailUrl', () => {
+                const getThumbnailUrl = jest.fn().mockReturnValue(thumbnailUrl);
+                const getFileAPI = jest.fn().mockReturnValue({
+                    getThumbnailUrl,
+                });
                 wrapper = getWrapper();
                 instance = wrapper.instance();
                 instance.api = { getFileAPI };
@@ -248,6 +251,167 @@ describe('elements/content-explorer/ContentExplorer', () => {
                         { currentCollection: newCollection, selected: newSelected },
                         callback,
                     );
+                });
+            });
+            test('should not call attemptThumbnailGeneration if thumbnail is null', () => {
+                const getThumbnailUrl = jest.fn().mockReturnValue(null);
+                const getFileAPI = jest.fn().mockReturnValue({
+                    getThumbnailUrl,
+                });
+
+                wrapper = getWrapper();
+                instance = wrapper.instance();
+                instance.api = { getFileAPI };
+                instance.setState = jest.fn();
+                instance.attemptThumbnailGeneration = jest.fn();
+
+                return instance.updateCollection(collection, item, callback).then(() => {
+                    expect(instance.attemptThumbnailGeneration).not.toHaveBeenCalled();
+                });
+            });
+
+            test('should not call attemptThumbnailGeneration if isThumbnailReady is true', () => {
+                const getThumbnailUrl = jest.fn().mockReturnValue(null);
+                const getFileAPI = jest.fn().mockReturnValue({
+                    getThumbnailUrl,
+                });
+
+                wrapper = getWrapper();
+                instance = wrapper.instance();
+                instance.api = { getFileAPI };
+                instance.setState = jest.fn();
+                instance.attemptThumbnailGeneration = jest.fn();
+                utils.isThumbnailReady = jest.fn().mockReturnValue(true);
+
+                return instance.updateCollection(collection, item, callback).then(() => {
+                    expect(instance.attemptThumbnailGeneration).not.toHaveBeenCalled();
+                });
+            });
+
+            test('should call attemptThumbnailGeneration if isThumbnailReady is false', () => {
+                const getThumbnailUrl = jest.fn().mockReturnValue(thumbnailUrl);
+                const getFileAPI = jest.fn().mockReturnValue({
+                    getThumbnailUrl,
+                });
+
+                wrapper = getWrapper();
+                instance = wrapper.instance();
+                instance.api = { getFileAPI };
+                instance.setState = jest.fn();
+                instance.attemptThumbnailGeneration = jest.fn();
+                utils.isThumbnailReady = jest.fn().mockReturnValue(false);
+
+                return instance.updateCollection(collection, item, callback).then(() => {
+                    expect(instance.attemptThumbnailGeneration).toHaveBeenCalled();
+                });
+            });
+
+            test('should not call attemptThumbnailGeneration or getThumbnailUrl if item is not file', () => {
+                const getThumbnailUrl = jest.fn().mockReturnValue(thumbnailUrl);
+                const getFileAPI = jest.fn().mockReturnValue({
+                    getThumbnailUrl,
+                });
+
+                wrapper = getWrapper();
+                instance = wrapper.instance();
+                instance.api = { getFileAPI };
+                instance.setState = jest.fn();
+                instance.attemptThumbnailGeneration = jest.fn();
+                utils.isThumbnailReady = jest.fn().mockReturnValue(false);
+
+                collection.items[0].type = 'folder';
+                return instance.updateCollection(collection, item, callback).then(() => {
+                    expect(instance.attemptThumbnailGeneration).not.toHaveBeenCalled();
+                    expect(getThumbnailUrl).not.toHaveBeenCalled();
+                });
+            });
+        });
+
+        describe('attemptThumbnailGeneration()', () => {
+            const entry1 = { name: 'entry1', updated: false };
+            const entry2 = { name: 'entry2', updated: false };
+            const itemWithRepresentation = { representations: { entries: [entry1, entry2] } };
+            const itemWithoutRepresentation = { name: 'item' };
+
+            let wrapper;
+            let instance;
+
+            test('should not update item in collection if grid view is not enabled', () => {
+                wrapper = getWrapper();
+                instance = wrapper.instance();
+                instance.updateItemInCollection = jest.fn();
+                return instance.attemptThumbnailGeneration(itemWithRepresentation).then(() => {
+                    expect(instance.updateItemInCollection).not.toHaveBeenCalled();
+                });
+            });
+
+            test('should not update item in collection if item does not have representation', () => {
+                wrapper = getWrapper();
+                instance = wrapper.instance();
+                instance.updateItemInCollection = jest.fn();
+                return instance.attemptThumbnailGeneration(itemWithoutRepresentation).then(() => {
+                    expect(instance.updateItemInCollection).not.toHaveBeenCalled();
+                });
+            });
+
+            test('should not update item in collection if updated representation matches given representation', () => {
+                wrapper = getWrapper();
+                instance = wrapper.instance();
+                instance.updateItemInCollection = jest.fn();
+                instance.api = {
+                    getFileAPI: jest
+                        .fn()
+                        .mockReturnValue({ generateRepresentation: jest.fn().mockReturnValue(entry1) }),
+                };
+                return instance.attemptThumbnailGeneration(itemWithRepresentation).then(() => {
+                    expect(instance.updateItemInCollection).not.toHaveBeenCalled();
+                });
+            });
+
+            test('should update item in collection if representation is updated', () => {
+                wrapper = getWrapper();
+                instance = wrapper.instance();
+                instance.updateItemInCollection = jest.fn();
+                instance.api = {
+                    getFileAPI: jest.fn().mockReturnValue({
+                        generateRepresentation: jest.fn().mockReturnValue({ ...entry1, updated: true }),
+                    }),
+                };
+                return instance.attemptThumbnailGeneration(itemWithRepresentation).then(() => {
+                    expect(instance.updateItemInCollection).toHaveBeenCalledWith({
+                        ...itemWithRepresentation,
+                        representations: { entries: [{ ...entry1, updated: true }, entry2] },
+                    });
+                });
+            });
+        });
+
+        describe('updateItemInCollection()', () => {
+            const item1 = { id: '1', updated: false };
+            const item2 = { id: '2', updated: false };
+            const baseCollection = { items: [item1, item2] };
+
+            let wrapper;
+            let instance;
+
+            beforeEach(() => {
+                wrapper = getWrapper();
+                instance = wrapper.instance();
+                instance.setState({ currentCollection: baseCollection });
+                instance.setState = jest.fn();
+            });
+
+            test('should not update collection if matching id is not present in collection', () => {
+                const item3 = { id: '3', updated: true };
+                instance.updateItemInCollection(item3);
+                expect(instance.setState).toHaveBeenCalledWith({ currentCollection: baseCollection });
+            });
+
+            test('should update collection if matching id is present in collection', () => {
+                const newItem2 = { id: '2', updated: true };
+                instance.updateItemInCollection(newItem2);
+                expect(instance.setState).toHaveBeenCalledWith({
+                    currentCollection: { ...baseCollection, items: [item1, newItem2] },
                 });
             });
         });
@@ -388,6 +552,26 @@ describe('elements/content-explorer/ContentExplorer', () => {
                     percentLoaded: 100,
                 },
             });
+        });
+    });
+
+    describe('render()', () => {
+        test('should render UploadDialog with contentUploaderProps', () => {
+            const contentUploaderProps = {
+                apiHost: 'https://api.box.com',
+                chunked: false,
+            };
+            const wrapper = getWrapper({ canUpload: true, contentUploaderProps });
+            wrapper.setState({
+                currentCollection: {
+                    permissions: {
+                        can_upload: true,
+                    },
+                },
+            });
+            const uploadDialogElement = wrapper.find(UploadDialog);
+            expect(uploadDialogElement.length).toBe(1);
+            expect(uploadDialogElement.prop('contentUploaderProps')).toEqual(contentUploaderProps);
         });
     });
 });

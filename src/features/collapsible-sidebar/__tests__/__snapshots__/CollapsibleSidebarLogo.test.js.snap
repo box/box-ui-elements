@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
+<div
+  className="bdl-CollapsibleSidebar-logo foo"
+>
+  <CollapsibleSidebarItem
+    collapsedElement={
+      <PlainButton
+        className="bdl-CollapsibleSidebar-toggleButton"
+      >
+        <Styled(IconHamburger)
+          height={20}
+          width={20}
+        />
+      </PlainButton>
+    }
+    expanded={true}
+    expandedElement={
+      <React.Fragment>
+        <PlainButton
+          className="bdl-CollapsibleSidebar-toggleButton"
+        >
+          <Styled(IconHamburger)
+            height={20}
+            width={20}
+          />
+        </PlainButton>
+        <LinkBase
+          href="/"
+        >
+          <React.Fragment>
+            <Styled(BoxLogo)
+              className="bdl-CollapsibleSidebar-logoIcon"
+              height={32}
+              width={61}
+            />
+          </React.Fragment>
+        </LinkBase>
+      </React.Fragment>
+    }
+  />
+</div>
+`;
+
+exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 2`] = `
+<div
+  className="bdl-CollapsibleSidebar-logo"
+>
+  <CollapsibleSidebarItem
+    collapsedElement={
+      <PlainButton
+        className="bdl-CollapsibleSidebar-toggleButton"
+      >
+        <Styled(IconHamburger)
+          height={20}
+          width={20}
+        />
+      </PlainButton>
+    }
+    expandedElement={
+      <React.Fragment>
+        <PlainButton
+          className="bdl-CollapsibleSidebar-toggleButton"
+        >
+          <Styled(IconHamburger)
+            height={20}
+            width={20}
+          />
+        </PlainButton>
+        <LinkBase
+          href="/"
+        >
+          <React.Fragment>
+            <Styled(BoxLogo)
+              className="bdl-CollapsibleSidebar-logoIcon"
+              height={32}
+              width={61}
+            />
+          </React.Fragment>
+        </LinkBase>
+      </React.Fragment>
+    }
+  />
+</div>
+`;

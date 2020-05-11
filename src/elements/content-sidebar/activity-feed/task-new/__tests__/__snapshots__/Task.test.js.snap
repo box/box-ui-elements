@@ -3,6 +3,10 @@
 exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly render task 1`] = `
 <div
   className="bcs-Task"
+  data-resin-feature="tasks"
+  data-resin-numassignees={2}
+  data-resin-taskid="123125"
+  data-resin-tasktype="GENERAL"
 >
   <Media
     as="div"
@@ -16,8 +20,8 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       <Avatar
         user={
           Object {
-            "id": "1",
-            "name": "Jake Thomas",
+            "id": "5",
+            "name": "Steven Yang",
             "type": "user",
           }
         }
@@ -87,8 +91,8 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       >
         <UserLink
           data-resin-target="activityfeed-profilelink"
-          id="1"
-          name="Jake Thomas"
+          id="5"
+          name="Steven Yang"
           type="user"
         />
       </div>
@@ -102,6 +106,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       >
         <Memo()
           status="NOT_STARTED"
+        />
+        <TaskMultiFileIcon
+          isMultiFile={false}
         />
         <TaskCompletionRuleIcon
           completionRule="ALL_ASSIGNEES"
@@ -168,8 +175,10 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       </div>
       <div
         className="bcs-Task-actionsContainer"
+        data-testid="action-container"
       >
         <TaskActions
+          isMultiFile={false}
           onTaskApproval={[Function]}
           onTaskComplete={[Function]}
           onTaskReject={[Function]}

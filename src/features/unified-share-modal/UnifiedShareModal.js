@@ -30,7 +30,7 @@ import type {
     tooltipComponentIdentifierType,
     trackingPropsType,
     sharedLinkType,
-    suggestedCollaboratorsType,
+    SuggestedCollabLookup,
 } from './flowTypes';
 import type { SelectOptionProp } from '../../components/select-field/props';
 
@@ -41,6 +41,8 @@ const INVITE_COLLABS_CONTACTS_TYPE = 'inviteCollabsContacts';
 const EMAIL_SHARED_LINK_CONTACTS_TYPE = 'emailSharedLinkContacts';
 
 type Props = {
+    /** Inline message for the USM modal */
+    allShareRestrictionWarning?: React.Node,
     /** Flag to determine whether to enable invite collaborators section */
     canInvite: boolean,
     /** Handler function that changes shared link access level */
@@ -55,6 +57,8 @@ type Props = {
     collaboratorsList?: collaboratorsListType,
     /** Used to limit the number of contacts that can be added in the contacts field */
     contactLimit?: number,
+    /** Whether the modal should create a shared link on load */
+    createSharedLinkOnLoad?: boolean,
     /** User ID of currently logged in user */
     currentUserID: string,
     /** Whether the modal should focus the shared link after the URL is resolved */
@@ -78,6 +82,12 @@ type Props = {
     item: ItemType,
     /** Handler function that adds the shared link */
     onAddLink: () => void,
+    /** Handler for when there is an error copying to clipboard after modal open */
+    onCopyError?: () => void,
+    /** Handler for when we initiate copying from to clipboard on modal open */
+    onCopyInit?: () => void,
+    /** Handler for when successfully copying to clipboard after modal open */
+    onCopySuccess?: () => void,
     /** Handler function that gets called whenever the user dismisses a tooltip on the given component identifier */
     onDismissTooltip?: (componentIdentifier: tooltipComponentIdentifierType) => void,
     /** Handler function that removes the shared link */
@@ -120,7 +130,7 @@ type Props = {
     /** Whether or not a request is in progress */
     submitting: boolean,
     /** Data for suggested collaborators shown at bottom of input box. UI doesn't render when this has length of 0. */
-    suggestedCollaborators?: suggestedCollaboratorsType,
+    suggestedCollaborators?: SuggestedCollabLookup,
     /** Mapping of components to the content that should be rendered in their tooltips */
     tooltips?: { [componentIdentifier: tooltipComponentIdentifierType]: React.Node },
     /** Object with props and handlers for tracking interactions in unified share modal */
@@ -144,6 +154,7 @@ type State = {
 class UnifiedShareModal extends React.Component<Props, State> {
     static defaultProps = {
         initiallySelectedContacts: [],
+        createSharedLinkOnLoad: false,
         focusSharedLinkOnLoad: false,
         trackingProps: {
             inviteCollabsEmailTracking: {},
@@ -647,10 +658,15 @@ class UnifiedShareModal extends React.Component<Props, State> {
     render() {
         // Shared link section props
         const {
+            onAddLink,
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
+            createSharedLinkOnLoad,
             focusSharedLinkOnLoad,
             item,
+            onCopyInit,
+            onCopySuccess,
+            onCopyError,
             onSettingsClick,
             sharedLink,
             intl,
@@ -659,6 +675,7 @@ class UnifiedShareModal extends React.Component<Props, State> {
             showSharedLinkSettingsCallout = false,
             submitting,
             tooltips = {},
+            allShareRestrictionWarning,
             ...rest
         } = this.props;
         const {
@@ -685,6 +702,13 @@ class UnifiedShareModal extends React.Component<Props, State> {
             showCollaboratorList,
         } = this.state;
 
+        // Only show the restriction warning on the main page of the USM where the email and share link option is available
+        const showShareRestrictionWarning =
+            !isEmailLinkSectionExpanded &&
+            !isInviteSectionExpanded &&
+            !showCollaboratorList &&
+            allShareRestrictionWarning;
+
         // focus logic at modal level
         const extendedModalProps = {
             focusElementSelector: canInvite
@@ -709,12 +733,16 @@ class UnifiedShareModal extends React.Component<Props, State> {
                     {...extendedModalProps}
                 >
                     <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
+                        {showShareRestrictionWarning && allShareRestrictionWarning}
+
                         {!isEmailLinkSectionExpanded && !showCollaboratorList && this.renderInviteSection()}
 
                         {!isEmailLinkSectionExpanded && !isInviteSectionExpanded && !showCollaboratorList && (
                             <SharedLinkSection
+                                addSharedLink={onAddLink}
                                 autofocusSharedLink={this.shouldAutoFocusSharedLink()}
-                                triggerCopyOnLoad={focusSharedLinkOnLoad}
+                                autoCreateSharedLink={createSharedLinkOnLoad}
+                                triggerCopyOnLoad={createSharedLinkOnLoad && focusSharedLinkOnLoad}
                                 changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                                 changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
                                 intl={intl}
@@ -724,6 +752,9 @@ class UnifiedShareModal extends React.Component<Props, State> {
                                 onEmailSharedLinkClick={this.openEmailSharedLinkForm}
                                 onSettingsClick={onSettingsClick}
                                 onToggleSharedLink={this.onToggleSharedLink}
+                                onCopyInit={onCopyInit}
+                                onCopySuccess={onCopySuccess}
+                                onCopyError={onCopyError}
                                 sharedLink={sharedLink}
                                 showSharedLinkSettingsCallout={showSharedLinkSettingsCallout}
                                 submitting={submitting || isFetching}

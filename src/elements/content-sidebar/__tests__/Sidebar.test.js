@@ -12,7 +12,8 @@ jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 jest.mock('../../../utils/LocalStore');
 
 describe('elements/content-sidebar/Sidebar', () => {
-    const getWrapper = props => shallow(<Sidebar file={{ id: 'id' }} location={{ pathname: '/' }} {...props} />);
+    const getWrapper = props =>
+        shallow(<Sidebar file={{ id: 'id' }} annotatorState={{}} location={{ pathname: '/' }} {...props} />);
 
     beforeEach(() => {
         LocalStore.mockClear();
@@ -67,6 +68,19 @@ describe('elements/content-sidebar/Sidebar', () => {
             wrapper.setProps({ location: { pathname: '/', state: { open: false } } });
             expect(instance.isForced).toHaveBeenCalledWith(false);
         });
+
+        test('should call handleAnnotationSelect if active annotation has changed', () => {
+            const mockAnnotatorState = {
+                activeAnnotationId: '123',
+            };
+            const mockHandleAnnotationSelect = jest.fn();
+            const wrapper = getWrapper({ annotatorState: mockAnnotatorState });
+
+            wrapper.instance().handleAnnotationSelect = mockHandleAnnotationSelect;
+            wrapper.setProps({ annotatorState: '321' });
+
+            expect(mockHandleAnnotationSelect).toBeCalled();
+        });
     });
 
     describe('handleVersionHistoryClick', () => {
@@ -114,6 +128,40 @@ describe('elements/content-sidebar/Sidebar', () => {
 
             expect(preventDefaultMock).toHaveBeenCalled();
             expect(historyMock.push).toHaveBeenCalledWith('/details/versions/4567');
+        });
+    });
+
+    describe('handleAnnotationSelect', () => {
+        test('should handle updating url', () => {
+            const historyMock = {
+                push: jest.fn(),
+                location: {
+                    pathname: '/activity',
+                },
+            };
+
+            const wrapper = getWrapper({ history: historyMock, file: { file_version: { id: '456' }, id: '1234' } });
+            const instance = wrapper.instance();
+
+            instance.handleAnnotationSelect('123');
+
+            expect(historyMock.push).toHaveBeenCalledWith('/activity/annotations/456/123');
+        });
+
+        test('should handle setting url back to url prefix if no id provided', () => {
+            const historyMock = {
+                push: jest.fn(),
+                location: {
+                    pathname: '/activity/annotations/456/123',
+                },
+            };
+
+            const wrapper = getWrapper({ history: historyMock, file: { id: '1234' } });
+            const instance = wrapper.instance();
+
+            instance.handleAnnotationSelect(null);
+
+            expect(historyMock.push).toHaveBeenCalledWith('/activity');
         });
     });
 

@@ -115,6 +115,7 @@ class PlainUpload extends BaseUpload {
      * @param {Function} [options.successCallback] - Function to call with response
      * @param {Function} [options.errorCallback] - Function to call with errors
      * @param {Function} [options.progressCallback] - Function to call with progress
+     * @param {Function} [options.conflictCallback] - Function to call on conflicting file names
      * @param {boolean} [overwrite] - Should upload overwrite file with same name
      * @return {void}
      */
@@ -126,8 +127,10 @@ class PlainUpload extends BaseUpload {
         successCallback = noop,
         errorCallback = noop,
         progressCallback = noop,
+        conflictCallback,
         overwrite = true,
     }: {
+        conflictCallback?: Function,
         errorCallback: Function,
         file: File,
         fileDescription: ?string,
@@ -151,6 +154,7 @@ class PlainUpload extends BaseUpload {
         this.errorCallback = errorCallback;
         this.progressCallback = progressCallback;
         this.overwrite = overwrite;
+        this.conflictCallback = conflictCallback;
 
         this.makePreflightRequest();
     }

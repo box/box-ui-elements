@@ -152,6 +152,7 @@ exports[`features/unified-share-modal/UnifiedShareModal closeEmailSharedLinkForm
         </div>
       </Tooltip>
       <SharedLinkSection
+        autoCreateSharedLink={false}
         autofocusSharedLink={false}
         intl={
           Object {
@@ -398,6 +399,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
         </div>
       </Tooltip>
       <SharedLinkSection
+        autoCreateSharedLink={false}
         autofocusSharedLink={false}
         intl={
           Object {
@@ -583,6 +585,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
         </div>
       </Tooltip>
       <SharedLinkSection
+        autoCreateSharedLink={false}
         autofocusSharedLink={false}
         intl={
           Object {
@@ -768,6 +771,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         </div>
       </Tooltip>
       <SharedLinkSection
+        autoCreateSharedLink={false}
         autofocusSharedLink={true}
         intl={
           Object {
@@ -798,7 +802,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         submitting={true}
         tooltips={Object {}}
         trackingProps={Object {}}
-        triggerCopyOnLoad={true}
+        triggerCopyOnLoad={false}
       />
     </LoadingIndicatorWrapper>
   </Modal>
@@ -957,6 +961,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         </div>
       </Tooltip>
       <SharedLinkSection
+        autoCreateSharedLink={false}
         autofocusSharedLink={false}
         intl={
           Object {
@@ -1142,6 +1147,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         </div>
       </Tooltip>
       <SharedLinkSection
+        autoCreateSharedLink={false}
         autofocusSharedLink={false}
         intl={
           Object {
@@ -1484,6 +1490,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         </div>
       </Tooltip>
       <SharedLinkSection
+        autoCreateSharedLink={false}
         autofocusSharedLink={false}
         intl={
           Object {
@@ -1670,6 +1677,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         </div>
       </Tooltip>
       <SharedLinkSection
+        autoCreateSharedLink={false}
         autofocusSharedLink={false}
         intl={
           Object {
@@ -1856,6 +1864,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         </div>
       </Tooltip>
       <SharedLinkSection
+        autoCreateSharedLink={false}
         autofocusSharedLink={false}
         intl={
           Object {
@@ -2266,6 +2275,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         </div>
       </Tooltip>
       <SharedLinkSection
+        autoCreateSharedLink={false}
         autofocusSharedLink={false}
         intl={
           Object {
@@ -2455,6 +2465,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         </div>
       </Tooltip>
       <SharedLinkSection
+        autoCreateSharedLink={false}
         autofocusSharedLink={false}
         intl={
           Object {
@@ -2485,7 +2496,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         submitting={true}
         tooltips={Object {}}
         trackingProps={Object {}}
-        triggerCopyOnLoad={true}
+        triggerCopyOnLoad={false}
       />
     </LoadingIndicatorWrapper>
   </Modal>
@@ -2644,6 +2655,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         </div>
       </Tooltip>
       <SharedLinkSection
+        autoCreateSharedLink={false}
         autofocusSharedLink={false}
         intl={
           Object {
@@ -2828,6 +2840,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         </div>
       </Tooltip>
       <SharedLinkSection
+        autoCreateSharedLink={false}
         autofocusSharedLink={false}
         intl={
           Object {
@@ -3198,6 +3211,14 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
       </Tooltip>
     </LoadingIndicatorWrapper>
   </Modal>
+</div>
+`;
+
+exports[`features/unified-share-modal/UnifiedShareModal render() should render an allShareRestrictionWarning message when it is available 1`] = `
+<div
+  className="test-class"
+>
+  Sharing is prohibited
 </div>
 `;
 

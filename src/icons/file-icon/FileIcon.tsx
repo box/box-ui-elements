@@ -143,7 +143,21 @@ const EXTENSIONS: { [key: string]: { [key: string]: string } } = {
     IconFileKeynote: mirror(['key']),
     IconFileNumbers: mirror(['numbers']),
     IconFilePages: mirror(['pages']),
-    IconFileImage: mirror(['bmp', 'gif', 'gdraw', 'jpeg', 'jpg', 'png', 'ps', 'svs', 'svg', 'tif', 'tiff']),
+    IconFileImage: mirror([
+        'bmp',
+        'gif',
+        'gdraw',
+        'jpeg',
+        'jpg',
+        'png',
+        'ps',
+        'svs',
+        'svg',
+        'tif',
+        'tiff',
+        'heic',
+        'heif',
+    ]),
     IconFilePDF: mirror(['pdf']),
     IconFilePresentation: mirror(['odp', 'otp', 'pot', 'potx']),
     IconFilePowerpointPresentation: mirror(['ppt', 'pptx', 'pptm']),
@@ -173,9 +187,9 @@ const EXTENSIONS: { [key: string]: { [key: string]: string } } = {
     IconFileZip: mirror(['rar', 'tgz', 'zip']),
 };
 
-const getFileIconComponent = (extension: string) => {
+const getFileIconComponent = (extension = '') => {
     const extensionComponentName = Object.keys(EXTENSIONS).filter(
-        extensionComponent => !!EXTENSIONS[extensionComponent][extension],
+        extensionComponent => !!EXTENSIONS[extensionComponent][extension.toLowerCase()],
     )[0];
     return extensionComponentName || 'IconFileDefault';
 };

@@ -16,7 +16,7 @@ import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import InlineError from '../../../../components/inline-error/InlineError';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import messages from './messages';
-import type { FocusableFeedItemType, FeedItems } from '../../../../common/types/feed';
+import type { FocusableFeedItemType, FeedItems, BoxAnnotationPermission } from '../../../../common/types/feed';
 import type { SelectorItems, User, GroupMini, BoxItem } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations, Errors } from '../../flowTypes';
@@ -36,6 +36,8 @@ type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
     isDisabled?: boolean,
     mentionSelectorContacts?: SelectorItems<User>,
+    onAnnotationDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => void,
+    onAnnotationSelect?: (id: string) => void,
     onAppActivityDelete?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
@@ -45,6 +47,7 @@ type Props = {
     onTaskDelete?: Function,
     onTaskModalClose?: Function,
     onTaskUpdate?: Function,
+    onTaskView?: Function,
     onVersionHistoryClick?: Function,
     translations?: Translations,
 };
@@ -67,7 +70,11 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
-        const { currentUser: prevCurrentUser, feedItems: prevFeedItems } = prevProps;
+        const {
+            activeFeedEntryId: prevActiveFeedEntryId,
+            currentUser: prevCurrentUser,
+            feedItems: prevFeedItems,
+        } = prevProps;
         const { feedItems: currFeedItems, activeFeedEntryId } = this.props;
         const { isInputOpen: prevIsInputOpen } = prevState;
         const { isInputOpen: currIsInputOpen } = this.state;
@@ -76,13 +83,13 @@ class ActivityFeed extends React.Component<Props, State> {
         const hasMoreItems = prevFeedItems && currFeedItems && prevFeedItems.length < currFeedItems.length;
         const didLoadFeedItems = prevFeedItems === undefined && currFeedItems !== undefined;
         const hasInputOpened = currIsInputOpen !== prevIsInputOpen;
+        const hasActiveFeedEntryIdChanged = activeFeedEntryId !== prevActiveFeedEntryId;
 
         if ((hasLoaded || hasMoreItems || didLoadFeedItems || hasInputOpened) && activeFeedEntryId === undefined) {
             this.resetFeedScroll();
         }
 
-        // do the scroll only once after first fetch of feed items
-        if (didLoadFeedItems) {
+        if (didLoadFeedItems || hasActiveFeedEntryIdChanged) {
             this.scrollToActiveFeedItemOrErrorMessage();
         }
     }
@@ -185,29 +192,32 @@ class ActivityFeed extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
-            translations,
-            approverSelectorContacts,
-            mentionSelectorContacts,
-            currentUser,
-            isDisabled,
-            getAvatarUrl,
-            getUserProfileUrl,
-            file,
-            onAppActivityDelete,
-            onCommentCreate,
-            getApproverWithQuery,
-            getMentionWithQuery,
-            activityFeedError,
-            onVersionHistoryClick,
-            onCommentDelete,
-            onCommentUpdate,
-            onTaskDelete,
-            onTaskUpdate,
-            onTaskAssignmentUpdate,
-            onTaskModalClose,
-            feedItems,
             activeFeedEntryId,
             activeFeedEntryType,
+            activityFeedError,
+            approverSelectorContacts,
+            currentUser,
+            feedItems,
+            file,
+            getApproverWithQuery,
+            getAvatarUrl,
+            getMentionWithQuery,
+            getUserProfileUrl,
+            isDisabled,
+            mentionSelectorContacts,
+            onAnnotationDelete,
+            onAnnotationSelect,
+            onAppActivityDelete,
+            onCommentCreate,
+            onCommentDelete,
+            onCommentUpdate,
+            onTaskAssignmentUpdate,
+            onTaskDelete,
+            onTaskModalClose,
+            onTaskUpdate,
+            onTaskView,
+            onVersionHistoryClick,
+            translations,
         } = this.props;
         const { isInputOpen } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
@@ -221,6 +231,7 @@ class ActivityFeed extends React.Component<Props, State> {
             feedItems.find(({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType);
 
         const errorMessageByEntryType = {
+            annotation: messages.annotationMissingError,
             comment: messages.commentMissingError,
             task: messages.taskMissingError,
         };
@@ -230,6 +241,7 @@ class ActivityFeed extends React.Component<Props, State> {
             : undefined;
 
         const isInlineFeedItemErrorVisible = !isLoading && activeFeedEntryType && !activeEntry;
+        const currentFileVersionId = getProp(file, 'file_version.id');
 
         return (
             // eslint-disable-next-line
@@ -253,12 +265,16 @@ class ActivityFeed extends React.Component<Props, State> {
                             items={collapseFeedState(feedItems)}
                             isDisabled={isDisabled}
                             currentUser={currentUser}
+                            currentFileVersionId={currentFileVersionId}
                             onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                            onAnnotationDelete={onAnnotationDelete}
+                            onAnnotationSelect={onAnnotationSelect}
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
                             onTaskDelete={onTaskDelete}
                             onTaskEdit={onTaskUpdate}
+                            onTaskView={onTaskView}
                             onTaskModalClose={onTaskModalClose}
                             onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
                             translations={translations}

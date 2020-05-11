@@ -12,15 +12,35 @@ import type { TaskType } from '../../../../common/types/tasks';
 import './TaskActions.scss';
 
 type Props = {|
+    isMultiFile: boolean,
     onTaskApproval: Function,
     onTaskComplete: Function,
     onTaskReject: Function,
+    onTaskView: Function,
     taskType: TaskType,
 |};
 
-const TaskActions = ({ onTaskApproval, onTaskReject, onTaskComplete, taskType }: Props): React.Node => {
+const TaskActions = ({
+    isMultiFile,
+    onTaskApproval,
+    onTaskReject,
+    onTaskComplete,
+    onTaskView,
+    taskType,
+}: Props): React.Node => {
     let action = null;
-    if (taskType === TASK_TYPE_APPROVAL) {
+    if (isMultiFile) {
+        action = onTaskView && (
+            <PrimaryButton
+                className="bcs-TaskActions-button"
+                data-testid="view-task"
+                onClick={onTaskView}
+                data-resin-target={ACTIVITY_TARGETS.TASK_VIEW_DETAILS}
+            >
+                <FormattedMessage {...messages.tasksFeedViewDetailsAction} />
+            </PrimaryButton>
+        );
+    } else if (taskType === TASK_TYPE_APPROVAL) {
         action = (
             <>
                 <Button

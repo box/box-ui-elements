@@ -47,11 +47,8 @@ module.exports = {
         development: {
             plugins: ['flow-react-proptypes'],
         },
-        npm: {
-            plugins: [['react-remove-properties', { properties: ['data-testid'] }]],
-        },
         production: {
-            plugins: [['react-remove-properties', { properties: ['data-resin-target', 'data-testid'] }]],
+            plugins: [['react-remove-properties', { properties: ['data-resin-target'] }]],
         },
         test: {
             plugins: [

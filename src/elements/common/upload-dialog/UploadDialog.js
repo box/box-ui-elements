@@ -16,6 +16,7 @@ import type { Token } from '../../../common/types/core';
 type Props = {
     apiHost: string,
     appElement: HTMLElement,
+    contentUploaderProps: ContentUploaderProps,
     currentFolderId: ?string,
     isOpen: boolean,
     onClose: Function,
@@ -41,6 +42,7 @@ const UploadDialog = ({
     parentElement,
     appElement,
     onUpload,
+    contentUploaderProps,
     requestInterceptor,
     responseInterceptor,
     intl,
@@ -56,6 +58,7 @@ const UploadDialog = ({
         portalClassName={`${CLASS_MODAL} be-modal-upload`}
     >
         <ContentUploader
+            {...contentUploaderProps}
             apiHost={apiHost}
             onClose={onClose}
             onComplete={onUpload}

@@ -1,4 +1,6 @@
 // @flow
+import type { MessageDescriptor } from 'react-intl';
+
 import {
     LIST_ACCESS_LEVEL,
     MANAGED_USERS_ACCESS_LEVEL,
@@ -51,11 +53,17 @@ type Controls = {
 
 type ControlsFormat = $Values<typeof SECURITY_CONTROLS_FORMAT>;
 
+type MessageItem = {
+    message: MessageDescriptor,
+    tooltipMessage?: MessageDescriptor,
+};
+
 export type {
     ApplicationRestriction,
     Controls,
     ControlsFormat,
     DownloadRestrictions,
     ExternalCollabRestriction,
+    MessageItem,
     SharedLinkRestrictions,
 };

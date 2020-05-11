@@ -1,0 +1,16 @@
+import * as React from "react";
+import AnnotatorContext from "./AnnotatorContext";
+import { Action, AnnotationActionEvent, AnnotatorState, Status } from "./types";
+export interface WithAnnotationsProps {
+  onAnnotationCreate: Function;
+}
+export interface ComponentWithAnnotations {
+  getAction: Function;
+  handleAnnotationCreate: Function;
+}
+export type WithAnnotationsComponent<P> = React.ComponentClass<
+  P & WithAnnotationsProps
+>;
+declare export default function withAnnotations<P: { [key: string]: any }>(
+  WrappedComponent: React.ComponentType<P>
+): WithAnnotationsComponent<P>;

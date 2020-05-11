@@ -16,6 +16,7 @@ import LocalStore from '../../utils/LocalStore';
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
+import { AnnotatorState, withAnnotatorContext } from '../common/annotator-context';
 import { withFeatureConsumer } from '../common/feature-checking';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { ActivitySidebarProps } from './ActivitySidebar';
@@ -29,6 +30,7 @@ import type { BoxItem, User } from '../../common/types/core';
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
     additionalTabs?: Array<AdditionalSidebarTab>,
+    annotatorState: AnnotatorState,
     className: string,
     currentUser?: User,
     detailsSidebarProps: DetailsSidebarProps,
@@ -63,6 +65,7 @@ export const SIDEBAR_FORCE_VALUE_OPEN: 'open' = 'open';
 
 class Sidebar extends React.Component<Props, State> {
     static defaultProps = {
+        annotatorState: {},
         isDefaultOpen: true,
         isLoading: false,
     };
@@ -88,8 +91,17 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props): void {
-        const { fileId, history, location }: Props = this.props;
-        const { fileId: prevFileId, location: prevLocation }: Props = prevProps;
+        const {
+            annotatorState: { activeAnnotationId },
+            fileId,
+            history,
+            location,
+        }: Props = this.props;
+        const {
+            annotatorState: { activeAnnotationId: prevActiveAnnotationId },
+            fileId: prevFileId,
+            location: prevLocation,
+        }: Props = prevProps;
         const { isDirty }: State = this.state;
 
         // User navigated to a different file without ever navigating the sidebar
@@ -102,11 +114,33 @@ class Sidebar extends React.Component<Props, State> {
             this.setForcedByLocation();
             this.setState({ isDirty: true });
         }
+
+        if (activeAnnotationId !== prevActiveAnnotationId) {
+            this.handleAnnotationSelect(activeAnnotationId);
+        }
     }
 
     getUrlPrefix = (pathname: string) => {
         const basePath = pathname.substring(1).split('/')[0];
         return basePath;
+    };
+
+    /**
+     * Handle annotation selection
+     *
+     * @param {string} annotationId - The id of the annotation being selected
+     * @return {void}
+     */
+
+    handleAnnotationSelect = (annotationId: string | null): void => {
+        const { file, history } = this.props;
+        const { file_version: { id: currentFileVersionId } = {} } = file;
+        const urlPrefix = this.getUrlPrefix(history.location.pathname);
+        const annotationUrl = annotationId
+            ? `/${urlPrefix}/annotations/${currentFileVersionId}/${annotationId}`
+            : `/${urlPrefix}`;
+
+        history.push(annotationUrl);
     };
 
     /**
@@ -277,4 +311,4 @@ class Sidebar extends React.Component<Props, State> {
 }
 
 export { Sidebar as SidebarComponent };
-export default flow([withFeatureConsumer, withRouter])(Sidebar);
+export default flow([withFeatureConsumer, withAnnotatorContext, withRouter])(Sidebar);

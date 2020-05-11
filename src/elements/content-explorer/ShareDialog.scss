@@ -10,7 +10,8 @@
         position: relative;
 
         input[type='text'] {
-            width: 296px;
+            flex-grow: 1;
+            max-width: 296px;
             text-overflow: ellipsis;
             border-right: 0 none;
             border-radius: 3px 0 0 3px;
@@ -21,7 +22,13 @@
         }
     }
 
+    .be-modal-input-group {
+        display: flex;
+        justify-content: space-between;
+    }
+
     .be-modal-button-copy {
+        min-width: 70px;
         height: 36px;
         margin: 0 0 0 -5px;
         padding: 0 10px;
@@ -36,5 +43,9 @@
     .be-modal-btns {
         align-items: center;
         justify-content: space-between;
+
+        .btn {
+            margin: 0;
+        }
     }
 }

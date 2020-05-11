@@ -94,6 +94,7 @@
     "overlay-z-index": "190",
     "tooltip-z-index": "190",
     "bdl-border-radius-size": "4px",
+    "bdl-border-radius-large-size": "10px",
     "bdl-grid-unit": "4px",
     "bdl-transitionDurationBase": "0.15s"
 }

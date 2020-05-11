@@ -17,7 +17,7 @@ import UploadDialog from '../common/upload-dialog';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import Internationalize from '../common/Internationalize';
 import makeResponsive from '../common/makeResponsive';
-import Pagination from '../../features/pagination';
+import OffsetBasedPagination from '../../features/pagination/OffsetBasedPagination';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import API from '../../api';
 import Content from './Content';
@@ -79,6 +79,7 @@ type Props = {
     chooseButtonLabel?: string,
     className: string,
     clientName: string,
+    contentUploaderProps: ContentUploaderProps,
     currentFolderId?: string,
     defaultView: DefaultView,
     extensions: string[],
@@ -164,6 +165,7 @@ class ContentPicker extends Component<Props, State> {
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         clientName: CLIENT_NAME_CONTENT_PICKER,
         defaultView: DEFAULT_VIEW_FILES,
+        contentUploaderProps: {},
     };
 
     /**
@@ -1138,6 +1140,7 @@ class ContentPicker extends Component<Props, State> {
             canUpload,
             canSetShareAccess,
             canCreateNewFolder,
+            contentUploaderProps,
             extensions,
             maxSelectable,
             type,
@@ -1230,9 +1233,9 @@ class ContentPicker extends Component<Props, State> {
                             chooseButtonLabel={chooseButtonLabel}
                             cancelButtonLabel={cancelButtonLabel}
                         >
-                            <Pagination
+                            <OffsetBasedPagination
                                 offset={offset}
-                                onChange={this.paginate}
+                                onOffsetChange={this.paginate}
                                 pageSize={currentPageSize}
                                 totalCount={totalCount}
                             />
@@ -1250,6 +1253,7 @@ class ContentPicker extends Component<Props, State> {
                             onClose={this.uploadSuccessHandler}
                             parentElement={this.rootElement}
                             appElement={this.appElement}
+                            contentUploaderProps={contentUploaderProps}
                             requestInterceptor={requestInterceptor}
                             responseInterceptor={responseInterceptor}
                         />
