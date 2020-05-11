@@ -5,7 +5,7 @@ exports[`components/select-field/BaseSelectField renderSelectButton() should sen
   aria-activedescendant={null}
   aria-autocomplete="list"
   aria-expanded={false}
-  aria-owns="selectfield11"
+  aria-owns="selectfield12"
   error="error"
   isDisabled={false}
   onClick={[Function]}
