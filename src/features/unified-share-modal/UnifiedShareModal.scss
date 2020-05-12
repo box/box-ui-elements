@@ -1,4 +1,5 @@
 @import '../../styles/variables';
+@import '../../styles/base';
 
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
@@ -268,5 +269,19 @@
         float: right;
         margin: -5px 0 10px 0;
         color: $bdl-box-blue;
+    }
+}
+
+.bdl-UnifiedShareForm {
+    @extend .unified-share-modal;
+
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 2em;
+
+    hr {
+        margin: 20px 0;
+        border: none;
+        border-top: 1px solid $bdl-gray-20;
     }
 }
