@@ -232,8 +232,11 @@ describe('components/select-field/BaseSelectField', () => {
             expect(itemsWrapper).toMatchSnapshot();
         });
 
-        test('should render a clear option if shouldShowClearOption is true', () => {
-            const wrapper = shallowRenderSelectField({ shouldShowClearOption: true });
+        test('should render a clear option if shouldShowClearOption is true and value is "clear"', () => {
+            const wrapper = shallowRenderSelectField({
+                options: [{ displayText: 'Clear All', value: 'clear' }],
+                shouldShowClearOption: true,
+            });
             const itemsWrapper = wrapper.find('DatalistItem');
 
             expect(itemsWrapper.at(0).prop('className')).toEqual('select-option is-clear-option');
@@ -804,6 +807,7 @@ describe('components/select-field/BaseSelectField', () => {
     describe('onOptionClick', () => {
         test('should call handleClearClick if index is 0 and shouldShowClearOption is true', () => {
             const wrapper = shallowRenderSelectField({
+                options: [{ displayText: 'Clear All', value: 'clear' }],
                 shouldShowClearOption: true,
             });
             wrapper.setState({
@@ -1009,6 +1013,32 @@ describe('components/select-field/BaseSelectField', () => {
         });
     });
 
+    describe('getItemFromFilteredOptions', () => {
+        test('should return the correct item when searchText is empty string', () => {
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+
+            const index = 0;
+
+            const item = instance.getItemFromFilteredOptions(index);
+            expect(item).toEqual(options[index]);
+        });
+
+        test('should return the correct item when searchText is not empty string', () => {
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            instance.setState({
+                searchText: 'Audio',
+            });
+
+            const indexBeforeFilter = 1; // Index of audio option in default options array
+            const indexAfterFilter = 0; // Index of audio option when user enters a search string of 'Audio'
+
+            const item = instance.getItemFromFilteredOptions(indexAfterFilter);
+            expect(item).toEqual(options[indexBeforeFilter]);
+        });
+    });
+
     describe('selectSingleOption()', () => {
         test('should call handleChange() when index selected was not selected previously', () => {
             const wrapper = shallowRenderSelectField();
@@ -1021,6 +1051,24 @@ describe('components/select-field/BaseSelectField', () => {
                 .withArgs([options[index]]);
 
             instance.selectSingleOption(index);
+        });
+
+        test('should call handleChange with the correct item when searchText is not empty string', () => {
+            const indexBeforeFilter = 1; // Index of audio option in default options array
+            const indexAfterFilter = 0; // Index of audio option after user inputs a search string of 'Audio'
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+
+            instance.setState({
+                searchText: 'Audio',
+            });
+
+            sandbox
+                .mock(instance)
+                .expects('handleChange')
+                .withArgs([options[indexBeforeFilter]]);
+
+            instance.selectSingleOption(indexAfterFilter);
         });
 
         test('should not call handleChange() when index selected was previously selected', () => {
@@ -1036,6 +1084,26 @@ describe('components/select-field/BaseSelectField', () => {
                 .never();
 
             instance.selectSingleOption(index);
+        });
+
+        test('should not call handleChange when index selected was previously selected and searchText is not empty string', () => {
+            const indexBeforeFilter = 1; // Index of audio option in default options array
+            const indexAfterFilter = 0; // Index of audio option after user inputs a search string of 'Audio'
+            const wrapper = shallowRenderSelectField({
+                selectedValues: [options[indexBeforeFilter].value],
+            });
+            const instance = wrapper.instance();
+
+            instance.setState({
+                searchText: 'Audio',
+            });
+
+            sandbox
+                .mock(instance)
+                .expects('handleChange')
+                .never();
+
+            instance.selectSingleOption(indexAfterFilter);
         });
 
         test('should call handleOptionSelect() even when index selected was previously selected', () => {
@@ -1135,6 +1203,27 @@ describe('components/select-field/BaseSelectField', () => {
                 .withArgs(options[index]); // audio + video
 
             instance.selectMultiOption(index);
+        });
+
+        test('should call handleOptionSelect with correct value when searchText is not empty string', () => {
+            const indexBeforeFilter = 3; // Matches video option in original options array
+            const indexAfterFilter = 0; // Matches index of video option after search filter is applied
+            const wrapper = shallowRenderSelectField({
+                defaultValue: '',
+                selectedValues: ['audio'],
+            }); // default value index is 0 in this case
+            const instance = wrapper.instance();
+
+            instance.setState({
+                searchText: 'Video',
+            });
+
+            sandbox
+                .mock(instance)
+                .expects('handleOptionSelect')
+                .withArgs(options[indexBeforeFilter]); // audio + video
+
+            instance.selectMultiOption(indexAfterFilter);
         });
     });
 
