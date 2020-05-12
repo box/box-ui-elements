@@ -245,7 +245,8 @@ class ActivityFeed extends React.Component<Props, State> {
             ? errorMessageByEntryType[activeFeedEntryType]
             : undefined;
 
-        const isInlineFeedItemErrorVisible = !isLoading && activeFeedEntryType && !activeEntry;
+        const isInlineFeedItemErrorVisible =
+            !isLoading && activeFeedEntryType && activeFeedEntryType !== 'annotation' && !activeEntry;
         const currentFileVersionId = getProp(file, 'file_version.id');
 
         return (
