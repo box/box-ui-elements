@@ -15,6 +15,8 @@ type Props = {
     options: Array<SelectOptionProp>,
     /** Boolean to determine whether or not to show the clear option */
     shouldShowClearOption?: boolean,
+    /** Will show Search Field  */
+    shouldShowSearchInput?: boolean,
 };
 
 const optionsWithClearOption = (options: Array<Object>, shouldShowClearOption?: boolean, intl: Object) => {

@@ -532,7 +532,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     getApproverWithQuery = debounce(
         (searchStr: string) =>
             this.getCollaborators(this.getApproverContactsSuccessCallback, this.errorCallback, searchStr, {
-                includeGroups: isFeatureEnabled(this.props.features, 'activityFeed.tasks.assignToGroup'),
+                includeGroups: true,
             }),
         DEFAULT_COLLAB_DEBOUNCE,
     );

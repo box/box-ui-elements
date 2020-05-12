@@ -1,9 +1,12 @@
 import React from 'react';
 import sinon from 'sinon';
+import { FormattedMessage } from 'react-intl';
 
 import { scrollIntoView } from '../../../utils/dom';
-import BaseSelectField from '../BaseSelectField';
+import { BaseSelectFieldBase as BaseSelectField } from '../BaseSelectField';
 import { OVERLAY_SCROLLABLE_CLASS } from '../SelectFieldDropdown';
+
+import messages from '../messages';
 
 const sandbox = sinon.sandbox.create();
 
@@ -17,6 +20,10 @@ describe('components/select-field/BaseSelectField', () => {
         jest.clearAllMocks();
     });
 
+    const intl = {
+        formatMessage: jest.fn(),
+    };
+
     const options = [
         { displayText: 'Any Type', value: '' },
         { displayText: 'Audio', value: 'audio' },
@@ -27,6 +34,7 @@ describe('components/select-field/BaseSelectField', () => {
     const shallowRenderSelectField = props =>
         shallow(
             <BaseSelectField
+                intl={intl}
                 isDisabled={false}
                 onChange={() => {}}
                 onOptionSelect={onOptionSelectSpy}
@@ -127,7 +135,47 @@ describe('components/select-field/BaseSelectField', () => {
         });
     });
 
+    describe('renderSearchInput', () => {
+        test('should render SearchForm if shouldShowSearchInput is true', () => {
+            const wrapper = shallowRenderSelectField({
+                shouldShowSearchInput: true,
+            });
+
+            const searchForm = wrapper.find('SearchForm');
+
+            expect(searchForm.length).toBe(1);
+        });
+    });
+
     describe('renderSelectOptions()', () => {
+        test('should render FormattedMessage if searchText is not a substring of any of the options', () => {
+            const searchText = 'abc';
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            instance.setState({
+                searchText,
+            });
+
+            const message = wrapper.find(FormattedMessage);
+
+            expect(message.props().id).toBe(messages.noResults.id);
+        });
+
+        test('should only render the option that matches the searchText substring', () => {
+            const searchText = 'Audio';
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            instance.setState({
+                searchText,
+            });
+
+            const itemsWrapper = wrapper.find('DatalistItem');
+            const option = itemsWrapper.at(0);
+
+            expect(itemsWrapper.length).toBe(1);
+            expect(option.find('.bdl-SelectField-optionText').props().title).toEqual(searchText);
+        });
+
         test('should render DatalistItems per option', () => {
             const wrapper = shallowRenderSelectField();
             const itemsWrapper = wrapper.find('DatalistItem');
@@ -280,14 +328,20 @@ describe('components/select-field/BaseSelectField', () => {
             wrapper.simulate('blur');
         });
 
-        test('should call closeDropdown() when dropdown is open', () => {
+        test('should call closeDropdown() when dropdown is open and event.relatedTarget.className is not search-input', () => {
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();
+            const mockedEvent = {
+                relatedTarget: {
+                    classList: { contains: jest.fn() },
+                },
+            };
+
             wrapper.setState({ isOpen: true });
 
             sandbox.mock(instance).expects('closeDropdown');
 
-            wrapper.simulate('blur');
+            wrapper.simulate('blur', mockedEvent);
         });
     });
 
@@ -459,6 +513,26 @@ describe('components/select-field/BaseSelectField', () => {
     });
 
     describe('onSpacebar', () => {
+        test('should not stop default event or select item when shouldShowSearchInput is true', () => {
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+            wrapper.setProps({
+                shouldShowSearchInput: true,
+            });
+            wrapper.setState({ isOpen: true });
+
+            sandbox
+                .mock(instance)
+                .expects('selectOption')
+                .never();
+
+            wrapper.simulate('keyDown', {
+                key: ' ',
+                preventDefault: sandbox.mock().never(),
+                stopPropagation: sandbox.mock().never(),
+            });
+        });
+
         test('should not stop default event or select item when no item is active', () => {
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();
@@ -859,6 +933,21 @@ describe('components/select-field/BaseSelectField', () => {
 
             expect(document.addEventListener).toHaveBeenCalled();
         });
+
+        test('should call this.searchInputRef.focus() if shouldShowSearchInput is true', () => {
+            const wrapper = shallowRenderSelectField({
+                shouldShowSearchInput: true,
+            });
+            const mockSearchInputRef = {
+                focus: jest.fn(),
+            };
+            const instance = wrapper.instance();
+            instance.searchInputRef = mockSearchInputRef;
+
+            instance.openDropdown();
+
+            expect(mockSearchInputRef.focus).toHaveBeenCalled();
+        });
     });
 
     describe('closeDropdown()', () => {
@@ -876,6 +965,7 @@ describe('components/select-field/BaseSelectField', () => {
             expect(wrapper.state('isOpen')).toBe(false);
             expect(wrapper.state('activeItemID')).toEqual(null);
             expect(wrapper.state('activeItemIndex')).toEqual(-1);
+            expect(wrapper.state('searchText')).toBe('');
         });
 
         test('should remove document click listener', () => {
@@ -1045,6 +1135,36 @@ describe('components/select-field/BaseSelectField', () => {
                 .withArgs(options[index]); // audio + video
 
             instance.selectMultiOption(index);
+        });
+    });
+
+    describe('updateSearchText', () => {
+        const wrapper = shallowRenderSelectField({
+            options: [
+                { displayText: 'hello', value: 0 },
+                { displayText: 'goodbye', value: 1 },
+            ],
+        });
+        const instance = wrapper.instance();
+
+        test('should set text in state and call setActiveItem if the input text is a substring of an option', () => {
+            const spy = jest.spyOn(instance, 'setActiveItem');
+            const text = 'he';
+
+            instance.updateSearchText(text);
+
+            expect(wrapper.state('searchText')).toBe(text);
+            expect(spy).toHaveBeenCalledWith(0);
+        });
+
+        test('should set text in state and not call setActiveItem if input text is not a substring of any of the options', () => {
+            const spy = jest.spyOn(instance, 'setActiveItem');
+            const text = 'woo';
+
+            instance.updateSearchText(text);
+
+            expect(wrapper.state('searchText')).toBe(text);
+            expect(spy).not.toHaveBeenCalled();
         });
     });
 
