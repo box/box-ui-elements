@@ -1,3 +1,5 @@
+import { match } from 'react-router-dom';
+
 export const CREATE: 'create' = 'create';
 
 export enum Action {
@@ -23,9 +25,12 @@ export interface AnnotatorState {
     meta?: Metadata | null;
 }
 
+export type GetMatchPath = (history: History) => match<MatchParams> | null;
+
 export interface AnnotatorContext {
-    state: AnnotatorState;
     emitActiveChangeEvent: (id: string) => void;
+    getAnnotationsMatchPath: GetMatchPath;
+    state: AnnotatorState;
 }
 
 export enum Status {
@@ -33,6 +38,11 @@ export enum Status {
     PENDING = 'pending',
     SUCCESS = 'success',
 }
+
+export type MatchParams = {
+    annotationId?: string;
+    fileVersionId?: string;
+};
 
 export interface Metadata {
     requestId: string;

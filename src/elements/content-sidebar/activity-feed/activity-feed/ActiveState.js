@@ -12,6 +12,7 @@ import TaskNew from '../task-new';
 import Version, { CollapsedVersion } from '../version';
 import withErrorHandling from '../../withErrorHandling';
 import type {
+    Annotation,
     BoxAnnotationPermission,
     FeedItem,
     FeedItems,
@@ -35,7 +36,7 @@ type Props = {
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems<>,
     onAnnotationDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => void,
-    onAnnotationSelect?: (id: string) => void,
+    onAnnotationSelect?: (annotation: Annotation) => void,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
     onCommentEdit?: Function,
@@ -170,10 +171,10 @@ const ActiveState = ({
                                     getAvatarUrl={getAvatarUrl}
                                     getUserProfileUrl={getUserProfileUrl}
                                     isCurrentVersion={currentFileVersionId === itemFileVersionId}
+                                    item={item}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     onDelete={onAnnotationDelete}
                                     onSelect={onAnnotationSelect}
-                                    {...item}
                                 />
                             </li>
                         );

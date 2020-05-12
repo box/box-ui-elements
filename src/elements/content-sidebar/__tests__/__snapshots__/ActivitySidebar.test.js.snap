@@ -50,6 +50,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     onTaskDelete={[Function]}
     onTaskModalClose={[Function]}
     onTaskUpdate={[Function]}
+    onVersionHistoryClick={[Function]}
   />
 </SidebarContent>
 `;

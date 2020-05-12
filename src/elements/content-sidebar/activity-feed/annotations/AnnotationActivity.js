@@ -27,34 +27,29 @@ type Props = {
     isCurrentVersion: boolean,
     isDisabled?: boolean,
     isPending?: boolean,
+    item: Annotation,
     onDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => any,
-    onSelect?: (id: string) => any,
-} & Annotation;
+    onSelect?: (annotation: Annotation) => any,
+};
 
-const AnnotationActivity = (props: Props) => {
-    const {
-        created_at,
-        created_by,
-        description,
-        error,
-        getAvatarUrl,
-        getUserProfileUrl,
-        file_version,
-        id,
-        isCurrentVersion,
-        isPending,
-        onDelete = noop,
-        onSelect = noop,
-        permissions = {},
-        target,
-    } = props;
+const AnnotationActivity = ({
+    error,
+    item,
+    getAvatarUrl,
+    getUserProfileUrl,
+    isCurrentVersion,
+    isPending,
+    onDelete = noop,
+    onSelect = noop,
+}: Props) => {
+    const { created_at, created_by, description, file_version, id, permissions = {}, target } = item;
 
     const handleDeleteConfirm = (): void => {
         onDelete({ id, permissions });
     };
 
     const handleOnSelect = () => {
-        onSelect(id);
+        onSelect(item);
     };
 
     const createdAtTimestamp = new Date(created_at).getTime();

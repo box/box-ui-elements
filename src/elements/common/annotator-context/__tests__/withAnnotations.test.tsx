@@ -78,6 +78,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
         expect(contextProvider.exists()).toBeTruthy();
         expect(contextProvider.prop('value').emitActiveChangeEvent).toEqual(instance.emitActiveChangeEvent);
+        expect(contextProvider.prop('value').getAnnotationsMatchPath).toEqual(instance.getMatchPath);
         expect(contextProvider.prop('value').state).toEqual({
             action: null,
             activeAnnotationId: null,

@@ -25,6 +25,11 @@ type GetAvatarUrlCallback = string => Promise<?string>;
 
 type GetProfileUrlCallback = string => Promise<string>;
 
+type Page = {
+    type: 'page',
+    value: number,
+};
+
 type AdditionalVersionInfo = {
     currentVersionId?: ?string,
     updateVersionToCurrent: () => void,
@@ -58,4 +63,5 @@ export type {
     ElementOrigin,
     Alignment,
     ModalOptions,
+    Page,
 };

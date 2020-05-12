@@ -16,7 +16,12 @@ import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import InlineError from '../../../../components/inline-error/InlineError';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import messages from './messages';
-import type { FocusableFeedItemType, FeedItems, BoxAnnotationPermission } from '../../../../common/types/feed';
+import type {
+    Annotation,
+    FocusableFeedItemType,
+    FeedItems,
+    BoxAnnotationPermission,
+} from '../../../../common/types/feed';
 import type { SelectorItems, User, GroupMini, BoxItem } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations, Errors } from '../../flowTypes';
@@ -37,7 +42,7 @@ type Props = {
     isDisabled?: boolean,
     mentionSelectorContacts?: SelectorItems<User>,
     onAnnotationDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => void,
-    onAnnotationSelect?: (id: string) => void,
+    onAnnotationSelect?: (annotation: Annotation) => void,
     onAppActivityDelete?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,

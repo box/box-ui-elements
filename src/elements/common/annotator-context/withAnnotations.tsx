@@ -1,8 +1,8 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
-import { matchPath } from 'react-router-dom';
+import { match as matchType, matchPath } from 'react-router-dom';
 import AnnotatorContext from './AnnotatorContext';
-import { Action, Annotator, AnnotationActionEvent, AnnotatorState, Status } from './types';
+import { Action, Annotator, AnnotationActionEvent, AnnotatorState, GetMatchPath, MatchParams, Status } from './types';
 
 export interface WithAnnotationsProps {
     onAnnotator: (annotator: Annotator) => void;
@@ -12,6 +12,7 @@ export interface WithAnnotationsProps {
 export interface ComponentWithAnnotations {
     emitActiveChangeEvent: (id: string | null) => void;
     getAction: (eventData: AnnotationActionEvent) => Action;
+    getMatchPath: GetMatchPath;
     handleActiveChange: (annotationId: string | null) => void;
     handleAnnotationChangeEvent: (id: string | null) => void;
     handleAnnotationCreate: (eventData: AnnotationActionEvent) => void;
@@ -34,11 +35,6 @@ type WithHistoryProps = {
     history?: History;
 };
 
-type MatchParams = {
-    annotationId?: string;
-    fileVersionId?: string;
-};
-
 type ResultProps<P> = P & WithAnnotationsProps & WithHistoryProps;
 
 export default function withAnnotations<P extends object>(
@@ -54,12 +50,8 @@ export default function withAnnotations<P extends object>(
 
             // Determine by url if there is already a deeply linked annotation
             const { history } = props;
-            const pathname = getProp(history, 'location.pathname');
-            const match = matchPath<MatchParams>(pathname, {
-                path: '/:sidebar/annotations/:fileVersionId/:annotationId',
-                exact: true,
-            });
-            const { params: { annotationId: activeAnnotationId = null } = {} } = match || {};
+            const match = this.getMatchPath(history);
+            const activeAnnotationId = getProp(match, 'params.annotationId', null);
 
             // Seed the initial state with the activeAnnotationId if any from the location path
             this.state = { ...defaultState, activeAnnotationId };
@@ -77,6 +69,14 @@ export default function withAnnotations<P extends object>(
 
         getAction({ meta: { status }, error }: AnnotationActionEvent): Action {
             return status === Status.SUCCESS || error ? Action.CREATE_END : Action.CREATE_START;
+        }
+
+        getMatchPath(history?: History): matchType<MatchParams> | null {
+            const pathname = getProp(history, 'location.pathname');
+            return matchPath<MatchParams>(pathname, {
+                path: '/:sidebar/annotations/:fileVersionId/:annotationId',
+                exact: true,
+            });
         }
 
         handleAnnotationCreate = (eventData: AnnotationActionEvent): void => {
@@ -122,11 +122,14 @@ export default function withAnnotations<P extends object>(
         render(): JSX.Element {
             return (
                 <AnnotatorContext.Provider
-                    value={{ emitActiveChangeEvent: this.emitActiveChangeEvent, state: this.state }}
+                    value={{
+                        emitActiveChangeEvent: this.emitActiveChangeEvent,
+                        getAnnotationsMatchPath: this.getMatchPath,
+                        state: this.state,
+                    }}
                 >
                     <WrappedComponent
                         {...this.props}
-                        annotatorState={this.state}
                         onAnnotator={this.handleAnnotator}
                         onPreviewDestroy={this.handlePreviewDestroy}
                     />

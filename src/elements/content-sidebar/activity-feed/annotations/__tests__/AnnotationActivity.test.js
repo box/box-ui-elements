@@ -22,20 +22,23 @@ const allHandlers = {
 };
 
 describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity', () => {
-    const mockActivity = {
+    const mockAnnotation = {
         created_at: TIME_STRING_SEPT_27_2017,
         created_by: { name: 'Jane Doe', id: 10 },
-        currentUser,
         description: { message: 'test' },
         file_version: {
             id: '456',
             version_number: '2',
         },
-        handlers: allHandlers,
         id: '123',
-        isCurrentVersion: true,
-        mentionSelectorContacts,
         target: { location: { value: 1 } },
+    };
+    const mockActivity = {
+        currentUser,
+        handlers: allHandlers,
+        isCurrentVersion: true,
+        item: mockAnnotation,
+        mentionSelectorContacts,
     };
 
     const getWrapper = (props = {}) => shallow(<AnnotationActivity {...mockActivity} {...props} />);
@@ -46,17 +49,18 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
     test('should correctly render annotation activity', () => {
         const unixTime = new Date(TIME_STRING_SEPT_27_2017).getTime();
-        const activity = {
+        const item = {
+            ...mockAnnotation,
             permissions: { can_delete: true },
         };
 
-        const wrapper = getWrapper(activity);
+        const wrapper = getWrapper({ item });
         const activityLink = wrapper.find(AnnotationActivityLink);
 
         expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
         expect(activityLink.prop('message')).toEqual({ ...messages.annotationActivityPageItem, values: { number: 1 } });
         expect(wrapper.find('AnnotationActivityMenu').length).toEqual(1);
-        expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(mockActivity.description.message);
+        expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(mockActivity.item.description.message);
     });
 
     test('should correctly render annotation activity of another file version', () => {
@@ -70,7 +74,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
     test('should render commenter as a link', () => {
         const wrapper = getWrapper();
-        expect(wrapper.find('UserLink').prop('name')).toEqual(mockActivity.created_by.name);
+        expect(wrapper.find('UserLink').prop('name')).toEqual(mockActivity.item.created_by.name);
     });
 
     test('should not show actions menu when annotation activity is pending', () => {
