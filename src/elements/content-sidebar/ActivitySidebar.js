@@ -40,15 +40,7 @@ import type {
 import type { Annotation, FocusableFeedItemType, FeedItems } from '../../common/types/feed';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
-import type {
-    SelectorItems,
-    User,
-    UserMini,
-    GroupMini,
-    BoxItem,
-    BoxItemPermission,
-    BoxItemVersion,
-} from '../../common/types/core';
+import type { SelectorItems, User, UserMini, GroupMini, BoxItem, BoxItemPermission } from '../../common/types/core';
 import type { GetProfileUrlCallback } from '../common/flowTypes';
 import type { Translations, Collaborators, Errors } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
@@ -93,7 +85,6 @@ type State = {
     currentUser?: User,
     currentUserError?: Errors,
     feedItems?: FeedItems,
-    fileVersion?: BoxItemVersion,
     mentionSelectorContacts?: SelectorItems<UserMini>,
 };
 
@@ -160,17 +151,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.fetchCurrentUser(currentUser);
     }
 
-    componentDidUpdate({ annotatorState: prevAnnotatorState }: Props, { fileVersion: prevFileVersion }: State): void {
-        const {
-            activeAnnotationId: prevActiveAnnotationId,
-            annotation: prevAnnotation,
-            match: prevMatch,
-        } = prevAnnotatorState;
+    componentDidUpdate({ annotatorState: prevAnnotatorState, match: prevMatch }: Props): void {
+        const { activeAnnotationId: prevActiveAnnotationId, annotation: prevAnnotation } = prevAnnotatorState;
         const {
             annotatorState: { activeAnnotationId, annotation },
             match,
         } = this.props;
-        const { fileVersion } = this.state;
         const prevFileVersionId = getProp(prevMatch, 'params.fileVersionId');
         const fileVersionId = getProp(match, 'params.fileVersionId');
 
@@ -183,10 +169,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         }
 
         if (prevFileVersionId !== fileVersionId) {
-            this.updateVersion();
-        }
-
-        if (prevFileVersion !== fileVersion) {
             this.handleVersionChange();
         }
     }
@@ -223,24 +205,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         );
     };
 
-    updateVersion = () => {
-        const { match } = this.props;
-        const fileVersionId = getProp(match, 'params.fileVersionId');
+    handleVersionChange = () => {
+        const { file, history, match, onVersionChange } = this.props;
         const { feedItems = [] } = this.state;
+        const currentFileVersionId = getProp(file, 'file_version.id');
+        const fileVersionId = getProp(match, 'params.fileVersionId');
         const version = feedItems.filter(item => item.type === 'file_version').find(item => item.id === fileVersionId);
 
         if (version) {
-            this.setState({ fileVersion: version });
-        }
-    };
-
-    handleVersionChange = () => {
-        const { file, history, onVersionChange } = this.props;
-        const currentFileVersionId = getProp(file, 'file_version.id');
-        const { fileVersion } = this.state;
-
-        if (fileVersion) {
-            onVersionChange(fileVersion, {
+            onVersionChange(version, {
                 currentVersionId: currentFileVersionId,
                 updateVersionToCurrent: () => history.push(`/activity/annotations/${currentFileVersionId}`),
             });
