@@ -4,6 +4,7 @@ import { injectIntl } from 'react-intl';
 
 import type { SelectOptionProp } from './props';
 import BaseSelectField from './BaseSelectField';
+import CLEAR from './constants';
 import messages from './messages';
 
 type Props = {
@@ -23,7 +24,7 @@ const optionsWithClearOption = (options: Array<Object>, shouldShowClearOption?: 
     return shouldShowClearOption
         ? [
               {
-                  value: 'clear',
+                  value: CLEAR,
                   displayText: intl.formatMessage(messages.clearAll),
               },
               ...options,
