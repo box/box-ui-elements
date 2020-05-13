@@ -241,6 +241,20 @@ describe('components/select-field/BaseSelectField', () => {
 
             expect(itemsWrapper.at(0).prop('className')).toEqual('select-option is-clear-option');
         });
+
+        test('should only set is-clear-option on the first item that has value: "clear"', () => {
+            const wrapper = shallowRenderSelectField({
+                options: [
+                    { displayText: 'Clear All', value: 'clear' },
+                    { displayText: 'User defined clear option', value: 'clear' },
+                ],
+                shouldShowClearOption: true,
+            });
+            const itemsWrapper = wrapper.find('DatalistItem');
+
+            expect(itemsWrapper.at(0).prop('className')).toEqual('select-option is-clear-option');
+            expect(itemsWrapper.at(1).prop('className')).toEqual('select-option');
+        });
     });
 
     describe('render()', () => {
