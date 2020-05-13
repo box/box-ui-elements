@@ -245,8 +245,10 @@ class ActivityFeed extends React.Component<Props, State> {
             ? errorMessageByEntryType[activeFeedEntryType]
             : undefined;
 
+        // Annotation deeplink allows for activeFeedEntryType but no activeFeedEntryId
+        const isAnnotationPartialLink = activeFeedEntryType === 'annotation' && !activeFeedEntryId;
         const isInlineFeedItemErrorVisible =
-            !isLoading && activeFeedEntryType && activeFeedEntryType !== 'annotation' && !activeEntry;
+            !isLoading && activeFeedEntryType && !isAnnotationPartialLink && !activeEntry;
         const currentFileVersionId = getProp(file, 'file_version.id');
 
         return (

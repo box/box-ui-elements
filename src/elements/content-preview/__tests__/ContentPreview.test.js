@@ -1126,21 +1126,13 @@ describe('elements/content-preview/ContentPreview', () => {
 
     describe('handleAnnotationSelect', () => {
         test.each`
-            annotationFileVersionId | selectedVersionId | version | locationType | onVersionChangeCount | setStateCount
-            ${'123'}                | ${'124'}          | ${{}}   | ${'page'}    | ${1}                 | ${1}
-            ${'123'}                | ${'124'}          | ${null} | ${'page'}    | ${0}                 | ${0}
-            ${'124'}                | ${'124'}          | ${{}}   | ${'page'}    | ${0}                 | ${0}
-            ${'123'}                | ${'124'}          | ${{}}   | ${''}        | ${1}                 | ${0}
+            annotationFileVersionId | selectedVersionId | locationType | setStateCount
+            ${'123'}                | ${'124'}          | ${'page'}    | ${1}
+            ${'124'}                | ${'124'}          | ${'page'}    | ${0}
+            ${'123'}                | ${'124'}          | ${''}        | ${0}
         `(
             'should call onVersionChange $onVersionChangeCount times and setState $setStateCount times',
-            ({
-                annotationFileVersionId,
-                selectedVersionId,
-                locationType,
-                version,
-                onVersionChangeCount,
-                setStateCount,
-            }) => {
+            ({ annotationFileVersionId, selectedVersionId, locationType, setStateCount }) => {
                 const wrapper = getWrapper();
                 const instance = wrapper.instance();
                 const annotation = {
@@ -1155,12 +1147,10 @@ describe('elements/content-preview/ContentPreview', () => {
                 };
 
                 wrapper.setState({ selectedVersion: { id: selectedVersionId } });
-                instance.onVersionChange = jest.fn();
                 instance.setState = jest.fn();
 
-                instance.handleAnnotationSelect(annotation, version);
+                instance.handleAnnotationSelect(annotation);
 
-                expect(instance.onVersionChange).toHaveBeenCalledTimes(onVersionChangeCount);
                 expect(instance.setState).toHaveBeenCalledTimes(setStateCount);
             },
         );
