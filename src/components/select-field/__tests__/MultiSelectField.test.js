@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { MultiSelectFieldBase } from '../MultiSelectField';
+import CLEAR from '../constants';
 
 describe('components/select-field/MultiSelectField', () => {
     const options = [
@@ -28,7 +29,7 @@ describe('components/select-field/MultiSelectField', () => {
             );
             const expectedOptions = [
                 {
-                    value: 'clear',
+                    value: CLEAR,
                     displayText: 'Clear All',
                 },
                 ...options,

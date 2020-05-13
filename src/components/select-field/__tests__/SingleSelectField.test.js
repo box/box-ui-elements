@@ -2,6 +2,7 @@ import React from 'react';
 import sinon from 'sinon';
 
 import { SingleSelectFieldBase } from '../SingleSelectField';
+import CLEAR from '../constants';
 
 const sandbox = sinon.sandbox.create();
 
@@ -57,7 +58,7 @@ describe('components/select-field/SingleSelectField', () => {
             const baseSelectFieldWrapper = wrapper.find('BaseSelectField');
             const expectedOptions = options;
             expectedOptions.unshift({
-                value: 'clear',
+                value: CLEAR,
                 displayText: 'Clear All',
             });
 
