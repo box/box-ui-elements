@@ -337,7 +337,7 @@ class BaseSelectField extends React.Component<Props, State> {
         }
     };
 
-    getFilteredOptions = () => {
+    getFilteredOptions = (): Array<SelectOptionProp> => {
         const { options } = this.props;
         const { searchText } = this.state;
 
