@@ -480,7 +480,7 @@ class BaseSelectField extends React.Component<Props, State> {
 
             const isSelected = selectedValues.includes(value);
 
-            const isClearOption = shouldShowClearOption && value === 'clear';
+            const isClearOption = shouldShowClearOption && value === 'clear' && index === 0;
 
             const itemProps: Object = {
                 className: classNames('select-option', { 'is-clear-option': isClearOption }),
