@@ -445,15 +445,6 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(wrapper.exists('InlineError')).toBe(true);
     });
 
-    test('should correctly handle an annotation id being undefined', () => {
-        const wrapper = getWrapper({
-            feedItems,
-            activeFeedEntryId: undefined,
-            activeFeedEntryType: annotations.entries[0].type,
-        });
-        expect(wrapper.exists('InlineError')).toBe(false);
-    });
-
     test('should not render inline error if the type is invalid', () => {
         const wrapper = getWrapper({
             feedItems,
