@@ -425,6 +425,7 @@ class BaseSelectField extends React.Component<Props, State> {
 
         return (
             <SearchForm
+                className="select-field-search-container"
                 getSearchInput={getSearchInput}
                 onChange={this.updateSearchText}
                 placeholder={intl.formatMessage(messages.searchPlaceholder)}
