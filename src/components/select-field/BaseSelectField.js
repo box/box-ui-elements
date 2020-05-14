@@ -14,6 +14,7 @@ import SelectFieldDropdown from './SelectFieldDropdown';
 import type { SelectOptionValueProp, SelectOptionProp } from './props';
 import { PLACEMENT_BOTTOM_END, PLACEMENT_BOTTOM_START } from '../popper/constants';
 import SearchForm from '../search-form/SearchForm';
+import CLEAR from './constants';
 
 import messages from './messages';
 
@@ -336,9 +337,21 @@ class BaseSelectField extends React.Component<Props, State> {
         }
     };
 
+    getFilteredOptions = (): Array<SelectOptionProp> => {
+        const { options } = this.props;
+        const { searchText } = this.state;
+
+        return options.filter(option => {
+            const isSubstring = option.displayText.toLowerCase().includes(searchText.toLowerCase());
+            const isClearOption = option.value === CLEAR;
+
+            return searchText ? isSubstring && !isClearOption : true;
+        });
+    };
+
     selectSingleOption(index: number) {
-        const { options, selectedValues } = this.props;
-        const item = options[index];
+        const { selectedValues } = this.props;
+        const item = this.getFilteredOptions()[index];
         // If item not previously selected, fire change handler
         if (!selectedValues.includes(item.value)) {
             this.handleChange([item]);
@@ -349,7 +362,7 @@ class BaseSelectField extends React.Component<Props, State> {
     selectMultiOption = (index: number) => {
         const { defaultValue, options, selectedValues } = this.props;
         const hasDefaultValue = defaultValue != null; // Checks if not undefined or null
-        const item = options[index];
+        const item = this.getFilteredOptions()[index];
 
         // If we are already using the default option, just return without firing onChange
         if (hasDefaultValue && defaultValue === item.value) {
@@ -449,12 +462,10 @@ class BaseSelectField extends React.Component<Props, State> {
     };
 
     renderSelectOptions = () => {
-        const { optionRenderer, options, selectedValues, separatorIndices, shouldShowClearOption } = this.props;
-        const { activeItemIndex, searchText } = this.state;
+        const { optionRenderer, selectedValues, separatorIndices, shouldShowClearOption } = this.props;
+        const { activeItemIndex } = this.state;
 
-        const filteredOptions = options.filter(option =>
-            searchText ? option.displayText.toLowerCase().includes(searchText.toLowerCase()) : true,
-        );
+        const filteredOptions = this.getFilteredOptions();
 
         if (filteredOptions.length === 0) {
             return (
@@ -469,7 +480,7 @@ class BaseSelectField extends React.Component<Props, State> {
 
             const isSelected = selectedValues.includes(value);
 
-            const isClearOption = shouldShowClearOption && index === 0;
+            const isClearOption = shouldShowClearOption && value === CLEAR;
 
             const itemProps: Object = {
                 className: classNames('select-option', { 'is-clear-option': isClearOption }),
