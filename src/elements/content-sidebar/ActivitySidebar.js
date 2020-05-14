@@ -10,7 +10,7 @@ import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
-import { withRouter, type ContextRouter } from 'react-router-dom';
+import { generatePath, withRouter, type ContextRouter } from 'react-router-dom';
 import ActivityFeed from './activity-feed';
 import AddTaskButton from './AddTaskButton';
 import API from '../../api';
@@ -138,17 +138,18 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             return '/activity';
         }
 
-        const pathParams = ['activity', 'annotations', fileVersionId, annotationId];
-        const path = pathParams.filter(param => !!param).join('/');
-        return `/${path}`;
+        return generatePath('/activity/annotations/:fileVersionId/:annotationId?', {
+            annotationId,
+            fileVersionId,
+        });
     };
 
     redirectDeeplinkedAnnotation = () => {
         const { file, getAnnotationsMatchPath, history } = this.props;
-        const currentFileVersionId = getProp(file, 'file_version.id');
         const match = getAnnotationsMatchPath(history);
-        const fileVersionId = getProp(match, 'params.fileVersionId');
         const annotationId = getProp(match, 'params.annotationId');
+        const currentFileVersionId = getProp(file, 'file_version.id');
+        const fileVersionId = getProp(match, 'params.fileVersionId');
 
         if (fileVersionId && annotationId && fileVersionId !== currentFileVersionId) {
             history.replace(this.getAnnotationsPath(currentFileVersionId, annotationId));
