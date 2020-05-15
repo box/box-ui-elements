@@ -183,7 +183,7 @@ class SidebarPanels extends React.Component<Props> {
                                     ref={this.activitySidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
                                     activeFeedEntryId={match.params.activeFeedEntryId}
-                                    activeFeedEntryType={activeFeedEntryType}
+                                    activeFeedEntryType={match.params.activeFeedEntryId && activeFeedEntryType}
                                     {...activitySidebarProps}
                                 />
                             );

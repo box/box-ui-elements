@@ -9,6 +9,24 @@ jest.mock('../../Avatar', () => 'Avatar');
 jest.mock('../ActiveState', () => 'ActiveState');
 
 const otherUser = { name: 'Akon', id: 11 };
+
+const annotations = {
+    entries: [
+        {
+            created_at: '2020-01-01T00:00:00Z',
+            created_by: otherUser,
+            id: '123',
+            modified_at: '2020-01-02T00:00:00Z',
+            modified_by: otherUser,
+            permissions: {
+                can_delete: true,
+                can_edit: true,
+            },
+            type: 'annotation',
+        },
+    ],
+};
+
 const comments = {
     total_count: 1,
     entries: [
@@ -414,6 +432,15 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             feedItems,
             activeFeedEntryId: 'invalid id',
             activeFeedEntryType: taskWithAssignment.type,
+        });
+        expect(wrapper.exists('InlineError')).toBe(true);
+    });
+
+    test('should correctly handle an inline error for an annotation id being invalid', () => {
+        const wrapper = getWrapper({
+            feedItems,
+            activeFeedEntryId: 'invalid id',
+            activeFeedEntryType: annotations.entries[0].type,
         });
         expect(wrapper.exists('InlineError')).toBe(true);
     });

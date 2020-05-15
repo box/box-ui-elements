@@ -33,6 +33,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     };
     const file = {
         id: 'I_AM_A_FILE',
+        file_version: {
+            id: '123',
+        },
     };
     let currentUser = {
         id: 'foo',
@@ -117,6 +120,25 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             wrapper.setProps({ annotatorState: { activeAnnotationId: '321' } });
             expect(instance.updateActiveAnnotation).toBeCalled();
         });
+
+        test.each`
+            prevFileVersionId | fileVersionId | expectedCallCount
+            ${'122'}          | ${'122'}      | ${0}
+            ${'122'}          | ${'123'}      | ${1}
+        `(
+            'should call updateActiveVersion if fileVersionId changes',
+            ({ prevFileVersionId, fileVersionId, expectedCallCount }) => {
+                const match = { params: { fileVersionId } };
+                const prevMatch = { params: { fileVersionId: prevFileVersionId } };
+                const wrapper = getWrapper({ match: prevMatch });
+                const instance = wrapper.instance();
+
+                instance.updateActiveVersion = jest.fn();
+
+                wrapper.setProps({ match });
+                expect(instance.updateActiveVersion).toHaveBeenCalledTimes(expectedCallCount);
+            },
+        );
     });
 
     describe('render()', () => {
@@ -731,7 +753,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             activeAnnotationId | fileVersionId | expectedPath
             ${'234'}           | ${'456'}      | ${'/activity/annotations/456/234'}
             ${'234'}           | ${undefined}  | ${'/activity/annotations/123/234'}
-            ${null}            | ${'456'}      | ${'/activity/'}
+            ${null}            | ${'456'}      | ${'/activity/annotations/456'}
         `(
             'should set location path based on match param fileVersionId=$fileVersionId and activeAnnotationId=$activeAnnotationId',
             ({ activeAnnotationId, fileVersionId, expectedPath }) => {
@@ -739,10 +761,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     activeAnnotationId,
                 };
                 const getAnnotationsMatchPath = jest.fn().mockReturnValue({ params: { fileVersionId } });
-                const history = { push: jest.fn() };
-                const mockFile = { file_version: { id: '123' } };
+                const history = { push: jest.fn(), replace: jest.fn() };
 
-                const wrapper = getWrapper({ annotatorState, file: mockFile, getAnnotationsMatchPath, history });
+                const wrapper = getWrapper({ annotatorState, file, getAnnotationsMatchPath, history });
                 const instance = wrapper.instance();
 
                 instance.updateActiveAnnotation();
@@ -755,10 +776,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     describe('handleAnnotationSelect()', () => {
         const annotatorState = { activeAnnotationId: '123' };
         const emitAnnotatorActiveChangeEvent = jest.fn();
-        const mockFile = { file_version: { id: '234' } };
         const getAnnotationsMatchPath = jest.fn().mockReturnValue({ params: { fileVersionId: '456' } });
         const history = {
             push: jest.fn(),
+            replace: jest.fn(),
         };
         const onAnnotationSelect = jest.fn();
 
@@ -766,7 +787,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             getWrapper({
                 annotatorState,
                 emitAnnotatorActiveChangeEvent,
-                file: mockFile,
+                file,
                 getAnnotationsMatchPath,
                 history,
                 onAnnotationSelect,
@@ -776,46 +797,103 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const wrapper = getAnnotationWrapper();
             const instance = wrapper.instance();
             const annotation = { file_version: { id: '235' }, id: '124' };
-            const version = { type: 'file_version', id: '235' };
-            const feedItems = [version];
 
-            wrapper.setState({ feedItems });
             instance.handleAnnotationSelect(annotation);
 
             expect(emitAnnotatorActiveChangeEvent).toHaveBeenCalledWith('124');
             expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
-            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, version);
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
 
         test('should not call history.push if file versions are the same', () => {
             const wrapper = getAnnotationWrapper();
             const instance = wrapper.instance();
             const annotation = { file_version: { id: '456' }, id: '124' };
-            const version = { type: 'file_version', id: '456' };
-            const feedItems = [version];
 
-            wrapper.setState({ feedItems });
             instance.handleAnnotationSelect(annotation);
 
             expect(emitAnnotatorActiveChangeEvent).toHaveBeenCalledWith('124');
             expect(history.push).not.toHaveBeenCalled();
-            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, version);
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
 
         test('should use current file version if match params returns null', () => {
             const wrapper = getAnnotationWrapper();
             const instance = wrapper.instance();
             const annotation = { file_version: { id: '235' }, id: '124' };
-            const version = { type: 'file_version', id: '235' };
-            const feedItems = [version];
             getAnnotationsMatchPath.mockReturnValue({ params: { fileVersionId: undefined } });
 
-            wrapper.setState({ feedItems });
             instance.handleAnnotationSelect(annotation);
 
             expect(emitAnnotatorActiveChangeEvent).toHaveBeenCalledWith('124');
             expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
-            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, version);
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
+    });
+
+    describe('getAnnotationsPath()', () => {
+        test.each`
+            fileVersionId | annotationId | expectedPath
+            ${undefined}  | ${undefined} | ${'/activity'}
+            ${'123'}      | ${undefined} | ${'/activity/annotations/123'}
+            ${'123'}      | ${'456'}     | ${'/activity/annotations/123/456'}
+        `('should return $expectedPath', ({ fileVersionId, annotationId, expectedPath }) => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            expect(instance.getAnnotationsPath(fileVersionId, annotationId)).toBe(expectedPath);
+        });
+    });
+
+    describe('redirectDeeplinkedAnnotation()', () => {
+        const history = {
+            replace: jest.fn(),
+        };
+        const getAnnotationsMatchPath = jest.fn();
+
+        beforeEach(() => {
+            jest.resetAllMocks();
+        });
+
+        test.each`
+            fileVersionId | annotationId | expectedCallCount
+            ${undefined}  | ${'987'}     | ${0}
+            ${'123'}      | ${'987'}     | ${0}
+            ${'124'}      | ${'987'}     | ${1}
+            ${'124'}      | ${undefined} | ${0}
+        `(
+            'should call history.replace appropriately if router location annotationId=$annotationId and fileVersionId=$fileVersionId',
+            ({ annotationId, fileVersionId, expectedCallCount }) => {
+                const wrapper = getWrapper({ file, getAnnotationsMatchPath, history });
+                const instance = wrapper.instance();
+                getAnnotationsMatchPath.mockReturnValue({ params: { annotationId, fileVersionId } });
+
+                instance.redirectDeeplinkedAnnotation();
+
+                expect(history.replace).toHaveBeenCalledTimes(expectedCallCount);
+            },
+        );
+    });
+
+    describe('updateActiveVersion()', () => {
+        const onVersionChange = jest.fn();
+        const version = { type: 'file_version', id: '124' };
+
+        test.each`
+            fileVersionId | expectedCallCount
+            ${'123'}      | ${0}
+            ${'124'}      | ${1}
+        `(
+            'should onVersionChange $expectedCallCount times based on fileVersionId $fileVersionId',
+            ({ fileVersionId, expectedCallCount }) => {
+                const match = { params: { fileVersionId } };
+                const wrapper = getWrapper({ file, onVersionChange, match });
+                const instance = wrapper.instance();
+                wrapper.setState({ feedItems: [version] });
+
+                instance.updateActiveVersion();
+
+                expect(onVersionChange).toHaveBeenCalledTimes(expectedCallCount);
+            },
+        );
     });
 });
