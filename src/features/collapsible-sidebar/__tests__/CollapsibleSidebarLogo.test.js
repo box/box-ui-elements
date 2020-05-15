@@ -1,10 +1,10 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mountConnected } from '../../../test-utils/enzyme';
 
 import CollapsibleSidebarLogo from '../CollapsibleSidebarLogo';
 
 describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
-    const getWrapper = (props = {}) => shallow(<CollapsibleSidebarLogo {...props} />);
+    const getWrapper = (props = {}) => mountConnected(<CollapsibleSidebarLogo {...props} />);
 
     test('render', () => {
         const sidebar = getWrapper({
