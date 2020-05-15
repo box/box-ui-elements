@@ -11,6 +11,7 @@ export interface WithAnnotationsProps {
 
 export interface ComponentWithAnnotations {
     emitActiveChangeEvent: (id: string | null) => void;
+    emitRemoveEvent: (id: string) => void;
     getAction: (eventData: AnnotationActionEvent) => Action;
     getMatchPath: GetMatchPath;
     handleActiveChange: (annotationId: string | null) => void;
@@ -65,6 +66,16 @@ export default function withAnnotations<P extends object>(
             }
 
             annotator.emit('annotations_active_set', id);
+        };
+
+        emitRemoveEvent = (id: string) => {
+            const { annotator } = this;
+
+            if (!annotator) {
+                return;
+            }
+
+            annotator.emit('annotations_remove', id);
         };
 
         getAction({ meta: { status }, error }: AnnotationActionEvent): Action {
@@ -123,6 +134,7 @@ export default function withAnnotations<P extends object>(
             return (
                 <AnnotatorContext.Provider
                     value={{
+                        emitRemoveEvent: this.emitRemoveEvent,
                         emitActiveChangeEvent: this.emitActiveChangeEvent,
                         getAnnotationsMatchPath: this.getMatchPath,
                         state: this.state,

@@ -29,6 +29,7 @@ export type GetMatchPath = (history: History) => match<MatchParams> | null;
 
 export interface AnnotatorContext {
     emitActiveChangeEvent: (id: string) => void;
+    emitRemoveEvent: (id: string) => void;
     getAnnotationsMatchPath: GetMatchPath;
     state: AnnotatorState;
 }

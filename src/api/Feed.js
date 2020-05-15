@@ -161,6 +161,33 @@ class Feed extends Base {
         this.updateFeedItem({ ...annotation, isPending: false }, id);
     }
 
+    deleteAnnotation = (
+        file: BoxItem,
+        annotationId: string,
+        successCallBack: Function,
+        errorCallback: Function,
+    ): void => {
+        this.annotationsAPI = new AnnotationsAPI(this.options);
+
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+
+        this.updateFeedItem({ isPending: true }, annotationId);
+        this.annotationsAPI.deleteAnnotation(
+            this.file.id,
+            annotationId,
+            this.deleteFeedItem.bind(this, annotationId, successCallBack),
+            (error: ElementsXhrError, code: string) => {
+                // Reusing comment error handler since annotations are treated as comments to user
+                this.deleteCommentErrorCallback(error, code, annotationId);
+            },
+        );
+    };
+
     /**
      * Creates a key for the cache
      *

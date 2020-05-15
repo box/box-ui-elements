@@ -4,6 +4,7 @@ import { AnnotatorState, GetMatchPath } from './types';
 
 export interface WithAnnotatorContextProps {
     annotatorState?: AnnotatorState;
+    emitRemoveEvent?: (id: string) => void;
     emitAnnotatorActiveChangeEvent?: (id: string) => void;
     getAnnotationsMatchPath?: GetMatchPath;
 }
@@ -11,12 +12,13 @@ export interface WithAnnotatorContextProps {
 export default function withAnnotatorContext<P extends {}>(WrappedComponent: React.ComponentType<P>) {
     return React.forwardRef<React.RefForwardingComponent<React.ComponentType<P>>, P>((props, ref) => (
         <AnnotatorContext.Consumer>
-            {({ emitActiveChangeEvent, getAnnotationsMatchPath, state }) => (
+            {({ emitActiveChangeEvent, emitRemoveEvent, getAnnotationsMatchPath, state }) => (
                 <WrappedComponent
                     ref={ref}
                     {...props}
                     annotatorState={state}
                     emitAnnotatorActiveChangeEvent={emitActiveChangeEvent}
+                    emitRemoveEvent={emitRemoveEvent}
                     getAnnotationsMatchPath={getAnnotationsMatchPath}
                 />
             )}

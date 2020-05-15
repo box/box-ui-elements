@@ -37,7 +37,7 @@ import type {
     TaskUpdatePayload,
     TaskCollabStatus,
 } from '../../common/types/tasks';
-import type { Annotation, FocusableFeedItemType, FeedItems } from '../../common/types/feed';
+import type { Annotation, BoxAnnotationPermission, FocusableFeedItemType, FeedItems } from '../../common/types/feed';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { SelectorItems, User, UserMini, GroupMini, BoxItem, BoxItemPermission } from '../../common/types/core';
@@ -225,6 +225,22 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 updateVersionToCurrent: () => history.push(this.getAnnotationsPath(currentFileVersionId)),
             });
         }
+    };
+
+    handleAnnotationDelete = ({ id }: { id: string, permissions?: BoxAnnotationPermission }) => {
+        const { api, emitRemoveEvent, file } = this.props;
+
+        api.getFeedAPI(false).deleteAnnotation(
+            file,
+            id,
+            () => {
+                this.feedSuccessCallback();
+                emitRemoveEvent(id);
+            },
+            this.feedErrorCallback,
+        );
+
+        this.fetchFeedItems();
     };
 
     /**
@@ -747,32 +763,33 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 title={<FormattedMessage {...messages.sidebarActivityTitle} />}
             >
                 <ActivityFeed
-                    file={file}
+                    activeFeedEntryId={activeFeedEntryId}
+                    activeFeedEntryType={activeFeedEntryType}
                     activityFeedError={activityFeedError}
                     approverSelectorContacts={approverSelectorContacts}
-                    mentionSelectorContacts={mentionSelectorContacts}
                     currentUser={currentUser}
+                    currentUserError={currentUserError}
+                    feedItems={feedItems}
+                    file={file}
+                    getApproverWithQuery={this.getApproverWithQuery}
+                    getAvatarUrl={this.getAvatarUrl}
+                    getMentionWithQuery={this.getMentionWithQuery}
+                    getUserProfileUrl={getUserProfileUrl}
                     isDisabled={isDisabled}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onAnnotationDelete={this.handleAnnotationDelete}
                     onAnnotationSelect={this.handleAnnotationSelect}
                     onAppActivityDelete={this.deleteAppActivity}
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
                     onCommentUpdate={this.updateComment}
+                    onTaskAssignmentUpdate={this.updateTaskAssignment}
                     onTaskCreate={this.createTask}
                     onTaskDelete={this.deleteTask}
+                    onTaskModalClose={this.onTaskModalClose}
                     onTaskUpdate={this.updateTask}
                     onTaskView={onTaskView}
-                    onTaskModalClose={this.onTaskModalClose}
-                    onTaskAssignmentUpdate={this.updateTaskAssignment}
-                    getApproverWithQuery={this.getApproverWithQuery}
-                    getMentionWithQuery={this.getMentionWithQuery}
                     onVersionHistoryClick={onVersionHistoryClick}
-                    getAvatarUrl={this.getAvatarUrl}
-                    getUserProfileUrl={getUserProfileUrl}
-                    feedItems={feedItems}
-                    currentUserError={currentUserError}
-                    activeFeedEntryId={activeFeedEntryId}
-                    activeFeedEntryType={activeFeedEntryType}
                 />
             </SidebarContent>
         );

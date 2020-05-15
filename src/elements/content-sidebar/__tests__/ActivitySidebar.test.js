@@ -11,6 +11,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     const feedAPI = {
         addAnnotation: jest.fn(),
         feedItems: jest.fn(),
+        deleteAnnotation: jest.fn(),
         deleteComment: jest.fn(),
         deleteTaskNew: jest.fn(),
         createTaskNew: jest.fn(),
@@ -895,5 +896,18 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect(onVersionChange).toHaveBeenCalledTimes(expectedCallCount);
             },
         );
+    });
+
+    describe('handleAnnotationDelete()', () => {
+        test('should call deleteAnnotation API', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+
+            wrapper.instance().handleAnnotationDelete({ id: '123' });
+
+            expect(api.getFeedAPI().deleteAnnotation).toBeCalled();
+            expect(instance.fetchFeedItems).toHaveBeenCalled();
+        });
     });
 });
