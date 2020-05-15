@@ -10,7 +10,7 @@ import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
-import { withRouter, type ContextRouter } from 'react-router-dom';
+import { generatePath, withRouter, type ContextRouter } from 'react-router-dom';
 import ActivityFeed from './activity-feed';
 import AddTaskButton from './AddTaskButton';
 import API from '../../api';
@@ -121,11 +121,40 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         super(props);
         // eslint-disable-next-line react/prop-types
         const { logger } = this.props;
+
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
         this.state = {};
+
+        // On hard load with deep link for annotation on previous version -- replace the
+        // file version with the latest file version until ContentPreview can support loading
+        // a previous version on mount
+        this.redirectDeeplinkedAnnotation();
     }
+
+    getAnnotationsPath = (fileVersionId?: string, annotationId?: string): string => {
+        if (!fileVersionId) {
+            return '/activity';
+        }
+
+        return generatePath('/activity/annotations/:fileVersionId/:annotationId?', {
+            annotationId,
+            fileVersionId,
+        });
+    };
+
+    redirectDeeplinkedAnnotation = () => {
+        const { file, getAnnotationsMatchPath, history } = this.props;
+        const match = getAnnotationsMatchPath(history);
+        const annotationId = getProp(match, 'params.annotationId');
+        const currentFileVersionId = getProp(file, 'file_version.id');
+        const fileVersionId = getProp(match, 'params.fileVersionId');
+
+        if (fileVersionId && annotationId && fileVersionId !== currentFileVersionId) {
+            history.replace(this.getAnnotationsPath(currentFileVersionId, annotationId));
+        }
+    };
 
     componentDidMount() {
         const { currentUser } = this.props;
@@ -133,11 +162,14 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.fetchCurrentUser(currentUser);
     }
 
-    componentDidUpdate({ annotatorState: prevAnnotatorState }: Props): void {
+    componentDidUpdate({ annotatorState: prevAnnotatorState, match: prevMatch }: Props): void {
         const { activeAnnotationId: prevActiveAnnotationId, annotation: prevAnnotation } = prevAnnotatorState;
         const {
             annotatorState: { activeAnnotationId, annotation },
+            match,
         } = this.props;
+        const prevFileVersionId = getProp(prevMatch, 'params.fileVersionId');
+        const fileVersionId = getProp(match, 'params.fileVersionId');
 
         if (prevAnnotation !== annotation) {
             this.addAnnotation();
@@ -145,6 +177,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         if (prevActiveAnnotationId !== activeAnnotationId) {
             this.updateActiveAnnotation();
+        }
+
+        if (prevFileVersionId !== fileVersionId) {
+            this.updateActiveVersion();
         }
     }
 
@@ -173,9 +209,22 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const currentFileVersionId = getProp(file, 'file_version.id');
         const fileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
 
-        history.push(
-            activeAnnotationId ? `/activity/annotations/${fileVersionId}/${activeAnnotationId}` : '/activity/',
-        );
+        history.push(this.getAnnotationsPath(fileVersionId, activeAnnotationId));
+    };
+
+    updateActiveVersion = () => {
+        const { file, history, match, onVersionChange } = this.props;
+        const { feedItems = [] } = this.state;
+        const currentFileVersionId = getProp(file, 'file_version.id');
+        const fileVersionId = getProp(match, 'params.fileVersionId');
+        const version = feedItems.filter(item => item.type === 'file_version').find(item => item.id === fileVersionId);
+
+        if (version) {
+            onVersionChange(version, {
+                currentVersionId: currentFileVersionId,
+                updateVersionToCurrent: () => history.push(this.getAnnotationsPath(currentFileVersionId)),
+            });
+        }
     };
 
     /**
@@ -627,10 +676,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             getAnnotationsMatchPath,
             onAnnotationSelect,
         } = this.props;
-        const { feedItems = [] } = this.state;
-        const version = feedItems
-            .filter(item => item.type === 'file_version')
-            .find(item => item.id === annotationFileVersionId);
         const currentFileVersionId = getProp(file, 'file_version.id');
         const match = getAnnotationsMatchPath(history);
         const selectedFileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
@@ -638,10 +683,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         emitAnnotatorActiveChangeEvent(nextActiveAnnotationId);
 
         if (annotationFileVersionId !== selectedFileVersionId) {
-            history.push(`/activity/annotations/${annotationFileVersionId}/${nextActiveAnnotationId}`);
+            history.push(this.getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));
         }
 
-        onAnnotationSelect(annotation, version);
+        onAnnotationSelect(annotation);
     };
 
     onTaskModalClose = () => {
