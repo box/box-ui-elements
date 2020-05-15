@@ -206,6 +206,7 @@ type BaseUSMProps = {
     getSharedLinkContacts: (query: string) => Promise<Array<contactType>>,
     /** An array of initially selected contacts. If none are initially selected, an empty array. */
     initiallySelectedContacts: Array<contactType>,
+    /** Intl object */
     intl: any,
     /** An array of invitee permissions */
     inviteePermissions: Array<inviteePermissionType>,
@@ -272,25 +273,19 @@ type BaseUSMProps = {
 export type USMProps = BaseUSMProps & {
     /** Whether the USM is open */
     isOpen?: boolean,
-    /** ID for the item being shared - for use with V2 APIs only */
-    itemID?: string,
-    /** Type of the item being shared - for use with V2 APIs only */
-    itemType?: string,
-    /** Language for the USM/USF */
-    language?: string,
     /** Handler function for when the USM is closed */
     onRequestClose?: Function,
-    /** Access token - for use with V2 APIs only */
-    token?: string,
 };
 
 // Prop types for the Unified Share Form
 export type USFProps = BaseUSMProps & {
+    /** Function for closing the Remove Link Confirm Modal */
     closeConfirmModal: () => void,
     /** Function for closing the FTUX tooltip */
     handleFtuxCloseClick: () => void,
     /** Whether the data for the USM/USF is being fetched */
     isFetching: boolean,
+    /** Function for opening the Remove Link Confirm Modal */
     openConfirmModal: () => void,
     /** Whether the shared link has loaded */
     sharedLinkLoaded: boolean,
