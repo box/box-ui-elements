@@ -1,7 +1,6 @@
 // @flow
 
 import type { BoxItemVersionMini, Reply, User } from './core';
-import type { BoxAnnotationPermission } from './feed';
 
 export type Page = {
     type: 'page',
@@ -31,6 +30,11 @@ export type TargetRegion = {
 
 export type Target = TargetRegion;
 
+export type AnnotationPermission = {
+    can_delete?: boolean,
+    can_edit?: boolean,
+};
+
 export type Annotation = {
     created_at: string,
     created_by: User,
@@ -39,7 +43,7 @@ export type Annotation = {
     id: string,
     modified_at: string,
     modified_by: User,
-    permissions: BoxAnnotationPermission,
+    permissions: AnnotationPermission,
     replies?: Array<Reply>,
     status?: 'deleted' | 'open' | 'resolved',
     target: Target,

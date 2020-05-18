@@ -317,6 +317,8 @@ describe('api/Feed', () => {
         id: '12345',
         permissions: {
             can_comment: true,
+            can_create_annotations: true,
+            can_view_annotations: true,
         },
         modified_at: 1234567891,
         file_version: {

@@ -237,7 +237,7 @@ class Feed extends Base {
         this.file = file;
         this.hasError = false;
         this.errorCallback = onError;
-        const annotationsPromise = shouldShowAnnotations ? this.fetchAnnotations() : Promise.resolve();
+        const annotationsPromise = shouldShowAnnotations ? this.fetchAnnotations(permissions) : Promise.resolve();
         const versionsPromise = this.fetchVersions();
         const currentVersionPromise = this.fetchCurrentVersion();
         const commentsPromise = this.fetchComments(permissions);
@@ -265,12 +265,13 @@ class Feed extends Base {
         });
     }
 
-    fetchAnnotations(): Promise<?Annotations> {
+    fetchAnnotations(permissions: BoxItemPermission): Promise<?Annotations> {
         this.annotationsAPI = new AnnotationsAPI(this.options);
         return new Promise(resolve => {
             this.annotationsAPI.getAnnotations(
                 this.file.id,
                 undefined,
+                permissions,
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
             );

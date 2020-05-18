@@ -148,6 +148,7 @@ type Crumb = {
 
 type BoxItemPermission = {
     can_comment?: boolean,
+    can_create_annotations?: boolean,
     can_delete?: boolean,
     can_download?: boolean,
     can_edit?: boolean,
@@ -156,6 +157,7 @@ type BoxItemPermission = {
     can_set_share_access?: boolean,
     can_share?: boolean,
     can_upload?: boolean,
+    can_view_annotations?: boolean,
 };
 
 type BoxItemVersionPermission = {
