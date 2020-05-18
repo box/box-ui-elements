@@ -11,11 +11,6 @@ type BoxCommentPermission = {
     can_edit?: boolean,
 };
 
-type BoxAnnotationPermission = {
-    can_delete?: boolean,
-    can_edit?: boolean,
-};
-
 type BoxTaskPermission = {
     can_delete?: boolean,
     can_update?: boolean,
@@ -119,7 +114,6 @@ export type {
     AppActivityItem,
     AppActivityItems,
     AppItem,
-    BoxAnnotationPermission,
     BoxCommentPermission,
     Comment,
     Comments,

@@ -1,6 +1,5 @@
 // @flow
 import merge from 'lodash/merge';
-import type { BoxAnnotationPermission } from '../common/types/feed';
 import {
     ERROR_CODE_CREATE_ANNOTATION,
     ERROR_CODE_DELETE_ANNOTATION,
@@ -11,7 +10,12 @@ import {
     PERMISSION_CAN_VIEW_ANNOTATIONS,
 } from '../constants';
 import MarkerBasedApi from './MarkerBasedAPI';
-import type { Annotation, Annotations as AnnotationsType, NewAnnotation } from '../common/types/annotations';
+import type {
+    Annotation,
+    AnnotationPermission,
+    Annotations as AnnotationsType,
+    NewAnnotation,
+} from '../common/types/annotations';
 import type { BoxItemPermission } from '../common/types/core';
 import type { ElementsXhrError } from '../common/types/api';
 
@@ -67,7 +71,7 @@ export default class Annotations extends MarkerBasedApi {
     deleteAnnotation(
         fileId: string,
         annotationId: string,
-        permissions: BoxAnnotationPermission,
+        permissions: AnnotationPermission,
         successCallback: () => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
     ): void {
