@@ -25,7 +25,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
         label={
           <span>
             <FormattedMessage
-              defaultMessage="Shared link is enabled"
+              defaultMessage="Shared link is created"
               id="boxui.unifiedShare.linkShareOn"
             />
             <Tooltip
@@ -199,7 +199,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
           isOn={true}
           label={
             <FormattedMessage
-              defaultMessage="Shared link is enabled"
+              defaultMessage="Shared link is created"
               id="boxui.unifiedShare.linkShareOn"
             />
           }
@@ -342,7 +342,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
           isOn={false}
           label={
             <FormattedMessage
-              defaultMessage="Enable shared link"
+              defaultMessage="Create shared link"
               id="boxui.unifiedShare.linkShareOff"
             />
           }
@@ -378,7 +378,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
         isOn={true}
         label={
           <FormattedMessage
-            defaultMessage="Shared link is enabled"
+            defaultMessage="Shared link is created"
             id="boxui.unifiedShare.linkShareOn"
           />
         }
@@ -511,7 +511,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
         isOn={false}
         label={
           <FormattedMessage
-            defaultMessage="Enable shared link"
+            defaultMessage="Create shared link"
             id="boxui.unifiedShare.linkShareOff"
           />
         }
@@ -545,7 +545,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled c
       isOn={false}
       label={
         <FormattedMessage
-          defaultMessage="Enable shared link"
+          defaultMessage="Create shared link"
           id="boxui.unifiedShare.linkShareOff"
         />
       }
@@ -578,7 +578,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled r
       isOn={true}
       label={
         <FormattedMessage
-          defaultMessage="Shared link is enabled"
+          defaultMessage="Shared link is created"
           id="boxui.unifiedShare.linkShareOn"
         />
       }
@@ -626,7 +626,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
           isOn={true}
           label={
             <FormattedMessage
-              defaultMessage="Shared link is enabled"
+              defaultMessage="Shared link is created"
               id="boxui.unifiedShare.linkShareOn"
             />
           }
@@ -766,7 +766,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         isOn={true}
         label={
           <FormattedMessage
-            defaultMessage="Shared link is enabled"
+            defaultMessage="Shared link is created"
             id="boxui.unifiedShare.linkShareOn"
           />
         }
@@ -900,7 +900,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         isOn={true}
         label={
           <FormattedMessage
-            defaultMessage="Shared link is enabled"
+            defaultMessage="Shared link is created"
             id="boxui.unifiedShare.linkShareOn"
           />
         }
@@ -1059,7 +1059,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
         isOn={true}
         label={
           <FormattedMessage
-            defaultMessage="Shared link is enabled"
+            defaultMessage="Shared link is created"
             id="boxui.unifiedShare.linkShareOn"
           />
         }

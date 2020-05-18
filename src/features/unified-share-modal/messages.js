@@ -112,18 +112,18 @@ const messages = defineMessages({
         id: 'boxui.unifiedShare.settingsButtonLabel',
     },
     linkShareOff: {
-        defaultMessage: 'Enable shared link',
-        description: 'Enable shared link',
+        defaultMessage: 'Create shared link',
+        description: 'Call to action text for allowing the user to create a new shared link',
         id: 'boxui.unifiedShare.linkShareOff',
     },
     linkShareOn: {
-        defaultMessage: 'Shared link is enabled',
-        description: 'Link sharing is on',
+        defaultMessage: 'Shared link is created',
+        description: 'Call to action text for allowing the user to remove an existing shared link',
         id: 'boxui.unifiedShare.linkShareOn',
     },
     messageTitle: {
         defaultMessage: 'Message',
-        description: 'Label for "Message" text box to email the Shared Link',
+        description: 'Label for "Message" text box to email the shared Link',
         id: 'boxui.unifiedShare.message',
     },
     suggestedCollabsTitle: {
@@ -161,13 +161,13 @@ const messages = defineMessages({
 
     removeLinkConfirmationTitle: {
         defaultMessage: 'Remove Shared Link',
-        description: 'Label for confirmation modal to remove a Shared Link',
+        description: 'Label for confirmation modal to remove a shared link (title-case)',
         id: 'boxui.unifiedShare.removeLinkConfirmationTitle',
     },
     removeLinkConfirmationDescription: {
         defaultMessage:
             'This will permanently remove the shared link. If this item is embedded on other sites it will also become inaccessible. Any custom properties, settings and expirations will be removed as well. Do you want to continue?',
-        description: 'Description for confirmation modal to remove a Shared Link',
+        description: 'Description for confirmation modal to remove a shared link',
         id: 'boxui.unifiedShare.removeLinkConfirmationDescription',
     },
     removeLinkTooltip: {
@@ -182,12 +182,12 @@ const messages = defineMessages({
     },
     sendSharedLink: {
         defaultMessage: 'Send Shared Link',
-        description: 'Label for text input to enter email addresses to send Shared Link to',
+        description: 'Label for text input to enter email addresses to send shared link to (title-case)',
         id: 'boxui.unifiedShare.sendSharedLink',
     },
     sendSharedLinkFieldLabel: {
         defaultMessage: 'Email Shared Link',
-        description: 'Label of the field where a user designates who to send shared link to',
+        description: 'Label of the field where a user designates who to send shared link to (title-case)',
         id: 'boxui.unifiedShare.sendSharedLinkFieldLabel',
     },
     sharedLinkExpirationTooltip: {
@@ -200,7 +200,7 @@ const messages = defineMessages({
     // shared link permissions
     sharedLinkPermissionsViewDownload: {
         defaultMessage: 'Can view and download',
-        description: 'Label for a Shared Link permission level',
+        description: 'Label for a shared link permission level',
         id: 'boxui.unifiedShare.sharedLinkPermissionsViewDownload',
     },
     sharedLinkPermissionsViewDownloadDescription: {
@@ -210,12 +210,12 @@ const messages = defineMessages({
     },
     sharedLinkPermissionsViewOnly: {
         defaultMessage: 'Can view only',
-        description: 'Label for a Shared Link permission level',
+        description: 'Label for a shared link permission level',
         id: 'boxui.unifiedShare.sharedLinkPermissionsViewOnly',
     },
     sharedLinkPermissionsEdit: {
         defaultMessage: 'Can edit',
-        description: 'Label for a Shared Link permission to show for editable box notes',
+        description: 'Label for a shared link permission to show for editable box notes',
         id: 'boxui.unifiedShare.sharedLinkPermissionsEdit',
     },
     sharedLinkPermissionsEditTooltip: {

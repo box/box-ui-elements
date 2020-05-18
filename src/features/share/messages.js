@@ -24,7 +24,7 @@ const messages = defineMessages({
     },
     getSharedLink: {
         defaultMessage: 'Get Shared Link',
-        description: 'Label for menu option to get shared link for item',
+        description: 'Label for menu option to get shared link for item (title-case)',
         id: 'boxui.shareMenu.getSharedLink',
     },
     viewAndDownload: {
