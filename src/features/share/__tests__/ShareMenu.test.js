@@ -23,7 +23,7 @@ describe('features/share/ShareMenu', () => {
         sandbox.verifyAndRestore();
     });
 
-    test('should render a Menu with Invite Collab and Get Shared Link options', () => {
+    test('should render a Menu component with invite collab and get shared link options', () => {
         const wrapper = getWrapper({
             onGetSharedLinkSelect: sandbox.mock(),
             onInviteCollabSelect: sandbox.mock(),
