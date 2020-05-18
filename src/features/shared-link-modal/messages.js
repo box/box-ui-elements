@@ -23,7 +23,7 @@ const messages = defineMessages({
     },
     emailSharedLink: {
         defaultMessage: 'Email Shared Link',
-        description: 'Label for text input to enter email addresses to send shared link to (title-case)',
+        description: 'Field label for shared link recipient list (title-case)',
         id: 'boxui.share.emailSharedLink',
     },
     removeLink: {

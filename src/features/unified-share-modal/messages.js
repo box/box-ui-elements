@@ -182,12 +182,12 @@ const messages = defineMessages({
     },
     sendSharedLink: {
         defaultMessage: 'Send Shared Link',
-        description: 'Label for text input to enter email addresses to send shared link to (title-case)',
+        description: 'Tooltip text for email shared link button (title-case)',
         id: 'boxui.unifiedShare.sendSharedLink',
     },
     sendSharedLinkFieldLabel: {
         defaultMessage: 'Email Shared Link',
-        description: 'Label of the field where a user designates who to send shared link to (title-case)',
+        description: 'Field label for shared link recipient list (title-case)',
         id: 'boxui.unifiedShare.sendSharedLinkFieldLabel',
     },
     sharedLinkExpirationTooltip: {
