@@ -92,7 +92,7 @@ describe('api/Annotations', () => {
         test.each([
             { can_create_annotations: false, can_view_annotations: false },
             { can_create_annotations: false, can_view_annotations: true },
-        ])('should reject with an error code for permissions %s', permissions => {
+        ])('should reject with an error code for calls with invalid permissions %s', permissions => {
             annotations.createAnnotation('12345', '67890', payload, permissions, successCallback, errorCallback);
 
             expect(errorCallback).toBeCalledWith(expect.any(Error), ERROR_CODE_CREATE_ANNOTATION);
@@ -105,12 +105,7 @@ describe('api/Annotations', () => {
         const successCallback = jest.fn();
 
         test('should format its parameters and call the delete method for a given id', () => {
-            const permissions = {
-                can_create_annotations: true,
-                can_view_annotations: true,
-            };
-
-            annotations.deleteAnnotation('12345', 'abc', permissions, successCallback, errorCallback);
+            annotations.deleteAnnotation('12345', 'abc', { can_delete: true }, successCallback, errorCallback);
 
             expect(annotations.delete).toBeCalledWith({
                 id: '12345',
@@ -120,11 +115,8 @@ describe('api/Annotations', () => {
             });
         });
 
-        test.each([
-            { can_create_annotations: false, can_view_annotations: false },
-            { can_create_annotations: false, can_view_annotations: true },
-        ])('should reject with an error code for permissions %s', permissions => {
-            annotations.deleteAnnotation('12345', '67890', permissions, successCallback, errorCallback);
+        test('should reject with an error code for calls with invalid permissions', () => {
+            annotations.deleteAnnotation('12345', '67890', { can_delete: false }, successCallback, errorCallback);
 
             expect(errorCallback).toBeCalledWith(expect.any(Error), ERROR_CODE_DELETE_ANNOTATION);
             expect(annotations.delete).not.toBeCalled();
@@ -154,7 +146,7 @@ describe('api/Annotations', () => {
         test.each([
             { can_create_annotations: true, can_view_annotations: false },
             { can_create_annotations: false, can_view_annotations: false },
-        ])('should reject with an error code for permissions %s', permissions => {
+        ])('should reject with an error code for calls with invalid permissions %s', permissions => {
             annotations.getAnnotation('12345', '67890', permissions, successCallback, errorCallback);
 
             expect(errorCallback).toBeCalledWith(expect.any(Error), ERROR_CODE_FETCH_ANNOTATION);
@@ -188,7 +180,7 @@ describe('api/Annotations', () => {
         test.each([
             { can_create_annotations: true, can_view_annotations: false },
             { can_create_annotations: false, can_view_annotations: false },
-        ])('should reject with an error code for permissions %s', permissions => {
+        ])('should reject with an error code for calls with invalid permissions %s', permissions => {
             annotations.getAnnotations('12345', '67890', permissions, successCallback, errorCallback);
 
             expect(errorCallback).toBeCalledWith(expect.any(Error), ERROR_CODE_FETCH_ANNOTATIONS);
