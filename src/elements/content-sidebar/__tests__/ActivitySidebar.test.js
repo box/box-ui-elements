@@ -910,4 +910,19 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(instance.fetchFeedItems).toHaveBeenCalled();
         });
     });
+
+    describe('deleteAnnotationSuccess()', () => {
+        test('should handle successful annotation deletion', () => {
+            const mockEmitRemoveEvent = jest.fn();
+            const mockFeedSuccess = jest.fn();
+            const wrapper = getWrapper({ emitRemoveEvent: mockEmitRemoveEvent });
+            const instance = wrapper.instance();
+
+            instance.feedSuccessCallback = mockFeedSuccess;
+            instance.deleteAnnotationSuccess('123');
+
+            expect(mockEmitRemoveEvent).toBeCalledWith('123');
+            expect(mockFeedSuccess).toBeCalled();
+        });
+    });
 });

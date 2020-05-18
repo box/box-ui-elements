@@ -134,8 +134,8 @@ export default function withAnnotations<P extends object>(
             return (
                 <AnnotatorContext.Provider
                     value={{
-                        emitRemoveEvent: this.emitRemoveEvent,
                         emitActiveChangeEvent: this.emitActiveChangeEvent,
+                        emitRemoveEvent: this.emitRemoveEvent,
                         getAnnotationsMatchPath: this.getMatchPath,
                         state: this.state,
                     }}

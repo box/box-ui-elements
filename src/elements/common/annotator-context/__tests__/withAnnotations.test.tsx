@@ -103,7 +103,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         });
     });
 
-    describe('emitDeleteEvent', () => {
+    describe('emitRemoveEvent', () => {
         test('should call annotator on delete with a delete event', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();

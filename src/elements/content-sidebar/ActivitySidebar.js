@@ -228,20 +228,24 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     handleAnnotationDelete = ({ id }: { id: string, permissions?: BoxAnnotationPermission }) => {
-        const { api, emitRemoveEvent, file } = this.props;
+        const { api, file } = this.props;
 
         api.getFeedAPI(false).deleteAnnotation(
             file,
             id,
-            () => {
-                this.feedSuccessCallback();
-                emitRemoveEvent(id);
-            },
+            this.deleteAnnotationSuccess.bind(this, id),
             this.feedErrorCallback,
         );
 
         this.fetchFeedItems();
     };
+
+    deleteAnnotationSuccess(id: string) {
+        const { emitRemoveEvent } = this.props;
+
+        this.feedSuccessCallback();
+        emitRemoveEvent(id);
+    }
 
     /**
      * Fetches a Users info

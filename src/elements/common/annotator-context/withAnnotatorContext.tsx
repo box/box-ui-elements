@@ -4,8 +4,8 @@ import { AnnotatorState, GetMatchPath } from './types';
 
 export interface WithAnnotatorContextProps {
     annotatorState?: AnnotatorState;
-    emitRemoveEvent?: (id: string) => void;
     emitAnnotatorActiveChangeEvent?: (id: string) => void;
+    emitRemoveEvent?: (id: string) => void;
     getAnnotationsMatchPath?: GetMatchPath;
 }
 
