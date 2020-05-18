@@ -1,15 +1,15 @@
 // @flow
 
-// Shared Link Access Level Constants
+// Shared link access level constants
 const ANYONE_WITH_LINK = 'peopleWithTheLink';
 const ANYONE_IN_COMPANY = 'peopleInYourCompany';
 const PEOPLE_IN_ITEM = 'peopleInThisItem';
 
-// Shared Link Permission Level Constants
+// Shared link permission level constants
 const CAN_VIEW_DOWNLOAD = 'canViewDownload';
 const CAN_VIEW_ONLY = 'canViewOnly';
 
-// Invitee Permission Level Constants
+// Invitee permission level constants
 const EDITOR = 'Editor';
 const CO_OWNER = 'Co-owner';
 const PREVIEWER = 'Previewer';

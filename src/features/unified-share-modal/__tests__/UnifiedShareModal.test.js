@@ -780,7 +780,7 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
             expect(wrapper.instance().hasExternalContact('inviteCollabsContacts')).toBe(false);
         });
 
-        test('should return true if the Email Shared Link contacts include at least one external user', () => {
+        test('should return true if the "Email Shared Link" contacts include at least one external user', () => {
             const contacts = [
                 {
                     email: 'x@example.com',
@@ -810,7 +810,7 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
             expect(wrapper.instance().hasExternalContact('emailSharedLinkContacts')).toBe(true);
         });
 
-        test('should not set isExternalUserInEmailSharedLinkContacts to true if the Email Shared Link contacts does not include any external user', () => {
+        test('should not set isExternalUserInEmailSharedLinkContacts to true if the "Email Shared Link" contacts does not include any external user', () => {
             const contacts = [
                 {
                     email: 'x@example.com',
