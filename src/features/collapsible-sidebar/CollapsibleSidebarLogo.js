@@ -3,6 +3,8 @@ import * as React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
+import { injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import Logo from '../../icon/logo/BoxLogo';
 import PlainButton from '../../components/plain-button/PlainButton';
 import LinkBase from '../../components/link/LinkBase';
@@ -10,6 +12,8 @@ import IconHamburger from '../../icons/general/IconHamburger';
 
 import CollapsibleSidebarItem from './CollapsibleSidebarItem';
 import './CollapsibleSidebarLogo.scss';
+
+import messages from './messages';
 
 const StyledLogo = styled(Logo)`
     & path,
@@ -37,15 +41,19 @@ type Props = {
     onToggle: () => void,
 
     resinTarget: string,
-};
+} & InjectIntlProvidedProps;
 
 function CollapsibleSidebarLogo(props: Props) {
-    const { badge, className, expanded, onToggle, resinTarget } = props;
+    const { badge, className, expanded, onToggle, resinTarget, intl } = props;
 
     const classes = classNames('bdl-CollapsibleSidebar-logo', className);
 
     const toggleButton = (
-        <PlainButton className="bdl-CollapsibleSidebar-toggleButton" onClick={onToggle}>
+        <PlainButton
+            className="bdl-CollapsibleSidebar-toggleButton"
+            onClick={onToggle}
+            aria-label={intl.formatMessage(expanded ? messages.collapseButtonLabel : messages.expandButtonLabel)}
+        >
             <StyledIconHamburger height={20} width={20} />
         </PlainButton>
     );
@@ -71,4 +79,4 @@ function CollapsibleSidebarLogo(props: Props) {
     );
 }
 
-export default CollapsibleSidebarLogo;
+export default injectIntl(CollapsibleSidebarLogo);

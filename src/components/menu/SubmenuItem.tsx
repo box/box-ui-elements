@@ -30,6 +30,8 @@ export interface SubmenuItemProps {
     onMouseEnter?: (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
     /** onClick - function called when the mouse leaves the submenu item */
     onMouseLeave?: (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
+    /** onOpen - function called when the submenu opens */
+    onOpen?: () => void;
     /** ref - reference to the menu element in the DOM */
     ref?: string | ((instance: HTMLLIElement | null) => void) | React.RefObject<HTMLLIElement> | null | undefined;
     /** rightBoundaryElement - an HTMLElement defining the right boundary for the submenu item */
@@ -134,6 +136,11 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
     };
 
     openSubmenu = () => {
+        const { onOpen } = this.props;
+        if (onOpen) {
+            onOpen();
+        }
+
         this.setState({
             isSubmenuOpen: true,
             submenuFocusIndex: null,
@@ -141,6 +148,11 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
     };
 
     openSubmenuAndFocus = () => {
+        const { onOpen } = this.props;
+        if (onOpen) {
+            onOpen();
+        }
+
         this.setState({
             isSubmenuOpen: true,
             submenuFocusIndex: 0,

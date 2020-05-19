@@ -33,6 +33,9 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
   <ActivityFeed
     file={
       Object {
+        "file_version": Object {
+          "id": "123",
+        },
         "id": "I_AM_A_FILE",
       }
     }
@@ -40,6 +43,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     getAvatarUrl={[Function]}
     getMentionWithQuery={[Function]}
     isDisabled={false}
+    onAnnotationDelete={[Function]}
     onAnnotationSelect={[Function]}
     onAppActivityDelete={[Function]}
     onCommentCreate={[Function]}
@@ -50,6 +54,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     onTaskDelete={[Function]}
     onTaskModalClose={[Function]}
     onTaskUpdate={[Function]}
+    onVersionHistoryClick={[Function]}
   />
 </SidebarContent>
 `;

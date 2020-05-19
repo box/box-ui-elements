@@ -23,8 +23,11 @@ function createDownloadIframe(): HTMLIFrameElement {
         }
     }
 
-    // Clean the iframe up
-    iframe.contentDocument.write('<head></head><body></body>');
+    // If the iframe previously failed to load contentDocument will be null
+    if (iframe.contentDocument) {
+        // Clean the iframe up
+        iframe.contentDocument.write('<head></head><body></body>');
+    }
     return iframe;
 }
 

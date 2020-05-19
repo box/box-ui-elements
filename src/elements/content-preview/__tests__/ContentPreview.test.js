@@ -316,6 +316,38 @@ describe('elements/content-preview/ContentPreview', () => {
             );
         });
 
+        test('should call preview show with startAt params if provided', async () => {
+            const wrapper = getWrapper(props);
+            wrapper.setState({
+                file,
+                startAt: {
+                    unit: 'pages',
+                    value: 3,
+                },
+            });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({
+                    container: expect.stringContaining('.bcpr-content'),
+                    header: 'none',
+                    showDownload: false,
+                    skipServerUpdate: true,
+                    useHotkeys: false,
+                    fileOptions: {
+                        [file.id]: {
+                            startAt: {
+                                unit: 'pages',
+                                value: 3,
+                            },
+                        },
+                    },
+                }),
+            );
+        });
+
         test('should use boxAnnotations instance if provided', async () => {
             const boxAnnotations = jest.fn();
             const wrapper = getWrapper({ ...props, boxAnnotations });
@@ -1090,5 +1122,37 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.api.destroy).toHaveBeenCalledWith(false);
             expect(instance.destroyPreview).toHaveBeenCalled();
         });
+    });
+
+    describe('handleAnnotationSelect', () => {
+        test.each`
+            annotationFileVersionId | selectedVersionId | locationType | setStateCount
+            ${'123'}                | ${'124'}          | ${'page'}    | ${1}
+            ${'124'}                | ${'124'}          | ${'page'}    | ${0}
+            ${'123'}                | ${'124'}          | ${''}        | ${0}
+        `(
+            'should call onVersionChange $onVersionChangeCount times and setState $setStateCount times',
+            ({ annotationFileVersionId, selectedVersionId, locationType, setStateCount }) => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                const annotation = {
+                    file_version: {
+                        id: annotationFileVersionId,
+                    },
+                    target: {
+                        location: {
+                            type: locationType,
+                        },
+                    },
+                };
+
+                wrapper.setState({ selectedVersion: { id: selectedVersionId } });
+                instance.setState = jest.fn();
+
+                instance.handleAnnotationSelect(annotation);
+
+                expect(instance.setState).toHaveBeenCalledTimes(setStateCount);
+            },
+        );
     });
 });
