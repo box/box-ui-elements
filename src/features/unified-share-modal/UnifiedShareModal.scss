@@ -279,10 +279,10 @@
     height: $bdl-grid-unit * 125;
     margin: 0 auto;
     padding: 2em;
+}
 
-    hr {
-        margin: ($bdl-grid-unit * 5) 0;
-        border: none;
-        border-top: 1px solid $bdl-gray-20;
-    }
+.bdl-SharedLinkSection-separator {
+    margin: ($bdl-grid-unit * 5) 0;
+    border: none;
+    border-top: 1px solid $bdl-gray-20;
 }
