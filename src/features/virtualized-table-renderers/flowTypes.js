@@ -13,6 +13,7 @@ type RowRendererParams = {
     columns: Array<any>,
     index: number,
     isScrolling: boolean,
+    key: string,
     onRowClick: ?MouseEvent,
     onRowDoubleClick: ?MouseEvent,
     onRowMouseOut: ?MouseEvent,

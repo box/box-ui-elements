@@ -10,17 +10,17 @@ import './VirtualizedTable.scss';
 
 type SortHandler = SortParams => void;
 
-type Props = {
+export type VirtualizedTableProps = {
     children: Node | (any => Node),
     className?: string,
     height?: number,
-    intl: any,
+    intl?: any,
     rowData: Array<Object>,
     rowGetter?: ({ index: number }) => any,
     sort?: SortHandler,
 };
 
-const VirtualizedTable = ({ children, height, intl, ...rest }: Props) => (
+const VirtualizedTable = ({ children, height, intl, ...rest }: VirtualizedTableProps) => (
     <AutoSizer defaultHeight={height} disableHeight>
         {({ width }) =>
             height ? (
