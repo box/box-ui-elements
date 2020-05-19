@@ -8,27 +8,27 @@ const messages = defineMessages({
     },
     canEdit: {
         defaultMessage: 'Can edit',
-        description: 'Label for a Shared Link permission level',
+        description: 'Label for a shared link permission level',
         id: 'boxui.share.canEdit',
     },
     canView: {
         defaultMessage: 'Can view',
-        description: 'Label for a Shared Link permission level',
+        description: 'Label for a shared link permission level',
         id: 'boxui.share.canView',
     },
     enterAtLeastOneEmailError: {
         defaultMessage: 'Enter at least one valid email',
-        description: 'Error message when user tries to send Shared Link as email without entering any recipients',
+        description: 'Error message when user tries to send shared link as email without entering any recipients',
         id: 'boxui.share.enterAtLeastOneEmail',
     },
     emailSharedLink: {
         defaultMessage: 'Email Shared Link',
-        description: 'Label for text input to enter email addresses to send Shared Link to',
+        description: 'Field label for shared link recipient list (title-case)',
         id: 'boxui.share.emailSharedLink',
     },
     removeLink: {
         defaultMessage: 'Remove Link',
-        description: 'Label for option to remove Shared Link',
+        description: 'Label for option to remove shared link',
         id: 'boxui.share.removeLink',
     },
     settingsButtonLabel: {
@@ -38,17 +38,17 @@ const messages = defineMessages({
     },
     sharedLinkLabel: {
         defaultMessage: 'Shared Link',
-        description: 'Label for field to copy Shared Link URL',
+        description: 'Label for field to copy shared link URL (title-case)',
         id: 'boxui.share.sharedLinkLabel',
     },
     sharedLinkModalTitle: {
         defaultMessage: 'Shared Link for {itemName}',
-        description: 'Title for Shared Link Modal',
+        description: 'Title for shared link modal (title-case)',
         id: 'boxui.share.sharedLinkModalTitle',
     },
     messageTitle: {
         defaultMessage: 'Message',
-        description: 'Label for "Message" text box to email the Shared Link',
+        description: 'Label for "Message" text box to email the shared link (title-case)',
         id: 'boxui.share.message',
     },
     peopleWithTheLink: {
@@ -79,13 +79,13 @@ const messages = defineMessages({
     },
     removeLinkConfirmationTitle: {
         defaultMessage: 'Remove Shared Link',
-        description: 'Label for confirmation modal to remove a Shared Link',
+        description: 'Label for confirmation modal to remove a shared link (title-case)',
         id: 'boxui.share.removeLinkConfirmationTitle',
     },
     removeLinkConfirmationDescription: {
         defaultMessage:
             'This will permanently remove the shared link. If this item is embedded on other sites it will also become inaccessible. Any custom properties, settings and expirations will be removed as well. Do you want to continue?',
-        description: 'Description for confirmation modal to remove a Shared Link',
+        description: 'Description for confirmation modal to remove a shared link',
         id: 'boxui.share.removeLinkConfirmationDescription',
     },
     sharedLinkExpirationTooltip: {

@@ -13,7 +13,7 @@ import messages from './messages';
 import UserLink from '../common/user-link';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { PLACEHOLDER_USER } from '../../../../constants';
-import type { ActionItemError, Annotation, BoxAnnotationPermission } from '../../../../common/types/feed';
+import type { ActionItemError, Annotation, AnnotationPermission } from '../../../../common/types/feed';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { User } from '../../../../common/types/core';
 
@@ -28,7 +28,7 @@ type Props = {
     isDisabled?: boolean,
     isPending?: boolean,
     item: Annotation,
-    onDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => any,
+    onDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
     onSelect?: (annotation: Annotation) => any,
 };
 

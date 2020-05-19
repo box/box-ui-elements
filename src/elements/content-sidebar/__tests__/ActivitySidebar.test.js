@@ -11,6 +11,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     const feedAPI = {
         addAnnotation: jest.fn(),
         feedItems: jest.fn(),
+        deleteAnnotation: jest.fn(),
         deleteComment: jest.fn(),
         deleteTaskNew: jest.fn(),
         createTaskNew: jest.fn(),
@@ -895,5 +896,33 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect(onVersionChange).toHaveBeenCalledTimes(expectedCallCount);
             },
         );
+    });
+
+    describe('handleAnnotationDelete()', () => {
+        test('should call deleteAnnotation API', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+
+            wrapper.instance().handleAnnotationDelete({ id: '123' });
+
+            expect(api.getFeedAPI().deleteAnnotation).toBeCalled();
+            expect(instance.fetchFeedItems).toHaveBeenCalled();
+        });
+    });
+
+    describe('deleteAnnotationSuccess()', () => {
+        test('should handle successful annotation deletion', () => {
+            const mockEmitRemoveEvent = jest.fn();
+            const mockFeedSuccess = jest.fn();
+            const wrapper = getWrapper({ emitRemoveEvent: mockEmitRemoveEvent });
+            const instance = wrapper.instance();
+
+            instance.feedSuccessCallback = mockFeedSuccess;
+            instance.deleteAnnotationSuccess('123');
+
+            expect(mockEmitRemoveEvent).toBeCalledWith('123');
+            expect(mockFeedSuccess).toBeCalled();
+        });
     });
 });

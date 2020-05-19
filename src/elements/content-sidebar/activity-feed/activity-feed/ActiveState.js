@@ -13,7 +13,7 @@ import Version, { CollapsedVersion } from '../version';
 import withErrorHandling from '../../withErrorHandling';
 import type {
     Annotation,
-    BoxAnnotationPermission,
+    AnnotationPermission,
     FeedItem,
     FeedItems,
     FocusableFeedItemType,
@@ -35,7 +35,7 @@ type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems<>,
-    onAnnotationDelete?: ({ id: string, permissions?: BoxAnnotationPermission }) => void,
+    onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
     onAnnotationSelect?: (annotation: Annotation) => void,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
