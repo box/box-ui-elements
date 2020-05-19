@@ -345,21 +345,44 @@ describe('components/select-field/BaseSelectField', () => {
             wrapper.simulate('blur');
         });
 
-        test('should call closeDropdown() when dropdown is open and event.relatedTarget.className is not search-input', () => {
+        test('should call closeDropdown() when dropdown is open and event.relatedTarget.classList does not contain select-button and does not contain search-input', () => {
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();
-            const mockedEvent = {
-                relatedTarget: {
-                    classList: { contains: jest.fn() },
-                },
-            };
-
+            const spy = jest.spyOn(instance, 'closeDropdown');
             wrapper.setState({ isOpen: true });
 
-            sandbox.mock(instance).expects('closeDropdown');
+            const targetWithClassName = {
+                relatedTarget: document.createElement('button'),
+            };
 
-            wrapper.simulate('blur', mockedEvent);
+            targetWithClassName.relatedTarget.className = 'not-select-button';
+            instance.handleBlur(targetWithClassName);
+
+            expect(spy).toHaveBeenCalled();
         });
+
+        test.each`
+            className
+            ${'search-input'}
+            ${'select-button'}
+        `(
+            'should not call closeDropdown when dropdown is open and event.relatedTarget.classList contains $className',
+            ({ className }) => {
+                const wrapper = shallowRenderSelectField();
+                const instance = wrapper.instance();
+                const spy = jest.spyOn(instance, 'closeDropdown');
+                wrapper.setState({ isOpen: true });
+
+                const targetWithClassName = {
+                    relatedTarget: document.createElement('button'),
+                };
+
+                targetWithClassName.relatedTarget.className = className;
+                instance.handleBlur(targetWithClassName);
+
+                expect(spy).not.toHaveBeenCalled();
+            },
+        );
     });
 
     describe('onArrowDown', () => {
@@ -526,6 +549,28 @@ describe('components/select-field/BaseSelectField', () => {
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
             });
+        });
+
+        const mockedSpaceEvent = { key: ' ', target: {} };
+        const mockedEnterEvent = { key: 'Enter', target: {} };
+        test.each`
+            event               | should
+            ${mockedSpaceEvent} | ${'should not call handleClearClick / selectOption / closeDropdown if shouldShowSearchInput is true and the key is space'}
+            ${mockedEnterEvent} | ${'should not call handleClearClick / selectOption / closeDropdown if shouldShowSearchInput is true and the key is enter and no item is active'}
+        `('$should', ({ event }) => {
+            const wrapper = shallowRenderSelectField({
+                shouldShowSearchInput: true,
+            });
+
+            const instance = wrapper.instance();
+            const handleClearClickSpy = jest.spyOn(instance, 'handleClearClick');
+            const selectOptionSpy = jest.spyOn(instance, 'selectOption');
+            const closeDropdownSpy = jest.spyOn(instance, 'closeDropdown');
+
+            instance.handleKeyDown(event);
+            expect(handleClearClickSpy).not.toHaveBeenCalled();
+            expect(selectOptionSpy).not.toHaveBeenCalled();
+            expect(closeDropdownSpy).not.toHaveBeenCalled();
         });
     });
 

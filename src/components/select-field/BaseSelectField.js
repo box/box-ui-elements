@@ -224,7 +224,8 @@ class BaseSelectField extends React.Component<Props, State> {
             isOpen &&
             event &&
             event.relatedTarget &&
-            !(event.relatedTarget: window.HTMLInputElement).classList.contains('search-input')
+            !(event.relatedTarget: window.HTMLInputElement).classList.contains('search-input') &&
+            !(event.relatedTarget: window.HTMLInputElement).classList.contains('select-button')
         ) {
             this.closeDropdown();
         }
@@ -256,9 +257,16 @@ class BaseSelectField extends React.Component<Props, State> {
                 break;
             case 'Enter':
             case ' ':
-                // When the search input is active, we want to allow space key presses in the search string
-                if (key === ' ' && shouldShowSearchInput) {
-                    break;
+                if (shouldShowSearchInput) {
+                    // Allow space key presses in the search string when search field is active
+                    if (key === ' ') {
+                        break;
+                    }
+
+                    // Enter presses should be ignored when no item is active
+                    if (key === 'Enter' && activeItemIndex === -1) {
+                        break;
+                    }
                 }
 
                 if (activeItemIndex !== -1 && isOpen) {
