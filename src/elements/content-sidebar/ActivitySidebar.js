@@ -37,7 +37,7 @@ import type {
     TaskUpdatePayload,
     TaskCollabStatus,
 } from '../../common/types/tasks';
-import type { Annotation, BoxAnnotationPermission, FocusableFeedItemType, FeedItems } from '../../common/types/feed';
+import type { Annotation, AnnotationPermission, FocusableFeedItemType, FeedItems } from '../../common/types/feed';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { SelectorItems, User, UserMini, GroupMini, BoxItem, BoxItemPermission } from '../../common/types/core';
@@ -227,12 +227,13 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         }
     };
 
-    handleAnnotationDelete = ({ id }: { id: string, permissions?: BoxAnnotationPermission }) => {
+    handleAnnotationDelete = ({ id, permissions }: { id: string, permissions: AnnotationPermission }) => {
         const { api, file } = this.props;
 
         api.getFeedAPI(false).deleteAnnotation(
             file,
             id,
+            permissions,
             this.deleteAnnotationSuccess.bind(this, id),
             this.feedErrorCallback,
         );

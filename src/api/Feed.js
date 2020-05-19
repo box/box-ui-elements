@@ -57,6 +57,7 @@ import type {
 } from '../common/types/core';
 import type {
     Annotation,
+    AnnotationPermission,
     Annotations,
     AppActivityItems,
     Comment,
@@ -164,6 +165,7 @@ class Feed extends Base {
     deleteAnnotation = (
         file: BoxItem,
         annotationId: string,
+        permissions: AnnotationPermission,
         successCallBack: Function,
         errorCallback: Function,
     ): void => {
@@ -180,6 +182,7 @@ class Feed extends Base {
         this.annotationsAPI.deleteAnnotation(
             this.file.id,
             annotationId,
+            permissions,
             this.deleteFeedItem.bind(this, annotationId, successCallBack),
             (error: ElementsXhrError, code: string) => {
                 // Reusing comment error handler since annotations are treated as comments to user
