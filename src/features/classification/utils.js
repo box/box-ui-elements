@@ -11,5 +11,12 @@ function getClassificationLabelColor(classificationLabelData?: ?{ colorID?: numb
     return color;
 }
 
+function getClassificationTinyconColor(classificationLabelData?: ?{ colorID?: number }) {
+    const colorID = getProp(classificationLabelData, 'colorID', DEFAULT_CLASSIFICATION_COLOR_ID);
+    const { tinycon } = classificationColorsMap[colorID] || classificationColorsMap[DEFAULT_CLASSIFICATION_COLOR_ID];
+
+    return tinycon;
+}
+
 // eslint-disable-next-line import/prefer-default-export
-export { getClassificationLabelColor };
+export { getClassificationLabelColor, getClassificationTinyconColor };

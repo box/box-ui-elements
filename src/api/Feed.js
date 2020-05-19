@@ -57,6 +57,7 @@ import type {
 } from '../common/types/core';
 import type {
     Annotation,
+    AnnotationPermission,
     Annotations,
     AppActivityItems,
     Comment,
@@ -161,6 +162,35 @@ class Feed extends Base {
         this.updateFeedItem({ ...annotation, isPending: false }, id);
     }
 
+    deleteAnnotation = (
+        file: BoxItem,
+        annotationId: string,
+        permissions: AnnotationPermission,
+        successCallBack: Function,
+        errorCallback: Function,
+    ): void => {
+        this.annotationsAPI = new AnnotationsAPI(this.options);
+
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+
+        this.updateFeedItem({ isPending: true }, annotationId);
+        this.annotationsAPI.deleteAnnotation(
+            this.file.id,
+            annotationId,
+            permissions,
+            this.deleteFeedItem.bind(this, annotationId, successCallBack),
+            (error: ElementsXhrError, code: string) => {
+                // Reusing comment error handler since annotations are treated as comments to user
+                this.deleteCommentErrorCallback(error, code, annotationId);
+            },
+        );
+    };
+
     /**
      * Creates a key for the cache
      *
@@ -237,7 +267,7 @@ class Feed extends Base {
         this.file = file;
         this.hasError = false;
         this.errorCallback = onError;
-        const annotationsPromise = shouldShowAnnotations ? this.fetchAnnotations() : Promise.resolve();
+        const annotationsPromise = shouldShowAnnotations ? this.fetchAnnotations(permissions) : Promise.resolve();
         const versionsPromise = this.fetchVersions();
         const currentVersionPromise = this.fetchCurrentVersion();
         const commentsPromise = this.fetchComments(permissions);
@@ -265,12 +295,13 @@ class Feed extends Base {
         });
     }
 
-    fetchAnnotations(): Promise<?Annotations> {
+    fetchAnnotations(permissions: BoxItemPermission): Promise<?Annotations> {
         this.annotationsAPI = new AnnotationsAPI(this.options);
         return new Promise(resolve => {
             this.annotationsAPI.getAnnotations(
                 this.file.id,
                 undefined,
+                permissions,
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
             );

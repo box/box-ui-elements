@@ -4,6 +4,7 @@ import { injectIntl } from 'react-intl';
 
 import type { SelectOptionProp } from './props';
 import BaseSelectField from './BaseSelectField';
+import CLEAR from './constants';
 import messages from './messages';
 
 type Props = {
@@ -15,13 +16,15 @@ type Props = {
     options: Array<SelectOptionProp>,
     /** Boolean to determine whether or not to show the clear option */
     shouldShowClearOption?: boolean,
+    /** Will show Search Field  */
+    shouldShowSearchInput?: boolean,
 };
 
 const optionsWithClearOption = (options: Array<Object>, shouldShowClearOption?: boolean, intl: Object) => {
     return shouldShowClearOption
         ? [
               {
-                  value: 'clear',
+                  value: CLEAR,
                   displayText: intl.formatMessage(messages.clearAll),
               },
               ...options,

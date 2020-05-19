@@ -2,6 +2,8 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
+import findIndex from 'lodash/findIndex';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { scrollIntoView } from '../../utils/dom';
 import IconCheck from '../../icons/general/IconCheck';
@@ -11,6 +13,10 @@ import PopperComponent from '../popper';
 import SelectFieldDropdown from './SelectFieldDropdown';
 import type { SelectOptionValueProp, SelectOptionProp } from './props';
 import { PLACEMENT_BOTTOM_END, PLACEMENT_BOTTOM_START } from '../popper/constants';
+import SearchForm from '../search-form/SearchForm';
+import CLEAR from './constants';
+
+import messages from './messages';
 
 import './SelectField.scss';
 
@@ -38,6 +44,8 @@ type Props = {
     defaultValue?: SelectOptionValueProp,
     /** An optional error to show within a tooltip. */
     error?: React.Node,
+    /* Intl object */
+    intl: Object,
     /** The select button is disabled if true */
     isDisabled?: boolean,
     /** Whether to allow the dropdown to overflow its boundaries and remain attached to its reference */
@@ -63,6 +71,8 @@ type Props = {
     separatorIndices: Array<number>,
     /** Boolean to determine whether or not to show the clear option */
     shouldShowClearOption?: boolean,
+    /** Boolean to determine whether or not to show the search field */
+    shouldShowSearchInput?: boolean,
     /** The select button text (by default, component will use comma separated list of all selected option displayText) */
     title?: string | React.Element<any>,
 };
@@ -71,6 +81,7 @@ type State = {
     activeItemID: ?string,
     activeItemIndex: number,
     isOpen: boolean,
+    searchText: string,
     shouldScrollIntoView: boolean,
 };
 
@@ -94,6 +105,7 @@ class BaseSelectField extends React.Component<Props, State> {
         selectedValues: [],
         separatorIndices: [],
         shouldShowClearOption: false,
+        shouldShowSearchInput: false,
     };
 
     constructor(props: Props) {
@@ -107,6 +119,7 @@ class BaseSelectField extends React.Component<Props, State> {
             activeItemID: null,
             activeItemIndex: -1,
             isOpen: false,
+            searchText: '',
             shouldScrollIntoView: false,
         };
     }
@@ -117,6 +130,21 @@ class BaseSelectField extends React.Component<Props, State> {
             document.removeEventListener('click', this.handleDocumentClick);
         }
     }
+
+    updateSearchText = (text: string) => {
+        const { options } = this.props;
+        const optionIndex = findIndex(options, element =>
+            element.displayText.toLowerCase().includes(text.toLowerCase()),
+        );
+
+        if (optionIndex >= 0) {
+            this.setActiveItem(optionIndex);
+        }
+
+        this.setState({
+            searchText: text,
+        });
+    };
 
     handleDocumentClick = (event: MouseEvent) => {
         const container = this.selectFieldContainerRef.current;
@@ -150,6 +178,8 @@ class BaseSelectField extends React.Component<Props, State> {
     selectFieldID: string;
 
     selectFieldContainerRef: { current: null | HTMLDivElement };
+
+    searchInputRef: HTMLInputElement;
 
     handleChange = (selectedItems: Array<SelectOptionProp>) => {
         const { onChange } = this.props;
@@ -188,16 +218,21 @@ class BaseSelectField extends React.Component<Props, State> {
         }
     };
 
-    handleBlur = () => {
+    handleBlur = (event?: SyntheticFocusEvent<>) => {
         const { isOpen } = this.state;
-        if (isOpen) {
+        if (
+            isOpen &&
+            event &&
+            event.relatedTarget &&
+            !(event.relatedTarget: window.HTMLInputElement).classList.contains('search-input')
+        ) {
             this.closeDropdown();
         }
     };
 
     handleKeyDown = (event: SyntheticKeyboardEvent<HTMLDivElement>) => {
         const { key } = event;
-        const { options, shouldShowClearOption } = this.props;
+        const { options, shouldShowClearOption, shouldShowSearchInput } = this.props;
         const { activeItemIndex, isOpen } = this.state;
         const itemCount = options.length;
         switch (key) {
@@ -221,6 +256,11 @@ class BaseSelectField extends React.Component<Props, State> {
                 break;
             case 'Enter':
             case ' ':
+                // When the search input is active, we want to allow space key presses in the search string
+                if (key === ' ' && shouldShowSearchInput) {
+                    break;
+                }
+
                 if (activeItemIndex !== -1 && isOpen) {
                     stopDefaultEvent(event);
                     const isClearOption = shouldShowClearOption && activeItemIndex === 0;
@@ -247,22 +287,29 @@ class BaseSelectField extends React.Component<Props, State> {
                 }
                 break;
             default: {
-                stopDefaultEvent(event);
-                const lowerCaseKey = key.toLowerCase();
-                const optionIndex = options.findIndex(
-                    option => option.displayText.toLowerCase().indexOf(lowerCaseKey) === 0,
-                );
+                if (!shouldShowSearchInput) {
+                    stopDefaultEvent(event);
+                    const lowerCaseKey = key.toLowerCase();
+                    const optionIndex = findIndex(
+                        options,
+                        option => option.displayText.toLowerCase().indexOf(lowerCaseKey) === 0,
+                    );
 
-                if (optionIndex >= 0) {
-                    this.setActiveItem(optionIndex);
+                    if (optionIndex >= 0) {
+                        this.setActiveItem(optionIndex);
+                    }
                 }
             }
         }
     };
 
     openDropdown = () => {
+        const { shouldShowSearchInput } = this.props;
         if (!this.state.isOpen) {
-            this.setState({ isOpen: true });
+            this.setState(
+                { isOpen: true },
+                () => shouldShowSearchInput && this.searchInputRef && this.searchInputRef.focus(),
+            );
             document.addEventListener('click', this.handleDocumentClick);
         }
     };
@@ -273,6 +320,7 @@ class BaseSelectField extends React.Component<Props, State> {
                 activeItemID: null,
                 activeItemIndex: -1,
                 isOpen: false,
+                searchText: '',
             });
             document.removeEventListener('click', this.handleDocumentClick);
         }
@@ -289,9 +337,21 @@ class BaseSelectField extends React.Component<Props, State> {
         }
     };
 
+    getFilteredOptions = (): Array<SelectOptionProp> => {
+        const { options } = this.props;
+        const { searchText } = this.state;
+
+        return options.filter(option => {
+            const isSubstring = option.displayText.toLowerCase().includes(searchText.toLowerCase());
+            const isClearOption = option.value === CLEAR;
+
+            return searchText ? isSubstring && !isClearOption : true;
+        });
+    };
+
     selectSingleOption(index: number) {
-        const { options, selectedValues } = this.props;
-        const item = options[index];
+        const { selectedValues } = this.props;
+        const item = this.getFilteredOptions()[index];
         // If item not previously selected, fire change handler
         if (!selectedValues.includes(item.value)) {
             this.handleChange([item]);
@@ -302,7 +362,7 @@ class BaseSelectField extends React.Component<Props, State> {
     selectMultiOption = (index: number) => {
         const { defaultValue, options, selectedValues } = this.props;
         const hasDefaultValue = defaultValue != null; // Checks if not undefined or null
-        const item = options[index];
+        const item = this.getFilteredOptions()[index];
 
         // If we are already using the default option, just return without firing onChange
         if (hasDefaultValue && defaultValue === item.value) {
@@ -316,7 +376,7 @@ class BaseSelectField extends React.Component<Props, State> {
 
         // Apply constraints if a defaultValue is specified
         if (hasDefaultValue) {
-            const defaultOptionIndex = options.findIndex(option => option.value === defaultValue);
+            const defaultOptionIndex = findIndex(options, option => option.value === defaultValue);
 
             if (defaultOptionIndex !== -1) {
                 if (newSelectedValues.length === 0) {
@@ -356,6 +416,24 @@ class BaseSelectField extends React.Component<Props, State> {
         return selectedOptions.map(option => option.displayText).join(', ');
     };
 
+    renderSearchInput = () => {
+        const { intl } = this.props;
+        const { searchText } = this.state;
+        const getSearchInput = element => {
+            this.searchInputRef = element;
+        };
+
+        return (
+            <SearchForm
+                className="select-field-search-container"
+                getSearchInput={getSearchInput}
+                onChange={this.updateSearchText}
+                placeholder={intl.formatMessage(messages.searchPlaceholder)}
+                value={searchText}
+            />
+        );
+    };
+
     renderSelectButton = () => {
         const { activeItemID, isOpen } = this.state;
         const { buttonProps: buttonElProps, isDisabled, className, error } = this.props;
@@ -385,15 +463,25 @@ class BaseSelectField extends React.Component<Props, State> {
     };
 
     renderSelectOptions = () => {
-        const { optionRenderer, options, selectedValues, separatorIndices, shouldShowClearOption } = this.props;
+        const { optionRenderer, selectedValues, separatorIndices, shouldShowClearOption } = this.props;
         const { activeItemIndex } = this.state;
 
-        const selectOptions = options.map<React.Element<typeof DatalistItem | 'li'>>((item, index) => {
+        const filteredOptions = this.getFilteredOptions();
+
+        if (filteredOptions.length === 0) {
+            return (
+                <DatalistItem className="select-option is-disabled">
+                    <FormattedMessage {...messages.noResults} />
+                </DatalistItem>
+            );
+        }
+
+        const selectOptions = filteredOptions.map<React.Element<typeof DatalistItem | 'li'>>((item, index) => {
             const { value } = item;
 
             const isSelected = selectedValues.includes(value);
 
-            const isClearOption = shouldShowClearOption && index === 0;
+            const isClearOption = shouldShowClearOption && value === CLEAR;
 
             const itemProps: Object = {
                 className: classNames('select-option', { 'is-clear-option': isClearOption }),
@@ -445,6 +533,7 @@ class BaseSelectField extends React.Component<Props, State> {
             isRightAligned,
             isScrollable,
             selectedValues,
+            shouldShowSearchInput,
         } = this.props;
         const { isOpen } = this.state;
 
@@ -475,6 +564,7 @@ class BaseSelectField extends React.Component<Props, State> {
                         selectedValues={selectedValues}
                         selectFieldID={this.selectFieldID}
                     >
+                        {shouldShowSearchInput && this.renderSearchInput()}
                         {this.renderSelectOptions()}
                     </SelectFieldDropdown>
                 </PopperComponent>
@@ -483,4 +573,5 @@ class BaseSelectField extends React.Component<Props, State> {
     }
 }
 
-export default BaseSelectField;
+export { BaseSelectField as BaseSelectFieldBase };
+export default injectIntl(BaseSelectField);

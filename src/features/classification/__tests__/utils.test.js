@@ -2,7 +2,7 @@
 import classificationColorsMap from '../classificationColorsMap';
 import { DEFAULT_CLASSIFICATION_COLOR_ID } from '../constants';
 
-import { getClassificationLabelColor } from '../utils';
+import { getClassificationLabelColor, getClassificationTinyconColor } from '../utils';
 
 describe('features/classification/utils', () => {
     describe('getClassificationLabelColor()', () => {
@@ -34,6 +34,38 @@ describe('features/classification/utils', () => {
             const expectedColor = color;
 
             expect(getClassificationLabelColor({})).toEqual(expectedColor);
+        });
+    });
+
+    describe('getClassificationTinyconColor()', () => {
+        test('should return the tinycon color that match the given color id', () => {
+            const colorID = 6;
+            const { tinycon } = classificationColorsMap[colorID];
+            const expectedColor = tinycon;
+
+            expect(getClassificationTinyconColor({ colorID })).toEqual(expectedColor);
+        });
+
+        test('should return default tinycon color when color id can not be matched', () => {
+            const colorID = classificationColorsMap.length;
+            const { tinycon } = classificationColorsMap[DEFAULT_CLASSIFICATION_COLOR_ID];
+            const expectedColor = tinycon;
+
+            expect(getClassificationTinyconColor({ colorID })).toEqual(expectedColor);
+        });
+
+        test('should return default tinycon color for empty params', () => {
+            const { tinycon } = classificationColorsMap[DEFAULT_CLASSIFICATION_COLOR_ID];
+            const expectedColor = tinycon;
+
+            expect(getClassificationTinyconColor()).toEqual(expectedColor);
+        });
+
+        test('should return default tinycon color when colorID property is missing', () => {
+            const { tinycon } = classificationColorsMap[DEFAULT_CLASSIFICATION_COLOR_ID];
+            const expectedColor = tinycon;
+
+            expect(getClassificationTinyconColor({})).toEqual(expectedColor);
         });
     });
 });

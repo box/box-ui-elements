@@ -17,7 +17,7 @@ type Props = {
     accessMenuButtonProps?: Object,
     /** The selectable access levels. Should be an object { peopleWithTheLink: true/false, peopleInYourCompany: true/false, peopleInThisItem: true/false } */
     allowedAccessLevels?: allowedAccessLevelsPropType,
-    /** Determines whether or not user is allowed to remove Shared Link */
+    /** Determines whether or not user is allowed to remove shared link */
     canRemoveLink?: boolean,
     /** Function that changes access level; (newAccessLevel: 'peopleWithTheLink' | 'peopleInYourCompany' | 'peopleInThisItem') => void */
     changeAccessLevel: Function,
@@ -52,10 +52,10 @@ type Props = {
     onSettingsClick?: Function,
     /** Current permission level for this item; one of 'canView' | 'canEdit'. If not provided, then the permission menu won't show up. */
     permissionLevel?: permissionLevelPropType,
-    /** Function that removes the Shared Link; () => void */
+    /** Function that removes the shared link; () => void */
     removeLink: Function,
     removeLinkButtonProps?: Object,
-    /** Function to send the Shared Link to the entered emails. Calls function with an object in the format { emails: Array<string>, emailMessage: string }.
+    /** Function to send the shared link to the entered emails. Calls function with an object in the format { emails: Array<string>, emailMessage: string }.
      *  If not provided, "Email Shared Link" section will not appear. */
     sendEmail?: Function,
     /** Share URL of the item */
