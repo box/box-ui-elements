@@ -20,8 +20,6 @@ import mergeContacts from './utils/mergeContacts';
 import type { contactType as Contact, USFProps } from './flowTypes';
 import type { SelectOptionProp } from '../../components/select-field/props';
 
-import './UnifiedShareModal.scss';
-
 const SHARED_LINKS_COMMUNITY_URL = 'https://community.box.com/t5/Using-Shared-Links/Creating-Shared-Links/ta-p/19523';
 const INVITE_COLLABS_CONTACTS_TYPE = 'inviteCollabsContacts';
 const EMAIL_SHARED_LINK_CONTACTS_TYPE = 'emailSharedLinkContacts';
