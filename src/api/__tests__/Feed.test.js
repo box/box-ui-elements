@@ -246,7 +246,7 @@ jest.mock('../Versions', () => {
 
 jest.mock('../Annotations', () =>
     jest.fn().mockImplementation(() => ({
-        deleteAnnotation: jest.fn().mockImplementation((file, id, successCallback) => {
+        deleteAnnotation: jest.fn().mockImplementation((file, id, permissions, successCallback) => {
             successCallback();
         }),
         getAnnotations: jest.fn(),
@@ -1479,7 +1479,7 @@ describe('api/Feed', () => {
         });
 
         test('should set error callback and file', () => {
-            feed.deleteAnnotation(file, annotationId, jest.fn(), errorCallback);
+            feed.deleteAnnotation(file, annotationId, { can_delete: true }, jest.fn(), errorCallback);
 
             expect(feed.errorCallback).toEqual(errorCallback);
             expect(feed.file).toEqual(file);
@@ -1494,7 +1494,7 @@ describe('api/Feed', () => {
 
         test('should call the deleteAnnotation API and call deleteFeedItem on success', () => {
             feed.deleteFeedItem = jest.fn().mockImplementation((id, cb) => cb());
-            feed.deleteAnnotation(file, '123', successCallback, errorCallback);
+            feed.deleteAnnotation(file, '123', { can_delete: true }, successCallback, errorCallback);
 
             expect(feed.annotationsAPI.deleteAnnotation).toBeCalled();
             expect(feed.deleteFeedItem).toBeCalled();
