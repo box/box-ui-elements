@@ -28,7 +28,7 @@ type Props = {
     isDisabled?: boolean,
     isPending?: boolean,
     item: Annotation,
-    onDelete?: ({ id: string, permissions?: AnnotationPermission }) => any,
+    onDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
     onSelect?: (annotation: Annotation) => any,
 };
 

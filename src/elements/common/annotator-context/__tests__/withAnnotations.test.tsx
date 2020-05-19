@@ -78,6 +78,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
         expect(contextProvider.exists()).toBeTruthy();
         expect(contextProvider.prop('value').emitActiveChangeEvent).toEqual(instance.emitActiveChangeEvent);
+        expect(contextProvider.prop('value').emitRemoveEvent).toEqual(instance.emitRemoveEvent);
         expect(contextProvider.prop('value').getAnnotationsMatchPath).toEqual(instance.getMatchPath);
         expect(contextProvider.prop('value').state).toEqual({
             action: null,
@@ -99,6 +100,18 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
             expect(mockAnnotator.emit).toBeCalled();
             expect(mockAnnotator.emit).toBeCalledWith('annotations_active_set', '123');
+        });
+    });
+
+    describe('emitRemoveEvent', () => {
+        test('should call annotator on delete with a delete event', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.handleAnnotator(mockAnnotator);
+            instance.emitRemoveEvent('123');
+
+            expect(mockAnnotator.emit).toBeCalledWith('annotations_remove', '123');
         });
     });
 

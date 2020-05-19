@@ -35,7 +35,7 @@ type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems<>,
-    onAnnotationDelete?: ({ id: string, permissions?: AnnotationPermission }) => void,
+    onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
     onAnnotationSelect?: (annotation: Annotation) => void,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
