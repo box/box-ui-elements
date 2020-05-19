@@ -36,7 +36,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning=""
       collaboratorsList={
         Object {
@@ -129,7 +128,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning=""
       collaboratorsList={
         Object {
@@ -222,7 +220,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning=""
       collaboratorsList={
         Object {
@@ -318,7 +315,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning=""
       collaboratorsList={
         Object {
@@ -411,7 +407,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning=""
       collaboratorsList={
         Object {
@@ -503,7 +498,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning=""
       collaboratorsList={
         Object {
@@ -596,7 +590,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning=""
       collaboratorsList={
         Object {
@@ -689,7 +682,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning=""
       collaboratorsList={
         Object {
@@ -782,7 +774,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning="Collaboration invitations can only be sent to people within company."
       collaboratorsList={
         Object {
@@ -875,7 +866,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning="Collaboration invitations can only be sent to people within company."
       collaboratorsList={
         Object {
@@ -967,7 +957,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning=""
       collaboratorsList={
         Object {
@@ -1069,7 +1058,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning=""
       collaboratorsList={
         Object {
@@ -1166,7 +1154,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning=""
       collaboratorsList={
         Object {
@@ -1262,7 +1249,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning=""
       collaboratorsList={
         Object {
@@ -1355,7 +1341,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning=""
       collaboratorsList={
         Object {
@@ -1446,7 +1431,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning=""
       collaboratorsList={
         Object {
@@ -1544,7 +1528,6 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "name": undefined,
         }
       }
-      closeConfirmModal={[Function]}
       collaborationRestrictionWarning=""
       collaboratorsList={
         Object {
