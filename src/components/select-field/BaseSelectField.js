@@ -265,6 +265,7 @@ class BaseSelectField extends React.Component<Props, State> {
 
                     // Enter presses should be ignored when no item is active
                     if (key === 'Enter' && activeItemIndex === -1) {
+                        stopDefaultEvent(event);
                         break;
                     }
                 }

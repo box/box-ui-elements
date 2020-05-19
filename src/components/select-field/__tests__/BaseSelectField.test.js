@@ -551,8 +551,8 @@ describe('components/select-field/BaseSelectField', () => {
             });
         });
 
-        const mockedSpaceEvent = { key: ' ', target: {} };
-        const mockedEnterEvent = { key: 'Enter', target: {} };
+        const mockedSpaceEvent = { key: ' ', target: {}, preventDefault: jest.fn(), stopPropagation: jest.fn() };
+        const mockedEnterEvent = { key: 'Enter', target: {}, preventDefault: jest.fn(), stopPropagation: jest.fn() };
         test.each`
             event               | should
             ${mockedSpaceEvent} | ${'should not call handleClearClick / selectOption / closeDropdown if shouldShowSearchInput is true and the key is space'}
