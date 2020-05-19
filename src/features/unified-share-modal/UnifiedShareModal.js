@@ -127,7 +127,6 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
         return (
             <UnifiedShareForm
                 {...this.props}
-                closeConfirmModal={this.closeConfirmModal}
                 handleFtuxCloseClick={this.handleFtuxCloseClick}
                 isFetching={isFetching}
                 openConfirmModal={this.openConfirmModal}

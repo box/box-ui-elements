@@ -478,30 +478,30 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     render() {
         // Shared link section props
         const {
-            onAddLink,
+            allShareRestrictionWarning,
             changeSharedLinkAccessLevel,
-            changeSharedLinkPermissionLevel,
-            closeConfirmModal,
             createSharedLinkOnLoad,
+            changeSharedLinkPermissionLevel,
             focusSharedLinkOnLoad,
+            getSharedLinkContacts,
+            intl,
             isFetching,
             item,
+            onAddLink,
+            onCopyError,
             onCopyInit,
             onCopySuccess,
-            onCopyError,
-            onSettingsClick,
-            sharedLink,
-            intl,
             onDismissTooltip = () => {},
+            onSettingsClick,
+            sendSharedLinkError,
+            sharedLink,
             showEnterEmailsCallout = false,
             showFormOnly,
             showSharedLinkSettingsCallout = false,
             submitting,
             tooltips = {},
-            allShareRestrictionWarning,
-            ...rest
+            trackingProps,
         } = this.props;
-        const { getSharedLinkContacts, sendSharedLinkError, trackingProps } = rest;
         const { sharedLinkTracking, sharedLinkEmailTracking } = trackingProps;
         const { isEmailLinkSectionExpanded, isInviteSectionExpanded, showCollaboratorList } = this.state;
 

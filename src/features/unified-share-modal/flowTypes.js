@@ -173,45 +173,48 @@ export type tooltipComponentIdentifierType =
     | 'shared-link-settings'
     | 'shared-link-toggle';
 
-type BaseUSMProps = {
-    /** Inline message */
-    allShareRestrictionWarning?: React.Node,
-    /** Flag to determine whether to enable invite collaborators section */
-    canInvite: boolean,
+// Prop types used in the invite section of the Unified Share Form
+type InviteSectionTypes = {
+    /** Message warning about restrictions regarding inviting collaborators to the item */
+    collaborationRestrictionWarning: React.Node,
+    /** Used to limit the number of contacts that can be added in the contacts field */
+    contactLimit?: number,
+    /** Handler function for when the user types into invite collaborators field to fetch contacts. */
+    getCollaboratorContacts: (query: string) => Promise<Array<contactType>>,
+    /** Shows a callout tooltip next to the names / email addresses input field explaining pre-populated recommendation */
+    recommendedSharingTooltipCalloutName: ?string,
+    /**
+     * Function to send collab invitations based on the given parameters object.
+     * This function should return a Promise.
+     */
+    sendInvites: (params: Object) => Promise<Object>,
+    /** Message indicating an error occurred while sending the invites. */
+    sendInvitesError: React.Node,
+    /** Function hoists contact data upon updates to the parent component. Only needed for suggested collabs. */
+    setUpdatedContacts?: (inviteCollabsContacts: Array<contactType>) => void,
+    /** Determine whether to show the First-time experience tooltip on load */
+    showCalloutForUser?: boolean,
+    /**
+     * Flag to show link to upgrade and get more access controls.
+     * Only applicable to non-file item types.
+     */
+    showUpgradeOptions: boolean,
+    /** Data for suggested collaborators shown at bottom of input box. UI doesn't render when this has length of 0. */
+    suggestedCollaborators?: SuggestedCollabLookup,
+};
+
+// Prop types used in the shared link section of the Unified Share Form
+// (Note: while there is an overlap between these types and the props passed to the Shared Link Section component,
+// they are different. See the render() function of the Unified Share Form for details.)
+type SharedLinkSectionTypes = {
     /** Handler function that changes shared link access level */
     changeSharedLinkAccessLevel: (newAccessLevel: accessLevelType) => Promise<{ accessLevel: accessLevelType }>,
     /** Handler function that changes shared link permission level */
     changeSharedLinkPermissionLevel: (
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
-    /** Message warning about restrictions regarding inviting collaborators to the item */
-    collaborationRestrictionWarning: React.Node,
-    /** List of existing collaborators */
-    collaboratorsList?: collaboratorsListType,
-    /** Used to limit the number of contacts that can be added in the contacts field */
-    contactLimit?: number,
     /** Whether the form should create a shared link on load */
     createSharedLinkOnLoad?: boolean,
-    /** User ID of currently logged in user */
-    currentUserID: string,
-    /** Whether the form should focus the shared link after the URL is resolved */
-    focusSharedLinkOnLoad?: boolean,
-    /** Handler function for when the user types into invite collaborators field to fetch contacts. */
-    getCollaboratorContacts: (query: string) => Promise<Array<contactType>>,
-    /** Handler function that gets contacts by a list of emails */
-    getContactsByEmail?: ({ emails: Array<string>, itemTypedID?: string }) => Promise<Object>,
-    /** Handler function for getting intial data for form */
-    getInitialData: Function,
-    /** Handler function for when the user types into email shared link field to fetch contacts. */
-    getSharedLinkContacts: (query: string) => Promise<Array<contactType>>,
-    /** An array of initially selected contacts. If none are initially selected, an empty array. */
-    initiallySelectedContacts: Array<contactType>,
-    /** Intl object */
-    intl: any,
-    /** An array of invitee permissions */
-    inviteePermissions: Array<inviteePermissionType>,
-    /** Item data */
-    item: item,
     /** Handler function that adds the shared link */
     onAddLink: () => void,
     /** Handler for when there is an error copying to clipboard */
@@ -222,19 +225,27 @@ type BaseUSMProps = {
     onCopySuccess?: () => void,
     /** Handler function that gets called whenever the user dismisses a tooltip on the given component identifier */
     onDismissTooltip?: (componentIdentifier: tooltipComponentIdentifierType) => void,
-    /** Handler function that removes the shared link */
-    onRemoveLink: () => void,
     /** Handler function for clicks on the settings icon. If not provided, the settings icon won't be rendered. */
     onSettingsClick?: Function,
-    /** Shows a callout tooltip next to the names / email addresses input field explaining pre-populated recommendation */
-    recommendedSharingTooltipCalloutName: ?string,
-    /**
-     * Function to send collab invitations based on the given parameters object.
-     * This function should return a Promise.
-     */
-    sendInvites: (params: Object) => Promise<Object>,
-    /** Message indicating an error occurred while sending the invites. */
-    sendInvitesError: React.Node,
+    /** Shared link data */
+    sharedLink: sharedLinkType,
+    /** Shows a callout tooltip next gear icon with info about what can be customized */
+    showSharedLinkSettingsCallout?: boolean,
+    /** Mapping of components to the content that should be rendered in their tooltips */
+    tooltips?: { [componentIdentifier: tooltipComponentIdentifierType]: React.Node },
+};
+
+// Prop types used in the collaborator avatars section of the Unified Share Form
+type CollaboratorAvatarsTypes = {
+    /** List of existing collaborators */
+    collaboratorsList?: collaboratorsListType,
+    /** User ID of currently logged in user */
+    currentUserID: string,
+};
+
+type EmailFormTypes = {
+    /** Handler function for when the user types into email shared link field to fetch contacts. */
+    getSharedLinkContacts: (query: string) => Promise<Array<contactType>>,
     /**
      * Function to send shared link email based on the given parameters object.
      * This function should return a Promise.
@@ -242,45 +253,55 @@ type BaseUSMProps = {
     sendSharedLink: (params: Object) => Promise<Object>,
     /** Message indicating an error occurred while sending the shared link. */
     sendSharedLinkError: React.Node,
-    /** Function hoists contact data upon updates to the parent component. Only needed for suggested collabs. */
-    setUpdatedContacts?: (inviteCollabsContacts: Array<contactType>) => void,
-    /** Shared link data */
-    sharedLink: sharedLinkType,
-    /** Determine whether to show the First-time experience tooltip on load */
-    showCalloutForUser?: boolean,
-    /** Shows a callout tooltip next to the names / email addresses input field encouraging users to fill out coworkers contact info */
-    showEnterEmailsCallout?: boolean,
-    /** Whether only the USF should be rendered */
-    showFormOnly?: boolean,
-    /** Shows a callout tooltip next gear icon with info about what can be customized */
-    showSharedLinkSettingsCallout?: boolean,
-    /**
-     * Flag to show link to upgrade and get more access controls.
-     * Only applicable to non-file item types.
-     */
-    showUpgradeOptions: boolean,
-    /** Whether or not a request is in progress */
-    submitting: boolean,
-    /** Data for suggested collaborators shown at bottom of input box. UI doesn't render when this has length of 0. */
-    suggestedCollaborators?: SuggestedCollabLookup,
-    /** Mapping of components to the content that should be rendered in their tooltips */
-    tooltips?: { [componentIdentifier: tooltipComponentIdentifierType]: React.Node },
-    /** Object with props and handlers for tracking interactions */
-    trackingProps: trackingPropsType,
 };
 
+// Prop types shared by both the Unified Share Modal and the Unified Share Form
+type BaseUnifiedShareProps = CollaboratorAvatarsTypes &
+    EmailFormTypes &
+    InviteSectionTypes &
+    SharedLinkSectionTypes & {
+        /** Inline message */
+        allShareRestrictionWarning?: React.Node,
+        /** Flag to determine whether to enable invite collaborators section */
+        canInvite: boolean,
+        /** Whether the form should focus the shared link after the URL is resolved */
+        focusSharedLinkOnLoad?: boolean,
+        /** Handler function that gets contacts by a list of emails */
+        getContactsByEmail?: ({ emails: Array<string>, itemTypedID?: string }) => Promise<Object>,
+        /** Handler function for getting intial data for form */
+        getInitialData: Function,
+        /** An array of initially selected contacts. If none are initially selected, an empty array. */
+        initiallySelectedContacts: Array<contactType>,
+        /** Intl object */
+        intl: any,
+        /** An array of invitee permissions */
+        inviteePermissions: Array<inviteePermissionType>,
+        /** Item data */
+        item: item,
+        /** Shows a callout tooltip next to the names / email addresses input field encouraging users to fill out coworkers contact info */
+        showEnterEmailsCallout?: boolean,
+        /** Whether only the USF should be rendered */
+        showFormOnly?: boolean,
+        /** Whether or not a request is in progress */
+        submitting: boolean,
+        /** Object with props and handlers for tracking interactions */
+        trackingProps: trackingPropsType,
+    };
+
 // Prop types for the Unified Share Modal
-export type USMProps = BaseUSMProps & {
+export type USMProps = BaseUnifiedShareProps & {
+    /** Function for closing the Remove Link Confirm Modal */
+    closeConfirmModal: () => void,
     /** Whether the USM is open */
     isOpen?: boolean,
+    /** Handler function that removes the shared link, used in the Remove Link Confirm Modal */
+    onRemoveLink: () => void,
     /** Handler function for when the USM is closed */
     onRequestClose?: Function,
 };
 
-// Prop types for the Unified Share Form
-export type USFProps = BaseUSMProps & {
-    /** Function for closing the Remove Link Confirm Modal */
-    closeConfirmModal: () => void,
+// Prop types for the Unified Share Form, passed from the Unified Share Modal
+export type USFProps = BaseUnifiedShareProps & {
     /** Function for closing the FTUX tooltip */
     handleFtuxCloseClick: () => void,
     /** Whether the data for the USM/USF is being fetched */
