@@ -3,6 +3,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Column } from 'react-virtualized/dist/es/Table';
 
+import { bdlGray } from '../../../styles/variables';
+
 import DraggableVirtualizedTable from '../DraggableVirtualizedTable';
 
 describe('features/virtualized-table/DraggableVirtualizedTable', () => {
@@ -41,9 +43,9 @@ describe('features/virtualized-table/DraggableVirtualizedTable', () => {
     test('should render a DraggableVirtualizedTable', () => {
         const renderPropWrapper = getRenderPropWrapper();
 
-        expect(wrapper).toMatchSnapshot();
-        expect(renderPropWrapper).toMatchSnapshot();
+        expect(wrapper.find('DragDropContext').props().onDragEnd).toEqual(expect.any(Function));
         expect(wrapper.find('Connect(Droppable)').props().droppableId).toBe('tableId');
+        expect(renderPropWrapper).toMatchSnapshot();
         expect(renderPropWrapper.find('VirtualizedTable')).toHaveLength(1);
         expect(renderPropWrapper.find('Column')).toHaveLength(3);
     });
@@ -77,7 +79,15 @@ describe('features/virtualized-table/DraggableVirtualizedTable', () => {
             .find({ dataKey: 'dragHandle' })
             .props();
 
-        expect(cellRenderer()).toMatchSnapshot();
+        const renderedCell = cellRenderer();
+        expect(renderedCell.type.name).toBe('IconDrag');
+        expect(renderedCell.props).toEqual(
+            expect.objectContaining({
+                color: bdlGray,
+                width: 24,
+                height: 24,
+            }),
+        );
     });
 
     test.each`

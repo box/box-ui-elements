@@ -4,9 +4,10 @@ import classNames from 'classnames';
 import { Draggable } from 'react-beautiful-dnd';
 import { defaultRowRenderer } from 'react-virtualized/dist/es/Table/index';
 
-import Portal from '../../components/portal';
-
+import type { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd/src';
 import type { RowRendererParams } from './flowTypes';
+
+import Portal from '../../components/portal';
 
 const draggableRowRenderer = (params: RowRendererParams) => {
     const { index, key, rowData } = params;
@@ -18,7 +19,7 @@ const draggableRowRenderer = (params: RowRendererParams) => {
 
     return (
         <Draggable draggableId={draggableId} index={index} key={draggableId}>
-            {(draggableProvided, draggableSnapshot) => {
+            {(draggableProvided: DraggableProvided, draggableSnapshot: DraggableStateSnapshot) => {
                 const { isDragging } = draggableSnapshot;
                 const { draggableProps, dragHandleProps, innerRef } = draggableProvided;
                 const { style: draggableStyle } = draggableProps;

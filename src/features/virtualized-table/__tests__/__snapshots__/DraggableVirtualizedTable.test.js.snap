@@ -1,22 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`features/virtualized-table/DraggableVirtualizedTable should render a DraggableVirtualizedTable 1`] = `
-<DragDropContext
-  onDragEnd={[Function]}
->
-  <Connect(Droppable)
-    direction="vertical"
-    droppableId="tableId"
-    ignoreContainerClipping={false}
-    isDropDisabled={false}
-    type="DEFAULT"
-  >
-    <Component />
-  </Connect(Droppable)>
-</DragDropContext>
-`;
-
-exports[`features/virtualized-table/DraggableVirtualizedTable should render a DraggableVirtualizedTable 2`] = `
 <div>
   <VirtualizedTable
     className="bdl-DraggableVirtualizedTable"
@@ -78,12 +62,4 @@ exports[`features/virtualized-table/DraggableVirtualizedTable should render a Dr
     />
   </VirtualizedTable>
 </div>
-`;
-
-exports[`features/virtualized-table/DraggableVirtualizedTable should render a drag icon when drag handle cell renderer is called 1`] = `
-<IconDrag
-  color="#000"
-  height={24}
-  width={24}
-/>
 `;

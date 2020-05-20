@@ -37,10 +37,11 @@ describe('features/virtualized-table-renderers/draggableRowRenderer', () => {
     test('should wrap row in Draggable and set correct props', () => {
         expect(wrapper.find('Connect(Draggable)').props().index).toEqual(rowRendererParams.index);
         expect(wrapper.find('Connect(Draggable)').props().draggableId).toEqual(rowRendererParams.key);
-        expect(wrapper).toMatchSnapshot();
 
         const renderPropWrapper = getRenderPropWrapper(draggableProvided, draggableSnapshot);
-        expect(renderPropWrapper).toMatchSnapshot();
+        expect(renderPropWrapper.props().role).toBe('row');
+        expect(renderPropWrapper.props().style).toEqual(rowRendererParams.style);
+        expect(renderPropWrapper.prop('aria-rowindex')).toBe(rowRendererParams.index + 1);
     });
 
     test('should further wrap row in Portal and set appropriate classes when being dragged', () => {

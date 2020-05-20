@@ -5,13 +5,14 @@ import classNames from 'classnames';
 import { Column } from 'react-virtualized/dist/es/Table/index';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
-import { black } from '../../styles/variables';
+import type { DroppableProvided } from 'react-beautiful-dnd/src';
+import type { VirtualizedTableProps } from './VirtualizedTable';
+
+import { bdlGray } from '../../styles/variables';
 import IconDrag from '../../icons/general/IconDrag';
 import { draggableRowRenderer } from '../virtualized-table-renderers';
 
 import VirtualizedTable from './VirtualizedTable';
-
-import type { VirtualizedTableProps } from './VirtualizedTable';
 
 import './DraggableVirtualizedTable.scss';
 
@@ -32,7 +33,7 @@ const DraggableVirtualizedTable = ({
     ...rest
 }: Props) => {
     const tableClassName = classNames('bdl-DraggableVirtualizedTable', className);
-    const draggableCellRenderer = () => <IconDrag color={black} height={ICON_SIZE} width={ICON_SIZE} />;
+    const draggableCellRenderer = () => <IconDrag color={bdlGray} height={ICON_SIZE} width={ICON_SIZE} />;
 
     const handleDragEnd = ({ destination, source }) => {
         const destinationIndex = destination ? destination.index : source.index;
@@ -42,7 +43,7 @@ const DraggableVirtualizedTable = ({
     return (
         <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId={tableId}>
-                {droppableProvided => (
+                {(droppableProvided: DroppableProvided) => (
                     <div ref={droppableProvided.innerRef}>
                         <VirtualizedTable {...rest} className={tableClassName} rowRenderer={draggableRowRenderer}>
                             {shouldShowDragHandle && (
