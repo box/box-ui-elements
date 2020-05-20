@@ -771,13 +771,13 @@ class Feed extends Base {
                     return;
                 }
 
-                this.addPendingItem(this.file.id, currentUser, pendingTask);
                 this.tasksNewAPI = new TasksNewAPI(this.options);
                 this.tasksNewAPI.createTaskWithDeps({
                     file,
                     task: taskPayload,
                     assignees,
                     successCallback: (taskWithDepsData: any) => {
+                        this.addPendingItem(this.file.id, currentUser, pendingTask);
                         this.updateFeedItem(
                             {
                                 ...taskWithDepsData,
