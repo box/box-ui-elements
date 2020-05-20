@@ -30,25 +30,85 @@ describe('api/TasksNew', () => {
             name: message,
             due_at: dueAt,
         };
+        const user = {
+            id: '1111',
+            name: 'user-name',
+            email: 'user-email',
+        };
+        const group = {
+            id: '22222',
+            name: 'group-name',
+        };
+        const assignees = [
+            {
+                id: user.id,
+                item: {
+                    type: 'user',
+                    id: user.id,
+                    name: user.name,
+                    login: user.email,
+                    email: user.email,
+                },
+                name: user.name,
+                text: user.name,
+                value: user.id,
+            },
+            {
+                id: group.id,
+                item: {
+                    id: group.id,
+                    name: group.name,
+                    type: 'group',
+                },
+                name: group.name,
+                text: group.name,
+                value: group.id,
+            },
+        ];
         const successCallback = jest.fn();
         const errorCallback = jest.fn();
 
-        describe('createTask()', () => {
-            test('should post a well formed task to the tasks endpoint', () => {
+        describe('createTaskWithDeps()', () => {
+            test('should post a well formed task, task link, and task collaborators to the tasks/with_dependencies endpoint', () => {
                 const expectedRequestData = {
-                    data: task,
+                    data: {
+                        task: { ...task },
+                        assigned_to: [
+                            {
+                                target: {
+                                    id: user.id,
+                                    type: 'user',
+                                },
+                            },
+                            {
+                                target: {
+                                    id: group.id,
+                                    type: 'group',
+                                },
+                            },
+                        ],
+                        task_links: [
+                            {
+                                target: {
+                                    id: file.id,
+                                    type: 'file',
+                                },
+                            },
+                        ],
+                    },
                 };
 
-                tasks.createTask({
+                tasks.createTaskWithDeps({
                     file,
                     task,
                     successCallback,
                     errorCallback,
+                    assignees,
                 });
 
                 expect(tasks.post).toBeCalledWith({
                     id: FILE_ID,
-                    url: `${BASE_URL}/undoc/tasks`,
+                    url: `${BASE_URL}/undoc/tasks/with_dependencies`,
                     data: expectedRequestData,
                     successCallback,
                     errorCallback,
