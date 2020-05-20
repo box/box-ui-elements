@@ -1,5 +1,5 @@
-import { ContentState, EditorState } from 'draft-js';
-import { addMention, getActiveMentionForEditorState } from '../utils';
+import { convertFromRaw, ContentState, EditorState } from 'draft-js';
+import { addMention, getActiveMentionForEditorState, getFormattedCommentText } from '../utils';
 
 const noMentionEditorState = EditorState.createWithContent(ContentState.createFromText('No mention here'));
 const oneMentionEditorState = EditorState.createWithContent(ContentState.createFromText('Hey @foo'));
@@ -85,6 +85,112 @@ describe('components/form-elements/draft-js-mention-selector/utils', () => {
             const editorStateWithLink = addMention(oneMentionEditorState, oneMentionExpectedMention, mention);
 
             expect(editorStateWithLink.getCurrentContent().getPlainText()).toEqual('Hey @Fool Name ');
+        });
+    });
+
+    describe('getFormattedCommentText()', () => {
+        const rawContentNoEntities = {
+            blocks: [
+                {
+                    text: 'Hey there',
+                    type: 'unstyled',
+                    entityRanges: [],
+                },
+            ],
+            entityMap: {
+                first: {
+                    type: 'MENTION',
+                    mutability: 'IMMUTABLE',
+                },
+            },
+        };
+
+        const rawContentOneEntity = {
+            blocks: [
+                {
+                    text: 'Hey @Becky',
+                    type: 'unstyled',
+                    entityRanges: [{ offset: 4, length: 6, key: 'first' }],
+                },
+            ],
+            entityMap: {
+                first: {
+                    type: 'MENTION',
+                    mutability: 'IMMUTABLE',
+                    data: { id: 1 },
+                },
+            },
+        };
+
+        const rawContentTwoEntities = {
+            blocks: [
+                {
+                    text: 'I hung out with @Becky and @Shania',
+                    type: 'unstyled',
+                    entityRanges: [
+                        { offset: 16, length: 6, key: 'first' },
+                        { offset: 27, length: 7, key: 'second' },
+                    ],
+                },
+            ],
+            entityMap: {
+                first: {
+                    type: 'MENTION',
+                    mutability: 'IMMUTABLE',
+                    data: { id: 1 },
+                },
+                second: {
+                    type: 'MENTION',
+                    mutability: 'IMMUTABLE',
+                    data: { id: 2 },
+                },
+            },
+        };
+
+        const rawContentTwoEntitiesOneLineBreak = {
+            blocks: [
+                {
+                    text: 'I hung out with @Becky and',
+                    type: 'unstyled',
+                    entityRanges: [{ offset: 16, length: 6, key: 'first' }],
+                },
+                {
+                    text: '@Shania yesterday',
+                    type: 'unstyled',
+                    entityRanges: [{ offset: 0, length: 7, key: 'second' }],
+                },
+            ],
+            entityMap: {
+                first: {
+                    type: 'MENTION',
+                    mutability: 'IMMUTABLE',
+                    data: { id: 1 },
+                },
+                second: {
+                    type: 'MENTION',
+                    mutability: 'IMMUTABLE',
+                    data: { id: 2 },
+                },
+            },
+        };
+
+        // Test cases in order
+        // no entities in the editor
+        // one entity in the editor
+        // two entities in the editor
+        // two entities and a linebreak in the editor
+        test.each`
+            rawContent                           | expected
+            ${rawContentNoEntities}              | ${{ text: 'Hey there', hasMention: false }}
+            ${rawContentOneEntity}               | ${{ text: 'Hey @[1:Becky]', hasMention: true }}
+            ${rawContentTwoEntities}             | ${{ text: 'I hung out with @[1:Becky] and @[2:Shania]', hasMention: true }}
+            ${rawContentTwoEntitiesOneLineBreak} | ${{ text: 'I hung out with @[1:Becky] and\n@[2:Shania] yesterday', hasMention: true }}
+        `('should return the correct result', ({ rawContent, expected }) => {
+            const blocks = convertFromRaw(rawContent);
+
+            const dummyEditorState = EditorState.createWithContent(blocks);
+
+            expect(getFormattedCommentText(dummyEditorState)).toEqual(expected);
         });
     });
 });

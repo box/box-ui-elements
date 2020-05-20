@@ -105,4 +105,52 @@ function addMention(editorState: EditorState, activeMention: Mention | null, men
     return editorStateWithLink;
 }
 
-export { addMention, defaultMentionTriggers, defaultMentionPattern, getActiveMentionForEditorState };
+/**
+ * Formats the editor's text such that it will be accepted by the server.
+ */
+function getFormattedCommentText(editorState: EditorState): { hasMention: boolean, text: string } {
+    const contentState = editorState.getCurrentContent();
+    const blockMap = contentState.getBlockMap();
+
+    const resultStringArr = [];
+
+    // The API needs to explicitly know if a message contains a mention.
+    let hasMention = false;
+
+    // For all ContentBlocks in the ContentState:
+    blockMap.forEach(block => {
+        const text = block.getText();
+        const blockMapStringArr = [];
+
+        // Break down the ContentBlock into ranges
+        block.findEntityRanges(
+            () => true,
+            (start, end) => {
+                const entityKey = block.getEntityAt(start);
+                // If the range is an Entity, format its text eg "@[1:Username]"
+                // Otherwise append its text to the block result as-is
+                if (entityKey) {
+                    const entity = contentState.getEntity(entityKey);
+                    const stringToAdd = `@[${entity.getData().id}:${text.substring(start + 1, end)}]`;
+                    blockMapStringArr.push(stringToAdd);
+                    hasMention = true;
+                } else {
+                    blockMapStringArr.push(text.substring(start, end));
+                }
+            },
+        );
+        resultStringArr.push(blockMapStringArr.join(''));
+    });
+
+    // Concatenate the array of block strings with newlines
+    // (Each block represents a paragraph)
+    return { text: resultStringArr.join('\n'), hasMention };
+}
+
+export {
+    addMention,
+    defaultMentionTriggers,
+    defaultMentionPattern,
+    getActiveMentionForEditorState,
+    getFormattedCommentText,
+};
