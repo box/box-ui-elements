@@ -448,7 +448,7 @@ class SharedLinkSection extends React.Component<Props, State> {
 
         return (
             <div>
-                <hr />
+                <hr className="bdl-SharedLinkSection-separator" />
                 {/* eslint-disable-next-line jsx-a11y/label-has-for */}
                 <label>
                     <span className="label bdl-Label">

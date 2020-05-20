@@ -21,7 +21,7 @@ import type { ElementsXhrError } from '../common/types/api';
 
 export default class Annotations extends MarkerBasedApi {
     getUrl() {
-        return `${this.getBaseApiUrl()}/internal_annotations`;
+        return `${this.getBaseApiUrl()}/undoc/annotations`;
     }
 
     getUrlForId(annotationId: string) {
