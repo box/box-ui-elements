@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { Column } from 'react-virtualized/dist/es/Table/index';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
-import type { DroppableProvided } from 'react-beautiful-dnd/src';
+import type { DroppableProvided } from 'react-beautiful-dnd';
 import type { VirtualizedTableProps } from './VirtualizedTable';
 
 import { bdlGray } from '../../styles/variables';

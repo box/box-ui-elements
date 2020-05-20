@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Draggable } from 'react-beautiful-dnd';
 import { defaultRowRenderer } from 'react-virtualized/dist/es/Table/index';
 
-import type { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd/src';
+import type { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
 import type { RowRendererParams } from './flowTypes';
 
 import Portal from '../../components/portal';
