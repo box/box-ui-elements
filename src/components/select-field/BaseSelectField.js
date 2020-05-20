@@ -15,6 +15,7 @@ import type { SelectOptionValueProp, SelectOptionProp } from './props';
 import { PLACEMENT_BOTTOM_END, PLACEMENT_BOTTOM_START } from '../popper/constants';
 import SearchForm from '../search-form/SearchForm';
 import CLEAR from './constants';
+import { ARROW_DOWN, ARROW_UP, ENTER, ESCAPE, SPACE, TAB } from '../../common/keyboard-events';
 
 import messages from './messages';
 
@@ -213,7 +214,7 @@ class BaseSelectField extends React.Component<Props, State> {
         const { activeItemIndex } = this.state;
 
         // If user is interacting with the select dropdown, don't close on space/enter (i.e. prevent click event)
-        if ((event.key === ' ' || event.key === 'Enter') && activeItemIndex !== -1) {
+        if ((event.key === SPACE || event.key === ENTER) && activeItemIndex !== -1) {
             event.preventDefault();
         }
     };
@@ -224,7 +225,8 @@ class BaseSelectField extends React.Component<Props, State> {
             isOpen &&
             event &&
             event.relatedTarget &&
-            !(event.relatedTarget: window.HTMLInputElement).classList.contains('search-input')
+            !(event.relatedTarget: window.HTMLInputElement).classList.contains('search-input') &&
+            !(event.relatedTarget: window.HTMLInputElement).classList.contains('select-button')
         ) {
             this.closeDropdown();
         }
@@ -236,7 +238,7 @@ class BaseSelectField extends React.Component<Props, State> {
         const { activeItemIndex, isOpen } = this.state;
         const itemCount = options.length;
         switch (key) {
-            case 'ArrowDown':
+            case ARROW_DOWN:
                 stopDefaultEvent(event);
                 if (isOpen) {
                     const nextIndex = activeItemIndex === itemCount - 1 ? -1 : activeItemIndex + 1;
@@ -245,7 +247,7 @@ class BaseSelectField extends React.Component<Props, State> {
                     this.openDropdown();
                 }
                 break;
-            case 'ArrowUp':
+            case ARROW_UP:
                 stopDefaultEvent(event);
                 if (isOpen) {
                     const prevIndex = activeItemIndex === -1 ? itemCount - 1 : activeItemIndex - 1;
@@ -254,11 +256,19 @@ class BaseSelectField extends React.Component<Props, State> {
                     this.openDropdown();
                 }
                 break;
-            case 'Enter':
-            case ' ':
-                // When the search input is active, we want to allow space key presses in the search string
-                if (key === ' ' && shouldShowSearchInput) {
-                    break;
+            case ENTER:
+            case SPACE:
+                if (shouldShowSearchInput) {
+                    // Allow space key presses in the search string when search field is active
+                    if (key === SPACE) {
+                        break;
+                    }
+
+                    // Enter presses should be ignored when no item is active
+                    if (key === ENTER && activeItemIndex === -1) {
+                        stopDefaultEvent(event);
+                        break;
+                    }
                 }
 
                 if (activeItemIndex !== -1 && isOpen) {
@@ -270,18 +280,18 @@ class BaseSelectField extends React.Component<Props, State> {
                         this.selectOption(activeItemIndex);
                     }
                     // Enter always closes dropdown (even for multiselect)
-                    if (key === 'Enter') {
+                    if (key === ENTER) {
                         this.closeDropdown();
                     }
                 }
                 break;
-            case 'Escape':
+            case ESCAPE:
                 if (isOpen) {
                     stopDefaultEvent(event);
                     this.closeDropdown();
                 }
                 break;
-            case 'Tab':
+            case TAB:
                 if (isOpen) {
                     this.closeDropdown();
                 }
