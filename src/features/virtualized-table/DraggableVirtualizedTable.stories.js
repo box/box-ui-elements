@@ -37,9 +37,16 @@ export const Basic = () => {
             rowData={rowData}
             shouldShowDragHandle={boolean('shouldShowDragHandle', true)}
         >
-            <Column cellRenderer={baseCellRenderer} dataKey="name" disableSort flexGrow={1} width={1} />
-            <Column cellRenderer={baseCellRenderer} dataKey="description" disableSort flexGrow={1} width={1} />
-            <Column cellRenderer={baseCellRenderer} dataKey="price" disableSort flexGrow={1} width={1} />
+            <Column cellRenderer={baseCellRenderer} dataKey="name" disableSort flexGrow={1} label="Name" width={1} />
+            <Column
+                cellRenderer={baseCellRenderer}
+                dataKey="description"
+                disableSort
+                flexGrow={1}
+                label="Description"
+                width={1}
+            />
+            <Column cellRenderer={baseCellRenderer} dataKey="price" disableSort flexGrow={1} label="Price" width={1} />
         </DraggableVirtualizedTable>
     );
 };
