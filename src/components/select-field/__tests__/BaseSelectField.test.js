@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { scrollIntoView } from '../../../utils/dom';
 import { BaseSelectFieldBase as BaseSelectField } from '../BaseSelectField';
 import { OVERLAY_SCROLLABLE_CLASS } from '../SelectFieldDropdown';
+import { ARROW_DOWN, ARROW_UP, ENTER, ESCAPE, SPACE, TAB } from '../../../common/keyboard-events';
 import CLEAR from '../constants';
 
 import messages from '../messages';
@@ -345,28 +346,51 @@ describe('components/select-field/BaseSelectField', () => {
             wrapper.simulate('blur');
         });
 
-        test('should call closeDropdown() when dropdown is open and event.relatedTarget.className is not search-input', () => {
+        test('should call closeDropdown() when dropdown is open and event.relatedTarget.classList does not contain select-button and does not contain search-input', () => {
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();
-            const mockedEvent = {
-                relatedTarget: {
-                    classList: { contains: jest.fn() },
-                },
-            };
-
+            const spy = jest.spyOn(instance, 'closeDropdown');
             wrapper.setState({ isOpen: true });
 
-            sandbox.mock(instance).expects('closeDropdown');
+            const targetWithClassName = {
+                relatedTarget: document.createElement('button'),
+            };
 
-            wrapper.simulate('blur', mockedEvent);
+            targetWithClassName.relatedTarget.className = 'not-select-button';
+            instance.handleBlur(targetWithClassName);
+
+            expect(spy).toHaveBeenCalled();
         });
+
+        test.each`
+            className
+            ${'search-input'}
+            ${'select-button'}
+        `(
+            'should not call closeDropdown when dropdown is open and event.relatedTarget.classList contains $className',
+            ({ className }) => {
+                const wrapper = shallowRenderSelectField();
+                const instance = wrapper.instance();
+                const spy = jest.spyOn(instance, 'closeDropdown');
+                wrapper.setState({ isOpen: true });
+
+                const targetWithClassName = {
+                    relatedTarget: document.createElement('button'),
+                };
+
+                targetWithClassName.relatedTarget.className = className;
+                instance.handleBlur(targetWithClassName);
+
+                expect(spy).not.toHaveBeenCalled();
+            },
+        );
     });
 
     describe('onArrowDown', () => {
         let event;
         beforeEach(() => {
             event = {
-                key: 'ArrowDown',
+                key: ARROW_DOWN,
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
             };
@@ -413,7 +437,7 @@ describe('components/select-field/BaseSelectField', () => {
         let event;
         beforeEach(() => {
             event = {
-                key: 'ArrowUp',
+                key: ARROW_UP,
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
             };
@@ -468,7 +492,7 @@ describe('components/select-field/BaseSelectField', () => {
                 .never();
 
             wrapper.simulate('keyDown', {
-                key: 'Enter',
+                key: ENTER,
                 preventDefault: sandbox.mock().never(),
                 stopPropagation: sandbox.mock().never(),
             });
@@ -485,7 +509,7 @@ describe('components/select-field/BaseSelectField', () => {
                 .never();
 
             wrapper.simulate('keyDown', {
-                key: 'Enter',
+                key: ENTER,
                 preventDefault: sandbox.mock().never(),
                 stopPropagation: sandbox.mock().never(),
             });
@@ -504,7 +528,7 @@ describe('components/select-field/BaseSelectField', () => {
             sandbox.mock(instance).expects('closeDropdown');
 
             wrapper.simulate('keyDown', {
-                key: 'Enter',
+                key: ENTER,
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
             });
@@ -522,11 +546,36 @@ describe('components/select-field/BaseSelectField', () => {
             sandbox.mock(instance).expects('handleClearClick');
 
             wrapper.simulate('keyDown', {
-                key: 'Enter',
+                key: ENTER,
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
             });
         });
+
+        const mockedSpaceEvent = { key: SPACE, target: {}, preventDefault: jest.fn(), stopPropagation: jest.fn() };
+        const mockedEnterEvent = { key: ENTER, target: {}, preventDefault: jest.fn(), stopPropagation: jest.fn() };
+        test.each`
+            event               | condition
+            ${mockedSpaceEvent} | ${'the key is SPACE'}
+            ${mockedEnterEvent} | ${'key is ENTER and no item is active'}
+        `(
+            'should not call handleClearClick / selectOption / closeDropdown if shouldShowSearchInput is true and $condition',
+            ({ event }) => {
+                const wrapper = shallowRenderSelectField({
+                    shouldShowSearchInput: true,
+                });
+
+                const instance = wrapper.instance();
+                const handleClearClickSpy = jest.spyOn(instance, 'handleClearClick');
+                const selectOptionSpy = jest.spyOn(instance, 'selectOption');
+                const closeDropdownSpy = jest.spyOn(instance, 'closeDropdown');
+
+                instance.handleKeyDown(event);
+                expect(handleClearClickSpy).not.toHaveBeenCalled();
+                expect(selectOptionSpy).not.toHaveBeenCalled();
+                expect(closeDropdownSpy).not.toHaveBeenCalled();
+            },
+        );
     });
 
     describe('onSpacebar', () => {
@@ -544,7 +593,7 @@ describe('components/select-field/BaseSelectField', () => {
                 .never();
 
             wrapper.simulate('keyDown', {
-                key: ' ',
+                key: SPACE,
                 preventDefault: sandbox.mock().never(),
                 stopPropagation: sandbox.mock().never(),
             });
@@ -561,7 +610,7 @@ describe('components/select-field/BaseSelectField', () => {
                 .never();
 
             wrapper.simulate('keyDown', {
-                key: ' ',
+                key: SPACE,
                 preventDefault: sandbox.mock().never(),
                 stopPropagation: sandbox.mock().never(),
             });
@@ -578,7 +627,7 @@ describe('components/select-field/BaseSelectField', () => {
                 .never();
 
             wrapper.simulate('keyDown', {
-                key: ' ',
+                key: SPACE,
                 preventDefault: sandbox.mock().never(),
                 stopPropagation: sandbox.mock().never(),
             });
@@ -596,7 +645,7 @@ describe('components/select-field/BaseSelectField', () => {
                 .withArgs(activeItemIndex);
 
             wrapper.simulate('keyDown', {
-                key: ' ',
+                key: SPACE,
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
             });
@@ -614,7 +663,7 @@ describe('components/select-field/BaseSelectField', () => {
             sandbox.mock(instance).expects('handleClearClick');
 
             wrapper.simulate('keyDown', {
-                key: ' ',
+                key: SPACE,
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
             });
@@ -631,7 +680,7 @@ describe('components/select-field/BaseSelectField', () => {
             instanceMock.expects('closeDropdown').never();
 
             wrapper.simulate('keyDown', {
-                key: 'Escape',
+                key: ESCAPE,
                 preventDefault: sandbox.mock().never(),
                 stopPropagation: sandbox.mock().never(),
             });
@@ -646,7 +695,7 @@ describe('components/select-field/BaseSelectField', () => {
             instanceMock.expects('closeDropdown');
 
             wrapper.simulate('keyDown', {
-                key: 'Escape',
+                key: ESCAPE,
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
             });
@@ -663,7 +712,7 @@ describe('components/select-field/BaseSelectField', () => {
             instanceMock.expects('closeDropdown').never();
 
             wrapper.simulate('keyDown', {
-                key: 'Tab',
+                key: TAB,
                 preventDefault: sandbox.mock().never(),
                 stopPropagation: sandbox.mock().never(),
             });
@@ -678,7 +727,7 @@ describe('components/select-field/BaseSelectField', () => {
             instanceMock.expects('closeDropdown');
 
             wrapper.simulate('keyDown', {
-                key: 'Tab',
+                key: TAB,
                 preventDefault: sandbox.mock().never(),
                 stopPropagation: sandbox.mock().never(),
             });
@@ -768,10 +817,10 @@ describe('components/select-field/BaseSelectField', () => {
     describe('handleButtonKeyDown', () => {
         [
             {
-                key: ' ',
+                key: SPACE,
             },
             {
-                key: 'Enter',
+                key: ENTER,
             },
         ].forEach(({ key }) => {
             test('should preventDefault() when key is space or enter and activeItemIndex != -1', () => {
@@ -811,7 +860,7 @@ describe('components/select-field/BaseSelectField', () => {
                 .find('PopperComponent')
                 .childAt(0)
                 .simulate('keyDown', {
-                    key: 'ArrowDown',
+                    key: ARROW_DOWN,
                     preventDefault: sandbox.mock().never(),
                     stopPropagation: sandbox.mock().never(),
                 });
