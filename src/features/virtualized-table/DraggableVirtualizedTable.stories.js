@@ -11,10 +11,10 @@ import DraggableVirtualizedTable from './DraggableVirtualizedTable';
 
 export const Basic = () => {
     const initialRowData = [
-        { name: 'Product A', description: 'Product Description A', price: 4.99 },
-        { name: 'Product B', description: 'Product Description B', price: 2.99 },
-        { name: 'Product C', description: 'Product Description C', price: 3.99 },
-        { name: 'Product D', description: 'Product Description D', price: 1.99 },
+        { id: '1', name: 'Product A', description: 'Product Description A', price: 4.99 },
+        { id: '2', name: 'Product B', description: 'Product Description B', price: 2.99 },
+        { id: '3', name: 'Product C', description: 'Product Description C', price: 3.99 },
+        { id: '4', name: 'Product D', description: 'Product Description D', price: 1.99 },
     ];
     const [rowData, setRowData] = React.useState(initialRowData);
 
