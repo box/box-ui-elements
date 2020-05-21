@@ -23,6 +23,7 @@ describe('api/TasksNew', () => {
         };
 
         const taskId = '123';
+        const taskCollabId = '456';
         const message = 'hello world';
         const dueAt = '2018-09-06';
         const task = {
@@ -116,25 +117,60 @@ describe('api/TasksNew', () => {
             });
         });
 
-        describe('updateTask()', () => {
-            test('should put a well formed task update to the tasks endpoint', () => {
+        describe('updateTaskWithDeps()', () => {
+            test('should put a well formed task update to the tasks with dependencies endpoint', () => {
                 const expectedRequestData = {
-                    data: {
-                        id: taskId,
-                        name: message,
-                    },
+                    data: [
+                        {
+                            op: 'update_task',
+                            payload: {
+                                description: message,
+                            },
+                        },
+                        {
+                            op: 'add_task_collaborator',
+                            payload: {
+                                target: {
+                                    type: 'user',
+                                    id: user.id,
+                                },
+                            },
+                        },
+                        {
+                            op: 'add_task_collaborators_expand_group',
+                            payload: {
+                                target: {
+                                    type: 'group',
+                                    id: group.id,
+                                },
+                            },
+                        },
+                        {
+                            op: 'delete_task_collaborator',
+                            id: taskCollabId,
+                        },
+                    ],
                 };
 
-                tasks.updateTask({
+                tasks.updateTaskWithDeps({
                     file,
-                    task: { id: taskId, name: message },
+                    task: {
+                        id: task.id,
+                        description: message,
+                        addedAssignees: assignees,
+                        removedAssignees: [
+                            {
+                                id: taskCollabId,
+                            },
+                        ],
+                    },
                     successCallback,
                     errorCallback,
                 });
 
                 expect(tasks.put).toBeCalledWith({
                     id: FILE_ID,
-                    url: `${BASE_URL}/undoc/tasks/${task.id}`,
+                    url: `${BASE_URL}/undoc/tasks/${task.id}/with_dependencies`,
                     data: expectedRequestData,
                     successCallback,
                     errorCallback,

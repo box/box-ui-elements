@@ -115,7 +115,7 @@ jest.mock('../tasks/TasksNew', () => {
     const task = mockTask;
     return jest.fn().mockImplementation(() => ({
         createTaskWithDeps: mockCreateTaskWithDeps,
-        updateTask: jest.fn().mockImplementation(({ successCallback }) => {
+        updateTaskWithDeps: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
         }),
         deleteTask: jest.fn().mockImplementation(({ successCallback }) => {
@@ -799,93 +799,7 @@ describe('api/Feed', () => {
                 { code: 'group_exceeds_limit', type: 'warning' },
                 code,
             );
-            expect(feed.createTaskCollaboratorsforGroup).not.toBeCalled();
-            expect(feed.createTaskCollaborator).not.toBeCalled();
-        });
-
-        test('should call the error handling when unable to create new task collaborator', async () => {
-            const mockErrorCallback = jest.fn();
-            const mockSuccessCallback = jest.fn();
-
-            feed.createTaskCollaborator = jest.fn().mockRejectedValue(new Error('forced rejection'));
-            feed.deleteTaskCollaborator = jest.fn().mockResolvedValue();
-
-            const task = {
-                id: '1',
-                description: 'updated description',
-                addedAssignees: [
-                    {
-                        type: 'user',
-                        id: '3086276240',
-                        name: 'Test User',
-                        login: 'testuser@foo.com',
-                    },
-                ],
-                removedAssignees: [
-                    {
-                        type: 'task_collaborator',
-                        id: '19283765',
-                        target: { type: 'user', id: '19283765', name: 'remove Test User', login: 'testuser@foo.com' },
-                        role: 'ASSIGNEE',
-                        permissions: {
-                            can_delete: true,
-                            can_update: true,
-                        },
-                        status: 'incomplete',
-                    },
-                ],
-            };
-
-            feed.updateTaskNew(file, task, mockSuccessCallback, mockErrorCallback);
-
-            await new Promise(r => setTimeout(r, 0));
-
-            expect(feed.tasksNewAPI.updateTask).not.toBeCalled();
-            expect(feed.tasksNewAPI.getTask).not.toBeCalled();
-            expect(feed.deleteTaskCollaborator).not.toBeCalled();
-            expect(feed.updateFeedItem).toBeCalled();
-            expect(mockErrorCallback).toBeCalled();
-        });
-
-        test('should call the error handling when unable to delete existing task collaborator', async () => {
-            const mockErrorCallback = jest.fn();
-            const mockSuccessCallback = jest.fn();
-            feed.deleteTaskCollaborator = jest.fn().mockRejectedValue(new Error('forced rejection'));
-
-            const task = {
-                id: '1',
-                description: 'updated description',
-                addedAssignees: [
-                    {
-                        type: 'user',
-                        id: '3086276240',
-                        name: 'Test User',
-                        login: 'testuser@foo.com',
-                    },
-                ],
-                removedAssignees: [
-                    {
-                        type: 'task_collaborator',
-                        id: '19283765',
-                        target: { type: 'user', id: '19283765', name: 'remove Test User', login: 'testuser@foo.com' },
-                        role: 'ASSIGNEE',
-                        permissions: {
-                            can_delete: true,
-                            can_update: true,
-                        },
-                        status: 'incomplete',
-                    },
-                ],
-            };
-
-            feed.updateTaskNew(file, task, mockSuccessCallback, mockErrorCallback);
-
-            await new Promise(r => setTimeout(r, 0));
-
-            expect(feed.tasksNewAPI.updateTask).toBeCalled();
-            expect(feed.tasksNewAPI.getTask).toBeCalled();
-            expect(feed.updateFeedItem).toBeCalled();
-            expect(mockErrorCallback).toBeCalled();
+            expect(feed.tasksNewAPI.updateTaskWithDeps).not.toBeCalled();
         });
 
         test('should call the new task api and if successful, the success callback', async () => {
@@ -902,7 +816,7 @@ describe('api/Feed', () => {
             // push a new promise to trigger the promises in updateTaskNew
             await new Promise(r => setTimeout(r, 0));
 
-            expect(feed.tasksNewAPI.updateTask).toBeCalled();
+            expect(feed.tasksNewAPI.updateTaskWithDeps).toBeCalled();
             expect(feed.tasksNewAPI.getTask).toBeCalled();
             expect(feed.updateFeedItem).toBeCalledTimes(2);
             expect(successCallback).toBeCalled();
@@ -946,7 +860,7 @@ describe('api/Feed', () => {
 
             await new Promise(r => setTimeout(r, 0));
 
-            expect(feed.tasksNewAPI.updateTask).toBeCalled();
+            expect(feed.tasksNewAPI.updateTaskWithDeps).toBeCalled();
             expect(feed.updateFeedItem).toBeCalled();
             expect(successCallback).toBeCalled();
         });

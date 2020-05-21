@@ -29,7 +29,11 @@ class TasksNew extends TasksBase {
         return `${this.getBaseApiUrl()}/undoc/tasks/${id}`;
     }
 
-    updateTask({
+    getUrlForTaskWithDeps(id: string): string {
+        return `${this.getBaseApiUrl()}/undoc/tasks/${id}/with_dependencies`;
+    }
+
+    updateTaskWithDeps({
         errorCallback,
         file,
         successCallback,
@@ -42,10 +46,42 @@ class TasksNew extends TasksBase {
     }): void {
         this.errorCode = ERROR_CODE_UPDATE_TASK;
 
+        const createTaskCollabsPayload = task.addedAssignees.map(assignee => {
+            return {
+                op:
+                    assignee.item && assignee.item.type === 'group'
+                        ? 'add_task_collaborators_expand_group'
+                        : 'add_task_collaborator',
+                payload: {
+                    target: {
+                        type: assignee.item && assignee.item.type === 'group' ? 'group' : 'user',
+                        id: assignee.id,
+                    },
+                },
+            };
+        });
+
+        const deleteTaskCollabsPayload = task.removedAssignees.map(assignee => {
+            return {
+                op: 'delete_task_collaborator',
+                id: assignee.id,
+            };
+        });
+
+        const { id, addedAssignees, removedAssignees, ...updateTaskPayload } = task;
         this.put({
             id: file.id,
-            url: this.getUrlForTask(task.id),
-            data: { data: { ...task } },
+            url: this.getUrlForTaskWithDeps(task.id),
+            data: {
+                data: [
+                    {
+                        op: 'update_task',
+                        payload: { ...updateTaskPayload },
+                    },
+                    ...createTaskCollabsPayload,
+                    ...deleteTaskCollabsPayload,
+                ],
+            },
             successCallback,
             errorCallback,
         });

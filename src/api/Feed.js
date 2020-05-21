@@ -496,9 +496,6 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        let updatedWithoutError = true;
-        let removeAssigneeError;
-
         this.file = file;
         this.errorCallback = errorCallback;
         this.tasksNewAPI = new TasksNewAPI(this.options);
@@ -533,28 +530,13 @@ class Feed extends Base {
                 return;
             }
 
-            await Promise.all(
-                task.addedAssignees.map(assignee =>
-                    assignee.item && assignee.item.type === 'group'
-                        ? this.createTaskCollaboratorsforGroup(file, task, assignee)
-                        : this.createTaskCollaborator(file, task, assignee),
-                ),
-            );
-
             await new Promise((resolve, reject) => {
-                this.tasksNewAPI.updateTask({
+                this.tasksNewAPI.updateTaskWithDeps({
                     file,
                     task,
                     successCallback: resolve,
                     errorCallback: reject,
                 });
-            });
-
-            await Promise.all(
-                task.removedAssignees.map(assignee => this.deleteTaskCollaborator(file, task, assignee)),
-            ).catch((e: ElementsXhrError) => {
-                updatedWithoutError = false;
-                removeAssigneeError = e;
             });
 
             await new Promise((resolve, reject) => {
@@ -570,10 +552,6 @@ class Feed extends Base {
                             task.id,
                         );
 
-                        if (!updatedWithoutError) {
-                            this.feedErrorCallback(false, removeAssigneeError, ERROR_CODE_UPDATE_TASK);
-                        }
-
                         resolve();
                     },
                     errorCallback: (e: ElementsXhrError) => {
@@ -585,7 +563,7 @@ class Feed extends Base {
             });
 
             // everything succeeded, so call the passed in success callback
-            if (!this.isDestroyed() && updatedWithoutError) {
+            if (!this.isDestroyed()) {
                 successCallback();
             }
         } catch (e) {
