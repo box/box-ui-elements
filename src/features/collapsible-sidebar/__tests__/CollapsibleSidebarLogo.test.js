@@ -32,4 +32,20 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
 
         expect(sidebar).toMatchSnapshot();
     });
+
+    test('render logo element with url thats passed', () => {
+        const sidebar = getWrapper({
+            url: '/some/url',
+        });
+
+        expect(sidebar).toMatchSnapshot();
+    });
+
+    test('render logo element with htmlAttributes thats passed', () => {
+        const sidebar = getWrapper({
+            htmlAttributes: { someProp: 'someValue' },
+        });
+
+        expect(sidebar).toMatchSnapshot();
+    });
 });
