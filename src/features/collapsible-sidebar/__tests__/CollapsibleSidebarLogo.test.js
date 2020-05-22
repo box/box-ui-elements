@@ -1,6 +1,7 @@
 import React from 'react';
 import { mountConnected } from '../../../test-utils/enzyme';
 
+import LinkBase from '../../../components/link/LinkBase';
 import CollapsibleSidebarLogo from '../CollapsibleSidebarLogo';
 
 describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
@@ -33,23 +34,25 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
         expect(sidebar).toMatchSnapshot();
     });
 
-    test('render logo element with linkUrl thats passed', () => {
+    test('render LinkBase element with linkUrl thats passed', () => {
         const someUrl = '/some/url';
         const sidebar = getWrapper({
+            expanded: true,
             linkUrl: someUrl,
         });
 
-        const componentProp = sidebar.find('CollapsibleSidebarItem').prop('expandedElement');
-        expect(componentProp.props.children[1].props.href).toBe(someUrl);
+        const componentProp = sidebar.find('CollapsibleSidebarItem');
+        expect(componentProp.find(LinkBase).prop('href')).toBe(someUrl);
     });
 
-    test('render logo element with linkHtmlAttributes thats passed', () => {
+    test('render LinkBase element with linkHtmlAttributes thats passed', () => {
         const someValue = 'someValue';
         const sidebar = getWrapper({
-            linkHtmlAttributes: { someProp: someValue },
+            expanded: true,
+            linkHtmlAttributes: { someprop: someValue },
         });
 
-        const componentProp = sidebar.find('CollapsibleSidebarItem').prop('expandedElement');
-        expect(componentProp.props.children[1].props.someProp).toBe(someValue);
+        const componentProp = sidebar.find('CollapsibleSidebarItem');
+        expect(componentProp.find(LinkBase).prop('someprop')).toBe(someValue);
     });
 });
