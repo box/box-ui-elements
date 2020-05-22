@@ -1,4 +1,5 @@
 @import '../../styles/variables';
+@import '../badgeable/mixins';
 
 /**************************************
  * Avatars
@@ -41,6 +42,19 @@
         line-height: 1;
     }
 
+    &.avatar--isExternal {
+        .avatar-external-badge {
+            width: 14px;
+            height: 14px;
+            border-width: 1px;
+        }
+
+        @include Badgeable-bottomRightBadge {
+            bottom: -4px;
+            left: calc(100% - 10px);
+        }
+    }
+
     @for $i from 1 through length($avatar-colors) {
         .avatar-initials[data-bg-idx='#{$i - 1}'] {
             background-color: nth($avatar-colors, $i);
@@ -54,6 +68,19 @@
         .avatar-initials {
             font-size: 11px;
         }
+
+        &.avatar--isExternal {
+            .avatar-external-badge {
+                width: 16px;
+                height: 16px;
+                border-width: 2px;
+            }
+
+            @include Badgeable-bottomRightBadge {
+                bottom: -4px;
+                left: calc(100% - 10px);
+            }
+        }
     }
 
     &.avatar--large {
@@ -64,4 +91,11 @@
             font-size: 14px;
         }
     }
+}
+
+.avatar-external-badge {
+    background-color: $white;
+    border-color: $white;
+    border-style: solid;
+    border-radius: 50%;
 }

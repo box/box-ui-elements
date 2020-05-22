@@ -2,7 +2,9 @@ import * as React from 'react';
 import classNames from 'classnames';
 import AvatarImage from './AvatarImage';
 import AvatarInitials from './AvatarInitials';
+import Badgeable from '../badgeable';
 import UnknownUserAvatar from './UnknownUserAvatar';
+import GlobeBadge16 from '../../icon/fill/GlobeBadge16';
 
 import './Avatar.scss';
 
@@ -19,21 +21,29 @@ export interface AvatarProps {
     className?: string;
     /** Users id */
     id?: string | number | null;
+    /** Whether this avatar should be labeled as external in the current context */
+    isExternal?: boolean;
     /**
      * Users full name.
      *
      * Required if "avatarUrl" is not specified.
      */
     name?: string | null;
+    /** Show the external avatar marker if the avatar is marked as for an external user */
+    shouldShowExternal?: boolean;
     /* avatar size (enum) */
     size?: keyof typeof SIZES | '';
 }
 
-function Avatar({ avatarUrl, className, name, id, size = '' }: AvatarProps) {
+function Avatar({ avatarUrl, className, name, id, isExternal, shouldShowExternal = false, size = '' }: AvatarProps) {
     const [hasImageErrored, setHasImageErrored] = React.useState<boolean>(false);
     const [prevAvatarUrl, setPrevAvatarUrl] = React.useState<AvatarProps['avatarUrl']>(null);
 
-    const classes = classNames(['avatar', className, { [`avatar--${size}`]: size && SIZES[size] }]);
+    const classes = classNames([
+        'avatar',
+        className,
+        { [`avatar--${size}`]: size && SIZES[size], 'avatar--isExternal': shouldShowExternal && isExternal },
+    ]);
 
     // Reset hasImageErrored state when avatarUrl changes
     if (avatarUrl !== prevAvatarUrl) {
@@ -58,9 +68,14 @@ function Avatar({ avatarUrl, className, name, id, size = '' }: AvatarProps) {
     }
 
     return (
-        <span className={classes} role="presentation">
-            {avatar}
-        </span>
+        <Badgeable
+            className={classes}
+            bottomRight={
+                shouldShowExternal && isExternal ? <GlobeBadge16 className="avatar-external-badge" /> : undefined
+            }
+        >
+            <span role="presentation">{avatar}</span>
+        </Badgeable>
     );
 }
 
