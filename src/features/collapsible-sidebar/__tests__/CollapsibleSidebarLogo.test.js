@@ -1,7 +1,6 @@
 import React from 'react';
 import { mountConnected } from '../../../test-utils/enzyme';
 
-import LinkBase from '../../../components/link/LinkBase';
 import CollapsibleSidebarLogo from '../CollapsibleSidebarLogo';
 
 describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
@@ -42,7 +41,7 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
         });
 
         const componentProp = sidebar.find('CollapsibleSidebarItem');
-        expect(componentProp.find(LinkBase).prop('href')).toBe(someUrl);
+        expect(componentProp.find('LinkBase').prop('href')).toBe(someUrl);
     });
 
     test('render LinkBase element with linkHtmlAttributes thats passed', () => {
@@ -53,6 +52,6 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
         });
 
         const componentProp = sidebar.find('CollapsibleSidebarItem');
-        expect(componentProp.find(LinkBase).prop('someprop')).toBe(someValue);
+        expect(componentProp.find('LinkBase').prop('someprop')).toBe(someValue);
     });
 });
