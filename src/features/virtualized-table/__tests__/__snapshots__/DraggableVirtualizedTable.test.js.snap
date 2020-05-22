@@ -4,6 +4,7 @@ exports[`features/virtualized-table/DraggableVirtualizedTable should render a Dr
 <div>
   <VirtualizedTable
     className="bdl-DraggableVirtualizedTable"
+    height={195}
     rowData={
       Array [
         Object {

@@ -12,10 +12,12 @@ import { bdlGray } from '../../styles/variables';
 import IconDrag from '../../icons/general/IconDrag';
 import { draggableRowRenderer } from '../virtualized-table-renderers';
 
+import { VIRTUALIZED_TABLE_DEFAULTS } from './constants';
 import VirtualizedTable from './VirtualizedTable';
 
 import './DraggableVirtualizedTable.scss';
 
+const { HEADER_HEIGHT, ROW_HEIGHT } = VIRTUALIZED_TABLE_DEFAULTS;
 const ICON_SIZE = 24;
 
 type Props = VirtualizedTableProps & {
@@ -28,12 +30,19 @@ const DraggableVirtualizedTable = ({
     children,
     className,
     onDragEnd,
+    rowData,
     shouldShowDragHandle,
     tableId,
     ...rest
 }: Props) => {
     const tableClassName = classNames('bdl-DraggableVirtualizedTable', className);
     const draggableCellRenderer = () => <IconDrag color={bdlGray} height={ICON_SIZE} width={ICON_SIZE} />;
+    // Virtualized table's performance optimizations can not be used here since
+    // all rows need to be rendered in order for drag and drop to work properly.
+    // From a UX perspective, it also doesn't make sense to have drag and drop on
+    // very large tables that actually require optimizations, so this component
+    // always forces the table to be tall enough to fit all rows
+    const tableHeight = rowData.length * ROW_HEIGHT + HEADER_HEIGHT;
 
     const handleDragEnd = ({ destination, source }) => {
         const destinationIndex = destination ? destination.index : source.index;
@@ -45,7 +54,13 @@ const DraggableVirtualizedTable = ({
             <Droppable droppableId={tableId}>
                 {(droppableProvided: DroppableProvided) => (
                     <div ref={droppableProvided.innerRef}>
-                        <VirtualizedTable {...rest} className={tableClassName} rowRenderer={draggableRowRenderer}>
+                        <VirtualizedTable
+                            {...rest}
+                            className={tableClassName}
+                            rowRenderer={draggableRowRenderer}
+                            height={tableHeight}
+                            rowData={rowData}
+                        >
                             {shouldShowDragHandle && (
                                 <Column
                                     cellRenderer={draggableCellRenderer}
