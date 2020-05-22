@@ -1,12 +1,34 @@
 @import '../../styles/variables';
 
+.contact-data-list-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 35px 12px 12px;
+    line-height: 16px;
+}
+
+.contact-avatar {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+}
+
+.contact-name-container {
+    overflow: hidden;
+}
+
 .contact-name {
+    color: $bdl-gray-80;
     font-size: 14px;
+    font-size: 13px;
 }
 
 .contact-sub-name {
     color: $bdl-gray-50;
+    color: $bdl-gray-62;
     font-size: 12px;
+    font-size: 13px;
 }
 
 .contact-text {

@@ -130,50 +130,74 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   validator={[MockFunction]}
 >
   <ContactDatalistItem
+    id="12345"
+    isExternalContact={false}
     key="12345"
     name="X User"
+    showAvatar={false}
     subtitle="x@example.com"
     title="X User"
   />
   <ContactDatalistItem
+    id="23456"
+    isExternalContact={true}
     key="23456"
     name="Y User"
+    showAvatar={false}
     subtitle="y@example.com"
     title="Y User"
   />
   <ContactDatalistItem
+    id="34567"
+    isExternalContact={false}
     key="34567"
     name="Z User"
+    showAvatar={false}
     subtitle="z@example.com"
     title="Z User"
   />
   <ContactDatalistItem
+    id="12"
+    isExternalContact={true}
     key="12"
     name="a b"
+    showAvatar={false}
     subtitle="a@example.com"
     title="a b"
   />
   <ContactDatalistItem
+    id="13"
+    isExternalContact={false}
     key="13"
     name="a b"
+    showAvatar={false}
     subtitle="b@example.com"
     title="a b"
   />
   <ContactDatalistItem
+    id="14"
+    isExternalContact={true}
     key="14"
     name="a c"
+    showAvatar={false}
     subtitle="c@example.com"
     title="a c"
   />
   <ContactDatalistItem
+    id="14"
+    isExternalContact={false}
     key="14"
     name="a d"
+    showAvatar={false}
     subtitle="d@example.com"
     title="a d"
   />
   <ContactDatalistItem
+    id="14"
+    isExternalContact={true}
     key="14"
     name="a e"
+    showAvatar={false}
     subtitle="e@example.com"
     title="a e"
   />

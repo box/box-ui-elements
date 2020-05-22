@@ -28,6 +28,7 @@ type Props = {
     onInput?: Function,
     onPillCreate?: (pills: Array<SelectOptionProp | Contact>) => void,
     selectedContacts: Array<Contact>,
+    showInviteeAvatars?: boolean,
     suggestedCollaborators?: SuggestedCollabLookup,
     validateForError: Function,
     validator: Function,
@@ -44,6 +45,10 @@ const isSubstring = (value, searchString) => {
 };
 
 class ContactsField extends React.Component<Props, State> {
+    static defaultProps = {
+        showInviteeAvatars: false,
+    };
+
     constructor(props: Props) {
         super(props);
 
@@ -87,7 +92,7 @@ class ContactsField extends React.Component<Props, State> {
                 fullContacts = this.addSuggestedContacts(fullContacts);
             }
 
-            return fullContacts.map<Object>(({ email, id, isExternalUser, name, type }) => ({
+            return fullContacts.map<any>(({ email, id, isExternalUser, name, type }) => ({
                 // map to standardized DatalistItem format
                 // TODO: refactor this so inline conversions aren't required at every usage
                 email,
@@ -153,6 +158,7 @@ class ContactsField extends React.Component<Props, State> {
             onContactAdd,
             onContactRemove,
             onPillCreate,
+            showInviteeAvatars,
             validateForError,
             validator,
         } = this.props;
@@ -188,8 +194,16 @@ class ContactsField extends React.Component<Props, State> {
                 validateForError={validateForError}
                 validator={validator}
             >
-                {contacts.map(({ email, text = null, id }) => (
-                    <ContactDatalistItem key={id} name={text} subtitle={email || groupLabel} title={text} />
+                {contacts.map(({ email, isExternalUser, text = null, id }) => (
+                    <ContactDatalistItem
+                        key={id}
+                        id={id}
+                        isExternalContact={isExternalUser}
+                        name={text}
+                        subtitle={email || groupLabel}
+                        title={text}
+                        showAvatar={showInviteeAvatars}
+                    />
                 ))}
             </PillSelectorDropdown>
         );
