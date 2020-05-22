@@ -33,19 +33,23 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
         expect(sidebar).toMatchSnapshot();
     });
 
-    test('render logo element with url thats passed', () => {
+    test('render logo element with linkUrl thats passed', () => {
+        const someUrl = '/some/url';
         const sidebar = getWrapper({
-            url: '/some/url',
+            linkUrl: someUrl,
         });
 
-        expect(sidebar).toMatchSnapshot();
+        const componentProp = sidebar.find('CollapsibleSidebarItem').prop('expandedElement');
+        expect(componentProp.props.children[1].props.href).toBe(someUrl);
     });
 
-    test('render logo element with htmlAttributes thats passed', () => {
+    test('render logo element with linkHtmlAttributes thats passed', () => {
+        const someValue = 'someValue';
         const sidebar = getWrapper({
-            htmlAttributes: { someProp: 'someValue' },
+            linkHtmlAttributes: { someProp: someValue },
         });
 
-        expect(sidebar).toMatchSnapshot();
+        const componentProp = sidebar.find('CollapsibleSidebarItem').prop('expandedElement');
+        expect(componentProp.props.children[1].props.someProp).toBe(someValue);
     });
 });

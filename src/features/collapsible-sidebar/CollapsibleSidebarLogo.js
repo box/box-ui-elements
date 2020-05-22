@@ -39,17 +39,17 @@ type Props = {
     expanded: boolean,
 
     /** Optional HTML attributes to append to logo */
-    htmlAttributes?: Object,
+    linkHtmlAttributes?: Object,
+
+    linkUrl?: string,
 
     onToggle: () => void,
 
     resinTarget: string,
-
-    url?: string,
 } & InjectIntlProvidedProps;
 
 function CollapsibleSidebarLogo(props: Props) {
-    const { badge, className, expanded, htmlAttributes, onToggle, resinTarget, intl, url = '/' } = props;
+    const { badge, className, expanded, linkHtmlAttributes, onToggle, resinTarget, intl, linkUrl = '/' } = props;
 
     const classes = classNames('bdl-CollapsibleSidebar-logo', className);
 
@@ -71,7 +71,7 @@ function CollapsibleSidebarLogo(props: Props) {
                 expandedElement={
                     <>
                         {toggleButton}
-                        <LinkBase data-resin-target={resinTarget} href={url} {...htmlAttributes}>
+                        <LinkBase data-resin-target={resinTarget} href={linkUrl} {...linkHtmlAttributes}>
                             <>
                                 <StyledLogo className="bdl-CollapsibleSidebar-logoIcon" height={32} width={61} />
                                 {badge}
