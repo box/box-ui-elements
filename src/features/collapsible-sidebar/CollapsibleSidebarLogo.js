@@ -49,7 +49,7 @@ type Props = {
 } & InjectIntlProvidedProps;
 
 function CollapsibleSidebarLogo(props: Props) {
-    const { badge, className, expanded, linkHtmlAttributes, onToggle, resinTarget, intl, linkUrl = '/' } = props;
+    const { badge, className, expanded, linkHtmlAttributes, linkUrl = '/', onToggle, resinTarget, intl } = props;
 
     const classes = classNames('bdl-CollapsibleSidebar-logo', className);
 
