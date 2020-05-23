@@ -51,15 +51,19 @@ const renderFiles = () => {
 export const basic = () => {
     const hexColor = color('Theme Color', '#0061d5');
     const theme = createTheme(hexColor);
+    const linkProps = {
+        href: '/?path=/story/components-tooltip--top-center',
+        'data-resin-target': 'resinTarget',
+    };
 
     return (
         <ThemeProvider theme={theme}>
             <CollapsibleSidebar expanded={boolean('isExpanded', true)}>
                 <CollapsibleSidebarLogo
                     canEndTrial={false}
+                    linkProps={linkProps}
                     onToggle={noop}
                     expanded={boolean('isExpanded', true)}
-                    resinTarget="test-resin"
                 />
                 <CollapsibleSidebarNav>
                     <ul>

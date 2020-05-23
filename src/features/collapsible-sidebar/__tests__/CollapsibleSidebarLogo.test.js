@@ -32,4 +32,28 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
 
         expect(sidebar).toMatchSnapshot();
     });
+
+    test('render LinkBase element with linkUrl thats passed', () => {
+        const someUrl = '/some/url';
+        const sidebar = getWrapper({
+            expanded: true,
+            linkProps: {
+                href: someUrl,
+            },
+        });
+
+        const componentProp = sidebar.find('CollapsibleSidebarItem');
+        expect(componentProp.find('LinkBase').prop('href')).toBe(someUrl);
+    });
+
+    test('render LinkBase element with linkHtmlAttributes thats passed', () => {
+        const someValue = 'someValue';
+        const sidebar = getWrapper({
+            expanded: true,
+            linkProps: { someprop: someValue },
+        });
+
+        const componentProp = sidebar.find('CollapsibleSidebarItem');
+        expect(componentProp.find('LinkBase').prop('someprop')).toBe(someValue);
+    });
 });
