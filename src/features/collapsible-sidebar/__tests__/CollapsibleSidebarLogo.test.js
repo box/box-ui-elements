@@ -37,7 +37,9 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
         const someUrl = '/some/url';
         const sidebar = getWrapper({
             expanded: true,
-            linkUrl: someUrl,
+            linkProps: {
+                href: someUrl,
+            },
         });
 
         const componentProp = sidebar.find('CollapsibleSidebarItem');
@@ -48,7 +50,7 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
         const someValue = 'someValue';
         const sidebar = getWrapper({
             expanded: true,
-            linkHtmlAttributes: { someprop: someValue },
+            linkProps: { someprop: someValue },
         });
 
         const componentProp = sidebar.find('CollapsibleSidebarItem');

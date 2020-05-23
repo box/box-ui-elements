@@ -72,7 +72,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
               />
             </PlainButton>
             <LinkBase
-              href="/"
+              className="bdl-CollapsibleSidebar-logoLink"
             >
               <React.Fragment>
                 <Styled(BoxLogo)
@@ -133,10 +133,11 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
           </button>
         </PlainButton>
         <LinkBase
-          href="/"
+          className="bdl-CollapsibleSidebar-logoLink"
         >
           <a
-            href="/"
+            className="bdl-CollapsibleSidebar-logoLink"
+            href="#"
           >
             <Styled(BoxLogo)
               className="bdl-CollapsibleSidebar-logoIcon"
@@ -220,7 +221,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 2`] = `
               />
             </PlainButton>
             <LinkBase
-              href="/"
+              className="bdl-CollapsibleSidebar-logoLink"
             >
               <React.Fragment>
                 <Styled(BoxLogo)
