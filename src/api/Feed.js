@@ -5,7 +5,6 @@
  */
 import uniqueId from 'lodash/uniqueId';
 import noop from 'lodash/noop';
-import flatten from 'lodash/flatten';
 import type { MessageDescriptor } from 'react-intl';
 import { getBadItemError, getBadUserError, isUserCorrectableError } from '../utils/error';
 import commonMessages from '../elements/common/messages';
@@ -497,9 +496,6 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        let updatedWithoutError = true;
-        let removeAssigneeError;
-
         this.file = file;
         this.errorCallback = errorCallback;
         this.tasksNewAPI = new TasksNewAPI(this.options);
@@ -534,28 +530,13 @@ class Feed extends Base {
                 return;
             }
 
-            await Promise.all(
-                task.addedAssignees.map(assignee =>
-                    assignee.item && assignee.item.type === 'group'
-                        ? this.createTaskCollaboratorsforGroup(file, task, assignee)
-                        : this.createTaskCollaborator(file, task, assignee),
-                ),
-            );
-
             await new Promise((resolve, reject) => {
-                this.tasksNewAPI.updateTask({
+                this.tasksNewAPI.updateTaskWithDeps({
                     file,
                     task,
                     successCallback: resolve,
                     errorCallback: reject,
                 });
-            });
-
-            await Promise.all(
-                task.removedAssignees.map(assignee => this.deleteTaskCollaborator(file, task, assignee)),
-            ).catch((e: ElementsXhrError) => {
-                updatedWithoutError = false;
-                removeAssigneeError = e;
             });
 
             await new Promise((resolve, reject) => {
@@ -571,10 +552,6 @@ class Feed extends Base {
                             task.id,
                         );
 
-                        if (!updatedWithoutError) {
-                            this.feedErrorCallback(false, removeAssigneeError, ERROR_CODE_UPDATE_TASK);
-                        }
-
                         resolve();
                     },
                     errorCallback: (e: ElementsXhrError) => {
@@ -586,7 +563,7 @@ class Feed extends Base {
             });
 
             // everything succeeded, so call the passed in success callback
-            if (!this.isDestroyed() && updatedWithoutError) {
+            if (!this.isDestroyed()) {
                 successCallback();
             }
         } catch (e) {
@@ -773,19 +750,30 @@ class Feed extends Base {
                 }
 
                 this.tasksNewAPI = new TasksNewAPI(this.options);
-                this.tasksNewAPI.createTask({
+                this.tasksNewAPI.createTaskWithDeps({
                     file,
                     task: taskPayload,
-                    successCallback: (taskData: Task) => {
+                    assignees,
+                    successCallback: (taskWithDepsData: any) => {
                         this.addPendingItem(this.file.id, currentUser, pendingTask);
-                        this.createTaskNewSuccessCallback(
-                            file,
+                        this.updateFeedItem(
+                            {
+                                ...taskWithDepsData,
+                                task_links: {
+                                    entries: taskWithDepsData.task_links,
+                                    next_marker: null,
+                                    limit: 1,
+                                },
+                                assigned_to: {
+                                    entries: taskWithDepsData.assigned_to,
+                                    next_marker: null,
+                                    limit: taskWithDepsData.assigned_to.length,
+                                },
+                                isPending: false,
+                            },
                             uuid,
-                            taskData,
-                            assignees,
-                            successCallback,
-                            errorCallback,
                         );
+                        successCallback(taskWithDepsData);
                     },
                     errorCallback: (e: ElementsXhrError, code: string) => {
                         this.feedErrorCallback(false, e, code);
@@ -796,73 +784,6 @@ class Feed extends Base {
                 this.feedErrorCallback(false, error, ERROR_CODE_CREATE_TASK);
             });
     };
-
-    /**
-     * Callback for successful creation of a Task. Creates a task assignment
-     *
-     * @param {BoxItem} file - The file to which the task is assigned
-     * @param {string} id - ID of the feed item to update with the new task data
-     * @param {Task} task - API returned task
-     * @param {Array} assignees - List of assignees
-     * @param {Function} successCallback - the function which will be called on success
-     * @param {Function} errorCallback - the function which will be called on error     *
-     * @return {void}
-     */
-    async createTaskNewSuccessCallback(
-        file: BoxItem,
-        id: string,
-        task: Task,
-        assignees: SelectorItems<UserMini | GroupMini>,
-        successCallback: Function,
-        errorCallback: ErrorCallback,
-    ) {
-        if (!file) {
-            throw getBadItemError();
-        }
-        this.errorCallback = errorCallback;
-
-        try {
-            const taskLink = await this.createTaskLink(file, task);
-
-            /* TODO: change block to process users in parallel and process groups sequentially
-            -check if length of users + groups = assignees (if not throw an error)
-            -filter out the users from assignees
-            -use the result of filter to store the task collaborators in parallel
-            -filter out the groups from assignees
-            -use result of filter to process each group sequentially */
-            const taskAssignments: Array<TaskCollabAssignee> = flatten<TaskCollabAssignee, TaskCollabAssignee>(
-                await Promise.all(
-                    assignees.map((assignee: SelectorItem<UserMini | GroupMini>): Promise<
-                        Array<TaskCollabAssignee> | TaskCollabAssignee,
-                    > =>
-                        assignee.item && assignee.item.type === 'group'
-                            ? this.createTaskCollaboratorsforGroup(file, task, assignee)
-                            : this.createTaskCollaborator(file, task, assignee),
-                    ),
-                ),
-            );
-            this.updateFeedItem(
-                {
-                    ...task,
-                    task_links: {
-                        entries: [taskLink],
-                        next_marker: null,
-                        limit: 1,
-                    },
-                    assigned_to: {
-                        entries: taskAssignments,
-                        next_marker: null,
-                        limit: taskAssignments.length,
-                    },
-                    isPending: false,
-                },
-                id,
-            );
-            successCallback(task);
-        } catch (err) {
-            this.feedErrorCallback(false, err, ERROR_CODE_CREATE_TASK);
-        }
-    }
 
     /**
      * Creates a task group via the API.
