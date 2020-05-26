@@ -174,4 +174,14 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
             ).toBe(isCurrentVersion);
         },
     );
+
+    test('should render annotation with error and isPending if appropriate', () => {
+        const error = new Error('foo');
+        const mockAnnotation = { ...annotation, error, isPending: true };
+        const wrapper = getShallowWrapper({ items: [mockAnnotation] });
+        const annotationActivity = wrapper.dive().find(AnnotationActivity);
+
+        expect(annotationActivity.prop('error')).toEqual(error);
+        expect(annotationActivity.prop('isPending')).toBe(true);
+    });
 });

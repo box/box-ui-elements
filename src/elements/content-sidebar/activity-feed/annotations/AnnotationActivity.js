@@ -25,7 +25,6 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getUserProfileUrl?: GetProfileUrlCallback,
     isCurrentVersion: boolean,
-    isDisabled?: boolean,
     isPending?: boolean,
     item: Annotation,
     onDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
