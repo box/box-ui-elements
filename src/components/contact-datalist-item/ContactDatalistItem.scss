@@ -11,7 +11,7 @@
     flex-shrink: 0;
     width: 32px;
     height: 32px;
-    margin-right: 8px;
+    margin-right: $bdl-grid-unit * 2;
 }
 
 .contact-name-container {
@@ -20,14 +20,11 @@
 
 .contact-name {
     color: $bdl-gray-80;
-    font-size: 14px;
     font-size: 13px;
 }
 
 .contact-sub-name {
-    color: $bdl-gray-50;
     color: $bdl-gray-62;
-    font-size: 12px;
     font-size: 13px;
 }
 
