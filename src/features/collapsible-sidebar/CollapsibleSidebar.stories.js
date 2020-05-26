@@ -141,7 +141,7 @@ export const basic = () => {
                                     expandedElement={
                                         <CollapsibleSidebarMenuItem
                                             content={menuItemContent}
-                                            icon={<Folder16 height={20} width={20} />}
+                                            icon={<CheckmarkBadge16 height={20} width={20} />}
                                         />
                                     }
                                     tooltipMessage="All Files Link"
