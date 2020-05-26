@@ -60,7 +60,7 @@ const StyledIconWrapper = styled.span`
     }
 `;
 
-const StyledMenuItemLabel = styled.span`
+export const StyledMenuItemLabel = styled.span`
     color: ${props => props.theme.primary.foreground};
 
     a:active &,
@@ -74,13 +74,15 @@ const StyledMenuItemLabel = styled.span`
 type Props = {
     /** Additional classes */
     className?: string,
+    /* Custom menu item content */
+    content?: React.Node,
     icon?: React.Node,
     overflowAction?: React.Node,
     text?: string,
 };
 
 function CollapsibleSidebarMenuItem(props: Props) {
-    const { className, icon, overflowAction, text, ...rest } = props;
+    const { className, content, icon, overflowAction, text, ...rest } = props;
     const textRef = React.useRef<?HTMLElement>(null);
     const isTextOverflowed = useIsContentOverflowed(textRef);
     const { isScrolling } = React.useContext(CollapsibleSidebarContext);
@@ -94,6 +96,7 @@ function CollapsibleSidebarMenuItem(props: Props) {
                         {text}
                     </StyledMenuItemLabel>
                 )}
+                {content}
                 {overflowAction}
             </StyledMenuItem>
         );

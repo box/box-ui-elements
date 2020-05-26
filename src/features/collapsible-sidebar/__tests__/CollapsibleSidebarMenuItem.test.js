@@ -32,6 +32,20 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should show custom content when content is passed', () => {
+        libDom.useIsContentOverflowed.mockReturnValue(false);
+
+        const wrapper = getWrapper(
+            {
+                className: 'foo',
+                content: <div>Custom Content</div>,
+                icon: 'bold',
+            },
+            { isScrolling: false },
+        );
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('should allow tooltip if text is overflowing and not scrolling', () => {
         libDom.useIsContentOverflowed.mockReturnValue(true);
 
