@@ -13,14 +13,17 @@ import CollapsibleSidebarLogo from './CollapsibleSidebarLogo';
 import CollapsibleSidebarFooter from './CollapsibleSidebarFooter';
 import CollapsibleSidebarNav from './CollapsibleSidebarNav';
 import CollapsibleSidebarItem from './CollapsibleSidebarItem';
-import CollapsibleSidebarMenuItem from './CollapsibleSidebarMenuItem';
+import CollapsibleSidebarMenuItem, { StyledMenuItemLabel } from './CollapsibleSidebarMenuItem';
 import notes from './CollapsibleSidebar.stories.md';
+
+import { BetaBadge, TrialBadge } from '../../components/badge';
 
 import Folder16 from '../../icon/fill/Folder16';
 import ClockBadge16 from '../../icon/fill/ClockBadge16';
 import Code16 from '../../icon/fill/Code16';
 import Trash16 from '../../icon/fill/Trash16';
 import FileDefault16 from '../../icon/fill/FileDefault16';
+import CheckmarkBadge16 from '../../icon/fill/CheckmarkBadge16';
 
 const renderFiles = () => {
     const items = [];
@@ -55,6 +58,31 @@ export const basic = () => {
         href: '/?path=/story/components-tooltip--top-center',
         'data-resin-target': 'resinTarget',
     };
+
+    const menuItemContent = (
+        <>
+            <StyledMenuItemLabel
+                style={{
+                    marginLeft: 16,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    opacity: 0.85,
+                }}
+            >
+                Synced
+            </StyledMenuItemLabel>
+            <BetaBadge
+                style={{
+                    marginLeft: 8,
+                }}
+            />
+            <TrialBadge
+                style={{
+                    marginLeft: 8,
+                }}
+            />
+        </>
+    );
 
     return (
         <ThemeProvider theme={theme}>
@@ -98,6 +126,25 @@ export const basic = () => {
                                         />
                                     }
                                     tooltipMessage="Recents Link"
+                                />
+                            </a>
+                        </li>
+                        <li key="djb-leftnav-menu-item-synced">
+                            <a href="/">
+                                <CollapsibleSidebarItem
+                                    collapsedElement={
+                                        <CollapsibleSidebarMenuItem
+                                            icon={<CheckmarkBadge16 height={20} width={20} />}
+                                        />
+                                    }
+                                    expanded={boolean('isExpanded', true)}
+                                    expandedElement={
+                                        <CollapsibleSidebarMenuItem
+                                            content={menuItemContent}
+                                            icon={<CheckmarkBadge16 height={20} width={20} />}
+                                        />
+                                    }
+                                    tooltipMessage="Synced Link"
                                 />
                             </a>
                         </li>
