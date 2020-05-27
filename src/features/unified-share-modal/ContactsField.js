@@ -72,7 +72,7 @@ class ContactsField extends React.Component<Props, State> {
         return [...suggestedOptions, ...otherOptions];
     };
 
-    filterContacts = (contacts: Array<Contact>) => {
+    filterContacts = (contacts: Array<Contact>): Array<Contact> => {
         const { pillSelectorInputValue } = this.state;
         const { selectedContacts, suggestedCollaborators } = this.props;
 
@@ -92,7 +92,7 @@ class ContactsField extends React.Component<Props, State> {
                 fullContacts = this.addSuggestedContacts(fullContacts);
             }
 
-            return fullContacts.map<any>(({ email, id, isExternalUser, name, type }) => ({
+            return fullContacts.map<Contact>(({ email, id, isExternalUser, name, type }) => ({
                 // map to standardized DatalistItem format
                 // TODO: refactor this so inline conversions aren't required at every usage
                 email,
