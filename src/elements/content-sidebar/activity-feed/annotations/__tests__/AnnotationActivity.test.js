@@ -3,7 +3,9 @@ import { mount, shallow } from 'enzyme';
 
 import AnnotationActivity from '../AnnotationActivity';
 import AnnotationActivityLink from '../AnnotationActivityLink';
+import AnnotationActivityMenu from '../AnnotationActivityMenu';
 import CommentForm from '../../comment-form/CommentForm';
+import Media from '../../../../../components/media';
 import messages from '../messages';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
@@ -78,22 +80,26 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
     });
 
     test('should not show actions menu when annotation activity is pending', () => {
-        const activity = {
+        const item = {
+            ...mockAnnotation,
             permissions: { can_delete: true },
             isPending: true,
-            onDelete: jest.fn(),
         };
 
-        const wrapper = getWrapper(activity);
+        const wrapper = getWrapper({ item });
 
-        expect(wrapper.find('[data-testid="annotation-activity-actions-menu"]').length).toEqual(0);
+        expect(wrapper.exists(AnnotationActivityMenu)).toBe(false);
+        expect(wrapper.find(Media).hasClass('bcs-is-pending')).toBe(true);
     });
 
     test('should render an error when one is defined', () => {
         const activity = {
-            error: {
-                title: 'error',
-                message: 'This is an error message',
+            item: {
+                ...mockAnnotation,
+                error: {
+                    title: 'error',
+                    message: 'This is an error message',
+                },
             },
             onDelete: jest.fn(),
         };
@@ -105,12 +111,15 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
     test('should render an error cta when an action is defined', () => {
         const onActionSpy = jest.fn();
         const activity = {
-            error: {
-                title: 'error',
-                message: 'This is an error message',
-                action: {
-                    text: 'click',
-                    onAction: onActionSpy,
+            item: {
+                ...mockAnnotation,
+                error: {
+                    title: 'error',
+                    message: 'This is an error message',
+                    action: {
+                        text: 'click',
+                        onAction: onActionSpy,
+                    },
                 },
             },
             onDelete: jest.fn(),

@@ -61,7 +61,7 @@ describe('Create Task', () => {
         });
 
         it('shows error state after receiving server error', () => {
-            cy.route('POST', '**/undoc/tasks').as('createTaskLink');
+            cy.route('POST', '**/undoc/tasks/with_dependencies').as('createTaskWithDeps');
             getSubmitButton().should('not.have.class', 'is-loading');
             cy.getByTestId('create-task-modal').within(() => {
                 getAssigneeField()
@@ -77,7 +77,7 @@ describe('Create Task', () => {
             getSubmitButton().should('have.class', 'is-loading');
 
             // wait for task creation request to finish
-            cy.wait('@createTaskLink');
+            cy.wait('@createTaskWithDeps');
 
             // test environment task create fails with default token, so an
             // inline error should appear in the form
