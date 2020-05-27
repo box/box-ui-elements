@@ -88,8 +88,8 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
         const wrapper = getWrapper({ item });
 
-        expect(wrapper.find(AnnotationActivityMenu).length).toEqual(0);
-        expect(wrapper.find(Media).prop('className')).toContain('bcs-is-pending');
+        expect(wrapper.exists(AnnotationActivityMenu)).toBe(false);
+        expect(wrapper.find(Media).hasClass('bcs-is-pending')).toBe(true);
     });
 
     test('should render an error when one is defined', () => {
