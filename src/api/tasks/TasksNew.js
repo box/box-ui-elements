@@ -14,44 +14,26 @@ import {
 } from '../../constants';
 import type { TaskUpdatePayload } from '../../common/types/tasks';
 import type { ElementsXhrError, ElementsErrorCallback } from '../../common/types/api';
-import type { BoxItem } from '../../common/types/core';
+import type { SelectorItems, SelectorItem, UserMini, GroupMini, BoxItem } from '../../common/types/core';
 
 class TasksNew extends TasksBase {
     getUrlForFileTasks(id: string): string {
         return `${this.getBaseApiUrl()}/undoc/files/${id}/linked_tasks?limit=${API_PAGE_LIMIT}`;
     }
 
-    getUrlForTaskCreate(): string {
-        return `${this.getBaseApiUrl()}/undoc/tasks`;
+    getUrlForTaskCreateWithDeps(): string {
+        return `${this.getBaseApiUrl()}/undoc/tasks/with_dependencies`;
     }
 
     getUrlForTask(id: string): string {
         return `${this.getBaseApiUrl()}/undoc/tasks/${id}`;
     }
 
-    createTask({
-        errorCallback,
-        file,
-        successCallback,
-        task,
-    }: {
-        errorCallback: (e: ElementsXhrError, code: string) => void,
-        file: BoxItem,
-        successCallback: Function,
-        task: {}, // Partial task object
-    }): void {
-        this.errorCode = ERROR_CODE_CREATE_TASK;
-
-        this.post({
-            id: file.id,
-            url: this.getUrlForTaskCreate(),
-            data: { data: { ...task } },
-            successCallback,
-            errorCallback,
-        });
+    getUrlForTaskWithDeps(id: string): string {
+        return `${this.getBaseApiUrl()}/undoc/tasks/${id}/with_dependencies`;
     }
 
-    updateTask({
+    updateTaskWithDeps({
         errorCallback,
         file,
         successCallback,
@@ -64,10 +46,42 @@ class TasksNew extends TasksBase {
     }): void {
         this.errorCode = ERROR_CODE_UPDATE_TASK;
 
+        const createTaskCollabsPayload = task.addedAssignees.map(assignee => {
+            return {
+                op:
+                    assignee.item && assignee.item.type === 'group'
+                        ? 'add_task_collaborators_expand_group'
+                        : 'add_task_collaborator',
+                payload: {
+                    target: {
+                        type: assignee.item && assignee.item.type === 'group' ? 'group' : 'user',
+                        id: assignee.id,
+                    },
+                },
+            };
+        });
+
+        const deleteTaskCollabsPayload = task.removedAssignees.map(assignee => {
+            return {
+                op: 'delete_task_collaborator',
+                id: assignee.id,
+            };
+        });
+
+        const { id, addedAssignees, removedAssignees, ...updateTaskPayload } = task;
         this.put({
             id: file.id,
-            url: this.getUrlForTask(task.id),
-            data: { data: { ...task } },
+            url: this.getUrlForTaskWithDeps(task.id),
+            data: {
+                data: [
+                    {
+                        op: 'update_task',
+                        payload: { ...updateTaskPayload },
+                    },
+                    ...createTaskCollabsPayload,
+                    ...deleteTaskCollabsPayload,
+                ],
+            },
             successCallback,
             errorCallback,
         });
@@ -127,6 +141,54 @@ class TasksNew extends TasksBase {
         this.get({
             id: file.id,
             url: this.getUrlForTask(id),
+            successCallback,
+            errorCallback,
+        });
+    }
+
+    createTaskWithDeps({
+        errorCallback,
+        file,
+        successCallback,
+        task,
+        assignees,
+    }: {
+        assignees: SelectorItems<UserMini | GroupMini>,
+        errorCallback: (e: ElementsXhrError, code: string) => void,
+        file: BoxItem,
+        successCallback: Function,
+        task: {}, // Partial task object
+    }): void {
+        this.errorCode = ERROR_CODE_CREATE_TASK;
+
+        const createTaskCollabsPayload = assignees.map((assignee: SelectorItem<UserMini | GroupMini>) => {
+            return {
+                target: {
+                    type: assignee.item && assignee.item.type === 'group' ? 'group' : 'user',
+                    id: assignee.id,
+                },
+            };
+        });
+
+        const createTaskLinksPayload = [
+            {
+                target: {
+                    id: file.id,
+                    type: 'file',
+                },
+            },
+        ];
+
+        const createTaskWithDepsPayload = {
+            task: { ...task },
+            assigned_to: createTaskCollabsPayload,
+            task_links: createTaskLinksPayload,
+        };
+
+        this.post({
+            id: file.id,
+            url: this.getUrlForTaskCreateWithDeps(),
+            data: { data: { ...createTaskWithDepsPayload } },
             successCallback,
             errorCallback,
         });
