@@ -511,8 +511,8 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             allShareRestrictionWarning;
 
         return (
-            <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
-                <div className={showFormOnly ? 'bdl-UnifiedShareForm' : ''}>
+            <div className={showFormOnly ? 'bdl-UnifiedShareForm' : ''}>
+                <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
                     {showShareRestrictionWarning && allShareRestrictionWarning}
 
                     {!isEmailLinkSectionExpanded && !showCollaboratorList && this.renderInviteSection()}
@@ -565,8 +565,8 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                         />
                     )}
                     {showCollaboratorList && this.renderCollaboratorList()}
-                </div>
-            </LoadingIndicatorWrapper>
+                </LoadingIndicatorWrapper>
+            </div>
         );
     }
 }

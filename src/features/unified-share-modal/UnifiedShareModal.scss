@@ -1,5 +1,4 @@
 @import '../../styles/variables';
-@import '../../styles/base';
 
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
@@ -275,6 +274,7 @@
 .bdl-UnifiedShareForm {
     @extend .unified-share-modal;
 
+    position: relative;
     max-width: $bdl-grid-unit * 115;
     height: $bdl-grid-unit * 125;
     margin: 0 auto;
