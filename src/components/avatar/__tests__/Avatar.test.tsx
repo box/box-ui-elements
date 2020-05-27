@@ -9,24 +9,24 @@ const testDataURI = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAAL
 describe('components/avatar/Avatar', () => {
     test('should render an avatar container', () => {
         const wrapper = shallow(<Avatar className="test-avatar" name="hello" />);
-        expect(wrapper.is('span.avatar.test-avatar')).toBe(true);
+        expect(wrapper.is('.avatar.test-avatar')).toBe(true);
     });
 
     test('should add small size class based on prop', () => {
         const wrapper = shallow(<Avatar name="hello" size="small" />);
-        expect(wrapper.is('span.avatar.avatar--small')).toBe(true);
+        expect(wrapper.is('.avatar.avatar--small')).toBe(true);
     });
 
     test('should add large size class based on prop', () => {
         const wrapper = shallow(<Avatar name="hello" size="large" />);
-        expect(wrapper.is('span.avatar.avatar--large')).toBe(true);
+        expect(wrapper.is('.avatar.avatar--large')).toBe(true);
     });
 
     test('should not allow unknown sizes', () => {
         // eslint-disable-next-line
         // @ts-ignore testing a wrong value for the size prop
         const wrapper = shallow(<Avatar name="hello" size="WRONG" />);
-        expect(wrapper.is('span.avatar.avatar--WRONG')).toBe(false);
+        expect(wrapper.is('.avatar.avatar--WRONG')).toBe(false);
     });
 
     test('should render an AvatarImage when avatarUrl is passed in', () => {
@@ -67,6 +67,14 @@ describe('components/avatar/Avatar', () => {
 
         const avatarInitials = wrapper.find('AvatarInitials');
         expect(avatarInitials.length).toEqual(1);
+    });
+
+    test('should show external user icon only when requested', () => {
+        const externalWrapper = shallow(<Avatar id="2" name="External User 1" isExternal shouldShowExternal />);
+        const nonExternalWrapper = shallow(<Avatar id="2" name="External User 2" isExternal />);
+
+        expect(externalWrapper.is('.avatar.avatar--isExternal')).toBe(true);
+        expect(nonExternalWrapper.is('.avatar.avatar--isExternal')).toBe(false);
     });
 
     test('should reset error state when new avatarUrl is passed in', () => {
