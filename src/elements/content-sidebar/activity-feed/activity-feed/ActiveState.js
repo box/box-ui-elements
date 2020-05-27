@@ -170,9 +170,7 @@ const ActiveState = ({
                                     currentUser={currentUser}
                                     getAvatarUrl={getAvatarUrl}
                                     getUserProfileUrl={getUserProfileUrl}
-                                    error={item.error}
                                     isCurrentVersion={currentFileVersionId === itemFileVersionId}
-                                    isPending={item.isPending}
                                     item={item}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     onDelete={onAnnotationDelete}

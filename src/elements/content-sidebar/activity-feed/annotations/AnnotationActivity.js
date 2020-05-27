@@ -13,7 +13,7 @@ import messages from './messages';
 import UserLink from '../common/user-link';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { PLACEHOLDER_USER } from '../../../../constants';
-import type { ActionItemError, Annotation, AnnotationPermission } from '../../../../common/types/feed';
+import type { Annotation, AnnotationPermission } from '../../../../common/types/feed';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { User } from '../../../../common/types/core';
 
@@ -21,27 +21,23 @@ import './AnnotationActivity.scss';
 
 type Props = {
     currentUser?: User,
-    error?: ActionItemError,
     getAvatarUrl: GetAvatarUrlCallback,
     getUserProfileUrl?: GetProfileUrlCallback,
     isCurrentVersion: boolean,
-    isPending?: boolean,
     item: Annotation,
     onDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
     onSelect?: (annotation: Annotation) => any,
 };
 
 const AnnotationActivity = ({
-    error,
     item,
     getAvatarUrl,
     getUserProfileUrl,
     isCurrentVersion,
-    isPending,
     onDelete = noop,
     onSelect = noop,
 }: Props) => {
-    const { created_at, created_by, description, file_version, id, permissions = {}, target } = item;
+    const { created_at, created_by, description, error, file_version, id, isPending, permissions = {}, target } = item;
 
     const handleDeleteConfirm = (): void => {
         onDelete({ id, permissions });
