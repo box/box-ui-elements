@@ -34,7 +34,6 @@ const allSections = [
         name: 'Components',
         components: () => [
             '../src/components/badge/Badge.js',
-            '../src/components/badgeable/Badgeable.js',
             '../src/components/breadcrumb/Breadcrumb.js',
             '../src/components/checkbox/Checkbox.js',
             '../src/components/count-badge/CountBadge.js',
@@ -86,6 +85,7 @@ const allSections = [
             '../src/components/toggle/Toggle.js',
 
             '../src/components/avatar/Avatar.tsx',
+            '../src/components/badgeable/Badgeable.tsx',
             '../src/components/label/Label.tsx',
             '../src/components/button/Button.tsx',
             '../src/components/button-group/ButtonGroup.tsx',
