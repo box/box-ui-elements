@@ -24,7 +24,7 @@ class USMExample extends React.Component {
             { id: 4, collabID: 4, name: 'Yong', email: 'ysu@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '4', },
             { id: 5, collabID: 5, name: 'Will', email: 'wy@example.com', type: 'pending', hasCustomAvatar: false, translatedRole: 'Editor', userID: '5', },
             { id: 6, collabID: 6, name: 'Dave', email: 'd@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '6', },
-            { id: 7, collabID: 7, name: 'Ke', email: 'k@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '7', },
+            { id: 7, collabID: 7, name: 'Ke', email: 'k@external.com', isExternalUser: true, type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '7', },
             { id: 8, collabID: 8, name: 'Wenbo', email: 'w@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '8', },
             { id: 11, collabID: 11, name: 'Supersupersupersuperreallyreallyreallylongfirstname incrediblyspectacularlylonglastname', email: 'Supersupersupersuperreallyreallyreallyincrediblyspectacularlylongemail@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '11', },
             { /* example group contact */
