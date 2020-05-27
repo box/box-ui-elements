@@ -38,13 +38,13 @@ type Props = {
     /** Controls whether or not the sidebar is expanded on the page */
     expanded: boolean,
 
-    onToggle: () => void,
+    linkProps: Object,
 
-    resinTarget: string,
+    onToggle: () => void,
 } & InjectIntlProvidedProps;
 
 function CollapsibleSidebarLogo(props: Props) {
-    const { badge, className, expanded, onToggle, resinTarget, intl } = props;
+    const { badge, className, expanded, linkProps, onToggle, intl } = props;
 
     const classes = classNames('bdl-CollapsibleSidebar-logo', className);
 
@@ -66,7 +66,7 @@ function CollapsibleSidebarLogo(props: Props) {
                 expandedElement={
                     <>
                         {toggleButton}
-                        <LinkBase data-resin-target={resinTarget} href="/">
+                        <LinkBase className="bdl-CollapsibleSidebar-logoLink" {...linkProps}>
                             <>
                                 <StyledLogo className="bdl-CollapsibleSidebar-logoIcon" height={32} width={61} />
                                 {badge}

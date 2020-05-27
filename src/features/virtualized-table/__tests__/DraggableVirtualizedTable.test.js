@@ -4,8 +4,11 @@ import { shallow } from 'enzyme';
 import { Column } from 'react-virtualized/dist/es/Table';
 
 import { bdlGray } from '../../../styles/variables';
+import { VIRTUALIZED_TABLE_DEFAULTS } from '../constants';
 
 import DraggableVirtualizedTable from '../DraggableVirtualizedTable';
+
+const { ROW_HEIGHT, HEADER_HEIGHT } = VIRTUALIZED_TABLE_DEFAULTS;
 
 describe('features/virtualized-table/DraggableVirtualizedTable', () => {
     let wrapper;
@@ -88,6 +91,18 @@ describe('features/virtualized-table/DraggableVirtualizedTable', () => {
                 height: 24,
             }),
         );
+    });
+
+    test('should set fixed height on table based on row count', () => {
+        rowData.push({
+            name: 'name4',
+            description: 'description4',
+        });
+        wrapper.setProps({ rowData });
+        const expectedHeight = rowData.length * ROW_HEIGHT + HEADER_HEIGHT;
+        const renderPropWrapper = getRenderPropWrapper();
+
+        expect(renderPropWrapper.find('VirtualizedTable').props().height).toBe(expectedHeight);
     });
 
     test.each`

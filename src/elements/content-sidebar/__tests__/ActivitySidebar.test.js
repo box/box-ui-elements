@@ -856,14 +856,14 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
 
         test.each`
-            fileVersionId | annotationId | expectedCallCount
-            ${undefined}  | ${'987'}     | ${0}
-            ${'123'}      | ${'987'}     | ${0}
-            ${'124'}      | ${'987'}     | ${1}
-            ${'124'}      | ${undefined} | ${0}
+            fileVersionId | annotationId | expectedCallCount | expectedPath
+            ${undefined}  | ${'987'}     | ${0}              | ${undefined}
+            ${'123'}      | ${'987'}     | ${0}              | ${undefined}
+            ${'124'}      | ${'987'}     | ${1}              | ${'/activity/annotations/123/987'}
+            ${'124'}      | ${undefined} | ${1}              | ${'/activity/annotations/123'}
         `(
             'should call history.replace appropriately if router location annotationId=$annotationId and fileVersionId=$fileVersionId',
-            ({ annotationId, fileVersionId, expectedCallCount }) => {
+            ({ annotationId, fileVersionId, expectedCallCount, expectedPath }) => {
                 const wrapper = getWrapper({ file, getAnnotationsMatchPath, history });
                 const instance = wrapper.instance();
                 getAnnotationsMatchPath.mockReturnValue({ params: { annotationId, fileVersionId } });
@@ -871,6 +871,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.redirectDeeplinkedAnnotation();
 
                 expect(history.replace).toHaveBeenCalledTimes(expectedCallCount);
+
+                if (expectedCallCount) {
+                    expect(history.replace).toHaveBeenCalledWith(expectedPath);
+                }
             },
         );
     });

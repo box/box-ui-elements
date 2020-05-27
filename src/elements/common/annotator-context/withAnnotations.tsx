@@ -85,7 +85,7 @@ export default function withAnnotations<P extends object>(
         getMatchPath(history?: History): matchType<MatchParams> | null {
             const pathname = getProp(history, 'location.pathname');
             return matchPath<MatchParams>(pathname, {
-                path: '/:sidebar/annotations/:fileVersionId/:annotationId',
+                path: '/:sidebar/annotations/:fileVersionId/:annotationId?',
                 exact: true,
             });
         }
