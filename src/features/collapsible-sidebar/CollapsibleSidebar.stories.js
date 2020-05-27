@@ -144,7 +144,7 @@ export const basic = () => {
                                             icon={<CheckmarkBadge16 height={20} width={20} />}
                                         />
                                     }
-                                    tooltipMessage="All Files Link"
+                                    tooltipMessage="Synced Link"
                                 />
                             </a>
                         </li>

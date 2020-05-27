@@ -32,7 +32,7 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should show custom content when content is passed', () => {
+    test('should show custom content when content is passed but not the text', () => {
         libDom.useIsContentOverflowed.mockReturnValue(false);
 
         const wrapper = getWrapper(
@@ -40,6 +40,21 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
                 className: 'foo',
                 content: <div>Custom Content</div>,
                 icon: 'bold',
+            },
+            { isScrolling: false },
+        );
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should show just text when text and content is passed', () => {
+        libDom.useIsContentOverflowed.mockReturnValue(false);
+
+        const wrapper = getWrapper(
+            {
+                className: 'foo',
+                content: <div>Custom Content</div>,
+                icon: 'bold',
+                text: 'bar',
             },
             { isScrolling: false },
         );
