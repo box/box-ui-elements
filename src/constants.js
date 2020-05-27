@@ -98,6 +98,7 @@ export const FIELD_RESTORED_FROM = 'restored_from';
 export const FIELD_CREATED_AT = 'created_at';
 export const FIELD_INTERACTED_AT: 'interacted_at' = 'interacted_at';
 export const FIELD_SHARED_LINK = 'shared_link';
+export const FIELD_SHARED_LINK_FEATURES = 'shared_link_features';
 export const FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS = 'allowed_shared_link_access_levels';
 export const FIELD_HAS_COLLABORATIONS = 'has_collaborations';
 export const FIELD_IS_EXTERNALLY_OWNED = 'is_externally_owned';
@@ -140,6 +141,8 @@ export const FIELD_OCCURRED_AT: 'occurred_at' = 'occurred_at';
 export const FIELD_RENDERED_TEXT: 'rendered_text' = 'rendered_text';
 export const FIELD_RETENTION: 'retention' = 'retention';
 export const FIELD_UPLOADER_DISPLAY_NAME: 'uploader_display_name' = 'uploader_display_name';
+export const FIELD_ENTERPRISE = 'enterprise';
+export const FIELD_HOSTNAME = 'hostname';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_COMMENT = 'can_comment';
@@ -187,6 +190,7 @@ export const CLIENT_NAME_CONTENT_EXPLORER = 'ContentExplorer';
 export const CLIENT_NAME_CONTENT_PREVIEW = 'ContentPreview';
 export const CLIENT_NAME_CONTENT_SIDEBAR = 'ContentSidebar';
 export const CLIENT_NAME_OPEN_WITH = 'ContentOpenWith';
+export const CLIENT_NAME_USM_ELEMENT = 'USMElement';
 
 /* ---------------------- Statuses -------------------------- */
 export const STATUS_PENDING: 'pending' = 'pending';

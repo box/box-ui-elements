@@ -1,0 +1,134 @@
+// @flow
+import type { BoxItem, BoxUser } from '../../common/types/core';
+import {
+    ACCESS_COLLAB,
+    ACCESS_COMPANY,
+    ACCESS_OPEN,
+    PERMISSION_CAN_DOWNLOAD,
+    PERMISSION_CAN_PREVIEW,
+    TYPE_FOLDER,
+} from '../../constants';
+import {
+    ANYONE_IN_COMPANY,
+    ANYONE_WITH_LINK,
+    CAN_VIEW_DOWNLOAD,
+    CAN_VIEW_ONLY,
+    PEOPLE_IN_ITEM,
+} from '../../features/unified-share-modal/constants';
+
+const ACCESS_LEVEL_MAP = {
+    [ACCESS_COLLAB]: PEOPLE_IN_ITEM,
+    [ACCESS_OPEN]: ANYONE_WITH_LINK,
+    [ACCESS_COMPANY]: ANYONE_IN_COMPANY,
+};
+
+const PERMISSION_LEVEL_MAP = {
+    [PERMISSION_CAN_DOWNLOAD]: CAN_VIEW_DOWNLOAD,
+    [PERMISSION_CAN_PREVIEW]: CAN_VIEW_ONLY,
+};
+
+const normalizeItemResponse = (itemAPIData: BoxItem) => {
+    let sharedLink = {};
+
+    const {
+        id,
+        description,
+        extension,
+        name,
+        owned_by: { id: ownerID },
+        permissions,
+        shared_link,
+        shared_link_features: {
+            download_url: isDirectLinkAvailable,
+            password: isPasswordAvailable,
+            vanity_name: isVanityNameAvailable,
+        },
+        type,
+    } = itemAPIData;
+    const {
+        can_download: isDownloadSettingAvailable,
+        can_edit: isEditAllowed,
+        can_preview: isPreviewAllowed,
+        can_set_share_access: canChangeAccessLevel,
+        can_share: itemShare,
+    } = permissions;
+
+    if (shared_link) {
+        const {
+            download_url: directLink,
+            effective_access,
+            effective_permission,
+            is_password_enabled: isPasswordEnabled,
+            unshared_at: expirationTimestamp,
+            url,
+            vanity_name: vanityName,
+        } = shared_link;
+
+        const accessLevel = ACCESS_LEVEL_MAP[effective_access];
+        const permissionLevel = PERMISSION_LEVEL_MAP[effective_permission];
+        const isDownloadAllowed = permissionLevel === PERMISSION_LEVEL_MAP.can_download;
+        const canChangeDownload = canChangeAccessLevel && isDownloadAllowed;
+        const canChangePassword = canChangeAccessLevel && isPasswordAvailable;
+        const canChangeVanityName = canChangeAccessLevel && isVanityNameAvailable;
+
+        sharedLink = {
+            accessLevel,
+            allowedAccessLevels: {
+                peopleInThisItem: accessLevel === PEOPLE_IN_ITEM,
+                peopleInYourCompany: accessLevel === ANYONE_IN_COMPANY,
+                peopleWithTheLink: accessLevel === ANYONE_WITH_LINK,
+            },
+            canChangeAccessLevel,
+            canChangeDownload, // SLS
+            canChangePassword, // SLS
+            canChangeVanityName, // SLS
+            directLink, // SLS
+            expirationTimestamp, // SLS
+            isDirectLinkAvailable, // SLS
+            isDownloadAllowed,
+            isDownloadAvailable: isDownloadSettingAvailable, // SLS
+            isDownloadEnabled: isDownloadAllowed, // SLS
+            isDownloadSettingAvailable,
+            isEditAllowed,
+            isNewSharedLink: false,
+            isPasswordAvailable, // SLS
+            isPasswordEnabled, // SLS
+            isPreviewAllowed,
+            permissionLevel,
+            url,
+            vanityName, // SLS
+        };
+    }
+
+    const typedIDPrefix = type === TYPE_FOLDER ? 'd' : 'f';
+
+    return {
+        item: {
+            description,
+            extension,
+            id,
+            grantedPermissions: {
+                itemShare,
+            },
+            name,
+            ownerID,
+            type,
+            typedID: `${typedIDPrefix}_${id}`,
+        },
+        sharedLink,
+    };
+};
+
+const normalizeUserResponse = (userAPIData: BoxUser) => {
+    const {
+        enterprise: { name: enterpriseName },
+        hostname,
+    } = userAPIData;
+
+    return {
+        enterpriseName,
+        serverURL: `${hostname}/v/`, // SLS
+    };
+};
+
+export { normalizeItemResponse, normalizeUserResponse };

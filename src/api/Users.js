@@ -73,7 +73,7 @@ class Users extends Base {
     /**
      * API for fetching a user
      *
-     * @param {string} id - a box file id
+     * @param {string} id - a Box user id
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @param {Object} requestData - additional request data

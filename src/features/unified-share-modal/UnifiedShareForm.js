@@ -273,7 +273,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     shouldAutoFocusSharedLink = () => {
         const { focusSharedLinkOnLoad, sharedLink, sharedLinkLoaded } = this.props;
         // if not forcing focus or not a newly added shared link, return false
-        if (!(focusSharedLinkOnLoad || sharedLink.isNewSharedLink)) {
+        if (!(focusSharedLinkOnLoad || (sharedLink && sharedLink.isNewSharedLink))) {
             return false;
         }
         // otherwise wait until the link data is loaded before focusing
