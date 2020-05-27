@@ -2,7 +2,7 @@
 
 exports[`components/badgeable/Badgeable should correctly render children in a badgeable wrapper without badges 1`] = `
 <div
-  className="badgeable-container "
+  className="badgeable-container"
 >
   some text to render
   <div

@@ -43,7 +43,7 @@
     }
 
     &.avatar--isExternal {
-        .avatar-external-badge {
+        .bdl-Avatar-externalBadge {
             width: 14px;
             height: 14px;
             border-width: 1px;
@@ -70,7 +70,7 @@
         }
 
         &.avatar--isExternal {
-            .avatar-external-badge {
+            .bdl-Avatar-externalBadge {
                 width: 16px;
                 height: 16px;
                 border-width: 2px;
@@ -93,7 +93,7 @@
     }
 }
 
-.avatar-external-badge {
+.bdl-Avatar-externalBadge {
     background-color: $white;
     border-color: $white;
     border-style: solid;

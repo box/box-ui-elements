@@ -1,4 +1,5 @@
 import * as React from 'react';
+import classnames from 'classnames';
 
 import './Badgeable.scss';
 
@@ -20,7 +21,7 @@ const Badgeable = (props: Props) => {
     const { children, className = '', topLeft = null, topRight = null, bottomLeft = null, bottomRight = null } = props;
 
     return (
-        <div className={`badgeable-container ${className}`}>
+        <div className={classnames('badgeable-container', className)}>
             {children}
             <div className="badges">
                 {topLeft && <div className="top-left-badge">{topLeft}</div>}

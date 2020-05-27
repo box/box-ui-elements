@@ -1,8 +1,8 @@
 import * as React from 'react';
 import classNames from 'classnames';
+import Badgeable from '../badgeable';
 import AvatarImage from './AvatarImage';
 import AvatarInitials from './AvatarInitials';
-import Badgeable from '../badgeable';
 import UnknownUserAvatar from './UnknownUserAvatar';
 import GlobeBadge16 from '../../icon/fill/GlobeBadge16';
 
@@ -71,7 +71,7 @@ function Avatar({ avatarUrl, className, name, id, isExternal, shouldShowExternal
         <Badgeable
             className={classes}
             bottomRight={
-                shouldShowExternal && isExternal ? <GlobeBadge16 className="avatar-external-badge" /> : undefined
+                shouldShowExternal && isExternal ? <GlobeBadge16 className="bdl-Avatar-externalBadge" /> : undefined
             }
         >
             <span role="presentation">{avatar}</span>
