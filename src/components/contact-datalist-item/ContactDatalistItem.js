@@ -8,16 +8,16 @@ import './ContactDatalistItem.scss';
 
 type Props = {
     id?: string | number | null,
-    isExternalContact?: boolean,
+    isExternal?: boolean,
     name: ?string,
     showAvatar?: boolean,
     subtitle?: React.Node,
 };
 
-const ContactDatalistItem = ({ id, isExternalContact, name, showAvatar, subtitle, ...rest }: Props) => (
+const ContactDatalistItem = ({ id, isExternal, name, showAvatar, subtitle, ...rest }: Props) => (
     <DatalistItem className="contact-data-list-item" {...rest}>
         {showAvatar && (
-            <Avatar className="contact-avatar" id={id} name={name} isExternal={isExternalContact} shouldShowExternal />
+            <Avatar className="contact-avatar" id={id} name={name} isExternal={isExternal} shouldShowExternal />
         )}
         <div className="contact-name-container">
             <div className="contact-text contact-name">{name}</div>

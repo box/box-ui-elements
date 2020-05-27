@@ -28,7 +28,7 @@ type Props = {
     onInput?: Function,
     onPillCreate?: (pills: Array<SelectOptionProp | Contact>) => void,
     selectedContacts: Array<Contact>,
-    showInviteeAvatars?: boolean,
+    showContactAvatars?: boolean,
     suggestedCollaborators?: SuggestedCollabLookup,
     validateForError: Function,
     validator: Function,
@@ -46,7 +46,7 @@ const isSubstring = (value, searchString) => {
 
 class ContactsField extends React.Component<Props, State> {
     static defaultProps = {
-        showInviteeAvatars: false,
+        showContactAvatars: false,
     };
 
     constructor(props: Props) {
@@ -158,7 +158,7 @@ class ContactsField extends React.Component<Props, State> {
             onContactAdd,
             onContactRemove,
             onPillCreate,
-            showInviteeAvatars,
+            showContactAvatars,
             validateForError,
             validator,
         } = this.props;
@@ -198,11 +198,11 @@ class ContactsField extends React.Component<Props, State> {
                     <ContactDatalistItem
                         key={id}
                         id={id}
-                        isExternalContact={isExternalUser}
+                        isExternal={isExternalUser}
                         name={text}
                         subtitle={email || groupLabel}
                         title={text}
-                        showAvatar={showInviteeAvatars}
+                        showAvatar={showContactAvatars}
                     />
                 ))}
             </PillSelectorDropdown>

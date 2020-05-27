@@ -131,7 +131,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
 >
   <ContactDatalistItem
     id="12345"
-    isExternalContact={false}
+    isExternal={false}
     key="12345"
     name="X User"
     showAvatar={false}
@@ -140,7 +140,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   />
   <ContactDatalistItem
     id="23456"
-    isExternalContact={true}
+    isExternal={true}
     key="23456"
     name="Y User"
     showAvatar={false}
@@ -149,7 +149,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   />
   <ContactDatalistItem
     id="34567"
-    isExternalContact={false}
+    isExternal={false}
     key="34567"
     name="Z User"
     showAvatar={false}
@@ -158,7 +158,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   />
   <ContactDatalistItem
     id="12"
-    isExternalContact={true}
+    isExternal={true}
     key="12"
     name="a b"
     showAvatar={false}
@@ -167,7 +167,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   />
   <ContactDatalistItem
     id="13"
-    isExternalContact={false}
+    isExternal={false}
     key="13"
     name="a b"
     showAvatar={false}
@@ -176,7 +176,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   />
   <ContactDatalistItem
     id="14"
-    isExternalContact={true}
+    isExternal={true}
     key="14"
     name="a c"
     showAvatar={false}
@@ -185,7 +185,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   />
   <ContactDatalistItem
     id="14"
-    isExternalContact={false}
+    isExternal={false}
     key="14"
     name="a d"
     showAvatar={false}
@@ -194,7 +194,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   />
   <ContactDatalistItem
     id="14"
-    isExternalContact={true}
+    isExternal={true}
     key="14"
     name="a e"
     showAvatar={false}
