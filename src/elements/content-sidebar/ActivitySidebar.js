@@ -151,7 +151,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const currentFileVersionId = getProp(file, 'file_version.id');
         const fileVersionId = getProp(match, 'params.fileVersionId');
 
-        if (fileVersionId && annotationId && fileVersionId !== currentFileVersionId) {
+        if (fileVersionId && fileVersionId !== currentFileVersionId) {
             history.replace(this.getAnnotationsPath(currentFileVersionId, annotationId));
         }
     };
