@@ -13,7 +13,7 @@ import CollapsibleSidebarLogo from './CollapsibleSidebarLogo';
 import CollapsibleSidebarFooter from './CollapsibleSidebarFooter';
 import CollapsibleSidebarNav from './CollapsibleSidebarNav';
 import CollapsibleSidebarItem from './CollapsibleSidebarItem';
-import CollapsibleSidebarMenuItem, { StyledMenuItemLabel } from './CollapsibleSidebarMenuItem';
+import CollapsibleSidebarMenuItem from './CollapsibleSidebarMenuItem';
 import notes from './CollapsibleSidebar.stories.md';
 
 import { BetaBadge, TrialBadge } from '../../components/badge';
@@ -61,16 +61,6 @@ export const basic = () => {
 
     const menuItemContent = (
         <>
-            <StyledMenuItemLabel
-                style={{
-                    marginLeft: 16,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    opacity: 0.85,
-                }}
-            >
-                Synced
-            </StyledMenuItemLabel>
             <BetaBadge
                 style={{
                     marginLeft: 8,
@@ -142,6 +132,7 @@ export const basic = () => {
                                         <CollapsibleSidebarMenuItem
                                             content={menuItemContent}
                                             icon={<CheckmarkBadge16 height={20} width={20} />}
+                                            text="Really really long synced link name synced Link"
                                         />
                                     }
                                     tooltipMessage="Synced Link"

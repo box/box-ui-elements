@@ -32,7 +32,7 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should show custom content when content is passed but not the text', () => {
+    test('should show custom content when content is passed', () => {
         libDom.useIsContentOverflowed.mockReturnValue(false);
 
         const testContent = 'Custom Content';
@@ -41,29 +41,13 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
                 className: 'foo',
                 content: <div className="custom-div">{testContent}</div>,
                 icon: 'bold',
+                text: 'bar',
             },
             { isScrolling: false },
         );
 
         expect(wrapper.find('.custom-div')).toHaveLength(1);
         expect(wrapper.find('.custom-div').text()).toBe(testContent);
-        expect(wrapper.find('span.bdl-CollapsibleSidebar-menuItemLabel')).toHaveLength(0);
-    });
-
-    test('should show just text when text and content is passed', () => {
-        libDom.useIsContentOverflowed.mockReturnValue(false);
-
-        const wrapper = getWrapper(
-            {
-                className: 'foo',
-                content: <div className="custom-div">Custom Content</div>,
-                icon: 'bold',
-                text: 'bar',
-            },
-            { isScrolling: false },
-        );
-
-        expect(wrapper.find('.custom-div')).toHaveLength(0);
         expect(wrapper.find('span.bdl-CollapsibleSidebar-menuItemLabel')).toHaveLength(1);
     });
 
