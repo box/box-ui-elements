@@ -10,7 +10,7 @@ import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
-import { generatePath, withRouter, type ContextRouter } from 'react-router-dom';
+import { generatePath, type ContextRouter } from 'react-router-dom';
 import ActivityFeed from './activity-feed';
 import AddTaskButton from './AddTaskButton';
 import API from '../../api';
@@ -24,6 +24,7 @@ import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
+import { withRouterAndRef } from '../common/with-router-and-ref';
 import {
     DEFAULT_COLLAB_DEBOUNCE,
     ORIGIN_ACTIVITY_SIDEBAR,
@@ -809,5 +810,5 @@ export default flow([
     withAPIContext,
     withFeatureConsumer,
     withAnnotatorContext,
-    withRouter,
+    withRouterAndRef,
 ])(ActivitySidebar);
