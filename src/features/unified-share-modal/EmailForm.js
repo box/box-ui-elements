@@ -281,6 +281,7 @@ class EmailForm extends React.Component<Props, State> {
                         suggestedCollaborators={suggestedCollaborators}
                         validateForError={this.validateContactField}
                         validator={this.isValidEmail}
+                        showContactAvatars
                     />
                 </Tooltip>
             </div>
