@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm() should set state properly 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -153,17 +153,17 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
       trackingProps={Object {}}
       triggerCopyOnLoad={false}
     />
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm openEmailSharedLinkForm() should set state properly 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
-  isLoading={false}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
+    isLoading={false}
   >
     <EmailForm
       contactsFieldLabel={
@@ -188,16 +188,16 @@ exports[`features/unified-share-modal/UnifiedShareForm openEmailSharedLinkForm()
       showEnterEmailsCallout={false}
       updateSelectedContacts={[Function]}
     />
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should not render a default component FTUX when prop is false 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -346,16 +346,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
       trackingProps={Object {}}
       triggerCopyOnLoad={false}
     />
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should not render a default component FTUX when state is false 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -503,16 +503,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
       trackingProps={Object {}}
       triggerCopyOnLoad={false}
     />
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render a component with autofocus set for shared link when focusSharedLinkOnLoad is enabled and there is a shared link 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -664,16 +664,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       trackingProps={Object {}}
       triggerCopyOnLoad={false}
     />
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render a default component FTUX based on enabled prop and state 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -822,17 +822,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       trackingProps={Object {}}
       triggerCopyOnLoad={false}
     />
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render a default component in initial loading state 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
-  isLoading={true}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
+    isLoading={true}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -981,17 +981,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       trackingProps={Object {}}
       triggerCopyOnLoad={false}
     />
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render a default component when showing invite section expanded 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
-  isLoading={false}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
+    isLoading={false}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -1110,17 +1110,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         </EmailForm>
       </div>
     </Tooltip>
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render a default component when the user cannot invite collaborators due to item type of weblink 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
-  isLoading={false}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
+    isLoading={false}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -1270,16 +1270,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       trackingProps={Object {}}
       triggerCopyOnLoad={false}
     />
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render a default component when the user cannot invite collaborators due to permissions 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -1428,17 +1428,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       trackingProps={Object {}}
       triggerCopyOnLoad={false}
     />
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render a default component with collaboration restriction warning specified and invite section is NOT expanded 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
-  isLoading={false}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
+    isLoading={false}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -1588,17 +1588,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       trackingProps={Object {}}
       triggerCopyOnLoad={false}
     />
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render a default component with collaboration restriction warning specified and invite section is expanded 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
-  isLoading={false}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
+    isLoading={false}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -1718,16 +1718,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         </EmailForm>
       </div>
     </Tooltip>
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render a default component with collaborator list if showCollaboratorList state is set 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
   >
     <CollaboratorList
       collaborators={
@@ -1758,17 +1758,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       maxCollaboratorListSize={90}
       onDoneClick={[Function]}
     />
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render a default component with confirm modal open 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
-  isLoading={false}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
+    isLoading={false}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -1917,16 +1917,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       trackingProps={Object {}}
       triggerCopyOnLoad={false}
     />
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render a default component with correct Focus element and props when focusSharedLinkOnLoad is enabled 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -2078,17 +2078,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       trackingProps={Object {}}
       triggerCopyOnLoad={false}
     />
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render a default component with default props 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
-  isLoading={false}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
+    isLoading={false}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -2237,17 +2237,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       trackingProps={Object {}}
       triggerCopyOnLoad={false}
     />
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render a default component with invitee permissions listed 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
-  isLoading={false}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
+    isLoading={false}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -2395,17 +2395,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       trackingProps={Object {}}
       triggerCopyOnLoad={false}
     />
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render a default component with send invite error specified 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
-  isLoading={false}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
+    isLoading={false}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -2527,17 +2527,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         </EmailForm>
       </div>
     </Tooltip>
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render a default component with upgrade CTA when showUpgradeOptions is enabled 1`] = `
-<LoadingIndicatorWrapper
-  hideContent={true}
-  isLoading={false}
+<div
+  className=""
 >
-  <div
-    className=""
+  <LoadingIndicatorWrapper
+    hideContent={true}
+    isLoading={false}
   >
     <Tooltip
       className="usm-ftux-tooltip"
@@ -2681,8 +2681,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         </EmailForm>
       </div>
     </Tooltip>
-  </div>
-</LoadingIndicatorWrapper>
+  </LoadingIndicatorWrapper>
+</div>
 `;
 
 exports[`features/unified-share-modal/UnifiedShareForm render() should render an allShareRestrictionWarning message when it is available 1`] = `
