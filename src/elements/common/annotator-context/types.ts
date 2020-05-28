@@ -31,6 +31,7 @@ export interface AnnotatorContext {
     emitActiveChangeEvent: (id: string) => void;
     emitRemoveEvent: (id: string) => void;
     getAnnotationsMatchPath: GetMatchPath;
+    getAnnotationsPath: (fileVersionId?: string, annotationId?: string) => string;
     state: AnnotatorState;
 }
 
