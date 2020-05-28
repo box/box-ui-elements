@@ -24,7 +24,7 @@ import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
-import { withRouterAndRef } from '../common/with-router-and-ref';
+import { withRouterAndRef } from '../common/routing';
 import {
     DEFAULT_COLLAB_DEBOUNCE,
     ORIGIN_ACTIVITY_SIDEBAR,

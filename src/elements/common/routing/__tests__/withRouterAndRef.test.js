@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
 import withRouterAndRef from '../withRouterAndRef';
 
-describe('elements/common/with-router-and-ref/withRouterAndRef', () => {
+describe('elements/common/routing/withRouterAndRef', () => {
     type Props = {
         value: string,
     };
