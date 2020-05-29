@@ -65,6 +65,7 @@ export const SIDEBAR_FORCE_VALUE_OPEN: 'open' = 'open';
 
 class Sidebar extends React.Component<Props, State> {
     static defaultProps = {
+        annotatorState: {},
         isDefaultOpen: true,
         isLoading: false,
     };
@@ -96,6 +97,8 @@ class Sidebar extends React.Component<Props, State> {
         const { activeAnnotationId } = annotatorState;
         const { activeAnnotationId: prevActiveAnnotationId } = prevAnnotatorState;
         const isAnnotationsPath = !!getAnnotationsMatchPath(history);
+        const hasActiveAnnotationChanged = prevActiveAnnotationId !== activeAnnotationId;
+        const isTransitioningToAnnotationPath = activeAnnotationId && !isAnnotationsPath;
 
         // User navigated to a different file without ever navigating the sidebar
         if (!isDirty && fileId !== prevFileId && location.pathname !== '/') {
@@ -111,20 +114,17 @@ class Sidebar extends React.Component<Props, State> {
         // Active annotation id changed. If location is currently an annotation path or
         // if location is not currently an annotation path but the active annotation id
         // transitioned from falsy to truthy, update the location accordingly
-        if (
-            prevActiveAnnotationId !== activeAnnotationId &&
-            (isAnnotationsPath || (activeAnnotationId && !isAnnotationsPath))
-        ) {
+        if (hasActiveAnnotationChanged && (isAnnotationsPath || isTransitioningToAnnotationPath)) {
             this.updateActiveAnnotation();
         }
     }
 
     updateActiveAnnotation = () => {
         const {
-            annotatorState: { activeAnnotationId } = {},
+            annotatorState: { activeAnnotationId },
             file,
-            getAnnotationsPath,
             getAnnotationsMatchPath,
+            getAnnotationsPath,
             history,
             location,
         } = this.props;

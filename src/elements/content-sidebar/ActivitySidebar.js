@@ -670,9 +670,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const {
             emitAnnotatorActiveChangeEvent,
             file,
-            history,
-            getAnnotationsPath,
             getAnnotationsMatchPath,
+            getAnnotationsPath,
+            history,
             onAnnotationSelect,
         } = this.props;
         const currentFileVersionId = getProp(file, 'file_version.id');
