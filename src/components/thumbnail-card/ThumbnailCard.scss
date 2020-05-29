@@ -17,6 +17,7 @@
 .thumbnail-card.is-expandable {
     &.is-action-item-active,
     &:hover {
+        box-shadow: 0 4px 24px 0 rgba(0, 0, 0, .2);
         transform: translate3d(0, -1px, 0) scale(1.25);
         transition-duration: .2s;
     }
