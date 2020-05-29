@@ -112,16 +112,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(instance.addAnnotation).toBeCalled();
         });
 
-        test('should call updateActiveAnnotation if activeAnnotationId changes', () => {
-            const wrapper = getWrapper({ annotatorState: { activeAnnotationId: '123' } });
-            const instance = wrapper.instance();
-
-            instance.updateActiveAnnotation = jest.fn();
-
-            wrapper.setProps({ annotatorState: { activeAnnotationId: '321' } });
-            expect(instance.updateActiveAnnotation).toBeCalled();
-        });
-
         test.each`
             prevFileVersionId | fileVersionId | expectedCallCount
             ${'122'}          | ${'122'}      | ${0}
@@ -749,35 +739,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
-    describe('updateActiveAnnotation()', () => {
-        test.each`
-            activeAnnotationId | fileVersionId | expectedPath
-            ${'234'}           | ${'456'}      | ${'/activity/annotations/456/234'}
-            ${'234'}           | ${undefined}  | ${'/activity/annotations/123/234'}
-            ${null}            | ${'456'}      | ${'/activity/annotations/456'}
-        `(
-            'should set location path based on match param fileVersionId=$fileVersionId and activeAnnotationId=$activeAnnotationId',
-            ({ activeAnnotationId, fileVersionId, expectedPath }) => {
-                const annotatorState = {
-                    activeAnnotationId,
-                };
-                const getAnnotationsMatchPath = jest.fn().mockReturnValue({ params: { fileVersionId } });
-                const history = { push: jest.fn(), replace: jest.fn() };
-
-                const wrapper = getWrapper({ annotatorState, file, getAnnotationsMatchPath, history });
-                const instance = wrapper.instance();
-
-                instance.updateActiveAnnotation();
-
-                expect(history.push).toHaveBeenCalledWith(expectedPath);
-            },
-        );
-    });
-
     describe('handleAnnotationSelect()', () => {
         const annotatorState = { activeAnnotationId: '123' };
         const emitAnnotatorActiveChangeEvent = jest.fn();
         const getAnnotationsMatchPath = jest.fn().mockReturnValue({ params: { fileVersionId: '456' } });
+        const getAnnotationsPath = jest.fn().mockReturnValue('/activity/annotations/235/124');
         const history = {
             push: jest.fn(),
             replace: jest.fn(),
@@ -790,6 +756,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 emitAnnotatorActiveChangeEvent,
                 file,
                 getAnnotationsMatchPath,
+                getAnnotationsPath,
                 history,
                 onAnnotationSelect,
             });
@@ -832,24 +799,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
-    describe('getAnnotationsPath()', () => {
-        test.each`
-            fileVersionId | annotationId | expectedPath
-            ${undefined}  | ${undefined} | ${'/activity'}
-            ${'123'}      | ${undefined} | ${'/activity/annotations/123'}
-            ${'123'}      | ${'456'}     | ${'/activity/annotations/123/456'}
-        `('should return $expectedPath', ({ fileVersionId, annotationId, expectedPath }) => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            expect(instance.getAnnotationsPath(fileVersionId, annotationId)).toBe(expectedPath);
-        });
-    });
-
     describe('redirectDeeplinkedAnnotation()', () => {
         const history = {
             replace: jest.fn(),
         };
         const getAnnotationsMatchPath = jest.fn();
+        const getAnnotationsPath = jest.fn();
 
         beforeEach(() => {
             jest.resetAllMocks();
@@ -864,9 +819,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         `(
             'should call history.replace appropriately if router location annotationId=$annotationId and fileVersionId=$fileVersionId',
             ({ annotationId, fileVersionId, expectedCallCount, expectedPath }) => {
-                const wrapper = getWrapper({ file, getAnnotationsMatchPath, history });
+                const wrapper = getWrapper({ file, getAnnotationsMatchPath, getAnnotationsPath, history });
                 const instance = wrapper.instance();
                 getAnnotationsMatchPath.mockReturnValue({ params: { annotationId, fileVersionId } });
+                getAnnotationsPath.mockReturnValue(expectedPath);
 
                 instance.redirectDeeplinkedAnnotation();
 
