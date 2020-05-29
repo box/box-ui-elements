@@ -2,7 +2,7 @@
 
 exports[`components/thumbnail-card/ThumbnailCard should pass down icon and subtitle 1`] = `
 <div
-  className="thumbnail-card "
+  className="thumbnail-card"
 >
   <ThumbnailCardThumbnail
     thumbnail={
@@ -33,7 +33,7 @@ exports[`components/thumbnail-card/ThumbnailCard should pass down icon and subti
 
 exports[`components/thumbnail-card/ThumbnailCard should render 1`] = `
 <div
-  className="thumbnail-card "
+  className="thumbnail-card"
 >
   <ThumbnailCardThumbnail
     thumbnail={
