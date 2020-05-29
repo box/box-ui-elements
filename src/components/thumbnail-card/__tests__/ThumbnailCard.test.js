@@ -27,4 +27,12 @@ describe('components/thumbnail-card/ThumbnailCard', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should apply is-expandable selector if shouldExpandOnHover is true', () => {
+        const shouldExpandOnHover = true;
+        const wrapper = getWrapper({ shouldExpandOnHover });
+
+        const container = wrapper.find('.is-expandable');
+        expect(container.length).toBe(1);
+    });
 });

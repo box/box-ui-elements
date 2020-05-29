@@ -25,4 +25,11 @@ describe('components/thumbnail-card/ThumbnailCardDetails', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should render actionItem if it is passed in', () => {
+        const actionItem = <div>Action Item</div>;
+        const wrapper = getWrapper({ actionItem });
+
+        expect(wrapper).toMatchSnapshot();
+    });
 });
