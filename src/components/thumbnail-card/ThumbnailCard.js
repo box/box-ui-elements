@@ -11,7 +11,7 @@ type Props = {
     actionItem?: React.Node,
     className?: string,
     icon?: React.Node,
-    shouldExpandOnHover: boolean,
+    shouldExpandOnHover?: boolean,
     subtitle?: React.Node,
     thumbnail: React.Node,
     title: React.Node,

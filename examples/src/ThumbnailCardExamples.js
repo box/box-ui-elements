@@ -8,11 +8,13 @@ import MenuToggle from '../../src/components/dropdown-menu/MenuToggle';
 import AccessibleSVG from '../../src/icons/accessible-svg';
 import { Menu, MenuItem } from '../../src/components/menu';
 
+type Props = {};
+
 type State = {
     isActionItemActive: boolean,
 };
 
-class ThumbnailCardExamples extends React.Component<State> {
+class ThumbnailCardExamples extends React.Component<Props, State> {
     state = {
         isActionItemActive: false,
     };
@@ -82,7 +84,7 @@ class ThumbnailCardExamples extends React.Component<State> {
                     <br />
                     <ThumbnailCard
                         actionItem={actionItem}
-                        className={isActionItemActive && 'is-action-item-active'}
+                        className={isActionItemActive ? 'is-action-item-active' : ''}
                         shouldExpandOnHover
                         thumbnail={thumbnail}
                         title={title}
