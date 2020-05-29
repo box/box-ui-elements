@@ -1133,9 +1133,6 @@ describe('elements/content-preview/ContentPreview', () => {
         `(
             'should call onVersionChange $onVersionChangeCount times and setState $setStateCount times',
             ({ annotationFileVersionId, selectedVersionId, locationType, setStateCount }) => {
-                const wrapper = getWrapper();
-                const emit = jest.fn();
-                const instance = wrapper.instance();
                 const annotation = {
                     file_version: {
                         id: annotationFileVersionId,
@@ -1147,7 +1144,12 @@ describe('elements/content-preview/ContentPreview', () => {
                     },
                 };
 
-                instance.getViewer = jest.fn().mockReturnValue({ emit });
+                const emit = jest.fn();
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+
+                jest.spyOn(instance, 'getViewer').mockReturnValue({ emit });
+
                 wrapper.setState({ selectedVersion: { id: selectedVersionId } });
                 instance.setState = jest.fn();
 
