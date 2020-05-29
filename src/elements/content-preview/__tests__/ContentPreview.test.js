@@ -1134,6 +1134,7 @@ describe('elements/content-preview/ContentPreview', () => {
             'should call onVersionChange $onVersionChangeCount times and setState $setStateCount times',
             ({ annotationFileVersionId, selectedVersionId, locationType, setStateCount }) => {
                 const wrapper = getWrapper();
+                const emit = jest.fn();
                 const instance = wrapper.instance();
                 const annotation = {
                     file_version: {
@@ -1146,12 +1147,14 @@ describe('elements/content-preview/ContentPreview', () => {
                     },
                 };
 
+                instance.getViewer = jest.fn().mockReturnValue({ emit });
                 wrapper.setState({ selectedVersion: { id: selectedVersionId } });
                 instance.setState = jest.fn();
 
                 instance.handleAnnotationSelect(annotation);
 
                 expect(instance.setState).toHaveBeenCalledTimes(setStateCount);
+                expect(emit).toBeCalledWith('scrolltoannotation', annotation);
             },
         );
     });
