@@ -1,63 +1,116 @@
+// @flow
 import * as React from 'react';
 
 import ThumbnailCard from '../../src/components/thumbnail-card';
+import PlainButton from '../../src/components/plain-button/PlainButton';
+import DropdownMenu from '../../src/components/dropdown-menu';
+import MenuToggle from '../../src/components/dropdown-menu/MenuToggle';
 import AccessibleSVG from '../../src/icons/accessible-svg';
+import { Menu, MenuItem } from '../../src/components/menu';
 
-const ThumbnailCardExamples = () => {
-    const icon = (
-        <div
-            style={{
-                alignItems: 'center',
-                display: 'flex',
-                marginRight: '15px',
-            }}
-        >
-            <AccessibleSVG height={32} viewBox="0 0 14 14" width={32}>
-                <path
-                    color="#000000"
-                    d="M7 11.5l-4 2.1c-.2.1-.4 0-.5-.1v-.2l.8-4.4L.1 5.8c-.1-.1-.1-.4 0-.5.1-.1.1-.1.2-.1l4.4-.6 2-4c.1-.2.3-.2.5-.2.1 0 .1.1.2.2l2 4 4.4.6c.2 0 .3.2.3.4 0 .1 0 .1-.1.2l-3.2 3.1.8 4.4c0 .2-.1.4-.3.4h-.2L7 11.5z"
-                />
-            </AccessibleSVG>
-        </div>
-    );
-    const subtitle = <div>I&#39;m a subtitle!</div>;
-    const title = <div>Hello World!</div>;
-    const thumbnail = <div>Thumbnail goes here</div>;
+type State = {
+    isActionItemActive: boolean,
+};
 
-    return (
-        <div>
+class ThumbnailCardExamples extends React.Component<State> {
+    state = {
+        isActionItemActive: false,
+    };
+
+    updateIsActionItemActive = (isActionItemActive: boolean) => {
+        this.setState({
+            isActionItemActive,
+        });
+    };
+
+    render() {
+        const { isActionItemActive } = this.state;
+        const icon = (
+            <div
+                style={{
+                    alignItems: 'center',
+                    display: 'flex',
+                    marginRight: '15px',
+                }}
+            >
+                <AccessibleSVG height={32} viewBox="0 0 14 14" width={32}>
+                    <path
+                        color="#000000"
+                        d="M7 11.5l-4 2.1c-.2.1-.4 0-.5-.1v-.2l.8-4.4L.1 5.8c-.1-.1-.1-.4 0-.5.1-.1.1-.1.2-.1l4.4-.6 2-4c.1-.2.3-.2.5-.2.1 0 .1.1.2.2l2 4 4.4.6c.2 0 .3.2.3.4 0 .1 0 .1-.1.2l-3.2 3.1.8 4.4c0 .2-.1.4-.3.4h-.2L7 11.5z"
+                    />
+                </AccessibleSVG>
+            </div>
+        );
+        const subtitle = <div>I&#39;m a subtitle!</div>;
+        const title = <div>Hello World!</div>;
+        const thumbnail = <div>Thumbnail goes here</div>;
+        const actionItem = (
+            <DropdownMenu
+                onMenuOpen={() => this.updateIsActionItemActive(true)}
+                onMenuClose={() => this.updateIsActionItemActive(false)}
+            >
+                <PlainButton className="lnk">
+                    <MenuToggle>Hello</MenuToggle>
+                </PlainButton>
+                <Menu>
+                    <MenuItem>Menu item</MenuItem>
+                </Menu>
+            </DropdownMenu>
+        );
+
+        return (
             <div>
-                <h1>Single Card Example</h1>
+                <div>
+                    <h1>Single Card Example</h1>
+                    <br />
+                    <ThumbnailCard thumbnail={thumbnail} title={title} />
+                </div>
                 <br />
-                <ThumbnailCard thumbnail={thumbnail} title={title} />
-            </div>
-            <br />
-            <div>
-                <h1>Single Card Example With Icon and Subtitle</h1>
-                <ThumbnailCard icon={icon} subtitle={subtitle} thumbnail={thumbnail} title={title} />
-            </div>
-            <br />
-            <div>
-                <h1>Multiple Cards Example</h1>
-                <div
-                    style={{
-                        display: 'flex',
-                        flexWrap: 'nowrap',
-                    }}
-                >
-                    {new Array(3).fill(true).map((_, i) => (
-                        <ThumbnailCard
-                            key={`thumbnailcard-${i}`}
-                            icon={icon}
-                            subtitle={subtitle}
-                            thumbnail={thumbnail}
-                            title={title}
-                        />
-                    ))}
+                <div>
+                    <h1>Single Card Example With Icon and Subtitle</h1>
+                    <ThumbnailCard icon={icon} subtitle={subtitle} thumbnail={thumbnail} title={title} />
+                </div>
+                <br />
+                <div>
+                    <h1>Expand on Hover Example</h1>
+                    <br />
+                    <ThumbnailCard shouldExpandOnHover thumbnail={thumbnail} title={title} />
+                </div>
+                <br />
+                <div>
+                    <h1>Expand on Hover with Action Item Example</h1>
+                    <br />
+                    <ThumbnailCard
+                        actionItem={actionItem}
+                        className={isActionItemActive && 'is-action-item-active'}
+                        shouldExpandOnHover
+                        thumbnail={thumbnail}
+                        title={title}
+                    />
+                </div>
+                <br />
+                <div>
+                    <h1>Multiple Cards Example</h1>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexWrap: 'nowrap',
+                        }}
+                    >
+                        {new Array(3).fill(true).map((_, i) => (
+                            <ThumbnailCard
+                                key={`thumbnailcard-${i}`}
+                                icon={icon}
+                                subtitle={subtitle}
+                                thumbnail={thumbnail}
+                                title={title}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
-        </div>
-    );
-};
+        );
+    }
+}
 
 export default ThumbnailCardExamples;
