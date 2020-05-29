@@ -8,6 +8,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
+import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import { withRouter } from 'react-router-dom';
 import type { Location, RouterHistory } from 'react-router-dom';
@@ -68,6 +69,8 @@ class Sidebar extends React.Component<Props, State> {
         annotatorState: {},
         isDefaultOpen: true,
         isLoading: false,
+        getAnnotationsMatchPath: noop,
+        getAnnotationsPath: noop,
     };
 
     id: string = uniqueid('bcs_');

@@ -105,6 +105,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         annotatorState: {},
         emitAnnotatorActiveChangeEvent: noop,
         getAnnotationsMatchPath: noop,
+        getAnnotationsPath: noop,
         isDisabled: false,
         onAnnotationSelect: noop,
         onCommentCreate: noop,
