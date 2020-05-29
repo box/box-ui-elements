@@ -47,6 +47,7 @@ type ExternalProps = {
     hasNotices?: boolean,
     hasProperties?: boolean,
     hasRetentionPolicy?: boolean,
+    hasSidebarInitialized: boolean,
     hasVersions?: boolean,
     onAccessStatsClick?: Function,
     onClassificationClick?: (e: SyntheticEvent<HTMLButtonElement>) => void,

@@ -115,5 +115,13 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 });
             });
         });
+
+        describe('first loaded behavior', () => {
+            test('should update isFirstLoad on mount', () => {
+                const wrapper = getWrapper({ path: '/activity' });
+                const sidebarPanels = wrapper.find(SidebarPanels);
+                expect(sidebarPanels.state('isInitialized')).toBe(true);
+            });
+        });
     });
 });

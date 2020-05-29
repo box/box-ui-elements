@@ -74,6 +74,23 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 endMarkName: expect.any(String),
             });
         });
+
+        test.each`
+            hasSidebarInitialized | expectedCount
+            ${false}              | ${1}
+            ${true}               | ${0}
+        `(
+            'should call redirectDeeplinkedAnnotation $expectedCount times when hasSidebarInitialized is $hasSidebarInitialized',
+            ({ expectedCount, hasSidebarInitialized }) => {
+                const getAnnotationsMatchPath = jest.fn();
+                const getAnnotationsPath = jest.fn();
+                const history = {
+                    replace: jest.fn(),
+                };
+                getWrapper({ getAnnotationsMatchPath, getAnnotationsPath, hasSidebarInitialized, history });
+                expect(getAnnotationsMatchPath).toHaveBeenCalledTimes(expectedCount);
+            },
+        );
     });
 
     describe('componentDidMount()', () => {

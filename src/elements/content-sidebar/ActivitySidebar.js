@@ -66,6 +66,7 @@ type ExternalProps = {
 type PropsWithoutContext = {
     elementId: string,
     file: BoxItem,
+    hasSidebarInitialized: boolean,
     isDisabled: boolean,
     onAnnotationSelect: Function,
     onVersionChange: Function,
@@ -122,17 +123,19 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         // eslint-disable-next-line react/prop-types
-        const { logger } = this.props;
+        const { hasSidebarInitialized, logger } = this.props;
 
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
         this.state = {};
 
-        // On hard load with deep link for annotation on previous version -- replace the
-        // file version with the latest file version until ContentPreview can support loading
-        // a previous version on mount
-        this.redirectDeeplinkedAnnotation();
+        if (!hasSidebarInitialized) {
+            // On hard load with deep link for annotation on previous version -- replace the
+            // file version with the latest file version until ContentPreview can support loading
+            // a previous version on mount
+            this.redirectDeeplinkedAnnotation();
+        }
     }
 
     redirectDeeplinkedAnnotation = () => {
