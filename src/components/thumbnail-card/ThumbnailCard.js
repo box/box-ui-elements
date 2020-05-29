@@ -10,8 +10,8 @@ import './ThumbnailCard.scss';
 type Props = {
     actionItem?: React.Node,
     className?: string,
+    expandOnHover?: boolean,
     icon?: React.Node,
-    shouldExpandOnHover?: boolean,
     subtitle?: React.Node,
     thumbnail: React.Node,
     title: React.Node,
@@ -21,13 +21,13 @@ const ThumbnailCard = ({
     actionItem,
     className = '',
     icon,
-    shouldExpandOnHover = false,
+    expandOnHover = false,
     subtitle,
     title,
     thumbnail,
     ...rest
 }: Props) => (
-    <div className={classNames('thumbnail-card', className, { 'is-expandable': shouldExpandOnHover })} {...rest}>
+    <div className={classNames('thumbnail-card', className, { 'is-expanded': expandOnHover })} {...rest}>
         <ThumbnailCardThumbnail thumbnail={thumbnail} />
         <ThumbnailCardDetails actionItem={actionItem} icon={icon} subtitle={subtitle} title={title} />
     </div>

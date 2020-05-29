@@ -28,11 +28,11 @@ describe('components/thumbnail-card/ThumbnailCard', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should apply is-expandable selector if shouldExpandOnHover is true', () => {
-        const shouldExpandOnHover = true;
-        const wrapper = getWrapper({ shouldExpandOnHover });
+    test('should apply is-expanded selector if expandOnHover is true', () => {
+        const expandOnHover = true;
+        const wrapper = getWrapper({ expandOnHover });
 
-        const container = wrapper.find('.is-expandable');
+        const container = wrapper.find('.is-expanded');
         expect(container.length).toBe(1);
     });
 });

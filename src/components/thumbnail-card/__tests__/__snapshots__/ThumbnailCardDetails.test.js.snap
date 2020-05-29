@@ -18,31 +18,6 @@ exports[`components/thumbnail-card/ThumbnailCardDetails should render 1`] = `
 </div>
 `;
 
-exports[`components/thumbnail-card/ThumbnailCardDetails should render actionItem if it is passed in 1`] = `
-<div
-  className="thumbnail-card-details"
->
-  <div
-    className="thumbnail-card-details-content"
-  >
-    <div
-      className="thumbnail-card-title"
-    >
-      <div>
-        Foo Bar!
-      </div>
-    </div>
-  </div>
-  <div
-    className="thumbnail-card-action-item"
-  >
-    <div>
-      Action Item
-    </div>
-  </div>
-</div>
-`;
-
 exports[`components/thumbnail-card/ThumbnailCardDetails should render icon 1`] = `
 <div
   className="thumbnail-card-details"

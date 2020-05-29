@@ -27,9 +27,9 @@ describe('components/thumbnail-card/ThumbnailCardDetails', () => {
     });
 
     test('should render actionItem if it is passed in', () => {
-        const actionItem = <div>Action Item</div>;
+        const actionItem = <div className="action-item">Action Item</div>;
         const wrapper = getWrapper({ actionItem });
 
-        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find('.action-item').length).toBe(1);
     });
 });
