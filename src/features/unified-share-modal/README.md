@@ -101,7 +101,19 @@ class USMExample extends React.Component {
                 const collaborators = this.contacts.slice();
 
                 const collaboratorsList = {
-                    collaborators,
+                    collaborators: this.contacts.map(contact => {
+                        // convert the existing contact entries to compatible collaborator entries 
+                        const isExternalCollab = contact.isExternalUser;
+                        delete contact.isExternalUser;
+                        contact.isExternalCollab = isExternalCollab;
+                        if (isExternalCollab) {
+                            contact.expiration = {
+                                executeAt: "November 27, 2022",
+                            }
+                        }
+
+                        return contact;
+                    }),
                 };
                 this.setState({collaboratorsList});
                 resolved();

@@ -156,8 +156,12 @@ export type sharedLinkType = {
 
 export type collaboratorType = {
     collabID: number,
+    expiration: {
+        executeAt: string,
+    },
     hasCustomAvatar: boolean,
     imageURL: ?string,
+    isExternalCollab: boolean,
     name: string,
     type: collaboratorGroupType,
     userID: ?number,

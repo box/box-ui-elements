@@ -2,67 +2,60 @@
 
 exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should not render avatar if badges are disabled 1`] = `
 <Badgeable
-  bottomLeft={null}
   topLeft={null}
 >
   <Avatar
+    email="test@example.org"
     id={1}
+    isExternal={true}
     name="foo bar"
+    shouldShowExternal={false}
   />
 </Badgeable>
 `;
 
 exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should not render badges with expiration lacking an execution date value 1`] = `
 <Badgeable
-  bottomLeft={null}
   topLeft={null}
 >
   <Avatar
     id={1}
+    isExternal={false}
     name="foo bar"
+    shouldShowExternal={true}
   />
 </Badgeable>
 `;
 
 exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should not render badges with expiration, but badging not allowed 1`] = `
 <Badgeable
-  bottomLeft={null}
   topLeft={null}
 >
   <Avatar
     id={1}
+    isExternal={false}
     name="foo bar"
-  />
-</Badgeable>
-`;
-
-exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should not render if email is missing 1`] = `
-<Badgeable
-  bottomLeft={null}
-  topLeft={null}
->
-  <Avatar
-    id={1}
-    name="foo bar"
+    shouldShowExternal={false}
   />
 </Badgeable>
 `;
 
 exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should not render if external collab is disabled 1`] = `
 <Badgeable
-  bottomLeft={null}
   topLeft={null}
 >
   <Avatar
+    email="test@example.org"
     id={1}
+    isExternal={false}
     name="foo bar"
+    shouldShowExternal={true}
   />
 </Badgeable>
 `;
 
 exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should render avatar with expiration if we allow badging 1`] = `
 <Badgeable
-  bottomLeft={null}
   topLeft={
     <Tooltip
       constrainToScrollParent={false}
@@ -94,71 +87,50 @@ exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should re
 >
   <Avatar
     id={1}
+    isExternal={false}
     name="foo bar"
+    shouldShowExternal={true}
   />
 </Badgeable>
 `;
 
 exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should render avatar with external collab if all preconditions are met 1`] = `
 <Badgeable
-  bottomLeft={
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
-      position="middle-right"
-      text={
-        <FormattedMessage
-          defaultMessage="{email} is from outside of your company"
-          id="boxui.collaboratorAvatars.collaborators.externalCollabTooltipText"
-          values={
-            Object {
-              "email": "test@example.org",
-            }
-          }
-        />
-      }
-      theme="default"
-    >
-      <div>
-        <IconGlobe
-          className="themed"
-          height={14}
-          width={14}
-        />
-      </div>
-    </Tooltip>
-  }
   topLeft={null}
 >
   <Avatar
+    email="test@example.org"
     id={1}
+    isExternal={true}
     name="foo bar"
+    shouldShowExternal={true}
   />
 </Badgeable>
 `;
 
 exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should render custom avatar 1`] = `
 <Badgeable
-  bottomLeft={null}
   topLeft={null}
 >
   <Avatar
     avatarUrl="http://foo.bar"
     id={1}
+    isExternal={false}
     name="foo bar"
+    shouldShowExternal={false}
   />
 </Badgeable>
 `;
 
 exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should render default component 1`] = `
 <Badgeable
-  bottomLeft={null}
   topLeft={null}
 >
   <Avatar
     id={1}
+    isExternal={false}
     name="foo bar"
+    shouldShowExternal={false}
   />
 </Badgeable>
 `;
