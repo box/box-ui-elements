@@ -49,7 +49,7 @@ type ExternalProps = {
 type PropsWithoutContext = {
     elementId: string,
     fileId: string,
-    hasSidebarInitialized: boolean,
+    hasSidebarInitialized?: boolean,
 } & ExternalProps;
 
 type Props = {

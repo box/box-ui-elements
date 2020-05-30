@@ -66,7 +66,7 @@ type ExternalProps = {
 type PropsWithoutContext = {
     elementId: string,
     file: BoxItem,
-    hasSidebarInitialized: boolean,
+    hasSidebarInitialized?: boolean,
     isDisabled: boolean,
     onAnnotationSelect: Function,
     onVersionChange: Function,

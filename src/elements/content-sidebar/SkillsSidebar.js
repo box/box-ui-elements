@@ -36,7 +36,7 @@ type PropsWithoutContext = {
     file: BoxItem,
     getPreview: Function,
     getViewer: Function,
-    hasSidebarInitialized: boolean,
+    hasSidebarInitialized?: boolean,
     refreshIdentity?: boolean,
 };
 
