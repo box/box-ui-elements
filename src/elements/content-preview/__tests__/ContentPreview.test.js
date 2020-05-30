@@ -1134,6 +1134,7 @@ describe('elements/content-preview/ContentPreview', () => {
             'should call onVersionChange $onVersionChangeCount times and setState $setStateCount times',
             ({ annotationFileVersionId, selectedVersionId, locationType, setStateCount }) => {
                 const annotation = {
+                    id: '123',
                     file_version: {
                         id: annotationFileVersionId,
                     },
@@ -1156,7 +1157,7 @@ describe('elements/content-preview/ContentPreview', () => {
                 instance.handleAnnotationSelect(annotation);
 
                 expect(instance.setState).toHaveBeenCalledTimes(setStateCount);
-                expect(emit).toBeCalledWith('scrolltoannotation', annotation);
+                expect(emit).toBeCalledWith('scrolltoannotation', { id: annotation.id, target: annotation.target });
             },
         );
     });
