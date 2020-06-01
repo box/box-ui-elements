@@ -78,18 +78,6 @@ describe('features/collaborator-avatars/CollaboratorAvatarItem', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should not render if email is missing', () => {
-            const wrapper = getWrapper({
-                allowBadging: true,
-                isExternalCollab: true,
-                expiration: {
-                    executeAt: null,
-                },
-            });
-
-            expect(wrapper).toMatchSnapshot();
-        });
-
         test('should not render if external collab is disabled', () => {
             const wrapper = getWrapper({
                 allowBadging: true,
