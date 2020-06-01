@@ -124,4 +124,23 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             });
         });
     });
+
+    describe('refresh()', () => {
+        test.each([true, false])('should call the sidebars with the appropriate argument', shouldRefreshCache => {
+            const instance = getWrapper()
+                .find(SidebarPanels)
+                .instance();
+
+            ['activitySidebar', 'detailsSidebar', 'metadataSidebar', 'versionsSidebar'].forEach(sidebar => {
+                instance[sidebar] = { current: { refresh: jest.fn() } };
+            });
+
+            instance.refresh(shouldRefreshCache);
+
+            expect(instance.activitySidebar.current.refresh).toHaveBeenCalledWith(shouldRefreshCache);
+            expect(instance.detailsSidebar.current.refresh).toHaveBeenCalledWith();
+            expect(instance.metadataSidebar.current.refresh).toHaveBeenCalledWith();
+            expect(instance.versionsSidebar.current.refresh).toHaveBeenCalledWith();
+        });
+    });
 });

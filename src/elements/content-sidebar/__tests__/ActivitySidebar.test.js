@@ -9,7 +9,6 @@ jest.mock('lodash/debounce', () => jest.fn(i => i));
 
 describe('elements/content-sidebar/ActivitySidebar', () => {
     const feedAPI = {
-        addAnnotation: jest.fn(),
         feedItems: jest.fn(),
         deleteAnnotation: jest.fn(),
         deleteComment: jest.fn(),
@@ -119,16 +118,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('componentDidUpdate', () => {
-        test('should call addAnnotation if annotator action changes', () => {
-            const wrapper = getWrapper({ annotatorState: { annotation: {} } });
-            const instance = wrapper.instance();
-
-            instance.addAnnotation = jest.fn();
-
-            wrapper.setProps({ annotatorState: { annotation: { id: '123' } } });
-            expect(instance.addAnnotation).toBeCalled();
-        });
-
         test.each`
             prevFileVersionId | fileVersionId | expectedCallCount
             ${'122'}          | ${'122'}      | ${0}
@@ -722,37 +711,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             expect(fetchFeedItems).toHaveBeenCalled();
             expect(fetchFeedItems).toHaveBeenCalledWith(true);
-        });
-    });
-
-    describe('addAnnotation()', () => {
-        test('should throw if no user', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-
-            expect(() => instance.addAnnotation()).toThrow('Bad box user!');
-        });
-        test.each([true, false])('should call feedApi with pending if action %s', isPending => {
-            const annotatorStateMock = {
-                action: isPending ? 'create_start' : null,
-                annotation: {},
-                meta: {
-                    requestId: '123',
-                },
-            };
-
-            const wrapper = getWrapper({ annotatorState: annotatorStateMock, currentUser });
-            const instance = wrapper.instance();
-
-            instance.addAnnotation();
-
-            expect(api.getFeedAPI().addAnnotation).toBeCalledWith(
-                file,
-                currentUser,
-                annotatorStateMock.annotation,
-                annotatorStateMock.meta.requestId,
-                isPending,
-            );
         });
     });
 

@@ -17,7 +17,9 @@ import LocalStore from '../../utils/LocalStore';
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
+import { getBadUserError } from '../../utils/error';
 import { withAnnotatorContext, WithAnnotatorContextProps } from '../common/annotator-context';
+import { withAPIContext } from '../common/api-context';
 import { withFeatureConsumer } from '../common/feature-checking';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { ActivitySidebarProps } from './ActivitySidebar';
@@ -97,8 +99,8 @@ class Sidebar extends React.Component<Props, State> {
         const { annotatorState, fileId, getAnnotationsMatchPath, history, location }: Props = this.props;
         const { annotatorState: prevAnnotatorState, fileId: prevFileId, location: prevLocation }: Props = prevProps;
         const { isDirty }: State = this.state;
-        const { activeAnnotationId } = annotatorState;
-        const { activeAnnotationId: prevActiveAnnotationId } = prevAnnotatorState;
+        const { activeAnnotationId, annotation } = annotatorState;
+        const { activeAnnotationId: prevActiveAnnotationId, annotation: prevAnnotation } = prevAnnotatorState;
         const isAnnotationsPath = !!getAnnotationsMatchPath(history);
         const hasActiveAnnotationChanged = prevActiveAnnotationId !== activeAnnotationId;
         const isTransitioningToAnnotationPath = activeAnnotationId && !isAnnotationsPath;
@@ -114,11 +116,53 @@ class Sidebar extends React.Component<Props, State> {
             this.setState({ isDirty: true });
         }
 
+        if (prevAnnotation !== annotation) {
+            this.addAnnotation();
+        }
+
         // Active annotation id changed. If location is currently an annotation path or
         // if location is not currently an annotation path but the active annotation id
         // transitioned from falsy to truthy, update the location accordingly
         if (hasActiveAnnotationChanged && (isAnnotationsPath || isTransitioningToAnnotationPath)) {
             this.updateActiveAnnotation();
+        }
+    }
+
+    getIsOpen = () => {
+        const { isDefaultOpen } = this.props;
+        return this.isForcedSet() ? this.isForcedOpen() : !!isDefaultOpen;
+    };
+
+    addAnnotation() {
+        const {
+            annotatorState: { action, annotation, meta },
+            api,
+            currentUser,
+            file,
+            getAnnotationsMatchPath,
+            history,
+        } = this.props;
+        const { requestId } = meta || {};
+        const isOpen = this.getIsOpen();
+        const isPending = action === 'create_start';
+        const isAnnotationsPath = getAnnotationsMatchPath(history);
+
+        if (!currentUser) {
+            throw getBadUserError();
+        }
+
+        const feedAPI = api.getFeedAPI(false);
+        const { id } = file;
+        const { items: hasItems } = feedAPI.getCachedItems(id) || {};
+
+        // If there are existing items in the cache for this file, then patch the cache with the new annotation
+        if (hasItems) {
+            feedAPI.addAnnotation(file, currentUser, annotation, requestId, isPending);
+        }
+
+        if (isAnnotationsPath && isOpen) {
+            // If the sidebar is currently open, then force the sidebar to refresh with the updated data
+            this.refresh(false);
         }
     }
 
@@ -219,11 +263,11 @@ class Sidebar extends React.Component<Props, State> {
      * Refreshes the sidebar panel
      * @returns {void}
      */
-    refresh(): void {
+    refresh(shouldRefreshCache: boolean = true): void {
         const { current: sidebarPanels } = this.sidebarPanels;
 
         if (sidebarPanels) {
-            sidebarPanels.refresh();
+            sidebarPanels.refresh(shouldRefreshCache);
         }
     }
 
@@ -251,7 +295,6 @@ class Sidebar extends React.Component<Props, State> {
             getViewer,
             hasAdditionalTabs,
             hasVersions,
-            isDefaultOpen,
             isLoading,
             metadataEditors,
             metadataSidebarProps,
@@ -259,7 +302,7 @@ class Sidebar extends React.Component<Props, State> {
             onVersionChange,
             versionsSidebarProps,
         }: Props = this.props;
-        const isOpen = this.isForcedSet() ? this.isForcedOpen() : !!isDefaultOpen;
+        const isOpen = this.getIsOpen();
         const hasActivity = SidebarUtils.canHaveActivitySidebar(this.props);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
@@ -319,4 +362,4 @@ class Sidebar extends React.Component<Props, State> {
 }
 
 export { Sidebar as SidebarComponent };
-export default flow([withFeatureConsumer, withAnnotatorContext, withRouter])(Sidebar);
+export default flow([withAPIContext, withFeatureConsumer, withAnnotatorContext, withRouter])(Sidebar);

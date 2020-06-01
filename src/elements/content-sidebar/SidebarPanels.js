@@ -99,14 +99,14 @@ class SidebarPanels extends React.Component<Props, State> {
      * Refreshes the contents of the active sidebar
      * @returns {void}
      */
-    refresh(): void {
+    refresh(shouldRefreshCache: boolean = true): void {
         const { current: activitySidebar } = this.activitySidebar;
         const { current: detailsSidebar } = this.detailsSidebar;
         const { current: metadataSidebar } = this.metadataSidebar;
         const { current: versionsSidebar } = this.versionsSidebar;
 
         if (activitySidebar) {
-            activitySidebar.refresh();
+            activitySidebar.refresh(shouldRefreshCache);
         }
 
         if (detailsSidebar) {

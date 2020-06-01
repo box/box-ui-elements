@@ -156,41 +156,14 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.fetchCurrentUser(currentUser);
     }
 
-    componentDidUpdate({ annotatorState: prevAnnotatorState, match: prevMatch }: Props): void {
-        const { annotation: prevAnnotation } = prevAnnotatorState;
-        const {
-            annotatorState: { annotation },
-            match,
-        } = this.props;
+    componentDidUpdate({ match: prevMatch }: Props): void {
+        const { match } = this.props;
         const prevFileVersionId = getProp(prevMatch, 'params.fileVersionId');
         const fileVersionId = getProp(match, 'params.fileVersionId');
-
-        if (prevAnnotation !== annotation) {
-            this.addAnnotation();
-        }
 
         if (prevFileVersionId !== fileVersionId) {
             this.updateActiveVersion();
         }
-    }
-
-    addAnnotation() {
-        const {
-            annotatorState: { action, annotation, meta },
-            api,
-            file,
-        } = this.props;
-        const { requestId } = meta || {};
-        const { currentUser } = this.state;
-        const isPending = action === 'create_start';
-
-        if (!currentUser) {
-            throw getBadUserError();
-        }
-
-        api.getFeedAPI(false).addAnnotation(file, currentUser, annotation, requestId, isPending);
-
-        this.fetchFeedItems();
     }
 
     updateActiveVersion = () => {
@@ -698,8 +671,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         });
     };
 
-    refresh(): void {
-        this.fetchFeedItems(true);
+    refresh(shouldRefreshCache: boolean = true): void {
+        this.fetchFeedItems(shouldRefreshCache);
     }
 
     renderAddTaskButton = () => {
