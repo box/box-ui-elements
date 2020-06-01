@@ -66,7 +66,7 @@ const positions = {
     },
 };
 
-type DefaultTooltipProps = {
+export type DefaultTooltipProps = {
     /** Whether to constrain the tooltip to the element's scroll parent. Defaults to `false` */
     constrainToScrollParent: boolean;
     /** Whether to constrain the tooltip to window. Defaults to `true` */
@@ -98,9 +98,6 @@ export type TooltipProps = {
     /** Text to show in the tooltip */
     text?: React.ReactNode;
 } & Partial<DefaultTooltipProps>;
-// Fixes issue where webpack thinks TooltipProps is undefined due to how Typescript types are removed
-// when compiling.
-export const TooltipProps = undefined;
 
 type State = {
     isShown: boolean;
