@@ -32,6 +32,8 @@ type Props = {
     /** optional badge to be displayed next to logo */
     badge?: React.Node,
 
+    buttonProps?: Object,
+
     /** Additional classes */
     className?: string,
 
@@ -44,7 +46,7 @@ type Props = {
 } & InjectIntlProvidedProps;
 
 function CollapsibleSidebarLogo(props: Props) {
-    const { badge, className, expanded, linkProps, onToggle, intl } = props;
+    const { badge, buttonProps, className, expanded, linkProps, onToggle, intl } = props;
 
     const classes = classNames('bdl-CollapsibleSidebar-logo', className);
 
@@ -53,6 +55,7 @@ function CollapsibleSidebarLogo(props: Props) {
             className="bdl-CollapsibleSidebar-toggleButton"
             onClick={onToggle}
             aria-label={intl.formatMessage(expanded ? messages.collapseButtonLabel : messages.expandButtonLabel)}
+            {...buttonProps}
         >
             <StyledIconHamburger height={20} width={20} />
         </PlainButton>
