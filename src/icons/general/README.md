@@ -533,6 +533,11 @@ width?: number,
         propsDocumentation: iconPropsDocumentation,
     },
     {
+        name: 'IconGlobeInverted',
+        component: require('./IconGlobeInverted').default,
+        propsDocumentation: iconPropsDocumentation,
+    },
+    {
         name: 'IconGlobeTinycon',
         component: require('./IconGlobeTinycon').default,
         propsDocumentation: iconPropsDocumentation,
