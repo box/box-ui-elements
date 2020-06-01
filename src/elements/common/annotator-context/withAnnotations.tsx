@@ -1,9 +1,10 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
-import { match as matchType, matchPath } from 'react-router-dom';
+import { generatePath, match as matchType, matchPath } from 'react-router-dom';
 import AnnotatorContext from './AnnotatorContext';
 import { Action, Annotator, AnnotationActionEvent, AnnotatorState, GetMatchPath, MatchParams, Status } from './types';
 
+const ANNOTATIONS_PATH = '/:sidebar/annotations/:fileVersionId/:annotationId?';
 export interface WithAnnotationsProps {
     onAnnotator: (annotator: Annotator) => void;
     onPreviewDestroy: () => void;
@@ -13,6 +14,7 @@ export interface ComponentWithAnnotations {
     emitActiveChangeEvent: (id: string | null) => void;
     emitRemoveEvent: (id: string) => void;
     getAction: (eventData: AnnotationActionEvent) => Action;
+    getAnnotationsPath: (fileVersionId?: string, annotationId?: string) => string;
     getMatchPath: GetMatchPath;
     handleActiveChange: (annotationId: string | null) => void;
     handleAnnotationChangeEvent: (id: string | null) => void;
@@ -82,10 +84,22 @@ export default function withAnnotations<P extends object>(
             return status === Status.SUCCESS || error ? Action.CREATE_END : Action.CREATE_START;
         }
 
+        getAnnotationsPath(fileVersionId?: string, annotationId?: string): string {
+            if (!fileVersionId) {
+                return '/activity';
+            }
+
+            return generatePath(ANNOTATIONS_PATH, {
+                sidebar: 'activity',
+                annotationId,
+                fileVersionId,
+            });
+        }
+
         getMatchPath(history?: History): matchType<MatchParams> | null {
             const pathname = getProp(history, 'location.pathname');
             return matchPath<MatchParams>(pathname, {
-                path: '/:sidebar/annotations/:fileVersionId/:annotationId?',
+                path: ANNOTATIONS_PATH,
                 exact: true,
             });
         }
@@ -137,6 +151,7 @@ export default function withAnnotations<P extends object>(
                         emitActiveChangeEvent: this.emitActiveChangeEvent,
                         emitRemoveEvent: this.emitRemoveEvent,
                         getAnnotationsMatchPath: this.getMatchPath,
+                        getAnnotationsPath: this.getAnnotationsPath,
                         state: this.state,
                     }}
                 >

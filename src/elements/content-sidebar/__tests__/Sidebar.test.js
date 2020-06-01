@@ -12,8 +12,20 @@ jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 jest.mock('../../../utils/LocalStore');
 
 describe('elements/content-sidebar/Sidebar', () => {
+    const annotatorContextProps = {
+        getAnnotationsMatchPath: jest.fn(),
+        getAnnotationsPath: jest.fn(),
+    };
+
+    const file = {
+        id: 'id',
+        file_version: {
+            id: '123',
+        },
+    };
+
     const getWrapper = props =>
-        shallow(<Sidebar file={{ id: 'id' }} annotatorState={{}} location={{ pathname: '/' }} {...props} />);
+        shallow(<Sidebar file={file} location={{ pathname: '/' }} {...annotatorContextProps} {...props} />);
 
     beforeEach(() => {
         LocalStore.mockClear();
@@ -68,6 +80,28 @@ describe('elements/content-sidebar/Sidebar', () => {
             wrapper.setProps({ location: { pathname: '/', state: { open: false } } });
             expect(instance.isForced).toHaveBeenCalledWith(false);
         });
+
+        test.each`
+            condition                                          | prevActiveAnnotationId | activeAnnotationId | isAnnotationsPath | expectedCount
+            ${'annotation ids are the same'}                   | ${'123'}               | ${'123'}           | ${true}           | ${0}
+            ${'annotation ids are different'}                  | ${'123'}               | ${'456'}           | ${true}           | ${1}
+            ${'annotation deselected on annotations path'}     | ${'123'}               | ${null}            | ${true}           | ${1}
+            ${'annotation deselected not on annotations path'} | ${'123'}               | ${null}            | ${false}          | ${0}
+            ${'annotation selected not on annotations path'}   | ${null}                | ${'123'}           | ${false}          | ${1}
+            ${'annotation selected on annotations path'}       | ${null}                | ${'123'}           | ${true}           | ${1}
+        `(
+            'should call updateActiveAnnotation $expectedCount times if $condition',
+            ({ prevActiveAnnotationId, activeAnnotationId, isAnnotationsPath, expectedCount }) => {
+                const wrapper = getWrapper({ annotatorState: { activeAnnotationId: prevActiveAnnotationId } });
+
+                wrapper.instance().updateActiveAnnotation = jest.fn();
+                annotatorContextProps.getAnnotationsMatchPath.mockReturnValue(isAnnotationsPath);
+
+                wrapper.setProps({ annotatorState: { activeAnnotationId } });
+
+                expect(wrapper.instance().updateActiveAnnotation).toHaveBeenCalledTimes(expectedCount);
+            },
+        );
     });
 
     describe('handleVersionHistoryClick', () => {
@@ -197,6 +231,34 @@ describe('elements/content-sidebar/Sidebar', () => {
                 const wrapper = getWrapper({ isDefaultOpen });
 
                 expect(wrapper.hasClass('bcs-is-open')).toBe(expected);
+            },
+        );
+    });
+
+    describe('updateActiveAnnotation()', () => {
+        test.each`
+            activeAnnotationId | fileVersionId | location                                    | expectedPath                       | expectedState
+            ${'234'}           | ${'456'}      | ${{ pathname: '/' }}                        | ${'/activity/annotations/456/234'} | ${{ open: true }}
+            ${'234'}           | ${undefined}  | ${{ pathname: '/' }}                        | ${'/activity/annotations/123/234'} | ${{ open: true }}
+            ${null}            | ${'456'}      | ${{ pathname: '/' }}                        | ${'/activity/annotations/456'}     | ${undefined}
+            ${null}            | ${'456'}      | ${{ pathname: '/', state: { foo: 'bar' } }} | ${'/activity/annotations/456'}     | ${{ foo: 'bar' }}
+            ${'234'}           | ${'456'}      | ${{ pathname: '/', state: { foo: 'bar' } }} | ${'/activity/annotations/456/234'} | ${{ foo: 'bar', open: true }}
+        `(
+            'should set location path based on match param fileVersionId=$fileVersionId and activeAnnotationId=$activeAnnotationId',
+            ({ activeAnnotationId, fileVersionId, location, expectedPath, expectedState }) => {
+                const annotatorState = {
+                    activeAnnotationId,
+                };
+                annotatorContextProps.getAnnotationsMatchPath.mockReturnValue({ params: { fileVersionId } });
+                annotatorContextProps.getAnnotationsPath.mockReturnValue(expectedPath);
+                const history = { push: jest.fn(), replace: jest.fn() };
+
+                const wrapper = getWrapper({ annotatorState, history, location });
+                const instance = wrapper.instance();
+
+                instance.updateActiveAnnotation();
+
+                expect(history.push).toHaveBeenCalledWith({ pathname: expectedPath, state: expectedState });
             },
         );
     });
