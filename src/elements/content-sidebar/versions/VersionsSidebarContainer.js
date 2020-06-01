@@ -24,6 +24,7 @@ import type { BoxItemVersion, BoxItem, FileVersions } from '../../../common/type
 type Props = {
     api: API,
     fileId: string,
+    hasSidebarInitialized?: boolean,
     history: RouterHistory,
     match: Match,
     onVersionChange: VersionChangeCallback,
