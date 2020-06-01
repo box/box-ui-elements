@@ -1,1 +1,1 @@
-export { default, TooltipPosition, TooltipTheme } from './Tooltip';
+export { default, TooltipPosition, TooltipProps, TooltipTheme } from './Tooltip';

@@ -1,0 +1,45 @@
+@import '../../styles/variables';
+
+.VisualTooltip {
+    width: 320px;
+    max-width: 320px;
+    padding: 0;
+    font-size: 14px;
+    text-align: center;
+    border-radius: 6px;
+
+    & .tooltip-close-button {
+        top: 16px;
+        right: 16px;
+        width: 16px;
+    }
+
+    &.with-close-button {
+        padding-right: 0;
+    }
+}
+
+.VisualTooltip--image {
+    max-width: 100%;
+}
+
+.VisualTooltip--contentWrapper {
+    margin-top: -4px;
+    padding: 24px 32px;
+    color: $bdl-gray-80;
+    font-size: 14px;
+    background-color: $white;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    box-shadow: 0 3px 6px 0 rgba($black, .1);
+}
+
+.VisualTooltip--title {
+    margin-top: 0;
+    color: $bdl-gray;
+    font-weight: bold;
+}
+
+.VisualTooltip--content {
+    margin: 0;
+}
