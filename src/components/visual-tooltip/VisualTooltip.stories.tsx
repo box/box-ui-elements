@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Button from '../button/Button';
+import Button, { ButtonType } from '../button/Button';
 
 import testImageSrc from './getTestImageSrc';
 import VisualTooltip from './VisualTooltip';
@@ -14,7 +14,7 @@ export const basic = () => (
             isShown
             title="Lorem ipsum dolor"
         >
-            <Button>Callout</Button>
+            <Button type={ButtonType.BUTTON}>Callout</Button>
         </VisualTooltip>
     </div>
 );

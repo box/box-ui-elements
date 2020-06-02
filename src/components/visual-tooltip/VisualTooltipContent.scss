@@ -1,0 +1,26 @@
+@import '../../styles/variables';
+
+.bdl-VisualTooltipContent-image {
+    max-width: 100%;
+}
+
+.bdl-VisualTooltipContent-contentWrapper {
+    margin-top: -4px;
+    padding: 24px 32px;
+    color: $bdl-gray-80;
+    font-size: 14px;
+    background-color: $white;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    box-shadow: 0 3px 6px 0 rgba($black, .1);
+}
+
+.bdl-VisualTooltipContent-title {
+    margin-top: 0;
+    color: $bdl-gray;
+    font-weight: bold;
+}
+
+.bdl-VisualTooltipContent-content {
+    margin: 0;
+}

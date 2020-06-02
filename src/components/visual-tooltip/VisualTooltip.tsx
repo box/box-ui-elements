@@ -2,6 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 import Tooltip, { TooltipProps, TooltipTheme } from '../tooltip';
+import VisualTooltipContent from './VisualTooltipContent';
 
 import './VisualTooltip.scss';
 
@@ -20,25 +21,13 @@ export type VisualTooltipProps = {
 } & OtherTooltipProps;
 
 const VisualTooltip = ({ children, className, content, imageSrc, title, ...otherTooltipProps }: VisualTooltipProps) => {
-    const VisualTooltipContent = () => (
-        <div className="VisualTooltip--wrap">
-            <div className="VisualTooltip--imageWrapper">
-                <img src={imageSrc} alt={title} className="VisualTooltip--image" />
-            </div>
-            <div className="VisualTooltip--contentWrapper">
-                <h4 className="VisualTooltip--title">{title}</h4>
-                <p className="VisualTooltip--content">{content}</p>
-            </div>
-        </div>
-    );
-
     return (
         <Tooltip
-            className={classNames('VisualTooltip', className)}
+            className={classNames('bdl-VisualTooltip', className)}
             showCloseButton
             theme={TooltipTheme.CALLOUT}
             {...otherTooltipProps}
-            text={<VisualTooltipContent />}
+            text={<VisualTooltipContent content={content} imageSrc={imageSrc} title={title} />}
         >
             {children}
         </Tooltip>

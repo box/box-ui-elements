@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/visual-tooltip/VisualTooltipContent should correctly render VisualTooltipContent 1`] = `
+<div
+  className="bdl-VisualTooltipContent"
+>
+  <div
+    className="bdl-VisualTooltipContent-imageWrapper"
+  >
+    <img
+      alt="I am a title"
+      className="bdl-VisualTooltipContent-image"
+      src="test-file-stub"
+    />
+  </div>
+  <div
+    className="bdl-VisualTooltipContent-contentWrapper"
+  >
+    <h4
+      className="bdl-VisualTooltipContent-title"
+    >
+      I am a title
+    </h4>
+    <p
+      className="bdl-VisualTooltipContent-content"
+    >
+      Hey I am content
+    </p>
+  </div>
+</div>
+`;
