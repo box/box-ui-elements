@@ -15,19 +15,19 @@ export type VisualTooltipProps = {
     /** A string to be used in the tooltip's paragraph content */
     content: string;
     /** The string source of the image used in the visual tooltip */
-    imageSrc: string;
+    image: React.ReactNode;
     /** A string to be used in the tooltip's title heading */
     title: string;
 } & OtherTooltipProps;
 
-const VisualTooltip = ({ children, className, content, imageSrc, title, ...otherTooltipProps }: VisualTooltipProps) => {
+const VisualTooltip = ({ children, className, content, image, title, ...otherTooltipProps }: VisualTooltipProps) => {
     return (
         <Tooltip
             className={classNames('bdl-VisualTooltip', className)}
             showCloseButton
             theme={TooltipTheme.CALLOUT}
             {...otherTooltipProps}
-            text={<VisualTooltipContent content={content} imageSrc={imageSrc} title={title} />}
+            text={<VisualTooltipContent content={content} image={image} title={title} />}
         >
             {children}
         </Tooltip>

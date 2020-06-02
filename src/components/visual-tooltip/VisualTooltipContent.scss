@@ -1,11 +1,14 @@
 @import '../../styles/variables';
 
 .bdl-VisualTooltipContent-image {
-    max-width: 100%;
+    display: flex;
+
+    img {
+        width: 100%;
+    }
 }
 
 .bdl-VisualTooltipContent-contentWrapper {
-    margin-top: -4px;
     padding: 24px 32px;
     color: $bdl-gray-80;
     font-size: 14px;

@@ -10,7 +10,7 @@ export const basic = () => (
     <div style={{ textAlign: 'center' }}>
         <VisualTooltip
             content="Lorem ipsum dolor sit amet, consec tetur adipiscing elit. Ut at semper nisl."
-            imageSrc={testImageSrc}
+            image={<img src={testImageSrc} alt="Lorem ipsum dolor" />}
             isShown
             title="Lorem ipsum dolor"
         >

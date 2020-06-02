@@ -5,11 +5,10 @@ exports[`components/visual-tooltip/VisualTooltipContent should correctly render 
   className="bdl-VisualTooltipContent"
 >
   <div
-    className="bdl-VisualTooltipContent-imageWrapper"
+    className="bdl-VisualTooltipContent-image"
   >
     <img
-      alt="I am a title"
-      className="bdl-VisualTooltipContent-image"
+      alt="foo"
       src="test-file-stub"
     />
   </div>

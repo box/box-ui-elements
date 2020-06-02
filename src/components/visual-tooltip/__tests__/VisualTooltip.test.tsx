@@ -7,8 +7,10 @@ import testImageSrc from '../getTestImageSrc';
 
 describe('components/visual-tooltip/VisualTooltip', () => {
     test('should correctly render VisualTooltip', () => {
+        const image = <img src={testImageSrc} alt="foo" />;
+
         const wrapper: ShallowWrapper = shallow(
-            <VisualTooltip content="Foo content" imageSrc={testImageSrc} isShown title="Bar">
+            <VisualTooltip content="Foo content" image={image} isShown title="Bar">
                 <Button>Callout</Button>
             </VisualTooltip>,
         );
