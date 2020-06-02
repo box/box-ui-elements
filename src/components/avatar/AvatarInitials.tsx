@@ -2,8 +2,10 @@ import * as React from 'react';
 import { avatarColors } from '../../styles/variables';
 
 const getInitials = (name: string) => {
-    const firstInitial = name.slice(0, 1);
-    const lastInitial = name.slice(name.lastIndexOf(' ') + 1, name.lastIndexOf(' ') + 2);
+    // Remove any bracketed text from the user name
+    const cleanedName = name.replace(/[[({<]+.*[\])}>]+/g, '').trim();
+    const firstInitial = cleanedName.slice(0, 1);
+    const lastInitial = cleanedName.slice(cleanedName.lastIndexOf(' ') + 1, cleanedName.lastIndexOf(' ') + 2);
     return (firstInitial + lastInitial).toUpperCase();
 };
 

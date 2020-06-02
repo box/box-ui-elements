@@ -37,7 +37,7 @@ export const markedAsExternal = () => (
 export const withMultipleAvatars = () => (
     <div>
         <Avatar id={1} name="Aaron Levie" />
-        <Avatar id={2} name="Front End" />
+        <Avatar id={2} name="Front End (example.com)" />
         <Avatar id={3} name="Redwood City" />
     </div>
 );
