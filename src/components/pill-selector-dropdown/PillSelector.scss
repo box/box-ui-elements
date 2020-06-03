@@ -114,6 +114,13 @@
                 outline: none;
             }
         }
+
+        // when using the larger pills with user avatars,
+        // increase textarea line height to align text with pill content
+        .bdl-RoundPill ~ .bdl-PillSelector-input {
+            height: $bdl-line-height + $bdl-grid-unit * 2;
+            line-height: $bdl-line-height + $bdl-grid-unit * 2;
+        }
     }
 }
 
