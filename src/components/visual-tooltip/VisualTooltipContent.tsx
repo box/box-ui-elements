@@ -5,7 +5,7 @@ import './VisualTooltipContent.scss';
 export type VisualTooltipContentProps = {
     /** A string to be used in the tooltip's paragraph content */
     content: string;
-    /** The string source of the image used in the visual tooltip */
+    /** A React component representing the image used in the visual tooltip */
     image: React.ReactNode;
     /** A string to be used in the tooltip's title heading */
     title: string;
