@@ -17,9 +17,6 @@ import LocalStore from '../../utils/LocalStore';
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
-import { getBadUserError } from '../../utils/error';
-import { withAnnotatorContext, WithAnnotatorContextProps } from '../common/annotator-context';
-import { withAPIContext } from '../common/api-context';
 import { withFeatureConsumer } from '../common/feature-checking';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { ActivitySidebarProps } from './ActivitySidebar';
@@ -56,7 +53,7 @@ type Props = {
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
-} & WithAnnotatorContextProps;
+};
 
 type State = {
     isDirty: boolean,
@@ -96,14 +93,9 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props): void {
-        const { annotatorState, fileId, getAnnotationsMatchPath, history, location }: Props = this.props;
-        const { annotatorState: prevAnnotatorState, fileId: prevFileId, location: prevLocation }: Props = prevProps;
+        const { fileId, history, location }: Props = this.props;
+        const { fileId: prevFileId, location: prevLocation }: Props = prevProps;
         const { isDirty }: State = this.state;
-        const { activeAnnotationId, annotation } = annotatorState;
-        const { activeAnnotationId: prevActiveAnnotationId, annotation: prevAnnotation } = prevAnnotatorState;
-        const isAnnotationsPath = !!getAnnotationsMatchPath(history);
-        const hasActiveAnnotationChanged = prevActiveAnnotationId !== activeAnnotationId;
-        const isTransitioningToAnnotationPath = activeAnnotationId && !isAnnotationsPath;
 
         // User navigated to a different file without ever navigating the sidebar
         if (!isDirty && fileId !== prevFileId && location.pathname !== '/') {
@@ -115,78 +107,7 @@ class Sidebar extends React.Component<Props, State> {
             this.setForcedByLocation();
             this.setState({ isDirty: true });
         }
-
-        if (prevAnnotation !== annotation) {
-            this.addAnnotation();
-        }
-
-        // Active annotation id changed. If location is currently an annotation path or
-        // if location is not currently an annotation path but the active annotation id
-        // transitioned from falsy to truthy, update the location accordingly
-        if (hasActiveAnnotationChanged && (isAnnotationsPath || isTransitioningToAnnotationPath)) {
-            this.updateActiveAnnotation();
-        }
     }
-
-    getIsOpen = () => {
-        const { isDefaultOpen } = this.props;
-        return this.isForcedSet() ? this.isForcedOpen() : !!isDefaultOpen;
-    };
-
-    addAnnotation() {
-        const {
-            annotatorState: { action, annotation, meta },
-            api,
-            currentUser,
-            file,
-            getAnnotationsMatchPath,
-            history,
-        } = this.props;
-        const { requestId } = meta || {};
-        const isOpen = this.getIsOpen();
-        const isPending = action === 'create_start';
-        const isAnnotationsPath = getAnnotationsMatchPath(history);
-
-        if (!currentUser) {
-            throw getBadUserError();
-        }
-
-        const feedAPI = api.getFeedAPI(false);
-        const { id } = file;
-        const { items: hasItems } = feedAPI.getCachedItems(id) || {};
-
-        // If there are existing items in the cache for this file, then patch the cache with the new annotation
-        if (hasItems) {
-            feedAPI.addAnnotation(file, currentUser, annotation, requestId, isPending);
-        }
-
-        if (isAnnotationsPath && isOpen) {
-            // If the sidebar is currently open, then force the sidebar to refresh with the updated data
-            this.refresh(false);
-        }
-    }
-
-    updateActiveAnnotation = () => {
-        const {
-            annotatorState: { activeAnnotationId },
-            file,
-            getAnnotationsMatchPath,
-            getAnnotationsPath,
-            history,
-            location,
-        } = this.props;
-        const match = getAnnotationsMatchPath(history);
-        const currentFileVersionId = getProp(file, 'file_version.id');
-        const fileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
-        const newLocationState = activeAnnotationId ? { ...location.state, open: true } : location.state;
-
-        // Update the location pathname and open state if transitioning to an active annotation id, force the sidebar open
-        history.push({
-            ...location,
-            pathname: getAnnotationsPath(fileVersionId, activeAnnotationId),
-            state: newLocationState,
-        });
-    };
 
     getUrlPrefix = (pathname: string) => {
         const basePath = pathname.substring(1).split('/')[0];
@@ -295,6 +216,7 @@ class Sidebar extends React.Component<Props, State> {
             getViewer,
             hasAdditionalTabs,
             hasVersions,
+            isDefaultOpen,
             isLoading,
             metadataEditors,
             metadataSidebarProps,
@@ -302,7 +224,7 @@ class Sidebar extends React.Component<Props, State> {
             onVersionChange,
             versionsSidebarProps,
         }: Props = this.props;
-        const isOpen = this.getIsOpen();
+        const isOpen = this.isForcedSet() ? this.isForcedOpen() : !!isDefaultOpen;
         const hasActivity = SidebarUtils.canHaveActivitySidebar(this.props);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
@@ -362,4 +284,4 @@ class Sidebar extends React.Component<Props, State> {
 }
 
 export { Sidebar as SidebarComponent };
-export default flow([withAPIContext, withFeatureConsumer, withAnnotatorContext, withRouter])(Sidebar);
+export default flow([withFeatureConsumer, withRouter])(Sidebar);

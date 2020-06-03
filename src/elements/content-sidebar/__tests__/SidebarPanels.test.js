@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme/build';
 import { MemoryRouter } from 'react-router-dom';
 
-import SidebarPanels from '../SidebarPanels';
+import { SidebarPanelsComponent as SidebarPanels } from '../SidebarPanels';
 
 // mock lazy imports
 jest.mock('../SidebarUtils');

@@ -12,26 +12,6 @@ jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 jest.mock('../../../utils/LocalStore');
 
 describe('elements/content-sidebar/Sidebar', () => {
-    const annotatorContextProps = {
-        getAnnotationsMatchPath: jest.fn(),
-        getAnnotationsPath: jest.fn(),
-    };
-
-    const feedAPI = {
-        addAnnotation: jest.fn(),
-        feedItems: jest.fn(),
-        getCachedItems: jest.fn(),
-        deleteAnnotation: jest.fn(),
-    };
-
-    const api = {
-        getFeedAPI: () => feedAPI,
-    };
-
-    const currentUser = {
-        id: 'foo',
-    };
-
     const file = {
         id: 'id',
         file_version: {
@@ -39,8 +19,7 @@ describe('elements/content-sidebar/Sidebar', () => {
         },
     };
 
-    const getWrapper = props =>
-        shallow(<Sidebar api={api} file={file} location={{ pathname: '/' }} {...annotatorContextProps} {...props} />);
+    const getWrapper = props => shallow(<Sidebar file={file} location={{ pathname: '/' }} {...props} />);
 
     beforeEach(() => {
         LocalStore.mockClear();
@@ -95,43 +74,6 @@ describe('elements/content-sidebar/Sidebar', () => {
             wrapper.setProps({ location: { pathname: '/', state: { open: false } } });
             expect(instance.isForced).toHaveBeenCalledWith(false);
         });
-
-        test.each`
-            condition                                          | prevActiveAnnotationId | activeAnnotationId | isAnnotationsPath | expectedCount
-            ${'annotation ids are the same'}                   | ${'123'}               | ${'123'}           | ${true}           | ${0}
-            ${'annotation ids are different'}                  | ${'123'}               | ${'456'}           | ${true}           | ${1}
-            ${'annotation deselected on annotations path'}     | ${'123'}               | ${null}            | ${true}           | ${1}
-            ${'annotation deselected not on annotations path'} | ${'123'}               | ${null}            | ${false}          | ${0}
-            ${'annotation selected not on annotations path'}   | ${null}                | ${'123'}           | ${false}          | ${1}
-            ${'annotation selected on annotations path'}       | ${null}                | ${'123'}           | ${true}           | ${1}
-        `(
-            'should call updateActiveAnnotation $expectedCount times if $condition',
-            ({ prevActiveAnnotationId, activeAnnotationId, isAnnotationsPath, expectedCount }) => {
-                const wrapper = getWrapper({ annotatorState: { activeAnnotationId: prevActiveAnnotationId } });
-
-                wrapper.instance().updateActiveAnnotation = jest.fn();
-                annotatorContextProps.getAnnotationsMatchPath.mockReturnValue(isAnnotationsPath);
-
-                wrapper.setProps({ annotatorState: { activeAnnotationId } });
-
-                expect(wrapper.instance().updateActiveAnnotation).toHaveBeenCalledTimes(expectedCount);
-            },
-        );
-
-        test.each`
-            annotation   | expectedCount
-            ${{}}        | ${1}
-            ${undefined} | ${0}
-        `(
-            'should call addAnnotation $expectedCount times if annotation changed to $annotation',
-            ({ annotation, expectedCount }) => {
-                const wrapper = getWrapper();
-                wrapper.instance().addAnnotation = jest.fn();
-                wrapper.setProps({ annotatorState: { annotation } });
-
-                expect(wrapper.instance().addAnnotation).toHaveBeenCalledTimes(expectedCount);
-            },
-        );
     });
 
     describe('handleVersionHistoryClick', () => {
@@ -261,85 +203,6 @@ describe('elements/content-sidebar/Sidebar', () => {
                 const wrapper = getWrapper({ isDefaultOpen });
 
                 expect(wrapper.hasClass('bcs-is-open')).toBe(expected);
-            },
-        );
-    });
-
-    describe('updateActiveAnnotation()', () => {
-        test.each`
-            activeAnnotationId | fileVersionId | location                                    | expectedPath                       | expectedState
-            ${'234'}           | ${'456'}      | ${{ pathname: '/' }}                        | ${'/activity/annotations/456/234'} | ${{ open: true }}
-            ${'234'}           | ${undefined}  | ${{ pathname: '/' }}                        | ${'/activity/annotations/123/234'} | ${{ open: true }}
-            ${null}            | ${'456'}      | ${{ pathname: '/' }}                        | ${'/activity/annotations/456'}     | ${undefined}
-            ${null}            | ${'456'}      | ${{ pathname: '/', state: { foo: 'bar' } }} | ${'/activity/annotations/456'}     | ${{ foo: 'bar' }}
-            ${'234'}           | ${'456'}      | ${{ pathname: '/', state: { foo: 'bar' } }} | ${'/activity/annotations/456/234'} | ${{ foo: 'bar', open: true }}
-        `(
-            'should set location path based on match param fileVersionId=$fileVersionId and activeAnnotationId=$activeAnnotationId',
-            ({ activeAnnotationId, fileVersionId, location, expectedPath, expectedState }) => {
-                const annotatorState = {
-                    activeAnnotationId,
-                };
-                annotatorContextProps.getAnnotationsMatchPath.mockReturnValue({ params: { fileVersionId } });
-                annotatorContextProps.getAnnotationsPath.mockReturnValue(expectedPath);
-                const history = { push: jest.fn(), replace: jest.fn() };
-
-                const wrapper = getWrapper({ annotatorState, history, location });
-                const instance = wrapper.instance();
-
-                instance.updateActiveAnnotation();
-
-                expect(history.push).toHaveBeenCalledWith({ pathname: expectedPath, state: expectedState });
-            },
-        );
-    });
-
-    describe('addAnnotation()', () => {
-        test('should throw if no user', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-
-            expect(() => instance.addAnnotation()).toThrow('Bad box user!');
-        });
-
-        test.each`
-            title                                                             | isOpen   | isPending | isAnnotationsPath | hasItems | expectedAddCount | expectedRefreshCount
-            ${'add annotation and refresh sidebar for pending annotation'}    | ${true}  | ${true}   | ${true}           | ${true}  | ${1}             | ${1}
-            ${'refresh sidebar for pending annotation'}                       | ${false} | ${true}   | ${true}           | ${true}  | ${1}             | ${0}
-            ${'add annotation but not refresh if not annotation path'}        | ${true}  | ${true}   | ${false}          | ${true}  | ${1}             | ${0}
-            ${'not add annotation but refresh sidebar if cache has no items'} | ${true}  | ${true}   | ${true}           | ${false} | ${0}             | ${1}
-            ${'add annotation and refresh sidebar for completed annotation'}  | ${true}  | ${false}  | ${true}           | ${true}  | ${1}             | ${1}
-        `(
-            'should $title',
-            ({ isOpen, isPending, isAnnotationsPath, hasItems, expectedAddCount, expectedRefreshCount }) => {
-                const annotatorStateMock = {
-                    action: isPending ? 'create_start' : null,
-                    annotation: {},
-                    meta: {
-                        requestId: '123',
-                    },
-                };
-
-                const wrapper = getWrapper({ annotatorState: annotatorStateMock, currentUser });
-                const instance = wrapper.instance();
-
-                annotatorContextProps.getAnnotationsMatchPath.mockReturnValueOnce(isAnnotationsPath);
-                feedAPI.getCachedItems.mockReturnValueOnce({ items: hasItems });
-                instance.refresh = jest.fn();
-                instance.getIsOpen = jest.fn().mockReturnValueOnce(isOpen);
-
-                instance.addAnnotation();
-
-                expect(feedAPI.addAnnotation).toHaveBeenCalledTimes(expectedAddCount);
-                if (expectedAddCount) {
-                    expect(feedAPI.addAnnotation).toBeCalledWith(
-                        file,
-                        currentUser,
-                        annotatorStateMock.annotation,
-                        annotatorStateMock.meta.requestId,
-                        isPending,
-                    );
-                }
-                expect(instance.refresh).toHaveBeenCalledTimes(expectedRefreshCount);
             },
         );
     });
