@@ -9,9 +9,25 @@ describe('components/avatar/AvatarInitials', () => {
         expect(wrapper.is('span.avatar-initials.test')).toBeTruthy();
     });
 
-    test('should render the initials', () => {
-        const wrapper = shallow(<AvatarInitials name="hello world" />);
-        expect(wrapper.text()).toEqual('HW');
+    test.each`
+        name                               | initials
+        ${'hello'}                         | ${'HH'}
+        ${'hello world'}                   | ${'HW'}
+        ${'hello world (personal)'}        | ${'HW'}
+        ${'hello world {personal acct}'}   | ${'HW'}
+        ${'hello world <personal acct>'}   | ${'HW'}
+        ${'hello world [personal acct]'}   | ${'HW'}
+        ${'hello world  (personal acct)'}  | ${'HW'}
+        ${' hello world (personal acct)'}  | ${'HW'}
+        ${'hello  world  (personal acct)'} | ${'HW'}
+        ${'hello world {{personal acct}}'} | ${'HW'}
+        ${'hello world <{personal acct}>'} | ${'HW'}
+        ${'hello world ((personal acct))'} | ${'HW'}
+        ${'John S. Smith'}                 | ${'JS'}
+        ${'James R. Stein-Grennaway'}      | ${'JS'}
+    `('should render the initials "$initials" from name "$name"', ({ name, initials }) => {
+        const wrapper = shallow(<AvatarInitials name={name} />);
+        expect(wrapper.text()).toEqual(initials);
     });
 
     test('should set data-bg-idx attribute based on id', () => {
