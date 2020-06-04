@@ -9,6 +9,8 @@ exports[`components/image-tooltip/ImageTooltipContent should correctly render an
   >
     <img
       alt="foo"
+      className="bdl-ImageTooltipContent-imageChild"
+      key=".0"
       src="test-file-stub"
     />
   </div>

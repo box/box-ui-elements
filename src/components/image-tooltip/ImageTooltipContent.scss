@@ -2,19 +2,17 @@
 
 .bdl-ImageTooltipContent-image {
     display: flex;
+}
 
-    img {
-        width: 100%;
-    }
+.bdl-ImageTooltipContent-imageChild {
+    width: 100%;
 }
 
 .bdl-ImageTooltipContent-contentWrapper {
-    padding: 24px 32px;
+    padding: ($bdl-grid-unit * 6) ($bdl-grid-unit * 8);
     color: $bdl-gray-80;
     font-size: 14px;
     background-color: $white;
-    border-bottom-right-radius: 6px;
-    border-bottom-left-radius: 6px;
     box-shadow: 0 3px 6px 0 rgba($black, .1);
 }
 

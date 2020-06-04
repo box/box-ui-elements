@@ -11,7 +11,9 @@ describe('components/image-tooltip/ImageTooltipContent', () => {
         const image = <img src={testImageSrc} alt="foo" />;
 
         const wrapper: ShallowWrapper = shallow(
-            <ImageTooltipContent content={tooltipContent} image={image} title={tooltipTitle} />,
+            <ImageTooltipContent content={tooltipContent} title={tooltipTitle}>
+                {image}
+            </ImageTooltipContent>,
         );
 
         expect(wrapper).toMatchSnapshot();
