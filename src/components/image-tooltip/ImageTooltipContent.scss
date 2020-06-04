@@ -1,6 +1,6 @@
 @import '../../styles/variables';
 
-.bdl-VisualTooltipContent-image {
+.bdl-ImageTooltipContent-image {
     display: flex;
 
     img {
@@ -8,7 +8,7 @@
     }
 }
 
-.bdl-VisualTooltipContent-contentWrapper {
+.bdl-ImageTooltipContent-contentWrapper {
     padding: 24px 32px;
     color: $bdl-gray-80;
     font-size: 14px;
@@ -18,12 +18,12 @@
     box-shadow: 0 3px 6px 0 rgba($black, .1);
 }
 
-.bdl-VisualTooltipContent-title {
+.bdl-ImageTooltipContent-title {
     margin-top: 0;
     color: $bdl-gray;
     font-weight: bold;
 }
 
-.bdl-VisualTooltipContent-content {
+.bdl-ImageTooltipContent-content {
     margin: 0;
 }

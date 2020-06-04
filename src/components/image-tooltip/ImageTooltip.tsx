@@ -2,14 +2,14 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 import Tooltip, { TooltipProps, TooltipTheme } from '../tooltip';
-import VisualTooltipContent from './VisualTooltipContent';
+import ImageTooltipContent from './ImageTooltipContent';
 
-import './VisualTooltip.scss';
+import './ImageTooltip.scss';
 
 // We manually set "text" with our specific visual tooltip content.
 type OtherTooltipProps = Omit<TooltipProps, 'text'>;
 
-export type VisualTooltipProps = {
+export type ImageTooltipProps = {
     /** A React element to put the tooltip on */
     children: React.ReactChild;
     /** A string to be used in the tooltip's paragraph content */
@@ -20,18 +20,18 @@ export type VisualTooltipProps = {
     title: string;
 } & OtherTooltipProps;
 
-const VisualTooltip = ({ children, className, content, image, title, ...otherTooltipProps }: VisualTooltipProps) => {
+const ImageTooltip = ({ children, className, content, image, title, ...otherTooltipProps }: ImageTooltipProps) => {
     return (
         <Tooltip
-            className={classNames('bdl-VisualTooltip', className)}
+            className={classNames('bdl-ImageTooltip', className)}
             showCloseButton
             theme={TooltipTheme.CALLOUT}
             {...otherTooltipProps}
-            text={<VisualTooltipContent content={content} image={image} title={title} />}
+            text={<ImageTooltipContent content={content} image={image} title={title} />}
         >
             {children}
         </Tooltip>
     );
 };
 
-export default VisualTooltip;
+export default ImageTooltip;
