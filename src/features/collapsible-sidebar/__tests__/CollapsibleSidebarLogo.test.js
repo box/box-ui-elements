@@ -33,6 +33,19 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
         expect(sidebar).toMatchSnapshot();
     });
 
+    test('render toggle button with buttonProps thats passed', () => {
+        const someValue = 'someValue';
+        const sidebar = getWrapper({
+            buttonProps: {
+                'data-resin-target': someValue,
+            },
+            expanded: true,
+        });
+
+        const componentProp = sidebar.find('CollapsibleSidebarItem');
+        expect(componentProp.find('PlainButton').prop('data-resin-target')).toBe(someValue);
+    });
+
     test('render LinkBase element with linkUrl thats passed', () => {
         const someUrl = '/some/url';
         const sidebar = getWrapper({

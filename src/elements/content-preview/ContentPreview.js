@@ -1145,15 +1145,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
         });
     };
 
-    handleAnnotationSelect = ({
-        file_version: { id: annotationFileVersionId },
-        target: { location = {} },
-    }: Annotation) => {
-        const { selectedVersion } = this.state;
-        const { file } = this.state;
+    handleAnnotationSelect = ({ file_version: { id: annotationFileVersionId }, id, target }: Annotation) => {
+        const { location = {} } = target;
+        const { file, selectedVersion } = this.state;
         const currentFileVersionId = getProp(file, 'file_version.id');
         const currentPreviewFileVersionId = getProp(selectedVersion, 'id', currentFileVersionId);
         const unit = startAtTypes[location.type];
+        const viewer = this.getViewer();
 
         if (unit && annotationFileVersionId !== currentPreviewFileVersionId) {
             this.setState({
@@ -1162,6 +1160,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
                     value: location.value,
                 },
             });
+        }
+
+        if (viewer) {
+            viewer.emit('scrolltoannotation', { id, target });
         }
     };
 

@@ -8,6 +8,8 @@ import Button from '../../../components/button/Button';
 
 import UnifiedShareModal from '../UnifiedShareModal';
 import notes from './UnifiedShareModal.stories.md';
+import type { contactType, collaboratorType } from '../flowTypes';
+import * as constants from '../constants';
 
 // Base Example. Extend for different initial loads or to demonstrate different interactions
 const DEFAULT_SHARED_LINK_STATE = {
@@ -48,7 +50,7 @@ const INITIAL_STATE = {
     submitting: false,
 };
 
-const contacts = [
+const contacts: Array<contactType> = [
     {
         id: 0,
         collabID: 0,
@@ -125,6 +127,7 @@ const contacts = [
         collabID: 7,
         name: 'Ke',
         email: 'k@example.com',
+        isExternalUser: true,
         type: 'user',
         hasCustomAvatar: false,
         translatedRole: 'Editor',
@@ -192,7 +195,22 @@ export const basic = () => {
         const initialPromise = fakeRequest();
         const fetchCollaborators = new Promise(resolved => {
             setTimeout(() => {
-                const collaborators = contacts.slice();
+                const collaborators: Array<collaboratorType> = contacts.slice().map(contact => {
+                    // convert the existing contact entries to compatible collaborator entries in this example
+                    const collaborator: collaboratorType = {
+                        collabID: 1234,
+                        id: contact.id,
+                        name: contact.name || '',
+                        type: contact.type !== 'group' ? constants.COLLAB_USER_TYPE : constants.COLLAB_GROUP_TYPE,
+                        isExternalCollab: contact.isExternalUser || false,
+                        userID: parseInt(contact.id, 10),
+                        expiration: { executeAt: contact.isExternalUser ? 'November 27, 2022' : '' },
+                        hasCustomAvatar: false,
+                        imageURL: null,
+                    };
+
+                    return collaborator;
+                });
 
                 const collaboratorsList = {
                     collaborators,
