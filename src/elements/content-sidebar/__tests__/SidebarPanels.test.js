@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme/build';
 import { MemoryRouter } from 'react-router-dom';
 
-import SidebarPanels from '../SidebarPanels';
+import { SidebarPanelsComponent as SidebarPanels } from '../SidebarPanels';
 
 // mock lazy imports
 jest.mock('../SidebarUtils');
@@ -122,6 +122,25 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 const sidebarPanels = wrapper.find(SidebarPanels);
                 expect(sidebarPanels.state('isInitialized')).toBe(true);
             });
+        });
+    });
+
+    describe('refresh()', () => {
+        test.each([true, false])('should call the sidebars with the appropriate argument', shouldRefreshCache => {
+            const instance = getWrapper()
+                .find(SidebarPanels)
+                .instance();
+
+            ['activitySidebar', 'detailsSidebar', 'metadataSidebar', 'versionsSidebar'].forEach(sidebar => {
+                instance[sidebar] = { current: { refresh: jest.fn() } };
+            });
+
+            instance.refresh(shouldRefreshCache);
+
+            expect(instance.activitySidebar.current.refresh).toHaveBeenCalledWith(shouldRefreshCache);
+            expect(instance.detailsSidebar.current.refresh).toHaveBeenCalledWith();
+            expect(instance.metadataSidebar.current.refresh).toHaveBeenCalledWith();
+            expect(instance.versionsSidebar.current.refresh).toHaveBeenCalledWith();
         });
     });
 });

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { createMemoryHistory, History } from 'history';
+import { createMemoryHistory, History, Location } from 'history';
 
 import { Annotator, AnnotatorContext, withAnnotations } from '../index';
 import { WithAnnotationsProps, ComponentWithAnnotations } from '../withAnnotations';
@@ -9,6 +9,7 @@ import { AnnotatorContext as AnnotatorContextType, Action } from '../types';
 type ComponentProps = {
     className?: string;
     history?: History;
+    location?: Location;
 };
 
 type WrappedComponentProps = ComponentProps & Partial<WithAnnotationsProps>;
@@ -51,13 +52,13 @@ describe('elements/common/annotator-context/withAnnotations', () => {
     describe('constructor', () => {
         test('should parse the history location pathname to initialize state with activeAnnotationId', () => {
             const history = createMemoryHistory({ initialEntries: ['/activity/annotations/123/456'] }) as History;
-            const wrapper = getWrapper({ history });
+            const wrapper = getWrapper({ history, location: history.location });
             expect(wrapper.state('activeAnnotationId')).toBe('456');
         });
 
         test('should not initialize state with activeAnnotationId if history path does not match deeplink schema', () => {
             const history = createMemoryHistory({ initialEntries: ['/activity/annotations/456'] }) as History;
-            const wrapper = getWrapper({ history });
+            const wrapper = getWrapper({ history, location: history.location });
             expect(wrapper.state('activeAnnotationId')).toBe(null);
         });
     });
@@ -212,7 +213,9 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         test.each`
             fileVersionId | annotationId | expectedPath
             ${undefined}  | ${undefined} | ${'/activity'}
+            ${undefined}  | ${null}      | ${'/activity'}
             ${'123'}      | ${undefined} | ${'/activity/annotations/123'}
+            ${'123'}      | ${null}      | ${'/activity/annotations/123'}
             ${'123'}      | ${'456'}     | ${'/activity/annotations/123/456'}
         `('should return $expectedPath', ({ fileVersionId, annotationId, expectedPath }) => {
             const wrapper = getWrapper();

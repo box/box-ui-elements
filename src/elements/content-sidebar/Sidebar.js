@@ -17,7 +17,6 @@ import LocalStore from '../../utils/LocalStore';
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
-import { withAnnotatorContext, WithAnnotatorContextProps } from '../common/annotator-context';
 import { withFeatureConsumer } from '../common/feature-checking';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { ActivitySidebarProps } from './ActivitySidebar';
@@ -54,7 +53,7 @@ type Props = {
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
-} & WithAnnotatorContextProps;
+};
 
 type State = {
     isDirty: boolean,
@@ -94,14 +93,9 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props): void {
-        const { annotatorState, fileId, getAnnotationsMatchPath, history, location }: Props = this.props;
-        const { annotatorState: prevAnnotatorState, fileId: prevFileId, location: prevLocation }: Props = prevProps;
+        const { fileId, history, location }: Props = this.props;
+        const { fileId: prevFileId, location: prevLocation }: Props = prevProps;
         const { isDirty }: State = this.state;
-        const { activeAnnotationId } = annotatorState;
-        const { activeAnnotationId: prevActiveAnnotationId } = prevAnnotatorState;
-        const isAnnotationsPath = !!getAnnotationsMatchPath(history);
-        const hasActiveAnnotationChanged = prevActiveAnnotationId !== activeAnnotationId;
-        const isTransitioningToAnnotationPath = activeAnnotationId && !isAnnotationsPath;
 
         // User navigated to a different file without ever navigating the sidebar
         if (!isDirty && fileId !== prevFileId && location.pathname !== '/') {
@@ -113,36 +107,7 @@ class Sidebar extends React.Component<Props, State> {
             this.setForcedByLocation();
             this.setState({ isDirty: true });
         }
-
-        // Active annotation id changed. If location is currently an annotation path or
-        // if location is not currently an annotation path but the active annotation id
-        // transitioned from falsy to truthy, update the location accordingly
-        if (hasActiveAnnotationChanged && (isAnnotationsPath || isTransitioningToAnnotationPath)) {
-            this.updateActiveAnnotation();
-        }
     }
-
-    updateActiveAnnotation = () => {
-        const {
-            annotatorState: { activeAnnotationId },
-            file,
-            getAnnotationsMatchPath,
-            getAnnotationsPath,
-            history,
-            location,
-        } = this.props;
-        const match = getAnnotationsMatchPath(history);
-        const currentFileVersionId = getProp(file, 'file_version.id');
-        const fileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
-        const newLocationState = activeAnnotationId ? { ...location.state, open: true } : location.state;
-
-        // Update the location pathname and open state if transitioning to an active annotation id, force the sidebar open
-        history.push({
-            ...location,
-            pathname: getAnnotationsPath(fileVersionId, activeAnnotationId),
-            state: newLocationState,
-        });
-    };
 
     getUrlPrefix = (pathname: string) => {
         const basePath = pathname.substring(1).split('/')[0];
@@ -219,11 +184,11 @@ class Sidebar extends React.Component<Props, State> {
      * Refreshes the sidebar panel
      * @returns {void}
      */
-    refresh(): void {
+    refresh(shouldRefreshCache: boolean = true): void {
         const { current: sidebarPanels } = this.sidebarPanels;
 
         if (sidebarPanels) {
-            sidebarPanels.refresh();
+            sidebarPanels.refresh(shouldRefreshCache);
         }
     }
 
@@ -319,4 +284,4 @@ class Sidebar extends React.Component<Props, State> {
 }
 
 export { Sidebar as SidebarComponent };
-export default flow([withFeatureConsumer, withAnnotatorContext, withRouter])(Sidebar);
+export default flow([withFeatureConsumer, withRouter])(Sidebar);

@@ -5,8 +5,13 @@
  */
 
 import * as React from 'react';
+import flow from 'lodash/flow';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import SidebarUtils from './SidebarUtils';
+import withSidebarAnnotations from './withSidebarAnnotations';
+import { withAnnotatorContext } from '../common/annotator-context';
+import { withAPIContext } from '../common/api-context';
+import { withRouterAndRef } from '../common/routing';
 import {
     ORIGIN_ACTIVITY_SIDEBAR,
     ORIGIN_DETAILS_SIDEBAR,
@@ -99,14 +104,14 @@ class SidebarPanels extends React.Component<Props, State> {
      * Refreshes the contents of the active sidebar
      * @returns {void}
      */
-    refresh(): void {
+    refresh(shouldRefreshCache: boolean = true): void {
         const { current: activitySidebar } = this.activitySidebar;
         const { current: detailsSidebar } = this.detailsSidebar;
         const { current: metadataSidebar } = this.metadataSidebar;
         const { current: versionsSidebar } = this.versionsSidebar;
 
         if (activitySidebar) {
-            activitySidebar.refresh();
+            activitySidebar.refresh(shouldRefreshCache);
         }
 
         if (detailsSidebar) {
@@ -278,4 +283,5 @@ class SidebarPanels extends React.Component<Props, State> {
     }
 }
 
-export default SidebarPanels;
+export { SidebarPanels as SidebarPanelsComponent };
+export default flow([withSidebarAnnotations, withAPIContext, withAnnotatorContext, withRouterAndRef])(SidebarPanels);

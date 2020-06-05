@@ -1,6 +1,7 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import { generatePath, match as matchType, matchPath } from 'react-router-dom';
+import { Location } from 'history';
 import AnnotatorContext from './AnnotatorContext';
 import { Action, Annotator, AnnotationActionEvent, AnnotatorState, GetMatchPath, MatchParams, Status } from './types';
 
@@ -14,7 +15,7 @@ export interface ComponentWithAnnotations {
     emitActiveChangeEvent: (id: string | null) => void;
     emitRemoveEvent: (id: string) => void;
     getAction: (eventData: AnnotationActionEvent) => Action;
-    getAnnotationsPath: (fileVersionId?: string, annotationId?: string) => string;
+    getAnnotationsPath: (fileVersionId?: string, annotationId?: string | null) => string;
     getMatchPath: GetMatchPath;
     handleActiveChange: (annotationId: string | null) => void;
     handleAnnotationChangeEvent: (id: string | null) => void;
@@ -34,11 +35,11 @@ const defaultState: AnnotatorState = {
     meta: null,
 };
 
-type WithHistoryProps = {
-    history?: History;
+type WithLocationProps = {
+    location?: Location;
 };
 
-type ResultProps<P> = P & WithAnnotationsProps & WithHistoryProps;
+type ResultProps<P> = P & WithAnnotationsProps & WithLocationProps;
 
 export default function withAnnotations<P extends object>(
     WrappedComponent: React.ComponentType<P>,
@@ -52,8 +53,8 @@ export default function withAnnotations<P extends object>(
             super(props);
 
             // Determine by url if there is already a deeply linked annotation
-            const { history } = props;
-            const match = this.getMatchPath(history);
+            const { location } = props;
+            const match = this.getMatchPath(location);
             const activeAnnotationId = getProp(match, 'params.annotationId', null);
 
             // Seed the initial state with the activeAnnotationId if any from the location path
@@ -84,20 +85,20 @@ export default function withAnnotations<P extends object>(
             return status === Status.SUCCESS || error ? Action.CREATE_END : Action.CREATE_START;
         }
 
-        getAnnotationsPath(fileVersionId?: string, annotationId?: string): string {
+        getAnnotationsPath(fileVersionId?: string, annotationId?: string | null): string {
             if (!fileVersionId) {
                 return '/activity';
             }
 
             return generatePath(ANNOTATIONS_PATH, {
                 sidebar: 'activity',
-                annotationId,
+                annotationId: annotationId || undefined,
                 fileVersionId,
             });
         }
 
-        getMatchPath(history?: History): matchType<MatchParams> | null {
-            const pathname = getProp(history, 'location.pathname');
+        getMatchPath(location?: Location): matchType<MatchParams> | null {
+            const pathname = getProp(location, 'pathname', '');
             return matchPath<MatchParams>(pathname, {
                 path: ANNOTATIONS_PATH,
                 exact: true,
