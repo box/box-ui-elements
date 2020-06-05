@@ -120,14 +120,11 @@ const normalizeItemResponse = (itemAPIData: BoxItem) => {
 };
 
 const normalizeUserResponse = (userAPIData: BoxUser) => {
-    const {
-        enterprise: { name: enterpriseName },
-        hostname,
-    } = userAPIData;
+    const { enterprise, hostname } = userAPIData;
 
     return {
-        enterpriseName,
-        serverURL: `${hostname}/v/`, // SLS
+        enterpriseName: enterprise ? enterprise.name : '',
+        serverURL: hostname ? `${hostname}/v/` : '', // SLS
     };
 };
 

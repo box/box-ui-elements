@@ -44,7 +44,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
         const { item, sharedLink } = props;
 
         this.state = {
-            getInitialDataCalled: !item,
+            getInitialDataCalled: item,
             isConfirmModalOpen: false,
             isEmailLinkSectionExpanded: false,
             isFetching: !item,

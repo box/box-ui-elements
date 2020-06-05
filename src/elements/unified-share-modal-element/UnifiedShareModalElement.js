@@ -4,8 +4,10 @@
  * @author Box
  */
 import React, { useCallback, useEffect, useState } from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import API from '../../api';
 import Internationalize from '../common/Internationalize';
+import ErrorMask from '../../components/error-mask';
 import UnifiedShareModal from '../../features/unified-share-modal';
 import messages from '../../features/unified-share-modal/messages';
 import { normalizeItemResponse, normalizeUserResponse } from './utils';
@@ -36,11 +38,20 @@ type USMProps = {
     token: string,
 };
 
+const elementMessages = defineMessages({
+    loadingError: {
+        defaultMessage: 'Could not load shared link for this item.',
+        description: 'Message that appears when the USM cannot be loaded.',
+        id: 'be.usm.loadingError',
+    },
+});
+
 function UnifiedShareModalElement(props: USMProps) {
     const { apiHost, currentUserID, itemID, itemType, language, token }: USMProps = props;
     const [item, setItem] = useState<{ item: BoxItem }>(null);
     const [sharedLink, setSharedLink] = useState<{ sharedLink: BoxItem }>(null);
     const [userDataReceived, setUserDataReceived] = useState<boolean>(false);
+    const [errorExists, setErrorExists] = useState<boolean>(false);
 
     const api = new API({
         apiHost,
@@ -49,86 +60,111 @@ function UnifiedShareModalElement(props: USMProps) {
         token,
     });
 
+    const resetState = useCallback(() => {
+        setItem(null);
+        setSharedLink(null);
+        setUserDataReceived(false);
+    }, [setItem, setSharedLink, setUserDataReceived]);
+
+    const getError = useCallback(() => {
+        setErrorExists(true);
+    }, [setErrorExists]);
+
     const getUserSuccess = useCallback(
         userEnterpriseData => {
             const normalizedUserEnterpriseData = normalizeUserResponse(userEnterpriseData);
             setSharedLink({ ...sharedLink, ...normalizedUserEnterpriseData });
             setUserDataReceived(true);
+            setErrorExists(false);
         },
-        [setUserDataReceived, sharedLink],
+        [sharedLink],
     );
-
-    const getUserData = useCallback(
-        async (ownerID: string) => {
-            await api.getUsersAPI().getUser(ownerID, getUserSuccess, null, {
-                fields: [FIELD_ENTERPRISE, FIELD_HOSTNAME],
-            });
-        },
-        [api, getUserSuccess],
-    );
-
     const getItemSuccess = itemData => {
         const { item: itemFromAPI, sharedLink: sharedLinkFromAPI } = normalizeItemResponse(itemData);
         setItem(itemFromAPI);
         setSharedLink(sharedLinkFromAPI);
+        setErrorExists(false);
     };
 
-    const getItem = useCallback(async () => {
-        if (itemType === TYPE_FILE) {
-            await api.getFileAPI().getFile(itemID, getItemSuccess, null, {
-                fields: [
-                    FIELD_DESCRIPTION,
-                    FIELD_EXTENSION,
-                    FIELD_ID,
-                    FIELD_NAME,
-                    FIELD_OWNED_BY,
-                    FIELD_PERMISSIONS,
-                    FIELD_SHARED_LINK,
-                    FIELD_SHARED_LINK_FEATURES,
-                    FIELD_TYPE,
-                ],
-            });
-        }
-
-        if (itemType === TYPE_FOLDER) {
-            await api.getFolderAPI().getFolderFields(getItemSuccess, null, null, {
-                fields: [
-                    FIELD_DESCRIPTION,
-                    FIELD_EXTENSION,
-                    FIELD_ID,
-                    FIELD_NAME,
-                    FIELD_OWNED_BY,
-                    FIELD_PERMISSIONS,
-                    FIELD_SHARED_LINK,
-                    FIELD_SHARED_LINK_FEATURES,
-                    FIELD_TYPE,
-                ],
-            });
-        }
-    }, [api, itemID, itemType]);
+    useEffect(() => {
+        resetState();
+    }, [resetState, token, itemID, itemType]);
 
     useEffect(() => {
-        if (!item && !sharedLink) {
-            getItem();
-        }
-
+        const getUserData = async (ownerID: string) => {
+            await api.getUsersAPI().getUser(ownerID, getUserSuccess, getError, {
+                fields: [FIELD_ENTERPRISE, FIELD_HOSTNAME],
+            });
+        };
         if (item && sharedLink && !userDataReceived) {
             const { ownerID } = item;
             getUserData(ownerID);
         }
-    }, [item, sharedLink, getItem, getUserData, userDataReceived]);
+    });
 
-    return item && sharedLink ? (
-        <Internationalize language={language} messages={messages}>
-            <UnifiedShareModal
-                collaboratorsList={[]}
-                currentUserID={currentUserID}
-                item={item}
-                sharedLink={sharedLink}
-                showFormOnly
-            />
-        </Internationalize>
-    ) : null;
+    useEffect(() => {
+        const getItem = async () => {
+            if (itemType === TYPE_FILE) {
+                await api.getFileAPI().getFile(itemID, getItemSuccess, getError, {
+                    fields: [
+                        FIELD_DESCRIPTION,
+                        FIELD_EXTENSION,
+                        FIELD_ID,
+                        FIELD_NAME,
+                        FIELD_OWNED_BY,
+                        FIELD_PERMISSIONS,
+                        FIELD_SHARED_LINK,
+                        FIELD_SHARED_LINK_FEATURES,
+                        FIELD_TYPE,
+                    ],
+                });
+            }
+
+            if (itemType === TYPE_FOLDER) {
+                await api.getFolderAPI().getFolderFields(itemID, getItemSuccess, getError, {
+                    fields: [
+                        FIELD_DESCRIPTION,
+                        FIELD_EXTENSION,
+                        FIELD_ID,
+                        FIELD_NAME,
+                        FIELD_OWNED_BY,
+                        FIELD_PERMISSIONS,
+                        FIELD_SHARED_LINK,
+                        FIELD_SHARED_LINK_FEATURES,
+                        FIELD_TYPE,
+                    ],
+                });
+            }
+        };
+
+        if (!item && !sharedLink) {
+            getItem();
+        }
+    }, [api, getError, item, itemID, itemType, sharedLink, userDataReceived]);
+
+    const renderElement = () => {
+        if (errorExists) {
+            return <ErrorMask errorHeader={<FormattedMessage {...elementMessages.loadingError} />} />;
+        }
+
+        if (item && sharedLink) {
+            return (
+                <Internationalize language={language} messages={messages}>
+                    <UnifiedShareModal
+                        collaboratorsList={[]}
+                        currentUserID={currentUserID}
+                        item={item}
+                        sharedLink={sharedLink}
+                        showFormOnly
+                    />
+                </Internationalize>
+            );
+        }
+
+        return null;
+    };
+
+    return renderElement();
 }
 
 export default UnifiedShareModalElement;
