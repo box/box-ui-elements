@@ -84,6 +84,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         expect(contextProvider.prop('value').getAnnotationsPath).toEqual(instance.getAnnotationsPath);
         expect(contextProvider.prop('value').state).toEqual({
             action: null,
+            activeAnnotationFileVersionId: null,
             activeAnnotationId: null,
             annotation: null,
             error: null,
@@ -144,6 +145,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                 expect(contextProvider.exists()).toBeTruthy();
                 expect(contextProvider.prop('value').state).toEqual({
                     action: expectedAction,
+                    activeAnnotationFileVersionId: null,
                     activeAnnotationId: null,
                     annotation: expectedAnnotation,
                     error: expectedError,
@@ -158,17 +160,22 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
     describe('handleActiveChange()', () => {
         test.each`
-            annotationId | expected
-            ${null}      | ${null}
-            ${'123'}     | ${'123'}
-        `('should update activeAnnotationId state to reflect value $annotationId', ({ annotationId, expected }) => {
-            const wrapper = getWrapper();
+            annotationId | fileVersionId | expectedAnnotationId | expectedFileVersionId
+            ${null}      | ${null}       | ${null}              | ${null}
+            ${'123'}     | ${'456'}      | ${'123'}             | ${'456'}
+        `(
+            'should update activeAnnotationId state to reflect value $annotationId',
+            ({ annotationId, fileVersionId, expectedAnnotationId, expectedFileVersionId }) => {
+                const wrapper = getWrapper();
 
-            wrapper.instance().handleActiveChange(annotationId);
-            const contextProvider = getContextProvider(wrapper);
-            expect(contextProvider.exists()).toBeTruthy();
-            expect(contextProvider.prop('value').state.activeAnnotationId).toEqual(expected);
-        });
+                wrapper.instance().handleActiveChange({ annotationId, fileVersionId });
+                const contextProvider = getContextProvider(wrapper);
+                const { activeAnnotationFileVersionId, activeAnnotationId } = contextProvider.prop('value').state;
+                expect(contextProvider.exists()).toBeTruthy();
+                expect(activeAnnotationFileVersionId).toEqual(expectedFileVersionId);
+                expect(activeAnnotationId).toEqual(expectedAnnotationId);
+            },
+        );
     });
 
     describe('handleAnnotatorEvent()', () => {
@@ -198,11 +205,13 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.handleAnnotator(mockAnnotator);
+            wrapper.setState({ activeAnnotationId: '123', activeAnnotationFileVersionId: '456' });
 
             wrapper.instance().handlePreviewDestroy();
             expect(mockAnnotator.removeListener).toBeCalledWith('annotatorevent', instance.handleAnnotatorEvent);
             expect(wrapper.state()).toEqual({
                 action: null,
+                activeAnnotationFileVersionId: null,
                 activeAnnotationId: null,
                 annotation: null,
                 error: null,
@@ -215,10 +224,11 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             const instance = wrapper.instance();
             instance.handleAnnotator(mockAnnotator);
 
-            wrapper.setState({ activeAnnotationId: '123' });
+            wrapper.setState({ activeAnnotationId: '123', activeAnnotationFileVersionId: '456' });
             wrapper.instance().handlePreviewDestroy(false);
             expect(mockAnnotator.removeListener).toBeCalledWith('annotatorevent', instance.handleAnnotatorEvent);
             expect(wrapper.state('activeAnnotationId')).toBe('123');
+            expect(wrapper.state('activeAnnotationFileVersionId')).toBe('456');
         });
     });
 
