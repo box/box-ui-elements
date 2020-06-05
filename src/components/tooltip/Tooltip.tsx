@@ -66,35 +66,38 @@ const positions = {
     },
 };
 
-export interface TooltipProps {
-    bodyElement?: HTMLElement;
-    /** A React element to put the tooltip on */
-    children: React.ReactChild;
-    /** A CSS class for the tooltip */
-    className?: string;
+export type DefaultTooltipProps = {
     /** Whether to constrain the tooltip to the element's scroll parent. Defaults to `false` */
     constrainToScrollParent: boolean;
     /** Whether to constrain the tooltip to window. Defaults to `true` */
     constrainToWindow: boolean;
     /** Forces the tooltip to be disabled irrespecitve of it's shown state. Defaults to `false` */
     isDisabled: boolean;
+    /** Where to position the tooltip relative to the wrapped component */
+    position: TooltipPosition | TooltipCustomPosition;
+    /** Tooltip theme */
+    theme: TooltipTheme;
+};
+
+export type TooltipProps = {
+    bodyElement?: HTMLElement;
+    /** A React element to put the tooltip on */
+    children: React.ReactChild;
+    /** A CSS class for the tooltip */
+    className?: string;
     /** Forces the tooltip to be shown or hidden (useful for errors) */
     isShown?: boolean;
     /** Whether to add tabindex=0.  Defaults to `true` */
     isTabbable?: boolean;
     /** Function called if the user manually dismisses the tooltip - only applies if showCloseButton is true */
     onDismiss?: () => void;
-    /** Where to position the tooltip relative to the wrapped component */
-    position: TooltipPosition | TooltipCustomPosition;
     /** Shows an X button to close the tooltip. Useful when tooltips are force shown with the isShown prop. */
     showCloseButton?: boolean;
     /** stop click|keypress event bubbling */
     stopBubble?: boolean;
     /** Text to show in the tooltip */
     text?: React.ReactNode;
-    /** Tooltip theme */
-    theme: TooltipTheme;
-}
+} & Partial<DefaultTooltipProps>;
 
 type State = {
     isShown: boolean;
@@ -103,7 +106,7 @@ type State = {
 };
 
 class Tooltip extends React.Component<TooltipProps, State> {
-    static defaultProps = {
+    static defaultProps: DefaultTooltipProps = {
         constrainToScrollParent: false,
         constrainToWindow: true,
         isDisabled: false,
@@ -205,7 +208,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             constrainToWindow,
             isDisabled,
             isTabbable = true,
-            position,
+            position = TooltipPosition.TOP_CENTER,
             showCloseButton,
             stopBubble,
             text,
