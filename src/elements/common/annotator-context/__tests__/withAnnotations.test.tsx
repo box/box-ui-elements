@@ -198,14 +198,27 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.handleAnnotator(mockAnnotator);
-            instance.handleActiveChange('123');
-            let contextProvider = getContextProvider(wrapper);
-            expect(contextProvider.prop('value').state.activeAnnotationId).toEqual('123');
 
             wrapper.instance().handlePreviewDestroy();
-            contextProvider = getContextProvider(wrapper);
-            expect(contextProvider.prop('value').state.activeAnnotationId).toEqual(null);
             expect(mockAnnotator.removeListener).toBeCalledWith('annotatorevent', instance.handleAnnotatorEvent);
+            expect(wrapper.state()).toEqual({
+                action: null,
+                activeAnnotationId: null,
+                annotation: null,
+                error: null,
+                meta: null,
+            });
+        });
+
+        test('should not reset state if called with false', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.handleAnnotator(mockAnnotator);
+
+            wrapper.setState({ activeAnnotationId: '123' });
+            wrapper.instance().handlePreviewDestroy(false);
+            expect(mockAnnotator.removeListener).toBeCalledWith('annotatorevent', instance.handleAnnotatorEvent);
+            expect(wrapper.state('activeAnnotationId')).toBe('123');
         });
     });
 
