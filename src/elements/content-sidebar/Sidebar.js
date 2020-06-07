@@ -8,6 +8,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
+import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import { withRouter } from 'react-router-dom';
 import type { Location, RouterHistory } from 'react-router-dom';
@@ -48,6 +49,7 @@ type Props = {
     location: Location,
     metadataEditors?: Array<MetadataEditor>,
     metadataSidebarProps: MetadataSidebarProps,
+    onAnnotationSelect?: Function,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
@@ -63,8 +65,11 @@ export const SIDEBAR_FORCE_VALUE_OPEN: 'open' = 'open';
 
 class Sidebar extends React.Component<Props, State> {
     static defaultProps = {
+        annotatorState: {},
         isDefaultOpen: true,
         isLoading: false,
+        getAnnotationsMatchPath: noop,
+        getAnnotationsPath: noop,
     };
 
     id: string = uniqueid('bcs_');
@@ -179,11 +184,11 @@ class Sidebar extends React.Component<Props, State> {
      * Refreshes the sidebar panel
      * @returns {void}
      */
-    refresh(): void {
+    refresh(shouldRefreshCache: boolean = true): void {
         const { current: sidebarPanels } = this.sidebarPanels;
 
         if (sidebarPanels) {
-            sidebarPanels.refresh();
+            sidebarPanels.refresh(shouldRefreshCache);
         }
     }
 
@@ -215,6 +220,7 @@ class Sidebar extends React.Component<Props, State> {
             isLoading,
             metadataEditors,
             metadataSidebarProps,
+            onAnnotationSelect,
             onVersionChange,
             versionsSidebarProps,
         }: Props = this.props;
@@ -264,6 +270,7 @@ class Sidebar extends React.Component<Props, State> {
                             isOpen={isOpen}
                             key={file.id}
                             metadataSidebarProps={metadataSidebarProps}
+                            onAnnotationSelect={onAnnotationSelect}
                             onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick}
                             ref={this.sidebarPanels}

@@ -42,7 +42,7 @@ class Browser {
      * to the H264 container (since we use H264 and not webm)
      *
      * @public
-     * @param { boolean} recheck - recheck support
+     * @param {boolean} recheck - recheck support
      * @return {boolean} true if dash is usable
      */
     static canPlayDash(recheck: boolean = false) {
@@ -55,6 +55,34 @@ class Browser {
         }
 
         return isDashSupported;
+    }
+
+    /**
+     * Checks whether the browser has support for the Clipboard API. This new API supercedes
+     * the `execCommand`-based API and uses Promises for detecting whether it works or not.
+     *
+     * This check determines if the browser can support writing to the clipboard.
+     * @see https://www.w3.org/TR/clipboard-apis/#async-clipboard-api
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/Clipboard
+     *
+     * @return {boolean} whether writing to the clipboard is possible
+     */
+    static canWriteToClipboard() {
+        return !!(global.navigator.clipboard && global.navigator.clipboard.writeText);
+    }
+
+    /**
+     * Checks whether the browser has support for the Clipboard API. This new API supercedes
+     * the `execCommand`-based API and uses Promises for detecting whether it works or not.
+     *
+     * This check determines if the browser can support reading from the clipboard.
+     * @see https://www.w3.org/TR/clipboard-apis/#async-clipboard-api
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/Clipboard
+     *
+     * @return {boolean} whether reading from the clipboard is possible
+     */
+    static canReadFromClipboard() {
+        return !!(global.navigator.clipboard && global.navigator.clipboard.readText);
     }
 }
 

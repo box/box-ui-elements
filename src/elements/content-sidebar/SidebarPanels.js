@@ -5,8 +5,13 @@
  */
 
 import * as React from 'react';
+import flow from 'lodash/flow';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import SidebarUtils from './SidebarUtils';
+import withSidebarAnnotations from './withSidebarAnnotations';
+import { withAnnotatorContext } from '../common/annotator-context';
+import { withAPIContext } from '../common/api-context';
+import { withRouterAndRef } from '../common/routing';
 import {
     ORIGIN_ACTIVITY_SIDEBAR,
     ORIGIN_DETAILS_SIDEBAR,
@@ -41,9 +46,14 @@ type Props = {
     hasVersions: boolean,
     isOpen: boolean,
     metadataSidebarProps: MetadataSidebarProps,
+    onAnnotationSelect?: Function,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
+};
+
+type State = {
+    isInitialized: boolean,
 };
 
 type ElementRefType = {
@@ -58,7 +68,7 @@ const MARK_NAME_JS_LOADING_SKILLS = `${ORIGIN_SKILLS_SIDEBAR}${BASE_EVENT_NAME}`
 const MARK_NAME_JS_LOADING_METADATA = `${ORIGIN_METADATA_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_VERSIONS = `${ORIGIN_VERSIONS_SIDEBAR}${BASE_EVENT_NAME}`;
 
-const URL_TO_FEED_ITEM_TYPE = { comments: 'comment', tasks: 'task' };
+const URL_TO_FEED_ITEM_TYPE = { annotations: 'annotation', comments: 'comment', tasks: 'task' };
 
 const LoadableDetailsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DETAILS, MARK_NAME_JS_LOADING_DETAILS);
 const LoadableActivitySidebar = SidebarUtils.getAsyncSidebarContent(
@@ -75,27 +85,33 @@ const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
     MARK_NAME_JS_LOADING_VERSIONS,
 );
 
-class SidebarPanels extends React.Component<Props> {
+class SidebarPanels extends React.Component<Props, State> {
     activitySidebar: ElementRefType = React.createRef();
 
     detailsSidebar: ElementRefType = React.createRef();
 
     metadataSidebar: ElementRefType = React.createRef();
 
+    state: State = { isInitialized: false };
+
     versionsSidebar: ElementRefType = React.createRef();
+
+    componentDidMount() {
+        this.setState({ isInitialized: true });
+    }
 
     /**
      * Refreshes the contents of the active sidebar
      * @returns {void}
      */
-    refresh(): void {
+    refresh(shouldRefreshCache: boolean = true): void {
         const { current: activitySidebar } = this.activitySidebar;
         const { current: detailsSidebar } = this.detailsSidebar;
         const { current: metadataSidebar } = this.metadataSidebar;
         const { current: versionsSidebar } = this.versionsSidebar;
 
         if (activitySidebar) {
-            activitySidebar.refresh();
+            activitySidebar.refresh(shouldRefreshCache);
         }
 
         if (detailsSidebar) {
@@ -128,10 +144,13 @@ class SidebarPanels extends React.Component<Props> {
             hasVersions,
             isOpen,
             metadataSidebarProps,
+            onAnnotationSelect,
             onVersionChange,
             onVersionHistoryClick,
             versionsSidebarProps,
         }: Props = this.props;
+
+        const { isInitialized } = this.state;
 
         if (!isOpen || (!hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
             return null;
@@ -150,6 +169,7 @@ class SidebarPanels extends React.Component<Props> {
                                 file={file}
                                 getPreview={getPreview}
                                 getViewer={getViewer}
+                                hasSidebarInitialized={isInitialized}
                                 startMarkName={MARK_NAME_JS_LOADING_SKILLS}
                             />
                         )}
@@ -162,6 +182,7 @@ class SidebarPanels extends React.Component<Props> {
                         exact
                         path={[
                             `/${SIDEBAR_VIEW_ACTIVITY}`,
+                            `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(annotations)/:fileVersionId/:activeFeedEntryId?`,
                             `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(comments|tasks)/:activeFeedEntryId?`,
                         ]}
                         render={({ match }) => {
@@ -174,11 +195,14 @@ class SidebarPanels extends React.Component<Props> {
                                     elementId={elementId}
                                     currentUser={currentUser}
                                     file={file}
+                                    hasSidebarInitialized={isInitialized}
+                                    onAnnotationSelect={onAnnotationSelect}
+                                    onVersionChange={onVersionChange}
                                     onVersionHistoryClick={onVersionHistoryClick}
                                     ref={this.activitySidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
                                     activeFeedEntryId={match.params.activeFeedEntryId}
-                                    activeFeedEntryType={activeFeedEntryType}
+                                    activeFeedEntryType={match.params.activeFeedEntryId && activeFeedEntryType}
                                     {...activitySidebarProps}
                                 />
                             );
@@ -193,6 +217,7 @@ class SidebarPanels extends React.Component<Props> {
                             <LoadableDetailsSidebar
                                 elementId={elementId}
                                 fileId={fileId}
+                                hasSidebarInitialized={isInitialized}
                                 key={fileId}
                                 hasVersions={hasVersions}
                                 onVersionHistoryClick={onVersionHistoryClick}
@@ -211,6 +236,7 @@ class SidebarPanels extends React.Component<Props> {
                             <LoadableMetadataSidebar
                                 elementId={elementId}
                                 fileId={fileId}
+                                hasSidebarInitialized={isInitialized}
                                 ref={this.metadataSidebar}
                                 startMarkName={MARK_NAME_JS_LOADING_METADATA}
                                 {...metadataSidebarProps}
@@ -224,6 +250,7 @@ class SidebarPanels extends React.Component<Props> {
                         render={({ match }) => (
                             <LoadableVersionsSidebar
                                 fileId={fileId}
+                                hasSidebarInitialized={isInitialized}
                                 key={fileId}
                                 onVersionChange={onVersionChange}
                                 parentName={match.params.sidebar}
@@ -256,4 +283,5 @@ class SidebarPanels extends React.Component<Props> {
     }
 }
 
-export default SidebarPanels;
+export { SidebarPanels as SidebarPanelsComponent };
+export default flow([withSidebarAnnotations, withAPIContext, withAnnotatorContext, withRouterAndRef])(SidebarPanels);

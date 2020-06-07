@@ -47,8 +47,21 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
     }
 
     &.is-callout {
-        background-color: $bdl-purple-rain;
-        border-color: $bdl-purple-rain;
+        color: $bdl-dark-blue-02;
+        background-color: $bdl-dark-blue;
+        border-color: $bdl-dark-blue;
+
+        a {
+            color: $bdl-dark-blue-02;
+        }
+
+        .tooltip-close-button {
+            .bdl-Tooltip-iconClose {
+                path {
+                    fill: $bdl-dark-blue-02;
+                }
+            }
+        }
     }
 
     &.is-metadata-tooltip {

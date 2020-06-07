@@ -12,7 +12,14 @@ jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 jest.mock('../../../utils/LocalStore');
 
 describe('elements/content-sidebar/Sidebar', () => {
-    const getWrapper = props => shallow(<Sidebar file={{ id: 'id' }} location={{ pathname: '/' }} {...props} />);
+    const file = {
+        id: 'id',
+        file_version: {
+            id: '123',
+        },
+    };
+
+    const getWrapper = props => shallow(<Sidebar file={file} location={{ pathname: '/' }} {...props} />);
 
     beforeEach(() => {
         LocalStore.mockClear();
@@ -198,5 +205,17 @@ describe('elements/content-sidebar/Sidebar', () => {
                 expect(wrapper.hasClass('bcs-is-open')).toBe(expected);
             },
         );
+    });
+
+    describe('refresh()', () => {
+        test.each([true, false])('should call panel refresh with the provided boolean', shouldRefreshCache => {
+            const instance = getWrapper().instance();
+            const refresh = jest.fn();
+            instance.sidebarPanels = { current: { refresh } };
+
+            instance.refresh(shouldRefreshCache);
+
+            expect(refresh).toHaveBeenCalledWith(shouldRefreshCache);
+        });
     });
 });

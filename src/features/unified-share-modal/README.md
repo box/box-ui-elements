@@ -24,7 +24,7 @@ class USMExample extends React.Component {
             { id: 4, collabID: 4, name: 'Yong', email: 'ysu@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '4', },
             { id: 5, collabID: 5, name: 'Will', email: 'wy@example.com', type: 'pending', hasCustomAvatar: false, translatedRole: 'Editor', userID: '5', },
             { id: 6, collabID: 6, name: 'Dave', email: 'd@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '6', },
-            { id: 7, collabID: 7, name: 'Ke', email: 'k@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '7', },
+            { id: 7, collabID: 7, name: 'Ke', email: 'k@external.com', isExternalUser: true, type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '7', },
             { id: 8, collabID: 8, name: 'Wenbo', email: 'w@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '8', },
             { id: 11, collabID: 11, name: 'Supersupersupersuperreallyreallyreallylongfirstname incrediblyspectacularlylonglastname', email: 'Supersupersupersuperreallyreallyreallyincrediblyspectacularlylongemail@example.com', type: 'user', hasCustomAvatar: false, translatedRole: 'Editor', userID: '11', },
             { /* example group contact */
@@ -101,7 +101,19 @@ class USMExample extends React.Component {
                 const collaborators = this.contacts.slice();
 
                 const collaboratorsList = {
-                    collaborators,
+                    collaborators: this.contacts.map(contact => {
+                        // convert the existing contact entries to compatible collaborator entries 
+                        const isExternalCollab = contact.isExternalUser;
+                        delete contact.isExternalUser;
+                        contact.isExternalCollab = isExternalCollab;
+                        if (isExternalCollab) {
+                            contact.expiration = {
+                                executeAt: "November 27, 2022",
+                            }
+                        }
+
+                        return contact;
+                    }),
                 };
                 this.setState({collaboratorsList});
                 resolved();
@@ -153,6 +165,7 @@ class USMExample extends React.Component {
                     collaboratorsList={this.state.collaboratorsList}
                     collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
                     currentUserID="0"
+                    createSharedLinkOnLoad={ this.props.shouldCreateSharedLinkOnLoad }
                     focusSharedLinkOnLoad={ this.props.shouldFocusSharedLinkOnLoad }
                     getCollaboratorContacts={ () => {
                         return Promise.resolve(this.contacts);
@@ -222,10 +235,10 @@ class USMExample extends React.Component {
                     showUpgradeOptions
                     submitting={ this.state.submitting }
                     suggestedCollaborators={{
-                        '2': { id: 2, userScore: '.1' },
-                        '5': { id: 5, userScore: '0.2' },
-                        '1': { id: 1, userScore: '0.5' },
-                        '3': { id: 3, userScore: '2' }
+                        '2': { id: 2, userScore: '.1', name: 'David', email: 'dt@example.com', },
+                        '5': { id: 5, userScore: '0.2', name: 'Will', email: 'wy@example.com', },
+                        '1': { id: 1, userScore: '0.5', name: 'Jeff', email: 'jt@example.com', },
+                        '3': { id: 3, userScore: '2', name: 'Yang', email: 'yz@example.com', }
                     }}
                     trackingProps={ {
                         inviteCollabsEmailTracking: {},
@@ -291,6 +304,11 @@ class USMSharedLinkExample extends USMExample {
     <div>
         This shows the Unified share modal when it has a shared link to fetch, and should auto-focus.
         <USMSharedLinkExample buttonText="Open USM Modal" shouldFocusSharedLinkOnLoad/>
+    </div>
+    <hr/>
+    <div>
+        This shows the Unified share modal when it needs to generate a shared link, and should auto-focus.
+        <USMExample buttonText="Open USM Modal" shouldFocusSharedLinkOnLoad shouldCreateSharedLinkOnLoad />
     </div>
 </div>
 

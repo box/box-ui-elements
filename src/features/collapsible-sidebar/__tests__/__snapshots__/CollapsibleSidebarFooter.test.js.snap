@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/core/collapsible-sidebar/CollapsibleSidebarFooter render 1`] = `
+<styled.div
+  className="bdl-CollapsibleSidebar-footer foo"
+>
+  <span
+    key="1"
+  >
+    abc
+  </span>
+  <span
+    key="2"
+  >
+    def
+  </span>
+</styled.div>
+`;

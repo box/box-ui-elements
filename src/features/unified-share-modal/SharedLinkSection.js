@@ -15,6 +15,7 @@ import IconGlobe from '../../icons/general/IconGlobe';
 import { bdlWatermelonRed } from '../../styles/variables';
 import type { ItemType } from '../../common/types/core';
 import { isBoxNote } from '../../utils/file';
+import Browser from '../../utils/Browser';
 
 import convertToBoxItem from './utils/item';
 import SharedLinkAccessMenu from './SharedLinkAccessMenu';
@@ -31,6 +32,8 @@ import type {
 import { PEOPLE_IN_ITEM, ANYONE_WITH_LINK, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
 
 type Props = {
+    addSharedLink: () => void,
+    autoCreateSharedLink?: boolean,
     autofocusSharedLink?: boolean,
     changeSharedLinkAccessLevel: (newAccessLevel: accessLevelType) => Promise<{ accessLevel: accessLevelType }>,
     changeSharedLinkPermissionLevel: (
@@ -39,6 +42,9 @@ type Props = {
     intl: any,
     item: itemtype,
     itemType: ItemType,
+    onCopyError?: () => void,
+    onCopyInit?: () => void,
+    onCopySuccess?: () => void,
     onDismissTooltip: (componentIdentifier: tooltipComponentIdentifierType) => void,
     onEmailSharedLinkClick: Function,
     onSettingsClick?: Function,
@@ -51,10 +57,99 @@ type Props = {
     triggerCopyOnLoad?: boolean,
 };
 
-class SharedLinkSection extends React.Component<Props> {
+type State = {
+    isAutoCreatingSharedLink: boolean,
+    isCopySuccessful: ?boolean,
+};
+
+class SharedLinkSection extends React.Component<Props, State> {
     static defaultProps = {
         trackingProps: {},
+        autoCreateSharedLink: false,
     };
+
+    constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            isAutoCreatingSharedLink: false,
+            isCopySuccessful: null,
+        };
+    }
+
+    componentDidMount() {
+        const { sharedLink, autoCreateSharedLink, addSharedLink, submitting } = this.props;
+
+        if (
+            autoCreateSharedLink &&
+            !this.state.isAutoCreatingSharedLink &&
+            sharedLink &&
+            !sharedLink.url &&
+            !submitting &&
+            !sharedLink.isNewSharedLink
+        ) {
+            this.setState({ isAutoCreatingSharedLink: true });
+            addSharedLink();
+        }
+    }
+
+    // We handle didUpdate but not didMount because
+    // the component initially renders with empty data
+    // in order to start showing UI components.
+    // When getInitialData completes in the parent we
+    // rerender with correct sharedLink data and can
+    // check whether to auto create a new one.
+    // Note: we are assuming the 2nd render is safe
+    // to start doing this check.
+    componentDidUpdate(prevProps: Props) {
+        const {
+            sharedLink,
+            autoCreateSharedLink,
+            addSharedLink,
+            submitting,
+            triggerCopyOnLoad,
+            onCopyError = () => {},
+            onCopySuccess = () => {},
+            onCopyInit = () => {},
+        } = this.props;
+
+        const { isAutoCreatingSharedLink, isCopySuccessful } = this.state;
+
+        if (
+            autoCreateSharedLink &&
+            !isAutoCreatingSharedLink &&
+            !sharedLink.url &&
+            !submitting &&
+            !sharedLink.isNewSharedLink
+        ) {
+            this.setState({ isAutoCreatingSharedLink: true });
+            addSharedLink();
+        }
+
+        if (!prevProps.sharedLink.url && sharedLink.url) {
+            this.setState({ isAutoCreatingSharedLink: false });
+        }
+
+        if (
+            Browser.canWriteToClipboard() &&
+            triggerCopyOnLoad &&
+            !isAutoCreatingSharedLink &&
+            sharedLink.url &&
+            isCopySuccessful === null
+        ) {
+            onCopyInit();
+            navigator.clipboard
+                .writeText(sharedLink.url)
+                .then(() => {
+                    this.setState({ isCopySuccessful: true });
+                    onCopySuccess();
+                })
+                .catch(() => {
+                    this.setState({ isCopySuccessful: false });
+                    onCopyError();
+                });
+        }
+    }
 
     canAddSharedLink = (isSharedLinkEnabled: boolean, canAddLink: boolean) => {
         return !isSharedLinkEnabled && canAddLink;
@@ -80,6 +175,9 @@ class SharedLinkSection extends React.Component<Props> {
             triggerCopyOnLoad,
             tooltips,
         } = this.props;
+
+        const { isCopySuccessful } = this.state;
+
         const {
             accessLevel,
             accessLevelsDisabledReason,
@@ -102,6 +200,8 @@ class SharedLinkSection extends React.Component<Props> {
             sharedLinkAccessMenuButtonProps,
             sharedLinkPermissionsMenuButtonProps,
         } = trackingProps;
+
+        const shouldTriggerCopyOnLoad = !!triggerCopyOnLoad && !!isCopySuccessful;
 
         const isEditableBoxNote = isBoxNote(convertToBoxItem(item)) && isEditAllowed;
         let allowedPermissionLevels = [CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];
@@ -136,7 +236,7 @@ class SharedLinkSection extends React.Component<Props> {
                             disabled={submitting}
                             label=""
                             onCopySuccess={onSharedLinkCopy}
-                            triggerCopyOnLoad={triggerCopyOnLoad}
+                            triggerCopyOnLoad={shouldTriggerCopyOnLoad}
                             type="url"
                             value={url}
                         />
@@ -348,7 +448,7 @@ class SharedLinkSection extends React.Component<Props> {
 
         return (
             <div>
-                <hr />
+                <hr className="bdl-SharedLinkSection-separator" />
                 {/* eslint-disable-next-line jsx-a11y/label-has-for */}
                 <label>
                     <span className="label bdl-Label">

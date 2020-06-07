@@ -9,6 +9,24 @@ jest.mock('../../Avatar', () => 'Avatar');
 jest.mock('../ActiveState', () => 'ActiveState');
 
 const otherUser = { name: 'Akon', id: 11 };
+
+const annotations = {
+    entries: [
+        {
+            created_at: '2020-01-01T00:00:00Z',
+            created_by: otherUser,
+            id: '123',
+            modified_at: '2020-01-02T00:00:00Z',
+            modified_by: otherUser,
+            permissions: {
+                can_delete: true,
+                can_edit: true,
+            },
+            type: 'annotation',
+        },
+    ],
+};
+
 const comments = {
     total_count: 1,
     entries: [
@@ -150,6 +168,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             feedItems,
         });
         expect(wrapper.find('ActiveState')).toHaveLength(1);
+        expect(wrapper.find('ActiveState').prop('currentFileVersionId')).toBe(987);
     });
 
     test('should not expose add approval ui if task submit handler is not passed', () => {
@@ -173,92 +192,139 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(instance.feedContainer.scrollTop).toEqual(100);
     });
 
-    test('should set scrollTop to be the scrollHeight if feedContainer exists and prevProps feedItems is undefined and this.props.feedItems is defined', () => {
-        const wrapper = getWrapper({
-            feedItems: [{ type: 'comment' }],
-        });
-        const instance = wrapper.instance();
-        instance.feedContainer = {
-            scrollTop: 0,
-            scrollHeight: 100,
-        };
-
-        instance.componentDidUpdate(
-            {
-                feedItems: undefined,
-                currentUser,
-            },
-            { isInputOpen: false },
-        );
-
-        expect(instance.feedContainer.scrollTop).toEqual(100);
-    });
-
-    test('should set scrollTop to be the scrollHeight if more feedItems are added', () => {
-        const wrapper = getWrapper({
-            feedItems: [{ type: 'comment' }, { type: 'comment' }],
-        });
-
-        const instance = wrapper.instance();
-        instance.feedContainer = {
-            scrollTop: 0,
-            scrollHeight: 100,
-        };
-
-        instance.componentDidUpdate(
-            {
+    describe('componentDidUpdate()', () => {
+        test('should set scrollTop to be the scrollHeight if feedContainer exists and prevProps feedItems is undefined and this.props.feedItems is defined', () => {
+            const wrapper = getWrapper({
                 feedItems: [{ type: 'comment' }],
-                currentUser,
-            },
-            { isInputOpen: false },
-        );
+            });
+            const instance = wrapper.instance();
+            instance.feedContainer = {
+                scrollTop: 0,
+                scrollHeight: 100,
+            };
 
-        expect(instance.feedContainer.scrollTop).toEqual(100);
-    });
+            instance.componentDidUpdate(
+                {
+                    feedItems: undefined,
+                    currentUser,
+                },
+                { isInputOpen: false },
+            );
 
-    test('should set scrollTop to be the scrollHeight if the user becomes defined', () => {
-        const wrapper = getWrapper({
-            feedItems: [{ type: 'comment' }],
+            expect(instance.feedContainer.scrollTop).toEqual(100);
         });
-        const instance = wrapper.instance();
-        instance.feedContainer = {
-            scrollTop: 0,
-            scrollHeight: 100,
-        };
 
-        instance.componentDidUpdate(
-            {
+        test('should set scrollTop to be the scrollHeight if more feedItems are added', () => {
+            const wrapper = getWrapper({
+                feedItems: [{ type: 'comment' }, { type: 'comment' }],
+            });
+
+            const instance = wrapper.instance();
+            instance.feedContainer = {
+                scrollTop: 0,
+                scrollHeight: 100,
+            };
+
+            instance.componentDidUpdate(
+                {
+                    feedItems: [{ type: 'comment' }],
+                    currentUser,
+                },
+                { isInputOpen: false },
+            );
+
+            expect(instance.feedContainer.scrollTop).toEqual(100);
+        });
+
+        test('should set scrollTop to be the scrollHeight if the user becomes defined', () => {
+            const wrapper = getWrapper({
                 feedItems: [{ type: 'comment' }],
-                currentUser: undefined,
-            },
-            { isInputOpen: false },
-        );
+            });
+            const instance = wrapper.instance();
+            instance.feedContainer = {
+                scrollTop: 0,
+                scrollHeight: 100,
+            };
 
-        expect(instance.feedContainer.scrollTop).toEqual(100);
-    });
+            instance.componentDidUpdate(
+                {
+                    feedItems: [{ type: 'comment' }],
+                    currentUser: undefined,
+                },
+                { isInputOpen: false },
+            );
 
-    test('should set scrollTop to be the scrollHeight if input opens', () => {
-        const wrapper = getWrapper({
-            feedItems: [{ type: 'comment' }],
+            expect(instance.feedContainer.scrollTop).toEqual(100);
         });
-        wrapper.setState({
-            isInputOpen: true,
-        });
-        const instance = wrapper.instance();
-        instance.feedContainer = {
-            scrollTop: 0,
-            scrollHeight: 100,
-        };
 
-        instance.componentDidUpdate(
-            {
+        test('should set scrollTop to be the scrollHeight if input opens', () => {
+            const wrapper = getWrapper({
                 feedItems: [{ type: 'comment' }],
-                currentUser,
-            },
-            { isInputOpen: false },
-        );
+            });
+            wrapper.setState({
+                isInputOpen: true,
+            });
+            const instance = wrapper.instance();
+            instance.feedContainer = {
+                scrollTop: 0,
+                scrollHeight: 100,
+            };
 
-        expect(instance.feedContainer.scrollTop).toEqual(100);
+            instance.componentDidUpdate(
+                {
+                    feedItems: [{ type: 'comment' }],
+                    currentUser,
+                },
+                { isInputOpen: false },
+            );
+
+            expect(instance.feedContainer.scrollTop).toEqual(100);
+        });
+
+        test('should call scrollToActiveFeedItemOrErrorMessage if feed items loaded', () => {
+            const wrapper = getWrapper({ feedItems: [{ type: 'comment' }] });
+            const instance = wrapper.instance();
+            instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
+
+            instance.componentDidUpdate(
+                {
+                    feedItems: undefined,
+                },
+                { isInputOpen: false },
+            );
+
+            expect(instance.scrollToActiveFeedItemOrErrorMessage).toHaveBeenCalled();
+        });
+
+        test('should call scrollToActiveFeedItemOrErrorMessage if activeFeedEntryId changed', () => {
+            const wrapper = getWrapper({ activeFeedEntryId: '123' });
+            const instance = wrapper.instance();
+            instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
+
+            instance.componentDidUpdate(
+                {
+                    activeFeedEntryId: '456',
+                },
+                { isInputOpen: false },
+            );
+
+            expect(instance.scrollToActiveFeedItemOrErrorMessage).toHaveBeenCalled();
+        });
+
+        test('should not call scrollToActiveFeedItemOrErrorMessage if activeFeedEntryId changed', () => {
+            const wrapper = getWrapper({ activeFeedEntryId: '456' });
+            const instance = wrapper.instance();
+            instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
+
+            instance.componentDidUpdate(
+                {
+                    activeFeedEntryId: '456',
+                },
+                { isInputOpen: false },
+            );
+
+            expect(instance.scrollToActiveFeedItemOrErrorMessage).not.toHaveBeenCalled();
+        });
     });
 
     test('should pass activeFeedItemRef to the ActiveState', () => {
@@ -366,6 +432,15 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             feedItems,
             activeFeedEntryId: 'invalid id',
             activeFeedEntryType: taskWithAssignment.type,
+        });
+        expect(wrapper.exists('InlineError')).toBe(true);
+    });
+
+    test('should correctly handle an inline error for an annotation id being invalid', () => {
+        const wrapper = getWrapper({
+            feedItems,
+            activeFeedEntryId: 'invalid id',
+            activeFeedEntryType: annotations.entries[0].type,
         });
         expect(wrapper.exists('InlineError')).toBe(true);
     });

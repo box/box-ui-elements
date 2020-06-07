@@ -1,5 +1,34 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`features/unified-share-modal/ContactsField filterContacts() Should return contacts in the correct format 1`] = `
+Array [
+  Object {
+    "email": "y@example.com",
+    "id": "23456",
+    "isExternalUser": false,
+    "text": "Y User",
+    "type": "user",
+    "value": "y@example.com",
+  },
+  Object {
+    "email": "z@example.com",
+    "id": "34567",
+    "isExternalUser": true,
+    "text": "Z User",
+    "type": "user",
+    "value": "z@example.com",
+  },
+  Object {
+    "email": "x@example.com",
+    "id": "12345",
+    "isExternalUser": false,
+    "text": "X User",
+    "type": "group",
+    "value": "x@example.com",
+  },
+]
+`;
+
 exports[`features/unified-share-modal/ContactsField render should have scrollable dropdown if contacts > 5 1`] = `
 <PillSelectorDropdown
   allowCustomPills={true}
@@ -101,50 +130,74 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   validator={[MockFunction]}
 >
   <ContactDatalistItem
+    id="12345"
+    isExternal={false}
     key="12345"
     name="X User"
+    showAvatar={false}
     subtitle="x@example.com"
     title="X User"
   />
   <ContactDatalistItem
+    id="23456"
+    isExternal={true}
     key="23456"
     name="Y User"
+    showAvatar={false}
     subtitle="y@example.com"
     title="Y User"
   />
   <ContactDatalistItem
+    id="34567"
+    isExternal={false}
     key="34567"
     name="Z User"
+    showAvatar={false}
     subtitle="z@example.com"
     title="Z User"
   />
   <ContactDatalistItem
+    id="12"
+    isExternal={true}
     key="12"
     name="a b"
+    showAvatar={false}
     subtitle="a@example.com"
     title="a b"
   />
   <ContactDatalistItem
+    id="13"
+    isExternal={false}
     key="13"
     name="a b"
+    showAvatar={false}
     subtitle="b@example.com"
     title="a b"
   />
   <ContactDatalistItem
+    id="14"
+    isExternal={true}
     key="14"
     name="a c"
+    showAvatar={false}
     subtitle="c@example.com"
     title="a c"
   />
   <ContactDatalistItem
+    id="14"
+    isExternal={false}
     key="14"
     name="a d"
+    showAvatar={false}
     subtitle="d@example.com"
     title="a d"
   />
   <ContactDatalistItem
+    id="14"
+    isExternal={true}
     key="14"
     name="a e"
+    showAvatar={false}
     subtitle="e@example.com"
     title="a e"
   />

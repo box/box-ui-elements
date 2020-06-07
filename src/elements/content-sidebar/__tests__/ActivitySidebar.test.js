@@ -10,6 +10,7 @@ jest.mock('lodash/debounce', () => jest.fn(i => i));
 describe('elements/content-sidebar/ActivitySidebar', () => {
     const feedAPI = {
         feedItems: jest.fn(),
+        deleteAnnotation: jest.fn(),
         deleteComment: jest.fn(),
         deleteTaskNew: jest.fn(),
         createTaskNew: jest.fn(),
@@ -32,6 +33,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     };
     const file = {
         id: 'I_AM_A_FILE',
+        file_version: {
+            id: '123',
+        },
     };
     let currentUser = {
         id: 'foo',
@@ -334,6 +338,41 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             instance.fetchFeedItems();
             expect(feedAPI.feedItems).toBeCalled();
         });
+
+        test.each`
+            annotationsEnabled | appActivityEnabled | expectedAnnotations | expectedAppActivity
+            ${false}           | ${false}           | ${false}            | ${false}
+            ${false}           | ${true}            | ${false}            | ${true}
+            ${true}            | ${false}           | ${true}             | ${false}
+            ${true}            | ${true}            | ${true}             | ${true}
+        `(
+            'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled and appActivityEnabled=$appActivityEnabled',
+            ({ annotationsEnabled, appActivityEnabled, expectedAnnotations, expectedAppActivity }) => {
+                wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            annotations: { enabled: annotationsEnabled },
+                            appActivity: { enabled: appActivityEnabled },
+                        },
+                    },
+                });
+
+                instance = wrapper.instance();
+                instance.errorCallback = jest.fn();
+                instance.fetchFeedItemsErrorCallback = jest.fn();
+                instance.fetchFeedItemsSuccessCallback = jest.fn();
+
+                instance.fetchFeedItems();
+                expect(feedAPI.feedItems).toHaveBeenCalledWith(
+                    file,
+                    false,
+                    instance.fetchFeedItemsSuccessCallback,
+                    instance.fetchFeedItemsErrorCallback,
+                    instance.errorCallback,
+                    { shouldShowAnnotations: expectedAnnotations, shouldShowAppActivity: expectedAppActivity },
+                );
+            },
+        );
     });
 
     describe('fetchFeedItemsSuccessCallback()', () => {
@@ -448,16 +487,8 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         let wrapper;
         let getCollaboratorsSpy;
 
-        test('should get collaborators with groups if FF is passed', () => {
-            wrapper = getWrapper({
-                features: {
-                    activityFeed: {
-                        tasks: {
-                            assignToGroup: true,
-                        },
-                    },
-                },
-            });
+        test('should get collaborators with groups', () => {
+            wrapper = getWrapper();
             instance = wrapper.instance();
             getCollaboratorsSpy = jest.spyOn(instance, 'getCollaborators');
 
@@ -477,32 +508,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 {
                     filter_term: search,
                     include_groups: true,
-                    include_uploader_collabs: false,
-                },
-            );
-        });
-
-        test('should get collaborators without groups if FF is not passed', () => {
-            wrapper = getWrapper({ features: {} });
-            instance = wrapper.instance();
-            getCollaboratorsSpy = jest.spyOn(instance, 'getCollaborators');
-
-            const search = 'Santa Claus';
-            instance.getApproverWithQuery(search);
-
-            expect(getCollaboratorsSpy).toBeCalledWith(
-                instance.getApproverContactsSuccessCallback,
-                instance.errorCallback,
-                search,
-                { includeGroups: false },
-            );
-            expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(
-                file.id,
-                instance.getApproverContactsSuccessCallback,
-                instance.errorCallback,
-                {
-                    filter_term: search,
-                    include_groups: false,
                     include_uploader_collabs: false,
                 },
             );
@@ -668,6 +673,94 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             expect(fetchFeedItems).toHaveBeenCalled();
             expect(fetchFeedItems).toHaveBeenCalledWith(true);
+        });
+    });
+
+    describe('handleAnnotationSelect()', () => {
+        const annotatorState = { activeAnnotationId: '123' };
+        const emitAnnotatorActiveChangeEvent = jest.fn();
+        const getAnnotationsMatchPath = jest.fn().mockReturnValue({ params: { fileVersionId: '456' } });
+        const getAnnotationsPath = jest.fn().mockReturnValue('/activity/annotations/235/124');
+        const history = {
+            push: jest.fn(),
+            replace: jest.fn(),
+        };
+        const onAnnotationSelect = jest.fn();
+
+        const getAnnotationWrapper = () =>
+            getWrapper({
+                annotatorState,
+                emitAnnotatorActiveChangeEvent,
+                file,
+                getAnnotationsMatchPath,
+                getAnnotationsPath,
+                history,
+                onAnnotationSelect,
+            });
+
+        test('should call emitAnnotatorActiveChangeEvent and onAnnotatorSelect appropriately', () => {
+            const wrapper = getAnnotationWrapper();
+            const instance = wrapper.instance();
+            const annotation = { file_version: { id: '235' }, id: '124' };
+
+            instance.handleAnnotationSelect(annotation);
+
+            expect(emitAnnotatorActiveChangeEvent).toHaveBeenCalledWith('124');
+            expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
+        });
+
+        test('should not call history.push if file versions are the same', () => {
+            const wrapper = getAnnotationWrapper();
+            const instance = wrapper.instance();
+            const annotation = { file_version: { id: '456' }, id: '124' };
+
+            instance.handleAnnotationSelect(annotation);
+
+            expect(emitAnnotatorActiveChangeEvent).toHaveBeenCalledWith('124');
+            expect(history.push).not.toHaveBeenCalled();
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
+        });
+
+        test('should use current file version if match params returns null', () => {
+            const wrapper = getAnnotationWrapper();
+            const instance = wrapper.instance();
+            const annotation = { file_version: { id: '235' }, id: '124' };
+            getAnnotationsMatchPath.mockReturnValue({ params: { fileVersionId: undefined } });
+
+            instance.handleAnnotationSelect(annotation);
+
+            expect(emitAnnotatorActiveChangeEvent).toHaveBeenCalledWith('124');
+            expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
+        });
+    });
+
+    describe('handleAnnotationDelete()', () => {
+        test('should call deleteAnnotation API', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+
+            wrapper.instance().handleAnnotationDelete({ id: '123' });
+
+            expect(api.getFeedAPI().deleteAnnotation).toBeCalled();
+            expect(instance.fetchFeedItems).toHaveBeenCalled();
+        });
+    });
+
+    describe('deleteAnnotationSuccess()', () => {
+        test('should handle successful annotation deletion', () => {
+            const mockEmitRemoveEvent = jest.fn();
+            const mockFeedSuccess = jest.fn();
+            const wrapper = getWrapper({ emitRemoveEvent: mockEmitRemoveEvent });
+            const instance = wrapper.instance();
+
+            instance.feedSuccessCallback = mockFeedSuccess;
+            instance.deleteAnnotationSuccess('123');
+
+            expect(mockEmitRemoveEvent).toBeCalledWith('123');
+            expect(mockFeedSuccess).toBeCalled();
         });
     });
 });

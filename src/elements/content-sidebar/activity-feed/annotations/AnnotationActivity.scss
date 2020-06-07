@@ -1,0 +1,53 @@
+@import '../../../common/variables';
+
+.bcs-AnnotationActivity {
+    position: relative;
+    z-index: 1;
+}
+
+// the comment activity item
+.bcs-AnnotationActivity-media {
+    opacity: 1;
+    transition: opacity .33s;
+
+    &.bcs-is-pending {
+        opacity: .4;
+        pointer-events: none;
+    }
+}
+
+.bcs-AnnotationActivity-link {
+    display: inline-block;
+    margin-top: 8px;
+
+    &:hover {
+        margin-top: 8px;
+    }
+}
+
+.bcs-AnnotationActivity-headline {
+    // target only Edge because this breaks other browsers
+    // but fixes Edge
+    @supports (-ms-ime-align: auto) {
+        word-break: break-all;
+    }
+}
+
+// tethered styles for delete confirmation modal
+.bcs-AnnotationActivity-deleteConfirmationModal {
+    z-index: $overlay-z-index;
+}
+
+// override for activity feed defaults
+.be {
+    .bcs-AnnotationActivity-editor.bcs-CommentForm {
+        margin-top: 20px;
+        padding: 0;
+        border-top: none;
+    }
+
+    .bcs-AnnotationActivity-link {
+        color: $bdl-box-blue;
+        font-weight: bold;
+    }
+}

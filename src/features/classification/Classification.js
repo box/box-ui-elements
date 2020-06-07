@@ -16,17 +16,16 @@ const STYLE_TOOLTIP: 'tooltip' = 'tooltip';
 
 type Props = {
     className?: string,
+    color?: string,
     controls?: Controls,
     controlsFormat?: ControlsFormat,
     definition?: string,
-    fillColor?: string,
     isLoadingControls?: boolean,
     itemName?: string,
     maxAppCount?: number,
     messageStyle?: typeof STYLE_INLINE | typeof STYLE_TOOLTIP,
     name?: string,
     onClick?: (event: SyntheticEvent<HTMLButtonElement>) => void,
-    strokeColor?: string,
 };
 
 const Classification = ({
@@ -39,8 +38,7 @@ const Classification = ({
     messageStyle,
     name,
     itemName = '',
-    fillColor,
-    strokeColor,
+    color,
     onClick,
 }: Props) => {
     const isClassified = !!name;
@@ -57,8 +55,7 @@ const Classification = ({
         <article className={`bdl-Classification ${className}`}>
             {isClassified && (
                 <ClassifiedBadge
-                    fillColor={fillColor}
-                    strokeColor={strokeColor}
+                    color={color}
                     name={((name: any): string)}
                     onClick={onClick}
                     tooltipText={isTooltipMessageEnabled ? definition : undefined}
@@ -76,14 +73,13 @@ const Classification = ({
             )}
             {isSecurityControlsEnabled && (
                 <SecurityControls
+                    classificationColor={color}
                     classificationName={name}
                     controls={controls}
                     controlsFormat={controlsFormat}
                     definition={definition}
                     itemName={itemName}
                     maxAppCount={maxAppCount}
-                    fillColor={fillColor}
-                    strokeColor={strokeColor}
                 />
             )}
             {isControlsIndicatorEnabled && <LoadingIndicator />}

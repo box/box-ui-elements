@@ -15,43 +15,43 @@ import * as vars from '../../styles/variables';
 const classificationColorsMap = {
     [CLASSIFICATION_COLOR_ID_0]: {
         name: messages.classificationYellow,
-        strokeColor: vars.bdlYellorange,
-        fillColor: vars.bdlYellorange20,
+        color: vars.bdlYellow50,
+        tinycon: vars.bdlYellorange,
     },
     [CLASSIFICATION_COLOR_ID_1]: {
         name: messages.classificationOrange,
-        strokeColor: vars.bdlOrange,
-        fillColor: vars.bdlOrange20,
+        color: vars.bdlOrange50,
+        tinycon: vars.bdlOrange,
     },
     [CLASSIFICATION_COLOR_ID_2]: {
         name: messages.classificationRed,
-        strokeColor: vars.bdlWatermelonRed,
-        fillColor: vars.bdlWatermelonRed20,
+        color: vars.bdlWatermelonRed50,
+        tinycon: vars.bdlWatermelonRed,
     },
     [CLASSIFICATION_COLOR_ID_3]: {
         name: messages.classificationPurple,
-        strokeColor: vars.bdlPurpleRain,
-        fillColor: vars.bdlPurpleRain20,
+        color: vars.bdlPurpleRain50,
+        tinycon: vars.bdlPurpleRain,
     },
     [CLASSIFICATION_COLOR_ID_4]: {
         name: messages.classificationLightBlue,
-        strokeColor: vars.bdlLightBlue,
-        fillColor: vars.bdlLightBlue20,
+        color: vars.bdlLightBlue50,
+        tinycon: vars.bdlLightBlue,
     },
     [CLASSIFICATION_COLOR_ID_5]: {
         name: messages.classificationDarkBlue,
-        strokeColor: vars.bdlBoxBlue,
-        fillColor: vars.bdlBoxBlue20,
+        color: vars.bdlDarkBlue50,
+        tinycon: vars.bdlDarkBlue,
     },
     [CLASSIFICATION_COLOR_ID_6]: {
         name: messages.classificationGreen,
-        strokeColor: vars.bdlGreenLight,
-        fillColor: vars.bdlGreenLight20,
+        color: vars.bdlGreenLight50,
+        tinycon: vars.bdlGreenLight,
     },
     [CLASSIFICATION_COLOR_ID_7]: {
         name: messages.classificationGrey,
-        strokeColor: vars.bdlGray,
-        fillColor: vars.bdlGray20,
+        color: vars.bdlGray20,
+        tinycon: vars.bdlGray62,
     },
 };
 

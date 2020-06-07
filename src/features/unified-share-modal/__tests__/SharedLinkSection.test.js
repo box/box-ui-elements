@@ -202,4 +202,188 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
 
         expect(tooltip).toMatchSnapshot();
     });
+
+    describe('componentDidMount()', () => {
+        test('should attempt shared link creation when component is mounted with initial, empty shared link data', () => {
+            const sharedLink = { url: '', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                submitting: false,
+                autoCreateSharedLink: true,
+                sharedLink,
+            });
+
+            expect(addSharedLink).toBeCalledTimes(1);
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(true);
+        });
+
+        test('should note attempt shared link creation when component is mounted with a shared link', () => {
+            const sharedLink = { url: 'sftp://example.org/', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                submitting: false,
+                autoCreateSharedLink: true,
+                sharedLink,
+            });
+
+            expect(addSharedLink).toBeCalledTimes(0);
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
+        });
+    });
+
+    describe('componentDidUpdate()', () => {
+        afterEach(() => {
+            global.navigator.clipboard = undefined;
+        });
+
+        test('should call addSharedLink when modal is triggered to create a URL', () => {
+            const sharedLink = { url: '', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                submitting: true,
+                autoCreateSharedLink: true,
+                sharedLink,
+            });
+
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
+
+            wrapper.setProps({ submitting: false });
+
+            expect(addSharedLink).toBeCalledTimes(1);
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(true);
+
+            wrapper.setProps({ sharedLink: { url: 'http://example.com/', isNewSharedLink: true } });
+
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
+        });
+
+        test('should not call addSharedLink when modal is triggered to fetch existing URL', () => {
+            const sharedLink = { url: 'http://example.com/', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                submitting: true,
+                autoCreateSharedLink: true,
+                sharedLink,
+            });
+
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
+
+            wrapper.setProps({ submitting: false });
+
+            expect(addSharedLink).toBeCalledTimes(0);
+            expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
+        });
+
+        test('should handle attempt to copy when the clipboard API is available and request is successful', async () => {
+            expect.assertions(6);
+            const sharedLink = { url: '', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+            const onCopyInitMock = jest.fn();
+            const onCopySuccessMock = jest.fn();
+            const onCopyErrorMock = jest.fn();
+            const writeTextSuccessMock = jest.fn(() => Promise.resolve());
+            navigator.clipboard = {
+                writeText: writeTextSuccessMock,
+            };
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                autoCreateSharedLink: true,
+                onCopyError: onCopyErrorMock,
+                onCopyInit: onCopyInitMock,
+                onCopySuccess: onCopySuccessMock,
+                sharedLink,
+                submitting: true,
+                triggerCopyOnLoad: true,
+            });
+
+            wrapper.setProps({ submitting: false });
+            wrapper.setProps({ sharedLink: { url: 'http://example.com/', isNewSharedLink: true } });
+
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(onCopyInitMock).toBeCalledTimes(1);
+            expect(writeTextSuccessMock).toBeCalledTimes(1);
+            expect(onCopySuccessMock).toBeCalledTimes(1);
+            expect(wrapper.find('TextInputWithCopyButton').prop('triggerCopyOnLoad')).toBe(true);
+            expect(wrapper.state('isCopySuccessful')).toEqual(true);
+            expect(onCopyErrorMock).toBeCalledTimes(0);
+        });
+
+        test('should only initiate copy when we specifically request a copy to be triggered', () => {
+            const sharedLink = { url: '', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+            const onCopyInitMock = jest.fn();
+            const onCopySuccessMock = jest.fn();
+            const onCopyErrorMock = jest.fn();
+            const writeTextSuccessMock = jest.fn(() => Promise.resolve());
+            navigator.clipboard = {
+                writeText: writeTextSuccessMock,
+            };
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                autoCreateSharedLink: true,
+                autofocusSharedLink: true,
+                onCopyError: onCopyErrorMock,
+                onCopyInit: onCopyInitMock,
+                onCopySuccess: onCopySuccessMock,
+                sharedLink,
+                submitting: true,
+                triggerCopyOnLoad: false,
+            });
+
+            wrapper.setProps({ submitting: false });
+            wrapper.setProps({ sharedLink: { url: 'http://example.com/', isNewSharedLink: true } });
+
+            expect(onCopyInitMock).toBeCalledTimes(0);
+            expect(writeTextSuccessMock).toBeCalledTimes(0);
+            expect(onCopySuccessMock).toBeCalledTimes(0);
+            expect(onCopyErrorMock).toBeCalledTimes(0);
+        });
+
+        test('should handle attempt to copy when the clipboard request fails', async () => {
+            expect.assertions(6);
+            const sharedLink = { url: '', isNewSharedLink: false };
+            const addSharedLink = jest.fn();
+            const onCopyInitMock = jest.fn();
+            const onCopySuccessMock = jest.fn();
+            const onCopyErrorMock = jest.fn();
+            const writeTextRejectMock = jest.fn(() => Promise.reject());
+            navigator.clipboard = {
+                writeText: writeTextRejectMock,
+            };
+
+            const wrapper = getWrapper({
+                addSharedLink,
+                autoCreateSharedLink: true,
+                onCopyError: onCopyErrorMock,
+                onCopyInit: onCopyInitMock,
+                onCopySuccess: onCopySuccessMock,
+                sharedLink,
+                submitting: true,
+                triggerCopyOnLoad: true,
+            });
+
+            wrapper.setProps({ submitting: false });
+            wrapper.setProps({ sharedLink: { url: 'http://example.com/', isNewSharedLink: true } });
+
+            await new Promise(r => setTimeout(r, 0));
+
+            expect(onCopyInitMock).toBeCalledTimes(1);
+            expect(writeTextRejectMock).toBeCalledTimes(1);
+            expect(onCopySuccessMock).toBeCalledTimes(0);
+            expect(onCopyErrorMock).toBeCalledTimes(1);
+            expect(wrapper.find('TextInputWithCopyButton').prop('triggerCopyOnLoad')).toBe(false);
+            expect(wrapper.state('isCopySuccessful')).toEqual(false);
+        });
+    });
 });

@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Pagination from '../Pagination';
 
-describe('elements/Pagination/Pagination', () => {
+describe('features/pagination/Pagination', () => {
     test.each`
         hasNextMarker | hasPrevMarker
         ${false}      | ${false}
@@ -16,4 +16,9 @@ describe('elements/Pagination/Pagination', () => {
             expect(wrapper).toMatchSnapshot();
         },
     );
+
+    test('should render OffsetBasedPagination when no markers are provided', () => {
+        const wrapper = shallow(<Pagination offset={0} onOffsetChange={() => null} pageSize={10} totalCount={100} />);
+        expect(wrapper).toMatchSnapshot();
+    });
 });

@@ -148,6 +148,7 @@ type Crumb = {
 
 type BoxItemPermission = {
     can_comment?: boolean,
+    can_create_annotations?: boolean,
     can_delete?: boolean,
     can_download?: boolean,
     can_edit?: boolean,
@@ -156,6 +157,7 @@ type BoxItemPermission = {
     can_set_share_access?: boolean,
     can_share?: boolean,
     can_upload?: boolean,
+    can_view_annotations?: boolean,
 };
 
 type BoxItemVersionPermission = {
@@ -200,11 +202,18 @@ type BoxItemVersion = {
     trashed_at: ?string,
     trashed_by?: ?User,
     type: 'file_version',
+    uploader_display_name?: string,
     version_end?: number,
     version_number: string,
     version_promoted?: string,
     version_start?: number,
     versions?: Array<BoxItemVersion>,
+};
+
+type BoxItemVersionMini = {
+    id: string,
+    type: 'version',
+    version_number: string,
 };
 
 type BoxPathCollection = {
@@ -351,6 +360,18 @@ type FileVersions = {
     total_count: number,
 };
 
+type Reply = {
+    created_at: string,
+    created_by: User,
+    id: string,
+    message: string,
+    parent: {
+        id: string,
+        type: string,
+    },
+    type: 'reply',
+};
+
 export type {
     Token,
     TokenLiteral,
@@ -385,6 +406,7 @@ export type {
     BoxItemVersionPermission,
     BoxItemVersionRetention,
     BoxItemVersion,
+    BoxItemVersionMini,
     BoxItem,
     BoxItemCollection,
     FlattenedBoxItemCollection,
@@ -394,4 +416,5 @@ export type {
     RecentCollection,
     FileVersions,
     FileRepresentation,
+    Reply,
 };

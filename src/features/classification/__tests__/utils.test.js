@@ -2,38 +2,70 @@
 import classificationColorsMap from '../classificationColorsMap';
 import { DEFAULT_CLASSIFICATION_COLOR_ID } from '../constants';
 
-import { getClassificationLabelColors } from '../utils';
+import { getClassificationLabelColor, getClassificationTinyconColor } from '../utils';
 
 describe('features/classification/utils', () => {
-    describe('getClassificationLabelColors()', () => {
-        test('should return the fill and stroke colors that match the given color id', () => {
+    describe('getClassificationLabelColor()', () => {
+        test('should return the fill color that match the given color id', () => {
             const colorID = 6;
-            const { fillColor, strokeColor } = classificationColorsMap[colorID];
-            const expectedColors = { fillColor, strokeColor };
+            const { color } = classificationColorsMap[colorID];
+            const expectedColor = color;
 
-            expect(getClassificationLabelColors({ colorID })).toEqual(expectedColors);
+            expect(getClassificationLabelColor({ colorID })).toEqual(expectedColor);
         });
 
-        test('should return default fill and stroke colors when color id can not be matched', () => {
+        test('should return default fill color when color id can not be matched', () => {
             const colorID = classificationColorsMap.length;
-            const { fillColor, strokeColor } = classificationColorsMap[DEFAULT_CLASSIFICATION_COLOR_ID];
-            const expectedColors = { fillColor, strokeColor };
+            const { color } = classificationColorsMap[DEFAULT_CLASSIFICATION_COLOR_ID];
+            const expectedColor = color;
 
-            expect(getClassificationLabelColors({ colorID })).toEqual(expectedColors);
+            expect(getClassificationLabelColor({ colorID })).toEqual(expectedColor);
         });
 
-        test('should return default fill and stroke colors for empty params', () => {
-            const { fillColor, strokeColor } = classificationColorsMap[DEFAULT_CLASSIFICATION_COLOR_ID];
-            const expectedColors = { fillColor, strokeColor };
+        test('should return default fill color for empty params', () => {
+            const { color } = classificationColorsMap[DEFAULT_CLASSIFICATION_COLOR_ID];
+            const expectedColor = color;
 
-            expect(getClassificationLabelColors()).toEqual(expectedColors);
+            expect(getClassificationLabelColor()).toEqual(expectedColor);
         });
 
-        test('should return default fill and stroke colors when colorID property is missing', () => {
-            const { fillColor, strokeColor } = classificationColorsMap[DEFAULT_CLASSIFICATION_COLOR_ID];
-            const expectedColors = { fillColor, strokeColor };
+        test('should return default fill color when colorID property is missing', () => {
+            const { color } = classificationColorsMap[DEFAULT_CLASSIFICATION_COLOR_ID];
+            const expectedColor = color;
 
-            expect(getClassificationLabelColors({})).toEqual(expectedColors);
+            expect(getClassificationLabelColor({})).toEqual(expectedColor);
+        });
+    });
+
+    describe('getClassificationTinyconColor()', () => {
+        test('should return the tinycon color that match the given color id', () => {
+            const colorID = 6;
+            const { tinycon } = classificationColorsMap[colorID];
+            const expectedColor = tinycon;
+
+            expect(getClassificationTinyconColor({ colorID })).toEqual(expectedColor);
+        });
+
+        test('should return default tinycon color when color id can not be matched', () => {
+            const colorID = classificationColorsMap.length;
+            const { tinycon } = classificationColorsMap[DEFAULT_CLASSIFICATION_COLOR_ID];
+            const expectedColor = tinycon;
+
+            expect(getClassificationTinyconColor({ colorID })).toEqual(expectedColor);
+        });
+
+        test('should return default tinycon color for empty params', () => {
+            const { tinycon } = classificationColorsMap[DEFAULT_CLASSIFICATION_COLOR_ID];
+            const expectedColor = tinycon;
+
+            expect(getClassificationTinyconColor()).toEqual(expectedColor);
+        });
+
+        test('should return default tinycon color when colorID property is missing', () => {
+            const { tinycon } = classificationColorsMap[DEFAULT_CLASSIFICATION_COLOR_ID];
+            const expectedColor = tinycon;
+
+            expect(getClassificationTinyconColor({})).toEqual(expectedColor);
         });
     });
 });

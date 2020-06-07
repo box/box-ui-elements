@@ -139,17 +139,20 @@ export const FIELD_APP: 'app' = 'app';
 export const FIELD_OCCURRED_AT: 'occurred_at' = 'occurred_at';
 export const FIELD_RENDERED_TEXT: 'rendered_text' = 'rendered_text';
 export const FIELD_RETENTION: 'retention' = 'retention';
+export const FIELD_UPLOADER_DISPLAY_NAME: 'uploader_display_name' = 'uploader_display_name';
 
 /* ----------------------- Permissions --------------------------- */
+export const PERMISSION_CAN_COMMENT = 'can_comment';
+export const PERMISSION_CAN_CREATE_ANNOTATIONS = 'can_create_annotations';
+export const PERMISSION_CAN_DELETE = 'can_delete';
+export const PERMISSION_CAN_DOWNLOAD = 'can_download';
+export const PERMISSION_CAN_EDIT = 'can_edit';
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
 export const PERMISSION_CAN_RENAME = 'can_rename';
-export const PERMISSION_CAN_DOWNLOAD = 'can_download';
-export const PERMISSION_CAN_DELETE = 'can_delete';
-export const PERMISSION_CAN_UPLOAD = 'can_upload';
-export const PERMISSION_CAN_SHARE = 'can_share';
 export const PERMISSION_CAN_SET_SHARE_ACCESS = 'can_set_share_access';
-export const PERMISSION_CAN_COMMENT = 'can_comment';
-export const PERMISSION_CAN_EDIT = 'can_edit';
+export const PERMISSION_CAN_SHARE = 'can_share';
+export const PERMISSION_CAN_UPLOAD = 'can_upload';
+export const PERMISSION_CAN_VIEW_ANNOTATIONS = 'can_view_annotations';
 
 /* ------------- Delimiters for bread crumbs ---------------- */
 export const DELIMITER_SLASH: 'slash' = 'slash';
@@ -212,6 +215,8 @@ export const ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED = 'child_folder_failed_upload
 export const ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED = 'storage_limit_exceeded';
 export const ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED = 'file_size_limit_exceeded';
 export const ERROR_CODE_UPLOAD_PENDING_APP_FOLDER_SIZE_LIMIT = 'pending_app_folder_size_limit';
+export const ERROR_CODE_FETCH_ANNOTATION = 'fetch_annotation_error';
+export const ERROR_CODE_FETCH_ANNOTATIONS = 'fetch_annotations_error';
 export const ERROR_CODE_FETCH_FILE = 'fetch_file_error';
 export const ERROR_CODE_FETCH_FILE_DUE_TO_POLICY = 'forbidden_by_policy';
 export const ERROR_CODE_FETCH_FOLDER = 'fetch_folder_error';
@@ -231,6 +236,7 @@ export const ERROR_CODE_FETCH_ACCESS_STATS = 'fetch_access_stats_error';
 export const ERROR_CODE_FETCH_SKILLS = 'fetch_skills_error';
 export const ERROR_CODE_FETCH_RECENTS = 'fetch_recents_error';
 export const ERROR_CODE_EXECUTE_INTEGRATION = 'execute_integrations_error';
+export const ERROR_CODE_CREATE_ANNOTATION = 'create_annotation_error';
 export const ERROR_CODE_CREATE_COMMENT = 'create_comment_error';
 export const ERROR_CODE_CREATE_TASK = 'create_task_error';
 export const ERROR_CODE_CREATE_TASK_LINK = 'create_task_link_error';
@@ -239,6 +245,7 @@ export const ERROR_CODE_CREATE_TASK_COLLABORATOR = 'create_task_collaborator_err
 export const ERROR_CODE_CREATE_FOLDER = 'create_folder_error';
 export const ERROR_CODE_CREATE_METADATA = 'create_metadata_error';
 export const ERROR_CODE_DELETE_APP_ACTIVITY = 'delete_app_activity_error';
+export const ERROR_CODE_DELETE_ANNOTATION = 'delete_annotation_error';
 export const ERROR_CODE_DELETE_COMMENT = 'delete_comment_error';
 export const ERROR_CODE_DELETE_TASK = 'delete_task_error';
 export const ERROR_CODE_DELETE_TASK_ASSIGNMENT = 'delete_task_assignment_error';
@@ -329,9 +336,9 @@ export const X_REP_HINT_JPG_DIMENSIONS_DEFAULT: '1024x1024' = '1024x1024';
 // available dimensions for PNG: "1024x1024", "2048x2048"
 export const X_REP_HINT_PNG_DIMENSIONS_DEFAULT: '1024x1024' = '1024x1024';
 
-// if unable to fetch jpg thumbnail, grab png rep of first page. Certain file types do
-// not have a thumbnail rep but do have a first page rep.
-export const X_REP_HINT_HEADER_DIMENSIONS_DEFAULT = `[jpg?dimensions=${X_REP_HINT_JPG_DIMENSIONS_DEFAULT}&paged=false,png?dimensions=${X_REP_HINT_PNG_DIMENSIONS_DEFAULT}]`;
+// If unable to fetch jpg thumbnail, grab png rep of first page. Certain file types do not have a thumbnail rep but do have a first page rep.
+// Get the PDF rep as well, which ensures that the Preview SDK loads linearized reps for customers with PDF optimization enabled.
+export const X_REP_HINT_HEADER_DIMENSIONS_DEFAULT = `[jpg?dimensions=${X_REP_HINT_JPG_DIMENSIONS_DEFAULT}&paged=false,png?dimensions=${X_REP_HINT_PNG_DIMENSIONS_DEFAULT}][pdf]`;
 
 /* ------------------ Representations Response ---------- */
 export const REPRESENTATIONS_RESPONSE_ERROR: 'error' = 'error';
@@ -380,6 +387,7 @@ export const VERSION_RETENTION_INDEFINITE: 'indefinite' = 'indefinite';
 
 /* ------------------ Placeholder Feed Items ------------------------- */
 export const PLACEHOLDER_USER = { type: 'user', id: '2', name: '' };
+export const FILE_REQUEST_NAME = 'File Request';
 
 /* ------------------ Open With ------------------------- */
 export const APP_INTEGRATION: 'app_integration' = 'app_integration';

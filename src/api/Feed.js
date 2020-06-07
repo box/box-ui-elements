@@ -5,13 +5,13 @@
  */
 import uniqueId from 'lodash/uniqueId';
 import noop from 'lodash/noop';
-import flatten from 'lodash/flatten';
 import type { MessageDescriptor } from 'react-intl';
 import { getBadItemError, getBadUserError, isUserCorrectableError } from '../utils/error';
 import commonMessages from '../elements/common/messages';
 import messages from './messages';
 import { sortFeedItems } from '../utils/sorter';
 import Base from './Base';
+import AnnotationsAPI from './Annotations';
 import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';
 import TasksNewAPI from './tasks/TasksNew';
@@ -54,7 +54,18 @@ import type {
     FileVersions,
     User,
 } from '../common/types/core';
-import type { Comment, Comments, Tasks, Task, FeedItem, FeedItems, AppActivityItems } from '../common/types/feed';
+import type {
+    Annotation,
+    AnnotationPermission,
+    Annotations,
+    AppActivityItems,
+    Comment,
+    Comments,
+    FeedItem,
+    FeedItems,
+    Task,
+    Tasks,
+} from '../common/types/feed';
 
 const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
 const TASK = 'task';
@@ -67,6 +78,11 @@ type FeedItemsCache = {
 type ErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
 class Feed extends Base {
+    /**
+     * @property {AnnotationsAPI}
+     */
+    annotationsAPI: AnnotationsAPI;
+
     /**
      * @property {VersionsAPI}
      */
@@ -112,6 +128,67 @@ class Feed extends Base {
         this.taskCollaboratorsAPI = [];
         this.taskLinksAPI = [];
     }
+
+    /**
+     * Creates pending card on create_start action, then updates card on next call
+     * @param {BoxItem} file - The file to which the annotation is assigned
+     * @param {Object} currentUser - the user who performed the action
+     * @param {Annotation} annotation - the current annotation to be created
+     * @param {string} id - unique id for the incoming annotation
+     * @param {boolean} isPending - indicates the current creation process of the annotation
+     */
+    addAnnotation(file: BoxItem, currentUser: User, annotation: Annotation, id: string, isPending: boolean): void {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+
+        // Add the pending interstitial card
+        if (isPending) {
+            const newAnnotation = {
+                ...annotation,
+                created_by: currentUser,
+                id,
+                type: 'annotation',
+            };
+
+            this.addPendingItem(this.file.id, currentUser, newAnnotation);
+
+            return;
+        }
+        // Create action has completed, so update the existing pending item
+        this.updateFeedItem({ ...annotation, isPending: false }, id);
+    }
+
+    deleteAnnotation = (
+        file: BoxItem,
+        annotationId: string,
+        permissions: AnnotationPermission,
+        successCallBack: Function,
+        errorCallback: Function,
+    ): void => {
+        this.annotationsAPI = new AnnotationsAPI(this.options);
+
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+
+        this.updateFeedItem({ isPending: true }, annotationId);
+        this.annotationsAPI.deleteAnnotation(
+            this.file.id,
+            annotationId,
+            permissions,
+            this.deleteFeedItem.bind(this, annotationId, successCallBack),
+            (error: ElementsXhrError, code: string) => {
+                // Reusing comment error handler since annotations are treated as comments to user
+                this.deleteCommentErrorCallback(error, code, annotationId);
+            },
+        );
+    };
 
     /**
      * Creates a key for the cache
@@ -166,7 +243,10 @@ class Feed extends Base {
         successCallback: Function,
         errorCallback: (feedItems: FeedItems) => void,
         onError: ErrorCallback,
-        { shouldShowAppActivity = false }: { shouldShowAppActivity?: boolean } = {},
+        {
+            shouldShowAnnotations = false,
+            shouldShowAppActivity = false,
+        }: { shouldShowAnnotations?: boolean, shouldShowAppActivity?: boolean } = {},
     ): void {
         const { id, permissions = {} } = file;
         const cachedItems = this.getCachedItems(id);
@@ -186,26 +266,45 @@ class Feed extends Base {
         this.file = file;
         this.hasError = false;
         this.errorCallback = onError;
+        const annotationsPromise = shouldShowAnnotations ? this.fetchAnnotations(permissions) : Promise.resolve();
         const versionsPromise = this.fetchVersions();
         const currentVersionPromise = this.fetchCurrentVersion();
         const commentsPromise = this.fetchComments(permissions);
         const tasksPromise = this.fetchTasksNew();
         const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
 
-        Promise.all([versionsPromise, currentVersionPromise, commentsPromise, tasksPromise, appActivityPromise]).then(
-            ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
-                const versionsWithCurrent = this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file);
-                const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
-                if (!this.isDestroyed()) {
-                    this.setCachedItems(id, sortedFeedItems);
-                    if (this.hasError) {
-                        errorCallback(sortedFeedItems);
-                    } else {
-                        successCallback(sortedFeedItems);
-                    }
+        Promise.all([
+            versionsPromise,
+            currentVersionPromise,
+            commentsPromise,
+            tasksPromise,
+            appActivityPromise,
+            annotationsPromise,
+        ]).then(([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
+            const versionsWithCurrent = this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file);
+            const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
+            if (!this.isDestroyed()) {
+                this.setCachedItems(id, sortedFeedItems);
+                if (this.hasError) {
+                    errorCallback(sortedFeedItems);
+                } else {
+                    successCallback(sortedFeedItems);
                 }
-            },
-        );
+            }
+        });
+    }
+
+    fetchAnnotations(permissions: BoxItemPermission): Promise<?Annotations> {
+        this.annotationsAPI = new AnnotationsAPI(this.options);
+        return new Promise(resolve => {
+            this.annotationsAPI.getAnnotations(
+                this.file.id,
+                undefined,
+                permissions,
+                resolve,
+                this.fetchFeedItemErrorCallback.bind(this, resolve),
+            );
+        });
     }
 
     /**
@@ -397,9 +496,6 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        let updatedWithoutError = true;
-        let removeAssigneeError;
-
         this.file = file;
         this.errorCallback = errorCallback;
         this.tasksNewAPI = new TasksNewAPI(this.options);
@@ -434,28 +530,13 @@ class Feed extends Base {
                 return;
             }
 
-            await Promise.all(
-                task.addedAssignees.map(assignee =>
-                    assignee.item && assignee.item.type === 'group'
-                        ? this.createTaskCollaboratorsforGroup(file, task, assignee)
-                        : this.createTaskCollaborator(file, task, assignee),
-                ),
-            );
-
             await new Promise((resolve, reject) => {
-                this.tasksNewAPI.updateTask({
+                this.tasksNewAPI.updateTaskWithDeps({
                     file,
                     task,
                     successCallback: resolve,
                     errorCallback: reject,
                 });
-            });
-
-            await Promise.all(
-                task.removedAssignees.map(assignee => this.deleteTaskCollaborator(file, task, assignee)),
-            ).catch((e: ElementsXhrError) => {
-                updatedWithoutError = false;
-                removeAssigneeError = e;
             });
 
             await new Promise((resolve, reject) => {
@@ -471,10 +552,6 @@ class Feed extends Base {
                             task.id,
                         );
 
-                        if (!updatedWithoutError) {
-                            this.feedErrorCallback(false, removeAssigneeError, ERROR_CODE_UPDATE_TASK);
-                        }
-
                         resolve();
                     },
                     errorCallback: (e: ElementsXhrError) => {
@@ -486,7 +563,7 @@ class Feed extends Base {
             });
 
             // everything succeeded, so call the passed in success callback
-            if (!this.isDestroyed() && updatedWithoutError) {
+            if (!this.isDestroyed()) {
                 successCallback();
             }
         } catch (e) {
@@ -673,19 +750,30 @@ class Feed extends Base {
                 }
 
                 this.tasksNewAPI = new TasksNewAPI(this.options);
-                this.tasksNewAPI.createTask({
+                this.tasksNewAPI.createTaskWithDeps({
                     file,
                     task: taskPayload,
-                    successCallback: (taskData: Task) => {
+                    assignees,
+                    successCallback: (taskWithDepsData: any) => {
                         this.addPendingItem(this.file.id, currentUser, pendingTask);
-                        this.createTaskNewSuccessCallback(
-                            file,
+                        this.updateFeedItem(
+                            {
+                                ...taskWithDepsData,
+                                task_links: {
+                                    entries: taskWithDepsData.task_links,
+                                    next_marker: null,
+                                    limit: 1,
+                                },
+                                assigned_to: {
+                                    entries: taskWithDepsData.assigned_to,
+                                    next_marker: null,
+                                    limit: taskWithDepsData.assigned_to.length,
+                                },
+                                isPending: false,
+                            },
                             uuid,
-                            taskData,
-                            assignees,
-                            successCallback,
-                            errorCallback,
                         );
+                        successCallback(taskWithDepsData);
                     },
                     errorCallback: (e: ElementsXhrError, code: string) => {
                         this.feedErrorCallback(false, e, code);
@@ -696,73 +784,6 @@ class Feed extends Base {
                 this.feedErrorCallback(false, error, ERROR_CODE_CREATE_TASK);
             });
     };
-
-    /**
-     * Callback for successful creation of a Task. Creates a task assignment
-     *
-     * @param {BoxItem} file - The file to which the task is assigned
-     * @param {string} id - ID of the feed item to update with the new task data
-     * @param {Task} task - API returned task
-     * @param {Array} assignees - List of assignees
-     * @param {Function} successCallback - the function which will be called on success
-     * @param {Function} errorCallback - the function which will be called on error     *
-     * @return {void}
-     */
-    async createTaskNewSuccessCallback(
-        file: BoxItem,
-        id: string,
-        task: Task,
-        assignees: SelectorItems<UserMini | GroupMini>,
-        successCallback: Function,
-        errorCallback: ErrorCallback,
-    ) {
-        if (!file) {
-            throw getBadItemError();
-        }
-        this.errorCallback = errorCallback;
-
-        try {
-            const taskLink = await this.createTaskLink(file, task);
-
-            /* TODO: change block to process users in parallel and process groups sequentially
-            -check if length of users + groups = assignees (if not throw an error)
-            -filter out the users from assignees
-            -use the result of filter to store the task collaborators in parallel
-            -filter out the groups from assignees
-            -use result of filter to process each group sequentially */
-            const taskAssignments: Array<TaskCollabAssignee> = flatten<TaskCollabAssignee, TaskCollabAssignee>(
-                await Promise.all(
-                    assignees.map((assignee: SelectorItem<UserMini | GroupMini>): Promise<
-                        Array<TaskCollabAssignee> | TaskCollabAssignee,
-                    > =>
-                        assignee.item && assignee.item.type === 'group'
-                            ? this.createTaskCollaboratorsforGroup(file, task, assignee)
-                            : this.createTaskCollaborator(file, task, assignee),
-                    ),
-                ),
-            );
-            this.updateFeedItem(
-                {
-                    ...task,
-                    task_links: {
-                        entries: [taskLink],
-                        next_marker: null,
-                        limit: 1,
-                    },
-                    assigned_to: {
-                        entries: taskAssignments,
-                        next_marker: null,
-                        limit: taskAssignments.length,
-                    },
-                    isPending: false,
-                },
-                id,
-            );
-            successCallback(task);
-        } catch (err) {
-            this.feedErrorCallback(false, err, ERROR_CODE_CREATE_TASK);
-        }
-    }
 
     /**
      * Creates a task group via the API.
@@ -1298,6 +1319,11 @@ class Feed extends Base {
      */
     destroy() {
         super.destroy();
+
+        if (this.annotationsAPI) {
+            this.annotationsAPI.destroy();
+            delete this.annotationsAPI;
+        }
 
         if (this.commentsAPI) {
             this.commentsAPI.destroy();

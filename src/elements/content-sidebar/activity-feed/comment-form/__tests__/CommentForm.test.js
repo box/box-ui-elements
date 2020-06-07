@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
-import { EditorState, convertFromRaw } from 'draft-js';
 
 import Button from '../../../../../components/button/Button';
 import Media from '../../../../../components/media';
@@ -103,117 +102,6 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
         expect(createCommentSpy).toHaveBeenCalledTimes(expectedCallCount);
     });
 
-    describe('getFormattedCommentText()', () => {
-        const rawContentNoEntities = {
-            blocks: [
-                {
-                    text: 'Hey there',
-                    type: 'unstyled',
-                    entityRanges: [],
-                },
-            ],
-            entityMap: {
-                first: {
-                    type: 'MENTION',
-                    mutability: 'IMMUTABLE',
-                },
-            },
-        };
-
-        const rawContentOneEntity = {
-            blocks: [
-                {
-                    text: 'Hey @Becky',
-                    type: 'unstyled',
-                    entityRanges: [{ offset: 4, length: 6, key: 'first' }],
-                },
-            ],
-            entityMap: {
-                first: {
-                    type: 'MENTION',
-                    mutability: 'IMMUTABLE',
-                    data: { id: 1 },
-                },
-            },
-        };
-
-        const rawContentTwoEntities = {
-            blocks: [
-                {
-                    text: 'I hung out with @Becky and @Shania',
-                    type: 'unstyled',
-                    entityRanges: [
-                        { offset: 16, length: 6, key: 'first' },
-                        { offset: 27, length: 7, key: 'second' },
-                    ],
-                },
-            ],
-            entityMap: {
-                first: {
-                    type: 'MENTION',
-                    mutability: 'IMMUTABLE',
-                    data: { id: 1 },
-                },
-                second: {
-                    type: 'MENTION',
-                    mutability: 'IMMUTABLE',
-                    data: { id: 2 },
-                },
-            },
-        };
-
-        const rawContentTwoEntitiesOneLineBreak = {
-            blocks: [
-                {
-                    text: 'I hung out with @Becky and',
-                    type: 'unstyled',
-                    entityRanges: [{ offset: 16, length: 6, key: 'first' }],
-                },
-                {
-                    text: '@Shania yesterday',
-                    type: 'unstyled',
-                    entityRanges: [{ offset: 0, length: 7, key: 'second' }],
-                },
-            ],
-            entityMap: {
-                first: {
-                    type: 'MENTION',
-                    mutability: 'IMMUTABLE',
-                    data: { id: 1 },
-                },
-                second: {
-                    type: 'MENTION',
-                    mutability: 'IMMUTABLE',
-                    data: { id: 2 },
-                },
-            },
-        };
-
-        // Test cases in order
-        // no entities in the editor
-        // one entity in the editor
-        // two entities in the editor
-        // two entities and a linebreak in the editor
-        test.each`
-            rawContent                           | expected
-            ${rawContentNoEntities}              | ${{ text: 'Hey there', hasMention: false }}
-            ${rawContentOneEntity}               | ${{ text: 'Hey @[1:Becky]', hasMention: true }}
-            ${rawContentTwoEntities}             | ${{ text: 'I hung out with @[1:Becky] and @[2:Shania]', hasMention: true }}
-            ${rawContentTwoEntitiesOneLineBreak} | ${{ text: 'I hung out with @[1:Becky] and\n@[2:Shania] yesterday', hasMention: true }}
-        `('should return the correct result', ({ rawContent, expected }) => {
-            const blocks = convertFromRaw(rawContent);
-
-            const dummyEditorState = EditorState.createWithContent(blocks);
-
-            const wrapper = render();
-            const instance = wrapper.instance();
-            wrapper.setState({ commentEditorState: dummyEditorState });
-
-            const result = instance.getFormattedCommentText();
-            expect(result).toEqual(expected);
-        });
-    });
-
     test('should have editor state reflect tagged_message prop when not empty', () => {
         const wrapper = render({ tagged_message: 'hey there' });
 
@@ -257,5 +145,11 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
                 .at(0)
                 .prop('onMention'),
         ).toEqual(null);
+    });
+
+    test('should not show mention tip is showTip is false', () => {
+        const wrapper = render({ showTip: false });
+
+        expect(wrapper.find('.bcs-CommentForm-tip').length).toEqual(0);
     });
 });

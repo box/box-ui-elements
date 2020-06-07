@@ -1,4 +1,5 @@
 import Cache from '../../utils/Cache';
+import AnnotationsAPI from '../Annotations';
 import APIFactory from '../APIFactory';
 import ChunkedUploadAPI from '../uploads/MultiputUpload';
 import PlainUploadAPI from '../uploads/PlainUpload';
@@ -50,6 +51,7 @@ describe('api/APIFactory', () => {
             factory.taskCollaboratorsAPI = { destroy: jest.fn() };
             factory.boxEditAPI = { destroy: jest.fn() };
             factory.metadataQueryAPI = { destroy: jest.fn() };
+            factory.annotationsAPI = { destroy: jest.fn() };
             factory.destroy();
             expect(factory.fileAPI).toBeUndefined();
             expect(factory.folderAPI).toBeUndefined();
@@ -65,6 +67,7 @@ describe('api/APIFactory', () => {
             expect(factory.tasksNewAPI).toBeUndefined();
             expect(factory.usersAPI).toBeUndefined();
             expect(factory.metadataQueryAPI).toBeUndefined();
+            expect(factory.annotationsAPI).toBeUndefined();
         });
         test('should not destroy cache by default', () => {
             const { cache } = factory.options;
@@ -405,6 +408,28 @@ describe('api/APIFactory', () => {
             expect(metadataQueryAPI.options.cache).toBeInstanceOf(Cache);
             expect(metadataQueryAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
             expect(metadataQueryAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getAnnotationsAPI', () => {
+        test('should call destroy and return annotations API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const annotationsAPI = factory.getAnnotationsAPI(true);
+            expect(spy).toBeCalled();
+            expect(annotationsAPI).toBeInstanceOf(AnnotationsAPI);
+            expect(annotationsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(annotationsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(annotationsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return annotations API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const annotationsAPI = factory.getAnnotationsAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(annotationsAPI).toBeInstanceOf(AnnotationsAPI);
+            expect(annotationsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(annotationsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(annotationsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 });

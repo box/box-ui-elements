@@ -4,6 +4,7 @@ import * as sorter from '../../utils/sorter';
 import * as error from '../../utils/error';
 import { IS_ERROR_DISPLAYED, TASK_NEW_NOT_STARTED, TASK_MAX_GROUP_ASSIGNEES } from '../../constants';
 import Feed from '../Feed';
+import { annotation as mockAnnotation } from '../../__mocks__/annotations';
 
 const mockTask = {
     created_by: {
@@ -98,17 +99,23 @@ const versionsWithCurrent = {
     entries: [mockCurrentVersion, mockFirstVersion, deleted_version],
 };
 
+const annotations = {
+    entries: [mockAnnotation],
+    limit: 1000,
+    next_marker: null,
+};
+
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
-const mockCreateTask = jest.fn().mockImplementation(({ successCallback }) => {
+const mockCreateTaskWithDeps = jest.fn().mockImplementation(({ successCallback }) => {
     successCallback();
 });
 
 jest.mock('../tasks/TasksNew', () => {
     const task = mockTask;
     return jest.fn().mockImplementation(() => ({
-        createTask: mockCreateTask,
-        updateTask: jest.fn().mockImplementation(({ successCallback }) => {
+        createTaskWithDeps: mockCreateTaskWithDeps,
+        updateTaskWithDeps: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
         }),
         deleteTask: jest.fn().mockImplementation(({ successCallback }) => {
@@ -237,6 +244,15 @@ jest.mock('../Versions', () => {
     }));
 });
 
+jest.mock('../Annotations', () =>
+    jest.fn().mockImplementation(() => ({
+        deleteAnnotation: jest.fn().mockImplementation((file, id, permissions, successCallback) => {
+            successCallback();
+        }),
+        getAnnotations: jest.fn(),
+    })),
+);
+
 const MOCK_APP_ACTIVITY_ITEM = {
     activity_template: {
         id: '1',
@@ -304,6 +320,8 @@ describe('api/Feed', () => {
         id: '12345',
         permissions: {
             can_comment: true,
+            can_create_annotations: true,
+            can_view_annotations: true,
         },
         modified_at: 1234567891,
         file_version: {
@@ -380,6 +398,7 @@ describe('api/Feed', () => {
             ...tasks.entries,
             ...comments.entries,
             ...appActivities.entries,
+            ...annotations.entries,
         ];
         let successCb;
         let errorCb;
@@ -390,6 +409,7 @@ describe('api/Feed', () => {
             feed.fetchTasksNew = jest.fn().mockResolvedValue(tasks);
             feed.fetchComments = jest.fn().mockResolvedValue(comments);
             feed.fetchAppActivity = jest.fn().mockReturnValue(appActivities);
+            feed.fetchAnnotations = jest.fn().mockReturnValue(annotations);
             feed.setCachedItems = jest.fn();
             feed.versionsAPI = {
                 getVersion: jest.fn().mockReturnValue(versions),
@@ -406,10 +426,19 @@ describe('api/Feed', () => {
         });
 
         test('should get feed items, sort, save to cache, and call the success callback', done => {
-            feed.feedItems(file, false, successCb, errorCb, jest.fn(), { shouldShowAppActivity: true });
+            feed.feedItems(file, false, successCb, errorCb, jest.fn(), {
+                shouldShowAnnotations: true,
+                shouldShowAppActivity: true,
+            });
             setImmediate(() => {
                 expect(feed.versionsAPI.addCurrentVersion).toHaveBeenCalledWith(mockCurrentVersion, versions, file);
-                expect(sorter.sortFeedItems).toHaveBeenCalledWith(versionsWithCurrent, comments, tasks, appActivities);
+                expect(sorter.sortFeedItems).toHaveBeenCalledWith(
+                    versionsWithCurrent,
+                    comments,
+                    tasks,
+                    appActivities,
+                    annotations,
+                );
                 expect(feed.setCachedItems).toHaveBeenCalledWith(file.id, sortedItems);
                 expect(successCb).toHaveBeenCalledWith(sortedItems);
                 done();
@@ -441,6 +470,22 @@ describe('api/Feed', () => {
             feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowAppActivity: false });
             setImmediate(() => {
                 expect(feed.fetchAppActivity).not.toHaveBeenCalled();
+                done();
+            });
+        });
+
+        test('should use the annotations api if shouldShowannotations is true', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowAnnotations: true });
+            setImmediate(() => {
+                expect(feed.fetchAnnotations).toHaveBeenCalled();
+                done();
+            });
+        });
+
+        test('should not use the annotations api if shouldShowannotations is false', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowAnnotations: false });
+            setImmediate(() => {
+                expect(feed.fetchAnnotations).not.toHaveBeenCalled();
                 done();
             });
         });
@@ -480,6 +525,19 @@ describe('api/Feed', () => {
                 expect(successCb).toHaveBeenCalledTimes(2);
                 done();
             });
+        });
+    });
+
+    describe('fetchAnnotations()', () => {
+        beforeEach(() => {
+            feed.file = file;
+            feed.fetchFeedItemErrorCallback = jest.fn();
+        });
+
+        test('should return a promise and call the annotations api', () => {
+            const annotationItems = feed.fetchAnnotations();
+            expect(annotationItems instanceof Promise).toBeTruthy();
+            expect(feed.annotationsAPI.getAnnotations).toBeCalled();
         });
     });
 
@@ -627,6 +685,7 @@ describe('api/Feed', () => {
             await new Promise(r => setTimeout(r, 0));
 
             expect(mockGetGroupCount).toBeCalled();
+            expect(mockCreateTaskWithDeps).toBeCalled();
         });
 
         test('should call error handling when group size exceeds limit', async () => {
@@ -649,67 +708,12 @@ describe('api/Feed', () => {
 
             expect(feed.file.id).toBe(file.id);
             expect(mockGetGroupCount).toBeCalled();
-            expect(mockCreateTask).not.toBeCalled();
+            expect(mockCreateTaskWithDeps).not.toBeCalled();
             expect(feed.feedErrorCallback).toBeCalledWith(
                 hasError,
                 { code: 'group_exceeds_limit', type: 'warning' },
                 code,
             );
-        });
-    });
-
-    describe('createTaskNewSuccessCallback()', () => {
-        beforeEach(() => {
-            feed.updateFeedItem = jest.fn();
-            feed.feedErrorCallback = jest.fn();
-        });
-
-        test('should flatten result of group assignments into task collaborators', async () => {
-            const mockSuccessCallback = jest.fn();
-
-            const task = {
-                id: '1',
-                description: 'updated description',
-                assignees: [
-                    {
-                        id: '3086276240',
-                        type: 'user',
-                        name: 'Test User',
-                        login: 'testuser@foo.com',
-                        item: {
-                            id: '3086276240',
-                            name: 'Test User',
-                            login: 'testuser@foo.com',
-                            type: 'user',
-                        },
-                    },
-                    {
-                        id: '89321113453',
-                        name: 'Test Group',
-                        login: null,
-                        type: 'group',
-                        item: {
-                            id: '89321113453',
-                            name: 'Test Group',
-                            login: null,
-                            type: 'group',
-                        },
-                    },
-                ],
-            };
-
-            feed.createTaskNewSuccessCallback(file, 'kj', task, task.assignees, mockSuccessCallback, jest.fn());
-
-            await new Promise(r => setTimeout(r, 0));
-
-            expect(feed.taskCollaboratorsAPI.pop().createTaskCollaboratorsforGroup).toBeCalled();
-            expect(feed.updateFeedItem).toBeCalled();
-            expect(mockSuccessCallback).toBeCalledWith(
-                expect.objectContaining({
-                    assignees: expect.arrayContaining([expect.objectContaining({ id: '89321113453' })]),
-                }),
-            );
-            /* TODO: add mock implementation for createTaskCollaboratorsforGroup and check that result is flattened */
         });
     });
 
@@ -795,93 +799,7 @@ describe('api/Feed', () => {
                 { code: 'group_exceeds_limit', type: 'warning' },
                 code,
             );
-            expect(feed.createTaskCollaboratorsforGroup).not.toBeCalled();
-            expect(feed.createTaskCollaborator).not.toBeCalled();
-        });
-
-        test('should call the error handling when unable to create new task collaborator', async () => {
-            const mockErrorCallback = jest.fn();
-            const mockSuccessCallback = jest.fn();
-
-            feed.createTaskCollaborator = jest.fn().mockRejectedValue(new Error('forced rejection'));
-            feed.deleteTaskCollaborator = jest.fn().mockResolvedValue();
-
-            const task = {
-                id: '1',
-                description: 'updated description',
-                addedAssignees: [
-                    {
-                        type: 'user',
-                        id: '3086276240',
-                        name: 'Test User',
-                        login: 'testuser@foo.com',
-                    },
-                ],
-                removedAssignees: [
-                    {
-                        type: 'task_collaborator',
-                        id: '19283765',
-                        target: { type: 'user', id: '19283765', name: 'remove Test User', login: 'testuser@foo.com' },
-                        role: 'ASSIGNEE',
-                        permissions: {
-                            can_delete: true,
-                            can_update: true,
-                        },
-                        status: 'incomplete',
-                    },
-                ],
-            };
-
-            feed.updateTaskNew(file, task, mockSuccessCallback, mockErrorCallback);
-
-            await new Promise(r => setTimeout(r, 0));
-
-            expect(feed.tasksNewAPI.updateTask).not.toBeCalled();
-            expect(feed.tasksNewAPI.getTask).not.toBeCalled();
-            expect(feed.deleteTaskCollaborator).not.toBeCalled();
-            expect(feed.updateFeedItem).toBeCalled();
-            expect(mockErrorCallback).toBeCalled();
-        });
-
-        test('should call the error handling when unable to delete existing task collaborator', async () => {
-            const mockErrorCallback = jest.fn();
-            const mockSuccessCallback = jest.fn();
-            feed.deleteTaskCollaborator = jest.fn().mockRejectedValue(new Error('forced rejection'));
-
-            const task = {
-                id: '1',
-                description: 'updated description',
-                addedAssignees: [
-                    {
-                        type: 'user',
-                        id: '3086276240',
-                        name: 'Test User',
-                        login: 'testuser@foo.com',
-                    },
-                ],
-                removedAssignees: [
-                    {
-                        type: 'task_collaborator',
-                        id: '19283765',
-                        target: { type: 'user', id: '19283765', name: 'remove Test User', login: 'testuser@foo.com' },
-                        role: 'ASSIGNEE',
-                        permissions: {
-                            can_delete: true,
-                            can_update: true,
-                        },
-                        status: 'incomplete',
-                    },
-                ],
-            };
-
-            feed.updateTaskNew(file, task, mockSuccessCallback, mockErrorCallback);
-
-            await new Promise(r => setTimeout(r, 0));
-
-            expect(feed.tasksNewAPI.updateTask).toBeCalled();
-            expect(feed.tasksNewAPI.getTask).toBeCalled();
-            expect(feed.updateFeedItem).toBeCalled();
-            expect(mockErrorCallback).toBeCalled();
+            expect(feed.tasksNewAPI.updateTaskWithDeps).not.toBeCalled();
         });
 
         test('should call the new task api and if successful, the success callback', async () => {
@@ -898,7 +816,7 @@ describe('api/Feed', () => {
             // push a new promise to trigger the promises in updateTaskNew
             await new Promise(r => setTimeout(r, 0));
 
-            expect(feed.tasksNewAPI.updateTask).toBeCalled();
+            expect(feed.tasksNewAPI.updateTaskWithDeps).toBeCalled();
             expect(feed.tasksNewAPI.getTask).toBeCalled();
             expect(feed.updateFeedItem).toBeCalledTimes(2);
             expect(successCallback).toBeCalled();
@@ -942,7 +860,7 @@ describe('api/Feed', () => {
 
             await new Promise(r => setTimeout(r, 0));
 
-            expect(feed.tasksNewAPI.updateTask).toBeCalled();
+            expect(feed.tasksNewAPI.updateTaskWithDeps).toBeCalled();
             expect(feed.updateFeedItem).toBeCalled();
             expect(successCallback).toBeCalled();
         });
@@ -1306,15 +1224,20 @@ describe('api/Feed', () => {
     });
 
     describe('destroy()', () => {
+        let annotationFn;
         let commentFn;
         let versionFn;
         let taskFn;
 
         beforeEach(() => {
+            annotationFn = jest.fn();
             commentFn = jest.fn();
             versionFn = jest.fn();
             taskFn = jest.fn();
 
+            feed.annotationsAPI = {
+                destroy: annotationFn,
+            };
             feed.tasksNewAPI = {
                 destroy: taskFn,
             };
@@ -1331,6 +1254,7 @@ describe('api/Feed', () => {
             expect(versionFn).toBeCalled();
             expect(commentFn).toBeCalled();
             expect(taskFn).toBeCalled();
+            expect(annotationFn).toBeCalled();
         });
     });
 
@@ -1360,6 +1284,81 @@ describe('api/Feed', () => {
             jest.spyOn(error, 'isUserCorrectableError').mockReturnValue(shouldDisplayError);
             feed.fetchFeedItemErrorCallback(errorCb, e, code);
             expect(feed.feedErrorCallback).toHaveBeenCalledWith(shouldDisplayError, e, code);
+        });
+    });
+
+    describe('addAnnotation()', () => {
+        beforeEach(() => {
+            feed.addPendingItem = jest.fn();
+            feed.updateFeedItem = jest.fn();
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        test('should throw if no file id', () => {
+            expect(() => feed.addAnnotation({})).toThrow('Bad box item!');
+        });
+
+        test('should add pending feedItem item if annotation event isPending', () => {
+            const expectedAnnotation = {
+                created_by: user,
+                id: '123',
+                type: 'annotation',
+            };
+
+            feed.addAnnotation(file, user, {}, '123', true);
+            expect(feed.addPendingItem).toBeCalledWith(file.id, user, expectedAnnotation);
+            expect(feed.updateFeedItem).not.toBeCalled();
+        });
+
+        test('should update feedItem if annotation event is not pending', () => {
+            const expectedAnnotation = {
+                isPending: false,
+            };
+
+            feed.addAnnotation(file, user, {}, '123', false);
+
+            expect(feed.updateFeedItem).toBeCalledWith(expectedAnnotation, '123');
+            expect(feed.addPendingItem).not.toBeCalled();
+        });
+    });
+
+    describe('deleteAnnotation()', () => {
+        const annotationId = '123';
+        let successCallback;
+        let errorCallback;
+
+        beforeEach(() => {
+            successCallback = jest.fn();
+            errorCallback = jest.fn();
+        });
+        test('should throw if file does not have an id', () => {
+            expect(() => feed.deleteAnnotation({}, annotationId, successCallback, errorCallback)).toThrow(fileError);
+        });
+
+        test('should set error callback and file', () => {
+            feed.deleteAnnotation(file, annotationId, { can_delete: true }, jest.fn(), errorCallback);
+
+            expect(feed.errorCallback).toEqual(errorCallback);
+            expect(feed.file).toEqual(file);
+        });
+
+        test('should updateFeedItem with to pending state', () => {
+            feed.updateFeedItem = jest.fn();
+            feed.deleteAnnotation(file, '123', successCallback, errorCallback);
+
+            expect(feed.updateFeedItem).toBeCalledWith({ isPending: true }, annotationId);
+        });
+
+        test('should call the deleteAnnotation API and call deleteFeedItem on success', () => {
+            feed.deleteFeedItem = jest.fn().mockImplementation((id, cb) => cb());
+            feed.deleteAnnotation(file, '123', { can_delete: true }, successCallback, errorCallback);
+
+            expect(feed.annotationsAPI.deleteAnnotation).toBeCalled();
+            expect(feed.deleteFeedItem).toBeCalled();
+            expect(successCallback).toBeCalled();
         });
     });
 });

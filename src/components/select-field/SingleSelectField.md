@@ -30,6 +30,94 @@ const handleChange = selectedOption => {
 />
 ```
 
+Clear Option Enabled
+
+```
+initialState = {
+    selectedValue: 'b',
+};
+
+const options = [
+    { displayText: 'Option A', value: 'a' },
+    { displayText: 'Option B', value: 'b' },
+    { displayText: 'Option C', value: 'c' },
+    { displayText: 'Option D', value: 'd' },
+    { displayText: 'Option E', value: 'e' },
+];
+
+const handleChange = selectedOption => {
+    setState({
+        selectedValue: selectedOption.value,
+    });
+};
+
+<SingleSelectField
+    onChange={ handleChange }
+    options={ options }
+    selectedValue={ state.selectedValue }
+    shouldShowClearOption={true}
+/>
+```
+
+Search Input Enabled
+
+```
+initialState = {
+    selectedValue: 'b',
+};
+
+const options = [
+    { displayText: 'Option A', value: 'a' },
+    { displayText: 'Option B', value: 'b' },
+    { displayText: 'Option C', value: 'c' },
+    { displayText: 'Option D', value: 'd' },
+    { displayText: 'Option E', value: 'e' },
+];
+
+const handleChange = selectedOption => {
+    setState({
+        selectedValue: selectedOption.value,
+    });
+};
+
+<SingleSelectField
+    onChange={ handleChange }
+    options={ options }
+    selectedValue={ state.selectedValue }
+    shouldShowSearchInput={true}
+/>
+```
+
+Search Input and Clear Option Enabled
+
+```
+initialState = {
+    selectedValue: 'b',
+};
+
+const options = [
+    { displayText: 'Option A', value: 'a' },
+    { displayText: 'Option B', value: 'b' },
+    { displayText: 'Option C', value: 'c' },
+    { displayText: 'Option D', value: 'd' },
+    { displayText: 'Option E', value: 'e' },
+];
+
+const handleChange = selectedOption => {
+    setState({
+        selectedValue: selectedOption.value,
+    });
+};
+
+<SingleSelectField
+    onChange={ handleChange }
+    options={ options }
+    selectedValue={ state.selectedValue }
+    shouldShowSearchInput={true}
+    shouldShowClearOption={true}
+/>
+```
+
 Disabled
 
 ```
@@ -81,6 +169,35 @@ const handleChange = selectedOption => {
         selectedValue={ state.selectedValue }
     />
 </Label>
+```
+
+Header Content
+
+```
+initialState = {
+    selectedValue: 'b',
+};
+
+const options = [
+    { displayText: 'Option A', value: 'a' },
+    { displayText: 'Option B', value: 'b' },
+    { displayText: 'Option C', value: 'c' },
+    { displayText: 'Option D', value: 'd' },
+    { displayText: 'Option E', value: 'e' },
+];
+
+const handleChange = selectedOption => {
+    setState({
+        selectedValue: selectedOption.value,
+    });
+};
+
+<SingleSelectField
+    onChange={ handleChange }
+    options={ options }
+    selectedValue={ state.selectedValue }
+    shouldShowClearOption={true}
+/>
 ```
 
 Invalid

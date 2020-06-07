@@ -1,9 +1,10 @@
 // @flow strict
 import type { MessageDescriptor } from 'react-intl';
-import type { User, BoxItemPermission, BoxItemVersion } from './core';
+import type { BoxItemPermission, BoxItemVersion, Reply, User } from './core';
+import type { Annotation, AnnotationPermission, Annotations } from './annotations';
 
 // Feed item types that can receive deeplinks inline in the feed
-type FocusableFeedItemType = 'task' | 'comment';
+type FocusableFeedItemType = 'task' | 'comment' | 'annotation';
 
 type BoxCommentPermission = {
     can_delete?: boolean,
@@ -15,11 +16,15 @@ type BoxTaskPermission = {
     can_update?: boolean,
 };
 
-// this is a subset of TaskNew, which imports as `any`
-type Task = {
+type BaseFeedItem = {|
     created_at: string,
     created_by: User,
     id: string,
+|};
+
+// this is a subset of TaskNew, which imports as `any`
+type Task = {
+    ...BaseFeedItem,
     permissions: BoxTaskPermission,
     type: 'task',
 };
@@ -30,9 +35,7 @@ type Tasks = {
 };
 
 type Comment = {
-    created_at: string,
-    created_by: User,
-    id: string,
+    ...BaseFeedItem,
     is_reply_comment?: boolean,
     message?: string,
     modified_at: string,
@@ -88,7 +91,7 @@ type AppActivityItems = {
     total_count: number,
 };
 
-type FeedItem = Comment | Task | BoxItemVersion | AppActivityItem;
+type FeedItem = Annotation | Comment | Task | BoxItemVersion | AppActivityItem;
 
 type FeedItems = Array<FeedItem>;
 
@@ -102,19 +105,23 @@ type ActionItemError = {
 };
 
 export type {
-    FocusableFeedItemType,
-    BoxCommentPermission,
-    Task,
-    Tasks,
-    Comment,
-    Comments,
+    ActionItemError,
     ActivityTemplateItem,
-    AppItem,
+    Annotation,
+    AnnotationPermission,
+    Annotations,
     AppActivityAPIItem,
     AppActivityAPIItems,
     AppActivityItem,
     AppActivityItems,
+    AppItem,
+    BoxCommentPermission,
+    Comment,
+    Comments,
     FeedItem,
     FeedItems,
-    ActionItemError,
+    FocusableFeedItemType,
+    Reply,
+    Task,
+    Tasks,
 };

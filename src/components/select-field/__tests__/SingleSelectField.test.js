@@ -1,7 +1,8 @@
 import React from 'react';
 import sinon from 'sinon';
 
-import SingleSelectField from '../SingleSelectField';
+import { SingleSelectFieldBase } from '../SingleSelectField';
+import CLEAR from '../constants';
 
 const sandbox = sinon.sandbox.create();
 
@@ -21,7 +22,12 @@ describe('components/select-field/SingleSelectField', () => {
     describe('render()', () => {
         test('should render a BaseSelectField with a selectedValues prop matching passed in selected value when called', () => {
             const wrapper = shallow(
-                <SingleSelectField isDisabled={false} onChange={onChangeStub} options={options} selectedValue="bar" />,
+                <SingleSelectFieldBase
+                    isDisabled={false}
+                    onChange={onChangeStub}
+                    options={options}
+                    selectedValue="bar"
+                />,
             );
             const instance = wrapper.instance();
 
@@ -33,9 +39,35 @@ describe('components/select-field/SingleSelectField', () => {
             expect(baseSelectFieldWrapper.prop('isDisabled')).toEqual(false);
         });
 
+        test('should render a BaseSelectField with options that includes a clear option if shouldShowClearOption is true', () => {
+            const intl = {
+                formatMessage: jest.fn().mockImplementationOnce(() => 'Clear All'),
+            };
+
+            const wrapper = shallow(
+                <SingleSelectFieldBase
+                    intl={intl}
+                    isDisabled={false}
+                    onChange={onChangeStub}
+                    options={options}
+                    selectedValue="bar"
+                    shouldShowClearOption
+                />,
+            );
+
+            const baseSelectFieldWrapper = wrapper.find('BaseSelectField');
+            const expectedOptions = options;
+            expectedOptions.unshift({
+                value: CLEAR,
+                displayText: 'Clear All',
+            });
+
+            expect(baseSelectFieldWrapper.prop('options')).toEqual(expectedOptions);
+        });
+
         test('should strip out props that are multi-select specific when called', () => {
             const wrapper = shallow(
-                <SingleSelectField
+                <SingleSelectFieldBase
                     defaultValue="foo"
                     multiple
                     onChange={onChangeStub}
@@ -56,10 +88,10 @@ describe('components/select-field/SingleSelectField', () => {
     });
 
     describe('handleChange()', () => {
-        test('should not call onChange() when there is no selected items', () => {
-            const onChangeMock = sandbox.mock().never();
+        test('should call onChange() with an object with value of null when there are no selected items', () => {
+            const onChangeMock = sandbox.mock().withArgs({ value: null });
             const wrapper = shallow(
-                <SingleSelectField onChange={onChangeMock} options={options} selectedValue="foo" />,
+                <SingleSelectFieldBase onChange={onChangeMock} options={options} selectedValue="foo" />,
             );
             const instance = wrapper.instance();
 
@@ -69,7 +101,7 @@ describe('components/select-field/SingleSelectField', () => {
         test('should call onChange() when there is a selected item', () => {
             const onChangeMock = sandbox.mock().withArgs('foo');
             const wrapper = shallow(
-                <SingleSelectField onChange={onChangeMock} options={options} selectedValue="foo" />,
+                <SingleSelectFieldBase onChange={onChangeMock} options={options} selectedValue="foo" />,
             );
             const instance = wrapper.instance();
 
@@ -79,7 +111,7 @@ describe('components/select-field/SingleSelectField', () => {
         test('should not call onChange() when there are more than 1 selected items (potentially an error)', () => {
             const onChangeMock = sandbox.mock().never();
             const wrapper = shallow(
-                <SingleSelectField onChange={onChangeMock} options={options} selectedValue="foo" />,
+                <SingleSelectFieldBase onChange={onChangeMock} options={options} selectedValue="foo" />,
             );
             const instance = wrapper.instance();
 

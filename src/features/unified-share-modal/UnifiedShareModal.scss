@@ -270,3 +270,18 @@
         color: $bdl-box-blue;
     }
 }
+
+.bdl-UnifiedShareForm {
+    @extend .unified-share-modal;
+
+    max-width: $bdl-grid-unit * 115;
+    height: $bdl-grid-unit * 125;
+    margin: 0 auto;
+    padding: 2em;
+}
+
+.bdl-SharedLinkSection-separator {
+    margin: ($bdl-grid-unit * 5) 0;
+    border: none;
+    border-top: 1px solid $bdl-gray-20;
+}

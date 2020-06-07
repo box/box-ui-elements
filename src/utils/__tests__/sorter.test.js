@@ -1,6 +1,7 @@
 import Cache from '../Cache';
 import sort, { sortFeedItems } from '../sorter';
 import { SORT_ASC, SORT_DESC } from '../../constants';
+import { annotation as mockAnnotation } from '../../__mocks__/annotations';
 
 let cache;
 let item;
@@ -295,11 +296,15 @@ describe('util/sorter', () => {
                 },
             ],
         };
+        const annotations = {
+            entries: [mockAnnotation],
+        };
 
         test('should sort items based on date', () => {
-            const sorted = sortFeedItems(comments, tasks);
-            expect(sorted[0].id).toEqual(tasks.entries[0].id);
-            expect(sorted[1].id).toEqual(comments.entries[0].id);
+            const sorted = sortFeedItems(comments, tasks, annotations);
+            expect(sorted[0].id).toEqual(annotations.entries[0].id);
+            expect(sorted[1].id).toEqual(tasks.entries[0].id);
+            expect(sorted[2].id).toEqual(comments.entries[0].id);
         });
     });
 });
