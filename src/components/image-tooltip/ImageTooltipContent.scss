@@ -13,6 +13,8 @@
     color: $bdl-gray-80;
     font-size: 14px;
     background-color: $white;
+    border-bottom-right-radius: $bdl-tooltip-border-radius-size;
+    border-bottom-left-radius: $bdl-tooltip-border-radius-size;
     box-shadow: 0 3px 6px 0 rgba($black, .1);
 }
 
