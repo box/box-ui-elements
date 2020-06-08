@@ -1,4 +1,5 @@
 @import '../../styles/variables';
+@import '../../components/pill-selector-dropdown/mixins';
 
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
@@ -102,11 +103,13 @@
     }
 
     .bdl-PillSelectorDropdown.scrollable {
+        // In the USM, the wrapper acts as a container
         .overlay-wrapper {
             position: absolute;
             height: 280px;
             overflow-y: scroll;
-            border: 1px solid $bdl-gray-30;
+
+            @include bdl-PillSelectorDropdown-container;
         }
 
         .overlay {
