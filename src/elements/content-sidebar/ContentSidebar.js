@@ -61,10 +61,12 @@ type Props = {
     hasVersions: boolean,
     history?: RouterHistory,
     isDefaultOpen?: boolean,
+    isViewerReady?: boolean,
     language?: string,
     messages?: StringMap,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
+    onScrollToAnnotation?: Function,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     requestInterceptor?: Function,
@@ -330,9 +332,11 @@ class ContentSidebar extends React.Component<Props, State> {
             hasVersions,
             history,
             isDefaultOpen,
+            isViewerReady,
             language,
             messages,
             metadataSidebarProps,
+            onScrollToAnnotation,
             onAnnotationSelect,
             onVersionChange,
             onVersionHistoryClick,
@@ -366,9 +370,11 @@ class ContentSidebar extends React.Component<Props, State> {
                             hasVersions={hasVersions}
                             isDefaultOpen={isDefaultOpen}
                             isLoading={isLoading}
+                            isViewerReady={isViewerReady}
                             metadataEditors={metadataEditors}
                             metadataSidebarProps={metadataSidebarProps}
                             onAnnotationSelect={onAnnotationSelect}
+                            onScrollToAnnotation={onScrollToAnnotation}
                             onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick}
                             versionsSidebarProps={versionsSidebarProps}

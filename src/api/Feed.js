@@ -211,6 +211,12 @@ class Feed extends Base {
         return cache.get(cacheKey);
     }
 
+    getCachedItem(cacheId: string, itemId: string): ?FeedItem {
+        const { items = [] } = this.getCachedItems(cacheId) || {};
+
+        return items.find(item => item.id === itemId);
+    }
+
     /**
      * Sets the items in the cache
      *

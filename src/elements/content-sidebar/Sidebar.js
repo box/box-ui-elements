@@ -46,10 +46,12 @@ type Props = {
     history: RouterHistory,
     isDefaultOpen?: boolean,
     isLoading?: boolean,
+    isViewerReady?: boolean,
     location: Location,
     metadataEditors?: Array<MetadataEditor>,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
+    onScrollToAnnotation?: Function,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
@@ -218,9 +220,11 @@ class Sidebar extends React.Component<Props, State> {
             hasVersions,
             isDefaultOpen,
             isLoading,
+            isViewerReady,
             metadataEditors,
             metadataSidebarProps,
             onAnnotationSelect,
+            onScrollToAnnotation,
             onVersionChange,
             versionsSidebarProps,
         }: Props = this.props;
@@ -268,9 +272,11 @@ class Sidebar extends React.Component<Props, State> {
                             hasSkills={hasSkills}
                             hasVersions={hasVersions}
                             isOpen={isOpen}
+                            isViewerReady={isViewerReady}
                             key={file.id}
                             metadataSidebarProps={metadataSidebarProps}
                             onAnnotationSelect={onAnnotationSelect}
+                            onScrollToAnnotation={onScrollToAnnotation}
                             onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick}
                             ref={this.sidebarPanels}

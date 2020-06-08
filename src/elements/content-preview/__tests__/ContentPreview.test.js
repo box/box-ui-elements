@@ -1145,11 +1145,8 @@ describe('elements/content-preview/ContentPreview', () => {
                     },
                 };
 
-                const emit = jest.fn();
                 const wrapper = getWrapper();
                 const instance = wrapper.instance();
-
-                jest.spyOn(instance, 'getViewer').mockReturnValue({ emit });
 
                 wrapper.setState({ selectedVersion: { id: selectedVersionId } });
                 instance.setState = jest.fn();
@@ -1157,7 +1154,6 @@ describe('elements/content-preview/ContentPreview', () => {
                 instance.handleAnnotationSelect(annotation);
 
                 expect(instance.setState).toHaveBeenCalledTimes(setStateCount);
-                expect(emit).toBeCalledWith('scrolltoannotation', { id: annotation.id, target: annotation.target });
             },
         );
     });

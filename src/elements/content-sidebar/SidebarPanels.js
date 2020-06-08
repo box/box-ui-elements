@@ -45,8 +45,10 @@ type Props = {
     hasSkills: boolean,
     hasVersions: boolean,
     isOpen: boolean,
+    isViewerReady?: boolean,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
+    onScrollToAnnotation?: Function,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
@@ -143,8 +145,10 @@ class SidebarPanels extends React.Component<Props, State> {
             hasSkills,
             hasVersions,
             isOpen,
+            isViewerReady,
             metadataSidebarProps,
             onAnnotationSelect,
+            onScrollToAnnotation,
             onVersionChange,
             onVersionHistoryClick,
             versionsSidebarProps,
@@ -196,7 +200,9 @@ class SidebarPanels extends React.Component<Props, State> {
                                     currentUser={currentUser}
                                     file={file}
                                     hasSidebarInitialized={isInitialized}
+                                    isViewerReady={isViewerReady}
                                     onAnnotationSelect={onAnnotationSelect}
+                                    onScrollToAnnotation={onScrollToAnnotation}
                                     onVersionChange={onVersionChange}
                                     onVersionHistoryClick={onVersionHistoryClick}
                                     ref={this.activitySidebar}

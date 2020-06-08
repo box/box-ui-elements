@@ -60,6 +60,7 @@ import type { ErrorType, AdditionalVersionInfo } from '../common/flowTypes';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { FetchOptions, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { StringMap, Token, BoxItem, BoxItemVersion } from '../../common/types/core';
+import type { Target } from '../../common/types/annotations';
 import type { VersionChangeCallback } from '../content-sidebar/versions';
 import type { FeatureConfig } from '../common/feature-checking';
 import type APICache from '../../utils/Cache';
@@ -127,6 +128,7 @@ type State = {
     file?: BoxItem,
     isReloadNotificationVisible: boolean,
     isThumbnailSidebarOpen: boolean,
+    isViewerReady: boolean,
     prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
     selectedVersion?: BoxItemVersion,
     startAt?: StartAt,
@@ -206,6 +208,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         canPrint: false,
         error: undefined,
         isReloadNotificationVisible: false,
+        isViewerReady: false,
         isThumbnailSidebarOpen: false,
     };
 
@@ -683,6 +686,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         this.handleCanPrint();
+        this.setState({ isViewerReady: true });
     };
 
     /**
@@ -1145,13 +1149,14 @@ class ContentPreview extends React.PureComponent<Props, State> {
         });
     };
 
-    handleAnnotationSelect = ({ file_version: { id: annotationFileVersionId }, id, target }: Annotation) => {
-        const { location = {} } = target;
+    handleAnnotationSelect = ({
+        file_version: { id: annotationFileVersionId },
+        target: { location = {} },
+    }: Annotation) => {
         const { file, selectedVersion } = this.state;
         const currentFileVersionId = getProp(file, 'file_version.id');
         const currentPreviewFileVersionId = getProp(selectedVersion, 'id', currentFileVersionId);
         const unit = startAtTypes[location.type];
-        const viewer = this.getViewer();
 
         if (unit && annotationFileVersionId !== currentPreviewFileVersionId) {
             this.setState({
@@ -1161,10 +1166,16 @@ class ContentPreview extends React.PureComponent<Props, State> {
                 },
             });
         }
+    };
 
-        if (viewer) {
-            viewer.emit('scrolltoannotation', { id, target });
+    handleScrollToAnnotation = (annotation?: { id: string, target: Target }) => {
+        const viewer = this.getViewer();
+
+        if (!viewer || !annotation) {
+            return;
         }
+
+        viewer.handleScrollToAnnotation(annotation);
     };
 
     /**
@@ -1225,6 +1236,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             isReloadNotificationVisible,
             currentFileId,
             isThumbnailSidebarOpen,
+            isViewerReady,
             selectedVersion,
         }: State = this.state;
 
@@ -1300,6 +1312,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                 getViewer={this.getViewer}
                                 history={history}
                                 isDefaultOpen={isLarge || isVeryLarge}
+                                isViewerReady={isViewerReady}
                                 language={language}
                                 ref={this.contentSidebar}
                                 sharedLink={sharedLink}
@@ -1307,6 +1320,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                 requestInterceptor={requestInterceptor}
                                 responseInterceptor={responseInterceptor}
                                 onAnnotationSelect={this.handleAnnotationSelect}
+                                onScrollToAnnotation={this.handleScrollToAnnotation}
                                 onVersionChange={this.onVersionChange}
                             />
                         )}

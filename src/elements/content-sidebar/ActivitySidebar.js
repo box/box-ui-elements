@@ -68,7 +68,9 @@ type PropsWithoutContext = {
     file: BoxItem,
     hasSidebarInitialized?: boolean,
     isDisabled: boolean,
+    isViewerReady?: boolean,
     onAnnotationSelect: Function,
+    onScrollToAnnotation: Function,
     onVersionChange: Function,
     onVersionHistoryClick?: Function,
     translations?: Translations,
@@ -109,6 +111,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         getAnnotationsPath: noop,
         isDisabled: false,
         onAnnotationSelect: noop,
+        onScrollToAnnotation: noop,
         onCommentCreate: noop,
         onCommentDelete: noop,
         onCommentUpdate: noop,
@@ -133,8 +136,37 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         const { currentUser } = this.props;
-        this.fetchFeedItems(true);
         this.fetchCurrentUser(currentUser);
+    }
+
+    componentDidUpdate({ isViewerReady: prevIsViewerReady }: Props, { feedItems: prevFeedItems }: State) {
+        const { getAnnotationsMatchPath, isViewerReady, location } = this.props;
+        const match = getProp(getAnnotationsMatchPath(location), 'params.annotationId', null);
+
+        // Fetch feed items once viewer is ready
+        if (prevIsViewerReady !== isViewerReady) {
+            this.fetchFeedItems(true);
+        }
+
+        if (this.didLoadFeedItems(prevFeedItems) && match) {
+            this.handleScrollToAnnotationOnLoad(match);
+        }
+    }
+
+    didLoadFeedItems = (prevFeedItems?: FeedItems) => {
+        const { feedItems } = this.state;
+
+        return prevFeedItems === undefined && feedItems !== undefined;
+    };
+
+    handleScrollToAnnotationOnLoad(annotationId?: string) {
+        if (!annotationId) {
+            return;
+        }
+
+        const { api, file, onScrollToAnnotation } = this.props;
+
+        onScrollToAnnotation(api.getFeedAPI(false).getCachedItem(file.id, annotationId));
     }
 
     handleAnnotationDelete = ({ id, permissions }: { id: string, permissions: AnnotationPermission }) => {
@@ -608,6 +640,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             history,
             location,
             onAnnotationSelect,
+            onScrollToAnnotation,
         } = this.props;
         const currentFileVersionId = getProp(file, 'file_version.id');
         const match = getAnnotationsMatchPath(location);
@@ -620,6 +653,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         }
 
         onAnnotationSelect(annotation);
+        onScrollToAnnotation(annotation);
     };
 
     onTaskModalClose = () => {

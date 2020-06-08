@@ -10,6 +10,7 @@ jest.mock('lodash/debounce', () => jest.fn(i => i));
 describe('elements/content-sidebar/ActivitySidebar', () => {
     const feedAPI = {
         feedItems: jest.fn(),
+        getCachedItem: jest.fn(),
         deleteAnnotation: jest.fn(),
         deleteComment: jest.fn(),
         deleteTaskNew: jest.fn(),
@@ -95,7 +96,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
 
         test('should fetch the file and refresh the cache and fetch the current user', () => {
-            expect(instance.fetchFeedItems).toHaveBeenCalledWith(true);
             expect(instance.fetchCurrentUser).toHaveBeenCalledWith(currentUser);
         });
     });
@@ -331,7 +331,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         beforeEach(() => {
             wrapper = getWrapper();
             instance = wrapper.instance();
-            instance.fetchFeedItems = jest.fn();
         });
 
         test('should fetch the feed items', () => {
