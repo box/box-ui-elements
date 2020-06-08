@@ -96,5 +96,6 @@
     "bdl-border-radius-size": "4px",
     "bdl-border-radius-large-size": "10px",
     "bdl-grid-unit": "4px",
+    "bdl-tooltip-border-radius-size": "6px",
     "bdl-transitionDurationBase": "0.15s"
 }
