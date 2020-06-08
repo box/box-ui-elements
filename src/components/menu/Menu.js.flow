@@ -27,6 +27,8 @@ type Props = {
     initialFocusIndex?: number,
     isHidden?: boolean,
     isSubmenu?: boolean,
+    /** menuItemSelector - overrides the default menu selector */
+    menuItemSelector?: string,
     onClose?: Function,
     /** Will fire this callback when menu should "close' */
     setRef?: Function,
@@ -95,9 +97,9 @@ class Menu extends React.Component<Props> {
     };
 
     setMenuItemEls = () => {
-        const { isSubmenu } = this.props;
+        const { isSubmenu, menuItemSelector } = this.props;
 
-        const selector = isSubmenu ? SUBMENU_ITEM_SELECTOR : TOP_LEVEL_MENU_ITEM_SELECTOR;
+        const selector = menuItemSelector || (isSubmenu ? SUBMENU_ITEM_SELECTOR : TOP_LEVEL_MENU_ITEM_SELECTOR);
         // Keep track of all the valid menu items that were rendered (querySelector since we don't want to pass ref functions to every single child)
         this.menuItemEls = this.menuEl ? [].slice.call(this.menuEl.querySelectorAll(selector)) : [];
     };
@@ -252,7 +254,7 @@ class Menu extends React.Component<Props> {
     render() {
         const { children, className, isHidden, setRef, shouldOutlineFocus, ...rest } = this.props;
 
-        const menuProps = omit(rest, ['onClose', 'initialFocusIndex', 'isSubmenu']);
+        const menuProps = omit(rest, ['onClose', 'initialFocusIndex', 'isSubmenu', 'menuItemSelector']);
         menuProps.className = classNames('aria-menu', className, {
             'is-hidden': isHidden,
             'should-outline-focus': shouldOutlineFocus,
