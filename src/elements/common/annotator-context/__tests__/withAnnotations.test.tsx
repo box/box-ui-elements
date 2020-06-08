@@ -161,7 +161,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
     describe('handleActiveChange()', () => {
         test.each`
             annotationId | fileVersionId | expectedAnnotationId | expectedFileVersionId
-            ${null}      | ${null}       | ${null}              | ${null}
+            ${null}      | ${'456'}      | ${null}              | ${'456'}
             ${'123'}     | ${'456'}      | ${'123'}             | ${'456'}
         `(
             'should update activeAnnotationId state to reflect value $annotationId',
