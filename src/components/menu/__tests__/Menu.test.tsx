@@ -69,7 +69,7 @@ describe('components/menu/Menu', () => {
             );
 
             const instance = wrapper.instance();
-            // Should have 3 items (li, li, a)
+            // Should have 3 items (div, div, a)
             expect(instance.menuItemEls.length).toBe(3);
         });
 
