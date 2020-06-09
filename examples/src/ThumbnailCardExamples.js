@@ -9,7 +9,7 @@ import PlainButton from '../../src/components/plain-button/PlainButton';
 import ThumbnailCard from '../../src/components/thumbnail-card';
 
 const ThumbnailCardExamples = () => {
-    const [isActionItemActive, setIsActionItemActive] = useState(false);
+    const [isCardInFocus, setIsCardInFocus] = useState('');
 
     const icon = (
         <div
@@ -30,9 +30,20 @@ const ThumbnailCardExamples = () => {
     const subtitle = <div>I&#39;m a subtitle!</div>;
     const title = <div>Hello World!</div>;
     const thumbnail = <div>Thumbnail goes here</div>;
+
     const actionItem = (
-        <DropdownMenu onMenuOpen={() => setIsActionItemActive(true)} onMenuClose={() => setIsActionItemActive(false)}>
-            <PlainButton className="lnk" type="button">
+        <DropdownMenu>
+            <PlainButton
+                onFocus={event => setIsCardInFocus(event.currentTarget.id)}
+                onBlur={event => {
+                    if (!event.relatedTarget.contains(event.currentTarget)) {
+                        setIsCardInFocus('');
+                    }
+                }}
+                tabIndex="0"
+                className="action-item-button"
+                type="button"
+            >
                 <MenuToggle>Hello</MenuToggle>
             </PlainButton>
             <Menu>
@@ -65,7 +76,9 @@ const ThumbnailCardExamples = () => {
                 <br />
                 <ThumbnailCard
                     actionItem={actionItem}
-                    className={isActionItemActive ? 'is-action-item-active' : ''}
+                    id={0}
+                    className="is-card-in-focus"
+                    setIsCardInFocus={setIsCardInFocus}
                     expandOnHover
                     thumbnail={thumbnail}
                     title={title}
@@ -83,7 +96,12 @@ const ThumbnailCardExamples = () => {
                     {new Array(3).fill(true).map((_, i) => (
                         <ThumbnailCard
                             key={`thumbnailcard-${i}`}
+                            actionItem={actionItem}
+                            className={isCardInFocus === i ? 'is-card-in-focus' : ''}
                             icon={icon}
+                            id={i}
+                            expandOnHover
+                            setIsCardInFocus={setIsCardInFocus}
                             subtitle={subtitle}
                             thumbnail={thumbnail}
                             title={title}

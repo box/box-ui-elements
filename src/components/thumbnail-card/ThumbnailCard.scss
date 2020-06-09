@@ -15,16 +15,12 @@
 
 // We should expand the card only when it is hovered or the action item is active
 .thumbnail-card.is-expanded {
-    &.is-action-item-active,
+    &.is-card-in-focus,
+    &:focus,
     &:hover {
         box-shadow: 0 4px 24px 0 rgba(0, 0, 0, .2);
         transform: translate3d(0, -1px, 0) scale(1.25);
         transition-duration: $bdl-transitionDurationBase;
-    }
-
-    // We should not show the action item when the card is not hovered
-    &:not(.is-action-item-active):not(:hover) .thumbnail-card-action-item {
-        display: none;
     }
 }
 
@@ -34,7 +30,13 @@
     align-items: center;
     padding: 12px;
     line-height: 16px;
+    background-color: white;
     border-top: 1px solid $bdl-gray-05;
+
+    .thumbnail-card-action-item:hover {
+        opacity: 1;
+        transition-duration: $bdl-transitionDurationBase;
+    }
 
     .thumbnail-card-details-content {
         flex: 1;
