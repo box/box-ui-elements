@@ -1,9 +1,16 @@
 @import '../../styles/variables';
 @import 'PillSelector';
+@import 'mixins';
 
 .bdl-PillSelector {
     &.show-error {
         border-color: $bdl-watermelon-red;
+    }
+}
+
+.bdl-PillSelectorDropdown {
+    .overlay {
+        @include bdl-PillSelectorDropdown-container;
     }
 }
 
