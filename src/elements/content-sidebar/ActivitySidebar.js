@@ -141,15 +141,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     componentDidUpdate({ isViewerReady: prevIsViewerReady }: Props, { feedItems: prevFeedItems }: State) {
         const { getAnnotationsMatchPath, isViewerReady, location } = this.props;
-        const match = getProp(getAnnotationsMatchPath(location), 'params.annotationId', null);
+        const activeAnnotationId = getProp(getAnnotationsMatchPath(location), 'params.annotationId', null);
 
         // Fetch feed items once viewer is ready
         if (prevIsViewerReady !== isViewerReady) {
             this.fetchFeedItems(true);
         }
 
-        if (this.didLoadFeedItems(prevFeedItems) && match) {
-            this.handleScrollToAnnotationOnLoad(match);
+        if (this.didLoadFeedItems(prevFeedItems) && activeAnnotationId) {
+            this.handleScrollToAnnotationOnLoad(activeAnnotationId);
         }
     }
 
