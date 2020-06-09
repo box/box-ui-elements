@@ -20,8 +20,18 @@ class SelectorDropdownContainer extends Component {
         this.state = {
             filterText: '',
             items: props.initialItems,
+            showTitle: false,
+            remainOpen: false,
         };
     }
+
+    handleShowTitle = () => {
+        this.setState({ showTitle: !this.state.showTitle });
+    };
+
+    handleRemainOpen = () => {
+        this.setState({ remainOpen: !this.state.remainOpen });
+    };
 
     handleUserInput = event => {
         this.filterByItem(event.target.value);
@@ -52,31 +62,35 @@ class SelectorDropdownContainer extends Component {
 
     render() {
         const { placeholder, title } = this.props;
-        const { filterText, items } = this.state;
+        const { filterText, items, showTitle, remainOpen } = this.state;
         const dropdownTitle = <div>This is a Title</div>;
 
         return (
             <div style={{ paddingBottom: '330px' }}>
-                <SelectorDropdown
-                    onSelect={this.handleItemSelection}
-                    selector={
-                        <InputContainer
-                            label={title}
-                            name="selectorDropdownInput"
-                            onInput={this.handleUserInput}
-                            placeholder={placeholder}
-                            type="text"
-                            value={filterText}
-                        />
-                    }
-                >
-                    {Children.map(items, item => (
-                        <DatalistItem key={item}>{item}</DatalistItem>
-                    ))}
-                </SelectorDropdown>
+                <label labelFor="title-check">
+                    <input
+                        type="checkbox"
+                        name="title-check"
+                        id="title-check"
+                        value={showTitle}
+                        onClick={this.handleShowTitle}
+                    />
+                    <span style={{ paddingLeft: '4px' }}>Add title to overlay</span>
+                </label>
                 <br />
-                <h2>Selector Dropdown with title passed in</h2>
+                <label labelFor="remain-open-check">
+                    <input
+                        type="checkbox"
+                        name="remain-open-check"
+                        id="remain-open-check"
+                        value={remainOpen}
+                        onClick={this.handleRemainOpen}
+                    />
+                    <span style={{ paddingLeft: '4px' }}>Overlay should remain open</span>
+                </label>
+                <hr />
                 <SelectorDropdown
+                    isAlwaysOpen={remainOpen}
                     onSelect={this.handleItemSelection}
                     selector={
                         <InputContainer
@@ -88,27 +102,7 @@ class SelectorDropdownContainer extends Component {
                             value={filterText}
                         />
                     }
-                    title={dropdownTitle}
-                >
-                    {Children.map(items, item => (
-                        <DatalistItem key={item}>{item}</DatalistItem>
-                    ))}
-                </SelectorDropdown>
-                <br />
-                <h2>Selector Dropdown with dropdown always open</h2>
-                <SelectorDropdown
-                    isAlwaysOpen
-                    onSelect={this.handleItemSelection}
-                    selector={
-                        <InputContainer
-                            label={title}
-                            name="selectorDropdownInput"
-                            onInput={this.handleUserInput}
-                            placeholder={placeholder}
-                            type="text"
-                            value={filterText}
-                        />
-                    }
+                    title={showTitle ? dropdownTitle : undefined}
                 >
                     {Children.map(items, item => (
                         <DatalistItem key={item}>{item}</DatalistItem>
