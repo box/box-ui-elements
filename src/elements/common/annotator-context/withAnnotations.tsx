@@ -8,7 +8,7 @@ import { Action, Annotator, AnnotationActionEvent, AnnotatorState, GetMatchPath,
 const ANNOTATIONS_PATH = '/:sidebar/annotations/:fileVersionId/:annotationId?';
 export interface WithAnnotationsProps {
     onAnnotator: (annotator: Annotator) => void;
-    onPreviewDestroy: () => void;
+    onPreviewDestroy: (shouldReset?: boolean) => void;
 }
 
 export interface ComponentWithAnnotations {
@@ -22,7 +22,7 @@ export interface ComponentWithAnnotations {
     handleAnnotationCreate: (eventData: AnnotationActionEvent) => void;
     handleAnnotator: (annotator: Annotator) => void;
     handleAnnotatorEvent: ({ event, data }: { event: string; data?: unknown }) => void;
-    handlePreviewDestroy: () => void;
+    handlePreviewDestroy: (shouldReset?: boolean) => void;
 }
 
 export type WithAnnotationsComponent<P> = React.ComponentClass<P & WithAnnotationsProps>;
@@ -135,8 +135,10 @@ export default function withAnnotations<P extends object>(
             this.annotator.addListener('annotatorevent', this.handleAnnotatorEvent);
         };
 
-        handlePreviewDestroy = (): void => {
-            this.setState(defaultState);
+        handlePreviewDestroy = (shouldReset = true): void => {
+            if (shouldReset) {
+                this.setState(defaultState);
+            }
 
             if (this.annotator) {
                 this.annotator.removeListener('annotatorevent', this.handleAnnotatorEvent);
