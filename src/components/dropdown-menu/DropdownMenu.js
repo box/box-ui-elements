@@ -10,18 +10,19 @@ import './DropdownMenu.scss';
 type Props = {
     bodyElement?: HTMLElement,
     children: React.Node,
-    /** Forces menu to render within the scroll parent */
     className?: string,
-    /** Forces menu to render within the visible window */
+    /** Forces menu to render within the scroll parent */
     constrainToScrollParent: boolean,
-    /** Right aligns menu to button */
+    /** Forces menu to render within the visible window */
     constrainToWindow: boolean,
-    /** Function called when menu is opened */
+    /** Right aligns menu to button */
     isRightAligned: boolean,
     /** Handler for dropdown menu close events */
     onMenuClose?: (event: SyntheticEvent<> | MouseEvent) => void,
     /** Handler for dropdown menu open events */
     onMenuOpen?: () => void,
+    /** Options to pass to the tether component instance */
+    tetherProps?: {},
     /** Set true to close dropdown menu on event bubble instead of event capture */
     useBubble?: boolean,
 };
@@ -179,6 +180,7 @@ class DropdownMenu extends React.Component<Props, State> {
             constrainToScrollParent,
             constrainToWindow,
             className,
+            tetherProps,
         } = this.props;
         const { isOpen, initialFocusIndex } = this.state;
 
@@ -248,6 +250,7 @@ class DropdownMenu extends React.Component<Props, State> {
                 constraints={constraints}
                 enabled={isOpen}
                 targetAttachment={targetAttachment}
+                {...tetherProps}
             >
                 {React.cloneElement(menuButton, menuButtonProps)}
                 {isOpen ? React.cloneElement(menu, menuProps) : null}

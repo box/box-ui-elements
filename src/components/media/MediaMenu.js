@@ -19,10 +19,12 @@ type Props = {
     isDisabled: boolean,
     /** Additional props for the Menu */
     menuProps?: {},
+    /** Options to pass to the tether component instance */
+    tetherProps?: {},
 };
 
-const MediaMenu = ({ className, children, isDisabled, dropdownProps, menuProps, ...rest }: Props) => (
-    <DropdownMenu constrainToScrollParent isRightAligned {...dropdownProps}>
+const MediaMenu = ({ className, children, isDisabled, dropdownProps, menuProps, tetherProps, ...rest }: Props) => (
+    <DropdownMenu constrainToScrollParent isRightAligned tetherProps={tetherProps} {...dropdownProps}>
         <PlainButton
             isDisabled={isDisabled}
             className={classnames('bdl-Media-menu', className)}
