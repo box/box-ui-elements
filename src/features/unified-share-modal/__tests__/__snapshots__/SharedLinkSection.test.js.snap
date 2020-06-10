@@ -34,6 +34,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
               constrainToScrollParent={false}
               constrainToWindow={true}
               isDisabled={false}
+              offset="0 0"
               position="top-center"
               text={
                 <FormattedMessage
@@ -71,6 +72,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
       constrainToWindow={true}
       isDisabled={false}
       isShown={false}
+      offset="0 0"
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
@@ -105,6 +107,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-left"
       text={
         <FormattedMessage
@@ -186,6 +189,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-right"
       text={
         <FormattedMessage
@@ -221,6 +225,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       constrainToWindow={true}
       isDisabled={false}
       isShown={false}
+      offset="0 0"
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
@@ -255,6 +260,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-left"
       text={
         <FormattedMessage
@@ -331,6 +337,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-right"
       text={
         <FormattedMessage
@@ -403,6 +410,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       constrainToWindow={true}
       isDisabled={false}
       isShown={false}
+      offset="0 0"
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
@@ -437,6 +445,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-left"
       text={
         <FormattedMessage
@@ -538,6 +547,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled c
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  offset="0 0"
   position="top-right"
   text={
     <FormattedMessage
@@ -571,6 +581,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled r
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  offset="0 0"
   position="top-right"
   text={
     <FormattedMessage
@@ -621,6 +632,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-right"
       text={
         <FormattedMessage
@@ -656,6 +668,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       constrainToWindow={true}
       isDisabled={false}
       isShown={false}
+      offset="0 0"
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
@@ -690,6 +703,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-left"
       text={
         <FormattedMessage
@@ -731,6 +745,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-center"
       text={
         <FormattedMessage
@@ -797,6 +812,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       constrainToWindow={true}
       isDisabled={false}
       isShown={false}
+      offset="0 0"
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
@@ -831,6 +847,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-left"
       text={
         <FormattedMessage
@@ -933,6 +950,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       constrainToWindow={true}
       isDisabled={false}
       isShown={false}
+      offset="0 0"
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
@@ -967,6 +985,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-left"
       text={
         <FormattedMessage
@@ -1094,6 +1113,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
       constrainToWindow={true}
       isDisabled={false}
       isShown={false}
+      offset="0 0"
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
@@ -1128,6 +1148,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-left"
       text={
         <FormattedMessage

@@ -12,6 +12,7 @@ exports[`components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIte
     constrainToWindow={true}
     isDisabled={true}
     isTabbable={false}
+    offset="0 0"
     position="middle-right"
     text="bar"
     theme="default"

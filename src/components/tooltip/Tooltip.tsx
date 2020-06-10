@@ -73,6 +73,8 @@ export type DefaultTooltipProps = {
     constrainToWindow: boolean;
     /** Forces the tooltip to be disabled irrespecitve of it's shown state. Defaults to `false` */
     isDisabled: boolean;
+    /** A string of the form 'vert-offset horiz-offset' which controls positioning */
+    offset: string;
     /** Where to position the tooltip relative to the wrapped component */
     position: TooltipPosition | TooltipCustomPosition;
     /** Tooltip theme */
@@ -110,6 +112,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
         constrainToScrollParent: false,
         constrainToWindow: true,
         isDisabled: false,
+        offset: '0 0',
         position: TooltipPosition.TOP_CENTER,
         theme: TooltipTheme.DEFAULT,
     };
@@ -208,6 +211,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             constrainToWindow,
             isDisabled,
             isTabbable = true,
+            offset,
             position = TooltipPosition.TOP_CENTER,
             showCloseButton,
             stopBubble,
@@ -279,6 +283,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             classPrefix: 'tooltip',
             constraints,
             enabled: showTooltip,
+            offset,
             targetAttachment: tetherPosition.targetAttachment,
         };
 

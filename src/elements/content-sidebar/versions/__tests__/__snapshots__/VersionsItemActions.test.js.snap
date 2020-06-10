@@ -38,6 +38,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ena
       constrainToWindow={true}
       isDisabled={true}
       isTabbable={false}
+      offset="0 0"
       position="middle-left"
       text={
         <FormattedMessage
@@ -101,6 +102,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ena
       constrainToWindow={true}
       isDisabled={false}
       isTabbable={false}
+      offset="0 0"
       position="middle-left"
       text={
         <FormattedMessage
@@ -207,6 +209,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
       constrainToWindow={true}
       isDisabled={true}
       isTabbable={false}
+      offset="0 0"
       position="middle-left"
       text={
         <FormattedMessage

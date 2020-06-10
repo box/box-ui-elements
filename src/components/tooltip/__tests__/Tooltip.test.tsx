@@ -85,6 +85,7 @@ describe('components/tooltip/Tooltip', () => {
             ]);
             expect(wrapper.prop('enabled')).toBe(false);
             expect(wrapper.prop('targetAttachment')).toEqual('top center');
+            expect(wrapper.prop('offset')).toEqual('0 0');
 
             expect(component.is('button')).toBe(true);
             expect(component.prop('onBlur')).toBeTruthy();
@@ -254,24 +255,35 @@ describe('components/tooltip/Tooltip', () => {
                 }),
             ).toMatchSnapshot();
         });
-    });
 
-    test('should match snapshot when stopBubble is set', () => {
-        const wrapper = shallow(
-            <Tooltip isShown stopBubble text="hi">
-                <button />
-            </Tooltip>,
-        );
-        expect(wrapper.find('div.tooltip')).toMatchSnapshot();
-    });
+        test('should match snapshot when stopBubble is set', () => {
+            const wrapper = shallow(
+                <Tooltip isShown stopBubble text="hi">
+                    <button />
+                </Tooltip>,
+            );
+            expect(wrapper.find('div.tooltip')).toMatchSnapshot();
+        });
 
-    test('event capture div is not present when stopBubble is not set', () => {
-        const wrapper = shallow(
-            <Tooltip isShown text="hi">
-                <button />
-            </Tooltip>,
-        );
-        expect(wrapper.find('div[role="presentation"]').exists()).toBe(false);
+        test('event capture div is not present when stopBubble is not set', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="hi">
+                    <button />
+                </Tooltip>,
+            );
+            expect(wrapper.find('div[role="presentation"]').exists()).toBe(false);
+        });
+
+        test('should render with custom offset when provided', () => {
+            const offset = '0 10px';
+            const wrapper = shallow(
+                <Tooltip offset={offset} text="hi">
+                    <button />
+                </Tooltip>,
+            );
+
+            expect(wrapper.prop('offset')).toEqual(offset);
+        });
     });
 
     describe('should stop event propagation when stopBubble is set', () => {

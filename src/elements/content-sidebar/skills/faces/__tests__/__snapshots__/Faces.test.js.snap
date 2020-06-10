@@ -9,6 +9,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render edi
     constrainToScrollParent={false}
     constrainToWindow={true}
     isDisabled={false}
+    offset="0 0"
     position="top-center"
     text={
       <FormattedMessage
@@ -117,6 +118,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render sav
     constrainToScrollParent={false}
     constrainToWindow={true}
     isDisabled={false}
+    offset="0 0"
     position="top-center"
     text={
       <FormattedMessage

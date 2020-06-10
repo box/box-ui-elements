@@ -239,6 +239,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 2`] = `
           constrainToWindow={true}
           isDisabled={true}
           isTabbable={false}
+          offset="0 0"
           position="middle-right"
           theme="default"
         >

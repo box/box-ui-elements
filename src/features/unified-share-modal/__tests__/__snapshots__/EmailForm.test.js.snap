@@ -14,6 +14,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
       constrainToWindow={true}
       isDisabled={false}
       isShown={true}
+      offset="0 0"
       position="middle-right"
       showCloseButton={true}
       text={
@@ -60,6 +61,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
       constrainToWindow={true}
       isDisabled={false}
       isShown={true}
+      offset="0 0"
       position="middle-right"
       showCloseButton={true}
       text={
@@ -111,6 +113,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       constrainToWindow={true}
       isDisabled={false}
       isShown={true}
+      offset="0 0"
       position="middle-right"
       showCloseButton={true}
       text={
@@ -152,6 +155,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     constrainToScrollParent={false}
     constrainToWindow={true}
     isDisabled={false}
+    offset="0 0"
     position="bottom-center"
     text="You do not have permission to invite collaborators."
     theme="default"
@@ -165,6 +169,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         constrainToWindow={true}
         isDisabled={false}
         isShown={true}
+        offset="0 0"
         position="middle-right"
         showCloseButton={true}
         text={
@@ -248,6 +253,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       constrainToWindow={true}
       isDisabled={false}
       isShown={true}
+      offset="0 0"
       position="middle-right"
       showCloseButton={true}
       text={
@@ -330,6 +336,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       constrainToWindow={true}
       isDisabled={false}
       isShown={true}
+      offset="0 0"
       position="middle-right"
       showCloseButton={true}
       text={
@@ -381,6 +388,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       constrainToWindow={true}
       isDisabled={false}
       isShown={true}
+      offset="0 0"
       position="middle-right"
       showCloseButton={true}
       text={
@@ -468,6 +476,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       constrainToWindow={true}
       isDisabled={false}
       isShown={true}
+      offset="0 0"
       position="middle-right"
       showCloseButton={true}
       text={
@@ -550,6 +559,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       constrainToWindow={true}
       isDisabled={false}
       isShown={true}
+      offset="0 0"
       position="middle-right"
       showCloseButton={true}
       text={
@@ -647,6 +657,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       constrainToWindow={true}
       isDisabled={false}
       isShown={true}
+      offset="0 0"
       position="middle-left"
       text={
         <FormattedMessage
@@ -697,6 +708,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       constrainToWindow={true}
       isDisabled={false}
       isShown={true}
+      offset="0 0"
       position="middle-right"
       showCloseButton={true}
       text={
@@ -743,6 +755,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       constrainToWindow={true}
       isDisabled={false}
       isShown={true}
+      offset="0 0"
       position="middle-right"
       showCloseButton={true}
       text={
@@ -789,6 +802,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       constrainToWindow={true}
       isDisabled={false}
       isShown={true}
+      offset="0 0"
       position="middle-right"
       showCloseButton={true}
       text={

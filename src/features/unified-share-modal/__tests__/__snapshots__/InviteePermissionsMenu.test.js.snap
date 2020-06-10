@@ -13,6 +13,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="bottom-center"
       text={
         <FormattedMessage
@@ -245,6 +246,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="bottom-center"
       text={
         <FormattedMessage
@@ -477,6 +479,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="bottom-center"
       text={
         <FormattedMessage
@@ -709,6 +712,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="bottom-center"
       text={
         <FormattedMessage
@@ -941,6 +945,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="bottom-center"
       text={
         <FormattedMessage
@@ -1173,6 +1178,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="bottom-center"
       text={
         <FormattedMessage
@@ -1512,6 +1518,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="bottom-center"
       text={
         <FormattedMessage
@@ -1629,6 +1636,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() should ren
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  offset="0 0"
   position="bottom-center"
   text={
     <FormattedMessage
@@ -1662,6 +1670,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() should ren
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  offset="0 0"
   position="bottom-center"
   text={
     <FormattedMessage

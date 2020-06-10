@@ -6,6 +6,7 @@ exports[`components/select-button/SelectButton should not show error tooltip on 
   constrainToWindow={true}
   isDisabled={false}
   isShown={false}
+  offset="0 0"
   position="middle-right"
   theme="error"
 >
@@ -25,6 +26,7 @@ exports[`components/select-button/SelectButton should show error tooltip on butt
   constrainToWindow={true}
   isDisabled={false}
   isShown={true}
+  offset="0 0"
   position="middle-right"
   text="error"
   theme="error"

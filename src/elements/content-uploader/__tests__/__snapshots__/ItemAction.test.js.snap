@@ -10,6 +10,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with compl
     constrainToScrollParent={false}
     constrainToWindow={true}
     isDisabled={false}
+    offset="0 0"
     position="top-left"
     text={
       <span
@@ -50,6 +51,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with error
     constrainToScrollParent={false}
     constrainToWindow={true}
     isDisabled={false}
+    offset="0 0"
     position="top-left"
     text={
       <span
@@ -81,6 +83,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with error
     constrainToScrollParent={false}
     constrainToWindow={true}
     isDisabled={false}
+    offset="0 0"
     position="top-left"
     text={
       <span
@@ -112,6 +115,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with inpro
     constrainToScrollParent={false}
     constrainToWindow={true}
     isDisabled={false}
+    offset="0 0"
     position="top-left"
     text={
       <span
@@ -148,6 +152,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with pendi
     constrainToScrollParent={false}
     constrainToWindow={true}
     isDisabled={false}
+    offset="0 0"
     position="top-left"
     text={
       <span
@@ -184,6 +189,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with stage
     constrainToScrollParent={false}
     constrainToWindow={true}
     isDisabled={false}
+    offset="0 0"
     position="top-left"
     text={
       <span

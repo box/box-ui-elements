@@ -12,6 +12,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-center"
       text={
         <FormattedMessage
@@ -37,6 +38,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-center"
       text={
         <FormattedMessage
@@ -107,6 +109,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-center"
       text={
         <FormattedMessage
@@ -132,6 +135,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-center"
       text={
         <FormattedMessage
@@ -156,6 +160,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-center"
       text={
         <FormattedMessage
@@ -254,6 +259,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      offset="0 0"
       position="top-center"
       text={
         <FormattedMessage

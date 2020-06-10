@@ -36,6 +36,8 @@ type Props = {
     isShown?: boolean,
     /** Whether to add tabindex=0.  Defaults to `true` */
     isTabbable?: boolean,
+    /** A string of the form 'vert-offset horiz-offset' which controls positioning */
+    offset: string,
     /** Function called if the user manually dismisses the tooltip - only applies if showCloseButton is true */
     onDismiss?: () => void,
     /** Where to position the tooltip relative to the wrapped component */
@@ -61,6 +63,7 @@ class Tooltip extends React.Component<Props, State> {
         constrainToScrollParent: false,
         constrainToWindow: true,
         isDisabled: false,
+        offset: '0 0',
         position: TOP_CENTER,
         theme: DEFAULT_THEME,
     };
