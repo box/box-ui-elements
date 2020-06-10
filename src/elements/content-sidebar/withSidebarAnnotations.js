@@ -80,7 +80,7 @@ export default function withSidebarAnnotations(
                 this.updateActiveAnnotation();
             }
 
-            if (prevFileVersionId !== fileVersionId) {
+            if (fileVersionId && prevFileVersionId !== fileVersionId) {
                 this.updateActiveVersion();
             }
 

@@ -49,6 +49,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         test.each`
             prevFileVersionId | fileVersionId | expectedCallCount
             ${'122'}          | ${'122'}      | ${0}
+            ${'122'}          | ${undefined}  | ${0}
             ${'122'}          | ${'123'}      | ${1}
         `(
             'should call updateActiveVersion if fileVersionId changes',
