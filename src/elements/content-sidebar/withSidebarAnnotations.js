@@ -56,8 +56,8 @@ export default function withSidebarAnnotations(
         };
 
         componentDidUpdate(prevProps: Props) {
-            const { annotatorState, getAnnotationsMatchPath, location }: Props = this.props;
-            const { annotatorState: prevAnnotatorState, location: prevLocation }: Props = prevProps;
+            const { annotatorState, fileId, getAnnotationsMatchPath, location, onVersionChange }: Props = this.props;
+            const { annotatorState: prevAnnotatorState, fileId: prevFileId, location: prevLocation }: Props = prevProps;
             const { activeAnnotationId, annotation } = annotatorState;
             const { activeAnnotationId: prevActiveAnnotationId, annotation: prevAnnotation } = prevAnnotatorState;
 
@@ -82,6 +82,12 @@ export default function withSidebarAnnotations(
 
             if (prevFileVersionId !== fileVersionId) {
                 this.updateActiveVersion();
+            }
+
+            if (prevFileId !== fileId) {
+                // If the file id has changed, reset the current version id since the previous (possibly versioned)
+                // location is no longer active
+                onVersionChange(null);
             }
         }
 
