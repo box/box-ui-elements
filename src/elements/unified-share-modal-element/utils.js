@@ -1,5 +1,6 @@
 // @flow
 import type { BoxItem, BoxUser } from '../../common/types/core';
+import { getTypedFileId, getTypedFolderId } from '../../utils/file';
 import {
     ACCESS_COLLAB,
     ACCESS_COMPANY,
@@ -35,7 +36,6 @@ const normalizeItemResponse = (itemAPIData: BoxItem) => {
         description,
         extension,
         name,
-        owned_by: { id: ownerID },
         permissions,
         shared_link,
         shared_link_features: {
@@ -48,6 +48,7 @@ const normalizeItemResponse = (itemAPIData: BoxItem) => {
     const {
         can_download: isDownloadSettingAvailable,
         can_edit: isEditAllowed,
+        can_invite_collaborator: canInvite,
         can_preview: isPreviewAllowed,
         can_set_share_access: canChangeAccessLevel,
         can_share: itemShare,
@@ -82,6 +83,7 @@ const normalizeItemResponse = (itemAPIData: BoxItem) => {
             canChangeDownload, // SLS
             canChangePassword, // SLS
             canChangeVanityName, // SLS
+            canInvite,
             directLink, // SLS
             expirationTimestamp, // SLS
             isDirectLinkAvailable, // SLS
@@ -100,8 +102,6 @@ const normalizeItemResponse = (itemAPIData: BoxItem) => {
         };
     }
 
-    const typedIDPrefix = type === TYPE_FOLDER ? 'd' : 'f';
-
     return {
         item: {
             description,
@@ -111,20 +111,22 @@ const normalizeItemResponse = (itemAPIData: BoxItem) => {
                 itemShare,
             },
             name,
-            ownerID,
             type,
-            typedID: `${typedIDPrefix}_${id}`,
+            typedID: type === TYPE_FOLDER ? getTypedFolderId(id) : getTypedFileId(id),
         },
         sharedLink,
     };
 };
 
 const normalizeUserResponse = (userAPIData: BoxUser) => {
-    const { enterprise, hostname } = userAPIData;
+    const { enterprise, hostname, id } = userAPIData;
 
     return {
-        enterpriseName: enterprise ? enterprise.name : '',
-        serverURL: hostname ? `${hostname}/v/` : '', // SLS
+        id,
+        userEnterpriseData: {
+            enterpriseName: enterprise ? enterprise.name : '',
+            serverURL: hostname ? `${hostname}/v/` : '', // SLS
+        },
     };
 };
 

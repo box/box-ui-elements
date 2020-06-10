@@ -24,13 +24,11 @@ import {
     TYPE_FOLDER,
     FIELD_PERMISSIONS,
     FIELD_EXTENSION,
-    FIELD_OWNED_BY,
     FIELD_DESCRIPTION,
 } from '../../constants';
 
 type USMProps = {
     apiHost: string,
-    currentUserID: string,
     itemID: string,
     itemType: TYPE_FILE | TYPE_FOLDER,
     language: string,
@@ -47,10 +45,10 @@ const elementMessages = defineMessages({
 });
 
 function UnifiedShareModalElement(props: USMProps) {
-    const { apiHost, currentUserID, itemID, itemType, language, token }: USMProps = props;
+    const { apiHost, itemID, itemType, language, token }: USMProps = props;
     const [item, setItem] = useState<{ item: BoxItem }>(null);
     const [sharedLink, setSharedLink] = useState<{ sharedLink: BoxItem }>(null);
-    const [userDataReceived, setUserDataReceived] = useState<boolean>(false);
+    const [currentUserID, setCurrentUserID] = useState<string>(null);
     const [errorExists, setErrorExists] = useState<boolean>(false);
 
     const api = new API({
@@ -63,18 +61,18 @@ function UnifiedShareModalElement(props: USMProps) {
     const resetState = useCallback(() => {
         setItem(null);
         setSharedLink(null);
-        setUserDataReceived(false);
-    }, [setItem, setSharedLink, setUserDataReceived]);
+        setCurrentUserID(null);
+    }, [setItem, setSharedLink, setCurrentUserID]);
 
     const getError = useCallback(() => {
         setErrorExists(true);
     }, [setErrorExists]);
 
     const getUserSuccess = useCallback(
-        userEnterpriseData => {
-            const normalizedUserEnterpriseData = normalizeUserResponse(userEnterpriseData);
-            setSharedLink({ ...sharedLink, ...normalizedUserEnterpriseData });
-            setUserDataReceived(true);
+        userData => {
+            const { id, userEnterpriseData } = normalizeUserResponse(userData);
+            setSharedLink({ ...sharedLink, ...userEnterpriseData });
+            setCurrentUserID(id);
             setErrorExists(false);
         },
         [sharedLink],
@@ -91,14 +89,13 @@ function UnifiedShareModalElement(props: USMProps) {
     }, [resetState, token, itemID, itemType]);
 
     useEffect(() => {
-        const getUserData = async (ownerID: string) => {
-            await api.getUsersAPI().getUser(ownerID, getUserSuccess, getError, {
+        const getUserData = async () => {
+            await api.getUsersAPI().getUser(itemID, getUserSuccess, getError, {
                 fields: [FIELD_ENTERPRISE, FIELD_HOSTNAME],
             });
         };
-        if (item && sharedLink && !userDataReceived) {
-            const { ownerID } = item;
-            getUserData(ownerID);
+        if (item && sharedLink && !currentUserID) {
+            getUserData();
         }
     });
 
@@ -111,7 +108,6 @@ function UnifiedShareModalElement(props: USMProps) {
                         FIELD_EXTENSION,
                         FIELD_ID,
                         FIELD_NAME,
-                        FIELD_OWNED_BY,
                         FIELD_PERMISSIONS,
                         FIELD_SHARED_LINK,
                         FIELD_SHARED_LINK_FEATURES,
@@ -127,7 +123,6 @@ function UnifiedShareModalElement(props: USMProps) {
                         FIELD_EXTENSION,
                         FIELD_ID,
                         FIELD_NAME,
-                        FIELD_OWNED_BY,
                         FIELD_PERMISSIONS,
                         FIELD_SHARED_LINK,
                         FIELD_SHARED_LINK_FEATURES,
@@ -140,7 +135,7 @@ function UnifiedShareModalElement(props: USMProps) {
         if (!item && !sharedLink) {
             getItem();
         }
-    }, [api, getError, item, itemID, itemType, sharedLink, userDataReceived]);
+    }, [api, getError, item, itemID, itemType, sharedLink, currentUserID]);
 
     const renderElement = () => {
         if (errorExists) {
@@ -151,6 +146,7 @@ function UnifiedShareModalElement(props: USMProps) {
             return (
                 <Internationalize language={language} messages={messages}>
                     <UnifiedShareModal
+                        canInvite={sharedLink.canInvite}
                         collaboratorsList={[]}
                         currentUserID={currentUserID}
                         item={item}

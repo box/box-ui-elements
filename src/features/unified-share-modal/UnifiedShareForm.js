@@ -35,7 +35,7 @@ type State = {
 
 class UnifiedShareForm extends React.Component<USFProps, State> {
     static defaultProps = {
-        initiallySelectedContacts: [],
+        // initiallySelectedContacts: [],
         createSharedLinkOnLoad: false,
         focusSharedLinkOnLoad: false,
         trackingProps: {
