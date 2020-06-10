@@ -69,6 +69,38 @@ describe('elements/content-preview/ContentPreview', () => {
 
             expect(instance.loadPreview).toHaveBeenCalledTimes(0);
         });
+
+        test('should destroy preview before attempting to load it', () => {
+            file = { id: '123' };
+
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.destroyPreview = jest.fn();
+            instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
+            instance.loadPreview = jest.fn();
+
+            wrapper.setState({ file });
+
+            expect(instance.destroyPreview).toHaveBeenCalledWith(false);
+            expect(instance.loadPreview).toHaveBeenCalledTimes(1);
+        });
+
+        test('should destroy preview and reset selectedVersion state on new fileId', () => {
+            file = { id: '123' };
+
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.destroyPreview = jest.fn();
+            instance.fetchFile = jest.fn();
+
+            wrapper.setProps({ fileId: '456' });
+
+            expect(instance.destroyPreview).toHaveBeenCalledWith();
+            expect(wrapper.state('selectedVersion')).toBe(undefined);
+            expect(instance.fetchFile).toHaveBeenCalledWith('456');
+        });
     });
 
     describe('shouldLoadPreview()', () => {
@@ -197,6 +229,7 @@ describe('elements/content-preview/ContentPreview', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.preview = {};
+            instance.destroyPreview = jest.fn();
             wrapper.setState({ file });
             instance.handleCanPrint();
 
