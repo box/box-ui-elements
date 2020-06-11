@@ -28,6 +28,7 @@ type Props = {
     contactsFieldAvatars?: React.Node,
     contactsFieldDisabledTooltip: React.Node,
     contactsFieldLabel: React.Node,
+    getContactAvatarUrl?: (contact: Contact) => string,
     getContacts: (query: string) => Promise<Array<Contact>>,
     inlineNotice: {
         content: React.Node,
@@ -226,6 +227,7 @@ class EmailForm extends React.Component<Props, State> {
             inlineNotice,
             isContactsFieldEnabled,
             isExternalUserSelected,
+            getContactAvatarUrl,
             getContacts,
             intl,
             isExpanded,
@@ -272,6 +274,7 @@ class EmailForm extends React.Component<Props, State> {
                         error={contactsFieldError}
                         fieldRef={this.contactsFieldRef}
                         getContacts={getContacts}
+                        getContactAvatarUrl={getContactAvatarUrl}
                         label={contactsFieldLabel}
                         onContactAdd={this.handleContactAdd}
                         onContactRemove={this.handleContactRemove}
