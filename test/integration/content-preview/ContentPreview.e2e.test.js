@@ -119,7 +119,7 @@ describe('ContentPreview', () => {
 
         it('Navigation within a collection keeps sidebar closed', () => {
             // Manually closing the sidebar should remove its content
-            cy.getByTestId('sidebarskills').click();
+            cy.getByTestId('sidebartoggle').click();
             cy.getByTestId('bcs-content').should('not.exist');
 
             // Navigating between files in a collection should retain the prior closed state
@@ -169,7 +169,7 @@ describe('ContentPreview', () => {
             cy.getByTestId('sidebaractivity').should('have.class', 'bcs-is-selected');
 
             // Click the activity tab to toggle it closed
-            cy.getByTestId('sidebaractivity').click();
+            cy.getByTestId('sidebartoggle').click();
             cy.getByTestId('bcs-content').should('not.exist');
         });
     });
