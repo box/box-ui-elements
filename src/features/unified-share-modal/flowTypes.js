@@ -156,8 +156,12 @@ export type sharedLinkType = {
 
 export type collaboratorType = {
     collabID: number,
+    expiration?: {
+        executeAt: string,
+    },
     hasCustomAvatar: boolean,
     imageURL: ?string,
+    isExternalCollab?: boolean,
     name: string,
     type: collaboratorGroupType,
     userID: ?number,
@@ -244,6 +248,8 @@ type CollaboratorAvatarsTypes = {
 };
 
 type EmailFormTypes = {
+    /** Function to retrieve the URL for an avatar, given contact details */
+    getContactAvatarUrl?: (contact: contactType) => string,
     /** Handler function for when the user types into email shared link field to fetch contacts. */
     getSharedLinkContacts: (query: string) => Promise<Array<contactType>>,
     /**

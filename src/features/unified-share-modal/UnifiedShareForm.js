@@ -289,6 +289,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             collaborationRestrictionWarning,
             contactLimit,
             getCollaboratorContacts,
+            getContactAvatarUrl,
             handleFtuxCloseClick,
             item,
             recommendedSharingTooltipCalloutName = null,
@@ -359,6 +360,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             contactsFieldDisabledTooltip={contactsFieldDisabledTooltip}
                             contactsFieldLabel={<FormattedMessage {...messages.inviteFieldLabel} />}
                             getContacts={getCollaboratorContacts}
+                            getContactAvatarUrl={getContactAvatarUrl}
                             inlineNotice={inlineNotice}
                             isContactsFieldEnabled={canInvite}
                             isExpanded={isInviteSectionExpanded}
@@ -482,6 +484,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             changeSharedLinkPermissionLevel,
             focusSharedLinkOnLoad,
             getSharedLinkContacts,
+            getContactAvatarUrl,
             intl,
             isFetching,
             item,
@@ -546,6 +549,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                     {isEmailLinkSectionExpanded && !showCollaboratorList && (
                         <EmailForm
                             contactsFieldLabel={<FormattedMessage {...messages.sendSharedLinkFieldLabel} />}
+                            getContactAvatarUrl={getContactAvatarUrl}
                             getContacts={getSharedLinkContacts}
                             inlineNotice={{
                                 type: 'error',

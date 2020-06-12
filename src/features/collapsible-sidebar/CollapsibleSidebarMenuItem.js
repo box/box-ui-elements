@@ -60,7 +60,7 @@ const StyledIconWrapper = styled.span`
     }
 `;
 
-export const StyledMenuItemLabel = styled.span`
+const StyledMenuItemLabel = styled.span`
     color: ${props => props.theme.primary.foreground};
 
     a:active &,
@@ -74,19 +74,10 @@ export const StyledMenuItemLabel = styled.span`
 type Props = {
     /** Additional classes */
     className?: string,
-    /**
-     * Custom menu item content. If passed in and "text" is not specified, component will render this content
-     *
-     * Required if "text" is not specified
-     */
+    /** Content to be  displayed next to item label. */
     content?: React.Node,
     icon?: React.Node,
     overflowAction?: React.Node,
-    /**
-     * Menu item label. If passed in, component will render the label irrespective of the presence of "content"
-     *
-     * Required if "content" is not specified
-     */
     text?: string,
 };
 
@@ -105,7 +96,7 @@ function CollapsibleSidebarMenuItem(props: Props) {
                         {text}
                     </StyledMenuItemLabel>
                 )}
-                {!text && content}
+                {content}
                 {overflowAction}
             </StyledMenuItem>
         );

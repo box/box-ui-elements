@@ -9,7 +9,6 @@ jest.mock('lodash/debounce', () => jest.fn(i => i));
 
 describe('elements/content-sidebar/ActivitySidebar', () => {
     const feedAPI = {
-        addAnnotation: jest.fn(),
         feedItems: jest.fn(),
         deleteAnnotation: jest.fn(),
         deleteComment: jest.fn(),
@@ -99,47 +98,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(instance.fetchFeedItems).toHaveBeenCalledWith(true);
             expect(instance.fetchCurrentUser).toHaveBeenCalledWith(currentUser);
         });
-    });
-
-    describe('componentDidUpdate', () => {
-        test('should call addAnnotation if annotator action changes', () => {
-            const wrapper = getWrapper({ annotatorState: { annotation: {} } });
-            const instance = wrapper.instance();
-
-            instance.addAnnotation = jest.fn();
-
-            wrapper.setProps({ annotatorState: { annotation: { id: '123' } } });
-            expect(instance.addAnnotation).toBeCalled();
-        });
-
-        test('should call updateActiveAnnotation if activeAnnotationId changes', () => {
-            const wrapper = getWrapper({ annotatorState: { activeAnnotationId: '123' } });
-            const instance = wrapper.instance();
-
-            instance.updateActiveAnnotation = jest.fn();
-
-            wrapper.setProps({ annotatorState: { activeAnnotationId: '321' } });
-            expect(instance.updateActiveAnnotation).toBeCalled();
-        });
-
-        test.each`
-            prevFileVersionId | fileVersionId | expectedCallCount
-            ${'122'}          | ${'122'}      | ${0}
-            ${'122'}          | ${'123'}      | ${1}
-        `(
-            'should call updateActiveVersion if fileVersionId changes',
-            ({ prevFileVersionId, fileVersionId, expectedCallCount }) => {
-                const match = { params: { fileVersionId } };
-                const prevMatch = { params: { fileVersionId: prevFileVersionId } };
-                const wrapper = getWrapper({ match: prevMatch });
-                const instance = wrapper.instance();
-
-                instance.updateActiveVersion = jest.fn();
-
-                wrapper.setProps({ match });
-                expect(instance.updateActiveVersion).toHaveBeenCalledTimes(expectedCallCount);
-            },
-        );
     });
 
     describe('render()', () => {
@@ -718,66 +676,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
-    describe('addAnnotation()', () => {
-        test('should throw if no user', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-
-            expect(() => instance.addAnnotation()).toThrow('Bad box user!');
-        });
-        test.each([true, false])('should call feedApi with pending if action %s', isPending => {
-            const annotatorStateMock = {
-                action: isPending ? 'create_start' : null,
-                annotation: {},
-                meta: {
-                    requestId: '123',
-                },
-            };
-
-            const wrapper = getWrapper({ annotatorState: annotatorStateMock, currentUser });
-            const instance = wrapper.instance();
-
-            instance.addAnnotation();
-
-            expect(api.getFeedAPI().addAnnotation).toBeCalledWith(
-                file,
-                currentUser,
-                annotatorStateMock.annotation,
-                annotatorStateMock.meta.requestId,
-                isPending,
-            );
-        });
-    });
-
-    describe('updateActiveAnnotation()', () => {
-        test.each`
-            activeAnnotationId | fileVersionId | expectedPath
-            ${'234'}           | ${'456'}      | ${'/activity/annotations/456/234'}
-            ${'234'}           | ${undefined}  | ${'/activity/annotations/123/234'}
-            ${null}            | ${'456'}      | ${'/activity/annotations/456'}
-        `(
-            'should set location path based on match param fileVersionId=$fileVersionId and activeAnnotationId=$activeAnnotationId',
-            ({ activeAnnotationId, fileVersionId, expectedPath }) => {
-                const annotatorState = {
-                    activeAnnotationId,
-                };
-                const getAnnotationsMatchPath = jest.fn().mockReturnValue({ params: { fileVersionId } });
-                const history = { push: jest.fn(), replace: jest.fn() };
-
-                const wrapper = getWrapper({ annotatorState, file, getAnnotationsMatchPath, history });
-                const instance = wrapper.instance();
-
-                instance.updateActiveAnnotation();
-
-                expect(history.push).toHaveBeenCalledWith(expectedPath);
-            },
-        );
-    });
-
     describe('handleAnnotationSelect()', () => {
         const annotatorState = { activeAnnotationId: '123' };
         const emitAnnotatorActiveChangeEvent = jest.fn();
         const getAnnotationsMatchPath = jest.fn().mockReturnValue({ params: { fileVersionId: '456' } });
+        const getAnnotationsPath = jest.fn().mockReturnValue('/activity/annotations/235/124');
         const history = {
             push: jest.fn(),
             replace: jest.fn(),
@@ -790,6 +693,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 emitAnnotatorActiveChangeEvent,
                 file,
                 getAnnotationsMatchPath,
+                getAnnotationsPath,
                 history,
                 onAnnotationSelect,
             });
@@ -830,76 +734,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
             expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
-    });
-
-    describe('getAnnotationsPath()', () => {
-        test.each`
-            fileVersionId | annotationId | expectedPath
-            ${undefined}  | ${undefined} | ${'/activity'}
-            ${'123'}      | ${undefined} | ${'/activity/annotations/123'}
-            ${'123'}      | ${'456'}     | ${'/activity/annotations/123/456'}
-        `('should return $expectedPath', ({ fileVersionId, annotationId, expectedPath }) => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            expect(instance.getAnnotationsPath(fileVersionId, annotationId)).toBe(expectedPath);
-        });
-    });
-
-    describe('redirectDeeplinkedAnnotation()', () => {
-        const history = {
-            replace: jest.fn(),
-        };
-        const getAnnotationsMatchPath = jest.fn();
-
-        beforeEach(() => {
-            jest.resetAllMocks();
-        });
-
-        test.each`
-            fileVersionId | annotationId | expectedCallCount | expectedPath
-            ${undefined}  | ${'987'}     | ${0}              | ${undefined}
-            ${'123'}      | ${'987'}     | ${0}              | ${undefined}
-            ${'124'}      | ${'987'}     | ${1}              | ${'/activity/annotations/123/987'}
-            ${'124'}      | ${undefined} | ${1}              | ${'/activity/annotations/123'}
-        `(
-            'should call history.replace appropriately if router location annotationId=$annotationId and fileVersionId=$fileVersionId',
-            ({ annotationId, fileVersionId, expectedCallCount, expectedPath }) => {
-                const wrapper = getWrapper({ file, getAnnotationsMatchPath, history });
-                const instance = wrapper.instance();
-                getAnnotationsMatchPath.mockReturnValue({ params: { annotationId, fileVersionId } });
-
-                instance.redirectDeeplinkedAnnotation();
-
-                expect(history.replace).toHaveBeenCalledTimes(expectedCallCount);
-
-                if (expectedCallCount) {
-                    expect(history.replace).toHaveBeenCalledWith(expectedPath);
-                }
-            },
-        );
-    });
-
-    describe('updateActiveVersion()', () => {
-        const onVersionChange = jest.fn();
-        const version = { type: 'file_version', id: '124' };
-
-        test.each`
-            fileVersionId | expectedCallCount
-            ${'123'}      | ${0}
-            ${'124'}      | ${1}
-        `(
-            'should onVersionChange $expectedCallCount times based on fileVersionId $fileVersionId',
-            ({ fileVersionId, expectedCallCount }) => {
-                const match = { params: { fileVersionId } };
-                const wrapper = getWrapper({ file, onVersionChange, match });
-                const instance = wrapper.instance();
-                wrapper.setState({ feedItems: [version] });
-
-                instance.updateActiveVersion();
-
-                expect(onVersionChange).toHaveBeenCalledTimes(expectedCallCount);
-            },
-        );
     });
 
     describe('handleAnnotationDelete()', () => {

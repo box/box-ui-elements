@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { createMemoryHistory, History } from 'history';
+import { createMemoryHistory, History, Location } from 'history';
 
 import { Annotator, AnnotatorContext, withAnnotations } from '../index';
 import { WithAnnotationsProps, ComponentWithAnnotations } from '../withAnnotations';
@@ -9,6 +9,7 @@ import { AnnotatorContext as AnnotatorContextType, Action } from '../types';
 type ComponentProps = {
     className?: string;
     history?: History;
+    location?: Location;
 };
 
 type WrappedComponentProps = ComponentProps & Partial<WithAnnotationsProps>;
@@ -51,13 +52,13 @@ describe('elements/common/annotator-context/withAnnotations', () => {
     describe('constructor', () => {
         test('should parse the history location pathname to initialize state with activeAnnotationId', () => {
             const history = createMemoryHistory({ initialEntries: ['/activity/annotations/123/456'] }) as History;
-            const wrapper = getWrapper({ history });
+            const wrapper = getWrapper({ history, location: history.location });
             expect(wrapper.state('activeAnnotationId')).toBe('456');
         });
 
         test('should not initialize state with activeAnnotationId if history path does not match deeplink schema', () => {
             const history = createMemoryHistory({ initialEntries: ['/activity/annotations/456'] }) as History;
-            const wrapper = getWrapper({ history });
+            const wrapper = getWrapper({ history, location: history.location });
             expect(wrapper.state('activeAnnotationId')).toBe(null);
         });
     });
@@ -80,6 +81,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         expect(contextProvider.prop('value').emitActiveChangeEvent).toEqual(instance.emitActiveChangeEvent);
         expect(contextProvider.prop('value').emitRemoveEvent).toEqual(instance.emitRemoveEvent);
         expect(contextProvider.prop('value').getAnnotationsMatchPath).toEqual(instance.getMatchPath);
+        expect(contextProvider.prop('value').getAnnotationsPath).toEqual(instance.getAnnotationsPath);
         expect(contextProvider.prop('value').state).toEqual({
             action: null,
             activeAnnotationId: null,
@@ -196,14 +198,42 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.handleAnnotator(mockAnnotator);
-            instance.handleActiveChange('123');
-            let contextProvider = getContextProvider(wrapper);
-            expect(contextProvider.prop('value').state.activeAnnotationId).toEqual('123');
 
             wrapper.instance().handlePreviewDestroy();
-            contextProvider = getContextProvider(wrapper);
-            expect(contextProvider.prop('value').state.activeAnnotationId).toEqual(null);
             expect(mockAnnotator.removeListener).toBeCalledWith('annotatorevent', instance.handleAnnotatorEvent);
+            expect(wrapper.state()).toEqual({
+                action: null,
+                activeAnnotationId: null,
+                annotation: null,
+                error: null,
+                meta: null,
+            });
+        });
+
+        test('should not reset state if called with false', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.handleAnnotator(mockAnnotator);
+
+            wrapper.setState({ activeAnnotationId: '123' });
+            wrapper.instance().handlePreviewDestroy(false);
+            expect(mockAnnotator.removeListener).toBeCalledWith('annotatorevent', instance.handleAnnotatorEvent);
+            expect(wrapper.state('activeAnnotationId')).toBe('123');
+        });
+    });
+
+    describe('getAnnotationsPath()', () => {
+        test.each`
+            fileVersionId | annotationId | expectedPath
+            ${undefined}  | ${undefined} | ${'/activity'}
+            ${undefined}  | ${null}      | ${'/activity'}
+            ${'123'}      | ${undefined} | ${'/activity/annotations/123'}
+            ${'123'}      | ${null}      | ${'/activity/annotations/123'}
+            ${'123'}      | ${'456'}     | ${'/activity/annotations/123/456'}
+        `('should return $expectedPath', ({ fileVersionId, annotationId, expectedPath }) => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            expect(instance.getAnnotationsPath(fileVersionId, annotationId)).toBe(expectedPath);
         });
     });
 });
