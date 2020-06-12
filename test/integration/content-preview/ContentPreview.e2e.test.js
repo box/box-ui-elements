@@ -168,7 +168,7 @@ describe('ContentPreview', () => {
             cy.getByTestId('bcs-content').should('exist');
             cy.getByTestId('sidebaractivity').should('have.class', 'bcs-is-selected');
 
-            // Click the activity tab to toggle it closed
+            // Click the sidebar toggle button to toggle it closed
             cy.getByTestId('sidebartoggle').click();
             cy.getByTestId('bcs-content').should('not.exist');
         });

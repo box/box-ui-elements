@@ -38,7 +38,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                 const isMatch = !!match;
                 const isActive = () => isMatch && !!isOpen;
                 const isActiveValue = isActive();
-                const isToggle = isMatch && match.isExact;
+                const isExactMatch = isMatch && match.isExact;
                 const id = `${elementId}${elementId === '' ? '' : '_'}${sidebarView}`;
 
                 return (
@@ -53,7 +53,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                             getDOMRef={ref}
                             id={id}
                             isActive={isActive}
-                            replace={isToggle}
+                            replace={isExactMatch}
                             role="tab"
                             tabIndex={isActiveValue ? '0' : '-1'}
                             to={{
