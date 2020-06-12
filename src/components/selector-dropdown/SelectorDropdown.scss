@@ -17,18 +17,20 @@
             display: block;
             width: calc(100% - 30px);
             height: 1px;
-            margin: 5px 15px;
+            margin: $bdl-grid-unit ($bdl-grid-unit * 4);
             border: 0;
-            border-bottom: 1px solid $bdl-gray-30;
+            border-bottom: 1px solid $bdl-gray-10;
             pointer-events: none;
         }
 
         .SelectorDropdown-title {
-            margin: 5px 15px;
-            color: $bdl-gray-30;
+            margin: ($bdl-grid-unit * 4);
+            margin-bottom: $bdl-grid-unit * 2;
+            color: $bdl-gray-62;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 11px;
             line-height: 1;
+            letter-spacing: .6px;
             text-transform: uppercase;
             pointer-events: none;
         }

@@ -3,7 +3,7 @@
 .contact-data-list-item {
     display: flex;
     align-items: center;
-    padding: 12px 35px 12px 12px;
+    padding: $bdl-grid-unit * 2;
     line-height: 16px;
 }
 
