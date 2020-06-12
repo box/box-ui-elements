@@ -20,6 +20,7 @@ type Props = {
     disabled: boolean,
     error: string,
     fieldRef?: Object,
+    getContactAvatarUrl?: (contact: Contact) => string,
     getContacts: (query: string) => Promise<Array<Contact>>,
     intl: any,
     label: React.Node,
@@ -75,7 +76,6 @@ class ContactsField extends React.Component<Props, State> {
     filterContacts = (contacts: Array<Contact>): Array<Contact> => {
         const { pillSelectorInputValue } = this.state;
         const { selectedContacts, suggestedCollaborators } = this.props;
-
         if (pillSelectorInputValue && contacts) {
             let fullContacts = contacts
                 .filter(
@@ -149,15 +149,16 @@ class ContactsField extends React.Component<Props, State> {
 
     render() {
         const {
-            intl,
             disabled,
             error,
             fieldRef,
+            getContactAvatarUrl,
+            intl,
             label,
-            selectedContacts,
             onContactAdd,
             onContactRemove,
             onPillCreate,
+            selectedContacts,
             showContactAvatars,
             validateForError,
             validator,
@@ -196,6 +197,7 @@ class ContactsField extends React.Component<Props, State> {
             >
                 {contacts.map(({ email, isExternalUser, text = null, id }) => (
                     <ContactDatalistItem
+                        getContactAvatarUrl={getContactAvatarUrl}
                         key={id}
                         id={id}
                         isExternal={isExternalUser}

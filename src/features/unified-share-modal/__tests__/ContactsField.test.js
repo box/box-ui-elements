@@ -7,6 +7,13 @@ import messages from '../messages';
 describe('features/unified-share-modal/ContactsField', () => {
     const contactsFromServer = [
         {
+            email: 'w@example.com',
+            id: '9875',
+            isExternalUser: false,
+            name: 'W User',
+            type: 'user',
+        },
+        {
             email: 'x@example.com',
             id: '12345',
             isExternalUser: false,
@@ -252,6 +259,21 @@ describe('features/unified-share-modal/ContactsField', () => {
 
             expect(wrapper.state('pillSelectorInputValue')).toEqual('a');
             expect(onInput).toHaveBeenCalled();
+        });
+
+        test('should get avatar URLs when prop is provided', async () => {
+            const getContacts = jest.fn().mockReturnValue(Promise.resolve(contactsFromServer));
+            const getContactAvatarUrlMock = jest.fn(contact => `/test?id=${contact.id}`);
+
+            const wrapper = getWrapper({
+                getContactAvatarUrl: getContactAvatarUrlMock,
+                getContacts,
+                showContactAvatars: true,
+            });
+            wrapper.instance().handlePillSelectorInput('w');
+            await wrapper.instance().getContactsPromise('w');
+
+            expect(wrapper.find('PillSelectorDropdown ContactDatalistItem').props().getContactAvatarUrl).toBeDefined();
         });
 
         test('should reset contacts if input is empty', async () => {
