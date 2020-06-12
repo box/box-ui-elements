@@ -2,13 +2,13 @@
 import * as React from 'react';
 import { State, Store } from '@sambego/storybook-state';
 
-import DatalistItem from '../datalist-item/DatalistItem';
+import ContactDatalistItem from '../contact-datalist-item';
 import PillSelectorDropdown from './PillSelectorDropdown';
 import notes from './PillSelectorDropdown.notes.md';
 
 const users = [
     { id: 0, name: 'bob@foo.bar' },
-    { id: 1, name: 'sally@foo.bar' },
+    { id: 1, name: 'sally@foo.bar', isExternalUser: true },
     { id: 2, name: 'jean@foo.bar' },
     { id: 3, name: 'longlonglonglonglonglonglonglonglonglonglonglongemail@foo.bar' },
     { id: 4, name: 'anotherlonglonglonglonglonglonglonglonglonglonglonglongemail@foo.bar' },
@@ -99,7 +99,9 @@ export const empty = () => {
                     validator={validator}
                 >
                     {state.selectorOptions.map(option => (
-                        <DatalistItem key={option.value}>{option.displayText}</DatalistItem>
+                        <ContactDatalistItem key={option.value} name={option.value}>
+                            {option.displayText}
+                        </ContactDatalistItem>
                     ))}
                 </PillSelectorDropdown>
             )}
@@ -143,7 +145,108 @@ export const withPills = () => {
                     validator={validator}
                 >
                     {state.selectorOptions.map(option => (
-                        <DatalistItem key={option.value}>{option.displayText}</DatalistItem>
+                        <ContactDatalistItem key={option.value} name={option.value}>
+                            {option.displayText}
+                        </ContactDatalistItem>
+                    ))}
+                </PillSelectorDropdown>
+            )}
+        </State>
+    );
+};
+
+export const showRoundedPills = () => {
+    const storeWithPills = new Store({
+        error: '',
+        selectedOptions: [
+            {
+                displayText: users[2].name,
+                value: users[2].name,
+            },
+            {
+                displayText: users[1].name,
+                value: users[1].name,
+            },
+            {
+                displayText: users[4].name,
+                value: users[4].name,
+            },
+        ],
+        selectorOptions: [],
+    });
+    const { handleInput, handleRemove, handleSelect, validator, validateForError } = generateProps(storeWithPills);
+    return (
+        <State store={storeWithPills}>
+            {state => (
+                <PillSelectorDropdown
+                    allowCustomPills
+                    error={state.error}
+                    placeholder="Names or email addresses"
+                    onInput={handleInput}
+                    onRemove={handleRemove}
+                    onSelect={handleSelect}
+                    selectedOptions={state.selectedOptions}
+                    selectorOptions={state.selectorOptions}
+                    showRoundedPills
+                    validateForError={validateForError}
+                    validator={validator}
+                >
+                    {state.selectorOptions.map(option => (
+                        <ContactDatalistItem key={option.value} name={option.value}>
+                            {option.displayText}
+                        </ContactDatalistItem>
+                    ))}
+                </PillSelectorDropdown>
+            )}
+        </State>
+    );
+};
+
+export const showAvatars = () => {
+    const storeWithPills = new Store({
+        error: '',
+        selectedOptions: [
+            {
+                text: users[2].name,
+                value: users[2].name,
+                id: users[2].id,
+            },
+            {
+                text: users[1].name,
+                value: users[1].name,
+                id: users[1].id,
+                isExternalUser: users[1].isExternalUser,
+            },
+            {
+                text: users[3].name,
+                value: users[3].name,
+                id: users[3].id,
+            },
+        ],
+        selectorOptions: [],
+    });
+    const { handleInput, handleRemove, handleSelect, validator, validateForError } = generateProps(storeWithPills);
+    return (
+        <State store={storeWithPills}>
+            {state => (
+                <PillSelectorDropdown
+                    allowCustomPills
+                    error={state.error}
+                    placeholder="Names or email addresses"
+                    onInput={handleInput}
+                    onRemove={handleRemove}
+                    onSelect={handleSelect}
+                    selectedOptions={state.selectedOptions}
+                    selectorOptions={state.selectorOptions}
+                    showRoundedPills
+                    showAvatars
+                    validateForError={validateForError}
+                    validator={validator}
+                >
+                    {state.selectorOptions.map(option => (
+                        <ContactDatalistItem key={option.value} name={option.value}>
+                            {option.displayText}
+                        </ContactDatalistItem>
                     ))}
                 </PillSelectorDropdown>
             )}
