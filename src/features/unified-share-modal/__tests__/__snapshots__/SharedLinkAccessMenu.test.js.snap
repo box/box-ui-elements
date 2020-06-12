@@ -7,7 +7,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   constrainToWindow={true}
   isDisabled={false}
   isShown={false}
-  offset="0 0"
   onDismiss={[Function]}
   position="middle-left"
   showCloseButton={true}
@@ -48,7 +47,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   constrainToWindow={true}
   isDisabled={false}
   isShown={false}
-  offset="0 0"
   onDismiss={[Function]}
   position="middle-left"
   showCloseButton={true}
@@ -89,7 +87,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   constrainToWindow={true}
   isDisabled={false}
   isShown={false}
-  offset="0 0"
   onDismiss={[Function]}
   position="middle-left"
   showCloseButton={true}
@@ -124,7 +121,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         constrainToWindow={true}
         isDisabled={true}
         key="tooltip-peopleInThisItem"
-        offset="0 0"
         position="top-center"
         text={
           <FormattedMessage
@@ -160,7 +156,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   constrainToWindow={true}
   isDisabled={false}
   isShown={true}
-  offset="0 0"
   onDismiss={[Function]}
   position="middle-left"
   showCloseButton={true}
@@ -201,7 +196,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   constrainToWindow={true}
   isDisabled={false}
   isShown={false}
-  offset="0 0"
   onDismiss={[Function]}
   position="middle-left"
   showCloseButton={true}
@@ -236,7 +230,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         constrainToWindow={true}
         isDisabled={false}
         key="tooltip-peopleWithTheLink"
-        offset="0 0"
         position="top-center"
         text={
           <FormattedMessage
@@ -265,7 +258,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         constrainToWindow={true}
         isDisabled={false}
         key="tooltip-peopleInYourCompany"
-        offset="0 0"
         position="top-center"
         text={
           <FormattedMessage
@@ -294,7 +286,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         constrainToWindow={true}
         isDisabled={true}
         key="tooltip-peopleInThisItem"
-        offset="0 0"
         position="top-center"
         text={
           <FormattedMessage
@@ -330,7 +321,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   constrainToWindow={true}
   isDisabled={false}
   isShown={false}
-  offset="0 0"
   onDismiss={[Function]}
   position="middle-left"
   showCloseButton={true}
@@ -365,7 +355,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         constrainToWindow={true}
         isDisabled={false}
         key="tooltip-peopleWithTheLink"
-        offset="0 0"
         position="top-center"
         text={
           <FormattedMessage
@@ -394,7 +383,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         constrainToWindow={true}
         isDisabled={false}
         key="tooltip-peopleInYourCompany"
-        offset="0 0"
         position="top-center"
         text={
           <FormattedMessage
@@ -423,7 +411,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         constrainToWindow={true}
         isDisabled={true}
         key="tooltip-peopleInThisItem"
-        offset="0 0"
         position="top-center"
         text={
           <FormattedMessage

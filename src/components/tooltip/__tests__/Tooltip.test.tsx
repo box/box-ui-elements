@@ -85,7 +85,6 @@ describe('components/tooltip/Tooltip', () => {
             ]);
             expect(wrapper.prop('enabled')).toBe(false);
             expect(wrapper.prop('targetAttachment')).toEqual('top center');
-            expect(wrapper.prop('offset')).toEqual('0 0');
 
             expect(component.is('button')).toBe(true);
             expect(component.prop('onBlur')).toBeTruthy();

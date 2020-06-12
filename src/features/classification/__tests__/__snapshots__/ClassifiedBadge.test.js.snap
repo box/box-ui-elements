@@ -6,7 +6,6 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
   constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
-  offset="0 0"
   position="bottom-center"
   text="fubar"
   theme="default"
@@ -31,7 +30,6 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
   constrainToWindow={true}
   isDisabled={true}
   isTabbable={false}
-  offset="0 0"
   position="bottom-center"
   theme="default"
 >
@@ -55,7 +53,6 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
   constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
-  offset="0 0"
   position="bottom-center"
   text="fubar"
   theme="default"

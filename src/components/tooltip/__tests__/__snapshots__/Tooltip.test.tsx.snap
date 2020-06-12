@@ -32,7 +32,6 @@ exports[`components/tooltip/Tooltip render() should not render the close button 
     ]
   }
   enabled={false}
-  offset="0 0"
   renderElementTag="div"
   renderElementTo={null}
   targetAttachment="top center"
@@ -57,7 +56,6 @@ exports[`components/tooltip/Tooltip render() should not render with close button
     ]
   }
   enabled={false}
-  offset="0 0"
   renderElementTag="div"
   renderElementTo={null}
   targetAttachment="top center"
@@ -82,7 +80,6 @@ exports[`components/tooltip/Tooltip render() should not render with close button
     ]
   }
   enabled={true}
-  offset="0 0"
   renderElementTag="div"
   renderElementTo={null}
   targetAttachment="top center"
@@ -123,7 +120,6 @@ exports[`components/tooltip/Tooltip render() should render children wrapped in t
     ]
   }
   enabled={false}
-  offset="0 0"
   renderElementTag="div"
   renderElementTo={null}
   targetAttachment="top center"
@@ -155,7 +151,6 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
     ]
   }
   enabled={true}
-  offset="0 0"
   renderElementTag="div"
   renderElementTo={null}
   targetAttachment="top center"
@@ -190,7 +185,6 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
     ]
   }
   enabled={true}
-  offset="0 0"
   renderElementTag="div"
   renderElementTo={null}
   targetAttachment="top center"

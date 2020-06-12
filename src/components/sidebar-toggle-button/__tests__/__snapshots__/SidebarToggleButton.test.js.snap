@@ -18,7 +18,6 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
-      offset="0 0"
       position="middle-left"
       text="Show Sidebar"
       theme="default"
@@ -36,7 +35,6 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
           ]
         }
         enabled={false}
-        offset="0 0"
         renderElementTag="div"
         renderElementTo={null}
         targetAttachment="middle left"
@@ -118,7 +116,6 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
-      offset="0 0"
       position="middle-right"
       text="Show Sidebar"
       theme="default"
@@ -136,7 +133,6 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
           ]
         }
         enabled={false}
-        offset="0 0"
         renderElementTag="div"
         renderElementTo={null}
         targetAttachment="middle right"
@@ -218,7 +214,6 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
-      offset="0 0"
       position="middle-right"
       text="Hide Sidebar"
       theme="default"
@@ -236,7 +231,6 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
           ]
         }
         enabled={false}
-        offset="0 0"
         renderElementTag="div"
         renderElementTo={null}
         targetAttachment="middle right"
@@ -316,7 +310,6 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
-      offset="0 0"
       position="middle-left"
       text="Hide Sidebar"
       theme="default"
@@ -334,7 +327,6 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
           ]
         }
         enabled={false}
-        offset="0 0"
         renderElementTag="div"
         renderElementTo={null}
         targetAttachment="middle left"

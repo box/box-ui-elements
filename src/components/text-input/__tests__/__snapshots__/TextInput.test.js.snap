@@ -18,7 +18,6 @@ exports[`components/text-input/TextInput should render text input with descripti
       constrainToWindow={true}
       isDisabled={false}
       isShown={false}
-      offset="0 0"
       position="middle-right"
       text=""
       theme="error"

@@ -26,7 +26,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       isDisabled={false}
       isShown={false}
       key="1"
-      offset="0 0"
       position="bottom-center"
       text={
         <div
@@ -75,7 +74,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       isDisabled={false}
       isShown={false}
       key="2"
-      offset="0 0"
       position="bottom-center"
       text={
         <div
@@ -124,7 +122,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       isDisabled={false}
       isShown={false}
       key="3"
-      offset="0 0"
       position="bottom-center"
       text={
         <div
@@ -256,7 +253,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       isDisabled={false}
       isShown={false}
       key="1"
-      offset="0 0"
       position="bottom-center"
       text={
         <div
@@ -305,7 +301,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       isDisabled={false}
       isShown={false}
       key="2"
-      offset="0 0"
       position="bottom-center"
       text={
         <div
@@ -354,7 +349,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       isDisabled={false}
       isShown={false}
       key="3"
-      offset="0 0"
       position="bottom-center"
       text={
         <div
@@ -528,7 +522,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       isDisabled={false}
       isShown={false}
       key="1"
-      offset="0 0"
       position="bottom-center"
       text={
         <div
@@ -577,7 +570,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       isDisabled={false}
       isShown={false}
       key="2"
-      offset="0 0"
       position="bottom-center"
       text={
         <div
@@ -626,7 +618,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       isDisabled={false}
       isShown={false}
       key="3"
-      offset="0 0"
       position="bottom-center"
       text={
         <div
@@ -767,7 +758,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       isDisabled={false}
       isShown={false}
       key="1"
-      offset="0 0"
       position="bottom-center"
       text={
         <div
@@ -816,7 +806,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       isDisabled={false}
       isShown={false}
       key="2"
-      offset="0 0"
       position="bottom-center"
       text={
         <div
@@ -865,7 +854,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       isDisabled={false}
       isShown={false}
       key="3"
-      offset="0 0"
       position="bottom-center"
       text={
         <div

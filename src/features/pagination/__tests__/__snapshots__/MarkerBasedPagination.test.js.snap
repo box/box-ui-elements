@@ -43,7 +43,6 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
               constrainToScrollParent={false}
               constrainToWindow={true}
               isDisabled={false}
-              offset="0 0"
               position="top-center"
               text={
                 <FormattedMessage
@@ -66,7 +65,6 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                   ]
                 }
                 enabled={false}
-                offset="0 0"
                 renderElementTag="div"
                 renderElementTo={null}
                 targetAttachment="top center"
@@ -291,7 +289,6 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
               constrainToScrollParent={false}
               constrainToWindow={true}
               isDisabled={false}
-              offset="0 0"
               position="top-center"
               text={
                 <FormattedMessage
@@ -314,7 +311,6 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                   ]
                 }
                 enabled={false}
-                offset="0 0"
                 renderElementTag="div"
                 renderElementTo={null}
                 targetAttachment="top center"
@@ -423,7 +419,6 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
               constrainToScrollParent={false}
               constrainToWindow={true}
               isDisabled={false}
-              offset="0 0"
               position="top-center"
               text={
                 <FormattedMessage
@@ -446,7 +441,6 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                   ]
                 }
                 enabled={false}
-                offset="0 0"
                 renderElementTag="div"
                 renderElementTo={null}
                 targetAttachment="top center"
@@ -527,7 +521,6 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
               constrainToScrollParent={false}
               constrainToWindow={true}
               isDisabled={false}
-              offset="0 0"
               position="top-center"
               text={
                 <FormattedMessage
@@ -550,7 +543,6 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                   ]
                 }
                 enabled={false}
-                offset="0 0"
                 renderElementTag="div"
                 renderElementTo={null}
                 targetAttachment="top center"

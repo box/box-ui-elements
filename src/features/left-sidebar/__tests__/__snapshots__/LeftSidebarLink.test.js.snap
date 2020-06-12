@@ -7,7 +7,6 @@ exports[`feature/left-sidebar/LeftSidebarLink should render BadgeCountElement 1`
   constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
-  offset="0 0"
   position="middle-right"
   text="Feed"
   theme="default"
@@ -32,7 +31,6 @@ exports[`feature/left-sidebar/LeftSidebarLink should render BadgeElement 1`] = `
   constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
-  offset="0 0"
   position="middle-right"
   text="Feed"
   theme="default"
@@ -63,7 +61,6 @@ exports[`feature/left-sidebar/LeftSidebarLink should render RemoveButton 1`] = `
     constrainToWindow={true}
     isDisabled={false}
     isTabbable={false}
-    offset="0 0"
     position="middle-right"
     text="Feed"
     theme="default"
@@ -93,7 +90,6 @@ exports[`feature/left-sidebar/LeftSidebarLink should render a LinkComponent comp
   constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
-  offset="0 0"
   position="middle-right"
   text="Feed"
   theme="default"
@@ -118,7 +114,6 @@ exports[`feature/left-sidebar/LeftSidebarLink should render the IconComponent 1`
   constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
-  offset="0 0"
   position="middle-right"
   text="Feed"
   theme="default"
@@ -146,7 +141,6 @@ exports[`feature/left-sidebar/LeftSidebarLink should render the router link 1`] 
   constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
-  offset="0 0"
   position="middle-right"
   text="Feed"
   theme="default"
@@ -185,7 +179,6 @@ exports[`feature/left-sidebar/LeftSidebarLink should use a custom className 1`] 
   constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
-  offset="0 0"
   position="middle-right"
   text="Feed"
   theme="default"
@@ -210,7 +203,6 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
   constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
-  offset="0 0"
   position="middle-right"
   text="Feed"
   theme="default"
@@ -239,7 +231,6 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
   constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
-  offset="0 0"
   position="middle-right"
   text="Feed"
   theme="default"
@@ -264,7 +255,6 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
   constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
-  offset="0 0"
   position="middle-right"
   text="Feed"
   theme="default"
@@ -293,7 +283,6 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
   constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
-  offset="0 0"
   position="middle-right"
   text="Feed"
   theme="default"
@@ -318,7 +307,6 @@ exports[`feature/left-sidebar/LeftSidebarLink tooltip should take class from sta
   constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
-  offset="0 0"
   position="middle-right"
   text="Feed"
   theme="default"

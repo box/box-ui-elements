@@ -7,7 +7,6 @@ exports[`feature/left-sidebar/defaultNavLinkRenderer should render default NavLi
   constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
-  offset="0 0"
   position="middle-right"
   theme="default"
 >
