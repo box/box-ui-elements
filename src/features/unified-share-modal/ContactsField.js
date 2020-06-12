@@ -191,6 +191,7 @@ class ContactsField extends React.Component<Props, State> {
                 placeholder={intl.formatMessage(commonMessages.pillSelectorPlaceholder)}
                 ref={fieldRef}
                 selectedOptions={selectedContacts}
+                showRoundedPills
                 selectorOptions={contacts}
                 validateForError={validateForError}
                 validator={validator}
