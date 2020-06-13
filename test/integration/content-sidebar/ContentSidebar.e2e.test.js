@@ -20,14 +20,10 @@ describe('ContentSidebar', () => {
             });
         });
 
-        it('should toggle sidebar content when a user toggles a sidebar tab', () => {
+        it('should remain sidebar open when a user clicks sidebar tab', () => {
             // Sidebar should be open by default
             cy.getByTestId('bcs-content').should('exist');
             cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
-
-            cy.getByTestId('sidebarskills').click();
-            cy.getByTestId('sidebarskills').should('not.have.class', 'bcs-is-selected');
-            cy.getByTestId('bcs-content').should('not.exist');
 
             cy.getByTestId('sidebarskills').click();
             cy.getByTestId('sidebarskills').should('have.class', 'bcs-is-selected');
