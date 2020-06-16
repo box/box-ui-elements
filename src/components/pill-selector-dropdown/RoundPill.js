@@ -11,6 +11,8 @@ import './RoundPill.scss';
 
 type Props = {
     className?: string,
+    /** Function to retrieve the image URL associated with a pill */
+    getPillImageUrl?: (data: { id: string | number, [key: string]: any }) => string,
     hasWarning?: boolean,
     id?: string | number,
     isDisabled?: boolean,
@@ -27,6 +29,7 @@ const RemoveButton = ({ onClick, ...rest }: { onClick: () => any }) => (
 );
 
 const RoundPill = ({
+    getPillImageUrl,
     isDisabled = false,
     isSelected = false,
     hasWarning = false,
@@ -60,6 +63,7 @@ const RoundPill = ({
     const avatar = showAvatar ? (
         <LabelPill.Icon
             Component={Avatar}
+            avatarUrl={getPillImageUrl && id ? getPillImageUrl({ id }) : undefined}
             id={id}
             isExternal={isExternal}
             name={text}
