@@ -256,6 +256,30 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 expect(history.push).toHaveBeenCalledWith({ pathname: expectedPath, state: expectedState });
             },
         );
+
+        test('should use the provided fileVersionId in the annotatorState if provided', () => {
+            const annotatorState = {
+                activeAnnotationFileVersionId: '456',
+                activeAnnotationId: '123',
+            };
+            const history = { push: jest.fn(), replace: jest.fn() };
+            const wrapper = getWrapper({ annotatorState, history, location: { pathname: '/' } });
+            const instance = wrapper.instance();
+
+            instance.updateActiveAnnotation();
+
+            expect(annotatorContextProps.getAnnotationsPath).toHaveBeenCalledWith('456', '123');
+        });
+
+        test('should fall back to the fileVersionId in the file if none other is provided', () => {
+            const history = { push: jest.fn(), replace: jest.fn() };
+            const wrapper = getWrapper({ history, location: { pathname: '/' } });
+            const instance = wrapper.instance();
+
+            instance.updateActiveAnnotation();
+
+            expect(annotatorContextProps.getAnnotationsPath).toHaveBeenCalledWith('123', undefined);
+        });
     });
 
     describe('updateActiveVersion()', () => {

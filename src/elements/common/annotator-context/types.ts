@@ -19,6 +19,7 @@ export interface Annotator {
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 export interface AnnotatorState {
+    activeAnnotationFileVersionId?: string | null;
     activeAnnotationId?: string | null;
     annotation?: object | null;
     action?: Action | null;
