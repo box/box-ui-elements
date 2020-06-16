@@ -32,6 +32,8 @@ type Props = {
     dropdownScrollBoundarySelector?: string,
     /** Error message */
     error?: React.Node,
+    /** Function to retrieve the image URL associated with a pill */
+    getPillImageUrl?: (data: { id: string | number, [key: string]: any }) => string,
     /** Passed in by `SelectorDropdown` for accessibility */
     inputProps: Object,
     /** Input label */
@@ -232,6 +234,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             dividerIndex,
             dropdownScrollBoundarySelector,
             error,
+            getPillImageUrl,
             inputProps,
             label,
             onRemove,
@@ -267,6 +270,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                             allowInvalidPills={allowInvalidPills}
                             disabled={disabled}
                             error={error}
+                            getPillImageUrl={getPillImageUrl}
                             onBlur={this.handleBlur}
                             onInput={this.handleInput}
                             onPaste={this.handlePaste}
