@@ -19,6 +19,14 @@ Array [
     "value": "z@example.com",
   },
   Object {
+    "email": "w@example.com",
+    "id": "9875",
+    "isExternalUser": false,
+    "text": "W User",
+    "type": "user",
+    "value": "w@example.com",
+  },
+  Object {
     "email": "x@example.com",
     "id": "12345",
     "isExternalUser": false,
@@ -58,6 +66,14 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   selectedOptions={Array []}
   selectorOptions={
     Array [
+      Object {
+        "email": "w@example.com",
+        "id": "9875",
+        "isExternalUser": false,
+        "text": "W User",
+        "type": "user",
+        "value": "w@example.com",
+      },
       Object {
         "email": "x@example.com",
         "id": "12345",
@@ -126,9 +142,19 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   }
   shouldClearUnmatchedInput={false}
   shouldSetActiveItemOnOpen={false}
+  showRoundedPills={true}
   validateForError={[MockFunction]}
   validator={[MockFunction]}
 >
+  <ContactDatalistItem
+    id="9875"
+    isExternal={false}
+    key="9875"
+    name="W User"
+    showAvatar={false}
+    subtitle="w@example.com"
+    title="W User"
+  />
   <ContactDatalistItem
     id="12345"
     isExternal={false}
@@ -261,6 +287,7 @@ exports[`features/unified-share-modal/ContactsField render should render default
   selectorOptions={Array []}
   shouldClearUnmatchedInput={false}
   shouldSetActiveItemOnOpen={false}
+  showRoundedPills={true}
   validateForError={[MockFunction]}
   validator={[MockFunction]}
 />

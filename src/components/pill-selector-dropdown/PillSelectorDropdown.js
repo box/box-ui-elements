@@ -32,6 +32,8 @@ type Props = {
     dropdownScrollBoundarySelector?: string,
     /** Error message */
     error?: React.Node,
+    /** Function to retrieve the image URL associated with a pill */
+    getPillImageUrl?: (data: { id: string | number, [key: string]: any }) => string,
     /** Passed in by `SelectorDropdown` for accessibility */
     inputProps: Object,
     /** Input label */
@@ -62,6 +64,10 @@ type Props = {
     shouldClearUnmatchedInput?: boolean,
     /** Determines whether or not the first item is highlighted automatically when the dropdown opens */
     shouldSetActiveItemOnOpen?: boolean,
+    /** show avatars (uses showRoundedPills) */
+    showAvatars?: boolean,
+    /** Use rounded style for pills */
+    showRoundedPills?: boolean,
     /** Array of suggested collaborators */
     suggestedPillsData?: Array<Object>,
     /** String decribes the datapoint to filter by so that items in the form are not shown in suggestions. */
@@ -228,6 +234,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             dividerIndex,
             dropdownScrollBoundarySelector,
             error,
+            getPillImageUrl,
             inputProps,
             label,
             onRemove,
@@ -235,6 +242,8 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             overlayTitle,
             placeholder,
             selectedOptions,
+            showAvatars,
+            showRoundedPills,
             suggestedPillsData,
             suggestedPillsFilter,
             suggestedPillsTitle,
@@ -261,6 +270,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                             allowInvalidPills={allowInvalidPills}
                             disabled={disabled}
                             error={error}
+                            getPillImageUrl={getPillImageUrl}
                             onBlur={this.handleBlur}
                             onInput={this.handleInput}
                             onPaste={this.handlePaste}
@@ -268,6 +278,8 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                             onSuggestedPillAdd={onSuggestedPillAdd}
                             placeholder={placeholder}
                             selectedOptions={selectedOptions}
+                            showRoundedPills={showRoundedPills}
+                            showAvatars={showAvatars && showRoundedPills}
                             suggestedPillsData={suggestedPillsData}
                             suggestedPillsFilter={suggestedPillsFilter}
                             suggestedPillsTitle={suggestedPillsTitle}

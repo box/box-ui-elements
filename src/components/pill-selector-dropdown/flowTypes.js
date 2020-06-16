@@ -15,6 +15,14 @@ export type SuggestedPill = {
     value?: string,
 };
 
+export type RoundOption = {
+    hasWarning: boolean,
+    id?: number | string,
+    isExternalUser: boolean,
+} & Option;
+
+export type SelectedRoundOptions = Array<RoundOption> | List<RoundOption>;
+
 export type SuggestedPills = Array<SuggestedPill>;
 
 export type SuggestedPillsFilter = $Keys<SuggestedPill>;

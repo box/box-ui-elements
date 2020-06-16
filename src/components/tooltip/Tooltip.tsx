@@ -89,6 +89,8 @@ export type TooltipProps = {
     isShown?: boolean;
     /** Whether to add tabindex=0.  Defaults to `true` */
     isTabbable?: boolean;
+    /** A string of the form 'vert-offset horiz-offset' which controls positioning */
+    offset?: string;
     /** Function called if the user manually dismisses the tooltip - only applies if showCloseButton is true */
     onDismiss?: () => void;
     /** Shows an X button to close the tooltip. Useful when tooltips are force shown with the isShown prop. */
@@ -208,6 +210,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             constrainToWindow,
             isDisabled,
             isTabbable = true,
+            offset,
             position = TooltipPosition.TOP_CENTER,
             showCloseButton,
             stopBubble,
@@ -272,8 +275,15 @@ class Tooltip extends React.Component<TooltipProps, State> {
             'with-close-button': withCloseButton,
         });
 
-        // Typescript defs seem busted for older versions of react-tether
-        const tetherProps = {
+        const tetherProps: {
+            attachment: TetherPosition;
+            bodyElement: HTMLElement;
+            classPrefix: string;
+            constraints: {};
+            enabled: boolean | undefined;
+            targetAttachment: TetherPosition;
+            offset?: string;
+        } = {
             attachment: tetherPosition.attachment,
             bodyElement: bodyEl,
             classPrefix: 'tooltip',
@@ -281,6 +291,10 @@ class Tooltip extends React.Component<TooltipProps, State> {
             enabled: showTooltip,
             targetAttachment: tetherPosition.targetAttachment,
         };
+
+        if (offset) {
+            tetherProps.offset = offset;
+        }
 
         const tooltipInner = (
             <>

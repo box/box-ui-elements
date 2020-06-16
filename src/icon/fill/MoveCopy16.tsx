@@ -14,14 +14,14 @@ import AccessibleSVG, { SVGProps } from '../../components/accessible-svg/Accessi
  * - https://github.com/box/box-ui-elements/issues/new?template=Feature_request.md
  */
 
-const GlobeBadge16 = (props: SVGProps) => (
+const MoveCopy16 = (props: SVGProps) => (
     <AccessibleSVG width={16} height={16} viewBox="0 0 16 16" {...props}>
         <path
             fill={vars.bdlGray50}
             fillRule="evenodd"
-            d="M8 0a7.988 7.988 0 00-5.662 2.338A7.992 7.992 0 000 8a7.988 7.988 0 002.338 5.662A7.992 7.992 0 008 16a7.988 7.988 0 005.662-2.338A7.992 7.992 0 0016 8a7.988 7.988 0 00-2.338-5.662A7.992 7.992 0 008 0zm-.862 14.4C4.062 13.908 1.6 11.323 1.6 8c0-.492.123-.984.123-1.477L5.54 10.34v.861c0 .862.738 1.6 1.6 1.6v1.6zm5.539-2.092c-.247-.616-.861-1.108-1.477-1.108h-.862V8.738c0-.368-.246-.738-.738-.738H4.8V6.4h1.6c.492 0 .862-.37.862-.862V4.062h1.6c.861 0 1.6-.739 1.6-1.6v-.37C12.8 3.077 14.4 5.292 14.4 8c0 1.723-.616 3.2-1.723 4.308z"
+            d="M13 3c.557 0 .942.345.994.875L14 4v11H4V3h9zm-2-2v1H3v10H2V1h9zm-.5 9h-3c-.3 0-.5.2-.5.5 0 .267.158.454.404.493L7.5 11h3c.3 0 .5-.2.5-.5s-.2-.5-.5-.5zm0-3h-3c-.3 0-.5.2-.5.5 0 .267.158.454.404.493L7.5 8h3c.3 0 .5-.2.5-.5s-.2-.5-.5-.5z"
         />
     </AccessibleSVG>
 );
 
-export default GlobeBadge16;
+export default MoveCopy16;

@@ -91,7 +91,15 @@ class RadarAnimation extends React.Component<RadarAnimationProps> {
     };
 
     render() {
-        const { children, className = '', constrainToScrollParent, constrainToWindow, position, isShown } = this.props;
+        const {
+            children,
+            className = '',
+            constrainToScrollParent,
+            constrainToWindow,
+            position,
+            isShown,
+            ...rest
+        } = this.props;
 
         const constraints = [];
         if (constrainToScrollParent) {
@@ -125,7 +133,7 @@ class RadarAnimation extends React.Component<RadarAnimationProps> {
             <TetherComponent ref={this.tetherRef} {...tetherProps}>
                 {referenceElement}
                 {isShown && (
-                    <div className={`radar ${className}`} id={this.radarAnimationID}>
+                    <div className={`radar ${className}`} id={this.radarAnimationID} {...rest}>
                         <div className="radar-dot" />
                         <div className="radar-circle" />
                     </div>
