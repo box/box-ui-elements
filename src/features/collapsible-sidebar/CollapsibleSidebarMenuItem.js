@@ -27,6 +27,19 @@ const StyledMenuItem = styled.div`
             opacity: 0.7;
         }
     }
+
+    .bdl-CollapsibleSidebar-menuItemActionContainer {
+        position: absolute;
+        top: 12px;
+        right: 8px;
+        padding: 0;
+        opacity: 0;
+
+        &:hover,
+        &:focus-within {
+            opacity: 1;
+        }
+    }
 `;
 
 const StyledIconWrapper = styled.span`
@@ -105,6 +118,13 @@ const StyledLink = styled.a`
 
     .bdl-CollapsibleSidebar-menuItemIcon + .bdl-CollapsibleSidebar-menuItemLabel {
         margin-left: 16px;
+        margin-right: 12px;
+    }
+
+    &.show-action + .bdl-CollapsibleSidebar-menuItemActionContainer,
+    &:focus + .bdl-CollapsibleSidebar-menuItemActionContainer,
+    &:hover + .bdl-CollapsibleSidebar-menuItemActionContainer {
+        opacity: 1;
     }
 `;
 
@@ -113,20 +133,25 @@ type Props = {
     className?: string,
     icon?: React.Node,
     overflowAction?: React.Node,
-    showAction: 'hover' | 'always', // TODO; what to call this, TODO: implement action hiding in here not EUA
-    text?: string,
+    /** Default is to always show */
+    showAction?: 'hover' | 'always',
+    text?: React.Node,
 };
 
 function CollapsibleSidebarMenuItem(props: Props) {
-    const { className, icon, overflowAction, text, ...rest } = props;
+    const { className, icon, overflowAction, showAction, text, ...rest } = props;
     const textRef = React.useRef<?HTMLElement>(null);
     const isTextOverflowed = useIsContentOverflowed(textRef);
     const { isScrolling } = React.useContext(CollapsibleSidebarContext);
+    const isShowOnHover = showAction === 'hover';
+    const menuItemLinkClassName = isShowOnHover
+        ? classNames('bdl-CollapsibleSidebar-menuItemLink')
+        : classNames('bdl-CollapsibleSidebar-menuItemLink', 'show-action');
 
     const renderMenuItem = () => {
         return (
             <StyledMenuItem className={className}>
-                <StyledLink className="bdl-CollapsibleSidebar-menuItemLink" {...rest}>
+                <StyledLink className={menuItemLinkClassName} {...rest}>
                     {icon && (
                         <StyledIconWrapper className="bdl-CollapsibleSidebar-menuItemIcon">{icon}</StyledIconWrapper>
                     )}
@@ -136,12 +161,7 @@ function CollapsibleSidebarMenuItem(props: Props) {
                         </StyledMenuItemLabel>
                     )}
                 </StyledLink>
-                <span
-                    className="bdl-CollapsibleSidebar-menuItemActionContainer"
-                    css={{ position: 'absolute', top: 8, right: 8, padding: 4 }}
-                >
-                    {overflowAction}
-                </span>
+                <span className="bdl-CollapsibleSidebar-menuItemActionContainer">{overflowAction}</span>
             </StyledMenuItem>
         );
     };
