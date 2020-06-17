@@ -132,7 +132,7 @@ export default function withSidebarAnnotations(
 
         updateActiveAnnotation = () => {
             const {
-                annotatorState: { activeAnnotationId },
+                annotatorState: { activeAnnotationFileVersionId, activeAnnotationId },
                 file,
                 getAnnotationsMatchPath,
                 getAnnotationsPath,
@@ -141,7 +141,8 @@ export default function withSidebarAnnotations(
             } = this.props;
             const match = getAnnotationsMatchPath(location);
             const currentFileVersionId = getProp(file, 'file_version.id');
-            const fileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
+            const defaultFileVersionId = activeAnnotationFileVersionId || currentFileVersionId;
+            const fileVersionId = getProp(match, 'params.fileVersionId', defaultFileVersionId);
             const newLocationState = activeAnnotationId ? { open: true } : location.state;
 
             // Update the location pathname and open state if transitioning to an active annotation id, force the sidebar open

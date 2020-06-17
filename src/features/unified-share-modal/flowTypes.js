@@ -248,6 +248,8 @@ type CollaboratorAvatarsTypes = {
 };
 
 type EmailFormTypes = {
+    /** Function to retrieve the URL for an avatar, given contact details */
+    getContactAvatarUrl?: (contact: contactType) => string,
     /** Handler function for when the user types into email shared link field to fetch contacts. */
     getSharedLinkContacts: (query: string) => Promise<Array<contactType>>,
     /**
