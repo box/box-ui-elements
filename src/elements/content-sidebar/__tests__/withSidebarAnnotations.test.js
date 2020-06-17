@@ -49,6 +49,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         test.each`
             prevFileVersionId | fileVersionId | expectedCallCount
             ${'122'}          | ${'122'}      | ${0}
+            ${'122'}          | ${undefined}  | ${0}
             ${'122'}          | ${'123'}      | ${1}
         `(
             'should call updateActiveVersion if fileVersionId changes',
@@ -104,6 +105,19 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 expect(wrapper.instance().addAnnotation).toHaveBeenCalledTimes(expectedCount);
             },
         );
+
+        test.each`
+            fileId   | expectedCount
+            ${'123'} | ${0}
+            ${'456'} | ${1}
+        `('should call onVersionChange appropriately if file id changes to $fileId', ({ fileId, expectedCount }) => {
+            const onVersionChange = jest.fn();
+            const wrapper = getWrapper({ fileId: '123', onVersionChange });
+
+            wrapper.setProps({ fileId });
+
+            expect(onVersionChange).toHaveBeenCalledTimes(expectedCount);
+        });
     });
 
     describe('redirectDeeplinkedAnnotation()', () => {
