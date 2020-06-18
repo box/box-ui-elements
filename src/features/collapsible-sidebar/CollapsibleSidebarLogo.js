@@ -29,6 +29,7 @@ const StyledLogo = styled(Logo)`
     a:focus & {
         /* since root navlink is focusable, give logo some kind of focus state */
         border-color: ${props => props.theme?.primary?.foreground};
+        outline: none;
     }
 `;
 
@@ -56,6 +57,7 @@ const StyledToggleButton = styled(PlainButton)`
 
     &:focus {
         border-color: ${props => props?.theme?.primary?.foreground};
+        outline: none;
     }
 `;
 

@@ -49,35 +49,35 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
     >
       <CollapsibleSidebarItem
         collapsedElement={
-          <Styled(PlainButton)
+          <CollapsibleSidebarLogo__StyledToggleButton
             aria-label="Collapse"
             className="bdl-CollapsibleSidebar-toggleButton"
             type="button"
           >
-            <Styled(IconHamburger)
+            <CollapsibleSidebarLogo__StyledIconHamburger
               height={20}
               width={20}
             />
-          </Styled(PlainButton)>
+          </CollapsibleSidebarLogo__StyledToggleButton>
         }
         expanded={true}
         expandedElement={
           <React.Fragment>
-            <Styled(PlainButton)
+            <CollapsibleSidebarLogo__StyledToggleButton
               aria-label="Collapse"
               className="bdl-CollapsibleSidebar-toggleButton"
               type="button"
             >
-              <Styled(IconHamburger)
+              <CollapsibleSidebarLogo__StyledIconHamburger
                 height={20}
                 width={20}
               />
-            </Styled(PlainButton)>
+            </CollapsibleSidebarLogo__StyledToggleButton>
             <LinkBase
               href="/"
             >
               <React.Fragment>
-                <Styled(BoxLogo)
+                <CollapsibleSidebarLogo__StyledLogo
                   className="bdl-CollapsibleSidebar-logoIcon"
                   height={42}
                   width={71}
@@ -87,38 +87,38 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
           </React.Fragment>
         }
       >
-        <Styled(PlainButton)
+        <CollapsibleSidebarLogo__StyledToggleButton
           aria-label="Collapse"
           className="bdl-CollapsibleSidebar-toggleButton"
           type="button"
         >
           <PlainButton
             aria-label="Collapse"
-            className="sc-AykKE cGDkIQ bdl-CollapsibleSidebar-toggleButton"
+            className="CollapsibleSidebarLogo__StyledToggleButton-sc-6amevi-2 ehAKgQ bdl-CollapsibleSidebar-toggleButton"
             type="button"
           >
             <button
               aria-label="Collapse"
-              className="btn-plain sc-AykKE cGDkIQ bdl-CollapsibleSidebar-toggleButton"
+              className="btn-plain CollapsibleSidebarLogo__StyledToggleButton-sc-6amevi-2 ehAKgQ bdl-CollapsibleSidebar-toggleButton"
               type="button"
             >
-              <Styled(IconHamburger)
+              <CollapsibleSidebarLogo__StyledIconHamburger
                 height={20}
                 width={20}
               >
                 <IconHamburger
-                  className="sc-AykKD knllNy"
+                  className="CollapsibleSidebarLogo__StyledIconHamburger-sc-6amevi-1 jjgzkm"
                   height={20}
                   width={20}
                 >
                   <AccessibleSVG
-                    className="icon-hamburger sc-AykKD knllNy"
+                    className="icon-hamburger CollapsibleSidebarLogo__StyledIconHamburger-sc-6amevi-1 jjgzkm"
                     height={20}
                     viewBox="0 0 24 24"
                     width={20}
                   >
                     <svg
-                      className="icon-hamburger sc-AykKD knllNy"
+                      className="icon-hamburger CollapsibleSidebarLogo__StyledIconHamburger-sc-6amevi-1 jjgzkm"
                       focusable="false"
                       height={20}
                       role="presentation"
@@ -137,34 +137,34 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
                     </svg>
                   </AccessibleSVG>
                 </IconHamburger>
-              </Styled(IconHamburger)>
+              </CollapsibleSidebarLogo__StyledIconHamburger>
             </button>
           </PlainButton>
-        </Styled(PlainButton)>
+        </CollapsibleSidebarLogo__StyledToggleButton>
         <LinkBase
           href="/"
         >
           <a
             href="/"
           >
-            <Styled(BoxLogo)
+            <CollapsibleSidebarLogo__StyledLogo
               className="bdl-CollapsibleSidebar-logoIcon"
               height={42}
               width={71}
             >
               <BoxLogo
-                className="sc-AykKC gvwjRB bdl-CollapsibleSidebar-logoIcon"
+                className="CollapsibleSidebarLogo__StyledLogo-sc-6amevi-0 jTcBgl bdl-CollapsibleSidebar-logoIcon"
                 height={42}
                 width={71}
               >
                 <AccessibleSVG
-                  className="sc-AykKC gvwjRB bdl-CollapsibleSidebar-logoIcon"
+                  className="CollapsibleSidebarLogo__StyledLogo-sc-6amevi-0 jTcBgl bdl-CollapsibleSidebar-logoIcon"
                   height={42}
                   viewBox="0 0 461 244"
                   width={71}
                 >
                   <svg
-                    className="sc-AykKC gvwjRB bdl-CollapsibleSidebar-logoIcon"
+                    className="CollapsibleSidebarLogo__StyledLogo-sc-6amevi-0 jTcBgl bdl-CollapsibleSidebar-logoIcon"
                     focusable="false"
                     height={42}
                     role="presentation"
@@ -179,7 +179,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
                   </svg>
                 </AccessibleSVG>
               </BoxLogo>
-            </Styled(BoxLogo)>
+            </CollapsibleSidebarLogo__StyledLogo>
           </a>
         </LinkBase>
       </CollapsibleSidebarItem>
@@ -207,34 +207,34 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 2`] = `
     >
       <CollapsibleSidebarItem
         collapsedElement={
-          <Styled(PlainButton)
+          <CollapsibleSidebarLogo__StyledToggleButton
             aria-label="Expand"
             className="bdl-CollapsibleSidebar-toggleButton"
             type="button"
           >
-            <Styled(IconHamburger)
+            <CollapsibleSidebarLogo__StyledIconHamburger
               height={20}
               width={20}
             />
-          </Styled(PlainButton)>
+          </CollapsibleSidebarLogo__StyledToggleButton>
         }
         expandedElement={
           <React.Fragment>
-            <Styled(PlainButton)
+            <CollapsibleSidebarLogo__StyledToggleButton
               aria-label="Expand"
               className="bdl-CollapsibleSidebar-toggleButton"
               type="button"
             >
-              <Styled(IconHamburger)
+              <CollapsibleSidebarLogo__StyledIconHamburger
                 height={20}
                 width={20}
               />
-            </Styled(PlainButton)>
+            </CollapsibleSidebarLogo__StyledToggleButton>
             <LinkBase
               href="/"
             >
               <React.Fragment>
-                <Styled(BoxLogo)
+                <CollapsibleSidebarLogo__StyledLogo
                   className="bdl-CollapsibleSidebar-logoIcon"
                   height={42}
                   width={71}
@@ -252,38 +252,38 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 2`] = `
           position="middle-right"
           theme="default"
         >
-          <Styled(PlainButton)
+          <CollapsibleSidebarLogo__StyledToggleButton
             aria-label="Expand"
             className="bdl-CollapsibleSidebar-toggleButton"
             type="button"
           >
             <PlainButton
               aria-label="Expand"
-              className="sc-AykKE cGDkIQ bdl-CollapsibleSidebar-toggleButton"
+              className="CollapsibleSidebarLogo__StyledToggleButton-sc-6amevi-2 ehAKgQ bdl-CollapsibleSidebar-toggleButton"
               type="button"
             >
               <button
                 aria-label="Expand"
-                className="btn-plain sc-AykKE cGDkIQ bdl-CollapsibleSidebar-toggleButton"
+                className="btn-plain CollapsibleSidebarLogo__StyledToggleButton-sc-6amevi-2 ehAKgQ bdl-CollapsibleSidebar-toggleButton"
                 type="button"
               >
-                <Styled(IconHamburger)
+                <CollapsibleSidebarLogo__StyledIconHamburger
                   height={20}
                   width={20}
                 >
                   <IconHamburger
-                    className="sc-AykKD knllNy"
+                    className="CollapsibleSidebarLogo__StyledIconHamburger-sc-6amevi-1 jjgzkm"
                     height={20}
                     width={20}
                   >
                     <AccessibleSVG
-                      className="icon-hamburger sc-AykKD knllNy"
+                      className="icon-hamburger CollapsibleSidebarLogo__StyledIconHamburger-sc-6amevi-1 jjgzkm"
                       height={20}
                       viewBox="0 0 24 24"
                       width={20}
                     >
                       <svg
-                        className="icon-hamburger sc-AykKD knllNy"
+                        className="icon-hamburger CollapsibleSidebarLogo__StyledIconHamburger-sc-6amevi-1 jjgzkm"
                         focusable="false"
                         height={20}
                         role="presentation"
@@ -302,10 +302,10 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 2`] = `
                       </svg>
                     </AccessibleSVG>
                   </IconHamburger>
-                </Styled(IconHamburger)>
+                </CollapsibleSidebarLogo__StyledIconHamburger>
               </button>
             </PlainButton>
-          </Styled(PlainButton)>
+          </CollapsibleSidebarLogo__StyledToggleButton>
         </Tooltip>
       </CollapsibleSidebarItem>
     </div>

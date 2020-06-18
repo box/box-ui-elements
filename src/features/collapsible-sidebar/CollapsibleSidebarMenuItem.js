@@ -135,7 +135,7 @@ type Props = {
     overflowAction?: React.Node,
     /** Default is to always show */
     showAction?: 'hover' | 'always',
-    text?: React.Node,
+    text?: string,
 };
 
 function CollapsibleSidebarMenuItem(props: Props) {
@@ -161,7 +161,9 @@ function CollapsibleSidebarMenuItem(props: Props) {
                         </StyledMenuItemLabel>
                     )}
                 </StyledLink>
-                <span className="bdl-CollapsibleSidebar-menuItemActionContainer">{overflowAction}</span>
+                {overflowAction && (
+                    <span className="bdl-CollapsibleSidebar-menuItemActionContainer">{overflowAction}</span>
+                )}
             </StyledMenuItem>
         );
     };

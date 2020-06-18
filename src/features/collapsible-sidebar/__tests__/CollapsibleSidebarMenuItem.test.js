@@ -60,9 +60,47 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
             onMouseOver: mouseEvent,
         });
 
-        const classNameTarget = wrapper.find('div.bdl-CollapsibleSidebar-menuItem');
-        const restTarget = classNameTarget;
+        const classNameTarget = wrapper.find('CollapsibleSidebarMenuItem__StyledMenuItem');
+        const restTarget = wrapper.find('a');
         expect(restTarget.prop('onMouseOver')).toBe(mouseEvent);
-        expect(classNameTarget.prop('className')).toContain(' foo');
+        expect(classNameTarget.prop('className')).toBe('foo');
+    });
+
+    test('should not show overflow action container', () => {
+        libDom.useIsContentOverflowed.mockReturnValue(false);
+
+        const wrapper = getWrapper({
+            className: 'foo',
+            text: 'bar',
+            icon: 'bold',
+        });
+        expect(wrapper.find('.bdl-CollapsibleSidebar-menuItemActionContainer').length).toBe(0);
+    });
+
+    test('should show overflow action by default', () => {
+        libDom.useIsContentOverflowed.mockReturnValue(false);
+
+        const wrapper = getWrapper({
+            className: 'foo',
+            text: 'bar',
+            icon: 'bold',
+            overflowAction: <div>Hi</div>,
+        });
+        expect(wrapper.find('.show-action').length).toBe(2);
+        expect(wrapper.find('.bdl-CollapsibleSidebar-menuItemActionContainer').length).toBe(1);
+    });
+
+    test('should show overflow action on hover if showAction is set to hover', () => {
+        libDom.useIsContentOverflowed.mockReturnValue(false);
+
+        const wrapper = getWrapper({
+            className: 'foo',
+            text: 'bar',
+            icon: 'bold',
+            overflowAction: <div>Hi</div>,
+            showAction: 'hover',
+        });
+        expect(wrapper.find('.show-action').length).toBe(0);
+        expect(wrapper.find('.bdl-CollapsibleSidebar-menuItemActionContainer').length).toBe(1);
     });
 });
