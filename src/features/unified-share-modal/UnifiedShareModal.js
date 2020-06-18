@@ -47,7 +47,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
             getInitialDataCalled: !!initialDataReceived,
             isConfirmModalOpen: false,
             isEmailLinkSectionExpanded: false,
-            isFetching: false,
+            isFetching: !initialDataReceived,
             sharedLinkLoaded: false,
             shouldRenderFTUXTooltip: false,
             showCollaboratorList: false,

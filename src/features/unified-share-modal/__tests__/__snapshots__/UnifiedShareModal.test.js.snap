@@ -60,7 +60,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
           },
         ]
       }
-      isFetching={false}
+      isFetching={true}
       item={
         Object {
           "grantedPermissions": Object {
@@ -152,7 +152,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
           },
         ]
       }
-      isFetching={false}
+      isFetching={true}
       item={
         Object {
           "grantedPermissions": Object {
@@ -244,7 +244,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
-      isFetching={false}
+      isFetching={true}
       item={
         Object {
           "grantedPermissions": Object {
@@ -339,7 +339,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
-      isFetching={false}
+      isFetching={true}
       item={
         Object {
           "grantedPermissions": Object {
@@ -706,7 +706,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
-      isFetching={false}
+      isFetching={true}
       item={
         Object {
           "grantedPermissions": Object {
@@ -990,7 +990,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
-      isFetching={false}
+      isFetching={true}
       item={
         Object {
           "grantedPermissions": Object {
@@ -1178,7 +1178,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
-      isFetching={false}
+      isFetching={true}
       item={
         Object {
           "grantedPermissions": Object {

@@ -21,7 +21,6 @@ import FileAccessStatsAPI from './FileAccessStats';
 import UsersAPI from './Users';
 import MetadataAPI from './Metadata';
 import FileCollaboratorsAPI from './FileCollaborators';
-import FolderCollaboratorsAPI from './FolderCollaborators';
 import FeedAPI from './Feed';
 import AppIntegrationsAPI from './AppIntegrations';
 import AnnotationsAPI from './Annotations';
@@ -120,11 +119,6 @@ class APIFactory {
      * @property {FileCollaboratorsAPI}
      */
     fileCollaboratorsAPI: FileCollaboratorsAPI;
-
-    /**
-     * @property {FolderCollaboratorsAPI}
-     */
-    folderCollaboratorsAPI: FoldCollaboratorsAPI;
 
     /**
      * @property {FeedAPI}
@@ -263,11 +257,6 @@ class APIFactory {
         if (this.fileCollaboratorsAPI) {
             this.fileCollaboratorsAPI.destroy();
             delete this.fileCollaboratorsAPI;
-        }
-
-        if (this.folderCollaboratorsAPI) {
-            this.folderCollaboratorsAPI.destroy();
-            delete this.folderCollaboratorsAPI;
         }
 
         if (this.appIntegrationsAPI) {
@@ -528,21 +517,6 @@ class APIFactory {
 
         this.fileCollaboratorsAPI = new FileCollaboratorsAPI(this.options);
         return this.fileCollaboratorsAPI;
-    }
-
-    /**
-     * API for folder collaborators
-     *
-     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
-     * @return {FolderCollaboratorsAPI} FolderCollaboratorsAPI instance
-     */
-    getFolderCollaboratorsAPI(shouldDestroy: boolean): FolderCollaboratorsAPI {
-        if (shouldDestroy) {
-            this.destroy();
-        }
-
-        this.folderCollaboratorsAPI = new FolderCollaboratorsAPI(this.options);
-        return this.folderCollaboratorsAPI;
     }
 
     /**
