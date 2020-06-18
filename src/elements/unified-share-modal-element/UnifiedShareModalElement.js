@@ -7,7 +7,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import API from '../../api';
 import Internationalize from '../common/Internationalize';
-import ErrorMask from '../../components/error-mask';
+import ErrorMask from '../../components/error-mask/ErrorMask';
 import UnifiedShareModal from '../../features/unified-share-modal';
 import messages from '../../features/unified-share-modal/messages';
 import { normalizeItemResponse, normalizeUserResponse } from './utils';
@@ -147,7 +147,7 @@ function UnifiedShareModalElement(props: USMProps) {
                 <Internationalize language={language} messages={messages}>
                     <UnifiedShareModal
                         canInvite={sharedLink.canInvite}
-                        collaboratorsList={[]}
+                        // collaboratorsList={}
                         currentUserID={currentUserID}
                         item={item}
                         sharedLink={sharedLink}

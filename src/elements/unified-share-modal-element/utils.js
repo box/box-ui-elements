@@ -130,4 +130,4 @@ const normalizeUserResponse = (userAPIData: BoxUser) => {
     };
 };
 
-export { normalizeItemResponse, normalizeUserResponse };
+export { normalizeItemResponse, normalizeUserResponse, PERMISSION_LEVEL_MAP };
