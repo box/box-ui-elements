@@ -1,7 +1,7 @@
 // @flow
 
 import type { BoxItemVersionMini, Reply, User } from './core';
-import type { BoxAnnotationPermission } from './feed';
+import type { ActionItemError } from './feed';
 
 export type Page = {
     type: 'page',
@@ -31,15 +31,22 @@ export type TargetRegion = {
 
 export type Target = TargetRegion;
 
+export type AnnotationPermission = {
+    can_delete?: boolean,
+    can_edit?: boolean,
+};
+
 export type Annotation = {
     created_at: string,
     created_by: User,
     description?: Reply,
+    error?: ActionItemError, // Doesn't come from the API but used in the FeedItems
     file_version: BoxItemVersionMini,
     id: string,
+    isPending?: boolean, // Doesn't come from the API but used in the FeedItems
     modified_at: string,
     modified_by: User,
-    permissions: BoxAnnotationPermission,
+    permissions: AnnotationPermission,
     replies?: Array<Reply>,
     status?: 'deleted' | 'open' | 'resolved',
     target: Target,

@@ -1,4 +1,5 @@
 @import '../../styles/variables';
+@import '../../components/pill-selector-dropdown/mixins';
 
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
@@ -102,15 +103,20 @@
     }
 
     .bdl-PillSelectorDropdown.scrollable {
+        // In the USM, the wrapper acts as a container
         .overlay-wrapper {
             position: absolute;
             height: 280px;
             overflow-y: scroll;
-            border: 1px solid $bdl-gray-30;
+
+            @include bdl-PillSelectorDropdown-container;
         }
 
         .overlay {
+            margin-top: 0;
+            padding-top: 0;
             border: none;
+            box-shadow: none;
         }
     }
 
@@ -269,4 +275,19 @@
         margin: -5px 0 10px 0;
         color: $bdl-box-blue;
     }
+}
+
+.bdl-UnifiedShareForm {
+    @extend .unified-share-modal;
+
+    max-width: $bdl-grid-unit * 115;
+    height: $bdl-grid-unit * 125;
+    margin: 0 auto;
+    padding: 2em;
+}
+
+.bdl-SharedLinkSection-separator {
+    margin: ($bdl-grid-unit * 5) 0;
+    border: none;
+    border-top: 1px solid $bdl-gray-20;
 }

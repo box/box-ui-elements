@@ -1,0 +1,78 @@
+/**************************************
+ * Round Pill
+ **************************************/
+@import '../../styles/variables';
+
+.bdl-RoundPill {
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+    height: 28px;
+    margin: $bdl-grid-unit - 1px $bdl-grid-unit / 2;
+    padding-top: 2px;
+    padding-left: 2px;
+    overflow: hidden;
+    font-weight: normal;
+    line-height: $bdl-line-height + $bdl-grid-unit;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border: 0;
+    border-radius: 14px;
+
+    &.bdl-RoundPill--selected {
+        font-weight: bold;
+        background-color: $bdl-gray-20;
+        box-shadow: inset 0 0 0 1px $white;
+    }
+
+    .bdl-Avatar-externalBadge {
+        border-color: $bdl-gray-10;
+    }
+}
+
+.bdl-RoundPill-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin: 0 $bdl-grid-unit * 2 !important;
+    padding-top: 1px; // offset for aligning "average" string that doesn't have descender chars
+    overflow: hidden;
+    line-height: $bdl-fontSize + $bdl-grid-unit; // for vertical centering using flex;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.bdl-RoundPill-closeBtn {
+    position: unset;
+    top: unset;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 12px;
+    margin-right: $bdl-grid-unit * 2;
+    cursor: pointer;
+}
+
+.bdl-RoundPill--warning {
+    .bdl-Avatar-externalBadge {
+        border-color: $bdl-yellorange-10;
+    }
+}
+
+.bdl-RoundPill--error {
+    .bdl-Avatar-externalBadge {
+        border-color: $bdl-watermelon-red-10;
+    }
+}
+
+.bdl-RoundPill--selected {
+    .bdl-Avatar-externalBadge {
+        border-color: $bdl-gray-20;
+    }
+}
+
+.bdl-RoundPill--disabled {
+    opacity: .5;
+
+    .bdl-RoundPill-closeBtn {
+        cursor: default;
+    }
+}

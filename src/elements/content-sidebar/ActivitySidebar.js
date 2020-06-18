@@ -10,7 +10,7 @@ import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
-import { generatePath, withRouter, type ContextRouter } from 'react-router-dom';
+import { type ContextRouter } from 'react-router-dom';
 import ActivityFeed from './activity-feed';
 import AddTaskButton from './AddTaskButton';
 import API from '../../api';
@@ -24,6 +24,7 @@ import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
+import { withRouterAndRef } from '../common/routing';
 import {
     DEFAULT_COLLAB_DEBOUNCE,
     ORIGIN_ACTIVITY_SIDEBAR,
@@ -37,7 +38,7 @@ import type {
     TaskUpdatePayload,
     TaskCollabStatus,
 } from '../../common/types/tasks';
-import type { Annotation, FocusableFeedItemType, FeedItems } from '../../common/types/feed';
+import type { Annotation, AnnotationPermission, FocusableFeedItemType, FeedItems } from '../../common/types/feed';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { SelectorItems, User, UserMini, GroupMini, BoxItem, BoxItemPermission } from '../../common/types/core';
@@ -65,6 +66,7 @@ type ExternalProps = {
 type PropsWithoutContext = {
     elementId: string,
     file: BoxItem,
+    hasSidebarInitialized?: boolean,
     isDisabled: boolean,
     onAnnotationSelect: Function,
     onVersionChange: Function,
@@ -104,6 +106,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         annotatorState: {},
         emitAnnotatorActiveChangeEvent: noop,
         getAnnotationsMatchPath: noop,
+        getAnnotationsPath: noop,
         isDisabled: false,
         onAnnotationSelect: noop,
         onCommentCreate: noop,
@@ -126,35 +129,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             endMarkName: MARK_NAME_JS_READY,
         });
         this.state = {};
-
-        // On hard load with deep link for annotation on previous version -- replace the
-        // file version with the latest file version until ContentPreview can support loading
-        // a previous version on mount
-        this.redirectDeeplinkedAnnotation();
     }
-
-    getAnnotationsPath = (fileVersionId?: string, annotationId?: string): string => {
-        if (!fileVersionId) {
-            return '/activity';
-        }
-
-        return generatePath('/activity/annotations/:fileVersionId/:annotationId?', {
-            annotationId,
-            fileVersionId,
-        });
-    };
-
-    redirectDeeplinkedAnnotation = () => {
-        const { file, getAnnotationsMatchPath, history } = this.props;
-        const match = getAnnotationsMatchPath(history);
-        const annotationId = getProp(match, 'params.annotationId');
-        const currentFileVersionId = getProp(file, 'file_version.id');
-        const fileVersionId = getProp(match, 'params.fileVersionId');
-
-        if (fileVersionId && annotationId && fileVersionId !== currentFileVersionId) {
-            history.replace(this.getAnnotationsPath(currentFileVersionId, annotationId));
-        }
-    };
 
     componentDidMount() {
         const { currentUser } = this.props;
@@ -162,70 +137,26 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.fetchCurrentUser(currentUser);
     }
 
-    componentDidUpdate({ annotatorState: prevAnnotatorState, match: prevMatch }: Props): void {
-        const { activeAnnotationId: prevActiveAnnotationId, annotation: prevAnnotation } = prevAnnotatorState;
-        const {
-            annotatorState: { activeAnnotationId, annotation },
-            match,
-        } = this.props;
-        const prevFileVersionId = getProp(prevMatch, 'params.fileVersionId');
-        const fileVersionId = getProp(match, 'params.fileVersionId');
+    handleAnnotationDelete = ({ id, permissions }: { id: string, permissions: AnnotationPermission }) => {
+        const { api, file } = this.props;
 
-        if (prevAnnotation !== annotation) {
-            this.addAnnotation();
-        }
-
-        if (prevActiveAnnotationId !== activeAnnotationId) {
-            this.updateActiveAnnotation();
-        }
-
-        if (prevFileVersionId !== fileVersionId) {
-            this.updateActiveVersion();
-        }
-    }
-
-    addAnnotation() {
-        const {
-            annotatorState: { action, annotation, meta },
-            api,
+        api.getFeedAPI(false).deleteAnnotation(
             file,
-        } = this.props;
-        const { requestId } = meta || {};
-        const { currentUser } = this.state;
-        const isPending = action === 'create_start';
-
-        if (!currentUser) {
-            throw getBadUserError();
-        }
-
-        api.getFeedAPI(false).addAnnotation(file, currentUser, annotation, requestId, isPending);
+            id,
+            permissions,
+            this.deleteAnnotationSuccess.bind(this, id),
+            this.feedErrorCallback,
+        );
 
         this.fetchFeedItems();
+    };
+
+    deleteAnnotationSuccess(id: string) {
+        const { emitRemoveEvent } = this.props;
+
+        this.feedSuccessCallback();
+        emitRemoveEvent(id);
     }
-
-    updateActiveAnnotation = () => {
-        const { annotatorState: { activeAnnotationId } = {}, file, getAnnotationsMatchPath, history } = this.props;
-        const match = getAnnotationsMatchPath(history);
-        const currentFileVersionId = getProp(file, 'file_version.id');
-        const fileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
-
-        history.push(this.getAnnotationsPath(fileVersionId, activeAnnotationId));
-    };
-
-    updateActiveVersion = () => {
-        const { file, history, match, onVersionChange } = this.props;
-        const { feedItems = [] } = this.state;
-        const currentFileVersionId = getProp(file, 'file_version.id');
-        const fileVersionId = getProp(match, 'params.fileVersionId');
-        const version = feedItems.filter(item => item.type === 'file_version').find(item => item.id === fileVersionId);
-
-        if (version) {
-            onVersionChange(version, {
-                currentVersionId: currentFileVersionId,
-                updateVersionToCurrent: () => history.push(this.getAnnotationsPath(currentFileVersionId)),
-            });
-        }
-    };
 
     /**
      * Fetches a Users info
@@ -672,18 +603,20 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const {
             emitAnnotatorActiveChangeEvent,
             file,
-            history,
             getAnnotationsMatchPath,
+            getAnnotationsPath,
+            history,
+            location,
             onAnnotationSelect,
         } = this.props;
         const currentFileVersionId = getProp(file, 'file_version.id');
-        const match = getAnnotationsMatchPath(history);
+        const match = getAnnotationsMatchPath(location);
         const selectedFileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
 
         emitAnnotatorActiveChangeEvent(nextActiveAnnotationId);
 
         if (annotationFileVersionId !== selectedFileVersionId) {
-            history.push(this.getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));
+            history.push(getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));
         }
 
         onAnnotationSelect(annotation);
@@ -695,8 +628,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         });
     };
 
-    refresh(): void {
-        this.fetchFeedItems(true);
+    refresh(shouldRefreshCache: boolean = true): void {
+        this.fetchFeedItems(shouldRefreshCache);
     }
 
     renderAddTaskButton = () => {
@@ -747,32 +680,33 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 title={<FormattedMessage {...messages.sidebarActivityTitle} />}
             >
                 <ActivityFeed
-                    file={file}
+                    activeFeedEntryId={activeFeedEntryId}
+                    activeFeedEntryType={activeFeedEntryType}
                     activityFeedError={activityFeedError}
                     approverSelectorContacts={approverSelectorContacts}
-                    mentionSelectorContacts={mentionSelectorContacts}
                     currentUser={currentUser}
+                    currentUserError={currentUserError}
+                    feedItems={feedItems}
+                    file={file}
+                    getApproverWithQuery={this.getApproverWithQuery}
+                    getAvatarUrl={this.getAvatarUrl}
+                    getMentionWithQuery={this.getMentionWithQuery}
+                    getUserProfileUrl={getUserProfileUrl}
                     isDisabled={isDisabled}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onAnnotationDelete={this.handleAnnotationDelete}
                     onAnnotationSelect={this.handleAnnotationSelect}
                     onAppActivityDelete={this.deleteAppActivity}
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
                     onCommentUpdate={this.updateComment}
+                    onTaskAssignmentUpdate={this.updateTaskAssignment}
                     onTaskCreate={this.createTask}
                     onTaskDelete={this.deleteTask}
+                    onTaskModalClose={this.onTaskModalClose}
                     onTaskUpdate={this.updateTask}
                     onTaskView={onTaskView}
-                    onTaskModalClose={this.onTaskModalClose}
-                    onTaskAssignmentUpdate={this.updateTaskAssignment}
-                    getApproverWithQuery={this.getApproverWithQuery}
-                    getMentionWithQuery={this.getMentionWithQuery}
                     onVersionHistoryClick={onVersionHistoryClick}
-                    getAvatarUrl={this.getAvatarUrl}
-                    getUserProfileUrl={getUserProfileUrl}
-                    feedItems={feedItems}
-                    currentUserError={currentUserError}
-                    activeFeedEntryId={activeFeedEntryId}
-                    activeFeedEntryType={activeFeedEntryType}
                 />
             </SidebarContent>
         );
@@ -787,5 +721,5 @@ export default flow([
     withAPIContext,
     withFeatureConsumer,
     withAnnotatorContext,
-    withRouter,
+    withRouterAndRef,
 ])(ActivitySidebar);

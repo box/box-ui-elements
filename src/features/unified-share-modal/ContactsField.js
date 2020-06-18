@@ -20,6 +20,7 @@ type Props = {
     disabled: boolean,
     error: string,
     fieldRef?: Object,
+    getContactAvatarUrl?: (contact: Contact) => string,
     getContacts: (query: string) => Promise<Array<Contact>>,
     intl: any,
     label: React.Node,
@@ -28,6 +29,7 @@ type Props = {
     onInput?: Function,
     onPillCreate?: (pills: Array<SelectOptionProp | Contact>) => void,
     selectedContacts: Array<Contact>,
+    showContactAvatars?: boolean,
     suggestedCollaborators?: SuggestedCollabLookup,
     validateForError: Function,
     validator: Function,
@@ -44,6 +46,10 @@ const isSubstring = (value, searchString) => {
 };
 
 class ContactsField extends React.Component<Props, State> {
+    static defaultProps = {
+        showContactAvatars: false,
+    };
+
     constructor(props: Props) {
         super(props);
 
@@ -67,10 +73,9 @@ class ContactsField extends React.Component<Props, State> {
         return [...suggestedOptions, ...otherOptions];
     };
 
-    filterContacts = (contacts: Array<Contact>) => {
+    filterContacts = (contacts: Array<Contact>): Array<Contact> => {
         const { pillSelectorInputValue } = this.state;
         const { selectedContacts, suggestedCollaborators } = this.props;
-
         if (pillSelectorInputValue && contacts) {
             let fullContacts = contacts
                 .filter(
@@ -87,7 +92,7 @@ class ContactsField extends React.Component<Props, State> {
                 fullContacts = this.addSuggestedContacts(fullContacts);
             }
 
-            return fullContacts.map<Object>(({ email, id, isExternalUser, name, type }) => ({
+            return fullContacts.map<Contact>(({ email, id, isExternalUser, name, type }) => ({
                 // map to standardized DatalistItem format
                 // TODO: refactor this so inline conversions aren't required at every usage
                 email,
@@ -144,15 +149,17 @@ class ContactsField extends React.Component<Props, State> {
 
     render() {
         const {
-            intl,
             disabled,
             error,
             fieldRef,
+            getContactAvatarUrl,
+            intl,
             label,
-            selectedContacts,
             onContactAdd,
             onContactRemove,
             onPillCreate,
+            selectedContacts,
+            showContactAvatars,
             validateForError,
             validator,
         } = this.props;
@@ -170,6 +177,7 @@ class ContactsField extends React.Component<Props, State> {
                 dividerIndex={shouldShowSuggested ? numSuggestedShowing : undefined}
                 disabled={disabled}
                 error={error}
+                getPillImageUrl={getContactAvatarUrl}
                 inputProps={{
                     autoFocus: true,
                     onChange: noop,
@@ -184,12 +192,22 @@ class ContactsField extends React.Component<Props, State> {
                 placeholder={intl.formatMessage(commonMessages.pillSelectorPlaceholder)}
                 ref={fieldRef}
                 selectedOptions={selectedContacts}
+                showRoundedPills
                 selectorOptions={contacts}
                 validateForError={validateForError}
                 validator={validator}
             >
-                {contacts.map(({ email, text = null, id }) => (
-                    <ContactDatalistItem key={id} name={text} subtitle={email || groupLabel} title={text} />
+                {contacts.map(({ email, isExternalUser, text = null, id }) => (
+                    <ContactDatalistItem
+                        getContactAvatarUrl={getContactAvatarUrl}
+                        key={id}
+                        id={id}
+                        isExternal={isExternalUser}
+                        name={text}
+                        subtitle={email || groupLabel}
+                        title={text}
+                        showAvatar={showContactAvatars}
+                    />
                 ))}
             </PillSelectorDropdown>
         );

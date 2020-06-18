@@ -42,7 +42,7 @@ class DeleteConfirmation extends React.Component<Props> {
     };
 
     render() {
-        const { message, onDeleteCancel, onDeleteConfirm, ...rest } = this.props;
+        const { isOpen, message, onDeleteCancel, onDeleteConfirm, ...rest } = this.props;
 
         return (
             <Overlay

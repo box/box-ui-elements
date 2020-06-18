@@ -18,11 +18,13 @@ import notes from './CollapsibleSidebar.stories.md';
 
 import Link from '../../components/link/Link';
 import IconPlusRound from '../../icons/general/IconPlusRound';
+import { BetaBadge, TrialBadge } from '../../components/badge';
 import Folder16 from '../../icon/fill/Folder16';
 import ClockBadge16 from '../../icon/fill/ClockBadge16';
 import Code16 from '../../icon/fill/Code16';
 import Trash16 from '../../icon/fill/Trash16';
 import FileDefault16 from '../../icon/fill/FileDefault16';
+import CheckmarkBadge16 from '../../icon/fill/CheckmarkBadge16';
 
 const renderFiles = () => {
     const items = [];
@@ -57,15 +59,34 @@ const renderFiles = () => {
 export const basic = () => {
     const hexColor = color('Theme Color', '#0061d5');
     const theme = createTheme(hexColor);
+    const linkProps = {
+        href: '/?path=/story/components-tooltip--top-center',
+        'data-resin-target': 'resinTarget',
+    };
+
+    const menuItemContent = (
+        <>
+            <BetaBadge
+                style={{
+                    marginLeft: 8,
+                }}
+            />
+            <TrialBadge
+                style={{
+                    marginLeft: 8,
+                }}
+            />
+        </>
+    );
 
     return (
         <ThemeProvider theme={theme}>
             <CollapsibleSidebar expanded={boolean('isExpanded', true)}>
                 <CollapsibleSidebarLogo
                     canEndTrial={false}
+                    linkProps={linkProps}
                     onToggle={noop}
                     expanded={boolean('isExpanded', true)}
-                    resinTarget="test-resin"
                 />
                 <CollapsibleSidebarNav>
                     <ul>
@@ -112,6 +133,26 @@ export const basic = () => {
                                 }
                                 tooltipMessage="Recents Link"
                             />
+                        </li>
+                        <li key="djb-leftnav-menu-item-synced">
+                            <a href="/">
+                                <CollapsibleSidebarItem
+                                    collapsedElement={
+                                        <CollapsibleSidebarMenuItem
+                                            icon={<CheckmarkBadge16 height={20} width={20} />}
+                                        />
+                                    }
+                                    expanded={boolean('isExpanded', true)}
+                                    expandedElement={
+                                        <CollapsibleSidebarMenuItem
+                                            content={menuItemContent}
+                                            icon={<CheckmarkBadge16 height={20} width={20} />}
+                                            text="Really really long synced link name synced Link"
+                                        />
+                                    }
+                                    tooltipMessage="Synced Link"
+                                />
+                            </a>
                         </li>
                         <li key="djb-leftnav-menu-item-all-trash">
                             <CollapsibleSidebarItem

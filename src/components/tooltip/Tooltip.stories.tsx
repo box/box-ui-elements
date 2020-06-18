@@ -86,6 +86,16 @@ withLongText.story = {
     name: 'Middle-left, long tooltip text',
 };
 
+export const withOffset = () =>
+    addSpacing(
+        <Tooltip position={TooltipPosition.MIDDLE_LEFT} text="this tooltip has 20px offset" offset="0 20px">
+            <Button>middle-left</Button>
+        </Tooltip>,
+    );
+withOffset.story = {
+    name: 'Middle-left, with offset',
+};
+
 export const shownByDefault = () =>
     addSpacing(
         <Tooltip

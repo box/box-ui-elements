@@ -131,6 +131,8 @@ const StyledLink = styled.a`
 type Props = {
     /** Additional classes */
     className?: string,
+    /** Content to be  displayed next to item label. */
+    content?: React.Node,
     icon?: React.Node,
     overflowAction?: React.Node,
     /** Default is to always show */
@@ -139,7 +141,7 @@ type Props = {
 };
 
 function CollapsibleSidebarMenuItem(props: Props) {
-    const { className, icon, overflowAction, showAction, text, ...rest } = props;
+    const { className, content, icon, overflowAction, showAction, text, ...rest } = props;
     const textRef = React.useRef<?HTMLElement>(null);
     const isTextOverflowed = useIsContentOverflowed(textRef);
     const { isScrolling } = React.useContext(CollapsibleSidebarContext);
@@ -160,10 +162,12 @@ function CollapsibleSidebarMenuItem(props: Props) {
                             {text}
                         </StyledMenuItemLabel>
                     )}
+                    {content}
                 </StyledLink>
                 {overflowAction && (
                     <span className="bdl-CollapsibleSidebar-menuItemActionContainer">{overflowAction}</span>
                 )}
+                {overflowAction}
             </StyledMenuItem>
         );
     };

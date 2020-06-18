@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { createMemoryHistory, History } from 'history';
+import { createMemoryHistory, History, Location } from 'history';
 
 import { Annotator, AnnotatorContext, withAnnotations } from '../index';
 import { WithAnnotationsProps, ComponentWithAnnotations } from '../withAnnotations';
@@ -9,6 +9,7 @@ import { AnnotatorContext as AnnotatorContextType, Action } from '../types';
 type ComponentProps = {
     className?: string;
     history?: History;
+    location?: Location;
 };
 
 type WrappedComponentProps = ComponentProps & Partial<WithAnnotationsProps>;
@@ -51,13 +52,13 @@ describe('elements/common/annotator-context/withAnnotations', () => {
     describe('constructor', () => {
         test('should parse the history location pathname to initialize state with activeAnnotationId', () => {
             const history = createMemoryHistory({ initialEntries: ['/activity/annotations/123/456'] }) as History;
-            const wrapper = getWrapper({ history });
+            const wrapper = getWrapper({ history, location: history.location });
             expect(wrapper.state('activeAnnotationId')).toBe('456');
         });
 
         test('should not initialize state with activeAnnotationId if history path does not match deeplink schema', () => {
             const history = createMemoryHistory({ initialEntries: ['/activity/annotations/456'] }) as History;
-            const wrapper = getWrapper({ history });
+            const wrapper = getWrapper({ history, location: history.location });
             expect(wrapper.state('activeAnnotationId')).toBe(null);
         });
     });
@@ -78,9 +79,12 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
         expect(contextProvider.exists()).toBeTruthy();
         expect(contextProvider.prop('value').emitActiveChangeEvent).toEqual(instance.emitActiveChangeEvent);
+        expect(contextProvider.prop('value').emitRemoveEvent).toEqual(instance.emitRemoveEvent);
         expect(contextProvider.prop('value').getAnnotationsMatchPath).toEqual(instance.getMatchPath);
+        expect(contextProvider.prop('value').getAnnotationsPath).toEqual(instance.getAnnotationsPath);
         expect(contextProvider.prop('value').state).toEqual({
             action: null,
+            activeAnnotationFileVersionId: null,
             activeAnnotationId: null,
             annotation: null,
             error: null,
@@ -99,6 +103,18 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
             expect(mockAnnotator.emit).toBeCalled();
             expect(mockAnnotator.emit).toBeCalledWith('annotations_active_set', '123');
+        });
+    });
+
+    describe('emitRemoveEvent', () => {
+        test('should call annotator on delete with a delete event', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.handleAnnotator(mockAnnotator);
+            instance.emitRemoveEvent('123');
+
+            expect(mockAnnotator.emit).toBeCalledWith('annotations_remove', '123');
         });
     });
 
@@ -129,6 +145,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                 expect(contextProvider.exists()).toBeTruthy();
                 expect(contextProvider.prop('value').state).toEqual({
                     action: expectedAction,
+                    activeAnnotationFileVersionId: null,
                     activeAnnotationId: null,
                     annotation: expectedAnnotation,
                     error: expectedError,
@@ -143,17 +160,22 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
     describe('handleActiveChange()', () => {
         test.each`
-            annotationId | expected
-            ${null}      | ${null}
-            ${'123'}     | ${'123'}
-        `('should update activeAnnotationId state to reflect value $annotationId', ({ annotationId, expected }) => {
-            const wrapper = getWrapper();
+            annotationId | fileVersionId | expectedAnnotationId | expectedFileVersionId
+            ${null}      | ${'456'}      | ${null}              | ${'456'}
+            ${'123'}     | ${'456'}      | ${'123'}             | ${'456'}
+        `(
+            'should update activeAnnotationId state to reflect value $annotationId',
+            ({ annotationId, fileVersionId, expectedAnnotationId, expectedFileVersionId }) => {
+                const wrapper = getWrapper();
 
-            wrapper.instance().handleActiveChange(annotationId);
-            const contextProvider = getContextProvider(wrapper);
-            expect(contextProvider.exists()).toBeTruthy();
-            expect(contextProvider.prop('value').state.activeAnnotationId).toEqual(expected);
-        });
+                wrapper.instance().handleActiveChange({ annotationId, fileVersionId });
+                const contextProvider = getContextProvider(wrapper);
+                const { activeAnnotationFileVersionId, activeAnnotationId } = contextProvider.prop('value').state;
+                expect(contextProvider.exists()).toBeTruthy();
+                expect(activeAnnotationFileVersionId).toEqual(expectedFileVersionId);
+                expect(activeAnnotationId).toEqual(expectedAnnotationId);
+            },
+        );
     });
 
     describe('handleAnnotatorEvent()', () => {
@@ -183,14 +205,45 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.handleAnnotator(mockAnnotator);
-            instance.handleActiveChange('123');
-            let contextProvider = getContextProvider(wrapper);
-            expect(contextProvider.prop('value').state.activeAnnotationId).toEqual('123');
+            wrapper.setState({ activeAnnotationId: '123', activeAnnotationFileVersionId: '456' });
 
             wrapper.instance().handlePreviewDestroy();
-            contextProvider = getContextProvider(wrapper);
-            expect(contextProvider.prop('value').state.activeAnnotationId).toEqual(null);
             expect(mockAnnotator.removeListener).toBeCalledWith('annotatorevent', instance.handleAnnotatorEvent);
+            expect(wrapper.state()).toEqual({
+                action: null,
+                activeAnnotationFileVersionId: null,
+                activeAnnotationId: null,
+                annotation: null,
+                error: null,
+                meta: null,
+            });
+        });
+
+        test('should not reset state if called with false', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.handleAnnotator(mockAnnotator);
+
+            wrapper.setState({ activeAnnotationId: '123', activeAnnotationFileVersionId: '456' });
+            wrapper.instance().handlePreviewDestroy(false);
+            expect(mockAnnotator.removeListener).toBeCalledWith('annotatorevent', instance.handleAnnotatorEvent);
+            expect(wrapper.state('activeAnnotationId')).toBe('123');
+            expect(wrapper.state('activeAnnotationFileVersionId')).toBe('456');
+        });
+    });
+
+    describe('getAnnotationsPath()', () => {
+        test.each`
+            fileVersionId | annotationId | expectedPath
+            ${undefined}  | ${undefined} | ${'/activity'}
+            ${undefined}  | ${null}      | ${'/activity'}
+            ${'123'}      | ${undefined} | ${'/activity/annotations/123'}
+            ${'123'}      | ${null}      | ${'/activity/annotations/123'}
+            ${'123'}      | ${'456'}     | ${'/activity/annotations/123/456'}
+        `('should return $expectedPath', ({ fileVersionId, annotationId, expectedPath }) => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            expect(instance.getAnnotationsPath(fileVersionId, annotationId)).toBe(expectedPath);
         });
     });
 });

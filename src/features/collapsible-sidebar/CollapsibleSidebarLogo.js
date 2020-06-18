@@ -65,19 +65,21 @@ type Props = {
     /** optional badge to be displayed next to logo */
     badge?: React.Node,
 
+    buttonProps?: Object,
+
     /** Additional classes */
     className?: string,
 
     /** Controls whether or not the sidebar is expanded on the page */
     expanded: boolean,
 
-    onToggle: () => void,
+    linkProps: Object,
 
-    resinTarget: string,
+    onToggle: () => void,
 } & InjectIntlProvidedProps;
 
 function CollapsibleSidebarLogo(props: Props) {
-    const { badge, className, expanded, onToggle, resinTarget, intl } = props;
+    const { badge, buttonProps, className, expanded, linkProps, onToggle, intl } = props;
 
     const classes = classNames('bdl-CollapsibleSidebar-logo', className);
 
@@ -87,6 +89,7 @@ function CollapsibleSidebarLogo(props: Props) {
             onClick={onToggle}
             aria-label={intl.formatMessage(expanded ? messages.collapseButtonLabel : messages.expandButtonLabel)}
             type="button"
+            {...buttonProps}
         >
             <StyledIconHamburger height={20} width={20} />
         </StyledToggleButton>
@@ -100,7 +103,7 @@ function CollapsibleSidebarLogo(props: Props) {
                 expandedElement={
                     <>
                         {toggleButton}
-                        <LinkBase data-resin-target={resinTarget} href="/">
+                        <LinkBase className="bdl-CollapsibleSidebar-logoLink" {...linkProps}>
                             <>
                                 <StyledLogo
                                     className="bdl-CollapsibleSidebar-logoIcon"

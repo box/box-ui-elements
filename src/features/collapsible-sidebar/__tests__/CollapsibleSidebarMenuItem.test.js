@@ -32,6 +32,25 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should show custom content when content is passed', () => {
+        libDom.useIsContentOverflowed.mockReturnValue(false);
+
+        const testContent = 'Custom Content';
+        const wrapper = getWrapper(
+            {
+                className: 'foo',
+                content: <div className="custom-div">{testContent}</div>,
+                icon: 'bold',
+                text: 'bar',
+            },
+            { isScrolling: false },
+        );
+
+        expect(wrapper.find('.custom-div')).toHaveLength(1);
+        expect(wrapper.find('.custom-div').text()).toBe(testContent);
+        expect(wrapper.find('span.bdl-CollapsibleSidebar-menuItemLabel')).toHaveLength(1);
+    });
+
     test('should allow tooltip if text is overflowing and not scrolling', () => {
         libDom.useIsContentOverflowed.mockReturnValue(true);
 

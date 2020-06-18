@@ -74,7 +74,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
               />
             </CollapsibleSidebarLogo__StyledToggleButton>
             <LinkBase
-              href="/"
+              className="bdl-CollapsibleSidebar-logoLink"
             >
               <React.Fragment>
                 <CollapsibleSidebarLogo__StyledLogo
@@ -142,10 +142,11 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
           </PlainButton>
         </CollapsibleSidebarLogo__StyledToggleButton>
         <LinkBase
-          href="/"
+          className="bdl-CollapsibleSidebar-logoLink"
         >
           <a
-            href="/"
+            className="bdl-CollapsibleSidebar-logoLink"
+            href="#"
           >
             <CollapsibleSidebarLogo__StyledLogo
               className="bdl-CollapsibleSidebar-logoIcon"
@@ -231,7 +232,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 2`] = `
               />
             </CollapsibleSidebarLogo__StyledToggleButton>
             <LinkBase
-              href="/"
+              className="bdl-CollapsibleSidebar-logoLink"
             >
               <React.Fragment>
                 <CollapsibleSidebarLogo__StyledLogo

@@ -1,8 +1,10 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
+import Badgeable from '../badgeable';
 import AvatarImage from './AvatarImage';
 import AvatarInitials from './AvatarInitials';
+import GlobeBadge16 from '../../icon/fill/GlobeBadge16';
 import UnknownUserAvatar from '../../icons/avatars/UnknownUserAvatar';
 
 import './Avatar.scss';
@@ -20,21 +22,29 @@ type Props = {
     className?: string,
     /** Users id */
     id?: ?string | number,
+    /** Whether this avatar should be labeled as external in the current context */
+    isExternal?: boolean,
     /**
      * Users full name.
      *
      * Required if "avatarUrl" is not specified.
      */
     name?: ?string,
+    /** Show the external avatar marker if the avatar is marked as for an external user */
+    shouldShowExternal?: boolean,
     /* avatar size (enum) */
     size?: $Keys<typeof SIZES>,
 };
 
-function Avatar({ avatarUrl, className, name, id, size = '' }: Props) {
+function Avatar({ avatarUrl, className, name, id, isExternal, shouldShowExternal = false, size = '' }: Props) {
     const [hasImageErrored, setHasImageErrored] = React.useState<boolean>(false);
     const [prevAvatarUrl, setPrevAvatarUrl] = React.useState<$PropertyType<Props, 'avatarUrl'>>(null);
 
-    const classes = classNames(['avatar', className, { [`avatar--${size}`]: SIZES[size] }]);
+    const classes = classNames([
+        'avatar',
+        className,
+        { [`avatar--${size}`]: size && SIZES[size], 'avatar--isExternal': shouldShowExternal && isExternal },
+    ]);
 
     // Reset hasImageErrored state when avatarUrl changes
     if (avatarUrl !== prevAvatarUrl) {
@@ -59,9 +69,14 @@ function Avatar({ avatarUrl, className, name, id, size = '' }: Props) {
     }
 
     return (
-        <span className={classes} role="presentation">
-            {avatar}
-        </span>
+        <Badgeable
+            className={classes}
+            bottomRight={
+                shouldShowExternal && isExternal ? <GlobeBadge16 className="bdl-Avatar-externalBadge" /> : undefined
+            }
+        >
+            <span role="presentation">{avatar}</span>
+        </Badgeable>
     );
 }
 
