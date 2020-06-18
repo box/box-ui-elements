@@ -75,7 +75,7 @@ export type item = {
         itemShare: boolean,
     },
     hideCollaborators: boolean,
-    id: number,
+    id: string,
     name: string,
     type: ItemType,
     typedID: string,

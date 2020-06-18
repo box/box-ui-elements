@@ -94,6 +94,12 @@ type FolderMini = {
 type UserMini = {
     avatar_url?: string,
     email?: string,
+    enterprise?: {
+        id: string,
+        name: string,
+        type: 'enterprise',
+    },
+    hostname?: string,
     id: string,
     login?: string,
     name: string,

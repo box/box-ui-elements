@@ -26,13 +26,16 @@ import {
     FIELD_EXTENSION,
     FIELD_DESCRIPTION,
 } from '../../constants';
+import type { ItemType } from '../../common/types/core';
+import type { item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
+import type { USMElementItemAPIResponse, USMElementSharedLinkType } from './types';
 
-type USMProps = {
+type USMElementProps = {
     apiHost: string,
     itemID: string,
-    itemType: TYPE_FILE | TYPE_FOLDER,
+    itemType: ItemType,
     language: string,
-    showFormOnly: boolean,
+    showFormOnly?: boolean,
     token: string,
 };
 
@@ -44,11 +47,11 @@ const elementMessages = defineMessages({
     },
 });
 
-function UnifiedShareModalElement(props: USMProps) {
-    const { apiHost, itemID, itemType, language, token }: USMProps = props;
-    const [item, setItem] = useState<{ item: BoxItem }>(null);
-    const [sharedLink, setSharedLink] = useState<{ sharedLink: BoxItem }>(null);
-    const [currentUserID, setCurrentUserID] = useState<string>(null);
+function UnifiedShareModalElement(props: USMElementProps) {
+    const { apiHost, itemID, itemType, language, token }: USMElementProps = props;
+    const [item, setItem] = useState<?itemFlowType>(null);
+    const [sharedLink, setSharedLink] = useState<?USMElementSharedLinkType>(null);
+    const [currentUserID, setCurrentUserID] = useState<?string>(null);
     const [errorExists, setErrorExists] = useState<boolean>(false);
 
     const api = new API({
@@ -77,7 +80,7 @@ function UnifiedShareModalElement(props: USMProps) {
         },
         [sharedLink],
     );
-    const getItemSuccess = itemData => {
+    const getItemSuccess = (itemData: USMElementItemAPIResponse) => {
         const { item: itemFromAPI, sharedLink: sharedLinkFromAPI } = normalizeItemResponse(itemData);
         setItem(itemFromAPI);
         setSharedLink(sharedLinkFromAPI);
@@ -90,7 +93,7 @@ function UnifiedShareModalElement(props: USMProps) {
 
     useEffect(() => {
         const getUserData = async () => {
-            await api.getUsersAPI().getUser(itemID, getUserSuccess, getError, {
+            await api.getUsersAPI(false).getUser(itemID, getUserSuccess, getError, {
                 fields: [FIELD_ENTERPRISE, FIELD_HOSTNAME],
             });
         };

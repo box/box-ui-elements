@@ -1,5 +1,5 @@
 // @flow
-import type { BoxItem, BoxUser } from '../../common/types/core';
+import type { User } from '../../common/types/core';
 import { getTypedFileId, getTypedFolderId } from '../../utils/file';
 import {
     ACCESS_COLLAB,
@@ -16,6 +16,7 @@ import {
     CAN_VIEW_ONLY,
     PEOPLE_IN_ITEM,
 } from '../../features/unified-share-modal/constants';
+import type { USMElementItemAPIResponse, USMElementItemDataType, USMElementUserDataType } from './types';
 
 const ACCESS_LEVEL_MAP = {
     [ACCESS_COLLAB]: PEOPLE_IN_ITEM,
@@ -28,8 +29,12 @@ const PERMISSION_LEVEL_MAP = {
     [PERMISSION_CAN_PREVIEW]: CAN_VIEW_ONLY,
 };
 
-const normalizeItemResponse = (itemAPIData: BoxItem) => {
-    let sharedLink = {};
+/**
+ * Convert a response from the Item API to the object that the USM expects.
+ * @param {BoxItem} itemAPIData
+ */
+const normalizeItemResponse = (itemAPIData: USMElementItemAPIResponse): USMElementItemDataType => {
+    let sharedLink = { canInvite: false };
 
     const {
         id,
@@ -45,6 +50,7 @@ const normalizeItemResponse = (itemAPIData: BoxItem) => {
         },
         type,
     } = itemAPIData;
+
     const {
         can_download: isDownloadSettingAvailable,
         can_edit: isEditAllowed,
@@ -80,36 +86,38 @@ const normalizeItemResponse = (itemAPIData: BoxItem) => {
                 peopleWithTheLink: accessLevel === ANYONE_WITH_LINK,
             },
             canChangeAccessLevel,
-            canChangeDownload, // SLS
-            canChangePassword, // SLS
-            canChangeVanityName, // SLS
+            canChangeDownload,
+            canChangePassword,
+            canChangeVanityName,
             canInvite,
-            directLink, // SLS
-            expirationTimestamp, // SLS
-            isDirectLinkAvailable, // SLS
+            directLink,
+            expirationTimestamp,
+            isDirectLinkAvailable,
             isDownloadAllowed,
-            isDownloadAvailable: isDownloadSettingAvailable, // SLS
-            isDownloadEnabled: isDownloadAllowed, // SLS
+            isDownloadAvailable: isDownloadSettingAvailable,
+            isDownloadEnabled: isDownloadAllowed,
             isDownloadSettingAvailable,
             isEditAllowed,
             isNewSharedLink: false,
-            isPasswordAvailable, // SLS
-            isPasswordEnabled, // SLS
+            isPasswordAvailable,
+            isPasswordEnabled,
             isPreviewAllowed,
             permissionLevel,
             url,
-            vanityName, // SLS
+            vanityName,
         };
     }
 
     return {
         item: {
+            canUserSeeClassification: false,
             description,
             extension,
-            id,
             grantedPermissions: {
                 itemShare,
             },
+            hideCollaborators: false, // to do: connect to Collaborators API
+            id,
             name,
             type,
             typedID: type === TYPE_FOLDER ? getTypedFolderId(id) : getTypedFileId(id),
@@ -118,14 +126,18 @@ const normalizeItemResponse = (itemAPIData: BoxItem) => {
     };
 };
 
-const normalizeUserResponse = (userAPIData: BoxUser) => {
+/**
+ * Convert a response from the User API into the object that the USM expects.
+ * @param {User} userAPIData
+ */
+const normalizeUserResponse = (userAPIData: User): USMElementUserDataType => {
     const { enterprise, hostname, id } = userAPIData;
 
     return {
         id,
         userEnterpriseData: {
             enterpriseName: enterprise ? enterprise.name : '',
-            serverURL: hostname ? `${hostname}/v/` : '', // SLS
+            serverURL: hostname ? `${hostname}/v/` : '',
         },
     };
 };

@@ -200,12 +200,14 @@ describe('normalizeItemResponse()', () => {
 
             const convertedResponse = {
                 item: {
+                    canUserSeeClassification: false,
                     description: ITEM_DESCRIPTION,
                     extension,
-                    id: ITEM_ID,
                     grantedPermissions: {
                         itemShare: can_share,
                     },
+                    hideCollaborators: false,
+                    id: ITEM_ID,
                     name: ITEM_NAME,
                     type: itemType,
                     typedID,
@@ -239,7 +241,7 @@ describe('normalizeItemResponse()', () => {
                           url,
                           vanityName: vanity_name,
                       }
-                    : {},
+                    : { canInvite: false },
             };
 
             expect(normalizeItemResponse(responseFromAPI)).toEqual(convertedResponse);
