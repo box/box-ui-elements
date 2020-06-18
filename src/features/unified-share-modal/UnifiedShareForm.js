@@ -35,7 +35,7 @@ type State = {
 
 class UnifiedShareForm extends React.Component<USFProps, State> {
     static defaultProps = {
-        // initiallySelectedContacts: [],
+        initiallySelectedContacts: [],
         createSharedLinkOnLoad: false,
         focusSharedLinkOnLoad: false,
         trackingProps: {
@@ -273,7 +273,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     shouldAutoFocusSharedLink = () => {
         const { focusSharedLinkOnLoad, sharedLink, sharedLinkLoaded } = this.props;
         // if not forcing focus or not a newly added shared link, return false
-        if (!(focusSharedLinkOnLoad || (sharedLink && sharedLink.isNewSharedLink))) {
+        if (!(focusSharedLinkOnLoad || sharedLink.isNewSharedLink)) {
             return false;
         }
         // otherwise wait until the link data is loaded before focusing

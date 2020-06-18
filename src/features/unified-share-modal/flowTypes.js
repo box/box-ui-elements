@@ -298,6 +298,8 @@ type BaseUnifiedShareProps = CollaboratorAvatarsTypes &
 export type USMProps = BaseUnifiedShareProps & {
     /** Function for closing the Remove Link Confirm Modal */
     closeConfirmModal: () => void,
+    /** Whether initial data for the USM has already been received */
+    initialDataReceived: boolean,
     /** Whether the USM is open */
     isOpen?: boolean,
     /** Handler function that removes the shared link, used in the Remove Link Confirm Modal */

@@ -147,8 +147,11 @@ function UnifiedShareModalElement(props: USMProps) {
                 <Internationalize language={language} messages={messages}>
                     <UnifiedShareModal
                         canInvite={sharedLink.canInvite}
-                        // collaboratorsList={}
+                        collaboratorsList={{ collaborators: [] }}
                         currentUserID={currentUserID}
+                        getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
+                        getSharedLinkContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
+                        initialDataReceived
                         item={item}
                         sharedLink={sharedLink}
                         showFormOnly
