@@ -11,13 +11,20 @@ export interface WithAnnotationsProps {
     onPreviewDestroy: (shouldReset?: boolean) => void;
 }
 
+type ActiveChangeEvent = {
+    annotationId: string | null;
+    fileVersionId: string;
+};
+
+type ActiveChangeEventHandler = (event: ActiveChangeEvent) => void;
+
 export interface ComponentWithAnnotations {
     emitActiveChangeEvent: (id: string | null) => void;
     emitRemoveEvent: (id: string) => void;
     getAction: (eventData: AnnotationActionEvent) => Action;
     getAnnotationsPath: (fileVersionId?: string, annotationId?: string | null) => string;
     getMatchPath: GetMatchPath;
-    handleActiveChange: (annotationId: string | null) => void;
+    handleActiveChange: ActiveChangeEventHandler;
     handleAnnotationChangeEvent: (id: string | null) => void;
     handleAnnotationCreate: (eventData: AnnotationActionEvent) => void;
     handleAnnotator: (annotator: Annotator) => void;
@@ -29,6 +36,7 @@ export type WithAnnotationsComponent<P> = React.ComponentClass<P & WithAnnotatio
 
 const defaultState: AnnotatorState = {
     action: null,
+    activeAnnotationFileVersionId: null,
     activeAnnotationId: null,
     annotation: null,
     error: null,
@@ -113,8 +121,8 @@ export default function withAnnotations<P extends object>(
             this.setState({ ...this.state, annotation, action, error, meta });
         };
 
-        handleActiveChange = (annotationId: string | null): void => {
-            this.setState({ activeAnnotationId: annotationId });
+        handleActiveChange: ActiveChangeEventHandler = ({ annotationId, fileVersionId }): void => {
+            this.setState({ activeAnnotationFileVersionId: fileVersionId, activeAnnotationId: annotationId });
         };
 
         handleAnnotatorEvent = ({ event, data }: { event: string; data: unknown }): void => {
@@ -123,7 +131,7 @@ export default function withAnnotations<P extends object>(
                     this.handleAnnotationCreate(data as AnnotationActionEvent);
                     break;
                 case 'annotations_active_change':
-                    this.handleActiveChange(data as string | null);
+                    this.handleActiveChange(data as ActiveChangeEvent);
                     break;
                 default:
                     break;

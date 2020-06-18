@@ -177,6 +177,7 @@ class ContactsField extends React.Component<Props, State> {
                 dividerIndex={shouldShowSuggested ? numSuggestedShowing : undefined}
                 disabled={disabled}
                 error={error}
+                getPillImageUrl={getContactAvatarUrl}
                 inputProps={{
                     autoFocus: true,
                     onChange: noop,
@@ -191,6 +192,7 @@ class ContactsField extends React.Component<Props, State> {
                 placeholder={intl.formatMessage(commonMessages.pillSelectorPlaceholder)}
                 ref={fieldRef}
                 selectedOptions={selectedContacts}
+                showRoundedPills
                 selectorOptions={contacts}
                 validateForError={validateForError}
                 validator={validator}

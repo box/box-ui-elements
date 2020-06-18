@@ -22,6 +22,8 @@ type Props = {
     className?: string,
     disabled?: boolean,
     error?: React.Node,
+    /** Function to retrieve the image URL associated with a pill */
+    getPillImageUrl?: (data: { id: string | number, [key: string]: any }) => string,
     inputProps: Object,
     onInput: Function,
     onRemove: Function,
@@ -168,6 +170,7 @@ class PillSelector extends React.Component<Props, State> {
             className,
             disabled,
             error,
+            getPillImageUrl,
             inputProps,
             onInput,
             onRemove,
@@ -211,6 +214,7 @@ class PillSelector extends React.Component<Props, State> {
                         ? selectedOptions.map((option: RoundOption, index: number) => {
                               return (
                                   <RoundPill
+                                      getPillImageUrl={getPillImageUrl}
                                       isValid={allowInvalidPills ? validator(option) : true}
                                       isDisabled={disabled}
                                       isSelected={index === selectedIndex}

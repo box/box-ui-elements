@@ -56,8 +56,8 @@ export default function withSidebarAnnotations(
         };
 
         componentDidUpdate(prevProps: Props) {
-            const { annotatorState, getAnnotationsMatchPath, location }: Props = this.props;
-            const { annotatorState: prevAnnotatorState, location: prevLocation }: Props = prevProps;
+            const { annotatorState, fileId, getAnnotationsMatchPath, location, onVersionChange }: Props = this.props;
+            const { annotatorState: prevAnnotatorState, fileId: prevFileId, location: prevLocation }: Props = prevProps;
             const { activeAnnotationId, annotation } = annotatorState;
             const { activeAnnotationId: prevActiveAnnotationId, annotation: prevAnnotation } = prevAnnotatorState;
 
@@ -80,8 +80,14 @@ export default function withSidebarAnnotations(
                 this.updateActiveAnnotation();
             }
 
-            if (prevFileVersionId !== fileVersionId) {
+            if (fileVersionId && prevFileVersionId !== fileVersionId) {
                 this.updateActiveVersion();
+            }
+
+            if (prevFileId !== fileId) {
+                // If the file id has changed, reset the current version id since the previous (possibly versioned)
+                // location is no longer active
+                onVersionChange(null);
             }
         }
 
@@ -126,7 +132,7 @@ export default function withSidebarAnnotations(
 
         updateActiveAnnotation = () => {
             const {
-                annotatorState: { activeAnnotationId },
+                annotatorState: { activeAnnotationFileVersionId, activeAnnotationId },
                 file,
                 getAnnotationsMatchPath,
                 getAnnotationsPath,
@@ -135,7 +141,8 @@ export default function withSidebarAnnotations(
             } = this.props;
             const match = getAnnotationsMatchPath(location);
             const currentFileVersionId = getProp(file, 'file_version.id');
-            const fileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
+            const defaultFileVersionId = activeAnnotationFileVersionId || currentFileVersionId;
+            const fileVersionId = getProp(match, 'params.fileVersionId', defaultFileVersionId);
             const newLocationState = activeAnnotationId ? { open: true } : location.state;
 
             // Update the location pathname and open state if transitioning to an active annotation id, force the sidebar open

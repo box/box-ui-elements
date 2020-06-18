@@ -8,51 +8,13 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
     test('should render default component', () => {
         const wrapper = shallow(<RoundPill onRemove={onRemoveStub} text="box" />);
 
-        expect(wrapper).toMatchInlineSnapshot(`
-            <LabelPill
-              className="bdl-RoundPill"
-              size="large"
-            >
-              <LabelPillText
-                className="bdl-RoundPill-text"
-              >
-                box
-              </LabelPillText>
-              <LabelPillIcon
-                Component={[Function]}
-                className="bdl-RoundPill-closeBtn"
-                onClick={[MockFunction]}
-              />
-            </LabelPill>
-        `);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render avatar if showAvatar prop is true', () => {
         const wrapper = shallow(<RoundPill onRemove={onRemoveStub} showAvatar text="box" />);
 
-        expect(wrapper).toMatchInlineSnapshot(`
-            <LabelPill
-              className="bdl-RoundPill"
-              size="large"
-            >
-              <LabelPillIcon
-                Component={[Function]}
-                name="box"
-                shouldShowExternal={true}
-                size="small"
-              />
-              <LabelPillText
-                className="bdl-RoundPill-text"
-              >
-                box
-              </LabelPillText>
-              <LabelPillIcon
-                Component={[Function]}
-                className="bdl-RoundPill-closeBtn"
-                onClick={[MockFunction]}
-              />
-            </LabelPill>
-        `);
+        expect(wrapper).toMatchSnapshot();
 
         expect(wrapper.find('LabelPillIcon')).toHaveLength(2);
     });
@@ -103,5 +65,23 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
         wrapper.setProps({ isDisabled: false });
         wrapper.find('LabelPillIcon').simulate('click');
         expect(onRemoveStub).toHaveBeenCalledTimes(1);
+    });
+
+    test('should use the avatar URL when the prop (and show avatar) are provided', () => {
+        const wrapper = shallow(
+            <RoundPill name="name" id="123" showAvatar getPillImageUrl={contact => `/test?id=${contact.id}`} />,
+        );
+
+        expect(wrapper.find('LabelPillIcon').length).toBe(2);
+        expect(wrapper.find('LabelPillIcon[avatarUrl]').props().avatarUrl).toEqual('/test?id=123');
+    });
+
+    test('should not have the avatar URL when the id prop is missing', () => {
+        const wrapper = shallow(
+            <RoundPill name="name" showAvatar getPillImageUrl={contact => `/test?id=${contact.id}`} />,
+        );
+
+        expect(wrapper.find('LabelPillIcon').length).toBe(2);
+        expect(wrapper.find('LabelPillIcon[avatarUrl]').length).toBe(0);
     });
 });

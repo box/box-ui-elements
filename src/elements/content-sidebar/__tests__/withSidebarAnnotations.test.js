@@ -49,6 +49,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         test.each`
             prevFileVersionId | fileVersionId | expectedCallCount
             ${'122'}          | ${'122'}      | ${0}
+            ${'122'}          | ${undefined}  | ${0}
             ${'122'}          | ${'123'}      | ${1}
         `(
             'should call updateActiveVersion if fileVersionId changes',
@@ -104,6 +105,19 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 expect(wrapper.instance().addAnnotation).toHaveBeenCalledTimes(expectedCount);
             },
         );
+
+        test.each`
+            fileId   | expectedCount
+            ${'123'} | ${0}
+            ${'456'} | ${1}
+        `('should call onVersionChange appropriately if file id changes to $fileId', ({ fileId, expectedCount }) => {
+            const onVersionChange = jest.fn();
+            const wrapper = getWrapper({ fileId: '123', onVersionChange });
+
+            wrapper.setProps({ fileId });
+
+            expect(onVersionChange).toHaveBeenCalledTimes(expectedCount);
+        });
     });
 
     describe('redirectDeeplinkedAnnotation()', () => {
@@ -256,6 +270,30 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 expect(history.push).toHaveBeenCalledWith({ pathname: expectedPath, state: expectedState });
             },
         );
+
+        test('should use the provided fileVersionId in the annotatorState if provided', () => {
+            const annotatorState = {
+                activeAnnotationFileVersionId: '456',
+                activeAnnotationId: '123',
+            };
+            const history = { push: jest.fn(), replace: jest.fn() };
+            const wrapper = getWrapper({ annotatorState, history, location: { pathname: '/' } });
+            const instance = wrapper.instance();
+
+            instance.updateActiveAnnotation();
+
+            expect(annotatorContextProps.getAnnotationsPath).toHaveBeenCalledWith('456', '123');
+        });
+
+        test('should fall back to the fileVersionId in the file if none other is provided', () => {
+            const history = { push: jest.fn(), replace: jest.fn() };
+            const wrapper = getWrapper({ history, location: { pathname: '/' } });
+            const instance = wrapper.instance();
+
+            instance.updateActiveAnnotation();
+
+            expect(annotatorContextProps.getAnnotationsPath).toHaveBeenCalledWith('123', undefined);
+        });
     });
 
     describe('updateActiveVersion()', () => {
