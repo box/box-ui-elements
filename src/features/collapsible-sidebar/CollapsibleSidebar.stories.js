@@ -135,24 +135,24 @@ export const basic = () => {
                             />
                         </li>
                         <li key="djb-leftnav-menu-item-synced">
-                            <a href="/">
-                                <CollapsibleSidebarItem
-                                    collapsedElement={
-                                        <CollapsibleSidebarMenuItem
-                                            icon={<CheckmarkBadge16 height={20} width={20} />}
-                                        />
-                                    }
-                                    expanded={boolean('isExpanded', true)}
-                                    expandedElement={
-                                        <CollapsibleSidebarMenuItem
-                                            content={menuItemContent}
-                                            icon={<CheckmarkBadge16 height={20} width={20} />}
-                                            text="Really really long synced link name synced Link"
-                                        />
-                                    }
-                                    tooltipMessage="Synced Link"
-                                />
-                            </a>
+                            <CollapsibleSidebarItem
+                                collapsedElement={
+                                    <CollapsibleSidebarMenuItem
+                                        as={Link}
+                                        href="/"
+                                        icon={<CheckmarkBadge16 height={20} width={20} />}
+                                    />
+                                }
+                                expanded={boolean('isExpanded', true)}
+                                expandedElement={
+                                    <CollapsibleSidebarMenuItem
+                                        content={menuItemContent}
+                                        icon={<CheckmarkBadge16 height={20} width={20} />}
+                                        text="Really really long synced link name synced Link"
+                                    />
+                                }
+                                tooltipMessage="Synced Link"
+                            />
                         </li>
                         <li key="djb-leftnav-menu-item-all-trash">
                             <CollapsibleSidebarItem

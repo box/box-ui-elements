@@ -66,6 +66,10 @@ const StyledMenuItemLabel = styled.span`
     text-overflow: ellipsis;
     opacity: 0.85;
 
+    &.overflow-action {
+        margin-right: 12px;
+    }
+
     a:active &,
     a:hover &,
     a:focus &,
@@ -118,7 +122,6 @@ const StyledLink = styled.a`
 
     .bdl-CollapsibleSidebar-menuItemIcon + .bdl-CollapsibleSidebar-menuItemLabel {
         margin-left: 16px;
-        margin-right: 12px;
     }
 
     &.show-action + .bdl-CollapsibleSidebar-menuItemActionContainer,
@@ -149,6 +152,9 @@ function CollapsibleSidebarMenuItem(props: Props) {
     const menuItemLinkClassName = isShowOnHover
         ? classNames('bdl-CollapsibleSidebar-menuItemLink')
         : classNames('bdl-CollapsibleSidebar-menuItemLink', 'show-action');
+    const menuItemLabelClassName = overflowAction
+        ? classNames('bdl-CollapsibleSidebar-menuItemLabel', 'overflow-action')
+        : classNames('bdl-CollapsibleSidebar-menuItemLabel');
 
     const renderMenuItem = () => {
         return (
@@ -158,7 +164,7 @@ function CollapsibleSidebarMenuItem(props: Props) {
                         <StyledIconWrapper className="bdl-CollapsibleSidebar-menuItemIcon">{icon}</StyledIconWrapper>
                     )}
                     {text && (
-                        <StyledMenuItemLabel ref={textRef} className="bdl-CollapsibleSidebar-menuItemLabel">
+                        <StyledMenuItemLabel ref={textRef} className={menuItemLabelClassName}>
                             {text}
                         </StyledMenuItemLabel>
                     )}
@@ -167,7 +173,6 @@ function CollapsibleSidebarMenuItem(props: Props) {
                 {overflowAction && (
                     <span className="bdl-CollapsibleSidebar-menuItemActionContainer">{overflowAction}</span>
                 )}
-                {overflowAction}
             </StyledMenuItem>
         );
     };
