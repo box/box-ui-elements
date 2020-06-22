@@ -146,6 +146,7 @@ export const basic = () => {
                                 expanded={boolean('isExpanded', true)}
                                 expandedElement={
                                     <CollapsibleSidebarMenuItem
+                                        as={Link}
                                         content={menuItemContent}
                                         icon={<CheckmarkBadge16 height={20} width={20} />}
                                         text="Really really long synced link name synced Link"
