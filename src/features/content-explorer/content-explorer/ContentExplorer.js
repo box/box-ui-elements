@@ -54,6 +54,8 @@ class ContentExplorer extends Component {
          * @param {Object[]} chosenItems
          */
         onChooseItems: PropTypes.func,
+        /** Called when selected button is clicked */
+        onSelectedClick: PropTypes.func,
         /**
          * Called when a destination folder has been selected for moving an item to
          *
@@ -344,6 +346,7 @@ class ContentExplorer extends Component {
             onCopyItem,
             onCancelButtonClick,
             onCreateNewFolderButtonClick,
+            onSelectedClick,
             showCreateNewFolderButton,
             isChooseButtonLoading,
             isCopyButtonLoading,
@@ -453,6 +456,7 @@ class ContentExplorer extends Component {
                     onCancelClick={onCancelButtonClick}
                     onChooseClick={onChooseItems}
                     onCopyClick={onCopyItem}
+                    onSelectedClick={onSelectedClick}
                     onMoveClick={onMoveItem}
                     selectedItems={selectedItems}
                 />

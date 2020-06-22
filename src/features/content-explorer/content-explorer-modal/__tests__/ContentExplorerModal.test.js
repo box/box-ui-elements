@@ -62,5 +62,11 @@ describe('features/content-explorer/content-explorer-modal/ContentExplorerModal'
             expect(wrapper.find('ContentExplorer').prop('customInput')).toEqual(customInput);
             expect(wrapper).toMatchSnapshot();
         });
+
+        test('should pass onSelectedClick to ContentExplorer', () => {
+            const onSelectedClick = () => {};
+            const wrapper = renderComponent({ onSelectedClick });
+            expect(wrapper.find('ContentExplorer').prop('onSelectedClick')).toEqual(onSelectedClick);
+        });
     });
 });
