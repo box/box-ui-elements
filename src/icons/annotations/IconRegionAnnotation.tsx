@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { white } from '../../styles/variables';
-
 import AccessibleSVG from '../accessible-svg';
-
 import { Icon } from '../iconTypes';
+import { white } from '../../styles/variables';
 
 const IconRegionAnnotation = ({ className = '', color = white, height = 21, title, width = 22 }: Icon) => (
     <AccessibleSVG
