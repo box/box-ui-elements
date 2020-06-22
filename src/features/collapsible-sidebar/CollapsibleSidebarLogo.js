@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { injectIntl } from 'react-intl';
 import type { InjectIntlProvidedProps } from 'react-intl';
-import { bdlTransitionDurationBase, bdlGridUnit } from '../../styles/variables';
+import { bdlGridUnit } from '../../styles/variables';
 import Logo from '../../icon/logo/BoxLogo';
 import PlainButton from '../../components/plain-button/PlainButton';
 import LinkBase from '../../components/link/LinkBase';
@@ -19,7 +19,6 @@ const StyledLogo = styled(Logo)`
     padding: ${bdlGridUnit};
     border: 1px solid transparent;
     border-radius: 8px;
-    /* transition: ${bdlTransitionDurationBase}; */
 
     & path,
     & .fill-color {

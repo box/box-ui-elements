@@ -23,10 +23,10 @@ exports[`components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIte
         className="CollapsibleSidebarMenuItem__StyledMenuItem-sc-1fmdq8m-0 cQLRdi foo"
       >
         <CollapsibleSidebarMenuItem__StyledLink
-          className="bdl-CollapsibleSidebar-menuItemLink show-action"
+          className="bdl-CollapsibleSidebar-menuItemLink show-overflowAction"
         >
           <a
-            className="CollapsibleSidebarMenuItem__StyledLink-sc-1fmdq8m-3 falEve bdl-CollapsibleSidebar-menuItemLink show-action"
+            className="CollapsibleSidebarMenuItem__StyledLink-sc-1fmdq8m-3 OZzby bdl-CollapsibleSidebar-menuItemLink show-overflowAction"
           >
             <CollapsibleSidebarMenuItem__StyledIconWrapper
               className="bdl-CollapsibleSidebar-menuItemIcon"

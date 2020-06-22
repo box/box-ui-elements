@@ -248,7 +248,7 @@ export const basic = () => {
                                                 <IconPlusRound color="white" />
                                             </Link>
                                         }
-                                        showAction="hover"
+                                        showOverflowAction="hover"
                                         text="Overflow Hover"
                                     />
                                 }
@@ -275,7 +275,7 @@ export const basic = () => {
                                                 <IconPlusRound color="white" />
                                             </Link>
                                         }
-                                        showAction="hover"
+                                        showOverflowAction="hover"
                                         text="Really really long overflow action name Overflow Hover"
                                     />
                                 }

@@ -124,7 +124,7 @@ const StyledLink = styled.a`
         margin-left: 16px;
     }
 
-    &.show-action + .bdl-CollapsibleSidebar-menuItemActionContainer,
+    &.show-overflowAction + .bdl-CollapsibleSidebar-menuItemActionContainer,
     &:focus + .bdl-CollapsibleSidebar-menuItemActionContainer,
     &:hover + .bdl-CollapsibleSidebar-menuItemActionContainer {
         opacity: 1;
@@ -139,22 +139,22 @@ type Props = {
     icon?: React.Node,
     overflowAction?: React.Node,
     /** Default is to always show */
-    showAction?: 'hover' | 'always',
+    showOverflowAction?: 'hover' | 'always',
     text?: string,
 };
 
 function CollapsibleSidebarMenuItem(props: Props) {
-    const { className, content, icon, overflowAction, showAction, text, ...rest } = props;
+    const { className, content, icon, overflowAction, showOverflowAction, text, ...rest } = props;
     const textRef = React.useRef<?HTMLElement>(null);
     const isTextOverflowed = useIsContentOverflowed(textRef);
     const { isScrolling } = React.useContext(CollapsibleSidebarContext);
-    const isShowOnHover = showAction === 'hover';
-    const menuItemLinkClassName = isShowOnHover
-        ? classNames('bdl-CollapsibleSidebar-menuItemLink')
-        : classNames('bdl-CollapsibleSidebar-menuItemLink', 'show-action');
-    const menuItemLabelClassName = overflowAction
-        ? classNames('bdl-CollapsibleSidebar-menuItemLabel', 'overflow-action')
-        : classNames('bdl-CollapsibleSidebar-menuItemLabel');
+    const isShowOverflowActionOnHover = showOverflowAction === 'hover';
+    const menuItemLinkClassName = classNames('bdl-CollapsibleSidebar-menuItemLink', {
+        'show-overflowAction': !isShowOverflowActionOnHover,
+    });
+    const menuItemLabelClassName = classNames('bdl-CollapsibleSidebar-menuItemLabel', {
+        'overflow-action': overflowAction,
+    });
 
     const renderMenuItem = () => {
         return (

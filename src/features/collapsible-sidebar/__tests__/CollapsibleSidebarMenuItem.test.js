@@ -105,7 +105,7 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
             icon: 'bold',
             overflowAction: <div>Hi</div>,
         });
-        expect(wrapper.find('.show-action').length).toBe(2);
+        expect(wrapper.find('.show-overflowAction').length).toBe(2);
         expect(wrapper.find('.bdl-CollapsibleSidebar-menuItemActionContainer').length).toBe(1);
     });
 
@@ -117,9 +117,9 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
             text: 'bar',
             icon: 'bold',
             overflowAction: <div>Hi</div>,
-            showAction: 'hover',
+            showOverflowAction: 'hover',
         });
-        expect(wrapper.find('.show-action').length).toBe(0);
+        expect(wrapper.find('.show-overflowAction').length).toBe(0);
         expect(wrapper.find('.bdl-CollapsibleSidebar-menuItemActionContainer').length).toBe(1);
     });
 });
