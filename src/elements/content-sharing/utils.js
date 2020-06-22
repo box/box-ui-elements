@@ -5,6 +5,7 @@ import {
     ACCESS_COLLAB,
     ACCESS_COMPANY,
     ACCESS_OPEN,
+    INVITEE_ROLE_EDITOR,
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_PREVIEW,
     TYPE_FOLDER,
@@ -16,7 +17,7 @@ import {
     CAN_VIEW_ONLY,
     PEOPLE_IN_ITEM,
 } from '../../features/unified-share-modal/constants';
-import type { USMElementItemAPIResponse, USMElementItemDataType, USMElementUserDataType } from './types';
+import type { ContentSharingItemAPIResponse, ContentSharingItemDataType, ContentSharingUserDataType } from './types';
 
 const ACCESS_LEVEL_MAP = {
     [ACCESS_COLLAB]: PEOPLE_IN_ITEM,
@@ -33,10 +34,11 @@ const PERMISSION_LEVEL_MAP = {
  * Convert a response from the Item API to the object that the USM expects.
  * @param {BoxItem} itemAPIData
  */
-const normalizeItemResponse = (itemAPIData: USMElementItemAPIResponse): USMElementItemDataType => {
+const normalizeItemResponse = (itemAPIData: ContentSharingItemAPIResponse): ContentSharingItemDataType => {
     let sharedLink = { canInvite: false };
 
     const {
+        allowed_invitee_roles,
         id,
         description,
         extension,
@@ -53,12 +55,13 @@ const normalizeItemResponse = (itemAPIData: USMElementItemAPIResponse): USMEleme
 
     const {
         can_download: isDownloadSettingAvailable,
-        can_edit: isEditAllowed,
         can_invite_collaborator: canInvite,
         can_preview: isPreviewAllowed,
         can_set_share_access: canChangeAccessLevel,
         can_share: itemShare,
     } = permissions;
+
+    const isEditAllowed = allowed_invitee_roles.indexOf(INVITEE_ROLE_EDITOR) !== -1;
 
     if (shared_link) {
         const {
@@ -130,7 +133,7 @@ const normalizeItemResponse = (itemAPIData: USMElementItemAPIResponse): USMEleme
  * Convert a response from the User API into the object that the USM expects.
  * @param {User} userAPIData
  */
-const normalizeUserResponse = (userAPIData: User): USMElementUserDataType => {
+const normalizeUserResponse = (userAPIData: User): ContentSharingUserDataType => {
     const { enterprise, hostname, id } = userAPIData;
 
     return {

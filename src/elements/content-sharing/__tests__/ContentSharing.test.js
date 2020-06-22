@@ -3,92 +3,30 @@ import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import API from '../../../api';
 import ErrorMask from '../../../components/error-mask/ErrorMask';
-import UnifiedShareModalElement from '../UnifiedShareModalElement';
+import ContentSharing from '../ContentSharing';
 import UnifiedShareModal from '../../../features/unified-share-modal/UnifiedShareModal';
 import { DEFAULT_HOSTNAME_API, TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import { normalizeItemResponse, normalizeUserResponse } from '../utils';
+import {
+    MOCK_ITEM,
+    MOCK_ITEM_API_RESPONSE,
+    MOCK_NORMALIZED_ITEM_DATA,
+    MOCK_NORMALIZED_USER_DATA,
+    MOCK_SHARED_LINK,
+    MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
+    MOCK_USER_API_RESPONSE,
+} from '../__mocks__/USMMocks';
 
 jest.mock('../../../api');
 jest.mock('../utils');
 
-const SHARED_LINK = {
-    accessLevel: 'company',
-    allowedAccessLevels: {
-        peopleInThisItem: false,
-        peopleInYourCompany: true,
-        peopleWithTheLink: false,
-    },
-    canChangeAccessLevel: true,
-    canChangeDownload: true,
-    canChangePassword: true,
-    canChangeVanityName: true,
-    canInvite: true,
-    directLink: '',
-    expirationTimestamp: '',
-    isDirectLinkAvailable: true,
-    isDownloadAllowed: true,
-    isDownloadAvailable: true,
-    isDownloadEnabled: true,
-    isDownloadSettingAvailable: true,
-    isEditAllowed: true,
-    isNewSharedLink: false,
-    isPasswordAvailable: true,
-    isPasswordEnabled: true,
-    isPreviewAllowed: true,
-    permissionLevel: 'peopleInYourCompany',
-    url: '',
-    vanityName: true,
-};
-const ITEM = {
-    id: '',
-    description: '',
-    extension: '',
-    grantedPermissions: {
-        itemShare: true,
-    },
-    name: '',
-    permissions: {},
-    typedID: '',
-};
-
-const ITEM_API_RESPONSE = {
-    item: ITEM,
-    shared_link: SHARED_LINK,
-    shared_link_features: {},
-};
-
-const NORMALIZED_ITEM_DATA = {
-    item: ITEM,
-    sharedLink: SHARED_LINK,
-};
-
-const USER_API_RESPONSE = {
-    enterprise: '',
-    hostname: '',
-    id: 'abcde',
-};
-
-const NORMALIZED_USER_DATA = {
-    id: 'abcde',
-    userEnterpriseData: {
-        enterpriseName: '',
-        serverURL: '',
-    },
-};
-
-const SHARED_LINK_DATA_AFTER_NORMALIZATION = {
-    ...SHARED_LINK,
-    enterpriseName: '',
-    serverURL: '',
-};
-
-describe('elements/unified-share-modal-element/UnifiedShareModalElement', () => {
+describe('elements/unified-share-modal-element/ContentSharing', () => {
     const getWrapper = props =>
-        mount(<UnifiedShareModalElement apiHost={DEFAULT_HOSTNAME_API} itemID="" language="" token="" {...props} />);
+        mount(<ContentSharing apiHost={DEFAULT_HOSTNAME_API} itemID="" language="" token="" {...props} />);
 
     beforeEach(() => {
-        normalizeItemResponse.mockReturnValue(NORMALIZED_ITEM_DATA);
-        normalizeUserResponse.mockReturnValue(NORMALIZED_USER_DATA);
+        normalizeItemResponse.mockReturnValue(MOCK_NORMALIZED_ITEM_DATA);
+        normalizeUserResponse.mockReturnValue(MOCK_NORMALIZED_USER_DATA);
     });
 
     afterEach(() => {
@@ -99,7 +37,7 @@ describe('elements/unified-share-modal-element/UnifiedShareModalElement', () => 
     describe('with successful API calls', () => {
         test('should call getFileAPI().getFile() if itemType is "file"', async () => {
             const getFile = jest.fn().mockImplementation((id, successFn) => {
-                return Promise.resolve(ITEM_API_RESPONSE).then(response => {
+                return Promise.resolve(MOCK_ITEM_API_RESPONSE).then(response => {
                     successFn(response);
                 });
             });
@@ -117,15 +55,15 @@ describe('elements/unified-share-modal-element/UnifiedShareModalElement', () => 
             const usm = wrapper.find(UnifiedShareModal);
 
             expect(getFile).toHaveBeenCalled();
-            expect(normalizeItemResponse).toHaveBeenCalledWith(ITEM_API_RESPONSE);
+            expect(normalizeItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(usm.length).toBe(1);
-            expect(usm.prop('item')).toEqual(ITEM);
-            expect(usm.prop('sharedLink')).toEqual(SHARED_LINK);
+            expect(usm.prop('item')).toEqual(MOCK_ITEM);
+            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
         });
 
         test('should call getFolderAPI().getFolderFields() if itemType is "folder"', async () => {
             const getFolderFields = jest.fn().mockImplementation((id, successFn) => {
-                return Promise.resolve(ITEM_API_RESPONSE).then(response => {
+                return Promise.resolve(MOCK_ITEM_API_RESPONSE).then(response => {
                     successFn(response);
                 });
             });
@@ -142,23 +80,23 @@ describe('elements/unified-share-modal-element/UnifiedShareModalElement', () => 
             wrapper.update();
             const usm = wrapper.find(UnifiedShareModal);
             expect(getFolderFields).toHaveBeenCalled();
-            expect(normalizeItemResponse).toHaveBeenCalledWith(ITEM_API_RESPONSE);
+            expect(normalizeItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(usm.length).toBe(1);
-            expect(usm.prop('item')).toEqual(ITEM);
-            expect(usm.prop('sharedLink')).toEqual(SHARED_LINK);
+            expect(usm.prop('item')).toEqual(MOCK_ITEM);
+            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
         });
 
         test('should call getUsersAPI().getUser() if item and sharedLink are defined, but currentUserID is not', async () => {
             jest.useFakeTimers();
 
             const getFile = jest.fn().mockImplementation((id, successFn) => {
-                return Promise.resolve(ITEM_API_RESPONSE).then(response => {
+                return Promise.resolve(MOCK_ITEM_API_RESPONSE).then(response => {
                     successFn(response);
                 });
             });
 
             const getUser = jest.fn().mockImplementation((id, successFn) => {
-                return Promise.resolve(USER_API_RESPONSE).then(response => {
+                return Promise.resolve(MOCK_USER_API_RESPONSE).then(response => {
                     successFn(response);
                 });
             });
@@ -177,17 +115,17 @@ describe('elements/unified-share-modal-element/UnifiedShareModalElement', () => 
             const usm = wrapper.find(UnifiedShareModal);
             expect(getFile).toHaveBeenCalled();
             expect(getUser).toHaveBeenCalled();
-            expect(normalizeUserResponse).toHaveBeenCalledWith(USER_API_RESPONSE);
+            expect(normalizeUserResponse).toHaveBeenCalledWith(MOCK_USER_API_RESPONSE);
             expect(usm.length).toBe(1);
-            expect(usm.prop('item')).toEqual(ITEM);
-            expect(usm.prop('sharedLink')).toEqual(SHARED_LINK_DATA_AFTER_NORMALIZATION);
+            expect(usm.prop('item')).toEqual(MOCK_ITEM);
+            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
         });
     });
 
     describe('with unsuccessful item API calls', () => {
         test('should show the ErrorMask and skip the call to getUser() if the call to getFile() fails', async () => {
             const getFile = jest.fn().mockImplementation((id, successFn, failureFn) => {
-                return Promise.reject(ITEM_API_RESPONSE).catch(() => {
+                return Promise.reject(MOCK_ITEM_API_RESPONSE).catch(() => {
                     failureFn();
                 });
             });
@@ -211,7 +149,7 @@ describe('elements/unified-share-modal-element/UnifiedShareModalElement', () => 
 
         test('should show the ErrorMask and skip the call to getUser() if the call to getFolderFields() fails', async () => {
             const getFolderFields = jest.fn().mockImplementation((id, successFn, failureFn) => {
-                return Promise.reject(ITEM_API_RESPONSE).catch(() => {
+                return Promise.reject(MOCK_ITEM_API_RESPONSE).catch(() => {
                     failureFn();
                 });
             });
@@ -240,19 +178,19 @@ describe('elements/unified-share-modal-element/UnifiedShareModalElement', () => 
         let getUser;
         beforeAll(() => {
             getFile = jest.fn().mockImplementation((id, successFn) => {
-                return Promise.resolve(ITEM_API_RESPONSE).then(response => {
+                return Promise.resolve(MOCK_ITEM_API_RESPONSE).then(response => {
                     successFn(response);
                 });
             });
 
             getFolderFields = jest.fn().mockImplementation((id, successFn) => {
-                return Promise.resolve(ITEM_API_RESPONSE).then(response => {
+                return Promise.resolve(MOCK_ITEM_API_RESPONSE).then(response => {
                     successFn(response);
                 });
             });
 
             getUser = jest.fn().mockImplementation((id, successFn, failureFn) => {
-                return Promise.reject(USER_API_RESPONSE).catch(() => {
+                return Promise.reject(MOCK_USER_API_RESPONSE).catch(() => {
                     failureFn();
                 });
             });
@@ -270,7 +208,7 @@ describe('elements/unified-share-modal-element/UnifiedShareModalElement', () => 
             });
             wrapper.update();
             expect(getFile).toHaveBeenCalled();
-            expect(normalizeItemResponse).toHaveBeenCalledWith(ITEM_API_RESPONSE);
+            expect(normalizeItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(getUser).toHaveBeenCalled();
             expect(normalizeUserResponse).not.toHaveBeenCalled();
             expect(wrapper.find(ErrorMask).length).toBe(1);
@@ -284,7 +222,7 @@ describe('elements/unified-share-modal-element/UnifiedShareModalElement', () => 
             });
             wrapper.update();
             expect(getFolderFields).toHaveBeenCalled();
-            expect(normalizeItemResponse).toHaveBeenCalledWith(ITEM_API_RESPONSE);
+            expect(normalizeItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(getUser).toHaveBeenCalled();
             expect(normalizeUserResponse).not.toHaveBeenCalled();
             expect(wrapper.find(ErrorMask).length).toBe(1);

@@ -18,21 +18,21 @@ describe('normalizeItemResponse()', () => {
     const ITEM_EXTENSION = '.png';
 
     const ITEM_SHARED_LINK = {
-        url: ITEM_SHARED_LINK_URL,
+        access: 'company',
+        download_count: 0,
         download_url: ITEM_SHARED_DOWNLOAD_URL,
-        vanity_url: null,
-        vanity_name: null,
         effective_access: 'company',
         effective_permission: 'can_download',
         is_password_enabled: false,
-        unshared_at: null,
-        download_count: 0,
-        preview_count: 0,
-        access: 'company',
         permissions: {
             can_preview: true,
             can_download: true,
         },
+        preview_count: 0,
+        unshared_at: null,
+        url: ITEM_SHARED_LINK_URL,
+        vanity_name: null,
+        vanity_url: null,
     };
 
     const FULL_PERMISSIONS = {
@@ -169,24 +169,18 @@ describe('normalizeItemResponse()', () => {
         'should convert $description',
         ({ itemType, extension, sharedLink, sharedLinkFeatures, permissions, typedID }) => {
             const responseFromAPI = {
-                type: itemType,
-                id: ITEM_ID,
+                allowed_invitee_roles: ['editor', 'viewer'],
+                description: ITEM_DESCRIPTION,
                 etag: '1',
                 extension,
-                description: ITEM_DESCRIPTION,
+                id: ITEM_ID,
                 name: ITEM_NAME,
                 permissions,
                 shared_link: sharedLink,
                 shared_link_features: sharedLinkFeatures,
+                type: itemType,
             };
-            const {
-                can_download,
-                can_edit,
-                can_invite_collaborator,
-                can_preview,
-                can_set_share_access,
-                can_share,
-            } = permissions;
+            const { can_download, can_invite_collaborator, can_preview, can_set_share_access, can_share } = permissions;
 
             const { download_url, effective_permission, is_password_enabled, unshared_at, url, vanity_name } = Object(
                 sharedLink,
@@ -232,7 +226,7 @@ describe('normalizeItemResponse()', () => {
                           isDownloadAvailable: can_download,
                           isDownloadEnabled: can_download,
                           isDownloadSettingAvailable: can_download,
-                          isEditAllowed: can_edit,
+                          isEditAllowed: true,
                           isNewSharedLink: false,
                           isPasswordAvailable: password,
                           isPasswordEnabled: is_password_enabled,

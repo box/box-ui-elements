@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Unified Share Modal Element
+ * @file ContentSharing Element
  * @author Box
  */
 import React, { useCallback, useEffect, useState } from 'react';
@@ -12,12 +12,13 @@ import UnifiedShareModal from '../../features/unified-share-modal';
 import messages from '../../features/unified-share-modal/messages';
 import { normalizeItemResponse, normalizeUserResponse } from './utils';
 import {
-    CLIENT_NAME_USM_ELEMENT,
+    CLIENT_NAME_CONTENT_SHARING,
+    FIELD_ALLOWED_INVITEE_ROLES,
     FIELD_ENTERPRISE,
     FIELD_HOSTNAME,
     FIELD_ID,
     FIELD_NAME,
-    FIELD_TYPE,
+    FIELD_TYPE as FIELD_ITEM_TYPE,
     FIELD_SHARED_LINK,
     FIELD_SHARED_LINK_FEATURES,
     TYPE_FILE,
@@ -28,9 +29,9 @@ import {
 } from '../../constants';
 import type { ItemType } from '../../common/types/core';
 import type { item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
-import type { USMElementItemAPIResponse, USMElementSharedLinkType } from './types';
+import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType } from './types';
 
-type USMElementProps = {
+type ContentSharingProps = {
     apiHost: string,
     itemID: string,
     itemType: ItemType,
@@ -47,16 +48,16 @@ const elementMessages = defineMessages({
     },
 });
 
-function UnifiedShareModalElement(props: USMElementProps) {
-    const { apiHost, itemID, itemType, language, token }: USMElementProps = props;
+function ContentSharing(props: ContentSharingProps) {
+    const { apiHost, itemID, itemType, language, token }: ContentSharingProps = props;
     const [item, setItem] = useState<?itemFlowType>(null);
-    const [sharedLink, setSharedLink] = useState<?USMElementSharedLinkType>(null);
+    const [sharedLink, setSharedLink] = useState<?ContentSharingSharedLinkType>(null);
     const [currentUserID, setCurrentUserID] = useState<?string>(null);
     const [errorExists, setErrorExists] = useState<boolean>(false);
 
     const api = new API({
         apiHost,
-        clientName: CLIENT_NAME_USM_ELEMENT,
+        clientName: CLIENT_NAME_CONTENT_SHARING,
         id: `${itemType}_usm`,
         token,
     });
@@ -80,7 +81,7 @@ function UnifiedShareModalElement(props: USMElementProps) {
         },
         [sharedLink],
     );
-    const getItemSuccess = (itemData: USMElementItemAPIResponse) => {
+    const getItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
         const { item: itemFromAPI, sharedLink: sharedLinkFromAPI } = normalizeItemResponse(itemData);
         setItem(itemFromAPI);
         setSharedLink(sharedLinkFromAPI);
@@ -92,21 +93,11 @@ function UnifiedShareModalElement(props: USMElementProps) {
     }, [resetState, token, itemID, itemType]);
 
     useEffect(() => {
-        const getUserData = async () => {
-            await api.getUsersAPI(false).getUser(itemID, getUserSuccess, getError, {
-                fields: [FIELD_ENTERPRISE, FIELD_HOSTNAME],
-            });
-        };
-        if (item && sharedLink && !currentUserID) {
-            getUserData();
-        }
-    });
-
-    useEffect(() => {
         const getItem = async () => {
             if (itemType === TYPE_FILE) {
                 await api.getFileAPI().getFile(itemID, getItemSuccess, getError, {
                     fields: [
+                        FIELD_ALLOWED_INVITEE_ROLES,
                         FIELD_DESCRIPTION,
                         FIELD_EXTENSION,
                         FIELD_ID,
@@ -114,7 +105,7 @@ function UnifiedShareModalElement(props: USMElementProps) {
                         FIELD_PERMISSIONS,
                         FIELD_SHARED_LINK,
                         FIELD_SHARED_LINK_FEATURES,
-                        FIELD_TYPE,
+                        FIELD_ITEM_TYPE,
                     ],
                 });
             }
@@ -122,6 +113,7 @@ function UnifiedShareModalElement(props: USMElementProps) {
             if (itemType === TYPE_FOLDER) {
                 await api.getFolderAPI().getFolderFields(itemID, getItemSuccess, getError, {
                     fields: [
+                        FIELD_ALLOWED_INVITEE_ROLES,
                         FIELD_DESCRIPTION,
                         FIELD_EXTENSION,
                         FIELD_ID,
@@ -129,7 +121,7 @@ function UnifiedShareModalElement(props: USMElementProps) {
                         FIELD_PERMISSIONS,
                         FIELD_SHARED_LINK,
                         FIELD_SHARED_LINK_FEATURES,
-                        FIELD_TYPE,
+                        FIELD_ITEM_TYPE,
                     ],
                 });
             }
@@ -139,6 +131,17 @@ function UnifiedShareModalElement(props: USMElementProps) {
             getItem();
         }
     }, [api, getError, item, itemID, itemType, sharedLink, currentUserID]);
+
+    useEffect(() => {
+        const getUserData = async () => {
+            await api.getUsersAPI(false).getUser(itemID, getUserSuccess, getError, {
+                fields: [FIELD_ENTERPRISE, FIELD_HOSTNAME],
+            });
+        };
+        if (item && sharedLink && !currentUserID) {
+            getUserData();
+        }
+    }, [api, getError, getUserSuccess, item, itemID, itemType, sharedLink, currentUserID]);
 
     const renderElement = () => {
         if (errorExists) {
@@ -150,7 +153,7 @@ function UnifiedShareModalElement(props: USMElementProps) {
                 <Internationalize language={language} messages={messages}>
                     <UnifiedShareModal
                         canInvite={sharedLink.canInvite}
-                        collaboratorsList={{ collaborators: [] }}
+                        collaboratorsList={{ collaborators: [] }} // to do: replace with Collaborators API
                         currentUserID={currentUserID}
                         getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
                         getSharedLinkContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
@@ -169,4 +172,4 @@ function UnifiedShareModalElement(props: USMElementProps) {
     return renderElement();
 }
 
-export default UnifiedShareModalElement;
+export default ContentSharing;

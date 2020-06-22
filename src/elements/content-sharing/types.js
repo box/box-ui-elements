@@ -3,20 +3,20 @@ import type { ItemType } from '../../common/types/core';
 import type { item, sharedLinkType } from '../../features/unified-share-modal/flowTypes';
 
 // "SLS" denotes values that are used in the Shared Link Settings modal
-type USMElementEnterpriseDataType = {
+type ContentSharingEnterpriseDataType = {
     enterpriseName: string,
     serverURL: string, // SLS
 };
 
-export type USMElementUserDataType = {
+export type ContentSharingUserDataType = {
     id: string,
-    userEnterpriseData: USMElementEnterpriseDataType,
+    userEnterpriseData: ContentSharingEnterpriseDataType,
 };
 
-export type USMElementSharedLinkType =
+export type ContentSharingSharedLinkType =
     | { canInvite: boolean }
     | (sharedLinkType &
-          USMElementEnterpriseDataType & {
+          ContentSharingEnterpriseDataType & {
               canChangeDownload: boolean, // SLS
               canChangePassword: boolean, // SLS
               canChangeVanityName: boolean, // SLS
@@ -30,12 +30,13 @@ export type USMElementSharedLinkType =
               vanityName: string,
           });
 
-export type USMElementItemDataType = {
+export type ContentSharingItemDataType = {
     item: item,
-    sharedLink: USMElementSharedLinkType,
+    sharedLink: ContentSharingSharedLinkType,
 };
 
-export type USMElementItemAPIResponse = {
+export type ContentSharingItemAPIResponse = {
+    allowed_invitee_roles: Array<string>,
     description: string,
     etag: string,
     extension: string,
@@ -46,7 +47,6 @@ export type USMElementItemAPIResponse = {
         can_comment: boolean,
         can_delete: boolean,
         can_download: boolean,
-        can_edit?: boolean,
         can_invite_collaborator: boolean,
         can_preview: boolean,
         can_rename: boolean,
