@@ -43,7 +43,7 @@ type ContentSharingProps = {
 const elementMessages = defineMessages({
     loadingError: {
         defaultMessage: 'Could not load shared link for this item.',
-        description: 'Message that appears when the USM cannot be loaded.',
+        description: 'Message that appears when the ContentSharing Element cannot be loaded.',
         id: 'be.contentSharing.loadingError',
     },
 });
