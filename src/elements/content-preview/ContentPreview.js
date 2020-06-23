@@ -1154,7 +1154,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const unit = startAtTypes[location.type];
         const viewer = this.getViewer();
 
-        if (unit && annotationFileVersionId !== currentPreviewFileVersionId) {
+        if (unit && annotationFileVersionId && annotationFileVersionId !== currentPreviewFileVersionId) {
             this.setState({
                 startAt: {
                     unit,

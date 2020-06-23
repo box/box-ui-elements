@@ -613,7 +613,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         emitAnnotatorActiveChangeEvent(nextActiveAnnotationId);
 
-        if (annotationFileVersionId !== selectedFileVersionId) {
+        if (annotationFileVersionId && annotationFileVersionId !== selectedFileVersionId) {
             history.push(getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));
         }
 
