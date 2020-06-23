@@ -1145,9 +1145,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
         });
     };
 
-    handleAnnotationSelect = ({ file_version: { id: annotationFileVersionId }, id, target }: Annotation) => {
+    handleAnnotationSelect = ({ file_version, id, target }: Annotation) => {
         const { location = {} } = target;
         const { file, selectedVersion } = this.state;
+        const annotationFileVersionId = getProp(file_version, 'id');
         const currentFileVersionId = getProp(file, 'file_version.id');
         const currentPreviewFileVersionId = getProp(selectedVersion, 'id', currentFileVersionId);
         const unit = startAtTypes[location.type];
