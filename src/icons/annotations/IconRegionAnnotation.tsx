@@ -5,7 +5,7 @@ import { white } from '../../styles/variables';
 
 const IconRegionAnnotation = ({ className = '', color = white, height = 21, title, width = 22 }: Icon) => (
     <AccessibleSVG
-        className={`icon-annotation-region ${className}`}
+        className={`bdl-IconRegionAnnotation ${className}`}
         height={height}
         title={title}
         viewBox="0 0 22 21"
