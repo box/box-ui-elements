@@ -8,7 +8,7 @@ import type { Icon } from '../flowTypes';
 
 const IconPointAnnotation = ({ className = '', color = bdlBoxBlue, height = 21, title, width = 22 }: Icon) => (
     <AccessibleSVG
-        className={`bdl-IconRegionAnnotation ${className}`}
+        className={`icon-annotation-point ${className}`}
         height={height}
         title={title}
         viewBox="0 0 22 21"
