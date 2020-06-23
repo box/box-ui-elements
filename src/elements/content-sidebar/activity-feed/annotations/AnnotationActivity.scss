@@ -46,5 +46,9 @@
     .bcs-AnnotationActivity-link {
         color: $bdl-box-blue;
         font-weight: bold;
+
+        &[aria-disabled='true'] {
+            color: $bdl-gray-62;
+        }
     }
 }

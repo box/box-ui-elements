@@ -74,6 +74,16 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         });
     });
 
+    test('should render version unavailable if file version is null', () => {
+        const wrapper = getWrapper({ item: { ...mockAnnotation, file_version: null } });
+        const activityLink = wrapper.find(AnnotationActivityLink);
+
+        expect(activityLink.prop('message')).toEqual({
+            ...messages.annotationActivityVersionUnavailable,
+        });
+        expect(activityLink.prop('isDisabled')).toBe(true);
+    });
+
     test('should render commenter as a link', () => {
         const wrapper = getWrapper();
         expect(wrapper.find('UserLink').prop('name')).toEqual(mockActivity.item.created_by.name);
