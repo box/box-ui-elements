@@ -1,6 +1,6 @@
 // @flow
-import type { User } from '../../common/types/core';
-import { getTypedFileId, getTypedFolderId } from '../../utils/file';
+import type { User } from '../../../common/types/core';
+import { getTypedFileId, getTypedFolderId } from '../../../utils/file';
 import {
     ACCESS_COLLAB,
     ACCESS_COMPANY,
@@ -9,15 +9,13 @@ import {
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_PREVIEW,
     TYPE_FOLDER,
-} from '../../constants';
-import {
-    ANYONE_IN_COMPANY,
-    ANYONE_WITH_LINK,
-    CAN_VIEW_DOWNLOAD,
-    CAN_VIEW_ONLY,
-    PEOPLE_IN_ITEM,
-} from '../../features/unified-share-modal/constants';
-import type { ContentSharingItemAPIResponse, ContentSharingItemDataType, ContentSharingUserDataType } from './types';
+} from '../../../constants';
+import { ANYONE_IN_COMPANY, ANYONE_WITH_LINK, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY, PEOPLE_IN_ITEM } from '../constants';
+import type {
+    ContentSharingItemAPIResponse,
+    ContentSharingItemDataType,
+    ContentSharingUserDataType,
+} from '../../../elements/content-sharing/types';
 
 const ACCESS_LEVEL_MAP = {
     [ACCESS_COLLAB]: PEOPLE_IN_ITEM,
@@ -34,9 +32,7 @@ const PERMISSION_LEVEL_MAP = {
  * Convert a response from the Item API to the object that the USM expects.
  * @param {BoxItem} itemAPIData
  */
-const normalizeItemResponse = (itemAPIData: ContentSharingItemAPIResponse): ContentSharingItemDataType => {
-    let sharedLink = { canInvite: false };
-
+const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): ContentSharingItemDataType => {
     const {
         allowed_invitee_roles,
         id,
@@ -62,6 +58,8 @@ const normalizeItemResponse = (itemAPIData: ContentSharingItemAPIResponse): Cont
     } = permissions;
 
     const isEditAllowed = allowed_invitee_roles.indexOf(INVITEE_ROLE_EDITOR) !== -1;
+
+    let sharedLink = { canInvite };
 
     if (shared_link) {
         const {
@@ -133,7 +131,7 @@ const normalizeItemResponse = (itemAPIData: ContentSharingItemAPIResponse): Cont
  * Convert a response from the User API into the object that the USM expects.
  * @param {User} userAPIData
  */
-const normalizeUserResponse = (userAPIData: User): ContentSharingUserDataType => {
+const convertUserResponse = (userAPIData: User): ContentSharingUserDataType => {
     const { enterprise, hostname, id } = userAPIData;
 
     return {
@@ -145,4 +143,4 @@ const normalizeUserResponse = (userAPIData: User): ContentSharingUserDataType =>
     };
 };
 
-export { normalizeItemResponse, normalizeUserResponse, PERMISSION_LEVEL_MAP };
+export { convertItemResponse, convertUserResponse, PERMISSION_LEVEL_MAP };

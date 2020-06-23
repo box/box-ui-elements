@@ -1,13 +1,13 @@
-import { normalizeItemResponse, normalizeUserResponse, PERMISSION_LEVEL_MAP } from '../utils';
-import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
-import { ANYONE_IN_COMPANY } from '../../../features/unified-share-modal/constants';
+import { convertItemResponse, convertUserResponse, PERMISSION_LEVEL_MAP } from '../convertData';
+import { TYPE_FILE, TYPE_FOLDER } from '../../../../constants';
+import { ANYONE_IN_COMPANY } from '../../constants';
 
-jest.mock('../../../utils/file', () => ({
+jest.mock('../../../../utils/file', () => ({
     getTypedFileId: () => 'f_190457309',
     getTypedFolderId: () => 'd_190457309',
 }));
 
-describe('normalizeItemResponse()', () => {
+describe('convertItemResponse()', () => {
     const TYPED_FILE_ID = 'f_190457309';
     const TYPED_FOLDER_ID = 'd_190457309';
     const ITEM_ID = '190457309';
@@ -235,15 +235,15 @@ describe('normalizeItemResponse()', () => {
                           url,
                           vanityName: vanity_name,
                       }
-                    : { canInvite: false },
+                    : { canInvite: can_invite_collaborator },
             };
 
-            expect(normalizeItemResponse(responseFromAPI)).toEqual(convertedResponse);
+            expect(convertItemResponse(responseFromAPI)).toEqual(convertedResponse);
         },
     );
 });
 
-describe('normalizeUserResponse()', () => {
+describe('convertUserResponse()', () => {
     const USER_ID = '79035428903';
     const ENTERPRISE_NAME = 'Best Enterprise Ever';
     const ENTERPRISE = {
@@ -273,6 +273,6 @@ describe('normalizeUserResponse()', () => {
             },
         };
 
-        expect(normalizeUserResponse(responseFromAPI)).toEqual(convertedResponse);
+        expect(convertUserResponse(responseFromAPI)).toEqual(convertedResponse);
     });
 });

@@ -10,7 +10,7 @@ import Internationalize from '../common/Internationalize';
 import ErrorMask from '../../components/error-mask/ErrorMask';
 import UnifiedShareModal from '../../features/unified-share-modal';
 import messages from '../../features/unified-share-modal/messages';
-import { normalizeItemResponse, normalizeUserResponse } from './utils';
+import { convertItemResponse, convertUserResponse } from '../../features/unified-share-modal/utils/convertData';
 import {
     CLIENT_NAME_CONTENT_SHARING,
     FIELD_ALLOWED_INVITEE_ROLES,
@@ -44,12 +44,12 @@ const elementMessages = defineMessages({
     loadingError: {
         defaultMessage: 'Could not load shared link for this item.',
         description: 'Message that appears when the USM cannot be loaded.',
-        id: 'be.usm.loadingError',
+        id: 'be.contentSharing.loadingError',
     },
 });
 
 function ContentSharing(props: ContentSharingProps) {
-    const { apiHost, itemID, itemType, language, token }: ContentSharingProps = props;
+    const { apiHost, itemID, itemType, language, token } = props;
     const [item, setItem] = useState<?itemFlowType>(null);
     const [sharedLink, setSharedLink] = useState<?ContentSharingSharedLinkType>(null);
     const [currentUserID, setCurrentUserID] = useState<?string>(null);
@@ -58,41 +58,28 @@ function ContentSharing(props: ContentSharingProps) {
     const api = new API({
         apiHost,
         clientName: CLIENT_NAME_CONTENT_SHARING,
-        id: `${itemType}_usm`,
+        id: `${itemType}_${itemID}`,
         token,
     });
-
-    const resetState = useCallback(() => {
-        setItem(null);
-        setSharedLink(null);
-        setCurrentUserID(null);
-    }, [setItem, setSharedLink, setCurrentUserID]);
 
     const getError = useCallback(() => {
         setErrorExists(true);
     }, [setErrorExists]);
 
-    const getUserSuccess = useCallback(
-        userData => {
-            const { id, userEnterpriseData } = normalizeUserResponse(userData);
-            setSharedLink({ ...sharedLink, ...userEnterpriseData });
-            setCurrentUserID(id);
+    useEffect(() => {
+        setItem(null);
+        setSharedLink(null);
+        setCurrentUserID(null);
+    }, [token, itemID, itemType]);
+
+    useEffect(() => {
+        const getItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
+            const { item: itemFromAPI, sharedLink: sharedLinkFromAPI } = convertItemResponse(itemData);
+            setItem(itemFromAPI);
+            setSharedLink(sharedLinkFromAPI);
             setErrorExists(false);
-        },
-        [sharedLink],
-    );
-    const getItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
-        const { item: itemFromAPI, sharedLink: sharedLinkFromAPI } = normalizeItemResponse(itemData);
-        setItem(itemFromAPI);
-        setSharedLink(sharedLinkFromAPI);
-        setErrorExists(false);
-    };
+        };
 
-    useEffect(() => {
-        resetState();
-    }, [resetState, token, itemID, itemType]);
-
-    useEffect(() => {
         const getItem = async () => {
             if (itemType === TYPE_FILE) {
                 await api.getFileAPI().getFile(itemID, getItemSuccess, getError, {
@@ -133,6 +120,13 @@ function ContentSharing(props: ContentSharingProps) {
     }, [api, getError, item, itemID, itemType, sharedLink, currentUserID]);
 
     useEffect(() => {
+        const getUserSuccess = userData => {
+            const { id, userEnterpriseData } = convertUserResponse(userData);
+            setSharedLink({ ...sharedLink, ...userEnterpriseData });
+            setCurrentUserID(id);
+            setErrorExists(false);
+        };
+
         const getUserData = async () => {
             await api.getUsersAPI(false).getUser(itemID, getUserSuccess, getError, {
                 fields: [FIELD_ENTERPRISE, FIELD_HOSTNAME],
@@ -141,7 +135,7 @@ function ContentSharing(props: ContentSharingProps) {
         if (item && sharedLink && !currentUserID) {
             getUserData();
         }
-    }, [api, getError, getUserSuccess, item, itemID, itemType, sharedLink, currentUserID]);
+    }, [api, getError, item, itemID, itemType, sharedLink, currentUserID]);
 
     const renderElement = () => {
         if (errorExists) {
@@ -153,12 +147,14 @@ function ContentSharing(props: ContentSharingProps) {
                 <Internationalize language={language} messages={messages}>
                     <UnifiedShareModal
                         canInvite={sharedLink.canInvite}
+                        changeSharedLinkPermissionLevel={() => Promise.resolve([])} // to do: replace with a POST to the Shared Link API
                         collaboratorsList={{ collaborators: [] }} // to do: replace with Collaborators API
                         currentUserID={currentUserID}
                         getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
                         getSharedLinkContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
                         initialDataReceived
                         item={item}
+                        onAddLink={() => Promise.resolve([])} // to do: replace with a POST to the Shared Link API
                         sharedLink={sharedLink}
                         showFormOnly
                     />

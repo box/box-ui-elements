@@ -47,7 +47,7 @@ const MOCK_ITEM_API_RESPONSE = {
     shared_link_features: {},
 };
 
-const MOCK_NORMALIZED_ITEM_DATA = {
+const MOCK_CONVERTED_ITEM_DATA = {
     item: MOCK_ITEM,
     sharedLink: MOCK_SHARED_LINK,
 };
@@ -58,7 +58,7 @@ const MOCK_USER_API_RESPONSE = {
     id: 'abcde',
 };
 
-const MOCK_NORMALIZED_USER_DATA = {
+const MOCK_CONVERTED_USER_DATA = {
     id: 'abcde',
     userEnterpriseData: {
         enterpriseName: '',
@@ -75,8 +75,8 @@ const MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION = {
 export {
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE,
-    MOCK_NORMALIZED_ITEM_DATA,
-    MOCK_NORMALIZED_USER_DATA,
+    MOCK_CONVERTED_ITEM_DATA,
+    MOCK_CONVERTED_USER_DATA,
     MOCK_SHARED_LINK,
     MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
     MOCK_USER_API_RESPONSE,

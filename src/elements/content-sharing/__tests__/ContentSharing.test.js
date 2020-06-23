@@ -6,27 +6,27 @@ import ErrorMask from '../../../components/error-mask/ErrorMask';
 import ContentSharing from '../ContentSharing';
 import UnifiedShareModal from '../../../features/unified-share-modal/UnifiedShareModal';
 import { DEFAULT_HOSTNAME_API, TYPE_FILE, TYPE_FOLDER } from '../../../constants';
-import { normalizeItemResponse, normalizeUserResponse } from '../utils';
+import { convertItemResponse, convertUserResponse } from '../../../features/unified-share-modal/utils/convertData';
 import {
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE,
-    MOCK_NORMALIZED_ITEM_DATA,
-    MOCK_NORMALIZED_USER_DATA,
+    MOCK_CONVERTED_ITEM_DATA,
+    MOCK_CONVERTED_USER_DATA,
     MOCK_SHARED_LINK,
     MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
     MOCK_USER_API_RESPONSE,
-} from '../__mocks__/USMMocks';
+} from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
 
 jest.mock('../../../api');
-jest.mock('../utils');
+jest.mock('../../../features/unified-share-modal/utils/convertData');
 
 describe('elements/unified-share-modal-element/ContentSharing', () => {
     const getWrapper = props =>
         mount(<ContentSharing apiHost={DEFAULT_HOSTNAME_API} itemID="" language="" token="" {...props} />);
 
     beforeEach(() => {
-        normalizeItemResponse.mockReturnValue(MOCK_NORMALIZED_ITEM_DATA);
-        normalizeUserResponse.mockReturnValue(MOCK_NORMALIZED_USER_DATA);
+        convertItemResponse.mockReturnValue(MOCK_CONVERTED_ITEM_DATA);
+        convertUserResponse.mockReturnValue(MOCK_CONVERTED_USER_DATA);
     });
 
     afterEach(() => {
@@ -55,7 +55,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             const usm = wrapper.find(UnifiedShareModal);
 
             expect(getFile).toHaveBeenCalled();
-            expect(normalizeItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
+            expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(usm.length).toBe(1);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
             expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
@@ -80,7 +80,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             wrapper.update();
             const usm = wrapper.find(UnifiedShareModal);
             expect(getFolderFields).toHaveBeenCalled();
-            expect(normalizeItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
+            expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(usm.length).toBe(1);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
             expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
@@ -115,7 +115,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             const usm = wrapper.find(UnifiedShareModal);
             expect(getFile).toHaveBeenCalled();
             expect(getUser).toHaveBeenCalled();
-            expect(normalizeUserResponse).toHaveBeenCalledWith(MOCK_USER_API_RESPONSE);
+            expect(convertUserResponse).toHaveBeenCalledWith(MOCK_USER_API_RESPONSE);
             expect(usm.length).toBe(1);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
             expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
@@ -142,7 +142,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             wrapper.update();
             expect(getFile).toHaveBeenCalled();
             expect(getUser).not.toHaveBeenCalled();
-            expect(normalizeItemResponse).not.toHaveBeenCalled();
+            expect(convertItemResponse).not.toHaveBeenCalled();
             expect(wrapper.find(ErrorMask).length).toBe(1);
             expect(wrapper.find(UnifiedShareModal).length).toBe(0);
         });
@@ -166,7 +166,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             wrapper.update();
             expect(getFolderFields).toHaveBeenCalled();
             expect(getUser).not.toHaveBeenCalled();
-            expect(normalizeItemResponse).not.toHaveBeenCalled();
+            expect(convertItemResponse).not.toHaveBeenCalled();
             expect(wrapper.find(ErrorMask).length).toBe(1);
             expect(wrapper.find(UnifiedShareModal).length).toBe(0);
         });
@@ -208,9 +208,9 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             });
             wrapper.update();
             expect(getFile).toHaveBeenCalled();
-            expect(normalizeItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
+            expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(getUser).toHaveBeenCalled();
-            expect(normalizeUserResponse).not.toHaveBeenCalled();
+            expect(convertUserResponse).not.toHaveBeenCalled();
             expect(wrapper.find(ErrorMask).length).toBe(1);
             expect(wrapper.find(UnifiedShareModal).length).toBe(0);
         });
@@ -222,9 +222,9 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             });
             wrapper.update();
             expect(getFolderFields).toHaveBeenCalled();
-            expect(normalizeItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
+            expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(getUser).toHaveBeenCalled();
-            expect(normalizeUserResponse).not.toHaveBeenCalled();
+            expect(convertUserResponse).not.toHaveBeenCalled();
             expect(wrapper.find(ErrorMask).length).toBe(1);
             expect(wrapper.find(UnifiedShareModal).length).toBe(0);
         });
