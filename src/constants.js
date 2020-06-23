@@ -142,8 +142,8 @@ export const FIELD_OCCURRED_AT: 'occurred_at' = 'occurred_at';
 export const FIELD_RENDERED_TEXT: 'rendered_text' = 'rendered_text';
 export const FIELD_RETENTION: 'retention' = 'retention';
 export const FIELD_UPLOADER_DISPLAY_NAME: 'uploader_display_name' = 'uploader_display_name';
-export const FIELD_ENTERPRISE = 'enterprise';
-export const FIELD_HOSTNAME = 'hostname';
+export const FIELD_ENTERPRISE: 'enterprise' = 'enterprise';
+export const FIELD_HOSTNAME: 'hostname' = 'hostname';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_COMMENT = 'can_comment';
