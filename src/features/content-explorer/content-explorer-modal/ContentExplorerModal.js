@@ -14,7 +14,7 @@ type Props = {
     description?: string,
     isOpen?: boolean,
     onRequestClose?: Function,
-    onSelectedClick?: Function,
+    onSelectedClick?: () => void,
     title?: string,
 };
 
