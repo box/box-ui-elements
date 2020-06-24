@@ -150,17 +150,21 @@ type Crumb = {
 };
 
 type BoxItemPermission = {
+    can_annotate?: boolean,
     can_comment?: boolean,
     can_create_annotations?: boolean,
     can_delete?: boolean,
     can_download?: boolean,
     can_edit?: boolean,
+    can_invite_collaborator?: boolean,
     can_preview?: boolean,
     can_rename?: boolean,
     can_set_share_access?: boolean,
     can_share?: boolean,
     can_upload?: boolean,
     can_view_annotations?: boolean,
+    can_view_annotations_all?: boolean,
+    can_view_annotations_self?: boolean,
 };
 
 type BoxItemVersionPermission = {
@@ -255,6 +259,7 @@ type SharedLink = {
     is_password_enabled?: boolean,
     permissions?: BoxItemPermission,
     preview_count?: number,
+    unshared_at?: string | null,
     url: string,
     vanity_name?: string,
     vanity_url?: string,

@@ -3,32 +3,18 @@
  * @file ContentSharing Element
  * @author Box
  */
-import React, { useCallback, useEffect, useState } from 'react';
+import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import type { $AxiosError } from 'axios';
 import API from '../../api';
 import Internationalize from '../common/Internationalize';
 import ErrorMask from '../../components/error-mask/ErrorMask';
 import UnifiedShareModal from '../../features/unified-share-modal';
-import messages from '../../features/unified-share-modal/messages';
+import usmMessages from '../../features/unified-share-modal/messages';
 import { convertItemResponse, convertUserResponse } from '../../features/unified-share-modal/utils/convertData';
-import {
-    CLIENT_NAME_CONTENT_SHARING,
-    FIELD_ALLOWED_INVITEE_ROLES,
-    FIELD_ENTERPRISE,
-    FIELD_HOSTNAME,
-    FIELD_ID,
-    FIELD_NAME,
-    FIELD_TYPE as FIELD_ITEM_TYPE,
-    FIELD_SHARED_LINK,
-    FIELD_SHARED_LINK_FEATURES,
-    TYPE_FILE,
-    TYPE_FOLDER,
-    FIELD_PERMISSIONS,
-    FIELD_EXTENSION,
-    FIELD_DESCRIPTION,
-} from '../../constants';
-import { contentSharingMessages, CONTENT_SHARING_ERRORS } from './messages';
+import { CLIENT_NAME_CONTENT_SHARING, FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FILE, TYPE_FOLDER } from '../../constants';
+import { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS } from './constants';
+import contentSharingMessages from './messages';
 import type { ErrorResponseData } from '../../common/types/api';
 import type { ItemType } from '../../common/types/core';
 import type { item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
@@ -36,29 +22,41 @@ import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType } from
 
 type ContentSharingProps = {
     apiHost: string,
+    displayInModal?: boolean,
     itemID: string,
     itemType: ItemType,
     language: string,
-    showFormOnly?: boolean,
     token: string,
 };
 
 function ContentSharing(props: ContentSharingProps) {
-    const { apiHost, itemID, itemType, language, token } = props;
-    const [item, setItem] = useState<?itemFlowType>(null);
-    const [sharedLink, setSharedLink] = useState<?ContentSharingSharedLinkType>(null);
-    const [currentUserID, setCurrentUserID] = useState<?string>(null);
-    const [errorMessage, setErrorMessage] = useState<?Object>(null);
+    const { apiHost, displayInModal, itemID, itemType, language, token } = props;
+    const [api, setAPI] = React.useState<API>(
+        new API({
+            apiHost,
+            clientName: CLIENT_NAME_CONTENT_SHARING,
+            id: `${itemType}_${itemID}`,
+            token,
+        }),
+    );
+    const [item, setItem] = React.useState<itemFlowType | null>(null);
+    const [sharedLink, setSharedLink] = React.useState<ContentSharingSharedLinkType | null>(null);
+    const [currentUserID, setCurrentUserID] = React.useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = React.useState<Object | null>(null);
 
-    const api = new API({
-        apiHost,
-        clientName: CLIENT_NAME_CONTENT_SHARING,
-        id: `${itemType}_${itemID}`,
-        token,
-    });
+    React.useEffect(() => {
+        setAPI(
+            new API({
+                apiHost,
+                clientName: CLIENT_NAME_CONTENT_SHARING,
+                id: `${itemType}_${itemID}`,
+                token,
+            }),
+        );
+    }, [apiHost, itemID, itemType, token]);
 
-    const getError = useCallback(
-        (error: $AxiosError<any> | ErrorResponseData) => {
+    const getError = React.useCallback(
+        (error: $AxiosError<Object> | ErrorResponseData) => {
             let errorObject;
             if (error.status) {
                 errorObject = contentSharingMessages[CONTENT_SHARING_ERRORS[error.status]];
@@ -73,13 +71,13 @@ function ContentSharing(props: ContentSharingProps) {
         [setErrorMessage],
     );
 
-    useEffect(() => {
+    React.useEffect(() => {
         setItem(null);
         setSharedLink(null);
         setCurrentUserID(null);
     }, [token, itemID, itemType]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         const getItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
             const { item: itemFromAPI, sharedLink: sharedLinkFromAPI } = convertItemResponse(itemData);
             setItem(itemFromAPI);
@@ -88,23 +86,10 @@ function ContentSharing(props: ContentSharingProps) {
         };
 
         const getItem = () => {
-            const fields = {
-                fields: [
-                    FIELD_ALLOWED_INVITEE_ROLES,
-                    FIELD_DESCRIPTION,
-                    FIELD_EXTENSION,
-                    FIELD_ID,
-                    FIELD_NAME,
-                    FIELD_PERMISSIONS,
-                    FIELD_SHARED_LINK,
-                    FIELD_SHARED_LINK_FEATURES,
-                    FIELD_ITEM_TYPE,
-                ],
-            };
             if (itemType === TYPE_FILE) {
-                api.getFileAPI().getFile(itemID, getItemSuccess, getError, fields);
+                api.getFileAPI().getFile(itemID, getItemSuccess, getError, CONTENT_SHARING_ITEM_FIELDS);
             } else if (itemType === TYPE_FOLDER) {
-                api.getFolderAPI().getFolderFields(itemID, getItemSuccess, getError, fields);
+                api.getFolderAPI().getFolderFields(itemID, getItemSuccess, getError, CONTENT_SHARING_ITEM_FIELDS);
             }
         };
 
@@ -113,7 +98,7 @@ function ContentSharing(props: ContentSharingProps) {
         }
     }, [api, getError, item, itemID, itemType, sharedLink, currentUserID]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         const getUserSuccess = userData => {
             const { id, userEnterpriseData } = convertUserResponse(userData);
             setSharedLink({ ...sharedLink, ...userEnterpriseData });
@@ -126,6 +111,7 @@ function ContentSharing(props: ContentSharingProps) {
                 fields: [FIELD_ENTERPRISE, FIELD_HOSTNAME],
             });
         };
+
         if (item && sharedLink && !currentUserID) {
             getUserData();
         }
@@ -138,13 +124,13 @@ function ContentSharing(props: ContentSharingProps) {
 
         if (item && sharedLink) {
             return (
-                <Internationalize language={language} messages={messages}>
+                <Internationalize language={language} messages={usmMessages}>
                     <UnifiedShareModal
                         canInvite={sharedLink.canInvite}
                         changeSharedLinkPermissionLevel={() => Promise.resolve([])} // to do: replace with a POST to the Shared Link API
                         collaboratorsList={{ collaborators: [] }} // to do: replace with Collaborators API
                         currentUserID={currentUserID}
-                        displayInModal={false}
+                        displayInModal={displayInModal}
                         getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
                         getSharedLinkContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
                         initialDataReceived

@@ -13,7 +13,14 @@ export const basic = () => {
     const token = text('Access Token', global.TOKEN);
     return (
         <IntlProvider locale="en">
-            <ContentSharing apiHost={apiHost} itemID={itemID} itemType={itemType} language="en" token={token} />
+            <ContentSharing
+                apiHost={apiHost}
+                displayInModal={false}
+                itemID={itemID}
+                itemType={itemType}
+                language="en"
+                token={token}
+            />
         </IntlProvider>
     );
 };

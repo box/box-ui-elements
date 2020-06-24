@@ -59,7 +59,9 @@ const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): Conten
 
     const isEditAllowed = allowed_invitee_roles.indexOf(INVITEE_ROLE_EDITOR) !== -1;
 
-    let sharedLink = { canInvite };
+    // The "canInvite" property is necessary even if the item does not have a shared link,
+    // because it allows users to invite individual collaborators.
+    let sharedLink = { canInvite: !!canInvite };
 
     if (shared_link) {
         const {
@@ -72,8 +74,8 @@ const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): Conten
             vanity_name: vanityName,
         } = shared_link;
 
-        const accessLevel = ACCESS_LEVEL_MAP[effective_access];
-        const permissionLevel = PERMISSION_LEVEL_MAP[effective_permission];
+        const accessLevel = effective_access ? ACCESS_LEVEL_MAP[effective_access] : null;
+        const permissionLevel = effective_permission ? PERMISSION_LEVEL_MAP[effective_permission] : null;
         const isDownloadAllowed = permissionLevel === PERMISSION_LEVEL_MAP.can_download;
         const canChangeDownload = canChangeAccessLevel && isDownloadAllowed;
         const canChangePassword = canChangeAccessLevel && isPasswordAvailable;
@@ -90,7 +92,7 @@ const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): Conten
             canChangeDownload,
             canChangePassword,
             canChangeVanityName,
-            canInvite,
+            canInvite: !!canInvite,
             directLink,
             expirationTimestamp,
             isDirectLinkAvailable,
@@ -115,7 +117,7 @@ const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): Conten
             description,
             extension,
             grantedPermissions: {
-                itemShare,
+                itemShare: !!itemShare,
             },
             hideCollaborators: false, // to do: connect to Collaborators API
             id,

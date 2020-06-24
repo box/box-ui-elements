@@ -23,12 +23,4 @@ const contentSharingMessages = defineMessages({
     },
 });
 
-const CONTENT_SHARING_ERRORS = {
-    400: 'badRequestError',
-    401: 'noAccessError',
-    403: 'noAccessError',
-    404: 'notFoundError',
-    500: 'loadingError',
-};
-
-export { contentSharingMessages, CONTENT_SHARING_ERRORS };
+export default contentSharingMessages;

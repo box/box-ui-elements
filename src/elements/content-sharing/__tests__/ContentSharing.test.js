@@ -57,7 +57,6 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
 
             expect(getFile).toHaveBeenCalled();
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
-            expect(usm.length).toBe(1);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
             expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
         });
@@ -82,7 +81,6 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             const usm = wrapper.find(UnifiedShareModal);
             expect(getFolderFields).toHaveBeenCalled();
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
-            expect(usm.length).toBe(1);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
             expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
         });
@@ -117,7 +115,6 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             expect(getFile).toHaveBeenCalled();
             expect(getUser).toHaveBeenCalled();
             expect(convertUserResponse).toHaveBeenCalledWith(MOCK_USER_API_RESPONSE);
-            expect(usm.length).toBe(1);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
             expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
         });
@@ -144,8 +141,8 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             expect(getFile).toHaveBeenCalled();
             expect(getUser).not.toHaveBeenCalled();
             expect(convertItemResponse).not.toHaveBeenCalled();
-            expect(wrapper.find(ErrorMask).length).toBe(1);
-            expect(wrapper.find(UnifiedShareModal).length).toBe(0);
+            expect(wrapper.exists(ErrorMask)).toBe(true);
+            expect(wrapper.exists(UnifiedShareModal)).toBe(false);
         });
 
         test('should show the ErrorMask and skip the call to getUser() if the call to getFolderFields() fails', async () => {
@@ -168,8 +165,8 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             expect(getFolderFields).toHaveBeenCalled();
             expect(getUser).not.toHaveBeenCalled();
             expect(convertItemResponse).not.toHaveBeenCalled();
-            expect(wrapper.find(ErrorMask).length).toBe(1);
-            expect(wrapper.find(UnifiedShareModal).length).toBe(0);
+            expect(wrapper.exists(ErrorMask)).toBe(true);
+            expect(wrapper.exists(UnifiedShareModal)).toBe(false);
         });
     });
 
@@ -212,8 +209,8 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(getUser).toHaveBeenCalled();
             expect(convertUserResponse).not.toHaveBeenCalled();
-            expect(wrapper.find(ErrorMask).length).toBe(1);
-            expect(wrapper.find(UnifiedShareModal).length).toBe(0);
+            expect(wrapper.exists(ErrorMask)).toBe(true);
+            expect(wrapper.exists(UnifiedShareModal)).toBe(false);
         });
 
         test('should show the ErrorMask if the call to getFolderFields() succeeds, but the call to getUser() fails', async () => {
@@ -226,8 +223,8 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(getUser).toHaveBeenCalled();
             expect(convertUserResponse).not.toHaveBeenCalled();
-            expect(wrapper.find(ErrorMask).length).toBe(1);
-            expect(wrapper.find(UnifiedShareModal).length).toBe(0);
+            expect(wrapper.exists(ErrorMask)).toBe(true);
+            expect(wrapper.exists(UnifiedShareModal)).toBe(false);
         });
     });
 
@@ -259,7 +256,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
                 });
                 wrapper.update();
                 expect(getFolderFields).toHaveBeenCalled();
-                expect(wrapper.find(ErrorMask).length).toBe(1);
+                expect(wrapper.exists(ErrorMask)).toBe(true);
                 expect(
                     wrapper
                         .find(ErrorMask)
@@ -297,7 +294,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
                 });
                 wrapper.update();
                 expect(getFolderFields).toHaveBeenCalled();
-                expect(wrapper.find(ErrorMask).length).toBe(1);
+                expect(wrapper.exists(ErrorMask)).toBe(true);
                 expect(
                     wrapper
                         .find(ErrorMask)
@@ -326,7 +323,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             });
             wrapper.update();
             expect(getFolderFields).toHaveBeenCalled();
-            expect(wrapper.find(ErrorMask).length).toBe(1);
+            expect(wrapper.exists(ErrorMask)).toBe(true);
             expect(
                 wrapper
                     .find(ErrorMask)

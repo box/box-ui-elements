@@ -1,11 +1,11 @@
 // @flow
-import type { ItemType } from '../../common/types/core';
-import type { item, sharedLinkType } from '../../features/unified-share-modal/flowTypes';
+import type { BoxItemPermission, ItemType, SharedLink as APISharedLink } from '../../common/types/core';
+import type { item, sharedLinkType as USMSharedLinkType } from '../../features/unified-share-modal/flowTypes';
 
 // "SLS" denotes values that are used in the Shared Link Settings modal
 type ContentSharingEnterpriseDataType = {
-    enterpriseName: string,
-    serverURL: string, // SLS
+    enterpriseName?: string,
+    serverURL?: string, // SLS
 };
 
 export type ContentSharingUserDataType = {
@@ -13,22 +13,27 @@ export type ContentSharingUserDataType = {
     userEnterpriseData: ContentSharingEnterpriseDataType,
 };
 
-export type ContentSharingSharedLinkType =
-    | { canInvite: boolean }
-    | (sharedLinkType &
-          ContentSharingEnterpriseDataType & {
-              canChangeDownload: boolean, // SLS
-              canChangePassword: boolean, // SLS
-              canChangeVanityName: boolean, // SLS
-              canInvite: boolean,
-              directLink: string, // SLS
-              isDirectLinkAvailable: boolean, // SLS
-              isDownloadAvailable: boolean, // SLS
-              isDownloadEnabled: boolean, // SLS
-              isPasswordAvailable: boolean, // SLS
-              isPasswordEnabled: boolean, // SLS
-              vanityName: string,
-          });
+// This type is used when an item does not have a shared link.
+type SharedLinkNotCreatedType = { canInvite: boolean };
+
+// This is the full shared link type, which extends the internal USM shared link with
+// data necessary for instantiating the Shared Link Settings modal.
+type SharedLinkCreatedType = USMSharedLinkType & {
+    canChangeDownload: boolean, // SLS
+    canChangePassword: boolean, // SLS
+    canChangeVanityName: boolean, // SLS
+    canInvite: boolean,
+    directLink: string, // SLS
+    isDirectLinkAvailable: boolean, // SLS
+    isDownloadAvailable: boolean, // SLS
+    isDownloadEnabled: boolean, // SLS
+    isPasswordAvailable: boolean, // SLS
+    isPasswordEnabled: boolean, // SLS
+    vanityName: string,
+};
+
+export type ContentSharingSharedLinkType = ContentSharingEnterpriseDataType &
+    (SharedLinkNotCreatedType | SharedLinkCreatedType);
 
 export type ContentSharingItemDataType = {
     item: item,
@@ -42,37 +47,8 @@ export type ContentSharingItemAPIResponse = {
     extension: string,
     id: string,
     name: string,
-    permissions: {
-        can_annotate: boolean,
-        can_comment: boolean,
-        can_delete: boolean,
-        can_download: boolean,
-        can_invite_collaborator: boolean,
-        can_preview: boolean,
-        can_rename: boolean,
-        can_set_share_access: boolean,
-        can_share: boolean,
-        can_upload: boolean,
-        can_view_annotations_all: boolean,
-        can_view_annotations_self: boolean,
-    },
-    shared_link?: {
-        access: string,
-        download_count: number,
-        download_url: string,
-        effective_access: string,
-        effective_permission: string,
-        is_password_enabled: boolean,
-        permissions: {
-            can_download: boolean,
-            can_preview: boolean,
-        },
-        preview_count: number,
-        unshared_at: ?string,
-        url: string,
-        vanity_name: ?string,
-        vanity_url: ?string,
-    },
+    permissions: BoxItemPermission,
+    shared_link?: APISharedLink,
     shared_link_features: {
         download_url: boolean,
         password: boolean,

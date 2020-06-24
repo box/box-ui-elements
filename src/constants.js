@@ -186,15 +186,15 @@ export const DEFAULT_FETCH_END = 1000;
 export const DEFAULT_VIEW_FILES: 'files' = 'files';
 export const DEFAULT_VIEW_RECENTS: 'recents' = 'recents';
 export const DEFAULT_VIEW_METADATA: 'metadata' = 'metadata';
-export const CLIENT_NAME_CONTENT_PICKER = 'ContentPicker';
-export const CLIENT_NAME_FILE_PICKER = 'FilePicker';
-export const CLIENT_NAME_FOLDER_PICKER = 'FolderPicker';
-export const CLIENT_NAME_CONTENT_UPLOADER = 'ContentUploader';
-export const CLIENT_NAME_CONTENT_EXPLORER = 'ContentExplorer';
-export const CLIENT_NAME_CONTENT_PREVIEW = 'ContentPreview';
-export const CLIENT_NAME_CONTENT_SIDEBAR = 'ContentSidebar';
-export const CLIENT_NAME_OPEN_WITH = 'ContentOpenWith';
+export const CLIENT_NAME_CONTENT_EXPLORER: 'ContentExplorer' = 'ContentExplorer';
+export const CLIENT_NAME_OPEN_WITH: 'ContentOpenWith' = 'ContentOpenWith';
+export const CLIENT_NAME_CONTENT_PICKER: 'ContentPicker' = 'ContentPicker';
+export const CLIENT_NAME_CONTENT_PREVIEW: 'ContentPreview' = 'ContentPreview';
 export const CLIENT_NAME_CONTENT_SHARING: 'ContentSharing' = 'ContentSharing';
+export const CLIENT_NAME_CONTENT_SIDEBAR: 'ContentSidebar' = 'ContentSidebar';
+export const CLIENT_NAME_CONTENT_UPLOADER: 'ContentUploader' = 'ContentUploader';
+export const CLIENT_NAME_FILE_PICKER: 'FilePicker' = 'FilePicker';
+export const CLIENT_NAME_FOLDER_PICKER: 'FolderPicker' = 'FolderPicker';
 
 /* ---------------------- Statuses -------------------------- */
 export const STATUS_PENDING: 'pending' = 'pending';
