@@ -1163,6 +1163,7 @@ describe('elements/content-preview/ContentPreview', () => {
             ${'123'}                | ${'124'}          | ${'page'}    | ${1}
             ${'124'}                | ${'124'}          | ${'page'}    | ${0}
             ${'123'}                | ${'124'}          | ${''}        | ${0}
+            ${undefined}            | ${'124'}          | ${'page'}    | ${0}
         `(
             'should call onVersionChange $onVersionChangeCount times and setState $setStateCount times',
             ({ annotationFileVersionId, selectedVersionId, locationType, setStateCount }) => {

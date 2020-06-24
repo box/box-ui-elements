@@ -26,6 +26,12 @@ const messages = defineMessages({
         defaultMessage: 'Version {number}',
         description: 'Annotation activity item link shown on annotation activity for previous file version',
     },
+    annotationActivityVersionUnavailable: {
+        id: 'be.contentSidebar.activityFeed.annotationActivityVersionUnavailable',
+        defaultMessage: 'Version Unavailable',
+        description:
+            'Annotation activity item link shown on annotation activity for previous file version that is unavailable',
+    },
 });
 
 export default messages;

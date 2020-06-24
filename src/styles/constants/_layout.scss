@@ -11,3 +11,4 @@ $bdl-border-radius-large-size: 10px; // Slowly migrating certain components, suc
 
 // Spacing
 $bdl-grid-unit: 4px !default;
+$bdl-grid-unit-px: 4 !default; // unitless grid unit (defined in pixels for manual multiplication in JS)

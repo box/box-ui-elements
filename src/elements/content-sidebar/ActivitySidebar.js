@@ -596,10 +596,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     handleAnnotationSelect = (annotation: Annotation): void => {
-        const {
-            file_version: { id: annotationFileVersionId },
-            id: nextActiveAnnotationId,
-        } = annotation;
+        const { file_version, id: nextActiveAnnotationId } = annotation;
         const {
             emitAnnotatorActiveChangeEvent,
             file,
@@ -609,13 +606,14 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             location,
             onAnnotationSelect,
         } = this.props;
+        const annotationFileVersionId = getProp(file_version, 'id');
         const currentFileVersionId = getProp(file, 'file_version.id');
         const match = getAnnotationsMatchPath(location);
         const selectedFileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
 
         emitAnnotatorActiveChangeEvent(nextActiveAnnotationId);
 
-        if (annotationFileVersionId !== selectedFileVersionId) {
+        if (annotationFileVersionId && annotationFileVersionId !== selectedFileVersionId) {
             history.push(getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));
         }
 
