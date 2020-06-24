@@ -1,5 +1,6 @@
 // @flow
 import classNames from 'classnames';
+import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import * as React from 'react';
 import ActivityError from '../common/activity-error';
@@ -50,10 +51,14 @@ const AnnotationActivity = ({
     const createdAtTimestamp = new Date(created_at).getTime();
     const createdByUser = created_by || PLACEHOLDER_USER;
     const canDelete = permissions.can_delete;
+    const isFileVersionUnavailable = file_version === null;
     const isMenuVisible = canDelete && !isPending;
     const message = (description && description.message) || '';
     const linkMessage = isCurrentVersion ? messages.annotationActivityPageItem : messages.annotationActivityVersionLink;
-    const linkValue = isCurrentVersion ? target.location.value : file_version.version_number;
+    const linkValue = isCurrentVersion ? target.location.value : getProp(file_version, 'version_number');
+    const activityLinkMessage = isFileVersionUnavailable
+        ? messages.annotationActivityVersionUnavailable
+        : { ...linkMessage, values: { number: linkValue } };
 
     return (
         <div className="bcs-AnnotationActivity">
@@ -83,10 +88,8 @@ const AnnotationActivity = ({
                     <ActivityMessage id={id} tagged_message={message} getUserProfileUrl={getUserProfileUrl} />
                     <AnnotationActivityLink
                         id={id}
-                        message={{
-                            ...linkMessage,
-                            values: { number: linkValue },
-                        }}
+                        isDisabled={isFileVersionUnavailable}
+                        message={activityLinkMessage}
                         onClick={handleOnSelect}
                     />
                 </Media.Body>

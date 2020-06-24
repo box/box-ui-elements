@@ -177,6 +177,7 @@ class ContactsField extends React.Component<Props, State> {
                 dividerIndex={shouldShowSuggested ? numSuggestedShowing : undefined}
                 disabled={disabled}
                 error={error}
+                getPillImageUrl={getContactAvatarUrl}
                 inputProps={{
                     autoFocus: true,
                     onChange: noop,

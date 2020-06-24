@@ -734,6 +734,19 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
             expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
+
+        test('should not call history.push if no file version id on the annotation', () => {
+            const wrapper = getAnnotationWrapper();
+            const instance = wrapper.instance();
+            const annotation = { file_version: null, id: '124' };
+            getAnnotationsMatchPath.mockReturnValue({ params: { fileVersionId: undefined } });
+
+            instance.handleAnnotationSelect(annotation);
+
+            expect(emitAnnotatorActiveChangeEvent).toHaveBeenCalledWith('124');
+            expect(history.push).not.toHaveBeenCalled();
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
+        });
     });
 
     describe('handleAnnotationDelete()', () => {
