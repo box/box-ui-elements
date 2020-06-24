@@ -35,6 +35,7 @@ const ContentExplorerActionButtons = ({
     onChooseClick,
     onCopyClick,
     onMoveClick,
+    onSelectedClick,
     selectedItems,
 }) => {
     const handleChooseClick = () => {
@@ -71,13 +72,19 @@ const ContentExplorerActionButtons = ({
 
     const renderStatus = () => {
         const chosenItems = getChosenItemsFromSelectedItems(selectedItems);
-        return (
-            contentExplorerMode === ContentExplorerModes.MULTI_SELECT && (
-                <span className="status-message">
-                    <FormattedMessage {...messages.numSelected} values={{ numSelected: chosenItems.length }} />
-                </span>
-            )
+        const statusMessage = (
+            <FormattedMessage {...messages.numSelected} values={{ numSelected: chosenItems.length }} />
         );
+
+        const statusElement = onSelectedClick ? (
+            <Button className="status-message" onClick={onSelectedClick}>
+                {statusMessage}
+            </Button>
+        ) : (
+            <span className="status-message">{statusMessage}</span>
+        );
+
+        return contentExplorerMode === ContentExplorerModes.MULTI_SELECT && statusElement;
     };
 
     return (
@@ -149,6 +156,7 @@ ContentExplorerActionButtons.propTypes = {
     onChooseClick: PropTypes.func,
     onCopyClick: PropTypes.func,
     onMoveClick: PropTypes.func,
+    onSelectedClick: PropTypes.func,
     selectedItems: ItemsMapPropType.isRequired,
 };
 
