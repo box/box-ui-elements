@@ -8,7 +8,7 @@ const IconRegionAnnotation = ({ className = '', color = white, height = 21, titl
         className={`bdl-IconRegionAnnotation ${className}`}
         height={height}
         title={title}
-        viewBox="0 0 22 21"
+        viewBox="0 0 19 19"
         width={width}
     >
         <path
