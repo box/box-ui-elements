@@ -53,7 +53,7 @@ function ContentSharing(props: ContentSharingProps) {
     const [item, setItem] = useState<?itemFlowType>(null);
     const [sharedLink, setSharedLink] = useState<?ContentSharingSharedLinkType>(null);
     const [currentUserID, setCurrentUserID] = useState<?string>(null);
-    const [errorExists, setErrorExists] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<?string>(null);
 
     const api = new API({
         apiHost,
@@ -62,9 +62,12 @@ function ContentSharing(props: ContentSharingProps) {
         token,
     });
 
-    const getError = useCallback(() => {
-        setErrorExists(true);
-    }, [setErrorExists]);
+    const getError = useCallback(
+        response => {
+            setErrorMessage(response && response.data ? response.data : elementMessages.loadingError);
+        },
+        [setErrorMessage],
+    );
 
     useEffect(() => {
         setItem(null);
@@ -77,40 +80,27 @@ function ContentSharing(props: ContentSharingProps) {
             const { item: itemFromAPI, sharedLink: sharedLinkFromAPI } = convertItemResponse(itemData);
             setItem(itemFromAPI);
             setSharedLink(sharedLinkFromAPI);
-            setErrorExists(false);
+            setErrorMessage(null);
         };
 
-        const getItem = async () => {
+        const getItem = () => {
+            const fields = {
+                fields: [
+                    FIELD_ALLOWED_INVITEE_ROLES,
+                    FIELD_DESCRIPTION,
+                    FIELD_EXTENSION,
+                    FIELD_ID,
+                    FIELD_NAME,
+                    FIELD_PERMISSIONS,
+                    FIELD_SHARED_LINK,
+                    FIELD_SHARED_LINK_FEATURES,
+                    FIELD_ITEM_TYPE,
+                ],
+            };
             if (itemType === TYPE_FILE) {
-                await api.getFileAPI().getFile(itemID, getItemSuccess, getError, {
-                    fields: [
-                        FIELD_ALLOWED_INVITEE_ROLES,
-                        FIELD_DESCRIPTION,
-                        FIELD_EXTENSION,
-                        FIELD_ID,
-                        FIELD_NAME,
-                        FIELD_PERMISSIONS,
-                        FIELD_SHARED_LINK,
-                        FIELD_SHARED_LINK_FEATURES,
-                        FIELD_ITEM_TYPE,
-                    ],
-                });
-            }
-
-            if (itemType === TYPE_FOLDER) {
-                await api.getFolderAPI().getFolderFields(itemID, getItemSuccess, getError, {
-                    fields: [
-                        FIELD_ALLOWED_INVITEE_ROLES,
-                        FIELD_DESCRIPTION,
-                        FIELD_EXTENSION,
-                        FIELD_ID,
-                        FIELD_NAME,
-                        FIELD_PERMISSIONS,
-                        FIELD_SHARED_LINK,
-                        FIELD_SHARED_LINK_FEATURES,
-                        FIELD_ITEM_TYPE,
-                    ],
-                });
+                api.getFileAPI().getFile(itemID, getItemSuccess, getError, fields);
+            } else if (itemType === TYPE_FOLDER) {
+                api.getFolderAPI().getFolderFields(itemID, getItemSuccess, getError, fields);
             }
         };
 
@@ -124,11 +114,11 @@ function ContentSharing(props: ContentSharingProps) {
             const { id, userEnterpriseData } = convertUserResponse(userData);
             setSharedLink({ ...sharedLink, ...userEnterpriseData });
             setCurrentUserID(id);
-            setErrorExists(false);
+            setErrorMessage(null);
         };
 
-        const getUserData = async () => {
-            await api.getUsersAPI(false).getUser(itemID, getUserSuccess, getError, {
+        const getUserData = () => {
+            api.getUsersAPI(false).getUser(itemID, getUserSuccess, getError, {
                 fields: [FIELD_ENTERPRISE, FIELD_HOSTNAME],
             });
         };
@@ -138,8 +128,8 @@ function ContentSharing(props: ContentSharingProps) {
     }, [api, getError, item, itemID, itemType, sharedLink, currentUserID]);
 
     const renderElement = () => {
-        if (errorExists) {
-            return <ErrorMask errorHeader={<FormattedMessage {...elementMessages.loadingError} />} />;
+        if (errorMessage) {
+            return <ErrorMask errorHeader={<FormattedMessage {...errorMessage} />} />;
         }
 
         if (item && sharedLink) {
