@@ -36,6 +36,7 @@ module.exports = {
         '@babel/plugin-transform-object-assign',
         '@babel/plugin-proposal-class-properties',
         '@babel/plugin-proposal-object-rest-spread',
+        'babel-plugin-styled-components',
         [
             'react-intl',
             {

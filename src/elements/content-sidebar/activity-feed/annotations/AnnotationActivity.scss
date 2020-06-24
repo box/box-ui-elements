@@ -16,13 +16,10 @@
     }
 }
 
-.bcs-AnnotationActivity-link {
+// Need to be more specific to override btn-plain margin:0
+.bcs-AnnotationActivity-link.btn-plain {
     display: inline-block;
     margin-top: 8px;
-
-    &:hover {
-        margin-top: 8px;
-    }
 }
 
 .bcs-AnnotationActivity-headline {
@@ -49,5 +46,9 @@
     .bcs-AnnotationActivity-link {
         color: $bdl-box-blue;
         font-weight: bold;
+
+        &[aria-disabled='true'] {
+            color: $bdl-gray-62;
+        }
     }
 }
