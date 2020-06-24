@@ -10,7 +10,7 @@ import {
     FIELD_DESCRIPTION,
 } from '../../constants';
 
-const CONTENT_SHARING_ERRORS = {
+export const CONTENT_SHARING_ERRORS = {
     400: 'badRequestError',
     401: 'noAccessError',
     403: 'noAccessError',
@@ -18,7 +18,7 @@ const CONTENT_SHARING_ERRORS = {
     500: 'loadingError',
 };
 
-const CONTENT_SHARING_ITEM_FIELDS = {
+export const CONTENT_SHARING_ITEM_FIELDS = {
     fields: [
         FIELD_ALLOWED_INVITEE_ROLES,
         FIELD_DESCRIPTION,
@@ -31,5 +31,3 @@ const CONTENT_SHARING_ITEM_FIELDS = {
         FIELD_ITEM_TYPE,
     ],
 };
-
-export { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS };

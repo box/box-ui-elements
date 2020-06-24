@@ -29,30 +29,23 @@ type ContentSharingProps = {
     token: string,
 };
 
-function ContentSharing(props: ContentSharingProps) {
-    const { apiHost, displayInModal, itemID, itemType, language, token } = props;
-    const [api, setAPI] = React.useState<API>(
-        new API({
-            apiHost,
-            clientName: CLIENT_NAME_CONTENT_SHARING,
-            id: `${itemType}_${itemID}`,
-            token,
-        }),
-    );
+const createAPI = (apiHost, itemID, itemType, token) =>
+    new API({
+        apiHost,
+        clientName: CLIENT_NAME_CONTENT_SHARING,
+        id: `${itemType}_${itemID}`,
+        token,
+    });
+
+function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, token }: ContentSharingProps) {
+    const [api, setAPI] = React.useState<API>(createAPI(apiHost, itemID, itemType, token));
     const [item, setItem] = React.useState<itemFlowType | null>(null);
     const [sharedLink, setSharedLink] = React.useState<ContentSharingSharedLinkType | null>(null);
     const [currentUserID, setCurrentUserID] = React.useState<string | null>(null);
     const [errorMessage, setErrorMessage] = React.useState<Object | null>(null);
 
     React.useEffect(() => {
-        setAPI(
-            new API({
-                apiHost,
-                clientName: CLIENT_NAME_CONTENT_SHARING,
-                id: `${itemType}_${itemID}`,
-                token,
-            }),
-        );
+        setAPI(createAPI(apiHost, itemID, itemType, token));
     }, [apiHost, itemID, itemType, token]);
 
     const getError = React.useCallback(
@@ -117,35 +110,31 @@ function ContentSharing(props: ContentSharingProps) {
         }
     }, [api, getError, item, itemID, itemType, sharedLink, currentUserID]);
 
-    const renderElement = () => {
-        if (errorMessage) {
-            return <ErrorMask errorHeader={<FormattedMessage {...errorMessage} />} />;
-        }
+    if (errorMessage) {
+        return <ErrorMask errorHeader={<FormattedMessage {...errorMessage} />} />;
+    }
 
-        if (item && sharedLink) {
-            return (
-                <Internationalize language={language} messages={usmMessages}>
-                    <UnifiedShareModal
-                        canInvite={sharedLink.canInvite}
-                        changeSharedLinkPermissionLevel={() => Promise.resolve([])} // to do: replace with a POST to the Shared Link API
-                        collaboratorsList={{ collaborators: [] }} // to do: replace with Collaborators API
-                        currentUserID={currentUserID}
-                        displayInModal={displayInModal}
-                        getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
-                        getSharedLinkContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
-                        initialDataReceived
-                        item={item}
-                        onAddLink={() => Promise.resolve([])} // to do: replace with a POST to the Shared Link API
-                        sharedLink={sharedLink}
-                    />
-                </Internationalize>
-            );
-        }
+    if (item && sharedLink) {
+        return (
+            <Internationalize language={language} messages={usmMessages}>
+                <UnifiedShareModal
+                    canInvite={sharedLink.canInvite}
+                    changeSharedLinkPermissionLevel={() => Promise.resolve([])} // to do: replace with a POST to the Shared Link API
+                    collaboratorsList={{ collaborators: [] }} // to do: replace with Collaborators API
+                    currentUserID={currentUserID}
+                    displayInModal={displayInModal}
+                    getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
+                    getSharedLinkContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
+                    initialDataReceived
+                    item={item}
+                    onAddLink={() => Promise.resolve([])} // to do: replace with a POST to the Shared Link API
+                    sharedLink={sharedLink}
+                />
+            </Internationalize>
+        );
+    }
 
-        return null;
-    };
-
-    return renderElement();
+    return null;
 }
 
 export default ContentSharing;

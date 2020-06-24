@@ -18,19 +18,19 @@ type SharedLinkNotCreatedType = { canInvite: boolean };
 
 // This is the full shared link type, which extends the internal USM shared link with
 // data necessary for instantiating the Shared Link Settings modal.
-type SharedLinkCreatedType = USMSharedLinkType & {
-    canChangeDownload: boolean, // SLS
-    canChangePassword: boolean, // SLS
-    canChangeVanityName: boolean, // SLS
-    canInvite: boolean,
-    directLink: string, // SLS
-    isDirectLinkAvailable: boolean, // SLS
-    isDownloadAvailable: boolean, // SLS
-    isDownloadEnabled: boolean, // SLS
-    isPasswordAvailable: boolean, // SLS
-    isPasswordEnabled: boolean, // SLS
-    vanityName: string,
-};
+type SharedLinkCreatedType = USMSharedLinkType &
+    SharedLinkNotCreatedType & {
+        canChangeDownload: boolean, // SLS
+        canChangePassword: boolean, // SLS
+        canChangeVanityName: boolean, // SLS
+        directLink: string, // SLS
+        isDirectLinkAvailable: boolean, // SLS
+        isDownloadAvailable: boolean, // SLS
+        isDownloadEnabled: boolean, // SLS
+        isPasswordAvailable: boolean, // SLS
+        isPasswordEnabled: boolean, // SLS
+        vanityName: string,
+    };
 
 export type ContentSharingSharedLinkType = ContentSharingEnterpriseDataType &
     (SharedLinkNotCreatedType | SharedLinkCreatedType);

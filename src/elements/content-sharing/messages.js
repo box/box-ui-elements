@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
 
-const contentSharingMessages = defineMessages({
+const messages = defineMessages({
     badRequestError: {
         defaultMessage: 'The request for this item was malformed.',
         description: 'Message that appears when the request for the ContentSharing Element is malformed.',
@@ -23,4 +23,4 @@ const contentSharingMessages = defineMessages({
     },
 });
 
-export default contentSharingMessages;
+export default messages;
