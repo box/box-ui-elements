@@ -4,7 +4,8 @@
  * @author Box
  */
 import React, { useCallback, useEffect, useState } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+import type { $AxiosError } from 'axios';
 import API from '../../api';
 import Internationalize from '../common/Internationalize';
 import ErrorMask from '../../components/error-mask/ErrorMask';
@@ -27,6 +28,8 @@ import {
     FIELD_EXTENSION,
     FIELD_DESCRIPTION,
 } from '../../constants';
+import { contentSharingMessages, CONTENT_SHARING_ERRORS } from './messages';
+import type { ErrorResponseData } from '../../common/types/api';
 import type { ItemType } from '../../common/types/core';
 import type { item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
 import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType } from './types';
@@ -40,20 +43,12 @@ type ContentSharingProps = {
     token: string,
 };
 
-const elementMessages = defineMessages({
-    loadingError: {
-        defaultMessage: 'Could not load shared link for this item.',
-        description: 'Message that appears when the ContentSharing Element cannot be loaded.',
-        id: 'be.contentSharing.loadingError',
-    },
-});
-
 function ContentSharing(props: ContentSharingProps) {
     const { apiHost, itemID, itemType, language, token } = props;
     const [item, setItem] = useState<?itemFlowType>(null);
     const [sharedLink, setSharedLink] = useState<?ContentSharingSharedLinkType>(null);
     const [currentUserID, setCurrentUserID] = useState<?string>(null);
-    const [errorMessage, setErrorMessage] = useState<?string>(null);
+    const [errorMessage, setErrorMessage] = useState<?Object>(null);
 
     const api = new API({
         apiHost,
@@ -63,8 +58,17 @@ function ContentSharing(props: ContentSharingProps) {
     });
 
     const getError = useCallback(
-        response => {
-            setErrorMessage(response && response.data ? response.data : elementMessages.loadingError);
+        (error: $AxiosError<any> | ErrorResponseData) => {
+            let errorObject;
+            if (error.status) {
+                errorObject = contentSharingMessages[CONTENT_SHARING_ERRORS[error.status]];
+            } else if (error.response && error.response.status) {
+                errorObject = contentSharingMessages[CONTENT_SHARING_ERRORS[error.response.status]];
+            } else {
+                errorObject = contentSharingMessages.loadingError;
+            }
+
+            setErrorMessage(errorObject);
         },
         [setErrorMessage],
     );
@@ -140,13 +144,13 @@ function ContentSharing(props: ContentSharingProps) {
                         changeSharedLinkPermissionLevel={() => Promise.resolve([])} // to do: replace with a POST to the Shared Link API
                         collaboratorsList={{ collaborators: [] }} // to do: replace with Collaborators API
                         currentUserID={currentUserID}
+                        displayInModal={false}
                         getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
                         getSharedLinkContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
                         initialDataReceived
                         item={item}
                         onAddLink={() => Promise.resolve([])} // to do: replace with a POST to the Shared Link API
                         sharedLink={sharedLink}
-                        showFormOnly
                     />
                 </Internationalize>
             );

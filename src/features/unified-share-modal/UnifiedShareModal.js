@@ -24,6 +24,7 @@ type State = {
 
 class UnifiedShareModal extends React.Component<USMProps, State> {
     static defaultProps = {
+        displayInModal: true,
         initiallySelectedContacts: [],
         createSharedLinkOnLoad: false,
         focusSharedLinkOnLoad: false,
@@ -117,9 +118,9 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
     };
 
     removeLink = () => {
-        const { onRemoveLink, showFormOnly } = this.props;
+        const { onRemoveLink, displayInModal } = this.props;
         onRemoveLink();
-        if (showFormOnly) {
+        if (!displayInModal) {
             this.closeConfirmModal();
         }
     };
@@ -140,7 +141,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
 
     render() {
         // Shared link section props
-        const { canInvite, isOpen, item, onRequestClose, showFormOnly, submitting, trackingProps } = this.props;
+        const { canInvite, displayInModal, isOpen, item, onRequestClose, submitting, trackingProps } = this.props;
         const { modalTracking, removeLinkConfirmModalTracking } = trackingProps;
         const { modalProps } = modalTracking;
         const { isEmailLinkSectionExpanded, isConfirmModalOpen, showCollaboratorList } = this.state;
@@ -155,9 +156,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
 
         return (
             <>
-                {showFormOnly ? (
-                    this.renderUSF()
-                ) : (
+                {displayInModal ? (
                     <Modal
                         className="unified-share-modal"
                         isOpen={isConfirmModalOpen ? false : isOpen}
@@ -173,6 +172,8 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
                     >
                         {this.renderUSF()}
                     </Modal>
+                ) : (
+                    this.renderUSF()
                 )}
                 {isConfirmModalOpen && (
                     <RemoveLinkConfirmModal

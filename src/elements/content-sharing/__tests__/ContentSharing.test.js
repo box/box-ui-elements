@@ -1,6 +1,7 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
+import { FormattedMessage } from 'react-intl';
 import API from '../../../api';
 import ErrorMask from '../../../components/error-mask/ErrorMask';
 import ContentSharing from '../ContentSharing';
@@ -125,8 +126,8 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
     describe('with unsuccessful item API calls', () => {
         test('should show the ErrorMask and skip the call to getUser() if the call to getFile() fails', async () => {
             const getFile = jest.fn().mockImplementation((id, successFn, failureFn) => {
-                return Promise.reject(MOCK_ITEM_API_RESPONSE).catch(() => {
-                    failureFn();
+                return Promise.reject(new Error({ status: '400' })).catch(response => {
+                    failureFn(response);
                 });
             });
             const getUser = jest.fn();
@@ -149,8 +150,8 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
 
         test('should show the ErrorMask and skip the call to getUser() if the call to getFolderFields() fails', async () => {
             const getFolderFields = jest.fn().mockImplementation((id, successFn, failureFn) => {
-                return Promise.reject(MOCK_ITEM_API_RESPONSE).catch(() => {
-                    failureFn();
+                return Promise.reject(new Error({ status: '400' })).catch(response => {
+                    failureFn(response);
                 });
             });
             const getUser = jest.fn();
@@ -190,8 +191,8 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             });
 
             getUser = jest.fn().mockImplementation((id, successFn, failureFn) => {
-                return Promise.reject(MOCK_USER_API_RESPONSE).catch(() => {
-                    failureFn();
+                return Promise.reject(new Error({ status: '400' })).catch(response => {
+                    failureFn(response);
                 });
             });
             API.mockImplementation(() => ({
@@ -227,6 +228,112 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             expect(convertUserResponse).not.toHaveBeenCalled();
             expect(wrapper.find(ErrorMask).length).toBe(1);
             expect(wrapper.find(UnifiedShareModal).length).toBe(0);
+        });
+    });
+
+    describe('with specific errors', () => {
+        test.each`
+            status   | expectedErrorName
+            ${'400'} | ${'badRequestError'}
+            ${'401'} | ${'noAccessError'}
+            ${'403'} | ${'noAccessError'}
+            ${'404'} | ${'notFoundError'}
+            ${'500'} | ${'loadingError'}
+        `(
+            'should show the correct error message when a call fails with a $status and the response is of type "ErrorResponseData"',
+            async ({ status, expectedErrorName }) => {
+                const getFolderFields = jest.fn().mockImplementation((id, successFn, failureFn) => {
+                    return Promise.reject(new Error()).catch(() => {
+                        failureFn({ status });
+                    });
+                });
+                const getUser = jest.fn();
+                API.mockImplementation(() => ({
+                    getFolderAPI: jest.fn().mockReturnValue({ getFolderFields }),
+                    getUsersAPI: jest.fn().mockReturnValue({ getUser }),
+                }));
+
+                let wrapper;
+                await act(async () => {
+                    wrapper = getWrapper({ itemType: TYPE_FOLDER });
+                });
+                wrapper.update();
+                expect(getFolderFields).toHaveBeenCalled();
+                expect(wrapper.find(ErrorMask).length).toBe(1);
+                expect(
+                    wrapper
+                        .find(ErrorMask)
+                        .find(FormattedMessage)
+                        .at(1) // the error header appears after the IconSadCloud title
+                        .prop('id'),
+                ).toBe(`be.contentSharing.${expectedErrorName}`);
+            },
+        );
+
+        test.each`
+            status   | expectedErrorName
+            ${'400'} | ${'badRequestError'}
+            ${'401'} | ${'noAccessError'}
+            ${'403'} | ${'noAccessError'}
+            ${'404'} | ${'notFoundError'}
+            ${'500'} | ${'loadingError'}
+        `(
+            'should show the correct error message when a call fails with a $status and the response is of type "$AxiosError"',
+            async ({ status, expectedErrorName }) => {
+                const getFolderFields = jest.fn().mockImplementation((id, successFn, failureFn) => {
+                    return Promise.reject(new Error()).catch(() => {
+                        failureFn({ response: { status } });
+                    });
+                });
+                const getUser = jest.fn();
+                API.mockImplementation(() => ({
+                    getFolderAPI: jest.fn().mockReturnValue({ getFolderFields }),
+                    getUsersAPI: jest.fn().mockReturnValue({ getUser }),
+                }));
+
+                let wrapper;
+                await act(async () => {
+                    wrapper = getWrapper({ itemType: TYPE_FOLDER });
+                });
+                wrapper.update();
+                expect(getFolderFields).toHaveBeenCalled();
+                expect(wrapper.find(ErrorMask).length).toBe(1);
+                expect(
+                    wrapper
+                        .find(ErrorMask)
+                        .find(FormattedMessage)
+                        .at(1)
+                        .prop('id'),
+                ).toBe(`be.contentSharing.${expectedErrorName}`);
+            },
+        );
+
+        test('should show the default error message when a call fails and the response is unparseable', async () => {
+            const getFolderFields = jest.fn().mockImplementation((id, successFn, failureFn) => {
+                return Promise.reject(new Error()).catch(() => {
+                    failureFn({ response: undefined });
+                });
+            });
+            const getUser = jest.fn();
+            API.mockImplementation(() => ({
+                getFolderAPI: jest.fn().mockReturnValue({ getFolderFields }),
+                getUsersAPI: jest.fn().mockReturnValue({ getUser }),
+            }));
+
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ itemType: TYPE_FOLDER });
+            });
+            wrapper.update();
+            expect(getFolderFields).toHaveBeenCalled();
+            expect(wrapper.find(ErrorMask).length).toBe(1);
+            expect(
+                wrapper
+                    .find(ErrorMask)
+                    .find(FormattedMessage)
+                    .at(1)
+                    .prop('id'),
+            ).toBe(`be.contentSharing.loadingError`);
         });
     });
 });

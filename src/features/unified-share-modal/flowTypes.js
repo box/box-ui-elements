@@ -270,6 +270,8 @@ type BaseUnifiedShareProps = CollaboratorAvatarsTypes &
         allShareRestrictionWarning?: React.Node,
         /** Flag to determine whether to enable invite collaborators section */
         canInvite: boolean,
+        /** Whether the full USM should be rendered */
+        displayInModal?: boolean,
         /** Whether the form should focus the shared link after the URL is resolved */
         focusSharedLinkOnLoad?: boolean,
         /** Handler function that gets contacts by a list of emails */
@@ -286,8 +288,6 @@ type BaseUnifiedShareProps = CollaboratorAvatarsTypes &
         item: item,
         /** Shows a callout tooltip next to the names / email addresses input field encouraging users to fill out coworkers contact info */
         showEnterEmailsCallout?: boolean,
-        /** Whether only the USF should be rendered */
-        showFormOnly?: boolean,
         /** Whether or not a request is in progress */
         submitting: boolean,
         /** Object with props and handlers for tracking interactions */

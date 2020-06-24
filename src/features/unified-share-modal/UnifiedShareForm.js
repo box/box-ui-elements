@@ -35,6 +35,7 @@ type State = {
 
 class UnifiedShareForm extends React.Component<USFProps, State> {
     static defaultProps = {
+        displayInModal: true,
         initiallySelectedContacts: [],
         createSharedLinkOnLoad: false,
         focusSharedLinkOnLoad: false,
@@ -482,6 +483,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             changeSharedLinkAccessLevel,
             createSharedLinkOnLoad,
             changeSharedLinkPermissionLevel,
+            displayInModal,
             focusSharedLinkOnLoad,
             getSharedLinkContacts,
             getContactAvatarUrl,
@@ -497,7 +499,6 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             sendSharedLinkError,
             sharedLink,
             showEnterEmailsCallout = false,
-            showFormOnly,
             showSharedLinkSettingsCallout = false,
             submitting,
             tooltips = {},
@@ -514,7 +515,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             allShareRestrictionWarning;
 
         return (
-            <div className={showFormOnly ? 'bdl-UnifiedShareForm' : ''}>
+            <div className={displayInModal ? '' : 'bdl-UnifiedShareForm'}>
                 <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
                     {showShareRestrictionWarning && allShareRestrictionWarning}
 
