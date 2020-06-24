@@ -12,6 +12,10 @@
     .overlay {
         @include bdl-PillSelectorDropdown-container;
     }
+
+    .suggested {
+        padding-top: 0;
+    }
 }
 
 /*
