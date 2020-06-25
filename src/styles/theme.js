@@ -24,6 +24,7 @@ const theme = {
         progressBarBackground: vars.bdlGray40,
 
         scrollShadowRgba: 'rgba(0, 0, 0, 0.12)',
+        gridUnitPx: parseInt(vars.bdlGridUnitPx, 10), // grid unit in pixels (as number for computations)
     },
 
     // Primary or brand color

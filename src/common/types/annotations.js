@@ -41,7 +41,7 @@ export type Annotation = {
     created_by: User,
     description?: Reply,
     error?: ActionItemError, // Doesn't come from the API but used in the FeedItems
-    file_version: BoxItemVersionMini,
+    file_version: BoxItemVersionMini | null,
     id: string,
     isPending?: boolean, // Doesn't come from the API but used in the FeedItems
     modified_at: string,

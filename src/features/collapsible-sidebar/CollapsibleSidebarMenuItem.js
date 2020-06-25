@@ -1,12 +1,4 @@
-/**
- * @flow
- * @file Menu item with styles to be used for CollapsibleSidebar
- * @author Box
- *
- * Menu item with styles to be used for CollapsibleSidebar.
- * Will render different variations of icon and text based on props.
- */
-
+// @flow strict
 import * as React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
@@ -14,42 +6,49 @@ import Tooltip from '../../components/tooltip';
 import { useIsContentOverflowed } from '../../utils/dom';
 import CollapsibleSidebarContext from './CollapsibleSidebarContext';
 
-import './CollapsibleSidebarMenuItem.scss';
-
 const StyledMenuItem = styled.div`
-    border: 1px solid transparent;
-    color: ${props => props.theme.primary.foreground};
+    position: relative;
 
-    a:hover:not(.is-currentPage) & {
-        background-color: ${props => props.theme.primary.backgroundHover};
+    /* hover styles for link so that hovering both action icon and link
+    will have hover effect over whole container */
+    &:hover a {
+        background-color: ${({ theme }) => theme.primary.backgroundHover};
     }
 
-    body.is-move-dragging a:hover & {
-        // if an item is being dragged to left nav, keep menu item defaults (don't highlight)
-        background-color: ${props => props.theme.primary.background};
+    &:hover a.is-currentPage {
+        background-color: ${({ theme }) => theme.primary.backgroundActive};
     }
 
-    a:focus & {
-        border-color: ${props => props.theme.primary.foreground};
+    body.is-move-dragging & a:hover {
+        /* if an item is being dragged to left nav, keep menu item defaults (don't highlight) */
+        background-color: ${({ theme }) => theme.primary.background};
+
+        .bdl-CollapsibleSidebar-menuItemIcon {
+            opacity: 0.7;
+        }
     }
 
-    a:focus:active & {
-        border-color: transparent;
-    }
+    .bdl-CollapsibleSidebar-menuItemActionContainer {
+        position: absolute;
+        top: 12px;
+        right: 8px;
+        padding: 0;
+        opacity: 0;
 
-    a.is-currentPage & {
-        background-color: ${props => props.theme.primary.backgroundActive};
-    }
-
-    a.is-currentPage:active & {
-        border-color: ${props => props.theme.primary.foreground};
+        &:hover,
+        &:focus-within {
+            opacity: 1;
+        }
     }
 `;
 
 const StyledIconWrapper = styled.span`
+    line-height: 0; /* let inner svg set the height */
+    opacity: 0.7;
+
     & path,
     & .fill-color {
-        fill: ${props => props.theme.primary.foreground};
+        fill: ${({ theme }) => theme.primary.foreground};
     }
 
     a:active &,
@@ -61,12 +60,73 @@ const StyledIconWrapper = styled.span`
 `;
 
 const StyledMenuItemLabel = styled.span`
-    color: ${props => props.theme.primary.foreground};
+    flex-grow: 1;
+    overflow: hidden;
+    color: ${({ theme }) => theme.primary.foreground};
+    text-overflow: ellipsis;
+    opacity: 0.85;
+
+    &.overflow-action {
+        margin-right: 12px;
+    }
 
     a:active &,
     a:hover &,
     a:focus &,
     a.is-currentPage & {
+        opacity: 1;
+    }
+`;
+
+// {...rest} props will go here, such as `as` prop to adjust the component name.
+// In most cases the consumer will want the tag to use a `Link` instead of `a`.
+const StyledLink = styled.a`
+    display: flex;
+    align-items: center;
+    height: ${({ theme }) => theme.base.gridUnitPx * 10}px;
+    padding: 0 ${({ theme }) => theme.base.gridUnitPx * 3}px;
+    overflow-x: hidden;
+    color: ${({ theme }) => theme.primary.foreground};
+    font-weight: bold;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    border-radius: ${({ theme }) => theme.base.gridUnitPx * 2}px;
+    transition: background-color 0.15s cubic-bezier(0.215, 0.61, 0.355, 1);
+
+    &:hover,
+    &:active,
+    &:focus,
+    &.is-currentPage {
+        .bdl-CollapsibleSidebar-menuItemIcon,
+        .bdl-CollapsibleSidebar-menuItemLabel {
+            opacity: 1;
+        }
+    }
+
+    &:focus {
+        border-color: ${({ theme }) => theme.primary.foreground};
+        outline: none;
+    }
+
+    &:focus:active {
+        border-color: transparent;
+    }
+
+    &.is-currentPage {
+        background-color: ${({ theme }) => theme.primary.backgroundActive};
+    }
+
+    &.is-currentPage:active {
+        border-color: ${({ theme }) => theme.primary.foreground};
+    }
+
+    .bdl-CollapsibleSidebar-menuItemIcon + .bdl-CollapsibleSidebar-menuItemLabel {
+        margin-left: 16px;
+    }
+
+    &.show-overflowAction + .bdl-CollapsibleSidebar-menuItemActionContainer,
+    &:focus + .bdl-CollapsibleSidebar-menuItemActionContainer,
+    &:hover + .bdl-CollapsibleSidebar-menuItemActionContainer {
         opacity: 1;
     }
 `;
@@ -78,26 +138,41 @@ type Props = {
     content?: React.Node,
     icon?: React.Node,
     overflowAction?: React.Node,
+    /** Default is to always show */
+    showOverflowAction?: 'hover' | 'always',
     text?: string,
 };
 
 function CollapsibleSidebarMenuItem(props: Props) {
-    const { className, content, icon, overflowAction, text, ...rest } = props;
+    const { className, content, icon, overflowAction, showOverflowAction, text, ...rest } = props;
     const textRef = React.useRef<?HTMLElement>(null);
     const isTextOverflowed = useIsContentOverflowed(textRef);
     const { isScrolling } = React.useContext(CollapsibleSidebarContext);
+    const isShowOverflowActionOnHover = showOverflowAction === 'hover';
+    const menuItemLinkClassName = classNames('bdl-CollapsibleSidebar-menuItemLink', {
+        'show-overflowAction': !isShowOverflowActionOnHover,
+    });
+    const menuItemLabelClassName = classNames('bdl-CollapsibleSidebar-menuItemLabel', {
+        'overflow-action': overflowAction,
+    });
 
     const renderMenuItem = () => {
         return (
-            <StyledMenuItem className={classNames('bdl-CollapsibleSidebar-menuItem', className)} {...rest}>
-                {icon && <StyledIconWrapper className="bdl-CollapsibleSidebar-menuItemIcon">{icon}</StyledIconWrapper>}
-                {text && (
-                    <StyledMenuItemLabel ref={textRef} className="bdl-CollapsibleSidebar-menuItemLabel">
-                        {text}
-                    </StyledMenuItemLabel>
+            <StyledMenuItem className={className}>
+                <StyledLink className={menuItemLinkClassName} {...rest}>
+                    {icon && (
+                        <StyledIconWrapper className="bdl-CollapsibleSidebar-menuItemIcon">{icon}</StyledIconWrapper>
+                    )}
+                    {text && (
+                        <StyledMenuItemLabel ref={textRef} className={menuItemLabelClassName}>
+                            {text}
+                        </StyledMenuItemLabel>
+                    )}
+                    {content}
+                </StyledLink>
+                {overflowAction && (
+                    <span className="bdl-CollapsibleSidebar-menuItemActionContainer">{overflowAction}</span>
                 )}
-                {content}
-                {overflowAction}
             </StyledMenuItem>
         );
     };

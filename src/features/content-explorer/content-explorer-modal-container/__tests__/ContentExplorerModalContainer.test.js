@@ -64,16 +64,19 @@ describe('features/content-explorer/content-explorer-modal-container/ContentExpl
             expect(wrapper.find('NewFolderModal').prop('parentFolderName')).toEqual(parentFolderName);
         });
 
-        test('should pass searchInputProps and chooseButtonText to ContentExplorerModal', () => {
+        test('should pass searchInputProps, chooseButtonText, and onSelectedClick to ContentExplorerModal', () => {
             const searchInputProps = { placeholder: 'test' };
             const chooseButtonText = 'test';
+            const onSelectedClick = () => {};
             const wrapper = renderComponent({
                 searchInputProps,
                 chooseButtonText,
+                onSelectedClick,
             });
 
             expect(wrapper.find('ContentExplorerModal').prop('searchInputProps')).toEqual(searchInputProps);
             expect(wrapper.find('ContentExplorerModal').prop('chooseButtonText')).toEqual(chooseButtonText);
+            expect(wrapper.find('ContentExplorerModal').prop('onSelectedClick')).toEqual(onSelectedClick);
         });
     });
 

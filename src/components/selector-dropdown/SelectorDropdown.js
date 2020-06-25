@@ -256,7 +256,11 @@ class SelectorDropdown extends React.Component<Props, State> {
         }
 
         const list = (
-            <ul className="overlay" id={listboxID} role="listbox">
+            <ul
+                className={classNames('overlay', overlayTitle ? overlayTitle.toLowerCase() : '')}
+                id={listboxID}
+                role="listbox"
+            >
                 {overlayTitle && <h5 className="SelectorDropdown-title">{overlayTitle}</h5>}
                 {React.Children.map(children, (item, index) => {
                     const itemProps: Object = {
