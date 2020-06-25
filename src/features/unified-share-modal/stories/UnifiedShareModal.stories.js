@@ -832,6 +832,7 @@ export const withFormOnly = () => {
                         collaboratorsList={state.collaboratorsList}
                         collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
                         currentUserID="0"
+                        displayInModal={false}
                         getCollaboratorContacts={() => {
                             return Promise.resolve(contacts);
                         }}
