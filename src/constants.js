@@ -98,6 +98,8 @@ export const FIELD_RESTORED_FROM = 'restored_from';
 export const FIELD_CREATED_AT = 'created_at';
 export const FIELD_INTERACTED_AT: 'interacted_at' = 'interacted_at';
 export const FIELD_SHARED_LINK = 'shared_link';
+export const FIELD_SHARED_LINK_FEATURES: 'shared_link_features' = 'shared_link_features';
+export const FIELD_ALLOWED_INVITEE_ROLES: 'allowed_invitee_roles' = 'allowed_invitee_roles';
 export const FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS = 'allowed_shared_link_access_levels';
 export const FIELD_HAS_COLLABORATIONS = 'has_collaborations';
 export const FIELD_IS_EXTERNALLY_OWNED = 'is_externally_owned';
@@ -140,6 +142,8 @@ export const FIELD_OCCURRED_AT: 'occurred_at' = 'occurred_at';
 export const FIELD_RENDERED_TEXT: 'rendered_text' = 'rendered_text';
 export const FIELD_RETENTION: 'retention' = 'retention';
 export const FIELD_UPLOADER_DISPLAY_NAME: 'uploader_display_name' = 'uploader_display_name';
+export const FIELD_ENTERPRISE: 'enterprise' = 'enterprise';
+export const FIELD_HOSTNAME: 'hostname' = 'hostname';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_COMMENT = 'can_comment';
@@ -153,6 +157,9 @@ export const PERMISSION_CAN_SET_SHARE_ACCESS = 'can_set_share_access';
 export const PERMISSION_CAN_SHARE = 'can_share';
 export const PERMISSION_CAN_UPLOAD = 'can_upload';
 export const PERMISSION_CAN_VIEW_ANNOTATIONS = 'can_view_annotations';
+
+/* --------------------- Invitee roles --------------------------- */
+export const INVITEE_ROLE_EDITOR: 'editor' = 'editor';
 
 /* ------------- Delimiters for bread crumbs ---------------- */
 export const DELIMITER_SLASH: 'slash' = 'slash';
@@ -179,14 +186,15 @@ export const DEFAULT_FETCH_END = 1000;
 export const DEFAULT_VIEW_FILES: 'files' = 'files';
 export const DEFAULT_VIEW_RECENTS: 'recents' = 'recents';
 export const DEFAULT_VIEW_METADATA: 'metadata' = 'metadata';
-export const CLIENT_NAME_CONTENT_PICKER = 'ContentPicker';
-export const CLIENT_NAME_FILE_PICKER = 'FilePicker';
-export const CLIENT_NAME_FOLDER_PICKER = 'FolderPicker';
-export const CLIENT_NAME_CONTENT_UPLOADER = 'ContentUploader';
-export const CLIENT_NAME_CONTENT_EXPLORER = 'ContentExplorer';
-export const CLIENT_NAME_CONTENT_PREVIEW = 'ContentPreview';
-export const CLIENT_NAME_CONTENT_SIDEBAR = 'ContentSidebar';
-export const CLIENT_NAME_OPEN_WITH = 'ContentOpenWith';
+export const CLIENT_NAME_CONTENT_EXPLORER: 'ContentExplorer' = 'ContentExplorer';
+export const CLIENT_NAME_OPEN_WITH: 'ContentOpenWith' = 'ContentOpenWith';
+export const CLIENT_NAME_CONTENT_PICKER: 'ContentPicker' = 'ContentPicker';
+export const CLIENT_NAME_CONTENT_PREVIEW: 'ContentPreview' = 'ContentPreview';
+export const CLIENT_NAME_CONTENT_SHARING: 'ContentSharing' = 'ContentSharing';
+export const CLIENT_NAME_CONTENT_SIDEBAR: 'ContentSidebar' = 'ContentSidebar';
+export const CLIENT_NAME_CONTENT_UPLOADER: 'ContentUploader' = 'ContentUploader';
+export const CLIENT_NAME_FILE_PICKER: 'FilePicker' = 'FilePicker';
+export const CLIENT_NAME_FOLDER_PICKER: 'FolderPicker' = 'FolderPicker';
 
 /* ---------------------- Statuses -------------------------- */
 export const STATUS_PENDING: 'pending' = 'pending';
