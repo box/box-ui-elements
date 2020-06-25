@@ -17,7 +17,7 @@ import {
     ERROR_CODE_RENAME_ITEM,
     ERROR_CODE_SHARE_ITEM,
 } from '../constants';
-import type { ElementsErrorCallback } from '../common/types/api';
+import type { ElementsErrorCallback, FetchOptions } from '../common/types/api';
 import type { BoxItem, FlattenedBoxItemCollection, FlattenedBoxItem, BoxItemPermission } from '../common/types/core';
 import type APICache from '../utils/Cache';
 
@@ -275,6 +275,7 @@ class Item extends Base {
      * @param {string} access - Shared access level
      * @param {Function} successCallback - Success callback
      * @param {Function|void} errorCallback - Error callback
+     * @param {Array<string>|void} fields - Optionally include specific fields
      * @return {void}
      */
     share(
@@ -282,6 +283,7 @@ class Item extends Base {
         access: string,
         successCallback: Function,
         errorCallback: ElementsErrorCallback = noop,
+        fields?: Array<string>,
     ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
@@ -312,6 +314,11 @@ class Item extends Base {
                 data: {
                     shared_link: access === ACCESS_NONE ? null : { access },
                 },
+                params: fields
+                    ? {
+                          fields,
+                      }
+                    : '',
             })
             .then(this.shareSuccessHandler)
             .catch((e: $AxiosError<any>) => {

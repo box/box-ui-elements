@@ -12,12 +12,19 @@ import ErrorMask from '../../components/error-mask/ErrorMask';
 import UnifiedShareModal from '../../features/unified-share-modal';
 import usmMessages from '../../features/unified-share-modal/messages';
 import { convertItemResponse, convertUserResponse } from '../../features/unified-share-modal/utils/convertData';
-import { CLIENT_NAME_CONTENT_SHARING, FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FILE, TYPE_FOLDER } from '../../constants';
+import {
+    ACCESS_COLLAB,
+    CLIENT_NAME_CONTENT_SHARING,
+    FIELD_ENTERPRISE,
+    FIELD_HOSTNAME,
+    TYPE_FILE,
+    TYPE_FOLDER,
+} from '../../constants';
 import { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS } from './constants';
 import contentSharingMessages from './messages';
 import type { ErrorResponseData } from '../../common/types/api';
-import type { ItemType } from '../../common/types/core';
-import type { item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
+import type { Access, BoxItemPermission, ItemType } from '../../common/types/core';
+import type { item as itemFlowType, onAddLinkType } from '../../features/unified-share-modal/flowTypes';
 import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType } from './types';
 
 type ContentSharingProps = {
@@ -43,11 +50,24 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     const [sharedLink, setSharedLink] = React.useState<ContentSharingSharedLinkType | null>(null);
     const [currentUserID, setCurrentUserID] = React.useState<string | null>(null);
     const [errorMessage, setErrorMessage] = React.useState<Object | null>(null);
+    const [permissions, setPermissions] = React.useState<BoxItemPermission | null>(null);
+    const [onAddLink, setOnAddLink] = React.useState<onAddLinkType | null>(null);
 
+    // Reset the API if necessary
     React.useEffect(() => {
         setAPI(createAPI(apiHost, itemID, itemType, token));
     }, [apiHost, itemID, itemType, token]);
 
+    // Success handler for calls to /files or /folders
+    const handleItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
+        const { item: itemFromAPI, originalPermissions, sharedLink: sharedLinkFromAPI } = convertItemResponse(itemData);
+        setErrorMessage(null);
+        setItem(itemFromAPI);
+        setPermissions(originalPermissions);
+        setSharedLink(sharedLinkFromAPI);
+    };
+
+    // Error handler for failed requests
     const getError = React.useCallback(
         (error: $AxiosError<Object> | ErrorResponseData) => {
             let errorObject;
@@ -64,25 +84,22 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         [setErrorMessage],
     );
 
+    // Reset state if necessary
     React.useEffect(() => {
-        setItem(null);
-        setSharedLink(null);
         setCurrentUserID(null);
-    }, [token, itemID, itemType]);
+        setItem(null);
+        setOnAddLink(null);
+        setPermissions(null);
+        setSharedLink(null);
+    }, [api]);
 
+    // Get initial data for the item
     React.useEffect(() => {
-        const getItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
-            const { item: itemFromAPI, sharedLink: sharedLinkFromAPI } = convertItemResponse(itemData);
-            setItem(itemFromAPI);
-            setSharedLink(sharedLinkFromAPI);
-            setErrorMessage(null);
-        };
-
         const getItem = () => {
             if (itemType === TYPE_FILE) {
-                api.getFileAPI().getFile(itemID, getItemSuccess, getError, CONTENT_SHARING_ITEM_FIELDS);
+                api.getFileAPI().getFile(itemID, handleItemSuccess, getError, CONTENT_SHARING_ITEM_FIELDS);
             } else if (itemType === TYPE_FOLDER) {
-                api.getFolderAPI().getFolderFields(itemID, getItemSuccess, getError, CONTENT_SHARING_ITEM_FIELDS);
+                api.getFolderAPI().getFolderFields(itemID, handleItemSuccess, getError, CONTENT_SHARING_ITEM_FIELDS);
             }
         };
 
@@ -91,6 +108,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         }
     }, [api, getError, item, itemID, itemType, sharedLink, currentUserID]);
 
+    // Get initial data for the user
     React.useEffect(() => {
         const getUserSuccess = userData => {
             const { id, userEnterpriseData } = convertUserResponse(userData);
@@ -110,6 +128,36 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         }
     }, [api, getError, item, itemID, itemType, sharedLink, currentUserID]);
 
+    // Generate the onAddLink function for the item
+    React.useEffect(() => {
+        if (item && permissions && !onAddLink) {
+            const dataForAPI = {
+                id: itemID,
+                permissions,
+            };
+            const setSharedItem = () => () => {
+                if (itemType === TYPE_FILE) {
+                    api.getFileAPI().share(
+                        dataForAPI,
+                        ACCESS_COLLAB,
+                        handleItemSuccess,
+                        getError,
+                        CONTENT_SHARING_ITEM_FIELDS,
+                    );
+                } else if (itemType === TYPE_FOLDER) {
+                    api.getFolderAPI().share(
+                        dataForAPI,
+                        ACCESS_COLLAB,
+                        handleItemSuccess,
+                        getError,
+                        CONTENT_SHARING_ITEM_FIELDS,
+                    );
+                }
+            };
+            setOnAddLink(setSharedItem);
+        }
+    }, [api, getError, item, itemID, itemType, onAddLink, permissions]);
+
     if (errorMessage) {
         return <ErrorMask errorHeader={<FormattedMessage {...errorMessage} />} />;
     }
@@ -127,7 +175,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                     getSharedLinkContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
                     initialDataReceived
                     item={item}
-                    onAddLink={() => Promise.resolve([])} // to do: replace with a POST to the Shared Link API
+                    onAddLink={onAddLink}
                     sharedLink={sharedLink}
                 />
             </Internationalize>
