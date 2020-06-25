@@ -96,8 +96,8 @@ export const basic = () => {
                                     <CollapsibleSidebarMenuItem
                                         as={Link}
                                         href="/"
-                                        className="is-currentPage"
                                         icon={<Folder16 height={20} width={20} />}
+                                        linkClassName="is-currentPage"
                                     />
                                 }
                                 expanded={boolean('isExpanded', true)}
@@ -105,8 +105,8 @@ export const basic = () => {
                                     <CollapsibleSidebarMenuItem
                                         as={Link}
                                         href="/"
-                                        className="is-currentPage"
                                         icon={<Folder16 height={20} width={20} />}
+                                        linkClassName="is-currentPage"
                                         text="All Files"
                                     />
                                 }
