@@ -137,7 +137,7 @@ type Props = {
     /** Content to be  displayed next to item label. */
     content?: React.Node,
     icon?: React.Node,
-    isCurrent?: boolean,
+    linkClassName?: string,
     overflowAction?: React.Node,
     /** Default is to always show */
     showOverflowAction?: 'hover' | 'always',
@@ -145,14 +145,13 @@ type Props = {
 };
 
 function CollapsibleSidebarMenuItem(props: Props) {
-    const { className, content, icon, isCurrent, overflowAction, showOverflowAction, text, ...rest } = props;
+    const { className, content, icon, linkClassName, overflowAction, showOverflowAction, text, ...rest } = props;
     const textRef = React.useRef<?HTMLElement>(null);
     const isTextOverflowed = useIsContentOverflowed(textRef);
     const { isScrolling } = React.useContext(CollapsibleSidebarContext);
     const isShowOverflowActionOnHover = showOverflowAction === 'hover';
-    const menuItemLinkClassName = classNames('bdl-CollapsibleSidebar-menuItemLink', {
+    const menuItemLinkClassName = classNames('bdl-CollapsibleSidebar-menuItemLink', linkClassName, {
         'show-overflowAction': !isShowOverflowActionOnHover,
-        'is-currentPage': isCurrent,
     });
     const menuItemLabelClassName = classNames('bdl-CollapsibleSidebar-menuItemLabel', {
         'overflow-action': overflowAction,

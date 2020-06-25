@@ -123,25 +123,14 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
         expect(wrapper.find('.bdl-CollapsibleSidebar-menuItemActionContainer').length).toBe(1);
     });
 
-    test('should not show is-currentPage if isCurrent is not set', () => {
+    test('should show link class name when it is set', () => {
         libDom.useIsContentOverflowed.mockReturnValue(false);
 
         const wrapper = getWrapper({
             className: 'foo',
             text: 'bar',
             icon: 'bold',
-        });
-        expect(wrapper.find('CollapsibleSidebarMenuItem__StyledLink.is-currentPage').length).toBe(0);
-    });
-
-    test('should show is-currentPage if isCurrent is set', () => {
-        libDom.useIsContentOverflowed.mockReturnValue(false);
-
-        const wrapper = getWrapper({
-            className: 'foo',
-            text: 'bar',
-            icon: 'bold',
-            isCurrent: 'true',
+            linkClassName: 'is-currentPage',
         });
         expect(wrapper.find('CollapsibleSidebarMenuItem__StyledLink.is-currentPage').length).toBe(1);
     });

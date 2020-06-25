@@ -97,7 +97,7 @@ export const basic = () => {
                                         as={Link}
                                         href="/"
                                         icon={<Folder16 height={20} width={20} />}
-                                        isCurrent
+                                        linkClassName="is-currentPage"
                                     />
                                 }
                                 expanded={boolean('isExpanded', true)}
@@ -106,7 +106,7 @@ export const basic = () => {
                                         as={Link}
                                         href="/"
                                         icon={<Folder16 height={20} width={20} />}
-                                        isCurrent
+                                        linkClassName="is-currentPage"
                                         text="All Files"
                                     />
                                 }
