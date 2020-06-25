@@ -97,7 +97,7 @@ export const basic = () => {
                                         as={Link}
                                         href="/"
                                         icon={<Folder16 height={20} width={20} />}
-                                        isActive="true"
+                                        isActive
                                     />
                                 }
                                 expanded={boolean('isExpanded', true)}
@@ -106,7 +106,7 @@ export const basic = () => {
                                         as={Link}
                                         href="/"
                                         icon={<Folder16 height={20} width={20} />}
-                                        isActive="true"
+                                        isActive
                                         text="All Files"
                                     />
                                 }

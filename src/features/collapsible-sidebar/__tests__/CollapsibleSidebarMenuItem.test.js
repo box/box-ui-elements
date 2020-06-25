@@ -122,4 +122,27 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
         expect(wrapper.find('.show-overflowAction').length).toBe(0);
         expect(wrapper.find('.bdl-CollapsibleSidebar-menuItemActionContainer').length).toBe(1);
     });
+
+    test('should not show is-currentPage if isActive is not set', () => {
+        libDom.useIsContentOverflowed.mockReturnValue(false);
+
+        const wrapper = getWrapper({
+            className: 'foo',
+            text: 'bar',
+            icon: 'bold',
+        });
+        expect(wrapper.find('CollapsibleSidebarMenuItem__StyledLink.is-currentPage').length).toBe(0);
+    });
+
+    test('should show is-currentPage if isActive is set', () => {
+        libDom.useIsContentOverflowed.mockReturnValue(false);
+
+        const wrapper = getWrapper({
+            className: 'foo',
+            text: 'bar',
+            icon: 'bold',
+            isActive: 'true',
+        });
+        expect(wrapper.find('CollapsibleSidebarMenuItem__StyledLink.is-currentPage').length).toBe(1);
+    });
 });
