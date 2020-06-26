@@ -283,7 +283,7 @@ class Item extends Base {
      */
     async share(
         item: BoxItem,
-        access: string,
+        access?: string,
         successCallback: Function,
         errorCallback: ElementsErrorCallback = noop,
         options: FetchOptions = {},

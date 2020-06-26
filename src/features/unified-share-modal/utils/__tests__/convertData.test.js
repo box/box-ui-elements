@@ -1,6 +1,6 @@
-import { convertItemResponse, convertUserResponse, PERMISSION_LEVEL_MAP } from '../convertData';
+import { convertItemResponse, convertUserResponse } from '../convertData';
 import { TYPE_FILE, TYPE_FOLDER } from '../../../../constants';
-import { ANYONE_IN_COMPANY } from '../../constants';
+import { ANYONE_IN_COMPANY, PERMISSION_LEVEL_MAP } from '../../constants';
 
 jest.mock('../../../../utils/file', () => ({
     getTypedFileId: () => 'f_190457309',
