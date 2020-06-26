@@ -14,6 +14,7 @@ import usmMessages from '../../features/unified-share-modal/messages';
 import { convertItemResponse, convertUserResponse } from '../../features/unified-share-modal/utils/convertData';
 import {
     ACCESS_COLLAB,
+    ACCESS_NONE,
     CLIENT_NAME_CONTENT_SHARING,
     FIELD_ENTERPRISE,
     FIELD_HOSTNAME,
@@ -23,8 +24,8 @@ import {
 import { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS } from './constants';
 import contentSharingMessages from './messages';
 import type { ErrorResponseData } from '../../common/types/api';
-import type { Access, BoxItemPermission, ItemType } from '../../common/types/core';
-import type { item as itemFlowType, onAddLinkType } from '../../features/unified-share-modal/flowTypes';
+import type { BoxItemPermission, ItemType } from '../../common/types/core';
+import type { item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
 import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType } from './types';
 
 type ContentSharingProps = {
@@ -51,7 +52,8 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     const [currentUserID, setCurrentUserID] = React.useState<string | null>(null);
     const [errorMessage, setErrorMessage] = React.useState<Object | null>(null);
     const [permissions, setPermissions] = React.useState<BoxItemPermission | null>(null);
-    const [onAddLink, setOnAddLink] = React.useState<onAddLinkType | null>(null);
+    const [onAddLink, setOnAddLink] = React.useState<() => () => void | null>(null);
+    const [onRemoveLink, setOnRemoveLink] = React.useState<() => () => void | null>(null);
 
     // Reset the API if necessary
     React.useEffect(() => {
@@ -97,9 +99,11 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     React.useEffect(() => {
         const getItem = () => {
             if (itemType === TYPE_FILE) {
-                api.getFileAPI().getFile(itemID, handleItemSuccess, getError, CONTENT_SHARING_ITEM_FIELDS);
+                api.getFileAPI().getFile(itemID, handleItemSuccess, getError, { fields: CONTENT_SHARING_ITEM_FIELDS });
             } else if (itemType === TYPE_FOLDER) {
-                api.getFolderAPI().getFolderFields(itemID, handleItemSuccess, getError, CONTENT_SHARING_ITEM_FIELDS);
+                api.getFolderAPI().getFolderFields(itemID, handleItemSuccess, getError, {
+                    fields: CONTENT_SHARING_ITEM_FIELDS,
+                });
             }
         };
 
@@ -128,33 +132,33 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         }
     }, [api, getError, item, itemID, itemType, sharedLink, currentUserID]);
 
-    // Generate the onAddLink function for the item
+    // Generate the onAddLink and onRemoveLink functions for the item
     React.useEffect(() => {
         if (item && permissions && !onAddLink) {
             const dataForAPI = {
                 id: itemID,
                 permissions,
             };
-            const setSharedItem = () => () => {
-                if (itemType === TYPE_FILE) {
-                    api.getFileAPI().share(
-                        dataForAPI,
-                        ACCESS_COLLAB,
-                        handleItemSuccess,
-                        getError,
-                        CONTENT_SHARING_ITEM_FIELDS,
-                    );
-                } else if (itemType === TYPE_FOLDER) {
-                    api.getFolderAPI().share(
-                        dataForAPI,
-                        ACCESS_COLLAB,
-                        handleItemSuccess,
-                        getError,
-                        CONTENT_SHARING_ITEM_FIELDS,
-                    );
-                }
-            };
-            setOnAddLink(setSharedItem);
+
+            let itemAPIInstance;
+            if (itemType === TYPE_FILE) {
+                itemAPIInstance = api.getFileAPI();
+            } else if (itemType === TYPE_FOLDER) {
+                itemAPIInstance = api.getFolderAPI();
+            }
+
+            setOnAddLink(() => () => {
+                itemAPIInstance.share(dataForAPI, ACCESS_COLLAB, handleItemSuccess, getError, {
+                    forceFetch: true,
+                    fields: CONTENT_SHARING_ITEM_FIELDS,
+                });
+            });
+            setOnRemoveLink(() => () => {
+                itemAPIInstance.share(dataForAPI, ACCESS_NONE, handleItemSuccess, getError, {
+                    forceFetch: true,
+                    fields: CONTENT_SHARING_ITEM_FIELDS,
+                });
+            });
         }
     }, [api, getError, item, itemID, itemType, onAddLink, permissions]);
 
@@ -176,6 +180,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                     initialDataReceived
                     item={item}
                     onAddLink={onAddLink}
+                    onRemoveLink={onRemoveLink}
                     sharedLink={sharedLink}
                 />
             </Internationalize>

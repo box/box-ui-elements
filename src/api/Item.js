@@ -7,6 +7,7 @@
 import noop from 'lodash/noop';
 import setProp from 'lodash/set';
 import { getBadItemError, getBadPermissionsError } from '../utils/error';
+import { fillMissingProperties } from '../utils/fields';
 import Base from './Base';
 import {
     ACCESS_NONE,
@@ -275,15 +276,17 @@ class Item extends Base {
      * @param {string} access - Shared access level
      * @param {Function} successCallback - Success callback
      * @param {Function|void} errorCallback - Error callback
-     * @param {Array<string>|void} fields - Optionally include specific fields
-     * @return {void}
+     * @param {Array<string>|void} options.fields - Optionally include specific fields
+     * @param {boolean|void} [options.forceFetch] - Optionally bypasses the cache
+     * @param {boolean|void} [options.refreshCache] - Optionally updates the cache
+     * @return {Promise<void>}
      */
-    share(
+    async share(
         item: BoxItem,
         access: string,
         successCallback: Function,
         errorCallback: ElementsErrorCallback = noop,
-        fields?: Array<string>,
+        options: FetchOptions = {},
     ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
@@ -302,28 +305,47 @@ class Item extends Base {
             return Promise.reject();
         }
 
-        this.id = id;
-        this.successCallback = successCallback;
-        this.errorCallback = errorCallback;
+        const cache: APICache = this.getCache();
+        const key: string = this.getCacheKey(id);
+        const isCached: boolean = !options.forceFetch && cache.has(key);
+        const cachedItem: BoxItem = isCached ? cache.get(key) : { id };
 
-        // We use the parent folder's auth token since use case involves
-        // only content explorer or picker which works onf folder tokens
-        return this.xhr
-            .put({
+        if (isCached) {
+            return successCallback(cachedItem);
+        }
+
+        try {
+            // We use the parent folder's auth token since use case involves
+            // only content explorer or picker which works on folder tokens
+            this.id = id;
+            this.successCallback = successCallback;
+            this.errorCallback = errorCallback;
+            const { fields } = options;
+
+            const { data } = await this.xhr.put({
                 url: this.getUrl(this.id),
                 data: {
                     shared_link: access === ACCESS_NONE ? null : { access },
                 },
                 params: fields
                     ? {
-                          fields,
+                          fields: fields.toString(),
                       }
                     : '',
-            })
-            .then(this.shareSuccessHandler)
-            .catch((e: $AxiosError<any>) => {
-                this.errorHandler(e);
             });
+
+            const dataWithMissingFields = fillMissingProperties(data, fields);
+
+            if (cache.has(key)) {
+                cache.merge(key, dataWithMissingFields);
+            } else {
+                cache.set(key, dataWithMissingFields);
+            }
+
+            return this.shareSuccessHandler({ data: cache.get(key) });
+        } catch (e) {
+            return this.errorHandler(e);
+        }
     }
 }
 
