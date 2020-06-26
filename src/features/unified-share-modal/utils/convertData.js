@@ -2,7 +2,7 @@
 import type { User } from '../../../common/types/core';
 import { getTypedFileId, getTypedFolderId } from '../../../utils/file';
 import { INVITEE_ROLE_EDITOR, TYPE_FOLDER } from '../../../constants';
-import { ALLOWED_ACCESS_LEVELS, API_TO_USM_ACCESS_LEVEL_MAP, PERMISSION_LEVEL_MAP } from '../constants';
+import { ALLOWED_ACCESS_LEVELS, API_TO_USM_ACCESS_LEVEL_MAP, API_TO_USM_PERMISSION_LEVEL_MAP } from '../constants';
 import type {
     ContentSharingItemAPIResponse,
     ContentSharingItemDataType,
@@ -56,8 +56,8 @@ const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): Conten
         } = shared_link;
 
         const accessLevel = effective_access ? API_TO_USM_ACCESS_LEVEL_MAP[effective_access] : null;
-        const permissionLevel = effective_permission ? PERMISSION_LEVEL_MAP[effective_permission] : null;
-        const isDownloadAllowed = permissionLevel === PERMISSION_LEVEL_MAP.can_download;
+        const permissionLevel = effective_permission ? API_TO_USM_PERMISSION_LEVEL_MAP[effective_permission] : null;
+        const isDownloadAllowed = permissionLevel === API_TO_USM_PERMISSION_LEVEL_MAP.can_download;
         const canChangeDownload = canChangeAccessLevel && isDownloadAllowed;
         const canChangePassword = canChangeAccessLevel && isPasswordAvailable;
         const canChangeVanityName = canChangeAccessLevel && isVanityNameAvailable;
@@ -102,7 +102,7 @@ const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): Conten
             type,
             typedID: type === TYPE_FOLDER ? getTypedFolderId(id) : getTypedFileId(id),
         },
-        originalPermissions: permissions,
+        originalItemPermissions: permissions,
         sharedLink,
     };
 };

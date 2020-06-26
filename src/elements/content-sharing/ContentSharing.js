@@ -26,7 +26,10 @@ import {
     CONTENT_SHARING_ITEM_FIELDS,
     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
 } from './constants';
-import { USM_TO_API_ACCESS_LEVEL_MAP } from '../../features/unified-share-modal/constants';
+import {
+    USM_TO_API_ACCESS_LEVEL_MAP,
+    USM_TO_API_PERMISSION_LEVEL_MAP,
+} from '../../features/unified-share-modal/constants';
 import contentSharingMessages from './messages';
 import type { ErrorResponseData } from '../../common/types/api';
 import type { BoxItemPermission, ItemType } from '../../common/types/core';
@@ -56,10 +59,13 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     const [sharedLink, setSharedLink] = React.useState<ContentSharingSharedLinkType | null>(null);
     const [currentUser, setCurrentUser] = React.useState<string | null>(null);
     const [errorMessage, setErrorMessage] = React.useState<Object | null>(null);
-    const [permissions, setPermissions] = React.useState<BoxItemPermission | null>(null);
+    const [itemPermissions, setItemPermissions] = React.useState<BoxItemPermission | null>(null);
     const [onAddLink, setOnAddLink] = React.useState<() => () => void | null>(null);
     const [onRemoveLink, setOnRemoveLink] = React.useState<() => () => void | null>(null);
     const [changeSharedLinkAccessLevel, setChangeSharedLinkAccessLevel] = React.useState<() => () => void | null>(null);
+    const [changeSharedLinkPermissionLevel, setChangeSharedLinkPermissionLevel] = React.useState<
+        () => () => void | null,
+    >(null);
 
     // Reset the API if necessary
     React.useEffect(() => {
@@ -68,10 +74,12 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
 
     // Success handler for GET requests to /files or /folders
     const handleGetItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
-        const { item: itemFromAPI, originalPermissions, sharedLink: sharedLinkFromAPI } = convertItemResponse(itemData);
+        const { item: itemFromAPI, originalItemPermissions, sharedLink: sharedLinkFromAPI } = convertItemResponse(
+            itemData,
+        );
         setErrorMessage(null);
         setItem(itemFromAPI);
-        setPermissions(originalPermissions);
+        setItemPermissions(originalItemPermissions);
         setSharedLink(sharedLinkFromAPI);
     };
 
@@ -97,7 +105,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         setCurrentUser(null);
         setItem(null);
         setOnAddLink(null);
-        setPermissions(null);
+        setItemPermissions(null);
         setSharedLink(null);
     }, [api]);
 
@@ -150,10 +158,10 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
             setSharedLink({ ...sharedLink, ...updatedSharedLink });
         };
 
-        if (item && permissions && !onAddLink) {
+        if (item && itemPermissions && !onAddLink) {
             const dataForAPI = {
                 id: itemID,
-                permissions,
+                permissions: itemPermissions,
             };
 
             let itemAPIInstance;
@@ -190,8 +198,28 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 );
             });
+            setChangeSharedLinkPermissionLevel(() => newSharedLinkPermissionLevel => {
+                const updatedSharedLinkPermissions = {};
+                Object.keys(USM_TO_API_PERMISSION_LEVEL_MAP).forEach(level => {
+                    if (level === newSharedLinkPermissionLevel) {
+                        updatedSharedLinkPermissions[USM_TO_API_PERMISSION_LEVEL_MAP[level]] = true;
+                    } else {
+                        updatedSharedLinkPermissions[USM_TO_API_PERMISSION_LEVEL_MAP[level]] = false;
+                    }
+                });
+                itemAPIInstance.share(
+                    dataForAPI,
+                    null,
+                    handleUpdateItemSuccess,
+                    getError,
+                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+                    {
+                        permissions: updatedSharedLinkPermissions,
+                    },
+                );
+            });
         }
-    }, [api, getError, item, itemID, itemType, onAddLink, permissions, sharedLink]);
+    }, [api, getError, item, itemID, itemPermissions, itemType, onAddLink, sharedLink]);
 
     if (errorMessage) {
         return <ErrorMask errorHeader={<FormattedMessage {...errorMessage} />} />;
@@ -205,7 +233,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                 <UnifiedShareModal
                     canInvite={sharedLink.canInvite}
                     changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
-                    changeSharedLinkPermissionLevel={() => Promise.resolve([])} // to do: replace with a POST to the Shared Link API
+                    changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
                     collaboratorsList={{ collaborators: [] }} // to do: replace with Collaborators API
                     currentUserID={currentUserID}
                     displayInModal={displayInModal}

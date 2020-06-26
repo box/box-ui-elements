@@ -1,6 +1,6 @@
 import { convertItemResponse, convertUserResponse } from '../convertData';
 import { TYPE_FILE, TYPE_FOLDER } from '../../../../constants';
-import { ANYONE_IN_COMPANY, PERMISSION_LEVEL_MAP } from '../../constants';
+import { ANYONE_IN_COMPANY, API_TO_USM_PERMISSION_LEVEL_MAP } from '../../constants';
 
 jest.mock('../../../../utils/file', () => ({
     getTypedFileId: () => 'f_190457309',
@@ -231,7 +231,7 @@ describe('convertItemResponse()', () => {
                           isPasswordAvailable: password,
                           isPasswordEnabled: is_password_enabled,
                           isPreviewAllowed: can_preview,
-                          permissionLevel: PERMISSION_LEVEL_MAP[effective_permission],
+                          permissionLevel: API_TO_USM_PERMISSION_LEVEL_MAP[effective_permission],
                           url,
                           vanityName: vanity_name,
                       }

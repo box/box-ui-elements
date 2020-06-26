@@ -273,20 +273,22 @@ class Item extends Base {
      * API to create or remove a shared link
      *
      * @param {Object} item - Item to share
-     * @param {string} access - Shared access level
+     * @param {string|null} access - Shared access level; potentially null if there are no access changes
      * @param {Function} successCallback - Success callback
      * @param {Function|void} errorCallback - Error callback
      * @param {Array<string>|void} options.fields - Optionally include specific fields
      * @param {boolean|void} [options.forceFetch] - Optionally bypasses the cache
      * @param {boolean|void} [options.refreshCache] - Optionally updates the cache
+     * @param {Function} sharedLinkOptions - Optional custom request body
      * @return {Promise<void>}
      */
     async share(
         item: BoxItem,
-        access?: string,
+        access: ?string,
         successCallback: Function,
         errorCallback: ElementsErrorCallback = noop,
         options: FetchOptions = {},
+        sharedLinkOptions?,
     ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
@@ -322,10 +324,19 @@ class Item extends Base {
             this.errorCallback = errorCallback;
             const { fields } = options;
 
+            let sharedLinkOptionsForRequest;
+            if (sharedLinkOptions) {
+                sharedLinkOptionsForRequest = sharedLinkOptions;
+            } else {
+                sharedLinkOptionsForRequest = {
+                    access: access === ACCESS_NONE ? null : access,
+                };
+            }
+
             const { data } = await this.xhr.put({
                 url: this.getUrl(this.id),
                 data: {
-                    shared_link: access === ACCESS_NONE ? null : { access },
+                    shared_link: sharedLinkOptionsForRequest,
                 },
                 params: fields
                     ? {
