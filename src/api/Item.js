@@ -279,7 +279,7 @@ class Item extends Base {
      * @param {Array<string>|void} options.fields - Optionally include specific fields
      * @param {boolean|void} [options.forceFetch] - Optionally bypasses the cache
      * @param {boolean|void} [options.refreshCache] - Optionally updates the cache
-     * @param {Function} sharedLinkOptions - Optional custom request body
+     * @param {Object} sharedLinkRequestBody - Optional custom request body for updating the shared
      * @return {Promise<void>}
      */
     async share(
@@ -288,7 +288,7 @@ class Item extends Base {
         successCallback: Function,
         errorCallback: ElementsErrorCallback = noop,
         options: FetchOptions = {},
-        sharedLinkOptions?,
+        sharedLinkRequestBody?,
     ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
@@ -324,11 +324,11 @@ class Item extends Base {
             this.errorCallback = errorCallback;
             const { fields } = options;
 
-            let sharedLinkOptionsForRequest;
-            if (sharedLinkOptions) {
-                sharedLinkOptionsForRequest = sharedLinkOptions;
+            let updatedSharedLink;
+            if (sharedLinkRequestBody) {
+                updatedSharedLink = sharedLinkRequestBody;
             } else {
-                sharedLinkOptionsForRequest = {
+                updatedSharedLink = {
                     access: access === ACCESS_NONE ? null : access,
                 };
             }
@@ -336,7 +336,7 @@ class Item extends Base {
             const { data } = await this.xhr.put({
                 url: this.getUrl(this.id),
                 data: {
-                    shared_link: sharedLinkOptionsForRequest,
+                    shared_link: updatedSharedLink,
                 },
                 params: fields
                     ? {

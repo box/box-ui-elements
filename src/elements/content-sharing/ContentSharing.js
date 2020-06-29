@@ -9,6 +9,8 @@ import type { $AxiosError } from 'axios';
 import API from '../../api';
 import Internationalize from '../common/Internationalize';
 import ErrorMask from '../../components/error-mask/ErrorMask';
+import Notification from '../../components/notification/Notification';
+import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
 import UnifiedShareModal from '../../features/unified-share-modal';
 import usmMessages from '../../features/unified-share-modal/messages';
 import { convertItemResponse, convertUserResponse } from '../../features/unified-share-modal/utils/convertData';
@@ -31,8 +33,8 @@ import {
     USM_TO_API_PERMISSION_LEVEL_MAP,
 } from '../../features/unified-share-modal/constants';
 import contentSharingMessages from './messages';
-import type { ErrorResponseData } from '../../common/types/api';
-import type { BoxItemPermission, ItemType } from '../../common/types/core';
+import type { ErrorResponseData, FetchOptions } from '../../common/types/api';
+import type { Access, BoxItemPermission, ItemType } from '../../common/types/core';
 import type { item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
 import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType } from './types';
 
@@ -57,9 +59,11 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     const [api, setAPI] = React.useState<API>(createAPI(apiHost, itemID, itemType, token));
     const [item, setItem] = React.useState<itemFlowType | null>(null);
     const [sharedLink, setSharedLink] = React.useState<ContentSharingSharedLinkType | null>(null);
-    const [currentUser, setCurrentUser] = React.useState<string | null>(null);
-    const [errorMessage, setErrorMessage] = React.useState<Object | null>(null);
+    const [currentUserID, setCurrentUserID] = React.useState<string | null>(null);
     const [itemPermissions, setItemPermissions] = React.useState<BoxItemPermission | null>(null);
+    const [componentErrorMessage, setComponentErrorMessage] = React.useState<Object | null>(null);
+    const [notifications, setNotifications] = React.useState<Record<string, Notification>>({});
+    const [notificationID, setNotificationID] = React.useState<number>(0);
     const [onAddLink, setOnAddLink] = React.useState<() => () => void | null>(null);
     const [onRemoveLink, setOnRemoveLink] = React.useState<() => () => void | null>(null);
     const [changeSharedLinkAccessLevel, setChangeSharedLinkAccessLevel] = React.useState<() => () => void | null>(null);
@@ -77,7 +81,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         const { item: itemFromAPI, originalItemPermissions, sharedLink: sharedLinkFromAPI } = convertItemResponse(
             itemData,
         );
-        setErrorMessage(null);
+        setComponentErrorMessage(null);
         setItem(itemFromAPI);
         setItemPermissions(originalItemPermissions);
         setSharedLink(sharedLinkFromAPI);
@@ -95,14 +99,14 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                 errorObject = contentSharingMessages.loadingError;
             }
 
-            setErrorMessage(errorObject);
+            setComponentErrorMessage(errorObject);
         },
-        [setErrorMessage],
+        [setComponentErrorMessage],
     );
 
     // Reset state if necessary
     React.useEffect(() => {
-        setCurrentUser(null);
+        setCurrentUserID(null);
         setItem(null);
         setOnAddLink(null);
         setItemPermissions(null);
@@ -126,13 +130,15 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         if (!item && !sharedLink) {
             getItem();
         }
-    }, [api, getError, item, itemID, itemType, sharedLink, currentUser]);
+    }, [api, getError, item, itemID, itemType, sharedLink]);
 
     // Get initial data for the user
     React.useEffect(() => {
         const getUserSuccess = userData => {
-            setCurrentUser(convertUserResponse(userData));
-            setErrorMessage(null);
+            const { id, userEnterpriseData } = convertUserResponse(userData);
+            setCurrentUserID(id);
+            setSharedLink(prevSharedLink => ({ ...prevSharedLink, ...userEnterpriseData }));
+            setComponentErrorMessage(null);
         };
 
         const getUserData = () => {
@@ -143,19 +149,57 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
             });
         };
 
-        if (item && sharedLink && !currentUser) {
+        if (item && sharedLink && !currentUserID) {
             getUserData();
         }
-    }, [api, getError, item, itemID, itemType, sharedLink, currentUser]);
+    }, [api, getError, item, itemID, itemType, sharedLink, currentUserID]);
+
+    // Close a notification
+    const handleNotificationClose = React.useCallback(
+        (id: number) => {
+            const updatedNotifications = { ...notifications };
+            delete updatedNotifications[id];
+            setNotifications(updatedNotifications);
+        },
+        [notifications],
+    );
+
+    // Create a notification
+    const createNotification = React.useCallback(
+        (notificationType: string, message: Record<string, string>) => {
+            return (
+                <Notification
+                    duration="short"
+                    key={notificationID}
+                    onClose={() => handleNotificationClose(notificationID)}
+                    type={notificationType}
+                >
+                    <span>
+                        <FormattedMessage {...message} />
+                    </span>
+                </Notification>
+            );
+        },
+        [handleNotificationClose, notificationID],
+    );
 
     // Generate the onAddLink and onRemoveLink functions for the item
     React.useEffect(() => {
         // Success handler for PUT requests to /files or /folders
         const handleUpdateItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
             const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
-            setErrorMessage(null);
-            setItem({ ...item, ...updatedItem });
-            setSharedLink({ ...sharedLink, ...updatedSharedLink });
+            setItem(prevItem => ({ ...prevItem, ...updatedItem }));
+            setSharedLink(prevSharedLink => ({ ...prevSharedLink, ...updatedSharedLink }));
+        };
+
+        const handleUpdateItemError = () => {
+            const updatedNotifications = { ...notifications };
+            updatedNotifications[notificationID] = createNotification(
+                'error',
+                contentSharingMessages.sharedLinkUpdateError,
+            );
+            setNotifications(updatedNotifications);
+            setNotificationID(notificationID + 1);
         };
 
         if (item && itemPermissions && !onAddLink) {
@@ -171,33 +215,26 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                 itemAPIInstance = api.getFolderAPI();
             }
 
-            setOnAddLink(() => () => {
-                itemAPIInstance.share(
+            const createSharedLinkAPIConnection = (
+                accessType: ?Access,
+                options?: FetchOptions = CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+                sharedLinkRequestBody?: { permissions: BoxItemPermission },
+            ) => {
+                return itemAPIInstance.share(
                     dataForAPI,
-                    ACCESS_COLLAB,
+                    accessType,
                     handleUpdateItemSuccess,
-                    getError,
-                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+                    handleUpdateItemError,
+                    options,
+                    sharedLinkRequestBody,
                 );
-            });
-            setOnRemoveLink(() => () => {
-                itemAPIInstance.share(
-                    dataForAPI,
-                    ACCESS_NONE,
-                    handleUpdateItemSuccess,
-                    getError,
-                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                );
-            });
-            setChangeSharedLinkAccessLevel(() => newAccessLevel => {
-                itemAPIInstance.share(
-                    dataForAPI,
-                    USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel],
-                    handleUpdateItemSuccess,
-                    getError,
-                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                );
-            });
+            };
+
+            setOnAddLink(() => () => createSharedLinkAPIConnection(ACCESS_COLLAB));
+            setOnRemoveLink(() => () => createSharedLinkAPIConnection(ACCESS_NONE));
+            setChangeSharedLinkAccessLevel(() => newAccessLevel =>
+                createSharedLinkAPIConnection(USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel]),
+            );
             setChangeSharedLinkPermissionLevel(() => newSharedLinkPermissionLevel => {
                 const updatedSharedLinkPermissions = {};
                 Object.keys(USM_TO_API_PERMISSION_LEVEL_MAP).forEach(level => {
@@ -207,45 +244,50 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         updatedSharedLinkPermissions[USM_TO_API_PERMISSION_LEVEL_MAP[level]] = false;
                     }
                 });
-                itemAPIInstance.share(
-                    dataForAPI,
-                    null,
-                    handleUpdateItemSuccess,
-                    getError,
-                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                    {
-                        permissions: updatedSharedLinkPermissions,
-                    },
-                );
+                createSharedLinkAPIConnection(null, CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS, {
+                    permissions: updatedSharedLinkPermissions,
+                });
             });
         }
-    }, [api, getError, item, itemID, itemPermissions, itemType, onAddLink, sharedLink]);
+    }, [
+        api,
+        createNotification,
+        item,
+        itemID,
+        itemPermissions,
+        itemType,
+        notificationID,
+        notifications,
+        onAddLink,
+        sharedLink,
+    ]);
 
-    if (errorMessage) {
-        return <ErrorMask errorHeader={<FormattedMessage {...errorMessage} />} />;
+    if (componentErrorMessage) {
+        return <ErrorMask errorHeader={<FormattedMessage {...componentErrorMessage} />} />;
     }
 
-    if (item && sharedLink && currentUser) {
-        const { id: currentUserID, userEnterpriseData } = currentUser;
-        const sharedLinkWithEnterpriseData = { ...userEnterpriseData, ...sharedLink };
+    if (item && sharedLink) {
         return (
-            <Internationalize language={language} messages={usmMessages}>
-                <UnifiedShareModal
-                    canInvite={sharedLink.canInvite}
-                    changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
-                    changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
-                    collaboratorsList={{ collaborators: [] }} // to do: replace with Collaborators API
-                    currentUserID={currentUserID}
-                    displayInModal={displayInModal}
-                    getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
-                    getSharedLinkContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
-                    initialDataReceived
-                    item={item}
-                    onAddLink={onAddLink}
-                    onRemoveLink={onRemoveLink}
-                    sharedLink={sharedLinkWithEnterpriseData}
-                />
-            </Internationalize>
+            <>
+                <NotificationsWrapper>{[...Object.values(notifications)]}</NotificationsWrapper>
+                <Internationalize language={language} messages={usmMessages}>
+                    <UnifiedShareModal
+                        canInvite={sharedLink.canInvite}
+                        changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
+                        changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
+                        collaboratorsList={{ collaborators: [] }} // to do: replace with Collaborators API
+                        currentUserID={currentUserID}
+                        displayInModal={displayInModal}
+                        getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
+                        getSharedLinkContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
+                        initialDataReceived
+                        item={item}
+                        onAddLink={onAddLink}
+                        onRemoveLink={onRemoveLink}
+                        sharedLink={sharedLink}
+                    />
+                </Internationalize>
+            </>
         );
     }
     return null;
