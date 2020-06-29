@@ -310,10 +310,9 @@ class Item extends Base {
         const cache: APICache = this.getCache();
         const key: string = this.getCacheKey(id);
         const isCached: boolean = !options.forceFetch && cache.has(key);
-        const cachedItem: BoxItem = isCached ? cache.get(key) : { id };
 
         if (isCached) {
-            return successCallback(cachedItem);
+            return successCallback(cache.get(key));
         }
 
         try {
@@ -328,22 +327,23 @@ class Item extends Base {
             if (sharedLinkRequestBody) {
                 updatedSharedLink = sharedLinkRequestBody;
             } else {
-                updatedSharedLink = {
-                    access: access === ACCESS_NONE ? null : access,
-                };
+                updatedSharedLink = access === ACCESS_NONE ? null : { access };
             }
 
-            const { data } = await this.xhr.put({
+            let apiRequestParams = {
                 url: this.getUrl(this.id),
                 data: {
                     shared_link: updatedSharedLink,
                 },
-                params: fields
-                    ? {
-                          fields: fields.toString(),
-                      }
-                    : '',
-            });
+            };
+            if (fields) {
+                apiRequestParams = {
+                    ...apiRequestParams,
+                    fields: fields.toString(),
+                };
+            }
+
+            const { data } = await this.xhr.put(apiRequestParams);
 
             const dataWithMissingFields = fillMissingProperties(data, fields);
 
@@ -353,7 +353,7 @@ class Item extends Base {
                 cache.set(key, dataWithMissingFields);
             }
 
-            return this.shareSuccessHandler({ data: cache.get(key) });
+            return this.shareSuccessHandler(cache.get(key));
         } catch (e) {
             return this.errorHandler(e);
         }

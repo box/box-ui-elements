@@ -78,9 +78,9 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
 
     // Success handler for GET requests to /files or /folders
     const handleGetItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
-        const { item: itemFromAPI, originalItemPermissions, sharedLink: sharedLinkFromAPI } = convertItemResponse(
-            itemData,
-        );
+        const { item: itemFromAPI, originalItemPermissions, sharedLink: sharedLinkFromAPI } = convertItemResponse({
+            data: itemData, // convertData expects an object wrapper around the item
+        });
         setComponentErrorMessage(null);
         setItem(itemFromAPI);
         setItemPermissions(originalItemPermissions);
