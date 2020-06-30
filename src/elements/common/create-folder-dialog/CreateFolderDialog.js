@@ -18,6 +18,7 @@ import {
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     ERROR_CODE_ITEM_NAME_IN_USE,
 } from '../../../constants';
+import './CreateFolderDialog.scss';
 
 type Props = {
     appElement: HTMLElement,
@@ -106,7 +107,9 @@ const CreateFolderDialog = ({
                     </div>
                 ) : null}
                 <FormattedMessage tagName="div" {...messages.createDialogText} />
-                <input ref={ref} onKeyDown={onKeyDown} required type="text" />
+                <div className="be-modal-input">
+                    <input ref={ref} onKeyDown={onKeyDown} required type="text" />
+                </div>
             </label>
             <div className="be-modal-btns">
                 <PrimaryButton data-testid="be-btn-create-folder" isLoading={isLoading} onClick={create} type="button">
