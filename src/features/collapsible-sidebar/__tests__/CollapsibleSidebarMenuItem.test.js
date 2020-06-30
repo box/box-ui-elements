@@ -18,9 +18,11 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
         );
     };
 
-    test('matches snapshot', () => {
+    beforeEach(() => {
         libDom.useIsContentOverflowed.mockReturnValue(false);
+    });
 
+    test('matches snapshot', () => {
         const wrapper = getWrapper(
             {
                 className: 'foo',
@@ -33,8 +35,6 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
     });
 
     test('should show custom content when content is passed', () => {
-        libDom.useIsContentOverflowed.mockReturnValue(false);
-
         const testContent = 'Custom Content';
         const wrapper = getWrapper(
             {
@@ -86,8 +86,6 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
     });
 
     test('should not show overflow action container', () => {
-        libDom.useIsContentOverflowed.mockReturnValue(false);
-
         const wrapper = getWrapper({
             className: 'foo',
             text: 'bar',
@@ -97,8 +95,6 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
     });
 
     test('should show overflow action by default', () => {
-        libDom.useIsContentOverflowed.mockReturnValue(false);
-
         const wrapper = getWrapper({
             className: 'foo',
             text: 'bar',
@@ -110,8 +106,6 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
     });
 
     test('should show overflow action on hover if showAction is set to hover', () => {
-        libDom.useIsContentOverflowed.mockReturnValue(false);
-
         const wrapper = getWrapper({
             className: 'foo',
             text: 'bar',
@@ -121,5 +115,15 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
         });
         expect(wrapper.find('.show-overflowAction').length).toBe(0);
         expect(wrapper.find('.bdl-CollapsibleSidebar-menuItemActionContainer').length).toBe(1);
+    });
+
+    test('should show link class name when it is set', () => {
+        const wrapper = getWrapper({
+            className: 'foo',
+            text: 'bar',
+            icon: 'bold',
+            linkClassName: 'is-currentPage',
+        });
+        expect(wrapper.find('CollapsibleSidebarMenuItem__StyledLink.is-currentPage').length).toBe(1);
     });
 });

@@ -30,6 +30,8 @@ import {
     VERSION_RETENTION_DELETE_ACTION,
     VERSION_RETENTION_REMOVE_ACTION,
     VERSION_RETENTION_INDEFINITE,
+    PERMISSION_CAN_DOWNLOAD,
+    PERMISSION_CAN_PREVIEW,
 } from '../../constants';
 import type { MetadataType } from './metadata';
 
@@ -73,11 +75,6 @@ type Order = {
 
 type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN;
 
-type SharedLink = {
-    access: Access,
-    url: string,
-};
-
 type InlineNoticeType = 'warning' | 'error' | 'success' | 'info' | 'generic';
 
 type ItemType = typeof ITEM_TYPE_FOLDER | typeof ITEM_TYPE_FILE | typeof ITEM_TYPE_WEBLINK;
@@ -97,6 +94,12 @@ type FolderMini = {
 type UserMini = {
     avatar_url?: string,
     email?: string,
+    enterprise?: {
+        id: string,
+        name: string,
+        type: 'enterprise',
+    },
+    hostname?: string,
     id: string,
     login?: string,
     name: string,
@@ -147,17 +150,21 @@ type Crumb = {
 };
 
 type BoxItemPermission = {
+    can_annotate?: boolean,
     can_comment?: boolean,
     can_create_annotations?: boolean,
     can_delete?: boolean,
     can_download?: boolean,
     can_edit?: boolean,
+    can_invite_collaborator?: boolean,
     can_preview?: boolean,
     can_rename?: boolean,
     can_set_share_access?: boolean,
     can_share?: boolean,
     can_upload?: boolean,
     can_view_annotations?: boolean,
+    can_view_annotations_all?: boolean,
+    can_view_annotations_self?: boolean,
 };
 
 type BoxItemVersionPermission = {
@@ -243,6 +250,27 @@ type FileRepresentationResponse = {
     entries: Array<FileRepresentation>,
 };
 
+type SharedLink = {
+    access: Access,
+    download_count?: number,
+    download_url?: string,
+    effective_access?: Access,
+    effective_permission?: typeof PERMISSION_CAN_DOWNLOAD | typeof PERMISSION_CAN_PREVIEW,
+    is_password_enabled?: boolean,
+    permissions?: BoxItemPermission,
+    preview_count?: number,
+    unshared_at?: string | null,
+    url: string,
+    vanity_name?: string,
+    vanity_url?: string,
+};
+
+type SharedLinkFeatures = {
+    download_url: boolean,
+    password: boolean,
+    vanity_name: boolean,
+};
+
 type BoxItem = {
     allowed_shared_link_access_levels?: Array<Access>,
     authenticated_download_url?: string,
@@ -272,6 +300,7 @@ type BoxItem = {
     restored_from?: BoxItemVersion,
     selected?: boolean,
     shared_link?: SharedLink,
+    shared_link_features?: SharedLinkFeatures,
     size?: number,
     thumbnailUrl?: ?string,
     type?: ItemType,

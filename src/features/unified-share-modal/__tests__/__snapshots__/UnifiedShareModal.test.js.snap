@@ -43,6 +43,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={false}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -135,6 +136,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={false}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -227,6 +229,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={true}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -322,6 +325,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={false}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -414,6 +418,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={false}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -505,6 +510,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={false}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -597,6 +603,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={false}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -689,6 +696,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={false}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -781,6 +789,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={false}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -873,6 +882,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={false}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -973,6 +983,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={false}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -1065,6 +1076,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={false}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -1161,6 +1173,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={true}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -1256,6 +1269,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={false}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -1348,6 +1362,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={false}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -1438,6 +1453,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={false}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}
@@ -1535,6 +1551,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       createSharedLinkOnLoad={false}
+      displayInModal={true}
       focusSharedLinkOnLoad={false}
       getInitialData={[MockFunction]}
       handleFtuxCloseClick={[Function]}

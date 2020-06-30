@@ -72,6 +72,12 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(wrapper.find(ContentExplorerHeaderActions).find('.header-actions-accessory').length).toBe(1);
         });
 
+        test('should pass onSelectedClick to ContentExplorerActionButtons', () => {
+            const onSelectedClick = () => {};
+            const wrapper = renderComponent({ onSelectedClick });
+            expect(wrapper.find('ContentExplorerActionButtons').prop('onSelectedClick')).toEqual(onSelectedClick);
+        });
+
         test("customInput should be false if the props isn't passed down", () => {
             const wrapper = renderComponent();
             expect(wrapper.find('ContentExplorerHeaderActions').prop('customInput')).toBe(undefined);
