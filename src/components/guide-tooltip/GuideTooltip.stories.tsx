@@ -13,10 +13,10 @@ export const allOptions = () =>
             title="Lorem Ipsum"
             body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             icon={<FolderShared32 />}
-            step={[1, 3]}
+            steps={[1, 3]}
             /* eslint-disable no-console */
-            primaryButton={{ children: 'Next', onClick: () => console.log('next') }}
-            secondaryButton={{ children: 'Back', onClick: () => console.log('back') }}
+            primaryButtonProps={{ children: 'Next', onClick: () => console.log('next') }}
+            secondaryButtonProps={{ children: 'Back', onClick: () => console.log('back') }}
             /* eslint-enable no-console */
         >
             <Button>example</Button>
@@ -24,7 +24,7 @@ export const allOptions = () =>
     );
 
 allOptions.story = {
-    name: 'body, icon, step, title, next button, previous button',
+    name: 'body, icon, steps, title, next button, previous button',
 };
 
 export const noButtons = () =>
@@ -33,14 +33,14 @@ export const noButtons = () =>
             title="Lorem Ipsum"
             body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             icon={<FolderShared32 />}
-            step={[1, 3]}
+            steps={[1, 3]}
         >
             <Button>example</Button>
         </GuideTooltip>,
     );
 
 noButtons.story = {
-    name: 'body, icon, step, title',
+    name: 'body, icon, steps, title',
 };
 
 export const onlyTitleBody = () =>

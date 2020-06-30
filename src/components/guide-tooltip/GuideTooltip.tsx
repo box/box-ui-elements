@@ -13,10 +13,12 @@ type TooltipProps = Omit<JSX.LibraryManagedAttributes<typeof Tooltip, Tooltip['p
 type Props = TooltipProps & {
     body: React.ReactNode;
     title?: React.ReactNode;
+    /** 32px x 32px */
     icon?: React.ReactNode;
-    step?: [number, number];
-    primaryButton?: JSX.LibraryManagedAttributes<typeof Button, Button['props']>;
-    secondaryButton?: JSX.LibraryManagedAttributes<typeof Button, Button['props']>;
+    /** displays guide progress e.g. 1 of 4 */
+    steps?: [number, number];
+    primaryButtonProps?: JSX.LibraryManagedAttributes<typeof Button, Button['props']>;
+    secondaryButtonProps?: JSX.LibraryManagedAttributes<typeof Button, Button['props']>;
 };
 
 function GuideTooltip({
@@ -25,9 +27,9 @@ function GuideTooltip({
     className = '',
     icon,
     isShown = true,
-    primaryButton,
-    step,
-    secondaryButton,
+    primaryButtonProps,
+    steps,
+    secondaryButtonProps,
     showCloseButton = true,
     title,
     ...rest
@@ -44,35 +46,35 @@ function GuideTooltip({
                     <div className="bdl-GuideTooltip-right">
                         {title && <div className="bdl-GuideTooltip-title">{title}</div>}
                         <div className="bdl-GuideTooltip-body">{body}</div>
-                        {(secondaryButton || primaryButton || step) && (
+                        {(secondaryButtonProps || primaryButtonProps || steps) && (
                             <div className="bdl-GuideTooltip-bottom">
-                                {(secondaryButton || primaryButton) && (
+                                {(secondaryButtonProps || primaryButtonProps) && (
                                     <div className="bdl-GuideTooltip-navigation">
-                                        {secondaryButton && (
+                                        {secondaryButtonProps && (
                                             <Button
-                                                {...secondaryButton}
+                                                {...secondaryButtonProps}
                                                 className={classNames(
                                                     'bdl-GuideTooltip-previousButton',
-                                                    secondaryButton.className,
+                                                    secondaryButtonProps.className,
                                                 )}
                                             />
                                         )}
-                                        {primaryButton && (
+                                        {primaryButtonProps && (
                                             <Button
-                                                {...primaryButton}
+                                                {...primaryButtonProps}
                                                 className={classNames(
                                                     'bdl-GuideTooltip-nextButton',
-                                                    primaryButton.className,
+                                                    primaryButtonProps.className,
                                                 )}
                                             />
                                         )}
                                     </div>
                                 )}
-                                {step && (
-                                    <div className="bdl-GuideTooltip-step">
+                                {steps && (
+                                    <div className="bdl-GuideTooltip-steps">
                                         <FormattedMessage
                                             {...messages.navigation}
-                                            values={{ currentStepIndex: step[0], totalNumSteps: step[1] }}
+                                            values={{ currentStepIndex: steps[0], totalNumSteps: steps[1] }}
                                         />
                                     </div>
                                 )}

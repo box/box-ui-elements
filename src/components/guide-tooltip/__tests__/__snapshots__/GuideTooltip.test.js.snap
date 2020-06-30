@@ -57,7 +57,7 @@ exports[`components/guide-tooltip/GuideTooltip should render with all options 1`
             </Button>
           </div>
           <div
-            className="bdl-GuideTooltip-step"
+            className="bdl-GuideTooltip-steps"
           >
             <FormattedMessage
               defaultMessage="{currentStepIndex} of {totalNumSteps}"
@@ -69,6 +69,34 @@ exports[`components/guide-tooltip/GuideTooltip should render with all options 1`
                 }
               }
             />
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  }
+  theme="callout"
+/>
+`;
+
+exports[`components/guide-tooltip/GuideTooltip should render with just body 1`] = `
+<Tooltip
+  className="bdl-GuideTooltip "
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
+  isShown={true}
+  position="top-center"
+  showCloseButton={true}
+  text={
+    <React.Fragment>
+      <div
+        className="bdl-GuideTooltip-right"
+      >
+        <div
+          className="bdl-GuideTooltip-body"
+        >
+          <div>
+            body
           </div>
         </div>
       </div>

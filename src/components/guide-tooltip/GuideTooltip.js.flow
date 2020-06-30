@@ -16,9 +16,9 @@ type Props = {|
     ...$Exact<TooltipProps>,
     body: React.Node,
     icon?: React.Node,
-    primaryButton?: React.ElementConfig<Button>,
-    secondaryButton?: React.ElementConfig<Button>,
-    step?: [number, number],
+    primaryButtonProps?: React.ElementConfig<Button>,
+    secondaryButtonProps?: React.ElementConfig<Button>,
+    steps?: [number, number],
     title?: React.Node,
 |};
 
