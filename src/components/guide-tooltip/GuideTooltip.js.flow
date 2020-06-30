@@ -1,0 +1,28 @@
+// @flow
+import * as React from 'react';
+import Button from '../button';
+
+import Tooltip from '../tooltip';
+
+type TooltipProps = $Diff<
+    React.ElementConfig<typeof Tooltip>,
+    {|
+        text: any,
+        theme: any,
+    |},
+>;
+
+type Props = {|
+    ...$Exact<TooltipProps>,
+    body: React.Node,
+    icon?: React.Node,
+    primaryButtonProps?: React.ElementConfig<Button>,
+    secondaryButtonProps?: React.ElementConfig<Button>,
+    steps?: [number, number],
+    title?: React.Node,
+|};
+
+// eslint-disable-next-line no-unused-vars
+function GuideTooltip(props: Props) {}
+
+export default GuideTooltip;
