@@ -3,7 +3,7 @@
  * @file ContentSharing Element
  * @author Box
  */
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import type { $AxiosError } from 'axios';
 import API from '../../api';
@@ -20,6 +20,7 @@ import {
     CLIENT_NAME_CONTENT_SHARING,
     FIELD_ENTERPRISE,
     FIELD_HOSTNAME,
+    STATUS_ERROR,
     TYPE_FILE,
     TYPE_FOLDER,
 } from '../../constants';
@@ -76,18 +77,18 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         setAPI(createAPI(apiHost, itemID, itemType, token));
     }, [apiHost, itemID, itemType, token]);
 
-    // Success handler for GET requests to /files or /folders
+    // Handle successful GET requests to /files or /folders
     const handleGetItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
-        const { item: itemFromAPI, originalItemPermissions, sharedLink: sharedLinkFromAPI } = convertItemResponse({
-            data: itemData, // convertData expects an object wrapper around the item
-        });
+        const { item: itemFromAPI, originalItemPermissions, sharedLink: sharedLinkFromAPI } = convertItemResponse(
+            itemData,
+        );
         setComponentErrorMessage(null);
         setItem(itemFromAPI);
         setItemPermissions(originalItemPermissions);
         setSharedLink(sharedLinkFromAPI);
     };
 
-    // Error handler for failed requests
+    // Handle component-level errors
     const getError = React.useCallback(
         (error: $AxiosError<Object> | ErrorResponseData) => {
             let errorObject;
@@ -185,17 +186,18 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
 
     // Generate the onAddLink and onRemoveLink functions for the item
     React.useEffect(() => {
-        // Success handler for PUT requests to /files or /folders
+        // Handle successful PUT requests to /files or /folders
         const handleUpdateItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
             const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
             setItem(prevItem => ({ ...prevItem, ...updatedItem }));
             setSharedLink(prevSharedLink => ({ ...prevSharedLink, ...updatedSharedLink }));
         };
 
+        // Handle failed PUT requests to /files or /folders
         const handleUpdateItemError = () => {
             const updatedNotifications = { ...notifications };
             updatedNotifications[notificationID] = createNotification(
-                'error',
+                STATUS_ERROR,
                 contentSharingMessages.sharedLinkUpdateError,
             );
             setNotifications(updatedNotifications);
@@ -244,7 +246,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         updatedSharedLinkPermissions[USM_TO_API_PERMISSION_LEVEL_MAP[level]] = false;
                     }
                 });
-                createSharedLinkAPIConnection(null, CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS, {
+                createSharedLinkAPIConnection(undefined, CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS, {
                     permissions: updatedSharedLinkPermissions,
                 });
             });

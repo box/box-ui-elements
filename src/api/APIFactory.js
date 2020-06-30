@@ -32,7 +32,7 @@ import type { ItemType } from '../common/types/core';
 import type { APIOptions } from '../common/types/api';
 import type APICache from '../utils/Cache';
 
-export type ItemAPI = FolderAPI | FileAPI | WebLinkAPI;
+type ItemAPI = FolderAPI | FileAPI | WebLinkAPI;
 
 class APIFactory {
     /**

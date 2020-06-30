@@ -102,7 +102,7 @@ const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): Conten
             type,
             typedID: type === TYPE_FOLDER ? getTypedFolderId(id) : getTypedFileId(id),
         },
-        originalItemPermissions: permissions,
+        originalItemPermissions: permissions, // the original permissions are necessary for POST requests to the Item API
         sharedLink,
     };
 };

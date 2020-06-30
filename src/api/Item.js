@@ -273,7 +273,7 @@ class Item extends Base {
      * API to create or remove a shared link
      *
      * @param {Object} item - Item to share
-     * @param {string|null} access - Shared access level; potentially null if there are no access changes
+     * @param {string|undefined} access - Shared access level; potentially undefined if there are no access changes
      * @param {Function} successCallback - Success callback
      * @param {Function|void} errorCallback - Error callback
      * @param {Array<string>|void} options.fields - Optionally include specific fields

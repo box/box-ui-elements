@@ -1,8 +1,13 @@
 /**
  * Mocks that represent the internal data formats of the UnifiedShareModal and its child components
  */
+const MOCK_PERMISSIONS = {
+    can_invite: true,
+    can_download: true,
+};
+
 const MOCK_SHARED_LINK = {
-    accessLevel: 'company',
+    accessLevel: 'collaborators',
     allowedAccessLevels: {
         peopleInThisItem: false,
         peopleInYourCompany: true,
@@ -25,19 +30,24 @@ const MOCK_SHARED_LINK = {
     isPasswordAvailable: true,
     isPasswordEnabled: true,
     isPreviewAllowed: true,
-    permissionLevel: 'peopleInYourCompany',
+    permissionLevel: 'peopleInThisItem',
     url: '',
     vanityName: true,
 };
+
+const MOCK_NULL_SHARED_LINK = { canInvite: true };
+
+const MOCK_ITEM_ID = '123456789';
+
 const MOCK_ITEM = {
-    id: '',
+    id: MOCK_ITEM_ID,
     description: '',
     extension: '',
     grantedPermissions: {
         itemShare: true,
     },
     name: '',
-    permissions: {},
+    permissions: MOCK_PERMISSIONS,
     typedID: '',
 };
 
@@ -47,9 +57,22 @@ const MOCK_ITEM_API_RESPONSE = {
     shared_link_features: {},
 };
 
+const MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK = {
+    item: MOCK_ITEM,
+    shared_link: null,
+    shared_link_features: {},
+};
+
 const MOCK_CONVERTED_ITEM_DATA = {
     item: MOCK_ITEM,
+    originalItemPermissions: MOCK_PERMISSIONS,
     sharedLink: MOCK_SHARED_LINK,
+};
+
+const MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK = {
+    item: MOCK_ITEM,
+    originalItemPermissions: MOCK_PERMISSIONS,
+    sharedLink: MOCK_NULL_SHARED_LINK,
 };
 
 const MOCK_USER_API_RESPONSE = {
@@ -75,8 +98,13 @@ const MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION = {
 export {
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE,
+    MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK,
+    MOCK_ITEM_ID,
     MOCK_CONVERTED_ITEM_DATA,
+    MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
     MOCK_CONVERTED_USER_DATA,
+    MOCK_NULL_SHARED_LINK,
+    MOCK_PERMISSIONS,
     MOCK_SHARED_LINK,
     MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
     MOCK_USER_API_RESPONSE,
