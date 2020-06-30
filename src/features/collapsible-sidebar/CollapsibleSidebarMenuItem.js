@@ -146,7 +146,7 @@ type Props = {
 
 function CollapsibleSidebarMenuItem(props: Props) {
     const { className, content, icon, linkClassName, overflowAction, showOverflowAction, text, ...rest } = props;
-    const textRef = React.useRef(null);
+    const textRef = React.useRef<?HTMLElement>(null);
     const isTextOverflowed = useIsContentOverflowed(textRef);
     const { isScrolling } = React.useContext(CollapsibleSidebarContext);
     const isShowOverflowActionOnHover = showOverflowAction === 'hover';
