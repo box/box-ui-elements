@@ -1,13 +1,8 @@
 /**
  * Mocks that represent the internal data formats of the UnifiedShareModal and its child components
  */
-const MOCK_PERMISSIONS = {
-    can_invite: true,
-    can_download: true,
-};
-
 const MOCK_SHARED_LINK = {
-    accessLevel: 'collaborators',
+    accessLevel: 'peopleInThisItem',
     allowedAccessLevels: {
         peopleInThisItem: false,
         peopleInYourCompany: true,
@@ -30,7 +25,7 @@ const MOCK_SHARED_LINK = {
     isPasswordAvailable: true,
     isPasswordEnabled: true,
     isPreviewAllowed: true,
-    permissionLevel: 'peopleInThisItem',
+    permissionLevel: 'canViewDownload',
     url: '',
     vanityName: true,
 };
@@ -47,7 +42,7 @@ const MOCK_ITEM = {
         itemShare: true,
     },
     name: '',
-    permissions: MOCK_PERMISSIONS,
+    permissions: {},
     typedID: '',
 };
 
@@ -65,13 +60,13 @@ const MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK = {
 
 const MOCK_CONVERTED_ITEM_DATA = {
     item: MOCK_ITEM,
-    originalItemPermissions: MOCK_PERMISSIONS,
+    originalItemPermissions: {},
     sharedLink: MOCK_SHARED_LINK,
 };
 
 const MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK = {
     item: MOCK_ITEM,
-    originalItemPermissions: MOCK_PERMISSIONS,
+    originalItemPermissions: {},
     sharedLink: MOCK_NULL_SHARED_LINK,
 };
 
@@ -104,7 +99,6 @@ export {
     MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
     MOCK_CONVERTED_USER_DATA,
     MOCK_NULL_SHARED_LINK,
-    MOCK_PERMISSIONS,
     MOCK_SHARED_LINK,
     MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
     MOCK_USER_API_RESPONSE,

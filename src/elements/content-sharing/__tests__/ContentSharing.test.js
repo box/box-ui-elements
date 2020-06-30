@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import API from '../../../api';
 import ErrorMask from '../../../components/error-mask/ErrorMask';
 import ContentSharing from '../ContentSharing';
+import Notification from '../../../components/notification/Notification';
 import UnifiedShareModal from '../../../features/unified-share-modal/UnifiedShareModal';
 import {
     ACCESS_COLLAB,
@@ -34,7 +35,6 @@ import {
     MOCK_ITEM_API_RESPONSE,
     MOCK_ITEM_ID,
     MOCK_NULL_SHARED_LINK,
-    MOCK_PERMISSIONS,
     MOCK_SHARED_LINK,
     MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
     MOCK_USER_API_RESPONSE,
@@ -54,6 +54,17 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
         });
     };
 
+    const createMockItemData = (accessLevel = PEOPLE_IN_ITEM, permissionLevel = CAN_VIEW_DOWNLOAD) => {
+        return {
+            item: MOCK_ITEM,
+            sharedLink: {
+                ...MOCK_SHARED_LINK,
+                accessLevel,
+                permissionLevel,
+            },
+        };
+    };
+
     beforeEach(() => {
         convertItemResponse.mockReturnValue(MOCK_CONVERTED_ITEM_DATA);
         convertUserResponse.mockReturnValue(MOCK_CONVERTED_USER_DATA);
@@ -65,7 +76,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
     });
 
     describe('with successful GET requests to the Item and Users API', () => {
-        test.only('should call getFileAPI().getFile() if itemType is "file"', async () => {
+        test('should call getFileAPI().getFile() if itemType is "file"', async () => {
             const getFile = jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE));
             API.mockImplementation(() => ({
                 getFileAPI: jest.fn().mockReturnValue({ getFile }),
@@ -334,7 +345,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
         });
     });
 
-    describe.only('with successful PUT requests to the Item API', () => {
+    describe('with successful PUT requests to the Item API', () => {
         let share;
         beforeAll(() => {
             share = jest.fn().mockImplementation((dataForAPI, accessType, successFn) => {
@@ -354,7 +365,9 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             }));
         });
 
-        test('should call share() from onAddLink()', async () => {
+        test('should call share() from onAddLink() and set a new shared link', async () => {
+            convertItemResponse.mockReturnValue(MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK);
+
             let wrapper;
             await act(async () => {
                 wrapper = getWrapper({ itemType: TYPE_FOLDER });
@@ -362,38 +375,52 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             wrapper.update();
 
             const usm = wrapper.find(UnifiedShareModal);
+            expect(usm.prop('sharedLink')).toEqual(MOCK_NULL_SHARED_LINK);
+
+            convertItemResponse.mockReset();
+            convertItemResponse.mockReturnValue(MOCK_CONVERTED_ITEM_DATA);
+
             await act(async () => {
                 usm.invoke('onAddLink')();
             });
+            wrapper.update();
             expect(share).toHaveBeenCalledWith(
-                { id: MOCK_ITEM_ID, permissions: MOCK_PERMISSIONS },
+                { id: MOCK_ITEM_ID, permissions: {} },
                 ACCESS_COLLAB,
                 expect.anything(),
                 expect.anything(),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 undefined,
             );
+            expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
         });
 
-        test('should call share() from onRemoveLink()', async () => {
+        test('should call share() from onRemoveLink() and remove the existing shared link', async () => {
             let wrapper;
             await act(async () => {
-                wrapper = getWrapper({ itemType: TYPE_FOLDER });
+                wrapper = getWrapper({ itemType: TYPE_FILE });
             });
             wrapper.update();
 
             const usm = wrapper.find(UnifiedShareModal);
+            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
+
+            convertItemResponse.mockReset();
+            convertItemResponse.mockReturnValue(MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK);
+
             await act(async () => {
                 usm.invoke('onRemoveLink')();
             });
+            wrapper.update();
             expect(share).toHaveBeenCalledWith(
-                { id: MOCK_ITEM_ID, permissions: MOCK_PERMISSIONS },
+                { id: MOCK_ITEM_ID, permissions: {} },
                 ACCESS_NONE,
                 expect.anything(),
                 expect.anything(),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 undefined,
             );
+            expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_NULL_SHARED_LINK);
         });
 
         test.each`
@@ -402,7 +429,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             ${ANYONE_WITH_LINK}  | ${ACCESS_OPEN}
             ${PEOPLE_IN_ITEM}    | ${ACCESS_COLLAB}
         `(
-            'should call share() from changeSharedLinkAccessLevel() when given access $accessLevelFromUSM',
+            'should call share() from changeSharedLinkAccessLevel() when given $accessLevelFromUSM access',
             async ({ accessLevelFromUSM, accessLevelForAPI }) => {
                 let wrapper;
                 await act(async () => {
@@ -411,17 +438,25 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
                 wrapper.update();
 
                 const usm = wrapper.find(UnifiedShareModal);
+                expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
+
+                const expectedItemData = createMockItemData(accessLevelFromUSM);
+                convertItemResponse.mockReset();
+                convertItemResponse.mockReturnValue(expectedItemData);
+
                 await act(async () => {
                     usm.invoke('changeSharedLinkAccessLevel')(accessLevelFromUSM);
                 });
+                wrapper.update();
                 expect(share).toHaveBeenCalledWith(
-                    { id: MOCK_ITEM_ID, permissions: MOCK_PERMISSIONS },
+                    { id: MOCK_ITEM_ID, permissions: {} },
                     accessLevelForAPI,
                     expect.anything(),
                     expect.anything(),
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                     undefined,
                 );
+                expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(expectedItemData.sharedLink);
             },
         );
 
@@ -430,26 +465,74 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             ${CAN_VIEW_ONLY}       | ${{ permissions: { [PERMISSION_CAN_DOWNLOAD]: false, [PERMISSION_CAN_PREVIEW]: true } }}
             ${CAN_VIEW_DOWNLOAD}   | ${{ permissions: { [PERMISSION_CAN_DOWNLOAD]: true, [PERMISSION_CAN_PREVIEW]: false } }}
         `(
-            'should call share() from changeSharedLinkPermissionLevel() when given permission $permissionLevelFromUSM',
+            'should call share() from changeSharedLinkPermissionLevel() when given $permissionLevelFromUSM permission',
             async ({ permissionLevelFromUSM, permissionLevelObjectForAPI }) => {
                 let wrapper;
                 await act(async () => {
-                    wrapper = getWrapper({ itemType: TYPE_FOLDER });
+                    wrapper = getWrapper({ itemType: TYPE_FILE });
                 });
                 wrapper.update();
 
                 const usm = wrapper.find(UnifiedShareModal);
+                expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
+
+                const expectedItemData = createMockItemData(undefined, permissionLevelFromUSM);
+                convertItemResponse.mockReset();
+                convertItemResponse.mockReturnValue(expectedItemData);
+
                 await act(async () => {
                     usm.invoke('changeSharedLinkPermissionLevel')(permissionLevelFromUSM);
                 });
+                wrapper.update();
                 expect(share).toHaveBeenCalledWith(
-                    { id: MOCK_ITEM_ID, permissions: MOCK_PERMISSIONS },
+                    { id: MOCK_ITEM_ID, permissions: {} },
                     undefined,
                     expect.anything(),
                     expect.anything(),
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                     permissionLevelObjectForAPI,
                 );
+                expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(expectedItemData.sharedLink);
+            },
+        );
+    });
+
+    describe('with failed PUT requests to the Item API', () => {
+        let share;
+        beforeAll(() => {
+            share = jest.fn().mockImplementation((dataForAPI, accessType, successFn, failureFn) => {
+                return Promise.reject(new Error({ status: '400' })).catch(response => {
+                    failureFn(response);
+                });
+            });
+            API.mockImplementation(() => ({
+                getFileAPI: jest
+                    .fn()
+                    .mockReturnValue({ getFile: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK), share }),
+                getFolderAPI: jest.fn().mockReturnValue({
+                    getFolderFields: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
+                    share,
+                }),
+                getUsersAPI: jest.fn().mockReturnValue({ getUser: jest.fn() }),
+            }));
+        });
+
+        test.each(['onAddLink', 'onRemoveLink', 'changeSharedLinkAccessLevel', 'changeSharedLinkPermissionLevel'])(
+            'should show an error notification if %s() fails',
+            async sharedLinkUpdateFn => {
+                let wrapper;
+                await act(async () => {
+                    wrapper = getWrapper({ itemType: TYPE_FOLDER });
+                });
+                wrapper.update();
+                expect(wrapper.exists(Notification)).toBe(false);
+
+                const usm = wrapper.find(UnifiedShareModal);
+                await act(async () => {
+                    usm.invoke(`${sharedLinkUpdateFn}`)();
+                });
+                wrapper.update();
+                expect(wrapper.exists(Notification)).toBe(true);
             },
         );
     });

@@ -193,6 +193,12 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
             setSharedLink(prevSharedLink => ({ ...prevSharedLink, ...updatedSharedLink }));
         };
 
+        const handleRemoveSharedLinkSuccess = (itemData: ContentSharingItemAPIResponse) => {
+            const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
+            setItem(prevItem => ({ ...prevItem, ...updatedItem }));
+            setSharedLink(updatedSharedLink);
+        };
+
         // Handle failed PUT requests to /files or /folders
         const handleUpdateItemError = () => {
             const updatedNotifications = { ...notifications };
@@ -221,11 +227,12 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                 accessType: ?Access,
                 options?: FetchOptions = CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 sharedLinkRequestBody?: { permissions: BoxItemPermission },
+                successFn = handleUpdateItemSuccess,
             ) => {
                 return itemAPIInstance.share(
                     dataForAPI,
                     accessType,
-                    handleUpdateItemSuccess,
+                    successFn,
                     handleUpdateItemError,
                     options,
                     sharedLinkRequestBody,
@@ -233,7 +240,9 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
             };
 
             setOnAddLink(() => () => createSharedLinkAPIConnection(ACCESS_COLLAB));
-            setOnRemoveLink(() => () => createSharedLinkAPIConnection(ACCESS_NONE));
+            setOnRemoveLink(() => () =>
+                createSharedLinkAPIConnection(ACCESS_NONE, undefined, undefined, handleRemoveSharedLinkSuccess),
+            );
             setChangeSharedLinkAccessLevel(() => newAccessLevel =>
                 createSharedLinkAPIConnection(USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel]),
             );

@@ -154,9 +154,7 @@ describe('api/Item', () => {
             item.merge = jest.fn();
             item.successCallback = jest.fn();
             item.shareSuccessHandler({
-                data: {
-                    shared_link: 'link',
-                },
+                shared_link: 'link',
             });
             expect(item.getCacheKey).toHaveBeenCalledWith('id');
             expect(item.merge).toHaveBeenCalledWith('key', 'shared_link', 'link');
@@ -462,7 +460,7 @@ describe('api/Item', () => {
                 expect(item.xhr.put).toHaveBeenCalledWith({
                     url: 'url',
                     data: { shared_link: { access: 'access' } },
-                    fields: stringifiedFields,
+                    params: { fields: stringifiedFields },
                 });
                 expect(item.getUrl).toHaveBeenCalledWith('id');
                 expect(item.getCacheKey).toHaveBeenCalledWith('id');
@@ -504,7 +502,7 @@ describe('api/Item', () => {
                 expect(item.xhr.put).toHaveBeenCalledWith({
                     url: 'url',
                     data: { shared_link: { permissions } },
-                    fields: stringifiedFields,
+                    params: { fields: stringifiedFields },
                 });
                 expect(item.getUrl).toHaveBeenCalledWith('id');
                 expect(item.getCacheKey).toHaveBeenCalledWith('id');

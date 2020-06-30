@@ -262,7 +262,7 @@ class Item extends Base {
      * @param {BoxItem} data - The updated item
      * @return {void}
      */
-    shareSuccessHandler = ({ data }: { data: BoxItem }): void => {
+    shareSuccessHandler = (data: BoxItem): void => {
         if (!this.isDestroyed()) {
             const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'shared_link', data.shared_link);
             this.successCallback(updatedObject);
@@ -330,17 +330,14 @@ class Item extends Base {
                 updatedSharedLink = access === ACCESS_NONE ? null : { access };
             }
 
-            let apiRequestParams = {
+            const apiRequestParams = {
                 url: this.getUrl(this.id),
                 data: {
                     shared_link: updatedSharedLink,
                 },
             };
             if (fields) {
-                apiRequestParams = {
-                    ...apiRequestParams,
-                    fields: fields.toString(),
-                };
+                apiRequestParams.params = { fields: fields.toString() };
             }
 
             const { data } = await this.xhr.put(apiRequestParams);
