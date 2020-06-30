@@ -135,16 +135,20 @@ export function scrollIntoView(itemEl: ?HTMLElement, options?: Object = {}): voi
  */
 export function useIsContentOverflowed(contentRef: { current: null | typeof undefined | HTMLElement }): boolean {
     const [isContentOverflowed, setIsContentOverflowed] = React.useState<boolean>(false);
-    const { current } = contentRef;
+
+    // This function should be set as the ref prop for the measured component.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     React.useLayoutEffect(() => {
+        const { current } = contentRef;
         if (!current) {
             return;
         }
         const { offsetWidth, scrollWidth } = current;
-        if (offsetWidth < scrollWidth) {
-            setIsContentOverflowed(true);
+        const willOverflow = offsetWidth < scrollWidth;
+        if (willOverflow !== isContentOverflowed) {
+            setIsContentOverflowed(willOverflow);
         }
-    }, [current]);
+    });
 
     return isContentOverflowed;
 }

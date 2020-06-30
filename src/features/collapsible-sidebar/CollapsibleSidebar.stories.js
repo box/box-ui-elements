@@ -297,10 +297,10 @@ export const basic = () => {
                                     <CollapsibleSidebarMenuItem
                                         as={Link}
                                         icon={<Code16 height={20} width={20} />}
-                                        text="Developer Console"
+                                        text="Developer Console super duper long"
                                     />
                                 }
-                                tooltipMessage="Developer Console Link"
+                                tooltipMessage="Developer Console Link supder duper long"
                             />
                         </li>
                     </ul>
