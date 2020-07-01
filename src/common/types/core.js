@@ -4,6 +4,7 @@ import {
     ACCESS_OPEN,
     ACCESS_COLLAB,
     ACCESS_COMPANY,
+    ACCESS_NONE,
     VIEW_SEARCH,
     VIEW_FOLDER,
     VIEW_ERROR,
@@ -73,9 +74,11 @@ type Order = {
     direction: SortDirection,
 };
 
-type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN;
+type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN | typeof ACCESS_NONE;
 
 type InlineNoticeType = 'warning' | 'error' | 'success' | 'info' | 'generic';
+
+type NotificationType = 'default' | 'info' | 'warn' | 'error';
 
 type ItemType = typeof ITEM_TYPE_FOLDER | typeof ITEM_TYPE_FILE | typeof ITEM_TYPE_WEBLINK;
 
@@ -250,17 +253,34 @@ type FileRepresentationResponse = {
     entries: Array<FileRepresentation>,
 };
 
+type SharedLinkPermission = typeof PERMISSION_CAN_DOWNLOAD | typeof PERMISSION_CAN_PREVIEW;
+
 type SharedLink = {
     access: Access,
     download_count?: number,
     download_url?: string,
     effective_access?: Access,
-    effective_permission?: typeof PERMISSION_CAN_DOWNLOAD | typeof PERMISSION_CAN_PREVIEW,
+    effective_permission?: SharedLinkPermission,
     is_password_enabled?: boolean,
     permissions?: BoxItemPermission,
     preview_count?: number,
     unshared_at?: string | null,
     url: string,
+    vanity_name?: string,
+    vanity_url?: string,
+};
+
+type SharedLinkUpdate = {
+    access?: Access,
+    download_count?: number,
+    download_url?: string,
+    effective_access?: Access,
+    effective_permission?: SharedLinkPermission,
+    is_password_enabled?: boolean,
+    permissions?: BoxItemPermission,
+    preview_count?: number,
+    unshared_at?: string | null,
+    url?: string,
     vanity_name?: string,
     vanity_url?: string,
 };
@@ -416,6 +436,8 @@ export type {
     SortDirection,
     Order,
     SharedLink,
+    SharedLinkPermission,
+    SharedLinkUpdate,
     InlineNoticeType,
     ItemType,
     Delimiter,
@@ -446,4 +468,5 @@ export type {
     FileVersions,
     FileRepresentation,
     Reply,
+    NotificationType,
 };

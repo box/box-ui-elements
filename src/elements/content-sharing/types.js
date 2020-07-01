@@ -37,6 +37,7 @@ export type ContentSharingSharedLinkType = ContentSharingEnterpriseDataType &
 
 export type ContentSharingItemDataType = {
     item: item,
+    originalItemPermissions: BoxItemPermission,
     sharedLink: ContentSharingSharedLinkType,
 };
 

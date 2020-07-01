@@ -18,8 +18,14 @@ import {
     ERROR_CODE_RENAME_ITEM,
     ERROR_CODE_SHARE_ITEM,
 } from '../constants';
-import type { ElementsErrorCallback, FetchOptions } from '../common/types/api';
-import type { BoxItem, FlattenedBoxItemCollection, FlattenedBoxItem, BoxItemPermission } from '../common/types/core';
+import type { ElementsErrorCallback, FetchData, FetchOptions } from '../common/types/api';
+import type {
+    BoxItem,
+    BoxItemPermission,
+    FlattenedBoxItem,
+    FlattenedBoxItemCollection,
+    SharedLinkUpdate,
+} from '../common/types/core';
 import type APICache from '../utils/Cache';
 
 class Item extends Base {
@@ -288,7 +294,7 @@ class Item extends Base {
         successCallback: Function,
         errorCallback: ElementsErrorCallback = noop,
         options: FetchOptions = {},
-        sharedLinkRequestBody?,
+        sharedLinkRequestBody?: SharedLinkUpdate,
     ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
@@ -330,17 +336,17 @@ class Item extends Base {
                 updatedSharedLink = access === ACCESS_NONE ? null : { access };
             }
 
-            const apiRequestParams = {
+            const fetchData: FetchData = {
                 url: this.getUrl(this.id),
                 data: {
                     shared_link: updatedSharedLink,
                 },
             };
             if (fields) {
-                apiRequestParams.params = { fields: fields.toString() };
+                fetchData.params = { fields: fields.toString() };
             }
 
-            const { data } = await this.xhr.put(apiRequestParams);
+            const { data } = await this.xhr.put(fetchData);
 
             const dataWithMissingFields = fillMissingProperties(data, fields);
 

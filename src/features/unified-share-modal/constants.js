@@ -5,16 +5,17 @@ import {
     ACCESS_OPEN,
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_PREVIEW,
+    ACCESS_NONE,
 } from '../../constants';
 
 // Shared link access level constants
-const ANYONE_WITH_LINK = 'peopleWithTheLink';
-const ANYONE_IN_COMPANY = 'peopleInYourCompany';
-const PEOPLE_IN_ITEM = 'peopleInThisItem';
+const ANYONE_WITH_LINK: 'peopleWithTheLink' = 'peopleWithTheLink';
+const ANYONE_IN_COMPANY: 'peopleInYourCompany' = 'peopleInYourCompany';
+const PEOPLE_IN_ITEM: 'peopleInThisItem' = 'peopleInThisItem';
 
 // Shared link permission level constants
-const CAN_VIEW_DOWNLOAD = 'canViewDownload';
-const CAN_VIEW_ONLY = 'canViewOnly';
+const CAN_VIEW_DOWNLOAD: 'canViewDownload' = 'canViewDownload';
+const CAN_VIEW_ONLY: 'canViewOnly' = 'canViewOnly';
 
 // Invitee permission level constants
 const EDITOR = 'Editor';
@@ -37,8 +38,9 @@ const COLLAB_PENDING_TYPE = 'pending';
 
 const API_TO_USM_ACCESS_LEVEL_MAP = {
     [ACCESS_COLLAB]: PEOPLE_IN_ITEM,
-    [ACCESS_OPEN]: ANYONE_WITH_LINK,
     [ACCESS_COMPANY]: ANYONE_IN_COMPANY,
+    [ACCESS_OPEN]: ANYONE_WITH_LINK,
+    [ACCESS_NONE]: null,
 };
 
 const USM_TO_API_ACCESS_LEVEL_MAP = {
