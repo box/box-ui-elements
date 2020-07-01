@@ -16,7 +16,6 @@ import usmMessages from '../../features/unified-share-modal/messages';
 import { convertItemResponse, convertUserResponse } from '../../features/unified-share-modal/utils/convertData';
 import {
     ACCESS_COLLAB,
-    ACCESS_NONE,
     CLIENT_NAME_CONTENT_SHARING,
     FIELD_ENTERPRISE,
     FIELD_HOSTNAME,
@@ -33,7 +32,7 @@ import contentSharingMessages from './messages';
 import type { ErrorResponseData } from '../../common/types/api';
 import type { BoxItemPermission, ItemType, NotificationType, StringMap } from '../../common/types/core';
 import type { item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
-import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType } from './types';
+import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType, SharedLinkUpdateFnType } from './types';
 
 type ContentSharingProps = {
     apiHost: string,
@@ -43,8 +42,6 @@ type ContentSharingProps = {
     language: string,
     token: string,
 };
-
-type SharedLinkUpdateFnType = () => () => Promise<void>;
 
 const createAPI = (apiHost, itemID, itemType, token) =>
     new API({
@@ -64,7 +61,6 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     const [notifications, setNotifications] = React.useState<{ [string]: typeof Notification }>({});
     const [notificationID, setNotificationID] = React.useState<number>(0);
     const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateFnType>(null);
-    const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateFnType>(null);
 
     // Reset the API if necessary
     React.useEffect(() => {
@@ -178,19 +174,13 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         [handleNotificationClose, notificationID],
     );
 
-    // Generate the onAddLink and onRemoveLink functions for the item
+    // Generate the onAddLink function for the item
     React.useEffect(() => {
         // Handle successful PUT requests to /files or /folders
         const handleUpdateItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
             const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
             setItem(prevItem => ({ ...prevItem, ...updatedItem }));
             setSharedLink(prevSharedLink => ({ ...prevSharedLink, ...updatedSharedLink }));
-        };
-
-        const handleRemoveSharedLinkSuccess = (itemData: ContentSharingItemAPIResponse) => {
-            const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
-            setItem(prevItem => ({ ...prevItem, ...updatedItem }));
-            setSharedLink(updatedSharedLink);
         };
 
         // Handle failed PUT requests to /files or /folders
@@ -226,16 +216,6 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 );
             setOnAddLink(updatedOnAddLink);
-
-            const updatedOnRemoveLink: SharedLinkUpdateFnType = () => () =>
-                itemAPIInstance.share(
-                    dataForAPI,
-                    ACCESS_NONE,
-                    handleRemoveSharedLinkSuccess,
-                    handleUpdateItemError,
-                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                );
-            setOnRemoveLink(updatedOnRemoveLink);
         }
     }, [
         api,
@@ -274,7 +254,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         initialDataReceived
                         item={item}
                         onAddLink={onAddLink}
-                        onRemoveLink={onRemoveLink}
+                        onRemoveLink={() => Promise.resolve([])} // to do: replace with a PUT to the Shared Link API
                         sharedLink={sharedLink}
                     />
                 </Internationalize>
