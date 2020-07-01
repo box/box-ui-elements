@@ -3104,10 +3104,15 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/frontend@^6.0.2":
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/@box/frontend/-/frontend-6.0.2.tgz#0e2c74c69f7b35635a9cf8c9b4dc522a49379ff3"
-  integrity sha512-M3WjX15MGym4PCR36t0pXhPUODNVzXCw+ZhiKdf8msKVGrGBcbdDBdrlp0TS416OAacCd8SQyzm6OmrD9olfZw==
+"@box/cldr-data@^34.2.0":
+  version "34.2.0"
+  resolved "https://registry.yarnpkg.com/@box/cldr-data/-/cldr-data-34.2.0.tgz#d2a50e778d28988faaf5e56194b17b46c6b98ae5"
+  integrity sha1-0qUOd40omI+q9eVhlLF7Rsa5iuU=
+
+"@box/frontend@8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@box/frontend/-/frontend-8.0.0.tgz#9bae68b773052550583b271999b0755566d868af"
+  integrity sha1-m65ot3MFJVBYOycZmbB1VWbYaK8=
   dependencies:
     properties-parser "^0.3.1"
     rimraf "^3.0.0"
@@ -3473,6 +3478,13 @@
   integrity sha512-RbZSgcV0ylz8X/RIafaFXijrOJHajjVZi8I8EJp6vTSPWwNAxpOMI7Q3OOWbRJ2Usxj0+ouEPMgTvI4xCo8kfw==
   dependencies:
     "@formatjs/intl-utils" "^2.1.0"
+
+"@formatjs/intl-pluralrules@^1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-pluralrules/-/intl-pluralrules-1.5.2.tgz#3e37f38e21b6a30c484e9138187d0a1a4b0d1f76"
+  integrity sha1-PjfzjiG2owxITpE4GH0KGksNH3Y=
+  dependencies:
+    "@formatjs/intl-utils" "^2.2.0"
 
 "@formatjs/intl-relativetimeformat@^4.5.7":
   version "4.5.8"

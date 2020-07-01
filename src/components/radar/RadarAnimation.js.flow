@@ -67,6 +67,8 @@ type Props = {
     constrainToWindow: boolean,
     /** Forces the radar to be shown or hidden - defaults to true */
     isShown: boolean,
+    /** A string of the form 'vert-offset horiz-offset' which controls positioning */
+    offset?: string,
     /** Where to position the radar relative to the wrapped component */
     position: Position,
 };

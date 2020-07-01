@@ -3,7 +3,10 @@
     "compilerOptions": {
         "baseUrl": ".",
         "outDir": "es",
-        "rootDir": "."
+        "rootDir": ".",
+        "paths": {
+            "box-locale-data": ["node_modules/@box/cldr-data/locale-data/en-US"]
+        }
     },
     "files": [".storybook/typings.d.ts"],
     "include": ["src/**/*.ts", "src/**/*.tsx", "examples/src/**.tsx", "types.ts"]
