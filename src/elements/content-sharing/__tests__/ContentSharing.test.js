@@ -7,25 +7,8 @@ import ErrorMask from '../../../components/error-mask/ErrorMask';
 import ContentSharing from '../ContentSharing';
 import Notification from '../../../components/notification/Notification';
 import UnifiedShareModal from '../../../features/unified-share-modal/UnifiedShareModal';
-import {
-    ACCESS_COLLAB,
-    ACCESS_COMPANY,
-    ACCESS_NONE,
-    ACCESS_OPEN,
-    DEFAULT_HOSTNAME_API,
-    TYPE_FILE,
-    TYPE_FOLDER,
-    PERMISSION_CAN_DOWNLOAD,
-    PERMISSION_CAN_PREVIEW,
-} from '../../../constants';
+import { ACCESS_COLLAB, ACCESS_NONE, DEFAULT_HOSTNAME_API, TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from '../constants';
-import {
-    ANYONE_WITH_LINK,
-    ANYONE_IN_COMPANY,
-    CAN_VIEW_DOWNLOAD,
-    CAN_VIEW_ONLY,
-    PEOPLE_IN_ITEM,
-} from '../../../features/unified-share-modal/constants';
 import { convertItemResponse, convertUserResponse } from '../../../features/unified-share-modal/utils/convertData';
 import {
     MOCK_CONVERTED_ITEM_DATA,
@@ -52,17 +35,6 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
         return Promise.resolve(responseFromAPI).then(response => {
             successFn(response);
         });
-    };
-
-    const createMockItemData = (accessLevel = PEOPLE_IN_ITEM, permissionLevel = CAN_VIEW_DOWNLOAD) => {
-        return {
-            item: MOCK_ITEM,
-            sharedLink: {
-                ...MOCK_SHARED_LINK,
-                accessLevel,
-                permissionLevel,
-            },
-        };
     };
 
     beforeEach(() => {
@@ -390,7 +362,6 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
                 expect.anything(),
                 expect.anything(),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                undefined,
             );
             expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
         });
@@ -418,83 +389,9 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
                 expect.anything(),
                 expect.anything(),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                undefined,
             );
             expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_NULL_SHARED_LINK);
         });
-
-        test.each`
-            accessLevelFromUSM   | accessLevelForAPI
-            ${ANYONE_IN_COMPANY} | ${ACCESS_COMPANY}
-            ${ANYONE_WITH_LINK}  | ${ACCESS_OPEN}
-            ${PEOPLE_IN_ITEM}    | ${ACCESS_COLLAB}
-        `(
-            'should call share() from changeSharedLinkAccessLevel() when given $accessLevelFromUSM access',
-            async ({ accessLevelFromUSM, accessLevelForAPI }) => {
-                let wrapper;
-                await act(async () => {
-                    wrapper = getWrapper({ itemType: TYPE_FOLDER });
-                });
-                wrapper.update();
-
-                const usm = wrapper.find(UnifiedShareModal);
-                expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
-
-                const expectedItemData = createMockItemData(accessLevelFromUSM);
-                convertItemResponse.mockReset();
-                convertItemResponse.mockReturnValue(expectedItemData);
-
-                await act(async () => {
-                    usm.invoke('changeSharedLinkAccessLevel')(accessLevelFromUSM);
-                });
-                wrapper.update();
-                expect(share).toHaveBeenCalledWith(
-                    { id: MOCK_ITEM_ID, permissions: {} },
-                    accessLevelForAPI,
-                    expect.anything(),
-                    expect.anything(),
-                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                    undefined,
-                );
-                expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(expectedItemData.sharedLink);
-            },
-        );
-
-        test.each`
-            permissionLevelFromUSM | permissionLevelObjectForAPI
-            ${CAN_VIEW_ONLY}       | ${{ permissions: { [PERMISSION_CAN_DOWNLOAD]: false, [PERMISSION_CAN_PREVIEW]: true } }}
-            ${CAN_VIEW_DOWNLOAD}   | ${{ permissions: { [PERMISSION_CAN_DOWNLOAD]: true, [PERMISSION_CAN_PREVIEW]: false } }}
-        `(
-            'should call share() from changeSharedLinkPermissionLevel() when given $permissionLevelFromUSM permission',
-            async ({ permissionLevelFromUSM, permissionLevelObjectForAPI }) => {
-                let wrapper;
-                await act(async () => {
-                    wrapper = getWrapper({ itemType: TYPE_FILE });
-                });
-                wrapper.update();
-
-                const usm = wrapper.find(UnifiedShareModal);
-                expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
-
-                const expectedItemData = createMockItemData(undefined, permissionLevelFromUSM);
-                convertItemResponse.mockReset();
-                convertItemResponse.mockReturnValue(expectedItemData);
-
-                await act(async () => {
-                    usm.invoke('changeSharedLinkPermissionLevel')(permissionLevelFromUSM);
-                });
-                wrapper.update();
-                expect(share).toHaveBeenCalledWith(
-                    { id: MOCK_ITEM_ID, permissions: {} },
-                    undefined,
-                    expect.anything(),
-                    expect.anything(),
-                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                    permissionLevelObjectForAPI,
-                );
-                expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(expectedItemData.sharedLink);
-            },
-        );
     });
 
     describe('with failed PUT requests to the Item API', () => {
@@ -517,7 +414,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             }));
         });
 
-        test.each(['onAddLink', 'onRemoveLink', 'changeSharedLinkAccessLevel', 'changeSharedLinkPermissionLevel'])(
+        test.each(['onAddLink', 'onRemoveLink'])(
             'should show an error notification if %s() fails',
             async sharedLinkUpdateFn => {
                 let wrapper;

@@ -443,10 +443,6 @@ describe('api/Item', () => {
 
             const fields = ['shared_link', 'shared_link_features'];
             const stringifiedFields = 'shared_link,shared_link_features';
-            const permissions = {
-                can_download: false,
-                can_preview: true,
-            };
 
             test('should make an xhr with options.fields', async () => {
                 await item.share(file, 'access', 'success', 'error', {
@@ -460,48 +456,6 @@ describe('api/Item', () => {
                 expect(item.xhr.put).toHaveBeenCalledWith({
                     url: 'url',
                     data: { shared_link: { access: 'access' } },
-                    params: { fields: stringifiedFields },
-                });
-                expect(item.getUrl).toHaveBeenCalledWith('id');
-                expect(item.getCacheKey).toHaveBeenCalledWith('id');
-            });
-
-            test('should make an xhr with a custom shared link request body', async () => {
-                await item.share(file, 'access', 'success', 'error', undefined, {
-                    permissions,
-                });
-                expect(item.shareSuccessHandler).toHaveBeenCalledWith('success');
-                expect(item.errorHandler).not.toHaveBeenCalled();
-                expect(item.successCallback).toBe('success');
-                expect(item.errorCallback).toBe('error');
-                expect(item.id).toBe('id');
-                expect(item.xhr.put).toHaveBeenCalledWith({
-                    url: 'url',
-                    data: { shared_link: { permissions } },
-                });
-                expect(item.getUrl).toHaveBeenCalledWith('id');
-                expect(item.getCacheKey).toHaveBeenCalledWith('id');
-            });
-
-            test('should make an xhr with a custom shared link request body and options.fields', async () => {
-                await item.share(
-                    file,
-                    'access',
-                    'success',
-                    'error',
-                    { fields },
-                    {
-                        permissions,
-                    },
-                );
-                expect(item.shareSuccessHandler).toHaveBeenCalledWith('success');
-                expect(item.errorHandler).not.toHaveBeenCalled();
-                expect(item.successCallback).toBe('success');
-                expect(item.errorCallback).toBe('error');
-                expect(item.id).toBe('id');
-                expect(item.xhr.put).toHaveBeenCalledWith({
-                    url: 'url',
-                    data: { shared_link: { permissions } },
                     params: { fields: stringifiedFields },
                 });
                 expect(item.getUrl).toHaveBeenCalledWith('id');

@@ -24,8 +24,10 @@ import {
     HTTP_HEAD,
     HTTP_STATUS_CODE_RATE_LIMIT,
 } from '../constants';
-import type { APIOptions, FetchData, Method, PayloadType } from '../common/types/api';
-import type { StringAnyMap, StringMap, Token } from '../common/types/core';
+import type { Method, APIOptions } from '../common/types/api';
+import type { Token, StringAnyMap, StringMap } from '../common/types/core';
+
+type PayloadType = StringAnyMap | Array<StringAnyMap>;
 
 const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 const MAX_NUM_RETRIES = 3;
@@ -327,7 +329,19 @@ class Xhr {
      * @param {Object} [headers] - Key-value map of headers
      * @return {Promise} - HTTP response
      */
-    put({ url, id, data, params, headers = {} }: FetchData): Promise<StringAnyMap> {
+    put({
+        url,
+        id,
+        data,
+        params,
+        headers = {},
+    }: {
+        data: PayloadType,
+        headers?: StringMap,
+        id?: string,
+        params?: StringAnyMap,
+        url: string,
+    }): Promise<StringAnyMap> {
         return this.post({ id, url, data, params, headers, method: HTTP_PUT });
     }
 
