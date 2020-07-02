@@ -287,7 +287,7 @@ type BoxItem = {
     download_url?: string,
     extension?: string,
     file_version?: BoxItemVersion,
-    has_collaborations?: boolean,
+    has_collaborators?: boolean,
     id: string,
     interacted_at?: string,
     is_download_available?: boolean,
@@ -344,7 +344,7 @@ type FlattenedBoxItem = {
     download_url?: string,
     extension?: string,
     file_version?: BoxItemVersion,
-    has_collaborations?: boolean,
+    has_collaborators?: boolean,
     id?: string,
     interacted_at?: string,
     is_externally_owned?: boolean,
@@ -406,6 +406,11 @@ type Reply = {
     type: 'reply',
 };
 
+type Collaborators = {
+    entries: Array<GroupMini | UserMini>,
+    next_marker: ?string,
+};
+
 export type {
     Token,
     TokenLiteral,
@@ -452,4 +457,5 @@ export type {
     FileRepresentation,
     Reply,
     NotificationType,
+    Collaborators,
 };

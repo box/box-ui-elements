@@ -12,14 +12,18 @@ import ErrorMask from '../../components/error-mask/ErrorMask';
 import UnifiedShareModal from '../../features/unified-share-modal';
 import SharingNotification from './SharingNotification';
 import usmMessages from '../../features/unified-share-modal/messages';
-import { convertItemResponse, convertUserResponse } from '../../features/unified-share-modal/utils/convertData';
+import {
+    convertCollabsResponse,
+    convertItemResponse,
+    convertUserResponse,
+} from '../../features/unified-share-modal/utils/convertData';
 import { CLIENT_NAME_CONTENT_SHARING, FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FILE, TYPE_FOLDER } from '../../constants';
 import { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS } from './constants';
 import contentSharingMessages from './messages';
 import type { ErrorResponseData } from '../../common/types/api';
-import type { BoxItemPermission, ItemType } from '../../common/types/core';
-import type { item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
-import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType, SharedLinkUpdateFnType } from './types';
+import type { BoxItemPermission, Collaborators, ItemType } from '../../common/types/core';
+import type { collaboratorsListType, item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
+import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType } from './types';
 
 type ContentSharingProps = {
     apiHost: string,
@@ -45,6 +49,8 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     const [currentUserID, setCurrentUserID] = React.useState<string | null>(null);
     const [itemPermissions, setItemPermissions] = React.useState<BoxItemPermission | null>(null);
     const [componentErrorMessage, setComponentErrorMessage] = React.useState<Object | null>(null);
+    const [collaboratorsList, setCollaboratorsList] = React.useState<collaboratorsListType | null>(null);
+
     const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateFnType>(null);
     const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateFnType>(null);
     const [changeSharedLinkAccessLevel, setChangeSharedLinkAccessLevel] = React.useState<null | SharedLinkUpdateFnType>(
@@ -138,6 +144,31 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         }
     }, [api, getError, item, itemID, itemType, sharedLink, currentUserID]);
 
+    React.useEffect(() => {
+        const handleGetCollaboratorsSuccess = (response: Collaborators) => {
+            const { hostname } = sharedLink;
+            const { ownerEmail, ownerID } = item;
+            const updatedCollaboratorsList = convertCollabsResponse(
+                response,
+                hostname,
+                ownerEmail,
+                ownerID === currentUserID,
+            );
+            setCollaboratorsList(updatedCollaboratorsList);
+        };
+
+        if (item && sharedLink && currentUserID && !collaboratorsList) {
+            let getCollaborators;
+            if (itemType === TYPE_FILE) {
+                getCollaborators = api.getFileCollaboratorsAPI().getFileCollaborators;
+            } else if (itemType === TYPE_FOLDER) {
+                getCollaborators = api.getFolderCollaboratorsAPI().getFolderCollaborators;
+            }
+
+            getCollaborators(itemID, handleGetCollaboratorsSuccess, () => null);
+        }
+    }, [api, collaboratorsList, currentUserID, item, itemID, itemType, sharedLink]);
+
     if (componentErrorMessage) {
         return <ErrorMask errorHeader={<FormattedMessage {...componentErrorMessage} />} />;
     }
@@ -162,7 +193,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         canInvite={sharedLink.canInvite}
                         changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                         changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
-                        collaboratorsList={{ collaborators: [] }} // to do: replace with Collaborators API
+                        collaboratorsList={collaboratorsList}
                         currentUserID={currentUserID}
                         displayInModal={displayInModal}
                         getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API

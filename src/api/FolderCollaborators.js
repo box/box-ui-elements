@@ -4,24 +4,29 @@
  * @author Box
  */
 
-import MarkerBasedAPI from './MarkerBasedAPI';
-import { DEFAULT_MAX_COLLABORATORS } from '../constants';
-import type { ElementsErrorCallback } from '../common/types/api';
-import type { Collaborations, SelectorItem, SelectorItems, UserMini, GroupMini } from '../common/types/core';
+import MarkerBasedAPI from 'box-ui-elements/es/api/MarkerBasedAPI';
+import { DEFAULT_MAX_COLLABORATORS } from 'box-ui-elements/es/constants';
+import type { ElementsErrorCallback } from 'box-ui-elements/es/common/types/api';
+import type { SelectorItem, SelectorItems, UserMini, GroupMini } from 'box-ui-elements/es/common/types/core';
 
-class FileCollaborators extends MarkerBasedAPI {
+type CollaboratorsAPIResponse = {
+    entries: Array<GroupMini | UserMini>,
+    next_marker: ?string,
+};
+
+class FolderCollaborators extends MarkerBasedAPI {
     /**
      * API URL for comments
      *
-     * @param {string} [id] - a box file id
-     * @return {string} base url for files
+     * @param {string} [id] - a Box folder id
+     * @return {string} base url for folders
      */
     getUrl(id: string): string {
         if (!id) {
-            throw new Error('Missing file id!');
+            throw new Error('Missing folder id!');
         }
 
-        return `${this.getBaseApiUrl()}/files/${id}/collaborators`;
+        return `${this.getBaseApiUrl()}/folders/${id}/collaborations`;
     }
 
     /**
@@ -29,7 +34,7 @@ class FileCollaborators extends MarkerBasedAPI {
      *
      * @param {Object} data the response data
      */
-    successHandler = (data: Collaborations): void => {
+    successHandler = (data: CollaboratorsAPIResponse): void => {
         if (this.isDestroyed() || typeof this.successCallback !== 'function') {
             return;
         }
@@ -56,22 +61,22 @@ class FileCollaborators extends MarkerBasedAPI {
     };
 
     /**
-     * API for fetching collaborators on a file
+     * API for fetching collaborators on a folder
      *
-     * @param {string} id - the file id
+     * @param {string} id - the folder id
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
      * @param {Object} requestData - any additional request data
      * @param {number} limit - the max number of collaborators to return
      * @returns {void}
      */
-    getFileCollaborators(
+    getFolderCollaborators = (
         id: string,
         successCallback: ({ entries: Array<SelectorItem<UserMini | GroupMini>>, next_marker: ?string }) => void,
         errorCallback: ElementsErrorCallback,
         requestData: Object = {},
         limit: number = DEFAULT_MAX_COLLABORATORS,
-    ): void {
+    ): void => {
         // NOTE: successCallback is called with the result
         // of this.successHandler, not the API response!
         this.markerGet({
@@ -81,7 +86,7 @@ class FileCollaborators extends MarkerBasedAPI {
             errorCallback,
             requestData,
         });
-    }
+    };
 }
 
-export default FileCollaborators;
+export default FolderCollaborators;
