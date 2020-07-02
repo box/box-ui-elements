@@ -61,7 +61,7 @@ const AnnotationActivity = ({
         : { ...linkMessage, values: { number: linkValue } };
 
     return (
-        <div className="bcs-AnnotationActivity">
+        <div className="bcs-AnnotationActivity" data-resin-feature="annotations">
             <Media
                 className={classNames('bcs-AnnotationActivity-media', {
                     'bcs-is-pending': isPending || error,

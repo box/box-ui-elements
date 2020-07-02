@@ -41,13 +41,7 @@ const AnnotationActivityMenu = ({ canDelete, onDeleteConfirm }: AnnotationActivi
     return (
         <TetherComponent {...tetherProps}>
             {canDelete && (
-                <Media.Menu
-                    isDisabled={isConfirmingDelete}
-                    data-testid="annotation-activity-actions-menu"
-                    menuProps={{
-                        'data-resin-component': ACTIVITY_TARGETS.ANNOTATION_OPTIONS,
-                    }}
-                >
+                <Media.Menu isDisabled={isConfirmingDelete} data-testid="annotation-activity-actions-menu">
                     <MenuItem
                         data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_DELETE}
                         data-testid="delete-annotation-activity"

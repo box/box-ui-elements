@@ -30,6 +30,7 @@ const AnnotationActivityLink = ({
     return (
         <PlainButton
             className="bcs-AnnotationActivity-link"
+            data-resin-target="markupLink"
             isDisabled={isDisabled}
             onClick={handleClick}
             type={ButtonType.BUTTON}
