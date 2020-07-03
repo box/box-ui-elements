@@ -34,6 +34,21 @@ const MOCK_NULL_SHARED_LINK = { canInvite: true };
 
 const MOCK_ITEM_ID = '123456789';
 
+const MOCK_ITEM_PERMISSIONS = {
+    can_download: true,
+    can_preview: true,
+    can_upload: true,
+    can_comment: true,
+    can_rename: true,
+    can_delete: true,
+    can_share: true,
+    can_set_share_access: true,
+    can_invite_collaborator: true,
+    can_annotate: true,
+    can_view_annotations_all: true,
+    can_view_annotations_self: true,
+};
+
 const MOCK_ITEM = {
     id: MOCK_ITEM_ID,
     description: '',
@@ -95,6 +110,7 @@ export {
     MOCK_ITEM_API_RESPONSE,
     MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK,
     MOCK_ITEM_ID,
+    MOCK_ITEM_PERMISSIONS,
     MOCK_CONVERTED_ITEM_DATA,
     MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
     MOCK_CONVERTED_USER_DATA,
