@@ -327,8 +327,8 @@ class Item extends Base {
             this.id = id;
             this.successCallback = successCallback;
             this.errorCallback = errorCallback;
-            const { fields } = options;
 
+            const { fields } = options;
             const requestData: RequestData = {
                 url: this.getUrl(this.id),
                 data: {

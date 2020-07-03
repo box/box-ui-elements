@@ -1,6 +1,7 @@
 import noop from 'lodash/noop';
 import Cache from '../../utils/Cache';
 import Item from '../Item';
+import { fillMissingProperties } from '../../utils/fields';
 
 let item;
 let file;
@@ -11,6 +12,9 @@ const errorCode = 'foo';
 jest.mock('../../utils/fields', () => ({
     fillMissingProperties: jest.fn(),
 }));
+
+const MOCK_FIELDS_LIST = ['shared_link', 'shared_link_features'];
+const MOCK_FIELDS_STRING = 'shared_link,shared_link_features';
 
 describe('api/Item', () => {
     beforeEach(() => {
@@ -134,30 +138,71 @@ describe('api/Item', () => {
     });
 
     describe('shareSuccessHandler()', () => {
-        test('should not do anything if destroyed', () => {
-            item.isDestroyed = jest.fn().mockReturnValueOnce(true);
+        let getItemStub;
+        let setItemStub;
+        let mergeItemStub;
+        let getCacheKeySpy;
+        const MOCK_UPDATED_ITEM = { shared_link: 'link' };
+        const MOCK_MERGED_ITEM = { shared_link: 'link', permissions: {} };
+        const MOCK_KEY = 'file_123456789';
+        beforeEach(() => {
+            setItemStub = jest.fn();
+            mergeItemStub = jest.fn();
+            getItemStub = jest.fn().mockReturnValue(MOCK_MERGED_ITEM);
+            getCacheKeySpy = jest.spyOn(item, 'getCacheKey').mockReturnValue(MOCK_KEY);
             item.id = 'id';
-            item.getCacheKey = jest.fn();
-            item.merge = jest.fn();
             item.successCallback = jest.fn();
-            item.shareSuccessHandler({
-                data: {
-                    shared_link: 'link',
-                },
-            });
-            expect(item.getCacheKey).not.toHaveBeenCalled();
-            expect(item.merge).not.toHaveBeenCalled();
         });
-        test('should call merge', () => {
-            item.id = 'id';
-            item.getCacheKey = jest.fn().mockReturnValueOnce('key');
-            item.merge = jest.fn();
-            item.successCallback = jest.fn();
-            item.shareSuccessHandler({
-                shared_link: 'link',
-            });
-            expect(item.getCacheKey).toHaveBeenCalledWith('id');
-            expect(item.merge).toHaveBeenCalledWith('key', 'shared_link', 'link');
+
+        test('should not do anything if destroyed', () => {
+            jest.spyOn(item, 'isDestroyed').mockReturnValueOnce(true);
+            item.shareSuccessHandler(MOCK_UPDATED_ITEM);
+            expect(getCacheKeySpy).not.toHaveBeenCalled();
+            expect(mergeItemStub).not.toHaveBeenCalled();
+            expect(getItemStub).not.toHaveBeenCalled();
+            expect(setItemStub).not.toHaveBeenCalled();
+            expect(item.successCallback).not.toHaveBeenCalled();
+        });
+
+        test('should call merge() if cache has key', () => {
+            jest.spyOn(item, 'getCache').mockImplementation(() => ({
+                has: jest.fn().mockReturnValue(true),
+                get: getItemStub,
+                set: setItemStub,
+                merge: mergeItemStub,
+            }));
+            item.shareSuccessHandler(MOCK_UPDATED_ITEM);
+            expect(getCacheKeySpy).toHaveBeenCalledWith('id');
+            expect(mergeItemStub).toHaveBeenCalledWith(MOCK_KEY, MOCK_UPDATED_ITEM);
+            expect(setItemStub).not.toHaveBeenCalled();
+            expect(getItemStub).toHaveBeenCalledWith(MOCK_KEY);
+            expect(item.successCallback).toHaveBeenCalledWith(MOCK_MERGED_ITEM);
+        });
+
+        test('should call set() if cache does not have key', () => {
+            jest.spyOn(item, 'getCache').mockImplementation(() => ({
+                has: jest.fn().mockReturnValue(false),
+                get: getItemStub,
+                set: setItemStub,
+                merge: mergeItemStub,
+            }));
+            item.shareSuccessHandler(MOCK_UPDATED_ITEM);
+            expect(getCacheKeySpy).toHaveBeenCalledWith('id');
+            expect(setItemStub).toHaveBeenCalledWith(MOCK_KEY, MOCK_UPDATED_ITEM);
+            expect(mergeItemStub).not.toHaveBeenCalled();
+            expect(getItemStub).toHaveBeenCalledWith(MOCK_KEY);
+            expect(item.successCallback).toHaveBeenCalledWith(MOCK_MERGED_ITEM);
+        });
+
+        test('should call fillMissingProperties if there are fields', () => {
+            jest.spyOn(item, 'getCache').mockImplementation(() => ({
+                has: jest.fn().mockReturnValue(false),
+                get: getItemStub,
+                set: setItemStub,
+                merge: mergeItemStub,
+            }));
+            item.shareSuccessHandler(MOCK_UPDATED_ITEM, MOCK_FIELDS_LIST);
+            expect(fillMissingProperties).toHaveBeenCalledWith(MOCK_UPDATED_ITEM, MOCK_FIELDS_LIST);
         });
     });
 
@@ -250,12 +295,10 @@ describe('api/Item', () => {
 
     describe('share()', () => {
         let getCacheKeySpy;
-        let successCallbackSpy;
-        let errorCallbackSpy;
         let shareSuccessHandlerSpy;
         let errorHandlerSpy;
         let getUrlSpy;
-        let xhrSpy;
+        const MOCK_DATA = { shared_link: '', permissions: {} };
         beforeEach(() => {
             file = {
                 id: 'id',
@@ -265,57 +308,55 @@ describe('api/Item', () => {
                 },
             };
             getCacheKeySpy = jest.spyOn(item, 'getCacheKey');
-            successCallbackSpy = jest.spyOn(item, 'successCallback');
-            errorCallbackSpy = jest.spyOn(item, 'errorCallback');
             shareSuccessHandlerSpy = jest.spyOn(item, 'shareSuccessHandler');
             errorHandlerSpy = jest.spyOn(item, 'errorHandler');
-            getUrlSpy = jest.spyOn('getUrl').mockReturnValue('url');
-            xhrSpy = jest.spyOn(item, 'xhr').mockImplementation(() => ({
-                put: jest.fn().mockResolvedValueOnce('success'),
-            }));
+            getUrlSpy = jest.spyOn(item, 'getUrl').mockReturnValue('url');
             jest.spyOn(item, 'getCache').mockImplementation(() => ({
                 get: jest.fn().mockReturnValue('success'),
                 has: jest.fn().mockReturnValue(false),
                 set: jest.fn(),
             }));
             jest.spyOn(item, 'merge');
+            item.xhr = {
+                put: jest.fn().mockResolvedValue({ data: MOCK_DATA }),
+            };
         });
 
         test('should not do anything if destroyed', () => {
             jest.spyOn(item, 'isDestroyed').mockReturnValueOnce(true);
-            jest.spyOn(item, 'xhr').mockImplementation(null);
+            item.xhr = null;
             return expect(item.share()).rejects.toBeUndefined();
         });
 
         test('should not do anything if id is missing', () => {
             delete file.id;
-            jest.spyOn(item, 'xhr').mockImplementation(null);
+            item.xhr = null;
             return expect(item.share(file, 'access', 'success', jest.fn())).rejects.toBeUndefined();
         });
 
         test('should not do anything if permissions is missing', () => {
             delete file.permissions;
-            jest.spyOn(item, 'xhr').mockImplementation(null);
+            item.xhr = null;
             return expect(item.share(file, 'access', 'success', jest.fn())).rejects.toBeUndefined();
         });
 
         test('should not do anything if can share is false', () => {
             delete file.permissions.can_share;
-            jest.spyOn(item, 'xhr').mockImplementation(null);
+            item.xhr = null;
             return expect(item.share(file, 'access', 'success', jest.fn())).rejects.toBeUndefined();
         });
 
         test('should not do anything if can set share access is false', () => {
             delete file.permissions.can_set_share_access;
-            jest.spyOn(item, 'xhr').mockImplementation(null);
+            item.xhr = null;
             return expect(item.share(file, 'access', 'success', jest.fn())).rejects.toBeUndefined();
         });
 
         test('should make xhr to share item and call success callback with access', () => {
-            return item.share(file, 'access', 'success', 'error').then(() => {
-                expect(shareSuccessHandlerSpy).toHaveBeenCalledWith('success');
+            return item.share(file, 'access', jest.fn(), jest.fn()).then(() => {
+                expect(shareSuccessHandlerSpy).toHaveBeenCalledWith(MOCK_DATA, undefined);
                 expect(errorHandlerSpy).not.toHaveBeenCalled();
-                expect(xhrSpy.put).toHaveBeenCalledWith({
+                expect(item.xhr.put).toHaveBeenCalledWith({
                     url: 'url',
                     data: { shared_link: { access: 'access' } },
                 });
@@ -325,10 +366,10 @@ describe('api/Item', () => {
         });
 
         test('should make xhr to share item and call success callback with access null', () => {
-            return item.share(file, 'none', 'success', 'error').then(() => {
-                expect(shareSuccessHandlerSpy).toHaveBeenCalledWith('success');
+            return item.share(file, 'none', jest.fn(), jest.fn()).then(() => {
+                expect(shareSuccessHandlerSpy).toHaveBeenCalledWith(MOCK_DATA, undefined);
                 expect(errorHandlerSpy).not.toHaveBeenCalled();
-                expect(xhrSpy.put).toHaveBeenCalledWith({
+                expect(item.xhr.put).toHaveBeenCalledWith({
                     url: 'url',
                     data: { shared_link: null },
                 });
@@ -339,13 +380,13 @@ describe('api/Item', () => {
 
         test('should make xhr to share item and call error callback', () => {
             const error = new Error('error');
-            xhrSpy = jest.spyOn(item, 'xhr').mockImplementation(() => ({
+            item.xhr = {
                 put: jest.fn().mockRejectedValue(error),
-            }));
+            };
             return item.share(file, 'access', 'success', 'error').then(() => {
                 expect(errorHandlerSpy).toHaveBeenCalledWith(error);
                 expect(shareSuccessHandlerSpy).not.toHaveBeenCalled();
-                expect(xhrSpy.put).toHaveBeenCalledWith({
+                expect(item.xhr.put).toHaveBeenCalledWith({
                     url: 'url',
                     data: { shared_link: { access: 'access' } },
                 });
@@ -356,18 +397,16 @@ describe('api/Item', () => {
 
         test('should default to noop error callback', () => {
             return item.share(file, 'access', 'success').catch(() => {
-                expect(errorCallbackSpy).toBe(noop);
+                expect(item.errorCallback).toBe(noop);
             });
         });
 
         describe('with a cached item', () => {
+            let successCallback;
+            let errorCallback;
             beforeEach(() => {
-                shareSuccessHandlerSpy = jest.spyOn(item, 'shareSuccessHandler');
-                errorHandlerSpy = jest.spyOn(item, 'errorHandler');
-                getUrlSpy = jest.spyOn('getUrl').mockReturnValue('url');
-                xhrSpy = jest.spyOn(item, 'xhr').mockImplementation(() => ({
-                    put: jest.fn().mockResolvedValueOnce('success'),
-                }));
+                successCallback = jest.fn();
+                errorCallback = jest.fn();
                 jest.spyOn(item, 'getCache').mockImplementation(() => ({
                     get: jest.fn().mockReturnValue('success'),
                     has: jest.fn().mockReturnValue(true),
@@ -377,55 +416,37 @@ describe('api/Item', () => {
             });
 
             test('should skip the xhr if the item is cached', async () => {
-                const successCallback = jest.fn();
-                const errorCallback = jest.fn();
                 await item.share(file, 'access', successCallback, errorCallback);
                 expect(successCallback).toHaveBeenCalledWith('success');
                 expect(errorCallback).not.toHaveBeenCalled();
+                expect(shareSuccessHandlerSpy).not.toHaveBeenCalled();
+                expect(errorHandlerSpy).not.toHaveBeenCalled();
             });
 
             test('should make an xhr if the item is cached, but options.forceFetch is true', async () => {
-                await item.share(file, 'access', 'success', 'error', {
+                await item.share(file, 'access', successCallback, errorCallback, {
                     forceFetch: true,
                 });
-                expect(shareSuccessHandlerSpy).toHaveBeenCalledWith('success');
+                expect(shareSuccessHandlerSpy).toHaveBeenCalledWith(MOCK_DATA, undefined);
                 expect(errorHandlerSpy).not.toHaveBeenCalled();
-                expect(xhrSpy.put).toHaveBeenCalledWith({
+                expect(item.xhr.put).toHaveBeenCalledWith({
                     url: 'url',
                     data: { shared_link: { access: 'access' } },
                 });
                 expect(getUrlSpy).toHaveBeenCalledWith('id');
                 expect(getCacheKeySpy).toHaveBeenCalledWith('id');
             });
-
-            test('should call the error handler if the cache lookup fails', async () => {
-                const error = new Error();
-                jest.spyOn(item, 'getCache').mockImplementation(() => ({
-                    get: jest.fn().mockRejectedValue(error),
-                    has: jest.fn().mockReturnValue(true),
-                    merge: jest.fn(),
-                    set: jest.fn(),
-                }));
-
-                await item.share(file, 'access', 'success', 'error', {
-                    forceFetch: true,
-                });
-                expect(errorHandlerSpy).toHaveBeenCalledWith(error);
-            });
         });
 
         test('should make an xhr with options.fields', async () => {
-            const fields = ['shared_link', 'shared_link_features'];
-            const stringifiedFields = 'shared_link,shared_link_features';
-
             await item.share(file, 'access', 'success', 'error', {
-                fields,
+                fields: MOCK_FIELDS_LIST,
             });
-            expect(shareSuccessHandlerSpy).toHaveBeenCalledWith('success');
-            expect(xhrSpy.put).toHaveBeenCalledWith({
+            expect(shareSuccessHandlerSpy).toHaveBeenCalledWith(MOCK_DATA, MOCK_FIELDS_LIST);
+            expect(item.xhr.put).toHaveBeenCalledWith({
                 url: 'url',
                 data: { shared_link: { access: 'access' } },
-                params: { fields: stringifiedFields },
+                params: { fields: MOCK_FIELDS_STRING },
             });
             expect(getUrlSpy).toHaveBeenCalledWith('id');
             expect(getCacheKeySpy).toHaveBeenCalledWith('id');
