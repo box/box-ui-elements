@@ -28,7 +28,7 @@ import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
 import type { WithLoggerProps } from '../../common/types/logging';
-import type { ElementsXhrError, FetchOptions, ErrorContextProps } from '../../common/types/api';
+import type { ElementsXhrError, RequestOptions, ErrorContextProps } from '../../common/types/api';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { StringMap, Token, User, BoxItem } from '../../common/types/core';
 import type { AdditionalSidebarTab } from './flowTypes';
@@ -284,7 +284,7 @@ class ContentSidebar extends React.Component<Props, State> {
      * @param {Object|void} [fetchOptions] - Fetch options
      * @return {void}
      */
-    fetchFile(fetchOptions: FetchOptions = {}): void {
+    fetchFile(fetchOptions: RequestOptions = {}): void {
         const { fileId }: Props = this.props;
         this.setState({ isLoading: true });
         if (fileId && SidebarUtils.canHaveSidebar(this.props)) {

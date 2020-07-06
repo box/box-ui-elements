@@ -7,6 +7,7 @@
 import noop from 'lodash/noop';
 import setProp from 'lodash/set';
 import { getBadItemError, getBadPermissionsError } from '../utils/error';
+import { fillMissingProperties } from '../utils/fields';
 import Base from './Base';
 import {
     ACCESS_NONE,
@@ -17,8 +18,8 @@ import {
     ERROR_CODE_RENAME_ITEM,
     ERROR_CODE_SHARE_ITEM,
 } from '../constants';
-import type { ElementsErrorCallback } from '../common/types/api';
-import type { BoxItem, FlattenedBoxItemCollection, FlattenedBoxItem, BoxItemPermission } from '../common/types/core';
+import type { ElementsErrorCallback, RequestData, RequestOptions } from '../common/types/api';
+import type { BoxItem, BoxItemPermission, FlattenedBoxItem, FlattenedBoxItemCollection } from '../common/types/core';
 import type APICache from '../utils/Cache';
 
 class Item extends Base {
@@ -259,12 +260,22 @@ class Item extends Base {
      * Handles response for shared link
      *
      * @param {BoxItem} data - The updated item
+     * @param {Array<string>} [fields] - Optional fields from request
      * @return {void}
      */
-    shareSuccessHandler = ({ data }: { data: BoxItem }): void => {
+    shareSuccessHandler = (data: BoxItem, fields?: Array<string>): void => {
         if (!this.isDestroyed()) {
-            const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'shared_link', data.shared_link);
-            this.successCallback(updatedObject);
+            // Add fields that were requested but not returned
+            const dataWithMissingFields = fields ? fillMissingProperties(data, fields) : data;
+            const cache: APICache = this.getCache();
+            const key = this.getCacheKey(this.id);
+
+            if (cache.has(key)) {
+                cache.merge(key, dataWithMissingFields);
+            } else {
+                cache.set(key, dataWithMissingFields);
+            }
+            this.successCallback(cache.get(key));
         }
     };
 
@@ -275,13 +286,17 @@ class Item extends Base {
      * @param {string} access - Shared access level
      * @param {Function} successCallback - Success callback
      * @param {Function|void} errorCallback - Error callback
-     * @return {void}
+     * @param {Array<string>|void} [options.fields] - Optionally include specific fields
+     * @param {boolean|void} [options.forceFetch] - Optionally bypasse the cache
+     * @param {boolean|void} [options.refreshCache] - Optionally update the cache
+     * @return {Promise<void>}
      */
-    share(
+    async share(
         item: BoxItem,
         access: string,
         successCallback: Function,
         errorCallback: ElementsErrorCallback = noop,
+        options: RequestOptions = {},
     ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
@@ -300,23 +315,35 @@ class Item extends Base {
             return Promise.reject();
         }
 
-        this.id = id;
-        this.successCallback = successCallback;
-        this.errorCallback = errorCallback;
+        const cache: APICache = this.getCache();
+        const key: string = this.getCacheKey(id);
+        const isCached: boolean = !options.forceFetch && cache.has(key);
 
-        // We use the parent folder's auth token since use case involves
-        // only content explorer or picker which works onf folder tokens
-        return this.xhr
-            .put({
+        if (isCached) {
+            return successCallback(cache.get(key));
+        }
+
+        try {
+            this.id = id;
+            this.successCallback = successCallback;
+            this.errorCallback = errorCallback;
+
+            const { fields } = options;
+            const requestData: RequestData = {
                 url: this.getUrl(this.id),
                 data: {
                     shared_link: access === ACCESS_NONE ? null : { access },
                 },
-            })
-            .then(this.shareSuccessHandler)
-            .catch((e: $AxiosError<any>) => {
-                this.errorHandler(e);
-            });
+            };
+            if (fields) {
+                requestData.params = { fields: fields.toString() };
+            }
+
+            const { data } = await this.xhr.put(requestData);
+            return this.shareSuccessHandler(data, fields);
+        } catch (e) {
+            return this.errorHandler(e);
+        }
     }
 }
 

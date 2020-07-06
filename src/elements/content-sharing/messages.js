@@ -21,6 +21,11 @@ const messages = defineMessages({
         description: 'Message that appears when the item for the ContentSharing Element cannot be found.',
         id: 'be.contentSharing.notFoundError',
     },
+    sharedLinkUpdateError: {
+        defaultMessage: 'Could not update the shared link for this item.',
+        description: 'Message that appears when the shared link in the ContentSharing Element cannot be updated.',
+        id: 'be.contentSharing.sharedLinkUpdateError',
+    },
 });
 
 export default messages;

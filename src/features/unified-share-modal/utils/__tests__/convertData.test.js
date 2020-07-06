@@ -206,6 +206,7 @@ describe('convertItemResponse()', () => {
                     type: itemType,
                     typedID,
                 },
+                originalItemPermissions: permissions,
                 sharedLink: sharedLink
                     ? {
                           accessLevel: ANYONE_IN_COMPANY,

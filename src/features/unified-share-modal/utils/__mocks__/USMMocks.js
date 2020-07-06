@@ -2,7 +2,7 @@
  * Mocks that represent the internal data formats of the UnifiedShareModal and its child components
  */
 const MOCK_SHARED_LINK = {
-    accessLevel: 'company',
+    accessLevel: 'peopleInThisItem',
     allowedAccessLevels: {
         peopleInThisItem: false,
         peopleInYourCompany: true,
@@ -25,12 +25,32 @@ const MOCK_SHARED_LINK = {
     isPasswordAvailable: true,
     isPasswordEnabled: true,
     isPreviewAllowed: true,
-    permissionLevel: 'peopleInYourCompany',
+    permissionLevel: 'canViewDownload',
     url: '',
     vanityName: true,
 };
+
+const MOCK_NULL_SHARED_LINK = { canInvite: true };
+
+const MOCK_ITEM_ID = '123456789';
+
+const MOCK_ITEM_PERMISSIONS = {
+    can_download: true,
+    can_preview: true,
+    can_upload: true,
+    can_comment: true,
+    can_rename: true,
+    can_delete: true,
+    can_share: true,
+    can_set_share_access: true,
+    can_invite_collaborator: true,
+    can_annotate: true,
+    can_view_annotations_all: true,
+    can_view_annotations_self: true,
+};
+
 const MOCK_ITEM = {
-    id: '',
+    id: MOCK_ITEM_ID,
     description: '',
     extension: '',
     grantedPermissions: {
@@ -47,9 +67,22 @@ const MOCK_ITEM_API_RESPONSE = {
     shared_link_features: {},
 };
 
+const MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK = {
+    item: MOCK_ITEM,
+    shared_link: null,
+    shared_link_features: {},
+};
+
 const MOCK_CONVERTED_ITEM_DATA = {
     item: MOCK_ITEM,
+    originalItemPermissions: {},
     sharedLink: MOCK_SHARED_LINK,
+};
+
+const MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK = {
+    item: MOCK_ITEM,
+    originalItemPermissions: {},
+    sharedLink: MOCK_NULL_SHARED_LINK,
 };
 
 const MOCK_USER_API_RESPONSE = {
@@ -75,8 +108,13 @@ const MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION = {
 export {
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE,
+    MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK,
+    MOCK_ITEM_ID,
+    MOCK_ITEM_PERMISSIONS,
     MOCK_CONVERTED_ITEM_DATA,
+    MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
     MOCK_CONVERTED_USER_DATA,
+    MOCK_NULL_SHARED_LINK,
     MOCK_SHARED_LINK,
     MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
     MOCK_USER_API_RESPONSE,
