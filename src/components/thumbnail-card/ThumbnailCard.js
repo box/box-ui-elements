@@ -11,10 +11,10 @@ import './ThumbnailCard.scss';
 type Props = {
     actionItem?: React.Node,
     className?: string,
-    expandOnHover?: boolean,
     icon?: React.Node,
     id?: string,
     setIsCardInFocus: (isInFocus: string) => void,
+    shadowOnHover?: boolean,
     subtitle?: React.Node,
     thumbnail: React.Node,
     title: React.Node,
@@ -25,7 +25,7 @@ const ThumbnailCard = ({
     className = '',
     icon,
     id,
-    expandOnHover = false,
+    shadowOnHover = false,
     setIsCardInFocus = noop,
     subtitle,
     title,
@@ -41,7 +41,7 @@ const ThumbnailCard = ({
         }}
         role="button"
         tabIndex="0"
-        className={classNames('thumbnail-card', className, { 'is-expanded': expandOnHover })}
+        className={classNames('thumbnail-card', className, { 'is-shadow-applied': shadowOnHover })}
         {...rest}
     >
         <ThumbnailCardThumbnail thumbnail={thumbnail} />

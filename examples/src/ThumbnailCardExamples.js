@@ -36,7 +36,7 @@ const ThumbnailCardExamples = () => {
             <PlainButton
                 onFocus={event => setIsCardInFocus(event.currentTarget.id)}
                 onBlur={event => {
-                    if (!event.relatedTarget.contains(event.currentTarget)) {
+                    if (event.relatedTarget && !event.relatedTarget.contains(event.currentTarget)) {
                         setIsCardInFocus('');
                     }
                 }}
@@ -66,27 +66,13 @@ const ThumbnailCardExamples = () => {
             </div>
             <br />
             <div>
-                <h1>Expand on Hover Example</h1>
+                <h1>Shadow on Hover Example</h1>
                 <br />
-                <ThumbnailCard expandOnHover thumbnail={thumbnail} title={title} />
+                <ThumbnailCard shadowOnHover thumbnail={thumbnail} title={title} />
             </div>
             <br />
             <div>
-                <h1>Expand on Hover with Action Item Example</h1>
-                <br />
-                <ThumbnailCard
-                    actionItem={actionItem}
-                    id={0}
-                    className="is-card-in-focus"
-                    setIsCardInFocus={setIsCardInFocus}
-                    expandOnHover
-                    thumbnail={thumbnail}
-                    title={title}
-                />
-            </div>
-            <br />
-            <div>
-                <h1>Multiple Cards Example</h1>
+                <h1>Multiple Cards Example with Action Item</h1>
                 <div
                     style={{
                         display: 'flex',
@@ -100,8 +86,8 @@ const ThumbnailCardExamples = () => {
                             className={isCardInFocus === i ? 'is-card-in-focus' : ''}
                             icon={icon}
                             id={i}
-                            expandOnHover
                             setIsCardInFocus={setIsCardInFocus}
+                            shadowOnHover
                             subtitle={subtitle}
                             thumbnail={thumbnail}
                             title={title}

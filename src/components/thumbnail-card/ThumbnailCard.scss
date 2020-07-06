@@ -13,14 +13,12 @@
     box-shadow: 0 5px 10px 0 rgba(198, 198, 198, .2);
 }
 
-// We should expand the card only when it is hovered or the action item is active
-.thumbnail-card.is-expanded {
+// We should apply shadow to the card only when it is hovered or the action item is active
+.thumbnail-card.is-shadow-applied {
     &.is-card-in-focus,
     &:focus,
     &:hover {
-        box-shadow: 0 4px 24px 0 rgba(0, 0, 0, .2);
-        transform: translate3d(0, -1px, 0) scale(1.25);
-        transition-duration: $bdl-transitionDurationBase;
+        box-shadow: 0 4px 24px 0 rgba(0, 0, 0, .1);
     }
 }
 
