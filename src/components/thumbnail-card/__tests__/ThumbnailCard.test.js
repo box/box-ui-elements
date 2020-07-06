@@ -28,11 +28,11 @@ describe('components/thumbnail-card/ThumbnailCard', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should apply is-expanded selector if expandOnHover is true', () => {
-        const expandOnHover = true;
-        const wrapper = getWrapper({ expandOnHover });
+    test('should apply is-shadow-applied selector if shadowOnHover is true', () => {
+        const shadowOnHover = true;
+        const wrapper = getWrapper({ shadowOnHover });
 
-        const container = wrapper.find('.is-expanded');
+        const container = wrapper.find('.is-shadow-applied');
         expect(container.length).toBe(1);
     });
 });
