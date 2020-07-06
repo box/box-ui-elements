@@ -80,6 +80,7 @@ export type DefaultTooltipProps = {
 };
 
 export type TooltipProps = {
+    /** An HTML element to append the tooltip container into (otherwise appends to body) */
     bodyElement?: HTMLElement;
     /** A React element to put the tooltip on */
     children: React.ReactChild;
