@@ -71,6 +71,7 @@ function getConfig(isReactExternalized) {
                 'box-ui-elements/es': path.join(__dirname, '../src'), // for examples only
                 examples: path.join(__dirname, '../examples/src'), // for examples only
                 'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
+                'box-locale-data': path.resolve(`node_modules/@box/cldr-data/locale-data/${language}`),
                 'rsg-components/Wrapper': path.join(__dirname, '../examples/Wrapper'), // for examples only
             },
         },

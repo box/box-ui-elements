@@ -9,31 +9,17 @@ import type { $AxiosError } from 'axios';
 import API from '../../api';
 import Internationalize from '../common/Internationalize';
 import ErrorMask from '../../components/error-mask/ErrorMask';
-import Notification from '../../components/notification/Notification';
-import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
 import UnifiedShareModal from '../../features/unified-share-modal';
+import SharingNotification from './SharingNotification';
 import usmMessages from '../../features/unified-share-modal/messages';
 import { convertItemResponse, convertUserResponse } from '../../features/unified-share-modal/utils/convertData';
-import {
-    ACCESS_COLLAB,
-    ACCESS_NONE,
-    CLIENT_NAME_CONTENT_SHARING,
-    FIELD_ENTERPRISE,
-    FIELD_HOSTNAME,
-    STATUS_ERROR,
-    TYPE_FILE,
-    TYPE_FOLDER,
-} from '../../constants';
-import {
-    CONTENT_SHARING_ERRORS,
-    CONTENT_SHARING_ITEM_FIELDS,
-    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-} from './constants';
+import { CLIENT_NAME_CONTENT_SHARING, FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FILE, TYPE_FOLDER } from '../../constants';
+import { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS } from './constants';
 import contentSharingMessages from './messages';
 import type { ErrorResponseData } from '../../common/types/api';
-import type { BoxItemPermission, ItemType, NotificationType, StringMap } from '../../common/types/core';
+import type { BoxItemPermission, ItemType } from '../../common/types/core';
 import type { item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
-import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType } from './types';
+import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType, SharedLinkUpdateFnType } from './types';
 
 type ContentSharingProps = {
     apiHost: string,
@@ -43,8 +29,6 @@ type ContentSharingProps = {
     language: string,
     token: string,
 };
-
-type SharedLinkUpdateFnType = () => () => Promise<void>;
 
 const createAPI = (apiHost, itemID, itemType, token) =>
     new API({
@@ -61,8 +45,6 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     const [currentUserID, setCurrentUserID] = React.useState<string | null>(null);
     const [itemPermissions, setItemPermissions] = React.useState<BoxItemPermission | null>(null);
     const [componentErrorMessage, setComponentErrorMessage] = React.useState<Object | null>(null);
-    const [notifications, setNotifications] = React.useState<{ [string]: typeof Notification }>({});
-    const [notificationID, setNotificationID] = React.useState<number>(0);
     const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateFnType>(null);
     const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateFnType>(null);
 
@@ -149,119 +131,24 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         }
     }, [api, getError, item, itemID, itemType, sharedLink, currentUserID]);
 
-    // Close a notification
-    const handleNotificationClose = React.useCallback(
-        (id: number) => {
-            const updatedNotifications = { ...notifications };
-            delete updatedNotifications[id];
-            setNotifications(updatedNotifications);
-        },
-        [notifications],
-    );
-
-    // Create a notification
-    const createNotification = React.useCallback(
-        (notificationType: NotificationType, message: StringMap) => {
-            return (
-                <Notification
-                    duration="short"
-                    key={notificationID}
-                    onClose={() => handleNotificationClose(notificationID)}
-                    type={notificationType}
-                >
-                    <span>
-                        <FormattedMessage {...message} />
-                    </span>
-                </Notification>
-            );
-        },
-        [handleNotificationClose, notificationID],
-    );
-
-    // Generate the onAddLink and onRemoveLink functions for the item
-    React.useEffect(() => {
-        // Handle successful PUT requests to /files or /folders
-        const handleUpdateItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
-            const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
-            setItem(prevItem => ({ ...prevItem, ...updatedItem }));
-            setSharedLink(prevSharedLink => ({ ...prevSharedLink, ...updatedSharedLink }));
-        };
-
-        const handleRemoveSharedLinkSuccess = (itemData: ContentSharingItemAPIResponse) => {
-            const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
-            setItem(prevItem => ({ ...prevItem, ...updatedItem }));
-            setSharedLink(updatedSharedLink);
-        };
-
-        // Handle failed PUT requests to /files or /folders
-        const handleUpdateItemError = () => {
-            const updatedNotifications = { ...notifications };
-            updatedNotifications[notificationID] = createNotification(
-                STATUS_ERROR,
-                contentSharingMessages.sharedLinkUpdateError,
-            );
-            setNotifications(updatedNotifications);
-            setNotificationID(notificationID + 1);
-        };
-
-        if (item && itemPermissions && !onAddLink) {
-            const dataForAPI = {
-                id: itemID,
-                permissions: itemPermissions,
-            };
-
-            let itemAPIInstance;
-            if (itemType === TYPE_FILE) {
-                itemAPIInstance = api.getFileAPI();
-            } else if (itemType === TYPE_FOLDER) {
-                itemAPIInstance = api.getFolderAPI();
-            }
-
-            const updatedOnAddLink: SharedLinkUpdateFnType = () => () =>
-                itemAPIInstance.share(
-                    dataForAPI,
-                    ACCESS_COLLAB,
-                    handleUpdateItemSuccess,
-                    handleUpdateItemError,
-                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                );
-            setOnAddLink(updatedOnAddLink);
-
-            const updatedOnRemoveLink: SharedLinkUpdateFnType = () => () =>
-                itemAPIInstance.share(
-                    dataForAPI,
-                    ACCESS_NONE,
-                    handleRemoveSharedLinkSuccess,
-                    handleUpdateItemError,
-                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                );
-            setOnRemoveLink(updatedOnRemoveLink);
-        }
-    }, [
-        api,
-        createNotification,
-        item,
-        itemID,
-        itemPermissions,
-        itemType,
-        notificationID,
-        notifications,
-        onAddLink,
-        setOnAddLink,
-        sharedLink,
-    ]);
-
     if (componentErrorMessage) {
         return <ErrorMask errorHeader={<FormattedMessage {...componentErrorMessage} />} />;
     }
 
     if (item && sharedLink) {
         return (
-            <>
-                <NotificationsWrapper>
-                    <>{[...Object.values(notifications)]}</>
-                </NotificationsWrapper>
-                <Internationalize language={language} messages={usmMessages}>
+            <Internationalize language={language} messages={usmMessages}>
+                <>
+                    <SharingNotification
+                        api={api}
+                        itemID={itemID}
+                        itemPermissions={itemPermissions}
+                        itemType={itemType}
+                        setItem={setItem}
+                        setOnAddLink={setOnAddLink}
+                        setOnRemoveLink={setOnRemoveLink}
+                        setSharedLink={setSharedLink}
+                    />
                     <UnifiedShareModal
                         canInvite={sharedLink.canInvite}
                         changeSharedLinkAccessLevel={() => Promise.resolve([])} // to do: replace with a PUT to the Shared Link API
@@ -277,8 +164,8 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         onRemoveLink={onRemoveLink}
                         sharedLink={sharedLink}
                     />
-                </Internationalize>
-            </>
+                </>
+            </Internationalize>
         );
     }
     return null;

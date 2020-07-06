@@ -57,3 +57,5 @@ export type ContentSharingItemAPIResponse = {
     },
     type: ItemType,
 };
+
+export type SharedLinkUpdateFnType = () => () => Promise<void>;

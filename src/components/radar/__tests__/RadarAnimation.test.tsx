@@ -64,6 +64,15 @@ describe('components/radar/RadarAnimation', () => {
         expect(wrapper.find('.radar').prop('data-resin-target')).toBe('radaranimation1');
     });
 
+    test('should render with custom offset when provided', () => {
+        const offset = '0 10px';
+        const wrapper = getWrapper({
+            offset,
+        });
+
+        expect(wrapper.prop('offset')).toEqual(offset);
+    });
+
     describe('isShown', () => {
         test('should be shown when isShown is not provided', () => {
             expect(

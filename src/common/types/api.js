@@ -25,7 +25,7 @@ type JSONPatch = {
 
 type JSONPatchOperations = Array<JSONPatch>;
 
-type FetchOptions = {
+type RequestOptions = {
     fields?: Array<string>,
     forceFetch?: boolean,
     noPagination?: boolean,
@@ -34,7 +34,7 @@ type FetchOptions = {
 
 type PayloadType = StringAnyMap | Array<StringAnyMap>;
 
-type FetchData = {
+type RequestData = {
     data: PayloadType,
     headers?: StringMap,
     id?: string,
@@ -95,8 +95,8 @@ export type {
     ElementsXhrError,
     ErrorContextProps,
     ErrorResponseData,
-    FetchData,
-    FetchOptions,
+    RequestData,
+    RequestOptions,
     JSONPatchOperations,
     Method,
     PayloadType,
