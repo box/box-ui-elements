@@ -105,7 +105,7 @@ function SharingNotification({
         };
 
         if (itemPermissions) {
-            const dataForAPI = {
+            const itemData = {
                 id: itemID,
                 permissions: itemPermissions,
             };
@@ -118,32 +118,22 @@ function SharingNotification({
             }
 
             const createSharedLinkAPIConnection = (
-                accessType: ?string,
+                accessType: string,
                 options?: RequestOptions = CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                sharedLinkRequestBody?: SharedLinkUpdateType,
                 successFn?: (itemData: ContentSharingItemAPIResponse) => void = handleUpdateItemSuccess,
             ) => {
-                return itemAPIInstance.share(
-                    dataForAPI,
-                    accessType,
-                    successFn,
-                    handleUpdateItemError,
-                    options,
-                    sharedLinkRequestBody,
-                );
+                return itemAPIInstance.share(itemData, accessType, successFn, handleUpdateItemError, options);
             };
 
             const updatedOnAddLinkFn: SharedLinkUpdateFnType = () => () => createSharedLinkAPIConnection(ACCESS_COLLAB);
             setOnAddLink(updatedOnAddLinkFn);
 
             const updatedOnRemoveLinkFn: SharedLinkUpdateFnType = () => () =>
-                createSharedLinkAPIConnection(ACCESS_NONE, undefined, undefined, handleRemoveSharedLinkSuccess);
+                createSharedLinkAPIConnection(ACCESS_NONE, undefined, handleRemoveSharedLinkSuccess);
             setOnRemoveLink(updatedOnRemoveLinkFn);
 
-            const updatedChangeSharedLinkAccessLevelFn: SharedLinkUpdateFnType = () => (newAccessLevel: ?string) => {
-                const level = newAccessLevel ? USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel] : undefined;
-                return createSharedLinkAPIConnection(level);
-            };
+            const updatedChangeSharedLinkAccessLevelFn: SharedLinkUpdateFnType = () => (newAccessLevel: ?string) =>
+                createSharedLinkAPIConnection(USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel]);
             setChangeSharedLinkAccessLevel(updatedChangeSharedLinkAccessLevelFn);
 
             const updatedChangeSharedLinkPermissionLevelFn: SharedLinkUpdateFnType = () => (
@@ -157,9 +147,15 @@ function SharingNotification({
                         updatedSharedLinkPermissions[USM_TO_API_PERMISSION_LEVEL_MAP[level]] = false;
                     }
                 });
-                return createSharedLinkAPIConnection(undefined, CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS, {
-                    permissions: updatedSharedLinkPermissions,
-                });
+                return itemAPIInstance.updateSharedLink(
+                    itemData,
+                    {
+                        permissions: updatedSharedLinkPermissions,
+                    },
+                    handleUpdateItemSuccess,
+                    handleUpdateItemError,
+                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+                );
             };
             setChangeSharedLinkPermissionLevel(updatedChangeSharedLinkPermissionLevelFn);
         }
