@@ -76,9 +76,11 @@ type Order = {
 
 type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN | typeof ACCESS_NONE;
 
-type InlineNoticeType = 'warning' | 'error' | 'success' | 'info' | 'generic';
+type NoticeType = 'info' | 'error';
 
-type NotificationType = 'default' | 'info' | 'warn' | 'error';
+type InlineNoticeType = NoticeType | 'warning' | 'success' | 'generic';
+
+type NotificationType = NoticeType | 'default' | 'warn';
 
 type ItemType = typeof ITEM_TYPE_FOLDER | typeof ITEM_TYPE_FILE | typeof ITEM_TYPE_WEBLINK;
 
@@ -270,7 +272,7 @@ type SharedLink = {
     vanity_url?: string,
 };
 
-type SharedLinkUpdate = {
+type SharedLinkUpdateType = {
     access?: Access,
     download_count?: number,
     download_url?: string,
@@ -437,7 +439,7 @@ export type {
     Order,
     SharedLink,
     SharedLinkPermission,
-    SharedLinkUpdate,
+    SharedLinkUpdateType,
     InlineNoticeType,
     ItemType,
     Delimiter,

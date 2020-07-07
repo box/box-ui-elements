@@ -40,11 +40,12 @@ import {
     MOCK_USER_API_RESPONSE,
     MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK,
 } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
+import SharingNotification from '../SharingNotification';
 
 jest.mock('../../../api');
 jest.mock('../../../features/unified-share-modal/utils/convertData');
 
-describe('elements/unified-share-modal-element/ContentSharing', () => {
+describe('elements/content-sharing/ContentSharing', () => {
     const getWrapper = props =>
         mount(<ContentSharing apiHost={DEFAULT_HOSTNAME_API} itemID={MOCK_ITEM_ID} language="" token="" {...props} />);
 
@@ -95,6 +96,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
             expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
+            expect(wrapper.exists(SharingNotification)).toBe(true);
         });
 
         test('should call getFolderAPI().getFolderFields() if itemType is "folder"', async () => {
@@ -115,6 +117,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
             expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
+            expect(wrapper.exists(SharingNotification)).toBe(true);
         });
 
         test('should call getUsersAPI().getUser() if item and sharedLink are defined, but currentUserID is not', async () => {
@@ -138,6 +141,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             expect(convertUserResponse).toHaveBeenCalledWith(MOCK_USER_API_RESPONSE);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
             expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
+            expect(wrapper.exists(SharingNotification)).toBe(true);
         });
     });
 
@@ -164,6 +168,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             expect(convertItemResponse).not.toHaveBeenCalled();
             expect(wrapper.exists(ErrorMask)).toBe(true);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
+            expect(wrapper.exists(SharingNotification)).toBe(false);
         });
 
         test('should show the ErrorMask and skip the call to getUser() if the call to getFolderFields() fails', async () => {
@@ -188,6 +193,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             expect(convertItemResponse).not.toHaveBeenCalled();
             expect(wrapper.exists(ErrorMask)).toBe(true);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
+            expect(wrapper.exists(SharingNotification)).toBe(false);
         });
     });
 
@@ -222,6 +228,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             expect(convertUserResponse).not.toHaveBeenCalled();
             expect(wrapper.exists(ErrorMask)).toBe(true);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
+            expect(wrapper.exists(SharingNotification)).toBe(false);
         });
 
         test('should show the ErrorMask if the call to getFolderFields() succeeds, but the call to getUser() fails', async () => {
@@ -236,6 +243,7 @@ describe('elements/unified-share-modal-element/ContentSharing', () => {
             expect(convertUserResponse).not.toHaveBeenCalled();
             expect(wrapper.exists(ErrorMask)).toBe(true);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
+            expect(wrapper.exists(SharingNotification)).toBe(false);
         });
     });
 

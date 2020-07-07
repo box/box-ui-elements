@@ -58,7 +58,7 @@ import {
 import type { Annotation } from '../../common/types/feed';
 import type { ErrorType, AdditionalVersionInfo } from '../common/flowTypes';
 import type { WithLoggerProps } from '../../common/types/logging';
-import type { FetchOptions, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
+import type { RequestOptions, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { StringMap, Token, BoxItem, BoxItemVersion } from '../../common/types/core';
 import type { VersionChangeCallback } from '../content-sidebar/versions';
 import type { FeatureConfig } from '../common/feature-checking';
@@ -895,7 +895,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         id: ?string,
         successCallback?: Function,
         errorCallback?: Function,
-        fetchOptions: FetchOptions = {},
+        fetchOptions: RequestOptions = {},
     ): void {
         if (!id) {
             return;

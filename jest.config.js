@@ -5,11 +5,12 @@ module.exports = {
     restoreMocks: true,
     moduleNameMapper: {
         'box-ui-elements-locale-data': '<rootDir>/i18n/en-US.js',
+        'box-locale-data': '<rootDir>/node_modules/@box/cldr-data/locale-data/en-US',
         '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
             '<rootDir>/scripts/jest/mocks/fileMock.js',
         '\\.(css|less|scss|md)$': '<rootDir>/scripts/jest/mocks/styleMock.js',
     },
-    transformIgnorePatterns: ['node_modules/(?!(react-virtualized/dist/es))'],
+    transformIgnorePatterns: ['node_modules/(?!(react-virtualized/dist/es|@box/cldr-data))'],
     testPathIgnorePatterns: ['/node_modules/', 'stories.test.js$', 'stories.test.tsx$'],
     collectCoverage: false,
     coverageDirectory: '<rootDir>/reports',

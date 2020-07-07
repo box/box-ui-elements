@@ -44,6 +44,7 @@ describe('components/tab-view/TabViewPrimitive', () => {
         expect(component.hasClass('tab-view')).toBe(true);
         expect(component.instance().handleKeyDown).toEqual(component.instance().handleKeyDown);
         expect(component.find('.tabs').find('button').length).toEqual(2);
+        expect(component.find({ tabIndex: 0 }).toBeFalsy);
     });
 
     test('should render tabview ui with link tabs', () => {

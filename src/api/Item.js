@@ -18,14 +18,14 @@ import {
     ERROR_CODE_RENAME_ITEM,
     ERROR_CODE_SHARE_ITEM,
 } from '../constants';
-import type { ElementsErrorCallback, FetchData, FetchOptions } from '../common/types/api';
 import type {
     BoxItem,
     BoxItemPermission,
     FlattenedBoxItem,
     FlattenedBoxItemCollection,
-    SharedLinkUpdate,
+    SharedLinkUpdateType,
 } from '../common/types/core';
+import type { ElementsErrorCallback, RequestData, RequestOptions } from '../common/types/api';
 import type APICache from '../utils/Cache';
 
 class Item extends Base {
@@ -266,12 +266,22 @@ class Item extends Base {
      * Handles response for shared link
      *
      * @param {BoxItem} data - The updated item
+     * @param {Array<string>} [fields] - Optional fields from request
      * @return {void}
      */
-    shareSuccessHandler = (data: BoxItem): void => {
+    shareSuccessHandler = (data: BoxItem, fields?: Array<string>): void => {
         if (!this.isDestroyed()) {
-            const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'shared_link', data.shared_link);
-            this.successCallback(updatedObject);
+            // Add fields that were requested but not returned
+            const dataWithMissingFields = fields ? fillMissingProperties(data, fields) : data;
+            const cache: APICache = this.getCache();
+            const key = this.getCacheKey(this.id);
+
+            if (cache.has(key)) {
+                cache.merge(key, dataWithMissingFields);
+            } else {
+                cache.set(key, dataWithMissingFields);
+            }
+            this.successCallback(cache.get(key));
         }
     };
 
@@ -282,10 +292,10 @@ class Item extends Base {
      * @param {string|undefined} access - Shared access level; potentially undefined if there are no access changes
      * @param {Function} successCallback - Success callback
      * @param {Function|void} errorCallback - Error callback
-     * @param {Array<string>|void} options.fields - Optionally include specific fields
-     * @param {boolean|void} [options.forceFetch] - Optionally bypasses the cache
-     * @param {boolean|void} [options.refreshCache] - Optionally updates the cache
-     * @param {Object} sharedLinkRequestBody - Optional custom request body for updating the shared
+     * @param {Array<string>|void} [options.fields] - Optionally include specific fields
+     * @param {boolean|void} [options.forceFetch] - Optionally bypasse the cache
+     * @param {boolean|void} [options.refreshCache] - Optionally update the cache
+     * @param {SharedLinkUpdateType} [sharedLinkRequestBody] - Optional custom request body for updating the shared link
      * @return {Promise<void>}
      */
     async share(
@@ -293,8 +303,8 @@ class Item extends Base {
         access: ?string,
         successCallback: Function,
         errorCallback: ElementsErrorCallback = noop,
-        options: FetchOptions = {},
-        sharedLinkRequestBody?: SharedLinkUpdate,
+        options: RequestOptions = {},
+        sharedLinkRequestBody?: SharedLinkUpdateType,
     ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
@@ -322,8 +332,6 @@ class Item extends Base {
         }
 
         try {
-            // We use the parent folder's auth token since use case involves
-            // only content explorer or picker which works on folder tokens
             this.id = id;
             this.successCallback = successCallback;
             this.errorCallback = errorCallback;
@@ -336,27 +344,18 @@ class Item extends Base {
                 updatedSharedLink = access === ACCESS_NONE ? null : { access };
             }
 
-            const fetchData: FetchData = {
+            const requestData: RequestData = {
                 url: this.getUrl(this.id),
                 data: {
                     shared_link: updatedSharedLink,
                 },
             };
             if (fields) {
-                fetchData.params = { fields: fields.toString() };
+                requestData.params = { fields: fields.toString() };
             }
 
-            const { data } = await this.xhr.put(fetchData);
-
-            const dataWithMissingFields = fillMissingProperties(data, fields);
-
-            if (cache.has(key)) {
-                cache.merge(key, dataWithMissingFields);
-            } else {
-                cache.set(key, dataWithMissingFields);
-            }
-
-            return this.shareSuccessHandler(cache.get(key));
+            const { data } = await this.xhr.put(requestData);
+            return this.shareSuccessHandler(data, fields);
         } catch (e) {
             return this.errorHandler(e);
         }
