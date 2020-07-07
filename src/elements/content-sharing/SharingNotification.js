@@ -5,16 +5,16 @@ import type { MessageDescriptor } from 'react-intl';
 import API from '../../api';
 import Notification from '../../components/notification/Notification';
 import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
-import { convertItemResponse } from '../../features/unified-share-modal/utils/convertData';
-import { ACCESS_COLLAB, ACCESS_NONE, STATUS_ERROR, TYPE_FILE, TYPE_FOLDER } from '../../constants';
-import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from './constants';
 import {
+    convertItemResponse,
     USM_TO_API_ACCESS_LEVEL_MAP,
     USM_TO_API_PERMISSION_LEVEL_MAP,
-} from '../../features/unified-share-modal/constants';
+} from '../../features/unified-share-modal/utils/convertData';
+import { ACCESS_COLLAB, ACCESS_NONE, STATUS_ERROR, TYPE_FILE, TYPE_FOLDER } from '../../constants';
+import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from './constants';
 import contentSharingMessages from './messages';
 import type { RequestOptions } from '../../common/types/api';
-import type { BoxItemPermission, ItemType, NotificationType, SharedLinkUpdateType } from '../../common/types/core';
+import type { BoxItemPermission, ItemType, NotificationType } from '../../common/types/core';
 import type { item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
 import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType, SharedLinkUpdateFnType } from './types';
 

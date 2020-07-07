@@ -13,10 +13,10 @@ import {
     ACCESS_NONE,
     ACCESS_OPEN,
     DEFAULT_HOSTNAME_API,
-    TYPE_FILE,
-    TYPE_FOLDER,
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_PREVIEW,
+    TYPE_FILE,
+    TYPE_FOLDER,
 } from '../../../constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from '../constants';
 import {

@@ -1,19 +1,61 @@
 // @flow
-import type { User } from '../../../common/types/core';
 import { getTypedFileId, getTypedFolderId } from '../../../utils/file';
-import { INVITEE_ROLE_EDITOR, TYPE_FOLDER } from '../../../constants';
-import { ALLOWED_ACCESS_LEVELS, API_TO_USM_ACCESS_LEVEL_MAP, API_TO_USM_PERMISSION_LEVEL_MAP } from '../constants';
+import {
+    ACCESS_COLLAB,
+    ACCESS_COMPANY,
+    ACCESS_NONE,
+    ACCESS_OPEN,
+    INVITEE_ROLE_EDITOR,
+    PERMISSION_CAN_DOWNLOAD,
+    PERMISSION_CAN_PREVIEW,
+    TYPE_FOLDER,
+} from '../../../constants';
+import {
+    ALLOWED_ACCESS_LEVELS,
+    ANYONE_IN_COMPANY,
+    ANYONE_WITH_LINK,
+    CAN_VIEW_DOWNLOAD,
+    CAN_VIEW_ONLY,
+    PEOPLE_IN_ITEM,
+} from '../constants';
 import type {
     ContentSharingItemAPIResponse,
     ContentSharingItemDataType,
     ContentSharingUserDataType,
 } from '../../../elements/content-sharing/types';
+import type { BoxItemPermission, User } from '../../../common/types/core';
+
+/**
+ * The following constants are used for converting API requests
+ * and responses into objects expected by the USM, and vice versa
+ */
+export const API_TO_USM_ACCESS_LEVEL_MAP = {
+    [ACCESS_COLLAB]: PEOPLE_IN_ITEM,
+    [ACCESS_COMPANY]: ANYONE_IN_COMPANY,
+    [ACCESS_OPEN]: ANYONE_WITH_LINK,
+    [ACCESS_NONE]: null,
+};
+export const API_TO_USM_PERMISSION_LEVEL_MAP = {
+    [PERMISSION_CAN_DOWNLOAD]: CAN_VIEW_DOWNLOAD,
+    [PERMISSION_CAN_PREVIEW]: CAN_VIEW_ONLY,
+};
+
+export const USM_TO_API_ACCESS_LEVEL_MAP = {
+    [ANYONE_IN_COMPANY]: ACCESS_COMPANY,
+    [ANYONE_WITH_LINK]: ACCESS_OPEN,
+    [PEOPLE_IN_ITEM]: ACCESS_COLLAB,
+};
+
+export const USM_TO_API_PERMISSION_LEVEL_MAP = {
+    [CAN_VIEW_DOWNLOAD]: PERMISSION_CAN_DOWNLOAD,
+    [CAN_VIEW_ONLY]: PERMISSION_CAN_PREVIEW,
+};
 
 /**
  * Convert a response from the Item API to the object that the USM expects.
  * @param {BoxItem} itemAPIData
  */
-const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): ContentSharingItemDataType => {
+export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): ContentSharingItemDataType => {
     const {
         allowed_invitee_roles,
         id,
@@ -111,7 +153,7 @@ const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): Conten
  * Convert a response from the User API into the object that the USM expects.
  * @param {User} userAPIData
  */
-const convertUserResponse = (userAPIData: User): ContentSharingUserDataType => {
+export const convertUserResponse = (userAPIData: User): ContentSharingUserDataType => {
     const { enterprise, hostname, id } = userAPIData;
 
     return {
@@ -123,4 +165,18 @@ const convertUserResponse = (userAPIData: User): ContentSharingUserDataType => {
     };
 };
 
-export { convertItemResponse, convertUserResponse };
+/**
+ * Create a shared link permissions object for the API based on a USM permission level.
+ * @param {string} newSharedLinkPermissionLevel
+ */
+export const createSharedLinkPermissions = (newSharedLinkPermissionLevel: string): $Shape<BoxItemPermission> => {
+    const sharedLinkPermissions = {};
+    Object.keys(USM_TO_API_PERMISSION_LEVEL_MAP).forEach(level => {
+        if (level === newSharedLinkPermissionLevel) {
+            sharedLinkPermissions[USM_TO_API_PERMISSION_LEVEL_MAP[level]] = true;
+        } else {
+            sharedLinkPermissions[USM_TO_API_PERMISSION_LEVEL_MAP[level]] = false;
+        }
+    });
+    return sharedLinkPermissions;
+};
