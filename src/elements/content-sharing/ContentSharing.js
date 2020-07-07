@@ -46,6 +46,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     const [itemPermissions, setItemPermissions] = React.useState<BoxItemPermission | null>(null);
     const [componentErrorMessage, setComponentErrorMessage] = React.useState<Object | null>(null);
     const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateFnType>(null);
+    const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateFnType>(null);
 
     // Reset the API if necessary
     React.useEffect(() => {
@@ -145,6 +146,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         itemType={itemType}
                         setItem={setItem}
                         setOnAddLink={setOnAddLink}
+                        setOnRemoveLink={setOnRemoveLink}
                         setSharedLink={setSharedLink}
                     />
                     <UnifiedShareModal
@@ -159,7 +161,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         initialDataReceived
                         item={item}
                         onAddLink={onAddLink}
-                        onRemoveLink={() => Promise.resolve([])} // to do: replace with a PUT to the Shared Link API
+                        onRemoveLink={onRemoveLink}
                         sharedLink={sharedLink}
                     />
                 </>

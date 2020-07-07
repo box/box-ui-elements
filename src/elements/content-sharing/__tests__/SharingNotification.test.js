@@ -15,6 +15,7 @@ jest.mock('../../../features/unified-share-modal/utils/convertData');
 describe('elements/content-sharing/SharingNotification', () => {
     const setItemStub = jest.fn();
     const setOnAddLinkStub = jest.fn();
+    const setOnRemoveLinkStub = jest.fn();
     const setSharedLinkStub = jest.fn();
     const share = jest.fn().mockImplementation((dataForAPI, accessType, successFn) => {
         return Promise.resolve(MOCK_ITEM_API_RESPONSE).then(response => {
@@ -35,19 +36,22 @@ describe('elements/content-sharing/SharingNotification', () => {
                 itemType={TYPE_FOLDER}
                 setItem={setItemStub}
                 setOnAddLink={setOnAddLinkStub}
+                setOnRemoveLink={setOnRemoveLinkStub}
                 setOnSharedLink={setSharedLinkStub}
                 {...props}
             />,
         );
 
-    test('should call setOnAddLink()', async () => {
+    test('should call setOnAddLink() and setOnRemoveLink()', async () => {
         getWrapper();
         expect(setOnAddLinkStub).toHaveBeenCalled();
+        expect(setOnRemoveLinkStub).toHaveBeenCalled();
     });
 
-    test('should not call setOnAddLink() if itemPermissions is null', () => {
+    test('should not call setOnAddLink() or setOnRemoveLink() if itemPermissions is null', () => {
         getWrapper({ itemPermissions: null });
         expect(setOnAddLinkStub).not.toHaveBeenCalled();
+        expect(setOnRemoveLinkStub).not.toHaveBeenCalled();
     });
 
     test('should render a NotificationsWrapper', async () => {

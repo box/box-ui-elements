@@ -7,7 +7,7 @@ import ErrorMask from '../../../components/error-mask/ErrorMask';
 import ContentSharing from '../ContentSharing';
 import Notification from '../../../components/notification/Notification';
 import UnifiedShareModal from '../../../features/unified-share-modal/UnifiedShareModal';
-import { ACCESS_COLLAB, DEFAULT_HOSTNAME_API, TYPE_FILE, TYPE_FOLDER } from '../../../constants';
+import { ACCESS_COLLAB, ACCESS_NONE, DEFAULT_HOSTNAME_API, TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from '../constants';
 import { convertItemResponse, convertUserResponse } from '../../../features/unified-share-modal/utils/convertData';
 import {
@@ -373,6 +373,33 @@ describe('elements/content-sharing/ContentSharing', () => {
             );
             expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
         });
+
+        test('should call share() from onRemoveLink() and remove the existing shared link', async () => {
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ itemType: TYPE_FILE });
+            });
+            wrapper.update();
+
+            const usm = wrapper.find(UnifiedShareModal);
+            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
+
+            convertItemResponse.mockReset();
+            convertItemResponse.mockReturnValue(MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK);
+
+            await act(async () => {
+                usm.invoke('onRemoveLink')();
+            });
+            wrapper.update();
+            expect(share).toHaveBeenCalledWith(
+                { id: MOCK_ITEM_ID, permissions: {} },
+                ACCESS_NONE,
+                expect.anything(),
+                expect.anything(),
+                CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+            );
+            expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_NULL_SHARED_LINK);
+        });
     });
 
     describe('with failed PUT requests to the Item API', () => {
@@ -395,20 +422,23 @@ describe('elements/content-sharing/ContentSharing', () => {
             }));
         });
 
-        test('should show an error notification if onAddLink() fails', async () => {
-            let wrapper;
-            await act(async () => {
-                wrapper = getWrapper({ itemType: TYPE_FOLDER });
-            });
-            wrapper.update();
-            expect(wrapper.exists(Notification)).toBe(false);
+        test.each(['onAddLink', 'onRemoveLink'])(
+            'should show an error notification if %s() fails',
+            async sharedLinkUpdateFn => {
+                let wrapper;
+                await act(async () => {
+                    wrapper = getWrapper({ itemType: TYPE_FOLDER });
+                });
+                wrapper.update();
+                expect(wrapper.exists(Notification)).toBe(false);
 
-            const usm = wrapper.find(UnifiedShareModal);
-            await act(async () => {
-                usm.invoke('onAddLink')();
-            });
-            wrapper.update();
-            expect(wrapper.exists(Notification)).toBe(true);
-        });
+                const usm = wrapper.find(UnifiedShareModal);
+                await act(async () => {
+                    usm.invoke(`${sharedLinkUpdateFn}`)();
+                });
+                wrapper.update();
+                expect(wrapper.exists(Notification)).toBe(true);
+            },
+        );
     });
 });

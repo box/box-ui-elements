@@ -6,7 +6,7 @@ import API from '../../api';
 import Notification from '../../components/notification/Notification';
 import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
 import { convertItemResponse } from '../../features/unified-share-modal/utils/convertData';
-import { ACCESS_COLLAB, STATUS_ERROR, TYPE_FILE, TYPE_FOLDER } from '../../constants';
+import { ACCESS_COLLAB, ACCESS_NONE, STATUS_ERROR, TYPE_FILE, TYPE_FOLDER } from '../../constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from './constants';
 import contentSharingMessages from './messages';
 import type { BoxItemPermission, ItemType, NotificationType } from '../../common/types/core';
@@ -20,6 +20,7 @@ type SharingNotificationProps = {
     itemType: ItemType,
     setItem: ((item: itemFlowType | null) => itemFlowType) => void,
     setOnAddLink: (addLink: SharedLinkUpdateFnType) => void,
+    setOnRemoveLink: (removeLink: SharedLinkUpdateFnType) => void,
     setSharedLink: ((sharedLink: ContentSharingSharedLinkType | null) => ContentSharingSharedLinkType) => void,
 };
 
@@ -30,6 +31,7 @@ function SharingNotification({
     itemType,
     setItem,
     setOnAddLink,
+    setOnRemoveLink,
     setSharedLink,
 }: SharingNotificationProps) {
     const [notifications, setNotifications] = React.useState<{ [string]: typeof Notification }>({});
@@ -76,6 +78,12 @@ function SharingNotification({
             }));
         };
 
+        const handleRemoveSharedLinkSuccess = (itemData: ContentSharingItemAPIResponse) => {
+            const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
+            setItem((prevItem: itemFlowType | null) => ({ ...prevItem, ...updatedItem }));
+            setSharedLink(() => updatedSharedLink);
+        };
+
         // Handle failed PUT requests to /files or /folders
         const handleUpdateItemError = () => {
             const updatedNotifications = { ...notifications };
@@ -109,6 +117,16 @@ function SharingNotification({
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 );
             setOnAddLink(updatedOnAddLink);
+
+            const updatedOnRemoveLink: SharedLinkUpdateFnType = () => () =>
+                itemAPIInstance.share(
+                    dataForAPI,
+                    ACCESS_NONE,
+                    handleRemoveSharedLinkSuccess,
+                    handleUpdateItemError,
+                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+                );
+            setOnRemoveLink(updatedOnRemoveLink);
         }
     }, [
         api,
@@ -120,6 +138,7 @@ function SharingNotification({
         notifications,
         setItem,
         setOnAddLink,
+        setOnRemoveLink,
         setSharedLink,
     ]);
 
