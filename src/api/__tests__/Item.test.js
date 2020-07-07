@@ -145,16 +145,6 @@ describe('api/Item', () => {
         const MOCK_UPDATED_ITEM = { shared_link: 'link' };
         const MOCK_MERGED_ITEM = { shared_link: 'link', permissions: {} };
         const MOCK_KEY = 'file_123456789';
-
-        const createGetCacheSpy = isCached => {
-            jest.spyOn(item, 'getCache').mockImplementation(() => ({
-                has: jest.fn().mockReturnValue(isCached),
-                get: getItemStub,
-                set: setItemStub,
-                merge: mergeItemStub,
-            }));
-        };
-
         beforeEach(() => {
             setItemStub = jest.fn();
             mergeItemStub = jest.fn();
@@ -175,7 +165,12 @@ describe('api/Item', () => {
         });
 
         test('should call merge() if cache has key', () => {
-            createGetCacheSpy(true);
+            jest.spyOn(item, 'getCache').mockImplementation(() => ({
+                has: jest.fn().mockReturnValue(true),
+                get: getItemStub,
+                set: setItemStub,
+                merge: mergeItemStub,
+            }));
             item.shareSuccessHandler(MOCK_UPDATED_ITEM);
             expect(getCacheKeySpy).toHaveBeenCalledWith('id');
             expect(mergeItemStub).toHaveBeenCalledWith(MOCK_KEY, MOCK_UPDATED_ITEM);
@@ -185,7 +180,12 @@ describe('api/Item', () => {
         });
 
         test('should call set() if cache does not have key', () => {
-            createGetCacheSpy(false);
+            jest.spyOn(item, 'getCache').mockImplementation(() => ({
+                has: jest.fn().mockReturnValue(false),
+                get: getItemStub,
+                set: setItemStub,
+                merge: mergeItemStub,
+            }));
             item.shareSuccessHandler(MOCK_UPDATED_ITEM);
             expect(getCacheKeySpy).toHaveBeenCalledWith('id');
             expect(setItemStub).toHaveBeenCalledWith(MOCK_KEY, MOCK_UPDATED_ITEM);
@@ -195,15 +195,14 @@ describe('api/Item', () => {
         });
 
         test('should call fillMissingProperties if there are fields', () => {
-            createGetCacheSpy(false);
+            jest.spyOn(item, 'getCache').mockImplementation(() => ({
+                has: jest.fn().mockReturnValue(false),
+                get: getItemStub,
+                set: setItemStub,
+                merge: mergeItemStub,
+            }));
             item.shareSuccessHandler(MOCK_UPDATED_ITEM, MOCK_FIELDS_LIST);
             expect(fillMissingProperties).toHaveBeenCalledWith(MOCK_UPDATED_ITEM, MOCK_FIELDS_LIST);
-        });
-
-        test('should not call fillMissingProperties if there are no fields', () => {
-            createGetCacheSpy(false);
-            item.shareSuccessHandler(MOCK_UPDATED_ITEM, undefined);
-            expect(fillMissingProperties).not.toHaveBeenCalled();
         });
     });
 
@@ -439,59 +438,18 @@ describe('api/Item', () => {
             });
         });
 
-        describe('with additional data', () => {
-            const MOCK_PERMISSIONS = {
-                can_download: false,
-                can_preview: true,
-            };
-
-            test('should make an xhr with options.fields', async () => {
-                await item.share(file, 'access', 'success', 'error', {
-                    fields: MOCK_FIELDS_LIST,
-                });
-                expect(shareSuccessHandlerSpy).toHaveBeenCalledWith(MOCK_DATA, MOCK_FIELDS_LIST);
-                expect(item.xhr.put).toHaveBeenCalledWith({
-                    url: 'url',
-                    data: { shared_link: { access: 'access' } },
-                    params: { fields: MOCK_FIELDS_STRING },
-                });
-                expect(getUrlSpy).toHaveBeenCalledWith('id');
-                expect(getCacheKeySpy).toHaveBeenCalledWith('id');
+        test('should make an xhr with options.fields', async () => {
+            await item.share(file, 'access', 'success', 'error', {
+                fields: MOCK_FIELDS_LIST,
             });
-
-            test('should make an xhr with a custom shared link request body', async () => {
-                await item.share(file, 'access', 'success', 'error', undefined, {
-                    permissions: MOCK_PERMISSIONS,
-                });
-                expect(shareSuccessHandlerSpy).toHaveBeenCalledWith(MOCK_DATA, undefined);
-                expect(item.xhr.put).toHaveBeenCalledWith({
-                    url: 'url',
-                    data: { shared_link: { permissions: MOCK_PERMISSIONS } },
-                });
-                expect(getUrlSpy).toHaveBeenCalledWith('id');
-                expect(getCacheKeySpy).toHaveBeenCalledWith('id');
+            expect(shareSuccessHandlerSpy).toHaveBeenCalledWith(MOCK_DATA, MOCK_FIELDS_LIST);
+            expect(item.xhr.put).toHaveBeenCalledWith({
+                url: 'url',
+                data: { shared_link: { access: 'access' } },
+                params: { fields: MOCK_FIELDS_STRING },
             });
-
-            test('should make an xhr with a custom shared link request body and options.fields', async () => {
-                await item.share(
-                    file,
-                    'access',
-                    'success',
-                    'error',
-                    { fields: MOCK_FIELDS_LIST },
-                    {
-                        permissions: MOCK_PERMISSIONS,
-                    },
-                );
-                expect(shareSuccessHandlerSpy).toHaveBeenCalledWith(MOCK_DATA, MOCK_FIELDS_LIST);
-                expect(item.xhr.put).toHaveBeenCalledWith({
-                    url: 'url',
-                    data: { shared_link: { permissions: MOCK_PERMISSIONS } },
-                    params: { fields: MOCK_FIELDS_STRING },
-                });
-                expect(getUrlSpy).toHaveBeenCalledWith('id');
-                expect(getCacheKeySpy).toHaveBeenCalledWith('id');
-            });
+            expect(getUrlSpy).toHaveBeenCalledWith('id');
+            expect(getCacheKeySpy).toHaveBeenCalledWith('id');
         });
     });
 

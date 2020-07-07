@@ -1,6 +1,6 @@
-import { convertItemResponse, convertUserResponse } from '../convertData';
+import { API_TO_USM_PERMISSION_LEVEL_MAP, convertItemResponse, convertUserResponse } from '../convertData';
 import { TYPE_FILE, TYPE_FOLDER } from '../../../../constants';
-import { ALLOWED_ACCESS_LEVELS, ANYONE_IN_COMPANY, API_TO_USM_PERMISSION_LEVEL_MAP } from '../../constants';
+import { ALLOWED_ACCESS_LEVELS, ANYONE_IN_COMPANY } from '../../constants';
 
 jest.mock('../../../../utils/file', () => ({
     getTypedFileId: () => 'f_190457309',

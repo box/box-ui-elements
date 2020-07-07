@@ -395,7 +395,6 @@ describe('elements/content-sharing/ContentSharing', () => {
                 expect.anything(),
                 expect.anything(),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                undefined,
             );
             expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
         });
@@ -423,7 +422,6 @@ describe('elements/content-sharing/ContentSharing', () => {
                 expect.anything(),
                 expect.anything(),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                undefined,
             );
             expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_NULL_SHARED_LINK);
         });
@@ -459,7 +457,6 @@ describe('elements/content-sharing/ContentSharing', () => {
                     expect.anything(),
                     expect.anything(),
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                    undefined,
                 );
                 expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(expectedItemData.sharedLink);
             },

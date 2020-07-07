@@ -18,14 +18,8 @@ import {
     ERROR_CODE_RENAME_ITEM,
     ERROR_CODE_SHARE_ITEM,
 } from '../constants';
-import type {
-    BoxItem,
-    BoxItemPermission,
-    FlattenedBoxItem,
-    FlattenedBoxItemCollection,
-    SharedLinkUpdateType,
-} from '../common/types/core';
 import type { ElementsErrorCallback, RequestData, RequestOptions } from '../common/types/api';
+import type { BoxItem, BoxItemPermission, FlattenedBoxItem, FlattenedBoxItemCollection } from '../common/types/core';
 import type APICache from '../utils/Cache';
 
 class Item extends Base {
@@ -289,22 +283,20 @@ class Item extends Base {
      * API to create or remove a shared link
      *
      * @param {Object} item - Item to share
-     * @param {string|undefined} access - Shared access level; potentially undefined if there are no access changes
+     * @param {string} access - Shared access level
      * @param {Function} successCallback - Success callback
      * @param {Function|void} errorCallback - Error callback
      * @param {Array<string>|void} [options.fields] - Optionally include specific fields
      * @param {boolean|void} [options.forceFetch] - Optionally bypasse the cache
      * @param {boolean|void} [options.refreshCache] - Optionally update the cache
-     * @param {SharedLinkUpdateType} [sharedLinkRequestBody] - Optional custom request body for updating the shared link
      * @return {Promise<void>}
      */
     async share(
         item: BoxItem,
-        access: ?string,
+        access: string,
         successCallback: Function,
         errorCallback: ElementsErrorCallback = noop,
         options: RequestOptions = {},
-        sharedLinkRequestBody?: SharedLinkUpdateType,
     ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
@@ -335,19 +327,12 @@ class Item extends Base {
             this.id = id;
             this.successCallback = successCallback;
             this.errorCallback = errorCallback;
+
             const { fields } = options;
-
-            let updatedSharedLink;
-            if (sharedLinkRequestBody) {
-                updatedSharedLink = sharedLinkRequestBody;
-            } else {
-                updatedSharedLink = access === ACCESS_NONE ? null : { access };
-            }
-
             const requestData: RequestData = {
                 url: this.getUrl(this.id),
                 data: {
-                    shared_link: updatedSharedLink,
+                    shared_link: access === ACCESS_NONE ? null : { access },
                 },
             };
             if (fields) {
