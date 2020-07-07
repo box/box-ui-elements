@@ -1,11 +1,20 @@
 import {
     API_TO_USM_PERMISSION_LEVEL_MAP,
+    convertCollabsResponse,
     convertItemResponse,
     convertUserResponse,
     convertSharedLinkPermissions,
 } from '../convertData';
 import { TYPE_FILE, TYPE_FOLDER, PERMISSION_CAN_DOWNLOAD, PERMISSION_CAN_PREVIEW } from '../../../../constants';
 import { ALLOWED_ACCESS_LEVELS, ANYONE_IN_COMPANY, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from '../../constants';
+import {
+    MOCK_COLLABS_API_RESPONSE,
+    MOCK_COLLAB_IDS,
+    MOCK_OWNER,
+    MOCK_OWNER_ID,
+    MOCK_OWNER_EMAIL,
+    MOCK_USER_IDS,
+} from '../__mocks__/USMMocks';
 
 jest.mock('../../../../utils/file', () => ({
     getTypedFileId: () => 'f_190457309',
@@ -180,6 +189,7 @@ describe('convertItemResponse()', () => {
                 extension,
                 id: ITEM_ID,
                 name: ITEM_NAME,
+                owned_by: MOCK_OWNER,
                 permissions,
                 shared_link: sharedLink,
                 shared_link_features: sharedLinkFeatures,
@@ -208,10 +218,12 @@ describe('convertItemResponse()', () => {
                     hideCollaborators: false,
                     id: ITEM_ID,
                     name: ITEM_NAME,
+                    ownerEmail: MOCK_OWNER_EMAIL,
+                    ownerID: MOCK_OWNER_ID,
+                    permissions,
                     type: itemType,
                     typedID,
                 },
-                originalItemPermissions: permissions,
                 sharedLink: sharedLink
                     ? {
                           accessLevel: ANYONE_IN_COMPANY,
@@ -286,5 +298,92 @@ describe('convertSharedLinkPermissions', () => {
         ${CAN_VIEW_ONLY}     | ${{ [PERMISSION_CAN_DOWNLOAD]: false, [PERMISSION_CAN_PREVIEW]: true }}
     `('should return the correct result for the $permissionLevel permission level', ({ permissionLevel, result }) => {
         expect(convertSharedLinkPermissions(permissionLevel)).toEqual(result);
+    });
+});
+
+describe('convertCollabsResponse', () => {
+    test.each`
+        isCurrentUserOwner | description
+        ${true}            | ${'the owner'}
+        ${false}           | ${'not the owner'}
+    `(
+        'should correctly convert a Collaborations API response when the current user is $description',
+        ({ isCurrentUserOwner }) => {
+            const convertedResponse = {
+                collaborators: [
+                    {
+                        collabID: MOCK_COLLAB_IDS[0],
+                        email: 'contentexplorer@box.com',
+                        expiration: null,
+                        hasCustomAvatar: false,
+                        imageURL: null,
+                        isExternalCollab: false,
+                        name: 'Content Explorer',
+                        translatedRole: 'Editor',
+                        type: 'user',
+                        userID: MOCK_USER_IDS[0],
+                    },
+                    {
+                        collabID: MOCK_COLLAB_IDS[1],
+                        email: 'contentpreview@box.com',
+                        expiration: null,
+                        hasCustomAvatar: false,
+                        imageURL: null,
+                        isExternalCollab: false,
+                        name: 'Content Preview',
+                        translatedRole: 'Editor',
+                        type: 'user',
+                        userID: MOCK_USER_IDS[1],
+                    },
+                    {
+                        collabID: MOCK_COLLAB_IDS[2],
+                        email: 'contentpicker@box.com',
+                        expiration: {
+                            executeAt: '2020-07-09T14:53:12-08:00',
+                        },
+                        hasCustomAvatar: false,
+                        imageURL: null,
+                        isExternalCollab: false,
+                        name: 'Content Picker',
+                        translatedRole: 'Editor',
+                        type: 'user',
+                        userID: MOCK_USER_IDS[2],
+                    },
+                    {
+                        collabID: MOCK_COLLAB_IDS[3],
+                        email: 'contentuploader@box.com',
+                        expiration: null,
+                        hasCustomAvatar: false,
+                        imageURL: null,
+                        isExternalCollab: false,
+                        name: 'Content Uploader',
+                        translatedRole: 'Editor',
+                        type: 'user',
+                        userID: MOCK_USER_IDS[3],
+                    },
+                    {
+                        collabID: MOCK_COLLAB_IDS[4],
+                        email: 'demo@boxworks.com',
+                        expiration: null,
+                        hasCustomAvatar: false,
+                        imageURL: null,
+                        isExternalCollab: !!isCurrentUserOwner,
+                        name: 'BoxWorks Demo',
+                        translatedRole: 'Viewer',
+                        type: 'user',
+                        userID: MOCK_USER_IDS[4],
+                    },
+                ],
+            };
+            expect(convertCollabsResponse(MOCK_COLLABS_API_RESPONSE, MOCK_OWNER_EMAIL, isCurrentUserOwner)).toEqual(
+                convertedResponse,
+            );
+        },
+    );
+
+    test('should return an object with an empty array if there are no collaborations', () => {
+        expect(convertCollabsResponse({ total_count: 0, entries: [] }, MOCK_OWNER_EMAIL, true)).toEqual({
+            collaborators: [],
+        });
     });
 });

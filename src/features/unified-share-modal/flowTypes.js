@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import type { ItemType } from '../../common/types/core';
+import type { BoxItemPermission, ItemType } from '../../common/types/core';
 import * as constants from './constants';
 
 // DRY: Invert the constants so that we can construct the appropriate enum types
@@ -77,6 +77,9 @@ export type item = {
     hideCollaborators: boolean,
     id: string,
     name: string,
+    ownerEmail?: string,
+    ownerID?: string,
+    permissions?: BoxItemPermission,
     type: ItemType,
     typedID: string,
 };
@@ -155,7 +158,7 @@ export type sharedLinkType = {
 };
 
 export type collaboratorType = {
-    collabID: number,
+    collabID: number | string,
     expiration?: {
         executeAt: string,
     },
@@ -164,7 +167,7 @@ export type collaboratorType = {
     isExternalCollab?: boolean,
     name: string,
     type: collaboratorGroupType,
-    userID: ?number,
+    userID: ?number | string,
 };
 
 export type collaboratorsListType = {

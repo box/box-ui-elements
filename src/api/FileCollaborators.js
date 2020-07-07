@@ -1,13 +1,18 @@
 /**
  * @flow
- * @file Helper for the Box collaborators API
+ * @file Helper for the box collaborators API
  * @author Box
  */
 
 import MarkerBasedAPI from './MarkerBasedAPI';
 import { DEFAULT_MAX_COLLABORATORS } from '../constants';
 import type { ElementsErrorCallback } from '../common/types/api';
-import type { Collaborations, SelectorItem, SelectorItems, UserMini, GroupMini } from '../common/types/core';
+import type { SelectorItem, SelectorItems, UserMini, GroupMini } from '../common/types/core';
+
+type CollaboratorsAPIResponse = {
+    entries: Array<GroupMini | UserMini>,
+    next_marker: ?string,
+};
 
 class FileCollaborators extends MarkerBasedAPI {
     /**
@@ -29,7 +34,7 @@ class FileCollaborators extends MarkerBasedAPI {
      *
      * @param {Object} data the response data
      */
-    successHandler = (data: Collaborations): void => {
+    successHandler = (data: CollaboratorsAPIResponse): void => {
         if (this.isDestroyed() || typeof this.successCallback !== 'function') {
             return;
         }

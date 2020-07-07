@@ -6,6 +6,7 @@ import API from '../../api';
 import Notification from '../../components/notification/Notification';
 import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
 import {
+    convertCollabsResponse,
     convertItemResponse,
     convertSharedLinkPermissions,
     USM_TO_API_ACCESS_LEVEL_MAP,
@@ -14,17 +15,22 @@ import { ACCESS_COLLAB, ACCESS_NONE, STATUS_ERROR, TYPE_FILE, TYPE_FOLDER } from
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from './constants';
 import contentSharingMessages from './messages';
 import type { RequestOptions } from '../../common/types/api';
-import type { BoxItemPermission, ItemType, NotificationType } from '../../common/types/core';
-import type { item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
+import type { BoxItemPermission, Collaborations, ItemType, NotificationType } from '../../common/types/core';
+import type { collaboratorsListType, item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
 import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType, SharedLinkUpdateFnType } from './types';
 
 type SharingNotificationProps = {
     api: API,
+    collaboratorsList: collaboratorsListType | null,
+    currentUserID: string | null,
     itemID: string,
-    itemPermissions: BoxItemPermission | null,
     itemType: ItemType,
+    ownerEmail: ?string,
+    ownerID: ?string,
+    permissions: ?BoxItemPermission,
     setChangeSharedLinkAccessLevel: (changeSharedLinkAccessLevel: SharedLinkUpdateFnType) => void,
     setChangeSharedLinkPermissionLevel: (changeSharedLinkPermissionLevel: SharedLinkUpdateFnType) => void,
+    setCollaboratorsList: (collaboratorsList: collaboratorsListType) => void,
     setItem: ((item: itemFlowType | null) => itemFlowType) => void,
     setOnAddLink: (addLink: SharedLinkUpdateFnType) => void,
     setOnRemoveLink: (removeLink: SharedLinkUpdateFnType) => void,
@@ -33,11 +39,16 @@ type SharingNotificationProps = {
 
 function SharingNotification({
     api,
+    collaboratorsList,
+    currentUserID,
     itemID,
-    itemPermissions,
     itemType,
+    ownerEmail,
+    ownerID,
+    permissions,
     setChangeSharedLinkAccessLevel,
     setChangeSharedLinkPermissionLevel,
+    setCollaboratorsList,
     setItem,
     setOnAddLink,
     setOnRemoveLink,
@@ -75,7 +86,7 @@ function SharingNotification({
         [handleNotificationClose, notificationID],
     );
 
-    // Generate the onAddLink function for the item
+    // Generate shared link CRUD functions for the item
     React.useEffect(() => {
         // Handle successful PUT requests to /files or /folders
         const handleUpdateItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
@@ -104,10 +115,10 @@ function SharingNotification({
             setNotificationID(notificationID + 1);
         };
 
-        if (itemPermissions) {
+        if (permissions) {
             const itemData = {
                 id: itemID,
-                permissions: itemPermissions,
+                permissions,
             };
 
             let itemAPIInstance;
@@ -155,16 +166,77 @@ function SharingNotification({
         api,
         createNotification,
         itemID,
-        itemPermissions,
         itemType,
         notificationID,
         notifications,
+        permissions,
         setChangeSharedLinkAccessLevel,
         setChangeSharedLinkPermissionLevel,
         setItem,
         setOnAddLink,
         setOnRemoveLink,
         setSharedLink,
+    ]);
+
+    /**
+     * Get the item's collaborators
+     *
+     * A note on the wording: the USM uses the term "collaborators" internally,
+     * so the state variable and state setting function also refer to "collaborators."
+     * However, we are using the Collaborations API here, so the API-related functions
+     * use the term "collaborations." For more details, see ./api/FileCollaborations.
+     */
+    React.useEffect(() => {
+        const handleGetCollaborationsSuccess = (response: Collaborations) => {
+            const updatedCollaboratorsList = convertCollabsResponse(response, ownerEmail, ownerID === currentUserID);
+            setCollaboratorsList(updatedCollaboratorsList);
+        };
+
+        const handleGetCollaborationsError = () => {
+            const updatedNotifications = { ...notifications };
+            if (updatedNotifications[notificationID]) {
+                return;
+            }
+            updatedNotifications[notificationID] = createNotification(
+                STATUS_ERROR,
+                contentSharingMessages.collaboratorsLoadingError,
+            );
+            setCollaboratorsList({ collaborators: [] }); // default to an empty collaborators list for the USM
+            setNotifications(updatedNotifications);
+            setNotificationID(notificationID + 1);
+        };
+
+        const getItemCollaborations = () => {
+            if (itemType === TYPE_FILE) {
+                api.getFileCollaborationsAPI(true).getCollaborations(
+                    itemID,
+                    handleGetCollaborationsSuccess,
+                    handleGetCollaborationsError,
+                );
+            } else if (itemType === TYPE_FOLDER) {
+                api.getFolderCollaborationsAPI(true).getCollaborations(
+                    itemID,
+                    handleGetCollaborationsSuccess,
+                    handleGetCollaborationsError,
+                );
+            }
+        };
+
+        if (itemID && currentUserID && !collaboratorsList) {
+            getItemCollaborations();
+        }
+    }, [
+        api,
+        collaboratorsList,
+        createNotification,
+        currentUserID,
+        itemID,
+        itemType,
+        notificationID,
+        notifications,
+        ownerEmail,
+        ownerID,
+        setCollaboratorsList,
     ]);
 
     return (

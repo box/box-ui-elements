@@ -23,7 +23,8 @@ import type {
     ContentSharingItemDataType,
     ContentSharingUserDataType,
 } from '../../../elements/content-sharing/types';
-import type { User } from '../../../common/types/core';
+import type { BoxItemPermission, Collaborations, User } from '../../../common/types/core';
+import type { collaboratorsListType, collaboratorType } from '../flowTypes';
 
 /**
  * The following constants are used for converting API requests
@@ -139,15 +140,15 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
             grantedPermissions: {
                 itemShare: !!itemShare,
             },
-            hideCollaborators: false, // to do: connect to Collaborators API
+            hideCollaborators: false, // to do: connect to Collaborations API
             id,
             name,
             ownerEmail, // the owner email is used to determine whether collaborators are external
             ownerID, // the owner ID is used to determine whether external collaborator badges should be shown
+            permissions, // the original permissions are necessary for PUT requests to the Item API
             type,
             typedID: type === TYPE_FOLDER ? getTypedFolderId(id) : getTypedFileId(id),
         },
-        originalItemPermissions: permissions, // the original permissions are necessary for PUT requests to the Item API
         sharedLink,
     };
 };
@@ -163,20 +164,34 @@ export const convertUserResponse = (userAPIData: User): ContentSharingUserDataTy
         id,
         userEnterpriseData: {
             enterpriseName: enterprise ? enterprise.name : '',
-            hostname,
             serverURL: hostname ? `${hostname}/v/` : '',
         },
     };
 };
 
 /**
- * Convert a response from the Item Collaborators API into the object that the USM expects.
- * @param {Collaborators} collabsAPIData
+ * Create a shared link permissions object for the API based on a USM permission level.
+ * @param {string} newSharedLinkPermissionLevel
+ */
+export const convertSharedLinkPermissions = (newSharedLinkPermissionLevel: string): $Shape<BoxItemPermission> => {
+    const sharedLinkPermissions = {};
+    Object.keys(USM_TO_API_PERMISSION_LEVEL_MAP).forEach(level => {
+        if (level === newSharedLinkPermissionLevel) {
+            sharedLinkPermissions[USM_TO_API_PERMISSION_LEVEL_MAP[level]] = true;
+        } else {
+            sharedLinkPermissions[USM_TO_API_PERMISSION_LEVEL_MAP[level]] = false;
+        }
+    });
+    return sharedLinkPermissions;
+};
+
+/**
+ * Convert a response from the Item Collaborations API into the object that the USM expects.
+ * @param {Collaborations} collabsAPIData
  */
 export const convertCollabsResponse = (
-    collabsAPIData: Collaborators,
-    hostname: string,
-    ownerEmail: string,
+    collabsAPIData: Collaborations,
+    ownerEmail: ?string,
     isCurrentUserOwner: boolean,
 ): collaboratorsListType => {
     let collaborators = [];
@@ -184,36 +199,33 @@ export const convertCollabsResponse = (
     const { entries } = collabsAPIData;
 
     if (entries.length) {
-        const ownerEmailDomain = ownerEmail.split('@')[1];
+        const ownerEmailDomain = ownerEmail ? ownerEmail.split('@')[1] : null;
         collaborators = entries.map(collab => {
             const {
-                accessible_by: { id: userID, login: email, name },
+                accessible_by: { id: userID, login: email, name, type },
                 id: collabID,
                 expires_at: executeAt,
-                role: translatedRole,
-                type,
+                role,
             } = collab;
             const collabEmailDomain = email.split('@')[1];
             // Only display external collaborator icons if the current user owns the item
             // and if the collaborator's email domain differs from the owner's email domain
             const isExternalCollab = isCurrentUserOwner && collabEmailDomain !== ownerEmailDomain;
-            return {
+            const convertedCollab: collaboratorType = {
                 collabID,
                 email,
-                expiration: executeAt
-                    ? {
-                          executeAt,
-                      }
-                    : null,
                 hasCustomAvatar: false, // to do: connect to Avatar API
                 imageURL: null, // to do: connect to Avatar API
                 isExternalCollab,
                 name,
-                profileURL: `${hostname}/profile/${userID}`,
-                translatedRole,
+                translatedRole: `${role[0].toUpperCase()}${role.slice(1)}`, // capitalize the user's role
                 type,
                 userID,
             };
+            if (executeAt) {
+                convertedCollab.expiration = { executeAt };
+            }
+            return convertedCollab;
         });
     }
 

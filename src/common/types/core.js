@@ -287,7 +287,7 @@ type BoxItem = {
     download_url?: string,
     extension?: string,
     file_version?: BoxItemVersion,
-    has_collaborators?: boolean,
+    has_collaborations?: boolean,
     id: string,
     interacted_at?: string,
     is_download_available?: boolean,
@@ -411,6 +411,23 @@ type Collaborators = {
     next_marker: ?string,
 };
 
+type Collaboration = {
+    accessible_by: {
+        id: number | string,
+        login: string,
+        name: string,
+        type: 'user',
+    },
+    expires_at: string | null,
+    id: number | string,
+    role: string,
+};
+
+type Collaborations = {
+    entries: Array<Collaboration>,
+    next_marker: ?string,
+};
+
 export type {
     Token,
     TokenLiteral,
@@ -458,4 +475,6 @@ export type {
     Reply,
     NotificationType,
     Collaborators,
+    Collaboration,
+    Collaborations,
 };

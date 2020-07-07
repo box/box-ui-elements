@@ -1,9 +1,20 @@
 import React from 'react';
+import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
+import { FormattedMessage } from 'react-intl';
 import SharingNotification from '../SharingNotification';
-import { TYPE_FOLDER } from '../../../constants';
-import { MOCK_ITEM_ID, MOCK_ITEM_PERMISSIONS } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
+import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
+import {
+    MOCK_COLLABS_API_RESPONSE,
+    MOCK_COLLABS_CONVERTED_RESPONSE,
+    MOCK_ITEM,
+    MOCK_ITEM_ID,
+    MOCK_OWNER_ID,
+    MOCK_OWNER_EMAIL,
+} from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
+import Notification from '../../../components/notification/Notification';
 import NotificationsWrapper from '../../../components/notification/NotificationsWrapper';
+import { convertCollabsResponse } from '../../../features/unified-share-modal/utils/convertData';
 
 jest.mock('../../../api');
 jest.mock('../../../features/unified-share-modal/utils/convertData');
@@ -15,21 +26,34 @@ describe('elements/content-sharing/SharingNotification', () => {
     const setOnAddLinkStub = jest.fn();
     const setOnRemoveLinkStub = jest.fn();
     const setSharedLinkStub = jest.fn();
-    const apiInstance = {
+    const setCollaboratorsListStub = jest.fn();
+    const createAPIInstance = getCollabStub => ({
+        getFileAPI: jest.fn().mockReturnValue({
+            share: jest.fn(),
+            updateSharedLink: jest.fn(),
+        }),
+        getFileCollaborationsAPI: jest.fn().mockReturnValue({
+            getCollaborations: getCollabStub,
+        }),
         getFolderAPI: jest.fn().mockReturnValue({
             share: jest.fn(),
             updateSharedLink: jest.fn(),
         }),
-    };
+        getFolderCollaborationsAPI: jest.fn().mockReturnValue({
+            getCollaborations: getCollabStub,
+        }),
+    });
+
     const getWrapper = props =>
         mount(
             <SharingNotification
-                api={apiInstance}
-                itemID={MOCK_ITEM_ID}
-                itemPermissions={MOCK_ITEM_PERMISSIONS}
+                collaboratorsList={null}
+                currentUserID={MOCK_OWNER_ID}
+                item={MOCK_ITEM}
                 itemType={TYPE_FOLDER}
                 setChangeSharedLinkAccessLevel={setChangeSharedLinkAccessLevelStub}
                 setChangeSharedLinkPermissionLevel={setChangeSharedLinkPermissionLevelStub}
+                setCollaboratorsList={setCollaboratorsListStub}
                 setItem={setItemStub}
                 setOnAddLink={setOnAddLinkStub}
                 setOnRemoveLink={setOnRemoveLinkStub}
@@ -38,24 +62,96 @@ describe('elements/content-sharing/SharingNotification', () => {
             />,
         );
 
-    test('should call state setting functions', async () => {
-        getWrapper();
-        expect(setOnAddLinkStub).toHaveBeenCalled();
-        expect(setOnRemoveLinkStub).toHaveBeenCalled();
-        expect(setChangeSharedLinkAccessLevelStub).toHaveBeenCalled();
-        expect(setChangeSharedLinkPermissionLevelStub).toHaveBeenCalled();
+    let apiInstance;
+    let getCollaborations;
+
+    describe('component rendering', () => {
+        beforeAll(() => {
+            getCollaborations = jest.fn();
+            apiInstance = createAPIInstance(getCollaborations);
+        });
+
+        test('should call state setting functions', async () => {
+            getWrapper({ api: apiInstance });
+            expect(setOnAddLinkStub).toHaveBeenCalled();
+            expect(setOnRemoveLinkStub).toHaveBeenCalled();
+            expect(setChangeSharedLinkAccessLevelStub).toHaveBeenCalled();
+            expect(setChangeSharedLinkPermissionLevelStub).toHaveBeenCalled();
+        });
+
+        test('should not call state setting functions if item is null', () => {
+            getWrapper({ api: apiInstance, item: null });
+            expect(setOnAddLinkStub).not.toHaveBeenCalled();
+            expect(setOnRemoveLinkStub).not.toHaveBeenCalled();
+            expect(setChangeSharedLinkAccessLevelStub).not.toHaveBeenCalled();
+            expect(setChangeSharedLinkPermissionLevelStub).not.toHaveBeenCalled();
+        });
+
+        test('should render a NotificationsWrapper', async () => {
+            const wrapper = getWrapper({ api: apiInstance });
+            expect(wrapper.exists(NotificationsWrapper)).toBe(true);
+        });
     });
 
-    test('should not call state setting functions if itemPermissions is null', () => {
-        getWrapper({ itemPermissions: null });
-        expect(setOnAddLinkStub).not.toHaveBeenCalled();
-        expect(setOnRemoveLinkStub).not.toHaveBeenCalled();
-        expect(setChangeSharedLinkAccessLevelStub).not.toHaveBeenCalled();
-        expect(setChangeSharedLinkPermissionLevelStub).not.toHaveBeenCalled();
+    describe('with successful GET requests to the Collaborations API', () => {
+        beforeAll(() => {
+            getCollaborations = jest.fn().mockImplementation((id, successFn) => {
+                return Promise.resolve(MOCK_COLLABS_API_RESPONSE).then(response => {
+                    successFn(response);
+                });
+            });
+            apiInstance = createAPIInstance(getCollaborations);
+            convertCollabsResponse.mockReturnValue(MOCK_COLLABS_CONVERTED_RESPONSE);
+        });
+
+        test.each`
+            apiName                         | itemType
+            ${'getFileCollaborationsAPI'}   | ${TYPE_FILE}
+            ${'getFolderCollaborationsAPI'} | ${TYPE_FOLDER}
+        `('should call $apiName().getCollaborations() if itemType is $itemType', async ({ itemType }) => {
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api: apiInstance, itemType });
+            });
+            wrapper.update();
+            expect(getCollaborations).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything());
+            expect(convertCollabsResponse).toHaveBeenCalledWith(MOCK_COLLABS_API_RESPONSE, MOCK_OWNER_EMAIL, true);
+            expect(setCollaboratorsListStub).toHaveBeenCalledWith(MOCK_COLLABS_CONVERTED_RESPONSE);
+            expect(wrapper.exists(Notification)).toBe(false);
+        });
     });
 
-    test('should render a NotificationsWrapper', async () => {
-        const wrapper = getWrapper();
-        expect(wrapper.exists(NotificationsWrapper)).toBe(true);
+    describe.only('with failed GET requests to the Collaborations API', () => {
+        const createShareFailureMock = () =>
+            jest.fn().mockImplementation((id, successFn, failureFn) => {
+                return Promise.reject(new Error({ status: '400' })).catch(response => {
+                    failureFn(response);
+                });
+            });
+        beforeAll(() => {
+            getCollaborations = createShareFailureMock();
+            apiInstance = createAPIInstance(getCollaborations);
+        });
+
+        test.each`
+            apiName                         | itemType
+            ${'getFileCollaborationsAPI'}   | ${TYPE_FILE}
+            ${'getFolderCollaborationsAPI'} | ${TYPE_FOLDER}
+        `('should call $apiName().getCollaborations() if itemType is $itemType', async ({ itemType }) => {
+            let wrapper;
+
+            await act(async () => {
+                wrapper = getWrapper({ api: apiInstance, itemType });
+            });
+            wrapper.update();
+            expect(getCollaborations).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything());
+            expect(convertCollabsResponse).not.toHaveBeenCalled();
+            expect(setCollaboratorsListStub).toHaveBeenCalledWith({
+                collaborators: [],
+            });
+            const notification = wrapper.find(Notification);
+            expect(notification.prop('key')).toBe(1);
+            expect(notification.find(FormattedMessage).prop('id')).toBe('be.contentSharing.collaboratorsLoadingError');
+        });
     });
 });

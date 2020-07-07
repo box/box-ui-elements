@@ -26,6 +26,11 @@ const messages = defineMessages({
         description: 'Message that appears when the shared link in the ContentSharing Element cannot be updated.',
         id: 'be.contentSharing.sharedLinkUpdateError',
     },
+    collaboratorsLoadingError: {
+        defaultMessage: 'Could not retrieve collaborators for this item.',
+        description: 'Message that appears when the shared link in the ContentSharing Element cannot be updated.',
+        id: 'be.contentSharing.collaboratorsLoadingError',
+    },
 });
 
 export default messages;
