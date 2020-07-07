@@ -8,10 +8,7 @@ import NotificationsWrapper from '../../components/notification/NotificationsWra
 import { convertItemResponse } from '../../features/unified-share-modal/utils/convertData';
 import { ACCESS_COLLAB, ACCESS_NONE, STATUS_ERROR, TYPE_FILE, TYPE_FOLDER } from '../../constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from './constants';
-import {
-    USM_TO_API_ACCESS_LEVEL_MAP,
-    USM_TO_API_PERMISSION_LEVEL_MAP,
-} from '../../features/unified-share-modal/constants';
+import { USM_TO_API_ACCESS_LEVEL_MAP } from '../../features/unified-share-modal/constants';
 import contentSharingMessages from './messages';
 import type { RequestOptions } from '../../common/types/api';
 import type { BoxItemPermission, ItemType, NotificationType, SharedLinkUpdateType } from '../../common/types/core';
@@ -24,7 +21,6 @@ type SharingNotificationProps = {
     itemPermissions: BoxItemPermission | null,
     itemType: ItemType,
     setChangeSharedLinkAccessLevel: (changeSharedLinkAccessLevel: SharedLinkUpdateFnType) => void,
-    setChangeSharedLinkPermissionLevel: (changeSharedLinkPermissionLevel: SharedLinkUpdateFnType) => void,
     setItem: ((item: itemFlowType | null) => itemFlowType) => void,
     setOnAddLink: (addLink: SharedLinkUpdateFnType) => void,
     setOnRemoveLink: (removeLink: SharedLinkUpdateFnType) => void,
@@ -37,7 +33,6 @@ function SharingNotification({
     itemPermissions,
     itemType,
     setChangeSharedLinkAccessLevel,
-    setChangeSharedLinkPermissionLevel,
     setItem,
     setOnAddLink,
     setOnRemoveLink,
@@ -145,23 +140,6 @@ function SharingNotification({
                 return createSharedLinkAPIConnection(level);
             };
             setChangeSharedLinkAccessLevel(updatedChangeSharedLinkAccessLevelFn);
-
-            const updatedChangeSharedLinkPermissionLevelFn: SharedLinkUpdateFnType = () => (
-                newSharedLinkPermissionLevel: ?string,
-            ) => {
-                const updatedSharedLinkPermissions = {};
-                Object.keys(USM_TO_API_PERMISSION_LEVEL_MAP).forEach(level => {
-                    if (level === newSharedLinkPermissionLevel) {
-                        updatedSharedLinkPermissions[USM_TO_API_PERMISSION_LEVEL_MAP[level]] = true;
-                    } else {
-                        updatedSharedLinkPermissions[USM_TO_API_PERMISSION_LEVEL_MAP[level]] = false;
-                    }
-                });
-                return createSharedLinkAPIConnection(undefined, CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS, {
-                    permissions: updatedSharedLinkPermissions,
-                });
-            };
-            setChangeSharedLinkPermissionLevel(updatedChangeSharedLinkPermissionLevelFn);
         }
     }, [
         api,
@@ -172,7 +150,6 @@ function SharingNotification({
         notificationID,
         notifications,
         setChangeSharedLinkAccessLevel,
-        setChangeSharedLinkPermissionLevel,
         setItem,
         setOnAddLink,
         setOnRemoveLink,

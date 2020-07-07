@@ -15,15 +15,12 @@ import {
     DEFAULT_HOSTNAME_API,
     TYPE_FILE,
     TYPE_FOLDER,
-    PERMISSION_CAN_DOWNLOAD,
-    PERMISSION_CAN_PREVIEW,
 } from '../../../constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from '../constants';
 import {
     ANYONE_WITH_LINK,
     ANYONE_IN_COMPANY,
     CAN_VIEW_DOWNLOAD,
-    CAN_VIEW_ONLY,
     PEOPLE_IN_ITEM,
 } from '../../../features/unified-share-modal/constants';
 import { convertItemResponse, convertUserResponse } from '../../../features/unified-share-modal/utils/convertData';
@@ -467,42 +464,6 @@ describe('elements/content-sharing/ContentSharing', () => {
                 expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(expectedItemData.sharedLink);
             },
         );
-
-        test.each`
-            permissionLevelFromUSM | permissionLevelObjectForAPI
-            ${CAN_VIEW_ONLY}       | ${{ permissions: { [PERMISSION_CAN_DOWNLOAD]: false, [PERMISSION_CAN_PREVIEW]: true } }}
-            ${CAN_VIEW_DOWNLOAD}   | ${{ permissions: { [PERMISSION_CAN_DOWNLOAD]: true, [PERMISSION_CAN_PREVIEW]: false } }}
-        `(
-            'should call share() from changeSharedLinkPermissionLevel() when given $permissionLevelFromUSM permission',
-            async ({ permissionLevelFromUSM, permissionLevelObjectForAPI }) => {
-                let wrapper;
-                await act(async () => {
-                    wrapper = getWrapper({ itemType: TYPE_FILE });
-                });
-                wrapper.update();
-
-                const usm = wrapper.find(UnifiedShareModal);
-                expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
-
-                const expectedItemData = createMockItemData(undefined, permissionLevelFromUSM);
-                convertItemResponse.mockReset();
-                convertItemResponse.mockReturnValue(expectedItemData);
-
-                await act(async () => {
-                    usm.invoke('changeSharedLinkPermissionLevel')(permissionLevelFromUSM);
-                });
-                wrapper.update();
-                expect(share).toHaveBeenCalledWith(
-                    { id: MOCK_ITEM_ID, permissions: {} },
-                    undefined,
-                    expect.anything(),
-                    expect.anything(),
-                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                    permissionLevelObjectForAPI,
-                );
-                expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(expectedItemData.sharedLink);
-            },
-        );
     });
 
     describe('with failed PUT requests to the Item API', () => {
@@ -525,7 +486,7 @@ describe('elements/content-sharing/ContentSharing', () => {
             }));
         });
 
-        test.each(['onAddLink', 'onRemoveLink', 'changeSharedLinkAccessLevel', 'changeSharedLinkPermissionLevel'])(
+        test.each(['onAddLink', 'onRemoveLink', 'changeSharedLinkAccessLevel'])(
             'should show an error notification if %s() fails',
             async sharedLinkUpdateFn => {
                 let wrapper;
