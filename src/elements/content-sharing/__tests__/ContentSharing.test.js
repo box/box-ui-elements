@@ -7,8 +7,22 @@ import ErrorMask from '../../../components/error-mask/ErrorMask';
 import ContentSharing from '../ContentSharing';
 import Notification from '../../../components/notification/Notification';
 import UnifiedShareModal from '../../../features/unified-share-modal/UnifiedShareModal';
-import { ACCESS_COLLAB, ACCESS_NONE, DEFAULT_HOSTNAME_API, TYPE_FILE, TYPE_FOLDER } from '../../../constants';
+import {
+    ACCESS_COLLAB,
+    ACCESS_COMPANY,
+    ACCESS_NONE,
+    ACCESS_OPEN,
+    DEFAULT_HOSTNAME_API,
+    TYPE_FILE,
+    TYPE_FOLDER,
+} from '../../../constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from '../constants';
+import {
+    ANYONE_WITH_LINK,
+    ANYONE_IN_COMPANY,
+    CAN_VIEW_DOWNLOAD,
+    PEOPLE_IN_ITEM,
+} from '../../../features/unified-share-modal/constants';
 import { convertItemResponse, convertUserResponse } from '../../../features/unified-share-modal/utils/convertData';
 import {
     MOCK_CONVERTED_ITEM_DATA,
@@ -36,6 +50,17 @@ describe('elements/content-sharing/ContentSharing', () => {
         return Promise.resolve(responseFromAPI).then(response => {
             successFn(response);
         });
+    };
+
+    const createMockItemData = (accessLevel = PEOPLE_IN_ITEM, permissionLevel = CAN_VIEW_DOWNLOAD) => {
+        return {
+            item: MOCK_ITEM,
+            sharedLink: {
+                ...MOCK_SHARED_LINK,
+                accessLevel,
+                permissionLevel,
+            },
+        };
     };
 
     beforeEach(() => {
@@ -400,6 +425,42 @@ describe('elements/content-sharing/ContentSharing', () => {
             );
             expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_NULL_SHARED_LINK);
         });
+
+        test.each`
+            accessLevelFromUSM   | accessLevelForAPI
+            ${ANYONE_IN_COMPANY} | ${ACCESS_COMPANY}
+            ${ANYONE_WITH_LINK}  | ${ACCESS_OPEN}
+            ${PEOPLE_IN_ITEM}    | ${ACCESS_COLLAB}
+        `(
+            'should call share() from changeSharedLinkAccessLevel() when given $accessLevelFromUSM access',
+            async ({ accessLevelFromUSM, accessLevelForAPI }) => {
+                let wrapper;
+                await act(async () => {
+                    wrapper = getWrapper({ itemType: TYPE_FOLDER });
+                });
+                wrapper.update();
+
+                const usm = wrapper.find(UnifiedShareModal);
+                expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
+
+                const expectedItemData = createMockItemData(accessLevelFromUSM);
+                convertItemResponse.mockReset();
+                convertItemResponse.mockReturnValue(expectedItemData);
+
+                await act(async () => {
+                    usm.invoke('changeSharedLinkAccessLevel')(accessLevelFromUSM);
+                });
+                wrapper.update();
+                expect(share).toHaveBeenCalledWith(
+                    { id: MOCK_ITEM_ID, permissions: {} },
+                    accessLevelForAPI,
+                    expect.anything(),
+                    expect.anything(),
+                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+                );
+                expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(expectedItemData.sharedLink);
+            },
+        );
     });
 
     describe('with failed PUT requests to the Item API', () => {
@@ -422,7 +483,7 @@ describe('elements/content-sharing/ContentSharing', () => {
             }));
         });
 
-        test.each(['onAddLink', 'onRemoveLink'])(
+        test.each(['onAddLink', 'onRemoveLink', 'changeSharedLinkAccessLevel'])(
             'should show an error notification if %s() fails',
             async sharedLinkUpdateFn => {
                 let wrapper;

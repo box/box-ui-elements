@@ -47,6 +47,9 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     const [componentErrorMessage, setComponentErrorMessage] = React.useState<Object | null>(null);
     const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateFnType>(null);
     const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateFnType>(null);
+    const [changeSharedLinkAccessLevel, setChangeSharedLinkAccessLevel] = React.useState<null | SharedLinkUpdateFnType>(
+        null,
+    );
 
     // Reset the API if necessary
     React.useEffect(() => {
@@ -144,6 +147,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         itemID={itemID}
                         itemPermissions={itemPermissions}
                         itemType={itemType}
+                        setChangeSharedLinkAccessLevel={setChangeSharedLinkAccessLevel}
                         setItem={setItem}
                         setOnAddLink={setOnAddLink}
                         setOnRemoveLink={setOnRemoveLink}
@@ -151,7 +155,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                     />
                     <UnifiedShareModal
                         canInvite={sharedLink.canInvite}
-                        changeSharedLinkAccessLevel={() => Promise.resolve([])} // to do: replace with a PUT to the Shared Link API
+                        changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                         changeSharedLinkPermissionLevel={() => Promise.resolve([])} // to do: replace with a PUT to the Shared Link API
                         collaboratorsList={{ collaborators: [] }} // to do: replace with Collaborators API
                         currentUserID={currentUserID}
