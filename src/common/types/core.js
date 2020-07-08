@@ -255,34 +255,17 @@ type FileRepresentationResponse = {
     entries: Array<FileRepresentation>,
 };
 
-type SharedLinkPermission = typeof PERMISSION_CAN_DOWNLOAD | typeof PERMISSION_CAN_PREVIEW;
-
 type SharedLink = {
     access: Access,
     download_count?: number,
     download_url?: string,
     effective_access?: Access,
-    effective_permission?: SharedLinkPermission,
+    effective_permission?: typeof PERMISSION_CAN_DOWNLOAD | typeof PERMISSION_CAN_PREVIEW,
     is_password_enabled?: boolean,
     permissions?: BoxItemPermission,
     preview_count?: number,
     unshared_at?: string | null,
     url: string,
-    vanity_name?: string,
-    vanity_url?: string,
-};
-
-type SharedLinkUpdateType = {
-    access?: Access,
-    download_count?: number,
-    download_url?: string,
-    effective_access?: Access,
-    effective_permission?: SharedLinkPermission,
-    is_password_enabled?: boolean,
-    permissions?: BoxItemPermission,
-    preview_count?: number,
-    unshared_at?: string | null,
-    url?: string,
     vanity_name?: string,
     vanity_url?: string,
 };
@@ -438,8 +421,6 @@ export type {
     SortDirection,
     Order,
     SharedLink,
-    SharedLinkPermission,
-    SharedLinkUpdateType,
     InlineNoticeType,
     ItemType,
     Delimiter,
