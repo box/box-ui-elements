@@ -1,12 +1,10 @@
 // @flow
-import React, { useState } from 'react';
+import * as React from 'react';
 
 import AccessibleSVG from '../../src/icons/accessible-svg';
 import ThumbnailCard from '../../src/components/thumbnail-card';
 
 const ThumbnailCardExamples = () => {
-    const [isCardInFocus, setIsCardInFocus] = useState('');
-
     const icon = (
         <div
             style={{
@@ -41,9 +39,9 @@ const ThumbnailCardExamples = () => {
             </div>
             <br />
             <div>
-                <h1>Shadow on Hover Example</h1>
+                <h1>Highlight on Hover Example</h1>
                 <br />
-                <ThumbnailCard shadowOnHover thumbnail={thumbnail} title={title} />
+                <ThumbnailCard highlightOnHover thumbnail={thumbnail} title={title} />
             </div>
             <br />
             <div>
@@ -57,11 +55,8 @@ const ThumbnailCardExamples = () => {
                     {new Array(3).fill(true).map((_, i) => (
                         <ThumbnailCard
                             key={`thumbnailcard-${i}`}
-                            className={isCardInFocus === i ? 'is-card-in-focus' : ''}
                             icon={icon}
-                            id={i}
-                            setIsCardInFocus={setIsCardInFocus}
-                            shadowOnHover
+                            highlightOnHover
                             subtitle={subtitle}
                             thumbnail={thumbnail}
                             title={title}

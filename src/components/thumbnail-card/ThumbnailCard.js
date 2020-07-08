@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import noop from 'lodash/noop';
 
 import ThumbnailCardDetails from './ThumbnailCardDetails';
 import ThumbnailCardThumbnail from './ThumbnailCardThumbnail';
@@ -10,10 +9,8 @@ import './ThumbnailCard.scss';
 
 type Props = {
     className?: string,
+    highlightOnHover?: boolean,
     icon?: React.Node,
-    id?: number,
-    setIsCardInFocus?: (isInFocus: number) => void,
-    shadowOnHover?: boolean,
     subtitle?: React.Node,
     thumbnail: React.Node,
     title: React.Node,
@@ -22,24 +19,16 @@ type Props = {
 const ThumbnailCard = ({
     className = '',
     icon,
-    id,
-    shadowOnHover = false,
-    setIsCardInFocus = noop,
+    highlightOnHover = false,
     subtitle,
     title,
     thumbnail,
     ...rest
 }: Props) => (
     <div
-        onFocus={() => id && setIsCardInFocus(id)}
-        onBlur={event => {
-            if (!event.currentTarget.contains(event.relatedTarget)) {
-                setIsCardInFocus(-1);
-            }
-        }}
         role="button"
         tabIndex="0"
-        className={classNames('thumbnail-card', className, { 'is-shadow-applied': shadowOnHover })}
+        className={classNames('thumbnail-card', className, { 'is-highlight-applied': highlightOnHover })}
         {...rest}
     >
         <ThumbnailCardThumbnail thumbnail={thumbnail} />
