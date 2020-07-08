@@ -19,7 +19,13 @@ import {
     ERROR_CODE_SHARE_ITEM,
 } from '../constants';
 import type { ElementsErrorCallback, RequestData, RequestOptions } from '../common/types/api';
-import type { BoxItem, BoxItemPermission, FlattenedBoxItem, FlattenedBoxItemCollection } from '../common/types/core';
+import type {
+    BoxItem,
+    BoxItemPermission,
+    FlattenedBoxItem,
+    FlattenedBoxItemCollection,
+    SharedLink,
+} from '../common/types/core';
 import type APICache from '../utils/Cache';
 
 class Item extends Base {
@@ -282,8 +288,13 @@ class Item extends Base {
     /**
      * Check whether an item's shared link can be updated
      *
+<<<<<<< HEAD
      * @param {string} itemID - ID of item to share
      * @param {BoxItemPermission} itemPermissions - Permissions for item
+=======
+     * @param {string|void} itemID - ID of item to share
+     * @param {BoxItemPermission|void} itemPermissions - Permissions for item
+>>>>>>> 2a367684... feat(content-sharing): Enable permissions level changes
      * @return {Error|null}
      */
     checkShareError(itemID: string, itemPermissions: BoxItemPermission) {
@@ -319,12 +330,21 @@ class Item extends Base {
         errorCallback: ElementsErrorCallback = noop,
         options: RequestOptions = {},
     ): Promise<void> {
+        if (this.isDestroyed()) {
+            return Promise.reject();
+        }
+
         const { id, permissions }: BoxItem = item;
         const shareError = this.checkShareError(id, permissions);
 
         if (shareError) {
+<<<<<<< HEAD
             const { error } = shareError;
             return errorCallback(error, this.errorCode);
+=======
+            errorCallback(shareError, this.errorCode);
+            return Promise.reject();
+>>>>>>> 2a367684... feat(content-sharing): Enable permissions level changes
         }
 
         const cache: APICache = this.getCache();
@@ -361,8 +381,8 @@ class Item extends Base {
     /**
      * API to update a shared link
      *
-     * @param {Object} item - Item to update
-     * @param {Object} sharedLinkParams - New shared link parameters
+     * @param {BoxItem} item - Item to update
+     * @param {$Shape<SharedLink>} sharedLinkParams - New shared link parameters
      * @param {Function} successCallback - Success callback
      * @param {Function|void} errorCallback - Error callback
      * @param {Array<string>|void} [options.fields] - Optionally include specific fields
@@ -372,7 +392,7 @@ class Item extends Base {
      */
     async updateSharedLink(
         item: BoxItem,
-        sharedLinkParams: Object,
+        sharedLinkParams: $Shape<SharedLink>,
         successCallback: Function,
         errorCallback: ElementsErrorCallback = noop,
         options: RequestOptions = {},
@@ -385,8 +405,8 @@ class Item extends Base {
         const shareError = this.checkShareError(id, permissions);
 
         if (shareError) {
-            const { error } = shareError;
-            return errorCallback(error, this.errorCode);
+            errorCallback(shareError, this.errorCode);
+            return Promise.reject();
         }
 
         try {
