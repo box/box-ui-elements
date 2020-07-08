@@ -290,20 +290,19 @@ class Item extends Base {
      *
      * @param {string|void} itemID - ID of item to share
      * @param {BoxItemPermission|void} itemPermissions - Permissions for item
-     * @return {Error|null}
+     * @throws {Error}
+     * @return {void}
      */
     validateRequest(itemID: ?string, itemPermissions: ?BoxItemPermission) {
         this.errorCode = ERROR_CODE_SHARE_ITEM;
         if (!itemID || !itemPermissions) {
-            return getBadItemError();
+            throw getBadItemError();
         }
 
         const { can_share, can_set_share_access }: BoxItemPermission = itemPermissions;
         if (!can_share || !can_set_share_access) {
-            return getBadPermissionsError();
+            throw getBadPermissionsError();
         }
-
-        return null;
     }
 
     /**
@@ -329,25 +328,13 @@ class Item extends Base {
             return Promise.reject();
         }
 
-        const { id, permissions }: BoxItem = item;
-        const shareError = this.validateRequest(id, permissions);
-        if (shareError) {
-            errorCallback(shareError, this.errorCode);
-            return Promise.reject();
-        }
-
-        const cache: APICache = this.getCache();
-        const key: string = this.getCacheKey(id);
-        const isCached: boolean = !options.forceFetch && cache.has(key);
-
-        if (isCached) {
-            return successCallback(cache.get(key));
-        }
-
         try {
+            const { id, permissions }: BoxItem = item;
             this.id = id;
             this.successCallback = successCallback;
             this.errorCallback = errorCallback;
+
+            this.validateRequest(id, permissions);
 
             const { fields } = options;
             const requestData: RequestData = {
@@ -390,25 +377,13 @@ class Item extends Base {
             return Promise.reject();
         }
 
-        const { id, permissions }: BoxItem = item;
-        const shareError = this.validateRequest(id, permissions);
-        if (shareError) {
-            errorCallback(shareError, this.errorCode);
-            return Promise.reject();
-        }
-
         try {
-            const cache: APICache = this.getCache();
-            const key: string = this.getCacheKey(id);
-            const isCached: boolean = !options.forceFetch && cache.has(key);
-
-            if (isCached) {
-                return successCallback(cache.get(key));
-            }
-
+            const { id, permissions }: BoxItem = item;
             this.id = id;
             this.successCallback = successCallback;
             this.errorCallback = errorCallback;
+
+            this.validateRequest(id, permissions);
 
             const { fields } = options;
             const requestData: RequestData = {

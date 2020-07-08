@@ -301,13 +301,13 @@ describe('api/Item', () => {
     });
 
     describe('validateRequest()', () => {
-        const MOCK_ITEM_ERROR = 'missing item data';
-        const MOCK_PERMISSIONS_ERROR = 'missing permissions';
+        const MOCK_ITEM_ERROR = new Error('missing item data');
+        const MOCK_PERMISSIONS_ERROR = new Error('missing permissions');
         const MOCK_SUFFICIENT_PERMISSIONS = {
             can_share: true,
             can_set_share_access: true,
         };
-        const MOCK_USER_ID = '123456789';
+        const MOCK_ITEM_ID = '123456789';
         beforeEach(() => {
             getBadItemError.mockReturnValue(MOCK_ITEM_ERROR);
             getBadPermissionsError.mockReturnValue(MOCK_PERMISSIONS_ERROR);
@@ -316,12 +316,9 @@ describe('api/Item', () => {
         test.each`
             itemID          | itemPermissions                | description
             ${undefined}    | ${MOCK_SUFFICIENT_PERMISSIONS} | ${'itemID is missing'}
-            ${MOCK_USER_ID} | ${undefined}                   | ${'itemPermissions is missing'}
-        `('should call getBadItemError() if $description', ({ itemID, itemPermissions }) => {
-            const result = item.validateRequest(itemID, itemPermissions);
-            expect(getBadItemError).toHaveBeenCalled();
-            expect(getBadPermissionsError).not.toHaveBeenCalled();
-            expect(result).toBe(MOCK_ITEM_ERROR);
+            ${MOCK_ITEM_ID} | ${undefined}                   | ${'itemPermissions is missing'}
+        `('should throw a bad item error if $description', ({ itemID, itemPermissions }) => {
+            expect(() => item.validateRequest(itemID, itemPermissions)).toThrowError(MOCK_ITEM_ERROR);
         });
 
         test.each`
@@ -329,23 +326,16 @@ describe('api/Item', () => {
             ${{ can_share: false, can_set_share_access: false }} | ${'neither share nor set share access'}
             ${{ can_share: false, can_set_share_access: true }}  | ${'set share access but not share'}
             ${{ can_share: true, can_set_share_access: false }}  | ${'share but not set share access'}
-        `('should call getBadPermissionsError() when the user can $description', ({ itemPermissions }) => {
-            const result = item.validateRequest(MOCK_USER_ID, itemPermissions);
-            expect(getBadPermissionsError).toHaveBeenCalled();
-            expect(getBadItemError).not.toHaveBeenCalled();
-            expect(result).toBe(MOCK_PERMISSIONS_ERROR);
+        `('should throw a bad permissions error when the user can $description', ({ itemPermissions }) => {
+            expect(() => item.validateRequest(MOCK_ITEM_ID, itemPermissions)).toThrowError(MOCK_PERMISSIONS_ERROR);
         });
 
-        test('should return null if the request is valid', () => {
-            const result = item.validateRequest(MOCK_USER_ID, MOCK_SUFFICIENT_PERMISSIONS);
-            expect(getBadItemError).not.toHaveBeenCalled();
-            expect(getBadPermissionsError).not.toHaveBeenCalled();
-            expect(result).toBeNull();
+        test('should not throw an error if the request is valid', () => {
+            expect(() => item.validateRequest(MOCK_ITEM_ID, MOCK_SUFFICIENT_PERMISSIONS)).not.toThrow();
         });
     });
 
     describe('share()', () => {
-        let getCacheKeySpy;
         let shareSuccessHandlerSpy;
         let errorHandlerSpy;
         let getUrlSpy;
@@ -359,7 +349,6 @@ describe('api/Item', () => {
                     can_set_share_access: true,
                 },
             };
-            getCacheKeySpy = jest.spyOn(item, 'getCacheKey');
             shareSuccessHandlerSpy = jest.spyOn(item, 'shareSuccessHandler');
             errorHandlerSpy = jest.spyOn(item, 'errorHandler');
             getUrlSpy = jest.spyOn(item, 'getUrl').mockReturnValue('url');
@@ -382,32 +371,39 @@ describe('api/Item', () => {
         });
 
         describe('with missing data', () => {
+            const MOCK_MISSING_DATA_ERROR = new Error('missing data');
             beforeEach(() => {
-                validateRequestSpy.mockReturnValue('error');
+                validateRequestSpy.mockImplementation(() => {
+                    throw MOCK_MISSING_DATA_ERROR;
+                });
             });
 
-            test('should not do anything if id is missing', () => {
+            test('should call the error handler if id is missing', () => {
                 delete file.id;
                 item.xhr = null;
-                return expect(item.share(file, 'access', 'success', jest.fn())).rejects.toBeUndefined();
+                item.share(file, 'access', 'success', jest.fn());
+                expect(errorHandlerSpy).toHaveBeenCalledWith(MOCK_MISSING_DATA_ERROR);
             });
 
-            test('should not do anything if permissions is missing', () => {
+            test('should call the error handler if permissions is missing', () => {
                 delete file.permissions;
                 item.xhr = null;
-                return expect(item.share(file, 'access', 'success', jest.fn())).rejects.toBeUndefined();
+                item.share(file, 'access', 'success', jest.fn());
+                expect(errorHandlerSpy).toHaveBeenCalledWith(MOCK_MISSING_DATA_ERROR);
             });
 
-            test('should not do anything if can share is false', () => {
+            test('should call the error handler if can share is false', () => {
                 delete file.permissions.can_share;
                 item.xhr = null;
-                return expect(item.share(file, 'access', 'success', jest.fn())).rejects.toBeUndefined();
+                item.share(file, 'access', 'success', jest.fn());
+                expect(errorHandlerSpy).toHaveBeenCalledWith(MOCK_MISSING_DATA_ERROR);
             });
 
-            test('should not do anything if can set share access is false', () => {
+            test('should call the error handler if can set share access is false', () => {
                 delete file.permissions.can_set_share_access;
                 item.xhr = null;
-                return expect(item.share(file, 'access', 'success', jest.fn())).rejects.toBeUndefined();
+                item.share(file, 'access', 'success', jest.fn());
+                expect(errorHandlerSpy).toHaveBeenCalledWith(MOCK_MISSING_DATA_ERROR);
             });
         });
 
@@ -420,7 +416,6 @@ describe('api/Item', () => {
                     data: { shared_link: { access: 'access' } },
                 });
                 expect(getUrlSpy).toHaveBeenCalledWith('id');
-                expect(getCacheKeySpy).toHaveBeenCalledWith('id');
             });
         });
 
@@ -433,7 +428,6 @@ describe('api/Item', () => {
                     data: { shared_link: null },
                 });
                 expect(getUrlSpy).toHaveBeenCalledWith('id');
-                expect(getCacheKeySpy).toHaveBeenCalledWith('id');
             });
         });
 
@@ -450,7 +444,6 @@ describe('api/Item', () => {
                     data: { shared_link: { access: 'access' } },
                 });
                 expect(getUrlSpy).toHaveBeenCalledWith('id');
-                expect(getCacheKeySpy).toHaveBeenCalledWith('id');
             });
         });
 
@@ -471,49 +464,10 @@ describe('api/Item', () => {
                 params: { fields: MOCK_FIELDS_STRING },
             });
             expect(getUrlSpy).toHaveBeenCalledWith('id');
-            expect(getCacheKeySpy).toHaveBeenCalledWith('id');
-        });
-
-        describe('with a cached item', () => {
-            let successCallback;
-            let errorCallback;
-            beforeEach(() => {
-                successCallback = jest.fn();
-                errorCallback = jest.fn();
-                jest.spyOn(item, 'getCache').mockImplementation(() => ({
-                    get: jest.fn().mockReturnValue('success'),
-                    has: jest.fn().mockReturnValue(true),
-                    merge: jest.fn(),
-                    set: jest.fn(),
-                }));
-            });
-
-            test('should skip the xhr if the item is cached', async () => {
-                await item.share(file, 'access', successCallback, errorCallback);
-                expect(successCallback).toHaveBeenCalledWith('success');
-                expect(errorCallback).not.toHaveBeenCalled();
-                expect(shareSuccessHandlerSpy).not.toHaveBeenCalled();
-                expect(errorHandlerSpy).not.toHaveBeenCalled();
-            });
-
-            test('should make an xhr if the item is cached, but options.forceFetch is true', async () => {
-                await item.share(file, 'access', successCallback, errorCallback, {
-                    forceFetch: true,
-                });
-                expect(shareSuccessHandlerSpy).toHaveBeenCalledWith(MOCK_DATA, undefined);
-                expect(errorHandlerSpy).not.toHaveBeenCalled();
-                expect(item.xhr.put).toHaveBeenCalledWith({
-                    url: 'url',
-                    data: { shared_link: { access: 'access' } },
-                });
-                expect(getUrlSpy).toHaveBeenCalledWith('id');
-                expect(getCacheKeySpy).toHaveBeenCalledWith('id');
-            });
         });
     });
 
     describe('updateSharedLink', () => {
-        let getCacheKeySpy;
         let shareSuccessHandlerSpy;
         let getUrlSpy;
         const MOCK_PERMISSIONS = {
@@ -529,7 +483,6 @@ describe('api/Item', () => {
                     can_set_share_access: true,
                 },
             };
-            getCacheKeySpy = jest.spyOn(item, 'getCacheKey');
             shareSuccessHandlerSpy = jest.spyOn(item, 'shareSuccessHandler');
             getUrlSpy = jest.spyOn(item, 'getUrl').mockReturnValue('url');
             jest.spyOn(item, 'validateRequest').mockReturnValue(null);
@@ -561,7 +514,6 @@ describe('api/Item', () => {
                 data: { shared_link: requestBody },
             });
             expect(getUrlSpy).toHaveBeenCalledWith('id');
-            expect(getCacheKeySpy).toHaveBeenCalledWith('id');
         });
 
         test('should make an xhr with a shared link request body and options.fields', async () => {
@@ -581,7 +533,6 @@ describe('api/Item', () => {
                 params: { fields: MOCK_FIELDS_STRING },
             });
             expect(getUrlSpy).toHaveBeenCalledWith('id');
-            expect(getCacheKeySpy).toHaveBeenCalledWith('id');
         });
     });
 
