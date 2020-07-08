@@ -29,7 +29,6 @@ export const DETAILS_TARGETS = {
 };
 
 export const ACTIVITY_TARGETS = {
-    ACTIVITY_FEED: 'activityfeed', // component
     ANNOTATION_OPTIONS_DELETE: 'activityfeed-annotation-delete',
     ANNOTATION_OPTIONS_EDIT: 'activityfeed-annotation-edit',
     ANNOTATION_OPTIONS: 'activityfeedannotation', // component

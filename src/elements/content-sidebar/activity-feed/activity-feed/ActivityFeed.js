@@ -16,7 +16,6 @@ import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import InlineError from '../../../../components/inline-error/InlineError';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import messages from './messages';
-import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import type { Annotation, AnnotationPermission, FocusableFeedItemType, FeedItems } from '../../../../common/types/feed';
 import type { SelectorItems, User, GroupMini, BoxItem } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
@@ -246,12 +245,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
         return (
             // eslint-disable-next-line
-            <div
-                className="bcs-activity-feed"
-                data-resin-component={ACTIVITY_TARGETS.ACTIVITY_FEED}
-                data-testid="activityfeed"
-                onKeyDown={this.onKeyDown}
-            >
+            <div className="bcs-activity-feed" data-testid="activityfeed" onKeyDown={this.onKeyDown}>
                 <div
                     ref={ref => {
                         this.feedContainer = ref;

@@ -3,7 +3,6 @@
 exports[`elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed should not render approval comment form if comment permissions are not present 1`] = `
 <div
   className="bcs-activity-feed"
-  data-resin-component="activityfeed"
   data-testid="activityfeed"
   onKeyDown={[Function]}
 >
@@ -22,7 +21,6 @@ exports[`elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed should
 exports[`elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed should not render approval comment form if only comment submit handler is not passed in 1`] = `
 <div
   className="bcs-activity-feed"
-  data-resin-component="activityfeed"
   data-testid="activityfeed"
   onKeyDown={[Function]}
 >
@@ -41,7 +39,6 @@ exports[`elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed should
 exports[`elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed should render approval comment form if comment submit handler is passed in and comment permissions 1`] = `
 <div
   className="bcs-activity-feed"
-  data-resin-component="activityfeed"
   data-testid="activityfeed"
   onKeyDown={[Function]}
 >
