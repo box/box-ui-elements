@@ -31,7 +31,7 @@ const ThumbnailCard = ({
     ...rest
 }: Props) => (
     <div
-        onFocus={() => setIsCardInFocus(id)}
+        onFocus={() => id && setIsCardInFocus(id)}
         onBlur={event => {
             if (!event.currentTarget.contains(event.relatedTarget)) {
                 setIsCardInFocus(-1);
