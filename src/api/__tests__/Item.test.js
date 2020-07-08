@@ -3,6 +3,7 @@ import Cache from '../../utils/Cache';
 import Item from '../Item';
 import { fillMissingProperties } from '../../utils/fields';
 import { getBadItemError, getBadPermissionsError } from '../../utils/error';
+import { ERROR_CODE_SHARE_ITEM } from '../../constants';
 
 let item;
 let file;
@@ -319,6 +320,7 @@ describe('api/Item', () => {
             ${MOCK_ITEM_ID} | ${undefined}                   | ${'itemPermissions is missing'}
         `('should throw a bad item error if $description', ({ itemID, itemPermissions }) => {
             expect(() => item.validateRequest(itemID, itemPermissions)).toThrowError(MOCK_ITEM_ERROR);
+            expect(item.errorCode).toBe(ERROR_CODE_SHARE_ITEM);
         });
 
         test.each`
@@ -328,10 +330,12 @@ describe('api/Item', () => {
             ${{ can_share: true, can_set_share_access: false }}  | ${'share but not set share access'}
         `('should throw a bad permissions error when the user can $description', ({ itemPermissions }) => {
             expect(() => item.validateRequest(MOCK_ITEM_ID, itemPermissions)).toThrowError(MOCK_PERMISSIONS_ERROR);
+            expect(item.errorCode).toBe(ERROR_CODE_SHARE_ITEM);
         });
 
         test('should not throw an error if the request is valid', () => {
             expect(() => item.validateRequest(MOCK_ITEM_ID, MOCK_SUFFICIENT_PERMISSIONS)).not.toThrow();
+            expect(item.errorCode).toBeUndefined();
         });
     });
 

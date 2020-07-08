@@ -294,13 +294,14 @@ class Item extends Base {
      * @return {void}
      */
     validateRequest(itemID: ?string, itemPermissions: ?BoxItemPermission) {
-        this.errorCode = ERROR_CODE_SHARE_ITEM;
         if (!itemID || !itemPermissions) {
+            this.errorCode = ERROR_CODE_SHARE_ITEM;
             throw getBadItemError();
         }
 
         const { can_share, can_set_share_access }: BoxItemPermission = itemPermissions;
         if (!can_share || !can_set_share_access) {
+            this.errorCode = ERROR_CODE_SHARE_ITEM;
             throw getBadPermissionsError();
         }
     }
