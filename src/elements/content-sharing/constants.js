@@ -31,6 +31,5 @@ export const CONTENT_SHARING_ITEM_FIELDS = [
 ];
 
 export const CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS = {
-    forceFetch: true,
     fields: CONTENT_SHARING_ITEM_FIELDS,
 };

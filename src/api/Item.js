@@ -314,8 +314,6 @@ class Item extends Base {
      * @param {Function} successCallback - Success callback
      * @param {Function|void} errorCallback - Error callback
      * @param {Array<string>|void} [options.fields] - Optionally include specific fields
-     * @param {boolean|void} [options.forceFetch] - Optionally bypasses the cache
-     * @param {boolean|void} [options.refreshCache] - Optionally update the cache
      * @return {Promise<void>}
      */
     async share(
@@ -363,8 +361,6 @@ class Item extends Base {
      * @param {Function} successCallback - Success callback
      * @param {Function|void} errorCallback - Error callback
      * @param {Array<string>|void} [options.fields] - Optionally include specific fields
-     * @param {boolean|void} [options.forceFetch] - Optionally bypasses the cache
-     * @param {boolean|void} [options.refreshCache] - Optionally update the cache
      * @return {Promise<void>}
      */
     async updateSharedLink(
