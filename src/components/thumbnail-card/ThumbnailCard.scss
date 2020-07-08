@@ -31,11 +31,6 @@
     background-color: white;
     border-top: 1px solid $bdl-gray-05;
 
-    .thumbnail-card-action-item:hover {
-        opacity: 1;
-        transition-duration: $bdl-transitionDurationBase;
-    }
-
     .thumbnail-card-details-content {
         flex: 1;
         overflow: hidden;
