@@ -19,7 +19,7 @@ import {
     SORT_DESC,
     ERROR_CODE_SEARCH,
 } from '../constants';
-import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
+import type { RequestOptions, ElementsErrorCallback } from '../common/types/api';
 import type { FlattenedBoxItem, FlattenedBoxItemCollection, Collection, BoxItemCollection } from '../common/types/core';
 import type APICache from '../utils/Cache';
 
@@ -193,10 +193,10 @@ class Search extends Base {
     /**
      * Does the network request
      *
-     * @param {FetchOptions} options - options for request
+     * @param {RequestOptions} options - options for request
      * @return {void}
      */
-    searchRequest(options: FetchOptions = {}): Promise<void> {
+    searchRequest(options: RequestOptions = {}): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }

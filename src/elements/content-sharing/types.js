@@ -37,6 +37,7 @@ export type ContentSharingSharedLinkType = ContentSharingEnterpriseDataType &
 
 export type ContentSharingItemDataType = {
     item: item,
+    originalItemPermissions: BoxItemPermission,
     sharedLink: ContentSharingSharedLinkType,
 };
 
@@ -56,3 +57,5 @@ export type ContentSharingItemAPIResponse = {
     },
     type: ItemType,
 };
+
+export type SharedLinkUpdateFnType = () => (level: string) => Promise<void>;

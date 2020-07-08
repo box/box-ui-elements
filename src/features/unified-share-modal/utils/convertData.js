@@ -4,35 +4,58 @@ import { getTypedFileId, getTypedFolderId } from '../../../utils/file';
 import {
     ACCESS_COLLAB,
     ACCESS_COMPANY,
+    ACCESS_NONE,
     ACCESS_OPEN,
     INVITEE_ROLE_EDITOR,
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_PREVIEW,
     TYPE_FOLDER,
 } from '../../../constants';
-import { ANYONE_IN_COMPANY, ANYONE_WITH_LINK, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY, PEOPLE_IN_ITEM } from '../constants';
+import {
+    ALLOWED_ACCESS_LEVELS,
+    ANYONE_IN_COMPANY,
+    ANYONE_WITH_LINK,
+    CAN_VIEW_DOWNLOAD,
+    CAN_VIEW_ONLY,
+    PEOPLE_IN_ITEM,
+} from '../constants';
 import type {
     ContentSharingItemAPIResponse,
     ContentSharingItemDataType,
     ContentSharingUserDataType,
 } from '../../../elements/content-sharing/types';
 
-const ACCESS_LEVEL_MAP = {
+/**
+ * The following constants are used for converting API requests
+ * and responses into objects expected by the USM, and vice versa
+ */
+export const API_TO_USM_ACCESS_LEVEL_MAP = {
     [ACCESS_COLLAB]: PEOPLE_IN_ITEM,
-    [ACCESS_OPEN]: ANYONE_WITH_LINK,
     [ACCESS_COMPANY]: ANYONE_IN_COMPANY,
+    [ACCESS_OPEN]: ANYONE_WITH_LINK,
+    [ACCESS_NONE]: null,
 };
-
-const PERMISSION_LEVEL_MAP = {
+export const API_TO_USM_PERMISSION_LEVEL_MAP = {
     [PERMISSION_CAN_DOWNLOAD]: CAN_VIEW_DOWNLOAD,
     [PERMISSION_CAN_PREVIEW]: CAN_VIEW_ONLY,
+};
+
+export const USM_TO_API_ACCESS_LEVEL_MAP = {
+    [ANYONE_IN_COMPANY]: ACCESS_COMPANY,
+    [ANYONE_WITH_LINK]: ACCESS_OPEN,
+    [PEOPLE_IN_ITEM]: ACCESS_COLLAB,
+};
+
+export const USM_TO_API_PERMISSION_LEVEL_MAP = {
+    [CAN_VIEW_DOWNLOAD]: PERMISSION_CAN_DOWNLOAD,
+    [CAN_VIEW_ONLY]: PERMISSION_CAN_PREVIEW,
 };
 
 /**
  * Convert a response from the Item API to the object that the USM expects.
  * @param {BoxItem} itemAPIData
  */
-const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): ContentSharingItemDataType => {
+export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): ContentSharingItemDataType => {
     const {
         allowed_invitee_roles,
         id,
@@ -74,20 +97,16 @@ const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): Conten
             vanity_name: vanityName,
         } = shared_link;
 
-        const accessLevel = effective_access ? ACCESS_LEVEL_MAP[effective_access] : null;
-        const permissionLevel = effective_permission ? PERMISSION_LEVEL_MAP[effective_permission] : null;
-        const isDownloadAllowed = permissionLevel === PERMISSION_LEVEL_MAP.can_download;
+        const accessLevel = effective_access ? API_TO_USM_ACCESS_LEVEL_MAP[effective_access] : null;
+        const permissionLevel = effective_permission ? API_TO_USM_PERMISSION_LEVEL_MAP[effective_permission] : null;
+        const isDownloadAllowed = permissionLevel === API_TO_USM_PERMISSION_LEVEL_MAP.can_download;
         const canChangeDownload = canChangeAccessLevel && isDownloadAllowed;
         const canChangePassword = canChangeAccessLevel && isPasswordAvailable;
         const canChangeVanityName = canChangeAccessLevel && isVanityNameAvailable;
 
         sharedLink = {
             accessLevel,
-            allowedAccessLevels: {
-                peopleInThisItem: accessLevel === PEOPLE_IN_ITEM,
-                peopleInYourCompany: accessLevel === ANYONE_IN_COMPANY,
-                peopleWithTheLink: accessLevel === ANYONE_WITH_LINK,
-            },
+            allowedAccessLevels: ALLOWED_ACCESS_LEVELS,
             canChangeAccessLevel,
             canChangeDownload,
             canChangePassword,
@@ -125,6 +144,7 @@ const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): Conten
             type,
             typedID: type === TYPE_FOLDER ? getTypedFolderId(id) : getTypedFileId(id),
         },
+        originalItemPermissions: permissions, // the original permissions are necessary for PUT requests to the Item API
         sharedLink,
     };
 };
@@ -133,7 +153,7 @@ const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): Conten
  * Convert a response from the User API into the object that the USM expects.
  * @param {User} userAPIData
  */
-const convertUserResponse = (userAPIData: User): ContentSharingUserDataType => {
+export const convertUserResponse = (userAPIData: User): ContentSharingUserDataType => {
     const { enterprise, hostname, id } = userAPIData;
 
     return {
@@ -144,5 +164,3 @@ const convertUserResponse = (userAPIData: User): ContentSharingUserDataType => {
         },
     };
 };
-
-export { convertItemResponse, convertUserResponse, PERMISSION_LEVEL_MAP };

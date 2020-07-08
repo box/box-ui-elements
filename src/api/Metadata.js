@@ -28,7 +28,7 @@ import {
     ERROR_CODE_FETCH_SKILLS,
 } from '../constants';
 
-import type { FetchOptions, ElementsErrorCallback, JSONPatchOperations } from '../common/types/api';
+import type { RequestOptions, ElementsErrorCallback, JSONPatchOperations } from '../common/types/api';
 import type {
     MetadataTemplateSchemaResponse,
     MetadataTemplate,
@@ -363,7 +363,7 @@ class Metadata extends File {
         successCallback: ({ editors: Array<MetadataEditor>, templates: Array<MetadataTemplate> }) => void,
         errorCallback: ElementsErrorCallback,
         hasMetadataFeature: boolean,
-        options: FetchOptions = {},
+        options: RequestOptions = {},
     ): Promise<void> {
         const { id, permissions, is_externally_owned }: BoxItem = file;
         this.errorCode = ERROR_CODE_FETCH_METADATA;

@@ -1,6 +1,6 @@
-import { convertItemResponse, convertUserResponse, PERMISSION_LEVEL_MAP } from '../convertData';
+import { API_TO_USM_PERMISSION_LEVEL_MAP, convertItemResponse, convertUserResponse } from '../convertData';
 import { TYPE_FILE, TYPE_FOLDER } from '../../../../constants';
-import { ANYONE_IN_COMPANY } from '../../constants';
+import { ALLOWED_ACCESS_LEVELS, ANYONE_IN_COMPANY } from '../../constants';
 
 jest.mock('../../../../utils/file', () => ({
     getTypedFileId: () => 'f_190457309',
@@ -206,14 +206,11 @@ describe('convertItemResponse()', () => {
                     type: itemType,
                     typedID,
                 },
+                originalItemPermissions: permissions,
                 sharedLink: sharedLink
                     ? {
                           accessLevel: ANYONE_IN_COMPANY,
-                          allowedAccessLevels: {
-                              peopleInThisItem: false,
-                              peopleInYourCompany: true,
-                              peopleWithTheLink: false,
-                          },
+                          allowedAccessLevels: ALLOWED_ACCESS_LEVELS,
                           canChangeAccessLevel: can_set_share_access,
                           canChangeDownload: can_set_share_access && can_download,
                           canChangePassword: can_set_share_access && password,
@@ -231,7 +228,7 @@ describe('convertItemResponse()', () => {
                           isPasswordAvailable: password,
                           isPasswordEnabled: is_password_enabled,
                           isPreviewAllowed: can_preview,
-                          permissionLevel: PERMISSION_LEVEL_MAP[effective_permission],
+                          permissionLevel: API_TO_USM_PERMISSION_LEVEL_MAP[effective_permission],
                           url,
                           vanityName: vanity_name,
                       }

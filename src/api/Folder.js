@@ -18,7 +18,7 @@ import {
     FIELD_REPRESENTATIONS,
     X_REP_HINT_HEADER_DIMENSIONS_DEFAULT,
 } from '../constants';
-import type { FetchOptions, ElementsErrorCallback } from '../common/types/api';
+import type { RequestOptions, ElementsErrorCallback } from '../common/types/api';
 import type {
     SortBy,
     SortDirection,
@@ -212,7 +212,7 @@ class Folder extends Item {
      * @return {Promise}
      */
     folderRequest(
-        { fields, noPagination }: FetchOptions = {},
+        { fields, noPagination }: RequestOptions = {},
         successHandler?: Function = this.folderSuccessHandler,
     ): Promise<any> {
         if (this.isDestroyed()) {
@@ -257,7 +257,12 @@ class Folder extends Item {
      * @param {Object} options - Options
      * @returns {void}
      */
-    getFolderFields(id: string, successCallback: Function, errorCallback: Function, options: FetchOptions = {}): void {
+    getFolderFields(
+        id: string,
+        successCallback: Function,
+        errorCallback: Function,
+        options: RequestOptions = {},
+    ): void {
         if (this.isDestroyed()) {
             return;
         }
@@ -294,7 +299,7 @@ class Folder extends Item {
         sortDirection: SortDirection,
         successCallback: Function,
         errorCallback: Function,
-        options: FetchOptions = {},
+        options: RequestOptions = {},
     ): void {
         if (this.isDestroyed()) {
             return;
