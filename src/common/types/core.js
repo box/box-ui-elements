@@ -4,6 +4,7 @@ import {
     ACCESS_OPEN,
     ACCESS_COLLAB,
     ACCESS_COMPANY,
+    ACCESS_NONE,
     VIEW_SEARCH,
     VIEW_FOLDER,
     VIEW_ERROR,
@@ -73,7 +74,7 @@ type Order = {
     direction: SortDirection,
 };
 
-type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN;
+type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN | typeof ACCESS_NONE;
 
 type NoticeType = 'info' | 'error';
 
