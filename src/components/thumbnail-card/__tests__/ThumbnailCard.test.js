@@ -28,11 +28,11 @@ describe('components/thumbnail-card/ThumbnailCard', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should apply is-shadow-applied selector if shadowOnHover is true', () => {
-        const shadowOnHover = true;
-        const wrapper = getWrapper({ shadowOnHover });
+    test('should apply is-highlight-applied selector if highlightOnHover is true', () => {
+        const highlightOnHover = true;
+        const wrapper = getWrapper({ highlightOnHover });
 
-        const container = wrapper.find('.is-shadow-applied');
+        const container = wrapper.find('.is-highlight-applied');
         expect(container.length).toBe(1);
     });
 });

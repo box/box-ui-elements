@@ -3,8 +3,6 @@
 exports[`components/thumbnail-card/ThumbnailCard should pass down icon and subtitle 1`] = `
 <div
   className="thumbnail-card"
-  onBlur={[Function]}
-  onFocus={[Function]}
   role="button"
   tabIndex="0"
 >
@@ -38,8 +36,6 @@ exports[`components/thumbnail-card/ThumbnailCard should pass down icon and subti
 exports[`components/thumbnail-card/ThumbnailCard should render 1`] = `
 <div
   className="thumbnail-card"
-  onBlur={[Function]}
-  onFocus={[Function]}
   role="button"
   tabIndex="0"
 >
@@ -63,8 +59,6 @@ exports[`components/thumbnail-card/ThumbnailCard should render 1`] = `
 exports[`components/thumbnail-card/ThumbnailCard should use additional className 1`] = `
 <div
   className="thumbnail-card fooBar"
-  onBlur={[Function]}
-  onFocus={[Function]}
   role="button"
   tabIndex="0"
 >
