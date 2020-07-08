@@ -286,18 +286,13 @@ class Item extends Base {
     };
 
     /**
-     * Check whether an item's shared link can be updated
+     * Validate an item update request
      *
-<<<<<<< HEAD
-     * @param {string} itemID - ID of item to share
-     * @param {BoxItemPermission} itemPermissions - Permissions for item
-=======
      * @param {string|void} itemID - ID of item to share
      * @param {BoxItemPermission|void} itemPermissions - Permissions for item
->>>>>>> 2a367684... feat(content-sharing): Enable permissions level changes
      * @return {Error|null}
      */
-    checkShareError(itemID: string, itemPermissions: BoxItemPermission) {
+    validateRequest(itemID: ?string, itemPermissions: ?BoxItemPermission) {
         this.errorCode = ERROR_CODE_SHARE_ITEM;
         if (!itemID || !itemPermissions) {
             return getBadItemError();
@@ -335,16 +330,10 @@ class Item extends Base {
         }
 
         const { id, permissions }: BoxItem = item;
-        const shareError = this.checkShareError(id, permissions);
-
+        const shareError = this.validateRequest(id, permissions);
         if (shareError) {
-<<<<<<< HEAD
-            const { error } = shareError;
-            return errorCallback(error, this.errorCode);
-=======
             errorCallback(shareError, this.errorCode);
             return Promise.reject();
->>>>>>> 2a367684... feat(content-sharing): Enable permissions level changes
         }
 
         const cache: APICache = this.getCache();
@@ -402,8 +391,7 @@ class Item extends Base {
         }
 
         const { id, permissions }: BoxItem = item;
-        const shareError = this.checkShareError(id, permissions);
-
+        const shareError = this.validateRequest(id, permissions);
         if (shareError) {
             errorCallback(shareError, this.errorCode);
             return Promise.reject();

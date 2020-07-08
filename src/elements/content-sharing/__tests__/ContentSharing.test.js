@@ -29,7 +29,7 @@ import {
 import {
     convertItemResponse,
     convertUserResponse,
-    createSharedLinkPermissions,
+    convertSharedLinkPermissions,
 } from '../../../features/unified-share-modal/utils/convertData';
 import {
     MOCK_CONVERTED_ITEM_DATA,
@@ -485,7 +485,7 @@ describe('elements/content-sharing/ContentSharing', () => {
         `(
             'should call updateSharedLink() from changeSharedLinkPermissionLevel() when given $permissionLevelFromUSM permission',
             async ({ permissionLevelFromUSM, permissionLevelObjectForAPI }) => {
-                createSharedLinkPermissions.mockReturnValue(permissionLevelObjectForAPI);
+                convertSharedLinkPermissions.mockReturnValue(permissionLevelObjectForAPI);
                 let wrapper;
                 await act(async () => {
                     wrapper = getWrapper({ itemType: TYPE_FILE });

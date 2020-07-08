@@ -7,8 +7,8 @@ import Notification from '../../components/notification/Notification';
 import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
 import {
     convertItemResponse,
+    convertSharedLinkPermissions,
     USM_TO_API_ACCESS_LEVEL_MAP,
-    USM_TO_API_PERMISSION_LEVEL_MAP,
 } from '../../features/unified-share-modal/utils/convertData';
 import { ACCESS_COLLAB, ACCESS_NONE, STATUS_ERROR, TYPE_FILE, TYPE_FOLDER } from '../../constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from './constants';
@@ -132,25 +132,17 @@ function SharingNotification({
                 createSharedLinkAPIConnection(ACCESS_NONE, undefined, handleRemoveSharedLinkSuccess);
             setOnRemoveLink(updatedOnRemoveLinkFn);
 
-            const updatedChangeSharedLinkAccessLevelFn: SharedLinkUpdateFnType = () => (newAccessLevel: ?string) =>
+            const updatedChangeSharedLinkAccessLevelFn: SharedLinkUpdateFnType = () => (newAccessLevel: string) =>
                 createSharedLinkAPIConnection(USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel]);
             setChangeSharedLinkAccessLevel(updatedChangeSharedLinkAccessLevelFn);
 
             const updatedChangeSharedLinkPermissionLevelFn: SharedLinkUpdateFnType = () => (
-                newSharedLinkPermissionLevel: ?string,
+                newSharedLinkPermissionLevel: string,
             ) => {
-                const updatedSharedLinkPermissions = {};
-                Object.keys(USM_TO_API_PERMISSION_LEVEL_MAP).forEach(level => {
-                    if (level === newSharedLinkPermissionLevel) {
-                        updatedSharedLinkPermissions[USM_TO_API_PERMISSION_LEVEL_MAP[level]] = true;
-                    } else {
-                        updatedSharedLinkPermissions[USM_TO_API_PERMISSION_LEVEL_MAP[level]] = false;
-                    }
-                });
                 return itemAPIInstance.updateSharedLink(
                     itemData,
                     {
-                        permissions: updatedSharedLinkPermissions,
+                        permissions: convertSharedLinkPermissions(newSharedLinkPermissionLevel),
                     },
                     handleUpdateItemSuccess,
                     handleUpdateItemError,

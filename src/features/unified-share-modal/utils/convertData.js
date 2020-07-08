@@ -169,7 +169,7 @@ export const convertUserResponse = (userAPIData: User): ContentSharingUserDataTy
  * Create a shared link permissions object for the API based on a USM permission level.
  * @param {string} newSharedLinkPermissionLevel
  */
-export const createSharedLinkPermissions = (newSharedLinkPermissionLevel: string): $Shape<BoxItemPermission> => {
+export const convertSharedLinkPermissions = (newSharedLinkPermissionLevel: string): $Shape<BoxItemPermission> => {
     const sharedLinkPermissions = {};
     Object.keys(USM_TO_API_PERMISSION_LEVEL_MAP).forEach(level => {
         if (level === newSharedLinkPermissionLevel) {
