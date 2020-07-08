@@ -9,11 +9,10 @@ import ThumbnailCardThumbnail from './ThumbnailCardThumbnail';
 import './ThumbnailCard.scss';
 
 type Props = {
-    actionItem?: React.Node,
     className?: string,
     icon?: React.Node,
-    id?: string,
-    setIsCardInFocus: (isInFocus: string) => void,
+    id?: number,
+    setIsCardInFocus?: (isInFocus: number) => void,
     shadowOnHover?: boolean,
     subtitle?: React.Node,
     thumbnail: React.Node,
@@ -21,7 +20,6 @@ type Props = {
 };
 
 const ThumbnailCard = ({
-    actionItem,
     className = '',
     icon,
     id,
@@ -36,7 +34,7 @@ const ThumbnailCard = ({
         onFocus={() => setIsCardInFocus(id)}
         onBlur={event => {
             if (!event.currentTarget.contains(event.relatedTarget)) {
-                setIsCardInFocus('');
+                setIsCardInFocus(-1);
             }
         }}
         role="button"
@@ -45,7 +43,7 @@ const ThumbnailCard = ({
         {...rest}
     >
         <ThumbnailCardThumbnail thumbnail={thumbnail} />
-        <ThumbnailCardDetails actionItem={actionItem} icon={icon} subtitle={subtitle} title={title} />
+        <ThumbnailCardDetails icon={icon} subtitle={subtitle} title={title} />
     </div>
 );
 

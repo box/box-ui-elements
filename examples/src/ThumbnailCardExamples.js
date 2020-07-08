@@ -2,10 +2,6 @@
 import React, { useState } from 'react';
 
 import AccessibleSVG from '../../src/icons/accessible-svg';
-import DropdownMenu from '../../src/components/dropdown-menu';
-import { Menu, MenuItem } from '../../src/components/menu';
-import MenuToggle from '../../src/components/dropdown-menu/MenuToggle';
-import PlainButton from '../../src/components/plain-button/PlainButton';
 import ThumbnailCard from '../../src/components/thumbnail-card';
 
 const ThumbnailCardExamples = () => {
@@ -31,27 +27,6 @@ const ThumbnailCardExamples = () => {
     const title = <div>Hello World!</div>;
     const thumbnail = <div>Thumbnail goes here</div>;
 
-    const actionItem = (
-        <DropdownMenu>
-            <PlainButton
-                onFocus={event => setIsCardInFocus(event.currentTarget.id)}
-                onBlur={event => {
-                    if (event.relatedTarget && !event.relatedTarget.contains(event.currentTarget)) {
-                        setIsCardInFocus('');
-                    }
-                }}
-                tabIndex="0"
-                className="action-item-button"
-                type="button"
-            >
-                <MenuToggle>Hello</MenuToggle>
-            </PlainButton>
-            <Menu>
-                <MenuItem>Menu item</MenuItem>
-            </Menu>
-        </DropdownMenu>
-    );
-
     return (
         <div>
             <div>
@@ -72,7 +47,7 @@ const ThumbnailCardExamples = () => {
             </div>
             <br />
             <div>
-                <h1>Multiple Cards Example with Action Item</h1>
+                <h1>Multiple Cards Example</h1>
                 <div
                     style={{
                         display: 'flex',
@@ -82,7 +57,6 @@ const ThumbnailCardExamples = () => {
                     {new Array(3).fill(true).map((_, i) => (
                         <ThumbnailCard
                             key={`thumbnailcard-${i}`}
-                            actionItem={actionItem}
                             className={isCardInFocus === i ? 'is-card-in-focus' : ''}
                             icon={icon}
                             id={i}
