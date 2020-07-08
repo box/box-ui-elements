@@ -1327,11 +1327,11 @@ export type ContentPreviewProps = Props;
 export { ContentPreview as ContentPreviewComponent };
 export default flow([
     makeResponsive,
-    withFeatureProvider,
-    withLogger(ORIGIN_CONTENT_PREVIEW),
-    withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
     withAnnotatorContext,
     withAnnotations,
     withRouter,
     withNavRouter,
+    withFeatureProvider,
+    withLogger(ORIGIN_CONTENT_PREVIEW),
+    withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
 ])(ContentPreview);
