@@ -6,24 +6,34 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from '../../../common/messages';
-import IconActivityFeedEmptyState from '../icons';
+import { IconActivityFeedEmptyState, IconActivityFeedEmptyStateFallback } from '../icons';
 
 type Props = {
+    showAnnotationMessage?: boolean,
     showCommentMessage?: boolean,
 };
 
-const EmptyState = ({ showCommentMessage }: Props): React.Node => (
-    <div className="bcs-activity-feed-empty-state">
-        <IconActivityFeedEmptyState />
-        <div className="bcs-empty-state-cta">
-            <FormattedMessage {...messages.noActivity} />
-            {showCommentMessage ? (
-                <aside>
-                    <FormattedMessage {...messages.noActivityCommentPrompt} />
-                </aside>
-            ) : null}
+const EmptyState = ({ showAnnotationMessage, showCommentMessage }: Props): React.Node => {
+    const showActionMessage = showAnnotationMessage || showCommentMessage;
+    const actionMessage = showAnnotationMessage
+        ? messages.noActivityAnnotationPrompt
+        : messages.noActivityCommentPrompt;
+
+    return (
+        <div className="bcs-activity-feed-empty-state">
+            {showAnnotationMessage ? <IconActivityFeedEmptyState /> : <IconActivityFeedEmptyStateFallback />}
+            <div className="bcs-empty-state-cta">
+                <FormattedMessage {...messages.noActivity}>
+                    {(text: string) => <span className="bcs-empty-state-detail">{text}</span>}
+                </FormattedMessage>
+                {showActionMessage ? (
+                    <aside>
+                        <FormattedMessage {...actionMessage} />
+                    </aside>
+                ) : null}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export default EmptyState;
