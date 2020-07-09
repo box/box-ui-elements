@@ -323,8 +323,6 @@ class TabViewPrimitive extends React.Component<Props, State> {
                             aria-hidden={selectedIndex !== i}
                             className={`tab-panel ${i === selectedIndex ? 'is-selected' : ''}`}
                             role={TAB_PANEL_ROLE}
-                            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-                            tabIndex="0"
                         >
                             {child.props.children}
                         </div>

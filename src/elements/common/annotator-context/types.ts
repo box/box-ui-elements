@@ -1,3 +1,4 @@
+import { Location } from 'history';
 import { match } from 'react-router-dom';
 
 export const CREATE: 'create' = 'create';
@@ -18,6 +19,7 @@ export interface Annotator {
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 export interface AnnotatorState {
+    activeAnnotationFileVersionId?: string | null;
     activeAnnotationId?: string | null;
     annotation?: object | null;
     action?: Action | null;
@@ -25,12 +27,13 @@ export interface AnnotatorState {
     meta?: Metadata | null;
 }
 
-export type GetMatchPath = (history: History) => match<MatchParams> | null;
+export type GetMatchPath = (location?: Location) => match<MatchParams> | null;
 
 export interface AnnotatorContext {
     emitActiveChangeEvent: (id: string) => void;
     emitRemoveEvent: (id: string) => void;
     getAnnotationsMatchPath: GetMatchPath;
+    getAnnotationsPath: (fileVersionId?: string, annotationId?: string) => string;
     state: AnnotatorState;
 }
 

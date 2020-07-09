@@ -1,5 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`components/tooltip/Tooltip render() should match snapshot when stopBubble is set 1`] = `
+<div
+  className="tooltip bdl-Tooltip"
+  id="tooltip19"
+  onClick={[Function]}
+  onContextMenu={[Function]}
+  onKeyPress={[Function]}
+  role="presentation"
+>
+  <div
+    aria-live="polite"
+    role="tooltip"
+  >
+    hi
+  </div>
+</div>
+`;
+
 exports[`components/tooltip/Tooltip render() should not render the close button if wasClosedByUser state is true 1`] = `
 <TetherComponent
   attachment="bottom center"
@@ -195,22 +213,4 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
     </PlainButton>
   </div>
 </TetherComponent>
-`;
-
-exports[`components/tooltip/Tooltip should match snapshot when stopBubble is set 1`] = `
-<div
-  className="tooltip bdl-Tooltip"
-  id="tooltip19"
-  onClick={[Function]}
-  onContextMenu={[Function]}
-  onKeyPress={[Function]}
-  role="presentation"
->
-  <div
-    aria-live="polite"
-    role="tooltip"
-  >
-    hi
-  </div>
-</div>
 `;

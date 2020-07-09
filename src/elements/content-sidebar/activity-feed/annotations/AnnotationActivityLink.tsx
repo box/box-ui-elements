@@ -6,11 +6,17 @@ import { ButtonType } from '../../../../components/button';
 
 export interface AnnotationActivityLinkProps {
     id: string;
+    isDisabled: boolean;
     message: MessageDescriptor;
     onClick: (id: string) => void;
 }
 
-const AnnotationActivityLink = ({ id, message, onClick = noop }: AnnotationActivityLinkProps): JSX.Element => {
+const AnnotationActivityLink = ({
+    id,
+    isDisabled = false,
+    message,
+    onClick = noop,
+}: AnnotationActivityLinkProps): JSX.Element => {
     const handleClick = (event: React.SyntheticEvent) => {
         event.preventDefault();
         event.stopPropagation();
@@ -22,7 +28,13 @@ const AnnotationActivityLink = ({ id, message, onClick = noop }: AnnotationActiv
         onClick(id);
     };
     return (
-        <PlainButton className="bcs-AnnotationActivity-link" onClick={handleClick} type={ButtonType.BUTTON}>
+        <PlainButton
+            className="bcs-AnnotationActivity-link"
+            data-resin-target="annotationLink"
+            isDisabled={isDisabled}
+            onClick={handleClick}
+            type={ButtonType.BUTTON}
+        >
             <FormattedMessage {...message} />
         </PlainButton>
     );

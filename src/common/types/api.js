@@ -2,7 +2,7 @@
 import { HTTP_GET, HTTP_POST, HTTP_PUT, HTTP_DELETE, HTTP_OPTIONS, HTTP_HEAD } from '../../constants';
 import { JSON_PATCH_OP_ADD, JSON_PATCH_OP_REMOVE, JSON_PATCH_OP_REPLACE, JSON_PATCH_OP_TEST } from '../constants';
 import type { ElementOrigin } from '../../elements/common/flowTypes';
-import type { Token } from './core';
+import type { StringAnyMap, StringMap, Token } from './core';
 import type APICache from '../../utils/Cache';
 
 type Method =
@@ -25,11 +25,21 @@ type JSONPatch = {
 
 type JSONPatchOperations = Array<JSONPatch>;
 
-type FetchOptions = {
+type RequestOptions = {
     fields?: Array<string>,
     forceFetch?: boolean,
     noPagination?: boolean,
     refreshCache?: boolean,
+};
+
+type PayloadType = StringAnyMap | Array<StringAnyMap>;
+
+type RequestData = {
+    data: PayloadType,
+    headers?: StringMap,
+    id?: string,
+    params?: StringAnyMap,
+    url: string,
 };
 
 type ErrorResponseData = {
@@ -78,14 +88,16 @@ type APIOptions = {
 };
 
 export type {
-    Method,
-    JSONPatchOperations,
-    FetchOptions,
-    ErrorResponseData,
-    ElementsXhrError,
+    APIOptions,
     ElementOrigin,
     ElementsError,
-    ErrorContextProps,
     ElementsErrorCallback,
-    APIOptions,
+    ElementsXhrError,
+    ErrorContextProps,
+    ErrorResponseData,
+    RequestData,
+    RequestOptions,
+    JSONPatchOperations,
+    Method,
+    PayloadType,
 };

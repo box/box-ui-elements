@@ -1,43 +1,32 @@
 import React, { Component } from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { createMemoryHistory, History } from 'history';
-
-import { Annotator, AnnotatorContext, withAnnotations } from '../index';
+import { createMemoryHistory, History, Location } from 'history';
+import { Action, Annotator, AnnotatorContext, withAnnotations, Status } from '../index';
 import { WithAnnotationsProps, ComponentWithAnnotations } from '../withAnnotations';
-import { AnnotatorContext as AnnotatorContextType, Action } from '../types';
 
 type ComponentProps = {
     className?: string;
     history?: History;
+    location?: Location;
 };
 
-type WrappedComponentProps = ComponentProps & Partial<WithAnnotationsProps>;
-
-type ContextProviderProps = {
-    value: AnnotatorContextType;
-};
+type WrappedProps = ComponentProps & Partial<WithAnnotationsProps>;
+type WrapperType = ShallowWrapper<WrappedProps, {}, Component & ComponentWithAnnotations>;
 
 describe('elements/common/annotator-context/withAnnotations', () => {
-    let mockAnnotator = {} as Annotator;
+    const defaults = {
+        className: 'foo',
+        onAnnotator: jest.fn(),
+        onError: jest.fn(),
+        onPreviewDestroy: jest.fn(),
+    };
     const MockComponent = (props: ComponentProps) => <div {...props} />;
     const WrappedComponent = withAnnotations(MockComponent);
 
-    const defaultProps = {
-        className: 'foo',
-        onAnnotator: jest.fn(),
-        onPreviewDestroy: jest.fn(),
-    };
-
-    const getWrapper = (
-        props: WrappedComponentProps = defaultProps,
-    ): ShallowWrapper<WrappedComponentProps, {}, Component & ComponentWithAnnotations> =>
-        shallow<Component & ComponentWithAnnotations, WrappedComponentProps>(
-            <WrappedComponent {...defaultProps} {...props} />,
-        );
-
-    const getContextProvider = (
-        wrapper: ShallowWrapper<WrappedComponentProps, {}, Component & ComponentWithAnnotations>,
-    ) => wrapper.find<ContextProviderProps>(AnnotatorContext.Provider);
+    const getWrapper = (props: WrappedProps = {}): WrapperType =>
+        shallow(<WrappedComponent {...defaults} {...props} />);
+    const getContextProvider = (wrapper: WrapperType) => wrapper.find(AnnotatorContext.Provider);
+    let mockAnnotator = {} as Annotator;
 
     beforeEach(() => {
         mockAnnotator = {
@@ -51,21 +40,21 @@ describe('elements/common/annotator-context/withAnnotations', () => {
     describe('constructor', () => {
         test('should parse the history location pathname to initialize state with activeAnnotationId', () => {
             const history = createMemoryHistory({ initialEntries: ['/activity/annotations/123/456'] }) as History;
-            const wrapper = getWrapper({ history });
+            const wrapper = getWrapper({ history, location: history.location });
             expect(wrapper.state('activeAnnotationId')).toBe('456');
         });
 
         test('should not initialize state with activeAnnotationId if history path does not match deeplink schema', () => {
             const history = createMemoryHistory({ initialEntries: ['/activity/annotations/456'] }) as History;
-            const wrapper = getWrapper({ history });
+            const wrapper = getWrapper({ history, location: history.location });
             expect(wrapper.state('activeAnnotationId')).toBe(null);
         });
     });
 
     test('should pass onAnnotator and onPreviewDestroy as props on the wrapped component', () => {
         const wrapper = getWrapper();
+        const wrappedComponent = wrapper.find<WrappedProps>(MockComponent);
 
-        const wrappedComponent = wrapper.find<WrappedComponentProps>(MockComponent);
         expect(wrappedComponent.exists()).toBeTruthy();
         expect(wrappedComponent.props().onAnnotator).toBeTruthy();
         expect(wrappedComponent.props().onPreviewDestroy).toBeTruthy();
@@ -80,8 +69,10 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         expect(contextProvider.prop('value').emitActiveChangeEvent).toEqual(instance.emitActiveChangeEvent);
         expect(contextProvider.prop('value').emitRemoveEvent).toEqual(instance.emitRemoveEvent);
         expect(contextProvider.prop('value').getAnnotationsMatchPath).toEqual(instance.getMatchPath);
+        expect(contextProvider.prop('value').getAnnotationsPath).toEqual(instance.getAnnotationsPath);
         expect(contextProvider.prop('value').state).toEqual({
             action: null,
+            activeAnnotationFileVersionId: null,
             activeAnnotationId: null,
             annotation: null,
             error: null,
@@ -120,10 +111,10 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         const mockError = new Error('boo');
 
         test.each`
-            status       | annotation        | error        | expectedAction         | expectedAnnotation | expectedError
-            ${'pending'} | ${mockAnnotation} | ${undefined} | ${Action.CREATE_START} | ${mockAnnotation}  | ${null}
-            ${'success'} | ${mockAnnotation} | ${undefined} | ${Action.CREATE_END}   | ${mockAnnotation}  | ${null}
-            ${'error'}   | ${mockAnnotation} | ${mockError} | ${Action.CREATE_END}   | ${mockAnnotation}  | ${mockError}
+            status            | annotation        | error        | expectedAction         | expectedAnnotation | expectedError
+            ${Status.PENDING} | ${mockAnnotation} | ${undefined} | ${Action.CREATE_START} | ${mockAnnotation}  | ${null}
+            ${Status.SUCCESS} | ${mockAnnotation} | ${undefined} | ${Action.CREATE_END}   | ${mockAnnotation}  | ${null}
+            ${Status.ERROR}   | ${mockAnnotation} | ${mockError} | ${Action.CREATE_END}   | ${mockAnnotation}  | ${mockError}
         `(
             'should update the context provider value if $status status received',
             ({ status, annotation, error, expectedAction, expectedAnnotation, expectedError }) => {
@@ -139,9 +130,11 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
                 wrapper.instance().handleAnnotationCreate(eventData);
                 const contextProvider = getContextProvider(wrapper);
+
                 expect(contextProvider.exists()).toBeTruthy();
                 expect(contextProvider.prop('value').state).toEqual({
                     action: expectedAction,
+                    activeAnnotationFileVersionId: null,
                     activeAnnotationId: null,
                     annotation: expectedAnnotation,
                     error: expectedError,
@@ -152,41 +145,39 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                 });
             },
         );
+
+        test('should invoke the onError prop if provided', () => {
+            const onError = jest.fn();
+            const wrapper = getWrapper({ onError });
+
+            wrapper.instance().handleAnnotationCreate({
+                error: mockError,
+                meta: {
+                    requestId: '123',
+                    status: Status.ERROR,
+                },
+            });
+
+            expect(onError).toHaveBeenCalledWith(mockError, 'create_annotation_error');
+        });
     });
 
     describe('handleActiveChange()', () => {
         test.each`
-            annotationId | expected
-            ${null}      | ${null}
-            ${'123'}     | ${'123'}
-        `('should update activeAnnotationId state to reflect value $annotationId', ({ annotationId, expected }) => {
-            const wrapper = getWrapper();
-
-            wrapper.instance().handleActiveChange(annotationId);
-            const contextProvider = getContextProvider(wrapper);
-            expect(contextProvider.exists()).toBeTruthy();
-            expect(contextProvider.prop('value').state.activeAnnotationId).toEqual(expected);
-        });
-    });
-
-    describe('handleAnnotatorEvent()', () => {
-        test.each`
-            event                          | numCreateCalled | numActiveChangeCalled
-            ${'annotations_create'}        | ${1}            | ${0}
-            ${'annotations_active_change'} | ${0}            | ${1}
-            ${'foo'}                       | ${0}            | ${0}
+            annotationId | fileVersionId | expectedAnnotationId | expectedFileVersionId
+            ${null}      | ${'456'}      | ${null}              | ${'456'}
+            ${'123'}     | ${'456'}      | ${'123'}             | ${'456'}
         `(
-            'should call appropriate handler based on event $event',
-            ({ event, numCreateCalled, numActiveChangeCalled }) => {
+            'should update activeAnnotationId state to reflect value $annotationId',
+            ({ annotationId, fileVersionId, expectedAnnotationId, expectedFileVersionId }) => {
                 const wrapper = getWrapper();
-                const instance = wrapper.instance();
-                instance.handleAnnotationCreate = jest.fn();
-                instance.handleActiveChange = jest.fn();
 
-                instance.handleAnnotatorEvent({ event });
-
-                expect((instance.handleAnnotationCreate as jest.Mock).mock.calls.length).toBe(numCreateCalled);
-                expect((instance.handleActiveChange as jest.Mock).mock.calls.length).toBe(numActiveChangeCalled);
+                wrapper.instance().handleActiveChange({ annotationId, fileVersionId });
+                const contextProvider = getContextProvider(wrapper);
+                const { activeAnnotationFileVersionId, activeAnnotationId } = contextProvider.prop('value').state;
+                expect(contextProvider.exists()).toBeTruthy();
+                expect(activeAnnotationFileVersionId).toEqual(expectedFileVersionId);
+                expect(activeAnnotationId).toEqual(expectedAnnotationId);
             },
         );
     });
@@ -194,16 +185,59 @@ describe('elements/common/annotator-context/withAnnotations', () => {
     describe('handlePreviewDestroy()', () => {
         test('should reset state and annotator', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            instance.handleAnnotator(mockAnnotator);
-            instance.handleActiveChange('123');
-            let contextProvider = getContextProvider(wrapper);
-            expect(contextProvider.prop('value').state.activeAnnotationId).toEqual('123');
 
+            wrapper.instance().handleAnnotator(mockAnnotator);
+            wrapper.setState({ activeAnnotationId: '123', activeAnnotationFileVersionId: '456' });
             wrapper.instance().handlePreviewDestroy();
-            contextProvider = getContextProvider(wrapper);
-            expect(contextProvider.prop('value').state.activeAnnotationId).toEqual(null);
-            expect(mockAnnotator.removeListener).toBeCalledWith('annotatorevent', instance.handleAnnotatorEvent);
+
+            expect(wrapper.state()).toEqual({
+                action: null,
+                activeAnnotationFileVersionId: null,
+                activeAnnotationId: null,
+                annotation: null,
+                error: null,
+                meta: null,
+            });
+        });
+
+        test('should not reset state if called with false', () => {
+            const wrapper = getWrapper();
+
+            wrapper.instance().handleAnnotator(mockAnnotator);
+            wrapper.setState({ activeAnnotationId: '123', activeAnnotationFileVersionId: '456' });
+            wrapper.instance().handlePreviewDestroy(false);
+
+            expect(wrapper.state('activeAnnotationId')).toBe('123');
+            expect(wrapper.state('activeAnnotationFileVersionId')).toBe('456');
+        });
+
+        test.each([true, false])('should remove all annotator event listeners', shouldReset => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.handleAnnotator(mockAnnotator);
+            instance.handlePreviewDestroy(shouldReset);
+
+            expect(mockAnnotator.removeListener).toBeCalledWith(
+                'annotations_active_change',
+                instance.handleActiveChange,
+            );
+            expect(mockAnnotator.removeListener).toBeCalledWith('annotations_create', instance.handleAnnotationCreate);
+        });
+    });
+
+    describe('getAnnotationsPath()', () => {
+        test.each`
+            fileVersionId | annotationId | expectedPath
+            ${undefined}  | ${undefined} | ${'/activity'}
+            ${undefined}  | ${null}      | ${'/activity'}
+            ${'123'}      | ${undefined} | ${'/activity/annotations/123'}
+            ${'123'}      | ${null}      | ${'/activity/annotations/123'}
+            ${'123'}      | ${'456'}     | ${'/activity/annotations/123/456'}
+        `('should return $expectedPath', ({ fileVersionId, annotationId, expectedPath }) => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            expect(instance.getAnnotationsPath(fileVersionId, annotationId)).toBe(expectedPath);
         });
     });
 });

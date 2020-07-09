@@ -89,4 +89,5 @@ export const tooltipZIndex = "190"; // tooltip-z-index
 export const bdlBorderRadiusSize = "4px"; // bdl-border-radius-size
 export const bdlBorderRadiusLargeSize = "10px"; // bdl-border-radius-large-size
 export const bdlGridUnit = "4px"; // bdl-grid-unit
+export const bdlGridUnitPx = "4"; // bdl-grid-unit-px
 export const bdlTransitionDurationBase = "0.15s"; // bdl-transitionDurationBase

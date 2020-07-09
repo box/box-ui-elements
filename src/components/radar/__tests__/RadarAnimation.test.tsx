@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import RadarAnimation, { RadarAnimationProps, RadarAnimationPosition } from '../RadarAnimation';
 
 describe('components/radar/RadarAnimation', () => {
-    const getWrapper = (props: RadarAnimationProps) =>
+    const getWrapper = (props: {}) =>
         shallow<RadarAnimation>(
             <RadarAnimation {...props}>
                 <div>Hello</div>
@@ -55,6 +55,22 @@ describe('components/radar/RadarAnimation', () => {
             const wrapper = getWrapper({ position } as RadarAnimationProps);
             expect(wrapper).toMatchSnapshot();
         });
+    });
+
+    test('should spread the rest of the props to the radar node', () => {
+        const wrapper = getWrapper({
+            'data-resin-target': 'radaranimation1',
+        });
+        expect(wrapper.find('.radar').prop('data-resin-target')).toBe('radaranimation1');
+    });
+
+    test('should render with custom offset when provided', () => {
+        const offset = '0 10px';
+        const wrapper = getWrapper({
+            offset,
+        });
+
+        expect(wrapper.prop('offset')).toEqual(offset);
     });
 
     describe('isShown', () => {

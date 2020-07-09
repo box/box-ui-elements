@@ -53,3 +53,6 @@ export * from './radio';
 
 export { default as Tooltip } from './tooltip';
 export * from './tooltip';
+
+export { default as GuideTooltip } from './guide-tooltip';
+export * from './guide-tooltip';

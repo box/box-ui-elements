@@ -67,6 +67,8 @@ type Props = {
     constrainToWindow: boolean,
     /** Forces the radar to be shown or hidden - defaults to true */
     isShown: boolean,
+    /** A string of the form 'vert-offset horiz-offset' which controls positioning */
+    offset?: string,
     /** Where to position the radar relative to the wrapped component */
     position: Position,
 };
@@ -92,7 +94,15 @@ class RadarAnimation extends React.Component<Props> {
     };
 
     render() {
-        const { children, className = '', constrainToScrollParent, constrainToWindow, position, isShown } = this.props;
+        const {
+            children,
+            className = '',
+            constrainToScrollParent,
+            constrainToWindow,
+            position,
+            isShown,
+            ...rest
+        } = this.props;
 
         const constraints = [];
         if (constrainToScrollParent) {
@@ -121,7 +131,7 @@ class RadarAnimation extends React.Component<Props> {
                     'aria-describedby': this.radarAnimationID,
                 })}
                 {isShown && (
-                    <div className={`radar ${className}`} id={this.radarAnimationID}>
+                    <div className={`radar ${className}`} id={this.radarAnimationID} {...rest}>
                         <div className="radar-dot" />
                         <div className="radar-circle" />
                     </div>

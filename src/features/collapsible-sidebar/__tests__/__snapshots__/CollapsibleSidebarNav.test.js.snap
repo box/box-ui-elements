@@ -50,7 +50,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
       }
       wrapperProps={Object {}}
     >
-      <styled.div
+      <CollapsibleSidebarNav__StyledScrollContainer
         className="ScrollbarsCustom foobar"
         style={
           Object {
@@ -62,7 +62,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
         }
       >
         <div
-          className="sc-AykKD cnzXiP ScrollbarsCustom foobar"
+          className="CollapsibleSidebarNav__StyledScrollContainer-csqupn-1 cFwMnb ScrollbarsCustom foobar"
           style={
             Object {
               "flexGrow": 1,
@@ -205,7 +205,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
                   onStop={[Function]}
                   transform={null}
                 >
-                  <styled.div
+                  <CollapsibleSidebarNav__StyledScrollThumb
                     axis="y"
                     className="ScrollbarsCustom-Thumb ScrollbarsCustom-ThumbY"
                     onMouseDown={[Function]}
@@ -223,7 +223,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
                     }
                   >
                     <div
-                      className="sc-AykKC cxcvn ScrollbarsCustom-Thumb ScrollbarsCustom-ThumbY"
+                      className="CollapsibleSidebarNav__StyledScrollThumb-csqupn-0 exWprS ScrollbarsCustom-Thumb ScrollbarsCustom-ThumbY"
                       onMouseDown={[Function]}
                       onMouseUp={[Function]}
                       onTouchEnd={[Function]}
@@ -238,7 +238,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
                         }
                       }
                     />
-                  </styled.div>
+                  </CollapsibleSidebarNav__StyledScrollThumb>
                 </DraggableCore>
               </ScrollbarThumb>
             </div>
@@ -332,7 +332,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
             </div>
           </ScrollbarTrack>
         </div>
-      </styled.div>
+      </CollapsibleSidebarNav__StyledScrollContainer>
     </Scrollbar>
   </mockConstructor>
 </CollapsibleSidebarNav>

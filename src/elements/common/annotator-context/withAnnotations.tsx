@@ -1,57 +1,64 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
-import { match as matchType, matchPath } from 'react-router-dom';
+import { generatePath, match as matchType, matchPath } from 'react-router-dom';
+import { Location } from 'history';
 import AnnotatorContext from './AnnotatorContext';
 import { Action, Annotator, AnnotationActionEvent, AnnotatorState, GetMatchPath, MatchParams, Status } from './types';
 
-export interface WithAnnotationsProps {
-    onAnnotator: (annotator: Annotator) => void;
-    onPreviewDestroy: () => void;
-}
+export type ActiveChangeEvent = {
+    annotationId: string | null;
+    fileVersionId: string;
+};
 
-export interface ComponentWithAnnotations {
+export type ActiveChangeEventHandler = (event: ActiveChangeEvent) => void;
+
+export type ComponentWithAnnotations = {
     emitActiveChangeEvent: (id: string | null) => void;
     emitRemoveEvent: (id: string) => void;
     getAction: (eventData: AnnotationActionEvent) => Action;
+    getAnnotationsPath: (fileVersionId?: string, annotationId?: string | null) => string;
     getMatchPath: GetMatchPath;
-    handleActiveChange: (annotationId: string | null) => void;
+    handleActiveChange: ActiveChangeEventHandler;
     handleAnnotationChangeEvent: (id: string | null) => void;
     handleAnnotationCreate: (eventData: AnnotationActionEvent) => void;
     handleAnnotator: (annotator: Annotator) => void;
     handleAnnotatorEvent: ({ event, data }: { event: string; data?: unknown }) => void;
-    handlePreviewDestroy: () => void;
-}
+    handlePreviewDestroy: (shouldReset?: boolean) => void;
+};
+
+export type WithAnnotationsProps = {
+    location?: Location;
+    onAnnotator: (annotator: Annotator) => void;
+    onError?: (error: Error, code: string) => void;
+    onPreviewDestroy: (shouldReset?: boolean) => void;
+};
 
 export type WithAnnotationsComponent<P> = React.ComponentClass<P & WithAnnotationsProps>;
 
+const ANNOTATIONS_PATH = '/:sidebar/annotations/:fileVersionId/:annotationId?';
 const defaultState: AnnotatorState = {
     action: null,
+    activeAnnotationFileVersionId: null,
     activeAnnotationId: null,
     annotation: null,
     error: null,
     meta: null,
 };
 
-type WithHistoryProps = {
-    history?: History;
-};
-
-type ResultProps<P> = P & WithAnnotationsProps & WithHistoryProps;
-
 export default function withAnnotations<P extends object>(
     WrappedComponent: React.ComponentType<P>,
 ): WithAnnotationsComponent<P> {
-    class ComponentWithAnnotations extends React.Component<ResultProps<P>, AnnotatorState> {
+    class ComponentWithAnnotations extends React.Component<P & WithAnnotationsProps, AnnotatorState> {
         static displayName: string;
 
         annotator: Annotator | null = null;
 
-        constructor(props: ResultProps<P>) {
+        constructor(props: P & WithAnnotationsProps) {
             super(props);
 
             // Determine by url if there is already a deeply linked annotation
-            const { history } = props;
-            const match = this.getMatchPath(history);
+            const { location } = props;
+            const match = this.getMatchPath(location);
             const activeAnnotationId = getProp(match, 'params.annotationId', null);
 
             // Seed the initial state with the activeAnnotationId if any from the location path
@@ -82,49 +89,61 @@ export default function withAnnotations<P extends object>(
             return status === Status.SUCCESS || error ? Action.CREATE_END : Action.CREATE_START;
         }
 
-        getMatchPath(history?: History): matchType<MatchParams> | null {
-            const pathname = getProp(history, 'location.pathname');
+        getAnnotationsPath(fileVersionId?: string, annotationId?: string | null): string {
+            if (!fileVersionId) {
+                return '/activity';
+            }
+
+            return generatePath(ANNOTATIONS_PATH, {
+                sidebar: 'activity',
+                annotationId: annotationId || undefined,
+                fileVersionId,
+            });
+        }
+
+        getMatchPath(location?: Location): matchType<MatchParams> | null {
+            const pathname = getProp(location, 'pathname', '');
             return matchPath<MatchParams>(pathname, {
-                path: '/:sidebar/annotations/:fileVersionId/:annotationId',
+                path: ANNOTATIONS_PATH,
                 exact: true,
             });
         }
 
         handleAnnotationCreate = (eventData: AnnotationActionEvent): void => {
             const { annotation = null, error = null, meta = null } = eventData;
+            const { onError } = this.props;
 
-            const action = this.getAction(eventData);
-
-            this.setState({ ...this.state, annotation, action, error, meta });
-        };
-
-        handleActiveChange = (annotationId: string | null): void => {
-            this.setState({ activeAnnotationId: annotationId });
-        };
-
-        handleAnnotatorEvent = ({ event, data }: { event: string; data: unknown }): void => {
-            switch (event) {
-                case 'annotations_create':
-                    this.handleAnnotationCreate(data as AnnotationActionEvent);
-                    break;
-                case 'annotations_active_change':
-                    this.handleActiveChange(data as string | null);
-                    break;
-                default:
-                    break;
+            if (onError && error) {
+                onError(error, 'create_annotation_error');
             }
+
+            this.setState({
+                ...this.state,
+                action: this.getAction(eventData),
+                annotation,
+                error,
+                meta,
+            });
+        };
+
+        handleActiveChange: ActiveChangeEventHandler = ({ annotationId, fileVersionId }): void => {
+            this.setState({ activeAnnotationFileVersionId: fileVersionId, activeAnnotationId: annotationId });
         };
 
         handleAnnotator = (annotator: Annotator): void => {
             this.annotator = annotator;
-            this.annotator.addListener('annotatorevent', this.handleAnnotatorEvent);
+            this.annotator.addListener('annotations_active_change', this.handleActiveChange);
+            this.annotator.addListener('annotations_create', this.handleAnnotationCreate);
         };
 
-        handlePreviewDestroy = (): void => {
-            this.setState(defaultState);
+        handlePreviewDestroy = (shouldReset = true): void => {
+            if (shouldReset) {
+                this.setState(defaultState);
+            }
 
             if (this.annotator) {
-                this.annotator.removeListener('annotatorevent', this.handleAnnotatorEvent);
+                this.annotator.removeListener('annotations_active_change', this.handleActiveChange);
+                this.annotator.removeListener('annotations_create', this.handleAnnotationCreate);
             }
 
             this.annotator = null;
@@ -137,6 +156,7 @@ export default function withAnnotations<P extends object>(
                         emitActiveChangeEvent: this.emitActiveChangeEvent,
                         emitRemoveEvent: this.emitRemoveEvent,
                         getAnnotationsMatchPath: this.getMatchPath,
+                        getAnnotationsPath: this.getAnnotationsPath,
                         state: this.state,
                     }}
                 >

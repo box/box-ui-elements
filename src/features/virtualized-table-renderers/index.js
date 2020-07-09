@@ -8,6 +8,7 @@ export { default as sizeCellRenderer } from './sizeCellRenderer';
 export { default as userCellRenderer } from './userCellRenderer';
 export { default as sortableColumnHeaderRenderer } from './sortableColumnHeaderRenderer';
 export { default as filePathCellRenderer } from './filePathCellRenderer';
+export { default as draggableRowRenderer } from './draggableRowRenderer';
 
 export type {
     CellRendererParams,

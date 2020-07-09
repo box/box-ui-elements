@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/RoundPill-selector-dropdown/RoundPill should render avatar if showAvatar prop is true 1`] = `
+<LabelPill
+  className="bdl-RoundPill"
+  size="large"
+>
+  <LabelPillIcon
+    Component={[Function]}
+    name="box"
+    shouldShowExternal={true}
+    size="small"
+  />
+  <LabelPillText
+    className="bdl-RoundPill-text"
+  >
+    box
+  </LabelPillText>
+  <LabelPillIcon
+    Component={[Function]}
+    className="bdl-RoundPill-closeBtn"
+    onClick={[MockFunction]}
+  />
+</LabelPill>
+`;
+
+exports[`components/RoundPill-selector-dropdown/RoundPill should render default component 1`] = `
+<LabelPill
+  className="bdl-RoundPill"
+  size="large"
+>
+  <LabelPillText
+    className="bdl-RoundPill-text"
+  >
+    box
+  </LabelPillText>
+  <LabelPillIcon
+    Component={[Function]}
+    className="bdl-RoundPill-closeBtn"
+    onClick={[MockFunction]}
+  />
+</LabelPill>
+`;

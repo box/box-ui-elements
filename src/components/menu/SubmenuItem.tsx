@@ -171,7 +171,7 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
         }
 
         const menuItemProps: SubmenuItemProps = {
-            ...omit(rest, ['bottomBoundaryElement', 'onClick', 'rightBoundaryElement', 'role', 'tabIndex']),
+            ...omit(rest, ['bottomBoundaryElement', 'onClick', 'onOpen', 'rightBoundaryElement', 'role', 'tabIndex']),
             'aria-disabled': isDisabled ? 'true' : undefined,
             'aria-expanded': isSubmenuOpen ? 'true' : 'false',
             'aria-haspopup': 'true',

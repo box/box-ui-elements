@@ -322,6 +322,22 @@ describe('features/content-explorer/content-explorer/ContentExplorerActionButton
                 expect(wrapper.find('.status-message').length).toEqual(0);
             });
         });
+
+        test('should render statusElement as button when onSelectedClick provided for multi select', () => {
+            const item = { id: '0', name: 'item1' };
+            const selectedItems = { '0': item };
+            const onSelectedClick = () => {};
+
+            const wrapper = renderComponent({
+                contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
+                selectedItems,
+            });
+            expect(wrapper.find('Button.status-message').length).toEqual(0);
+            expect(wrapper.find('.status-message').length).toEqual(1);
+
+            wrapper.setProps({ onSelectedClick });
+            expect(wrapper.find('Button.status-message').length).toEqual(1);
+        });
     });
 
     describe('getChosenItemsFromSelectedItems', () => {

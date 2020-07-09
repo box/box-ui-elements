@@ -7,6 +7,7 @@
 import noop from 'lodash/noop';
 import setProp from 'lodash/set';
 import { getBadItemError, getBadPermissionsError } from '../utils/error';
+import { fillMissingProperties } from '../utils/fields';
 import Base from './Base';
 import {
     ACCESS_NONE,
@@ -17,8 +18,14 @@ import {
     ERROR_CODE_RENAME_ITEM,
     ERROR_CODE_SHARE_ITEM,
 } from '../constants';
-import type { ElementsErrorCallback } from '../common/types/api';
-import type { BoxItem, FlattenedBoxItemCollection, FlattenedBoxItem, BoxItemPermission } from '../common/types/core';
+import type { ElementsErrorCallback, RequestData, RequestOptions } from '../common/types/api';
+import type {
+    BoxItem,
+    BoxItemPermission,
+    FlattenedBoxItem,
+    FlattenedBoxItemCollection,
+    SharedLink,
+} from '../common/types/core';
 import type APICache from '../utils/Cache';
 
 class Item extends Base {
@@ -259,14 +266,45 @@ class Item extends Base {
      * Handles response for shared link
      *
      * @param {BoxItem} data - The updated item
+     * @param {Array<string>} [fields] - Optional fields from request
      * @return {void}
      */
-    shareSuccessHandler = ({ data }: { data: BoxItem }): void => {
+    shareSuccessHandler = (data: BoxItem, fields?: Array<string>): void => {
         if (!this.isDestroyed()) {
-            const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'shared_link', data.shared_link);
-            this.successCallback(updatedObject);
+            // Add fields that were requested but not returned
+            const dataWithMissingFields = fields ? fillMissingProperties(data, fields) : data;
+            const cache: APICache = this.getCache();
+            const key = this.getCacheKey(this.id);
+
+            if (cache.has(key)) {
+                cache.merge(key, dataWithMissingFields);
+            } else {
+                cache.set(key, dataWithMissingFields);
+            }
+            this.successCallback(cache.get(key));
         }
     };
+
+    /**
+     * Validate an item update request
+     *
+     * @param {string|void} itemID - ID of item to share
+     * @param {BoxItemPermission|void} itemPermissions - Permissions for item
+     * @throws {Error}
+     * @return {void}
+     */
+    validateRequest(itemID: ?string, itemPermissions: ?BoxItemPermission) {
+        if (!itemID || !itemPermissions) {
+            this.errorCode = ERROR_CODE_SHARE_ITEM;
+            throw getBadItemError();
+        }
+
+        const { can_share, can_set_share_access }: BoxItemPermission = itemPermissions;
+        if (!can_share || !can_set_share_access) {
+            this.errorCode = ERROR_CODE_SHARE_ITEM;
+            throw getBadPermissionsError();
+        }
+    }
 
     /**
      * API to create or remove a shared link
@@ -275,48 +313,91 @@ class Item extends Base {
      * @param {string} access - Shared access level
      * @param {Function} successCallback - Success callback
      * @param {Function|void} errorCallback - Error callback
-     * @return {void}
+     * @param {Array<string>|void} [options.fields] - Optionally include specific fields
+     * @return {Promise<void>}
      */
-    share(
+    async share(
         item: BoxItem,
         access: string,
         successCallback: Function,
         errorCallback: ElementsErrorCallback = noop,
+        options: RequestOptions = {},
     ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
 
-        this.errorCode = ERROR_CODE_SHARE_ITEM;
-        const { id, permissions }: BoxItem = item;
-        if (!id || !permissions) {
-            errorCallback(getBadItemError(), this.errorCode);
-            return Promise.reject();
-        }
+        try {
+            const { id, permissions }: BoxItem = item;
+            this.id = id;
+            this.successCallback = successCallback;
+            this.errorCallback = errorCallback;
 
-        const { can_share, can_set_share_access }: BoxItemPermission = permissions;
-        if (!can_share || !can_set_share_access) {
-            errorCallback(getBadPermissionsError(), this.errorCode);
-            return Promise.reject();
-        }
+            this.validateRequest(id, permissions);
 
-        this.id = id;
-        this.successCallback = successCallback;
-        this.errorCallback = errorCallback;
-
-        // We use the parent folder's auth token since use case involves
-        // only content explorer or picker which works onf folder tokens
-        return this.xhr
-            .put({
+            const { fields } = options;
+            const requestData: RequestData = {
                 url: this.getUrl(this.id),
                 data: {
                     shared_link: access === ACCESS_NONE ? null : { access },
                 },
-            })
-            .then(this.shareSuccessHandler)
-            .catch((e: $AxiosError<any>) => {
-                this.errorHandler(e);
-            });
+            };
+            if (fields) {
+                requestData.params = { fields: fields.toString() };
+            }
+
+            const { data } = await this.xhr.put(requestData);
+            return this.shareSuccessHandler(data, fields);
+        } catch (e) {
+            return this.errorHandler(e);
+        }
+    }
+
+    /**
+     * API to update a shared link
+     *
+     * @param {BoxItem} item - Item to update
+     * @param {$Shape<SharedLink>} sharedLinkParams - New shared link parameters
+     * @param {Function} successCallback - Success callback
+     * @param {Function|void} errorCallback - Error callback
+     * @param {Array<string>|void} [options.fields] - Optionally include specific fields
+     * @return {Promise<void>}
+     */
+    async updateSharedLink(
+        item: BoxItem,
+        sharedLinkParams: $Shape<SharedLink>,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback = noop,
+        options: RequestOptions = {},
+    ): Promise<void> {
+        if (this.isDestroyed()) {
+            return Promise.reject();
+        }
+
+        try {
+            const { id, permissions }: BoxItem = item;
+            this.id = id;
+            this.successCallback = successCallback;
+            this.errorCallback = errorCallback;
+
+            this.validateRequest(id, permissions);
+
+            const { fields } = options;
+            const requestData: RequestData = {
+                url: this.getUrl(this.id),
+                data: {
+                    shared_link: sharedLinkParams,
+                },
+            };
+            if (fields) {
+                requestData.params = { fields: fields.toString() };
+            }
+
+            const { data } = await this.xhr.put(requestData);
+            return this.shareSuccessHandler(data, fields);
+        } catch (e) {
+            return this.errorHandler(e);
+        }
     }
 }
 

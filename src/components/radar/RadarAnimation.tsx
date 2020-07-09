@@ -66,6 +66,8 @@ export interface RadarAnimationProps {
     constrainToWindow: boolean;
     /** Forces the radar to be shown or hidden - defaults to true */
     isShown: boolean;
+    /** A string of the form 'vert-offset horiz-offset' which controls positioning */
+    offset?: string;
     /** Where to position the radar relative to the wrapped component */
     position: RadarAnimationPosition;
 }
@@ -91,7 +93,16 @@ class RadarAnimation extends React.Component<RadarAnimationProps> {
     };
 
     render() {
-        const { children, className = '', constrainToScrollParent, constrainToWindow, position, isShown } = this.props;
+        const {
+            children,
+            className = '',
+            constrainToScrollParent,
+            constrainToWindow,
+            position,
+            isShown,
+            offset,
+            ...rest
+        } = this.props;
 
         const constraints = [];
         if (constrainToScrollParent) {
@@ -114,18 +125,28 @@ class RadarAnimation extends React.Component<RadarAnimationProps> {
         });
 
         // Typescript defs seem busted for older versions of react-tether
-        const tetherProps = {
+        const tetherProps: {
+            attachment: string;
+            classPrefix: string;
+            constraints: {};
+            targetAttachment: string;
+            offset?: string;
+        } = {
             attachment,
             classPrefix: 'radar-animation',
             constraints,
             targetAttachment,
         };
 
+        if (offset) {
+            tetherProps.offset = offset;
+        }
+
         return (
             <TetherComponent ref={this.tetherRef} {...tetherProps}>
                 {referenceElement}
                 {isShown && (
-                    <div className={`radar ${className}`} id={this.radarAnimationID}>
+                    <div className={`radar ${className}`} id={this.radarAnimationID} {...rest}>
                         <div className="radar-dot" />
                         <div className="radar-circle" />
                     </div>

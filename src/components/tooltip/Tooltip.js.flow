@@ -21,6 +21,7 @@ export type Position =
     | 'top-right';
 
 type Props = {
+    /** An HTML element to append the tooltip container into (otherwise appends to body) */
     bodyElement?: HTMLElement,
     /** A React element to put the tooltip on */
     children: React.Node,
@@ -36,6 +37,8 @@ type Props = {
     isShown?: boolean,
     /** Whether to add tabindex=0.  Defaults to `true` */
     isTabbable?: boolean,
+    /** A string of the form 'vert-offset horiz-offset' which controls positioning */
+    offset?: string,
     /** Function called if the user manually dismisses the tooltip - only applies if showCloseButton is true */
     onDismiss?: () => void,
     /** Where to position the tooltip relative to the wrapped component */

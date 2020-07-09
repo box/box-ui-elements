@@ -25,13 +25,13 @@ describe('api/Annotations', () => {
 
     describe('getUrl()', () => {
         test('should the return correct url for annotations', () => {
-            expect(annotations.getUrl()).toBe('https://api.box.com/2.0/internal_annotations');
+            expect(annotations.getUrl()).toBe('https://api.box.com/2.0/undoc/annotations');
         });
     });
 
     describe('getUrlForId()', () => {
         test('should return the correct url for a given annotation id', () => {
-            expect(annotations.getUrlForId('test')).toBe('https://api.box.com/2.0/internal_annotations/test');
+            expect(annotations.getUrlForId('test')).toBe('https://api.box.com/2.0/undoc/annotations/test');
         });
     });
 
@@ -85,7 +85,7 @@ describe('api/Annotations', () => {
                 },
                 errorCallback,
                 successCallback,
-                url: 'https://api.box.com/2.0/internal_annotations',
+                url: 'https://api.box.com/2.0/undoc/annotations',
             });
         });
 
@@ -111,7 +111,7 @@ describe('api/Annotations', () => {
                 id: '12345',
                 errorCallback,
                 successCallback,
-                url: 'https://api.box.com/2.0/internal_annotations/abc',
+                url: 'https://api.box.com/2.0/undoc/annotations/abc',
             });
         });
 
@@ -139,7 +139,7 @@ describe('api/Annotations', () => {
                 id: '12345',
                 errorCallback,
                 successCallback,
-                url: 'https://api.box.com/2.0/internal_annotations/abc',
+                url: 'https://api.box.com/2.0/undoc/annotations/abc',
             });
         });
 

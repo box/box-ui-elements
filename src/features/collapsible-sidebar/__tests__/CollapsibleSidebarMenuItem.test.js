@@ -18,9 +18,11 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
         );
     };
 
-    test('matches snapshot', () => {
+    beforeEach(() => {
         libDom.useIsContentOverflowed.mockReturnValue(false);
+    });
 
+    test('matches snapshot', () => {
         const wrapper = getWrapper(
             {
                 className: 'foo',
@@ -30,6 +32,23 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
             { isScrolling: false },
         );
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should show custom content when content is passed', () => {
+        const testContent = 'Custom Content';
+        const wrapper = getWrapper(
+            {
+                className: 'foo',
+                content: <div className="custom-div">{testContent}</div>,
+                icon: 'bold',
+                text: 'bar',
+            },
+            { isScrolling: false },
+        );
+
+        expect(wrapper.find('.custom-div')).toHaveLength(1);
+        expect(wrapper.find('.custom-div').text()).toBe(testContent);
+        expect(wrapper.find('span.bdl-CollapsibleSidebar-menuItemLabel')).toHaveLength(1);
     });
 
     test('should allow tooltip if text is overflowing and not scrolling', () => {
@@ -60,9 +79,51 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
             onMouseOver: mouseEvent,
         });
 
-        const classNameTarget = wrapper.find('div.bdl-CollapsibleSidebar-menuItem');
-        const restTarget = classNameTarget;
+        const classNameTarget = wrapper.find('CollapsibleSidebarMenuItem__StyledMenuItem');
+        const restTarget = wrapper.find('a');
         expect(restTarget.prop('onMouseOver')).toBe(mouseEvent);
-        expect(classNameTarget.prop('className')).toContain(' foo');
+        expect(classNameTarget.prop('className')).toBe('foo');
+    });
+
+    test('should not show overflow action container', () => {
+        const wrapper = getWrapper({
+            className: 'foo',
+            text: 'bar',
+            icon: 'bold',
+        });
+        expect(wrapper.find('.bdl-CollapsibleSidebar-menuItemActionContainer').length).toBe(0);
+    });
+
+    test('should show overflow action by default', () => {
+        const wrapper = getWrapper({
+            className: 'foo',
+            text: 'bar',
+            icon: 'bold',
+            overflowAction: <div>Hi</div>,
+        });
+        expect(wrapper.find('.show-overflowAction').length).toBe(2);
+        expect(wrapper.find('.bdl-CollapsibleSidebar-menuItemActionContainer').length).toBe(1);
+    });
+
+    test('should show overflow action on hover if showAction is set to hover', () => {
+        const wrapper = getWrapper({
+            className: 'foo',
+            text: 'bar',
+            icon: 'bold',
+            overflowAction: <div>Hi</div>,
+            showOverflowAction: 'hover',
+        });
+        expect(wrapper.find('.show-overflowAction').length).toBe(0);
+        expect(wrapper.find('.bdl-CollapsibleSidebar-menuItemActionContainer').length).toBe(1);
+    });
+
+    test('should show link class name when it is set', () => {
+        const wrapper = getWrapper({
+            className: 'foo',
+            text: 'bar',
+            icon: 'bold',
+            linkClassName: 'is-currentPage',
+        });
+        expect(wrapper.find('CollapsibleSidebarMenuItem__StyledLink.is-currentPage').length).toBe(1);
     });
 });
