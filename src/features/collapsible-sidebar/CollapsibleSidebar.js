@@ -9,6 +9,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
+import tabbable from 'tabbable';
 
 import './CollapsibleSidebar.scss';
 
@@ -36,22 +37,66 @@ type Props = {
     htmlAttributes?: Object,
 };
 
-const CollapsibleSidebar = (props: Props = { expanded: false }) => {
-    const { children, className, expanded, htmlAttributes } = props;
+class CollapsibleSidebar extends React.Component<Props, State> {
+    navRef: { current: null | HTMLElement } = React.createRef();
 
-    const classes = classNames(
-        {
-            'is-expanded': expanded,
-        },
-        'bdl-CollapsibleSidebar',
-        className,
-    );
+    focusNextEl = () => {
+        if (this.navRef.current) {
+            const tabbableEls = tabbable(this.navRef.current);
+            const currentElIndex = tabbableEls.findIndex(el => el === document.activeElement);
+            const nextElIndex = currentElIndex === tabbableEls.length - 1 ? 0 : currentElIndex + 1;
+            tabbableEls[nextElIndex].focus();
+        }
+    };
 
-    return (
-        <aside className="bdl-CollapsibleSidebar-wrapper" {...htmlAttributes}>
-            <StyledNav className={classes}>{children}</StyledNav>
-        </aside>
-    );
-};
+    focusPreviousEl = () => {
+        if (this.navRef.current) {
+            const tabbableEls = tabbable(this.navRef.current);
+            const currentElIndex = tabbableEls.findIndex(el => el === document.activeElement);
+            const prevElIndex = currentElIndex === 0 ? tabbableEls.length - 1 : currentElIndex - 1;
+            tabbableEls[prevElIndex].focus();
+        }
+    };
+
+    handleKeyDown = (event: SyntheticKeyboardEvent<>) => {
+        if (this.navRef.current && this.navRef.current.contains(document.activeElement)) {
+            switch (event.key) {
+                case 'ArrowDown':
+                    event.stopPropagation();
+                    event.preventDefault();
+                    this.focusNextEl();
+                    break;
+
+                case 'ArrowUp':
+                    event.stopPropagation();
+                    event.preventDefault();
+                    this.focusPreviousEl();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    };
+
+    render() {
+        const { children, className, expanded, htmlAttributes } = this.props;
+        const classes = classNames(
+            {
+                'is-expanded': expanded,
+            },
+            'bdl-CollapsibleSidebar',
+            className,
+        );
+
+        return (
+            <aside className="bdl-CollapsibleSidebar-wrapper" {...htmlAttributes}>
+                <StyledNav ref={this.navRef} className={classes} onKeyDown={this.handleKeyDown}>
+                    {children}
+                </StyledNav>
+            </aside>
+        );
+    }
+}
 
 export default CollapsibleSidebar;
