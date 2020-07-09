@@ -19,7 +19,13 @@ import {
     ERROR_CODE_SHARE_ITEM,
 } from '../constants';
 import type { ElementsErrorCallback, RequestData, RequestOptions } from '../common/types/api';
-import type { BoxItem, BoxItemPermission, FlattenedBoxItem, FlattenedBoxItemCollection } from '../common/types/core';
+import type {
+    BoxItem,
+    BoxItemPermission,
+    FlattenedBoxItem,
+    FlattenedBoxItemCollection,
+    SharedLink,
+} from '../common/types/core';
 import type APICache from '../utils/Cache';
 
 class Item extends Base {
@@ -280,6 +286,27 @@ class Item extends Base {
     };
 
     /**
+     * Validate an item update request
+     *
+     * @param {string|void} itemID - ID of item to share
+     * @param {BoxItemPermission|void} itemPermissions - Permissions for item
+     * @throws {Error}
+     * @return {void}
+     */
+    validateRequest(itemID: ?string, itemPermissions: ?BoxItemPermission) {
+        if (!itemID || !itemPermissions) {
+            this.errorCode = ERROR_CODE_SHARE_ITEM;
+            throw getBadItemError();
+        }
+
+        const { can_share, can_set_share_access }: BoxItemPermission = itemPermissions;
+        if (!can_share || !can_set_share_access) {
+            this.errorCode = ERROR_CODE_SHARE_ITEM;
+            throw getBadPermissionsError();
+        }
+    }
+
+    /**
      * API to create or remove a shared link
      *
      * @param {Object} item - Item to share
@@ -287,8 +314,6 @@ class Item extends Base {
      * @param {Function} successCallback - Success callback
      * @param {Function|void} errorCallback - Error callback
      * @param {Array<string>|void} [options.fields] - Optionally include specific fields
-     * @param {boolean|void} [options.forceFetch] - Optionally bypasse the cache
-     * @param {boolean|void} [options.refreshCache] - Optionally update the cache
      * @return {Promise<void>}
      */
     async share(
@@ -302,37 +327,66 @@ class Item extends Base {
             return Promise.reject();
         }
 
-        this.errorCode = ERROR_CODE_SHARE_ITEM;
-        const { id, permissions }: BoxItem = item;
-        if (!id || !permissions) {
-            errorCallback(getBadItemError(), this.errorCode);
-            return Promise.reject();
-        }
-
-        const { can_share, can_set_share_access }: BoxItemPermission = permissions;
-        if (!can_share || !can_set_share_access) {
-            errorCallback(getBadPermissionsError(), this.errorCode);
-            return Promise.reject();
-        }
-
-        const cache: APICache = this.getCache();
-        const key: string = this.getCacheKey(id);
-        const isCached: boolean = !options.forceFetch && cache.has(key);
-
-        if (isCached) {
-            return successCallback(cache.get(key));
-        }
-
         try {
+            const { id, permissions }: BoxItem = item;
             this.id = id;
             this.successCallback = successCallback;
             this.errorCallback = errorCallback;
+
+            this.validateRequest(id, permissions);
 
             const { fields } = options;
             const requestData: RequestData = {
                 url: this.getUrl(this.id),
                 data: {
                     shared_link: access === ACCESS_NONE ? null : { access },
+                },
+            };
+            if (fields) {
+                requestData.params = { fields: fields.toString() };
+            }
+
+            const { data } = await this.xhr.put(requestData);
+            return this.shareSuccessHandler(data, fields);
+        } catch (e) {
+            return this.errorHandler(e);
+        }
+    }
+
+    /**
+     * API to update a shared link
+     *
+     * @param {BoxItem} item - Item to update
+     * @param {$Shape<SharedLink>} sharedLinkParams - New shared link parameters
+     * @param {Function} successCallback - Success callback
+     * @param {Function|void} errorCallback - Error callback
+     * @param {Array<string>|void} [options.fields] - Optionally include specific fields
+     * @return {Promise<void>}
+     */
+    async updateSharedLink(
+        item: BoxItem,
+        sharedLinkParams: $Shape<SharedLink>,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback = noop,
+        options: RequestOptions = {},
+    ): Promise<void> {
+        if (this.isDestroyed()) {
+            return Promise.reject();
+        }
+
+        try {
+            const { id, permissions }: BoxItem = item;
+            this.id = id;
+            this.successCallback = successCallback;
+            this.errorCallback = errorCallback;
+
+            this.validateRequest(id, permissions);
+
+            const { fields } = options;
+            const requestData: RequestData = {
+                url: this.getUrl(this.id),
+                data: {
+                    shared_link: sharedLinkParams,
                 },
             };
             if (fields) {

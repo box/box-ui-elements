@@ -2,11 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import SharingNotification from '../SharingNotification';
 import { TYPE_FOLDER } from '../../../constants';
-import {
-    MOCK_ITEM_API_RESPONSE,
-    MOCK_ITEM_ID,
-    MOCK_ITEM_PERMISSIONS,
-} from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
+import { MOCK_ITEM_ID, MOCK_ITEM_PERMISSIONS } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
 import NotificationsWrapper from '../../../components/notification/NotificationsWrapper';
 
 jest.mock('../../../api');
@@ -14,18 +10,15 @@ jest.mock('../../../features/unified-share-modal/utils/convertData');
 
 describe('elements/content-sharing/SharingNotification', () => {
     const setChangeSharedLinkAccessLevelStub = jest.fn();
+    const setChangeSharedLinkPermissionLevelStub = jest.fn();
     const setItemStub = jest.fn();
     const setOnAddLinkStub = jest.fn();
     const setOnRemoveLinkStub = jest.fn();
     const setSharedLinkStub = jest.fn();
-    const share = jest.fn().mockImplementation((dataForAPI, accessType, successFn) => {
-        return Promise.resolve(MOCK_ITEM_API_RESPONSE).then(response => {
-            successFn(response);
-        });
-    });
     const apiInstance = {
         getFolderAPI: jest.fn().mockReturnValue({
-            share,
+            share: jest.fn(),
+            updateSharedLink: jest.fn(),
         }),
     };
     const getWrapper = props =>
@@ -36,6 +29,7 @@ describe('elements/content-sharing/SharingNotification', () => {
                 itemPermissions={MOCK_ITEM_PERMISSIONS}
                 itemType={TYPE_FOLDER}
                 setChangeSharedLinkAccessLevel={setChangeSharedLinkAccessLevelStub}
+                setChangeSharedLinkPermissionLevel={setChangeSharedLinkPermissionLevelStub}
                 setItem={setItemStub}
                 setOnAddLink={setOnAddLinkStub}
                 setOnRemoveLink={setOnRemoveLinkStub}
@@ -49,6 +43,7 @@ describe('elements/content-sharing/SharingNotification', () => {
         expect(setOnAddLinkStub).toHaveBeenCalled();
         expect(setOnRemoveLinkStub).toHaveBeenCalled();
         expect(setChangeSharedLinkAccessLevelStub).toHaveBeenCalled();
+        expect(setChangeSharedLinkPermissionLevelStub).toHaveBeenCalled();
     });
 
     test('should not call state setting functions if itemPermissions is null', () => {
@@ -56,6 +51,7 @@ describe('elements/content-sharing/SharingNotification', () => {
         expect(setOnAddLinkStub).not.toHaveBeenCalled();
         expect(setOnRemoveLinkStub).not.toHaveBeenCalled();
         expect(setChangeSharedLinkAccessLevelStub).not.toHaveBeenCalled();
+        expect(setChangeSharedLinkPermissionLevelStub).not.toHaveBeenCalled();
     });
 
     test('should render a NotificationsWrapper', async () => {

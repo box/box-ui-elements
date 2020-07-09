@@ -13,6 +13,8 @@ import {
     ACCESS_NONE,
     ACCESS_OPEN,
     DEFAULT_HOSTNAME_API,
+    PERMISSION_CAN_DOWNLOAD,
+    PERMISSION_CAN_PREVIEW,
     TYPE_FILE,
     TYPE_FOLDER,
 } from '../../../constants';
@@ -21,9 +23,14 @@ import {
     ANYONE_WITH_LINK,
     ANYONE_IN_COMPANY,
     CAN_VIEW_DOWNLOAD,
+    CAN_VIEW_ONLY,
     PEOPLE_IN_ITEM,
 } from '../../../features/unified-share-modal/constants';
-import { convertItemResponse, convertUserResponse } from '../../../features/unified-share-modal/utils/convertData';
+import {
+    convertItemResponse,
+    convertUserResponse,
+    convertSharedLinkPermissions,
+} from '../../../features/unified-share-modal/utils/convertData';
 import {
     MOCK_CONVERTED_ITEM_DATA,
     MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
@@ -352,19 +359,28 @@ describe('elements/content-sharing/ContentSharing', () => {
 
     describe('with successful PUT requests to the Item API', () => {
         let share;
+        let updateSharedLink;
         beforeAll(() => {
             share = jest.fn().mockImplementation((dataForAPI, accessType, successFn) => {
                 return Promise.resolve(MOCK_ITEM_API_RESPONSE).then(response => {
                     successFn(response);
                 });
             });
+            updateSharedLink = jest.fn().mockImplementation((dataForAPI, sharedLinkParams, successFn) => {
+                return Promise.resolve(MOCK_ITEM_API_RESPONSE).then(response => {
+                    successFn(response);
+                });
+            });
             API.mockImplementation(() => ({
-                getFileAPI: jest
-                    .fn()
-                    .mockReturnValue({ getFile: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK), share }),
+                getFileAPI: jest.fn().mockReturnValue({
+                    getFile: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
+                    share,
+                    updateSharedLink,
+                }),
                 getFolderAPI: jest.fn().mockReturnValue({
                     getFolderFields: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
                     share,
+                    updateSharedLink,
                 }),
                 getUsersAPI: jest.fn().mockReturnValue({ getUser: jest.fn() }),
             }));
@@ -461,29 +477,72 @@ describe('elements/content-sharing/ContentSharing', () => {
                 expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(expectedItemData.sharedLink);
             },
         );
+
+        test.each`
+            permissionLevelFromUSM | permissionLevelObjectForAPI
+            ${CAN_VIEW_DOWNLOAD}   | ${{ [PERMISSION_CAN_DOWNLOAD]: true, [PERMISSION_CAN_PREVIEW]: false }}
+            ${CAN_VIEW_ONLY}       | ${{ [PERMISSION_CAN_DOWNLOAD]: false, [PERMISSION_CAN_PREVIEW]: true }}
+        `(
+            'should call updateSharedLink() from changeSharedLinkPermissionLevel() when given $permissionLevelFromUSM permission',
+            async ({ permissionLevelFromUSM, permissionLevelObjectForAPI }) => {
+                convertSharedLinkPermissions.mockReturnValue(permissionLevelObjectForAPI);
+                let wrapper;
+                await act(async () => {
+                    wrapper = getWrapper({ itemType: TYPE_FILE });
+                });
+                wrapper.update();
+
+                const usm = wrapper.find(UnifiedShareModal);
+                expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
+
+                const expectedItemData = createMockItemData(undefined, permissionLevelFromUSM);
+                convertItemResponse.mockReset();
+                convertItemResponse.mockReturnValue(expectedItemData);
+
+                await act(async () => {
+                    usm.invoke('changeSharedLinkPermissionLevel')(permissionLevelFromUSM);
+                });
+                wrapper.update();
+                expect(updateSharedLink).toHaveBeenCalledWith(
+                    { id: MOCK_ITEM_ID, permissions: {} },
+                    { permissions: permissionLevelObjectForAPI },
+                    expect.anything(),
+                    expect.anything(),
+                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+                );
+                expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(expectedItemData.sharedLink);
+            },
+        );
     });
 
     describe('with failed PUT requests to the Item API', () => {
         let share;
-        beforeAll(() => {
-            share = jest.fn().mockImplementation((dataForAPI, accessType, successFn, failureFn) => {
+        let updateSharedLink;
+        const createShareFailureMock = () =>
+            jest.fn().mockImplementation((dataForAPI, accessType, successFn, failureFn) => {
                 return Promise.reject(new Error({ status: '400' })).catch(response => {
                     failureFn(response);
                 });
             });
+        beforeAll(() => {
+            share = createShareFailureMock();
+            updateSharedLink = createShareFailureMock();
             API.mockImplementation(() => ({
-                getFileAPI: jest
-                    .fn()
-                    .mockReturnValue({ getFile: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK), share }),
+                getFileAPI: jest.fn().mockReturnValue({
+                    getFile: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
+                    share,
+                    updateSharedLink,
+                }),
                 getFolderAPI: jest.fn().mockReturnValue({
                     getFolderFields: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
                     share,
+                    updateSharedLink,
                 }),
                 getUsersAPI: jest.fn().mockReturnValue({ getUser: jest.fn() }),
             }));
         });
 
-        test.each(['onAddLink', 'onRemoveLink', 'changeSharedLinkAccessLevel'])(
+        test.each(['onAddLink', 'onRemoveLink', 'changeSharedLinkAccessLevel', 'changeSharedLinkPermissionLevel'])(
             'should show an error notification if %s() fails',
             async sharedLinkUpdateFn => {
                 let wrapper;
