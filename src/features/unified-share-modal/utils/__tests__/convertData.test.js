@@ -1,6 +1,11 @@
-import { API_TO_USM_PERMISSION_LEVEL_MAP, convertItemResponse, convertUserResponse } from '../convertData';
-import { TYPE_FILE, TYPE_FOLDER } from '../../../../constants';
-import { ALLOWED_ACCESS_LEVELS, ANYONE_IN_COMPANY } from '../../constants';
+import {
+    API_TO_USM_PERMISSION_LEVEL_MAP,
+    convertItemResponse,
+    convertUserResponse,
+    convertSharedLinkPermissions,
+} from '../convertData';
+import { TYPE_FILE, TYPE_FOLDER, PERMISSION_CAN_DOWNLOAD, PERMISSION_CAN_PREVIEW } from '../../../../constants';
+import { ALLOWED_ACCESS_LEVELS, ANYONE_IN_COMPANY, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from '../../constants';
 
 jest.mock('../../../../utils/file', () => ({
     getTypedFileId: () => 'f_190457309',
@@ -271,5 +276,15 @@ describe('convertUserResponse()', () => {
         };
 
         expect(convertUserResponse(responseFromAPI)).toEqual(convertedResponse);
+    });
+});
+
+describe('convertSharedLinkPermissions', () => {
+    test.each`
+        permissionLevel      | result
+        ${CAN_VIEW_DOWNLOAD} | ${{ [PERMISSION_CAN_DOWNLOAD]: true, [PERMISSION_CAN_PREVIEW]: false }}
+        ${CAN_VIEW_ONLY}     | ${{ [PERMISSION_CAN_DOWNLOAD]: false, [PERMISSION_CAN_PREVIEW]: true }}
+    `('should return the correct result for the $permissionLevel permission level', ({ permissionLevel, result }) => {
+        expect(convertSharedLinkPermissions(permissionLevel)).toEqual(result);
     });
 });

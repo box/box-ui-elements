@@ -1,5 +1,4 @@
 // @flow
-import type { User } from '../../../common/types/core';
 import { getTypedFileId, getTypedFolderId } from '../../../utils/file';
 import {
     ACCESS_COLLAB,
@@ -24,6 +23,7 @@ import type {
     ContentSharingItemDataType,
     ContentSharingUserDataType,
 } from '../../../elements/content-sharing/types';
+import type { BoxItemPermission, User } from '../../../common/types/core';
 
 /**
  * The following constants are used for converting API requests
@@ -163,4 +163,20 @@ export const convertUserResponse = (userAPIData: User): ContentSharingUserDataTy
             serverURL: hostname ? `${hostname}/v/` : '',
         },
     };
+};
+
+/**
+ * Create a shared link permissions object for the API based on a USM permission level.
+ * @param {string} newSharedLinkPermissionLevel
+ */
+export const convertSharedLinkPermissions = (newSharedLinkPermissionLevel: string): $Shape<BoxItemPermission> => {
+    const sharedLinkPermissions = {};
+    Object.keys(USM_TO_API_PERMISSION_LEVEL_MAP).forEach(level => {
+        if (level === newSharedLinkPermissionLevel) {
+            sharedLinkPermissions[USM_TO_API_PERMISSION_LEVEL_MAP[level]] = true;
+        } else {
+            sharedLinkPermissions[USM_TO_API_PERMISSION_LEVEL_MAP[level]] = false;
+        }
+    });
+    return sharedLinkPermissions;
 };

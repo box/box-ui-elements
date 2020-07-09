@@ -5,7 +5,11 @@ import type { MessageDescriptor } from 'react-intl';
 import API from '../../api';
 import Notification from '../../components/notification/Notification';
 import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
-import { convertItemResponse, USM_TO_API_ACCESS_LEVEL_MAP } from '../../features/unified-share-modal/utils/convertData';
+import {
+    convertItemResponse,
+    convertSharedLinkPermissions,
+    USM_TO_API_ACCESS_LEVEL_MAP,
+} from '../../features/unified-share-modal/utils/convertData';
 import { ACCESS_COLLAB, ACCESS_NONE, STATUS_ERROR, TYPE_FILE, TYPE_FOLDER } from '../../constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from './constants';
 import contentSharingMessages from './messages';
@@ -20,6 +24,7 @@ type SharingNotificationProps = {
     itemPermissions: BoxItemPermission | null,
     itemType: ItemType,
     setChangeSharedLinkAccessLevel: (changeSharedLinkAccessLevel: SharedLinkUpdateFnType) => void,
+    setChangeSharedLinkPermissionLevel: (changeSharedLinkPermissionLevel: SharedLinkUpdateFnType) => void,
     setItem: ((item: itemFlowType | null) => itemFlowType) => void,
     setOnAddLink: (addLink: SharedLinkUpdateFnType) => void,
     setOnRemoveLink: (removeLink: SharedLinkUpdateFnType) => void,
@@ -32,6 +37,7 @@ function SharingNotification({
     itemPermissions,
     itemType,
     setChangeSharedLinkAccessLevel,
+    setChangeSharedLinkPermissionLevel,
     setItem,
     setOnAddLink,
     setOnRemoveLink,
@@ -99,7 +105,7 @@ function SharingNotification({
         };
 
         if (itemPermissions) {
-            const dataForAPI = {
+            const itemData = {
                 id: itemID,
                 permissions: itemPermissions,
             };
@@ -116,7 +122,7 @@ function SharingNotification({
                 options?: RequestOptions = CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 successFn?: (itemData: ContentSharingItemAPIResponse) => void = handleUpdateItemSuccess,
             ) => {
-                return itemAPIInstance.share(dataForAPI, accessType, successFn, handleUpdateItemError, options);
+                return itemAPIInstance.share(itemData, accessType, successFn, handleUpdateItemError, options);
             };
 
             const updatedOnAddLinkFn: SharedLinkUpdateFnType = () => () => createSharedLinkAPIConnection(ACCESS_COLLAB);
@@ -129,6 +135,21 @@ function SharingNotification({
             const updatedChangeSharedLinkAccessLevelFn: SharedLinkUpdateFnType = () => (newAccessLevel: string) =>
                 createSharedLinkAPIConnection(USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel]);
             setChangeSharedLinkAccessLevel(updatedChangeSharedLinkAccessLevelFn);
+
+            const updatedChangeSharedLinkPermissionLevelFn: SharedLinkUpdateFnType = () => (
+                newSharedLinkPermissionLevel: string,
+            ) => {
+                return itemAPIInstance.updateSharedLink(
+                    itemData,
+                    {
+                        permissions: convertSharedLinkPermissions(newSharedLinkPermissionLevel),
+                    },
+                    handleUpdateItemSuccess,
+                    handleUpdateItemError,
+                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+                );
+            };
+            setChangeSharedLinkPermissionLevel(updatedChangeSharedLinkPermissionLevelFn);
         }
     }, [
         api,
@@ -139,6 +160,7 @@ function SharingNotification({
         notificationID,
         notifications,
         setChangeSharedLinkAccessLevel,
+        setChangeSharedLinkPermissionLevel,
         setItem,
         setOnAddLink,
         setOnRemoveLink,
