@@ -37,7 +37,7 @@ type Props = {
     htmlAttributes?: Object,
 };
 
-class CollapsibleSidebar extends React.Component<Props, State> {
+class CollapsibleSidebar extends React.Component<Props> {
     navRef: { current: null | HTMLElement } = React.createRef();
 
     focusNextEl = () => {
