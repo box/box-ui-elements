@@ -417,9 +417,9 @@ describe('elements/content-preview/ContentPreview', () => {
                 await instance.loadPreview();
 
                 if (called) {
-                    expect(instance.preview.addListener).toHaveBeenCalledWith('annotator', onAnnotator);
+                    expect(instance.preview.addListener).toHaveBeenCalledWith('annotator_create', onAnnotator);
                 } else {
-                    expect(instance.preview.addListener).not.toHaveBeenCalledWith('annotator', onAnnotator);
+                    expect(instance.preview.addListener).not.toHaveBeenCalledWith('annotator_create', onAnnotator);
                 }
             },
         );

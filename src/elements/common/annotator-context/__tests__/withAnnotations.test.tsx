@@ -182,6 +182,17 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         );
     });
 
+    describe('handleAnnotationFetchError()', () => {
+        test('should call onError', () => {
+            const instance = getWrapper().instance();
+
+            const mockError = new Error();
+            instance.handleAnnotationFetchError({ error: mockError });
+
+            expect(defaults.onError).toHaveBeenCalledWith(mockError, 'fetch_annotations_error');
+        });
+    });
+
     describe('handlePreviewDestroy()', () => {
         test('should reset state and annotator', () => {
             const wrapper = getWrapper();
@@ -223,6 +234,10 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                 instance.handleActiveChange,
             );
             expect(mockAnnotator.removeListener).toBeCalledWith('annotations_create', instance.handleAnnotationCreate);
+            expect(mockAnnotator.removeListener).toBeCalledWith(
+                'annotations_fetch_error',
+                instance.handleAnnotationFetchError,
+            );
         });
     });
 
