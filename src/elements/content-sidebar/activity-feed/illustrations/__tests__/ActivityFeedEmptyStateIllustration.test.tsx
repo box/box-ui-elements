@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
+import AccessibleSVG from '../../../../../icons/accessible-svg';
 
 import ActivityFeedEmptyStateIllustration from '../ActivityFeedEmptyStateIllustration';
 
-describe('elements/content-sidebar/ActivityFeed/illustrations/IconActivityFeedEmptyState', () => {
+describe('elements/content-sidebar/activity-feed/illustrations/ActivityFeedEmptyStateIllustration', () => {
     test('should correctly add class if passed', () => {
         const wrapper = shallow(<ActivityFeedEmptyStateIllustration className="test" />);
 
@@ -15,6 +16,8 @@ describe('elements/content-sidebar/ActivityFeed/illustrations/IconActivityFeedEm
         const height = 17;
         const wrapper = shallow(<ActivityFeedEmptyStateIllustration height={height} width={width} />);
 
-        expect(wrapper).toMatchSnapshot();
+        const svg = wrapper.find(AccessibleSVG);
+        expect(svg.prop('height')).toBe(height);
+        expect(svg.prop('width')).toBe(width);
     });
 });
