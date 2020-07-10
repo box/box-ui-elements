@@ -6,7 +6,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from '../../../common/messages';
-import { IconActivityFeedEmptyState, IconActivityFeedEmptyStateFallback } from '../icons';
+import { ActivityFeedEmptyStateFallbackIllustration, ActivityFeedEmptyStateIllustration } from '../illustrations';
 
 type Props = {
     showAnnotationMessage?: boolean,
@@ -21,16 +21,20 @@ const EmptyState = ({ showAnnotationMessage, showCommentMessage }: Props): React
 
     return (
         <div className="bcs-activity-feed-empty-state">
-            {showAnnotationMessage ? <IconActivityFeedEmptyState /> : <IconActivityFeedEmptyStateFallback />}
+            {showAnnotationMessage ? (
+                <ActivityFeedEmptyStateIllustration />
+            ) : (
+                <ActivityFeedEmptyStateFallbackIllustration />
+            )}
             <div className="bcs-empty-state-cta">
                 <FormattedMessage {...messages.noActivity}>
                     {(text: string) => <span className="bcs-empty-state-detail">{text}</span>}
                 </FormattedMessage>
-                {showActionMessage ? (
+                {showActionMessage && (
                     <aside>
                         <FormattedMessage {...actionMessage} />
                     </aside>
-                ) : null}
+                )}
             </div>
         </div>
     );

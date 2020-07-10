@@ -8,9 +8,9 @@ type Props = {
     width?: number;
 };
 
-const IconActivityFeedEmptyState = ({ className = '', width = 140, height = 140 }: Props): JSX.Element => (
+const ActivityFeedEmptyStateIllustration = ({ className = '', width = 140, height = 140 }: Props): JSX.Element => (
     <AccessibleSVG
-        className={`bcs-activity-feed-empty-state-illustration ${className}`}
+        className={`bcs-ActivityFeedEmptyStateIllustration ${className}`}
         height={height}
         viewBox="0 0 140 140"
         width={width}
@@ -31,4 +31,4 @@ const IconActivityFeedEmptyState = ({ className = '', width = 140, height = 140 
     </AccessibleSVG>
 );
 
-export default IconActivityFeedEmptyState;
+export default ActivityFeedEmptyStateIllustration;

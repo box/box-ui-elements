@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/ActivityFeed/icons/IconActivityFeedEmptyState should correctly add class if passed 1`] = `
+exports[`elements/content-sidebar/ActivityFeed/illustrations/IconActivityFeedEmptyState should correctly add class if passed 1`] = `
 <AccessibleSVG
-  className="bcs-activity-feed-empty-state-illustration test"
+  className="bcs-ActivityFeedEmptyStateIllustration test"
   height={140}
   viewBox="0 0 140 140"
   width={140}
@@ -26,9 +26,9 @@ exports[`elements/content-sidebar/ActivityFeed/icons/IconActivityFeedEmptyState 
 </AccessibleSVG>
 `;
 
-exports[`elements/content-sidebar/ActivityFeed/icons/IconActivityFeedEmptyState should correctly render icon with specified width and height 1`] = `
+exports[`elements/content-sidebar/ActivityFeed/illustrations/IconActivityFeedEmptyState should correctly render icon with specified width and height 1`] = `
 <AccessibleSVG
-  className="bcs-activity-feed-empty-state-illustration "
+  className="bcs-ActivityFeedEmptyStateIllustration "
   height={17}
   viewBox="0 0 140 140"
   width={16}

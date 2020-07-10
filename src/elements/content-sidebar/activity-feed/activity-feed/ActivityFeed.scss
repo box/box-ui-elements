@@ -121,7 +121,8 @@
             font-weight: bold;
         }
 
-        .bcs-activity-feed-empty-state-illustration {
+        .bcs-ActivityFeedEmptyStateFallbackIllustration,
+        .bcs-ActivityFeedEmptyStateIllustration {
             margin-top: 60px;
             margin-bottom: 15px;
         }
