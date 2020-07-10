@@ -749,7 +749,7 @@ const messages = defineMessages({
     },
     noActivityAnnotationPrompt: {
         id: 'be.noActivityAnnotationPrompt',
-        defaultMessage: 'Hover over the preview and use the control at the bottom to annotate the file.',
+        defaultMessage: 'Hover over the preview and use the controls at the bottom to annotate the file.',
         description: 'Message shown alongside empty activity feed when user can annotate',
     },
     noActivityCommentPrompt: {
