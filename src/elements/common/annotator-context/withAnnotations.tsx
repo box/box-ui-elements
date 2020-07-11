@@ -21,15 +21,15 @@ export type ComponentWithAnnotations = {
     handleActiveChange: ActiveChangeEventHandler;
     handleAnnotationChangeEvent: (id: string | null) => void;
     handleAnnotationCreate: (eventData: AnnotationActionEvent) => void;
+    handleAnnotationFetchError: ({ error }: { error: Error }) => void;
     handleAnnotator: (annotator: Annotator) => void;
-    handleAnnotatorEvent: ({ event, data }: { event: string; data?: unknown }) => void;
     handlePreviewDestroy: (shouldReset?: boolean) => void;
 };
 
 export type WithAnnotationsProps = {
     location?: Location;
     onAnnotator: (annotator: Annotator) => void;
-    onError?: (error: Error, code: string) => void;
+    onError?: (error: Error, code: string, contextInfo?: Record<string, unknown>) => void;
     onPreviewDestroy: (shouldReset?: boolean) => void;
 };
 
@@ -114,7 +114,7 @@ export default function withAnnotations<P extends object>(
             const { onError } = this.props;
 
             if (onError && error) {
-                onError(error, 'create_annotation_error');
+                onError(error, 'create_annotation_error', { showNotification: true });
             }
 
             this.setState({
@@ -130,10 +130,19 @@ export default function withAnnotations<P extends object>(
             this.setState({ activeAnnotationFileVersionId: fileVersionId, activeAnnotationId: annotationId });
         };
 
+        handleAnnotationFetchError = ({ error }: { error: Error }): void => {
+            const { onError } = this.props;
+
+            if (onError && error) {
+                onError(error, 'fetch_annotations_error', { showNotification: true });
+            }
+        };
+
         handleAnnotator = (annotator: Annotator): void => {
             this.annotator = annotator;
             this.annotator.addListener('annotations_active_change', this.handleActiveChange);
             this.annotator.addListener('annotations_create', this.handleAnnotationCreate);
+            this.annotator.addListener('annotations_fetch_error', this.handleAnnotationFetchError);
         };
 
         handlePreviewDestroy = (shouldReset = true): void => {
@@ -144,6 +153,7 @@ export default function withAnnotations<P extends object>(
             if (this.annotator) {
                 this.annotator.removeListener('annotations_active_change', this.handleActiveChange);
                 this.annotator.removeListener('annotations_create', this.handleAnnotationCreate);
+                this.annotator.removeListener('annotations_fetch_error', this.handleAnnotationFetchError);
             }
 
             this.annotator = null;

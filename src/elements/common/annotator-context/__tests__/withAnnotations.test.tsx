@@ -158,7 +158,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                 },
             });
 
-            expect(onError).toHaveBeenCalledWith(mockError, 'create_annotation_error');
+            expect(onError).toHaveBeenCalledWith(mockError, 'create_annotation_error', { showNotification: true });
         });
     });
 
@@ -180,6 +180,19 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                 expect(activeAnnotationId).toEqual(expectedAnnotationId);
             },
         );
+    });
+
+    describe('handleAnnotationFetchError()', () => {
+        test('should call onError', () => {
+            const instance = getWrapper().instance();
+
+            const mockError = new Error();
+            instance.handleAnnotationFetchError({ error: mockError });
+
+            expect(defaults.onError).toHaveBeenCalledWith(mockError, 'fetch_annotations_error', {
+                showNotification: true,
+            });
+        });
     });
 
     describe('handlePreviewDestroy()', () => {
@@ -223,6 +236,10 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                 instance.handleActiveChange,
             );
             expect(mockAnnotator.removeListener).toBeCalledWith('annotations_create', instance.handleAnnotationCreate);
+            expect(mockAnnotator.removeListener).toBeCalledWith(
+                'annotations_fetch_error',
+                instance.handleAnnotationFetchError,
+            );
         });
     });
 

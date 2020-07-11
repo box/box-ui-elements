@@ -29,9 +29,15 @@
         }
 
         .bcs-version-item {
+            margin-top: $bdl-grid-unit * 4;
+
             &:first-child .bcs-version {
                 margin-top: 0;
             }
+        }
+
+        .bcs-version-item + .bcs-activity-feed-annotation-activity {
+            margin-top: $bdl-grid-unit * 4;
         }
 
         .bcs-activity-feed-task,

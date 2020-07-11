@@ -71,7 +71,7 @@ const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
 const TASK = 'task';
 
 type FeedItemsCache = {
-    hasError: boolean,
+    errors: ErrorResponseData[],
     items: FeedItems,
 };
 
@@ -119,14 +119,15 @@ class Feed extends Base {
     file: BoxItem;
 
     /**
-     * @property {boolean}
+     * @property {ElementsXhrError}
      */
-    hasError: boolean;
+    errors: ElementsXhrError[];
 
     constructor(options: APIOptions) {
         super(options);
         this.taskCollaboratorsAPI = [];
         this.taskLinksAPI = [];
+        this.errors = [];
     }
 
     /**
@@ -221,7 +222,7 @@ class Feed extends Base {
         const cache = this.getCache();
         const cacheKey = this.getCacheKey(id);
         cache.set(cacheKey, {
-            hasError: !!this.hasError,
+            errors: this.errors,
             items,
         });
     }
@@ -241,7 +242,7 @@ class Feed extends Base {
         file: BoxItem,
         shouldRefreshCache: boolean,
         successCallback: Function,
-        errorCallback: (feedItems: FeedItems) => void,
+        errorCallback: (feedItems: FeedItems, errors: ElementsXhrError[]) => void,
         onError: ErrorCallback,
         {
             shouldShowAnnotations = false,
@@ -251,9 +252,9 @@ class Feed extends Base {
         const { id, permissions = {} } = file;
         const cachedItems = this.getCachedItems(id);
         if (cachedItems) {
-            const { hasError, items } = cachedItems;
-            if (hasError) {
-                errorCallback(items);
+            const { errors, items } = cachedItems;
+            if (errors.length) {
+                errorCallback(items, errors);
             } else {
                 successCallback(items);
             }
@@ -264,7 +265,7 @@ class Feed extends Base {
         }
 
         this.file = file;
-        this.hasError = false;
+        this.errors = [];
         this.errorCallback = onError;
         const annotationsPromise = shouldShowAnnotations ? this.fetchAnnotations(permissions) : Promise.resolve();
         const versionsPromise = this.fetchVersions();
@@ -285,8 +286,8 @@ class Feed extends Base {
             const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
             if (!this.isDestroyed()) {
                 this.setCachedItems(id, sortedFeedItems);
-                if (this.hasError) {
-                    errorCallback(sortedFeedItems);
+                if (this.errors.length) {
+                    errorCallback(sortedFeedItems, this.errors);
                 } else {
                     successCallback(sortedFeedItems);
                 }
@@ -979,7 +980,7 @@ class Feed extends Base {
      */
     feedErrorCallback = (hasError: boolean = false, e: ElementsXhrError, code: string): void => {
         if (hasError) {
-            this.hasError = true;
+            this.errors.push({ ...e, code });
         }
 
         if (!this.isDestroyed() && this.errorCallback) {

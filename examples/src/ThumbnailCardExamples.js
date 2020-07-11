@@ -1,7 +1,8 @@
+// @flow
 import * as React from 'react';
 
-import ThumbnailCard from '../../src/components/thumbnail-card';
 import AccessibleSVG from '../../src/icons/accessible-svg';
+import ThumbnailCard from '../../src/components/thumbnail-card';
 
 const ThumbnailCardExamples = () => {
     const icon = (
@@ -38,6 +39,12 @@ const ThumbnailCardExamples = () => {
             </div>
             <br />
             <div>
+                <h1>Highlight on Hover Example</h1>
+                <br />
+                <ThumbnailCard highlightOnHover thumbnail={thumbnail} title={title} />
+            </div>
+            <br />
+            <div>
                 <h1>Multiple Cards Example</h1>
                 <div
                     style={{
@@ -49,6 +56,7 @@ const ThumbnailCardExamples = () => {
                         <ThumbnailCard
                             key={`thumbnailcard-${i}`}
                             icon={icon}
+                            highlightOnHover
                             subtitle={subtitle}
                             thumbnail={thumbnail}
                             title={title}
