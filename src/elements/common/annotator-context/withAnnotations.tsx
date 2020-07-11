@@ -29,7 +29,7 @@ export type ComponentWithAnnotations = {
 export type WithAnnotationsProps = {
     location?: Location;
     onAnnotator: (annotator: Annotator) => void;
-    onError?: (error: Error, code: string) => void;
+    onError?: (error: Error, code: string, contextInfo?: Record<string, unknown>) => void;
     onPreviewDestroy: (shouldReset?: boolean) => void;
 };
 
@@ -114,7 +114,7 @@ export default function withAnnotations<P extends object>(
             const { onError } = this.props;
 
             if (onError && error) {
-                onError(error, 'create_annotation_error');
+                onError(error, 'create_annotation_error', { showNotification: true });
             }
 
             this.setState({
@@ -134,7 +134,7 @@ export default function withAnnotations<P extends object>(
             const { onError } = this.props;
 
             if (onError && error) {
-                onError(error, 'fetch_annotations_error');
+                onError(error, 'fetch_annotations_error', { showNotification: true });
             }
         };
 
