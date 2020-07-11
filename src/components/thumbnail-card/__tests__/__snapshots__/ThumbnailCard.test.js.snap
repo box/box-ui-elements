@@ -15,7 +15,9 @@ exports[`components/thumbnail-card/ThumbnailCard should pass down actionItem, ic
   />
   <ThumbnailCardDetails
     actionItem={
-      <button>
+      <button
+        type="button"
+      >
         Click Me
       </button>
     }

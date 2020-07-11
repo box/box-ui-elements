@@ -40,7 +40,9 @@ exports[`components/thumbnail-card/ThumbnailCardDetails should render actionItem
         </div>
       </div>
     </div>
-    <button>
+    <button
+      type="button"
+    >
       Click Me
     </button>
   </div>
