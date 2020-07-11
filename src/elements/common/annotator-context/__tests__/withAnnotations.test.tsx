@@ -158,7 +158,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
                 },
             });
 
-            expect(onError).toHaveBeenCalledWith(mockError, 'create_annotation_error');
+            expect(onError).toHaveBeenCalledWith(mockError, 'create_annotation_error', { showNotification: true });
         });
     });
 
@@ -189,7 +189,9 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             const mockError = new Error();
             instance.handleAnnotationFetchError({ error: mockError });
 
-            expect(defaults.onError).toHaveBeenCalledWith(mockError, 'fetch_annotations_error');
+            expect(defaults.onError).toHaveBeenCalledWith(mockError, 'fetch_annotations_error', {
+                showNotification: true,
+            });
         });
     });
 
