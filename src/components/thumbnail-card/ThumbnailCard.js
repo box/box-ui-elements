@@ -8,6 +8,7 @@ import ThumbnailCardThumbnail from './ThumbnailCardThumbnail';
 import './ThumbnailCard.scss';
 
 type Props = {
+    actionItem?: React.Node,
     className?: string,
     highlightOnHover?: boolean,
     icon?: React.Node,
@@ -17,6 +18,7 @@ type Props = {
 };
 
 const ThumbnailCard = ({
+    actionItem,
     className = '',
     icon,
     highlightOnHover = false,
@@ -32,7 +34,7 @@ const ThumbnailCard = ({
         {...rest}
     >
         <ThumbnailCardThumbnail thumbnail={thumbnail} />
-        <ThumbnailCardDetails icon={icon} subtitle={subtitle} title={title} />
+        <ThumbnailCardDetails actionItem={actionItem} icon={icon} subtitle={subtitle} title={title} />
     </div>
 );
 

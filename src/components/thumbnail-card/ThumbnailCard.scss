@@ -15,8 +15,7 @@
 
 // We should apply border to the card only when it is hovered
 .thumbnail-card.is-highlight-applied {
-    &:focus,
-    &:hover {
+    &:hover:not(:focus) {
         border: 1px solid $bdl-light-blue;
     }
 }
@@ -25,15 +24,23 @@
     display: flex;
     flex: 1;
     align-items: center;
-    padding: 12px;
+    padding: 0 12px 0 12px;
     line-height: 16px;
     border-top: 1px solid $bdl-gray-05;
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
 
     .thumbnail-card-details-content {
+        display: flex;
         flex: 1;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
         overflow: hidden;
+
+        .thumbnail-card-details-body {
+            width: 110px;
+        }
     }
 
     .thumbnail-card-title,

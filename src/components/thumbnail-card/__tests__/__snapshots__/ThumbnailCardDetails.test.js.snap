@@ -8,12 +8,41 @@ exports[`components/thumbnail-card/ThumbnailCardDetails should render 1`] = `
     className="thumbnail-card-details-content"
   >
     <div
-      className="thumbnail-card-title"
+      className="thumbnail-card-details-body"
     >
-      <div>
-        Foo Bar!
+      <div
+        className="thumbnail-card-title"
+      >
+        <div>
+          Foo Bar!
+        </div>
       </div>
     </div>
+  </div>
+</div>
+`;
+
+exports[`components/thumbnail-card/ThumbnailCardDetails should render actionItem 1`] = `
+<div
+  className="thumbnail-card-details"
+>
+  <div
+    className="thumbnail-card-details-content"
+  >
+    <div
+      className="thumbnail-card-details-body"
+    >
+      <div
+        className="thumbnail-card-title"
+      >
+        <div>
+          Foo Bar!
+        </div>
+      </div>
+    </div>
+    <button>
+      Click Me
+    </button>
   </div>
 </div>
 `;
@@ -29,10 +58,14 @@ exports[`components/thumbnail-card/ThumbnailCardDetails should render icon 1`] =
     className="thumbnail-card-details-content"
   >
     <div
-      className="thumbnail-card-title"
+      className="thumbnail-card-details-body"
     >
-      <div>
-        Foo Bar!
+      <div
+        className="thumbnail-card-title"
+      >
+        <div>
+          Foo Bar!
+        </div>
       </div>
     </div>
   </div>
@@ -47,17 +80,21 @@ exports[`components/thumbnail-card/ThumbnailCardDetails should render subtitle 1
     className="thumbnail-card-details-content"
   >
     <div
-      className="thumbnail-card-title"
+      className="thumbnail-card-details-body"
     >
-      <div>
-        Foo Bar!
+      <div
+        className="thumbnail-card-title"
+      >
+        <div>
+          Foo Bar!
+        </div>
       </div>
-    </div>
-    <div
-      className="thumbnail-card-subtitle"
-    >
-      <div>
-        Subtitle!
+      <div
+        className="thumbnail-card-subtitle"
+      >
+        <div>
+          Subtitle!
+        </div>
       </div>
     </div>
   </div>

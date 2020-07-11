@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import AccessibleSVG from '../../src/icons/accessible-svg';
 import ThumbnailCard from '../../src/components/thumbnail-card';
+import PrimaryButton from '../../src/components/primary-button';
 
 const ThumbnailCardExamples = () => {
     const icon = (
@@ -24,6 +25,7 @@ const ThumbnailCardExamples = () => {
     const subtitle = <div>I&#39;m a subtitle!</div>;
     const title = <div>Hello World!</div>;
     const thumbnail = <div>Thumbnail goes here</div>;
+    const actionItem = <PrimaryButton>Click Me</PrimaryButton>;
 
     return (
         <div>
@@ -42,6 +44,11 @@ const ThumbnailCardExamples = () => {
                 <h1>Highlight on Hover Example</h1>
                 <br />
                 <ThumbnailCard highlightOnHover thumbnail={thumbnail} title={title} />
+            </div>
+            <div>
+                <h1>Action Item Example</h1>
+                <br />
+                <ThumbnailCard actionItem={actionItem} highlightOnHover thumbnail={thumbnail} title={title} />
             </div>
             <br />
             <div>
