@@ -48,7 +48,7 @@ const ThumbnailCardExamples = () => {
             <div>
                 <h1>Action Item Example</h1>
                 <br />
-                <ThumbnailCard actionItem={actionItem} highlightOnHover thumbnail={thumbnail} title={title} />
+                <ThumbnailCard actionItem={actionItem} thumbnail={thumbnail} title={title} />
             </div>
             <br />
             <div>
