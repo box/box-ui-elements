@@ -344,7 +344,7 @@ type FlattenedBoxItem = {
     download_url?: string,
     extension?: string,
     file_version?: BoxItemVersion,
-    has_collaborators?: boolean,
+    has_collaborations?: boolean,
     id?: string,
     interacted_at?: string,
     is_externally_owned?: boolean,
