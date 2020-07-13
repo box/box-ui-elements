@@ -314,7 +314,6 @@ describe('convertCollabsResponse', () => {
                     {
                         collabID: MOCK_COLLAB_IDS[0],
                         email: 'contentexplorer@box.com',
-                        expiration: null,
                         hasCustomAvatar: false,
                         imageURL: null,
                         isExternalCollab: false,
@@ -326,7 +325,6 @@ describe('convertCollabsResponse', () => {
                     {
                         collabID: MOCK_COLLAB_IDS[1],
                         email: 'contentpreview@box.com',
-                        expiration: null,
                         hasCustomAvatar: false,
                         imageURL: null,
                         isExternalCollab: false,
@@ -352,7 +350,6 @@ describe('convertCollabsResponse', () => {
                     {
                         collabID: MOCK_COLLAB_IDS[3],
                         email: 'contentuploader@box.com',
-                        expiration: null,
                         hasCustomAvatar: false,
                         imageURL: null,
                         isExternalCollab: false,
@@ -364,7 +361,6 @@ describe('convertCollabsResponse', () => {
                     {
                         collabID: MOCK_COLLAB_IDS[4],
                         email: 'demo@boxworks.com',
-                        expiration: null,
                         hasCustomAvatar: false,
                         imageURL: null,
                         isExternalCollab: !!isCurrentUserOwner,

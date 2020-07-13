@@ -56,6 +56,7 @@ function SharingNotification({
 }: SharingNotificationProps) {
     const [notifications, setNotifications] = React.useState<{ [string]: typeof Notification }>({});
     const [notificationID, setNotificationID] = React.useState<number>(0);
+    const [retrievedCollaborators, setRetrievedCollaborators] = React.useState<boolean>(false); // add an internal check for testing purposes
 
     // Close a notification
     const handleNotificationClose = React.useCallback(
@@ -190,6 +191,7 @@ function SharingNotification({
         const handleGetCollaborationsSuccess = (response: Collaborations) => {
             const updatedCollaboratorsList = convertCollabsResponse(response, ownerEmail, ownerID === currentUserID);
             setCollaboratorsList(updatedCollaboratorsList);
+            setRetrievedCollaborators(true);
         };
 
         const handleGetCollaborationsError = () => {
@@ -204,26 +206,23 @@ function SharingNotification({
             setCollaboratorsList({ collaborators: [] }); // default to an empty collaborators list for the USM
             setNotifications(updatedNotifications);
             setNotificationID(notificationID + 1);
+            setRetrievedCollaborators(true);
         };
 
-        const getItemCollaborations = () => {
+        if (itemID && currentUserID && !retrievedCollaborators) {
+            let collabAPIInstance;
             if (itemType === TYPE_FILE) {
-                api.getFileCollaborationsAPI(true).getCollaborations(
-                    itemID,
-                    handleGetCollaborationsSuccess,
-                    handleGetCollaborationsError,
-                );
+                collabAPIInstance = api.getFileCollaborationsAPI(false);
             } else if (itemType === TYPE_FOLDER) {
-                api.getFolderCollaborationsAPI(true).getCollaborations(
+                collabAPIInstance = api.getFolderCollaborationsAPI(false);
+            }
+            if (collabAPIInstance) {
+                collabAPIInstance.getCollaborations(
                     itemID,
                     handleGetCollaborationsSuccess,
                     handleGetCollaborationsError,
                 );
             }
-        };
-
-        if (itemID && currentUserID && !collaboratorsList) {
-            getItemCollaborations();
         }
     }, [
         api,
@@ -236,6 +235,7 @@ function SharingNotification({
         notifications,
         ownerEmail,
         ownerID,
+        retrievedCollaborators,
         setCollaboratorsList,
     ]);
 

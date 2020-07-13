@@ -7,10 +7,10 @@ import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import {
     MOCK_COLLABS_API_RESPONSE,
     MOCK_COLLABS_CONVERTED_RESPONSE,
-    MOCK_ITEM,
     MOCK_ITEM_ID,
     MOCK_OWNER_ID,
     MOCK_OWNER_EMAIL,
+    MOCK_ITEM_PERMISSIONS,
 } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
 import Notification from '../../../components/notification/Notification';
 import NotificationsWrapper from '../../../components/notification/NotificationsWrapper';
@@ -49,8 +49,11 @@ describe('elements/content-sharing/SharingNotification', () => {
             <SharingNotification
                 collaboratorsList={null}
                 currentUserID={MOCK_OWNER_ID}
-                item={MOCK_ITEM}
+                itemID={MOCK_ITEM_ID}
                 itemType={TYPE_FOLDER}
+                ownerEmail={MOCK_OWNER_EMAIL}
+                ownerID={MOCK_OWNER_ID}
+                permissions={MOCK_ITEM_PERMISSIONS}
                 setChangeSharedLinkAccessLevel={setChangeSharedLinkAccessLevelStub}
                 setChangeSharedLinkPermissionLevel={setChangeSharedLinkPermissionLevelStub}
                 setCollaboratorsList={setCollaboratorsListStub}
@@ -79,8 +82,8 @@ describe('elements/content-sharing/SharingNotification', () => {
             expect(setChangeSharedLinkPermissionLevelStub).toHaveBeenCalled();
         });
 
-        test('should not call state setting functions if item is null', () => {
-            getWrapper({ api: apiInstance, item: null });
+        test('should not call state setting functions if given null permissions', () => {
+            getWrapper({ api: apiInstance, permissions: null });
             expect(setOnAddLinkStub).not.toHaveBeenCalled();
             expect(setOnRemoveLinkStub).not.toHaveBeenCalled();
             expect(setChangeSharedLinkAccessLevelStub).not.toHaveBeenCalled();
@@ -121,15 +124,13 @@ describe('elements/content-sharing/SharingNotification', () => {
         });
     });
 
-    describe.only('with failed GET requests to the Collaborations API', () => {
-        const createShareFailureMock = () =>
-            jest.fn().mockImplementation((id, successFn, failureFn) => {
+    describe('with failed GET requests to the Collaborations API', () => {
+        beforeAll(() => {
+            getCollaborations = jest.fn().mockImplementation((id, successFn, failureFn) => {
                 return Promise.reject(new Error({ status: '400' })).catch(response => {
                     failureFn(response);
                 });
             });
-        beforeAll(() => {
-            getCollaborations = createShareFailureMock();
             apiInstance = createAPIInstance(getCollaborations);
         });
 
@@ -150,8 +151,12 @@ describe('elements/content-sharing/SharingNotification', () => {
                 collaborators: [],
             });
             const notification = wrapper.find(Notification);
-            expect(notification.prop('key')).toBe(1);
-            expect(notification.find(FormattedMessage).prop('id')).toBe('be.contentSharing.collaboratorsLoadingError');
+            expect(
+                notification
+                    .find(FormattedMessage)
+                    .at(0)
+                    .prop('id'),
+            ).toBe('be.contentSharing.collaboratorsLoadingError');
         });
     });
 });
