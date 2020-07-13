@@ -1,21 +1,20 @@
-/**
- * @flow
- * @file IconActivityFeedEmptyState icon component
- */
-
 import * as React from 'react';
 
 import AccessibleSVG from '../../../../icons/accessible-svg';
 
 type Props = {
-    className?: string,
-    height?: number,
-    width?: number,
+    className?: string;
+    height?: number;
+    width?: number;
 };
 
-const IconActivityFeedEmptyState = ({ className = '', width = 90, height = 90 }: Props): React.Node => (
+const ActivityFeedEmptyStateFallbackIllustration = ({
+    className = '',
+    width = 90,
+    height = 90,
+}: Props): JSX.Element => (
     <AccessibleSVG
-        className={`bcs-activity-feed-empty-state-illustration ${className}`}
+        className={`bcs-ActivityFeedEmptyStateFallbackIllustration ${className}`}
         height={height}
         viewBox="0 0 90 90"
         width={width}
@@ -36,4 +35,4 @@ const IconActivityFeedEmptyState = ({ className = '', width = 90, height = 90 }:
     </AccessibleSVG>
 );
 
-export default IconActivityFeedEmptyState;
+export default ActivityFeedEmptyStateFallbackIllustration;
