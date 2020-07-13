@@ -212,27 +212,32 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         );
 
         test.each`
-            isAnnotationsPath | isOpen   | current             | expectedCount
-            ${false}          | ${false} | ${null}             | ${0}
-            ${true}           | ${false} | ${null}             | ${0}
-            ${false}          | ${true}  | ${null}             | ${0}
-            ${false}          | ${false} | ${sidebarPanelsRef} | ${0}
-            ${true}           | ${true}  | ${null}             | ${0}
-            ${false}          | ${true}  | ${sidebarPanelsRef} | ${0}
-            ${true}           | ${true}  | ${sidebarPanelsRef} | ${1}
+            pathname                            | isOpen   | current             | expectedCount
+            ${'/'}                              | ${false} | ${null}             | ${0}
+            ${'/details'}                       | ${true}  | ${null}             | ${0}
+            ${'/activity'}                      | ${false} | ${null}             | ${0}
+            ${'/activity'}                      | ${true}  | ${null}             | ${0}
+            ${'/activity'}                      | ${false} | ${sidebarPanelsRef} | ${0}
+            ${'/activity'}                      | ${true}  | ${sidebarPanelsRef} | ${1}
+            ${'/activity/versions/12345'}       | ${true}  | ${sidebarPanelsRef} | ${1}
+            ${'/activity/versions/12345/67890'} | ${true}  | ${sidebarPanelsRef} | ${1}
+            ${'/details'}                       | ${true}  | ${sidebarPanelsRef} | ${0}
+            ${'/'}                              | ${true}  | ${sidebarPanelsRef} | ${0}
         `(
-            'should refresh the sidebarPanels ref accordingly if isAnnotationsPath=$isAnnotationsPath, isOpen=$isOpen, current=$current',
-            ({ isAnnotationsPath, isOpen, current, expectedCount }) => {
+            'should refresh the sidebarPanels ref accordingly if pathname=$pathname, isOpen=$isOpen, current=$current',
+            ({ current, expectedCount, isOpen, pathname }) => {
                 const annotatorStateMock = {
                     meta: {
                         requestId: '123',
                     },
                 };
-
-                const wrapper = getWrapper({ annotatorState: annotatorStateMock, currentUser, isOpen });
+                const wrapper = getWrapper({
+                    annotatorState: annotatorStateMock,
+                    currentUser,
+                    isOpen,
+                    location: { pathname },
+                });
                 const instance = wrapper.instance();
-
-                annotatorContextProps.getAnnotationsMatchPath.mockReturnValueOnce(isAnnotationsPath);
                 instance.sidebarPanels = {
                     current,
                 };

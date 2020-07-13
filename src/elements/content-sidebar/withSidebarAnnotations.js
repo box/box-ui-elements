@@ -2,7 +2,7 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
-import type { ContextRouter } from 'react-router-dom';
+import { matchPath, type ContextRouter } from 'react-router-dom';
 import { getBadUserError } from '../../utils/error';
 import type { WithAnnotatorContextProps } from '../common/annotator-context';
 import type { BoxItem, User } from '../../common/types/core';
@@ -98,7 +98,6 @@ export default function withSidebarAnnotations(
                 currentUser,
                 file,
                 fileId,
-                getAnnotationsMatchPath,
                 isOpen,
                 location,
             } = this.props;
@@ -113,7 +112,8 @@ export default function withSidebarAnnotations(
             }
 
             const feedAPI = api.getFeedAPI(false);
-            const isAnnotationsPath = !!getAnnotationsMatchPath(location);
+            const pathname = getProp(location, 'pathname', '');
+            const isActivity = matchPath(pathname, '/activity');
             const isPending = action === 'create_start';
             const { items: hasItems } = feedAPI.getCachedItems(fileId) || {};
             const { current } = this.sidebarPanels;
@@ -124,8 +124,8 @@ export default function withSidebarAnnotations(
                 feedAPI.addAnnotation(file, currentUser, annotation, requestId, isPending);
             }
 
-            if (isAnnotationsPath && isOpen && current) {
-                // If the sidebar is currently open, then force the sidebar to refresh with the updated data
+            // If the activity sidebar is currently open, then force it to refresh with the updated data
+            if (current && isActivity && isOpen) {
                 current.refresh(false);
             }
         }
