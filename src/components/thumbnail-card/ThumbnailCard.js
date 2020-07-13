@@ -8,7 +8,7 @@ import ThumbnailCardThumbnail from './ThumbnailCardThumbnail';
 import './ThumbnailCard.scss';
 
 type Props = {
-    actionItem?: React.Node,
+    actionItem?: React.Element,
     className?: string,
     highlightOnHover?: boolean,
     icon?: React.Node,

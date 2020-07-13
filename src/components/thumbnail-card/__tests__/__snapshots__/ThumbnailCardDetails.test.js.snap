@@ -8,7 +8,7 @@ exports[`components/thumbnail-card/ThumbnailCardDetails should render 1`] = `
     className="thumbnail-card-details-content"
   >
     <div
-      className="thumbnail-card-details-body"
+      className="ThumbnailCardDetails-bodyText"
     >
       <div
         className="thumbnail-card-title"
@@ -30,7 +30,7 @@ exports[`components/thumbnail-card/ThumbnailCardDetails should render actionItem
     className="thumbnail-card-details-content"
   >
     <div
-      className="thumbnail-card-details-body"
+      className="ThumbnailCardDetails-bodyText"
     >
       <div
         className="thumbnail-card-title"
@@ -60,7 +60,7 @@ exports[`components/thumbnail-card/ThumbnailCardDetails should render icon 1`] =
     className="thumbnail-card-details-content"
   >
     <div
-      className="thumbnail-card-details-body"
+      className="ThumbnailCardDetails-bodyText"
     >
       <div
         className="thumbnail-card-title"
@@ -82,7 +82,7 @@ exports[`components/thumbnail-card/ThumbnailCardDetails should render subtitle 1
     className="thumbnail-card-details-content"
   >
     <div
-      className="thumbnail-card-details-body"
+      className="ThumbnailCardDetails-bodyText"
     >
       <div
         className="thumbnail-card-title"
