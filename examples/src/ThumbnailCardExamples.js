@@ -31,7 +31,6 @@ const ThumbnailCardExamples = () => {
         <div>
             <div>
                 <h1>Single Card Example</h1>
-                <br />
                 <ThumbnailCard thumbnail={thumbnail} title={title} />
             </div>
             <br />
@@ -42,12 +41,10 @@ const ThumbnailCardExamples = () => {
             <br />
             <div>
                 <h1>Highlight on Hover Example</h1>
-                <br />
                 <ThumbnailCard highlightOnHover thumbnail={thumbnail} title={title} />
             </div>
             <div>
                 <h1>Action Item Example</h1>
-                <br />
                 <ThumbnailCard actionItem={actionItem} thumbnail={thumbnail} title={title} />
             </div>
             <br />
