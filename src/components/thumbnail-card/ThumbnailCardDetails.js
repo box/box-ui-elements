@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 type Props = {
-    actionItem?: React.Element,
+    actionItem?: React.Element<any>,
     icon?: React.Node,
     subtitle?: React.Node,
     title: React.Node,

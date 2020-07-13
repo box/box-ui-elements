@@ -4,9 +4,12 @@ import * as React from 'react';
 import ThumbnailCard from './ThumbnailCard';
 import notes from './ThumbnailCard.stories.md';
 
-export const basic = () => <ThumbnailCard />;
+const thumbnail = <div>Thumbnail</div>;
+const title = 'Title';
 
-export const highlightOnHover = () => <ThumbnailCard highlightOnHover />;
+export const basic = () => <ThumbnailCard thumbnail={thumbnail} title={title} />;
+
+export const highlightOnHover = () => <ThumbnailCard highlightOnHover thumbnail={thumbnail} title={title} />;
 
 export default {
     title: 'Components|ThumbnailCard',
