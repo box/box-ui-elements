@@ -1,8 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/thumbnail-card/ThumbnailCard should pass down icon and subtitle 1`] = `
+exports[`components/thumbnail-card/ThumbnailCard should pass down actionItem, icon, and subtitle 1`] = `
 <div
-  className="thumbnail-card "
+  className="thumbnail-card"
+  role="button"
+  tabIndex="0"
 >
   <ThumbnailCardThumbnail
     thumbnail={
@@ -12,6 +14,13 @@ exports[`components/thumbnail-card/ThumbnailCard should pass down icon and subti
     }
   />
   <ThumbnailCardDetails
+    actionItem={
+      <button
+        type="button"
+      >
+        Click Me
+      </button>
+    }
     icon={
       <img
         alt="icon"
@@ -33,7 +42,9 @@ exports[`components/thumbnail-card/ThumbnailCard should pass down icon and subti
 
 exports[`components/thumbnail-card/ThumbnailCard should render 1`] = `
 <div
-  className="thumbnail-card "
+  className="thumbnail-card"
+  role="button"
+  tabIndex="0"
 >
   <ThumbnailCardThumbnail
     thumbnail={
@@ -55,6 +66,8 @@ exports[`components/thumbnail-card/ThumbnailCard should render 1`] = `
 exports[`components/thumbnail-card/ThumbnailCard should use additional className 1`] = `
 <div
   className="thumbnail-card fooBar"
+  role="button"
+  tabIndex="0"
 >
   <ThumbnailCardThumbnail
     thumbnail={

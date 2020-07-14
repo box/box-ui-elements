@@ -9,21 +9,38 @@
     max-width: $thumbnail-card-max-width;
     height: 200px;
     border: $thumbnail-card-border solid $bdl-gray-10;
-    border-radius: 4px;
+    border-radius: 8px;
     box-shadow: 0 5px 10px 0 rgba(198, 198, 198, .2);
+}
+
+// We should apply border to the card only when it is hovered
+.thumbnail-card.is-highlight-applied {
+    &:hover:not(:focus) {
+        border: 1px solid $bdl-light-blue;
+    }
 }
 
 .thumbnail-card-details {
     display: flex;
     flex: 1;
     align-items: center;
-    padding: 12px;
+    padding: 0 12px 0 12px;
     line-height: 16px;
     border-top: 1px solid $bdl-gray-05;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
 
     .thumbnail-card-details-content {
+        display: flex;
         flex: 1;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
         overflow: hidden;
+
+        .ThumbnailCardDetails-bodyText {
+            width: 110px;
+        }
     }
 
     .thumbnail-card-title,
@@ -44,6 +61,8 @@
     width: 100%;
     height: $thumbnail-height;
     background-color: $bdl-gray-05;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 
     .thumbnail-card-thumbnail-viewport {
         position: relative;
@@ -52,8 +71,8 @@
         max-height: $thumbnail-height;
         overflow: hidden;
         text-align: center;
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
 
         img,
         svg {
