@@ -9,11 +9,11 @@ import { TYPE_FILE, TYPE_FOLDER, PERMISSION_CAN_DOWNLOAD, PERMISSION_CAN_PREVIEW
 import { ALLOWED_ACCESS_LEVELS, ANYONE_IN_COMPANY, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from '../../constants';
 import {
     MOCK_COLLABS_API_RESPONSE,
-    MOCK_COLLAB_IDS,
+    MOCK_COLLAB_IDS_CONVERTED,
     MOCK_OWNER,
     MOCK_OWNER_ID,
     MOCK_OWNER_EMAIL,
-    MOCK_USER_IDS,
+    MOCK_USER_IDS_CONVERTED,
 } from '../__mocks__/USMMocks';
 
 jest.mock('../../../../utils/file', () => ({
@@ -312,7 +312,7 @@ describe('convertCollabsResponse', () => {
             const convertedResponse = {
                 collaborators: [
                     {
-                        collabID: MOCK_COLLAB_IDS[0],
+                        collabID: MOCK_COLLAB_IDS_CONVERTED[0],
                         email: 'contentexplorer@box.com',
                         hasCustomAvatar: false,
                         imageURL: null,
@@ -320,10 +320,10 @@ describe('convertCollabsResponse', () => {
                         name: 'Content Explorer',
                         translatedRole: 'Editor',
                         type: 'user',
-                        userID: MOCK_USER_IDS[0],
+                        userID: MOCK_USER_IDS_CONVERTED[0],
                     },
                     {
-                        collabID: MOCK_COLLAB_IDS[1],
+                        collabID: MOCK_COLLAB_IDS_CONVERTED[1],
                         email: 'contentpreview@box.com',
                         hasCustomAvatar: false,
                         imageURL: null,
@@ -331,10 +331,10 @@ describe('convertCollabsResponse', () => {
                         name: 'Content Preview',
                         translatedRole: 'Editor',
                         type: 'user',
-                        userID: MOCK_USER_IDS[1],
+                        userID: MOCK_USER_IDS_CONVERTED[1],
                     },
                     {
-                        collabID: MOCK_COLLAB_IDS[2],
+                        collabID: MOCK_COLLAB_IDS_CONVERTED[2],
                         email: 'contentpicker@box.com',
                         expiration: {
                             executeAt: '2020-07-09T14:53:12-08:00',
@@ -345,10 +345,10 @@ describe('convertCollabsResponse', () => {
                         name: 'Content Picker',
                         translatedRole: 'Editor',
                         type: 'user',
-                        userID: MOCK_USER_IDS[2],
+                        userID: MOCK_USER_IDS_CONVERTED[2],
                     },
                     {
-                        collabID: MOCK_COLLAB_IDS[3],
+                        collabID: MOCK_COLLAB_IDS_CONVERTED[3],
                         email: 'contentuploader@box.com',
                         hasCustomAvatar: false,
                         imageURL: null,
@@ -356,10 +356,10 @@ describe('convertCollabsResponse', () => {
                         name: 'Content Uploader',
                         translatedRole: 'Editor',
                         type: 'user',
-                        userID: MOCK_USER_IDS[3],
+                        userID: MOCK_USER_IDS_CONVERTED[3],
                     },
                     {
-                        collabID: MOCK_COLLAB_IDS[4],
+                        collabID: MOCK_COLLAB_IDS_CONVERTED[4],
                         email: 'demo@boxworks.com',
                         hasCustomAvatar: false,
                         imageURL: null,
@@ -367,7 +367,7 @@ describe('convertCollabsResponse', () => {
                         name: 'BoxWorks Demo',
                         translatedRole: 'Viewer',
                         type: 'user',
-                        userID: MOCK_USER_IDS[4],
+                        userID: MOCK_USER_IDS_CONVERTED[4],
                     },
                 ],
             };

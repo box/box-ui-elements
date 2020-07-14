@@ -200,7 +200,7 @@ export const convertCollabsResponse = (
 
     if (!entries.length) return { collaborators: [] };
 
-    const ownerEmailDomain = ownerEmail || !/@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
+    const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
     const collaborators = entries.map(collab => {
         const {
             accessible_by: { id: userID, login: email, name, type },
@@ -213,7 +213,7 @@ export const convertCollabsResponse = (
         // and if the collaborator's email domain differs from the owner's email domain
         const isExternalCollab = isCurrentUserOwner && collabEmailDomain !== ownerEmailDomain;
         const convertedCollab: collaboratorType = {
-            collabID,
+            collabID: parseInt(collabID, 10),
             email,
             hasCustomAvatar: false, // to do: connect to Avatar API
             imageURL: null, // to do: connect to Avatar API
@@ -221,7 +221,7 @@ export const convertCollabsResponse = (
             name,
             translatedRole: `${role[0].toUpperCase()}${role.slice(1)}`, // capitalize the user's role
             type,
-            userID,
+            userID: parseInt(userID, 10),
         };
         if (executeAt) {
             convertedCollab.expiration = { executeAt };

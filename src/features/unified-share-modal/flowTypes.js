@@ -158,7 +158,7 @@ export type sharedLinkType = {
 };
 
 export type collaboratorType = {
-    collabID: number | string,
+    collabID: number,
     expiration?: {
         executeAt: string,
     },
@@ -167,7 +167,7 @@ export type collaboratorType = {
     isExternalCollab?: boolean,
     name: string,
     type: collaboratorGroupType,
-    userID: ?number | string,
+    userID: ?number,
 };
 
 export type collaboratorsListType = {
