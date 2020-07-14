@@ -3,8 +3,8 @@
  * @file Active state component for Activity Feed
  */
 import * as React from 'react';
-import classNames from 'classnames';
 import getProp from 'lodash/get';
+import ActivityItem from './ActivityItem';
 import AppActivity from '../app-activity';
 import AnnotationActivity from '../annotations';
 import Comment from '../comment';
@@ -87,10 +87,11 @@ const ActiveState = ({
                 switch (item.type) {
                     case 'comment':
                         return (
-                            <li
+                            <ActivityItem
                                 key={item.type + item.id}
-                                className={classNames('bcs-activity-feed-comment', { 'bcs-is-focused': isFocused })}
+                                className="bcs-activity-feed-comment"
                                 data-testid="comment"
+                                isFocused={isFocused}
                                 ref={refValue}
                             >
                                 <Comment
@@ -108,14 +109,15 @@ const ActiveState = ({
                                     }}
                                     translations={translations}
                                 />
-                            </li>
+                            </ActivityItem>
                         );
                     case 'task':
                         return (
-                            <li
+                            <ActivityItem
                                 key={item.type + item.id}
-                                className={classNames('bcs-activity-feed-task-new', { 'bcs-is-focused': isFocused })}
+                                className="bcs-activity-feed-task-new"
                                 data-testid="task"
+                                isFocused={isFocused}
                                 ref={refValue}
                             >
                                 <TaskNew
@@ -132,11 +134,11 @@ const ActiveState = ({
                                     onModalClose={onTaskModalClose}
                                     translations={translations}
                                 />
-                            </li>
+                            </ActivityItem>
                         );
                     case 'file_version':
                         return (
-                            <li key={item.type + item.id} className="bcs-version-item" data-testid="version">
+                            <ActivityItem key={item.type + item.id} className="bcs-version-item" data-testid="version">
                                 {item.versions ? (
                                     // $FlowFixMe
                                     <CollapsedVersion {...item} onInfo={onVersionInfo} />
@@ -144,26 +146,25 @@ const ActiveState = ({
                                     // $FlowFixMe
                                     <Version {...item} onInfo={onVersionInfo} />
                                 )}
-                            </li>
+                            </ActivityItem>
                         );
                     case 'app_activity':
                         return (
-                            <li
+                            <ActivityItem
                                 key={item.type + item.id}
                                 className="bcs-activity-feed-app-activity"
                                 data-testid="app-activity"
                             >
                                 <AppActivity currentUser={currentUser} onDelete={onAppActivityDelete} {...item} />
-                            </li>
+                            </ActivityItem>
                         );
                     case 'annotation':
                         return (
-                            <li
+                            <ActivityItem
                                 key={item.type + item.id}
-                                className={classNames('bcs-activity-feed-annotation-activity', {
-                                    'bcs-is-focused': isFocused,
-                                })}
+                                className="bcs-activity-feed-annotation-activity"
                                 data-testid="annotation-activity"
+                                isFocused={isFocused}
                                 ref={refValue}
                             >
                                 <AnnotationActivity
@@ -176,7 +177,7 @@ const ActiveState = ({
                                     onDelete={onAnnotationDelete}
                                     onSelect={onAnnotationSelect}
                                 />
-                            </li>
+                            </ActivityItem>
                         );
                     default:
                         return null;
