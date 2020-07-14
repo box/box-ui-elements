@@ -34,7 +34,7 @@ describe('convertItemResponse()', () => {
             can_download: true,
         },
         preview_count: 0,
-        unshared_at: null,
+        unshared_at: '2020-07-31T06:59:00-07:00',
         url: ITEM_SHARED_LINK_URL,
         vanity_name: null,
         vanity_url: null,
@@ -187,9 +187,7 @@ describe('convertItemResponse()', () => {
             };
             const { can_download, can_invite_collaborator, can_preview, can_set_share_access, can_share } = permissions;
 
-            const { download_url, effective_permission, is_password_enabled, unshared_at, url, vanity_name } = Object(
-                sharedLink,
-            );
+            const { download_url, effective_permission, is_password_enabled, url, vanity_name } = Object(sharedLink);
 
             const {
                 download_url: isDirectLinkAvailable,
@@ -218,11 +216,12 @@ describe('convertItemResponse()', () => {
                           allowedAccessLevels: ALLOWED_ACCESS_LEVELS,
                           canChangeAccessLevel: can_set_share_access,
                           canChangeDownload: can_set_share_access && can_download,
+                          canChangeExpiration: can_set_share_access,
                           canChangePassword: can_set_share_access && password,
                           canChangeVanityName: can_set_share_access && isVanityNameAvailable,
                           canInvite: can_invite_collaborator,
                           directLink: download_url,
-                          expirationTimestamp: unshared_at,
+                          expirationTimestamp: 1596203940000,
                           isDirectLinkAvailable,
                           isDownloadAllowed: can_download,
                           isDownloadAvailable: can_download,
@@ -235,7 +234,7 @@ describe('convertItemResponse()', () => {
                           isPreviewAllowed: can_preview,
                           permissionLevel: API_TO_USM_PERMISSION_LEVEL_MAP[effective_permission],
                           url,
-                          vanityName: vanity_name,
+                          vanityName: vanity_name || '',
                       }
                     : { canInvite: can_invite_collaborator },
             };

@@ -6,6 +6,7 @@ import API from '../../../api';
 import ErrorMask from '../../../components/error-mask/ErrorMask';
 import ContentSharing from '../ContentSharing';
 import Notification from '../../../components/notification/Notification';
+import SharedLinkSettingsModal from '../../../features/shared-link-settings-modal';
 import UnifiedShareModal from '../../../features/unified-share-modal/UnifiedShareModal';
 import {
     ACCESS_COLLAB,
@@ -48,6 +49,9 @@ import SharingNotification from '../SharingNotification';
 
 jest.mock('../../../api');
 jest.mock('../../../features/unified-share-modal/utils/convertData');
+
+// Stub the queryCommandSupported function, which is used in the Shared Link Settings Modal
+global.document.queryCommandSupported = jest.fn();
 
 describe('elements/content-sharing/ContentSharing', () => {
     const getWrapper = props =>
@@ -146,6 +150,34 @@ describe('elements/content-sharing/ContentSharing', () => {
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
             expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
             expect(wrapper.exists(SharingNotification)).toBe(true);
+        });
+
+        test('should toggle between the Unified Share Modal and the Shared Link Settings Modal', async () => {
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ itemType: TYPE_FILE });
+            });
+            wrapper.update();
+
+            // Check that the Shared Link Settings Modal is hidden on load
+            expect(wrapper.exists(SharedLinkSettingsModal)).toBe(false);
+            const usm = wrapper.find(UnifiedShareModal);
+            await act(async () => {
+                usm.invoke('onSettingsClick')();
+            });
+            wrapper.update();
+
+            // Check that the Unified Share Modal disappears and the Shared Link Settings Modal appears
+            expect(wrapper.exists(UnifiedShareModal)).toBe(false);
+            const slsm = wrapper.find(SharedLinkSettingsModal);
+            await act(async () => {
+                slsm.invoke('onRequestClose')();
+            });
+            wrapper.update();
+
+            // Check that the Shared Link Settings Modal disappears and the Unified Share Modal appears
+            expect(wrapper.exists(SharedLinkSettingsModal)).toBe(false);
+            expect(wrapper.exists(UnifiedShareModal)).toBe(true);
         });
     });
 
