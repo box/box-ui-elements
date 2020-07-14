@@ -21,6 +21,8 @@ import FileAccessStatsAPI from './FileAccessStats';
 import UsersAPI from './Users';
 import MetadataAPI from './Metadata';
 import FileCollaboratorsAPI from './FileCollaborators';
+import FileCollaborationsAPI from './FileCollaborations';
+import FolderCollaborationsAPI from './FolderCollaborations';
 import FeedAPI from './Feed';
 import AppIntegrationsAPI from './AppIntegrations';
 import AnnotationsAPI from './Annotations';
@@ -119,6 +121,16 @@ class APIFactory {
      * @property {FileCollaboratorsAPI}
      */
     fileCollaboratorsAPI: FileCollaboratorsAPI;
+
+    /**
+     * @property {FileCollaborationsAPI}
+     */
+    fileCollaborationsAPI: FileCollaborationsAPI;
+
+    /**
+     * @property {FolderCollaborationsAPI}
+     */
+    folderCollaborationsAPI: FolderCollaborationsAPI;
 
     /**
      * @property {FeedAPI}
@@ -257,6 +269,16 @@ class APIFactory {
         if (this.fileCollaboratorsAPI) {
             this.fileCollaboratorsAPI.destroy();
             delete this.fileCollaboratorsAPI;
+        }
+
+        if (this.fileCollaborationsAPI) {
+            this.fileCollaborationsAPI.destroy();
+            delete this.fileCollaborationsAPI;
+        }
+
+        if (this.folderCollaborationsAPI) {
+            this.folderCollaborationsAPI.destroy();
+            delete this.folderCollaborationsAPI;
         }
 
         if (this.appIntegrationsAPI) {
@@ -517,6 +539,38 @@ class APIFactory {
 
         this.fileCollaboratorsAPI = new FileCollaboratorsAPI(this.options);
         return this.fileCollaboratorsAPI;
+    }
+
+    /**
+     * API for file collaborations
+     *
+     * This is different from the FileCollaboratorsAPI! See ./FileCollaborations for more information.
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {FileCollaborationsAPI} FileCollaborationsAPI instance
+     */
+    getFileCollaborationsAPI(shouldDestroy: boolean): FileCollaborationsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.fileCollaborationsAPI = new FileCollaborationsAPI(this.options);
+        return this.fileCollaborationsAPI;
+    }
+
+    /**
+     * API for folder collaborations
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {FolderCollaborationsAPI} FolderCollaborationsAPI instance
+     */
+    getFolderCollaborationsAPI(shouldDestroy: boolean): FolderCollaborationsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.folderCollaborationsAPI = new FolderCollaborationsAPI(this.options);
+        return this.folderCollaborationsAPI;
     }
 
     /**

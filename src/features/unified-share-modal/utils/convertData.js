@@ -23,7 +23,8 @@ import type {
     ContentSharingItemDataType,
     ContentSharingUserDataType,
 } from '../../../elements/content-sharing/types';
-import type { BoxItemPermission, User } from '../../../common/types/core';
+import type { BoxItemPermission, Collaborations, User } from '../../../common/types/core';
+import type { collaboratorsListType, collaboratorType } from '../flowTypes';
 
 /**
  * The following constants are used for converting API requests
@@ -62,6 +63,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
         description,
         extension,
         name,
+        owned_by: { id: ownerID, login: ownerEmail },
         permissions,
         shared_link,
         shared_link_features: {
@@ -138,13 +140,15 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
             grantedPermissions: {
                 itemShare: !!itemShare,
             },
-            hideCollaborators: false, // to do: connect to Collaborators API
+            hideCollaborators: false, // to do: connect to Collaborations API
             id,
             name,
+            ownerEmail, // the owner email is used to determine whether collaborators are external
+            ownerID, // the owner ID is used to determine whether external collaborator badges should be shown
+            permissions, // the original permissions are necessary for PUT requests to the Item API
             type,
             typedID: type === TYPE_FOLDER ? getTypedFolderId(id) : getTypedFileId(id),
         },
-        originalItemPermissions: permissions, // the original permissions are necessary for PUT requests to the Item API
         sharedLink,
     };
 };
@@ -179,4 +183,51 @@ export const convertSharedLinkPermissions = (newSharedLinkPermissionLevel: strin
         }
     });
     return sharedLinkPermissions;
+};
+
+/**
+ * Convert a response from the Item Collaborations API into the object that the USM expects.
+ * @param {Collaborations} collabsAPIData
+ * @param {string | null | undefined} ownerEmail
+ * @param {boolean} isCurrentUserOwner
+ */
+export const convertCollabsResponse = (
+    collabsAPIData: Collaborations,
+    ownerEmail: ?string,
+    isCurrentUserOwner: boolean,
+): collaboratorsListType => {
+    const { entries } = collabsAPIData;
+
+    if (!entries.length) return { collaborators: [] };
+
+    const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
+    const collaborators = entries.map(collab => {
+        const {
+            accessible_by: { id: userID, login: email, name, type },
+            id: collabID,
+            expires_at: executeAt,
+            role,
+        } = collab;
+        const collabEmailDomain = email.split('@')[1];
+        // Only display external collaborator icons if the current user owns the item
+        // and if the collaborator's email domain differs from the owner's email domain
+        const isExternalCollab = isCurrentUserOwner && collabEmailDomain !== ownerEmailDomain;
+        const convertedCollab: collaboratorType = {
+            collabID: parseInt(collabID, 10),
+            email,
+            hasCustomAvatar: false, // to do: connect to Avatar API
+            imageURL: null, // to do: connect to Avatar API
+            isExternalCollab,
+            name,
+            translatedRole: `${role[0].toUpperCase()}${role.slice(1)}`, // capitalize the user's role
+            type,
+            userID: parseInt(userID, 10),
+        };
+        if (executeAt) {
+            convertedCollab.expiration = { executeAt };
+        }
+        return convertedCollab;
+    });
+
+    return { collaborators };
 };
