@@ -18,11 +18,14 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLi
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should fire onClick when link is followed', () => {
+    test('should fire onMousedown when link is followed', () => {
         const onClickFn = jest.fn();
         const wrapper = getWrapper({ onClick: onClickFn });
-        const onClick = wrapper.find('PlainButton').prop('onClick');
+        const onMouseDown = wrapper.find('PlainButton').prop('onMouseDown');
         const event = {
+            currentTarget: {
+                focus: jest.fn(),
+            },
             preventDefault: jest.fn(),
             stopPropagation: jest.fn(),
             nativeEvent: {
@@ -30,9 +33,10 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLi
             },
         };
 
-        onClick(event);
+        onMouseDown(event);
 
         expect(onClickFn).toHaveBeenCalledWith('123');
+        expect(event.currentTarget.focus).toHaveBeenCalled();
         expect(event.preventDefault).toHaveBeenCalled();
         expect(event.stopPropagation).toHaveBeenCalled();
         expect(event.nativeEvent.stopImmediatePropagation).toHaveBeenCalled();

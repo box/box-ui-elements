@@ -17,13 +17,16 @@ const AnnotationActivityLink = ({
     message,
     onClick = noop,
 }: AnnotationActivityLinkProps): JSX.Element => {
-    const handleClick = (event: React.SyntheticEvent) => {
+    const handleMouseDown = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
         // Prevents document event handlers from executing because box-annotations relies on
-        // detecting clicks on the document outside of annotation targets to determine when to
+        // detecting mouse events on the document outside of annotation targets to determine when to
         // deselect annotations. This link also may represent that annotation target in the sidebar.
         event.nativeEvent.stopImmediatePropagation();
+
+        // Stopping propagation on the mousedown event prevents focus from reaching the button.
+        event.currentTarget.focus();
 
         onClick(id);
     };
@@ -32,7 +35,7 @@ const AnnotationActivityLink = ({
             className="bcs-AnnotationActivity-link"
             data-resin-target="annotationLink"
             isDisabled={isDisabled}
-            onClick={handleClick}
+            onMouseDown={handleMouseDown}
             type={ButtonType.BUTTON}
         >
             <FormattedMessage {...message} />
