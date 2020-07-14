@@ -21,6 +21,7 @@ type SharedLinkNotCreatedType = { canInvite: boolean };
 type SharedLinkCreatedType = USMSharedLinkType &
     SharedLinkNotCreatedType & {
         canChangeDownload: boolean, // SLS
+        canChangeExpiration: boolean, // SLS
         canChangePassword: boolean, // SLS
         canChangeVanityName: boolean, // SLS
         directLink: string, // SLS

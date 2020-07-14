@@ -10,11 +10,12 @@ const MOCK_SHARED_LINK = {
     },
     canChangeAccessLevel: true,
     canChangeDownload: true,
+    canChangeExpiration: true,
     canChangePassword: true,
     canChangeVanityName: true,
     canInvite: true,
     directLink: '',
-    expirationTimestamp: '',
+    expirationTimestamp: 1596178800000,
     isDirectLinkAvailable: true,
     isDownloadAllowed: true,
     isDownloadAvailable: true,
@@ -27,7 +28,7 @@ const MOCK_SHARED_LINK = {
     isPreviewAllowed: true,
     permissionLevel: 'canViewDownload',
     url: '',
-    vanityName: true,
+    vanityName: '',
 };
 
 const MOCK_NULL_SHARED_LINK = { canInvite: true };

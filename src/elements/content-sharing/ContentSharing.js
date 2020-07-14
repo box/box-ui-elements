@@ -10,11 +10,12 @@ import API from '../../api';
 import Internationalize from '../common/Internationalize';
 import ErrorMask from '../../components/error-mask/ErrorMask';
 import UnifiedShareModal from '../../features/unified-share-modal';
+import SharedLinkSettingsModal from '../../features/shared-link-settings-modal';
 import SharingNotification from './SharingNotification';
 import usmMessages from '../../features/unified-share-modal/messages';
 import { convertItemResponse, convertUserResponse } from '../../features/unified-share-modal/utils/convertData';
 import { CLIENT_NAME_CONTENT_SHARING, FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FILE, TYPE_FOLDER } from '../../constants';
-import { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS } from './constants';
+import { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS, CONTENT_SHARING_VIEWS } from './constants';
 import contentSharingMessages from './messages';
 import type { ErrorResponseData } from '../../common/types/api';
 import type { ItemType } from '../../common/types/core';
@@ -54,6 +55,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         changeSharedLinkPermissionLevel,
         setChangeSharedLinkPermissionLevel,
     ] = React.useState<null | SharedLinkUpdateFnType>(null);
+    const [currentView, setCurrentView] = React.useState<string>(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL);
 
     // Reset the API if necessary
     React.useEffect(() => {
@@ -164,21 +166,36 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         setOnRemoveLink={setOnRemoveLink}
                         setSharedLink={setSharedLink}
                     />
-                    <UnifiedShareModal
-                        canInvite={sharedLink.canInvite}
-                        changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
-                        changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
-                        collaboratorsList={collaboratorsList}
-                        currentUserID={currentUserID}
-                        displayInModal={displayInModal}
-                        getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
-                        getSharedLinkContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
-                        initialDataReceived
-                        item={item}
-                        onAddLink={onAddLink}
-                        onRemoveLink={onRemoveLink}
-                        sharedLink={sharedLink}
-                    />
+                    {currentView === CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS && (
+                        <SharedLinkSettingsModal
+                            isDirectLinkUnavailableDueToDownloadSettings={false}
+                            isDirectLinkUnavailableDueToAccessPolicy={false}
+                            isDirectLinkUnavailableDueToMaliciousContent={false}
+                            isOpen
+                            item={item}
+                            onRequestClose={() => setCurrentView(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL)}
+                            onSubmit={() => null} // to do: replace with a PUT request to the Item Shared Link API
+                            {...sharedLink}
+                        />
+                    )}
+                    {currentView === CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL && (
+                        <UnifiedShareModal
+                            canInvite={sharedLink.canInvite}
+                            changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
+                            changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
+                            collaboratorsList={collaboratorsList}
+                            currentUserID={currentUserID}
+                            displayInModal={displayInModal}
+                            getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
+                            getSharedLinkContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
+                            initialDataReceived
+                            item={item}
+                            onAddLink={onAddLink}
+                            onRemoveLink={onRemoveLink}
+                            onSettingsClick={() => setCurrentView(CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS)}
+                            sharedLink={sharedLink}
+                        />
+                    )}
                 </>
             </Internationalize>
         );

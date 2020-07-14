@@ -105,17 +105,19 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
         const canChangeDownload = canChangeAccessLevel && isDownloadAllowed;
         const canChangePassword = canChangeAccessLevel && isPasswordAvailable;
         const canChangeVanityName = canChangeAccessLevel && isVanityNameAvailable;
+        const canChangeExpiration = canChangeAccessLevel && isEditAllowed;
 
         sharedLink = {
             accessLevel,
             allowedAccessLevels: ALLOWED_ACCESS_LEVELS,
             canChangeAccessLevel,
             canChangeDownload,
+            canChangeExpiration,
             canChangePassword,
             canChangeVanityName,
             canInvite: !!canInvite,
             directLink,
-            expirationTimestamp,
+            expirationTimestamp: expirationTimestamp ? new Date(expirationTimestamp).getTime() : null, // convert to milliseconds
             isDirectLinkAvailable,
             isDownloadAllowed,
             isDownloadAvailable: isDownloadSettingAvailable,
@@ -128,7 +130,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
             isPreviewAllowed,
             permissionLevel,
             url,
-            vanityName,
+            vanityName: vanityName || '',
         };
     }
 
