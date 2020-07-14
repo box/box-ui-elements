@@ -412,6 +412,20 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 feedItems,
                 activityFeedError: activityFeedInlineError,
             });
+            expect(onError).not.toHaveBeenCalled();
+        });
+
+        test('should call onError if errors is not empty', () => {
+            instance.fetchFeedItemsErrorCallback(feedItems, []);
+
+            expect(onError).not.toHaveBeenCalled();
+
+            instance.fetchFeedItemsErrorCallback(feedItems, [{ code: '0' }, { code: '1' }]);
+
+            expect(onError).toHaveBeenCalledWith(expect.any(Error), 'fetch_activity_error', {
+                showNotification: true,
+                errors: ['0', '1'],
+            });
         });
     });
 

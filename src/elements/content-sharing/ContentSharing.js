@@ -18,8 +18,8 @@ import { CLIENT_NAME_CONTENT_SHARING, FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FIL
 import { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS, CONTENT_SHARING_VIEWS } from './constants';
 import contentSharingMessages from './messages';
 import type { ErrorResponseData } from '../../common/types/api';
-import type { BoxItemPermission, ItemType } from '../../common/types/core';
-import type { item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
+import type { ItemType } from '../../common/types/core';
+import type { collaboratorsListType, item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
 import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType, SharedLinkUpdateFnType } from './types';
 
 type ContentSharingProps = {
@@ -44,8 +44,8 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     const [item, setItem] = React.useState<itemFlowType | null>(null);
     const [sharedLink, setSharedLink] = React.useState<ContentSharingSharedLinkType | null>(null);
     const [currentUserID, setCurrentUserID] = React.useState<string | null>(null);
-    const [itemPermissions, setItemPermissions] = React.useState<BoxItemPermission | null>(null);
     const [componentErrorMessage, setComponentErrorMessage] = React.useState<Object | null>(null);
+    const [collaboratorsList, setCollaboratorsList] = React.useState<collaboratorsListType | null>(null);
     const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateFnType>(null);
     const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateFnType>(null);
     const [changeSharedLinkAccessLevel, setChangeSharedLinkAccessLevel] = React.useState<null | SharedLinkUpdateFnType>(
@@ -64,12 +64,9 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
 
     // Handle successful GET requests to /files or /folders
     const handleGetItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
-        const { item: itemFromAPI, originalItemPermissions, sharedLink: sharedLinkFromAPI } = convertItemResponse(
-            itemData,
-        );
+        const { item: itemFromAPI, sharedLink: sharedLinkFromAPI } = convertItemResponse(itemData);
         setComponentErrorMessage(null);
         setItem(itemFromAPI);
-        setItemPermissions(originalItemPermissions);
         setSharedLink(sharedLinkFromAPI);
     };
 
@@ -90,14 +87,17 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         [setComponentErrorMessage],
     );
 
-    // Reset state if necessary
+    // Reset state if the API has changed
     React.useEffect(() => {
+        setChangeSharedLinkAccessLevel(null);
+        setChangeSharedLinkPermissionLevel(null);
+        setCollaboratorsList(null);
         setCurrentUserID(null);
         setItem(null);
         setOnAddLink(null);
-        setItemPermissions(null);
+        setOnRemoveLink(null);
         setSharedLink(null);
-    }, [api, setOnAddLink]);
+    }, [api]);
 
     // Get initial data for the item
     React.useEffect(() => {
@@ -145,16 +145,22 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     }
 
     if (item && sharedLink) {
+        const { ownerEmail, ownerID, permissions } = item;
         return (
             <Internationalize language={language} messages={usmMessages}>
                 <>
                     <SharingNotification
                         api={api}
+                        collaboratorsList={collaboratorsList}
+                        currentUserID={currentUserID}
                         itemID={itemID}
-                        itemPermissions={itemPermissions}
                         itemType={itemType}
+                        ownerEmail={ownerEmail}
+                        ownerID={ownerID}
+                        permissions={permissions}
                         setChangeSharedLinkAccessLevel={setChangeSharedLinkAccessLevel}
                         setChangeSharedLinkPermissionLevel={setChangeSharedLinkPermissionLevel}
+                        setCollaboratorsList={setCollaboratorsList}
                         setItem={setItem}
                         setOnAddLink={setOnAddLink}
                         setOnRemoveLink={setOnRemoveLink}
@@ -177,7 +183,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                             canInvite={sharedLink.canInvite}
                             changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                             changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
-                            collaboratorsList={{ collaborators: [] }} // to do: replace with Collaborators API
+                            collaboratorsList={collaboratorsList}
                             currentUserID={currentUserID}
                             displayInModal={displayInModal}
                             getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API

@@ -63,6 +63,8 @@ const mockTask = {
     status: TASK_NEW_NOT_STARTED,
 };
 
+const mockErrors = [{ code: 'error_code_0' }, { code: 'error_code_1' }];
+
 const mockFirstVersion = {
     action: 'upload',
     type: 'file_version',
@@ -343,6 +345,7 @@ describe('api/Feed', () => {
     });
 
     afterEach(() => {
+        feed.errors = [];
         jest.restoreAllMocks();
     });
 
@@ -386,8 +389,8 @@ describe('api/Feed', () => {
             feed.setCachedItems(id, feedItems);
             expect(feed.getCacheKey).toHaveBeenCalledWith(id);
             expect(cache.set).toHaveBeenCalledWith(cacheKey, {
+                errors: [],
                 items: feedItems,
-                hasError: false,
             });
         });
     });
@@ -447,13 +450,13 @@ describe('api/Feed', () => {
 
         test('should get feed items, sort, save to cache, and call the error callback', done => {
             feed.fetchVersions = function fetchVersionsWithError() {
-                this.hasError = true;
+                this.errors = mockErrors;
                 return [];
             };
 
             feed.feedItems(file, false, successCb, errorCb);
             setImmediate(() => {
-                expect(errorCb).toHaveBeenCalledWith(sortedItems);
+                expect(errorCb).toHaveBeenCalledWith(sortedItems, mockErrors);
                 done();
             });
         });
@@ -502,7 +505,7 @@ describe('api/Feed', () => {
 
         test('should return the cached items', () => {
             feed.getCachedItems = jest.fn().mockReturnValue({
-                hasError: false,
+                errors: [],
                 items: feedItems,
             });
             feed.feedItems(file, false, successCb, errorCb);
@@ -512,7 +515,7 @@ describe('api/Feed', () => {
 
         test('should refresh the cache after returning the cached items', done => {
             feed.getCachedItems = jest.fn().mockReturnValue({
-                hasError: false,
+                errors: [],
                 items: feedItems,
             });
             feed.feedItems(file, true, successCb, errorCb);
@@ -613,7 +616,7 @@ describe('api/Feed', () => {
     describe('updateTaskCollaboratorSuccessCallback()', () => {
         beforeEach(() => {
             feed.getCachedItems = jest.fn().mockReturnValue({
-                hasError: false,
+                errors: [],
                 items: feedItems,
             });
             feed.updateFeedItem = jest.fn();
@@ -970,7 +973,7 @@ describe('api/Feed', () => {
 
         test('should delete the feed item and call success callback', () => {
             feed.getCachedItems = jest.fn().mockReturnValue({
-                hasError: false,
+                errors: [],
                 items: feedItems,
             });
             feed.deleteFeedItem(feedItemId, successCb);
@@ -998,11 +1001,11 @@ describe('api/Feed', () => {
             jest.restoreAllMocks();
         });
 
-        test('should log the error and set the hasError property if its not destroyed and hasError is set to true', () => {
+        test('should log the error and set the errors property if its not destroyed and hasError is set to true', () => {
             const hasError = true;
             feed.feedErrorCallback(hasError, e, code);
             expect(global.console.error).toBeCalledWith(e);
-            expect(feed.hasError).toBe(true);
+            expect(feed.errors).toEqual([{ ...e, code }]);
             expect(feed.errorCallback).toHaveBeenCalledWith(e, code, {
                 error: e,
                 [IS_ERROR_DISPLAYED]: hasError,
@@ -1018,14 +1021,12 @@ describe('api/Feed', () => {
             });
         });
 
-        test('should set hasError only if hasError is set', () => {
-            feed.hasError = null;
-            expect(feed.hasError).toBe(null);
-            const hasError = false;
-            feed.feedErrorCallback(hasError, e, code);
-            expect(feed.hasError).toBe(null);
+        test('should set errors only if hasError is true', () => {
+            feed.errors = [];
+            feed.feedErrorCallback(false, e, code);
+            expect(feed.errors).toEqual([]);
             feed.feedErrorCallback(true, e, code);
-            expect(feed.hasError).toBe(true);
+            expect(feed.errors).toEqual([{ ...e, code }]);
         });
     });
 
@@ -1052,7 +1053,7 @@ describe('api/Feed', () => {
 
         test('should create an item and add it to the feed with populated cache', () => {
             feed.getCachedItems = jest.fn().mockReturnValue({
-                hasError: false,
+                errors: [],
                 items: feedItems,
             });
 
@@ -1136,7 +1137,7 @@ describe('api/Feed', () => {
         beforeEach(() => {
             feed.setCachedItems = jest.fn();
             feed.getCachedItems = jest.fn().mockReturnValue({
-                hasError: false,
+                errors: [],
                 items: feedItems,
             });
         });

@@ -27,6 +27,7 @@ import { withLogger } from '../common/logger';
 import { withRouterAndRef } from '../common/routing';
 import {
     DEFAULT_COLLAB_DEBOUNCE,
+    ERROR_CODE_FETCH_ACTIVITY,
     ORIGIN_ACTIVITY_SIDEBAR,
     SIDEBAR_VIEW_ACTIVITY,
     TASK_COMPLETION_RULE_ALL,
@@ -442,11 +443,20 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {Error} e - API error
      * @return {void}
      */
-    fetchFeedItemsErrorCallback = (feedItems: FeedItems): void => {
+    fetchFeedItemsErrorCallback = (feedItems: FeedItems, errors: ElementsXhrError[]): void => {
+        const { onError } = this.props;
+
         this.setState({
             feedItems,
             activityFeedError: activityFeedInlineError,
         });
+
+        if (Array.isArray(errors) && errors.length) {
+            onError(new Error('Fetch feed items error'), ERROR_CODE_FETCH_ACTIVITY, {
+                showNotification: true,
+                errors: errors.map(({ code }) => code),
+            });
+        }
     };
 
     /**
