@@ -106,29 +106,6 @@
         }
     }
 
-    .bcs-activity-feed-empty-state {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        .bcs-empty-state-cta {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-
-            aside {
-                width: 200px;
-                margin-top: 6px;
-                text-align: center;
-            }
-        }
-
-        .bcs-activity-feed-empty-state-illustration {
-            margin-top: 60px;
-            margin-bottom: 15px;
-        }
-    }
-
     .bcs-activity-feed-loading-state {
         display: flex;
         flex-direction: column;

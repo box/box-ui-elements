@@ -37,7 +37,6 @@ export type ContentSharingSharedLinkType = ContentSharingEnterpriseDataType &
 
 export type ContentSharingItemDataType = {
     item: item,
-    originalItemPermissions: BoxItemPermission,
     sharedLink: ContentSharingSharedLinkType,
 };
 
@@ -48,6 +47,10 @@ export type ContentSharingItemAPIResponse = {
     extension: string,
     id: string,
     name: string,
+    owned_by: {
+        id: string,
+        login: string,
+    },
     permissions: BoxItemPermission,
     shared_link?: APISharedLink,
     shared_link_features: {

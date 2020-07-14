@@ -25,4 +25,11 @@ describe('components/thumbnail-card/ThumbnailCardDetails', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should render actionItem', () => {
+        const actionItem = <button type="button">Click Me</button>;
+        const wrapper = getWrapper({ actionItem });
+
+        expect(wrapper).toMatchSnapshot();
+    });
 });

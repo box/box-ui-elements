@@ -19,6 +19,8 @@ import FileCollaboratorsAPI from '../FileCollaborators';
 import UsersAPI from '../Users';
 import BoxEditAPI from '../box-edit';
 import MetadataQueryAPI from '../MetadataQuery';
+import FileCollaborationsAPI from '../FileCollaborations';
+import FolderCollaborationsAPI from '../FolderCollaborations';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 
 let factory;
@@ -52,6 +54,8 @@ describe('api/APIFactory', () => {
             factory.boxEditAPI = { destroy: jest.fn() };
             factory.metadataQueryAPI = { destroy: jest.fn() };
             factory.annotationsAPI = { destroy: jest.fn() };
+            factory.fileCollaborationsAPI = { destroy: jest.fn() };
+            factory.folderCollaborationsAPI = { destroy: jest.fn() };
             factory.destroy();
             expect(factory.fileAPI).toBeUndefined();
             expect(factory.folderAPI).toBeUndefined();
@@ -68,6 +72,8 @@ describe('api/APIFactory', () => {
             expect(factory.usersAPI).toBeUndefined();
             expect(factory.metadataQueryAPI).toBeUndefined();
             expect(factory.annotationsAPI).toBeUndefined();
+            expect(factory.fileCollaborationsAPI).toBeUndefined();
+            expect(factory.folderCollaborationsAPI).toBeUndefined();
         });
         test('should not destroy cache by default', () => {
             const { cache } = factory.options;
@@ -430,6 +436,50 @@ describe('api/APIFactory', () => {
             expect(annotationsAPI.options.cache).toBeInstanceOf(Cache);
             expect(annotationsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
             expect(annotationsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getFileCollaborationsAPI', () => {
+        test('should call destroy and return file collaborations API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const fileCollaborationsAPI = factory.getFileCollaborationsAPI(true);
+            expect(spy).toBeCalled();
+            expect(fileCollaborationsAPI).toBeInstanceOf(FileCollaborationsAPI);
+            expect(fileCollaborationsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(fileCollaborationsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(fileCollaborationsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return file collaborations API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const fileCollaborationsAPI = factory.getFileCollaborationsAPI();
+            expect(spy).not.toBeCalled();
+            expect(fileCollaborationsAPI).toBeInstanceOf(FileCollaborationsAPI);
+            expect(fileCollaborationsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(fileCollaborationsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(fileCollaborationsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getFolderCollaborationsAPI', () => {
+        test('should call destroy and return file collaborations API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const folderCollaborationsAPI = factory.getFolderCollaborationsAPI(true);
+            expect(spy).toBeCalled();
+            expect(folderCollaborationsAPI).toBeInstanceOf(FolderCollaborationsAPI);
+            expect(folderCollaborationsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(folderCollaborationsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(folderCollaborationsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return file collaborations API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const folderCollaborationsAPI = factory.getFolderCollaborationsAPI();
+            expect(spy).not.toBeCalled();
+            expect(folderCollaborationsAPI).toBeInstanceOf(FolderCollaborationsAPI);
+            expect(folderCollaborationsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(folderCollaborationsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(folderCollaborationsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 });
