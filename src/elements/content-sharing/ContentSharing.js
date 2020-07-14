@@ -54,6 +54,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         changeSharedLinkPermissionLevel,
         setChangeSharedLinkPermissionLevel,
     ] = React.useState<null | SharedLinkUpdateFnType>(null);
+    const [getContacts, setGetContacts] = React.useState<null | (() => void)>(null);
 
     // Reset the API if necessary
     React.useEffect(() => {
@@ -153,6 +154,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         itemType={itemType}
                         setChangeSharedLinkAccessLevel={setChangeSharedLinkAccessLevel}
                         setChangeSharedLinkPermissionLevel={setChangeSharedLinkPermissionLevel}
+                        setGetContacts={setGetContacts}
                         setItem={setItem}
                         setOnAddLink={setOnAddLink}
                         setOnRemoveLink={setOnRemoveLink}
@@ -165,8 +167,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         collaboratorsList={{ collaborators: [] }} // to do: replace with Collaborators API
                         currentUserID={currentUserID}
                         displayInModal={displayInModal}
-                        getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
-                        getSharedLinkContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
+                        getCollaboratorContacts={getContacts}
                         initialDataReceived
                         item={item}
                         onAddLink={onAddLink}

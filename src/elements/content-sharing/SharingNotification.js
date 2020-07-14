@@ -25,6 +25,7 @@ type SharingNotificationProps = {
     itemType: ItemType,
     setChangeSharedLinkAccessLevel: (changeSharedLinkAccessLevel: SharedLinkUpdateFnType) => void,
     setChangeSharedLinkPermissionLevel: (changeSharedLinkPermissionLevel: SharedLinkUpdateFnType) => void,
+    setGetContacts: () => void,
     setItem: ((item: itemFlowType | null) => itemFlowType) => void,
     setOnAddLink: (addLink: SharedLinkUpdateFnType) => void,
     setOnRemoveLink: (removeLink: SharedLinkUpdateFnType) => void,
@@ -38,6 +39,7 @@ function SharingNotification({
     itemType,
     setChangeSharedLinkAccessLevel,
     setChangeSharedLinkPermissionLevel,
+    setGetContacts,
     setItem,
     setOnAddLink,
     setOnRemoveLink,
@@ -45,6 +47,7 @@ function SharingNotification({
 }: SharingNotificationProps) {
     const [notifications, setNotifications] = React.useState<{ [string]: typeof Notification }>({});
     const [notificationID, setNotificationID] = React.useState<number>(0);
+    const [getContactsExists, setGetContactsExists] = React.useState<boolean>(false);
 
     // Close a notification
     const handleNotificationClose = React.useCallback(
@@ -166,6 +169,33 @@ function SharingNotification({
         setOnRemoveLink,
         setSharedLink,
     ]);
+
+    // Set the getContacts function, which is used for inviting collaborators in the USM
+    React.useEffect(() => {
+        const handleGetContactsSuccess = response => {
+            setGetContactsExists(true);
+            return response.entries;
+        };
+
+        // Handle failed PUT requests to /files or /folders
+        const handleGetContactsError = () => {
+            const updatedNotifications = { ...notifications };
+            updatedNotifications[notificationID] = createNotification(
+                STATUS_ERROR,
+                contentSharingMessages.getContactsError,
+            );
+            setNotifications(updatedNotifications);
+            setNotificationID(notificationID + 1);
+        };
+
+        if (!getContactsExists) {
+            const updatedGetContactsFn = () => (filterTerm: string) =>
+                api
+                    .getUsersAPI(false)
+                    .getUsersInEnterprise(itemID, handleGetContactsSuccess, handleGetContactsError, filterTerm);
+            setGetContacts(updatedGetContactsFn);
+        }
+    }, [api, createNotification, getContactsExists, itemID, notificationID, notifications, setGetContacts]);
 
     return (
         <NotificationsWrapper>
