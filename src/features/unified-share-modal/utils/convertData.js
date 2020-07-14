@@ -188,6 +188,8 @@ export const convertSharedLinkPermissions = (newSharedLinkPermissionLevel: strin
 /**
  * Convert a response from the Item Collaborations API into the object that the USM expects.
  * @param {Collaborations} collabsAPIData
+ * @param {string | null | undefined} ownerEmail
+ * @param {boolean} isCurrentUserOwner
  */
 export const convertCollabsResponse = (
     collabsAPIData: Collaborations,
