@@ -13,22 +13,22 @@ class ItemCollaborations extends MarkerBasedAPI {
     /**
      * API URL for collaborations
      *
-     * @param {string} id - Item id
+     * @param {string} id - Item ID
      * @protected
-     * @return {string} Base url for collaborations
+     * @return {string} Base URL for collaborations
      */
     getUrl(id: string): string {
-        return `getUrl(${id}) should be overriden`;
+        return `getUrl(${id}) should be overridden`;
     }
 
     /**
-     * API for fetching collaborations on a folder
+     * API for fetching collaborations on a Box item
      *
-     * @param {string} id - the folder id
-     * @param {Function} successCallback - the success callback
-     * @param {Function} errorCallback - the error callback
-     * @param {Object} requestData - any additional request data
-     * @param {number} limit - the max number of collaborations to return
+     * @param {string} id - Item ID
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @param {Object} [requestData] - Optional additional request data
+     * @param {number} [limit] - Max number of collaborations to return
      * @returns {void}
      */
     getCollaborations = (
@@ -50,14 +50,14 @@ class ItemCollaborations extends MarkerBasedAPI {
     /**
      * Used by the MarkerBasedAPI after a successful call
      *
-     * @param {Object} data the response data
+     * @param {Object} data - Response data
      */
     successHandler = (data: Collaborations): void => {
         if (this.isDestroyed() || typeof this.successCallback !== 'function') {
             return;
         }
 
-        this.successCallback(data);
+        this.successCallback(data); // defined in this.markerGet()
     };
 }
 

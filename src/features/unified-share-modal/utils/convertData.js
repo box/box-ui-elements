@@ -196,42 +196,38 @@ export const convertCollabsResponse = (
     ownerEmail: ?string,
     isCurrentUserOwner: boolean,
 ): collaboratorsListType => {
-    let collaborators = [];
-
     const { entries } = collabsAPIData;
 
-    if (entries.length) {
-        const ownerEmailDomain = ownerEmail ? ownerEmail.split('@')[1] : null;
-        collaborators = entries.map(collab => {
-            const {
-                accessible_by: { id: userID, login: email, name, type },
-                id: collabID,
-                expires_at: executeAt,
-                role,
-            } = collab;
-            const collabEmailDomain = email.split('@')[1];
-            // Only display external collaborator icons if the current user owns the item
-            // and if the collaborator's email domain differs from the owner's email domain
-            const isExternalCollab = isCurrentUserOwner && collabEmailDomain !== ownerEmailDomain;
-            const convertedCollab: collaboratorType = {
-                collabID,
-                email,
-                hasCustomAvatar: false, // to do: connect to Avatar API
-                imageURL: null, // to do: connect to Avatar API
-                isExternalCollab,
-                name,
-                translatedRole: `${role[0].toUpperCase()}${role.slice(1)}`, // capitalize the user's role
-                type,
-                userID,
-            };
-            if (executeAt) {
-                convertedCollab.expiration = { executeAt };
-            }
-            return convertedCollab;
-        });
-    }
+    if (!entries.length) return { collaborators: [] };
 
-    return {
-        collaborators,
-    };
+    const ownerEmailDomain = ownerEmail || !/@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
+    const collaborators = entries.map(collab => {
+        const {
+            accessible_by: { id: userID, login: email, name, type },
+            id: collabID,
+            expires_at: executeAt,
+            role,
+        } = collab;
+        const collabEmailDomain = email.split('@')[1];
+        // Only display external collaborator icons if the current user owns the item
+        // and if the collaborator's email domain differs from the owner's email domain
+        const isExternalCollab = isCurrentUserOwner && collabEmailDomain !== ownerEmailDomain;
+        const convertedCollab: collaboratorType = {
+            collabID,
+            email,
+            hasCustomAvatar: false, // to do: connect to Avatar API
+            imageURL: null, // to do: connect to Avatar API
+            isExternalCollab,
+            name,
+            translatedRole: `${role[0].toUpperCase()}${role.slice(1)}`, // capitalize the user's role
+            type,
+            userID,
+        };
+        if (executeAt) {
+            convertedCollab.expiration = { executeAt };
+        }
+        return convertedCollab;
+    });
+
+    return { collaborators };
 };

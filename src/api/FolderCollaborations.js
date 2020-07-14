@@ -10,12 +10,12 @@ class FolderCollaborations extends ItemCollaborations {
     /**
      * API URL for comments
      *
-     * @param {string} [id] - a Box folder id
-     * @return {string} base url for folders
+     * @param {string} id - Box folder ID
+     * @return {string} Base url for folders
      */
     getUrl(id: string): string {
         if (!id) {
-            throw new Error('Missing folder id!');
+            throw new Error('Missing folder ID!');
         }
 
         return `${this.getBaseApiUrl()}/folders/${id}/collaborations`;

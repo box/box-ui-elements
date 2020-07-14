@@ -271,6 +271,16 @@ class APIFactory {
             delete this.fileCollaboratorsAPI;
         }
 
+        if (this.fileCollaborationsAPI) {
+            this.fileCollaborationsAPI.destroy();
+            delete this.fileCollaborationsAPI;
+        }
+
+        if (this.folderCollaborationsAPI) {
+            this.folderCollaborationsAPI.destroy();
+            delete this.folderCollaborationsAPI;
+        }
+
         if (this.appIntegrationsAPI) {
             this.appIntegrationsAPI.destroy();
             delete this.appIntegrationsAPI;

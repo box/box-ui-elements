@@ -17,12 +17,12 @@ class FileCollaborations extends ItemCollaborations {
     /**
      * API URL for comments
      *
-     * @param {string} [id] - a Box file id
-     * @return {string} base url for files
+     * @param {string} id - Box file ID
+     * @return {string} Base url for files
      */
     getUrl(id: string): string {
         if (!id) {
-            throw new Error('Missing file id!');
+            throw new Error('Missing file ID!');
         }
 
         return `${this.getBaseApiUrl()}/files/${id}/collaborations`;
