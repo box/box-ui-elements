@@ -22,6 +22,7 @@ jest.mock('../../../features/unified-share-modal/utils/convertData');
 describe('elements/content-sharing/SharingNotification', () => {
     const setChangeSharedLinkAccessLevelStub = jest.fn();
     const setChangeSharedLinkPermissionLevelStub = jest.fn();
+    const setGetContactsStub = jest.fn();
     const setItemStub = jest.fn();
     const setOnAddLinkStub = jest.fn();
     const setOnRemoveLinkStub = jest.fn();
@@ -57,6 +58,7 @@ describe('elements/content-sharing/SharingNotification', () => {
                 setChangeSharedLinkAccessLevel={setChangeSharedLinkAccessLevelStub}
                 setChangeSharedLinkPermissionLevel={setChangeSharedLinkPermissionLevelStub}
                 setCollaboratorsList={setCollaboratorsListStub}
+                setGetContacts={setGetContactsStub}
                 setItem={setItemStub}
                 setOnAddLink={setOnAddLinkStub}
                 setOnRemoveLink={setOnRemoveLinkStub}
@@ -80,9 +82,10 @@ describe('elements/content-sharing/SharingNotification', () => {
             expect(setOnRemoveLinkStub).toHaveBeenCalled();
             expect(setChangeSharedLinkAccessLevelStub).toHaveBeenCalled();
             expect(setChangeSharedLinkPermissionLevelStub).toHaveBeenCalled();
+            expect(setGetContactsStub).toHaveBeenCalled();
         });
 
-        test('should not call state setting functions if given null permissions', () => {
+        test('should not call state setting functions that require permissions if given null permissions', () => {
             getWrapper({ api: apiInstance, permissions: null });
             expect(setOnAddLinkStub).not.toHaveBeenCalled();
             expect(setOnRemoveLinkStub).not.toHaveBeenCalled();

@@ -69,7 +69,7 @@ class Base {
     /**
      * @property {Function}
      */
-    successCallback: (data?: Object) => void;
+    successCallback: (data?: Object) => Promise<any> | null;
 
     /**
      * @property {Function}
@@ -160,7 +160,7 @@ class Base {
     /**
      * Gets the cache instance
      *
-     * @return {Cache} cache instance
+     * @returns {Cache} cache instance
      */
     getCache(): APICache {
         return this.cache;
@@ -170,11 +170,13 @@ class Base {
      * Generic success handler
      *
      * @param {Object} data - The response data
+     * @returns {Promise|null|undefined}
      */
-    successHandler = (data: any): void => {
+    successHandler = (data: any): Promise<any> | null | typeof undefined => {
         if (!this.isDestroyed() && typeof this.successCallback === 'function') {
-            this.successCallback(data);
+            return this.successCallback(data);
         }
+        return null;
     };
 
     /**
@@ -237,7 +239,7 @@ class Base {
         requestData?: Object,
         successCallback: Function,
         url?: string,
-    }): Promise<any> {
+    }): Promise<any> | null {
         const apiUrl = url || this.getUrl(id);
         return this.makeRequest(HTTP_GET, id, apiUrl, successCallback, errorCallback, requestData);
     }
@@ -263,7 +265,7 @@ class Base {
         id: string,
         successCallback: Function,
         url: string,
-    }): Promise<any> {
+    }): Promise<any> | null {
         return this.makeRequest(HTTP_POST, id, url, successCallback, errorCallback, data);
     }
 
@@ -288,7 +290,7 @@ class Base {
         id: string,
         successCallback: Function,
         url: string,
-    }): Promise<any> {
+    }): Promise<any> | null {
         return this.makeRequest(HTTP_PUT, id, url, successCallback, errorCallback, data);
     }
 
@@ -313,7 +315,7 @@ class Base {
         id: string,
         successCallback: Function,
         url: string,
-    }): Promise<any> {
+    }): Promise<any> | null {
         return this.makeRequest(HTTP_DELETE, id, url, successCallback, errorCallback, data);
     }
 
@@ -326,6 +328,7 @@ class Base {
      * @param {Function} successCallback - The success callback
      * @param {Function} errorCallback - The error callback
      * @param {Object} requestData - Optional info to be added to the API call such as params or request body data
+     * @returns {Promise<any>}
      */
     async makeRequest(
         method: string,
@@ -334,9 +337,9 @@ class Base {
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
         requestData: Object = {},
-    ): Promise<void> {
+    ): Promise<any> {
         if (this.isDestroyed()) {
-            return;
+            return null;
         }
 
         this.successCallback = successCallback;
@@ -350,9 +353,9 @@ class Base {
                 url,
                 ...requestData,
             });
-            this.successHandler(data);
+            return this.successHandler(data);
         } catch (error) {
-            this.errorHandler(error);
+            return this.errorHandler(error);
         }
     }
 }

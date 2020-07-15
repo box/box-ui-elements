@@ -30,6 +30,44 @@ const ALLOWED_ACCESS_LEVELS = {
     peopleWithTheLink: true,
 };
 
+const INVITEE_PERMISSIONS = [
+    {
+        default: false,
+        text: CO_OWNER,
+        value: CO_OWNER,
+    },
+    {
+        default: false,
+        text: EDITOR,
+        value: EDITOR,
+    },
+    {
+        default: true,
+        text: PREVIEWER,
+        value: PREVIEWER,
+    },
+    {
+        default: false,
+        text: PREVIEWER_UPLOADER,
+        value: PREVIEWER_UPLOADER,
+    },
+    {
+        default: false,
+        text: UPLOADER,
+        value: UPLOADER,
+    },
+    {
+        default: false,
+        text: VIEWER,
+        value: VIEWER,
+    },
+    {
+        default: false,
+        text: VIEWER_UPLOADER,
+        value: VIEWER_UPLOADER,
+    },
+];
+
 export {
     ALLOWED_ACCESS_LEVELS,
     ANYONE_IN_COMPANY,
@@ -41,6 +79,7 @@ export {
     COLLAB_USER_TYPE,
     CO_OWNER,
     EDITOR,
+    INVITEE_PERMISSIONS,
     OWNER,
     PEOPLE_IN_ITEM,
     PREVIEWER,

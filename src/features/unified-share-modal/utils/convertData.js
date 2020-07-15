@@ -23,8 +23,8 @@ import type {
     ContentSharingItemDataType,
     ContentSharingUserDataType,
 } from '../../../elements/content-sharing/types';
-import type { BoxItemPermission, Collaborations, User } from '../../../common/types/core';
-import type { collaboratorsListType, collaboratorType } from '../flowTypes';
+import type { BoxItemPermission, Collaborations, User, UserCollection } from '../../../common/types/core';
+import type { collaboratorsListType, collaboratorType, contactType } from '../flowTypes';
 
 /**
  * The following constants are used for converting API requests
@@ -232,4 +232,28 @@ export const convertCollabsResponse = (
     });
 
     return { collaborators };
+};
+
+/**
+ * Convert an enterprise users API response into an array of internal USM contacts.
+ *
+ * @param {UserCollection} contactsAPIData
+ * @param {string|null} currentUserID
+ */
+export const convertContactsResponse = (
+    contactsAPIData: UserCollection,
+    currentUserID: string | null,
+): Array<contactType> => {
+    const { entries } = contactsAPIData;
+
+    if (!entries || !entries.length) return [];
+
+    // Return all users except for the current user
+    return entries.reduce((filteredContacts, contact) => {
+        const { id, login: email, name, type } = contact;
+        if (id !== currentUserID) {
+            filteredContacts.push({ id, email, name, type });
+        }
+        return filteredContacts;
+    }, []);
 };

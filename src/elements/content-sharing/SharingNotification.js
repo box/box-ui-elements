@@ -7,6 +7,7 @@ import Notification from '../../components/notification/Notification';
 import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
 import {
     convertCollabsResponse,
+    convertContactsResponse,
     convertItemResponse,
     convertSharedLinkPermissions,
     USM_TO_API_ACCESS_LEVEL_MAP,
@@ -17,7 +18,12 @@ import contentSharingMessages from './messages';
 import type { RequestOptions } from '../../common/types/api';
 import type { BoxItemPermission, Collaborations, ItemType, NotificationType } from '../../common/types/core';
 import type { collaboratorsListType, item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
-import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType, SharedLinkUpdateFnType } from './types';
+import type {
+    ContentSharingItemAPIResponse,
+    ContentSharingSharedLinkType,
+    GetContactsFnType,
+    SharedLinkUpdateFnType,
+} from './types';
 
 type SharingNotificationProps = {
     api: API,
@@ -31,7 +37,7 @@ type SharingNotificationProps = {
     setChangeSharedLinkAccessLevel: (changeSharedLinkAccessLevel: SharedLinkUpdateFnType) => void,
     setChangeSharedLinkPermissionLevel: (changeSharedLinkPermissionLevel: SharedLinkUpdateFnType) => void,
     setCollaboratorsList: (collaboratorsList: collaboratorsListType) => void,
-    setGetContacts: () => void,
+    setGetContacts: (getContacts: GetContactsFnType) => void,
     setItem: ((item: itemFlowType | null) => itemFlowType) => void,
     setOnAddLink: (addLink: SharedLinkUpdateFnType) => void,
     setOnRemoveLink: (removeLink: SharedLinkUpdateFnType) => void,
@@ -246,10 +252,9 @@ function SharingNotification({
     React.useEffect(() => {
         const handleGetContactsSuccess = response => {
             setGetContactsExists(true);
-            return response.entries;
+            return convertContactsResponse(response, currentUserID);
         };
 
-        // Handle failed PUT requests to /files or /folders
         const handleGetContactsError = () => {
             const updatedNotifications = { ...notifications };
             updatedNotifications[notificationID] = createNotification(
@@ -267,7 +272,18 @@ function SharingNotification({
                     .getUsersInEnterprise(itemID, handleGetContactsSuccess, handleGetContactsError, filterTerm);
             setGetContacts(updatedGetContactsFn);
         }
-    }, [api, createNotification, getContactsExists, itemID, notificationID, notifications, setGetContacts]);
+    }, [
+        api,
+        createNotification,
+        currentUserID,
+        getContactsExists,
+        itemID,
+        notificationID,
+        notifications,
+        ownerEmail,
+        ownerID,
+        setGetContacts,
+    ]);
 
     return (
         <NotificationsWrapper>

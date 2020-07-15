@@ -10,7 +10,7 @@ import { getTypedFileId } from '../utils/file';
 import Base from './Base';
 import { ERROR_CODE_FETCH_CURRENT_USER, ERROR_CODE_FETCH_ENTERPRISE_USERS } from '../constants';
 import type { ElementsErrorCallback } from '../common/types/api';
-import type { TokenLiteral } from '../common/types/core';
+import type { TokenLiteral, UserCollection } from '../common/types/core';
 
 class Users extends Base {
     /**
@@ -43,6 +43,9 @@ class Users extends Base {
      * @return {string} URL for fetching enterprise users
      */
     getUsersInEnterpriseUrl(filterTerm: string): string {
+        if (!filterTerm) {
+            throw new Error('Missing filter term');
+        }
         return `${this.getBaseApiUrl()}/users?filter_term=${filterTerm}`;
     }
 
@@ -107,18 +110,18 @@ class Users extends Base {
     /**
      * API for fetching all users in the current user's enterprise
      *
-     * @param {string} id - Box item id
+     * @param {string} id - Box item ID
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @param {string} [filterTerm] - Optional filter for the users
-     * @returns {Promise<void>}
+     * @returns {Promise<UserCollection>|null}
      */
     getUsersInEnterprise(
         id: string,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
         filterTerm: string = '',
-    ): void {
+    ): Promise<UserCollection> | null {
         this.errorCode = ERROR_CODE_FETCH_ENTERPRISE_USERS;
         return this.get({
             id,

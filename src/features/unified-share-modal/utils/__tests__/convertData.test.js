@@ -1,6 +1,7 @@
 import {
     API_TO_USM_PERMISSION_LEVEL_MAP,
     convertCollabsResponse,
+    convertContactsResponse,
     convertItemResponse,
     convertUserResponse,
     convertSharedLinkPermissions,
@@ -10,6 +11,8 @@ import { ALLOWED_ACCESS_LEVELS, ANYONE_IN_COMPANY, CAN_VIEW_DOWNLOAD, CAN_VIEW_O
 import {
     MOCK_COLLABS_API_RESPONSE,
     MOCK_COLLAB_IDS_CONVERTED,
+    MOCK_CONTACTS_API_RESPONSE,
+    MOCK_CONTACTS_CONVERTED_RESPONSE,
     MOCK_OWNER,
     MOCK_OWNER_ID,
     MOCK_OWNER_EMAIL,
@@ -380,5 +383,17 @@ describe('convertCollabsResponse', () => {
         expect(convertCollabsResponse({ total_count: 0, entries: [] }, MOCK_OWNER_EMAIL, true)).toEqual({
             collaborators: [],
         });
+    });
+});
+
+describe('convertContactsResponse()', () => {
+    test('should return all users except the current user', () => {
+        expect(convertContactsResponse(MOCK_CONTACTS_API_RESPONSE, MOCK_OWNER_ID)).toEqual(
+            MOCK_CONTACTS_CONVERTED_RESPONSE,
+        );
+    });
+
+    test('should return an empty array if there are no available users', () => {
+        expect(convertContactsResponse({ total_count: 0, entries: [] }, MOCK_OWNER_ID)).toEqual([]);
     });
 });

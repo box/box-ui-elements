@@ -180,34 +180,34 @@ describe('api/Base', () => {
 
     describe('makeRequest()', () => {
         const url = 'https://foo.bar';
-        test('should not do anything if destroyed', () => {
-            base.isDestroyed = jest.fn().mockReturnValueOnce(true);
+        test('should return null and not call the API if destroyed', async () => {
+            jest.spyOn(base, 'isDestroyed').mockReturnValueOnce(true);
             base.xhr = null;
 
             const successCb = jest.fn();
             const errorCb = jest.fn();
 
-            return base.makeRequest(HTTP_GET, 'id', url, successCb, errorCb).catch(() => {
-                expect(successCb).not.toHaveBeenCalled();
-                expect(errorCb).not.toHaveBeenCalled();
-            });
+            const response = await base.makeRequest(HTTP_GET, 'id', url, successCb, errorCb);
+            expect(successCb).not.toHaveBeenCalled();
+            expect(errorCb).not.toHaveBeenCalled();
+            expect(response).toBeNull();
         });
 
-        test('should make xhr to get base and call success callback', () => {
+        test('should make an xhr, call the success callback, and return a response', async () => {
             base.xhr = {
-                post: jest.fn().mockReturnValueOnce(Promise.resolve({ data: baseResponse })),
+                post: jest.fn().mockResolvedValueOnce({ data: baseResponse }),
             };
 
-            const successCb = jest.fn();
+            const successCb = jest.fn().mockResolvedValue(baseResponse);
             const errorCb = jest.fn();
 
-            return base.makeRequest(HTTP_POST, 'id', url, successCb, errorCb).then(() => {
-                expect(successCb).toHaveBeenCalledWith(baseResponse);
-                expect(base.xhr.post).toHaveBeenCalledWith({
-                    id: 'file_id',
-                    url,
-                });
+            const response = await base.makeRequest(HTTP_POST, 'id', url, successCb, errorCb);
+            expect(successCb).toHaveBeenCalledWith(baseResponse);
+            expect(base.xhr.post).toHaveBeenCalledWith({
+                id: 'file_id',
+                url,
             });
+            expect(response).toEqual(baseResponse);
         });
 
         test('should call error callback when xhr fails', () => {
@@ -254,6 +254,24 @@ describe('api/Base', () => {
                     data: requestData.data,
                 });
             });
+        });
+    });
+
+    describe('successHandler()', () => {
+        const MOCK_DATA = { total_count: 0, entries: [], limit: 25, offset: 0 };
+
+        test('should return null if isDestroyed() returns true', () => {
+            jest.spyOn(base, 'isDestroyed').mockReturnValue(true);
+            base.successCallback = jest.fn();
+            base.successHandler(MOCK_DATA);
+            expect(base.successCallback).not.toHaveBeenCalled();
+        });
+
+        test('should call this.successCallback()', () => {
+            jest.spyOn(base, 'isDestroyed').mockReturnValue(false);
+            base.successCallback = jest.fn();
+            base.successHandler(MOCK_DATA);
+            expect(base.successCallback).toHaveBeenCalledWith(MOCK_DATA);
         });
     });
 });
