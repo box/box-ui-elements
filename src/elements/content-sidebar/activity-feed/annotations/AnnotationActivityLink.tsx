@@ -18,6 +18,10 @@ const AnnotationActivityLink = ({
     onClick = noop,
 }: AnnotationActivityLinkProps): JSX.Element => {
     const handleMouseDown = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (isDisabled) {
+            return;
+        }
+
         event.preventDefault();
         event.stopPropagation();
         // Prevents document event handlers from executing because box-annotations relies on
