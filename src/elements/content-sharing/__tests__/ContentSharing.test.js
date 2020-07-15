@@ -6,6 +6,7 @@ import API from '../../../api';
 import ErrorMask from '../../../components/error-mask/ErrorMask';
 import ContentSharing from '../ContentSharing';
 import Notification from '../../../components/notification/Notification';
+import SharedLinkSettingsModal from '../../../features/shared-link-settings-modal';
 import UnifiedShareModal from '../../../features/unified-share-modal/UnifiedShareModal';
 import {
     ACCESS_COLLAB,
@@ -49,6 +50,21 @@ import SharingNotification from '../SharingNotification';
 jest.mock('../../../api');
 jest.mock('../../../features/unified-share-modal/utils/convertData');
 
+// Stub the queryCommandSupported function, which is used in the Shared Link Settings Modal
+global.document.queryCommandSupported = jest.fn();
+
+const createAPIMock = (fileAPI, folderAPI, usersAPI) => () => ({
+    getFileAPI: jest.fn().mockReturnValue(fileAPI),
+    getFileCollaborationsAPI: jest.fn().mockReturnValue({
+        getCollaborations: jest.fn(),
+    }),
+    getFolderAPI: jest.fn().mockReturnValue(folderAPI),
+    getFolderCollaborationsAPI: jest.fn().mockReturnValue({
+        getCollaborations: jest.fn(),
+    }),
+    getUsersAPI: jest.fn().mockReturnValue(usersAPI),
+});
+
 describe('elements/content-sharing/ContentSharing', () => {
     const getWrapper = props =>
         mount(<ContentSharing apiHost={DEFAULT_HOSTNAME_API} itemID={MOCK_ITEM_ID} language="" token="" {...props} />);
@@ -83,10 +99,7 @@ describe('elements/content-sharing/ContentSharing', () => {
     describe('with successful GET requests to the Item and Users API', () => {
         test('should call getFileAPI().getFile() if itemType is "file"', async () => {
             const getFile = jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE));
-            API.mockImplementation(() => ({
-                getFileAPI: jest.fn().mockReturnValue({ getFile }),
-                getUsersAPI: jest.fn().mockReturnValue({ getUser: jest.fn() }),
-            }));
+            API.mockImplementation(createAPIMock({ getFile }, null, { getUser: jest.fn() }));
 
             let wrapper;
             await act(async () => {
@@ -108,6 +121,9 @@ describe('elements/content-sharing/ContentSharing', () => {
 
             API.mockImplementation(() => ({
                 getFolderAPI: jest.fn().mockReturnValue({ getFolderFields }),
+                getFolderCollaborationsAPI: jest.fn().mockReturnValue({
+                    getCollaborations: jest.fn(),
+                }),
                 getUsersAPI: jest.fn().mockReturnValue({ getUser: jest.fn() }),
             }));
 
@@ -127,12 +143,7 @@ describe('elements/content-sharing/ContentSharing', () => {
         test('should call getUsersAPI().getUser() if item and sharedLink are defined, but currentUserID is not', async () => {
             const getFile = jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE));
             const getUser = jest.fn().mockImplementation(createSuccessMock(MOCK_USER_API_RESPONSE));
-
-            API.mockImplementation(() => ({
-                getFileAPI: jest.fn().mockReturnValue({ getFile }),
-                getFolderAPI: jest.fn().mockReturnValue({ getFolderFields: jest.fn() }),
-                getUsersAPI: jest.fn().mockReturnValue({ getUser }),
-            }));
+            API.mockImplementation(createAPIMock({ getFile }, { getFolderFields: jest.fn() }, { getUser }));
 
             let wrapper;
             await act(async () => {
@@ -147,6 +158,34 @@ describe('elements/content-sharing/ContentSharing', () => {
             expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
             expect(wrapper.exists(SharingNotification)).toBe(true);
         });
+
+        test('should toggle between the Unified Share Modal and the Shared Link Settings Modal', async () => {
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ itemType: TYPE_FILE });
+            });
+            wrapper.update();
+
+            // Check that the Shared Link Settings Modal is hidden on load
+            expect(wrapper.exists(SharedLinkSettingsModal)).toBe(false);
+            const usm = wrapper.find(UnifiedShareModal);
+            await act(async () => {
+                usm.invoke('onSettingsClick')();
+            });
+            wrapper.update();
+
+            // Check that the Unified Share Modal disappears and the Shared Link Settings Modal appears
+            expect(wrapper.exists(UnifiedShareModal)).toBe(false);
+            const slsm = wrapper.find(SharedLinkSettingsModal);
+            await act(async () => {
+                slsm.invoke('onRequestClose')();
+            });
+            wrapper.update();
+
+            // Check that the Shared Link Settings Modal disappears and the Unified Share Modal appears
+            expect(wrapper.exists(SharedLinkSettingsModal)).toBe(false);
+            expect(wrapper.exists(UnifiedShareModal)).toBe(true);
+        });
     });
 
     describe('with failed GET requests to the Item and/or Users API', () => {
@@ -157,10 +196,7 @@ describe('elements/content-sharing/ContentSharing', () => {
                 });
             });
             const getUser = jest.fn();
-            API.mockImplementation(() => ({
-                getFileAPI: jest.fn().mockReturnValue({ getFile }),
-                getUsersAPI: jest.fn().mockReturnValue({ getUser }),
-            }));
+            API.mockImplementation(createAPIMock({ getFile }, null, { getUser }));
 
             let wrapper;
             await act(async () => {
@@ -182,10 +218,7 @@ describe('elements/content-sharing/ContentSharing', () => {
                 });
             });
             const getUser = jest.fn();
-            API.mockImplementation(() => ({
-                getFolderAPI: jest.fn().mockReturnValue({ getFolderFields }),
-                getUsersAPI: jest.fn().mockReturnValue({ getUser }),
-            }));
+            API.mockImplementation(createAPIMock(null, { getFolderFields }, { getUser }));
 
             let wrapper;
             await act(async () => {
@@ -213,11 +246,7 @@ describe('elements/content-sharing/ContentSharing', () => {
                     failureFn(response);
                 });
             });
-            API.mockImplementation(() => ({
-                getFileAPI: jest.fn().mockReturnValue({ getFile }),
-                getFolderAPI: jest.fn().mockReturnValue({ getFolderFields }),
-                getUsersAPI: jest.fn().mockReturnValue({ getUser }),
-            }));
+            API.mockImplementation(createAPIMock({ getFile }, { getFolderFields }, { getUser }));
         });
 
         test('should show the ErrorMask if the call to getFile() succeeds, but the call to getUser() fails', async () => {
@@ -268,10 +297,7 @@ describe('elements/content-sharing/ContentSharing', () => {
                     });
                 });
                 const getUser = jest.fn();
-                API.mockImplementation(() => ({
-                    getFolderAPI: jest.fn().mockReturnValue({ getFolderFields }),
-                    getUsersAPI: jest.fn().mockReturnValue({ getUser }),
-                }));
+                API.mockImplementation(createAPIMock(null, { getFolderFields }, { getUser }));
 
                 let wrapper;
                 await act(async () => {
@@ -306,10 +332,7 @@ describe('elements/content-sharing/ContentSharing', () => {
                     });
                 });
                 const getUser = jest.fn();
-                API.mockImplementation(() => ({
-                    getFolderAPI: jest.fn().mockReturnValue({ getFolderFields }),
-                    getUsersAPI: jest.fn().mockReturnValue({ getUser }),
-                }));
+                API.mockImplementation(createAPIMock(null, { getFolderFields }, { getUser }));
 
                 let wrapper;
                 await act(async () => {
@@ -335,10 +358,7 @@ describe('elements/content-sharing/ContentSharing', () => {
                 });
             });
             const getUser = jest.fn();
-            API.mockImplementation(() => ({
-                getFolderAPI: jest.fn().mockReturnValue({ getFolderFields }),
-                getUsersAPI: jest.fn().mockReturnValue({ getUser }),
-            }));
+            API.mockImplementation(createAPIMock(null, { getFolderFields }, { getUser }));
 
             let wrapper;
             await act(async () => {
@@ -371,19 +391,21 @@ describe('elements/content-sharing/ContentSharing', () => {
                     successFn(response);
                 });
             });
-            API.mockImplementation(() => ({
-                getFileAPI: jest.fn().mockReturnValue({
-                    getFile: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
-                    share,
-                    updateSharedLink,
-                }),
-                getFolderAPI: jest.fn().mockReturnValue({
-                    getFolderFields: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
-                    share,
-                    updateSharedLink,
-                }),
-                getUsersAPI: jest.fn().mockReturnValue({ getUser: jest.fn() }),
-            }));
+            API.mockImplementation(
+                createAPIMock(
+                    {
+                        getFile: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
+                        share,
+                        updateSharedLink,
+                    },
+                    {
+                        getFolderFields: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
+                        share,
+                        updateSharedLink,
+                    },
+                    { getUser: jest.fn() },
+                ),
+            );
         });
 
         test('should call share() from onAddLink() and set a new shared link', async () => {
@@ -527,19 +549,21 @@ describe('elements/content-sharing/ContentSharing', () => {
         beforeAll(() => {
             share = createShareFailureMock();
             updateSharedLink = createShareFailureMock();
-            API.mockImplementation(() => ({
-                getFileAPI: jest.fn().mockReturnValue({
-                    getFile: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
-                    share,
-                    updateSharedLink,
-                }),
-                getFolderAPI: jest.fn().mockReturnValue({
-                    getFolderFields: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
-                    share,
-                    updateSharedLink,
-                }),
-                getUsersAPI: jest.fn().mockReturnValue({ getUser: jest.fn() }),
-            }));
+            API.mockImplementation(
+                createAPIMock(
+                    {
+                        getFile: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
+                        share,
+                        updateSharedLink,
+                    },
+                    {
+                        getFolderFields: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
+                        share,
+                        updateSharedLink,
+                    },
+                    { getUser: jest.fn() },
+                ),
+            );
         });
 
         test.each(['onAddLink', 'onRemoveLink', 'changeSharedLinkAccessLevel', 'changeSharedLinkPermissionLevel'])(

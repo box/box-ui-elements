@@ -26,6 +26,11 @@ const messages = defineMessages({
         description: 'Message that appears when the shared link in the ContentSharing Element cannot be updated.',
         id: 'be.contentSharing.sharedLinkUpdateError',
     },
+    collaboratorsLoadingError: {
+        defaultMessage: 'Could not retrieve collaborators for this item.',
+        description: 'Message that appears when collaborators cannot be retrieved in the ContentSharing Element.',
+        id: 'be.contentSharing.collaboratorsLoadingError',
+    },
     getContactsError: {
         defaultMessage: 'Could not retrieve contacts.',
         description: 'Message that appears when users cannot be retrieved in the ContentSharing Element.',
