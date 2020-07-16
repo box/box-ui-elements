@@ -18,16 +18,13 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLi
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should fire onClick when link is followed', () => {
+    test('should fire onClick when the button is clicked', () => {
         const onClickFn = jest.fn();
         const wrapper = getWrapper({ onClick: onClickFn });
         const onClick = wrapper.find('PlainButton').prop('onClick');
         const event = {
             preventDefault: jest.fn(),
             stopPropagation: jest.fn(),
-            nativeEvent: {
-                stopImmediatePropagation: jest.fn(),
-            },
         };
 
         onClick(event);
@@ -35,6 +32,41 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLi
         expect(onClickFn).toHaveBeenCalledWith('123');
         expect(event.preventDefault).toHaveBeenCalled();
         expect(event.stopPropagation).toHaveBeenCalled();
+    });
+
+    test('should stop propagation of the native mousedown event', () => {
+        const wrapper = getWrapper();
+        const onMouseDown = wrapper.find('PlainButton').prop('onMouseDown');
+        const event = {
+            currentTarget: {
+                focus: jest.fn(),
+            },
+            nativeEvent: {
+                stopImmediatePropagation: jest.fn(),
+            },
+        };
+
+        onMouseDown(event);
+
+        expect(event.currentTarget.focus).toHaveBeenCalled();
         expect(event.nativeEvent.stopImmediatePropagation).toHaveBeenCalled();
+    });
+
+    test('should not stop propagation of the native mousedown event if isDisabled is true', () => {
+        const wrapper = getWrapper({ isDisabled: true });
+        const onMouseDown = wrapper.find('PlainButton').prop('onMouseDown');
+        const event = {
+            currentTarget: {
+                focus: jest.fn(),
+            },
+            nativeEvent: {
+                stopImmediatePropagation: jest.fn(),
+            },
+        };
+
+        onMouseDown(event);
+
+        expect(event.currentTarget.focus).not.toHaveBeenCalled();
+        expect(event.nativeEvent.stopImmediatePropagation).not.toHaveBeenCalled();
     });
 });

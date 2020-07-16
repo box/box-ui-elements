@@ -303,7 +303,7 @@ class SharedLinkSettingsModal extends Component {
 
         return (
             message && (
-                <p className="link-settings-modal-notice">
+                <div className="link-settings-modal-notice">
                     <FormattedMessage {...message} />{' '}
                     <Link
                         href="https://community.box.com/t5/Using-Shared-Links/Shared-Link-Settings/ta-p/50250"
@@ -311,7 +311,7 @@ class SharedLinkSettingsModal extends Component {
                     >
                         <FormattedMessage {...messages.sharedLinkSettingWarningLinkText} />
                     </Link>
-                </p>
+                </div>
             )
         );
     }

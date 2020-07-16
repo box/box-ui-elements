@@ -3,7 +3,7 @@ import noop from 'lodash/noop';
 
 import { ButtonType } from '../button';
 
-export interface PlainButtonProps {
+export interface PlainButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
     /** Contents of the plain button */
     children?: React.ReactNode;
     /** Custom class name for the plain button */

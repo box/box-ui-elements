@@ -6,6 +6,7 @@ exports[`elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLin
   data-resin-target="annotationLink"
   isDisabled={false}
   onClick={[Function]}
+  onMouseDown={[Function]}
   type="button"
 >
   <FormattedMessage

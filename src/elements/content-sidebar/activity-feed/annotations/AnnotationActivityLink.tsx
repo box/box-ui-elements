@@ -17,22 +17,34 @@ const AnnotationActivityLink = ({
     message,
     onClick = noop,
 }: AnnotationActivityLinkProps): JSX.Element => {
-    const handleClick = (event: React.SyntheticEvent) => {
+    const handleClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
-        // Prevents document event handlers from executing because box-annotations relies on
-        // detecting clicks on the document outside of annotation targets to determine when to
-        // deselect annotations. This link also may represent that annotation target in the sidebar.
-        event.nativeEvent.stopImmediatePropagation();
 
         onClick(id);
     };
+
+    const handleMouseDown = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (isDisabled) {
+            return;
+        }
+
+        // Prevents document event handlers from executing because box-annotations relies on
+        // detecting mouse events on the document outside of annotation targets to determine when to
+        // deselect annotations. This link also may represent that annotation target in the sidebar.
+        event.nativeEvent.stopImmediatePropagation();
+
+        // Stopping propagation on the mousedown event prevents focus from reaching the button, so forward it.
+        event.currentTarget.focus();
+    };
+
     return (
         <PlainButton
             className="bcs-AnnotationActivity-link"
             data-resin-target="annotationLink"
             isDisabled={isDisabled}
             onClick={handleClick}
+            onMouseDown={handleMouseDown}
             type={ButtonType.BUTTON}
         >
             <FormattedMessage {...message} />

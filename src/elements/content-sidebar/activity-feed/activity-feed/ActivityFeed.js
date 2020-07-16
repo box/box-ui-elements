@@ -8,14 +8,15 @@ import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
-import { scrollIntoView } from '../../../../utils/dom';
 import ActiveState from './ActiveState';
 import CommentForm from '../comment-form';
 import EmptyState from './EmptyState';
-import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import InlineError from '../../../../components/inline-error/InlineError';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import messages from './messages';
+import { collapseFeedState, ItemTypes } from './activityFeedUtils';
+import { PERMISSION_CAN_CREATE_ANNOTATIONS } from '../../../../constants';
+import { scrollIntoView } from '../../../../utils/dom';
 import type { Annotation, AnnotationPermission, FocusableFeedItemType, FeedItems } from '../../../../common/types/feed';
 import type { SelectorItems, User, GroupMini, BoxItem } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
@@ -220,6 +221,7 @@ class ActivityFeed extends React.Component<Props, State> {
             translations,
         } = this.props;
         const { isInputOpen } = this.state;
+        const hasAnnotationCreatePermission = getProp(file, ['permissions', PERMISSION_CAN_CREATE_ANNOTATIONS], false);
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
         const showCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate && feedItems);
 
@@ -258,7 +260,12 @@ class ActivityFeed extends React.Component<Props, State> {
                         </div>
                     )}
 
-                    {isEmpty && !isLoading && <EmptyState showCommentMessage={showCommentForm} />}
+                    {isEmpty && !isLoading && (
+                        <EmptyState
+                            showAnnotationMessage={hasAnnotationCreatePermission}
+                            showCommentMessage={showCommentForm}
+                        />
+                    )}
                     {!isEmpty && !isLoading && (
                         <ActiveState
                             {...activityFeedError}
