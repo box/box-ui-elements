@@ -7,7 +7,8 @@ TokenService.getReadToken.mockImplementation(() => Promise.resolve(`${Math.rando
 
 const MOCK_FILTER = 'content';
 const MOCK_ITEM_ID = '140984325';
-const MOCK_ENTERPRISE_USERS_URL = `https://api.box.com/2.0/users?filter_term=${MOCK_FILTER}`;
+const MOCK_ENTERPRISE_USERS_URL = 'https://api.box.com/2.0/users';
+const MOCK_ENTERPRISE_USERS_URL_WITH_FILTER = `https://api.box.com/2.0/users?filter_term=${MOCK_FILTER}`;
 const MOCK_ENTERPRISE_USERS_RESPONSE = { total_count: 0, entries: [], limit: 25, offset: 0 };
 
 let users;
@@ -51,12 +52,12 @@ describe('api/Users', () => {
     });
 
     describe('getUsersInEnterpriseUrl()', () => {
-        test('should return the correct enterprise users URL', () => {
-            expect(users.getUsersInEnterpriseUrl(MOCK_FILTER)).toBe(MOCK_ENTERPRISE_USERS_URL);
+        test('should return the enterprise users URL with the provided filter term', () => {
+            expect(users.getUsersInEnterpriseUrl(MOCK_FILTER)).toBe(MOCK_ENTERPRISE_USERS_URL_WITH_FILTER);
         });
 
-        test('should throw an error if called without a filter term', () => {
-            expect(() => users.getUsersInEnterpriseUrl()).toThrow(new Error('Missing filter term'));
+        test('should return the default enterprise users URL if called without a filter term', () => {
+            expect(users.getUsersInEnterpriseUrl()).toBe(MOCK_ENTERPRISE_USERS_URL);
         });
     });
 

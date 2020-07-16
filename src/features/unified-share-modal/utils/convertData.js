@@ -244,9 +244,7 @@ export const convertContactsResponse = (
     contactsAPIData: UserCollection,
     currentUserID: string | null,
 ): Array<contactType> => {
-    const { entries } = contactsAPIData;
-
-    if (!entries || !entries.length) return [];
+    const { entries = [] } = contactsAPIData;
 
     // Return all users except for the current user
     return entries.reduce((filteredContacts, contact) => {

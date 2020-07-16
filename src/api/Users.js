@@ -43,10 +43,14 @@ class Users extends Base {
      * @return {string} URL for fetching enterprise users
      */
     getUsersInEnterpriseUrl(filterTerm: string): string {
-        if (!filterTerm) {
-            throw new Error('Missing filter term');
+        let url = `${this.getBaseApiUrl()}/users`;
+
+        if (filterTerm) {
+            const enterpriseUsersQuery = queryString.stringify({ filter_term: filterTerm });
+            url = `${url}?${enterpriseUsersQuery}`;
         }
-        return `${this.getBaseApiUrl()}/users?filter_term=${filterTerm}`;
+
+        return url;
     }
 
     /**
