@@ -34,16 +34,16 @@ class ContentExplorerModalContainer extends Component {
         onNewFolderModalShown: PropTypes.func,
         /** Called when the NewFolderModal is closed. */
         onNewFolderModalClosed: PropTypes.func,
-        /** Folder is in the process of being created. */
-        onSelectedClick: PropTypes.func,
         /** Called when selected button is clicked */
-        onSelectItem: PropTypes.func,
+        onSelectedClick: PropTypes.func,
         /**
          * Called when an item is selected
          *
          * @param {Object} selectedItem
          * @param {number} selectedItemIndex
          */
+        onSelectItem: PropTypes.func,
+        /** Folder is in the process of being created. */
         isCreatingFolder: PropTypes.bool,
         /** Message that will be shown when there was an error creating the folder. */
         createFolderError: PropTypes.string,
