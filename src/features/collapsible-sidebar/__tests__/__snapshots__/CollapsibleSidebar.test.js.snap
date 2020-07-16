@@ -6,6 +6,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
 >
   <CollapsibleSidebar__StyledNav
     className="is-expanded bdl-CollapsibleSidebar foo"
+    onKeyDown={[Function]}
   >
     <span
       key="1"
