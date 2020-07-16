@@ -63,6 +63,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     ] = React.useState<null | SharedLinkUpdateFnType>(null);
     const [currentView, setCurrentView] = React.useState<string>(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL);
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
+    const [onSubmitSettings, setOnSubmitSettings] = React.useState<null | Function>(null);
 
     // Reset the API if necessary
     React.useEffect(() => {
@@ -151,7 +152,8 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         return <ErrorMask errorHeader={<FormattedMessage {...componentErrorMessage} />} />;
     }
 
-    if (item && sharedLink) {
+    // Ensure that all necessary data has been received before rendering child components
+    if (item && sharedLink && currentUserID && sharedLink.serverURL) {
         const { ownerEmail, ownerID, permissions } = item;
         return (
             <Internationalize language={language} messages={usmMessages}>
@@ -163,6 +165,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         getContacts={getContacts}
                         itemID={itemID}
                         itemType={itemType}
+                        onRequestClose={() => setCurrentView(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL)}
                         ownerEmail={ownerEmail}
                         ownerID={ownerID}
                         permissions={permissions}
@@ -173,7 +176,9 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         setItem={setItem}
                         setOnAddLink={setOnAddLink}
                         setOnRemoveLink={setOnRemoveLink}
+                        setOnSubmitSettings={setOnSubmitSettings}
                         setSharedLink={setSharedLink}
+                        sharedLink={sharedLink}
                     />
                     {currentView === CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS && (
                         <SharedLinkSettingsModal
@@ -183,7 +188,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                             isOpen
                             item={item}
                             onRequestClose={() => setCurrentView(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL)}
-                            onSubmit={() => null} // to do: replace with a PUT request to the Item Shared Link API
+                            onSubmit={onSubmitSettings}
                             {...sharedLink}
                         />
                     )}

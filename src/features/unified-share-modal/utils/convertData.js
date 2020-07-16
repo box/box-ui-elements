@@ -96,6 +96,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
             effective_access,
             effective_permission,
             is_password_enabled: isPasswordEnabled,
+            password,
             unshared_at: expirationTimestamp,
             url,
             vanity_name: vanityName,
@@ -130,6 +131,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
             isPasswordAvailable,
             isPasswordEnabled,
             isPreviewAllowed,
+            password,
             permissionLevel,
             url,
             vanityName: vanityName || '',
@@ -170,7 +172,7 @@ export const convertUserResponse = (userAPIData: User): ContentSharingUserDataTy
         id,
         userEnterpriseData: {
             enterpriseName: enterprise ? enterprise.name : '',
-            serverURL: hostname ? `${hostname}/v/` : '',
+            serverURL: hostname ? `${hostname}v/` : '',
         },
     };
 };
@@ -191,6 +193,21 @@ export const convertSharedLinkPermissions = (newSharedLinkPermissionLevel: strin
         }
     });
     return sharedLinkPermissions;
+};
+
+/**
+ * Convert an item from the USM into the object that the Item API expects.
+ * @param {*} newSettings
+ */
+export const convertSharedLinkSettings = (newSettings, serverURL: string) => {
+    const { expirationTimestamp, isDownloadEnabled: can_download, password, vanityName } = newSettings;
+
+    return {
+        can_download,
+        vanity_url: vanityName ? `${serverURL}${vanityName}` : null,
+        unshared_at: expirationTimestamp ? new Date(expirationTimestamp).toISOString() : null,
+        ...(password && { password }),
+    };
 };
 
 /**

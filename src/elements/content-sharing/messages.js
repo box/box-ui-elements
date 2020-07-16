@@ -26,6 +26,12 @@ const messages = defineMessages({
         description: 'Message that appears when the shared link in the ContentSharing Element cannot be updated.',
         id: 'be.contentSharing.sharedLinkUpdateError',
     },
+    sharedLinkSettingsUpdateSuccess: {
+        defaultMessage: 'Your settings were saved successfully.',
+        description:
+            'Message that appears when the shared link settings in the ContentSharing Element were successfully updated.',
+        id: 'be.contentSharing.sharedLinkSettingsUpdateSuccess',
+    },
     collaboratorsLoadingError: {
         defaultMessage: 'Could not retrieve collaborators for this item.',
         description: 'Message that appears when collaborators cannot be retrieved in the ContentSharing Element.',

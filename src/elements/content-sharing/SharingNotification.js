@@ -5,6 +5,7 @@ import type { MessageDescriptor } from 'react-intl';
 import API from '../../api';
 import Notification from '../../components/notification/Notification';
 import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
+import useSharedLink from './hooks/useSharedLink';
 import {
     convertCollabsResponse,
     convertContactsResponse,
@@ -17,7 +18,6 @@ import useContacts from './hooks/useContacts';
 import { ACCESS_COLLAB, ACCESS_NONE, STATUS_ERROR, TYPE_FILE, TYPE_FOLDER } from '../../constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from './constants';
 import contentSharingMessages from './messages';
-import type { RequestOptions } from '../../common/types/api';
 import type { BoxItemPermission, Collaborations, ItemType, NotificationType } from '../../common/types/core';
 import type { collaboratorsListType, item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
 import type {
@@ -34,9 +34,11 @@ type SharingNotificationProps = {
     getContacts: GetContactsFnType | null,
     itemID: string,
     itemType: ItemType,
+    onRequestClose: Function,
     ownerEmail: ?string,
     ownerID: ?string,
     permissions: ?BoxItemPermission,
+    serverURL: string,
     setChangeSharedLinkAccessLevel: (changeSharedLinkAccessLevel: SharedLinkUpdateFnType) => void,
     setChangeSharedLinkPermissionLevel: (changeSharedLinkPermissionLevel: SharedLinkUpdateFnType) => void,
     setCollaboratorsList: (collaboratorsList: collaboratorsListType | null) => void,
@@ -44,7 +46,9 @@ type SharingNotificationProps = {
     setItem: ((item: itemFlowType | null) => itemFlowType) => void,
     setOnAddLink: (addLink: SharedLinkUpdateFnType) => void,
     setOnRemoveLink: (removeLink: SharedLinkUpdateFnType) => void,
+    setOnSubmitSettings: Function,
     setSharedLink: ((sharedLink: ContentSharingSharedLinkType | null) => ContentSharingSharedLinkType) => void,
+    sharedLink: any,
 };
 
 function SharingNotification({
@@ -54,6 +58,7 @@ function SharingNotification({
     getContacts,
     itemID,
     itemType,
+    onRequestClose,
     ownerEmail,
     ownerID,
     permissions,
@@ -64,7 +69,9 @@ function SharingNotification({
     setItem,
     setOnAddLink,
     setOnRemoveLink,
+    setOnSubmitSettings,
     setSharedLink,
+    sharedLink,
 }: SharingNotificationProps) {
     const [notifications, setNotifications] = React.useState<{ [string]: typeof Notification }>({});
     const [notificationID, setNotificationID] = React.useState<number>(0);
@@ -82,7 +89,11 @@ function SharingNotification({
     // Create a notification
     const createNotification = React.useCallback(
         (notificationType: NotificationType, message: MessageDescriptor) => {
-            return (
+            const updatedNotifications = { ...notifications };
+            if (updatedNotifications[notificationID]) {
+                return;
+            }
+            updatedNotifications[notificationID] = (
                 <Notification
                     duration="short"
                     key={notificationID}
@@ -94,111 +105,31 @@ function SharingNotification({
                     </span>
                 </Notification>
             );
-        },
-        [handleNotificationClose, notificationID],
-    );
-
-    // Create a notification with the provided error message
-    const handleError = React.useCallback(
-        (errorMessage: MessageDescriptor) => {
-            const updatedNotifications = { ...notifications };
-            if (updatedNotifications[notificationID]) {
-                return;
-            }
-            updatedNotifications[notificationID] = createNotification(STATUS_ERROR, errorMessage);
             setNotifications(updatedNotifications);
             setNotificationID(notificationID + 1);
         },
-        [createNotification, notificationID, notifications],
+        [handleNotificationClose, notificationID, notifications],
     );
 
-    // Generate shared link CRUD functions for the item
-    React.useEffect(() => {
-        // Handle successful PUT requests to /files or /folders
-        const handleUpdateItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
-            const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
-            setItem((prevItem: itemFlowType | null) => ({ ...prevItem, ...updatedItem }));
-            setSharedLink((prevSharedLink: ContentSharingSharedLinkType | null) => ({
-                ...prevSharedLink,
-                ...updatedSharedLink,
-            }));
-        };
+    const {
+        changeSharedLinkAccessLevel,
+        changeSharedLinkPermissionLevel,
+        onAddLink,
+        onRemoveLink,
+        onSubmitSettings,
+    } = useSharedLink(api, itemID, itemType, sharedLink, permissions, setItem, setSharedLink, {
+        handleError: () => createNotification('error', contentSharingMessages.sharedLinkUpdateError),
+        handleSuccess: () => {
+            createNotification('info', contentSharingMessages.sharedLinkSettingsUpdateSuccess);
+            onRequestClose();
+        },
+    });
 
-        const handleRemoveSharedLinkSuccess = (itemData: ContentSharingItemAPIResponse) => {
-            const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
-            setItem((prevItem: itemFlowType | null) => ({ ...prevItem, ...updatedItem }));
-            setSharedLink(() => updatedSharedLink);
-        };
-
-        if (permissions) {
-            const itemData = {
-                id: itemID,
-                permissions,
-            };
-
-            let itemAPIInstance;
-            if (itemType === TYPE_FILE) {
-                itemAPIInstance = api.getFileAPI();
-            } else if (itemType === TYPE_FOLDER) {
-                itemAPIInstance = api.getFolderAPI();
-            }
-
-            const createSharedLinkAPIConnection = (
-                accessType: string,
-                options?: RequestOptions = CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                successFn?: (itemData: ContentSharingItemAPIResponse) => void = handleUpdateItemSuccess,
-            ) => {
-                return itemAPIInstance.share(
-                    itemData,
-                    accessType,
-                    successFn,
-                    () => handleError(contentSharingMessages.sharedLinkUpdateError),
-                    options,
-                );
-            };
-
-            const updatedOnAddLinkFn: SharedLinkUpdateFnType = () => () => createSharedLinkAPIConnection(ACCESS_COLLAB);
-            setOnAddLink(updatedOnAddLinkFn);
-
-            const updatedOnRemoveLinkFn: SharedLinkUpdateFnType = () => () =>
-                createSharedLinkAPIConnection(ACCESS_NONE, undefined, handleRemoveSharedLinkSuccess);
-            setOnRemoveLink(updatedOnRemoveLinkFn);
-
-            const updatedChangeSharedLinkAccessLevelFn: SharedLinkUpdateFnType = () => (newAccessLevel: string) =>
-                createSharedLinkAPIConnection(USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel]);
-            setChangeSharedLinkAccessLevel(updatedChangeSharedLinkAccessLevelFn);
-
-            const updatedChangeSharedLinkPermissionLevelFn: SharedLinkUpdateFnType = () => (
-                newSharedLinkPermissionLevel: string,
-            ) => {
-                return itemAPIInstance.updateSharedLink(
-                    itemData,
-                    {
-                        permissions: convertSharedLinkPermissions(newSharedLinkPermissionLevel),
-                    },
-                    handleUpdateItemSuccess,
-                    () => handleError(contentSharingMessages.sharedLinkUpdateError),
-                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-                );
-            };
-            setChangeSharedLinkPermissionLevel(updatedChangeSharedLinkPermissionLevelFn);
-        }
-    }, [
-        api,
-        createNotification,
-        handleError,
-        itemID,
-        itemType,
-        notificationID,
-        notifications,
-        permissions,
-        setChangeSharedLinkAccessLevel,
-        setChangeSharedLinkPermissionLevel,
-        setItem,
-        setOnAddLink,
-        setOnRemoveLink,
-        setSharedLink,
-    ]);
+    setChangeSharedLinkAccessLevel(() => changeSharedLinkAccessLevel);
+    setChangeSharedLinkPermissionLevel(() => changeSharedLinkPermissionLevel);
+    setOnAddLink(() => onAddLink);
+    setOnRemoveLink(() => onRemoveLink);
+    setOnSubmitSettings(() => onSubmitSettings);
 
     // Set the collaborators list
     const collaboratorsListFromAPI: Collaborations | null = useCollaborators(api, itemID, itemType, {
