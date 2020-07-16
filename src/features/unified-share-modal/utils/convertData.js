@@ -256,11 +256,15 @@ export const convertContactsResponse = (
     const { entries = [] } = contactsAPIData;
 
     // Return all users except for the current user
-    return entries.reduce((filteredContacts, contact) => {
-        const { id, login: email, name, type } = contact;
-        if (id !== currentUserID) {
-            filteredContacts.push({ id, email, name, type });
-        }
-        return filteredContacts;
-    }, []);
+    return entries
+        .map(contact => {
+            const { id, login: email, name, type } = contact;
+            return {
+                id,
+                email,
+                name,
+                type,
+            };
+        })
+        .filter(({ id }) => id !== currentUserID);
 };

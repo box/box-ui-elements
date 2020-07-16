@@ -99,7 +99,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         setChangeSharedLinkAccessLevel(null);
         setChangeSharedLinkPermissionLevel(null);
         setCollaboratorsList(null);
-        setCurrentUserID(null);
+        // setCurrentUserID(null);
         setItem(null);
         setOnAddLink(null);
         setOnRemoveLink(null);
