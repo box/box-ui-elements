@@ -1,11 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import sinon from 'sinon';
 
 import { mountConnected } from '../../../test-utils/enzyme';
 import CollapsibleSidebar from '../CollapsibleSidebar';
-
-const sandbox = sinon.sandbox.create();
 
 describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
     const getWrapper = (props = {}) => shallow(<CollapsibleSidebar {...props} />);
@@ -53,7 +50,6 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
         });
 
         afterEach(() => {
-            sandbox.verifyAndRestore();
             if (wrapper) {
                 wrapper.unmount();
                 wrapper = null;
@@ -61,71 +57,58 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
             document.body.removeChild(attachTo);
         });
 
-        test('focusNextEl', () => {
+        test('focusEl down', () => {
             const instance = wrapper.instance();
             const firstLink = wrapper.find('.first').getDOMNode();
             const secondLink = wrapper.find('.second').getDOMNode();
             const thirdLink = wrapper.find('.third').getDOMNode();
 
-            instance.focusNextEl();
+            instance.focusEl('down');
             expect(secondLink).toEqual(document.activeElement);
-            instance.focusNextEl();
+            instance.focusEl('down');
             expect(thirdLink).toEqual(document.activeElement);
-            instance.focusNextEl();
+            instance.focusEl('down');
             expect(firstLink).toEqual(document.activeElement);
         });
 
-        test('focusPreviousEl', () => {
+        test('focusEl up', () => {
             const instance = wrapper.instance();
             const firstLink = wrapper.find('.first').getDOMNode();
             const secondLink = wrapper.find('.second').getDOMNode();
             const thirdLink = wrapper.find('.third').getDOMNode();
 
-            instance.focusPreviousEl();
+            instance.focusEl('up');
             expect(thirdLink).toEqual(document.activeElement);
-            instance.focusPreviousEl();
+            instance.focusEl('up');
             expect(secondLink).toEqual(document.activeElement);
-            instance.focusPreviousEl();
+            instance.focusEl('up');
             expect(firstLink).toEqual(document.activeElement);
         });
 
-        test('should focusNextEl() when "down" key is pressed', () => {
-            const instance = wrapper.instance();
-            sandbox.mock(instance).expects('focusNextEl');
-            const nav = wrapper.find('nav');
-            nav.simulate('keydown', {
-                key: 'ArrowDown',
-                preventDefault: sandbox.mock(),
-                stopPropagation: sandbox.mock(),
-            });
-        });
-
-        test('should focusPreviousEl() when "up" key is pressed', () => {
-            const instance = wrapper.instance();
-            sandbox.mock(instance).expects('focusPreviousEl');
-            const nav = wrapper.find('nav');
-            nav.simulate('keydown', {
-                key: 'ArrowUp',
-                preventDefault: sandbox.mock(),
-                stopPropagation: sandbox.mock(),
-            });
-        });
-
-        test('should not call focusNextEl() or focusPreviousEl() when other key is pressed', () => {
-            const instance = wrapper.instance();
-            sandbox
-                .mock(instance)
-                .expects('focusNextEl')
-                .never();
-            sandbox
-                .mock(instance)
-                .expects('focusPreviousEl')
-                .never();
-            const nav = wrapper.find('nav');
-            nav.simulate('keydown', {
-                key: 'Enter',
-                preventDefault: sandbox.mock().never(),
-                stopPropagation: sandbox.mock().never(),
+        describe.each([
+            ['ArrowDown', 'down', 1],
+            ['ArrowUp', 'up', 1],
+            ['Enter', '', 0],
+        ])('%o', (keyInput, expectedArg, expectedCallTime) => {
+            test('test focusNextEl() when a key is pressed', () => {
+                const instance = wrapper.instance();
+                const focusElMock = jest.fn();
+                const preventDefaultMock = jest.fn();
+                const stopPropagationMock = jest.fn();
+                instance.focusEl = focusElMock;
+                const nav = wrapper.find('nav');
+                nav.simulate('keydown', {
+                    key: keyInput,
+                    preventDefault: preventDefaultMock,
+                    stopPropagation: stopPropagationMock,
+                });
+                if (expectedCallTime === 0) {
+                    expect(focusElMock).toHaveBeenCalledTimes(0);
+                } else {
+                    expect(focusElMock).toHaveBeenCalledWith(expectedArg);
+                }
+                expect(preventDefaultMock).toHaveBeenCalledTimes(expectedCallTime);
+                expect(stopPropagationMock).toHaveBeenCalledTimes(expectedCallTime);
             });
         });
     });

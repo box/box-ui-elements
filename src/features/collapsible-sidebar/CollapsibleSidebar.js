@@ -10,6 +10,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
 import tabbable from 'tabbable';
+import { KEYS } from '../../constants';
 
 import './CollapsibleSidebar.scss';
 
@@ -40,37 +41,37 @@ type Props = {
 class CollapsibleSidebar extends React.Component<Props> {
     navRef: { current: null | HTMLElement } = React.createRef();
 
-    focusNextEl = () => {
-        if (this.navRef.current) {
-            const tabbableEls = tabbable(this.navRef.current);
-            const currentElIndex = tabbableEls.findIndex(el => el === document.activeElement);
-            const nextElIndex = currentElIndex === tabbableEls.length - 1 ? 0 : currentElIndex + 1;
-            tabbableEls[nextElIndex].focus();
-        }
+    static defaultProps = {
+        expanded: false,
     };
 
-    focusPreviousEl = () => {
+    focusEl = (direction: 'down' | 'up') => {
         if (this.navRef.current) {
             const tabbableEls = tabbable(this.navRef.current);
             const currentElIndex = tabbableEls.findIndex(el => el === document.activeElement);
-            const prevElIndex = currentElIndex === 0 ? tabbableEls.length - 1 : currentElIndex - 1;
-            tabbableEls[prevElIndex].focus();
+            let index;
+            if (direction === 'down') {
+                index = currentElIndex === tabbableEls.length - 1 ? 0 : currentElIndex + 1;
+            } else {
+                index = currentElIndex === 0 ? tabbableEls.length - 1 : currentElIndex - 1;
+            }
+            tabbableEls[index].focus();
         }
     };
 
     handleKeyDown = (event: SyntheticKeyboardEvent<>) => {
         if (this.navRef.current && this.navRef.current.contains(document.activeElement)) {
             switch (event.key) {
-                case 'ArrowDown':
+                case KEYS.arrowDown:
                     event.stopPropagation();
                     event.preventDefault();
-                    this.focusNextEl();
+                    this.focusEl('down');
                     break;
 
-                case 'ArrowUp':
+                case KEYS.arrowUp:
                     event.stopPropagation();
                     event.preventDefault();
-                    this.focusPreviousEl();
+                    this.focusEl('up');
                     break;
 
                 default:
