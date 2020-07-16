@@ -68,11 +68,14 @@ describe('api/Users', () => {
             ${undefined}   | ${'default'}
         `('should call this.get() with the $description filter term and return a promise', ({ filterTerm }) => {
             const getSpy = jest.spyOn(users, 'get').mockResolvedValue(MOCK_ENTERPRISE_USERS_RESPONSE);
+            const getUsersInEnterpriseUrlSpy = jest
+                .spyOn(users, 'getUsersInEnterpriseUrl')
+                .mockReturnValue(MOCK_ENTERPRISE_USERS_URL);
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
-            jest.spyOn(users, 'getUsersInEnterpriseUrl').mockReturnValue(MOCK_ENTERPRISE_USERS_URL);
             const response = users.getUsersInEnterprise(MOCK_ITEM_ID, successCallback, errorCallback, filterTerm);
             expect(users.errorCode).toBe(ERROR_CODE_FETCH_ENTERPRISE_USERS);
+            expect(getUsersInEnterpriseUrlSpy).toHaveBeenCalledWith(filterTerm);
             expect(getSpy).toHaveBeenCalledWith({
                 id: MOCK_ITEM_ID,
                 successCallback,

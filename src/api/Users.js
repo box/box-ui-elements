@@ -39,10 +39,10 @@ class Users extends Base {
     /**
      * API URL for fetching all users in the current user's enterprise
      *
-     * @param {string} filterTerm Filter for enterprise users
+     * @param {string} [filterTerm] Optional filter for enterprise users
      * @return {string} URL for fetching enterprise users
      */
-    getUsersInEnterpriseUrl(filterTerm: string): string {
+    getUsersInEnterpriseUrl(filterTerm: ?string): string {
         let url = `${this.getBaseApiUrl()}/users`;
 
         if (filterTerm) {
@@ -124,7 +124,7 @@ class Users extends Base {
         id: string,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
-        filterTerm: string = '',
+        filterTerm: ?string,
     ): Promise<UserCollection> | null {
         this.errorCode = ERROR_CODE_FETCH_ENTERPRISE_USERS;
         return this.get({
