@@ -6,6 +6,7 @@ import { convertContactsResponse } from '../../../features/unified-share-modal/u
 import type { ElementsErrorCallback } from '../../../common/types/api';
 import type { UserCollection } from '../../../common/types/core';
 import type { GetContactsFnType } from '../types';
+import type { contactType } from '../../../features/unified-share-modal/flowTypes';
 
 /**
  * Generate the getContacts function, which is used for inviting collaborators in the USM.
@@ -27,18 +28,24 @@ function useContacts(
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
 
     React.useEffect(() => {
-        const handleGetContactsSuccess = (response: UserCollection) => {
-            if (handleSuccess) {
-                handleSuccess();
-            }
-            return convertContactsResponse(response, currentUserID);
-        };
+        if (getContacts) return;
 
-        if (!getContacts) {
-            const updatedGetContactsFn: GetContactsFnType = () => (filterTerm: string) =>
-                api.getUsersAPI(false).getUsersInEnterprise(itemID, handleGetContactsSuccess, handleError, filterTerm);
-            setGetContacts(updatedGetContactsFn);
-        }
+        const updatedGetContactsFn: GetContactsFnType = () => (filterTerm: string) => {
+            return new Promise((resolve: (result: Array<contactType>) => void) => {
+                api.getUsersAPI(false).getUsersInEnterprise(
+                    itemID,
+                    (response: UserCollection) => {
+                        if (handleSuccess) {
+                            handleSuccess();
+                        }
+                        return resolve(convertContactsResponse(response, currentUserID));
+                    },
+                    handleError,
+                    filterTerm,
+                );
+            });
+        };
+        setGetContacts(updatedGetContactsFn);
     }, [api, currentUserID, getContacts, handleError, handleSuccess, itemID]);
 
     return getContacts;

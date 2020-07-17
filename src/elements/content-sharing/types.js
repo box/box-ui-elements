@@ -1,6 +1,10 @@
 // @flow
-import type { BoxItemPermission, ItemType, SharedLink as APISharedLink, UserCollection } from '../../common/types/core';
-import type { item, sharedLinkType as USMSharedLinkType } from '../../features/unified-share-modal/flowTypes';
+import type { BoxItemPermission, ItemType, SharedLink as APISharedLink } from '../../common/types/core';
+import type {
+    contactType,
+    item,
+    sharedLinkType as USMSharedLinkType,
+} from '../../features/unified-share-modal/flowTypes';
 
 // "SLS" denotes values that are used in the Shared Link Settings modal
 type ContentSharingEnterpriseDataType = {
@@ -64,4 +68,4 @@ export type ContentSharingItemAPIResponse = {
 
 export type SharedLinkUpdateFnType = () => (level: string) => Promise<void>;
 
-export type GetContactsFnType = () => (filterTerm: string) => Promise<UserCollection> | null;
+export type GetContactsFnType = () => (filterTerm: string) => Promise<Array<contactType>> | null;
