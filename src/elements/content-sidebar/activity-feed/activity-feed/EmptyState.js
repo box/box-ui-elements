@@ -5,9 +5,9 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import ActivityFeedEmptyStateIllustration from '../illustrations/ActivityFeedEmptyStateIllustration';
 import EmptyStatePreviewActivity140 from '../../../../illustration/EmptyStatePreviewActivity140';
 import messages from '../../../common/messages';
-import ActivityFeedEmptyStateIllustration from '../illustrations/ActivityFeedEmptyStateIllustration';
 import './EmptyState.scss';
 
 type Props = {
