@@ -428,6 +428,14 @@ type Collaborations = {
     next_marker: ?string,
 };
 
+// reflects an IE11 specific object to support drag
+// and drop for file uploads
+type DOMStringList = {
+    contains: (strToSearch: string) => boolean,
+    item: (index: number) => string | null,
+    length: number,
+};
+
 export type {
     Token,
     TokenLiteral,
@@ -477,4 +485,5 @@ export type {
     Collaborators,
     Collaboration,
     Collaborations,
+    DOMStringList,
 };
