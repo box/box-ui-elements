@@ -5,8 +5,9 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import EmptyStatePreviewActivity140 from '../../../../illustration/EmptyStatePreviewActivity140';
 import messages from '../../../common/messages';
-import { ActivityFeedEmptyStateFallbackIllustration, ActivityFeedEmptyStateIllustration } from '../illustrations';
+import ActivityFeedEmptyStateIllustration from '../illustrations/ActivityFeedEmptyStateIllustration';
 import './EmptyState.scss';
 
 type Props = {
@@ -23,11 +24,7 @@ const EmptyState = ({ showAnnotationMessage, showCommentMessage }: Props): React
     return (
         <div className="bcs-EmptyState">
             <div className="bcs-EmptyState-illustration">
-                {showAnnotationMessage ? (
-                    <ActivityFeedEmptyStateIllustration />
-                ) : (
-                    <ActivityFeedEmptyStateFallbackIllustration />
-                )}
+                {showAnnotationMessage ? <ActivityFeedEmptyStateIllustration /> : <EmptyStatePreviewActivity140 />}
             </div>
             <div className="bcs-EmptyState-cta">
                 <FormattedMessage {...messages.noActivity}>
