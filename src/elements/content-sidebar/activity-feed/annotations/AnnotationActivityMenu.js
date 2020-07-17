@@ -45,7 +45,8 @@ const AnnotationActivityMenu = ({ canDelete, onDeleteConfirm }: AnnotationActivi
                     isDisabled={isConfirmingDelete}
                     data-testid="annotation-activity-actions-menu"
                     menuProps={{
-                        'data-resin-component': ACTIVITY_TARGETS.ANNOTATION_OPTIONS,
+                        'data-resin-component': 'preview',
+                        'data-resin-feature': 'annotations',
                     }}
                 >
                     <MenuItem

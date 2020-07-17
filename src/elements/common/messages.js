@@ -744,8 +744,13 @@ const messages = defineMessages({
     },
     noActivity: {
         id: 'be.noActivity',
-        defaultMessage: 'No Activity Yet',
+        defaultMessage: 'No activity to show',
         description: 'Message displayed in an empty activity feed',
+    },
+    noActivityAnnotationPrompt: {
+        id: 'be.noActivityAnnotationPrompt',
+        defaultMessage: 'Hover over the preview and use the controls at the bottom to annotate the file.',
+        description: 'Message shown alongside empty activity feed when user can annotate',
     },
     noActivityCommentPrompt: {
         id: 'be.noActivityCommentPrompt',

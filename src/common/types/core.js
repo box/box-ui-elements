@@ -4,6 +4,7 @@ import {
     ACCESS_OPEN,
     ACCESS_COLLAB,
     ACCESS_COMPANY,
+    ACCESS_NONE,
     VIEW_SEARCH,
     VIEW_FOLDER,
     VIEW_ERROR,
@@ -73,7 +74,7 @@ type Order = {
     direction: SortDirection,
 };
 
-type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN;
+type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN | typeof ACCESS_NONE;
 
 type NoticeType = 'info' | 'error';
 
@@ -405,6 +406,28 @@ type Reply = {
     type: 'reply',
 };
 
+type Collaborators = {
+    entries: Array<GroupMini | UserMini>,
+    next_marker: ?string,
+};
+
+type Collaboration = {
+    accessible_by: {
+        id: number | string,
+        login: string,
+        name: string,
+        type: 'user',
+    },
+    expires_at: string | null,
+    id: number | string,
+    role: string,
+};
+
+type Collaborations = {
+    entries: Array<Collaboration>,
+    next_marker: ?string,
+};
+
 export type {
     Token,
     TokenLiteral,
@@ -451,4 +474,7 @@ export type {
     FileRepresentation,
     Reply,
     NotificationType,
+    Collaborators,
+    Collaboration,
+    Collaborations,
 };

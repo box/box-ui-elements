@@ -29,9 +29,15 @@
         }
 
         .bcs-version-item {
+            margin-top: $bdl-grid-unit * 4;
+
             &:first-child .bcs-version {
                 margin-top: 0;
             }
+        }
+
+        .bcs-version-item + .bcs-activity-feed-annotation-activity {
+            margin-top: $bdl-grid-unit * 4;
         }
 
         .bcs-activity-feed-task,
@@ -97,29 +103,6 @@
 
         > li:last-child {
             margin-bottom: 10px;
-        }
-    }
-
-    .bcs-activity-feed-empty-state {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        .bcs-empty-state-cta {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-
-            aside {
-                width: 200px;
-                margin-top: 6px;
-                text-align: center;
-            }
-        }
-
-        .bcs-activity-feed-empty-state-illustration {
-            margin-top: 60px;
-            margin-bottom: 15px;
         }
     }
 

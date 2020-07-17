@@ -3,8 +3,10 @@
 exports[`elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLink should correctly render annotation activity link 1`] = `
 <PlainButton
   className="bcs-AnnotationActivity-link"
+  data-resin-target="annotationLink"
   isDisabled={false}
   onClick={[Function]}
+  onMouseDown={[Function]}
   type="button"
 >
   <FormattedMessage

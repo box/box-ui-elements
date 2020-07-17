@@ -792,7 +792,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.preview.addListener('thumbnailsClose', () => this.setState({ isThumbnailSidebarOpen: false }));
 
         if (showAnnotationsControls) {
-            this.preview.addListener('annotator', onAnnotator);
+            this.preview.addListener('annotator_create', onAnnotator);
         }
 
         this.preview.updateFileCache([file]);
@@ -1327,11 +1327,11 @@ export type ContentPreviewProps = Props;
 export { ContentPreview as ContentPreviewComponent };
 export default flow([
     makeResponsive,
-    withFeatureProvider,
-    withLogger(ORIGIN_CONTENT_PREVIEW),
-    withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
     withAnnotatorContext,
     withAnnotations,
     withRouter,
     withNavRouter,
+    withFeatureProvider,
+    withLogger(ORIGIN_CONTENT_PREVIEW),
+    withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
 ])(ContentPreview);
