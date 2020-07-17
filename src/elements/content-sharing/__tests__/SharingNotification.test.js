@@ -70,6 +70,10 @@ describe('elements/content-sharing/SharingNotification', () => {
     let apiInstance;
     let getCollaborations;
 
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
     describe('component rendering', () => {
         beforeAll(() => {
             getCollaborations = jest.fn();

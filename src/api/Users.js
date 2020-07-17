@@ -10,7 +10,7 @@ import { getTypedFileId } from '../utils/file';
 import Base from './Base';
 import { ERROR_CODE_FETCH_CURRENT_USER, ERROR_CODE_FETCH_ENTERPRISE_USERS } from '../constants';
 import type { ElementsErrorCallback } from '../common/types/api';
-import type { TokenLiteral, UserCollection } from '../common/types/core';
+import type { TokenLiteral } from '../common/types/core';
 
 class Users extends Base {
     /**
@@ -118,16 +118,16 @@ class Users extends Base {
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @param {string} [filterTerm] - Optional filter for the users
-     * @returns {Promise<UserCollection>|null}
+     * @returns {void}
      */
     getUsersInEnterprise(
         id: string,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
         filterTerm: ?string,
-    ): Promise<UserCollection> | null {
+    ): void {
         this.errorCode = ERROR_CODE_FETCH_ENTERPRISE_USERS;
-        return this.get({
+        this.get({
             id,
             successCallback,
             errorCallback,

@@ -158,7 +158,6 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                 <>
                     <SharingNotification
                         api={api}
-                        collaboratorsList={collaboratorsList}
                         currentUserID={currentUserID}
                         itemID={itemID}
                         itemType={itemType}

@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react';
+import noop from 'lodash/noop';
 import API from '../../../api';
-import { convertContactsResponse } from '../../../features/unified-share-modal/utils/convertData';
 import type { ElementsErrorCallback } from '../../../common/types/api';
 import type { UserCollection } from '../../../common/types/core';
 import type { GetContactsFnType } from '../types';
@@ -12,7 +12,6 @@ import type { contactType } from '../../../features/unified-share-modal/flowType
  * Generate the getContacts function, which is used for inviting collaborators in the USM.
  *
  * @param {API} api
- * @param {string | null} currentUserID
  * @param {string} itemID
  * @param {Function} handleSuccess
  * @param {ElementsErrorCallback} handleError
@@ -20,9 +19,8 @@ import type { contactType } from '../../../features/unified-share-modal/flowType
  */
 function useContacts(
     api: API,
-    currentUserID: string | null,
     itemID: string,
-    handleSuccess: ?Function,
+    handleSuccess: Function = noop,
     handleError: ElementsErrorCallback,
 ): GetContactsFnType | null {
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
@@ -35,10 +33,7 @@ function useContacts(
                 api.getUsersAPI(false).getUsersInEnterprise(
                     itemID,
                     (response: UserCollection) => {
-                        if (handleSuccess) {
-                            handleSuccess();
-                        }
-                        return resolve(convertContactsResponse(response, currentUserID));
+                        return resolve(handleSuccess(response));
                     },
                     handleError,
                     filterTerm,
@@ -46,7 +41,7 @@ function useContacts(
             });
         };
         setGetContacts(updatedGetContactsFn);
-    }, [api, currentUserID, getContacts, handleError, handleSuccess, itemID]);
+    }, [api, getContacts, handleError, handleSuccess, itemID]);
 
     return getContacts;
 }

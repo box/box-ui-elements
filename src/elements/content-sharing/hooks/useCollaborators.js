@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react';
+import noop from 'lodash/noop';
 import API from '../../../api';
-import { convertCollabsResponse } from '../../../features/unified-share-modal/utils/convertData';
 import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import type { Collaborations, ItemType } from '../../../common/types/core';
 import type { collaboratorsListType } from '../../../features/unified-share-modal/flowTypes';
@@ -18,8 +18,6 @@ import type { collaboratorsListType } from '../../../features/unified-share-moda
  * @param {API} api
  * @param {string} itemID
  * @param {ItemType} itemType
- * @param {string} ownerEmail
- * @param {boolean} isCurrentUserOwner
  * @param {Function} [handleSuccess]
  * @param {Function} [handleError]
  * @returns {collaboratorsListType | null}
@@ -28,10 +26,8 @@ function useCollaborators(
     api: API,
     itemID: string,
     itemType: ItemType,
-    ownerEmail: ?string,
-    isCurrentUserOwner: boolean,
-    handleSuccess: ?Function,
-    handleError: ?Function,
+    handleSuccess: Function = noop,
+    handleError: Function = noop,
 ): collaboratorsListType | null {
     const [collaboratorsList, setCollaboratorsList] = React.useState<collaboratorsListType | null>(null);
 
@@ -39,18 +35,12 @@ function useCollaborators(
         if (collaboratorsList) return;
 
         const handleGetCollaborationsSuccess = (response: Collaborations) => {
-            const updatedCollaboratorsList = convertCollabsResponse(response, ownerEmail, isCurrentUserOwner);
-            setCollaboratorsList(updatedCollaboratorsList);
-            if (handleSuccess) {
-                handleSuccess();
-            }
+            setCollaboratorsList(handleSuccess(response));
         };
 
         const handleGetCollaborationsError = () => {
             setCollaboratorsList({ collaborators: [] }); // default to an empty collaborators list for the USM
-            if (handleError) {
-                handleError();
-            }
+            handleError();
         };
 
         let collabAPIInstance;
@@ -62,7 +52,7 @@ function useCollaborators(
         if (collabAPIInstance) {
             collabAPIInstance.getCollaborations(itemID, handleGetCollaborationsSuccess, handleGetCollaborationsError);
         }
-    }, [api, collaboratorsList, handleError, handleSuccess, isCurrentUserOwner, itemID, itemType, ownerEmail]);
+    }, [api, collaboratorsList, handleError, handleSuccess, itemID, itemType]);
 
     return collaboratorsList;
 }

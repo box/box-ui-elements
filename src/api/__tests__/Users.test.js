@@ -73,7 +73,7 @@ describe('api/Users', () => {
                 .mockReturnValue(MOCK_ENTERPRISE_USERS_URL);
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
-            const response = users.getUsersInEnterprise(MOCK_ITEM_ID, successCallback, errorCallback, filterTerm);
+            users.getUsersInEnterprise(MOCK_ITEM_ID, successCallback, errorCallback, filterTerm);
             expect(users.errorCode).toBe(ERROR_CODE_FETCH_ENTERPRISE_USERS);
             expect(getUsersInEnterpriseUrlSpy).toHaveBeenCalledWith(filterTerm);
             expect(getSpy).toHaveBeenCalledWith({
@@ -82,7 +82,6 @@ describe('api/Users', () => {
                 errorCallback,
                 url: MOCK_ENTERPRISE_USERS_URL,
             });
-            expect(response).resolves.toEqual(MOCK_ENTERPRISE_USERS_RESPONSE);
         });
     });
 });

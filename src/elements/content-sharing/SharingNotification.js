@@ -6,6 +6,8 @@ import API from '../../api';
 import Notification from '../../components/notification/Notification';
 import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
 import {
+    convertCollabsResponse,
+    convertContactsResponse,
     convertItemResponse,
     convertSharedLinkPermissions,
     USM_TO_API_ACCESS_LEVEL_MAP,
@@ -62,6 +64,7 @@ function SharingNotification({
 }: SharingNotificationProps) {
     const [notifications, setNotifications] = React.useState<{ [string]: typeof Notification }>({});
     const [notificationID, setNotificationID] = React.useState<number>(0);
+    const [collabsExist, setCollabsExist] = React.useState<boolean>(false);
 
     // Close a notification
     const handleNotificationClose = React.useCallback(
@@ -199,16 +202,20 @@ function SharingNotification({
         api,
         itemID,
         itemType,
-        ownerEmail,
-        currentUserID === ownerID,
-        null,
+        data => convertCollabsResponse(data, ownerEmail, currentUserID === ownerID),
         () => handleError(contentSharingMessages.collaboratorsLoadingError),
     );
-    setCollaboratorsList(collaboratorsList);
+    if (collaboratorsList && !collabsExist) {
+        setCollaboratorsList(collaboratorsList);
+        setCollabsExist(true);
+    }
 
     // Set the getContacts function
-    const getContactsFn: GetContactsFnType | null = useContacts(api, currentUserID, itemID, null, () =>
-        handleError(contentSharingMessages.getContactsError),
+    const getContactsFn: GetContactsFnType | null = useContacts(
+        api,
+        itemID,
+        data => convertContactsResponse(data, currentUserID),
+        () => handleError(contentSharingMessages.getContactsError),
     );
     setGetContacts(() => getContactsFn);
 

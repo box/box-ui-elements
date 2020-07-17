@@ -8,28 +8,16 @@ import useCollaborators from '../hooks/useCollaborators';
 import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import {
     MOCK_COLLABS_CONVERTED_RESPONSE,
-    MOCK_OWNER_ID,
     MOCK_ITEM_ID,
 } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
-import { convertCollabsResponse } from '../../../features/unified-share-modal/utils/convertData';
 
-jest.mock('../../../features/unified-share-modal/utils/convertData');
-
-const handleSuccess = jest.fn();
+const handleSuccess = jest.fn().mockReturnValue(MOCK_COLLABS_CONVERTED_RESPONSE);
 const handleError = jest.fn();
 
 function FakeComponent({ api, itemType }: { api: API, itemType: string }) {
     const [collaboratorsList, setCollaboratorsList] = React.useState(null);
 
-    const collabsResponse = useCollaborators(
-        api,
-        MOCK_ITEM_ID,
-        itemType,
-        MOCK_OWNER_ID,
-        true,
-        handleSuccess,
-        handleError,
-    );
+    const collabsResponse = useCollaborators(api, MOCK_ITEM_ID, itemType, handleSuccess, handleError);
 
     if (collabsResponse && !collaboratorsList) {
         setCollaboratorsList(JSON.stringify(collabsResponse));
@@ -46,7 +34,6 @@ describe('elements/content-sharing/hooks/useCollaborators', () => {
 
     describe('with successful API calls', () => {
         beforeAll(() => {
-            convertCollabsResponse.mockReturnValue(MOCK_COLLABS_CONVERTED_RESPONSE);
             getCollaborations = jest.fn().mockImplementation((itemID, getCollabsSuccess) => {
                 getCollabsSuccess();
             });

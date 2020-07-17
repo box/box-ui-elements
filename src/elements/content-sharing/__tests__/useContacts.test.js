@@ -7,12 +7,8 @@ import API from '../../../api';
 import useContacts from '../hooks/useContacts';
 import {
     MOCK_CONTACTS_CONVERTED_RESPONSE,
-    MOCK_OWNER_ID,
     MOCK_ITEM_ID,
 } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
-import { convertContactsResponse } from '../../../features/unified-share-modal/utils/convertData';
-
-jest.mock('../../../features/unified-share-modal/utils/convertData');
 
 const handleSuccess = jest.fn();
 const handleError = jest.fn();
@@ -20,7 +16,7 @@ const handleError = jest.fn();
 function FakeComponent({ api }: { api: API }) {
     const [getContacts, setGetContacts] = React.useState(null);
 
-    const updatedGetContactsFn = useContacts(api, MOCK_OWNER_ID, MOCK_ITEM_ID, handleSuccess, handleError);
+    const updatedGetContactsFn = useContacts(api, MOCK_ITEM_ID, handleSuccess, handleError);
 
     if (updatedGetContactsFn && !getContacts) {
         setGetContacts(() => updatedGetContactsFn);
@@ -43,7 +39,6 @@ describe('elements/content-sharing/hooks/useContacts', () => {
 
     describe('with successful API calls', () => {
         beforeAll(() => {
-            convertContactsResponse.mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
             getUsersInEnterprise = jest.fn().mockImplementation((itemID, getUsersInEnterpriseSuccess) => {
                 return getUsersInEnterpriseSuccess();
             });
@@ -84,7 +79,6 @@ describe('elements/content-sharing/hooks/useContacts', () => {
 
     describe('with failed API calls', () => {
         beforeAll(() => {
-            convertContactsResponse.mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
             getUsersInEnterprise = jest
                 .fn()
                 .mockImplementation((itemID, getUsersInEnterpriseSuccess, getUsersInEnterpriseError) => {
