@@ -12,18 +12,18 @@ type Props = {
 };
 
 const StyledFooter = styled.div`
-    & .bdl-CollapsibleSidebar-menuItem {
+    & .bdl-CollapsibleSidebar-menuItemLink {
         background-color: ${props => props.theme.primary.backgroundHover};
     }
 
-    & a:hover .bdl-CollapsibleSidebar-menuItem,
-    & a:hover:not(.is-currentPage) .bdl-CollapsibleSidebar-menuItem {
+    & .bdl-CollapsibleSidebar-menuItem:hover .bdl-CollapsibleSidebar-menuItemLink,
+    & .bdl-CollapsibleSidebar-menuItem:hover:not(.is-currentPage) .bdl-CollapsibleSidebar-menuItemLink {
         background-color: ${props => props.theme.primary.backgroundActive};
         color: ${props => props.theme.primary.foreground};
     }
 
-    .is-currentPage & .bdl-CollapsibleSidebar-menuItem,
-    & .bdl-CollapsibleSidebar-menuItem:active {
+    .is-currentPage & .bdl-CollapsibleSidebar-menuItemLink,
+    & .bdl-CollapsibleSidebar-menuItemLink:active {
         background-color: ${props => props.theme.primary.backgroundActive};
         color: ${props => props.theme.primary.foreground};
     }

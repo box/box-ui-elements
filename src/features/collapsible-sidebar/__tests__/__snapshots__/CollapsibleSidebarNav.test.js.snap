@@ -19,6 +19,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
       minimalThumbSize={30}
       momentum={true}
       onScroll={[Function]}
+      onUpdate={[Function]}
       renderer={[Function]}
       scrollDetectionThreshold={100}
       scrollerProps={Object {}}
