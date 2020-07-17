@@ -14,6 +14,7 @@ import throttle from 'lodash/throttle';
 import Scrollbar from 'react-scrollbars-custom';
 import styled from 'styled-components';
 
+import type { ScrollState } from 'react-scrollbars-custom';
 import CollapsibleSidebarContext from './CollapsibleSidebarContext';
 import { getScrollShadowClassName } from './utils/scrollShadow';
 
@@ -69,10 +70,6 @@ class CollapsibleSidebarNav extends React.Component<Props, State> {
         this.setScrollShadowState();
     }
 
-    componentDidUpdate() {
-        this.setScrollShadowState();
-    }
-
     turnOffScrollingState = () => {
         this.setState({
             isScrolling: false,
@@ -99,6 +96,14 @@ class CollapsibleSidebarNav extends React.Component<Props, State> {
         this.debouncedTurnOffScrollingState();
     };
 
+    onUpdateHandler = (scrollValues: ScrollState, prevScrollValues: ScrollState) => {
+        const { clientHeight, contentScrollHeight } = scrollValues;
+        const { clientHeight: prevClientHeight, contentScrollHeight: prevContentScrollHeight } = prevScrollValues;
+        if (clientHeight !== prevClientHeight || contentScrollHeight !== prevContentScrollHeight) {
+            this.setScrollShadowState();
+        }
+    };
+
     setScrollShadowState = () => {
         if (!this.scrollRef.current) {
             return;
@@ -118,6 +123,8 @@ class CollapsibleSidebarNav extends React.Component<Props, State> {
     // sets onScrollHandler to true for a maximum of once every 50ms.
     throtteldOnScrollHandler = throttle(this.onScrollHandler, 50);
 
+    throttleOnUpdateHandler = throttle(this.onUpdateHandler, 50);
+
     render() {
         const { className, children } = this.props;
         const { isScrolling, scrollShadowClassName } = this.state;
@@ -132,6 +139,7 @@ class CollapsibleSidebarNav extends React.Component<Props, State> {
                     ref={this.scrollRef}
                     className={scrollShadowClassName}
                     onScroll={this.throtteldOnScrollHandler}
+                    onUpdate={this.throttleOnUpdateHandler}
                     renderer={props => {
                         const { elementRef, ...restProps } = props;
                         return <StyledScrollContainer {...restProps} ref={elementRef} />;
