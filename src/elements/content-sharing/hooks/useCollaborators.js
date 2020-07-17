@@ -36,6 +36,8 @@ function useCollaborators(
     const [collaboratorsList, setCollaboratorsList] = React.useState<collaboratorsListType | null>(null);
 
     React.useEffect(() => {
+        if (collaboratorsList) return;
+
         const handleGetCollaborationsSuccess = (response: Collaborations) => {
             const updatedCollaboratorsList = convertCollabsResponse(response, ownerEmail, isCurrentUserOwner);
             setCollaboratorsList(updatedCollaboratorsList);
@@ -51,20 +53,14 @@ function useCollaborators(
             }
         };
 
-        if (!collaboratorsList) {
-            let collabAPIInstance;
-            if (itemType === TYPE_FILE) {
-                collabAPIInstance = api.getFileCollaborationsAPI(false);
-            } else if (itemType === TYPE_FOLDER) {
-                collabAPIInstance = api.getFolderCollaborationsAPI(false);
-            }
-            if (collabAPIInstance) {
-                collabAPIInstance.getCollaborations(
-                    itemID,
-                    handleGetCollaborationsSuccess,
-                    handleGetCollaborationsError,
-                );
-            }
+        let collabAPIInstance;
+        if (itemType === TYPE_FILE) {
+            collabAPIInstance = api.getFileCollaborationsAPI(false);
+        } else if (itemType === TYPE_FOLDER) {
+            collabAPIInstance = api.getFolderCollaborationsAPI(false);
+        }
+        if (collabAPIInstance) {
+            collabAPIInstance.getCollaborations(itemID, handleGetCollaborationsSuccess, handleGetCollaborationsError);
         }
     }, [api, collaboratorsList, handleError, handleSuccess, isCurrentUserOwner, itemID, itemType, ownerEmail]);
 

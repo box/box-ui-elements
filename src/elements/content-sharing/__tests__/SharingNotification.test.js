@@ -8,8 +8,8 @@ import {
     MOCK_COLLABS_API_RESPONSE,
     MOCK_COLLABS_CONVERTED_RESPONSE,
     MOCK_ITEM_ID,
-    MOCK_OWNER_ID,
     MOCK_OWNER_EMAIL,
+    MOCK_OWNER_ID,
     MOCK_ITEM_PERMISSIONS,
 } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
 import Notification from '../../../components/notification/Notification';
