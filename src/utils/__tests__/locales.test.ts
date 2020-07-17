@@ -37,6 +37,7 @@ describe('util/locales in English', () => {
             '한국어',
         ]);
     });
+
     test('should return display names with ids in order', () => {
         expect(getDisplayNamesWithIds()).toEqual([
             { id: 4, name: 'English (US)' },
@@ -66,6 +67,7 @@ describe('util/locales in English', () => {
             { id: 55, name: '한국어' },
         ]);
     });
+
     test('should return display names with ids in order', () => {
         expect(getLocalizedNames()).toEqual([
             'Australian English',
@@ -95,6 +97,7 @@ describe('util/locales in English', () => {
             'Turkish',
         ]);
     });
+
     test('should return display names with ids in order', () => {
         expect(getLocalizedNamesWithIds()).toEqual([
             { id: 67, name: 'Australian English' },
@@ -156,6 +159,7 @@ describe('util/locales in German', () => {
             'Türkisch',
         ]);
     });
+
     test('should return display names with ids in order', () => {
         expect(getLocalizedNamesWithIds(germanLanguagesData)).toEqual([
             {
@@ -292,6 +296,7 @@ describe('util/locales in Japanese', () => {
             '韓国語',
         ]);
     });
+
     test('should return display names with ids in order', () => {
         expect(getLocalizedNamesWithIds(japaneseLanguagesData)).toEqual([
             {
@@ -397,6 +402,7 @@ describe('util/locales in Japanese', () => {
         ]);
     });
 });
+
 describe('util/locales in Russian', () => {
     test('should return display names with ids in order', () => {
         expect(getLocalizedNames(russianLanguagesData)).toEqual([
@@ -427,6 +433,7 @@ describe('util/locales in Russian', () => {
             'японский',
         ]);
     });
+
     test('should return display names with ids in order', () => {
         expect(getLocalizedNamesWithIds(russianLanguagesData)).toEqual([
             {
