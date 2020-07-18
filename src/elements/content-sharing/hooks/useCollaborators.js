@@ -5,7 +5,6 @@ import noop from 'lodash/noop';
 import API from '../../../api';
 import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import type { Collaborations, ItemType } from '../../../common/types/core';
-import type { collaboratorsListType } from '../../../features/unified-share-modal/flowTypes';
 
 /**
  * Get the item's collaborators
@@ -20,7 +19,7 @@ import type { collaboratorsListType } from '../../../features/unified-share-moda
  * @param {ItemType} itemType
  * @param {Function} [handleSuccess]
  * @param {Function} [handleError]
- * @returns {collaboratorsListType | null}
+ * @returns {Collaborations | null}
  */
 function useCollaborators(
     api: API,
@@ -28,18 +27,19 @@ function useCollaborators(
     itemType: ItemType,
     handleSuccess: Function = noop,
     handleError: Function = noop,
-): collaboratorsListType | null {
-    const [collaboratorsList, setCollaboratorsList] = React.useState<collaboratorsListType | null>(null);
+): Collaborations | null {
+    const [collaboratorsList, setCollaboratorsList] = React.useState<Collaborations | null>(null);
 
     React.useEffect(() => {
         if (collaboratorsList) return;
 
         const handleGetCollaborationsSuccess = (response: Collaborations) => {
-            setCollaboratorsList(handleSuccess(response));
+            setCollaboratorsList(response);
+            handleSuccess(response);
         };
 
         const handleGetCollaborationsError = () => {
-            setCollaboratorsList({ collaborators: [] }); // default to an empty collaborators list for the USM
+            setCollaboratorsList({ entries: [], next_marker: null });
             handleError();
         };
 

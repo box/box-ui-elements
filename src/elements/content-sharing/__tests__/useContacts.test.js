@@ -10,7 +10,7 @@ import {
     MOCK_ITEM_ID,
 } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
 
-const handleSuccess = jest.fn();
+const handleSuccess = jest.fn().mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
 const handleError = jest.fn();
 
 function FakeComponent({ api }: { api: API }) {
@@ -40,7 +40,7 @@ describe('elements/content-sharing/hooks/useContacts', () => {
     describe('with successful API calls', () => {
         beforeAll(() => {
             getUsersInEnterprise = jest.fn().mockImplementation((itemID, getUsersInEnterpriseSuccess) => {
-                return getUsersInEnterpriseSuccess();
+                return getUsersInEnterpriseSuccess(MOCK_CONTACTS_CONVERTED_RESPONSE);
             });
             mockAPI = {
                 getUsersAPI: jest.fn().mockReturnValue({
@@ -60,11 +60,7 @@ describe('elements/content-sharing/hooks/useContacts', () => {
             const btn = fakeComponent.find('button');
             expect(btn.prop('onClick')).toBeDefined();
 
-            let contacts;
-            act(() => {
-                contacts = btn.invoke('onClick')(MOCK_FILTER);
-            });
-            fakeComponent.update();
+            const contacts = btn.invoke('onClick')(MOCK_FILTER);
 
             expect(getUsersInEnterprise).toHaveBeenCalledWith(
                 MOCK_ITEM_ID,
@@ -73,7 +69,7 @@ describe('elements/content-sharing/hooks/useContacts', () => {
                 MOCK_FILTER,
             );
             expect(handleSuccess).toHaveBeenCalled();
-            expect(contacts).resolves.toEqual(MOCK_CONTACTS_CONVERTED_RESPONSE);
+            return expect(contacts).resolves.toEqual(MOCK_CONTACTS_CONVERTED_RESPONSE);
         });
     });
 
@@ -102,12 +98,7 @@ describe('elements/content-sharing/hooks/useContacts', () => {
             const btn = fakeComponent.find('button');
             expect(btn.prop('onClick')).toBeDefined();
 
-            let contacts;
-            act(() => {
-                contacts = btn.invoke('onClick')(MOCK_FILTER);
-            });
-            fakeComponent.update();
-
+            const contacts = btn.invoke('onClick')(MOCK_FILTER);
             expect(getUsersInEnterprise).toHaveBeenCalledWith(
                 MOCK_ITEM_ID,
                 expect.anything(Function),

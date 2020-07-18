@@ -18,7 +18,7 @@ import { ACCESS_COLLAB, ACCESS_NONE, STATUS_ERROR, TYPE_FILE, TYPE_FOLDER } from
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from './constants';
 import contentSharingMessages from './messages';
 import type { RequestOptions } from '../../common/types/api';
-import type { BoxItemPermission, ItemType, NotificationType } from '../../common/types/core';
+import type { BoxItemPermission, Collaborations, ItemType, NotificationType } from '../../common/types/core';
 import type { collaboratorsListType, item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
 import type {
     ContentSharingItemAPIResponse,
@@ -65,6 +65,7 @@ function SharingNotification({
     const [notifications, setNotifications] = React.useState<{ [string]: typeof Notification }>({});
     const [notificationID, setNotificationID] = React.useState<number>(0);
     const [collabsExist, setCollabsExist] = React.useState<boolean>(false);
+    const [getContactsExists, setGetContactsExists] = React.useState<boolean>(false);
 
     // Close a notification
     const handleNotificationClose = React.useCallback(
@@ -198,14 +199,15 @@ function SharingNotification({
     ]);
 
     // Set the collaborators list
-    const collaboratorsList: collaboratorsListType | null = useCollaborators(
-        api,
-        itemID,
-        itemType,
-        data => convertCollabsResponse(data, ownerEmail, currentUserID === ownerID),
-        () => handleError(contentSharingMessages.collaboratorsLoadingError),
+    const collaboratorsListFromAPI: Collaborations | null = useCollaborators(api, itemID, itemType, undefined, () =>
+        handleError(contentSharingMessages.collaboratorsLoadingError),
     );
-    if (collaboratorsList && !collabsExist) {
+    if (collaboratorsListFromAPI && !collabsExist) {
+        const collaboratorsList = convertCollabsResponse(
+            collaboratorsListFromAPI,
+            ownerEmail,
+            currentUserID === ownerID,
+        );
         setCollaboratorsList(collaboratorsList);
         setCollabsExist(true);
     }
@@ -217,7 +219,10 @@ function SharingNotification({
         data => convertContactsResponse(data, currentUserID),
         () => handleError(contentSharingMessages.getContactsError),
     );
-    setGetContacts(() => getContactsFn);
+    if (getContactsFn && !getContactsExists) {
+        setGetContacts(() => getContactsFn);
+        setGetContactsExists(true);
+    }
 
     return (
         <NotificationsWrapper>

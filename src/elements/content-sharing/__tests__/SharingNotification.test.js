@@ -70,10 +70,6 @@ describe('elements/content-sharing/SharingNotification', () => {
     let apiInstance;
     let getCollaborations;
 
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
-
     describe('component rendering', () => {
         beforeAll(() => {
             getCollaborations = jest.fn();
@@ -139,6 +135,7 @@ describe('elements/content-sharing/SharingNotification', () => {
                 });
             });
             apiInstance = createAPIInstance(getCollaborations);
+            convertCollabsResponse.mockReturnValue({ collaborators: [] });
         });
 
         test.each`
@@ -153,7 +150,6 @@ describe('elements/content-sharing/SharingNotification', () => {
             });
             wrapper.update();
             expect(getCollaborations).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything());
-            expect(convertCollabsResponse).not.toHaveBeenCalled();
             expect(setCollaboratorsListStub).toHaveBeenCalledWith({
                 collaborators: [],
             });

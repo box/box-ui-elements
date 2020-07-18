@@ -35,7 +35,7 @@ describe('elements/content-sharing/hooks/useCollaborators', () => {
     describe('with successful API calls', () => {
         beforeAll(() => {
             getCollaborations = jest.fn().mockImplementation((itemID, getCollabsSuccess) => {
-                getCollabsSuccess();
+                getCollabsSuccess(MOCK_COLLABS_CONVERTED_RESPONSE);
             });
             mockAPI = {
                 getFileCollaborationsAPI: jest.fn().mockReturnValue({
@@ -92,7 +92,7 @@ describe('elements/content-sharing/hooks/useCollaborators', () => {
                 expect.anything(Function),
             );
             expect(handleError).toHaveBeenCalled();
-            expect(fakeComponent.find('div').text()).toBe(JSON.stringify({ collaborators: [] }));
+            expect(fakeComponent.find('div').text()).toBe(JSON.stringify({ entries: [], next_marker: null }));
         });
     });
 });
