@@ -82,7 +82,7 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
         const classNameTarget = wrapper.find('CollapsibleSidebarMenuItem__StyledMenuItem');
         const restTarget = wrapper.find('a');
         expect(restTarget.prop('onMouseOver')).toBe(mouseEvent);
-        expect(classNameTarget.prop('className')).toBe('foo');
+        expect(classNameTarget.prop('className')).toBe('bdl-CollapsibleSidebar-menuItem foo');
     });
 
     test('should not show overflow action container', () => {
