@@ -3,9 +3,8 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import API from '../../../api';
-import type { ElementsErrorCallback } from '../../../common/types/api';
 import type { UserCollection } from '../../../common/types/core';
-import type { GetContactsFnType } from '../types';
+import type { ContentSharingHooksOptions, GetContactsFnType } from '../types';
 import type { contactType } from '../../../features/unified-share-modal/flowTypes';
 
 /**
@@ -13,27 +12,23 @@ import type { contactType } from '../../../features/unified-share-modal/flowType
  *
  * @param {API} api
  * @param {string} itemID
- * @param {Function} handleSuccess
- * @param {ElementsErrorCallback} handleError
+ * @param {ContentSharingHooksOptions} options
  * @returns {GetContactsFnType | null}
  */
-function useContacts(
-    api: API,
-    itemID: string,
-    handleSuccess: Function = noop,
-    handleError: ElementsErrorCallback,
-): GetContactsFnType | null {
+function useContacts(api: API, itemID: string, options: ContentSharingHooksOptions): GetContactsFnType | null {
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
+    const { handleSuccess = noop, handleError = noop, transformResponse = noop } = options;
 
     React.useEffect(() => {
         if (getContacts) return;
 
         const updatedGetContactsFn: GetContactsFnType = () => (filterTerm: string) => {
-            return new Promise((resolve: (result: Array<contactType>) => void) => {
+            return new Promise((resolve: (result?: Array<contactType>) => void) => {
                 api.getUsersAPI(false).getUsersInEnterprise(
                     itemID,
                     (response: UserCollection) => {
-                        return resolve(handleSuccess(response));
+                        handleSuccess(response);
+                        return resolve(transformResponse(response));
                     },
                     handleError,
                     filterTerm,
@@ -41,7 +36,7 @@ function useContacts(
             });
         };
         setGetContacts(updatedGetContactsFn);
-    }, [api, getContacts, handleError, handleSuccess, itemID]);
+    }, [api, getContacts, handleError, handleSuccess, itemID, transformResponse]);
 
     return getContacts;
 }

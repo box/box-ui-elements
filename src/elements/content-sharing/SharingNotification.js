@@ -209,12 +209,10 @@ function SharingNotification({
     }
 
     // Set the getContacts function
-    const getContactsFn: GetContactsFnType | null = useContacts(
-        api,
-        itemID,
-        data => convertContactsResponse(data, currentUserID),
-        () => handleError(contentSharingMessages.getContactsError),
-    );
+    const getContactsFn: GetContactsFnType | null = useContacts(api, itemID, {
+        handleError: () => handleError(contentSharingMessages.getContactsError),
+        transformResponse: data => convertContactsResponse(data, currentUserID),
+    });
     if (getContactsFn && !getContacts) {
         setGetContacts(() => getContactsFn);
     }

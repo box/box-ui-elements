@@ -10,13 +10,14 @@ import {
     MOCK_ITEM_ID,
 } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
 
-const handleSuccess = jest.fn().mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
+const handleSuccess = jest.fn();
 const handleError = jest.fn();
+const transformResponse = jest.fn().mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
 
 function FakeComponent({ api }: { api: API }) {
     const [getContacts, setGetContacts] = React.useState(null);
 
-    const updatedGetContactsFn = useContacts(api, MOCK_ITEM_ID, handleSuccess, handleError);
+    const updatedGetContactsFn = useContacts(api, MOCK_ITEM_ID, { handleSuccess, handleError, transformResponse });
 
     if (updatedGetContactsFn && !getContacts) {
         setGetContacts(() => updatedGetContactsFn);
