@@ -347,6 +347,24 @@ class ContentUploader extends Component<Props, State> {
     };
 
     /**
+     * Add dropped items to the upload queue
+     *
+     * @private
+     * @param {DataTransfer} droppedItems
+     * @param {Function} itemUpdateCallback
+     * @returns {Promise<any>}
+     */
+    addDroppedItemsToUploadQueue = (droppedItems: DataTransfer, itemUpdateCallback: Function): void => {
+        if (droppedItems.items) {
+            this.addDataTransferItemsToUploadQueue(droppedItems.items, itemUpdateCallback);
+        } else {
+            Array.from(droppedItems.files).forEach(file => {
+                this.addFilesToUploadQueue([file], itemUpdateCallback);
+            });
+        }
+    };
+
+    /**
      * Add dataTransferItems to the upload queue
      *
      * @private
@@ -1189,7 +1207,7 @@ class ContentUploader extends Component<Props, State> {
                 ) : (
                     <div ref={measureRef} className={styleClassName} id={this.id}>
                         <DroppableContent
-                            addDataTransferItemsToUploadQueue={this.addDataTransferItemsToUploadQueue}
+                            addDataTransferItemsToUploadQueue={this.addDroppedItemsToUploadQueue}
                             addFiles={this.addFilesToUploadQueue}
                             allowedTypes={['Files']}
                             isFolderUploadEnabled={isFolderUploadEnabled}
