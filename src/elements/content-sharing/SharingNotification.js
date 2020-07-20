@@ -68,8 +68,6 @@ function SharingNotification({
 }: SharingNotificationProps) {
     const [notifications, setNotifications] = React.useState<{ [string]: typeof Notification }>({});
     const [notificationID, setNotificationID] = React.useState<number>(0);
-    // const [collabsExist, setCollabsExist] = React.useState<boolean>(false);
-    // const [getContactsExists, setGetContactsExists] = React.useState<boolean>(false);
 
     // Close a notification
     const handleNotificationClose = React.useCallback(
