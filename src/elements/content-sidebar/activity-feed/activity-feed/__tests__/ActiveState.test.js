@@ -122,14 +122,6 @@ const getShallowWrapper = (params = {}) =>
             {...params}
         />,
     );
-const getWrapper = (params = {}) =>
-    mount(
-        <ActiveState
-            items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
-            currentUser={currentUser}
-            {...params}
-        />,
-    );
 
 describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () => {
     test('should render empty state', () => {
@@ -144,7 +136,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
     });
 
     test('should render card for item type', () => {
-        const wrapper = getWrapper();
+        const wrapper = getShallowWrapper().dive();
         expect(wrapper.find('[data-testid="comment"]')).toHaveLength(1);
         expect(wrapper.find('[data-testid="version"]')).toHaveLength(1);
         expect(wrapper.find('[data-testid="task"]')).toHaveLength(1);

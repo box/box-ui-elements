@@ -63,10 +63,12 @@ describe('features/content-explorer/content-explorer-modal/ContentExplorerModal'
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should pass onSelectedClick to ContentExplorer', () => {
+        test('should pass onSelectedClick and onSelectItem to ContentExplorer', () => {
             const onSelectedClick = () => {};
-            const wrapper = renderComponent({ onSelectedClick });
+            const onSelectItem = () => {};
+            const wrapper = renderComponent({ onSelectedClick, onSelectItem });
             expect(wrapper.find('ContentExplorer').prop('onSelectedClick')).toEqual(onSelectedClick);
+            expect(wrapper.find('ContentExplorer').prop('onSelectItem')).toEqual(onSelectItem);
         });
     });
 });

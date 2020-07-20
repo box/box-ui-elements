@@ -17,10 +17,10 @@ exports[`components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIte
     theme="default"
   >
     <CollapsibleSidebarMenuItem__StyledMenuItem
-      className="foo"
+      className="bdl-CollapsibleSidebar-menuItem foo"
     >
       <div
-        className="CollapsibleSidebarMenuItem__StyledMenuItem-sc-1fmdq8m-0 cQLRdi foo"
+        className="CollapsibleSidebarMenuItem__StyledMenuItem-sc-1fmdq8m-0 cQLRdi bdl-CollapsibleSidebar-menuItem foo"
       >
         <CollapsibleSidebarMenuItem__StyledLink
           className="bdl-CollapsibleSidebar-menuItemLink show-overflowAction"

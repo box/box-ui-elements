@@ -14,6 +14,7 @@ type Props = {
     description?: string,
     isOpen?: boolean,
     onRequestClose?: Function,
+    onSelectItem?: (item: Object, index: number) => void,
     onSelectedClick?: () => void,
     title?: string,
 };
@@ -26,6 +27,7 @@ const ContentExplorerModal = ({
     isOpen = false,
     onRequestClose,
     onSelectedClick,
+    onSelectItem,
     ...rest
 }: Props) => (
     <Modal
@@ -39,6 +41,7 @@ const ContentExplorerModal = ({
             customInput={customInput}
             onCancelButtonClick={onRequestClose}
             onSelectedClick={onSelectedClick}
+            onSelectItem={onSelectItem}
             listWidth={560}
             listHeight={285}
             {...rest}
