@@ -17,7 +17,7 @@ const handleError = jest.fn();
 function FakeComponent({ api, itemType }: { api: API, itemType: string }) {
     const [collaboratorsList, setCollaboratorsList] = React.useState(null);
 
-    const collabsResponse = useCollaborators(api, MOCK_ITEM_ID, itemType, handleSuccess, handleError);
+    const collabsResponse = useCollaborators(api, MOCK_ITEM_ID, itemType, { handleSuccess, handleError });
 
     if (collabsResponse && !collaboratorsList) {
         setCollaboratorsList(JSON.stringify(collabsResponse));

@@ -5,6 +5,7 @@ import noop from 'lodash/noop';
 import API from '../../../api';
 import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import type { Collaborations, ItemType } from '../../../common/types/core';
+import type { ContentSharingHooksOptions } from '../types';
 
 /**
  * Get the item's collaborators
@@ -17,18 +18,17 @@ import type { Collaborations, ItemType } from '../../../common/types/core';
  * @param {API} api
  * @param {string} itemID
  * @param {ItemType} itemType
- * @param {Function} [handleSuccess]
- * @param {Function} [handleError]
+ * @param {ContentSharingHooksOptions} options
  * @returns {Collaborations | null}
  */
 function useCollaborators(
     api: API,
     itemID: string,
     itemType: ItemType,
-    handleSuccess: Function = noop,
-    handleError: Function = noop,
+    options: ContentSharingHooksOptions,
 ): Collaborations | null {
     const [collaboratorsList, setCollaboratorsList] = React.useState<Collaborations | null>(null);
+    const { handleSuccess = noop, handleError = noop } = options;
 
     React.useEffect(() => {
         if (collaboratorsList) return;

@@ -69,3 +69,8 @@ export type ContentSharingItemAPIResponse = {
 export type SharedLinkUpdateFnType = () => (level: string) => Promise<void>;
 
 export type GetContactsFnType = () => (filterTerm: string) => Promise<Array<contactType>> | null;
+
+export type ContentSharingHooksOptions = {
+    handleError?: Function,
+    handleSuccess?: Function,
+};

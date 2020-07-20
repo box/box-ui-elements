@@ -29,7 +29,9 @@ import type {
 
 type SharingNotificationProps = {
     api: API,
+    collaboratorsList: collaboratorsListType | null,
     currentUserID: string | null,
+    getContacts: GetContactsFnType | null,
     itemID: string,
     itemType: ItemType,
     ownerEmail: ?string,
@@ -47,7 +49,9 @@ type SharingNotificationProps = {
 
 function SharingNotification({
     api,
+    collaboratorsList,
     currentUserID,
+    getContacts,
     itemID,
     itemType,
     ownerEmail,
@@ -64,8 +68,8 @@ function SharingNotification({
 }: SharingNotificationProps) {
     const [notifications, setNotifications] = React.useState<{ [string]: typeof Notification }>({});
     const [notificationID, setNotificationID] = React.useState<number>(0);
-    const [collabsExist, setCollabsExist] = React.useState<boolean>(false);
-    const [getContactsExists, setGetContactsExists] = React.useState<boolean>(false);
+    // const [collabsExist, setCollabsExist] = React.useState<boolean>(false);
+    // const [getContactsExists, setGetContactsExists] = React.useState<boolean>(false);
 
     // Close a notification
     const handleNotificationClose = React.useCallback(
@@ -199,17 +203,11 @@ function SharingNotification({
     ]);
 
     // Set the collaborators list
-    const collaboratorsListFromAPI: Collaborations | null = useCollaborators(api, itemID, itemType, undefined, () =>
-        handleError(contentSharingMessages.collaboratorsLoadingError),
-    );
-    if (collaboratorsListFromAPI && !collabsExist) {
-        const collaboratorsList = convertCollabsResponse(
-            collaboratorsListFromAPI,
-            ownerEmail,
-            currentUserID === ownerID,
-        );
-        setCollaboratorsList(collaboratorsList);
-        setCollabsExist(true);
+    const collaboratorsListFromAPI: Collaborations | null = useCollaborators(api, itemID, itemType, {
+        handleError: () => handleError(contentSharingMessages.collaboratorsLoadingError),
+    });
+    if (collaboratorsListFromAPI && !collaboratorsList) {
+        setCollaboratorsList(convertCollabsResponse(collaboratorsListFromAPI, ownerEmail, currentUserID === ownerID));
     }
 
     // Set the getContacts function
@@ -219,9 +217,8 @@ function SharingNotification({
         data => convertContactsResponse(data, currentUserID),
         () => handleError(contentSharingMessages.getContactsError),
     );
-    if (getContactsFn && !getContactsExists) {
+    if (getContactsFn && !getContacts) {
         setGetContacts(() => getContactsFn);
-        setGetContactsExists(true);
     }
 
     return (
