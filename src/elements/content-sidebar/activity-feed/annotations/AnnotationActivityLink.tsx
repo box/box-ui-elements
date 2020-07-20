@@ -20,6 +20,7 @@ const AnnotationActivityLink = ({
     const handleClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
+        event.currentTarget.focus(); // Buttons do not receive focus in Firefox and Safari on MacOS
 
         onClick(id);
     };
@@ -33,9 +34,6 @@ const AnnotationActivityLink = ({
         // detecting mouse events on the document outside of annotation targets to determine when to
         // deselect annotations. This link also may represent that annotation target in the sidebar.
         event.nativeEvent.stopImmediatePropagation();
-
-        // Stopping propagation on the mousedown event prevents focus from reaching the button, so forward it.
-        event.currentTarget.focus();
     };
 
     return (

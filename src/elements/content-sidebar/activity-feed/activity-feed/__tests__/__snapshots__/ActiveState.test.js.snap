@@ -43,9 +43,10 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
 <ul
   className="bcs-activity-feed-active-state"
 >
-  <li
+  <ForwardRef(ActivityItem)
     className="bcs-activity-feed-annotation-activity"
     data-testid="annotation-activity"
+    isFocused={false}
     key="annotationanno_123"
   >
     <AnnotationActivity
@@ -81,10 +82,11 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
         }
       }
     />
-  </li>
-  <li
+  </ForwardRef(ActivityItem)>
+  <ForwardRef(ActivityItem)
     className="bcs-activity-feed-comment"
     data-testid="comment"
+    isFocused={false}
     key="commentc_123"
   >
     <Comment
@@ -113,8 +115,8 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       tagged_message="test @[123:Jeezy] @[10:Kanye West]"
       type="comment"
     />
-  </li>
-  <li
+  </ForwardRef(ActivityItem)>
+  <ForwardRef(ActivityItem)
     className="bcs-version-item"
     data-testid="version"
     key="file_versionf_123"
@@ -132,10 +134,11 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       trashed_at="2018-07-03T14:43:52-07:00"
       type="file_version"
     />
-  </li>
-  <li
+  </ForwardRef(ActivityItem)>
+  <ForwardRef(ActivityItem)
     className="bcs-activity-feed-task-new"
     data-testid="task"
+    isFocused={false}
     key="taskt_345"
   >
     <ForwardRef
@@ -204,8 +207,8 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       task_type="GENERAL"
       type="task"
     />
-  </li>
-  <li
+  </ForwardRef(ActivityItem)>
+  <ForwardRef(ActivityItem)
     className="bcs-activity-feed-app-activity"
     data-testid="app-activity"
     key="app_activityapp_activity_12344556"
@@ -244,6 +247,6 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       rendered_text="this is text and a <a>link</a>"
       type="app_activity"
     />
-  </li>
+  </ForwardRef(ActivityItem)>
 </ul>
 `;

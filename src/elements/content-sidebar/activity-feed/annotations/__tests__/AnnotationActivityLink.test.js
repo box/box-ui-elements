@@ -23,6 +23,9 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLi
         const wrapper = getWrapper({ onClick: onClickFn });
         const onClick = wrapper.find('PlainButton').prop('onClick');
         const event = {
+            currentTarget: {
+                focus: jest.fn(),
+            },
             preventDefault: jest.fn(),
             stopPropagation: jest.fn(),
         };
@@ -30,6 +33,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLi
         onClick(event);
 
         expect(onClickFn).toHaveBeenCalledWith('123');
+        expect(event.currentTarget.focus).toHaveBeenCalled();
         expect(event.preventDefault).toHaveBeenCalled();
         expect(event.stopPropagation).toHaveBeenCalled();
     });
@@ -48,12 +52,15 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLi
 
         onMouseDown(event);
 
-        expect(event.currentTarget.focus).toHaveBeenCalled();
         expect(event.nativeEvent.stopImmediatePropagation).toHaveBeenCalled();
     });
 
-    test('should not stop propagation of the native mousedown event if isDisabled is true', () => {
-        const wrapper = getWrapper({ isDisabled: true });
+    test.each`
+        isDisabled | expected
+        ${false}   | ${1}
+        ${true}    | ${0}
+    `('should handle the mousedown event if isDisabled is $isDisabled', ({ expected, isDisabled }) => {
+        const wrapper = getWrapper({ isDisabled });
         const onMouseDown = wrapper.find('PlainButton').prop('onMouseDown');
         const event = {
             currentTarget: {
@@ -66,7 +73,6 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLi
 
         onMouseDown(event);
 
-        expect(event.currentTarget.focus).not.toHaveBeenCalled();
-        expect(event.nativeEvent.stopImmediatePropagation).not.toHaveBeenCalled();
+        expect(event.nativeEvent.stopImmediatePropagation).toHaveBeenCalledTimes(expected);
     });
 });
