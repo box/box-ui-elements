@@ -1,23 +1,28 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
-import type { MessageDescriptor } from 'react-intl';
+import noop from 'lodash/noop';
 import API from '../../../api';
-import {
-    convertItemResponse,
-    convertSharedLinkPermissions,
-    convertSharedLinkSettings,
-    USM_TO_API_ACCESS_LEVEL_MAP,
-} from '../../../features/unified-share-modal/utils/convertData';
-import { ACCESS_COLLAB, ACCESS_NONE, STATUS_ERROR, TYPE_FILE, TYPE_FOLDER } from '../../../constants';
+import { ACCESS_COLLAB, ACCESS_NONE, TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from '../constants';
-import contentSharingMessages from '../messages';
 import type { RequestOptions } from '../../../common/types/api';
-import type { BoxItemPermission, Collaborations, ItemType, NotificationType } from '../../../common/types/core';
+import type { BoxItemPermission, ItemType } from '../../../common/types/core';
 import type { item as itemFlowType } from '../../../features/unified-share-modal/flowTypes';
 import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType, SharedLinkUpdateFnType } from '../types';
 
-// Generate shared link CRUD functions for the item
+/**
+ *
+ * @param {*} api
+ * @param {*} itemID
+ * @param {*} itemType
+ * @param {*} sharedLink
+ * @param {*} permissions
+ * @param {*} setItem
+ * @param {any}
+ * @param {*} setSharedLink
+ * @param {any}
+ * @param {*} [responseHandlers]
+ * @param {*} [transformationHandlers]
+ */
 function useSharedLink(
     api: API,
     itemID: string,
@@ -26,9 +31,9 @@ function useSharedLink(
     permissions: ?BoxItemPermission,
     setItem: ((item: itemFlowType | null) => itemFlowType) => void,
     setSharedLink: ((sharedLink: ContentSharingSharedLinkType | null) => ContentSharingSharedLinkType) => void,
-    options,
+    responseHandlers = {},
+    transformationHandlers = {},
 ) {
-    const { handleError, handleSuccess } = options;
     const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateFnType>(null);
     const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateFnType>(null);
     const [changeSharedLinkAccessLevel, setChangeSharedLinkAccessLevel] = React.useState<null | SharedLinkUpdateFnType>(
@@ -40,13 +45,20 @@ function useSharedLink(
     ] = React.useState<null | SharedLinkUpdateFnType>(null);
     const [onSubmitSettings, setOnSubmitSettings] = React.useState<null | Function>(null);
     const [generatedFunctions, setGeneratedFunctions] = React.useState<boolean>(false);
+    const { handleError = noop, handleSuccess = noop } = responseHandlers;
+    const {
+        transformAccess = arg => arg,
+        transformItem = arg => arg,
+        transformPermissions = arg => arg,
+        transformSettings = arg => arg,
+    } = transformationHandlers;
 
     React.useEffect(() => {
         if (!permissions || generatedFunctions) return;
 
         // Handle successful PUT requests to /files or /folders
         const handleUpdateItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
-            const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
+            const { item: updatedItem, sharedLink: updatedSharedLink } = transformItem(itemData);
             setItem((prevItem: itemFlowType | null) => ({ ...prevItem, ...updatedItem }));
             setSharedLink((prevSharedLink: ContentSharingSharedLinkType | null) => ({
                 ...prevSharedLink,
@@ -56,9 +68,10 @@ function useSharedLink(
         };
 
         const handleRemoveSharedLinkSuccess = (itemData: ContentSharingItemAPIResponse) => {
-            const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
+            const { item: updatedItem, sharedLink: updatedSharedLink } = transformItem(itemData);
             setItem((prevItem: itemFlowType | null) => ({ ...prevItem, ...updatedItem }));
             setSharedLink(() => updatedSharedLink);
+            handleSuccess();
         };
 
         const itemData = {
@@ -89,7 +102,7 @@ function useSharedLink(
         setOnRemoveLink(updatedOnRemoveLinkFn);
 
         const updatedChangeSharedLinkAccessLevelFn: SharedLinkUpdateFnType = () => (newAccessLevel: string) =>
-            createSharedLinkAPIConnection(USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel]);
+            createSharedLinkAPIConnection(transformAccess(newAccessLevel));
         setChangeSharedLinkAccessLevel(updatedChangeSharedLinkAccessLevelFn);
 
         const updatedChangeSharedLinkPermissionLevelFn: SharedLinkUpdateFnType = () => (
@@ -98,7 +111,7 @@ function useSharedLink(
             return itemAPIInstance.updateSharedLink(
                 itemData,
                 {
-                    permissions: convertSharedLinkPermissions(newSharedLinkPermissionLevel),
+                    permissions: transformPermissions(newSharedLinkPermissionLevel),
                 },
                 handleUpdateItemSuccess,
                 handleError,
@@ -108,10 +121,9 @@ function useSharedLink(
         setChangeSharedLinkPermissionLevel(updatedChangeSharedLinkPermissionLevelFn);
 
         const updatedOnSubmitSettingsFn = () => newSettings => {
-            const { serverURL } = sharedLink;
             return itemAPIInstance.updateSharedLink(
                 itemData,
-                convertSharedLinkSettings(newSettings, serverURL),
+                transformSettings(newSettings),
                 handleUpdateItemSuccess,
                 handleError,
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
@@ -131,6 +143,10 @@ function useSharedLink(
         setItem,
         setSharedLink,
         sharedLink,
+        transformAccess,
+        transformItem,
+        transformPermissions,
+        transformSettings,
     ]);
 
     return {

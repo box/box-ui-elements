@@ -262,6 +262,7 @@ type SharedLink = {
     effective_access?: Access,
     effective_permission?: typeof PERMISSION_CAN_DOWNLOAD | typeof PERMISSION_CAN_PREVIEW,
     is_password_enabled?: boolean,
+    password?: string,
     permissions?: BoxItemPermission,
     preview_count?: number,
     unshared_at?: string | null,

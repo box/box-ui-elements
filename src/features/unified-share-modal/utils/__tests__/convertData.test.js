@@ -5,6 +5,7 @@ import {
     convertItemResponse,
     convertUserResponse,
     convertSharedLinkPermissions,
+    convertSharedLinkSettings,
 } from '../convertData';
 import { TYPE_FILE, TYPE_FOLDER, PERMISSION_CAN_DOWNLOAD, PERMISSION_CAN_PREVIEW } from '../../../../constants';
 import { ALLOWED_ACCESS_LEVELS, ANYONE_IN_COMPANY, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from '../../constants';
@@ -16,7 +17,19 @@ import {
     MOCK_OWNER,
     MOCK_OWNER_ID,
     MOCK_OWNER_EMAIL,
+    MOCK_PASSWORD,
+    MOCK_SERVER_URL,
+    MOCK_SETTINGS_WITH_ALL_FEATURES,
+    MOCK_SETTINGS_DOWNLOAD_PERMISSIONS,
+    MOCK_SETTINGS_PREVIEW_PERMISSIONS,
+    MOCK_SETTINGS_WITHOUT_DOWNLOAD,
+    MOCK_SETTINGS_WITHOUT_EXPIRATION,
+    MOCK_SETTINGS_WITHOUT_PASSWORD,
+    MOCK_SETTINGS_WITHOUT_VANITY_URL,
+    MOCK_TIMESTAMP,
+    MOCK_TIMESTAMP_ISO_STRING,
     MOCK_USER_IDS_CONVERTED,
+    MOCK_VANITY_URL,
 } from '../__mocks__/USMMocks';
 
 jest.mock('../../../../utils/file', () => ({
@@ -46,7 +59,7 @@ describe('convertItemResponse()', () => {
             can_download: true,
         },
         preview_count: 0,
-        unshared_at: '2020-07-31T06:59:00-07:00',
+        unshared_at: MOCK_TIMESTAMP_ISO_STRING,
         url: ITEM_SHARED_LINK_URL,
         vanity_name: null,
         vanity_url: null,
@@ -202,11 +215,7 @@ describe('convertItemResponse()', () => {
 
             const { download_url, effective_permission, is_password_enabled, url, vanity_name } = Object(sharedLink);
 
-            const {
-                download_url: isDirectLinkAvailable,
-                password,
-                vanity_name: isVanityNameAvailable,
-            } = sharedLinkFeatures;
+            const { download_url: isDirectLinkAvailable, password } = sharedLinkFeatures;
 
             const convertedResponse = {
                 item: {
@@ -233,10 +242,10 @@ describe('convertItemResponse()', () => {
                           canChangeDownload: can_set_share_access && can_download,
                           canChangeExpiration: can_set_share_access,
                           canChangePassword: can_set_share_access && password,
-                          canChangeVanityName: can_set_share_access && isVanityNameAvailable,
+                          canChangeVanityName: false,
                           canInvite: can_invite_collaborator,
                           directLink: download_url,
-                          expirationTimestamp: 1596203940000,
+                          expirationTimestamp: MOCK_TIMESTAMP,
                           isDirectLinkAvailable,
                           isDownloadAllowed: can_download,
                           isDownloadAvailable: can_download,
@@ -266,14 +275,13 @@ describe('convertUserResponse()', () => {
         name: ENTERPRISE_NAME,
     };
     const HOSTNAME = 'https://cloud.box.com/';
-    const SERVER_URL = `${HOSTNAME}/v/`;
 
     test.each`
-        enterprise    | hostname    | enterpriseName     | serverURL     | description
-        ${ENTERPRISE} | ${HOSTNAME} | ${ENTERPRISE_NAME} | ${SERVER_URL} | ${'enterprise and hostname exist'}
-        ${ENTERPRISE} | ${null}     | ${ENTERPRISE_NAME} | ${''}         | ${'enterprise exists, but not hostname'}
-        ${null}       | ${HOSTNAME} | ${''}              | ${SERVER_URL} | ${'hostname exists, but not enterprise'}
-        ${null}       | ${null}     | ${''}              | ${''}         | ${'neither enterprise nor hostname exists'}
+        enterprise    | hostname    | enterpriseName     | serverURL          | description
+        ${ENTERPRISE} | ${HOSTNAME} | ${ENTERPRISE_NAME} | ${MOCK_SERVER_URL} | ${'enterprise and hostname exist'}
+        ${ENTERPRISE} | ${null}     | ${ENTERPRISE_NAME} | ${''}              | ${'enterprise exists, but not hostname'}
+        ${null}       | ${HOSTNAME} | ${''}              | ${MOCK_SERVER_URL} | ${'hostname exists, but not enterprise'}
+        ${null}       | ${null}     | ${''}              | ${''}              | ${'neither enterprise nor hostname exists'}
     `('should convert data when $description', ({ enterprise, hostname, enterpriseName, serverURL }) => {
         const responseFromAPI = {
             enterprise,
@@ -301,6 +309,29 @@ describe('convertSharedLinkPermissions', () => {
     `('should return the correct result for the $permissionLevel permission level', ({ permissionLevel, result }) => {
         expect(convertSharedLinkPermissions(permissionLevel)).toEqual(result);
     });
+});
+
+describe('convertSharedLinkSettings', () => {
+    test.each`
+        newSettings                         | permissions                           | unsharedAt                   | vanityUrl          | password         | serverURL          | description
+        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'with all features'}
+        ${MOCK_SETTINGS_WITHOUT_DOWNLOAD}   | ${MOCK_SETTINGS_PREVIEW_PERMISSIONS}  | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'without disallowed direct downloads'}
+        ${MOCK_SETTINGS_WITHOUT_EXPIRATION} | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${null}                      | ${MOCK_VANITY_URL} | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'without an expiration date'}
+        ${MOCK_SETTINGS_WITHOUT_PASSWORD}   | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${null}          | ${MOCK_SERVER_URL} | ${'without a password'}
+        ${MOCK_SETTINGS_WITHOUT_VANITY_URL} | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${null}            | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'without a vanity name'}
+        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${null}            | ${MOCK_PASSWORD} | ${null}            | ${'without a server URL'}
+    `(
+        'should convert a shared link settings USM object $description',
+        ({ newSettings, password, permissions, unsharedAt, serverURL, vanityUrl }) => {
+            const passwordObject = password && { password };
+            expect(convertSharedLinkSettings(newSettings, serverURL)).toEqual({
+                permissions,
+                unshared_at: unsharedAt,
+                vanity_url: vanityUrl,
+                ...passwordObject,
+            });
+        },
+    );
 });
 
 describe('convertCollabsResponse', () => {

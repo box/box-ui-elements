@@ -75,3 +75,10 @@ export type ContentSharingHooksOptions = {
     handleSuccess?: Function,
     transformResponse?: Function,
 };
+
+export type SharedLinkSettingsOptions = {
+    expirationTimestamp: number,
+    isDownloadEnabled: boolean,
+    password: string,
+    vanityName: string,
+};

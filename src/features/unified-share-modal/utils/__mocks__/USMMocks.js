@@ -1,6 +1,14 @@
 /**
  * Mocks that represent the internal data formats of the UnifiedShareModal and its child components
  */
+
+const MOCK_PASSWORD = 'supersecureunbreakablepassword';
+const MOCK_TIMESTAMP = 1596203940000;
+const MOCK_TIMESTAMP_ISO_STRING = '2020-07-31T13:59:00.000Z';
+const MOCK_SERVER_URL = 'https://cloud.box.com/v/';
+const MOCK_VANITY_NAME = 'amazinguniquefile';
+const MOCK_VANITY_URL = `${MOCK_SERVER_URL}${MOCK_VANITY_NAME}`;
+
 const MOCK_SHARED_LINK = {
     accessLevel: 'peopleInThisItem',
     allowedAccessLevels: {
@@ -15,7 +23,7 @@ const MOCK_SHARED_LINK = {
     canChangeVanityName: true,
     canInvite: true,
     directLink: '',
-    expirationTimestamp: 1596178800000,
+    expirationTimestamp: MOCK_TIMESTAMP,
     isDirectLinkAvailable: true,
     isDownloadAllowed: true,
     isDownloadAvailable: true,
@@ -27,8 +35,8 @@ const MOCK_SHARED_LINK = {
     isPasswordEnabled: true,
     isPreviewAllowed: true,
     permissionLevel: 'canViewDownload',
-    url: '',
-    vanityName: '',
+    url: MOCK_VANITY_URL,
+    vanityName: MOCK_VANITY_NAME,
 };
 
 const MOCK_NULL_SHARED_LINK = { canInvite: true };
@@ -107,14 +115,14 @@ const MOCK_CONVERTED_USER_DATA = {
     id: 'abcde',
     userEnterpriseData: {
         enterpriseName: '',
-        serverURL: '',
+        serverURL: MOCK_SERVER_URL,
     },
 };
 
 const MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION = {
     ...MOCK_SHARED_LINK,
     enterpriseName: '',
-    serverURL: '',
+    serverURL: MOCK_SERVER_URL,
 };
 
 const COLLAB_ITEM = {
@@ -378,6 +386,44 @@ const MOCK_CONTACTS_CONVERTED_RESPONSE = [
     },
 ];
 
+const MOCK_SETTINGS_WITH_ALL_FEATURES = {
+    expirationTimestamp: MOCK_TIMESTAMP,
+    isDownloadEnabled: true,
+    password: MOCK_PASSWORD,
+    vanityName: MOCK_VANITY_NAME,
+};
+
+const MOCK_SETTINGS_WITHOUT_DOWNLOAD = {
+    expirationTimestamp: MOCK_TIMESTAMP,
+    isDownloadEnabled: false,
+    password: MOCK_PASSWORD,
+    vanityName: MOCK_VANITY_NAME,
+};
+
+const MOCK_SETTINGS_WITHOUT_EXPIRATION = {
+    expirationTimestamp: null,
+    isDownloadEnabled: true,
+    password: MOCK_PASSWORD,
+    vanityName: MOCK_VANITY_NAME,
+};
+
+const MOCK_SETTINGS_WITHOUT_PASSWORD = {
+    expirationTimestamp: MOCK_TIMESTAMP,
+    isDownloadEnabled: true,
+    password: null,
+    vanityName: MOCK_VANITY_NAME,
+};
+
+const MOCK_SETTINGS_WITHOUT_VANITY_URL = {
+    expirationTimestamp: MOCK_TIMESTAMP,
+    isDownloadEnabled: true,
+    password: MOCK_PASSWORD,
+    vanityName: null,
+};
+
+const MOCK_SETTINGS_DOWNLOAD_PERMISSIONS = { can_download: true, can_preview: false };
+const MOCK_SETTINGS_PREVIEW_PERMISSIONS = { can_download: false, can_preview: true };
+
 export {
     MOCK_COLLABS_API_RESPONSE,
     MOCK_COLLABS_CONVERTED_RESPONSE,
@@ -397,9 +443,22 @@ export {
     MOCK_OWNER,
     MOCK_OWNER_EMAIL,
     MOCK_OWNER_ID,
+    MOCK_PASSWORD,
+    MOCK_SERVER_URL,
+    MOCK_SETTINGS_WITH_ALL_FEATURES,
+    MOCK_SETTINGS_DOWNLOAD_PERMISSIONS,
+    MOCK_SETTINGS_PREVIEW_PERMISSIONS,
+    MOCK_SETTINGS_WITHOUT_DOWNLOAD,
+    MOCK_SETTINGS_WITHOUT_EXPIRATION,
+    MOCK_SETTINGS_WITHOUT_PASSWORD,
+    MOCK_SETTINGS_WITHOUT_VANITY_URL,
     MOCK_SHARED_LINK,
     MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
+    MOCK_TIMESTAMP,
+    MOCK_TIMESTAMP_ISO_STRING,
     MOCK_USER_API_RESPONSE,
     MOCK_USER_IDS,
     MOCK_USER_IDS_CONVERTED,
+    MOCK_VANITY_NAME,
+    MOCK_VANITY_URL,
 };

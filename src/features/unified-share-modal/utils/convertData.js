@@ -22,8 +22,9 @@ import type {
     ContentSharingItemAPIResponse,
     ContentSharingItemDataType,
     ContentSharingUserDataType,
+    SharedLinkSettingsOptions,
 } from '../../../elements/content-sharing/types';
-import type { BoxItemPermission, Collaborations, User, UserCollection } from '../../../common/types/core';
+import type { BoxItemPermission, Collaborations, SharedLink, User, UserCollection } from '../../../common/types/core';
 import type { collaboratorsListType, collaboratorType, contactType } from '../flowTypes';
 
 /**
@@ -68,11 +69,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
         owned_by: { id: ownerID, login: ownerEmail },
         permissions,
         shared_link,
-        shared_link_features: {
-            download_url: isDirectLinkAvailable,
-            password: isPasswordAvailable,
-            vanity_name: isVanityNameAvailable,
-        },
+        shared_link_features: { download_url: isDirectLinkAvailable, password: isPasswordAvailable },
         type,
     } = itemAPIData;
 
@@ -105,9 +102,8 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
         const accessLevel = effective_access ? API_TO_USM_ACCESS_LEVEL_MAP[effective_access] : null;
         const permissionLevel = effective_permission ? API_TO_USM_PERMISSION_LEVEL_MAP[effective_permission] : null;
         const isDownloadAllowed = permissionLevel === API_TO_USM_PERMISSION_LEVEL_MAP.can_download;
-        const canChangeDownload = canChangeAccessLevel && isDownloadAllowed;
+        const canChangeDownload = canChangeAccessLevel && isDownloadSettingAvailable;
         const canChangePassword = canChangeAccessLevel && isPasswordAvailable;
-        const canChangeVanityName = canChangeAccessLevel && isVanityNameAvailable;
         const canChangeExpiration = canChangeAccessLevel && isEditAllowed;
 
         sharedLink = {
@@ -117,7 +113,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
             canChangeDownload,
             canChangeExpiration,
             canChangePassword,
-            canChangeVanityName,
+            canChangeVanityName: false, // vanity URLs cannot be set via the API
             canInvite: !!canInvite,
             directLink,
             expirationTimestamp: expirationTimestamp ? new Date(expirationTimestamp).getTime() : null, // convert to milliseconds
@@ -196,16 +192,22 @@ export const convertSharedLinkPermissions = (newSharedLinkPermissionLevel: strin
 };
 
 /**
- * Convert an item from the USM into the object that the Item API expects.
- * @param {*} newSettings
+ * Convert a shared link settings object from the USM into the format that the API expects.
+ *
+ * @param {SharedLinkSettingsOptions} newSettings
+ * @param {serverURL} string
+ * @returns {$Shape<SharedLink>}
  */
-export const convertSharedLinkSettings = (newSettings, serverURL: string) => {
+export const convertSharedLinkSettings = (
+    newSettings: SharedLinkSettingsOptions,
+    serverURL: string,
+): $Shape<SharedLink> => {
     const { expirationTimestamp, isDownloadEnabled: can_download, password, vanityName } = newSettings;
 
     return {
-        can_download,
-        vanity_url: vanityName ? `${serverURL}${vanityName}` : null,
+        permissions: { can_download, can_preview: !can_download },
         unshared_at: expirationTimestamp ? new Date(expirationTimestamp).toISOString() : null,
+        vanity_url: serverURL && vanityName ? `${serverURL}${vanityName}` : null,
         ...(password && { password }),
     };
 };
