@@ -7,22 +7,31 @@ import Notification from '../../components/notification/Notification';
 import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
 import {
     convertCollabsResponse,
+    convertContactsResponse,
     convertItemResponse,
     convertSharedLinkPermissions,
     USM_TO_API_ACCESS_LEVEL_MAP,
 } from '../../features/unified-share-modal/utils/convertData';
+import useCollaborators from './hooks/useCollaborators';
+import useContacts from './hooks/useContacts';
 import { ACCESS_COLLAB, ACCESS_NONE, STATUS_ERROR, TYPE_FILE, TYPE_FOLDER } from '../../constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from './constants';
 import contentSharingMessages from './messages';
 import type { RequestOptions } from '../../common/types/api';
 import type { BoxItemPermission, Collaborations, ItemType, NotificationType } from '../../common/types/core';
 import type { collaboratorsListType, item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
-import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType, SharedLinkUpdateFnType } from './types';
+import type {
+    ContentSharingItemAPIResponse,
+    ContentSharingSharedLinkType,
+    GetContactsFnType,
+    SharedLinkUpdateFnType,
+} from './types';
 
 type SharingNotificationProps = {
     api: API,
     collaboratorsList: collaboratorsListType | null,
     currentUserID: string | null,
+    getContacts: GetContactsFnType | null,
     itemID: string,
     itemType: ItemType,
     ownerEmail: ?string,
@@ -30,7 +39,8 @@ type SharingNotificationProps = {
     permissions: ?BoxItemPermission,
     setChangeSharedLinkAccessLevel: (changeSharedLinkAccessLevel: SharedLinkUpdateFnType) => void,
     setChangeSharedLinkPermissionLevel: (changeSharedLinkPermissionLevel: SharedLinkUpdateFnType) => void,
-    setCollaboratorsList: (collaboratorsList: collaboratorsListType) => void,
+    setCollaboratorsList: (collaboratorsList: collaboratorsListType | null) => void,
+    setGetContacts: (getContacts: () => GetContactsFnType | null) => void,
     setItem: ((item: itemFlowType | null) => itemFlowType) => void,
     setOnAddLink: (addLink: SharedLinkUpdateFnType) => void,
     setOnRemoveLink: (removeLink: SharedLinkUpdateFnType) => void,
@@ -41,6 +51,7 @@ function SharingNotification({
     api,
     collaboratorsList,
     currentUserID,
+    getContacts,
     itemID,
     itemType,
     ownerEmail,
@@ -48,6 +59,7 @@ function SharingNotification({
     permissions,
     setChangeSharedLinkAccessLevel,
     setChangeSharedLinkPermissionLevel,
+    setGetContacts,
     setCollaboratorsList,
     setItem,
     setOnAddLink,
@@ -56,7 +68,6 @@ function SharingNotification({
 }: SharingNotificationProps) {
     const [notifications, setNotifications] = React.useState<{ [string]: typeof Notification }>({});
     const [notificationID, setNotificationID] = React.useState<number>(0);
-    const [retrievedCollaborators, setRetrievedCollaborators] = React.useState<boolean>(false); // add an internal check for testing purposes
 
     // Close a notification
     const handleNotificationClose = React.useCallback(
@@ -87,6 +98,20 @@ function SharingNotification({
         [handleNotificationClose, notificationID],
     );
 
+    // Create a notification with the provided error message
+    const handleError = React.useCallback(
+        (errorMessage: MessageDescriptor) => {
+            const updatedNotifications = { ...notifications };
+            if (updatedNotifications[notificationID]) {
+                return;
+            }
+            updatedNotifications[notificationID] = createNotification(STATUS_ERROR, errorMessage);
+            setNotifications(updatedNotifications);
+            setNotificationID(notificationID + 1);
+        },
+        [createNotification, notificationID, notifications],
+    );
+
     // Generate shared link CRUD functions for the item
     React.useEffect(() => {
         // Handle successful PUT requests to /files or /folders
@@ -103,17 +128,6 @@ function SharingNotification({
             const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
             setItem((prevItem: itemFlowType | null) => ({ ...prevItem, ...updatedItem }));
             setSharedLink(() => updatedSharedLink);
-        };
-
-        // Handle failed PUT requests to /files or /folders
-        const handleUpdateItemError = () => {
-            const updatedNotifications = { ...notifications };
-            updatedNotifications[notificationID] = createNotification(
-                STATUS_ERROR,
-                contentSharingMessages.sharedLinkUpdateError,
-            );
-            setNotifications(updatedNotifications);
-            setNotificationID(notificationID + 1);
         };
 
         if (permissions) {
@@ -134,7 +148,13 @@ function SharingNotification({
                 options?: RequestOptions = CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 successFn?: (itemData: ContentSharingItemAPIResponse) => void = handleUpdateItemSuccess,
             ) => {
-                return itemAPIInstance.share(itemData, accessType, successFn, handleUpdateItemError, options);
+                return itemAPIInstance.share(
+                    itemData,
+                    accessType,
+                    successFn,
+                    () => handleError(contentSharingMessages.sharedLinkUpdateError),
+                    options,
+                );
             };
 
             const updatedOnAddLinkFn: SharedLinkUpdateFnType = () => () => createSharedLinkAPIConnection(ACCESS_COLLAB);
@@ -157,7 +177,7 @@ function SharingNotification({
                         permissions: convertSharedLinkPermissions(newSharedLinkPermissionLevel),
                     },
                     handleUpdateItemSuccess,
-                    handleUpdateItemError,
+                    () => handleError(contentSharingMessages.sharedLinkUpdateError),
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 );
             };
@@ -166,6 +186,7 @@ function SharingNotification({
     }, [
         api,
         createNotification,
+        handleError,
         itemID,
         itemType,
         notificationID,
@@ -179,65 +200,22 @@ function SharingNotification({
         setSharedLink,
     ]);
 
-    /**
-     * Get the item's collaborators
-     *
-     * A note on the wording: the USM uses the term "collaborators" internally,
-     * so the state variable and state setting function also refer to "collaborators."
-     * However, we are using the Collaborations API here, so the API-related functions
-     * use the term "collaborations." For more details, see ./api/FileCollaborations.
-     */
-    React.useEffect(() => {
-        const handleGetCollaborationsSuccess = (response: Collaborations) => {
-            const updatedCollaboratorsList = convertCollabsResponse(response, ownerEmail, ownerID === currentUserID);
-            setCollaboratorsList(updatedCollaboratorsList);
-            setRetrievedCollaborators(true);
-        };
+    // Set the collaborators list
+    const collaboratorsListFromAPI: Collaborations | null = useCollaborators(api, itemID, itemType, {
+        handleError: () => handleError(contentSharingMessages.collaboratorsLoadingError),
+    });
+    if (collaboratorsListFromAPI && !collaboratorsList) {
+        setCollaboratorsList(convertCollabsResponse(collaboratorsListFromAPI, ownerEmail, currentUserID === ownerID));
+    }
 
-        const handleGetCollaborationsError = () => {
-            const updatedNotifications = { ...notifications };
-            if (updatedNotifications[notificationID]) {
-                return;
-            }
-            updatedNotifications[notificationID] = createNotification(
-                STATUS_ERROR,
-                contentSharingMessages.collaboratorsLoadingError,
-            );
-            setCollaboratorsList({ collaborators: [] }); // default to an empty collaborators list for the USM
-            setNotifications(updatedNotifications);
-            setNotificationID(notificationID + 1);
-            setRetrievedCollaborators(true);
-        };
-
-        if (itemID && currentUserID && !retrievedCollaborators) {
-            let collabAPIInstance;
-            if (itemType === TYPE_FILE) {
-                collabAPIInstance = api.getFileCollaborationsAPI(false);
-            } else if (itemType === TYPE_FOLDER) {
-                collabAPIInstance = api.getFolderCollaborationsAPI(false);
-            }
-            if (collabAPIInstance) {
-                collabAPIInstance.getCollaborations(
-                    itemID,
-                    handleGetCollaborationsSuccess,
-                    handleGetCollaborationsError,
-                );
-            }
-        }
-    }, [
-        api,
-        collaboratorsList,
-        createNotification,
-        currentUserID,
-        itemID,
-        itemType,
-        notificationID,
-        notifications,
-        ownerEmail,
-        ownerID,
-        retrievedCollaborators,
-        setCollaboratorsList,
-    ]);
+    // Set the getContacts function
+    const getContactsFn: GetContactsFnType | null = useContacts(api, itemID, {
+        handleError: () => handleError(contentSharingMessages.getContactsError),
+        transformResponse: data => convertContactsResponse(data, currentUserID),
+    });
+    if (getContactsFn && !getContacts) {
+        setGetContacts(() => getContactsFn);
+    }
 
     return (
         <NotificationsWrapper>

@@ -23,8 +23,8 @@ import type {
     ContentSharingItemDataType,
     ContentSharingUserDataType,
 } from '../../../elements/content-sharing/types';
-import type { BoxItemPermission, Collaborations, User } from '../../../common/types/core';
-import type { collaboratorsListType, collaboratorType } from '../flowTypes';
+import type { BoxItemPermission, Collaborations, User, UserCollection } from '../../../common/types/core';
+import type { collaboratorsListType, collaboratorType, contactType } from '../flowTypes';
 
 /**
  * The following constants are used for converting API requests
@@ -54,7 +54,9 @@ export const USM_TO_API_PERMISSION_LEVEL_MAP = {
 
 /**
  * Convert a response from the Item API to the object that the USM expects.
+ *
  * @param {BoxItem} itemAPIData
+ * @returns {ContentSharingItemDataType} Object containing item and shared link information
  */
 export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): ContentSharingItemDataType => {
     const {
@@ -157,7 +159,9 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
 
 /**
  * Convert a response from the User API into the object that the USM expects.
+ *
  * @param {User} userAPIData
+ * @returns {ContentSharingUserDataType} Object containing user and enterprise information
  */
 export const convertUserResponse = (userAPIData: User): ContentSharingUserDataType => {
     const { enterprise, hostname, id } = userAPIData;
@@ -173,7 +177,9 @@ export const convertUserResponse = (userAPIData: User): ContentSharingUserDataTy
 
 /**
  * Create a shared link permissions object for the API based on a USM permission level.
+ *
  * @param {string} newSharedLinkPermissionLevel
+ * @returns {$Shape<BoxItemPermission>} Object containing shared link permissions
  */
 export const convertSharedLinkPermissions = (newSharedLinkPermissionLevel: string): $Shape<BoxItemPermission> => {
     const sharedLinkPermissions = {};
@@ -189,9 +195,11 @@ export const convertSharedLinkPermissions = (newSharedLinkPermissionLevel: strin
 
 /**
  * Convert a response from the Item Collaborations API into the object that the USM expects.
+ *
  * @param {Collaborations} collabsAPIData
  * @param {string | null | undefined} ownerEmail
  * @param {boolean} isCurrentUserOwner
+ * @returns {collaboratorsListType} Object containing an array of collaborators
  */
 export const convertCollabsResponse = (
     collabsAPIData: Collaborations,
@@ -232,4 +240,31 @@ export const convertCollabsResponse = (
     });
 
     return { collaborators };
+};
+
+/**
+ * Convert an enterprise users API response into an array of internal USM contacts.
+ *
+ * @param {UserCollection} contactsAPIData
+ * @param {string|null} currentUserID
+ * @returns {Array<contactType>} Array of USM contacts
+ */
+export const convertContactsResponse = (
+    contactsAPIData: UserCollection,
+    currentUserID: string | null,
+): Array<contactType> => {
+    const { entries = [] } = contactsAPIData;
+
+    // Return all users except for the current user
+    return entries
+        .map(contact => {
+            const { id, login: email, name, type } = contact;
+            return {
+                id,
+                email,
+                name,
+                type,
+            };
+        })
+        .filter(({ id }) => id !== currentUserID);
 };

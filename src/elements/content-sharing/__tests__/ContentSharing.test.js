@@ -28,11 +28,14 @@ import {
     PEOPLE_IN_ITEM,
 } from '../../../features/unified-share-modal/constants';
 import {
+    convertContactsResponse,
     convertItemResponse,
     convertUserResponse,
     convertSharedLinkPermissions,
 } from '../../../features/unified-share-modal/utils/convertData';
 import {
+    MOCK_CONTACTS_API_RESPONSE,
+    MOCK_CONTACTS_CONVERTED_RESPONSE,
     MOCK_CONVERTED_ITEM_DATA,
     MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
     MOCK_CONVERTED_USER_DATA,
@@ -119,13 +122,7 @@ describe('elements/content-sharing/ContentSharing', () => {
         test('should call getFolderAPI().getFolderFields() if itemType is "folder"', async () => {
             const getFolderFields = jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE));
 
-            API.mockImplementation(() => ({
-                getFolderAPI: jest.fn().mockReturnValue({ getFolderFields }),
-                getFolderCollaborationsAPI: jest.fn().mockReturnValue({
-                    getCollaborations: jest.fn(),
-                }),
-                getUsersAPI: jest.fn().mockReturnValue({ getUser: jest.fn() }),
-            }));
+            API.mockImplementation(createAPIMock(null, { getFolderFields }, { getUser: jest.fn() }));
 
             let wrapper;
             await act(async () => {
@@ -537,9 +534,57 @@ describe('elements/content-sharing/ContentSharing', () => {
         );
     });
 
-    describe('with failed PUT requests to the Item API', () => {
+    describe('with successful GET requests to the enterprise users API', () => {
+        let getUsersInEnterprise;
+        beforeAll(() => {
+            getUsersInEnterprise = jest.fn().mockImplementation((itemID, successFn) => {
+                return Promise.resolve(MOCK_CONTACTS_API_RESPONSE).then(response => {
+                    return successFn(response);
+                });
+            });
+            API.mockImplementation(
+                createAPIMock(
+                    { getFile: jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE)) },
+                    null,
+                    {
+                        getUser: jest.fn().mockImplementation(createSuccessMock(MOCK_USER_API_RESPONSE)),
+                        getUsersInEnterprise,
+                    },
+                ),
+            );
+            convertContactsResponse.mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
+        });
+
+        test('should call getUsersInEnterprise() from getCollaboratorContacts() and return a converted response', async () => {
+            const MOCK_FILTER = 'content';
+
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ itemType: TYPE_FILE });
+            });
+            wrapper.update();
+
+            const usm = wrapper.find(UnifiedShareModal);
+            let response;
+            await act(async () => {
+                response = usm.invoke('getCollaboratorContacts')(MOCK_FILTER);
+            });
+            wrapper.update();
+
+            expect(getUsersInEnterprise).toHaveBeenCalledWith(
+                MOCK_ITEM_ID,
+                expect.anything(),
+                expect.anything(),
+                MOCK_FILTER,
+            );
+            expect(response).resolves.toEqual(MOCK_CONTACTS_CONVERTED_RESPONSE);
+        });
+    });
+
+    describe('with failed notification-level API requests', () => {
         let share;
         let updateSharedLink;
+        let getUsersInEnterprise;
         const createShareFailureMock = () =>
             jest.fn().mockImplementation((dataForAPI, accessType, successFn, failureFn) => {
                 return Promise.reject(new Error({ status: '400' })).catch(response => {
@@ -549,6 +594,11 @@ describe('elements/content-sharing/ContentSharing', () => {
         beforeAll(() => {
             share = createShareFailureMock();
             updateSharedLink = createShareFailureMock();
+            getUsersInEnterprise = jest.fn().mockImplementation((itemID, successFn, failureFn) => {
+                return Promise.reject(new Error({ status: '400' })).catch(response => {
+                    failureFn(response);
+                });
+            });
             API.mockImplementation(
                 createAPIMock(
                     {
@@ -561,28 +611,31 @@ describe('elements/content-sharing/ContentSharing', () => {
                         share,
                         updateSharedLink,
                     },
-                    { getUser: jest.fn() },
+                    { getUser: jest.fn(), getUsersInEnterprise },
                 ),
             );
         });
 
-        test.each(['onAddLink', 'onRemoveLink', 'changeSharedLinkAccessLevel', 'changeSharedLinkPermissionLevel'])(
-            'should show an error notification if %s() fails',
-            async sharedLinkUpdateFn => {
-                let wrapper;
-                await act(async () => {
-                    wrapper = getWrapper({ itemType: TYPE_FOLDER });
-                });
-                wrapper.update();
-                expect(wrapper.exists(Notification)).toBe(false);
+        test.each([
+            'onAddLink',
+            'onRemoveLink',
+            'changeSharedLinkAccessLevel',
+            'changeSharedLinkPermissionLevel',
+            'getCollaboratorContacts',
+        ])('should show an error notification if %s() fails', async sharedLinkUpdateFn => {
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ itemType: TYPE_FOLDER });
+            });
+            wrapper.update();
+            expect(wrapper.exists(Notification)).toBe(false);
 
-                const usm = wrapper.find(UnifiedShareModal);
-                await act(async () => {
-                    usm.invoke(`${sharedLinkUpdateFn}`)();
-                });
-                wrapper.update();
-                expect(wrapper.exists(Notification)).toBe(true);
-            },
-        );
+            const usm = wrapper.find(UnifiedShareModal);
+            await act(async () => {
+                usm.invoke(`${sharedLinkUpdateFn}`)();
+            });
+            wrapper.update();
+            expect(wrapper.exists(Notification)).toBe(true);
+        });
     });
 });

@@ -31,6 +31,11 @@ const messages = defineMessages({
         description: 'Message that appears when collaborators cannot be retrieved in the ContentSharing Element.',
         id: 'be.contentSharing.collaboratorsLoadingError',
     },
+    getContactsError: {
+        defaultMessage: 'Could not retrieve contacts.',
+        description: 'Message that appears when users cannot be retrieved in the ContentSharing Element.',
+        id: 'be.contentSharing.getContactsError',
+    },
 });
 
 export default messages;

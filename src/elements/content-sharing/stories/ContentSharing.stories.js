@@ -8,9 +8,9 @@ import notes from './ContentSharing.stories.md';
 
 export const basic = () => {
     const apiHost = text('API Host', DEFAULT_HOSTNAME_API);
-    const itemID = text('Item ID', global.FILE_ID);
+    const itemID = text('Item ID');
     const itemType = select('Item Type', [TYPE_FILE, TYPE_FOLDER], TYPE_FILE);
-    const token = text('Access Token', global.TOKEN);
+    const token = text('Access Token');
     return (
         <IntlProvider locale="en">
             <ContentSharing

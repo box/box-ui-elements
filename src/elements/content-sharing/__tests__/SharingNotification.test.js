@@ -8,8 +8,8 @@ import {
     MOCK_COLLABS_API_RESPONSE,
     MOCK_COLLABS_CONVERTED_RESPONSE,
     MOCK_ITEM_ID,
-    MOCK_OWNER_ID,
     MOCK_OWNER_EMAIL,
+    MOCK_OWNER_ID,
     MOCK_ITEM_PERMISSIONS,
 } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
 import Notification from '../../../components/notification/Notification';
@@ -22,6 +22,7 @@ jest.mock('../../../features/unified-share-modal/utils/convertData');
 describe('elements/content-sharing/SharingNotification', () => {
     const setChangeSharedLinkAccessLevelStub = jest.fn();
     const setChangeSharedLinkPermissionLevelStub = jest.fn();
+    const setGetContactsStub = jest.fn();
     const setItemStub = jest.fn();
     const setOnAddLinkStub = jest.fn();
     const setOnRemoveLinkStub = jest.fn();
@@ -57,6 +58,7 @@ describe('elements/content-sharing/SharingNotification', () => {
                 setChangeSharedLinkAccessLevel={setChangeSharedLinkAccessLevelStub}
                 setChangeSharedLinkPermissionLevel={setChangeSharedLinkPermissionLevelStub}
                 setCollaboratorsList={setCollaboratorsListStub}
+                setGetContacts={setGetContactsStub}
                 setItem={setItemStub}
                 setOnAddLink={setOnAddLinkStub}
                 setOnRemoveLink={setOnRemoveLinkStub}
@@ -80,9 +82,10 @@ describe('elements/content-sharing/SharingNotification', () => {
             expect(setOnRemoveLinkStub).toHaveBeenCalled();
             expect(setChangeSharedLinkAccessLevelStub).toHaveBeenCalled();
             expect(setChangeSharedLinkPermissionLevelStub).toHaveBeenCalled();
+            expect(setGetContactsStub).toHaveBeenCalled();
         });
 
-        test('should not call state setting functions if given null permissions', () => {
+        test('should not call state setting functions that require permissions if given null permissions', () => {
             getWrapper({ api: apiInstance, permissions: null });
             expect(setOnAddLinkStub).not.toHaveBeenCalled();
             expect(setOnRemoveLinkStub).not.toHaveBeenCalled();
@@ -132,6 +135,7 @@ describe('elements/content-sharing/SharingNotification', () => {
                 });
             });
             apiInstance = createAPIInstance(getCollaborations);
+            convertCollabsResponse.mockReturnValue({ collaborators: [] });
         });
 
         test.each`
@@ -146,7 +150,6 @@ describe('elements/content-sharing/SharingNotification', () => {
             });
             wrapper.update();
             expect(getCollaborations).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything());
-            expect(convertCollabsResponse).not.toHaveBeenCalled();
             expect(setCollaboratorsListStub).toHaveBeenCalledWith({
                 collaborators: [],
             });

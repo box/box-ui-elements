@@ -16,11 +16,17 @@ import usmMessages from '../../features/unified-share-modal/messages';
 import { convertItemResponse, convertUserResponse } from '../../features/unified-share-modal/utils/convertData';
 import { CLIENT_NAME_CONTENT_SHARING, FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FILE, TYPE_FOLDER } from '../../constants';
 import { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS, CONTENT_SHARING_VIEWS } from './constants';
+import { INVITEE_PERMISSIONS } from '../../features/unified-share-modal/constants';
 import contentSharingMessages from './messages';
 import type { ErrorResponseData } from '../../common/types/api';
 import type { ItemType } from '../../common/types/core';
 import type { collaboratorsListType, item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
-import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType, SharedLinkUpdateFnType } from './types';
+import type {
+    ContentSharingItemAPIResponse,
+    ContentSharingSharedLinkType,
+    GetContactsFnType,
+    SharedLinkUpdateFnType,
+} from './types';
 
 type ContentSharingProps = {
     apiHost: string,
@@ -56,6 +62,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         setChangeSharedLinkPermissionLevel,
     ] = React.useState<null | SharedLinkUpdateFnType>(null);
     const [currentView, setCurrentView] = React.useState<string>(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL);
+    const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
 
     // Reset the API if necessary
     React.useEffect(() => {
@@ -153,6 +160,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         api={api}
                         collaboratorsList={collaboratorsList}
                         currentUserID={currentUserID}
+                        getContacts={getContacts}
                         itemID={itemID}
                         itemType={itemType}
                         ownerEmail={ownerEmail}
@@ -160,6 +168,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         permissions={permissions}
                         setChangeSharedLinkAccessLevel={setChangeSharedLinkAccessLevel}
                         setChangeSharedLinkPermissionLevel={setChangeSharedLinkPermissionLevel}
+                        setGetContacts={setGetContacts}
                         setCollaboratorsList={setCollaboratorsList}
                         setItem={setItem}
                         setOnAddLink={setOnAddLink}
@@ -186,13 +195,14 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                             collaboratorsList={collaboratorsList}
                             currentUserID={currentUserID}
                             displayInModal={displayInModal}
-                            getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
-                            getSharedLinkContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
+                            getCollaboratorContacts={getContacts}
                             initialDataReceived
+                            inviteePermissions={INVITEE_PERMISSIONS}
                             item={item}
                             onAddLink={onAddLink}
                             onRemoveLink={onRemoveLink}
                             onSettingsClick={() => setCurrentView(CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS)}
+                            sendInvites={() => Promise.resolve(null)} // to do: connect to Collaborations API
                             sharedLink={sharedLink}
                         />
                     )}
