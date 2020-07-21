@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/additional-tabs/AdditionalTabFtuxTooltip should render the tooltip 1`] = `
+<withTargetedClickThrough(GuideTooltip)
+  body="FTUX Text"
+  className="rec-app-ftux-tooltip"
+  position="middle-right"
+  shouldTarget={true}
+  useTargetingApi={[Function]}
+>
+  <div>
+    Child content
+  </div>
+</withTargetedClickThrough(GuideTooltip)>
+`;

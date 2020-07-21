@@ -69,4 +69,23 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should render the FTUX tooltip when ftuxTooltipData is present', () => {
+        const mockSrc = 'https://foo.com/image';
+        const props = {
+            title: 'test title',
+            iconUrl: mockSrc,
+            isLoading: false,
+            id: 4,
+            callback: () => {},
+            ftuxTooltipData: {
+                targetingApi: () => {},
+                text: 'ftux text',
+            },
+        };
+
+        const wrapper = getWrapper(props);
+
+        expect(wrapper).toMatchSnapshot();
+    });
 });

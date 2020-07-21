@@ -12,13 +12,16 @@ import { bdlGray50 } from '../../../styles/variables';
 import Tooltip from '../../common/Tooltip';
 import PlainButton from '../../../components/plain-button/PlainButton';
 import IconEllipsis from '../../../icons/general/IconEllipsis';
+import AdditionalTabFtuxTooltip from './AdditionalTabFtuxTooltip';
 import AdditionalTabPlaceholder from './AdditionalTabPlaceholder';
 import messages from './messages';
-import type { AdditionalSidebarTab } from '../flowTypes';
+
+import type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData } from '../flowTypes';
 
 import './AdditionalTab.scss';
 
 type Props = {
+    ftuxTooltipData?: AdditionalSidebarTabFtuxData, // TODO - type
     isLoading: boolean,
     onImageLoad: () => void,
     status?: string,
@@ -83,6 +86,22 @@ class AdditionalTab extends React.PureComponent<Props, State> {
         return TabIcon;
     }
 
+    withFtuxTooltip(body: React.Node) {
+        const { ftuxTooltipData, isLoading } = this.props;
+
+        if (!ftuxTooltipData || isLoading) {
+            return body;
+        }
+
+        const { targetingApi, text } = ftuxTooltipData;
+
+        return (
+            <AdditionalTabFtuxTooltip targetingApi={targetingApi} text={text}>
+                {body}
+            </AdditionalTabFtuxTooltip>
+        );
+    }
+
     render() {
         const { callback: callbackFn, id, isLoading, iconUrl, onImageLoad, title, ...rest } = this.props;
 
@@ -95,7 +114,7 @@ class AdditionalTab extends React.PureComponent<Props, State> {
 
         const tooltipText = isDisabled ? this.getDisabledReason() : title;
 
-        return (
+        const body = (
             <Tooltip position="middle-left" text={tooltipText}>
                 <PlainButton
                     className={className}
@@ -108,6 +127,8 @@ class AdditionalTab extends React.PureComponent<Props, State> {
                 </PlainButton>
             </Tooltip>
         );
+
+        return this.withFtuxTooltip(body);
     }
 }
 
