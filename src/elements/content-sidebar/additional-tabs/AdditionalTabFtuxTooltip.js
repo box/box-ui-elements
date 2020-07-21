@@ -1,4 +1,8 @@
-// @flow
+/**
+ * @flow
+ * @file Sidebar Additional Tab FTUX tooltip
+ * @author Box
+ */
 
 import * as React from 'react';
 
