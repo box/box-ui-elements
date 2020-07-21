@@ -21,7 +21,7 @@ import type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData } from '../flow
 import './AdditionalTab.scss';
 
 type Props = {
-    ftuxTooltipData?: AdditionalSidebarTabFtuxData, // TODO - type
+    ftuxTooltipData?: AdditionalSidebarTabFtuxData,
     isLoading: boolean,
     onImageLoad: () => void,
     status?: string,
