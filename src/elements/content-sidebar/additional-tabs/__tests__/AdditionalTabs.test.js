@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import AdditionalTabs from '../AdditionalTabs';
-import AdditionalTab from '../AdditionalTab';
+import AdditionalTabFtuxTooltip from '../AdditionalTabFtuxTooltip';
 import AdditionalTabsLoading from '../AdditionalTabsLoading';
 
 describe('elements/content-sidebar/AdditionalTabs', () => {
@@ -28,7 +28,7 @@ describe('elements/content-sidebar/AdditionalTabs', () => {
         };
 
         const wrapper = getWrapper(props);
-        expect(wrapper.find(AdditionalTab)).toHaveLength(2);
+        expect(wrapper.find('AdditionalTabFtuxTooltipComponent')).toHaveLength(2);
         expect(wrapper.find(AdditionalTabsLoading)).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
@@ -50,7 +50,7 @@ describe('elements/content-sidebar/AdditionalTabs', () => {
 
         wrapper.setState({ isLoading: false });
 
-        expect(wrapper.find(AdditionalTab)).toHaveLength(1);
+        expect(wrapper.find('AdditionalTabFtuxTooltipComponent')).toHaveLength(1);
         expect(wrapper.find(AdditionalTabsLoading)).toHaveLength(0);
         expect(wrapper).toMatchSnapshot();
     });
@@ -121,5 +121,30 @@ describe('elements/content-sidebar/AdditionalTabs', () => {
 
         instance.onImageLoad();
         expect(instance.setState).toBeCalled();
+    });
+
+    test('should render the FTUX tooltip when ftuxTooltipData is present and the tab is not loading', () => {
+        const props = {
+            tabs: [
+                {
+                    id: 200,
+                    title: 'Test title',
+                    iconUrl: 'https://foo.com/icon',
+                    isLoading: false,
+                    ftuxTooltipData: {
+                        targetingApi: jest.fn(),
+                        text: 'ftux text',
+                    },
+                    callback: jest.fn(),
+                    status: 'ADDED',
+                },
+            ],
+        };
+
+        const wrapper = getWrapper(props);
+        wrapper.setState({ isLoading: false });
+
+        const ftuxTooltipComponent = wrapper.find('AdditionalTabFtuxTooltipComponent');
+        expect(ftuxTooltipComponent.dive().find(AdditionalTabFtuxTooltip)).toHaveLength(1);
     });
 });

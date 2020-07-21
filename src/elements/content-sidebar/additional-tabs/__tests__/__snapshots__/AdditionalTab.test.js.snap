@@ -27,33 +27,6 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render di
 </Tooltip>
 `;
 
-exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render the FTUX tooltip when ftuxTooltipData is present 1`] = `
-<AdditionalTabFtuxTooltip
-  targetingApi={[Function]}
-  text="ftux text"
->
-  <Tooltip
-    position="middle-left"
-    text="test title"
-  >
-    <PlainButton
-      className="bdl-AdditionalTab"
-      data-testid="additionaltab"
-      isDisabled={false}
-      onClick={[Function]}
-      type="button"
-    >
-      <img
-        alt="test title"
-        className="bdl-AdditionalTab-icon"
-        onError={[Function]}
-        src="https://foo.com/image"
-      />
-    </PlainButton>
-  </Tooltip>
-</AdditionalTabFtuxTooltip>
-`;
-
 exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render the more icon ellipsis if no valid id and icon URL are provided 1`] = `
 <Tooltip
   position="middle-left"

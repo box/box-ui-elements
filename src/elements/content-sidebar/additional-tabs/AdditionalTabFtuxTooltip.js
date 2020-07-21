@@ -20,7 +20,7 @@ type Props = {
 
 const AdditionalTabFtuxTooltip = ({ children, targetingApi, text }: Props) => (
     <TargetedClickThroughGuideTooltip
-        className="rec-app-ftux-tooltip"
+        className="bdl-AdditionalTabFtuxTooltip"
         body={text}
         position="middle-right"
         shouldTarget
