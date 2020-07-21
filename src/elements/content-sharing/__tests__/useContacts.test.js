@@ -6,15 +6,16 @@ import { mount } from 'enzyme';
 import API from '../../../api';
 import useContacts from '../hooks/useContacts';
 import {
+    MOCK_CONTACTS_API_RESPONSE,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
     MOCK_ITEM_ID,
 } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
 
 const handleSuccess = jest.fn();
 const handleError = jest.fn();
-const transformResponse = jest.fn().mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
+const transformResponseSpy = jest.fn().mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
 
-function FakeComponent({ api }: { api: API }) {
+function FakeComponent({ api, transformResponse }: { api: API, transformResponse: Function }) {
     const [getContacts, setGetContacts] = React.useState(null);
 
     const updatedGetContactsFn = useContacts(api, MOCK_ITEM_ID, { handleSuccess, handleError, transformResponse });
@@ -41,7 +42,7 @@ describe('elements/content-sharing/hooks/useContacts', () => {
     describe('with successful API calls', () => {
         beforeAll(() => {
             getUsersInEnterprise = jest.fn().mockImplementation((itemID, getUsersInEnterpriseSuccess) => {
-                return getUsersInEnterpriseSuccess(MOCK_CONTACTS_CONVERTED_RESPONSE);
+                return getUsersInEnterpriseSuccess(MOCK_CONTACTS_API_RESPONSE);
             });
             mockAPI = {
                 getUsersAPI: jest.fn().mockReturnValue({
@@ -51,6 +52,30 @@ describe('elements/content-sharing/hooks/useContacts', () => {
         });
 
         test('should set the value of getContacts() and retrieve contacts on invocation', () => {
+            let fakeComponent;
+
+            act(() => {
+                fakeComponent = mount(<FakeComponent api={mockAPI} transformResponse={transformResponseSpy} />);
+            });
+            fakeComponent.update();
+
+            const btn = fakeComponent.find('button');
+            expect(btn.prop('onClick')).toBeDefined();
+
+            const contacts = btn.invoke('onClick')(MOCK_FILTER);
+
+            expect(getUsersInEnterprise).toHaveBeenCalledWith(
+                MOCK_ITEM_ID,
+                expect.anything(Function),
+                expect.anything(Function),
+                MOCK_FILTER,
+            );
+            expect(handleSuccess).toHaveBeenCalledWith(MOCK_CONTACTS_API_RESPONSE);
+            expect(transformResponseSpy).toHaveBeenCalledWith(MOCK_CONTACTS_API_RESPONSE);
+            return expect(contacts).resolves.toEqual(MOCK_CONTACTS_CONVERTED_RESPONSE);
+        });
+
+        test('should return the API data if transformResponse() is not provided', () => {
             let fakeComponent;
 
             act(() => {
@@ -69,8 +94,9 @@ describe('elements/content-sharing/hooks/useContacts', () => {
                 expect.anything(Function),
                 MOCK_FILTER,
             );
-            expect(handleSuccess).toHaveBeenCalled();
-            return expect(contacts).resolves.toEqual(MOCK_CONTACTS_CONVERTED_RESPONSE);
+            expect(handleSuccess).toHaveBeenCalledWith(MOCK_CONTACTS_API_RESPONSE);
+            expect(transformResponseSpy).not.toHaveBeenCalled();
+            return expect(contacts).resolves.toEqual(MOCK_CONTACTS_API_RESPONSE);
         });
     });
 
@@ -92,7 +118,7 @@ describe('elements/content-sharing/hooks/useContacts', () => {
             let fakeComponent;
 
             act(() => {
-                fakeComponent = mount(<FakeComponent api={mockAPI} />);
+                fakeComponent = mount(<FakeComponent api={mockAPI} transformResponse={transformResponseSpy} />);
             });
             fakeComponent.update();
 

@@ -1,5 +1,5 @@
 // @flow
-import type { BoxItemPermission, ItemType, SharedLink as APISharedLink } from '../../common/types/core';
+import type { BoxItemPermission, ItemType, SharedLink as APISharedLink, UserCollection } from '../../common/types/core';
 import type {
     contactType,
     item,
@@ -68,7 +68,7 @@ export type ContentSharingItemAPIResponse = {
 
 export type SharedLinkUpdateFnType = () => (level: string) => Promise<void>;
 
-export type GetContactsFnType = () => (filterTerm: string) => Promise<?Array<contactType>> | null;
+export type GetContactsFnType = () => (filterTerm: string) => Promise<Array<contactType> | UserCollection> | null;
 
 export type ContentSharingHooksOptions = {
     handleError?: Function,

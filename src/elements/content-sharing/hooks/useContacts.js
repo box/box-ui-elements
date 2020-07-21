@@ -17,13 +17,13 @@ import type { contactType } from '../../../features/unified-share-modal/flowType
  */
 function useContacts(api: API, itemID: string, options: ContentSharingHooksOptions): GetContactsFnType | null {
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
-    const { handleSuccess = noop, handleError = noop, transformResponse = noop } = options;
+    const { handleSuccess = noop, handleError = noop, transformResponse = arg => arg } = options;
 
     React.useEffect(() => {
         if (getContacts) return;
 
         const updatedGetContactsFn: GetContactsFnType = () => (filterTerm: string) => {
-            return new Promise((resolve: (result?: Array<contactType>) => void) => {
+            return new Promise((resolve: (result: UserCollection | Array<contactType>) => void) => {
                 api.getUsersAPI(false).getUsersInEnterprise(
                     itemID,
                     (response: UserCollection) => {
