@@ -7,7 +7,6 @@
 import React, { PureComponent } from 'react';
 import AdditionalTab from './AdditionalTab';
 import AdditionalTabsLoading from './AdditionalTabsLoading';
-import withFtuxTooltip from './withFtuxTooltip';
 import type { AdditionalSidebarTab } from '../flowTypes';
 
 import './AdditionalTabs.scss';
@@ -19,8 +18,6 @@ type Props = {
 type State = {
     isLoading: boolean,
 };
-
-const AdditionalTabWithFtux = withFtuxTooltip(AdditionalTab);
 
 class AdditionalTabs extends PureComponent<Props, State> {
     numLoadedTabs: number = 0;
@@ -64,7 +61,7 @@ class AdditionalTabs extends PureComponent<Props, State> {
                 {isLoading && <AdditionalTabsLoading />}
                 {tabs &&
                     tabs.map(tabData => (
-                        <AdditionalTabWithFtux
+                        <AdditionalTab
                             key={tabData.id}
                             onImageLoad={this.onImageLoad}
                             isLoading={isLoading}

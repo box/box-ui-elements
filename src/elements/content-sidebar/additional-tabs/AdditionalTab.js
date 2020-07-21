@@ -12,9 +12,9 @@ import { bdlGray50 } from '../../../styles/variables';
 import Tooltip from '../../common/Tooltip';
 import PlainButton from '../../../components/plain-button/PlainButton';
 import IconEllipsis from '../../../icons/general/IconEllipsis';
+import AdditionalTabFtuxTooltip from './AdditionalTabFtuxTooltip';
 import AdditionalTabPlaceholder from './AdditionalTabPlaceholder';
 import messages from './messages';
-
 import type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData } from '../flowTypes';
 
 import './AdditionalTab.scss';
@@ -86,7 +86,16 @@ class AdditionalTab extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { callback: callbackFn, id, isLoading, iconUrl, onImageLoad, title, ...rest } = this.props;
+        const {
+            callback: callbackFn,
+            id,
+            isLoading,
+            iconUrl,
+            ftuxTooltipData,
+            onImageLoad,
+            title,
+            ...rest
+        } = this.props;
 
         const isDisabled = this.isDisabled();
 
@@ -96,19 +105,22 @@ class AdditionalTab extends React.PureComponent<Props, State> {
         });
 
         const tooltipText = isDisabled ? this.getDisabledReason() : title;
+        const isFtuxTooltipVisible = !isLoading && !!ftuxTooltipData;
 
         return (
-            <Tooltip position="middle-left" text={tooltipText}>
-                <PlainButton
-                    className={className}
-                    data-testid="additionaltab"
-                    type="button"
-                    isDisabled={isDisabled}
-                    onClick={() => callbackFn({ id, callbackData: rest })}
-                >
-                    {this.getTabIcon()}
-                </PlainButton>
-            </Tooltip>
+            <AdditionalTabFtuxTooltip isVisible={isFtuxTooltipVisible} {...(ftuxTooltipData || {})}>
+                <Tooltip position="middle-left" text={tooltipText}>
+                    <PlainButton
+                        className={className}
+                        data-testid="additionaltab"
+                        type="button"
+                        isDisabled={isDisabled}
+                        onClick={() => callbackFn({ id, callbackData: rest })}
+                    >
+                        {this.getTabIcon()}
+                    </PlainButton>
+                </Tooltip>
+            </AdditionalTabFtuxTooltip>
         );
     }
 }

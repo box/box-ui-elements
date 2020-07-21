@@ -4,7 +4,7 @@ exports[`elements/content-sidebar/AdditionalTabs should not render the loading s
 <div
   className="bdl-AdditionalTabs"
 >
-  <AdditionalTabFtuxTooltipComponent
+  <AdditionalTab
     callback={[MockFunction]}
     iconUrl="https://foo.com/icon"
     id={200}
@@ -22,7 +22,7 @@ exports[`elements/content-sidebar/AdditionalTabs should render the correct numbe
   className="bdl-AdditionalTabs"
 >
   <AdditionalTabsLoading />
-  <AdditionalTabFtuxTooltipComponent
+  <AdditionalTab
     callback={[MockFunction]}
     iconUrl="https://foo.com/icon"
     id={200}
@@ -32,7 +32,7 @@ exports[`elements/content-sidebar/AdditionalTabs should render the correct numbe
     status="ADDED"
     title="Test title"
   />
-  <AdditionalTabFtuxTooltipComponent
+  <AdditionalTab
     callback={[MockFunction]}
     iconUrl="https://foo.com/icon"
     id={1}

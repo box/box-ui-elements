@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import Tooltip from '../../../common/Tooltip';
 import PlainButton from '../../../../components/plain-button/PlainButton';
 import AdditionalTab from '../AdditionalTab';
+import AdditionalTabFtuxTooltip from '../AdditionalTabFtuxTooltip';
 import AdditionalTabPlaceholder from '../AdditionalTabPlaceholder';
 
 describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
@@ -17,7 +18,7 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
             callback: () => {},
         };
 
-        const wrapper = getWrapper(props);
+        const wrapper = getWrapper(props).dive();
 
         expect(
             wrapper
@@ -37,7 +38,7 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
             callback: () => {},
         };
 
-        const wrapper = getWrapper(props);
+        const wrapper = getWrapper(props).dive();
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -51,8 +52,10 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
         const wrapper = getWrapper(props);
 
         wrapper.setState({ isErrored: true });
-        expect(wrapper.find(AdditionalTabPlaceholder)).toHaveLength(1);
-        expect(wrapper).toMatchSnapshot();
+
+        const wrapperDive = wrapper.dive();
+        expect(wrapperDive.find(AdditionalTabPlaceholder)).toHaveLength(1);
+        expect(wrapperDive).toMatchSnapshot();
     });
 
     test('should render disabled button when blocked by shield access policy', () => {
@@ -65,8 +68,27 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
             status: 'BLOCKED_BY_SHIELD_ACCESS_POLICY',
         };
 
-        const wrapper = getWrapper(props);
+        const wrapper = getWrapper(props).dive();
 
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render the FTUX tooltip when ftuxTooltipData is present and the tab is not loading', () => {
+        const mockSrc = 'https://foo.com/image';
+        const props = {
+            title: 'test title',
+            iconUrl: mockSrc,
+            id: 4,
+            isLoading: false,
+            ftuxTooltipData: {
+                targetingApi: () => {},
+                test: 'ftux tooltip text',
+            },
+            callback: () => {},
+        };
+
+        const wrapper = getWrapper(props);
+
+        expect(wrapper.find(AdditionalTabFtuxTooltip).exists()).toBeTruthy();
     });
 });
