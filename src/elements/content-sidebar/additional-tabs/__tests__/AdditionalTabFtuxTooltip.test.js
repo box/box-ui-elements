@@ -12,7 +12,7 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTabFtuxTooltip', ()
         const targetingApi = () => {};
         const text = 'FTUX Text';
 
-        const wrapper = getWrapper({ isVisible: true, targetingApi, text }, children);
+        const wrapper = getWrapper({ isVisible: true, ftuxTooltipData: { targetingApi, text } }, children);
 
         const tooltip = wrapper.find('.bdl-AdditionalTabFtuxTooltip');
         expect(tooltip.exists()).toBeTruthy();

@@ -108,7 +108,7 @@ class AdditionalTab extends React.PureComponent<Props, State> {
         const isFtuxTooltipVisible = !isLoading && !!ftuxTooltipData;
 
         return (
-            <AdditionalTabFtuxTooltip isVisible={isFtuxTooltipVisible} {...(ftuxTooltipData || {})}>
+            <AdditionalTabFtuxTooltip ftuxTooltipData={ftuxTooltipData} isVisible={isFtuxTooltipVisible}>
                 <Tooltip position="middle-left" text={tooltipText}>
                     <PlainButton
                         className={className}
