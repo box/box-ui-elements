@@ -83,20 +83,29 @@ exports[`features/classification/Classification should render a classified badge
       fubar
     </p>
   </Label>
-  <SecurityControls
-    classificationName="Confidential"
-    controls={
-      Object {
-        "sharedLink": Object {
-          "accessLevel": "collabOnly",
-        },
-      }
+  <Label
+    text={
+      <FormattedMessage
+        defaultMessage="Restrictions"
+        id="boxui.classification.restrictionsLabel"
+      />
     }
-    controlsFormat="short"
-    definition="fubar"
-    itemName=""
-    maxAppCount={3}
-  />
+  >
+    <SecurityControls
+      classificationName="Confidential"
+      controls={
+        Object {
+          "sharedLink": Object {
+            "accessLevel": "collabOnly",
+          },
+        }
+      }
+      controlsFormat="short"
+      definition="fubar"
+      itemName=""
+      maxAppCount={3}
+    />
+  </Label>
 </article>
 `;
 
@@ -138,7 +147,12 @@ exports[`features/classification/Classification should render classification las
         id="boxui.classification.modifiedBy"
         values={
           Object {
-            "modifiedAt": 2020-07-16T00:51:10.000Z,
+            "modifiedAt": <FormattedDate
+              day="numeric"
+              month="long"
+              value={2020-07-16T00:51:10.000Z}
+              year="numeric"
+            />,
             "modifiedBy": "A User",
           }
         }

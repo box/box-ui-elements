@@ -36,6 +36,12 @@ const messages = defineMessages({
         description: 'Sentence stating which user or service modified a classification and on what date.',
         id: 'boxui.classification.modifiedBy',
     },
+    restrictionsLabel: {
+        defaultMessage: 'Restrictions',
+        description:
+            'Label displayed above the security restrictions on the file due to the classification label and associated policies.',
+        id: 'boxui.classification.restrictionsLabel',
+    },
     // Classification Colors
     classificationYellow: {
         defaultMessage: 'Yellow',

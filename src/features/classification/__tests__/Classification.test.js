@@ -1,12 +1,9 @@
 import React from 'react';
-import { createIntl } from 'react-intl';
 
-import { ClassificationCore as Classification } from '../Classification';
+import Classification from '../Classification';
 import ClassifiedBadge from '../ClassifiedBadge';
 import SecurityControls from '../security-controls';
 import LoadingIndicator from '../../../components/loading-indicator/LoadingIndicator';
-
-const intl = createIntl({ locale: 'en' });
 
 describe('features/classification/Classification', () => {
     const getWrapper = (props = {}) => shallow(<Classification {...props} />);
@@ -60,15 +57,35 @@ describe('features/classification/Classification', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should not render classification last modified information when modified props are not provided', () => {
+        const wrapper = getWrapper({
+            name: 'Confidential',
+            definition: 'fubar',
+            messageStyle: 'inline',
+        });
+        expect(wrapper.find('.bdl-Classification-modifiedBy').length).toBe(0);
+    });
+
+    test('should not render classification last modified information when message is tooltip', () => {
+        const wrapper = getWrapper({
+            name: 'Confidential',
+            definition: 'fubar',
+            messageStyle: 'tooltip',
+            modifiedAt: '2020-07-16T00:51:10.000Z',
+            modifiedBy: 'A User',
+        });
+        expect(wrapper.find('.bdl-Classification-modifiedBy').length).toBe(0);
+    });
+
     test('should render classification last modified information when provided and message style is inline', () => {
         const wrapper = getWrapper({
             name: 'Confidential',
             definition: 'fubar',
-            intl,
             messageStyle: 'inline',
             modifiedAt: '2020-07-16T00:51:10.000Z',
             modifiedBy: 'A User',
         });
+        expect(wrapper.find('.bdl-Classification-modifiedBy').length).toBe(1);
         expect(wrapper).toMatchSnapshot();
     });
 
