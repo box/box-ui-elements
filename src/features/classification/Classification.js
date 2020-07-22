@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 
 import Label from '../../components/label/Label';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
@@ -24,18 +25,23 @@ type Props = {
     itemName?: string,
     maxAppCount?: number,
     messageStyle?: typeof STYLE_INLINE | typeof STYLE_TOOLTIP,
+    modifiedAt?: string,
+    modifiedBy?: string,
     name?: string,
     onClick?: (event: SyntheticEvent<HTMLButtonElement>) => void,
-};
+} & InjectIntlProvidedProps;
 
 const Classification = ({
     definition,
     className = '',
     controls,
     controlsFormat,
+    intl,
     isLoadingControls,
     maxAppCount,
     messageStyle,
+    modifiedAt,
+    modifiedBy,
     name,
     itemName = '',
     color,
@@ -43,6 +49,8 @@ const Classification = ({
 }: Props) => {
     const isClassified = !!name;
     const hasDefinition = !!definition;
+    const hasModifiedAt = !!modifiedAt;
+    const hasModifiedBy = !!modifiedBy;
     const hasSecurityControls = !!controls;
     const isTooltipMessageEnabled = isClassified && hasDefinition && messageStyle === STYLE_TOOLTIP;
     const isInlineMessageEnabled = isClassified && hasDefinition && messageStyle === STYLE_INLINE;
@@ -50,6 +58,18 @@ const Classification = ({
     const isControlsIndicatorEnabled = isClassified && isLoadingControls && messageStyle === STYLE_INLINE;
     const isSecurityControlsEnabled =
         isClassified && !isLoadingControls && hasSecurityControls && messageStyle === STYLE_INLINE;
+    const isModifiedMessageVisible = isClassified && hasModifiedAt && hasModifiedBy;
+
+    let formattedModifiedAt;
+
+    if (isModifiedMessageVisible) {
+        const d = new Date(modifiedAt);
+        formattedModifiedAt = intl.formatDate(d, {
+            month: 'long',
+            year: 'numeric',
+            day: 'numeric',
+        });
+    }
 
     return (
         <article className={`bdl-Classification ${className}`}>
@@ -82,10 +102,21 @@ const Classification = ({
                     maxAppCount={maxAppCount}
                 />
             )}
+            {isModifiedMessageVisible && (
+                <Label text={<FormattedMessage {...messages.modifiedByLabel} />}>
+                    <p className="bdl-Classification-modifiedBy">
+                        <FormattedMessage
+                            {...messages.modifiedBy}
+                            values={{ modifiedAt: formattedModifiedAt, modifiedBy }}
+                        />
+                    </p>
+                </Label>
+            )}
             {isControlsIndicatorEnabled && <LoadingIndicator />}
         </article>
     );
 };
 
 export { STYLE_INLINE, STYLE_TOOLTIP };
-export default Classification;
+export { Classification as ClassificationCore };
+export default injectIntl(Classification);

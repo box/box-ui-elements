@@ -100,6 +100,54 @@ exports[`features/classification/Classification should render a classified badge
 </article>
 `;
 
+exports[`features/classification/Classification should render classification last modified information when provided and message style is inline 1`] = `
+<article
+  className="bdl-Classification "
+>
+  <ClassifiedBadge
+    color="#ffeb7f"
+    name="Confidential"
+  />
+  <Label
+    text={
+      <FormattedMessage
+        defaultMessage="Definition"
+        id="boxui.classification.definition"
+      />
+    }
+  >
+    <p
+      className="bdl-Classification-definition"
+    >
+      fubar
+    </p>
+  </Label>
+  <Label
+    text={
+      <FormattedMessage
+        defaultMessage="Classification Updated By"
+        id="boxui.classification.modifiedByLabel"
+      />
+    }
+  >
+    <p
+      className="bdl-Classification-modifiedBy"
+    >
+      <FormattedMessage
+        defaultMessage="{modifiedBy} on {modifiedAt}"
+        id="boxui.classification.modifiedBy"
+        values={
+          Object {
+            "modifiedAt": 2020-07-16T00:51:10.000Z,
+            "modifiedBy": "A User",
+          }
+        }
+      />
+    </p>
+  </Label>
+</article>
+`;
+
 exports[`features/classification/Classification should render not classified message 1`] = `
 <article
   className="bdl-Classification "

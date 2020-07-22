@@ -1,9 +1,12 @@
 import React from 'react';
+import { createIntl } from 'react-intl';
 
-import Classification from '../Classification';
+import { ClassificationCore as Classification } from '../Classification';
 import ClassifiedBadge from '../ClassifiedBadge';
 import SecurityControls from '../security-controls';
 import LoadingIndicator from '../../../components/loading-indicator/LoadingIndicator';
+
+const intl = createIntl({ locale: 'en' });
 
 describe('features/classification/Classification', () => {
     const getWrapper = (props = {}) => shallow(<Classification {...props} />);
@@ -53,6 +56,18 @@ describe('features/classification/Classification', () => {
             definition: 'fubar',
             messageStyle: 'tooltip',
             onClick: () => {},
+        });
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render classification last modified information when provided and message style is inline', () => {
+        const wrapper = getWrapper({
+            name: 'Confidential',
+            definition: 'fubar',
+            intl,
+            messageStyle: 'inline',
+            modifiedAt: '2020-07-16T00:51:10.000Z',
+            modifiedBy: 'A User',
         });
         expect(wrapper).toMatchSnapshot();
     });
