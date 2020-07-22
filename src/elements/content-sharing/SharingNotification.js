@@ -32,7 +32,6 @@ type SharingNotificationProps = {
     ownerEmail: ?string,
     ownerID: ?string,
     permissions: ?BoxItemPermission,
-    serverURL: string,
     setChangeSharedLinkAccessLevel: (changeSharedLinkAccessLevel: SharedLinkUpdateFnType) => void,
     setChangeSharedLinkPermissionLevel: (changeSharedLinkPermissionLevel: SharedLinkUpdateFnType) => void,
     setCollaboratorsList: (collaboratorsList: collaboratorsListType | null) => void,

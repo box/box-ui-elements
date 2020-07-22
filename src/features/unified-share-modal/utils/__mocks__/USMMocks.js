@@ -39,7 +39,7 @@ const MOCK_SHARED_LINK = {
     vanityName: MOCK_VANITY_NAME,
 };
 
-const MOCK_NULL_SHARED_LINK = { canInvite: true };
+const MOCK_NULL_SHARED_LINK = { canInvite: true, enterpriseName: '', serverURL: MOCK_SERVER_URL };
 
 const MOCK_ITEM_ID = '123456789';
 
@@ -81,12 +81,6 @@ const MOCK_ITEM = {
     typedID: '',
 };
 
-const MOCK_ITEM_API_RESPONSE = {
-    item: MOCK_ITEM,
-    shared_link: MOCK_SHARED_LINK,
-    shared_link_features: {},
-};
-
 const MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK = {
     item: MOCK_ITEM,
     shared_link: null,
@@ -123,6 +117,12 @@ const MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION = {
     ...MOCK_SHARED_LINK,
     enterpriseName: '',
     serverURL: MOCK_SERVER_URL,
+};
+
+const MOCK_ITEM_API_RESPONSE = {
+    item: MOCK_ITEM,
+    shared_link: MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
+    shared_link_features: {},
 };
 
 const COLLAB_ITEM = {
@@ -424,6 +424,13 @@ const MOCK_SETTINGS_WITHOUT_VANITY_URL = {
 const MOCK_SETTINGS_DOWNLOAD_PERMISSIONS = { can_download: true, can_preview: false };
 const MOCK_SETTINGS_PREVIEW_PERMISSIONS = { can_download: false, can_preview: true };
 
+const MOCK_CONVERTED_SETTINGS = {
+    permissions: MOCK_SETTINGS_DOWNLOAD_PERMISSIONS,
+    unshared_at: MOCK_TIMESTAMP_ISO_STRING,
+    vanity_url: MOCK_VANITY_URL,
+    password: MOCK_PASSWORD,
+};
+
 export {
     MOCK_COLLABS_API_RESPONSE,
     MOCK_COLLABS_CONVERTED_RESPONSE,
@@ -433,6 +440,7 @@ export {
     MOCK_CONTACTS_CONVERTED_RESPONSE,
     MOCK_CONVERTED_ITEM_DATA,
     MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
+    MOCK_CONVERTED_SETTINGS,
     MOCK_CONVERTED_USER_DATA,
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE,
