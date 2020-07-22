@@ -63,7 +63,7 @@ describe('features/classification/Classification', () => {
             definition: 'fubar',
             messageStyle: 'inline',
         });
-        expect(wrapper.find('.bdl-Classification-modifiedBy').length).toBe(0);
+        expect(wrapper.exists('[data-testid="classification-modifiedby"]')).toBe(false);
     });
 
     test('should not render classification last modified information when message is tooltip', () => {
@@ -74,7 +74,7 @@ describe('features/classification/Classification', () => {
             modifiedAt: '2020-07-16T00:51:10.000Z',
             modifiedBy: 'A User',
         });
-        expect(wrapper.find('.bdl-Classification-modifiedBy').length).toBe(0);
+        expect(wrapper.exists('[data-testid="classification-modifiedby"]')).toBe(false);
     });
 
     test('should render classification last modified information when provided and message style is inline', () => {
@@ -85,8 +85,7 @@ describe('features/classification/Classification', () => {
             modifiedAt: '2020-07-16T00:51:10.000Z',
             modifiedBy: 'A User',
         });
-        expect(wrapper.find('.bdl-Classification-modifiedBy').length).toBe(1);
-        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.exists('[data-testid="classification-modifiedby"]')).toBe(true);
     });
 
     test('should render a classified badge with security controls when provided and message style is inline', () => {

@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
+import { isValidDate } from '../../utils/datetime';
 import Label from '../../components/label/Label';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import ClassifiedBadge from './ClassifiedBadge';
@@ -13,12 +14,6 @@ import type { Controls, ControlsFormat } from './flowTypes';
 
 const STYLE_INLINE: 'inline' = 'inline';
 const STYLE_TOOLTIP: 'tooltip' = 'tooltip';
-
-const formattedDateOptions = {
-    month: 'long',
-    year: 'numeric',
-    day: 'numeric',
-};
 type Props = {
     className?: string,
     color?: string,
@@ -61,10 +56,12 @@ const Classification = ({
     const isControlsIndicatorEnabled = isClassified && isLoadingControls && messageStyle === STYLE_INLINE;
     const isSecurityControlsEnabled =
         isClassified && !isLoadingControls && hasSecurityControls && messageStyle === STYLE_INLINE;
-    const isModifiedMessageVisible = isClassified && hasModifiedAt && hasModifiedBy && messageStyle === STYLE_INLINE;
+    const modifiedDate = new Date(modifiedAt || 0);
+    const isModifiedMessageVisible =
+        isClassified && hasModifiedAt && isValidDate(modifiedDate) && hasModifiedBy && messageStyle === STYLE_INLINE;
 
     const formattedModifiedAt = isModifiedMessageVisible && (
-        <FormattedDate value={new Date(modifiedAt)} {...formattedDateOptions} />
+        <FormattedDate value={modifiedDate} month="long" year="numeric" day="numeric" />
     );
 
     return (
@@ -89,7 +86,7 @@ const Classification = ({
             )}
             {isModifiedMessageVisible && (
                 <Label text={<FormattedMessage {...messages.modifiedByLabel} />}>
-                    <p className="bdl-Classification-modifiedBy">
+                    <p className="bdl-Classification-modifiedBy" data-testid="classification-modifiedby">
                         <FormattedMessage
                             {...messages.modifiedBy}
                             values={{ modifiedAt: formattedModifiedAt, modifiedBy }}
