@@ -761,6 +761,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         if (selectedVersion) {
             setProp(fileOpts, [fileId, 'fileVersionId'], selectedVersion.id);
+            setProp(fileOpts, [fileId, 'currentFileVersionId'], getProp(file, 'file_version.id'));
         }
 
         if (activeAnnotationId) {
