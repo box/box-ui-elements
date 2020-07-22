@@ -6,6 +6,7 @@ import { DEFAULT_MAX_APP_COUNT, SECURITY_CONTROLS_FORMAT } from '../constants';
 import { getShortSecurityControlsMessage, getFullSecurityControlsMessages } from './utils';
 import messages from './messages';
 import PlainButton from '../../../components/plain-button';
+import Label from '../../../components/label/Label';
 import SecurityControlsItem from './SecurityControlsItem';
 import SecurityControlsModal from './SecurityControlsModal';
 import type { Controls, ControlsFormat } from '../flowTypes';
@@ -22,6 +23,7 @@ type Props = {
     definition?: string,
     itemName?: string,
     maxAppCount?: number,
+    shouldRenderLabel?: boolean,
 };
 
 type State = {
@@ -36,6 +38,7 @@ class SecurityControls extends React.Component<Props, State> {
         controls: {},
         controlsFormat: SHORT,
         maxAppCount: DEFAULT_MAX_APP_COUNT,
+        shouldRenderLabel: false,
     };
 
     state = {
@@ -55,6 +58,7 @@ class SecurityControls extends React.Component<Props, State> {
             definition,
             itemName,
             maxAppCount,
+            shouldRenderLabel,
         } = this.props;
 
         let items = [];
@@ -79,13 +83,21 @@ class SecurityControls extends React.Component<Props, State> {
         const shouldShowSecurityControlsModal =
             controlsFormat === SHORT_WITH_BTN && !!itemName && !!classificationName && !!definition;
 
+        let itemsList = (
+            <ul className="bdl-SecurityControls">
+                {items.map(({ message, tooltipMessage }) => (
+                    <SecurityControlsItem key={message.id} message={message} tooltipMessage={tooltipMessage} />
+                ))}
+            </ul>
+        );
+
+        if (shouldRenderLabel) {
+            itemsList = <Label text={<FormattedMessage {...messages.securityControlsLabel} />}>{itemsList}</Label>;
+        }
+
         return (
             <>
-                <ul className="bdl-SecurityControls">
-                    {items.map(({ message, tooltipMessage }) => (
-                        <SecurityControlsItem key={message.id} message={message} tooltipMessage={tooltipMessage} />
-                    ))}
-                </ul>
+                {itemsList}
                 {shouldShowSecurityControlsModal && (
                     <>
                         <PlainButton className="lnk" onClick={this.openModal} type="button">

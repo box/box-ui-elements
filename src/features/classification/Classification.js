@@ -96,17 +96,16 @@ const Classification = ({
             )}
 
             {isSecurityControlsEnabled && (
-                <Label text={<FormattedMessage {...messages.restrictionsLabel} />}>
-                    <SecurityControls
-                        classificationColor={color}
-                        classificationName={name}
-                        controls={controls}
-                        controlsFormat={controlsFormat}
-                        definition={definition}
-                        itemName={itemName}
-                        maxAppCount={maxAppCount}
-                    />
-                </Label>
+                <SecurityControls
+                    classificationColor={color}
+                    classificationName={name}
+                    controls={controls}
+                    controlsFormat={controlsFormat}
+                    definition={definition}
+                    itemName={itemName}
+                    maxAppCount={maxAppCount}
+                    shouldRenderLabel
+                />
             )}
             {isControlsIndicatorEnabled && <LoadingIndicator />}
         </article>

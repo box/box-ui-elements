@@ -83,29 +83,21 @@ exports[`features/classification/Classification should render a classified badge
       fubar
     </p>
   </Label>
-  <Label
-    text={
-      <FormattedMessage
-        defaultMessage="Restrictions"
-        id="boxui.classification.restrictionsLabel"
-      />
-    }
-  >
-    <SecurityControls
-      classificationName="Confidential"
-      controls={
-        Object {
-          "sharedLink": Object {
-            "accessLevel": "collabOnly",
-          },
-        }
+  <SecurityControls
+    classificationName="Confidential"
+    controls={
+      Object {
+        "sharedLink": Object {
+          "accessLevel": "collabOnly",
+        },
       }
-      controlsFormat="short"
-      definition="fubar"
-      itemName=""
-      maxAppCount={3}
-    />
-  </Label>
+    }
+    controlsFormat="short"
+    definition="fubar"
+    itemName=""
+    maxAppCount={3}
+    shouldRenderLabel={true}
+  />
 </article>
 `;
 
