@@ -57,6 +57,37 @@ describe('features/classification/Classification', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should not render classification last modified information when modified props are not provided', () => {
+        const wrapper = getWrapper({
+            name: 'Confidential',
+            definition: 'fubar',
+            messageStyle: 'inline',
+        });
+        expect(wrapper.exists('[data-testid="classification-modifiedby"]')).toBe(false);
+    });
+
+    test('should not render classification last modified information when message is tooltip', () => {
+        const wrapper = getWrapper({
+            name: 'Confidential',
+            definition: 'fubar',
+            messageStyle: 'tooltip',
+            modifiedAt: '2020-07-16T00:51:10.000Z',
+            modifiedBy: 'A User',
+        });
+        expect(wrapper.exists('[data-testid="classification-modifiedby"]')).toBe(false);
+    });
+
+    test('should render classification last modified information when provided and message style is inline', () => {
+        const wrapper = getWrapper({
+            name: 'Confidential',
+            definition: 'fubar',
+            messageStyle: 'inline',
+            modifiedAt: '2020-07-16T00:51:10.000Z',
+            modifiedBy: 'A User',
+        });
+        expect(wrapper.exists('[data-testid="classification-modifiedby"]')).toBe(true);
+    });
+
     test('should render a classified badge with security controls when provided and message style is inline', () => {
         const wrapper = getWrapper({
             name: 'Confidential',
