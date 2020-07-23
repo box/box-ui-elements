@@ -42,6 +42,18 @@ const messages = defineMessages({
         description: 'Message that appears when users cannot be retrieved in the ContentSharing Element.',
         id: 'be.contentSharing.getContactsError',
     },
+    sendInvitesError: {
+        defaultMessage: 'Could not send invites.',
+        description:
+            'Message that appears when collaborators cannot be added to the shared link in the ContentSharing Element.',
+        id: 'be.contentSharing.sendInvitesError',
+    },
+    sendInvitesSuccess: {
+        defaultMessage: 'Successfully invited collaborators.',
+        description:
+            'Message that appears when collaborators were added to the shared link in the ContentSharing Element.',
+        id: 'be.contentSharing.sendInvitesSuccess',
+    },
 });
 
 export default messages;

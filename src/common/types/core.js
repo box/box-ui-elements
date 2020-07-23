@@ -417,7 +417,7 @@ type Collaboration = {
         id: number | string,
         login: string,
         name: string,
-        type: 'user',
+        type: 'user' | 'group',
     },
     expires_at: string | null,
     id: number | string,

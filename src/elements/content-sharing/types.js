@@ -1,5 +1,11 @@
 // @flow
-import type { BoxItemPermission, ItemType, SharedLink as APISharedLink, UserCollection } from '../../common/types/core';
+import type {
+    BoxItemPermission,
+    Collaboration,
+    ItemType,
+    SharedLink as APISharedLink,
+    UserCollection,
+} from '../../common/types/core';
 import type {
     contactType,
     item,
@@ -91,4 +97,9 @@ export type SharedLinkSettingsOptions = {
     isPasswordEnabled: boolean,
     password: string,
     vanityName: string,
+};
+
+export type ContentSharingCollaborationsRequest = {
+    groups: $Shape<Collaboration>,
+    users: $Shape<Collaboration>,
 };

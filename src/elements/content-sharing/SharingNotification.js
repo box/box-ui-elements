@@ -7,6 +7,7 @@ import Notification, { TYPE_ERROR, TYPE_INFO } from '../../components/notificati
 import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
 import useSharedLink from './hooks/useSharedLink';
 import {
+    convertCollabsRequest,
     convertCollabsResponse,
     convertContactsResponse,
     convertItemResponse,
@@ -18,7 +19,11 @@ import useCollaborators from './hooks/useCollaborators';
 import useContacts from './hooks/useContacts';
 import contentSharingMessages from './messages';
 import type { BoxItemPermission, Collaborations, ItemType, NotificationType } from '../../common/types/core';
-import type { collaboratorsListType, item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
+import type {
+    collaboratorsListType,
+    InviteCollaboratorsRequest,
+    item as itemFlowType,
+} from '../../features/unified-share-modal/flowTypes';
 import type {
     ContentSharingItemAPIResponse,
     ContentSharingSharedLinkType,
@@ -39,6 +44,7 @@ type SharingNotificationProps = {
     ownerEmail: ?string,
     ownerID: ?string,
     permissions: ?BoxItemPermission,
+    sendInvites: any,
     serverURL: string,
     setChangeSharedLinkAccessLevel: (changeSharedLinkAccessLevel: () => SharedLinkUpdateLevelFnType | null) => void,
     setChangeSharedLinkPermissionLevel: (
@@ -50,6 +56,7 @@ type SharingNotificationProps = {
     setOnAddLink: (addLink: () => SharedLinkUpdateLevelFnType | null) => void,
     setOnRemoveLink: (removeLink: () => SharedLinkUpdateLevelFnType | null) => void,
     setOnSubmitSettings: (submitSettings: () => SharedLinkUpdateSettingsFnType | null) => void,
+    setSendInvites: Function,
     setSharedLink: ((sharedLink: ContentSharingSharedLinkType | null) => ContentSharingSharedLinkType) => void,
 };
 
@@ -65,6 +72,7 @@ function SharingNotification({
     ownerEmail,
     ownerID,
     permissions,
+    sendInvites,
     serverURL,
     setChangeSharedLinkAccessLevel,
     setChangeSharedLinkPermissionLevel,
@@ -74,6 +82,7 @@ function SharingNotification({
     setOnAddLink,
     setOnRemoveLink,
     setOnSubmitSettings,
+    setSendInvites,
     setSharedLink,
 }: SharingNotificationProps) {
     const [notifications, setNotifications] = React.useState<{ [string]: typeof Notification }>({});
@@ -180,6 +189,23 @@ function SharingNotification({
     if (getContactsFn && !getContacts) {
         setGetContacts(() => getContactsFn);
     }
+
+    React.useEffect(() => {
+        const createPostCollaborationFn = () => async (collabRequest: InviteCollaboratorsRequest) => {
+            const { users, groups } = convertCollabsRequest(collabRequest, itemID, itemType);
+
+            await Promise.all([
+                users.map(user => api.getCollaborationsAPI().addCollaboration(user)),
+                groups.map(group => api.getCollaborationsAPI().addCollaboration(group)),
+            ])
+                .then(() => createNotification('info', contentSharingMessages.sendInvitesSuccess))
+                .catch(() => createNotification('error', contentSharingMessages.sendInvitesError));
+        };
+
+        if (!sendInvites) {
+            setSendInvites(createPostCollaborationFn);
+        }
+    });
 
     return (
         <NotificationsWrapper>

@@ -16,16 +16,26 @@ import {
     ANYONE_WITH_LINK,
     CAN_VIEW_DOWNLOAD,
     CAN_VIEW_ONLY,
+    COLLAB_GROUP_TYPE,
+    COLLAB_USER_TYPE,
     PEOPLE_IN_ITEM,
 } from '../constants';
 import type {
+    ContentSharingCollaborationsRequest,
     ContentSharingItemAPIResponse,
     ContentSharingItemDataType,
     ContentSharingUserDataType,
     SharedLinkSettingsOptions,
 } from '../../../elements/content-sharing/types';
-import type { BoxItemPermission, Collaborations, SharedLink, User, UserCollection } from '../../../common/types/core';
-import type { collaboratorsListType, collaboratorType, contactType } from '../flowTypes';
+import type {
+    BoxItemPermission,
+    Collaborations,
+    ItemType,
+    SharedLink,
+    User,
+    UserCollection,
+} from '../../../common/types/core';
+import type { collaboratorsListType, collaboratorType, contactType, InviteCollaboratorsRequest } from '../flowTypes';
 
 /**
  * The following constants are used for converting API requests
@@ -292,6 +302,49 @@ export const convertCollabsResponse = (
     });
 
     return { collaborators };
+};
+
+/**
+ * Convert a request from the USM (specifically the Invite Collaborators Modal) into the format expected by the Collaborations API.
+ *
+ * @param {InviteCollaboratorsRequest} collabRequest
+ * @param {string} itemID
+ * @param {ItemType} itemType
+ */
+export const convertCollabsRequest = (
+    collabRequest: InviteCollaboratorsRequest,
+    itemID: string,
+    itemType: ItemType,
+): ContentSharingCollaborationsRequest => {
+    const { emails, groupIDs, permission } = collabRequest;
+    const emailArray = emails ? emails.split(',') : [];
+    const groupIDArray = groupIDs ? groupIDs.split(',') : [];
+
+    const sharedCollabSettings = {
+        item: {
+            id: itemID,
+            type: itemType,
+        },
+        role: permission.toLowerCase(), // USM permissions are identical to API roles, except for the casing
+    };
+
+    const users = emailArray.map(email => ({
+        accessible_by: {
+            login: email,
+            type: COLLAB_USER_TYPE,
+        },
+        ...sharedCollabSettings,
+    }));
+
+    const groups = groupIDArray.map(groupID => ({
+        accessible_by: {
+            id: groupID,
+            type: COLLAB_GROUP_TYPE,
+        },
+        ...sharedCollabSettings,
+    }));
+
+    return { users, groups };
 };
 
 /**
