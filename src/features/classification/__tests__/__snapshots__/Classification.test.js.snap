@@ -96,6 +96,7 @@ exports[`features/classification/Classification should render a classified badge
     definition="fubar"
     itemName=""
     maxAppCount={3}
+    shouldRenderLabel={true}
   />
 </article>
 `;
