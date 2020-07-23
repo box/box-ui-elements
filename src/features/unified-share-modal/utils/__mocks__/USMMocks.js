@@ -389,6 +389,8 @@ const MOCK_CONTACTS_CONVERTED_RESPONSE = [
 const MOCK_SETTINGS_WITH_ALL_FEATURES = {
     expirationTimestamp: MOCK_TIMESTAMP,
     isDownloadEnabled: true,
+    isExpirationEnabled: true,
+    isPasswordEnabled: true,
     password: MOCK_PASSWORD,
     vanityName: MOCK_VANITY_NAME,
 };
@@ -396,6 +398,8 @@ const MOCK_SETTINGS_WITH_ALL_FEATURES = {
 const MOCK_SETTINGS_WITHOUT_DOWNLOAD = {
     expirationTimestamp: MOCK_TIMESTAMP,
     isDownloadEnabled: false,
+    isExpirationEnabled: true,
+    isPasswordEnabled: true,
     password: MOCK_PASSWORD,
     vanityName: MOCK_VANITY_NAME,
 };
@@ -403,6 +407,8 @@ const MOCK_SETTINGS_WITHOUT_DOWNLOAD = {
 const MOCK_SETTINGS_WITHOUT_EXPIRATION = {
     expirationTimestamp: null,
     isDownloadEnabled: true,
+    isExpirationEnabled: false,
+    isPasswordEnabled: true,
     password: MOCK_PASSWORD,
     vanityName: MOCK_VANITY_NAME,
 };
@@ -410,6 +416,8 @@ const MOCK_SETTINGS_WITHOUT_EXPIRATION = {
 const MOCK_SETTINGS_WITHOUT_PASSWORD = {
     expirationTimestamp: MOCK_TIMESTAMP,
     isDownloadEnabled: true,
+    isExpirationEnabled: true,
+    isPasswordEnabled: false,
     password: null,
     vanityName: MOCK_VANITY_NAME,
 };
@@ -417,6 +425,8 @@ const MOCK_SETTINGS_WITHOUT_PASSWORD = {
 const MOCK_SETTINGS_WITHOUT_VANITY_URL = {
     expirationTimestamp: MOCK_TIMESTAMP,
     isDownloadEnabled: true,
+    isExpirationEnabled: true,
+    isPasswordEnabled: true,
     password: MOCK_PASSWORD,
     vanityName: null,
 };

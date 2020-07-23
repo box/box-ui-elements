@@ -19,9 +19,16 @@ import useContacts from './hooks/useContacts';
 import contentSharingMessages from './messages';
 import type { BoxItemPermission, Collaborations, ItemType, NotificationType } from '../../common/types/core';
 import type { collaboratorsListType, item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
-import type { ContentSharingSharedLinkType, GetContactsFnType, SharedLinkUpdateFnType } from './types';
+import type {
+    ContentSharingItemAPIResponse,
+    ContentSharingSharedLinkType,
+    GetContactsFnType,
+    SharedLinkUpdateLevelFnType,
+    SharedLinkUpdateSettingsFnType,
+} from './types';
 
 type SharingNotificationProps = {
+    accessLevel: string,
     api: API,
     collaboratorsList: collaboratorsListType | null,
     currentUserID: string | null,
@@ -32,19 +39,22 @@ type SharingNotificationProps = {
     ownerEmail: ?string,
     ownerID: ?string,
     permissions: ?BoxItemPermission,
-    setChangeSharedLinkAccessLevel: (changeSharedLinkAccessLevel: SharedLinkUpdateFnType) => void,
-    setChangeSharedLinkPermissionLevel: (changeSharedLinkPermissionLevel: SharedLinkUpdateFnType) => void,
+    serverURL: string,
+    setChangeSharedLinkAccessLevel: (changeSharedLinkAccessLevel: () => SharedLinkUpdateLevelFnType | null) => void,
+    setChangeSharedLinkPermissionLevel: (
+        changeSharedLinkPermissionLevel: () => SharedLinkUpdateLevelFnType | null,
+    ) => void,
     setCollaboratorsList: (collaboratorsList: collaboratorsListType | null) => void,
     setGetContacts: (getContacts: () => GetContactsFnType | null) => void,
     setItem: ((item: itemFlowType | null) => itemFlowType) => void,
-    setOnAddLink: (addLink: SharedLinkUpdateFnType) => void,
-    setOnRemoveLink: (removeLink: SharedLinkUpdateFnType) => void,
-    setOnSubmitSettings: Function,
+    setOnAddLink: (addLink: () => SharedLinkUpdateLevelFnType | null) => void,
+    setOnRemoveLink: (removeLink: () => SharedLinkUpdateLevelFnType | null) => void,
+    setOnSubmitSettings: (submitSettings: () => SharedLinkUpdateSettingsFnType | null) => void,
     setSharedLink: ((sharedLink: ContentSharingSharedLinkType | null) => ContentSharingSharedLinkType) => void,
-    sharedLink: any,
 };
 
 function SharingNotification({
+    accessLevel,
     api,
     collaboratorsList,
     currentUserID,
@@ -55,6 +65,7 @@ function SharingNotification({
     ownerEmail,
     ownerID,
     permissions,
+    serverURL,
     setChangeSharedLinkAccessLevel,
     setChangeSharedLinkPermissionLevel,
     setGetContacts,
@@ -64,7 +75,6 @@ function SharingNotification({
     setOnRemoveLink,
     setOnSubmitSettings,
     setSharedLink,
-    sharedLink,
 }: SharingNotificationProps) {
     const [notifications, setNotifications] = React.useState<{ [string]: typeof Notification }>({});
     const [notificationID, setNotificationID] = React.useState<number>(0);
@@ -104,37 +114,49 @@ function SharingNotification({
         [handleNotificationClose, notificationID, notifications],
     );
 
+    // Handle successful PUT requests to /files or /folders
+    const handleUpdateSharedLinkSuccess = (itemData: ContentSharingItemAPIResponse) => {
+        const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
+        setItem((prevItem: itemFlowType | null) => ({ ...prevItem, ...updatedItem }));
+        setSharedLink((prevSharedLink: ContentSharingSharedLinkType | null) => {
+            return {
+                ...prevSharedLink,
+                ...updatedSharedLink,
+            };
+        }); // merge new shared link data with current shared link data
+    };
+
+    // Handle a successful shared link deletion request
+    const handleRemoveSharedLinkSuccess = (itemData: ContentSharingItemAPIResponse) => {
+        const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
+        setItem((prevItem: itemFlowType | null) => ({ ...prevItem, ...updatedItem }));
+        setSharedLink(() => updatedSharedLink); // replace shared link data completely
+    };
+
     // Generate shared link CRUD functions for the item
-    const { serverURL } = sharedLink;
     const {
         changeSharedLinkAccessLevel,
         changeSharedLinkPermissionLevel,
         onAddLink,
         onRemoveLink,
         onSubmitSettings,
-    } = useSharedLink(
-        api,
-        itemID,
-        itemType,
-        sharedLink,
-        permissions,
-        setItem,
-        setSharedLink,
-        {
-            handleError: () => createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError),
-            handleSuccess: () => {
-                createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess);
-                onRequestClose();
-            },
+    } = useSharedLink(api, itemID, itemType, permissions, accessLevel, {
+        handleError: () => createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError),
+        handleUpdateSharedLinkSuccess: itemData => {
+            createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess);
+            handleUpdateSharedLinkSuccess(itemData);
+            onRequestClose();
         },
-        {
-            transformAccess: access => USM_TO_API_ACCESS_LEVEL_MAP[access],
-            transformItem: item => convertItemResponse(item),
-            transformPermissions: newSharedLinkPermissionLevel =>
-                convertSharedLinkPermissions(newSharedLinkPermissionLevel),
-            transformSettings: newSettings => convertSharedLinkSettings(newSettings, serverURL),
+        handleRemoveSharedLinkSuccess: itemData => {
+            createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess);
+            handleRemoveSharedLinkSuccess(itemData);
+            onRequestClose();
         },
-    );
+        transformAccess: newAccessLevel => USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel],
+        transformPermissions: newSharedLinkPermissionLevel =>
+            convertSharedLinkPermissions(newSharedLinkPermissionLevel),
+        transformSettings: (settings, access) => convertSharedLinkSettings(settings, access, serverURL),
+    });
 
     setChangeSharedLinkAccessLevel(() => changeSharedLinkAccessLevel);
     setChangeSharedLinkPermissionLevel(() => changeSharedLinkPermissionLevel);

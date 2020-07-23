@@ -35,7 +35,7 @@ export const API_TO_USM_ACCESS_LEVEL_MAP = {
     [ACCESS_COLLAB]: PEOPLE_IN_ITEM,
     [ACCESS_COMPANY]: ANYONE_IN_COMPANY,
     [ACCESS_OPEN]: ANYONE_WITH_LINK,
-    [ACCESS_NONE]: null,
+    [ACCESS_NONE]: '',
 };
 export const API_TO_USM_PERMISSION_LEVEL_MAP = {
     [PERMISSION_CAN_DOWNLOAD]: CAN_VIEW_DOWNLOAD,
@@ -99,10 +99,11 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
             vanity_name: vanityName,
         } = shared_link;
 
-        const accessLevel = effective_access ? API_TO_USM_ACCESS_LEVEL_MAP[effective_access] : null;
+        const accessLevel = effective_access ? API_TO_USM_ACCESS_LEVEL_MAP[effective_access] : '';
         const permissionLevel = effective_permission ? API_TO_USM_PERMISSION_LEVEL_MAP[effective_permission] : null;
         const isDownloadAllowed = permissionLevel === API_TO_USM_PERMISSION_LEVEL_MAP.can_download;
-        const canChangeDownload = canChangeAccessLevel && isDownloadSettingAvailable;
+        const canChangeDownload =
+            canChangeAccessLevel && isDownloadSettingAvailable && effective_access !== ACCESS_COLLAB; // access must be "company" or "open"
         const canChangePassword = canChangeAccessLevel && isPasswordAvailable;
         const canChangeExpiration = canChangeAccessLevel && isEditAllowed;
 
@@ -195,21 +196,53 @@ export const convertSharedLinkPermissions = (newSharedLinkPermissionLevel: strin
  * Convert a shared link settings object from the USM into the format that the API expects.
  *
  * @param {SharedLinkSettingsOptions} newSettings
+ * @param {accessLevel} string
  * @param {serverURL} string
  * @returns {$Shape<SharedLink>}
  */
 export const convertSharedLinkSettings = (
     newSettings: SharedLinkSettingsOptions,
+    accessLevel: string,
     serverURL: string,
 ): $Shape<SharedLink> => {
-    const { expirationTimestamp, isDownloadEnabled: can_download, password, vanityName } = newSettings;
-
-    return {
-        permissions: { can_download, can_preview: !can_download },
-        unshared_at: expirationTimestamp ? new Date(expirationTimestamp).toISOString() : null,
-        vanity_url: serverURL && vanityName ? `${serverURL}${vanityName}` : null,
-        ...(password && { password }),
+    const {
+        expirationTimestamp,
+        isDownloadEnabled: can_download,
+        isExpirationEnabled,
+        isPasswordEnabled,
+        password,
+        vanityName,
+    } = newSettings;
+    const convertedSettings: $Shape<SharedLink> = {
+        unshared_at: expirationTimestamp && isExpirationEnabled ? new Date(expirationTimestamp).toISOString() : null,
+        vanity_url: serverURL && vanityName ? `${serverURL}${vanityName}` : '',
+        // Download permissions can only be set on "company" or "open" shared links.
+        // A Flow limitation prevents the usage of an && statement in an object spread: https://github.com/facebook/flow/issues/5946
+        ...(accessLevel !== PEOPLE_IN_ITEM ? { permissions: { can_download, can_preview: !can_download } } : {}),
     };
+
+    /**
+     * This block covers the following cases:
+     * - Setting a new password: "isPasswordEnabled" is true, and "password" is a non-empty string.
+     * - Removing a password: "isPasswordEnabled" is false, and "password" is an empty string.
+     *   The API only accepts non-empty strings and null values, so the empty string must be converted to null.
+     *
+     * Other notes:
+     * - Passwords can only be set on "open" shared links.
+     * - Attempting to set the password field on any other type of shared link will throw a 400 error.
+     * - When other settings are updated, and a password has already been set, the SharedLinkSettingsModal
+     *   returns password = '' and isPasswordEnabled = true. In these cases, the password should *not*
+     *   be converted to null, because that would remove the existing password.
+     */
+    if (accessLevel === ANYONE_WITH_LINK) {
+        if (isPasswordEnabled && !!password) {
+            convertedSettings.password = password;
+        } else if (!isPasswordEnabled) {
+            convertedSettings.password = null;
+        }
+    }
+
+    return convertedSettings;
 };
 
 /**

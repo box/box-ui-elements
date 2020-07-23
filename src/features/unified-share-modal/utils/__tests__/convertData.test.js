@@ -7,8 +7,23 @@ import {
     convertSharedLinkPermissions,
     convertSharedLinkSettings,
 } from '../convertData';
-import { TYPE_FILE, TYPE_FOLDER, PERMISSION_CAN_DOWNLOAD, PERMISSION_CAN_PREVIEW } from '../../../../constants';
-import { ALLOWED_ACCESS_LEVELS, ANYONE_IN_COMPANY, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from '../../constants';
+import {
+    TYPE_FILE,
+    TYPE_FOLDER,
+    PERMISSION_CAN_DOWNLOAD,
+    PERMISSION_CAN_PREVIEW,
+    ACCESS_COLLAB,
+    ACCESS_COMPANY,
+    ACCESS_OPEN,
+} from '../../../../constants';
+import {
+    ALLOWED_ACCESS_LEVELS,
+    ANYONE_IN_COMPANY,
+    ANYONE_WITH_LINK,
+    CAN_VIEW_DOWNLOAD,
+    CAN_VIEW_ONLY,
+    PEOPLE_IN_ITEM,
+} from '../../constants';
 import {
     MOCK_COLLABS_API_RESPONSE,
     MOCK_COLLAB_IDS_CONVERTED,
@@ -30,6 +45,7 @@ import {
     MOCK_TIMESTAMP_ISO_STRING,
     MOCK_USER_IDS_CONVERTED,
     MOCK_VANITY_URL,
+    MOCK_ITEM_PERMISSIONS,
 } from '../__mocks__/USMMocks';
 
 jest.mock('../../../../utils/file', () => ({
@@ -266,6 +282,37 @@ describe('convertItemResponse()', () => {
             expect(convertItemResponse(responseFromAPI)).toEqual(convertedResponse);
         },
     );
+
+    test.each`
+        access            | permission                 | expectedIsDownloadAllowed | expectedCanChangeDownload | description
+        ${ACCESS_COLLAB}  | ${PERMISSION_CAN_DOWNLOAD} | ${true}                   | ${false}                  | ${'access is "collab" and shared link permission is "can_download"'}
+        ${ACCESS_COMPANY} | ${PERMISSION_CAN_DOWNLOAD} | ${true}                   | ${true}                   | ${'access is "company" and shared link permission is "can_download"'}
+        ${ACCESS_OPEN}    | ${PERMISSION_CAN_DOWNLOAD} | ${true}                   | ${true}                   | ${'access is "open" and shared link permission is "can_download"'}
+        ${ACCESS_COLLAB}  | ${PERMISSION_CAN_PREVIEW}  | ${false}                  | ${false}                  | ${'access is "collab" and shared link permission is "can_preview"'}
+        ${ACCESS_COMPANY} | ${PERMISSION_CAN_PREVIEW}  | ${false}                  | ${true}                   | ${'access is "company" and shared link permission is "can_preview"'}
+        ${ACCESS_OPEN}    | ${PERMISSION_CAN_PREVIEW}  | ${false}                  | ${true}                   | ${'access is "open" and shared link permission is "can_preview"'}
+    `(
+        'should set download properties correctly when $description',
+        ({ access, permission, expectedIsDownloadAllowed, expectedCanChangeDownload }) => {
+            const responseFromAPI = {
+                allowed_invitee_roles: ['editor', 'viewer'],
+                description: ITEM_DESCRIPTION,
+                etag: '1',
+                id: ITEM_ID,
+                name: ITEM_NAME,
+                owned_by: MOCK_OWNER,
+                permissions: MOCK_ITEM_PERMISSIONS,
+                shared_link: { ...ITEM_SHARED_LINK, effective_access: access, effective_permission: permission },
+                shared_link_features: ALL_SHARED_LINK_FEATURES,
+                type: TYPE_FILE,
+            };
+            const {
+                sharedLink: { canChangeDownload, isDownloadAllowed },
+            } = convertItemResponse(responseFromAPI);
+            expect(canChangeDownload).toBe(expectedCanChangeDownload);
+            expect(isDownloadAllowed).toBe(expectedIsDownloadAllowed);
+        },
+    );
 });
 
 describe('convertUserResponse()', () => {
@@ -313,22 +360,60 @@ describe('convertSharedLinkPermissions', () => {
 
 describe('convertSharedLinkSettings', () => {
     test.each`
+        newSettings                         | permissions                           | unsharedAt                   | vanityUrl          | serverURL          | description
+        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'with all features'}
+        ${MOCK_SETTINGS_WITHOUT_DOWNLOAD}   | ${MOCK_SETTINGS_PREVIEW_PERMISSIONS}  | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'without disallowed direct downloads'}
+        ${MOCK_SETTINGS_WITHOUT_EXPIRATION} | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${null}                      | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'without an expiration date'}
+        ${MOCK_SETTINGS_WITHOUT_PASSWORD}   | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'without a password'}
+        ${MOCK_SETTINGS_WITHOUT_VANITY_URL} | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${''}              | ${MOCK_SERVER_URL} | ${'without a vanity name'}
+        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${''}              | ${null}            | ${'without a server URL'}
+    `(
+        'should convert a shared link settings USM object $description when the accessLevel is ANYONE_IN_COMPANY',
+        ({ newSettings, permissions, unsharedAt, serverURL, vanityUrl }) => {
+            // "password" should not exist in the converted object
+            expect(convertSharedLinkSettings(newSettings, ANYONE_IN_COMPANY, serverURL)).toEqual({
+                permissions,
+                unshared_at: unsharedAt,
+                vanity_url: vanityUrl,
+            });
+        },
+    );
+    test.each`
+        newSettings                         | unsharedAt                   | vanityUrl          | serverURL          | description
+        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'with all features'}
+        ${MOCK_SETTINGS_WITHOUT_DOWNLOAD}   | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'without disallowed direct downloads'}
+        ${MOCK_SETTINGS_WITHOUT_EXPIRATION} | ${null}                      | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'without an expiration date'}
+        ${MOCK_SETTINGS_WITHOUT_PASSWORD}   | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'without a password'}
+        ${MOCK_SETTINGS_WITHOUT_VANITY_URL} | ${MOCK_TIMESTAMP_ISO_STRING} | ${''}              | ${MOCK_SERVER_URL} | ${'without a vanity name'}
+        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_TIMESTAMP_ISO_STRING} | ${''}              | ${null}            | ${'without a server URL'}
+    `(
+        'should convert a shared link settings USM object $description when the accessLevel is PEOPLE_IN_ITEM',
+        ({ newSettings, unsharedAt, serverURL, vanityUrl }) => {
+            // "password" and "permissions" should not exist in the converted object
+            expect(convertSharedLinkSettings(newSettings, PEOPLE_IN_ITEM, serverURL)).toEqual({
+                unshared_at: unsharedAt,
+                vanity_url: vanityUrl,
+            });
+        },
+    );
+
+    test.each`
         newSettings                         | permissions                           | unsharedAt                   | vanityUrl          | password         | serverURL          | description
         ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'with all features'}
         ${MOCK_SETTINGS_WITHOUT_DOWNLOAD}   | ${MOCK_SETTINGS_PREVIEW_PERMISSIONS}  | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'without disallowed direct downloads'}
         ${MOCK_SETTINGS_WITHOUT_EXPIRATION} | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${null}                      | ${MOCK_VANITY_URL} | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'without an expiration date'}
         ${MOCK_SETTINGS_WITHOUT_PASSWORD}   | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${null}          | ${MOCK_SERVER_URL} | ${'without a password'}
-        ${MOCK_SETTINGS_WITHOUT_VANITY_URL} | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${null}            | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'without a vanity name'}
-        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${null}            | ${MOCK_PASSWORD} | ${null}            | ${'without a server URL'}
+        ${MOCK_SETTINGS_WITHOUT_VANITY_URL} | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${''}              | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'without a vanity name'}
+        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${''}              | ${MOCK_PASSWORD} | ${null}            | ${'without a server URL'}
     `(
-        'should convert a shared link settings USM object $description',
+        'should convert a shared link settings USM object $description when the accessLevel is ANYONE_WITH_LINK',
         ({ newSettings, password, permissions, unsharedAt, serverURL, vanityUrl }) => {
-            const passwordObject = password && { password };
-            expect(convertSharedLinkSettings(newSettings, serverURL)).toEqual({
+            // All fields should exist in the converted object
+            expect(convertSharedLinkSettings(newSettings, ANYONE_WITH_LINK, serverURL)).toEqual({
+                password,
                 permissions,
                 unshared_at: unsharedAt,
                 vanity_url: vanityUrl,
-                ...passwordObject,
             });
         },
     );

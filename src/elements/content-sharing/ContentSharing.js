@@ -25,7 +25,8 @@ import type {
     ContentSharingItemAPIResponse,
     ContentSharingSharedLinkType,
     GetContactsFnType,
-    SharedLinkUpdateFnType,
+    SharedLinkUpdateLevelFnType,
+    SharedLinkUpdateSettingsFnType,
 } from './types';
 
 type ContentSharingProps = {
@@ -52,18 +53,19 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     const [currentUserID, setCurrentUserID] = React.useState<string | null>(null);
     const [componentErrorMessage, setComponentErrorMessage] = React.useState<Object | null>(null);
     const [collaboratorsList, setCollaboratorsList] = React.useState<collaboratorsListType | null>(null);
-    const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateFnType>(null);
-    const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateFnType>(null);
-    const [changeSharedLinkAccessLevel, setChangeSharedLinkAccessLevel] = React.useState<null | SharedLinkUpdateFnType>(
-        null,
-    );
+    const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
+    const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
+    const [
+        changeSharedLinkAccessLevel,
+        setChangeSharedLinkAccessLevel,
+    ] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
     const [
         changeSharedLinkPermissionLevel,
         setChangeSharedLinkPermissionLevel,
-    ] = React.useState<null | SharedLinkUpdateFnType>(null);
+    ] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
+    const [onSubmitSettings, setOnSubmitSettings] = React.useState<null | SharedLinkUpdateSettingsFnType>(null);
     const [currentView, setCurrentView] = React.useState<string>(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL);
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
-    const [onSubmitSettings, setOnSubmitSettings] = React.useState<null | Function>(null);
 
     // Reset the API if necessary
     React.useEffect(() => {
@@ -71,12 +73,12 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     }, [apiHost, itemID, itemType, token]);
 
     // Handle successful GET requests to /files or /folders
-    const handleGetItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
+    const handleGetItemSuccess = React.useCallback((itemData: ContentSharingItemAPIResponse) => {
         const { item: itemFromAPI, sharedLink: sharedLinkFromAPI } = convertItemResponse(itemData);
         setComponentErrorMessage(null);
         setItem(itemFromAPI);
         setSharedLink(sharedLinkFromAPI);
-    };
+    }, []);
 
     // Handle component-level errors
     const getError = React.useCallback(
@@ -124,7 +126,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         if (!item && !sharedLink) {
             getItem();
         }
-    }, [api, getError, item, itemID, itemType, sharedLink]);
+    }, [api, getError, handleGetItemSuccess, item, itemID, itemType, sharedLink]);
 
     // Get initial data for the user
     React.useEffect(() => {
@@ -153,12 +155,15 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     }
 
     // Ensure that all necessary data has been received before rendering child components
+    // "serverURL" is added to sharedLink after the call to the Users API
     if (item && sharedLink && currentUserID && sharedLink.serverURL) {
         const { ownerEmail, ownerID, permissions } = item;
+        const { accessLevel = '', serverURL } = sharedLink;
         return (
             <Internationalize language={language} messages={usmMessages}>
                 <>
                     <SharingNotification
+                        accessLevel={accessLevel}
                         api={api}
                         collaboratorsList={collaboratorsList}
                         currentUserID={currentUserID}
@@ -166,9 +171,11 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         itemID={itemID}
                         itemType={itemType}
                         onRequestClose={() => setCurrentView(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL)}
+                        onSubmitSettings={onSubmitSettings}
                         ownerEmail={ownerEmail}
                         ownerID={ownerID}
                         permissions={permissions}
+                        serverURL={serverURL}
                         setChangeSharedLinkAccessLevel={setChangeSharedLinkAccessLevel}
                         setChangeSharedLinkPermissionLevel={setChangeSharedLinkPermissionLevel}
                         setGetContacts={setGetContacts}
@@ -178,7 +185,6 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         setOnRemoveLink={setOnRemoveLink}
                         setOnSubmitSettings={setOnSubmitSettings}
                         setSharedLink={setSharedLink}
-                        sharedLink={sharedLink}
                     />
                     {currentView === CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS && (
                         <SharedLinkSettingsModal

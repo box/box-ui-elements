@@ -6,73 +6,53 @@ import { ACCESS_COLLAB, ACCESS_NONE, TYPE_FILE, TYPE_FOLDER } from '../../../con
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from '../constants';
 import type { RequestOptions } from '../../../common/types/api';
 import type { BoxItemPermission, ItemType } from '../../../common/types/core';
-import type { item as itemFlowType } from '../../../features/unified-share-modal/flowTypes';
-import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType, SharedLinkUpdateFnType } from '../types';
+import type { ContentSharingHooksOptions, SharedLinkUpdateLevelFnType, SharedLinkUpdateSettingsFnType } from '../types';
 
 /**
+ * Generate CRUD functions for shared links.
  *
- * @param {*} api
- * @param {*} itemID
- * @param {*} itemType
- * @param {*} sharedLink
- * @param {*} permissions
- * @param {*} setItem
- * @param {any}
- * @param {*} setSharedLink
- * @param {any}
- * @param {*} [responseHandlers]
- * @param {*} [transformationHandlers]
+ * @param {API} api
+ * @param {string} itemID
+ * @param {ItemType} itemType
+ * @param {BoxItemPermission} permissions
+ * @param {string} accessLevel
+ * @param {ContentSharingHooksOptions} [options]
  */
 function useSharedLink(
     api: API,
     itemID: string,
     itemType: ItemType,
-    sharedLink: any,
     permissions: ?BoxItemPermission,
-    setItem: ((item: itemFlowType | null) => itemFlowType) => void,
-    setSharedLink: ((sharedLink: ContentSharingSharedLinkType | null) => ContentSharingSharedLinkType) => void,
-    responseHandlers = {},
-    transformationHandlers = {},
+    accessLevel: string,
+    options: ContentSharingHooksOptions = {},
 ) {
-    const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateFnType>(null);
-    const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateFnType>(null);
-    const [changeSharedLinkAccessLevel, setChangeSharedLinkAccessLevel] = React.useState<null | SharedLinkUpdateFnType>(
-        null,
-    );
+    const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
+    const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
+    const [
+        changeSharedLinkAccessLevel,
+        setChangeSharedLinkAccessLevel,
+    ] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
     const [
         changeSharedLinkPermissionLevel,
         setChangeSharedLinkPermissionLevel,
-    ] = React.useState<null | SharedLinkUpdateFnType>(null);
-    const [onSubmitSettings, setOnSubmitSettings] = React.useState<null | Function>(null);
+    ] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
+    const [onSubmitSettings, setOnSubmitSettings] = React.useState<null | SharedLinkUpdateSettingsFnType>(null);
     const [generatedFunctions, setGeneratedFunctions] = React.useState<boolean>(false);
-    const { handleError = noop, handleSuccess = noop } = responseHandlers;
+
+    // Storing the access level in a ref allows us to update settings, which depend on the access level, after potentially updating the access level
+    const currentAccessLevel = React.useRef(accessLevel);
+
     const {
+        handleError = noop,
+        handleRemoveSharedLinkSuccess = arg => arg,
+        handleUpdateSharedLinkSuccess = arg => arg,
         transformAccess = arg => arg,
-        transformItem = arg => arg,
         transformPermissions = arg => arg,
-        transformSettings = arg => arg,
-    } = transformationHandlers;
+        transformSettings = (data, access) => data, // eslint-disable-line no-unused-vars
+    } = options;
 
     React.useEffect(() => {
         if (!permissions || generatedFunctions) return;
-
-        // Handle successful PUT requests to /files or /folders
-        const handleUpdateItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
-            const { item: updatedItem, sharedLink: updatedSharedLink } = transformItem(itemData);
-            setItem((prevItem: itemFlowType | null) => ({ ...prevItem, ...updatedItem }));
-            setSharedLink((prevSharedLink: ContentSharingSharedLinkType | null) => ({
-                ...prevSharedLink,
-                ...updatedSharedLink,
-            }));
-            handleSuccess();
-        };
-
-        const handleRemoveSharedLinkSuccess = (itemData: ContentSharingItemAPIResponse) => {
-            const { item: updatedItem, sharedLink: updatedSharedLink } = transformItem(itemData);
-            setItem((prevItem: itemFlowType | null) => ({ ...prevItem, ...updatedItem }));
-            setSharedLink(() => updatedSharedLink);
-            handleSuccess();
-        };
 
         const itemData = {
             id: itemID,
@@ -80,73 +60,70 @@ function useSharedLink(
         };
 
         let itemAPIInstance;
+
         if (itemType === TYPE_FILE) {
             itemAPIInstance = api.getFileAPI();
         } else if (itemType === TYPE_FOLDER) {
             itemAPIInstance = api.getFolderAPI();
         }
 
-        const createSharedLinkAPIConnection = (
+        // Create functions that alter the access level of a shared link
+        const connectToItemShare = (
             accessType: string,
             requestOptions?: RequestOptions = CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-            successFn?: (itemData: ContentSharingItemAPIResponse) => void = handleUpdateItemSuccess,
+            successFn?: Function = handleUpdateSharedLinkSuccess,
         ) => {
             return itemAPIInstance.share(itemData, accessType, successFn, handleError, requestOptions);
         };
 
-        const updatedOnAddLinkFn: SharedLinkUpdateFnType = () => () => createSharedLinkAPIConnection(ACCESS_COLLAB);
+        const updatedOnAddLinkFn: SharedLinkUpdateLevelFnType = () => () => connectToItemShare(ACCESS_COLLAB);
         setOnAddLink(updatedOnAddLinkFn);
 
-        const updatedOnRemoveLinkFn: SharedLinkUpdateFnType = () => () =>
-            createSharedLinkAPIConnection(ACCESS_NONE, undefined, handleRemoveSharedLinkSuccess);
+        const updatedOnRemoveLinkFn: SharedLinkUpdateLevelFnType = () => () =>
+            connectToItemShare(ACCESS_NONE, undefined, handleRemoveSharedLinkSuccess);
         setOnRemoveLink(updatedOnRemoveLinkFn);
 
-        const updatedChangeSharedLinkAccessLevelFn: SharedLinkUpdateFnType = () => (newAccessLevel: string) =>
-            createSharedLinkAPIConnection(transformAccess(newAccessLevel));
+        const updatedChangeSharedLinkAccessLevelFn: SharedLinkUpdateLevelFnType = () => (newAccessLevel: string) =>
+            connectToItemShare(transformAccess(newAccessLevel), undefined, data => {
+                currentAccessLevel.current = newAccessLevel;
+                handleUpdateSharedLinkSuccess(data);
+            });
         setChangeSharedLinkAccessLevel(updatedChangeSharedLinkAccessLevelFn);
 
-        const updatedChangeSharedLinkPermissionLevelFn: SharedLinkUpdateFnType = () => (
-            newSharedLinkPermissionLevel: string,
-        ) => {
+        const connectToUpdateSharedLink = (newSharedLinkData: Object) => {
             return itemAPIInstance.updateSharedLink(
                 itemData,
-                {
-                    permissions: transformPermissions(newSharedLinkPermissionLevel),
-                },
-                handleUpdateItemSuccess,
+                newSharedLinkData,
+                handleUpdateSharedLinkSuccess,
                 handleError,
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
         };
+
+        const updatedChangeSharedLinkPermissionLevelFn: SharedLinkUpdateLevelFnType = () => (
+            newSharedLinkPermissionLevel: string,
+        ) => connectToUpdateSharedLink({ permissions: transformPermissions(newSharedLinkPermissionLevel) });
         setChangeSharedLinkPermissionLevel(updatedChangeSharedLinkPermissionLevelFn);
 
-        const updatedOnSubmitSettingsFn = () => newSettings => {
-            return itemAPIInstance.updateSharedLink(
-                itemData,
-                transformSettings(newSettings),
-                handleUpdateItemSuccess,
-                handleError,
-                CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-            );
-        };
+        const updatedOnSubmitSettingsFn: SharedLinkUpdateSettingsFnType = () => newSettings =>
+            connectToUpdateSharedLink(transformSettings(newSettings, currentAccessLevel.current));
         setOnSubmitSettings(updatedOnSubmitSettingsFn);
 
         setGeneratedFunctions(true);
     }, [
-        api,
+        permissions,
         generatedFunctions,
-        handleError,
-        handleSuccess,
         itemID,
         itemType,
-        permissions,
-        setItem,
-        setSharedLink,
-        sharedLink,
+        handleUpdateSharedLinkSuccess,
+        handleError,
+        handleRemoveSharedLinkSuccess,
         transformAccess,
-        transformItem,
+        accessLevel,
         transformPermissions,
         transformSettings,
+        currentAccessLevel,
+        api,
     ]);
 
     return {
