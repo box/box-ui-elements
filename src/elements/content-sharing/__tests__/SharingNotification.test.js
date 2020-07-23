@@ -8,9 +8,10 @@ import {
     MOCK_COLLABS_API_RESPONSE,
     MOCK_COLLABS_CONVERTED_RESPONSE,
     MOCK_ITEM_ID,
+    MOCK_ITEM_PERMISSIONS,
     MOCK_OWNER_EMAIL,
     MOCK_OWNER_ID,
-    MOCK_ITEM_PERMISSIONS,
+    MOCK_SHARED_LINK,
 } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
 import Notification from '../../../components/notification/Notification';
 import NotificationsWrapper from '../../../components/notification/NotificationsWrapper';
@@ -28,6 +29,7 @@ describe('elements/content-sharing/SharingNotification', () => {
     const setOnRemoveLinkStub = jest.fn();
     const setSharedLinkStub = jest.fn();
     const setCollaboratorsListStub = jest.fn();
+    const setOnSubmitSettingsStub = jest.fn();
     const createAPIInstance = getCollabStub => ({
         getFileAPI: jest.fn().mockReturnValue({
             share: jest.fn(),
@@ -63,6 +65,8 @@ describe('elements/content-sharing/SharingNotification', () => {
                 setOnAddLink={setOnAddLinkStub}
                 setOnRemoveLink={setOnRemoveLinkStub}
                 setOnSharedLink={setSharedLinkStub}
+                setOnSubmitSettings={setOnSubmitSettingsStub}
+                sharedLink={MOCK_SHARED_LINK}
                 {...props}
             />,
         );
@@ -83,14 +87,7 @@ describe('elements/content-sharing/SharingNotification', () => {
             expect(setChangeSharedLinkAccessLevelStub).toHaveBeenCalled();
             expect(setChangeSharedLinkPermissionLevelStub).toHaveBeenCalled();
             expect(setGetContactsStub).toHaveBeenCalled();
-        });
-
-        test('should not call state setting functions that require permissions if given null permissions', () => {
-            getWrapper({ api: apiInstance, permissions: null });
-            expect(setOnAddLinkStub).not.toHaveBeenCalled();
-            expect(setOnRemoveLinkStub).not.toHaveBeenCalled();
-            expect(setChangeSharedLinkAccessLevelStub).not.toHaveBeenCalled();
-            expect(setChangeSharedLinkPermissionLevelStub).not.toHaveBeenCalled();
+            expect(setOnSubmitSettingsStub).toHaveBeenCalled();
         });
 
         test('should render a NotificationsWrapper', async () => {

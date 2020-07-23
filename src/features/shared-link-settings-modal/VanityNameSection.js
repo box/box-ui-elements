@@ -56,6 +56,7 @@ const VanityNameSection = ({
                 <Checkbox
                     label={<FormattedMessage {...messages.vanityURLEnableText} />}
                     isChecked={isVanityEnabled}
+                    isDisabled={!canChangeVanityName}
                     subsection={isVanityEnabled ? vanityURLInput : undefined}
                     onChange={onCheckboxChange}
                 />
