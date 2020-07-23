@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import API from '../../../api';
 import ErrorMask from '../../../components/error-mask/ErrorMask';
 import ContentSharing from '../ContentSharing';
-import Notification from '../../../components/notification/Notification';
+import Notification, { TYPE_ERROR } from '../../../components/notification/Notification';
 import SharedLinkSettingsModal from '../../../features/shared-link-settings-modal';
 import UnifiedShareModal from '../../../features/unified-share-modal/UnifiedShareModal';
 import {
@@ -32,18 +32,20 @@ import {
     convertItemResponse,
     convertUserResponse,
     convertSharedLinkPermissions,
+    convertSharedLinkSettings,
 } from '../../../features/unified-share-modal/utils/convertData';
 import {
     MOCK_CONTACTS_API_RESPONSE,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
     MOCK_CONVERTED_ITEM_DATA,
     MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
+    MOCK_CONVERTED_SETTINGS,
     MOCK_CONVERTED_USER_DATA,
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE,
     MOCK_ITEM_ID,
     MOCK_NULL_SHARED_LINK,
-    MOCK_SHARED_LINK,
+    MOCK_SETTINGS_WITH_ALL_FEATURES,
     MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
     MOCK_USER_API_RESPONSE,
     MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK,
@@ -82,7 +84,7 @@ describe('elements/content-sharing/ContentSharing', () => {
         return {
             item: MOCK_ITEM,
             sharedLink: {
-                ...MOCK_SHARED_LINK,
+                ...MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
                 accessLevel,
                 permissionLevel,
             },
@@ -100,9 +102,18 @@ describe('elements/content-sharing/ContentSharing', () => {
     });
 
     describe('with successful GET requests to the Item and Users API', () => {
+        let getUser;
+        let getFile;
+        let getFolderFields;
+
+        beforeEach(() => {
+            getUser = jest.fn().mockImplementation(createSuccessMock(MOCK_USER_API_RESPONSE));
+            getFile = jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE));
+            getFolderFields = jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE));
+        });
+
         test('should call getFileAPI().getFile() if itemType is "file"', async () => {
-            const getFile = jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE));
-            API.mockImplementation(createAPIMock({ getFile }, null, { getUser: jest.fn() }));
+            API.mockImplementation(createAPIMock({ getFile }, null, { getUser }));
 
             let wrapper;
             await act(async () => {
@@ -115,14 +126,12 @@ describe('elements/content-sharing/ContentSharing', () => {
             expect(getFile).toHaveBeenCalled();
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
-            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
+            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
             expect(wrapper.exists(SharingNotification)).toBe(true);
         });
 
         test('should call getFolderAPI().getFolderFields() if itemType is "folder"', async () => {
-            const getFolderFields = jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE));
-
-            API.mockImplementation(createAPIMock(null, { getFolderFields }, { getUser: jest.fn() }));
+            API.mockImplementation(createAPIMock(null, { getFolderFields }, { getUser }));
 
             let wrapper;
             await act(async () => {
@@ -133,14 +142,12 @@ describe('elements/content-sharing/ContentSharing', () => {
             expect(getFolderFields).toHaveBeenCalled();
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
-            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
+            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
             expect(wrapper.exists(SharingNotification)).toBe(true);
         });
 
         test('should call getUsersAPI().getUser() if item and sharedLink are defined, but currentUserID is not', async () => {
-            const getFile = jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE));
-            const getUser = jest.fn().mockImplementation(createSuccessMock(MOCK_USER_API_RESPONSE));
-            API.mockImplementation(createAPIMock({ getFile }, { getFolderFields: jest.fn() }, { getUser }));
+            API.mockImplementation(createAPIMock({ getFile }, null, { getUser }));
 
             let wrapper;
             await act(async () => {
@@ -391,16 +398,20 @@ describe('elements/content-sharing/ContentSharing', () => {
             API.mockImplementation(
                 createAPIMock(
                     {
-                        getFile: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
+                        getFile: jest
+                            .fn()
+                            .mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK)),
                         share,
                         updateSharedLink,
                     },
                     {
-                        getFolderFields: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
+                        getFolderFields: jest
+                            .fn()
+                            .mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK)),
                         share,
                         updateSharedLink,
                     },
-                    { getUser: jest.fn() },
+                    { getUser: jest.fn().mockImplementation(createSuccessMock(MOCK_USER_API_RESPONSE)) },
                 ),
             );
         });
@@ -431,7 +442,9 @@ describe('elements/content-sharing/ContentSharing', () => {
                 expect.anything(),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
-            expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
+            expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(
+                MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
+            );
         });
 
         test('should call share() from onRemoveLink() and remove the existing shared link', async () => {
@@ -442,7 +455,7 @@ describe('elements/content-sharing/ContentSharing', () => {
             wrapper.update();
 
             const usm = wrapper.find(UnifiedShareModal);
-            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
+            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
 
             convertItemResponse.mockReset();
             convertItemResponse.mockReturnValue(MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK);
@@ -476,7 +489,7 @@ describe('elements/content-sharing/ContentSharing', () => {
                 wrapper.update();
 
                 const usm = wrapper.find(UnifiedShareModal);
-                expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
+                expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
 
                 const expectedItemData = createMockItemData(accessLevelFromUSM);
                 convertItemResponse.mockReset();
@@ -512,7 +525,7 @@ describe('elements/content-sharing/ContentSharing', () => {
                 wrapper.update();
 
                 const usm = wrapper.find(UnifiedShareModal);
-                expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK);
+                expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
 
                 const expectedItemData = createMockItemData(undefined, permissionLevelFromUSM);
                 convertItemResponse.mockReset();
@@ -532,6 +545,46 @@ describe('elements/content-sharing/ContentSharing', () => {
                 expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(expectedItemData.sharedLink);
             },
         );
+
+        test('should call updateSharedLink() from onSubmitSettings()', async () => {
+            convertSharedLinkSettings.mockReturnValue(MOCK_CONVERTED_SETTINGS);
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ itemType: TYPE_FILE });
+            });
+            wrapper.update();
+
+            const usm = wrapper.find(UnifiedShareModal);
+            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
+
+            await act(async () => {
+                usm.invoke('onSettingsClick')();
+            });
+            wrapper.update();
+
+            const expectedItemData = {
+                item: MOCK_ITEM,
+                sharedLink: {
+                    ...MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
+                    ...MOCK_CONVERTED_SETTINGS,
+                },
+            };
+            convertItemResponse.mockReset();
+            convertItemResponse.mockReturnValue(expectedItemData);
+
+            await act(async () => {
+                wrapper.find(SharedLinkSettingsModal).invoke('onSubmit')(MOCK_SETTINGS_WITH_ALL_FEATURES);
+            });
+            wrapper.update();
+            expect(updateSharedLink).toHaveBeenCalledWith(
+                { id: MOCK_ITEM_ID, permissions: {} },
+                MOCK_CONVERTED_SETTINGS,
+                expect.anything(),
+                expect.anything(),
+                CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+            );
+            expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(expectedItemData.sharedLink);
+        });
     });
 
     describe('with successful GET requests to the enterprise users API', () => {
@@ -602,26 +655,33 @@ describe('elements/content-sharing/ContentSharing', () => {
             API.mockImplementation(
                 createAPIMock(
                     {
-                        getFile: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
+                        getFile: jest
+                            .fn()
+                            .mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK)),
                         share,
                         updateSharedLink,
                     },
                     {
-                        getFolderFields: createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK),
+                        getFolderFields: jest
+                            .fn()
+                            .mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK)),
                         share,
                         updateSharedLink,
                     },
-                    { getUser: jest.fn(), getUsersInEnterprise },
+                    {
+                        getUser: jest.fn().mockImplementation(createSuccessMock(MOCK_USER_API_RESPONSE)),
+                        getUsersInEnterprise,
+                    },
                 ),
             );
         });
 
         test.each([
-            'onAddLink',
-            'onRemoveLink',
             'changeSharedLinkAccessLevel',
             'changeSharedLinkPermissionLevel',
             'getCollaboratorContacts',
+            'onAddLink',
+            'onRemoveLink',
         ])('should show an error notification if %s() fails', async sharedLinkUpdateFn => {
             let wrapper;
             await act(async () => {
@@ -630,12 +690,32 @@ describe('elements/content-sharing/ContentSharing', () => {
             wrapper.update();
             expect(wrapper.exists(Notification)).toBe(false);
 
-            const usm = wrapper.find(UnifiedShareModal);
             await act(async () => {
-                usm.invoke(`${sharedLinkUpdateFn}`)();
+                wrapper.find(UnifiedShareModal).invoke(`${sharedLinkUpdateFn}`)();
             });
             wrapper.update();
-            expect(wrapper.exists(Notification)).toBe(true);
+            expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
+        });
+
+        test('should show an error notification if onSubmitSettings() fails', async () => {
+            convertSharedLinkSettings.mockReturnValue(MOCK_CONVERTED_SETTINGS);
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ itemType: TYPE_FILE });
+            });
+            wrapper.update();
+
+            await act(async () => {
+                wrapper.find(UnifiedShareModal).invoke('onSettingsClick')();
+            });
+            wrapper.update();
+            expect(wrapper.exists(Notification)).toBe(false);
+
+            await act(async () => {
+                wrapper.find(SharedLinkSettingsModal).invoke('onSubmit')(MOCK_SETTINGS_WITH_ALL_FEATURES);
+            });
+            wrapper.update();
+            expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
         });
     });
 });

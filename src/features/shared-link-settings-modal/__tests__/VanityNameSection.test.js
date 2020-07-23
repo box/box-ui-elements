@@ -1,5 +1,7 @@
 import React from 'react';
 import sinon from 'sinon';
+import Checkbox from '../../../components/checkbox';
+import TextInput from '../../../components/text-input';
 
 import { VanityNameSectionBase as VanityNameSection } from '../VanityNameSection';
 
@@ -27,12 +29,16 @@ describe('features/shared-link-settings-modla/VanityNameSection', () => {
         sandbox.verifyAndRestore();
     });
 
-    test('should render a TextInput', () => {
+    test('should render a TextInput and a Checkbox', () => {
         const wrapper = getWrapper();
 
-        const textInput = wrapper.find('TextInput');
+        const textInput = wrapper.find(TextInput);
         expect(textInput.length).toBe(1);
         expect(textInput.prop('value')).toEqual(vanityName);
+
+        const checkbox = wrapper.find(Checkbox);
+        expect(checkbox.length).toBe(1);
+        expect(checkbox.prop('isDisabled')).toBe(false);
     });
 
     test('should pass passthrough props to TextInput', () => {
@@ -40,7 +46,7 @@ describe('features/shared-link-settings-modla/VanityNameSection', () => {
             vanityNameInputProps: { 'data-prop': 'input' },
         });
 
-        expect(wrapper.find('TextInput').prop('data-prop')).toEqual('input');
+        expect(wrapper.find(TextInput).prop('data-prop')).toEqual('input');
     });
 
     test('should render a URL preview', () => {
@@ -59,13 +65,16 @@ describe('features/shared-link-settings-modla/VanityNameSection', () => {
         expect(wrapper.find('.custom-url-preview').length).toBe(0);
     });
 
-    test('should disable TextInput when user cannot change vanity name', () => {
+    test('should disable TextInput and Checkbox when user cannot change vanity name', () => {
         const wrapper = getWrapper({
             canChangeVanityName: false,
         });
 
-        const textInput = wrapper.find('TextInput');
+        const textInput = wrapper.find(TextInput);
         expect(textInput.prop('disabled')).toBe(true);
+
+        const checkbox = wrapper.find(Checkbox);
+        expect(checkbox.prop('isDisabled')).toBe(true);
     });
 
     test('should show message in TextInput when user cannot change vanity name and no vanity name is set', () => {
@@ -76,6 +85,7 @@ describe('features/shared-link-settings-modla/VanityNameSection', () => {
             vanityName: '',
         });
 
-        expect(wrapper.find('TextInput').prop('value')).toEqual(message);
+        expect(wrapper.find(TextInput).prop('value')).toEqual(message);
+        expect(wrapper.find(Checkbox).prop('isDisabled')).toBe(true);
     });
 });
