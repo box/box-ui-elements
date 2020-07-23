@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Box Content Sharing Test Page</title>
+        <link rel="stylesheet" type="text/css" href="../dev/en-US/sharing.css" />
+    </head>
+    <body>
+        <div>
+            <div class="container"></div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.9.0/umd/react.development.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.9.0/umd/react-dom.development.js"></script>
+            <script src="../dev/en-US/sharing.no.react.js"></script>
+            <script>
+                function load() {
+                    const contentSharing = new Box.ContentSharing();
+                    const itemId = 694510728433;
+                    const itemType = 'file';
+                    const token = 'kotkRaWDWTlB4yD0JhLHn7uUMtsDt8pj';
+                    contentSharing.show(itemId, token, {
+                        container: '.container',
+                        displayInModal: false,
+                        itemType,
+                    });
+                }
+
+                load();
+            </script>
+        </div>
+    </body>
+</html>
