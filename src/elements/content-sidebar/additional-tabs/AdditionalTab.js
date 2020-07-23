@@ -11,7 +11,7 @@ import { FormattedMessage } from 'react-intl';
 import { bdlGray50 } from '../../../styles/variables';
 import PlainButton from '../../../components/plain-button/PlainButton';
 import IconEllipsis from '../../../icons/general/IconEllipsis';
-import AdditionalTabFtuxTooltip from './AdditionalTabFtuxTooltip';
+import AdditionalTabTooltip from './AdditionalTabTooltip';
 import AdditionalTabPlaceholder from './AdditionalTabPlaceholder';
 import messages from './messages';
 import type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData } from '../flowTypes';
@@ -104,13 +104,12 @@ class AdditionalTab extends React.PureComponent<Props, State> {
         });
 
         const tooltipText = isDisabled ? this.getDisabledReason() : title;
-        const isFtuxTooltipVisible = !isLoading && !!ftuxTooltipData;
 
         return (
-            <AdditionalTabFtuxTooltip
+            <AdditionalTabTooltip
                 defaultTooltipText={tooltipText}
                 ftuxTooltipData={ftuxTooltipData}
-                isFtuxVisible={isFtuxTooltipVisible}
+                isFtuxVisible={!isLoading}
             >
                 <PlainButton
                     className={className}
@@ -121,7 +120,7 @@ class AdditionalTab extends React.PureComponent<Props, State> {
                 >
                     {this.getTabIcon()}
                 </PlainButton>
-            </AdditionalTabFtuxTooltip>
+            </AdditionalTabTooltip>
         );
     }
 }

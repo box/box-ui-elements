@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import PlainButton from '../../../../components/plain-button/PlainButton';
 import AdditionalTab from '../AdditionalTab';
-import AdditionalTabFtuxTooltip from '../AdditionalTabFtuxTooltip';
+import AdditionalTabTooltip from '../AdditionalTabTooltip';
 import AdditionalTabPlaceholder from '../AdditionalTabPlaceholder';
 
 describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
@@ -25,7 +25,7 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
                 .childAt(0)
                 .prop('src'),
         ).toEqual(mockSrc);
-        expect(wrapper.find(AdditionalTabFtuxTooltip).prop('defaultTooltipText')).toBe('test title');
+        expect(wrapper.find(AdditionalTabTooltip).prop('defaultTooltipText')).toBe('test title');
 
         expect(wrapper).toMatchSnapshot();
     });
@@ -87,6 +87,6 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
 
         const wrapper = getWrapper(props);
 
-        expect(wrapper.find(AdditionalTabFtuxTooltip).exists()).toBeTruthy();
+        expect(wrapper.find(AdditionalTabTooltip).exists()).toBeTruthy();
     });
 });

@@ -8,7 +8,7 @@ import * as React from 'react';
 import Tooltip from '../../common/Tooltip';
 import TargetedClickThroughGuideTooltip from '../../../features/targeting/TargetedClickThroughGuideTooltip';
 import type { AdditionalSidebarTabFtuxData } from '../flowTypes';
-import './AdditionalTabFtuxTooltip.scss';
+import './AdditionalTabTooltip.scss';
 
 type Props = {
     children: React.Node,
@@ -17,7 +17,7 @@ type Props = {
     isFtuxVisible: boolean,
 };
 
-const AdditionalTabFtuxTooltip = ({ children, defaultTooltipText, isFtuxVisible, ftuxTooltipData }: Props) => {
+const AdditionalTabTooltip = ({ children, defaultTooltipText, isFtuxVisible, ftuxTooltipData }: Props) => {
     if (!isFtuxVisible || !ftuxTooltipData || !ftuxTooltipData.targetingApi().canShow) {
         return (
             <Tooltip position="middle-left" text={defaultTooltipText}>
@@ -30,7 +30,7 @@ const AdditionalTabFtuxTooltip = ({ children, defaultTooltipText, isFtuxVisible,
 
     return (
         <TargetedClickThroughGuideTooltip
-            className="bdl-AdditionalTabFtuxTooltip"
+            className="bdl-AdditionalTabTooltip"
             body={text}
             position="middle-right"
             shouldTarget
@@ -41,4 +41,4 @@ const AdditionalTabFtuxTooltip = ({ children, defaultTooltipText, isFtuxVisible,
     );
 };
 
-export default AdditionalTabFtuxTooltip;
+export default AdditionalTabTooltip;
