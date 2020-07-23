@@ -5,19 +5,25 @@
  */
 
 import * as React from 'react';
+import Tooltip from '../../common/Tooltip';
 import TargetedClickThroughGuideTooltip from '../../../features/targeting/TargetedClickThroughGuideTooltip';
 import type { AdditionalSidebarTabFtuxData } from '../flowTypes';
 import './AdditionalTabFtuxTooltip.scss';
 
 type Props = {
     children: React.Node,
+    defaultTooltipText: ?string | React.Node,
     ftuxTooltipData?: AdditionalSidebarTabFtuxData,
-    isVisible: boolean,
+    isFtuxVisible: boolean,
 };
 
-const AdditionalTabFtuxTooltip = ({ children, isVisible, ftuxTooltipData }: Props) => {
-    if (!isVisible || !ftuxTooltipData) {
-        return children;
+const AdditionalTabFtuxTooltip = ({ children, defaultTooltipText, isFtuxVisible, ftuxTooltipData }: Props) => {
+    if (!isFtuxVisible || !ftuxTooltipData || !ftuxTooltipData.targetingApi().canShow) {
+        return (
+            <Tooltip position="middle-left" text={defaultTooltipText}>
+                {children}
+            </Tooltip>
+        );
     }
 
     const { targetingApi, text } = ftuxTooltipData;

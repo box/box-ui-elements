@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Tooltip from '../../../common/Tooltip';
 import PlainButton from '../../../../components/plain-button/PlainButton';
 import AdditionalTab from '../AdditionalTab';
 import AdditionalTabFtuxTooltip from '../AdditionalTabFtuxTooltip';
@@ -18,7 +17,7 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
             callback: () => {},
         };
 
-        const wrapper = getWrapper(props).dive();
+        const wrapper = getWrapper(props);
 
         expect(
             wrapper
@@ -26,7 +25,7 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
                 .childAt(0)
                 .prop('src'),
         ).toEqual(mockSrc);
-        expect(wrapper.find(Tooltip).prop('text')).toBe('test title');
+        expect(wrapper.find(AdditionalTabFtuxTooltip).prop('defaultTooltipText')).toBe('test title');
 
         expect(wrapper).toMatchSnapshot();
     });
@@ -38,7 +37,7 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
             callback: () => {},
         };
 
-        const wrapper = getWrapper(props).dive();
+        const wrapper = getWrapper(props);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -53,9 +52,8 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
 
         wrapper.setState({ isErrored: true });
 
-        const wrapperDive = wrapper.dive();
-        expect(wrapperDive.find(AdditionalTabPlaceholder)).toHaveLength(1);
-        expect(wrapperDive).toMatchSnapshot();
+        expect(wrapper.find(AdditionalTabPlaceholder)).toHaveLength(1);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render disabled button when blocked by shield access policy', () => {
@@ -68,7 +66,7 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
             status: 'BLOCKED_BY_SHIELD_ACCESS_POLICY',
         };
 
-        const wrapper = getWrapper(props).dive();
+        const wrapper = getWrapper(props);
 
         expect(wrapper).toMatchSnapshot();
     });

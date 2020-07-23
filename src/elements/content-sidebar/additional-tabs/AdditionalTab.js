@@ -9,7 +9,6 @@ import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
 import { bdlGray50 } from '../../../styles/variables';
-import Tooltip from '../../common/Tooltip';
 import PlainButton from '../../../components/plain-button/PlainButton';
 import IconEllipsis from '../../../icons/general/IconEllipsis';
 import AdditionalTabFtuxTooltip from './AdditionalTabFtuxTooltip';
@@ -108,18 +107,20 @@ class AdditionalTab extends React.PureComponent<Props, State> {
         const isFtuxTooltipVisible = !isLoading && !!ftuxTooltipData;
 
         return (
-            <AdditionalTabFtuxTooltip ftuxTooltipData={ftuxTooltipData} isVisible={isFtuxTooltipVisible}>
-                <Tooltip position="middle-left" text={tooltipText}>
-                    <PlainButton
-                        className={className}
-                        data-testid="additionaltab"
-                        type="button"
-                        isDisabled={isDisabled}
-                        onClick={() => callbackFn({ id, callbackData: rest })}
-                    >
-                        {this.getTabIcon()}
-                    </PlainButton>
-                </Tooltip>
+            <AdditionalTabFtuxTooltip
+                defaultTooltipText={tooltipText}
+                ftuxTooltipData={ftuxTooltipData}
+                isFtuxVisible={isFtuxTooltipVisible}
+            >
+                <PlainButton
+                    className={className}
+                    data-testid="additionaltab"
+                    type="button"
+                    isDisabled={isDisabled}
+                    onClick={() => callbackFn({ id, callbackData: rest })}
+                >
+                    {this.getTabIcon()}
+                </PlainButton>
             </AdditionalTabFtuxTooltip>
         );
     }
