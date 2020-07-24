@@ -72,7 +72,7 @@ const AnnotationActivity = ({
                 </Media.Figure>
                 <Media.Body>
                     {isMenuVisible && (
-                        <AnnotationActivityMenu canDelete={canDelete} onDeleteConfirm={handleDeleteConfirm} />
+                        <AnnotationActivityMenu canDelete={canDelete} id={id} onDeleteConfirm={handleDeleteConfirm} />
                     )}
                     <div className="bcs-AnnotationActivity-headline">
                         <UserLink
@@ -87,6 +87,9 @@ const AnnotationActivity = ({
                     </div>
                     <ActivityMessage id={id} tagged_message={message} getUserProfileUrl={getUserProfileUrl} />
                     <AnnotationActivityLink
+                        data-resin-iscurrent={isCurrentVersion}
+                        data-resin-itemid={id}
+                        data-resin-target="annotationLink"
                         id={id}
                         isDisabled={isFileVersionUnavailable}
                         message={activityLinkMessage}
