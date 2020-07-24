@@ -16,6 +16,7 @@ const AnnotationActivityLink = ({
     isDisabled = false,
     message,
     onClick = noop,
+    ...rest
 }: AnnotationActivityLinkProps): JSX.Element => {
     const handleClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -39,11 +40,11 @@ const AnnotationActivityLink = ({
     return (
         <PlainButton
             className="bcs-AnnotationActivity-link"
-            data-resin-target="annotationLink"
             isDisabled={isDisabled}
             onClick={handleClick}
             onMouseDown={handleMouseDown}
             type={ButtonType.BUTTON}
+            {...rest}
         >
             <FormattedMessage {...message} />
         </PlainButton>
