@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import AdditionalTabs from '../AdditionalTabs';
 import AdditionalTab from '../AdditionalTab';
+import AdditionalTabs from '../AdditionalTabs';
 import AdditionalTabsLoading from '../AdditionalTabsLoading';
 
 describe('elements/content-sidebar/AdditionalTabs', () => {
@@ -29,7 +29,7 @@ describe('elements/content-sidebar/AdditionalTabs', () => {
 
         const wrapper = getWrapper(props);
         expect(wrapper.find(AdditionalTab)).toHaveLength(2);
-        expect(wrapper.find(AdditionalTabsLoading)).toHaveLength(1);
+        expect(wrapper.find(AdditionalTabsLoading).exists()).toBeTruthy();
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -50,7 +50,7 @@ describe('elements/content-sidebar/AdditionalTabs', () => {
 
         wrapper.setState({ isLoading: false });
 
-        expect(wrapper.find(AdditionalTab)).toHaveLength(1);
+        expect(wrapper.find(AdditionalTab).exists()).toBeTruthy();
         expect(wrapper.find(AdditionalTabsLoading)).toHaveLength(0);
         expect(wrapper).toMatchSnapshot();
     });
