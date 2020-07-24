@@ -1,6 +1,7 @@
 // @flow
 import type { MessageDescriptor } from 'react-intl';
 import type { SelectorItem, UserMini, GroupMini } from '../../common/types/core';
+import type { UseTargetingApi } from '../../features/targeting/types';
 
 type ClassificationInfo = {
     definition?: string,
@@ -11,8 +12,14 @@ type NavigateOptions = {
     isToggle?: boolean,
 };
 
+type AdditionalSidebarTabFtuxData = {
+    targetingApi: UseTargetingApi,
+    text: string,
+};
+
 type AdditionalSidebarTab = {
     callback: (callbackData: Object) => void,
+    ftuxTooltipData?: AdditionalSidebarTabFtuxData,
     iconUrl?: string,
     id: number,
     title: ?string,
@@ -56,6 +63,7 @@ export type {
     ClassificationInfo,
     NavigateOptions,
     AdditionalSidebarTab,
+    AdditionalSidebarTabFtuxData,
     Translations,
     Collaborators,
     FileAccessStats,
