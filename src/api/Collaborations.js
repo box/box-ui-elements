@@ -40,10 +40,14 @@ class Collaborations extends Base {
         successCallback: ?Function,
         errorCallback: ?ElementsErrorCallback,
     ): void => {
+        const { id } = item;
         this.post({
+            id,
             data: {
-                accessible_by: collaboration,
-                item,
+                data: {
+                    item,
+                    ...collaboration,
+                },
             },
             errorCallback,
             successCallback,

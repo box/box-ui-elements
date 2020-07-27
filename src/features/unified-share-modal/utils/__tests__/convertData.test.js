@@ -6,6 +6,7 @@ import {
     convertUserResponse,
     convertSharedLinkPermissions,
     convertSharedLinkSettings,
+    convertCollabsRequest,
 } from '../convertData';
 import {
     TYPE_FILE,
@@ -26,9 +27,15 @@ import {
 } from '../../constants';
 import {
     MOCK_COLLABS_API_RESPONSE,
+    MOCK_COLLABS_CONVERTED_REQUEST,
     MOCK_COLLAB_IDS_CONVERTED,
     MOCK_CONTACTS_API_RESPONSE,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
+    MOCK_COLLAB_REQUEST_GROUPS_ARRAY,
+    MOCK_COLLAB_REQUEST_GROUPS_ONLY,
+    MOCK_COLLAB_REQUEST_USERS_ARRAY,
+    MOCK_COLLAB_REQUEST_USERS_ONLY,
+    MOCK_COLLAB_REQUEST_USERS_AND_GROUPS,
     MOCK_OWNER,
     MOCK_OWNER_ID,
     MOCK_OWNER_EMAIL,
@@ -511,5 +518,17 @@ describe('convertContactsResponse()', () => {
 
     test('should return an empty array if there are no available users', () => {
         expect(convertContactsResponse({ total_count: 0, entries: [] }, MOCK_OWNER_ID)).toEqual([]);
+    });
+});
+
+describe('convertCollabsRequest()', () => {
+    test.each`
+        requestFromUSM                                      | convertedResponse                                          | description
+        ${MOCK_COLLAB_REQUEST_USERS_ONLY}                   | ${{ groups: [], users: MOCK_COLLAB_REQUEST_USERS_ARRAY }}  | ${'users only'}
+        ${MOCK_COLLAB_REQUEST_GROUPS_ONLY}                  | ${{ groups: MOCK_COLLAB_REQUEST_GROUPS_ARRAY, users: [] }} | ${'groups only'}
+        ${MOCK_COLLAB_REQUEST_USERS_AND_GROUPS}             | ${MOCK_COLLABS_CONVERTED_REQUEST}                          | ${'users and groups'}
+        ${{ emails: '', groups: '', permission: 'Editor' }} | ${{ groups: [], users: [] }}                               | ${'no users or groups'}
+    `('should convert a request with $description', ({ requestFromUSM, convertedResponse }) => {
+        expect(convertCollabsRequest(requestFromUSM)).toEqual(convertedResponse);
     });
 });

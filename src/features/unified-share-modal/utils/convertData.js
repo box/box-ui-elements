@@ -8,6 +8,7 @@ import {
     INVITEE_ROLE_EDITOR,
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_PREVIEW,
+    STATUS_ACCEPTED,
     TYPE_FOLDER,
 } from '../../../constants';
 import {
@@ -27,14 +28,7 @@ import type {
     ContentSharingUserDataType,
     SharedLinkSettingsOptions,
 } from '../../../elements/content-sharing/types';
-import type {
-    BoxItemPermission,
-    Collaborations,
-    ItemType,
-    SharedLink,
-    User,
-    UserCollection,
-} from '../../../common/types/core';
+import type { BoxItemPermission, Collaborations, SharedLink, User, UserCollection } from '../../../common/types/core';
 import type { collaboratorsListType, collaboratorType, contactType, InviteCollaboratorsRequest } from '../flowTypes';
 
 /**
@@ -273,32 +267,37 @@ export const convertCollabsResponse = (
     if (!entries.length) return { collaborators: [] };
 
     const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
-    const collaborators = entries.map(collab => {
-        const {
-            accessible_by: { id: userID, login: email, name, type },
-            id: collabID,
-            expires_at: executeAt,
-            role,
-        } = collab;
-        const collabEmailDomain = email.split('@')[1];
-        // Only display external collaborator icons if the current user owns the item
-        // and if the collaborator's email domain differs from the owner's email domain
-        const isExternalCollab = isCurrentUserOwner && collabEmailDomain !== ownerEmailDomain;
-        const convertedCollab: collaboratorType = {
-            collabID: parseInt(collabID, 10),
-            email,
-            hasCustomAvatar: false, // to do: connect to Avatar API
-            imageURL: null, // to do: connect to Avatar API
-            isExternalCollab,
-            name,
-            translatedRole: `${role[0].toUpperCase()}${role.slice(1)}`, // capitalize the user's role
-            type,
-            userID: parseInt(userID, 10),
-        };
-        if (executeAt) {
-            convertedCollab.expiration = { executeAt };
+
+    const collaborators = [];
+    entries.forEach(collab => {
+        // Only show accepted collaborations
+        if (collab.status === STATUS_ACCEPTED) {
+            const {
+                accessible_by: { id: userID, login: email, name, type },
+                id: collabID,
+                expires_at: executeAt,
+                role,
+            } = collab;
+            const collabEmailDomain = email ? email.split('@')[1] : null;
+            // Only display external collaborator icons if the current user owns the item
+            // and if the collaborator's email domain differs from the owner's email domain
+            const isExternalCollab = isCurrentUserOwner && collabEmailDomain !== ownerEmailDomain;
+            const convertedCollab: collaboratorType = {
+                collabID: parseInt(collabID, 10),
+                email,
+                hasCustomAvatar: false, // to do: connect to Avatar API
+                imageURL: null, // to do: connect to Avatar API
+                isExternalCollab,
+                name,
+                translatedRole: `${role[0].toUpperCase()}${role.slice(1)}`, // capitalize the user's role
+                type,
+                userID: parseInt(userID, 10),
+            };
+            if (executeAt) {
+                convertedCollab.expiration = { executeAt };
+            }
+            collaborators.push(convertedCollab);
         }
-        return convertedCollab;
     });
 
     return { collaborators };
@@ -306,45 +305,40 @@ export const convertCollabsResponse = (
 
 /**
  * Convert a request from the USM (specifically the Invite Collaborators Modal) into the format expected by the Collaborations API.
+ * ContentSharing/USM will only call this function when at least one properly-formatted email is entered into the "Invite People" field.
+ * Within the context of this feature, groups are identified by IDs, whereas users are identified by their emails.
  *
  * @param {InviteCollaboratorsRequest} collabRequest
- * @param {string} itemID
- * @param {ItemType} itemType
+ * @returns {ContentSharingCollaborationsRequest}
  */
 export const convertCollabsRequest = (
     collabRequest: InviteCollaboratorsRequest,
-    itemID: string,
-    itemType: ItemType,
 ): ContentSharingCollaborationsRequest => {
     const { emails, groupIDs, permission } = collabRequest;
     const emailArray = emails ? emails.split(',') : [];
     const groupIDArray = groupIDs ? groupIDs.split(',') : [];
 
-    const sharedCollabSettings = {
-        item: {
-            id: itemID,
-            type: itemType,
-        },
+    const roleSettings = {
         role: permission.toLowerCase(), // USM permissions are identical to API roles, except for the casing
     };
-
-    const users = emailArray.map(email => ({
-        accessible_by: {
-            login: email,
-            type: COLLAB_USER_TYPE,
-        },
-        ...sharedCollabSettings,
-    }));
 
     const groups = groupIDArray.map(groupID => ({
         accessible_by: {
             id: groupID,
             type: COLLAB_GROUP_TYPE,
         },
-        ...sharedCollabSettings,
+        ...roleSettings,
     }));
 
-    return { users, groups };
+    const users = emailArray.map(email => ({
+        accessible_by: {
+            login: email,
+            type: COLLAB_USER_TYPE,
+        },
+        ...roleSettings,
+    }));
+
+    return { groups, users };
 };
 
 /**

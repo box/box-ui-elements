@@ -37,12 +37,12 @@ const INVITEE_PERMISSIONS = [
         value: CO_OWNER,
     },
     {
-        default: false,
+        default: true, // default in the WebApp
         text: EDITOR,
         value: EDITOR,
     },
     {
-        default: true,
+        default: false,
         text: PREVIEWER,
         value: PREVIEWER,
     },

@@ -27,7 +27,7 @@ const messages = defineMessages({
         id: 'be.contentSharing.sharedLinkUpdateError',
     },
     sharedLinkSettingsUpdateSuccess: {
-        defaultMessage: 'Your settings were saved successfully.',
+        defaultMessage: 'The shared link for this item was successfully updated.',
         description:
             'Message that appears when the shared link settings in the ContentSharing Element were successfully updated.',
         id: 'be.contentSharing.sharedLinkSettingsUpdateSuccess',

@@ -17,13 +17,10 @@ import {
 } from '../../features/unified-share-modal/utils/convertData';
 import useCollaborators from './hooks/useCollaborators';
 import useContacts from './hooks/useContacts';
+import useInvites from './hooks/useInvites';
 import contentSharingMessages from './messages';
 import type { BoxItemPermission, Collaborations, ItemType, NotificationType } from '../../common/types/core';
-import type {
-    collaboratorsListType,
-    InviteCollaboratorsRequest,
-    item as itemFlowType,
-} from '../../features/unified-share-modal/flowTypes';
+import type { collaboratorsListType, item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
 import type {
     ContentSharingItemAPIResponse,
     ContentSharingSharedLinkType,
@@ -190,22 +187,15 @@ function SharingNotification({
         setGetContacts(() => getContactsFn);
     }
 
-    React.useEffect(() => {
-        const createPostCollaborationFn = () => async (collabRequest: InviteCollaboratorsRequest) => {
-            const { users, groups } = convertCollabsRequest(collabRequest, itemID, itemType);
-
-            await Promise.all([
-                users.map(user => api.getCollaborationsAPI().addCollaboration(user)),
-                groups.map(group => api.getCollaborationsAPI().addCollaboration(group)),
-            ])
-                .then(() => createNotification('info', contentSharingMessages.sendInvitesSuccess))
-                .catch(() => createNotification('error', contentSharingMessages.sendInvitesError));
-        };
-
-        if (!sendInvites) {
-            setSendInvites(createPostCollaborationFn);
-        }
+    // Set the sendInvites function
+    const sendInvitesFn = useInvites(api, itemID, itemType, {
+        handleSuccess: () => createNotification(TYPE_INFO, contentSharingMessages.sendInvitesSuccess),
+        handleError: () => createNotification(TYPE_ERROR, contentSharingMessages.sendInvitesError),
+        transformRequest: data => convertCollabsRequest(data),
     });
+    if (sendInvitesFn && !sendInvites) {
+        setSendInvites(() => sendInvitesFn);
+    }
 
     return (
         <NotificationsWrapper>

@@ -170,7 +170,7 @@ export const DEFAULT_PREVIEW_VERSION = '2.37.0';
 export const DEFAULT_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
-export const DEFAULT_HOSTNAME_API = 'https://shiga.dev.box.net/api';
+export const DEFAULT_HOSTNAME_API = 'https://api.box.com';
 export const DEFAULT_HOSTNAME_STATIC = 'https://cdn01.boxcdn.net';
 export const DEFAULT_HOSTNAME_UPLOAD = 'https://upload.box.com';
 export const DEFAULT_HOSTNAME_APP = 'https://app.box.com';
@@ -202,6 +202,7 @@ export const STATUS_IN_PROGRESS: 'inprogress' = 'inprogress';
 export const STATUS_STAGED: 'staged' = 'staged';
 export const STATUS_COMPLETE: 'complete' = 'complete';
 export const STATUS_ERROR: 'error' = 'error';
+export const STATUS_ACCEPTED: 'accepted' = 'accepted';
 
 /* ------------------- Styles ------------------------ */
 export const CLASS_MODAL_CONTENT = 'be-modal-dialog-content';
