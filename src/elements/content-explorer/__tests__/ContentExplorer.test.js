@@ -573,5 +573,10 @@ describe('elements/content-explorer/ContentExplorer', () => {
             expect(uploadDialogElement.length).toBe(1);
             expect(uploadDialogElement.prop('contentUploaderProps')).toEqual(contentUploaderProps);
         });
+
+        test('should render test id for e2e testing', () => {
+            const wrapper = getWrapper();
+            expect(wrapper.find('[data-testid="content-explorer"]')).toHaveLength(1);
+        });
     });
 });

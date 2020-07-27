@@ -404,6 +404,7 @@ class ContentExplorer extends Component {
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
             <div
                 className={classNames('content-explorer', className)}
+                data-testid="content-explorer"
                 onClick={this.handleContentExplorerClick}
                 ref={ref => {
                     this.domNode = ref;

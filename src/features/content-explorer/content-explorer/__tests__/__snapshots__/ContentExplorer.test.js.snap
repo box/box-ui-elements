@@ -3,6 +3,7 @@
 exports[`features/content-explorer/content-explorer/ContentExplorer render() customInput should be contain a custom input if the prop is passed 1`] = `
 <div
   className="content-explorer"
+  data-testid="content-explorer"
   onClick={[Function]}
 >
   <ContentExplorerHeaderActions
