@@ -8,7 +8,7 @@ import type { ContentSharingHooksOptions, GetContactsFnType } from '../types';
 import type { contactType } from '../../../features/unified-share-modal/flowTypes';
 
 /**
- * Generate the getContacts function, which is used for inviting collaborators in the USM.
+ * Generate the getContacts() function, which is used for retrieving potential collaborators in the USM.
  *
  * @param {API} api
  * @param {string} itemID

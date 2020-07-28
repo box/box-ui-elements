@@ -324,3 +324,12 @@ export type USFProps = BaseUnifiedShareProps & {
     /** Whether the FTUX tooltip should be rendered */
     shouldRenderFTUXTooltip: boolean,
 };
+
+export type InviteCollaboratorsRequest = {
+    emailMessage: string,
+    emails: string,
+    groupIDs: string,
+    numOfInviteeGroups: number,
+    numsOfInvitees: number,
+    permission: string,
+};

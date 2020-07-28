@@ -15,10 +15,10 @@ import ItemCollaborations from './ItemCollaborations';
 
 class FileCollaborations extends ItemCollaborations {
     /**
-     * API URL for comments
+     * API URL for retrieving file collaborations
      *
      * @param {string} id - Box file ID
-     * @return {string} Base url for files
+     * @return {string} Base URL for files
      */
     getUrl(id: string): string {
         if (!id) {

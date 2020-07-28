@@ -27,7 +27,7 @@ const messages = defineMessages({
         id: 'be.contentSharing.sharedLinkUpdateError',
     },
     sharedLinkSettingsUpdateSuccess: {
-        defaultMessage: 'Your settings were saved successfully.',
+        defaultMessage: 'The shared link for this item was successfully updated.',
         description:
             'Message that appears when the shared link settings in the ContentSharing Element were successfully updated.',
         id: 'be.contentSharing.sharedLinkSettingsUpdateSuccess',
@@ -41,6 +41,18 @@ const messages = defineMessages({
         defaultMessage: 'Could not retrieve contacts.',
         description: 'Message that appears when users cannot be retrieved in the ContentSharing Element.',
         id: 'be.contentSharing.getContactsError',
+    },
+    sendInvitesError: {
+        defaultMessage: 'Could not send invites.',
+        description:
+            'Message that appears when collaborators cannot be added to the shared link in the ContentSharing Element.',
+        id: 'be.contentSharing.sendInvitesError',
+    },
+    sendInvitesSuccess: {
+        defaultMessage: 'Successfully invited collaborators.',
+        description:
+            'Message that appears when collaborators were added to the shared link in the ContentSharing Element.',
+        id: 'be.contentSharing.sendInvitesSuccess',
     },
 });
 

@@ -8,10 +8,10 @@ import ItemCollaborations from './ItemCollaborations';
 
 class FolderCollaborations extends ItemCollaborations {
     /**
-     * API URL for comments
+     * API URL for retrieving folder collaborations
      *
      * @param {string} id - Box folder ID
-     * @return {string} Base url for folders
+     * @return {string} Base URL for folders
      */
     getUrl(id: string): string {
         if (!id) {
