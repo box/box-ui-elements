@@ -13,6 +13,10 @@ import SharingModal from './SharingModal';
 import { CLIENT_NAME_CONTENT_SHARING } from '../../constants';
 import type { ItemType } from '../../common/types/core';
 
+import '../common/base.scss';
+import '../common/fonts.scss';
+import '../common/modal.scss';
+
 type ContentSharingProps = {
     /** apiHost - API hostname. Defaults to https://api.box.com */
     apiHost: string,

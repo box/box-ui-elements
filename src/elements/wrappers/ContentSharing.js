@@ -8,16 +8,21 @@ import React from 'react';
 import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
 import ContentSharingReactComponent from '../content-sharing';
+import { ITEM_TYPE_FILE } from '../../common/constants';
+import type { ItemType } from '../../common/types/core';
 
 class ContentSharing extends ES6Wrapper {
     /** @inheritdoc */
     render() {
+        const { itemType }: { itemType?: ItemType } = this.options;
+
         render(
             <ContentSharingReactComponent
                 componentRef={this.setComponent}
                 itemID={this.id}
-                // itemType={this.itemType}
+                itemType={itemType || ITEM_TYPE_FILE}
                 language={this.language}
+                messages={this.messages}
                 token={this.token}
                 {...this.options}
             />,
