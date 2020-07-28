@@ -412,7 +412,7 @@ type Collaborators = {
     next_marker: ?string,
 };
 
-type AccessibleBy = {
+type AccessibleByUserOrGroup = {
     id: number | string,
     login: string,
     name: string,
@@ -427,11 +427,11 @@ type CollaborationOptions = {
 };
 
 type Collaboration = CollaborationOptions & {
-    accessible_by: AccessibleBy,
+    accessible_by: AccessibleByUserOrGroup,
 };
 
 type NewCollaboration = CollaborationOptions & {
-    accessible_by: $Shape<AccessibleBy>,
+    accessible_by: $Shape<AccessibleByUserOrGroup>,
 };
 
 type Collaborations = {

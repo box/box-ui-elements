@@ -31,13 +31,13 @@ class Collaborations extends Base {
      *
      * @param {BoxItem} item
      * @param {$Shape<Collaboration>} collaboration
-     * @param {Function} successCallback
+     * @param {(data?: Object) => void} successCallback
      * @param {ElementsErrorCallback} errorCallback
      */
     addCollaboration = (
         item: BoxItem,
         collaboration: $Shape<Collaboration>,
-        successCallback: Function,
+        successCallback: (data?: Object) => void,
         errorCallback: ElementsErrorCallback,
     ): void => {
         const { id } = item;
