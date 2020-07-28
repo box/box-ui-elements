@@ -1,5 +1,6 @@
 // @flow
 import { getTypedFileId, getTypedFolderId } from '../../../utils/file';
+import { checkIsExternalUser } from '../../../utils/parseEmails';
 import {
     ACCESS_COLLAB,
     ACCESS_COMPANY,
@@ -247,25 +248,6 @@ export const convertSharedLinkSettings = (
     }
 
     return convertedSettings;
-};
-
-/**
- * Check if an email belongs to an external collaborator.
- * External collaborator icons will only be displayed if the current user owns the itme
- * and if the collaborator's email domain differs from the owner's email domain.
- *
- * @param {boolean} isCurrentUserOwner
- * @param {string | null} ownerEmailDomain
- * @param {string | undefined} emailToCheck
- * @returns {boolean}
- */
-export const checkIsExternalUser = (
-    isCurrentUserOwner: boolean,
-    ownerEmailDomain: string | null,
-    emailToCheck: ?string,
-) => {
-    if (!emailToCheck || !ownerEmailDomain || !isCurrentUserOwner) return false;
-    return emailToCheck.split('@')[1] !== ownerEmailDomain;
 };
 
 /**
