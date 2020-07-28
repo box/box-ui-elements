@@ -12,10 +12,11 @@ import { MenuItem } from '../../../../components/menu';
 
 type AnnotationActivityMenuProps = {
     canDelete?: boolean,
+    id: string,
     onDeleteConfirm: () => void,
 };
 
-const AnnotationActivityMenu = ({ canDelete, onDeleteConfirm }: AnnotationActivityMenuProps) => {
+const AnnotationActivityMenu = ({ canDelete, id, onDeleteConfirm }: AnnotationActivityMenuProps) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
 
     const handleDeleteCancel = (): void => {
@@ -50,6 +51,7 @@ const AnnotationActivityMenu = ({ canDelete, onDeleteConfirm }: AnnotationActivi
                     }}
                 >
                     <MenuItem
+                        data-resin-itemid={id}
                         data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_DELETE}
                         data-testid="delete-annotation-activity"
                         onClick={handleDeleteClick}

@@ -5,6 +5,9 @@ import messages from '../messages';
 
 describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLink', () => {
     const wrapperProps = {
+        'data-resin-iscurrent': 'true',
+        'data-resin-itemid': '123',
+        'data-resin-target': 'annotationLink',
         id: '123',
         message: { ...messages.annotationActivityPageItem, values: { number: 1 } },
     };
