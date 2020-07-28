@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/indicator/Indicator should correctly render default element 1`] = `
+<div
+  className="bdl-Indicator"
+>
+  <span
+    className="bdl-Indicator-text"
+  >
+    foo
+  </span>
+</div>
+`;

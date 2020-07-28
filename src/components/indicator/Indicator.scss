@@ -1,0 +1,27 @@
+@import '../../styles/variables';
+
+$indicator-max-width: 584px;
+
+.bdl-Indicator {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    z-index: $overlay-z-index + 1;
+    max-width: $indicator-max-width;
+    height: 40px;
+    padding: 10px 24px;
+    background-color: fade-out($bdl-gray, .1);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    transform: translate(-50%, 0);
+}
+
+.bdl-Indicator-text {
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    color: $white;
+    font-size: 13px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
