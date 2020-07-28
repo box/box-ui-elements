@@ -30,7 +30,11 @@ describe('elements/content-sharing/SharingNotification', () => {
     const setSharedLinkStub = jest.fn();
     const setCollaboratorsListStub = jest.fn();
     const setOnSubmitSettingsStub = jest.fn();
+    const setSendInvitesStub = jest.fn();
     const createAPIInstance = getCollabStub => ({
+        getCollaborationsAPI: jest.fn().mockReturnValue({
+            addCollaboration: jest.fn(),
+        }),
         getFileAPI: jest.fn().mockReturnValue({
             share: jest.fn(),
             updateSharedLink: jest.fn(),
@@ -52,11 +56,13 @@ describe('elements/content-sharing/SharingNotification', () => {
             <SharingNotification
                 collaboratorsList={null}
                 currentUserID={MOCK_OWNER_ID}
+                getContacts={null}
                 itemID={MOCK_ITEM_ID}
                 itemType={TYPE_FOLDER}
                 ownerEmail={MOCK_OWNER_EMAIL}
                 ownerID={MOCK_OWNER_ID}
                 permissions={MOCK_ITEM_PERMISSIONS}
+                sendInvites={null}
                 setChangeSharedLinkAccessLevel={setChangeSharedLinkAccessLevelStub}
                 setChangeSharedLinkPermissionLevel={setChangeSharedLinkPermissionLevelStub}
                 setCollaboratorsList={setCollaboratorsListStub}
@@ -66,6 +72,7 @@ describe('elements/content-sharing/SharingNotification', () => {
                 setOnRemoveLink={setOnRemoveLinkStub}
                 setOnSharedLink={setSharedLinkStub}
                 setOnSubmitSettings={setOnSubmitSettingsStub}
+                setSendInvites={setSendInvitesStub}
                 sharedLink={MOCK_SHARED_LINK}
                 {...props}
             />,
@@ -88,6 +95,7 @@ describe('elements/content-sharing/SharingNotification', () => {
             expect(setChangeSharedLinkPermissionLevelStub).toHaveBeenCalled();
             expect(setGetContactsStub).toHaveBeenCalled();
             expect(setOnSubmitSettingsStub).toHaveBeenCalled();
+            expect(setSendInvitesStub).toHaveBeenCalled();
         });
 
         test('should render a NotificationsWrapper', async () => {

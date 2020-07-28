@@ -31,14 +31,14 @@ class Collaborations extends Base {
      *
      * @param {BoxItem} item
      * @param {$Shape<Collaboration>} collaboration
-     * @param {Function} [successCallback]
-     * @param {ElementsErrorCallback} [errorCallback]
+     * @param {Function} successCallback
+     * @param {ElementsErrorCallback} errorCallback
      */
     addCollaboration = (
         item: BoxItem,
         collaboration: $Shape<Collaboration>,
-        successCallback: ?Function,
-        errorCallback: ?ElementsErrorCallback,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
     ): void => {
         const { id } = item;
         this.post({

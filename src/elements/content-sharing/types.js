@@ -1,13 +1,14 @@
 // @flow
 import type {
     BoxItemPermission,
-    Collaboration,
     ItemType,
+    NewCollaboration,
     SharedLink as APISharedLink,
     UserCollection,
 } from '../../common/types/core';
 import type {
     contactType,
+    InviteCollaboratorsRequest,
     item,
     sharedLinkType as USMSharedLinkType,
 } from '../../features/unified-share-modal/flowTypes';
@@ -72,12 +73,6 @@ export type ContentSharingItemAPIResponse = {
     type: ItemType,
 };
 
-export type SharedLinkUpdateLevelFnType = () => (level: string) => Promise<void>;
-
-export type SharedLinkUpdateSettingsFnType = () => ($Shape<APISharedLink>) => Promise<void>;
-
-export type GetContactsFnType = () => (filterTerm: string) => Promise<Array<contactType> | UserCollection> | null;
-
 export type ContentSharingHooksOptions = {
     handleError?: Function,
     handleRemoveSharedLinkSuccess?: Function,
@@ -100,6 +95,18 @@ export type SharedLinkSettingsOptions = {
 };
 
 export type ContentSharingCollaborationsRequest = {
-    groups: $Shape<Collaboration>,
-    users: $Shape<Collaboration>,
+    groups: Array<$Shape<NewCollaboration>>,
+    users: Array<$Shape<NewCollaboration>>,
 };
+
+export type UseInvitesOptions = ContentSharingHooksOptions & {
+    transformRequest: InviteCollaboratorsRequest => ContentSharingCollaborationsRequest,
+};
+
+export type SharedLinkUpdateLevelFnType = () => (level: string) => Promise<void>;
+
+export type SharedLinkUpdateSettingsFnType = () => ($Shape<APISharedLink>) => Promise<void>;
+
+export type GetContactsFnType = () => (filterTerm: string) => Promise<Array<contactType> | UserCollection> | null;
+
+export type SendInvitesFnType = () => InviteCollaboratorsRequest => Promise<null | Array<Function>>;

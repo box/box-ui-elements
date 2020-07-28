@@ -271,7 +271,7 @@ export const convertCollabsResponse = (
     const collaborators = [];
     entries.forEach(collab => {
         // Only show accepted collaborations
-        if (collab.status === STATUS_ACCEPTED) {
+        if (collab.status && collab.status === STATUS_ACCEPTED) {
             const {
                 accessible_by: { id: userID, login: email, name, type },
                 id: collabID,

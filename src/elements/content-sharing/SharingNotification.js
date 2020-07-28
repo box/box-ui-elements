@@ -25,6 +25,7 @@ import type {
     ContentSharingItemAPIResponse,
     ContentSharingSharedLinkType,
     GetContactsFnType,
+    SendInvitesFnType,
     SharedLinkUpdateLevelFnType,
     SharedLinkUpdateSettingsFnType,
 } from './types';
@@ -41,7 +42,7 @@ type SharingNotificationProps = {
     ownerEmail: ?string,
     ownerID: ?string,
     permissions: ?BoxItemPermission,
-    sendInvites: any,
+    sendInvites: SendInvitesFnType | null,
     serverURL: string,
     setChangeSharedLinkAccessLevel: (changeSharedLinkAccessLevel: () => SharedLinkUpdateLevelFnType | null) => void,
     setChangeSharedLinkPermissionLevel: (
@@ -53,7 +54,7 @@ type SharingNotificationProps = {
     setOnAddLink: (addLink: () => SharedLinkUpdateLevelFnType | null) => void,
     setOnRemoveLink: (removeLink: () => SharedLinkUpdateLevelFnType | null) => void,
     setOnSubmitSettings: (submitSettings: () => SharedLinkUpdateSettingsFnType | null) => void,
-    setSendInvites: Function,
+    setSendInvites: (sendInvites: () => SendInvitesFnType | null) => void,
     setSharedLink: ((sharedLink: ContentSharingSharedLinkType | null) => ContentSharingSharedLinkType) => void,
 };
 

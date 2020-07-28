@@ -25,6 +25,7 @@ import type {
     ContentSharingItemAPIResponse,
     ContentSharingSharedLinkType,
     GetContactsFnType,
+    SendInvitesFnType,
     SharedLinkUpdateLevelFnType,
     SharedLinkUpdateSettingsFnType,
 } from './types';
@@ -66,7 +67,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     const [onSubmitSettings, setOnSubmitSettings] = React.useState<null | SharedLinkUpdateSettingsFnType>(null);
     const [currentView, setCurrentView] = React.useState<string>(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL);
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
-    const [sendInvites, setSendInvites] = React.useState<null | Function>(null);
+    const [sendInvites, setSendInvites] = React.useState<null | SendInvitesFnType>(null);
 
     // Reset the API if necessary
     React.useEffect(() => {

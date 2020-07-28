@@ -9,9 +9,9 @@ import { TYPE_FOLDER } from '../../../constants';
 import {
     MOCK_COLLABS_API_RESPONSE,
     MOCK_COLLABS_CONVERTED_REQUEST,
-    MOCK_COLLAB_REQUEST_USERS_AND_GROUPS,
-    MOCK_COLLAB_REQUEST_GROUPS_ARRAY,
-    MOCK_COLLAB_REQUEST_USERS_ARRAY,
+    MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
+    MOCK_COLLABS_CONVERTED_GROUPS,
+    MOCK_COLLABS_CONVERTED_USERS,
     MOCK_ITEM_ID,
 } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
 
@@ -59,7 +59,7 @@ describe('elements/content-sharing/hooks/useInvites', () => {
 
     describe('with successful API calls', () => {
         beforeAll(() => {
-            addCollaboration = jest.fn().mockImplementation((itemID, collab, addCollaborationSuccess) => {
+            addCollaboration = jest.fn().mockImplementation((item, collab, addCollaborationSuccess) => {
                 addCollaborationSuccess(successfulAPIResponse);
             });
             mockAPI = {
@@ -83,10 +83,10 @@ describe('elements/content-sharing/hooks/useInvites', () => {
             });
             fakeComponent.update();
 
-            fakeComponent.find('button').invoke('onClick')(MOCK_COLLAB_REQUEST_USERS_AND_GROUPS);
+            fakeComponent.find('button').invoke('onClick')(MOCK_COLLABS_REQUEST_USERS_AND_GROUPS);
 
-            expect(transformRequestSpy).toHaveBeenCalledWith(MOCK_COLLAB_REQUEST_USERS_AND_GROUPS);
-            MOCK_COLLAB_REQUEST_USERS_ARRAY.forEach(user => {
+            expect(transformRequestSpy).toHaveBeenCalledWith(MOCK_COLLABS_REQUEST_USERS_AND_GROUPS);
+            MOCK_COLLABS_CONVERTED_USERS.forEach(user => {
                 expect(addCollaboration).toHaveBeenCalledWith(
                     itemData,
                     user,
@@ -94,7 +94,7 @@ describe('elements/content-sharing/hooks/useInvites', () => {
                     expect.anything(Function),
                 );
             });
-            MOCK_COLLAB_REQUEST_GROUPS_ARRAY.forEach(group => {
+            MOCK_COLLABS_CONVERTED_GROUPS.forEach(group => {
                 expect(addCollaboration).toHaveBeenCalledWith(
                     itemData,
                     group,
@@ -106,7 +106,7 @@ describe('elements/content-sharing/hooks/useInvites', () => {
             expect(transformResponseSpy).toHaveBeenCalledWith(successfulAPIResponse);
         });
 
-        test('should do nothing without the request transformation function', async () => {
+        test('should return a null Promise if the transformation function is not provided', () => {
             let fakeComponent;
 
             act(() => {
@@ -114,8 +114,9 @@ describe('elements/content-sharing/hooks/useInvites', () => {
             });
             fakeComponent.update();
 
-            await fakeComponent.find('button').invoke('onClick')(MOCK_COLLAB_REQUEST_USERS_AND_GROUPS);
+            const sendInvites = fakeComponent.find('button').invoke('onClick')(MOCK_COLLABS_REQUEST_USERS_AND_GROUPS);
             expect(addCollaboration).not.toHaveBeenCalled();
+            return expect(sendInvites).resolves.toBeNull();
         });
     });
 
@@ -123,7 +124,7 @@ describe('elements/content-sharing/hooks/useInvites', () => {
         beforeAll(() => {
             addCollaboration = jest
                 .fn()
-                .mockImplementation((itemID, collab, addCollaborationSuccess, addCollaborationError) => {
+                .mockImplementation((item, collab, addCollaborationSuccess, addCollaborationError) => {
                     addCollaborationError();
                 });
             mockAPI = {
@@ -147,10 +148,10 @@ describe('elements/content-sharing/hooks/useInvites', () => {
             });
             fakeComponent.update();
 
-            fakeComponent.find('button').invoke('onClick')(MOCK_COLLAB_REQUEST_USERS_AND_GROUPS);
+            fakeComponent.find('button').invoke('onClick')(MOCK_COLLABS_REQUEST_USERS_AND_GROUPS);
 
-            expect(transformRequestSpy).toHaveBeenCalledWith(MOCK_COLLAB_REQUEST_USERS_AND_GROUPS);
-            MOCK_COLLAB_REQUEST_USERS_ARRAY.forEach(user => {
+            expect(transformRequestSpy).toHaveBeenCalledWith(MOCK_COLLABS_REQUEST_USERS_AND_GROUPS);
+            MOCK_COLLABS_CONVERTED_USERS.forEach(user => {
                 expect(addCollaboration).toHaveBeenCalledWith(
                     itemData,
                     user,
@@ -158,7 +159,7 @@ describe('elements/content-sharing/hooks/useInvites', () => {
                     expect.anything(Function),
                 );
             });
-            MOCK_COLLAB_REQUEST_GROUPS_ARRAY.forEach(group => {
+            MOCK_COLLABS_CONVERTED_GROUPS.forEach(group => {
                 expect(addCollaboration).toHaveBeenCalledWith(
                     itemData,
                     group,

@@ -412,16 +412,26 @@ type Collaborators = {
     next_marker: ?string,
 };
 
-type Collaboration = {
-    accessible_by: {
-        id: number | string,
-        login: string,
-        name: string,
-        type: 'user' | 'group',
-    },
+type AccessibleBy = {
+    id: number | string,
+    login: string,
+    name: string,
+    type: 'user' | 'group',
+};
+
+type CollaborationOptions = {
     expires_at: string | null,
     id: number | string,
     role: string,
+    status?: string,
+};
+
+type Collaboration = CollaborationOptions & {
+    accessible_by: AccessibleBy,
+};
+
+type NewCollaboration = CollaborationOptions & {
+    accessible_by: $Shape<AccessibleBy>,
 };
 
 type Collaborations = {
@@ -486,5 +496,6 @@ export type {
     Collaborators,
     Collaboration,
     Collaborations,
+    NewCollaboration,
     DOMStringList,
 };
