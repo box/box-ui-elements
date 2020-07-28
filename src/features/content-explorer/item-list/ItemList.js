@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
+import getProp from 'lodash/get';
 
 import Column from 'react-virtualized/dist/commonjs/Table/Column';
 import Table from 'react-virtualized/dist/commonjs/Table';
@@ -143,6 +144,7 @@ const ItemList = ({
         const { index, key, style, className: rowClassName, columns } = rendererParams;
         const item = items[index];
         const itemRowClassname = classNames(rowClassName, getRowClassNames(index, item));
+        const testId = getProp(rendererParams, 'rowData.id', '');
 
         if (item.isLoading) {
             return (
@@ -164,10 +166,11 @@ const ItemList = ({
             );
         }
 
-        return defaultTableRowRenderer({
+        const defaultRow = defaultTableRowRenderer({
             ...rendererParams,
             className: itemRowClassname,
         });
+        return React.cloneElement(defaultRow, { 'data-testid': `item-row-${testId}` });
     };
 
     let TableComponent = Table;
