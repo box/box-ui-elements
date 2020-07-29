@@ -14,7 +14,7 @@ import SharedLinkSettingsModal from '../../features/shared-link-settings-modal';
 import SharingNotification from './SharingNotification';
 import usmMessages from '../../features/unified-share-modal/messages';
 import { convertItemResponse, convertUserResponse } from '../../features/unified-share-modal/utils/convertData';
-import { CLIENT_NAME_CONTENT_SHARING, FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FILE, TYPE_FOLDER } from '../../constants';
+import { FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FILE, TYPE_FOLDER } from '../../constants';
 import { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS, CONTENT_SHARING_VIEWS } from './constants';
 import { INVITEE_PERMISSIONS } from '../../features/unified-share-modal/constants';
 import contentSharingMessages from './messages';
@@ -31,24 +31,16 @@ import type {
 } from './types';
 
 type ContentSharingProps = {
-    apiHost: string,
-    displayInModal?: boolean,
+    api: API,
+    displayInModal: boolean,
+    isOpen: boolean,
     itemID: string,
     itemType: ItemType,
     language: string,
-    token: string,
+    onRequestClose?: () => boolean,
 };
 
-const createAPI = (apiHost, itemID, itemType, token) =>
-    new API({
-        apiHost,
-        clientName: CLIENT_NAME_CONTENT_SHARING,
-        id: `${itemType}_${itemID}`,
-        token,
-    });
-
-function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, token }: ContentSharingProps) {
-    const [api, setAPI] = React.useState<API>(createAPI(apiHost, itemID, itemType, token));
+function ContentSharing({ api, displayInModal, itemID, itemType, language, onRequestClose }: ContentSharingProps) {
     const [item, setItem] = React.useState<itemFlowType | null>(null);
     const [sharedLink, setSharedLink] = React.useState<ContentSharingSharedLinkType | null>(null);
     const [currentUserID, setCurrentUserID] = React.useState<string | null>(null);
@@ -68,11 +60,6 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     const [currentView, setCurrentView] = React.useState<string>(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL);
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
     const [sendInvites, setSendInvites] = React.useState<null | SendInvitesFnType>(null);
-
-    // Reset the API if necessary
-    React.useEffect(() => {
-        setAPI(createAPI(apiHost, itemID, itemType, token));
-    }, [apiHost, itemID, itemType, token]);
 
     // Handle successful GET requests to /files or /folders
     const handleGetItemSuccess = React.useCallback((itemData: ContentSharingItemAPIResponse) => {
@@ -109,7 +96,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         setOnAddLink(null);
         setOnRemoveLink(null);
         setSharedLink(null);
-    }, [api]);
+    }, []);
 
     // Get initial data for the item
     React.useEffect(() => {
@@ -150,7 +137,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
         if (item && sharedLink && !currentUserID) {
             getUserData();
         }
-    }, [api, getError, item, itemID, itemType, sharedLink, currentUserID]);
+    }, [getError, item, itemID, itemType, sharedLink, currentUserID, api]);
 
     if (componentErrorMessage) {
         return <ErrorMask errorHeader={<FormattedMessage {...componentErrorMessage} />} />;
@@ -216,8 +203,10 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
                         getCollaboratorContacts={getContacts}
                         initialDataReceived
                         inviteePermissions={INVITEE_PERMISSIONS}
+                        isOpen
                         item={item}
                         onAddLink={onAddLink}
+                        onRequestClose={onRequestClose}
                         onRemoveLink={onRemoveLink}
                         onSettingsClick={() => setCurrentView(CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS)}
                         sendInvites={sendInvites}
