@@ -53,10 +53,12 @@ function ContentSharingLauncher({
     // Reset state if the API has changed
     React.useEffect(() => {
         setContentSharingInstance(null);
+        setLaunchButton(null);
     }, [api]);
 
     React.useEffect(() => {
         const createContentSharingInstance = () => {
+            setIsOpen(true);
             return (
                 <ContentSharing
                     api={api}
