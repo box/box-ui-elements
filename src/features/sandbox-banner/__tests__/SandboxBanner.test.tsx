@@ -1,12 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Indicator from '../Indicator';
+import SandboxBanner from '../SandboxBanner';
 
-describe('components/indicator/Indicator', () => {
+describe('features/sandbox-banner/SandboxBanner', () => {
     test('should correctly render default element', () => {
         const children = 'foo';
 
-        const wrapper = shallow(<Indicator>{children}</Indicator>);
+        const wrapper = shallow(<SandboxBanner>{children}</SandboxBanner>);
 
         expect(wrapper).toMatchSnapshot();
     });

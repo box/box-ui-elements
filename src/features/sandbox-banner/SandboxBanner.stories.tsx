@@ -1,21 +1,21 @@
 import * as React from 'react';
 
-import Indicator from './Indicator';
+import SandboxBanner from './SandboxBanner';
 
-import notes from './Indicator.stories.md';
+import notes from './SandboxBanner.stories.md';
 
 export const basic = () => (
-    <Indicator>
+    <SandboxBanner>
         <span>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
             dolore magna aliqua.
         </span>
-    </Indicator>
+    </SandboxBanner>
 );
 
 export default {
-    title: 'Components|Indicator',
-    component: Indicator,
+    title: 'Features|SandboxBanner',
+    component: SandboxBanner,
     parameters: {
         notes,
     },

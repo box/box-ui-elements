@@ -1,13 +1,13 @@
 @import '../../styles/variables';
 
-$indicator-max-width: 584px;
+$sandboxbanner-max-width: 584px;
 
-.bdl-Indicator {
+.bdl-SandboxBanner {
     position: fixed;
     bottom: 0;
     left: 50%;
     z-index: $overlay-z-index + 1;
-    max-width: $indicator-max-width;
+    max-width: $sandboxbanner-max-width;
     height: 40px;
     padding: 10px 24px;
     background-color: fade-out($bdl-gray, .1);
@@ -16,7 +16,7 @@ $indicator-max-width: 584px;
     transform: translate(-50%, 0);
 }
 
-.bdl-Indicator-text {
+.bdl-SandboxBanner-text {
     display: inline-block;
     width: 100%;
     overflow: hidden;

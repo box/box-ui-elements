@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/sandbox-banner/SandboxBanner should correctly render default element 1`] = `
+<div
+  className="bdl-SandboxBanner"
+>
+  <span
+    className="bdl-SandboxBanner-text"
+  >
+    foo
+  </span>
+</div>
+`;
