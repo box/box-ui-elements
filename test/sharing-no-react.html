@@ -24,7 +24,7 @@
     </head>
     <body>
         <div>
-            <div class="inputs">
+            <form class="inputs">
                 <label>
                     <div>Item ID</div>
                     <input id="itemID" placeholder="Enter an item ID" type="text"
@@ -47,7 +47,7 @@
                 </label>
 
                 <button type="button" onclick="load()">Submit</button>
-            </div>
+            </form>
 
             <div class="container"></div>
 
@@ -63,8 +63,7 @@
                     document.getElementById('token').value = token;
 
                     const displayInModal = localStorage.getItem('displayInModal');
-                    document.getElementById('displayInModal').checked =
-                        displayInModal !== undefined ? displayInModal === 'true' : false;
+                    document.getElementById('displayInModal').checked = displayInModal === 'true';
                 }
 
                 function load() {
