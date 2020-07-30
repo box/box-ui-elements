@@ -6,7 +6,7 @@ import Tooltip from '../../components/tooltip';
 import './SandboxBanner.scss';
 
 type Props = {
-    children: React.Node,
+    children: React.Element<any>,
 };
 
 const SandboxBanner = ({ children }: Props) => {
