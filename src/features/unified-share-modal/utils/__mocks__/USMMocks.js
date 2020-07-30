@@ -441,17 +441,115 @@ const MOCK_CONVERTED_SETTINGS = {
     password: MOCK_PASSWORD,
 };
 
+const MOCK_EMAIL_STRING = 'narwhal@box.com,armadillo@box.com,hedgehog@box.com,turtle@box.com';
+const MOCK_GROUPID_STRING = '12345,67891,01112,13141';
+const MOCK_EMAIL_ARRAY = MOCK_EMAIL_STRING.split(',');
+const MOCK_GROUPID_ARRAY = MOCK_GROUPID_STRING.split(',');
+
+const MOCK_COLLABS_REQUEST_USERS_ONLY = {
+    emails: MOCK_EMAIL_STRING,
+    groupIDs: '',
+    permission: 'Editor',
+};
+
+const MOCK_COLLABS_REQUEST_GROUPS_ONLY = {
+    emails: '',
+    groupIDs: MOCK_GROUPID_STRING,
+    permission: 'Editor',
+};
+
+const MOCK_COLLABS_REQUEST_USERS_AND_GROUPS = {
+    emails: MOCK_EMAIL_STRING,
+    groupIDs: MOCK_GROUPID_STRING,
+    permission: 'Editor',
+};
+
+const MOCK_COLLABS_CONVERTED_USERS = [
+    {
+        accessible_by: {
+            login: 'narwhal@box.com',
+            type: 'user',
+        },
+        role: 'editor',
+    },
+    {
+        accessible_by: {
+            login: 'armadillo@box.com',
+            type: 'user',
+        },
+        role: 'editor',
+    },
+    {
+        accessible_by: {
+            login: 'hedgehog@box.com',
+            type: 'user',
+        },
+        role: 'editor',
+    },
+    {
+        accessible_by: {
+            login: 'turtle@box.com',
+            type: 'user',
+        },
+        role: 'editor',
+    },
+];
+
+const MOCK_COLLABS_CONVERTED_GROUPS = [
+    {
+        accessible_by: {
+            id: '12345',
+            type: 'group',
+        },
+        role: 'editor',
+    },
+    {
+        accessible_by: {
+            id: '67891',
+            type: 'group',
+        },
+        role: 'editor',
+    },
+    {
+        accessible_by: {
+            id: '01112',
+            type: 'group',
+        },
+        role: 'editor',
+    },
+    {
+        accessible_by: {
+            id: '13141',
+            type: 'group',
+        },
+        role: 'editor',
+    },
+];
+
+const MOCK_COLLABS_CONVERTED_REQUEST = {
+    groups: MOCK_COLLABS_CONVERTED_GROUPS,
+    users: MOCK_COLLABS_CONVERTED_USERS,
+};
+
 export {
-    MOCK_COLLABS_API_RESPONSE,
-    MOCK_COLLABS_CONVERTED_RESPONSE,
     MOCK_COLLAB_IDS,
     MOCK_COLLAB_IDS_CONVERTED,
+    MOCK_COLLABS_API_RESPONSE,
+    MOCK_COLLABS_CONVERTED_GROUPS,
+    MOCK_COLLABS_CONVERTED_RESPONSE,
+    MOCK_COLLABS_CONVERTED_REQUEST,
+    MOCK_COLLABS_CONVERTED_USERS,
+    MOCK_COLLABS_REQUEST_GROUPS_ONLY,
+    MOCK_COLLABS_REQUEST_USERS_ONLY,
+    MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
     MOCK_CONTACTS_API_RESPONSE,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
     MOCK_CONVERTED_ITEM_DATA,
     MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
     MOCK_CONVERTED_SETTINGS,
     MOCK_CONVERTED_USER_DATA,
+    MOCK_EMAIL_ARRAY,
+    MOCK_GROUPID_ARRAY,
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE,
     MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK,

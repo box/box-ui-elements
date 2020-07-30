@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import API from '../../../api';
 import ErrorMask from '../../../components/error-mask/ErrorMask';
 import ContentSharing from '../ContentSharing';
-import Notification, { TYPE_ERROR } from '../../../components/notification/Notification';
+import Notification, { TYPE_ERROR, TYPE_INFO } from '../../../components/notification/Notification';
 import SharedLinkSettingsModal from '../../../features/shared-link-settings-modal';
 import UnifiedShareModal from '../../../features/unified-share-modal/UnifiedShareModal';
 import {
@@ -28,6 +28,7 @@ import {
     PEOPLE_IN_ITEM,
 } from '../../../features/unified-share-modal/constants';
 import {
+    convertCollabsRequest,
     convertContactsResponse,
     convertItemResponse,
     convertUserResponse,
@@ -35,6 +36,10 @@ import {
     convertSharedLinkSettings,
 } from '../../../features/unified-share-modal/utils/convertData';
 import {
+    MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
+    MOCK_COLLABS_CONVERTED_GROUPS,
+    MOCK_COLLABS_CONVERTED_REQUEST,
+    MOCK_COLLABS_CONVERTED_USERS,
     MOCK_CONTACTS_API_RESPONSE,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
     MOCK_CONVERTED_ITEM_DATA,
@@ -43,12 +48,12 @@ import {
     MOCK_CONVERTED_USER_DATA,
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE,
+    MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK,
     MOCK_ITEM_ID,
     MOCK_NULL_SHARED_LINK,
     MOCK_SETTINGS_WITH_ALL_FEATURES,
     MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
     MOCK_USER_API_RESPONSE,
-    MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK,
 } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
 import SharingNotification from '../SharingNotification';
 
@@ -58,7 +63,7 @@ jest.mock('../../../features/unified-share-modal/utils/convertData');
 // Stub the queryCommandSupported function, which is used in the Shared Link Settings Modal
 global.document.queryCommandSupported = jest.fn();
 
-const createAPIMock = (fileAPI, folderAPI, usersAPI) => () => ({
+const createAPIMock = (fileAPI, folderAPI, usersAPI, collaborationsAPI) => () => ({
     getFileAPI: jest.fn().mockReturnValue(fileAPI),
     getFileCollaborationsAPI: jest.fn().mockReturnValue({
         getCollaborations: jest.fn(),
@@ -68,6 +73,7 @@ const createAPIMock = (fileAPI, folderAPI, usersAPI) => () => ({
         getCollaborations: jest.fn(),
     }),
     getUsersAPI: jest.fn().mockReturnValue(usersAPI),
+    getCollaborationsAPI: jest.fn().mockReturnValue(collaborationsAPI),
 });
 
 describe('elements/content-sharing/ContentSharing', () => {
@@ -634,12 +640,63 @@ describe('elements/content-sharing/ContentSharing', () => {
         });
     });
 
+    describe('with successful POST requests to the Collaborations API', () => {
+        test('should call addCollaboration() from sendInvites() and show a success notification', async () => {
+            const itemData = { id: MOCK_ITEM_ID, type: TYPE_FOLDER };
+            const addCollaboration = jest.fn().mockImplementation((item, collab, successFn) => {
+                return Promise.resolve().then(() => {
+                    return successFn();
+                });
+            });
+            API.mockImplementation(
+                createAPIMock(
+                    null,
+                    { getFolderFields: jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE)) },
+                    { getUser: jest.fn().mockImplementation(createSuccessMock(MOCK_USER_API_RESPONSE)) },
+                    { addCollaboration },
+                ),
+            );
+            convertCollabsRequest.mockReturnValue(MOCK_COLLABS_CONVERTED_REQUEST);
+
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ itemType: TYPE_FOLDER });
+            });
+            wrapper.update();
+
+            await act(async () => {
+                wrapper.find(UnifiedShareModal).invoke('sendInvites')(MOCK_COLLABS_REQUEST_USERS_AND_GROUPS);
+            });
+            wrapper.update();
+
+            MOCK_COLLABS_CONVERTED_USERS.forEach(user => {
+                expect(addCollaboration).toHaveBeenCalledWith(
+                    itemData,
+                    user,
+                    expect.anything(Function),
+                    expect.anything(Function),
+                );
+            });
+            MOCK_COLLABS_CONVERTED_GROUPS.forEach(group => {
+                expect(addCollaboration).toHaveBeenCalledWith(
+                    itemData,
+                    group,
+                    expect.anything(Function),
+                    expect.anything(Function),
+                );
+            });
+
+            expect(wrapper.find(Notification).prop('type')).toBe(TYPE_INFO);
+        });
+    });
+
     describe('with failed notification-level API requests', () => {
         let share;
         let updateSharedLink;
         let getUsersInEnterprise;
+        let addCollaboration;
         const createShareFailureMock = () =>
-            jest.fn().mockImplementation((dataForAPI, accessType, successFn, failureFn) => {
+            jest.fn().mockImplementation((itemData, otherRequestData, successFn, failureFn) => {
                 return Promise.reject(new Error({ status: '400' })).catch(response => {
                     failureFn(response);
                 });
@@ -647,6 +704,7 @@ describe('elements/content-sharing/ContentSharing', () => {
         beforeAll(() => {
             share = createShareFailureMock();
             updateSharedLink = createShareFailureMock();
+            addCollaboration = createShareFailureMock();
             getUsersInEnterprise = jest.fn().mockImplementation((itemID, successFn, failureFn) => {
                 return Promise.reject(new Error({ status: '400' })).catch(response => {
                     failureFn(response);
@@ -672,6 +730,9 @@ describe('elements/content-sharing/ContentSharing', () => {
                         getUser: jest.fn().mockImplementation(createSuccessMock(MOCK_USER_API_RESPONSE)),
                         getUsersInEnterprise,
                     },
+                    {
+                        addCollaboration,
+                    },
                 ),
             );
         });
@@ -682,7 +743,8 @@ describe('elements/content-sharing/ContentSharing', () => {
             'getCollaboratorContacts',
             'onAddLink',
             'onRemoveLink',
-        ])('should show an error notification if %s() fails', async sharedLinkUpdateFn => {
+            'sendInvites',
+        ])('should show an error notification if %s() fails', async usmFn => {
             let wrapper;
             await act(async () => {
                 wrapper = getWrapper({ itemType: TYPE_FOLDER });
@@ -691,7 +753,7 @@ describe('elements/content-sharing/ContentSharing', () => {
             expect(wrapper.exists(Notification)).toBe(false);
 
             await act(async () => {
-                wrapper.find(UnifiedShareModal).invoke(`${sharedLinkUpdateFn}`)();
+                wrapper.find(UnifiedShareModal).invoke(`${usmFn}`)();
             });
             wrapper.update();
             expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);

@@ -1,5 +1,6 @@
 // @flow
 import { getTypedFileId, getTypedFolderId } from '../../../utils/file';
+import { checkIsExternalUser } from '../../../utils/parseEmails';
 import {
     ACCESS_COLLAB,
     ACCESS_COMPANY,
@@ -8,6 +9,7 @@ import {
     INVITEE_ROLE_EDITOR,
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_PREVIEW,
+    STATUS_ACCEPTED,
     TYPE_FOLDER,
 } from '../../../constants';
 import {
@@ -16,16 +18,19 @@ import {
     ANYONE_WITH_LINK,
     CAN_VIEW_DOWNLOAD,
     CAN_VIEW_ONLY,
+    COLLAB_GROUP_TYPE,
+    COLLAB_USER_TYPE,
     PEOPLE_IN_ITEM,
 } from '../constants';
 import type {
+    ContentSharingCollaborationsRequest,
     ContentSharingItemAPIResponse,
     ContentSharingItemDataType,
     ContentSharingUserDataType,
     SharedLinkSettingsOptions,
 } from '../../../elements/content-sharing/types';
 import type { BoxItemPermission, Collaborations, SharedLink, User, UserCollection } from '../../../common/types/core';
-import type { collaboratorsListType, collaboratorType, contactType } from '../flowTypes';
+import type { collaboratorsListType, collaboratorType, contactType, InviteCollaboratorsRequest } from '../flowTypes';
 
 /**
  * The following constants are used for converting API requests
@@ -258,40 +263,78 @@ export const convertCollabsResponse = (
     ownerEmail: ?string,
     isCurrentUserOwner: boolean,
 ): collaboratorsListType => {
-    const { entries } = collabsAPIData;
+    const { entries = [] } = collabsAPIData;
 
     if (!entries.length) return { collaborators: [] };
 
     const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
-    const collaborators = entries.map(collab => {
-        const {
-            accessible_by: { id: userID, login: email, name, type },
-            id: collabID,
-            expires_at: executeAt,
-            role,
-        } = collab;
-        const collabEmailDomain = email.split('@')[1];
-        // Only display external collaborator icons if the current user owns the item
-        // and if the collaborator's email domain differs from the owner's email domain
-        const isExternalCollab = isCurrentUserOwner && collabEmailDomain !== ownerEmailDomain;
-        const convertedCollab: collaboratorType = {
-            collabID: parseInt(collabID, 10),
-            email,
-            hasCustomAvatar: false, // to do: connect to Avatar API
-            imageURL: null, // to do: connect to Avatar API
-            isExternalCollab,
-            name,
-            translatedRole: `${role[0].toUpperCase()}${role.slice(1)}`, // capitalize the user's role
-            type,
-            userID: parseInt(userID, 10),
-        };
-        if (executeAt) {
-            convertedCollab.expiration = { executeAt };
-        }
-        return convertedCollab;
-    });
+
+    const collaborators = entries
+        // Only show accepted collaborations
+        .filter(collab => collab.status === STATUS_ACCEPTED)
+        .map(collab => {
+            const {
+                accessible_by: { id: userID, login: email, name, type },
+                id: collabID,
+                expires_at: executeAt,
+                role,
+            } = collab;
+            const convertedCollab: collaboratorType = {
+                collabID: parseInt(collabID, 10),
+                email,
+                hasCustomAvatar: false, // to do: connect to Avatar API
+                imageURL: null, // to do: connect to Avatar API
+                isExternalCollab: checkIsExternalUser(isCurrentUserOwner, ownerEmailDomain, email),
+                name,
+                translatedRole: `${role[0].toUpperCase()}${role.slice(1)}`, // capitalize the user's role
+                type,
+                userID: parseInt(userID, 10),
+            };
+            if (executeAt) {
+                convertedCollab.expiration = { executeAt };
+            }
+            return convertedCollab;
+        });
 
     return { collaborators };
+};
+
+/**
+ * Convert a request from the USM (specifically the Invite Collaborators Modal) into the format expected by the Collaborations API.
+ * ContentSharing/USM will only call this function when at least one properly-formatted email is entered into the "Invite People" field.
+ * Within the context of this feature, groups are identified by IDs, whereas users are identified by their emails.
+ *
+ * @param {InviteCollaboratorsRequest} collabRequest
+ * @returns {ContentSharingCollaborationsRequest}
+ */
+export const convertCollabsRequest = (
+    collabRequest: InviteCollaboratorsRequest,
+): ContentSharingCollaborationsRequest => {
+    const { emails, groupIDs, permission } = collabRequest;
+    const emailArray = emails ? emails.split(',') : [];
+    const groupIDArray = groupIDs ? groupIDs.split(',') : [];
+
+    const roleSettings = {
+        role: permission.toLowerCase(), // USM permissions are identical to API roles, except for the casing
+    };
+
+    const groups = groupIDArray.map(groupID => ({
+        accessible_by: {
+            id: groupID,
+            type: COLLAB_GROUP_TYPE,
+        },
+        ...roleSettings,
+    }));
+
+    const users = emailArray.map(email => ({
+        accessible_by: {
+            login: email,
+            type: COLLAB_USER_TYPE,
+        },
+        ...roleSettings,
+    }));
+
+    return { groups, users };
 };
 
 /**

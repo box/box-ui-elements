@@ -23,6 +23,7 @@ import MetadataAPI from './Metadata';
 import FileCollaboratorsAPI from './FileCollaborators';
 import FileCollaborationsAPI from './FileCollaborations';
 import FolderCollaborationsAPI from './FolderCollaborations';
+import CollaborationsAPI from './Collaborations';
 import FeedAPI from './Feed';
 import AppIntegrationsAPI from './AppIntegrations';
 import AnnotationsAPI from './Annotations';
@@ -131,6 +132,11 @@ class APIFactory {
      * @property {FolderCollaborationsAPI}
      */
     folderCollaborationsAPI: FolderCollaborationsAPI;
+
+    /**
+     * @property {CollaborationsAPI}
+     */
+    collaborationsAPI: CollaborationsAPI;
 
     /**
      * @property {FeedAPI}
@@ -279,6 +285,11 @@ class APIFactory {
         if (this.folderCollaborationsAPI) {
             this.folderCollaborationsAPI.destroy();
             delete this.folderCollaborationsAPI;
+        }
+
+        if (this.collaborationsAPI) {
+            this.collaborationsAPI.destroy();
+            delete this.collaborationsAPI;
         }
 
         if (this.appIntegrationsAPI) {
@@ -571,6 +582,24 @@ class APIFactory {
 
         this.folderCollaborationsAPI = new FolderCollaborationsAPI(this.options);
         return this.folderCollaborationsAPI;
+    }
+
+    /**
+     * API for collaborations
+     *
+     * This is different from the other collaboration/collaborator APIs!
+     * See ./Collaborations for more information.
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {CollaborationsAPI} CollaborationsAPI instance
+     */
+    getCollaborationsAPI(shouldDestroy: boolean): CollaborationsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.collaborationsAPI = new CollaborationsAPI(this.options);
+        return this.collaborationsAPI;
     }
 
     /**

@@ -1,6 +1,6 @@
 /**
  * Parse a string containing email addresses and potential contact information
- * or delimeters and return an array of email addresses
+ * or delimiters and return an array of email addresses
  *
  * @param  {string} text The input string
  * @return {array} A list of separated emails
@@ -35,5 +35,20 @@ function parseEmails(text) {
         return c;
     });
 }
+
+/**
+ * Check if an email belongs to an external collaborator.
+ * External collaborator icons will only be displayed in the USM if the current user owns
+ * the item and if the collaborator's email domain differs from the owner's email domain.
+ *
+ * @param {boolean} isCurrentUserOwner
+ * @param {string | null} ownerEmailDomain
+ * @param {string | undefined} emailToCheck
+ * @returns {boolean}
+ */
+export const checkIsExternalUser = (isCurrentUserOwner, ownerEmailDomain, emailToCheck) => {
+    if (!emailToCheck || !ownerEmailDomain || !isCurrentUserOwner) return false;
+    return emailToCheck.split('@')[1] !== ownerEmailDomain;
+};
 
 export default parseEmails;

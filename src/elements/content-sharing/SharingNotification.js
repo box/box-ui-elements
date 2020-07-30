@@ -7,6 +7,7 @@ import Notification, { TYPE_ERROR, TYPE_INFO } from '../../components/notificati
 import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
 import useSharedLink from './hooks/useSharedLink';
 import {
+    convertCollabsRequest,
     convertCollabsResponse,
     convertContactsResponse,
     convertItemResponse,
@@ -16,6 +17,7 @@ import {
 } from '../../features/unified-share-modal/utils/convertData';
 import useCollaborators from './hooks/useCollaborators';
 import useContacts from './hooks/useContacts';
+import useInvites from './hooks/useInvites';
 import contentSharingMessages from './messages';
 import type { BoxItemPermission, Collaborations, ItemType, NotificationType } from '../../common/types/core';
 import type { collaboratorsListType, item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
@@ -23,6 +25,7 @@ import type {
     ContentSharingItemAPIResponse,
     ContentSharingSharedLinkType,
     GetContactsFnType,
+    SendInvitesFnType,
     SharedLinkUpdateLevelFnType,
     SharedLinkUpdateSettingsFnType,
 } from './types';
@@ -39,6 +42,7 @@ type SharingNotificationProps = {
     ownerEmail: ?string,
     ownerID: ?string,
     permissions: ?BoxItemPermission,
+    sendInvites: SendInvitesFnType | null,
     serverURL: string,
     setChangeSharedLinkAccessLevel: (changeSharedLinkAccessLevel: () => SharedLinkUpdateLevelFnType | null) => void,
     setChangeSharedLinkPermissionLevel: (
@@ -50,6 +54,7 @@ type SharingNotificationProps = {
     setOnAddLink: (addLink: () => SharedLinkUpdateLevelFnType | null) => void,
     setOnRemoveLink: (removeLink: () => SharedLinkUpdateLevelFnType | null) => void,
     setOnSubmitSettings: (submitSettings: () => SharedLinkUpdateSettingsFnType | null) => void,
+    setSendInvites: (sendInvites: () => SendInvitesFnType | null) => void,
     setSharedLink: ((sharedLink: ContentSharingSharedLinkType | null) => ContentSharingSharedLinkType) => void,
 };
 
@@ -65,6 +70,7 @@ function SharingNotification({
     ownerEmail,
     ownerID,
     permissions,
+    sendInvites,
     serverURL,
     setChangeSharedLinkAccessLevel,
     setChangeSharedLinkPermissionLevel,
@@ -74,6 +80,7 @@ function SharingNotification({
     setOnAddLink,
     setOnRemoveLink,
     setOnSubmitSettings,
+    setSendInvites,
     setSharedLink,
 }: SharingNotificationProps) {
     const [notifications, setNotifications] = React.useState<{ [string]: typeof Notification }>({});
@@ -179,6 +186,16 @@ function SharingNotification({
     });
     if (getContactsFn && !getContacts) {
         setGetContacts(() => getContactsFn);
+    }
+
+    // Set the sendInvites function
+    const sendInvitesFn = useInvites(api, itemID, itemType, {
+        handleSuccess: () => createNotification(TYPE_INFO, contentSharingMessages.sendInvitesSuccess),
+        handleError: () => createNotification(TYPE_ERROR, contentSharingMessages.sendInvitesError),
+        transformRequest: data => convertCollabsRequest(data),
+    });
+    if (sendInvitesFn && !sendInvites) {
+        setSendInvites(() => sendInvitesFn);
     }
 
     return (

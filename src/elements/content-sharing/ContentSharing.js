@@ -25,6 +25,7 @@ import type {
     ContentSharingItemAPIResponse,
     ContentSharingSharedLinkType,
     GetContactsFnType,
+    SendInvitesFnType,
     SharedLinkUpdateLevelFnType,
     SharedLinkUpdateSettingsFnType,
 } from './types';
@@ -66,6 +67,7 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
     const [onSubmitSettings, setOnSubmitSettings] = React.useState<null | SharedLinkUpdateSettingsFnType>(null);
     const [currentView, setCurrentView] = React.useState<string>(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL);
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
+    const [sendInvites, setSendInvites] = React.useState<null | SendInvitesFnType>(null);
 
     // Reset the API if necessary
     React.useEffect(() => {
@@ -156,72 +158,75 @@ function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, t
 
     // Ensure that all necessary data has been received before rendering child components
     // "serverURL" is added to sharedLink after the call to the Users API
-    if (item && sharedLink && currentUserID && sharedLink.serverURL) {
-        const { ownerEmail, ownerID, permissions } = item;
-        const { accessLevel = '', serverURL } = sharedLink;
-        return (
-            <Internationalize language={language} messages={usmMessages}>
-                <>
-                    <SharingNotification
-                        accessLevel={accessLevel}
-                        api={api}
+    if (!item || !sharedLink || !currentUserID || !sharedLink.serverURL) {
+        return null;
+    }
+
+    const { ownerEmail, ownerID, permissions } = item;
+    const { accessLevel = '', serverURL } = sharedLink;
+    return (
+        <Internationalize language={language} messages={usmMessages}>
+            <>
+                <SharingNotification
+                    accessLevel={accessLevel}
+                    api={api}
+                    collaboratorsList={collaboratorsList}
+                    currentUserID={currentUserID}
+                    getContacts={getContacts}
+                    itemID={itemID}
+                    itemType={itemType}
+                    onRequestClose={() => setCurrentView(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL)}
+                    onSubmitSettings={onSubmitSettings}
+                    ownerEmail={ownerEmail}
+                    ownerID={ownerID}
+                    permissions={permissions}
+                    sendInvites={sendInvites}
+                    serverURL={serverURL}
+                    setChangeSharedLinkAccessLevel={setChangeSharedLinkAccessLevel}
+                    setChangeSharedLinkPermissionLevel={setChangeSharedLinkPermissionLevel}
+                    setGetContacts={setGetContacts}
+                    setCollaboratorsList={setCollaboratorsList}
+                    setItem={setItem}
+                    setOnAddLink={setOnAddLink}
+                    setOnRemoveLink={setOnRemoveLink}
+                    setOnSubmitSettings={setOnSubmitSettings}
+                    setSendInvites={setSendInvites}
+                    setSharedLink={setSharedLink}
+                />
+                {currentView === CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS && (
+                    <SharedLinkSettingsModal
+                        isDirectLinkUnavailableDueToDownloadSettings={false}
+                        isDirectLinkUnavailableDueToAccessPolicy={false}
+                        isDirectLinkUnavailableDueToMaliciousContent={false}
+                        isOpen
+                        item={item}
+                        onRequestClose={() => setCurrentView(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL)}
+                        onSubmit={onSubmitSettings}
+                        {...sharedLink}
+                    />
+                )}
+                {currentView === CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL && (
+                    <UnifiedShareModal
+                        canInvite={sharedLink.canInvite}
+                        changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
+                        changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
                         collaboratorsList={collaboratorsList}
                         currentUserID={currentUserID}
-                        getContacts={getContacts}
-                        itemID={itemID}
-                        itemType={itemType}
-                        onRequestClose={() => setCurrentView(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL)}
-                        onSubmitSettings={onSubmitSettings}
-                        ownerEmail={ownerEmail}
-                        ownerID={ownerID}
-                        permissions={permissions}
-                        serverURL={serverURL}
-                        setChangeSharedLinkAccessLevel={setChangeSharedLinkAccessLevel}
-                        setChangeSharedLinkPermissionLevel={setChangeSharedLinkPermissionLevel}
-                        setGetContacts={setGetContacts}
-                        setCollaboratorsList={setCollaboratorsList}
-                        setItem={setItem}
-                        setOnAddLink={setOnAddLink}
-                        setOnRemoveLink={setOnRemoveLink}
-                        setOnSubmitSettings={setOnSubmitSettings}
-                        setSharedLink={setSharedLink}
+                        displayInModal={displayInModal}
+                        getCollaboratorContacts={getContacts}
+                        initialDataReceived
+                        inviteePermissions={INVITEE_PERMISSIONS}
+                        item={item}
+                        onAddLink={onAddLink}
+                        onRemoveLink={onRemoveLink}
+                        onSettingsClick={() => setCurrentView(CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS)}
+                        sendInvites={sendInvites}
+                        sharedLink={sharedLink}
                     />
-                    {currentView === CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS && (
-                        <SharedLinkSettingsModal
-                            isDirectLinkUnavailableDueToDownloadSettings={false}
-                            isDirectLinkUnavailableDueToAccessPolicy={false}
-                            isDirectLinkUnavailableDueToMaliciousContent={false}
-                            isOpen
-                            item={item}
-                            onRequestClose={() => setCurrentView(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL)}
-                            onSubmit={onSubmitSettings}
-                            {...sharedLink}
-                        />
-                    )}
-                    {currentView === CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL && (
-                        <UnifiedShareModal
-                            canInvite={sharedLink.canInvite}
-                            changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
-                            changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
-                            collaboratorsList={collaboratorsList}
-                            currentUserID={currentUserID}
-                            displayInModal={displayInModal}
-                            getCollaboratorContacts={getContacts}
-                            initialDataReceived
-                            inviteePermissions={INVITEE_PERMISSIONS}
-                            item={item}
-                            onAddLink={onAddLink}
-                            onRemoveLink={onRemoveLink}
-                            onSettingsClick={() => setCurrentView(CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS)}
-                            sendInvites={() => Promise.resolve(null)} // to do: connect to Collaborations API
-                            sharedLink={sharedLink}
-                        />
-                    )}
-                </>
-            </Internationalize>
-        );
-    }
-    return null;
+                )}
+            </>
+        </Internationalize>
+    );
 }
 
 export default ContentSharing;
