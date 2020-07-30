@@ -7,10 +7,9 @@ import './SandboxBanner.scss';
 
 type Props = {
     children: React.ReactChild;
-    text?: string;
 };
 
-const SandboxBanner = ({ children, text }: Props) => {
+const SandboxBanner = ({ children }: Props) => {
     const textRef = React.useRef<HTMLElement>(null);
     const isTextOverflowed = useIsContentOverflowed(textRef);
 
