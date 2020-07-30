@@ -12,6 +12,31 @@ export const withModal = () => {
     const itemID = text('Item ID');
     const itemType = select('Item Type', [TYPE_FILE, TYPE_FOLDER], TYPE_FILE);
     const token = text('Access Token');
+    return (
+        <>
+            <p>
+                Update the values in the Knobs section below to view the ContentSharing UI Element. The internal
+                SharingModal will appear when valid values have been entered.
+            </p>
+            <IntlProvider locale="en">
+                <ContentSharing
+                    apiHost={apiHost}
+                    displayInModal
+                    itemID={itemID}
+                    itemType={itemType}
+                    language="en"
+                    token={token}
+                />
+            </IntlProvider>
+        </>
+    );
+};
+
+export const withModalAndCustomButton = () => {
+    const apiHost = text('API Host', DEFAULT_HOSTNAME_API);
+    const itemID = text('Item ID');
+    const itemType = select('Item Type', [TYPE_FILE, TYPE_FOLDER], TYPE_FILE);
+    const token = text('Access Token');
     const customButton = <Button>&#10047; Launch ContentSharing &#10047;</Button>;
     return (
         <>
@@ -42,7 +67,10 @@ export const withoutModal = () => {
     const token = text('Access Token');
     return (
         <>
-            <p>Update the values in the Knobs section below to view the ContentSharing UI Element.</p>
+            <p>
+                Update the values in the Knobs section below to view the ContentSharing UI Element. The internal
+                SharingModal will appear as a form within this page when valid values are entered.
+            </p>
             <IntlProvider locale="en">
                 <ContentSharing
                     apiHost={apiHost}

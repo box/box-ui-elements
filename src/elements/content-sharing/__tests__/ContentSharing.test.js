@@ -94,13 +94,16 @@ describe('elements/content-sharing/ContentSharing', () => {
         expect(wrapper.exists(Button)).toBe(true);
     });
 
-    test('should instantiate SharingModal automatically in the absence of a button', () => {
-        let wrapper;
-        act(() => {
-            wrapper = getWrapper({ displayInModal: false });
-        });
-        wrapper.update();
-        expect(wrapper.exists(SharingModal)).toBe(true);
-        expect(wrapper.exists(Button)).toBe(false);
-    });
+    test.each([true, false])(
+        'should instantiate SharingModal automatically when no button exists and displayInModal is %s',
+        ({ displayInModal }) => {
+            let wrapper;
+            act(() => {
+                wrapper = getWrapper({ displayInModal });
+            });
+            wrapper.update();
+            expect(wrapper.exists(SharingModal)).toBe(true);
+            expect(wrapper.exists(Button)).toBe(false);
+        },
+    );
 });

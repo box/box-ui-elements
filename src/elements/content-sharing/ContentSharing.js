@@ -57,6 +57,7 @@ function ContentSharing({
     React.useEffect(() => {
         setSharingModalInstance(null);
         setLaunchButton(null);
+        setIsOpen(true);
     }, [api]);
 
     React.useEffect(() => {
@@ -86,7 +87,7 @@ function ContentSharing({
         }
 
         // If there is no custom button, instantiate SharingModal
-        if (!customButton && !sharingModalInstance) {
+        if (!customButton && !sharingModalInstance && isOpen) {
             setSharingModalInstance(createSharingModalInstance());
         }
 
