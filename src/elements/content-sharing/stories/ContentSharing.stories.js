@@ -4,7 +4,7 @@ import { select, text } from '@storybook/addon-knobs';
 import { IntlProvider } from 'react-intl';
 import { DEFAULT_HOSTNAME_API, TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import Button from '../../../components/button/Button';
-import ContentSharingLauncher from '../ContentSharingLauncher';
+import ContentSharing from '../ContentSharing';
 import notes from './ContentSharing.stories.md';
 
 export const withModal = () => {
@@ -17,10 +17,11 @@ export const withModal = () => {
         <>
             <p>
                 Update the values in the Knobs section below to view the ContentSharing UI Element. The API will be
-                instantiated on load, but ContentSharing will not be instantiated until the button is clicked.
+                instantiated on load, but the internal SharingModal will not be instantiated until the button is
+                clicked.
             </p>
             <IntlProvider locale="en">
-                <ContentSharingLauncher
+                <ContentSharing
                     apiHost={apiHost}
                     customButton={customButton}
                     displayInModal
@@ -43,7 +44,7 @@ export const withoutModal = () => {
         <>
             <p>Update the values in the Knobs section below to view the ContentSharing UI Element.</p>
             <IntlProvider locale="en">
-                <ContentSharingLauncher
+                <ContentSharing
                     apiHost={apiHost}
                     displayInModal={false}
                     itemID={itemID}
@@ -58,7 +59,7 @@ export const withoutModal = () => {
 
 export default {
     title: 'Elements|ContentSharing',
-    component: ContentSharingLauncher,
+    component: ContentSharing,
     parameters: {
         notes,
     },
