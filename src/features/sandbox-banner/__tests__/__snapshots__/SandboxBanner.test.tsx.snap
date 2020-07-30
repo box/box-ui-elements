@@ -1,13 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`features/sandbox-banner/SandboxBanner should correctly render default element 1`] = `
-<div
-  className="bdl-SandboxBanner"
+<Tooltip
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={true}
+  position="top-center"
+  text="foo"
+  theme="default"
 >
-  <span
-    className="bdl-SandboxBanner-text"
+  <div
+    className="bdl-SandboxBanner"
   >
-    foo
-  </span>
-</div>
+    <div
+      className="bdl-SandboxBanner-text"
+    >
+      foo
+    </div>
+  </div>
+</Tooltip>
 `;

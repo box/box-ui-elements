@@ -1,16 +1,27 @@
 import * as React from 'react';
 
+import { useIsContentOverflowed } from '../../utils/dom';
+import Tooltip from '../../components/tooltip';
+
 import './SandboxBanner.scss';
 
 type Props = {
     children: React.ReactChild;
+    text?: string;
 };
 
-const SandboxBanner = ({ children }: Props) => {
+const SandboxBanner = ({ children, text }: Props) => {
+    const textRef = React.useRef<HTMLElement>(null);
+    const isTextOverflowed = useIsContentOverflowed(textRef);
+
     return (
-        <div className="bdl-SandboxBanner">
-            <div className="bdl-SandboxBanner-text">{children}</div>
-        </div>
+        <Tooltip isDisabled={!isTextOverflowed} text={children}>
+            <div className="bdl-SandboxBanner">
+                <div ref={textRef} className="bdl-SandboxBanner-text">
+                    {children}
+                </div>
+            </div>
+        </Tooltip>
     );
 };
 
