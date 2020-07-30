@@ -10,7 +10,7 @@ type Props = {
 };
 
 const SandboxBanner = ({ children }: Props) => {
-    const textRef = React.useRef<HTMLElement>(null);
+    const textRef = React.useRef<HTMLDivElement>(null);
     const isTextOverflowed = useIsContentOverflowed(textRef);
 
     return (
