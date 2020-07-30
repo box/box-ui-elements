@@ -33,11 +33,10 @@ import type {
 type ContentSharingProps = {
     api: API,
     displayInModal: boolean,
-    isOpen: boolean,
     itemID: string,
     itemType: ItemType,
     language: string,
-    onRequestClose?: () => boolean,
+    onRequestClose?: () => void,
 };
 
 function ContentSharing({ api, displayInModal, itemID, itemType, language, onRequestClose }: ContentSharingProps) {
