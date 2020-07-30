@@ -199,6 +199,11 @@ export const convertSharedLinkPermissions = (newSharedLinkPermissionLevel: strin
 
 /**
  * Convert a shared link settings object from the USM into the format that the API expects.
+ * This function compares the provided access level to both API and internal USM access level constants, to accommodate two potential flows:
+ * - Changing the settings for a shared link right after the shared link has been created. The access level is saved directly from the data
+ *   returned by the API, so it is in API format.
+ * - Changing the settings for a shared link in any other scenario. The access level is saved from the initial calls to the Item API and
+ *   convertItemResponse, so it is in internal USM format.
  *
  * @param {SharedLinkSettingsOptions} newSettings
  * @param {accessLevel} string
@@ -221,9 +226,13 @@ export const convertSharedLinkSettings = (
     const convertedSettings: $Shape<SharedLink> = {
         unshared_at: expirationTimestamp && isExpirationEnabled ? new Date(expirationTimestamp).toISOString() : null,
         vanity_url: serverURL && vanityName ? `${serverURL}${vanityName}` : '',
-        // Download permissions can only be set on "company" or "open" shared links.
-        // A Flow limitation prevents the usage of an && statement in an object spread: https://github.com/facebook/flow/issues/5946
-        ...(accessLevel !== PEOPLE_IN_ITEM ? { permissions: { can_download, can_preview: !can_download } } : {}),
+        /**
+         * Download permissions can only be set on "company" or "open" shared links.
+         * A Flow limitation prevents the usage of an && statement in an object spread: https://github.com/facebook/flow/issues/5946
+         */
+        ...(accessLevel !== PEOPLE_IN_ITEM && accessLevel !== ACCESS_COLLAB
+            ? { permissions: { can_download, can_preview: !can_download } }
+            : {}),
     };
 
     /**
@@ -239,7 +248,7 @@ export const convertSharedLinkSettings = (
      *   returns password = '' and isPasswordEnabled = true. In these cases, the password should *not*
      *   be converted to null, because that would remove the existing password.
      */
-    if (accessLevel === ANYONE_WITH_LINK) {
+    if (accessLevel === ANYONE_WITH_LINK || accessLevel === ACCESS_OPEN) {
         if (isPasswordEnabled && !!password) {
             convertedSettings.password = password;
         } else if (!isPasswordEnabled) {

@@ -50,6 +50,7 @@ type SharingNotificationProps = {
     ) => void,
     setCollaboratorsList: (collaboratorsList: collaboratorsListType | null) => void,
     setGetContacts: (getContacts: () => GetContactsFnType | null) => void,
+    setIsLoading: boolean => void,
     setItem: ((item: itemFlowType | null) => itemFlowType) => void,
     setOnAddLink: (addLink: () => SharedLinkUpdateLevelFnType | null) => void,
     setOnRemoveLink: (removeLink: () => SharedLinkUpdateLevelFnType | null) => void,
@@ -76,6 +77,7 @@ function SharingNotification({
     setChangeSharedLinkPermissionLevel,
     setGetContacts,
     setCollaboratorsList,
+    setIsLoading,
     setItem,
     setOnAddLink,
     setOnRemoveLink,
@@ -148,17 +150,24 @@ function SharingNotification({
         onRemoveLink,
         onSubmitSettings,
     } = useSharedLink(api, itemID, itemType, permissions, accessLevel, {
-        handleError: () => createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError),
+        handleError: () => {
+            createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError);
+            setIsLoading(false);
+            onRequestClose();
+        },
         handleUpdateSharedLinkSuccess: itemData => {
             createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess);
             handleUpdateSharedLinkSuccess(itemData);
+            setIsLoading(false);
             onRequestClose();
         },
         handleRemoveSharedLinkSuccess: itemData => {
             createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess);
             handleRemoveSharedLinkSuccess(itemData);
+            setIsLoading(false);
             onRequestClose();
         },
+        setIsLoading,
         transformAccess: newAccessLevel => USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel],
         transformPermissions: newSharedLinkPermissionLevel =>
             convertSharedLinkPermissions(newSharedLinkPermissionLevel),
@@ -190,8 +199,15 @@ function SharingNotification({
 
     // Set the sendInvites function
     const sendInvitesFn = useInvites(api, itemID, itemType, {
-        handleSuccess: () => createNotification(TYPE_INFO, contentSharingMessages.sendInvitesSuccess),
-        handleError: () => createNotification(TYPE_ERROR, contentSharingMessages.sendInvitesError),
+        handleSuccess: () => {
+            createNotification(TYPE_INFO, contentSharingMessages.sendInvitesSuccess);
+            setIsLoading(false);
+        },
+        handleError: () => {
+            createNotification(TYPE_ERROR, contentSharingMessages.sendInvitesError);
+            setIsLoading(false);
+        },
+        setIsLoading,
         transformRequest: data => convertCollabsRequest(data),
     });
     if (sendInvitesFn && !sendInvites) {

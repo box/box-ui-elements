@@ -2,7 +2,7 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import API from '../../../api';
-import { ACCESS_COLLAB, ACCESS_NONE, TYPE_FILE, TYPE_FOLDER } from '../../../constants';
+import { ACCESS_NONE, TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from '../constants';
 import type { RequestOptions } from '../../../common/types/api';
 import type { BoxItemPermission, ItemType } from '../../../common/types/core';
@@ -39,13 +39,18 @@ function useSharedLink(
     const [onSubmitSettings, setOnSubmitSettings] = React.useState<null | SharedLinkUpdateSettingsFnType>(null);
     const [generatedFunctions, setGeneratedFunctions] = React.useState<boolean>(false);
 
-    // Storing the access level in a ref allows us to update settings, which depend on the access level, after potentially updating the access level
+    /**
+     * Storing the access level in a ref allows us to update settings, which depend on the access level, in the following potential scenarios:
+     * - After changing the shared link's access level
+     * - After removing and recreating the shared link
+     */
     const currentAccessLevel = React.useRef(accessLevel);
 
     const {
         handleError = noop,
         handleRemoveSharedLinkSuccess = arg => arg,
         handleUpdateSharedLinkSuccess = arg => arg,
+        setIsLoading = noop,
         transformAccess = arg => arg,
         transformPermissions = arg => arg,
         transformSettings = (data, access) => data, // eslint-disable-line no-unused-vars
@@ -69,14 +74,27 @@ function useSharedLink(
 
         // Create functions that alter the access level of a shared link
         const connectToItemShare = (
-            accessType: string,
+            accessType?: string,
             requestOptions?: RequestOptions = CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             successFn?: Function = handleUpdateSharedLinkSuccess,
         ) => {
+            setIsLoading(true);
             return itemAPIInstance.share(itemData, accessType, successFn, handleError, requestOptions);
         };
 
-        const updatedOnAddLinkFn: SharedLinkUpdateLevelFnType = () => () => connectToItemShare(ACCESS_COLLAB);
+        /**
+         * Set the shared link creation function.
+         * The backend will determine the default access level for the shared link, so we do not need to pass an access level.
+         * After a shared link is successfully created, we save the access level from the API response into our ref.
+         */
+        const updatedOnAddLinkFn: SharedLinkUpdateLevelFnType = () => () =>
+            connectToItemShare(undefined, undefined, data => {
+                const {
+                    shared_link: { access },
+                } = data;
+                currentAccessLevel.current = access;
+                handleUpdateSharedLinkSuccess(data);
+            });
         setOnAddLink(updatedOnAddLinkFn);
 
         const updatedOnRemoveLinkFn: SharedLinkUpdateLevelFnType = () => () =>
@@ -91,6 +109,7 @@ function useSharedLink(
         setChangeSharedLinkAccessLevel(updatedChangeSharedLinkAccessLevelFn);
 
         const connectToUpdateSharedLink = (newSharedLinkData: Object) => {
+            setIsLoading(true);
             return itemAPIInstance.updateSharedLink(
                 itemData,
                 newSharedLinkData,
@@ -124,6 +143,7 @@ function useSharedLink(
         transformSettings,
         currentAccessLevel,
         api,
+        setIsLoading,
     ]);
 
     return {

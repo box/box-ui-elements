@@ -11,6 +11,7 @@ import type { $AxiosError } from 'axios';
 import API from '../../api';
 import Internationalize from '../common/Internationalize';
 import ErrorMask from '../../components/error-mask/ErrorMask';
+import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import UnifiedShareModal from '../../features/unified-share-modal';
 import SharedLinkSettingsModal from '../../features/shared-link-settings-modal';
 import SharingNotification from './SharingNotification';
@@ -61,6 +62,7 @@ function SharingModal({ api, displayInModal, itemID, itemType, language, onReque
     const [currentView, setCurrentView] = React.useState<string>(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL);
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
     const [sendInvites, setSendInvites] = React.useState<null | SendInvitesFnType>(null);
+    const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
     // Handle successful GET requests to /files or /folders
     const handleGetItemSuccess = React.useCallback((itemData: ContentSharingItemAPIResponse) => {
@@ -68,6 +70,7 @@ function SharingModal({ api, displayInModal, itemID, itemType, language, onReque
         setComponentErrorMessage(null);
         setItem(itemFromAPI);
         setSharedLink(sharedLinkFromAPI);
+        setIsLoading(false);
     }, []);
 
     // Handle component-level errors
@@ -97,6 +100,7 @@ function SharingModal({ api, displayInModal, itemID, itemType, language, onReque
         setOnAddLink(null);
         setOnRemoveLink(null);
         setSharedLink(null);
+        setIsLoading(true);
     }, []);
 
     // Get initial data for the item
@@ -125,6 +129,7 @@ function SharingModal({ api, displayInModal, itemID, itemType, language, onReque
             setCurrentUserID(id);
             setSharedLink(prevSharedLink => ({ ...prevSharedLink, ...userEnterpriseData }));
             setComponentErrorMessage(null);
+            setIsLoading(false);
         };
 
         const getUserData = () => {
@@ -147,7 +152,7 @@ function SharingModal({ api, displayInModal, itemID, itemType, language, onReque
     // Ensure that all necessary data has been received before rendering child components
     // "serverURL" is added to sharedLink after the call to the Users API
     if (!item || !sharedLink || !currentUserID || !sharedLink.serverURL) {
-        return null;
+        return <LoadingIndicator />;
     }
 
     const { ownerEmail, ownerID, permissions } = item;
@@ -174,6 +179,7 @@ function SharingModal({ api, displayInModal, itemID, itemType, language, onReque
                     setChangeSharedLinkPermissionLevel={setChangeSharedLinkPermissionLevel}
                     setGetContacts={setGetContacts}
                     setCollaboratorsList={setCollaboratorsList}
+                    setIsLoading={setIsLoading}
                     setItem={setItem}
                     setOnAddLink={setOnAddLink}
                     setOnRemoveLink={setOnRemoveLink}
@@ -190,6 +196,7 @@ function SharingModal({ api, displayInModal, itemID, itemType, language, onReque
                         item={item}
                         onRequestClose={() => setCurrentView(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL)}
                         onSubmit={onSubmitSettings}
+                        submitting={isLoading}
                         {...sharedLink}
                     />
                 )}
@@ -212,6 +219,7 @@ function SharingModal({ api, displayInModal, itemID, itemType, language, onReque
                         onSettingsClick={() => setCurrentView(CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS)}
                         sendInvites={sendInvites}
                         sharedLink={sharedLink}
+                        submitting={isLoading}
                     />
                 )}
             </>

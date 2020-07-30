@@ -78,6 +78,7 @@ export type ContentSharingHooksOptions = {
     handleRemoveSharedLinkSuccess?: Function,
     handleSuccess?: Function,
     handleUpdateSharedLinkSuccess?: Function,
+    setIsLoading?: Function,
     transformAccess?: Function,
     transformItem?: Function,
     transformPermissions?: Function,
