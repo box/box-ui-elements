@@ -163,12 +163,13 @@ function SharingModal({ api, displayInModal, itemID, itemType, language, onReque
                 <SharingNotification
                     accessLevel={accessLevel}
                     api={api}
+                    closeComponent={onRequestClose}
+                    closeSettings={() => setCurrentView(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL)}
                     collaboratorsList={collaboratorsList}
                     currentUserID={currentUserID}
                     getContacts={getContacts}
                     itemID={itemID}
                     itemType={itemType}
-                    onRequestClose={() => setCurrentView(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL)}
                     onSubmitSettings={onSubmitSettings}
                     ownerEmail={ownerEmail}
                     ownerID={ownerID}

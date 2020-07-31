@@ -12,6 +12,7 @@ import type {
     item,
     sharedLinkType as USMSharedLinkType,
 } from '../../features/unified-share-modal/flowTypes';
+import type { RequestOptions } from '../../common/types/api';
 
 // "SLS" denotes values that are used in the Shared Link Settings modal
 type ContentSharingEnterpriseDataType = {
@@ -111,3 +112,9 @@ export type SharedLinkUpdateSettingsFnType = () => ($Shape<APISharedLink>) => Pr
 export type GetContactsFnType = () => (filterTerm: string) => Promise<Array<contactType> | UserCollection> | null;
 
 export type SendInvitesFnType = () => InviteCollaboratorsRequest => Promise<null | Array<Function>>;
+
+export type ConnectToItemShareFnType = ({
+    access?: string,
+    requestOptions?: RequestOptions,
+    successFn?: Function,
+}) => Function;

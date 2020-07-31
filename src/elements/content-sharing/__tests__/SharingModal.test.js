@@ -486,7 +486,7 @@ describe('elements/content-sharing/SharingModal', () => {
             wrapper.update();
             expect(share).toHaveBeenCalledWith(
                 { id: MOCK_ITEM_ID, permissions: {} },
-                ACCESS_COLLAB,
+                undefined,
                 expect.anything(),
                 expect.anything(),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
@@ -497,9 +497,10 @@ describe('elements/content-sharing/SharingModal', () => {
         });
 
         test('should call share() from onRemoveLink() and remove the existing shared link', async () => {
+            const onRequestCloseSpy = jest.fn();
             let wrapper;
             await act(async () => {
-                wrapper = getWrapper({ api, itemType: TYPE_FILE });
+                wrapper = getWrapper({ api, itemType: TYPE_FILE, onRequestClose: onRequestCloseSpy });
             });
             wrapper.update();
 
@@ -521,6 +522,7 @@ describe('elements/content-sharing/SharingModal', () => {
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
             expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_NULL_SHARED_LINK);
+            expect(onRequestCloseSpy).toHaveBeenCalled();
         });
 
         test.each`

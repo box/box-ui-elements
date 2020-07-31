@@ -33,12 +33,13 @@ import type {
 type SharingNotificationProps = {
     accessLevel: string,
     api: API,
+    closeComponent: Function,
+    closeSettings: Function,
     collaboratorsList: collaboratorsListType | null,
     currentUserID: string | null,
     getContacts: GetContactsFnType | null,
     itemID: string,
     itemType: ItemType,
-    onRequestClose: Function,
     ownerEmail: ?string,
     ownerID: ?string,
     permissions: ?BoxItemPermission,
@@ -62,12 +63,13 @@ type SharingNotificationProps = {
 function SharingNotification({
     accessLevel,
     api,
+    closeComponent,
+    closeSettings,
     collaboratorsList,
     currentUserID,
     getContacts,
     itemID,
     itemType,
-    onRequestClose,
     ownerEmail,
     ownerID,
     permissions,
@@ -135,11 +137,24 @@ function SharingNotification({
         }); // merge new shared link data with current shared link data
     };
 
-    // Handle a successful shared link deletion request
+    /**
+     * Handle a successful shared link removal request.
+     *
+     * Most of the data for the shared link will be removed, with the exception of the "canInvite" and "serverURL"
+     * properties, both of which are still necessary for rendering the form-only version of ContentSharing.
+     * We retain "serverURL" from the previous shared link, to avoid having to make another call to the Users API.
+     *
+     * @param {ContentSharingItemAPIResponse} itemData
+     */
     const handleRemoveSharedLinkSuccess = (itemData: ContentSharingItemAPIResponse) => {
         const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
         setItem((prevItem: itemFlowType | null) => ({ ...prevItem, ...updatedItem }));
-        setSharedLink(() => updatedSharedLink); // replace shared link data completely
+        setSharedLink((prevSharedLink: ContentSharingSharedLinkType | null) => {
+            return {
+                ...updatedSharedLink,
+                serverURL: prevSharedLink ? prevSharedLink.serverURL : '',
+            };
+        });
     };
 
     // Generate shared link CRUD functions for the item
@@ -153,19 +168,19 @@ function SharingNotification({
         handleError: () => {
             createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError);
             setIsLoading(false);
-            onRequestClose();
+            closeSettings();
         },
         handleUpdateSharedLinkSuccess: itemData => {
             createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess);
             handleUpdateSharedLinkSuccess(itemData);
             setIsLoading(false);
-            onRequestClose();
+            closeSettings();
         },
         handleRemoveSharedLinkSuccess: itemData => {
             createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess);
             handleRemoveSharedLinkSuccess(itemData);
             setIsLoading(false);
-            onRequestClose();
+            closeComponent(); // if this function is provided, it will close the modal
         },
         setIsLoading,
         transformAccess: newAccessLevel => USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel],

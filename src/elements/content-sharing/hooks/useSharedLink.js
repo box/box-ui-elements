@@ -4,9 +4,13 @@ import noop from 'lodash/noop';
 import API from '../../../api';
 import { ACCESS_NONE, TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from '../constants';
-import type { RequestOptions } from '../../../common/types/api';
 import type { BoxItemPermission, ItemType } from '../../../common/types/core';
-import type { ContentSharingHooksOptions, SharedLinkUpdateLevelFnType, SharedLinkUpdateSettingsFnType } from '../types';
+import type {
+    ConnectToItemShareFnType,
+    ContentSharingHooksOptions,
+    SharedLinkUpdateLevelFnType,
+    SharedLinkUpdateSettingsFnType,
+} from '../types';
 
 /**
  * Generate CRUD functions for shared links.
@@ -73,41 +77,54 @@ function useSharedLink(
         }
 
         // Create functions that alter the access level of a shared link
-        const connectToItemShare = (
-            accessType?: string,
-            requestOptions?: RequestOptions = CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-            successFn?: Function = handleUpdateSharedLinkSuccess,
-        ) => {
+        const connectToItemShare: ConnectToItemShareFnType = ({
+            access,
+            requestOptions = CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+            successFn = handleUpdateSharedLinkSuccess,
+        }) => {
             setIsLoading(true);
-            return itemAPIInstance.share(itemData, accessType, successFn, handleError, requestOptions);
+            return itemAPIInstance.share(itemData, access, successFn, handleError, requestOptions);
         };
 
         /**
          * Set the shared link creation function.
-         * The backend will determine the default access level for the shared link, so we do not need to pass an access level.
+         *
+         * The backend will determine the default access level for the shared link, so we should not pass a value for "access."
+         * The "open" and "company" access levels may be disabled due to certain policies, and attempting to set a disabled
+         * access level will throw a 400. The only access level that we can reliably set is "collaborators," but defaulting
+         * to that level diverges from existing shared link creation behavior in the WebApp.
+         *
          * After a shared link is successfully created, we save the access level from the API response into our ref.
          */
         const updatedOnAddLinkFn: SharedLinkUpdateLevelFnType = () => () =>
-            connectToItemShare(undefined, undefined, data => {
-                const {
-                    shared_link: { access },
-                } = data;
-                currentAccessLevel.current = access;
-                handleUpdateSharedLinkSuccess(data);
+            connectToItemShare({
+                successFn: data => {
+                    const {
+                        shared_link: { access },
+                    } = data;
+                    currentAccessLevel.current = access;
+                    handleUpdateSharedLinkSuccess(data);
+                },
             });
         setOnAddLink(updatedOnAddLinkFn);
 
+        // Shared link removal function
         const updatedOnRemoveLinkFn: SharedLinkUpdateLevelFnType = () => () =>
-            connectToItemShare(ACCESS_NONE, undefined, handleRemoveSharedLinkSuccess);
+            connectToItemShare({ access: ACCESS_NONE, successFn: handleRemoveSharedLinkSuccess });
         setOnRemoveLink(updatedOnRemoveLinkFn);
 
+        // Shared link access level change function
         const updatedChangeSharedLinkAccessLevelFn: SharedLinkUpdateLevelFnType = () => (newAccessLevel: string) =>
-            connectToItemShare(transformAccess(newAccessLevel), undefined, data => {
-                currentAccessLevel.current = newAccessLevel;
-                handleUpdateSharedLinkSuccess(data);
+            connectToItemShare({
+                access: transformAccess(newAccessLevel),
+                successFn: data => {
+                    currentAccessLevel.current = newAccessLevel;
+                    handleUpdateSharedLinkSuccess(data);
+                },
             });
         setChangeSharedLinkAccessLevel(updatedChangeSharedLinkAccessLevelFn);
 
+        // Create functions that update shared link settings aside from the access level
         const connectToUpdateSharedLink = (newSharedLinkData: Object) => {
             setIsLoading(true);
             return itemAPIInstance.updateSharedLink(
@@ -119,11 +136,16 @@ function useSharedLink(
             );
         };
 
+        // Shared link permission level change function
         const updatedChangeSharedLinkPermissionLevelFn: SharedLinkUpdateLevelFnType = () => (
             newSharedLinkPermissionLevel: string,
         ) => connectToUpdateSharedLink({ permissions: transformPermissions(newSharedLinkPermissionLevel) });
         setChangeSharedLinkPermissionLevel(updatedChangeSharedLinkPermissionLevelFn);
 
+        /**
+         * Set the shared link settings update function. This is currently used in the Shared Link Settings Modal,
+         * but it may also be used to update any settings not covered by the above functions.
+         */
         const updatedOnSubmitSettingsFn: SharedLinkUpdateSettingsFnType = () => newSettings =>
             connectToUpdateSharedLink(transformSettings(newSettings, currentAccessLevel.current));
         setOnSubmitSettings(updatedOnSubmitSettingsFn);
