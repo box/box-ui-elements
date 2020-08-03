@@ -18,7 +18,6 @@ class ContentSharing extends ES6Wrapper {
 
         render(
             <ContentSharingReactComponent
-                componentRef={this.setComponent}
                 itemID={this.id}
                 itemType={itemType || ITEM_TYPE_FILE}
                 language={this.language}
