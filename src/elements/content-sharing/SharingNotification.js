@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import type { MessageDescriptor } from 'react-intl';
 import API from '../../api';
@@ -33,8 +34,8 @@ import type {
 type SharingNotificationProps = {
     accessLevel: string,
     api: API,
-    closeComponent: () => void,
-    closeSettings: () => string,
+    closeComponent?: () => void,
+    closeSettings: () => void,
     collaboratorsList: collaboratorsListType | null,
     currentUserID: string | null,
     getContacts: GetContactsFnType | null,
@@ -63,7 +64,7 @@ type SharingNotificationProps = {
 function SharingNotification({
     accessLevel,
     api,
-    closeComponent,
+    closeComponent = noop,
     closeSettings,
     collaboratorsList,
     currentUserID,
