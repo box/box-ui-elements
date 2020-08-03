@@ -5,7 +5,7 @@ import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import API from '../../../api';
 import useSharedLink from '../hooks/useSharedLink';
-import { ACCESS_COLLAB, ACCESS_NONE, PERMISSION_CAN_DOWNLOAD, TYPE_FILE, TYPE_FOLDER } from '../../../constants';
+import { ACCESS_NONE, PERMISSION_CAN_DOWNLOAD, TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import {
     MOCK_ITEM_API_RESPONSE,
     MOCK_ITEM_ID,
@@ -122,9 +122,9 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
         test.each`
             itemType       | buttonIndex | invokedFunctionArg   | shareAccess          | description
             ${TYPE_FILE}   | ${0}        | ${ANYONE_IN_COMPANY} | ${ANYONE_IN_COMPANY} | ${'changeSharedLinkAccessLevel'}
-            ${TYPE_FILE}   | ${2}        | ${undefined}         | ${ACCESS_COLLAB}     | ${'onAddLink'}
+            ${TYPE_FILE}   | ${2}        | ${undefined}         | ${undefined}         | ${'onAddLink'}
             ${TYPE_FOLDER} | ${0}        | ${ANYONE_IN_COMPANY} | ${ANYONE_IN_COMPANY} | ${'changeSharedLinkAccessLevel'}
-            ${TYPE_FOLDER} | ${2}        | ${undefined}         | ${ACCESS_COLLAB}     | ${'onAddLink'}
+            ${TYPE_FOLDER} | ${2}        | ${undefined}         | ${undefined}         | ${'onAddLink'}
         `(
             'should set $description() and call success functions when invoked for a $itemType',
             ({ itemType, buttonIndex, invokedFunctionArg, shareAccess }) => {

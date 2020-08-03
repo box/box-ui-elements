@@ -7,18 +7,34 @@
  * @author Box
  */
 import * as React from 'react';
+import noop from 'lodash/noop';
 import API from '../../api';
 import SharingModal from './SharingModal';
 import { CLIENT_NAME_CONTENT_SHARING } from '../../constants';
 import type { ItemType } from '../../common/types/core';
 
 type ContentSharingProps = {
+    /** apiHost - API hostname. Defaults to https://api.box.com */
     apiHost: string,
+    /**
+     * customButton - Clickable element for opening the SharingModal component.
+     * This property should always be used in conjunction with displayInModal.
+     */
     customButton?: React.Element<any>,
+    /**
+     * displayInModal - Whether the SharingModal component should be displayed in a modal.
+     * If false, the SharingModal component will appear as a form within the surrounding page.
+     * This property can be used with or without a customButton. If used without a customButton,
+     * the modal will appear on page load. See ContentSharing.stories.js for examples.
+     */
     displayInModal: boolean,
+    /** itemID - Box file or folder ID */
     itemID: string,
+    /** itemType - "file" or "folder" */
     itemType: ItemType,
+    /** language - Language used for the element */
     language: string,
+    /** token - Valid access token */
     token: string,
 };
 
@@ -70,7 +86,7 @@ function ContentSharing({
                     itemID={itemID}
                     itemType={itemType}
                     language={language}
-                    onRequestClose={() => setIsOpen(false)}
+                    onRequestClose={displayInModal ? () => setIsOpen(false) : noop} // this function only applies to the modal view
                 />
             );
         };
@@ -99,8 +115,8 @@ function ContentSharing({
 
     return (
         <>
-            {sharingModalInstance}
             {launchButton}
+            {sharingModalInstance}
         </>
     );
 }

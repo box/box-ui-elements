@@ -17,7 +17,13 @@ import type { ItemType } from '../../../common/types/core';
  */
 function useInvites(api: API, itemID: string, itemType: ItemType, options: UseInvitesOptions) {
     const [sendInvites, setSendInvites] = React.useState<null | SendInvitesFnType>(null);
-    const { handleSuccess = noop, handleError = noop, transformRequest, transformResponse = arg => arg } = options;
+    const {
+        handleSuccess = noop,
+        handleError = noop,
+        setIsLoading = noop,
+        transformRequest,
+        transformResponse = arg => arg,
+    } = options;
 
     React.useEffect(() => {
         if (sendInvites) return;
@@ -26,8 +32,9 @@ function useInvites(api: API, itemID: string, itemType: ItemType, options: UseIn
             id: itemID,
             type: itemType,
         };
-        const sendCollabRequest = collab =>
-            api.getCollaborationsAPI(false).addCollaboration(
+        const sendCollabRequest = collab => {
+            setIsLoading(true);
+            return api.getCollaborationsAPI(false).addCollaboration(
                 itemData,
                 collab,
                 response => {
@@ -36,6 +43,7 @@ function useInvites(api: API, itemID: string, itemType: ItemType, options: UseIn
                 },
                 handleError,
             );
+        };
 
         const createPostCollaborationFn: SendInvitesFnType = () => async (
             collabRequest: InviteCollaboratorsRequest,
@@ -52,7 +60,17 @@ function useInvites(api: API, itemID: string, itemType: ItemType, options: UseIn
         if (!sendInvites) {
             setSendInvites(createPostCollaborationFn);
         }
-    }, [api, handleError, handleSuccess, itemID, itemType, sendInvites, transformRequest, transformResponse]);
+    }, [
+        api,
+        handleError,
+        handleSuccess,
+        itemID,
+        itemType,
+        sendInvites,
+        setIsLoading,
+        transformRequest,
+        transformResponse,
+    ]);
 
     return sendInvites;
 }

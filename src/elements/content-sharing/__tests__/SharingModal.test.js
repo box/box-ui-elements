@@ -3,6 +3,7 @@ import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import { FormattedMessage } from 'react-intl';
 import ErrorMask from '../../../components/error-mask/ErrorMask';
+import LoadingIndicator from '../../../components/loading-indicator/LoadingIndicator';
 import SharingModal from '../SharingModal';
 import Notification, { TYPE_ERROR, TYPE_INFO } from '../../../components/notification/Notification';
 import SharedLinkSettingsModal from '../../../features/shared-link-settings-modal';
@@ -195,18 +196,44 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(wrapper.exists(SharedLinkSettingsModal)).toBe(false);
             expect(wrapper.exists(UnifiedShareModal)).toBe(true);
         });
+
+        test('should show the LoadingIndicator while data is being retrieved', async () => {
+            const api = createAPIMock({ getFile }, null, { getUser });
+
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, itemType: TYPE_FILE });
+            });
+
+            expect(wrapper.exists(LoadingIndicator)).toBe(true);
+
+            wrapper.update();
+            expect(wrapper.exists(LoadingIndicator)).toBe(false);
+            expect(wrapper.exists(UnifiedShareModal)).toBe(true);
+        });
     });
 
     describe('with failed GET requests to the Item and/or Users API', () => {
-        test('should show the ErrorMask and skip the call to getUser() if the call to getFile() fails', async () => {
-            const getFile = jest.fn().mockImplementation((id, successFn, failureFn) => {
+        let api;
+        let getFile;
+        let getFolderFields;
+        let getUser;
+        beforeEach(() => {
+            getFile = jest.fn().mockImplementation((id, successFn, failureFn) => {
                 return Promise.reject(new Error({ status: '400' })).catch(response => {
                     failureFn(response);
                 });
             });
-            const getUser = jest.fn();
-            const api = createAPIMock({ getFile }, null, { getUser });
+            getFolderFields = jest.fn().mockImplementation((id, successFn, failureFn) => {
+                return Promise.reject(new Error({ status: '400' })).catch(response => {
+                    failureFn(response);
+                });
+            });
+            getUser = jest.fn();
+            api = createAPIMock({ getFile }, { getFolderFields }, { getUser });
+        });
 
+        test('should show the ErrorMask and skip the call to getUser() if the call to getFile() fails', async () => {
             let wrapper;
             await act(async () => {
                 wrapper = getWrapper({ api, itemType: TYPE_FILE });
@@ -221,14 +248,6 @@ describe('elements/content-sharing/SharingModal', () => {
         });
 
         test('should show the ErrorMask and skip the call to getUser() if the call to getFolderFields() fails', async () => {
-            const getFolderFields = jest.fn().mockImplementation((id, successFn, failureFn) => {
-                return Promise.reject(new Error({ status: '400' })).catch(response => {
-                    failureFn(response);
-                });
-            });
-            const getUser = jest.fn();
-            const api = createAPIMock(null, { getFolderFields }, { getUser });
-
             let wrapper;
             await act(async () => {
                 wrapper = getWrapper({ api, itemType: TYPE_FOLDER });
@@ -241,6 +260,18 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
             expect(wrapper.exists(SharingNotification)).toBe(false);
         });
+
+        test('should show the LoadingIndicator while data is being retrieved', async () => {
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, itemType: TYPE_FOLDER });
+            });
+            expect(wrapper.exists(LoadingIndicator)).toBe(true);
+
+            wrapper.update();
+            expect(wrapper.exists(LoadingIndicator)).toBe(false);
+            expect(wrapper.exists(ErrorMask)).toBe(true);
+        });
     });
 
     describe('with successful item API calls, but an unsuccessful users API call', () => {
@@ -248,7 +279,7 @@ describe('elements/content-sharing/SharingModal', () => {
         let getFile;
         let getFolderFields;
         let getUser;
-        beforeAll(() => {
+        beforeEach(() => {
             getFile = jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE));
             getFolderFields = jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE));
             getUser = jest.fn().mockImplementation((id, successFn, failureFn) => {
@@ -287,6 +318,19 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(wrapper.exists(ErrorMask)).toBe(true);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
             expect(wrapper.exists(SharingNotification)).toBe(false);
+        });
+
+        test('should show the LoadingIndicator while data is being retrieved', async () => {
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, itemType: TYPE_FOLDER });
+            });
+
+            expect(wrapper.exists(LoadingIndicator)).toBe(true);
+
+            wrapper.update();
+            expect(wrapper.exists(LoadingIndicator)).toBe(false);
+            expect(wrapper.exists(ErrorMask)).toBe(true);
         });
     });
 
@@ -442,7 +486,7 @@ describe('elements/content-sharing/SharingModal', () => {
             wrapper.update();
             expect(share).toHaveBeenCalledWith(
                 { id: MOCK_ITEM_ID, permissions: {} },
-                ACCESS_COLLAB,
+                undefined,
                 expect.anything(),
                 expect.anything(),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
@@ -453,9 +497,10 @@ describe('elements/content-sharing/SharingModal', () => {
         });
 
         test('should call share() from onRemoveLink() and remove the existing shared link', async () => {
+            const onRequestCloseSpy = jest.fn();
             let wrapper;
             await act(async () => {
-                wrapper = getWrapper({ api, itemType: TYPE_FILE });
+                wrapper = getWrapper({ api, itemType: TYPE_FILE, onRequestClose: onRequestCloseSpy });
             });
             wrapper.update();
 
@@ -477,6 +522,7 @@ describe('elements/content-sharing/SharingModal', () => {
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
             expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_NULL_SHARED_LINK);
+            expect(onRequestCloseSpy).toHaveBeenCalled();
         });
 
         test.each`
