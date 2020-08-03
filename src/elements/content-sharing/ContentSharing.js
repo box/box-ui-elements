@@ -38,6 +38,8 @@ type ContentSharingProps = {
     itemType: ItemType,
     /** language - Language used for the element */
     language: string,
+    /** messages - Localized strings used by the element */
+    messages?: StringMap,
     /** token - Valid access token */
     token: string,
 };
@@ -65,7 +67,14 @@ function ContentSharing({
     const [launchButton, setLaunchButton] = React.useState<React.Element<any> | null>(null);
     const [sharingModalInstance, setSharingModalInstance] = React.useState<React.Element<typeof SharingModal> | null>(
         customButton ? null : (
-            <SharingModal api={api} displayInModal={false} itemID={itemID} itemType={itemType} language={language} />
+            <SharingModal
+                api={api}
+                displayInModal={false}
+                itemID={itemID}
+                itemType={itemType}
+                language={language}
+                messages={messages}
+            />
         ),
     );
 
@@ -91,6 +100,7 @@ function ContentSharing({
                     itemID={itemID}
                     itemType={itemType}
                     language={language}
+                    messages={messages}
                     onRequestClose={displayInModal ? () => setIsOpen(false) : noop} // this function only applies to the modal view
                 />
             );
