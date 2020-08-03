@@ -33,8 +33,8 @@ import type {
 type SharingNotificationProps = {
     accessLevel: string,
     api: API,
-    closeComponent: Function,
-    closeSettings: Function,
+    closeComponent: () => void,
+    closeSettings: () => string,
     collaboratorsList: collaboratorsListType | null,
     currentUserID: string | null,
     getContacts: GetContactsFnType | null,

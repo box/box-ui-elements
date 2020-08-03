@@ -226,14 +226,12 @@ export const convertSharedLinkSettings = (
     const convertedSettings: $Shape<SharedLink> = {
         unshared_at: expirationTimestamp && isExpirationEnabled ? new Date(expirationTimestamp).toISOString() : null,
         vanity_url: serverURL && vanityName ? `${serverURL}${vanityName}` : '',
-        /**
-         * Download permissions can only be set on "company" or "open" shared links.
-         * A Flow limitation prevents the usage of an && statement in an object spread: https://github.com/facebook/flow/issues/5946
-         */
-        ...(accessLevel !== PEOPLE_IN_ITEM && accessLevel !== ACCESS_COLLAB
-            ? { permissions: { can_download, can_preview: !can_download } }
-            : {}),
     };
+
+    // Download permissions can only be set on "company" or "open" shared links.
+    if (![ACCESS_COLLAB, PEOPLE_IN_ITEM].includes(accessLevel)) {
+        convertedSettings.permissions = { can_download, can_preview: !can_download };
+    }
 
     /**
      * This block covers the following cases:
@@ -248,7 +246,7 @@ export const convertSharedLinkSettings = (
      *   returns password = '' and isPasswordEnabled = true. In these cases, the password should *not*
      *   be converted to null, because that would remove the existing password.
      */
-    if (accessLevel === ANYONE_WITH_LINK || accessLevel === ACCESS_OPEN) {
+    if ([ANYONE_WITH_LINK, ACCESS_OPEN].includes(accessLevel)) {
         if (isPasswordEnabled && !!password) {
             convertedSettings.password = password;
         } else if (!isPasswordEnabled) {
