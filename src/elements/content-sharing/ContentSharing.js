@@ -11,7 +11,7 @@ import noop from 'lodash/noop';
 import API from '../../api';
 import SharingModal from './SharingModal';
 import { CLIENT_NAME_CONTENT_SHARING } from '../../constants';
-import type { ItemType } from '../../common/types/core';
+import type { ItemType, StringMap } from '../../common/types/core';
 
 import '../common/base.scss';
 import '../common/fonts.scss';
@@ -57,6 +57,7 @@ function ContentSharing({
     itemID,
     itemType,
     language,
+    messages,
     token,
 }: ContentSharingProps) {
     const [isOpen, setIsOpen] = React.useState<boolean>(true);
@@ -115,7 +116,18 @@ function ContentSharing({
         if (!isOpen) {
             setSharingModalInstance(null);
         }
-    }, [api, sharingModalInstance, customButton, displayInModal, isOpen, itemID, itemType, language, launchButton]);
+    }, [
+        api,
+        sharingModalInstance,
+        customButton,
+        displayInModal,
+        isOpen,
+        itemID,
+        itemType,
+        language,
+        launchButton,
+        messages,
+    ]);
 
     return (
         <>
