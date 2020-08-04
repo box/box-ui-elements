@@ -65,7 +65,7 @@ export type item = {
     bannerPolicy?: {
         body: string,
         colorID?: number,
-        title: string,
+        title?: string,
     },
     canUserSeeClassification: boolean,
     classification?: string,
