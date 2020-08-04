@@ -60,12 +60,10 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
     const metadataQueryResponse = {
         entries: [
             {
-                item: {
-                    type: 'file',
-                    id: '1234',
-                    name: 'filename1.pdf',
-                    size: 10000,
-                },
+                type: 'file',
+                id: '1234',
+                name: 'filename1.pdf',
+                size: 10000,
                 metadata: {
                     [templateScope]: {
                         [templateKey]: {
@@ -83,12 +81,10 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
                 },
             },
             {
-                item: {
-                    type: 'file',
-                    id: '9876',
-                    name: 'filename2.mp4',
-                    size: 50000,
-                },
+                type: 'file',
+                id: '9876',
+                name: 'filename2.mp4',
+                size: 50000,
                 metadata: {
                     [templateScope]: {
                         [templateKey]: {
@@ -113,17 +109,20 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             enterprise: {
                 fields: [
                     {
-                        name: 'type',
+                        displayName: 'type',
+                        key: 'type',
                         value: 'bill',
                         type: 'string',
                     },
                     {
-                        name: 'year',
+                        displayName: 'year',
+                        key: 'year',
                         value: 2017,
                         type: 'float',
                     },
                     {
-                        name: 'approved',
+                        displayName: 'approved',
+                        key: 'approved',
                         value: 'yes',
                         type: 'enum',
                         options,
@@ -136,17 +135,20 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             enterprise: {
                 fields: [
                     {
-                        name: 'type',
+                        displayName: 'type',
+                        key: 'type',
                         value: 'receipt',
                         type: 'string',
                     },
                     {
-                        name: 'year',
+                        displayName: 'year',
+                        key: 'year',
                         value: 2018,
                         type: 'float',
                     },
                     {
-                        name: 'approved',
+                        displayName: 'approved',
+                        key: 'approved',
                         value: 'no',
                         type: 'enum',
                         options,
@@ -250,11 +252,11 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
     describe('filterMetdataQueryResponse()', () => {
         test('should return query response with entries of type file only', () => {
             const entries = [
-                { item: { type: 'file' }, metadata: {} },
-                { item: { type: 'folder' }, metadata: {} },
-                { item: { type: 'file' }, metadata: {} },
-                { item: { type: 'folder' }, metadata: {} },
-                { item: { type: 'file' }, metadata: {} },
+                { type: 'file', metadata: {} },
+                { type: 'folder', metadata: {} },
+                { type: 'file', metadata: {} },
+                { type: 'folder', metadata: {} },
+                { type: 'file', metadata: {} },
             ];
             const next_marker = 'marker_123456789';
             const mdQueryResponse = {
@@ -263,7 +265,7 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             };
 
             const filteredResponse = metadataQueryAPIHelper.filterMetdataQueryResponse(mdQueryResponse);
-            const isEveryEntryOfTypeFile = filteredResponse.entries.every(entry => entry.item.type === ITEM_TYPE_FILE);
+            const isEveryEntryOfTypeFile = filteredResponse.entries.every(entry => entry.type === ITEM_TYPE_FILE);
             expect(isEveryEntryOfTypeFile).toBe(true);
         });
     });

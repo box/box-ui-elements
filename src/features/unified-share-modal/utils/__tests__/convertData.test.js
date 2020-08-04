@@ -26,6 +26,16 @@ import {
     PEOPLE_IN_ITEM,
 } from '../../constants';
 import {
+    bdlDarkBlue50,
+    bdlGray20,
+    bdlGreenLight50,
+    bdlLightBlue50,
+    bdlOrange50,
+    bdlPurpleRain50,
+    bdlWatermelonRed50,
+    bdlYellow50,
+} from '../../../../styles/variables';
+import {
     MOCK_COLLABS_API_RESPONSE,
     MOCK_COLLABS_CONVERTED_REQUEST,
     MOCK_COLLAB_IDS_CONVERTED,
@@ -36,6 +46,7 @@ import {
     MOCK_COLLABS_CONVERTED_USERS,
     MOCK_COLLABS_REQUEST_USERS_ONLY,
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
+    MOCK_ITEM_PERMISSIONS,
     MOCK_OWNER,
     MOCK_OWNER_ID,
     MOCK_OWNER_EMAIL,
@@ -52,7 +63,6 @@ import {
     MOCK_TIMESTAMP_ISO_STRING,
     MOCK_USER_IDS_CONVERTED,
     MOCK_VANITY_URL,
-    MOCK_ITEM_PERMISSIONS,
 } from '../__mocks__/USMMocks';
 
 jest.mock('../../../../utils/file', () => ({
@@ -320,6 +330,49 @@ describe('convertItemResponse()', () => {
             expect(isDownloadAllowed).toBe(expectedIsDownloadAllowed);
         },
     );
+
+    test.each`
+        hexCode               | colorID | colorName
+        ${bdlYellow50}        | ${0}    | ${'a yellow'}
+        ${bdlOrange50}        | ${1}    | ${'an orange'}
+        ${bdlWatermelonRed50} | ${2}    | ${'a red'}
+        ${bdlPurpleRain50}    | ${3}    | ${'a purple'}
+        ${bdlLightBlue50}     | ${4}    | ${'a light blue'}
+        ${bdlDarkBlue50}      | ${5}    | ${'a dark blue'}
+        ${bdlGreenLight50}    | ${6}    | ${'a green'}
+        ${bdlGray20}          | ${7}    | ${'a gray'}
+    `('should convert classification with $colorName background', ({ hexCode, colorID }) => {
+        const classificationName = 'internal';
+        const definition = 'For internal purposes only.';
+
+        const responseFromAPI = {
+            allowed_invitee_roles: ['editor', 'viewer'],
+            classification: {
+                color: hexCode,
+                definition,
+                name: classificationName,
+            },
+            description: ITEM_DESCRIPTION,
+            etag: '1',
+            id: ITEM_ID,
+            name: ITEM_NAME,
+            owned_by: MOCK_OWNER,
+            permissions: FULL_PERMISSIONS,
+            shared_link: ITEM_SHARED_LINK,
+            shared_link_features: ALL_SHARED_LINK_FEATURES,
+            type: TYPE_FOLDER,
+        };
+
+        const {
+            item: { bannerPolicy, classification },
+        } = convertItemResponse(responseFromAPI);
+
+        expect(bannerPolicy).toEqual({
+            body: definition,
+            colorID,
+        });
+        expect(classification).toBe(classificationName);
+    });
 });
 
 describe('convertUserResponse()', () => {
