@@ -11,7 +11,11 @@ import noop from 'lodash/noop';
 import API from '../../api';
 import SharingModal from './SharingModal';
 import { CLIENT_NAME_CONTENT_SHARING } from '../../constants';
-import type { ItemType } from '../../common/types/core';
+import type { ItemType, StringMap } from '../../common/types/core';
+
+import '../common/base.scss';
+import '../common/fonts.scss';
+import '../common/modal.scss';
 
 type ContentSharingProps = {
     /** apiHost - API hostname. Defaults to https://api.box.com */
@@ -34,6 +38,8 @@ type ContentSharingProps = {
     itemType: ItemType,
     /** language - Language used for the element */
     language: string,
+    /** messages - Localized strings used by the element */
+    messages?: StringMap,
     /** token - Valid access token */
     token: string,
 };
@@ -53,6 +59,7 @@ function ContentSharing({
     itemID,
     itemType,
     language,
+    messages,
     token,
 }: ContentSharingProps) {
     const [isOpen, setIsOpen] = React.useState<boolean>(true);
@@ -60,7 +67,14 @@ function ContentSharing({
     const [launchButton, setLaunchButton] = React.useState<React.Element<any> | null>(null);
     const [sharingModalInstance, setSharingModalInstance] = React.useState<React.Element<typeof SharingModal> | null>(
         customButton ? null : (
-            <SharingModal api={api} displayInModal={false} itemID={itemID} itemType={itemType} language={language} />
+            <SharingModal
+                api={api}
+                displayInModal={false}
+                itemID={itemID}
+                itemType={itemType}
+                language={language}
+                messages={messages}
+            />
         ),
     );
 
@@ -86,6 +100,7 @@ function ContentSharing({
                     itemID={itemID}
                     itemType={itemType}
                     language={language}
+                    messages={messages}
                     onRequestClose={displayInModal ? () => setIsOpen(false) : noop} // this function only applies to the modal view
                 />
             );
@@ -111,7 +126,18 @@ function ContentSharing({
         if (!isOpen) {
             setSharingModalInstance(null);
         }
-    }, [api, sharingModalInstance, customButton, displayInModal, isOpen, itemID, itemType, language, launchButton]);
+    }, [
+        api,
+        sharingModalInstance,
+        customButton,
+        displayInModal,
+        isOpen,
+        itemID,
+        itemType,
+        language,
+        launchButton,
+        messages,
+    ]);
 
     return (
         <>
