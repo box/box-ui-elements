@@ -1,5 +1,6 @@
 // @flow
 import type {
+    BoxItemClassification,
     BoxItemPermission,
     ItemType,
     NewCollaboration,
@@ -55,6 +56,7 @@ export type ContentSharingItemDataType = {
 
 export type ContentSharingItemAPIResponse = {
     allowed_invitee_roles: Array<string>,
+    classification: ?BoxItemClassification,
     description: string,
     etag: string,
     extension: string,

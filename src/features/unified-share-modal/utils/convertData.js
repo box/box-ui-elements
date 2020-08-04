@@ -22,6 +22,26 @@ import {
     COLLAB_USER_TYPE,
     PEOPLE_IN_ITEM,
 } from '../constants';
+import {
+    bdlDarkBlue50,
+    bdlGray20,
+    bdlGreenLight50,
+    bdlLightBlue50,
+    bdlOrange50,
+    bdlPurpleRain50,
+    bdlWatermelonRed50,
+    bdlYellow50,
+} from '../../../styles/variables';
+import {
+    CLASSIFICATION_COLOR_ID_0,
+    CLASSIFICATION_COLOR_ID_1,
+    CLASSIFICATION_COLOR_ID_2,
+    CLASSIFICATION_COLOR_ID_3,
+    CLASSIFICATION_COLOR_ID_4,
+    CLASSIFICATION_COLOR_ID_5,
+    CLASSIFICATION_COLOR_ID_6,
+    CLASSIFICATION_COLOR_ID_7,
+} from '../../classification/constants';
 import type {
     ContentSharingCollaborationsRequest,
     ContentSharingItemAPIResponse,
@@ -58,15 +78,28 @@ export const USM_TO_API_PERMISSION_LEVEL_MAP = {
     [CAN_VIEW_ONLY]: PERMISSION_CAN_PREVIEW,
 };
 
+const API_TO_USM_CLASSIFICATION_COLORS_MAP = {
+    [bdlYellow50]: CLASSIFICATION_COLOR_ID_0,
+    [bdlOrange50]: CLASSIFICATION_COLOR_ID_1,
+    [bdlWatermelonRed50]: CLASSIFICATION_COLOR_ID_2,
+    [bdlPurpleRain50]: CLASSIFICATION_COLOR_ID_3,
+    [bdlLightBlue50]: CLASSIFICATION_COLOR_ID_4,
+    [bdlDarkBlue50]: CLASSIFICATION_COLOR_ID_5,
+    [bdlGreenLight50]: CLASSIFICATION_COLOR_ID_6,
+    [bdlGray20]: CLASSIFICATION_COLOR_ID_7,
+};
+
 /**
  * Convert a response from the Item API to the object that the USM expects.
  *
  * @param {BoxItem} itemAPIData
  * @returns {ContentSharingItemDataType} Object containing item and shared link information
  */
+
 export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): ContentSharingItemDataType => {
     const {
         allowed_invitee_roles,
+        classification,
         id,
         description,
         extension,
@@ -85,6 +118,19 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
         can_set_share_access: canChangeAccessLevel,
         can_share: itemShare,
     } = permissions;
+
+    // Convert classification data for the item if available
+    let classificationData = {};
+    if (classification) {
+        const { color, definition, name: classificationName } = classification;
+        classificationData = {
+            bannerPolicy: {
+                body: definition,
+                colorID: API_TO_USM_CLASSIFICATION_COLORS_MAP[color],
+            },
+            classification: classificationName,
+        };
+    }
 
     const isEditAllowed = allowed_invitee_roles.indexOf(INVITEE_ROLE_EDITOR) !== -1;
 
@@ -142,7 +188,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
 
     return {
         item: {
-            canUserSeeClassification: false,
+            canUserSeeClassification: !!classification,
             description,
             extension,
             grantedPermissions: {
@@ -156,6 +202,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
             permissions, // the original permissions are necessary for PUT requests to the Item API
             type,
             typedID: type === TYPE_FOLDER ? getTypedFolderId(id) : getTypedFileId(id),
+            ...classificationData,
         },
         sharedLink,
     };

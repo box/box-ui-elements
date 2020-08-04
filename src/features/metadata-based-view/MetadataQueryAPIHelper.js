@@ -16,12 +16,7 @@ import {
     METADATA_FIELD_TYPE_MULTISELECT,
 } from '../../common/constants';
 
-import type {
-    MetadataQuery as MetadataQueryType,
-    MetadataQueryResponseData,
-    MetadataQueryResponseEntry,
-    MetadataQueryResponseEntryMetadata,
-} from '../../common/types/metadataQueries';
+import type { MetadataQuery as MetadataQueryType, MetadataQueryResponseData } from '../../common/types/metadataQueries';
 import type {
     MetadataTemplateSchemaResponse,
     MetadataTemplate,
@@ -72,7 +67,7 @@ export default class MetadataQueryAPIHelper {
         },
     ];
 
-    flattenMetadata = (metadata: MetadataQueryResponseEntryMetadata): MetadataType => {
+    flattenMetadata = (metadata?: MetadataType): MetadataType => {
         const templateFields = getProp(this.metadataTemplate, 'fields', []);
         const instance = getProp(metadata, `${this.templateScope}.${this.templateKey}`);
 
@@ -85,10 +80,12 @@ export default class MetadataQueryAPIHelper {
             .map(key => {
                 const templateField = find(templateFields, ['key', key]);
                 const type = getProp(templateField, 'type'); // get data type
+                const displayName = getProp(templateField, 'displayName'); // get displayName
                 const field: MetadataQueryInstanceTypeField = {
-                    name: key,
+                    key,
                     value: instance[key],
                     type,
+                    displayName,
                 };
 
                 if (includes(SELECT_TYPES, type)) {
@@ -107,8 +104,8 @@ export default class MetadataQueryAPIHelper {
         };
     };
 
-    flattenResponseEntry = ({ item, metadata }: MetadataQueryResponseEntry): BoxItem => {
-        const { id, name, size } = item;
+    flattenResponseEntry = (metadataEntry: BoxItem): BoxItem => {
+        const { id, name, size, metadata } = metadataEntry;
 
         return {
             id,
@@ -121,7 +118,7 @@ export default class MetadataQueryAPIHelper {
     filterMetdataQueryResponse = (response: MetadataQueryResponseData): MetadataQueryResponseData => {
         const { entries = [], next_marker } = response;
         return {
-            entries: entries.filter(entry => getProp(entry, 'item.type') === ITEM_TYPE_FILE), // return only file items
+            entries: entries.filter(entry => getProp(entry, 'type') === ITEM_TYPE_FILE), // return only file items
             next_marker,
         };
     };

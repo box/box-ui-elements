@@ -154,6 +154,12 @@ type Crumb = {
     name: string,
 };
 
+type BoxItemClassification = {
+    color: string,
+    definition: string,
+    name: string,
+};
+
 type BoxItemPermission = {
     can_annotate?: boolean,
     can_comment?: boolean,
@@ -477,6 +483,7 @@ export type {
     SelectorItem,
     SelectorItems,
     Crumb,
+    BoxItemClassification,
     BoxItemPermission,
     BoxItemVersionPermission,
     BoxItemVersionRetention,
