@@ -55,7 +55,8 @@ type MetadataFieldValue = string | number | Array<any>;
 type MetadataFields = { [string]: MetadataFieldValue };
 
 type MetadataQueryInstanceTypeField = {
-    name: string,
+    displayName: string,
+    key: string,
     options?: MetadataTemplateFieldOption,
     type: string,
     value: ?MetadataFieldValue,
