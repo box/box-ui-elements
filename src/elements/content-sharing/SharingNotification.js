@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import type { MessageDescriptor } from 'react-intl';
 import API from '../../api';
@@ -34,7 +33,7 @@ import type {
 type SharingNotificationProps = {
     accessLevel: string,
     api: API,
-    closeComponent?: () => void,
+    closeComponent: () => void,
     closeSettings: () => void,
     collaboratorsList: collaboratorsListType | null,
     currentUserID: string | null,
@@ -64,7 +63,7 @@ type SharingNotificationProps = {
 function SharingNotification({
     accessLevel,
     api,
-    closeComponent = noop,
+    closeComponent,
     closeSettings,
     collaboratorsList,
     currentUserID,
@@ -158,6 +157,12 @@ function SharingNotification({
         });
     };
 
+    const handleUpdateSharedLinkError = () => {
+        createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError);
+        setIsLoading(false);
+        closeSettings();
+    };
+
     // Generate shared link CRUD functions for the item
     const {
         changeSharedLinkAccessLevel,
@@ -166,22 +171,22 @@ function SharingNotification({
         onRemoveLink,
         onSubmitSettings,
     } = useSharedLink(api, itemID, itemType, permissions, accessLevel, {
-        handleError: () => {
-            createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError);
-            setIsLoading(false);
-            closeSettings();
-        },
+        handleUpdateSharedLinkError,
         handleUpdateSharedLinkSuccess: itemData => {
             createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess);
             handleUpdateSharedLinkSuccess(itemData);
             setIsLoading(false);
             closeSettings();
         },
+        handleRemoveSharedLinkError: () => {
+            handleUpdateSharedLinkError();
+            closeComponent(); // if this function is provided, it will close the modal
+        },
         handleRemoveSharedLinkSuccess: itemData => {
-            createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess);
+            createNotification(TYPE_INFO, contentSharingMessages.sharedLinkRemovalSuccess);
             handleRemoveSharedLinkSuccess(itemData);
             setIsLoading(false);
-            closeComponent(); // if this function is provided, it will close the modal
+            closeComponent();
         },
         setIsLoading,
         transformAccess: newAccessLevel => USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel],
@@ -218,10 +223,12 @@ function SharingNotification({
         handleSuccess: () => {
             createNotification(TYPE_INFO, contentSharingMessages.sendInvitesSuccess);
             setIsLoading(false);
+            closeComponent();
         },
         handleError: () => {
             createNotification(TYPE_ERROR, contentSharingMessages.sendInvitesError);
             setIsLoading(false);
+            closeComponent();
         },
         setIsLoading,
         transformRequest: data => convertCollabsRequest(data),

@@ -16,7 +16,8 @@ import { ANYONE_IN_COMPANY, CAN_VIEW_DOWNLOAD, PEOPLE_IN_ITEM } from '../../../f
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from '../constants';
 import type { BoxItemPermission } from '../../../common/types/core';
 
-const handleError = jest.fn();
+const handleRemoveSharedLinkError = jest.fn();
+const handleUpdateSharedLinkError = jest.fn();
 const handleRemoveSharedLinkSuccess = jest.fn().mockReturnValue(MOCK_ITEM_API_RESPONSE);
 const handleUpdateSharedLinkSuccess = jest.fn().mockReturnValue(MOCK_ITEM_API_RESPONSE);
 
@@ -136,7 +137,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                             api={mockAPI}
                             itemType={itemType}
                             permissions={MOCK_ITEM_PERMISSIONS}
-                            options={{ handleError, handleUpdateSharedLinkSuccess }}
+                            options={{ handleUpdateSharedLinkError, handleUpdateSharedLinkSuccess }}
                         />,
                     );
                 });
@@ -151,7 +152,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                     MOCK_ITEM_DATA,
                     shareAccess,
                     expect.anything(Function),
-                    handleError,
+                    handleUpdateSharedLinkError,
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 );
                 expect(handleUpdateSharedLinkSuccess).toHaveBeenCalled();
@@ -169,7 +170,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                             api={mockAPI}
                             itemType={itemType}
                             permissions={MOCK_ITEM_PERMISSIONS}
-                            options={{ handleError, handleRemoveSharedLinkSuccess }}
+                            options={{ handleRemoveSharedLinkError, handleRemoveSharedLinkSuccess }}
                         />,
                     );
                 });
@@ -184,7 +185,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                     MOCK_ITEM_DATA,
                     ACCESS_NONE,
                     expect.anything(Function),
-                    handleError,
+                    handleRemoveSharedLinkError,
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 );
                 expect(handleRemoveSharedLinkSuccess).toHaveBeenCalled();
@@ -208,7 +209,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                             api={mockAPI}
                             itemType={itemType}
                             permissions={permissions}
-                            options={{ handleError, handleUpdateSharedLinkSuccess }}
+                            options={{ handleUpdateSharedLinkError, handleUpdateSharedLinkSuccess }}
                         />,
                     );
                 });
@@ -223,7 +224,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                     { id: MOCK_ITEM_ID, permissions },
                     sharedLinkData,
                     expect.anything(Function),
-                    handleError,
+                    handleUpdateSharedLinkError,
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 );
                 expect(handleUpdateSharedLinkSuccess).toHaveBeenCalled();
@@ -243,7 +244,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                         api={mockAPI}
                         itemType={TYPE_FILE}
                         permissions={MOCK_ITEM_PERMISSIONS}
-                        options={{ handleError, transformAccess }}
+                        options={{ handleUpdateSharedLinkError, transformAccess }}
                     />,
                 );
             });
@@ -263,7 +264,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                         api={mockAPI}
                         itemType={TYPE_FILE}
                         permissions={MOCK_ITEM_PERMISSIONS}
-                        options={{ handleError, transformPermissions }}
+                        options={{ handleUpdateSharedLinkError, transformPermissions }}
                     />,
                 );
             });
@@ -283,7 +284,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                         api={mockAPI}
                         itemType={TYPE_FILE}
                         permissions={MOCK_ITEM_PERMISSIONS}
-                        options={{ handleError, transformSettings }}
+                        options={{ handleUpdateSharedLinkError, transformSettings }}
                     />,
                 );
             });
@@ -315,25 +316,29 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
         });
 
         test.each`
-            itemType       | buttonIndex | invokedFunctionArg                 | description
-            ${TYPE_FILE}   | ${0}        | ${ANYONE_IN_COMPANY}               | ${'changeSharedLinkAccessLevel'}
-            ${TYPE_FILE}   | ${1}        | ${PERMISSION_CAN_DOWNLOAD}         | ${'changeSharedLinkPermissionLevel'}
-            ${TYPE_FILE}   | ${2}        | ${undefined}                       | ${'onAddLink'}
-            ${TYPE_FILE}   | ${3}        | ${undefined}                       | ${'onRemoveLink'}
-            ${TYPE_FILE}   | ${4}        | ${MOCK_SETTINGS_WITH_ALL_FEATURES} | ${'onSubmitSettings'}
-            ${TYPE_FOLDER} | ${0}        | ${ANYONE_IN_COMPANY}               | ${'changeSharedLinkAccessLevel'}
-            ${TYPE_FOLDER} | ${1}        | ${PERMISSION_CAN_DOWNLOAD}         | ${'changeSharedLinkPermissionLevel'}
-            ${TYPE_FOLDER} | ${2}        | ${undefined}                       | ${'onAddLink'}
-            ${TYPE_FOLDER} | ${3}        | ${undefined}                       | ${'onRemoveLink'}
-            ${TYPE_FOLDER} | ${4}        | ${MOCK_SETTINGS_WITH_ALL_FEATURES} | ${'onSubmitSettings'}
+            itemType       | buttonIndex | invokedFunctionArg                 | errorFn                        | description
+            ${TYPE_FILE}   | ${0}        | ${ANYONE_IN_COMPANY}               | ${handleUpdateSharedLinkError} | ${'changeSharedLinkAccessLevel'}
+            ${TYPE_FILE}   | ${1}        | ${PERMISSION_CAN_DOWNLOAD}         | ${handleUpdateSharedLinkError} | ${'changeSharedLinkPermissionLevel'}
+            ${TYPE_FILE}   | ${2}        | ${undefined}                       | ${handleUpdateSharedLinkError} | ${'onAddLink'}
+            ${TYPE_FILE}   | ${3}        | ${undefined}                       | ${handleRemoveSharedLinkError} | ${'onRemoveLink'}
+            ${TYPE_FILE}   | ${4}        | ${MOCK_SETTINGS_WITH_ALL_FEATURES} | ${handleUpdateSharedLinkError} | ${'onSubmitSettings'}
+            ${TYPE_FOLDER} | ${0}        | ${ANYONE_IN_COMPANY}               | ${handleUpdateSharedLinkError} | ${'changeSharedLinkAccessLevel'}
+            ${TYPE_FOLDER} | ${1}        | ${PERMISSION_CAN_DOWNLOAD}         | ${handleUpdateSharedLinkError} | ${'changeSharedLinkPermissionLevel'}
+            ${TYPE_FOLDER} | ${2}        | ${undefined}                       | ${handleUpdateSharedLinkError} | ${'onAddLink'}
+            ${TYPE_FOLDER} | ${3}        | ${undefined}                       | ${handleRemoveSharedLinkError} | ${'onRemoveLink'}
+            ${TYPE_FOLDER} | ${4}        | ${MOCK_SETTINGS_WITH_ALL_FEATURES} | ${handleUpdateSharedLinkError} | ${'onSubmitSettings'}
         `(
-            'should set $description() and call handleError() when invoked',
-            ({ itemType, buttonIndex, invokedFunctionArg }) => {
+            'should set $description() and call handleUpdateSharedLinkError() when invoked',
+            ({ itemType, buttonIndex, invokedFunctionArg, errorFn }) => {
                 let fakeComponent;
 
                 act(() => {
                     fakeComponent = mount(
-                        <FakeComponent api={mockAPI} itemType={itemType} options={{ handleError }} />,
+                        <FakeComponent
+                            api={mockAPI}
+                            itemType={itemType}
+                            options={{ handleUpdateSharedLinkError, handleRemoveSharedLinkError }}
+                        />,
                     );
                 });
                 fakeComponent.update();
@@ -341,7 +346,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                 const btn = fakeComponent.find('button').at(buttonIndex);
                 expect(btn.prop('onClick')).toBeDefined();
                 btn.invoke('onClick')(invokedFunctionArg);
-                expect(handleError).toHaveBeenCalled();
+                expect(errorFn).toHaveBeenCalled();
             },
         );
     });
