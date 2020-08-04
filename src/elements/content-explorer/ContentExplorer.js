@@ -63,7 +63,7 @@ import {
     TYPED_ID_FOLDER_PREFIX,
 } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
-import type { MetadataQuery, MetadataColumnsToShow } from '../../common/types/metadataQueries';
+import type { MetadataQuery } from '../../common/types/metadataQueries';
 import type { MetadataFieldValue } from '../../common/types/metadata';
 import type {
     View,
@@ -115,7 +115,6 @@ type Props = {
     logoUrl?: string,
     measureRef?: Function,
     messages?: StringMap,
-    metadataColumnsToShow: MetadataColumnsToShow,
     metadataQuery: MetadataQuery,
     onCreate: Function,
     onDelete: Function,
@@ -1522,7 +1521,7 @@ class ContentExplorer extends Component<Props, State> {
             if (item.id === clonedItem.id) {
                 const fields = getProp(clonedItem, 'metadata.enterprise.fields', []);
                 fields.forEach(itemField => {
-                    if (itemField.name === field) {
+                    if (itemField.key === field) {
                         itemField.value = newValue; // set updated metadata value to correct item in currentCollection
                     }
                 });
@@ -1569,7 +1568,6 @@ class ContentExplorer extends Component<Props, State> {
             logoUrl,
             measureRef,
             messages,
-            metadataColumnsToShow,
             onDownload,
             onPreview,
             onUpload,
@@ -1670,7 +1668,6 @@ class ContentExplorer extends Component<Props, State> {
                             isMedium={isMedium}
                             isSmall={isSmall}
                             isTouch={isTouch}
-                            metadataColumnsToShow={metadataColumnsToShow}
                             onItemClick={this.onItemClick}
                             onItemDelete={this.delete}
                             onItemDownload={this.download}

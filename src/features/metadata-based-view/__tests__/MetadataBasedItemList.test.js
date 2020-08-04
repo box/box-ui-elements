@@ -35,12 +35,14 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
                         id: '11',
                         fields: [
                             {
-                                name: 'type',
+                                key: 'type',
+                                displayName: 'Type',
                                 type: 'string',
                                 value: 'bill',
                             },
                             {
-                                name: 'amount',
+                                key: 'amount',
+                                displayName: 'Amount',
                                 type: 'float',
                                 value: 100.12,
                             },
@@ -57,12 +59,14 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
                         id: '22',
                         fields: [
                             {
-                                name: 'type',
+                                key: 'type',
+                                displayName: 'Type',
                                 type: 'string',
                                 value: 'receipt',
                             },
                             {
-                                name: 'amount',
+                                key: 'amount',
+                                displayName: 'Amount',
                                 type: 'float',
                                 value: 200.88,
                             },
@@ -75,7 +79,6 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         ],
         nextMarker: 'abc',
     };
-    const metadataColumnsToShow = ['type', { name: 'amount', canEdit: true }];
 
     const pdfNameButton = (
         <PlainButton onClick={onClick} type="button">
@@ -92,7 +95,6 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
 
     const defaultProps = {
         currentCollection,
-        metadataColumnsToShow,
         intl,
         onItemClick,
         onMetadataUpdate,
@@ -120,7 +122,6 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         test('should call setState() when component gets updated with different props', () => {
             const updatedProps = {
                 currentCollection: [],
-                metadataColumnsToShow,
                 intl,
                 onItemClick,
             };
@@ -216,8 +217,8 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             columnIndex | headerData
             ${0}        | ${undefined}
             ${1}        | ${'Name'}
-            ${2}        | ${'type'}
-            ${3}        | ${'amount'}
+            ${2}        | ${'Type'}
+            ${3}        | ${'Amount'}
         `('headerData for column $columnIndex', ({ columnIndex, headerData }) => {
             const data = instance.getGridHeaderData(columnIndex);
             if (columnIndex === 1) {
@@ -226,18 +227,6 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             } else {
                 expect(data).toBe(headerData);
             }
-        });
-    });
-
-    describe('getMetadataColumnName()', () => {
-        test('should return the column name when either column or column config object is passed', () => {
-            const column = 'amount';
-            const columnConfig = {
-                name: 'amount',
-                canEdit: true,
-            };
-            expect(instance.getMetadataColumnName(column)).toBe('amount');
-            expect(instance.getMetadataColumnName(columnConfig)).toBe('amount');
         });
     });
 
@@ -358,12 +347,21 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
 
     describe('calculateContentWidth()', () => {
         test('should return total width of the content', () => {
-            const width =
-                FILE_ICON_COLUMN_WIDTH +
-                FILE_NAME_COLUMN_WIDTH +
-                metadataColumnsToShow.length * MIN_METADATA_COLUMN_WIDTH;
+            const { fields } = currentCollection.items[0].metadata.enterprise;
+            const width = FILE_ICON_COLUMN_WIDTH + FILE_NAME_COLUMN_WIDTH + fields.length * MIN_METADATA_COLUMN_WIDTH;
 
             expect(instance.calculateContentWidth()).toBe(width);
+        });
+    });
+
+    describe('getFieldsToShow()', () => {
+        test('should return a list of metadata fields to display', () => {
+            const response = instance.getFieldsToShow();
+            const fields = [
+                { key: 'type', displayName: 'Type' },
+                { key: 'amount', displayName: 'Amount' },
+            ];
+            expect(response).toEqual(fields);
         });
     });
 
