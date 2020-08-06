@@ -32,4 +32,11 @@ describe('components/thumbnail-card/ThumbnailCardDetails', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should render a Tooltip if shouldShowTooltipOnTitleHover is true', () => {
+        const shouldShowTooltipOnTitleHover = true;
+        const wrapper = getWrapper({ shouldShowTooltipOnTitleHover });
+
+        expect(wrapper.find('Tooltip').length).toBe(1);
+    });
 });
