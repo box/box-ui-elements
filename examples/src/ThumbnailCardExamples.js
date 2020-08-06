@@ -24,6 +24,7 @@ const ThumbnailCardExamples = () => {
     );
     const subtitle = <div>I&#39;m a subtitle!</div>;
     const title = <div>Hello World!</div>;
+    const longTitle = 'Super long title goes here here here';
     const thumbnail = <div>Thumbnail goes here</div>;
     const actionItem = <PrimaryButton>Click Me</PrimaryButton>;
 
@@ -53,7 +54,7 @@ const ThumbnailCardExamples = () => {
                     actionItem={actionItem}
                     shouldShowTooltipOnTitleHover
                     thumbnail={thumbnail}
-                    title={title}
+                    title={longTitle}
                 />
             </div>
             <br />

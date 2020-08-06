@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import Tooltip from '../tooltip';
+import { useIsContentOverflowed } from '../../utils/dom';
 
 type Props = {
     actionItem?: React.Element<any>,
@@ -10,13 +11,23 @@ type Props = {
     title: React.Node,
 };
 
-const renderTitle = (shouldShowTooltipOnTitleHover: boolean, title: React.Node) => {
-    return shouldShowTooltipOnTitleHover ? (
-        <Tooltip className="thumbnail-card-title-tooltip" text={title}>
-            <div className="thumbnail-card-title">{title}</div>
-        </Tooltip>
-    ) : (
-        <div className="thumbnail-card-title">{title}</div>
+const RenderTitle = (shouldShowTooltipOnTitleHover: boolean, title: React.Node) => {
+    const textRef = React.useRef<?HTMLElement>(null);
+    const isTextOverflowed = useIsContentOverflowed(textRef);
+
+    if (isTextOverflowed && shouldShowTooltipOnTitleHover) {
+        return (
+            <Tooltip className="thumbnail-card-title-tooltip" text={title}>
+                <div ref={textRef} className="thumbnail-card-title">
+                    {title}
+                </div>
+            </Tooltip>
+        );
+    }
+    return (
+        <div ref={textRef} className="thumbnail-card-title">
+            {title}
+        </div>
     );
 };
 
@@ -25,7 +36,7 @@ const ThumbnailCardDetails = ({ actionItem, icon, shouldShowTooltipOnTitleHover,
         {icon}
         <div className="thumbnail-card-details-content">
             <div className="ThumbnailCardDetails-bodyText">
-                {renderTitle(shouldShowTooltipOnTitleHover, title)}
+                {RenderTitle(shouldShowTooltipOnTitleHover, title)}
                 {subtitle && <div className="thumbnail-card-subtitle">{subtitle}</div>}
             </div>
             {actionItem}
