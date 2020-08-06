@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
-import type { BoxItemPermission, ItemType } from '../../common/types/core';
 import * as constants from './constants';
+import type { BoxItemPermission, ItemType } from '../../common/types/core';
 
 // DRY: Invert the constants so that we can construct the appropriate enum types
 const accessLevelValues = {
@@ -264,6 +264,11 @@ type EmailFormTypes = {
     sendSharedLinkError: React.Node,
 };
 
+export type SharingConfig = {
+    /** Whether the send email button in the USM should be rendered */
+    allowEmails: boolean,
+};
+
 // Prop types shared by both the Unified Share Modal and the Unified Share Form
 type BaseUnifiedShareProps = CollaboratorAvatarsTypes &
     EmailFormTypes &
@@ -273,6 +278,8 @@ type BaseUnifiedShareProps = CollaboratorAvatarsTypes &
         allShareRestrictionWarning?: React.Node,
         /** Flag to determine whether to enable invite collaborators section */
         canInvite: boolean,
+        /** Configuration object for hiding parts of the USM */
+        config?: SharingConfig,
         /** Whether the full USM should be rendered */
         displayInModal?: boolean,
         /** Whether the form should focus the shared link after the URL is resolved */
