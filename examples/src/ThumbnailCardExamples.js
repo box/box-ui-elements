@@ -47,6 +47,15 @@ const ThumbnailCardExamples = () => {
                 <h1>Action Item Example</h1>
                 <ThumbnailCard actionItem={actionItem} thumbnail={thumbnail} title={title} />
             </div>
+            <div>
+                <h1>Show Tooltip on Title Hover Example</h1>
+                <ThumbnailCard
+                    actionItem={actionItem}
+                    shouldShowTooltipOnTitleHover
+                    thumbnail={thumbnail}
+                    title={title}
+                />
+            </div>
             <br />
             <div>
                 <h1>Multiple Cards Example</h1>
