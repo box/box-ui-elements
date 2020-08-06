@@ -6,6 +6,7 @@
  * @author Box
  */
 import * as React from 'react';
+import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import type { $AxiosError } from 'axios';
 import API from '../../api';
@@ -39,18 +40,9 @@ type SharingModalProps = {
     itemType: ItemType,
     language: string,
     messages?: StringMap,
-    onRequestClose?: () => void,
 };
 
-function SharingModal({
-    api,
-    displayInModal,
-    itemID,
-    itemType,
-    language,
-    messages,
-    onRequestClose,
-}: SharingModalProps) {
+function SharingModal({ api, displayInModal, itemID, itemType, language, messages }: SharingModalProps) {
     const [item, setItem] = React.useState<itemFlowType | null>(null);
     const [sharedLink, setSharedLink] = React.useState<ContentSharingSharedLinkType | null>(null);
     const [currentUserID, setCurrentUserID] = React.useState<string | null>(null);
@@ -71,6 +63,7 @@ function SharingModal({
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
     const [sendInvites, setSendInvites] = React.useState<null | SendInvitesFnType>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
+    const [isOpen, setIsOpen] = React.useState<boolean>(true);
 
     // Handle successful GET requests to /files or /folders
     const handleGetItemSuccess = React.useCallback((itemData: ContentSharingItemAPIResponse) => {
@@ -171,7 +164,7 @@ function SharingModal({
                 <SharingNotification
                     accessLevel={accessLevel}
                     api={api}
-                    closeComponent={onRequestClose}
+                    closeComponent={displayInModal ? () => setIsOpen(false) : noop}
                     closeSettings={() => setCurrentView(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL)}
                     collaboratorsList={collaboratorsList}
                     currentUserID={currentUserID}
@@ -196,7 +189,7 @@ function SharingModal({
                     setSendInvites={setSendInvites}
                     setSharedLink={setSharedLink}
                 />
-                {currentView === CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS && (
+                {isOpen && currentView === CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS && (
                     <SharedLinkSettingsModal
                         isDirectLinkUnavailableDueToDownloadSettings={false}
                         isDirectLinkUnavailableDueToAccessPolicy={false}
@@ -209,7 +202,7 @@ function SharingModal({
                         {...sharedLink}
                     />
                 )}
-                {currentView === CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL && (
+                {isOpen && currentView === CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL && (
                     <UnifiedShareModal
                         canInvite={sharedLink.canInvite}
                         changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
@@ -223,7 +216,7 @@ function SharingModal({
                         isOpen
                         item={item}
                         onAddLink={onAddLink}
-                        onRequestClose={onRequestClose}
+                        onRequestClose={displayInModal ? () => setIsOpen(false) : noop}
                         onRemoveLink={onRemoveLink}
                         onSettingsClick={() => setCurrentView(CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS)}
                         sendInvites={sendInvites}

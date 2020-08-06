@@ -51,8 +51,9 @@ function useSharedLink(
     const currentAccessLevel = React.useRef(accessLevel);
 
     const {
-        handleError = noop,
+        handleRemoveSharedLinkError = noop,
         handleRemoveSharedLinkSuccess = arg => arg,
+        handleUpdateSharedLinkError = noop,
         handleUpdateSharedLinkSuccess = arg => arg,
         setIsLoading = noop,
         transformAccess = arg => arg,
@@ -81,9 +82,10 @@ function useSharedLink(
             access,
             requestOptions = CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             successFn = handleUpdateSharedLinkSuccess,
+            errorFn = handleUpdateSharedLinkError,
         }) => {
             setIsLoading(true);
-            return itemAPIInstance.share(itemData, access, successFn, handleError, requestOptions);
+            return itemAPIInstance.share(itemData, access, successFn, errorFn, requestOptions);
         };
 
         /**
@@ -110,7 +112,11 @@ function useSharedLink(
 
         // Shared link removal function
         const updatedOnRemoveLinkFn: SharedLinkUpdateLevelFnType = () => () =>
-            connectToItemShare({ access: ACCESS_NONE, successFn: handleRemoveSharedLinkSuccess });
+            connectToItemShare({
+                access: ACCESS_NONE,
+                successFn: handleRemoveSharedLinkSuccess,
+                errorFn: handleRemoveSharedLinkError,
+            });
         setOnRemoveLink(updatedOnRemoveLinkFn);
 
         // Shared link access level change function
@@ -131,7 +137,7 @@ function useSharedLink(
                 itemData,
                 newSharedLinkData,
                 handleUpdateSharedLinkSuccess,
-                handleError,
+                handleUpdateSharedLinkError,
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
         };
@@ -157,7 +163,6 @@ function useSharedLink(
         itemID,
         itemType,
         handleUpdateSharedLinkSuccess,
-        handleError,
         handleRemoveSharedLinkSuccess,
         transformAccess,
         accessLevel,
@@ -166,6 +171,8 @@ function useSharedLink(
         currentAccessLevel,
         api,
         setIsLoading,
+        handleRemoveSharedLinkError,
+        handleUpdateSharedLinkError,
     ]);
 
     return {
