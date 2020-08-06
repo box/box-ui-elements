@@ -3104,7 +3104,7 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/cldr-data@^34.4.1":
+"@box/cldr-data@^34.5.0":
   version "34.5.0"
   resolved "https://registry.yarnpkg.com/@box/cldr-data/-/cldr-data-34.5.0.tgz#58281a039a48d7b605e814eb10b0308b11356909"
   integrity sha1-WCgaA5pI17YF6BTrELAwixE1aQk=
