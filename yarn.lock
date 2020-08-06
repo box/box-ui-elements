@@ -3105,9 +3105,9 @@
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
 "@box/cldr-data@^34.4.1":
-  version "34.4.1"
-  resolved "https://registry.yarnpkg.com/@box/cldr-data/-/cldr-data-34.4.1.tgz#6ca1959e8758f7937a0fd36808f222743a9f18bd"
-  integrity sha1-bKGVnodY95N6D9NoCPIidDqfGL0=
+  version "34.5.0"
+  resolved "https://registry.yarnpkg.com/@box/cldr-data/-/cldr-data-34.5.0.tgz#58281a039a48d7b605e814eb10b0308b11356909"
+  integrity sha1-WCgaA5pI17YF6BTrELAwixE1aQk=
 
 "@box/frontend@8.0.0":
   version "8.0.0"
