@@ -78,8 +78,10 @@ export type ContentSharingItemAPIResponse = {
 
 export type ContentSharingHooksOptions = {
     handleError?: Function,
+    handleRemoveSharedLinkError?: Function,
     handleRemoveSharedLinkSuccess?: Function,
     handleSuccess?: Function,
+    handleUpdateSharedLinkError?: Function,
     handleUpdateSharedLinkSuccess?: Function,
     setIsLoading?: Function,
     transformAccess?: Function,
@@ -117,6 +119,7 @@ export type SendInvitesFnType = () => InviteCollaboratorsRequest => Promise<null
 
 export type ConnectToItemShareFnType = ({
     access?: string,
+    errorFn?: Function,
     requestOptions?: RequestOptions,
     successFn?: Function,
 }) => Function;

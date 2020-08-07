@@ -98,6 +98,7 @@ describe('elements/content-sharing/SharingModal', () => {
     beforeEach(() => {
         convertItemResponse.mockReturnValue(MOCK_CONVERTED_ITEM_DATA);
         convertUserResponse.mockReturnValue(MOCK_CONVERTED_USER_DATA);
+        convertCollabsRequest.mockReturnValue(MOCK_COLLABS_CONVERTED_REQUEST);
     });
 
     afterEach(() => {
@@ -496,34 +497,43 @@ describe('elements/content-sharing/SharingModal', () => {
             );
         });
 
-        test('should call share() from onRemoveLink() and remove the existing shared link', async () => {
-            const onRequestCloseSpy = jest.fn();
-            let wrapper;
-            await act(async () => {
-                wrapper = getWrapper({ api, itemType: TYPE_FILE, onRequestClose: onRequestCloseSpy });
-            });
-            wrapper.update();
+        test.each`
+            displayInModal | modalExists | description
+            ${true}        | ${false}    | ${'USM instances'}
+            ${false}       | ${true}     | ${'USF-only instances'}
+        `(
+            'should call share() from onRemoveLink() and remove the existing shared link for $description',
+            async ({ displayInModal, modalExists }) => {
+                let wrapper;
+                await act(async () => {
+                    wrapper = getWrapper({ api, displayInModal, itemType: TYPE_FILE });
+                });
+                wrapper.update();
 
-            const usm = wrapper.find(UnifiedShareModal);
-            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
+                const usm = wrapper.find(UnifiedShareModal);
+                expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
 
-            convertItemResponse.mockReset();
-            convertItemResponse.mockReturnValue(MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK);
+                convertItemResponse.mockReset();
+                convertItemResponse.mockReturnValue(MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK);
 
-            await act(async () => {
-                usm.invoke('onRemoveLink')();
-            });
-            wrapper.update();
-            expect(share).toHaveBeenCalledWith(
-                { id: MOCK_ITEM_ID, permissions: {} },
-                ACCESS_NONE,
-                expect.anything(),
-                expect.anything(),
-                CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-            );
-            expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_NULL_SHARED_LINK);
-            expect(onRequestCloseSpy).toHaveBeenCalled();
-        });
+                await act(async () => {
+                    usm.invoke('onRemoveLink')();
+                });
+                wrapper.update();
+                expect(share).toHaveBeenCalledWith(
+                    { id: MOCK_ITEM_ID, permissions: {} },
+                    ACCESS_NONE,
+                    expect.anything(),
+                    expect.anything(),
+                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+                );
+
+                expect(wrapper.exists(UnifiedShareModal)).toBe(modalExists);
+                if (modalExists) {
+                    expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_NULL_SHARED_LINK);
+                }
+            },
+        );
 
         test.each`
             accessLevelFromUSM   | accessLevelForAPI
@@ -685,51 +695,58 @@ describe('elements/content-sharing/SharingModal', () => {
     });
 
     describe('with successful POST requests to the Collaborations API', () => {
-        test('should call addCollaboration() from sendInvites() and show a success notification', async () => {
-            const itemData = { id: MOCK_ITEM_ID, type: TYPE_FOLDER };
-            const addCollaboration = jest.fn().mockImplementation((item, collab, successFn) => {
-                return Promise.resolve().then(() => {
-                    return successFn();
+        test.each`
+            displayInModal | modalExists | description
+            ${true}        | ${false}    | ${'USM instances'}
+            ${false}       | ${true}     | ${'USF-only instances'}
+        `(
+            'should call addCollaboration() from sendInvites() and show a success notification for $description',
+            async ({ displayInModal, modalExists }) => {
+                const itemData = { id: MOCK_ITEM_ID, type: TYPE_FOLDER };
+                const addCollaboration = jest.fn().mockImplementation((item, collab, successFn) => {
+                    return Promise.resolve().then(() => {
+                        return successFn();
+                    });
                 });
-            });
-            const api = createAPIMock(
-                null,
-                { getFolderFields: jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE)) },
-                { getUser: jest.fn().mockImplementation(createSuccessMock(MOCK_USER_API_RESPONSE)) },
-                { addCollaboration },
-            );
-            convertCollabsRequest.mockReturnValue(MOCK_COLLABS_CONVERTED_REQUEST);
-
-            let wrapper;
-            await act(async () => {
-                wrapper = getWrapper({ api, itemType: TYPE_FOLDER });
-            });
-            wrapper.update();
-
-            await act(async () => {
-                wrapper.find(UnifiedShareModal).invoke('sendInvites')(MOCK_COLLABS_REQUEST_USERS_AND_GROUPS);
-            });
-            wrapper.update();
-
-            MOCK_COLLABS_CONVERTED_USERS.forEach(user => {
-                expect(addCollaboration).toHaveBeenCalledWith(
-                    itemData,
-                    user,
-                    expect.anything(Function),
-                    expect.anything(Function),
+                const api = createAPIMock(
+                    null,
+                    { getFolderFields: jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE)) },
+                    { getUser: jest.fn().mockImplementation(createSuccessMock(MOCK_USER_API_RESPONSE)) },
+                    { addCollaboration },
                 );
-            });
-            MOCK_COLLABS_CONVERTED_GROUPS.forEach(group => {
-                expect(addCollaboration).toHaveBeenCalledWith(
-                    itemData,
-                    group,
-                    expect.anything(Function),
-                    expect.anything(Function),
-                );
-            });
 
-            expect(wrapper.find(Notification).prop('type')).toBe(TYPE_INFO);
-        });
+                let wrapper;
+                await act(async () => {
+                    wrapper = getWrapper({ api, displayInModal, itemType: TYPE_FOLDER });
+                });
+                wrapper.update();
+
+                await act(async () => {
+                    wrapper.find(UnifiedShareModal).invoke('sendInvites')(MOCK_COLLABS_REQUEST_USERS_AND_GROUPS);
+                });
+                wrapper.update();
+
+                MOCK_COLLABS_CONVERTED_USERS.forEach(user => {
+                    expect(addCollaboration).toHaveBeenCalledWith(
+                        itemData,
+                        user,
+                        expect.anything(Function),
+                        expect.anything(Function),
+                    );
+                });
+                MOCK_COLLABS_CONVERTED_GROUPS.forEach(group => {
+                    expect(addCollaboration).toHaveBeenCalledWith(
+                        itemData,
+                        group,
+                        expect.anything(Function),
+                        expect.anything(Function),
+                    );
+                });
+
+                expect(wrapper.find(Notification).prop('type')).toBe(TYPE_INFO);
+                expect(wrapper.exists(UnifiedShareModal)).toBe(modalExists);
+            },
+        );
     });
 
     describe('with failed notification-level API requests', () => {
@@ -798,6 +815,20 @@ describe('elements/content-sharing/SharingModal', () => {
             });
             wrapper.update();
             expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
+        });
+
+        test.each(['onRemoveLink', 'sendInvites'])('should close the USM after %s() fails', async usmFn => {
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, displayInModal: true, itemType: TYPE_FOLDER });
+            });
+            wrapper.update();
+
+            await act(async () => {
+                wrapper.find(UnifiedShareModal).invoke(`${usmFn}`)();
+            });
+            wrapper.update();
+            expect(wrapper.exists(UnifiedShareModal)).toBe(false);
         });
 
         test('should show an error notification if onSubmitSettings() fails', async () => {

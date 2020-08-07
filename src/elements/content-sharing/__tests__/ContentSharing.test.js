@@ -75,25 +75,6 @@ describe('elements/content-sharing/ContentSharing', () => {
         expect(wrapper.exists(Button)).toBe(true);
     });
 
-    test('should remove SharingModal when isOpen is set to false', () => {
-        let wrapper;
-        act(() => {
-            wrapper = getWrapper({ customButton, displayInModal: true });
-        });
-        wrapper.update();
-        const launchButton = wrapper.find(Button);
-        act(() => {
-            launchButton.invoke('onClick')();
-        });
-        wrapper.update();
-        act(() => {
-            wrapper.find(SharingModal).invoke('onRequestClose')();
-        });
-        wrapper.update();
-        expect(wrapper.exists(SharingModal)).toBe(false);
-        expect(wrapper.exists(Button)).toBe(true);
-    });
-
     test.each([true, false])(
         'should instantiate SharingModal automatically when no button exists and displayInModal is %s',
         ({ displayInModal }) => {

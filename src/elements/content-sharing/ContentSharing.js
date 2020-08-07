@@ -7,7 +7,6 @@
  * @author Box
  */
 import * as React from 'react';
-import noop from 'lodash/noop';
 import API from '../../api';
 import SharingModal from './SharingModal';
 import { CLIENT_NAME_CONTENT_SHARING } from '../../constants';
@@ -62,7 +61,6 @@ function ContentSharing({
     messages,
     token,
 }: ContentSharingProps) {
-    const [isOpen, setIsOpen] = React.useState<boolean>(true);
     const [api, setAPI] = React.useState<API>(createAPI(apiHost, itemID, itemType, token));
     const [launchButton, setLaunchButton] = React.useState<React.Element<any> | null>(null);
     const [sharingModalInstance, setSharingModalInstance] = React.useState<React.Element<typeof SharingModal> | null>(
@@ -87,12 +85,10 @@ function ContentSharing({
     React.useEffect(() => {
         setSharingModalInstance(null);
         setLaunchButton(null);
-        setIsOpen(true);
     }, [api]);
 
     React.useEffect(() => {
         const createSharingModalInstance = () => {
-            setIsOpen(true);
             return (
                 <SharingModal
                     api={api}
@@ -101,7 +97,6 @@ function ContentSharing({
                     itemType={itemType}
                     language={language}
                     messages={messages}
-                    onRequestClose={displayInModal ? () => setIsOpen(false) : noop} // this function only applies to the modal view
                 />
             );
         };
@@ -118,26 +113,10 @@ function ContentSharing({
         }
 
         // If there is no custom button, instantiate SharingModal
-        if (!customButton && !sharingModalInstance && isOpen) {
+        if (!customButton && !sharingModalInstance) {
             setSharingModalInstance(createSharingModalInstance());
         }
-
-        // If the modal is closed, remove the SharingModal instance
-        if (!isOpen) {
-            setSharingModalInstance(null);
-        }
-    }, [
-        api,
-        sharingModalInstance,
-        customButton,
-        displayInModal,
-        isOpen,
-        itemID,
-        itemType,
-        language,
-        launchButton,
-        messages,
-    ]);
+    }, [api, sharingModalInstance, customButton, displayInModal, itemID, itemType, language, launchButton, messages]);
 
     return (
         <>
