@@ -11,6 +11,7 @@ import API from '../../api';
 import SharingModal from './SharingModal';
 import { CLIENT_NAME_CONTENT_SHARING } from '../../constants';
 import type { ItemType, StringMap } from '../../common/types/core';
+import type { USMConfig } from '../../features/unified-share-modal/flowTypes';
 
 import '../common/base.scss';
 import '../common/fonts.scss';
@@ -19,6 +20,7 @@ import '../common/modal.scss';
 type ContentSharingProps = {
     /** apiHost - API hostname. Defaults to https://api.box.com */
     apiHost: string,
+    config?: USMConfig,
     /**
      * customButton - Clickable element for opening the SharingModal component.
      * This property should always be used in conjunction with displayInModal.
@@ -53,6 +55,7 @@ const createAPI = (apiHost, itemID, itemType, token) =>
 
 function ContentSharing({
     apiHost,
+    config,
     customButton,
     displayInModal,
     itemID,
@@ -67,6 +70,7 @@ function ContentSharing({
         customButton ? null : (
             <SharingModal
                 api={api}
+                config={config}
                 displayInModal={false}
                 itemID={itemID}
                 itemType={itemType}
@@ -92,6 +96,7 @@ function ContentSharing({
             return (
                 <SharingModal
                     api={api}
+                    config={config}
                     displayInModal={displayInModal}
                     itemID={itemID}
                     itemType={itemType}
@@ -116,7 +121,18 @@ function ContentSharing({
         if (!customButton && !sharingModalInstance) {
             setSharingModalInstance(createSharingModalInstance());
         }
-    }, [api, sharingModalInstance, customButton, displayInModal, itemID, itemType, language, launchButton, messages]);
+    }, [
+        api,
+        config,
+        sharingModalInstance,
+        customButton,
+        displayInModal,
+        itemID,
+        itemType,
+        language,
+        launchButton,
+        messages,
+    ]);
 
     return (
         <>

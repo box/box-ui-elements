@@ -23,7 +23,11 @@ import { INVITEE_PERMISSIONS } from '../../features/unified-share-modal/constant
 import contentSharingMessages from './messages';
 import type { ErrorResponseData } from '../../common/types/api';
 import type { ItemType, StringMap } from '../../common/types/core';
-import type { collaboratorsListType, item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
+import type {
+    collaboratorsListType,
+    item as itemFlowType,
+    USMConfig,
+} from '../../features/unified-share-modal/flowTypes';
 import type {
     ContentSharingItemAPIResponse,
     ContentSharingSharedLinkType,
@@ -35,6 +39,7 @@ import type {
 
 type SharingModalProps = {
     api: API,
+    config?: USMConfig,
     displayInModal: boolean,
     itemID: string,
     itemType: ItemType,
@@ -42,7 +47,7 @@ type SharingModalProps = {
     messages?: StringMap,
 };
 
-function SharingModal({ api, displayInModal, itemID, itemType, language, messages }: SharingModalProps) {
+function SharingModal({ api, config, displayInModal, itemID, itemType, language, messages }: SharingModalProps) {
     const [item, setItem] = React.useState<itemFlowType | null>(null);
     const [sharedLink, setSharedLink] = React.useState<ContentSharingSharedLinkType | null>(null);
     const [currentUserID, setCurrentUserID] = React.useState<string | null>(null);
@@ -205,6 +210,7 @@ function SharingModal({ api, displayInModal, itemID, itemType, language, message
                 {isOpen && currentView === CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL && (
                     <UnifiedShareModal
                         canInvite={sharedLink.canInvite}
+                        config={config}
                         changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                         changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
                         collaboratorsList={collaboratorsList}
