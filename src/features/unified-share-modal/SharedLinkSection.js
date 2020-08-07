@@ -27,8 +27,8 @@ import type {
     permissionLevelType,
     sharedLinkType,
     sharedLinkTrackingType,
-    SharingConfig,
     tooltipComponentIdentifierType,
+    USMConfig,
 } from './flowTypes';
 import { PEOPLE_IN_ITEM, ANYONE_WITH_LINK, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
 
@@ -40,7 +40,7 @@ type Props = {
     changeSharedLinkPermissionLevel: (
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
-    config?: SharingConfig,
+    config?: USMConfig,
     intl: any,
     item: itemtype,
     itemType: ItemType,
@@ -208,9 +208,9 @@ class SharedLinkSection extends React.Component<Props, State> {
 
         /**
          * The email button should be rendered by default.
-         * Only hide the button if there is a config prop that declares allowEmails to be false.
+         * Only hide the button if there is a config prop that declares showEmailSharedLinkForm to be false.
          */
-        const hideEmailButton = config && config.allowEmails === false;
+        const hideEmailButton = config && config.showEmailSharedLinkForm === false;
 
         const isEditableBoxNote = isBoxNote(convertToBoxItem(item)) && isEditAllowed;
         let allowedPermissionLevels = [CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];

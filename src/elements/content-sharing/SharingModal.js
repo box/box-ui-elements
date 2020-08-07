@@ -26,7 +26,7 @@ import type { ItemType, StringMap } from '../../common/types/core';
 import type {
     collaboratorsListType,
     item as itemFlowType,
-    SharingConfig,
+    USMConfig,
 } from '../../features/unified-share-modal/flowTypes';
 import type {
     ContentSharingItemAPIResponse,
@@ -39,7 +39,7 @@ import type {
 
 type SharingModalProps = {
     api: API,
-    config?: SharingConfig,
+    config?: USMConfig,
     displayInModal: boolean,
     itemID: string,
     itemType: ItemType,

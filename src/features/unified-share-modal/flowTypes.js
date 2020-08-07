@@ -264,9 +264,9 @@ type EmailFormTypes = {
     sendSharedLinkError: React.Node,
 };
 
-export type SharingConfig = {
-    /** Whether the send email button in the USM should be rendered */
-    allowEmails: boolean,
+export type USMConfig = {
+    /** Whether the "Email Shared Link" button and form should be rendered in the USM/USF */
+    showEmailSharedLinkForm: boolean,
 };
 
 // Prop types shared by both the Unified Share Modal and the Unified Share Form
@@ -279,7 +279,7 @@ type BaseUnifiedShareProps = CollaboratorAvatarsTypes &
         /** Flag to determine whether to enable invite collaborators section */
         canInvite: boolean,
         /** Configuration object for hiding parts of the USM */
-        config?: SharingConfig,
+        config?: USMConfig,
         /** Whether the full USM should be rendered */
         displayInModal?: boolean,
         /** Whether the form should focus the shared link after the URL is resolved */

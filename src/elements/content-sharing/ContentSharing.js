@@ -11,7 +11,7 @@ import API from '../../api';
 import SharingModal from './SharingModal';
 import { CLIENT_NAME_CONTENT_SHARING } from '../../constants';
 import type { ItemType, StringMap } from '../../common/types/core';
-import type { SharingConfig } from '../../features/unified-share-modal/flowTypes';
+import type { USMConfig } from '../../features/unified-share-modal/flowTypes';
 
 import '../common/base.scss';
 import '../common/fonts.scss';
@@ -20,7 +20,7 @@ import '../common/modal.scss';
 type ContentSharingProps = {
     /** apiHost - API hostname. Defaults to https://api.box.com */
     apiHost: string,
-    config?: SharingConfig,
+    config?: USMConfig,
     /**
      * customButton - Clickable element for opening the SharingModal component.
      * This property should always be used in conjunction with displayInModal.
