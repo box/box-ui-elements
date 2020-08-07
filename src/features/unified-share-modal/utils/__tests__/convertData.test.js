@@ -46,6 +46,7 @@ import {
     MOCK_COLLABS_CONVERTED_USERS,
     MOCK_COLLABS_REQUEST_USERS_ONLY,
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
+    MOCK_DISABLED_REASONS,
     MOCK_ITEM_PERMISSIONS,
     MOCK_OWNER,
     MOCK_OWNER_ID,
@@ -270,6 +271,7 @@ describe('convertItemResponse()', () => {
                 sharedLink: sharedLink
                     ? {
                           accessLevel: ANYONE_IN_COMPANY,
+                          accessLevelsDisabledReason: {},
                           allowedAccessLevels: ALLOWED_ACCESS_LEVELS,
                           canChangeAccessLevel: can_set_share_access,
                           canChangeDownload: can_set_share_access && can_download,
@@ -373,6 +375,37 @@ describe('convertItemResponse()', () => {
         });
         expect(classification).toBe(classificationName);
     });
+
+    test.each`
+        accessLevelsFromAPI      | disabledReasonsFromAPI   | convertedAccessLevels    | convertedDisabledReasons | description
+        ${ALLOWED_ACCESS_LEVELS} | ${MOCK_DISABLED_REASONS} | ${ALLOWED_ACCESS_LEVELS} | ${MOCK_DISABLED_REASONS} | ${'access levels with disabled reasons when both are returned from the API'}
+        ${undefined}             | ${MOCK_DISABLED_REASONS} | ${ALLOWED_ACCESS_LEVELS} | ${MOCK_DISABLED_REASONS} | ${'default allowed access levels when the API does not return allowed access levels'}
+        ${ALLOWED_ACCESS_LEVELS} | ${undefined}             | ${ALLOWED_ACCESS_LEVELS} | ${{}}                    | ${'default disabled reasons when the API does not return disabled reasons'}
+        ${undefined}             | ${undefined}             | ${ALLOWED_ACCESS_LEVELS} | ${{}}                    | ${'default allowed access levels and disabled reasons when the API returns neither'}
+    `(
+        'should return $description',
+        ({ accessLevelsFromAPI, disabledReasonsFromAPI, convertedAccessLevels, convertedDisabledReasons }) => {
+            const responseFromAPI = {
+                allowed_invitee_roles: ['editor', 'viewer'],
+                description: ITEM_DESCRIPTION,
+                etag: '1',
+                id: ITEM_ID,
+                name: ITEM_NAME,
+                owned_by: MOCK_OWNER,
+                permissions: FULL_PERMISSIONS,
+                shared_link: ITEM_SHARED_LINK,
+                shared_link_features: ALL_SHARED_LINK_FEATURES,
+                shared_link_access_levels: accessLevelsFromAPI,
+                shared_link_access_levels_disabled_reasons: disabledReasonsFromAPI,
+                type: TYPE_FOLDER,
+            };
+            const {
+                sharedLink: { accessLevelsDisabledReason, allowedAccessLevels },
+            } = convertItemResponse(responseFromAPI);
+            expect(accessLevelsDisabledReason).toEqual(convertedDisabledReasons);
+            expect(allowedAccessLevels).toEqual(convertedAccessLevels);
+        },
+    );
 });
 
 describe('convertUserResponse()', () => {

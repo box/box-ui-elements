@@ -8,6 +8,8 @@ import type {
     UserCollection,
 } from '../../common/types/core';
 import type {
+    accessLevelsDisabledReasonType,
+    allowedAccessLevelsType,
     contactType,
     InviteCollaboratorsRequest,
     item,
@@ -68,6 +70,8 @@ export type ContentSharingItemAPIResponse = {
     },
     permissions: BoxItemPermission,
     shared_link?: APISharedLink,
+    shared_link_access_levels?: allowedAccessLevelsType,
+    shared_link_access_levels_disabled_reasons?: accessLevelsDisabledReasonType,
     shared_link_features: {
         download_url: boolean,
         password: boolean,
