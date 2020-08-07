@@ -10,13 +10,13 @@ exports[`components/thumbnail-card/ThumbnailCardDetails should render 1`] = `
     <div
       className="ThumbnailCardDetails-bodyText"
     >
-      <div
-        className="thumbnail-card-title"
-      >
-        <div>
-          Foo Bar!
-        </div>
-      </div>
+      <Title
+        title={
+          <div>
+            Foo Bar!
+          </div>
+        }
+      />
     </div>
   </div>
 </div>
@@ -32,13 +32,13 @@ exports[`components/thumbnail-card/ThumbnailCardDetails should render actionItem
     <div
       className="ThumbnailCardDetails-bodyText"
     >
-      <div
-        className="thumbnail-card-title"
-      >
-        <div>
-          Foo Bar!
-        </div>
-      </div>
+      <Title
+        title={
+          <div>
+            Foo Bar!
+          </div>
+        }
+      />
     </div>
     <button
       type="button"
@@ -62,13 +62,13 @@ exports[`components/thumbnail-card/ThumbnailCardDetails should render icon 1`] =
     <div
       className="ThumbnailCardDetails-bodyText"
     >
-      <div
-        className="thumbnail-card-title"
-      >
-        <div>
-          Foo Bar!
-        </div>
-      </div>
+      <Title
+        title={
+          <div>
+            Foo Bar!
+          </div>
+        }
+      />
     </div>
   </div>
 </div>
@@ -84,13 +84,13 @@ exports[`components/thumbnail-card/ThumbnailCardDetails should render subtitle 1
     <div
       className="ThumbnailCardDetails-bodyText"
     >
-      <div
-        className="thumbnail-card-title"
-      >
-        <div>
-          Foo Bar!
-        </div>
-      </div>
+      <Title
+        title={
+          <div>
+            Foo Bar!
+          </div>
+        }
+      />
       <div
         className="thumbnail-card-subtitle"
       >
