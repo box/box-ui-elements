@@ -50,12 +50,7 @@ const ThumbnailCardExamples = () => {
             </div>
             <div>
                 <h1>Show Tooltip on Title Hover Example</h1>
-                <ThumbnailCard
-                    actionItem={actionItem}
-                    shouldShowTooltipOnTitleHover
-                    thumbnail={thumbnail}
-                    title={longTitle}
-                />
+                <ThumbnailCard actionItem={actionItem} thumbnail={thumbnail} title={longTitle} />
             </div>
             <br />
             <div>

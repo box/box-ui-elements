@@ -12,7 +12,6 @@ type Props = {
     className?: string,
     highlightOnHover?: boolean,
     icon?: React.Node,
-    shouldShowTooltipOnTitleHover?: boolean,
     subtitle?: React.Node,
     thumbnail: React.Node,
     title: React.Node,
@@ -23,7 +22,6 @@ const ThumbnailCard = ({
     className = '',
     icon,
     highlightOnHover = false,
-    shouldShowTooltipOnTitleHover = false,
     subtitle,
     title,
     thumbnail,
@@ -36,13 +34,7 @@ const ThumbnailCard = ({
         {...rest}
     >
         <ThumbnailCardThumbnail thumbnail={thumbnail} />
-        <ThumbnailCardDetails
-            actionItem={actionItem}
-            icon={icon}
-            shouldShowTooltipOnTitleHover={shouldShowTooltipOnTitleHover}
-            subtitle={subtitle}
-            title={title}
-        />
+        <ThumbnailCardDetails actionItem={actionItem} icon={icon} subtitle={subtitle} title={title} />
     </div>
 );
 

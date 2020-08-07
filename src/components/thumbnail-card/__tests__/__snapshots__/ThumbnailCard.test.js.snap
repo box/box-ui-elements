@@ -26,7 +26,6 @@ exports[`components/thumbnail-card/ThumbnailCard should pass down actionItem, ic
         alt="icon"
       />
     }
-    shouldShowTooltipOnTitleHover={false}
     subtitle={
       <div>
         Subtitle!
@@ -55,7 +54,6 @@ exports[`components/thumbnail-card/ThumbnailCard should render 1`] = `
     }
   />
   <ThumbnailCardDetails
-    shouldShowTooltipOnTitleHover={false}
     title={
       <div>
         Hello World!
@@ -79,7 +77,6 @@ exports[`components/thumbnail-card/ThumbnailCard should use additional className
     }
   />
   <ThumbnailCardDetails
-    shouldShowTooltipOnTitleHover={false}
     title={
       <div>
         Hello World!
