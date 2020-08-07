@@ -1,6 +1,8 @@
 // @flow
 import * as React from 'react';
 
+import { mount, shallow } from 'enzyme';
+
 import * as libDom from '../../../utils/dom';
 
 import ThumbnailCardDetails from '../ThumbnailCardDetails';
@@ -44,8 +46,7 @@ describe('components/thumbnail-card/ThumbnailCardDetails', () => {
     test('should render a Tooltip if text is overflowed', () => {
         libDom.useIsContentOverflowed.mockReturnValue(true);
 
-        const title = 'super long title goes here';
-        const wrapper = getWrapper({ title });
+        const wrapper = mount(<ThumbnailCardDetails title={<div>Foo Bar!</div>} />);
 
         expect(wrapper.find('Tooltip').length).toBe(1);
     });

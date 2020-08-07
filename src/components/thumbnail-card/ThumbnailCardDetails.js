@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+
 import Tooltip from '../tooltip';
 import { useIsContentOverflowed } from '../../utils/dom';
 
@@ -10,7 +11,11 @@ type Props = {
     title: React.Node,
 };
 
-const RenderTitle = (title: React.Node) => {
+type TitleProps = {
+    title: React.Node,
+};
+
+const Title = ({ title }: TitleProps) => {
     const textRef = React.useRef<?HTMLElement>(null);
     const isTextOverflowed = useIsContentOverflowed(textRef);
 
@@ -35,7 +40,7 @@ const ThumbnailCardDetails = ({ actionItem, icon, subtitle, title }: Props) => (
         {icon}
         <div className="thumbnail-card-details-content">
             <div className="ThumbnailCardDetails-bodyText">
-                {RenderTitle(title)}
+                <Title title={title} />
                 {subtitle && <div className="thumbnail-card-subtitle">{subtitle}</div>}
             </div>
             {actionItem}
