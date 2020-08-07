@@ -41,12 +41,11 @@ describe('components/thumbnail-card/ThumbnailCardDetails', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render a Tooltip if shouldShowTooltipOnTitleHover is true and text is overflowed', () => {
+    test('should render a Tooltip if text is overflowed', () => {
         libDom.useIsContentOverflowed.mockReturnValue(true);
 
-        const shouldShowTooltipOnTitleHover = true;
         const title = 'super long title goes here';
-        const wrapper = getWrapper({ shouldShowTooltipOnTitleHover, title });
+        const wrapper = getWrapper({ title });
 
         expect(wrapper.find('Tooltip').length).toBe(1);
     });
