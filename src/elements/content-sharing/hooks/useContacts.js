@@ -3,7 +3,7 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import API from '../../../api';
-import type { UserCollection } from '../../../common/types/core';
+import type { GroupCollection, UserCollection } from '../../../common/types/core';
 import type { ContentSharingHooksOptions, GetContactsFnType } from '../types';
 import type { contactType } from '../../../features/unified-share-modal/flowTypes';
 
@@ -17,26 +17,46 @@ import type { contactType } from '../../../features/unified-share-modal/flowType
  */
 function useContacts(api: API, itemID: string, options: ContentSharingHooksOptions): GetContactsFnType | null {
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
-    const { handleSuccess = noop, handleError = noop, transformResponse = arg => arg } = options;
+    const {
+        handleSuccess = noop,
+        handleError = noop,
+        transformGroupsResponse = arg => arg,
+        transformUsersResponse = arg => arg,
+    } = options;
 
     React.useEffect(() => {
         if (getContacts) return;
 
         const updatedGetContactsFn: GetContactsFnType = () => (filterTerm: string) => {
-            return new Promise((resolve: (result: UserCollection | Array<contactType>) => void) => {
+            const getUsers = new Promise((resolve: (result: UserCollection | Array<contactType>) => void) => {
                 api.getUsersAPI(false).getUsersInEnterprise(
                     itemID,
                     (response: UserCollection) => {
                         handleSuccess(response);
-                        return resolve(transformResponse(response));
+                        return resolve(transformUsersResponse(response));
                     },
                     handleError,
                     filterTerm,
                 );
             });
+            const getGroups = new Promise((resolve: (result: GroupCollection | Array<contactType>) => void) => {
+                api.getGroupsAPI(false).getGroupsInEnterprise(
+                    itemID,
+                    (response: GroupCollection) => {
+                        handleSuccess(response);
+                        return resolve(transformGroupsResponse(response));
+                    },
+                    handleError,
+                    filterTerm,
+                );
+            });
+            return Promise.all([getUsers, getGroups]).then(contactArrays => {
+                console.log(contactArrays);
+                return [...contactArrays[0], ...contactArrays[1]];
+            });
         };
         setGetContacts(updatedGetContactsFn);
-    }, [api, getContacts, handleError, handleSuccess, itemID, transformResponse]);
+    }, [api, getContacts, handleError, handleSuccess, itemID, transformGroupsResponse, transformUsersResponse]);
 
     return getContacts;
 }

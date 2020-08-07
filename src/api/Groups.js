@@ -4,7 +4,9 @@
  * @author Box
  */
 import noop from 'lodash/noop';
+import queryString from 'query-string';
 import Base from './Base';
+import { ERROR_CODE_FETCH_ENTERPRISE_GROUPS } from '../constants';
 import type { ElementsErrorCallback } from '../common/types/api';
 
 class Groups extends Base {
@@ -16,6 +18,23 @@ class Groups extends Base {
      */
     getUrlForGroupCount(id: string): string {
         return `${this.getBaseApiUrl()}/groups/${id}/memberships`;
+    }
+
+    /**
+     * API URL for fetching all groups in the current user's enterprise
+     *
+     * @param {string} [filterTerm] Optional filter for enterprise groups
+     * @returns {string} URL for fetching enterprise groups
+     */
+    getGroupsInEnterpriseUrl(filterTerm: ?string): string {
+        let url = `${this.getBaseApiUrl()}/groups`;
+
+        if (filterTerm) {
+            const enterpriseGroupsQuery = queryString.stringify({ filter_term: filterTerm });
+            url = `${url}?${enterpriseGroupsQuery}`;
+        }
+
+        return url;
     }
 
     /**
@@ -52,6 +71,30 @@ class Groups extends Base {
                 requestData: { params: { limit: 1 } },
             }),
         );
+    }
+
+    /**
+     * API for fetching all groups in the current user's enterprise
+     *
+     * @param {string} id - Box item ID
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @param {string} [filterTerm] - Optional filter for the groups
+     * @returns {void}
+     */
+    getGroupsInEnterprise(
+        id: string,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+        filterTerm: ?string,
+    ): void {
+        this.errorCode = ERROR_CODE_FETCH_ENTERPRISE_GROUPS;
+        this.get({
+            id,
+            successCallback,
+            errorCallback,
+            url: this.getGroupsInEnterpriseUrl(filterTerm),
+        });
     }
 }
 

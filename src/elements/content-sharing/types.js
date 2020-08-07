@@ -85,10 +85,12 @@ export type ContentSharingHooksOptions = {
     handleUpdateSharedLinkSuccess?: Function,
     setIsLoading?: Function,
     transformAccess?: Function,
+    transformGroupsResponse?: Function,
     transformItem?: Function,
     transformPermissions?: Function,
     transformResponse?: Function,
     transformSettings?: Function,
+    transformUsersResponse?: Function,
 };
 
 export type SharedLinkSettingsOptions = {

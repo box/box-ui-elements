@@ -238,6 +238,7 @@ export const ERROR_CODE_FETCH_VERSION = 'fetch_version_error';
 export const ERROR_CODE_FETCH_VERSIONS = 'fetch_versions_error';
 export const ERROR_CODE_FETCH_TASKS = 'fetch_tasks_error';
 export const ERROR_CODE_FETCH_CURRENT_USER = 'fetch_current_user_error';
+export const ERROR_CODE_FETCH_ENTERPRISE_GROUPS: 'fetch_enterprise_groups_error' = 'fetch_enterprise_groups_error';
 export const ERROR_CODE_FETCH_ENTERPRISE_USERS: 'fetch_enterprise_users_error' = 'fetch_enterprise_users_error';
 export const ERROR_CODE_FETCH_TASK_ASSIGNMENT = 'fetch_task_assignment_error';
 export const ERROR_CODE_FETCH_TASK_COLLABORATOR = 'fetch_task_collaborator_error';

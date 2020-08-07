@@ -111,10 +111,7 @@ type UserMini = {
     type: 'user',
 };
 
-type User = UserMini;
-
-type UserCollection = {
-    entries?: Array<User>,
+type ContactCollection = {
     isLoaded?: boolean,
     limit?: number,
     next_marker?: string,
@@ -124,10 +121,21 @@ type UserCollection = {
     total_count?: number,
 };
 
+type User = UserMini;
+
+type UserCollection = ContactCollection & {
+    entries?: Array<User>,
+};
+
 type GroupMini = {
+    group_type: string,
     id: string,
     name: string,
     type: 'group',
+};
+
+type GroupCollection = ContactCollection & {
+    entries?: Array<GroupMini>,
 };
 
 type ISODate = string;
@@ -478,6 +486,7 @@ export type {
     User,
     UserCollection,
     GroupMini,
+    GroupCollection,
     ISODate,
     MarkerPaginatedCollection,
     SelectorItem,
