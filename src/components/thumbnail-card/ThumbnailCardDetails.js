@@ -16,7 +16,7 @@ type TitleProps = {
 };
 
 const Title = ({ title }: TitleProps) => {
-    const textRef: { current: null | HTMLElement } = React.useRef(null);
+    const textRef: { current: null | typeof undefined | HTMLElement } = React.useRef(null);
 
     const isTextOverflowed = useIsContentOverflowed(textRef);
 
