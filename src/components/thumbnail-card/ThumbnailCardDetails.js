@@ -16,23 +16,16 @@ type TitleProps = {
 };
 
 const Title = ({ title }: TitleProps) => {
+    // $FlowFixMe
     const textRef: { current: null | HTMLElement } = React.useRef(null);
-
     const isTextOverflowed = useIsContentOverflowed(textRef);
 
-    if (isTextOverflowed) {
-        return (
-            <Tooltip text={title}>
-                <div ref={textRef} className="thumbnail-card-title">
-                    {title}
-                </div>
-            </Tooltip>
-        );
-    }
     return (
-        <div ref={textRef} className="thumbnail-card-title">
-            {title}
-        </div>
+        <Tooltip isDisabled={!isTextOverflowed} text={title}>
+            <div ref={textRef} className="thumbnail-card-title">
+                {title}
+            </div>
+        </Tooltip>
     );
 };
 
