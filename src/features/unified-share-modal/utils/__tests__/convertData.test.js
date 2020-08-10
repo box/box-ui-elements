@@ -1,5 +1,6 @@
 import {
     API_TO_USM_PERMISSION_LEVEL_MAP,
+    convertAllowedAccessLevels,
     convertCollabsResponse,
     convertContactsResponse,
     convertItemResponse,
@@ -70,6 +71,22 @@ jest.mock('../../../../utils/file', () => ({
     getTypedFileId: () => 'f_190457309',
     getTypedFolderId: () => 'd_190457309',
 }));
+
+describe('convertAllowedAccessLevels', () => {
+    // The "collaborators" access level is always allowed.
+    test.each`
+        allowedAccessLevelsFromAPI              | convertedAllowedAccessLevels                                                        | description
+        ${['collaborators', 'open', 'company']} | ${ALLOWED_ACCESS_LEVELS}                                                            | ${'all'}
+        ${['collaborators', 'company']}         | ${{ peopleInThisItem: true, peopleInYourCompany: true, peopleWithTheLink: false }}  | ${'only collaborators and company'}
+        ${['collaborators', 'open']}            | ${{ peopleInThisItem: true, peopleInYourCompany: false, peopleWithTheLink: true }}  | ${'only collaborators and open'}
+        ${['collaborators']}                    | ${{ peopleInThisItem: true, peopleInYourCompany: false, peopleWithTheLink: false }} | ${'only collaborators and open'}
+    `(
+        'should convert allowed access levels when $description levels are allowed',
+        ({ allowedAccessLevelsFromAPI, convertedAllowedAccessLevels }) => {
+            expect(convertAllowedAccessLevels(allowedAccessLevelsFromAPI)).toEqual(convertedAllowedAccessLevels);
+        },
+    );
+});
 
 describe('convertItemResponse()', () => {
     const TYPED_FILE_ID = 'f_190457309';
@@ -377,35 +394,29 @@ describe('convertItemResponse()', () => {
     });
 
     test.each`
-        accessLevelsFromAPI      | disabledReasonsFromAPI   | convertedAccessLevels    | convertedDisabledReasons | description
-        ${ALLOWED_ACCESS_LEVELS} | ${MOCK_DISABLED_REASONS} | ${ALLOWED_ACCESS_LEVELS} | ${MOCK_DISABLED_REASONS} | ${'access levels with disabled reasons when both are returned from the API'}
-        ${undefined}             | ${MOCK_DISABLED_REASONS} | ${ALLOWED_ACCESS_LEVELS} | ${MOCK_DISABLED_REASONS} | ${'default allowed access levels when the API does not return allowed access levels'}
-        ${ALLOWED_ACCESS_LEVELS} | ${undefined}             | ${ALLOWED_ACCESS_LEVELS} | ${{}}                    | ${'default disabled reasons when the API does not return disabled reasons'}
-        ${undefined}             | ${undefined}             | ${ALLOWED_ACCESS_LEVELS} | ${{}}                    | ${'default allowed access levels and disabled reasons when the API returns neither'}
-    `(
-        'should return $description',
-        ({ accessLevelsFromAPI, disabledReasonsFromAPI, convertedAccessLevels, convertedDisabledReasons }) => {
-            const responseFromAPI = {
-                allowed_invitee_roles: ['editor', 'viewer'],
-                description: ITEM_DESCRIPTION,
-                etag: '1',
-                id: ITEM_ID,
-                name: ITEM_NAME,
-                owned_by: MOCK_OWNER,
-                permissions: FULL_PERMISSIONS,
-                shared_link: ITEM_SHARED_LINK,
-                shared_link_features: ALL_SHARED_LINK_FEATURES,
-                shared_link_access_levels: accessLevelsFromAPI,
-                shared_link_access_levels_disabled_reasons: disabledReasonsFromAPI,
-                type: TYPE_FOLDER,
-            };
-            const {
-                sharedLink: { accessLevelsDisabledReason, allowedAccessLevels },
-            } = convertItemResponse(responseFromAPI);
-            expect(accessLevelsDisabledReason).toEqual(convertedDisabledReasons);
-            expect(allowedAccessLevels).toEqual(convertedAccessLevels);
-        },
-    );
+        disabledReasonsFromAPI   | convertedDisabledReasons | description
+        ${MOCK_DISABLED_REASONS} | ${MOCK_DISABLED_REASONS} | ${'disabled reasons when they are returned from the API'}
+        ${undefined}             | ${{}}                    | ${'default disabled reasons when the API does not return disabled reasons'}
+    `('should return $description', ({ disabledReasonsFromAPI, convertedDisabledReasons }) => {
+        const responseFromAPI = {
+            allowed_invitee_roles: ['editor', 'viewer'],
+            description: ITEM_DESCRIPTION,
+            etag: '1',
+            id: ITEM_ID,
+            name: ITEM_NAME,
+            owned_by: MOCK_OWNER,
+            permissions: FULL_PERMISSIONS,
+            shared_link: ITEM_SHARED_LINK,
+            shared_link_features: ALL_SHARED_LINK_FEATURES,
+            shared_link_access_levels_disabled_reasons: disabledReasonsFromAPI,
+            type: TYPE_FOLDER,
+        };
+        const {
+            sharedLink: { accessLevelsDisabledReason, allowedAccessLevels },
+        } = convertItemResponse(responseFromAPI);
+        expect(accessLevelsDisabledReason).toEqual(convertedDisabledReasons);
+        expect(allowedAccessLevels).toEqual(ALLOWED_ACCESS_LEVELS);
+    });
 });
 
 describe('convertUserResponse()', () => {
