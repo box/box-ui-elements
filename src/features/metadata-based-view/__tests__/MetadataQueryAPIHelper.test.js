@@ -1,5 +1,11 @@
 import MetadataQueryAPIHelper from '../MetadataQueryAPIHelper';
-import { ITEM_TYPE_FILE, JSON_PATCH_OP_REPLACE, JSON_PATCH_OP_TEST } from '../../../common/constants';
+import {
+    ITEM_TYPE_FILE,
+    JSON_PATCH_OP_ADD,
+    JSON_PATCH_OP_REMOVE,
+    JSON_PATCH_OP_REPLACE,
+    JSON_PATCH_OP_TEST,
+} from '../../../common/constants';
 
 describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
     let metadataQueryAPIHelper;
@@ -197,6 +203,12 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
         from: 'enterprise_1234.templateKey',
         query: 'query',
         query_params: {},
+        fields: [
+            'name',
+            'metadata.enterprise_1234.templateKey.type',
+            'metadata.enterprise_1234.templateKey.year',
+            'metadata.enterprise_1234.templateKey.approved',
+        ],
     };
 
     beforeEach(() => {
@@ -204,6 +216,7 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
         metadataQueryAPIHelper.templateKey = templateKey;
         metadataQueryAPIHelper.templateScope = templateScope;
         metadataQueryAPIHelper.metadataTemplate = template;
+        metadataQueryAPIHelper.metadataQuery = mdQuery;
     });
 
     describe('flattenMetadata()', () => {
@@ -338,26 +351,44 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
     });
 
     describe('createJSONPatchOperations()', () => {
-        test('should return valid JSON patch object for metadata PUT operation', () => {
-            const field = 'amount';
-            const oldValue = 100;
-            const newValue = 200;
-            const expectedJSONPatchOps = [
-                {
-                    op: JSON_PATCH_OP_TEST,
-                    path: `/${field}`,
-                    value: oldValue,
-                },
-                {
-                    op: JSON_PATCH_OP_REPLACE,
-                    path: `/${field}`,
-                    value: newValue,
-                },
-            ];
+        const field = 'amount';
+        const testOp = {
+            op: JSON_PATCH_OP_TEST,
+            path: `/${field}`,
+            value: 100,
+        };
 
-            expect(metadataQueryAPIHelper.createJSONPatchOperations(field, oldValue, newValue)).toEqual(
-                expectedJSONPatchOps,
-            );
+        const addOp = {
+            op: JSON_PATCH_OP_ADD,
+            path: `/${field}`,
+            value: 200,
+        };
+
+        const replaceOp = {
+            op: JSON_PATCH_OP_REPLACE,
+            path: `/${field}`,
+            value: 200,
+        };
+
+        const removeOp = {
+            op: JSON_PATCH_OP_REMOVE,
+            path: `/${field}`,
+        };
+
+        test.each`
+            oldValue     | newValue     | ops
+            ${undefined} | ${200}       | ${[addOp]}
+            ${100}       | ${200}       | ${[testOp, replaceOp]}
+            ${100}       | ${undefined} | ${[testOp, removeOp]}
+        `('should return valid JSON patch object', ({ oldValue, newValue, ops }) => {
+            expect(metadataQueryAPIHelper.createJSONPatchOperations(field, oldValue, newValue)).toEqual(ops);
+        });
+    });
+
+    describe('getMetadataQueryFields()', () => {
+        test('should get metadata instance fields array from the query', () => {
+            const expectedResponse = ['type', 'year', 'approved'];
+            expect(metadataQueryAPIHelper.getMetadataQueryFields()).toEqual(expectedResponse);
         });
     });
 

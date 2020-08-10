@@ -18,6 +18,7 @@ type MetadataQueryOrderByClause = {
 
 type MetadataQuery = {
     ancestor_folder_id: string,
+    fields?: string[],
     from: string,
     limit?: number,
     marker?: string,

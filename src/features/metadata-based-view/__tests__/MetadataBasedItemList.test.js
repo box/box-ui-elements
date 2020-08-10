@@ -108,7 +108,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         isUpdating: false,
         scrollLeftOffset: 0,
         scrollRightOffset: 0,
-        valueBeingEdited: null,
+        valueBeingEdited: undefined,
     };
 
     const getWrapper = (props = defaultProps) => mount(<MetadataBasedItemList {...props} />);
@@ -131,7 +131,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
                 editedColumnIndex: -1,
                 editedRowIndex: -1,
                 isUpdating: false,
-                valueBeingEdited: null,
+                valueBeingEdited: undefined,
             });
         });
         test('should not call setState() when component receives same props again', () => {
@@ -169,6 +169,8 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             ${FIELD_TYPE_FLOAT}       | ${'123.456'}                  | ${123.456}
             ${FIELD_TYPE_MULTISELECT} | ${['Yes', 'No']}              | ${['Yes', 'No']}
             ${FIELD_TYPE_STRING}      | ${'str'}                      | ${'str'}
+            ${FIELD_TYPE_STRING}      | ${undefined}                  | ${undefined}
+            ${null}                   | ${'some value'}               | ${'some value'}
         `('get correct value for type $type', ({ type, value, valueForType }) => {
             const expectedValue = instance.getValueForType(type, value);
             expect(valueForType).toStrictEqual(expectedValue);
