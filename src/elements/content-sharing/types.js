@@ -9,7 +9,6 @@ import type {
 } from '../../common/types/core';
 import type {
     accessLevelsDisabledReasonType,
-    allowedAccessLevelsType,
     contactType,
     InviteCollaboratorsRequest,
     item,
@@ -58,6 +57,7 @@ export type ContentSharingItemDataType = {
 
 export type ContentSharingItemAPIResponse = {
     allowed_invitee_roles: Array<string>,
+    allowed_shared_link_access_levels?: Array<string>,
     classification: ?BoxItemClassification,
     description: string,
     etag: string,
@@ -70,7 +70,6 @@ export type ContentSharingItemAPIResponse = {
     },
     permissions: BoxItemPermission,
     shared_link?: APISharedLink,
-    shared_link_access_levels?: allowedAccessLevelsType,
     shared_link_access_levels_disabled_reasons?: accessLevelsDisabledReasonType,
     shared_link_features: {
         download_url: boolean,

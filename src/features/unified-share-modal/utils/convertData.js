@@ -50,7 +50,13 @@ import type {
     SharedLinkSettingsOptions,
 } from '../../../elements/content-sharing/types';
 import type { BoxItemPermission, Collaborations, SharedLink, User, UserCollection } from '../../../common/types/core';
-import type { collaboratorsListType, collaboratorType, contactType, InviteCollaboratorsRequest } from '../flowTypes';
+import type {
+    allowedAccessLevelsType,
+    collaboratorsListType,
+    collaboratorType,
+    contactType,
+    InviteCollaboratorsRequest,
+} from '../flowTypes';
 
 /**
  * The following constants are used for converting API requests
@@ -89,7 +95,7 @@ const API_TO_USM_CLASSIFICATION_COLORS_MAP = {
     [bdlGray20]: CLASSIFICATION_COLOR_ID_7,
 };
 
-export const convertAllowedAccessLevels = levelsFromAPI => {
+export const convertAllowedAccessLevels = (levelsFromAPI?: Array<string>): allowedAccessLevelsType | null => {
     if (!levelsFromAPI) return null;
     const convertedLevels = {
         peopleInThisItem: false,
