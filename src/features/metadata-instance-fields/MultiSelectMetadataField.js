@@ -13,6 +13,7 @@ import type { MetadataFieldValue, MetadataTemplateFieldOption } from '../../comm
 import './MultiSelectMetadataField.scss';
 
 type Props = {
+    blurExceptionClassNames?: Array<string>,
     dataKey: string,
     dataValue?: MetadataFieldValue,
     description?: string,
@@ -23,6 +24,7 @@ type Props = {
 };
 
 const MultiSelectMetadataField = ({
+    blurExceptionClassNames,
     dataKey,
     dataValue,
     displayName,
@@ -38,6 +40,7 @@ const MultiSelectMetadataField = ({
             <Label text={displayName}>
                 {!!description && <i className="bdl-MultiSelectMetadataField-desc">{description}</i>}
                 <MultiSelect
+                    blurExceptionClassNames={blurExceptionClassNames}
                     isEscapedWithReference
                     isScrollable
                     onChange={(selectedOptions: Array<SelectOptionProp>) => {

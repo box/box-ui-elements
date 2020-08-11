@@ -24,6 +24,7 @@ import {
 } from './constants';
 
 type Props = {
+    blurExceptionClassNames?: Array<string>,
     canEdit: boolean,
     dataKey: string,
     dataValue?: MetadataFieldValue,
@@ -38,6 +39,7 @@ type Props = {
 };
 
 const MetadataField = ({
+    blurExceptionClassNames,
     dataKey,
     dataValue,
     displayName,
@@ -113,6 +115,7 @@ const MetadataField = ({
         case FIELD_TYPE_ENUM:
             return (
                 <EnumMetadataField
+                    blurExceptionClassNames={blurExceptionClassNames}
                     dataKey={dataKey}
                     dataValue={dataValue}
                     description={description}
@@ -126,6 +129,7 @@ const MetadataField = ({
         case FIELD_TYPE_MULTISELECT:
             return (
                 <MultiSelectMetadataField
+                    blurExceptionClassNames={blurExceptionClassNames}
                     dataKey={dataKey}
                     dataValue={dataValue}
                     description={description}

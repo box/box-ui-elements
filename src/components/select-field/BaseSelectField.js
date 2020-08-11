@@ -37,6 +37,8 @@ function toggleOption(options, value) {
 }
 
 type Props = {
+    /** List of classnames of the relatedTarget that should prevent handleBlur from firing */
+    blurExceptionClassNames?: Array<string>,
     /** Props to add to the button element */
     buttonProps?: Object,
     /** CSS class for the select container */
@@ -221,12 +223,17 @@ class BaseSelectField extends React.Component<Props, State> {
 
     handleBlur = (event?: SyntheticFocusEvent<>) => {
         const { isOpen } = this.state;
+        const { blurExceptionClassNames = [] } = this.props;
+
+        const exceptionClasses = ['search-input', 'select-button', ...blurExceptionClassNames];
+
         if (
             isOpen &&
             event &&
             event.relatedTarget &&
-            !(event.relatedTarget: window.HTMLInputElement).classList.contains('search-input') &&
-            !(event.relatedTarget: window.HTMLInputElement).classList.contains('select-button')
+            exceptionClasses.every(
+                className => event && !(event.relatedTarget: window.HTMLInputElement).classList.contains(className),
+            )
         ) {
             this.closeDropdown();
         }
