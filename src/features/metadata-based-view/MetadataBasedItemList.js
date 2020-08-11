@@ -7,6 +7,8 @@ import classNames from 'classnames';
 import find from 'lodash/find';
 import getProp from 'lodash/get';
 import isEqual from 'lodash/isEqual';
+import isNil from 'lodash/isNil';
+import isString from 'lodash/isString';
 import MultiGrid from 'react-virtualized/dist/es/MultiGrid/MultiGrid';
 
 import MetadataField from '../metadata-instance-fields/MetadataField';
@@ -47,7 +49,7 @@ type State = {
     isUpdating: boolean,
     scrollLeftOffset: number,
     scrollRightOffset: number,
-    valueBeingEdited: ?MetadataFieldValue,
+    valueBeingEdited?: ?MetadataFieldValue,
 };
 
 type Props = {
@@ -95,7 +97,6 @@ class MetadataBasedItemList extends React.Component<Props, State> {
             isUpdating: false,
             scrollLeftOffset: 0,
             scrollRightOffset: 0,
-            valueBeingEdited: null,
         };
     };
 
@@ -109,7 +110,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                 editedColumnIndex: -1,
                 editedRowIndex: -1,
                 isUpdating: false,
-                valueBeingEdited: null,
+                valueBeingEdited: undefined,
             });
         }
     }
@@ -204,16 +205,15 @@ class MetadataBasedItemList extends React.Component<Props, State> {
     };
 
     getValueForType(type: string, value: MetadataFieldValue) {
-        switch (type) {
-            case FIELD_TYPE_FLOAT:
-                return parseFloat(value);
-
-            case FIELD_TYPE_INTEGER:
-                return parseInt(value, 10);
-
-            default:
-                return value;
+        if (type === FIELD_TYPE_FLOAT && !isNil(value)) {
+            return parseFloat(value);
         }
+
+        if (type === FIELD_TYPE_INTEGER && !isNil(value)) {
+            return parseInt(value, 10);
+        }
+
+        return value;
     }
 
     getGridCellData(columnIndex: number, rowIndex: number): GridCellData | void {
@@ -258,17 +258,18 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                     return cellData;
                 }
                 const { type, value, options = [] } = field;
+                const shouldShowEditIcon = isCellEditable && isString(type);
                 cellData = (
                     <>
                         {!isCellBeingEdited && <ReadOnlyMetadataField dataValue={value} displayName="" type={type} />}
-                        {isCellEditable && (
+                        {shouldShowEditIcon && (
                             <IconWithTooltip
                                 type={EDIT_ICON_TYPE}
                                 tooltipText={<FormattedMessage {...messages.editLabel} />}
                                 onClick={() => this.handleEditIconClick(columnIndex, rowIndex, value)}
                             />
                         )}
-                        {isCellBeingEdited && valueBeingEdited && (
+                        {isCellBeingEdited && (
                             <div className="bdl-MetadataBasedItemList-cell--edit">
                                 <MetadataField
                                     canEdit
@@ -282,7 +283,9 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                                         });
                                     }}
                                     onRemove={() => {
-                                        /* implement me */
+                                        this.setState({
+                                            valueBeingEdited: undefined,
+                                        });
                                     }}
                                     options={options}
                                 />
