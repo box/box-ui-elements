@@ -2,10 +2,11 @@
 import type {
     BoxItemClassification,
     BoxItemPermission,
+    GroupMini,
     ItemType,
     NewCollaboration,
     SharedLink as APISharedLink,
-    UserCollection,
+    UserMini,
 } from '../../common/types/core';
 import type {
     accessLevelsDisabledReasonType,
@@ -116,7 +117,7 @@ export type SharedLinkUpdateLevelFnType = () => (level: string) => Promise<void>
 
 export type SharedLinkUpdateSettingsFnType = () => ($Shape<APISharedLink>) => Promise<void>;
 
-export type GetContactsFnType = () => (filterTerm: string) => Promise<Array<contactType> | UserCollection> | null;
+export type GetContactsFnType = () => (filterTerm: string) => Promise<Array<contactType | GroupMini | UserMini>> | null;
 
 export type SendInvitesFnType = () => InviteCollaboratorsRequest => Promise<null | Array<Function>>;
 

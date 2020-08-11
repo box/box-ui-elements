@@ -3,9 +3,8 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import API from '../../../api';
-import type { GroupCollection, UserCollection } from '../../../common/types/core';
+import type { GroupCollection, GroupMini, UserMini, UserCollection } from '../../../common/types/core';
 import type { ContentSharingHooksOptions, GetContactsFnType } from '../types';
-import type { contactType } from '../../../features/unified-share-modal/flowTypes';
 
 /**
  * Generate the getContacts() function, which is used for retrieving potential collaborators in the USM.
@@ -23,26 +22,29 @@ function useContacts(api: API, itemID: string, options: ContentSharingHooksOptio
         if (getContacts) return;
 
         const updatedGetContactsFn: GetContactsFnType = () => (filterTerm: string) => {
-            const getUsers = new Promise((resolve: (result: UserCollection | Array<contactType>) => void) => {
+            const getUsers = new Promise((resolve: (result: Array<UserMini>) => void) => {
                 api.getUsersAPI(false).getUsersInEnterprise(
                     itemID,
                     (response: UserCollection) => {
                         handleSuccess(response);
-                        if (transformResponse && response.entries.length) {
+                        // A successful API call will always return an entries array, but we still need these checks for Flow purposes
+                        const entriesExist = response && response.entries && response.entries.length;
+                        if (transformResponse && entriesExist) {
                             return resolve(transformResponse(response));
                         }
-                        return resolve(response.entries); // a successful API call will always return an entries array
+                        const emptyEntries: Array<any> = [];
+                        return resolve(response && response.entries ? response.entries : emptyEntries);
                     },
                     handleError,
                     filterTerm,
                 );
             });
-            const getGroups = new Promise((resolve: (result: GroupCollection | Array<contactType>) => void) => {
+            const getGroups = new Promise((resolve: (result: Array<GroupMini>) => void) => {
                 api.getGroupsAPI(false).getGroupsInEnterprise(
                     itemID,
                     (response: GroupCollection) => {
                         handleSuccess(response);
-                        return resolve(response.entries);
+                        return resolve(response && response.entries ? response.entries : []);
                     },
                     handleError,
                     filterTerm,

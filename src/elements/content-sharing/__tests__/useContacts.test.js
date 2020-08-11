@@ -16,6 +16,11 @@ const handleSuccess = jest.fn();
 const handleError = jest.fn();
 const transformResponseSpy = jest.fn().mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
 
+const createAPIMock = (groupsAPI, usersAPI) => ({
+    getGroupsAPI: jest.fn().mockReturnValue(groupsAPI),
+    getUsersAPI: jest.fn().mockReturnValue(usersAPI),
+});
+
 function FakeComponent({ api, transformResponse }: { api: API, transformResponse: Function }) {
     const [getContacts, setGetContacts] = React.useState(null);
 
@@ -49,14 +54,7 @@ describe('elements/content-sharing/hooks/useContacts', () => {
             getUsersInEnterprise = jest.fn().mockImplementation((itemID, getUsersInEnterpriseSuccess) => {
                 return getUsersInEnterpriseSuccess(MOCK_CONTACTS_API_RESPONSE);
             });
-            mockAPI = {
-                getGroupsAPI: jest.fn().mockReturnValue({
-                    getGroupsInEnterprise,
-                }),
-                getUsersAPI: jest.fn().mockReturnValue({
-                    getUsersInEnterprise,
-                }),
-            };
+            mockAPI = createAPIMock({ getGroupsInEnterprise }, { getUsersInEnterprise });
         });
 
         test('should set the value of getContacts() and retrieve contacts on invocation', () => {
@@ -124,14 +122,7 @@ describe('elements/content-sharing/hooks/useContacts', () => {
             getUsersInEnterprise = jest.fn().mockImplementation((itemID, getUsersInEnterpriseSuccess) => {
                 return getUsersInEnterpriseSuccess(EMPTY_USERS);
             });
-            mockAPI = {
-                getGroupsAPI: jest.fn().mockReturnValue({
-                    getGroupsInEnterprise,
-                }),
-                getUsersAPI: jest.fn().mockReturnValue({
-                    getUsersInEnterprise,
-                }),
-            };
+            mockAPI = createAPIMock({ getGroupsInEnterprise }, { getUsersInEnterprise });
             let fakeComponent;
 
             act(() => {
@@ -141,20 +132,49 @@ describe('elements/content-sharing/hooks/useContacts', () => {
 
             const btn = fakeComponent.find('button');
             expect(btn.prop('onClick')).toBeDefined();
-
             const contacts = btn.invoke('onClick')(MOCK_FILTER);
 
-            expect(getUsersInEnterprise).toHaveBeenCalledWith(
-                MOCK_ITEM_ID,
-                expect.anything(Function),
-                expect.anything(Function),
-                MOCK_FILTER,
-            );
             expect(handleSuccess).toHaveBeenCalledWith(EMPTY_GROUPS);
             expect(handleSuccess).toHaveBeenCalledWith(EMPTY_USERS);
             expect(transformResponseSpy).not.toHaveBeenCalled();
             return expect(contacts).resolves.toEqual([]);
         });
+
+        /**
+         * A successful API call will always return an entries array. However, the Flow definitions
+         * for GroupCollection and UserCollection mark "entries" as optional, so we still need to test
+         * for the hypothetical case in which the entries array is undefined.
+         */
+        test.each`
+            groupsResponse                      | usersResponse                 | resolvedResponse                            | description
+            ${undefined}                        | ${undefined}                  | ${[]}                                       | ${'both responses are undefined'}
+            ${{}}                               | ${{}}                         | ${[]}                                       | ${'both responses are defined, but do not contain an entries array'}
+            ${undefined}                        | ${MOCK_CONTACTS_API_RESPONSE} | ${MOCK_CONTACTS_CONVERTED_RESPONSE}         | ${'users response is defined, and groups response is undefined'}
+            ${MOCK_GROUP_CONTACTS_API_RESPONSE} | ${undefined}                  | ${MOCK_GROUP_CONTACTS_API_RESPONSE.entries} | ${'groups response is defined, and users response is undefined'}
+        `(
+            'should set the value of getContacts() to an empty array when $description',
+            ({ groupsResponse, usersResponse, resolvedResponse }) => {
+                getGroupsInEnterprise = jest.fn().mockImplementation((itemID, getGroupsInEnterpriseSuccess) => {
+                    return getGroupsInEnterpriseSuccess(groupsResponse);
+                });
+                getUsersInEnterprise = jest.fn().mockImplementation((itemID, getUsersInEnterpriseSuccess) => {
+                    return getUsersInEnterpriseSuccess(usersResponse);
+                });
+                mockAPI = createAPIMock({ getGroupsInEnterprise }, { getUsersInEnterprise });
+                let fakeComponent;
+
+                act(() => {
+                    fakeComponent = mount(<FakeComponent api={mockAPI} transformResponse={transformResponseSpy} />);
+                });
+                fakeComponent.update();
+
+                const btn = fakeComponent.find('button');
+                expect(btn.prop('onClick')).toBeDefined();
+                const contacts = btn.invoke('onClick')(MOCK_FILTER);
+
+                return expect(contacts).resolves.toEqual(resolvedResponse);
+            },
+        );
     });
 
     describe('with failed API calls', () => {
@@ -169,14 +189,7 @@ describe('elements/content-sharing/hooks/useContacts', () => {
                 .mockImplementation((itemID, getUsersInEnterpriseSuccess, getUsersInEnterpriseError) => {
                     return getUsersInEnterpriseError();
                 });
-            mockAPI = {
-                getGroupsAPI: jest.fn().mockReturnValue({
-                    getGroupsInEnterprise,
-                }),
-                getUsersAPI: jest.fn().mockReturnValue({
-                    getUsersInEnterprise,
-                }),
-            };
+            mockAPI = createAPIMock({ getGroupsInEnterprise }, { getUsersInEnterprise });
         });
 
         test('should set the value of getContacts() and call handleError() when invoked', () => {

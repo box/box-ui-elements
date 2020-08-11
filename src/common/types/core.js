@@ -128,7 +128,6 @@ type UserCollection = ContactCollection & {
 };
 
 type GroupMini = {
-    group_type: string,
     id: string,
     name: string,
     type: 'group',
