@@ -49,7 +49,7 @@ type State = {
     isUpdating: boolean,
     scrollLeftOffset: number,
     scrollRightOffset: number,
-    valueBeingEdited: ?MetadataFieldValue,
+    valueBeingEdited?: ?MetadataFieldValue,
 };
 
 type Props = {
@@ -97,7 +97,6 @@ class MetadataBasedItemList extends React.Component<Props, State> {
             isUpdating: false,
             scrollLeftOffset: 0,
             scrollRightOffset: 0,
-            valueBeingEdited: undefined,
         };
     };
 

@@ -85,8 +85,7 @@ export default class MetadataQueryAPIHelper {
             delete patchOp.value;
         }
 
-        const ops = operation === JSON_PATCH_OP_ADD ? [patchOp] : [testOp, patchOp];
-        return ops;
+        return operation === JSON_PATCH_OP_ADD ? [patchOp] : [testOp, patchOp];
     };
 
     getMetadataQueryFields = (): string[] => {
@@ -106,7 +105,7 @@ export default class MetadataQueryAPIHelper {
             This function will return ['field_1', 'field_2', 'field_3']
         */
         const { fields = [], from } = this.metadataQuery;
-        return fields.filter(field => field.includes(from)).map(field => field.split(`${from}.`).pop());
+        return fields.filter(field => field.includes(from)).map(field => field.split('.').pop());
     };
 
     flattenMetadata = (metadata?: MetadataType): MetadataType => {
