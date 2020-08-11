@@ -57,7 +57,13 @@ import type {
     User,
     UserCollection,
 } from '../../../common/types/core';
-import type { collaboratorsListType, collaboratorType, contactType, InviteCollaboratorsRequest } from '../flowTypes';
+import type {
+    allowedAccessLevelsType,
+    collaboratorsListType,
+    collaboratorType,
+    contactType,
+    InviteCollaboratorsRequest,
+} from '../flowTypes';
 
 /**
  * The following constants are used for converting API requests
@@ -96,6 +102,19 @@ const API_TO_USM_CLASSIFICATION_COLORS_MAP = {
     [bdlGray20]: CLASSIFICATION_COLOR_ID_7,
 };
 
+export const convertAllowedAccessLevels = (levelsFromAPI?: Array<string>): allowedAccessLevelsType | null => {
+    if (!levelsFromAPI) return null;
+    const convertedLevels = {
+        peopleInThisItem: false,
+        peopleInYourCompany: false,
+        peopleWithTheLink: false,
+    };
+    levelsFromAPI.forEach(level => {
+        convertedLevels[API_TO_USM_ACCESS_LEVEL_MAP[level]] = true;
+    });
+    return convertedLevels;
+};
+
 /**
  * Convert a response from the Item API to the object that the USM expects.
  *
@@ -106,6 +125,7 @@ const API_TO_USM_CLASSIFICATION_COLORS_MAP = {
 export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): ContentSharingItemDataType => {
     const {
         allowed_invitee_roles,
+        allowed_shared_link_access_levels,
         classification,
         id,
         description,
@@ -114,6 +134,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
         owned_by: { id: ownerID, login: ownerEmail },
         permissions,
         shared_link,
+        shared_link_access_levels_disabled_reasons,
         shared_link_features: { download_url: isDirectLinkAvailable, password: isPasswordAvailable },
         type,
     } = itemAPIData;
@@ -167,7 +188,8 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
 
         sharedLink = {
             accessLevel,
-            allowedAccessLevels: ALLOWED_ACCESS_LEVELS,
+            accessLevelsDisabledReason: shared_link_access_levels_disabled_reasons || {},
+            allowedAccessLevels: convertAllowedAccessLevels(allowed_shared_link_access_levels) || ALLOWED_ACCESS_LEVELS, // show all access levels by default
             canChangeAccessLevel,
             canChangeDownload,
             canChangeExpiration,

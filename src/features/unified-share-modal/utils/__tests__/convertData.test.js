@@ -1,7 +1,8 @@
 import {
     API_TO_USM_PERMISSION_LEVEL_MAP,
+    convertAllowedAccessLevels,
     convertCollabsResponse,
-    convertContactsResponse,
+    convertUserContactsResponse,
     convertItemResponse,
     convertUserResponse,
     convertSharedLinkPermissions,
@@ -46,6 +47,7 @@ import {
     MOCK_COLLABS_CONVERTED_USERS,
     MOCK_COLLABS_REQUEST_USERS_ONLY,
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
+    MOCK_DISABLED_REASONS,
     MOCK_ITEM_PERMISSIONS,
     MOCK_OWNER,
     MOCK_OWNER_ID,
@@ -69,6 +71,22 @@ jest.mock('../../../../utils/file', () => ({
     getTypedFileId: () => 'f_190457309',
     getTypedFolderId: () => 'd_190457309',
 }));
+
+describe('convertAllowedAccessLevels', () => {
+    // The "collaborators" access level is always allowed.
+    test.each`
+        allowedAccessLevelsFromAPI              | convertedAllowedAccessLevels                                                        | description
+        ${['collaborators', 'open', 'company']} | ${ALLOWED_ACCESS_LEVELS}                                                            | ${'all'}
+        ${['collaborators', 'company']}         | ${{ peopleInThisItem: true, peopleInYourCompany: true, peopleWithTheLink: false }}  | ${'only collaborators and company'}
+        ${['collaborators', 'open']}            | ${{ peopleInThisItem: true, peopleInYourCompany: false, peopleWithTheLink: true }}  | ${'only collaborators and open'}
+        ${['collaborators']}                    | ${{ peopleInThisItem: true, peopleInYourCompany: false, peopleWithTheLink: false }} | ${'only collaborators and open'}
+    `(
+        'should convert allowed access levels when $description levels are allowed',
+        ({ allowedAccessLevelsFromAPI, convertedAllowedAccessLevels }) => {
+            expect(convertAllowedAccessLevels(allowedAccessLevelsFromAPI)).toEqual(convertedAllowedAccessLevels);
+        },
+    );
+});
 
 describe('convertItemResponse()', () => {
     const TYPED_FILE_ID = 'f_190457309';
@@ -270,6 +288,7 @@ describe('convertItemResponse()', () => {
                 sharedLink: sharedLink
                     ? {
                           accessLevel: ANYONE_IN_COMPANY,
+                          accessLevelsDisabledReason: {},
                           allowedAccessLevels: ALLOWED_ACCESS_LEVELS,
                           canChangeAccessLevel: can_set_share_access,
                           canChangeDownload: can_set_share_access && can_download,
@@ -372,6 +391,31 @@ describe('convertItemResponse()', () => {
             colorID,
         });
         expect(classification).toBe(classificationName);
+    });
+
+    test.each`
+        disabledReasonsFromAPI   | convertedDisabledReasons | description
+        ${MOCK_DISABLED_REASONS} | ${MOCK_DISABLED_REASONS} | ${'disabled reasons when they are returned from the API'}
+        ${undefined}             | ${{}}                    | ${'default disabled reasons when the API does not return disabled reasons'}
+    `('should return $description', ({ disabledReasonsFromAPI, convertedDisabledReasons }) => {
+        const responseFromAPI = {
+            allowed_invitee_roles: ['editor', 'viewer'],
+            description: ITEM_DESCRIPTION,
+            etag: '1',
+            id: ITEM_ID,
+            name: ITEM_NAME,
+            owned_by: MOCK_OWNER,
+            permissions: FULL_PERMISSIONS,
+            shared_link: ITEM_SHARED_LINK,
+            shared_link_features: ALL_SHARED_LINK_FEATURES,
+            shared_link_access_levels_disabled_reasons: disabledReasonsFromAPI,
+            type: TYPE_FOLDER,
+        };
+        const {
+            sharedLink: { accessLevelsDisabledReason, allowedAccessLevels },
+        } = convertItemResponse(responseFromAPI);
+        expect(accessLevelsDisabledReason).toEqual(convertedDisabledReasons);
+        expect(allowedAccessLevels).toEqual(ALLOWED_ACCESS_LEVELS);
     });
 });
 
@@ -562,15 +606,15 @@ describe('convertCollabsResponse', () => {
     });
 });
 
-describe('convertContactsResponse()', () => {
+describe('convertUserContactsResponse()', () => {
     test('should return all users except the current user', () => {
-        expect(convertContactsResponse(MOCK_CONTACTS_API_RESPONSE, MOCK_OWNER_ID)).toEqual(
+        expect(convertUserContactsResponse(MOCK_CONTACTS_API_RESPONSE, MOCK_OWNER_ID)).toEqual(
             MOCK_CONTACTS_CONVERTED_RESPONSE,
         );
     });
 
     test('should return an empty array if there are no available users', () => {
-        expect(convertContactsResponse({ total_count: 0, entries: [] }, MOCK_OWNER_ID)).toEqual([]);
+        expect(convertUserContactsResponse({ total_count: 0, entries: [] }, MOCK_OWNER_ID)).toEqual([]);
     });
 });
 
