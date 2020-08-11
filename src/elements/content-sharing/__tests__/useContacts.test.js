@@ -152,7 +152,7 @@ describe('elements/content-sharing/hooks/useContacts', () => {
             ${undefined}                        | ${MOCK_CONTACTS_API_RESPONSE} | ${MOCK_CONTACTS_CONVERTED_RESPONSE}         | ${'users response is defined, and groups response is undefined'}
             ${MOCK_GROUP_CONTACTS_API_RESPONSE} | ${undefined}                  | ${MOCK_GROUP_CONTACTS_API_RESPONSE.entries} | ${'groups response is defined, and users response is undefined'}
         `(
-            'should set the value of getContacts() to an empty array when $description',
+            'should set the value of getContacts() when $description',
             ({ groupsResponse, usersResponse, resolvedResponse }) => {
                 getGroupsInEnterprise = jest.fn().mockImplementation((itemID, getGroupsInEnterpriseSuccess) => {
                     return getGroupsInEnterpriseSuccess(groupsResponse);
