@@ -607,7 +607,7 @@ describe('convertCollabsResponse', () => {
 });
 
 describe('convertContactsResponse()', () => {
-    test('should return all users except the current user', () => {
+    test('should return all users except the current user and app users', () => {
         expect(convertContactsResponse(MOCK_CONTACTS_API_RESPONSE, MOCK_OWNER_ID)).toEqual(
             MOCK_CONTACTS_CONVERTED_RESPONSE,
         );
