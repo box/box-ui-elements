@@ -2,7 +2,7 @@ import {
     API_TO_USM_PERMISSION_LEVEL_MAP,
     convertAllowedAccessLevels,
     convertCollabsResponse,
-    convertUserContactsResponse,
+    convertContactsResponse,
     convertItemResponse,
     convertUserResponse,
     convertSharedLinkPermissions,
@@ -606,15 +606,15 @@ describe('convertCollabsResponse', () => {
     });
 });
 
-describe('convertUserContactsResponse()', () => {
+describe('convertContactsResponse()', () => {
     test('should return all users except the current user', () => {
-        expect(convertUserContactsResponse(MOCK_CONTACTS_API_RESPONSE, MOCK_OWNER_ID)).toEqual(
+        expect(convertContactsResponse(MOCK_CONTACTS_API_RESPONSE, MOCK_OWNER_ID)).toEqual(
             MOCK_CONTACTS_CONVERTED_RESPONSE,
         );
     });
 
     test('should return an empty array if there are no available users', () => {
-        expect(convertUserContactsResponse({ total_count: 0, entries: [] }, MOCK_OWNER_ID)).toEqual([]);
+        expect(convertContactsResponse({ total_count: 0, entries: [] }, MOCK_OWNER_ID)).toEqual([]);
     });
 });
 

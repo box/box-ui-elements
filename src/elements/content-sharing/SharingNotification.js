@@ -9,11 +9,10 @@ import useSharedLink from './hooks/useSharedLink';
 import {
     convertCollabsRequest,
     convertCollabsResponse,
-    convertGroupContactsResponse,
+    convertContactsResponse,
     convertItemResponse,
     convertSharedLinkPermissions,
     convertSharedLinkSettings,
-    convertUserContactsResponse,
     USM_TO_API_ACCESS_LEVEL_MAP,
 } from '../../features/unified-share-modal/utils/convertData';
 import useCollaborators from './hooks/useCollaborators';
@@ -213,8 +212,7 @@ function SharingNotification({
     // Set the getContacts function
     const getContactsFn: GetContactsFnType | null = useContacts(api, itemID, {
         handleError: () => createNotification(TYPE_ERROR, contentSharingMessages.getContactsError),
-        transformUsersResponse: data => convertUserContactsResponse(data, currentUserID),
-        transformGroupsResponse: data => convertGroupContactsResponse(data),
+        transformResponse: data => convertContactsResponse(data, currentUserID),
     });
     if (getContactsFn && !getContacts) {
         setGetContacts(() => getContactsFn);

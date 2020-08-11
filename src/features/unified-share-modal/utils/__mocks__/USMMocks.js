@@ -386,6 +386,26 @@ const MOCK_CONTACTS_CONVERTED_RESPONSE = [
     },
 ];
 
+const MOCK_GROUP_CONTACTS_API_RESPONSE = {
+    total_count: 1,
+    entries: [
+        {
+            type: 'group',
+            id: '234524525',
+            name: 'hedgehogs',
+            group_type: 'managed_group',
+        },
+        {
+            type: 'group',
+            id: '689796890',
+            name: 'armadillos',
+            group_type: 'managed_group',
+        },
+    ],
+    limit: 100,
+    offset: 0,
+};
+
 const MOCK_SETTINGS_WITH_ALL_FEATURES = {
     expirationTimestamp: MOCK_TIMESTAMP,
     isDownloadEnabled: true,
@@ -556,6 +576,7 @@ export {
     MOCK_CONVERTED_USER_DATA,
     MOCK_DISABLED_REASONS,
     MOCK_EMAIL_ARRAY,
+    MOCK_GROUP_CONTACTS_API_RESPONSE,
     MOCK_GROUPID_ARRAY,
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE,

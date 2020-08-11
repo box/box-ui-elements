@@ -17,12 +17,7 @@ import type { contactType } from '../../../features/unified-share-modal/flowType
  */
 function useContacts(api: API, itemID: string, options: ContentSharingHooksOptions): GetContactsFnType | null {
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
-    const {
-        handleSuccess = noop,
-        handleError = noop,
-        transformGroupsResponse = arg => arg,
-        transformUsersResponse = arg => arg,
-    } = options;
+    const { handleSuccess = noop, handleError = noop, transformResponse } = options;
 
     React.useEffect(() => {
         if (getContacts) return;
@@ -33,7 +28,10 @@ function useContacts(api: API, itemID: string, options: ContentSharingHooksOptio
                     itemID,
                     (response: UserCollection) => {
                         handleSuccess(response);
-                        return resolve(transformUsersResponse(response));
+                        if (transformResponse && response.entries.length) {
+                            return resolve(transformResponse(response));
+                        }
+                        return resolve(response.entries); // a successful API call will always return an entries array
                     },
                     handleError,
                     filterTerm,
@@ -44,19 +42,16 @@ function useContacts(api: API, itemID: string, options: ContentSharingHooksOptio
                     itemID,
                     (response: GroupCollection) => {
                         handleSuccess(response);
-                        return resolve(transformGroupsResponse(response));
+                        return resolve(response.entries);
                     },
                     handleError,
                     filterTerm,
                 );
             });
-            return Promise.all([getUsers, getGroups]).then(contactArrays => {
-                console.log(contactArrays);
-                return [...contactArrays[0], ...contactArrays[1]];
-            });
+            return Promise.all([getUsers, getGroups]).then(contactArrays => [...contactArrays[0], ...contactArrays[1]]);
         };
         setGetContacts(updatedGetContactsFn);
-    }, [api, getContacts, handleError, handleSuccess, itemID, transformGroupsResponse, transformUsersResponse]);
+    }, [api, getContacts, handleError, handleSuccess, itemID, transformResponse]);
 
     return getContacts;
 }
