@@ -95,6 +95,8 @@ const API_TO_USM_CLASSIFICATION_COLORS_MAP = {
     [bdlGray20]: CLASSIFICATION_COLOR_ID_7,
 };
 
+const APP_USERS_DOMAIN_REGEXP = new RegExp('boxdevedition.com');
+
 export const convertAllowedAccessLevels = (levelsFromAPI?: Array<string>): allowedAccessLevelsType | null => {
     if (!levelsFromAPI) return null;
     const convertedLevels = {
@@ -426,7 +428,7 @@ export const convertContactsResponse = (
 ): Array<contactType> => {
     const { entries = [] } = contactsAPIData;
 
-    // Return all users except for the current user
+    // Return all users except for the current user and app users
     return entries
         .map(contact => {
             const { id, login: email, name, type } = contact;
@@ -437,5 +439,5 @@ export const convertContactsResponse = (
                 type,
             };
         })
-        .filter(({ id }) => id !== currentUserID);
+        .filter(({ id, email }) => id !== currentUserID && email && !APP_USERS_DOMAIN_REGEXP.test(email));
 };
