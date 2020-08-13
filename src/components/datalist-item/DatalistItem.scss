@@ -1,12 +1,6 @@
 @import '../../styles/variables';
+@import '../../styles/mixins/overlay';
 
 .datalist-item {
-    margin: 0 ($bdl-grid-unit * 2);
-    padding: $bdl-grid-unit ($bdl-grid-unit * 9) $bdl-grid-unit ($bdl-grid-unit * 2);
-    border-radius: $bdl-border-radius-size * 2;
-
-    &.is-active {
-        background-color: fade-out($bdl-gray, .95);
-        cursor: pointer;
-    }
+    @include bdl-Overlay-listItemContainer;
 }
