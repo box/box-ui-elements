@@ -80,6 +80,7 @@ class Groups extends Base {
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @param {string} [filterTerm] - Optional filter for the groups
+     * @param {Object} [requestData] - Opitional additional request data
      * @returns {void}
      */
     getGroupsInEnterprise(
@@ -87,6 +88,7 @@ class Groups extends Base {
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
         filterTerm: ?string,
+        requestData: ?Object,
     ): void {
         this.errorCode = ERROR_CODE_FETCH_ENTERPRISE_GROUPS;
         this.get({
@@ -94,6 +96,7 @@ class Groups extends Base {
             successCallback,
             errorCallback,
             url: this.getGroupsInEnterpriseUrl(filterTerm),
+            requestData,
         });
     }
 }

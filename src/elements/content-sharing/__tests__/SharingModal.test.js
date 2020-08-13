@@ -28,11 +28,12 @@ import {
 } from '../../../features/unified-share-modal/constants';
 import {
     convertCollabsRequest,
-    convertContactsResponse,
+    convertGroupContactsResponse,
     convertItemResponse,
     convertUserResponse,
     convertSharedLinkPermissions,
     convertSharedLinkSettings,
+    convertUserContactsResponse,
 } from '../../../features/unified-share-modal/utils/convertData';
 import {
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
@@ -46,6 +47,7 @@ import {
     MOCK_CONVERTED_SETTINGS,
     MOCK_CONVERTED_USER_DATA,
     MOCK_GROUP_CONTACTS_API_RESPONSE,
+    MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE,
     MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK,
@@ -677,7 +679,8 @@ describe('elements/content-sharing/SharingModal', () => {
                     getGroupsInEnterprise,
                 },
             );
-            convertContactsResponse.mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
+            convertGroupContactsResponse.mockReturnValue(MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE);
+            convertUserContactsResponse.mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
         });
 
         test('should call getUsersInEnterprise() and getGroupsInEnterprise() from getCollaboratorContacts() and return a converted response', async () => {
@@ -704,7 +707,7 @@ describe('elements/content-sharing/SharingModal', () => {
             );
             expect(response).resolves.toEqual([
                 ...MOCK_CONTACTS_CONVERTED_RESPONSE,
-                ...MOCK_GROUP_CONTACTS_API_RESPONSE.entries,
+                ...MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
             ]);
         });
     });

@@ -130,6 +130,9 @@ type UserCollection = ContactCollection & {
 type GroupMini = {
     id: string,
     name: string,
+    permissions?: {
+        can_invite_as_collaborator: boolean,
+    },
     type: 'group',
 };
 

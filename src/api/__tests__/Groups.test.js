@@ -70,21 +70,24 @@ describe('api/Groups', () => {
 
         describe('getGroupsInEnterprise', () => {
             test.each`
-                filterTerm     | description
-                ${MOCK_FILTER} | ${'provided'}
-                ${undefined}   | ${'default'}
-            `('should call this.get() with the $description filter term and return a promise', ({ filterTerm }) => {
+                filterTerm     | requestData                       | description
+                ${MOCK_FILTER} | ${{ fields: 'name,permissions' }} | ${'provided filter term and request data'}
+                ${undefined}   | ${{ fields: 'name,permissions' }} | ${'default filter term and provided request data'}
+                ${MOCK_FILTER} | ${undefined}                      | ${'provided filter term and undefined request data'}
+                ${undefined}   | ${undefined}                      | ${'default filter term and undefined request data'}
+            `('should call this.get() with the $description and return a promise', ({ filterTerm, requestData }) => {
                 const getSpy = jest.spyOn(groups, 'get').mockResolvedValue(MOCK_ENTERPRISE_GROUPS_RESPONSE);
                 const getGroupsInEnterpriseUrlSpy = jest
                     .spyOn(groups, 'getGroupsInEnterpriseUrl')
                     .mockReturnValue(BASE_URL);
-                groups.getGroupsInEnterprise(FILE_ID, successCallback, errorCallback, filterTerm);
+                groups.getGroupsInEnterprise(FILE_ID, successCallback, errorCallback, filterTerm, requestData);
                 expect(groups.errorCode).toBe(ERROR_CODE_FETCH_ENTERPRISE_GROUPS);
                 expect(getGroupsInEnterpriseUrlSpy).toHaveBeenCalledWith(filterTerm);
                 expect(getSpy).toHaveBeenCalledWith({
                     id: FILE_ID,
                     successCallback,
                     errorCallback,
+                    requestData,
                     url: BASE_URL,
                 });
             });

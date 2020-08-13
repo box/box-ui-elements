@@ -3,6 +3,7 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import API from '../../../api';
+import { FIELD_NAME, FIELD_PERMISSIONS } from '../../../constants';
 import type { GroupCollection, GroupMini, UserMini, UserCollection } from '../../../common/types/core';
 import type { ContentSharingHooksOptions, GetContactsFnType } from '../types';
 
@@ -16,25 +17,31 @@ import type { ContentSharingHooksOptions, GetContactsFnType } from '../types';
  */
 function useContacts(api: API, itemID: string, options: ContentSharingHooksOptions): GetContactsFnType | null {
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
-    const { handleSuccess = noop, handleError = noop, transformResponse } = options;
+    const { handleSuccess = noop, handleError = noop, transformGroups, transformUsers } = options;
 
     React.useEffect(() => {
         if (getContacts) return;
+
+        const resolveAPICall = (
+            resolve: (result: Array<Object>) => void,
+            response: GroupCollection | UserCollection,
+            transformFn: ?Function,
+        ) => {
+            handleSuccess(response);
+            // A successful API call will always return an entries array, but we still need these checks for Flow purposes
+            const entriesExist = response && response.entries && response.entries.length;
+            if (transformFn && entriesExist) {
+                return resolve(transformFn(response));
+            }
+            const emptyEntries: Array<any> = [];
+            return resolve(response && response.entries ? response.entries : emptyEntries);
+        };
 
         const updatedGetContactsFn: GetContactsFnType = () => (filterTerm: string) => {
             const getUsers = new Promise((resolve: (result: Array<UserMini>) => void) => {
                 api.getUsersAPI(false).getUsersInEnterprise(
                     itemID,
-                    (response: UserCollection) => {
-                        handleSuccess(response);
-                        // A successful API call will always return an entries array, but we still need these checks for Flow purposes
-                        const entriesExist = response && response.entries && response.entries.length;
-                        if (transformResponse && entriesExist) {
-                            return resolve(transformResponse(response));
-                        }
-                        const emptyEntries: Array<any> = [];
-                        return resolve(response && response.entries ? response.entries : emptyEntries);
-                    },
+                    (response: UserCollection) => resolveAPICall(resolve, response, transformUsers),
                     handleError,
                     filterTerm,
                 );
@@ -42,18 +49,20 @@ function useContacts(api: API, itemID: string, options: ContentSharingHooksOptio
             const getGroups = new Promise((resolve: (result: Array<GroupMini>) => void) => {
                 api.getGroupsAPI(false).getGroupsInEnterprise(
                     itemID,
-                    (response: GroupCollection) => {
-                        handleSuccess(response);
-                        return resolve(response && response.entries ? response.entries : []);
-                    },
+                    (response: GroupCollection) => resolveAPICall(resolve, response, transformGroups),
                     handleError,
                     filterTerm,
+                    {
+                        params: {
+                            fields: [FIELD_NAME, FIELD_PERMISSIONS].toString(),
+                        },
+                    },
                 );
             });
             return Promise.all([getUsers, getGroups]).then(contactArrays => [...contactArrays[0], ...contactArrays[1]]);
         };
         setGetContacts(updatedGetContactsFn);
-    }, [api, getContacts, handleError, handleSuccess, itemID, transformResponse]);
+    }, [api, getContacts, handleError, handleSuccess, itemID, transformGroups, transformUsers]);
 
     return getContacts;
 }
