@@ -1,9 +1,0 @@
-@import '../../styles/variables';
-
-@mixin bdl-PillSelectorDropdown-container {
-    margin-top: $bdl-grid-unit;
-    background-color: $white;
-    border: 1px solid $bdl-gray-10;
-    border-radius: $bdl-border-radius-size;
-    box-shadow: 0 $bdl-grid-unit ($bdl-grid-unit * 3) 0 rgba($black, .1);
-}

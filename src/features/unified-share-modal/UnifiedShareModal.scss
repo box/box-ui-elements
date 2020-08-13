@@ -1,5 +1,5 @@
 @import '../../styles/variables';
-@import '../../components/pill-selector-dropdown/mixins';
+@import '../../styles/mixins/overlay';
 
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
@@ -109,7 +109,7 @@
             height: 280px;
             overflow-y: scroll;
 
-            @include bdl-PillSelectorDropdown-container;
+            @include bdl-Overlay-container;
         }
 
         .overlay {
