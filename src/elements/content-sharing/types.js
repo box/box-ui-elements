@@ -1,5 +1,6 @@
 // @flow
 import type {
+    BoxItemClassification,
     BoxItemPermission,
     ItemType,
     NewCollaboration,
@@ -7,11 +8,13 @@ import type {
     UserCollection,
 } from '../../common/types/core';
 import type {
+    accessLevelsDisabledReasonType,
     contactType,
     InviteCollaboratorsRequest,
     item,
     sharedLinkType as USMSharedLinkType,
 } from '../../features/unified-share-modal/flowTypes';
+import type { RequestOptions } from '../../common/types/api';
 
 // "SLS" denotes values that are used in the Shared Link Settings modal
 type ContentSharingEnterpriseDataType = {
@@ -54,6 +57,8 @@ export type ContentSharingItemDataType = {
 
 export type ContentSharingItemAPIResponse = {
     allowed_invitee_roles: Array<string>,
+    allowed_shared_link_access_levels?: Array<string>,
+    classification: ?BoxItemClassification,
     description: string,
     etag: string,
     extension: string,
@@ -65,6 +70,7 @@ export type ContentSharingItemAPIResponse = {
     },
     permissions: BoxItemPermission,
     shared_link?: APISharedLink,
+    shared_link_access_levels_disabled_reasons?: accessLevelsDisabledReasonType,
     shared_link_features: {
         download_url: boolean,
         password: boolean,
@@ -75,9 +81,12 @@ export type ContentSharingItemAPIResponse = {
 
 export type ContentSharingHooksOptions = {
     handleError?: Function,
+    handleRemoveSharedLinkError?: Function,
     handleRemoveSharedLinkSuccess?: Function,
     handleSuccess?: Function,
+    handleUpdateSharedLinkError?: Function,
     handleUpdateSharedLinkSuccess?: Function,
+    setIsLoading?: Function,
     transformAccess?: Function,
     transformItem?: Function,
     transformPermissions?: Function,
@@ -110,3 +119,10 @@ export type SharedLinkUpdateSettingsFnType = () => ($Shape<APISharedLink>) => Pr
 export type GetContactsFnType = () => (filterTerm: string) => Promise<Array<contactType> | UserCollection> | null;
 
 export type SendInvitesFnType = () => InviteCollaboratorsRequest => Promise<null | Array<Function>>;
+
+export type ConnectToItemShareFnType = ({
+    access?: string,
+    errorFn?: Function,
+    requestOptions?: RequestOptions,
+    successFn?: Function,
+}) => Function;

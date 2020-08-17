@@ -36,6 +36,7 @@ const entries = {
     preview: path.resolve('src/elements/wrappers/ContentPreview.js'),
     sidebar: path.resolve('src/elements/wrappers/ContentSidebar.js'),
     openwith: path.resolve('src/elements/wrappers/ContentOpenWith.js'),
+    sharing: path.resolve('src/elements/wrappers/ContentSharing.js'),
 };
 const entriesToBuild =
     typeof process.env.ENTRY === 'string'

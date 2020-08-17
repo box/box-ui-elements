@@ -22,6 +22,26 @@ import {
     COLLAB_USER_TYPE,
     PEOPLE_IN_ITEM,
 } from '../constants';
+import {
+    bdlDarkBlue50,
+    bdlGray20,
+    bdlGreenLight50,
+    bdlLightBlue50,
+    bdlOrange50,
+    bdlPurpleRain50,
+    bdlWatermelonRed50,
+    bdlYellow50,
+} from '../../../styles/variables';
+import {
+    CLASSIFICATION_COLOR_ID_0,
+    CLASSIFICATION_COLOR_ID_1,
+    CLASSIFICATION_COLOR_ID_2,
+    CLASSIFICATION_COLOR_ID_3,
+    CLASSIFICATION_COLOR_ID_4,
+    CLASSIFICATION_COLOR_ID_5,
+    CLASSIFICATION_COLOR_ID_6,
+    CLASSIFICATION_COLOR_ID_7,
+} from '../../classification/constants';
 import type {
     ContentSharingCollaborationsRequest,
     ContentSharingItemAPIResponse,
@@ -30,7 +50,13 @@ import type {
     SharedLinkSettingsOptions,
 } from '../../../elements/content-sharing/types';
 import type { BoxItemPermission, Collaborations, SharedLink, User, UserCollection } from '../../../common/types/core';
-import type { collaboratorsListType, collaboratorType, contactType, InviteCollaboratorsRequest } from '../flowTypes';
+import type {
+    allowedAccessLevelsType,
+    collaboratorsListType,
+    collaboratorType,
+    contactType,
+    InviteCollaboratorsRequest,
+} from '../flowTypes';
 
 /**
  * The following constants are used for converting API requests
@@ -58,15 +84,44 @@ export const USM_TO_API_PERMISSION_LEVEL_MAP = {
     [CAN_VIEW_ONLY]: PERMISSION_CAN_PREVIEW,
 };
 
+const API_TO_USM_CLASSIFICATION_COLORS_MAP = {
+    [bdlYellow50]: CLASSIFICATION_COLOR_ID_0,
+    [bdlOrange50]: CLASSIFICATION_COLOR_ID_1,
+    [bdlWatermelonRed50]: CLASSIFICATION_COLOR_ID_2,
+    [bdlPurpleRain50]: CLASSIFICATION_COLOR_ID_3,
+    [bdlLightBlue50]: CLASSIFICATION_COLOR_ID_4,
+    [bdlDarkBlue50]: CLASSIFICATION_COLOR_ID_5,
+    [bdlGreenLight50]: CLASSIFICATION_COLOR_ID_6,
+    [bdlGray20]: CLASSIFICATION_COLOR_ID_7,
+};
+
+const APP_USERS_DOMAIN_REGEXP = new RegExp('boxdevedition.com');
+
+export const convertAllowedAccessLevels = (levelsFromAPI?: Array<string>): allowedAccessLevelsType | null => {
+    if (!levelsFromAPI) return null;
+    const convertedLevels = {
+        peopleInThisItem: false,
+        peopleInYourCompany: false,
+        peopleWithTheLink: false,
+    };
+    levelsFromAPI.forEach(level => {
+        convertedLevels[API_TO_USM_ACCESS_LEVEL_MAP[level]] = true;
+    });
+    return convertedLevels;
+};
+
 /**
  * Convert a response from the Item API to the object that the USM expects.
  *
  * @param {BoxItem} itemAPIData
  * @returns {ContentSharingItemDataType} Object containing item and shared link information
  */
+
 export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): ContentSharingItemDataType => {
     const {
         allowed_invitee_roles,
+        allowed_shared_link_access_levels,
+        classification,
         id,
         description,
         extension,
@@ -74,6 +129,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
         owned_by: { id: ownerID, login: ownerEmail },
         permissions,
         shared_link,
+        shared_link_access_levels_disabled_reasons,
         shared_link_features: { download_url: isDirectLinkAvailable, password: isPasswordAvailable },
         type,
     } = itemAPIData;
@@ -85,6 +141,19 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
         can_set_share_access: canChangeAccessLevel,
         can_share: itemShare,
     } = permissions;
+
+    // Convert classification data for the item if available
+    let classificationData = {};
+    if (classification) {
+        const { color, definition, name: classificationName } = classification;
+        classificationData = {
+            bannerPolicy: {
+                body: definition,
+                colorID: API_TO_USM_CLASSIFICATION_COLORS_MAP[color],
+            },
+            classification: classificationName,
+        };
+    }
 
     const isEditAllowed = allowed_invitee_roles.indexOf(INVITEE_ROLE_EDITOR) !== -1;
 
@@ -114,7 +183,8 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
 
         sharedLink = {
             accessLevel,
-            allowedAccessLevels: ALLOWED_ACCESS_LEVELS,
+            accessLevelsDisabledReason: shared_link_access_levels_disabled_reasons || {},
+            allowedAccessLevels: convertAllowedAccessLevels(allowed_shared_link_access_levels) || ALLOWED_ACCESS_LEVELS, // show all access levels by default
             canChangeAccessLevel,
             canChangeDownload,
             canChangeExpiration,
@@ -142,7 +212,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
 
     return {
         item: {
-            canUserSeeClassification: false,
+            canUserSeeClassification: !!classification,
             description,
             extension,
             grantedPermissions: {
@@ -156,6 +226,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
             permissions, // the original permissions are necessary for PUT requests to the Item API
             type,
             typedID: type === TYPE_FOLDER ? getTypedFolderId(id) : getTypedFileId(id),
+            ...classificationData,
         },
         sharedLink,
     };
@@ -199,6 +270,11 @@ export const convertSharedLinkPermissions = (newSharedLinkPermissionLevel: strin
 
 /**
  * Convert a shared link settings object from the USM into the format that the API expects.
+ * This function compares the provided access level to both API and internal USM access level constants, to accommodate two potential flows:
+ * - Changing the settings for a shared link right after the shared link has been created. The access level is saved directly from the data
+ *   returned by the API, so it is in API format.
+ * - Changing the settings for a shared link in any other scenario. The access level is saved from the initial calls to the Item API and
+ *   convertItemResponse, so it is in internal USM format.
  *
  * @param {SharedLinkSettingsOptions} newSettings
  * @param {accessLevel} string
@@ -221,10 +297,12 @@ export const convertSharedLinkSettings = (
     const convertedSettings: $Shape<SharedLink> = {
         unshared_at: expirationTimestamp && isExpirationEnabled ? new Date(expirationTimestamp).toISOString() : null,
         vanity_url: serverURL && vanityName ? `${serverURL}${vanityName}` : '',
-        // Download permissions can only be set on "company" or "open" shared links.
-        // A Flow limitation prevents the usage of an && statement in an object spread: https://github.com/facebook/flow/issues/5946
-        ...(accessLevel !== PEOPLE_IN_ITEM ? { permissions: { can_download, can_preview: !can_download } } : {}),
     };
+
+    // Download permissions can only be set on "company" or "open" shared links.
+    if (![ACCESS_COLLAB, PEOPLE_IN_ITEM].includes(accessLevel)) {
+        convertedSettings.permissions = { can_download, can_preview: !can_download };
+    }
 
     /**
      * This block covers the following cases:
@@ -239,7 +317,7 @@ export const convertSharedLinkSettings = (
      *   returns password = '' and isPasswordEnabled = true. In these cases, the password should *not*
      *   be converted to null, because that would remove the existing password.
      */
-    if (accessLevel === ANYONE_WITH_LINK) {
+    if ([ANYONE_WITH_LINK, ACCESS_OPEN].includes(accessLevel)) {
         if (isPasswordEnabled && !!password) {
             convertedSettings.password = password;
         } else if (!isPasswordEnabled) {
@@ -350,7 +428,7 @@ export const convertContactsResponse = (
 ): Array<contactType> => {
     const { entries = [] } = contactsAPIData;
 
-    // Return all users except for the current user
+    // Return all users except for the current user and app users
     return entries
         .map(contact => {
             const { id, login: email, name, type } = contact;
@@ -361,5 +439,5 @@ export const convertContactsResponse = (
                 type,
             };
         })
-        .filter(({ id }) => id !== currentUserID);
+        .filter(({ id, email }) => id !== currentUserID && email && !APP_USERS_DOMAIN_REGEXP.test(email));
 };

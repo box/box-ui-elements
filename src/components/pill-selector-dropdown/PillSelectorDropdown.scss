@@ -1,6 +1,6 @@
 @import '../../styles/variables';
+@import '../../styles/mixins/overlay';
 @import 'PillSelector';
-@import 'mixins';
 
 .bdl-PillSelector {
     &.show-error {
@@ -10,7 +10,7 @@
 
 .bdl-PillSelectorDropdown {
     .overlay {
-        @include bdl-PillSelectorDropdown-container;
+        @include bdl-Overlay-container;
     }
 
     .suggested {

@@ -32,6 +32,11 @@ const messages = defineMessages({
             'Message that appears when the shared link settings in the ContentSharing Element were successfully updated.',
         id: 'be.contentSharing.sharedLinkSettingsUpdateSuccess',
     },
+    sharedLinkRemovalSuccess: {
+        defaultMessage: 'The shared link for this item was removed.',
+        description: 'Message that appears when the shared link in the ContentSharing Element was removed.',
+        id: 'be.contentSharing.sharedLinkRemovalSuccess',
+    },
     collaboratorsLoadingError: {
         defaultMessage: 'Could not retrieve collaborators for this item.',
         description: 'Message that appears when collaborators cannot be retrieved in the ContentSharing Element.',

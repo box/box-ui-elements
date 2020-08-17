@@ -23,7 +23,7 @@ const COLLAB_GROUP_TYPE = 'group';
 const COLLAB_USER_TYPE = 'user';
 const COLLAB_PENDING_TYPE = 'pending';
 
-// To do: connect to Item API if this data becomes available
+// Default allowed access levels
 const ALLOWED_ACCESS_LEVELS = {
     peopleInThisItem: true,
     peopleInYourCompany: true,

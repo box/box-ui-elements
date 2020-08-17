@@ -98,6 +98,8 @@ export const FIELD_RESTORED_FROM = 'restored_from';
 export const FIELD_CREATED_AT = 'created_at';
 export const FIELD_INTERACTED_AT: 'interacted_at' = 'interacted_at';
 export const FIELD_SHARED_LINK = 'shared_link';
+export const FIELD_SHARED_LINK_ACCESS_LEVELS_DISABLED_REASONS: 'shared_link_access_levels_disabled_reasons' =
+    'shared_link_access_levels_disabled_reasons';
 export const FIELD_SHARED_LINK_FEATURES: 'shared_link_features' = 'shared_link_features';
 export const FIELD_ALLOWED_INVITEE_ROLES: 'allowed_invitee_roles' = 'allowed_invitee_roles';
 export const FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS = 'allowed_shared_link_access_levels';
@@ -142,6 +144,7 @@ export const FIELD_OCCURRED_AT: 'occurred_at' = 'occurred_at';
 export const FIELD_RENDERED_TEXT: 'rendered_text' = 'rendered_text';
 export const FIELD_RETENTION: 'retention' = 'retention';
 export const FIELD_UPLOADER_DISPLAY_NAME: 'uploader_display_name' = 'uploader_display_name';
+export const FIELD_CLASSIFICATION: 'classification' = 'classification';
 export const FIELD_ENTERPRISE: 'enterprise' = 'enterprise';
 export const FIELD_HOSTNAME: 'hostname' = 'hostname';
 

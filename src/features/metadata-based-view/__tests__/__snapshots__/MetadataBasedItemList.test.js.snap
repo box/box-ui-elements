@@ -11,12 +11,14 @@ exports[`features/metadata-based-view/MetadataBasedItemList render() should rend
             "enterprise": Object {
               "fields": Array [
                 Object {
-                  "name": "type",
+                  "displayName": "Type",
+                  "key": "type",
                   "type": "string",
                   "value": "bill",
                 },
                 Object {
-                  "name": "amount",
+                  "displayName": "Amount",
+                  "key": "amount",
                   "type": "float",
                   "value": 100.12,
                 },
@@ -33,12 +35,14 @@ exports[`features/metadata-based-view/MetadataBasedItemList render() should rend
             "enterprise": Object {
               "fields": Array [
                 Object {
-                  "name": "type",
+                  "displayName": "Type",
+                  "key": "type",
                   "type": "string",
                   "value": "receipt",
                 },
                 Object {
-                  "name": "amount",
+                  "displayName": "Amount",
+                  "key": "amount",
                   "type": "float",
                   "value": 200.88,
                 },
@@ -57,15 +61,6 @@ exports[`features/metadata-based-view/MetadataBasedItemList render() should rend
     Object {
       "formatMessage": [MockFunction],
     }
-  }
-  metadataColumnsToShow={
-    Array [
-      "type",
-      Object {
-        "canEdit": true,
-        "name": "amount",
-      },
-    ]
   }
   onItemClick={[MockFunction]}
   onMetadataUpdate={[MockFunction]}

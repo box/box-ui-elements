@@ -33,12 +33,13 @@ import type {
 type SharingNotificationProps = {
     accessLevel: string,
     api: API,
+    closeComponent: () => void,
+    closeSettings: () => void,
     collaboratorsList: collaboratorsListType | null,
     currentUserID: string | null,
     getContacts: GetContactsFnType | null,
     itemID: string,
     itemType: ItemType,
-    onRequestClose: Function,
     ownerEmail: ?string,
     ownerID: ?string,
     permissions: ?BoxItemPermission,
@@ -50,6 +51,7 @@ type SharingNotificationProps = {
     ) => void,
     setCollaboratorsList: (collaboratorsList: collaboratorsListType | null) => void,
     setGetContacts: (getContacts: () => GetContactsFnType | null) => void,
+    setIsLoading: boolean => void,
     setItem: ((item: itemFlowType | null) => itemFlowType) => void,
     setOnAddLink: (addLink: () => SharedLinkUpdateLevelFnType | null) => void,
     setOnRemoveLink: (removeLink: () => SharedLinkUpdateLevelFnType | null) => void,
@@ -61,12 +63,13 @@ type SharingNotificationProps = {
 function SharingNotification({
     accessLevel,
     api,
+    closeComponent,
+    closeSettings,
     collaboratorsList,
     currentUserID,
     getContacts,
     itemID,
     itemType,
-    onRequestClose,
     ownerEmail,
     ownerID,
     permissions,
@@ -76,6 +79,7 @@ function SharingNotification({
     setChangeSharedLinkPermissionLevel,
     setGetContacts,
     setCollaboratorsList,
+    setIsLoading,
     setItem,
     setOnAddLink,
     setOnRemoveLink,
@@ -133,11 +137,30 @@ function SharingNotification({
         }); // merge new shared link data with current shared link data
     };
 
-    // Handle a successful shared link deletion request
+    /**
+     * Handle a successful shared link removal request.
+     *
+     * Most of the data for the shared link will be removed, with the exception of the "canInvite" and "serverURL"
+     * properties, both of which are still necessary for rendering the form-only version of ContentSharing.
+     * We retain "serverURL" from the previous shared link, to avoid having to make another call to the Users API.
+     *
+     * @param {ContentSharingItemAPIResponse} itemData
+     */
     const handleRemoveSharedLinkSuccess = (itemData: ContentSharingItemAPIResponse) => {
         const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
         setItem((prevItem: itemFlowType | null) => ({ ...prevItem, ...updatedItem }));
-        setSharedLink(() => updatedSharedLink); // replace shared link data completely
+        setSharedLink((prevSharedLink: ContentSharingSharedLinkType | null) => {
+            return {
+                ...updatedSharedLink,
+                serverURL: prevSharedLink ? prevSharedLink.serverURL : '',
+            };
+        });
+    };
+
+    const handleUpdateSharedLinkError = () => {
+        createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError);
+        setIsLoading(false);
+        closeSettings();
     };
 
     // Generate shared link CRUD functions for the item
@@ -148,17 +171,24 @@ function SharingNotification({
         onRemoveLink,
         onSubmitSettings,
     } = useSharedLink(api, itemID, itemType, permissions, accessLevel, {
-        handleError: () => createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError),
+        handleUpdateSharedLinkError,
         handleUpdateSharedLinkSuccess: itemData => {
             createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess);
             handleUpdateSharedLinkSuccess(itemData);
-            onRequestClose();
+            setIsLoading(false);
+            closeSettings();
+        },
+        handleRemoveSharedLinkError: () => {
+            handleUpdateSharedLinkError();
+            closeComponent(); // if this function is provided, it will close the modal
         },
         handleRemoveSharedLinkSuccess: itemData => {
-            createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess);
+            createNotification(TYPE_INFO, contentSharingMessages.sharedLinkRemovalSuccess);
             handleRemoveSharedLinkSuccess(itemData);
-            onRequestClose();
+            setIsLoading(false);
+            closeComponent();
         },
+        setIsLoading,
         transformAccess: newAccessLevel => USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel],
         transformPermissions: newSharedLinkPermissionLevel =>
             convertSharedLinkPermissions(newSharedLinkPermissionLevel),
@@ -190,8 +220,17 @@ function SharingNotification({
 
     // Set the sendInvites function
     const sendInvitesFn = useInvites(api, itemID, itemType, {
-        handleSuccess: () => createNotification(TYPE_INFO, contentSharingMessages.sendInvitesSuccess),
-        handleError: () => createNotification(TYPE_ERROR, contentSharingMessages.sendInvitesError),
+        handleSuccess: () => {
+            createNotification(TYPE_INFO, contentSharingMessages.sendInvitesSuccess);
+            setIsLoading(false);
+            closeComponent();
+        },
+        handleError: () => {
+            createNotification(TYPE_ERROR, contentSharingMessages.sendInvitesError);
+            setIsLoading(false);
+            closeComponent();
+        },
+        setIsLoading,
         transformRequest: data => convertCollabsRequest(data),
     });
     if (sendInvitesFn && !sendInvites) {

@@ -1,5 +1,11 @@
 import MetadataQueryAPIHelper from '../MetadataQueryAPIHelper';
-import { ITEM_TYPE_FILE, JSON_PATCH_OP_REPLACE, JSON_PATCH_OP_TEST } from '../../../common/constants';
+import {
+    ITEM_TYPE_FILE,
+    JSON_PATCH_OP_ADD,
+    JSON_PATCH_OP_REMOVE,
+    JSON_PATCH_OP_REPLACE,
+    JSON_PATCH_OP_TEST,
+} from '../../../common/constants';
 
 describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
     let metadataQueryAPIHelper;
@@ -60,12 +66,10 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
     const metadataQueryResponse = {
         entries: [
             {
-                item: {
-                    type: 'file',
-                    id: '1234',
-                    name: 'filename1.pdf',
-                    size: 10000,
-                },
+                type: 'file',
+                id: '1234',
+                name: 'filename1.pdf',
+                size: 10000,
                 metadata: {
                     [templateScope]: {
                         [templateKey]: {
@@ -83,12 +87,10 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
                 },
             },
             {
-                item: {
-                    type: 'file',
-                    id: '9876',
-                    name: 'filename2.mp4',
-                    size: 50000,
-                },
+                type: 'file',
+                id: '9876',
+                name: 'filename2.mp4',
+                size: 50000,
                 metadata: {
                     [templateScope]: {
                         [templateKey]: {
@@ -113,17 +115,20 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             enterprise: {
                 fields: [
                     {
-                        name: 'type',
+                        displayName: 'type',
+                        key: 'type',
                         value: 'bill',
                         type: 'string',
                     },
                     {
-                        name: 'year',
+                        displayName: 'year',
+                        key: 'year',
                         value: 2017,
                         type: 'float',
                     },
                     {
-                        name: 'approved',
+                        displayName: 'approved',
+                        key: 'approved',
                         value: 'yes',
                         type: 'enum',
                         options,
@@ -136,17 +141,20 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             enterprise: {
                 fields: [
                     {
-                        name: 'type',
+                        displayName: 'type',
+                        key: 'type',
                         value: 'receipt',
                         type: 'string',
                     },
                     {
-                        name: 'year',
+                        displayName: 'year',
+                        key: 'year',
                         value: 2018,
                         type: 'float',
                     },
                     {
-                        name: 'approved',
+                        displayName: 'approved',
+                        key: 'approved',
                         value: 'no',
                         type: 'enum',
                         options,
@@ -195,6 +203,12 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
         from: 'enterprise_1234.templateKey',
         query: 'query',
         query_params: {},
+        fields: [
+            'name',
+            'metadata.enterprise_1234.templateKey.type',
+            'metadata.enterprise_1234.templateKey.year',
+            'metadata.enterprise_1234.templateKey.approved',
+        ],
     };
 
     beforeEach(() => {
@@ -202,6 +216,7 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
         metadataQueryAPIHelper.templateKey = templateKey;
         metadataQueryAPIHelper.templateScope = templateScope;
         metadataQueryAPIHelper.metadataTemplate = template;
+        metadataQueryAPIHelper.metadataQuery = mdQuery;
     });
 
     describe('flattenMetadata()', () => {
@@ -250,11 +265,11 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
     describe('filterMetdataQueryResponse()', () => {
         test('should return query response with entries of type file only', () => {
             const entries = [
-                { item: { type: 'file' }, metadata: {} },
-                { item: { type: 'folder' }, metadata: {} },
-                { item: { type: 'file' }, metadata: {} },
-                { item: { type: 'folder' }, metadata: {} },
-                { item: { type: 'file' }, metadata: {} },
+                { type: 'file', metadata: {} },
+                { type: 'folder', metadata: {} },
+                { type: 'file', metadata: {} },
+                { type: 'folder', metadata: {} },
+                { type: 'file', metadata: {} },
             ];
             const next_marker = 'marker_123456789';
             const mdQueryResponse = {
@@ -263,7 +278,7 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             };
 
             const filteredResponse = metadataQueryAPIHelper.filterMetdataQueryResponse(mdQueryResponse);
-            const isEveryEntryOfTypeFile = filteredResponse.entries.every(entry => entry.item.type === ITEM_TYPE_FILE);
+            const isEveryEntryOfTypeFile = filteredResponse.entries.every(entry => entry.type === ITEM_TYPE_FILE);
             expect(isEveryEntryOfTypeFile).toBe(true);
         });
     });
@@ -336,26 +351,44 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
     });
 
     describe('createJSONPatchOperations()', () => {
-        test('should return valid JSON patch object for metadata PUT operation', () => {
-            const field = 'amount';
-            const oldValue = 100;
-            const newValue = 200;
-            const expectedJSONPatchOps = [
-                {
-                    op: JSON_PATCH_OP_TEST,
-                    path: `/${field}`,
-                    value: oldValue,
-                },
-                {
-                    op: JSON_PATCH_OP_REPLACE,
-                    path: `/${field}`,
-                    value: newValue,
-                },
-            ];
+        const field = 'amount';
+        const testOp = {
+            op: JSON_PATCH_OP_TEST,
+            path: `/${field}`,
+            value: 100,
+        };
 
-            expect(metadataQueryAPIHelper.createJSONPatchOperations(field, oldValue, newValue)).toEqual(
-                expectedJSONPatchOps,
-            );
+        const addOp = {
+            op: JSON_PATCH_OP_ADD,
+            path: `/${field}`,
+            value: 200,
+        };
+
+        const replaceOp = {
+            op: JSON_PATCH_OP_REPLACE,
+            path: `/${field}`,
+            value: 200,
+        };
+
+        const removeOp = {
+            op: JSON_PATCH_OP_REMOVE,
+            path: `/${field}`,
+        };
+
+        test.each`
+            oldValue     | newValue     | ops
+            ${undefined} | ${200}       | ${[addOp]}
+            ${100}       | ${200}       | ${[testOp, replaceOp]}
+            ${100}       | ${undefined} | ${[testOp, removeOp]}
+        `('should return valid JSON patch object', ({ oldValue, newValue, ops }) => {
+            expect(metadataQueryAPIHelper.createJSONPatchOperations(field, oldValue, newValue)).toEqual(ops);
+        });
+    });
+
+    describe('getMetadataQueryFields()', () => {
+        test('should get metadata instance fields array from the query', () => {
+            const expectedResponse = ['type', 'year', 'approved'];
+            expect(metadataQueryAPIHelper.getMetadataQueryFields()).toEqual(expectedResponse);
         });
     });
 
