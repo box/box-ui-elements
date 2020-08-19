@@ -16,6 +16,14 @@ type MetadataQueryOrderByClause = {
     field_key: string,
 };
 
+type MetadataFieldConfig = {
+    canEdit?: boolean,
+    displayName?: string,
+    key: string,
+};
+
+type MetadataFieldsToShow = Array<MetadataFieldConfig | string>;
+
 type MetadataQuery = {
     ancestor_folder_id: string,
     fields?: Array<string>,
@@ -31,6 +39,8 @@ type MetadataQuery = {
 };
 
 export type {
+    MetadataFieldConfig,
+    MetadataFieldsToShow,
     MetadataQuery,
     MetadataQueryOrderByClause,
     MetadataQueryResponseData,
