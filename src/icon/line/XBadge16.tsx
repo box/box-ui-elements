@@ -14,14 +14,13 @@ import AccessibleSVG, { SVGProps } from '../../components/accessible-svg/Accessi
  * - https://github.com/box/box-ui-elements/issues/new?template=Feature_request.md
  */
 
-const FileExcel16 = (props: SVGProps) => (
+const XBadge16 = (props: SVGProps) => (
     <AccessibleSVG width={16} height={16} viewBox="0 0 16 16" {...props}>
         <path
-            fill={vars.bdlGray50}
-            fillRule="evenodd"
-            d="M13.25 14a.748.748 0 00.75-.75V2.75a.748.748 0 00-.75-.75H5a.748.748 0 00-.75.75v1.5h-1.5A.748.748 0 002 5v6a.748.748 0 00.75.75h1.5v1.5A.748.748 0 005 14h8.25zm-4.5-9.75H5v-1.5h3.75v1.5zm4.5 0H9.5v-1.5h3.75v1.5zm0 3H9.5V5h3.75v2.25zm-8.344 3.188H3.395l1.582-2.45-1.442-2.426h1.518l.756 1.495.82-1.495h1.43l-1.483 2.42 1.518 2.455H6.6l-.838-1.564-.856 1.565zm8.344-.188H9.5V8h3.75v2.25zm0 3H9.5V11h3.75v2.25zm-4.5 0H5v-1.5h3.75v1.5z"
+            fill={vars.bdlGray}
+            d="M8 1a7 7 0 110 14A7 7 0 018 1zm0 1a6 6 0 100 12A6 6 0 008 2zM5.784 5.089l.07.057L8 7.293l2.146-2.147.07-.057a.501.501 0 01.638.765L8.707 8l2.147 2.146a.501.501 0 01-.638.765l-.07-.057L8 8.707l-2.146 2.147-.07.057a.501.501 0 01-.638-.765L7.293 8 5.146 5.854a.501.501 0 01.638-.765z"
         />
     </AccessibleSVG>
 );
 
-export default FileExcel16;
+export default XBadge16;
