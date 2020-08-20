@@ -10,7 +10,7 @@ export type ImageTooltipContentProps = {
     children: React.ReactElement;
     /** A string to be used in the tooltip's paragraph content */
     content: string;
-    /** A callback trigged onLoad for the image element */
+    /** A callback triggered onLoad for the image element */
     onImageLoad?: OnImageLoad;
     /** A string to be used in the tooltip's title heading */
     title: string;
