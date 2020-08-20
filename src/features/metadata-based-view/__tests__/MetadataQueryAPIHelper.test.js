@@ -1,3 +1,6 @@
+import includes from 'lodash/includes';
+import isArray from 'lodash/isArray';
+
 import MetadataQueryAPIHelper from '../MetadataQueryAPIHelper';
 import {
     ITEM_TYPE_FILE,
@@ -325,7 +328,7 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             metadataQueryAPIHelper.getTemplateSchemaInfo = jest.fn().mockReturnValueOnce(Promise.resolve(template));
             metadataQueryAPIHelper.getFlattenedDataWithTypes = jest.fn().mockReturnValueOnce(flattenedDataWithTypes);
             await metadataQueryAPIHelper.fetchMetadataQueryResults(mdQuery, successCallback, errorCallback);
-            expect(metadataQueryAPIHelper.queryMetadata).toBeCalledWith(mdQuery);
+            expect(metadataQueryAPIHelper.queryMetadata).toBeCalled();
             expect(metadataQueryAPIHelper.getTemplateSchemaInfo).toBeCalledWith(metadataQueryResponse);
             expect(metadataQueryAPIHelper.getFlattenedDataWithTypes).toBeCalledWith(template);
             expect(successCallback).toBeCalledWith(flattenedDataWithTypes);
@@ -342,7 +345,7 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             metadataQueryAPIHelper.getTemplateSchemaInfo = jest.fn().mockReturnValueOnce(Promise.reject(err));
             metadataQueryAPIHelper.getFlattenedDataWithTypes = jest.fn().mockReturnValueOnce(flattenedDataWithTypes);
             await metadataQueryAPIHelper.fetchMetadataQueryResults(mdQuery, successCallback, errorCallback);
-            expect(metadataQueryAPIHelper.queryMetadata).toBeCalledWith(mdQuery);
+            expect(metadataQueryAPIHelper.queryMetadata).toBeCalled();
             expect(metadataQueryAPIHelper.getTemplateSchemaInfo).toBeCalledWith(metadataQueryResponse);
             expect(metadataQueryAPIHelper.getFlattenedDataWithTypes).not.toHaveBeenCalled();
             expect(successCallback).not.toHaveBeenCalled();
@@ -420,5 +423,51 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
                 errorCallback,
             );
         });
+    });
+
+    describe('verifyQueryFields()', () => {
+        const mdQueryWithEmptyFields = {
+            ancestor_folder_id: '672838458',
+            from: 'enterprise_1234.templateKey',
+            query: 'query',
+            query_params: {},
+        };
+        const mdQueryWithoutNameField = {
+            ancestor_folder_id: '672838458',
+            from: 'enterprise_1234.templateKey',
+            query: 'query',
+            query_params: {},
+            fields: ['created_at', 'metadata.enterprise_1234.templateKey.type'],
+        };
+        const mdQueryWithNameField = {
+            ancestor_folder_id: '672838458',
+            from: 'enterprise_1234.templateKey',
+            query: 'query',
+            query_params: {},
+            fields: ['name', 'metadata.enterprise_1234.templateKey.type'],
+        };
+        test.each`
+            index | metadataQuery
+            ${1}  | ${mdQueryWithEmptyFields}
+            ${2}  | ${mdQueryWithoutNameField}
+            ${3}  | ${mdQueryWithNameField}
+        `(
+            'should verify the metadata query object and add the "name" field if necessary',
+            ({ index, metadataQuery }) => {
+                const updatedMetadataQuery = metadataQueryAPIHelper.verifyQueryFields(metadataQuery);
+                expect(isArray(updatedMetadataQuery.fields)).toBe(true);
+                expect(includes(updatedMetadataQuery.fields, 'name')).toBe(true);
+
+                if (index === 2) {
+                    // Verify "name" is added to pre-existing fields
+                    expect(updatedMetadataQuery.fields).toEqual([...mdQueryWithoutNameField.fields, 'name']);
+                }
+
+                if (index === 3) {
+                    // No change, original query has all nececssary fields
+                    expect(updatedMetadataQuery.fields).toEqual(mdQueryWithNameField.fields);
+                }
+            },
+        );
     });
 });
