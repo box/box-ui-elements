@@ -228,11 +228,11 @@ export default class MetadataQueryAPIHelper {
     };
 
     /**
-     * Verify that the metadata query has reqiured fields and update it if necessary
+     * Verify that the metadata query has required fields and update it if necessary
      * For a file item, default fields included in the response are "type", "id", "etag"
      *
-     * @param {Object} metadataQuery metadata query object
-     * @return {Object} updated metadata query object with required fields
+     * @param {MetadataQueryType} metadataQuery metadata query object
+     * @return {MetadataQueryType} updated metadata query object with required fields
      */
     verifyQueryFields = (metadataQuery: MetadataQueryType): MetadataQueryType => {
         const clonedQuery = cloneDeep(metadataQuery);
