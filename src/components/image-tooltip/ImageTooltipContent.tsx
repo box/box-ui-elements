@@ -16,36 +16,21 @@ export type ImageTooltipContentProps = {
     title: string;
 };
 
-function cloneTooltipImageChildWithProps(
-    child: React.ReactElement,
-    onImageLoad: OnImageLoad,
-): React.ReactElement | null {
-    if (child) {
-        const {
-            props: { className: existingClasses },
-        } = child;
-        const className = classNames(existingClasses, 'bdl-ImageTooltipContent-imageChild');
+function cloneTooltipChildWithNewProps(child: React.ReactElement, onImageLoad: OnImageLoad): React.ReactElement {
+    const {
+        props: { className: existingClasses },
+    } = child;
+    const className = classNames(existingClasses, 'bdl-ImageTooltipContent-imageChild');
 
-        const propsForElement = onImageLoad
-            ? {
-                  className,
-                  onLoad: onImageLoad,
-              }
-            : {
-                  className,
-              };
-
-        return React.cloneElement(child, propsForElement);
-    }
-
-    return null;
+    return React.cloneElement(child, {
+        className,
+        onLoad: onImageLoad,
+    });
 }
 
 const ImageTooltipContent = ({ children, content, onImageLoad, title }: ImageTooltipContentProps) => (
     <div className="bdl-ImageTooltipContent">
-        <div className="bdl-ImageTooltipContent-image">
-            {React.Children.map(children, child => cloneTooltipImageChildWithProps(child, onImageLoad))}
-        </div>
+        <div className="bdl-ImageTooltipContent-image">{cloneTooltipChildWithNewProps(children, onImageLoad)}</div>
         <div className="bdl-ImageTooltipContent-contentWrapper">
             <h4 className="bdl-ImageTooltipContent-title">{title}</h4>
             <p className="bdl-ImageTooltipContent-content">{content}</p>
