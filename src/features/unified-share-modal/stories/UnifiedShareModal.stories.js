@@ -52,7 +52,7 @@ const INITIAL_STATE = {
 
 const contacts: Array<contactType> = [
     {
-        id: 0,
+        id: '0',
         collabID: 0,
         name: 'Jackie',
         email: 'j@example.com',
@@ -63,8 +63,8 @@ const contacts: Array<contactType> = [
         profileURL: 'https://foo.bar',
     },
     {
-        id: 1,
-        collabID: 1,
+        id: '1',
+        collabID: '1',
         name: 'Jeff',
         email: 'jt@example.com',
         type: 'user',
@@ -73,8 +73,8 @@ const contacts: Array<contactType> = [
         userID: '1',
     },
     {
-        id: 2,
-        collabID: 2,
+        id: '2',
+        collabID: '2',
         name: 'David',
         email: 'dt@example.com',
         type: 'user',
@@ -83,8 +83,8 @@ const contacts: Array<contactType> = [
         userID: '2',
     },
     {
-        id: 3,
-        collabID: 3,
+        id: '3',
+        collabID: '3',
         name: 'Yang',
         email: 'yz@example.com',
         type: 'user',
@@ -93,8 +93,8 @@ const contacts: Array<contactType> = [
         userID: '3',
     },
     {
-        id: 4,
-        collabID: 4,
+        id: '4',
+        collabID: '4',
         name: 'Yong',
         email: 'ysu@example.com',
         type: 'user',
@@ -103,8 +103,8 @@ const contacts: Array<contactType> = [
         userID: '4',
     },
     {
-        id: 5,
-        collabID: 5,
+        id: '5',
+        collabID: '5',
         name: 'Will',
         email: 'wy@example.com',
         type: 'pending',
@@ -113,8 +113,8 @@ const contacts: Array<contactType> = [
         userID: '5',
     },
     {
-        id: 6,
-        collabID: 6,
+        id: '6',
+        collabID: '6',
         name: 'Dave',
         email: 'd@example.com',
         type: 'user',
@@ -123,8 +123,8 @@ const contacts: Array<contactType> = [
         userID: '6',
     },
     {
-        id: 7,
-        collabID: 7,
+        id: '7',
+        collabID: '7',
         name: 'Ke',
         email: 'k@example.com',
         isExternalUser: true,
@@ -134,8 +134,8 @@ const contacts: Array<contactType> = [
         userID: '7',
     },
     {
-        id: 8,
-        collabID: 8,
+        id: '8',
+        collabID: '8',
         name: 'Wenbo',
         email: 'w@example.com',
         type: 'user',
@@ -144,8 +144,8 @@ const contacts: Array<contactType> = [
         userID: '8',
     },
     {
-        id: 11,
-        collabID: 11,
+        id: '11',
+        collabID: '11',
         name: 'Supersupersupersuperreallyreallyreallylongfirstname incrediblyspectacularlylonglastname',
         email: 'Supersupersupersuperreallyreallyreallyincrediblyspectacularlylongemail@example.com',
         type: 'user',
@@ -155,8 +155,8 @@ const contacts: Array<contactType> = [
     },
     {
         /* example group contact */
-        id: 14,
-        collabID: 14,
+        id: '14',
+        collabID: '14',
         type: 'group',
         name: 'my group',
         hasCustomAvatar: false,

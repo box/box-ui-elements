@@ -18,6 +18,7 @@ import TasksNewAPI from './tasks/TasksNew';
 import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
 import TaskLinksAPI from './tasks/TaskLinks';
 import FileAccessStatsAPI from './FileAccessStats';
+import GroupsAPI from './Groups';
 import UsersAPI from './Users';
 import MetadataAPI from './Metadata';
 import FileCollaboratorsAPI from './FileCollaborators';
@@ -107,6 +108,11 @@ class APIFactory {
      * @property {FileAccessStatsAPI}
      */
     fileAccessStatsAPI: FileAccessStatsAPI;
+
+    /**
+     * @property {GroupsAPI}
+     */
+    groupsAPI: GroupsAPI;
 
     /*
      * @property {UsersAPI}
@@ -260,6 +266,11 @@ class APIFactory {
         if (this.commentsAPI) {
             this.commentsAPI.destroy();
             delete this.commentsAPI;
+        }
+
+        if (this.groupsAPI) {
+            this.groupsAPI.destroy();
+            delete this.groupsAPI;
         }
 
         if (this.usersAPI) {
@@ -600,6 +611,21 @@ class APIFactory {
 
         this.collaborationsAPI = new CollaborationsAPI(this.options);
         return this.collaborationsAPI;
+    }
+
+    /**
+     * API for Groups
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {GroupsAPI} GroupsAPI instance
+     */
+    getGroupsAPI(shouldDestroy: boolean): GroupsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.groupsAPI = new GroupsAPI(this.options);
+        return this.groupsAPI;
     }
 
     /**
