@@ -257,6 +257,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                                 isDisabled={submitting}
                                 onClick={onEmailSharedLinkClick}
                                 type="button"
+                                aria-label={intl.formatMessage(messages.sendSharedLink)}
                                 {...sendSharedLinkButtonProps}
                             >
                                 <IconMail />
