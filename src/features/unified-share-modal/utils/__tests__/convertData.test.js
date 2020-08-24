@@ -2,7 +2,8 @@ import {
     API_TO_USM_PERMISSION_LEVEL_MAP,
     convertAllowedAccessLevels,
     convertCollabsResponse,
-    convertContactsResponse,
+    convertGroupContactsResponse,
+    convertUserContactsResponse,
     convertItemResponse,
     convertUserResponse,
     convertSharedLinkPermissions,
@@ -48,6 +49,8 @@ import {
     MOCK_COLLABS_REQUEST_USERS_ONLY,
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
     MOCK_DISABLED_REASONS,
+    MOCK_GROUP_CONTACTS_API_RESPONSE,
+    MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
     MOCK_ITEM_PERMISSIONS,
     MOCK_OWNER,
     MOCK_OWNER_ID,
@@ -606,15 +609,27 @@ describe('convertCollabsResponse', () => {
     });
 });
 
-describe('convertContactsResponse()', () => {
-    test('should return all users except the current user and app users', () => {
-        expect(convertContactsResponse(MOCK_CONTACTS_API_RESPONSE, MOCK_OWNER_ID)).toEqual(
+describe('convertUserContactsResponse()', () => {
+    test('should return all users except the current user', () => {
+        expect(convertUserContactsResponse(MOCK_CONTACTS_API_RESPONSE, MOCK_OWNER_ID)).toEqual(
             MOCK_CONTACTS_CONVERTED_RESPONSE,
         );
     });
 
     test('should return an empty array if there are no available users', () => {
-        expect(convertContactsResponse({ total_count: 0, entries: [] }, MOCK_OWNER_ID)).toEqual([]);
+        expect(convertUserContactsResponse({ total_count: 0, entries: [] }, MOCK_OWNER_ID)).toEqual([]);
+    });
+});
+
+describe('convertGroupContactsResponse()', () => {
+    test('should return groups with the correct permissions', () => {
+        expect(convertGroupContactsResponse(MOCK_GROUP_CONTACTS_API_RESPONSE)).toEqual(
+            MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
+        );
+    });
+
+    test('should return an empty array if there are no available groups', () => {
+        expect(convertGroupContactsResponse({ total_count: 0, entries: [] })).toEqual([]);
     });
 });
 

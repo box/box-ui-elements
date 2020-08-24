@@ -38,12 +38,12 @@ export type accessLevelsDisabledReasonType = {
 
 export type contactType = {
     email?: string,
-    id: number | string,
+    id: string,
     isExternalUser?: boolean,
     name?: string,
     text?: string,
     type: string,
-    value?: number | string,
+    value?: string,
 };
 
 export type SuggestedCollab = contactType & {
