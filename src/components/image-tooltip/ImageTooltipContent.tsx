@@ -11,12 +11,15 @@ export type ImageTooltipContentProps = {
     /** A string to be used in the tooltip's paragraph content */
     content: string;
     /** A callback triggered onLoad for the image element */
-    onImageLoad?: OnImageLoad;
+    onImageLoad: OnImageLoad;
     /** A string to be used in the tooltip's title heading */
     title: string;
 };
 
-function appendTooltipImageChildClass(child: React.ReactElement, onImageLoad?: OnImageLoad): React.ReactElement | null {
+function cloneTooltipImageChildWithProps(
+    child: React.ReactElement,
+    onImageLoad: OnImageLoad,
+): React.ReactElement | null {
     if (child) {
         const {
             props: { className: existingClasses },
@@ -41,7 +44,7 @@ function appendTooltipImageChildClass(child: React.ReactElement, onImageLoad?: O
 const ImageTooltipContent = ({ children, content, onImageLoad, title }: ImageTooltipContentProps) => (
     <div className="bdl-ImageTooltipContent">
         <div className="bdl-ImageTooltipContent-image">
-            {React.Children.map(children, child => appendTooltipImageChildClass(child, onImageLoad))}
+            {React.Children.map(children, child => cloneTooltipImageChildWithProps(child, onImageLoad))}
         </div>
         <div className="bdl-ImageTooltipContent-contentWrapper">
             <h4 className="bdl-ImageTooltipContent-title">{title}</h4>
