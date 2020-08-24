@@ -223,7 +223,7 @@ describe('elements/content-uploader/ContentUploader', () => {
 
             instance.onClick(item);
 
-            expect(instance.removeFileFromUploadQueue).toBeCalled();
+            expect(instance.removeFileFromUploadQueue).toBeCalledWith(item);
             expect(onClickCancel.mock.calls.length).toBe(1);
         });
 
