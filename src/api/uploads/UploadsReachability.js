@@ -18,8 +18,6 @@ class UploadsReachability {
 
     /**
      * [constructor]
-     *
-     * @param {Xhr} xhr
      */
     constructor() {
         this.localStore = new LocalStore();
@@ -65,15 +63,15 @@ class UploadsReachability {
     }
 
     /**
-     * Returns the cached result for the given hostUrl
+     * Returns the cached result for the given uploadHost
      *
      * @private
-     * @param {string} hostUrl - The host URL
+     * @param {string} uploadHost - The host URL
      * @return {null|StringAnyMap} The result object or null if there isn't one
      */
-    getCachedResult(hostUrl: string) {
-        if (hostUrl in this.cachedResults) {
-            const result = this.cachedResults[hostUrl];
+    getCachedResult(uploadHost: string) {
+        if (uploadHost in this.cachedResults) {
+            const result = this.cachedResults[uploadHost];
             if (this.isCachedHostValid(result)) {
                 return result;
             }
@@ -86,12 +84,12 @@ class UploadsReachability {
      * Updates a cached result. Changes both the in-memory cachedResult variable and what's stored in local store
      *
      * @private
-     * @param {string} hostUrl - The host URL that was tested
+     * @param {string} uploadHost - The host URL that was tested
      * @param {boolean} isHostReachable - Whether or not the host was reachable
      * @return {void}
      */
-    updateCachedResult(hostUrl: string, isHostReachable: boolean) {
-        this.cachedResults[hostUrl] = {
+    updateCachedResult(uploadHost: string, isHostReachable: boolean) {
+        this.cachedResults[uploadHost] = {
             isReachable: isHostReachable,
             expirationTimestampMS: Date.now() + 1000 * 86400,
         };
@@ -110,10 +108,10 @@ class UploadsReachability {
             return;
         }
 
-        Object.keys(localStoreResults).forEach(hostUrl => {
-            const result = localStoreResults[hostUrl];
+        Object.keys(localStoreResults).forEach(uploadHost => {
+            const result = localStoreResults[uploadHost];
             if (this.isCachedHostValid(result)) {
-                this.cachedResults[hostUrl] = result;
+                this.cachedResults[uploadHost] = result;
             }
         });
     }
@@ -129,10 +127,10 @@ class UploadsReachability {
             return unreachableHosts;
         }
 
-        Object.keys(this.cachedResults).forEach(hostUrl => {
-            const value = this.cachedResults[hostUrl];
+        Object.keys(this.cachedResults).forEach(uploadHost => {
+            const value = this.cachedResults[uploadHost];
             if (this.isCachedHostValid(value) && !value.isReachable) {
-                unreachableHosts.push(hostUrl);
+                unreachableHosts.push(uploadHost);
             }
         });
 
@@ -164,14 +162,14 @@ class UploadsReachability {
     }
 
     /**
-     * Determines if the given hostUrl is reachable by making a test upload request to it.
+     * Determines if the given uploadHost is reachable by making a test upload request to it.
      * Does not read or modify any cached results.
      *
-     * @param {string} hostUrl - The upload host url to make a test request against
+     * @param {string} uploadHost - The upload host url to make a test request against
      * @return {Promise<boolean>}
      */
-    async makeReachabilityRequest(hostUrl: string) {
-        const url = `${hostUrl}html5?reachability_test=run`;
+    async makeReachabilityRequest(uploadHost: string) {
+        const url = `${uploadHost}html5?reachability_test=run`;
         const headers: StringMap = {
             [HEADER_CONTENT_TYPE]: 'application/x-www-form-urlencoded; charset=UTF-8',
             'X-File-Name': 'reachability_pseudofile.txt',

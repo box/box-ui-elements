@@ -6,7 +6,6 @@
 
 import Base from '../Base';
 import { DEFAULT_RETRY_DELAY_MS, MS_IN_S, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
-import type { APIOptions } from '../../common/types/api';
 
 const MAX_RETRY = 5;
 // Note: We may have to change this number if we add a lot more fast upload hosts.
@@ -37,12 +36,7 @@ class BaseUpload extends Base {
 
     retryTimeout: TimeoutID;
 
-    isUploadFallbackLogicEnabled: boolean;
-
-    constructor(options: APIOptions) {
-        super(options);
-        this.isUploadFallbackLogicEnabled = false;
-    }
+    isUploadFallbackLogicEnabled: boolean = false;
 
     /**
      * Sends an upload pre-flight request. If a file ID is available,
@@ -122,7 +116,7 @@ class BaseUpload extends Base {
         if (isHostReachable) {
             this.preflightSuccessHandler({ data });
         } else if (this.reachabilityRetryCount >= MAX_REACHABILITY_RETRY) {
-            this.preflightSuccessHandler();
+            this.preflightSuccessHandler({ data: {} });
         } else {
             this.reachabilityRetryCount += 1;
             this.makePreflightRequest();
