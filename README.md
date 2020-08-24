@@ -6,6 +6,8 @@
 [![Mergify Status](https://img.shields.io/endpoint.svg?url=https://gh.mergify.io/badges/box/box-ui-elements&style=flat)](https://mergify.io)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
+Test for commitlint
+
 <a href="https://www.npmjs.com/package/box-ui-elements">
 <img alt="npm latest version" src="https://img.shields.io/npm/v/box-ui-elements/latest.svg">
 </a>
