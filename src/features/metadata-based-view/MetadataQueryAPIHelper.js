@@ -3,9 +3,11 @@
  * @file Metadata Queries API Helper
  * @author Box
  */
+import cloneDeep from 'lodash/cloneDeep';
 import find from 'lodash/find';
 import getProp from 'lodash/get';
 import includes from 'lodash/includes';
+import isArray from 'lodash/isArray';
 import isNil from 'lodash/isNil';
 import API from '../../api';
 
@@ -18,6 +20,7 @@ import {
     METADATA_FIELD_TYPE_ENUM,
     METADATA_FIELD_TYPE_MULTISELECT,
 } from '../../common/constants';
+import { FIELD_NAME } from '../../constants';
 
 import type { MetadataQuery as MetadataQueryType, MetadataQueryResponseData } from '../../common/types/metadataQueries';
 import type {
@@ -190,9 +193,9 @@ export default class MetadataQueryAPIHelper {
         return this.api.getMetadataAPI(true).getSchemaByTemplateKey(this.templateKey);
     };
 
-    queryMetadata = (metadataQuery: MetadataQueryType): Promise<MetadataQueryResponseData> => {
+    queryMetadata = (): Promise<MetadataQueryResponseData> => {
         return new Promise((resolve, reject) => {
-            this.api.getMetadataQueryAPI().queryMetadata(metadataQuery, resolve, reject, { forceFetch: true });
+            this.api.getMetadataQueryAPI().queryMetadata(this.metadataQuery, resolve, reject, { forceFetch: true });
         });
     };
 
@@ -201,8 +204,8 @@ export default class MetadataQueryAPIHelper {
         successsCallback: SuccessCallback,
         errorCallback: ErrorCallback,
     ): Promise<void> => {
-        this.metadataQuery = metadataQuery;
-        return this.queryMetadata(metadataQuery)
+        this.metadataQuery = this.verifyQueryFields(metadataQuery);
+        return this.queryMetadata()
             .then(this.getTemplateSchemaInfo)
             .then(this.getFlattenedDataWithTypes)
             .then(successsCallback)
@@ -221,5 +224,25 @@ export default class MetadataQueryAPIHelper {
         return this.api
             .getMetadataAPI(true)
             .updateMetadata(file, this.metadataTemplate, operations, successsCallback, errorCallback);
+    };
+
+    /**
+     * Verify that the metadata query has required fields and update it if necessary
+     * For a file item, default fields included in the response are "type", "id", "etag"
+     *
+     * @param {MetadataQueryType} metadataQuery metadata query object
+     * @return {MetadataQueryType} updated metadata query object with required fields
+     */
+    verifyQueryFields = (metadataQuery: MetadataQueryType): MetadataQueryType => {
+        const clonedQuery = cloneDeep(metadataQuery);
+        const clonedFields = isArray(clonedQuery.fields) ? clonedQuery.fields : [];
+
+        // Make sure the query fields array has "name" field which is necessary to display info.
+        if (!clonedFields.includes(FIELD_NAME)) {
+            clonedFields.push(FIELD_NAME);
+        }
+        clonedQuery.fields = clonedFields;
+
+        return clonedQuery;
     };
 }
