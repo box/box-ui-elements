@@ -20,6 +20,7 @@ import {
     METADATA_FIELD_TYPE_ENUM,
     METADATA_FIELD_TYPE_MULTISELECT,
 } from '../../common/constants';
+import { FIELD_NAME } from '../../constants';
 
 import type { MetadataQuery as MetadataQueryType, MetadataQueryResponseData } from '../../common/types/metadataQueries';
 import type {
@@ -39,8 +40,6 @@ const SELECT_TYPES: Array<typeof METADATA_FIELD_TYPE_ENUM | typeof METADATA_FIEL
     METADATA_FIELD_TYPE_ENUM,
     METADATA_FIELD_TYPE_MULTISELECT,
 ];
-
-const METADATA_QUERY_ITEM_NAME_FIELD = 'name';
 
 export default class MetadataQueryAPIHelper {
     api: API;
@@ -239,8 +238,8 @@ export default class MetadataQueryAPIHelper {
         const clonedFields = isArray(clonedQuery.fields) ? clonedQuery.fields : [];
 
         // Make sure the query fields array has "name" field which is necessary to display info.
-        if (!clonedFields.includes(METADATA_QUERY_ITEM_NAME_FIELD)) {
-            clonedFields.push(METADATA_QUERY_ITEM_NAME_FIELD);
+        if (!clonedFields.includes(FIELD_NAME)) {
+            clonedFields.push(FIELD_NAME);
         }
         clonedQuery.fields = clonedFields;
 

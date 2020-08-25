@@ -9,6 +9,7 @@ import {
     JSON_PATCH_OP_REPLACE,
     JSON_PATCH_OP_TEST,
 } from '../../../common/constants';
+import { FIELD_NAME } from '../../../constants';
 
 describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
     let metadataQueryAPIHelper;
@@ -207,7 +208,7 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
         query: 'query',
         query_params: {},
         fields: [
-            'name',
+            FIELD_NAME,
             'metadata.enterprise_1234.templateKey.type',
             'metadata.enterprise_1234.templateKey.year',
             'metadata.enterprise_1234.templateKey.approved',
@@ -444,7 +445,7 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             from: 'enterprise_1234.templateKey',
             query: 'query',
             query_params: {},
-            fields: ['name', 'metadata.enterprise_1234.templateKey.type'],
+            fields: [FIELD_NAME, 'metadata.enterprise_1234.templateKey.type'],
         };
         test.each`
             index | metadataQuery
@@ -456,15 +457,15 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             ({ index, metadataQuery }) => {
                 const updatedMetadataQuery = metadataQueryAPIHelper.verifyQueryFields(metadataQuery);
                 expect(isArray(updatedMetadataQuery.fields)).toBe(true);
-                expect(includes(updatedMetadataQuery.fields, 'name')).toBe(true);
+                expect(includes(updatedMetadataQuery.fields, FIELD_NAME)).toBe(true);
 
                 if (index === 2) {
                     // Verify "name" is added to pre-existing fields
-                    expect(updatedMetadataQuery.fields).toEqual([...mdQueryWithoutNameField.fields, 'name']);
+                    expect(updatedMetadataQuery.fields).toEqual([...mdQueryWithoutNameField.fields, FIELD_NAME]);
                 }
 
                 if (index === 3) {
-                    // No change, original query has all nececssary fields
+                    // No change, original query has all necessary fields
                     expect(updatedMetadataQuery.fields).toEqual(mdQueryWithNameField.fields);
                 }
             },
