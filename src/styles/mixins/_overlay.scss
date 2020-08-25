@@ -42,5 +42,5 @@
  * - FTUX tooltip guides
  */
 @mixin bdl-Overlay-containerShadow {
-    box-shadow: 0 $bdl-grid-unit ($bdl-grid-unit * 3) 0 rgba($black, .1);
+    box-shadow: 0 $bdl-grid-unit ($bdl-grid-unit * 3) 0 rgba($black, .12);
 }
