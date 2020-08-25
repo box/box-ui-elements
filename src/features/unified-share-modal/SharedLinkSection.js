@@ -253,6 +253,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                     {!hideEmailButton && (
                         <Tooltip position="top-left" text={<FormattedMessage {...messages.sendSharedLink} />}>
                             <Button
+                                aria-label={intl.formatMessage(messages.sendSharedLink)}
                                 className="email-shared-link-btn"
                                 isDisabled={submitting}
                                 onClick={onEmailSharedLinkClick}
