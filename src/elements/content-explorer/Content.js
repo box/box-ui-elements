@@ -21,11 +21,12 @@ import './Content.scss';
  *
  * @param {string} view the current view
  * @param {Object} currentCollection the current collection
+ * @param {MetadataFieldsToShow} metadataFieldsToShow list of metadata template fields to show
  * @return {boolean} empty or not
  */
 function isEmpty(view: View, currentCollection: Collection, metadataFieldsToShow: MetadataFieldsToShow): boolean {
     const { items = [] }: Collection = currentCollection;
-    return view === VIEW_ERROR || items.length === 0 || (view === VIEW_METADATA && metadataFieldsToShow.length === 0);
+    return view === VIEW_ERROR || !items.length || (view === VIEW_METADATA && !metadataFieldsToShow.length);
 }
 
 type Props = {

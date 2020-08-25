@@ -22,6 +22,8 @@ type MetadataFieldConfig = {
     key: string,
 };
 
+// MetadataFieldsToShow array items could be simple strings or objects
+// e.g. const metadataFieldsToShow: MetadataFieldsToShow = [ 'name', { key: 'desc', displayName: 'Desc', canEdit: true } ];
 type MetadataFieldsToShow = Array<MetadataFieldConfig | string>;
 
 type MetadataQuery = {
