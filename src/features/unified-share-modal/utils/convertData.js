@@ -345,6 +345,7 @@ export const convertSharedLinkSettings = (
  */
 export const convertCollabsResponse = (
     collabsAPIData: Collaborations,
+    avatarsAPIData,
     ownerEmail: ?string,
     isCurrentUserOwner: boolean,
 ): collaboratorsListType => {
@@ -364,11 +365,12 @@ export const convertCollabsResponse = (
                 expires_at: executeAt,
                 role,
             } = collab;
+            const avatarURL = avatarsAPIData[userID];
             const convertedCollab: collaboratorType = {
                 collabID: parseInt(collabID, 10),
                 email,
-                hasCustomAvatar: false, // to do: connect to Avatar API
-                imageURL: null, // to do: connect to Avatar API
+                hasCustomAvatar: !!avatarURL, // to do: connect to Avatar API
+                imageURL: avatarURL, // to do: connect to Avatar API
                 isExternalCollab: checkIsExternalUser(isCurrentUserOwner, ownerEmailDomain, email),
                 name,
                 translatedRole: `${role[0].toUpperCase()}${role.slice(1)}`, // capitalize the user's role

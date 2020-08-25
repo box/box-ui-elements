@@ -16,6 +16,7 @@ import {
     convertUserContactsResponse,
     USM_TO_API_ACCESS_LEVEL_MAP,
 } from '../../features/unified-share-modal/utils/convertData';
+import useAvatars from './hooks/useAvatars';
 import useCollaborators from './hooks/useCollaborators';
 import useContacts from './hooks/useContacts';
 import useInvites from './hooks/useInvites';
@@ -206,8 +207,12 @@ function SharingNotification({
     const collaboratorsListFromAPI: Collaborations | null = useCollaborators(api, itemID, itemType, {
         handleError: () => createNotification(TYPE_ERROR, contentSharingMessages.collaboratorsLoadingError),
     });
-    if (collaboratorsListFromAPI && !collaboratorsList) {
-        setCollaboratorsList(convertCollabsResponse(collaboratorsListFromAPI, ownerEmail, currentUserID === ownerID));
+    const avatarsFromAPI = useAvatars(api, itemID, collaboratorsListFromAPI);
+
+    if (collaboratorsListFromAPI && avatarsFromAPI && !collaboratorsList) {
+        setCollaboratorsList(
+            convertCollabsResponse(collaboratorsListFromAPI, avatarsFromAPI, ownerEmail, currentUserID === ownerID),
+        );
     }
 
     // Set the getContacts function
