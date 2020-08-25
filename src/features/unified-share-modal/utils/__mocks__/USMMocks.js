@@ -424,6 +424,46 @@ const MOCK_CONTACTS_CONVERTED_RESPONSE = [
     },
 ];
 
+const MOCK_GROUP_CONTACTS_API_RESPONSE = {
+    total_count: 3,
+    entries: [
+        {
+            type: 'group',
+            id: '234524525',
+            name: 'hedgehogs',
+            permissions: {
+                can_invite_as_collaborator: false,
+            },
+        },
+        {
+            type: 'group',
+            id: '689796890',
+            name: 'armadillos',
+            permissions: {
+                can_invite_as_collaborator: true,
+            },
+        },
+        {
+            type: 'group',
+            id: '980753514',
+            name: 'narwhals',
+            permissions: {
+                can_invite_as_collaborator: false,
+            },
+        },
+    ],
+    limit: 100,
+    offset: 0,
+};
+
+const MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE = [
+    {
+        type: 'group',
+        id: '689796890',
+        name: 'armadillos',
+    },
+];
+
 const MOCK_SETTINGS_WITH_ALL_FEATURES = {
     expirationTimestamp: MOCK_TIMESTAMP,
     isDownloadEnabled: true,
@@ -594,6 +634,8 @@ export {
     MOCK_CONVERTED_USER_DATA,
     MOCK_DISABLED_REASONS,
     MOCK_EMAIL_ARRAY,
+    MOCK_GROUP_CONTACTS_API_RESPONSE,
+    MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
     MOCK_GROUPID_ARRAY,
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE,

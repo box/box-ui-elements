@@ -7,8 +7,8 @@ import DatalistItem from '../datalist-item';
 import './ContactDatalistItem.scss';
 
 type Props = {
-    getContactAvatarUrl?: (contact: { id: string | number, [key: string]: any }) => string,
-    id?: string | number,
+    getContactAvatarUrl?: (contact: { id: string, [key: string]: any }) => string,
+    id?: string,
     isExternal?: boolean,
     name: ?string,
     showAvatar?: boolean,

@@ -14,7 +14,7 @@ function scoreComparator(optionA: SuggestedCollab, optionB: SuggestedCollab): nu
  * Function to compute suggested collaborators given a list of contacts and cached suggested collaborators.
  * Used by input components to help augment API results with cached suggestions using a fuzzy search.
  */
-function computeSuggestedCollabs<C: { id: number | string }>(
+function computeSuggestedCollabs<C: { id: string }>(
     contacts: Array<C>,
     suggestedCollabLookup: SuggestedCollabLookup,
     inputValue: string,

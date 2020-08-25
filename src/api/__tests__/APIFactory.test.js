@@ -16,6 +16,7 @@ import TaskLinksAPI from '../tasks/TaskLinks';
 import FileAccessStatsAPI from '../FileAccessStats';
 import MetadataAPI from '../Metadata';
 import FileCollaboratorsAPI from '../FileCollaborators';
+import GroupsAPI from '../Groups';
 import UsersAPI from '../Users';
 import BoxEditAPI from '../box-edit';
 import MetadataQueryAPI from '../MetadataQuery';
@@ -69,6 +70,7 @@ describe('api/APIFactory', () => {
             expect(factory.taskCollaboratorsAPI).toBeUndefined();
             expect(factory.taskLinksAPI).toBeUndefined();
             expect(factory.tasksNewAPI).toBeUndefined();
+            expect(factory.groupsAPI).toBeUndefined();
             expect(factory.usersAPI).toBeUndefined();
             expect(factory.metadataQueryAPI).toBeUndefined();
             expect(factory.annotationsAPI).toBeUndefined();
@@ -363,6 +365,28 @@ describe('api/APIFactory', () => {
             expect(fileCollaboratorsAPI.options.cache).toBeInstanceOf(Cache);
             expect(fileCollaboratorsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
             expect(fileCollaboratorsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getGroupsAPI()', () => {
+        test('should call destroy and return groups API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const groupsAPI = factory.getGroupsAPI(true);
+            expect(spy).toBeCalled();
+            expect(groupsAPI).toBeInstanceOf(GroupsAPI);
+            expect(groupsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(groupsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(groupsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return groups API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const groupsAPI = factory.getGroupsAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(groupsAPI).toBeInstanceOf(GroupsAPI);
+            expect(groupsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(groupsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(groupsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 
