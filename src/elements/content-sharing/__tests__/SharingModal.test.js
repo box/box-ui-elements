@@ -28,11 +28,12 @@ import {
 } from '../../../features/unified-share-modal/constants';
 import {
     convertCollabsRequest,
-    convertContactsResponse,
+    convertGroupContactsResponse,
     convertItemResponse,
     convertUserResponse,
     convertSharedLinkPermissions,
     convertSharedLinkSettings,
+    convertUserContactsResponse,
 } from '../../../features/unified-share-modal/utils/convertData';
 import {
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
@@ -45,6 +46,8 @@ import {
     MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
     MOCK_CONVERTED_SETTINGS,
     MOCK_CONVERTED_USER_DATA,
+    MOCK_GROUP_CONTACTS_API_RESPONSE,
+    MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE,
     MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK,
@@ -62,7 +65,7 @@ jest.mock('../../../features/unified-share-modal/utils/convertData');
 // Stub the queryCommandSupported function, which is used in the Shared Link Settings Modal
 global.document.queryCommandSupported = jest.fn();
 
-const createAPIMock = (fileAPI, folderAPI, usersAPI, collaborationsAPI) => ({
+const createAPIMock = (fileAPI, folderAPI, usersAPI, collaborationsAPI, groupsAPI) => ({
     getFileAPI: jest.fn().mockReturnValue(fileAPI),
     getFileCollaborationsAPI: jest.fn().mockReturnValue({
         getCollaborations: jest.fn(),
@@ -73,6 +76,7 @@ const createAPIMock = (fileAPI, folderAPI, usersAPI, collaborationsAPI) => ({
     }),
     getUsersAPI: jest.fn().mockReturnValue(usersAPI),
     getCollaborationsAPI: jest.fn().mockReturnValue(collaborationsAPI),
+    getGroupsAPI: jest.fn().mockReturnValue(groupsAPI),
 });
 
 describe('elements/content-sharing/SharingModal', () => {
@@ -648,10 +652,16 @@ describe('elements/content-sharing/SharingModal', () => {
         });
     });
 
-    describe('with successful GET requests to the enterprise users API', () => {
+    describe('with successful GET requests to the enterprise users and groups APIs', () => {
         let api;
+        let getGroupsInEnterprise;
         let getUsersInEnterprise;
         beforeAll(() => {
+            getGroupsInEnterprise = jest.fn().mockImplementation((itemID, successFn) => {
+                return Promise.resolve(MOCK_GROUP_CONTACTS_API_RESPONSE).then(response => {
+                    return successFn(response);
+                });
+            });
             getUsersInEnterprise = jest.fn().mockImplementation((itemID, successFn) => {
                 return Promise.resolve(MOCK_CONTACTS_API_RESPONSE).then(response => {
                     return successFn(response);
@@ -664,11 +674,16 @@ describe('elements/content-sharing/SharingModal', () => {
                     getUser: jest.fn().mockImplementation(createSuccessMock(MOCK_USER_API_RESPONSE)),
                     getUsersInEnterprise,
                 },
+                null,
+                {
+                    getGroupsInEnterprise,
+                },
             );
-            convertContactsResponse.mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
+            convertGroupContactsResponse.mockReturnValue(MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE);
+            convertUserContactsResponse.mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
         });
 
-        test('should call getUsersInEnterprise() from getCollaboratorContacts() and return a converted response', async () => {
+        test('should call getUsersInEnterprise() and getGroupsInEnterprise() from getCollaboratorContacts() and return a converted response', async () => {
             const MOCK_FILTER = 'content';
 
             let wrapper;
@@ -690,7 +705,10 @@ describe('elements/content-sharing/SharingModal', () => {
                 expect.anything(),
                 MOCK_FILTER,
             );
-            expect(response).resolves.toEqual(MOCK_CONTACTS_CONVERTED_RESPONSE);
+            expect(response).resolves.toEqual([
+                ...MOCK_CONTACTS_CONVERTED_RESPONSE,
+                ...MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
+            ]);
         });
     });
 
@@ -753,6 +771,7 @@ describe('elements/content-sharing/SharingModal', () => {
         let api;
         let share;
         let updateSharedLink;
+        let getGroupsInEnterprise;
         let getUsersInEnterprise;
         let addCollaboration;
         const createShareFailureMock = () =>
@@ -765,6 +784,11 @@ describe('elements/content-sharing/SharingModal', () => {
             share = createShareFailureMock();
             updateSharedLink = createShareFailureMock();
             addCollaboration = createShareFailureMock();
+            getGroupsInEnterprise = jest.fn().mockImplementation((itemID, successFn, failureFn) => {
+                return Promise.reject(new Error({ status: '400' })).catch(response => {
+                    failureFn(response);
+                });
+            });
             getUsersInEnterprise = jest.fn().mockImplementation((itemID, successFn, failureFn) => {
                 return Promise.reject(new Error({ status: '400' })).catch(response => {
                     failureFn(response);
@@ -791,6 +815,9 @@ describe('elements/content-sharing/SharingModal', () => {
                 },
                 {
                     addCollaboration,
+                },
+                {
+                    getGroupsInEnterprise,
                 },
             );
         });
