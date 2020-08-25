@@ -49,7 +49,14 @@ import type {
     ContentSharingUserDataType,
     SharedLinkSettingsOptions,
 } from '../../../elements/content-sharing/types';
-import type { BoxItemPermission, Collaborations, SharedLink, User, UserCollection } from '../../../common/types/core';
+import type {
+    BoxItemPermission,
+    Collaborations,
+    GroupCollection,
+    SharedLink,
+    User,
+    UserCollection,
+} from '../../../common/types/core';
 import type {
     allowedAccessLevelsType,
     collaboratorsListType,
@@ -422,7 +429,7 @@ export const convertCollabsRequest = (
  * @param {string|null} currentUserID
  * @returns {Array<contactType>} Array of USM contacts
  */
-export const convertContactsResponse = (
+export const convertUserContactsResponse = (
     contactsAPIData: UserCollection,
     currentUserID: string | null,
 ): Array<contactType> => {
@@ -440,4 +447,28 @@ export const convertContactsResponse = (
             };
         })
         .filter(({ id, email }) => id !== currentUserID && email && !APP_USERS_DOMAIN_REGEXP.test(email));
+};
+
+/**
+ * Convert an enterprise groups API response into an array of internal USM contacts.
+ *
+ * @param {GroupCollection} contactsAPIData
+ * @returns {Array<contactType>} Array of USM contacts
+ */
+export const convertGroupContactsResponse = (contactsAPIData: GroupCollection): Array<contactType> => {
+    const { entries = [] } = contactsAPIData;
+
+    // Only return groups with the correct permissions
+    return entries
+        .filter(({ permissions }) => {
+            return permissions && permissions.can_invite_as_collaborator;
+        })
+        .map(contact => {
+            const { id, name, type } = contact;
+            return {
+                id,
+                name,
+                type,
+            };
+        });
 };
