@@ -72,7 +72,7 @@ describe('elements/content-sharing/hooks/useCollaborators', () => {
         ${undefined}      | ${'is undefined'}
         ${{}}             | ${'is an empty object'}
         ${{ foo: 'bar' }} | ${'does not have entries'}
-    `('should not generate avatar URLs when when collaborators list $description', ({ collaboratorsList }) => {
+    `('should not generate avatar URLs when collaborators list $description', ({ collaboratorsList }) => {
         let fakeComponent;
 
         act(() => {
@@ -87,7 +87,7 @@ describe('elements/content-sharing/hooks/useCollaborators', () => {
         collaboratorsList                     | description
         ${{ entries: [] }}                    | ${'has an empty entries array'}
         ${{ entries: [null, undefined, ''] }} | ${'contains incomplete entries only'}
-    `('should return an empty object when when collaborators list $description', async ({ collaboratorsList }) => {
+    `('should return an empty object when collaborators list $description', async ({ collaboratorsList }) => {
         let fakeComponent;
 
         await act(async () => {
