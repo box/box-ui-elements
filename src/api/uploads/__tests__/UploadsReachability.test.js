@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { withData } from 'leche';
 import UploadsReachability from '../UploadsReachability';
 import { DEFAULT_HOSTNAME_UPLOAD } from '../../../constants';
 
@@ -39,51 +38,56 @@ describe('api/uploads/UploadsReachability', () => {
     });
 
     describe('isReachable()', () => {
-        withData(
-            {
-                'negative cached result': [hostUrls[0], false],
-                'positive cached result': [hostUrls[1], true],
-            },
-            (hostUrl, expectedIsReachable) => {
-                test('should return the cached result when it exists and make no reachability requests', async () => {
-                    uploadsReachability.cachedResults = validResults;
-                    uploadsReachability.makeReachabilityRequest = jest.fn();
-                    uploadsReachability.getCachedResult = jest.fn().mockReturnValueOnce(validResults[hostUrl]);
+        // Test cases in order
+        // negative cached result
+        // positive cached result
+        test.each`
+            hostUrl        | expectedIsReachable
+            ${hostUrls[0]} | ${false}
+            ${hostUrls[1]} | ${true}
+        `(
+            'should return the cached result when it exists and make no reachability requests',
+            async ({ hostUrl, expectedIsReachable }) => {
+                uploadsReachability.cachedResults = validResults;
+                uploadsReachability.makeReachabilityRequest = jest.fn();
+                uploadsReachability.getCachedResult = jest.fn().mockReturnValueOnce(validResults[hostUrl]);
 
-                    const response = await uploadsReachability.isReachable(hostUrl);
+                const response = await uploadsReachability.isReachable(hostUrl);
 
-                    expect(response).toEqual(expectedIsReachable);
-                    expect(uploadsReachability.makeReachabilityRequest).not.toBeCalled();
-                });
+                expect(response).toEqual(expectedIsReachable);
+                expect(uploadsReachability.makeReachabilityRequest).not.toBeCalled();
             },
         );
 
-        withData(
-            {
-                'expired cached result, makeReachabilityRequest() succeeds': [hostUrls[0], 1, null, true],
-                'expired cached result, makeReachabilityRequest() fails': [hostUrls[0], 1, null, false],
+        // Test cases in order
+        // expired cached result, makeReachabilityRequest() succeeds
+        // expired cached result, makeReachabilityRequest() fails
+        // no cached result, makeReachabilityRequest() succeeds
+        // no cached result, makeReachabilityRequest() fails
+        test.each`
+            hostUrl        | getCachedResult | makeReachabilityRequestSucceed
+            ${hostUrls[0]} | ${null}         | ${true}
+            ${hostUrls[0]} | ${null}         | ${false}
+            ${hostUrls[1]} | ${null}         | ${true}
+            ${hostUrls[1]} | ${null}         | ${false}
+        `(
+            'should return and store the result according to makeReachabilityRequest() when there is no valid cached result',
+            async ({ hostUrl, getCachedResult, makeReachabilityRequestSucceed }) => {
+                uploadsReachability.cachedResults = validAndInvalidResults;
+                uploadsReachability.makeReachabilityRequest = jest
+                    .fn()
+                    .mockReturnValueOnce(Promise.resolve(makeReachabilityRequestSucceed));
+                uploadsReachability.getCachedResult = jest.fn().mockReturnValueOnce(getCachedResult);
+                uploadsReachability.updateCachedResult = jest.fn();
 
-                'no cached result, makeReachabilityRequest() succeeds': [hostUrls[1], 0, null, true],
-                'no cached result, makeReachabilityRequest() fails': [hostUrls[1], 0, null, false],
-            },
-            (hostUrl, msToTick, getCachedResult, makeReachabilityRequestSucceeds) => {
-                test('should return and store the result according to makeReachabilityRequest() when there is no valid cached result', async () => {
-                    uploadsReachability.cachedResults = validAndInvalidResults;
-                    uploadsReachability.makeReachabilityRequest = jest
-                        .fn()
-                        .mockReturnValueOnce(Promise.resolve(makeReachabilityRequestSucceeds));
-                    uploadsReachability.getCachedResult = jest.fn().mockReturnValueOnce(getCachedResult);
-                    uploadsReachability.updateCachedResult = jest.fn();
+                const response = await uploadsReachability.isReachable(hostUrl);
 
-                    const response = await uploadsReachability.isReachable(hostUrl);
-
-                    expect(response).toEqual(makeReachabilityRequestSucceeds);
-                    expect(uploadsReachability.getCachedResult).toHaveBeenCalled();
-                    expect(uploadsReachability.updateCachedResult).toHaveBeenCalledWith(
-                        hostUrl,
-                        makeReachabilityRequestSucceeds,
-                    );
-                });
+                expect(response).toEqual(makeReachabilityRequestSucceed);
+                expect(uploadsReachability.getCachedResult).toHaveBeenCalled();
+                expect(uploadsReachability.updateCachedResult).toHaveBeenCalledWith(
+                    hostUrl,
+                    makeReachabilityRequestSucceed,
+                );
             },
         );
 

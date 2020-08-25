@@ -97,14 +97,14 @@ class BaseUpload extends Base {
             return;
         }
 
-        const uploadUrl = data.upload_url;
-        // If uploadUrl is not available, don't make reachability test
-        if (!uploadUrl) {
+        const { upload_url } = data;
+        // If upload_url is not available, don't make reachability test
+        if (!upload_url) {
             this.preflightSuccessHandler({ data });
             return;
         }
 
-        const uploadHost = this.getUploadHostFromUrl(uploadUrl);
+        const uploadHost = this.getUploadHostFromUrl(upload_url);
         // The default upload host should always be reachable
         if (uploadHost === `${DEFAULT_HOSTNAME_UPLOAD}/`) {
             this.preflightSuccessHandler({ data });

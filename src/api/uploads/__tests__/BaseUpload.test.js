@@ -129,11 +129,13 @@ describe('api/uploads/BaseUpload', () => {
     describe('preflightSuccessReachabilityHandler()', () => {
         beforeEach(() => {
             upload.isUploadFallbackLogicEnabled = jest.fn().mockReturnValueOnce(true);
+            upload.makePreflightRequest = jest.fn();
+            upload.preflightSuccessHandler = jest.fn();
         });
 
         test('should not do anything if API is destroyed', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
-            upload.makePreflightRequest = jest.fn();
+
             upload.preflightSuccessReachabilityHandler({ data: {} });
 
             expect(upload.makePreflightRequest).not.toHaveBeenCalled();
@@ -141,7 +143,6 @@ describe('api/uploads/BaseUpload', () => {
 
         test('should call preflightSuccesshandler if no uploadUrl is provided', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
-            upload.preflightSuccessHandler = jest.fn();
             upload.uploadsReachability = {
                 isReachable: jest.fn(),
             };
@@ -154,7 +155,6 @@ describe('api/uploads/BaseUpload', () => {
 
         test('should call preflightSuccessHandler, without doing a reachability test if DEFAULT_HOSTNAME_UPLOAD is provided as uploadUrl', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
-            upload.preflightSuccessHandler = jest.fn();
             upload.uploadsReachability = {
                 isReachable: jest.fn(),
             };
@@ -175,7 +175,6 @@ describe('api/uploads/BaseUpload', () => {
 
         test('should check for reachability if upload host is not DEFAULT_HOSTNAME_UPLOAD and host is reachable', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
-            upload.preflightSuccessHandler = jest.fn();
             upload.uploadsReachability = {
                 isReachable: jest.fn().mockReturnValueOnce(Promise.resolve(true)),
             };
@@ -196,8 +195,6 @@ describe('api/uploads/BaseUpload', () => {
 
         test('should check for reachability if upload host is not DEFAULT_HOSTNAME_UPLOAD and host is not reachable', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
-            upload.preflightSuccessHandler = jest.fn();
-            upload.makePreflightRequest = jest.fn();
             upload.uploadsReachability = {
                 isReachable: jest.fn().mockReturnValueOnce(Promise.resolve(false)),
             };
@@ -218,8 +215,6 @@ describe('api/uploads/BaseUpload', () => {
 
         test('should not retry preflight check if reachabilityRetry count is greater then or equal to MAX_REACHABILITY_RETRY', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
-            upload.preflightSuccessHandler = jest.fn();
-            upload.makePreflightRequest = jest.fn();
             upload.uploadsReachability = {
                 isReachable: jest.fn().mockReturnValueOnce(Promise.resolve(false)),
             };

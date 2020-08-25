@@ -11,10 +11,15 @@ import type { StringAnyMap, StringMap } from '../../common/types/core';
 
 const CACHED_RESULTS_LOCAL_STORE_KEY = 'bcu-uploads-reachability-cached-results';
 
+type CachedResult = {
+    expirationTimestampMS: number,
+    isReachable: boolean,
+};
+
 class UploadsReachability {
     localStore: LocalStore;
 
-    cachedResults: StringAnyMap;
+    cachedResults: Record<string, CachedResult>;
 
     /**
      * [constructor]
