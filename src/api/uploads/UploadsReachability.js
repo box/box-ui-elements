@@ -19,7 +19,7 @@ type CachedResult = {
 class UploadsReachability {
     localStore: LocalStore;
 
-    cachedResults: Record<string, CachedResult>;
+    cachedResults: { string: CachedResult };
 
     /**
      * [constructor]
