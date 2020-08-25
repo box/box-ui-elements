@@ -6,8 +6,7 @@
  * - data list components
  */
 @mixin bdl-Overlay-listItemContainer {
-    margin: 0 ($bdl-grid-unit * 2);
-    padding: $bdl-grid-unit ($bdl-grid-unit * 9) $bdl-grid-unit ($bdl-grid-unit * 2);
+    padding: ($bdl-grid-unit * 2) ($bdl-grid-unit * 12) ($bdl-grid-unit * 2) ($bdl-grid-unit * 2);
     border-radius: $bdl-border-radius-size * 2;
     cursor: pointer;
 
@@ -31,9 +30,10 @@
  */
 @mixin bdl-Overlay-container {
     margin-top: $bdl-grid-unit;
+    padding: $bdl-grid-unit * 3;
     background-color: $white;
     border: 1px solid $bdl-gray-10;
-    border-radius: $bdl-border-radius-size;
+    border-radius: $bdl-border-radius-size * 2;
 
     @include bdl-Overlay-containerShadow;
 }
@@ -46,5 +46,5 @@
  * - FTUX tooltip guides
  */
 @mixin bdl-Overlay-containerShadow {
-    box-shadow: 0 $bdl-grid-unit ($bdl-grid-unit * 3) 0 rgba($black, .1);
+    box-shadow: 0 $bdl-grid-unit ($bdl-grid-unit * 3) 0 rgba($black, .12);
 }
