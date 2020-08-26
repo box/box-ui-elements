@@ -22,6 +22,7 @@ import messages from '../../elements/common/messages';
 
 import './MetadataBasedItemList.scss';
 
+import type { MetadataFieldConfig, MetadataFieldsToShow } from '../../common/types/metadataQueries';
 import type { MetadataFieldValue } from '../../common/types/metadata';
 import type { StringAnyMap, Collection, BoxItem } from '../../common/types/core';
 
@@ -54,6 +55,7 @@ type State = {
 
 type Props = {
     currentCollection: Collection,
+    metadataFieldsToShow: MetadataFieldsToShow,
     onItemClick: BoxItem => void,
     onMetadataUpdate: (BoxItem, string, ?MetadataFieldValue, ?MetadataFieldValue) => void,
 };
@@ -115,13 +117,13 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         }
     }
 
-    getFieldsToShow() {
+    getQueryResponseFields() {
         const fields = getProp(this.props, 'currentCollection.items[0].metadata.enterprise.fields', []);
         return fields.map(({ key, displayName }) => ({ key, displayName }));
     }
 
     getColumnWidth(width: number): ColumnWidthCallback {
-        const metadataFieldsToShow = this.getFieldsToShow();
+        const { metadataFieldsToShow } = this.props;
 
         return ({ index }: { index: number }): number => {
             if (index === FILE_ICON_COLUMN_INDEX) {
@@ -219,8 +221,8 @@ class MetadataBasedItemList extends React.Component<Props, State> {
     getGridCellData(columnIndex: number, rowIndex: number): GridCellData | void {
         const {
             currentCollection: { items = [] },
+            metadataFieldsToShow,
         }: Props = this.props;
-        const metadataFieldsToShow = this.getFieldsToShow();
 
         const {
             editedColumnIndex,
@@ -252,7 +254,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                 );
                 break;
             default: {
-                const { key } = metadataColumn;
+                const key = isString(metadataColumn) ? metadataColumn : metadataColumn.key;
                 const field = find(fields, ['key', key]);
                 if (!field) {
                     return cellData;
@@ -315,13 +317,25 @@ class MetadataBasedItemList extends React.Component<Props, State> {
     }
 
     getGridHeaderData(columnIndex: number): string | Element<typeof FormattedMessage> | void {
-        const metadataFieldsToShow = this.getFieldsToShow();
+        const { metadataFieldsToShow } = this.props;
 
         if (columnIndex === 0) return undefined;
         if (columnIndex === FILE_NAME_COLUMN_INDEX) {
             return <FormattedMessage {...messages.name} />; // "Name" column header
         }
-        return metadataFieldsToShow[columnIndex - FIXED_COLUMNS_NUMBER].displayName;
+
+        const responseFields = this.getQueryResponseFields();
+        const field: string | MetadataFieldConfig = metadataFieldsToShow[columnIndex - FIXED_COLUMNS_NUMBER];
+        const key = isString(field) ? field : field.key;
+
+        // Derive displayName in following order:
+        // 1. metadataFieldsToShow prop ||
+        // 2. metadata template instance ||
+        // 3. field key
+        const displayName =
+            getProp(field, 'displayName') || getProp(find(responseFields, ['key', key]), 'displayName', key);
+
+        return displayName;
     }
 
     cellRenderer = ({ columnIndex, rowIndex, key, style }: CellRendererArgs): Element<'div'> => {
@@ -366,7 +380,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
     }
 
     calculateContentWidth(): number {
-        const metadataFieldsToShow = this.getFieldsToShow();
+        const { metadataFieldsToShow } = this.props;
         // total width = sum of widths of sticky & non-sticky columns
         return (
             FILE_ICON_COLUMN_WIDTH + FILE_NAME_COLUMN_WIDTH + metadataFieldsToShow.length * MIN_METADATA_COLUMN_WIDTH
@@ -374,8 +388,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
     }
 
     render() {
-        const { currentCollection }: Props = this.props;
-        const metadataFieldsToShow = this.getFieldsToShow();
+        const { currentCollection, metadataFieldsToShow }: Props = this.props;
         const rowCount = currentCollection.items ? currentCollection.items.length : 0;
 
         return (

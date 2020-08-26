@@ -138,8 +138,21 @@ const MOCK_USER_IDS = ['1415', '1617', '1819', '2021', '2223'];
 const MOCK_COLLAB_IDS_CONVERTED = [123, 456, 789, 1011, 1213];
 const MOCK_USER_IDS_CONVERTED = [1415, 1617, 1819, 2021, 2223];
 
+const MOCK_AVATAR_URL_MAP = {
+    [MOCK_USER_IDS[0]]: `https://api.box.com/2.0/users/${MOCK_USER_IDS[0]}/avatar?access_token=foo&pic_type=large`,
+    [MOCK_USER_IDS[1]]: `https://api.box.com/2.0/users/${MOCK_USER_IDS[1]}/avatar?access_token=foo&pic_type=large`,
+    [MOCK_USER_IDS[2]]: `https://api.box.com/2.0/users/${MOCK_USER_IDS[2]}/avatar?access_token=foo&pic_type=large`,
+    [MOCK_USER_IDS[3]]: `https://api.box.com/2.0/users/${MOCK_USER_IDS[3]}/avatar?access_token=foo&pic_type=large`,
+    [MOCK_USER_IDS[4]]: `https://api.box.com/2.0/users/${MOCK_USER_IDS[4]}/avatar?access_token=foo&pic_type=large`,
+};
+
+const MOCK_AVATAR_URL_MAP_FOR_INCOMPLETE_ENTRIES = {
+    [MOCK_USER_IDS[3]]: `https://api.box.com/2.0/users/${MOCK_USER_IDS[3]}/avatar?access_token=foo&pic_type=large`,
+    [MOCK_USER_IDS[4]]: `https://api.box.com/2.0/users/${MOCK_USER_IDS[4]}/avatar?access_token=foo&pic_type=large`,
+};
+
 const MOCK_COLLABS_API_RESPONSE = {
-    total_count: 4,
+    total_count: 5,
     entries: [
         {
             type: 'collaboration',
@@ -198,6 +211,77 @@ const MOCK_COLLABS_API_RESPONSE = {
             acknowledged_at: '2019-11-20T14:33:52-08:00',
             item: COLLAB_ITEM,
         },
+        {
+            type: 'collaboration',
+            id: MOCK_COLLAB_IDS[3],
+            created_by: MOCK_OWNER,
+            created_at: '2019-11-20T14:33:52-08:00',
+            modified_at: '2019-11-20T14:33:52-08:00',
+            expires_at: null,
+            status: 'accepted',
+            accessible_by: {
+                type: 'user',
+                id: MOCK_USER_IDS[3],
+                name: 'Content Uploader',
+                login: 'contentuploader@box.com',
+            },
+            invite_email: null,
+            role: 'editor',
+            acknowledged_at: '2019-11-20T14:33:52-08:00',
+            item: COLLAB_ITEM,
+        },
+        {
+            type: 'collaboration',
+            id: MOCK_COLLAB_IDS[4],
+            created_by: MOCK_OWNER,
+            created_at: '2019-11-20T14:33:52-08:00',
+            modified_at: '2019-11-20T14:33:52-08:00',
+            expires_at: null,
+            status: 'accepted',
+            accessible_by: {
+                type: 'user',
+                id: MOCK_USER_IDS[4],
+                name: 'BoxWorks Demo',
+                login: 'demo@boxworks.com',
+            },
+            invite_email: null,
+            role: 'viewer',
+            acknowledged_at: '2019-11-20T14:33:52-08:00',
+            item: COLLAB_ITEM,
+        },
+    ],
+};
+
+const MOCK_COLLABS_API_RESPONSE_WITH_INCOMPLETE_ENTRIES = {
+    total_count: 5,
+    entries: [
+        {
+            type: 'collaboration',
+            id: MOCK_COLLAB_IDS[0],
+            created_by: MOCK_OWNER,
+            created_at: '2019-08-07T13:37:32-07:00',
+            modified_at: '2019-08-07T13:37:32-07:00',
+            expires_at: null,
+            status: 'accepted',
+            invite_email: null,
+            role: 'editor',
+            acknowledged_at: '2019-08-07T13:37:32-07:00',
+            item: COLLAB_ITEM,
+        },
+        {
+            type: 'collaboration',
+            id: MOCK_COLLAB_IDS[1],
+            created_by: MOCK_OWNER,
+            created_at: '2019-08-07T13:37:32-07:00',
+            modified_at: '2019-08-07T13:37:32-07:00',
+            expires_at: null,
+            status: 'accepted',
+            invite_email: null,
+            role: 'editor',
+            acknowledged_at: '2019-08-07T13:37:32-07:00',
+            item: COLLAB_ITEM,
+        },
+        null,
         {
             type: 'collaboration',
             id: MOCK_COLLAB_IDS[3],
@@ -424,6 +508,46 @@ const MOCK_CONTACTS_CONVERTED_RESPONSE = [
     },
 ];
 
+const MOCK_GROUP_CONTACTS_API_RESPONSE = {
+    total_count: 3,
+    entries: [
+        {
+            type: 'group',
+            id: '234524525',
+            name: 'hedgehogs',
+            permissions: {
+                can_invite_as_collaborator: false,
+            },
+        },
+        {
+            type: 'group',
+            id: '689796890',
+            name: 'armadillos',
+            permissions: {
+                can_invite_as_collaborator: true,
+            },
+        },
+        {
+            type: 'group',
+            id: '980753514',
+            name: 'narwhals',
+            permissions: {
+                can_invite_as_collaborator: false,
+            },
+        },
+    ],
+    limit: 100,
+    offset: 0,
+};
+
+const MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE = [
+    {
+        type: 'group',
+        id: '689796890',
+        name: 'armadillos',
+    },
+];
+
 const MOCK_SETTINGS_WITH_ALL_FEATURES = {
     expirationTimestamp: MOCK_TIMESTAMP,
     isDownloadEnabled: true,
@@ -576,9 +700,12 @@ const MOCK_DISABLED_REASONS = {
 };
 
 export {
+    MOCK_AVATAR_URL_MAP,
+    MOCK_AVATAR_URL_MAP_FOR_INCOMPLETE_ENTRIES,
     MOCK_COLLAB_IDS,
     MOCK_COLLAB_IDS_CONVERTED,
     MOCK_COLLABS_API_RESPONSE,
+    MOCK_COLLABS_API_RESPONSE_WITH_INCOMPLETE_ENTRIES,
     MOCK_COLLABS_CONVERTED_GROUPS,
     MOCK_COLLABS_CONVERTED_RESPONSE,
     MOCK_COLLABS_CONVERTED_REQUEST,
@@ -594,6 +721,8 @@ export {
     MOCK_CONVERTED_USER_DATA,
     MOCK_DISABLED_REASONS,
     MOCK_EMAIL_ARRAY,
+    MOCK_GROUP_CONTACTS_API_RESPONSE,
+    MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
     MOCK_GROUPID_ARRAY,
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE,

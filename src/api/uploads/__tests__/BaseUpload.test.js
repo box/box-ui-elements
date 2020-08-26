@@ -1,4 +1,5 @@
 import BaseUpload from '../BaseUpload';
+import { DEFAULT_HOSTNAME_UPLOAD } from '../../../constants';
 
 let upload;
 let clock;
@@ -40,6 +41,8 @@ describe('api/uploads/BaseUpload', () => {
             upload.xhr = {
                 options: jest.fn(),
             };
+            upload.isUploadFallbackLogicEnabled = jest.fn().mockReturnValueOnce(false);
+            upload.preflightSuccessReachabilityHandler = jest.fn();
 
             upload.makePreflightRequest();
             expect(upload.xhr.options).toHaveBeenCalledWith({
@@ -52,13 +55,15 @@ describe('api/uploads/BaseUpload', () => {
                     size: upload.file.size,
                     description: upload.fileDescription,
                 },
-                successHandler: upload.preflightSuccessHandler,
+                successHandler: expect.any(Function),
                 errorHandler: upload.preflightErrorHandler,
             });
+            expect(upload.preflightSuccessReachabilityHandler).not.toHaveBeenCalled();
         });
 
         test('should make preflight request to upload file version url if fileId is given', () => {
             const baseUrl = 'base';
+
             upload.fileId = '234';
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
             upload.getBaseApiUrl = jest.fn().mockReturnValueOnce(baseUrl);
@@ -67,17 +72,166 @@ describe('api/uploads/BaseUpload', () => {
                 name: 'zavala',
             };
             upload.folderId = '123';
-
             upload.xhr = {
                 options: jest.fn(),
             };
+            upload.isUploadFallbackLogicEnabled = jest.fn().mockReturnValueOnce(false);
+            upload.preflightSuccessReachabilityHandler = jest.fn();
 
             upload.makePreflightRequest();
             expect(upload.xhr.options).toHaveBeenCalledWith({
                 url: `${baseUrl}/files/${upload.fileId}/content`,
                 data: expect.any(Object),
-                successHandler: upload.preflightSuccessHandler,
+                successHandler: expect.any(Function),
                 errorHandler: upload.preflightErrorHandler,
+            });
+            expect(upload.preflightSuccessReachabilityHandler).not.toHaveBeenCalled();
+        });
+
+        test(`should make a preflight request with unreachable_hosts query parameter when there are unreachable upload hosts`, () => {
+            const baseUrl = 'base';
+
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.getBaseApiUrl = jest.fn().mockReturnValueOnce(baseUrl);
+            upload.file = {
+                size: 1,
+                name: 'zavala',
+            };
+            upload.folderId = '123';
+            upload.fileDescription = 'ronaldo';
+            upload.xhr = {
+                options: jest.fn(),
+            };
+            upload.isUploadFallbackLogicEnabled = jest.fn().mockReturnValueOnce(true);
+            upload.uploadsReachability = {
+                getUnreachableHostsUrls: jest.fn().mockReturnValueOnce(['https://test-upload.box.com/']),
+            };
+            upload.preflightSuccessHandler = jest.fn();
+
+            upload.makePreflightRequest();
+            expect(upload.xhr.options).toHaveBeenCalledWith({
+                url: `${baseUrl}/files/content?unreachable_hosts=https://test-upload.box.com/`,
+                data: {
+                    name: upload.file.name,
+                    parent: {
+                        id: upload.folderId,
+                    },
+                    size: upload.file.size,
+                    description: upload.fileDescription,
+                },
+                successHandler: expect.any(Function),
+                errorHandler: upload.preflightErrorHandler,
+            });
+            expect(upload.preflightSuccessHandler).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('preflightSuccessReachabilityHandler()', () => {
+        beforeEach(() => {
+            upload.isUploadFallbackLogicEnabled = jest.fn().mockReturnValueOnce(true);
+            upload.makePreflightRequest = jest.fn();
+            upload.preflightSuccessHandler = jest.fn();
+        });
+
+        test('should not do anything if API is destroyed', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
+
+            upload.preflightSuccessReachabilityHandler({ data: {} });
+
+            expect(upload.makePreflightRequest).not.toHaveBeenCalled();
+        });
+
+        test('should call preflightSuccesshandler if no uploadUrl is provided', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.uploadsReachability = {
+                isReachable: jest.fn(),
+            };
+
+            upload.preflightSuccessReachabilityHandler({ data: {} });
+
+            expect(upload.preflightSuccessHandler).toHaveBeenCalledWith({ data: {} });
+            expect(upload.uploadsReachability.isReachable).not.toHaveBeenCalled();
+        });
+
+        test('should call preflightSuccessHandler, without doing a reachability test if DEFAULT_HOSTNAME_UPLOAD is provided as uploadUrl', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.uploadsReachability = {
+                isReachable: jest.fn(),
+            };
+
+            const preflightResponse = {
+                data: {
+                    upload_url: `${DEFAULT_HOSTNAME_UPLOAD}/api/2.0/files/1234/content?upload_session_id=123&protected_params=123`,
+                    upload_token: null,
+                    download_url: null,
+                },
+            };
+
+            upload.preflightSuccessReachabilityHandler(preflightResponse);
+
+            expect(upload.preflightSuccessHandler).toHaveBeenCalledWith(preflightResponse);
+            expect(upload.uploadsReachability.isReachable).not.toHaveBeenCalled();
+        });
+
+        test('should check for reachability if upload host is not DEFAULT_HOSTNAME_UPLOAD and host is reachable', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.uploadsReachability = {
+                isReachable: jest.fn().mockReturnValueOnce(Promise.resolve(true)),
+            };
+
+            const preflightResponse = {
+                data: {
+                    upload_url: `https://test-upload.box.com/api/2.0/files/1234/content?upload_session_id=123&protected_params=123`,
+                    upload_token: null,
+                    download_url: null,
+                },
+            };
+
+            return upload.preflightSuccessReachabilityHandler(preflightResponse).then(() => {
+                expect(upload.uploadsReachability.isReachable).toHaveBeenCalled();
+                expect(upload.preflightSuccessHandler).toHaveBeenCalledWith(preflightResponse);
+            });
+        });
+
+        test('should check for reachability if upload host is not DEFAULT_HOSTNAME_UPLOAD and host is not reachable', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.uploadsReachability = {
+                isReachable: jest.fn().mockReturnValueOnce(Promise.resolve(false)),
+            };
+
+            const preflightResponse = {
+                data: {
+                    upload_url: `https://test-upload.box.com/api/2.0/files/1234/content?upload_session_id=123&protected_params=123`,
+                    upload_token: null,
+                    download_url: null,
+                },
+            };
+
+            return upload.preflightSuccessReachabilityHandler(preflightResponse).then(() => {
+                expect(upload.uploadsReachability.isReachable).toHaveBeenCalled();
+                expect(upload.makePreflightRequest).toHaveBeenCalled();
+            });
+        });
+
+        test('should not retry preflight check if reachabilityRetry count is greater then or equal to MAX_REACHABILITY_RETRY', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.uploadsReachability = {
+                isReachable: jest.fn().mockReturnValueOnce(Promise.resolve(false)),
+            };
+            upload.reachabilityRetryCount = 10;
+
+            const preflightResponse = {
+                data: {
+                    upload_url: `https://test-upload.box.com/api/2.0/files/1234/content?upload_session_id=123&protected_params=123`,
+                    upload_token: null,
+                    download_url: null,
+                },
+            };
+
+            return upload.preflightSuccessReachabilityHandler(preflightResponse).then(() => {
+                expect(upload.uploadsReachability.isReachable).toHaveBeenCalled();
+                expect(upload.preflightSuccessHandler).toHaveBeenCalled();
+                expect(upload.makePreflightRequest).not.toHaveBeenCalled();
             });
         });
     });

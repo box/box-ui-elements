@@ -43,13 +43,21 @@ import {
     CLASSIFICATION_COLOR_ID_7,
 } from '../../classification/constants';
 import type {
+    AvatarURLMap,
     ContentSharingCollaborationsRequest,
     ContentSharingItemAPIResponse,
     ContentSharingItemDataType,
     ContentSharingUserDataType,
     SharedLinkSettingsOptions,
 } from '../../../elements/content-sharing/types';
-import type { BoxItemPermission, Collaborations, SharedLink, User, UserCollection } from '../../../common/types/core';
+import type {
+    BoxItemPermission,
+    Collaborations,
+    GroupCollection,
+    SharedLink,
+    User,
+    UserCollection,
+} from '../../../common/types/core';
 import type {
     allowedAccessLevelsType,
     collaboratorsListType,
@@ -332,12 +340,14 @@ export const convertSharedLinkSettings = (
  * Convert a response from the Item Collaborations API into the object that the USM expects.
  *
  * @param {Collaborations} collabsAPIData
+ * @param {AvatarURLMap | null} avatarURLMap
  * @param {string | null | undefined} ownerEmail
  * @param {boolean} isCurrentUserOwner
  * @returns {collaboratorsListType} Object containing an array of collaborators
  */
 export const convertCollabsResponse = (
     collabsAPIData: Collaborations,
+    avatarURLMap: ?AvatarURLMap,
     ownerEmail: ?string,
     isCurrentUserOwner: boolean,
 ): collaboratorsListType => {
@@ -357,11 +367,12 @@ export const convertCollabsResponse = (
                 expires_at: executeAt,
                 role,
             } = collab;
+            const avatarURL = avatarURLMap ? avatarURLMap[userID] : undefined;
             const convertedCollab: collaboratorType = {
                 collabID: parseInt(collabID, 10),
                 email,
-                hasCustomAvatar: false, // to do: connect to Avatar API
-                imageURL: null, // to do: connect to Avatar API
+                hasCustomAvatar: !!avatarURL,
+                imageURL: avatarURL,
                 isExternalCollab: checkIsExternalUser(isCurrentUserOwner, ownerEmailDomain, email),
                 name,
                 translatedRole: `${role[0].toUpperCase()}${role.slice(1)}`, // capitalize the user's role
@@ -422,7 +433,7 @@ export const convertCollabsRequest = (
  * @param {string|null} currentUserID
  * @returns {Array<contactType>} Array of USM contacts
  */
-export const convertContactsResponse = (
+export const convertUserContactsResponse = (
     contactsAPIData: UserCollection,
     currentUserID: string | null,
 ): Array<contactType> => {
@@ -440,4 +451,28 @@ export const convertContactsResponse = (
             };
         })
         .filter(({ id, email }) => id !== currentUserID && email && !APP_USERS_DOMAIN_REGEXP.test(email));
+};
+
+/**
+ * Convert an enterprise groups API response into an array of internal USM contacts.
+ *
+ * @param {GroupCollection} contactsAPIData
+ * @returns {Array<contactType>} Array of USM contacts
+ */
+export const convertGroupContactsResponse = (contactsAPIData: GroupCollection): Array<contactType> => {
+    const { entries = [] } = contactsAPIData;
+
+    // Only return groups with the correct permissions
+    return entries
+        .filter(({ permissions }) => {
+            return permissions && permissions.can_invite_as_collaborator;
+        })
+        .map(contact => {
+            const { id, name, type } = contact;
+            return {
+                id,
+                name,
+                type,
+            };
+        });
 };

@@ -15,6 +15,7 @@ type Option = {
 };
 
 type Props = {
+    blurExceptionClassNames?: Array<string>,
     dataKey: string,
     dataValue?: MetadataFieldValue,
     description?: string,
@@ -26,6 +27,7 @@ type Props = {
 };
 
 const EnumMetadataField = ({
+    blurExceptionClassNames,
     dataKey,
     dataValue,
     displayName,
@@ -54,6 +56,7 @@ const EnumMetadataField = ({
             <Label text={displayName}>
                 {!!description && <i className="bdl-EnumMetadataField-desc">{description}</i>}
                 <SingleSelectField
+                    blurExceptionClassNames={blurExceptionClassNames}
                     isEscapedWithReference
                     isScrollable
                     onChange={(option: Option) => {
