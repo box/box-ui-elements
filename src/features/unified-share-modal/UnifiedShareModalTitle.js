@@ -54,8 +54,8 @@ const UnifiedShareModalTitle = ({ isEmailLinkSectionExpanded, showCollaboratorLi
     const classificationColor = getClassificationLabelColor(bannerPolicy);
 
     return (
-        <span className="bdl-UnifiedShareModalTitle">
-            {title}
+        <>
+            <span className="bdl-UnifiedShareModalTitle">{title}</span>
             {canUserSeeClassification && (
                 <Classification
                     definition={bannerPolicy ? bannerPolicy.body : undefined}
@@ -65,7 +65,7 @@ const UnifiedShareModalTitle = ({ isEmailLinkSectionExpanded, showCollaboratorLi
                     className="bdl-UnifiedShareModalTitle-classification"
                 />
             )}
-        </span>
+        </>
     );
 };
 

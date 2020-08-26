@@ -12,6 +12,7 @@ import ItemList from './ItemList';
 import MetadataBasedItemList from '../../features/metadata-based-view';
 import { VIEW_ERROR, VIEW_METADATA, VIEW_MODE_LIST, VIEW_MODE_GRID, VIEW_SELECTED } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
+import type { MetadataFieldsToShow } from '../../common/types/metadataQueries';
 import type { View, Collection } from '../../common/types/core';
 import './Content.scss';
 
@@ -20,11 +21,12 @@ import './Content.scss';
  *
  * @param {string} view the current view
  * @param {Object} currentCollection the current collection
+ * @param {MetadataFieldsToShow} metadataFieldsToShow list of metadata template fields to show
  * @return {boolean} empty or not
  */
-function isEmpty(view: View, currentCollection: Collection): boolean {
+function isEmpty(view: View, currentCollection: Collection, metadataFieldsToShow: MetadataFieldsToShow): boolean {
     const { items = [] }: Collection = currentCollection;
-    return view === VIEW_ERROR || items.length === 0;
+    return view === VIEW_ERROR || !items.length || (view === VIEW_METADATA && !metadataFieldsToShow.length);
 }
 
 type Props = {
@@ -39,6 +41,7 @@ type Props = {
     isMedium: boolean,
     isSmall: boolean,
     isTouch: boolean,
+    metadataFieldsToShow?: MetadataFieldsToShow,
     onItemClick: Function,
     onItemDelete: Function,
     onItemDownload: Function,
@@ -64,9 +67,10 @@ const Content = ({
     tableRef,
     view,
     viewMode = VIEW_MODE_LIST,
+    metadataFieldsToShow = [],
     ...rest
 }: Props) => {
-    const isViewEmpty = isEmpty(view, currentCollection);
+    const isViewEmpty = isEmpty(view, currentCollection, metadataFieldsToShow);
     const isMetadataBasedView = view === VIEW_METADATA;
     const isListView = !isMetadataBasedView && viewMode === VIEW_MODE_LIST; // Folder view or Recents view
     const isGridView = !isMetadataBasedView && viewMode === VIEW_MODE_GRID; // Folder view or Recents view
@@ -79,7 +83,11 @@ const Content = ({
 
             {isViewEmpty && <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />}
             {!isViewEmpty && isMetadataBasedView && (
-                <MetadataBasedItemList currentCollection={currentCollection} {...rest} />
+                <MetadataBasedItemList
+                    currentCollection={currentCollection}
+                    metadataFieldsToShow={metadataFieldsToShow}
+                    {...rest}
+                />
             )}
             {!isViewEmpty && isListView && (
                 <ItemList

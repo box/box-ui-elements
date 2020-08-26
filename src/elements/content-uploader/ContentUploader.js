@@ -71,6 +71,7 @@ type Props = {
     isResumableUploadsEnabled: boolean,
     isSmall: boolean,
     isTouch: boolean,
+    isUploadFallbackLogicEnabled: boolean,
     language?: string,
     measureRef: Function,
     messages?: StringMap,
@@ -151,6 +152,7 @@ class ContentUploader extends Component<Props, State> {
         onCancel: noop,
         isFolderUploadEnabled: false,
         isResumableUploadsEnabled: false,
+        isUploadFallbackLogicEnabled: false,
         dataTransferItems: [],
         isDraggingItemsToUploadsManager: false,
     };
@@ -638,7 +640,7 @@ class ContentUploader extends Component<Props, State> {
      * @return {UploadAPI} - Instance of Upload API
      */
     getUploadAPI(file: File, uploadAPIOptions?: UploadItemAPIOptions) {
-        const { chunked, isResumableUploadsEnabled } = this.props;
+        const { chunked, isResumableUploadsEnabled, isUploadFallbackLogicEnabled } = this.props;
         const { size } = file;
         const factory = this.createAPIFactory(uploadAPIOptions);
 
@@ -647,6 +649,9 @@ class ContentUploader extends Component<Props, State> {
                 const chunkedUploadAPI = factory.getChunkedUploadAPI();
                 if (isResumableUploadsEnabled) {
                     chunkedUploadAPI.isResumableUploadsEnabled = true;
+                }
+                if (isUploadFallbackLogicEnabled) {
+                    chunkedUploadAPI.isUploadFallbackLogicEnabled = true;
                 }
                 return chunkedUploadAPI;
             }
@@ -658,7 +663,12 @@ class ContentUploader extends Component<Props, State> {
             /* eslint-enable no-console */
         }
 
-        return factory.getPlainUploadAPI();
+        const plainUploadAPI = factory.getPlainUploadAPI();
+        if (isUploadFallbackLogicEnabled) {
+            plainUploadAPI.isUploadFallbackLogicEnabled = true;
+        }
+
+        return plainUploadAPI;
     }
 
     /**

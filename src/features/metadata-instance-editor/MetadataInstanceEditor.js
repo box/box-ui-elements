@@ -8,9 +8,11 @@ import Instances from './Instances';
 import EmptyContent from './EmptyContent';
 import type { MetadataEditor, MetadataTemplate, MetadataCascadingPolicyData } from '../../common/types/metadata';
 import type { JSONPatchOperations } from '../../common/types/api';
+import MetadataInstanceEditorContext from './MetadataInstanceEditorContext';
 import './MetadataInstanceEditor.scss';
 
 type Props = {
+    blurExceptionClassNames?: Array<string>,
     canAdd: boolean,
     editors?: Array<MetadataEditor>,
     isCascadingPolicyApplicable?: boolean,
@@ -31,6 +33,7 @@ type Props = {
 };
 
 const MetadataInstanceEditor = ({
+    blurExceptionClassNames,
     canAdd,
     isCascadingPolicyApplicable = false,
     isDropdownBusy,
@@ -43,30 +46,32 @@ const MetadataInstanceEditor = ({
     templates,
     title,
 }: Props) => (
-    <div className="metadata-instance-editor">
-        <Header
-            canAdd={canAdd}
-            editors={editors}
-            isDropdownBusy={isDropdownBusy}
-            onAdd={onAdd}
-            templates={templates}
-            title={title}
-        />
-        {editors.length === 0 ? (
-            <EmptyContent canAdd={canAdd} />
-        ) : (
-            <ScrollWrapper>
-                <Instances
-                    editors={editors}
-                    isCascadingPolicyApplicable={isCascadingPolicyApplicable}
-                    onModification={onModification}
-                    onRemove={onRemove}
-                    onSave={onSave}
-                    selectedTemplateKey={selectedTemplateKey}
-                />
-            </ScrollWrapper>
-        )}
-    </div>
+    <MetadataInstanceEditorContext.Provider value={{ blurExceptionClassNames }}>
+        <div className="metadata-instance-editor">
+            <Header
+                canAdd={canAdd}
+                editors={editors}
+                isDropdownBusy={isDropdownBusy}
+                onAdd={onAdd}
+                templates={templates}
+                title={title}
+            />
+            {editors.length === 0 ? (
+                <EmptyContent canAdd={canAdd} />
+            ) : (
+                <ScrollWrapper>
+                    <Instances
+                        editors={editors}
+                        isCascadingPolicyApplicable={isCascadingPolicyApplicable}
+                        onModification={onModification}
+                        onRemove={onRemove}
+                        onSave={onSave}
+                        selectedTemplateKey={selectedTemplateKey}
+                    />
+                </ScrollWrapper>
+            )}
+        </div>
+    </MetadataInstanceEditorContext.Provider>
 );
 
 export default MetadataInstanceEditor;

@@ -1,17 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`features/unified-share-modal/HeaderTitle should not render classification label when canUserSeeClassification is false 1`] = `
-<span
-  className="bdl-UnifiedShareModalTitle"
->
-  <FormattedMessage
-    defaultMessage="Share ‘{itemName}’"
-    id="boxui.unifiedShare.modalTitle"
-    values={
-      Object {
-        "itemName": "test file",
+<Fragment>
+  <span
+    className="bdl-UnifiedShareModalTitle"
+  >
+    <FormattedMessage
+      defaultMessage="Share ‘{itemName}’"
+      id="boxui.unifiedShare.modalTitle"
+      values={
+        Object {
+          "itemName": "test file",
+        }
       }
-    }
-  />
-</span>
+    />
+  </span>
+</Fragment>
 `;

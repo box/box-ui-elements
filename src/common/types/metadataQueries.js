@@ -16,6 +16,16 @@ type MetadataQueryOrderByClause = {
     field_key: string,
 };
 
+type MetadataFieldConfig = {
+    canEdit?: boolean,
+    displayName?: string,
+    key: string,
+};
+
+// MetadataFieldsToShow array items could be simple strings or objects
+// e.g. const metadataFieldsToShow: MetadataFieldsToShow = [ 'name', { key: 'desc', displayName: 'Desc', canEdit: true } ];
+type MetadataFieldsToShow = Array<MetadataFieldConfig | string>;
+
 type MetadataQuery = {
     ancestor_folder_id: string,
     fields?: Array<string>,
@@ -31,6 +41,8 @@ type MetadataQuery = {
 };
 
 export type {
+    MetadataFieldConfig,
+    MetadataFieldsToShow,
     MetadataQuery,
     MetadataQueryOrderByClause,
     MetadataQueryResponseData,
