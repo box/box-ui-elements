@@ -129,3 +129,5 @@ export type ConnectToItemShareFnType = ({
     requestOptions?: RequestOptions,
     successFn?: Function,
 }) => Function;
+
+export type AvatarURLMap = { [number | string]: ?string };

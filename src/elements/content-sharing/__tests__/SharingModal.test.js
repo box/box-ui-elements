@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import { FormattedMessage } from 'react-intl';
@@ -74,7 +74,7 @@ const createAPIMock = (fileAPI, folderAPI, usersAPI, collaborationsAPI, groupsAP
     getFolderCollaborationsAPI: jest.fn().mockReturnValue({
         getCollaborations: jest.fn(),
     }),
-    getUsersAPI: jest.fn().mockReturnValue(usersAPI),
+    getUsersAPI: jest.fn().mockReturnValue({ getAvatarUrlWithAccessToken: jest.fn(), ...usersAPI }),
     getCollaborationsAPI: jest.fn().mockReturnValue(collaborationsAPI),
     getGroupsAPI: jest.fn().mockReturnValue(groupsAPI),
 });
