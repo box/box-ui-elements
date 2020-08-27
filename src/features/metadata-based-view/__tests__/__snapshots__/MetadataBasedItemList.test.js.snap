@@ -22,6 +22,12 @@ exports[`features/metadata-based-view/MetadataBasedItemList render() should rend
                   "type": "float",
                   "value": 100.12,
                 },
+                Object {
+                  "displayName": "Created",
+                  "key": "created",
+                  "type": "date",
+                  "value": "2020-08-18T00:00:00.000Z",
+                },
               ],
               "id": "11",
             },
@@ -46,6 +52,12 @@ exports[`features/metadata-based-view/MetadataBasedItemList render() should rend
                   "type": "float",
                   "value": 200.88,
                 },
+                Object {
+                  "displayName": "Created",
+                  "key": "created",
+                  "type": "date",
+                  "value": "2020-08-18T00:00:00.000Z",
+                },
               ],
               "id": "22",
             },
@@ -61,6 +73,24 @@ exports[`features/metadata-based-view/MetadataBasedItemList render() should rend
     Object {
       "formatMessage": [MockFunction],
     }
+  }
+  metadataFieldsToShow={
+    Array [
+      "type",
+      Object {
+        "canEdit": true,
+        "key": "amount",
+      },
+      Object {
+        "canEdit": true,
+        "displayName": "Created At",
+        "key": "created",
+      },
+      Object {
+        "canEdit": true,
+        "key": "invalidKey",
+      },
+    ]
   }
   onItemClick={[MockFunction]}
   onMetadataUpdate={[MockFunction]}

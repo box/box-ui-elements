@@ -21,15 +21,23 @@ export type ImageTooltipProps = {
 } & OtherTooltipProps;
 
 const ImageTooltip = ({ children, className, content, image, title, ...otherTooltipProps }: ImageTooltipProps) => {
+    // State to track if the image has been loaded before displaying the tooltip
+    const [isImageLoaded, setIsImageLoaded] = React.useState(false);
+
     const tooltipContent = (
-        <ImageTooltipContent content={content} title={title}>
+        <ImageTooltipContent content={content} onImageLoad={() => setIsImageLoaded(true)} title={title}>
             {React.Children.only(image)}
         </ImageTooltipContent>
     );
 
+    const imageTooltipClasses = classNames('bdl-ImageTooltip', {
+        className,
+        'bdl-is-image-loaded': isImageLoaded,
+    });
+
     return (
         <Tooltip
-            className={classNames('bdl-ImageTooltip', className)}
+            className={imageTooltipClasses}
             showCloseButton
             theme={TooltipTheme.CALLOUT}
             {...otherTooltipProps}
