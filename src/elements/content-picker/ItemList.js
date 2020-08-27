@@ -157,7 +157,7 @@ const ItemList = ({
                                 <Column
                                     dataKey={FIELD_SHARED_LINK}
                                     cellRenderer={shareAccessCell}
-                                    width={220}
+                                    width={260}
                                     flexShrink={0}
                                 />
                             )}
