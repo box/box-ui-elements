@@ -1,32 +1,31 @@
 /**
  * @flow
- * @file Helper for the Box Enterprise Users API
+ * @file Marker-based helper for the Box Users API
  * @author Box
  */
 
 import MarkerBasedApi from './MarkerBasedAPI';
-import { DEFAULT_MAX_COLLABORATORS, ERROR_CODE_FETCH_ENTERPRISE_USERS } from '../constants';
+import { DEFAULT_MAX_CONTACTS, ERROR_CODE_FETCH_ENTERPRISE_USERS } from '../constants';
 import type { ElementsErrorCallback } from '../common/types/api';
 
-class EnterpriseUsers extends MarkerBasedApi {
+class MarkerBasedUsers extends MarkerBasedApi {
     /**
-     * API URL for fetching all users in the current user's enterprise
+     * API URL for fetching all users who are visible to the current user
      *
-     * @param {string} [filterTerm] Optional filter for enterprise users
-     * @returns {string} URL for fetching enterprise users
+     * @returns {string} URL for fetching users
      */
     getUrl(): string {
         return `${this.getBaseApiUrl()}/users`;
     }
 
-    // ({ entries: Array<Collaboration>, next_marker: ?string }) => void
     /**
      * API for fetching all users in the current user's enterprise
      *
      * @param {string} id - Box item ID
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
-     * @param {string} [filterTerm] - Optional filter for the users
+     * @param {Object} [requestData] - Opitional additional request data
+     * @param {Object} [limit] - Max number of groups to return
      * @returns {void}
      */
     getUsersInEnterprise(
@@ -34,7 +33,7 @@ class EnterpriseUsers extends MarkerBasedApi {
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
         requestData: ?Object,
-        limit: number = DEFAULT_MAX_COLLABORATORS,
+        limit: number = DEFAULT_MAX_CONTACTS,
     ): void {
         this.errorCode = ERROR_CODE_FETCH_ENTERPRISE_USERS;
         this.markerGet({
@@ -48,4 +47,4 @@ class EnterpriseUsers extends MarkerBasedApi {
     }
 }
 
-export default EnterpriseUsers;
+export default MarkerBasedUsers;

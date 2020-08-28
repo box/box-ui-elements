@@ -39,7 +39,7 @@ function useContacts(api: API, itemID: string, options: ContentSharingHooksOptio
 
         const updatedGetContactsFn: GetContactsFnType = () => (filterTerm: string) => {
             const getUsers = new Promise((resolve: (result: Array<UserMini>) => void) => {
-                api.getEnterpriseUsersAPI(false).getUsersInEnterprise(
+                api.getMarkerBasedUsersAPI(false).getUsersInEnterprise(
                     itemID,
                     (response: UserCollection) => resolveAPICall(resolve, response, transformUsers),
                     handleError,
@@ -47,7 +47,7 @@ function useContacts(api: API, itemID: string, options: ContentSharingHooksOptio
                 );
             });
             const getGroups = new Promise((resolve: (result: Array<GroupMini>) => void) => {
-                api.getEnterpriseGroupsAPI(false).getGroupsInEnterprise(
+                api.getMarkerBasedGroupsAPI(false).getGroupsInEnterprise(
                     itemID,
                     (response: GroupCollection) => resolveAPICall(resolve, response, transformGroups),
                     handleError,

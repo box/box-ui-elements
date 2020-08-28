@@ -28,24 +28,27 @@ describe('api/ItemCollaborations', () => {
 
         test.each`
             providedLimit | providedRequestData                   | limit                        | requestData                           | description
-            ${undefined}  | ${undefined}                          | ${DEFAULT_MAX_COLLABORATORS} | ${{}}                                 | ${'with default arguments'}
-            ${100}        | ${{ fields: ['id', 'type', 'name'] }} | ${100}                       | ${{ fields: ['id', 'type', 'name'] }} | ${'with provided arguments'}
-        `('should call markerGet() with $description', ({ providedLimit, providedRequestData, limit, requestData }) => {
-            itemCollaborations.getCollaborations(
-                MOCK_ITEM_ID,
-                successCallback,
-                errorCallback,
-                providedRequestData,
-                providedLimit,
-            );
-            expect(markerGetSpy).toHaveBeenCalledWith({
-                id: MOCK_ITEM_ID,
-                limit,
-                successCallback,
-                errorCallback,
-                requestData,
-            });
-        });
+            ${undefined}  | ${undefined}                          | ${DEFAULT_MAX_COLLABORATORS} | ${{}}                                 | ${'default arguments'}
+            ${100}        | ${{ fields: ['id', 'type', 'name'] }} | ${100}                       | ${{ fields: ['id', 'type', 'name'] }} | ${'provided arguments'}
+        `(
+            'should call markerGet() with the $description',
+            ({ providedLimit, providedRequestData, limit, requestData }) => {
+                itemCollaborations.getCollaborations(
+                    MOCK_ITEM_ID,
+                    successCallback,
+                    errorCallback,
+                    providedRequestData,
+                    providedLimit,
+                );
+                expect(markerGetSpy).toHaveBeenCalledWith({
+                    id: MOCK_ITEM_ID,
+                    limit,
+                    successCallback,
+                    errorCallback,
+                    requestData,
+                });
+            },
+        );
     });
 
     describe('successHandler()', () => {

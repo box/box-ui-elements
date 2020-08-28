@@ -8,6 +8,7 @@ describe('api/MarkerBasedAPI', () => {
         next_marker: '',
         limit: LIMIT,
         entries: [],
+        usemarker: true,
     };
     const url = 'https://foo.bar';
     const errorCode = 'foo';
@@ -45,6 +46,7 @@ describe('api/MarkerBasedAPI', () => {
                                 next_marker: 'next_marker',
                                 limit: LIMIT,
                                 entries: [],
+                                usemarker: true,
                             },
                         }),
                     )
@@ -132,6 +134,7 @@ describe('api/MarkerBasedAPI', () => {
                         params: {
                             marker: 'next_marker',
                             limit: LIMIT,
+                            usemarker: true,
                             ...requestData,
                         },
                     });
@@ -163,6 +166,7 @@ describe('api/MarkerBasedAPI', () => {
                         params: {
                             marker: '',
                             limit: LIMIT,
+                            usemarker: true,
                         },
                     });
                 });

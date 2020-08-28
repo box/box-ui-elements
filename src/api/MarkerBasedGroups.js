@@ -1,18 +1,17 @@
 /**
  * @flow
- * @file Helper for the Box Enterprise Groups API
+ * @file Marker-based helper for the Box Groups API
  * @author Box
  */
 import MarkerBasedAPI from './MarkerBasedAPI';
-import { DEFAULT_MAX_COLLABORATORS, ERROR_CODE_FETCH_ENTERPRISE_GROUPS } from '../constants';
+import { DEFAULT_MAX_CONTACTS, ERROR_CODE_FETCH_ENTERPRISE_GROUPS } from '../constants';
 import type { ElementsErrorCallback } from '../common/types/api';
 
-class Groups extends MarkerBasedAPI {
+class MarkerBasedGroups extends MarkerBasedAPI {
     /**
-     * API URL for fetching all groups in the current user's enterprise
+     * API URL for fetching all groups that are visible to the current user
      *
-     * @param {string} [filterTerm] Optional filter for enterprise groups
-     * @returns {string} URL for fetching enterprise groups
+     * @returns {string} URL for fetching groups
      */
     getUrl(): string {
         return `${this.getBaseApiUrl()}/groups`;
@@ -24,8 +23,8 @@ class Groups extends MarkerBasedAPI {
      * @param {string} id - Box item ID
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
-     * @param {string} [filterTerm] - Optional filter for the groups
      * @param {Object} [requestData] - Opitional additional request data
+     * @param {Object} [limit] - Max number of groups to return
      * @returns {void}
      */
     getGroupsInEnterprise(
@@ -33,7 +32,7 @@ class Groups extends MarkerBasedAPI {
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
         requestData: ?Object,
-        limit: number = DEFAULT_MAX_COLLABORATORS,
+        limit: number = DEFAULT_MAX_CONTACTS,
     ): void {
         this.errorCode = ERROR_CODE_FETCH_ENTERPRISE_GROUPS;
 
@@ -48,4 +47,4 @@ class Groups extends MarkerBasedAPI {
     }
 }
 
-export default Groups;
+export default MarkerBasedGroups;
