@@ -18,6 +18,8 @@ import TasksNewAPI from './tasks/TasksNew';
 import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
 import TaskLinksAPI from './tasks/TaskLinks';
 import FileAccessStatsAPI from './FileAccessStats';
+import EnterpriseGroupsAPI from './EnterpriseGroups';
+import EnterpriseUsersAPI from './EnterpriseUsers';
 import GroupsAPI from './Groups';
 import UsersAPI from './Users';
 import MetadataAPI from './Metadata';
@@ -108,6 +110,16 @@ class APIFactory {
      * @property {FileAccessStatsAPI}
      */
     fileAccessStatsAPI: FileAccessStatsAPI;
+
+    /*
+     * @property {EnterpriseGroupsAPI}
+     */
+    enterpriseGroupsAPI: EnterpriseGroupsAPI;
+
+    /*
+     * @property {EnterpriseUsersAPI}
+     */
+    enterpriseUsersAPI: EnterpriseUsersAPI;
 
     /**
      * @property {GroupsAPI}
@@ -266,6 +278,16 @@ class APIFactory {
         if (this.commentsAPI) {
             this.commentsAPI.destroy();
             delete this.commentsAPI;
+        }
+
+        if (this.enterpriseGroupsAPI) {
+            this.enterpriseGroupsAPI.destroy();
+            delete this.enterpriseGroupsAPI;
+        }
+
+        if (this.enterpriseUsersAPI) {
+            this.enterpriseUsersAPI.destroy();
+            delete this.enterpriseUsersAPI;
         }
 
         if (this.groupsAPI) {
@@ -611,6 +633,36 @@ class APIFactory {
 
         this.collaborationsAPI = new CollaborationsAPI(this.options);
         return this.collaborationsAPI;
+    }
+
+    /**
+     * API for Enterprise Groups
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {EnterpriseGroupsAPI} EnterpriseGroupsAPI instance
+     */
+    getEnterpriseGroupsAPI(shouldDestroy: boolean): EnterpriseGroupsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.enterpriseGroupsAPI = new EnterpriseGroupsAPI(this.options);
+        return this.enterpriseGroupsAPI;
+    }
+
+    /**
+     * API for Enterprise Users
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {EnterpriseUsersAPI} EnterpriseUsersAPI instance
+     */
+    getEnterpriseUsersAPI(shouldDestroy: boolean): EnterpriseUsersAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.enterpriseUsersAPI = new EnterpriseUsersAPI(this.options);
+        return this.enterpriseUsersAPI;
     }
 
     /**

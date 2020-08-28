@@ -62,6 +62,7 @@ class MarkerBasedApi extends Base {
                 ...requestData,
                 marker,
                 limit,
+                usemarker: true,
             };
 
             const { data }: { data: Data } = await this.xhr.get({
