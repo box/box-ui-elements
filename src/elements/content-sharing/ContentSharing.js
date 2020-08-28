@@ -6,6 +6,7 @@
  * button click (when a custom button is provided).
  * @author Box
  */
+import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import API from '../../api';
 import SharingModal from './SharingModal';
