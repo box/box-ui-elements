@@ -9,7 +9,7 @@
         position: absolute;
         top: $bdl-submenu-offset;
         right: auto;
-        left: calc(100% + 12px);
+        left: calc(100% + #{$bdl-grid-unit} * 3);
 
         &.is-left-aligned {
             right: 100%;

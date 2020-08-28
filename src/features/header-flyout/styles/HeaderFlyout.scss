@@ -15,7 +15,7 @@
     .overlay {
         @include bdl-Overlay-container;
 
-        padding: 2 * $flyout-header-spacer $flyout-list-padding 0;
+        padding: (2 * $flyout-header-spacer) $flyout-list-padding 0;
     }
 }
 

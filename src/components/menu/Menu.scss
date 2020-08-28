@@ -80,6 +80,6 @@
     }
 
     svg:not(.menu-item-arrow) {
-        margin-right: 16px;
+        margin-right: $bdl-grid-unit * 4;
     }
 }
