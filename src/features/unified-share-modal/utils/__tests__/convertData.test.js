@@ -404,6 +404,7 @@ describe('convertItemResponse()', () => {
     `('should return $description', ({ disabledReasonsFromAPI, convertedDisabledReasons }) => {
         const responseFromAPI = {
             allowed_invitee_roles: ['editor', 'viewer'],
+            allowed_shared_link_access_levels_disabled_reasons: disabledReasonsFromAPI,
             description: ITEM_DESCRIPTION,
             etag: '1',
             id: ITEM_ID,
@@ -412,7 +413,6 @@ describe('convertItemResponse()', () => {
             permissions: FULL_PERMISSIONS,
             shared_link: ITEM_SHARED_LINK,
             shared_link_features: ALL_SHARED_LINK_FEATURES,
-            shared_link_access_levels_disabled_reasons: disabledReasonsFromAPI,
             type: TYPE_FOLDER,
         };
         const {
