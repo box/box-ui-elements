@@ -213,6 +213,20 @@ describe('elements/content-uploader/ContentUploader', () => {
     });
 
     describe('onClick()', () => {
+        test('should cancel folder upload in progress', () => {
+            const item = { api: {}, isFolder: true, status: STATUS_IN_PROGRESS };
+            const onClickCancel = jest.fn();
+            const wrapper = getWrapper({ onClickCancel });
+            const instance = wrapper.instance();
+
+            instance.removeFileFromUploadQueue = jest.fn();
+
+            instance.onClick(item);
+
+            expect(instance.removeFileFromUploadQueue).toBeCalledWith(item);
+            expect(onClickCancel.mock.calls.length).toBe(1);
+        });
+
         test.each([
             [
                 'should set bytesUploadedOnLastResume when status is error and item is resumable',

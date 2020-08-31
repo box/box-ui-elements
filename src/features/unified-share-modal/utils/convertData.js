@@ -129,6 +129,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
     const {
         allowed_invitee_roles,
         allowed_shared_link_access_levels,
+        allowed_shared_link_access_levels_disabled_reasons,
         classification,
         id,
         description,
@@ -137,7 +138,6 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
         owned_by: { id: ownerID, login: ownerEmail },
         permissions,
         shared_link,
-        shared_link_access_levels_disabled_reasons,
         shared_link_features: { download_url: isDirectLinkAvailable, password: isPasswordAvailable },
         type,
     } = itemAPIData;
@@ -191,7 +191,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
 
         sharedLink = {
             accessLevel,
-            accessLevelsDisabledReason: shared_link_access_levels_disabled_reasons || {},
+            accessLevelsDisabledReason: allowed_shared_link_access_levels_disabled_reasons || {},
             allowedAccessLevels: convertAllowedAccessLevels(allowed_shared_link_access_levels) || ALLOWED_ACCESS_LEVELS, // show all access levels by default
             canChangeAccessLevel,
             canChangeDownload,
