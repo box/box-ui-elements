@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import API from '../../../api';
@@ -18,9 +18,9 @@ const handleError = jest.fn();
 const transformUsersSpy = jest.fn().mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
 const transformGroupsSpy = jest.fn().mockReturnValue(MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE);
 
-const createAPIMock = (groupsAPI, usersAPI) => ({
-    getGroupsAPI: jest.fn().mockReturnValue(groupsAPI),
-    getUsersAPI: jest.fn().mockReturnValue(usersAPI),
+const createAPIMock = (markerBasedGroupsAPI, markerBasedUsersAPI) => ({
+    getMarkerBasedGroupsAPI: jest.fn().mockReturnValue(markerBasedGroupsAPI),
+    getMarkerBasedUsersAPI: jest.fn().mockReturnValue(markerBasedUsersAPI),
 });
 
 function FakeComponent({
@@ -95,7 +95,13 @@ describe('elements/content-sharing/hooks/useContacts', () => {
                 MOCK_ITEM_ID,
                 expect.anything(Function),
                 expect.anything(Function),
-                MOCK_FILTER,
+                { filter_term: MOCK_FILTER },
+            );
+            expect(getGroupsInEnterprise).toHaveBeenCalledWith(
+                MOCK_ITEM_ID,
+                expect.anything(Function),
+                expect.anything(Function),
+                { fields: 'name,permissions', filter_term: MOCK_FILTER },
             );
             expect(handleSuccess).toHaveBeenCalledWith(MOCK_CONTACTS_API_RESPONSE);
             expect(handleSuccess).toHaveBeenCalledWith(MOCK_GROUP_CONTACTS_API_RESPONSE);
@@ -124,7 +130,13 @@ describe('elements/content-sharing/hooks/useContacts', () => {
                 MOCK_ITEM_ID,
                 expect.anything(Function),
                 expect.anything(Function),
-                MOCK_FILTER,
+                { filter_term: MOCK_FILTER },
+            );
+            expect(getGroupsInEnterprise).toHaveBeenCalledWith(
+                MOCK_ITEM_ID,
+                expect.anything(Function),
+                expect.anything(Function),
+                { fields: 'name,permissions', filter_term: MOCK_FILTER },
             );
             expect(handleSuccess).toHaveBeenCalledWith(MOCK_CONTACTS_API_RESPONSE);
             expect(handleSuccess).toHaveBeenCalledWith(MOCK_GROUP_CONTACTS_API_RESPONSE);
@@ -250,7 +262,13 @@ describe('elements/content-sharing/hooks/useContacts', () => {
                 MOCK_ITEM_ID,
                 expect.anything(Function),
                 expect.anything(Function),
-                MOCK_FILTER,
+                { filter_term: MOCK_FILTER },
+            );
+            expect(getGroupsInEnterprise).toHaveBeenCalledWith(
+                MOCK_ITEM_ID,
+                expect.anything(Function),
+                expect.anything(Function),
+                { fields: 'name,permissions', filter_term: MOCK_FILTER },
             );
             expect(handleError).toHaveBeenCalled();
             expect(contacts).resolves.toBeFalsy();

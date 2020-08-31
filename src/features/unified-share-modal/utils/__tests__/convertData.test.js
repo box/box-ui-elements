@@ -38,6 +38,7 @@ import {
     bdlYellow50,
 } from '../../../../styles/variables';
 import {
+    MOCK_AVATAR_URL_MAP,
     MOCK_COLLABS_API_RESPONSE,
     MOCK_COLLABS_CONVERTED_REQUEST,
     MOCK_COLLAB_IDS_CONVERTED,
@@ -403,6 +404,7 @@ describe('convertItemResponse()', () => {
     `('should return $description', ({ disabledReasonsFromAPI, convertedDisabledReasons }) => {
         const responseFromAPI = {
             allowed_invitee_roles: ['editor', 'viewer'],
+            allowed_shared_link_access_levels_disabled_reasons: disabledReasonsFromAPI,
             description: ITEM_DESCRIPTION,
             etag: '1',
             id: ITEM_ID,
@@ -411,7 +413,6 @@ describe('convertItemResponse()', () => {
             permissions: FULL_PERMISSIONS,
             shared_link: ITEM_SHARED_LINK,
             shared_link_features: ALL_SHARED_LINK_FEATURES,
-            shared_link_access_levels_disabled_reasons: disabledReasonsFromAPI,
             type: TYPE_FOLDER,
         };
         const {
@@ -528,19 +529,21 @@ describe('convertSharedLinkSettings', () => {
 
 describe('convertCollabsResponse', () => {
     test.each`
-        isCurrentUserOwner | description
-        ${true}            | ${'the owner'}
-        ${false}           | ${'not the owner'}
+        isCurrentUserOwner | avatarURLMap | ownerDescription   | avatarURLMapDescription
+        ${true}            | ${{}}        | ${'the owner'}     | ${'empty'}
+        ${false}           | ${{}}        | ${'not the owner'} | ${'empty'}
+        ${true}            | ${null}      | ${'the owner'}     | ${'null'}
+        ${false}           | ${null}      | ${'not the owner'} | ${'null'}
     `(
-        'should correctly convert a Collaborations API response when the current user is $description',
-        ({ isCurrentUserOwner }) => {
+        'should correctly convert a Collaborations API response when the current user is $ownerDescription and the avatar URL map is $avatarURLMapDescription',
+        ({ isCurrentUserOwner, avatarURLMap }) => {
             const convertedResponse = {
                 collaborators: [
                     {
                         collabID: MOCK_COLLAB_IDS_CONVERTED[0],
                         email: 'contentexplorer@box.com',
                         hasCustomAvatar: false,
-                        imageURL: null,
+                        imageURL: undefined,
                         isExternalCollab: false,
                         name: 'Content Explorer',
                         translatedRole: 'Editor',
@@ -551,7 +554,7 @@ describe('convertCollabsResponse', () => {
                         collabID: MOCK_COLLAB_IDS_CONVERTED[1],
                         email: 'contentpreview@box.com',
                         hasCustomAvatar: false,
-                        imageURL: null,
+                        imageURL: undefined,
                         isExternalCollab: false,
                         name: 'Content Preview',
                         translatedRole: 'Editor',
@@ -565,7 +568,7 @@ describe('convertCollabsResponse', () => {
                             executeAt: '2020-07-09T14:53:12-08:00',
                         },
                         hasCustomAvatar: false,
-                        imageURL: null,
+                        imageURL: undefined,
                         isExternalCollab: false,
                         name: 'Content Picker',
                         translatedRole: 'Editor',
@@ -576,7 +579,7 @@ describe('convertCollabsResponse', () => {
                         collabID: MOCK_COLLAB_IDS_CONVERTED[3],
                         email: 'contentuploader@box.com',
                         hasCustomAvatar: false,
-                        imageURL: null,
+                        imageURL: undefined,
                         isExternalCollab: false,
                         name: 'Content Uploader',
                         translatedRole: 'Editor',
@@ -587,7 +590,7 @@ describe('convertCollabsResponse', () => {
                         collabID: MOCK_COLLAB_IDS_CONVERTED[4],
                         email: 'demo@boxworks.com',
                         hasCustomAvatar: false,
-                        imageURL: null,
+                        imageURL: undefined,
                         isExternalCollab: !!isCurrentUserOwner,
                         name: 'BoxWorks Demo',
                         translatedRole: 'Viewer',
@@ -596,17 +599,95 @@ describe('convertCollabsResponse', () => {
                     },
                 ],
             };
-            expect(convertCollabsResponse(MOCK_COLLABS_API_RESPONSE, MOCK_OWNER_EMAIL, isCurrentUserOwner)).toEqual(
-                convertedResponse,
-            );
+            expect(
+                convertCollabsResponse(MOCK_COLLABS_API_RESPONSE, avatarURLMap, MOCK_OWNER_EMAIL, isCurrentUserOwner),
+            ).toEqual(convertedResponse);
         },
     );
 
-    test('should return an object with an empty array if there are no collaborations', () => {
-        expect(convertCollabsResponse({ total_count: 0, entries: [] }, MOCK_OWNER_EMAIL, true)).toEqual({
-            collaborators: [],
-        });
+    test('should correctly convert a Collaborations API response with avatar URLs', () => {
+        const convertedResponse = {
+            collaborators: [
+                {
+                    collabID: MOCK_COLLAB_IDS_CONVERTED[0],
+                    email: 'contentexplorer@box.com',
+                    hasCustomAvatar: true,
+                    imageURL: MOCK_AVATAR_URL_MAP[MOCK_USER_IDS_CONVERTED[0]],
+                    isExternalCollab: false,
+                    name: 'Content Explorer',
+                    translatedRole: 'Editor',
+                    type: 'user',
+                    userID: MOCK_USER_IDS_CONVERTED[0],
+                },
+                {
+                    collabID: MOCK_COLLAB_IDS_CONVERTED[1],
+                    email: 'contentpreview@box.com',
+                    hasCustomAvatar: true,
+                    imageURL: MOCK_AVATAR_URL_MAP[MOCK_USER_IDS_CONVERTED[1]],
+                    isExternalCollab: false,
+                    name: 'Content Preview',
+                    translatedRole: 'Editor',
+                    type: 'user',
+                    userID: MOCK_USER_IDS_CONVERTED[1],
+                },
+                {
+                    collabID: MOCK_COLLAB_IDS_CONVERTED[2],
+                    email: 'contentpicker@box.com',
+                    expiration: {
+                        executeAt: '2020-07-09T14:53:12-08:00',
+                    },
+                    hasCustomAvatar: true,
+                    imageURL: MOCK_AVATAR_URL_MAP[MOCK_USER_IDS_CONVERTED[2]],
+                    isExternalCollab: false,
+                    name: 'Content Picker',
+                    translatedRole: 'Editor',
+                    type: 'user',
+                    userID: MOCK_USER_IDS_CONVERTED[2],
+                },
+                {
+                    collabID: MOCK_COLLAB_IDS_CONVERTED[3],
+                    email: 'contentuploader@box.com',
+                    hasCustomAvatar: true,
+                    imageURL: MOCK_AVATAR_URL_MAP[MOCK_USER_IDS_CONVERTED[3]],
+                    isExternalCollab: false,
+                    name: 'Content Uploader',
+                    translatedRole: 'Editor',
+                    type: 'user',
+                    userID: MOCK_USER_IDS_CONVERTED[3],
+                },
+                {
+                    collabID: MOCK_COLLAB_IDS_CONVERTED[4],
+                    email: 'demo@boxworks.com',
+                    hasCustomAvatar: true,
+                    imageURL: MOCK_AVATAR_URL_MAP[MOCK_USER_IDS_CONVERTED[4]],
+                    isExternalCollab: true,
+                    name: 'BoxWorks Demo',
+                    translatedRole: 'Viewer',
+                    type: 'user',
+                    userID: MOCK_USER_IDS_CONVERTED[4],
+                },
+            ],
+        };
+        expect(convertCollabsResponse(MOCK_COLLABS_API_RESPONSE, MOCK_AVATAR_URL_MAP, MOCK_OWNER_EMAIL, true)).toEqual(
+            convertedResponse,
+        );
     });
+
+    test.each`
+        avatarURLMap           | description
+        ${null}                | ${'null'}
+        ${{}}                  | ${'empty'}
+        ${MOCK_AVATAR_URL_MAP} | ${'not empty'}
+    `(
+        'should return an object with an empty array if there are no collaborations and the avatar URL map is $description',
+        ({ avatarURLMap }) => {
+            expect(
+                convertCollabsResponse({ total_count: 0, entries: [] }, avatarURLMap, MOCK_OWNER_EMAIL, true),
+            ).toEqual({
+                collaborators: [],
+            });
+        },
+    );
 });
 
 describe('convertUserContactsResponse()', () => {

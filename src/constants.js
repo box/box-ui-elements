@@ -98,8 +98,8 @@ export const FIELD_RESTORED_FROM = 'restored_from';
 export const FIELD_CREATED_AT = 'created_at';
 export const FIELD_INTERACTED_AT: 'interacted_at' = 'interacted_at';
 export const FIELD_SHARED_LINK = 'shared_link';
-export const FIELD_SHARED_LINK_ACCESS_LEVELS_DISABLED_REASONS: 'shared_link_access_levels_disabled_reasons' =
-    'shared_link_access_levels_disabled_reasons';
+export const FIELD_SHARED_LINK_ACCESS_LEVELS_DISABLED_REASONS: 'allowed_shared_link_access_levels_disabled_reasons' =
+    'allowed_shared_link_access_levels_disabled_reasons';
 export const FIELD_SHARED_LINK_FEATURES: 'shared_link_features' = 'shared_link_features';
 export const FIELD_ALLOWED_INVITEE_ROLES: 'allowed_invitee_roles' = 'allowed_invitee_roles';
 export const FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS = 'allowed_shared_link_access_levels';
@@ -182,6 +182,7 @@ export const DEFAULT_ROOT = '0';
 export const DEFAULT_SEARCH_DEBOUNCE = 500;
 export const DEFAULT_COLLAB_DEBOUNCE = 500;
 export const DEFAULT_MAX_COLLABORATORS = 25;
+export const DEFAULT_MAX_CONTACTS = 50;
 export const DEFAULT_PAGE_NUMBER = 1;
 export const DEFAULT_PAGE_SIZE = 50;
 export const DEFAULT_FETCH_START = 0;

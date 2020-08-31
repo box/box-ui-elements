@@ -59,6 +59,7 @@ export type ContentSharingItemDataType = {
 export type ContentSharingItemAPIResponse = {
     allowed_invitee_roles: Array<string>,
     allowed_shared_link_access_levels?: Array<string>,
+    allowed_shared_link_access_levels_disabled_reasons?: accessLevelsDisabledReasonType,
     classification: ?BoxItemClassification,
     description: string,
     etag: string,
@@ -71,7 +72,6 @@ export type ContentSharingItemAPIResponse = {
     },
     permissions: BoxItemPermission,
     shared_link?: APISharedLink,
-    shared_link_access_levels_disabled_reasons?: accessLevelsDisabledReasonType,
     shared_link_features: {
         download_url: boolean,
         password: boolean,
@@ -129,3 +129,5 @@ export type ConnectToItemShareFnType = ({
     requestOptions?: RequestOptions,
     successFn?: Function,
 }) => Function;
+
+export type AvatarURLMap = { [number | string]: ?string };
