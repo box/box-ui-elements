@@ -1,13 +1,5 @@
 @import '../../styles/variables';
 
-$horizontal-offset: 10px;
-$arrow-offset: -3px;
-$arrow-size: 5px;
-$rotation-bottom: 225deg;
-$rotation-top: 45deg;
-$rotation-middle-right: 135deg;
-$rotation-middle-left: 315deg;
-
 @keyframes flyout_overlay {
     0% {
         opacity: 0;
@@ -91,22 +83,8 @@ $rotation-middle-left: 315deg;
         border-radius: $bdl-border-radius-size;
     }
 
-    &::before {
-        position: absolute;
-        z-index: $overlay-z-index + 1;
-        border: $arrow-size solid $white;
-        box-shadow: 1px 1px 0 0 $bdl-gray-30;
-        content: '';
-    }
-
     // Bottom
     &.flyout-overlay-target-attached-bottom.flyout-overlay-target-attached-left {
-        &::before {
-            top: $arrow-offset;
-            left: $horizontal-offset;
-            transform: rotate($rotation-bottom);
-        }
-
         .overlay {
             transform-origin: left top;
             animation: flyout_overlay .125s, flyout_overlay_top_left_aligned .125s;
@@ -114,12 +92,6 @@ $rotation-middle-left: 315deg;
     }
 
     &.flyout-overlay-target-attached-bottom.flyout-overlay-target-attached-right {
-        &::before {
-            top: $arrow-offset;
-            right: $horizontal-offset;
-            transform: rotate($rotation-bottom);
-        }
-
         .overlay {
             transform-origin: right top;
             animation: flyout_overlay .125s, flyout_overlay_top_right_aligned .125s;
@@ -127,12 +99,6 @@ $rotation-middle-left: 315deg;
     }
 
     &.flyout-overlay-target-attached-bottom.flyout-overlay-target-attached-center {
-        &::before {
-            top: $arrow-offset;
-            left: 50%;
-            transform: rotate($rotation-bottom);
-        }
-
         .overlay {
             transform-origin: center top;
             animation: flyout_overlay .125s, flyout_overlay_top_center_aligned .125s;
@@ -141,12 +107,6 @@ $rotation-middle-left: 315deg;
 
     // Top
     &.flyout-overlay-target-attached-top.flyout-overlay-target-attached-left {
-        &::before {
-            bottom: $arrow-offset;
-            left: $horizontal-offset;
-            transform: rotate($rotation-top);
-        }
-
         .overlay {
             transform-origin: left bottom;
             animation: flyout_overlay .125s, flyout_overlay_bottom_left_aligned .125s;
@@ -154,12 +114,6 @@ $rotation-middle-left: 315deg;
     }
 
     &.flyout-overlay-target-attached-top.flyout-overlay-target-attached-right {
-        &::before {
-            right: $horizontal-offset;
-            bottom: $arrow-offset;
-            transform: rotate($rotation-top);
-        }
-
         .overlay {
             transform-origin: right bottom;
             animation: flyout_overlay .125s, flyout_overlay_bottom_right_aligned .125s;
@@ -167,12 +121,6 @@ $rotation-middle-left: 315deg;
     }
 
     &.flyout-overlay-target-attached-top.flyout-overlay-target-attached-center {
-        &::before {
-            bottom: $arrow-offset;
-            left: 50%;
-            transform: rotate($rotation-top);
-        }
-
         .overlay {
             transform-origin: center bottom;
             animation: flyout_overlay .125s, flyout_overlay_bottom_center_aligned .125s;
@@ -181,13 +129,6 @@ $rotation-middle-left: 315deg;
 
     // Middle
     &.flyout-overlay-target-attached-middle.flyout-overlay-target-attached-left {
-        &::before {
-            top: 50%;
-            right: $arrow-offset;
-            margin-top: -$arrow-size;
-            transform: rotate($rotation-middle-left);
-        }
-
         .overlay {
             transform-origin: right center;
             animation: flyout_overlay .125s, flyout_overlay_middle_right_aligned .125s;
@@ -195,13 +136,6 @@ $rotation-middle-left: 315deg;
     }
 
     &.flyout-overlay-target-attached-middle.flyout-overlay-target-attached-right {
-        &::before {
-            top: 50%;
-            left: $arrow-offset;
-            margin-top: -$arrow-size;
-            transform: rotate($rotation-middle-right);
-        }
-
         .overlay {
             transform-origin: left center;
             animation: flyout_overlay .125s, flyout_overlay_middle_left_aligned .125s;
