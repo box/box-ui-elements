@@ -1,12 +1,10 @@
 import Groups from '../Groups';
-import { ERROR_CODE_FETCH_ENTERPRISE_GROUPS } from '../../constants';
 
 let groups;
 const BASE_URL = 'https://www.foo.com';
 const FILE_ID = 'foo';
 const id = 123;
-const MOCK_FILTER = 'content';
-const MOCK_ENTERPRISE_GROUPS_RESPONSE = { total_count: 0, entries: [], limit: 25, offset: 0 };
+
 describe('api/Groups', () => {
     beforeEach(() => {
         groups = new Groups({});
@@ -52,43 +50,6 @@ describe('api/Groups', () => {
                     requestData: expectedRequestData,
                     successCallback: expect.any(Function),
                     errorCallback: expect.any(Function),
-                });
-            });
-        });
-
-        describe('getGroupsInEnterpriseUrl', () => {
-            test('should return the enterprise groups URL with the provided filter term', () => {
-                expect(groups.getGroupsInEnterpriseUrl(MOCK_FILTER)).toBe(
-                    `${BASE_URL}/groups?filter_term=${MOCK_FILTER}`,
-                );
-            });
-
-            test('should return the default enterprise groups URL if called without a filter term', () => {
-                expect(groups.getGroupsInEnterpriseUrl()).toBe(`${BASE_URL}/groups`);
-            });
-        });
-
-        describe('getGroupsInEnterprise', () => {
-            test.each`
-                filterTerm     | requestData                       | description
-                ${MOCK_FILTER} | ${{ fields: 'name,permissions' }} | ${'provided filter term and request data'}
-                ${undefined}   | ${{ fields: 'name,permissions' }} | ${'default filter term and provided request data'}
-                ${MOCK_FILTER} | ${undefined}                      | ${'provided filter term and undefined request data'}
-                ${undefined}   | ${undefined}                      | ${'default filter term and undefined request data'}
-            `('should call this.get() with the $description and return a promise', ({ filterTerm, requestData }) => {
-                const getSpy = jest.spyOn(groups, 'get').mockResolvedValue(MOCK_ENTERPRISE_GROUPS_RESPONSE);
-                const getGroupsInEnterpriseUrlSpy = jest
-                    .spyOn(groups, 'getGroupsInEnterpriseUrl')
-                    .mockReturnValue(BASE_URL);
-                groups.getGroupsInEnterprise(FILE_ID, successCallback, errorCallback, filterTerm, requestData);
-                expect(groups.errorCode).toBe(ERROR_CODE_FETCH_ENTERPRISE_GROUPS);
-                expect(getGroupsInEnterpriseUrlSpy).toHaveBeenCalledWith(filterTerm);
-                expect(getSpy).toHaveBeenCalledWith({
-                    id: FILE_ID,
-                    successCallback,
-                    errorCallback,
-                    requestData,
-                    url: BASE_URL,
                 });
             });
         });
