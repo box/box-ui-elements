@@ -8,7 +8,7 @@ import queryString from 'query-string';
 import TokenService from '../utils/TokenService';
 import { getTypedFileId } from '../utils/file';
 import Base from './Base';
-import { ERROR_CODE_FETCH_CURRENT_USER, ERROR_CODE_FETCH_ENTERPRISE_USERS } from '../constants';
+import { ERROR_CODE_FETCH_CURRENT_USER } from '../constants';
 import type { ElementsErrorCallback } from '../common/types/api';
 import type { TokenLiteral } from '../common/types/core';
 
@@ -34,23 +34,6 @@ class Users extends Base {
         }
 
         return `${this.getBaseApiUrl()}/users/${id}/avatar`;
-    }
-
-    /**
-     * API URL for fetching all users in the current user's enterprise
-     *
-     * @param {string} [filterTerm] Optional filter for enterprise users
-     * @returns {string} URL for fetching enterprise users
-     */
-    getUsersInEnterpriseUrl(filterTerm: ?string): string {
-        let url = `${this.getBaseApiUrl()}/users`;
-
-        if (filterTerm) {
-            const enterpriseUsersQuery = queryString.stringify({ filter_term: filterTerm });
-            url = `${url}?${enterpriseUsersQuery}`;
-        }
-
-        return url;
     }
 
     /**
@@ -108,30 +91,6 @@ class Users extends Base {
             successCallback,
             errorCallback,
             requestData,
-        });
-    }
-
-    /**
-     * API for fetching all users in the current user's enterprise
-     *
-     * @param {string} id - Box item ID
-     * @param {Function} successCallback - Success callback
-     * @param {Function} errorCallback - Error callback
-     * @param {string} [filterTerm] - Optional filter for the users
-     * @returns {void}
-     */
-    getUsersInEnterprise(
-        id: string,
-        successCallback: Function,
-        errorCallback: ElementsErrorCallback,
-        filterTerm: ?string,
-    ): void {
-        this.errorCode = ERROR_CODE_FETCH_ENTERPRISE_USERS;
-        this.get({
-            id,
-            successCallback,
-            errorCallback,
-            url: this.getUsersInEnterpriseUrl(filterTerm),
         });
     }
 }

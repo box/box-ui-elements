@@ -65,7 +65,7 @@ jest.mock('../../../features/unified-share-modal/utils/convertData');
 // Stub the queryCommandSupported function, which is used in the Shared Link Settings Modal
 global.document.queryCommandSupported = jest.fn();
 
-const createAPIMock = (fileAPI, folderAPI, usersAPI, collaborationsAPI, groupsAPI) => ({
+const createAPIMock = (fileAPI, folderAPI, usersAPI, collaborationsAPI, markerBasedGroupsAPI, markerBasedUsersAPI) => ({
     getFileAPI: jest.fn().mockReturnValue(fileAPI),
     getFileCollaborationsAPI: jest.fn().mockReturnValue({
         getCollaborations: jest.fn(),
@@ -76,7 +76,8 @@ const createAPIMock = (fileAPI, folderAPI, usersAPI, collaborationsAPI, groupsAP
     }),
     getUsersAPI: jest.fn().mockReturnValue({ getAvatarUrlWithAccessToken: jest.fn(), ...usersAPI }),
     getCollaborationsAPI: jest.fn().mockReturnValue(collaborationsAPI),
-    getGroupsAPI: jest.fn().mockReturnValue(groupsAPI),
+    getMarkerBasedGroupsAPI: jest.fn().mockReturnValue(markerBasedGroupsAPI),
+    getMarkerBasedUsersAPI: jest.fn().mockReturnValue(markerBasedUsersAPI),
 });
 
 describe('elements/content-sharing/SharingModal', () => {
@@ -672,11 +673,13 @@ describe('elements/content-sharing/SharingModal', () => {
                 null,
                 {
                     getUser: jest.fn().mockImplementation(createSuccessMock(MOCK_USER_API_RESPONSE)),
-                    getUsersInEnterprise,
                 },
                 null,
                 {
                     getGroupsInEnterprise,
+                },
+                {
+                    getUsersInEnterprise,
                 },
             );
             convertGroupContactsResponse.mockReturnValue(MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE);
@@ -699,11 +702,14 @@ describe('elements/content-sharing/SharingModal', () => {
             });
             wrapper.update();
 
-            expect(getUsersInEnterprise).toHaveBeenCalledWith(
+            expect(getUsersInEnterprise).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything(), {
+                filter_term: MOCK_FILTER,
+            });
+            expect(getGroupsInEnterprise).toHaveBeenCalledWith(
                 MOCK_ITEM_ID,
-                expect.anything(),
-                expect.anything(),
-                MOCK_FILTER,
+                expect.anything(Function),
+                expect.anything(Function),
+                { fields: 'name,permissions', filter_term: MOCK_FILTER },
             );
             expect(response).resolves.toEqual([
                 ...MOCK_CONTACTS_CONVERTED_RESPONSE,
@@ -811,13 +817,15 @@ describe('elements/content-sharing/SharingModal', () => {
                 },
                 {
                     getUser: jest.fn().mockImplementation(createSuccessMock(MOCK_USER_API_RESPONSE)),
-                    getUsersInEnterprise,
                 },
                 {
                     addCollaboration,
                 },
                 {
                     getGroupsInEnterprise,
+                },
+                {
+                    getUsersInEnterprise,
                 },
             );
         });

@@ -18,6 +18,8 @@ import TasksNewAPI from './tasks/TasksNew';
 import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
 import TaskLinksAPI from './tasks/TaskLinks';
 import FileAccessStatsAPI from './FileAccessStats';
+import MarkerBasedGroupsAPI from './MarkerBasedGroups';
+import MarkerBasedUsersAPI from './MarkerBasedUsers';
 import GroupsAPI from './Groups';
 import UsersAPI from './Users';
 import MetadataAPI from './Metadata';
@@ -108,6 +110,16 @@ class APIFactory {
      * @property {FileAccessStatsAPI}
      */
     fileAccessStatsAPI: FileAccessStatsAPI;
+
+    /*
+     * @property {MarkerBasedGroupsAPI}
+     */
+    markerBasedGroupsAPI: MarkerBasedGroupsAPI;
+
+    /*
+     * @property {MarkerBasedUsersAPI}
+     */
+    markerBasedUsersAPI: MarkerBasedUsersAPI;
 
     /**
      * @property {GroupsAPI}
@@ -266,6 +278,16 @@ class APIFactory {
         if (this.commentsAPI) {
             this.commentsAPI.destroy();
             delete this.commentsAPI;
+        }
+
+        if (this.markerBasedGroupsAPI) {
+            this.markerBasedGroupsAPI.destroy();
+            delete this.markerBasedGroupsAPI;
+        }
+
+        if (this.markerBasedUsersAPI) {
+            this.markerBasedUsersAPI.destroy();
+            delete this.markerBasedUsersAPI;
         }
 
         if (this.groupsAPI) {
@@ -614,7 +636,37 @@ class APIFactory {
     }
 
     /**
-     * API for Groups
+     * API for Groups (marker-based paging)
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {MarkerBasedGroupsAPI} MarkerBasedGroupsAPI instance
+     */
+    getMarkerBasedGroupsAPI(shouldDestroy: boolean): MarkerBasedGroupsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.markerBasedGroupsAPI = new MarkerBasedGroupsAPI(this.options);
+        return this.markerBasedGroupsAPI;
+    }
+
+    /**
+     * API for Users (marker-based paging)
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {MarkerBasedUsersAPI} MarkerBasedUsersAPI instance
+     */
+    getMarkerBasedUsersAPI(shouldDestroy: boolean): MarkerBasedUsersAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.markerBasedUsersAPI = new MarkerBasedUsersAPI(this.options);
+        return this.markerBasedUsersAPI;
+    }
+
+    /**
+     * API for Groups (offset-based paging)
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
      * @return {GroupsAPI} GroupsAPI instance
@@ -629,7 +681,7 @@ class APIFactory {
     }
 
     /**
-     * API for Users
+     * API for Users (offset-based paging)
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
      * @return {UsersAPI} UsersAPI instance

@@ -39,23 +39,21 @@ function useContacts(api: API, itemID: string, options: ContentSharingHooksOptio
 
         const updatedGetContactsFn: GetContactsFnType = () => (filterTerm: string) => {
             const getUsers = new Promise((resolve: (result: Array<UserMini>) => void) => {
-                api.getUsersAPI(false).getUsersInEnterprise(
+                api.getMarkerBasedUsersAPI(false).getUsersInEnterprise(
                     itemID,
                     (response: UserCollection) => resolveAPICall(resolve, response, transformUsers),
                     handleError,
-                    filterTerm,
+                    { filter_term: filterTerm },
                 );
             });
             const getGroups = new Promise((resolve: (result: Array<GroupMini>) => void) => {
-                api.getGroupsAPI(false).getGroupsInEnterprise(
+                api.getMarkerBasedGroupsAPI(false).getGroupsInEnterprise(
                     itemID,
                     (response: GroupCollection) => resolveAPICall(resolve, response, transformGroups),
                     handleError,
-                    filterTerm,
                     {
-                        params: {
-                            fields: [FIELD_NAME, FIELD_PERMISSIONS].toString(),
-                        },
+                        fields: [FIELD_NAME, FIELD_PERMISSIONS].toString(),
+                        filter_term: filterTerm,
                     },
                 );
             });
