@@ -41,7 +41,10 @@ class MarkerBasedGroups extends MarkerBasedAPI {
             limit,
             successCallback,
             errorCallback,
-            requestData,
+            requestData: {
+                usemarker: true,
+                ...requestData,
+            },
             shouldFetchAll: false,
         });
     }

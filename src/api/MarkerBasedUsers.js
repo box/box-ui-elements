@@ -41,7 +41,10 @@ class MarkerBasedUsers extends MarkerBasedApi {
             limit,
             successCallback,
             errorCallback,
-            requestData,
+            requestData: {
+                usemarker: true,
+                ...requestData,
+            },
             shouldFetchAll: false,
         });
     }

@@ -7,7 +7,7 @@ let successCallback;
 let errorCallback;
 const BASE_URL = 'https://api.box.com/2.0';
 const ITEM_ID = '14237093';
-const MOCK_REQUEST_DATA = { fields: ['name', 'permissions'], filter_term: 'foo' };
+const MOCK_REQUEST_DATA = { fields: ['name', 'permissions'], filter_term: 'foo', usemarker: true };
 
 describe('api/MarkerBasedUsers', () => {
     beforeEach(() => {
@@ -25,9 +25,9 @@ describe('api/MarkerBasedUsers', () => {
 
     describe('getUsersInEnterprise()', () => {
         test.each`
-            providedLimit | providedRequestData  | limit                   | requestData          | description
-            ${undefined}  | ${undefined}         | ${DEFAULT_MAX_CONTACTS} | ${{}}                | ${'default arguments'}
-            ${100}        | ${MOCK_REQUEST_DATA} | ${100}                  | ${MOCK_REQUEST_DATA} | ${'provided arguments'}
+            providedLimit | providedRequestData  | limit                   | requestData            | description
+            ${undefined}  | ${undefined}         | ${DEFAULT_MAX_CONTACTS} | ${{ usemarker: true }} | ${'default arguments'}
+            ${100}        | ${MOCK_REQUEST_DATA} | ${100}                  | ${MOCK_REQUEST_DATA}   | ${'provided arguments'}
         `('should call this.markerGet() with the $description', ({ requestData, limit }) => {
             jest.spyOn(markerBasedUsers, 'getUrl').mockReturnValue(BASE_URL);
             markerBasedUsers.getUsersInEnterprise(ITEM_ID, successCallback, errorCallback, requestData, limit);
