@@ -9,7 +9,7 @@
         position: absolute;
         top: $bdl-submenu-offset;
         right: auto;
-        left: calc(100% + #{$bdl-grid-unit * 3});
+        left: calc(100% - #{bdl-submenu-offset});
 
         &.is-left-aligned {
             right: 100%;
@@ -29,7 +29,7 @@
 
     .menu-item-arrow {
         position: absolute;
-        top: 12px;
+        top: $bdl-grid-unit * 3;
         right: $bdl-grid-unit * 2;
     }
 }
