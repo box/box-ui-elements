@@ -9,7 +9,7 @@
         position: absolute;
         top: $bdl-submenu-offset;
         right: auto;
-        left: calc(100% - #{bdl-submenu-offset});
+        left: calc(100% - #{$bdl-submenu-offset});
 
         &.is-left-aligned {
             right: 100%;
