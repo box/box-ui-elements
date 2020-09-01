@@ -16,6 +16,11 @@ exports[`components/menu/SubmenuItem render() should correctly render correctly 
   <div
     key=".0"
   />
+  <Arrow16
+    className="menu-item-arrow"
+    height={12}
+    width={12}
+  />
   <div
     className="submenu"
     initialFocusIndex={null}
@@ -43,6 +48,11 @@ exports[`components/menu/SubmenuItem render() should correctly render correctly 
   <div
     key=".0"
   />
+  <Arrow16
+    className="menu-item-arrow"
+    height={12}
+    width={12}
+  />
   <div
     className="submenu"
     initialFocusIndex={null}
@@ -69,6 +79,11 @@ exports[`components/menu/SubmenuItem render() should correctly render default co
 >
   <div
     key=".0"
+  />
+  <Arrow16
+    className="menu-item-arrow"
+    height={12}
+    width={12}
   />
   <div
     className="submenu"

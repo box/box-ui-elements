@@ -13,9 +13,9 @@
     height: $flyout-list-height;
 
     .overlay {
-        padding: 2 * $flyout-header-spacer $flyout-list-padding 0;
-
         @include bdl-Overlay-container;
+
+        padding: (2 * $flyout-header-spacer) $flyout-list-padding 0;
     }
 }
 
