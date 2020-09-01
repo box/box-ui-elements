@@ -53,17 +53,17 @@
 
     &.is-select-item {
         position: relative;
-        padding-left: 30px;
+        padding-left: 38px;
 
         /* checkmark */
         &.is-selected::before {
             position: absolute;
-            top: 8px;
+            top: 10px;
             left: 14px;
             width: 6px;
             height: 12px;
             margin: auto;
-            border-color: $bdl-gray-80;
+            border-color: $bdl-gray;
             border-style: none solid solid none;
             border-width: 2px;
             transform: rotate(45deg);
