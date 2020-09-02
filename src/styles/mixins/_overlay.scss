@@ -13,10 +13,6 @@
     &.is-active {
         background-color: fade-out($bdl-gray, .95);
     }
-
-    &:focus {
-        box-shadow: inset 0 0 1px 1px $bdl-box-blue-50, 0 0 2px 0 $bdl-box-blue-50;
-    }
 }
 
 /**

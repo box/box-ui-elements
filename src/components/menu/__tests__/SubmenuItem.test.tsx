@@ -1,15 +1,14 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-// import { Global } from '../../../__mocks__/globals';
 import SubmenuItem from '../SubmenuItem';
 
-// declare global {
-//     interface Window {
-//         innerHeight: number;
-//         innerWidth: number;
-//     }
-// }
+jest.mock('lodash/debounce', () =>
+    jest.fn(fn => {
+        fn.cancel = jest.fn();
+        return fn;
+    }),
+);
 
 describe('components/menu/SubmenuItem', () => {
     const getWrapper = (props = {}) => {

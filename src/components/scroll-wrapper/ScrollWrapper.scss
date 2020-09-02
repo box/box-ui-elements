@@ -28,31 +28,13 @@ $scroll-shadow-height: 30px;
         &::before {
             top: -$scroll-shadow-height;
             z-index: 20;
-            box-shadow: 0 ($scroll-shadow-height / 2) $scroll-shadow-height (-$scroll-shadow-height / 2.5) rgba(0, 0, 0, .25);
+            box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .1);
         }
 
         &::after {
             bottom: -$scroll-shadow-height;
             z-index: 30;
-            box-shadow: 0 (-$scroll-shadow-height / 2) $scroll-shadow-height (-$scroll-shadow-height / 2.5) rgba(0, 0, 0, .25);
-        }
-
-        &.style--cover {
-            &::before,
-            &::after {
-                width: 110%;
-                margin: 0 -5%;
-            }
-        }
-
-        &.style--contain {
-            &::before {
-                top: -($scroll-shadow-height + 10px);
-            }
-
-            &::after {
-                bottom: -($scroll-shadow-height + 10px);
-            }
+            box-shadow: 0 -2px 8px 0 rgba(0, 0, 0, .1);
         }
     }
 

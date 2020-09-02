@@ -1,8 +1,10 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
+import debounce from 'lodash/debounce';
 
 import './SubmenuItem.scss';
+import Arrow16 from '../../icon/fill/Arrow16';
 
 const SUBMENU_LEFT_ALIGNED_CLASS = 'is-left-aligned';
 const SUBMENU_BOTTOM_ALIGNED_CLASS = 'is-bottom-aligned';
@@ -121,26 +123,25 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
         }
     };
 
-    closeSubmenu = () => {
+    closeSubmenu = debounce(() => {
         this.setState({
             isSubmenuOpen: false,
         });
-    };
+    }, 50);
 
     closeSubmenuAndFocusTrigger = (isKeyboardEvent: boolean | null | undefined) => {
         this.closeSubmenu();
-
         if (this.submenuTriggerEl && isKeyboardEvent) {
             this.submenuTriggerEl.focus();
         }
     };
 
     openSubmenu = () => {
+        this.closeSubmenu.cancel();
         const { onOpen } = this.props;
         if (onOpen) {
             onOpen();
         }
-
         this.setState({
             isSubmenuOpen: true,
             submenuFocusIndex: null,
@@ -170,11 +171,14 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
             throw new Error('SubmenuItem must have exactly two children, a trigger component and a <Menu>');
         }
 
+        const chevron = <Arrow16 className="menu-item-arrow" width={12} height={12} />;
+
         const menuItemProps: SubmenuItemProps = {
             ...omit(rest, ['bottomBoundaryElement', 'onClick', 'onOpen', 'rightBoundaryElement', 'role', 'tabIndex']),
             'aria-disabled': isDisabled ? 'true' : undefined,
             'aria-expanded': isSubmenuOpen ? 'true' : 'false',
             'aria-haspopup': 'true',
+
             className: classNames('menu-item', 'submenu-target', className),
             onClick: this.handleMenuItemClick,
             onMouseLeave: this.closeSubmenu,
@@ -202,6 +206,7 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
         return (
             <li {...menuItemProps}>
                 {submenuTriggerContent}
+                {chevron}
                 {React.cloneElement(submenu, submenuProps)}
             </li>
         );
