@@ -104,11 +104,12 @@
     .bdl-PillSelectorDropdown.scrollable {
         // In the USM, the wrapper acts as a container
         .overlay-wrapper {
+            @include bdl-Overlay-container;
+
             position: absolute;
             height: 280px;
+            padding: 0;
             overflow-y: scroll;
-
-            @include bdl-Overlay-container;
         }
 
         .overlay {
