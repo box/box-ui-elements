@@ -384,6 +384,23 @@ describe('components/select-field/BaseSelectField', () => {
                 expect(spy).not.toHaveBeenCalled();
             },
         );
+
+        test('should not call closeDropdown when dropdown is open and event.relatedTarget.classList contains blurExceptionClassNames', () => {
+            const exception = 'foobar';
+            const wrapper = shallowRenderSelectField({ blurExceptionClassNames: [exception] });
+            const instance = wrapper.instance();
+            const spy = jest.spyOn(instance, 'closeDropdown');
+            wrapper.setState({ isOpen: true });
+
+            const targetWithClassName = {
+                relatedTarget: document.createElement('button'),
+            };
+
+            targetWithClassName.relatedTarget.className = exception;
+            instance.handleBlur(targetWithClassName);
+
+            expect(spy).not.toHaveBeenCalled();
+        });
     });
 
     describe('onArrowDown', () => {

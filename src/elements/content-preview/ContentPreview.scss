@@ -8,6 +8,7 @@
     .bcpr-body {
         display: flex;
         flex: 1;
+        min-height: 0; // Required to prevent overflow of child flex elements
     }
 
     .bcpr-container {

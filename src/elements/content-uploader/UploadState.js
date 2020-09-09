@@ -10,7 +10,6 @@ import ErrorEmptyState from '../../icons/states/ErrorEmptyState';
 import UploadEmptyState from '../../icons/states/UploadEmptyState';
 import UploadSuccessState from '../../icons/states/UploadSuccessState';
 import messages from '../common/messages';
-import Browser from '../../utils/Browser';
 import UploadStateContent from './UploadStateContent';
 import { VIEW_ERROR, VIEW_UPLOAD_EMPTY, VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS } from '../../constants';
 import type { View } from '../../common/types/core';
@@ -54,12 +53,11 @@ const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFol
                             isFolderUploadEnabled && <FormattedMessage {...messages.uploadEmptyFolderInput} />
                         }
                         message={
-                            !Browser.isIE() &&
-                            (isFolderUploadEnabled ? (
+                            isFolderUploadEnabled ? (
                                 <FormattedMessage {...messages.uploadEmptyWithFolderUploadEnabled} />
                             ) : (
                                 <FormattedMessage {...messages.uploadEmptyWithFolderUploadDisabled} />
-                            ))
+                            )
                         }
                         onChange={onSelect}
                     />

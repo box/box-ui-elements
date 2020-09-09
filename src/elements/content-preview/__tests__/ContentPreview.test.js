@@ -304,7 +304,7 @@ describe('elements/content-preview/ContentPreview', () => {
         test('should call preview show with file version params if provided', async () => {
             const wrapper = getWrapper(props);
             wrapper.setState({
-                file,
+                file: { ...file, file_version: { id: '67890' } },
                 selectedVersion: {
                     id: '12345',
                 },
@@ -323,6 +323,7 @@ describe('elements/content-preview/ContentPreview', () => {
                     fileOptions: {
                         [file.id]: {
                             fileVersionId: '12345',
+                            currentFileVersionId: '67890',
                         },
                     },
                 }),
@@ -417,9 +418,9 @@ describe('elements/content-preview/ContentPreview', () => {
                 await instance.loadPreview();
 
                 if (called) {
-                    expect(instance.preview.addListener).toHaveBeenCalledWith('annotator', onAnnotator);
+                    expect(instance.preview.addListener).toHaveBeenCalledWith('annotator_create', onAnnotator);
                 } else {
-                    expect(instance.preview.addListener).not.toHaveBeenCalledWith('annotator', onAnnotator);
+                    expect(instance.preview.addListener).not.toHaveBeenCalledWith('annotator_create', onAnnotator);
                 }
             },
         );

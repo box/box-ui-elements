@@ -71,6 +71,7 @@ type Props = {
     isResumableUploadsEnabled: boolean,
     isSmall: boolean,
     isTouch: boolean,
+    isUploadFallbackLogicEnabled: boolean,
     language?: string,
     measureRef: Function,
     messages?: StringMap,
@@ -151,6 +152,7 @@ class ContentUploader extends Component<Props, State> {
         onCancel: noop,
         isFolderUploadEnabled: false,
         isResumableUploadsEnabled: false,
+        isUploadFallbackLogicEnabled: false,
         dataTransferItems: [],
         isDraggingItemsToUploadsManager: false,
     };
@@ -344,6 +346,24 @@ class ContentUploader extends Component<Props, State> {
                 }
             },
         );
+    };
+
+    /**
+     * Add dropped items to the upload queue
+     *
+     * @private
+     * @param {DataTransfer} droppedItems
+     * @param {Function} itemUpdateCallback
+     * @returns {Promise<any>}
+     */
+    addDroppedItemsToUploadQueue = (droppedItems: DataTransfer, itemUpdateCallback: Function): void => {
+        if (droppedItems.items) {
+            this.addDataTransferItemsToUploadQueue(droppedItems.items, itemUpdateCallback);
+        } else {
+            Array.from(droppedItems.files).forEach(file => {
+                this.addFilesToUploadQueue([file], itemUpdateCallback);
+            });
+        }
     };
 
     /**
@@ -620,7 +640,7 @@ class ContentUploader extends Component<Props, State> {
      * @return {UploadAPI} - Instance of Upload API
      */
     getUploadAPI(file: File, uploadAPIOptions?: UploadItemAPIOptions) {
-        const { chunked, isResumableUploadsEnabled } = this.props;
+        const { chunked, isResumableUploadsEnabled, isUploadFallbackLogicEnabled } = this.props;
         const { size } = file;
         const factory = this.createAPIFactory(uploadAPIOptions);
 
@@ -629,6 +649,9 @@ class ContentUploader extends Component<Props, State> {
                 const chunkedUploadAPI = factory.getChunkedUploadAPI();
                 if (isResumableUploadsEnabled) {
                     chunkedUploadAPI.isResumableUploadsEnabled = true;
+                }
+                if (isUploadFallbackLogicEnabled) {
+                    chunkedUploadAPI.isUploadFallbackLogicEnabled = true;
                 }
                 return chunkedUploadAPI;
             }
@@ -640,7 +663,12 @@ class ContentUploader extends Component<Props, State> {
             /* eslint-enable no-console */
         }
 
-        return factory.getPlainUploadAPI();
+        const plainUploadAPI = factory.getPlainUploadAPI();
+        if (isUploadFallbackLogicEnabled) {
+            plainUploadAPI.isUploadFallbackLogicEnabled = true;
+        }
+
+        return plainUploadAPI;
     }
 
     /**
@@ -993,7 +1021,8 @@ class ContentUploader extends Component<Props, State> {
     onClick = (item: UploadItem) => {
         const { chunked, isResumableUploadsEnabled, onClickCancel, onClickResume, onClickRetry } = this.props;
         const { status, file } = item;
-        const isChunkedUpload = chunked && file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES && isMultiputSupported();
+        const isChunkedUpload =
+            chunked && !item.isFolder && file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES && isMultiputSupported();
         const isResumable = isResumableUploadsEnabled && isChunkedUpload && item.api.sessionId;
 
         switch (status) {
@@ -1189,7 +1218,7 @@ class ContentUploader extends Component<Props, State> {
                 ) : (
                     <div ref={measureRef} className={styleClassName} id={this.id}>
                         <DroppableContent
-                            addDataTransferItemsToUploadQueue={this.addDataTransferItemsToUploadQueue}
+                            addDataTransferItemsToUploadQueue={this.addDroppedItemsToUploadQueue}
                             addFiles={this.addFilesToUploadQueue}
                             allowedTypes={['Files']}
                             isFolderUploadEnabled={isFolderUploadEnabled}

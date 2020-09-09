@@ -2,6 +2,12 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    securityControlsLabel: {
+        defaultMessage: 'Restrictions',
+        description:
+            'Label displayed above the security restrictions on the file due to the classification label and associated policies.',
+        id: 'boxui.securityControls.securityControlsLabel',
+    },
     shortSharing: {
         defaultMessage: 'Sharing restriction applies',
         description: 'Short summary displayed for classification when a sharing restriction is applied to it',

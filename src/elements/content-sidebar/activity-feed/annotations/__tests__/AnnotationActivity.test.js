@@ -42,6 +42,11 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         item: mockAnnotation,
         mentionSelectorContacts,
     };
+    const generateReginTags = (isCurrentVersion = mockActivity.isCurrentVersion) => ({
+        'data-resin-iscurrent': isCurrentVersion,
+        'data-resin-itemid': mockAnnotation.id,
+        'data-resin-target': 'annotationLink',
+    });
 
     const getWrapper = (props = {}) => shallow(<AnnotationActivity {...mockActivity} {...props} />);
 
@@ -61,6 +66,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
         expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
         expect(activityLink.prop('message')).toEqual({ ...messages.annotationActivityPageItem, values: { number: 1 } });
+        expect(activityLink.props()).toMatchObject(generateReginTags());
         expect(wrapper.find('AnnotationActivityMenu').length).toEqual(1);
         expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(mockActivity.item.description.message);
     });
@@ -72,6 +78,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             ...messages.annotationActivityVersionLink,
             values: { number: '2' },
         });
+        expect(wrapper.find(AnnotationActivityLink).props()).toMatchObject(generateReginTags(false));
     });
 
     test('should render version unavailable if file version is null', () => {

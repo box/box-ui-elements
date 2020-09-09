@@ -268,6 +268,9 @@ function getFileId(file: UploadFileWithAPIOptions | UploadFile, rootFolderId: st
 
 /**
  * Generates item id based on item properties
+ *
+ * When item options including folderId or uploadInitTimestamp are missing, item name is returned as item id.
+ * Otherwise, item properties are used as item id.
  * E.g., folder1_0_123124124
  *
  * @param {DataTransferItem | UploadDataTransferItemWithAPIOptions} itemData
@@ -280,6 +283,10 @@ function getDataTransferItemId(
 ): string {
     const item = getDataTransferItem(itemData);
     const { name } = getEntryFromDataTransferItem(item);
+    if (!doesDataTransferItemContainAPIOptions(itemData)) {
+        return name;
+    }
+
     const { folderId = rootFolderId, uploadInitTimestamp = Date.now() } = getDataTransferItemAPIOptions(itemData);
 
     return `${name}_${folderId}_${uploadInitTimestamp}`;

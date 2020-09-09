@@ -1,4 +1,5 @@
 @import '../../../styles/variables';
+@import '../../../styles/mixins/overlay';
 @import './variables';
 
 .header-flyout {
@@ -12,9 +13,9 @@
     height: $flyout-list-height;
 
     .overlay {
-        padding: 2 * $flyout-header-spacer $flyout-list-padding 0;
-        // TODO: decide which BDL color applies here
-        border: 1px solid $bdl-gray-10;
+        @include bdl-Overlay-container;
+
+        padding: (2 * $flyout-header-spacer) $flyout-list-padding 0;
     }
 }
 

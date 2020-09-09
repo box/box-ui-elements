@@ -26,6 +26,39 @@ const messages = defineMessages({
         description: 'Message that appears when the shared link in the ContentSharing Element cannot be updated.',
         id: 'be.contentSharing.sharedLinkUpdateError',
     },
+    sharedLinkSettingsUpdateSuccess: {
+        defaultMessage: 'The shared link for this item was successfully updated.',
+        description:
+            'Message that appears when the shared link settings in the ContentSharing Element were successfully updated.',
+        id: 'be.contentSharing.sharedLinkSettingsUpdateSuccess',
+    },
+    sharedLinkRemovalSuccess: {
+        defaultMessage: 'The shared link for this item was removed.',
+        description: 'Message that appears when the shared link in the ContentSharing Element was removed.',
+        id: 'be.contentSharing.sharedLinkRemovalSuccess',
+    },
+    collaboratorsLoadingError: {
+        defaultMessage: 'Could not retrieve collaborators for this item.',
+        description: 'Message that appears when collaborators cannot be retrieved in the ContentSharing Element.',
+        id: 'be.contentSharing.collaboratorsLoadingError',
+    },
+    getContactsError: {
+        defaultMessage: 'Could not retrieve contacts.',
+        description: 'Message that appears when users cannot be retrieved in the ContentSharing Element.',
+        id: 'be.contentSharing.getContactsError',
+    },
+    sendInvitesError: {
+        defaultMessage: 'Could not send invites.',
+        description:
+            'Message that appears when collaborators cannot be added to the shared link in the ContentSharing Element.',
+        id: 'be.contentSharing.sendInvitesError',
+    },
+    sendInvitesSuccess: {
+        defaultMessage: 'Successfully invited collaborators.',
+        description:
+            'Message that appears when collaborators were added to the shared link in the ContentSharing Element.',
+        id: 'be.contentSharing.sendInvitesSuccess',
+    },
 });
 
 export default messages;

@@ -28,6 +28,7 @@ import type {
     sharedLinkType,
     sharedLinkTrackingType,
     tooltipComponentIdentifierType,
+    USMConfig,
 } from './flowTypes';
 import { PEOPLE_IN_ITEM, ANYONE_WITH_LINK, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
 
@@ -39,6 +40,7 @@ type Props = {
     changeSharedLinkPermissionLevel: (
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
+    config?: USMConfig,
     intl: any,
     item: itemtype,
     itemType: ItemType,
@@ -164,6 +166,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             autofocusSharedLink,
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
+            config,
             item,
             itemType,
             intl,
@@ -203,6 +206,12 @@ class SharedLinkSection extends React.Component<Props, State> {
 
         const shouldTriggerCopyOnLoad = !!triggerCopyOnLoad && !!isCopySuccessful;
 
+        /**
+         * The email button should be rendered by default.
+         * Only hide the button if there is a config prop that declares showEmailSharedLinkForm to be false.
+         */
+        const hideEmailButton = config && config.showEmailSharedLinkForm === false;
+
         const isEditableBoxNote = isBoxNote(convertToBoxItem(item)) && isEditAllowed;
         let allowedPermissionLevels = [CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];
 
@@ -241,17 +250,20 @@ class SharedLinkSection extends React.Component<Props, State> {
                             value={url}
                         />
                     </Tooltip>
-                    <Tooltip position="top-left" text={<FormattedMessage {...messages.sendSharedLink} />}>
-                        <Button
-                            className="email-shared-link-btn"
-                            isDisabled={submitting}
-                            onClick={onEmailSharedLinkClick}
-                            type="button"
-                            {...sendSharedLinkButtonProps}
-                        >
-                            <IconMail />
-                        </Button>
-                    </Tooltip>
+                    {!hideEmailButton && (
+                        <Tooltip position="top-left" text={<FormattedMessage {...messages.sendSharedLink} />}>
+                            <Button
+                                aria-label={intl.formatMessage(messages.sendSharedLink)}
+                                className="email-shared-link-btn"
+                                isDisabled={submitting}
+                                onClick={onEmailSharedLinkClick}
+                                type="button"
+                                {...sendSharedLinkButtonProps}
+                            >
+                                <IconMail />
+                            </Button>
+                        </Tooltip>
+                    )}
                 </div>
 
                 <div className="shared-link-access-row">

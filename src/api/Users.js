@@ -16,7 +16,7 @@ class Users extends Base {
     /**
      * API URL for Users
      *
-     * @return {string} base url for users
+     * @returns {string} base url for users
      */
     getUrl(): string {
         return `${this.getBaseApiUrl()}/users/me`;
@@ -26,7 +26,7 @@ class Users extends Base {
      * API URL for Users avatar
      *
      * @param {string} id - A box user id.
-     * @return {string} base url for users
+     * @returns {string} base url for users
      */
     getAvatarUrl(id: string): string {
         if (!id) {
@@ -41,7 +41,7 @@ class Users extends Base {
      *
      * @param {string} userId the user id
      * @param {string} fileId the file id
-     * @return {string} the user avatar URL string for a given user with access token attached
+     * @returns {string} the user avatar URL string for a given user with access token attached
      */
     async getAvatarUrlWithAccessToken(userId?: ?string, fileId: string): Promise<?string> {
         if (!userId) {

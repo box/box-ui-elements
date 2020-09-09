@@ -63,7 +63,7 @@ import {
     TYPED_ID_FOLDER_PREFIX,
 } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
-import type { MetadataQuery, MetadataColumnsToShow } from '../../common/types/metadataQueries';
+import type { MetadataQuery, MetadataFieldsToShow } from '../../common/types/metadataQueries';
 import type { MetadataFieldValue } from '../../common/types/metadata';
 import type {
     View,
@@ -115,8 +115,8 @@ type Props = {
     logoUrl?: string,
     measureRef?: Function,
     messages?: StringMap,
-    metadataColumnsToShow: MetadataColumnsToShow,
-    metadataQuery: MetadataQuery,
+    metadataFieldsToShow?: MetadataFieldsToShow,
+    metadataQuery?: MetadataQuery,
     onCreate: Function,
     onDelete: Function,
     onDownload: Function,
@@ -386,7 +386,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     showMetadataQueryResults() {
-        const { metadataQuery }: Props = this.props;
+        const { metadataQuery = {} }: Props = this.props;
         const { currentPageNumber, markers }: State = this.state;
         const metadataQueryClone = cloneDeep(metadataQuery);
 
@@ -1522,7 +1522,7 @@ class ContentExplorer extends Component<Props, State> {
             if (item.id === clonedItem.id) {
                 const fields = getProp(clonedItem, 'metadata.enterprise.fields', []);
                 fields.forEach(itemField => {
-                    if (itemField.name === field) {
+                    if (itemField.key === field) {
                         itemField.value = newValue; // set updated metadata value to correct item in currentCollection
                     }
                 });
@@ -1569,7 +1569,7 @@ class ContentExplorer extends Component<Props, State> {
             logoUrl,
             measureRef,
             messages,
-            metadataColumnsToShow,
+            metadataFieldsToShow,
             onDownload,
             onPreview,
             onUpload,
@@ -1670,7 +1670,7 @@ class ContentExplorer extends Component<Props, State> {
                             isMedium={isMedium}
                             isSmall={isSmall}
                             isTouch={isTouch}
-                            metadataColumnsToShow={metadataColumnsToShow}
+                            metadataFieldsToShow={metadataFieldsToShow}
                             onItemClick={this.onItemClick}
                             onItemDelete={this.delete}
                             onItemDownload={this.download}

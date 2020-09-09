@@ -59,6 +59,14 @@ describe('features/classification/security-controls/SecurityControls', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should render label for security controls when shouldRenderLabel prop is set', () => {
+        wrapper.setProps({ controlsFormat: SHORT });
+        expect(wrapper.find('Label').length).toBe(0);
+
+        wrapper.setProps({ controlsFormat: SHORT, shouldRenderLabel: true });
+        expect(wrapper.find('Label').length).toBe(1);
+    });
+
     test('should restrict displayed app names to maxAppCount', () => {
         controls.app.apps = [
             { displayText: 'App 1' },

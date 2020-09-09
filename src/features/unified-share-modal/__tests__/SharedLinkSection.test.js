@@ -203,6 +203,18 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
         expect(tooltip).toMatchSnapshot();
     });
 
+    test.each`
+        config                                | emailButtonExists | description
+        ${undefined}                          | ${true}           | ${'should render email shared link button when config is undefined'}
+        ${{ foo: 'bar' }}                     | ${true}           | ${'should render email shared link button when config does not contain showEmailSharedLinkForm'}
+        ${{ showEmailSharedLinkForm: true }}  | ${true}           | ${'should render email shared link button when config.showEmailSharedLinkForm is true'}
+        ${{ showEmailSharedLinkForm: false }} | ${false}          | ${'should not render email shared link button when config.showEmailSharedLinkForm is false'}
+    `('$description', ({ config, emailButtonExists }) => {
+        const sharedLink = { url: 'https://example.com/shared-link' };
+        const wrapper = getWrapper({ config, sharedLink });
+        expect(wrapper.exists('.email-shared-link-btn')).toBe(emailButtonExists);
+    });
+
     describe('componentDidMount()', () => {
         test('should attempt shared link creation when component is mounted with initial, empty shared link data', () => {
             const sharedLink = { url: '', isNewSharedLink: false };

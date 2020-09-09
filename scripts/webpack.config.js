@@ -36,6 +36,7 @@ const entries = {
     preview: path.resolve('src/elements/wrappers/ContentPreview.js'),
     sidebar: path.resolve('src/elements/wrappers/ContentSidebar.js'),
     openwith: path.resolve('src/elements/wrappers/ContentOpenWith.js'),
+    sharing: path.resolve('src/elements/wrappers/ContentSharing.js'),
 };
 const entriesToBuild =
     typeof process.env.ENTRY === 'string'
@@ -88,7 +89,9 @@ function getConfig(isReactExternalized) {
                     test: /\.(js|mjs|ts|tsx)$/,
                     loader: 'babel-loader',
                     // For webpack dev build perf we want to exlcude node_modules unless we want to support legacy browsers like IE11
-                    exclude: shouldIncludeAllSupportedBrowsers ? /@babel(?:\/|\\{1,2})runtime|pikaday/ : /node_modules/,
+                    exclude: shouldIncludeAllSupportedBrowsers
+                        ? /@babel(?:\/|\\{1,2})runtime|pikaday|core-js/
+                        : /node_modules/,
                 },
                 {
                     test: /\.s?css$/,

@@ -1,5 +1,5 @@
 @import '../../styles/variables';
-@import '../../components/pill-selector-dropdown/mixins';
+@import '../../styles/mixins/overlay';
 
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
@@ -52,13 +52,12 @@
 
 .unified-share-modal {
     /** title and classifiction label */
-    .bdl-UnifiedShareModalTitle {
-        display: flex;
-        flex-flow: row wrap;
+    .bdl-UnifiedShareModalTitle-classification {
+        display: inline;
+    }
 
-        .bdl-UnifiedShareModalTitle-classification {
-            margin-left: 6px;
-        }
+    .bdl-UnifiedShareModalTitle {
+        margin-right: 6px;
     }
 
     /** overrides for USM sub-components */
@@ -105,11 +104,12 @@
     .bdl-PillSelectorDropdown.scrollable {
         // In the USM, the wrapper acts as a container
         .overlay-wrapper {
+            @include bdl-Overlay-container;
+
             position: absolute;
             height: 280px;
+            padding: 0;
             overflow-y: scroll;
-
-            @include bdl-PillSelectorDropdown-container;
         }
 
         .overlay {

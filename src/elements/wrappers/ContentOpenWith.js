@@ -37,11 +37,11 @@ class ContentOpenWith extends ES6Wrapper {
                 fileId={this.id}
                 language={this.language}
                 messages={this.messages}
+                onError={this.onError}
+                onExecute={this.onExecute}
                 onInteraction={this.onInteraction}
                 token={this.token}
                 {...this.options}
-                onError={this.onError}
-                onExecute={this.onExecute}
             />,
             this.container,
         );

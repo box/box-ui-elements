@@ -111,6 +111,18 @@ describe('features/content-explorer/item-list/ItemList', () => {
             });
         });
 
+        test('should render items with test ids for e2e testing', () => {
+            const items = [
+                { id: 'item1', name: 'item1' },
+                { id: 'item2', name: 'item2' },
+            ];
+            const expectedTestId = ['item-row-item1', 'item-row-item2'];
+            const wrapper = renderComponent({ items });
+
+            const testIds = wrapper.find('[role="row"][data-testid*="item-row-"]').map(row => row.prop('data-testid'));
+            expect(testIds).toEqual(expectedTestId);
+        });
+
         test('should render component with default item buttons', () => {
             const items = [
                 { id: '1', name: 'item1' },

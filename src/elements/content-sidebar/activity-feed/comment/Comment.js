@@ -4,11 +4,11 @@ import classNames from 'classnames';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import TetherComponent from 'react-tether';
+import Trash16 from '../../../../icon/line/Trash16';
+import Pencil16 from '../../../../icon/line/Pencil16';
 import Avatar from '../Avatar';
 import Media from '../../../../components/media';
 import { MenuItem } from '../../../../components/menu';
-import IconTrash from '../../../../icons/general/IconTrash';
-import IconPencil from '../../../../icons/general/IconPencil';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import DeleteConfirmation from '../common/delete-confirmation';
 import ActivityTimestamp from '../common/activity-timestamp';
@@ -16,7 +16,6 @@ import UserLink from '../common/user-link';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
 import CommentForm from '../comment-form';
-import { bdlGray80 } from '../../../../styles/variables';
 import { PLACEHOLDER_USER } from '../../../../constants';
 import messages from './messages';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
@@ -150,7 +149,7 @@ class Comment extends React.Component<Props, State> {
                                             data-testid="edit-comment"
                                             onClick={this.handleEditClick}
                                         >
-                                            <IconPencil color={bdlGray80} />
+                                            <Pencil16 />
                                             <FormattedMessage {...messages.commentEditMenuItem} />
                                         </MenuItem>
                                     )}
@@ -160,7 +159,7 @@ class Comment extends React.Component<Props, State> {
                                             data-testid="delete-comment"
                                             onClick={this.handleDeleteClick}
                                         >
-                                            <IconTrash color={bdlGray80} />
+                                            <Trash16 />
                                             <FormattedMessage {...messages.commentDeleteMenuItem} />
                                         </MenuItem>
                                     )}

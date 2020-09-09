@@ -26,6 +26,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
     const onItemClick = jest.fn();
     const onMetadataUpdate = jest.fn();
     const onClick = expect.any(Function);
+    const createdAt = '2020-08-18T00:00:00.000Z';
     const currentCollection = {
         items: [
             {
@@ -35,14 +36,22 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
                         id: '11',
                         fields: [
                             {
-                                name: 'type',
+                                key: 'type',
+                                displayName: 'Type',
                                 type: 'string',
                                 value: 'bill',
                             },
                             {
-                                name: 'amount',
+                                key: 'amount',
+                                displayName: 'Amount',
                                 type: 'float',
                                 value: 100.12,
+                            },
+                            {
+                                key: 'created',
+                                displayName: 'Created',
+                                type: 'date',
+                                value: createdAt,
                             },
                         ],
                     },
@@ -57,14 +66,22 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
                         id: '22',
                         fields: [
                             {
-                                name: 'type',
+                                key: 'type',
+                                displayName: 'Type',
                                 type: 'string',
                                 value: 'receipt',
                             },
                             {
-                                name: 'amount',
+                                key: 'amount',
+                                displayName: 'Amount',
                                 type: 'float',
                                 value: 200.88,
+                            },
+                            {
+                                key: 'created',
+                                displayName: 'Created',
+                                type: 'date',
+                                value: createdAt,
                             },
                         ],
                     },
@@ -75,7 +92,13 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         ],
         nextMarker: 'abc',
     };
-    const metadataColumnsToShow = ['type', { name: 'amount', canEdit: true }];
+
+    const metadataFieldsToShow = [
+        'type',
+        { key: 'amount', canEdit: true },
+        { key: 'created', canEdit: true, displayName: 'Created At' },
+        { key: 'invalidKey', canEdit: true }, // field not there in template
+    ];
 
     const pdfNameButton = (
         <PlainButton onClick={onClick} type="button">
@@ -92,7 +115,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
 
     const defaultProps = {
         currentCollection,
-        metadataColumnsToShow,
+        metadataFieldsToShow,
         intl,
         onItemClick,
         onMetadataUpdate,
@@ -106,7 +129,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         isUpdating: false,
         scrollLeftOffset: 0,
         scrollRightOffset: 0,
-        valueBeingEdited: null,
+        valueBeingEdited: undefined,
     };
 
     const getWrapper = (props = defaultProps) => mount(<MetadataBasedItemList {...props} />);
@@ -120,7 +143,6 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         test('should call setState() when component gets updated with different props', () => {
             const updatedProps = {
                 currentCollection: [],
-                metadataColumnsToShow,
                 intl,
                 onItemClick,
             };
@@ -130,7 +152,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
                 editedColumnIndex: -1,
                 editedRowIndex: -1,
                 isUpdating: false,
-                valueBeingEdited: null,
+                valueBeingEdited: undefined,
             });
         });
         test('should not call setState() when component receives same props again', () => {
@@ -168,6 +190,8 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             ${FIELD_TYPE_FLOAT}       | ${'123.456'}                  | ${123.456}
             ${FIELD_TYPE_MULTISELECT} | ${['Yes', 'No']}              | ${['Yes', 'No']}
             ${FIELD_TYPE_STRING}      | ${'str'}                      | ${'str'}
+            ${FIELD_TYPE_STRING}      | ${undefined}                  | ${undefined}
+            ${null}                   | ${'some value'}               | ${'some value'}
         `('get correct value for type $type', ({ type, value, valueForType }) => {
             const expectedValue = instance.getValueForType(type, value);
             expect(valueForType).toStrictEqual(expectedValue);
@@ -176,16 +200,20 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
 
     describe('getGridCellData(columnIndex, rowIndex)', () => {
         test.each`
-            columnIndex | rowIndex | cellData
-            ${0}        | ${1}     | ${pdfIcon}
-            ${1}        | ${1}     | ${pdfNameButton}
-            ${2}        | ${1}     | ${'bill'}
-            ${3}        | ${1}     | ${100.12}
-            ${0}        | ${2}     | ${mp4Icon}
-            ${1}        | ${2}     | ${mp4NameButton}
-            ${2}        | ${2}     | ${'receipt'}
-            ${3}        | ${2}     | ${200.88}
-        `('cellData for row: $rowIndex, column: $columnIndex', ({ columnIndex, rowIndex, cellData }) => {
+            columnIndex | rowIndex | cellData         | dataType
+            ${0}        | ${1}     | ${pdfIcon}       | ${undefined}
+            ${1}        | ${1}     | ${pdfNameButton} | ${undefined}
+            ${2}        | ${1}     | ${'bill'}        | ${'string'}
+            ${3}        | ${1}     | ${100.12}        | ${'float'}
+            ${4}        | ${1}     | ${createdAt}     | ${'date'}
+            ${5}        | ${1}     | ${undefined}     | ${undefined}
+            ${0}        | ${2}     | ${mp4Icon}       | ${undefined}
+            ${1}        | ${2}     | ${mp4NameButton} | ${undefined}
+            ${2}        | ${2}     | ${'receipt'}     | ${'string'}
+            ${3}        | ${2}     | ${200.88}        | ${'float'}
+            ${4}        | ${2}     | ${createdAt}     | ${'date'}
+            ${5}        | ${2}     | ${undefined}     | ${undefined}
+        `('cellData for row: $rowIndex, column: $columnIndex', ({ columnIndex, rowIndex, cellData, dataType }) => {
             const editableColumnIndex = 3; // amount field is editable
 
             if (columnIndex === editableColumnIndex) {
@@ -194,14 +222,18 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             }
 
             const data = instance.getGridCellData(columnIndex, rowIndex);
-            if (columnIndex < 2) {
+            if (columnIndex < 2 || !data) {
                 // i.e. FileIcon and FileName columns
                 expect(data).toEqual(cellData);
                 return;
             }
 
             const wrap = mount(data);
-            expect(wrap.contains(cellData)).toBe(true);
+            const ReadOnlyMetadataField = wrap.find('ReadOnlyMetadataField');
+
+            expect(ReadOnlyMetadataField).toBeTruthy();
+            expect(ReadOnlyMetadataField.prop('dataValue')).toEqual(cellData);
+            expect(ReadOnlyMetadataField.prop('type')).toEqual(dataType);
 
             if (columnIndex === editableColumnIndex) {
                 // Expect edit icon for editable column
@@ -216,8 +248,10 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             columnIndex | headerData
             ${0}        | ${undefined}
             ${1}        | ${'Name'}
-            ${2}        | ${'type'}
-            ${3}        | ${'amount'}
+            ${2}        | ${'Type'}
+            ${3}        | ${'Amount'}
+            ${4}        | ${'Created At'}
+            ${5}        | ${'invalidKey'}
         `('headerData for column $columnIndex', ({ columnIndex, headerData }) => {
             const data = instance.getGridHeaderData(columnIndex);
             if (columnIndex === 1) {
@@ -226,18 +260,6 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             } else {
                 expect(data).toBe(headerData);
             }
-        });
-    });
-
-    describe('getMetadataColumnName()', () => {
-        test('should return the column name when either column or column config object is passed', () => {
-            const column = 'amount';
-            const columnConfig = {
-                name: 'amount',
-                canEdit: true,
-            };
-            expect(instance.getMetadataColumnName(column)).toBe('amount');
-            expect(instance.getMetadataColumnName(columnConfig)).toBe('amount');
         });
     });
 
@@ -361,9 +383,21 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             const width =
                 FILE_ICON_COLUMN_WIDTH +
                 FILE_NAME_COLUMN_WIDTH +
-                metadataColumnsToShow.length * MIN_METADATA_COLUMN_WIDTH;
+                metadataFieldsToShow.length * MIN_METADATA_COLUMN_WIDTH;
 
             expect(instance.calculateContentWidth()).toBe(width);
+        });
+    });
+
+    describe('getQueryResponseFields()', () => {
+        test('should return a list of metadata fields to display', () => {
+            const response = instance.getQueryResponseFields();
+            const fields = [
+                { key: 'type', displayName: 'Type' },
+                { key: 'amount', displayName: 'Amount' },
+                { key: 'created', displayName: 'Created' },
+            ];
+            expect(response).toEqual(fields);
         });
     });
 

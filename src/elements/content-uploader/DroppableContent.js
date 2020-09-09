@@ -8,7 +8,7 @@ import makeDroppable from '../common/droppable';
 import ItemList from './ItemList';
 import UploadState from './UploadState';
 import type { UploadItem } from '../../common/types/upload';
-import type { View } from '../../common/types/core';
+import type { View, DOMStringList } from '../../common/types/core';
 
 import './DroppableContent.scss';
 
@@ -31,18 +31,24 @@ const dropDefinition = {
     /**
      * Validates whether a file can be dropped or not.
      */
-    dropValidator: ({ allowedTypes }: { allowedTypes: Array<string> }, { types }: { types: Array<string> }) =>
-        Array.from(types).some(type => allowedTypes.indexOf(type) > -1),
+    dropValidator: (
+        { allowedTypes }: { allowedTypes: Array<string> },
+        { types }: { types: Array<string> | DOMStringList },
+    ) => {
+        if (types instanceof Array) {
+            return Array.from(types).some(type => allowedTypes.indexOf(type) > -1);
+        }
+
+        const allowedList = allowedTypes.filter(allowed => types.contains(allowed));
+        return allowedList.length > 0;
+    },
 
     /**
      * Determines what happens after a file is dropped
      */
     onDrop: (event, { addDataTransferItemsToUploadQueue }: Props) => {
-        const {
-            dataTransfer: { items },
-        } = event;
-
-        addDataTransferItemsToUploadQueue(items);
+        const { dataTransfer } = event;
+        addDataTransferItemsToUploadQueue(dataTransfer);
     },
 };
 

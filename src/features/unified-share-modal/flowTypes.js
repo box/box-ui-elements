@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
-import type { ItemType } from '../../common/types/core';
 import * as constants from './constants';
+import type { BoxItemPermission, ItemType } from '../../common/types/core';
 
 // DRY: Invert the constants so that we can construct the appropriate enum types
 const accessLevelValues = {
@@ -38,12 +38,12 @@ export type accessLevelsDisabledReasonType = {
 
 export type contactType = {
     email?: string,
-    id: number | string,
+    id: string,
     isExternalUser?: boolean,
     name?: string,
     text?: string,
     type: string,
-    value?: number | string,
+    value?: string,
 };
 
 export type SuggestedCollab = contactType & {
@@ -65,7 +65,7 @@ export type item = {
     bannerPolicy?: {
         body: string,
         colorID?: number,
-        title: string,
+        title?: string,
     },
     canUserSeeClassification: boolean,
     classification?: string,
@@ -77,6 +77,9 @@ export type item = {
     hideCollaborators: boolean,
     id: string,
     name: string,
+    ownerEmail?: string,
+    ownerID?: string,
+    permissions?: BoxItemPermission,
     type: ItemType,
     typedID: string,
 };
@@ -261,6 +264,11 @@ type EmailFormTypes = {
     sendSharedLinkError: React.Node,
 };
 
+export type USMConfig = {
+    /** Whether the "Email Shared Link" button and form should be rendered in the USM/USF */
+    showEmailSharedLinkForm: boolean,
+};
+
 // Prop types shared by both the Unified Share Modal and the Unified Share Form
 type BaseUnifiedShareProps = CollaboratorAvatarsTypes &
     EmailFormTypes &
@@ -270,6 +278,8 @@ type BaseUnifiedShareProps = CollaboratorAvatarsTypes &
         allShareRestrictionWarning?: React.Node,
         /** Flag to determine whether to enable invite collaborators section */
         canInvite: boolean,
+        /** Configuration object for hiding parts of the USM */
+        config?: USMConfig,
         /** Whether the full USM should be rendered */
         displayInModal?: boolean,
         /** Whether the form should focus the shared link after the URL is resolved */
@@ -320,4 +330,13 @@ export type USFProps = BaseUnifiedShareProps & {
     sharedLinkLoaded: boolean,
     /** Whether the FTUX tooltip should be rendered */
     shouldRenderFTUXTooltip: boolean,
+};
+
+export type InviteCollaboratorsRequest = {
+    emailMessage: string,
+    emails: string,
+    groupIDs: string,
+    numOfInviteeGroups: number,
+    numsOfInvitees: number,
+    permission: string,
 };

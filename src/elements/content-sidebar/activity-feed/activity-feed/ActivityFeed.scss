@@ -1,5 +1,17 @@
 @import '../../../common/variables';
 
+@keyframes bcs-ActivityItem-callout {
+    0%,
+    100% {
+        background-color: transparent;
+    }
+
+    30%,
+    70% {
+        background-color: $bdl-box-blue-05;
+    }
+}
+
 .be .bcs-activity-feed {
     position: relative;
     display: flex;
@@ -17,6 +29,10 @@
     }
 
     .bcs-activity-feed-items-container {
+        $container-padding: 25px;
+        $container-transition-delay: 25ms;
+        $container-transition-duration: 200ms;
+
         position: relative;
         display: flex;
         flex: 1 1 auto;
@@ -28,99 +44,60 @@
             margin: 9px 20px;
         }
 
-        .bcs-version-item {
-            &:first-child .bcs-version {
-                margin-top: 0;
-            }
-        }
-
-        .bcs-activity-feed-task,
-        .bcs-activity-feed-task-new,
-        .bcs-activity-feed-comment,
-        .bcs-activity-feed-app-activity,
-        .bcs-activity-feed-annotation-activity {
+        .bcs-ActivityItem {
             position: relative;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid $bdl-gray-10;
-
-            &:first-child .bcs-comment {
-                margin-top: 0;
-            }
+            padding: 20px $container-padding;
+            box-shadow: 0 $container-padding 0 -#{$container-padding - 1} $bdl-gray-10;
+            backface-visibility: hidden; // Prevent visual shifting during pseudo-element scale transitions
+            transition: box-shadow $container-transition-duration ease $container-transition-delay;
 
             &.bcs-is-focused {
-                $container-padding: 25px;
+                box-shadow: 0 0 $bdl-grid-unit * 4 $bdl-gray-30;
+                animation: bcs-ActivityItem-callout 1s ease-in-out $container-transition-delay 0 normal none; // Disabled by default
 
-                margin-right: -$container-padding;
-                margin-bottom: 1px;
-                margin-left: -$container-padding;
-                padding-right: $container-padding;
-                padding-left: $container-padding;
-                background-color: $bdl-box-blue-05;
-                border-bottom: none;
-                box-shadow: 0 $container-padding 0 -#{$container-padding - 1} $bdl-gray-10;
-            }
-        }
-
-        .bcs-activity-feed-task,
-        .bcs-activity-feed-task-new,
-        .bcs-activity-feed-comment,
-        .bcs-activity-feed-app-activity {
-            &.bcs-is-focused {
-                animation: fade-out 6s ease-out 2s 1 normal forwards;
-
-                @keyframes fade-out {
-                    0% {
-                        background-color: $bdl-box-blue-05;
-                    }
-
-                    100% {
-                        background-color: transparent;
-                    }
+                &:not(:focus-within) {
+                    animation-iteration-count: 1; // Only play the animation if the user is not interacting directly with the element or its descendents
+                    animation-fill-mode: forwards;
                 }
             }
         }
 
-        .bcs-activity-feed-annotation-activity.bcs-is-focused {
-            padding-left: 21px;
-            border-left: 4px solid $bdl-yellorange;
+        .bcs-version-item {
+            padding-top: 0;
+            padding-bottom: 0;
+            box-shadow: none;
+
+            &,
+            & + .bcs-ActivityItem {
+                margin-top: $bdl-grid-unit * 4;
+            }
         }
 
-        .bcs-activity-feed-task {
-            padding-bottom: 28px;
+        .bcs-activity-feed-annotation-activity {
+            &::before {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                display: block;
+                width: $bdl-grid-unit;
+                background-color: $bdl-yellorange;
+                transform: scaleY(0); // Visually hidden, but available for transition
+                transition: transform $container-transition-duration ease $container-transition-delay;
+                content: '';
+            }
+
+            &.bcs-is-focused {
+                &::before {
+                    transform: scaleY(1);
+                }
+            }
         }
     }
 
     .bcs-activity-feed-active-state {
         width: 100%;
-        padding: 9px 25px;
-
-        > li:last-child {
-            margin-bottom: 10px;
-        }
-    }
-
-    .bcs-activity-feed-empty-state {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        .bcs-empty-state-cta {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-
-            aside {
-                width: 200px;
-                margin-top: 6px;
-                text-align: center;
-            }
-        }
-
-        .bcs-activity-feed-empty-state-illustration {
-            margin-top: 60px;
-            margin-bottom: 15px;
-        }
+        padding-bottom: $bdl-grid-unit * 4;
     }
 
     .bcs-activity-feed-loading-state {

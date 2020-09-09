@@ -277,7 +277,7 @@ describe('util/uploads', () => {
         Date.now = jest.fn(() => now);
 
         test('should return item id correctly when item does not contain API options', () => {
-            expect(getDataTransferItemId(mockItem, rootFolderId)).toBe(`hi_0_${now}`);
+            expect(getDataTransferItemId(mockItem, rootFolderId)).toBe('hi');
         });
 
         test('should return item id correctly when item does contain API options', () => {

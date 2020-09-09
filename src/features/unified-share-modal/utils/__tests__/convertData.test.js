@@ -1,11 +1,96 @@
-import { convertItemResponse, convertUserResponse, PERMISSION_LEVEL_MAP } from '../convertData';
-import { TYPE_FILE, TYPE_FOLDER } from '../../../../constants';
-import { ANYONE_IN_COMPANY } from '../../constants';
+import {
+    API_TO_USM_PERMISSION_LEVEL_MAP,
+    convertAllowedAccessLevels,
+    convertCollabsResponse,
+    convertGroupContactsResponse,
+    convertUserContactsResponse,
+    convertItemResponse,
+    convertUserResponse,
+    convertSharedLinkPermissions,
+    convertSharedLinkSettings,
+    convertCollabsRequest,
+} from '../convertData';
+import {
+    TYPE_FILE,
+    TYPE_FOLDER,
+    PERMISSION_CAN_DOWNLOAD,
+    PERMISSION_CAN_PREVIEW,
+    ACCESS_COLLAB,
+    ACCESS_COMPANY,
+    ACCESS_OPEN,
+} from '../../../../constants';
+import {
+    ALLOWED_ACCESS_LEVELS,
+    ANYONE_IN_COMPANY,
+    ANYONE_WITH_LINK,
+    CAN_VIEW_DOWNLOAD,
+    CAN_VIEW_ONLY,
+    PEOPLE_IN_ITEM,
+} from '../../constants';
+import {
+    bdlDarkBlue50,
+    bdlGray20,
+    bdlGreenLight50,
+    bdlLightBlue50,
+    bdlOrange50,
+    bdlPurpleRain50,
+    bdlWatermelonRed50,
+    bdlYellow50,
+} from '../../../../styles/variables';
+import {
+    MOCK_AVATAR_URL_MAP,
+    MOCK_COLLABS_API_RESPONSE,
+    MOCK_COLLABS_CONVERTED_REQUEST,
+    MOCK_COLLAB_IDS_CONVERTED,
+    MOCK_CONTACTS_API_RESPONSE,
+    MOCK_CONTACTS_CONVERTED_RESPONSE,
+    MOCK_COLLABS_CONVERTED_GROUPS,
+    MOCK_COLLABS_REQUEST_GROUPS_ONLY,
+    MOCK_COLLABS_CONVERTED_USERS,
+    MOCK_COLLABS_REQUEST_USERS_ONLY,
+    MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
+    MOCK_DISABLED_REASONS,
+    MOCK_GROUP_CONTACTS_API_RESPONSE,
+    MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
+    MOCK_ITEM_PERMISSIONS,
+    MOCK_OWNER,
+    MOCK_OWNER_ID,
+    MOCK_OWNER_EMAIL,
+    MOCK_PASSWORD,
+    MOCK_SERVER_URL,
+    MOCK_SETTINGS_WITH_ALL_FEATURES,
+    MOCK_SETTINGS_DOWNLOAD_PERMISSIONS,
+    MOCK_SETTINGS_PREVIEW_PERMISSIONS,
+    MOCK_SETTINGS_WITHOUT_DOWNLOAD,
+    MOCK_SETTINGS_WITHOUT_EXPIRATION,
+    MOCK_SETTINGS_WITHOUT_PASSWORD,
+    MOCK_SETTINGS_WITHOUT_VANITY_URL,
+    MOCK_TIMESTAMP,
+    MOCK_TIMESTAMP_ISO_STRING,
+    MOCK_USER_IDS_CONVERTED,
+    MOCK_VANITY_URL,
+} from '../__mocks__/USMMocks';
 
 jest.mock('../../../../utils/file', () => ({
     getTypedFileId: () => 'f_190457309',
     getTypedFolderId: () => 'd_190457309',
 }));
+
+describe('convertAllowedAccessLevels', () => {
+    // The "collaborators" access level is always allowed.
+    test.each`
+        allowedAccessLevelsFromAPI              | convertedAllowedAccessLevels                                                        | description
+        ${['collaborators', 'open', 'company']} | ${ALLOWED_ACCESS_LEVELS}                                                            | ${'all'}
+        ${['collaborators', 'company']}         | ${{ peopleInThisItem: true, peopleInYourCompany: true, peopleWithTheLink: false }}  | ${'only collaborators and company'}
+        ${['collaborators', 'open']}            | ${{ peopleInThisItem: true, peopleInYourCompany: false, peopleWithTheLink: true }}  | ${'only collaborators and open'}
+        ${['collaborators']}                    | ${{ peopleInThisItem: true, peopleInYourCompany: false, peopleWithTheLink: false }} | ${'only collaborators and open'}
+    `(
+        'should convert allowed access levels when $description levels are allowed',
+        ({ allowedAccessLevelsFromAPI, convertedAllowedAccessLevels }) => {
+            expect(convertAllowedAccessLevels(allowedAccessLevelsFromAPI)).toEqual(convertedAllowedAccessLevels);
+        },
+    );
+});
 
 describe('convertItemResponse()', () => {
     const TYPED_FILE_ID = 'f_190457309';
@@ -29,7 +114,7 @@ describe('convertItemResponse()', () => {
             can_download: true,
         },
         preview_count: 0,
-        unshared_at: null,
+        unshared_at: MOCK_TIMESTAMP_ISO_STRING,
         url: ITEM_SHARED_LINK_URL,
         vanity_name: null,
         vanity_url: null,
@@ -175,6 +260,7 @@ describe('convertItemResponse()', () => {
                 extension,
                 id: ITEM_ID,
                 name: ITEM_NAME,
+                owned_by: MOCK_OWNER,
                 permissions,
                 shared_link: sharedLink,
                 shared_link_features: sharedLinkFeatures,
@@ -182,15 +268,9 @@ describe('convertItemResponse()', () => {
             };
             const { can_download, can_invite_collaborator, can_preview, can_set_share_access, can_share } = permissions;
 
-            const { download_url, effective_permission, is_password_enabled, unshared_at, url, vanity_name } = Object(
-                sharedLink,
-            );
+            const { download_url, effective_permission, is_password_enabled, url, vanity_name } = Object(sharedLink);
 
-            const {
-                download_url: isDirectLinkAvailable,
-                password,
-                vanity_name: isVanityNameAvailable,
-            } = sharedLinkFeatures;
+            const { download_url: isDirectLinkAvailable, password } = sharedLinkFeatures;
 
             const convertedResponse = {
                 item: {
@@ -203,25 +283,25 @@ describe('convertItemResponse()', () => {
                     hideCollaborators: false,
                     id: ITEM_ID,
                     name: ITEM_NAME,
+                    ownerEmail: MOCK_OWNER_EMAIL,
+                    ownerID: MOCK_OWNER_ID,
+                    permissions,
                     type: itemType,
                     typedID,
                 },
-                originalItemPermissions: permissions,
                 sharedLink: sharedLink
                     ? {
                           accessLevel: ANYONE_IN_COMPANY,
-                          allowedAccessLevels: {
-                              peopleInThisItem: false,
-                              peopleInYourCompany: true,
-                              peopleWithTheLink: false,
-                          },
+                          accessLevelsDisabledReason: {},
+                          allowedAccessLevels: ALLOWED_ACCESS_LEVELS,
                           canChangeAccessLevel: can_set_share_access,
                           canChangeDownload: can_set_share_access && can_download,
+                          canChangeExpiration: can_set_share_access,
                           canChangePassword: can_set_share_access && password,
-                          canChangeVanityName: can_set_share_access && isVanityNameAvailable,
+                          canChangeVanityName: false,
                           canInvite: can_invite_collaborator,
                           directLink: download_url,
-                          expirationTimestamp: unshared_at,
+                          expirationTimestamp: MOCK_TIMESTAMP,
                           isDirectLinkAvailable,
                           isDownloadAllowed: can_download,
                           isDownloadAvailable: can_download,
@@ -232,9 +312,9 @@ describe('convertItemResponse()', () => {
                           isPasswordAvailable: password,
                           isPasswordEnabled: is_password_enabled,
                           isPreviewAllowed: can_preview,
-                          permissionLevel: PERMISSION_LEVEL_MAP[effective_permission],
+                          permissionLevel: API_TO_USM_PERMISSION_LEVEL_MAP[effective_permission],
                           url,
-                          vanityName: vanity_name,
+                          vanityName: vanity_name || '',
                       }
                     : { canInvite: can_invite_collaborator },
             };
@@ -242,6 +322,105 @@ describe('convertItemResponse()', () => {
             expect(convertItemResponse(responseFromAPI)).toEqual(convertedResponse);
         },
     );
+
+    test.each`
+        access            | permission                 | expectedIsDownloadAllowed | expectedCanChangeDownload | description
+        ${ACCESS_COLLAB}  | ${PERMISSION_CAN_DOWNLOAD} | ${true}                   | ${false}                  | ${'access is "collab" and shared link permission is "can_download"'}
+        ${ACCESS_COMPANY} | ${PERMISSION_CAN_DOWNLOAD} | ${true}                   | ${true}                   | ${'access is "company" and shared link permission is "can_download"'}
+        ${ACCESS_OPEN}    | ${PERMISSION_CAN_DOWNLOAD} | ${true}                   | ${true}                   | ${'access is "open" and shared link permission is "can_download"'}
+        ${ACCESS_COLLAB}  | ${PERMISSION_CAN_PREVIEW}  | ${false}                  | ${false}                  | ${'access is "collab" and shared link permission is "can_preview"'}
+        ${ACCESS_COMPANY} | ${PERMISSION_CAN_PREVIEW}  | ${false}                  | ${true}                   | ${'access is "company" and shared link permission is "can_preview"'}
+        ${ACCESS_OPEN}    | ${PERMISSION_CAN_PREVIEW}  | ${false}                  | ${true}                   | ${'access is "open" and shared link permission is "can_preview"'}
+    `(
+        'should set download properties correctly when $description',
+        ({ access, permission, expectedIsDownloadAllowed, expectedCanChangeDownload }) => {
+            const responseFromAPI = {
+                allowed_invitee_roles: ['editor', 'viewer'],
+                description: ITEM_DESCRIPTION,
+                etag: '1',
+                id: ITEM_ID,
+                name: ITEM_NAME,
+                owned_by: MOCK_OWNER,
+                permissions: MOCK_ITEM_PERMISSIONS,
+                shared_link: { ...ITEM_SHARED_LINK, effective_access: access, effective_permission: permission },
+                shared_link_features: ALL_SHARED_LINK_FEATURES,
+                type: TYPE_FILE,
+            };
+            const {
+                sharedLink: { canChangeDownload, isDownloadAllowed },
+            } = convertItemResponse(responseFromAPI);
+            expect(canChangeDownload).toBe(expectedCanChangeDownload);
+            expect(isDownloadAllowed).toBe(expectedIsDownloadAllowed);
+        },
+    );
+
+    test.each`
+        hexCode               | colorID | colorName
+        ${bdlYellow50}        | ${0}    | ${'a yellow'}
+        ${bdlOrange50}        | ${1}    | ${'an orange'}
+        ${bdlWatermelonRed50} | ${2}    | ${'a red'}
+        ${bdlPurpleRain50}    | ${3}    | ${'a purple'}
+        ${bdlLightBlue50}     | ${4}    | ${'a light blue'}
+        ${bdlDarkBlue50}      | ${5}    | ${'a dark blue'}
+        ${bdlGreenLight50}    | ${6}    | ${'a green'}
+        ${bdlGray20}          | ${7}    | ${'a gray'}
+    `('should convert classification with $colorName background', ({ hexCode, colorID }) => {
+        const classificationName = 'internal';
+        const definition = 'For internal purposes only.';
+
+        const responseFromAPI = {
+            allowed_invitee_roles: ['editor', 'viewer'],
+            classification: {
+                color: hexCode,
+                definition,
+                name: classificationName,
+            },
+            description: ITEM_DESCRIPTION,
+            etag: '1',
+            id: ITEM_ID,
+            name: ITEM_NAME,
+            owned_by: MOCK_OWNER,
+            permissions: FULL_PERMISSIONS,
+            shared_link: ITEM_SHARED_LINK,
+            shared_link_features: ALL_SHARED_LINK_FEATURES,
+            type: TYPE_FOLDER,
+        };
+
+        const {
+            item: { bannerPolicy, classification },
+        } = convertItemResponse(responseFromAPI);
+
+        expect(bannerPolicy).toEqual({
+            body: definition,
+            colorID,
+        });
+        expect(classification).toBe(classificationName);
+    });
+
+    test.each`
+        disabledReasonsFromAPI   | convertedDisabledReasons | description
+        ${MOCK_DISABLED_REASONS} | ${MOCK_DISABLED_REASONS} | ${'disabled reasons when they are returned from the API'}
+        ${undefined}             | ${{}}                    | ${'default disabled reasons when the API does not return disabled reasons'}
+    `('should return $description', ({ disabledReasonsFromAPI, convertedDisabledReasons }) => {
+        const responseFromAPI = {
+            allowed_invitee_roles: ['editor', 'viewer'],
+            allowed_shared_link_access_levels_disabled_reasons: disabledReasonsFromAPI,
+            description: ITEM_DESCRIPTION,
+            etag: '1',
+            id: ITEM_ID,
+            name: ITEM_NAME,
+            owned_by: MOCK_OWNER,
+            permissions: FULL_PERMISSIONS,
+            shared_link: ITEM_SHARED_LINK,
+            shared_link_features: ALL_SHARED_LINK_FEATURES,
+            type: TYPE_FOLDER,
+        };
+        const {
+            sharedLink: { accessLevelsDisabledReason, allowedAccessLevels },
+        } = convertItemResponse(responseFromAPI);
+        expect(accessLevelsDisabledReason).toEqual(convertedDisabledReasons);
+        expect(allowedAccessLevels).toEqual(ALLOWED_ACCESS_LEVELS);
+    });
 });
 
 describe('convertUserResponse()', () => {
@@ -251,14 +430,13 @@ describe('convertUserResponse()', () => {
         name: ENTERPRISE_NAME,
     };
     const HOSTNAME = 'https://cloud.box.com/';
-    const SERVER_URL = `${HOSTNAME}/v/`;
 
     test.each`
-        enterprise    | hostname    | enterpriseName     | serverURL     | description
-        ${ENTERPRISE} | ${HOSTNAME} | ${ENTERPRISE_NAME} | ${SERVER_URL} | ${'enterprise and hostname exist'}
-        ${ENTERPRISE} | ${null}     | ${ENTERPRISE_NAME} | ${''}         | ${'enterprise exists, but not hostname'}
-        ${null}       | ${HOSTNAME} | ${''}              | ${SERVER_URL} | ${'hostname exists, but not enterprise'}
-        ${null}       | ${null}     | ${''}              | ${''}         | ${'neither enterprise nor hostname exists'}
+        enterprise    | hostname    | enterpriseName     | serverURL          | description
+        ${ENTERPRISE} | ${HOSTNAME} | ${ENTERPRISE_NAME} | ${MOCK_SERVER_URL} | ${'enterprise and hostname exist'}
+        ${ENTERPRISE} | ${null}     | ${ENTERPRISE_NAME} | ${''}              | ${'enterprise exists, but not hostname'}
+        ${null}       | ${HOSTNAME} | ${''}              | ${MOCK_SERVER_URL} | ${'hostname exists, but not enterprise'}
+        ${null}       | ${null}     | ${''}              | ${''}              | ${'neither enterprise nor hostname exists'}
     `('should convert data when $description', ({ enterprise, hostname, enterpriseName, serverURL }) => {
         const responseFromAPI = {
             enterprise,
@@ -275,5 +453,275 @@ describe('convertUserResponse()', () => {
         };
 
         expect(convertUserResponse(responseFromAPI)).toEqual(convertedResponse);
+    });
+});
+
+describe('convertSharedLinkPermissions', () => {
+    test.each`
+        permissionLevel      | result
+        ${CAN_VIEW_DOWNLOAD} | ${{ [PERMISSION_CAN_DOWNLOAD]: true, [PERMISSION_CAN_PREVIEW]: false }}
+        ${CAN_VIEW_ONLY}     | ${{ [PERMISSION_CAN_DOWNLOAD]: false, [PERMISSION_CAN_PREVIEW]: true }}
+    `('should return the correct result for the $permissionLevel permission level', ({ permissionLevel, result }) => {
+        expect(convertSharedLinkPermissions(permissionLevel)).toEqual(result);
+    });
+});
+
+describe('convertSharedLinkSettings', () => {
+    test.each`
+        newSettings                         | permissions                           | unsharedAt                   | vanityUrl          | serverURL          | description
+        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'with all features'}
+        ${MOCK_SETTINGS_WITHOUT_DOWNLOAD}   | ${MOCK_SETTINGS_PREVIEW_PERMISSIONS}  | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'without disallowed direct downloads'}
+        ${MOCK_SETTINGS_WITHOUT_EXPIRATION} | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${null}                      | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'without an expiration date'}
+        ${MOCK_SETTINGS_WITHOUT_PASSWORD}   | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'without a password'}
+        ${MOCK_SETTINGS_WITHOUT_VANITY_URL} | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${''}              | ${MOCK_SERVER_URL} | ${'without a vanity name'}
+        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${''}              | ${null}            | ${'without a server URL'}
+    `(
+        'should convert a shared link settings USM object $description when the accessLevel is ANYONE_IN_COMPANY',
+        ({ newSettings, permissions, unsharedAt, serverURL, vanityUrl }) => {
+            // "password" should not exist in the converted object
+            expect(convertSharedLinkSettings(newSettings, ANYONE_IN_COMPANY, serverURL)).toEqual({
+                permissions,
+                unshared_at: unsharedAt,
+                vanity_url: vanityUrl,
+            });
+        },
+    );
+    test.each`
+        newSettings                         | unsharedAt                   | vanityUrl          | serverURL          | description
+        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'with all features'}
+        ${MOCK_SETTINGS_WITHOUT_DOWNLOAD}   | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'without disallowed direct downloads'}
+        ${MOCK_SETTINGS_WITHOUT_EXPIRATION} | ${null}                      | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'without an expiration date'}
+        ${MOCK_SETTINGS_WITHOUT_PASSWORD}   | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_SERVER_URL} | ${'without a password'}
+        ${MOCK_SETTINGS_WITHOUT_VANITY_URL} | ${MOCK_TIMESTAMP_ISO_STRING} | ${''}              | ${MOCK_SERVER_URL} | ${'without a vanity name'}
+        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_TIMESTAMP_ISO_STRING} | ${''}              | ${null}            | ${'without a server URL'}
+    `(
+        'should convert a shared link settings USM object $description when the accessLevel is PEOPLE_IN_ITEM',
+        ({ newSettings, unsharedAt, serverURL, vanityUrl }) => {
+            // "password" and "permissions" should not exist in the converted object
+            expect(convertSharedLinkSettings(newSettings, PEOPLE_IN_ITEM, serverURL)).toEqual({
+                unshared_at: unsharedAt,
+                vanity_url: vanityUrl,
+            });
+        },
+    );
+
+    test.each`
+        newSettings                         | permissions                           | unsharedAt                   | vanityUrl          | password         | serverURL          | description
+        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'with all features'}
+        ${MOCK_SETTINGS_WITHOUT_DOWNLOAD}   | ${MOCK_SETTINGS_PREVIEW_PERMISSIONS}  | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'without disallowed direct downloads'}
+        ${MOCK_SETTINGS_WITHOUT_EXPIRATION} | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${null}                      | ${MOCK_VANITY_URL} | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'without an expiration date'}
+        ${MOCK_SETTINGS_WITHOUT_PASSWORD}   | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${null}          | ${MOCK_SERVER_URL} | ${'without a password'}
+        ${MOCK_SETTINGS_WITHOUT_VANITY_URL} | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${''}              | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'without a vanity name'}
+        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${''}              | ${MOCK_PASSWORD} | ${null}            | ${'without a server URL'}
+    `(
+        'should convert a shared link settings USM object $description when the accessLevel is ANYONE_WITH_LINK',
+        ({ newSettings, password, permissions, unsharedAt, serverURL, vanityUrl }) => {
+            // All fields should exist in the converted object
+            expect(convertSharedLinkSettings(newSettings, ANYONE_WITH_LINK, serverURL)).toEqual({
+                password,
+                permissions,
+                unshared_at: unsharedAt,
+                vanity_url: vanityUrl,
+            });
+        },
+    );
+});
+
+describe('convertCollabsResponse', () => {
+    test.each`
+        isCurrentUserOwner | avatarURLMap | ownerDescription   | avatarURLMapDescription
+        ${true}            | ${{}}        | ${'the owner'}     | ${'empty'}
+        ${false}           | ${{}}        | ${'not the owner'} | ${'empty'}
+        ${true}            | ${null}      | ${'the owner'}     | ${'null'}
+        ${false}           | ${null}      | ${'not the owner'} | ${'null'}
+    `(
+        'should correctly convert a Collaborations API response when the current user is $ownerDescription and the avatar URL map is $avatarURLMapDescription',
+        ({ isCurrentUserOwner, avatarURLMap }) => {
+            const convertedResponse = {
+                collaborators: [
+                    {
+                        collabID: MOCK_COLLAB_IDS_CONVERTED[0],
+                        email: 'contentexplorer@box.com',
+                        hasCustomAvatar: false,
+                        imageURL: undefined,
+                        isExternalCollab: false,
+                        name: 'Content Explorer',
+                        translatedRole: 'Editor',
+                        type: 'user',
+                        userID: MOCK_USER_IDS_CONVERTED[0],
+                    },
+                    {
+                        collabID: MOCK_COLLAB_IDS_CONVERTED[1],
+                        email: 'contentpreview@box.com',
+                        hasCustomAvatar: false,
+                        imageURL: undefined,
+                        isExternalCollab: false,
+                        name: 'Content Preview',
+                        translatedRole: 'Editor',
+                        type: 'user',
+                        userID: MOCK_USER_IDS_CONVERTED[1],
+                    },
+                    {
+                        collabID: MOCK_COLLAB_IDS_CONVERTED[2],
+                        email: 'contentpicker@box.com',
+                        expiration: {
+                            executeAt: '2020-07-09T14:53:12-08:00',
+                        },
+                        hasCustomAvatar: false,
+                        imageURL: undefined,
+                        isExternalCollab: false,
+                        name: 'Content Picker',
+                        translatedRole: 'Editor',
+                        type: 'user',
+                        userID: MOCK_USER_IDS_CONVERTED[2],
+                    },
+                    {
+                        collabID: MOCK_COLLAB_IDS_CONVERTED[3],
+                        email: 'contentuploader@box.com',
+                        hasCustomAvatar: false,
+                        imageURL: undefined,
+                        isExternalCollab: false,
+                        name: 'Content Uploader',
+                        translatedRole: 'Editor',
+                        type: 'user',
+                        userID: MOCK_USER_IDS_CONVERTED[3],
+                    },
+                    {
+                        collabID: MOCK_COLLAB_IDS_CONVERTED[4],
+                        email: 'demo@boxworks.com',
+                        hasCustomAvatar: false,
+                        imageURL: undefined,
+                        isExternalCollab: !!isCurrentUserOwner,
+                        name: 'BoxWorks Demo',
+                        translatedRole: 'Viewer',
+                        type: 'user',
+                        userID: MOCK_USER_IDS_CONVERTED[4],
+                    },
+                ],
+            };
+            expect(
+                convertCollabsResponse(MOCK_COLLABS_API_RESPONSE, avatarURLMap, MOCK_OWNER_EMAIL, isCurrentUserOwner),
+            ).toEqual(convertedResponse);
+        },
+    );
+
+    test('should correctly convert a Collaborations API response with avatar URLs', () => {
+        const convertedResponse = {
+            collaborators: [
+                {
+                    collabID: MOCK_COLLAB_IDS_CONVERTED[0],
+                    email: 'contentexplorer@box.com',
+                    hasCustomAvatar: true,
+                    imageURL: MOCK_AVATAR_URL_MAP[MOCK_USER_IDS_CONVERTED[0]],
+                    isExternalCollab: false,
+                    name: 'Content Explorer',
+                    translatedRole: 'Editor',
+                    type: 'user',
+                    userID: MOCK_USER_IDS_CONVERTED[0],
+                },
+                {
+                    collabID: MOCK_COLLAB_IDS_CONVERTED[1],
+                    email: 'contentpreview@box.com',
+                    hasCustomAvatar: true,
+                    imageURL: MOCK_AVATAR_URL_MAP[MOCK_USER_IDS_CONVERTED[1]],
+                    isExternalCollab: false,
+                    name: 'Content Preview',
+                    translatedRole: 'Editor',
+                    type: 'user',
+                    userID: MOCK_USER_IDS_CONVERTED[1],
+                },
+                {
+                    collabID: MOCK_COLLAB_IDS_CONVERTED[2],
+                    email: 'contentpicker@box.com',
+                    expiration: {
+                        executeAt: '2020-07-09T14:53:12-08:00',
+                    },
+                    hasCustomAvatar: true,
+                    imageURL: MOCK_AVATAR_URL_MAP[MOCK_USER_IDS_CONVERTED[2]],
+                    isExternalCollab: false,
+                    name: 'Content Picker',
+                    translatedRole: 'Editor',
+                    type: 'user',
+                    userID: MOCK_USER_IDS_CONVERTED[2],
+                },
+                {
+                    collabID: MOCK_COLLAB_IDS_CONVERTED[3],
+                    email: 'contentuploader@box.com',
+                    hasCustomAvatar: true,
+                    imageURL: MOCK_AVATAR_URL_MAP[MOCK_USER_IDS_CONVERTED[3]],
+                    isExternalCollab: false,
+                    name: 'Content Uploader',
+                    translatedRole: 'Editor',
+                    type: 'user',
+                    userID: MOCK_USER_IDS_CONVERTED[3],
+                },
+                {
+                    collabID: MOCK_COLLAB_IDS_CONVERTED[4],
+                    email: 'demo@boxworks.com',
+                    hasCustomAvatar: true,
+                    imageURL: MOCK_AVATAR_URL_MAP[MOCK_USER_IDS_CONVERTED[4]],
+                    isExternalCollab: true,
+                    name: 'BoxWorks Demo',
+                    translatedRole: 'Viewer',
+                    type: 'user',
+                    userID: MOCK_USER_IDS_CONVERTED[4],
+                },
+            ],
+        };
+        expect(convertCollabsResponse(MOCK_COLLABS_API_RESPONSE, MOCK_AVATAR_URL_MAP, MOCK_OWNER_EMAIL, true)).toEqual(
+            convertedResponse,
+        );
+    });
+
+    test.each`
+        avatarURLMap           | description
+        ${null}                | ${'null'}
+        ${{}}                  | ${'empty'}
+        ${MOCK_AVATAR_URL_MAP} | ${'not empty'}
+    `(
+        'should return an object with an empty array if there are no collaborations and the avatar URL map is $description',
+        ({ avatarURLMap }) => {
+            expect(
+                convertCollabsResponse({ total_count: 0, entries: [] }, avatarURLMap, MOCK_OWNER_EMAIL, true),
+            ).toEqual({
+                collaborators: [],
+            });
+        },
+    );
+});
+
+describe('convertUserContactsResponse()', () => {
+    test('should return all users except the current user', () => {
+        expect(convertUserContactsResponse(MOCK_CONTACTS_API_RESPONSE, MOCK_OWNER_ID)).toEqual(
+            MOCK_CONTACTS_CONVERTED_RESPONSE,
+        );
+    });
+
+    test('should return an empty array if there are no available users', () => {
+        expect(convertUserContactsResponse({ total_count: 0, entries: [] }, MOCK_OWNER_ID)).toEqual([]);
+    });
+});
+
+describe('convertGroupContactsResponse()', () => {
+    test('should return groups with the correct permissions', () => {
+        expect(convertGroupContactsResponse(MOCK_GROUP_CONTACTS_API_RESPONSE)).toEqual(
+            MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
+        );
+    });
+
+    test('should return an empty array if there are no available groups', () => {
+        expect(convertGroupContactsResponse({ total_count: 0, entries: [] })).toEqual([]);
+    });
+});
+
+describe('convertCollabsRequest()', () => {
+    test.each`
+        requestFromUSM                                      | convertedResponse                                       | description
+        ${MOCK_COLLABS_REQUEST_USERS_ONLY}                  | ${{ groups: [], users: MOCK_COLLABS_CONVERTED_USERS }}  | ${'users only'}
+        ${MOCK_COLLABS_REQUEST_GROUPS_ONLY}                 | ${{ groups: MOCK_COLLABS_CONVERTED_GROUPS, users: [] }} | ${'groups only'}
+        ${MOCK_COLLABS_REQUEST_USERS_AND_GROUPS}            | ${MOCK_COLLABS_CONVERTED_REQUEST}                       | ${'users and groups'}
+        ${{ emails: '', groups: '', permission: 'Editor' }} | ${{ groups: [], users: [] }}                            | ${'no users or groups'}
+    `('should convert a request with $description', ({ requestFromUSM, convertedResponse }) => {
+        expect(convertCollabsRequest(requestFromUSM)).toEqual(convertedResponse);
     });
 });

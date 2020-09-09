@@ -26,6 +26,16 @@ const messages = defineMessages({
         description: 'Default message for classification in the sidebar when there is none',
         id: 'boxui.classification.missing',
     },
+    modifiedByLabel: {
+        defaultMessage: 'Classification Updated By',
+        description: 'Label displayed above details about when a classification was last modified.',
+        id: 'boxui.classification.modifiedByLabel',
+    },
+    modifiedBy: {
+        defaultMessage: '{modifiedBy} on {modifiedAt}',
+        description: 'Sentence stating which user or service modified a classification and on what date.',
+        id: 'boxui.classification.modifiedBy',
+    },
     // Classification Colors
     classificationYellow: {
         defaultMessage: 'Yellow',

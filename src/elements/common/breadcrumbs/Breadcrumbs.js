@@ -5,10 +5,13 @@
  */
 
 import React from 'react';
+import { injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import Breadcrumb from './Breadcrumb';
 import BreadcrumbDropdown from './BreadcrumbDropdown';
 import BreadcrumbDelimiter from './BreadcrumbDelimiter';
-import { DELIMITER_SLASH, DELIMITER_CARET } from '../../../constants';
+import { DELIMITER_CARET, DEFAULT_ROOT, DELIMITER_SLASH } from '../../../constants';
+import messages from '../messages';
 import type { Delimiter, Crumb } from '../../../common/types/core';
 import './Breadcrumbs.scss';
 
@@ -18,7 +21,7 @@ type Props = {
     isSmall?: boolean,
     onCrumbClick: Function,
     rootId: string,
-};
+} & InjectIntlProvidedProps;
 
 /**
  * Filters out ancestors to root from the crumbs.
@@ -61,13 +64,20 @@ function getBreadcrumb(crumbs: Crumb | Crumb[], isLast: boolean, onCrumbClick: F
     return <Breadcrumb delimiter={delimiter} isLast={isLast} name={name} onClick={() => onCrumbClick(id)} />;
 }
 
-const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false }: Props) => {
+const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false, intl }: Props) => {
     if (!rootId || crumbs.length === 0) {
         return <span />;
     }
 
     // The crumbs given may have ancestors higher than the root. We need to filter them out.
     const filteredCrumbs = filterCrumbs(rootId, crumbs);
+
+    // Make sure "All Files" crumb is localized
+    const defaultRootCrumb = filteredCrumbs.find(({ id }) => id === DEFAULT_ROOT);
+    if (defaultRootCrumb) {
+        defaultRootCrumb.name = intl.formatMessage(messages.rootBreadcrumb);
+    }
+
     const { length } = filteredCrumbs;
 
     // Always show the last/leaf breadcrumb.
@@ -96,4 +106,5 @@ const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false 
     );
 };
 
-export default Breadcrumbs;
+export { Breadcrumbs as BreadcrumbsBase };
+export default injectIntl(Breadcrumbs);

@@ -7,6 +7,8 @@ import classNames from 'classnames';
 import find from 'lodash/find';
 import getProp from 'lodash/get';
 import isEqual from 'lodash/isEqual';
+import isNil from 'lodash/isNil';
+import isString from 'lodash/isString';
 import MultiGrid from 'react-virtualized/dist/es/MultiGrid/MultiGrid';
 
 import MetadataField from '../metadata-instance-fields/MetadataField';
@@ -20,7 +22,7 @@ import messages from '../../elements/common/messages';
 
 import './MetadataBasedItemList.scss';
 
-import type { MetadataColumnConfig, MetadataColumnsToShow } from '../../common/types/metadataQueries';
+import type { MetadataFieldConfig, MetadataFieldsToShow } from '../../common/types/metadataQueries';
 import type { MetadataFieldValue } from '../../common/types/metadata';
 import type { StringAnyMap, Collection, BoxItem } from '../../common/types/core';
 
@@ -48,12 +50,12 @@ type State = {
     isUpdating: boolean,
     scrollLeftOffset: number,
     scrollRightOffset: number,
-    valueBeingEdited: ?MetadataFieldValue,
+    valueBeingEdited?: ?MetadataFieldValue,
 };
 
 type Props = {
     currentCollection: Collection,
-    metadataColumnsToShow: MetadataColumnsToShow,
+    metadataFieldsToShow: MetadataFieldsToShow,
     onItemClick: BoxItem => void,
     onMetadataUpdate: (BoxItem, string, ?MetadataFieldValue, ?MetadataFieldValue) => void,
 };
@@ -97,7 +99,6 @@ class MetadataBasedItemList extends React.Component<Props, State> {
             isUpdating: false,
             scrollLeftOffset: 0,
             scrollRightOffset: 0,
-            valueBeingEdited: null,
         };
     };
 
@@ -111,13 +112,18 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                 editedColumnIndex: -1,
                 editedRowIndex: -1,
                 isUpdating: false,
-                valueBeingEdited: null,
+                valueBeingEdited: undefined,
             });
         }
     }
 
+    getQueryResponseFields() {
+        const fields = getProp(this.props, 'currentCollection.items[0].metadata.enterprise.fields', []);
+        return fields.map(({ key, displayName }) => ({ key, displayName }));
+    }
+
     getColumnWidth(width: number): ColumnWidthCallback {
-        const { metadataColumnsToShow }: Props = this.props;
+        const { metadataFieldsToShow } = this.props;
 
         return ({ index }: { index: number }): number => {
             if (index === FILE_ICON_COLUMN_INDEX) {
@@ -130,7 +136,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
 
             const availableWidth = width - FILE_NAME_COLUMN_WIDTH - FILE_ICON_COLUMN_WIDTH; // total width minus width of sticky columns
             // Maintain min column width, else occupy the rest of the space equally
-            return Math.max(availableWidth / metadataColumnsToShow.length, MIN_METADATA_COLUMN_WIDTH);
+            return Math.max(availableWidth / metadataFieldsToShow.length, MIN_METADATA_COLUMN_WIDTH);
         };
     }
 
@@ -143,10 +149,6 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         const permissions = { can_preview: true, can_upload: true };
         return { ...item, permissions };
     };
-
-    getMetadataColumnName(column: MetadataColumnConfig | string): string {
-        return typeof column === 'string' ? column : getProp(column, 'name');
-    }
 
     handleItemClick(item: BoxItem): void {
         const { onItemClick }: Props = this.props;
@@ -205,22 +207,21 @@ class MetadataBasedItemList extends React.Component<Props, State> {
     };
 
     getValueForType(type: string, value: MetadataFieldValue) {
-        switch (type) {
-            case FIELD_TYPE_FLOAT:
-                return parseFloat(value);
-
-            case FIELD_TYPE_INTEGER:
-                return parseInt(value, 10);
-
-            default:
-                return value;
+        if (type === FIELD_TYPE_FLOAT && !isNil(value)) {
+            return parseFloat(value);
         }
+
+        if (type === FIELD_TYPE_INTEGER && !isNil(value)) {
+            return parseInt(value, 10);
+        }
+
+        return value;
     }
 
     getGridCellData(columnIndex: number, rowIndex: number): GridCellData | void {
         const {
             currentCollection: { items = [] },
-            metadataColumnsToShow,
+            metadataFieldsToShow,
         }: Props = this.props;
 
         const {
@@ -234,8 +235,8 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         const isCellBeingEdited = columnIndex === editedColumnIndex && rowIndex === editedRowIndex;
         const isCellHovered = columnIndex === hoveredColumnIndex && rowIndex === hoveredRowIndex;
 
-        const metadataColumn = metadataColumnsToShow[columnIndex - FIXED_COLUMNS_NUMBER];
-        const isCellEditable = !isCellBeingEdited && isCellHovered && !!getProp(metadataColumn, 'canEdit', false);
+        const metadataColumn = metadataFieldsToShow[columnIndex - FIXED_COLUMNS_NUMBER];
+        const isCellEditable = !isCellBeingEdited && isCellHovered;
         const item = items[rowIndex - 1];
         const { id, name } = item;
         const fields = getProp(item, 'metadata.enterprise.fields', []);
@@ -253,37 +254,40 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                 );
                 break;
             default: {
-                const mdFieldName = this.getMetadataColumnName(metadataColumn);
-                const field = find(fields, ['name', mdFieldName]);
+                const key = isString(metadataColumn) ? metadataColumn : metadataColumn.key;
+                const field = find(fields, ['key', key]);
                 if (!field) {
                     return cellData;
                 }
                 const { type, value, options = [] } = field;
+                const shouldShowEditIcon = isCellEditable && isString(type);
                 cellData = (
                     <>
                         {!isCellBeingEdited && <ReadOnlyMetadataField dataValue={value} displayName="" type={type} />}
-                        {isCellEditable && (
+                        {shouldShowEditIcon && (
                             <IconWithTooltip
                                 type={EDIT_ICON_TYPE}
                                 tooltipText={<FormattedMessage {...messages.editLabel} />}
                                 onClick={() => this.handleEditIconClick(columnIndex, rowIndex, value)}
                             />
                         )}
-                        {isCellBeingEdited && valueBeingEdited && (
+                        {isCellBeingEdited && (
                             <div className="bdl-MetadataBasedItemList-cell--edit">
                                 <MetadataField
                                     canEdit
-                                    dataKey={`${id}${mdFieldName}`}
+                                    dataKey={`${id}${key}`}
                                     dataValue={valueBeingEdited}
                                     displayName=""
                                     type={type}
-                                    onChange={(key, changedValue) => {
+                                    onChange={(changeKey, changedValue) => {
                                         this.setState({
                                             valueBeingEdited: changedValue,
                                         });
                                     }}
                                     onRemove={() => {
-                                        /* implement me */
+                                        this.setState({
+                                            valueBeingEdited: undefined,
+                                        });
                                     }}
                                     options={options}
                                 />
@@ -296,9 +300,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                                 {value !== valueBeingEdited && (
                                     <IconWithTooltip
                                         className="bdl-MetadataBasedItemList-cell--saveIcon"
-                                        onClick={() =>
-                                            this.handleSave(item, mdFieldName, type, value, valueBeingEdited)
-                                        }
+                                        onClick={() => this.handleSave(item, key, type, value, valueBeingEdited)}
                                         tooltipText={<FormattedMessage {...messages.save} />}
                                         type={SAVE_ICON_TYPE}
                                         isUpdating={isUpdating}
@@ -314,14 +316,26 @@ class MetadataBasedItemList extends React.Component<Props, State> {
         return cellData;
     }
 
-    getGridHeaderData(columnIndex: number): string | Element<typeof FormattedMessage> {
-        const { metadataColumnsToShow } = this.props;
+    getGridHeaderData(columnIndex: number): string | Element<typeof FormattedMessage> | void {
+        const { metadataFieldsToShow } = this.props;
 
+        if (columnIndex === 0) return undefined;
         if (columnIndex === FILE_NAME_COLUMN_INDEX) {
             return <FormattedMessage {...messages.name} />; // "Name" column header
         }
 
-        return this.getMetadataColumnName(metadataColumnsToShow[columnIndex - FIXED_COLUMNS_NUMBER]); // column header
+        const responseFields = this.getQueryResponseFields();
+        const field: string | MetadataFieldConfig = metadataFieldsToShow[columnIndex - FIXED_COLUMNS_NUMBER];
+        const key = isString(field) ? field : field.key;
+
+        // Derive displayName in following order:
+        // 1. metadataFieldsToShow prop ||
+        // 2. metadata template instance ||
+        // 3. field key
+        const displayName =
+            getProp(field, 'displayName') || getProp(find(responseFields, ['key', key]), 'displayName', key);
+
+        return displayName;
     }
 
     cellRenderer = ({ columnIndex, rowIndex, key, style }: CellRendererArgs): Element<'div'> => {
@@ -366,15 +380,15 @@ class MetadataBasedItemList extends React.Component<Props, State> {
     }
 
     calculateContentWidth(): number {
-        const { metadataColumnsToShow }: Props = this.props;
+        const { metadataFieldsToShow } = this.props;
         // total width = sum of widths of sticky & non-sticky columns
         return (
-            FILE_ICON_COLUMN_WIDTH + FILE_NAME_COLUMN_WIDTH + metadataColumnsToShow.length * MIN_METADATA_COLUMN_WIDTH
+            FILE_ICON_COLUMN_WIDTH + FILE_NAME_COLUMN_WIDTH + metadataFieldsToShow.length * MIN_METADATA_COLUMN_WIDTH
         );
     }
 
     render() {
-        const { currentCollection, metadataColumnsToShow }: Props = this.props;
+        const { currentCollection, metadataFieldsToShow }: Props = this.props;
         const rowCount = currentCollection.items ? currentCollection.items.length : 0;
 
         return (
@@ -392,7 +406,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                                 cellRenderer={this.cellRenderer}
                                 classNameBottomRightGrid={classesBottomRightGrid}
                                 classNameTopRightGrid={classesTopRightGrid}
-                                columnCount={metadataColumnsToShow.length + FIXED_COLUMNS_NUMBER}
+                                columnCount={metadataFieldsToShow.length + FIXED_COLUMNS_NUMBER}
                                 columnWidth={this.getColumnWidth(width)}
                                 fixedColumnCount={FIXED_COLUMNS_NUMBER}
                                 fixedRowCount={FIXED_ROW_NUMBER}

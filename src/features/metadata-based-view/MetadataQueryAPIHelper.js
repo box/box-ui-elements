@@ -3,25 +3,26 @@
  * @file Metadata Queries API Helper
  * @author Box
  */
+import cloneDeep from 'lodash/cloneDeep';
 import find from 'lodash/find';
 import getProp from 'lodash/get';
 import includes from 'lodash/includes';
+import isArray from 'lodash/isArray';
+import isNil from 'lodash/isNil';
 import API from '../../api';
 
 import {
     ITEM_TYPE_FILE,
+    JSON_PATCH_OP_ADD,
+    JSON_PATCH_OP_REMOVE,
     JSON_PATCH_OP_REPLACE,
     JSON_PATCH_OP_TEST,
     METADATA_FIELD_TYPE_ENUM,
     METADATA_FIELD_TYPE_MULTISELECT,
 } from '../../common/constants';
+import { FIELD_NAME } from '../../constants';
 
-import type {
-    MetadataQuery as MetadataQueryType,
-    MetadataQueryResponseData,
-    MetadataQueryResponseEntry,
-    MetadataQueryResponseEntryMetadata,
-} from '../../common/types/metadataQueries';
+import type { MetadataQuery as MetadataQueryType, MetadataQueryResponseData } from '../../common/types/metadataQueries';
 import type {
     MetadataTemplateSchemaResponse,
     MetadataTemplate,
@@ -51,6 +52,8 @@ export default class MetadataQueryAPIHelper {
 
     templateScope: string;
 
+    metadataQuery: MetadataQueryType;
+
     constructor(api: API) {
         this.api = api;
     }
@@ -59,20 +62,56 @@ export default class MetadataQueryAPIHelper {
         field: string,
         oldValue: ?MetadataFieldValue,
         newValue: ?MetadataFieldValue,
-    ): JSONPatchOperations => [
-        {
+    ): JSONPatchOperations => {
+        let operation = JSON_PATCH_OP_REPLACE;
+
+        if (isNil(oldValue) && newValue) {
+            operation = JSON_PATCH_OP_ADD;
+        }
+
+        if (oldValue && isNil(newValue)) {
+            operation = JSON_PATCH_OP_REMOVE;
+        }
+
+        const testOp = {
             op: JSON_PATCH_OP_TEST,
             path: `/${field}`,
             value: oldValue,
-        },
-        {
-            op: JSON_PATCH_OP_REPLACE,
+        };
+        const patchOp = {
+            op: operation,
             path: `/${field}`,
             value: newValue,
-        },
-    ];
+        };
 
-    flattenMetadata = (metadata: MetadataQueryResponseEntryMetadata): MetadataType => {
+        if (operation === JSON_PATCH_OP_REMOVE) {
+            delete patchOp.value;
+        }
+
+        return operation === JSON_PATCH_OP_ADD ? [patchOp] : [testOp, patchOp];
+    };
+
+    getMetadataQueryFields = (): string[] => {
+        /*
+            Example metadata query:
+            const query = {
+                from: 'enterprise_12345.myAwesomeTemplateKey',
+                fields: [
+                    'name', // base representation field for an item (name, size, etag etc.)
+                    'metadata.enterprise_12345.myAwesomeTemplateKey.field_1', // metadata instance field
+                    'metadata.enterprise_12345.myAwesomeTemplateKey.field_2', // metadata instance field
+                    'metadata.enterprise_12345.myAwesomeTemplateKey.field_3' // metadata instance field
+                ],
+                ancestor_folder_id: 0,
+            };
+
+            This function will return ['field_1', 'field_2', 'field_3']
+        */
+        const { fields = [], from } = this.metadataQuery;
+        return fields.filter(field => field.includes(from)).map(field => field.split('.').pop());
+    };
+
+    flattenMetadata = (metadata?: MetadataType): MetadataType => {
         const templateFields = getProp(this.metadataTemplate, 'fields', []);
         const instance = getProp(metadata, `${this.templateScope}.${this.templateKey}`);
 
@@ -80,24 +119,27 @@ export default class MetadataQueryAPIHelper {
             return {};
         }
 
-        const fields = Object.keys(instance)
-            .filter(key => !key.startsWith('$'))
-            .map(key => {
-                const templateField = find(templateFields, ['key', key]);
-                const type = getProp(templateField, 'type'); // get data type
-                const field: MetadataQueryInstanceTypeField = {
-                    name: key,
-                    value: instance[key],
-                    type,
-                };
+        const queryFields = this.getMetadataQueryFields();
 
-                if (includes(SELECT_TYPES, type)) {
-                    // get "options" for enums or multiselects
-                    field.options = getProp(templateField, 'options');
-                }
+        const fields = queryFields.map((queryField: string) => {
+            const templateField = find(templateFields, ['key', queryField]);
+            const type = getProp(templateField, 'type'); // get data type
+            const displayName = getProp(templateField, 'displayName', queryField); // get displayName, defaults to key
 
-                return field;
-            });
+            const field: MetadataQueryInstanceTypeField = {
+                key: queryField,
+                value: instance[queryField],
+                type,
+                displayName,
+            };
+
+            if (includes(SELECT_TYPES, type)) {
+                // get "options" for enums or multiselects
+                field.options = getProp(templateField, 'options');
+            }
+
+            return field;
+        });
 
         return {
             enterprise: {
@@ -107,8 +149,8 @@ export default class MetadataQueryAPIHelper {
         };
     };
 
-    flattenResponseEntry = ({ item, metadata }: MetadataQueryResponseEntry): BoxItem => {
-        const { id, name, size } = item;
+    flattenResponseEntry = (metadataEntry: BoxItem): BoxItem => {
+        const { id, name, size, metadata } = metadataEntry;
 
         return {
             id,
@@ -121,7 +163,7 @@ export default class MetadataQueryAPIHelper {
     filterMetdataQueryResponse = (response: MetadataQueryResponseData): MetadataQueryResponseData => {
         const { entries = [], next_marker } = response;
         return {
-            entries: entries.filter(entry => getProp(entry, 'item.type') === ITEM_TYPE_FILE), // return only file items
+            entries: entries.filter(entry => getProp(entry, 'type') === ITEM_TYPE_FILE), // return only file items
             next_marker,
         };
     };
@@ -151,9 +193,9 @@ export default class MetadataQueryAPIHelper {
         return this.api.getMetadataAPI(true).getSchemaByTemplateKey(this.templateKey);
     };
 
-    queryMetadata = (metadataQuery: MetadataQueryType): Promise<MetadataQueryResponseData> => {
+    queryMetadata = (): Promise<MetadataQueryResponseData> => {
         return new Promise((resolve, reject) => {
-            this.api.getMetadataQueryAPI().queryMetadata(metadataQuery, resolve, reject, { forceFetch: true });
+            this.api.getMetadataQueryAPI().queryMetadata(this.metadataQuery, resolve, reject, { forceFetch: true });
         });
     };
 
@@ -162,7 +204,8 @@ export default class MetadataQueryAPIHelper {
         successsCallback: SuccessCallback,
         errorCallback: ErrorCallback,
     ): Promise<void> => {
-        return this.queryMetadata(metadataQuery)
+        this.metadataQuery = this.verifyQueryFields(metadataQuery);
+        return this.queryMetadata()
             .then(this.getTemplateSchemaInfo)
             .then(this.getFlattenedDataWithTypes)
             .then(successsCallback)
@@ -181,5 +224,25 @@ export default class MetadataQueryAPIHelper {
         return this.api
             .getMetadataAPI(true)
             .updateMetadata(file, this.metadataTemplate, operations, successsCallback, errorCallback);
+    };
+
+    /**
+     * Verify that the metadata query has required fields and update it if necessary
+     * For a file item, default fields included in the response are "type", "id", "etag"
+     *
+     * @param {MetadataQueryType} metadataQuery metadata query object
+     * @return {MetadataQueryType} updated metadata query object with required fields
+     */
+    verifyQueryFields = (metadataQuery: MetadataQueryType): MetadataQueryType => {
+        const clonedQuery = cloneDeep(metadataQuery);
+        const clonedFields = isArray(clonedQuery.fields) ? clonedQuery.fields : [];
+
+        // Make sure the query fields array has "name" field which is necessary to display info.
+        if (!clonedFields.includes(FIELD_NAME)) {
+            clonedFields.push(FIELD_NAME);
+        }
+        clonedQuery.fields = clonedFields;
+
+        return clonedQuery;
     };
 }

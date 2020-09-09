@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render disabled button when blocked by shield access policy 1`] = `
-<Tooltip
-  position="middle-left"
-  text={
+<AdditionalTabTooltip
+  defaultTooltipText={
     <FormattedMessage
       defaultMessage="Use of this app has been disabled by the applied access policy"
       id="be.additionalTab.blockedByShieldAccessPolicy"
     />
   }
+  isFtuxVisible={true}
 >
   <PlainButton
     className="bdl-AdditionalTab bdl-is-disabled"
@@ -24,13 +24,13 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render di
       src="https://foo.com/image"
     />
   </PlainButton>
-</Tooltip>
+</AdditionalTabTooltip>
 `;
 
 exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render the more icon ellipsis if no valid id and icon URL are provided 1`] = `
-<Tooltip
-  position="middle-left"
-  text="test title"
+<AdditionalTabTooltip
+  defaultTooltipText="test title"
+  isFtuxVisible={true}
 >
   <PlainButton
     className="bdl-AdditionalTab"
@@ -43,13 +43,13 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
       color="#909090"
     />
   </PlainButton>
-</Tooltip>
+</AdditionalTabTooltip>
 `;
 
 exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render the placeholder when an error occurs 1`] = `
-<Tooltip
-  position="middle-left"
-  text="test title"
+<AdditionalTabTooltip
+  defaultTooltipText="test title"
+  isFtuxVisible={true}
 >
   <PlainButton
     className="bdl-AdditionalTab"
@@ -62,13 +62,13 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
       isLoading={false}
     />
   </PlainButton>
-</Tooltip>
+</AdditionalTabTooltip>
 `;
 
 exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render the tooltip and button contents 1`] = `
-<Tooltip
-  position="middle-left"
-  text="test title"
+<AdditionalTabTooltip
+  defaultTooltipText="test title"
+  isFtuxVisible={true}
 >
   <PlainButton
     className="bdl-AdditionalTab"
@@ -84,5 +84,5 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
       src="https://foo.com/image"
     />
   </PlainButton>
-</Tooltip>
+</AdditionalTabTooltip>
 `;

@@ -488,7 +488,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
         test('should correctly update the current collection and set the state', () => {
             const boxItem = { id: 2 };
             const field = 'amount';
-            const newVaue = 111.22;
+            const newValue = 111.22;
             const collectionItem1 = {
                 id: 1,
                 metadata: {
@@ -496,11 +496,13 @@ describe('elements/content-explorer/ContentExplorer', () => {
                         fields: [
                             {
                                 name: 'name',
+                                key: 'name',
                                 value: 'abc',
                                 type: 'string',
                             },
                             {
                                 name: 'amount',
+                                key: 'amount',
                                 value: 100.34,
                                 type: 'float',
                             },
@@ -515,11 +517,13 @@ describe('elements/content-explorer/ContentExplorer', () => {
                         fields: [
                             {
                                 name: 'name',
+                                key: 'name',
                                 value: 'pqr',
                                 type: 'string',
                             },
                             {
                                 name: 'amount',
+                                key: 'amount',
                                 value: 354.23,
                                 type: 'float',
                             },
@@ -536,7 +540,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
             const wrapper = getWrapper();
 
             // update the metadata
-            clonedCollectionItem2.metadata.enterprise.fields.find(item => item.name === field).value = newVaue;
+            clonedCollectionItem2.metadata.enterprise.fields.find(item => item.key === field).value = newValue;
 
             const updatedItems = [collectionItem1, clonedCollectionItem2];
 
@@ -544,7 +548,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
             const instance = wrapper.instance();
             instance.setState = jest.fn();
 
-            instance.updateMetadataSuccessCallback(boxItem, field, newVaue);
+            instance.updateMetadataSuccessCallback(boxItem, field, newValue);
             expect(instance.setState).toHaveBeenCalledWith({
                 currentCollection: {
                     items: updatedItems,
@@ -572,6 +576,11 @@ describe('elements/content-explorer/ContentExplorer', () => {
             const uploadDialogElement = wrapper.find(UploadDialog);
             expect(uploadDialogElement.length).toBe(1);
             expect(uploadDialogElement.prop('contentUploaderProps')).toEqual(contentUploaderProps);
+        });
+
+        test('should render test id for e2e testing', () => {
+            const wrapper = getWrapper();
+            expect(wrapper.find('[data-testid="content-explorer"]')).toHaveLength(1);
         });
     });
 });

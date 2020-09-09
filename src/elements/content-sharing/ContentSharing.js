@@ -1,32 +1,48 @@
 /**
  * @flow
  * @file ContentSharing Element
+ * @description This is the top-level component for ContentSharing. It instantiates the API, which it then
+ * passes to the SharingModal component either immediately (when no custom button is provided) or on
+ * button click (when a custom button is provided).
  * @author Box
  */
+import 'regenerator-runtime/runtime';
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
-import type { $AxiosError } from 'axios';
 import API from '../../api';
-import Internationalize from '../common/Internationalize';
-import ErrorMask from '../../components/error-mask/ErrorMask';
-import UnifiedShareModal from '../../features/unified-share-modal';
-import SharingNotification from './SharingNotification';
-import usmMessages from '../../features/unified-share-modal/messages';
-import { convertItemResponse, convertUserResponse } from '../../features/unified-share-modal/utils/convertData';
-import { CLIENT_NAME_CONTENT_SHARING, FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FILE, TYPE_FOLDER } from '../../constants';
-import { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS } from './constants';
-import contentSharingMessages from './messages';
-import type { ErrorResponseData } from '../../common/types/api';
-import type { BoxItemPermission, ItemType } from '../../common/types/core';
-import type { item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
-import type { ContentSharingItemAPIResponse, ContentSharingSharedLinkType, SharedLinkUpdateFnType } from './types';
+import SharingModal from './SharingModal';
+import { CLIENT_NAME_CONTENT_SHARING } from '../../constants';
+import type { ItemType, StringMap } from '../../common/types/core';
+import type { USMConfig } from '../../features/unified-share-modal/flowTypes';
+
+import '../common/base.scss';
+import '../common/fonts.scss';
+import '../common/modal.scss';
 
 type ContentSharingProps = {
+    /** apiHost - API hostname. Defaults to https://api.box.com */
     apiHost: string,
-    displayInModal?: boolean,
+    config?: USMConfig,
+    /**
+     * customButton - Clickable element for opening the SharingModal component.
+     * This property should always be used in conjunction with displayInModal.
+     */
+    customButton?: React.Element<any>,
+    /**
+     * displayInModal - Whether the SharingModal component should be displayed in a modal.
+     * If false, the SharingModal component will appear as a form within the surrounding page.
+     * This property can be used with or without a customButton. If used without a customButton,
+     * the modal will appear on page load. See ContentSharing.stories.js for examples.
+     */
+    displayInModal: boolean,
+    /** itemID - Box file or folder ID */
     itemID: string,
+    /** itemType - "file" or "folder" */
     itemType: ItemType,
+    /** language - Language used for the element */
     language: string,
+    /** messages - Localized strings used by the element */
+    messages?: StringMap,
+    /** token - Valid access token */
     token: string,
 };
 
@@ -38,135 +54,93 @@ const createAPI = (apiHost, itemID, itemType, token) =>
         token,
     });
 
-function ContentSharing({ apiHost, displayInModal, itemID, itemType, language, token }: ContentSharingProps) {
+function ContentSharing({
+    apiHost,
+    config,
+    customButton,
+    displayInModal,
+    itemID,
+    itemType,
+    language,
+    messages,
+    token,
+}: ContentSharingProps) {
     const [api, setAPI] = React.useState<API>(createAPI(apiHost, itemID, itemType, token));
-    const [item, setItem] = React.useState<itemFlowType | null>(null);
-    const [sharedLink, setSharedLink] = React.useState<ContentSharingSharedLinkType | null>(null);
-    const [currentUserID, setCurrentUserID] = React.useState<string | null>(null);
-    const [itemPermissions, setItemPermissions] = React.useState<BoxItemPermission | null>(null);
-    const [componentErrorMessage, setComponentErrorMessage] = React.useState<Object | null>(null);
-    const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateFnType>(null);
+    const [launchButton, setLaunchButton] = React.useState<React.Element<any> | null>(null);
+    const [sharingModalInstance, setSharingModalInstance] = React.useState<React.Element<typeof SharingModal> | null>(
+        customButton ? null : (
+            <SharingModal
+                api={api}
+                config={config}
+                displayInModal={false}
+                itemID={itemID}
+                itemType={itemType}
+                language={language}
+                messages={messages}
+            />
+        ),
+    );
 
     // Reset the API if necessary
     React.useEffect(() => {
         setAPI(createAPI(apiHost, itemID, itemType, token));
     }, [apiHost, itemID, itemType, token]);
 
-    // Handle successful GET requests to /files or /folders
-    const handleGetItemSuccess = (itemData: ContentSharingItemAPIResponse) => {
-        const { item: itemFromAPI, originalItemPermissions, sharedLink: sharedLinkFromAPI } = convertItemResponse(
-            itemData,
-        );
-        setComponentErrorMessage(null);
-        setItem(itemFromAPI);
-        setItemPermissions(originalItemPermissions);
-        setSharedLink(sharedLinkFromAPI);
-    };
+    // Reset state if the API has changed
+    React.useEffect(() => {
+        setSharingModalInstance(null);
+        setLaunchButton(null);
+    }, [api]);
 
-    // Handle component-level errors
-    const getError = React.useCallback(
-        (error: $AxiosError<Object> | ErrorResponseData) => {
-            let errorObject;
-            if (error.status) {
-                errorObject = contentSharingMessages[CONTENT_SHARING_ERRORS[error.status]];
-            } else if (error.response && error.response.status) {
-                errorObject = contentSharingMessages[CONTENT_SHARING_ERRORS[error.response.status]];
-            } else {
-                errorObject = contentSharingMessages.loadingError;
-            }
+    React.useEffect(() => {
+        const createSharingModalInstance = () => {
+            return (
+                <SharingModal
+                    api={api}
+                    config={config}
+                    displayInModal={displayInModal}
+                    itemID={itemID}
+                    itemType={itemType}
+                    language={language}
+                    messages={messages}
+                />
+            );
+        };
 
-            setComponentErrorMessage(errorObject);
-        },
-        [setComponentErrorMessage],
+        // Add an onClick function that instantiates SharingModal to the custom button
+        if (customButton && !launchButton) {
+            setLaunchButton(
+                React.cloneElement(customButton, {
+                    onClick: () => {
+                        return setSharingModalInstance(createSharingModalInstance());
+                    },
+                }),
+            );
+        }
+
+        // If there is no custom button, instantiate SharingModal
+        if (!customButton && !sharingModalInstance) {
+            setSharingModalInstance(createSharingModalInstance());
+        }
+    }, [
+        api,
+        config,
+        sharingModalInstance,
+        customButton,
+        displayInModal,
+        itemID,
+        itemType,
+        language,
+        launchButton,
+        messages,
+    ]);
+
+    return (
+        <>
+            {launchButton}
+            {sharingModalInstance}
+        </>
     );
-
-    // Reset state if necessary
-    React.useEffect(() => {
-        setCurrentUserID(null);
-        setItem(null);
-        setOnAddLink(null);
-        setItemPermissions(null);
-        setSharedLink(null);
-    }, [api, setOnAddLink]);
-
-    // Get initial data for the item
-    React.useEffect(() => {
-        const getItem = () => {
-            if (itemType === TYPE_FILE) {
-                api.getFileAPI().getFile(itemID, handleGetItemSuccess, getError, {
-                    fields: CONTENT_SHARING_ITEM_FIELDS,
-                });
-            } else if (itemType === TYPE_FOLDER) {
-                api.getFolderAPI().getFolderFields(itemID, handleGetItemSuccess, getError, {
-                    fields: CONTENT_SHARING_ITEM_FIELDS,
-                });
-            }
-        };
-
-        if (!item && !sharedLink) {
-            getItem();
-        }
-    }, [api, getError, item, itemID, itemType, sharedLink]);
-
-    // Get initial data for the user
-    React.useEffect(() => {
-        const getUserSuccess = userData => {
-            const { id, userEnterpriseData } = convertUserResponse(userData);
-            setCurrentUserID(id);
-            setSharedLink(prevSharedLink => ({ ...prevSharedLink, ...userEnterpriseData }));
-            setComponentErrorMessage(null);
-        };
-
-        const getUserData = () => {
-            api.getUsersAPI(false).getUser(itemID, getUserSuccess, getError, {
-                params: {
-                    fields: [FIELD_ENTERPRISE, FIELD_HOSTNAME].toString(),
-                },
-            });
-        };
-
-        if (item && sharedLink && !currentUserID) {
-            getUserData();
-        }
-    }, [api, getError, item, itemID, itemType, sharedLink, currentUserID]);
-
-    if (componentErrorMessage) {
-        return <ErrorMask errorHeader={<FormattedMessage {...componentErrorMessage} />} />;
-    }
-
-    if (item && sharedLink) {
-        return (
-            <Internationalize language={language} messages={usmMessages}>
-                <>
-                    <SharingNotification
-                        api={api}
-                        itemID={itemID}
-                        itemPermissions={itemPermissions}
-                        itemType={itemType}
-                        setItem={setItem}
-                        setOnAddLink={setOnAddLink}
-                        setSharedLink={setSharedLink}
-                    />
-                    <UnifiedShareModal
-                        canInvite={sharedLink.canInvite}
-                        changeSharedLinkAccessLevel={() => Promise.resolve([])} // to do: replace with a PUT to the Shared Link API
-                        changeSharedLinkPermissionLevel={() => Promise.resolve([])} // to do: replace with a PUT to the Shared Link API
-                        collaboratorsList={{ collaborators: [] }} // to do: replace with Collaborators API
-                        currentUserID={currentUserID}
-                        displayInModal={displayInModal}
-                        getCollaboratorContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
-                        getSharedLinkContacts={() => Promise.resolve([])} // to do: replace with Collaborators API
-                        initialDataReceived
-                        item={item}
-                        onAddLink={onAddLink}
-                        onRemoveLink={() => Promise.resolve([])} // to do: replace with a PUT to the Shared Link API
-                        sharedLink={sharedLink}
-                    />
-                </>
-            </Internationalize>
-        );
-    }
-    return null;
 }
 
 export default ContentSharing;

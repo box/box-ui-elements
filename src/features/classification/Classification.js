@@ -1,7 +1,8 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedDate, FormattedMessage } from 'react-intl';
 
+import { isValidDate } from '../../utils/datetime';
 import Label from '../../components/label/Label';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import ClassifiedBadge from './ClassifiedBadge';
@@ -13,7 +14,6 @@ import type { Controls, ControlsFormat } from './flowTypes';
 
 const STYLE_INLINE: 'inline' = 'inline';
 const STYLE_TOOLTIP: 'tooltip' = 'tooltip';
-
 type Props = {
     className?: string,
     color?: string,
@@ -24,6 +24,8 @@ type Props = {
     itemName?: string,
     maxAppCount?: number,
     messageStyle?: typeof STYLE_INLINE | typeof STYLE_TOOLTIP,
+    modifiedAt?: string,
+    modifiedBy?: string,
     name?: string,
     onClick?: (event: SyntheticEvent<HTMLButtonElement>) => void,
 };
@@ -36,6 +38,8 @@ const Classification = ({
     isLoadingControls,
     maxAppCount,
     messageStyle,
+    modifiedAt,
+    modifiedBy,
     name,
     itemName = '',
     color,
@@ -43,6 +47,8 @@ const Classification = ({
 }: Props) => {
     const isClassified = !!name;
     const hasDefinition = !!definition;
+    const hasModifiedAt = !!modifiedAt;
+    const hasModifiedBy = !!modifiedBy;
     const hasSecurityControls = !!controls;
     const isTooltipMessageEnabled = isClassified && hasDefinition && messageStyle === STYLE_TOOLTIP;
     const isInlineMessageEnabled = isClassified && hasDefinition && messageStyle === STYLE_INLINE;
@@ -50,6 +56,13 @@ const Classification = ({
     const isControlsIndicatorEnabled = isClassified && isLoadingControls && messageStyle === STYLE_INLINE;
     const isSecurityControlsEnabled =
         isClassified && !isLoadingControls && hasSecurityControls && messageStyle === STYLE_INLINE;
+    const modifiedDate = new Date(modifiedAt || 0);
+    const isModifiedMessageVisible =
+        isClassified && hasModifiedAt && isValidDate(modifiedDate) && hasModifiedBy && messageStyle === STYLE_INLINE;
+
+    const formattedModifiedAt = isModifiedMessageVisible && (
+        <FormattedDate value={modifiedDate} month="long" year="numeric" day="numeric" />
+    );
 
     return (
         <article className={`bdl-Classification ${className}`}>
@@ -71,6 +84,17 @@ const Classification = ({
                     <FormattedMessage {...messages.missing} />
                 </span>
             )}
+            {isModifiedMessageVisible && (
+                <Label text={<FormattedMessage {...messages.modifiedByLabel} />}>
+                    <p className="bdl-Classification-modifiedBy" data-testid="classification-modifiedby">
+                        <FormattedMessage
+                            {...messages.modifiedBy}
+                            values={{ modifiedAt: formattedModifiedAt, modifiedBy }}
+                        />
+                    </p>
+                </Label>
+            )}
+
             {isSecurityControlsEnabled && (
                 <SecurityControls
                     classificationColor={color}
@@ -80,6 +104,7 @@ const Classification = ({
                     definition={definition}
                     itemName={itemName}
                     maxAppCount={maxAppCount}
+                    shouldRenderLabel
                 />
             )}
             {isControlsIndicatorEnabled && <LoadingIndicator />}

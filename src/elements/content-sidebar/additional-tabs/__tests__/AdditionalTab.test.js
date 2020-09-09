@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Tooltip from '../../../common/Tooltip';
 import PlainButton from '../../../../components/plain-button/PlainButton';
 import AdditionalTab from '../AdditionalTab';
+import AdditionalTabTooltip from '../AdditionalTabTooltip';
 import AdditionalTabPlaceholder from '../AdditionalTabPlaceholder';
 
 describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
@@ -25,7 +25,7 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
                 .childAt(0)
                 .prop('src'),
         ).toEqual(mockSrc);
-        expect(wrapper.find(Tooltip).prop('text')).toBe('test title');
+        expect(wrapper.find(AdditionalTabTooltip).prop('defaultTooltipText')).toBe('test title');
 
         expect(wrapper).toMatchSnapshot();
     });
@@ -51,6 +51,7 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
         const wrapper = getWrapper(props);
 
         wrapper.setState({ isErrored: true });
+
         expect(wrapper.find(AdditionalTabPlaceholder)).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
@@ -68,5 +69,24 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
         const wrapper = getWrapper(props);
 
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render the FTUX tooltip when ftuxTooltipData is present and the tab is not loading', () => {
+        const mockSrc = 'https://foo.com/image';
+        const props = {
+            title: 'test title',
+            iconUrl: mockSrc,
+            id: 4,
+            isLoading: false,
+            ftuxTooltipData: {
+                targetingApi: () => {},
+                test: 'ftux tooltip text',
+            },
+            callback: () => {},
+        };
+
+        const wrapper = getWrapper(props);
+
+        expect(wrapper.find(AdditionalTabTooltip).exists()).toBeTruthy();
     });
 });

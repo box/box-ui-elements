@@ -146,10 +146,11 @@ type Props = {
 
 function CollapsibleSidebarMenuItem(props: Props) {
     const { className, content, icon, linkClassName, overflowAction, showOverflowAction, text, ...rest } = props;
-    const textRef = React.useRef<?HTMLElement>(null);
+    const textRef: { current: null | HTMLElement } = React.useRef(null);
     const isTextOverflowed = useIsContentOverflowed(textRef);
     const { isScrolling } = React.useContext(CollapsibleSidebarContext);
     const isShowOverflowActionOnHover = showOverflowAction === 'hover';
+    const menuItemClassName = classNames('bdl-CollapsibleSidebar-menuItem', className);
     const menuItemLinkClassName = classNames('bdl-CollapsibleSidebar-menuItemLink', linkClassName, {
         'show-overflowAction': !isShowOverflowActionOnHover,
     });
@@ -159,7 +160,7 @@ function CollapsibleSidebarMenuItem(props: Props) {
 
     const renderMenuItem = () => {
         return (
-            <StyledMenuItem className={className}>
+            <StyledMenuItem className={menuItemClassName}>
                 <StyledLink className={menuItemLinkClassName} {...rest}>
                     {icon && (
                         <StyledIconWrapper className="bdl-CollapsibleSidebar-menuItemIcon">{icon}</StyledIconWrapper>

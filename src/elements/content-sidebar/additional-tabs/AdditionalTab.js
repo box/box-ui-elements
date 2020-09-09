@@ -9,16 +9,17 @@ import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
 import { bdlGray50 } from '../../../styles/variables';
-import Tooltip from '../../common/Tooltip';
 import PlainButton from '../../../components/plain-button/PlainButton';
 import IconEllipsis from '../../../icons/general/IconEllipsis';
+import AdditionalTabTooltip from './AdditionalTabTooltip';
 import AdditionalTabPlaceholder from './AdditionalTabPlaceholder';
 import messages from './messages';
-import type { AdditionalSidebarTab } from '../flowTypes';
+import type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData } from '../flowTypes';
 
 import './AdditionalTab.scss';
 
 type Props = {
+    ftuxTooltipData?: AdditionalSidebarTabFtuxData,
     isLoading: boolean,
     onImageLoad: () => void,
     status?: string,
@@ -84,7 +85,16 @@ class AdditionalTab extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { callback: callbackFn, id, isLoading, iconUrl, onImageLoad, title, ...rest } = this.props;
+        const {
+            callback: callbackFn,
+            id,
+            isLoading,
+            iconUrl,
+            ftuxTooltipData,
+            onImageLoad,
+            title,
+            ...rest
+        } = this.props;
 
         const isDisabled = this.isDisabled();
 
@@ -96,7 +106,11 @@ class AdditionalTab extends React.PureComponent<Props, State> {
         const tooltipText = isDisabled ? this.getDisabledReason() : title;
 
         return (
-            <Tooltip position="middle-left" text={tooltipText}>
+            <AdditionalTabTooltip
+                defaultTooltipText={tooltipText}
+                ftuxTooltipData={ftuxTooltipData}
+                isFtuxVisible={!isLoading}
+            >
                 <PlainButton
                     className={className}
                     data-testid="additionaltab"
@@ -106,7 +120,7 @@ class AdditionalTab extends React.PureComponent<Props, State> {
                 >
                     {this.getTabIcon()}
                 </PlainButton>
-            </Tooltip>
+            </AdditionalTabTooltip>
         );
     }
 }

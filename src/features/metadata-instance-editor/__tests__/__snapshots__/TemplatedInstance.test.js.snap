@@ -16,6 +16,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
 exports[`features/metadata-instance-editor/fields/TemplatedInstance should correctly render fields that are visible 1`] = `
 <Fragment>
   <MetadataField
+    blurExceptionClassNames={Array []}
     dataKey="hiddenfield"
     displayName="String Field that is hidden"
     isHidden={true}
@@ -25,6 +26,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     type="string"
   />
   <MetadataField
+    blurExceptionClassNames={Array []}
     dataKey="nodescfield"
     displayName="No Description Field"
     isHidden={false}
@@ -34,6 +36,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     type="string"
   />
   <MetadataField
+    blurExceptionClassNames={Array []}
     dataKey="stringfield"
     dataValue="some string"
     description="example of a string field"
@@ -45,6 +48,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     type="string"
   />
   <MetadataField
+    blurExceptionClassNames={Array []}
     dataKey="emptystring"
     description="example of an empty string field"
     displayName="Empty String Field"
@@ -55,6 +59,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     type="string"
   />
   <MetadataField
+    blurExceptionClassNames={Array []}
     dataKey="floatfield"
     dataValue={1}
     description="example of a float field"
@@ -66,6 +71,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     type="float"
   />
   <MetadataField
+    blurExceptionClassNames={Array []}
     dataKey="emptyfloat"
     description="example of an empty float field"
     displayName="Empty Float Field"
@@ -76,6 +82,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     type="float"
   />
   <MetadataField
+    blurExceptionClassNames={Array []}
     dataKey="enumfield"
     dataValue="yes"
     description="example of a enum field"
@@ -97,6 +104,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     type="enum"
   />
   <MetadataField
+    blurExceptionClassNames={Array []}
     dataKey="emptyenumfield"
     description="example of an empty enum field"
     displayName="Empty Enum Field"
@@ -117,6 +125,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     type="enum"
   />
   <MetadataField
+    blurExceptionClassNames={Array []}
     dataKey="datefield"
     dataValue="2018-06-20T00:00:00.000Z"
     description="example of a date field"
@@ -128,6 +137,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     type="date"
   />
   <MetadataField
+    blurExceptionClassNames={Array []}
     dataKey="emptydatefield"
     description="example of an empty date field"
     displayName="Empty Date Field"
@@ -138,6 +148,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
     type="date"
   />
   <MetadataField
+    blurExceptionClassNames={Array []}
     dataKey="hiddenfield"
     displayName="Another string Field that is hidden"
     isHidden={true}

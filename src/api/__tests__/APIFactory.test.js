@@ -16,9 +16,14 @@ import TaskLinksAPI from '../tasks/TaskLinks';
 import FileAccessStatsAPI from '../FileAccessStats';
 import MetadataAPI from '../Metadata';
 import FileCollaboratorsAPI from '../FileCollaborators';
+import MarkerBasedGroupsAPI from '../MarkerBasedGroups';
+import MarkerBasedUsersAPI from '../MarkerBasedUsers';
+import GroupsAPI from '../Groups';
 import UsersAPI from '../Users';
 import BoxEditAPI from '../box-edit';
 import MetadataQueryAPI from '../MetadataQuery';
+import FileCollaborationsAPI from '../FileCollaborations';
+import FolderCollaborationsAPI from '../FolderCollaborations';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 
 let factory;
@@ -45,6 +50,9 @@ describe('api/APIFactory', () => {
             factory.recentsAPI = { destroy: jest.fn() };
             factory.versionsAPI = { destroy: jest.fn() };
             factory.metadataAPI = { destroy: jest.fn() };
+            factory.markerBasedGroupsAPI = { destroy: jest.fn() };
+            factory.markerBasedUserssAPI = { destroy: jest.fn() };
+            factory.groupsAPI = { destroy: jest.fn() };
             factory.usersAPI = { destroy: jest.fn() };
             factory.tasksNewAPI = { destroy: jest.fn() };
             factory.taskLinksAPI = { destroy: jest.fn() };
@@ -52,6 +60,8 @@ describe('api/APIFactory', () => {
             factory.boxEditAPI = { destroy: jest.fn() };
             factory.metadataQueryAPI = { destroy: jest.fn() };
             factory.annotationsAPI = { destroy: jest.fn() };
+            factory.fileCollaborationsAPI = { destroy: jest.fn() };
+            factory.folderCollaborationsAPI = { destroy: jest.fn() };
             factory.destroy();
             expect(factory.fileAPI).toBeUndefined();
             expect(factory.folderAPI).toBeUndefined();
@@ -65,9 +75,14 @@ describe('api/APIFactory', () => {
             expect(factory.taskCollaboratorsAPI).toBeUndefined();
             expect(factory.taskLinksAPI).toBeUndefined();
             expect(factory.tasksNewAPI).toBeUndefined();
+            expect(factory.markerBasedGroupsAPI).toBeUndefined();
+            expect(factory.markerBasedUsersAPI).toBeUndefined();
+            expect(factory.groupsAPI).toBeUndefined();
             expect(factory.usersAPI).toBeUndefined();
             expect(factory.metadataQueryAPI).toBeUndefined();
             expect(factory.annotationsAPI).toBeUndefined();
+            expect(factory.fileCollaborationsAPI).toBeUndefined();
+            expect(factory.folderCollaborationsAPI).toBeUndefined();
         });
         test('should not destroy cache by default', () => {
             const { cache } = factory.options;
@@ -360,6 +375,72 @@ describe('api/APIFactory', () => {
         });
     });
 
+    describe('getMarkerBasedGroupsAPI()', () => {
+        test('should call destroy and return markerBasedGroups API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const markerBasedGroupsAPI = factory.getMarkerBasedGroupsAPI(true);
+            expect(spy).toBeCalled();
+            expect(markerBasedGroupsAPI).toBeInstanceOf(MarkerBasedGroupsAPI);
+            expect(markerBasedGroupsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(markerBasedGroupsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(markerBasedGroupsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return markerBasedGroups API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const markerBasedGroupsAPI = factory.getMarkerBasedGroupsAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(markerBasedGroupsAPI).toBeInstanceOf(MarkerBasedGroupsAPI);
+            expect(markerBasedGroupsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(markerBasedGroupsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(markerBasedGroupsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getMarkerBasedUsersAPI()', () => {
+        test('should call destroy and return markerBasedUsers API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const markerBasedUsers = factory.getMarkerBasedUsersAPI(true);
+            expect(spy).toBeCalled();
+            expect(markerBasedUsers).toBeInstanceOf(MarkerBasedUsersAPI);
+            expect(markerBasedUsers.options.cache).toBeInstanceOf(Cache);
+            expect(markerBasedUsers.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(markerBasedUsers.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return users API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const markerBasedUsers = factory.getMarkerBasedUsersAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(markerBasedUsers).toBeInstanceOf(MarkerBasedUsersAPI);
+            expect(markerBasedUsers.options.cache).toBeInstanceOf(Cache);
+            expect(markerBasedUsers.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(markerBasedUsers.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getGroupsAPI()', () => {
+        test('should call destroy and return groups API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const groupsAPI = factory.getGroupsAPI(true);
+            expect(spy).toBeCalled();
+            expect(groupsAPI).toBeInstanceOf(GroupsAPI);
+            expect(groupsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(groupsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(groupsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return groups API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const groupsAPI = factory.getGroupsAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(groupsAPI).toBeInstanceOf(GroupsAPI);
+            expect(groupsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(groupsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(groupsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
     describe('getUsersAPI()', () => {
         test('should call destroy and return users API', () => {
             const spy = jest.spyOn(factory, 'destroy');
@@ -430,6 +511,50 @@ describe('api/APIFactory', () => {
             expect(annotationsAPI.options.cache).toBeInstanceOf(Cache);
             expect(annotationsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
             expect(annotationsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getFileCollaborationsAPI', () => {
+        test('should call destroy and return file collaborations API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const fileCollaborationsAPI = factory.getFileCollaborationsAPI(true);
+            expect(spy).toBeCalled();
+            expect(fileCollaborationsAPI).toBeInstanceOf(FileCollaborationsAPI);
+            expect(fileCollaborationsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(fileCollaborationsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(fileCollaborationsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return file collaborations API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const fileCollaborationsAPI = factory.getFileCollaborationsAPI();
+            expect(spy).not.toBeCalled();
+            expect(fileCollaborationsAPI).toBeInstanceOf(FileCollaborationsAPI);
+            expect(fileCollaborationsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(fileCollaborationsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(fileCollaborationsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getFolderCollaborationsAPI', () => {
+        test('should call destroy and return file collaborations API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const folderCollaborationsAPI = factory.getFolderCollaborationsAPI(true);
+            expect(spy).toBeCalled();
+            expect(folderCollaborationsAPI).toBeInstanceOf(FolderCollaborationsAPI);
+            expect(folderCollaborationsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(folderCollaborationsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(folderCollaborationsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return file collaborations API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const folderCollaborationsAPI = factory.getFolderCollaborationsAPI();
+            expect(spy).not.toBeCalled();
+            expect(folderCollaborationsAPI).toBeInstanceOf(FolderCollaborationsAPI);
+            expect(folderCollaborationsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(folderCollaborationsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(folderCollaborationsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 });

@@ -1,7 +1,9 @@
+// @flow
 import * as React from 'react';
 
-import ThumbnailCard from '../../src/components/thumbnail-card';
 import AccessibleSVG from '../../src/icons/accessible-svg';
+import ThumbnailCard from '../../src/components/thumbnail-card';
+import PrimaryButton from '../../src/components/primary-button';
 
 const ThumbnailCardExamples = () => {
     const icon = (
@@ -22,19 +24,33 @@ const ThumbnailCardExamples = () => {
     );
     const subtitle = <div>I&#39;m a subtitle!</div>;
     const title = <div>Hello World!</div>;
+    const longTitle = 'Super long title goes here here here';
     const thumbnail = <div>Thumbnail goes here</div>;
+    const actionItem = <PrimaryButton>Click Me</PrimaryButton>;
 
     return (
         <div>
             <div>
                 <h1>Single Card Example</h1>
-                <br />
                 <ThumbnailCard thumbnail={thumbnail} title={title} />
             </div>
             <br />
             <div>
                 <h1>Single Card Example With Icon and Subtitle</h1>
                 <ThumbnailCard icon={icon} subtitle={subtitle} thumbnail={thumbnail} title={title} />
+            </div>
+            <br />
+            <div>
+                <h1>Highlight on Hover Example</h1>
+                <ThumbnailCard highlightOnHover thumbnail={thumbnail} title={title} />
+            </div>
+            <div>
+                <h1>Action Item Example</h1>
+                <ThumbnailCard actionItem={actionItem} thumbnail={thumbnail} title={title} />
+            </div>
+            <div>
+                <h1>Show Tooltip on Title Hover Example</h1>
+                <ThumbnailCard actionItem={actionItem} thumbnail={thumbnail} title={longTitle} />
             </div>
             <br />
             <div>
@@ -49,6 +65,7 @@ const ThumbnailCardExamples = () => {
                         <ThumbnailCard
                             key={`thumbnailcard-${i}`}
                             icon={icon}
+                            highlightOnHover
                             subtitle={subtitle}
                             thumbnail={thumbnail}
                             title={title}

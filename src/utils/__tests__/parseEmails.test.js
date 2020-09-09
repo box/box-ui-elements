@@ -1,4 +1,4 @@
-import parseEmails from '../parseEmails';
+import parseEmails, { checkIsExternalUser } from '../parseEmails';
 
 describe('utils/parseEmails', () => {
     [
@@ -53,5 +53,22 @@ describe('utils/parseEmails', () => {
             const expectedResult = testCase.result;
             expect(actualResult).toEqual(expectedResult);
         });
+    });
+
+    describe('checkIsExternalUser', () => {
+        test.each`
+            emailToCheck         | ownerEmailDomain       | isCurrentUserOwner | result   | description
+            ${'narwhal@box.com'} | ${'box.com'}           | ${true}            | ${false} | ${'the current user owns the item and the email to check is internal'}
+            ${'narwhal@box.com'} | ${'box.com'}           | ${false}           | ${false} | ${'the current user does not own the item and the email to check is internal'}
+            ${'narwhal@box.com'} | ${'boxuielements.com'} | ${true}            | ${true}  | ${'the current user owns the item and the email to check is external'}
+            ${'narwhal@box.com'} | ${'boxuielements.com'} | ${false}           | ${false} | ${'the current user does not own the item and the email to check is external'}
+            ${undefined}         | ${'box.com'}           | ${true}            | ${false} | ${'the email to check is undefined'}
+            ${'narwhal@box.com'} | ${null}                | ${true}            | ${false} | ${'the owner email domain is null'}
+        `(
+            'should return $result when $description',
+            ({ isCurrentUserOwner, ownerEmailDomain, emailToCheck, result }) => {
+                expect(checkIsExternalUser(isCurrentUserOwner, ownerEmailDomain, emailToCheck)).toBe(result);
+            },
+        );
     });
 });
