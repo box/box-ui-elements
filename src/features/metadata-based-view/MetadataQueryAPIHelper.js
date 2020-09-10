@@ -20,7 +20,7 @@ import {
     METADATA_FIELD_TYPE_ENUM,
     METADATA_FIELD_TYPE_MULTISELECT,
 } from '../../common/constants';
-import { FIELD_NAME } from '../../constants';
+import { FIELD_NAME, FIELD_METADATA } from '../../constants';
 
 import type { MetadataQuery as MetadataQueryType, MetadataQueryResponseData } from '../../common/types/metadataQueries';
 import type {
@@ -127,7 +127,7 @@ export default class MetadataQueryAPIHelper {
             const displayName = getProp(templateField, 'displayName', queryField); // get displayName, defaults to key
 
             const field: MetadataQueryInstanceTypeField = {
-                key: queryField,
+                key: `${FIELD_METADATA}.${this.templateScope}.${this.templateKey}.${queryField}`,
                 value: instance[queryField],
                 type,
                 displayName,
@@ -150,13 +150,10 @@ export default class MetadataQueryAPIHelper {
     };
 
     flattenResponseEntry = (metadataEntry: BoxItem): BoxItem => {
-        const { id, name, size, metadata } = metadataEntry;
-
+        const { metadata } = metadataEntry;
         return {
-            id,
+            ...metadataEntry,
             metadata: this.flattenMetadata(metadata),
-            name,
-            size,
         };
     };
 
