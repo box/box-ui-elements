@@ -2,7 +2,7 @@
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() it should render correct menu 1`] = `
 <div
-  className="invitee-menu-wrap"
+  className="be invitee-menu-wrap"
 >
   <DropdownMenu
     constrainToScrollParent={false}
@@ -127,7 +127,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() it should render correct menu 2`] = `
 <div
-  className="invitee-menu-wrap"
+  className="be invitee-menu-wrap"
 >
   <DropdownMenu
     constrainToScrollParent={false}
@@ -234,7 +234,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() it should render correct menu 3`] = `
 <div
-  className="invitee-menu-wrap"
+  className="be invitee-menu-wrap"
 >
   <DropdownMenu
     constrainToScrollParent={false}
@@ -359,7 +359,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() it should render correct menu 4`] = `
 <div
-  className="invitee-menu-wrap"
+  className="be invitee-menu-wrap"
 >
   <DropdownMenu
     constrainToScrollParent={false}
@@ -466,7 +466,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() it should render correct menu 5`] = `
 <div
-  className="invitee-menu-wrap"
+  className="be invitee-menu-wrap"
 >
   <DropdownMenu
     constrainToScrollParent={false}
@@ -591,7 +591,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() it should render correct menu 6`] = `
 <div
-  className="invitee-menu-wrap"
+  className="be invitee-menu-wrap"
 >
   <DropdownMenu
     constrainToScrollParent={false}
@@ -698,7 +698,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() it should render correct menu 7`] = `
 <div
-  className="invitee-menu-wrap"
+  className="be invitee-menu-wrap"
 >
   <DropdownMenu
     constrainToScrollParent={false}
@@ -823,7 +823,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() it should render correct menu 8`] = `
 <div
-  className="invitee-menu-wrap"
+  className="be invitee-menu-wrap"
 >
   <DropdownMenu
     constrainToScrollParent={false}
@@ -930,7 +930,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() it should render correct menu 9`] = `
 <div
-  className="invitee-menu-wrap"
+  className="be invitee-menu-wrap"
 >
   <DropdownMenu
     constrainToScrollParent={false}
@@ -1055,7 +1055,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() it should render correct menu 10`] = `
 <div
-  className="invitee-menu-wrap"
+  className="be invitee-menu-wrap"
 >
   <DropdownMenu
     constrainToScrollParent={false}
@@ -1162,7 +1162,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() it should render correct menu 11`] = `
 <div
-  className="invitee-menu-wrap"
+  className="be invitee-menu-wrap"
 >
   <DropdownMenu
     constrainToScrollParent={false}
@@ -1287,7 +1287,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() it should render correct menu 12`] = `
 <div
-  className="invitee-menu-wrap"
+  className="be invitee-menu-wrap"
 >
   <DropdownMenu
     constrainToScrollParent={false}
@@ -1394,7 +1394,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() it should render correct menu 13`] = `
 <div
-  className="invitee-menu-wrap"
+  className="be invitee-menu-wrap"
 >
   <DropdownMenu
     constrainToScrollParent={false}
@@ -1501,7 +1501,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() it should render correct menu 14`] = `
 <div
-  className="invitee-menu-wrap"
+  className="be invitee-menu-wrap"
 >
   <DropdownMenu
     constrainToScrollParent={false}
