@@ -173,7 +173,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
                         {this.renderUSF()}
                     </Modal>
                 ) : (
-                    <div className="unified-share-form-container">{this.renderUSF()}</div>
+                    <div className="bdl-UnifiedShareForm-container">{this.renderUSF()}</div>
                 )}
                 {isConfirmModalOpen && (
                     <RemoveLinkConfirmModal
