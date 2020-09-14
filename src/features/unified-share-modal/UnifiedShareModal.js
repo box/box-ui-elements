@@ -158,7 +158,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
             <>
                 {displayInModal ? (
                     <Modal
-                        className="unified-share-modal"
+                        className="be-modal unified-share-modal"
                         isOpen={isConfirmModalOpen ? false : isOpen}
                         onRequestClose={submitting ? undefined : onRequestClose}
                         title={
@@ -173,7 +173,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
                         {this.renderUSF()}
                     </Modal>
                 ) : (
-                    this.renderUSF()
+                    <div className="unified-share-form-container">{this.renderUSF()}</div>
                 )}
                 {isConfirmModalOpen && (
                     <RemoveLinkConfirmModal

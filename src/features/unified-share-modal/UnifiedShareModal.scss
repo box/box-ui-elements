@@ -78,6 +78,12 @@
     /*** Invite collaborators section ***/
     .invite-collaborator-container {
         position: relative;
+
+        .text-area-container {
+            textarea {
+                width: 100%;
+            }
+        }
     }
 
     .invitee-menu-wrap {
@@ -209,6 +215,7 @@
             flex: 1;
 
             input {
+                width: 100%;
                 margin-top: 0;
             }
         }
@@ -274,6 +281,10 @@
         margin: -5px 0 10px 0;
         color: $bdl-box-blue;
     }
+}
+
+.unified-share-form-container {
+    width: 400px;
 }
 
 .bdl-UnifiedShareForm {

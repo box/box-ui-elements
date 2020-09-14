@@ -392,7 +392,7 @@ class SharedLinkSettingsModal extends Component {
         const disableSaveBtn = !(canChangeDownload || canChangeExpiration || canChangePassword || canChangeVanityName);
         return (
             <Modal
-                className="shared-link-settings-modal"
+                className="be-modal shared-link-settings-modal"
                 isOpen={isOpen}
                 onRequestClose={submitting ? undefined : onRequestClose}
                 title={this.renderModalTitle()}

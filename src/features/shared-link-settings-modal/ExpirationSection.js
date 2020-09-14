@@ -46,7 +46,7 @@ const ExpirationSection = ({
     return (
         <div>
             <hr />
-            <Fieldset className="expiration-section" title={<FormattedMessage {...messages.expirationTitle} />}>
+            <Fieldset className="be expiration-section" title={<FormattedMessage {...messages.expirationTitle} />}>
                 <Checkbox
                     isChecked={isExpirationEnabled}
                     isDisabled={!canChangeExpiration}

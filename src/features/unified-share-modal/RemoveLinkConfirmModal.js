@@ -42,6 +42,7 @@ class RemoveLinkConfirmModal extends Component<Props> {
 
         return (
             <Modal
+                className="be-modal"
                 focusElementSelector=".btn-primary"
                 isOpen={isOpen}
                 onRequestClose={submitting ? undefined : onRequestClose}
