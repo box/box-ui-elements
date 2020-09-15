@@ -45,7 +45,7 @@ const PasswordSection = ({
     return (
         <div>
             <hr />
-            <Fieldset className="password-section" title={<FormattedMessage {...messages.passwordTitle} />}>
+            <Fieldset className="be password-section" title={<FormattedMessage {...messages.passwordTitle} />}>
                 <Checkbox
                     isChecked={isPasswordEnabled}
                     isDisabled={!canChangePassword}
