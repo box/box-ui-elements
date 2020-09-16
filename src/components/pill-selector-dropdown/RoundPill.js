@@ -12,7 +12,7 @@ import './RoundPill.scss';
 type Props = {
     className?: string,
     /** Function to retrieve the image URL associated with a pill */
-    getPillImageUrl?: (data: { id: string | number, [key: string]: any }) => string,
+    getPillImageUrl?: (data: { id: string | number, [key: string]: any }) => string | Promise<?string>,
     hasWarning?: boolean,
     id?: string | number,
     isDisabled?: boolean,
@@ -24,61 +24,120 @@ type Props = {
     text: string,
 };
 
+type State = {
+    avatarUrl: ?string,
+};
+
 const RemoveButton = ({ onClick, ...rest }: { onClick: () => any }) => (
     <X {...rest} aria-hidden="true" onClick={onClick} />
 );
 
-const RoundPill = ({
-    getPillImageUrl,
-    isDisabled = false,
-    isSelected = false,
-    hasWarning = false,
-    isExternal,
-    isValid = true,
-    onRemove,
-    text,
-    className,
-    showAvatar = false,
-    id,
-}: Props) => {
-    const styles = classNames('bdl-RoundPill', className, {
-        'bdl-RoundPill--selected': isSelected && !isDisabled,
-        'bdl-RoundPill--disabled': isDisabled,
-        'bdl-RoundPill--warning': hasWarning,
-        'bdl-RoundPill--error': !isValid,
-    });
+class RoundPill extends React.PureComponent<Props, State> {
+    state = {
+        avatarUrl: undefined,
+    };
 
-    let pillType;
+    isMounted: boolean = false;
 
-    if (hasWarning) {
-        pillType = 'warning';
+    getStyles = (): string => {
+        const { className, isSelected, isDisabled, hasWarning, isValid } = this.props;
+
+        return classNames('bdl-RoundPill', className, {
+            'bdl-RoundPill--selected': isSelected && !isDisabled,
+            'bdl-RoundPill--disabled': isDisabled,
+            'bdl-RoundPill--warning': hasWarning,
+            'bdl-RoundPill--error': !isValid,
+        });
+    };
+
+    getPillType = (): ?string => {
+        const { hasWarning, isValid } = this.props;
+
+        let pillType;
+        if (hasWarning) {
+            pillType = 'warning';
+        }
+
+        if (!isValid) {
+            pillType = 'error';
+        }
+
+        return pillType;
+    };
+
+    handleClickRemove = () => {
+        const { isDisabled, onRemove } = this.props;
+        return isDisabled ? noop : onRemove();
+    };
+
+    getAvatar = () => {
+        const { id, isExternal, showAvatar, text } = this.props;
+        const { avatarUrl } = this.state;
+
+        return showAvatar ? (
+            <LabelPill.Icon
+                Component={Avatar}
+                avatarUrl={avatarUrl}
+                id={id}
+                isExternal={isExternal}
+                name={text}
+                size="small"
+                shouldShowExternal
+            />
+        ) : null;
+    };
+
+    /**
+     * Success handler for getting avatar url
+     *
+     * @param {string} avatarUrl the user avatar url
+     */
+    getAvatarUrlHandler = (avatarUrl: ?string) => {
+        if (this.isMounted) {
+            this.setState({
+                avatarUrl,
+            });
+        }
+    };
+
+    /**
+     * Gets the avatar URL for the user from the getAvatarUrl prop
+     *
+     * @return {string} the avatar url string
+     */
+    getAvatarUrl() {
+        const { getPillImageUrl, id } = this.props;
+        const returnVal = getPillImageUrl && id ? Promise.resolve(getPillImageUrl({ id })) : undefined;
+
+        if (returnVal) {
+            returnVal.then(this.getAvatarUrlHandler);
+        }
     }
 
-    if (!isValid) {
-        pillType = 'error';
+    componentDidMount() {
+        this.isMounted = true;
+        this.getAvatarUrl();
     }
 
-    const handleClickRemove = isDisabled ? noop : onRemove;
+    componentWillUnmount() {
+        this.isMounted = false;
+    }
 
-    const avatar = showAvatar ? (
-        <LabelPill.Icon
-            Component={Avatar}
-            avatarUrl={getPillImageUrl && id ? getPillImageUrl({ id }) : undefined}
-            id={id}
-            isExternal={isExternal}
-            name={text}
-            size="small"
-            shouldShowExternal
-        />
-    ) : null;
+    render() {
+        const { text } = this.props;
 
-    return (
-        <LabelPill.Pill size="large" className={styles} type={pillType}>
-            {avatar}
-            <LabelPill.Text className="bdl-RoundPill-text">{text}</LabelPill.Text>
-            <LabelPill.Icon className="bdl-RoundPill-closeBtn" Component={RemoveButton} onClick={handleClickRemove} />
-        </LabelPill.Pill>
-    );
-};
+        return (
+            <LabelPill.Pill size="large" className={this.getStyles()} type={this.getPillType()}>
+                {this.getAvatar()}
+                <LabelPill.Text className="bdl-RoundPill-text">{text}</LabelPill.Text>
+                <LabelPill.Icon
+                    className="bdl-RoundPill-closeBtn"
+                    Component={RemoveButton}
+                    onClick={this.handleClickRemove}
+                />
+            </LabelPill.Pill>
+        );
+    }
+}
 
 export default RoundPill;
