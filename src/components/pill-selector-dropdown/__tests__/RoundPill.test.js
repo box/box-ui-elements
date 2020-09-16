@@ -71,6 +71,9 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
         const wrapper = shallow(
             <RoundPill name="name" id="123" showAvatar getPillImageUrl={contact => `/test?id=${contact.id}`} />,
         );
+        wrapper.setState({
+            avatarUrl: '/test?id=123',
+        });
 
         expect(wrapper.find('LabelPillIcon').length).toBe(2);
         expect(wrapper.find('LabelPillIcon[avatarUrl]').props().avatarUrl).toEqual('/test?id=123');

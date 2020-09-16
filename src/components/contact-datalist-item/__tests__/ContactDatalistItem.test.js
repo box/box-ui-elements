@@ -35,6 +35,9 @@ describe('components/contact-datalist-item/ContactDatalistItem', () => {
                     getContactAvatarUrl={contact => `/test?id=${contact.id}`}
                 />,
             );
+            wrapper.setState({
+                avatarUrl: '/test?id=123',
+            });
 
             expect(wrapper.find('Avatar').length).toBe(1);
             expect(wrapper.find('Avatar').props().avatarUrl).toEqual('/test?id=123');

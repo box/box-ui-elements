@@ -33,6 +33,13 @@ const RemoveButton = ({ onClick, ...rest }: { onClick: () => any }) => (
 );
 
 class RoundPill extends React.PureComponent<Props, State> {
+    static defaultProps = {
+        isDisabled: false,
+        isValid: true,
+        hasWarning: false,
+        showAvatar: false,
+    };
+
     state = {
         avatarUrl: undefined,
     };
@@ -68,23 +75,6 @@ class RoundPill extends React.PureComponent<Props, State> {
     handleClickRemove = () => {
         const { isDisabled, onRemove } = this.props;
         return isDisabled ? noop : onRemove();
-    };
-
-    getAvatar = () => {
-        const { id, isExternal, showAvatar, text } = this.props;
-        const { avatarUrl } = this.state;
-
-        return showAvatar ? (
-            <LabelPill.Icon
-                Component={Avatar}
-                avatarUrl={avatarUrl}
-                id={id}
-                isExternal={isExternal}
-                name={text}
-                size="small"
-                shouldShowExternal
-            />
-        ) : null;
     };
 
     /**
@@ -124,11 +114,22 @@ class RoundPill extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { text } = this.props;
+        const { id, isExternal, showAvatar, text } = this.props;
+        const { avatarUrl } = this.state;
 
         return (
             <LabelPill.Pill size="large" className={this.getStyles()} type={this.getPillType()}>
-                {this.getAvatar()}
+                {showAvatar ? (
+                    <LabelPill.Icon
+                        Component={Avatar}
+                        avatarUrl={avatarUrl}
+                        id={id}
+                        isExternal={isExternal}
+                        name={text}
+                        size="small"
+                        shouldShowExternal
+                    />
+                ) : null}
                 <LabelPill.Text className="bdl-RoundPill-text">{text}</LabelPill.Text>
                 <LabelPill.Icon
                     className="bdl-RoundPill-closeBtn"
