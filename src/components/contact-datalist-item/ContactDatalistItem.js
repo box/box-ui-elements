@@ -49,7 +49,9 @@ class ContactDatalistItem extends React.PureComponent<Props, State> {
         const returnVal = getContactAvatarUrl && id ? Promise.resolve(getContactAvatarUrl({ id })) : undefined;
 
         if (returnVal) {
-            returnVal.then(this.getAvatarUrlHandler);
+            returnVal.then(this.getAvatarUrlHandler).catch(() => {
+                // noop
+            });
         }
     }
 

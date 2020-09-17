@@ -100,7 +100,9 @@ class RoundPill extends React.PureComponent<Props, State> {
         const returnVal = getPillImageUrl && id ? Promise.resolve(getPillImageUrl({ id })) : undefined;
 
         if (returnVal) {
-            returnVal.then(this.getAvatarUrlHandler);
+            returnVal.then(this.getAvatarUrlHandler).catch(() => {
+                // noop
+            });
         }
     }
 
