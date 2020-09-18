@@ -19,7 +19,7 @@
     &.flyout-overlay-target-attached-right,
     &.dropdown-menu-element-attached-center {
         .overlay {
-            @include bdl-animation($bdl-transitionDurationBase);
+            @include bdl-openComponentAnimation($bdl-transitionDurationBase);
         }
     }
 }

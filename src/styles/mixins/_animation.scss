@@ -6,7 +6,7 @@
     transition-property: $properties;
 }
 
-@mixin bdl-animation($time-length) {
+@mixin bdl-openComponentAnimation($time-length) {
     animation: fade-in $bdl-timingFunction $time-length;
 }
 

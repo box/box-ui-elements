@@ -9,7 +9,7 @@ $bdl-AdditionalTabs-fade-in-time: .5s;
 }
 
 .bdl-AdditionalTabPlaceholder-icon {
-    @include bdl-animation($bdl-AdditionalTabs-fade-in-time);
+    @include bdl-openComponentAnimation($bdl-AdditionalTabs-fade-in-time);
 
     width: 24px;
     height: 24px;
@@ -22,5 +22,5 @@ $bdl-AdditionalTabs-fade-in-time: .5s;
 }
 
 .bdl-AdditionalTabPlaceholder-moreIcon {
-    @include bdl-animation($bdl-AdditionalTabs-fade-in-time);
+    @include bdl-openComponentAnimation($bdl-AdditionalTabs-fade-in-time);
 }

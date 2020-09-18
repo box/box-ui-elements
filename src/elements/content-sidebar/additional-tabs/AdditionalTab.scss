@@ -23,7 +23,7 @@
 }
 
 .bdl-AdditionalTab-icon {
-    @include bdl-animation(.5s);
+    @include bdl-openComponentAnimation(.5s);
 
     width: 24px;
     height: 24px;

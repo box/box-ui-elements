@@ -4,7 +4,7 @@
 .dropdown-menu-element-attached-right,
 .dropdown-menu-element-attached-center {
     .aria-menu {
-        @include bdl-animation($bdl-transitionDurationBase);
+        @include bdl-openComponentAnimation($bdl-transitionDurationBase);
     }
 }
 
