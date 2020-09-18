@@ -9,7 +9,7 @@ $bdl-AdditionalTabs-fade-in-time: .5s;
 }
 
 .bdl-AdditionalTabPlaceholder-icon {
-    @include bdl-fadeIn($bdl-AdditionalTabs-fade-in-time);
+    @include bdl-openComponentAnimation($bdl-AdditionalTabs-fade-in-time);
 
     width: 24px;
     height: 24px;
@@ -18,9 +18,9 @@ $bdl-AdditionalTabs-fade-in-time: .5s;
 }
 
 .bdl-AdditionalTabPlaceholder-icon--loading {
-    @include bdl-loadingPulse(#f4f4f4, $bdl-gray-10, $bdl-AdditionalTabs-fade-in-time);
+    @include bdl-loadingPulseAnimation(#f4f4f4, $bdl-gray-10, $bdl-AdditionalTabs-fade-in-time);
 }
 
 .bdl-AdditionalTabPlaceholder-moreIcon {
-    @include bdl-fadeIn($bdl-AdditionalTabs-fade-in-time);
+    @include bdl-openComponentAnimation($bdl-AdditionalTabs-fade-in-time);
 }
