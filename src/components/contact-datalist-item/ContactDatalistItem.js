@@ -29,7 +29,7 @@ class ContactDatalistItem extends React.PureComponent<Props, State> {
     /**
      * Success handler for getting avatar url
      *
-     * @param {string} avatarUrl the user avatar url
+     * @param {string} [avatarUrl] the user avatar url
      */
     getAvatarUrlHandler = (avatarUrl: ?string) => {
         if (this.isMounted) {
@@ -40,19 +40,17 @@ class ContactDatalistItem extends React.PureComponent<Props, State> {
     };
 
     /**
-     * Gets the avatar URL for the user from the getAvatarUrl prop
+     * Gets the avatar URL for the user from the getContactAvatarUrl prop
      *
-     * @return {string} the avatar url string
+     * @return {void}
      */
     getAvatarUrl() {
         const { getContactAvatarUrl, id } = this.props;
-        const returnVal = getContactAvatarUrl && id ? Promise.resolve(getContactAvatarUrl({ id })) : undefined;
-
-        if (returnVal) {
-            returnVal.then(this.getAvatarUrlHandler).catch(() => {
+        Promise.resolve(getContactAvatarUrl && id ? getContactAvatarUrl({ id }) : undefined)
+            .then(this.getAvatarUrlHandler)
+            .catch(() => {
                 // noop
             });
-        }
     }
 
     componentDidMount() {

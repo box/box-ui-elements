@@ -35,6 +35,7 @@ const RemoveButton = ({ onClick, ...rest }: { onClick: () => any }) => (
 class RoundPill extends React.PureComponent<Props, State> {
     static defaultProps = {
         isDisabled: false,
+        isSelected: false,
         isValid: true,
         hasWarning: false,
         showAvatar: false,
@@ -80,7 +81,7 @@ class RoundPill extends React.PureComponent<Props, State> {
     /**
      * Success handler for getting avatar url
      *
-     * @param {string} avatarUrl the user avatar url
+     * @param {string} [avatarUrl] the user avatar url
      */
     getAvatarUrlHandler = (avatarUrl: ?string) => {
         if (this.isMounted) {
@@ -91,19 +92,17 @@ class RoundPill extends React.PureComponent<Props, State> {
     };
 
     /**
-     * Gets the avatar URL for the user from the getAvatarUrl prop
+     * Gets the avatar URL for the user from the getPillImageUrl prop
      *
-     * @return {string} the avatar url string
+     * @return {void}
      */
     getAvatarUrl() {
         const { getPillImageUrl, id } = this.props;
-        const returnVal = getPillImageUrl && id ? Promise.resolve(getPillImageUrl({ id })) : undefined;
-
-        if (returnVal) {
-            returnVal.then(this.getAvatarUrlHandler).catch(() => {
+        Promise.resolve(getPillImageUrl && id ? getPillImageUrl({ id }) : undefined)
+            .then(this.getAvatarUrlHandler)
+            .catch(() => {
                 // noop
             });
-        }
     }
 
     componentDidMount() {
