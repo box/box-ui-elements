@@ -26,19 +26,47 @@ describe('components/contact-datalist-item/ContactDatalistItem', () => {
             expect(wrapper.find('Avatar').length).toBe(1);
         });
 
-        test('should use the avatar URL when the prop (and show avatar) are provided', () => {
+        test('should do nothing when getPillImageUrl returns a rejected Promise', () => {
             const wrapper = shallow(
                 <ContactDatalistItem
                     name="name"
                     id="123"
                     showAvatar
-                    getContactAvatarUrl={contact => `/test?id=${contact.id}`}
+                    getPillImageUrl={() => Promise.reject(new Error())}
                 />,
             );
+            expect(wrapper.state('avatarUrl')).toBe(undefined);
+            const instance = wrapper.instance();
 
-            expect(wrapper.find('Avatar').length).toBe(1);
-            expect(wrapper.find('Avatar').props().avatarUrl).toEqual('/test?id=123');
+            instance.componentDidMount();
+
+            setImmediate(() => {
+                wrapper.update();
+                expect(wrapper.state('avatarUrl')).toBeUndefined();
+                expect(wrapper.find('Avatar').length).toBe(1);
+                expect(wrapper.find('Avatar').props().avatarUrl).toBeUndefined();
+            });
         });
+
+        test.each([[contact => `/test?id=${contact.id}`], [contact => Promise.resolve(`/test?id=${contact.id}`)]])(
+            'should use the avatar URL when the prop (and show avatar) are provided',
+            getContactAvatarUrl => {
+                const wrapper = shallow(
+                    <ContactDatalistItem name="name" id="123" showAvatar getContactAvatarUrl={getContactAvatarUrl} />,
+                );
+                expect(wrapper.state('avatarUrl')).toBeUndefined();
+                const instance = wrapper.instance();
+
+                instance.componentDidMount();
+
+                setImmediate(() => {
+                    wrapper.update();
+                    expect(wrapper.state('avatarUrl')).toBe('/test?id=123');
+                    expect(wrapper.find('Avatar').length).toBe(1);
+                    expect(wrapper.find('Avatar').props().avatarUrl).toEqual('/test?id=123');
+                });
+            },
+        );
 
         test('should not have the avatar URL when the id prop is missing', () => {
             const wrapper = shallow(
