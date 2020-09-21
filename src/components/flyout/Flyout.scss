@@ -1,73 +1,5 @@
 @import '../../styles/variables';
 
-@keyframes flyout_overlay {
-    0% {
-        opacity: 0;
-    }
-
-    60% {
-        opacity: 1;
-    }
-
-    100% {
-        transform: rotateY(0) rotateX(0);
-    }
-}
-
-@keyframes flyout_overlay_top_right_aligned {
-    0% {
-        transform: rotateY(-10deg) rotateX(-10deg);
-    }
-}
-
-@keyframes flyout_overlay_top_left_aligned {
-    0% {
-        transform: rotateY(10deg) rotateX(-10deg);
-    }
-}
-
-@keyframes flyout_overlay_top_center_aligned {
-    0% {
-        transform: rotateY(0) rotateX(-10deg);
-    }
-}
-
-@keyframes flyout_overlay_bottom_right_aligned {
-    0% {
-        transform: rotateY(10deg) rotateX(10deg);
-    }
-}
-
-@keyframes flyout_overlay_bottom_left_aligned {
-    0% {
-        transform: rotateY(-10deg) rotateX(10deg);
-    }
-}
-
-@keyframes flyout_overlay_bottom_center_aligned {
-    0% {
-        transform: rotateY(0) rotateX(10deg);
-    }
-}
-
-@keyframes flyout_overlay_middle_right_aligned {
-    0% {
-        transform: rotateY(10deg) rotateX(0);
-    }
-}
-
-@keyframes flyout_overlay_middle_left_aligned {
-    0% {
-        transform: rotateY(-10deg) rotateX(0);
-    }
-}
-
-@keyframes flyout_overlay_middle_center_aligned {
-    0% {
-        transform: rotateY(0) rotateX(10deg);
-    }
-}
-
 .flyout-overlay {
     @include common-typography;
 
@@ -83,62 +15,11 @@
         border-radius: $bdl-border-radius-size;
     }
 
-    // Bottom
-    &.flyout-overlay-target-attached-bottom.flyout-overlay-target-attached-left {
+    &.flyout-overlay-target-attached-left,
+    &.flyout-overlay-target-attached-right,
+    &.dropdown-menu-element-attached-center {
         .overlay {
-            transform-origin: left top;
-            animation: flyout_overlay .125s, flyout_overlay_top_left_aligned .125s;
-        }
-    }
-
-    &.flyout-overlay-target-attached-bottom.flyout-overlay-target-attached-right {
-        .overlay {
-            transform-origin: right top;
-            animation: flyout_overlay .125s, flyout_overlay_top_right_aligned .125s;
-        }
-    }
-
-    &.flyout-overlay-target-attached-bottom.flyout-overlay-target-attached-center {
-        .overlay {
-            transform-origin: center top;
-            animation: flyout_overlay .125s, flyout_overlay_top_center_aligned .125s;
-        }
-    }
-
-    // Top
-    &.flyout-overlay-target-attached-top.flyout-overlay-target-attached-left {
-        .overlay {
-            transform-origin: left bottom;
-            animation: flyout_overlay .125s, flyout_overlay_bottom_left_aligned .125s;
-        }
-    }
-
-    &.flyout-overlay-target-attached-top.flyout-overlay-target-attached-right {
-        .overlay {
-            transform-origin: right bottom;
-            animation: flyout_overlay .125s, flyout_overlay_bottom_right_aligned .125s;
-        }
-    }
-
-    &.flyout-overlay-target-attached-top.flyout-overlay-target-attached-center {
-        .overlay {
-            transform-origin: center bottom;
-            animation: flyout_overlay .125s, flyout_overlay_bottom_center_aligned .125s;
-        }
-    }
-
-    // Middle
-    &.flyout-overlay-target-attached-middle.flyout-overlay-target-attached-left {
-        .overlay {
-            transform-origin: right center;
-            animation: flyout_overlay .125s, flyout_overlay_middle_right_aligned .125s;
-        }
-    }
-
-    &.flyout-overlay-target-attached-middle.flyout-overlay-target-attached-right {
-        .overlay {
-            transform-origin: left center;
-            animation: flyout_overlay .125s, flyout_overlay_middle_left_aligned .125s;
+            @include bdl-openComponentAnimation($bdl-transitionDurationBase);
         }
     }
 }
