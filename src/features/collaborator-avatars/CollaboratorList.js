@@ -62,7 +62,7 @@ class CollaboratorList extends React.Component<Props> {
                 <div className="manage-all-btn-container">
                     {this.createCollaboratorPageLink(manageAllBtn, manageLinkProps)}
                 </div>
-                <ul className="collaborator-list">
+                <ul className="be collaborator-list">
                     {collaborators.slice(0, maxListSizeToRender).map((collaborator, index) => {
                         const { collabID, type } = collaborator;
                         return (

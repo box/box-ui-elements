@@ -165,7 +165,7 @@ function SharingModal({ api, config, displayInModal, itemID, itemType, language,
     const { accessLevel = '', serverURL } = sharedLink;
     return (
         <Internationalize language={language} messages={messages}>
-            <div className="be">
+            <>
                 <SharingNotification
                     accessLevel={accessLevel}
                     api={api}
@@ -230,7 +230,7 @@ function SharingModal({ api, config, displayInModal, itemID, itemType, language,
                         submitting={isLoading}
                     />
                 )}
-            </div>
+            </>
         </Internationalize>
     );
 }

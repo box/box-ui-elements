@@ -9,7 +9,7 @@ import {
     JSON_PATCH_OP_REPLACE,
     JSON_PATCH_OP_TEST,
 } from '../../../common/constants';
-import { FIELD_NAME } from '../../../constants';
+import { FIELD_METADATA, FIELD_NAME } from '../../../constants';
 
 describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
     let metadataQueryAPIHelper;
@@ -120,19 +120,19 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
                 fields: [
                     {
                         displayName: 'type',
-                        key: 'type',
+                        key: `${FIELD_METADATA}.${templateScope}.${templateKey}.type`,
                         value: 'bill',
                         type: 'string',
                     },
                     {
                         displayName: 'year',
-                        key: 'year',
+                        key: `${FIELD_METADATA}.${templateScope}.${templateKey}.year`,
                         value: 2017,
                         type: 'float',
                     },
                     {
                         displayName: 'approved',
-                        key: 'approved',
+                        key: `${FIELD_METADATA}.${templateScope}.${templateKey}.approved`,
                         value: 'yes',
                         type: 'enum',
                         options,
@@ -146,19 +146,19 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
                 fields: [
                     {
                         displayName: 'type',
-                        key: 'type',
+                        key: `${FIELD_METADATA}.${templateScope}.${templateKey}.type`,
                         value: 'receipt',
                         type: 'string',
                     },
                     {
                         displayName: 'year',
-                        key: 'year',
+                        key: `${FIELD_METADATA}.${templateScope}.${templateKey}.year`,
                         value: 2018,
                         type: 'float',
                     },
                     {
                         displayName: 'approved',
-                        key: 'approved',
+                        key: `${FIELD_METADATA}.${templateScope}.${templateKey}.approved`,
                         value: 'no',
                         type: 'enum',
                         options,
@@ -174,12 +174,14 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             metadata: flattenedMetadataEntries[0],
             name: 'filename1.pdf',
             size: 10000,
+            type: 'file',
         },
         {
             id: '9876',
             metadata: flattenedMetadataEntries[1],
             name: 'filename2.mp4',
             size: 50000,
+            type: 'file',
         },
     ];
     const flattenedDataWithTypes = {

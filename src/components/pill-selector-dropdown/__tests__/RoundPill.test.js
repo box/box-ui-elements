@@ -67,13 +67,39 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
         expect(onRemoveStub).toHaveBeenCalledTimes(1);
     });
 
-    test('should use the avatar URL when the prop (and show avatar) are provided', () => {
+    test('should do nothing when getPillImageUrl returns a rejected Promise', () => {
         const wrapper = shallow(
-            <RoundPill name="name" id="123" showAvatar getPillImageUrl={contact => `/test?id=${contact.id}`} />,
+            <RoundPill name="name" id="123" showAvatar getPillImageUrl={() => Promise.reject(new Error())} />,
         );
+        expect(wrapper.state('avatarUrl')).toBe(undefined);
+        const instance = wrapper.instance();
 
-        expect(wrapper.find('LabelPillIcon').length).toBe(2);
-        expect(wrapper.find('LabelPillIcon[avatarUrl]').props().avatarUrl).toEqual('/test?id=123');
+        instance.componentDidMount();
+
+        setImmediate(() => {
+            wrapper.update();
+            expect(wrapper.state('avatarUrl')).toBeUndefined();
+            expect(wrapper.find('LabelPillIcon').length).toBe(2);
+            expect(wrapper.find('LabelPillIcon[avatarUrl]').length).toBe(0);
+        });
+    });
+
+    test.each([
+        [contact => `/test?id=${contact.id}`, '/test?id=123'],
+        [contact => Promise.resolve(`/test?id=${contact.id}`), '/test?id=123'],
+    ])('should use the avatar URL when the prop (and show avatar) are provided', (getPillImageUrl, expected) => {
+        const wrapper = shallow(<RoundPill name="name" id="123" showAvatar getPillImageUrl={getPillImageUrl} />);
+        expect(wrapper.state('avatarUrl')).toBe(undefined);
+        const instance = wrapper.instance();
+
+        instance.componentDidMount();
+
+        setImmediate(() => {
+            wrapper.update();
+            expect(wrapper.state('avatarUrl')).toBe(expected);
+            expect(wrapper.find('LabelPillIcon').length).toBe(2);
+            expect(wrapper.find('LabelPillIcon[avatarUrl]').props().avatarUrl).toEqual(expected);
+        });
     });
 
     test('should not have the avatar URL when the id prop is missing', () => {
