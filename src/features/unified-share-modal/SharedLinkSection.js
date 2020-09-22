@@ -459,7 +459,7 @@ class SharedLinkSection extends React.Component<Props, State> {
         const isSharedLinkEnabled = !!sharedLink.url;
 
         return (
-            <div>
+            <div className="be">
                 <hr className="bdl-SharedLinkSection-separator" />
                 {/* eslint-disable-next-line jsx-a11y/label-has-for */}
                 <label>

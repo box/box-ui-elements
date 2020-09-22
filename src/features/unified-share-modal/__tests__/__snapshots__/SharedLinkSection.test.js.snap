@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`features/unified-share-modal/SharedLinkSection should account for shared link expirations being set 1`] = `
-<div>
+<div
+  className="be"
+>
   <hr
     className="bdl-SharedLinkSection-separator"
   />
@@ -164,7 +166,9 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
 `;
 
 exports[`features/unified-share-modal/SharedLinkSection should render a default component when there is a shared link but user lacks permission to toggle off 1`] = `
-<div>
+<div
+  className="be"
+>
   <hr
     className="bdl-SharedLinkSection-separator"
   />
@@ -310,7 +314,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
 `;
 
 exports[`features/unified-share-modal/SharedLinkSection should render default component with no sharedLink 1`] = `
-<div>
+<div
+  className="be"
+>
   <hr
     className="bdl-SharedLinkSection-separator"
   />
@@ -361,7 +367,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
 `;
 
 exports[`features/unified-share-modal/SharedLinkSection should render default component with shared link 1`] = `
-<div>
+<div
+  className="be"
+>
   <hr
     className="bdl-SharedLinkSection-separator"
   />
@@ -496,7 +504,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
 `;
 
 exports[`features/unified-share-modal/SharedLinkSection should render default components with proper tooltip state while submitting request 1`] = `
-<div>
+<div
+  className="be"
+>
   <hr
     className="bdl-SharedLinkSection-separator"
   />
@@ -599,7 +609,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled r
 `;
 
 exports[`features/unified-share-modal/SharedLinkSection should render proper dropdown override when viewing an editable box note 1`] = `
-<div>
+<div
+  className="be"
+>
   <hr
     className="bdl-SharedLinkSection-separator"
   />
@@ -755,7 +767,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
 `;
 
 exports[`features/unified-share-modal/SharedLinkSection should render proper list of permission options based on the the download setting availability 1`] = `
-<div>
+<div
+  className="be"
+>
   <hr
     className="bdl-SharedLinkSection-separator"
   />
@@ -891,7 +905,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
 `;
 
 exports[`features/unified-share-modal/SharedLinkSection should render proper list of permission options based on the the download setting availability 2`] = `
-<div>
+<div
+  className="be"
+>
   <hr
     className="bdl-SharedLinkSection-separator"
   />
@@ -1052,7 +1068,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render settings l
 `;
 
 exports[`features/unified-share-modal/SharedLinkSection should render without SharedLinkPermissionMenu if access level is "people in item" 1`] = `
-<div>
+<div
+  className="be"
+>
   <hr
     className="bdl-SharedLinkSection-separator"
   />

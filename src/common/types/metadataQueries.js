@@ -22,9 +22,9 @@ type MetadataFieldConfig = {
     key: string,
 };
 
-// MetadataFieldsToShow array items could be simple strings or objects
-// e.g. const metadataFieldsToShow: MetadataFieldsToShow = [ 'name', { key: 'desc', displayName: 'Desc', canEdit: true } ];
-type MetadataFieldsToShow = Array<MetadataFieldConfig | string>;
+// FieldsToShow array items could be simple strings or objects
+// e.g. const fieldsToShow: FieldsToShow = [ 'name', { key: 'desc', displayName: 'Desc', canEdit: true } ];
+type FieldsToShow = Array<MetadataFieldConfig | string>;
 
 type MetadataQuery = {
     ancestor_folder_id: string,
@@ -42,7 +42,7 @@ type MetadataQuery = {
 
 export type {
     MetadataFieldConfig,
-    MetadataFieldsToShow,
+    FieldsToShow,
     MetadataQuery,
     MetadataQueryOrderByClause,
     MetadataQueryResponseData,

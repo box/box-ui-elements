@@ -33,7 +33,7 @@ type Props = {
     /** Error message */
     error?: React.Node,
     /** Function to retrieve the image URL associated with a pill */
-    getPillImageUrl?: (data: { id: string, [key: string]: any }) => string,
+    getPillImageUrl?: (data: { id: string, [key: string]: any }) => string | Promise<?string>,
     /** Passed in by `SelectorDropdown` for accessibility */
     inputProps: Object,
     /** Input label */

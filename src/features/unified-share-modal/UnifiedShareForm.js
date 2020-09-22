@@ -516,7 +516,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             allShareRestrictionWarning;
 
         return (
-            <div className={displayInModal ? '' : 'bdl-UnifiedShareForm'}>
+            <div className={displayInModal ? '' : 'be bdl-UnifiedShareForm'}>
                 <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
                     {showShareRestrictionWarning && allShareRestrictionWarning}
 

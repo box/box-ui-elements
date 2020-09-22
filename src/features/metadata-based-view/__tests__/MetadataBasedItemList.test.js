@@ -16,6 +16,7 @@ import {
     FIELD_TYPE_MULTISELECT,
     FIELD_TYPE_STRING,
 } from '../../metadata-instance-fields/constants';
+import { FIELD_METADATA } from '../../../constants';
 
 jest.mock('react-virtualized/dist/es/AutoSizer', () => () => 'AutoSizer');
 
@@ -27,6 +28,11 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
     const onMetadataUpdate = jest.fn();
     const onClick = expect.any(Function);
     const createdAt = '2020-08-18T00:00:00.000Z';
+    const templateScope = 'enterprise_12345';
+    const templateKey = 'awesomeTemplate';
+    const typeMetadataField = `${FIELD_METADATA}.${templateScope}.${templateKey}.type`;
+    const amountMetadataField = `${FIELD_METADATA}.${templateScope}.${templateKey}.amount`;
+    const createdMetadataField = `${FIELD_METADATA}.${templateScope}.${templateKey}.created`;
     const currentCollection = {
         items: [
             {
@@ -36,19 +42,19 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
                         id: '11',
                         fields: [
                             {
-                                key: 'type',
+                                key: typeMetadataField,
                                 displayName: 'Type',
                                 type: 'string',
                                 value: 'bill',
                             },
                             {
-                                key: 'amount',
+                                key: amountMetadataField,
                                 displayName: 'Amount',
                                 type: 'float',
                                 value: 100.12,
                             },
                             {
-                                key: 'created',
+                                key: createdMetadataField,
                                 displayName: 'Created',
                                 type: 'date',
                                 value: createdAt,
@@ -66,19 +72,19 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
                         id: '22',
                         fields: [
                             {
-                                key: 'type',
+                                key: typeMetadataField,
                                 displayName: 'Type',
                                 type: 'string',
                                 value: 'receipt',
                             },
                             {
-                                key: 'amount',
+                                key: amountMetadataField,
                                 displayName: 'Amount',
                                 type: 'float',
                                 value: 200.88,
                             },
                             {
-                                key: 'created',
+                                key: createdMetadataField,
                                 displayName: 'Created',
                                 type: 'date',
                                 value: createdAt,
@@ -93,11 +99,11 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         nextMarker: 'abc',
     };
 
-    const metadataFieldsToShow = [
-        'type',
-        { key: 'amount', canEdit: true },
-        { key: 'created', canEdit: true, displayName: 'Created At' },
-        { key: 'invalidKey', canEdit: true }, // field not there in template
+    const fieldsToShow = [
+        'size',
+        { key: amountMetadataField, canEdit: true },
+        { key: createdMetadataField, canEdit: true, displayName: 'Created At' },
+        { key: 'invalidKey', canEdit: true }, // item
     ];
 
     const pdfNameButton = (
@@ -115,7 +121,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
 
     const defaultProps = {
         currentCollection,
-        metadataFieldsToShow,
+        fieldsToShow,
         intl,
         onItemClick,
         onMetadataUpdate,
@@ -203,16 +209,16 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             columnIndex | rowIndex | cellData         | dataType
             ${0}        | ${1}     | ${pdfIcon}       | ${undefined}
             ${1}        | ${1}     | ${pdfNameButton} | ${undefined}
-            ${2}        | ${1}     | ${'bill'}        | ${'string'}
+            ${2}        | ${1}     | ${'123'}         | ${'string'}
             ${3}        | ${1}     | ${100.12}        | ${'float'}
             ${4}        | ${1}     | ${createdAt}     | ${'date'}
-            ${5}        | ${1}     | ${undefined}     | ${undefined}
+            ${5}        | ${1}     | ${undefined}     | ${'string'}
             ${0}        | ${2}     | ${mp4Icon}       | ${undefined}
             ${1}        | ${2}     | ${mp4NameButton} | ${undefined}
-            ${2}        | ${2}     | ${'receipt'}     | ${'string'}
+            ${2}        | ${2}     | ${'456'}         | ${'string'}
             ${3}        | ${2}     | ${200.88}        | ${'float'}
             ${4}        | ${2}     | ${createdAt}     | ${'date'}
-            ${5}        | ${2}     | ${undefined}     | ${undefined}
+            ${5}        | ${2}     | ${undefined}     | ${'string'}
         `('cellData for row: $rowIndex, column: $columnIndex', ({ columnIndex, rowIndex, cellData, dataType }) => {
             const editableColumnIndex = 3; // amount field is editable
 
@@ -248,7 +254,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             columnIndex | headerData
             ${0}        | ${undefined}
             ${1}        | ${'Name'}
-            ${2}        | ${'Type'}
+            ${2}        | ${'size'}
             ${3}        | ${'Amount'}
             ${4}        | ${'Created At'}
             ${5}        | ${'invalidKey'}
@@ -381,9 +387,7 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
     describe('calculateContentWidth()', () => {
         test('should return total width of the content', () => {
             const width =
-                FILE_ICON_COLUMN_WIDTH +
-                FILE_NAME_COLUMN_WIDTH +
-                metadataFieldsToShow.length * MIN_METADATA_COLUMN_WIDTH;
+                FILE_ICON_COLUMN_WIDTH + FILE_NAME_COLUMN_WIDTH + fieldsToShow.length * MIN_METADATA_COLUMN_WIDTH;
 
             expect(instance.calculateContentWidth()).toBe(width);
         });
@@ -393,11 +397,25 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         test('should return a list of metadata fields to display', () => {
             const response = instance.getQueryResponseFields();
             const fields = [
-                { key: 'type', displayName: 'Type' },
-                { key: 'amount', displayName: 'Amount' },
-                { key: 'created', displayName: 'Created' },
+                { key: typeMetadataField, displayName: 'Type' },
+                { key: amountMetadataField, displayName: 'Amount' },
+                { key: createdMetadataField, displayName: 'Created' },
             ];
             expect(response).toEqual(fields);
+        });
+    });
+
+    describe('isMetadataField()', () => {
+        test('should return a boolean indicating if the field is metadata field or not (item field)', () => {
+            expect(instance.isMetadataField(amountMetadataField)).toBe(true);
+            expect(instance.isMetadataField('size')).toBe(false);
+        });
+    });
+
+    describe('getFieldNameFromKey()', () => {
+        test('should return a field name from the field key', () => {
+            expect(instance.getFieldNameFromKey(amountMetadataField)).toBe('amount');
+            expect(instance.getFieldNameFromKey('size')).toBe('size');
         });
     });
 
