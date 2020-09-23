@@ -325,7 +325,16 @@ class TaskForm extends React.Component<Props, State> {
     };
 
     render() {
-        const { approverSelectorContacts, className, error, isDisabled, intl, editMode, taskType } = this.props;
+        const {
+            approverSelectorContacts,
+            className,
+            getAvatarUrl,
+            error,
+            isDisabled,
+            intl,
+            editMode,
+            taskType,
+        } = this.props;
         const { dueDate, approvers, message, formValidityState, isLoading, completionRule } = this.state;
         const inputContainerClassNames = classNames('bcs-task-input-container', 'bcs-task-input-is-open', className);
         const isCreateEditMode = editMode === TASK_EDIT_MODE_CREATE;
@@ -369,6 +378,9 @@ class TaskForm extends React.Component<Props, State> {
                             className={pillSelectorOverlayClasses}
                             error={this.getErrorByFieldname('taskAssignees')}
                             disabled={isForbiddenErrorOnEdit}
+                            getPillImageUrl={obj => {
+                                return getAvatarUrl(obj.id);
+                            }}
                             inputProps={{ 'data-testid': 'task-form-assignee-input' }}
                             isRequired
                             label={<FormattedMessage {...messages.tasksAddTaskFormSelectAssigneesLabel} />}
@@ -380,6 +392,8 @@ class TaskForm extends React.Component<Props, State> {
                             placeholder={intl.formatMessage(commentFormMessages.approvalAddAssignee)}
                             selectedOptions={selectedApprovers}
                             selectorOptions={approverOptions}
+                            showAvatars
+                            showRoundedPills
                             shouldSetActiveItemOnOpen
                             shouldClearUnmatchedInput
                             validateForError={() => this.validateForm('taskAssignees')}
@@ -388,7 +402,12 @@ class TaskForm extends React.Component<Props, State> {
                                 <ContactDatalistItem
                                     key={id}
                                     data-testid="task-assignee-option"
+                                    getContactAvatarUrl={obj => {
+                                        return getAvatarUrl(obj.id);
+                                    }}
+                                    id={id}
                                     name={name}
+                                    showAvatar
                                     subtitle={
                                         item.type === 'group' ? (
                                             <FormattedMessage {...messages.taskCreateGroupLabel} />
