@@ -20,10 +20,12 @@ import {
     getDataTransferItemId,
     getFileId,
     getFileFromDataTransferItem,
+    getPackageFileFromDataTransferItem,
     getFile,
     getFileAPIOptions,
     getDataTransferItemAPIOptions,
     isDataTransferItemAFolder,
+    isDataTransferItemAPackage,
     isMultiputSupported,
 } from '../../utils/uploads';
 import DroppableContent from './DroppableContent';
@@ -215,6 +217,7 @@ class ContentUploader extends Component<Props, State> {
             return;
         }
 
+        // TODO: this gets called unnecessarily (upon each render regardless of the queue not changing)
         this.addFilesWithOptionsToUploadQueueAndStartUpload(files, dataTransferItems);
     }
 
@@ -385,10 +388,13 @@ class ContentUploader extends Component<Props, State> {
 
         const folderItems = [];
         const fileItems = [];
+        const packageItems = [];
 
         Array.from(dataTransferItems).forEach(item => {
             const isDirectory = isDataTransferItemAFolder(item);
-            if (isDirectory && isFolderUploadEnabled) {
+            if (isDataTransferItemAPackage(item)) {
+                packageItems.push(item);
+            } else if (isDirectory && isFolderUploadEnabled) {
                 folderItems.push(item);
             } else if (!isDirectory) {
                 fileItems.push(item);
@@ -396,6 +402,7 @@ class ContentUploader extends Component<Props, State> {
         });
 
         this.addFileDataTransferItemsToUploadQueue(fileItems, itemUpdateCallback);
+        if (packageItems.length) this.addPackageDataTransferItemsToUploadQueue(packageItems, itemUpdateCallback);
         this.addFolderDataTransferItemsToUploadQueue(folderItems, itemUpdateCallback);
     };
 
@@ -418,6 +425,34 @@ class ContentUploader extends Component<Props, State> {
             }
 
             this.addFilesToUploadQueue([file], itemUpdateCallback);
+        });
+    };
+
+    /**
+     * Add dataTransferItem of package type to the upload queue
+     *
+     * @private
+     * @param {Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>} dataTransferItems
+     * @param {Function} itemUpdateCallback
+     * @returns {void}
+     */
+    addPackageDataTransferItemsToUploadQueue = (
+        dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
+        itemUpdateCallback: Function,
+    ): void => {
+        dataTransferItems.forEach(async item => {
+            try {
+                const file = await getPackageFileFromDataTransferItem(item);
+
+                if (!file) {
+                    return;
+                }
+
+                this.addFilesToUploadQueue([file], itemUpdateCallback);
+            } catch (ex) {
+                // no-op ; discard errors for handling in the upload queue
+                // this will occur if the item cannot be converted into its file representation
+            }
         });
     };
 
@@ -450,7 +485,6 @@ class ContentUploader extends Component<Props, State> {
 
         const fileAPIOptions: Object = getDataTransferItemAPIOptions(newItems[0]);
         const { folderId = rootFolderId } = fileAPIOptions;
-
         newItems.forEach(async item => {
             const folderUpload = this.getFolderUploadAPI(folderId);
             await folderUpload.buildFolderTreeFromDataTransferItem(item);

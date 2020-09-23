@@ -228,6 +228,8 @@ export const ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED = 'child_folder_failed_upload
 export const ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED = 'storage_limit_exceeded';
 export const ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED = 'file_size_limit_exceeded';
 export const ERROR_CODE_UPLOAD_PENDING_APP_FOLDER_SIZE_LIMIT = 'pending_app_folder_size_limit';
+export const ERROR_CODE_UPLOAD_BAD_DIGEST = 'bad_digest';
+export const ERROR_CODE_UPLOAD_FAILED_PACKAGE = 'failed_package_upload';
 export const ERROR_CODE_FETCH_ACTIVITY = 'fetch_activity_error';
 export const ERROR_CODE_FETCH_ANNOTATION = 'fetch_annotation_error';
 export const ERROR_CODE_FETCH_ANNOTATIONS = 'fetch_annotations_error';
@@ -379,10 +381,11 @@ export const HTTP_OPTIONS: 'OPTIONS' = 'OPTIONS';
 export const HTTP_HEAD: 'HEAD' = 'HEAD';
 
 /* ------------------ HTTP Codes  ---------------------- */
+export const HTTP_STATUS_CODE_BAD_REQUEST: 400 = 400;
+export const HTTP_STATUS_CODE_UNAUTHORIZED: 401 = 401;
 export const HTTP_STATUS_CODE_FORBIDDEN: 403 = 403;
 export const HTTP_STATUS_CODE_NOT_FOUND: 404 = 404;
 export const HTTP_STATUS_CODE_CONFLICT: 409 = 409;
-export const HTTP_STATUS_CODE_UNAUTHORIZED: 401 = 401;
 export const HTTP_STATUS_CODE_RATE_LIMIT: 429 = 429;
 export const HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR: 500 = 500;
 export const HTTP_STATUS_CODE_NOT_IMPLEMENTED: 501 = 501;

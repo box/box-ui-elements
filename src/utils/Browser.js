@@ -37,6 +37,15 @@ class Browser {
     }
 
     /**
+     * Returns whether browser is Safari.
+     *
+     * @return {boolena} Whether browser is IE
+     */
+    static isSafari() {
+        return /AppleWebKit/i.test(Browser.getUserAgent());
+    }
+
+    /**
      * Checks the browser for Dash support using H264 high.
      * Dash requires MediaSource extensions to exist and be applicable
      * to the H264 container (since we use H264 and not webm)

@@ -34,6 +34,17 @@ describe('util/Browser/isIE()', () => {
     });
 });
 
+describe('util/Browser/isSafari()', () => {
+    test('should return true if Safari', () => {
+        browser.getUserAgent = jest.fn().mockReturnValueOnce('AppleWebKit/4.0');
+        expect(browser.isSafari()).toBeTruthy();
+    });
+    test('should return false if not Safari', () => {
+        browser.getUserAgent = jest.fn().mockReturnValueOnce('Trident');
+        expect(browser.isSafari()).toBeFalsy();
+    });
+});
+
 describe('util/Browser/getUserAgent()', () => {
     test('should return the user agent', () => {
         expect(browser.getUserAgent()).toBeUndefined();

@@ -119,6 +119,40 @@ describe('elements/content-uploader/ContentUploader', () => {
             const expected = { yoyo: true, yoyo_0_10000: true };
             expect(wrapper.state().itemIds).toEqual(expected);
         });
+
+        test.only('should handle accepting package "files" separate from folders', () => {
+            const mockFile = { name: 'hi' };
+            const entry = {
+                isDirectory: true,
+                kind: 'file',
+                file: fn => {
+                    fn(mockFile);
+                },
+            };
+            const wrapper = getWrapper({
+                rootFolderId: 0,
+                isFolderUploadEnabled: true,
+                hasUploads: true,
+                useUploadsManager: true,
+            });
+
+            global.Date.now = jest.fn(() => 10000);
+
+            wrapper.setProps({
+                files: [mockFile],
+                dataTransferItems: [
+                    {
+                        kind: 'file',
+                        type: 'application/zip',
+                        getAsFile: jest.fn(() => mockFile),
+                        webkitGetAsEntry: () => entry,
+                        name: 'hi',
+                    },
+                ],
+            });
+            const expected = { hi: true, hi_0_10000: true };
+            expect(wrapper.state().itemIds).toEqual(expected);
+        });
     });
 
     describe('removeFileFromUploadQueue()', () => {
