@@ -120,7 +120,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(wrapper.state().itemIds).toEqual(expected);
         });
 
-        test.only('should handle accepting package "files" separate from folders', () => {
+        test('should handle accepting package "files" separate from folders', () => {
             const mockFile = { name: 'hi' };
             const entry = {
                 isDirectory: true,
