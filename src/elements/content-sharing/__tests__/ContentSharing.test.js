@@ -75,6 +75,41 @@ describe('elements/content-sharing/ContentSharing', () => {
         expect(wrapper.exists(Button)).toBe(true);
     });
 
+    test('should reinstantiate SharingModal', () => {
+        const clickLaunchButton = (launchButton, wrapper) => {
+            act(() => {
+                launchButton.invoke('onClick')();
+            });
+            wrapper.update();
+        };
+
+        const closeModal = wrapper => {
+            act(() => {
+                wrapper.find(SharingModal).invoke('closeModal')();
+            });
+            wrapper.update();
+        };
+
+        let wrapper;
+        act(() => {
+            wrapper = getWrapper({ customButton, displayInModal: true });
+        });
+        wrapper.update();
+
+        const launchButton = wrapper.find(Button);
+        clickLaunchButton(launchButton, wrapper); // open modal
+        expect(wrapper.exists(SharingModal)).toBe(true);
+
+        closeModal(wrapper); // close modal
+        expect(wrapper.exists(SharingModal)).toBe(false);
+
+        clickLaunchButton(launchButton, wrapper); // open modal again
+        expect(wrapper.exists(SharingModal)).toBe(true);
+
+        closeModal(wrapper); // close modal again
+        expect(wrapper.exists(SharingModal)).toBe(false);
+    });
+
     test.each([true, false])(
         'should instantiate SharingModal automatically when no button exists and displayInModal is %s',
         ({ displayInModal }) => {

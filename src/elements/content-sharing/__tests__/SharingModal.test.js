@@ -81,7 +81,10 @@ const createAPIMock = (fileAPI, folderAPI, usersAPI, collaborationsAPI, markerBa
 });
 
 describe('elements/content-sharing/SharingModal', () => {
-    const getWrapper = props => mount(<SharingModal itemID={MOCK_ITEM_ID} language="" {...props} />);
+    // The modal is unmounted in the ContentSharing parent element, so we can only test whether the function for closing the modal was called
+    const closeModalMock = jest.fn();
+    const getWrapper = props =>
+        mount(<SharingModal closeModal={closeModalMock} itemID={MOCK_ITEM_ID} language="" {...props} />);
 
     const createSuccessMock = responseFromAPI => (id, successFn) => {
         return Promise.resolve(responseFromAPI).then(response => {
@@ -216,6 +219,21 @@ describe('elements/content-sharing/SharingModal', () => {
             wrapper.update();
             expect(wrapper.exists(LoadingIndicator)).toBe(false);
             expect(wrapper.exists(UnifiedShareModal)).toBe(true);
+        });
+
+        test('should call closeModal() when the X button is pressed', async () => {
+            const api = createAPIMock({ getFile }, null, { getUser });
+
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, displayInModal: true, itemType: TYPE_FILE });
+            });
+            wrapper.update();
+            act(() => {
+                wrapper.find(UnifiedShareModal).invoke('onRequestClose')();
+            });
+            wrapper.update();
+            expect(closeModalMock).toHaveBeenCalled();
         });
     });
 
@@ -503,12 +521,12 @@ describe('elements/content-sharing/SharingModal', () => {
         });
 
         test.each`
-            displayInModal | modalExists | description
-            ${true}        | ${false}    | ${'USM instances'}
-            ${false}       | ${true}     | ${'USF-only instances'}
+            displayInModal | description
+            ${true}        | ${'USM instances'}
+            ${false}       | ${'USF-only instances'}
         `(
             'should call share() from onRemoveLink() and remove the existing shared link for $description',
-            async ({ displayInModal, modalExists }) => {
+            async ({ displayInModal }) => {
                 let wrapper;
                 await act(async () => {
                     wrapper = getWrapper({ api, displayInModal, itemType: TYPE_FILE });
@@ -533,8 +551,9 @@ describe('elements/content-sharing/SharingModal', () => {
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 );
 
-                expect(wrapper.exists(UnifiedShareModal)).toBe(modalExists);
-                if (modalExists) {
+                if (displayInModal) {
+                    expect(closeModalMock).toHaveBeenCalled();
+                } else {
                     expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_NULL_SHARED_LINK);
                 }
             },
@@ -720,12 +739,12 @@ describe('elements/content-sharing/SharingModal', () => {
 
     describe('with successful POST requests to the Collaborations API', () => {
         test.each`
-            displayInModal | modalExists | description
-            ${true}        | ${false}    | ${'USM instances'}
-            ${false}       | ${true}     | ${'USF-only instances'}
+            displayInModal | description
+            ${true}        | ${'USM instances'}
+            ${false}       | ${'USF-only instances'}
         `(
             'should call addCollaboration() from sendInvites() and show a success notification for $description',
-            async ({ displayInModal, modalExists }) => {
+            async ({ displayInModal }) => {
                 const itemData = { id: MOCK_ITEM_ID, type: TYPE_FOLDER };
                 const addCollaboration = jest.fn().mockImplementation((item, collab, successFn) => {
                     return Promise.resolve().then(() => {
@@ -768,7 +787,10 @@ describe('elements/content-sharing/SharingModal', () => {
                 });
 
                 expect(wrapper.find(Notification).prop('type')).toBe(TYPE_INFO);
-                expect(wrapper.exists(UnifiedShareModal)).toBe(modalExists);
+
+                if (displayInModal) {
+                    expect(closeModalMock).toHaveBeenCalled();
+                }
             },
         );
     });
@@ -852,7 +874,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
         });
 
-        test.each(['onRemoveLink', 'sendInvites'])('should close the USM after %s() fails', async usmFn => {
+        test.each(['onRemoveLink', 'sendInvites'])('should call closeModal() after %s() fails', async usmFn => {
             let wrapper;
             await act(async () => {
                 wrapper = getWrapper({ api, displayInModal: true, itemType: TYPE_FOLDER });
@@ -863,7 +885,7 @@ describe('elements/content-sharing/SharingModal', () => {
                 wrapper.find(UnifiedShareModal).invoke(`${usmFn}`)();
             });
             wrapper.update();
-            expect(wrapper.exists(UnifiedShareModal)).toBe(false);
+            expect(closeModalMock).toHaveBeenCalled();
         });
 
         test('should show an error notification if onSubmitSettings() fails', async () => {
