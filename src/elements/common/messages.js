@@ -715,7 +715,7 @@ const messages = defineMessages({
     uploadsPackageUploadErrorMessage: {
         id: 'be.uploadsPackageUploadErrorMessage',
         description: 'Error message to display when a macOS package failed to upload',
-        defaultMessage: 'Package file uploads not currently supported. Please retry by saving as a single file.',
+        defaultMessage: 'Package file uploads are not currently supported. Please retry by saving as a single file.',
     },
     uploadsDefaultErrorMessage: {
         id: 'be.uploadsDefaultErrorMessage',
