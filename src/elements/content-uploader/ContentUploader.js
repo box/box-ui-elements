@@ -12,6 +12,8 @@ import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import cloneDeep from 'lodash/cloneDeep';
 import { getTypedFileId, getTypedFolderId } from '../../utils/file';
+import Browser from '../../utils/Browser';
+
 import makeResponsive from '../common/makeResponsive';
 import Internationalize from '../common/Internationalize';
 import FolderUpload from '../../api/uploads/FolderUpload';
@@ -392,7 +394,7 @@ class ContentUploader extends Component<Props, State> {
 
         Array.from(dataTransferItems).forEach(item => {
             const isDirectory = isDataTransferItemAFolder(item);
-            if (isDataTransferItemAPackage(item)) {
+            if (Browser.isSafari() && isDataTransferItemAPackage(item)) {
                 packageItems.push(item);
             } else if (isDirectory && isFolderUploadEnabled) {
                 folderItems.push(item);

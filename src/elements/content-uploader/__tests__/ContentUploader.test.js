@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import * as UploaderUtils from '../../../utils/uploads';
+import Browser from '../../../utils/Browser';
 import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
 import Footer from '../Footer';
 import {
@@ -16,6 +17,8 @@ import {
 } from '../../../constants';
 
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
+
+jest.mock('../../../utils/Browser');
 
 describe('elements/content-uploader/ContentUploader', () => {
     const getWrapper = (props = {}) => shallow(<ContentUploaderComponent {...props} />);
@@ -122,6 +125,7 @@ describe('elements/content-uploader/ContentUploader', () => {
 
         test('should handle accepting package "files" separate from folders', () => {
             const mockFile = { name: 'hi' };
+            Browser.isSafari = jest.fn(() => true);
             const entry = {
                 isDirectory: true,
                 kind: 'file',

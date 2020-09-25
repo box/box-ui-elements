@@ -42,7 +42,8 @@ class Browser {
      * @return {boolena} Whether browser is IE
      */
     static isSafari() {
-        return /AppleWebKit/i.test(Browser.getUserAgent());
+        const userAgent = Browser.getUserAgent();
+        return /AppleWebKit/i.test(userAgent) && !/Chrome\//i.test(userAgent);
     }
 
     /**

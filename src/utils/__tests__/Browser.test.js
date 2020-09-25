@@ -43,6 +43,13 @@ describe('util/Browser/isSafari()', () => {
         browser.getUserAgent = jest.fn().mockReturnValueOnce('Trident');
         expect(browser.isSafari()).toBeFalsy();
     });
+
+    test('should not incorrectly identify Blink as WebKit', () => {
+        browser.getUserAgent = jest
+            .fn()
+            .mockReturnValueOnce('AppleWebKit/7.8 (KHTML, like Gecko) Chrome/1.2.3.4 Safari/5.6');
+        expect(browser.isSafari()).toBeFalsy();
+    });
 });
 
 describe('util/Browser/getUserAgent()', () => {
