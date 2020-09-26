@@ -67,12 +67,14 @@ function ContentSharing({
 }: ContentSharingProps) {
     const [api, setAPI] = React.useState<API>(createAPI(apiHost, itemID, itemType, token));
     const [launchButton, setLaunchButton] = React.useState<React.Element<any> | null>(null);
+    const [isOpen, setIsOpen] = React.useState<boolean>(true);
     const [sharingModalInstance, setSharingModalInstance] = React.useState<React.Element<typeof SharingModal> | null>(
         customButton ? null : (
             <SharingModal
                 api={api}
                 config={config}
                 displayInModal={false}
+                isOpen={isOpen}
                 itemID={itemID}
                 itemType={itemType}
                 language={language}
@@ -92,11 +94,19 @@ function ContentSharing({
         setLaunchButton(null);
     }, [api]);
 
+    // Reset instance if modal has been closed
+    React.useEffect(() => {
+        if (!isOpen) {
+            setSharingModalInstance(null);
+        }
+    }, [isOpen]);
+
     React.useEffect(() => {
         const createSharingModalInstance = () => {
             return (
                 <SharingModal
                     api={api}
+                    closeModal={() => setIsOpen(false)}
                     config={config}
                     displayInModal={displayInModal}
                     itemID={itemID}
@@ -112,6 +122,7 @@ function ContentSharing({
             setLaunchButton(
                 React.cloneElement(customButton, {
                     onClick: () => {
+                        setIsOpen(true);
                         return setSharingModalInstance(createSharingModalInstance());
                     },
                 }),
