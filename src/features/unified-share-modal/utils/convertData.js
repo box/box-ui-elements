@@ -465,7 +465,7 @@ export const convertUserContactsByEmailResponse = (contactsAPIData: UserCollecti
     const contactsMap = {};
 
     entries.forEach(contact => {
-        const { id, login: email, name, type } = contact;
+        const { id, login: email = '', name, type } = contact;
         contactsMap[email] = {
             id,
             email,

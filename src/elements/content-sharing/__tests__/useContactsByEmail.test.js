@@ -92,7 +92,7 @@ describe('elements/content-sharing/hooks/useContactsByEmail', () => {
             );
             expect(handleSuccess).toHaveBeenCalledWith(MOCK_CONTACTS_API_RESPONSE);
             expect(transformUsersSpy).not.toHaveBeenCalled();
-            return expect(contacts).resolves.toEqual(MOCK_CONTACTS_API_RESPONSE.entries);
+            expect(contacts).resolves.toEqual(MOCK_CONTACTS_API_RESPONSE.entries);
         });
 
         test('should set the value of getContactsByEmail() to an empty object when no results are found', () => {
@@ -112,7 +112,7 @@ describe('elements/content-sharing/hooks/useContactsByEmail', () => {
 
             expect(handleSuccess).toHaveBeenCalledWith(EMPTY_USERS);
             expect(transformUsersSpy).not.toHaveBeenCalled();
-            return expect(contacts).resolves.toEqual([]);
+            return expect(contacts).resolves.toEqual({});
         });
 
         test.each`
@@ -132,7 +132,7 @@ describe('elements/content-sharing/hooks/useContactsByEmail', () => {
 
             expect(getUsersInEnterprise).not.toHaveBeenCalled();
             expect(handleError).not.toHaveBeenCalled();
-            expect(contacts).toEqual({});
+            return expect(contacts).resolves.toEqual({});
         });
     });
 

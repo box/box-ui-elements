@@ -2,8 +2,9 @@
 
 import * as React from 'react';
 import noop from 'lodash/noop';
-import type { UserMini, UserCollection } from '../../../common/types/core';
-import type { ContentSharingHooksOptions, GetContactsByEmailFnType } from '../types';
+import API from '../../../api';
+import type { UserCollection, UserMini } from '../../../common/types/core';
+import type { ContactByEmailObject, ContentSharingHooksOptions, GetContactsByEmailFnType } from '../types';
 
 /**
  * Generate the getContactsByEmail() function, which is used for looking up contacts added to the collaborators field in the USM.
@@ -25,29 +26,27 @@ function useContactsByEmail(
         if (getContactsByEmail) return;
 
         const resolveAPICall = (
-            resolve: (result: Array<Object>) => void,
+            resolve: (result: ContactByEmailObject | Array<UserMini>) => void,
             response: UserCollection,
             transformFn: ?Function,
         ) => {
             handleSuccess(response);
             // A successful API call will always return an entries array, but we still need these checks for Flow purposes
-            const entriesExist = response && response.entries && response.entries.length;
-            if (transformFn && entriesExist) {
-                return resolve(transformFn(response));
+            if (response && response.entries && response.entries.length) {
+                return resolve(transformFn ? transformFn(response) : response.entries);
             }
-            const emptyEntries: Object = {};
-            return resolve(response && response.entries ? response.entries : emptyEntries);
+            return resolve({});
         };
 
         const updatedGetContactsByEmailFn: GetContactsByEmailFnType = () => (filterTerm: {
             [emails: string]: string,
         }) => {
             if (!filterTerm || !filterTerm.emails || !Array.isArray(filterTerm.emails) || !filterTerm.emails.length) {
-                return {};
+                return Promise.resolve({});
             }
             const parsedFilterTerm = filterTerm.emails[0];
 
-            return new Promise((resolve: (result: Array<UserMini>) => void) => {
+            return new Promise((resolve: (result: ContactByEmailObject | Array<UserMini>) => void) => {
                 api.getMarkerBasedUsersAPI(false).getUsersInEnterprise(
                     itemID,
                     (response: UserCollection) => resolveAPICall(resolve, response, transformUsers),

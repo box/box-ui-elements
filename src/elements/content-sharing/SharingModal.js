@@ -173,7 +173,7 @@ function SharingModal({
         transformUsers: data => convertUserContactsByEmailResponse(data),
     });
     if (getContactsByEmailFn && !getContactsByEmail) {
-        setGetContactsByEmail(() => getContactsByEmailFn);
+        setGetContactsByEmail((): GetContactsByEmailFnType => getContactsByEmailFn);
     }
 
     if (componentErrorMessage) {

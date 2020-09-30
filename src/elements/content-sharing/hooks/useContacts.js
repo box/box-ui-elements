@@ -4,7 +4,7 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import API from '../../../api';
 import { FIELD_NAME, FIELD_PERMISSIONS } from '../../../constants';
-import type { GroupCollection, GroupMini, UserMini, UserCollection } from '../../../common/types/core';
+import type { GroupCollection, GroupMini, UserCollection, UserMini } from '../../../common/types/core';
 import type { ContentSharingHooksOptions, GetContactsFnType } from '../types';
 
 /**
