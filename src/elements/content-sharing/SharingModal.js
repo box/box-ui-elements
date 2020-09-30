@@ -171,7 +171,7 @@ function SharingModal({
     }
 
     const { ownerEmail, ownerID, permissions } = item;
-    const { accessLevel = '', serverURL } = sharedLink;
+    const { accessLevel = '', expirationTimestamp, serverURL } = sharedLink;
     return (
         <Internationalize language={language} messages={messages}>
             <>
@@ -235,7 +235,10 @@ function SharingModal({
                         onRemoveLink={onRemoveLink}
                         onSettingsClick={() => setCurrentView(CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS)}
                         sendInvites={sendInvites}
-                        sharedLink={sharedLink}
+                        sharedLink={{
+                            ...sharedLink,
+                            expirationTimestamp: expirationTimestamp ? expirationTimestamp / 1000 : null,
+                        }} // the USM expects this value in seconds, while the SLSM expects this value in milliseconds
                         submitting={isLoading}
                     />
                 )}
