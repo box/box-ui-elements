@@ -20,6 +20,8 @@ import {
     CAN_VIEW_ONLY,
     COLLAB_GROUP_TYPE,
     COLLAB_USER_TYPE,
+    DISABLED_REASON_ACCESS_POLICY,
+    DISABLED_REASON_MALICIOUS_CONTENT,
     PEOPLE_IN_ITEM,
 } from '../constants';
 import {
@@ -109,10 +111,11 @@ const APP_USERS_DOMAIN_REGEXP = new RegExp('boxdevedition.com');
 /**
  * Convert access levels disabled reasons into USM format.
  *
- * @param {accessLevelsDisabledReasonType} disabledReasons
+ * @param {{ [string]: string }} disabledReasons
+ * @returns {accessLevelsDisabledReasonType | null}
  */
 export const convertAccessLevelsDisabledReasons = (disabledReasons?: {
-    [string]: string,
+    [string]: typeof DISABLED_REASON_ACCESS_POLICY | typeof DISABLED_REASON_MALICIOUS_CONTENT | null,
 }): accessLevelsDisabledReasonType | null => {
     if (!disabledReasons) return null;
     const convertedReasons = {};
@@ -126,6 +129,7 @@ export const convertAccessLevelsDisabledReasons = (disabledReasons?: {
  * Convert allowed access levels into USM format.
  *
  * @param {Array<string>} [levelsFromAPI]
+ * @returns {allowedAccessLevelsType | null}
  */
 export const convertAllowedAccessLevels = (levelsFromAPI?: Array<string>): allowedAccessLevelsType | null => {
     if (!levelsFromAPI) return null;

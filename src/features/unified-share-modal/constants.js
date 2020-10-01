@@ -30,8 +30,8 @@ const ALLOWED_ACCESS_LEVELS = {
     peopleWithTheLink: true,
 };
 
-const DISABLED_REASON_ACCESS_POLICY = 'access_policy';
-const DISABLED_REASON_MALICIOUS_CONTENT = 'malicious_content';
+const DISABLED_REASON_ACCESS_POLICY: 'access_policy' = 'access_policy';
+const DISABLED_REASON_MALICIOUS_CONTENT: 'malicious_content' = 'malicious_content';
 
 const INVITEE_PERMISSIONS = [
     {
