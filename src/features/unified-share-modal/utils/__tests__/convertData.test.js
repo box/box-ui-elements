@@ -1,5 +1,6 @@
 import {
     API_TO_USM_PERMISSION_LEVEL_MAP,
+    convertAccessLevelsDisabledReasons,
     convertAllowedAccessLevels,
     convertCollabsRequest,
     convertCollabsResponse,
@@ -26,6 +27,7 @@ import {
     ANYONE_WITH_LINK,
     CAN_VIEW_DOWNLOAD,
     CAN_VIEW_ONLY,
+    DISABLED_REASON_ACCESS_POLICY,
     PEOPLE_IN_ITEM,
 } from '../../constants';
 import {
@@ -51,7 +53,8 @@ import {
     MOCK_COLLABS_CONVERTED_USERS,
     MOCK_COLLABS_REQUEST_USERS_ONLY,
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
-    MOCK_DISABLED_REASONS,
+    MOCK_CONVERTED_DISABLED_REASONS,
+    MOCK_DISABLED_REASONS_FROM_API,
     MOCK_GROUP_CONTACTS_API_RESPONSE,
     MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
     MOCK_ITEM_PERMISSIONS,
@@ -77,6 +80,21 @@ jest.mock('../../../../utils/file', () => ({
     getTypedFileId: () => 'f_190457309',
     getTypedFolderId: () => 'd_190457309',
 }));
+
+describe('convertAccessLevelsDisabledReasons', () => {
+    // The "collaborators" access level will never have a disabled reason.
+    test.each`
+        disabledReasonsFromAPI                        | convertedDisabledReasons                                  | description
+        ${MOCK_DISABLED_REASONS_FROM_API}             | ${MOCK_CONVERTED_DISABLED_REASONS}                        | ${'both company and open'}
+        ${{ company: DISABLED_REASON_ACCESS_POLICY }} | ${{ peopleInYourCompany: DISABLED_REASON_ACCESS_POLICY }} | ${'company only'}
+        ${{ open: DISABLED_REASON_ACCESS_POLICY }}    | ${{ peopleWithTheLink: DISABLED_REASON_ACCESS_POLICY }}   | ${'open only'}
+    `(
+        'should convert access levels disabled reasons when given reasons for $description',
+        ({ disabledReasonsFromAPI, convertedDisabledReasons }) => {
+            expect(convertAccessLevelsDisabledReasons(disabledReasonsFromAPI)).toEqual(convertedDisabledReasons);
+        },
+    );
+});
 
 describe('convertAllowedAccessLevels', () => {
     // The "collaborators" access level is always allowed.
@@ -400,9 +418,9 @@ describe('convertItemResponse()', () => {
     });
 
     test.each`
-        disabledReasonsFromAPI   | convertedDisabledReasons | description
-        ${MOCK_DISABLED_REASONS} | ${MOCK_DISABLED_REASONS} | ${'disabled reasons when they are returned from the API'}
-        ${undefined}             | ${{}}                    | ${'default disabled reasons when the API does not return disabled reasons'}
+        disabledReasonsFromAPI            | convertedDisabledReasons           | description
+        ${MOCK_DISABLED_REASONS_FROM_API} | ${MOCK_CONVERTED_DISABLED_REASONS} | ${'disabled reasons when they are returned from the API'}
+        ${undefined}                      | ${{}}                              | ${'default disabled reasons when the API does not return disabled reasons'}
     `('should return $description', ({ disabledReasonsFromAPI, convertedDisabledReasons }) => {
         const responseFromAPI = {
             allowed_invitee_roles: ['editor', 'viewer'],
