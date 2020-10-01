@@ -41,7 +41,7 @@ function useContactsByEmail(
         const updatedGetContactsByEmailFn: GetContactsByEmailFnType = () => (filterTerm: {
             [emails: string]: string,
         }) => {
-            if (!filterTerm || !filterTerm.emails || !Array.isArray(filterTerm.emails) || !filterTerm.emails.length) {
+            if (!filterTerm || !Array.isArray(filterTerm.emails) || !filterTerm.emails.length) {
                 return Promise.resolve({});
             }
             const parsedFilterTerm = filterTerm.emails[0];
