@@ -59,6 +59,7 @@ import type {
     UserCollection,
 } from '../../../common/types/core';
 import type {
+    accessLevelsDisabledReasonType,
     allowedAccessLevelsType,
     collaboratorsListType,
     collaboratorType,
@@ -105,6 +106,27 @@ const API_TO_USM_CLASSIFICATION_COLORS_MAP = {
 
 const APP_USERS_DOMAIN_REGEXP = new RegExp('boxdevedition.com');
 
+/**
+ * Convert access levels disabled reasons into USM format.
+ *
+ * @param {accessLevelsDisabledReasonType} disabledReasons
+ */
+export const convertAccessLevelsDisabledReasons = (disabledReasons?: {
+    [string]: string,
+}): accessLevelsDisabledReasonType | null => {
+    if (!disabledReasons) return null;
+    const convertedReasons = {};
+    Object.entries(disabledReasons).forEach(([level, reason]) => {
+        convertedReasons[API_TO_USM_ACCESS_LEVEL_MAP[level]] = reason;
+    });
+    return convertedReasons;
+};
+
+/**
+ * Convert allowed access levels into USM format.
+ *
+ * @param {Array<string>} [levelsFromAPI]
+ */
 export const convertAllowedAccessLevels = (levelsFromAPI?: Array<string>): allowedAccessLevelsType | null => {
     if (!levelsFromAPI) return null;
     const convertedLevels = {
@@ -191,7 +213,8 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
 
         sharedLink = {
             accessLevel,
-            accessLevelsDisabledReason: allowed_shared_link_access_levels_disabled_reasons || {},
+            accessLevelsDisabledReason:
+                convertAccessLevelsDisabledReasons(allowed_shared_link_access_levels_disabled_reasons) || {},
             allowedAccessLevels: convertAllowedAccessLevels(allowed_shared_link_access_levels) || ALLOWED_ACCESS_LEVELS, // show all access levels by default
             canChangeAccessLevel,
             canChangeDownload,
