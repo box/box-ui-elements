@@ -1,14 +1,15 @@
 import {
     API_TO_USM_PERMISSION_LEVEL_MAP,
     convertAllowedAccessLevels,
+    convertCollabsRequest,
     convertCollabsResponse,
     convertGroupContactsResponse,
-    convertUserContactsResponse,
     convertItemResponse,
-    convertUserResponse,
     convertSharedLinkPermissions,
     convertSharedLinkSettings,
-    convertCollabsRequest,
+    convertUserContactsResponse,
+    convertUserContactsByEmailResponse,
+    convertUserResponse,
 } from '../convertData';
 import {
     TYPE_FILE,
@@ -44,6 +45,7 @@ import {
     MOCK_COLLAB_IDS_CONVERTED,
     MOCK_CONTACTS_API_RESPONSE,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
+    MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE,
     MOCK_COLLABS_CONVERTED_GROUPS,
     MOCK_COLLABS_REQUEST_GROUPS_ONLY,
     MOCK_COLLABS_CONVERTED_USERS,
@@ -699,6 +701,18 @@ describe('convertUserContactsResponse()', () => {
 
     test('should return an empty array if there are no available users', () => {
         expect(convertUserContactsResponse({ total_count: 0, entries: [] }, MOCK_OWNER_ID)).toEqual([]);
+    });
+});
+
+describe('convertUserContactsByEmailResponse()', () => {
+    test('should convert users into an object with emails as keys', () => {
+        expect(convertUserContactsByEmailResponse(MOCK_CONTACTS_API_RESPONSE)).toEqual(
+            MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE,
+        );
+    });
+
+    test('should return an empty object if there are no available users', () => {
+        expect(convertUserContactsByEmailResponse({ total_count: 0, entries: [] }, MOCK_OWNER_ID)).toEqual({});
     });
 });
 

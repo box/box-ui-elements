@@ -519,6 +519,39 @@ const MOCK_CONTACTS_CONVERTED_RESPONSE = [
     },
 ];
 
+const MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE = {
+    'contentopenwith@box.com': {
+        id: MOCK_USER_IDS[0],
+        email: 'contentopenwith@box.com',
+        name: 'Content Open With',
+        type: 'user',
+    },
+    'contentsharing@box.com': {
+        id: MOCK_OWNER_ID,
+        email: 'contentsharing@box.com',
+        name: 'Content Sharing',
+        type: 'user',
+    },
+    'contentpreview@boxdevedition.com': {
+        id: MOCK_USER_IDS[1],
+        email: 'contentpreview@boxdevedition.com',
+        name: 'Content Preview',
+        type: 'user',
+    },
+    'contentsidebar@box.com': {
+        id: MOCK_USER_IDS[2],
+        email: 'contentsidebar@box.com',
+        name: 'Content Sidebar',
+        type: 'user',
+    },
+    'contentexplorer@boxdevedition.com': {
+        id: MOCK_USER_IDS[3],
+        email: 'contentexplorer@boxdevedition.com',
+        name: 'Content Explorer',
+        type: 'user',
+    },
+};
+
 const MOCK_GROUP_CONTACTS_API_RESPONSE = {
     total_count: 3,
     entries: [
@@ -726,6 +759,7 @@ export {
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
     MOCK_CONTACTS_API_RESPONSE,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
+    MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE,
     MOCK_CONVERTED_ITEM_DATA,
     MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
     MOCK_CONVERTED_SETTINGS,

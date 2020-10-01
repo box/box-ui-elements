@@ -34,6 +34,7 @@ import {
     convertSharedLinkPermissions,
     convertSharedLinkSettings,
     convertUserContactsResponse,
+    convertUserContactsByEmailResponse,
 } from '../../../features/unified-share-modal/utils/convertData';
 import {
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
@@ -41,6 +42,7 @@ import {
     MOCK_COLLABS_CONVERTED_REQUEST,
     MOCK_COLLABS_CONVERTED_USERS,
     MOCK_CONTACTS_API_RESPONSE,
+    MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
     MOCK_CONVERTED_ITEM_DATA,
     MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
@@ -744,6 +746,7 @@ describe('elements/content-sharing/SharingModal', () => {
             );
             convertGroupContactsResponse.mockReturnValue(MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE);
             convertUserContactsResponse.mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
+            convertUserContactsByEmailResponse.mockReturnValue(MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE);
         });
 
         test('should call getUsersInEnterprise() and getGroupsInEnterprise() from getCollaboratorContacts() and return a converted response', async () => {
@@ -776,6 +779,28 @@ describe('elements/content-sharing/SharingModal', () => {
                 ...MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
             ]);
         });
+
+        test('should call getUsersInEnterprise() from getContactsByEmail() and return a converted response', async () => {
+            const MOCK_EMAIL = 'contentsharing@box.com';
+
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, itemType: TYPE_FILE });
+            });
+            wrapper.update();
+
+            const usm = wrapper.find(UnifiedShareModal);
+            let response;
+            await act(async () => {
+                response = usm.invoke('getContactsByEmail')({ emails: [MOCK_EMAIL] });
+            });
+            wrapper.update();
+
+            expect(getUsersInEnterprise).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything(), {
+                filter_term: MOCK_EMAIL,
+            });
+            expect(response).resolves.toEqual(MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE);
+        });
     });
 
     describe('with successful POST requests to the Collaborations API', () => {
@@ -797,6 +822,12 @@ describe('elements/content-sharing/SharingModal', () => {
                     { getFolderFields: jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE)) },
                     { getUser: jest.fn().mockImplementation(createSuccessMock(MOCK_USER_API_RESPONSE)) },
                     { addCollaboration },
+                    null,
+                    {
+                        getUsersInEnterprise: jest
+                            .fn()
+                            .mockImplementation(createSuccessMock(MOCK_CONTACTS_API_RESPONSE)),
+                    },
                 );
 
                 let wrapper;
@@ -836,7 +867,7 @@ describe('elements/content-sharing/SharingModal', () => {
         );
     });
 
-    describe('with failed notification-level API requests', () => {
+    describe('with non-blocking failed API requests', () => {
         let api;
         let share;
         let updateSharedLink;
@@ -948,6 +979,29 @@ describe('elements/content-sharing/SharingModal', () => {
             });
             wrapper.update();
             expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
+        });
+
+        test('should do nothing if getContactsByEmail() fails', async () => {
+            const MOCK_EMAIL = 'contentsharing@box.com';
+
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, itemType: TYPE_FILE });
+            });
+            wrapper.update();
+
+            const usm = wrapper.find(UnifiedShareModal);
+            let response;
+            await act(async () => {
+                response = usm.invoke('getContactsByEmail')({ emails: [MOCK_EMAIL] });
+            });
+            wrapper.update();
+
+            expect(getUsersInEnterprise).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything(), {
+                filter_term: MOCK_EMAIL,
+            });
+            expect(response).resolves.toBeFalsy();
+            expect(wrapper.exists(Notification)).toBeFalsy();
         });
     });
 });

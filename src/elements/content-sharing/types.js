@@ -121,6 +121,12 @@ export type SharedLinkUpdateSettingsFnType = () => ($Shape<APISharedLink>) => Pr
 
 export type GetContactsFnType = () => (filterTerm: string) => Promise<Array<contactType | GroupMini | UserMini>> | null;
 
+export type ContactByEmailObject = { [string]: contactType | UserMini | [] };
+
+export type GetContactsByEmailFnType = () => (filterTerm: {
+    [emails: string]: string,
+}) => Promise<ContactByEmailObject | Array<UserMini>> | null;
+
 export type SendInvitesFnType = () => InviteCollaboratorsRequest => Promise<null | Array<Function>>;
 
 export type ConnectToItemShareFnType = ({
