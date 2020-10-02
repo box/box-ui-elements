@@ -140,7 +140,7 @@
         }
     }
 
-    .bdl-PillSelector {
+    .bdl-PillSelectorDropdown .bdl-PillSelector {
         margin-top: 10px;
         border: 1px solid $bdl-gray-20;
 
@@ -217,6 +217,8 @@
             input {
                 width: 100%;
                 margin-top: 0;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
             }
         }
 
@@ -277,9 +279,15 @@
     }
 
     .manage-all-btn {
+        $manageAllBtnMargin: -5px 0 10px 0;
+
         float: right;
-        margin: -5px 0 10px 0;
+        margin: $manageAllBtnMargin;
         color: $bdl-box-blue;
+
+        &:hover {
+            margin: $manageAllBtnMargin;
+        }
     }
 }
 
