@@ -1,4 +1,5 @@
 @import '../../styles/variables';
+@import '../../styles/mixins/buttons';
 @import '../../styles/mixins/overlay';
 
 // Menus are rendered at the root of the DOM, so this style is not nested
@@ -279,15 +280,10 @@
     }
 
     .manage-all-btn {
-        $manageAllBtnMargin: -5px 0 10px 0;
+        @include bdl-Button-margins(-5px 0 10px 0);
 
         float: right;
-        margin: $manageAllBtnMargin;
         color: $bdl-box-blue;
-
-        &:hover {
-            margin: $manageAllBtnMargin;
-        }
     }
 }
 
