@@ -21,8 +21,8 @@ import {
     VERSION_RESTORE_ACTION,
     VERSION_UPLOAD_ACTION,
 } from '../../../constants';
-import type { VersionActionCallback } from './flowTypes';
 import type { BoxItemVersion } from '../../../common/types/core';
+import type { VersionActionCallback } from './flowTypes';
 import './VersionsItem.scss';
 
 type Props = {
@@ -46,6 +46,7 @@ const ACTION_MAP = {
     [VERSION_PROMOTE_ACTION]: messages.versionPromotedBy,
     [VERSION_UPLOAD_ACTION]: messages.versionUploadedBy,
 };
+const FILE_EXTENSIONS_OFFICE = ['xlsb', 'xlsm', 'xlsx'];
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
 const VersionsItem = ({
@@ -64,6 +65,7 @@ const VersionsItem = ({
 }: Props) => {
     const {
         created_at: createdAt,
+        extension,
         id: versionId,
         is_download_available,
         permissions = {},
@@ -96,7 +98,8 @@ const VersionsItem = ({
     const isDeleted = versionAction === VERSION_DELETE_ACTION;
     const isDownloadable = !!is_download_available;
     const isLimited = versionCount - versionInteger >= versionLimit;
-    const isRestricted = isWatermarked && !isCurrent; // Watermarked files do not support prior version preview
+    const isOffice = FILE_EXTENSIONS_OFFICE.includes(extension);
+    const isRestricted = (isOffice || isWatermarked) && !isCurrent;
     const isRetained = !!retentionAppliedAt && (!retentionDispositionAtDate || retentionDispositionAtDate > new Date());
 
     // Version action helpers
