@@ -1,0 +1,14 @@
+@import '~box-ui-elements/es/styles/variables';
+
+.MessageTags {
+    margin-bottom: 4 * $bdl-grid-unit;
+}
+
+.MessageTags-tag {
+    margin-right: $bdl-grid-unit;
+    text-transform: uppercase;
+
+    .bdl-LabelPill-textContent {
+        padding: $bdl-grid-unit 2 * $bdl-grid-unit;
+    }
+}
