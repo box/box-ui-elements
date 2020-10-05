@@ -34,6 +34,7 @@ import {
     convertSharedLinkPermissions,
     convertSharedLinkSettings,
     convertUserContactsResponse,
+    convertUserContactsByEmailResponse,
 } from '../../../features/unified-share-modal/utils/convertData';
 import {
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
@@ -41,6 +42,7 @@ import {
     MOCK_COLLABS_CONVERTED_REQUEST,
     MOCK_COLLABS_CONVERTED_USERS,
     MOCK_CONTACTS_API_RESPONSE,
+    MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
     MOCK_CONVERTED_ITEM_DATA,
     MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
@@ -52,9 +54,13 @@ import {
     MOCK_ITEM_API_RESPONSE,
     MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK,
     MOCK_ITEM_ID,
+    MOCK_NORMALIZED_SHARED_LINK_DATA,
+    MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM,
     MOCK_NULL_SHARED_LINK,
     MOCK_SETTINGS_WITH_ALL_FEATURES,
-    MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
+    MOCK_SHARED_LINK,
+    MOCK_TIMESTAMP_MILLISECONDS,
+    MOCK_TIMESTAMP_SECONDS,
     MOCK_USER_API_RESPONSE,
 } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
 import SharingNotification from '../SharingNotification';
@@ -96,7 +102,7 @@ describe('elements/content-sharing/SharingModal', () => {
         return {
             item: MOCK_ITEM,
             sharedLink: {
-                ...MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
+                ...MOCK_NORMALIZED_SHARED_LINK_DATA,
                 accessLevel,
                 permissionLevel,
             },
@@ -139,7 +145,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(getFile).toHaveBeenCalled();
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
-            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
+            expect(usm.prop('sharedLink')).toEqual(MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM);
             expect(wrapper.exists(SharingNotification)).toBe(true);
         });
 
@@ -155,7 +161,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(getFolderFields).toHaveBeenCalled();
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
-            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
+            expect(usm.prop('sharedLink')).toEqual(MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM);
             expect(wrapper.exists(SharingNotification)).toBe(true);
         });
 
@@ -172,7 +178,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(getUser).toHaveBeenCalled();
             expect(convertUserResponse).toHaveBeenCalledWith(MOCK_USER_API_RESPONSE);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
-            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
+            expect(usm.prop('sharedLink')).toEqual(MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM);
             expect(wrapper.exists(SharingNotification)).toBe(true);
         });
 
@@ -235,6 +241,37 @@ describe('elements/content-sharing/SharingModal', () => {
             wrapper.update();
             expect(closeModalMock).toHaveBeenCalled();
         });
+
+        test.each`
+            expirationTimestampInSLSM      | expirationTimestampInUSM  | description
+            ${MOCK_TIMESTAMP_MILLISECONDS} | ${MOCK_TIMESTAMP_SECONDS} | ${'defined'}
+            ${null}                        | ${null}                   | ${'null'}
+        `(
+            'should set the correct timestamp props when sharedLink.expirationTimestamp is $description',
+            async ({ expirationTimestampInSLSM, expirationTimestampInUSM }) => {
+                const sharedLink = { ...MOCK_SHARED_LINK, expirationTimestamp: expirationTimestampInSLSM };
+                convertItemResponse.mockReturnValue({ ...MOCK_CONVERTED_ITEM_DATA, sharedLink });
+
+                const api = createAPIMock({ getFile }, null, { getUser });
+
+                let wrapper;
+                await act(async () => {
+                    wrapper = getWrapper({ api, itemType: TYPE_FILE });
+                });
+                wrapper.update();
+
+                const usm = wrapper.find(UnifiedShareModal);
+                expect(usm.prop('sharedLink').expirationTimestamp).toBe(expirationTimestampInUSM);
+                await act(async () => {
+                    usm.invoke('onSettingsClick')();
+                });
+                wrapper.update();
+
+                expect(wrapper.find(SharedLinkSettingsModal).prop('expirationTimestamp')).toBe(
+                    expirationTimestampInSLSM,
+                );
+            },
+        );
     });
 
     describe('with failed GET requests to the Item and/or Users API', () => {
@@ -516,7 +553,7 @@ describe('elements/content-sharing/SharingModal', () => {
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
             expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(
-                MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
+                MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM,
             );
         });
 
@@ -534,7 +571,7 @@ describe('elements/content-sharing/SharingModal', () => {
                 wrapper.update();
 
                 const usm = wrapper.find(UnifiedShareModal);
-                expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
+                expect(usm.prop('sharedLink')).toEqual(MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM);
 
                 convertItemResponse.mockReset();
                 convertItemResponse.mockReturnValue(MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK);
@@ -574,11 +611,10 @@ describe('elements/content-sharing/SharingModal', () => {
                 wrapper.update();
 
                 const usm = wrapper.find(UnifiedShareModal);
-                expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
+                expect(usm.prop('sharedLink')).toEqual(MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM);
 
-                const expectedItemData = createMockItemData(accessLevelFromUSM);
                 convertItemResponse.mockReset();
-                convertItemResponse.mockReturnValue(expectedItemData);
+                convertItemResponse.mockReturnValue(createMockItemData(accessLevelFromUSM));
 
                 await act(async () => {
                     usm.invoke('changeSharedLinkAccessLevel')(accessLevelFromUSM);
@@ -591,7 +627,10 @@ describe('elements/content-sharing/SharingModal', () => {
                     expect.anything(),
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 );
-                expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(expectedItemData.sharedLink);
+                expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual({
+                    ...MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM,
+                    accessLevel: accessLevelFromUSM,
+                });
             },
         );
 
@@ -610,11 +649,10 @@ describe('elements/content-sharing/SharingModal', () => {
                 wrapper.update();
 
                 const usm = wrapper.find(UnifiedShareModal);
-                expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
+                expect(usm.prop('sharedLink')).toEqual(MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM);
 
-                const expectedItemData = createMockItemData(undefined, permissionLevelFromUSM);
                 convertItemResponse.mockReset();
-                convertItemResponse.mockReturnValue(expectedItemData);
+                convertItemResponse.mockReturnValue(createMockItemData(undefined, permissionLevelFromUSM));
 
                 await act(async () => {
                     usm.invoke('changeSharedLinkPermissionLevel')(permissionLevelFromUSM);
@@ -627,7 +665,10 @@ describe('elements/content-sharing/SharingModal', () => {
                     expect.anything(),
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 );
-                expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(expectedItemData.sharedLink);
+                expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual({
+                    ...MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM,
+                    permissionLevel: permissionLevelFromUSM,
+                });
             },
         );
 
@@ -640,22 +681,21 @@ describe('elements/content-sharing/SharingModal', () => {
             wrapper.update();
 
             const usm = wrapper.find(UnifiedShareModal);
-            expect(usm.prop('sharedLink')).toEqual(MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION);
+            expect(usm.prop('sharedLink')).toEqual(MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM);
 
             await act(async () => {
                 usm.invoke('onSettingsClick')();
             });
             wrapper.update();
 
-            const expectedItemData = {
+            convertItemResponse.mockReset();
+            convertItemResponse.mockReturnValue({
                 item: MOCK_ITEM,
                 sharedLink: {
-                    ...MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
+                    ...MOCK_NORMALIZED_SHARED_LINK_DATA,
                     ...MOCK_CONVERTED_SETTINGS,
                 },
-            };
-            convertItemResponse.mockReset();
-            convertItemResponse.mockReturnValue(expectedItemData);
+            });
 
             await act(async () => {
                 wrapper.find(SharedLinkSettingsModal).invoke('onSubmit')(MOCK_SETTINGS_WITH_ALL_FEATURES);
@@ -668,7 +708,10 @@ describe('elements/content-sharing/SharingModal', () => {
                 expect.anything(),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
-            expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(expectedItemData.sharedLink);
+            expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual({
+                ...MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM,
+                ...MOCK_CONVERTED_SETTINGS,
+            });
         });
     });
 
@@ -703,6 +746,7 @@ describe('elements/content-sharing/SharingModal', () => {
             );
             convertGroupContactsResponse.mockReturnValue(MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE);
             convertUserContactsResponse.mockReturnValue(MOCK_CONTACTS_CONVERTED_RESPONSE);
+            convertUserContactsByEmailResponse.mockReturnValue(MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE);
         });
 
         test('should call getUsersInEnterprise() and getGroupsInEnterprise() from getCollaboratorContacts() and return a converted response', async () => {
@@ -735,6 +779,28 @@ describe('elements/content-sharing/SharingModal', () => {
                 ...MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
             ]);
         });
+
+        test('should call getUsersInEnterprise() from getContactsByEmail() and return a converted response', async () => {
+            const MOCK_EMAIL = 'contentsharing@box.com';
+
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, itemType: TYPE_FILE });
+            });
+            wrapper.update();
+
+            const usm = wrapper.find(UnifiedShareModal);
+            let response;
+            await act(async () => {
+                response = usm.invoke('getContactsByEmail')({ emails: [MOCK_EMAIL] });
+            });
+            wrapper.update();
+
+            expect(getUsersInEnterprise).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything(), {
+                filter_term: MOCK_EMAIL,
+            });
+            expect(response).resolves.toEqual(MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE);
+        });
     });
 
     describe('with successful POST requests to the Collaborations API', () => {
@@ -756,6 +822,12 @@ describe('elements/content-sharing/SharingModal', () => {
                     { getFolderFields: jest.fn().mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE)) },
                     { getUser: jest.fn().mockImplementation(createSuccessMock(MOCK_USER_API_RESPONSE)) },
                     { addCollaboration },
+                    null,
+                    {
+                        getUsersInEnterprise: jest
+                            .fn()
+                            .mockImplementation(createSuccessMock(MOCK_CONTACTS_API_RESPONSE)),
+                    },
                 );
 
                 let wrapper;
@@ -795,7 +867,7 @@ describe('elements/content-sharing/SharingModal', () => {
         );
     });
 
-    describe('with failed notification-level API requests', () => {
+    describe('with non-blocking failed API requests', () => {
         let api;
         let share;
         let updateSharedLink;
@@ -907,6 +979,29 @@ describe('elements/content-sharing/SharingModal', () => {
             });
             wrapper.update();
             expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
+        });
+
+        test('should do nothing if getContactsByEmail() fails', async () => {
+            const MOCK_EMAIL = 'contentsharing@box.com';
+
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, itemType: TYPE_FILE });
+            });
+            wrapper.update();
+
+            const usm = wrapper.find(UnifiedShareModal);
+            let response;
+            await act(async () => {
+                response = usm.invoke('getContactsByEmail')({ emails: [MOCK_EMAIL] });
+            });
+            wrapper.update();
+
+            expect(getUsersInEnterprise).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything(), {
+                filter_term: MOCK_EMAIL,
+            });
+            expect(response).resolves.toBeFalsy();
+            expect(wrapper.exists(Notification)).toBeFalsy();
         });
     });
 });

@@ -31,9 +31,18 @@ export type allowedAccessLevelsType = {
 };
 
 export type accessLevelsDisabledReasonType = {
-    peopleInThisItem?: 'access_policy' | null,
-    peopleInYourCompany?: 'access_policy' | null,
-    peopleWithTheLink?: 'access_policy' | null,
+    peopleInThisItem?:
+        | typeof constants.DISABLED_REASON_ACCESS_POLICY
+        | typeof constants.DISABLED_REASON_MALICIOUS_CONTENT
+        | null,
+    peopleInYourCompany?:
+        | typeof constants.DISABLED_REASON_ACCESS_POLICY
+        | typeof constants.DISABLED_REASON_MALICIOUS_CONTENT
+        | null,
+    peopleWithTheLink?:
+        | typeof constants.DISABLED_REASON_ACCESS_POLICY
+        | typeof constants.DISABLED_REASON_MALICIOUS_CONTENT
+        | null,
 };
 
 export type contactType = {

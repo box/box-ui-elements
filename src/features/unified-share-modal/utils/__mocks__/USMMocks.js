@@ -1,9 +1,12 @@
+import { DISABLED_REASON_ACCESS_POLICY, DISABLED_REASON_MALICIOUS_CONTENT } from '../../constants';
+
 /**
  * Mocks that represent the internal data formats of the UnifiedShareModal and its child components
  */
 
 const MOCK_PASSWORD = 'supersecureunbreakablepassword';
-const MOCK_TIMESTAMP = 1596203940000;
+const MOCK_TIMESTAMP_MILLISECONDS = 1596203940000;
+const MOCK_TIMESTAMP_SECONDS = 1596203940;
 const MOCK_TIMESTAMP_ISO_STRING = '2020-07-31T13:59:00.000Z';
 const MOCK_SERVER_URL = 'https://cloud.box.com/v/';
 const MOCK_VANITY_NAME = 'amazinguniquefile';
@@ -23,7 +26,7 @@ const MOCK_SHARED_LINK = {
     canChangeVanityName: true,
     canInvite: true,
     directLink: '',
-    expirationTimestamp: MOCK_TIMESTAMP,
+    expirationTimestamp: MOCK_TIMESTAMP_MILLISECONDS,
     isDirectLinkAvailable: true,
     isDownloadAllowed: true,
     isDownloadAvailable: true,
@@ -39,7 +42,12 @@ const MOCK_SHARED_LINK = {
     vanityName: MOCK_VANITY_NAME,
 };
 
-const MOCK_NULL_SHARED_LINK = { canInvite: true, enterpriseName: '', serverURL: MOCK_SERVER_URL };
+const MOCK_NULL_SHARED_LINK = {
+    canInvite: true,
+    enterpriseName: '',
+    expirationTimestamp: null,
+    serverURL: MOCK_SERVER_URL,
+};
 
 const MOCK_ITEM_ID = '123456789';
 
@@ -113,15 +121,20 @@ const MOCK_CONVERTED_USER_DATA = {
     },
 };
 
-const MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION = {
+const MOCK_NORMALIZED_SHARED_LINK_DATA = {
     ...MOCK_SHARED_LINK,
     enterpriseName: '',
     serverURL: MOCK_SERVER_URL,
 };
 
+const MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM = {
+    ...MOCK_NORMALIZED_SHARED_LINK_DATA,
+    expirationTimestamp: MOCK_TIMESTAMP_SECONDS,
+};
+
 const MOCK_ITEM_API_RESPONSE = {
     item: MOCK_ITEM,
-    shared_link: MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
+    shared_link: MOCK_NORMALIZED_SHARED_LINK_DATA,
     shared_link_features: {},
 };
 
@@ -508,6 +521,39 @@ const MOCK_CONTACTS_CONVERTED_RESPONSE = [
     },
 ];
 
+const MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE = {
+    'contentopenwith@box.com': {
+        id: MOCK_USER_IDS[0],
+        email: 'contentopenwith@box.com',
+        name: 'Content Open With',
+        type: 'user',
+    },
+    'contentsharing@box.com': {
+        id: MOCK_OWNER_ID,
+        email: 'contentsharing@box.com',
+        name: 'Content Sharing',
+        type: 'user',
+    },
+    'contentpreview@boxdevedition.com': {
+        id: MOCK_USER_IDS[1],
+        email: 'contentpreview@boxdevedition.com',
+        name: 'Content Preview',
+        type: 'user',
+    },
+    'contentsidebar@box.com': {
+        id: MOCK_USER_IDS[2],
+        email: 'contentsidebar@box.com',
+        name: 'Content Sidebar',
+        type: 'user',
+    },
+    'contentexplorer@boxdevedition.com': {
+        id: MOCK_USER_IDS[3],
+        email: 'contentexplorer@boxdevedition.com',
+        name: 'Content Explorer',
+        type: 'user',
+    },
+};
+
 const MOCK_GROUP_CONTACTS_API_RESPONSE = {
     total_count: 3,
     entries: [
@@ -549,7 +595,7 @@ const MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE = [
 ];
 
 const MOCK_SETTINGS_WITH_ALL_FEATURES = {
-    expirationTimestamp: MOCK_TIMESTAMP,
+    expirationTimestamp: MOCK_TIMESTAMP_MILLISECONDS,
     isDownloadEnabled: true,
     isExpirationEnabled: true,
     isPasswordEnabled: true,
@@ -558,7 +604,7 @@ const MOCK_SETTINGS_WITH_ALL_FEATURES = {
 };
 
 const MOCK_SETTINGS_WITHOUT_DOWNLOAD = {
-    expirationTimestamp: MOCK_TIMESTAMP,
+    expirationTimestamp: MOCK_TIMESTAMP_MILLISECONDS,
     isDownloadEnabled: false,
     isExpirationEnabled: true,
     isPasswordEnabled: true,
@@ -576,7 +622,7 @@ const MOCK_SETTINGS_WITHOUT_EXPIRATION = {
 };
 
 const MOCK_SETTINGS_WITHOUT_PASSWORD = {
-    expirationTimestamp: MOCK_TIMESTAMP,
+    expirationTimestamp: MOCK_TIMESTAMP_MILLISECONDS,
     isDownloadEnabled: true,
     isExpirationEnabled: true,
     isPasswordEnabled: false,
@@ -585,7 +631,7 @@ const MOCK_SETTINGS_WITHOUT_PASSWORD = {
 };
 
 const MOCK_SETTINGS_WITHOUT_VANITY_URL = {
-    expirationTimestamp: MOCK_TIMESTAMP,
+    expirationTimestamp: MOCK_TIMESTAMP_MILLISECONDS,
     isDownloadEnabled: true,
     isExpirationEnabled: true,
     isPasswordEnabled: true,
@@ -693,10 +739,14 @@ const MOCK_COLLABS_CONVERTED_REQUEST = {
     users: MOCK_COLLABS_CONVERTED_USERS,
 };
 
-const MOCK_DISABLED_REASONS = {
-    peopleWithTheLink: null,
-    peopleInYourCompany: null,
-    peopleInThisItem: null,
+const MOCK_DISABLED_REASONS_FROM_API = {
+    company: DISABLED_REASON_ACCESS_POLICY,
+    open: DISABLED_REASON_MALICIOUS_CONTENT,
+};
+
+const MOCK_CONVERTED_DISABLED_REASONS = {
+    peopleInYourCompany: DISABLED_REASON_ACCESS_POLICY,
+    peopleWithTheLink: DISABLED_REASON_MALICIOUS_CONTENT,
 };
 
 export {
@@ -715,11 +765,13 @@ export {
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
     MOCK_CONTACTS_API_RESPONSE,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
+    MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE,
+    MOCK_CONVERTED_DISABLED_REASONS,
     MOCK_CONVERTED_ITEM_DATA,
     MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
     MOCK_CONVERTED_SETTINGS,
     MOCK_CONVERTED_USER_DATA,
-    MOCK_DISABLED_REASONS,
+    MOCK_DISABLED_REASONS_FROM_API,
     MOCK_EMAIL_ARRAY,
     MOCK_GROUP_CONTACTS_API_RESPONSE,
     MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
@@ -729,6 +781,8 @@ export {
     MOCK_ITEM_API_RESPONSE_WITHOUT_SHARED_LINK,
     MOCK_ITEM_ID,
     MOCK_ITEM_PERMISSIONS,
+    MOCK_NORMALIZED_SHARED_LINK_DATA,
+    MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM,
     MOCK_NULL_SHARED_LINK,
     MOCK_OWNER,
     MOCK_OWNER_EMAIL,
@@ -743,8 +797,8 @@ export {
     MOCK_SETTINGS_WITHOUT_PASSWORD,
     MOCK_SETTINGS_WITHOUT_VANITY_URL,
     MOCK_SHARED_LINK,
-    MOCK_SHARED_LINK_DATA_AFTER_NORMALIZATION,
-    MOCK_TIMESTAMP,
+    MOCK_TIMESTAMP_MILLISECONDS,
+    MOCK_TIMESTAMP_SECONDS,
     MOCK_TIMESTAMP_ISO_STRING,
     MOCK_USER_API_RESPONSE,
     MOCK_USER_IDS,

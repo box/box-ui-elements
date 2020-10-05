@@ -20,6 +20,8 @@ import {
     CAN_VIEW_ONLY,
     COLLAB_GROUP_TYPE,
     COLLAB_USER_TYPE,
+    DISABLED_REASON_ACCESS_POLICY,
+    DISABLED_REASON_MALICIOUS_CONTENT,
     PEOPLE_IN_ITEM,
 } from '../constants';
 import {
@@ -59,6 +61,7 @@ import type {
     UserCollection,
 } from '../../../common/types/core';
 import type {
+    accessLevelsDisabledReasonType,
     allowedAccessLevelsType,
     collaboratorsListType,
     collaboratorType,
@@ -105,6 +108,29 @@ const API_TO_USM_CLASSIFICATION_COLORS_MAP = {
 
 const APP_USERS_DOMAIN_REGEXP = new RegExp('boxdevedition.com');
 
+/**
+ * Convert access levels disabled reasons into USM format.
+ *
+ * @param {{ [string]: string }} disabledReasons
+ * @returns {accessLevelsDisabledReasonType | null}
+ */
+export const convertAccessLevelsDisabledReasons = (disabledReasons?: {
+    [string]: typeof DISABLED_REASON_ACCESS_POLICY | typeof DISABLED_REASON_MALICIOUS_CONTENT | null,
+}): accessLevelsDisabledReasonType | null => {
+    if (!disabledReasons) return null;
+    const convertedReasons = {};
+    Object.entries(disabledReasons).forEach(([level, reason]) => {
+        convertedReasons[API_TO_USM_ACCESS_LEVEL_MAP[level]] = reason;
+    });
+    return convertedReasons;
+};
+
+/**
+ * Convert allowed access levels into USM format.
+ *
+ * @param {Array<string>} [levelsFromAPI]
+ * @returns {allowedAccessLevelsType | null}
+ */
 export const convertAllowedAccessLevels = (levelsFromAPI?: Array<string>): allowedAccessLevelsType | null => {
     if (!levelsFromAPI) return null;
     const convertedLevels = {
@@ -191,7 +217,8 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
 
         sharedLink = {
             accessLevel,
-            accessLevelsDisabledReason: allowed_shared_link_access_levels_disabled_reasons || {},
+            accessLevelsDisabledReason:
+                convertAccessLevelsDisabledReasons(allowed_shared_link_access_levels_disabled_reasons) || {},
             allowedAccessLevels: convertAllowedAccessLevels(allowed_shared_link_access_levels) || ALLOWED_ACCESS_LEVELS, // show all access levels by default
             canChangeAccessLevel,
             canChangeDownload,
@@ -451,6 +478,30 @@ export const convertUserContactsResponse = (
             };
         })
         .filter(({ id, email }) => id !== currentUserID && email && !APP_USERS_DOMAIN_REGEXP.test(email));
+};
+
+/**
+ * Convert an enterprise users API response into an object of internal USM contacts, keyed by email, which is
+ * then passed to the mergeContacts function.
+ *
+ * @param {UserCollection} contactsAPIData
+ * @returns { [string]: contactType } Object of USM contacts
+ */
+export const convertUserContactsByEmailResponse = (contactsAPIData: UserCollection): { [string]: contactType } => {
+    const { entries = [] } = contactsAPIData;
+    const contactsMap = {};
+
+    entries.forEach(contact => {
+        const { id, login: email = '', name, type } = contact;
+        contactsMap[email] = {
+            id,
+            email,
+            name,
+            type,
+        };
+    });
+
+    return contactsMap;
 };
 
 /**

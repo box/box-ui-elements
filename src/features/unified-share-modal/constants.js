@@ -30,6 +30,9 @@ const ALLOWED_ACCESS_LEVELS = {
     peopleWithTheLink: true,
 };
 
+const DISABLED_REASON_ACCESS_POLICY: 'access_policy' = 'access_policy';
+const DISABLED_REASON_MALICIOUS_CONTENT: 'malicious_content' = 'malicious_content';
+
 const INVITEE_PERMISSIONS = [
     {
         default: false,
@@ -78,6 +81,8 @@ export {
     COLLAB_PENDING_TYPE,
     COLLAB_USER_TYPE,
     CO_OWNER,
+    DISABLED_REASON_ACCESS_POLICY,
+    DISABLED_REASON_MALICIOUS_CONTENT,
     EDITOR,
     INVITEE_PERMISSIONS,
     OWNER,

@@ -16,7 +16,12 @@ import LoadingIndicator from '../../components/loading-indicator/LoadingIndicato
 import UnifiedShareModal from '../../features/unified-share-modal';
 import SharedLinkSettingsModal from '../../features/shared-link-settings-modal';
 import SharingNotification from './SharingNotification';
-import { convertItemResponse, convertUserResponse } from '../../features/unified-share-modal/utils/convertData';
+import {
+    convertItemResponse,
+    convertUserContactsByEmailResponse,
+    convertUserResponse,
+} from '../../features/unified-share-modal/utils/convertData';
+import useContactsByEmail from './hooks/useContactsByEmail';
 import { FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FILE, TYPE_FOLDER } from '../../constants';
 import { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS, CONTENT_SHARING_VIEWS } from './constants';
 import { INVITEE_PERMISSIONS } from '../../features/unified-share-modal/constants';
@@ -32,6 +37,7 @@ import type {
     ContentSharingItemAPIResponse,
     ContentSharingSharedLinkType,
     GetContactsFnType,
+    GetContactsByEmailFnType,
     SendInvitesFnType,
     SharedLinkUpdateLevelFnType,
     SharedLinkUpdateSettingsFnType,
@@ -76,6 +82,7 @@ function SharingModal({
     const [onSubmitSettings, setOnSubmitSettings] = React.useState<null | SharedLinkUpdateSettingsFnType>(null);
     const [currentView, setCurrentView] = React.useState<string>(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL);
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
+    const [getContactsByEmail, setGetContactsByEmail] = React.useState<null | GetContactsByEmailFnType>(null);
     const [sendInvites, setSendInvites] = React.useState<null | SendInvitesFnType>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
@@ -160,6 +167,15 @@ function SharingModal({
         }
     }, [getError, item, itemID, itemType, sharedLink, currentUserID, api]);
 
+    // Set the getContactsByEmail function. This call is not associated with a banner notification,
+    // which is why it exists at this level and not in SharingNotification
+    const getContactsByEmailFn: GetContactsByEmailFnType | null = useContactsByEmail(api, itemID, {
+        transformUsers: data => convertUserContactsByEmailResponse(data),
+    });
+    if (getContactsByEmailFn && !getContactsByEmail) {
+        setGetContactsByEmail((): GetContactsByEmailFnType => getContactsByEmailFn);
+    }
+
     if (componentErrorMessage) {
         return <ErrorMask errorHeader={<FormattedMessage {...componentErrorMessage} />} />;
     }
@@ -171,7 +187,7 @@ function SharingModal({
     }
 
     const { ownerEmail, ownerID, permissions } = item;
-    const { accessLevel = '', serverURL } = sharedLink;
+    const { accessLevel = '', expirationTimestamp, serverURL } = sharedLink;
     return (
         <Internationalize language={language} messages={messages}>
             <>
@@ -226,6 +242,7 @@ function SharingModal({
                         currentUserID={currentUserID}
                         displayInModal={displayInModal}
                         getCollaboratorContacts={getContacts}
+                        getContactsByEmail={getContactsByEmail}
                         initialDataReceived
                         inviteePermissions={INVITEE_PERMISSIONS}
                         isOpen
@@ -235,7 +252,10 @@ function SharingModal({
                         onRemoveLink={onRemoveLink}
                         onSettingsClick={() => setCurrentView(CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS)}
                         sendInvites={sendInvites}
-                        sharedLink={sharedLink}
+                        sharedLink={{
+                            ...sharedLink,
+                            expirationTimestamp: expirationTimestamp ? expirationTimestamp / 1000 : null,
+                        }} // the USM expects this value in seconds, while the SLSM expects this value in milliseconds
                         submitting={isLoading}
                     />
                 )}

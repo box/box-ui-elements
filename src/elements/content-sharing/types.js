@@ -29,7 +29,7 @@ export type ContentSharingUserDataType = {
 };
 
 // This type is used when an item does not have a shared link.
-type SharedLinkNotCreatedType = { accessLevel?: string, canInvite: boolean };
+type SharedLinkNotCreatedType = { accessLevel?: string, canInvite: boolean, expirationTimestamp?: ?number };
 
 // This is the full shared link type, which extends the internal USM shared link with
 // data necessary for instantiating the Shared Link Settings modal.
@@ -120,6 +120,12 @@ export type SharedLinkUpdateLevelFnType = () => (level: string) => Promise<void>
 export type SharedLinkUpdateSettingsFnType = () => ($Shape<APISharedLink>) => Promise<void>;
 
 export type GetContactsFnType = () => (filterTerm: string) => Promise<Array<contactType | GroupMini | UserMini>> | null;
+
+export type ContactByEmailObject = { [string]: contactType | UserMini | [] };
+
+export type GetContactsByEmailFnType = () => (filterTerm: {
+    [emails: string]: string,
+}) => Promise<ContactByEmailObject | Array<UserMini>> | null;
 
 export type SendInvitesFnType = () => InviteCollaboratorsRequest => Promise<null | Array<Function>>;
 
