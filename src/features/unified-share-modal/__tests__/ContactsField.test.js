@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { emailValidator } from '../../../utils/validators';
+
 import { ContactsFieldBase as ContactsField } from '../ContactsField';
 import messages from '../messages';
 
@@ -291,6 +293,42 @@ describe('features/unified-share-modal/ContactsField', () => {
 
             expect(wrapper.state('contacts')).toEqual([]);
             expect(onInput).toHaveBeenCalled();
+        });
+    });
+
+    describe('parseItems()', () => {
+        test('should correctly parse parse pill selector input and filter out items that do not pass validator test', () => {
+            const wrapper = getWrapper({ validator: emailValidator });
+            const { parseItems } = wrapper.find('PillSelectorDropdown').props();
+
+            [
+                {
+                    inputValue: 'a@example.com',
+                    expectedItems: ['a@example.com'],
+                },
+                {
+                    inputValue: 'Foo Bar <fbar@example.com>; Test User <test@example.com>',
+                    expectedItems: ['fbar@example.com', 'test@example.com'],
+                },
+                {
+                    inputValue: 'not_an_email; Test User <test@example.com>',
+                    expectedItems: ['test@example.com'],
+                },
+                {
+                    inputValue: 'malformed,emailtest@example.com',
+                    expectedItems: [],
+                },
+                {
+                    inputValue: '123',
+                    expectedItems: [],
+                },
+                {
+                    inputValue: 'not_an_email',
+                    expectedItems: [],
+                },
+            ].forEach(({ inputValue, expectedItems }) => {
+                expect(parseItems(inputValue)).toEqual(expectedItems);
+            });
         });
     });
 

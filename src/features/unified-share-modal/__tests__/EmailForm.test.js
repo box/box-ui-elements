@@ -284,7 +284,7 @@ describe('features/unified-share-modal/EmailForm', () => {
         });
     });
 
-    describe('isValidEmail()', () => {
+    describe('isValidContactPill()', () => {
         [
             {
                 email: 'x@example.com',
@@ -311,13 +311,41 @@ describe('features/unified-share-modal/EmailForm', () => {
                 expectedValue: false,
             },
         ].forEach(({ email, expectedValue }) => {
-            test('should validate email addresses properly', () => {
+            test('should properly validate pill text input as email address', () => {
                 const wrapper = getWrapper();
 
-                const isValidEmail = wrapper.instance().isValidEmail(email);
+                const isValidContactPill = wrapper.instance().isValidContactPill(email);
 
-                expect(isValidEmail).toBe(expectedValue);
+                expect(isValidContactPill).toBe(expectedValue);
             });
+        });
+
+        test('should consider parsed contact pills as valid by default', () => {
+            const wrapper = getWrapper();
+
+            expectedContacts.forEach(contact => {
+                const isValidContactPill = wrapper.instance().isValidContactPill(contact);
+
+                expect(isValidContactPill).toBe(true);
+            });
+        });
+
+        test('should invalidate parsed contact pills when shouldInvalidateExternalCollabs is true and contact is an external user', () => {
+            let isValidContactPill;
+
+            const externalContact = {
+                ...expectedContacts[0],
+                isExternalUser: true,
+            };
+            const wrapper = getWrapper();
+
+            wrapper.setProps({ shouldInvalidateExternalCollabs: false });
+            isValidContactPill = wrapper.instance().isValidContactPill(externalContact);
+            expect(isValidContactPill).toBe(true);
+
+            wrapper.setProps({ shouldInvalidateExternalCollabs: true });
+            isValidContactPill = wrapper.instance().isValidContactPill(externalContact);
+            expect(isValidContactPill).toBe(false);
         });
     });
 
