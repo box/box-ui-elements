@@ -287,6 +287,7 @@
         "react-virtualized": "^9.21.0",
         "regenerator-runtime": "^0.13.3",
         "rimraf": "^3.0.1",
+        "sanitize-html": "1.21.1",
         "sass-lint": "^1.13.1",
         "sass-loader": "^8.0.2",
         "sass-variable-parser": "^1.2.2",
@@ -355,6 +356,7 @@
         "react-textarea-autosize": "^7.1.0",
         "react-virtualized": "^9.21.0",
         "regenerator-runtime": "^0.13.2",
+        "sanitize-html": "1.21.1",
         "scroll-into-view-if-needed": "^2.2.20",
         "tabbable": "^1.1.2",
         "uuid": "^3.3.2"

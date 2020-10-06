@@ -1,0 +1,11 @@
+.MessagePreviewContent {
+    height: 288px;
+
+    &.is-loading {
+        display: none;
+    }
+
+    img.zoomable {
+        cursor: default;
+    }
+}
