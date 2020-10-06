@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import * as UploaderUtils from '../../../utils/uploads';
+import Browser from '../../../utils/Browser';
 import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
 import Footer from '../Footer';
 import {
@@ -16,6 +17,8 @@ import {
 } from '../../../constants';
 
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
+
+jest.mock('../../../utils/Browser');
 
 describe('elements/content-uploader/ContentUploader', () => {
     const getWrapper = (props = {}) => shallow(<ContentUploaderComponent {...props} />);
@@ -117,6 +120,41 @@ describe('elements/content-uploader/ContentUploader', () => {
             wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
 
             const expected = { yoyo: true, yoyo_0_10000: true };
+            expect(wrapper.state().itemIds).toEqual(expected);
+        });
+
+        test('should handle accepting package "files" separate from folders', () => {
+            const mockFile = { name: 'hi' };
+            Browser.isSafari = jest.fn(() => true);
+            const entry = {
+                isDirectory: true,
+                kind: 'file',
+                file: fn => {
+                    fn(mockFile);
+                },
+            };
+            const wrapper = getWrapper({
+                rootFolderId: 0,
+                isFolderUploadEnabled: true,
+                hasUploads: true,
+                useUploadsManager: true,
+            });
+
+            global.Date.now = jest.fn(() => 10000);
+
+            wrapper.setProps({
+                files: [mockFile],
+                dataTransferItems: [
+                    {
+                        kind: 'file',
+                        type: 'application/zip',
+                        getAsFile: jest.fn(() => mockFile),
+                        webkitGetAsEntry: () => entry,
+                        name: 'hi',
+                    },
+                ],
+            });
+            const expected = { hi: true, hi_0_10000: true };
             expect(wrapper.state().itemIds).toEqual(expected);
         });
     });
