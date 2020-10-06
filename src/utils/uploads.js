@@ -212,10 +212,7 @@ function isDataTransferItemAPackage(itemData: UploadDataTransferItemWithAPIOptio
     const item = getDataTransferItem(itemData);
     const isDirectory = isDataTransferItemAFolder(item);
 
-    if (isDirectory && item.kind === 'file') {
-        return true;
-    }
-    return false;
+    return isDirectory && item.kind === 'file';
 }
 
 /**
@@ -265,11 +262,11 @@ async function getFileFromDataTransferItem(
  * @see https://en.wikipedia.org/wiki/Package_(macOS)
  *
  * @param {UploadDataTransferItemWithAPIOptions | DataTransferItem} itemData
- * @returns {Promise<?UploadFile | ?UploadFileWithAPIOptions | null>}
+ * @returns {?UploadFile | ?UploadFileWithAPIOptions | null}
  */
-async function getPackageFileFromDataTransferItem(
+function getPackageFileFromDataTransferItem(
     itemData: UploadDataTransferItemWithAPIOptions | DataTransferItem,
-): Promise<?UploadFile | ?UploadFileWithAPIOptions | null> {
+): ?UploadFile | ?UploadFileWithAPIOptions | null {
     const item = getDataTransferItem(itemData);
     const entry = getEntryFromDataTransferItem(((item: any): DataTransferItem));
     if (!entry) {
@@ -279,13 +276,13 @@ async function getPackageFileFromDataTransferItem(
     const itemFile = item.getAsFile();
 
     if (doesDataTransferItemContainAPIOptions(itemData)) {
-        return Promise.resolve({
+        return {
             file: ((itemFile: any): UploadFile),
             options: getDataTransferItemAPIOptions(itemData),
-        });
+        };
     }
 
-    return Promise.resolve(itemFile);
+    return itemFile;
 }
 
 /**

@@ -35,20 +35,14 @@ describe('util/Browser/isIE()', () => {
 });
 
 describe('util/Browser/isSafari()', () => {
-    test('should return true if Safari', () => {
-        browser.getUserAgent = jest.fn().mockReturnValueOnce('AppleWebKit/4.0');
-        expect(browser.isSafari()).toBeTruthy();
-    });
-    test('should return false if not Safari', () => {
-        browser.getUserAgent = jest.fn().mockReturnValueOnce('Trident');
-        expect(browser.isSafari()).toBeFalsy();
-    });
-
-    test('should not incorrectly identify Blink as WebKit', () => {
-        browser.getUserAgent = jest
-            .fn()
-            .mockReturnValueOnce('AppleWebKit/7.8 (KHTML, like Gecko) Chrome/1.2.3.4 Safari/5.6');
-        expect(browser.isSafari()).toBeFalsy();
+    test.each`
+        result   | userAgent
+        ${true}  | ${'AppleWebKit/4.0'}
+        ${false} | ${'Trident'}
+        ${false} | ${'AppleWebKit/7.8 (KHTML, like Gecko) Chrome/1.2.3.4 Safari/5.6'}
+    `('should return $result when user agent is $userAgent', ({ result, userAgent }) => {
+        browser.getUserAgent = jest.fn().mockReturnValueOnce(userAgent);
+        expect(browser.isSafari()).toBe(result);
     });
 });
 

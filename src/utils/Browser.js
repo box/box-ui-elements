@@ -39,7 +39,7 @@ class Browser {
     /**
      * Returns whether browser is Safari.
      *
-     * @return {boolena} Whether browser is IE
+     * @return {boolean} Whether browser is Safari
      */
     static isSafari() {
         const userAgent = Browser.getUserAgent();

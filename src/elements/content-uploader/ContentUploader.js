@@ -391,7 +391,6 @@ class ContentUploader extends Component<Props, State> {
         const folderItems = [];
         const fileItems = [];
         const packageItems = [];
-
         Array.from(dataTransferItems).forEach(item => {
             const isDirectory = isDataTransferItemAFolder(item);
             if (Browser.isSafari() && isDataTransferItemAPackage(item)) {
@@ -404,7 +403,7 @@ class ContentUploader extends Component<Props, State> {
         });
 
         this.addFileDataTransferItemsToUploadQueue(fileItems, itemUpdateCallback);
-        if (packageItems.length) this.addPackageDataTransferItemsToUploadQueue(packageItems, itemUpdateCallback);
+        this.addPackageDataTransferItemsToUploadQueue(packageItems, itemUpdateCallback);
         this.addFolderDataTransferItemsToUploadQueue(folderItems, itemUpdateCallback);
     };
 
@@ -442,19 +441,14 @@ class ContentUploader extends Component<Props, State> {
         dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
         itemUpdateCallback: Function,
     ): void => {
-        dataTransferItems.forEach(async item => {
-            try {
-                const file = await getPackageFileFromDataTransferItem(item);
+        dataTransferItems.forEach(item => {
+            const file = getPackageFileFromDataTransferItem(item);
 
-                if (!file) {
-                    return;
-                }
-
-                this.addFilesToUploadQueue([file], itemUpdateCallback);
-            } catch (ex) {
-                // no-op ; discard errors for handling in the upload queue
-                // this will occur if the item cannot be converted into its file representation
+            if (!file) {
+                return;
             }
+
+            this.addFilesToUploadQueue([file], itemUpdateCallback);
         });
     };
 
