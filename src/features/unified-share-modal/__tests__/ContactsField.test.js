@@ -297,39 +297,23 @@ describe('features/unified-share-modal/ContactsField', () => {
     });
 
     describe('parseItems()', () => {
-        test('should correctly parse parse pill selector input and filter out items that do not pass validator test', () => {
-            const wrapper = getWrapper({ validator: emailValidator });
-            const { parseItems } = wrapper.find('PillSelectorDropdown').props();
+        test.each`
+            inputValue                                                    | expectedItems
+            ${'a@example.com'}                                            | ${['a@example.com']}
+            ${'Foo Bar <fbar@example.com>; Test User <test@example.com>'} | ${['fbar@example.com', 'test@example.com']}
+            ${'not_an_email; Test User <test@example.com>'}               | ${['test@example.com']}
+            ${'malformed,emailtest@example.com'}                          | ${[]}
+            ${'123'}                                                      | ${[]}
+            ${'not_an_email'}                                             | ${[]}
+        `(
+            'should correctly parse pill selector input "$inputValue" and return $expectedItems',
+            ({ inputValue, expectedItems }) => {
+                const wrapper = getWrapper({ validator: emailValidator });
+                const { parseItems } = wrapper.find('PillSelectorDropdown').props();
 
-            [
-                {
-                    inputValue: 'a@example.com',
-                    expectedItems: ['a@example.com'],
-                },
-                {
-                    inputValue: 'Foo Bar <fbar@example.com>; Test User <test@example.com>',
-                    expectedItems: ['fbar@example.com', 'test@example.com'],
-                },
-                {
-                    inputValue: 'not_an_email; Test User <test@example.com>',
-                    expectedItems: ['test@example.com'],
-                },
-                {
-                    inputValue: 'malformed,emailtest@example.com',
-                    expectedItems: [],
-                },
-                {
-                    inputValue: '123',
-                    expectedItems: [],
-                },
-                {
-                    inputValue: 'not_an_email',
-                    expectedItems: [],
-                },
-            ].forEach(({ inputValue, expectedItems }) => {
                 expect(parseItems(inputValue)).toEqual(expectedItems);
-            });
-        });
+            },
+        );
     });
 
     describe('render', () => {

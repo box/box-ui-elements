@@ -330,23 +330,26 @@ describe('features/unified-share-modal/EmailForm', () => {
             });
         });
 
-        test('should invalidate parsed contact pills when shouldInvalidateExternalCollabs is true and contact is an external user', () => {
-            let isValidContactPill;
+        test.each`
+            shouldInvalidateExternalCollabs | isExternalUser | expectedIsValid
+            ${false}                        | ${true}        | ${true}
+            ${true}                         | ${true}        | ${false}
+            ${false}                        | ${false}       | ${true}
+            ${true}                         | ${false}       | ${true}
+        `(
+            'should have isValidContactPill return $expectedIsValid when shouldInvalidateExternalCollabs is $shouldInvalidateExternalCollabs and isExternalUser is $isExternalUser',
+            ({ shouldInvalidateExternalCollabs, isExternalUser, expectedIsValid }) => {
+                const externalContact = {
+                    ...expectedContacts[0],
+                    isExternalUser,
+                };
+                const wrapper = getWrapper();
 
-            const externalContact = {
-                ...expectedContacts[0],
-                isExternalUser: true,
-            };
-            const wrapper = getWrapper();
-
-            wrapper.setProps({ shouldInvalidateExternalCollabs: false });
-            isValidContactPill = wrapper.instance().isValidContactPill(externalContact);
-            expect(isValidContactPill).toBe(true);
-
-            wrapper.setProps({ shouldInvalidateExternalCollabs: true });
-            isValidContactPill = wrapper.instance().isValidContactPill(externalContact);
-            expect(isValidContactPill).toBe(false);
-        });
+                wrapper.setProps({ shouldInvalidateExternalCollabs });
+                const isValidContactPill = wrapper.instance().isValidContactPill(externalContact);
+                expect(isValidContactPill).toBe(expectedIsValid);
+            },
+        );
     });
 
     describe('render()', () => {
