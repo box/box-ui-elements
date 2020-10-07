@@ -1,6 +1,7 @@
 // @flow
 
 import * as React from 'react';
+import isString from 'lodash/isString';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
@@ -49,6 +50,7 @@ type Props = {
     recommendedSharingTooltipCalloutName?: ?string,
     selectedContacts: Array<Contact>,
     sendButtonProps?: Object,
+    shouldInvalidateExternalCollabs?: boolean,
     showEnterEmailsCallout: boolean,
     submitting: boolean,
     suggestedCollaborators?: SuggestedCollabLookup,
@@ -205,14 +207,27 @@ class EmailForm extends React.Component<Props, State> {
         const { intl } = this.props;
         let contactsFieldError = '';
 
-        if (text && !this.isValidEmail(text)) {
+        if (text && !emailValidator(text)) {
             contactsFieldError = intl.formatMessage(commonMessages.invalidEmailError);
         }
         this.setState({ contactsFieldError });
     };
 
-    isValidEmail = (text: string): boolean => {
-        return emailValidator(text);
+    isValidContactPill = (contactPill: string | Contact): boolean => {
+        let isValid = true;
+        const { shouldInvalidateExternalCollabs } = this.props;
+
+        if (isString(contactPill)) {
+            // If we receive a string it means we're validating unparsed
+            // pill selector input. Check that we have a valid email
+            isValid = emailValidator(contactPill);
+        } else {
+            // Invalid emails are filtered out by ContactsField when parsing
+            // new pills, so parsed pills can currently only be invalid
+            // when user is external and external collab is restricted
+            isValid = !shouldInvalidateExternalCollabs || !contactPill.isExternalUser;
+        }
+        return isValid;
     };
 
     render() {
@@ -283,7 +298,7 @@ class EmailForm extends React.Component<Props, State> {
                         selectedContacts={selectedContacts}
                         suggestedCollaborators={suggestedCollaborators}
                         validateForError={this.validateContactField}
-                        validator={this.isValidEmail}
+                        validator={this.isValidContactPill}
                         showContactAvatars
                     />
                 </Tooltip>
