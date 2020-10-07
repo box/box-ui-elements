@@ -203,6 +203,19 @@ function isDataTransferItemAFolder(itemData: UploadDataTransferItemWithAPIOption
 }
 
 /**
+ * Check if a dataTransfer item is a macOS "package file"
+ * @see https://en.wikipedia.org/wiki/Package_(macOS)
+ *
+ * @returns {boolean}
+ */
+function isDataTransferItemAPackage(itemData: UploadDataTransferItemWithAPIOptions | DataTransferItem): boolean {
+    const item = getDataTransferItem(itemData);
+    const isDirectory = isDataTransferItemAFolder(item);
+
+    return isDirectory && item.kind === 'file';
+}
+
+/**
  * Get file from FileSystemFileEntry
  *
  * @param {FileSystemFileEntry} entry
@@ -241,6 +254,35 @@ async function getFileFromDataTransferItem(
     }
 
     return file;
+}
+
+/**
+ * Get file from DataTransferItem or UploadDataTransferItemWithAPIOptions
+ * Uses `entry`'s `getAsFile` method for retrieving package information as a single file.
+ * @see https://en.wikipedia.org/wiki/Package_(macOS)
+ *
+ * @param {UploadDataTransferItemWithAPIOptions | DataTransferItem} itemData
+ * @returns {?UploadFile | ?UploadFileWithAPIOptions | null}
+ */
+function getPackageFileFromDataTransferItem(
+    itemData: UploadDataTransferItemWithAPIOptions | DataTransferItem,
+): ?UploadFile | ?UploadFileWithAPIOptions | null {
+    const item = getDataTransferItem(itemData);
+    const entry = getEntryFromDataTransferItem(((item: any): DataTransferItem));
+    if (!entry) {
+        return null;
+    }
+
+    const itemFile = item.getAsFile();
+
+    if (doesDataTransferItemContainAPIOptions(itemData)) {
+        return {
+            file: ((itemFile: any): UploadFile),
+            options: getDataTransferItemAPIOptions(itemData),
+        };
+    }
+
+    return itemFile;
 }
 
 /**
@@ -312,10 +354,12 @@ export {
     getFile,
     getFileAPIOptions,
     getFileFromDataTransferItem,
+    getPackageFileFromDataTransferItem,
     getFileFromEntry,
     getFileId,
     getFileLastModifiedAsISONoMSIfPossible,
     isDataTransferItemAFolder,
+    isDataTransferItemAPackage,
     isMultiputSupported,
     toISOStringNoMS,
     tryParseJson,

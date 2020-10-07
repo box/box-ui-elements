@@ -37,6 +37,16 @@ class Browser {
     }
 
     /**
+     * Returns whether browser is Safari.
+     *
+     * @return {boolean} Whether browser is Safari
+     */
+    static isSafari() {
+        const userAgent = Browser.getUserAgent();
+        return /AppleWebKit/i.test(userAgent) && !/Chrome\//i.test(userAgent);
+    }
+
+    /**
      * Checks the browser for Dash support using H264 high.
      * Dash requires MediaSource extensions to exist and be applicable
      * to the H264 container (since we use H264 and not webm)
