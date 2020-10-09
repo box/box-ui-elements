@@ -14,6 +14,8 @@ type Props = {
     onChange: Function,
     /** List of options (displayText, value) */
     options: Array<SelectOptionProp>,
+    /** Boolean to determine whether the dropdown should be in fixed position */
+    positionFixed?: boolean,
     /** Boolean to determine whether or not to show the clear option */
     shouldShowClearOption?: boolean,
     /** Will show Search Field  */
@@ -32,12 +34,13 @@ const optionsWithClearOption = (options: Array<Object>, shouldShowClearOption?: 
         : options;
 };
 
-const MultiSelectField = ({ intl, options, shouldShowClearOption, ...rest }: Props) => (
+const MultiSelectField = ({ intl, options, positionFixed, shouldShowClearOption, ...rest }: Props) => (
     <BaseSelectField
         {...rest}
         shouldShowClearOption={shouldShowClearOption}
         options={optionsWithClearOption(options, shouldShowClearOption, intl)}
         multiple
+        positionFixed={positionFixed}
     />
 );
 

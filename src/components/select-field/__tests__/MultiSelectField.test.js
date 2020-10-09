@@ -11,6 +11,13 @@ describe('components/select-field/MultiSelectField', () => {
     ];
 
     describe('MultiSelectField', () => {
+        test('should render a BaseSelectField with a positionFixed prop matching passed in prop when called', () => {
+            const wrapper = shallow(<MultiSelectFieldBase onChange={() => {}} options={options} positionFixed />);
+
+            const baseSelectFieldWrapper = wrapper.find('BaseSelectField');
+            expect(baseSelectFieldWrapper.prop('positionFixed')).toBe(true);
+        });
+
         test('should render a BaseSelectField with a selectedValues prop matching passed in selected value when called', () => {
             const wrapper = shallow(<MultiSelectFieldBase onChange={() => {}} options={options} />);
 
