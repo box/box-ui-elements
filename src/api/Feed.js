@@ -162,6 +162,65 @@ class Feed extends Base {
         this.updateFeedItem({ ...annotation, isPending: false }, id);
     }
 
+    updateAnnotation = (
+        file: BoxItem,
+        annotationId: string,
+        text: string,
+        hasMention: boolean,
+        permissions: AnnotationPermission,
+        successCallback: Function,
+        errorCallback: Function,
+    ): void => {
+        const annotationData = {
+            tagged_message: text,
+        };
+
+        this.annotationsAPI = new AnnotationsAPI(this.options);
+
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+
+        const message = {};
+        if (hasMention) {
+            message.tagged_message = text;
+        } else {
+            message.message = text;
+        }
+
+        // Create action has completed, so update the existing pending item
+        this.updateFeedItem({ ...annotationData, isPending: true }, annotationId);
+
+        this.annotationsAPI.updateAnnotation(
+            this.file.id,
+            annotationId,
+            permissions,
+            message.message,
+            message.tagged_message,
+            (annotation: Annotation) => {
+                // use the request payload instead of response in the
+                // feed item update because response may not contain
+                // the tagged version of the message
+                this.updateFeedItem(
+                    {
+                        ...annotation,
+                        isPending: false,
+                    },
+                    annotationId,
+                );
+                if (!this.isDestroyed()) {
+                    successCallback(annotation);
+                }
+            },
+            (e: ErrorResponseData, code: string) => {
+                this.feedErrorCallback(true, e, code);
+            },
+        );
+    };
+
     deleteAnnotation = (
         file: BoxItem,
         annotationId: string,

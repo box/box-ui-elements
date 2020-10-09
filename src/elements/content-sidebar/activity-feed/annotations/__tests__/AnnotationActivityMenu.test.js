@@ -21,6 +21,12 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
         },
     );
 
+    test('should render the edit annotation activity menu item if canEdit is true', () => {
+        const wrapper = getWrapper({ canEdit: true });
+
+        expect(wrapper.find('[data-testid="edit-annotation-activity"]').length).toEqual(1);
+    });
+
     test('should show the delete confirm menu when confirming delete', () => {
         const wrapper = getWrapper({ canDelete: true });
         const deleteButton = wrapper.find('MenuItem').prop('onClick');
@@ -30,12 +36,16 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
         expect(wrapper.find('DeleteConfirmation').length).toEqual(1);
     });
 
-    test('shoud render resin tags', () => {
-        const wrapper = getWrapper({ canDelete: true });
+    test.each`
+        canDelete | canEdit  | dataTestId                      | dataResinTarget
+        ${true}   | ${false} | ${'delete-annotation-activity'} | ${'activityfeed-annotation-delete'}
+        ${false}  | ${true}  | ${'edit-annotation-activity'}   | ${'activityfeed-annotation-edit'}
+    `('should render resin tags', ({ canDelete, canEdit, dataResinTarget, dataTestId }) => {
+        const wrapper = getWrapper({ canDelete, canEdit });
 
-        expect(wrapper.find('[data-testid="delete-annotation-activity"]').props()).toMatchObject({
+        expect(wrapper.find(`[data-testid="${dataTestId}"]`).props()).toMatchObject({
             'data-resin-itemid': '123',
-            'data-resin-target': 'activityfeed-annotation-delete',
+            'data-resin-target': dataResinTarget,
         });
     });
 });

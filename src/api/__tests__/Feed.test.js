@@ -251,6 +251,9 @@ jest.mock('../Annotations', () =>
         deleteAnnotation: jest.fn().mockImplementation((file, id, permissions, successCallback) => {
             successCallback();
         }),
+        updateAnnotation: jest.fn().mockImplementation((file, id, text, hasMention, permissions, successCallback) => {
+            successCallback();
+        }),
         getAnnotations: jest.fn(),
     })),
 );
@@ -1323,6 +1326,50 @@ describe('api/Feed', () => {
 
             expect(feed.updateFeedItem).toBeCalledWith(expectedAnnotation, '123');
             expect(feed.addPendingItem).not.toBeCalled();
+        });
+    });
+
+    describe('updateAnnotation()', () => {
+        const annotationId = '123';
+        const text = 'hello';
+        const permissions = { can_edit: true };
+        let successCallback;
+        let errorCallback;
+        let hasMention;
+
+        beforeEach(() => {
+            successCallback = jest.fn();
+            errorCallback = jest.fn();
+        });
+
+        test('should throw if file does not have an id', () => {
+            hasMention = false;
+            expect(() =>
+                feed.updateAnnotation({}, annotationId, text, hasMention, permissions, successCallback, errorCallback),
+            ).toThrow(fileError);
+        });
+
+        test('should set error callback and file', () => {
+            feed.updateAnnotation(file, annotationId, text, hasMention, permissions, successCallback, errorCallback);
+
+            expect(feed.errorCallback).toEqual(errorCallback);
+            expect(feed.file).toEqual(file);
+        });
+
+        test('should updateFeedItem with to pending state', () => {
+            feed.updateFeedItem = jest.fn();
+            feed.updateAnnotation(file, annotationId, text, hasMention, permissions, successCallback, errorCallback);
+
+            expect(feed.updateFeedItem).toBeCalledWith({ tagged_message: 'hello', isPending: true }, annotationId);
+        });
+
+        test('should call the updateAnnotation API and call updateFeedItem on success', () => {
+            feed.updateFeedItem = jest.fn();
+            feed.updateAnnotation(file, '123', { can_edit: true }, 'hello', undefined, successCallback, errorCallback);
+
+            expect(feed.annotationsAPI.updateAnnotation).toBeCalled();
+            expect(feed.updateFeedItem).toBeCalled();
+            expect(successCallback).toBeCalled();
         });
     });
 

@@ -2,6 +2,7 @@ import Annotations from '../Annotations';
 import {
     ERROR_CODE_CREATE_ANNOTATION,
     ERROR_CODE_DELETE_ANNOTATION,
+    ERROR_CODE_EDIT_ANNOTATION,
     ERROR_CODE_FETCH_ANNOTATION,
     ERROR_CODE_FETCH_ANNOTATIONS,
 } from '../../constants';
@@ -97,6 +98,47 @@ describe('api/Annotations', () => {
 
             expect(errorCallback).toBeCalledWith(expect.any(Error), ERROR_CODE_CREATE_ANNOTATION);
             expect(annotations.post).not.toBeCalled();
+        });
+    });
+
+    describe('updateAnnotation()', () => {
+        const errorCallback = jest.fn();
+        const successCallback = jest.fn();
+        const tagged_message = null;
+
+        test('should format its parameters and call the update method for a given id', () => {
+            annotations.updateAnnotation(
+                '12345',
+                'abc',
+                { can_edit: true },
+                'hello',
+                tagged_message,
+                successCallback,
+                errorCallback,
+            );
+
+            expect(annotations.put).toBeCalledWith({
+                id: '12345',
+                data: { data: { description: { message: 'hello' } } },
+                errorCallback,
+                successCallback,
+                url: 'https://api.box.com/2.0/undoc/annotations/abc',
+            });
+        });
+
+        test('should reject with an error code for calls with invalid permissions', () => {
+            annotations.updateAnnotation(
+                '12345',
+                '67890',
+                { can_edit: false },
+                'hello',
+                tagged_message,
+                successCallback,
+                errorCallback,
+            );
+
+            expect(errorCallback).toBeCalledWith(expect.any(Error), ERROR_CODE_EDIT_ANNOTATION);
+            expect(annotations.put).not.toBeCalled();
         });
     });
 
