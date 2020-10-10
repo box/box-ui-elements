@@ -3,7 +3,6 @@ import * as React from 'react';
 import { FormattedMessage, injectIntl, type InjectIntlProvidedProps } from 'react-intl';
 import classNames from 'classnames';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
-import throttle from 'lodash/throttle';
 import debounce from 'lodash/debounce';
 import AnimateHeight from 'react-animate-height';
 import Scrollbar from 'react-scrollbars-custom';
@@ -163,17 +162,20 @@ function MessageCenterModal({
         );
     }
 
-    function handleCollapse(clientHeight) {
-        if (isExpanded && clientHeight > 0 && !isMouseInTitleRef.current) {
-            setIsExpanded(false);
+    function handleOnScroll(clientHeight, scrollTop, prevScrollTop) {
+        if (clientHeight > 0 && !isMouseInTitleRef.current) {
+            const isScrollingDown = prevScrollTop < scrollTop;
+            if (isExpanded && isScrollingDown) {
+                setIsExpanded(false);
+            } else if (!isExpanded && !isScrollingDown) {
+                setIsExpanded(true);
+            }
         }
     }
 
     function handleResize(resizeDimensions) {
         setDimensions(resizeDimensions);
     }
-
-    const handleOnScroll = React.useCallback(throttle(handleCollapse, 60, { leading: true, trailing: false }), []);
 
     const handlOnResize = React.useCallback(debounce(handleResize, 300), []);
 
@@ -222,8 +224,8 @@ function MessageCenterModal({
                     {({ height, width }) => (
                         <CollapsibleScrollbar
                             ref={scrollRef}
-                            onScroll={({ clientHeight, scrollTop, scrollLeft }) => {
-                                handleOnScroll(clientHeight);
+                            onScroll={({ clientHeight, scrollTop, scrollLeft }, { scrollTop: prevScrollTop }) => {
+                                handleOnScroll(clientHeight, scrollTop, prevScrollTop);
                                 if (listRef.current && listRef.current.Grid) {
                                     const { Grid } = listRef.current;
                                     Grid.handleScrollEvent({ scrollTop, scrollLeft });

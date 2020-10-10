@@ -2,11 +2,12 @@
 
 .bdl-MessageCenterModal {
     display: flex;
+    min-height: 400px;
     padding: 54px 126px;
 
     .modal-dialog-container,
     .modal-dialog {
-        width: 593px;
+        width: 592px;
         height: 100%;
     }
 
