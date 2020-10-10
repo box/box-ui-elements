@@ -332,7 +332,7 @@ describe('components/select-field/BaseSelectField', () => {
         });
 
         test('should apply positionFixed when set', () => {
-            const wrapper = shallowRenderSelectField({ positionFixed: true });
+            const wrapper = shallowRenderSelectField({ isPositionFixed: true });
 
             const props = wrapper.find('PopperComponent').props();
             expect(props.positionFixed).toBe(true);
@@ -825,7 +825,9 @@ describe('components/select-field/BaseSelectField', () => {
         });
 
         test('should call openDropdown with event', () => {
-            const event = { target: 'Button' };
+            const event = {
+                target: document.createElement('button'),
+            };
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();
 
@@ -1031,29 +1033,32 @@ describe('components/select-field/BaseSelectField', () => {
 
         test.each([
             [
-                {
-                    target: {
-                        getBoundingClientRect: jest.fn().mockReturnValue({
-                            width: 50,
-                        }),
-                    },
-                },
+                { target: document.createElement('div') },
                 {
                     top: 'unset',
                     left: 'unset',
                     minWidth: 'unset',
                     transform: 'none',
                     willTransform: 'unset',
-                    width: 50,
+                    width: 120,
                 },
             ],
             [{}, {}],
-        ])('%o should set dropdownStyle state when event has a target', (event, expected) => {
-            const mockEvent = event;
-            const wrapper = shallowRenderSelectField({ positionFixed: true });
+        ])('%o should set dropdownStyle state when position is fixed', (event, expected) => {
+            Element.prototype.getBoundingClientRect = jest.fn(() => {
+                return {
+                    width: 120,
+                    height: 120,
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                };
+            });
+            const wrapper = shallowRenderSelectField({ isPositionFixed: true });
             const instance = wrapper.instance();
 
-            instance.openDropdown(mockEvent);
+            instance.openDropdown(event);
 
             expect(wrapper.state('dropdownStyle')).toStrictEqual(expected);
         });

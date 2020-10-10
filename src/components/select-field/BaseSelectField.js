@@ -53,6 +53,8 @@ type Props = {
     isDisabled?: boolean,
     /** Whether to allow the dropdown to overflow its boundaries and remain attached to its reference */
     isEscapedWithReference?: boolean,
+    /** Whether to position the dropdown as fixed */
+    isPositionFixed?: boolean,
     /** Whether to align the dropdown to the right */
     isRightAligned: boolean,
     /** The select field overlay (dropdown) will have a scrollbar and max-height if true * */
@@ -68,8 +70,6 @@ type Props = {
     options: Array<SelectOptionProp>,
     /** The select button text shown when no options are selected. */
     placeholder?: string | React.Element<any>,
-    /** Boolean to determine whether the dropdown should be in fixed position */
-    positionFixed?: boolean,
     /** The currently selected option values (can be empty) */
     selectedValues: Array<SelectOptionValueProp>,
     /** Array of ordered indices indicating where to insert separators (ex. index 2 means insert a separator after option 2) */
@@ -103,12 +103,12 @@ class BaseSelectField extends React.Component<Props, State> {
     static defaultProps = {
         buttonProps: {},
         isDisabled: false,
+        isPositionFixed: false,
         isRightAligned: false,
         isScrollable: false,
         multiple: false,
         optionRenderer: defaultOptionRenderer,
         options: [],
-        positionFixed: false,
         selectedValues: [],
         separatorIndices: [],
         shouldShowClearOption: false,
@@ -205,7 +205,7 @@ class BaseSelectField extends React.Component<Props, State> {
         }
     };
 
-    handleButtonClick = event => {
+    handleButtonClick = (event: SyntheticEvent<HTMLElement>) => {
         if (this.state.isOpen) {
             this.closeDropdown();
         } else {
@@ -325,13 +325,14 @@ class BaseSelectField extends React.Component<Props, State> {
         }
     };
 
-    openDropdown = event => {
-        const { shouldShowSearchInput, positionFixed } = this.props;
+    openDropdown = (event: SyntheticEvent<HTMLElement>) => {
+        const { shouldShowSearchInput, isPositionFixed } = this.props;
         if (!this.state.isOpen) {
             let dropdownStyle = {};
 
-            if (positionFixed) {
-                const rect = event.target ? event.target.getBoundingClientRect() : null;
+            if (isPositionFixed) {
+                const rect =
+                    event.target && event.target instanceof HTMLElement ? event.target.getBoundingClientRect() : null;
                 dropdownStyle = rect
                     ? {
                           top: 'unset',
@@ -571,9 +572,9 @@ class BaseSelectField extends React.Component<Props, State> {
             className,
             multiple,
             isEscapedWithReference,
+            isPositionFixed,
             isRightAligned,
             isScrollable,
-            positionFixed,
             selectedValues,
             shouldShowSearchInput,
         } = this.props;
@@ -589,6 +590,7 @@ class BaseSelectField extends React.Component<Props, State> {
         const dropdownPlacement = isRightAligned ? PLACEMENT_BOTTOM_END : PLACEMENT_BOTTOM_START;
         // popper.js modifier to allow dropdown to overflow its boundaries and remain attached to its reference
         const dropdownModifiers = isEscapedWithReference ? { preventOverflow: { escapeWithReference: true } } : {};
+        const dropdownPosition = !!isPositionFixed;
 
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
@@ -602,7 +604,7 @@ class BaseSelectField extends React.Component<Props, State> {
                     placement={dropdownPlacement}
                     isOpen={isOpen}
                     modifiers={dropdownModifiers}
-                    positionFixed={positionFixed}
+                    positionFixed={dropdownPosition}
                 >
                     {this.renderSelectButton()}
                     <SelectFieldDropdown
