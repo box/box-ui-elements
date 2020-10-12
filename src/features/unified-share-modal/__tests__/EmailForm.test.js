@@ -284,7 +284,7 @@ describe('features/unified-share-modal/EmailForm', () => {
         });
     });
 
-    describe('isValidEmail()', () => {
+    describe('isValidContactPill()', () => {
         [
             {
                 email: 'x@example.com',
@@ -311,14 +311,45 @@ describe('features/unified-share-modal/EmailForm', () => {
                 expectedValue: false,
             },
         ].forEach(({ email, expectedValue }) => {
-            test('should validate email addresses properly', () => {
+            test('should properly validate pill text input as email address', () => {
                 const wrapper = getWrapper();
 
-                const isValidEmail = wrapper.instance().isValidEmail(email);
+                const isValidContactPill = wrapper.instance().isValidContactPill(email);
 
-                expect(isValidEmail).toBe(expectedValue);
+                expect(isValidContactPill).toBe(expectedValue);
             });
         });
+
+        test('should consider parsed contact pills as valid by default', () => {
+            const wrapper = getWrapper();
+
+            expectedContacts.forEach(contact => {
+                const isValidContactPill = wrapper.instance().isValidContactPill(contact);
+
+                expect(isValidContactPill).toBe(true);
+            });
+        });
+
+        test.each`
+            shouldInvalidateExternalCollabs | isExternalUser | expectedIsValid
+            ${false}                        | ${true}        | ${true}
+            ${true}                         | ${true}        | ${false}
+            ${false}                        | ${false}       | ${true}
+            ${true}                         | ${false}       | ${true}
+        `(
+            'should have isValidContactPill return $expectedIsValid when shouldInvalidateExternalCollabs is $shouldInvalidateExternalCollabs and isExternalUser is $isExternalUser',
+            ({ shouldInvalidateExternalCollabs, isExternalUser, expectedIsValid }) => {
+                const externalContact = {
+                    ...expectedContacts[0],
+                    isExternalUser,
+                };
+                const wrapper = getWrapper();
+
+                wrapper.setProps({ shouldInvalidateExternalCollabs });
+                const isValidContactPill = wrapper.instance().isValidContactPill(externalContact);
+                expect(isValidContactPill).toBe(expectedIsValid);
+            },
+        );
     });
 
     describe('render()', () => {

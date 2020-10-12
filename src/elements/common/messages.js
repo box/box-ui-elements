@@ -712,6 +712,11 @@ const messages = defineMessages({
         description: 'Error message shown when one or more child folders failed to upload',
         defaultMessage: 'One or more child folders failed to upload.',
     },
+    uploadsPackageUploadErrorMessage: {
+        id: 'be.uploadsPackageUploadErrorMessage',
+        description: 'Error message to display when a macOS package failed to upload',
+        defaultMessage: 'Package file uploads are not currently supported. Please retry by saving as a single file.',
+    },
     uploadsDefaultErrorMessage: {
         id: 'be.uploadsDefaultErrorMessage',
         description: 'Default error message shown when upload fails',

@@ -127,6 +127,19 @@ class ContactsField extends React.Component<Props, State> {
 
     debouncedGetContacts = debounce(this.getContactsPromise, 200);
 
+    handleParseItems = (inputValue: string): Array<string> => {
+        const { validator } = this.props;
+
+        // ContactField allows invalid pills to be displayed in
+        // in some cases (e.g., when user is external and external
+        // collab is restricted). We don't allow, however, invalid
+        // emails from the pill selector input to be turned into pills.
+        const emails = parseEmails(inputValue);
+        const validEmails = emails.filter(email => validator(email));
+
+        return validEmails;
+    };
+
     handlePillSelectorInput = (value: string) => {
         const { onInput } = this.props;
         const trimmedValue = value.trim();
@@ -173,6 +186,7 @@ class ContactsField extends React.Component<Props, State> {
         return (
             <PillSelectorDropdown
                 allowCustomPills
+                allowInvalidPills
                 className={pillSelectorOverlayClasses}
                 dividerIndex={shouldShowSuggested ? numSuggestedShowing : undefined}
                 disabled={disabled}
@@ -188,7 +202,7 @@ class ContactsField extends React.Component<Props, State> {
                 onSelect={onContactAdd}
                 onPillCreate={onPillCreate}
                 overlayTitle={shouldShowSuggested ? intl.formatMessage(messages.suggestedCollabsTitle) : undefined}
-                parseItems={parseEmails}
+                parseItems={this.handleParseItems}
                 placeholder={intl.formatMessage(commonMessages.pillSelectorPlaceholder)}
                 ref={fieldRef}
                 selectedOptions={selectedContacts}
