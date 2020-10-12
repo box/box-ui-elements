@@ -65,7 +65,7 @@ function ContentSharing({
     messages,
     token,
 }: ContentSharingProps) {
-    const [api, setAPI] = React.useState<API>(createAPI(apiHost, itemID, itemType, token));
+    const [api, setAPI] = React.useState<API | null>(createAPI(apiHost, itemID, itemType, token));
     const [launchButton, setLaunchButton] = React.useState<React.Element<any> | null>(null);
     const [isVisible, setIsVisible] = React.useState<boolean>(!customButton);
 
@@ -98,17 +98,19 @@ function ContentSharing({
     return (
         <>
             {launchButton}
-            <SharingModal
-                api={api}
-                config={config}
-                displayInModal={displayInModal}
-                itemID={itemID}
-                itemType={itemType}
-                language={language}
-                messages={messages}
-                isVisible={isVisible}
-                setIsVisible={setIsVisible}
-            />
+            {api && (
+                <SharingModal
+                    api={api}
+                    config={config}
+                    displayInModal={displayInModal}
+                    isVisible={isVisible}
+                    itemID={itemID}
+                    itemType={itemType}
+                    language={language}
+                    messages={messages}
+                    setIsVisible={setIsVisible}
+                />
+            )}
         </>
     );
 }

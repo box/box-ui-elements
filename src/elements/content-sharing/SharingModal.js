@@ -6,6 +6,7 @@
  * @author Box
  */
 import * as React from 'react';
+import isEmpty from 'lodash/isEmpty';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import type { $AxiosError } from 'axios';
@@ -52,7 +53,7 @@ type SharingModalProps = {
     itemType: ItemType,
     language: string,
     messages?: StringMap,
-    setIsVisible: () => void,
+    setIsVisible: (arg: boolean) => void,
 };
 
 function SharingModal({
@@ -140,7 +141,7 @@ function SharingModal({
             }
         };
 
-        if (api && isVisible && !item && !sharedLink) {
+        if (api && !isEmpty(api) && isVisible && !item && !sharedLink) {
             getItem();
         }
     }, [api, getError, handleGetItemSuccess, isVisible, item, itemID, itemType, sharedLink]);
@@ -163,7 +164,7 @@ function SharingModal({
             });
         };
 
-        if (api && item && sharedLink && !currentUserID) {
+        if (api && !isEmpty(api) && item && sharedLink && !currentUserID) {
             getUserData();
         }
     }, [getError, item, itemID, itemType, sharedLink, currentUserID, api]);
