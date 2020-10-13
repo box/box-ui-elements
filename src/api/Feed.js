@@ -168,8 +168,8 @@ class Feed extends Base {
         text: string,
         hasMention: boolean,
         permissions: AnnotationPermission,
-        successCallback: Function,
-        errorCallback: Function,
+        successCallback: (annotation: Annotation) => void,
+        errorCallback: ErrorCallback,
     ): void => {
         const annotationData = {
             tagged_message: text,

@@ -76,7 +76,7 @@ export default class Annotations extends MarkerBasedApi {
         permissions: AnnotationPermission,
         message: string,
         tagged_message?: string,
-        successCallback: Function,
+        successCallback: (annotation: Annotation) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
     ): void {
         this.errorCode = ERROR_CODE_EDIT_ANNOTATION;
