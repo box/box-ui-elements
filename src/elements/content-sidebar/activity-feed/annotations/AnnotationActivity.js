@@ -27,7 +27,6 @@ type Props = {
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
     isCurrentVersion: boolean,
-    isDisabled?: boolean,
     item: Annotation,
     mentionSelectorContacts?: SelectorItems<>,
     onDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
@@ -37,7 +36,6 @@ type Props = {
 
 const AnnotationActivity = ({
     currentUser,
-    isDisabled,
     item,
     getAvatarUrl,
     getMentionWithQuery,
@@ -123,9 +121,9 @@ const AnnotationActivity = ({
                     </div>
                     {isEditing ? (
                         <CommentForm
-                            isDisabled={isDisabled}
+                            isDisabled={isPending}
                             className={classNames('bcs-AnnotationActivity-commentEditor', {
-                                'bcs-is-disabled': isDisabled,
+                                'bcs-is-disabled': isPending,
                             })}
                             updateComment={commentFormSubmitHandler}
                             isOpen={isInputOpen}

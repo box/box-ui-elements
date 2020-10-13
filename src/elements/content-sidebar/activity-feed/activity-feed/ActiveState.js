@@ -33,7 +33,6 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
-    isDisabled?: boolean,
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems<>,
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
@@ -58,7 +57,6 @@ const ActiveState = ({
     approverSelectorContacts,
     currentFileVersionId,
     currentUser,
-    isDisabled,
     items,
     mentionSelectorContacts,
     getMentionWithQuery,
@@ -177,7 +175,6 @@ const ActiveState = ({
                                     getUserProfileUrl={getUserProfileUrl}
                                     getMentionWithQuery={getMentionWithQuery}
                                     isCurrentVersion={currentFileVersionId === itemFileVersionId}
-                                    isDisabled={isDisabled}
                                     item={item}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     onEdit={onAnnotationEdit}
