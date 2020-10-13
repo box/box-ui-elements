@@ -28,7 +28,7 @@ type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
     isCurrentVersion: boolean,
     item: Annotation,
-    mentionSelectorContacts?: SelectorItems<>,
+    mentionSelectorContacts?: SelectorItems<User>,
     onDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
     onEdit?: (id: string, text: string, permissions: AnnotationPermission) => any,
     onSelect?: (annotation: Annotation) => any,
@@ -49,13 +49,13 @@ const AnnotationActivity = ({
     const [isInputOpen, setIsInputOpen] = React.useState(false);
     const [isEditing, setIsEditing] = React.useState(false);
     const { created_at, created_by, description, error, file_version, id, isPending, permissions = {}, target } = item;
-    const message = (description && description.message) || '';
+    const message = description?.message || '';
 
     const handleDeleteConfirm = (): void => {
         onDelete({ id, permissions });
     };
 
-    const handleEditClick = () => {
+    const handleEdit = () => {
         setIsEditing(true);
     };
 
@@ -63,14 +63,14 @@ const AnnotationActivity = ({
         onSelect(item);
     };
 
-    const commentFormFocusHandler = (): void => setIsInputOpen(true);
+    const handleFormFocus = (): void => setIsInputOpen(true);
 
-    const commentFormCancelHandler = (): void => {
+    const handleFormCancel = (): void => {
         setIsInputOpen(false);
         setIsEditing(false);
     };
 
-    const commentFormSubmitHandler = ({ text }): void => {
+    const handleFormSubmit = ({ text }): void => {
         setIsInputOpen(false);
         setIsEditing(false);
         onEdit(id, text, permissions);
@@ -78,8 +78,7 @@ const AnnotationActivity = ({
 
     const createdAtTimestamp = new Date(created_at).getTime();
     const createdByUser = created_by || PLACEHOLDER_USER;
-    const canDelete = permissions.can_delete;
-    const canEdit = permissions.can_edit;
+    const { can_delete: canDelete, can_edit: canEdit } = permissions;
     const isFileVersionUnavailable = file_version === null;
     const isMenuVisible = (canDelete || canEdit) && !isPending;
     const linkMessage = isCurrentVersion ? messages.annotationActivityPageItem : messages.annotationActivityVersionLink;
@@ -105,7 +104,7 @@ const AnnotationActivity = ({
                             canEdit={canEdit}
                             id={id}
                             onDeleteConfirm={handleDeleteConfirm}
-                            onEdit={handleEditClick}
+                            onEdit={handleEdit}
                         />
                     )}
                     <div className="bcs-AnnotationActivity-headline">
@@ -121,22 +120,19 @@ const AnnotationActivity = ({
                     </div>
                     {isEditing ? (
                         <CommentForm
-                            isDisabled={isPending}
-                            className={classNames('bcs-AnnotationActivity-commentEditor', {
-                                'bcs-is-disabled': isPending,
-                            })}
-                            updateComment={commentFormSubmitHandler}
+                            className="bcs-AnnotationActivity-commentEditor"
+                            entityId={id}
+                            getAvatarUrl={getAvatarUrl}
+                            getMentionWithQuery={getMentionWithQuery}
+                            isEditing={isEditing}
                             isOpen={isInputOpen}
+                            mentionSelectorContacts={mentionSelectorContacts}
+                            onCancel={handleFormCancel}
+                            onFocus={handleFormFocus}
+                            updateComment={handleFormSubmit}
                             // $FlowFixMe
                             user={currentUser}
-                            onCancel={commentFormCancelHandler}
-                            onFocus={commentFormFocusHandler}
-                            isEditing={isEditing}
-                            entityId={id}
                             tagged_message={message}
-                            getAvatarUrl={getAvatarUrl}
-                            mentionSelectorContacts={mentionSelectorContacts}
-                            getMentionWithQuery={getMentionWithQuery}
                         />
                     ) : (
                         <ActivityMessage id={id} tagged_message={message} getUserProfileUrl={getUserProfileUrl} />

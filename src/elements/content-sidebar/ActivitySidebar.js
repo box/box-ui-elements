@@ -152,7 +152,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.fetchFeedItems();
     };
 
-    handleAnnotationEdit = (id: string, text: string, hasMention: boolean, permissions: AnnotationPermission) => {
+    handleAnnotationEdit = (id: string, text: string, permissions: AnnotationPermission) => {
         const { api, file } = this.props;
 
         const errorCallback = (e, code) => {
@@ -163,7 +163,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             this.feedSuccessCallback();
         };
 
-        api.getFeedAPI(false).updateAnnotation(file, id, text, hasMention, permissions, successCallback, errorCallback);
+        api.getFeedAPI(false).updateAnnotation(file, id, text, permissions, successCallback, errorCallback);
 
         this.fetchFeedItems();
     };
