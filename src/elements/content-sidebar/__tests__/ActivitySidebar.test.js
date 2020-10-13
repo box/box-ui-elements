@@ -773,7 +773,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             wrapper.instance().handleAnnotationEdit({
                 id: '123',
                 text: 'hello',
-                hasMention: false,
                 permissions: {
                     can_edit: true,
                     can_delete: true,
