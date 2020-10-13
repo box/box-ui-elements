@@ -35,7 +35,10 @@ type Props = {
     children?: React.Node,
     /** Additional classes */
     className?: string,
-    onScroll?: ({ clientHeight: number, scrollLeft: number, scrollTop: number }) => void,
+    onScroll?: (
+        { clientHeight: number, scrollLeft: number, scrollTop: number },
+        { clientHeight: number, scrollLeft: number, scrollTop: number },
+    ) => void,
     style: { height: number | string, width: number | string },
     thumbYStyles?: Object,
     trackYStyles?: Object,
@@ -67,12 +70,12 @@ function CollapsibleScrollbar(
     // If there hasn't been an update to isScrolling in 100ms, it'll be set to false.
     const debouncedTurnOffScrollingState = React.useCallback(debounce(turnOffScrollingState, 100), []);
 
-    const onScrollHandler = () => {
+    const onScrollHandler = (scrollValues, prevScrollValues) => {
         if (!scrollRef.current) {
             return;
         }
 
-        const { scrollHeight, clientHeight, scrollTop, scrollLeft } = scrollRef.current;
+        const { scrollHeight, clientHeight, scrollTop } = scrollValues;
         const scrollShadowClassNameValue = getScrollShadowClassName(scrollTop, scrollHeight, clientHeight);
 
         setIsScrolling(true);
@@ -80,7 +83,7 @@ function CollapsibleScrollbar(
 
         debouncedTurnOffScrollingState();
         if (onScroll) {
-            onScroll({ scrollHeight, clientHeight, scrollTop, scrollLeft });
+            onScroll(scrollValues, prevScrollValues);
         }
     };
 
