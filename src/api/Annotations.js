@@ -75,7 +75,6 @@ export default class Annotations extends MarkerBasedApi {
         annotationId: string,
         permissions: AnnotationPermission,
         message: string,
-        tagged_message?: string,
         successCallback: (annotation: Annotation) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
     ): void {
@@ -88,7 +87,7 @@ export default class Annotations extends MarkerBasedApi {
             return;
         }
 
-        const requestData = { data: { description: { message: tagged_message || message } } };
+        const requestData = { data: { description: { message } } };
 
         this.put({
             id: fileId,

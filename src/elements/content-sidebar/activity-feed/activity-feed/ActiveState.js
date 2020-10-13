@@ -37,7 +37,7 @@ type Props = {
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems<>,
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
-    onAnnotationEdit?: (id: string, text: string, hasMention: boolean, permissions: AnnotationPermission) => void,
+    onAnnotationEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
     onAnnotationSelect?: (annotation: Annotation) => void,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,

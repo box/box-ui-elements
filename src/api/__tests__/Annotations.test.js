@@ -104,22 +104,14 @@ describe('api/Annotations', () => {
     describe('updateAnnotation()', () => {
         const errorCallback = jest.fn();
         const successCallback = jest.fn();
-        const tagged_message = null;
+        const message = 'hello';
 
         test('should format its parameters and call the update method for a given id', () => {
-            annotations.updateAnnotation(
-                '12345',
-                'abc',
-                { can_edit: true },
-                'hello',
-                tagged_message,
-                successCallback,
-                errorCallback,
-            );
+            annotations.updateAnnotation('12345', 'abc', { can_edit: true }, message, successCallback, errorCallback);
 
             expect(annotations.put).toBeCalledWith({
                 id: '12345',
-                data: { data: { description: { message: 'hello' } } },
+                data: { data: { description: { message } } },
                 errorCallback,
                 successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/abc',
@@ -131,8 +123,7 @@ describe('api/Annotations', () => {
                 '12345',
                 '67890',
                 { can_edit: false },
-                'hello',
-                tagged_message,
+                message,
                 successCallback,
                 errorCallback,
             );

@@ -31,7 +31,7 @@ type Props = {
     item: Annotation,
     mentionSelectorContacts?: SelectorItems<>,
     onDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
-    onEdit?: (id: string, text: string, hasMention: boolean, permissions: AnnotationPermission) => any,
+    onEdit?: (id: string, text: string, permissions: AnnotationPermission) => any,
     onSelect?: (annotation: Annotation) => any,
 };
 
@@ -72,10 +72,10 @@ const AnnotationActivity = ({
         setIsEditing(false);
     };
 
-    const commentFormSubmitHandler = ({ text, hasMention }): void => {
+    const commentFormSubmitHandler = ({ text }): void => {
         setIsInputOpen(false);
         setIsEditing(false);
-        onEdit(id, text, hasMention, permissions);
+        onEdit(id, text, permissions);
     };
 
     const createdAtTimestamp = new Date(created_at).getTime();

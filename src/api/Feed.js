@@ -166,13 +166,12 @@ class Feed extends Base {
         file: BoxItem,
         annotationId: string,
         text: string,
-        hasMention: boolean,
         permissions: AnnotationPermission,
         successCallback: (annotation: Annotation) => void,
         errorCallback: ErrorCallback,
     ): void => {
         const annotationData = {
-            tagged_message: text,
+            message: text,
         };
 
         this.annotationsAPI = new AnnotationsAPI(this.options);
@@ -184,13 +183,6 @@ class Feed extends Base {
         this.file = file;
         this.errorCallback = errorCallback;
 
-        const message = {};
-        if (hasMention) {
-            message.tagged_message = text;
-        } else {
-            message.message = text;
-        }
-
         // Create action has completed, so update the existing pending item
         this.updateFeedItem({ ...annotationData, isPending: true }, annotationId);
 
@@ -198,8 +190,7 @@ class Feed extends Base {
             this.file.id,
             annotationId,
             permissions,
-            message.message,
-            message.tagged_message,
+            text,
             (annotation: Annotation) => {
                 // use the request payload instead of response in the
                 // feed item update because response may not contain
