@@ -1,4 +1,10 @@
-import { isBoxNote, getTypedFileId, getTypedFolderId, getFileExtension } from '../file';
+import {
+    FILE_EXTENSION_GOOGLE_DOC,
+    FILE_EXTENSION_GOOGLE_SHEET,
+    FILE_EXTENSION_GOOGLE_SLIDE,
+    FILE_EXTENSION_GOOGLE_SLIDE_LEGACY,
+} from '../../constants';
+import { isBoxNote, getTypedFileId, getTypedFolderId, getFileExtension, isGSuiteExtension } from '../file';
 
 describe('util/file', () => {
     describe('isBoxNote()', () => {
@@ -40,6 +46,20 @@ describe('util/file', () => {
             ['invalidfilenamepdf', ''],
         ])('should return extension of file correctly', (filename, extension) => {
             expect(getFileExtension(filename)).toBe(extension);
+        });
+    });
+
+    describe('isGSuiteExtension()', () => {
+        test.each`
+            extension                             | expectedResult
+            ${FILE_EXTENSION_GOOGLE_DOC}          | ${true}
+            ${FILE_EXTENSION_GOOGLE_SHEET}        | ${true}
+            ${FILE_EXTENSION_GOOGLE_SLIDE}        | ${true}
+            ${FILE_EXTENSION_GOOGLE_SLIDE_LEGACY} | ${true}
+            ${'docx'}                             | ${false}
+            ${'png'}                              | ${false}
+        `('should return the correct value for a $extension', ({ extension, expectedResult }) => {
+            expect(isGSuiteExtension(extension)).toBe(expectedResult);
         });
     });
 });

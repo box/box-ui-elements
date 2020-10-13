@@ -41,6 +41,7 @@ type SharingNotificationProps = {
     collaboratorsList: collaboratorsListType | null,
     currentUserID: string | null,
     getContacts: GetContactsFnType | null,
+    isDownloadAvailable: boolean,
     itemID: string,
     itemType: ItemType,
     ownerEmail: ?string,
@@ -71,6 +72,7 @@ function SharingNotification({
     collaboratorsList,
     currentUserID,
     getContacts,
+    isDownloadAvailable,
     itemID,
     itemType,
     ownerEmail,
@@ -196,7 +198,8 @@ function SharingNotification({
         transformAccess: newAccessLevel => USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel],
         transformPermissions: newSharedLinkPermissionLevel =>
             convertSharedLinkPermissions(newSharedLinkPermissionLevel),
-        transformSettings: (settings, access) => convertSharedLinkSettings(settings, access, serverURL),
+        transformSettings: (settings, access) =>
+            convertSharedLinkSettings(settings, access, isDownloadAvailable, serverURL),
     });
 
     setChangeSharedLinkAccessLevel(() => changeSharedLinkAccessLevel);
