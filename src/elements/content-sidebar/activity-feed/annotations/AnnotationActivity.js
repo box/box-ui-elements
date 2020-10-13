@@ -124,7 +124,7 @@ const AnnotationActivity = ({
                     {isEditing ? (
                         <CommentForm
                             isDisabled={isDisabled}
-                            className={classNames('bcs-Comment-editor', {
+                            className={classNames('bcs-AnnotationActivity-commentEditor', {
                                 'bcs-is-disabled': isDisabled,
                             })}
                             updateComment={commentFormSubmitHandler}
