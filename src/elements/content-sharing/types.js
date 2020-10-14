@@ -29,7 +29,12 @@ export type ContentSharingUserDataType = {
 };
 
 // This type is used when an item does not have a shared link.
-type SharedLinkNotCreatedType = { accessLevel?: string, canInvite: boolean, expirationTimestamp?: ?number };
+type SharedLinkNotCreatedType = {
+    accessLevel?: string,
+    canInvite: boolean,
+    expirationTimestamp?: ?number,
+    isDownloadAvailable?: boolean,
+};
 
 // This is the full shared link type, which extends the internal USM shared link with
 // data necessary for instantiating the Shared Link Settings modal.

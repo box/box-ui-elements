@@ -65,6 +65,7 @@ describe('elements/content-sharing/SharingNotification', () => {
                 collaboratorsList={null}
                 currentUserID={MOCK_OWNER_ID}
                 getContacts={null}
+                isDownloadAvailable
                 itemID={MOCK_ITEM_ID}
                 itemType={TYPE_FOLDER}
                 ownerEmail={MOCK_OWNER_EMAIL}
