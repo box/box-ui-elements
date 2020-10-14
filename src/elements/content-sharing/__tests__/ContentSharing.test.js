@@ -37,24 +37,23 @@ jest.mock('../../../api', () => {
     });
 });
 
+const MOCK_TOKEN = 'token';
+
 describe('elements/content-sharing/ContentSharing', () => {
     const customButton = <Button>Test Button</Button>;
-    const getWrapper = props =>
-        mount(
-            <ContentSharing
-                apiHost={DEFAULT_HOSTNAME_API}
-                itemID={MOCK_ITEM_ID}
-                itemType={TYPE_FOLDER}
-                language=""
-                token=""
-                {...props}
-            />,
-        );
+    const getWrapper = props => mount(<ContentSharing language="" {...props} />);
 
     test('should add an onClick function to a custom button', () => {
         let wrapper;
         act(() => {
-            wrapper = getWrapper({ customButton, displayInModal: true });
+            wrapper = getWrapper({
+                apiHost: DEFAULT_HOSTNAME_API,
+                customButton,
+                displayInModal: true,
+                itemID: MOCK_ITEM_ID,
+                itemType: TYPE_FOLDER,
+                token: MOCK_TOKEN,
+            });
         });
         wrapper.update();
         expect(wrapper.exists(Button)).toBe(true);
@@ -63,7 +62,14 @@ describe('elements/content-sharing/ContentSharing', () => {
     test('should instantiate SharingModal on button click', () => {
         let wrapper;
         act(() => {
-            wrapper = getWrapper({ customButton, displayInModal: true });
+            wrapper = getWrapper({
+                apiHost: DEFAULT_HOSTNAME_API,
+                customButton,
+                displayInModal: true,
+                itemID: MOCK_ITEM_ID,
+                itemType: TYPE_FOLDER,
+                token: MOCK_TOKEN,
+            });
         });
         wrapper.update();
         const launchButton = wrapper.find(Button);
@@ -72,6 +78,7 @@ describe('elements/content-sharing/ContentSharing', () => {
         });
         wrapper.update();
         expect(wrapper.exists(SharingModal)).toBe(true);
+        expect(wrapper.find(SharingModal).prop('isVisible')).toBe(true);
         expect(wrapper.exists(Button)).toBe(true);
     });
 
@@ -83,31 +90,39 @@ describe('elements/content-sharing/ContentSharing', () => {
             wrapper.update();
         };
 
-        const closeModal = wrapper => {
+        const setIsVisible = (wrapper, isVisible) => {
             act(() => {
-                wrapper.find(SharingModal).invoke('closeModal')();
+                wrapper.find(SharingModal).invoke('setIsVisible')(isVisible);
             });
             wrapper.update();
         };
 
         let wrapper;
         act(() => {
-            wrapper = getWrapper({ customButton, displayInModal: true });
+            wrapper = getWrapper({
+                apiHost: DEFAULT_HOSTNAME_API,
+                customButton,
+                displayInModal: true,
+                itemID: MOCK_ITEM_ID,
+                itemType: TYPE_FOLDER,
+                token: MOCK_TOKEN,
+            });
         });
         wrapper.update();
 
         const launchButton = wrapper.find(Button);
         clickLaunchButton(launchButton, wrapper); // open modal
         expect(wrapper.exists(SharingModal)).toBe(true);
+        expect(wrapper.find(SharingModal).prop('isVisible')).toBe(true);
 
-        closeModal(wrapper); // close modal
-        expect(wrapper.exists(SharingModal)).toBe(false);
+        setIsVisible(wrapper, false); // close modal
+        expect(wrapper.find(SharingModal).prop('isVisible')).toBe(false); // grab a fresh reference to SharingModal
 
         clickLaunchButton(launchButton, wrapper); // open modal again
-        expect(wrapper.exists(SharingModal)).toBe(true);
+        expect(wrapper.find(SharingModal).prop('isVisible')).toBe(true);
 
-        closeModal(wrapper); // close modal again
-        expect(wrapper.exists(SharingModal)).toBe(false);
+        setIsVisible(wrapper, false); // close modal again
+        expect(wrapper.find(SharingModal).prop('isVisible')).toBe(false);
     });
 
     test.each([true, false])(
@@ -115,11 +130,33 @@ describe('elements/content-sharing/ContentSharing', () => {
         ({ displayInModal }) => {
             let wrapper;
             act(() => {
-                wrapper = getWrapper({ displayInModal });
+                wrapper = getWrapper({
+                    apiHost: DEFAULT_HOSTNAME_API,
+                    displayInModal,
+                    itemID: MOCK_ITEM_ID,
+                    itemType: TYPE_FOLDER,
+                    token: MOCK_TOKEN,
+                });
             });
             wrapper.update();
             expect(wrapper.exists(SharingModal)).toBe(true);
             expect(wrapper.exists(Button)).toBe(false);
         },
     );
+
+    test.each`
+        apiHost                 | itemID          | itemType       | token         | sharingModalExists | description
+        ${DEFAULT_HOSTNAME_API} | ${MOCK_ITEM_ID} | ${TYPE_FOLDER} | ${MOCK_TOKEN} | ${true}            | ${'instantiate SharingModal with a new API when all parameters are provided'}
+        ${null}                 | ${MOCK_ITEM_ID} | ${TYPE_FOLDER} | ${MOCK_TOKEN} | ${false}           | ${'not instantiate SharingModal if apiHost is missing'}
+        ${DEFAULT_HOSTNAME_API} | ${null}         | ${TYPE_FOLDER} | ${MOCK_TOKEN} | ${false}           | ${'not instantiate SharingModal if itemID is missing'}
+        ${DEFAULT_HOSTNAME_API} | ${MOCK_ITEM_ID} | ${null}        | ${MOCK_TOKEN} | ${false}           | ${'not instantiate SharingModal if itemType is missing'}
+        ${DEFAULT_HOSTNAME_API} | ${MOCK_ITEM_ID} | ${TYPE_FOLDER} | ${null}       | ${false}           | ${'not instantiate SharingModal if token is missing'}
+    `('should $description', ({ apiHost, itemID, itemType, token, sharingModalExists }) => {
+        let wrapper;
+        act(() => {
+            wrapper = getWrapper({ apiHost, itemID, itemType, token });
+        });
+        wrapper.update();
+        expect(wrapper.exists(SharingModal)).toBe(sharingModalExists);
+    });
 });
