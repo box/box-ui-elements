@@ -346,6 +346,10 @@ export const SKILLS_STATUS_INVOKED = 'skills_invoked_status';
 
 /* ------------------ File Extensions ---------------------- */
 export const FILE_EXTENSION_BOX_NOTE = 'boxnote';
+export const FILE_EXTENSION_GOOGLE_DOC = 'gdoc';
+export const FILE_EXTENSION_GOOGLE_SHEET = 'gsheet';
+export const FILE_EXTENSION_GOOGLE_SLIDE = 'gslides';
+export const FILE_EXTENSION_GOOGLE_SLIDE_LEGACY = 'gslide';
 
 /* ------------------ X-Rep-Hints ---------------------- */
 // available dimensions for JPG: "32x32", "94x94", "160x160", "320x320", "1024x1024", "2048x2048"

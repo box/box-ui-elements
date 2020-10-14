@@ -1,5 +1,5 @@
 // @flow
-import { getTypedFileId, getTypedFolderId } from '../../../utils/file';
+import { getTypedFileId, getTypedFolderId, isGSuiteExtension } from '../../../utils/file';
 import { checkIsExternalUser } from '../../../utils/parseEmails';
 import {
     ACCESS_COLLAB,
@@ -67,6 +67,7 @@ import type {
     collaboratorType,
     contactType,
     InviteCollaboratorsRequest,
+    permissionLevelType,
 } from '../flowTypes';
 
 /**
@@ -145,6 +146,38 @@ export const convertAllowedAccessLevels = (levelsFromAPI?: Array<string>): allow
 };
 
 /**
+ * Convert shared link permission into USM format, taking file type limitations into account.
+ *
+ * @param {string} effectivePermissionFromAPI
+ * @param {string} extension
+ * @returns {permissionLevelType}
+ */
+export const convertEffectiveSharedLinkPermission = (
+    effectivePermissionFromAPI: string,
+    extension: string,
+): permissionLevelType => {
+    return isGSuiteExtension(extension) ? CAN_VIEW_ONLY : API_TO_USM_PERMISSION_LEVEL_MAP[effectivePermissionFromAPI];
+};
+
+/**
+ * Convert isDownloadSettingAvailable into a value used by the USM, taking into account file type limitations.
+ *
+ * @param {boolean} isDownloadSettingAvailableFromAPI
+ * @param {string} extension
+ * @returns {boolean}
+ */
+export const convertIsDownloadSettingAvailable = (
+    isDownloadSettingAvailableFromAPI?: boolean,
+    extension: string,
+): boolean | void => {
+    if (isDownloadSettingAvailableFromAPI === undefined) {
+        return undefined;
+    }
+
+    return !isGSuiteExtension(extension) && isDownloadSettingAvailableFromAPI;
+};
+
+/**
  * Convert a response from the Item API to the object that the USM expects.
  *
  * @param {BoxItem} itemAPIData
@@ -169,7 +202,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
     } = itemAPIData;
 
     const {
-        can_download: isDownloadSettingAvailable,
+        can_download: isDownloadSettingAvailableFromApi,
         can_invite_collaborator: canInvite,
         can_preview: isPreviewAllowed,
         can_set_share_access: canChangeAccessLevel,
@@ -207,8 +240,15 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
             vanity_name: vanityName,
         } = shared_link;
 
+        const isDownloadSettingAvailable = convertIsDownloadSettingAvailable(
+            isDownloadSettingAvailableFromApi,
+            extension,
+        );
+
         const accessLevel = effective_access ? API_TO_USM_ACCESS_LEVEL_MAP[effective_access] : '';
-        const permissionLevel = effective_permission ? API_TO_USM_PERMISSION_LEVEL_MAP[effective_permission] : null;
+        const permissionLevel = effective_permission
+            ? convertEffectiveSharedLinkPermission(effective_permission, extension)
+            : null;
         const isDownloadAllowed = permissionLevel === API_TO_USM_PERMISSION_LEVEL_MAP.can_download;
         const canChangeDownload =
             canChangeAccessLevel && isDownloadSettingAvailable && effective_access !== ACCESS_COLLAB; // access must be "company" or "open"
@@ -319,6 +359,7 @@ export const convertSharedLinkPermissions = (newSharedLinkPermissionLevel: strin
 export const convertSharedLinkSettings = (
     newSettings: SharedLinkSettingsOptions,
     accessLevel: string,
+    isDownloadAvailable: boolean,
     serverURL: string,
 ): $Shape<SharedLink> => {
     const {
@@ -336,7 +377,12 @@ export const convertSharedLinkSettings = (
 
     // Download permissions can only be set on "company" or "open" shared links.
     if (![ACCESS_COLLAB, PEOPLE_IN_ITEM].includes(accessLevel)) {
-        convertedSettings.permissions = { can_download, can_preview: !can_download };
+        const permissions: BoxItemPermission = { can_preview: !can_download };
+        if (isDownloadAvailable) {
+            permissions.can_download = can_download;
+        }
+
+        convertedSettings.permissions = permissions;
     }
 
     /**

@@ -25,7 +25,7 @@ import {
 import useContactsByEmail from './hooks/useContactsByEmail';
 import { FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FILE, TYPE_FOLDER } from '../../constants';
 import { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS, CONTENT_SHARING_VIEWS } from './constants';
-import { INVITEE_PERMISSIONS } from '../../features/unified-share-modal/constants';
+import { INVITEE_PERMISSIONS_FOLDER, INVITEE_PERMISSIONS_FILE } from '../../features/unified-share-modal/constants';
 import contentSharingMessages from './messages';
 import type { ErrorResponseData } from '../../common/types/api';
 import type { ItemType, StringMap } from '../../common/types/core';
@@ -190,7 +190,7 @@ function SharingModal({
     }
 
     const { ownerEmail, ownerID, permissions } = item;
-    const { accessLevel = '', expirationTimestamp, serverURL } = sharedLink;
+    const { accessLevel = '', expirationTimestamp, isDownloadAvailable = false, serverURL } = sharedLink;
     return (
         <Internationalize language={language} messages={messages}>
             <>
@@ -202,6 +202,7 @@ function SharingModal({
                     collaboratorsList={collaboratorsList}
                     currentUserID={currentUserID}
                     getContacts={getContacts}
+                    isDownloadAvailable={isDownloadAvailable}
                     itemID={itemID}
                     itemType={itemType}
                     onSubmitSettings={onSubmitSettings}
@@ -247,7 +248,9 @@ function SharingModal({
                         getCollaboratorContacts={getContacts}
                         getContactsByEmail={getContactsByEmail}
                         initialDataReceived
-                        inviteePermissions={INVITEE_PERMISSIONS}
+                        inviteePermissions={
+                            itemType === TYPE_FOLDER ? INVITEE_PERMISSIONS_FOLDER : INVITEE_PERMISSIONS_FILE
+                        }
                         isOpen={isVisible}
                         item={item}
                         onAddLink={onAddLink}

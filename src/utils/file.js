@@ -5,7 +5,15 @@
  */
 
 import getProp from 'lodash/get';
-import { TYPED_ID_FILE_PREFIX, TYPED_ID_FOLDER_PREFIX, FILE_EXTENSION_BOX_NOTE } from '../constants';
+import {
+    TYPED_ID_FILE_PREFIX,
+    TYPED_ID_FOLDER_PREFIX,
+    FILE_EXTENSION_BOX_NOTE,
+    FILE_EXTENSION_GOOGLE_DOC,
+    FILE_EXTENSION_GOOGLE_SHEET,
+    FILE_EXTENSION_GOOGLE_SLIDE,
+    FILE_EXTENSION_GOOGLE_SLIDE_LEGACY,
+} from '../constants';
 import type { BoxItem } from '../common/types/core';
 
 const FILE_EXT_REGEX = /\.([0-9a-z]+)$/i; // Case insensitive regex to extract file extension without "."
@@ -37,6 +45,20 @@ export function getTypedFolderId(id: string): string {
  */
 export function isBoxNote(file: BoxItem): boolean {
     return file.extension === FILE_EXTENSION_BOX_NOTE;
+}
+
+/**
+ * Determines whether a file extension is associated with a G Suite file.
+ * @param {string} extension
+ * @return boolean true if the extension is a valid G Suite extension
+ */
+export function isGSuiteExtension(extension: string): boolean {
+    return (
+        extension === FILE_EXTENSION_GOOGLE_DOC ||
+        extension === FILE_EXTENSION_GOOGLE_SHEET ||
+        extension === FILE_EXTENSION_GOOGLE_SLIDE ||
+        extension === FILE_EXTENSION_GOOGLE_SLIDE_LEGACY
+    );
 }
 
 /**
