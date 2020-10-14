@@ -19,10 +19,10 @@ import './Notification.scss';
 const DURATION_SHORT = 'short';
 const DURATION_LONG = 'long';
 const OVERFLOW_WRAP = 'wrap';
-export const TYPE_DEFAULT = 'default';
-export const TYPE_INFO = 'info';
-export const TYPE_WARN = 'warn';
-export const TYPE_ERROR = 'error';
+const TYPE_DEFAULT = 'default';
+const TYPE_INFO = 'info';
+const TYPE_WARN = 'warn';
+const TYPE_ERROR = 'error';
 
 const DURATION_TIMES = {
     [DURATION_SHORT]: 5000,
