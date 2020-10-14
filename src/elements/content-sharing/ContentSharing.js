@@ -65,91 +65,52 @@ function ContentSharing({
     messages,
     token,
 }: ContentSharingProps) {
-    const [api, setAPI] = React.useState<API>(createAPI(apiHost, itemID, itemType, token));
+    const [api, setAPI] = React.useState<API | null>(createAPI(apiHost, itemID, itemType, token));
     const [launchButton, setLaunchButton] = React.useState<React.Element<any> | null>(null);
-    const [isOpen, setIsOpen] = React.useState<boolean>(true);
-    const [sharingModalInstance, setSharingModalInstance] = React.useState<React.Element<typeof SharingModal> | null>(
-        customButton ? null : (
-            <SharingModal
-                api={api}
-                config={config}
-                displayInModal={false}
-                isOpen={isOpen}
-                itemID={itemID}
-                itemType={itemType}
-                language={language}
-                messages={messages}
-            />
-        ),
-    );
+    const [isVisible, setIsVisible] = React.useState<boolean>(!customButton);
 
     // Reset the API if necessary
     React.useEffect(() => {
-        setAPI(createAPI(apiHost, itemID, itemType, token));
+        if (apiHost && itemID && itemType && token) {
+            setAPI(createAPI(apiHost, itemID, itemType, token));
+        } else {
+            setAPI(null);
+        }
     }, [apiHost, itemID, itemType, token]);
 
     // Reset state if the API has changed
     React.useEffect(() => {
-        setSharingModalInstance(null);
-        setLaunchButton(null);
-    }, [api]);
-
-    // Reset instance if modal has been closed
-    React.useEffect(() => {
-        if (!isOpen) {
-            setSharingModalInstance(null);
-        }
-    }, [isOpen]);
+        setIsVisible(!customButton);
+    }, [api, customButton]);
 
     React.useEffect(() => {
-        const createSharingModalInstance = () => {
-            return (
-                <SharingModal
-                    api={api}
-                    closeModal={() => setIsOpen(false)}
-                    config={config}
-                    displayInModal={displayInModal}
-                    itemID={itemID}
-                    itemType={itemType}
-                    language={language}
-                    messages={messages}
-                />
-            );
-        };
-
-        // Add an onClick function that instantiates SharingModal to the custom button
         if (customButton && !launchButton) {
             setLaunchButton(
                 React.cloneElement(customButton, {
                     onClick: () => {
-                        setIsOpen(true);
-                        return setSharingModalInstance(createSharingModalInstance());
+                        return setIsVisible(true);
                     },
                 }),
             );
         }
-
-        // If there is no custom button, instantiate SharingModal
-        if (!customButton && !sharingModalInstance) {
-            setSharingModalInstance(createSharingModalInstance());
-        }
-    }, [
-        api,
-        config,
-        sharingModalInstance,
-        customButton,
-        displayInModal,
-        itemID,
-        itemType,
-        language,
-        launchButton,
-        messages,
-    ]);
+    }, [config, customButton, displayInModal, itemID, itemType, language, launchButton, messages, isVisible]);
 
     return (
         <>
             {launchButton}
-            {sharingModalInstance}
+            {api && (
+                <SharingModal
+                    api={api}
+                    config={config}
+                    displayInModal={displayInModal}
+                    isVisible={isVisible}
+                    itemID={itemID}
+                    itemType={itemType}
+                    language={language}
+                    messages={messages}
+                    setIsVisible={setIsVisible}
+                />
+            )}
         </>
     );
 }
