@@ -71,7 +71,7 @@ const INVITEE_PERMISSIONS_FOLDER = [
     },
 ];
 
-const INVITEE_PERMISSIONS_SFC = [
+const INVITEE_PERMISSIONS_FILE = [
     {
         default: true, // default in the WebApp
         text: EDITOR,
@@ -98,7 +98,7 @@ export {
     DISABLED_REASON_MALICIOUS_CONTENT,
     EDITOR,
     INVITEE_PERMISSIONS_FOLDER,
-    INVITEE_PERMISSIONS_SFC,
+    INVITEE_PERMISSIONS_FILE,
     OWNER,
     PEOPLE_IN_ITEM,
     PREVIEWER,

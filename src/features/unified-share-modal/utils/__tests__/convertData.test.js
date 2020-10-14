@@ -297,6 +297,8 @@ describe('convertItemResponse()', () => {
 
             const { download_url: isDirectLinkAvailable, password } = sharedLinkFeatures;
 
+            const isDownloadAvailable = can_download && extension !== ITEM_EXTENSION_GDOC;
+
             const convertedResponse = {
                 item: {
                     canUserSeeClassification: false,
@@ -320,7 +322,7 @@ describe('convertItemResponse()', () => {
                           accessLevelsDisabledReason: {},
                           allowedAccessLevels: ALLOWED_ACCESS_LEVELS,
                           canChangeAccessLevel: can_set_share_access,
-                          canChangeDownload: can_set_share_access && can_download && extension !== ITEM_EXTENSION_GDOC,
+                          canChangeDownload: can_set_share_access && isDownloadAvailable,
                           canChangeExpiration: can_set_share_access,
                           canChangePassword: can_set_share_access && password,
                           canChangeVanityName: false,
@@ -328,10 +330,10 @@ describe('convertItemResponse()', () => {
                           directLink: download_url,
                           expirationTimestamp: MOCK_TIMESTAMP_MILLISECONDS,
                           isDirectLinkAvailable,
-                          isDownloadAllowed: can_download && extension !== ITEM_EXTENSION_GDOC,
-                          isDownloadAvailable: can_download && extension !== ITEM_EXTENSION_GDOC,
-                          isDownloadEnabled: can_download && extension !== ITEM_EXTENSION_GDOC,
-                          isDownloadSettingAvailable: can_download && extension !== ITEM_EXTENSION_GDOC,
+                          isDownloadAllowed: isDownloadAvailable,
+                          isDownloadAvailable,
+                          isDownloadEnabled: isDownloadAvailable,
+                          isDownloadSettingAvailable: isDownloadAvailable,
                           isEditAllowed: true,
                           isNewSharedLink: false,
                           isPasswordAvailable: password,

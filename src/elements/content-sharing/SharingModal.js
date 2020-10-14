@@ -25,7 +25,7 @@ import {
 import useContactsByEmail from './hooks/useContactsByEmail';
 import { FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FILE, TYPE_FOLDER } from '../../constants';
 import { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS, CONTENT_SHARING_VIEWS } from './constants';
-import { INVITEE_PERMISSIONS_FOLDER, INVITEE_PERMISSIONS_SFC } from '../../features/unified-share-modal/constants';
+import { INVITEE_PERMISSIONS_FOLDER, INVITEE_PERMISSIONS_FILE } from '../../features/unified-share-modal/constants';
 import contentSharingMessages from './messages';
 import type { ErrorResponseData } from '../../common/types/api';
 import type { ItemType, StringMap } from '../../common/types/core';
@@ -249,7 +249,7 @@ function SharingModal({
                         getContactsByEmail={getContactsByEmail}
                         initialDataReceived
                         inviteePermissions={
-                            itemType === TYPE_FOLDER ? INVITEE_PERMISSIONS_FOLDER : INVITEE_PERMISSIONS_SFC
+                            itemType === TYPE_FOLDER ? INVITEE_PERMISSIONS_FOLDER : INVITEE_PERMISSIONS_FILE
                         }
                         isOpen={isVisible}
                         item={item}

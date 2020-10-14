@@ -26,7 +26,7 @@ import {
     CAN_VIEW_DOWNLOAD,
     CAN_VIEW_ONLY,
     PEOPLE_IN_ITEM,
-    INVITEE_PERMISSIONS_SFC,
+    INVITEE_PERMISSIONS_FILE,
     INVITEE_PERMISSIONS_FOLDER,
 } from '../../../features/unified-share-modal/constants';
 import {
@@ -173,7 +173,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
             expect(usm.prop('sharedLink')).toEqual(MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM);
-            expect(usm.prop('inviteePermissions')).toEqual(INVITEE_PERMISSIONS_SFC);
+            expect(usm.prop('inviteePermissions')).toEqual(INVITEE_PERMISSIONS_FILE);
             expect(wrapper.exists(SharingNotification)).toBe(true);
         });
 
