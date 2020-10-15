@@ -1,8 +1,17 @@
+@import '~box-ui-elements/es/styles/variables';
+
 .MessagePreviewContent {
     height: 288px;
 
     &.is-loading {
         display: none;
+    }
+
+    .bp-image img {
+        top: 0 !important; /* stylelint-disable-line declaration-no-important */
+        left: 0 !important; /* stylelint-disable-line declaration-no-important */
+        width: 100% !important; /* stylelint-disable-line declaration-no-important */
+        border-radius: $bdl-grid-unit * 2 $bdl-grid-unit * 2 0 0;
     }
 
     img.zoomable {
