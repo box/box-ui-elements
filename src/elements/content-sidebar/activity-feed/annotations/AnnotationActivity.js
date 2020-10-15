@@ -49,7 +49,7 @@ const AnnotationActivity = ({
     const [isInputOpen, setIsInputOpen] = React.useState(false);
     const [isEditing, setIsEditing] = React.useState(false);
     const { created_at, created_by, description, error, file_version, id, isPending, permissions = {}, target } = item;
-    const message = description?.message || '';
+    const message = (description && description.message) || '';
 
     const handleDeleteConfirm = (): void => {
         onDelete({ id, permissions });
@@ -120,7 +120,7 @@ const AnnotationActivity = ({
                     </div>
                     {isEditing ? (
                         <CommentForm
-                            className="bcs-AnnotationActivity-commentEditor"
+                            className="bcs-AnnotationActivity-editor"
                             entityId={id}
                             getAvatarUrl={getAvatarUrl}
                             getMentionWithQuery={getMentionWithQuery}
