@@ -1365,9 +1365,9 @@ describe('api/Feed', () => {
             feed.updateFeedItem = jest.fn();
             feed.updateAnnotation(file, annotationId, permissions, text, successCallback, errorCallback);
 
-            expect(feed.annotationsAPI.updateAnnotation).toBeCalled();
-            expect(feed.updateFeedItem).toBeCalled();
-            expect(successCallback).toBeCalled();
+            expect(feed.annotationsAPI.updateAnnotation).toHaveBeenCalled();
+            expect(feed.updateFeedItem).toHaveBeenCalled();
+            expect(successCallback).toHaveBeenCalled();
         });
     });
 
