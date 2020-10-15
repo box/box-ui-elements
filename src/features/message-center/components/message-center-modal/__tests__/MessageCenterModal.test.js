@@ -157,6 +157,19 @@ describe('components/message-center/components/message-center-modal/MessageCente
         expect(wrapper.find('[data-testid="modal-title"]').hasClass('is-expanded')).toBe(true);
     });
 
+    test('should not expand/collapse when client height changes', async () => {
+        const wrapper = await getWrapper();
+        expect(wrapper.find('[data-testid="modal-title"]').hasClass('is-expanded')).toBe(true);
+        act(() => {
+            wrapper.find(CollapsibleScrollbar).prop('onScroll')(
+                { scrollHeight: 100, clientHeight: 200, scrollTop: 10 },
+                { scrollHeight: 100, clientHeight: 300, scrollTop: 0 },
+            );
+        });
+        wrapper.update();
+        expect(wrapper.find('[data-testid="modal-title"]').hasClass('is-expanded')).toBe(true);
+    });
+
     test('should render ErrorState when messages is an error', async () => {
         const wrapper = await getWrapper({ messages: new Error('network error') });
 

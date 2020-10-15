@@ -162,8 +162,8 @@ function MessageCenterModal({
         );
     }
 
-    function handleOnScroll(clientHeight, scrollTop, prevScrollTop) {
-        if (clientHeight > 0 && !isMouseInTitleRef.current) {
+    function handleOnScroll(clientHeight, scrollTop, prevClientHeight, prevScrollTop) {
+        if (clientHeight > 0 && clientHeight === prevClientHeight && !isMouseInTitleRef.current) {
             const isScrollingDown = prevScrollTop < scrollTop;
             if (isExpanded && isScrollingDown) {
                 setIsExpanded(false);
@@ -224,8 +224,11 @@ function MessageCenterModal({
                     {({ height, width }) => (
                         <CollapsibleScrollbar
                             ref={scrollRef}
-                            onScroll={({ clientHeight, scrollTop, scrollLeft }, { scrollTop: prevScrollTop }) => {
-                                handleOnScroll(clientHeight, scrollTop, prevScrollTop);
+                            onScroll={(
+                                { clientHeight, scrollTop, scrollLeft },
+                                { clientHeight: prevClientHeight, scrollTop: prevScrollTop },
+                            ) => {
+                                handleOnScroll(clientHeight, scrollTop, prevClientHeight, prevScrollTop);
                                 if (listRef.current && listRef.current.Grid) {
                                     const { Grid } = listRef.current;
                                     Grid.handleScrollEvent({ scrollTop, scrollLeft });
