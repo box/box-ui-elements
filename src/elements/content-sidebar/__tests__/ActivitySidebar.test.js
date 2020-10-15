@@ -779,7 +779,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 },
             });
 
-            expect(api.getFeedAPI().updateAnnotation).toBeCalled();
+            expect(api.getFeedAPI().updateAnnotation).toHaveBeenCalled();
             expect(instance.fetchFeedItems).toHaveBeenCalled();
         });
     });

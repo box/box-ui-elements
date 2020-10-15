@@ -62,7 +62,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
         const wrapper = getWrapper({ item });
 
-        expect(wrapper.find('AnnotationActivityMenu').length).toEqual(0);
+        expect(wrapper.exists('AnnotationActivityMenu')).toBe(false);
     });
 
     test.each`
@@ -88,7 +88,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
                 values: { number: 1 },
             });
             expect(activityLink.props()).toMatchObject(generateReginTags());
-            expect(wrapper.find('AnnotationActivityMenu').length).toEqual(1);
+            expect(wrapper.exists('AnnotationActivityMenu')).toBe(true);
             expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(
                 mockActivity.item.description.message,
             );

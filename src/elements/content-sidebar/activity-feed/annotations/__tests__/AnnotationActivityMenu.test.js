@@ -24,7 +24,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
     test('should render the edit annotation activity menu item if canEdit is true', () => {
         const wrapper = getWrapper({ canEdit: true });
 
-        expect(wrapper.exists('[data-testid="edit-annotation-activity"]'));
+        expect(wrapper.exists('[data-testid="edit-annotation-activity"]')).toBe(true);
     });
 
     test('should show the delete confirm menu when confirming delete', () => {
