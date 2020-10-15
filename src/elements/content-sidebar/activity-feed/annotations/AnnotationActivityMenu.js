@@ -44,39 +44,37 @@ const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdi
 
     return (
         <TetherComponent {...tetherProps}>
-            {
-                <Media.Menu
-                    isDisabled={isConfirmingDelete}
-                    data-testid="annotation-activity-actions-menu"
-                    menuProps={{
-                        'data-resin-component': 'preview',
-                        'data-resin-feature': 'annotations',
-                    }}
-                >
-                    {canEdit && (
-                        <MenuItem
-                            data-resin-itemid={id}
-                            data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_EDIT}
-                            data-testid="edit-annotation-activity"
-                            onClick={onEdit}
-                        >
-                            <IconEdit color={bdlGray} />
-                            <FormattedMessage {...messages.annotationActivityEditMenuItem} />
-                        </MenuItem>
-                    )}
-                    {canDelete && (
-                        <MenuItem
-                            data-resin-itemid={id}
-                            data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_DELETE}
-                            data-testid="delete-annotation-activity"
-                            onClick={handleDeleteClick}
-                        >
-                            <IconTrash color={bdlGray} />
-                            <FormattedMessage {...messages.annotationActivityDeleteMenuItem} />
-                        </MenuItem>
-                    )}
-                </Media.Menu>
-            }
+            <Media.Menu
+                isDisabled={isConfirmingDelete}
+                data-testid="annotation-activity-actions-menu"
+                menuProps={{
+                    'data-resin-component': 'preview',
+                    'data-resin-feature': 'annotations',
+                }}
+            >
+                {canEdit && (
+                    <MenuItem
+                        data-resin-itemid={id}
+                        data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_EDIT}
+                        data-testid="edit-annotation-activity"
+                        onClick={onEdit}
+                    >
+                        <IconEdit color={bdlGray} />
+                        <FormattedMessage {...messages.annotationActivityEditMenuItem} />
+                    </MenuItem>
+                )}
+                {canDelete && (
+                    <MenuItem
+                        data-resin-itemid={id}
+                        data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_DELETE}
+                        data-testid="delete-annotation-activity"
+                        onClick={handleDeleteClick}
+                    >
+                        <IconTrash color={bdlGray} />
+                        <FormattedMessage {...messages.annotationActivityDeleteMenuItem} />
+                    </MenuItem>
+                )}
+            </Media.Menu>
             {isConfirmingDelete && (
                 <DeleteConfirmation
                     data-resin-component={ACTIVITY_TARGETS.ANNOTATION_OPTIONS}

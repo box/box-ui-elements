@@ -102,11 +102,11 @@ describe('api/Annotations', () => {
     });
 
     describe('updateAnnotation()', () => {
-        const errorCallback = jest.fn();
-        const successCallback = jest.fn();
         const message = 'hello';
 
         test('should format its parameters and call the update method for a given id', () => {
+            const errorCallback = jest.fn();
+            const successCallback = jest.fn();
             annotations.updateAnnotation('12345', 'abc', { can_edit: true }, message, successCallback, errorCallback);
 
             expect(annotations.put).toBeCalledWith({
@@ -119,6 +119,8 @@ describe('api/Annotations', () => {
         });
 
         test('should reject with an error code for calls with invalid permissions', () => {
+            const errorCallback = jest.fn();
+            const successCallback = jest.fn();
             annotations.updateAnnotation(
                 '12345',
                 '67890',

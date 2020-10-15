@@ -1354,7 +1354,7 @@ describe('api/Feed', () => {
             expect(feed.file).toEqual(file);
         });
 
-        test('should updateFeedItem with to pending state', () => {
+        test('should updateFeedItem with isPending set to true', () => {
             feed.updateFeedItem = jest.fn();
             feed.updateAnnotation(file, annotationId, text, permissions, successCallback, errorCallback);
 

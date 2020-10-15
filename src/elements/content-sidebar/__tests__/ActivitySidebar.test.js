@@ -9,15 +9,15 @@ jest.mock('lodash/debounce', () => jest.fn(i => i));
 
 describe('elements/content-sidebar/ActivitySidebar', () => {
     const feedAPI = {
-        feedItems: jest.fn(),
-        updateAnnotation: jest.fn(),
+        createComment: jest.fn(),
+        createTaskNew: jest.fn(),
         deleteAnnotation: jest.fn(),
         deleteComment: jest.fn(),
         deleteTaskNew: jest.fn(),
-        createTaskNew: jest.fn(),
-        updateTaskNew: jest.fn(),
+        feedItems: jest.fn(),
+        updateAnnotation: jest.fn(),
         updateTaskCollaborator: jest.fn(),
-        createComment: jest.fn(),
+        updateTaskNew: jest.fn(),
     };
     const usersAPI = {
         get: jest.fn(),
