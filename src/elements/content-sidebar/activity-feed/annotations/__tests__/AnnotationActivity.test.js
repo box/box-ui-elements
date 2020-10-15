@@ -54,6 +54,17 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         CommentForm.default = jest.fn().mockReturnValue(<div />);
     });
 
+    test('should not render annotation activity menu when both can_delete is false and can_edit is false', () => {
+        const item = {
+            ...mockAnnotation,
+            permissions: { can_delete: false, can_edit: false },
+        };
+
+        const wrapper = getWrapper({ item });
+
+        expect(wrapper.find('AnnotationActivityMenu').length).toEqual(0);
+    });
+
     test.each`
         canDelete | canEdit
         ${false}  | ${true}
