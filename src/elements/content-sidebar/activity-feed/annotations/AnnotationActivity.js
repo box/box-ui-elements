@@ -8,8 +8,8 @@ import ActivityMessage from '../common/activity-message';
 import ActivityTimestamp from '../common/activity-timestamp';
 import AnnotationActivityLink from './AnnotationActivityLink';
 import AnnotationActivityMenu from './AnnotationActivityMenu';
-import CommentForm from '../comment-form/CommentForm';
 import Avatar from '../Avatar';
+import CommentForm from '../comment-form/CommentForm';
 import Media from '../../../../components/media';
 import messages from './messages';
 import UserLink from '../common/user-link';
@@ -24,7 +24,7 @@ import './AnnotationActivity.scss';
 type Props = {
     currentUser?: User,
     getAvatarUrl: GetAvatarUrlCallback,
-    getMentionWithQuery?: Function,
+    getMentionWithQuery?: (searchStr: string) => void,
     getUserProfileUrl?: GetProfileUrlCallback,
     isCurrentVersion: boolean,
     item: Annotation,
@@ -49,7 +49,6 @@ const AnnotationActivity = ({
     const [isInputOpen, setIsInputOpen] = React.useState(false);
     const [isEditing, setIsEditing] = React.useState(false);
     const { created_at, created_by, description, error, file_version, id, isPending, permissions = {}, target } = item;
-    const message = (description && description.message) || '';
 
     const handleDeleteConfirm = (): void => {
         onDelete({ id, permissions });
@@ -81,6 +80,7 @@ const AnnotationActivity = ({
     const { can_delete: canDelete, can_edit: canEdit } = permissions;
     const isFileVersionUnavailable = file_version === null;
     const isMenuVisible = (canDelete || canEdit) && !isPending;
+    const message = (description && description.message) || '';
     const linkMessage = isCurrentVersion ? messages.annotationActivityPageItem : messages.annotationActivityVersionLink;
     const linkValue = isCurrentVersion ? target.location.value : getProp(file_version, 'version_number');
     const activityLinkMessage = isFileVersionUnavailable
@@ -118,7 +118,7 @@ const AnnotationActivity = ({
                     <div>
                         <ActivityTimestamp date={createdAtTimestamp} />
                     </div>
-                    {isEditing ? (
+                    {isEditing && currentUser ? (
                         <CommentForm
                             className="bcs-AnnotationActivity-editor"
                             entityId={id}
@@ -130,7 +130,6 @@ const AnnotationActivity = ({
                             onCancel={handleFormCancel}
                             onFocus={handleFormFocus}
                             updateComment={handleFormSubmit}
-                            // $FlowFixMe
                             user={currentUser}
                             tagged_message={message}
                         />

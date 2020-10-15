@@ -154,10 +154,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     handleAnnotationEdit = (id: string, text: string, permissions: AnnotationPermission) => {
         const { api, file } = this.props;
-        const errorCallback = (e, code) => this.feedErrorCallback(e, code);
-        const successCallback = () => this.feedSuccessCallback();
 
-        api.getFeedAPI(false).updateAnnotation(file, id, text, permissions, successCallback, errorCallback);
+        api.getFeedAPI(false).updateAnnotation(
+            file,
+            id,
+            text,
+            permissions,
+            this.feedSuccessCallback,
+            this.feedErrorCallback,
+        );
 
         this.fetchFeedItems();
     };
