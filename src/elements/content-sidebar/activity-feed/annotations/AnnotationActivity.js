@@ -30,7 +30,7 @@ type Props = {
     item: Annotation,
     mentionSelectorContacts?: SelectorItems<User>,
     onDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
-    onEdit?: (id: string, text: string, permissions: AnnotationPermission) => any,
+    onEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
     onSelect?: (annotation: Annotation) => any,
 };
 
