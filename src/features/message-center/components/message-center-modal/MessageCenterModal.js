@@ -13,7 +13,7 @@ import PillCloud from '../../../../components/pill-cloud/PillCloud';
 import CollapsibleScrollbar from '../collapsibile-scrollbar/CollapsibleScrollbar';
 import Message from '../message/Message';
 import intlMessages from '../../messages';
-import type { EligibleMessageCenterMessage } from '../../types';
+import type { ContentPreviewProps, EligibleMessageCenterMessage } from '../../types';
 import './MessageCenterModal.scss';
 import PreviewGhost from '../templates/common/PreviewGhost';
 import ContentGhost from '../templates/common/ContentGhost';
@@ -23,6 +23,7 @@ import EmptyState from './EmptyState';
 
 type Props = {|
     apiHost: string,
+    contentPreviewProps?: ContentPreviewProps,
     getToken: (fileId: string) => Promise<Token>,
     messages: Array<EligibleMessageCenterMessage> | null | Error,
     onRequestClose: () => void,
@@ -41,6 +42,7 @@ const trackYStyles = { marginLeft: `${SCROLLBAR_MARGIN}px` };
 
 function MessageCenterModal({
     apiHost,
+    contentPreviewProps,
     onRequestClose,
     messages,
     getToken,
@@ -155,7 +157,12 @@ function MessageCenterModal({
             <CellMeasurer key={key} cache={cache} columnIndex={0} parent={parent} rowIndex={index}>
                 {({ registerChild }) => (
                     <div ref={registerChild} className="bdl-MessageCenterModal-message" style={style}>
-                        <Message apiHost={apiHost} {...message} getToken={getToken} />
+                        <Message
+                            contentPreviewProps={contentPreviewProps}
+                            apiHost={apiHost}
+                            {...message}
+                            getToken={getToken}
+                        />
                     </div>
                 )}
             </CellMeasurer>
