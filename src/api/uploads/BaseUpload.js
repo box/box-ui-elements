@@ -106,6 +106,8 @@ class BaseUpload extends Base {
 
         const uploadHost = this.getUploadHostFromUrl(upload_url);
         // The default upload host should always be reachable
+        // DEFAULT_HOSTNAME_UPLOAD is the original default upload host, while DEFAULT_HOSTNAME_UPLOAD is recent.
+        // Both of these hosts will resolve to the same IP so they are interchangeable.
         if (uploadHost === `${DEFAULT_HOSTNAME_UPLOAD}/` || uploadHost === `${DEFAULT_HOSTNAME_UPLOAD_APP}/`) {
             this.preflightSuccessHandler({ data });
             return;
