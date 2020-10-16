@@ -5,7 +5,7 @@
  */
 
 import Base from '../Base';
-import {DEFAULT_RETRY_DELAY_MS, MS_IN_S, DEFAULT_HOSTNAME_UPLOAD, DEFAULT_HOSTNAME_UPLOAD_APP} from '../../constants';
+import { DEFAULT_RETRY_DELAY_MS, MS_IN_S, DEFAULT_HOSTNAME_UPLOAD, DEFAULT_HOSTNAME_UPLOAD_APP } from '../../constants';
 
 const MAX_RETRY = 5;
 // Note: We may have to change this number if we add a lot more fast upload hosts.
