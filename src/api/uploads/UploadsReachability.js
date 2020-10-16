@@ -6,7 +6,7 @@
 
 import axios from 'axios';
 import LocalStore from '../../utils/LocalStore';
-import { DEFAULT_HOSTNAME_UPLOAD, HEADER_CONTENT_TYPE } from '../../constants';
+import { DEFAULT_HOSTNAME_UPLOAD, DEFAULT_HOSTNAME_UPLOAD_APP, HEADER_CONTENT_TYPE } from '../../constants';
 import type { StringAnyMap, StringMap } from '../../common/types/core';
 
 const CACHED_RESULTS_LOCAL_STORE_KEY = 'bcu-uploads-reachability-cached-results';
@@ -152,7 +152,7 @@ class UploadsReachability {
      */
     async isReachable(uploadHost: string) {
         // The default upload host should always reachable
-        if (uploadHost === `${DEFAULT_HOSTNAME_UPLOAD}/`) {
+        if (uploadHost === `${DEFAULT_HOSTNAME_UPLOAD}/` || uploadHost === `${DEFAULT_HOSTNAME_UPLOAD_APP}/`) {
             return true;
         }
 

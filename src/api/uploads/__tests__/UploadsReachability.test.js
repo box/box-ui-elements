@@ -1,6 +1,6 @@
 import axios from 'axios';
 import UploadsReachability from '../UploadsReachability';
-import { DEFAULT_HOSTNAME_UPLOAD } from '../../../constants';
+import { DEFAULT_HOSTNAME_UPLOAD, DEFAULT_HOSTNAME_UPLOAD_APP } from '../../../constants';
 
 let uploadsReachability;
 
@@ -95,6 +95,16 @@ describe('api/uploads/UploadsReachability', () => {
             uploadsReachability.getCachedResult = jest.fn();
             uploadsReachability.makeReachabilityRequest = jest.fn();
             const response = await uploadsReachability.isReachable(`${DEFAULT_HOSTNAME_UPLOAD}/`);
+
+            expect(response).toBe(true);
+            expect(uploadsReachability.getCachedResult).not.toHaveBeenCalled();
+            expect(uploadsReachability.makeReachabilityRequest).not.toHaveBeenCalled();
+        });
+
+        test('should return true when host is DEFAULT_HOSTNAME_UPLOAD_APP, without checking cache and making a reachability test', async () => {
+            uploadsReachability.getCachedResult = jest.fn();
+            uploadsReachability.makeReachabilityRequest = jest.fn();
+            const response = await uploadsReachability.isReachable(`${DEFAULT_HOSTNAME_UPLOAD_APP}/`);
 
             expect(response).toBe(true);
             expect(uploadsReachability.getCachedResult).not.toHaveBeenCalled();
