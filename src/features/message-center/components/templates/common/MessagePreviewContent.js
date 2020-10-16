@@ -25,6 +25,11 @@ function MessagePreviewContent({ contentPreviewProps, fileId, sharedLink, getTok
     const [isPreviewInErrorState, setIsPreviewInErrorState] = React.useState(false);
     const previewRef = React.useRef(null);
 
+    React.useEffect(() => {
+        setIsPreviewLoaded(false);
+        setIsPreviewInErrorState(false);
+    }, [fileId]);
+
     return (
         <div className={classNames('MessagePreviewContent', className)}>
             {isPreviewLoaded ? null : <PreviewGhost />}
