@@ -23,6 +23,11 @@ function MessagePreviewContent({ fileId, sharedLink, getToken, className = '', a
     const [isPreviewInErrorState, setIsPreviewInErrorState] = React.useState(false);
     const previewRef = React.useRef(null);
 
+    React.useEffect(() => {
+        setIsPreviewLoaded(false);
+        setIsPreviewInErrorState(false);
+    }, [fileId]);
+
     return (
         <div className={classNames('MessagePreviewContent', className)}>
             {isPreviewLoaded ? null : <PreviewGhost />}
