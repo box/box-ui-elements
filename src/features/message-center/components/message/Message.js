@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import type { Token } from '../../../../common/types/core';
-import type { EligibleMessageCenterMessage } from '../../types';
+import type { ContentPreviewProps, EligibleMessageCenterMessage } from '../../types';
 import { PreviewTitleBodyTags, PreviewTitleBodyTagsButton, TitleBodyTags, TitleBodyTagsButton } from '../templates';
 import {
     PREVIEW_TITLE_BODY_TAGS,
@@ -13,12 +13,14 @@ import {
 type Props = {|
     ...EligibleMessageCenterMessage,
     apiHost: string,
+    contentPreviewProps?: ContentPreviewProps,
     getToken: (fileId: string) => Promise<Token>,
 |};
 
 function Message({
     activateDate,
     apiHost,
+    contentPreviewProps,
     getToken,
     templateName,
     templateParams: { body, button1, fileUpload, tags, title },
@@ -29,6 +31,7 @@ function Message({
             <PreviewTitleBodyTags
                 apiHost={apiHost}
                 body={body}
+                contentPreviewProps={contentPreviewProps}
                 date={date}
                 fileUpload={fileUpload}
                 getToken={getToken}
@@ -43,6 +46,7 @@ function Message({
                 apiHost={apiHost}
                 body={body}
                 button1={button1}
+                contentPreviewProps={contentPreviewProps}
                 date={date}
                 fileUpload={fileUpload}
                 getToken={getToken}

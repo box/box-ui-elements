@@ -7,6 +7,7 @@ import type { Token } from '../../../common/types/core';
 
 import MessageCenterModal from './message-center-modal/MessageCenterModal';
 import type {
+    ContentPreviewProps,
     GetEligibleMessageCenterMessages,
     UnreadEligibleMessageCenterMessageCount,
     EligibleMessageCenterMessage,
@@ -15,6 +16,7 @@ import type {
 type Props = {|
     apiHost: string,
     buttonComponent: React.ComponentType<{ render: () => React.Node }>,
+    contentPreviewProps?: ContentPreviewProps,
     getEligibleMessages: () => Promise<GetEligibleMessageCenterMessages>,
     getToken: (fileId: string) => Promise<Token>,
     getUnreadMessageCount: () => Promise<UnreadEligibleMessageCenterMessageCount>,
@@ -23,6 +25,7 @@ type Props = {|
 |};
 
 function MessageCenter({
+    contentPreviewProps,
     getUnreadMessageCount,
     buttonComponent: ButtonComponent,
     getEligibleMessages,
@@ -113,6 +116,7 @@ function MessageCenter({
                     {icon}
                     <MessageCenterModal
                         apiHost={apiHost}
+                        contentPreviewProps={contentPreviewProps}
                         getToken={getToken}
                         messages={messages}
                         onRequestClose={onRequestClose}
