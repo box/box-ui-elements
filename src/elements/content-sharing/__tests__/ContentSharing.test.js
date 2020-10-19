@@ -125,6 +125,41 @@ describe('elements/content-sharing/ContentSharing', () => {
         expect(wrapper.find(SharingModal).prop('isVisible')).toBe(false);
     });
 
+    test('should reset isVisible when given a new uuid', () => {
+        const setIsVisible = (wrapper, isVisible) => {
+            act(() => {
+                wrapper.find(SharingModal).invoke('setIsVisible')(isVisible);
+            });
+            wrapper.update();
+        };
+
+        let wrapper;
+        act(() => {
+            wrapper = getWrapper({
+                apiHost: DEFAULT_HOSTNAME_API,
+                displayInModal: true,
+                itemID: MOCK_ITEM_ID,
+                itemType: TYPE_FOLDER,
+                token: MOCK_TOKEN,
+                uuid: 'unique-id-0',
+            });
+        });
+        wrapper.update();
+
+        expect(wrapper.exists(SharingModal)).toBe(true);
+        expect(wrapper.find(SharingModal).prop('isVisible')).toBe(true);
+
+        setIsVisible(wrapper, false); // close modal
+        expect(wrapper.find(SharingModal).prop('isVisible')).toBe(false);
+
+        act(() => {
+            wrapper.setProps({ uuid: 'unique-id-1' });
+        });
+        wrapper.update();
+
+        expect(wrapper.find(SharingModal).prop('isVisible')).toBe(true);
+    });
+
     test.each([true, false])(
         'should instantiate SharingModal automatically when no button exists and displayInModal is %s',
         ({ displayInModal }) => {
