@@ -5,7 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import ErrorMask from '../../../components/error-mask/ErrorMask';
 import LoadingIndicator from '../../../components/loading-indicator/LoadingIndicator';
 import SharingModal from '../SharingModal';
-import Notification, { TYPE_ERROR, TYPE_INFO } from '../../../components/notification/Notification';
+import Notification from '../../../components/notification/Notification';
+import { DURATION_SHORT, TYPE_ERROR, TYPE_INFO } from '../../../components/notification/constants';
 import SharedLinkSettingsModal from '../../../features/shared-link-settings-modal';
 import UnifiedShareModal from '../../../features/unified-share-modal/UnifiedShareModal';
 import {
@@ -25,6 +26,8 @@ import {
     CAN_VIEW_DOWNLOAD,
     CAN_VIEW_ONLY,
     PEOPLE_IN_ITEM,
+    INVITEE_PERMISSIONS_FILE,
+    INVITEE_PERMISSIONS_FOLDER,
 } from '../../../features/unified-share-modal/constants';
 import {
     convertCollabsRequest,
@@ -87,10 +90,10 @@ const createAPIMock = (fileAPI, folderAPI, usersAPI, collaborationsAPI, markerBa
 });
 
 describe('elements/content-sharing/SharingModal', () => {
-    // The modal is unmounted in the ContentSharing parent element, so we can only test whether the function for closing the modal was called
-    const closeModalMock = jest.fn();
+    // The visibility of the modal is set in the ContentSharing parent element, so we can only test whether the function for closing the modal was called
+    const setIsVisibleMock = jest.fn();
     const getWrapper = props =>
-        mount(<SharingModal closeModal={closeModalMock} itemID={MOCK_ITEM_ID} language="" {...props} />);
+        mount(<SharingModal isVisible itemID={MOCK_ITEM_ID} language="" setIsVisible={setIsVisibleMock} {...props} />);
 
     const createSuccessMock = responseFromAPI => (id, successFn) => {
         return Promise.resolve(responseFromAPI).then(response => {
@@ -120,6 +123,30 @@ describe('elements/content-sharing/SharingModal', () => {
         jest.restoreAllMocks();
     });
 
+    describe('loading states', () => {
+        test.each([null, undefined, '', {}])('should show the LoadingIndicator if the api prop is %p', async api => {
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, itemType: TYPE_FILE });
+            });
+            wrapper.update();
+            expect(wrapper.exists(LoadingIndicator)).toBe(true);
+            expect(wrapper.exists(UnifiedShareModal)).toBe(false);
+            expect(wrapper.exists(SharedLinkSettingsModal)).toBe(false);
+        });
+
+        test('should show nothing if isVisible is false', async () => {
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api: {}, isVisible: false, itemType: TYPE_FILE });
+            });
+            wrapper.update();
+            expect(wrapper.exists(LoadingIndicator)).toBe(false);
+            expect(wrapper.exists(UnifiedShareModal)).toBe(false);
+            expect(wrapper.exists(SharedLinkSettingsModal)).toBe(false);
+        });
+    });
+
     describe('with successful GET requests to the Item and Users API', () => {
         let getUser;
         let getFile;
@@ -146,6 +173,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
             expect(usm.prop('sharedLink')).toEqual(MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM);
+            expect(usm.prop('inviteePermissions')).toEqual(INVITEE_PERMISSIONS_FILE);
             expect(wrapper.exists(SharingNotification)).toBe(true);
         });
 
@@ -162,6 +190,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(usm.prop('item')).toEqual(MOCK_ITEM);
             expect(usm.prop('sharedLink')).toEqual(MOCK_NORMALIZED_SHARED_LINK_DATA_FOR_USM);
+            expect(usm.prop('inviteePermissions')).toEqual(INVITEE_PERMISSIONS_FOLDER);
             expect(wrapper.exists(SharingNotification)).toBe(true);
         });
 
@@ -227,7 +256,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(wrapper.exists(UnifiedShareModal)).toBe(true);
         });
 
-        test('should call closeModal() when the X button is pressed', async () => {
+        test('should call setIsVisible() when the X button is pressed', async () => {
             const api = createAPIMock({ getFile }, null, { getUser });
 
             let wrapper;
@@ -239,7 +268,7 @@ describe('elements/content-sharing/SharingModal', () => {
                 wrapper.find(UnifiedShareModal).invoke('onRequestClose')();
             });
             wrapper.update();
-            expect(closeModalMock).toHaveBeenCalled();
+            expect(setIsVisibleMock).toHaveBeenCalledWith(false);
         });
 
         test.each`
@@ -589,7 +618,7 @@ describe('elements/content-sharing/SharingModal', () => {
                 );
 
                 if (displayInModal) {
-                    expect(closeModalMock).toHaveBeenCalled();
+                    expect(setIsVisibleMock).toHaveBeenCalledWith(false);
                 } else {
                     expect(wrapper.find(UnifiedShareModal).prop('sharedLink')).toEqual(MOCK_NULL_SHARED_LINK);
                 }
@@ -861,7 +890,7 @@ describe('elements/content-sharing/SharingModal', () => {
                 expect(wrapper.find(Notification).prop('type')).toBe(TYPE_INFO);
 
                 if (displayInModal) {
-                    expect(closeModalMock).toHaveBeenCalled();
+                    expect(setIsVisibleMock).toHaveBeenCalledWith(false);
                 }
             },
         );
@@ -929,8 +958,6 @@ describe('elements/content-sharing/SharingModal', () => {
             'changeSharedLinkPermissionLevel',
             'getCollaboratorContacts',
             'onAddLink',
-            'onRemoveLink',
-            'sendInvites',
         ])('should show an error notification if %s() fails', async usmFn => {
             let wrapper;
             await act(async () => {
@@ -943,22 +970,30 @@ describe('elements/content-sharing/SharingModal', () => {
                 wrapper.find(UnifiedShareModal).invoke(`${usmFn}`)();
             });
             wrapper.update();
-            expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
+            const notification = wrapper.find(Notification);
+            expect(notification.prop('type')).toBe(TYPE_ERROR);
+            expect(notification.prop('duration')).toBe(DURATION_SHORT);
         });
 
-        test.each(['onRemoveLink', 'sendInvites'])('should call closeModal() after %s() fails', async usmFn => {
-            let wrapper;
-            await act(async () => {
-                wrapper = getWrapper({ api, displayInModal: true, itemType: TYPE_FOLDER });
-            });
-            wrapper.update();
+        test.each(['onRemoveLink', 'sendInvites'])(
+            'should call setIsVisible() and show a notification after %s() fails',
+            async usmFn => {
+                let wrapper;
+                await act(async () => {
+                    wrapper = getWrapper({ api, displayInModal: true, itemType: TYPE_FOLDER });
+                });
+                wrapper.update();
 
-            await act(async () => {
-                wrapper.find(UnifiedShareModal).invoke(`${usmFn}`)();
-            });
-            wrapper.update();
-            expect(closeModalMock).toHaveBeenCalled();
-        });
+                await act(async () => {
+                    wrapper.find(UnifiedShareModal).invoke(`${usmFn}`)();
+                });
+                wrapper.update();
+                expect(setIsVisibleMock).toHaveBeenCalledWith(false);
+                const notification = wrapper.find(Notification);
+                expect(notification.prop('type')).toBe(TYPE_ERROR);
+                expect(notification.prop('duration')).toBeUndefined();
+            },
+        );
 
         test('should show an error notification if onSubmitSettings() fails', async () => {
             convertSharedLinkSettings.mockReturnValue(MOCK_CONVERTED_SETTINGS);
@@ -978,7 +1013,9 @@ describe('elements/content-sharing/SharingModal', () => {
                 wrapper.find(SharedLinkSettingsModal).invoke('onSubmit')(MOCK_SETTINGS_WITH_ALL_FEATURES);
             });
             wrapper.update();
-            expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
+            const notification = wrapper.find(Notification);
+            expect(notification.prop('type')).toBe(TYPE_ERROR);
+            expect(notification.prop('duration')).toBe(DURATION_SHORT);
         });
 
         test('should do nothing if getContactsByEmail() fails', async () => {

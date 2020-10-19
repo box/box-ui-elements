@@ -33,7 +33,7 @@ const ALLOWED_ACCESS_LEVELS = {
 const DISABLED_REASON_ACCESS_POLICY: 'access_policy' = 'access_policy';
 const DISABLED_REASON_MALICIOUS_CONTENT: 'malicious_content' = 'malicious_content';
 
-const INVITEE_PERMISSIONS = [
+const INVITEE_PERMISSIONS_FOLDER = [
     {
         default: false,
         text: CO_OWNER,
@@ -71,6 +71,19 @@ const INVITEE_PERMISSIONS = [
     },
 ];
 
+const INVITEE_PERMISSIONS_FILE = [
+    {
+        default: true, // default in the WebApp
+        text: EDITOR,
+        value: EDITOR,
+    },
+    {
+        default: false,
+        text: VIEWER,
+        value: VIEWER,
+    },
+];
+
 export {
     ALLOWED_ACCESS_LEVELS,
     ANYONE_IN_COMPANY,
@@ -84,7 +97,8 @@ export {
     DISABLED_REASON_ACCESS_POLICY,
     DISABLED_REASON_MALICIOUS_CONTENT,
     EDITOR,
-    INVITEE_PERMISSIONS,
+    INVITEE_PERMISSIONS_FOLDER,
+    INVITEE_PERMISSIONS_FILE,
     OWNER,
     PEOPLE_IN_ITEM,
     PREVIEWER,

@@ -6,6 +6,7 @@
  * @author Box
  */
 import * as React from 'react';
+import isEmpty from 'lodash/isEmpty';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import type { $AxiosError } from 'axios';
@@ -24,7 +25,7 @@ import {
 import useContactsByEmail from './hooks/useContactsByEmail';
 import { FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FILE, TYPE_FOLDER } from '../../constants';
 import { CONTENT_SHARING_ERRORS, CONTENT_SHARING_ITEM_FIELDS, CONTENT_SHARING_VIEWS } from './constants';
-import { INVITEE_PERMISSIONS } from '../../features/unified-share-modal/constants';
+import { INVITEE_PERMISSIONS_FOLDER, INVITEE_PERMISSIONS_FILE } from '../../features/unified-share-modal/constants';
 import contentSharingMessages from './messages';
 import type { ErrorResponseData } from '../../common/types/api';
 import type { ItemType, StringMap } from '../../common/types/core';
@@ -45,24 +46,26 @@ import type {
 
 type SharingModalProps = {
     api: API,
-    closeModal?: () => void,
     config?: USMConfig,
     displayInModal: boolean,
+    isVisible: boolean,
     itemID: string,
     itemType: ItemType,
     language: string,
     messages?: StringMap,
+    setIsVisible: (arg: boolean) => void,
 };
 
 function SharingModal({
     api,
-    closeModal,
     config,
     displayInModal,
+    isVisible,
     itemID,
     itemType,
     language,
     messages,
+    setIsVisible,
 }: SharingModalProps) {
     const [item, setItem] = React.useState<itemFlowType | null>(null);
     const [sharedLink, setSharedLink] = React.useState<ContentSharingSharedLinkType | null>(null);
@@ -85,7 +88,6 @@ function SharingModal({
     const [getContactsByEmail, setGetContactsByEmail] = React.useState<null | GetContactsByEmailFnType>(null);
     const [sendInvites, setSendInvites] = React.useState<null | SendInvitesFnType>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
-
     // Handle successful GET requests to /files or /folders
     const handleGetItemSuccess = React.useCallback((itemData: ContentSharingItemAPIResponse) => {
         const { item: itemFromAPI, sharedLink: sharedLinkFromAPI } = convertItemResponse(itemData);
@@ -123,7 +125,7 @@ function SharingModal({
         setOnRemoveLink(null);
         setSharedLink(null);
         setIsLoading(true);
-    }, []);
+    }, [api]);
 
     // Get initial data for the item
     React.useEffect(() => {
@@ -139,10 +141,10 @@ function SharingModal({
             }
         };
 
-        if (!item && !sharedLink) {
+        if (api && !isEmpty(api) && isVisible && !item && !sharedLink) {
             getItem();
         }
-    }, [api, getError, handleGetItemSuccess, item, itemID, itemType, sharedLink]);
+    }, [api, getError, handleGetItemSuccess, isVisible, item, itemID, itemType, sharedLink]);
 
     // Get initial data for the user
     React.useEffect(() => {
@@ -162,7 +164,7 @@ function SharingModal({
             });
         };
 
-        if (item && sharedLink && !currentUserID) {
+        if (api && !isEmpty(api) && item && sharedLink && !currentUserID) {
             getUserData();
         }
     }, [getError, item, itemID, itemType, sharedLink, currentUserID, api]);
@@ -180,25 +182,27 @@ function SharingModal({
         return <ErrorMask errorHeader={<FormattedMessage {...componentErrorMessage} />} />;
     }
 
-    // Ensure that all necessary data has been received before rendering child components
-    // "serverURL" is added to sharedLink after the call to the Users API
+    // Ensure that all necessary data has been received before rendering child components.
+    // If the USM is visible, show the LoadingIndicator; otherwise, show nothing.
+    // "serverURL" is added to sharedLink after the call to the Users API, so it needs to be checked separately.
     if (!item || !sharedLink || !currentUserID || !sharedLink.serverURL) {
-        return <LoadingIndicator />;
+        return isVisible ? <LoadingIndicator /> : null;
     }
 
     const { ownerEmail, ownerID, permissions } = item;
-    const { accessLevel = '', expirationTimestamp, serverURL } = sharedLink;
+    const { accessLevel = '', expirationTimestamp, isDownloadAvailable = false, serverURL } = sharedLink;
     return (
         <Internationalize language={language} messages={messages}>
             <>
                 <SharingNotification
                     accessLevel={accessLevel}
                     api={api}
-                    closeComponent={displayInModal && closeModal ? closeModal : noop}
+                    closeComponent={displayInModal ? () => setIsVisible(false) : noop}
                     closeSettings={() => setCurrentView(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL)}
                     collaboratorsList={collaboratorsList}
                     currentUserID={currentUserID}
                     getContacts={getContacts}
+                    isDownloadAvailable={isDownloadAvailable}
                     itemID={itemID}
                     itemType={itemType}
                     onSubmitSettings={onSubmitSettings}
@@ -219,12 +223,12 @@ function SharingModal({
                     setSendInvites={setSendInvites}
                     setSharedLink={setSharedLink}
                 />
-                {currentView === CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS && (
+                {isVisible && currentView === CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS && (
                     <SharedLinkSettingsModal
                         isDirectLinkUnavailableDueToDownloadSettings={false}
                         isDirectLinkUnavailableDueToAccessPolicy={false}
                         isDirectLinkUnavailableDueToMaliciousContent={false}
-                        isOpen
+                        isOpen={isVisible}
                         item={item}
                         onRequestClose={() => setCurrentView(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL)}
                         onSubmit={onSubmitSettings}
@@ -232,7 +236,7 @@ function SharingModal({
                         {...sharedLink}
                     />
                 )}
-                {currentView === CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL && (
+                {isVisible && currentView === CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL && (
                     <UnifiedShareModal
                         canInvite={sharedLink.canInvite}
                         config={config}
@@ -244,11 +248,13 @@ function SharingModal({
                         getCollaboratorContacts={getContacts}
                         getContactsByEmail={getContactsByEmail}
                         initialDataReceived
-                        inviteePermissions={INVITEE_PERMISSIONS}
-                        isOpen
+                        inviteePermissions={
+                            itemType === TYPE_FOLDER ? INVITEE_PERMISSIONS_FOLDER : INVITEE_PERMISSIONS_FILE
+                        }
+                        isOpen={isVisible}
                         item={item}
                         onAddLink={onAddLink}
-                        onRequestClose={displayInModal && closeModal ? closeModal : noop}
+                        onRequestClose={displayInModal ? () => setIsVisible(false) : noop}
                         onRemoveLink={onRemoveLink}
                         onSettingsClick={() => setCurrentView(CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS)}
                         sendInvites={sendInvites}

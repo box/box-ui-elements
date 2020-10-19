@@ -52,7 +52,10 @@ describe('components/message-center/components/collapsible-scrollbar/Collapsible
         });
 
         act(() => {
-            scrollbar.find(Scrollbar).prop('onScroll')();
+            scrollbar.find(Scrollbar).prop('onScroll')(
+                { scrollHeight: 100, clientHeight: 200, scrollTop: 0 },
+                { scrollHeight: 100, clientHeight: 200, scrollTop: 10 },
+            );
         });
 
         scrollbar.update();

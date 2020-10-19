@@ -15,6 +15,7 @@ import {
     MOCK_SHARED_LINK,
 } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
 import Notification from '../../../components/notification/Notification';
+import { DURATION_SHORT } from '../../../components/notification/constants';
 import NotificationsWrapper from '../../../components/notification/NotificationsWrapper';
 import { convertCollabsResponse } from '../../../features/unified-share-modal/utils/convertData';
 
@@ -64,6 +65,7 @@ describe('elements/content-sharing/SharingNotification', () => {
                 collaboratorsList={null}
                 currentUserID={MOCK_OWNER_ID}
                 getContacts={null}
+                isDownloadAvailable
                 itemID={MOCK_ITEM_ID}
                 itemType={TYPE_FOLDER}
                 ownerEmail={MOCK_OWNER_EMAIL}
@@ -178,6 +180,7 @@ describe('elements/content-sharing/SharingNotification', () => {
                     .at(0)
                     .prop('id'),
             ).toBe('be.contentSharing.collaboratorsLoadingError');
+            expect(notification.prop('duration')).toBe(DURATION_SHORT);
         });
     });
 });

@@ -95,7 +95,7 @@ describe('components/message-center/components/message-center-modal/MessageCente
         return mountConnected(<MessageCenterModal {...defaultProps} {...props} />);
     }
 
-    test('should collapse filters when scrolled and mouse is not in title', async () => {
+    test('should collapse filters when scrolled down and mouse is not in title', async () => {
         const wrapper = await getWrapper();
         act(() => {
             wrapper.find('[data-testid="modal-title"]').prop('onMouseEnter')();
@@ -104,18 +104,47 @@ describe('components/message-center/components/message-center-modal/MessageCente
         expect(wrapper.find('[data-testid="modal-title"]').hasClass('is-collapsed')).toBe(false);
         act(() => {
             wrapper.find('[data-testid="modal-title"]').prop('onMouseLeave')();
-            wrapper.find(CollapsibleScrollbar).prop('onScroll')({ clientHeight: 100 });
+            wrapper.find(CollapsibleScrollbar).prop('onScroll')(
+                { scrollHeight: 100, clientHeight: 200, scrollTop: 10 },
+                { scrollHeight: 100, clientHeight: 200, scrollTop: 0 },
+            );
         });
         wrapper.update();
 
         expect(wrapper.find('[data-testid="modal-title"]').hasClass('is-collapsed')).toBe(true);
     });
 
+    test('should expand filters when scrolled up', async () => {
+        const wrapper = await getWrapper();
+        act(() => {
+            wrapper.find('[data-testid="modal-title"]').prop('onMouseLeave')();
+            wrapper.find(CollapsibleScrollbar).prop('onScroll')(
+                { scrollHeight: 100, clientHeight: 200, scrollTop: 10 },
+                { scrollHeight: 100, clientHeight: 200, scrollTop: 0 },
+            );
+        });
+        wrapper.update();
+        expect(wrapper.find('[data-testid="modal-title"]').hasClass('is-expanded')).toBe(false);
+
+        act(() => {
+            wrapper.find(CollapsibleScrollbar).prop('onScroll')(
+                { scrollHeight: 100, clientHeight: 200, scrollTop: 0 },
+                { scrollHeight: 100, clientHeight: 200, scrollTop: 10 },
+            );
+        });
+        wrapper.update();
+
+        expect(wrapper.find('[data-testid="modal-title"]').hasClass('is-expanded')).toBe(true);
+    });
+
     test('should expand filters when mouse moves into title', async () => {
         const wrapper = await getWrapper();
         act(() => {
             wrapper.find('[data-testid="modal-title"]').prop('onMouseLeave')();
-            wrapper.find(CollapsibleScrollbar).prop('onScroll')({ clientHeight: 100 });
+            wrapper.find(CollapsibleScrollbar).prop('onScroll')(
+                { scrollHeight: 100, clientHeight: 200, scrollTop: 10 },
+                { scrollHeight: 100, clientHeight: 200, scrollTop: 0 },
+            );
         });
         wrapper.update();
         expect(wrapper.find('[data-testid="modal-title"]').hasClass('is-expanded')).toBe(false);
@@ -125,6 +154,19 @@ describe('components/message-center/components/message-center-modal/MessageCente
         });
         wrapper.update();
 
+        expect(wrapper.find('[data-testid="modal-title"]').hasClass('is-expanded')).toBe(true);
+    });
+
+    test('should not expand/collapse when client height changes', async () => {
+        const wrapper = await getWrapper();
+        expect(wrapper.find('[data-testid="modal-title"]').hasClass('is-expanded')).toBe(true);
+        act(() => {
+            wrapper.find(CollapsibleScrollbar).prop('onScroll')(
+                { scrollHeight: 100, clientHeight: 200, scrollTop: 10 },
+                { scrollHeight: 100, clientHeight: 300, scrollTop: 0 },
+            );
+        });
+        wrapper.update();
         expect(wrapper.find('[data-testid="modal-title"]').hasClass('is-expanded')).toBe(true);
     });
 
