@@ -1371,6 +1371,23 @@ describe('api/Feed', () => {
         });
     });
 
+    describe('updateAnnotationErrorCallback()', () => {
+        const e = new Error('foo');
+
+        beforeEach(() => {
+            feed.updateFeedItem = jest.fn();
+            feed.createFeedError = jest.fn().mockReturnValue(error);
+            feed.feedErrorCallback = jest.fn();
+        });
+
+        test('should update the feed item and call the error callback', () => {
+            const commentId = '1';
+            feed.deleteCommentErrorCallback(e, errorCode, commentId);
+            expect(feed.updateFeedItem).toBeCalledWith(error, commentId);
+            expect(feed.feedErrorCallback).toBeCalledWith(true, e, errorCode);
+        });
+    });
+
     describe('deleteAnnotation()', () => {
         const annotationId = '123';
         let successCallback;
