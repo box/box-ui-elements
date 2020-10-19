@@ -36,6 +36,7 @@ type Props = {
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems<>,
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
+    onAnnotationEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
     onAnnotationSelect?: (annotation: Annotation) => void,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
@@ -60,6 +61,7 @@ const ActiveState = ({
     mentionSelectorContacts,
     getMentionWithQuery,
     onAnnotationDelete,
+    onAnnotationEdit,
     onAnnotationSelect,
     onAppActivityDelete,
     onCommentDelete,
@@ -171,9 +173,11 @@ const ActiveState = ({
                                     currentUser={currentUser}
                                     getAvatarUrl={getAvatarUrl}
                                     getUserProfileUrl={getUserProfileUrl}
+                                    getMentionWithQuery={getMentionWithQuery}
                                     isCurrentVersion={currentFileVersionId === itemFileVersionId}
                                     item={item}
                                     mentionSelectorContacts={mentionSelectorContacts}
+                                    onEdit={onAnnotationEdit}
                                     onDelete={onAnnotationDelete}
                                     onSelect={onAnnotationSelect}
                                 />

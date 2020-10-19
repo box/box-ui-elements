@@ -3,10 +3,12 @@ import merge from 'lodash/merge';
 import {
     ERROR_CODE_CREATE_ANNOTATION,
     ERROR_CODE_DELETE_ANNOTATION,
+    ERROR_CODE_EDIT_ANNOTATION,
     ERROR_CODE_FETCH_ANNOTATION,
     ERROR_CODE_FETCH_ANNOTATIONS,
     PERMISSION_CAN_CREATE_ANNOTATIONS,
     PERMISSION_CAN_DELETE,
+    PERMISSION_CAN_EDIT,
     PERMISSION_CAN_VIEW_ANNOTATIONS,
 } from '../constants';
 import MarkerBasedApi from './MarkerBasedAPI';
@@ -65,6 +67,34 @@ export default class Annotations extends MarkerBasedApi {
             errorCallback,
             successCallback,
             url: this.getUrl(),
+        });
+    }
+
+    updateAnnotation(
+        fileId: string,
+        annotationId: string,
+        permissions: AnnotationPermission,
+        message: string,
+        successCallback: (annotation: Annotation) => void,
+        errorCallback: (e: ElementsXhrError, code: string) => void,
+    ): void {
+        this.errorCode = ERROR_CODE_EDIT_ANNOTATION;
+
+        try {
+            this.checkApiCallValidity(PERMISSION_CAN_EDIT, permissions, fileId);
+        } catch (e) {
+            errorCallback(e, this.errorCode);
+            return;
+        }
+
+        const requestData = { data: { description: { message } } };
+
+        this.put({
+            id: fileId,
+            data: requestData,
+            errorCallback,
+            successCallback,
+            url: this.getUrlForId(annotationId),
         });
     }
 

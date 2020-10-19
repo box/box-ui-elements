@@ -9,14 +9,15 @@ jest.mock('lodash/debounce', () => jest.fn(i => i));
 
 describe('elements/content-sidebar/ActivitySidebar', () => {
     const feedAPI = {
-        feedItems: jest.fn(),
+        createComment: jest.fn(),
+        createTaskNew: jest.fn(),
         deleteAnnotation: jest.fn(),
         deleteComment: jest.fn(),
         deleteTaskNew: jest.fn(),
-        createTaskNew: jest.fn(),
-        updateTaskNew: jest.fn(),
+        feedItems: jest.fn(),
+        updateAnnotation: jest.fn(),
         updateTaskCollaborator: jest.fn(),
-        createComment: jest.fn(),
+        updateTaskNew: jest.fn(),
     };
     const usersAPI = {
         get: jest.fn(),
@@ -760,6 +761,26 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(emitAnnotatorActiveChangeEvent).toHaveBeenCalledWith('124');
             expect(history.push).not.toHaveBeenCalled();
             expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
+        });
+    });
+
+    describe('handleAnnotationEdit()', () => {
+        test('should call updateAnnotation API', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+
+            wrapper.instance().handleAnnotationEdit({
+                id: '123',
+                text: 'hello',
+                permissions: {
+                    can_edit: true,
+                    can_delete: true,
+                },
+            });
+
+            expect(api.getFeedAPI().updateAnnotation).toHaveBeenCalled();
+            expect(instance.fetchFeedItems).toHaveBeenCalled();
         });
     });
 

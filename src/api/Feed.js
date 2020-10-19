@@ -162,6 +162,48 @@ class Feed extends Base {
         this.updateFeedItem({ ...annotation, isPending: false }, id);
     }
 
+    updateAnnotation = (
+        file: BoxItem,
+        annotationId: string,
+        text: string,
+        permissions: AnnotationPermission,
+        successCallback: (annotation: Annotation) => void,
+        errorCallback: ErrorCallback,
+    ): void => {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.annotationsAPI = new AnnotationsAPI(this.options);
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+
+        this.updateFeedItem({ message: text, isPending: true }, annotationId);
+
+        this.annotationsAPI.updateAnnotation(
+            this.file.id,
+            annotationId,
+            permissions,
+            text,
+            (annotation: Annotation) => {
+                this.updateFeedItem(
+                    {
+                        ...annotation,
+                        isPending: false,
+                    },
+                    annotationId,
+                );
+                if (!this.isDestroyed()) {
+                    successCallback(annotation);
+                }
+            },
+            (e: ErrorResponseData, code: string) => {
+                this.feedErrorCallback(true, e, code);
+            },
+        );
+    };
+
     deleteAnnotation = (
         file: BoxItem,
         annotationId: string,
