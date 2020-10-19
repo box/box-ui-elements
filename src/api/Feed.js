@@ -199,22 +199,10 @@ class Feed extends Base {
                 }
             },
             (e: ErrorResponseData, code: string) => {
-                this.updateAnnotationErrorCallback(e, code, annotationId);
+                this.updateFeedItem(this.createFeedError(messages.annotationUpdateErrorMessage), annotationId);
+                this.feedErrorCallback(true, e, code);
             },
         );
-    };
-
-    /**
-     * Error callback for updating an annotation comment
-     *
-     * @param {ElementsXhrError} e - the error returned by the API
-     * @param {string} code - the error code
-     * @param {string} annotatonId - the annotation id
-     * @return {void}
-     */
-    updateAnnotationErrorCallback = (e: ElementsXhrError, code: string, annotationId: string) => {
-        this.updateFeedItem(this.createFeedError(messages.annotationUpdateErrorMessage), annotationId);
-        this.feedErrorCallback(true, e, code);
     };
 
     deleteAnnotation = (
