@@ -152,6 +152,21 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.fetchFeedItems();
     };
 
+    handleAnnotationEdit = (id: string, text: string, permissions: AnnotationPermission) => {
+        const { api, file } = this.props;
+
+        api.getFeedAPI(false).updateAnnotation(
+            file,
+            id,
+            text,
+            permissions,
+            this.feedSuccessCallback,
+            this.feedErrorCallback,
+        );
+
+        this.fetchFeedItems();
+    };
+
     deleteAnnotationSuccess(id: string) {
         const { emitRemoveEvent } = this.props;
 
@@ -703,6 +718,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     isDisabled={isDisabled}
                     mentionSelectorContacts={mentionSelectorContacts}
                     onAnnotationDelete={this.handleAnnotationDelete}
+                    onAnnotationEdit={this.handleAnnotationEdit}
                     onAnnotationSelect={this.handleAnnotationSelect}
                     onAppActivityDelete={this.deleteAppActivity}
                     onCommentCreate={this.createComment}
