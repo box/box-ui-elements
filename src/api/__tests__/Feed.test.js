@@ -1369,6 +1369,21 @@ describe('api/Feed', () => {
             expect(feed.updateFeedItem).toHaveBeenCalled();
             expect(successCallback).toHaveBeenCalled();
         });
+
+        test('should call updateFeedItem and feedErrorCallback on failure', () => {
+            const e = new Error('foo');
+            feed.updateFeedItem = jest.fn();
+            feed.feedErrorCallback = jest.fn();
+            feed.updateAnnotation = jest.fn().mockImplementation(() => {
+                feed.updateFeedItem();
+                feed.feedErrorCallback(true, e, errorCode);
+            });
+
+            feed.updateAnnotation(file, annotationId, permissions, text, successCallback, errorCallback);
+
+            expect(feed.updateFeedItem).toHaveBeenCalled();
+            expect(feed.feedErrorCallback).toHaveBeenCalledWith(true, e, errorCode);
+        });
     });
 
     describe('deleteAnnotation()', () => {
