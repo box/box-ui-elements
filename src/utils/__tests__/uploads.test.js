@@ -262,7 +262,7 @@ describe('util/uploads', () => {
             expect(isDataTransferItemAPackage(itemData)).toBeTruthy();
         });
 
-        test('should be true if data transfer item has both identifies a directory but only has kind = file', () => {
+        test('should be false if data transfer item has both identifies a directory but only has kind = file', () => {
             const packageEntry = {
                 isDirectory: true,
                 isFile: false,
