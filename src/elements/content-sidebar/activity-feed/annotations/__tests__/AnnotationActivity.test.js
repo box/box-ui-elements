@@ -54,22 +54,46 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         CommentForm.default = jest.fn().mockReturnValue(<div />);
     });
 
-    test('should correctly render annotation activity', () => {
-        const unixTime = new Date(TIME_STRING_SEPT_27_2017).getTime();
+    test('should not render annotation activity menu when both can_delete is false and can_edit is false', () => {
         const item = {
             ...mockAnnotation,
-            permissions: { can_delete: true },
+            permissions: { can_delete: false, can_edit: false },
         };
 
         const wrapper = getWrapper({ item });
-        const activityLink = wrapper.find(AnnotationActivityLink);
 
-        expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
-        expect(activityLink.prop('message')).toEqual({ ...messages.annotationActivityPageItem, values: { number: 1 } });
-        expect(activityLink.props()).toMatchObject(generateReginTags());
-        expect(wrapper.find('AnnotationActivityMenu').length).toEqual(1);
-        expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(mockActivity.item.description.message);
+        expect(wrapper.exists('AnnotationActivityMenu')).toBe(false);
     });
+
+    test.each`
+        canDelete | canEdit
+        ${false}  | ${true}
+        ${true}   | ${false}
+        ${true}   | ${true}
+    `(
+        'should correct render annotation activity when canDelete: $canDelete and canEdit: $canEdit',
+        ({ canDelete, canEdit }) => {
+            const unixTime = new Date(TIME_STRING_SEPT_27_2017).getTime();
+            const item = {
+                ...mockAnnotation,
+                permissions: { can_delete: canDelete, can_edit: canEdit },
+            };
+
+            const wrapper = getWrapper({ item });
+            const activityLink = wrapper.find(AnnotationActivityLink);
+
+            expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
+            expect(activityLink.prop('message')).toEqual({
+                ...messages.annotationActivityPageItem,
+                values: { number: 1 },
+            });
+            expect(activityLink.props()).toMatchObject(generateReginTags());
+            expect(wrapper.exists('AnnotationActivityMenu')).toBe(true);
+            expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(
+                mockActivity.item.description.message,
+            );
+        },
+    );
 
     test('should correctly render annotation activity of another file version', () => {
         const wrapper = getWrapper({ isCurrentVersion: false });

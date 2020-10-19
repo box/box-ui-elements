@@ -3,6 +3,7 @@ import * as React from 'react';
 import TetherComponent from 'react-tether';
 import { FormattedMessage } from 'react-intl';
 import DeleteConfirmation from '../common/delete-confirmation';
+import IconEdit from '../../../../icons/general/IconEdit';
 import IconTrash from '../../../../icons/general/IconTrash';
 import Media from '../../../../components/media';
 import messages from './messages';
@@ -12,11 +13,13 @@ import { MenuItem } from '../../../../components/menu';
 
 type AnnotationActivityMenuProps = {
     canDelete?: boolean,
+    canEdit?: boolean,
     id: string,
     onDeleteConfirm: () => void,
+    onEdit: () => void,
 };
 
-const AnnotationActivityMenu = ({ canDelete, id, onDeleteConfirm }: AnnotationActivityMenuProps) => {
+const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdit }: AnnotationActivityMenuProps) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
 
     const handleDeleteCancel = (): void => {
@@ -41,15 +44,26 @@ const AnnotationActivityMenu = ({ canDelete, id, onDeleteConfirm }: AnnotationAc
 
     return (
         <TetherComponent {...tetherProps}>
-            {canDelete && (
-                <Media.Menu
-                    isDisabled={isConfirmingDelete}
-                    data-testid="annotation-activity-actions-menu"
-                    menuProps={{
-                        'data-resin-component': 'preview',
-                        'data-resin-feature': 'annotations',
-                    }}
-                >
+            <Media.Menu
+                isDisabled={isConfirmingDelete}
+                data-testid="annotation-activity-actions-menu"
+                menuProps={{
+                    'data-resin-component': 'preview',
+                    'data-resin-feature': 'annotations',
+                }}
+            >
+                {canEdit && (
+                    <MenuItem
+                        data-resin-itemid={id}
+                        data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_EDIT}
+                        data-testid="edit-annotation-activity"
+                        onClick={onEdit}
+                    >
+                        <IconEdit color={bdlGray} />
+                        <FormattedMessage {...messages.annotationActivityEditMenuItem} />
+                    </MenuItem>
+                )}
+                {canDelete && (
                     <MenuItem
                         data-resin-itemid={id}
                         data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_DELETE}
@@ -59,8 +73,8 @@ const AnnotationActivityMenu = ({ canDelete, id, onDeleteConfirm }: AnnotationAc
                         <IconTrash color={bdlGray} />
                         <FormattedMessage {...messages.annotationActivityDeleteMenuItem} />
                     </MenuItem>
-                </Media.Menu>
-            )}
+                )}
+            </Media.Menu>
             {isConfirmingDelete && (
                 <DeleteConfirmation
                     data-resin-component={ACTIVITY_TARGETS.ANNOTATION_OPTIONS}
