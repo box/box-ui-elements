@@ -1,0 +1,24 @@
+@import '../../styles/variables';
+
+.bdl-ContactRestrictionNotice {
+    .bdl-SelectButton {
+        margin-top: 10px;
+    }
+
+    .bdl-SelectFieldDropdown {
+        z-index: $overlay-z-index;
+        max-width: 100%;
+    }
+}
+
+.bdl-ContactRestrictionNotice-description {
+    margin-bottom: 10px;
+}
+
+.bdl-ContactRestrictionNotice-loadingIndicator {
+    margin: 14px auto 10px auto;
+}
+
+.bdl-ContactRestrictionNotice-removeBtn {
+    text-decoration: underline;
+}
