@@ -12,11 +12,6 @@ const messages = defineMessages({
         description: 'Error message when an app activity deletion fails',
         defaultMessage: 'There was an error deleting this item.',
     },
-    commentUpdateErrorMessage: {
-        id: 'be.api.commentUpdateErrorMessage',
-        description: 'Error message when an annotation comment update fails',
-        defaultMessage: 'This comment could not be modified.',
-    },
     commentCreateErrorMessage: {
         id: 'be.api.commentCreateErrorMessage',
         description: 'Error message when a comment creation fails',
@@ -31,6 +26,11 @@ const messages = defineMessages({
         id: 'be.api.commentDeleteErrorMessage',
         description: 'Error message when a comment deletion fails',
         defaultMessage: 'There was an error deleting this comment.',
+    },
+    commentUpdateErrorMessage: {
+        id: 'be.api.commentUpdateErrorMessage',
+        description: 'Error message when an annotation comment update fails',
+        defaultMessage: 'This comment could not be modified.',
     },
     taskActionErrorTitle: {
         id: 'be.api.taskActionErrorTitle',
