@@ -46,7 +46,7 @@ type ContentSharingProps = {
     /** token - Valid access token */
     token: string,
     /** uuid - Unique identifier, used for refreshing element visibility when called from the ES6 wrapper */
-    uuid?: number,
+    uuid?: string,
 };
 
 const createAPI = (apiHost, itemID, itemType, token) =>
@@ -113,6 +113,7 @@ function ContentSharing({
                     language={language}
                     messages={messages}
                     setIsVisible={setIsVisible}
+                    uuid={uuid}
                 />
             )}
         </>
