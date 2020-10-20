@@ -1383,6 +1383,7 @@ describe('api/Feed', () => {
         test('should update the feed item and call the error callback', () => {
             const id = '1';
             feed.updateCommentErrorCallback(e, errorCode, id);
+            expect(feed.createFeedError).toBeCalledWith(messages.commentUpdateErrorMessage);
             expect(feed.updateFeedItem).toBeCalledWith(error, id);
             expect(feed.feedErrorCallback).toBeCalledWith(true, e, errorCode);
         });
