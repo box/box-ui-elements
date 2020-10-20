@@ -95,6 +95,23 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         },
     );
 
+    test('should render CommentForm if user clicks on the Modify menu item', () => {
+        const activity = {
+            item: {
+                ...mockAnnotation,
+                isPending: false,
+                permissions: { can_edit: true },
+            },
+        };
+
+        const wrapper = mount(<AnnotationActivity {...mockActivity} {...activity} />);
+
+        wrapper.find('AnnotationActivityMenu').simulate('click');
+        wrapper.find('MenuItem').simulate('click');
+
+        expect(wrapper.exists('CommentForm')).toBe(true);
+    });
+
     test('should correctly render annotation activity of another file version', () => {
         const wrapper = getWrapper({ isCurrentVersion: false });
 
