@@ -10,6 +10,7 @@ import {
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_PREVIEW,
     STATUS_ACCEPTED,
+    STATUS_INACTIVE,
     TYPE_FOLDER,
 } from '../../../constants';
 import {
@@ -499,6 +500,8 @@ export const convertCollabsRequest = (
     return { groups, users };
 };
 
+const sortByName = ({ name: nameA = '' }, { name: nameB = '' }) => nameA.localeCompare(nameB);
+
 /**
  * Convert an enterprise users API response into an array of internal USM contacts.
  *
@@ -512,8 +515,16 @@ export const convertUserContactsResponse = (
 ): Array<contactType> => {
     const { entries = [] } = contactsAPIData;
 
-    // Return all users except for the current user and app users
+    // Return all active users except for the current user and app users
     return entries
+        .filter(
+            ({ id, login: email, status }) =>
+                id !== currentUserID &&
+                email &&
+                !APP_USERS_DOMAIN_REGEXP.test(email) &&
+                status &&
+                status !== STATUS_INACTIVE,
+        )
         .map(contact => {
             const { id, login: email, name, type } = contact;
             return {
@@ -523,7 +534,7 @@ export const convertUserContactsResponse = (
                 type,
             };
         })
-        .filter(({ id, email }) => id !== currentUserID && email && !APP_USERS_DOMAIN_REGEXP.test(email));
+        .sort(sortByName);
 };
 
 /**
@@ -571,5 +582,6 @@ export const convertGroupContactsResponse = (contactsAPIData: GroupCollection): 
                 name,
                 type,
             };
-        });
+        })
+        .sort(sortByName);
 };

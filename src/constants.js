@@ -208,6 +208,7 @@ export const STATUS_STAGED: 'staged' = 'staged';
 export const STATUS_COMPLETE: 'complete' = 'complete';
 export const STATUS_ERROR: 'error' = 'error';
 export const STATUS_ACCEPTED: 'accepted' = 'accepted';
+export const STATUS_INACTIVE: 'inactive' = 'inactive';
 
 /* ------------------- Styles ------------------------ */
 export const CLASS_MODAL_CONTENT = 'be-modal-dialog-content';
