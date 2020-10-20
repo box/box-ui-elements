@@ -199,10 +199,22 @@ class Feed extends Base {
                 }
             },
             (e: ErrorResponseData, code: string) => {
-                this.updateFeedItem(this.createFeedError(messages.annotationUpdateErrorMessage), annotationId);
-                this.feedErrorCallback(true, e, code);
+                this.updateCommentErrorCallback(e, code, annotationId);
             },
         );
+    };
+
+    /**
+     * Error callback for updating a comment
+     *
+     * @param {ElementsXhrError} e - the error returned by the API
+     * @param {string} code - the error code
+     * @param {string} id - the id of either an annotation or comment
+     * @return {void}
+     */
+    updateCommentErrorCallback = (e: ElementsXhrError, code: string, id: string) => {
+        this.updateFeedItem(this.createFeedError(messages.commentUpdateErrorMessage), id);
+        this.feedErrorCallback(true, e, code);
     };
 
     deleteAnnotation = (
@@ -1269,7 +1281,7 @@ class Feed extends Base {
                 }
             },
             errorCallback: (e: ErrorResponseData, code: string) => {
-                this.feedErrorCallback(true, e, code);
+                this.updateCommentErrorCallback(e, code, commentId);
             },
         });
     };

@@ -1369,20 +1369,22 @@ describe('api/Feed', () => {
             expect(feed.updateFeedItem).toHaveBeenCalled();
             expect(successCallback).toHaveBeenCalled();
         });
+    });
 
-        test('should call updateFeedItem and feedErrorCallback on failure', () => {
-            const e = new Error('foo');
+    describe('updateCommentErrorCallback()', () => {
+        const e = new Error('foo');
+
+        beforeEach(() => {
             feed.updateFeedItem = jest.fn();
+            feed.createFeedError = jest.fn().mockReturnValue(error);
             feed.feedErrorCallback = jest.fn();
-            feed.updateAnnotation = jest.fn().mockImplementation(() => {
-                feed.updateFeedItem();
-                feed.feedErrorCallback(true, e, errorCode);
-            });
+        });
 
-            feed.updateAnnotation(file, annotationId, permissions, text, successCallback, errorCallback);
-
-            expect(feed.updateFeedItem).toHaveBeenCalled();
-            expect(feed.feedErrorCallback).toHaveBeenCalledWith(true, e, errorCode);
+        test('should update the feed item and call the error callback', () => {
+            const id = '1';
+            feed.updateCommentErrorCallback(e, errorCode, id);
+            expect(feed.updateFeedItem).toBeCalledWith(error, id);
+            expect(feed.feedErrorCallback).toBeCalledWith(true, e, errorCode);
         });
     });
 

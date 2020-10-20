@@ -12,8 +12,8 @@ const messages = defineMessages({
         description: 'Error message when an app activity deletion fails',
         defaultMessage: 'There was an error deleting this item.',
     },
-    annotationUpdateErrorMessage: {
-        id: 'be.api.annotationUpdateErrorMessage',
+    commentUpdateErrorMessage: {
+        id: 'be.api.commentUpdateErrorMessage',
         description: 'Error message when an annotation comment update fails',
         defaultMessage: 'This comment could not be modified.',
     },
