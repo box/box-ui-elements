@@ -27,6 +27,11 @@ const messages = defineMessages({
         description: 'Error message when a comment deletion fails',
         defaultMessage: 'There was an error deleting this comment.',
     },
+    commentUpdateErrorMessage: {
+        id: 'be.api.commentUpdateErrorMessage',
+        description: 'Error message when an annotation comment update fails',
+        defaultMessage: 'This comment could not be modified.',
+    },
     taskActionErrorTitle: {
         id: 'be.api.taskActionErrorTitle',
         description: 'Title shown when an error occurs performing an action on a task',
