@@ -43,7 +43,7 @@ ContactsEmailsTooltip.displayName = 'ContactsEmailsTooltip';
 
 ContactsEmailsTooltip.defaultProps = {
     contacts: [],
-    maxContacts: 10,
+    maxContacts: 15,
 };
 
 export default ContactsEmailsTooltip;

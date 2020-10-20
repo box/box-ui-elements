@@ -74,9 +74,14 @@ const ContactRestrictionNotice = ({
             description="Notice to display when sharing a file with external collaborators requires a business justification to be provided."
             id="boxui.unifiedShare.businessJustificationRequiredSingular"
         >
-            This classified content requires business justification to collaborate with{' '}
-            <ContactsEmailsTooltip contacts={restrictedExternalContacts}>1 person</ContactsEmailsTooltip>. Select a
-            business justification below or <RemoveButton>remove them</RemoveButton> to continue.
+            This classified content requires a business justification to collaborate with{' '}
+            <span className="bdl-ContactRestrictionNotice-contactEmail">
+                <Param
+                    value={restrictedExternalContacts[0].value}
+                    description="The email address of the external user"
+                />
+            </span>
+            . Select a business justification below or <RemoveButton>remove the user</RemoveButton> to continue.
         </FormattedCompMessage>
     );
 
@@ -86,7 +91,7 @@ const ContactRestrictionNotice = ({
             description="Notice to display when sharing a file with external collaborators requires a business justification to be provided."
             id="boxui.unifiedShare.businessJustificationRequiredPlural"
         >
-            This classified content requires business justification to collaborate with{' '}
+            This classified content requires a business justification to collaborate with{' '}
             <ContactsEmailsTooltip contacts={restrictedExternalContacts}>
                 <Param
                     value={restrictedExternalContactCount}

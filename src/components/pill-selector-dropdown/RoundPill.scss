@@ -30,6 +30,13 @@
     }
 }
 
+.bdl-RoundPill-avatar,
+.bdl-RoundPill-closeBtn {
+    path {
+        fill: $bdl-gray-50;
+    }
+}
+
 .bdl-RoundPill-text {
     flex-grow: 1;
     flex-shrink: 1;
@@ -52,12 +59,18 @@
 }
 
 .bdl-RoundPill--warning {
+    background-color: $bdl-yellorange-10;
+    border: 1px solid $bdl-yellorange-50;
+
     .bdl-Avatar-externalBadge {
         border-color: $bdl-yellorange-10;
     }
 }
 
 .bdl-RoundPill--error {
+    background-color: $bdl-watermelon-red-10;
+    border: 1px solid $bdl-watermelon-red-50;
+
     .bdl-Avatar-externalBadge {
         border-color: $bdl-watermelon-red-10;
     }

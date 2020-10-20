@@ -2,7 +2,7 @@
 
 .bdl-ContactRestrictionNotice {
     .bdl-SelectButton {
-        margin-top: 10px;
+        margin-top: $bdl-grid-unit * 2;
     }
 
     .bdl-SelectFieldDropdown {
@@ -11,14 +11,19 @@
     }
 }
 
+.bdl-ContactRestrictionNotice-contactEmail {
+    text-decoration: underline;
+}
+
 .bdl-ContactRestrictionNotice-description {
-    margin-bottom: 10px;
+    margin-bottom: $bdl-grid-unit * 2;
 }
 
 .bdl-ContactRestrictionNotice-loadingIndicator {
-    margin: 14px auto 10px auto;
+    margin: 14px auto $bdl-grid-unit * 2 auto;
 }
 
 .bdl-ContactRestrictionNotice-removeBtn {
+    color: $bdl-gray;
     text-decoration: underline;
 }

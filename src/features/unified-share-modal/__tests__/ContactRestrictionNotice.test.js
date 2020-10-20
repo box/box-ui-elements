@@ -79,6 +79,7 @@ describe('features/unified-share-modal/ContactRestrictionNotice', () => {
             wrapper.setProps({ restrictedExternalEmails });
             const message = wrapper.find(`FormattedCompMessage[id="${singularMessageId}"]`);
             expect(message).toHaveLength(1);
+            expect(wrapper.find('Param').props().value).toBe(restrictedExternalEmails[0]);
         });
 
         test('should render plural message when more than one restricted external contact exist', () => {
