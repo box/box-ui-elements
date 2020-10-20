@@ -56,6 +56,7 @@ const AnnotationActivity = ({
 
     const handleEdit = () => {
         setIsEditing(true);
+        setIsInputOpen(true);
     };
 
     const handleOnSelect = () => {
@@ -118,14 +119,14 @@ const AnnotationActivity = ({
                     <div>
                         <ActivityTimestamp date={createdAtTimestamp} />
                     </div>
-                    {isEditing && currentUser ? (
+                    {isEditing && isInputOpen && currentUser ? (
                         <CommentForm
                             className="bcs-AnnotationActivity-editor"
                             entityId={id}
                             getAvatarUrl={getAvatarUrl}
                             getMentionWithQuery={getMentionWithQuery}
                             isEditing={isEditing}
-                            isOpen={isInputOpen}
+                            isOpen={isEditing}
                             mentionSelectorContacts={mentionSelectorContacts}
                             onCancel={handleFormCancel}
                             onFocus={handleFormFocus}
