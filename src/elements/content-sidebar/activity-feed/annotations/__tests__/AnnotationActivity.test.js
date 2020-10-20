@@ -108,8 +108,15 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
         wrapper.find('AnnotationActivityMenu').simulate('click');
         wrapper.find('MenuItem').simulate('click');
-
         expect(wrapper.exists('CommentForm')).toBe(true);
+
+        // Clicking the cancel button will remove the CommentForm
+        wrapper
+            .find('CommentInputControls')
+            .find('Button')
+            .first()
+            .simulate('click');
+        expect(wrapper.exists('CommentForm')).toBe(false);
     });
 
     test('should correctly render annotation activity of another file version', () => {
