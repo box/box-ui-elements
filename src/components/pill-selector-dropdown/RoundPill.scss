@@ -80,6 +80,26 @@
     .bdl-Avatar-externalBadge {
         border-color: $bdl-gray-20;
     }
+
+    &.bdl-RoundPill--warning {
+        background-color: $bdl-yellorange-20;
+        border-color: $bdl-yellorange;
+        box-shadow: none;
+
+        .bdl-Avatar-externalBadge {
+            border-color: $bdl-yellorange-20;
+        }
+    }
+
+    &.bdl-RoundPill--error {
+        background-color: $bdl-watermelon-red-20;
+        border-color: $bdl-watermelon-red;
+        box-shadow: none;
+
+        .bdl-Avatar-externalBadge {
+            border-color: $bdl-watermelon-red-20;
+        }
+    }
 }
 
 .bdl-RoundPill--disabled {
