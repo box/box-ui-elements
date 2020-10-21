@@ -48,6 +48,7 @@ import {
     MOCK_COLLABS_CONVERTED_REQUEST,
     MOCK_COLLAB_IDS_CONVERTED,
     MOCK_CONTACTS_API_RESPONSE,
+    MOCK_CONTACTS_API_RESPONSE_UNSORTED,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
     MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE,
     MOCK_COLLABS_CONVERTED_GROUPS,
@@ -76,6 +77,7 @@ import {
     MOCK_TIMESTAMP_ISO_STRING,
     MOCK_USER_IDS_CONVERTED,
     MOCK_VANITY_URL,
+    MOCK_GROUP_CONTACTS_API_RESPONSE_UNSORTED,
 } from '../__mocks__/USMMocks';
 
 jest.mock('../../../../utils/file', () => ({
@@ -744,8 +746,14 @@ describe('convertCollabsResponse', () => {
 });
 
 describe('convertUserContactsResponse()', () => {
-    test('should return all users except the current user', () => {
+    test('should return all active users except the current user', () => {
         expect(convertUserContactsResponse(MOCK_CONTACTS_API_RESPONSE, MOCK_OWNER_ID)).toEqual(
+            MOCK_CONTACTS_CONVERTED_RESPONSE,
+        );
+    });
+
+    test('should return users sorted by name', () => {
+        expect(convertUserContactsResponse(MOCK_CONTACTS_API_RESPONSE_UNSORTED, MOCK_OWNER_ID)).toEqual(
             MOCK_CONTACTS_CONVERTED_RESPONSE,
         );
     });
@@ -770,6 +778,12 @@ describe('convertUserContactsByEmailResponse()', () => {
 describe('convertGroupContactsResponse()', () => {
     test('should return groups with the correct permissions', () => {
         expect(convertGroupContactsResponse(MOCK_GROUP_CONTACTS_API_RESPONSE)).toEqual(
+            MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
+        );
+    });
+
+    test('should return groups sorted by name', () => {
+        expect(convertGroupContactsResponse(MOCK_GROUP_CONTACTS_API_RESPONSE_UNSORTED)).toEqual(
             MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
         );
     });
