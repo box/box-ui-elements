@@ -29,8 +29,9 @@ describe('features/unified-share-modal/EmailForm', () => {
             value: 'z@example.com',
         },
     ];
+    const expectedJustificationReason = { displayText: 'Reason', value: '123' };
 
-    const intl = { formatMessage: jest.fn() };
+    const intl = { formatMessage: jest.fn().mockImplementation(({ id }) => id) };
 
     const getWrapper = (props = {}) =>
         shallow(
@@ -110,6 +111,49 @@ describe('features/unified-share-modal/EmailForm', () => {
         });
     });
 
+    describe('handleRemoveRestrictedExternalContacts()', () => {
+        test('should remove all contacts whose email matches a value from restrictedExternalEmails', () => {
+            const onContactRemove = jest.fn();
+            const updateSelectedContacts = jest.fn();
+            const restrictedExternalEmails = [
+                expectedContacts[0].value,
+                expectedContacts[2].value,
+                'not_included_in_contacts@example.com',
+            ];
+
+            const wrapper = getWrapper({
+                onContactRemove,
+                restrictedExternalEmails,
+                selectedContacts: expectedContacts,
+                updateSelectedContacts,
+            });
+
+            wrapper.instance().handleRemoveRestrictedExternalContacts();
+
+            // The two restricted emails that match values in expectedContacts
+            expect(onContactRemove).toHaveBeenCalledTimes(2);
+            expect(onContactRemove).toHaveBeenCalledWith(expectedContacts[0]);
+            expect(onContactRemove).toHaveBeenCalledWith(expectedContacts[2]);
+            expect(updateSelectedContacts).toHaveBeenCalledTimes(1);
+            expect(updateSelectedContacts).toHaveBeenCalledWith([expectedContacts[1]]);
+        });
+
+        test('should reset contact limit error when contact removal results in a contact count within the limit', () => {
+            const wrapper = getWrapper({
+                contactLimit: 1,
+                onSubmit: jest.fn().mockResolvedValue({}),
+                restrictedExternalEmails: [expectedContacts[2].value],
+                selectedContacts: [expectedContacts[1], expectedContacts[2]],
+            });
+
+            wrapper.instance().handleSubmit({ preventDefault: jest.fn() });
+            expect(wrapper.state('contactsFieldError')).toBe('boxui.unifiedShare.contactsExceedLimitError');
+
+            wrapper.instance().handleRemoveRestrictedExternalContacts();
+            expect(wrapper.state('contactsFieldError')).toBe('');
+        });
+    });
+
     describe('handleMessageChange()', () => {
         test('should set the state depending on the input value', () => {
             const textarea = mount(<textarea defaultValue="test" />);
@@ -123,6 +167,30 @@ describe('features/unified-share-modal/EmailForm', () => {
             });
 
             expect(wrapper.state('message')).toEqual('test');
+        });
+    });
+
+    describe('handleSelectJustificationReason()', () => {
+        test('should set justification reason and clear justification reason error when a value is selected', () => {
+            const wrapper = getWrapper({
+                isExpanded: true,
+                onSubmit: jest.fn().mockResolvedValue({}),
+                restrictedExternalEmails: [expectedContacts[0].value],
+                selectedContacts: expectedContacts,
+                shouldRequireExternalContactJustification: true,
+            });
+
+            // Trigger error by submitting without selecting a justification
+            wrapper.instance().handleSubmit({ preventDefault: jest.fn() });
+            expect(wrapper.find('ContactRestrictionNotice').props().error).toBe(
+                'boxui.unifiedShare.justificationRequiredError',
+            );
+
+            wrapper.find('ContactRestrictionNotice').simulate('selectJustificationReason', expectedJustificationReason);
+            expect(wrapper.find('ContactRestrictionNotice').props().error).toBe('');
+            expect(wrapper.find('ContactRestrictionNotice').props().selectedJustificationReason).toEqual(
+                expectedJustificationReason,
+            );
         });
     });
 
@@ -185,7 +253,9 @@ describe('features/unified-share-modal/EmailForm', () => {
             const expectedParam = {
                 emails: ['y@example.com'],
                 groupIDs: ['x@example.com'],
+                justificationReason: null,
                 message,
+                restrictedExternalEmails: [],
             };
             const onSubmit = jest.fn().mockReturnValue(Promise.resolve());
             const wrapper = getWrapper({
@@ -202,12 +272,42 @@ describe('features/unified-share-modal/EmailForm', () => {
             expect(onSubmit).toHaveBeenCalledWith(expectedParam);
         });
 
+        test('should include justificationReason and restrictedExternalEmails when available', () => {
+            const message = 'test message';
+            const event = { preventDefault: jest.fn() };
+            const onSubmit = jest.fn().mockReturnValue(Promise.resolve());
+
+            const wrapper = getWrapper({
+                onSubmit,
+                restrictedExternalEmails: [
+                    expectedContacts[1].value,
+                    expectedContacts[2].value,
+                    'not_included_in_contacts@example.com',
+                ],
+                selectedContacts: expectedContacts,
+                shouldRequireExternalContactJustification: true,
+            });
+
+            wrapper.setState({ message });
+            wrapper.instance().handleSelectJustificationReason(expectedJustificationReason);
+            wrapper.instance().handleSubmit(event);
+
+            expect(onSubmit).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    justificationReason: expectedJustificationReason,
+                    restrictedExternalEmails: [expectedContacts[1].value, expectedContacts[2].value],
+                }),
+            );
+        });
+
         test('should handle errors from onSubmit prop', () => {
             const message = 'test message';
             const expectedParam = {
                 emails: [],
                 groupIDs: ['x@example.com'],
+                justificationReason: null,
                 message,
+                restrictedExternalEmails: [],
             };
             const onSubmit = jest.fn().mockReturnValue(
                 // eslint-disable-next-line prefer-promise-reject-errors
@@ -284,6 +384,26 @@ describe('features/unified-share-modal/EmailForm', () => {
         });
     });
 
+    describe('validateJustificationReason()', () => {
+        test.each`
+            shouldRequireExternalContactJustification | selectedJustificationReason    | expectedError
+            ${false}                                  | ${null}                        | ${''}
+            ${false}                                  | ${expectedJustificationReason} | ${''}
+            ${true}                                   | ${null}                        | ${'boxui.unifiedShare.justificationRequiredError'}
+            ${true}                                   | ${expectedJustificationReason} | ${''}
+        `(
+            'should return "$expectedError" when shouldRequireExternalContactJustification is $shouldRequireExternalContactJustification and selectedJustificationReason is $selectedJustificationReason',
+            ({ shouldRequireExternalContactJustification, selectedJustificationReason, expectedError }) => {
+                const wrapper = getWrapper({
+                    shouldRequireExternalContactJustification,
+                });
+
+                wrapper.instance().handleSelectJustificationReason(selectedJustificationReason);
+                expect(wrapper.instance().validateJustificationReason()).toEqual(expectedError);
+            },
+        );
+    });
+
     describe('isValidContactPill()', () => {
         [
             {
@@ -331,22 +451,28 @@ describe('features/unified-share-modal/EmailForm', () => {
         });
 
         test.each`
-            shouldInvalidateExternalCollabs | isExternalUser | expectedIsValid
-            ${false}                        | ${true}        | ${true}
-            ${true}                         | ${true}        | ${false}
-            ${false}                        | ${false}       | ${true}
-            ${true}                         | ${false}       | ${true}
+            shouldRequireExternalContactJustification | selectedJustificationReason    | restrictedExternalEmails       | expectedIsValid
+            ${false}                                  | ${null}                        | ${[]}                          | ${true}
+            ${false}                                  | ${expectedJustificationReason} | ${[expectedContacts[0].value]} | ${false}
+            ${false}                                  | ${null}                        | ${[expectedContacts[0].value]} | ${false}
+            ${true}                                   | ${null}                        | ${[expectedContacts[0].value]} | ${false}
+            ${true}                                   | ${null}                        | ${[]}                          | ${true}
+            ${true}                                   | ${expectedJustificationReason} | ${[expectedContacts[0].value]} | ${true}
         `(
-            'should have isValidContactPill return $expectedIsValid when shouldInvalidateExternalCollabs is $shouldInvalidateExternalCollabs and isExternalUser is $isExternalUser',
-            ({ shouldInvalidateExternalCollabs, isExternalUser, expectedIsValid }) => {
-                const externalContact = {
-                    ...expectedContacts[0],
-                    isExternalUser,
-                };
+            'should have isValidContactPill return $expectedIsValid when shouldRequireExternalContactJustification = $shouldRequireExternalContactJustification, selectedJustificationReason = $selectedJustificationReason and restrictedExternalEmails = $restrictedExternalEmails',
+            ({
+                shouldRequireExternalContactJustification,
+                selectedJustificationReason,
+                restrictedExternalEmails,
+                expectedIsValid,
+            }) => {
                 const wrapper = getWrapper();
+                const contact = expectedContacts[0];
 
-                wrapper.setProps({ shouldInvalidateExternalCollabs });
-                const isValidContactPill = wrapper.instance().isValidContactPill(externalContact);
+                wrapper.instance().handleSelectJustificationReason(selectedJustificationReason);
+                wrapper.setProps({ restrictedExternalEmails, shouldRequireExternalContactJustification });
+
+                const isValidContactPill = wrapper.instance().isValidContactPill(contact);
                 expect(isValidContactPill).toBe(expectedIsValid);
             },
         );
@@ -448,6 +574,31 @@ describe('features/unified-share-modal/EmailForm', () => {
         test('should render tooltip around EmailForm correctly if recommendedSharingTooltipCalloutName is not passed in', () => {
             const wrapper = getWrapper();
             expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render ContactRestrictionNotice and correctly forward props when isExpanded is true and restrictedExternalEmails has matching values in selectedContacts', () => {
+            const isFetchingJustificationReasons = true;
+            const justificationReasons = [expectedJustificationReason];
+            const restrictedExternalEmails = [expectedContacts[0].value];
+            const selectedContacts = expectedContacts;
+
+            const wrapper = getWrapper({
+                isExpanded: true,
+                isFetchingJustificationReasons,
+                justificationReasons,
+                restrictedExternalEmails,
+                selectedContacts,
+            });
+
+            expect(wrapper.find('ContactRestrictionNotice')).toHaveLength(1);
+            expect(wrapper.find('ContactRestrictionNotice').props()).toEqual(
+                expect.objectContaining({
+                    isLoading: isFetchingJustificationReasons,
+                    justificationReasons,
+                    restrictedExternalEmails,
+                    selectedContacts,
+                }),
+            );
         });
     });
 });
