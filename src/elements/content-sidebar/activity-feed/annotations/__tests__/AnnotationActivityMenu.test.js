@@ -21,10 +21,10 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
         },
     );
 
-    test('should render the edit annotation activity menu item if canEdit is true', () => {
+    test('should not render the edit annotation activity menu item if canEdit is true and shouldDisableModifyMenuItem is true', () => {
         const wrapper = getWrapper({ canEdit: true });
 
-        expect(wrapper.exists('[data-testid="edit-annotation-activity"]')).toBe(true);
+        expect(wrapper.exists('[data-testid="edit-annotation-activity"]')).toBe(false);
     });
 
     test('should show the delete confirm menu when confirming delete', () => {
@@ -37,16 +37,11 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
     });
 
     test('should render resin tags', () => {
-        const wrapper = getWrapper({ canDelete: true, canEdit: true });
+        const wrapper = getWrapper({ canDelete: true });
 
         expect(wrapper.find("[data-testid='delete-annotation-activity']").props()).toMatchObject({
             'data-resin-itemid': '123',
             'data-resin-target': 'activityfeed-annotation-delete',
-        });
-
-        expect(wrapper.find("[data-testid='edit-annotation-activity']").props()).toMatchObject({
-            'data-resin-itemid': '123',
-            'data-resin-target': 'activityfeed-annotation-edit',
         });
     });
 });
