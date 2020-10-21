@@ -123,6 +123,7 @@ class RoundPill extends React.PureComponent<Props, State> {
                 {showAvatar ? (
                     <LabelPill.Icon
                         Component={Avatar}
+                        className="bdl-RoundPill-avatar"
                         avatarUrl={avatarUrl}
                         id={id}
                         isExternal={isExternal}

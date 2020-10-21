@@ -242,7 +242,27 @@ describe('util/uploads', () => {
             expect(isDataTransferItemAPackage(itemData)).toBeFalsy();
         });
 
-        test('should be true if data transfer item has both identifies a directory but has kind = file', () => {
+        test('should be true if data transfer item has both identifies a directory but has kind = file and type = application/zip', () => {
+            const packageEntry = {
+                isDirectory: true,
+                isFile: false,
+            };
+
+            const folderItem = {
+                kind: 'file',
+                type: 'application/zip',
+                webkitGetAsEntry: () => packageEntry,
+            };
+
+            const itemData = {
+                item: folderItem,
+                options,
+            };
+
+            expect(isDataTransferItemAPackage(itemData)).toBeTruthy();
+        });
+
+        test('should be false if data transfer item has both identifies a directory but only has kind = file', () => {
             const packageEntry = {
                 isDirectory: true,
                 isFile: false,
@@ -258,7 +278,7 @@ describe('util/uploads', () => {
                 options,
             };
 
-            expect(isDataTransferItemAPackage(itemData)).toBeTruthy();
+            expect(isDataTransferItemAPackage(itemData)).toBeFalsy();
         });
     });
 

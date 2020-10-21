@@ -10,7 +10,7 @@ import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import API from '../../api';
 import SharingModal from './SharingModal';
-import { CLIENT_NAME_CONTENT_SHARING } from '../../constants';
+import { CLIENT_NAME_CONTENT_SHARING, DEFAULT_HOSTNAME_API } from '../../constants';
 import type { ItemType, StringMap } from '../../common/types/core';
 import type { USMConfig } from '../../features/unified-share-modal/flowTypes';
 
@@ -21,6 +21,7 @@ import '../common/modal.scss';
 type ContentSharingProps = {
     /** apiHost - API hostname. Defaults to https://api.box.com */
     apiHost: string,
+    /** config - Configuration object that shows/hides features in the USM */
     config?: USMConfig,
     /**
      * customButton - Clickable element for opening the SharingModal component.
@@ -44,6 +45,8 @@ type ContentSharingProps = {
     messages?: StringMap,
     /** token - Valid access token */
     token: string,
+    /** uuid - Unique identifier, used for refreshing element visibility when called from the ES6 wrapper */
+    uuid?: string,
 };
 
 const createAPI = (apiHost, itemID, itemType, token) =>
@@ -55,7 +58,7 @@ const createAPI = (apiHost, itemID, itemType, token) =>
     });
 
 function ContentSharing({
-    apiHost,
+    apiHost = DEFAULT_HOSTNAME_API,
     config,
     customButton,
     displayInModal,
@@ -64,6 +67,7 @@ function ContentSharing({
     language,
     messages,
     token,
+    uuid,
 }: ContentSharingProps) {
     const [api, setAPI] = React.useState<API | null>(createAPI(apiHost, itemID, itemType, token));
     const [launchButton, setLaunchButton] = React.useState<React.Element<any> | null>(null);
@@ -81,7 +85,7 @@ function ContentSharing({
     // Reset state if the API has changed
     React.useEffect(() => {
         setIsVisible(!customButton);
-    }, [api, customButton]);
+    }, [api, customButton, uuid]);
 
     React.useEffect(() => {
         if (customButton && !launchButton) {
@@ -109,6 +113,7 @@ function ContentSharing({
                     language={language}
                     messages={messages}
                     setIsVisible={setIsVisible}
+                    uuid={uuid}
                 />
             )}
         </>

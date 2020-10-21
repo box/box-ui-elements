@@ -6,12 +6,13 @@ import MessageTextContent from '../common/MessageTextContent';
 import MessageTags from '../common/MessageTags';
 import MessageFooter from '../common/MessageFooter';
 import BottomContentWrapper from '../common/BottomContentWrapper';
-import type { PreviewTitleBodyTagsButtonTemplateParams } from '../../../types';
+import type { ContentPreviewProps, PreviewTitleBodyTagsButtonTemplateParams } from '../../../types';
 
 type Props = $Diff<
     {|
         ...PreviewTitleBodyTagsButtonTemplateParams,
         apiHost: string,
+        contentPreviewProps?: ContentPreviewProps,
         date: Date,
         getToken: (fileId: string) => Promise<Token>,
     |},
@@ -23,6 +24,7 @@ function PreviewTitleBodyTagsButton({
     date,
     body,
     button1,
+    contentPreviewProps,
     fileUpload: { fileId, sharedLinkUrl } = {},
     getToken,
     tags,
@@ -30,7 +32,13 @@ function PreviewTitleBodyTagsButton({
 }: Props) {
     return (
         <div className="PreviewTitleBodyTagsButton">
-            <MessagePreviewContent apiHost={apiHost} fileId={fileId} getToken={getToken} sharedLink={sharedLinkUrl} />
+            <MessagePreviewContent
+                apiHost={apiHost}
+                contentPreviewProps={contentPreviewProps}
+                fileId={fileId}
+                getToken={getToken}
+                sharedLink={sharedLinkUrl}
+            />
             <BottomContentWrapper>
                 <MessageTextContent body={body} title={title} />
                 <MessageTags tags={tags} />

@@ -212,7 +212,7 @@ function isDataTransferItemAPackage(itemData: UploadDataTransferItemWithAPIOptio
     const item = getDataTransferItem(itemData);
     const isDirectory = isDataTransferItemAFolder(item);
 
-    return isDirectory && item.kind === 'file';
+    return isDirectory && item.type === 'application/zip' && item.kind === 'file';
 }
 
 /**
