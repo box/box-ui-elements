@@ -33,7 +33,7 @@ type Props = {
     isOpen: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onCancel: Function,
-    onFocus?: Function,
+    onFocus: Function,
     onSubmit?: Function,
     showTip?: boolean,
     tagged_message?: string,

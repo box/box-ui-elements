@@ -46,6 +46,7 @@ const AnnotationActivity = ({
     onEdit = noop,
     onSelect = noop,
 }: Props) => {
+    const [isInputOpen, setIsInputOpen] = React.useState(false);
     const [isEditing, setIsEditing] = React.useState(false);
     const { created_at, created_by, description, error, file_version, id, isPending, permissions = {}, target } = item;
 
@@ -61,11 +62,15 @@ const AnnotationActivity = ({
         onSelect(item);
     };
 
+    const handleFormFocus = (): void => setIsInputOpen(true);
+
     const handleFormCancel = (): void => {
+        setIsInputOpen(false);
         setIsEditing(false);
     };
 
     const handleFormSubmit = ({ text }): void => {
+        setIsInputOpen(false);
         setIsEditing(false);
         onEdit(id, text, permissions);
     };
@@ -120,9 +125,10 @@ const AnnotationActivity = ({
                             getAvatarUrl={getAvatarUrl}
                             getMentionWithQuery={getMentionWithQuery}
                             isEditing={isEditing}
-                            isOpen={isEditing}
+                            isOpen={isInputOpen}
                             mentionSelectorContacts={mentionSelectorContacts}
                             onCancel={handleFormCancel}
+                            onFocus={handleFormFocus}
                             updateComment={handleFormSubmit}
                             user={currentUser}
                             tagged_message={message}
