@@ -31,6 +31,7 @@ export type ContentSharingUserDataType = {
 // This type is used when an item does not have a shared link.
 type SharedLinkNotCreatedType = {
     accessLevel?: string,
+    canChangeExpiration?: boolean,
     canInvite: boolean,
     expirationTimestamp?: ?number,
     isDownloadAvailable?: boolean,
