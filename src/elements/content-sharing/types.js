@@ -2,6 +2,7 @@
 import type {
     BoxItemClassification,
     BoxItemPermission,
+    Collaboration,
     GroupMini,
     ItemType,
     NewCollaboration,
@@ -143,3 +144,10 @@ export type ConnectToItemShareFnType = ({
 }) => Function;
 
 export type AvatarURLMap = { [number | string]: ?string };
+
+export type ConvertCollabOptions = {
+    avatarURLMap?: ?AvatarURLMap,
+    collab: Collaboration,
+    isCurrentUserOwner: boolean,
+    ownerEmail: ?string,
+};

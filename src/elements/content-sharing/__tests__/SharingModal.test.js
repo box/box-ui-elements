@@ -1032,7 +1032,7 @@ describe('elements/content-sharing/SharingModal', () => {
                 expect(setIsVisibleMock).toHaveBeenCalledWith(false);
                 const notification = wrapper.find(Notification);
                 expect(notification.prop('type')).toBe(TYPE_ERROR);
-                expect(notification.prop('duration')).toBeUndefined();
+                expect(notification.prop('duration')).toBe(DURATION_SHORT);
             },
         );
 

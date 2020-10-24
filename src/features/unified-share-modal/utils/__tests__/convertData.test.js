@@ -2,6 +2,7 @@ import {
     API_TO_USM_PERMISSION_LEVEL_MAP,
     convertAccessLevelsDisabledReasons,
     convertAllowedAccessLevels,
+    convertCollab,
     convertCollabsRequest,
     convertCollabsResponse,
     convertGroupContactsResponse,
@@ -743,6 +744,37 @@ describe('convertCollabsResponse', () => {
             });
         },
     );
+});
+
+describe('convertCollab()', () => {
+    test('should convert a new collaborator', () => {
+        const convertedCollaborator = {
+            collabID: MOCK_COLLAB_IDS_CONVERTED[0],
+            email: 'contentexplorer@box.com',
+            hasCustomAvatar: false,
+            imageURL: undefined,
+            isExternalCollab: false,
+            name: 'Content Explorer',
+            translatedRole: 'Editor',
+            type: 'user',
+            userID: MOCK_USER_IDS_CONVERTED[0],
+        };
+        expect(
+            convertCollab({
+                collab: MOCK_COLLABS_API_RESPONSE.entries[0],
+                ownerEmail: MOCK_OWNER_EMAIL,
+                isCurrentUserOwner: true,
+            }),
+        ).toEqual(convertedCollaborator);
+    });
+
+    test.each`
+        collab                               | expectedResponse | description
+        ${{ collab: { status: 'pending' } }} | ${null}          | ${'status is pending'}
+        ${{ collab: undefined }}             | ${null}          | ${'collab does not exist'}
+    `('should return null when $description', ({ collab, expectedResponse }) => {
+        expect(convertCollab(collab, undefined, undefined, true)).toEqual(expectedResponse);
+    });
 });
 
 describe('convertUserContactsResponse()', () => {
