@@ -8,7 +8,6 @@ import messages from './messages';
 import Pencil16 from '../../../../icon/line/Pencil16';
 import Trash16 from '../../../../icon/fill/Trash16';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import { bdlGray } from '../../../../styles/variables';
 import { MenuItem } from '../../../../components/menu';
 
 type AnnotationActivityMenuProps = {
@@ -72,7 +71,7 @@ const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdi
                         data-testid="delete-annotation-activity"
                         onClick={handleDeleteClick}
                     >
-                        <Trash16 color={bdlGray} />
+                        <Trash16 />
                         <FormattedMessage {...messages.annotationActivityDeleteMenuItem} />
                     </MenuItem>
                 )}
