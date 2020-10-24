@@ -8,6 +8,7 @@ import { DURATION_SHORT, TYPE_ERROR, TYPE_INFO } from '../../components/notifica
 import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
 import useSharedLink from './hooks/useSharedLink';
 import {
+    convertCollab,
     convertCollabsRequest,
     convertCollabsResponse,
     convertGroupContactsResponse,
@@ -107,7 +108,7 @@ function SharingNotification({
 
     // Create a notification
     const createNotification = React.useCallback(
-        (notificationType: NotificationType, message: MessageDescriptor, props) => {
+        (notificationType: NotificationType, message: MessageDescriptor) => {
             const updatedNotifications = { ...notifications };
             if (updatedNotifications[notificationID]) {
                 return;
@@ -115,9 +116,9 @@ function SharingNotification({
             updatedNotifications[notificationID] = (
                 <Notification
                     key={notificationID}
+                    duration={DURATION_SHORT}
                     onClose={() => handleNotificationClose(notificationID)}
                     type={notificationType}
-                    {...props}
                 >
                     <span>
                         <FormattedMessage {...message} />
@@ -171,14 +172,12 @@ function SharingNotification({
         onSubmitSettings,
     } = useSharedLink(api, itemID, itemType, permissions, accessLevel, {
         handleUpdateSharedLinkError: () => {
-            createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError, { duration: DURATION_SHORT });
+            createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError);
             setIsLoading(false);
             closeSettings();
         },
         handleUpdateSharedLinkSuccess: itemData => {
-            createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess, {
-                duration: DURATION_SHORT,
-            });
+            createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess);
             handleUpdateSharedLinkSuccess(itemData);
             setIsLoading(false);
             closeSettings();
@@ -210,10 +209,7 @@ function SharingNotification({
 
     // Set the collaborators list
     const collaboratorsListFromAPI: Collaborations | null = useCollaborators(api, itemID, itemType, {
-        handleError: () =>
-            createNotification(TYPE_ERROR, contentSharingMessages.collaboratorsLoadingError, {
-                duration: DURATION_SHORT,
-            }),
+        handleError: () => createNotification(TYPE_ERROR, contentSharingMessages.collaboratorsLoadingError),
     });
     const avatarsFromAPI = useAvatars(api, itemID, collaboratorsListFromAPI);
 
@@ -225,8 +221,7 @@ function SharingNotification({
 
     // Set the getContacts function
     const getContactsFn: GetContactsFnType | null = useContacts(api, itemID, {
-        handleError: () =>
-            createNotification(TYPE_ERROR, contentSharingMessages.getContactsError, { duration: DURATION_SHORT }),
+        handleError: () => createNotification(TYPE_ERROR, contentSharingMessages.getContactsError),
         transformGroups: data => convertGroupContactsResponse(data),
         transformUsers: data => convertUserContactsResponse(data, currentUserID),
     });
@@ -236,9 +231,21 @@ function SharingNotification({
 
     // Set the sendInvites function
     const sendInvitesFn = useInvites(api, itemID, itemType, {
-        handleSuccess: () => {
+        handleSuccess: response => {
             createNotification(TYPE_INFO, contentSharingMessages.sendInvitesSuccess);
             setIsLoading(false);
+            setCollaboratorsList(prevList => {
+                const newList = prevList ? { ...prevList } : { collaborators: [] };
+                const newCollab = convertCollab({
+                    collab: response,
+                    ownerEmail,
+                    isCurrentUserOwner: currentUserID === ownerID,
+                });
+                if (newCollab) {
+                    newList.collaborators.push(newCollab);
+                }
+                return newList;
+            });
             closeComponent();
         },
         handleError: () => {
