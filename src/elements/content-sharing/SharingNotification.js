@@ -54,7 +54,7 @@ type SharingNotificationProps = {
     setChangeSharedLinkPermissionLevel: (
         changeSharedLinkPermissionLevel: () => SharedLinkUpdateLevelFnType | null,
     ) => void,
-    setCollaboratorsList: (collaboratorsList: collaboratorsListType | null) => void,
+    setCollaboratorsList: ((collaboratorsList: collaboratorsListType | null) => collaboratorsListType) => void,
     setGetContacts: (getContacts: () => GetContactsFnType | null) => void,
     setIsLoading: boolean => void,
     setItem: ((item: itemFlowType | null) => itemFlowType) => void,
@@ -214,7 +214,7 @@ function SharingNotification({
     const avatarsFromAPI = useAvatars(api, itemID, collaboratorsListFromAPI);
 
     if (collaboratorsListFromAPI && avatarsFromAPI && !collaboratorsList) {
-        setCollaboratorsList(
+        setCollaboratorsList(() =>
             convertCollabsResponse(collaboratorsListFromAPI, avatarsFromAPI, ownerEmail, currentUserID === ownerID),
         );
     }
@@ -234,7 +234,7 @@ function SharingNotification({
         handleSuccess: response => {
             createNotification(TYPE_INFO, contentSharingMessages.sendInvitesSuccess);
             setIsLoading(false);
-            setCollaboratorsList(prevList => {
+            setCollaboratorsList((prevList: collaboratorsListType | null) => {
                 const newList = prevList ? { ...prevList } : { collaborators: [] };
                 const newCollab = convertCollab({
                     collab: response,

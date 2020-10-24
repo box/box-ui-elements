@@ -417,14 +417,14 @@ export const convertSharedLinkSettings = (
  * so the avatar fields (hasCustomAvatar and imageURL) are not set in that case.
  *
  * @param {ConvertCollabOptions} options
- * @returns {collaboratorType} Object containing a collaborator
+ * @returns {collaboratorType | null} Object containing a collaborator
  */
 export const convertCollab = ({
     collab,
     avatarURLMap,
     ownerEmail,
     isCurrentUserOwner = false,
-}: ConvertCollabOptions): collaboratorType => {
+}: ConvertCollabOptions): collaboratorType | null => {
     if (!collab || collab.status !== STATUS_ACCEPTED) return null;
 
     const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
@@ -472,10 +472,18 @@ export const convertCollabsResponse = (
 
     if (!entries.length) return { collaborators: [] };
 
-    const collaborators = entries
+    const collaborators = [];
+
+    entries
         // Only show accepted collaborations
         .filter(collab => collab.status === STATUS_ACCEPTED)
-        .map(collab => convertCollab({ collab, avatarURLMap, ownerEmail, isCurrentUserOwner }));
+        .forEach(collab => {
+            const convertedCollab = convertCollab({ collab, avatarURLMap, ownerEmail, isCurrentUserOwner });
+            if (convertedCollab) {
+                // Necessary for Flow checking
+                collaborators.push(convertedCollab);
+            }
+        });
 
     return { collaborators };
 };
