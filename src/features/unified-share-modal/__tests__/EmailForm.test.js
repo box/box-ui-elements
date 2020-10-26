@@ -600,5 +600,27 @@ describe('features/unified-share-modal/EmailForm', () => {
                 }),
             );
         });
+
+        test.each`
+            showInviteCollaboratorMessageSection | description
+            ${true}                              | ${'show the message section when showInviteCollaboratorMessageSection is true'}
+            ${false}                             | ${'hide the message section when showInviteCollaboratorMessageSection is false'}
+        `('should $description', ({ showInviteCollaboratorMessageSection }) => {
+            const config = {
+                showInviteCollaboratorMessageSection,
+            };
+
+            const wrapper = getWrapper({ config, isExpanded: true });
+
+            expect(wrapper.find('[data-testid="be-emailform-message"]')).toHaveLength(
+                showInviteCollaboratorMessageSection ? 1 : 0,
+            );
+        });
+
+        test('should show the message section when config is undefined', () => {
+            const wrapper = getWrapper({ isExpanded: true });
+
+            expect(wrapper.find('[data-testid="be-emailform-message"]')).toHaveLength(1);
+        });
     });
 });

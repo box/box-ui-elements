@@ -758,4 +758,18 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             expect(contactsFieldAvatars).toMatchSnapshot();
         });
     });
+
+    describe('renderInviteSection()', () => {
+        test('should pass the config object into EmailForm', () => {
+            const config = {
+                showEmailSharedLinkForm: true,
+                showInviteCollaboratorMessageSection: true,
+            };
+            const wrapper = getWrapper({
+                config,
+            });
+
+            expect(wrapper.find('EmailForm').prop('config')).toBe(config);
+        });
+    });
 });

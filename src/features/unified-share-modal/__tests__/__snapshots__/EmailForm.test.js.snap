@@ -196,6 +196,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     </div>
   </Tooltip>
   <TextArea
+    data-testid="be-emailform-message"
     label={
       <FormattedMessage
         defaultMessage="Message"
@@ -279,6 +280,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     </Tooltip>
   </div>
   <TextArea
+    data-testid="be-emailform-message"
     label={
       <FormattedMessage
         defaultMessage="Message"
@@ -413,6 +415,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     </Tooltip>
   </div>
   <TextArea
+    data-testid="be-emailform-message"
     label={
       <FormattedMessage
         defaultMessage="Message"
@@ -501,6 +504,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     </Tooltip>
   </div>
   <TextArea
+    data-testid="be-emailform-message"
     label={
       <FormattedMessage
         defaultMessage="Message"
@@ -584,6 +588,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     </Tooltip>
   </div>
   <TextArea
+    data-testid="be-emailform-message"
     label={
       <FormattedMessage
         defaultMessage="Message"
