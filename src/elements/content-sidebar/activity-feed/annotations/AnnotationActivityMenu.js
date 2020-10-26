@@ -3,10 +3,10 @@ import * as React from 'react';
 import TetherComponent from 'react-tether';
 import { FormattedMessage } from 'react-intl';
 import DeleteConfirmation from '../common/delete-confirmation';
-import IconEdit from '../../../../icons/general/IconEdit';
-import IconTrash from '../../../../icons/general/IconTrash';
 import Media from '../../../../components/media';
 import messages from './messages';
+import Pencil16 from '../../../../icon/line/Pencil16';
+import Trash16 from '../../../../icon/fill/Trash16';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { bdlGray } from '../../../../styles/variables';
 import { MenuItem } from '../../../../components/menu';
@@ -59,7 +59,7 @@ const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdi
                         data-testid="edit-annotation-activity"
                         onClick={onEdit}
                     >
-                        <IconEdit color={bdlGray} />
+                        <Pencil16 />
                         <FormattedMessage {...messages.annotationActivityEditMenuItem} />
                     </MenuItem>
                 )}
@@ -70,7 +70,7 @@ const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdi
                         data-testid="delete-annotation-activity"
                         onClick={handleDeleteClick}
                     >
-                        <IconTrash color={bdlGray} />
+                        <Trash16 color={bdlGray} />
                         <FormattedMessage {...messages.annotationActivityDeleteMenuItem} />
                     </MenuItem>
                 )}

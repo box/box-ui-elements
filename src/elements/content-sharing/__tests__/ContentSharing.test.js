@@ -178,20 +178,4 @@ describe('elements/content-sharing/ContentSharing', () => {
             expect(wrapper.exists(Button)).toBe(false);
         },
     );
-
-    test.each`
-        apiHost                 | itemID          | itemType       | token         | sharingModalExists | description
-        ${DEFAULT_HOSTNAME_API} | ${MOCK_ITEM_ID} | ${TYPE_FOLDER} | ${MOCK_TOKEN} | ${true}            | ${'instantiate SharingModal with a new API when all parameters are provided'}
-        ${null}                 | ${MOCK_ITEM_ID} | ${TYPE_FOLDER} | ${MOCK_TOKEN} | ${false}           | ${'not instantiate SharingModal if apiHost is missing'}
-        ${DEFAULT_HOSTNAME_API} | ${null}         | ${TYPE_FOLDER} | ${MOCK_TOKEN} | ${false}           | ${'not instantiate SharingModal if itemID is missing'}
-        ${DEFAULT_HOSTNAME_API} | ${MOCK_ITEM_ID} | ${null}        | ${MOCK_TOKEN} | ${false}           | ${'not instantiate SharingModal if itemType is missing'}
-        ${DEFAULT_HOSTNAME_API} | ${MOCK_ITEM_ID} | ${TYPE_FOLDER} | ${null}       | ${false}           | ${'not instantiate SharingModal if token is missing'}
-    `('should $description', ({ apiHost, itemID, itemType, token, sharingModalExists }) => {
-        let wrapper;
-        act(() => {
-            wrapper = getWrapper({ apiHost, itemID, itemType, token });
-        });
-        wrapper.update();
-        expect(wrapper.exists(SharingModal)).toBe(sharingModalExists);
-    });
 });

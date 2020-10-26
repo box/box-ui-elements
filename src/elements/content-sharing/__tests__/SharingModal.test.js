@@ -46,6 +46,7 @@ import {
     MOCK_CONTACTS_API_RESPONSE,
     MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
+    MOCK_CONVERTED_ENTERPRISE_USER_DATA,
     MOCK_CONVERTED_ITEM_DATA,
     MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
     MOCK_CONVERTED_SETTINGS,
@@ -238,6 +239,45 @@ describe('elements/content-sharing/SharingModal', () => {
             // Check that the Shared Link Settings Modal disappears and the Unified Share Modal appears
             expect(wrapper.exists(SharedLinkSettingsModal)).toBe(false);
             expect(wrapper.exists(UnifiedShareModal)).toBe(true);
+        });
+
+        test('should disable shared link expiration for non-enterprise users', async () => {
+            const api = createAPIMock({ getFile }, null, { getUser });
+
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, itemType: TYPE_FILE });
+            });
+            wrapper.update();
+
+            const usm = wrapper.find(UnifiedShareModal);
+            await act(async () => {
+                usm.invoke('onSettingsClick')();
+            });
+            wrapper.update();
+
+            const settingsModal = wrapper.find(SharedLinkSettingsModal);
+            expect(settingsModal.prop('canChangeExpiration')).toBe(false);
+        });
+
+        test('should enable shared link expiration for enterprise users', async () => {
+            convertUserResponse.mockReturnValue(MOCK_CONVERTED_ENTERPRISE_USER_DATA);
+            const api = createAPIMock({ getFile }, null, { getUser });
+
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, itemType: TYPE_FILE });
+            });
+            wrapper.update();
+
+            const usm = wrapper.find(UnifiedShareModal);
+            await act(async () => {
+                usm.invoke('onSettingsClick')();
+            });
+            wrapper.update();
+
+            const settingsModal = wrapper.find(SharedLinkSettingsModal);
+            expect(settingsModal.prop('canChangeExpiration')).toBe(true);
         });
 
         test('should show the LoadingIndicator while data is being retrieved', async () => {
@@ -992,7 +1032,7 @@ describe('elements/content-sharing/SharingModal', () => {
                 expect(setIsVisibleMock).toHaveBeenCalledWith(false);
                 const notification = wrapper.find(Notification);
                 expect(notification.prop('type')).toBe(TYPE_ERROR);
-                expect(notification.prop('duration')).toBeUndefined();
+                expect(notification.prop('duration')).toBe(DURATION_SHORT);
             },
         );
 
