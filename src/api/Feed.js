@@ -1281,7 +1281,7 @@ class Feed extends Base {
                 }
             },
             errorCallback: (e: ErrorResponseData, code: string) => {
-                this.updateCommentErrorCallback(e, code, commentId);
+                this.feedErrorCallback(true, e, code);
             },
         });
     };
