@@ -41,6 +41,8 @@ const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdi
         targetAttachment: 'bottom right',
     };
 
+    const shouldDisableModifyMenuItem = true;
+
     return (
         <TetherComponent {...tetherProps}>
             <Media.Menu
@@ -51,7 +53,7 @@ const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdi
                     'data-resin-feature': 'annotations',
                 }}
             >
-                {canEdit && (
+                {!shouldDisableModifyMenuItem && canEdit && (
                     <MenuItem
                         data-resin-itemid={id}
                         data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_EDIT}
