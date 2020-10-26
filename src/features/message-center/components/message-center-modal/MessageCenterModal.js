@@ -151,10 +151,10 @@ function MessageCenterModal({
         }
     }, [category]);
 
-    function rowRenderer({ index, parent, style, key }: Object) {
+    function rowRenderer({ index, parent, style }: Object) {
         const message = filteredMessages[index];
         return (
-            <CellMeasurer key={key} cache={cache} columnIndex={0} parent={parent} rowIndex={index}>
+            <CellMeasurer key={message.id} cache={cache} columnIndex={0} parent={parent} rowIndex={index}>
                 {({ registerChild }) => (
                     <div ref={registerChild} className="bdl-MessageCenterModal-message" style={style}>
                         <Message
