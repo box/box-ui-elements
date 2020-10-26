@@ -73,6 +73,7 @@ function SharingModal({
 }: SharingModalProps) {
     const [item, setItem] = React.useState<itemFlowType | null>(null);
     const [sharedLink, setSharedLink] = React.useState<ContentSharingSharedLinkType | null>(null);
+    const [currentUserEnterpriseName, setCurrentUserEnterpriseName] = React.useState<string | null>(null);
     const [currentUserID, setCurrentUserID] = React.useState<string | null>(null);
     const [initialDataErrorMessage, setInitialDataErrorMessage] = React.useState<Object | null>(null);
     const [isInitialDataErrorVisible, setIsInitialDataErrorVisible] = React.useState<boolean>(false);
@@ -130,6 +131,7 @@ function SharingModal({
         setCollaboratorsList(null);
         setInitialDataErrorMessage(null);
         setCurrentUserID(null);
+        setCurrentUserEnterpriseName(null);
         setIsInitialDataErrorVisible(false);
         setIsLoading(true);
         setItem(null);
@@ -168,6 +170,7 @@ function SharingModal({
         const getUserSuccess = userData => {
             const { id, userEnterpriseData } = convertUserResponse(userData);
             setCurrentUserID(id);
+            setCurrentUserEnterpriseName(userEnterpriseData.enterpriseName || null);
             setSharedLink(prevSharedLink => ({ ...prevSharedLink, ...userEnterpriseData }));
             setInitialDataErrorMessage(null);
             setIsLoading(false);
@@ -222,7 +225,13 @@ function SharingModal({
     }
 
     const { ownerEmail, ownerID, permissions } = item;
-    const { accessLevel = '', expirationTimestamp, isDownloadAvailable = false, serverURL } = sharedLink;
+    const {
+        accessLevel = '',
+        canChangeExpiration = false,
+        expirationTimestamp,
+        isDownloadAvailable = false,
+        serverURL,
+    } = sharedLink;
     return (
         <Internationalize language={language} messages={messages}>
             <>
@@ -266,6 +275,7 @@ function SharingModal({
                         onSubmit={onSubmitSettings}
                         submitting={isLoading}
                         {...sharedLink}
+                        canChangeExpiration={canChangeExpiration && !!currentUserEnterpriseName}
                     />
                 )}
                 {isVisible && currentView === CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL && (
