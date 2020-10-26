@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/unified-share-modal/ContactsEmailsTooltip should render default ContactsEmailsTooltip component 1`] = `
+<Tooltip
+  className="bdl-ContactsEmailsTooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
+  position="top-center"
+  text="x@example.com, y@example.com, z@example.com"
+  theme="default"
+>
+  <span
+    className="bdl-ContactsEmailsTooltip-target"
+  >
+    <span>
+      Target
+    </span>
+  </span>
+</Tooltip>
+`;

@@ -21,6 +21,12 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
         },
     );
 
+    test('should render the edit annotation activity menu item if canEdit is true', () => {
+        const wrapper = getWrapper({ canEdit: true });
+
+        expect(wrapper.exists('[data-testid="edit-annotation-activity"]')).toBe(true);
+    });
+
     test('should show the delete confirm menu when confirming delete', () => {
         const wrapper = getWrapper({ canDelete: true });
         const deleteButton = wrapper.find('MenuItem').prop('onClick');
@@ -30,12 +36,17 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
         expect(wrapper.find('DeleteConfirmation').length).toEqual(1);
     });
 
-    test('shoud render resin tags', () => {
-        const wrapper = getWrapper({ canDelete: true });
+    test('should render resin tags', () => {
+        const wrapper = getWrapper({ canDelete: true, canEdit: true });
 
-        expect(wrapper.find('[data-testid="delete-annotation-activity"]').props()).toMatchObject({
+        expect(wrapper.find("[data-testid='delete-annotation-activity']").props()).toMatchObject({
             'data-resin-itemid': '123',
             'data-resin-target': 'activityfeed-annotation-delete',
+        });
+
+        expect(wrapper.find("[data-testid='edit-annotation-activity']").props()).toMatchObject({
+            'data-resin-itemid': '123',
+            'data-resin-target': 'activityfeed-annotation-edit',
         });
     });
 });

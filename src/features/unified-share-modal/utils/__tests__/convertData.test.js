@@ -2,6 +2,7 @@ import {
     API_TO_USM_PERMISSION_LEVEL_MAP,
     convertAccessLevelsDisabledReasons,
     convertAllowedAccessLevels,
+    convertCollab,
     convertCollabsRequest,
     convertCollabsResponse,
     convertGroupContactsResponse,
@@ -48,6 +49,7 @@ import {
     MOCK_COLLABS_CONVERTED_REQUEST,
     MOCK_COLLAB_IDS_CONVERTED,
     MOCK_CONTACTS_API_RESPONSE,
+    MOCK_CONTACTS_API_RESPONSE_UNSORTED,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
     MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE,
     MOCK_COLLABS_CONVERTED_GROUPS,
@@ -76,6 +78,7 @@ import {
     MOCK_TIMESTAMP_ISO_STRING,
     MOCK_USER_IDS_CONVERTED,
     MOCK_VANITY_URL,
+    MOCK_GROUP_CONTACTS_API_RESPONSE_UNSORTED,
 } from '../__mocks__/USMMocks';
 
 jest.mock('../../../../utils/file', () => ({
@@ -743,9 +746,46 @@ describe('convertCollabsResponse', () => {
     );
 });
 
+describe('convertCollab()', () => {
+    test('should convert a new collaborator', () => {
+        const convertedCollaborator = {
+            collabID: MOCK_COLLAB_IDS_CONVERTED[0],
+            email: 'contentexplorer@box.com',
+            hasCustomAvatar: false,
+            imageURL: undefined,
+            isExternalCollab: false,
+            name: 'Content Explorer',
+            translatedRole: 'Editor',
+            type: 'user',
+            userID: MOCK_USER_IDS_CONVERTED[0],
+        };
+        expect(
+            convertCollab({
+                collab: MOCK_COLLABS_API_RESPONSE.entries[0],
+                ownerEmail: MOCK_OWNER_EMAIL,
+                isCurrentUserOwner: true,
+            }),
+        ).toEqual(convertedCollaborator);
+    });
+
+    test.each`
+        collab                               | expectedResponse | description
+        ${{ collab: { status: 'pending' } }} | ${null}          | ${'status is pending'}
+        ${{ collab: undefined }}             | ${null}          | ${'collab does not exist'}
+    `('should return null when $description', ({ collab, expectedResponse }) => {
+        expect(convertCollab(collab, undefined, undefined, true)).toEqual(expectedResponse);
+    });
+});
+
 describe('convertUserContactsResponse()', () => {
-    test('should return all users except the current user', () => {
+    test('should return all active users except the current user', () => {
         expect(convertUserContactsResponse(MOCK_CONTACTS_API_RESPONSE, MOCK_OWNER_ID)).toEqual(
+            MOCK_CONTACTS_CONVERTED_RESPONSE,
+        );
+    });
+
+    test('should return users sorted by name', () => {
+        expect(convertUserContactsResponse(MOCK_CONTACTS_API_RESPONSE_UNSORTED, MOCK_OWNER_ID)).toEqual(
             MOCK_CONTACTS_CONVERTED_RESPONSE,
         );
     });
@@ -770,6 +810,12 @@ describe('convertUserContactsByEmailResponse()', () => {
 describe('convertGroupContactsResponse()', () => {
     test('should return groups with the correct permissions', () => {
         expect(convertGroupContactsResponse(MOCK_GROUP_CONTACTS_API_RESPONSE)).toEqual(
+            MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
+        );
+    });
+
+    test('should return groups sorted by name', () => {
+        expect(convertGroupContactsResponse(MOCK_GROUP_CONTACTS_API_RESPONSE_UNSORTED)).toEqual(
             MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
         );
     });

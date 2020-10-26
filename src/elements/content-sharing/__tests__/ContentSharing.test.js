@@ -125,6 +125,41 @@ describe('elements/content-sharing/ContentSharing', () => {
         expect(wrapper.find(SharingModal).prop('isVisible')).toBe(false);
     });
 
+    test('should reset isVisible when given a new uuid', () => {
+        const setIsVisible = (wrapper, isVisible) => {
+            act(() => {
+                wrapper.find(SharingModal).invoke('setIsVisible')(isVisible);
+            });
+            wrapper.update();
+        };
+
+        let wrapper;
+        act(() => {
+            wrapper = getWrapper({
+                apiHost: DEFAULT_HOSTNAME_API,
+                displayInModal: true,
+                itemID: MOCK_ITEM_ID,
+                itemType: TYPE_FOLDER,
+                token: MOCK_TOKEN,
+                uuid: 'unique-id-0',
+            });
+        });
+        wrapper.update();
+
+        expect(wrapper.exists(SharingModal)).toBe(true);
+        expect(wrapper.find(SharingModal).prop('isVisible')).toBe(true);
+
+        setIsVisible(wrapper, false); // close modal
+        expect(wrapper.find(SharingModal).prop('isVisible')).toBe(false);
+
+        act(() => {
+            wrapper.setProps({ uuid: 'unique-id-1' });
+        });
+        wrapper.update();
+
+        expect(wrapper.find(SharingModal).prop('isVisible')).toBe(true);
+    });
+
     test.each([true, false])(
         'should instantiate SharingModal automatically when no button exists and displayInModal is %s',
         ({ displayInModal }) => {
@@ -143,20 +178,4 @@ describe('elements/content-sharing/ContentSharing', () => {
             expect(wrapper.exists(Button)).toBe(false);
         },
     );
-
-    test.each`
-        apiHost                 | itemID          | itemType       | token         | sharingModalExists | description
-        ${DEFAULT_HOSTNAME_API} | ${MOCK_ITEM_ID} | ${TYPE_FOLDER} | ${MOCK_TOKEN} | ${true}            | ${'instantiate SharingModal with a new API when all parameters are provided'}
-        ${null}                 | ${MOCK_ITEM_ID} | ${TYPE_FOLDER} | ${MOCK_TOKEN} | ${false}           | ${'not instantiate SharingModal if apiHost is missing'}
-        ${DEFAULT_HOSTNAME_API} | ${null}         | ${TYPE_FOLDER} | ${MOCK_TOKEN} | ${false}           | ${'not instantiate SharingModal if itemID is missing'}
-        ${DEFAULT_HOSTNAME_API} | ${MOCK_ITEM_ID} | ${null}        | ${MOCK_TOKEN} | ${false}           | ${'not instantiate SharingModal if itemType is missing'}
-        ${DEFAULT_HOSTNAME_API} | ${MOCK_ITEM_ID} | ${TYPE_FOLDER} | ${null}       | ${false}           | ${'not instantiate SharingModal if token is missing'}
-    `('should $description', ({ apiHost, itemID, itemType, token, sharingModalExists }) => {
-        let wrapper;
-        act(() => {
-            wrapper = getWrapper({ apiHost, itemID, itemType, token });
-        });
-        wrapper.update();
-        expect(wrapper.exists(SharingModal)).toBe(sharingModalExists);
-    });
 });

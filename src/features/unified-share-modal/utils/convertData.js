@@ -10,6 +10,7 @@ import {
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_PREVIEW,
     STATUS_ACCEPTED,
+    STATUS_INACTIVE,
     TYPE_FOLDER,
 } from '../../../constants';
 import {
@@ -50,6 +51,7 @@ import type {
     ContentSharingItemAPIResponse,
     ContentSharingItemDataType,
     ContentSharingUserDataType,
+    ConvertCollabOptions,
     SharedLinkSettingsOptions,
 } from '../../../elements/content-sharing/types';
 import type {
@@ -410,6 +412,48 @@ export const convertSharedLinkSettings = (
 };
 
 /**
+ * Convert a collaborator.
+ * Note: We do not retrieve the avatar URL of collaborators right after inviting them,
+ * so the avatar fields (hasCustomAvatar and imageURL) are not set in that case.
+ *
+ * @param {ConvertCollabOptions} options
+ * @returns {collaboratorType | null} Object containing a collaborator
+ */
+export const convertCollab = ({
+    collab,
+    avatarURLMap,
+    ownerEmail,
+    isCurrentUserOwner = false,
+}: ConvertCollabOptions): collaboratorType | null => {
+    if (!collab || collab.status !== STATUS_ACCEPTED) return null;
+
+    const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
+
+    const {
+        accessible_by: { id: userID, login: email, name, type },
+        id: collabID,
+        expires_at: executeAt,
+        role,
+    } = collab;
+    const avatarURL = avatarURLMap ? avatarURLMap[userID] : undefined;
+    const convertedCollab: collaboratorType = {
+        collabID: parseInt(collabID, 10),
+        email,
+        hasCustomAvatar: !!avatarURL,
+        imageURL: avatarURL,
+        isExternalCollab: checkIsExternalUser(isCurrentUserOwner, ownerEmailDomain, email),
+        name,
+        translatedRole: `${role[0].toUpperCase()}${role.slice(1)}`, // capitalize the user's role
+        type,
+        userID: parseInt(userID, 10),
+    };
+    if (executeAt) {
+        convertedCollab.expiration = { executeAt };
+    }
+    return convertedCollab;
+};
+
+/**
  * Convert a response from the Item Collaborations API into the object that the USM expects.
  *
  * @param {Collaborations} collabsAPIData
@@ -428,34 +472,17 @@ export const convertCollabsResponse = (
 
     if (!entries.length) return { collaborators: [] };
 
-    const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
+    const collaborators = [];
 
-    const collaborators = entries
+    entries
         // Only show accepted collaborations
         .filter(collab => collab.status === STATUS_ACCEPTED)
-        .map(collab => {
-            const {
-                accessible_by: { id: userID, login: email, name, type },
-                id: collabID,
-                expires_at: executeAt,
-                role,
-            } = collab;
-            const avatarURL = avatarURLMap ? avatarURLMap[userID] : undefined;
-            const convertedCollab: collaboratorType = {
-                collabID: parseInt(collabID, 10),
-                email,
-                hasCustomAvatar: !!avatarURL,
-                imageURL: avatarURL,
-                isExternalCollab: checkIsExternalUser(isCurrentUserOwner, ownerEmailDomain, email),
-                name,
-                translatedRole: `${role[0].toUpperCase()}${role.slice(1)}`, // capitalize the user's role
-                type,
-                userID: parseInt(userID, 10),
-            };
-            if (executeAt) {
-                convertedCollab.expiration = { executeAt };
+        .forEach(collab => {
+            const convertedCollab = convertCollab({ collab, avatarURLMap, ownerEmail, isCurrentUserOwner });
+            if (convertedCollab) {
+                // Necessary for Flow checking
+                collaborators.push(convertedCollab);
             }
-            return convertedCollab;
         });
 
     return { collaborators };
@@ -499,6 +526,8 @@ export const convertCollabsRequest = (
     return { groups, users };
 };
 
+const sortByName = ({ name: nameA = '' }, { name: nameB = '' }) => nameA.localeCompare(nameB);
+
 /**
  * Convert an enterprise users API response into an array of internal USM contacts.
  *
@@ -512,8 +541,16 @@ export const convertUserContactsResponse = (
 ): Array<contactType> => {
     const { entries = [] } = contactsAPIData;
 
-    // Return all users except for the current user and app users
+    // Return all active users except for the current user and app users
     return entries
+        .filter(
+            ({ id, login: email, status }) =>
+                id !== currentUserID &&
+                email &&
+                !APP_USERS_DOMAIN_REGEXP.test(email) &&
+                status &&
+                status !== STATUS_INACTIVE,
+        )
         .map(contact => {
             const { id, login: email, name, type } = contact;
             return {
@@ -523,7 +560,7 @@ export const convertUserContactsResponse = (
                 type,
             };
         })
-        .filter(({ id, email }) => id !== currentUserID && email && !APP_USERS_DOMAIN_REGEXP.test(email));
+        .sort(sortByName);
 };
 
 /**
@@ -571,5 +608,6 @@ export const convertGroupContactsResponse = (contactsAPIData: GroupCollection): 
                 name,
                 type,
             };
-        });
+        })
+        .sort(sortByName);
 };

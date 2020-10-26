@@ -12,7 +12,9 @@ import { FormattedMessage } from 'react-intl';
 import type { $AxiosError } from 'axios';
 import API from '../../api';
 import Internationalize from '../common/Internationalize';
-import ErrorMask from '../../components/error-mask/ErrorMask';
+import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
+import Notification from '../../components/notification/Notification';
+import { DURATION_SHORT, TYPE_ERROR } from '../../components/notification/constants';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import UnifiedShareModal from '../../features/unified-share-modal';
 import SharedLinkSettingsModal from '../../features/shared-link-settings-modal';
@@ -54,6 +56,7 @@ type SharingModalProps = {
     language: string,
     messages?: StringMap,
     setIsVisible: (arg: boolean) => void,
+    uuid?: string,
 };
 
 function SharingModal({
@@ -66,11 +69,14 @@ function SharingModal({
     language,
     messages,
     setIsVisible,
+    uuid,
 }: SharingModalProps) {
     const [item, setItem] = React.useState<itemFlowType | null>(null);
     const [sharedLink, setSharedLink] = React.useState<ContentSharingSharedLinkType | null>(null);
+    const [currentUserEnterpriseName, setCurrentUserEnterpriseName] = React.useState<string | null>(null);
     const [currentUserID, setCurrentUserID] = React.useState<string | null>(null);
-    const [componentErrorMessage, setComponentErrorMessage] = React.useState<Object | null>(null);
+    const [initialDataErrorMessage, setInitialDataErrorMessage] = React.useState<Object | null>(null);
+    const [isInitialDataErrorVisible, setIsInitialDataErrorVisible] = React.useState<boolean>(false);
     const [collaboratorsList, setCollaboratorsList] = React.useState<collaboratorsListType | null>(null);
     const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
     const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
@@ -88,18 +94,23 @@ function SharingModal({
     const [getContactsByEmail, setGetContactsByEmail] = React.useState<null | GetContactsByEmailFnType>(null);
     const [sendInvites, setSendInvites] = React.useState<null | SendInvitesFnType>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
+
     // Handle successful GET requests to /files or /folders
     const handleGetItemSuccess = React.useCallback((itemData: ContentSharingItemAPIResponse) => {
         const { item: itemFromAPI, sharedLink: sharedLinkFromAPI } = convertItemResponse(itemData);
-        setComponentErrorMessage(null);
         setItem(itemFromAPI);
         setSharedLink(sharedLinkFromAPI);
         setIsLoading(false);
     }, []);
 
-    // Handle component-level errors
+    // Handle initial data retrieval errors
     const getError = React.useCallback(
         (error: $AxiosError<Object> | ErrorResponseData) => {
+            if (isInitialDataErrorVisible) return; // display only one component-level notification at a time
+
+            setIsInitialDataErrorVisible(true);
+            setIsLoading(false);
+
             let errorObject;
             if (error.status) {
                 errorObject = contentSharingMessages[CONTENT_SHARING_ERRORS[error.status]];
@@ -108,10 +119,9 @@ function SharingModal({
             } else {
                 errorObject = contentSharingMessages.loadingError;
             }
-
-            setComponentErrorMessage(errorObject);
+            setInitialDataErrorMessage(errorObject);
         },
-        [setComponentErrorMessage],
+        [isInitialDataErrorVisible],
     );
 
     // Reset state if the API has changed
@@ -119,13 +129,22 @@ function SharingModal({
         setChangeSharedLinkAccessLevel(null);
         setChangeSharedLinkPermissionLevel(null);
         setCollaboratorsList(null);
+        setInitialDataErrorMessage(null);
         setCurrentUserID(null);
+        setCurrentUserEnterpriseName(null);
+        setIsInitialDataErrorVisible(false);
+        setIsLoading(true);
         setItem(null);
         setOnAddLink(null);
         setOnRemoveLink(null);
         setSharedLink(null);
-        setIsLoading(true);
     }, [api]);
+
+    // Refresh error state if the uuid has changed
+    React.useEffect(() => {
+        setInitialDataErrorMessage(null);
+        setIsInitialDataErrorVisible(false);
+    }, [uuid]);
 
     // Get initial data for the item
     React.useEffect(() => {
@@ -141,18 +160,19 @@ function SharingModal({
             }
         };
 
-        if (api && !isEmpty(api) && isVisible && !item && !sharedLink) {
+        if (api && !isEmpty(api) && !initialDataErrorMessage && isVisible && !item && !sharedLink) {
             getItem();
         }
-    }, [api, getError, handleGetItemSuccess, isVisible, item, itemID, itemType, sharedLink]);
+    }, [api, initialDataErrorMessage, getError, handleGetItemSuccess, isVisible, item, itemID, itemType, sharedLink]);
 
     // Get initial data for the user
     React.useEffect(() => {
         const getUserSuccess = userData => {
             const { id, userEnterpriseData } = convertUserResponse(userData);
             setCurrentUserID(id);
+            setCurrentUserEnterpriseName(userEnterpriseData.enterpriseName || null);
             setSharedLink(prevSharedLink => ({ ...prevSharedLink, ...userEnterpriseData }));
-            setComponentErrorMessage(null);
+            setInitialDataErrorMessage(null);
             setIsLoading(false);
         };
 
@@ -164,10 +184,10 @@ function SharingModal({
             });
         };
 
-        if (api && !isEmpty(api) && item && sharedLink && !currentUserID) {
+        if (api && !isEmpty(api) && !initialDataErrorMessage && item && sharedLink && !currentUserID) {
             getUserData();
         }
-    }, [getError, item, itemID, itemType, sharedLink, currentUserID, api]);
+    }, [getError, item, itemID, itemType, sharedLink, currentUserID, api, initialDataErrorMessage]);
 
     // Set the getContactsByEmail function. This call is not associated with a banner notification,
     // which is why it exists at this level and not in SharingNotification
@@ -178,8 +198,23 @@ function SharingModal({
         setGetContactsByEmail((): GetContactsByEmailFnType => getContactsByEmailFn);
     }
 
-    if (componentErrorMessage) {
-        return <ErrorMask errorHeader={<FormattedMessage {...componentErrorMessage} />} />;
+    // Display a notification if there is an error in retrieving initial data
+    if (initialDataErrorMessage) {
+        return isInitialDataErrorVisible ? (
+            <Internationalize language={language} messages={messages}>
+                <NotificationsWrapper>
+                    <Notification
+                        onClose={() => setIsInitialDataErrorVisible(false)}
+                        type={TYPE_ERROR}
+                        duration={DURATION_SHORT}
+                    >
+                        <span>
+                            <FormattedMessage {...initialDataErrorMessage} />
+                        </span>
+                    </Notification>
+                </NotificationsWrapper>
+            </Internationalize>
+        ) : null;
     }
 
     // Ensure that all necessary data has been received before rendering child components.
@@ -190,7 +225,13 @@ function SharingModal({
     }
 
     const { ownerEmail, ownerID, permissions } = item;
-    const { accessLevel = '', expirationTimestamp, isDownloadAvailable = false, serverURL } = sharedLink;
+    const {
+        accessLevel = '',
+        canChangeExpiration = false,
+        expirationTimestamp,
+        isDownloadAvailable = false,
+        serverURL,
+    } = sharedLink;
     return (
         <Internationalize language={language} messages={messages}>
             <>
@@ -234,6 +275,7 @@ function SharingModal({
                         onSubmit={onSubmitSettings}
                         submitting={isLoading}
                         {...sharedLink}
+                        canChangeExpiration={canChangeExpiration && !!currentUserEnterpriseName}
                     />
                 )}
                 {isVisible && currentView === CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL && (

@@ -108,6 +108,7 @@ type UserMini = {
     id: string,
     login?: string,
     name: string,
+    status?: string,
     type: 'user',
 };
 

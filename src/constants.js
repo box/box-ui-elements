@@ -176,6 +176,7 @@ export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
 export const DEFAULT_HOSTNAME_API = 'https://api.box.com';
 export const DEFAULT_HOSTNAME_STATIC = 'https://cdn01.boxcdn.net';
 export const DEFAULT_HOSTNAME_UPLOAD = 'https://upload.box.com';
+export const DEFAULT_HOSTNAME_UPLOAD_APP = 'https://upload.app.box.com';
 export const DEFAULT_HOSTNAME_APP = 'https://app.box.com';
 export const DEFAULT_CONTAINER = 'body';
 export const DEFAULT_ROOT = '0';
@@ -207,6 +208,7 @@ export const STATUS_STAGED: 'staged' = 'staged';
 export const STATUS_COMPLETE: 'complete' = 'complete';
 export const STATUS_ERROR: 'error' = 'error';
 export const STATUS_ACCEPTED: 'accepted' = 'accepted';
+export const STATUS_INACTIVE: 'inactive' = 'inactive';
 
 /* ------------------- Styles ------------------------ */
 export const CLASS_MODAL_CONTENT = 'be-modal-dialog-content';
@@ -264,6 +266,7 @@ export const ERROR_CODE_CREATE_FOLDER = 'create_folder_error';
 export const ERROR_CODE_CREATE_METADATA = 'create_metadata_error';
 export const ERROR_CODE_DELETE_APP_ACTIVITY = 'delete_app_activity_error';
 export const ERROR_CODE_DELETE_ANNOTATION = 'delete_annotation_error';
+export const ERROR_CODE_EDIT_ANNOTATION = 'edit_annotation_error';
 export const ERROR_CODE_DELETE_COMMENT = 'delete_comment_error';
 export const ERROR_CODE_DELETE_TASK = 'delete_task_error';
 export const ERROR_CODE_DELETE_TASK_ASSIGNMENT = 'delete_task_assignment_error';

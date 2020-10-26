@@ -4,7 +4,8 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
+import uniqueId from 'lodash/uniqueId';
 import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
 import ContentSharingReactComponent from '../content-sharing';
@@ -23,6 +24,7 @@ class ContentSharing extends ES6Wrapper {
                 language={this.language}
                 messages={this.messages}
                 token={this.token}
+                uuid={uniqueId('contentSharing_')}
                 {...this.options}
             />,
             this.container,

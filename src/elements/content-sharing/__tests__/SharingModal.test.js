@@ -2,7 +2,6 @@ import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import { FormattedMessage } from 'react-intl';
-import ErrorMask from '../../../components/error-mask/ErrorMask';
 import LoadingIndicator from '../../../components/loading-indicator/LoadingIndicator';
 import SharingModal from '../SharingModal';
 import Notification from '../../../components/notification/Notification';
@@ -47,6 +46,7 @@ import {
     MOCK_CONTACTS_API_RESPONSE,
     MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
+    MOCK_CONVERTED_ENTERPRISE_USER_DATA,
     MOCK_CONVERTED_ITEM_DATA,
     MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
     MOCK_CONVERTED_SETTINGS,
@@ -241,6 +241,45 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(wrapper.exists(UnifiedShareModal)).toBe(true);
         });
 
+        test('should disable shared link expiration for non-enterprise users', async () => {
+            const api = createAPIMock({ getFile }, null, { getUser });
+
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, itemType: TYPE_FILE });
+            });
+            wrapper.update();
+
+            const usm = wrapper.find(UnifiedShareModal);
+            await act(async () => {
+                usm.invoke('onSettingsClick')();
+            });
+            wrapper.update();
+
+            const settingsModal = wrapper.find(SharedLinkSettingsModal);
+            expect(settingsModal.prop('canChangeExpiration')).toBe(false);
+        });
+
+        test('should enable shared link expiration for enterprise users', async () => {
+            convertUserResponse.mockReturnValue(MOCK_CONVERTED_ENTERPRISE_USER_DATA);
+            const api = createAPIMock({ getFile }, null, { getUser });
+
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, itemType: TYPE_FILE });
+            });
+            wrapper.update();
+
+            const usm = wrapper.find(UnifiedShareModal);
+            await act(async () => {
+                usm.invoke('onSettingsClick')();
+            });
+            wrapper.update();
+
+            const settingsModal = wrapper.find(SharedLinkSettingsModal);
+            expect(settingsModal.prop('canChangeExpiration')).toBe(true);
+        });
+
         test('should show the LoadingIndicator while data is being retrieved', async () => {
             const api = createAPIMock({ getFile }, null, { getUser });
 
@@ -248,7 +287,6 @@ describe('elements/content-sharing/SharingModal', () => {
             await act(async () => {
                 wrapper = getWrapper({ api, itemType: TYPE_FILE });
             });
-
             expect(wrapper.exists(LoadingIndicator)).toBe(true);
 
             wrapper.update();
@@ -323,7 +361,7 @@ describe('elements/content-sharing/SharingModal', () => {
             api = createAPIMock({ getFile }, { getFolderFields }, { getUser });
         });
 
-        test('should show the ErrorMask and skip the call to getUser() if the call to getFile() fails', async () => {
+        test('should show the initial data error notification and skip the call to getUser() if the call to getFile() fails', async () => {
             let wrapper;
             await act(async () => {
                 wrapper = getWrapper({ api, itemType: TYPE_FILE });
@@ -332,12 +370,12 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(getFile).toHaveBeenCalled();
             expect(getUser).not.toHaveBeenCalled();
             expect(convertItemResponse).not.toHaveBeenCalled();
-            expect(wrapper.exists(ErrorMask)).toBe(true);
+            expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
             expect(wrapper.exists(SharingNotification)).toBe(false);
         });
 
-        test('should show the ErrorMask and skip the call to getUser() if the call to getFolderFields() fails', async () => {
+        test('should show the initial data error notification and skip the call to getUser() if the call to getFolderFields() fails', async () => {
             let wrapper;
             await act(async () => {
                 wrapper = getWrapper({ api, itemType: TYPE_FOLDER });
@@ -346,7 +384,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(getFolderFields).toHaveBeenCalled();
             expect(getUser).not.toHaveBeenCalled();
             expect(convertItemResponse).not.toHaveBeenCalled();
-            expect(wrapper.exists(ErrorMask)).toBe(true);
+            expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
             expect(wrapper.exists(SharingNotification)).toBe(false);
         });
@@ -360,7 +398,20 @@ describe('elements/content-sharing/SharingModal', () => {
 
             wrapper.update();
             expect(wrapper.exists(LoadingIndicator)).toBe(false);
-            expect(wrapper.exists(ErrorMask)).toBe(true);
+            expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
+        });
+
+        test('should close the initial data error notification when onClose() is called', async () => {
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, itemType: TYPE_FILE });
+            });
+            wrapper.update();
+            await act(async () => {
+                wrapper.find(Notification).invoke('onClose')();
+            });
+            wrapper.update();
+            expect(wrapper.exists(Notification)).toBe(false);
         });
     });
 
@@ -380,7 +431,7 @@ describe('elements/content-sharing/SharingModal', () => {
             api = createAPIMock({ getFile }, { getFolderFields }, { getUser });
         });
 
-        test('should show the ErrorMask if the call to getFile() succeeds, but the call to getUser() fails', async () => {
+        test('should show the initial data error notification if the call to getFile() succeeds, but the call to getUser() fails', async () => {
             let wrapper;
             await act(async () => {
                 wrapper = getWrapper({ api, itemType: TYPE_FILE });
@@ -390,12 +441,12 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(getUser).toHaveBeenCalled();
             expect(convertUserResponse).not.toHaveBeenCalled();
-            expect(wrapper.exists(ErrorMask)).toBe(true);
+            expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
             expect(wrapper.exists(SharingNotification)).toBe(false);
         });
 
-        test('should show the ErrorMask if the call to getFolderFields() succeeds, but the call to getUser() fails', async () => {
+        test('should show the initial data error notification if the call to getFolderFields() succeeds, but the call to getUser() fails', async () => {
             let wrapper;
             await act(async () => {
                 wrapper = getWrapper({ api, itemType: TYPE_FOLDER });
@@ -405,7 +456,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(getUser).toHaveBeenCalled();
             expect(convertUserResponse).not.toHaveBeenCalled();
-            expect(wrapper.exists(ErrorMask)).toBe(true);
+            expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
             expect(wrapper.exists(SharingNotification)).toBe(false);
         });
@@ -415,16 +466,15 @@ describe('elements/content-sharing/SharingModal', () => {
             await act(async () => {
                 wrapper = getWrapper({ api, itemType: TYPE_FOLDER });
             });
-
             expect(wrapper.exists(LoadingIndicator)).toBe(true);
 
             wrapper.update();
             expect(wrapper.exists(LoadingIndicator)).toBe(false);
-            expect(wrapper.exists(ErrorMask)).toBe(true);
+            expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
         });
     });
 
-    describe('with specific errors', () => {
+    describe('with specific initial data errors', () => {
         test.each`
             status   | expectedErrorName
             ${'400'} | ${'badRequestError'}
@@ -449,14 +499,11 @@ describe('elements/content-sharing/SharingModal', () => {
                 });
                 wrapper.update();
                 expect(getFolderFields).toHaveBeenCalled();
-                expect(wrapper.exists(ErrorMask)).toBe(true);
-                expect(
-                    wrapper
-                        .find(ErrorMask)
-                        .find(FormattedMessage)
-                        .at(1) // the error header appears after the IconSadCloud title
-                        .prop('id'),
-                ).toBe(`be.contentSharing.${expectedErrorName}`);
+                const initialDataErrorNotification = wrapper.find(Notification);
+                expect(initialDataErrorNotification.prop('type')).toBe(TYPE_ERROR);
+                expect(initialDataErrorNotification.find(FormattedMessage).prop('id')).toBe(
+                    `be.contentSharing.${expectedErrorName}`,
+                );
             },
         );
 
@@ -484,14 +531,11 @@ describe('elements/content-sharing/SharingModal', () => {
                 });
                 wrapper.update();
                 expect(getFolderFields).toHaveBeenCalled();
-                expect(wrapper.exists(ErrorMask)).toBe(true);
-                expect(
-                    wrapper
-                        .find(ErrorMask)
-                        .find(FormattedMessage)
-                        .at(1)
-                        .prop('id'),
-                ).toBe(`be.contentSharing.${expectedErrorName}`);
+                const initialDataErrorNotification = wrapper.find(Notification);
+                expect(initialDataErrorNotification.prop('type')).toBe(TYPE_ERROR);
+                expect(initialDataErrorNotification.find(FormattedMessage).prop('id')).toBe(
+                    `be.contentSharing.${expectedErrorName}`,
+                );
             },
         );
 
@@ -510,14 +554,11 @@ describe('elements/content-sharing/SharingModal', () => {
             });
             wrapper.update();
             expect(getFolderFields).toHaveBeenCalled();
-            expect(wrapper.exists(ErrorMask)).toBe(true);
-            expect(
-                wrapper
-                    .find(ErrorMask)
-                    .find(FormattedMessage)
-                    .at(1)
-                    .prop('id'),
-            ).toBe(`be.contentSharing.loadingError`);
+            const initialDataErrorNotification = wrapper.find(Notification);
+            expect(initialDataErrorNotification.prop('type')).toBe(TYPE_ERROR);
+            expect(initialDataErrorNotification.find(FormattedMessage).prop('id')).toBe(
+                `be.contentSharing.loadingError`,
+            );
         });
     });
 
@@ -991,7 +1032,7 @@ describe('elements/content-sharing/SharingModal', () => {
                 expect(setIsVisibleMock).toHaveBeenCalledWith(false);
                 const notification = wrapper.find(Notification);
                 expect(notification.prop('type')).toBe(TYPE_ERROR);
-                expect(notification.prop('duration')).toBeUndefined();
+                expect(notification.prop('duration')).toBe(DURATION_SHORT);
             },
         );
 

@@ -3,26 +3,32 @@ import * as React from 'react';
 import Megaphone20 from '../../../icon/fill/Megaphone20';
 import CountBadge from '../../../components/count-badge/CountBadge';
 import Badgeable from '../../../components/badgeable/Badgeable';
-import type { Token } from '../../../common/types/core';
+import type { Token, StringMap } from '../../../common/types/core';
 
 import MessageCenterModal from './message-center-modal/MessageCenterModal';
 import type {
+    ContentPreviewProps,
     GetEligibleMessageCenterMessages,
     UnreadEligibleMessageCenterMessageCount,
     EligibleMessageCenterMessage,
 } from '../types';
+import Internationalize from '../../../elements/common/Internationalize';
 
 type Props = {|
     apiHost: string,
     buttonComponent: React.ComponentType<{ render: () => React.Node }>,
+    contentPreviewProps?: ContentPreviewProps,
     getEligibleMessages: () => Promise<GetEligibleMessageCenterMessages>,
     getToken: (fileId: string) => Promise<Token>,
     getUnreadMessageCount: () => Promise<UnreadEligibleMessageCenterMessageCount>,
+    language?: string,
+    messages?: StringMap,
     overscanRowCount?: number,
     postMarkAllMessagesAsSeen: (messageArray: Array<EligibleMessageCenterMessage> | Error) => Promise<null>,
 |};
 
 function MessageCenter({
+    contentPreviewProps,
     getUnreadMessageCount,
     buttonComponent: ButtonComponent,
     getEligibleMessages,
@@ -30,11 +36,15 @@ function MessageCenter({
     apiHost,
     postMarkAllMessagesAsSeen,
     overscanRowCount,
+    language,
+    messages,
 }: Props) {
     const [isOpen, setIsOpen] = React.useState(false);
     const [unreadMessageCount, setUnreadMessageCount] = React.useState(null);
     // TODO: create hook for fetching, loading
-    const [messages, setMessages] = React.useState<GetEligibleMessageCenterMessages | null | Error>(null);
+    const [eligibleMessages, setEligibleMessages] = React.useState<GetEligibleMessageCenterMessages | null | Error>(
+        null,
+    );
     const isFetchingMessagesRef = React.useRef(false);
 
     React.useEffect(() => {
@@ -56,27 +66,27 @@ function MessageCenter({
                 isFetchingMessagesRef.current = true;
                 try {
                     const eligibleMessagesResponse = await getEligibleMessages();
-                    setMessages(eligibleMessagesResponse);
+                    setEligibleMessages(eligibleMessagesResponse);
                 } catch (err) {
-                    setMessages(err);
+                    setEligibleMessages(err);
                 }
                 isFetchingMessagesRef.current = false;
             }
         }
 
-        const isOpenAndNoMessages = isOpen && !messages;
+        const isOpenAndNoMessages = isOpen && !eligibleMessages;
         // if there are unread messages, prefetch the data as the user is more likely to click on the message center
-        const shouldPrefetch = !isOpen && !messages && !!unreadMessageCount;
+        const shouldPrefetch = !isOpen && !eligibleMessages && !!unreadMessageCount;
         if (isOpenAndNoMessages || shouldPrefetch) {
             fetchEligibleMessages();
         }
-    }, [getEligibleMessages, isOpen, messages, unreadMessageCount]);
+    }, [eligibleMessages, getEligibleMessages, isOpen, unreadMessageCount]);
 
     function handleOnClick() {
         setIsOpen(prevIsOpen => !prevIsOpen);
-        if (unreadMessageCount && unreadMessageCount > 0 && messages) {
+        if (unreadMessageCount && unreadMessageCount > 0 && eligibleMessages) {
             try {
-                postMarkAllMessagesAsSeen(messages);
+                postMarkAllMessagesAsSeen(eligibleMessages);
             } catch (err) {
                 // swallow
             }
@@ -107,22 +117,25 @@ function MessageCenter({
     );
 
     return (
-        <span className="bdl-MessageCenter" data-resin-component="messageCenter">
-            {isOpen ? (
-                <>
-                    {icon}
-                    <MessageCenterModal
-                        apiHost={apiHost}
-                        getToken={getToken}
-                        messages={messages}
-                        onRequestClose={onRequestClose}
-                        overscanRowCount={overscanRowCount}
-                    />
-                </>
-            ) : (
-                <>{icon}</>
-            )}
-        </span>
+        <Internationalize messages={messages} language={language}>
+            <span className="bdl-MessageCenter" data-resin-component="messageCenter">
+                {isOpen ? (
+                    <>
+                        {icon}
+                        <MessageCenterModal
+                            apiHost={apiHost}
+                            contentPreviewProps={contentPreviewProps}
+                            getToken={getToken}
+                            messages={eligibleMessages}
+                            onRequestClose={onRequestClose}
+                            overscanRowCount={overscanRowCount}
+                        />
+                    </>
+                ) : (
+                    <>{icon}</>
+                )}
+            </span>
+        </Internationalize>
     );
 }
 

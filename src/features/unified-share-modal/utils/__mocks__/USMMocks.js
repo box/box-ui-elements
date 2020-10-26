@@ -1,3 +1,4 @@
+import { STATUS_INACTIVE } from '../../../../constants';
 import { DISABLED_REASON_ACCESS_POLICY, DISABLED_REASON_MALICIOUS_CONTENT } from '../../constants';
 
 /**
@@ -117,6 +118,14 @@ const MOCK_CONVERTED_USER_DATA = {
     id: 'abcde',
     userEnterpriseData: {
         enterpriseName: '',
+        serverURL: MOCK_SERVER_URL,
+    },
+};
+
+const MOCK_CONVERTED_ENTERPRISE_USER_DATA = {
+    id: 'fghijk',
+    userEnterpriseData: {
+        enterpriseName: 'Mock Enterprise',
         serverURL: MOCK_SERVER_URL,
     },
 };
@@ -404,7 +413,7 @@ const MOCK_COLLABS_CONVERTED_RESPONSE = {
 };
 
 const MOCK_CONTACTS_API_RESPONSE = {
-    total_count: 3,
+    total_count: 6,
     entries: [
         {
             type: 'user',
@@ -501,6 +510,71 @@ const MOCK_CONTACTS_API_RESPONSE = {
             avatar_url: '',
             notification_email: [],
         },
+        {
+            type: 'user',
+            id: MOCK_USER_IDS[4],
+            name: 'Content Picker',
+            login: 'contentpicker@box.com',
+            created_at: '2018-07-11T11:28:13-07:00',
+            modified_at: '2020-07-15T08:36:52-07:00',
+            language: 'en',
+            timezone: 'America/Los_Angeles',
+            space_amount: 999999999999999,
+            space_used: 20464672,
+            max_upload_size: 5368709120,
+            status: STATUS_INACTIVE,
+            job_title: '',
+            phone: '',
+            address: '',
+            avatar_url: '',
+            notification_email: [],
+        },
+    ],
+    limit: 25,
+    offset: 0,
+};
+
+const MOCK_CONTACTS_API_RESPONSE_UNSORTED = {
+    total_count: 2,
+    entries: [
+        {
+            type: 'user',
+            id: MOCK_USER_IDS[2],
+            name: 'Content Sidebar',
+            login: 'contentsidebar@box.com',
+            created_at: '2018-07-11T11:28:13-07:00',
+            modified_at: '2020-07-15T08:36:52-07:00',
+            language: 'en',
+            timezone: 'America/Los_Angeles',
+            space_amount: 999999999999999,
+            space_used: 20464672,
+            max_upload_size: 5368709120,
+            status: 'active',
+            job_title: '',
+            phone: '',
+            address: '',
+            avatar_url: '',
+            notification_email: [],
+        },
+        {
+            type: 'user',
+            id: MOCK_USER_IDS[0],
+            name: 'Content Open With',
+            login: 'contentopenwith@box.com',
+            created_at: '2019-01-14T15:15:58-08:00',
+            modified_at: '2019-01-14T15:15:59-08:00',
+            language: 'en',
+            timezone: 'America/Los_Angeles',
+            space_amount: 10737418240,
+            space_used: 0,
+            max_upload_size: 5368709120,
+            status: 'active',
+            job_title: '',
+            phone: '',
+            address: '',
+            avatar_url: '',
+            notification_email: [],
+        },
     ],
     limit: 25,
     offset: 0,
@@ -552,10 +626,16 @@ const MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE = {
         name: 'Content Explorer',
         type: 'user',
     },
+    'contentpicker@box.com': {
+        id: MOCK_USER_IDS[4],
+        email: 'contentpicker@box.com',
+        name: 'Content Picker',
+        type: 'user',
+    },
 };
 
 const MOCK_GROUP_CONTACTS_API_RESPONSE = {
-    total_count: 3,
+    total_count: 4,
     entries: [
         {
             type: 'group',
@@ -575,6 +655,14 @@ const MOCK_GROUP_CONTACTS_API_RESPONSE = {
         },
         {
             type: 'group',
+            id: '4618291047',
+            name: 'penguins',
+            permissions: {
+                can_invite_as_collaborator: true,
+            },
+        },
+        {
+            type: 'group',
             id: '980753514',
             name: 'narwhals',
             permissions: {
@@ -586,11 +674,38 @@ const MOCK_GROUP_CONTACTS_API_RESPONSE = {
     offset: 0,
 };
 
+const MOCK_GROUP_CONTACTS_API_RESPONSE_UNSORTED = {
+    total_count: 2,
+    entries: [
+        {
+            type: 'group',
+            id: '4618291047',
+            name: 'penguins',
+            permissions: {
+                can_invite_as_collaborator: true,
+            },
+        },
+        {
+            type: 'group',
+            id: '689796890',
+            name: 'armadillos',
+            permissions: {
+                can_invite_as_collaborator: true,
+            },
+        },
+    ],
+};
+
 const MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE = [
     {
         type: 'group',
         id: '689796890',
         name: 'armadillos',
+    },
+    {
+        type: 'group',
+        id: '4618291047',
+        name: 'penguins',
     },
 ];
 
@@ -764,9 +879,11 @@ export {
     MOCK_COLLABS_REQUEST_USERS_ONLY,
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
     MOCK_CONTACTS_API_RESPONSE,
+    MOCK_CONTACTS_API_RESPONSE_UNSORTED,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
     MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE,
     MOCK_CONVERTED_DISABLED_REASONS,
+    MOCK_CONVERTED_ENTERPRISE_USER_DATA,
     MOCK_CONVERTED_ITEM_DATA,
     MOCK_CONVERTED_ITEM_DATA_WITHOUT_SHARED_LINK,
     MOCK_CONVERTED_SETTINGS,
@@ -774,6 +891,7 @@ export {
     MOCK_DISABLED_REASONS_FROM_API,
     MOCK_EMAIL_ARRAY,
     MOCK_GROUP_CONTACTS_API_RESPONSE,
+    MOCK_GROUP_CONTACTS_API_RESPONSE_UNSORTED,
     MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
     MOCK_GROUPID_ARRAY,
     MOCK_ITEM,
