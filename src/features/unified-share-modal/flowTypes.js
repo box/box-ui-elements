@@ -276,6 +276,8 @@ type EmailFormTypes = {
 export type USMConfig = {
     /** Whether the "Email Shared Link" button and form should be rendered in the USM/USF */
     showEmailSharedLinkForm: boolean,
+    /* Whether the message section of the invite collaborator page should be rendered in the USM/USF */
+    showInviteCollaboratorMessageSection: boolean,
 };
 
 // Prop types shared by both the Unified Share Modal and the Unified Share Form

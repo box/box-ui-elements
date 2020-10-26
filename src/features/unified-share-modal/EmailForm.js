@@ -21,12 +21,13 @@ import IconGlobe from '../../icons/general/IconGlobe';
 import ContactRestrictionNotice from './ContactRestrictionNotice';
 import ContactsField from './ContactsField';
 import messages from './messages';
-import type { SuggestedCollabLookup, contactType as Contact } from './flowTypes';
+import type { SuggestedCollabLookup, contactType as Contact, USMConfig } from './flowTypes';
 import type { SelectOptionProp } from '../../components/select-field/props';
 
 type Props = {
     cancelButtonProps?: Object,
     children?: React.Node,
+    config?: USMConfig,
     contactLimit?: number,
     contactsFieldAvatars?: React.Node,
     contactsFieldDisabledTooltip: React.Node,
@@ -330,6 +331,7 @@ class EmailForm extends React.Component<Props, State> {
         const {
             cancelButtonProps,
             children,
+            config,
             contactsFieldAvatars,
             contactsFieldDisabledTooltip,
             contactsFieldLabel,
@@ -413,6 +415,7 @@ class EmailForm extends React.Component<Props, State> {
             );
         }
 
+        const hideMessageSection = config && config.showInviteCollaboratorMessageSection === false;
         const shouldRenderContactRestrictionNotice = isExpanded && this.hasRestrictedExternalContacts();
 
         return (
@@ -440,8 +443,9 @@ class EmailForm extends React.Component<Props, State> {
                 {contactsFieldAvatars}
                 {contactsFieldWrap}
                 {children}
-                {isExpanded && (
+                {isExpanded && !hideMessageSection && (
                     <TextArea
+                        data-testid="be-emailform-message"
                         label={<FormattedMessage {...messages.messageTitle} />}
                         onChange={this.handleMessageChange}
                         placeholder={intl.formatMessage(commonMessages.messageSelectorPlaceholder)}

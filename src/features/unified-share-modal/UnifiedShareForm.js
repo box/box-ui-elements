@@ -288,6 +288,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         const {
             canInvite,
             collaborationRestrictionWarning,
+            config,
             contactLimit,
             getCollaboratorContacts,
             getContactAvatarUrl,
@@ -356,6 +357,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                 <Tooltip {...ftuxTooltipProps}>
                     <div className="invite-collaborator-container">
                         <EmailForm
+                            config={config}
                             contactLimit={contactLimit}
                             contactsFieldAvatars={avatars}
                             contactsFieldDisabledTooltip={contactsFieldDisabledTooltip}
