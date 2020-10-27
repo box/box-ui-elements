@@ -16,9 +16,17 @@ type AnnotationActivityMenuProps = {
     id: string,
     onDeleteConfirm: () => void,
     onEdit: () => void,
+    shouldShowModifyAnnotations: boolean,
 };
 
-const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdit }: AnnotationActivityMenuProps) => {
+const AnnotationActivityMenu = ({
+    canDelete,
+    canEdit,
+    id,
+    onDeleteConfirm,
+    onEdit,
+    shouldShowModifyAnnotations,
+}: AnnotationActivityMenuProps) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
 
     const handleDeleteCancel = (): void => {
@@ -51,7 +59,7 @@ const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdi
                     'data-resin-feature': 'annotations',
                 }}
             >
-                {canEdit && (
+                {canEdit && shouldShowModifyAnnotations && (
                     <MenuItem
                         data-resin-itemid={id}
                         data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_EDIT}

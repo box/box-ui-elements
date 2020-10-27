@@ -21,8 +21,8 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
         },
     );
 
-    test('should render the edit annotation activity menu item if canEdit is true', () => {
-        const wrapper = getWrapper({ canEdit: true });
+    test('should render the edit annotation activity menu item if canEdit is true and shouldShowModifyAnnotations is true', () => {
+        const wrapper = getWrapper({ canEdit: true, shouldShowModifyAnnotations: true });
 
         expect(wrapper.exists('[data-testid="edit-annotation-activity"]')).toBe(true);
     });
@@ -37,7 +37,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
     });
 
     test('should render resin tags', () => {
-        const wrapper = getWrapper({ canDelete: true, canEdit: true });
+        const wrapper = getWrapper({ canDelete: true, canEdit: true, shouldShowModifyAnnotations: true });
 
         expect(wrapper.find("[data-testid='delete-annotation-activity']").props()).toMatchObject({
             'data-resin-itemid': '123',

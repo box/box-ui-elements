@@ -71,7 +71,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         ${true}   | ${false}
         ${true}   | ${true}
     `(
-        'should correct render annotation activity when canDelete: $canDelete and canEdit: $canEdit',
+        'should correct render annotation activity when canDelete: $canDelete and canEdit: $canEdit and shouldShowModifyAnnotations is true',
         ({ canDelete, canEdit }) => {
             const unixTime = new Date(TIME_STRING_SEPT_27_2017).getTime();
             const item = {
@@ -79,7 +79,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
                 permissions: { can_delete: canDelete, can_edit: canEdit },
             };
 
-            const wrapper = getWrapper({ item });
+            const wrapper = getWrapper({ item, shouldShowModifyAnnotations: true });
             const activityLink = wrapper.find(AnnotationActivityLink);
 
             expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
@@ -104,7 +104,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             },
         };
 
-        const wrapper = mount(<AnnotationActivity {...mockActivity} {...activity} />);
+        const wrapper = mount(<AnnotationActivity shouldShowModifyAnnotations {...mockActivity} {...activity} />);
 
         wrapper.find('AnnotationActivityMenu').simulate('click');
         wrapper.find('MenuItem').simulate('click');

@@ -32,6 +32,7 @@ type Props = {
     onDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
     onEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
     onSelect?: (annotation: Annotation) => any,
+    shouldShowModifyAnnotations: boolean,
 };
 
 const AnnotationActivity = ({
@@ -45,6 +46,7 @@ const AnnotationActivity = ({
     onDelete = noop,
     onEdit = noop,
     onSelect = noop,
+    shouldShowModifyAnnotations,
 }: Props) => {
     const [isEditing, setIsEditing] = React.useState(false);
     const { created_at, created_by, description, error, file_version, id, isPending, permissions = {}, target } = item;
@@ -100,6 +102,7 @@ const AnnotationActivity = ({
                             id={id}
                             onDeleteConfirm={handleDeleteConfirm}
                             onEdit={handleEdit}
+                            shouldShowModifyAnnotations={shouldShowModifyAnnotations}
                         />
                     )}
                     <div className="bcs-AnnotationActivity-headline">
