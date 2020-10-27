@@ -65,6 +65,7 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -96,13 +97,17 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
           }
           isExpanded={false}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -141,6 +146,7 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
           "id": "111",
           "name": "test file",
           "type": "file",
+          "typedID": "f_111",
         }
       }
       itemType="file"
@@ -258,6 +264,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -289,13 +296,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           }
           isExpanded={false}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -334,6 +345,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           "id": "111",
           "name": "test file",
           "type": "file",
+          "typedID": "f_111",
         }
       }
       itemType="file"
@@ -415,6 +427,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -446,13 +459,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           }
           isExpanded={false}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -491,6 +508,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           "id": "111",
           "name": "test file",
           "type": "file",
+          "typedID": "f_111",
         }
       }
       itemType="file"
@@ -572,6 +590,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -603,13 +622,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           }
           isExpanded={false}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -648,6 +671,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           "id": "111",
           "name": "test file",
           "type": "file",
+          "typedID": "f_111",
         }
       }
       itemType="file"
@@ -734,6 +758,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -765,13 +790,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           }
           isExpanded={false}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -810,6 +839,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           "id": "111",
           "name": "test file",
           "type": "file",
+          "typedID": "f_111",
         }
       }
       itemType="file"
@@ -892,6 +922,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -923,13 +954,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           }
           isExpanded={false}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -968,6 +1003,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           "id": "111",
           "name": "test file",
           "type": "file",
+          "typedID": "f_111",
         }
       }
       itemType="file"
@@ -1051,6 +1087,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -1082,13 +1119,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           }
           isExpanded={true}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1180,6 +1221,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -1212,13 +1254,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isContactsFieldEnabled={false}
           isExpanded={false}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1257,6 +1303,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           "id": "111",
           "name": "test file",
           "type": "web_link",
+          "typedID": "f_111",
         }
       }
       itemType="web_link"
@@ -1339,6 +1386,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -1371,13 +1419,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isContactsFieldEnabled={false}
           isExpanded={false}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1416,6 +1468,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           "id": "111",
           "name": "test file",
           "type": "folder",
+          "typedID": "f_111",
         }
       }
       itemType="folder"
@@ -1498,6 +1551,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -1530,13 +1584,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isContactsFieldEnabled={true}
           isExpanded={false}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1575,6 +1633,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           "id": "111",
           "name": "test file",
           "type": "file",
+          "typedID": "f_111",
         }
       }
       itemType="file"
@@ -1658,6 +1717,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -1690,13 +1750,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isContactsFieldEnabled={true}
           isExpanded={true}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1751,6 +1815,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           "id": "111",
           "name": "test file",
           "type": "file",
+          "typedID": "f_111",
         }
       }
       itemName="test file"
@@ -1828,6 +1893,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -1859,13 +1925,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           }
           isExpanded={false}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1904,6 +1974,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           "id": "111",
           "name": "test file",
           "type": "file",
+          "typedID": "f_111",
         }
       }
       itemType="file"
@@ -1986,6 +2057,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -2017,13 +2089,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           }
           isExpanded={false}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -2062,6 +2138,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           "id": "111",
           "name": "test file",
           "type": "file",
+          "typedID": "f_111",
         }
       }
       itemType="file"
@@ -2148,6 +2225,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -2179,13 +2257,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           }
           isExpanded={false}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -2224,6 +2306,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           "id": "111",
           "name": "test file",
           "type": "file",
+          "typedID": "f_111",
         }
       }
       itemType="file"
@@ -2307,6 +2390,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -2339,13 +2423,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isContactsFieldEnabled={true}
           isExpanded={false}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           submitting={false}
           updateSelectedContacts={[Function]}
@@ -2382,6 +2470,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           "id": "111",
           "name": "test file",
           "type": "file",
+          "typedID": "f_111",
         }
       }
       itemType="file"
@@ -2465,6 +2554,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -2499,13 +2589,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isContactsFieldEnabled={true}
           isExpanded={true}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -2597,6 +2691,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     >
       <div
         className="invite-collaborator-container"
+        data-testid="invite-collaborator-container"
       >
         <EmailForm
           contactsFieldAvatars={
@@ -2629,13 +2724,17 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isContactsFieldEnabled={true}
           isExpanded={true}
           isExternalUserSelected={false}
+          isFetchingJustificationReasons={false}
+          justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
+          restrictedExternalEmails={Array []}
           selectedContacts={Array []}
+          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
