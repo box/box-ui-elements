@@ -56,7 +56,6 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     onTaskModalClose={[Function]}
     onTaskUpdate={[Function]}
     onVersionHistoryClick={[Function]}
-    shouldShowModifyAnnotations={false}
   />
 </SidebarContent>
 `;
