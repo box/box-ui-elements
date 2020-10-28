@@ -3,10 +3,11 @@ import { mount, shallow } from 'enzyme';
 
 import AnnotationActivity from '../AnnotationActivity';
 import AnnotationActivityLink from '../AnnotationActivityLink';
-import AnnotationActivityMenu from '../AnnotationActivityMenu';
 import CommentForm from '../../comment-form/CommentForm';
 import Media from '../../../../../components/media';
 import messages from '../messages';
+import { AnnotationActivityMenuBase as AnnotationActivityMenu } from '../AnnotationActivityMenu';
+import { FeatureProvider } from '../../../../common/feature-checking';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 
@@ -48,7 +49,22 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         'data-resin-target': 'annotationLink',
     });
 
+    const defaultFeatures = {
+        activityFeed: {
+            modifyAnnotations: {
+                enabled: true,
+            },
+        },
+    };
+
     const getWrapper = (props = {}) => shallow(<AnnotationActivity {...mockActivity} {...props} />);
+
+    const getWrapperWithFeatures = props =>
+        mount(
+            <FeatureProvider features={defaultFeatures}>
+                <AnnotationActivity {...mockActivity} {...props} />
+            </FeatureProvider>,
+        );
 
     beforeEach(() => {
         CommentForm.default = jest.fn().mockReturnValue(<div />);
@@ -62,7 +78,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
         const wrapper = getWrapper({ item });
 
-        expect(wrapper.exists('AnnotationActivityMenu')).toBe(false);
+        expect(wrapper.exists(AnnotationActivityMenu)).toBe(false);
     });
 
     test.each`
@@ -71,7 +87,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         ${true}   | ${false}
         ${true}   | ${true}
     `(
-        'should correct render annotation activity when canDelete: $canDelete and canEdit: $canEdit',
+        'should correctly render annotation activity when canDelete: $canDelete and canEdit: $canEdit',
         ({ canDelete, canEdit }) => {
             const unixTime = new Date(TIME_STRING_SEPT_27_2017).getTime();
             const item = {
@@ -79,7 +95,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
                 permissions: { can_delete: canDelete, can_edit: canEdit },
             };
 
-            const wrapper = getWrapper({ item });
+            const wrapper = getWrapperWithFeatures({ item });
             const activityLink = wrapper.find(AnnotationActivityLink);
 
             expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
@@ -88,12 +104,36 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
                 values: { number: 1 },
             });
             expect(activityLink.props()).toMatchObject(generateReginTags());
-            expect(wrapper.exists('AnnotationActivityMenu')).toBe(true);
+            expect(wrapper.exists(AnnotationActivityMenu)).toBe(true);
             expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(
                 mockActivity.item.description.message,
             );
         },
     );
+
+    test('should render CommentForm if user clicks on the Modify menu item', () => {
+        const activity = {
+            item: {
+                ...mockAnnotation,
+                isPending: false,
+                permissions: { can_edit: true },
+            },
+        };
+
+        const wrapper = getWrapperWithFeatures({ ...mockActivity, ...activity });
+
+        wrapper.find(AnnotationActivityMenu).simulate('click');
+        wrapper.find('MenuItem').simulate('click');
+        expect(wrapper.exists('CommentForm')).toBe(true);
+
+        // Clicking the cancel button will remove the CommentForm
+        wrapper
+            .find('CommentInputControls')
+            .find('Button')
+            .first()
+            .simulate('click');
+        expect(wrapper.exists('CommentForm')).toBe(false);
+    });
 
     test('should correctly render annotation activity of another file version', () => {
         const wrapper = getWrapper({ isCurrentVersion: false });

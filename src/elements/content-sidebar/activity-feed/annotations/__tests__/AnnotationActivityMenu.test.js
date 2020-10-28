@@ -1,10 +1,21 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
 
-import AnnotationActivityMenu from '../AnnotationActivityMenu';
+import { AnnotationActivityMenuBase as AnnotationActivityMenu } from '../AnnotationActivityMenu';
 
 describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMenu', () => {
-    const getWrapper = (props = {}) => shallow(<AnnotationActivityMenu id="123" {...props} />);
+    const defaults = {
+        features: {
+            activityFeed: {
+                modifyAnnotations: {
+                    enabled: true,
+                },
+            },
+        },
+        id: '123',
+    };
+
+    const getWrapper = (props = {}) => shallow(<AnnotationActivityMenu {...defaults} {...props} />);
 
     test.each`
         permissions             | showDelete
@@ -21,10 +32,10 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
         },
     );
 
-    test('should not render the edit annotation activity menu item if canEdit is true and shouldDisableModifyMenuItem is true', () => {
+    test('should render the edit annotation activity menu item if canEdit is true', () => {
         const wrapper = getWrapper({ canEdit: true });
 
-        expect(wrapper.exists('[data-testid="edit-annotation-activity"]')).toBe(false);
+        expect(wrapper.exists('[data-testid="edit-annotation-activity"]')).toBe(true);
     });
 
     test('should show the delete confirm menu when confirming delete', () => {
@@ -37,11 +48,16 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
     });
 
     test('should render resin tags', () => {
-        const wrapper = getWrapper({ canDelete: true });
+        const wrapper = getWrapper({ canDelete: true, canEdit: true });
 
         expect(wrapper.find("[data-testid='delete-annotation-activity']").props()).toMatchObject({
             'data-resin-itemid': '123',
             'data-resin-target': 'activityfeed-annotation-delete',
+        });
+
+        expect(wrapper.find("[data-testid='edit-annotation-activity']").props()).toMatchObject({
+            'data-resin-itemid': '123',
+            'data-resin-target': 'activityfeed-annotation-edit',
         });
     });
 });

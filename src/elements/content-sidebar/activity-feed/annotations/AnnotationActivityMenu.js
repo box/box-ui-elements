@@ -9,17 +9,29 @@ import Pencil16 from '../../../../icon/line/Pencil16';
 import Trash16 from '../../../../icon/fill/Trash16';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { MenuItem } from '../../../../components/menu';
+import { isFeatureEnabled, withFeatureConsumer } from '../../../common/feature-checking';
+import type { FeatureConfig } from '../../../common/feature-checking';
 
 type AnnotationActivityMenuProps = {
     canDelete?: boolean,
     canEdit?: boolean,
+    features: FeatureConfig,
     id: string,
     onDeleteConfirm: () => void,
     onEdit: () => void,
 };
 
-const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdit }: AnnotationActivityMenuProps) => {
+const AnnotationActivityMenu = ({
+    canDelete,
+    canEdit,
+    features,
+    id,
+    onDeleteConfirm,
+    onEdit,
+}: AnnotationActivityMenuProps) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
+
+    const isModifyEnabled = isFeatureEnabled(features, 'activityFeed.modifyAnnotations.enabled');
 
     const handleDeleteCancel = (): void => {
         setIsConfirmingDelete(false);
@@ -41,8 +53,6 @@ const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdi
         targetAttachment: 'bottom right',
     };
 
-    const shouldDisableModifyMenuItem = true;
-
     return (
         <TetherComponent {...tetherProps}>
             <Media.Menu
@@ -53,7 +63,7 @@ const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdi
                     'data-resin-feature': 'annotations',
                 }}
             >
-                {!shouldDisableModifyMenuItem && canEdit && (
+                {canEdit && isModifyEnabled && (
                     <MenuItem
                         data-resin-itemid={id}
                         data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_EDIT}
@@ -89,4 +99,5 @@ const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdi
     );
 };
 
-export default AnnotationActivityMenu;
+export { AnnotationActivityMenu as AnnotationActivityMenuBase };
+export default withFeatureConsumer(AnnotationActivityMenu);
