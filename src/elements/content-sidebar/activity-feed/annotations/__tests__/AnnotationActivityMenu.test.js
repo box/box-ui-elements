@@ -4,15 +4,17 @@ import { shallow } from 'enzyme';
 import { AnnotationActivityMenuBase as AnnotationActivityMenu } from '../AnnotationActivityMenu';
 
 describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMenu', () => {
-    const defaultFeatures = {
-        activityFeed: {
-            modifyAnnotations: {
-                enabled: true,
+    const defaults = {
+        features: {
+            activityFeed: {
+                modifyAnnotations: {
+                    enabled: true,
+                },
             },
         },
     };
 
-    const getWrapper = (props = {}) => shallow(<AnnotationActivityMenu id="123" {...props} />);
+    const getWrapper = (props = {}) => shallow(<AnnotationActivityMenu id="123" {...defaults} {...props} />);
 
     test.each`
         permissions             | showDelete
@@ -23,14 +25,14 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
     `(
         `for an activity with permissions $permissions and onEdit ($onEdit), should showDelete: $showDelete, showEdit: $showEdit`,
         ({ permissions, showDelete }) => {
-            const wrapper = getWrapper({ ...permissions, features: defaultFeatures });
+            const wrapper = getWrapper({ ...permissions });
 
             expect(wrapper.find('[data-testid="delete-annotation-activity"]').length).toEqual(showDelete ? 1 : 0);
         },
     );
 
     test('should render the edit annotation activity menu item if canEdit is true', () => {
-        const wrapper = getWrapper({ canEdit: true, features: defaultFeatures });
+        const wrapper = getWrapper({ canEdit: true });
 
         expect(wrapper.exists('[data-testid="edit-annotation-activity"]')).toBe(true);
     });
@@ -45,7 +47,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
     });
 
     test('should render resin tags', () => {
-        const wrapper = getWrapper({ canDelete: true, canEdit: true, features: defaultFeatures });
+        const wrapper = getWrapper({ canDelete: true, canEdit: true });
 
         expect(wrapper.find("[data-testid='delete-annotation-activity']").props()).toMatchObject({
             'data-resin-itemid': '123',

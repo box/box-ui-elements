@@ -6,6 +6,7 @@ import AnnotationActivityLink from '../AnnotationActivityLink';
 import CommentForm from '../../comment-form/CommentForm';
 import Media from '../../../../../components/media';
 import messages from '../messages';
+import { AnnotationActivityMenuBase as AnnotationActivityMenu } from '../AnnotationActivityMenu';
 import { FeatureProvider } from '../../../../common/feature-checking';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
@@ -48,8 +49,6 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         'data-resin-target': 'annotationLink',
     });
 
-    const getWrapper = (props = {}) => shallow(<AnnotationActivity {...mockActivity} {...props} />);
-
     const defaultFeatures = {
         activityFeed: {
             modifyAnnotations: {
@@ -58,9 +57,11 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         },
     };
 
-    const renderWithFeatures = (props, features) =>
+    const getWrapper = (props = {}) => shallow(<AnnotationActivity {...mockActivity} {...props} />);
+
+    const getWrapperWithFeatures = props =>
         mount(
-            <FeatureProvider features={features || defaultFeatures}>
+            <FeatureProvider features={defaultFeatures}>
                 <AnnotationActivity {...mockActivity} {...props} />
             </FeatureProvider>,
         );
@@ -77,7 +78,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
         const wrapper = getWrapper({ item });
 
-        expect(wrapper.exists('AnnotationActivityMenu')).toBe(false);
+        expect(wrapper.exists(AnnotationActivityMenu)).toBe(false);
     });
 
     test.each`
@@ -94,7 +95,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
                 permissions: { can_delete: canDelete, can_edit: canEdit },
             };
 
-            const wrapper = renderWithFeatures({ item });
+            const wrapper = getWrapperWithFeatures({ item });
             const activityLink = wrapper.find(AnnotationActivityLink);
 
             expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
@@ -103,7 +104,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
                 values: { number: 1 },
             });
             expect(activityLink.props()).toMatchObject(generateReginTags());
-            expect(wrapper.exists('AnnotationActivityMenu')).toBe(true);
+            expect(wrapper.exists(AnnotationActivityMenu)).toBe(true);
             expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(
                 mockActivity.item.description.message,
             );
@@ -119,9 +120,9 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             },
         };
 
-        const wrapper = renderWithFeatures({ ...mockActivity, ...activity });
+        const wrapper = getWrapperWithFeatures({ ...mockActivity, ...activity });
 
-        wrapper.find('AnnotationActivityMenu').simulate('click');
+        wrapper.find(AnnotationActivityMenu).simulate('click');
         wrapper.find('MenuItem').simulate('click');
         expect(wrapper.exists('CommentForm')).toBe(true);
 
@@ -168,7 +169,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
         const wrapper = getWrapper({ item });
 
-        expect(wrapper.exists('AnnotationActivityMenu')).toBe(false);
+        expect(wrapper.exists(AnnotationActivityMenu)).toBe(false);
         expect(wrapper.find(Media).hasClass('bcs-is-pending')).toBe(true);
     });
 
