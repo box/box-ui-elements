@@ -9,7 +9,7 @@ import Pencil16 from '../../../../icon/line/Pencil16';
 import Trash16 from '../../../../icon/fill/Trash16';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { MenuItem } from '../../../../components/menu';
-import { withFeatureConsumer, isFeatureEnabled } from '../../../common/feature-checking';
+import { isFeatureEnabled, withFeatureConsumer } from '../../../common/feature-checking';
 import type { FeatureConfig } from '../../../common/feature-checking';
 
 type AnnotationActivityMenuProps = {
