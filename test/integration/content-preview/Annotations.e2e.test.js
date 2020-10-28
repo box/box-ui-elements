@@ -1,8 +1,15 @@
-// Specify Annotations Version in command line, for example:
-// CYPRESS_ANNOTATIONS_VERSION=4.0.0-beta.24 yarn test:e2e:open
+// Specify Annotations version in command line, otherwise defaults to the latest version
+// e.g. CYPRESS_ANNOTATIONS_VERSION=4.0.0-beta.24 yarn test:e2e:open
 const ANNOTATIONS_VERSION = Cypress.env('ANNOTATIONS_VERSION') ? `@${Cypress.env('ANNOTATIONS_VERSION')}` : '';
 
 import(`https://unpkg.com/box-annotations${ANNOTATIONS_VERSION}/dist/annotations.js`);
+
+Cypress.Commands.add('clickAnnotationLinkByComment', comment => {
+    cy.contains(comment)
+        .siblings()
+        .filter('[data-testid="bcs-AnnotationActivity-link"]')
+        .click();
+});
 
 describe('ContentPreview with Annotations', () => {
     const helpers = {
