@@ -3,10 +3,10 @@ import { mount, shallow } from 'enzyme';
 
 import AnnotationActivity from '../AnnotationActivity';
 import AnnotationActivityLink from '../AnnotationActivityLink';
-import AnnotationActivityMenu from '../AnnotationActivityMenu';
 import CommentForm from '../../comment-form/CommentForm';
 import Media from '../../../../../components/media';
 import messages from '../messages';
+import { FeatureProvider } from '../../../../common/feature-checking';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 
@@ -50,6 +50,21 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
     const getWrapper = (props = {}) => shallow(<AnnotationActivity {...mockActivity} {...props} />);
 
+    const defaultFeatures = {
+        activityFeed: {
+            modifyAnnotations: {
+                enabled: true,
+            },
+        },
+    };
+
+    const renderWithFeatures = (props, features) =>
+        mount(
+            <FeatureProvider features={features || defaultFeatures}>
+                <AnnotationActivity {...mockActivity} {...props} />
+            </FeatureProvider>,
+        );
+
     beforeEach(() => {
         CommentForm.default = jest.fn().mockReturnValue(<div />);
     });
@@ -71,7 +86,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         ${true}   | ${false}
         ${true}   | ${true}
     `(
-        'should correctly render annotation activity when canDelete: $canDelete and canEdit: $canEdit and shouldShowModifyAnnotations is true',
+        'should correctly render annotation activity when canDelete: $canDelete and canEdit: $canEdit',
         ({ canDelete, canEdit }) => {
             const unixTime = new Date(TIME_STRING_SEPT_27_2017).getTime();
             const item = {
@@ -79,7 +94,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
                 permissions: { can_delete: canDelete, can_edit: canEdit },
             };
 
-            const wrapper = getWrapper({ item, shouldShowModifyAnnotations: true });
+            const wrapper = renderWithFeatures({ item });
             const activityLink = wrapper.find(AnnotationActivityLink);
 
             expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
@@ -104,7 +119,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             },
         };
 
-        const wrapper = mount(<AnnotationActivity shouldShowModifyAnnotations {...mockActivity} {...activity} />);
+        const wrapper = renderWithFeatures({ ...mockActivity, ...activity });
 
         wrapper.find('AnnotationActivityMenu').simulate('click');
         wrapper.find('MenuItem').simulate('click');
@@ -153,7 +168,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
         const wrapper = getWrapper({ item });
 
-        expect(wrapper.exists(AnnotationActivityMenu)).toBe(false);
+        expect(wrapper.exists('AnnotationActivityMenu')).toBe(false);
         expect(wrapper.find(Media).hasClass('bcs-is-pending')).toBe(true);
     });
 

@@ -51,7 +51,6 @@ type Props = {
     onTaskUpdate?: Function,
     onTaskView?: Function,
     onVersionHistoryClick?: Function,
-    shouldShowModifyAnnotations: boolean,
     translations?: Translations,
 };
 
@@ -221,7 +220,6 @@ class ActivityFeed extends React.Component<Props, State> {
             onTaskUpdate,
             onTaskView,
             onVersionHistoryClick,
-            shouldShowModifyAnnotations,
             translations,
         } = this.props;
         const { isInputOpen } = this.state;
@@ -299,7 +297,6 @@ class ActivityFeed extends React.Component<Props, State> {
                             activeFeedEntryId={activeFeedEntryId}
                             activeFeedEntryType={activeFeedEntryType}
                             activeFeedItemRef={this.activeFeedItemRef}
-                            shouldShowModifyAnnotations={shouldShowModifyAnnotations}
                         />
                     )}
                     {isInlineFeedItemErrorVisible && inlineFeedItemErrorMessage && (

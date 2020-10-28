@@ -680,7 +680,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             file,
             isDisabled = false,
             onVersionHistoryClick,
-            features,
             getUserProfileUrl,
             activeFeedEntryId,
             activeFeedEntryType,
@@ -694,8 +693,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             activityFeedError,
             currentUserError,
         } = this.state;
-
-        const shouldShowModifyAnnotations = isFeatureEnabled(features, 'activityFeed.modifyAnnotations.enabled');
 
         return (
             <SidebarContent
@@ -720,7 +717,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     getUserProfileUrl={getUserProfileUrl}
                     isDisabled={isDisabled}
                     mentionSelectorContacts={mentionSelectorContacts}
-                    shouldShowModifyAnnotations={shouldShowModifyAnnotations}
                     onAnnotationDelete={this.handleAnnotationDelete}
                     onAnnotationEdit={this.handleAnnotationEdit}
                     onAnnotationSelect={this.handleAnnotationSelect}

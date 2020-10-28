@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import flow from 'lodash/flow';
 import TetherComponent from 'react-tether';
 import { FormattedMessage } from 'react-intl';
 import DeleteConfirmation from '../common/delete-confirmation';
@@ -9,23 +10,25 @@ import Pencil16 from '../../../../icon/line/Pencil16';
 import Trash16 from '../../../../icon/fill/Trash16';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { MenuItem } from '../../../../components/menu';
+import { withFeatureConsumer, isFeatureEnabled } from '../../../common/feature-checking';
+import type { FeatureConfig } from '../../../common/feature-checking';
 
 type AnnotationActivityMenuProps = {
     canDelete?: boolean,
     canEdit?: boolean,
+    features: FeatureConfig,
     id: string,
     onDeleteConfirm: () => void,
     onEdit: () => void,
-    shouldShowModifyAnnotations: boolean,
 };
 
 const AnnotationActivityMenu = ({
     canDelete,
     canEdit,
+    features,
     id,
     onDeleteConfirm,
     onEdit,
-    shouldShowModifyAnnotations,
 }: AnnotationActivityMenuProps) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
 
@@ -48,6 +51,8 @@ const AnnotationActivityMenu = ({
         constraints: [{ to: 'scrollParent', attachment: 'together' }],
         targetAttachment: 'bottom right',
     };
+
+    const shouldShowModifyAnnotations = isFeatureEnabled(features, 'activityFeed.modifyAnnotations.enabled');
 
     return (
         <TetherComponent {...tetherProps}>
@@ -95,4 +100,5 @@ const AnnotationActivityMenu = ({
     );
 };
 
-export default AnnotationActivityMenu;
+export { AnnotationActivityMenu as AnnotationActivityMenuBase };
+export default flow([withFeatureConsumer])(AnnotationActivityMenu);

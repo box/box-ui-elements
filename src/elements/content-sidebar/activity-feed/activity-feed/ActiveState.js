@@ -47,7 +47,6 @@ type Props = {
     onTaskModalClose?: Function,
     onTaskView?: Function,
     onVersionInfo?: Function,
-    shouldShowModifyAnnotations: boolean,
     translations?: Translations,
 };
 
@@ -77,7 +76,6 @@ const ActiveState = ({
     getApproverWithQuery,
     getAvatarUrl,
     getUserProfileUrl,
-    shouldShowModifyAnnotations,
 }: Props): React.Node => {
     const activeEntry = items.find(({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType);
 
@@ -182,7 +180,6 @@ const ActiveState = ({
                                     onEdit={onAnnotationEdit}
                                     onDelete={onAnnotationDelete}
                                     onSelect={onAnnotationSelect}
-                                    shouldShowModifyAnnotations={shouldShowModifyAnnotations}
                                 />
                             </ActivityItem>
                         );
