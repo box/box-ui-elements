@@ -51,7 +51,7 @@ const AnnotationActivityMenu = ({
         targetAttachment: 'bottom right',
     };
 
-    const shouldShowModifyAnnotations = isFeatureEnabled(features, 'activityFeed.modifyAnnotations.enabled');
+    const isModifyEnabled = isFeatureEnabled(features, 'activityFeed.modifyAnnotations.enabled');
 
     return (
         <TetherComponent {...tetherProps}>
@@ -63,7 +63,7 @@ const AnnotationActivityMenu = ({
                     'data-resin-feature': 'annotations',
                 }}
             >
-                {canEdit && shouldShowModifyAnnotations && (
+                {canEdit && isModifyEnabled && (
                     <MenuItem
                         data-resin-itemid={id}
                         data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_EDIT}
