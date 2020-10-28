@@ -71,7 +71,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         ${true}   | ${false}
         ${true}   | ${true}
     `(
-        'should correct render annotation activity when canDelete: $canDelete and canEdit: $canEdit and shouldShowModifyAnnotations is true',
+        'should correctly render annotation activity when canDelete: $canDelete and canEdit: $canEdit and shouldShowModifyAnnotations is true',
         ({ canDelete, canEdit }) => {
             const unixTime = new Date(TIME_STRING_SEPT_27_2017).getTime();
             const item = {
