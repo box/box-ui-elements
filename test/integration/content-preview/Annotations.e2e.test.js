@@ -35,7 +35,8 @@ describe('ContentPreview with Annotations', () => {
             });
         },
         clickAnnotationLinkByComment(comment) {
-            cy.contains(comment)
+            return cy
+                .contains(comment)
                 .siblings()
                 .filter('[data-testid="bcs-AnnotationActivity-link"]')
                 .click();
