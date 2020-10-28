@@ -4,13 +4,6 @@ const ANNOTATIONS_VERSION = Cypress.env('ANNOTATIONS_VERSION') ? `@${Cypress.env
 
 import(`https://unpkg.com/box-annotations${ANNOTATIONS_VERSION}/dist/annotations.js`);
 
-Cypress.Commands.add('clickAnnotationLinkByComment', comment => {
-    cy.contains(comment)
-        .siblings()
-        .filter('[data-testid="bcs-AnnotationActivity-link"]')
-        .click();
-});
-
 describe('ContentPreview with Annotations', () => {
     const helpers = {
         load({ features, fileId, props } = {}) {
@@ -41,6 +34,12 @@ describe('ContentPreview with Annotations', () => {
                 },
             });
         },
+        clickAnnotationLinkByComment(comment) {
+            cy.contains(comment)
+                .siblings()
+                .filter('[data-testid="bcs-AnnotationActivity-link"]')
+                .click();
+        },
     };
 
     it('Should scroll to annotations', () => {
@@ -57,13 +56,13 @@ describe('ContentPreview with Annotations', () => {
         cy.get('.ba-HighlightTarget-rect').should('not.be.visible');
 
         // Click highlight annotation in the sidebar to trigger scrolling
-        cy.clickAnnotationLinkByComment('Highlight Annotation on version 2');
+        helpers.clickAnnotationLinkByComment('Highlight Annotation on version 2');
 
         cy.get('.ba-RegionAnnotation').should('not.be.visible');
         cy.get('.ba-HighlightTarget-rect').should('be.visible');
 
         // Click region annotation in the sidebar to scroll back
-        cy.clickAnnotationLinkByComment('Region Annotation on version 2');
+        helpers.clickAnnotationLinkByComment('Region Annotation on version 2');
 
         cy.get('.ba-RegionAnnotation').should('be.visible');
         cy.get('.ba-HighlightTarget-rect').should('not.be.visible');
@@ -78,7 +77,7 @@ describe('ContentPreview with Annotations', () => {
         });
 
         // Click an annotation on previous version
-        cy.clickAnnotationLinkByComment('Region Annotations');
+        helpers.clickAnnotationLinkByComment('Region Annotations');
 
         // Previous versions header
         cy.get('.bcpr-PreviewHeader--basic').should('be.visible');
@@ -87,7 +86,7 @@ describe('ContentPreview with Annotations', () => {
         cy.get('.ba-RegionAnnotation').should('exist');
 
         // Click an annotation on current versoin
-        cy.clickAnnotationLinkByComment('Region Annotation on version 2');
+        helpers.clickAnnotationLinkByComment('Region Annotation on version 2');
 
         // Current version header
         cy.get('.bcpr-PreviewHeader').should('be.visible');
