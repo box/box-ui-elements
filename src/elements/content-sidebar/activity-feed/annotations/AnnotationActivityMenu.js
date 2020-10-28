@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import flow from 'lodash/flow';
 import TetherComponent from 'react-tether';
 import { FormattedMessage } from 'react-intl';
 import DeleteConfirmation from '../common/delete-confirmation';
@@ -101,4 +100,4 @@ const AnnotationActivityMenu = ({
 };
 
 export { AnnotationActivityMenu as AnnotationActivityMenuBase };
-export default flow([withFeatureConsumer])(AnnotationActivityMenu);
+export default withFeatureConsumer(AnnotationActivityMenu);
