@@ -12,9 +12,10 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
                 },
             },
         },
+        id: '123',
     };
 
-    const getWrapper = (props = {}) => shallow(<AnnotationActivityMenu id="123" {...defaults} {...props} />);
+    const getWrapper = (props = {}) => shallow(<AnnotationActivityMenu {...defaults} {...props} />);
 
     test.each`
         permissions             | showDelete

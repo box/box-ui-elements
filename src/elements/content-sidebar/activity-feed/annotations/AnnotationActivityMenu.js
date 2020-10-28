@@ -31,6 +31,8 @@ const AnnotationActivityMenu = ({
 }: AnnotationActivityMenuProps) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
 
+    const isModifyEnabled = isFeatureEnabled(features, 'activityFeed.modifyAnnotations.enabled');
+
     const handleDeleteCancel = (): void => {
         setIsConfirmingDelete(false);
     };
@@ -50,8 +52,6 @@ const AnnotationActivityMenu = ({
         constraints: [{ to: 'scrollParent', attachment: 'together' }],
         targetAttachment: 'bottom right',
     };
-
-    const isModifyEnabled = isFeatureEnabled(features, 'activityFeed.modifyAnnotations.enabled');
 
     return (
         <TetherComponent {...tetherProps}>
