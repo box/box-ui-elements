@@ -20,6 +20,7 @@ import IconGlobe from '../../icons/general/IconGlobe';
 
 import ContactRestrictionNotice from './ContactRestrictionNotice';
 import ContactsField from './ContactsField';
+import hasRestrictedExternalContacts from './utils/hasRestrictedExternalContacts';
 import messages from './messages';
 import type { SuggestedCollabLookup, contactType as Contact, USMConfig } from './flowTypes';
 import type { SelectOptionProp } from '../../components/select-field/props';
@@ -95,6 +96,8 @@ class EmailForm extends React.Component<Props, State> {
     } = React.createRef();
 
     componentDidUpdate(prevProps: Props, prevState: State) {
+        const { shouldRequireExternalContactJustification } = this.props;
+        const { shouldRequireExternalContactJustification: prevShouldRequireExternalContactJustification } = prevProps;
         const { contactsFieldError, justificationReasonsFieldError } = this.state;
         const {
             contactsFieldError: prevContactsFieldError,
@@ -108,6 +111,14 @@ class EmailForm extends React.Component<Props, State> {
         }
         if (!prevJustificationReasonsFieldError && justificationReasonsFieldError) {
             this.setState({ contactsFieldError: '' });
+        }
+
+        const didJustificationRequirementChange =
+            shouldRequireExternalContactJustification !== prevShouldRequireExternalContactJustification;
+
+        // Clear selected justification when form state is reset
+        if (didJustificationRequirementChange && !shouldRequireExternalContactJustification) {
+            this.setState({ selectedJustificationReason: null });
         }
     }
 
@@ -212,6 +223,7 @@ class EmailForm extends React.Component<Props, State> {
         this.setState({
             message: '',
             contactsFieldError: '',
+            selectedJustificationReason: null,
         });
 
         this.props.updateSelectedContacts([]);
@@ -315,16 +327,6 @@ class EmailForm extends React.Component<Props, State> {
         return restrictedExternalEmails.includes(email);
     };
 
-    hasRestrictedExternalContacts = () => {
-        const { restrictedExternalEmails, selectedContacts } = this.props;
-
-        if (!restrictedExternalEmails.length) {
-            return false;
-        }
-
-        return selectedContacts.some(({ value }) => this.isRestrictedExternalEmail(value));
-    };
-
     render() {
         const { contactsFieldError, justificationReasonsFieldError, message, selectedJustificationReason } = this.state;
 
@@ -416,7 +418,8 @@ class EmailForm extends React.Component<Props, State> {
         }
 
         const hideMessageSection = config && config.showInviteCollaboratorMessageSection === false;
-        const shouldRenderContactRestrictionNotice = isExpanded && this.hasRestrictedExternalContacts();
+        const shouldRenderContactRestrictionNotice =
+            isExpanded && hasRestrictedExternalContacts(selectedContacts, restrictedExternalEmails);
 
         return (
             <form

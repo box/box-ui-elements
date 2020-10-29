@@ -205,6 +205,7 @@ describe('features/unified-share-modal/EmailForm', () => {
             wrapper.setState({
                 message: 'test',
                 contactsFieldError: 'Error',
+                selectedJustificationReason: expectedJustificationReason,
             });
 
             wrapper.instance().handleClose();
@@ -212,6 +213,7 @@ describe('features/unified-share-modal/EmailForm', () => {
             expect(wrapper.state('message')).toEqual('');
             expect(updateSelectedContacts).toHaveBeenCalledWith([]);
             expect(wrapper.state('contactsFieldError')).toEqual('');
+            expect(wrapper.state('selectedJustificationReason')).toBeNull();
         });
     });
 
@@ -476,6 +478,51 @@ describe('features/unified-share-modal/EmailForm', () => {
                 expect(isValidContactPill).toBe(expectedIsValid);
             },
         );
+    });
+
+    describe('componentDidUpdate()', () => {
+        test('should clear other visible errors when a new error is set', () => {
+            const wrapper = getWrapper({
+                isExpanded: true,
+                justificationReasons: [expectedJustificationReason],
+                restrictedExternalEmails: [expectedContacts[0].value],
+                selectedContacts: expectedContacts,
+                shouldRequireExternalContactJustification: true,
+            });
+
+            wrapper.instance().validateContactField('invalid_email');
+            expect(wrapper.find('ContactsField').props().error).toBe('boxui.validation.emailError');
+
+            // Will fail validation since no justification reason has been selected
+            wrapper.instance().validateJustificationReason();
+            expect(wrapper.find('ContactsField').props().error).toBe('');
+            expect(wrapper.find('ContactRestrictionNotice').props().error).toBe(
+                'boxui.unifiedShare.justificationRequiredError',
+            );
+
+            // Triggering another contacts field error should clear justification field error
+            wrapper.instance().validateContactField('invalid_email');
+            expect(wrapper.find('ContactRestrictionNotice').props().error).toBe('');
+            expect(wrapper.find('ContactsField').props().error).toBe('boxui.validation.emailError');
+        });
+
+        test('should clear selected justification reason when shouldRequireExternalContactJustification is set to false after being true', () => {
+            const wrapper = getWrapper({
+                isExpanded: true,
+                justificationReasons: [expectedJustificationReason],
+                restrictedExternalEmails: [expectedContacts[0].value],
+                selectedContacts: expectedContacts,
+                shouldRequireExternalContactJustification: true,
+            });
+
+            wrapper.instance().handleSelectJustificationReason(expectedJustificationReason);
+            expect(wrapper.find('ContactRestrictionNotice').props().selectedJustificationReason).toEqual(
+                expectedJustificationReason,
+            );
+
+            wrapper.setProps({ shouldRequireExternalContactJustification: false });
+            expect(wrapper.find('ContactRestrictionNotice').props().selectedJustificationReason).toBeNull();
+        });
     });
 
     describe('render()', () => {

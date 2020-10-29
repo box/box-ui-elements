@@ -28,6 +28,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
         initiallySelectedContacts: [],
         createSharedLinkOnLoad: false,
         focusSharedLinkOnLoad: false,
+        restrictedExternalCollabEmails: [],
         trackingProps: {
             inviteCollabsEmailTracking: {},
             sharedLinkEmailTracking: {},
