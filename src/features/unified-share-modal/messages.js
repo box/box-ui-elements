@@ -430,12 +430,6 @@ const messages = defineMessages({
     },
 
     // External collab restrictions and business justifications
-    justificationSelectLabel: {
-        defaultMessage: 'Business Justification',
-        description:
-            'The label displayed at the top of the select field that allows selecting a business justification reason',
-        id: 'boxui.unifiedShare.justificationSelectLabel',
-    },
     justificationSelectPlaceholder: {
         defaultMessage: 'Select Justification',
         description: 'The placeholder text of the select field that allows selecting a business justification reason',
@@ -446,6 +440,37 @@ const messages = defineMessages({
         description:
             'The error message that is displayed when a user tries to send invitations to external collaborators, but a business justification is required before proceeding',
         id: 'boxui.unifiedShare.justificationRequiredError',
+    },
+    restrictedContactsError: {
+        defaultMessage: 'Remove people to continue',
+        description:
+            'The error message that is displayed when a user tries to send invitations to external collaborators, but restricted contacts need to be removed before proceeding',
+        id: 'boxui.unifiedShare.restrictedContactsError',
+    },
+    justifiableContactRestrictionNotice: {
+        defaultMessage:
+            'This classified content requires a business justification to invite {count, plural, one {{email}} other {{count} people}}. Please select a business justification below.',
+        description:
+            'Text for the notice that is displayed when there are collaboration restrictions that apply to one or more of the selected contacts and business justifications are allowed for bypassing restrictions',
+        id: 'boxui.unifiedShare.justifiableContactRestrictionNotice',
+    },
+    justifiableContactRestrictionRemoveButtonLabel: {
+        defaultMessage: 'Alternatively, remove {count, plural, one {the person} other {{count} people}} and continue.',
+        description:
+            'Label for the button that removes restricted contacts on the contact restriction notice when business justifications are allowed for bypassing restrictions',
+        id: 'boxui.unifiedShare.justifiableContactRestrictionRemoveButtonLabel',
+    },
+    contactRestrictionNotice: {
+        defaultMessage:
+            'Invitations cannot be sent to {count, plural, one {{email}} other {{count} people}} because external collaboration is restricted due to the applied classification.',
+        description:
+            'Text for the notice that is displayed when there are collaboration restrictions that apply to one or more of the selected contacts',
+        id: 'boxui.unifiedShare.contactRestrictionNotice',
+    },
+    contactRestrictionRemoveButtonLabel: {
+        defaultMessage: 'Remove {count, plural, one {the person} other {{count} people}} and continue.',
+        description: 'Label for the button that removes restricted contacts on the contact restriction notice',
+        id: 'boxui.unifiedShare.contactRestrictionRemoveButtonLabel',
     },
     contactEmailsTooltipText: {
         defaultMessage: '{emails}, and {remainingEmailsCount} more',

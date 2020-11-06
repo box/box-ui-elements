@@ -2,7 +2,7 @@
 
 .bdl-ContactRestrictionNotice {
     .bdl-SelectButton {
-        margin-top: $bdl-grid-unit * 2;
+        margin: $bdl-grid-unit * 3 auto;
     }
 
     .bdl-SelectFieldDropdown {
@@ -15,12 +15,11 @@
     text-decoration: underline;
 }
 
-.bdl-ContactRestrictionNotice-description {
-    margin-bottom: $bdl-grid-unit * 2;
-}
-
 .bdl-ContactRestrictionNotice-loadingIndicator {
-    margin: 14px auto $bdl-grid-unit * 2 auto;
+    display: flex;
+    align-items: center;
+    height: 34px;
+    margin: $bdl-grid-unit * 3 auto;
 }
 
 .bdl-ContactRestrictionNotice-removeBtn {

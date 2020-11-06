@@ -486,6 +486,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             isExpanded={isInviteSectionExpanded}
                             isFetchingJustificationReasons={isFetchingJustificationReasons}
                             isExternalUserSelected={this.hasExternalContact(INVITE_COLLABS_CONTACTS_TYPE)}
+                            isRestrictionJustificationEnabled={this.shouldRequireExternalCollabJustification()}
                             justificationReasons={justificationReasons}
                             onContactInput={this.openInviteCollaborators}
                             onPillCreate={this.handleInviteCollabPillCreate}
@@ -494,7 +495,6 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             openInviteCollaboratorsSection={this.openInviteCollaboratorsSection}
                             recommendedSharingTooltipCalloutName={recommendedSharingTooltipCalloutName}
                             restrictedExternalEmails={restrictedExternalCollabEmails}
-                            shouldRequireExternalContactJustification={this.shouldRequireExternalCollabJustification()}
                             showEnterEmailsCallout={showEnterEmailsCallout}
                             submitting={submitting}
                             selectedContacts={this.state.inviteCollabsContacts}
