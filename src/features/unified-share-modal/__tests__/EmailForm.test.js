@@ -306,43 +306,31 @@ describe('features/unified-share-modal/EmailForm', () => {
             );
         });
 
-        test('should trigger an error and abort submit action when restricted contacts are present and justification is allowed but not selected', () => {
-            const message = 'test message';
-            const event = { preventDefault: jest.fn() };
-            const onSubmit = jest.fn();
+        test.each`
+            isRestrictionJustificationEnabled | expectedErrorId                                    | conditionDescription
+            ${true}                           | ${'boxui.unifiedShare.justificationRequiredError'} | ${'justification is allowed but not selected'}
+            ${false}                          | ${'boxui.unifiedShare.restrictedContactsError'}    | ${'justification is not allowed'}
+        `(
+            'should trigger an error and abort submit action when restricted contacts are present and $conditionDescription',
+            ({ isRestrictionJustificationEnabled, expectedErrorId }) => {
+                const message = 'test message';
+                const event = { preventDefault: jest.fn() };
+                const onSubmit = jest.fn();
 
-            const wrapper = getWrapper({
-                onSubmit,
-                restrictedExternalEmails: [expectedContacts[1].value, expectedContacts[2].value],
-                selectedContacts: expectedContacts,
-                isRestrictionJustificationEnabled: true,
-            });
+                const wrapper = getWrapper({
+                    onSubmit,
+                    restrictedExternalEmails: [expectedContacts[1].value, expectedContacts[2].value],
+                    selectedContacts: expectedContacts,
+                    isRestrictionJustificationEnabled,
+                });
 
-            wrapper.setState({ message });
-            wrapper.instance().handleSubmit(event);
+                wrapper.setState({ message });
+                wrapper.instance().handleSubmit(event);
 
-            expect(wrapper.state('contactsRestrictionError')).toEqual('boxui.unifiedShare.justificationRequiredError');
-            expect(onSubmit).toHaveBeenCalledTimes(0);
-        });
-
-        test('should trigger an error and abort submit action when restricted contacts are present and justification is not allowed', () => {
-            const message = 'test message';
-            const event = { preventDefault: jest.fn() };
-            const onSubmit = jest.fn();
-
-            const wrapper = getWrapper({
-                onSubmit,
-                restrictedExternalEmails: [expectedContacts[1].value, expectedContacts[2].value],
-                selectedContacts: expectedContacts,
-                isRestrictionJustificationEnabled: false,
-            });
-
-            wrapper.setState({ message });
-            wrapper.instance().handleSubmit(event);
-
-            expect(wrapper.state('contactsRestrictionError')).toEqual('boxui.unifiedShare.restrictedContactsError');
-            expect(onSubmit).toHaveBeenCalledTimes(0);
-        });
+                expect(wrapper.state('contactsRestrictionError')).toBe(expectedErrorId);
+                expect(onSubmit).toHaveBeenCalledTimes(0);
+            },
+        );
 
         test('should handle errors from onSubmit prop', () => {
             const message = 'test message';
