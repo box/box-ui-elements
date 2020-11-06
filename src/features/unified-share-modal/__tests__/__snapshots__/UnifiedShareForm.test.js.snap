@@ -98,6 +98,7 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
           isExpanded={false}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -107,7 +108,6 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -297,6 +297,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           isExpanded={false}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -306,7 +307,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -460,6 +460,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           isExpanded={false}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -469,7 +470,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -623,6 +623,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExpanded={false}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -632,7 +633,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -791,6 +791,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExpanded={false}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -800,7 +801,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -955,6 +955,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExpanded={false}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -964,7 +965,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1120,6 +1120,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExpanded={true}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -1129,7 +1130,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1255,6 +1255,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExpanded={false}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -1264,7 +1265,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1420,6 +1420,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExpanded={false}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -1429,7 +1430,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1585,6 +1585,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExpanded={false}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -1594,7 +1595,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1751,6 +1751,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExpanded={true}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -1760,7 +1761,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1926,6 +1926,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExpanded={false}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -1935,7 +1936,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -2090,6 +2090,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExpanded={false}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -2099,7 +2100,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -2258,6 +2258,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExpanded={false}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -2267,7 +2268,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -2424,6 +2424,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExpanded={false}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -2433,7 +2434,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           submitting={false}
           updateSelectedContacts={[Function]}
@@ -2590,6 +2590,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExpanded={true}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -2599,7 +2600,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -2725,6 +2725,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExpanded={true}
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
+          isRestrictionJustificationEnabled={false}
           justificationReasons={Array []}
           onContactInput={[Function]}
           onPillCreate={[Function]}
@@ -2734,7 +2735,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           recommendedSharingTooltipCalloutName={null}
           restrictedExternalEmails={Array []}
           selectedContacts={Array []}
-          shouldRequireExternalContactJustification={false}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >

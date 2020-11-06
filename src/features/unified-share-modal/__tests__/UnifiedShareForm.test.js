@@ -725,7 +725,7 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
 
                 wrapper.instance().updateInviteCollabsContacts(defaultContacts);
                 const externalCollabEmailForm = wrapper.find('[data-testid="invite-collaborator-container"] EmailForm');
-                expect(externalCollabEmailForm.props().shouldRequireExternalContactJustification).toBe(expectedResult);
+                expect(externalCollabEmailForm.props().isRestrictionJustificationEnabled).toBe(expectedResult);
             },
         );
     });

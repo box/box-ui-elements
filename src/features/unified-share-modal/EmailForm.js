@@ -44,6 +44,7 @@ type Props = {
     isExpanded: boolean,
     isExternalUserSelected: boolean,
     isFetchingJustificationReasons?: boolean,
+    isRestrictionJustificationEnabled: boolean,
     justificationReasons: Array<SelectOptionProp>,
     messageProps?: Object,
     onContactAdd?: Function,
@@ -57,7 +58,6 @@ type Props = {
     restrictedExternalEmails: Array<string>,
     selectedContacts: Array<Contact>,
     sendButtonProps?: Object,
-    shouldRequireExternalContactJustification: boolean,
     showEnterEmailsCallout: boolean,
     submitting: boolean,
     suggestedCollaborators?: SuggestedCollabLookup,
@@ -66,7 +66,7 @@ type Props = {
 
 type State = {
     contactsFieldError: string,
-    justificationReasonsFieldError: string,
+    contactsRestrictionError: string,
     message: string,
     selectedJustificationReason: ?SelectOptionProp,
 };
@@ -75,9 +75,9 @@ class EmailForm extends React.Component<Props, State> {
     static defaultProps = {
         messageProps: {},
         contactsFieldDisabledTooltip: null,
+        isRestrictionJustificationEnabled: false,
         justificationReasons: [],
         restrictedExternalEmails: [],
-        shouldRequireExternalContactJustification: false,
     };
 
     constructor(props: Props) {
@@ -85,7 +85,7 @@ class EmailForm extends React.Component<Props, State> {
 
         this.state = {
             contactsFieldError: '',
-            justificationReasonsFieldError: '',
+            contactsRestrictionError: '',
             message: '',
             selectedJustificationReason: null,
         };
@@ -96,28 +96,28 @@ class EmailForm extends React.Component<Props, State> {
     } = React.createRef();
 
     componentDidUpdate(prevProps: Props, prevState: State) {
-        const { shouldRequireExternalContactJustification } = this.props;
-        const { shouldRequireExternalContactJustification: prevShouldRequireExternalContactJustification } = prevProps;
-        const { contactsFieldError, justificationReasonsFieldError } = this.state;
+        const { isRestrictionJustificationEnabled } = this.props;
+        const { isRestrictionJustificationEnabled: prevIsRestrictionJustificationEnabled } = prevProps;
+        const { contactsFieldError, contactsRestrictionError } = this.state;
         const {
             contactsFieldError: prevContactsFieldError,
-            justificationReasonsFieldError: prevJustificationReasonsFieldError,
+            contactsRestrictionError: prevContactsRestrictionError,
         } = prevState;
 
         // Only display one type of error at a time and give preference
         // to the one triggered most recently
         if (!prevContactsFieldError && contactsFieldError) {
-            this.setState({ justificationReasonsFieldError: '' });
+            this.setState({ contactsRestrictionError: '' });
         }
-        if (!prevJustificationReasonsFieldError && justificationReasonsFieldError) {
+        if (!prevContactsRestrictionError && contactsRestrictionError) {
             this.setState({ contactsFieldError: '' });
         }
 
         const didJustificationRequirementChange =
-            shouldRequireExternalContactJustification !== prevShouldRequireExternalContactJustification;
+            isRestrictionJustificationEnabled !== prevIsRestrictionJustificationEnabled;
 
         // Clear selected justification when form state is reset
-        if (didJustificationRequirementChange && !shouldRequireExternalContactJustification) {
+        if (didJustificationRequirementChange && !isRestrictionJustificationEnabled) {
             this.setState({ selectedJustificationReason: null });
         }
     }
@@ -182,21 +182,23 @@ class EmailForm extends React.Component<Props, State> {
         return contactsFieldError;
     };
 
-    validateJustificationReason = () => {
-        let justificationReasonsFieldError = '';
+    validateContactsRestrictions = () => {
+        let contactsRestrictionError = '';
         const { selectedJustificationReason } = this.state;
-        const { intl, shouldRequireExternalContactJustification } = this.props;
+        const { intl, isRestrictionJustificationEnabled, selectedContacts, restrictedExternalEmails } = this.props;
 
-        const isMissingRequiredJustification =
-            shouldRequireExternalContactJustification && !selectedJustificationReason;
+        const hasRestrictedContacts = hasRestrictedExternalContacts(selectedContacts, restrictedExternalEmails);
+        const isMissingRequiredJustification = isRestrictionJustificationEnabled && !selectedJustificationReason;
 
         if (isMissingRequiredJustification) {
-            justificationReasonsFieldError = intl.formatMessage(messages.justificationRequiredError);
+            contactsRestrictionError = intl.formatMessage(messages.justificationRequiredError);
+        } else if (hasRestrictedContacts && !isRestrictionJustificationEnabled) {
+            contactsRestrictionError = intl.formatMessage(messages.restrictedContactsError);
         }
 
-        this.setState({ justificationReasonsFieldError });
+        this.setState({ contactsRestrictionError });
 
-        return justificationReasonsFieldError;
+        return contactsRestrictionError;
     };
 
     handleContactInput = (value: string) => {
@@ -216,7 +218,7 @@ class EmailForm extends React.Component<Props, State> {
     };
 
     handleSelectJustificationReason = (selectedJustificationReason: SelectOptionProp) => {
-        this.setState({ selectedJustificationReason }, this.validateJustificationReason);
+        this.setState({ selectedJustificationReason }, this.validateContactsRestrictions);
     };
 
     handleClose = () => {
@@ -252,9 +254,9 @@ class EmailForm extends React.Component<Props, State> {
         }
 
         const contactsError = this.validateContacts(selectedContacts);
-        const justificationReasonError = this.validateJustificationReason();
+        const contactsRestrictionError = this.validateContactsRestrictions();
 
-        if (contactsError || justificationReasonError) {
+        if (contactsError || contactsRestrictionError) {
             return;
         }
 
@@ -305,14 +307,14 @@ class EmailForm extends React.Component<Props, State> {
     isValidContactPill = (contactPill: string | Contact): boolean => {
         let isValid = true;
         const { selectedJustificationReason } = this.state;
-        const { shouldRequireExternalContactJustification } = this.props;
+        const { isRestrictionJustificationEnabled } = this.props;
 
         if (isString(contactPill)) {
             // If we receive a string it means we're validating unparsed
             // pill selector input. Check that we have a valid email
             isValid = emailValidator(contactPill);
         } else {
-            const hasRequiredJustification = !!selectedJustificationReason && shouldRequireExternalContactJustification;
+            const hasRequiredJustification = !!selectedJustificationReason && isRestrictionJustificationEnabled;
             // Invalid emails are filtered out by ContactsField when parsing
             // new pills, so parsed pills can currently only be invalid
             // when user is external and external collab is restricted
@@ -328,7 +330,7 @@ class EmailForm extends React.Component<Props, State> {
     };
 
     render() {
-        const { contactsFieldError, justificationReasonsFieldError, message, selectedJustificationReason } = this.state;
+        const { contactsFieldError, contactsRestrictionError, message, selectedJustificationReason } = this.state;
 
         const {
             cancelButtonProps,
@@ -345,6 +347,7 @@ class EmailForm extends React.Component<Props, State> {
             intl,
             isExpanded,
             isFetchingJustificationReasons,
+            isRestrictionJustificationEnabled,
             justificationReasons,
             messageProps,
             onPillCreate,
@@ -433,8 +436,9 @@ class EmailForm extends React.Component<Props, State> {
                 )}
                 {shouldRenderContactRestrictionNotice && (
                     <ContactRestrictionNotice
-                        error={justificationReasonsFieldError}
-                        isLoading={isFetchingJustificationReasons}
+                        error={contactsRestrictionError}
+                        isFetchingJustificationReasons={isFetchingJustificationReasons}
+                        isRestrictionJustificationEnabled={isRestrictionJustificationEnabled}
                         justificationReasons={justificationReasons}
                         onRemoveRestrictedExternalContacts={this.handleRemoveRestrictedExternalContacts}
                         restrictedExternalEmails={restrictedExternalEmails}
