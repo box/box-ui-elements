@@ -292,6 +292,7 @@ export const ERROR_CODE_UNEXPECTED_EXCEPTION = 'unexpected_exception_error';
 export const ERROR_CODE_SEARCH = 'search_error';
 export const ERROR_CODE_METADATA_QUERY = 'metadata_query_error';
 export const ERROR_CODE_UNKNOWN = 'unknown_error';
+export const ERROR_CODE_EXISTING_COLLABORATOR = 'user_already_collaborator';
 
 /* ------------------ Origins ---------------------- */
 export const ORIGIN_CONTENT_PREVIEW: 'content_preview' = 'content_preview';

@@ -23,6 +23,7 @@ import useCollaborators from './hooks/useCollaborators';
 import useContacts from './hooks/useContacts';
 import useInvites from './hooks/useInvites';
 import contentSharingMessages from './messages';
+import { ERROR_CODE_EXISTING_COLLABORATOR } from '../../constants';
 import type { BoxItemPermission, Collaborations, ItemType, NotificationType } from '../../common/types/core';
 import type { collaboratorsListType, item as itemFlowType } from '../../features/unified-share-modal/flowTypes';
 import type {
@@ -253,8 +254,12 @@ function SharingNotification({
             });
             closeComponent();
         },
-        handleError: () => {
-            createNotification(TYPE_ERROR, contentSharingMessages.sendInvitesError);
+        handleError: response => {
+            let error = contentSharingMessages.sendInvitesError;
+            if (response && response.code === ERROR_CODE_EXISTING_COLLABORATOR) {
+                error = contentSharingMessages.sendInvitesExistingCollabError;
+            }
+            createNotification(TYPE_ERROR, error);
             setIsLoading(false);
             closeComponent();
         },

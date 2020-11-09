@@ -53,6 +53,12 @@ const messages = defineMessages({
             'Message that appears when collaborators cannot be added to the shared link in the ContentSharing Element.',
         id: 'be.contentSharing.sendInvitesError',
     },
+    sendInvitesExistingCollabError: {
+        defaultMessage: 'User is already a collaborator.',
+        description:
+            'Message that appears when the user attempts to invite an existing collaborator to the shared link in the ContentSharing Element.',
+        id: 'be.contentSharing.sendInvitesExistingCollabError',
+    },
     sendInvitesSuccess: {
         defaultMessage: 'Successfully invited collaborators.',
         description:

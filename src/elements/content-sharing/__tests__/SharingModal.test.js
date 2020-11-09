@@ -13,6 +13,7 @@ import {
     ACCESS_COMPANY,
     ACCESS_NONE,
     ACCESS_OPEN,
+    ERROR_CODE_EXISTING_COLLABORATOR,
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_PREVIEW,
     TYPE_FILE,
@@ -557,7 +558,7 @@ describe('elements/content-sharing/SharingModal', () => {
             const initialDataErrorNotification = wrapper.find(Notification);
             expect(initialDataErrorNotification.prop('type')).toBe(TYPE_ERROR);
             expect(initialDataErrorNotification.find(FormattedMessage).prop('id')).toBe(
-                `be.contentSharing.loadingError`,
+                'be.contentSharing.loadingError',
             );
         });
     });
@@ -1016,23 +1017,53 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(notification.prop('duration')).toBe(DURATION_SHORT);
         });
 
-        test.each(['onRemoveLink', 'sendInvites'])(
-            'should call setIsVisible() and show a notification after %s() fails',
-            async usmFn => {
+        test.each('should call setIsVisible() and show a notification after onRemoveLink() fails', async () => {
+            let wrapper;
+            await act(async () => {
+                wrapper = getWrapper({ api, displayInModal: true, itemType: TYPE_FOLDER });
+            });
+            wrapper.update();
+
+            await act(async () => {
+                wrapper.find(UnifiedShareModal).invoke('onRemoveLink')();
+            });
+            wrapper.update();
+            expect(setIsVisibleMock).toHaveBeenCalledWith(false);
+            const notification = wrapper.find(Notification);
+            expect(notification.prop('type')).toBe(TYPE_ERROR);
+            expect(notification.prop('duration')).toBe(DURATION_SHORT);
+        });
+
+        test.each`
+            responseCode                        | expectedErrorName                   | description
+            ${ERROR_CODE_EXISTING_COLLABORATOR} | ${'sendInvitesExistingCollabError'} | ${`${ERROR_CODE_EXISTING_COLLABORATOR} message`}
+            ${''}                               | ${'sendInvitesError'}               | ${'default message'}
+        `(
+            'should show a notification with the $description when sendInvites() fails',
+            async ({ responseCode, expectedErrorName }) => {
+                api.getCollaborationsAPI = jest.fn().mockReturnValue({
+                    addCollaboration: jest
+                        .fn()
+                        .mockImplementation((itemData, otherRequestData, successFn, failureFn) => {
+                            return Promise.reject(new Error()).catch(() => {
+                                failureFn({ status: '400', code: responseCode });
+                            });
+                        }),
+                });
                 let wrapper;
                 await act(async () => {
-                    wrapper = getWrapper({ api, displayInModal: true, itemType: TYPE_FOLDER });
+                    wrapper = getWrapper({ api, displayInModal: true, itemType: TYPE_FILE });
                 });
                 wrapper.update();
 
                 await act(async () => {
-                    wrapper.find(UnifiedShareModal).invoke(`${usmFn}`)();
+                    wrapper.find(UnifiedShareModal).invoke('sendInvites')();
                 });
                 wrapper.update();
                 expect(setIsVisibleMock).toHaveBeenCalledWith(false);
                 const notification = wrapper.find(Notification);
                 expect(notification.prop('type')).toBe(TYPE_ERROR);
-                expect(notification.prop('duration')).toBe(DURATION_SHORT);
+                expect(notification.find(FormattedMessage).prop('id')).toBe(`be.contentSharing.${expectedErrorName}`);
             },
         );
 
