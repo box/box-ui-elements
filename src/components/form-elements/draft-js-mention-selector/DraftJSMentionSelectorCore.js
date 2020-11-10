@@ -95,7 +95,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const { contacts: currentContacts } = this.props;
         const { activeMention } = this.state;
 
-        if (activeMention !== null && !currentContacts.length && prevContacts !== currentContacts) {
+        if (activeMention !== null && !currentContacts.length && prevContacts.length !== currentContacts.length) {
             // if empty set of contacts get passed in, set active mention to null
             this.setState({
                 activeMention: null,
