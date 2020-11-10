@@ -11,7 +11,7 @@ import SelectorDropdown from '../selector-dropdown';
 import PillSelector from './PillSelector';
 import type { contactType as Contact } from '../../features/unified-share-modal/flowTypes';
 import type { SelectOptionProp } from '../select-field/props';
-import type { Option, OptionValue, SelectedOptions, SuggestedPillsFilter } from './flowTypes';
+import type { Option, OptionValue, RoundPillVariant, SelectedOptions, SuggestedPillsFilter } from './flowTypes';
 
 import './PillSelectorDropdown.scss';
 
@@ -34,6 +34,8 @@ type Props = {
     error?: React.Node,
     /** Function to retrieve the image URL associated with a pill */
     getPillImageUrl?: (data: { id: string, [key: string]: any }) => string | Promise<?string>,
+    /** Called on pill render to determine which RoundPill variant to use for a particular option. Default variant is used when function is not provided. Note: Only has effect when showRoundedPills is true. */
+    getPillVariant?: (option: Option) => RoundPillVariant,
     /** Passed in by `SelectorDropdown` for accessibility */
     inputProps: Object,
     /** Input label */
@@ -235,6 +237,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             dropdownScrollBoundarySelector,
             error,
             getPillImageUrl,
+            getPillVariant,
             inputProps,
             label,
             onRemove,
@@ -271,6 +274,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                             disabled={disabled}
                             error={error}
                             getPillImageUrl={getPillImageUrl}
+                            getPillVariant={getPillVariant}
                             onBlur={this.handleBlur}
                             onInput={this.handleInput}
                             onPaste={this.handlePaste}

@@ -1,16 +1,18 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
+import isFunction from 'lodash/isFunction';
 import uniqueId from 'lodash/uniqueId';
 import { List } from 'immutable';
 
 import Tooltip from '../tooltip';
 import { KEYS } from '../../constants';
+import { PILL_VARIANT_DEFAULT } from './constants';
 
 import RoundPill from './RoundPill';
 import Pill from './Pill';
 import SuggestedPillsRow from './SuggestedPillsRow';
-import type { RoundOption, Option, OptionValue, SuggestedPillsFilter } from './flowTypes';
+import type { Option, OptionValue, RoundOption, RoundPillVariant, SuggestedPillsFilter } from './flowTypes';
 
 function stopDefaultEvent(event) {
     event.preventDefault();
@@ -24,6 +26,8 @@ type Props = {
     error?: React.Node,
     /** Function to retrieve the image URL associated with a pill */
     getPillImageUrl?: (data: { id: string | number, [key: string]: any }) => string,
+    /** Called on pill render to determine which RoundPill variant to use for a particular option. Default variant is used when function is not provided. Note: Only has effect when showRoundedPills is true. */
+    getPillVariant?: (option: Option) => RoundPillVariant,
     inputProps: Object,
     onInput: Function,
     onRemove: Function,
@@ -171,6 +175,7 @@ class PillSelector extends React.Component<Props, State> {
             disabled,
             error,
             getPillImageUrl,
+            getPillVariant,
             inputProps,
             onInput,
             onRemove,
@@ -212,6 +217,10 @@ class PillSelector extends React.Component<Props, State> {
                 >
                     {showRoundedPills
                         ? selectedOptions.map((option: RoundOption, index: number) => {
+                              const pillVariant = isFunction(getPillVariant)
+                                  ? getPillVariant(option)
+                                  : PILL_VARIANT_DEFAULT;
+
                               return (
                                   <RoundPill
                                       getPillImageUrl={getPillImageUrl}
@@ -224,8 +233,8 @@ class PillSelector extends React.Component<Props, State> {
                                       text={option.displayText || option.text}
                                       showAvatar
                                       id={option.id}
-                                      hasWarning={option.hasWarning}
                                       isExternal={option.isExternalUser}
+                                      variant={pillVariant}
                                   />
                               );
                           })

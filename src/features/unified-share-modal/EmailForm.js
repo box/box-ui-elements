@@ -12,7 +12,7 @@ import { ModalActions } from '../../components/modal';
 import Button from '../../components/button';
 import Tooltip from '../../components/tooltip';
 import InlineNotice from '../../components/inline-notice';
-import PillSelectorDropdown from '../../components/pill-selector-dropdown';
+import PillSelectorDropdown, { PillSelectorDropdownConstants } from '../../components/pill-selector-dropdown';
 import commonMessages from '../../common/messages';
 import { emailValidator } from '../../utils/validators';
 import type { InlineNoticeType } from '../../common/types/core';
@@ -22,8 +22,12 @@ import ContactRestrictionNotice from './ContactRestrictionNotice';
 import ContactsField from './ContactsField';
 import hasRestrictedExternalContacts from './utils/hasRestrictedExternalContacts';
 import messages from './messages';
+
 import type { SuggestedCollabLookup, contactType as Contact, USMConfig } from './flowTypes';
 import type { SelectOptionProp } from '../../components/select-field/props';
+import type { RoundPillVariant } from '../../components/pill-selector-dropdown/flowTypes';
+
+const { PILL_VARIANT_DEFAULT, PILL_VARIANT_WAIVED } = PillSelectorDropdownConstants;
 
 type Props = {
     cancelButtonProps?: Object,
@@ -323,6 +327,17 @@ class EmailForm extends React.Component<Props, State> {
         return isValid;
     };
 
+    getContactPillVariant = (contactPill: SelectOptionProp): RoundPillVariant => {
+        const { selectedJustificationReason } = this.state;
+        const { isRestrictionJustificationEnabled } = this.props;
+
+        const pillId = String(contactPill.value);
+        const hasRequiredJustification = !!selectedJustificationReason && isRestrictionJustificationEnabled;
+        const isWaivedPill = this.isRestrictedExternalEmail(pillId) && hasRequiredJustification;
+
+        return isWaivedPill ? PILL_VARIANT_WAIVED : PILL_VARIANT_DEFAULT;
+    };
+
     isRestrictedExternalEmail = (email?: string) => {
         const { restrictedExternalEmails } = this.props;
 
@@ -403,6 +418,7 @@ class EmailForm extends React.Component<Props, State> {
                         suggestedCollaborators={suggestedCollaborators}
                         validateForError={this.validateContactField}
                         validator={this.isValidContactPill}
+                        getPillVariant={this.getContactPillVariant}
                         showContactAvatars
                     />
                 </Tooltip>

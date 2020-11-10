@@ -3,6 +3,8 @@ import { mount, shallow } from 'enzyme';
 import { List, Record } from 'immutable';
 import sinon from 'sinon';
 
+import { PILL_VARIANT_DEFAULT, PILL_VARIANT_WARNING, PILL_VARIANT_WAIVED } from '../constants';
+
 import PillSelector from '../PillSelector';
 
 const sandbox = sinon.sandbox.create();
@@ -131,6 +133,45 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             expect(pills.length).toBe(2);
             expect(pills.at(0).prop('isValid')).toBeFalsy();
             expect(pills.at(1).prop('isValid')).toBeFalsy();
+        });
+
+        test('should render round pills using default variant when getPillVariant is not provided', () => {
+            const options = [{ displayText: 'Pill 1', value: '1' }];
+            const wrapper = shallow(
+                <PillSelector
+                    showRoundedPills
+                    onInput={onInputStub}
+                    onRemove={onRemoveStub}
+                    selectedOptions={options}
+                    getPillVariant={null}
+                />,
+            );
+
+            const pills = wrapper.find('RoundPill');
+            expect(pills.at(0).prop('variant')).toBe(PILL_VARIANT_DEFAULT);
+        });
+
+        test('should render round pills using the variant returned by getPillVariant', () => {
+            const getPillVariant = ({ variant }) => variant;
+            const options = [
+                { displayText: 'Pill 1', value: '1', variant: PILL_VARIANT_DEFAULT },
+                { displayText: 'Pill 2', value: '2', variant: PILL_VARIANT_WARNING },
+                { displayText: 'Pill 3', value: '3', variant: PILL_VARIANT_WAIVED },
+            ];
+            const wrapper = shallow(
+                <PillSelector
+                    showRoundedPills
+                    onInput={onInputStub}
+                    onRemove={onRemoveStub}
+                    selectedOptions={options}
+                    getPillVariant={getPillVariant}
+                />,
+            );
+
+            const pills = wrapper.find('RoundPill');
+            expect(pills.at(0).prop('variant')).toBe(options[0].variant);
+            expect(pills.at(1).prop('variant')).toBe(options[1].variant);
+            expect(pills.at(2).prop('variant')).toBe(options[2].variant);
         });
 
         test('should render pills when selected options are immutable', () => {

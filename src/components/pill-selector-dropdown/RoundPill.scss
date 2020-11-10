@@ -67,6 +67,10 @@
     }
 }
 
+.bdl-RoundPill--waived {
+    border: 1px solid $bdl-watermelon-red-50;
+}
+
 .bdl-RoundPill--error {
     background-color: $bdl-watermelon-red-10;
     border: 1px solid $bdl-watermelon-red-50;
@@ -89,6 +93,11 @@
         .bdl-Avatar-externalBadge {
             border-color: $bdl-yellorange-20;
         }
+    }
+
+    &.bdl-RoundPill--waived {
+        border-color: $bdl-watermelon-red;
+        box-shadow: none;
     }
 
     &.bdl-RoundPill--error {

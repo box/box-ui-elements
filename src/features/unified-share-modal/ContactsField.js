@@ -15,6 +15,7 @@ import commonMessages from '../../common/messages';
 import messages from './messages';
 import type { SuggestedCollabLookup, contactType as Contact } from './flowTypes';
 import type { SelectOptionProp } from '../../components/select-field/props';
+import type { RoundPillVariant } from '../../components/pill-selector-dropdown/flowTypes';
 
 type Props = {
     disabled: boolean,
@@ -22,6 +23,7 @@ type Props = {
     fieldRef?: Object,
     getContactAvatarUrl?: (contact: Contact) => string,
     getContacts: (query: string) => Promise<Array<Contact>>,
+    getPillVariant?: (option: SelectOptionProp) => RoundPillVariant,
     intl: any,
     label: React.Node,
     onContactAdd: Function,
@@ -166,6 +168,7 @@ class ContactsField extends React.Component<Props, State> {
             error,
             fieldRef,
             getContactAvatarUrl,
+            getPillVariant,
             intl,
             label,
             onContactAdd,
@@ -207,6 +210,7 @@ class ContactsField extends React.Component<Props, State> {
                 ref={fieldRef}
                 selectedOptions={selectedContacts}
                 showRoundedPills
+                getPillVariant={getPillVariant}
                 selectorOptions={contacts}
                 validateForError={validateForError}
                 validator={validator}

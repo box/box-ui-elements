@@ -5,6 +5,7 @@ import { State, Store } from '@sambego/storybook-state';
 import ContactDatalistItem from '../contact-datalist-item';
 import PillSelectorDropdown from './PillSelectorDropdown';
 import notes from './PillSelectorDropdown.notes.md';
+import { PILL_VARIANT_DEFAULT, PILL_VARIANT_WARNING, PILL_VARIANT_WAIVED } from './constants';
 
 const users = [
     { id: 0, name: 'bob@foo.bar' },
@@ -193,6 +194,71 @@ export const showRoundedPills = () => {
                 >
                     {state.selectorOptions.map(option => (
                         <ContactDatalistItem key={option.value} name={option.value}>
+                            {option.displayText}
+                        </ContactDatalistItem>
+                    ))}
+                </PillSelectorDropdown>
+            )}
+        </State>
+    );
+};
+
+export const roundPillVariants = () => {
+    const storeWithPills = new Store({
+        error: '',
+        selectedOptions: [
+            {
+                displayText: 'default@example.com',
+                value: '1',
+            },
+            {
+                displayText: 'warning@example.com',
+                value: '2',
+            },
+            {
+                displayText: 'waived@example.com',
+                value: '3',
+            },
+            {
+                displayText: 'waived+external@example.com',
+                value: '4',
+                isExternalUser: true,
+            },
+        ],
+        selectorOptions: [],
+    });
+    const getPillVariant = ({ value }) => {
+        switch (value) {
+            case '2':
+                return PILL_VARIANT_WARNING;
+            case '3':
+            case '4':
+                return PILL_VARIANT_WAIVED;
+            case '1':
+            default:
+                return PILL_VARIANT_DEFAULT;
+        }
+    };
+    const { handleInput, handleRemove, handleSelect, validator, validateForError } = generateProps(storeWithPills);
+    return (
+        <State store={storeWithPills}>
+            {state => (
+                <PillSelectorDropdown
+                    allowCustomPills
+                    error={state.error}
+                    getPillVariant={getPillVariant}
+                    placeholder="Names or email addresses"
+                    onInput={handleInput}
+                    onRemove={handleRemove}
+                    onSelect={handleSelect}
+                    selectedOptions={state.selectedOptions}
+                    selectorOptions={state.selectorOptions}
+                    showRoundedPills
+                    validateForError={validateForError}
+                    validator={validator}
+                >
+                    {state.selectorOptions.map(option => (
+                        <ContactDatalistItem key={option.value} name={option.displayText}>
                             {option.displayText}
                         </ContactDatalistItem>
                     ))}

@@ -6,6 +6,9 @@ import X from '../../icon/fill/X16';
 // $FlowFixMe this imports from a typescript file
 import LabelPill from '../label-pill';
 import Avatar from '../avatar';
+import { PILL_VARIANT_DEFAULT, PILL_VARIANT_WARNING, PILL_VARIANT_WAIVED } from './constants';
+
+import type { RoundPillVariant } from './flowTypes';
 
 import './RoundPill.scss';
 
@@ -13,7 +16,6 @@ type Props = {
     className?: string,
     /** Function to retrieve the image URL associated with a pill */
     getPillImageUrl?: (data: { id: string | number, [key: string]: any }) => string | Promise<?string>,
-    hasWarning?: boolean,
     id?: string | number,
     isDisabled?: boolean,
     isExternal?: boolean,
@@ -22,6 +24,7 @@ type Props = {
     onRemove: () => any,
     showAvatar?: boolean,
     text: string,
+    variant?: RoundPillVariant,
 };
 
 type State = {
@@ -37,8 +40,8 @@ class RoundPill extends React.PureComponent<Props, State> {
         isDisabled: false,
         isSelected: false,
         isValid: true,
-        hasWarning: false,
         showAvatar: false,
+        variant: PILL_VARIANT_DEFAULT,
     };
 
     state = {
@@ -48,29 +51,17 @@ class RoundPill extends React.PureComponent<Props, State> {
     isMounted: boolean = false;
 
     getStyles = (): string => {
-        const { className, isSelected, isDisabled, hasWarning, isValid } = this.props;
+        const { className, isSelected, isDisabled, isValid, variant } = this.props;
+        // Invalid pills are always displayed as red regardless of which variant is selected
+        const activeVariant = isValid ? variant : PILL_VARIANT_DEFAULT;
 
         return classNames('bdl-RoundPill', className, {
             'bdl-RoundPill--selected': isSelected && !isDisabled,
             'bdl-RoundPill--disabled': isDisabled,
-            'bdl-RoundPill--warning': hasWarning,
+            'bdl-RoundPill--warning': activeVariant === PILL_VARIANT_WARNING,
+            'bdl-RoundPill--waived': activeVariant === PILL_VARIANT_WAIVED,
             'bdl-RoundPill--error': !isValid,
         });
-    };
-
-    getPillType = (): ?string => {
-        const { hasWarning, isValid } = this.props;
-
-        let pillType;
-        if (hasWarning) {
-            pillType = 'warning';
-        }
-
-        if (!isValid) {
-            pillType = 'error';
-        }
-
-        return pillType;
     };
 
     handleClickRemove = () => {
@@ -119,7 +110,7 @@ class RoundPill extends React.PureComponent<Props, State> {
         const { avatarUrl } = this.state;
 
         return (
-            <LabelPill.Pill size="large" className={this.getStyles()} type={this.getPillType()}>
+            <LabelPill.Pill size="large" className={this.getStyles()}>
                 {showAvatar ? (
                     <LabelPill.Icon
                         Component={Avatar}

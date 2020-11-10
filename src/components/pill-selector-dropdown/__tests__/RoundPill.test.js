@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { PILL_VARIANT_DEFAULT, PILL_VARIANT_WARNING, PILL_VARIANT_WAIVED } from '../constants';
+
 import RoundPill from '../RoundPill';
 
 describe('components/RoundPill-selector-dropdown/RoundPill', () => {
@@ -25,26 +27,34 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
         expect(wrapper.hasClass('bdl-RoundPill--selected')).toBe(true);
     });
 
-    test('should generate LabelPill with error type when isValid prop is false', () => {
-        const wrapper = shallow(<RoundPill isValid={false} onRemove={onRemoveStub} text="box" />);
+    test.each`
+        isValid  | variant                 | expectedClass
+        ${true}  | ${PILL_VARIANT_DEFAULT} | ${'bdl-RoundPill'}
+        ${false} | ${PILL_VARIANT_DEFAULT} | ${'bdl-RoundPill--error'}
+        ${true}  | ${PILL_VARIANT_WARNING} | ${'bdl-RoundPill--warning'}
+        ${true}  | ${PILL_VARIANT_WAIVED}  | ${'bdl-RoundPill--waived'}
+        ${false} | ${PILL_VARIANT_WARNING} | ${'bdl-RoundPill--error'}
+        ${false} | ${PILL_VARIANT_WAIVED}  | ${'bdl-RoundPill--error'}
+    `(
+        'should set $expectedClass class on pill when isValid is $isValid and pill variant is $variant',
+        ({ isValid, variant, expectedClass }) => {
+            const mutuallyExclusiveClasses = [
+                'bdl-RoundPill--error',
+                'bdl-RoundPill--warning',
+                'bdl-RoundPill--waived',
+            ];
+            const wrapper = shallow(
+                <RoundPill isValid={isValid} variant={variant} onRemove={onRemoveStub} text="box" />,
+            );
 
-        expect(wrapper.find('LabelPill').prop('type')).toBe('error');
-        expect(wrapper.hasClass('bdl-RoundPill--error')).toBe(true);
-    });
-
-    test('should generate LabelPill with warning type when hasWarning prop is true', () => {
-        const wrapper = shallow(<RoundPill hasWarning onRemove={onRemoveStub} text="box" />);
-
-        expect(wrapper.find('LabelPill').prop('type')).toBe('warning');
-        expect(wrapper.hasClass('bdl-RoundPill--warning')).toBe(true);
-    });
-
-    test('should generate LabelPill with error type when isValid is false and hasWarning is true', () => {
-        const wrapper = shallow(<RoundPill isValid={false} hasWarning onRemove={onRemoveStub} text="box" />);
-
-        expect(wrapper.find('LabelPill').prop('type')).toBe('error');
-        expect(wrapper.hasClass('bdl-RoundPill--error')).toBe(true);
-    });
+            mutuallyExclusiveClasses.forEach(className => {
+                if (className !== expectedClass) {
+                    expect(wrapper.hasClass(className)).toBe(false);
+                }
+            });
+            expect(wrapper.hasClass(expectedClass)).toBe(true);
+        },
+    );
 
     test('should disable click handler and add class when disabled', () => {
         const onRemoveMock = jest.fn();
