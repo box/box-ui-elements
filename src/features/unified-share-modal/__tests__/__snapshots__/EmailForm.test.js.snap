@@ -33,7 +33,6 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
           }
         }
         getContacts={[MockFunction]}
-        getPillVariant={[Function]}
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
@@ -80,7 +79,6 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
           }
         }
         getContacts={[MockFunction]}
-        getPillVariant={[Function]}
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
@@ -132,7 +130,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
           }
         }
         getContacts={[MockFunction]}
-        getPillVariant={[Function]}
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
@@ -187,7 +184,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
             }
           }
           getContacts={[MockFunction]}
-          getPillVariant={[Function]}
           onContactAdd={[Function]}
           onContactRemove={[Function]}
           onInput={[Function]}
@@ -273,7 +269,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
           }
         }
         getContacts={[MockFunction]}
-        getPillVariant={[Function]}
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
@@ -358,7 +353,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
           }
         }
         getContacts={[MockFunction]}
-        getPillVariant={[Function]}
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
@@ -410,7 +404,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
           }
         }
         getContacts={[MockFunction]}
-        getPillVariant={[Function]}
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
@@ -500,7 +493,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
           }
         }
         getContacts={[MockFunction]}
-        getPillVariant={[Function]}
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
@@ -585,7 +577,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
           }
         }
         getContacts={[MockFunction]}
-        getPillVariant={[Function]}
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
@@ -689,7 +680,6 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
           }
         }
         getContacts={[MockFunction]}
-        getPillVariant={[Function]}
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
@@ -736,7 +726,6 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
           }
         }
         getContacts={[MockFunction]}
-        getPillVariant={[Function]}
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
@@ -783,7 +772,6 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
           }
         }
         getContacts={[MockFunction]}
-        getPillVariant={[Function]}
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
@@ -830,7 +818,6 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
           }
         }
         getContacts={[MockFunction]}
-        getPillVariant={[Function]}
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}

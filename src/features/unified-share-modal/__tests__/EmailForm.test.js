@@ -1,12 +1,9 @@
 import * as React from 'react';
 
-import { PillSelectorDropdownConstants } from '../../../components/pill-selector-dropdown';
 import CollaboratorAvatars from '../../collaborator-avatars/CollaboratorAvatars';
 import commonMessages from '../../../common/messages';
 
 import { EmailFormBase as EmailForm } from '../EmailForm';
-
-const { PILL_VARIANT_DEFAULT, PILL_VARIANT_WAIVED } = PillSelectorDropdownConstants;
 
 describe('features/unified-share-modal/EmailForm', () => {
     const expectedContacts = [
@@ -518,35 +515,6 @@ describe('features/unified-share-modal/EmailForm', () => {
 
                 const isValidContactPill = wrapper.instance().isValidContactPill(contact);
                 expect(isValidContactPill).toBe(expectedIsValid);
-            },
-        );
-    });
-
-    describe('getContactPillVariant()', () => {
-        test.each`
-            isRestrictionJustificationEnabled | selectedJustificationReason    | restrictedExternalEmails       | expectedVariant
-            ${false}                          | ${null}                        | ${[]}                          | ${PILL_VARIANT_DEFAULT}
-            ${false}                          | ${expectedJustificationReason} | ${[expectedContacts[0].value]} | ${PILL_VARIANT_DEFAULT}
-            ${false}                          | ${null}                        | ${[expectedContacts[0].value]} | ${PILL_VARIANT_DEFAULT}
-            ${true}                           | ${null}                        | ${[expectedContacts[0].value]} | ${PILL_VARIANT_DEFAULT}
-            ${true}                           | ${null}                        | ${[]}                          | ${PILL_VARIANT_DEFAULT}
-            ${true}                           | ${expectedJustificationReason} | ${[expectedContacts[0].value]} | ${PILL_VARIANT_WAIVED}
-        `(
-            'should return "$expectedVariant" when isRestrictionJustificationEnabled = $isRestrictionJustificationEnabled, selectedJustificationReason = $selectedJustificationReason and restrictedExternalEmails = $restrictedExternalEmails',
-            ({
-                isRestrictionJustificationEnabled,
-                selectedJustificationReason,
-                restrictedExternalEmails,
-                expectedVariant,
-            }) => {
-                const wrapper = getWrapper();
-                const contact = expectedContacts[0];
-
-                wrapper.instance().handleSelectJustificationReason(selectedJustificationReason);
-                wrapper.setProps({ restrictedExternalEmails, isRestrictionJustificationEnabled });
-
-                const contactPillVariant = wrapper.instance().getContactPillVariant(contact);
-                expect(contactPillVariant).toBe(expectedVariant);
             },
         );
     });

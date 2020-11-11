@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import isFunction from 'lodash/isFunction';
 import uniqueId from 'lodash/uniqueId';
 import { List } from 'immutable';
 
@@ -217,9 +216,7 @@ class PillSelector extends React.Component<Props, State> {
                 >
                     {showRoundedPills
                         ? selectedOptions.map((option: RoundOption, index: number) => {
-                              const pillVariant = isFunction(getPillVariant)
-                                  ? getPillVariant(option)
-                                  : PILL_VARIANT_DEFAULT;
+                              const pillVariant = getPillVariant ? getPillVariant(option) : PILL_VARIANT_DEFAULT;
 
                               return (
                                   <RoundPill
