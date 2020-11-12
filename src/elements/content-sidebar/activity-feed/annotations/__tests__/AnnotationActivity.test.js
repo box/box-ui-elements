@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
 
 import AnnotationActivity from '../AnnotationActivity';
 import AnnotationActivityLink from '../AnnotationActivityLink';
+import AnnotationActivityMenu from '../AnnotationActivityMenu';
 import CommentForm from '../../comment-form/CommentForm';
 import Media from '../../../../../components/media';
 import messages from '../messages';
-import { AnnotationActivityMenuBase as AnnotationActivityMenu } from '../AnnotationActivityMenu';
-import { FeatureProvider } from '../../../../common/feature-checking';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 
@@ -49,22 +48,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         'data-resin-target': 'annotationLink',
     });
 
-    const defaultFeatures = {
-        activityFeed: {
-            modifyAnnotations: {
-                enabled: true,
-            },
-        },
-    };
-
-    const getWrapper = (props = {}) => shallow(<AnnotationActivity {...mockActivity} {...props} />);
-
-    const getWrapperWithFeatures = props =>
-        mount(
-            <FeatureProvider features={defaultFeatures}>
-                <AnnotationActivity {...mockActivity} {...props} />
-            </FeatureProvider>,
-        );
+    const getWrapper = (props = {}) => mount(<AnnotationActivity {...mockActivity} {...props} />);
 
     beforeEach(() => {
         CommentForm.default = jest.fn().mockReturnValue(<div />);
@@ -95,7 +79,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
                 permissions: { can_delete: canDelete, can_edit: canEdit },
             };
 
-            const wrapper = getWrapperWithFeatures({ item });
+            const wrapper = getWrapper({ item });
             const activityLink = wrapper.find(AnnotationActivityLink);
 
             expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
@@ -120,7 +104,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             },
         };
 
-        const wrapper = getWrapperWithFeatures({ ...mockActivity, ...activity });
+        const wrapper = getWrapper({ ...mockActivity, ...activity });
 
         wrapper.find(AnnotationActivityMenu).simulate('click');
         wrapper.find('MenuItem').simulate('click');
