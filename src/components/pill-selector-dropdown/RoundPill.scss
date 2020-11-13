@@ -2,32 +2,10 @@
  * Round Pill
  **************************************/
 @import '../../styles/variables';
+@import './mixins';
 
 .bdl-RoundPill {
-    display: flex;
-    align-items: center;
-    max-width: 100%;
-    height: 28px;
-    margin: $bdl-grid-unit - 1px $bdl-grid-unit / 2;
-    padding-top: 2px;
-    padding-left: 2px;
-    overflow: hidden;
-    font-weight: normal;
-    line-height: $bdl-line-height + $bdl-grid-unit;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    border: 0;
-    border-radius: 14px;
-
-    &.bdl-RoundPill--selected {
-        font-weight: bold;
-        background-color: $bdl-gray-20;
-        box-shadow: inset 0 0 0 1px $white;
-    }
-
-    .bdl-Avatar-externalBadge {
-        border-color: $bdl-gray-10;
-    }
+    @include bdl-RoundPill();
 }
 
 .bdl-RoundPill-avatar,
@@ -59,47 +37,11 @@
 }
 
 .bdl-RoundPill--warning {
-    background-color: $bdl-yellorange-10;
-    border: 1px solid $bdl-yellorange-50;
-
-    .bdl-Avatar-externalBadge {
-        border-color: $bdl-yellorange-10;
-    }
+    @include bdl-RoundPill($background-color: $bdl-yellorange-10, $border-color: $bdl-yellorange-50, $selected-background-color: $bdl-yellorange-20, $selected-border-color: $bdl-yellorange);
 }
 
 .bdl-RoundPill--error {
-    background-color: $bdl-watermelon-red-10;
-    border: 1px solid $bdl-watermelon-red-50;
-
-    .bdl-Avatar-externalBadge {
-        border-color: $bdl-watermelon-red-10;
-    }
-}
-
-.bdl-RoundPill--selected {
-    .bdl-Avatar-externalBadge {
-        border-color: $bdl-gray-20;
-    }
-
-    &.bdl-RoundPill--warning {
-        background-color: $bdl-yellorange-20;
-        border-color: $bdl-yellorange;
-        box-shadow: none;
-
-        .bdl-Avatar-externalBadge {
-            border-color: $bdl-yellorange-20;
-        }
-    }
-
-    &.bdl-RoundPill--error {
-        background-color: $bdl-watermelon-red-20;
-        border-color: $bdl-watermelon-red;
-        box-shadow: none;
-
-        .bdl-Avatar-externalBadge {
-            border-color: $bdl-watermelon-red-20;
-        }
-    }
+    @include bdl-RoundPill($background-color: $bdl-watermelon-red-10, $border-color: $bdl-watermelon-red-50, $selected-background-color: $bdl-watermelon-red-20, $selected-border-color: $bdl-watermelon-red);
 }
 
 .bdl-RoundPill--disabled {

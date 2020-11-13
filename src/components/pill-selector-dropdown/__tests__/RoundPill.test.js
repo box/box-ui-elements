@@ -11,6 +11,12 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should set custom class name when provided', () => {
+        const wrapper = shallow(<RoundPill onRemove={onRemoveStub} text="box" className="MyClass" />);
+
+        expect(wrapper.hasClass('MyClass')).toBe(true);
+    });
+
     test('should render avatar if showAvatar prop is true', () => {
         const wrapper = shallow(<RoundPill onRemove={onRemoveStub} showAvatar text="box" />);
 
@@ -25,24 +31,21 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
         expect(wrapper.hasClass('bdl-RoundPill--selected')).toBe(true);
     });
 
-    test('should generate LabelPill with error type when isValid prop is false', () => {
+    test('should generate LabelPill with error class when isValid prop is false', () => {
         const wrapper = shallow(<RoundPill isValid={false} onRemove={onRemoveStub} text="box" />);
 
-        expect(wrapper.find('LabelPill').prop('type')).toBe('error');
         expect(wrapper.hasClass('bdl-RoundPill--error')).toBe(true);
     });
 
-    test('should generate LabelPill with warning type when hasWarning prop is true', () => {
+    test('should generate LabelPill with warning class when hasWarning prop is true', () => {
         const wrapper = shallow(<RoundPill hasWarning onRemove={onRemoveStub} text="box" />);
 
-        expect(wrapper.find('LabelPill').prop('type')).toBe('warning');
         expect(wrapper.hasClass('bdl-RoundPill--warning')).toBe(true);
     });
 
-    test('should generate LabelPill with error type when isValid is false and hasWarning is true', () => {
+    test('should generate LabelPill with error class when isValid is false and hasWarning is true', () => {
         const wrapper = shallow(<RoundPill isValid={false} hasWarning onRemove={onRemoveStub} text="box" />);
 
-        expect(wrapper.find('LabelPill').prop('type')).toBe('error');
         expect(wrapper.hasClass('bdl-RoundPill--error')).toBe(true);
     });
 
