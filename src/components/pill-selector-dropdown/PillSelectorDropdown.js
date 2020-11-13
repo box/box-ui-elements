@@ -32,7 +32,7 @@ type Props = {
     dropdownScrollBoundarySelector?: string,
     /** Error message */
     error?: React.Node,
-    /** Called on pill render to get a specific class name to use a particular option. Note: Only has effect when showRoundedPills is true. */
+    /** Called on pill render to get a specific class name to use for a particular option. Note: Only has effect when showRoundedPills is true. */
     getPillClassName?: (option: Option) => string,
     /** Function to retrieve the image URL associated with a pill */
     getPillImageUrl?: (data: { id: string, [key: string]: any }) => string | Promise<?string>,
