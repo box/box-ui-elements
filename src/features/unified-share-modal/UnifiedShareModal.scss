@@ -1,6 +1,7 @@
 @import '../../styles/variables';
 @import '../../styles/mixins/buttons';
 @import '../../styles/mixins/overlay';
+@import '../../components/pill-selector-dropdown/mixins';
 
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
@@ -123,6 +124,12 @@
             margin-top: 0;
             border: none;
             box-shadow: none;
+        }
+    }
+
+    .bdl-RoundPill {
+        &.is-waived {
+            @include bdl-RoundPill($border-color: $bdl-watermelon-red-50, $selected-border-color: $bdl-watermelon-red-50);
         }
     }
 

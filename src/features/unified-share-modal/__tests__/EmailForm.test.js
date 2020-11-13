@@ -519,6 +519,35 @@ describe('features/unified-share-modal/EmailForm', () => {
         );
     });
 
+    describe('getContactPillClassName()', () => {
+        test.each`
+            isRestrictionJustificationEnabled | selectedJustificationReason    | restrictedExternalEmails       | expectedClassName
+            ${false}                          | ${null}                        | ${[]}                          | ${''}
+            ${false}                          | ${expectedJustificationReason} | ${[expectedContacts[0].value]} | ${''}
+            ${false}                          | ${null}                        | ${[expectedContacts[0].value]} | ${''}
+            ${true}                           | ${null}                        | ${[expectedContacts[0].value]} | ${''}
+            ${true}                           | ${null}                        | ${[]}                          | ${''}
+            ${true}                           | ${expectedJustificationReason} | ${[expectedContacts[0].value]} | ${'is-waived'}
+        `(
+            'should return "$expectedClassName" when isRestrictionJustificationEnabled = $isRestrictionJustificationEnabled, selectedJustificationReason = $selectedJustificationReason and restrictedExternalEmails = $restrictedExternalEmails',
+            ({
+                isRestrictionJustificationEnabled,
+                selectedJustificationReason,
+                restrictedExternalEmails,
+                expectedClassName,
+            }) => {
+                const wrapper = getWrapper();
+                const contact = expectedContacts[0];
+
+                wrapper.instance().handleSelectJustificationReason(selectedJustificationReason);
+                wrapper.setProps({ restrictedExternalEmails, isRestrictionJustificationEnabled });
+
+                const contactPillClassName = wrapper.instance().getContactPillClassName(contact);
+                expect(contactPillClassName).toBe(expectedClassName);
+            },
+        );
+    });
+
     describe('componentDidUpdate()', () => {
         test('should clear other visible errors when a new error is set', () => {
             const wrapper = getWrapper({
