@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
 import AnnotationActivity from '../AnnotationActivity';
 import AnnotationActivityLink from '../AnnotationActivityLink';
@@ -48,7 +48,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         'data-resin-target': 'annotationLink',
     });
 
-    const getWrapper = (props = {}) => mount(<AnnotationActivity {...mockActivity} {...props} />);
+    const getWrapper = (props = {}) => shallow(<AnnotationActivity {...mockActivity} {...props} />);
 
     beforeEach(() => {
         CommentForm.default = jest.fn().mockReturnValue(<div />);
@@ -106,16 +106,23 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
         const wrapper = getWrapper({ ...mockActivity, ...activity });
 
-        wrapper.find(AnnotationActivityMenu).simulate('click');
-        wrapper.find('MenuItem').simulate('click');
+        wrapper
+            .find(AnnotationActivityMenu)
+            .dive()
+            .simulate('click');
+        wrapper
+            .find(AnnotationActivityMenu)
+            .dive()
+            .find('MenuItem')
+            .simulate('click');
         expect(wrapper.exists('CommentForm')).toBe(true);
 
-        // Clicking the cancel button will remove the CommentForm
+        // Firing the onCancel prop will remove the CommentForm
         wrapper
-            .find('CommentInputControls')
-            .find('Button')
-            .first()
-            .simulate('click');
+            .find('CommentForm')
+            .dive()
+            .props()
+            .onCancel();
         expect(wrapper.exists('CommentForm')).toBe(false);
     });
 
