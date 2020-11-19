@@ -58,21 +58,6 @@ class RoundPill extends React.PureComponent<Props, State> {
         });
     };
 
-    getPillType = (): ?string => {
-        const { hasWarning, isValid } = this.props;
-
-        let pillType;
-        if (hasWarning) {
-            pillType = 'warning';
-        }
-
-        if (!isValid) {
-            pillType = 'error';
-        }
-
-        return pillType;
-    };
-
     handleClickRemove = () => {
         const { isDisabled, onRemove } = this.props;
         return isDisabled ? noop : onRemove();
@@ -119,7 +104,7 @@ class RoundPill extends React.PureComponent<Props, State> {
         const { avatarUrl } = this.state;
 
         return (
-            <LabelPill.Pill size="large" className={this.getStyles()} type={this.getPillType()}>
+            <LabelPill.Pill size="large" className={this.getStyles()}>
                 {showAvatar ? (
                     <LabelPill.Icon
                         Component={Avatar}

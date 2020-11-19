@@ -133,6 +133,29 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             expect(pills.at(1).prop('isValid')).toBeFalsy();
         });
 
+        test('should render round pills using the class name returned by getPillClassName', () => {
+            const getPillClassName = ({ className }) => className;
+            const options = [
+                { displayText: 'Pill 1', value: '1', className: 'MyClass1' },
+                { displayText: 'Pill 2', value: '2', className: 'MyClass2' },
+                { displayText: 'Pill 3', value: '3', className: 'MyClass2' },
+            ];
+            const wrapper = shallow(
+                <PillSelector
+                    showRoundedPills
+                    onInput={onInputStub}
+                    onRemove={onRemoveStub}
+                    selectedOptions={options}
+                    getPillClassName={getPillClassName}
+                />,
+            );
+
+            const pills = wrapper.find('RoundPill');
+            expect(pills.at(0).prop('className')).toBe(options[0].className);
+            expect(pills.at(1).prop('className')).toBe(options[1].className);
+            expect(pills.at(2).prop('className')).toBe(options[2].className);
+        });
+
         test('should render pills when selected options are immutable', () => {
             const options = new List([
                 new OptionRecord({ text: 'test', value: 'test' }),
