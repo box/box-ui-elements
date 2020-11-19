@@ -1,17 +1,10 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
 
-import { AnnotationActivityMenuBase as AnnotationActivityMenu } from '../AnnotationActivityMenu';
+import AnnotationActivityMenu from '../AnnotationActivityMenu';
 
 describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMenu', () => {
     const defaults = {
-        features: {
-            activityFeed: {
-                modifyAnnotations: {
-                    enabled: true,
-                },
-            },
-        },
         id: '123',
     };
 
