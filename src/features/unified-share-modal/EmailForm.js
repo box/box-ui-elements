@@ -323,6 +323,17 @@ class EmailForm extends React.Component<Props, State> {
         return isValid;
     };
 
+    getContactPillClassName = (contactPill: SelectOptionProp): string => {
+        const { selectedJustificationReason } = this.state;
+        const { isRestrictionJustificationEnabled } = this.props;
+
+        const pillId = String(contactPill.value);
+        const hasRequiredJustification = !!selectedJustificationReason && isRestrictionJustificationEnabled;
+        const isWaivedPill = this.isRestrictedExternalEmail(pillId) && hasRequiredJustification;
+
+        return isWaivedPill ? 'is-waived' : '';
+    };
+
     isRestrictedExternalEmail = (email?: string) => {
         const { restrictedExternalEmails } = this.props;
 
@@ -394,6 +405,7 @@ class EmailForm extends React.Component<Props, State> {
                         fieldRef={this.contactsFieldRef}
                         getContacts={getContacts}
                         getContactAvatarUrl={getContactAvatarUrl}
+                        getPillClassName={this.getContactPillClassName}
                         label={contactsFieldLabel}
                         onContactAdd={this.handleContactAdd}
                         onContactRemove={this.handleContactRemove}

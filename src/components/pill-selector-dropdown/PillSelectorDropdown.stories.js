@@ -101,7 +101,7 @@ export const empty = () => {
                     validator={validator}
                 >
                     {state.selectorOptions.map(option => (
-                        <ContactDatalistItem key={option.value} name={option.value}>
+                        <ContactDatalistItem key={option.value} name={option.displayText}>
                             {option.displayText}
                         </ContactDatalistItem>
                     ))}

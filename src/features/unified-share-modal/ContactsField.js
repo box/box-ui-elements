@@ -22,6 +22,7 @@ type Props = {
     fieldRef?: Object,
     getContactAvatarUrl?: (contact: Contact) => string,
     getContacts: (query: string) => Promise<Array<Contact>>,
+    getPillClassName?: (option: SelectOptionProp) => string,
     intl: any,
     label: React.Node,
     onContactAdd: Function,
@@ -166,6 +167,7 @@ class ContactsField extends React.Component<Props, State> {
             error,
             fieldRef,
             getContactAvatarUrl,
+            getPillClassName,
             intl,
             label,
             onContactAdd,
@@ -191,6 +193,7 @@ class ContactsField extends React.Component<Props, State> {
                 dividerIndex={shouldShowSuggested ? numSuggestedShowing : undefined}
                 disabled={disabled}
                 error={error}
+                getPillClassName={getPillClassName}
                 getPillImageUrl={getContactAvatarUrl}
                 inputProps={{
                     autoFocus: true,
