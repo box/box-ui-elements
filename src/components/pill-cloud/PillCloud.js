@@ -23,6 +23,7 @@ const PillCloud = ({ options, onSelect, selectedOptions = [], buttonProps = {} }
                         'is-selected': selectedOptions.find(op => isEqual(op, option)),
                     })}
                     onClick={onSelect ? () => onSelect(option) : undefined}
+                    data-resin-target={option.value}
                     {...buttonProps}
                 >
                     {option.displayText}
