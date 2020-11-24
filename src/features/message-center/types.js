@@ -13,6 +13,7 @@ export type UnreadEligibleMessageCenterMessageCount = {| count: number |};
 type CommonParams = {|
     body: string,
     category: string,
+    name: string,
     tags: string,
     title: string,
 |};
