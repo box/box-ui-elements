@@ -156,7 +156,12 @@ function MessageCenterModal({
         return (
             <CellMeasurer key={message.id} cache={cache} columnIndex={0} parent={parent} rowIndex={index}>
                 {({ registerChild }) => (
-                    <div ref={registerChild} className="bdl-MessageCenterModal-message" style={style}>
+                    <div
+                        ref={registerChild}
+                        className="bdl-MessageCenterModal-message"
+                        style={style}
+                        data-testid="messagecentermodalmessage"
+                    >
                         <Message
                             contentPreviewProps={contentPreviewProps}
                             apiHost={apiHost}
@@ -221,6 +226,7 @@ function MessageCenterModal({
         <Modal
             className="bdl-MessageCenterModal"
             data-resin-component="messageCenterModal"
+            data-testid="messagecentermodal"
             focusElementSelector=".bdl-PillCloud .is-selected"
             isOpen
             onRequestClose={onRequestClose}
