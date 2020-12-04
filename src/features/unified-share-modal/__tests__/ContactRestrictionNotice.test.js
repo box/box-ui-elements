@@ -74,13 +74,21 @@ describe('features/unified-share-modal/ContactRestrictionNotice', () => {
         });
 
         test.each`
-            isRestrictionJustificationEnabled | restrictionNoticeMessageId                         | removeButtonMessageId
-            ${false}                          | ${messages.contactRestrictionNotice.id}            | ${messages.contactRestrictionRemoveButtonLabel.id}
-            ${true}                           | ${messages.justifiableContactRestrictionNotice.id} | ${messages.justifiableContactRestrictionRemoveButtonLabel.id}
+            isRestrictionJustificationEnabled | restrictedExternalContactCount | restrictionNoticeMessageId                                 | removeButtonMessageId
+            ${false}                          | ${1}                           | ${messages.contactRestrictionNoticeSingular.id}            | ${messages.contactRestrictionRemoveButtonLabel.id}
+            ${false}                          | ${2}                           | ${messages.contactRestrictionNotice.id}                    | ${messages.contactRestrictionRemoveButtonLabel.id}
+            ${true}                           | ${1}                           | ${messages.justifiableContactRestrictionNoticeSingular.id} | ${messages.justifiableContactRestrictionRemoveButtonLabel.id}
+            ${true}                           | ${2}                           | ${messages.justifiableContactRestrictionNotice.id}         | ${messages.justifiableContactRestrictionRemoveButtonLabel.id}
         `(
-            'should select appropriate messages when isRestrictionJustificationEnabled is $isRestrictionJustificationEnabled',
-            ({ isRestrictionJustificationEnabled, restrictionNoticeMessageId, removeButtonMessageId }) => {
-                wrapper.setProps({ isRestrictionJustificationEnabled });
+            'should select appropriate messages when isRestrictionJustificationEnabled is $isRestrictionJustificationEnabled and restricted external contact count is $restrictedExternalContactCount',
+            ({
+                isRestrictionJustificationEnabled,
+                restrictedExternalContactCount,
+                restrictionNoticeMessageId,
+                removeButtonMessageId,
+            }) => {
+                restrictedExternalEmails = restrictedExternalEmails.slice(0, restrictedExternalContactCount);
+                wrapper.setProps({ isRestrictionJustificationEnabled, restrictedExternalEmails });
 
                 const restrictionNoticeMessage = wrapper.find(`FormattedMessage[id="${restrictionNoticeMessageId}"]`);
                 const removeButtonMessage = wrapper.find(`FormattedMessage[id="${removeButtonMessageId}"]`);

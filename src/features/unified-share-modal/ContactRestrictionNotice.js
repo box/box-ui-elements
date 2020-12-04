@@ -19,6 +19,22 @@ import type { contactType as Contact } from './flowTypes';
 
 import './ContactRestrictionNotice.scss';
 
+const SINGLE_CONTACT = 'singleContact';
+const MULTIPLE_CONTACTS = 'multipleContacts';
+const RESTRICTION_JUSTIFICATION_ENABLED = 'restrictionJustificationEnabled';
+const RESTRICTION_JUSTIFICATION_DISABLED = 'restrictionJustificationDisabled';
+
+const restrictionNoticeMessageMap = {
+    [RESTRICTION_JUSTIFICATION_ENABLED]: {
+        [SINGLE_CONTACT]: messages.justifiableContactRestrictionNoticeSingular,
+        [MULTIPLE_CONTACTS]: messages.justifiableContactRestrictionNotice,
+    },
+    [RESTRICTION_JUSTIFICATION_DISABLED]: {
+        [SINGLE_CONTACT]: messages.contactRestrictionNoticeSingular,
+        [MULTIPLE_CONTACTS]: messages.contactRestrictionNotice,
+    },
+};
+
 type Props = {
     error?: React.Node,
     isFetchingJustificationReasons?: boolean,
@@ -54,12 +70,15 @@ const ContactRestrictionNotice = ({
     const selectedValue = getProp(selectedJustificationReason, 'value', null);
     const isErrorTooltipShown = !!error;
 
-    const restrictionNoticeMessage = isRestrictionJustificationEnabled
-        ? messages.justifiableContactRestrictionNotice
-        : messages.contactRestrictionNotice;
+    const justificationStatus = isRestrictionJustificationEnabled
+        ? RESTRICTION_JUSTIFICATION_ENABLED
+        : RESTRICTION_JUSTIFICATION_DISABLED;
+    const restrictedContactCountType = restrictedExternalContactCount === 1 ? SINGLE_CONTACT : MULTIPLE_CONTACTS;
+
     const removeButtonLabelMessage = isRestrictionJustificationEnabled
         ? messages.justifiableContactRestrictionRemoveButtonLabel
         : messages.contactRestrictionRemoveButtonLabel;
+    const restrictionNoticeMessage = restrictionNoticeMessageMap[justificationStatus][restrictedContactCountType];
 
     const justificationSelectSection = isFetchingJustificationReasons ? (
         <LoadingIndicator className="bdl-ContactRestrictionNotice-loadingIndicator" />
