@@ -103,6 +103,7 @@ const ContactRestrictionNotice = ({
                     {...restrictionNoticeMessage}
                     values={{ count: restrictedExternalContactCount, email: firstEmail }}
                 />
+                &nbsp;
                 {isRestrictionJustificationEnabled && justificationSelectSection}
                 <PlainButton
                     className="bdl-ContactRestrictionNotice-removeBtn"
