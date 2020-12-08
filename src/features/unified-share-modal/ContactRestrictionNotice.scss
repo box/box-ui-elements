@@ -1,6 +1,8 @@
 @import '../../styles/variables';
 
 .bdl-ContactRestrictionNotice {
+    color: $bdl-gray;
+
     .bdl-SelectButton {
         margin: $bdl-grid-unit * 3 auto;
     }
