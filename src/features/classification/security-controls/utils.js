@@ -7,9 +7,16 @@ import type { Controls, MessageItem } from '../flowTypes';
 import appRestrictionsMessageMap from './appRestrictionsMessageMap';
 import downloadRestrictionsMessageMap from './downloadRestrictionsMessageMap';
 import messages from './messages';
-import { ACCESS_POLICY_RESTRICTION, DOWNLOAD_CONTROL, LIST_ACCESS_LEVEL, SHARED_LINK_ACCESS_LEVEL } from '../constants';
+import {
+    ACCESS_POLICY_RESTRICTION,
+    APP_RESTRICTION_MESSAGE_TYPE,
+    DOWNLOAD_CONTROL,
+    LIST_ACCESS_LEVEL,
+    SHARED_LINK_ACCESS_LEVEL,
+} from '../constants';
 
 const { SHARED_LINK, DOWNLOAD, EXTERNAL_COLLAB, APP } = ACCESS_POLICY_RESTRICTION;
+const { DEFAULT, WITH_APP_LIST, WITH_OVERFLOWN_APP_LIST } = APP_RESTRICTION_MESSAGE_TYPE;
 const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
 const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
 const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY, PUBLIC } = SHARED_LINK_ACCESS_LEVEL;
@@ -94,7 +101,7 @@ const getAppDownloadMessages = (controls: Controls, maxAppCount?: number): Array
 
     switch (accessLevel) {
         case BLOCK:
-            items.push({ message: messages.appDownloadBlock });
+            items.push({ message: messages.appDownloadRestricted });
             break;
         case WHITELIST:
         case BLACKLIST: {
@@ -110,7 +117,7 @@ const getAppDownloadMessages = (controls: Controls, maxAppCount?: number): Array
 
                 items.push({
                     message: {
-                        ...appRestrictionsMessageMap[accessLevel].overflow,
+                        ...appRestrictionsMessageMap[accessLevel][WITH_OVERFLOWN_APP_LIST],
                         values: { appNames, remainingAppCount },
                     },
                     tooltipMessage: {
@@ -119,9 +126,13 @@ const getAppDownloadMessages = (controls: Controls, maxAppCount?: number): Array
                     },
                 });
             } else {
+                // Display list of apps if available, otherwise use generic
+                // app restriction copy
+                const messageType = apps.length ? WITH_APP_LIST : DEFAULT;
+
                 items.push({
                     message: {
-                        ...appRestrictionsMessageMap[accessLevel].default,
+                        ...appRestrictionsMessageMap[accessLevel][messageType],
                         values: { appNames },
                     },
                 });
