@@ -9,15 +9,15 @@ describe('icons/iwork/IWorkDesktopIcon', () => {
     [
         {
             extension: 'pages',
-            component: 'IconIWorkPagesDesktop',
+            component: 'PagesForMac32',
         },
         {
             extension: 'numbers',
-            component: 'IconIWorkNumbersDesktop',
+            component: 'NumbersForMac32',
         },
         {
             extension: 'key',
-            component: 'IconIWorkKeynoteDesktop',
+            component: 'KeynoteForMac32',
         },
     ].forEach(({ extension, component }) => {
         test('should correctly render default icon', () => {
