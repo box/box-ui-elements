@@ -29,7 +29,6 @@ describe('features/classification/security-controls/SecurityControls', () => {
             },
             app: {
                 accessLevel: 'whitelist',
-                apps: [{ displayText: 'App 1' }, { displayText: 'App 2' }],
             },
         };
         wrapper = getWrapper();

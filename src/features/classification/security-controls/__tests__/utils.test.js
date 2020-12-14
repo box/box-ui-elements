@@ -3,14 +3,12 @@ import appRestrictionsMessageMap from '../appRestrictionsMessageMap';
 import downloadRestrictionsMessageMap from '../downloadRestrictionsMessageMap';
 import { getShortSecurityControlsMessage, getFullSecurityControlsMessages } from '../utils';
 import {
-    APP_RESTRICTION_MESSAGE_TYPE,
     DOWNLOAD_CONTROL,
     LIST_ACCESS_LEVEL,
     MANAGED_USERS_ACCESS_LEVEL,
     SHARED_LINK_ACCESS_LEVEL,
 } from '../../constants';
 
-const { DEFAULT, WITH_APP_LIST, WITH_OVERFLOWN_APP_LIST } = APP_RESTRICTION_MESSAGE_TYPE;
 const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
 const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
 const { OWNERS_AND_COOWNERS, OWNERS_COOWNERS_AND_EDITORS } = MANAGED_USERS_ACCESS_LEVEL;
@@ -141,33 +139,8 @@ describe('features/classification/security-controls/utils', () => {
                     accessLevel: BLOCK,
                 },
             };
-            expect(getFullSecurityControlsMessages(accessPolicy)).toEqual([
-                { message: messages.appDownloadRestricted },
-            ]);
+            expect(getFullSecurityControlsMessages(accessPolicy)).toEqual([{ message: messages.appDownloadBlock }]);
         });
-
-        test.each([WHITELIST, BLACKLIST])(
-            'should include correct message when app download is restricted by %s and apps list is not provided',
-            listType => {
-                accessPolicy = {
-                    app: {
-                        accessLevel: listType,
-                        apps: [],
-                    },
-                };
-                const expectedMessage = appRestrictionsMessageMap[listType][DEFAULT];
-
-                expect(expectedMessage).toBeTruthy();
-                expect(getFullSecurityControlsMessages(accessPolicy, 3)).toEqual([
-                    {
-                        message: {
-                            ...expectedMessage,
-                            values: { appNames: '' },
-                        },
-                    },
-                ]);
-            },
-        );
 
         test.each([WHITELIST, BLACKLIST])(
             'should include correct message when app download is restricted by %s and apps are less than maxAppCount',
@@ -178,16 +151,8 @@ describe('features/classification/security-controls/utils', () => {
                         apps: [{ displayText: 'a' }, { displayText: 'b' }, { displayText: 'c' }],
                     },
                 };
-                const expectedMessage = appRestrictionsMessageMap[listType][WITH_APP_LIST];
-
-                expect(expectedMessage).toBeTruthy();
                 expect(getFullSecurityControlsMessages(accessPolicy, 3)).toEqual([
-                    {
-                        message: {
-                            ...expectedMessage,
-                            values: { appNames: 'a, b, c' },
-                        },
-                    },
+                    { message: { ...appRestrictionsMessageMap[listType].default, values: { appNames: 'a, b, c' } } },
                 ]);
             },
         );
@@ -207,13 +172,10 @@ describe('features/classification/security-controls/utils', () => {
                         ],
                     },
                 };
-                const expectedMessage = appRestrictionsMessageMap[listType][WITH_OVERFLOWN_APP_LIST];
-
-                expect(expectedMessage).toBeTruthy();
                 expect(getFullSecurityControlsMessages(accessPolicy, 3)).toEqual([
                     {
                         message: {
-                            ...expectedMessage,
+                            ...appRestrictionsMessageMap[listType].overflow,
                             values: { appNames: 'a, b, c', remainingAppCount: 2 },
                         },
                         tooltipMessage: {
