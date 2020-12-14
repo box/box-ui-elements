@@ -6,7 +6,7 @@ import PagesForMac32 from '../../icon/logo/PagesForMac32';
 
 import { FileIcon } from '../iconTypes';
 
-const IWorkDesktopIcon = ({ className, dimension = 30, extension, title }: FileIcon) => {
+const IWorkDesktopIcon = ({ className, dimension = 32, extension, title }: FileIcon) => {
     let Component = null;
     switch (extension) {
         case 'pages':

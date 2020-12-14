@@ -24,8 +24,8 @@ describe('icons/iwork/IWorkDesktopIcon', () => {
             const wrapper = getWrapper({ extension });
 
             expect(wrapper.is(component)).toBe(true);
-            expect(wrapper.prop('height')).toEqual(30);
-            expect(wrapper.prop('width')).toEqual(30);
+            expect(wrapper.prop('height')).toEqual(32);
+            expect(wrapper.prop('width')).toEqual(32);
         });
 
         test('should set class when specified', () => {
