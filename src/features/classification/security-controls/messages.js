@@ -74,6 +74,11 @@ const messages = defineMessages({
         description: 'Bullet point that summarizes application download blocked restriction applied to classification',
         id: 'boxui.securityControls.appDownloadBlock',
     },
+    appDownloadRestricted: {
+        defaultMessage: 'Download restricted for some applications.',
+        description: 'Bullet point that summarizes application download restriction applied to classification',
+        id: 'boxui.securityControls.appDownloadRestricted',
+    },
     appDownloadBlacklist: {
         defaultMessage: 'Download restricted for some applications: {appNames}',
         description: 'Bullet point that summarizes application download restriction applied to classification',
