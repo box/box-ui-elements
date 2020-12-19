@@ -8,7 +8,7 @@ import AnimateHeight from 'react-animate-height';
 import Scrollbar from 'react-scrollbars-custom';
 import type { Token } from '../../../../common/types/core';
 import Modal from '../../../../components/modal/Modal';
-import PillCloud from '../../../../components/pill-cloud/PillCloud';
+import CategorySelector from '../../../../components/category-selector/CategorySelector';
 
 import CollapsibleScrollbar from '../collapsibile-scrollbar/CollapsibleScrollbar';
 import Message from '../message/Message';
@@ -69,9 +69,10 @@ function MessageCenterModal({
             },
         ];
     }, [intl]);
+
     const listRef = React.useRef(null);
     const isMouseInTitleRef = React.useRef(false);
-    const [category, setCategory] = React.useState(categories[0]);
+    const [category, setCategory] = React.useState(categories[0].value);
     const [isExpanded, setIsExpanded] = React.useState(true);
     const [dimensions, setDimensions] = React.useState({ width: 0, height: 0 });
     const scrollRef = React.useRef<{ scrollbarRef: React.ElementRef<typeof Scrollbar> } | null>(null);
@@ -95,16 +96,14 @@ function MessageCenterModal({
                 <FormattedMessage {...intlMessages.title} />
             </div>
             <AnimateHeight duration={300} height={isExpanded ? 'auto' : 0}>
-                <section className="bdl-MessageCenterModal-categorySelector">
-                    <PillCloud
-                        onSelect={selected => {
-                            cache.clearAll();
-                            setCategory(selected);
-                        }}
-                        options={categories}
-                        selectedOptions={[category]}
-                    />
-                </section>
+                <CategorySelector
+                    currentCategory={category}
+                    categories={categories}
+                    onSelect={(value: string) => {
+                        cache.clearAll();
+                        setCategory(value);
+                    }}
+                />
             </AnimateHeight>
         </section>
     );
@@ -116,7 +115,7 @@ function MessageCenterModal({
 
         return messages
             .filter(({ templateParams }) => {
-                return category.value === ALL || templateParams.category === category.value;
+                return category === ALL || templateParams.category === category;
             })
             .sort(
                 (
@@ -143,7 +142,7 @@ function MessageCenterModal({
                     return 0;
                 },
             );
-    }, [category.value, messages]);
+    }, [category, messages]);
 
     React.useEffect(() => {
         if (scrollRef.current && scrollRef.current.scrollbarRef && scrollRef.current.scrollbarRef.current) {
@@ -227,7 +226,7 @@ function MessageCenterModal({
             className="bdl-MessageCenterModal"
             data-resin-component="messageCenterModal"
             data-testid="messagecentermodal"
-            focusElementSelector=".bdl-PillCloud .is-selected"
+            focusElementSelector=".category-selector .selected"
             isOpen
             onRequestClose={onRequestClose}
             title={title}
