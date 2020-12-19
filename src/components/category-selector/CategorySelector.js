@@ -5,6 +5,7 @@ import noop from 'lodash/noop';
 import forEach from 'lodash/forEach';
 
 import CategorySelectorComponent from './CategorySelectorComponent';
+
 import './CategorySelector.scss';
 
 export type Category = {
@@ -81,11 +82,19 @@ const CategorySelector = ({
                     ...linkWidths,
                     ...linksToRemove,
                 });
+<<<<<<< HEAD
+=======
+                // debugger;
+>>>>>>> 8804edff (feat(preview): add category selector component)
             } else {
                 // There is more room, see if any links can be brought back in
                 let linksToAdd = 0;
 
+<<<<<<< HEAD
                 while (maxLinks + linksToAdd < categories.length && linksWidth < containerWidth) {
+=======
+                while (maxLinks + linksToAdd < categories.length && linksWidth <= containerWidth) {
+>>>>>>> 8804edff (feat(preview): add category selector component)
                     const category = categories[maxLinks + linksToAdd].value;
                     const elementWidth = linkWidths[category];
 
@@ -94,7 +103,11 @@ const CategorySelector = ({
                     const targetWidth = maxLinks + linksToAdd + 1 >= categories.length ? width : containerWidth;
 
                     // If the addition of a link is too large, stop checking
+<<<<<<< HEAD
                     if (linksWidth + elementWidth >= targetWidth) {
+=======
+                    if (linksWidth + elementWidth > targetWidth) {
+>>>>>>> 8804edff (feat(preview): add category selector component)
                         break;
                     }
                     linksToAdd += 1;
@@ -114,19 +127,30 @@ const CategorySelector = ({
         if (!moreRef.current) return;
 
         setMoreWidth(outerWidth(moreRef.current));
+<<<<<<< HEAD
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [moreRef.current, currentCategory]);
 
     // This effect must be defined after the checkLinks function
     // If the currently selected category changes or the more link width changes, be sure to check for any links to hide or show
+=======
+    }, [currentCategory]);
+
+    // This effect must be defined after the checkLinks function
+    // If the currently selected category changes, be sure to check for any links to hide or show
+>>>>>>> 8804edff (feat(preview): add category selector component)
     React.useEffect(() => {
         if (!linksRef.current) return;
 
         const { clientWidth } = linksRef.current;
 
         checkLinks({ client: { width: clientWidth } });
+<<<<<<< HEAD
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [moreRef.current, moreWidth, currentCategory]);
+=======
+    }, [checkLinks, currentCategory]);
+>>>>>>> 8804edff (feat(preview): add category selector component)
 
     return (
         <Measure client innerRef={linksRef} onResize={checkLinks}>
