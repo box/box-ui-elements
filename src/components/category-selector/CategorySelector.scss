@@ -1,0 +1,56 @@
+@import '../../styles/variables';
+
+/**************************************
+ * Category Selector
+ **************************************/
+
+.category-selector {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    height: 32px;
+
+    .category-links {
+        height: 32px;
+        overflow: hidden;
+    }
+
+    .category-pill {
+        margin-right: 8px;
+    }
+
+    .category-pill,
+    .category-more-label {
+        display: inline-block;
+        height: 32px;
+        padding: 8px 16px;
+        font-weight: bold;
+        font-size: 13px;
+        line-height: 16px;
+        white-space: nowrap;
+        text-align: center;
+        border-radius: 16px;
+        outline: none;
+        cursor: pointer;
+
+        &:hover,
+        &:focus {
+            background-color: $bdl-gray-05;
+        }
+
+        &.selected {
+            color: #fff;
+            background-color: $bdl-box-blue;
+
+            .fill-color {
+                fill: #fff;
+            }
+        }
+    }
+
+    .category-more {
+        &.hide {
+            display: none;
+        }
+    }
+}

@@ -35,6 +35,7 @@ const allSections = [
         components: () => [
             '../src/components/badge/Badge.js',
             '../src/components/breadcrumb/Breadcrumb.js',
+            '../src/components/category-selector/CategorySelector.js',
             '../src/components/checkbox/Checkbox.js',
             '../src/components/count-badge/CountBadge.js',
             '../src/components/datalist-item/DatalistItem.js',

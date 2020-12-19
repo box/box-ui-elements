@@ -161,8 +161,8 @@ describe('components/message-center/MessageCenter.integration', () => {
 
         act(() => {
             wrapper
-                .find('PillCloud')
-                .find('Button')
+                .find('CategorySelector')
+                .find('.category-pill')
                 .findWhere(n => {
                     return n.text() === 'Product';
                 })
