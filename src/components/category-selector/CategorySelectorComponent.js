@@ -5,8 +5,9 @@ import classnames from 'classnames';
 import PlainButton from '../plain-button/PlainButton';
 import DropdownMenu, { MenuToggle } from '../dropdown-menu';
 import { Menu, SelectMenuItem } from '../menu';
-import './CategorySelector.scss';
 import messages from './messages';
+
+import './CategorySelector.scss';
 
 import type { Category } from './CategorySelector';
 
