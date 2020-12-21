@@ -121,7 +121,7 @@ exports[`components/category-selector/CategorySelector should render component c
         <MenuToggle>
           <FormattedMessage
             defaultMessage="More"
-            id="boxrelay.templates.category.label.more"
+            id="categoryselector.templates.category.label.more"
           />
         </MenuToggle>
       </PlainButton>
@@ -214,7 +214,7 @@ exports[`components/category-selector/CategorySelector should render component c
         <MenuToggle>
           <FormattedMessage
             defaultMessage="More"
-            id="boxrelay.templates.category.label.more"
+            id="categoryselector.templates.category.label.more"
           />
         </MenuToggle>
       </PlainButton>
