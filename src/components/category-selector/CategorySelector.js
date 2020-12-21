@@ -4,8 +4,8 @@ import Measure from 'react-measure';
 import noop from 'lodash/noop';
 import forEach from 'lodash/forEach';
 
-import './CategorySelector.scss';
 import CategorySelectorComponent from './CategorySelectorComponent';
+import './CategorySelector.scss';
 
 export type Category = {
     displayText: string,
@@ -81,7 +81,6 @@ const CategorySelector = ({
                     ...linkWidths,
                     ...linksToRemove,
                 });
-                // debugger;
             } else {
                 // There is more room, see if any links can be brought back in
                 let linksToAdd = 0;
