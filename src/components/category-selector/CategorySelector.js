@@ -62,7 +62,7 @@ const CategorySelector = ({
                 const linksToRemove = {};
                 let counter = 1;
 
-                while (linksWidth > containerWidth && counter < elements.length) {
+                while (linksWidth >= containerWidth && counter < elements.length) {
                     const element = elements[elements.length - counter];
 
                     const elementWidth = outerWidth(element);
@@ -96,7 +96,7 @@ const CategorySelector = ({
                     const targetWidth = maxLinks + linksToAdd + 1 >= categories.length ? width : containerWidth;
 
                     // If the addition of a link is too large, stop checking
-                    if (linksWidth + elementWidth > targetWidth) {
+                    if (linksWidth + elementWidth >= targetWidth) {
                         break;
                     }
                     linksToAdd += 1;
