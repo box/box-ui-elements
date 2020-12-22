@@ -60,7 +60,7 @@ const CategorySelector = ({
                 const linksToRemove = {};
                 let counter = 1;
 
-                while (linksWidth >= containerWidth && counter < elements.length) {
+                while (linksWidth > containerWidth && counter < elements.length) {
                     const element = elements[elements.length - counter];
 
                     const elementWidth = outerWidth(element);
@@ -85,7 +85,7 @@ const CategorySelector = ({
                 // There is more room, see if any links can be brought back in
                 let linksToAdd = 0;
 
-                while (maxLinks + linksToAdd < categories.length && linksWidth <= containerWidth) {
+                while (maxLinks + linksToAdd < categories.length && linksWidth < containerWidth) {
                     const category = categories[maxLinks + linksToAdd].value;
                     const elementWidth = linkWidths[category];
 
@@ -114,10 +114,11 @@ const CategorySelector = ({
         if (!moreRef.current) return;
 
         setMoreWidth(outerWidth(moreRef.current));
-    }, [currentCategory]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [moreRef.current, currentCategory]);
 
     // This effect must be defined after the checkLinks function
-    // If the currently selected category changes, be sure to check for any links to hide or show
+    // If the currently selected category changes or the more link width changes, be sure to check for any links to hide or show
     React.useEffect(() => {
         if (!linksRef.current) return;
 
@@ -125,7 +126,7 @@ const CategorySelector = ({
 
         checkLinks({ client: { width: clientWidth } });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [moreWidth, currentCategory]);
+    }, [moreRef.current, moreWidth, currentCategory]);
 
     return (
         <Measure client innerRef={linksRef} onResize={checkLinks}>
