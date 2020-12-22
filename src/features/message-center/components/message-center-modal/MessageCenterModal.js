@@ -96,14 +96,16 @@ function MessageCenterModal({
                 <FormattedMessage {...intlMessages.title} />
             </div>
             <AnimateHeight duration={300} height={isExpanded ? 'auto' : 0}>
-                <CategorySelector
-                    currentCategory={category}
-                    categories={categories}
-                    onSelect={(value: string) => {
-                        cache.clearAll();
-                        setCategory(value);
-                    }}
-                />
+                <section className="bdl-MessageCenterModal-categorySelector">
+                    <CategorySelector
+                        currentCategory={category}
+                        categories={categories}
+                        onSelect={(value: string) => {
+                            cache.clearAll();
+                            setCategory(value);
+                        }}
+                    />
+                </section>
             </AnimateHeight>
         </section>
     );
