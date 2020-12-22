@@ -11,6 +11,7 @@ import { retryNumOfTimes } from '../../utils/function';
 import { digest } from '../../utils/webcrypto';
 import hexToBase64 from '../../utils/base64';
 import createWorker from '../../utils/uploadsSHA1Worker';
+import Browser from '../../utils/Browser';
 import {
     DEFAULT_RETRY_DELAY_MS,
     ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED,
@@ -1187,17 +1188,21 @@ class MultiputUpload extends BaseMultiput {
         const currentFileLastModified = getFileLastModifiedAsISONoMSIfPossible(this.file);
 
         if (currentFileSize !== this.initialFileSize || currentFileLastModified !== this.initialFileLastModified) {
-            this.sessionErrorHandler(
-                null,
-                LOG_EVENT_TYPE_FILE_CHANGED_DURING_UPLOAD,
-                JSON.stringify({
-                    oldSize: this.initialFileSize,
-                    newSize: currentFileSize,
-                    oldLastModified: this.initialFileLastModified,
-                    newLastModified: currentFileLastModified,
-                }),
-            );
-            return true;
+            const changeJSON = JSON.stringify({
+                oldSize: this.initialFileSize,
+                newSize: currentFileSize,
+                oldLastModified: this.initialFileLastModified,
+                newLastModified: currentFileLastModified,
+            });
+            // Leave IE with old behavior and kill upload
+            if (Browser.isIE()) {
+                this.sessionErrorHandler(null, LOG_EVENT_TYPE_FILE_CHANGED_DURING_UPLOAD, changeJSON);
+                return true;
+            }
+            // for evergreen browsers where the file change check does not work, log and continue with upload
+            // https://w3c.github.io/FileAPI/#file-section
+            this.consoleLog(`file properties changed during upload: ${changeJSON}`);
+            return false;
         }
 
         return false;
