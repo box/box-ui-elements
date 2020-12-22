@@ -124,7 +124,8 @@ const CategorySelector = ({
         const { clientWidth } = linksRef.current;
 
         checkLinks({ client: { width: clientWidth } });
-    }, [moreWidth, currentCategory, checkLinks]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [moreWidth, currentCategory]);
 
     return (
         <Measure client innerRef={linksRef} onResize={checkLinks}>
