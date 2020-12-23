@@ -38,7 +38,7 @@ const CategorySelector = ({
 
     const outerWidth = element => {
         const style = getComputedStyle(element);
-        return element.offsetWidth + parseFloat(style.marginLeft) + parseFloat(style.marginRight);
+        return element.offsetWidth + parseFloat(style.marginLeft) + parseFloat(style.marginRight) + 1;
     };
 
     const checkLinks = React.useCallback(
