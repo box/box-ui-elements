@@ -4,23 +4,23 @@
  * Category Selector
  **************************************/
 
-.category-selector {
+.bdl-CategorySelector {
     display: flex;
     flex-grow: 1;
     justify-content: center;
     height: 32px;
 
-    .category-links {
+    .bdl-CategorySelector-links {
         height: 32px;
         overflow: hidden;
     }
 
-    .category-pill {
+    .bdl-CategorySelector-pill {
         margin-right: 8px;
     }
 
-    .category-pill,
-    .category-more-label {
+    .bdl-CategorySelector-pill,
+    .bdl-CategorySelector-more-label {
         display: inline-block;
         height: 32px;
         padding: 8px 16px;
@@ -40,7 +40,7 @@
             background-color: $bdl-gray-05;
         }
 
-        &.selected {
+        &.is-selected {
             color: #fff;
             background-color: $bdl-box-blue;
 
@@ -50,7 +50,7 @@
         }
     }
 
-    .category-more {
+    .bdl-CategorySelector-more {
         &.hide {
             display: none;
         }

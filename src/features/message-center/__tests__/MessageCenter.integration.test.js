@@ -162,7 +162,7 @@ describe('components/message-center/MessageCenter.integration', () => {
         act(() => {
             wrapper
                 .find('CategorySelector')
-                .find('.category-pill')
+                .find('.bdl-CategorySelector-pill')
                 .findWhere(n => {
                     return n.text() === 'Product';
                 })

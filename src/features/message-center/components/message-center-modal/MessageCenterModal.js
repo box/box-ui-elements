@@ -228,7 +228,7 @@ function MessageCenterModal({
             className="bdl-MessageCenterModal"
             data-resin-component="messageCenterModal"
             data-testid="messagecentermodal"
-            focusElementSelector=".category-selector .selected"
+            focusElementSelector=".bdl-CategorySelector .is-selected"
             isOpen
             onRequestClose={onRequestClose}
             title={title}

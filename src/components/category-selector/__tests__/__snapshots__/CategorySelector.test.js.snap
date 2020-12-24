@@ -2,13 +2,13 @@
 
 exports[`components/category-selector/CategorySelector should render component correctly 1`] = `
 <div
-  className="category-selector"
+  className="bdl-CategorySelector"
 >
   <div
-    className="category-links"
+    className="bdl-CategorySelector-links"
   >
     <span
-      className="category-pill selected"
+      className="bdl-CategorySelector-pill is-selected"
       data-category="all"
       data-resin-target="selectcategory"
       data-resin-template_category="All"
@@ -22,7 +22,7 @@ exports[`components/category-selector/CategorySelector should render component c
       All
     </span>
     <span
-      className="category-pill"
+      className="bdl-CategorySelector-pill"
       data-category="legal"
       data-resin-target="selectcategory"
       data-resin-template_category="Legal"
@@ -36,7 +36,7 @@ exports[`components/category-selector/CategorySelector should render component c
       Legal
     </span>
     <span
-      className="category-pill"
+      className="bdl-CategorySelector-pill"
       data-category="marketing"
       data-resin-target="selectcategory"
       data-resin-template_category="Marketing"
@@ -50,7 +50,7 @@ exports[`components/category-selector/CategorySelector should render component c
       Marketing
     </span>
     <span
-      className="category-pill"
+      className="bdl-CategorySelector-pill"
       data-category="hr"
       data-resin-target="selectcategory"
       data-resin-template_category="HR"
@@ -64,7 +64,7 @@ exports[`components/category-selector/CategorySelector should render component c
       HR
     </span>
     <span
-      className="category-pill"
+      className="bdl-CategorySelector-pill"
       data-category="bizops"
       data-resin-target="selectcategory"
       data-resin-template_category="Business Operations"
@@ -78,7 +78,7 @@ exports[`components/category-selector/CategorySelector should render component c
       Business Operations
     </span>
     <span
-      className="category-pill"
+      className="bdl-CategorySelector-pill"
       data-category="sales"
       data-resin-target="selectcategory"
       data-resin-template_category="Sales"
@@ -92,7 +92,7 @@ exports[`components/category-selector/CategorySelector should render component c
       Sales
     </span>
     <span
-      className="category-pill"
+      className="bdl-CategorySelector-pill"
       data-category="finance"
       data-resin-target="selectcategory"
       data-resin-template_category="Finance"
@@ -107,7 +107,7 @@ exports[`components/category-selector/CategorySelector should render component c
     </span>
   </div>
   <div
-    className="category-more hide"
+    className="bdl-CategorySelector-more hide"
   >
     <DropdownMenu
       className="dropdownWrapper"
@@ -116,7 +116,7 @@ exports[`components/category-selector/CategorySelector should render component c
       isRightAligned={true}
     >
       <PlainButton
-        className="category-more-label"
+        className="bdl-CategorySelector-more-label"
       >
         <MenuToggle>
           <FormattedMessage
@@ -137,13 +137,13 @@ exports[`components/category-selector/CategorySelector should render component c
 
 exports[`components/category-selector/CategorySelector should render component correctly with more dropdown 1`] = `
 <div
-  className="category-selector"
+  className="bdl-CategorySelector"
 >
   <div
-    className="category-links"
+    className="bdl-CategorySelector-links"
   >
     <span
-      className="category-pill selected"
+      className="bdl-CategorySelector-pill is-selected"
       data-category="all"
       data-resin-target="selectcategory"
       data-resin-template_category="All"
@@ -157,7 +157,7 @@ exports[`components/category-selector/CategorySelector should render component c
       All
     </span>
     <span
-      className="category-pill"
+      className="bdl-CategorySelector-pill"
       data-category="legal"
       data-resin-target="selectcategory"
       data-resin-template_category="Legal"
@@ -171,7 +171,7 @@ exports[`components/category-selector/CategorySelector should render component c
       Legal
     </span>
     <span
-      className="category-pill"
+      className="bdl-CategorySelector-pill"
       data-category="marketing"
       data-resin-target="selectcategory"
       data-resin-template_category="Marketing"
@@ -185,7 +185,7 @@ exports[`components/category-selector/CategorySelector should render component c
       Marketing
     </span>
     <span
-      className="category-pill"
+      className="bdl-CategorySelector-pill"
       data-category="hr"
       data-resin-target="selectcategory"
       data-resin-template_category="HR"
@@ -200,7 +200,7 @@ exports[`components/category-selector/CategorySelector should render component c
     </span>
   </div>
   <div
-    className="category-more"
+    className="bdl-CategorySelector-more"
   >
     <DropdownMenu
       className="dropdownWrapper"
@@ -209,7 +209,7 @@ exports[`components/category-selector/CategorySelector should render component c
       isRightAligned={true}
     >
       <PlainButton
-        className="category-more-label"
+        className="bdl-CategorySelector-more-label"
       >
         <MenuToggle>
           <FormattedMessage

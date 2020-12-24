@@ -40,8 +40,8 @@ const CategorySelectorComponent = ({
     const renderCategory = ({ value, displayText }: Category) => (
         <span
             key={value}
-            className={classnames('category-pill', {
-                selected: value === currentCategory,
+            className={classnames('bdl-CategorySelector-pill', {
+                'is-selected': value === currentCategory,
             })}
             data-category={value}
             data-resin-target="selectcategory"
@@ -60,18 +60,18 @@ const CategorySelectorComponent = ({
     );
 
     return (
-        <div ref={measureRef} className={classnames(className, 'category-selector')}>
-            <div className="category-links">{linkCategories.map(renderCategory)}</div>
+        <div ref={measureRef} className={classnames(className, 'bdl-CategorySelector')}>
+            <div className="bdl-CategorySelector-links">{linkCategories.map(renderCategory)}</div>
             <div
                 ref={moreRef}
-                className={classnames('category-more', {
+                className={classnames('bdl-CategorySelector-more', {
                     hide: maxLinks >= categories.length,
                 })}
             >
                 <DropdownMenu className="dropdownWrapper" isRightAligned>
                     <PlainButton
-                        className={classnames('category-more-label', {
-                            selected: selectedOverflow,
+                        className={classnames('bdl-CategorySelector-more-label', {
+                            'is-selected': selectedOverflow,
                         })}
                     >
                         <MenuToggle>
