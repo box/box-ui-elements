@@ -5,7 +5,6 @@ import noop from 'lodash/noop';
 import forEach from 'lodash/forEach';
 
 import CategorySelectorComponent from './CategorySelectorComponent';
-import './CategorySelector.scss';
 
 import './CategorySelector.scss';
 
@@ -62,7 +61,7 @@ const CategorySelector = ({
                 const linksToRemove = {};
                 let counter = 1;
 
-                while (linksWidth >= containerWidth && counter < elements.length) {
+                while (linksWidth > containerWidth && counter < elements.length) {
                     const element = elements[elements.length - counter];
 
                     const elementWidth = outerWidth(element);
