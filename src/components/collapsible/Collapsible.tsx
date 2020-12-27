@@ -2,6 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import AnimateHeight from 'react-animate-height';
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import { RESIN_TAG_TARGET } from '../../common/variables';

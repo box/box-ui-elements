@@ -69,7 +69,6 @@ function MessageCenterModal({
             },
         ];
     }, [intl]);
-
     const listRef = React.useRef(null);
     const isMouseInTitleRef = React.useRef(false);
     const [category, setCategory] = React.useState(categories[0].value);
@@ -100,7 +99,7 @@ function MessageCenterModal({
                     <CategorySelector
                         currentCategory={category}
                         categories={categories}
-                        onSelect={(value: string) => {
+                        onSelect={value => {
                             cache.clearAll();
                             setCategory(value);
                         }}
