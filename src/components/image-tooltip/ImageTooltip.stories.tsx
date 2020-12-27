@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 import Button, { ButtonType } from '../button/Button';
-
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 import testImageSrc from './getTestImageSrc';
 import ImageTooltip from './ImageTooltip';
 import notes from './ImageTooltip.stories.md';

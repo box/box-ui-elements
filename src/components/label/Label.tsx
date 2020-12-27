@@ -4,6 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import InfoIconWithTooltip from './InfoIconWithTooltip';
 import StandardLabel from './StandardLabel';
 import HiddenLabel from './HiddenLabel';
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 import commonMessages from '../../common/messages';
 
 import './Label.scss';

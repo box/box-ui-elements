@@ -1,26 +1,27 @@
-// @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
 import PlainButton from '../plain-button/PlainButton';
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 import DropdownMenu, { MenuToggle } from '../dropdown-menu';
 import { Menu, SelectMenuItem } from '../menu';
 import messages from './messages';
 
 import './CategorySelector.scss';
 
-import type { Category } from './CategorySelector';
+import { Category } from './CategorySelector';
 
-type Props = {
-    categories: Array<Category>,
-    categorySelectorProps: Object,
-    className: string,
-    currentCategory: string,
-    maxLinks: number,
-    measureRef: Function,
-    moreRef: Function,
-    onSelect: string => void,
-};
+interface CategorySelectorComponentProps {
+    categories: Category[];
+    categorySelectorProps: object;
+    className: string;
+    currentCategory: string;
+    maxLinks: number;
+    measureRef: (ref: Element | null) => void;
+    moreRef: React.RefObject<HTMLDivElement>;
+    onSelect: (value: string) => void;
+}
 
 const CategorySelectorComponent = ({
     measureRef,
@@ -31,7 +32,7 @@ const CategorySelectorComponent = ({
     currentCategory,
     categorySelectorProps,
     onSelect,
-}: Props) => {
+}: CategorySelectorComponentProps) => {
     const linkCategories = categories.slice(0, maxLinks);
     const overflowCategories = categories.slice(maxLinks);
 
@@ -48,11 +49,11 @@ const CategorySelectorComponent = ({
             data-resin-template_category={displayText}
             data-testid={`template-category-${value}`}
             onClick={() => onSelect(value)}
-            onKeyPress={(event: SyntheticKeyboardEvent<HTMLDivElement>) => {
+            onKeyPress={(event: React.KeyboardEvent<HTMLSpanElement>) => {
                 if (event.key === 'Enter' || event.key === ' ') onSelect(value);
             }}
             role="button"
-            tabIndex="0"
+            tabIndex={0}
             {...categorySelectorProps}
         >
             {displayText}

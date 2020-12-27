@@ -3,6 +3,8 @@ import { shallow, ShallowWrapper } from 'enzyme';
 
 import Button from '../../button/Button';
 import ImageTooltip from '../ImageTooltip';
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 import testImageSrc from '../getTestImageSrc';
 
 describe('components/image-tooltip/ImageTooltip', () => {

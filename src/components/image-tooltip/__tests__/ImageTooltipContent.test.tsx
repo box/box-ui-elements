@@ -2,6 +2,8 @@ import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
 import ImageTooltipContent from '../ImageTooltipContent';
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 import testImageSrc from '../getTestImageSrc';
 
 describe('components/image-tooltip/ImageTooltipContent', () => {

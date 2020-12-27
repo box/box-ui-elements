@@ -2,7 +2,8 @@ import * as React from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import AnimateHeight from 'react-animate-height';
-
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 import { RESIN_TAG_TARGET } from '../../common/variables';
 import IconCaretDown from '../../icons/general/IconCaretDown';
 import PlainButton from '../plain-button';
@@ -105,6 +106,8 @@ class Collapsible extends React.PureComponent<CollapsibleProps, CollapsibleState
             : 'collapsible-card-header';
 
         if (interactionTarget) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
             modifiedButtonProps[RESIN_TAG_TARGET] = `${interactionTarget}${isOpen ? 'collapse' : 'expand'}`;
         }
 

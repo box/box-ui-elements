@@ -1,74 +1,80 @@
-// @flow
 import * as React from 'react';
 import Measure from 'react-measure';
-import noop from 'lodash/noop';
 import forEach from 'lodash/forEach';
 
 import CategorySelectorComponent from './CategorySelectorComponent';
 
 import './CategorySelector.scss';
 
-export type Category = {
-    displayText: string,
-    value: string,
-};
+export interface Category {
+    displayText: string;
+    value: string;
+}
 
-type Props = {
-    categories: Array<Category>,
-    categorySelectorProps?: Object,
-    className?: string,
-    currentCategory?: string,
-    onSelect?: string => void,
-};
+export interface CategorySelectorProps {
+    /** Array of categories that will display in the selector, each category is an object with a string value and a string displayText */
+    categories: Category[];
+    /** Optional props that can be passed to category selector component */
+    categorySelectorProps?: object;
+    /** Optional className that can be passed to category selector component */
+    className?: string;
+    /** Optional value of initial selected category */
+    currentCategory?: string;
+    /** Parent component can use this on select handler to update state for selected category */
+    onSelect: (value: string) => void;
+}
 
 const CategorySelector = ({
     categories,
     categorySelectorProps = {},
     className = '',
     currentCategory = '',
-    onSelect = noop,
-}: Props) => {
-    const linksRef = React.useRef();
-    const moreRef = React.useRef();
+    onSelect,
+}: CategorySelectorProps) => {
+    const linksRef = React.useRef<HTMLDivElement>(null);
+    const moreRef = React.useRef<HTMLDivElement>(null);
 
     const [maxLinks, setMaxLinks] = React.useState(categories.length);
-    const [linkWidths, setLinkWidths] = React.useState({});
+    const defaultLinkWidths: { [index: string]: number } = {};
+    const [linkWidths, setLinkWidths] = React.useState(defaultLinkWidths);
     const [moreWidth, setMoreWidth] = React.useState(0);
 
-    const outerWidth = element => {
+    const outerWidth = (element: HTMLElement) => {
         const style = getComputedStyle(element);
         return element.offsetWidth + parseFloat(style.marginLeft) + parseFloat(style.marginRight) + 1;
     };
 
     const checkLinks = React.useCallback(
-        ({ client: { width } }: { client: { width: number } }) => {
+        contentRect => {
+            const { width } = contentRect.client;
+
             if (!linksRef.current) return;
 
             // Pull in some common widths we'll need
             const containerWidth = width - moreWidth;
 
             // Get all the links
-            const elements = linksRef.current.querySelectorAll('[data-category]');
+            const elements = linksRef.current.querySelectorAll<HTMLSpanElement>('[data-category]');
 
             // First, calculate the total width of all links in the main section
             let linksWidth = 0;
-            forEach(elements, element => {
+            forEach(elements, (element: HTMLSpanElement) => {
                 linksWidth += outerWidth(element);
             });
 
             if (linksWidth > containerWidth) {
                 // The links exceed the container's width. Figure out how many need to be removed
-                const linksToRemove = {};
+                const linksToRemove: { [index: string]: number } = {};
                 let counter = 1;
 
                 while (linksWidth > containerWidth && counter < elements.length) {
-                    const element = elements[elements.length - counter];
+                    const element: HTMLSpanElement = elements[elements.length - counter];
 
                     const elementWidth = outerWidth(element);
                     linksWidth -= elementWidth;
-
+                    const category: string = element.dataset.category ?? '';
                     // Save the width of the link being removed for use later
-                    linksToRemove[element.dataset.category] = elementWidth;
+                    linksToRemove[category] = elementWidth;
                     counter += 1;
                 }
 
@@ -87,7 +93,7 @@ const CategorySelector = ({
                 let linksToAdd = 0;
 
                 while (maxLinks + linksToAdd < categories.length && linksWidth < containerWidth) {
-                    const category = categories[maxLinks + linksToAdd].value;
+                    const category: string = categories[maxLinks + linksToAdd].value;
                     const elementWidth = linkWidths[category];
 
                     // If there is only one link in the More menu, calculate against the total container width,
@@ -108,7 +114,7 @@ const CategorySelector = ({
                 }
             }
         },
-        [categories, linkWidths, maxLinks, moreWidth],
+        [categories, linkWidths, linksRef, maxLinks, moreWidth],
     );
 
     React.useLayoutEffect(() => {
