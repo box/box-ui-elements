@@ -192,7 +192,6 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should render TetherComponent in the body if invalid body element is specified', () => {
             const wrapper = shallow(
-                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore testing a wrong value for the bodyElement prop
                 <Tooltip bodyElement="foo" text="hi">
                     <button />
@@ -438,7 +437,6 @@ describe('components/tooltip/Tooltip', () => {
             const positionTetherMock = jest.fn();
 
             const wrapper = getWrapper({ isShown });
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
             // @ts-ignore: react-tether shenanigans
             wrapper.instance().tetherRef = { current: { position: positionTetherMock } };
 
