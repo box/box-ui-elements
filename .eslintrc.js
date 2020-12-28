@@ -31,8 +31,38 @@ module.exports = {
         {
             files: ['*.ts', '*.tsx'],
             rules: {
+                'flowtype/no-types-missing-file-annotation': 'off',
+                '@typescript-eslint/explicit-module-boundary-types': 'off', // fixme
                 '@typescript-eslint/explicit-function-return-type': 'off', // fixme
-            }
-        }
-    ]
+                '@typescript-eslint/ban-types': [
+                    "error",
+                    {
+                        "types": {
+                            "Function": false, // fixme
+                            "Object": false, // fixme
+                            "object": false, // fixme
+                            "{}": false,
+                        }
+                    }
+                ],
+                // note you must disable the base rule as it can report incorrect errors:
+                'no-use-before-define': 'off',
+                '@typescript-eslint/ban-ts-ignore': 'off', // deprecated
+                '@typescript-eslint/no-use-before-define': ['error'],
+                '@typescript-eslint/ban-ts-comment': [
+                    'error',
+                    {
+                        'ts-expect-error': 'allow-with-description',
+                        'ts-ignore': 'allow-with-description',
+                        'ts-nocheck': 'allow-with-description',
+                        'ts-check': 'allow-with-description',
+                        minimumDescriptionLength: 1,
+                    },
+                ],
+                "camelcase": "error",
+                "no-shadow": "off",
+                "@typescript-eslint/no-shadow": ["error"],
+            },
+        },
+    ],
 };

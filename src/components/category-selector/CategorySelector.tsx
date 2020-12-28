@@ -15,7 +15,7 @@ export interface CategorySelectorProps {
     /** Array of categories that will display in the selector, each category is an object with a string value and a string displayText */
     categories: Category[];
     /** Optional props that can be passed to each category in category selector component */
-    categoryProps?: object;
+    categoryProps?: Record<string, unknown>;
     /** Optional className that can be passed to category selector component */
     className?: string;
     /** Optional value of initial selected category */

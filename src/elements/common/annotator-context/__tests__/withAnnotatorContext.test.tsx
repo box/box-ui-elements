@@ -13,7 +13,8 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
         className?: string | undefined;
     };
 
-    type WrappedComponentProps<T> = ComponentProps & WithAnnotatorContextProps;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    type WrappedComponentProps<T> = ComponentProps & WithAnnotatorContextProps; // T is supposed to be allowed component props
 
     const Component = (props: WrappedComponentProps<HTMLDivElement>) => <div {...props} />;
 
