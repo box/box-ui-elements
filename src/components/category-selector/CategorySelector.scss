@@ -10,15 +10,7 @@
     justify-content: center;
     height: 8 * $bdl-grid-unit;
 
-    .bdl-CategorySelector-links {
-        height: 8 * $bdl-grid-unit;
-        overflow: hidden;
-    }
-
-    .bdl-CategorySelector-pill {
-        margin-right: 2 * $bdl-grid-unit;
-    }
-
+    // bdl-CategorySelector-more-label specifically needs to be nested for specificity otherwise .btn-plain styles will overwrite
     .bdl-CategorySelector-pill,
     .bdl-CategorySelector-more-label {
         display: inline-block;
@@ -36,6 +28,7 @@
 
         &:hover,
         &:focus {
+            // The following styles are needed for specificity otherwise they will be overwritten by .btn-plain
             padding: 2 * $bdl-grid-unit 4 * $bdl-grid-unit;
             font-weight: bold;
             background-color: $bdl-gray-05;
@@ -56,10 +49,19 @@
             }
         }
     }
+}
 
-    .bdl-CategorySelector-more {
-        &.hide {
-            display: none;
-        }
+.bdl-CategorySelector-links {
+    height: 8 * $bdl-grid-unit;
+    overflow: hidden;
+}
+
+.bdl-CategorySelector-pill {
+    margin-right: 2 * $bdl-grid-unit;
+}
+
+.bdl-CategorySelector-more {
+    &.hide {
+        display: none;
     }
 }
