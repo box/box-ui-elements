@@ -1,7 +1,7 @@
 import { Location } from 'history';
 import { match } from 'react-router-dom';
 
-export const CREATE: 'create' = 'create';
+export const CREATE = 'create';
 
 export enum Action {
     CREATE_START = 'create_start',

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 export const annotations = [
     { id: 'anno_1', target: { shape: { height: 10, width: 10, x: 10, y: 10, type: 'rect' }, type: 'region' } },
     { id: 'anno_2', target: { shape: { height: 20, width: 20, x: 20, y: 20, type: 'rect' }, type: 'region' } },

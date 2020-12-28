@@ -1,6 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
+// @ts-ignore flow import
 import Tooltip, { TooltipProps, TooltipTheme } from '../tooltip';
 import ImageTooltipContent from './ImageTooltipContent';
 
