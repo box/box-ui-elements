@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 // @flow
 import * as React from 'react';
 

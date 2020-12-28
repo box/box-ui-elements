@@ -2,6 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import AnimateHeight from 'react-animate-height';
+
 // @ts-ignore flow import
 import { RESIN_TAG_TARGET } from '../../common/variables';
 import IconCaretDown from '../../icons/general/IconCaretDown';

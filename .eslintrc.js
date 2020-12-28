@@ -41,7 +41,7 @@ module.exports = {
                             "Function": false, // fixme
                             "Object": false, // fixme
                             "object": false, // fixme
-                            "{}": false,
+                            "{}": false, // fixme
                         }
                     }
                 ],
