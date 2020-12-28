@@ -4,8 +4,6 @@ import classNames from 'classnames';
 
 import Tooltip, { TooltipTheme } from '../tooltip';
 import Button from '../button';
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
 import messages from './messages';
 
 import './GuideTooltip.scss';

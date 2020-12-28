@@ -14,8 +14,8 @@ export interface Category {
 export interface CategorySelectorProps {
     /** Array of categories that will display in the selector, each category is an object with a string value and a string displayText */
     categories: Category[];
-    /** Optional props that can be passed to category selector component */
-    categorySelectorProps?: object;
+    /** Optional props that can be passed to each category in category selector component */
+    categoryProps?: object;
     /** Optional className that can be passed to category selector component */
     className?: string;
     /** Optional value of initial selected category */
@@ -26,7 +26,7 @@ export interface CategorySelectorProps {
 
 const CategorySelector = ({
     categories,
-    categorySelectorProps = {},
+    categoryProps = {},
     className = '',
     currentCategory = '',
     onSelect,
@@ -148,7 +148,7 @@ const CategorySelector = ({
                     maxLinks={maxLinks}
                     currentCategory={currentCategory}
                     onSelect={onSelect}
-                    categorySelectorProps={categorySelectorProps}
+                    categoryProps={categoryProps}
                 />
             )}
         </Measure>

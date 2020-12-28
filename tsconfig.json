@@ -2,7 +2,6 @@
     "extends": "@box/frontend/ts/tsconfig",
     "compilerOptions": {
         "baseUrl": ".",
-        "allowJs": false,
         "outDir": "es",
         "rootDir": ".",
         "paths": {

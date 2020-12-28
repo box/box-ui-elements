@@ -2,8 +2,6 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
 import PlainButton from '../plain-button/PlainButton';
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
 import DropdownMenu, { MenuToggle } from '../dropdown-menu';
 import { Menu, SelectMenuItem } from '../menu';
 import messages from './messages';
@@ -14,7 +12,7 @@ import { Category } from './CategorySelector';
 
 interface CategorySelectorComponentProps {
     categories: Category[];
-    categorySelectorProps: object;
+    categoryProps: object;
     className: string;
     currentCategory: string;
     maxLinks: number;
@@ -30,7 +28,7 @@ const CategorySelectorComponent = ({
     categories,
     maxLinks,
     currentCategory,
-    categorySelectorProps,
+    categoryProps,
     onSelect,
 }: CategorySelectorComponentProps) => {
     const linkCategories = categories.slice(0, maxLinks);
@@ -54,7 +52,7 @@ const CategorySelectorComponent = ({
             }}
             role="button"
             tabIndex={0}
-            {...categorySelectorProps}
+            {...categoryProps}
         >
             {displayText}
         </span>
