@@ -8,35 +8,35 @@
     display: flex;
     flex-grow: 1;
     justify-content: center;
-    height: 32px;
+    height: 8 * $bdl-grid-unit;
 
     .bdl-CategorySelector-links {
-        height: 32px;
+        height: 8 * $bdl-grid-unit;
         overflow: hidden;
     }
 
     .bdl-CategorySelector-pill {
-        margin-right: 8px;
+        margin-right: 2 * $bdl-grid-unit;
     }
 
     .bdl-CategorySelector-pill,
     .bdl-CategorySelector-more-label {
         display: inline-block;
-        height: 32px;
-        padding: 8px 16px;
+        height: 8 * $bdl-grid-unit;
+        padding: 2 * $bdl-grid-unit 4 * $bdl-grid-unit;
         font-weight: bold;
-        font-size: 13px;
-        line-height: 16px;
+        font-size: $bdl-fontSize;
+        line-height: 4 * $bdl-grid-unit;
         white-space: nowrap;
         text-align: center;
         border: 1px solid transparent;
-        border-radius: 16px;
+        border-radius: 4 * $bdl-grid-unit;
         outline: none;
         cursor: pointer;
 
         &:hover,
         &:focus {
-            padding: 8px 16px;
+            padding: 2 * $bdl-grid-unit 4 * $bdl-grid-unit;
             font-weight: bold;
             background-color: $bdl-gray-05;
             border: 1px solid transparent;
