@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import Button, { ButtonType } from '../button/Button';
 
+// @ts-ignore flow import
 import testImageSrc from './getTestImageSrc';
 import ImageTooltip from './ImageTooltip';
 import notes from './ImageTooltip.stories.md';

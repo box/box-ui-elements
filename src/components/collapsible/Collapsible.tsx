@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import omit from 'lodash/omit';
 import AnimateHeight from 'react-animate-height';
 
+// @ts-ignore flow import
 import { RESIN_TAG_TARGET } from '../../common/variables';
 import IconCaretDown from '../../icons/general/IconCaretDown';
 import PlainButton from '../plain-button';
@@ -98,14 +99,15 @@ class Collapsible extends React.PureComponent<CollapsibleProps, CollapsibleState
             },
             className,
         );
-        const interactionTarget = buttonProps[RESIN_TAG_TARGET];
-        const modifiedButtonProps = omit(buttonProps, [RESIN_TAG_TARGET]);
+        const resinTagTarget: string = RESIN_TAG_TARGET;
+        const modifiedButtonProps: { [index: string]: string } = omit(buttonProps, [resinTagTarget]);
+        const interactionTarget = buttonProps[resinTagTarget];
         const buttonClassName = hasStickyHeader
             ? 'collapsible-card-header has-sticky-header'
             : 'collapsible-card-header';
 
         if (interactionTarget) {
-            modifiedButtonProps[RESIN_TAG_TARGET] = `${interactionTarget}${isOpen ? 'collapse' : 'expand'}`;
+            modifiedButtonProps[resinTagTarget] = `${interactionTarget}${isOpen ? 'collapse' : 'expand'}`;
         }
 
         return (

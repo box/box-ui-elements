@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import Tooltip, { TooltipTheme } from '../tooltip';
 import Button from '../button';
+// @ts-ignore flow import
 import messages from './messages';
 
 import './GuideTooltip.scss';
