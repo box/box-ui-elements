@@ -66,34 +66,7 @@
 }
 
 .bdl-MessageCenterModal-categorySelector {
-    .bdl-PillCloud {
-        padding: 0 0 6 * $bdl-grid-unit;
-        overflow-y: hidden;
-        text-align: center;
-        border: none;
-
-        .bdl-Pill {
-            height: 8 * $bdl-grid-unit;
-            margin: 0 2 * $bdl-grid-unit 0 0;
-            padding: 2 * $bdl-grid-unit 4 * $bdl-grid-unit;
-            color: $bdl-gray-80;
-            font-weight: bold;
-            font-size: 14px;
-            line-height: 4 * $bdl-grid-unit;
-            letter-spacing: .3px;
-            border: none;
-            border-radius: 4 * $bdl-grid-unit;
-
-            &.is-selected {
-                color: $white;
-                background-color: $bdl-box-blue;
-            }
-        }
-
-        .bdl-Pill:last-child {
-            margin-right: 0;
-        }
-    }
+    padding: 0 0 6 * $bdl-grid-unit;
 }
 
 .bdl-MessageCenterModal-whatsNew {
