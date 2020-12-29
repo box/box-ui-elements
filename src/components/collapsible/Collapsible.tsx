@@ -100,8 +100,8 @@ class Collapsible extends React.PureComponent<CollapsibleProps, CollapsibleState
             className,
         );
         const resinTagTarget: string = RESIN_TAG_TARGET;
-        const interactionTarget = buttonProps[resinTagTarget];
         const modifiedButtonProps: { [index: string]: string } = omit(buttonProps, [resinTagTarget]);
+        const interactionTarget = buttonProps[resinTagTarget];
         const buttonClassName = hasStickyHeader
             ? 'collapsible-card-header has-sticky-header'
             : 'collapsible-card-header';

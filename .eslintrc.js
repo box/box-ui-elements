@@ -35,13 +35,13 @@ module.exports = {
                 '@typescript-eslint/explicit-module-boundary-types': 'off', // fixme
                 '@typescript-eslint/explicit-function-return-type': 'off', // fixme
                 '@typescript-eslint/ban-types': [
-                    "error",
+                    'error',
                     {
-                        "types": {
-                            "Function": false, // fixme
-                            "Object": false, // fixme
-                            "object": false, // fixme
-                            "{}": false, // fixme
+                        'types': {
+                            'Function': false, // fixme
+                            'Object': false, // fixme
+                            'object': false, // fixme
+                            '{}': false, // fixme
                         }
                     }
                 ],
@@ -59,9 +59,9 @@ module.exports = {
                         minimumDescriptionLength: 1,
                     },
                 ],
-                "camelcase": "error",
-                "no-shadow": "off",
-                "@typescript-eslint/no-shadow": ["error"],
+                'camelcase': 'error',
+                'no-shadow': 'off',
+                '@typescript-eslint/no-shadow': ['error'],
             },
         },
     ],
