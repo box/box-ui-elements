@@ -141,7 +141,9 @@ describe('features/classification/security-controls/utils', () => {
                     accessLevel: BLOCK,
                 },
             };
-            expect(getFullSecurityControlsMessages(accessPolicy)).toEqual([{ message: messages.appDownloadBlock }]);
+            expect(getFullSecurityControlsMessages(accessPolicy)).toEqual([
+                { message: messages.appDownloadRestricted },
+            ]);
         });
 
         test.each([WHITELIST, BLACKLIST])(

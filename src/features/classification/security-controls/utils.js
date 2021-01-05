@@ -101,7 +101,7 @@ const getAppDownloadMessages = (controls: Controls, maxAppCount?: number): Array
 
     switch (accessLevel) {
         case BLOCK:
-            items.push({ message: messages.appDownloadBlock });
+            items.push({ message: messages.appDownloadRestricted });
             break;
         case WHITELIST:
         case BLACKLIST: {
