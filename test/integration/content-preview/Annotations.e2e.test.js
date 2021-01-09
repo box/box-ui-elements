@@ -47,7 +47,7 @@ describe('ContentPreview with Annotations', () => {
         helpers.load({
             fileId: Cypress.env('FILE_ID_DOC_ANNOTATIONS'),
             props: {
-                boxAnnotations: new global.BoxAnnotations(null, { features: { highlightText: true } }),
+                boxAnnotations: new global.BoxAnnotations(),
             },
         });
 
@@ -91,5 +91,19 @@ describe('ContentPreview with Annotations', () => {
 
         // Current version header
         cy.get('.bcpr-PreviewHeader').should('be.visible');
+    });
+
+    it('Should show drawing annotations', () => {
+        helpers.load({
+            fileId: Cypress.env('FILE_ID_DOC_ANNOTATIONS'),
+            props: {
+                boxAnnotations: new global.BoxAnnotations(null, { features: { drawing: true } }),
+            },
+        });
+
+        cy.get('.ba-DrawingTarget')
+            .should('be.visible')
+            .rightclick() // prevent jumping to hyperlink of <a>
+            .should('have.class', 'is-active');
     });
 });
