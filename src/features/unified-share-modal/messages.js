@@ -449,14 +449,14 @@ const messages = defineMessages({
     },
     justifiableContactRestrictionNotice: {
         defaultMessage:
-            'This classified content requires a business justification to invite {count, plural, one {{count} person} other {{count} people}}. Please select a business justification below.',
+            'This content requires a business justification to invite {count, plural, one {{count} person} other {{count} people}}. Please select a business justification below.',
         description:
             'Text for the notice that is displayed when there are collaboration restrictions that apply to one or more of the selected contacts and business justifications are allowed for bypassing restrictions',
         id: 'boxui.unifiedShare.justifiableContactRestrictionNotice',
     },
     justifiableContactRestrictionNoticeSingular: {
         defaultMessage:
-            'This classified content requires a business justification to invite {email}. Please select a business justification below.',
+            'This content requires a business justification to invite {email}. Please select a business justification below.',
         description:
             'Text for the notice that is displayed when there are collaboration restrictions that apply to one or more of the selected contacts and business justifications are allowed for bypassing restrictions',
         id: 'boxui.unifiedShare.justifiableContactRestrictionNoticeSingular',
