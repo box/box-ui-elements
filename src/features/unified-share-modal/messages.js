@@ -469,14 +469,14 @@ const messages = defineMessages({
     },
     contactRestrictionNotice: {
         defaultMessage:
-            'Invitations cannot be sent to {count, plural, one {{count} person} other {{count} people}} because external collaboration is restricted due to the applied classification.',
+            'Invitations cannot be sent to {count, plural, one {{count} person} other {{count} people}} because external collaboration is restricted due to the applied security policy.',
         description:
             'Text for the notice that is displayed when there are collaboration restrictions that apply to one or more of the selected contacts',
         id: 'boxui.unifiedShare.contactRestrictionNotice',
     },
     contactRestrictionNoticeSingular: {
         defaultMessage:
-            'Invitations cannot be sent to {email} because external collaboration is restricted due to the applied classification.',
+            'Invitations cannot be sent to {email} because external collaboration is restricted due to the applied security policy.',
         description:
             'Text for the notice that is displayed when there are collaboration restrictions that apply to one or more of the selected contacts',
         id: 'boxui.unifiedShare.contactRestrictionNoticeSingular',
