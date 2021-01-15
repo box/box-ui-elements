@@ -7,7 +7,7 @@ import { RecordOf } from 'immutable';
 import type { ItemType } from '../../common/types/core';
 import { convertToMs, isToday, isYesterday } from '../../utils/datetime';
 import DatalistItem from '../../components/datalist-item';
-import IconSmallFolder from '../../icons/folder/IconSmallFolder';
+import Folder16 from '../../icon/fill/Folder16';
 import ItemIcon from '../../icons/item-icon';
 import { Link } from '../../components/link';
 
@@ -157,7 +157,7 @@ const QuickSearchItem = ({
                 <span className="item-subtext">
                     {(parentName || parentFolderRenderer) && (
                         <>
-                            <IconSmallFolder title={<FormattedMessage {...messages.parentFolder} />} />
+                            <Folder16 title={<FormattedMessage {...messages.parentFolder} />} height={12} width={12} />
 
                             {parentFolderRenderer ? (
                                 parentFolderRenderer(itemData, closeDropdown)

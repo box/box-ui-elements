@@ -109,7 +109,7 @@ describe('features/quick-search/QuickSearchItem', () => {
     test('should render parent folder icon', () => {
         const wrapper = mount(<QuickSearchItem itemData={itemData} />);
 
-        expect(wrapper.find('IconSmallFolder').prop('title')).toBeTruthy();
+        expect(wrapper.find('Folder16').prop('title')).toBeTruthy();
     });
 
     test('should render parent name', () => {
