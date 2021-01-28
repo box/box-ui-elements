@@ -37,6 +37,7 @@
         display: flex;
         flex: 1 1 auto;
         flex-direction: column;
+        width: 100%; // Explicit width required since flex-direction is column
         overflow-x: hidden;
         overflow-y: auto;
 
@@ -96,7 +97,6 @@
     }
 
     .bcs-activity-feed-active-state {
-        width: 100%;
         padding-bottom: $bdl-grid-unit * 4;
     }
 
