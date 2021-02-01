@@ -8,7 +8,7 @@ describe('components/context-menu/ContextMenu', () => {
         return expect(image).toMatchImageSnapshot();
     });
 
-    test.only.each(CONTEXT_MENU_STORIES)('looks visually correct when right-clicking on story %s', async id => {
+    test.each(CONTEXT_MENU_STORIES)('looks visually correct when right-clicking on story %s', async id => {
         const browser = await puppeteer.launch({});
         const page = await browser.newPage();
         await page.goto(`http://localhost:6061/iframe.html?id=${id}`);
