@@ -98,46 +98,17 @@
             "last 2 iOS versions",
             "IE 11"
         ],
-        "development": [
-            "last 1 Chrome versions",
-            "last 1 Firefox versions"
-        ]
+        "development": ["last 1 Chrome versions", "last 1 Firefox versions"]
     },
     "lint-staged": {
-        "*.js": [
-            "eslint --fix",
-            "git add"
-        ],
-        "*.ts": [
-            "eslint --ext=.ts --fix",
-            "git add"
-        ],
-        "*.tsx": [
-            "eslint --ext=.tsx --fix",
-            "git add"
-        ],
-        "*.md": [
-            "prettier --write --parser=markdown",
-            "git add"
-        ],
-        "*.json": [
-            "prettier --write --parser=json",
-            "git add"
-        ],
-        "*.html": [
-            "prettier --write --parser=html",
-            "git add"
-        ],
-        "*.scss": [
-            "prettier --write --parser=scss",
-            "stylelint --syntax scss --fix",
-            "git add"
-        ],
-        "*.css": [
-            "prettier --write --parser=css",
-            "stylelint --syntax css --fix",
-            "git add"
-        ]
+        "*.js": ["eslint --fix", "git add"],
+        "*.ts": ["eslint --ext=.ts --fix", "git add"],
+        "*.tsx": ["eslint --ext=.tsx --fix", "git add"],
+        "*.md": ["prettier --write --parser=markdown", "git add"],
+        "*.json": ["prettier --write --parser=json", "git add"],
+        "*.html": ["prettier --write --parser=html", "git add"],
+        "*.scss": ["prettier --write --parser=scss", "stylelint --syntax scss --fix", "git add"],
+        "*.css": ["prettier --write --parser=css", "stylelint --syntax css --fix", "git add"]
     },
     "husky": {
         "hooks": {
@@ -295,12 +266,12 @@
         "puppeteer": "^2.0.0",
         "query-string": "5.1.1",
         "raf": "^3.4.1",
-        "react": "^17.0.0",
+        "react": "^17.0.1",
         "react-animate-height": "^2.0.8",
         "react-beautiful-dnd": "^9.0.2",
         "react-docgen-typescript": "^1.16.1",
         "react-docgen-typescript-loader": "^3.6.0",
-        "react-dom": "^17.0.0",
+        "react-dom": "^17.0.1",
         "react-draggable": "^3.3.0",
         "react-immutable-proptypes": "^2.1.0",
         "react-intl": "^3.11.0",
