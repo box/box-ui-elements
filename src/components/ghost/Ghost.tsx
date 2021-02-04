@@ -14,12 +14,13 @@ type Props = {
 
     /** style.height */
     height?: Dimension;
+
     /** Set to false to remove animated background effect */
-
     isAnimated?: boolean;
-    /** inline styles merged with height/width/radius options */
 
+    /** inline styles merged with height/width/radius options */
     style?: {};
+
     /** style.width */
     width?: Dimension;
 };
