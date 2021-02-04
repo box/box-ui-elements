@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/message-center/components/message-center-modal/EmptyState should render correctly 1`] = `
+<ErrorState>
+  <FormattedMessage
+    defaultMessage="There are no posts for this category at the moment."
+    id="be.messageCenter.noPosts"
+  />
+</ErrorState>
+`;

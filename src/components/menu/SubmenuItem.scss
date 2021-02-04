@@ -1,23 +1,15 @@
 @import '../../styles/variables';
 
 .submenu-target {
-    position: relative;
+    $bdl-submenu-offset: $bdl-grid-unit * -3;
 
-    &::after {
-        position: absolute;
-        top: 12px;
-        right: 10px;
-        border: 4px solid transparent;
-        border-right-style: none;
-        border-left-color: $bdl-gray-30;
-        content: '';
-    }
+    position: relative;
 
     .submenu {
         position: absolute;
-        top: 0;
+        top: $bdl-submenu-offset;
         right: auto;
-        left: 100%;
+        left: calc(100% - #{$bdl-submenu-offset});
 
         &.is-left-aligned {
             right: 100%;
@@ -31,7 +23,13 @@
 
         &.is-bottom-aligned {
             top: auto;
-            bottom: 0;
+            bottom: $bdl-submenu-offset;
         }
+    }
+
+    .menu-item-arrow {
+        position: absolute;
+        top: $bdl-grid-unit * 3;
+        right: $bdl-grid-unit * 2;
     }
 }

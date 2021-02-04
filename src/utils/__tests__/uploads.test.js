@@ -3,7 +3,9 @@ import {
     getFileLastModifiedAsISONoMSIfPossible,
     tryParseJson,
     isDataTransferItemAFolder,
+    isDataTransferItemAPackage,
     getFileFromDataTransferItem,
+    getPackageFileFromDataTransferItem,
     doesFileContainAPIOptions,
     doesDataTransferItemContainAPIOptions,
     getFile,
@@ -184,6 +186,102 @@ describe('util/uploads', () => {
         });
     });
 
+    describe('getPackageFileFromDataTransferItem()', () => {
+        test('should return file of UploadFileWithAPIOptions type when itemData is UploadDataTransferItemWithAPIOptions type', async () => {
+            const mockPackageItem = {
+                getAsFile: jest.fn(() => mockFile),
+                webkitGetAsEntry: () => entry,
+            };
+            const itemData = {
+                item: mockPackageItem,
+                options,
+            };
+
+            expect(await getPackageFileFromDataTransferItem(itemData)).toEqual({
+                file: mockFile,
+                options,
+            });
+        });
+    });
+
+    describe('isDataTransferItemAPackage()', () => {
+        test('should be false if data transfer item thinks it is a folder', () => {
+            const folderEntry = {
+                isDirectory: true,
+            };
+
+            const folderItem = {
+                kind: '',
+                webkitGetAsEntry: () => folderEntry,
+            };
+
+            const itemData = {
+                item: folderItem,
+                options,
+            };
+
+            expect(isDataTransferItemAPackage(itemData)).toBeFalsy();
+        });
+
+        test('should be false if data transfer item thinks it is a file', () => {
+            const fileEntry = {
+                isDirectory: false,
+                isFile: true,
+            };
+
+            const folderItem = {
+                kind: 'file',
+                webkitGetAsEntry: () => fileEntry,
+            };
+
+            const itemData = {
+                item: folderItem,
+                options,
+            };
+
+            expect(isDataTransferItemAPackage(itemData)).toBeFalsy();
+        });
+
+        test('should be true if data transfer item has both identifies a directory but has kind = file and type = application/zip', () => {
+            const packageEntry = {
+                isDirectory: true,
+                isFile: false,
+            };
+
+            const folderItem = {
+                kind: 'file',
+                type: 'application/zip',
+                webkitGetAsEntry: () => packageEntry,
+            };
+
+            const itemData = {
+                item: folderItem,
+                options,
+            };
+
+            expect(isDataTransferItemAPackage(itemData)).toBeTruthy();
+        });
+
+        test('should be false if data transfer item has both identifies a directory but only has kind = file', () => {
+            const packageEntry = {
+                isDirectory: true,
+                isFile: false,
+            };
+
+            const folderItem = {
+                kind: 'file',
+                webkitGetAsEntry: () => packageEntry,
+            };
+
+            const itemData = {
+                item: folderItem,
+                options,
+            };
+
+            expect(isDataTransferItemAPackage(itemData)).toBeFalsy();
+        });
+    });
+
     describe('isDataTransferItemAFolder()', () => {
         test('should return true if item is a folder', () => {
             const folderEntry = {
@@ -277,7 +375,7 @@ describe('util/uploads', () => {
         Date.now = jest.fn(() => now);
 
         test('should return item id correctly when item does not contain API options', () => {
-            expect(getDataTransferItemId(mockItem, rootFolderId)).toBe(`hi_0_${now}`);
+            expect(getDataTransferItemId(mockItem, rootFolderId)).toBe('hi');
         });
 
         test('should return item id correctly when item does contain API options', () => {

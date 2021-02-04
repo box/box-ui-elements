@@ -11,6 +11,12 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should set custom class name when provided', () => {
+        const wrapper = shallow(<RoundPill onRemove={onRemoveStub} text="box" className="MyClass" />);
+
+        expect(wrapper.hasClass('MyClass')).toBe(true);
+    });
+
     test('should render avatar if showAvatar prop is true', () => {
         const wrapper = shallow(<RoundPill onRemove={onRemoveStub} showAvatar text="box" />);
 
@@ -25,24 +31,21 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
         expect(wrapper.hasClass('bdl-RoundPill--selected')).toBe(true);
     });
 
-    test('should generate LabelPill with error type when isValid prop is false', () => {
+    test('should generate LabelPill with error class when isValid prop is false', () => {
         const wrapper = shallow(<RoundPill isValid={false} onRemove={onRemoveStub} text="box" />);
 
-        expect(wrapper.find('LabelPill').prop('type')).toBe('error');
         expect(wrapper.hasClass('bdl-RoundPill--error')).toBe(true);
     });
 
-    test('should generate LabelPill with warning type when hasWarning prop is true', () => {
+    test('should generate LabelPill with warning class when hasWarning prop is true', () => {
         const wrapper = shallow(<RoundPill hasWarning onRemove={onRemoveStub} text="box" />);
 
-        expect(wrapper.find('LabelPill').prop('type')).toBe('warning');
         expect(wrapper.hasClass('bdl-RoundPill--warning')).toBe(true);
     });
 
-    test('should generate LabelPill with error type when isValid is false and hasWarning is true', () => {
+    test('should generate LabelPill with error class when isValid is false and hasWarning is true', () => {
         const wrapper = shallow(<RoundPill isValid={false} hasWarning onRemove={onRemoveStub} text="box" />);
 
-        expect(wrapper.find('LabelPill').prop('type')).toBe('error');
         expect(wrapper.hasClass('bdl-RoundPill--error')).toBe(true);
     });
 
@@ -67,13 +70,39 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
         expect(onRemoveStub).toHaveBeenCalledTimes(1);
     });
 
-    test('should use the avatar URL when the prop (and show avatar) are provided', () => {
+    test('should do nothing when getPillImageUrl returns a rejected Promise', () => {
         const wrapper = shallow(
-            <RoundPill name="name" id="123" showAvatar getPillImageUrl={contact => `/test?id=${contact.id}`} />,
+            <RoundPill name="name" id="123" showAvatar getPillImageUrl={() => Promise.reject(new Error())} />,
         );
+        expect(wrapper.state('avatarUrl')).toBe(undefined);
+        const instance = wrapper.instance();
 
-        expect(wrapper.find('LabelPillIcon').length).toBe(2);
-        expect(wrapper.find('LabelPillIcon[avatarUrl]').props().avatarUrl).toEqual('/test?id=123');
+        instance.componentDidMount();
+
+        setImmediate(() => {
+            wrapper.update();
+            expect(wrapper.state('avatarUrl')).toBeUndefined();
+            expect(wrapper.find('LabelPillIcon').length).toBe(2);
+            expect(wrapper.find('LabelPillIcon[avatarUrl]').length).toBe(0);
+        });
+    });
+
+    test.each([
+        [contact => `/test?id=${contact.id}`, '/test?id=123'],
+        [contact => Promise.resolve(`/test?id=${contact.id}`), '/test?id=123'],
+    ])('should use the avatar URL when the prop (and show avatar) are provided', (getPillImageUrl, expected) => {
+        const wrapper = shallow(<RoundPill name="name" id="123" showAvatar getPillImageUrl={getPillImageUrl} />);
+        expect(wrapper.state('avatarUrl')).toBe(undefined);
+        const instance = wrapper.instance();
+
+        instance.componentDidMount();
+
+        setImmediate(() => {
+            wrapper.update();
+            expect(wrapper.state('avatarUrl')).toBe(expected);
+            expect(wrapper.find('LabelPillIcon').length).toBe(2);
+            expect(wrapper.find('LabelPillIcon[avatarUrl]').props().avatarUrl).toEqual(expected);
+        });
     });
 
     test('should not have the avatar URL when the id prop is missing', () => {

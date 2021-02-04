@@ -39,7 +39,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
           "defaultMessage": "Only select applications are allowed: {appNames}",
           "id": "boxui.securityControls.appDownloadWhitelist",
           "values": Object {
-            "appNames": "",
+            "appNames": "App 1, App 2",
           },
         }
       }
@@ -104,7 +104,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
             "defaultMessage": "Only select applications are allowed: {appNames}",
             "id": "boxui.securityControls.appDownloadWhitelist",
             "values": Object {
-              "appNames": "",
+              "appNames": "App 1, App 2",
             },
           },
         },

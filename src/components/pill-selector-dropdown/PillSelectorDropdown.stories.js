@@ -6,6 +6,8 @@ import ContactDatalistItem from '../contact-datalist-item';
 import PillSelectorDropdown from './PillSelectorDropdown';
 import notes from './PillSelectorDropdown.notes.md';
 
+import './PillSelectorDropdown.stories.scss';
+
 const users = [
     { id: 0, name: 'bob@foo.bar' },
     { id: 1, name: 'sally@foo.bar', isExternalUser: true },
@@ -99,7 +101,7 @@ export const empty = () => {
                     validator={validator}
                 >
                     {state.selectorOptions.map(option => (
-                        <ContactDatalistItem key={option.value} name={option.value}>
+                        <ContactDatalistItem key={option.value} name={option.displayText}>
                             {option.displayText}
                         </ContactDatalistItem>
                     ))}
@@ -245,6 +247,71 @@ export const showAvatars = () => {
                 >
                     {state.selectorOptions.map(option => (
                         <ContactDatalistItem key={option.value} name={option.value}>
+                            {option.displayText}
+                        </ContactDatalistItem>
+                    ))}
+                </PillSelectorDropdown>
+            )}
+        </State>
+    );
+};
+
+export const customPillStyles = () => {
+    /**
+     * NOTE: For consistent styling, use bdl-RoundPill mixin when creating custom pill classes.
+     *
+     * Example:
+     *
+     *    .bdl-RoundPill {
+     *       &.is-custom {
+     *         @include bdl-RoundPill($border-color: $bdl-watermelon-red-50, $selected-border-color: $bdl-watermelon-red-50);
+     *       }
+     *     }
+     *
+     *
+     */
+    const storeWithPills = new Store({
+        error: '',
+        selectedOptions: [
+            {
+                displayText: 'default@example.com',
+                value: '1',
+            },
+            {
+                displayText: 'custom@example.com',
+                value: '2',
+            },
+        ],
+        selectorOptions: [],
+    });
+    const getPillClassName = ({ value }) => {
+        switch (value) {
+            case '2':
+                return 'is-custom';
+            default:
+                return '';
+        }
+    };
+    const { handleInput, handleRemove, handleSelect, validator, validateForError } = generateProps(storeWithPills);
+    return (
+        <State store={storeWithPills}>
+            {state => (
+                <PillSelectorDropdown
+                    allowCustomPills
+                    error={state.error}
+                    getPillClassName={getPillClassName}
+                    placeholder="Names or email addresses"
+                    onInput={handleInput}
+                    onRemove={handleRemove}
+                    onSelect={handleSelect}
+                    selectedOptions={state.selectedOptions}
+                    selectorOptions={state.selectorOptions}
+                    showRoundedPills
+                    validateForError={validateForError}
+                    validator={validator}
+                >
+                    {state.selectorOptions.map(option => (
+                        <ContactDatalistItem key={option.value} name={option.displayText}>
                             {option.displayText}
                         </ContactDatalistItem>
                     ))}

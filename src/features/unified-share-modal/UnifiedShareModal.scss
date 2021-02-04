@@ -1,5 +1,7 @@
 @import '../../styles/variables';
+@import '../../styles/mixins/buttons';
 @import '../../styles/mixins/overlay';
+@import '../../components/pill-selector-dropdown/mixins';
 
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
@@ -78,6 +80,12 @@
     /*** Invite collaborators section ***/
     .invite-collaborator-container {
         position: relative;
+
+        .text-area-container {
+            textarea {
+                width: 100%;
+            }
+        }
     }
 
     .invitee-menu-wrap {
@@ -104,17 +112,24 @@
     .bdl-PillSelectorDropdown.scrollable {
         // In the USM, the wrapper acts as a container
         .overlay-wrapper {
+            @include bdl-Overlay-container;
+
             position: absolute;
             height: 280px;
+            padding: 0;
             overflow-y: scroll;
-
-            @include bdl-Overlay-container;
         }
 
         .overlay {
             margin-top: 0;
             border: none;
             box-shadow: none;
+        }
+    }
+
+    .bdl-RoundPill {
+        &.is-waived {
+            @include bdl-RoundPill($border-color: $bdl-watermelon-red-50, $selected-border-color: $bdl-watermelon-red-50);
         }
     }
 
@@ -133,7 +148,7 @@
         }
     }
 
-    .bdl-PillSelector {
+    .bdl-PillSelectorDropdown .bdl-PillSelector {
         margin-top: 10px;
         border: 1px solid $bdl-gray-20;
 
@@ -208,7 +223,10 @@
             flex: 1;
 
             input {
+                width: 100%;
                 margin-top: 0;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
             }
         }
 
@@ -269,10 +287,15 @@
     }
 
     .manage-all-btn {
+        @include bdl-Button-margins(-5px 0 10px 0);
+
         float: right;
-        margin: -5px 0 10px 0;
         color: $bdl-box-blue;
     }
+}
+
+.bdl-UnifiedShareForm-container {
+    width: 400px;
 }
 
 .bdl-UnifiedShareForm {

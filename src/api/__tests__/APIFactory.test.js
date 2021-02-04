@@ -16,6 +16,8 @@ import TaskLinksAPI from '../tasks/TaskLinks';
 import FileAccessStatsAPI from '../FileAccessStats';
 import MetadataAPI from '../Metadata';
 import FileCollaboratorsAPI from '../FileCollaborators';
+import MarkerBasedGroupsAPI from '../MarkerBasedGroups';
+import MarkerBasedUsersAPI from '../MarkerBasedUsers';
 import GroupsAPI from '../Groups';
 import UsersAPI from '../Users';
 import BoxEditAPI from '../box-edit';
@@ -48,6 +50,9 @@ describe('api/APIFactory', () => {
             factory.recentsAPI = { destroy: jest.fn() };
             factory.versionsAPI = { destroy: jest.fn() };
             factory.metadataAPI = { destroy: jest.fn() };
+            factory.markerBasedGroupsAPI = { destroy: jest.fn() };
+            factory.markerBasedUserssAPI = { destroy: jest.fn() };
+            factory.groupsAPI = { destroy: jest.fn() };
             factory.usersAPI = { destroy: jest.fn() };
             factory.tasksNewAPI = { destroy: jest.fn() };
             factory.taskLinksAPI = { destroy: jest.fn() };
@@ -70,6 +75,8 @@ describe('api/APIFactory', () => {
             expect(factory.taskCollaboratorsAPI).toBeUndefined();
             expect(factory.taskLinksAPI).toBeUndefined();
             expect(factory.tasksNewAPI).toBeUndefined();
+            expect(factory.markerBasedGroupsAPI).toBeUndefined();
+            expect(factory.markerBasedUsersAPI).toBeUndefined();
             expect(factory.groupsAPI).toBeUndefined();
             expect(factory.usersAPI).toBeUndefined();
             expect(factory.metadataQueryAPI).toBeUndefined();
@@ -365,6 +372,50 @@ describe('api/APIFactory', () => {
             expect(fileCollaboratorsAPI.options.cache).toBeInstanceOf(Cache);
             expect(fileCollaboratorsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
             expect(fileCollaboratorsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getMarkerBasedGroupsAPI()', () => {
+        test('should call destroy and return markerBasedGroups API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const markerBasedGroupsAPI = factory.getMarkerBasedGroupsAPI(true);
+            expect(spy).toBeCalled();
+            expect(markerBasedGroupsAPI).toBeInstanceOf(MarkerBasedGroupsAPI);
+            expect(markerBasedGroupsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(markerBasedGroupsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(markerBasedGroupsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return markerBasedGroups API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const markerBasedGroupsAPI = factory.getMarkerBasedGroupsAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(markerBasedGroupsAPI).toBeInstanceOf(MarkerBasedGroupsAPI);
+            expect(markerBasedGroupsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(markerBasedGroupsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(markerBasedGroupsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getMarkerBasedUsersAPI()', () => {
+        test('should call destroy and return markerBasedUsers API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const markerBasedUsers = factory.getMarkerBasedUsersAPI(true);
+            expect(spy).toBeCalled();
+            expect(markerBasedUsers).toBeInstanceOf(MarkerBasedUsersAPI);
+            expect(markerBasedUsers.options.cache).toBeInstanceOf(Cache);
+            expect(markerBasedUsers.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(markerBasedUsers.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return users API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const markerBasedUsers = factory.getMarkerBasedUsersAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(markerBasedUsers).toBeInstanceOf(MarkerBasedUsersAPI);
+            expect(markerBasedUsers.options.cache).toBeInstanceOf(Cache);
+            expect(markerBasedUsers.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(markerBasedUsers.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 

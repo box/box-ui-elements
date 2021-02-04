@@ -428,6 +428,70 @@ const messages = defineMessages({
         description: 'Tooltip description to explain recommendation for sharing tooltip',
         id: 'boxui.unifiedShare.recommendedSharingTooltipCalloutText',
     },
+
+    // External collab restrictions and business justifications
+    justificationSelectPlaceholder: {
+        defaultMessage: 'Select Justification',
+        description: 'The placeholder text of the select field that allows selecting a business justification reason',
+        id: 'boxui.unifiedShare.justificationSelectPlaceholder',
+    },
+    justificationRequiredError: {
+        defaultMessage: 'Select a justification or remove people to continue',
+        description:
+            'The error message that is displayed when a user tries to send invitations to external collaborators, but a business justification is required before proceeding',
+        id: 'boxui.unifiedShare.justificationRequiredError',
+    },
+    restrictedContactsError: {
+        defaultMessage: 'Remove people to continue',
+        description:
+            'The error message that is displayed when a user tries to send invitations to external collaborators, but restricted contacts need to be removed before proceeding',
+        id: 'boxui.unifiedShare.restrictedContactsError',
+    },
+    justifiableContactRestrictionNotice: {
+        defaultMessage:
+            'This content requires a business justification to invite {count, plural, one {{count} person} other {{count} people}}. Please select a business justification below.',
+        description:
+            'Text for the notice that is displayed when there are collaboration restrictions that apply to one or more of the selected contacts and business justifications are allowed for bypassing restrictions',
+        id: 'boxui.unifiedShare.justifiableContactRestrictionNotice',
+    },
+    justifiableContactRestrictionNoticeSingular: {
+        defaultMessage:
+            'This content requires a business justification to invite {email}. Please select a business justification below.',
+        description:
+            'Text for the notice that is displayed when there are collaboration restrictions that apply to one or more of the selected contacts and business justifications are allowed for bypassing restrictions',
+        id: 'boxui.unifiedShare.justifiableContactRestrictionNoticeSingular',
+    },
+    justifiableContactRestrictionRemoveButtonLabel: {
+        defaultMessage: 'Alternatively, remove {count, plural, one {the person} other {{count} people}} and continue',
+        description:
+            'Label for the button that removes restricted contacts on the contact restriction notice when business justifications are allowed for bypassing restrictions',
+        id: 'boxui.unifiedShare.justifiableContactRestrictionRemoveButtonLabel',
+    },
+    contactRestrictionNotice: {
+        defaultMessage:
+            'Invitations cannot be sent to {count, plural, one {{count} person} other {{count} people}} because external collaboration is restricted due to the applied security policy.',
+        description:
+            'Text for the notice that is displayed when there are collaboration restrictions that apply to one or more of the selected contacts',
+        id: 'boxui.unifiedShare.contactRestrictionNotice',
+    },
+    contactRestrictionNoticeSingular: {
+        defaultMessage:
+            'Invitations cannot be sent to {email} because external collaboration is restricted due to the applied security policy.',
+        description:
+            'Text for the notice that is displayed when there are collaboration restrictions that apply to one or more of the selected contacts',
+        id: 'boxui.unifiedShare.contactRestrictionNoticeSingular',
+    },
+    contactRestrictionRemoveButtonLabel: {
+        defaultMessage: 'Remove {count, plural, one {the person} other {{count} people}} and continue',
+        description: 'Label for the button that removes restricted contacts on the contact restriction notice',
+        id: 'boxui.unifiedShare.contactRestrictionRemoveButtonLabel',
+    },
+    contactEmailsTooltipText: {
+        defaultMessage: '{emails}, and {remainingEmailsCount} more',
+        description:
+            'Text to show when the number of contact email addresses displayed on a tooltip exceeds the maximum amount that can be displayed',
+        id: 'boxui.unifiedShare.contactEmailsTooltipText',
+    },
 });
 
 export default messages;

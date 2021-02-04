@@ -104,7 +104,6 @@ describe('components/radar/RadarAnimation', () => {
             const positionTetherMock = jest.fn();
 
             const wrapper = getWrapper({ isShown } as RadarAnimationProps);
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
             // @ts-ignore: react-tether shenanigans
             wrapper.instance().tetherRef = { current: { position: positionTetherMock } };
 

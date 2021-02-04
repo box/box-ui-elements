@@ -51,9 +51,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
             data-testid="delete-comment"
             onClick={[Function]}
           >
-            <IconTrash
-              color="#4e4e4e"
-            />
+            <Trash16 />
             <FormattedMessage
               defaultMessage="Delete"
               id="be.contentSidebar.activityFeed.comment.commentDeleteMenuItem"

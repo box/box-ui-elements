@@ -12,6 +12,8 @@ import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import cloneDeep from 'lodash/cloneDeep';
 import { getTypedFileId, getTypedFolderId } from '../../utils/file';
+import Browser from '../../utils/Browser';
+
 import makeResponsive from '../common/makeResponsive';
 import Internationalize from '../common/Internationalize';
 import FolderUpload from '../../api/uploads/FolderUpload';
@@ -20,10 +22,12 @@ import {
     getDataTransferItemId,
     getFileId,
     getFileFromDataTransferItem,
+    getPackageFileFromDataTransferItem,
     getFile,
     getFileAPIOptions,
     getDataTransferItemAPIOptions,
     isDataTransferItemAFolder,
+    isDataTransferItemAPackage,
     isMultiputSupported,
 } from '../../utils/uploads';
 import DroppableContent from './DroppableContent';
@@ -215,6 +219,7 @@ class ContentUploader extends Component<Props, State> {
             return;
         }
 
+        // TODO: this gets called unnecessarily (upon each render regardless of the queue not changing)
         this.addFilesWithOptionsToUploadQueueAndStartUpload(files, dataTransferItems);
     }
 
@@ -385,10 +390,12 @@ class ContentUploader extends Component<Props, State> {
 
         const folderItems = [];
         const fileItems = [];
-
+        const packageItems = [];
         Array.from(dataTransferItems).forEach(item => {
             const isDirectory = isDataTransferItemAFolder(item);
-            if (isDirectory && isFolderUploadEnabled) {
+            if (Browser.isSafari() && isDataTransferItemAPackage(item)) {
+                packageItems.push(item);
+            } else if (isDirectory && isFolderUploadEnabled) {
                 folderItems.push(item);
             } else if (!isDirectory) {
                 fileItems.push(item);
@@ -396,6 +403,7 @@ class ContentUploader extends Component<Props, State> {
         });
 
         this.addFileDataTransferItemsToUploadQueue(fileItems, itemUpdateCallback);
+        this.addPackageDataTransferItemsToUploadQueue(packageItems, itemUpdateCallback);
         this.addFolderDataTransferItemsToUploadQueue(folderItems, itemUpdateCallback);
     };
 
@@ -413,6 +421,29 @@ class ContentUploader extends Component<Props, State> {
     ): void => {
         dataTransferItems.forEach(async item => {
             const file = await getFileFromDataTransferItem(item);
+            if (!file) {
+                return;
+            }
+
+            this.addFilesToUploadQueue([file], itemUpdateCallback);
+        });
+    };
+
+    /**
+     * Add dataTransferItem of package type to the upload queue
+     *
+     * @private
+     * @param {Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>} dataTransferItems
+     * @param {Function} itemUpdateCallback
+     * @returns {void}
+     */
+    addPackageDataTransferItemsToUploadQueue = (
+        dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
+        itemUpdateCallback: Function,
+    ): void => {
+        dataTransferItems.forEach(item => {
+            const file = getPackageFileFromDataTransferItem(item);
+
             if (!file) {
                 return;
             }
@@ -450,7 +481,6 @@ class ContentUploader extends Component<Props, State> {
 
         const fileAPIOptions: Object = getDataTransferItemAPIOptions(newItems[0]);
         const { folderId = rootFolderId } = fileAPIOptions;
-
         newItems.forEach(async item => {
             const folderUpload = this.getFolderUploadAPI(folderId);
             await folderUpload.buildFolderTreeFromDataTransferItem(item);
@@ -1021,7 +1051,8 @@ class ContentUploader extends Component<Props, State> {
     onClick = (item: UploadItem) => {
         const { chunked, isResumableUploadsEnabled, onClickCancel, onClickResume, onClickRetry } = this.props;
         const { status, file } = item;
-        const isChunkedUpload = chunked && file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES && isMultiputSupported();
+        const isChunkedUpload =
+            chunked && !item.isFolder && file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES && isMultiputSupported();
         const isResumable = isResumableUploadsEnabled && isChunkedUpload && item.api.sessionId;
 
         switch (status) {

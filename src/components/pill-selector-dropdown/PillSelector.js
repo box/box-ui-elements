@@ -22,6 +22,8 @@ type Props = {
     className?: string,
     disabled?: boolean,
     error?: React.Node,
+    /** Called on pill render to get a specific class name to use for a particular option. Note: Only has effect when showRoundedPills is true. */
+    getPillClassName?: (option: Option) => string,
     /** Function to retrieve the image URL associated with a pill */
     getPillImageUrl?: (data: { id: string | number, [key: string]: any }) => string,
     inputProps: Object,
@@ -170,6 +172,7 @@ class PillSelector extends React.Component<Props, State> {
             className,
             disabled,
             error,
+            getPillClassName,
             getPillImageUrl,
             inputProps,
             onInput,
@@ -214,6 +217,7 @@ class PillSelector extends React.Component<Props, State> {
                         ? selectedOptions.map((option: RoundOption, index: number) => {
                               return (
                                   <RoundPill
+                                      className={getPillClassName ? getPillClassName(option) : undefined}
                                       getPillImageUrl={getPillImageUrl}
                                       isValid={allowInvalidPills ? validator(option) : true}
                                       isDisabled={disabled}

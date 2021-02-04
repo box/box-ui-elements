@@ -162,6 +162,61 @@ class Feed extends Base {
         this.updateFeedItem({ ...annotation, isPending: false }, id);
     }
 
+    updateAnnotation = (
+        file: BoxItem,
+        annotationId: string,
+        text: string,
+        permissions: AnnotationPermission,
+        successCallback: (annotation: Annotation) => void,
+        errorCallback: ErrorCallback,
+    ): void => {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.annotationsAPI = new AnnotationsAPI(this.options);
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+
+        this.updateFeedItem({ message: text, isPending: true }, annotationId);
+
+        this.annotationsAPI.updateAnnotation(
+            this.file.id,
+            annotationId,
+            permissions,
+            text,
+            (annotation: Annotation) => {
+                this.updateFeedItem(
+                    {
+                        ...annotation,
+                        isPending: false,
+                    },
+                    annotationId,
+                );
+                if (!this.isDestroyed()) {
+                    successCallback(annotation);
+                }
+            },
+            (e: ErrorResponseData, code: string) => {
+                this.updateCommentErrorCallback(e, code, annotationId);
+            },
+        );
+    };
+
+    /**
+     * Error callback for updating a comment
+     *
+     * @param {ElementsXhrError} e - the error returned by the API
+     * @param {string} code - the error code
+     * @param {string} id - the id of either an annotation or comment
+     * @return {void}
+     */
+    updateCommentErrorCallback = (e: ElementsXhrError, code: string, id: string) => {
+        this.updateFeedItem(this.createFeedError(messages.commentUpdateErrorMessage), id);
+        this.feedErrorCallback(true, e, code);
+    };
+
     deleteAnnotation = (
         file: BoxItem,
         annotationId: string,
@@ -1226,7 +1281,7 @@ class Feed extends Base {
                 }
             },
             errorCallback: (e: ErrorResponseData, code: string) => {
-                this.feedErrorCallback(true, e, code);
+                this.updateCommentErrorCallback(e, code, commentId);
             },
         });
     };

@@ -6,6 +6,7 @@ exports[`elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLin
   data-resin-iscurrent="true"
   data-resin-itemid="123"
   data-resin-target="annotationLink"
+  data-testid="bcs-AnnotationActivity-link"
   isDisabled={false}
   onClick={[Function]}
   onMouseDown={[Function]}

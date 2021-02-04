@@ -32,8 +32,10 @@ type Props = {
     dropdownScrollBoundarySelector?: string,
     /** Error message */
     error?: React.Node,
+    /** Called on pill render to get a specific class name to use for a particular option. Note: Only has effect when showRoundedPills is true. */
+    getPillClassName?: (option: Option) => string,
     /** Function to retrieve the image URL associated with a pill */
-    getPillImageUrl?: (data: { id: string, [key: string]: any }) => string,
+    getPillImageUrl?: (data: { id: string, [key: string]: any }) => string | Promise<?string>,
     /** Passed in by `SelectorDropdown` for accessibility */
     inputProps: Object,
     /** Input label */
@@ -234,6 +236,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             dividerIndex,
             dropdownScrollBoundarySelector,
             error,
+            getPillClassName,
             getPillImageUrl,
             inputProps,
             label,
@@ -270,6 +273,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                             allowInvalidPills={allowInvalidPills}
                             disabled={disabled}
                             error={error}
+                            getPillClassName={getPillClassName}
                             getPillImageUrl={getPillImageUrl}
                             onBlur={this.handleBlur}
                             onInput={this.handleInput}

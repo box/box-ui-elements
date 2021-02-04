@@ -3,10 +3,12 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import type { MessageDescriptor } from 'react-intl';
 import API from '../../api';
-import Notification, { TYPE_ERROR, TYPE_INFO } from '../../components/notification/Notification';
+import Notification from '../../components/notification/Notification';
+import { DURATION_SHORT, TYPE_ERROR, TYPE_INFO } from '../../components/notification/constants';
 import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
 import useSharedLink from './hooks/useSharedLink';
 import {
+    convertCollab,
     convertCollabsRequest,
     convertCollabsResponse,
     convertGroupContactsResponse,
@@ -40,6 +42,7 @@ type SharingNotificationProps = {
     collaboratorsList: collaboratorsListType | null,
     currentUserID: string | null,
     getContacts: GetContactsFnType | null,
+    isDownloadAvailable: boolean,
     itemID: string,
     itemType: ItemType,
     ownerEmail: ?string,
@@ -51,7 +54,12 @@ type SharingNotificationProps = {
     setChangeSharedLinkPermissionLevel: (
         changeSharedLinkPermissionLevel: () => SharedLinkUpdateLevelFnType | null,
     ) => void,
-    setCollaboratorsList: (collaboratorsList: collaboratorsListType | null) => void,
+    setCollaboratorsList: (
+        collaboratorsList:
+            | collaboratorsListType
+            | null
+            | ((prevList: collaboratorsListType | null) => collaboratorsListType),
+    ) => void,
     setGetContacts: (getContacts: () => GetContactsFnType | null) => void,
     setIsLoading: boolean => void,
     setItem: ((item: itemFlowType | null) => itemFlowType) => void,
@@ -70,6 +78,7 @@ function SharingNotification({
     collaboratorsList,
     currentUserID,
     getContacts,
+    isDownloadAvailable,
     itemID,
     itemType,
     ownerEmail,
@@ -111,8 +120,8 @@ function SharingNotification({
             }
             updatedNotifications[notificationID] = (
                 <Notification
-                    duration="short"
                     key={notificationID}
+                    duration={DURATION_SHORT}
                     onClose={() => handleNotificationClose(notificationID)}
                     type={notificationType}
                 >
@@ -159,12 +168,6 @@ function SharingNotification({
         });
     };
 
-    const handleUpdateSharedLinkError = () => {
-        createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError);
-        setIsLoading(false);
-        closeSettings();
-    };
-
     // Generate shared link CRUD functions for the item
     const {
         changeSharedLinkAccessLevel,
@@ -173,7 +176,11 @@ function SharingNotification({
         onRemoveLink,
         onSubmitSettings,
     } = useSharedLink(api, itemID, itemType, permissions, accessLevel, {
-        handleUpdateSharedLinkError,
+        handleUpdateSharedLinkError: () => {
+            createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError);
+            setIsLoading(false);
+            closeSettings();
+        },
         handleUpdateSharedLinkSuccess: itemData => {
             createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess);
             handleUpdateSharedLinkSuccess(itemData);
@@ -181,7 +188,8 @@ function SharingNotification({
             closeSettings();
         },
         handleRemoveSharedLinkError: () => {
-            handleUpdateSharedLinkError();
+            createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError);
+            setIsLoading(false);
             closeComponent(); // if this function is provided, it will close the modal
         },
         handleRemoveSharedLinkSuccess: itemData => {
@@ -194,7 +202,8 @@ function SharingNotification({
         transformAccess: newAccessLevel => USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel],
         transformPermissions: newSharedLinkPermissionLevel =>
             convertSharedLinkPermissions(newSharedLinkPermissionLevel),
-        transformSettings: (settings, access) => convertSharedLinkSettings(settings, access, serverURL),
+        transformSettings: (settings, access) =>
+            convertSharedLinkSettings(settings, access, isDownloadAvailable, serverURL),
     });
 
     setChangeSharedLinkAccessLevel(() => changeSharedLinkAccessLevel);
@@ -227,9 +236,21 @@ function SharingNotification({
 
     // Set the sendInvites function
     const sendInvitesFn = useInvites(api, itemID, itemType, {
-        handleSuccess: () => {
+        handleSuccess: response => {
             createNotification(TYPE_INFO, contentSharingMessages.sendInvitesSuccess);
             setIsLoading(false);
+            setCollaboratorsList((prevList: collaboratorsListType | null) => {
+                const newList = prevList ? { ...prevList } : { collaborators: [] };
+                const newCollab = convertCollab({
+                    collab: response,
+                    ownerEmail,
+                    isCurrentUserOwner: currentUserID === ownerID,
+                });
+                if (newCollab) {
+                    newList.collaborators.push(newCollab);
+                }
+                return newList;
+            });
             closeComponent();
         },
         handleError: () => {

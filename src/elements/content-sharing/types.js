@@ -2,6 +2,7 @@
 import type {
     BoxItemClassification,
     BoxItemPermission,
+    Collaboration,
     GroupMini,
     ItemType,
     NewCollaboration,
@@ -29,7 +30,13 @@ export type ContentSharingUserDataType = {
 };
 
 // This type is used when an item does not have a shared link.
-type SharedLinkNotCreatedType = { accessLevel?: string, canInvite: boolean };
+type SharedLinkNotCreatedType = {
+    accessLevel?: string,
+    canChangeExpiration?: boolean,
+    canInvite: boolean,
+    expirationTimestamp?: ?number,
+    isDownloadAvailable?: boolean,
+};
 
 // This is the full shared link type, which extends the internal USM shared link with
 // data necessary for instantiating the Shared Link Settings modal.
@@ -59,6 +66,7 @@ export type ContentSharingItemDataType = {
 export type ContentSharingItemAPIResponse = {
     allowed_invitee_roles: Array<string>,
     allowed_shared_link_access_levels?: Array<string>,
+    allowed_shared_link_access_levels_disabled_reasons?: accessLevelsDisabledReasonType,
     classification: ?BoxItemClassification,
     description: string,
     etag: string,
@@ -71,7 +79,6 @@ export type ContentSharingItemAPIResponse = {
     },
     permissions: BoxItemPermission,
     shared_link?: APISharedLink,
-    shared_link_access_levels_disabled_reasons?: accessLevelsDisabledReasonType,
     shared_link_features: {
         download_url: boolean,
         password: boolean,
@@ -121,6 +128,12 @@ export type SharedLinkUpdateSettingsFnType = () => ($Shape<APISharedLink>) => Pr
 
 export type GetContactsFnType = () => (filterTerm: string) => Promise<Array<contactType | GroupMini | UserMini>> | null;
 
+export type ContactByEmailObject = { [string]: contactType | UserMini | [] };
+
+export type GetContactsByEmailFnType = () => (filterTerm: {
+    [emails: string]: string,
+}) => Promise<ContactByEmailObject | Array<UserMini>> | null;
+
 export type SendInvitesFnType = () => InviteCollaboratorsRequest => Promise<null | Array<Function>>;
 
 export type ConnectToItemShareFnType = ({
@@ -131,3 +144,10 @@ export type ConnectToItemShareFnType = ({
 }) => Function;
 
 export type AvatarURLMap = { [number | string]: ?string };
+
+export type ConvertCollabOptions = {
+    avatarURLMap?: ?AvatarURLMap,
+    collab: Collaboration,
+    isCurrentUserOwner: boolean,
+    ownerEmail: ?string,
+};

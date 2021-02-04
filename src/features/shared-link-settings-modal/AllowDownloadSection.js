@@ -10,6 +10,8 @@ import Tooltip from '../../components/tooltip';
 
 import messages from './messages';
 
+import './AllowDownloadSection.scss';
+
 const AllowDownloadSection = ({
     canChangeDownload,
     classification,
@@ -67,6 +69,7 @@ const AllowDownloadSection = ({
                     position="middle-left"
                 >
                     <Fieldset
+                        className="be"
                         disabled={isDirectLinkUnavailable}
                         title={<FormattedMessage {...messages.allowDownloadTitle} />}
                     >

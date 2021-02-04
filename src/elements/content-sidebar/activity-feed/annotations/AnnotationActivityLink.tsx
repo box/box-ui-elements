@@ -40,6 +40,7 @@ const AnnotationActivityLink = ({
     return (
         <PlainButton
             className="bcs-AnnotationActivity-link"
+            data-testid="bcs-AnnotationActivity-link"
             isDisabled={isDisabled}
             onClick={handleClick}
             onMouseDown={handleMouseDown}

@@ -98,8 +98,8 @@ export const FIELD_RESTORED_FROM = 'restored_from';
 export const FIELD_CREATED_AT = 'created_at';
 export const FIELD_INTERACTED_AT: 'interacted_at' = 'interacted_at';
 export const FIELD_SHARED_LINK = 'shared_link';
-export const FIELD_SHARED_LINK_ACCESS_LEVELS_DISABLED_REASONS: 'shared_link_access_levels_disabled_reasons' =
-    'shared_link_access_levels_disabled_reasons';
+export const FIELD_SHARED_LINK_ACCESS_LEVELS_DISABLED_REASONS: 'allowed_shared_link_access_levels_disabled_reasons' =
+    'allowed_shared_link_access_levels_disabled_reasons';
 export const FIELD_SHARED_LINK_FEATURES: 'shared_link_features' = 'shared_link_features';
 export const FIELD_ALLOWED_INVITEE_ROLES: 'allowed_invitee_roles' = 'allowed_invitee_roles';
 export const FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS = 'allowed_shared_link_access_levels';
@@ -169,19 +169,21 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '2.37.0';
+export const DEFAULT_PREVIEW_VERSION = '2.57.0';
 export const DEFAULT_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
 export const DEFAULT_HOSTNAME_API = 'https://api.box.com';
 export const DEFAULT_HOSTNAME_STATIC = 'https://cdn01.boxcdn.net';
 export const DEFAULT_HOSTNAME_UPLOAD = 'https://upload.box.com';
+export const DEFAULT_HOSTNAME_UPLOAD_APP = 'https://upload.app.box.com';
 export const DEFAULT_HOSTNAME_APP = 'https://app.box.com';
 export const DEFAULT_CONTAINER = 'body';
 export const DEFAULT_ROOT = '0';
 export const DEFAULT_SEARCH_DEBOUNCE = 500;
 export const DEFAULT_COLLAB_DEBOUNCE = 500;
 export const DEFAULT_MAX_COLLABORATORS = 25;
+export const DEFAULT_MAX_CONTACTS = 50;
 export const DEFAULT_PAGE_NUMBER = 1;
 export const DEFAULT_PAGE_SIZE = 50;
 export const DEFAULT_FETCH_START = 0;
@@ -206,6 +208,7 @@ export const STATUS_STAGED: 'staged' = 'staged';
 export const STATUS_COMPLETE: 'complete' = 'complete';
 export const STATUS_ERROR: 'error' = 'error';
 export const STATUS_ACCEPTED: 'accepted' = 'accepted';
+export const STATUS_INACTIVE: 'inactive' = 'inactive';
 
 /* ------------------- Styles ------------------------ */
 export const CLASS_MODAL_CONTENT = 'be-modal-dialog-content';
@@ -227,6 +230,8 @@ export const ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED = 'child_folder_failed_upload
 export const ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED = 'storage_limit_exceeded';
 export const ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED = 'file_size_limit_exceeded';
 export const ERROR_CODE_UPLOAD_PENDING_APP_FOLDER_SIZE_LIMIT = 'pending_app_folder_size_limit';
+export const ERROR_CODE_UPLOAD_BAD_DIGEST = 'bad_digest';
+export const ERROR_CODE_UPLOAD_FAILED_PACKAGE = 'failed_package_upload';
 export const ERROR_CODE_FETCH_ACTIVITY = 'fetch_activity_error';
 export const ERROR_CODE_FETCH_ANNOTATION = 'fetch_annotation_error';
 export const ERROR_CODE_FETCH_ANNOTATIONS = 'fetch_annotations_error';
@@ -261,6 +266,7 @@ export const ERROR_CODE_CREATE_FOLDER = 'create_folder_error';
 export const ERROR_CODE_CREATE_METADATA = 'create_metadata_error';
 export const ERROR_CODE_DELETE_APP_ACTIVITY = 'delete_app_activity_error';
 export const ERROR_CODE_DELETE_ANNOTATION = 'delete_annotation_error';
+export const ERROR_CODE_EDIT_ANNOTATION = 'edit_annotation_error';
 export const ERROR_CODE_DELETE_COMMENT = 'delete_comment_error';
 export const ERROR_CODE_DELETE_TASK = 'delete_task_error';
 export const ERROR_CODE_DELETE_TASK_ASSIGNMENT = 'delete_task_assignment_error';
@@ -343,6 +349,10 @@ export const SKILLS_STATUS_INVOKED = 'skills_invoked_status';
 
 /* ------------------ File Extensions ---------------------- */
 export const FILE_EXTENSION_BOX_NOTE = 'boxnote';
+export const FILE_EXTENSION_GOOGLE_DOC = 'gdoc';
+export const FILE_EXTENSION_GOOGLE_SHEET = 'gsheet';
+export const FILE_EXTENSION_GOOGLE_SLIDE = 'gslides';
+export const FILE_EXTENSION_GOOGLE_SLIDE_LEGACY = 'gslide';
 
 /* ------------------ X-Rep-Hints ---------------------- */
 // available dimensions for JPG: "32x32", "94x94", "160x160", "320x320", "1024x1024", "2048x2048"
@@ -378,10 +388,11 @@ export const HTTP_OPTIONS: 'OPTIONS' = 'OPTIONS';
 export const HTTP_HEAD: 'HEAD' = 'HEAD';
 
 /* ------------------ HTTP Codes  ---------------------- */
+export const HTTP_STATUS_CODE_BAD_REQUEST: 400 = 400;
+export const HTTP_STATUS_CODE_UNAUTHORIZED: 401 = 401;
 export const HTTP_STATUS_CODE_FORBIDDEN: 403 = 403;
 export const HTTP_STATUS_CODE_NOT_FOUND: 404 = 404;
 export const HTTP_STATUS_CODE_CONFLICT: 409 = 409;
-export const HTTP_STATUS_CODE_UNAUTHORIZED: 401 = 401;
 export const HTTP_STATUS_CODE_RATE_LIMIT: 429 = 429;
 export const HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR: 500 = 500;
 export const HTTP_STATUS_CODE_NOT_IMPLEMENTED: 501 = 501;

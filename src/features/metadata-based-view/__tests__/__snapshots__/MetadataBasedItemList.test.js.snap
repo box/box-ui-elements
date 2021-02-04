@@ -12,19 +12,19 @@ exports[`features/metadata-based-view/MetadataBasedItemList render() should rend
               "fields": Array [
                 Object {
                   "displayName": "Type",
-                  "key": "type",
+                  "key": "metadata.enterprise_12345.awesomeTemplate.type",
                   "type": "string",
                   "value": "bill",
                 },
                 Object {
                   "displayName": "Amount",
-                  "key": "amount",
+                  "key": "metadata.enterprise_12345.awesomeTemplate.amount",
                   "type": "float",
                   "value": 100.12,
                 },
                 Object {
                   "displayName": "Created",
-                  "key": "created",
+                  "key": "metadata.enterprise_12345.awesomeTemplate.created",
                   "type": "date",
                   "value": "2020-08-18T00:00:00.000Z",
                 },
@@ -42,19 +42,19 @@ exports[`features/metadata-based-view/MetadataBasedItemList render() should rend
               "fields": Array [
                 Object {
                   "displayName": "Type",
-                  "key": "type",
+                  "key": "metadata.enterprise_12345.awesomeTemplate.type",
                   "type": "string",
                   "value": "receipt",
                 },
                 Object {
                   "displayName": "Amount",
-                  "key": "amount",
+                  "key": "metadata.enterprise_12345.awesomeTemplate.amount",
                   "type": "float",
                   "value": 200.88,
                 },
                 Object {
                   "displayName": "Created",
-                  "key": "created",
+                  "key": "metadata.enterprise_12345.awesomeTemplate.created",
                   "type": "date",
                   "value": "2020-08-18T00:00:00.000Z",
                 },
@@ -69,28 +69,28 @@ exports[`features/metadata-based-view/MetadataBasedItemList render() should rend
       "nextMarker": "abc",
     }
   }
-  intl={
-    Object {
-      "formatMessage": [MockFunction],
-    }
-  }
-  metadataFieldsToShow={
+  fieldsToShow={
     Array [
-      "type",
+      "size",
       Object {
         "canEdit": true,
-        "key": "amount",
+        "key": "metadata.enterprise_12345.awesomeTemplate.amount",
       },
       Object {
         "canEdit": true,
         "displayName": "Created At",
-        "key": "created",
+        "key": "metadata.enterprise_12345.awesomeTemplate.created",
       },
       Object {
         "canEdit": true,
         "key": "invalidKey",
       },
     ]
+  }
+  intl={
+    Object {
+      "formatMessage": [MockFunction],
+    }
   }
   onItemClick={[MockFunction]}
   onMetadataUpdate={[MockFunction]}

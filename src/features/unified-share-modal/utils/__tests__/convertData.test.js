@@ -1,14 +1,19 @@
 import {
     API_TO_USM_PERMISSION_LEVEL_MAP,
+    convertAccessLevelsDisabledReasons,
     convertAllowedAccessLevels,
+    convertCollab,
+    convertCollabsRequest,
     convertCollabsResponse,
     convertGroupContactsResponse,
-    convertUserContactsResponse,
+    convertIsDownloadSettingAvailable,
     convertItemResponse,
-    convertUserResponse,
     convertSharedLinkPermissions,
     convertSharedLinkSettings,
-    convertCollabsRequest,
+    convertUserContactsResponse,
+    convertUserContactsByEmailResponse,
+    convertUserResponse,
+    convertEffectiveSharedLinkPermission,
 } from '../convertData';
 import {
     TYPE_FILE,
@@ -25,6 +30,7 @@ import {
     ANYONE_WITH_LINK,
     CAN_VIEW_DOWNLOAD,
     CAN_VIEW_ONLY,
+    DISABLED_REASON_ACCESS_POLICY,
     PEOPLE_IN_ITEM,
 } from '../../constants';
 import {
@@ -43,13 +49,16 @@ import {
     MOCK_COLLABS_CONVERTED_REQUEST,
     MOCK_COLLAB_IDS_CONVERTED,
     MOCK_CONTACTS_API_RESPONSE,
+    MOCK_CONTACTS_API_RESPONSE_UNSORTED,
     MOCK_CONTACTS_CONVERTED_RESPONSE,
+    MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE,
     MOCK_COLLABS_CONVERTED_GROUPS,
     MOCK_COLLABS_REQUEST_GROUPS_ONLY,
     MOCK_COLLABS_CONVERTED_USERS,
     MOCK_COLLABS_REQUEST_USERS_ONLY,
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
-    MOCK_DISABLED_REASONS,
+    MOCK_CONVERTED_DISABLED_REASONS,
+    MOCK_DISABLED_REASONS_FROM_API,
     MOCK_GROUP_CONTACTS_API_RESPONSE,
     MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
     MOCK_ITEM_PERMISSIONS,
@@ -65,16 +74,33 @@ import {
     MOCK_SETTINGS_WITHOUT_EXPIRATION,
     MOCK_SETTINGS_WITHOUT_PASSWORD,
     MOCK_SETTINGS_WITHOUT_VANITY_URL,
-    MOCK_TIMESTAMP,
+    MOCK_TIMESTAMP_MILLISECONDS,
     MOCK_TIMESTAMP_ISO_STRING,
     MOCK_USER_IDS_CONVERTED,
     MOCK_VANITY_URL,
+    MOCK_GROUP_CONTACTS_API_RESPONSE_UNSORTED,
 } from '../__mocks__/USMMocks';
 
 jest.mock('../../../../utils/file', () => ({
+    ...jest.requireActual('../../../../utils/file'),
     getTypedFileId: () => 'f_190457309',
     getTypedFolderId: () => 'd_190457309',
 }));
+
+describe('convertAccessLevelsDisabledReasons', () => {
+    // The "collaborators" access level will never have a disabled reason.
+    test.each`
+        disabledReasonsFromAPI                        | convertedDisabledReasons                                  | description
+        ${MOCK_DISABLED_REASONS_FROM_API}             | ${MOCK_CONVERTED_DISABLED_REASONS}                        | ${'both company and open'}
+        ${{ company: DISABLED_REASON_ACCESS_POLICY }} | ${{ peopleInYourCompany: DISABLED_REASON_ACCESS_POLICY }} | ${'company only'}
+        ${{ open: DISABLED_REASON_ACCESS_POLICY }}    | ${{ peopleWithTheLink: DISABLED_REASON_ACCESS_POLICY }}   | ${'open only'}
+    `(
+        'should convert access levels disabled reasons when given reasons for $description',
+        ({ disabledReasonsFromAPI, convertedDisabledReasons }) => {
+            expect(convertAccessLevelsDisabledReasons(disabledReasonsFromAPI)).toEqual(convertedDisabledReasons);
+        },
+    );
+});
 
 describe('convertAllowedAccessLevels', () => {
     // The "collaborators" access level is always allowed.
@@ -100,7 +126,8 @@ describe('convertItemResponse()', () => {
     const ITEM_DESCRIPTION = 'Why we <3 Box UI Elements';
     const ITEM_SHARED_LINK_URL = 'https://cloud.box.com/s/boxuielementsarethebest';
     const ITEM_SHARED_DOWNLOAD_URL = 'https://cloud.box.com/shared/static/boxuielementsarethebest';
-    const ITEM_EXTENSION = '.png';
+    const ITEM_EXTENSION = 'png';
+    const ITEM_EXTENSION_GDOC = 'gdoc';
 
     const ITEM_SHARED_LINK = {
         access: 'company',
@@ -185,71 +212,72 @@ describe('convertItemResponse()', () => {
     };
 
     test.each`
-        itemType       | extension         | sharedLink          | sharedLinkFeatures          | permissions                     | typedID            | description
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with no shared link, full permissions, and all shared link features'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with no shared link, download permissions, and all shared link features'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with no shared link, invite collabs permissions, and all shared link features'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with no shared link, set share access permissions, and all shared link features'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with a shared link, full permissions, and all shared link features'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with a shared link, download permissions, and all shared link features'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with a shared link, invite collabs permissions, and all shared link features'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with a shared link, set share access permissions, and all shared link features'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${VANITY_NAME_ONLY}         | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with no shared link, full permissions, and the vanity URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${VANITY_NAME_ONLY}         | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with no shared link, download permissions, and the vanity URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${VANITY_NAME_ONLY}         | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with no shared link, invite collabs permissions, and the vanity URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${VANITY_NAME_ONLY}         | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with no shared link, set share access permissions, and the vanity URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with a shared link, full permissions, and the vanity URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with a shared link, download permissions, and the vanity URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with a shared link, invite collabs permissions, and the vanity URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with a shared link, set share access permissions, and the vanity URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with no shared link, full permissions, and the download URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with no shared link, download permissions, and the download URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with no shared link, invite collabs permissions, and the download URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with no shared link, set share access permissions, and the download URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with a shared link, full permissions, and the download URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with a shared link, download permissions, and the download URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with a shared link, invite collabs permissions, and the download URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with a shared link, set share access permissions, and the download URL feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${PASSWORD_ONLY}            | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with no shared link, full permissions, and the password feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${PASSWORD_ONLY}            | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with no shared link, download permissions, and the password feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${PASSWORD_ONLY}            | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with no shared link, invite collabs permissions, and the password feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${null}             | ${PASSWORD_ONLY}            | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with no shared link, set share access permissions, and the password feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with a shared link, full permissions, and the password feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with a shared link, download permissions, and the password feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with a shared link, invite collabs permissions, and the password feature'}
-        ${TYPE_FILE}   | ${ITEM_EXTENSION} | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with a shared link, set share access permissions, and the password feature'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with no shared link, full permissions, and all shared link features'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with no shared link, download permissions, and all shared link features'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with no shared link, invite collabs permissions, and all shared link features'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with no shared link, set share access permissions, and all shared link features'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with a shared link, full permissions, and all shared link features'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with a shared link, download permissions, and all shared link features'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with a shared link, invite collabs permissions, and all shared link features'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with a shared link, set share access permissions, and all shared link features'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${VANITY_NAME_ONLY}         | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with no shared link, full permissions, and the vanity URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${VANITY_NAME_ONLY}         | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with no shared link, download permissions, and the vanity URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${VANITY_NAME_ONLY}         | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with no shared link, invite collabs permissions, and the vanity URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${VANITY_NAME_ONLY}         | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with no shared link, set share access permissions, and the vanity URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with a shared link, full permissions, and the vanity URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with a shared link, download permissions, and the vanity URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with a shared link, invite collabs permissions, and the vanity URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with a shared link, set share access permissions, and the vanity URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with no shared link, full permissions, and the download URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with no shared link, download permissions, and the download URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with no shared link, invite collabs permissions, and the download URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with no shared link, set share access permissions, and the download URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with a shared link, full permissions, and the download URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with a shared link, download permissions, and the download URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with a shared link, invite collabs permissions, and the download URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with a shared link, set share access permissions, and the download URL feature'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${PASSWORD_ONLY}            | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with no shared link, full permissions, and the password feature'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${PASSWORD_ONLY}            | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with no shared link, download permissions, and the password feature'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${PASSWORD_ONLY}            | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with no shared link, invite collabs permissions, and the password feature'}
-        ${TYPE_FOLDER} | ${null}           | ${null}             | ${PASSWORD_ONLY}            | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with no shared link, set share access permissions, and the password feature'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with a shared link, full permissions, and the password feature'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with a shared link, download permissions, and the password feature'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with a shared link, invite collabs permissions, and the password feature'}
-        ${TYPE_FOLDER} | ${null}           | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with a shared link, set share access permissions, and the password feature'}
+        itemType       | extension              | sharedLink          | sharedLinkFeatures          | permissions                     | typedID            | description
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with no shared link, full permissions, and all shared link features'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with no shared link, download permissions, and all shared link features'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with no shared link, invite collabs permissions, and all shared link features'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with no shared link, set share access permissions, and all shared link features'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with a shared link, full permissions, and all shared link features'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with a shared link, download permissions, and all shared link features'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with a shared link, invite collabs permissions, and all shared link features'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with a shared link, set share access permissions, and all shared link features'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${VANITY_NAME_ONLY}         | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with no shared link, full permissions, and the vanity URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${VANITY_NAME_ONLY}         | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with no shared link, download permissions, and the vanity URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${VANITY_NAME_ONLY}         | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with no shared link, invite collabs permissions, and the vanity URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${VANITY_NAME_ONLY}         | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with no shared link, set share access permissions, and the vanity URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with a shared link, full permissions, and the vanity URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with a shared link, download permissions, and the vanity URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with a shared link, invite collabs permissions, and the vanity URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with a shared link, set share access permissions, and the vanity URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with no shared link, full permissions, and the download URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with no shared link, download permissions, and the download URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with no shared link, invite collabs permissions, and the download URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with no shared link, set share access permissions, and the download URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with a shared link, full permissions, and the download URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with a shared link, download permissions, and the download URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with a shared link, invite collabs permissions, and the download URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with a shared link, set share access permissions, and the download URL feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${PASSWORD_ONLY}            | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with no shared link, full permissions, and the password feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${PASSWORD_ONLY}            | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with no shared link, download permissions, and the password feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${PASSWORD_ONLY}            | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with no shared link, invite collabs permissions, and the password feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${null}             | ${PASSWORD_ONLY}            | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with no shared link, set share access permissions, and the password feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${FULL_PERMISSIONS}             | ${TYPED_FILE_ID}   | ${'files with a shared link, full permissions, and the password feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FILE_ID}   | ${'files with a shared link, download permissions, and the password feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FILE_ID}   | ${'files with a shared link, invite collabs permissions, and the password feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION}      | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'files with a shared link, set share access permissions, and the password feature'}
+        ${TYPE_FILE}   | ${ITEM_EXTENSION_GDOC} | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FILE_ID}   | ${'g suite files with a shared link, set share access permissions, and the password feature'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with no shared link, full permissions, and all shared link features'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with no shared link, download permissions, and all shared link features'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with no shared link, invite collabs permissions, and all shared link features'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${ALL_SHARED_LINK_FEATURES} | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with no shared link, set share access permissions, and all shared link features'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with a shared link, full permissions, and all shared link features'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with a shared link, download permissions, and all shared link features'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with a shared link, invite collabs permissions, and all shared link features'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${ALL_SHARED_LINK_FEATURES} | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with a shared link, set share access permissions, and all shared link features'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${VANITY_NAME_ONLY}         | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with no shared link, full permissions, and the vanity URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${VANITY_NAME_ONLY}         | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with no shared link, download permissions, and the vanity URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${VANITY_NAME_ONLY}         | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with no shared link, invite collabs permissions, and the vanity URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${VANITY_NAME_ONLY}         | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with no shared link, set share access permissions, and the vanity URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with a shared link, full permissions, and the vanity URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with a shared link, download permissions, and the vanity URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with a shared link, invite collabs permissions, and the vanity URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${VANITY_NAME_ONLY}         | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with a shared link, set share access permissions, and the vanity URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with no shared link, full permissions, and the download URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with no shared link, download permissions, and the download URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with no shared link, invite collabs permissions, and the download URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${DOWNLOAD_URL_ONLY}        | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with no shared link, set share access permissions, and the download URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with a shared link, full permissions, and the download URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with a shared link, download permissions, and the download URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with a shared link, invite collabs permissions, and the download URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${DOWNLOAD_URL_ONLY}        | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with a shared link, set share access permissions, and the download URL feature'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${PASSWORD_ONLY}            | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with no shared link, full permissions, and the password feature'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${PASSWORD_ONLY}            | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with no shared link, download permissions, and the password feature'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${PASSWORD_ONLY}            | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with no shared link, invite collabs permissions, and the password feature'}
+        ${TYPE_FOLDER} | ${null}                | ${null}             | ${PASSWORD_ONLY}            | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with no shared link, set share access permissions, and the password feature'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${FULL_PERMISSIONS}             | ${TYPED_FOLDER_ID} | ${'folders with a shared link, full permissions, and the password feature'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${DOWNLOAD_PERMISSIONS}         | ${TYPED_FOLDER_ID} | ${'folders with a shared link, download permissions, and the password feature'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${INVITE_COLLAB_PERMISSIONS}    | ${TYPED_FOLDER_ID} | ${'folders with a shared link, invite collabs permissions, and the password feature'}
+        ${TYPE_FOLDER} | ${null}                | ${ITEM_SHARED_LINK} | ${PASSWORD_ONLY}            | ${SET_SHARE_ACCESS_PERMISSIONS} | ${TYPED_FOLDER_ID} | ${'folders with a shared link, set share access permissions, and the password feature'}
     `(
         'should convert $description',
         ({ itemType, extension, sharedLink, sharedLinkFeatures, permissions, typedID }) => {
@@ -271,6 +299,8 @@ describe('convertItemResponse()', () => {
             const { download_url, effective_permission, is_password_enabled, url, vanity_name } = Object(sharedLink);
 
             const { download_url: isDirectLinkAvailable, password } = sharedLinkFeatures;
+
+            const isDownloadAvailable = can_download && extension !== ITEM_EXTENSION_GDOC;
 
             const convertedResponse = {
                 item: {
@@ -295,24 +325,27 @@ describe('convertItemResponse()', () => {
                           accessLevelsDisabledReason: {},
                           allowedAccessLevels: ALLOWED_ACCESS_LEVELS,
                           canChangeAccessLevel: can_set_share_access,
-                          canChangeDownload: can_set_share_access && can_download,
+                          canChangeDownload: can_set_share_access && isDownloadAvailable,
                           canChangeExpiration: can_set_share_access,
                           canChangePassword: can_set_share_access && password,
                           canChangeVanityName: false,
                           canInvite: can_invite_collaborator,
                           directLink: download_url,
-                          expirationTimestamp: MOCK_TIMESTAMP,
+                          expirationTimestamp: MOCK_TIMESTAMP_MILLISECONDS,
                           isDirectLinkAvailable,
-                          isDownloadAllowed: can_download,
-                          isDownloadAvailable: can_download,
-                          isDownloadEnabled: can_download,
-                          isDownloadSettingAvailable: can_download,
+                          isDownloadAllowed: isDownloadAvailable,
+                          isDownloadAvailable,
+                          isDownloadEnabled: isDownloadAvailable,
+                          isDownloadSettingAvailable: isDownloadAvailable,
                           isEditAllowed: true,
                           isNewSharedLink: false,
                           isPasswordAvailable: password,
                           isPasswordEnabled: is_password_enabled,
                           isPreviewAllowed: can_preview,
-                          permissionLevel: API_TO_USM_PERMISSION_LEVEL_MAP[effective_permission],
+                          permissionLevel:
+                              extension !== ITEM_EXTENSION_GDOC
+                                  ? API_TO_USM_PERMISSION_LEVEL_MAP[effective_permission]
+                                  : CAN_VIEW_ONLY,
                           url,
                           vanityName: vanity_name || '',
                       }
@@ -398,12 +431,13 @@ describe('convertItemResponse()', () => {
     });
 
     test.each`
-        disabledReasonsFromAPI   | convertedDisabledReasons | description
-        ${MOCK_DISABLED_REASONS} | ${MOCK_DISABLED_REASONS} | ${'disabled reasons when they are returned from the API'}
-        ${undefined}             | ${{}}                    | ${'default disabled reasons when the API does not return disabled reasons'}
+        disabledReasonsFromAPI            | convertedDisabledReasons           | description
+        ${MOCK_DISABLED_REASONS_FROM_API} | ${MOCK_CONVERTED_DISABLED_REASONS} | ${'disabled reasons when they are returned from the API'}
+        ${undefined}                      | ${{}}                              | ${'default disabled reasons when the API does not return disabled reasons'}
     `('should return $description', ({ disabledReasonsFromAPI, convertedDisabledReasons }) => {
         const responseFromAPI = {
             allowed_invitee_roles: ['editor', 'viewer'],
+            allowed_shared_link_access_levels_disabled_reasons: disabledReasonsFromAPI,
             description: ITEM_DESCRIPTION,
             etag: '1',
             id: ITEM_ID,
@@ -412,7 +446,6 @@ describe('convertItemResponse()', () => {
             permissions: FULL_PERMISSIONS,
             shared_link: ITEM_SHARED_LINK,
             shared_link_features: ALL_SHARED_LINK_FEATURES,
-            shared_link_access_levels_disabled_reasons: disabledReasonsFromAPI,
             type: TYPE_FOLDER,
         };
         const {
@@ -479,7 +512,7 @@ describe('convertSharedLinkSettings', () => {
         'should convert a shared link settings USM object $description when the accessLevel is ANYONE_IN_COMPANY',
         ({ newSettings, permissions, unsharedAt, serverURL, vanityUrl }) => {
             // "password" should not exist in the converted object
-            expect(convertSharedLinkSettings(newSettings, ANYONE_IN_COMPANY, serverURL)).toEqual({
+            expect(convertSharedLinkSettings(newSettings, ANYONE_IN_COMPANY, true, serverURL)).toEqual({
                 permissions,
                 unshared_at: unsharedAt,
                 vanity_url: vanityUrl,
@@ -498,7 +531,7 @@ describe('convertSharedLinkSettings', () => {
         'should convert a shared link settings USM object $description when the accessLevel is PEOPLE_IN_ITEM',
         ({ newSettings, unsharedAt, serverURL, vanityUrl }) => {
             // "password" and "permissions" should not exist in the converted object
-            expect(convertSharedLinkSettings(newSettings, PEOPLE_IN_ITEM, serverURL)).toEqual({
+            expect(convertSharedLinkSettings(newSettings, PEOPLE_IN_ITEM, true, serverURL)).toEqual({
                 unshared_at: unsharedAt,
                 vanity_url: vanityUrl,
             });
@@ -517,9 +550,32 @@ describe('convertSharedLinkSettings', () => {
         'should convert a shared link settings USM object $description when the accessLevel is ANYONE_WITH_LINK',
         ({ newSettings, password, permissions, unsharedAt, serverURL, vanityUrl }) => {
             // All fields should exist in the converted object
-            expect(convertSharedLinkSettings(newSettings, ANYONE_WITH_LINK, serverURL)).toEqual({
+            expect(convertSharedLinkSettings(newSettings, ANYONE_WITH_LINK, true, serverURL)).toEqual({
                 password,
                 permissions,
+                unshared_at: unsharedAt,
+                vanity_url: vanityUrl,
+            });
+        },
+    );
+
+    test.each`
+        newSettings                         | permissions                           | unsharedAt                   | vanityUrl          | password         | serverURL          | description
+        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'with all features'}
+        ${MOCK_SETTINGS_WITHOUT_DOWNLOAD}   | ${MOCK_SETTINGS_PREVIEW_PERMISSIONS}  | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'without disallowed direct downloads'}
+        ${MOCK_SETTINGS_WITHOUT_EXPIRATION} | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${null}                      | ${MOCK_VANITY_URL} | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'without an expiration date'}
+        ${MOCK_SETTINGS_WITHOUT_PASSWORD}   | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${MOCK_VANITY_URL} | ${null}          | ${MOCK_SERVER_URL} | ${'without a password'}
+        ${MOCK_SETTINGS_WITHOUT_VANITY_URL} | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${''}              | ${MOCK_PASSWORD} | ${MOCK_SERVER_URL} | ${'without a vanity name'}
+        ${MOCK_SETTINGS_WITH_ALL_FEATURES}  | ${MOCK_SETTINGS_DOWNLOAD_PERMISSIONS} | ${MOCK_TIMESTAMP_ISO_STRING} | ${''}              | ${MOCK_PASSWORD} | ${null}            | ${'without a server URL'}
+    `(
+        'should convert a shared link settings USM object $description when isDownloadEnabled is false',
+        ({ newSettings, password, permissions, unsharedAt, serverURL, vanityUrl }) => {
+            // can_download should never be in permissions
+            expect(convertSharedLinkSettings(newSettings, ANYONE_WITH_LINK, false, serverURL)).toEqual({
+                password,
+                permissions: {
+                    can_preview: !permissions.can_download,
+                },
                 unshared_at: unsharedAt,
                 vanity_url: vanityUrl,
             });
@@ -690,9 +746,46 @@ describe('convertCollabsResponse', () => {
     );
 });
 
+describe('convertCollab()', () => {
+    test('should convert a new collaborator', () => {
+        const convertedCollaborator = {
+            collabID: MOCK_COLLAB_IDS_CONVERTED[0],
+            email: 'contentexplorer@box.com',
+            hasCustomAvatar: false,
+            imageURL: undefined,
+            isExternalCollab: false,
+            name: 'Content Explorer',
+            translatedRole: 'Editor',
+            type: 'user',
+            userID: MOCK_USER_IDS_CONVERTED[0],
+        };
+        expect(
+            convertCollab({
+                collab: MOCK_COLLABS_API_RESPONSE.entries[0],
+                ownerEmail: MOCK_OWNER_EMAIL,
+                isCurrentUserOwner: true,
+            }),
+        ).toEqual(convertedCollaborator);
+    });
+
+    test.each`
+        collab                               | expectedResponse | description
+        ${{ collab: { status: 'pending' } }} | ${null}          | ${'status is pending'}
+        ${{ collab: undefined }}             | ${null}          | ${'collab does not exist'}
+    `('should return null when $description', ({ collab, expectedResponse }) => {
+        expect(convertCollab(collab, undefined, undefined, true)).toEqual(expectedResponse);
+    });
+});
+
 describe('convertUserContactsResponse()', () => {
-    test('should return all users except the current user', () => {
+    test('should return all active users except the current user', () => {
         expect(convertUserContactsResponse(MOCK_CONTACTS_API_RESPONSE, MOCK_OWNER_ID)).toEqual(
+            MOCK_CONTACTS_CONVERTED_RESPONSE,
+        );
+    });
+
+    test('should return users sorted by name', () => {
+        expect(convertUserContactsResponse(MOCK_CONTACTS_API_RESPONSE_UNSORTED, MOCK_OWNER_ID)).toEqual(
             MOCK_CONTACTS_CONVERTED_RESPONSE,
         );
     });
@@ -702,9 +795,27 @@ describe('convertUserContactsResponse()', () => {
     });
 });
 
+describe('convertUserContactsByEmailResponse()', () => {
+    test('should convert users into an object with emails as keys', () => {
+        expect(convertUserContactsByEmailResponse(MOCK_CONTACTS_API_RESPONSE)).toEqual(
+            MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE,
+        );
+    });
+
+    test('should return an empty object if there are no available users', () => {
+        expect(convertUserContactsByEmailResponse({ total_count: 0, entries: [] }, MOCK_OWNER_ID)).toEqual({});
+    });
+});
+
 describe('convertGroupContactsResponse()', () => {
     test('should return groups with the correct permissions', () => {
         expect(convertGroupContactsResponse(MOCK_GROUP_CONTACTS_API_RESPONSE)).toEqual(
+            MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
+        );
+    });
+
+    test('should return groups sorted by name', () => {
+        expect(convertGroupContactsResponse(MOCK_GROUP_CONTACTS_API_RESPONSE_UNSORTED)).toEqual(
             MOCK_GROUP_CONTACTS_CONVERTED_RESPONSE,
         );
     });
@@ -723,5 +834,37 @@ describe('convertCollabsRequest()', () => {
         ${{ emails: '', groups: '', permission: 'Editor' }} | ${{ groups: [], users: [] }}                            | ${'no users or groups'}
     `('should convert a request with $description', ({ requestFromUSM, convertedResponse }) => {
         expect(convertCollabsRequest(requestFromUSM)).toEqual(convertedResponse);
+    });
+});
+
+describe('convertEffectiveSharedLinkPermission()', () => {
+    const ITEM_EXTENSION = 'png';
+    const ITEM_EXTENSION_GDOC = 'gdoc';
+
+    test.each`
+        extension              | permissionFromApi          | expectedPermission   | description
+        ${ITEM_EXTENSION}      | ${PERMISSION_CAN_DOWNLOAD} | ${CAN_VIEW_DOWNLOAD} | ${'file with download permission'}
+        ${ITEM_EXTENSION}      | ${PERMISSION_CAN_PREVIEW}  | ${CAN_VIEW_ONLY}     | ${'file with preview permission'}
+        ${ITEM_EXTENSION_GDOC} | ${PERMISSION_CAN_DOWNLOAD} | ${CAN_VIEW_ONLY}     | ${'g suite file with download permission'}
+        ${ITEM_EXTENSION_GDOC} | ${PERMISSION_CAN_PREVIEW}  | ${CAN_VIEW_ONLY}     | ${'g suite file with preview permission'}
+    `('should convert the permission for a $description', ({ extension, permissionFromApi, expectedPermission }) => {
+        expect(convertEffectiveSharedLinkPermission(permissionFromApi, extension)).toBe(expectedPermission);
+    });
+});
+
+describe('convertIsDownloadSettingAvailable()', () => {
+    const ITEM_EXTENSION = 'png';
+    const ITEM_EXTENSION_GDOC = 'gdoc';
+
+    test.each`
+        extension              | settingFromApi | expectedSetting | description
+        ${ITEM_EXTENSION}      | ${true}        | ${true}         | ${'file with download available'}
+        ${ITEM_EXTENSION}      | ${false}       | ${false}        | ${'file without download available'}
+        ${ITEM_EXTENSION}      | ${undefined}   | ${undefined}    | ${'file with undefined download available'}
+        ${ITEM_EXTENSION_GDOC} | ${true}        | ${false}        | ${'g suite file with download available'}
+        ${ITEM_EXTENSION_GDOC} | ${false}       | ${false}        | ${'g suite file without download available'}
+        ${ITEM_EXTENSION_GDOC} | ${undefined}   | ${undefined}    | ${'g suite file with undefined download available'}
+    `('should convert the setting for a $description', ({ extension, settingFromApi, expectedSetting }) => {
+        expect(convertIsDownloadSettingAvailable(settingFromApi, extension)).toBe(expectedSetting);
     });
 });
