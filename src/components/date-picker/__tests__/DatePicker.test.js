@@ -423,6 +423,7 @@ describe('components/date-picker/DatePicker', () => {
 
                 instance.handleButtonClick({
                     preventDefault: sandbox.mock(),
+                    stopPropagation: sandbox.mock(),
                 });
             });
 
@@ -439,6 +440,7 @@ describe('components/date-picker/DatePicker', () => {
 
                 instance.handleButtonClick({
                     preventDefault: () => {},
+                    stopPropagation: () => {},
                 });
             });
 
@@ -452,6 +454,7 @@ describe('components/date-picker/DatePicker', () => {
 
                 instance.handleButtonClick({
                     preventDefault: () => {},
+                    stopPropagation: () => {},
                 });
             });
         });
