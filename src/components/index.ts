@@ -25,6 +25,12 @@ export * from './error-mask';
 export { default as Fieldset } from './fieldset';
 export * from './fieldset';
 
+export { default as Ghost } from './ghost';
+export * from './ghost';
+
+export { default as Header } from './header';
+export * from './header';
+
 export { default as Label } from './label';
 export * from './label';
 
