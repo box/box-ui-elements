@@ -18,7 +18,7 @@ type Props = {
 };
 
 const AdditionalTabTooltip = ({ children, defaultTooltipText, isFtuxVisible, ftuxTooltipData }: Props) => {
-    if (!isFtuxVisible || !ftuxTooltipData || !ftuxTooltipData.targetingApi().canShow) {
+    if (!isFtuxVisible || !ftuxTooltipData || !ftuxTooltipData.targetingApi(true).canShow) {
         return (
             <Tooltip position="middle-left" text={defaultTooltipText}>
                 {children}

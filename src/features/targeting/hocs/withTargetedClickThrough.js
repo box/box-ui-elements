@@ -20,7 +20,7 @@ function withTargetedClickThrough<Config>(
         ...Config,
         ...$Exact<TargetedComponentProps>,
     |}) => {
-        const { canShow, onComplete, onClose, onShow } = useTargetingApi();
+        const { canShow, onComplete, onClose, onShow } = useTargetingApi(shouldTarget);
 
         const handleOnComplete = () => {
             if (shouldTarget && canShow) {

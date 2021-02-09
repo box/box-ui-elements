@@ -5,8 +5,8 @@ import { type UseTargetingApi, type TargetingApi } from './types';
 function makeUseShowOne(targetingApis: Array<UseTargetingApi>): Array<UseTargetingApi> {
     let shown: number | null = null;
 
-    function useShowOne(useTargetingApi: UseTargetingApi, index: number): TargetingApi {
-        const { canShow, onShow, onClose, onComplete } = useTargetingApi();
+    function useShowOne(useTargetingApi: UseTargetingApi, index: number, shouldTarget: boolean): TargetingApi {
+        const { canShow, onShow, onClose, onComplete } = useTargetingApi(shouldTarget);
 
         return {
             canShow: (shown === null || shown === index) && canShow,
@@ -22,7 +22,7 @@ function makeUseShowOne(targetingApis: Array<UseTargetingApi>): Array<UseTargeti
     }
 
     return targetingApis.map((targetingApi, index) => {
-        return () => useShowOne(targetingApi, index);
+        return (shouldTarget: boolean) => useShowOne(targetingApi, index, shouldTarget);
     });
 }
 

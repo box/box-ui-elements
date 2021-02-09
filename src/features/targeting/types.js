@@ -30,11 +30,11 @@ export type TargetingApi = $ReadOnly<{
     onShow: () => void,
 }>;
 
-export type UseTargetingApi = () => TargetingApi;
+export type UseTargetingApi = (shouldTarget: boolean) => TargetingApi;
 
 export type TargetedComponentProps = {
     children: React.Node,
     closeOnClickOutside?: boolean,
     shouldTarget: boolean,
-    useTargetingApi: () => TargetingApi,
+    useTargetingApi: UseTargetingApi,
 };
