@@ -34,9 +34,7 @@ describe('components/portal/Portal', () => {
     test('should render the portal as a child to body', () => {
         mountToBody(<Portal />);
         const portalParentElement = document.querySelector('[data-portal]')?.parentElement;
-        if (portalParentElement) {
-            expect(portalParentElement.tagName.toLowerCase()).toEqual('body');
-        }
+        expect(portalParentElement && portalParentElement.tagName.toLowerCase()).toEqual('body');
     });
 
     test('should render the portal children as children node', () => {
@@ -104,17 +102,13 @@ describe('components/portal/Portal', () => {
             wrapper.setProps({ children: 'boo' });
         }
         const portal = document.querySelector('[data-portal]');
-        if (portal) {
-            expect(portal.textContent).toEqual('boo');
-        }
+        expect(portal && portal.textContent).toEqual('boo');
     });
 
     test('should used a passed in document if provided', () => {
         const newDoc = document.implementation.createHTMLDocument('doc');
         mountToBody(<Portal container={newDoc.body}>text</Portal>);
         const portal = newDoc.querySelector('[data-portal]');
-        if (portal && portal.ownerDocument) {
-            expect(portal.ownerDocument.title).toEqual('doc');
-        }
+        expect(portal && portal.ownerDocument && portal.ownerDocument.title).toEqual('doc');
     });
 });
