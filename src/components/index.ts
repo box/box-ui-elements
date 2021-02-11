@@ -37,13 +37,11 @@ export * from './label';
 export { default as LabelPill } from './label-pill';
 export * from './label-pill';
 
-export { default as Link } from './link';
 export * from './link';
 
 export { default as LoadingIndicator } from './loading-indicator';
 export * from './loading-indicator';
 
-export { default as Menu } from './menu';
 export * from './menu';
 
 export { default as PlainButton } from './plain-button';
@@ -62,3 +60,9 @@ export * from './tooltip';
 
 export { default as GuideTooltip } from './guide-tooltip';
 export * from './guide-tooltip';
+
+export { default as Portal } from './portal';
+export * from './portal';
+
+export { default as DraggableList } from './draggable-list';
+export * from './draggable-list';

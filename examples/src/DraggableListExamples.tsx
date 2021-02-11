@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react';
 import uniqueId from 'lodash/uniqueId';
 
@@ -6,18 +5,18 @@ import Checkbox from '../../src/components/checkbox/Checkbox';
 import DraggableList from '../../src/components/draggable-list';
 import DraggableListItem from '../../src/components/draggable-list/DraggableListItem';
 
-import reorder from '../../src/components/draggable-list/draggable-list-utils/reorder';
+import reorder, { ReorderListItem } from '../../src/components/draggable-list/draggable-list-utils/reorder';
 
 import '../styles/DraggableListExamples.scss';
 
-type Props = {
-    isDraggableViaHandle?: boolean,
-};
+interface Props {
+    isDraggableViaHandle?: boolean;
+}
 
-type State = {
-    items: Array<Object>,
-    listId: string,
-};
+interface State {
+    items: Array<ReorderListItem>;
+    listId: string;
+}
 
 class DraggableListExamples extends Component<Props, State> {
     state = {
@@ -32,7 +31,7 @@ class DraggableListExamples extends Component<Props, State> {
         });
     }
 
-    getItems = (count: number): Array<Object> => {
+    getItems = (count: number): Array<ReorderListItem> => {
         return Array.from({ length: count }, (v, k) => k).map(k => ({
             id: uniqueId('item_'),
             label: `item ${k}`,
@@ -57,7 +56,7 @@ class DraggableListExamples extends Component<Props, State> {
 
         return (
             <DraggableList className="draggable-list-example-container" listId={listId} onDragEnd={this.onDragEnd}>
-                {items.map((item, index) => (
+                {items.map((item: ReorderListItem, index) => (
                     <DraggableListItem
                         key={`draggable-${index}`}
                         id={item.id}
