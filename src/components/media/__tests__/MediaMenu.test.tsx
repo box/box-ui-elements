@@ -1,4 +1,5 @@
 import React from 'react';
+import { mount } from 'enzyme';
 
 import MediaMenu from '../MediaMenu';
 
@@ -10,7 +11,11 @@ describe('components/Media/MediaMenu', () => {
             'resin-target': 'my-menu',
         };
         const className = 'foo';
-        const wrapper = mount(<MediaMenu className={className} {...extraProps} />);
+        const wrapper = mount(
+            <MediaMenu className={className} {...extraProps}>
+                <div>foo</div>
+            </MediaMenu>,
+        );
 
         expect(wrapper.find('PlainButton').props()).toEqual(expect.objectContaining(extraProps));
         expect(wrapper.find('PlainButton').prop('className')).toBe(`bdl-Media-menu ${className}`);
