@@ -1,18 +1,17 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { mount } from 'enzyme';
+import * as React from 'react';
+import { mount, MountRendererProps, ReactWrapper } from 'enzyme';
 
 import Portal from '../Portal';
 
 describe('components/portal/Portal', () => {
-    let attachTo;
-    let wrapper = null;
+    let attachTo: HTMLElement | null;
+    let wrapper: ReactWrapper | null = null;
 
     /**
      * Helper method to mount things to the correct DOM element
      * this makes it easier to clean up after ourselves after each test.
      */
-    const mountToBody = (component, options) => {
+    const mountToBody = (component: React.ReactElement, options?: MountRendererProps) => {
         wrapper = mount(component, { attachTo, ...options });
     };
 
@@ -25,17 +24,17 @@ describe('components/portal/Portal', () => {
 
     afterEach(() => {
         // Unmount and remove the mounting point after each test
-        if (wrapper.exists()) {
+        if (wrapper && wrapper.exists()) {
             wrapper.unmount();
             wrapper = null;
         }
-        document.body.removeChild(attachTo);
+        document.body.removeChild(attachTo as HTMLElement);
     });
 
     test('should render the portal as a child to body', () => {
         mountToBody(<Portal />);
-        const portal = document.querySelector('[data-portal]');
-        expect(portal.parentElement.tagName.toLowerCase()).toEqual('body');
+        const portalParentElement = document.querySelector('[data-portal]')?.parentElement;
+        expect(portalParentElement && portalParentElement.tagName.toLowerCase()).toEqual('body');
     });
 
     test('should render the portal children as children node', () => {
@@ -45,43 +44,44 @@ describe('components/portal/Portal', () => {
             </Portal>,
         );
         const portal = document.querySelector('[data-portal]');
-        const child = portal.querySelector('#foo');
+        const child = portal ? portal.querySelector('#foo') : null;
         expect(child).toBeTruthy();
-        expect(attachTo.textContent).toEqual('');
+        expect(attachTo && attachTo.textContent).toEqual('');
     });
 
     test('should pass Portal props as props to the React Root div', () => {
-        mountToBody(<Portal style={{ color: 'blue' }} />);
+        mountToBody(
+            <Portal
+                style={{
+                    color: 'blue',
+                }}
+            />,
+        );
         const portal = document.querySelector('[data-portal]');
-        const reactRoot = portal.querySelector('div');
-        expect(reactRoot.style.color).toEqual('blue');
+        const reactRoot = portal ? portal.querySelector('div') : null;
+        expect(reactRoot && reactRoot.style.color).toEqual('blue');
     });
 
     test('should propagate parent context to the children', () => {
         /**
          * Test class with context
          */
-        class TestPortal extends Component {
-            static childContextTypes = {
-                name: PropTypes.string,
-            };
-
-            getChildContext() {
-                return { name: 'fn-2187' };
-            }
+        const TestPortalContext = React.createContext({ name: 'fn-2187' });
+        class TestPortal extends React.PureComponent {
+            static contextType = TestPortalContext;
 
             render() {
                 return <Portal {...this.props} />;
             }
         }
-        const ChildComponent = (props, context) => {
+        TestPortal.contextType = TestPortalContext;
+        const ChildComponent = (context: { name: string }) => {
             expect(context.name).toEqual('fn-2187');
             return <div id="sanity" />;
         };
-        ChildComponent.contextTypes = { name: PropTypes.string };
         mountToBody(
             <TestPortal>
-                <ChildComponent />
+                <TestPortalContext.Consumer>{context => <ChildComponent {...context} />}</TestPortalContext.Consumer>
             </TestPortal>,
         );
         expect(document.querySelector('#sanity')).toBeTruthy();
@@ -90,21 +90,25 @@ describe('components/portal/Portal', () => {
     test('should remove the portal from the DOM when unmounting', () => {
         mountToBody(<Portal />);
         expect(document.querySelector('[data-portal]')).toBeTruthy();
-        wrapper.unmount();
+        if (wrapper) {
+            wrapper.unmount();
+        }
         expect(document.querySelector('[data-portal]')).toBeFalsy();
     });
 
     test('should update portaled DOM when updating React props', () => {
         mountToBody(<Portal>wee</Portal>);
-        wrapper.setProps({ children: 'boo' });
+        if (wrapper) {
+            wrapper.setProps({ children: 'boo' });
+        }
         const portal = document.querySelector('[data-portal]');
-        expect(portal.textContent).toEqual('boo');
+        expect(portal && portal.textContent).toEqual('boo');
     });
 
     test('should used a passed in document if provided', () => {
         const newDoc = document.implementation.createHTMLDocument('doc');
         mountToBody(<Portal container={newDoc.body}>text</Portal>);
         const portal = newDoc.querySelector('[data-portal]');
-        expect(portal.ownerDocument.title).toEqual('doc');
+        expect(portal && portal.ownerDocument && portal.ownerDocument.title).toEqual('doc');
     });
 });
