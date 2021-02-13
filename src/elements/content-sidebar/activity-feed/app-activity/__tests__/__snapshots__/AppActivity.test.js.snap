@@ -2,14 +2,11 @@
 
 exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should correctly render an app activity item 1`] = `
 <Media
-  as="div"
   className="bcs-AppActivity"
   data-resin-feature="appActivityCardtemplate_12345"
   data-resin-target="loaded"
 >
-  <MediaFigure
-    as="figure"
-  >
+  <MediaFigure>
     <img
       alt="My Application Icon"
       className="bcs-AppActivity-icon"
@@ -35,9 +32,7 @@ exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should c
       targetAttachment="bottom right"
     >
       <MediaMenu
-        dropdownProps={Object {}}
         isDisabled={false}
-        menuProps={Object {}}
       >
         <MenuItem
           onClick={[Function]}
