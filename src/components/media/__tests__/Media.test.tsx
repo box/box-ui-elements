@@ -37,12 +37,14 @@ describe('components/Media', () => {
     test('"as" prop changes Media root element', () => {
         const wrapper = shallow(
             <Media>
-                <div>foo</div>
+                <Media.Figure>foo</Media.Figure>
+                <Media.Body>bar</Media.Body>
             </Media>,
         );
         const wrapperAs = shallow(
             <Media as="li">
-                <div>foo</div>
+                <Media.Figure>foo</Media.Figure>
+                <Media.Body>bar</Media.Body>
             </Media>,
         );
         expect(wrapper.is('div')).toBe(true);

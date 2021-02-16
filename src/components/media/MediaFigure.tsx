@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 import './Media.scss';
 
-type Props = {
+export interface MediaFigureProps {
     /** Component to use as outermost element, e.g., 'div' */
     as?: React.ElementType;
 
@@ -12,9 +12,12 @@ type Props = {
 
     /** Additional class names */
     className?: string;
-} & React.HTMLAttributes<HTMLOrSVGElement>;
 
-const MediaFigure = ({ as: Wrapper = 'figure', className, children, ...rest }: Props) => (
+    /** Additional inline styles */
+    style?: React.CSSProperties;
+}
+
+const MediaFigure = ({ as: Wrapper = 'figure', className, children, ...rest }: MediaFigureProps) => (
     <Wrapper className={classnames('bdl-Media-figure', className)} {...rest}>
         {children}
     </Wrapper>

@@ -3,15 +3,18 @@ import classnames from 'classnames';
 
 import './Media.scss';
 
-type Props = {
+export interface MediaBodyProps {
     /** Child elements */
     children: React.ReactNode;
 
     /** Additional class names */
     className?: string;
-} & React.HTMLAttributes<HTMLOrSVGElement>;
 
-const MediaBody = ({ className, children, ...rest }: Props) => (
+    /** Additional inline styles */
+    style?: React.CSSProperties;
+}
+
+const MediaBody = ({ className, children, ...rest }: MediaBodyProps) => (
     <div className={classnames('bdl-Media-body', className)} {...rest}>
         {children}
     </div>

@@ -3,15 +3,14 @@ import classnames from 'classnames';
 
 import IconEllipsis from '../../icons/general/IconEllipsis';
 import { ButtonType } from '../button';
-import PlainButton from '../plain-button';
-import { PlainButtonProps } from '../plain-button/PlainButton';
+import PlainButton, { PlainButtonProps } from '../plain-button';
 // @ts-ignore TODO: migrate DropdownMenu to typescript
 import DropdownMenu from '../dropdown-menu';
 import { Menu } from '../menu';
 import { bdlGray50 } from '../../styles/variables';
 import './Media.scss';
 
-type Props = {
+export interface MediaMenuProps extends PlainButtonProps {
     /** Child elements */
     children: Array<React.ReactNode> | React.ReactChild;
 
@@ -26,9 +25,16 @@ type Props = {
 
     /** Additional props for the Menu */
     menuProps?: {};
-} & PlainButtonProps;
+}
 
-const MediaMenu = ({ className, children, isDisabled = false, dropdownProps = {}, menuProps = {}, ...rest }: Props) => (
+const MediaMenu = ({
+    className,
+    children,
+    isDisabled = false,
+    dropdownProps = {},
+    menuProps = {},
+    ...rest
+}: MediaMenuProps) => (
     <DropdownMenu constrainToScrollParent isRightAligned {...dropdownProps}>
         <PlainButton
             isDisabled={isDisabled}

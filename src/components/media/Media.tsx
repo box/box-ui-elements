@@ -11,7 +11,7 @@ type Props = {
     as?: React.ElementType;
 
     /** Child elements */
-    children: Array<React.ReactElement<typeof MediaFigure | typeof MediaBody | typeof MediaMenu>> | React.ReactNode;
+    children: Array<React.ReactElement<typeof MediaFigure | typeof MediaBody | typeof MediaMenu>>;
 
     /** Additional class names */
     className?: string;
