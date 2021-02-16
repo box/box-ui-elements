@@ -6,7 +6,7 @@ import MediaBody from './MediaBody';
 import MediaMenu from './MediaMenu';
 import './Media.scss';
 
-type Props = {
+export interface MediaProps {
     /** Component to use as outermost element, e.g., 'li' */
     as?: React.ElementType;
 
@@ -15,9 +15,12 @@ type Props = {
 
     /** Additional class names */
     className?: string;
-} & React.HTMLAttributes<HTMLOrSVGElement>;
 
-const Media = ({ as: Wrapper = 'div', children, className, ...rest }: Props) => (
+    /** Additional inline styles */
+    style?: React.CSSProperties;
+}
+
+const Media = ({ as: Wrapper = 'div', children, className, ...rest }: MediaProps) => (
     <Wrapper className={classnames('bdl-Media', className)} {...rest}>
         {children}
     </Wrapper>
