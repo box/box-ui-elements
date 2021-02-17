@@ -22,7 +22,9 @@ exports[`components/Media compound component 1`] = `
       id="menubutton2"
       type="button"
     >
-      <div />
+      <div
+        data-test-id="icon-ellipsis"
+      />
     </button>
     <div>
       <b>
