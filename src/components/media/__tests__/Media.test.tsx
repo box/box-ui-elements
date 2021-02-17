@@ -3,7 +3,7 @@ import { mount, shallow } from 'enzyme';
 
 import Media from '../Media';
 
-jest.mock('../../../icons/general/IconEllipsis', () => () => <div />);
+jest.mock('../../../icons/general/IconEllipsis', () => () => <div data-test-id="icon-ellipsis" />);
 
 describe('components/Media', () => {
     test('compound component', () => {

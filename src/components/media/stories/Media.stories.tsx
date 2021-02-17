@@ -18,7 +18,7 @@ export const example = () => (
         </Media.Figure>
 
         <Media.Body>
-            <Media.Menu>
+            <Media.Menu aria-label="Options">
                 <MenuItem>Edit</MenuItem>
                 <MenuItem>Delete</MenuItem>
             </Media.Menu>
