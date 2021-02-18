@@ -32,9 +32,11 @@ function withTargetedClickThrough<Config>(
 
         useOnClickBody(onClose, !!(shouldShow && closeOnClickOutside));
 
-        if (shouldShow) {
-            onShow();
-        }
+        React.useEffect(() => {
+            if (shouldShow) {
+                onShow();
+            }
+        }, [shouldShow, onShow]);
 
         return (
             <WrappedComponent showCloseButton stopBubble {...rest} isShown={shouldShow} onDismiss={onClose}>
