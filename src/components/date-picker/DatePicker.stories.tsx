@@ -1,8 +1,8 @@
-// @flow
 import * as React from 'react';
 import { IntlProvider } from 'react-intl';
 import { State, Store } from '@sambego/storybook-state';
 
+import { TooltipPosition } from '../tooltip';
 import DatePicker from './DatePicker';
 import notes from './DatePicker.stories.md';
 
@@ -28,7 +28,7 @@ export const basic = () => {
                         }}
                         label="Date"
                         name="datepicker"
-                        onChange={date => {
+                        onChange={(date: Date) => {
                             componentStore.set({ date });
                         }}
                         placeholder="Date"
@@ -69,7 +69,7 @@ export const customErrorTooltipPosition = () => (
     <IntlProvider locale="en-US">
         <DatePicker
             error="Error Message"
-            errorTooltipPosition="middle-right"
+            errorTooltipPosition={TooltipPosition.MIDDLE_RIGHT}
             placeholder="Date"
             name="datepicker"
             label="Disabled Date Picker"
@@ -81,10 +81,10 @@ export const withRange = () => {
     const MAX_TIME = new Date('3000-01-01T00:00:00.000Z');
     const MIN_TIME = new Date(0);
     const TODAY = new Date();
-    const componentStore = new Store({
+    const componentStore: Store<{ date: Date; fromDate?: Date; toDate?: Date }> = new Store({
         date: new Date(),
-        fromDate: null,
-        toDate: null,
+        fromDate: undefined,
+        toDate: undefined,
     });
     return (
         <State store={componentStore}>
@@ -102,7 +102,7 @@ export const withRange = () => {
                             label="From Date"
                             maxDate={state.toDate || MAX_TIME}
                             name="datepicker-from"
-                            onChange={date => {
+                            onChange={(date: Date) => {
                                 componentStore.set({ fromDate: date });
                             }}
                             placeholder="Choose a Date"
@@ -120,7 +120,7 @@ export const withRange = () => {
                             minDate={state.fromDate || MIN_TIME}
                             maxDate={TODAY}
                             name="datepicker-to"
-                            onChange={date => {
+                            onChange={(date: Date) => {
                                 componentStore.set({ toDate: date });
                             }}
                             placeholder="Choose a Date"
