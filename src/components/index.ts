@@ -42,6 +42,9 @@ export * from './link';
 export { default as LoadingIndicator } from './loading-indicator';
 export * from './loading-indicator';
 
+export { default as Logo } from './logo';
+export * from './logo';
+
 export * from './menu';
 
 export { default as PlainButton } from './plain-button';
