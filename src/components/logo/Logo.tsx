@@ -11,7 +11,7 @@ export interface LogoProps {
     height?: number;
 
     /** Title attribute on the logo image. */
-    title?: string | React.ReactElement<any>;
+    title?: string | React.ReactElement<string>;
 
     /** Width of the logo image to be rendered. */
     width?: number;
