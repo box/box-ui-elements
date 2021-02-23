@@ -18,6 +18,7 @@ import Label from '../label';
 import PlainButton from '../plain-button';
 import Tooltip, { TooltipPosition, TooltipTheme } from '../tooltip';
 
+// @ts-ignore flow import
 import { convertDateToUnixMidnightTime } from '../../utils/datetime';
 
 import './DatePicker.scss';
@@ -144,7 +145,7 @@ export interface DatePickerProps extends WrappedComponentProps {
     /** Resin tag */
     resinTarget?: string;
     /** Date to set the input */
-    value?: Date;
+    value?: Date | null;
     yearRange?: number | Array<number>;
 }
 
@@ -172,7 +173,7 @@ class DatePicker extends React.Component<DatePickerProps> {
         let defaultValue = value;
         // When date format is utcTime, initial date needs to be converted from being relative to GMT to being
         // relative to browser timezone
-        if (dateFormat === DateFormat.UTC_TIME_DATE_FORMAT && typeof value !== 'undefined') {
+        if (dateFormat === DateFormat.UTC_TIME_DATE_FORMAT && value) {
             defaultValue = convertUTCToLocal(value);
         }
         // Make sure the DST detection algorithm in browsers is up-to-date
@@ -190,7 +191,7 @@ class DatePicker extends React.Component<DatePickerProps> {
         this.datePicker = new Pikaday({
             blurFieldOnSelect: false, // Available in pikaday > 1.5.1
             setDefaultDate: true,
-            defaultDate: defaultValue,
+            defaultDate: defaultValue === null ? undefined : defaultValue,
             field: this.dateInputEl,
             firstDay: localesWhereWeekStartsOnSunday.includes(intl.locale) ? 0 : 1,
             maxDate,

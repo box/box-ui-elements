@@ -81,10 +81,10 @@ export const withRange = () => {
     const MAX_TIME = new Date('3000-01-01T00:00:00.000Z');
     const MIN_TIME = new Date(0);
     const TODAY = new Date();
-    const componentStore: Store<{ date: Date; fromDate?: Date; toDate?: Date }> = new Store({
+    const componentStore: Store<{ date: Date; fromDate: Date | null; toDate: Date | null }> = new Store({
         date: new Date(),
-        fromDate: undefined,
-        toDate: undefined,
+        fromDate: null,
+        toDate: null,
     });
     return (
         <State store={componentStore}>

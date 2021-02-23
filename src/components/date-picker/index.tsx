@@ -1,1 +1,1 @@
-export { default, DatePickerProps, DateFormat } from './DatePicker';
+export { default, DateFormat } from './DatePicker';
