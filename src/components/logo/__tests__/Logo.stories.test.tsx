@@ -1,6 +1,6 @@
 describe('components/logo/Logo', () => {
-    test.each([['logo']])('looks visually correct when using story %s', async id => {
-        const image = await BoxVisualTestUtils.takeScreenshot(id);
+    test('looks visually correct when using story %s', async () => {
+        const image = await BoxVisualTestUtils.takeScreenshot('logo');
         return expect(image).toMatchImageSnapshot();
     });
 });
