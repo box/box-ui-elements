@@ -69,3 +69,6 @@ export * from './portal';
 
 export { default as DraggableList } from './draggable-list';
 export * from './draggable-list';
+
+export { default as DatePicker } from './date-picker';
+export * from './date-picker';
