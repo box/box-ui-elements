@@ -112,12 +112,16 @@ export interface DatePickerProps extends WrappedComponentProps {
     error?: React.ReactNode;
     /** Position of error message tooltip */
     errorTooltipPosition?: TooltipPosition;
+    /** Whether to show or hide the field */
+    hideDefaultInput?: boolean;
     /** Whether to show or hide the field's label */
     hideLabel?: boolean;
     /** Whether show or hide the 'Optional' label */
     hideOptionalLabel?: boolean;
     /** Props that will be applied on the input element */
     inputProps?: Object;
+    /** Is the calendar always visible */
+    isAlwaysVisible?: boolean;
     /** Is input clearable */
     isClearable?: boolean;
     /** Is input disabled */
@@ -146,6 +150,7 @@ export interface DatePickerProps extends WrappedComponentProps {
     resinTarget?: string;
     /** Date to set the input */
     value?: Date | null;
+    /** Number of years, or an array containing an upper and lower range */
     yearRange?: number | Array<number>;
 }
 
@@ -167,7 +172,16 @@ class DatePicker extends React.Component<DatePickerProps> {
     descriptionID = uniqueId('description');
 
     componentDidMount() {
-        const { dateFormat, intl, maxDate, minDate, value, yearRange, isTextInputAllowed } = this.props;
+        const {
+            dateFormat,
+            intl,
+            isAlwaysVisible,
+            isTextInputAllowed,
+            maxDate,
+            minDate,
+            value,
+            yearRange,
+        } = this.props;
         const { formatDate, formatMessage } = intl;
         const { nextMonth, previousMonth } = messages;
         let defaultValue = value;
@@ -206,6 +220,11 @@ class DatePicker extends React.Component<DatePickerProps> {
 
         if (isTextInputAllowed) {
             this.updateDateInputValue(this.formatDisplay(defaultValue));
+        }
+
+        if (isAlwaysVisible) {
+            this.datePicker.show();
+            this.datePicker.hide = noop;
         }
     }
 
@@ -381,10 +400,12 @@ class DatePicker extends React.Component<DatePickerProps> {
             description,
             error,
             errorTooltipPosition,
+            hideDefaultInput,
             hideLabel,
             hideOptionalLabel,
             inputProps,
             intl,
+            isAlwaysVisible,
             isClearable,
             isDisabled,
             isRequired,
@@ -443,11 +464,13 @@ class DatePicker extends React.Component<DatePickerProps> {
                                 theme={TooltipTheme.ERROR}
                             >
                                 <input
+                                    aria-hidden={hideDefaultInput}
                                     ref={ref => {
                                         this.dateInputEl = ref;
                                     }}
                                     className="date-picker-input"
                                     disabled={isDisabled}
+                                    hidden={hideDefaultInput}
                                     onBlur={this.handleInputBlur}
                                     placeholder={placeholder || formatMessage(messages.chooseDate)}
                                     required={isRequired}
@@ -484,18 +507,20 @@ class DatePicker extends React.Component<DatePickerProps> {
                             width={13}
                         />
                     ) : null}
-                    <PlainButton
-                        aria-label={formatMessage(messages.chooseDate)}
-                        className="date-picker-open-btn"
-                        getDOMRef={ref => {
-                            this.datePickerButtonEl = ref;
-                        }}
-                        isDisabled={isDisabled}
-                        onClick={this.handleButtonClick}
-                        type={ButtonType.BUTTON}
-                    >
-                        <IconCalendar height={17} width={16} />
-                    </PlainButton>
+                    {!isAlwaysVisible && (
+                        <PlainButton
+                            aria-label={formatMessage(messages.chooseDate)}
+                            className="date-picker-open-btn"
+                            getDOMRef={ref => {
+                                this.datePickerButtonEl = ref;
+                            }}
+                            isDisabled={isDisabled}
+                            onClick={this.handleButtonClick}
+                            type={ButtonType.BUTTON}
+                        >
+                            <IconCalendar height={17} width={16} />
+                        </PlainButton>
+                    )}
                     <input
                         className="date-picker-unix-time-input"
                         name={name}

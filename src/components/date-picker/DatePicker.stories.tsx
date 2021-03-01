@@ -3,8 +3,11 @@ import { IntlProvider } from 'react-intl';
 import { State, Store } from '@sambego/storybook-state';
 
 import { TooltipPosition } from '../tooltip';
+import Label from '../label';
 import DatePicker from './DatePicker';
 import notes from './DatePicker.stories.md';
+
+import { bdlGray10 } from '../../styles/variables';
 
 export const basic = () => {
     const MIN_TIME = new Date(0);
@@ -52,6 +55,148 @@ export const manuallyEditable = () => (
         <DatePicker isTextInputAllowed placeholder="Date" label="Date Picker" value={new Date('September 27, 2019')} />
     </IntlProvider>
 );
+
+export const withLimitedDateRange = () => {
+    const maxDate = new Date('February 25, 2021');
+    const sixDays = 1000 * 60 * 60 * 24 * 6;
+    const minDate = new Date(maxDate.valueOf() - sixDays);
+    const componentStore = new Store({
+        date: maxDate,
+        fromDate: null,
+        toDate: null,
+    });
+    return (
+        <State store={componentStore}>
+            {state => (
+                <IntlProvider locale="en-US">
+                    <DatePicker
+                        isTextInputAllowed
+                        placeholder="Date"
+                        label="Date Picker"
+                        minDate={minDate}
+                        maxDate={maxDate}
+                        value={state.date}
+                    />
+                </IntlProvider>
+            )}
+        </State>
+    );
+};
+
+export const alwaysVisibleWithHiddenInput = () => {
+    const componentStore = new Store({
+        date: new Date('February 26, 2021'),
+        fromDate: null,
+        toDate: null,
+    });
+    const customInput = (
+        <input
+            aria-disabled
+            disabled
+            style={{
+                background: bdlGray10,
+                border: 0,
+                borderRadius: '4px',
+                padding: '.5em .8em',
+            }}
+        />
+    );
+    return (
+        <State store={componentStore}>
+            {state => (
+                <IntlProvider locale="en-US">
+                    <DatePicker
+                        className="date-picker-example"
+                        displayFormat={{
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                        }}
+                        hideDefaultInput
+                        isAlwaysVisible
+                        isClearable={false}
+                        label="Date"
+                        name="datepicker"
+                        onChange={(date: Date) => {
+                            componentStore.set({ date });
+                        }}
+                        placeholder="Date"
+                        value={state.date}
+                    />
+                </IntlProvider>
+            )}
+        </State>
+    );
+};
+
+export const alwaysVisibleWithSeparateInputField = () => {
+    const componentStore = new Store({
+        date: new Date('February 26, 2021'),
+        fromDate: null,
+        toDate: null,
+    });
+
+    return (
+        <State store={componentStore}>
+            {state => (
+                <IntlProvider locale="en-US">
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'top',
+                            justifyContent: 'space-around',
+                            width: '650px',
+                        }}
+                    >
+                        <DatePicker
+                            className="date-picker-example"
+                            displayFormat={{
+                                day: 'numeric',
+                                month: 'short',
+                                year: 'numeric',
+                            }}
+                            hideDefaultInput
+                            hideLabel
+                            isAlwaysVisible
+                            isClearable={false}
+                            label="Date"
+                            name="datepicker"
+                            onChange={(date: Date) => {
+                                componentStore.set({ date });
+                            }}
+                            placeholder="Date"
+                            value={state.date}
+                        />
+                        <Label
+                            text={
+                                <span>
+                                    This input field displays the selected date,
+                                    <br />
+                                    but it is not contained within the Date Picker
+                                </span>
+                            }
+                        >
+                            <input
+                                aria-disabled
+                                disabled
+                                name="date-picker-separate-input"
+                                style={{
+                                    background: bdlGray10,
+                                    border: 0,
+                                    borderRadius: '4px',
+                                    padding: '.5em .8em',
+                                    width: '19em',
+                                    height: '2.5em',
+                                }}
+                                value={state.date.toDateString()}
+                            />
+                        </Label>
+                    </div>
+                </IntlProvider>
+            )}
+        </State>
+    );
+};
 
 export const disabledWithErrorMessage = () => (
     <IntlProvider locale="en-US">

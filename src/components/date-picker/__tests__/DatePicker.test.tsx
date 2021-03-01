@@ -460,10 +460,14 @@ describe('components/date-picker/DatePicker', () => {
     });
 
     describe('render()', () => {
-        test('should render the date-picker-open btn', () => {
-            const wrapper = renderDatePicker();
+        test.each`
+            props                        | buttonExists | description
+            ${{}}                        | ${true}      | ${'should render the date-picker-open btn by default'}
+            ${{ isAlwaysVisible: true }} | ${false}     | ${'should not render the date-picker-open btn if isAlwaysVisible is true'}
+        `('$description', ({ props, buttonExists }) => {
+            const wrapper = renderDatePicker(props);
             const buttonEl = wrapper.find('PlainButton.date-picker-open-btn');
-            expect(buttonEl.exists()).toBe(true);
+            expect(buttonEl.exists()).toBe(buttonExists);
         });
 
         test('should render a disabled date-picker-open btn when DatePicker is disabled', () => {
@@ -472,6 +476,17 @@ describe('components/date-picker/DatePicker', () => {
             });
             const buttonEl = wrapper.find('PlainButton.date-picker-open-btn');
             expect(buttonEl.prop('isDisabled')).toBe(true);
+        });
+
+        test.each`
+            props                         | resolvedHiddenValue | description
+            ${{}}                         | ${undefined}        | ${'should render the input field by default'}
+            ${{ hideDefaultInput: true }} | ${true}             | ${'should hide the input field if hideDefaultInput is true'}
+        `('$description', ({ props, resolvedHiddenValue }) => {
+            const wrapper = renderDatePicker(props);
+            const inputEl = wrapper.find('.date-picker-input');
+            expect(inputEl.prop('hidden')).toBe(resolvedHiddenValue);
+            expect(inputEl.prop('aria-hidden')).toBe(resolvedHiddenValue);
         });
     });
 

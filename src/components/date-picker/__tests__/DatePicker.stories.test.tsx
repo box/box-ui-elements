@@ -6,6 +6,9 @@ describe('components/date-picker/DatePicker', () => {
         'components-datepicker--basic',
         'components-datepicker--with-description',
         'components-datepicker--manually-editable',
+        'components-datepicker--with-limited-date-range',
+        'components-datepicker--always-visible-with-hidden-input',
+        'components-datepicker--always-visible-with-separate-input-field',
         'components-datepicker--disabled-with-error-message',
         'components-datepicker--custom-error-tooltip-position',
         'components-datepicker--with-range',
@@ -34,6 +37,16 @@ describe('components/date-picker/DatePicker', () => {
         await page.type(INPUT_SELECTOR, '1/28/2020');
         const image = await page.screenshot();
         await browser.close();
+        return expect(image).toMatchImageSnapshot();
+    });
+
+    test(`shows limited range in ${DATEPICKER_STORIES[3]}`, async () => {
+        const image = await BoxVisualTestUtils.takeScreenshotAfterInput(DATEPICKER_STORIES[3], INPUT_SELECTOR);
+        return expect(image).toMatchImageSnapshot();
+    });
+
+    test(`reflects changes in ${DATEPICKER_STORIES[5]}`, async () => {
+        const image = await BoxVisualTestUtils.takeScreenshotAfterInput(DATEPICKER_STORIES[5], 'td[data-day="10"]');
         return expect(image).toMatchImageSnapshot();
     });
 });
