@@ -52,13 +52,5 @@ describe('components/tooltip/LeftSidebarLinkCallout', () => {
             const wrapper = getWrapper({ isShown: true, callout });
             expect(wrapper.props().enabled).toBe(true);
         });
-
-        test('enabled prop on tethered component should be false when isShown prop not provided', () => {
-            const callout = {
-                content: <div>Hi</div>,
-            };
-            const wrapper = getWrapper({ callout });
-            expect(wrapper.props().enabled).toBe(false);
-        });
     });
 });
