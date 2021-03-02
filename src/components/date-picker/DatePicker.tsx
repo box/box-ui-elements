@@ -102,6 +102,8 @@ const localesWhereWeekStartsOnSunday = ['en-US', 'en-CA', 'jp-JP'];
 export interface DatePickerProps extends WrappedComponentProps {
     /** Add a css class to the component */
     className?: string;
+    /** Custom input field */
+    customInput?: React.ReactElement;
     /** The format of the date value for form submit */
     dateFormat?: DateFormat;
     /** Some optional description */
@@ -112,8 +114,6 @@ export interface DatePickerProps extends WrappedComponentProps {
     error?: React.ReactNode;
     /** Position of error message tooltip */
     errorTooltipPosition?: TooltipPosition;
-    /** Whether to show or hide the field */
-    hideDefaultInput?: boolean;
     /** Whether to show or hide the field's label */
     hideLabel?: boolean;
     /** Whether show or hide the 'Optional' label */
@@ -173,6 +173,7 @@ class DatePicker extends React.Component<DatePickerProps> {
 
     componentDidMount() {
         const {
+            customInput,
             dateFormat,
             intl,
             isAlwaysVisible,
@@ -202,7 +203,10 @@ class DatePicker extends React.Component<DatePickerProps> {
             weekdaysShort: range(1, 8).map(date => formatDate(new Date(2016, 4, date), { weekday: 'narrow' })),
         };
 
+        // If "bound" is true (default), the DatePicker will be appended at the end of the document, with absolute positioning
+        // If "bound" is false, the DatePicker will be appended to the DOM right after the input, with relative positioning
         this.datePicker = new Pikaday({
+            bound: !customInput,
             blurFieldOnSelect: false, // Available in pikaday > 1.5.1
             setDefaultDate: true,
             defaultDate: defaultValue === null ? undefined : defaultValue,
@@ -397,10 +401,10 @@ class DatePicker extends React.Component<DatePickerProps> {
     render() {
         const {
             className,
+            customInput,
             description,
             error,
             errorTooltipPosition,
-            hideDefaultInput,
             hideLabel,
             hideOptionalLabel,
             inputProps,
@@ -463,26 +467,32 @@ class DatePicker extends React.Component<DatePickerProps> {
                                 text={error || ''}
                                 theme={TooltipTheme.ERROR}
                             >
-                                <input
-                                    aria-hidden={hideDefaultInput}
-                                    ref={ref => {
-                                        this.dateInputEl = ref;
-                                    }}
-                                    className="date-picker-input"
-                                    disabled={isDisabled}
-                                    hidden={hideDefaultInput}
-                                    onBlur={this.handleInputBlur}
-                                    placeholder={placeholder || formatMessage(messages.chooseDate)}
-                                    required={isRequired}
-                                    type="text"
-                                    {...onChangeAttr}
-                                    onFocus={onFocus}
-                                    onKeyDown={this.handleInputKeyDown}
-                                    {...resinTargetAttr}
-                                    {...ariaAttrs}
-                                    {...inputProps}
-                                    {...valueAttr}
-                                />
+                                {customInput ? (
+                                    React.cloneElement(customInput, {
+                                        ref: (ref: HTMLInputElement) => {
+                                            this.dateInputEl = ref;
+                                        },
+                                    })
+                                ) : (
+                                    <input
+                                        ref={ref => {
+                                            this.dateInputEl = ref;
+                                        }}
+                                        className="date-picker-input"
+                                        disabled={isDisabled}
+                                        onBlur={this.handleInputBlur}
+                                        placeholder={placeholder || formatMessage(messages.chooseDate)}
+                                        required={isRequired}
+                                        type="text"
+                                        {...onChangeAttr}
+                                        onFocus={onFocus}
+                                        onKeyDown={this.handleInputKeyDown}
+                                        {...resinTargetAttr}
+                                        {...ariaAttrs}
+                                        {...inputProps}
+                                        {...valueAttr}
+                                    />
+                                )}
                             </Tooltip>
                             <span id={this.errorMessageID} className="accessibility-hidden" role="alert">
                                 {error}

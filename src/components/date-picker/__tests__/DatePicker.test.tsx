@@ -8,6 +8,10 @@ import noop from 'lodash/noop';
 import { TooltipPosition } from '../../tooltip';
 import DatePicker, { DateFormat, DatePickerBase } from '../DatePicker';
 
+const DATE_PICKER_DEFAULT_INPUT_CLASS_NAME = 'date-picker-input';
+const DATE_PICKER_CUSTOM_INPUT_CLASS_NAME = 'date-picker-custom-input';
+const customInput = <input className={DATE_PICKER_CUSTOM_INPUT_CLASS_NAME} />;
+
 let clock: SinonFakeTimers;
 
 jest.mock('pikaday');
@@ -225,6 +229,15 @@ describe('components/date-picker/DatePicker', () => {
                     firstDay: 1,
                 }),
             );
+        });
+
+        test.each`
+            customInputProp    | bound    | description
+            ${{ customInput }} | ${false} | ${'false if customInput is provided'}
+            ${{}}              | ${true}  | ${'true if customInput is not provided'}
+        `('should set bound to $description', ({ customInputProp, bound }) => {
+            renderDatePicker(customInputProp);
+            expect(Pikaday).toHaveBeenCalledWith(expect.objectContaining({ bound }));
         });
     });
 
@@ -479,14 +492,13 @@ describe('components/date-picker/DatePicker', () => {
         });
 
         test.each`
-            props                         | resolvedHiddenValue | description
-            ${{}}                         | ${undefined}        | ${'should render the input field by default'}
-            ${{ hideDefaultInput: true }} | ${true}             | ${'should hide the input field if hideDefaultInput is true'}
-        `('$description', ({ props, resolvedHiddenValue }) => {
-            const wrapper = renderDatePicker(props);
-            const inputEl = wrapper.find('.date-picker-input');
-            expect(inputEl.prop('hidden')).toBe(resolvedHiddenValue);
-            expect(inputEl.prop('aria-hidden')).toBe(resolvedHiddenValue);
+            customInputProp    | renderedClassName                       | absentClassName                         | description
+            ${{}}              | ${DATE_PICKER_DEFAULT_INPUT_CLASS_NAME} | ${DATE_PICKER_CUSTOM_INPUT_CLASS_NAME}  | ${'should render the default input field'}
+            ${{ customInput }} | ${DATE_PICKER_CUSTOM_INPUT_CLASS_NAME}  | ${DATE_PICKER_DEFAULT_INPUT_CLASS_NAME} | ${'should render the custom input field if provided'}
+        `('$description', ({ customInputProp, renderedClassName, absentClassName }) => {
+            const wrapper = renderDatePicker(customInputProp);
+            expect(wrapper.exists(`.${renderedClassName}`)).toBe(true);
+            expect(wrapper.exists(`.${absentClassName}`)).toBe(false);
         });
     });
 

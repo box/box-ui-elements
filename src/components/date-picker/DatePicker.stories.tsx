@@ -3,7 +3,6 @@ import { IntlProvider } from 'react-intl';
 import { State, Store } from '@sambego/storybook-state';
 
 import { TooltipPosition } from '../tooltip';
-import Label from '../label';
 import DatePicker from './DatePicker';
 import notes from './DatePicker.stories.md';
 
@@ -83,41 +82,7 @@ export const withLimitedDateRange = () => {
     );
 };
 
-export const alwaysVisibleWithHiddenInput = () => {
-    const componentStore = new Store({
-        date: new Date('February 26, 2021'),
-        fromDate: null,
-        toDate: null,
-    });
-    return (
-        <State store={componentStore}>
-            {state => (
-                <IntlProvider locale="en-US">
-                    <DatePicker
-                        className="date-picker-example"
-                        displayFormat={{
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                        }}
-                        hideDefaultInput
-                        isAlwaysVisible
-                        isClearable={false}
-                        label="Date"
-                        name="datepicker"
-                        onChange={(date: Date) => {
-                            componentStore.set({ date });
-                        }}
-                        placeholder="Date"
-                        value={state.date}
-                    />
-                </IntlProvider>
-            )}
-        </State>
-    );
-};
-
-export const alwaysVisibleWithSeparateInputField = () => {
+export const alwaysVisibleWithCustomInputField = () => {
     const componentStore = new Store({
         date: new Date('February 26, 2021'),
         fromDate: null,
@@ -126,24 +91,35 @@ export const alwaysVisibleWithSeparateInputField = () => {
 
     return (
         <State store={componentStore}>
-            {state => (
-                <IntlProvider locale="en-US">
-                    <div
+            {state => {
+                const customInput = (
+                    <input
+                        name="date-picker-custom-input"
                         style={{
-                            display: 'flex',
-                            alignItems: 'top',
-                            justifyContent: 'space-around',
-                            width: '650px',
+                            background: bdlGray10,
+                            border: 0,
+                            borderRadius: '4px',
+                            margin: '0 1em',
+                            padding: '.5em .8em',
+                            width: '19em',
+                            height: '2.5em',
+                            position: 'absolute',
+                            left: '100%',
+                            top: 0,
+                            outline: 'none',
                         }}
-                    >
+                    />
+                );
+                return (
+                    <IntlProvider locale="en-US">
                         <DatePicker
                             className="date-picker-example"
+                            customInput={customInput}
                             displayFormat={{
                                 day: 'numeric',
                                 month: 'short',
                                 year: 'numeric',
                             }}
-                            hideDefaultInput
                             hideLabel
                             isAlwaysVisible
                             isClearable={false}
@@ -155,33 +131,9 @@ export const alwaysVisibleWithSeparateInputField = () => {
                             placeholder="Date"
                             value={state.date}
                         />
-                        <Label
-                            text={
-                                <span>
-                                    This input field displays the selected date,
-                                    <br />
-                                    but it is not contained within the Date Picker
-                                </span>
-                            }
-                        >
-                            <input
-                                aria-disabled
-                                disabled
-                                name="date-picker-separate-input"
-                                style={{
-                                    background: bdlGray10,
-                                    border: 0,
-                                    borderRadius: '4px',
-                                    padding: '.5em .8em',
-                                    width: '19em',
-                                    height: '2.5em',
-                                }}
-                                value={state.date.toDateString()}
-                            />
-                        </Label>
-                    </div>
-                </IntlProvider>
-            )}
+                    </IntlProvider>
+                );
+            }}
         </State>
     );
 };
