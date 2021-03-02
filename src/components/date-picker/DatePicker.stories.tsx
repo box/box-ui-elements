@@ -89,18 +89,6 @@ export const alwaysVisibleWithHiddenInput = () => {
         fromDate: null,
         toDate: null,
     });
-    const customInput = (
-        <input
-            aria-disabled
-            disabled
-            style={{
-                background: bdlGray10,
-                border: 0,
-                borderRadius: '4px',
-                padding: '.5em .8em',
-            }}
-        />
-    );
     return (
         <State store={componentStore}>
             {state => (
