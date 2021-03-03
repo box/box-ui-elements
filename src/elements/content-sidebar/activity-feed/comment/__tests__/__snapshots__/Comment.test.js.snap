@@ -5,12 +5,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
   className="bcs-Comment"
 >
   <Media
-    as="div"
     className="bcs-Comment-media"
   >
-    <MediaFigure
-      as="figure"
-    >
+    <MediaFigure>
       <Component
         user={
           Object {
@@ -38,7 +35,6 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
       >
         <MediaMenu
           data-testid="comment-actions-menu"
-          dropdownProps={Object {}}
           isDisabled={false}
           menuProps={
             Object {
@@ -89,12 +85,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
   className="bcs-Comment"
 >
   <Media
-    as="div"
     className="bcs-Comment-media"
   >
-    <MediaFigure
-      as="figure"
-    >
+    <MediaFigure>
       <Component
         user={
           Object {
@@ -136,12 +129,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
   className="bcs-Comment"
 >
   <Media
-    as="div"
     className="bcs-Comment-media bcs-is-pending"
   >
-    <MediaFigure
-      as="figure"
-    >
+    <MediaFigure>
       <Component
         user={
           Object {
@@ -186,12 +176,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
   className="bcs-Comment"
 >
   <Media
-    as="div"
     className="bcs-Comment-media"
   >
-    <MediaFigure
-      as="figure"
-    >
+    <MediaFigure>
       <Component
         user={
           Object {

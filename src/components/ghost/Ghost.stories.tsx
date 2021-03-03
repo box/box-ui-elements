@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { boolean } from '@storybook/addon-knobs';
 
-// @ts-ignore TODO: migrate Media to typescript
 import Media from '../media';
 
 import Ghost from './Ghost';
