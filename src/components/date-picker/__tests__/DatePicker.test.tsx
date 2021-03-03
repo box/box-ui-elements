@@ -492,14 +492,23 @@ describe('components/date-picker/DatePicker', () => {
         });
 
         test.each`
-            customInputProp    | renderedClassName                       | absentClassName                         | description
-            ${{}}              | ${DATE_PICKER_DEFAULT_INPUT_CLASS_NAME} | ${DATE_PICKER_CUSTOM_INPUT_CLASS_NAME}  | ${'should render the default input field'}
-            ${{ customInput }} | ${DATE_PICKER_CUSTOM_INPUT_CLASS_NAME}  | ${DATE_PICKER_DEFAULT_INPUT_CLASS_NAME} | ${'should render the custom input field if provided'}
-        `('$description', ({ customInputProp, renderedClassName, absentClassName }) => {
-            const wrapper = renderDatePicker(customInputProp);
-            expect(wrapper.exists(`.${renderedClassName}`)).toBe(true);
-            expect(wrapper.exists(`.${absentClassName}`)).toBe(false);
-        });
+            customInputProp | renderedClassName                       | absentClassName                         | isDisabled | isRequired | resinTarget | description
+            ${undefined}    | ${DATE_PICKER_DEFAULT_INPUT_CLASS_NAME} | ${DATE_PICKER_CUSTOM_INPUT_CLASS_NAME}  | ${true}    | ${true}    | ${'target'} | ${'should render the default input field with provided props'}
+            ${customInput}  | ${DATE_PICKER_CUSTOM_INPUT_CLASS_NAME}  | ${DATE_PICKER_DEFAULT_INPUT_CLASS_NAME} | ${true}    | ${true}    | ${'target'} | ${'should render the custom input field with provided props if provided'}
+        `(
+            '$description',
+            ({ customInputProp, renderedClassName, absentClassName, isDisabled, isRequired, resinTarget }) => {
+                const input = renderDatePicker({ customInput: customInputProp, isDisabled, isRequired, resinTarget })
+                    .find('input')
+                    .at(0);
+                expect(input.prop('className')).toBe(renderedClassName);
+                expect(input.prop('className')).not.toBe(absentClassName);
+                expect(input.prop('disabled')).toBe(isDisabled);
+                expect(input.prop('required')).toBe(isRequired);
+                expect(input.prop('aria-required')).toBe(isRequired);
+                expect(input.prop('data-resin-target')).toEqual(resinTarget);
+            },
+        );
     });
 
     describe('componentWillUnmount()', () => {

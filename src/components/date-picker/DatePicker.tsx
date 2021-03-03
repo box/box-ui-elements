@@ -469,9 +469,13 @@ class DatePicker extends React.Component<DatePickerProps> {
                             >
                                 {customInput ? (
                                     React.cloneElement(customInput, {
+                                        disabled: isDisabled,
                                         ref: (ref: HTMLInputElement) => {
                                             this.dateInputEl = ref;
                                         },
+                                        required: isRequired,
+                                        ...resinTargetAttr,
+                                        ...ariaAttrs,
                                     })
                                 ) : (
                                     <input
