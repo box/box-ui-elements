@@ -94,43 +94,84 @@ export const alwaysVisibleWithCustomInputField = () => {
             {state => {
                 const customInput = (
                     <input
-                        name="date-picker-custom-input"
                         style={{
-                            background: bdlGray10,
-                            border: 0,
-                            borderRadius: '4px',
-                            margin: '0 1em',
-                            padding: '.5em .8em',
-                            width: '19em',
-                            height: '2.5em',
-                            position: 'absolute',
-                            left: '100%',
-                            top: 0,
-                            outline: 'none',
+                            display: 'none',
                         }}
                     />
                 );
+
                 return (
                     <IntlProvider locale="en-US">
-                        <DatePicker
-                            className="date-picker-example"
-                            customInput={customInput}
-                            displayFormat={{
-                                day: 'numeric',
-                                month: 'short',
-                                year: 'numeric',
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
                             }}
-                            hideLabel
-                            isAlwaysVisible
-                            isClearable={false}
-                            label="Date"
-                            name="datepicker"
-                            onChange={(date: Date) => {
-                                componentStore.set({ date });
-                            }}
-                            placeholder="Date"
-                            value={state.date}
-                        />
+                        >
+                            <DatePicker
+                                className="date-picker-example"
+                                customInput={customInput}
+                                displayFormat={{
+                                    day: 'numeric',
+                                    month: 'short',
+                                    year: 'numeric',
+                                }}
+                                hideLabel
+                                isAlwaysVisible
+                                isClearable={false}
+                                label="Date"
+                                name="datepicker"
+                                onChange={(date: Date) => {
+                                    componentStore.set({ date });
+                                }}
+                                placeholder="Date"
+                                value={state.date}
+                            />
+                            <div
+                                style={{
+                                    margin: '20px 30px',
+                                    width: '400px',
+                                }}
+                            >
+                                <p>
+                                    In this example, the DatePicker is bound to a custom hidden input field. The right
+                                    panel retains the same state as the DatePicker, but is not contained within the
+                                    DatePicker component.
+                                </p>
+                                <div
+                                    style={{
+                                        position: 'relative',
+                                    }}
+                                >
+                                    <label
+                                        htmlFor="date-picker-custom-input"
+                                        style={{
+                                            position: 'absolute',
+                                            left: '10px',
+                                            top: '6px',
+                                            zIndex: 100,
+                                        }}
+                                    >
+                                        Start Date
+                                    </label>
+                                    <input
+                                        name="date-picker-custom-input"
+                                        style={{
+                                            background: bdlGray10,
+                                            border: 0,
+                                            borderRadius: '4px',
+                                            padding: '.5em .8em',
+                                            width: '19em',
+                                            height: '2.5em',
+                                            top: 0,
+                                            outline: 'none',
+                                            textAlign: 'right',
+                                        }}
+                                        value={state.date.toDateString()}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </IntlProvider>
                 );
             }}
