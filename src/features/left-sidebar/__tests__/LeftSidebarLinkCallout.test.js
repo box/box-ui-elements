@@ -44,5 +44,13 @@ describe('components/tooltip/LeftSidebarLinkCallout', () => {
             const btn = wrapper.find('.nav-link-callout-close-button');
             btn.simulate('click');
         });
+
+        test('should enable tethered component when isShown prop true', () => {
+            const callout = {
+                content: <div>Hi</div>,
+            };
+            const wrapper = getWrapper({ isShown: true, callout });
+            expect(wrapper.props().enabled).toBe(true);
+        });
     });
 });
