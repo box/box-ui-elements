@@ -75,3 +75,6 @@ export * from './draggable-list';
 
 export { default as DatePicker } from './date-picker';
 export * from './date-picker';
+
+export { default as Section } from './section';
+export * from './section';
