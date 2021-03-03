@@ -45,6 +45,9 @@ export * from './loading-indicator';
 export { default as Logo } from './logo';
 export * from './logo';
 
+export { default as Media } from './media';
+export * from './media';
+
 export * from './menu';
 
 export { default as PlainButton } from './plain-button';
