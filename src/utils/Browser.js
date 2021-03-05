@@ -18,13 +18,35 @@ class Browser {
     }
 
     /**
-     * Returns whether browser is mobile.
+     * Returns the max touch points for touchscreen devices
+     * Helps in mocking out.
+     *
+     * Only supported in the following browsers:
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/Navigator/maxTouchPoints
+     *
+     * @return {number} navigator maxTouchPoints
+     */
+    static getMaxTouchPoints(): number {
+        const maxTouchPoints = global.navigator.maxTouchPoints;
+        return !!maxTouchPoints && typeof maxTouchPoints === 'number' ? maxTouchPoints : 0;
+    }
+
+    /**
+     * Returns whether browser is mobile, including tablets.
+     *
+     * We rely on user agent (UA) to avoid matching desktops with touchscreens.
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent#mobile_tablet_or_desktop
+     *
+     * Also captures iOS 13+ mobile devices for browsers that request the desktop website since mac does not have any desktops with touchscreens as of Mar 2021.
      *
      * @return {boolean} Whether browser is mobile
      */
     static isMobile(): boolean {
-        // Relying on the user agent to avoid desktop browsers on machines with touch screens.
-        return /iphone|ipad|ipod|android|blackberry|bb10|mini|windows\sce|palm/i.test(Browser.getUserAgent());
+        return (
+            /iphone|ipad|ipod|android|blackberry|bb10|mini|windows\sce|palm/i.test(Browser.getUserAgent()) ||
+            /Mobi/i.test(Browser.getUserAgent()) ||
+            (/Macintosh/i.test(Browser.getUserAgent()) && Browser.getMaxTouchPoints() > 0)
+        );
     }
 
     /**

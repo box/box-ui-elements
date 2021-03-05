@@ -1,5 +1,16 @@
 import browser from '../Browser';
 
+describe('util/Browser/getMaxTouchPoints', () => {
+    test.each([
+        [5, 5],
+        [undefined, 0],
+        [null, 0],
+    ])('should return maxTouchPoints if exists: %o', (maxTouchPoints, expected) => {
+        global.navigator.maxTouchPoints = maxTouchPoints;
+        expect(browser.getMaxTouchPoints()).toEqual(expected);
+    });
+});
+
 describe('util/Browser/isMobile()', () => {
     test('should return false if not mobile', () => {
         browser.getUserAgent = jest.fn().mockReturnValueOnce('foobar');
@@ -19,6 +30,25 @@ describe('util/Browser/isMobile()', () => {
         ${'palm'}
     `('should return true for $device', ({ device }) => {
         browser.getUserAgent = jest.fn().mockReturnValueOnce(device);
+        expect(browser.isMobile()).toBeTruthy();
+    });
+
+    test('should return true if user agent contains the string "Mobi"', () => {
+        browser.getUserAgent = jest
+            .fn()
+            .mockReturnValueOnce(
+                'Mozilla/5.0 (iPad; CPU OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1',
+            );
+        expect(browser.isMobile()).toBeTruthy();
+    });
+
+    test('should return true if user agent belongs to Macintosh and has touchscreen', () => {
+        browser.getUserAgent = jest
+            .fn()
+            .mockReturnValue(
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15',
+            );
+        browser.getMaxTouchPoints = jest.fn().mockReturnValueOnce(5);
         expect(browser.isMobile()).toBeTruthy();
     });
 });
