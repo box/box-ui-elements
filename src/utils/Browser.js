@@ -27,7 +27,7 @@ class Browser {
      * @return {number} navigator maxTouchPoints
      */
     static getMaxTouchPoints(): number {
-        const maxTouchPoints = global.navigator.maxTouchPoints;
+        const { maxTouchPoints } = global.navigator;
         return !!maxTouchPoints && typeof maxTouchPoints === 'number' ? maxTouchPoints : 0;
     }
 

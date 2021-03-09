@@ -5,7 +5,7 @@
  */
 import getProp from 'lodash/get';
 
-import Browser from '../utils/Browser';
+import Browser from './Browser';
 
 import type {
     UploadFile,
@@ -345,9 +345,9 @@ function isMultiputSupported(): boolean {
 
     if (Browser.isMobile() && Browser.isSafari()) {
         return false;
-    } else {
-        return window.location.protocol === 'https:' && cryptoObj && cryptoObj.subtle;
     }
+
+    return window.location.protocol === 'https:' && cryptoObj && cryptoObj.subtle;
 }
 
 export {
