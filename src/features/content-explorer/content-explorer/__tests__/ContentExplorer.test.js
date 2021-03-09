@@ -558,6 +558,17 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 const result = wrapper.instance().toggleSelectedItem(selectedItems, item);
                 expect(Object.keys(result).length).toEqual(expectedLength);
             });
+            test('should set initialSelectedItems', () => {
+                const wrapper = renderComponent(
+                    {
+                        initialSelectedItems: selectedItems,
+                        contentExplorerMode: ContentExplorerModes.SELECT_FILE,
+                    },
+                    false,
+                );
+                const actionButtons = wrapper.find('ContentExplorerActionButtons');
+                expect(actionButtons.prop('selectedItems')).toEqual(selectedItems);
+            });
         });
     });
 });
