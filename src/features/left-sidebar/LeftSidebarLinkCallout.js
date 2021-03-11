@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import classNames from 'classnames';
 import TetherComponent from 'react-tether';
 
 import PlainButton from '../../components/plain-button';
@@ -16,6 +17,7 @@ type Props = {
     callout: Callout,
     children: React.Node,
     isShown?: boolean,
+    navLinkClassName?: string,
     targetAttachmentPosition?: TetherPosition,
 };
 
@@ -56,6 +58,7 @@ class LeftSidebarLinkCallout extends React.Component<Props, State> {
             attachmentPosition = TETHER_POSITIONS.MIDDLE_LEFT,
             children,
             callout: { content },
+            navLinkClassName,
             targetAttachmentPosition = TETHER_POSITIONS.MIDDLE_RIGHT,
         } = this.props;
 
@@ -70,7 +73,7 @@ class LeftSidebarLinkCallout extends React.Component<Props, State> {
             >
                 {React.Children.only(children)}
                 {showTooltip && (
-                    <div className="nav-link-callout">
+                    <div className={classNames('nav-link-callout', navLinkClassName)}>
                         <PlainButton className="nav-link-callout-close-button" onClick={this.hideCallout}>
                             <IconClose color="#fff" height={16} width={16} />
                         </PlainButton>
