@@ -39,6 +39,18 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebarNav', () => {
         expect(sidebar).toMatchSnapshot();
     });
 
+    test('passes customScrollBarProps to Scrollbar from react-scrollbars-custom', () => {
+        const customProps = { noScrollY: true };
+        const sidebar = getWrapper({
+            children: [<span key="1">abc</span>, <span key="2">def</span>],
+            expanded: true,
+            className: 'foo',
+            customScrollBarProps: customProps,
+        });
+
+        expect(sidebar.find('Scrollbar').props()).toMatchObject(customProps);
+    });
+
     test('should check scroll shadow if content height changes', () => {
         const sidebar = getWrapper({
             children: [<span key="1">abc</span>, <span key="2">def</span>],
