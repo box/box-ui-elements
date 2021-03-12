@@ -311,11 +311,11 @@ export const basic = () => {
 };
 
 basic.story = {
-    name: 'Top-left, basic',
+    name: 'Basic Usage',
 };
 
 export default {
-    title: 'Components|CollapsibleSidebar',
+    title: 'Features|CollapsibleSidebar',
     component: CollapsibleSidebar,
     parameters: {
         notes,
