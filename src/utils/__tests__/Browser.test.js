@@ -1,16 +1,5 @@
 import browser from '../Browser';
 
-describe('util/Browser/getMaxTouchPoints', () => {
-    test.each([
-        [5, 5],
-        [undefined, 0],
-        [null, 0],
-    ])('should return maxTouchPoints if exists: %o', (maxTouchPoints, expected) => {
-        global.navigator.maxTouchPoints = maxTouchPoints;
-        expect(browser.getMaxTouchPoints()).toEqual(expected);
-    });
-});
-
 describe('util/Browser/isMobile()', () => {
     test('should return false if not mobile', () => {
         browser.getUserAgent = jest.fn().mockReturnValueOnce('foobar');
@@ -41,16 +30,6 @@ describe('util/Browser/isMobile()', () => {
             );
         expect(browser.isMobile()).toBeTruthy();
     });
-
-    test('should return true if user agent belongs to Macintosh and has touchscreen', () => {
-        browser.getUserAgent = jest
-            .fn()
-            .mockReturnValue(
-                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15',
-            );
-        browser.getMaxTouchPoints = jest.fn().mockReturnValueOnce(5);
-        expect(browser.isMobile()).toBeTruthy();
-    });
 });
 
 describe('util/Browser/isIE()', () => {
@@ -73,6 +52,41 @@ describe('util/Browser/isSafari()', () => {
     `('should return $result when user agent is $userAgent', ({ result, userAgent }) => {
         browser.getUserAgent = jest.fn().mockReturnValueOnce(userAgent);
         expect(browser.isSafari()).toBe(result);
+    });
+});
+
+describe('util/Browser/isMobileSafari()', () => {
+    afterEach(() => {
+        browser.getUserAgent = jest.fn().mockReset();
+    });
+
+    test.each`
+        result   | userAgent
+        ${true}  | ${'AppleWebKit/603.1.23 (KHTML, like Gecko) Version/10.0 Mobile/14E5239e Safari/602.1'}
+        ${false} | ${'AppleWebKit/4.0'}
+        ${false} | ${'Trident'}
+        ${false} | ${'AppleWebKit/7.8 (KHTML, like Gecko) Chrome/1.2.3.4 Safari/5.6'}
+        ${false} | ${'AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/87.0.4280.77 Mobile/15E148 Safari/604.1'}
+    `('should return $result when user agent is $userAgent', ({ result, userAgent }) => {
+        browser.getUserAgent = jest.fn().mockReturnValue(userAgent);
+        expect(browser.isMobileSafari()).toBe(result);
+    });
+});
+
+describe('util/Browser/isMobileChromeOniOS()', () => {
+    afterEach(() => {
+        browser.getUserAgent = jest.fn().mockReset();
+    });
+
+    test.each`
+        result   | userAgent
+        ${true}  | ${'AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/87.0.4280.77 Mobile/15E148 Safari/604.1'}
+        ${false} | ${'AppleWebKit/4.0'}
+        ${false} | ${'Trident'}
+        ${false} | ${'AppleWebKit/7.8 (KHTML, like Gecko) Chrome/1.2.3.4 Safari/5.6'}
+    `('should return $result when user agent is $userAgent', ({ result, userAgent }) => {
+        browser.getUserAgent = jest.fn().mockReturnValue(userAgent);
+        expect(browser.isMobileChromeOniOS()).toBe(result);
     });
 });
 

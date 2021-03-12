@@ -18,34 +18,17 @@ class Browser {
     }
 
     /**
-     * Returns the max touch points for touchscreen devices
-     * Helps in mocking out.
-     *
-     * Only supported in the following browsers:
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/Navigator/maxTouchPoints
-     *
-     * @return {number} navigator maxTouchPoints
-     */
-    static getMaxTouchPoints(): number {
-        const { maxTouchPoints } = global.navigator;
-        return !!maxTouchPoints && typeof maxTouchPoints === 'number' ? maxTouchPoints : 0;
-    }
-
-    /**
      * Returns whether browser is mobile, including tablets.
      *
      * We rely on user agent (UA) to avoid matching desktops with touchscreens.
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent#mobile_tablet_or_desktop
      *
-     * Also captures iOS 13+ mobile devices for browsers that request the desktop website since mac does not have any desktops with touchscreens as of Mar 2021.
-     *
      * @return {boolean} Whether browser is mobile
      */
     static isMobile(): boolean {
+        const userAgent = Browser.getUserAgent();
         return (
-            /iphone|ipad|ipod|android|blackberry|bb10|mini|windows\sce|palm/i.test(Browser.getUserAgent()) ||
-            /Mobi/i.test(Browser.getUserAgent()) ||
-            (/Macintosh/i.test(Browser.getUserAgent()) && Browser.getMaxTouchPoints() > 0)
+            /iphone|ipad|ipod|android|blackberry|bb10|mini|windows\sce|palm/i.test(userAgent) || /Mobi/i.test(userAgent)
         );
     }
 
@@ -66,6 +49,27 @@ class Browser {
     static isSafari() {
         const userAgent = Browser.getUserAgent();
         return /AppleWebKit/i.test(userAgent) && !/Chrome\//i.test(userAgent);
+    }
+
+    /**
+     * Returns whether browser is Mobile Safari.
+     *
+     * @see https://developer.chrome.com/docs/multidevice/user-agent/
+     * @return {boolean} Whether browser is Mobile Safari
+     */
+    static isMobileSafari() {
+        return Browser.isMobile() && Browser.isSafari() && !Browser.isMobileChromeOniOS();
+    }
+
+    /**
+     * Returns whether browser is Mobile Chrome on iOS.
+     *
+     * @see https://developer.chrome.com/docs/multidevice/user-agent/
+     * @return {boolean} Whether browser is Mobile Chrome on iOS
+     */
+    static isMobileChromeOniOS() {
+        const userAgent = Browser.getUserAgent();
+        return Browser.isMobile() && /AppleWebKit/i.test(userAgent) && /CriOS\//i.test(userAgent);
     }
 
     /**

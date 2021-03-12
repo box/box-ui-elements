@@ -406,16 +406,15 @@ describe('util/uploads', () => {
         });
 
         test.each([
-            ['mobile safari', true, true, false],
-            ['web safari', false, true, true],
-            ['mobile other browsers', true, false, true],
-        ])('should return whether multiput is supported on device: %o', (test, mobile, safari, expected) => {
+            ['mobile safari', true, false],
+            ['web safari', false, true],
+            ['mobile other browsers', false, true],
+        ])('should return whether multiput is supported on device: %o', (test, mobileSafari, expected) => {
             windowSpy.mockImplementation(() => ({
                 crypto: { subtle: true },
                 location: { protocol: 'https:' },
             }));
-            browser.isMobile = jest.fn().mockReturnValueOnce(mobile);
-            browser.isSafari = jest.fn().mockReturnValueOnce(safari);
+            browser.isMobileSafari = jest.fn().mockReturnValueOnce(mobileSafari);
             expect(isMultiputSupported()).toEqual(expected);
         });
     });
