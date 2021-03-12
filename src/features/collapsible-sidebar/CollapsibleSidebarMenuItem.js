@@ -142,10 +142,21 @@ type Props = {
     /** Default is to always show */
     showOverflowAction?: 'hover' | 'always',
     text?: string,
+    tooltipIsDisabled?: boolean,
 };
 
 function CollapsibleSidebarMenuItem(props: Props) {
-    const { className, content, icon, linkClassName, overflowAction, showOverflowAction, text, ...rest } = props;
+    const {
+        className,
+        content,
+        icon,
+        linkClassName,
+        overflowAction,
+        showOverflowAction,
+        text,
+        tooltipIsDisabled = false,
+        ...rest
+    } = props;
     const textRef: { current: null | HTMLElement } = React.useRef(null);
     const isTextOverflowed = useIsContentOverflowed(textRef);
     const { isScrolling } = React.useContext(CollapsibleSidebarContext);
@@ -186,7 +197,7 @@ function CollapsibleSidebarMenuItem(props: Props) {
     return (
         <Tooltip
             className={classNames('bdl-CollapsibleSidebar-menuItemToolTip')}
-            isDisabled={!isTextOverflowed}
+            isDisabled={tooltipIsDisabled || !isTextOverflowed}
             isShown={isScrolling ? false : undefined}
             isTabbable={false}
             position="middle-right"
