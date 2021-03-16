@@ -11,7 +11,7 @@ A sidebar navigation component with custom scrollbars (normalized scrollbar appe
     - `collapsedElement`|`expandedElement` usually a `CollapsibleSidebarMenuItem`
   - `CollapsibleSidebarMenuItem` standard display element for nav entries
     - `text` prop (optional); usually unset when collapsed
-    - `tooltipIsDisabled` prop (optional); usually set to true when another tooltip is showing
+    - `shouldHideTooltip` prop (optional); usually set to true when another tooltip is showing
     - `icon` prop (optional) + `tooltipMessage` prop; typical collapsed presentation
 
 ## Example

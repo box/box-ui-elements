@@ -251,6 +251,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 2`] = `
           isDisabled={true}
           isTabbable={false}
           position="middle-right"
+          shouldHideTooltip={false}
           theme="default"
         >
           <CollapsibleSidebarLogo__StyledToggleButton
