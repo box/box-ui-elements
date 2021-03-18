@@ -51,6 +51,8 @@ class ContentExplorerModalContainer extends Component {
         contentExplorerMode: ContentExplorerModePropType.isRequired,
         /** Initial path of folders. The last folder in the array is the current folder. */
         initialFoldersPath: FoldersPathPropType.isRequired,
+        /** Initial items that will show up as selected */
+        initialSelectedItems: PropTypes.object,
         /**
          * Called when the current folder changes
          *
@@ -186,6 +188,7 @@ class ContentExplorerModalContainer extends Component {
             showCreateNewFolderButton,
             searchInputProps,
             chooseButtonText,
+            initialSelectedItems,
         } = this.props;
         const { foldersPath, isNewFolderModalOpen } = this.state;
         const currentFolder = foldersPath[foldersPath.length - 1];
@@ -221,6 +224,7 @@ class ContentExplorerModalContainer extends Component {
                     showCreateNewFolderButton={showCreateNewFolderButton}
                     searchInputProps={searchInputProps}
                     chooseButtonText={chooseButtonText}
+                    initialSelectedItems={initialSelectedItems}
                 />
                 {isNewFolderModalOpen && (
                     <NewFolderModal

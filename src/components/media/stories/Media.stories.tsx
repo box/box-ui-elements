@@ -1,10 +1,10 @@
-// @flow
 import * as React from 'react';
 
 import Avatar from '../../avatar/Avatar';
 import Button from '../../button/Button';
 import MenuItem from '../../menu/MenuItem';
-import TextArea from '../../text-area/TextArea';
+// @ts-ignore TODO: migrate TextArea to typescript
+import TextArea from '../../text-area';
 
 import Media from '../Media';
 import notes from './Media.stories.md';
@@ -18,7 +18,7 @@ export const example = () => (
         </Media.Figure>
 
         <Media.Body>
-            <Media.Menu label="Options">
+            <Media.Menu aria-label="Options">
                 <MenuItem>Edit</MenuItem>
                 <MenuItem>Delete</MenuItem>
             </Media.Menu>
