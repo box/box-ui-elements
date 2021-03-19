@@ -34,6 +34,8 @@ class ContentExplorer extends Component {
         headerActionsAccessory: PropTypes.node,
         /** Initial path of folders. The last folder in the array is the current folder. */
         initialFoldersPath: FoldersPathPropType.isRequired,
+        /** Initial items that will show up as selected */
+        initialSelectedItems: PropTypes.object,
         /**
          * Called when the current folder changes
          *
@@ -127,7 +129,7 @@ class ContentExplorer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedItems: {},
+            selectedItems: props.initialSelectedItems || {},
             foldersPath: props.initialFoldersPath,
             isInSearchMode: false,
         };
