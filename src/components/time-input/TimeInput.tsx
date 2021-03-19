@@ -1,7 +1,9 @@
 import * as React from 'react';
-import classnames from 'classnames';
 import { defineMessages, injectIntl, FormattedMessage, WrappedComponentProps } from 'react-intl';
-import Tooltip, { TooltipPosition, TooltipTheme } from '../tooltip';
+import { TooltipPosition } from '../tooltip';
+import { parseTimeFromString } from './TimeInputUtils';
+// @ts-ignore flow import
+import TextInput from '../text-input';
 
 import '../text-input/TextInput.scss';
 
@@ -12,97 +14,68 @@ const messages = defineMessages({
         id: 'boxui.timeInput.invalidTimeError',
     },
 });
-
 export interface TimeInputProps extends WrappedComponentProps {
     className?: string;
     errorTooltipPosition?: TooltipPosition;
-    hasDefaultTime?: boolean;
+    hideLabel?: boolean;
+    label?: React.ReactNode;
+    isRequired?: boolean;
     onBlur?: Function;
     onChange?: Function;
+    value?: string;
 }
-
-const VALID_TIME_REGEX = /[0-9]{1,2}.?.?.?[0-9]{0,2}\s?[AaPp]?\.?\s?[Mm]?/;
-const PM_REGEX = /[Pp]\.?\s?[Mm]/;
-const NUMBER_REGEX = /[0-9]{1,2}/g;
-const TWELVE_HOURS = 12;
-const DEFAULT_PARSED_TIME = { hours: 0, minutes: 0 };
-
-const isValidTime = (input?: string): boolean => {
-    return !!input && VALID_TIME_REGEX.test(input);
-};
-
-const parseTimeFromString = (input?: string): { hours: number; minutes: number } => {
-    if (!input) return DEFAULT_PARSED_TIME;
-
-    const timeArray = input.match(NUMBER_REGEX);
-    if (!timeArray || !timeArray.length) return DEFAULT_PARSED_TIME;
-
-    const hasPMNotation = PM_REGEX.test(input);
-    let [hours, minutes] = timeArray;
-    if (hours && minutes && hours.length > minutes.length) {
-        minutes = hours[1] + minutes;
-        hours = hours[0];
-    }
-
-    const numericHours = parseInt(hours, 10);
-    const numericMinutes = minutes ? parseInt(minutes, 10) : 0;
-
-    return {
-        hours: hasPMNotation && numericHours < TWELVE_HOURS ? numericHours + TWELVE_HOURS : numericHours,
-        minutes: numericMinutes,
-    };
-};
 
 const TimeInput = ({
     className,
     errorTooltipPosition = TooltipPosition.MIDDLE_RIGHT,
-    hasDefaultTime = true,
+    hideLabel = true,
     intl,
+    isRequired = true,
+    label,
     onBlur,
     onChange,
+    value,
 }: TimeInputProps) => {
     const [displayTime, setDisplayTime] = React.useState<string | undefined>(
-        hasDefaultTime ? intl.formatTime(new Date()) : undefined,
+        value ? intl.formatTime(new Date(value)) : intl.formatTime(new Date()),
     );
-    const [inputTimeString, setInputTimeString] = React.useState<string | undefined>(undefined);
     const [error, setError] = React.useState<React.ReactElement | undefined>(undefined);
 
-    const classes = classnames(className, 'bdl-TextInput', {
-        'show-error': error,
-    });
-
-    React.useEffect(() => {
-        if (!inputTimeString) return;
-
-        if (isValidTime(inputTimeString)) {
-            const { hours: parsedHours, minutes: parsedMinutes } = parseTimeFromString(inputTimeString);
+    const handleBlur = () => {
+        try {
+            const { hours: parsedHours, minutes: parsedMinutes } = parseTimeFromString(displayTime);
             const date = new Date();
             date.setHours(parsedHours);
             date.setMinutes(parsedMinutes);
-            setDisplayTime(intl.formatTime(date));
-        } else {
+            const newDisplayTime = intl.formatTime(date);
+            setDisplayTime(newDisplayTime);
+            if (onBlur) onBlur(newDisplayTime);
+        } catch (e) {
             setError(<FormattedMessage {...messages.invalidTimeError} />);
         }
-    }, [intl, inputTimeString]);
-
-    const handleBlur = () => {
-        setInputTimeString(displayTime);
-        if (onBlur) onBlur(displayTime);
     };
 
     const handleChange = (event: React.FocusEvent<HTMLInputElement>) => {
         const {
-            target: { value },
+            target: { value: updatedValue },
         } = event;
-        setDisplayTime(value);
+        setDisplayTime(updatedValue);
         if (error) setError(undefined);
-        if (onChange) onChange(value);
+        if (onChange) onChange(updatedValue);
     };
 
     return (
-        <Tooltip isShown={!!error} position={errorTooltipPosition} text={error || ''} theme={TooltipTheme.ERROR}>
-            <input className={classes} onBlur={handleBlur} onChange={handleChange} type="text" value={displayTime} />
-        </Tooltip>
+        <TextInput
+            className={className}
+            error={error}
+            hideLabel={hideLabel}
+            isRequired={isRequired}
+            label={label}
+            onBlur={handleBlur}
+            onChange={handleChange}
+            position={errorTooltipPosition}
+            value={displayTime}
+        />
     );
 };
 
