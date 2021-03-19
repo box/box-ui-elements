@@ -16,6 +16,11 @@ const messages = defineMessages({
         defaultMessage: 'Modify',
         description: 'Text to show on menu item to edit the annotation comment',
     },
+    annotationActivityInfo: {
+        id: 'be.contentSidebar.activityFeed.annotationActivity.annotationActivityInfo',
+        defaultMessage: 'on',
+        description: 'Connects when the annotation was posted and where on the file. <date and time> on <Page 1>',
+    },
     annotationActivityPostedFullDateTime: {
         id: 'be.contentSidebar.activityFeed.annotationActivity.annotationActivityPostedFullDateTime',
         defaultMessage: '{time, date, full} at {time, time, short}',

@@ -1,8 +1,9 @@
 // @flow
+import * as React from 'react';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
-import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
 import ActivityTimestamp from '../common/activity-timestamp';
@@ -112,6 +113,18 @@ const AnnotationActivity = ({
                     </div>
                     <div>
                         <ActivityTimestamp date={createdAtTimestamp} />
+                        <FormattedMessage {...messages.annotationActivityInfo}>
+                            {msg => <small className="bcs-AnnotationActivity-info">{msg}</small>}
+                        </FormattedMessage>
+                        <AnnotationActivityLink
+                            data-resin-iscurrent={isCurrentVersion}
+                            data-resin-itemid={id}
+                            data-resin-target="annotationLink"
+                            id={id}
+                            isDisabled={isFileVersionUnavailable}
+                            message={activityLinkMessage}
+                            onClick={handleOnSelect}
+                        />
                     </div>
                     {isEditing && currentUser ? (
                         <CommentForm
@@ -130,15 +143,6 @@ const AnnotationActivity = ({
                     ) : (
                         <ActivityMessage id={id} tagged_message={message} getUserProfileUrl={getUserProfileUrl} />
                     )}
-                    <AnnotationActivityLink
-                        data-resin-iscurrent={isCurrentVersion}
-                        data-resin-itemid={id}
-                        data-resin-target="annotationLink"
-                        id={id}
-                        isDisabled={isFileVersionUnavailable}
-                        message={activityLinkMessage}
-                        onClick={handleOnSelect}
-                    />
                 </Media.Body>
             </Media>
             {/* $FlowFixMe */}
