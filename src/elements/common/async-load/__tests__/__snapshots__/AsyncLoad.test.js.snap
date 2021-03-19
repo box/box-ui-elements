@@ -2,6 +2,7 @@
 
 exports[`elements/common/async-load/AsyncLoad should load the lazy component 1`] = `
 <Suspense
+  component={[Function]}
   fallback={null}
 >
   <lazy
