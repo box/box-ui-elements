@@ -1,11 +1,13 @@
 @import '../../../common/variables';
+@import '../activity-feed/mixin';
 
 .be {
     .bcs-Version {
+        @include bcs-ActivityFeedItem;
+
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 100%;
         padding: 9px;
         color: $bdl-green-light;
         background-color: fade-out($bdl-green-light, .9);

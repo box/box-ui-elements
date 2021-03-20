@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import noop from 'lodash/noop';
 import TetherComponent from 'react-tether';
 import { FormattedMessage } from 'react-intl';
 import DeleteConfirmation from '../common/delete-confirmation';
@@ -16,9 +17,19 @@ type AnnotationActivityMenuProps = {
     id: string,
     onDeleteConfirm: () => void,
     onEdit: () => void,
+    onMenuClose?: (event: React.MouseEvent) => void,
+    onMenuOpen?: (event: React.MouseEvent) => void,
 };
 
-const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdit }: AnnotationActivityMenuProps) => {
+const AnnotationActivityMenu = ({
+    canDelete,
+    canEdit,
+    id,
+    onDeleteConfirm,
+    onEdit,
+    onMenuClose = noop,
+    onMenuOpen = noop,
+}: AnnotationActivityMenuProps) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
 
     const handleDeleteCancel = (): void => {
@@ -46,6 +57,7 @@ const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdi
             <Media.Menu
                 isDisabled={isConfirmingDelete}
                 data-testid="annotation-activity-actions-menu"
+                dropdownProps={{ onMenuClose, onMenuOpen }}
                 menuProps={{
                     'data-resin-component': 'preview',
                     'data-resin-feature': 'annotations',

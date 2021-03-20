@@ -101,12 +101,14 @@ class DropdownMenu extends React.Component<Props, State> {
 
     handleButtonClick = (event: SyntheticEvent<>) => {
         const { isOpen } = this.state;
+        const { onMenuClose = noop } = this.props;
 
         event.stopPropagation();
         event.preventDefault();
 
         if (isOpen) {
             this.closeMenu();
+            onMenuClose(event);
         } else {
             this.openMenuAndSetFocusIndex(null);
         }

@@ -1,0 +1,13 @@
+@keyframes bcs-ActivityItem-interactive {
+    from {
+        background-color: transparent;
+    }
+
+    to {
+        background-color: $bdl-box-blue-05;
+    }
+}
+
+@mixin bcs-ActivityFeedItem {
+    padding: 20px 25px;
+}

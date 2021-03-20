@@ -48,6 +48,8 @@ const AnnotationActivity = ({
     onSelect = noop,
 }: Props) => {
     const [isEditing, setIsEditing] = React.useState(false);
+    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const [isInteractive, setIsInteractive] = React.useState(true);
     const { created_at, created_by, description, error, file_version, id, isPending, permissions = {}, target } = item;
 
     const handleDeleteConfirm = (): void => {
@@ -59,16 +61,31 @@ const AnnotationActivity = ({
     };
 
     const handleOnSelect = () => {
+        if (!isInteractive) {
+            return;
+        }
+
         onSelect(item);
     };
 
-    const handleFormCancel = (): void => {
+    const handleFormCancel = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+        event.preventDefault();
+        event.stopPropagation();
+
         setIsEditing(false);
     };
 
     const handleFormSubmit = ({ text }): void => {
         setIsEditing(false);
         onEdit(id, text, permissions);
+    };
+
+    const handleMenuClose = (): void => {
+        setIsMenuOpen(false);
+    };
+
+    const handleMenuOpen = (): void => {
+        setIsMenuOpen(true);
     };
 
     const createdAtTimestamp = new Date(created_at).getTime();
@@ -83,8 +100,22 @@ const AnnotationActivity = ({
         ? messages.annotationActivityVersionUnavailable
         : { ...linkMessage, values: { number: linkValue } };
 
+    React.useEffect(() => {
+        setIsInteractive(!(isMenuOpen || isEditing || isFileVersionUnavailable));
+    }, [isEditing, isFileVersionUnavailable, isMenuOpen]);
+
     return (
-        <div className="bcs-AnnotationActivity" data-resin-feature="annotations">
+        <div
+            className={classNames('bcs-AnnotationActivity', { 'is-interactive': isInteractive })}
+            data-resin-feature="annotations"
+            data-resin-iscurrent={isCurrentVersion}
+            data-resin-itemid={id}
+            data-resin-target="annotationButton"
+            id={id}
+            onClick={handleOnSelect}
+            role="button"
+            tabIndex="0"
+        >
             <Media
                 className={classNames('bcs-AnnotationActivity-media', {
                     'bcs-is-pending': isPending || error,
@@ -101,6 +132,8 @@ const AnnotationActivity = ({
                             id={id}
                             onDeleteConfirm={handleDeleteConfirm}
                             onEdit={handleEdit}
+                            onMenuClose={handleMenuClose}
+                            onMenuOpen={handleMenuOpen}
                         />
                     )}
                     <div className="bcs-AnnotationActivity-headline">

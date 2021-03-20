@@ -47,7 +47,7 @@
 
         .bcs-ActivityItem {
             position: relative;
-            padding: 20px $container-padding;
+            // padding: 20px $container-padding;
             box-shadow: 0 $container-padding 0 -#{$container-padding - 1} $bdl-gray-10;
             backface-visibility: hidden; // Prevent visual shifting during pseudo-element scale transitions
             transition: box-shadow $container-transition-duration ease $container-transition-delay;
@@ -91,6 +91,15 @@
             &.bcs-is-focused {
                 &::before {
                     transform: scaleY(1);
+                }
+
+                .bcs-AnnotationActivity {
+                    &.is-interactive {
+                        &:hover,
+                        &:focus {
+                            animation-iteration-count: 0;
+                        }
+                    }
                 }
             }
         }
