@@ -13,7 +13,7 @@ type Props = {
     className?: string,
     /** Set by a parent datalist component to indicate when the item is highlighted (but not necessarily selected) */
     isActive?: boolean,
-
+    /** Set by a parent datalist component to indicate when the item is selected */
     isSelected?: boolean,
     /** Set by a parent datalist component to receive the updated active item ID */
     setActiveItemID?: Function,
