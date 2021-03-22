@@ -1,1 +1,1 @@
-export { default, TimeInputProps } from './TimeInput';
+export { default } from './TimeInput';
