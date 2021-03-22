@@ -14,6 +14,7 @@ import CommentForm from '../comment-form/CommentForm';
 import Media from '../../../../components/media';
 import messages from './messages';
 import UserLink from '../common/user-link';
+import useSuppressiveClicks from './useSuppresiveClicks';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { PLACEHOLDER_USER } from '../../../../constants';
 import type { Annotation, AnnotationPermission } from '../../../../common/types/feed';
@@ -68,10 +69,7 @@ const AnnotationActivity = ({
         onSelect(item);
     };
 
-    const handleFormCancel = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-        event.preventDefault();
-        event.stopPropagation();
-
+    const handleFormCancel = (): void => {
         setIsEditing(false);
     };
 
@@ -99,6 +97,13 @@ const AnnotationActivity = ({
     const activityLinkMessage = isFileVersionUnavailable
         ? messages.annotationActivityVersionUnavailable
         : { ...linkMessage, values: { number: linkValue } };
+    const clickHandlers = useSuppressiveClicks<HTMLDivElement>({ onClick: handleOnSelect });
+    const interactiveDivProps = isInteractive
+        ? {
+              role: 'button',
+              tabIndex: '0',
+          }
+        : null;
 
     React.useEffect(() => {
         setIsInteractive(!(isMenuOpen || isEditing || isFileVersionUnavailable));
@@ -112,9 +117,8 @@ const AnnotationActivity = ({
             data-resin-itemid={id}
             data-resin-target="annotationButton"
             id={id}
-            onClick={handleOnSelect}
-            role="button"
-            tabIndex="0"
+            {...interactiveDivProps}
+            {...clickHandlers}
         >
             <Media
                 className={classNames('bcs-AnnotationActivity-media', {

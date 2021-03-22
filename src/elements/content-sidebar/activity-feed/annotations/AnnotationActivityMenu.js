@@ -31,6 +31,7 @@ const AnnotationActivityMenu = ({
     onMenuOpen = noop,
 }: AnnotationActivityMenuProps) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
+    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
     const handleDeleteCancel = (): void => {
         setIsConfirmingDelete(false);
@@ -45,6 +46,14 @@ const AnnotationActivityMenu = ({
         onDeleteConfirm();
     };
 
+    const handleMenuClose = () => {
+        setIsMenuOpen(false);
+    };
+
+    const handleMenuOpen = () => {
+        setIsMenuOpen(true);
+    };
+
     const tetherProps = {
         attachment: 'top right',
         className: 'bcs-AnnotationActivity-deleteConfirmationModal',
@@ -52,12 +61,22 @@ const AnnotationActivityMenu = ({
         targetAttachment: 'bottom right',
     };
 
+    React.useEffect(() => {
+        if (isConfirmingDelete || isMenuOpen) {
+            onMenuOpen();
+        }
+
+        if (!(isConfirmingDelete || isMenuOpen)) {
+            onMenuClose();
+        }
+    }, [isConfirmingDelete, isMenuOpen, onMenuClose, onMenuOpen]);
+
     return (
         <TetherComponent {...tetherProps}>
             <Media.Menu
                 isDisabled={isConfirmingDelete}
                 data-testid="annotation-activity-actions-menu"
-                dropdownProps={{ onMenuClose, onMenuOpen }}
+                dropdownProps={{ onMenuClose: handleMenuClose, onMenuOpen: handleMenuOpen }}
                 menuProps={{
                     'data-resin-component': 'preview',
                     'data-resin-feature': 'annotations',
