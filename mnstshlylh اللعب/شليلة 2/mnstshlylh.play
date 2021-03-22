@@ -1,0 +1,4 @@
+# mnstshlylh-play
+#متجرمنصةشليله
+curl -i -X GET "https://api.box.com/2.0/files/12345/metadata/enterprise/securityClassification-6VMVochwUWo" \ -H "Authorization: Bearer <ACCESS_TOKEN>"
+{ "$canEdit": true, "$parent": "folder_59449484661,", "$scope": "enterprise_27335", "$template": "securityClassification-6VMVochwUWo", "$type": "securityClassification-6VMVochwUWo-fd31537a-0f95-4d86-9f2b-5974a29978f8", "$typeVersion": 5, "$version": 1, "Box__Security__Classification__Key": "Sensitive" }
