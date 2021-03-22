@@ -34,7 +34,8 @@ describe('src/components/time-input/TimeInput', () => {
             minutes: 0,
         }));
         const VALID_INPUT = '3:00 am';
-        const wrapper = getWrapper({ intl: intlFake });
+        const onBlurSpy = jest.fn();
+        const wrapper = getWrapper({ intl: intlFake, onBlur: onBlurSpy });
         const inputField = wrapper.find('input');
         act(() => {
             inputField.simulate('change', {
@@ -48,6 +49,7 @@ describe('src/components/time-input/TimeInput', () => {
         });
         expect(parseTimeFromString).toHaveBeenCalledWith(VALID_INPUT);
         expect(intlFake.formatTime).toHaveBeenCalled();
+        expect(onBlurSpy).toHaveBeenCalledWith({ hours: 3, minutes: 0, displayTime: '3:00 AM' });
     });
 
     test('should not call intl.formatTime for an invalid input', () => {

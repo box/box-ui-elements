@@ -29,10 +29,13 @@ export interface TimeInputProps extends WrappedComponentProps {
     initialDate?: Date;
     /** isRequired - Whether the time input is required */
     isRequired?: boolean;
-    /** onBlur - Function to call when the user blurs out of the time input */
-    onBlur?: Function;
+    /**
+     * onBlur - Function to call when the user blurs out of the time input
+     * The parsed display time, along with the hours and minutes in 24-hour format, will be passed to the handler.
+     */
+    onBlur?: ({ displayTime, hours, minutes }: { displayTime: string; hours: number; minutes: number }) => void;
     /** onChange - Function to call when the user edits the time input */
-    onChange?: Function;
+    onChange?: (value: string) => void;
 }
 
 const TimeInput = ({
@@ -59,7 +62,7 @@ const TimeInput = ({
             date.setMinutes(parsedMinutes);
             const newDisplayTime = intl.formatTime(date);
             setDisplayTime(newDisplayTime);
-            if (onBlur) onBlur(newDisplayTime);
+            if (onBlur) onBlur({ displayTime: newDisplayTime, hours: parsedHours, minutes: parsedMinutes });
         } catch (e) {
             setError(<FormattedMessage {...messages.invalidTimeError} />);
         }

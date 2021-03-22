@@ -4,6 +4,6 @@
     .bdl-TimeInput-icon {
         display: inline-block;
         margin-bottom: -3px;
-        margin-left: -24px;
+        margin-left: -($bdl-grid-unit * 6);
     }
 }
