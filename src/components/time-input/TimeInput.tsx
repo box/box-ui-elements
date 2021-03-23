@@ -1,5 +1,6 @@
 import * as React from 'react';
 import classnames from 'classnames';
+import debounce from 'lodash/debounce';
 import { defineMessages, injectIntl, FormattedMessage, WrappedComponentProps } from 'react-intl';
 import { TooltipPosition } from '../tooltip';
 import { parseTimeFromString } from './TimeInputUtils';
@@ -23,6 +24,16 @@ const AUTO_BLUR_KEYS: { [key: string]: boolean } = {
     [KEYS.enter]: true,
     [KEYS.escape]: true,
 };
+
+type TimeInputEventHandler = ({
+    displayTime,
+    hours,
+    minutes,
+}: {
+    displayTime: string;
+    hours: number;
+    minutes: number;
+}) => void;
 export interface TimeInputProps extends WrappedComponentProps {
     /** className - CSS class for the component */
     className?: string;
@@ -42,9 +53,10 @@ export interface TimeInputProps extends WrappedComponentProps {
      * onBlur - Function to call when the user blurs out of the time input
      * The parsed display time, along with the hours and minutes in 24-hour format, will be passed to the handler.
      */
-    onBlur?: ({ displayTime, hours, minutes }: { displayTime: string; hours: number; minutes: number }) => void;
-    /** shouldAutoBlur - Whether the field should automatically blur when form submit keys are pressed */
-    shouldAutoBlur?: boolean;
+    onBlur?: TimeInputEventHandler;
+    onChange?: TimeInputEventHandler;
+    /** shouldAutoFormat - Whether the field should automatically blur when form submit keys are pressed */
+    shouldAutoFormat?: boolean;
 }
 
 const TimeInput = ({
@@ -57,46 +69,64 @@ const TimeInput = ({
     isRequired = true,
     label,
     onBlur,
-    shouldAutoBlur = true,
+    onChange,
+    shouldAutoFormat = true,
 }: TimeInputProps) => {
-    const [displayTime, setDisplayTime] = React.useState<string | undefined>(
-        initialDate ? intl.formatTime(initialDate) : '',
-    );
+    const [displayTime, setDisplayTime] = React.useState<string>(initialDate ? intl.formatTime(initialDate) : '');
     const [error, setError] = React.useState<React.ReactElement | undefined>(undefined);
 
     /**
      * Handle blur events.
      * Parse and reformat the current display time (as entered by the user).
+     * @param latestValue - string
+     * @param callback - onBlur, onChange, or a combination of the two
+     * @returns
      */
-    const handleBlur = () => {
+    const formatDisplayTime = (latestValue: string = displayTime, callback?: TimeInputEventHandler) => {
+        if (!latestValue) return;
         try {
-            const { hours: parsedHours, minutes: parsedMinutes } = parseTimeFromString(displayTime);
+            const { hours: parsedHours, minutes: parsedMinutes } = parseTimeFromString(latestValue);
             const date = new Date();
             date.setHours(parsedHours);
             date.setMinutes(parsedMinutes);
             const newDisplayTime = intl.formatTime(date);
             setDisplayTime(newDisplayTime);
-            if (onBlur) onBlur({ displayTime: newDisplayTime, hours: parsedHours, minutes: parsedMinutes });
+            if (callback) callback({ displayTime: newDisplayTime, hours: parsedHours, minutes: parsedMinutes });
         } catch (e) {
             setError(<FormattedMessage {...messages.invalidTimeError} />);
         }
     };
 
     /**
-     * Handle keydown events if shouldAutoBlur is true.
-     * If the user pressed Ctrl+Enter or Cmd+Enter (as in a form submit),
-     * blur the input field automatically, which will trigger handleBlur() above.
+     * Handle keydown events if shouldAutoFormat is true.
+     * If the user pressed Ctrl+Enter or Cmd+Enter (as in a form submit), call formatDisplayTime().
      * @param event - KeyboardEvent
      */
     const handleKeyDown = (event: React.KeyboardEvent) => {
         const { ctrlKey, key, metaKey } = event;
         const autoBlurKeyPressed = AUTO_BLUR_KEYS[key] || metaKey || ctrlKey;
-        if (autoBlurKeyPressed) handleBlur();
+        if (autoBlurKeyPressed) {
+            formatDisplayTime(displayTime, parsedData => {
+                if (onBlur) onBlur(parsedData);
+                if (onChange) onChange(parsedData);
+            });
+        }
     };
 
     /**
+     * Debounce formatDisplayTime() for use in handleChange().
+     * useCallback() memoizes the debounced function, so that the debounced function
+     * is not recreated on every re-render triggered by handleChange().
+     */
+    const debouncedFormatDisplayTime = React.useCallback(
+        debounce((latestValue: string) => formatDisplayTime(latestValue, onChange), 2000),
+        [],
+    );
+
+    /**
      * Handle change events.
-     * Update the value of the display time to match what the user typed.
+     * Clear errors, update the value of the display time to match what the user typed,
+     * and call the debounced version of formatDisplayTime().
      * @param event - ChangeEvent
      */
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,6 +135,14 @@ const TimeInput = ({
         } = event;
         setDisplayTime(updatedValue);
         if (error) setError(undefined);
+        if (shouldAutoFormat) debouncedFormatDisplayTime(updatedValue);
+    };
+
+    /**
+     * Handle blur events.
+     */
+    const handleBlur = () => {
+        formatDisplayTime(displayTime, onBlur);
     };
 
     return (
@@ -121,7 +159,7 @@ const TimeInput = ({
             position={errorTooltipPosition}
             type="text"
             value={displayTime}
-            {...(shouldAutoBlur ? { onKeyDown: handleKeyDown } : {})}
+            {...(shouldAutoFormat ? { onKeyDown: handleKeyDown } : {})}
         />
     );
 };
