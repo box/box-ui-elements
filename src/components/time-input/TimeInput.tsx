@@ -6,6 +6,8 @@ import { parseTimeFromString } from './TimeInputUtils';
 // @ts-ignore flow import
 import TextInput from '../text-input';
 import ClockBadge16 from '../../icon/line/ClockBadge16';
+// @ts-ignore flow import
+import { KEYS } from '../../constants';
 
 import './TimeInput.scss';
 
@@ -16,6 +18,11 @@ const messages = defineMessages({
         id: 'boxui.timeInput.invalidTimeError',
     },
 });
+
+const AUTO_BLUR_KEYS: { [key: string]: boolean } = {
+    [KEYS.enter]: true,
+    [KEYS.escape]: true,
+};
 export interface TimeInputProps extends WrappedComponentProps {
     /** className - CSS class for the component */
     className?: string;
@@ -27,6 +34,8 @@ export interface TimeInputProps extends WrappedComponentProps {
     label?: React.ReactNode;
     /** initialDate - Date object for initializing the time input */
     initialDate?: Date;
+    /** innerRef - Ref for the time input */
+    innerRef?: React.Ref<HTMLInputElement>;
     /** isRequired - Whether the time input is required */
     isRequired?: boolean;
     /**
@@ -34,8 +43,8 @@ export interface TimeInputProps extends WrappedComponentProps {
      * The parsed display time, along with the hours and minutes in 24-hour format, will be passed to the handler.
      */
     onBlur?: ({ displayTime, hours, minutes }: { displayTime: string; hours: number; minutes: number }) => void;
-    /** onChange - Function to call when the user edits the time input */
-    onChange?: (value: string) => void;
+    /** shouldAutoBlur - Whether the field should automatically blur when form submit keys are pressed */
+    shouldAutoBlur?: boolean;
 }
 
 const TimeInput = ({
@@ -43,17 +52,22 @@ const TimeInput = ({
     errorTooltipPosition = TooltipPosition.MIDDLE_RIGHT,
     hideLabel = true,
     initialDate,
+    innerRef,
     intl,
     isRequired = true,
     label,
     onBlur,
-    onChange,
+    shouldAutoBlur = true,
 }: TimeInputProps) => {
     const [displayTime, setDisplayTime] = React.useState<string | undefined>(
         initialDate ? intl.formatTime(initialDate) : '',
     );
     const [error, setError] = React.useState<React.ReactElement | undefined>(undefined);
 
+    /**
+     * Handle blur events.
+     * Parse and reformat the current display time (as entered by the user).
+     */
     const handleBlur = () => {
         try {
             const { hours: parsedHours, minutes: parsedMinutes } = parseTimeFromString(displayTime);
@@ -68,13 +82,29 @@ const TimeInput = ({
         }
     };
 
-    const handleChange = (event: React.FocusEvent<HTMLInputElement>) => {
+    /**
+     * Handle keydown events if shouldAutoBlur is true.
+     * If the user pressed Ctrl+Enter or Cmd+Enter (as in a form submit),
+     * blur the input field automatically, which will trigger handleBlur() above.
+     * @param event - KeyboardEvent
+     */
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+        const { ctrlKey, key, metaKey } = event;
+        const autoBlurKeyPressed = AUTO_BLUR_KEYS[key] || metaKey || ctrlKey;
+        if (autoBlurKeyPressed) handleBlur();
+    };
+
+    /**
+     * Handle change events.
+     * Update the value of the display time to match what the user typed.
+     * @param event - ChangeEvent
+     */
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {
             target: { value: updatedValue },
         } = event;
         setDisplayTime(updatedValue);
         if (error) setError(undefined);
-        if (onChange) onChange(updatedValue);
     };
 
     return (
@@ -83,6 +113,7 @@ const TimeInput = ({
             error={error}
             hideLabel={hideLabel}
             icon={<ClockBadge16 className="bdl-TimeInput-icon" />}
+            inputRef={innerRef}
             isRequired={isRequired}
             label={label}
             onBlur={handleBlur}
@@ -90,6 +121,7 @@ const TimeInput = ({
             position={errorTooltipPosition}
             type="text"
             value={displayTime}
+            {...(shouldAutoBlur ? { onKeyDown: handleKeyDown } : {})}
         />
     );
 };
