@@ -4,15 +4,19 @@ import { FormattedMessage } from 'react-intl';
 import Tooltip from '../../../../../components/tooltip';
 import ReadableTime from '../../../../../components/time/ReadableTime';
 import messages from './messages';
-import { isCurrentYear } from '../../../../../utils/datetime';
 import './ActivityTimestamp.scss';
 
 type Props = {
     date: number, // unix epoch timestamp (new Date().getTime())
 };
 
+// 365 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
+const MILLISECONDS_PER_YEAR = 365 * 24 * 60 * 60 * 1000;
+
 const ActivityTimestamp = ({ date }: Props) => {
-    const showTime = isCurrentYear(date);
+    const now = new Date().getTime();
+    // Only show time if activity time is within the last year
+    const showTime = now - date < MILLISECONDS_PER_YEAR;
 
     return (
         <Tooltip text={<FormattedMessage {...messages.fullDateTime} values={{ time: date }} />}>

@@ -22,4 +22,14 @@ describe('elements/content-sidebar/ActivityFeed/common/ActivityTimestamp', () =>
 
         expect(wrapper.find('ReadableTime').prop('alwaysShowTime')).toEqual(true);
     });
+
+    test('should not show time when past a year', () => {
+        // 365 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
+        const MILLISECONDS_PER_YEAR = 365 * 24 * 60 * 60 * 1000;
+        const lastYear = new Date().getTime() - MILLISECONDS_PER_YEAR;
+
+        const wrapper = shallow(<Timestamp date={lastYear} />);
+
+        expect(wrapper.find('ReadableTime').prop('alwaysShowTime')).toEqual(false);
+    });
 });
