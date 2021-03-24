@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
 import ActivityTimestamp from '../common/activity-timestamp';
+import AnnotationActivityButton from './AnnotationActivityButton';
 import AnnotationActivityLink from './AnnotationActivityLink';
 import AnnotationActivityMenu from './AnnotationActivityMenu';
 import Avatar from '../Avatar';
@@ -14,7 +15,6 @@ import CommentForm from '../comment-form/CommentForm';
 import Media from '../../../../components/media';
 import messages from './messages';
 import UserLink from '../common/user-link';
-import useSuppressiveClicks from './useSuppresiveClicks';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { PLACEHOLDER_USER } from '../../../../constants';
 import type { Annotation, AnnotationPermission } from '../../../../common/types/feed';
@@ -62,10 +62,6 @@ const AnnotationActivity = ({
     };
 
     const handleOnSelect = () => {
-        if (!isInteractive) {
-            return;
-        }
-
         onSelect(item);
     };
 
@@ -97,28 +93,21 @@ const AnnotationActivity = ({
     const activityLinkMessage = isFileVersionUnavailable
         ? messages.annotationActivityVersionUnavailable
         : { ...linkMessage, values: { number: linkValue } };
-    const clickHandlers = useSuppressiveClicks<HTMLDivElement>({ onClick: handleOnSelect });
-    const interactiveDivProps = isInteractive
-        ? {
-              role: 'button',
-              tabIndex: '0',
-          }
-        : null;
 
     React.useEffect(() => {
         setIsInteractive(!(isMenuOpen || isEditing || isFileVersionUnavailable));
     }, [isEditing, isFileVersionUnavailable, isMenuOpen]);
 
     return (
-        <div
+        <AnnotationActivityButton
             className={classNames('bcs-AnnotationActivity', { 'is-interactive': isInteractive })}
             data-resin-feature="annotations"
             data-resin-iscurrent={isCurrentVersion}
             data-resin-itemid={id}
             data-resin-target="annotationButton"
             id={id}
-            {...interactiveDivProps}
-            {...clickHandlers}
+            isDisabled={!isInteractive}
+            onSelect={handleOnSelect}
         >
             <Media
                 className={classNames('bcs-AnnotationActivity-media', {
@@ -184,7 +173,7 @@ const AnnotationActivity = ({
             </Media>
             {/* $FlowFixMe */}
             {error ? <ActivityError {...error} /> : null}
-        </div>
+        </AnnotationActivityButton>
     );
 };
 
