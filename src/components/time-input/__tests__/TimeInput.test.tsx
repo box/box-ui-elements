@@ -12,6 +12,7 @@ jest.mock('lodash/debounce');
 
 const VALID_INPUT = '3:00 am';
 const INVALID_INPUT = '300000';
+const FORMATTED_TIME_OBJECT = { hours: 3, minutes: 0, displayTime: '3:00 AM' };
 
 describe('src/components/time-input/TimeInput', () => {
     const getWrapper = (props: TimeInputProps) => {
@@ -55,7 +56,7 @@ describe('src/components/time-input/TimeInput', () => {
         });
         expect(parseTimeFromString).toHaveBeenCalledWith(VALID_INPUT);
         expect(intlFake.formatTime).toHaveBeenCalled();
-        expect(onBlurSpy).toHaveBeenCalledWith({ hours: 3, minutes: 0, displayTime: '3:00 AM' });
+        expect(onBlurSpy).toHaveBeenCalledWith(FORMATTED_TIME_OBJECT);
     });
 
     test('should not format input on blur when value has an invalid format', () => {
@@ -63,7 +64,13 @@ describe('src/components/time-input/TimeInput', () => {
         (parseTimeFromString as jest.Mock<any>).mockImplementation(() => {
             throw new SyntaxError();
         });
-        const wrapper = getWrapper({ intl: intlFake });
+        const onBlurSpy = jest.fn();
+        const onChangeSpy = jest.fn();
+        const wrapper = getWrapper({
+            intl: intlFake,
+            onBlur: onBlurSpy,
+            onChange: onChangeSpy,
+        });
         const inputField = wrapper.find('input');
         act(() => {
             inputField.simulate('change', {
@@ -77,6 +84,8 @@ describe('src/components/time-input/TimeInput', () => {
         });
         expect(parseTimeFromString).toHaveBeenCalledWith(INVALID_INPUT);
         expect(intlFake.formatTime).not.toHaveBeenCalled();
+        expect(onChangeSpy).not.toHaveBeenCalledWith(FORMATTED_TIME_OBJECT);
+        expect(onBlurSpy).not.toHaveBeenCalled();
     });
 
     test('should format input on change', () => {
@@ -97,7 +106,7 @@ describe('src/components/time-input/TimeInput', () => {
         });
         expect(parseTimeFromString).toHaveBeenCalledWith(VALID_INPUT);
         expect(intlFake.formatTime).toHaveBeenCalled();
-        expect(onChangeSpy).toHaveBeenCalledWith({ hours: 3, minutes: 0, displayTime: '3:00 AM' });
-        expect(onBlurSpy).not.toHaveBeenCalled();
+        expect(onBlurSpy).toHaveBeenCalledWith(FORMATTED_TIME_OBJECT);
+        expect(onChangeSpy).toHaveBeenCalledWith(FORMATTED_TIME_OBJECT);
     });
 });

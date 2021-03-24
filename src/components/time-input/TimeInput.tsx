@@ -75,10 +75,9 @@ const TimeInput = ({
      * Handle blur events.
      * Parse and reformat the current display time (as entered by the user).
      * @param latestValue - string
-     * @param callback - onBlur, onChange, or a combination of the two
      * @returns
      */
-    const formatDisplayTime = (latestValue: string = displayTime, callback?: TimeInputEventHandler) => {
+    const formatDisplayTime = (latestValue: string = displayTime) => {
         if (!latestValue) return;
         try {
             const { hours: parsedHours, minutes: parsedMinutes } = parseTimeFromString(latestValue);
@@ -87,7 +86,8 @@ const TimeInput = ({
             date.setMinutes(parsedMinutes);
             const newDisplayTime = intl.formatTime(date);
             setDisplayTime(newDisplayTime);
-            if (callback) callback({ displayTime: newDisplayTime, hours: parsedHours, minutes: parsedMinutes });
+            if (onBlur) onBlur({ displayTime: newDisplayTime, hours: parsedHours, minutes: parsedMinutes });
+            if (onChange) onChange({ displayTime: newDisplayTime, hours: parsedHours, minutes: parsedMinutes });
         } catch (e) {
             setError(<FormattedMessage {...messages.invalidTimeError} />);
         }
@@ -99,7 +99,7 @@ const TimeInput = ({
      * is not recreated on every re-render triggered by handleChange().
      */
     const debouncedFormatDisplayTime = React.useCallback(
-        debounce((latestValue: string) => formatDisplayTime(latestValue, onChange), DEFAULT_FORMAT_DEBOUNCE),
+        debounce((latestValue: string) => formatDisplayTime(latestValue), DEFAULT_FORMAT_DEBOUNCE),
         [],
     );
 
@@ -122,7 +122,7 @@ const TimeInput = ({
      * Handle blur events.
      */
     const handleBlur = () => {
-        formatDisplayTime(displayTime, onBlur);
+        formatDisplayTime(displayTime);
     };
 
     return (
