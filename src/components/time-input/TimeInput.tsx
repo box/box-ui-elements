@@ -8,7 +8,7 @@ import { parseTimeFromString } from './TimeInputUtils';
 import TextInput from '../text-input';
 import ClockBadge16 from '../../icon/line/ClockBadge16';
 // @ts-ignore flow import
-import { KEYS } from '../../constants';
+import { DEFAULT_FORMAT_DEBOUNCE } from '../../constants';
 
 import './TimeInput.scss';
 
@@ -19,11 +19,6 @@ const messages = defineMessages({
         id: 'boxui.timeInput.invalidTimeError',
     },
 });
-
-const AUTO_BLUR_KEYS: { [key: string]: boolean } = {
-    [KEYS.enter]: true,
-    [KEYS.escape]: true,
-};
 
 type TimeInputEventHandler = ({
     displayTime,
@@ -54,9 +49,11 @@ export interface TimeInputProps extends WrappedComponentProps {
      * The parsed display time, along with the hours and minutes in 24-hour format, will be passed to the handler.
      */
     onBlur?: TimeInputEventHandler;
+    /**
+     * onChange - Function to call when the user changes the value of the time input
+     * The parsed display time, along with the hours and minutes in 24-hour format, will be passed to the handler.
+     */
     onChange?: TimeInputEventHandler;
-    /** shouldAutoFormat - Whether the field should automatically blur when form submit keys are pressed */
-    shouldAutoFormat?: boolean;
 }
 
 const TimeInput = ({
@@ -70,7 +67,6 @@ const TimeInput = ({
     label,
     onBlur,
     onChange,
-    shouldAutoFormat = true,
 }: TimeInputProps) => {
     const [displayTime, setDisplayTime] = React.useState<string>(initialDate ? intl.formatTime(initialDate) : '');
     const [error, setError] = React.useState<React.ReactElement | undefined>(undefined);
@@ -98,28 +94,12 @@ const TimeInput = ({
     };
 
     /**
-     * Handle keydown events if shouldAutoFormat is true.
-     * If the user pressed Ctrl+Enter or Cmd+Enter (as in a form submit), call formatDisplayTime().
-     * @param event - KeyboardEvent
-     */
-    const handleKeyDown = (event: React.KeyboardEvent) => {
-        const { ctrlKey, key, metaKey } = event;
-        const autoBlurKeyPressed = AUTO_BLUR_KEYS[key] || metaKey || ctrlKey;
-        if (autoBlurKeyPressed) {
-            formatDisplayTime(displayTime, parsedData => {
-                if (onBlur) onBlur(parsedData);
-                if (onChange) onChange(parsedData);
-            });
-        }
-    };
-
-    /**
      * Debounce formatDisplayTime() for use in handleChange().
      * useCallback() memoizes the debounced function, so that the debounced function
      * is not recreated on every re-render triggered by handleChange().
      */
     const debouncedFormatDisplayTime = React.useCallback(
-        debounce((latestValue: string) => formatDisplayTime(latestValue, onChange), 2000),
+        debounce((latestValue: string) => formatDisplayTime(latestValue, onChange), DEFAULT_FORMAT_DEBOUNCE),
         [],
     );
 
@@ -135,7 +115,7 @@ const TimeInput = ({
         } = event;
         setDisplayTime(updatedValue);
         if (error) setError(undefined);
-        if (shouldAutoFormat) debouncedFormatDisplayTime(updatedValue);
+        debouncedFormatDisplayTime(updatedValue);
     };
 
     /**
@@ -159,7 +139,6 @@ const TimeInput = ({
             position={errorTooltipPosition}
             type="text"
             value={displayTime}
-            {...(shouldAutoFormat ? { onKeyDown: handleKeyDown } : {})}
         />
     );
 };
