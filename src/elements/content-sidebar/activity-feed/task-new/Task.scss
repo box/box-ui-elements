@@ -1,7 +1,12 @@
 @import '../../../common/variables';
+@import '../mixins';
 @import './mixins';
 
 $bcs-task-left-offset: 10 * $bdl-grid-unit + 2px;
+
+.bcs-Task {
+    @include bcs-ActivityFeedItem;
+}
 
 .bcs-Task-media {
     opacity: 1;

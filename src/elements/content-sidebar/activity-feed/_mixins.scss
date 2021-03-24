@@ -1,0 +1,6 @@
+$bcs-ActivityFeedItem-padding-vertical: 20px;
+$bcs-ActivityFeedItem-padding-horizontal: 25px;
+
+@mixin bcs-ActivityFeedItem {
+    padding: $bcs-ActivityFeedItem-padding-vertical $bcs-ActivityFeedItem-padding-horizontal;
+}

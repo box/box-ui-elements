@@ -1,6 +1,9 @@
 @import '../../../common/variables';
+@import '../mixins';
 
 .bcs-AnnotationActivity {
+    @include bcs-ActivityFeedItem;
+
     position: relative;
     z-index: 1;
 }

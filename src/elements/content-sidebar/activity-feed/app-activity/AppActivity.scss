@@ -1,6 +1,9 @@
 @import '../../../common/variables';
+@import '../mixins';
 
 .bcs-AppActivity {
+    @include bcs-ActivityFeedItem;
+
     width: 100%;
 
     &.bcs-is-pending {
