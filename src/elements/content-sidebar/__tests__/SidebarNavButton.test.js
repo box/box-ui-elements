@@ -22,6 +22,13 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
         expect(button.hasClass('bcs-is-selected')).toBe(false);
     });
 
+    test('should set aria-label prop in nav button properly', () => {
+        const wrapper = getWrapper({ 'aria-label': 'foo' });
+        const button = getButton(wrapper);
+
+        expect(button.prop('aria-label')).toEqual('foo');
+    });
+
     test.each`
         isOpen       | expected
         ${true}      | ${true}

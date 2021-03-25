@@ -30,7 +30,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
         isOpen,
         sidebarView,
         tooltip,
-        'aria-label': dataAriaLabel,
+        'aria-label': ariaLabel,
     } = props;
     const sidebarPath = `/${sidebarView}`;
 
@@ -49,7 +49,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                             activeClassName="bcs-is-selected"
                             aria-selected={isActiveValue}
                             aria-controls={`${id}-content`}
-                            aria-label={dataAriaLabel}
+                            aria-label={ariaLabel}
                             className="bcs-NavButton"
                             data-resin-target={dataResinTarget}
                             data-testid={dataTestId}
