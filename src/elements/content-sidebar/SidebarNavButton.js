@@ -12,7 +12,6 @@ import './SidebarNavButton.scss';
 
 type Props = {
     'aria-label'?: string,
-    'aria-label'?: string,
     'data-resin-target'?: string,
     'data-testid'?: string,
     children: React.Node,
