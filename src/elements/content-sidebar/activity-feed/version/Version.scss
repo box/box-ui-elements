@@ -1,12 +1,11 @@
 @import '../../../common/variables';
-@import '../mixins';
 
 .be {
     .bcs-Version {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin: 0 $bcs-ActivityFeedItem-padding-horizontal;
+        margin: 0 $sidebar-activity-feed-spacing-horizontal;
         padding: 9px;
         color: $bdl-green-light;
         background-color: fade-out($bdl-green-light, .9);

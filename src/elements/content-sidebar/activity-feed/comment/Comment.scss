@@ -1,10 +1,7 @@
 @import '../../../common/variables';
-@import '../mixins';
 
 // the comment container including inline error component
 .bcs-Comment {
-    @include bcs-ActivityFeedItem;
-
     position: relative;
     z-index: 1;
 }
