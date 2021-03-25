@@ -1,7 +1,11 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-
+import ClockBadge16 from '../../../icon/line/ClockBadge16';
+import IconVerified from '../../../icons/general/IconVerified';
+import LoadingIndicator from '../../loading-indicator';
 import TextInput from '..';
+
+jest.mock('lodash/uniqueId', () => () => 'description20');
 
 describe('components/text-input/TextInput', () => {
     test('should correctly render default component', () => {
@@ -53,37 +57,6 @@ describe('components/text-input/TextInput', () => {
         expect(wrapper.find('Label').prop('showOptionalText')).toBe(false);
     });
 
-    test('should correctly render LoadingIndicator if it is loading', () => {
-        const wrapper = shallow(<TextInput isLoading label="label" />);
-
-        expect(wrapper.find('.text-input-loading').length).toBe(1);
-    });
-
-    test('should correctly render IconVerified if it is valid', () => {
-        const wrapper = shallow(<TextInput isValid label="label" />);
-
-        expect(wrapper.find('.text-input-verified').length).toBe(1);
-    });
-
-    test('should not render LoadingIndicator if not loading', () => {
-        const wrapper = shallow(<TextInput label="label" />);
-
-        expect(wrapper.find('.text-input-loading').length).toBe(0);
-    });
-
-    test('should not render IconVerified if not valid', () => {
-        const wrapper = shallow(<TextInput label="label" />);
-
-        expect(wrapper.find('.text-input-verified').length).toBe(0);
-    });
-
-    test('should not render LoadingIndicator or IconVerified if both loading and valid', () => {
-        const wrapper = shallow(<TextInput isLoading isValid label="label" />);
-
-        expect(wrapper.find('.text-input-loading').length).toBe(0);
-        expect(wrapper.find('.text-input-verified').length).toBe(0);
-    });
-
     test('should show Tooltip when error exists', () => {
         const wrapper = shallow(<TextInput error="error" label="label" />);
 
@@ -110,4 +83,25 @@ describe('components/text-input/TextInput', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test.each`
+        isLoading | isValid  | icon                  | loadingIndicatorExists | validIconExists | customIconExists | description
+        ${true}   | ${false} | ${(<ClockBadge16 />)} | ${true}                | ${false}        | ${false}         | ${'LoadingIndicator if a custom icon is provided but isLoading is true'}
+        ${false}  | ${true}  | ${(<ClockBadge16 />)} | ${false}               | ${true}         | ${false}         | ${'IconVerified if a custom icon is provided but isValid is true'}
+        ${false}  | ${false} | ${(<ClockBadge16 />)} | ${false}               | ${false}        | ${true}          | ${'custom icon if provided and neither isLoading nor isValid is true'}
+        ${true}   | ${false} | ${null}               | ${true}                | ${false}        | ${false}         | ${'LoadingIndicator if isLoading is true'}
+        ${false}  | ${true}  | ${null}               | ${false}               | ${true}         | ${false}         | ${'IconVerified if isValid is true'}
+        ${true}   | ${true}  | ${null}               | ${false}               | ${false}        | ${false}         | ${'no icons if both isLoading and isValid are true'}
+        ${true}   | ${true}  | ${(<ClockBadge16 />)} | ${false}               | ${false}        | ${false}         | ${'no icons if both isLoading and isValid are true and a custom icon is provided'}
+    `(
+        'should render $description',
+        ({ isLoading, isValid, icon, loadingIndicatorExists, validIconExists, customIconExists }) => {
+            const wrapper = shallow(<TextInput icon={icon} isLoading={isLoading} isValid={isValid} />);
+            if (icon) {
+                expect(wrapper.exists(ClockBadge16)).toBe(customIconExists);
+            }
+            expect(wrapper.exists(LoadingIndicator)).toBe(loadingIndicatorExists);
+            expect(wrapper.exists(IconVerified)).toBe(validIconExists);
+        },
+    );
 });

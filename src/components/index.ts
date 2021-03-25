@@ -45,6 +45,9 @@ export * from './loading-indicator';
 export { default as Logo } from './logo';
 export * from './logo';
 
+export { default as Media } from './media';
+export * from './media';
+
 export * from './menu';
 
 export { default as PlainButton } from './plain-button';
@@ -72,3 +75,9 @@ export * from './draggable-list';
 
 export { default as DatePicker } from './date-picker';
 export * from './date-picker';
+
+export { default as Section } from './section';
+export * from './section';
+
+export { default as TimeInput } from './time-input';
+export * from './time-input';

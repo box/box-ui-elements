@@ -522,6 +522,8 @@ class BaseSelectField extends React.Component<Props, State> {
                 itemProps.isActive = true;
             }
 
+            itemProps.isSelected = isSelected;
+
             // The below actually does have a key, but eslint can't catch that
             /* eslint-disable react/jsx-key */
             return (

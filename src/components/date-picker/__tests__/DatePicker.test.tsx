@@ -8,6 +8,10 @@ import noop from 'lodash/noop';
 import { TooltipPosition } from '../../tooltip';
 import DatePicker, { DateFormat, DatePickerBase } from '../DatePicker';
 
+const DATE_PICKER_DEFAULT_INPUT_CLASS_NAME = 'date-picker-input';
+const DATE_PICKER_CUSTOM_INPUT_CLASS_NAME = 'date-picker-custom-input';
+const customInput = <input className={DATE_PICKER_CUSTOM_INPUT_CLASS_NAME} />;
+
 let clock: SinonFakeTimers;
 
 jest.mock('pikaday');
@@ -225,6 +229,15 @@ describe('components/date-picker/DatePicker', () => {
                     firstDay: 1,
                 }),
             );
+        });
+
+        test.each`
+            customInputProp    | bound    | description
+            ${{ customInput }} | ${false} | ${'false if customInput is provided'}
+            ${{}}              | ${true}  | ${'true if customInput is not provided'}
+        `('should set bound to $description', ({ customInputProp, bound }) => {
+            renderDatePicker(customInputProp);
+            expect(Pikaday).toHaveBeenCalledWith(expect.objectContaining({ bound }));
         });
     });
 
@@ -460,10 +473,14 @@ describe('components/date-picker/DatePicker', () => {
     });
 
     describe('render()', () => {
-        test('should render the date-picker-open btn', () => {
-            const wrapper = renderDatePicker();
+        test.each`
+            props                        | buttonExists | description
+            ${{}}                        | ${true}      | ${'should render the date-picker-open btn by default'}
+            ${{ isAlwaysVisible: true }} | ${false}     | ${'should not render the date-picker-open btn if isAlwaysVisible is true'}
+        `('$description', ({ props, buttonExists }) => {
+            const wrapper = renderDatePicker(props);
             const buttonEl = wrapper.find('PlainButton.date-picker-open-btn');
-            expect(buttonEl.exists()).toBe(true);
+            expect(buttonEl.exists()).toBe(buttonExists);
         });
 
         test('should render a disabled date-picker-open btn when DatePicker is disabled', () => {
@@ -473,6 +490,25 @@ describe('components/date-picker/DatePicker', () => {
             const buttonEl = wrapper.find('PlainButton.date-picker-open-btn');
             expect(buttonEl.prop('isDisabled')).toBe(true);
         });
+
+        test.each`
+            customInputProp | renderedClassName                       | absentClassName                         | isDisabled | isRequired | resinTarget | description
+            ${undefined}    | ${DATE_PICKER_DEFAULT_INPUT_CLASS_NAME} | ${DATE_PICKER_CUSTOM_INPUT_CLASS_NAME}  | ${true}    | ${true}    | ${'target'} | ${'should render the default input field with provided props'}
+            ${customInput}  | ${DATE_PICKER_CUSTOM_INPUT_CLASS_NAME}  | ${DATE_PICKER_DEFAULT_INPUT_CLASS_NAME} | ${true}    | ${true}    | ${'target'} | ${'should render the custom input field with provided props if provided'}
+        `(
+            '$description',
+            ({ customInputProp, renderedClassName, absentClassName, isDisabled, isRequired, resinTarget }) => {
+                const input = renderDatePicker({ customInput: customInputProp, isDisabled, isRequired, resinTarget })
+                    .find('input')
+                    .at(0);
+                expect(input.prop('className')).toBe(renderedClassName);
+                expect(input.prop('className')).not.toBe(absentClassName);
+                expect(input.prop('disabled')).toBe(isDisabled);
+                expect(input.prop('required')).toBe(isRequired);
+                expect(input.prop('aria-required')).toBe(isRequired);
+                expect(input.prop('data-resin-target')).toEqual(resinTarget);
+            },
+        );
     });
 
     describe('componentWillUnmount()', () => {

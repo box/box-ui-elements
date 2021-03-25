@@ -9,12 +9,10 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
   data-resin-tasktype="GENERAL"
 >
   <Media
-    as="div"
     className="bcs-Task-media"
     data-testid="task-card"
   >
     <MediaFigure
-      as="figure"
       className="bcs-Task-avatar"
     >
       <Avatar
@@ -50,7 +48,6 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       >
         <MediaMenu
           data-testid="task-actions-menu"
-          dropdownProps={Object {}}
           isDisabled={false}
           menuProps={
             Object {

@@ -34,6 +34,13 @@ describe('components/datalist-item/DatalistItem', () => {
             expect(wrapper.hasClass(className)).toBe(true);
         });
 
+        test('should render the correct aria-selected according to isSelected prop', () => {
+            const isSelectedValue = true;
+            const wrapper = shallow(<DatalistItem isSelected={isSelectedValue}>test</DatalistItem>);
+
+            expect(wrapper.prop('aria-selected')).toBe(isSelectedValue);
+        });
+
         test('should render custom attributes when specified', () => {
             const wrapper = shallow(<DatalistItem data-resin-target="test">Test</DatalistItem>);
 

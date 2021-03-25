@@ -102,6 +102,8 @@ const localesWhereWeekStartsOnSunday = ['en-US', 'en-CA', 'jp-JP'];
 export interface DatePickerProps extends WrappedComponentProps {
     /** Add a css class to the component */
     className?: string;
+    /** Custom input field */
+    customInput?: React.ReactElement;
     /** The format of the date value for form submit */
     dateFormat?: DateFormat;
     /** Some optional description */
@@ -118,6 +120,8 @@ export interface DatePickerProps extends WrappedComponentProps {
     hideOptionalLabel?: boolean;
     /** Props that will be applied on the input element */
     inputProps?: Object;
+    /** Is the calendar always visible */
+    isAlwaysVisible?: boolean;
     /** Is input clearable */
     isClearable?: boolean;
     /** Is input disabled */
@@ -146,6 +150,7 @@ export interface DatePickerProps extends WrappedComponentProps {
     resinTarget?: string;
     /** Date to set the input */
     value?: Date | null;
+    /** Number of years, or an array containing an upper and lower range */
     yearRange?: number | Array<number>;
 }
 
@@ -167,7 +172,17 @@ class DatePicker extends React.Component<DatePickerProps> {
     descriptionID = uniqueId('description');
 
     componentDidMount() {
-        const { dateFormat, intl, maxDate, minDate, value, yearRange, isTextInputAllowed } = this.props;
+        const {
+            customInput,
+            dateFormat,
+            intl,
+            isAlwaysVisible,
+            isTextInputAllowed,
+            maxDate,
+            minDate,
+            value,
+            yearRange,
+        } = this.props;
         const { formatDate, formatMessage } = intl;
         const { nextMonth, previousMonth } = messages;
         let defaultValue = value;
@@ -188,7 +203,10 @@ class DatePicker extends React.Component<DatePickerProps> {
             weekdaysShort: range(1, 8).map(date => formatDate(new Date(2016, 4, date), { weekday: 'narrow' })),
         };
 
+        // If "bound" is true (default), the DatePicker will be appended at the end of the document, with absolute positioning
+        // If "bound" is false, the DatePicker will be appended to the DOM right after the input, with relative positioning
         this.datePicker = new Pikaday({
+            bound: !customInput,
             blurFieldOnSelect: false, // Available in pikaday > 1.5.1
             setDefaultDate: true,
             defaultDate: defaultValue === null ? undefined : defaultValue,
@@ -206,6 +224,11 @@ class DatePicker extends React.Component<DatePickerProps> {
 
         if (isTextInputAllowed) {
             this.updateDateInputValue(this.formatDisplay(defaultValue));
+        }
+
+        if (isAlwaysVisible) {
+            this.datePicker.show();
+            this.datePicker.hide = noop;
         }
     }
 
@@ -351,6 +374,7 @@ class DatePicker extends React.Component<DatePickerProps> {
 
     handleButtonClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
         event.preventDefault();
+        event.stopPropagation();
 
         if (!this.shouldStayClosed) {
             this.focusDatePicker();
@@ -378,6 +402,7 @@ class DatePicker extends React.Component<DatePickerProps> {
     render() {
         const {
             className,
+            customInput,
             description,
             error,
             errorTooltipPosition,
@@ -385,6 +410,7 @@ class DatePicker extends React.Component<DatePickerProps> {
             hideOptionalLabel,
             inputProps,
             intl,
+            isAlwaysVisible,
             isClearable,
             isDisabled,
             isRequired,
@@ -442,24 +468,36 @@ class DatePicker extends React.Component<DatePickerProps> {
                                 text={error || ''}
                                 theme={TooltipTheme.ERROR}
                             >
-                                <input
-                                    ref={ref => {
-                                        this.dateInputEl = ref;
-                                    }}
-                                    className="date-picker-input"
-                                    disabled={isDisabled}
-                                    onBlur={this.handleInputBlur}
-                                    placeholder={placeholder || formatMessage(messages.chooseDate)}
-                                    required={isRequired}
-                                    type="text"
-                                    {...onChangeAttr}
-                                    onFocus={onFocus}
-                                    onKeyDown={this.handleInputKeyDown}
-                                    {...resinTargetAttr}
-                                    {...ariaAttrs}
-                                    {...inputProps}
-                                    {...valueAttr}
-                                />
+                                {customInput ? (
+                                    React.cloneElement(customInput, {
+                                        disabled: isDisabled,
+                                        ref: (ref: HTMLInputElement) => {
+                                            this.dateInputEl = ref;
+                                        },
+                                        required: isRequired,
+                                        ...resinTargetAttr,
+                                        ...ariaAttrs,
+                                    })
+                                ) : (
+                                    <input
+                                        ref={ref => {
+                                            this.dateInputEl = ref;
+                                        }}
+                                        className="date-picker-input"
+                                        disabled={isDisabled}
+                                        onBlur={this.handleInputBlur}
+                                        placeholder={placeholder || formatMessage(messages.chooseDate)}
+                                        required={isRequired}
+                                        type="text"
+                                        {...onChangeAttr}
+                                        onFocus={onFocus}
+                                        onKeyDown={this.handleInputKeyDown}
+                                        {...resinTargetAttr}
+                                        {...ariaAttrs}
+                                        {...inputProps}
+                                        {...valueAttr}
+                                    />
+                                )}
                             </Tooltip>
                             <span id={this.errorMessageID} className="accessibility-hidden" role="alert">
                                 {error}
@@ -484,18 +522,20 @@ class DatePicker extends React.Component<DatePickerProps> {
                             width={13}
                         />
                     ) : null}
-                    <PlainButton
-                        aria-label={formatMessage(messages.chooseDate)}
-                        className="date-picker-open-btn"
-                        getDOMRef={ref => {
-                            this.datePickerButtonEl = ref;
-                        }}
-                        isDisabled={isDisabled}
-                        onClick={this.handleButtonClick}
-                        type={ButtonType.BUTTON}
-                    >
-                        <IconCalendar height={17} width={16} />
-                    </PlainButton>
+                    {!isAlwaysVisible && (
+                        <PlainButton
+                            aria-label={formatMessage(messages.chooseDate)}
+                            className="date-picker-open-btn"
+                            getDOMRef={ref => {
+                                this.datePickerButtonEl = ref;
+                            }}
+                            isDisabled={isDisabled}
+                            onClick={this.handleButtonClick}
+                            type={ButtonType.BUTTON}
+                        >
+                            <IconCalendar height={17} width={16} />
+                        </PlainButton>
+                    )}
                     <input
                         className="date-picker-unix-time-input"
                         name={name}

@@ -344,6 +344,7 @@ class DatePicker extends React.Component<Props> {
 
     handleButtonClick = (event: SyntheticEvent<HTMLButtonElement>) => {
         event.preventDefault();
+        event.stopPropagation();
 
         if (!this.shouldStayClosed) {
             this.focusDatePicker();

@@ -1,8 +1,9 @@
 import React from 'react';
+import { mount, shallow } from 'enzyme';
 
 import Media from '../Media';
 
-jest.mock('../../../icons/general/IconEllipsis', () => () => <icon-ellipsis />);
+jest.mock('../../../icons/general/IconEllipsis', () => () => <div data-test-id="icon-ellipsis" />);
 
 describe('components/Media', () => {
     test('compound component', () => {
@@ -20,7 +21,9 @@ describe('components/Media', () => {
                 </Media.Figure>
 
                 <Media.Body>
-                    <Media.Menu />
+                    <Media.Menu>
+                        <div>foo</div>
+                    </Media.Menu>
                     {title}
                     {content}
                 </Media.Body>
@@ -32,8 +35,18 @@ describe('components/Media', () => {
     });
 
     test('"as" prop changes Media root element', () => {
-        const wrapper = shallow(<Media />);
-        const wrapperAs = shallow(<Media as="li" />);
+        const wrapper = shallow(
+            <Media>
+                <Media.Figure>foo</Media.Figure>
+                <Media.Body>bar</Media.Body>
+            </Media>,
+        );
+        const wrapperAs = shallow(
+            <Media as="li">
+                <Media.Figure>foo</Media.Figure>
+                <Media.Body>bar</Media.Body>
+            </Media>,
+        );
         expect(wrapper.is('div')).toBe(true);
         expect(wrapperAs.is('li')).toBe(true);
     });
