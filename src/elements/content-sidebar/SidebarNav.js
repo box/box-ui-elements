@@ -5,7 +5,7 @@
  */
 
 import * as React from 'react';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import type { InjectIntlProvidedProps } from 'react-intl';
 import IconMagicWand from '../../icons/general/IconMagicWand';
 import IconMetadataThick from '../../icons/general/IconMetadataThick';
@@ -57,44 +57,40 @@ const SidebarNav = ({
             <SidebarNavTablist elementId={elementId} isOpen={isOpen} onNavigate={onNavigate}>
                 {hasActivity && (
                     <SidebarNavButton
-                        aria-label={intl.formatMessage(messages.sidebarActivityTitle)}
                         data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}
                         data-testid="sidebaractivity"
                         sidebarView={SIDEBAR_VIEW_ACTIVITY}
-                        tooltip={<FormattedMessage {...messages.sidebarActivityTitle} />}
+                        tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
                     >
                         <IconChatRound />
                     </SidebarNavButton>
                 )}
                 {hasDetails && (
                     <SidebarNavButton
-                        aria-label={intl.formatMessage(messages.sidebarDetailsTitle)}
                         data-resin-target={SIDEBAR_NAV_TARGETS.DETAILS}
                         data-testid="sidebardetails"
                         sidebarView={SIDEBAR_VIEW_DETAILS}
-                        tooltip={<FormattedMessage {...messages.sidebarDetailsTitle} />}
+                        tooltip={intl.formatMessage(messages.sidebarDetailsTitle)}
                     >
                         <IconDocInfo />
                     </SidebarNavButton>
                 )}
                 {hasSkills && (
                     <SidebarNavButton
-                        aria-label={intl.formatMessage(messages.sidebarSkillsTitle)}
                         data-resin-target={SIDEBAR_NAV_TARGETS.SKILLS}
                         data-testid="sidebarskills"
                         sidebarView={SIDEBAR_VIEW_SKILLS}
-                        tooltip={<FormattedMessage {...messages.sidebarSkillsTitle} />}
+                        tooltip={intl.formatMessage(messages.sidebarSkillsTitle)}
                     >
                         <IconMagicWand />
                     </SidebarNavButton>
                 )}
                 {hasMetadata && (
                     <SidebarNavButton
-                        aria-label={intl.formatMessage(messages.sidebarMetadataTitle)}
                         data-resin-target={SIDEBAR_NAV_TARGETS.METADATA}
                         data-testid="sidebarmetadata"
                         sidebarView={SIDEBAR_VIEW_METADATA}
-                        tooltip={<FormattedMessage {...messages.sidebarMetadataTitle} />}
+                        tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
                     >
                         <IconMetadataThick />
                     </SidebarNavButton>
