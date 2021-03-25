@@ -1,8 +1,8 @@
 @import '../../../../../styles/variables';
+@import './mixin';
 
 .bcs-ActivityTimestamp {
-    color: $bdl-gray-62;
-    font-size: 12px;
-    line-height: 20px;
+    @include bcs-ActivityInfo;
+
     cursor: default;
 }

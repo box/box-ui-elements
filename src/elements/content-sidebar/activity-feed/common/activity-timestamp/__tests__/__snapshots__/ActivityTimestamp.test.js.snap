@@ -23,7 +23,6 @@ exports[`elements/content-sidebar/ActivityFeed/common/ActivityTimestamp should c
     className="bcs-ActivityTimestamp"
   >
     <ReadableTime
-      alwaysShowTime={true}
       relativeThreshold={0}
       timestamp={1506534041000}
     />

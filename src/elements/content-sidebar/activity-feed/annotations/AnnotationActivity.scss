@@ -1,8 +1,22 @@
 @import '../../../common/variables';
+@import '../common/activity-timestamp/mixin';
+@import '../activity-feed/mixin';
 
 .bcs-AnnotationActivity {
+    @include bcs-ActivityFeedItem;
+
     position: relative;
     z-index: 1;
+
+    &.is-interactive {
+        cursor: pointer;
+
+        &:hover,
+        &:focus {
+            box-shadow: 0 0 8px 0 rgba(114, 132, 142, .16);
+            animation: bcs-ActivityItem-interactive 1s ease-in-out 25ms 1 normal forwards;
+        }
+    }
 }
 
 // the comment activity item
@@ -19,7 +33,6 @@
 // Need to be more specific to override btn-plain margin:0
 .bcs-AnnotationActivity-link.btn-plain {
     display: inline-block;
-    margin-top: 8px;
 }
 
 .bcs-AnnotationActivity-headline {
@@ -51,4 +64,11 @@
             color: $bdl-gray-62;
         }
     }
+}
+
+.bcs-AnnotationActivity-info {
+    @include bcs-ActivityInfo;
+
+    margin-right: 3px;
+    margin-left: 3px;
 }

@@ -1,8 +1,9 @@
 // @flow
+import * as React from 'react';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
-import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
 import ActivityTimestamp from '../common/activity-timestamp';
@@ -13,6 +14,7 @@ import CommentForm from '../comment-form/CommentForm';
 import Media from '../../../../components/media';
 import messages from './messages';
 import UserLink from '../common/user-link';
+import useSuppressiveClicks from './useSuppresiveClicks';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { PLACEHOLDER_USER } from '../../../../constants';
 import type { Annotation, AnnotationPermission } from '../../../../common/types/feed';
@@ -47,6 +49,8 @@ const AnnotationActivity = ({
     onSelect = noop,
 }: Props) => {
     const [isEditing, setIsEditing] = React.useState(false);
+    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const [isInteractive, setIsInteractive] = React.useState(true);
     const { created_at, created_by, description, error, file_version, id, isPending, permissions = {}, target } = item;
 
     const handleDeleteConfirm = (): void => {
@@ -58,6 +62,10 @@ const AnnotationActivity = ({
     };
 
     const handleOnSelect = () => {
+        if (!isInteractive) {
+            return;
+        }
+
         onSelect(item);
     };
 
@@ -68,6 +76,14 @@ const AnnotationActivity = ({
     const handleFormSubmit = ({ text }): void => {
         setIsEditing(false);
         onEdit(id, text, permissions);
+    };
+
+    const handleMenuClose = (): void => {
+        setIsMenuOpen(false);
+    };
+
+    const handleMenuOpen = (): void => {
+        setIsMenuOpen(true);
     };
 
     const createdAtTimestamp = new Date(created_at).getTime();
@@ -81,9 +97,29 @@ const AnnotationActivity = ({
     const activityLinkMessage = isFileVersionUnavailable
         ? messages.annotationActivityVersionUnavailable
         : { ...linkMessage, values: { number: linkValue } };
+    const clickHandlers = useSuppressiveClicks<HTMLDivElement>({ onClick: handleOnSelect });
+    const interactiveDivProps = isInteractive
+        ? {
+              role: 'button',
+              tabIndex: '0',
+          }
+        : null;
+
+    React.useEffect(() => {
+        setIsInteractive(!(isMenuOpen || isEditing || isFileVersionUnavailable));
+    }, [isEditing, isFileVersionUnavailable, isMenuOpen]);
 
     return (
-        <div className="bcs-AnnotationActivity" data-resin-feature="annotations">
+        <div
+            className={classNames('bcs-AnnotationActivity', { 'is-interactive': isInteractive })}
+            data-resin-feature="annotations"
+            data-resin-iscurrent={isCurrentVersion}
+            data-resin-itemid={id}
+            data-resin-target="annotationButton"
+            id={id}
+            {...interactiveDivProps}
+            {...clickHandlers}
+        >
             <Media
                 className={classNames('bcs-AnnotationActivity-media', {
                     'bcs-is-pending': isPending || error,
@@ -100,6 +136,8 @@ const AnnotationActivity = ({
                             id={id}
                             onDeleteConfirm={handleDeleteConfirm}
                             onEdit={handleEdit}
+                            onMenuClose={handleMenuClose}
+                            onMenuOpen={handleMenuOpen}
                         />
                     )}
                     <div className="bcs-AnnotationActivity-headline">
@@ -112,6 +150,18 @@ const AnnotationActivity = ({
                     </div>
                     <div>
                         <ActivityTimestamp date={createdAtTimestamp} />
+                        <FormattedMessage {...messages.annotationActivityInfo}>
+                            {msg => <small className="bcs-AnnotationActivity-info">{msg}</small>}
+                        </FormattedMessage>
+                        <AnnotationActivityLink
+                            data-resin-iscurrent={isCurrentVersion}
+                            data-resin-itemid={id}
+                            data-resin-target="annotationLink"
+                            id={id}
+                            isDisabled={isFileVersionUnavailable}
+                            message={activityLinkMessage}
+                            onClick={handleOnSelect}
+                        />
                     </div>
                     {isEditing && currentUser ? (
                         <CommentForm
@@ -130,15 +180,6 @@ const AnnotationActivity = ({
                     ) : (
                         <ActivityMessage id={id} tagged_message={message} getUserProfileUrl={getUserProfileUrl} />
                     )}
-                    <AnnotationActivityLink
-                        data-resin-iscurrent={isCurrentVersion}
-                        data-resin-itemid={id}
-                        data-resin-target="annotationLink"
-                        id={id}
-                        isDisabled={isFileVersionUnavailable}
-                        message={activityLinkMessage}
-                        onClick={handleOnSelect}
-                    />
                 </Media.Body>
             </Media>
             {/* $FlowFixMe */}
