@@ -61,6 +61,7 @@ const SidebarNav = ({
                         data-testid="sidebaractivity"
                         sidebarView={SIDEBAR_VIEW_ACTIVITY}
                         tooltip={<FormattedMessage {...messages.sidebarActivityTitle} />}
+                        aria-label={intl.formatMessage(messages.sidebarActivityTitle)}
                     >
                         <IconChatRound />
                     </SidebarNavButton>
@@ -71,6 +72,7 @@ const SidebarNav = ({
                         data-testid="sidebardetails"
                         sidebarView={SIDEBAR_VIEW_DETAILS}
                         tooltip={<FormattedMessage {...messages.sidebarDetailsTitle} />}
+                        aria-label={intl.formatMessage(messages.sidebarDetailsTitle)}
                     >
                         <IconDocInfo />
                     </SidebarNavButton>
@@ -81,6 +83,7 @@ const SidebarNav = ({
                         data-testid="sidebarskills"
                         sidebarView={SIDEBAR_VIEW_SKILLS}
                         tooltip={<FormattedMessage {...messages.sidebarSkillsTitle} />}
+                        aria-label={intl.formatMessage(messages.sidebarSkillsTitle)}
                     >
                         <IconMagicWand />
                     </SidebarNavButton>
@@ -91,6 +94,7 @@ const SidebarNav = ({
                         data-testid="sidebarmetadata"
                         sidebarView={SIDEBAR_VIEW_METADATA}
                         tooltip={<FormattedMessage {...messages.sidebarMetadataTitle} />}
+                        aria-label={intl.formatMessage(messages.sidebarMetadataTitle)}
                     >
                         <IconMetadataThick />
                     </SidebarNavButton>

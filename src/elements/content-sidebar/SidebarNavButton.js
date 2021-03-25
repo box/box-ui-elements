@@ -11,6 +11,7 @@ import Tooltip from '../../components/tooltip/Tooltip';
 import './SidebarNavButton.scss';
 
 type Props = {
+    'aria-label'?: string,
     'data-resin-target'?: string,
     'data-testid'?: string,
     children: React.Node,
@@ -29,6 +30,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
         isOpen,
         sidebarView,
         tooltip,
+        'aria-label': dataAriaLabel,
     } = props;
     const sidebarPath = `/${sidebarView}`;
 
@@ -47,6 +49,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                             activeClassName="bcs-is-selected"
                             aria-selected={isActiveValue}
                             aria-controls={`${id}-content`}
+                            aria-label={dataAriaLabel}
                             className="bcs-NavButton"
                             data-resin-target={dataResinTarget}
                             data-testid={dataTestId}
