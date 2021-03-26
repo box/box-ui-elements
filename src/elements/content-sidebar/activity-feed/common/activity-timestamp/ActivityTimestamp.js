@@ -11,7 +11,7 @@ type Props = {
 };
 
 // 365 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
-const MILLISECONDS_PER_YEAR = 365 * 24 * 60 * 60 * 1000;
+export const MILLISECONDS_PER_YEAR = 365 * 24 * 60 * 60 * 1000;
 
 const ActivityTimestamp = ({ date }: Props) => {
     const now = new Date().getTime();
