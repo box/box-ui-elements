@@ -6,6 +6,7 @@
 import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { InjectIntlProvidedProps } from 'react-intl';
+import ActivityCard from '../ActivityCard';
 import IconInfoInverted from '../../../../icons/general/IconInfoInverted';
 import PlainButton from '../../../../components/plain-button';
 import messages from '../../../common/messages';
@@ -72,7 +73,7 @@ const CollapsedVersion = (props: Props): React.Node => {
     const { collaborators, intl, onInfo, versions, version_start, version_end } = props;
 
     return (
-        <div className="bcs-Version">
+        <ActivityCard className="bcs-Version">
             <span className="bcs-Version-message">
                 {getMessageForAction(action, collaborators, version_start, version_end)}
             </span>
@@ -91,7 +92,7 @@ const CollapsedVersion = (props: Props): React.Node => {
                     </PlainButton>
                 </span>
             ) : null}
-        </div>
+        </ActivityCard>
     );
 };
 

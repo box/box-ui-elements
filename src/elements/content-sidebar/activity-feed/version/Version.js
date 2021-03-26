@@ -6,6 +6,7 @@
 import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { InjectIntlProvidedProps } from 'react-intl';
+import ActivityCard from '../ActivityCard';
 import IconInfoInverted from '../../../../icons/general/IconInfoInverted';
 import messages from '../../../common/messages';
 import PlainButton from '../../../../components/plain-button';
@@ -44,7 +45,7 @@ const Version = (props: Props): React.Node => {
     const user = selectors.getVersionUser(props);
     const name = user.name === FILE_REQUEST_NAME ? intl.formatMessage(messages.fileRequestDisplayName) : user.name;
     return (
-        <div className="bcs-Version">
+        <ActivityCard className="bcs-Version">
             <span className="bcs-Version-message">
                 <FormattedMessage
                     {...ACTION_MAP[action]}
@@ -70,7 +71,7 @@ const Version = (props: Props): React.Node => {
                     </PlainButton>
                 </span>
             ) : null}
-        </div>
+        </ActivityCard>
     );
 };
 
