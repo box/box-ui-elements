@@ -121,13 +121,11 @@ class AppActivity extends React.PureComponent<Props, State> {
         const { isConfirmingDelete } = this.state;
 
         return (
-            <ActivityCard>
+            <ActivityCard data-resin-target="loaded" data-resin-feature={`appActivityCard${templateId}`}>
                 <Media
                     className={classNames('bcs-AppActivity', {
                         'bcs-is-pending': isPending || error,
                     })}
-                    data-resin-target="loaded"
-                    data-resin-feature={`appActivityCard${templateId}`}
                 >
                     <Media.Figure>
                         <img

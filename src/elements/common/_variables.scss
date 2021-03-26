@@ -5,8 +5,8 @@ $font: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
 $minimumWidth: 300px;
 $sidebarContentWidth: 340px;
-$sidebar-activity-feed-spacing-vertical: 20px;
-$sidebar-activity-feed-spacing-horizontal: 25px;
+$sidebarActivityFeedSpacingHorizontal: 25px;
+$sidebarActivityFeedSpacingVertical: 20px;
 
 @mixin rendering {
     -webkit-font-smoothing: antialiased;

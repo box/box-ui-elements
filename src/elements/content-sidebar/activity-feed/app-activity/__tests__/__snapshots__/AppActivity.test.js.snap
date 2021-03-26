@@ -1,11 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should correctly render an app activity item 1`] = `
-<ActivityCard>
+<ActivityCard
+  data-resin-feature="appActivityCardtemplate_12345"
+  data-resin-target="loaded"
+>
   <Media
     className="bcs-AppActivity"
-    data-resin-feature="appActivityCardtemplate_12345"
-    data-resin-target="loaded"
   >
     <MediaFigure>
       <img
