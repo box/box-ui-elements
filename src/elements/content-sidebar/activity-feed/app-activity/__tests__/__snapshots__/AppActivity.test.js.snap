@@ -2,11 +2,12 @@
 
 exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should correctly render an app activity item 1`] = `
 <ActivityCard
+  className="bcs-AppActivity"
   data-resin-feature="appActivityCardtemplate_12345"
   data-resin-target="loaded"
 >
   <Media
-    className="bcs-AppActivity"
+    className=""
   >
     <MediaFigure>
       <img
