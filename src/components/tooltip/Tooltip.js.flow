@@ -43,6 +43,8 @@ type Props = {
     onDismiss?: () => void,
     /** Where to position the tooltip relative to the wrapped component */
     position?: Position | CustomPosition,
+    /** True when should hide tooltip (usually when another tooltip is showing) */
+    shouldHideTooltip?: boolean,
     /** Shows an X button to close the tooltip. Useful when tooltips are force shown with the isShown prop. */
     showCloseButton?: boolean,
     /** stop click|keypress event bubbling */
