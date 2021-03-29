@@ -3,16 +3,15 @@ import classNames from 'classnames';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import * as React from 'react';
-import ActivityCard from '../ActivityCard';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
-import ActivityTimestamp from '../common/activity-timestamp';
-import AnnotationActivityLink from './AnnotationActivityLink';
 import AnnotationActivityMenu from './AnnotationActivityMenu';
+import AnnotationActivityTimestamp from './AnnotationActivityTimestamp';
 import Avatar from '../Avatar';
 import CommentForm from '../comment-form/CommentForm';
 import Media from '../../../../components/media';
 import messages from './messages';
+import SelectableActivityCard from '../SelectableActivityCard';
 import UserLink from '../common/user-link';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { PLACEHOLDER_USER } from '../../../../constants';
@@ -48,7 +47,10 @@ const AnnotationActivity = ({
     onSelect = noop,
 }: Props) => {
     const [isEditing, setIsEditing] = React.useState(false);
+    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const { created_at, created_by, description, error, file_version, id, isPending, permissions = {}, target } = item;
+    const isFileVersionUnavailable = file_version === null;
+    const isCardDisabled = error || isMenuOpen || isEditing || isFileVersionUnavailable;
 
     const handleDeleteConfirm = (): void => {
         onDelete({ id, permissions });
@@ -71,10 +73,28 @@ const AnnotationActivity = ({
         onEdit(id, text, permissions);
     };
 
+    const handleMenuClose = (): void => {
+        setIsMenuOpen(false);
+    };
+
+    const handleMenuOpen = (): void => {
+        setIsMenuOpen(true);
+    };
+
+    const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+        if (isCardDisabled) {
+            return;
+        }
+
+        // Prevents document event handlers from executing because box-annotations relies on
+        // detecting mouse events on the document outside of annotation targets to determine when to
+        // deselect annotations
+        event.stopPropagation();
+    };
+
     const createdAtTimestamp = new Date(created_at).getTime();
     const createdByUser = created_by || PLACEHOLDER_USER;
     const { can_delete: canDelete, can_edit: canEdit } = permissions;
-    const isFileVersionUnavailable = file_version === null;
     const isMenuVisible = (canDelete || canEdit) && !isPending;
     const message = (description && description.message) || '';
     const linkMessage = isCurrentVersion ? messages.annotationActivityPageItem : messages.annotationActivityVersionLink;
@@ -84,67 +104,76 @@ const AnnotationActivity = ({
         : { ...linkMessage, values: { number: linkValue } };
 
     return (
-        <ActivityCard className="bcs-AnnotationActivity" data-resin-feature="annotations">
-            <Media
-                className={classNames('bcs-AnnotationActivity-media', {
-                    'bcs-is-pending': isPending || error,
-                })}
+        <>
+            <SelectableActivityCard
+                data-resin-iscurrent={isCurrentVersion}
+                data-resin-target="annotationButton"
+                data-resin-itemid={id}
+                className="bcs-AnnotationActivity"
+                data-resin-feature="annotations"
+                isDisabled={isCardDisabled}
+                onMouseDown={handleMouseDown}
+                onSelect={handleOnSelect}
             >
-                <Media.Figure>
-                    <Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} />
-                </Media.Figure>
-                <Media.Body>
-                    {isMenuVisible && (
-                        <AnnotationActivityMenu
-                            canDelete={canDelete}
-                            canEdit={canEdit}
+                <Media
+                    className={classNames('bcs-AnnotationActivity-media', {
+                        'bcs-is-pending': isPending || error,
+                    })}
+                >
+                    <Media.Figure>
+                        <Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} />
+                    </Media.Figure>
+                    <Media.Body>
+                        <div className="bcs-AnnotationActivity-headline">
+                            <UserLink
+                                data-resin-target={ACTIVITY_TARGETS.PROFILE}
+                                getUserProfileUrl={getUserProfileUrl}
+                                id={createdByUser.id}
+                                name={createdByUser.name}
+                            />
+                        </div>
+                        <AnnotationActivityTimestamp
+                            data-resin-target="annotationLink"
+                            date={createdAtTimestamp}
                             id={id}
-                            onDeleteConfirm={handleDeleteConfirm}
-                            onEdit={handleEdit}
+                            isDisabled={isFileVersionUnavailable}
+                            message={activityLinkMessage}
+                            onAnnotationSelect={handleOnSelect}
                         />
-                    )}
-                    <div className="bcs-AnnotationActivity-headline">
-                        <UserLink
-                            data-resin-target={ACTIVITY_TARGETS.PROFILE}
-                            getUserProfileUrl={getUserProfileUrl}
-                            id={createdByUser.id}
-                            name={createdByUser.name}
-                        />
-                    </div>
-                    <div>
-                        <ActivityTimestamp date={createdAtTimestamp} />
-                    </div>
-                    {isEditing && currentUser ? (
-                        <CommentForm
-                            className="bcs-AnnotationActivity-editor"
-                            entityId={id}
-                            getAvatarUrl={getAvatarUrl}
-                            getMentionWithQuery={getMentionWithQuery}
-                            isEditing={isEditing}
-                            isOpen={isEditing}
-                            mentionSelectorContacts={mentionSelectorContacts}
-                            onCancel={handleFormCancel}
-                            updateComment={handleFormSubmit}
-                            user={currentUser}
-                            tagged_message={message}
-                        />
-                    ) : (
-                        <ActivityMessage id={id} tagged_message={message} getUserProfileUrl={getUserProfileUrl} />
-                    )}
-                    <AnnotationActivityLink
-                        data-resin-iscurrent={isCurrentVersion}
-                        data-resin-itemid={id}
-                        data-resin-target="annotationLink"
-                        id={id}
-                        isDisabled={isFileVersionUnavailable}
-                        message={activityLinkMessage}
-                        onClick={handleOnSelect}
-                    />
-                </Media.Body>
-            </Media>
-            {/* $FlowFixMe */}
-            {error ? <ActivityError {...error} /> : null}
-        </ActivityCard>
+                        {isEditing && currentUser ? (
+                            <CommentForm
+                                className="bcs-AnnotationActivity-editor"
+                                entityId={id}
+                                getAvatarUrl={getAvatarUrl}
+                                getMentionWithQuery={getMentionWithQuery}
+                                isEditing={isEditing}
+                                isOpen={isEditing}
+                                mentionSelectorContacts={mentionSelectorContacts}
+                                onCancel={handleFormCancel}
+                                updateComment={handleFormSubmit}
+                                user={currentUser}
+                                tagged_message={message}
+                            />
+                        ) : (
+                            <ActivityMessage id={id} tagged_message={message} getUserProfileUrl={getUserProfileUrl} />
+                        )}
+                    </Media.Body>
+                </Media>
+                {/* $FlowFixMe */}
+                {error ? <ActivityError {...error} /> : null}
+            </SelectableActivityCard>
+            {isMenuVisible && (
+                <AnnotationActivityMenu
+                    canDelete={canDelete}
+                    canEdit={canEdit}
+                    id={id}
+                    onDeleteConfirm={handleDeleteConfirm}
+                    onEdit={handleEdit}
+                    onMenuClose={handleMenuClose}
+                    onMenuOpen={handleMenuOpen}
+                />
+            )}
+        </>
     );
 };
 

@@ -19,7 +19,6 @@
 // Need to be more specific to override btn-plain margin:0
 .bcs-AnnotationActivity-link.btn-plain {
     display: inline-block;
-    margin-top: 8px;
 }
 
 .bcs-AnnotationActivity-headline {
@@ -33,6 +32,13 @@
 // tethered styles for delete confirmation modal
 .bcs-AnnotationActivity-deleteConfirmationModal {
     z-index: $overlay-z-index;
+}
+
+.bcs-AnnotationActivityMenu {
+    position: absolute;
+    top: $sidebarActivityFeedSpacingVertical;
+    right: $sidebarActivityFeedSpacingHorizontal;
+    z-index: 1;
 }
 
 // override for activity feed defaults

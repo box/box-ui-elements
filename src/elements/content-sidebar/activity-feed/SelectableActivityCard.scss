@@ -1,0 +1,24 @@
+@import '../../common/variables';
+
+@keyframes bcs-SelectableActivityCard-hover {
+    from {
+        background-color: transparent;
+    }
+
+    to {
+        background-color: $bdl-box-blue-05;
+    }
+}
+
+.bcs-SelectableActivityCard {
+    &[aria-disabled='false'] {
+        cursor: pointer;
+
+        &:hover,
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 8px 0 rgba(114, 132, 142, .16);
+            animation: bcs-SelectableActivityCard-hover 1s ease-in-out 25ms 1 normal forwards;
+        }
+    }
+}

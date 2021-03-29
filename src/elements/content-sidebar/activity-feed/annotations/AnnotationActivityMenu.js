@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import noop from 'lodash/noop';
 import TetherComponent from 'react-tether';
 import { FormattedMessage } from 'react-intl';
 import DeleteConfirmation from '../common/delete-confirmation';
@@ -16,10 +17,21 @@ type AnnotationActivityMenuProps = {
     id: string,
     onDeleteConfirm: () => void,
     onEdit: () => void,
+    onMenuClose: (event: React.MouseEvent) => void,
+    onMenuOpen: (event: React.MouseEvent) => void,
 };
 
-const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdit }: AnnotationActivityMenuProps) => {
+const AnnotationActivityMenu = ({
+    canDelete,
+    canEdit,
+    id,
+    onDeleteConfirm,
+    onEdit,
+    onMenuClose = noop,
+    onMenuOpen = noop,
+}: AnnotationActivityMenuProps) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
+    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
     const handleDeleteCancel = (): void => {
         setIsConfirmingDelete(false);
@@ -34,6 +46,14 @@ const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdi
         onDeleteConfirm();
     };
 
+    const handleMenuClose = () => {
+        setIsMenuOpen(false);
+    };
+
+    const handleMenuOpen = () => {
+        setIsMenuOpen(true);
+    };
+
     const tetherProps = {
         attachment: 'top right',
         className: 'bcs-AnnotationActivity-deleteConfirmationModal',
@@ -41,11 +61,23 @@ const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdi
         targetAttachment: 'bottom right',
     };
 
+    React.useEffect(() => {
+        if (isConfirmingDelete || isMenuOpen) {
+            onMenuOpen();
+        }
+
+        if (!isConfirmingDelete && !isMenuOpen) {
+            onMenuClose();
+        }
+    }, [isConfirmingDelete, isMenuOpen, onMenuClose, onMenuOpen]);
+
     return (
         <TetherComponent {...tetherProps}>
             <Media.Menu
+                className="bcs-AnnotationActivityMenu"
                 isDisabled={isConfirmingDelete}
                 data-testid="annotation-activity-actions-menu"
+                dropdownProps={{ onMenuClose: handleMenuClose, onMenuOpen: handleMenuOpen }}
                 menuProps={{
                     'data-resin-component': 'preview',
                     'data-resin-feature': 'annotations',
