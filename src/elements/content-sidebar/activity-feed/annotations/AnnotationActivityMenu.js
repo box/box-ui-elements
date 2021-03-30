@@ -32,6 +32,7 @@ const AnnotationActivityMenu = ({
 }: AnnotationActivityMenuProps) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const isMountedRef = React.useRef<boolean>(false);
 
     const handleDeleteCancel = (): void => {
         setIsConfirmingDelete(false);
@@ -62,7 +63,14 @@ const AnnotationActivityMenu = ({
     };
 
     React.useEffect(() => {
-        if (isConfirmingDelete || isMenuOpen) {
+        const { current: isMounted } = isMountedRef;
+
+        if (!isMounted) {
+            isMountedRef.current = true;
+            return;
+        }
+
+        if (!isConfirmingDelete && isMenuOpen) {
             onMenuOpen();
         }
 

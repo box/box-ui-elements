@@ -1,12 +1,13 @@
 import * as React from 'react';
+import { act } from 'react-dom/test-utils';
 import { shallow } from 'enzyme';
 
 import AnnotationActivity from '../AnnotationActivity';
-import AnnotationActivityLink from '../AnnotationActivityLink';
 import AnnotationActivityMenu from '../AnnotationActivityMenu';
 import CommentForm from '../../comment-form/CommentForm';
 import Media from '../../../../../components/media';
 import messages from '../messages';
+import SelectableActivityCard from '../../SelectableActivityCard';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 
@@ -42,16 +43,27 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         item: mockAnnotation,
         mentionSelectorContacts,
     };
-    const generateReginTags = (isCurrentVersion = mockActivity.isCurrentVersion) => ({
-        'data-resin-iscurrent': isCurrentVersion,
-        'data-resin-itemid': mockAnnotation.id,
-        'data-resin-target': 'annotationLink',
-    });
 
     const getWrapper = (props = {}) => shallow(<AnnotationActivity {...mockActivity} {...props} />);
 
     beforeEach(() => {
         CommentForm.default = jest.fn().mockReturnValue(<div />);
+    });
+
+    test('should render as SelectableActivityCard', () => {
+        const wrapper = getWrapper();
+
+        expect(wrapper.exists(SelectableActivityCard)).toBe(true);
+        expect(wrapper.find(SelectableActivityCard).props()).toMatchObject({
+            className: 'bcs-AnnotationActivity',
+            'data-resin-iscurrent': true,
+            'data-resin-itemid': mockAnnotation.id,
+            'data-resin-feature': 'annotations',
+            'data-resin-target': 'annotationButton',
+            isDisabled: false,
+            onMouseDown: expect.any(Function),
+            onSelect: expect.any(Function),
+        });
     });
 
     test('should not render annotation activity menu when both can_delete is false and can_edit is false', () => {
@@ -80,14 +92,16 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             };
 
             const wrapper = getWrapper({ item });
-            const activityLink = wrapper.find(AnnotationActivityLink);
+            const annotationTimestamp = wrapper.find('AnnotationActivityTimestamp');
 
-            expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
-            expect(activityLink.prop('message')).toEqual({
-                ...messages.annotationActivityPageItem,
-                values: { number: 1 },
+            expect(annotationTimestamp.props()).toMatchObject({
+                'data-resin-target': 'annotationLink',
+                date: unixTime,
+                message: {
+                    ...messages.annotationActivityPageItem,
+                    values: { number: 1 },
+                },
             });
-            expect(activityLink.props()).toMatchObject(generateReginTags());
             expect(wrapper.exists(AnnotationActivityMenu)).toBe(true);
             expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(
                 mockActivity.item.description.message,
@@ -129,21 +143,20 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
     test('should correctly render annotation activity of another file version', () => {
         const wrapper = getWrapper({ isCurrentVersion: false });
 
-        expect(wrapper.find(AnnotationActivityLink).prop('message')).toEqual({
+        expect(wrapper.find('AnnotationActivityTimestamp').prop('message')).toEqual({
             ...messages.annotationActivityVersionLink,
             values: { number: '2' },
         });
-        expect(wrapper.find(AnnotationActivityLink).props()).toMatchObject(generateReginTags(false));
     });
 
     test('should render version unavailable if file version is null', () => {
         const wrapper = getWrapper({ item: { ...mockAnnotation, file_version: null } });
-        const activityLink = wrapper.find(AnnotationActivityLink);
+        const activityTimestamp = wrapper.find('AnnotationActivityTimestamp');
 
-        expect(activityLink.prop('message')).toEqual({
+        expect(activityTimestamp.prop('message')).toEqual({
             ...messages.annotationActivityVersionUnavailable,
         });
-        expect(activityLink.prop('isDisabled')).toBe(true);
+        expect(activityTimestamp.prop('isDisabled')).toBe(true);
     });
 
     test('should render commenter as a link', () => {
@@ -207,5 +220,103 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         inlineErrorActionOnClick();
 
         expect(onActionSpy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should disable card if there is an error', () => {
+        const activity = {
+            item: {
+                ...mockAnnotation,
+                error: {
+                    title: 'error',
+                    message: 'This is an error message',
+                    action: {
+                        text: 'click',
+                    },
+                },
+            },
+        };
+        const wrapper = getWrapper(activity);
+
+        expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
+    });
+
+    test('should disable card if the overflow menu is open', () => {
+        const activity = {
+            item: {
+                ...mockAnnotation,
+                permissions: { can_delete: true, can_edit: true },
+            },
+        };
+        const wrapper = mount(<AnnotationActivity {...activity} />);
+
+        expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(false);
+
+        wrapper.find(AnnotationActivityMenu).simulate('click');
+
+        expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
+    });
+
+    test('should disable card if editing the comment', () => {
+        const activity = {
+            item: {
+                ...mockAnnotation,
+                permissions: { can_delete: true, can_edit: true },
+            },
+        };
+        const wrapper = mount(<AnnotationActivity {...activity} />);
+
+        expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(false);
+
+        act(() => {
+            wrapper.find(AnnotationActivityMenu).prop('onEdit')();
+        });
+
+        wrapper.update();
+
+        expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
+    });
+
+    test('should disable card if file version is unavailable', () => {
+        const activity = {
+            item: {
+                ...mockAnnotation,
+                file_version: null,
+                permissions: { can_delete: true, can_edit: true },
+            },
+        };
+        const wrapper = mount(<AnnotationActivity {...activity} />);
+
+        expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
+    });
+
+    test('should stop propagation of mousedown event from SelectableActivityCard', () => {
+        const activity = {
+            item: {
+                ...mockAnnotation,
+            },
+        };
+        const event = { stopPropagation: jest.fn() };
+        const wrapper = getWrapper(activity);
+
+        wrapper.find(SelectableActivityCard).simulate('mousedown', event);
+
+        expect(event.stopPropagation).toHaveBeenCalled();
+    });
+
+    test('should not stop propagation of mousedown event from SelectableActivityCard when disabled', () => {
+        const activity = {
+            item: {
+                ...mockAnnotation,
+                file_version: null,
+            },
+        };
+        const event = { stopPropagation: jest.fn() };
+        const wrapper = getWrapper(activity);
+
+        expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
+
+        wrapper.find(SelectableActivityCard).simulate('mousedown', event);
+
+        expect(event.stopPropagation).not.toHaveBeenCalled();
     });
 });

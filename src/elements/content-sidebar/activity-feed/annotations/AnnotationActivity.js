@@ -50,7 +50,7 @@ const AnnotationActivity = ({
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const { created_at, created_by, description, error, file_version, id, isPending, permissions = {}, target } = item;
     const isFileVersionUnavailable = file_version === null;
-    const isCardDisabled = error || isMenuOpen || isEditing || isFileVersionUnavailable;
+    const isCardDisabled = !!error || isMenuOpen || isEditing || isFileVersionUnavailable;
 
     const handleDeleteConfirm = (): void => {
         onDelete({ id, permissions });
@@ -106,11 +106,11 @@ const AnnotationActivity = ({
     return (
         <>
             <SelectableActivityCard
-                data-resin-iscurrent={isCurrentVersion}
-                data-resin-target="annotationButton"
-                data-resin-itemid={id}
                 className="bcs-AnnotationActivity"
                 data-resin-feature="annotations"
+                data-resin-iscurrent={isCurrentVersion}
+                data-resin-itemid={id}
+                data-resin-target="annotationButton"
                 isDisabled={isCardDisabled}
                 onMouseDown={handleMouseDown}
                 onSelect={handleOnSelect}

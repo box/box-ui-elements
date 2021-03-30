@@ -5,7 +5,7 @@ import ActivityTimestamp from '../common/activity-timestamp';
 import AnnotationActivityLink from './AnnotationActivityLink';
 import './AnnotationActivityTimestamp.scss';
 
-type Props = {
+export type Props = {
     date: number;
     id: string;
     isDisabled?: boolean;
