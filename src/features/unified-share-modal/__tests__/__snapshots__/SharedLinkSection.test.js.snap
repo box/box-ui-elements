@@ -95,7 +95,6 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
         }
         className="shared-link-field-container"
         hideOptionalLabel={true}
-        label=""
         readOnly={true}
         successStateDuration={3000}
         triggerCopyOnLoad={false}
@@ -247,7 +246,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
         }
         className="shared-link-field-container"
         hideOptionalLabel={true}
-        label=""
         readOnly={true}
         successStateDuration={3000}
         triggerCopyOnLoad={false}
@@ -433,7 +431,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
         }
         className="shared-link-field-container"
         hideOptionalLabel={true}
-        label=""
         readOnly={true}
         successStateDuration={3000}
         triggerCopyOnLoad={false}
@@ -690,7 +687,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
         }
         className="shared-link-field-container"
         hideOptionalLabel={true}
-        label=""
         readOnly={true}
         successStateDuration={3000}
         triggerCopyOnLoad={false}
@@ -833,7 +829,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         }
         className="shared-link-field-container"
         hideOptionalLabel={true}
-        label=""
         readOnly={true}
         successStateDuration={3000}
         triggerCopyOnLoad={false}
@@ -971,7 +966,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         }
         className="shared-link-field-container"
         hideOptionalLabel={true}
-        label=""
         readOnly={true}
         successStateDuration={3000}
         triggerCopyOnLoad={false}
@@ -1134,7 +1128,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
         }
         className="shared-link-field-container"
         hideOptionalLabel={true}
-        label=""
         readOnly={true}
         successStateDuration={3000}
         triggerCopyOnLoad={false}
