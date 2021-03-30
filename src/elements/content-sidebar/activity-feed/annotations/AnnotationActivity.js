@@ -64,7 +64,7 @@ const AnnotationActivity = ({
     };
     const handleMenuClose = (): void => setIsMenuOpen(false);
     const handleMenuOpen = (): void => setIsMenuOpen(true);
-    const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+    const handleMouseDown = (event: MouseEvent) => {
         if (isCardDisabled) {
             return;
         }

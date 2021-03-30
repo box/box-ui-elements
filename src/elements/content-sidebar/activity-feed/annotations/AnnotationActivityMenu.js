@@ -17,8 +17,8 @@ type AnnotationActivityMenuProps = {
     id: string,
     onDeleteConfirm: () => void,
     onEdit: () => void,
-    onMenuClose: (event: React.MouseEvent) => void,
-    onMenuOpen: (event: React.MouseEvent) => void,
+    onMenuClose: () => void,
+    onMenuOpen: () => void,
 };
 
 const AnnotationActivityMenu = ({
