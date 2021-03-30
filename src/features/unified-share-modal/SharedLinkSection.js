@@ -243,7 +243,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                             buttonProps={copyButtonProps}
                             className="shared-link-field-container"
                             disabled={submitting}
-                            label=""
+                            label={intl.formatMessage(messages.sharedLinkURLLabel)}
                             onCopySuccess={onSharedLinkCopy}
                             triggerCopyOnLoad={shouldTriggerCopyOnLoad}
                             type="url"
