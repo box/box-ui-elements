@@ -8,10 +8,12 @@ export type Props = React.PropsWithChildren<{
     theme?: 'light' | 'dark';
 }>;
 
-export default function PreviewLoadingRing({ children, className, color, theme }: Props): React.ReactElement {
+export default function PreviewLoadingRing({ children, className, color, theme = 'light' }: Props): React.ReactElement {
+    const borderStyles = color ? { backgroundColor: color } : undefined;
+
     return (
         <div className={classNames('bdl-PreviewLoadingRing', `bdl-PreviewLoadingRing--${theme}`, className)}>
-            <div className="bdl-PreviewLoadingRing-border" style={{ backgroundColor: color }} />
+            <div className="bdl-PreviewLoadingRing-border" style={borderStyles} />
             <div className="bdl-PreviewLoadingRing-content">{children}</div>
         </div>
     );
