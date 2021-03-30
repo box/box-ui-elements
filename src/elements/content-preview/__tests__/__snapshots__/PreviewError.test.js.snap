@@ -1,15 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-preview/PreviewLoading render() should render correctly 1`] = `
+exports[`elements/content-preview/PreviewError render() should render correctly 1`] = `
 <div
-  className="bcpr-PreviewLoading"
+  className="bcpr-PreviewError"
 >
   <FileDefault32
     height={160}
     width={160}
   />
   <div
-    className="bcpr-PreviewLoading-message"
+    className="bcpr-PreviewError-message"
   >
     <FormattedMessage
       defaultMessage="We’re sorry, the preview didn’t load. Please refresh the page."
@@ -19,13 +19,13 @@ exports[`elements/content-preview/PreviewLoading render() should render correctl
 </div>
 `;
 
-exports[`elements/content-preview/PreviewLoading render() should render correctly when blocked by access policy 1`] = `
+exports[`elements/content-preview/PreviewError render() should render correctly when blocked by access policy 1`] = `
 <div
-  className="bcpr-PreviewLoading"
+  className="bcpr-PreviewError"
 >
   <SecurityBlockedState />
   <div
-    className="bcpr-PreviewLoading-message"
+    className="bcpr-PreviewError-message"
   >
     <FormattedMessage
       defaultMessage="Your access is restricted due to the classification applied to this content."
