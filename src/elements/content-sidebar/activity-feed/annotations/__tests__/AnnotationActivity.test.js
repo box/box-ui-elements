@@ -92,11 +92,10 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             };
 
             const wrapper = getWrapper({ item });
-            const annotationTimestamp = wrapper.find('AnnotationActivityTimestamp');
 
-            expect(annotationTimestamp.props()).toMatchObject({
+            expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
+            expect(wrapper.find('AnnotationActivityLink').props()).toMatchObject({
                 'data-resin-target': 'annotationLink',
-                date: unixTime,
                 message: {
                     ...messages.annotationActivityPageItem,
                     values: { number: 1 },
@@ -143,7 +142,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
     test('should correctly render annotation activity of another file version', () => {
         const wrapper = getWrapper({ isCurrentVersion: false });
 
-        expect(wrapper.find('AnnotationActivityTimestamp').prop('message')).toEqual({
+        expect(wrapper.find('AnnotationActivityLink').prop('message')).toEqual({
             ...messages.annotationActivityVersionLink,
             values: { number: '2' },
         });
@@ -151,12 +150,12 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
     test('should render version unavailable if file version is null', () => {
         const wrapper = getWrapper({ item: { ...mockAnnotation, file_version: null } });
-        const activityTimestamp = wrapper.find('AnnotationActivityTimestamp');
+        const activityLink = wrapper.find('AnnotationActivityLink');
 
-        expect(activityTimestamp.prop('message')).toEqual({
+        expect(activityLink.prop('message')).toEqual({
             ...messages.annotationActivityVersionUnavailable,
         });
-        expect(activityTimestamp.prop('isDisabled')).toBe(true);
+        expect(activityLink.prop('isDisabled')).toBe(true);
     });
 
     test('should render commenter as a link', () => {

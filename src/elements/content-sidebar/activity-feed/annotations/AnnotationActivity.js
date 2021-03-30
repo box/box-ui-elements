@@ -5,8 +5,9 @@ import noop from 'lodash/noop';
 import * as React from 'react';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
+import ActivityTimestamp from '../common/activity-timestamp';
+import AnnotationActivityLink from './AnnotationActivityLink';
 import AnnotationActivityMenu from './AnnotationActivityMenu';
-import AnnotationActivityTimestamp from './AnnotationActivityTimestamp';
 import Avatar from '../Avatar';
 import CommentForm from '../comment-form/CommentForm';
 import Media from '../../../../components/media';
@@ -49,38 +50,20 @@ const AnnotationActivity = ({
     const [isEditing, setIsEditing] = React.useState(false);
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const { created_at, created_by, description, error, file_version, id, isPending, permissions = {}, target } = item;
+    const { can_delete: canDelete, can_edit: canEdit } = permissions;
     const isFileVersionUnavailable = file_version === null;
     const isCardDisabled = !!error || isMenuOpen || isEditing || isFileVersionUnavailable;
+    const isMenuVisible = (canDelete || canEdit) && !isPending;
 
-    const handleDeleteConfirm = (): void => {
-        onDelete({ id, permissions });
-    };
-
-    const handleEdit = () => {
-        setIsEditing(true);
-    };
-
-    const handleOnSelect = () => {
-        onSelect(item);
-    };
-
-    const handleFormCancel = (): void => {
-        setIsEditing(false);
-    };
-
+    const handleDeleteConfirm = (): void => onDelete({ id, permissions });
+    const handleEdit = () => setIsEditing(true);
+    const handleFormCancel = (): void => setIsEditing(false);
     const handleFormSubmit = ({ text }): void => {
         setIsEditing(false);
         onEdit(id, text, permissions);
     };
-
-    const handleMenuClose = (): void => {
-        setIsMenuOpen(false);
-    };
-
-    const handleMenuOpen = (): void => {
-        setIsMenuOpen(true);
-    };
-
+    const handleMenuClose = (): void => setIsMenuOpen(false);
+    const handleMenuOpen = (): void => setIsMenuOpen(true);
     const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
         if (isCardDisabled) {
             return;
@@ -91,14 +74,13 @@ const AnnotationActivity = ({
         // deselect annotations
         event.stopPropagation();
     };
+    const handleOnSelect = () => onSelect(item);
 
     const createdAtTimestamp = new Date(created_at).getTime();
     const createdByUser = created_by || PLACEHOLDER_USER;
-    const { can_delete: canDelete, can_edit: canEdit } = permissions;
-    const isMenuVisible = (canDelete || canEdit) && !isPending;
-    const message = (description && description.message) || '';
     const linkMessage = isCurrentVersion ? messages.annotationActivityPageItem : messages.annotationActivityVersionLink;
     const linkValue = isCurrentVersion ? target.location.value : getProp(file_version, 'version_number');
+    const message = (description && description.message) || '';
     const activityLinkMessage = isFileVersionUnavailable
         ? messages.annotationActivityVersionUnavailable
         : { ...linkMessage, values: { number: linkValue } };
@@ -132,14 +114,16 @@ const AnnotationActivity = ({
                                 name={createdByUser.name}
                             />
                         </div>
-                        <AnnotationActivityTimestamp
-                            data-resin-target="annotationLink"
-                            date={createdAtTimestamp}
-                            id={id}
-                            isDisabled={isFileVersionUnavailable}
-                            message={activityLinkMessage}
-                            onAnnotationSelect={handleOnSelect}
-                        />
+                        <div className="bcs-AnnotationActivity-timestamp">
+                            <ActivityTimestamp date={createdAtTimestamp} />
+                            <AnnotationActivityLink
+                                data-resin-target="annotationLink"
+                                id={id}
+                                isDisabled={isFileVersionUnavailable}
+                                message={activityLinkMessage}
+                                onClick={handleOnSelect}
+                            />
+                        </div>
                         {isEditing && currentUser ? (
                             <CommentForm
                                 className="bcs-AnnotationActivity-editor"

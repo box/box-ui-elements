@@ -18,7 +18,7 @@
         &:focus {
             outline: none;
             box-shadow: 0 0 8px 0 rgba(114, 132, 142, .16);
-            animation: bcs-SelectableActivityCard-hover 1s ease-in-out 25ms 1 normal forwards;
+            animation: bcs-SelectableActivityCard-hover 300ms ease-in-out 25ms 1 normal forwards;
         }
     }
 }
