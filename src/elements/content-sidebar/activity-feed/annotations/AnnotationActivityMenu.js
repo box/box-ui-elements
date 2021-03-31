@@ -10,7 +10,6 @@ import PlainButton from '../../../../components/plain-button';
 import Trash16 from '../../../../icon/fill/Trash16';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { bdlGray50 } from '../../../../styles/variables';
-import { ButtonType } from '../../../../components/button';
 import { Menu, MenuItem } from '../../../../components/menu';
 
 type AnnotationActivityMenuProps = {
@@ -42,12 +41,12 @@ const AnnotationActivityMenu = ({
     };
 
     return (
-        <DropdownMenu constrainToScrollParent isRightAligned dropdownProps={{ onMenuClose, onMenuOpen }}>
+        <DropdownMenu constrainToScrollParent isRightAligned onMenuClose={onMenuClose} onMenuOpen={onMenuOpen}>
             <PlainButton
                 className={classNames('bcs-AnnotationActivityMenu', className)}
                 isDisabled={isDisabled}
                 data-testid="annotation-activity-actions-menu"
-                type={ButtonType.BUTTON}
+                type="button"
             >
                 <IconEllipsis color={bdlGray50} height={16} width={16} />
             </PlainButton>
