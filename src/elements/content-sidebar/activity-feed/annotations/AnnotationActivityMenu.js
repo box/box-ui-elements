@@ -2,12 +2,16 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import Media from '../../../../components/media';
+import DropdownMenu from '../../../../components/dropdown-menu';
+import IconEllipsis from '../../../../icons/general/IconEllipsis';
 import messages from './messages';
 import Pencil16 from '../../../../icon/line/Pencil16';
+import PlainButton from '../../../../components/plain-button';
 import Trash16 from '../../../../icon/fill/Trash16';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import { MenuItem } from '../../../../components/menu';
+import { bdlGray50 } from '../../../../styles/variables';
+import { ButtonType } from '../../../../components/button';
+import { Menu, MenuItem } from '../../../../components/menu';
 
 type AnnotationActivityMenuProps = {
     canDelete?: boolean,
@@ -31,40 +35,48 @@ const AnnotationActivityMenu = ({
     onEdit,
     onMenuClose,
     onMenuOpen,
-}: AnnotationActivityMenuProps) => (
-    <Media.Menu
-        className={classNames('bcs-AnnotationActivityMenu', className)}
-        isDisabled={isDisabled}
-        data-testid="annotation-activity-actions-menu"
-        dropdownProps={{ onMenuClose, onMenuOpen }}
-        menuProps={{
-            'data-resin-component': 'preview',
-            'data-resin-feature': 'annotations',
-        }}
-    >
-        {canEdit && (
-            <MenuItem
-                data-resin-itemid={id}
-                data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_EDIT}
-                data-testid="edit-annotation-activity"
-                onClick={onEdit}
+}: AnnotationActivityMenuProps) => {
+    const menuProps = {
+        'data-resin-component': 'preview',
+        'data-resin-feature': 'annotations',
+    };
+
+    return (
+        <DropdownMenu constrainToScrollParent isRightAligned dropdownProps={{ onMenuClose, onMenuOpen }}>
+            <PlainButton
+                className={classNames('bcs-AnnotationActivityMenu', className)}
+                isDisabled={isDisabled}
+                data-testid="annotation-activity-actions-menu"
+                type={ButtonType.BUTTON}
             >
-                <Pencil16 />
-                <FormattedMessage {...messages.annotationActivityEditMenuItem} />
-            </MenuItem>
-        )}
-        {canDelete && (
-            <MenuItem
-                data-resin-itemid={id}
-                data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_DELETE}
-                data-testid="delete-annotation-activity"
-                onClick={onDelete}
-            >
-                <Trash16 />
-                <FormattedMessage {...messages.annotationActivityDeleteMenuItem} />
-            </MenuItem>
-        )}
-    </Media.Menu>
-);
+                <IconEllipsis color={bdlGray50} height={16} width={16} />
+            </PlainButton>
+            <Menu {...menuProps}>
+                {canEdit && (
+                    <MenuItem
+                        data-resin-itemid={id}
+                        data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_EDIT}
+                        data-testid="edit-annotation-activity"
+                        onClick={onEdit}
+                    >
+                        <Pencil16 />
+                        <FormattedMessage {...messages.annotationActivityEditMenuItem} />
+                    </MenuItem>
+                )}
+                {canDelete && (
+                    <MenuItem
+                        data-resin-itemid={id}
+                        data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_DELETE}
+                        data-testid="delete-annotation-activity"
+                        onClick={onDelete}
+                    >
+                        <Trash16 />
+                        <FormattedMessage {...messages.annotationActivityDeleteMenuItem} />
+                    </MenuItem>
+                )}
+            </Menu>
+        </DropdownMenu>
+    );
+};
 
 export default AnnotationActivityMenu;

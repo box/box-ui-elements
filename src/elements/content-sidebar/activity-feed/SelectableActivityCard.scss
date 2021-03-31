@@ -11,12 +11,13 @@
 }
 
 .bcs-SelectableActivityCard {
+    outline: none;
+
     &[aria-disabled='false'] {
         cursor: pointer;
 
         &:hover,
         &:focus {
-            outline: none;
             box-shadow: 0 0 8px 0 lighten($bdl-gray-20, 10%);
             animation: bcs-SelectableActivityCard-hover 300ms ease-in-out 25ms 1 normal forwards;
         }
