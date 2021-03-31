@@ -56,7 +56,7 @@ const AnnotationActivity = ({
     const isMenuVisible = (canDelete || canEdit) && !isPending;
 
     const handleDeleteConfirm = (): void => onDelete({ id, permissions });
-    const handleEdit = () => setIsEditing(true);
+    const handleEdit = (): void => setIsEditing(true);
     const handleFormCancel = (): void => setIsEditing(false);
     const handleFormSubmit = ({ text }): void => {
         setIsEditing(false);
@@ -74,7 +74,7 @@ const AnnotationActivity = ({
         // deselect annotations
         event.stopPropagation();
     };
-    const handleOnSelect = () => onSelect(item);
+    const handleSelect = () => onSelect(item);
 
     const createdAtTimestamp = new Date(created_at).getTime();
     const createdByUser = created_by || PLACEHOLDER_USER;
@@ -95,7 +95,7 @@ const AnnotationActivity = ({
                 data-resin-target="annotationButton"
                 isDisabled={isCardDisabled}
                 onMouseDown={handleMouseDown}
-                onSelect={handleOnSelect}
+                onSelect={handleSelect}
             >
                 <Media
                     className={classNames('bcs-AnnotationActivity-media', {
@@ -121,7 +121,7 @@ const AnnotationActivity = ({
                                 id={id}
                                 isDisabled={isFileVersionUnavailable}
                                 message={activityLinkMessage}
-                                onClick={handleOnSelect}
+                                onClick={handleSelect}
                             />
                         </div>
                         {isEditing && currentUser ? (
@@ -150,6 +150,7 @@ const AnnotationActivity = ({
                 <AnnotationActivityMenu
                     canDelete={canDelete}
                     canEdit={canEdit}
+                    className="bcs-AnnotationActivity-menu"
                     id={id}
                     onDeleteConfirm={handleDeleteConfirm}
                     onEdit={handleEdit}

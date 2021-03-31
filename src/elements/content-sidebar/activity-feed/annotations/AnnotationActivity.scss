@@ -16,11 +16,6 @@
     }
 }
 
-// Need to be more specific to override btn-plain margin:0
-.bcs-AnnotationActivity-link.btn-plain {
-    display: inline-block;
-}
-
 .bcs-AnnotationActivity-headline {
     // target only Edge because this breaks other browsers
     // but fixes Edge
@@ -34,7 +29,7 @@
     z-index: $overlay-z-index;
 }
 
-.bcs-AnnotationActivityMenu {
+.bcs-AnnotationActivity-menu {
     position: absolute;
     top: $sidebarActivityFeedSpacingVertical;
     right: $sidebarActivityFeedSpacingHorizontal;
@@ -43,13 +38,6 @@
 
 .bcs-AnnotationActivity-timestamp {
     white-space: nowrap;
-
-    .bcs-AnnotationActivity-link::before {
-        margin-right: 8px;
-        margin-left: 8px;
-        color: $bdl-gray-50;
-        content: '\2022';
-    }
 }
 
 // override for activity feed defaults
@@ -61,11 +49,19 @@
     }
 
     .bcs-AnnotationActivity-link {
+        display: inline-block;
         color: $bdl-box-blue;
         font-weight: bold;
 
         &[aria-disabled='true'] {
             color: $bdl-gray-62;
+        }
+
+        &::before {
+            margin-right: 8px;
+            margin-left: 8px;
+            color: $bdl-gray-50;
+            content: '\2022';
         }
     }
 }

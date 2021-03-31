@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import classNames from 'classnames';
 import noop from 'lodash/noop';
 import TetherComponent from 'react-tether';
 import { FormattedMessage } from 'react-intl';
@@ -14,6 +15,7 @@ import { MenuItem } from '../../../../components/menu';
 type AnnotationActivityMenuProps = {
     canDelete?: boolean,
     canEdit?: boolean,
+    className?: string,
     id: string,
     onDeleteConfirm: () => void,
     onEdit: () => void,
@@ -24,6 +26,7 @@ type AnnotationActivityMenuProps = {
 const AnnotationActivityMenu = ({
     canDelete,
     canEdit,
+    className,
     id,
     onDeleteConfirm,
     onEdit,
@@ -82,7 +85,7 @@ const AnnotationActivityMenu = ({
     return (
         <TetherComponent {...tetherProps}>
             <Media.Menu
-                className="bcs-AnnotationActivityMenu"
+                className={classNames('bcs-AnnotationActivityMenu', className)}
                 isDisabled={isConfirmingDelete}
                 data-testid="annotation-activity-actions-menu"
                 dropdownProps={{ onMenuClose: handleMenuClose, onMenuOpen: handleMenuOpen }}
