@@ -1,10 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import noop from 'lodash/noop';
-import TetherComponent from 'react-tether';
 import { FormattedMessage } from 'react-intl';
-import DeleteConfirmation from '../common/delete-confirmation';
 import Media from '../../../../components/media';
 import messages from './messages';
 import Pencil16 from '../../../../icon/line/Pencil16';
@@ -17,7 +14,8 @@ type AnnotationActivityMenuProps = {
     canEdit?: boolean,
     className?: string,
     id: string,
-    onDeleteConfirm: () => void,
+    isDisabled?: boolean,
+    onDelete: () => void,
     onEdit: () => void,
     onMenuClose: () => void,
     onMenuOpen: () => void,
@@ -28,106 +26,45 @@ const AnnotationActivityMenu = ({
     canEdit,
     className,
     id,
-    onDeleteConfirm,
+    isDisabled,
+    onDelete,
     onEdit,
-    onMenuClose = noop,
-    onMenuOpen = noop,
-}: AnnotationActivityMenuProps) => {
-    const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
-    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-    const isMountedRef = React.useRef<boolean>(false);
-
-    const handleDeleteCancel = (): void => {
-        setIsConfirmingDelete(false);
-    };
-
-    const handleDeleteClick = () => {
-        setIsConfirmingDelete(true);
-    };
-
-    const handleDeleteConfirm = () => {
-        setIsConfirmingDelete(false);
-        onDeleteConfirm();
-    };
-
-    const handleMenuClose = () => {
-        setIsMenuOpen(false);
-    };
-
-    const handleMenuOpen = () => {
-        setIsMenuOpen(true);
-    };
-
-    const tetherProps = {
-        attachment: 'top right',
-        className: 'bcs-AnnotationActivity-deleteConfirmationModal',
-        constraints: [{ to: 'scrollParent', attachment: 'together' }],
-        targetAttachment: 'bottom right',
-    };
-
-    React.useEffect(() => {
-        const { current: isMounted } = isMountedRef;
-
-        if (!isMounted) {
-            isMountedRef.current = true;
-            return;
-        }
-
-        if (!isConfirmingDelete && isMenuOpen) {
-            onMenuOpen();
-        }
-
-        if (!isConfirmingDelete && !isMenuOpen) {
-            onMenuClose();
-        }
-    }, [isConfirmingDelete, isMenuOpen, onMenuClose, onMenuOpen]);
-
-    return (
-        <TetherComponent {...tetherProps}>
-            <Media.Menu
-                className={classNames('bcs-AnnotationActivityMenu', className)}
-                isDisabled={isConfirmingDelete}
-                data-testid="annotation-activity-actions-menu"
-                dropdownProps={{ onMenuClose: handleMenuClose, onMenuOpen: handleMenuOpen }}
-                menuProps={{
-                    'data-resin-component': 'preview',
-                    'data-resin-feature': 'annotations',
-                }}
+    onMenuClose,
+    onMenuOpen,
+}: AnnotationActivityMenuProps) => (
+    <Media.Menu
+        className={classNames('bcs-AnnotationActivityMenu', className)}
+        isDisabled={isDisabled}
+        data-testid="annotation-activity-actions-menu"
+        dropdownProps={{ onMenuClose, onMenuOpen }}
+        menuProps={{
+            'data-resin-component': 'preview',
+            'data-resin-feature': 'annotations',
+        }}
+    >
+        {canEdit && (
+            <MenuItem
+                data-resin-itemid={id}
+                data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_EDIT}
+                data-testid="edit-annotation-activity"
+                onClick={onEdit}
             >
-                {canEdit && (
-                    <MenuItem
-                        data-resin-itemid={id}
-                        data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_EDIT}
-                        data-testid="edit-annotation-activity"
-                        onClick={onEdit}
-                    >
-                        <Pencil16 />
-                        <FormattedMessage {...messages.annotationActivityEditMenuItem} />
-                    </MenuItem>
-                )}
-                {canDelete && (
-                    <MenuItem
-                        data-resin-itemid={id}
-                        data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_DELETE}
-                        data-testid="delete-annotation-activity"
-                        onClick={handleDeleteClick}
-                    >
-                        <Trash16 />
-                        <FormattedMessage {...messages.annotationActivityDeleteMenuItem} />
-                    </MenuItem>
-                )}
-            </Media.Menu>
-            {isConfirmingDelete && (
-                <DeleteConfirmation
-                    data-resin-component={ACTIVITY_TARGETS.ANNOTATION_OPTIONS}
-                    isOpen={isConfirmingDelete}
-                    message={messages.annotationActivityDeletePrompt}
-                    onDeleteCancel={handleDeleteCancel}
-                    onDeleteConfirm={handleDeleteConfirm}
-                />
-            )}
-        </TetherComponent>
-    );
-};
+                <Pencil16 />
+                <FormattedMessage {...messages.annotationActivityEditMenuItem} />
+            </MenuItem>
+        )}
+        {canDelete && (
+            <MenuItem
+                data-resin-itemid={id}
+                data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_DELETE}
+                data-testid="delete-annotation-activity"
+                onClick={onDelete}
+            >
+                <Trash16 />
+                <FormattedMessage {...messages.annotationActivityDeleteMenuItem} />
+            </MenuItem>
+        )}
+    </Media.Menu>
+);
 
 export default AnnotationActivityMenu;

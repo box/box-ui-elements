@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { act } from 'react-dom/test-utils';
 import { shallow } from 'enzyme';
 
 import AnnotationActivity from '../AnnotationActivity';
 import AnnotationActivityMenu from '../AnnotationActivityMenu';
 import CommentForm from '../../comment-form/CommentForm';
+import DeleteConfirmation from '../../common/delete-confirmation';
 import Media from '../../../../../components/media';
 import messages from '../messages';
 import SelectableActivityCard from '../../SelectableActivityCard';
@@ -205,7 +205,58 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         expect(onActionSpy).toHaveBeenCalledTimes(1);
     });
 
+    describe('delete confirmation behavior', () => {
+        test('should render the DeleteConfirmation when delete menu item is selected', () => {
+            const item = {
+                ...mockAnnotation,
+                permissions: { can_delete: true },
+            };
+
+            const wrapper = getWrapper({ item });
+
+            wrapper.find(AnnotationActivityMenu).prop('onDelete')();
+
+            expect(wrapper.exists(DeleteConfirmation));
+        });
+
+        test('should close the DeleteConfirmation when cancel is selected', () => {
+            const item = {
+                ...mockAnnotation,
+                permissions: { can_delete: true },
+            };
+
+            const wrapper = getWrapper({ item });
+
+            wrapper.find(AnnotationActivityMenu).prop('onDelete')();
+            wrapper.find(DeleteConfirmation).prop('onDeleteCancel')();
+
+            expect(wrapper.exists(DeleteConfirmation)).toBe(false);
+        });
+
+        test('should call onDelete when confirm delete is selected', () => {
+            const onDelete = jest.fn();
+            const permissions = { can_delete: true };
+            const item = {
+                ...mockAnnotation,
+                permissions,
+            };
+
+            const wrapper = getWrapper({ item, onDelete });
+
+            wrapper.find(AnnotationActivityMenu).prop('onDelete')();
+            wrapper.find(DeleteConfirmation).prop('onDeleteConfirm')();
+
+            expect(onDelete).toHaveBeenCalledWith({ id: mockAnnotation.id, permissions });
+        });
+    });
+
     describe('SelectableActivityCard', () => {
+        const getActivityItem = overrides => ({
+            ...mockAnnotation,
+            permissions: { can_delete: true, can_edit: true },
+            ...overrides,
+        });
+
         test('should render as SelectableActivityCard', () => {
             const wrapper = getWrapper();
 
@@ -241,13 +292,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         });
 
         test('should disable card if the overflow menu is open', () => {
-            const activity = {
-                item: {
-                    ...mockAnnotation,
-                    permissions: { can_delete: true, can_edit: true },
-                },
-            };
-            const wrapper = getWrapper(activity);
+            const wrapper = getWrapper({ item: getActivityItem() });
 
             expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(false);
 
@@ -257,46 +302,34 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         });
 
         test('should disable card if editing the comment', () => {
-            const activity = {
-                item: {
-                    ...mockAnnotation,
-                    permissions: { can_delete: true, can_edit: true },
-                },
-            };
-            const wrapper = getWrapper(activity);
+            const wrapper = getWrapper({ item: getActivityItem() });
 
             expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(false);
 
-            act(() => {
-                wrapper.find(AnnotationActivityMenu).prop('onEdit')();
-            });
-
-            wrapper.update();
+            wrapper.find(AnnotationActivityMenu).prop('onEdit')();
 
             expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
         });
 
         test('should disable card if file version is unavailable', () => {
-            const activity = {
-                item: {
-                    ...mockAnnotation,
-                    file_version: null,
-                    permissions: { can_delete: true, can_edit: true },
-                },
-            };
-            const wrapper = getWrapper(activity);
+            const wrapper = getWrapper({ item: getActivityItem({ file_version: null }) });
+
+            expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
+        });
+
+        test('should disable card if the delete confirmation is open', () => {
+            const wrapper = getWrapper({ item: getActivityItem() });
+
+            expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(false);
+
+            wrapper.find(AnnotationActivityMenu).prop('onDelete')();
 
             expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
         });
 
         test('should stop propagation of mousedown event from SelectableActivityCard', () => {
-            const activity = {
-                item: {
-                    ...mockAnnotation,
-                },
-            };
             const event = { stopPropagation: jest.fn() };
-            const wrapper = getWrapper(activity);
+            const wrapper = getWrapper({ item: getActivityItem() });
 
             wrapper.find(SelectableActivityCard).simulate('mousedown', event);
 
@@ -304,14 +337,8 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         });
 
         test('should not stop propagation of mousedown event from SelectableActivityCard when disabled', () => {
-            const activity = {
-                item: {
-                    ...mockAnnotation,
-                    file_version: null,
-                },
-            };
             const event = { stopPropagation: jest.fn() };
-            const wrapper = getWrapper(activity);
+            const wrapper = getWrapper({ item: getActivityItem({ file_version: null }) });
 
             expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
 

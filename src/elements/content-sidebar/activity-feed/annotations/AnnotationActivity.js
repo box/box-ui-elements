@@ -1,8 +1,9 @@
 // @flow
+import * as React from 'react';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
-import * as React from 'react';
+import TetherComponent from 'react-tether';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
 import ActivityTimestamp from '../common/activity-timestamp';
@@ -10,6 +11,7 @@ import AnnotationActivityLink from './AnnotationActivityLink';
 import AnnotationActivityMenu from './AnnotationActivityMenu';
 import Avatar from '../Avatar';
 import CommentForm from '../comment-form/CommentForm';
+import DeleteConfirmation from '../common/delete-confirmation';
 import Media from '../../../../components/media';
 import messages from './messages';
 import SelectableActivityCard from '../SelectableActivityCard';
@@ -47,14 +49,17 @@ const AnnotationActivity = ({
     onEdit = noop,
     onSelect = noop,
 }: Props) => {
+    const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
     const [isEditing, setIsEditing] = React.useState(false);
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const { created_at, created_by, description, error, file_version, id, isPending, permissions = {}, target } = item;
     const { can_delete: canDelete, can_edit: canEdit } = permissions;
     const isFileVersionUnavailable = file_version === null;
-    const isCardDisabled = !!error || isMenuOpen || isEditing || isFileVersionUnavailable;
+    const isCardDisabled = !!error || isConfirmingDelete || isMenuOpen || isEditing || isFileVersionUnavailable;
     const isMenuVisible = (canDelete || canEdit) && !isPending;
 
+    const handleDelete = (): void => setIsConfirmingDelete(true);
+    const handleDeleteCancel = (): void => setIsConfirmingDelete(false);
     const handleDeleteConfirm = (): void => onDelete({ id, permissions });
     const handleEdit = (): void => setIsEditing(true);
     const handleFormCancel = (): void => setIsEditing(false);
@@ -84,6 +89,12 @@ const AnnotationActivity = ({
     const activityLinkMessage = isFileVersionUnavailable
         ? messages.annotationActivityVersionUnavailable
         : { ...linkMessage, values: { number: linkValue } };
+    const tetherProps = {
+        attachment: 'top right',
+        className: 'bcs-AnnotationActivity-deleteConfirmationModal',
+        constraints: [{ to: 'scrollParent', attachment: 'together' }],
+        targetAttachment: 'bottom right',
+    };
 
     return (
         <>
@@ -146,18 +157,30 @@ const AnnotationActivity = ({
                 {/* $FlowFixMe */}
                 {error ? <ActivityError {...error} /> : null}
             </SelectableActivityCard>
-            {isMenuVisible && (
-                <AnnotationActivityMenu
-                    canDelete={canDelete}
-                    canEdit={canEdit}
-                    className="bcs-AnnotationActivity-menu"
-                    id={id}
-                    onDeleteConfirm={handleDeleteConfirm}
-                    onEdit={handleEdit}
-                    onMenuClose={handleMenuClose}
-                    onMenuOpen={handleMenuOpen}
-                />
-            )}
+            <TetherComponent {...tetherProps}>
+                {isMenuVisible && (
+                    <AnnotationActivityMenu
+                        canDelete={canDelete}
+                        canEdit={canEdit}
+                        className="bcs-AnnotationActivity-menu"
+                        id={id}
+                        isDisabled={isConfirmingDelete}
+                        onDelete={handleDelete}
+                        onEdit={handleEdit}
+                        onMenuClose={handleMenuClose}
+                        onMenuOpen={handleMenuOpen}
+                    />
+                )}
+                {isConfirmingDelete && (
+                    <DeleteConfirmation
+                        data-resin-component={ACTIVITY_TARGETS.ANNOTATION_OPTIONS}
+                        isOpen={isConfirmingDelete}
+                        message={messages.annotationActivityDeletePrompt}
+                        onDeleteCancel={handleDeleteCancel}
+                        onDeleteConfirm={handleDeleteConfirm}
+                    />
+                )}
+            </TetherComponent>
         </>
     );
 };
