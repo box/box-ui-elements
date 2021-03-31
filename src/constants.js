@@ -182,6 +182,7 @@ export const DEFAULT_CONTAINER = 'body';
 export const DEFAULT_ROOT = '0';
 export const DEFAULT_SEARCH_DEBOUNCE = 500;
 export const DEFAULT_COLLAB_DEBOUNCE = 500;
+export const DEFAULT_FORMAT_DEBOUNCE = 1000;
 export const DEFAULT_MAX_COLLABORATORS = 25;
 export const DEFAULT_MAX_CONTACTS = 50;
 export const DEFAULT_PAGE_NUMBER = 1;

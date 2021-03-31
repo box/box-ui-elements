@@ -13,6 +13,7 @@ import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import DeleteConfirmation from '../common/delete-confirmation';
 import ActivityTimestamp from '../common/activity-timestamp';
 import UserLink from '../common/user-link';
+import ActivityCard from '../ActivityCard';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
 import CommentForm from '../comment-form';
@@ -119,7 +120,7 @@ class Comment extends React.Component<Props, State> {
         const isMenuVisible = (canDelete || canEdit) && !isPending;
 
         return (
-            <div className="bcs-Comment">
+            <ActivityCard className="bcs-Comment">
                 <Media
                     className={classNames('bcs-Comment-media', {
                         'bcs-is-pending': isPending || error,
@@ -219,7 +220,7 @@ class Comment extends React.Component<Props, State> {
                 </Media>
                 {/* $FlowFixMe */}
                 {error ? <ActivityError {...error} /> : null}
-            </div>
+            </ActivityCard>
         );
     }
 }
