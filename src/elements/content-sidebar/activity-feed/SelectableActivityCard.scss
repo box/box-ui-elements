@@ -17,7 +17,7 @@
         &:hover,
         &:focus {
             outline: none;
-            box-shadow: 0 0 8px 0 rgba(114, 132, 142, .16);
+            box-shadow: 0 0 8px 0 lighten($bdl-gray-20, 10%);
             animation: bcs-SelectableActivityCard-hover 300ms ease-in-out 25ms 1 normal forwards;
         }
     }
