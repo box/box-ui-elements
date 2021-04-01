@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should correctly render an app activity item 1`] = `
-<ActivityCard
+<ForwardRef(ActivityCard)
   className="bcs-AppActivity"
   data-resin-feature="appActivityCardtemplate_12345"
   data-resin-target="loaded"
@@ -74,5 +74,5 @@ exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should c
       </Link>
     </MediaBody>
   </Media>
-</ActivityCard>
+</ForwardRef(ActivityCard)>
 `;
