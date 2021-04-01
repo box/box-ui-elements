@@ -39,12 +39,18 @@
     z-index: 1;
 }
 
-.bcs-AnnotationActivity-timestamp {
-    white-space: nowrap;
-
-    .bcs-AnnotationActivity-link {
-        font-size: 12px;
+.bcs-AnnotationActivity-link {
+    &::before {
+        margin-right: 8px;
+        margin-left: 8px;
+        color: $bdl-gray-50;
+        content: '\2022';
     }
+}
+
+.bcs-AnnotationActivity-timestamp {
+    display: flex;
+    white-space: nowrap;
 }
 
 // override for activity feed defaults
@@ -56,19 +62,8 @@
     }
 
     .bcs-AnnotationActivity-link {
-        display: inline-block;
-        color: $bdl-box-blue;
+        display: flex;
         font-weight: bold;
-
-        &[aria-disabled='true'] {
-            color: $bdl-gray-62;
-        }
-
-        &::before {
-            margin-right: 8px;
-            margin-left: 8px;
-            color: $bdl-gray-50;
-            content: '\2022';
-        }
+        font-size: 12px;
     }
 }
