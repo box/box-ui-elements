@@ -4,10 +4,13 @@ import './ActivityCard.scss';
 
 export type Props = React.HTMLAttributes<HTMLDivElement>;
 
-const ActivityCard = ({ children, className, ...rest }: Props): JSX.Element => (
-    <div className={classNames('bcs-ActivityCard', className)} {...rest}>
-        {children}
-    </div>
-);
+const ActivityCard = (props: Props, ref: React.Ref<HTMLDivElement>): JSX.Element => {
+    const { children, className, ...rest } = props;
+    return (
+        <div ref={ref} className={classNames('bcs-ActivityCard', className)} {...rest}>
+            {children}
+        </div>
+    );
+};
 
-export default ActivityCard;
+export default React.forwardRef(ActivityCard);
