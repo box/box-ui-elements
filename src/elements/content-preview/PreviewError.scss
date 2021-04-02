@@ -1,6 +1,6 @@
 @import '../common/variables';
 
-.bcpr-PreviewLoading {
+.bcpr-PreviewError {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,7 +8,7 @@
     text-align: center;
 }
 
-.bcpr-PreviewLoading-message {
+.bcpr-PreviewError-message {
     max-width: 400px;
     margin-top: 20px;
     font-size: 14px;

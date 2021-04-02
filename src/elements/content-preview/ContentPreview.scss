@@ -70,18 +70,6 @@
             right: 0;
         }
     }
-
-    .bcpr-loading-wrapper {
-        display: flex;
-        flex: 1;
-        flex-direction: column;
-        justify-content: center;
-        background-color: $bdl-gray-05;
-
-        .bcpr-loaded & {
-            display: none;
-        }
-    }
 }
 
 .bcpr.bcpr-thumbnails-open .bcpr-navigate-left {
