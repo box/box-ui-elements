@@ -128,6 +128,7 @@ const AnnotationActivity = ({
                         <div className="bcs-AnnotationActivity-timestamp">
                             <ActivityTimestamp date={createdAtTimestamp} />
                             <AnnotationActivityLink
+                                className="bcs-AnnotationActivity-link"
                                 data-resin-target="annotationLink"
                                 id={id}
                                 isDisabled={isFileVersionUnavailable}
