@@ -1,11 +1,11 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { PreviewLoadingComponent as PreviewLoading } from '../PreviewLoading';
+import PreviewError from '../PreviewError';
 import { ERROR_CODE_FETCH_FILE_DUE_TO_POLICY } from '../../../constants';
 
-const getWrapper = props => shallow(<PreviewLoading {...props} />);
+const getWrapper = props => shallow(<PreviewError {...props} />);
 
-describe('elements/content-preview/PreviewLoading', () => {
+describe('elements/content-preview/PreviewError', () => {
     describe('render()', () => {
         test('should render correctly', () => {
             const wrapper = getWrapper();
