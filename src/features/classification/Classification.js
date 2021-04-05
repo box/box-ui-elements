@@ -28,22 +28,24 @@ type Props = {
     modifiedBy?: string,
     name?: string,
     onClick?: (event: SyntheticEvent<HTMLButtonElement>) => void,
+    useAppliedByLabel?: boolean,
 };
 
 const Classification = ({
-    definition,
     className = '',
+    color,
     controls,
     controlsFormat,
+    definition,
     isLoadingControls,
+    itemName = '',
     maxAppCount,
     messageStyle,
     modifiedAt,
     modifiedBy,
     name,
-    itemName = '',
-    color,
     onClick,
+    useAppliedByLabel = true,
 }: Props) => {
     const isClassified = !!name;
     const hasDefinition = !!definition;
@@ -89,7 +91,15 @@ const Classification = ({
                     <p className="bdl-Classification-modifiedBy" data-testid="classification-modifiedby">
                         <FormattedMessage
                             {...messages.modifiedBy}
-                            values={{ modifiedAt: formattedModifiedAt, modifiedBy }}
+                            values={{
+                                modifiedActionLabel: useAppliedByLabel ? (
+                                    <FormattedMessage {...messages.appliedByText} />
+                                ) : (
+                                    <FormattedMessage {...messages.importedFromText} />
+                                ),
+                                modifiedAt: formattedModifiedAt,
+                                modifiedBy,
+                            }}
                         />
                     </p>
                 </Label>

@@ -101,6 +101,72 @@ exports[`features/classification/Classification should render a classified badge
 </article>
 `;
 
+exports[`features/classification/Classification should render classification last modified information with expected action label when provided and message style is inline 1`] = `
+<FormattedMessage
+  defaultMessage="{modifiedActionLabel} {modifiedBy} on {modifiedAt}"
+  id="boxui.classification.modifiedBy"
+  values={
+    Object {
+      "modifiedActionLabel": <FormattedMessage
+        defaultMessage="Applied by"
+        id="boxui.classification.appliedByText"
+      />,
+      "modifiedAt": <FormattedDate
+        day="numeric"
+        month="long"
+        value={2020-07-16T00:51:10.000Z}
+        year="numeric"
+      />,
+      "modifiedBy": "A User",
+    }
+  }
+/>
+`;
+
+exports[`features/classification/Classification should render classification last modified information with expected action label when provided and message style is inline 2`] = `
+<FormattedMessage
+  defaultMessage="{modifiedActionLabel} {modifiedBy} on {modifiedAt}"
+  id="boxui.classification.modifiedBy"
+  values={
+    Object {
+      "modifiedActionLabel": <FormattedMessage
+        defaultMessage="Applied by"
+        id="boxui.classification.appliedByText"
+      />,
+      "modifiedAt": <FormattedDate
+        day="numeric"
+        month="long"
+        value={2020-07-16T00:51:10.000Z}
+        year="numeric"
+      />,
+      "modifiedBy": "A User",
+    }
+  }
+/>
+`;
+
+exports[`features/classification/Classification should render classification last modified information with expected action label when provided and message style is inline 3`] = `
+<FormattedMessage
+  defaultMessage="{modifiedActionLabel} {modifiedBy} on {modifiedAt}"
+  id="boxui.classification.modifiedBy"
+  values={
+    Object {
+      "modifiedActionLabel": <FormattedMessage
+        defaultMessage="Imported from"
+        id="boxui.classification.importedFromText"
+      />,
+      "modifiedAt": <FormattedDate
+        day="numeric"
+        month="long"
+        value={2020-07-16T00:51:10.000Z}
+        year="numeric"
+      />,
+      "modifiedBy": "A User",
+    }
+  }
+/>
+`;
+
 exports[`features/classification/Classification should render not classified message 1`] = `
 <article
   className="bdl-Classification "

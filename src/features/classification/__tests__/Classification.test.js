@@ -5,6 +5,8 @@ import ClassifiedBadge from '../ClassifiedBadge';
 import SecurityControls from '../security-controls';
 import LoadingIndicator from '../../../components/loading-indicator/LoadingIndicator';
 
+import messages from '../messages';
+
 describe('features/classification/Classification', () => {
     const getWrapper = (props = {}) => shallow(<Classification {...props} />);
 
@@ -77,16 +79,32 @@ describe('features/classification/Classification', () => {
         expect(wrapper.exists('[data-testid="classification-modifiedby"]')).toBe(false);
     });
 
-    test('should render classification last modified information when provided and message style is inline', () => {
-        const wrapper = getWrapper({
-            name: 'Confidential',
-            definition: 'fubar',
-            messageStyle: 'inline',
-            modifiedAt: '2020-07-16T00:51:10.000Z',
-            modifiedBy: 'A User',
-        });
-        expect(wrapper.exists('[data-testid="classification-modifiedby"]')).toBe(true);
-    });
+    test.each`
+        useAppliedByLabel | expectedActionLabelId
+        ${undefined}      | ${messages.appliedByText.id}
+        ${true}           | ${messages.appliedByText.id}
+        ${false}          | ${messages.importedFromText.id}
+    `(
+        'should render classification last modified information with expected action label when provided and message style is inline',
+        ({ useAppliedByLabel, expectedActionLabelId }) => {
+            const wrapper = getWrapper({
+                name: 'Confidential',
+                definition: 'fubar',
+                messageStyle: 'inline',
+                modifiedAt: '2020-07-16T00:51:10.000Z',
+                modifiedBy: 'A User',
+                useAppliedByLabel,
+            });
+
+            const modifiedByFormattedMsg = wrapper.find('FormattedMessage');
+            const { modifiedActionLabel: modifiedActionLabelFormattedMsg = {} } = modifiedByFormattedMsg.prop('values');
+            const { id: actionLabelId = '' } = modifiedActionLabelFormattedMsg.props;
+
+            expect(wrapper.exists('[data-testid="classification-modifiedby"]')).toBe(true);
+            expect(actionLabelId).toEqual(expectedActionLabelId);
+            expect(modifiedByFormattedMsg).toMatchSnapshot();
+        },
+    );
 
     test('should render a classified badge with security controls when provided and message style is inline', () => {
         const wrapper = getWrapper({
