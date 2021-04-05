@@ -100,8 +100,6 @@ export type TooltipProps = {
     stopBubble?: boolean;
     /** Text to show in the tooltip */
     text?: React.ReactNode;
-    /** True when should hide tooltip (usually when another tooltip is showing) */
-    shouldHideTooltip?: boolean;
 } & Partial<DefaultTooltipProps>;
 
 type State = {
@@ -194,12 +192,12 @@ class Tooltip extends React.Component<TooltipProps, State> {
     };
 
     isShown = () => {
-        const { isShown: isShownProp, shouldHideTooltip = false } = this.props;
+        const { isShown: isShownProp } = this.props;
         const isControlled = this.isControlled();
 
         const isShown = isControlled ? isShownProp : this.state.isShown;
 
-        const showTooltip = !shouldHideTooltip && isShown && !this.state.wasClosedByUser && this.state.hasRendered;
+        const showTooltip = isShown && !this.state.wasClosedByUser && this.state.hasRendered;
 
         return showTooltip;
     };

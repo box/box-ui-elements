@@ -54,7 +54,7 @@ function CollapsibleSidebarItem(props: Props) {
             position="middle-right"
             text={tooltipMessage}
             isDisabled={!tooltipMessage}
-            shouldHideTooltip={shouldHideTooltip}
+            isShown={shouldHideTooltip ? false : undefined}
         >
             {collapsedElement}
         </Tooltip>

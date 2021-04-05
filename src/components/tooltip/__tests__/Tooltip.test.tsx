@@ -123,17 +123,6 @@ describe('components/tooltip/Tooltip', () => {
             expect(tooltip.text()).toEqual('hi');
         });
 
-        test('should hide tooltip when shouldHideTooltip prop is true', () => {
-            const wrapper = shallow(
-                <Tooltip text="hi" shouldHideTooltip>
-                    <button />
-                </Tooltip>,
-            );
-
-            expect(wrapper.prop('enabled')).toBe(false);
-            expect(wrapper).toMatchSnapshot();
-        });
-
         test('should render tooltip class when specified', () => {
             const wrapper = shallow(
                 <Tooltip className="testing" isShown text="hi">

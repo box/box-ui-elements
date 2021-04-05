@@ -198,8 +198,7 @@ function CollapsibleSidebarMenuItem(props: Props) {
         <Tooltip
             className={classNames('bdl-CollapsibleSidebar-menuItemToolTip')}
             isDisabled={!isTextOverflowed}
-            shouldHideTooltip={shouldHideTooltip}
-            isShown={isScrolling ? false : undefined}
+            isShown={isScrolling || shouldHideTooltip ? false : undefined}
             isTabbable={false}
             position="middle-right"
             text={text}
