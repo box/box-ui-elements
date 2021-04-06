@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Datestamp from '../datestamp';
+import ActivityDatestamp from '../activity-datestamp';
 import Tooltip from '../../../../../components/tooltip';
 import messages from './messages';
 import './ActivityTimestamp.scss';
@@ -13,7 +13,7 @@ type Props = {
 const ActivityTimestamp = ({ date }: Props) => (
     <Tooltip text={<FormattedMessage {...messages.fullDateTime} values={{ time: date }} />}>
         <small className="bcs-ActivityTimestamp">
-            <Datestamp date={date} />
+            <ActivityDatestamp date={date} />
         </small>
     </Tooltip>
 );

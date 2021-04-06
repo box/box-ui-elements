@@ -1,17 +1,13 @@
-// @flow
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import Datestamp from '../Datestamp';
-import { MILLISECONDS_PER_YEAR } from '../../../../../../constants';
-import type { Props } from '../Datestamp';
+import ActivityDatestamp, { MILLISECONDS_PER_YEAR } from '../ActivityDatestamp';
 
-describe('elements/content-sidebar/activity-feed/common/datestamp/Datestamp', () => {
+describe('elements/content-sidebar/activity-feed/common/activity-datestamp/ActivityDatestamp', () => {
     const MOCK_DATE = new Date('2021-01-01');
     const MOCK_DATE_STRING = '2021-01-01T00:00:00+00:00';
     const MOCK_DATE_TIME = 1609459200000;
 
-    const getDefaults = () => ({ date: MOCK_DATE });
-    const getWrapper = (props: Props) => shallow(<Datestamp {...getDefaults()} {...props} />);
+    const getWrapper = (props = {}) => shallow(<ActivityDatestamp date={MOCK_DATE} {...props} />);
 
     test.each([MOCK_DATE, MOCK_DATE_STRING, MOCK_DATE_TIME])('should handle date passed in as %s', date => {
         const wrapper = getWrapper({ date });

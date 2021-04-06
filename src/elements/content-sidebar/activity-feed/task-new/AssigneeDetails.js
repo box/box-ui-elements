@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
-import Datestamp from '../common/datestamp';
+import ActivityDatestamp from '../common/activity-datestamp';
 import commonMessages from '../../../common/messages';
 import messages from './messages';
 import { TASK_NEW_APPROVED, TASK_NEW_REJECTED, TASK_NEW_COMPLETED, TASK_NEW_NOT_STARTED } from '../../../../constants';
@@ -33,7 +33,10 @@ const AssigneeDetails = React.memo<Props>(({ user, status, completedAt, classNam
             </div>
             {statusMessage && completedAt && (
                 <div className="bcs-AssigneeDetails-status">
-                    <FormattedMessage {...statusMessage} values={{ dateTime: <Datestamp date={completedAt} /> }} />
+                    <FormattedMessage
+                        {...statusMessage}
+                        values={{ dateTime: <ActivityDatestamp date={completedAt} /> }}
+                    />
                 </div>
             )}
         </div>

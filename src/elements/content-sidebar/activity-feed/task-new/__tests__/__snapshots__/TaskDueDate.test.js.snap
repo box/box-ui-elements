@@ -25,7 +25,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskDueDate should rende
               id="be.contentSidebar.activityFeed.taskNew.taskFeedStatusDue"
               values={
                 Object {
-                  "dateTime": <Datestamp
+                  "dateTime": <ActivityDatestamp
                     date={987654321000}
                     uppercase={true}
                   />,

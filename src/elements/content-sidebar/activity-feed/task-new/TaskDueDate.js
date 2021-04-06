@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Datestamp from '../common/datestamp';
+import ActivityDatestamp from '../common/activity-datestamp';
 import messages from './messages';
 // $FlowFixMe LabelPill is in typescript
 import LabelPill from '../../../../components/label-pill';
@@ -27,7 +27,7 @@ const TaskDueDate = ({ dueDate, status }: Props): React.Node => {
                     <FormattedMessage
                         {...messages.taskFeedStatusDue}
                         values={{
-                            dateTime: <Datestamp date={fullDueDate.getTime()} uppercase />,
+                            dateTime: <ActivityDatestamp date={fullDueDate.getTime()} uppercase />,
                         }}
                     />
                 </LabelPill.Text>

@@ -10,7 +10,7 @@ describe('elements/content-sidebar/ActivityFeed/common/ActivityTimestamp', () =>
         const wrapper = shallow(<ActivityTimestamp date={unixTime} />);
 
         // validating that the Tooltip and the time format are properly set
-        expect(wrapper.find('Datestamp').prop('date')).toEqual(unixTime);
+        expect(wrapper.find('ActivityDatestamp').prop('date')).toEqual(unixTime);
 
         expect(wrapper).toMatchSnapshot();
     });
