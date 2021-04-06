@@ -20,6 +20,7 @@ type Props = {
     controls?: Controls,
     controlsFormat?: ControlsFormat,
     definition?: string,
+    isImportedClassification?: boolean,
     isLoadingControls?: boolean,
     itemName?: string,
     maxAppCount?: number,
@@ -28,7 +29,6 @@ type Props = {
     modifiedBy?: string,
     name?: string,
     onClick?: (event: SyntheticEvent<HTMLButtonElement>) => void,
-    useAppliedByLabel?: boolean,
 };
 
 const Classification = ({
@@ -37,6 +37,7 @@ const Classification = ({
     controls,
     controlsFormat,
     definition,
+    isImportedClassification = false,
     isLoadingControls,
     itemName = '',
     maxAppCount,
@@ -45,7 +46,6 @@ const Classification = ({
     modifiedBy,
     name,
     onClick,
-    useAppliedByLabel = true,
 }: Props) => {
     const isClassified = !!name;
     const hasDefinition = !!definition;
@@ -65,6 +65,8 @@ const Classification = ({
     const formattedModifiedAt = isModifiedMessageVisible && (
         <FormattedDate value={modifiedDate} month="long" year="numeric" day="numeric" />
     );
+
+    const modifiedByMessage = isImportedClassification ? messages.importedBy : messages.modifiedBy;
 
     return (
         <article className={`bdl-Classification ${className}`}>
@@ -90,16 +92,8 @@ const Classification = ({
                 <Label text={<FormattedMessage {...messages.modifiedByLabel} />}>
                     <p className="bdl-Classification-modifiedBy" data-testid="classification-modifiedby">
                         <FormattedMessage
-                            {...messages.modifiedBy}
-                            values={{
-                                modifiedActionLabel: useAppliedByLabel ? (
-                                    <FormattedMessage {...messages.appliedByText} />
-                                ) : (
-                                    <FormattedMessage {...messages.importedFromText} />
-                                ),
-                                modifiedAt: formattedModifiedAt,
-                                modifiedBy,
-                            }}
+                            {...modifiedByMessage}
+                            values={{ modifiedAt: formattedModifiedAt, modifiedBy }}
                         />
                     </p>
                 </Label>

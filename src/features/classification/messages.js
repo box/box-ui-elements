@@ -31,18 +31,13 @@ const messages = defineMessages({
         description: 'Label displayed above details about when a classification was last modified.',
         id: 'boxui.classification.modifiedByLabel',
     },
-    appliedByText: {
-        defaultMessage: 'Applied by',
-        description: 'Text prepended to user or service that modified the classification.',
-        id: 'boxui.classification.appliedByText',
-    },
-    importedFromText: {
-        defaultMessage: 'Imported from',
-        description: 'Text prepended to user or service that imported the classification.',
-        id: 'boxui.classification.importedFromText',
+    importedBy: {
+        defaultMessage: 'Imported from {modifiedBy} on {modifiedAt}',
+        description: 'Sentence stating which user or service imported a classification and on what date.',
+        id: 'boxui.classification.importedBy',
     },
     modifiedBy: {
-        defaultMessage: '{modifiedActionLabel} {modifiedBy} on {modifiedAt}',
+        defaultMessage: 'Applied by {modifiedBy} on {modifiedAt}',
         description: 'Sentence stating which user or service modified a classification and on what date.',
         id: 'boxui.classification.modifiedBy',
     },

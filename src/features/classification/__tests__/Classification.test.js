@@ -80,28 +80,27 @@ describe('features/classification/Classification', () => {
     });
 
     test.each`
-        useAppliedByLabel | expectedActionLabelId
-        ${undefined}      | ${messages.appliedByText.id}
-        ${true}           | ${messages.appliedByText.id}
-        ${false}          | ${messages.importedFromText.id}
+        isImportedClassification | expectedModifedByMessageId
+        ${undefined}             | ${messages.modifiedBy.id}
+        ${false}                 | ${messages.modifiedBy.id}
+        ${true}                  | ${messages.importedBy.id}
     `(
-        'should render classification last modified information with expected action label when provided and message style is inline',
-        ({ useAppliedByLabel, expectedActionLabelId }) => {
+        `should render classification last modified information with message id ($expectedModifedByMessageId)
+        when it has modifiedBy (and isImportedClassification: $isImportedClassification) and message style is inline`,
+        ({ isImportedClassification, expectedModifedByMessageId }) => {
             const wrapper = getWrapper({
                 name: 'Confidential',
                 definition: 'fubar',
+                isImportedClassification,
                 messageStyle: 'inline',
                 modifiedAt: '2020-07-16T00:51:10.000Z',
                 modifiedBy: 'A User',
-                useAppliedByLabel,
             });
 
             const modifiedByFormattedMsg = wrapper.find('FormattedMessage');
-            const { modifiedActionLabel: modifiedActionLabelFormattedMsg = {} } = modifiedByFormattedMsg.prop('values');
-            const { id: actionLabelId = '' } = modifiedActionLabelFormattedMsg.props;
 
             expect(wrapper.exists('[data-testid="classification-modifiedby"]')).toBe(true);
-            expect(actionLabelId).toEqual(expectedActionLabelId);
+            expect(modifiedByFormattedMsg.prop('id')).toEqual(expectedModifedByMessageId);
             expect(modifiedByFormattedMsg).toMatchSnapshot();
         },
     );

@@ -101,16 +101,13 @@ exports[`features/classification/Classification should render a classified badge
 </article>
 `;
 
-exports[`features/classification/Classification should render classification last modified information with expected action label when provided and message style is inline 1`] = `
+exports[`features/classification/Classification should render classification last modified information with message id (boxui.classification.importedBy)
+        when it has modifiedBy (and isImportedClassification: true) and message style is inline 1`] = `
 <FormattedMessage
-  defaultMessage="{modifiedActionLabel} {modifiedBy} on {modifiedAt}"
-  id="boxui.classification.modifiedBy"
+  defaultMessage="Imported from {modifiedBy} on {modifiedAt}"
+  id="boxui.classification.importedBy"
   values={
     Object {
-      "modifiedActionLabel": <FormattedMessage
-        defaultMessage="Applied by"
-        id="boxui.classification.appliedByText"
-      />,
       "modifiedAt": <FormattedDate
         day="numeric"
         month="long"
@@ -123,16 +120,13 @@ exports[`features/classification/Classification should render classification las
 />
 `;
 
-exports[`features/classification/Classification should render classification last modified information with expected action label when provided and message style is inline 2`] = `
+exports[`features/classification/Classification should render classification last modified information with message id (boxui.classification.modifiedBy)
+        when it has modifiedBy (and isImportedClassification: false) and message style is inline 1`] = `
 <FormattedMessage
-  defaultMessage="{modifiedActionLabel} {modifiedBy} on {modifiedAt}"
+  defaultMessage="Applied by {modifiedBy} on {modifiedAt}"
   id="boxui.classification.modifiedBy"
   values={
     Object {
-      "modifiedActionLabel": <FormattedMessage
-        defaultMessage="Applied by"
-        id="boxui.classification.appliedByText"
-      />,
       "modifiedAt": <FormattedDate
         day="numeric"
         month="long"
@@ -145,16 +139,13 @@ exports[`features/classification/Classification should render classification las
 />
 `;
 
-exports[`features/classification/Classification should render classification last modified information with expected action label when provided and message style is inline 3`] = `
+exports[`features/classification/Classification should render classification last modified information with message id (boxui.classification.modifiedBy)
+        when it has modifiedBy (and isImportedClassification: undefined) and message style is inline 1`] = `
 <FormattedMessage
-  defaultMessage="{modifiedActionLabel} {modifiedBy} on {modifiedAt}"
+  defaultMessage="Applied by {modifiedBy} on {modifiedAt}"
   id="boxui.classification.modifiedBy"
   values={
     Object {
-      "modifiedActionLabel": <FormattedMessage
-        defaultMessage="Imported from"
-        id="boxui.classification.importedFromText"
-      />,
       "modifiedAt": <FormattedDate
         day="numeric"
         month="long"
