@@ -467,3 +467,4 @@ export const KEYS = {
 
 /* ----------------- Other ----------------------- */
 export const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
+export const MILLISECONDS_PER_YEAR = 365 * 24 * 60 * 60 * 1000; // 365 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
