@@ -27,12 +27,17 @@ const messages = defineMessages({
         id: 'boxui.classification.missing',
     },
     modifiedByLabel: {
-        defaultMessage: 'Classification Updated By',
+        defaultMessage: 'Classification Label',
         description: 'Label displayed above details about when a classification was last modified.',
         id: 'boxui.classification.modifiedByLabel',
     },
+    importedBy: {
+        defaultMessage: 'Imported from {modifiedBy} on {modifiedAt}',
+        description: 'Sentence stating which user or service imported a classification and on what date.',
+        id: 'boxui.classification.importedBy',
+    },
     modifiedBy: {
-        defaultMessage: '{modifiedBy} on {modifiedAt}',
+        defaultMessage: 'Applied by {modifiedBy} on {modifiedAt}',
         description: 'Sentence stating which user or service modified a classification and on what date.',
         id: 'boxui.classification.modifiedBy',
     },
