@@ -25,12 +25,15 @@ type Props = {
     /** Element to be shown when component is expanded */
     expandedElement: React.Node,
 
+    /** Tooltip should no be shown is true (usually when another tooltip is showing) */
+    shouldHideTooltip?: boolean,
+
     /** Tooltip message to show for collapsed item */
     tooltipMessage?: string,
 };
 
 function CollapsibleSidebarItem(props: Props) {
-    const { callout, collapsedElement, expanded, expandedElement, tooltipMessage } = props;
+    const { callout, collapsedElement, expanded, expandedElement, shouldHideTooltip = false, tooltipMessage } = props;
 
     if (callout) {
         const calloutChildren = expanded ? expandedElement : collapsedElement;
@@ -46,7 +49,13 @@ function CollapsibleSidebarItem(props: Props) {
     }
 
     const wrappedCollapsedElement = (
-        <Tooltip isTabbable={false} position="middle-right" text={tooltipMessage} isDisabled={!tooltipMessage}>
+        <Tooltip
+            isTabbable={false}
+            position="middle-right"
+            text={tooltipMessage}
+            isDisabled={!tooltipMessage}
+            isShown={shouldHideTooltip ? false : undefined}
+        >
             {collapsedElement}
         </Tooltip>
     );
