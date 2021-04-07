@@ -20,6 +20,7 @@ type Props = {
     controls?: Controls,
     controlsFormat?: ControlsFormat,
     definition?: string,
+    isImportedClassification?: boolean,
     isLoadingControls?: boolean,
     itemName?: string,
     maxAppCount?: number,
@@ -31,18 +32,19 @@ type Props = {
 };
 
 const Classification = ({
-    definition,
     className = '',
+    color,
     controls,
     controlsFormat,
+    definition,
+    isImportedClassification = false,
     isLoadingControls,
+    itemName = '',
     maxAppCount,
     messageStyle,
     modifiedAt,
     modifiedBy,
     name,
-    itemName = '',
-    color,
     onClick,
 }: Props) => {
     const isClassified = !!name;
@@ -63,6 +65,8 @@ const Classification = ({
     const formattedModifiedAt = isModifiedMessageVisible && (
         <FormattedDate value={modifiedDate} month="long" year="numeric" day="numeric" />
     );
+
+    const modifiedByMessage = isImportedClassification ? messages.importedBy : messages.modifiedBy;
 
     return (
         <article className={`bdl-Classification ${className}`}>
@@ -88,7 +92,7 @@ const Classification = ({
                 <Label text={<FormattedMessage {...messages.modifiedByLabel} />}>
                     <p className="bdl-Classification-modifiedBy" data-testid="classification-modifiedby">
                         <FormattedMessage
-                            {...messages.modifiedBy}
+                            {...modifiedByMessage}
                             values={{ modifiedAt: formattedModifiedAt, modifiedBy }}
                         />
                     </p>
