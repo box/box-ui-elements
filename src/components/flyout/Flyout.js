@@ -249,10 +249,18 @@ class Flyout extends React.Component<Props, State> {
             this.openOverlay();
         }
 
-        // If button was clicked, the detail field should hold number of clicks.
-        // If number is zero, the event was synthesized.
-        // https://developer.mozilla.org/en-US/docs/Web/API/UIEvent/detail
-        const isButtonClicked = event.detail > 0;
+        // In at least one place, .click() is called programmatically
+        //     src/features/presence/Presence.js
+        // In the programmatic case, the event is not supposed to trigger
+        // autofocus of the content (TBD if this is truly correct behavior).
+        // This line was using "event.detail > 0"
+        // to detect if a click event was from a user, but that made keyboard
+        // triggers of the button click behave differently than the mouse.
+        // So, we use "isTrusted" instead. Note: React polyfills for IE11.
+        // https://developer.mozilla.org/en-US/docs/Web/API/Event/isTrusted
+        // https://reactjs.org/docs/events.html
+
+        const isButtonClicked = event.isTrusted;
 
         this.setState({ isButtonClicked });
 
