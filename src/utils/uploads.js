@@ -343,7 +343,7 @@ function getDataTransferItemId(
 function isMultiputSupported(): boolean {
     const cryptoObj = window.crypto || window.msCrypto;
 
-    if (Browser.isMobileSafari() || Browser.isMobileChromeOniOS()) {
+    if (Browser.isMobileSafari()) {
         return false;
     }
 
