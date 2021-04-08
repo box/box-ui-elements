@@ -1,5 +1,7 @@
 @import '../../common/variables';
 
+$versions-item-badge-size: 40px;
+
 .bcs-VersionsItemBadge {
     padding: 10px 8px;
     color: $bdl-box-blue;
@@ -7,4 +9,16 @@
     text-align: center;
     background-color: $selected-blue-background;
     border-radius: 4px;
+}
+
+.Body.is-deja-blue {
+    .bcs-VersionsItemBadge {
+        min-width: $versions-item-badge-size;
+        height: $versions-item-badge-size;
+        color: $white;
+        font-weight: bold;
+        text-transform: lowercase;
+        background-color: $bdl-box-blue-50;
+        border-radius: 6px;
+    }
 }

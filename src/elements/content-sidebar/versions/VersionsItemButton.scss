@@ -44,3 +44,18 @@
         border-color: $bdl-box-blue;
     }
 }
+
+.Body.is-deja-blue {
+    .bcs-VersionsItemButton {
+        &.bcs-is-disabled {
+            .bcs-VersionsItemBadge {
+                background-color: $bdl-gray-40;
+            }
+
+            .bcs-VersionsItemBadge,
+            .bcs-VersionsItem-current {
+                color: $white;
+            }
+        }
+    }
+}
