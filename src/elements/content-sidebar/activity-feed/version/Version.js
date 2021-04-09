@@ -7,7 +7,7 @@ import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { InjectIntlProvidedProps } from 'react-intl';
 import ActivityCard from '../ActivityCard';
-import IconInfoInverted from '../../../../icons/general/IconInfoInverted';
+import IconInfo from '../../../../icons/general/IconInfo';
 import messages from '../../../common/messages';
 import PlainButton from '../../../../components/plain-button';
 import selectors from '../../../common/selectors/version';
@@ -67,7 +67,7 @@ const Version = (props: Props): React.Node => {
                         }}
                         type="button"
                     >
-                        <IconInfoInverted height={16} width={16} />
+                        <IconInfo height={16} width={16} />
                     </PlainButton>
                 </span>
             ) : null}
