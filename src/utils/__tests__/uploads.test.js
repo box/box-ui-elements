@@ -407,7 +407,6 @@ describe('util/uploads', () => {
 
         test.each([
             ['mobile safari', true, false],
-            ['web safari', false, true],
             ['mobile other browsers', false, true],
         ])('should return whether multiput is supported on device: %o', (test, mobileSafari, expected) => {
             windowSpy.mockImplementation(() => ({

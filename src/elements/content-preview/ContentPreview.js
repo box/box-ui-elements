@@ -35,8 +35,8 @@ import { EVENT_JS_READY } from '../common/logger/constants';
 import ReloadNotification from './ReloadNotification';
 import API from '../../api';
 import PreviewHeader from './preview-header';
+import PreviewMask from './PreviewMask';
 import PreviewNavigation from './PreviewNavigation';
-import PreviewLoading from './PreviewLoading';
 import {
     withAnnotations,
     WithAnnotationsProps,
@@ -125,6 +125,7 @@ type State = {
     currentFileId?: string,
     error?: ErrorType,
     file?: BoxItem,
+    isLoading: boolean,
     isReloadNotificationVisible: boolean,
     isThumbnailSidebarOpen: boolean,
     prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
@@ -205,6 +206,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
     initialState: State = {
         canPrint: false,
         error: undefined,
+        isLoading: true,
         isReloadNotificationVisible: false,
         isThumbnailSidebarOpen: false,
     };
@@ -364,10 +366,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         if (hasFileIdChanged) {
             this.destroyPreview();
-            this.setState({ selectedVersion: undefined });
+            this.setState({ isLoading: true, selectedVersion: undefined });
             this.fetchFile(currentFileId);
         } else if (this.shouldLoadPreview(prevState)) {
             this.destroyPreview(false);
+            this.setState({ isLoading: true });
             this.loadPreview();
         } else if (hasTokenChanged) {
             this.updatePreviewToken();
@@ -569,7 +572,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const { onError } = this.props;
 
         // In case of error, there should be no thumbnail sidebar to account for
-        this.setState({ isThumbnailSidebarOpen: false });
+        this.setState({ isLoading: false, isThumbnailSidebarOpen: false });
 
         onError(
             error,
@@ -677,7 +680,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         onLoad(loadData);
+
+        this.setState({ isLoading: false });
         this.focusPreview();
+
         if (this.preview && filesToPrefetch.length) {
             this.prefetch(filesToPrefetch);
         }
@@ -781,6 +787,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
             showAnnotations: this.canViewAnnotations(),
             showAnnotationsControls,
             showDownload: this.canDownload(),
+            showLoading: false,
+            showProgress: false,
             skipServerUpdate: true,
             useHotkeys: false,
         };
@@ -1222,10 +1230,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         const {
             canPrint,
+            currentFileId,
             error,
             file,
+            isLoading,
             isReloadNotificationVisible,
-            currentFileId,
             isThumbnailSidebarOpen,
             selectedVersion,
         }: State = this.state;
@@ -1243,6 +1252,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         const errorCode = getProp(error, 'code');
+        const currentExtension = getProp(file, 'id') === currentFileId ? getProp(file, 'extension') : '';
         const currentVersionId = getProp(file, 'file_version.id');
         const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
         const onHeaderClose = currentVersionId === selectedVersionId ? onClose : this.updateVersionToCurrent;
@@ -1269,21 +1279,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
                     )}
                     <div className="bcpr-body">
                         <div className="bcpr-container" onMouseMove={this.onMouseMove} ref={this.containerRef}>
-                            {file ? (
+                            {file && (
                                 <Measure bounds onResize={this.onResize}>
                                     {({ measureRef: previewRef }) => <div ref={previewRef} className="bcpr-content" />}
                                 </Measure>
-                            ) : (
-                                <div className="bcpr-loading-wrapper">
-                                    <PreviewLoading
-                                        errorCode={errorCode}
-                                        isLoading={!errorCode}
-                                        loadingIndicatorProps={{
-                                            size: 'large',
-                                        }}
-                                    />
-                                </div>
                             )}
+                            <PreviewMask errorCode={errorCode} extension={currentExtension} isLoading={isLoading} />
                             <PreviewNavigation
                                 collection={collection}
                                 currentIndex={this.getFileIndex()}
