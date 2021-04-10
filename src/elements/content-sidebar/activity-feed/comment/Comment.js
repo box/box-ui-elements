@@ -2,6 +2,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
+import intl from 'lib/intl';
 import { FormattedMessage } from 'react-intl';
 import TetherComponent from 'react-tether';
 import Trash16 from '../../../../icon/line/Trash16';
@@ -118,6 +119,7 @@ class Comment extends React.Component<Props, State> {
         const canEdit = onEdit !== noop && permissions.can_edit;
         const canDelete = permissions.can_delete;
         const isMenuVisible = (canDelete || canEdit) && !isPending;
+        const commentOptionsAriaLabel = intl.formatMessage(messages.commentOptionsArialLabel);
 
         return (
             <ActivityCard className="bcs-Comment">
@@ -140,6 +142,7 @@ class Comment extends React.Component<Props, State> {
                                 <Media.Menu
                                     isDisabled={isConfirmingDelete}
                                     data-testid="comment-actions-menu"
+                                    aria-label={commentOptionsAriaLabel}
                                     menuProps={{
                                         'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS,
                                     }}
