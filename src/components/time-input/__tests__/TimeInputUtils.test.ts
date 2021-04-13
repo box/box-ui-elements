@@ -74,6 +74,20 @@ const VALID_TIME_INPUTS = [
     ['11:00pm', { hours: 23, minutes: 0 }],
     ['12am', { hours: 0, minutes: 0 }],
     ['12pm', { hours: 12, minutes: 0 }],
+    ['22:32', { hours: 22, minutes: 32 }],
+    ['11:32 π.μ.', { hours: 11, minutes: 32 }],
+    ['11:32 μ.μ.', { hours: 23, minutes: 32 }],
+    ['6:32 am', { hours: 6, minutes: 32 }],
+    ['4:32 p.m.', { hours: 16, minutes: 32 }],
+    ['21:32', { hours: 21, minutes: 32 }],
+    ['4:32 PM', { hours: 16, minutes: 32 }],
+    ['23.32', { hours: 23, minutes: 32 }],
+    ['16 h 32', { hours: 16, minutes: 32 }],
+    ['5:32', { hours: 5, minutes: 32 }],
+    ['오전 5:32', { hours: 5, minutes: 32 }],
+    ['오후 5:32', { hours: 17, minutes: 32 }],
+    ['上午4:32', { hours: 4, minutes: 32 }],
+    ['下午4:32', { hours: 16, minutes: 32 }],
 ];
 
 const INVALID_TIME_INPUTS = ['abcde', '', undefined];
