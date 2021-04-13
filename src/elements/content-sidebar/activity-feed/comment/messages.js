@@ -29,7 +29,7 @@ const messages = defineMessages({
     },
     commentOptionsArialLabel: {
         id: 'be.contentSidebar.activityFeed.comment.commentOptionsArialLabel',
-        defaultMessage: 'Comment Options Menu',
+        defaultMessage: 'Options',
         description: 'Label for comment options menu',
     },
 });
