@@ -81,135 +81,139 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly render comment when translation is enabled 1`] = `
-<ForwardRef(ActivityCard)
-  className="bcs-Comment"
->
-  <Media
-    className="bcs-Comment-media"
-  >
-    <MediaFigure>
-      <Component
-        user={
-          Object {
-            "id": 10,
-            "name": "50 Cent",
-          }
-        }
-      />
-    </MediaFigure>
-    <MediaBody>
-      <div
-        className="bcs-Comment-headline"
-      >
-        <UserLink
-          data-resin-target="activityfeed-profilelink"
-          id={10}
-          name="50 Cent"
-        />
-      </div>
-      <div>
-        <ActivityTimestamp
-          date={1506534041000}
-        />
-      </div>
-      <ActivityMessage
-        id="123"
-        onTranslate={[MockFunction]}
-        tagged_message="test"
-        translationEnabled={true}
-        translationFailed={null}
-      />
-    </MediaBody>
-  </Media>
-</ForwardRef(ActivityCard)>
+<Comment
+  approverSelectorContacts={Array []}
+  created_at="2017-09-27T10:40:41-07:00"
+  created_by={
+    Object {
+      "id": 10,
+      "name": "50 Cent",
+    }
+  }
+  currentUser={
+    Object {
+      "id": 11,
+      "name": "testuser",
+    }
+  }
+  handlers={
+    Object {
+      "contacts": Object {
+        "getApproverWithQuery": [MockFunction],
+        "getMentionWithQuery": [MockFunction],
+      },
+      "tasks": Object {
+        "edit": [MockFunction],
+      },
+    }
+  }
+  id="123"
+  intl={
+    Object {
+      "formatDate": [Function],
+      "formatMessage": [Function],
+      "formatRelativeTime": [Function],
+    }
+  }
+  mentionSelectorContacts={Array []}
+  onDelete={[Function]}
+  onEdit={[Function]}
+  tagged_message="test"
+  translations={
+    Object {
+      "onTranslate": [MockFunction],
+      "translationEnabled": true,
+    }
+  }
+/>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an error when one is defined 1`] = `
-<ForwardRef(ActivityCard)
-  className="bcs-Comment"
->
-  <Media
-    className="bcs-Comment-media bcs-is-pending"
-  >
-    <MediaFigure>
-      <Component
-        user={
-          Object {
-            "id": 10,
-            "name": "50 Cent",
-          }
-        }
-      />
-    </MediaFigure>
-    <MediaBody>
-      <div
-        className="bcs-Comment-headline"
-      >
-        <UserLink
-          data-resin-target="activityfeed-profilelink"
-          id={10}
-          name="50 Cent"
-        />
-      </div>
-      <div>
-        <ActivityTimestamp
-          date={1506534041000}
-        />
-      </div>
-      <ActivityMessage
-        id="123"
-        tagged_message="test"
-        translationEnabled={false}
-        translationFailed={true}
-      />
-    </MediaBody>
-  </Media>
-  <ActivityError
-    message="errorrrrr"
-    title="error"
-  />
-</ForwardRef(ActivityCard)>
+<Comment
+  approverSelectorContacts={Array []}
+  created_at="2017-09-27T10:40:41-07:00"
+  created_by={
+    Object {
+      "id": 10,
+      "name": "50 Cent",
+    }
+  }
+  currentUser={
+    Object {
+      "id": 11,
+      "name": "testuser",
+    }
+  }
+  error={
+    Object {
+      "message": "errorrrrr",
+      "title": "error",
+    }
+  }
+  handlers={
+    Object {
+      "contacts": Object {
+        "getApproverWithQuery": [MockFunction],
+        "getMentionWithQuery": [MockFunction],
+      },
+      "tasks": Object {
+        "edit": [MockFunction],
+      },
+    }
+  }
+  id="123"
+  intl={
+    Object {
+      "formatDate": [Function],
+      "formatMessage": [Function],
+      "formatRelativeTime": [Function],
+    }
+  }
+  mentionSelectorContacts={Array []}
+  onDelete={[MockFunction]}
+  onEdit={[Function]}
+  tagged_message="test"
+/>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render commenter as a link 1`] = `
-<ForwardRef(ActivityCard)
-  className="bcs-Comment"
->
-  <Media
-    className="bcs-Comment-media"
-  >
-    <MediaFigure>
-      <Component
-        user={
-          Object {
-            "id": 10,
-            "name": "50 Cent",
-          }
-        }
-      />
-    </MediaFigure>
-    <MediaBody>
-      <div
-        className="bcs-Comment-headline"
-      >
-        <UserLink
-          data-resin-target="activityfeed-profilelink"
-          id={10}
-          name="50 Cent"
-        />
-      </div>
-      <div>
-        <ActivityTimestamp
-          date={1506534041000}
-        />
-      </div>
-      <ActivityMessage
-        id="123"
-        tagged_message="test"
-        translationEnabled={false}
-        translationFailed={null}
-      />
-    </MediaBody>
-  </Media>
-</ForwardRef(ActivityCard)>
+<Comment
+  approverSelectorContacts={Array []}
+  created_at="2017-09-27T10:40:41-07:00"
+  created_by={
+    Object {
+      "id": 10,
+      "name": "50 Cent",
+    }
+  }
+  currentUser={
+    Object {
+      "id": 11,
+      "name": "testuser",
+    }
+  }
+  handlers={
+    Object {
+      "contacts": Object {
+        "getApproverWithQuery": [MockFunction],
+        "getMentionWithQuery": [MockFunction],
+      },
+      "tasks": Object {
+        "edit": [MockFunction],
+      },
+    }
+  }
+  id="123"
+  intl={
+    Object {
+      "formatDate": [Function],
+      "formatMessage": [Function],
+      "formatRelativeTime": [Function],
+    }
+  }
+  mentionSelectorContacts={Array []}
+  onDelete={[Function]}
+  onEdit={[Function]}
+  tagged_message="test"
+/>
 `;
