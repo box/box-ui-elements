@@ -1,6 +1,8 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
 import Badge from '../Badge';
+import { BadgeType } from '../types';
 
 describe('components/badge/Badge', () => {
     test('should correctly render children in badge', () => {
@@ -18,21 +20,12 @@ describe('components/badge/Badge', () => {
         expect(wrapper.hasClass('some-badge-style')).toBe(true);
     });
 
-    [
-        {
-            type: 'info',
-        },
-        {
-            type: 'warning',
-        },
-        {
-            type: 'highlight',
-        },
-    ].forEach(({ type }) => {
-        test(`should render a badge with ${type} styling when initialized`, () => {
+    test.each([BadgeType.INFO, BadgeType.WARNING, BadgeType.HIGHLIGHT])(
+        `should render a badge with %s styling when initialized`,
+        type => {
             const wrapper = shallow(<Badge type={type}>test</Badge>);
 
             expect(wrapper).toMatchSnapshot();
-        });
-    });
+        },
+    );
 });
