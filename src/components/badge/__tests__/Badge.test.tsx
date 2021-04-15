@@ -20,11 +20,12 @@ describe('components/badge/Badge', () => {
         expect(wrapper.hasClass('some-badge-style')).toBe(true);
     });
 
-    [BadgeType.INFO, BadgeType.WARNING, BadgeType.HIGHLIGHT].forEach((type: BadgeType) => {
-        test(`should render a badge with ${type} styling when initialized`, () => {
+    test.each([BadgeType.INFO, BadgeType.WARNING, BadgeType.HIGHLIGHT])(
+        `should render a badge with %s styling when initialized`,
+        type => {
             const wrapper = shallow(<Badge type={type}>test</Badge>);
 
             expect(wrapper).toMatchSnapshot();
-        });
-    });
+        },
+    );
 });
