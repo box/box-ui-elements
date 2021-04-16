@@ -1,7 +1,8 @@
 import * as React from 'react';
 import classnames from 'classnames';
 
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
+import messages from './messages';
 import IconEllipsis from '../../icons/general/IconEllipsis';
 import { ButtonType } from '../button';
 import PlainButton, { PlainButtonProps } from '../plain-button';
@@ -10,14 +11,6 @@ import DropdownMenu from '../dropdown-menu';
 import { Menu } from '../menu';
 import { bdlGray50 } from '../../styles/variables';
 import './Media.scss';
-
-const messages = defineMessages({
-    commentOptionsArialLabel: {
-        id: 'be.contentSidebar.activityFeed.comment.commentOptionsArialLabel',
-        defaultMessage: 'Options',
-        description: 'Label for comment options menu',
-    },
-});
 
 export interface MediaMenuProps extends PlainButtonProps, WrappedComponentProps {
     /** Child elements */
