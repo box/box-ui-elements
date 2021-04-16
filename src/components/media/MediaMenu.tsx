@@ -1,6 +1,7 @@
 import * as React from 'react';
 import classnames from 'classnames';
 
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import IconEllipsis from '../../icons/general/IconEllipsis';
 import { ButtonType } from '../button';
 import PlainButton, { PlainButtonProps } from '../plain-button';
@@ -10,7 +11,15 @@ import { Menu } from '../menu';
 import { bdlGray50 } from '../../styles/variables';
 import './Media.scss';
 
-export interface MediaMenuProps extends PlainButtonProps {
+const messages = defineMessages({
+    commentOptionsArialLabel: {
+        id: 'be.contentSidebar.activityFeed.comment.commentOptionsArialLabel',
+        defaultMessage: 'Options',
+        description: 'Label for comment options menu',
+    },
+});
+
+export interface MediaMenuProps extends PlainButtonProps, WrappedComponentProps {
     /** Child elements */
     children: Array<React.ReactNode> | React.ReactChild;
 
@@ -33,19 +42,25 @@ const MediaMenu = ({
     isDisabled = false,
     dropdownProps = {},
     menuProps = {},
+    intl,
     ...rest
-}: MediaMenuProps) => (
-    <DropdownMenu constrainToScrollParent isRightAligned {...dropdownProps}>
-        <PlainButton
-            isDisabled={isDisabled}
-            className={classnames('bdl-Media-menu', className)}
-            type={ButtonType.BUTTON}
-            {...rest}
-        >
-            <IconEllipsis color={bdlGray50} height={16} width={16} />
-        </PlainButton>
-        <Menu {...menuProps}>{children}</Menu>
-    </DropdownMenu>
-);
+}: MediaMenuProps) => {
+    const commentOptionsAriaLabel = intl.formatMessage(messages.commentOptionsArialLabel);
 
-export default MediaMenu;
+    return (
+        <DropdownMenu constrainToScrollParent isRightAligned {...dropdownProps}>
+            <PlainButton
+                isDisabled={isDisabled}
+                className={classnames('bdl-Media-menu', className)}
+                type={ButtonType.BUTTON}
+                aria-label={commentOptionsAriaLabel}
+                {...rest}
+            >
+                <IconEllipsis color={bdlGray50} height={16} width={16} />
+            </PlainButton>
+            <Menu {...menuProps}>{children}</Menu>
+        </DropdownMenu>
+    );
+};
+
+export default injectIntl(MediaMenu);
