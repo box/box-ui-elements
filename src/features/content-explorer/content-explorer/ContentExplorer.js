@@ -6,6 +6,7 @@ import omit from 'lodash/omit';
 import ContentExplorerHeaderActions from './ContentExplorerHeaderActions';
 import ContentExplorerEmptyState from './ContentExplorerEmptyState';
 import ContentExplorerActionButtons from './ContentExplorerActionButtons';
+import ContentExplorerSelectAll from './ContentExplorerSelectAll';
 
 import ItemList from '../item-list';
 import { ContentExplorerModePropType, FoldersPathPropType, ItemsPropType } from '../prop-types';
@@ -82,6 +83,8 @@ class ContentExplorer extends Component {
         isCopyButtonLoading: PropTypes.bool,
         /** Whether the user has permission to create a new folder */
         isCreateNewFolderAllowed: PropTypes.bool,
+        /** Whether the user could see select all checkbox */
+        isSelectAllAllowed: PropTypes.bool,
         /** Whether the move button should be shown with a loading indicator */
         isMoveButtonLoading: PropTypes.bool,
         /**
@@ -132,6 +135,7 @@ class ContentExplorer extends Component {
             selectedItems: props.initialSelectedItems || {},
             foldersPath: props.initialFoldersPath,
             isInSearchMode: false,
+            isSelectAllChecked: false,
         };
     }
 
@@ -278,7 +282,7 @@ class ContentExplorer extends Component {
             newSelectedItems[item.id] = item;
         }
 
-        this.setState({ selectedItems: newSelectedItems });
+        this.setState({ selectedItems: newSelectedItems, isSelectAllChecked: false });
 
         if (onSelectItem) {
             onSelectItem(item, index);
@@ -298,6 +302,7 @@ class ContentExplorer extends Component {
         } else {
             onChooseItems([item]);
         }
+        this.setState({ isSelectAllChecked: false });
     };
 
     handleItemNameClick = (event, index) => {
@@ -313,6 +318,7 @@ class ContentExplorer extends Component {
         event.stopPropagation();
 
         this.enterFolder(item);
+        this.setState({ isSelectAllChecked: false });
     };
 
     toggleSelectedItem = (selectedItems, item) => {
@@ -324,6 +330,43 @@ class ContentExplorer extends Component {
         }
 
         return result;
+    };
+
+    selectAll = () => {
+        const { items } = this.props;
+        const { selectedItems } = this.state;
+        const result = { ...selectedItems };
+        items.forEach(item => {
+            if (!result[item.id]) {
+                result[item.id] = item;
+            }
+        });
+
+        return result;
+    };
+
+    unSelectAll = () => {
+        const { items } = this.props;
+        const { selectedItems } = this.state;
+        const result = { ...selectedItems };
+        items.forEach(item => {
+            if (result[item.id]) {
+                delete result[item.id];
+            }
+        });
+
+        return result;
+    };
+
+    handleSelectAllClick = async () => {
+        // check if the items list is still loading
+        const { items } = this.props;
+        if (items && items[0] && items[0].isLoading) {
+            return;
+        }
+        const { isSelectAllChecked } = this.state;
+        const newSelectedItems = isSelectAllChecked ? this.unSelectAll() : this.selectAll();
+        this.setState({ selectedItems: newSelectedItems, isSelectAllChecked: !isSelectAllChecked });
     };
 
     renderItemListEmptyState = () => {
@@ -354,6 +397,7 @@ class ContentExplorer extends Component {
             isCopyButtonLoading,
             isCreateNewFolderAllowed,
             isMoveButtonLoading,
+            isSelectAllAllowed,
             items,
             numItemsPerPage,
             numTotalItems,
@@ -366,7 +410,7 @@ class ContentExplorer extends Component {
             searchInputProps,
             ...rest
         } = this.props;
-        const { isInSearchMode, foldersPath, selectedItems } = this.state;
+        const { isInSearchMode, foldersPath, selectedItems, isSelectAllChecked } = this.state;
         const isViewingSearchResults = isInSearchMode && foldersPath.length === 1;
         const currentFolder = this.getCurrentFolder();
         const contentExplorerProps = omit(rest, [
@@ -428,6 +472,13 @@ class ContentExplorer extends Component {
                 >
                     {headerActionsAccessory}
                 </ContentExplorerHeaderActions>
+                {isSelectAllAllowed && (
+                    <ContentExplorerSelectAll
+                        numTotalItems={numTotalItems}
+                        isSelectAllChecked={isSelectAllChecked}
+                        handleSelectAllClick={this.handleSelectAllClick}
+                    />
+                )}
                 <ItemList
                     contentExplorerMode={contentExplorerMode}
                     height={listHeight}

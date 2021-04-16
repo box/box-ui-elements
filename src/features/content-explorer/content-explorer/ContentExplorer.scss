@@ -51,6 +51,25 @@
         }
     }
 
+    .content-explorer-select-all-container {
+        display: block;
+        height: 32px;
+
+        .content-explorer-select-all-items-counter {
+            margin-left: 2px;
+        }
+
+        .content-explorer-select-all-checkbox-lable {
+            float: right;
+            margin-right: 43px;
+        }
+
+        .content-explorer-select-all-checkbox {
+            float: right;
+            margin-right: -80px;
+        }
+    }
+
     .content-explorer-empty-state {
         display: flex;
         flex-direction: column;
