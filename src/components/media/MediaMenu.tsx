@@ -40,10 +40,10 @@ const MediaMenu = ({
 }: MediaMenuProps) => (
     <DropdownMenu constrainToScrollParent isRightAligned {...dropdownProps}>
         <PlainButton
-            isDisabled={isDisabled}
-            className={classnames('bdl-Media-menu', className)}
-            type={ButtonType.BUTTON}
             aria-label={intl.formatMessage(messages.commentOptionsArialLabel)}
+            className={classnames('bdl-Media-menu', className)}
+            isDisabled={isDisabled}
+            type={ButtonType.BUTTON}
             {...rest}
         >
             <IconEllipsis color={bdlGray50} height={16} width={16} />
