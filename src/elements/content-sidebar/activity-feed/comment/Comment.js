@@ -2,8 +2,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
-import { injectIntl, FormattedMessage } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import TetherComponent from 'react-tether';
 import Trash16 from '../../../../icon/line/Trash16';
 import Pencil16 from '../../../../icon/line/Pencil16';
@@ -45,7 +44,7 @@ type Props = {
     tagged_message: string,
     translatedTaggedMessage?: string,
     translations?: Translations,
-} & InjectIntlProvidedProps;
+};
 
 type State = {
     isConfirmingDelete: boolean,
@@ -112,7 +111,6 @@ class Comment extends React.Component<Props, State> {
             getMentionWithQuery,
             mentionSelectorContacts,
             onEdit,
-            intl,
         } = this.props;
         const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
@@ -120,7 +118,6 @@ class Comment extends React.Component<Props, State> {
         const canEdit = onEdit !== noop && permissions.can_edit;
         const canDelete = permissions.can_delete;
         const isMenuVisible = (canDelete || canEdit) && !isPending;
-        const commentOptionsAriaLabel = intl.formatMessage(messages.commentOptionsArialLabel);
 
         return (
             <ActivityCard className="bcs-Comment">
@@ -143,7 +140,6 @@ class Comment extends React.Component<Props, State> {
                                 <Media.Menu
                                     isDisabled={isConfirmingDelete}
                                     data-testid="comment-actions-menu"
-                                    aria-label={commentOptionsAriaLabel}
                                     menuProps={{
                                         'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS,
                                     }}
@@ -229,4 +225,4 @@ class Comment extends React.Component<Props, State> {
     }
 }
 
-export default injectIntl(Comment);
+export default Comment;
