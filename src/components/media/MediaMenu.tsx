@@ -44,23 +44,19 @@ const MediaMenu = ({
     menuProps = {},
     intl,
     ...rest
-}: MediaMenuProps) => {
-    const commentOptionsAriaLabel = intl.formatMessage(messages.commentOptionsArialLabel);
-
-    return (
-        <DropdownMenu constrainToScrollParent isRightAligned {...dropdownProps}>
-            <PlainButton
-                isDisabled={isDisabled}
-                className={classnames('bdl-Media-menu', className)}
-                type={ButtonType.BUTTON}
-                aria-label={commentOptionsAriaLabel}
-                {...rest}
-            >
-                <IconEllipsis color={bdlGray50} height={16} width={16} />
-            </PlainButton>
-            <Menu {...menuProps}>{children}</Menu>
-        </DropdownMenu>
-    );
-};
+}: MediaMenuProps) => (
+    <DropdownMenu constrainToScrollParent isRightAligned {...dropdownProps}>
+        <PlainButton
+            isDisabled={isDisabled}
+            className={classnames('bdl-Media-menu', className)}
+            type={ButtonType.BUTTON}
+            aria-label={intl.formatMessage(messages.commentOptionsArialLabel)}
+            {...rest}
+        >
+            <IconEllipsis color={bdlGray50} height={16} width={16} />
+        </PlainButton>
+        <Menu {...menuProps}>{children}</Menu>
+    </DropdownMenu>
+);
 
 export default injectIntl(MediaMenu);

@@ -27,11 +27,6 @@ const messages = defineMessages({
         defaultMessage: '{time, date, full} at {time, time, short}',
         description: 'Comment posted full date time for title',
     },
-    commentOptionsArialLabel: {
-        id: 'be.contentSidebar.activityFeed.comment.commentOptionsArialLabel',
-        defaultMessage: 'Options',
-        description: 'Label for comment options menu',
-    },
 });
 
 export default messages;
