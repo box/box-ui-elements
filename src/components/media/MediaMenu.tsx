@@ -40,7 +40,7 @@ const MediaMenu = ({
 }: MediaMenuProps) => (
     <DropdownMenu constrainToScrollParent isRightAligned {...dropdownProps}>
         <PlainButton
-            aria-label={intl.formatMessage(messages.commentOptionsArialLabel)}
+            aria-label={intl.formatMessage(messages.menuButtonArialLabel)}
             className={classnames('bdl-Media-menu', className)}
             isDisabled={isDisabled}
             type={ButtonType.BUTTON}

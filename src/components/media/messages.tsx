@@ -6,7 +6,7 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-    commentOptionsArialLabel: {
+    menuButtonArialLabel: {
         id: 'boxui.media.menuButtonArialLabel',
         defaultMessage: 'Options',
         description: 'Label for comment options menu',
