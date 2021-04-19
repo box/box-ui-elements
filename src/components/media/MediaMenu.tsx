@@ -1,6 +1,8 @@
 import * as React from 'react';
 import classnames from 'classnames';
 
+import { injectIntl, WrappedComponentProps } from 'react-intl';
+import messages from './messages';
 import IconEllipsis from '../../icons/general/IconEllipsis';
 import { ButtonType } from '../button';
 import PlainButton, { PlainButtonProps } from '../plain-button';
@@ -10,7 +12,7 @@ import { Menu } from '../menu';
 import { bdlGray50 } from '../../styles/variables';
 import './Media.scss';
 
-export interface MediaMenuProps extends PlainButtonProps {
+export interface MediaMenuProps extends PlainButtonProps, WrappedComponentProps {
     /** Child elements */
     children: Array<React.ReactNode> | React.ReactChild;
 
@@ -33,12 +35,14 @@ const MediaMenu = ({
     isDisabled = false,
     dropdownProps = {},
     menuProps = {},
+    intl,
     ...rest
 }: MediaMenuProps) => (
     <DropdownMenu constrainToScrollParent isRightAligned {...dropdownProps}>
         <PlainButton
-            isDisabled={isDisabled}
+            aria-label={intl.formatMessage(messages.menuButtonArialLabel)}
             className={classnames('bdl-Media-menu', className)}
+            isDisabled={isDisabled}
             type={ButtonType.BUTTON}
             {...rest}
         >
@@ -48,4 +52,4 @@ const MediaMenu = ({
     </DropdownMenu>
 );
 
-export default MediaMenu;
+export default injectIntl(MediaMenu);
