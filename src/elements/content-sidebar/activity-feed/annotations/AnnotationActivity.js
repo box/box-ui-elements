@@ -60,7 +60,10 @@ const AnnotationActivity = ({
 
     const handleDelete = (): void => setIsConfirmingDelete(true);
     const handleDeleteCancel = (): void => setIsConfirmingDelete(false);
-    const handleDeleteConfirm = (): void => onDelete({ id, permissions });
+    const handleDeleteConfirm = (): void => {
+        setIsConfirmingDelete(false);
+        onDelete({ id, permissions });
+    };
     const handleEdit = (): void => setIsEditing(true);
     const handleFormCancel = (): void => setIsEditing(false);
     const handleFormSubmit = ({ text }): void => {
