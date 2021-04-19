@@ -53,20 +53,20 @@
 
     .content-explorer-select-all-container {
         display: block;
-        height: 32px;
+        height: 8 * $bdl-grid-unit;
 
         .content-explorer-select-all-items-counter {
             margin-left: 2px;
         }
 
-        .content-explorer-select-all-checkbox-lable {
+        .content-explorer-select-all-checkbox-label {
             float: right;
-            margin-right: 43px;
+            margin-right: 42px;
         }
 
         .content-explorer-select-all-checkbox {
             float: right;
-            margin-right: -80px;
+            margin-right: -20 * $bdl-grid-unit;
         }
     }
 

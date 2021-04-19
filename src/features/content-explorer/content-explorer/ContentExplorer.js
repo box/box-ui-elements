@@ -83,7 +83,7 @@ class ContentExplorer extends Component {
         isCopyButtonLoading: PropTypes.bool,
         /** Whether the user has permission to create a new folder */
         isCreateNewFolderAllowed: PropTypes.bool,
-        /** Whether the user could see select all checkbox */
+        /** Whether the user can see select all checkbox */
         isSelectAllAllowed: PropTypes.bool,
         /** Whether the move button should be shown with a loading indicator */
         isMoveButtonLoading: PropTypes.bool,
@@ -345,7 +345,7 @@ class ContentExplorer extends Component {
         return result;
     };
 
-    unSelectAll = () => {
+    unselectAll = () => {
         const { items } = this.props;
         const { selectedItems } = this.state;
         const result = { ...selectedItems };
@@ -365,7 +365,7 @@ class ContentExplorer extends Component {
             return;
         }
         const { isSelectAllChecked } = this.state;
-        const newSelectedItems = isSelectAllChecked ? this.unSelectAll() : this.selectAll();
+        const newSelectedItems = isSelectAllChecked ? this.unselectAll() : this.selectAll();
         this.setState({ selectedItems: newSelectedItems, isSelectAllChecked: !isSelectAllChecked });
     };
 

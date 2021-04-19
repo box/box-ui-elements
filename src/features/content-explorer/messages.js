@@ -138,6 +138,11 @@ const messages = defineMessages({
         description: 'Results label for number of items on list',
         id: 'boxui.contentExplorer.results',
     },
+    result: {
+        defaultMessage: '{itemsCount} result',
+        description: 'Results label for number of items on list when its just 1',
+        id: 'boxui.contentExplorer.result',
+    },
 });
 
 export default messages;

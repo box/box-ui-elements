@@ -1,11 +1,8 @@
 import React from 'react';
-import sinon from 'sinon';
 
 import { ContentExplorerSelectAllBase as ContentExplorerSelectAll } from '../ContentExplorerSelectAll';
 
 describe('features/content-explorer/content-explorer/ContentExplorerSelectAll', () => {
-    const sandbox = sinon.sandbox.create();
-
     const renderComponent = props =>
         shallow(
             <ContentExplorerSelectAll
@@ -19,21 +16,20 @@ describe('features/content-explorer/content-explorer/ContentExplorerSelectAll', 
             />,
         );
 
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
     describe('render()', () => {
         test('should render the default component', () => {
             const wrapper = renderComponent();
-            const instance = wrapper.instance();
+            const handleSelectAllClick = jest.fn();
+            const isSelectAllChecked = true;
+            wrapper.setProps({ handleSelectAllClick, isSelectAllChecked });
+            const checkbox = wrapper.find('Checkbox');
 
             expect(wrapper.is('div')).toBe(true);
-            expect(wrapper.find('Checkbox').prop('onChange')).toEqual(instance.handleSelectAllClick);
-            expect(wrapper.find('Checkbox').prop('isChecked')).toEqual(instance.isSelectAllChecked);
+            expect(wrapper.find('Checkbox').prop('onChange')).toEqual(handleSelectAllClick);
+            expect(checkbox.prop('isChecked')).toEqual(isSelectAllChecked);
         });
 
-        test('should render checkbox label correct', () => {
+        test('should render checkbox label correctly', () => {
             const wrapper = renderComponent();
 
             expect(
@@ -45,24 +41,26 @@ describe('features/content-explorer/content-explorer/ContentExplorerSelectAll', 
             ).toEqual('boxui.contentExplorer.selectAll');
         });
 
-        test('should render items count correct', () => {
+        test('should render items count correctly when result !== 1', () => {
             const numTotalItems = 12345;
             const wrapper = renderComponent({ numTotalItems });
+            const itemsCountLabel = wrapper
+                .find('label')
+                .at(0)
+                .find('FormattedMessage');
+            expect(itemsCountLabel.props().id).toEqual('boxui.contentExplorer.results');
+            expect(itemsCountLabel.props().values.itemsCount).toEqual(numTotalItems);
+        });
 
-            expect(
-                wrapper
-                    .find('label')
-                    .at(0)
-                    .find('FormattedMessage')
-                    .props().id,
-            ).toEqual('boxui.contentExplorer.results');
-            expect(
-                wrapper
-                    .find('label')
-                    .at(0)
-                    .find('FormattedMessage')
-                    .props().values.itemsCount,
-            ).toEqual(numTotalItems);
+        test('should render items count correctly when result === 1', () => {
+            const numTotalItems = 1;
+            const wrapper = renderComponent({ numTotalItems });
+            const itemsCountLabel = wrapper
+                .find('label')
+                .at(0)
+                .find('FormattedMessage');
+            expect(itemsCountLabel.props().id).toEqual('boxui.contentExplorer.result');
+            expect(itemsCountLabel.props().values.itemsCount).toEqual(numTotalItems);
         });
     });
 });

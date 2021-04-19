@@ -82,7 +82,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             const isSelectAllAllowed = true;
             const wrapper = renderComponent({ isSelectAllAllowed });
 
-            expect(wrapper.find('ContentExplorerSelectAll').length).toBe(1);
+            expect(wrapper.exists('ContentExplorerSelectAll')).toBeTruthy();
         });
 
         test('should not render ContentExplorerSelectAll with isSelectAllAllowed = false', () => {
@@ -614,57 +614,60 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(result).toStrictEqual(selectedItems);
         });
 
-        test('should remove items from selectedItems when unSelectAll is called', () => {
+        test('should remove items from selectedItems when unselectAll is called', () => {
             const wrapper = renderComponent({ items });
             wrapper.setState({ selectedItems });
-            const result = wrapper.instance().unSelectAll();
+            const result = wrapper.instance().unselectAll();
 
             expect(result).toStrictEqual({});
         });
 
         test('should call selectAll when handleSelectAllClick and checkbox is not selected', () => {
             const wrapper = renderComponent({ items });
-            wrapper.instance().setState({ isSelectAllChecked: false });
+            const instance = wrapper.instance();
+            wrapper.setState({ isSelectAllChecked: false });
 
-            wrapper.instance().selectAll = jest.fn();
+            instance.selectAll = jest.fn();
 
-            wrapper.instance().unSelectAll = jest.fn();
+            instance.unselectAll = jest.fn();
 
-            wrapper.instance().handleSelectAllClick();
+            instance.handleSelectAllClick();
 
             expect(wrapper.state('isSelectAllChecked')).toBeTruthy();
-            expect(wrapper.instance().selectAll).toHaveBeenCalledTimes(1);
-            expect(wrapper.instance().unSelectAll).toHaveBeenCalledTimes(0);
+            expect(instance.selectAll).toHaveBeenCalledTimes(1);
+            expect(instance.unselectAll).toHaveBeenCalledTimes(0);
         });
 
-        test('should call unSelectAll when handleSelectAllClick and checkbox is selected', () => {
+        test('should call unselectAll when handleSelectAllClick and checkbox is selected', () => {
             const wrapper = renderComponent({ items });
-            wrapper.instance().setState({ isSelectAllChecked: true });
+            wrapper.setState({ isSelectAllChecked: true });
+            const instance = wrapper.instance();
 
-            wrapper.instance().selectAll = jest.fn();
+            instance.selectAll = jest.fn();
 
-            wrapper.instance().unSelectAll = jest.fn();
+            instance.unselectAll = jest.fn();
 
-            wrapper.instance().handleSelectAllClick();
+            instance.handleSelectAllClick();
 
             expect(wrapper.state('isSelectAllChecked')).toBeFalsy();
-            expect(wrapper.instance().selectAll).toHaveBeenCalledTimes(0);
-            expect(wrapper.instance().unSelectAll).toHaveBeenCalledTimes(1);
+            expect(instance.selectAll).toHaveBeenCalledTimes(0);
+            expect(instance.unselectAll).toHaveBeenCalledTimes(1);
         });
 
-        test('should not call selectAll or unSelectAll when handleSelectAllClick and checkbox is not selected but items are still loading', () => {
+        test('should not call selectAll or unselectAll when handleSelectAllClick and checkbox is not selected but items are still loading', () => {
             const wrapper = renderComponent({ items: [{ isLoading: true }] });
-            wrapper.instance().setState({ isSelectAllChecked: true });
+            wrapper.setState({ isSelectAllChecked: true });
+            const instance = wrapper.instance();
 
-            wrapper.instance().selectAll = jest.fn();
+            instance.selectAll = jest.fn();
 
-            wrapper.instance().unSelectAll = jest.fn();
+            instance.unselectAll = jest.fn();
 
-            wrapper.instance().handleSelectAllClick();
+            instance.handleSelectAllClick();
 
             expect(wrapper.state('isSelectAllChecked')).toBeTruthy();
-            expect(wrapper.instance().selectAll).toHaveBeenCalledTimes(0);
-            expect(wrapper.instance().unSelectAll).toHaveBeenCalledTimes(0);
+            expect(instance.selectAll).toHaveBeenCalledTimes(0);
+            expect(instance.unselectAll).toHaveBeenCalledTimes(0);
         });
     });
 });
