@@ -12,8 +12,7 @@ export type Props = {
 
 const ALLOWABLE_NODENAMES = ['A', 'BUTTON'];
 
-function isAllowableNode(event: React.SyntheticEvent<HTMLDivElement>) {
-    const { target } = event;
+function isAllowableNode({ target }: React.SyntheticEvent<HTMLDivElement>) {
     return target instanceof HTMLElement && ALLOWABLE_NODENAMES.includes(target.nodeName);
 }
 
