@@ -10,11 +10,17 @@ export type Props = {
     onSelect: () => void;
 } & ActivityCardProps;
 
+const ALLOWABLE_NODENAMES = ['A', 'BUTTON'];
+
+function isAllowableNode({ target }: React.SyntheticEvent<HTMLDivElement>) {
+    return target instanceof HTMLElement && ALLOWABLE_NODENAMES.includes(target.nodeName);
+}
+
 const SelectableActivityCard = ({ children, className, isDisabled = false, onSelect, ...rest }: Props): JSX.Element => {
     const ref = React.useRef<HTMLDivElement | null>(null);
 
-    const handleClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
-        if (isDisabled) {
+    const handleClick = (event: React.SyntheticEvent<HTMLDivElement>): void => {
+        if (isDisabled || isAllowableNode(event)) {
             return;
         }
 
@@ -25,8 +31,8 @@ const SelectableActivityCard = ({ children, className, isDisabled = false, onSel
         onSelect();
     };
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (isDisabled) {
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+        if (isDisabled || isAllowableNode(event)) {
             return;
         }
 
