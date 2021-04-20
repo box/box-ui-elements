@@ -31,7 +31,7 @@ import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
 import isThumbnailReady from './utils';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
-import { FILE_SHARED_LINK_FIELDS_TO_FETCH, FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
+import { CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH, FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
 import LocalStore from '../../utils/LocalStore';
 import { withFeatureConsumer, withFeatureProvider, type FeatureConfig } from '../common/feature-checking';
 import {
@@ -580,7 +580,7 @@ class ContentExplorer extends Component<Props, State> {
                 this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            { fields: FOLDER_FIELDS_TO_FETCH, forceFetch: true },
+            { fields: CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH, forceFetch: true },
         );
     };
 
@@ -643,7 +643,7 @@ class ContentExplorer extends Component<Props, State> {
         this.api
             .getSearchAPI()
             .search(id, query, currentPageSize, currentOffset, this.searchSuccessCallback, this.errorCallback, {
-                fields: FOLDER_FIELDS_TO_FETCH,
+                fields: CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH,
                 forceFetch: true,
             });
     }, DEFAULT_SEARCH_DEBOUNCE);
@@ -739,7 +739,7 @@ class ContentExplorer extends Component<Props, State> {
                 this.recentsSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            { fields: FOLDER_FIELDS_TO_FETCH, forceFetch: true },
+            { fields: CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH, forceFetch: true },
         );
     }
 

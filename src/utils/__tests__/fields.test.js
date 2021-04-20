@@ -1,4 +1,5 @@
 import {
+    CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH,
     FOLDER_FIELDS_TO_FETCH,
     PREVIEW_FIELDS_TO_FETCH,
     SIDEBAR_FIELDS_TO_FETCH,
@@ -68,7 +69,6 @@ describe('util/fields', () => {
             FIELD_SIZE,
             FIELD_PARENT,
             FIELD_EXTENSION,
-            FIELD_FILE_VERSION,
             FIELD_PERMISSIONS,
             FIELD_PATH_COLLECTION,
             FIELD_MODIFIED_AT,
@@ -80,9 +80,33 @@ describe('util/fields', () => {
             FIELD_AUTHENTICATED_DOWNLOAD_URL,
             FIELD_IS_DOWNLOAD_AVAILABLE,
             FIELD_REPRESENTATIONS,
+            FIELD_URL,
+        ]);
+    });
+
+    test('should fetch correct folder fields for the Content Explorer', () => {
+        expect(CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH).toEqual([
+            FIELD_ID,
+            FIELD_NAME,
+            FIELD_TYPE,
+            FIELD_SIZE,
+            FIELD_PARENT,
+            FIELD_EXTENSION,
+            FIELD_PERMISSIONS,
+            FIELD_PATH_COLLECTION,
+            FIELD_MODIFIED_AT,
+            FIELD_CREATED_AT,
+            FIELD_MODIFIED_BY,
+            FIELD_HAS_COLLABORATIONS,
+            FIELD_IS_EXTERNALLY_OWNED,
+            FIELD_ITEM_COLLECTION,
+            FIELD_AUTHENTICATED_DOWNLOAD_URL,
+            FIELD_IS_DOWNLOAD_AVAILABLE,
+            FIELD_REPRESENTATIONS,
+            FIELD_URL,
+            FIELD_FILE_VERSION,
             FIELD_SHA1,
             FIELD_SHARED_LINK,
-            FIELD_URL,
             FIELD_WATERMARK_INFO,
         ]);
     });

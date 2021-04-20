@@ -60,7 +60,7 @@ import {
     PLACEHOLDER_USER,
 } from '../constants';
 
-// Minimum set of fields needed for Content Explorer / Picker
+// Minimum set of fields needed for folder requests
 const FOLDER_FIELDS_TO_FETCH = [
     FIELD_ID,
     FIELD_NAME,
@@ -68,7 +68,6 @@ const FOLDER_FIELDS_TO_FETCH = [
     FIELD_SIZE,
     FIELD_PARENT,
     FIELD_EXTENSION,
-    FIELD_FILE_VERSION,
     FIELD_PERMISSIONS,
     FIELD_PATH_COLLECTION,
     FIELD_MODIFIED_AT,
@@ -80,9 +79,15 @@ const FOLDER_FIELDS_TO_FETCH = [
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_IS_DOWNLOAD_AVAILABLE,
     FIELD_REPRESENTATIONS,
+    FIELD_URL,
+];
+
+// Fields needed for Content Explorer folder requests
+const CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH = [
+    ...FOLDER_FIELDS_TO_FETCH,
+    FIELD_FILE_VERSION,
     FIELD_SHA1,
     FIELD_SHARED_LINK,
-    FIELD_URL,
     FIELD_WATERMARK_INFO,
 ];
 
@@ -259,6 +264,7 @@ function fillUserPlaceholder(obj: Object): Object {
 export {
     APP_ACTIVITY_FIELDS_TO_FETCH,
     COMMENTS_FIELDS_TO_FETCH,
+    CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH,
     FILE_SHARED_LINK_FIELDS_TO_FETCH,
     FILE_VERSION_FIELDS_TO_FETCH,
     FILE_VERSIONS_FIELDS_TO_FETCH,
