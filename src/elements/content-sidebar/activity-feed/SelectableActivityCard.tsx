@@ -17,9 +17,8 @@ const SelectableActivityCard = ({ children, className, isDisabled = false, onSel
 
     const handleClick = (event: React.SyntheticEvent<HTMLDivElement>): void => {
         const { target } = event;
-        const { nodeName } = target as HTMLElement;
 
-        if (isDisabled || ALLOWABLE_NODENAMES.includes(nodeName)) {
+        if (isDisabled || (target instanceof HTMLElement && ALLOWABLE_NODENAMES.includes(target.nodeName))) {
             return;
         }
 
@@ -32,9 +31,8 @@ const SelectableActivityCard = ({ children, className, isDisabled = false, onSel
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
         const { target } = event;
-        const { nodeName } = target as HTMLElement;
 
-        if (isDisabled || ALLOWABLE_NODENAMES.includes(nodeName)) {
+        if (isDisabled || (target instanceof HTMLElement && ALLOWABLE_NODENAMES.includes(target.nodeName))) {
             return;
         }
 
