@@ -140,7 +140,7 @@ const messages = defineMessages({
     },
     result: {
         defaultMessage: '{itemsCount} result',
-        description: 'Results label for number of items on list when its just 1',
+        description: "Results label for number of items on list when it's just 1",
         id: 'boxui.contentExplorer.result',
     },
 });
