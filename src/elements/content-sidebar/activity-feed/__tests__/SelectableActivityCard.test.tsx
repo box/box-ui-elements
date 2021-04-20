@@ -14,6 +14,13 @@ describe('elements/content-sidebar/activity-feed/SelectableActivityCard', () => 
     const getWrapper = (props = {}): ShallowWrapper =>
         shallow(<SelectableActivityCard {...getDefaults()} {...props} />);
 
+    const getEventTarget = (classname = 'bcs-UserLink'): HTMLElement => {
+        const target = document.createElement('div');
+        target.classList.add(classname);
+
+        return target;
+    };
+
     test('should render children and HTML div props', () => {
         const wrapper = getWrapper({ className: 'foo', 'data-prop': 'bar' });
 
@@ -69,6 +76,46 @@ describe('elements/content-sidebar/activity-feed/SelectableActivityCard', () => 
             expect(clickEvent.currentTarget.focus).toHaveBeenCalled();
             expect(onSelect).toHaveBeenCalled();
         });
+
+        test('should not call onSelect if event is triggered from user link', () => {
+            const clickEvent = {
+                preventDefault: jest.fn(),
+                stopPropagation: jest.fn(),
+                currentTarget: {
+                    focus: jest.fn(),
+                },
+                target: getEventTarget(),
+            };
+            const onSelect = jest.fn();
+            const wrapper = getWrapper({ isDisabled: false, onSelect });
+
+            wrapper.simulate('click', clickEvent);
+
+            expect(onSelect).not.toHaveBeenCalled();
+        });
+
+        test.each([getEventTarget('other-link'), document])(
+            'should call onSelect if event is not triggered from user link',
+            target => {
+                const clickEvent = {
+                    preventDefault: jest.fn(),
+                    stopPropagation: jest.fn(),
+                    currentTarget: {
+                        focus: jest.fn(),
+                    },
+                    target,
+                };
+                const onSelect = jest.fn();
+                const wrapper = getWrapper({ isDisabled: false, onSelect });
+
+                wrapper.simulate('click', clickEvent);
+
+                expect(clickEvent.preventDefault).toHaveBeenCalled();
+                expect(clickEvent.stopPropagation).toHaveBeenCalled();
+                expect(clickEvent.currentTarget.focus).toHaveBeenCalled();
+                expect(onSelect).toHaveBeenCalled();
+            },
+        );
     });
 
     describe('key handling', () => {
@@ -82,6 +129,36 @@ describe('elements/content-sidebar/activity-feed/SelectableActivityCard', () => 
             expect(decodeSpy).not.toHaveBeenCalled();
             expect(onSelect).not.toHaveBeenCalled();
         });
+
+        test('should not process if event is triggered from user link', () => {
+            const mockEvent = {
+                target: getEventTarget(),
+            };
+            const decodeSpy = jest.spyOn(keys, 'decode');
+            const onSelect = jest.fn();
+            const wrapper = getWrapper({ isDisabled: false, onSelect });
+
+            wrapper.simulate('keydown', mockEvent);
+
+            expect(decodeSpy).not.toHaveBeenCalled();
+            expect(onSelect).not.toHaveBeenCalled();
+        });
+
+        test.each([getEventTarget('other-link'), document])(
+            'should process if event is triggered from non user link',
+            target => {
+                const mockEvent = {
+                    target,
+                };
+                const decodeSpy = jest.spyOn(keys, 'decode');
+                const onSelect = jest.fn();
+                const wrapper = getWrapper({ isDisabled: false, onSelect });
+
+                wrapper.simulate('keydown', mockEvent);
+
+                expect(decodeSpy).toHaveBeenCalled();
+            },
+        );
 
         test.each(['Space', 'Enter'])('should call onSelect if key is %s', key => {
             const onSelect = jest.fn();

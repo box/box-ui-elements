@@ -13,8 +13,12 @@ export type Props = {
 const SelectableActivityCard = ({ children, className, isDisabled = false, onSelect, ...rest }: Props): JSX.Element => {
     const ref = React.useRef<HTMLDivElement | null>(null);
 
-    const handleClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
-        if (isDisabled) {
+    const isUserLink = (event: React.SyntheticEvent<HTMLDivElement>): boolean => {
+        return event.target instanceof HTMLElement && event.target.classList.contains('bcs-UserLink');
+    };
+
+    const handleClick = (event: React.SyntheticEvent<HTMLDivElement>): void => {
+        if (isDisabled || isUserLink(event)) {
             return;
         }
 
@@ -25,8 +29,8 @@ const SelectableActivityCard = ({ children, className, isDisabled = false, onSel
         onSelect();
     };
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (isDisabled) {
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+        if (isDisabled || isUserLink(event)) {
             return;
         }
 
