@@ -5,10 +5,25 @@ import SelectableActivityCard, { Props } from '../SelectableActivityCard';
 // @ts-ignore flow import
 import * as keys from '../../../../utils/keys';
 
+type MockEventProps = {
+    key?: string;
+    target?: HTMLElement;
+};
+
 describe('elements/content-sidebar/activity-feed/SelectableActivityCard', () => {
     const getDefaults = (): Props => ({
         children: <span>Child Span</span>,
         onSelect: jest.fn(),
+    });
+
+    const getMockEvent = ({ key, target = document.createElement('div') }: MockEventProps = {}) => ({
+        key,
+        preventDefault: jest.fn(),
+        stopPropagation: jest.fn(),
+        currentTarget: {
+            focus: jest.fn(),
+        },
+        target,
     });
 
     const getWrapper = (props = {}): ShallowWrapper =>
@@ -46,20 +61,14 @@ describe('elements/content-sidebar/activity-feed/SelectableActivityCard', () => 
             const onSelect = jest.fn();
             const wrapper = getWrapper({ isDisabled: true, onSelect });
 
-            wrapper.simulate('click');
+            wrapper.simulate('click', getMockEvent());
 
             expect(onSelect).not.toHaveBeenCalled();
         });
 
         test('should call onSelect if card is not disabled', () => {
             const onSelect = jest.fn();
-            const clickEvent = {
-                preventDefault: jest.fn(),
-                stopPropagation: jest.fn(),
-                currentTarget: {
-                    focus: jest.fn(),
-                },
-            };
+            const clickEvent = getMockEvent();
             const wrapper = getWrapper({ isDisabled: false, onSelect });
 
             wrapper.simulate('click', clickEvent);
@@ -69,15 +78,35 @@ describe('elements/content-sidebar/activity-feed/SelectableActivityCard', () => 
             expect(clickEvent.currentTarget.focus).toHaveBeenCalled();
             expect(onSelect).toHaveBeenCalled();
         });
+
+        test.each(['a', 'button'])('should not call onSelect if event target nodeName is %s', nodeName => {
+            const onSelect = jest.fn();
+            const wrapper = getWrapper({ isDisabled: true, onSelect });
+
+            wrapper.simulate('click', getMockEvent({ target: document.createElement(nodeName) }));
+
+            expect(onSelect).not.toHaveBeenCalled();
+        });
     });
 
     describe('key handling', () => {
         test('should not process if card is disabled', () => {
+            const decodeSpy = jest.spyOn(keys, 'decode');
             const onSelect = jest.fn();
             const wrapper = getWrapper({ isDisabled: true, onSelect });
-            const decodeSpy = jest.spyOn(keys, 'decode');
 
-            wrapper.simulate('keydown');
+            wrapper.simulate('keydown', getMockEvent());
+
+            expect(decodeSpy).not.toHaveBeenCalled();
+            expect(onSelect).not.toHaveBeenCalled();
+        });
+
+        test.each(['a', 'button'])('should not process if event target nodeName is %s', nodeName => {
+            const decodeSpy = jest.spyOn(keys, 'decode');
+            const onSelect = jest.fn();
+            const wrapper = getWrapper({ isDisabled: true, onSelect });
+
+            wrapper.simulate('keydown', getMockEvent({ target: document.createElement(nodeName) }));
 
             expect(decodeSpy).not.toHaveBeenCalled();
             expect(onSelect).not.toHaveBeenCalled();
@@ -87,7 +116,7 @@ describe('elements/content-sidebar/activity-feed/SelectableActivityCard', () => 
             const onSelect = jest.fn();
             const wrapper = getWrapper({ onSelect });
 
-            wrapper.simulate('keydown', { key });
+            wrapper.simulate('keydown', getMockEvent({ key }));
 
             expect(onSelect).toHaveBeenCalled();
         });
@@ -96,7 +125,7 @@ describe('elements/content-sidebar/activity-feed/SelectableActivityCard', () => 
             const onSelect = jest.fn();
             const wrapper = getWrapper({ onSelect });
 
-            wrapper.simulate('keydown', { key });
+            wrapper.simulate('keydown', getMockEvent({ key }));
 
             expect(onSelect).not.toHaveBeenCalled();
         });

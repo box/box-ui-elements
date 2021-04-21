@@ -45,6 +45,8 @@ class ContentExplorerModalContainer extends Component {
         onSelectItem: PropTypes.func,
         /** Folder is in the process of being created. */
         isCreatingFolder: PropTypes.bool,
+        /** Whether the user can see select all checkbox */
+        isSelectAllAllowed: PropTypes.bool,
         /** Message that will be shown when there was an error creating the folder. */
         createFolderError: PropTypes.string,
         /** Configures the content explorer based on the user's intended action (ex. select file or move/copy) */
@@ -189,6 +191,7 @@ class ContentExplorerModalContainer extends Component {
             searchInputProps,
             chooseButtonText,
             initialSelectedItems,
+            isSelectAllAllowed,
         } = this.props;
         const { foldersPath, isNewFolderModalOpen } = this.state;
         const currentFolder = foldersPath[foldersPath.length - 1];
@@ -212,6 +215,7 @@ class ContentExplorerModalContainer extends Component {
                     onSelectItem={onSelectItem}
                     onCreateNewFolderButtonClick={this.handleCreateNewFolderButtonClick}
                     isCreateNewFolderAllowed={isCreateNewFolderAllowed}
+                    isSelectAllAllowed={isSelectAllAllowed}
                     onSearchSubmit={onSearchSubmit}
                     onExitSearch={onExitSearch}
                     items={items}
