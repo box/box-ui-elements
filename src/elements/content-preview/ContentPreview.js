@@ -56,6 +56,7 @@ import {
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
 import type { Annotation } from '../../common/types/feed';
+import type { TargetingApi } from '../../features/targeting/types';
 import type { ErrorType, AdditionalVersionInfo } from '../common/flowTypes';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { RequestOptions, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
@@ -103,6 +104,9 @@ type Props = {
     onLoad: Function,
     onNavigate: Function,
     onVersionChange: VersionChangeCallback,
+    previewExperiences?: {
+        [name: string]: TargetingApi,
+    },
     previewLibraryVersion: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
@@ -746,6 +750,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             fileOptions,
             onAnnotatorEvent,
             onAnnotator,
+            previewExperiences,
             showAnnotationsControls,
             token: tokenOrTokenFunction,
             ...rest
@@ -784,6 +789,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             fileOptions: fileOpts,
             header: 'none',
             headerElement: `#${this.id} .bcpr-PreviewHeader`,
+            experiences: previewExperiences,
             showAnnotations: this.canViewAnnotations(),
             showAnnotationsControls,
             showDownload: this.canDownload(),
