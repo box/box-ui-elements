@@ -5,7 +5,7 @@ import noop from 'lodash/noop';
 import * as utils from '../utils';
 import { ContentExplorerComponent as ContentExplorer } from '../ContentExplorer';
 import UploadDialog from '../../common/upload-dialog';
-import { CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH } from '../../../utils/fields';
+import CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH from '../constants';
 import { VIEW_MODE_GRID } from '../../../constants';
 
 jest.mock('../../common/header/Header', () => 'mock-header');

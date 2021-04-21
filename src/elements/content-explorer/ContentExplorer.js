@@ -31,7 +31,8 @@ import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
 import isThumbnailReady from './utils';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
-import { CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH, FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
+import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
+import CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH from './constants';
 import LocalStore from '../../utils/LocalStore';
 import { withFeatureConsumer, withFeatureProvider, type FeatureConfig } from '../common/feature-checking';
 import {

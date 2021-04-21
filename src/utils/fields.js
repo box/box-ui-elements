@@ -82,15 +82,6 @@ const FOLDER_FIELDS_TO_FETCH = [
     FIELD_URL,
 ];
 
-// Fields needed for Content Explorer folder requests
-const CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH = [
-    ...FOLDER_FIELDS_TO_FETCH,
-    FIELD_FILE_VERSION,
-    FIELD_SHA1,
-    FIELD_SHARED_LINK,
-    FIELD_WATERMARK_INFO,
-];
-
 // Fields needed for the sidebar
 const SIDEBAR_FIELDS_TO_FETCH = [
     FIELD_ID,
@@ -264,7 +255,6 @@ function fillUserPlaceholder(obj: Object): Object {
 export {
     APP_ACTIVITY_FIELDS_TO_FETCH,
     COMMENTS_FIELDS_TO_FETCH,
-    CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH,
     FILE_SHARED_LINK_FIELDS_TO_FETCH,
     FILE_VERSION_FIELDS_TO_FETCH,
     FILE_VERSIONS_FIELDS_TO_FETCH,
