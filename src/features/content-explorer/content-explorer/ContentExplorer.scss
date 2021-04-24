@@ -51,6 +51,25 @@
         }
     }
 
+    .content-explorer-select-all-container {
+        display: block;
+        height: 8 * $bdl-grid-unit;
+
+        .content-explorer-select-all-items-counter {
+            margin-left: 2px;
+        }
+
+        .content-explorer-select-all-checkbox-label {
+            float: right;
+            margin-right: 42px;
+        }
+
+        .content-explorer-select-all-checkbox {
+            float: right;
+            margin-right: -20 * $bdl-grid-unit;
+        }
+    }
+
     .content-explorer-empty-state {
         display: flex;
         flex-direction: column;
