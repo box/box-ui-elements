@@ -363,13 +363,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     componentDidUpdate(prevProps: Props, prevState: State): void {
         const { token, previewExperiences } = this.props;
-        const { token: prevToken } = prevProps;
+        const { token: prevToken, previewExperiences: prevPreviewExperiences } = prevProps;
         const { currentFileId } = this.state;
         const hasFileIdChanged = prevState.currentFileId !== currentFileId;
         const hasTokenChanged = prevToken !== token;
-        const experiencesHaveChanged = prevProps.previewExperiences !== previewExperiences;
+        const haveExperiencesChanged = prevPreviewExperiences !== previewExperiences;
 
-        if (experiencesHaveChanged && this.preview && this.preview.updateExperiences) {
+        if (haveExperiencesChanged && this.preview && this.preview.updateExperiences) {
             this.preview.updateExperiences(previewExperiences);
         }
 
