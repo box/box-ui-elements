@@ -306,21 +306,22 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: TaskCollabStatus): void => {
         const { file, api, onTaskAssignmentUpdate } = this.props;
 
+        const successCallback = () => {
+            this.feedSuccessCallback();
+            onTaskAssignmentUpdate(taskId, taskAssignmentId, status);
+        };
+
         api.getFeedAPI(false).updateTaskCollaborator(
             file,
             taskId,
             taskAssignmentId,
             status,
-            this.feedSuccessCallback,
+            successCallback,
             this.feedErrorCallback,
         );
 
         // need to load the pending item
         this.fetchFeedItems();
-
-        if (onTaskAssignmentUpdate) {
-            onTaskAssignmentUpdate(taskId, taskAssignmentId, status);
-        }
     };
 
     /**
