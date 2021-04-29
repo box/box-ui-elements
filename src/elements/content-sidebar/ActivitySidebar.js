@@ -305,14 +305,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: TaskCollabStatus): void => {
         const { file, api, onTaskAssignmentUpdate } = this.props;
-        // $FlowFixMe
-        const {
-            currentUser: { id },
-        } = this.state;
+        const { currentUser } = this.state;
 
         const successCallback = () => {
             this.feedSuccessCallback();
-            onTaskAssignmentUpdate(taskId, taskAssignmentId, status, id);
+            // $FlowFixMe
+            onTaskAssignmentUpdate(taskId, taskAssignmentId, status, currentUser.id);
         };
 
         api.getFeedAPI(false).updateTaskCollaborator(
