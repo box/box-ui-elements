@@ -290,12 +290,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
         beforeEach(() => {
             onTaskAssignmentUpdate = jest.fn();
-            wrapper = getWrapper({onTaskAssignmentUpdate, file});
+            wrapper = getWrapper({ onTaskAssignmentUpdate, file });
             instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
             instance.feedSuccessCallback = jest.fn();
             instance.feedErrorCallback = jest.fn();
-            instance.setState({currentUser});
+            instance.setState({ currentUser });
         });
 
         test('should call the update task assignment API and fetch the items', () => {
@@ -306,7 +306,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 '2',
                 'foo',
                 expect.any(Function),
-                instance.feedErrorCallback
+                instance.feedErrorCallback,
             );
             expect(instance.fetchFeedItems).toBeCalled();
             const successCallback = feedAPI.updateTaskCollaborator.mock.calls[0][4];
