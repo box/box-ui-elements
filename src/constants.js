@@ -177,6 +177,7 @@ export const DEFAULT_HOSTNAME_API = 'https://api.box.com';
 export const DEFAULT_HOSTNAME_STATIC = 'https://cdn01.boxcdn.net';
 export const DEFAULT_HOSTNAME_UPLOAD = 'https://upload.box.com';
 export const DEFAULT_HOSTNAME_UPLOAD_APP = 'https://upload.app.box.com';
+export const DEFAULT_HOSTNAME_UPLOAD_GOV = 'https://upload.app.box-gov.com';
 export const DEFAULT_HOSTNAME_APP = 'https://app.box.com';
 export const DEFAULT_CONTAINER = 'body';
 export const DEFAULT_ROOT = '0';
