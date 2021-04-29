@@ -17,8 +17,7 @@ export default function PreviewMask({ errorCode, extension, isLoading }: Props):
 
     return (
         <div className="bcpr-PreviewMask">
-            {errorCode && <PreviewError />}
-            {isLoading && <PreviewLoading extension={extension} />}
+            {errorCode ? <PreviewError /> : isLoading && <PreviewLoading extension={extension} />}
         </div>
     );
 }

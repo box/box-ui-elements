@@ -19,6 +19,11 @@ describe('elements/content-preview/PreviewMask', () => {
             expect(wrapper.exists(PreviewLoading)).toBe(true);
         });
 
+        test('should not render PreviewLoading if isLoading is true and error code is provided', () => {
+            const wrapper = getWrapper({ errorCode: 'error', isLoading: true });
+            expect(wrapper.exists(PreviewLoading)).toBe(false);
+        });
+
         test('should render nothing if error is missing and isLoading is false', () => {
             const wrapper = getWrapper();
             expect(wrapper.isEmptyRender()).toBe(true);
