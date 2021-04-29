@@ -128,6 +128,21 @@ const messages = defineMessages({
         description: 'Text shown on button to create a new folder',
         id: 'boxui.newFolderModal.create',
     },
+    selectAll: {
+        defaultMessage: 'Select All',
+        description: 'Select All label for select all items check box',
+        id: 'boxui.contentExplorer.selectAll',
+    },
+    results: {
+        defaultMessage: '{itemsCount} results',
+        description: 'Results label for number of items on list',
+        id: 'boxui.contentExplorer.results',
+    },
+    result: {
+        defaultMessage: '{itemsCount} result',
+        description: "Results label for number of items on list when it's just 1",
+        id: 'boxui.contentExplorer.result',
+    },
 });
 
 export default messages;

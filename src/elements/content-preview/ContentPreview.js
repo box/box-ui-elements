@@ -56,6 +56,7 @@ import {
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
 import type { Annotation } from '../../common/types/feed';
+import type { TargetingApi } from '../../features/targeting/types';
 import type { ErrorType, AdditionalVersionInfo } from '../common/flowTypes';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { RequestOptions, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
@@ -103,6 +104,9 @@ type Props = {
     onLoad: Function,
     onNavigate: Function,
     onVersionChange: VersionChangeCallback,
+    previewExperiences?: {
+        [name: string]: TargetingApi,
+    },
     previewLibraryVersion: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
@@ -358,11 +362,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidUpdate(prevProps: Props, prevState: State): void {
-        const { token } = this.props;
-        const { token: prevToken } = prevProps;
+        const { previewExperiences, token } = this.props;
+        const { previewExperiences: prevPreviewExperiences, token: prevToken } = prevProps;
         const { currentFileId } = this.state;
         const hasFileIdChanged = prevState.currentFileId !== currentFileId;
         const hasTokenChanged = prevToken !== token;
+        const haveExperiencesChanged = prevPreviewExperiences !== previewExperiences;
 
         if (hasFileIdChanged) {
             this.destroyPreview();
@@ -374,6 +379,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.loadPreview();
         } else if (hasTokenChanged) {
             this.updatePreviewToken();
+        }
+
+        if (haveExperiencesChanged && this.preview && this.preview.updateExperiences) {
+            this.preview.updateExperiences(previewExperiences);
         }
     }
 
@@ -746,6 +755,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             fileOptions,
             onAnnotatorEvent,
             onAnnotator,
+            previewExperiences,
             showAnnotationsControls,
             token: tokenOrTokenFunction,
             ...rest
@@ -784,6 +794,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             fileOptions: fileOpts,
             header: 'none',
             headerElement: `#${this.id} .bcpr-PreviewHeader`,
+            experiences: previewExperiences,
             showAnnotations: this.canViewAnnotations(),
             showAnnotationsControls,
             showDownload: this.canDownload(),

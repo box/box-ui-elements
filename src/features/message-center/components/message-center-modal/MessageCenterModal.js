@@ -49,7 +49,20 @@ function MessageCenterModal({
     intl,
     overscanRowCount = 1,
 }: Props & InjectIntlProvidedProps) {
-    const categories = React.useMemo(() => {
+    const categories: Array<{ displayText: string, value: string }> | null = React.useMemo(() => {
+        if (!Array.isArray(messages)) {
+            return null;
+        }
+
+        const messageCategoriesSet = new Set<string>();
+        messages.forEach(({ templateParams: { category } }) => {
+            messageCategoriesSet.add(category);
+        });
+
+        if (messageCategoriesSet.size <= 1) {
+            return null;
+        }
+
         return [
             {
                 value: ALL,
@@ -68,10 +81,10 @@ function MessageCenterModal({
                 displayText: intl.formatMessage(intlMessages.boxEducation),
             },
         ];
-    }, [intl]);
+    }, [intl, messages]);
     const listRef = React.useRef(null);
     const isMouseInTitleRef = React.useRef(false);
-    const [category, setCategory] = React.useState(categories[0].value);
+    const [category, setCategory] = React.useState(ALL);
     const [isExpanded, setIsExpanded] = React.useState(true);
     const [dimensions, setDimensions] = React.useState({ width: 0, height: 0 });
     const scrollRef = React.useRef<{ scrollbarRef: React.ElementRef<typeof Scrollbar> } | null>(null);
@@ -94,23 +107,25 @@ function MessageCenterModal({
             <div className="bdl-MessageCenterModal-whatsNew">
                 <FormattedMessage {...intlMessages.title} />
             </div>
-            <AnimateHeight duration={300} height={isExpanded ? 'auto' : 0}>
-                <section className="bdl-MessageCenterModal-categorySelector">
-                    <CategorySelector
-                        currentCategory={category}
-                        categories={categories}
-                        onSelect={value => {
-                            cache.clearAll();
-                            setCategory(value);
-                        }}
-                    />
-                </section>
-            </AnimateHeight>
+            {categories && (
+                <AnimateHeight duration={300} height={isExpanded ? 'auto' : 0}>
+                    <section className="bdl-MessageCenterModal-categorySelector">
+                        <CategorySelector
+                            currentCategory={category}
+                            categories={categories}
+                            onSelect={value => {
+                                cache.clearAll();
+                                setCategory(value);
+                            }}
+                        />
+                    </section>
+                </AnimateHeight>
+            )}
         </section>
     );
 
     const filteredMessages = React.useMemo(() => {
-        if (!messages || messages instanceof Error) {
+        if (!Array.isArray(messages)) {
             return [];
         }
 
@@ -227,7 +242,6 @@ function MessageCenterModal({
             className="bdl-MessageCenterModal"
             data-resin-component="messageCenterModal"
             data-testid="messagecentermodal"
-            focusElementSelector=".bdl-CategorySelector .is-selected"
             isOpen
             onRequestClose={onRequestClose}
             title={title}

@@ -247,6 +247,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             wrapper.find(DeleteConfirmation).prop('onDeleteConfirm')();
 
             expect(onDelete).toHaveBeenCalledWith({ id: mockAnnotation.id, permissions });
+            expect(wrapper.exists(DeleteConfirmation)).toBe(false);
         });
     });
 
