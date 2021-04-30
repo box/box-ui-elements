@@ -896,7 +896,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             code: errorCode,
             message: fileError.message,
         };
-        this.setState({ error, file: undefined });
+        this.setState({ error, file: undefined, isLoading: false });
         onError(fileError, errorCode, {
             error: fileError,
         });

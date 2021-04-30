@@ -592,6 +592,12 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.file).toBeUndefined();
             expect(onError).toHaveBeenCalled();
         });
+
+        test('should set isLoading to false', () => {
+            instance.setState({ isLoading: true });
+            instance.fetchFileErrorCallback({ code: 'specialCode', message: 'specialMessage' }, 'code');
+            expect(instance.state.isLoading).toBe(false);
+        });
     });
 
     describe('getTotalFileFetchTime()', () => {
