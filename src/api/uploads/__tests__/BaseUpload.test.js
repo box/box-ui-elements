@@ -1,5 +1,5 @@
 import BaseUpload from '../BaseUpload';
-import { DEFAULT_HOSTNAME_UPLOAD, DEFAULT_HOSTNAME_UPLOAD_APP } from '../../../constants';
+import { DEFAULT_HOSTNAME_UPLOAD, DEFAULT_HOSTNAME_UPLOAD_APP, DEFAULT_HOSTNAME_UPLOAD_GOV } from '../../../constants';
 
 let upload;
 let clock;
@@ -182,6 +182,26 @@ describe('api/uploads/BaseUpload', () => {
             const preflightResponse = {
                 data: {
                     upload_url: `${DEFAULT_HOSTNAME_UPLOAD_APP}/api/2.0/files/1234/content?upload_session_id=123&protected_params=123`,
+                    upload_token: null,
+                    download_url: null,
+                },
+            };
+
+            upload.preflightSuccessReachabilityHandler(preflightResponse);
+
+            expect(upload.preflightSuccessHandler).toHaveBeenCalledWith(preflightResponse);
+            expect(upload.uploadsReachability.isReachable).not.toHaveBeenCalled();
+        });
+
+        test('should call preflightSuccessHandler, without doing a reachability test if DEFAULT_HOSTNAME_UPLOAD_GOV is provided as uploadUrl', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.uploadsReachability = {
+                isReachable: jest.fn(),
+            };
+
+            const preflightResponse = {
+                data: {
+                    upload_url: `${DEFAULT_HOSTNAME_UPLOAD_GOV}/api/2.0/files/1234/content?upload_session_id=123&protected_params=123`,
                     upload_token: null,
                     download_url: null,
                 },

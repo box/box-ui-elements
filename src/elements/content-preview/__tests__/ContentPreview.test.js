@@ -24,6 +24,7 @@ describe('elements/content-preview/ContentPreview', () => {
             this.show = jest.fn();
             this.updateToken = jest.fn();
             this.addListener = jest.fn();
+            this.updateExperiences = jest.fn();
         };
         global.performance = {
             now: jest.fn().mockReturnValue(PERFORMANCE_TIME),
@@ -591,6 +592,12 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.file).toBeUndefined();
             expect(onError).toHaveBeenCalled();
         });
+
+        test('should set isLoading to false', () => {
+            instance.setState({ isLoading: true });
+            instance.fetchFileErrorCallback({ code: 'specialCode', message: 'specialMessage' }, 'code');
+            expect(instance.state.isLoading).toBe(false);
+        });
     });
 
     describe('getTotalFileFetchTime()', () => {
@@ -954,6 +961,15 @@ describe('elements/content-preview/ContentPreview', () => {
                 token: 'bar',
             });
             expect(instance.updatePreviewToken).toBeCalledTimes(1);
+        });
+
+        test('should update experiences in preview when previewExperiences changes', async () => {
+            instance.preview = new global.Box.Preview();
+            wrapper.setProps({
+                previewExperiences: {},
+            });
+
+            expect(instance.preview.updateExperiences).toBeCalledTimes(1);
         });
     });
 
