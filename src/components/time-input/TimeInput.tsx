@@ -18,6 +18,11 @@ const messages = defineMessages({
         description: 'Error message for invalid time formats. "HH:MM A" should be localized.',
         id: 'boxui.timeInput.invalidTimeError',
     },
+    emptyTimeError: {
+        defaultMessage: 'Required field. Enter a time in the format HH:MM A.',
+        description: 'Error message for empty time formats. "HH:MM A" should be localized.',
+        id: 'boxui.timeInput.emptyTimeError',
+    },
 });
 
 type TimeInputEventHandler = ({
@@ -54,6 +59,7 @@ export interface TimeInputProps extends WrappedComponentProps {
      * The parsed display time, along with the hours and minutes in 24-hour format, will be passed to the handler.
      */
     onChange?: TimeInputEventHandler;
+    onError?: (error: React.ReactNode) => void;
 }
 
 const TimeInput = ({
@@ -67,6 +73,7 @@ const TimeInput = ({
     label,
     onBlur,
     onChange,
+    onError,
 }: TimeInputProps) => {
     const [displayTime, setDisplayTime] = React.useState<string>(initialDate ? intl.formatTime(initialDate) : '');
     const [error, setError] = React.useState<React.ReactElement | undefined>(undefined);
@@ -78,9 +85,8 @@ const TimeInput = ({
      * @returns
      */
     const formatDisplayTime = (latestValue: string = displayTime) => {
-        if (!latestValue) return;
         try {
-            const { hours: parsedHours, minutes: parsedMinutes } = parseTimeFromString(latestValue);
+            const { hours: parsedHours, minutes: parsedMinutes } = parseTimeFromString(latestValue, isRequired);
             const date = new Date();
             date.setHours(parsedHours);
             date.setMinutes(parsedMinutes);
@@ -89,7 +95,10 @@ const TimeInput = ({
             if (onBlur) onBlur({ displayTime: newDisplayTime, hours: parsedHours, minutes: parsedMinutes });
             if (onChange) onChange({ displayTime: newDisplayTime, hours: parsedHours, minutes: parsedMinutes });
         } catch (e) {
-            setError(<FormattedMessage {...messages.invalidTimeError} />);
+            const errorMessage = latestValue ? messages.invalidTimeError : messages.emptyTimeError;
+            const updatedError = <FormattedMessage {...errorMessage} />;
+            setError(updatedError);
+            if (onError) onError(updatedError);
         }
     };
 

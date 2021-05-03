@@ -40,9 +40,9 @@ describe('src/components/time-input/TimeInput', () => {
         expect(wrapper.exists(TextInput)).toBe(true);
     });
 
-    test('should format input on blur', () => {
+    test.each([true, false])('should format input on blur when isRequired is %s', isRequired => {
         const onBlurSpy = jest.fn();
-        const wrapper = getWrapper({ intl: intlFake, onBlur: onBlurSpy });
+        const wrapper = getWrapper({ intl: intlFake, isRequired, onBlur: onBlurSpy });
         const inputField = wrapper.find('input');
         act(() => {
             inputField.simulate('change', {
@@ -54,45 +54,53 @@ describe('src/components/time-input/TimeInput', () => {
         act(() => {
             inputField.simulate('blur');
         });
-        expect(parseTimeFromString).toHaveBeenCalledWith(VALID_INPUT);
+        expect(parseTimeFromString).toHaveBeenCalledWith(VALID_INPUT, isRequired);
         expect(intlFake.formatTime).toHaveBeenCalled();
         expect(onBlurSpy).toHaveBeenCalledWith(FORMATTED_TIME_OBJECT);
     });
 
-    test('should not format input on blur when value has an invalid format', () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (parseTimeFromString as jest.Mock<any>).mockImplementation(() => {
-            throw new SyntaxError();
-        });
-        const onBlurSpy = jest.fn();
-        const onChangeSpy = jest.fn();
-        const wrapper = getWrapper({
-            intl: intlFake,
-            onBlur: onBlurSpy,
-            onChange: onChangeSpy,
-        });
-        const inputField = wrapper.find('input');
-        act(() => {
-            inputField.simulate('change', {
-                target: {
-                    value: INVALID_INPUT,
-                },
+    test.each([true, false])(
+        'should not format input on blur when value has an invalid format and isRequired is %s',
+        isRequired => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (parseTimeFromString as jest.Mock<any>).mockImplementation(() => {
+                throw new SyntaxError();
             });
-        });
-        act(() => {
-            inputField.simulate('blur');
-        });
-        expect(parseTimeFromString).toHaveBeenCalledWith(INVALID_INPUT);
-        expect(intlFake.formatTime).not.toHaveBeenCalled();
-        expect(onChangeSpy).not.toHaveBeenCalledWith(FORMATTED_TIME_OBJECT);
-        expect(onBlurSpy).not.toHaveBeenCalled();
-    });
+            const onBlurSpy = jest.fn();
+            const onChangeSpy = jest.fn();
+            const onErrorSpy = jest.fn();
+            const wrapper = getWrapper({
+                intl: intlFake,
+                isRequired,
+                onBlur: onBlurSpy,
+                onChange: onChangeSpy,
+                onError: onErrorSpy,
+            });
+            const inputField = wrapper.find('input');
+            act(() => {
+                inputField.simulate('change', {
+                    target: {
+                        value: INVALID_INPUT,
+                    },
+                });
+            });
+            act(() => {
+                inputField.simulate('blur');
+            });
+            expect(parseTimeFromString).toHaveBeenCalledWith(INVALID_INPUT, isRequired);
+            expect(intlFake.formatTime).not.toHaveBeenCalled();
+            expect(onChangeSpy).not.toHaveBeenCalledWith(FORMATTED_TIME_OBJECT);
+            expect(onBlurSpy).not.toHaveBeenCalled();
+            expect(onErrorSpy).toHaveBeenCalled();
+        },
+    );
 
-    test('should format input on change', () => {
+    test.each([true, false])('should format input on change when isRequired is %s', isRequired => {
         const onBlurSpy = jest.fn();
         const onChangeSpy = jest.fn();
         const wrapper = getWrapper({
             intl: intlFake,
+            isRequired,
             onBlur: onBlurSpy,
             onChange: onChangeSpy,
         });
@@ -104,7 +112,7 @@ describe('src/components/time-input/TimeInput', () => {
                 },
             });
         });
-        expect(parseTimeFromString).toHaveBeenCalledWith(VALID_INPUT);
+        expect(parseTimeFromString).toHaveBeenCalledWith(VALID_INPUT, isRequired);
         expect(intlFake.formatTime).toHaveBeenCalled();
         expect(onBlurSpy).toHaveBeenCalledWith(FORMATTED_TIME_OBJECT);
         expect(onChangeSpy).toHaveBeenCalledWith(FORMATTED_TIME_OBJECT);
