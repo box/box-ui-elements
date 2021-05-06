@@ -90,15 +90,22 @@ const VALID_TIME_INPUTS = [
     ['下午4:32', { hours: 16, minutes: 32 }],
 ];
 
-const INVALID_TIME_INPUTS = ['abcde', '', undefined];
-const OUT_OF_RANGE_INPUT = ['154309', '4449292 p.m.', '4444', '3:66 p.m.', '55:55'];
+const OUT_OF_RANGE_INPUTS = ['154309', '4449292 p.m.', '4444', '3:66 p.m.', '55:55'];
 
 describe('src/components/time-input/TimeInputUtils', () => {
     test.each(VALID_TIME_INPUTS)('should return true for valid input %s', input => {
         expect(isValidTime(input as string)).toBe(true);
     });
 
-    test.each(INVALID_TIME_INPUTS)('should return false for invalid input %s', input => {
+    test.each`
+        input             | inputName
+        ${''}             | ${'empty string'}
+        ${null}           | ${'null'}
+        ${undefined}      | ${'undefined'}
+        ${'abcde'}        | ${'all alphabetical characters'}
+        ${'%!@#$%^'}      | ${'all symbol characters'}
+        ${'%!@#$%^abcde'} | ${'all alphabetical and symbol characters'}
+    `('should return false when input is $inputName', input => {
         expect(isValidTime(input)).toBe(false);
     });
 
@@ -106,7 +113,25 @@ describe('src/components/time-input/TimeInputUtils', () => {
         expect(parseTimeFromString(input as string)).toEqual(parsedTime);
     });
 
-    test.each(OUT_OF_RANGE_INPUT)('should throw a SyntaxError for input %s', input => {
+    test.each(OUT_OF_RANGE_INPUTS)('should throw a SyntaxError for input %s', input => {
         expect(() => parseTimeFromString(input)).toThrow(SyntaxError);
+    });
+
+    test.each`
+        input        | inputName
+        ${''}        | ${'empty string'}
+        ${null}      | ${'null'}
+        ${undefined} | ${'undefined'}
+    `('should throw a SyntaxError when input is $inputName and isRequired is true', ({ input }) => {
+        expect(() => parseTimeFromString(input, true)).toThrow(SyntaxError);
+    });
+
+    test.each`
+        input        | inputName
+        ${''}        | ${'empty string'}
+        ${null}      | ${'null'}
+        ${undefined} | ${'undefined'}
+    `('should return the default parsed time when input is $inputName and isRequired is false', ({ input }) => {
+        expect(parseTimeFromString(input)).toEqual({ hours: 0, minutes: 0 });
     });
 });

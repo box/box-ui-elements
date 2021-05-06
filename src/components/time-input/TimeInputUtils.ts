@@ -19,13 +19,15 @@ export const isValidTime = (input?: string): boolean => {
 /**
  * Parse an input string and convert it into an object containing numerical hours and minutes.
  * @param input - input string to be converted
+ * @param isRequired - whether the input is required
  * @returns
  */
-export const parseTimeFromString = (input?: string): { hours: number; minutes: number } => {
-    if (!input) return DEFAULT_PARSED_TIME;
+export const parseTimeFromString = (input?: string, isRequired?: boolean): { hours: number; minutes: number } => {
+    // Return the default time (midnight) if the input is empty, but not required
+    if (!input && !isRequired) return DEFAULT_PARSED_TIME;
 
-    // Throw an error if the input fails the initial regex
-    if (!isValidTime(input)) {
+    // Throw an error if the input is empty and required, or if the input fails the initial regex
+    if (!input || !isValidTime(input)) {
         throw new SyntaxError();
     }
 
