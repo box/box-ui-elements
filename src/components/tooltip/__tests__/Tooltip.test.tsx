@@ -282,6 +282,14 @@ describe('components/tooltip/Tooltip', () => {
 
             expect(wrapper.prop('offset')).toEqual(offset);
         });
+
+        test('should render correctly with tetherElementClassName', () => {
+            expect(
+                getWrapper({
+                    tetherElementClassName: 'tether-element-class-name',
+                }),
+            ).toMatchSnapshot();
+        });
     });
 
     describe('should stop event propagation when stopBubble is set', () => {
