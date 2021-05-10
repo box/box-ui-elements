@@ -273,7 +273,6 @@ class Flyout extends React.Component<Props, State> {
         const { openOnHover, openOnHoverDelayTimeout } = this.props;
         if (openOnHover) {
             clearTimeout(this.hoverDelay);
-
             this.hoverDelay = setTimeout(() => {
                 this.openOverlay();
             }, openOnHoverDelayTimeout);
@@ -288,6 +287,13 @@ class Flyout extends React.Component<Props, State> {
             this.hoverDelay = setTimeout(() => {
                 this.closeOverlay();
             }, openOnHoverDelayTimeout);
+        }
+    };
+
+    handleKeyPress = event => {
+        if (event.key === 'Enter') {
+            this.openOverlay();
+            this.focusButton();
         }
     };
 
@@ -379,8 +385,10 @@ class Flyout extends React.Component<Props, State> {
             key: this.overlayButtonID,
             role: 'button',
             onClick: this.handleButtonClick,
+            onKeyPress: this.handleKeyPress,
             onMouseEnter: this.handleButtonHover,
             onMouseLeave: this.handleButtonHoverLeave,
+            tabindex: '0',
             'aria-haspopup': 'true',
             'aria-expanded': isVisible ? 'true' : 'false',
         };
