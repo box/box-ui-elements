@@ -204,17 +204,6 @@ class Tooltip extends React.Component<TooltipProps, State> {
         return showTooltip;
     };
 
-    tooltipText = this.props.text
-        ? typeof this.props.text === 'object'
-            ? this.props.text.props.defaultMessage
-            : String(this.props.text)
-        : '';
-
-    labelInName = () => {
-        const ariaLabel = React.Children.only(this.props.children).props['aria-label'];
-        return ariaLabel && this.tooltipText !== ariaLabel;
-    };
-
     render() {
         const {
             bodyElement,
@@ -233,6 +222,12 @@ class Tooltip extends React.Component<TooltipProps, State> {
             theme,
         } = this.props;
 
+        const tooltipText =
+            text && typeof text === 'object' ? (text as React.ReactElement).props.defaultMessage : String(text);
+
+        const ariaLabel = (React.Children.only(children) as React.ReactElement).props['aria-label'];
+        const labelInName = ariaLabel && tooltipText !== ariaLabel;
+
         // If the tooltip is disabled just render the children
         if (isDisabled) {
             return React.Children.only(children);
@@ -240,7 +235,6 @@ class Tooltip extends React.Component<TooltipProps, State> {
 
         const isControlled = this.isControlled();
         const showTooltip = this.isShown();
-        let ariaHidden;
 
         const withCloseButton = showCloseButton && isControlled;
         const tetherPosition = typeof position === 'string' ? positions[position] : position;
@@ -266,11 +260,10 @@ class Tooltip extends React.Component<TooltipProps, State> {
         }
 
         if (showTooltip) {
-            ariaHidden = this.labelInName();
-            if (ariaHidden) {
+            if (labelInName) {
                 componentProps['aria-describedby'] = this.tooltipID;
             } else {
-                componentProps['aria-label'] = this.tooltipText;
+                componentProps['aria-label'] = tooltipText;
             }
 
             if (theme === TooltipTheme.ERROR) {
@@ -343,12 +336,12 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 onContextMenu={this.handleTooltipEvent}
                 onKeyPress={this.handleTooltipEvent}
             >
-                <div role="tooltip" aria-live="polite" aria-hidden={!ariaHidden}>
+                <div role="tooltip" aria-live="polite" aria-hidden={!labelInName}>
                     {tooltipInner}
                 </div>
             </div>
         ) : (
-            <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite" aria-hidden={!ariaHidden}>
+            <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite" aria-hidden={!labelInName}>
                 {tooltipInner}
             </div>
         );
