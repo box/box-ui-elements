@@ -2,6 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 import TetherComponent from 'react-tether';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
 
 import TetherPosition from '../../common/tether-positions';
 import IconClose from '../../icon/fill/X16';
@@ -79,7 +80,7 @@ export type DefaultTooltipProps = {
     theme: TooltipTheme;
 };
 
-export type TooltipProps = {
+export interface TooltipProps extends WrappedComponentProps, DefaultTooltipProps {
     /** An HTML element to append the tooltip container into (otherwise appends to body) */
     bodyElement?: HTMLElement;
     /** A React element to put the tooltip on */
@@ -102,7 +103,7 @@ export type TooltipProps = {
     tetherElementClassName?: string;
     /** Text to show in the tooltip */
     text?: React.ReactNode;
-} & Partial<DefaultTooltipProps>;
+}
 
 type State = {
     isShown: boolean;
@@ -220,10 +221,17 @@ class Tooltip extends React.Component<TooltipProps, State> {
             tetherElementClassName,
             text,
             theme,
+            intl,
         } = this.props;
 
-        const tooltipText =
-            text && typeof text === 'object' ? (text as React.ReactElement).props.defaultMessage : String(text);
+        const textElement = text as React.ReactElement;
+        let tooltipText;
+
+        if (text && typeof textElement === 'string') {
+            tooltipText = String(text);
+        } else if (text && typeof text === 'object' && textElement.props.id) {
+            tooltipText = intl.formatMessage(textElement.props);
+        }
 
         const ariaLabel = (React.Children.only(children) as React.ReactElement).props['aria-label'];
         const labelInName = ariaLabel && tooltipText !== ariaLabel;
@@ -262,7 +270,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
         if (showTooltip) {
             if (labelInName) {
                 componentProps['aria-describedby'] = this.tooltipID;
-            } else {
+            } else if (tooltipText) {
                 componentProps['aria-label'] = tooltipText;
             }
 
@@ -355,4 +363,4 @@ class Tooltip extends React.Component<TooltipProps, State> {
     }
 }
 
-export default Tooltip;
+export default injectIntl(Tooltip);
