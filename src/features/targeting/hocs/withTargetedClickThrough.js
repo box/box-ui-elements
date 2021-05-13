@@ -41,7 +41,7 @@ function withTargetedClickThrough<Config>(
         return (
             <WrappedComponent showCloseButton stopBubble {...rest} isShown={shouldShow} onDismiss={onClose}>
                 <span
-                    className="bdl-targeted-click-through bdl-ButtonWrapper"
+                    className="bdl-targeted-click-through"
                     data-targeting="click-through"
                     data-testid="with-targeted-click-span"
                     onClickCapture={handleOnComplete}
