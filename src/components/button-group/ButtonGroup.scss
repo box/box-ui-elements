@@ -85,9 +85,12 @@
         > .btn:focus {
             z-index: 3; /* place on top of all other buttons for accessibility */
         }
+    }
 
-        &.bdl-is-disabled,
-        &.is-disabled {
+    &.bdl-is-disabled,
+    &.is-disabled {
+        &,
+        & > .bdl-targeted-click-through {
             > .btn,
             > .bdl-Button {
                 color: $bdl-gray-62;
