@@ -224,17 +224,17 @@ class Tooltip extends React.Component<TooltipProps, State> {
             intl,
         } = this.props;
 
-        const textElement = text as React.ReactElement;
-        let tooltipText;
-
-        if (text && typeof textElement === 'string') {
-            tooltipText = String(text);
-        } else if (text && typeof text === 'object' && textElement.props.id) {
-            tooltipText = intl.formatMessage(textElement.props);
+        let tooltipText = '';
+        if (text) {
+            if (typeof text === 'string') {
+                tooltipText = text;
+            } else if (React.isValidElement(text) && (text as React.ReactElement).props.id) {
+                tooltipText = intl.formatMessage((text as React.ReactElement).props);
+            }
         }
 
         const ariaLabel = (React.Children.only(children) as React.ReactElement).props['aria-label'];
-        const labelInName = ariaLabel && tooltipText !== ariaLabel;
+        const isChildLabelDifferentThanTooltipText = ariaLabel && tooltipText !== ariaLabel;
 
         // If the tooltip is disabled just render the children
         if (isDisabled) {
@@ -267,8 +267,9 @@ class Tooltip extends React.Component<TooltipProps, State> {
             });
         }
 
+        console.log(tooltipText);
         if (showTooltip) {
-            if (labelInName) {
+            if (isChildLabelDifferentThanTooltipText) {
                 componentProps['aria-describedby'] = this.tooltipID;
             } else if (tooltipText) {
                 componentProps['aria-label'] = tooltipText;
@@ -344,12 +345,18 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 onContextMenu={this.handleTooltipEvent}
                 onKeyPress={this.handleTooltipEvent}
             >
-                <div role="tooltip" aria-live="polite" aria-hidden={!labelInName}>
+                <div role="tooltip" aria-live="polite" aria-hidden={!isChildLabelDifferentThanTooltipText}>
                     {tooltipInner}
                 </div>
             </div>
         ) : (
-            <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite" aria-hidden={!labelInName}>
+            <div
+                className={classes}
+                id={this.tooltipID}
+                role="tooltip"
+                aria-live="polite"
+                aria-hidden={!isChildLabelDifferentThanTooltipText}
+            >
                 {tooltipInner}
             </div>
         );
