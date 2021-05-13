@@ -8,7 +8,7 @@ exports[`features/targeting/hocs/withTargetedClickThrough render() should render
   stopBubble={true}
 >
   <span
-    className="bdl-targeted-click-through"
+    className="bdl-targeted-click-through bdl-ButtonWrapper"
     data-targeting="click-through"
     data-testid="with-targeted-click-span"
     onClickCapture={[Function]}
