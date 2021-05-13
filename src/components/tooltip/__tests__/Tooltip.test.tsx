@@ -2,17 +2,24 @@
 
 import * as React from 'react';
 import sinon from 'sinon';
-import { shallow } from 'enzyme';
-import Tooltip, { TooltipPosition, TooltipTheme } from '../Tooltip';
+import { shallow, mount } from 'enzyme';
+import { MessageDescriptor } from 'react-intl';
+import { TooltipBase as Tooltip, TooltipPosition, TooltipTheme } from '../Tooltip';
 import TetherPosition from '../../../common/tether-positions';
 
 const sandbox = sinon.sandbox.create();
 
 describe('components/tooltip/Tooltip', () => {
+    const intlFake: any = {
+        formatMessage: (message: MessageDescriptor) => message.defaultMessage,
+        formatDate: (date: string | number | Date | undefined) => (date ? date.toString() : ''),
+        locale: 'en-US',
+    };
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const getWrapper = (props: Record<string, any>) =>
-        shallow<Tooltip>(
-            <Tooltip text="hi" {...props}>
+        mount<Tooltip>(
+            <Tooltip text="hi" {...props} intl={intlFake}>
                 <div>Hello</div>
             </Tooltip>,
         );
@@ -69,7 +76,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should render default component', () => {
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip text="hi" intl={intlFake}>
                     <button />
                 </Tooltip>,
             );
@@ -97,7 +104,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should not add tabindex if isTabbable is false', () => {
             const wrapper = shallow(
-                <Tooltip isShown isTabbable={false} text="hi">
+                <Tooltip isShown isTabbable={false} text="hi" intl={intlFake}>
                     <button />
                 </Tooltip>,
             );
@@ -108,8 +115,8 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should show tooltip when isShown state is true', () => {
             const wrapper = shallow(
-                <Tooltip text="hi">
-                    <button />
+                <Tooltip text="hi" intl={intlFake}>
+                    <button aria-label="tales" />
                 </Tooltip>,
             );
             wrapper.setState({ isShown: true });
@@ -125,7 +132,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should render tooltip class when specified', () => {
             const wrapper = shallow(
-                <Tooltip className="testing" isShown text="hi">
+                <Tooltip className="testing" isShown text="hi" intl={intlFake}>
                     <button />
                 </Tooltip>,
             );
@@ -154,7 +161,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should render correct attachments when position is specified', () => {
             const wrapper = shallow(
-                <Tooltip position={TooltipPosition.MIDDLE_RIGHT} text="hi">
+                <Tooltip position={TooltipPosition.MIDDLE_RIGHT} text="hi" intl={intlFake}>
                     <button />
                 </Tooltip>,
             );
@@ -169,7 +176,7 @@ describe('components/tooltip/Tooltip', () => {
                 targetAttachment: TetherPosition.BOTTOM_RIGHT,
             };
             const wrapper = shallow(
-                <Tooltip position={customPosition} text="hi">
+                <Tooltip position={customPosition} text="hi" intl={intlFake}>
                     <button />
                 </Tooltip>,
             );
@@ -182,7 +189,7 @@ describe('components/tooltip/Tooltip', () => {
             const bodyEl = document.createElement('div');
 
             const wrapper = shallow(
-                <Tooltip bodyElement={bodyEl} text="hi">
+                <Tooltip bodyElement={bodyEl} text="hi" intl={intlFake}>
                     <button />
                 </Tooltip>,
             );
@@ -203,8 +210,8 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should show tooltip when isShown prop is true', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi">
-                    <button />
+                <Tooltip isShown text="hi" intl={intlFake}>
+                    <button aria-label="test" />
                 </Tooltip>,
             );
             const component = wrapper.childAt(0);
@@ -226,8 +233,8 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should render error class when theme is error', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi" theme={TooltipTheme.ERROR}>
-                    <button />
+                <Tooltip isShown text="hi" theme={TooltipTheme.ERROR} intl={intlFake}>
+                    <button aria-label="test" />
                 </Tooltip>,
             );
             const component = wrapper.childAt(0);
@@ -256,7 +263,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should match snapshot when stopBubble is set', () => {
             const wrapper = shallow(
-                <Tooltip isShown stopBubble text="hi">
+                <Tooltip isShown stopBubble text="hi" intl={intlFake}>
                     <button />
                 </Tooltip>,
             );
@@ -265,7 +272,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('event capture div is not present when stopBubble is not set', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi">
+                <Tooltip isShown text="hi" intl={intlFake}>
                     <button />
                 </Tooltip>,
             );
@@ -275,7 +282,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should render with custom offset when provided', () => {
             const offset = '0 10px';
             const wrapper = shallow(
-                <Tooltip offset={offset} text="hi">
+                <Tooltip offset={offset} text="hi" intl={intlFake}>
                     <button />
                 </Tooltip>,
             );
@@ -295,7 +302,7 @@ describe('components/tooltip/Tooltip', () => {
     describe('should stop event propagation when stopBubble is set', () => {
         test.each([['onClick', 'onContextMenu', 'onKeyPress']])('when %o', onEvent => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi" stopBubble>
+                <Tooltip isShown text="hi" stopBubble intl={intlFake}>
                     <button />
                 </Tooltip>,
             );
@@ -317,20 +324,21 @@ describe('components/tooltip/Tooltip', () => {
     describe('closeTooltip()', () => {
         test('should update the wasClosedByUser state', () => {
             const wrapper = shallow<Tooltip>(
-                <Tooltip text="hi">
+                <Tooltip text="hi" isShown intl={intlFake}>
                     <button />
                 </Tooltip>,
             );
 
-            expect(wrapper.state('wasClosedByUser')).toBe(false);
+            const { tooltipID } = wrapper.instance();
+            expect(wrapper.find(`#${tooltipID}`).exists()).toBeTruthy();
             wrapper.instance().closeTooltip();
-            expect(wrapper.state('wasClosedByUser')).toBe(true);
+            expect(wrapper.find(`#${tooltipID}`).exists()).toBeFalsy();
         });
 
         test('should call onDismiss if provided', () => {
             const onDismissMock = jest.fn();
             const wrapper = shallow<Tooltip>(
-                <Tooltip text="hi" onDismiss={onDismissMock}>
+                <Tooltip text="hi" onDismiss={onDismissMock} intl={intlFake}>
                     <button />
                 </Tooltip>,
             );
@@ -344,7 +352,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should correctly handle mouseenter events', () => {
             const onMouseEnter = sinon.spy();
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip text="hi" intl={intlFake}>
                     <button onMouseEnter={onMouseEnter} />
                 </Tooltip>,
             );
@@ -359,7 +367,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should correctly handle mouseleave events', () => {
             const onMouseLeave = sinon.spy();
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip text="hi" intl={intlFake}>
                     <button onMouseLeave={onMouseLeave} />
                 </Tooltip>,
             );
@@ -375,7 +383,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should correctly handle focus events', () => {
             const onFocus = sinon.spy();
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip text="hi" intl={intlFake}>
                     <button onFocus={onFocus} />
                 </Tooltip>,
             );
@@ -390,7 +398,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should correctly handle blur events', () => {
             const onBlur = sinon.spy();
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip text="hi" intl={intlFake}>
                     <button onBlur={onBlur} />
                 </Tooltip>,
             );
@@ -405,7 +413,7 @@ describe('components/tooltip/Tooltip', () => {
     describe('handleKeyDown()', () => {
         test('should update isShown state only when escape key is pressed', () => {
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip text="hi" intl={intlFake}>
                     <button />
                 </Tooltip>,
             );
@@ -417,7 +425,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should not update isShown state only when some other key is pressed', () => {
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip text="hi" intl={intlFake}>
                     <button />
                 </Tooltip>,
             );
@@ -430,7 +438,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should call keydown handler of component when specified', () => {
             const onKeyDown = sinon.spy();
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip text="hi" intl={intlFake}>
                     <button onKeyDown={onKeyDown} />
                 </Tooltip>,
             );

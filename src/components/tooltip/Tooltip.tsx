@@ -231,8 +231,11 @@ class Tooltip extends React.Component<TooltipProps, State> {
         if (text) {
             if (typeof text === 'string') {
                 tooltipText = text;
-            } else if (React.isValidElement(text) && getProp(text, 'props.id')) {
-                tooltipText = intl.formatMessage(getProp(text, 'props'));
+            } else if (React.isValidElement(text) && getProp(text, 'props')) {
+                const { id, defaultMessage, description, values } = getProp(text, 'props');
+                if (id && defaultMessage) {
+                    tooltipText = intl.formatMessage({ id, defaultMessage, description }, values);
+                }
             }
         }
         if (getProp(children, 'props')) {
@@ -373,4 +376,5 @@ class Tooltip extends React.Component<TooltipProps, State> {
     }
 }
 
+export { Tooltip as TooltipBase };
 export default injectIntl(Tooltip);
