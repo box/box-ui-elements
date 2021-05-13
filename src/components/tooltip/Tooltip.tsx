@@ -1,6 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
+import getProp from 'lodash/get';
 import TetherComponent from 'react-tether';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 
@@ -224,16 +225,19 @@ class Tooltip extends React.Component<TooltipProps, State> {
             intl,
         } = this.props;
 
-        let tooltipText = '';
+        let ariaLabel;
+        let tooltipText;
+
         if (text) {
             if (typeof text === 'string') {
                 tooltipText = text;
-            } else if (React.isValidElement(text) && (text as React.ReactElement).props.id) {
-                tooltipText = intl.formatMessage((text as React.ReactElement).props);
+            } else if (React.isValidElement(text) && getProp(text, 'props.id')) {
+                tooltipText = intl.formatMessage(getProp(text, 'props'));
             }
         }
-
-        const ariaLabel = (React.Children.only(children) as React.ReactElement).props['aria-label'];
+        if (getProp(children, 'props')) {
+            ariaLabel = getProp(children, 'props.aria-label');
+        }
         const isChildLabelDifferentThanTooltipText = ariaLabel && tooltipText !== ariaLabel;
 
         // If the tooltip is disabled just render the children
@@ -267,7 +271,6 @@ class Tooltip extends React.Component<TooltipProps, State> {
             });
         }
 
-        console.log(tooltipText);
         if (showTooltip) {
             if (isChildLabelDifferentThanTooltipText) {
                 componentProps['aria-describedby'] = this.tooltipID;
