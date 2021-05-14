@@ -2,6 +2,7 @@
 import * as React from 'react';
 import TetherComponent from 'react-tether';
 import uniqueId from 'lodash/uniqueId';
+import { KEYS } from '../../constants';
 
 import './Flyout.scss';
 
@@ -290,8 +291,8 @@ class Flyout extends React.Component<Props, State> {
         }
     };
 
-    handleKeyPress = (e: KeyboardEvent) => {
-        if (e.key === 'Enter') {
+    handleKeyPress = () => {
+        if (KEYS.enter) {
             this.openOverlay();
             this.focusButton();
         }
