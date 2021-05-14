@@ -231,7 +231,7 @@ describe('components/tooltip/Tooltip', () => {
             expect(tooltip.text()).toEqual('hi');
         });
 
-        test('should have text equal to text property if it is a String', () => {
+        test('should have tooltipText equal to text property if it is a String', () => {
             const wrapper = shallow(
                 <Tooltip isShown text="hi" intl={intlFake}>
                     <button />
@@ -241,7 +241,7 @@ describe('components/tooltip/Tooltip', () => {
             expect(tooltip.text()).toEqual('hi');
         });
 
-        test('should set tooltipText even when text property is an intl-message', () => {
+        test('should set tooltipText when text property is an intl-message', () => {
             const message = 'testing message';
             const intlMessage = React.createElement(
                 'FormattedMessage',
@@ -262,7 +262,7 @@ describe('components/tooltip/Tooltip', () => {
             expect(tooltip.text()).toEqual(message);
         });
 
-        test('should not set aria-label when text property is an intl-message', () => {
+        test('should not set aria-label when text property is an Children component', () => {
             const Foo = () => {
                 return <div>foo</div>;
             };
