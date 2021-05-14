@@ -241,23 +241,40 @@ describe('components/tooltip/Tooltip', () => {
             expect(tooltip.text()).toEqual('hi');
         });
 
-        // test.only('set tooltipText even when text property is an intl-message', () => {
-        //     const message = 'testing message';
-        //     const intlMessage: React.ReactNode = {
-        //         props: {
-        //             id: 'uniqueId123',
-        //             defaultMessage: message
-        //         }
-        //     }
-        //     const spy = jest.spyOn(React, 'isValidElement').mockReturnValueOnce(true);
-        //     const wrapper = shallow(
-        //         <Tooltip isShown text={intlMessage} intl={intlFake}>
-        //             <button />
-        //         </Tooltip>,
-        //     );
-        //     const tooltip = wrapper.childAt(1);
-        //     expect(tooltip.text()).toEqual(message);
-        // });
+        test('should set tooltipText even when text property is an intl-message', () => {
+            const message = 'testing message';
+            const intlMessage = React.createElement(
+                'FormattedMessage',
+                {
+                    id: 'uniqueId123',
+                    defaultMessage: message,
+                },
+                message,
+            );
+
+            const wrapper = shallow(
+                <Tooltip isShown text={intlMessage} intl={intlFake}>
+                    <button />
+                </Tooltip>,
+            );
+            const tooltip = wrapper.childAt(1);
+
+            expect(tooltip.text()).toEqual(message);
+        });
+
+        test('should not set aria-label when text property is an intl-message', () => {
+            const Foo = () => {
+                return <div>foo</div>;
+            };
+            const wrapper = shallow(
+                <Tooltip isShown text={<Foo />} intl={intlFake}>
+                    <button />
+                </Tooltip>,
+            );
+            const component = wrapper.childAt(0);
+
+            expect(component.prop('aria-label')).toEqual(undefined);
+        });
 
         test('should set arria-hidden as true if aria-label and tooltipText are equal', () => {
             const wrapper = shallow(
@@ -276,7 +293,6 @@ describe('components/tooltip/Tooltip', () => {
                     <button />
                 </Tooltip>,
             );
-            const component = wrapper.childAt(0);
             const tooltip = wrapper.childAt(1);
 
             expect(tooltip.prop('aria-hidden')).toBeTruthy();
@@ -290,7 +306,6 @@ describe('components/tooltip/Tooltip', () => {
                 </Tooltip>,
             );
             const component = wrapper.childAt(0);
-            const tooltip = wrapper.childAt(1);
 
             expect(component.prop('aria-label')).toEqual(defautText);
         });
@@ -301,7 +316,6 @@ describe('components/tooltip/Tooltip', () => {
                     <button aria-label="launch" />
                 </Tooltip>,
             );
-            const component = wrapper.childAt(0);
             const tooltip = wrapper.childAt(1);
 
             expect(tooltip.prop('aria-hidden')).toBeFalsy();
