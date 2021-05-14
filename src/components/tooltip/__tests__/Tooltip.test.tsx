@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import sinon from 'sinon';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { MessageDescriptor } from 'react-intl';
 import { TooltipBase as Tooltip, TooltipPosition, TooltipTheme } from '../Tooltip';
 import TetherPosition from '../../../common/tether-positions';
@@ -18,7 +18,7 @@ describe('components/tooltip/Tooltip', () => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const getWrapper = (props: Record<string, any>) =>
-        mount<Tooltip>(
+        shallow<Tooltip>(
             <Tooltip text="hi" {...props} intl={intlFake}>
                 <div>Hello</div>
             </Tooltip>,

@@ -3,7 +3,7 @@
 exports[`components/tooltip/Tooltip render() should match snapshot when stopBubble is set 1`] = `
 <div
   className="tooltip bdl-Tooltip"
-  id="tooltip27"
+  id="tooltip25"
   onClick={[Function]}
   onContextMenu={[Function]}
   onKeyPress={[Function]}
@@ -20,594 +20,158 @@ exports[`components/tooltip/Tooltip render() should match snapshot when stopBubb
 `;
 
 exports[`components/tooltip/Tooltip render() should not render the close button if wasClosedByUser state is true 1`] = `
-<Tooltip
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  intl={
-    Object {
-      "formatDate": [Function],
-      "formatMessage": [Function],
-      "locale": "en-US",
-    }
+<TetherComponent
+  attachment="bottom center"
+  bodyElement={<body />}
+  classPrefix="tooltip"
+  constraints={
+    Array [
+      Object {
+        "attachment": "together",
+        "to": "window",
+      },
+    ]
   }
-  isDisabled={false}
-  isShown={true}
-  position="top-center"
-  showCloseButton={true}
-  text="hi"
-  theme="default"
->
-  <TetherComponent
-    attachment="bottom center"
-    bodyElement={
-      <body>
-        <div
-          class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
-          style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
-        >
-          <div
-            aria-hidden="true"
-            aria-live="polite"
-            class="tooltip bdl-Tooltip with-close-button"
-            id="tooltip1"
-            role="tooltip"
-          >
-            hi
-            <button
-              class="btn-plain tooltip-close-button"
-              type="submit"
-            >
-              <svg
-                class="bdl-Tooltip-iconClose"
-                focusable="false"
-                height="14"
-                role="presentation"
-                viewBox="0 0 16 16"
-                width="14"
-              >
-                <path
-                  d="M8 6.586l4.182-4.182a.5.5 0 01.707 0l.707.707a.5.5 0 010 .707L9.414 8l4.182 4.182a.5.5 0 010 .707l-.707.707a.5.5 0 01-.707 0L8 9.414l-4.182 4.182a.5.5 0 01-.707 0l-.707-.707a.5.5 0 010-.707L6.586 8 2.404 3.818a.5.5 0 010-.707l.707-.707a.5.5 0 01.707 0L8 6.586z"
-                  fill="#909090"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div
-          data-tether-id="1"
-          style="top: 0px; left: 0px; position: absolute;"
-        />
-      </body>
-    }
-    classPrefix="tooltip"
-    constraints={
-      Array [
-        Object {
-          "attachment": "together",
-          "to": "window",
-        },
-      ]
-    }
-    enabled={false}
-    renderElementTag="div"
-    renderElementTo={null}
-    targetAttachment="top center"
-  >
-    <div
-      aria-label="hi"
-      key=".0"
-    >
-      Hello
-    </div>
-  </TetherComponent>
-</Tooltip>
-`;
-
-exports[`components/tooltip/Tooltip render() should not render with close button if isShown is false 1`] = `
-<Tooltip
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  intl={
-    Object {
-      "formatDate": [Function],
-      "formatMessage": [Function],
-      "locale": "en-US",
-    }
-  }
-  isDisabled={false}
-  isShown={false}
-  position="top-center"
-  showCloseButton={true}
-  text="hi"
-  theme="default"
->
-  <TetherComponent
-    attachment="bottom center"
-    bodyElement={
-      <body>
-        <div
-          class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
-          style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
-        >
-          <div
-            aria-hidden="true"
-            aria-live="polite"
-            class="tooltip bdl-Tooltip with-close-button"
-            id="tooltip1"
-            role="tooltip"
-          >
-            hi
-            <button
-              class="btn-plain tooltip-close-button"
-              type="submit"
-            >
-              <svg
-                class="bdl-Tooltip-iconClose"
-                focusable="false"
-                height="14"
-                role="presentation"
-                viewBox="0 0 16 16"
-                width="14"
-              >
-                <path
-                  d="M8 6.586l4.182-4.182a.5.5 0 01.707 0l.707.707a.5.5 0 010 .707L9.414 8l4.182 4.182a.5.5 0 010 .707l-.707.707a.5.5 0 01-.707 0L8 9.414l-4.182 4.182a.5.5 0 01-.707 0l-.707-.707a.5.5 0 010-.707L6.586 8 2.404 3.818a.5.5 0 010-.707l.707-.707a.5.5 0 01.707 0L8 6.586z"
-                  fill="#909090"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div
-          data-tether-id="1"
-          style="top: 0px; left: 0px; position: absolute;"
-        />
-        <div
-          class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
-          style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
-        >
-          <div
-            aria-hidden="true"
-            aria-live="polite"
-            class="tooltip bdl-Tooltip"
-            id="tooltip5"
-            role="tooltip"
-          >
-            hi
-          </div>
-        </div>
-      </body>
-    }
-    classPrefix="tooltip"
-    constraints={
-      Array [
-        Object {
-          "attachment": "together",
-          "to": "window",
-        },
-      ]
-    }
-    enabled={false}
-    renderElementTag="div"
-    renderElementTo={null}
-    targetAttachment="top center"
-  >
-    <div
-      aria-label="hi"
-      key=".0"
-    >
-      Hello
-    </div>
-  </TetherComponent>
-</Tooltip>
-`;
-
-exports[`components/tooltip/Tooltip render() should not render with close button if showCloseButton is false 1`] = `
-<Tooltip
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  intl={
-    Object {
-      "formatDate": [Function],
-      "formatMessage": [Function],
-      "locale": "en-US",
-    }
-  }
-  isDisabled={false}
-  isShown={true}
-  position="top-center"
-  showCloseButton={false}
-  text="hi"
-  theme="default"
->
-  <TetherComponent
-    attachment="bottom center"
-    bodyElement={
-      <body>
-        <div
-          class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
-          style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
-        >
-          <div
-            aria-hidden="true"
-            aria-live="polite"
-            class="tooltip bdl-Tooltip with-close-button"
-            id="tooltip1"
-            role="tooltip"
-          >
-            hi
-            <button
-              class="btn-plain tooltip-close-button"
-              type="submit"
-            >
-              <svg
-                class="bdl-Tooltip-iconClose"
-                focusable="false"
-                height="14"
-                role="presentation"
-                viewBox="0 0 16 16"
-                width="14"
-              >
-                <path
-                  d="M8 6.586l4.182-4.182a.5.5 0 01.707 0l.707.707a.5.5 0 010 .707L9.414 8l4.182 4.182a.5.5 0 010 .707l-.707.707a.5.5 0 01-.707 0L8 9.414l-4.182 4.182a.5.5 0 01-.707 0l-.707-.707a.5.5 0 010-.707L6.586 8 2.404 3.818a.5.5 0 010-.707l.707-.707a.5.5 0 01.707 0L8 6.586z"
-                  fill="#909090"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div
-          data-tether-id="1"
-          style="top: 0px; left: 0px; position: absolute;"
-        />
-        <div
-          class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
-          style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
-        >
-          <div
-            aria-hidden="true"
-            aria-live="polite"
-            class="tooltip bdl-Tooltip"
-            id="tooltip5"
-            role="tooltip"
-          >
-            hi
-          </div>
-        </div>
-      </body>
-    }
-    classPrefix="tooltip"
-    constraints={
-      Array [
-        Object {
-          "attachment": "together",
-          "to": "window",
-        },
-      ]
-    }
-    enabled={true}
-    renderElementTag="div"
-    renderElementTo={null}
-    targetAttachment="top center"
-  >
-    <div
-      aria-label="hi"
-      key=".0"
-    >
-      Hello
-    </div>
-    <Portal
-      containerInfo={
-        <div
-          class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
-          style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
-        >
-          <div
-            aria-hidden="true"
-            aria-live="polite"
-            class="tooltip bdl-Tooltip"
-            id="tooltip5"
-            role="tooltip"
-          >
-            hi
-          </div>
-        </div>
-      }
-    >
-      <div
-        aria-hidden={true}
-        aria-live="polite"
-        className="tooltip bdl-Tooltip"
-        id="tooltip5"
-        key=".1"
-        role="tooltip"
-      >
-        hi
-      </div>
-    </Portal>
-  </TetherComponent>
-</Tooltip>
-`;
-
-exports[`components/tooltip/Tooltip render() should render children only when tooltip is disabled 1`] = `
-<Tooltip
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  intl={
-    Object {
-      "formatDate": [Function],
-      "formatMessage": [Function],
-      "locale": "en-US",
-    }
-  }
-  isDisabled={true}
-  position="top-center"
-  text="hi"
-  theme="default"
+  enabled={false}
+  renderElementTag="div"
+  renderElementTo={null}
+  targetAttachment="top center"
 >
   <div>
     Hello
   </div>
-</Tooltip>
+</TetherComponent>
+`;
+
+exports[`components/tooltip/Tooltip render() should not render with close button if isShown is false 1`] = `
+<TetherComponent
+  attachment="bottom center"
+  bodyElement={<body />}
+  classPrefix="tooltip"
+  constraints={
+    Array [
+      Object {
+        "attachment": "together",
+        "to": "window",
+      },
+    ]
+  }
+  enabled={false}
+  renderElementTag="div"
+  renderElementTo={null}
+  targetAttachment="top center"
+>
+  <div>
+    Hello
+  </div>
+</TetherComponent>
+`;
+
+exports[`components/tooltip/Tooltip render() should not render with close button if showCloseButton is false 1`] = `
+<TetherComponent
+  attachment="bottom center"
+  bodyElement={<body />}
+  classPrefix="tooltip"
+  constraints={
+    Array [
+      Object {
+        "attachment": "together",
+        "to": "window",
+      },
+    ]
+  }
+  enabled={true}
+  renderElementTag="div"
+  renderElementTo={null}
+  targetAttachment="top center"
+>
+  <div
+    aria-label="hi"
+  >
+    Hello
+  </div>
+  <div
+    aria-hidden={true}
+    aria-live="polite"
+    className="tooltip bdl-Tooltip"
+    id="tooltip3"
+    role="tooltip"
+  >
+    hi
+  </div>
+</TetherComponent>
+`;
+
+exports[`components/tooltip/Tooltip render() should render children only when tooltip is disabled 1`] = `
+<div>
+  Hello
+</div>
 `;
 
 exports[`components/tooltip/Tooltip render() should render children wrapped in tether when tooltip has text missing 1`] = `
-<Tooltip
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  intl={
-    Object {
-      "formatDate": [Function],
-      "formatMessage": [Function],
-      "locale": "en-US",
-    }
+<TetherComponent
+  attachment="bottom center"
+  bodyElement={<body />}
+  classPrefix="tooltip"
+  constraints={
+    Array [
+      Object {
+        "attachment": "together",
+        "to": "window",
+      },
+    ]
   }
-  isDisabled={false}
-  position="top-center"
-  text={null}
-  theme="default"
+  enabled={false}
+  renderElementTag="div"
+  renderElementTo={null}
+  targetAttachment="top center"
 >
-  <TetherComponent
-    attachment="bottom center"
-    bodyElement={
-      <body>
-        <div
-          class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
-          style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
-        >
-          <div
-            aria-hidden="true"
-            aria-live="polite"
-            class="tooltip bdl-Tooltip with-close-button"
-            id="tooltip1"
-            role="tooltip"
-          >
-            hi
-            <button
-              class="btn-plain tooltip-close-button"
-              type="submit"
-            >
-              <svg
-                class="bdl-Tooltip-iconClose"
-                focusable="false"
-                height="14"
-                role="presentation"
-                viewBox="0 0 16 16"
-                width="14"
-              >
-                <path
-                  d="M8 6.586l4.182-4.182a.5.5 0 01.707 0l.707.707a.5.5 0 010 .707L9.414 8l4.182 4.182a.5.5 0 010 .707l-.707.707a.5.5 0 01-.707 0L8 9.414l-4.182 4.182a.5.5 0 01-.707 0l-.707-.707a.5.5 0 010-.707L6.586 8 2.404 3.818a.5.5 0 010-.707l.707-.707a.5.5 0 01.707 0L8 6.586z"
-                  fill="#909090"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div
-          data-tether-id="1"
-          style="top: 0px; left: 0px; position: absolute;"
-        />
-        <div
-          class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
-          style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
-        >
-          <div
-            aria-hidden="true"
-            aria-live="polite"
-            class="tooltip bdl-Tooltip"
-            id="tooltip5"
-            role="tooltip"
-          >
-            hi
-          </div>
-        </div>
-        <div
-          class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
-          style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
-        >
-          <div
-            aria-hidden="true"
-            aria-live="polite"
-            class="tooltip bdl-Tooltip is-callout"
-            id="tooltip7"
-            role="tooltip"
-          >
-            hi
-          </div>
-        </div>
-      </body>
-    }
-    classPrefix="tooltip"
-    constraints={
-      Array [
-        Object {
-          "attachment": "together",
-          "to": "window",
-        },
-      ]
-    }
-    enabled={false}
-    renderElementTag="div"
-    renderElementTo={null}
-    targetAttachment="top center"
+  <div
+    onBlur={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    tabIndex="0"
   >
-    <div
-      key=".0"
-      onBlur={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      tabIndex="0"
-    >
-      Hello
-    </div>
-  </TetherComponent>
-</Tooltip>
+    Hello
+  </div>
+</TetherComponent>
 `;
 
 exports[`components/tooltip/Tooltip render() should render correctly with callout theme 1`] = `
-<Tooltip
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  intl={
-    Object {
-      "formatDate": [Function],
-      "formatMessage": [Function],
-      "locale": "en-US",
-    }
+<TetherComponent
+  attachment="bottom center"
+  bodyElement={<body />}
+  classPrefix="tooltip"
+  constraints={
+    Array [
+      Object {
+        "attachment": "together",
+        "to": "window",
+      },
+    ]
   }
-  isDisabled={false}
-  isShown={true}
-  position="top-center"
-  text="hi"
-  theme="callout"
+  enabled={true}
+  renderElementTag="div"
+  renderElementTo={null}
+  targetAttachment="top center"
 >
-  <TetherComponent
-    attachment="bottom center"
-    bodyElement={
-      <body>
-        <div
-          class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
-          style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
-        >
-          <div
-            aria-hidden="true"
-            aria-live="polite"
-            class="tooltip bdl-Tooltip with-close-button"
-            id="tooltip1"
-            role="tooltip"
-          >
-            hi
-            <button
-              class="btn-plain tooltip-close-button"
-              type="submit"
-            >
-              <svg
-                class="bdl-Tooltip-iconClose"
-                focusable="false"
-                height="14"
-                role="presentation"
-                viewBox="0 0 16 16"
-                width="14"
-              >
-                <path
-                  d="M8 6.586l4.182-4.182a.5.5 0 01.707 0l.707.707a.5.5 0 010 .707L9.414 8l4.182 4.182a.5.5 0 010 .707l-.707.707a.5.5 0 01-.707 0L8 9.414l-4.182 4.182a.5.5 0 01-.707 0l-.707-.707a.5.5 0 010-.707L6.586 8 2.404 3.818a.5.5 0 010-.707l.707-.707a.5.5 0 01.707 0L8 6.586z"
-                  fill="#909090"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div
-          data-tether-id="1"
-          style="top: 0px; left: 0px; position: absolute;"
-        />
-        <div
-          class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
-          style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
-        >
-          <div
-            aria-hidden="true"
-            aria-live="polite"
-            class="tooltip bdl-Tooltip"
-            id="tooltip5"
-            role="tooltip"
-          >
-            hi
-          </div>
-        </div>
-        <div
-          class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
-          style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
-        >
-          <div
-            aria-hidden="true"
-            aria-live="polite"
-            class="tooltip bdl-Tooltip is-callout"
-            id="tooltip7"
-            role="tooltip"
-          >
-            hi
-          </div>
-        </div>
-      </body>
-    }
-    classPrefix="tooltip"
-    constraints={
-      Array [
-        Object {
-          "attachment": "together",
-          "to": "window",
-        },
-      ]
-    }
-    enabled={true}
-    renderElementTag="div"
-    renderElementTo={null}
-    targetAttachment="top center"
+  <div
+    aria-label="hi"
   >
-    <div
-      aria-label="hi"
-      key=".0"
-    >
-      Hello
-    </div>
-    <Portal
-      containerInfo={
-        <div
-          class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
-          style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
-        >
-          <div
-            aria-hidden="true"
-            aria-live="polite"
-            class="tooltip bdl-Tooltip is-callout"
-            id="tooltip7"
-            role="tooltip"
-          >
-            hi
-          </div>
-        </div>
-      }
-    >
-      <div
-        aria-hidden={true}
-        aria-live="polite"
-        className="tooltip bdl-Tooltip is-callout"
-        id="tooltip7"
-        key=".1"
-        role="tooltip"
-      >
-        hi
-      </div>
-    </Portal>
-  </TetherComponent>
-</Tooltip>
+    Hello
+  </div>
+  <div
+    aria-hidden={true}
+    aria-live="polite"
+    className="tooltip bdl-Tooltip is-callout"
+    id="tooltip5"
+    role="tooltip"
+  >
+    hi
+  </div>
+</TetherComponent>
 `;
 
 exports[`components/tooltip/Tooltip render() should render correctly with tetherElementClassName 1`] = `
@@ -643,172 +207,46 @@ exports[`components/tooltip/Tooltip render() should render correctly with tether
 `;
 
 exports[`components/tooltip/Tooltip render() should render with close button if isShown and showCloseButton are true 1`] = `
-<Tooltip
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  intl={
-    Object {
-      "formatDate": [Function],
-      "formatMessage": [Function],
-      "locale": "en-US",
-    }
+<TetherComponent
+  attachment="bottom center"
+  bodyElement={<body />}
+  classPrefix="tooltip"
+  constraints={
+    Array [
+      Object {
+        "attachment": "together",
+        "to": "window",
+      },
+    ]
   }
-  isDisabled={false}
-  isShown={true}
-  position="top-center"
-  showCloseButton={true}
-  text="hi"
-  theme="default"
+  enabled={true}
+  renderElementTag="div"
+  renderElementTo={null}
+  targetAttachment="top center"
 >
-  <TetherComponent
-    attachment="bottom center"
-    bodyElement={
-      <body>
-        <div
-          class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
-          style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
-        >
-          <div
-            aria-hidden="true"
-            aria-live="polite"
-            class="tooltip bdl-Tooltip with-close-button"
-            id="tooltip1"
-            role="tooltip"
-          >
-            hi
-            <button
-              class="btn-plain tooltip-close-button"
-              type="submit"
-            >
-              <svg
-                class="bdl-Tooltip-iconClose"
-                focusable="false"
-                height="14"
-                role="presentation"
-                viewBox="0 0 16 16"
-                width="14"
-              >
-                <path
-                  d="M8 6.586l4.182-4.182a.5.5 0 01.707 0l.707.707a.5.5 0 010 .707L9.414 8l4.182 4.182a.5.5 0 010 .707l-.707.707a.5.5 0 01-.707 0L8 9.414l-4.182 4.182a.5.5 0 01-.707 0l-.707-.707a.5.5 0 010-.707L6.586 8 2.404 3.818a.5.5 0 010-.707l.707-.707a.5.5 0 01.707 0L8 6.586z"
-                  fill="#909090"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div
-          data-tether-id="1"
-          style="top: 0px; left: 0px; position: absolute;"
-        />
-      </body>
-    }
-    classPrefix="tooltip"
-    constraints={
-      Array [
-        Object {
-          "attachment": "together",
-          "to": "window",
-        },
-      ]
-    }
-    enabled={true}
-    renderElementTag="div"
-    renderElementTo={null}
-    targetAttachment="top center"
+  <div
+    aria-label="hi"
   >
-    <div
-      aria-label="hi"
-      key=".0"
+    Hello
+  </div>
+  <div
+    aria-hidden={true}
+    aria-live="polite"
+    className="tooltip bdl-Tooltip with-close-button"
+    id="tooltip1"
+    role="tooltip"
+  >
+    hi
+    <PlainButton
+      className="tooltip-close-button"
+      onClick={[Function]}
     >
-      Hello
-    </div>
-    <Portal
-      containerInfo={
-        <div
-          class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
-          style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
-        >
-          <div
-            aria-hidden="true"
-            aria-live="polite"
-            class="tooltip bdl-Tooltip with-close-button"
-            id="tooltip1"
-            role="tooltip"
-          >
-            hi
-            <button
-              class="btn-plain tooltip-close-button"
-              type="submit"
-            >
-              <svg
-                class="bdl-Tooltip-iconClose"
-                focusable="false"
-                height="14"
-                role="presentation"
-                viewBox="0 0 16 16"
-                width="14"
-              >
-                <path
-                  d="M8 6.586l4.182-4.182a.5.5 0 01.707 0l.707.707a.5.5 0 010 .707L9.414 8l4.182 4.182a.5.5 0 010 .707l-.707.707a.5.5 0 01-.707 0L8 9.414l-4.182 4.182a.5.5 0 01-.707 0l-.707-.707a.5.5 0 010-.707L6.586 8 2.404 3.818a.5.5 0 010-.707l.707-.707a.5.5 0 01.707 0L8 6.586z"
-                  fill="#909090"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-      }
-    >
-      <div
-        aria-hidden={true}
-        aria-live="polite"
-        className="tooltip bdl-Tooltip with-close-button"
-        id="tooltip1"
-        key=".1"
-        role="tooltip"
-      >
-        hi
-        <PlainButton
-          className="tooltip-close-button"
-          onClick={[Function]}
-        >
-          <button
-            className="btn-plain tooltip-close-button"
-            onClick={[Function]}
-            type="submit"
-          >
-            <X16
-              className="bdl-Tooltip-iconClose"
-              height={14}
-              width={14}
-            >
-              <AccessibleSVG
-                className="bdl-Tooltip-iconClose"
-                height={14}
-                viewBox="0 0 16 16"
-                width={14}
-              >
-                <svg
-                  className="bdl-Tooltip-iconClose"
-                  focusable="false"
-                  height={14}
-                  role="presentation"
-                  viewBox="0 0 16 16"
-                  width={14}
-                >
-                  <path
-                    d="M8 6.586l4.182-4.182a.5.5 0 01.707 0l.707.707a.5.5 0 010 .707L9.414 8l4.182 4.182a.5.5 0 010 .707l-.707.707a.5.5 0 01-.707 0L8 9.414l-4.182 4.182a.5.5 0 01-.707 0l-.707-.707a.5.5 0 010-.707L6.586 8 2.404 3.818a.5.5 0 010-.707l.707-.707a.5.5 0 01.707 0L8 6.586z"
-                    fill="#909090"
-                    fillRule="evenodd"
-                  />
-                </svg>
-              </AccessibleSVG>
-            </X16>
-          </button>
-        </PlainButton>
-      </div>
-    </Portal>
-  </TetherComponent>
-</Tooltip>
+      <X16
+        className="bdl-Tooltip-iconClose"
+        height={14}
+        width={14}
+      />
+    </PlainButton>
+  </div>
+</TetherComponent>
 `;
