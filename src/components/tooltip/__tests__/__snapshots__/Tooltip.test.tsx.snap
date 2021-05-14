@@ -3,7 +3,7 @@
 exports[`components/tooltip/Tooltip render() should match snapshot when stopBubble is set 1`] = `
 <div
   className="tooltip bdl-Tooltip"
-  id="tooltip21"
+  id="tooltip27"
   onClick={[Function]}
   onContextMenu={[Function]}
   onKeyPress={[Function]}
@@ -95,6 +95,7 @@ exports[`components/tooltip/Tooltip render() should not render the close button 
     targetAttachment="top center"
   >
     <div
+      aria-label="hi"
       key=".0"
     >
       Hello
@@ -193,6 +194,7 @@ exports[`components/tooltip/Tooltip render() should not render with close button
     targetAttachment="top center"
   >
     <div
+      aria-label="hi"
       key=".0"
     >
       Hello

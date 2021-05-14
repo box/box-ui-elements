@@ -142,7 +142,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should constrain to scroll parent when specified', () => {
             const wrapper = shallow(
-                <Tooltip constrainToScrollParent text="hi">
+                <Tooltip constrainToScrollParent text="hi" intl={intlFake}>
                     <button />
                 </Tooltip>,
             );
@@ -229,6 +229,94 @@ describe('components/tooltip/Tooltip', () => {
             expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
             expect(component.prop('aria-errormessage')).toBeFalsy();
             expect(tooltip.text()).toEqual('hi');
+        });
+
+        test('should have text equal to text property if it is a String', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="hi" intl={intlFake}>
+                    <button />
+                </Tooltip>,
+            );
+            const tooltip = wrapper.childAt(1);
+            expect(tooltip.text()).toEqual('hi');
+        });
+
+        // test.only('set tooltipText even when text property is an intl-message', () => {
+        //     const message = 'testing message';
+        //     const intlMessage: React.ReactNode = {
+        //         props: {
+        //             id: 'uniqueId123',
+        //             defaultMessage: message
+        //         }
+        //     }
+        //     const spy = jest.spyOn(React, 'isValidElement').mockReturnValueOnce(true);
+        //     const wrapper = shallow(
+        //         <Tooltip isShown text={intlMessage} intl={intlFake}>
+        //             <button />
+        //         </Tooltip>,
+        //     );
+        //     const tooltip = wrapper.childAt(1);
+        //     expect(tooltip.text()).toEqual(message);
+        // });
+
+        test('should set arria-hidden as true if aria-label and tooltipText are equal', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="test" intl={intlFake}>
+                    <button aria-label="test" />
+                </Tooltip>,
+            );
+            const tooltip = wrapper.childAt(1);
+            expect(tooltip.prop('aria-hidden')).toBeTruthy();
+        });
+
+        test('should set aria-hidden as true if aria-label does not exist', () => {
+            const defautText = 'test';
+            const wrapper = shallow(
+                <Tooltip isShown text={defautText} intl={intlFake}>
+                    <button />
+                </Tooltip>,
+            );
+            const component = wrapper.childAt(0);
+            const tooltip = wrapper.childAt(1);
+
+            expect(tooltip.prop('aria-hidden')).toBeTruthy();
+        });
+
+        test('should set aria-label=tooltipText if aria-label does not exist', () => {
+            const defautText = 'test';
+            const wrapper = shallow(
+                <Tooltip isShown text={defautText} intl={intlFake}>
+                    <button />
+                </Tooltip>,
+            );
+            const component = wrapper.childAt(0);
+            const tooltip = wrapper.childAt(1);
+
+            expect(component.prop('aria-label')).toEqual(defautText);
+        });
+
+        test('should set aria-hidden=false if aria-label is different than tooltipText', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="Im a long tooltip description" intl={intlFake}>
+                    <button aria-label="launch" />
+                </Tooltip>,
+            );
+            const component = wrapper.childAt(0);
+            const tooltip = wrapper.childAt(1);
+
+            expect(tooltip.prop('aria-hidden')).toBeFalsy();
+        });
+
+        test('should set describedBy equal to tooltipID if aria-label is different than tooltipText', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="Im a long tooltip description" intl={intlFake}>
+                    <button aria-label="launch" />
+                </Tooltip>,
+            );
+            const component = wrapper.childAt(0);
+            const tooltip = wrapper.childAt(1);
+
+            expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
         });
 
         test('should render error class when theme is error', () => {
