@@ -227,6 +227,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
 
         let ariaLabel;
         let tooltipText;
+        let isChildrenComponent = false;
 
         if (text) {
             if (typeof text === 'string') {
@@ -236,12 +237,14 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 if (id && defaultMessage) {
                     tooltipText = intl.formatMessage({ id, defaultMessage, description }, values);
                 }
+            } else {
+                isChildrenComponent = true;
             }
         }
         if (getProp(children, 'props')) {
             ariaLabel = getProp(children, 'props.aria-label');
         }
-        const isChildLabelDifferentThanTooltipText = ariaLabel && tooltipText !== ariaLabel;
+        const isChildLabelDifferentThanTooltipText = (ariaLabel && tooltipText !== ariaLabel) || isChildrenComponent;
 
         // If the tooltip is disabled just render the children
         if (isDisabled) {
@@ -274,11 +277,13 @@ class Tooltip extends React.Component<TooltipProps, State> {
             });
         }
 
+        if (tooltipText) {
+            componentProps['aria-label'] = tooltipText;
+        }
+
         if (showTooltip) {
             if (isChildLabelDifferentThanTooltipText) {
                 componentProps['aria-describedby'] = this.tooltipID;
-            } else if (tooltipText) {
-                componentProps['aria-label'] = tooltipText;
             }
 
             if (theme === TooltipTheme.ERROR) {

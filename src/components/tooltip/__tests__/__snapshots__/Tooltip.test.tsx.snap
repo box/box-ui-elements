@@ -37,7 +37,9 @@ exports[`components/tooltip/Tooltip render() should not render the close button 
   renderElementTo={null}
   targetAttachment="top center"
 >
-  <div>
+  <div
+    aria-label="hi"
+  >
     Hello
   </div>
 </TetherComponent>
@@ -61,7 +63,9 @@ exports[`components/tooltip/Tooltip render() should not render with close button
   renderElementTo={null}
   targetAttachment="top center"
 >
-  <div>
+  <div
+    aria-label="hi"
+  >
     Hello
   </div>
 </TetherComponent>
