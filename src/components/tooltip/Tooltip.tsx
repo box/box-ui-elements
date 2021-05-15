@@ -225,7 +225,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             intl,
         } = this.props;
 
-        let ariaLabel;
+        let childComponentAriaLabel;
         let tooltipText;
         let isChildrenComponent = false;
 
@@ -242,9 +242,10 @@ class Tooltip extends React.Component<TooltipProps, State> {
             }
         }
         if (getProp(children, 'props')) {
-            ariaLabel = getProp(children, 'props.aria-label');
+            childComponentAriaLabel = getProp(children, 'props.aria-label');
         }
-        const isChildLabelDifferentThanTooltipText = (ariaLabel && tooltipText !== ariaLabel) || isChildrenComponent;
+        const isChildLabelDifferentThanTooltipText =
+            (childComponentAriaLabel && tooltipText !== childComponentAriaLabel) || isChildrenComponent;
 
         // If the tooltip is disabled just render the children
         if (isDisabled) {
