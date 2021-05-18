@@ -12,7 +12,6 @@ const sandbox = sinon.sandbox.create();
 describe('components/tooltip/Tooltip', () => {
     const intlFake: any = {
         formatMessage: (message: MessageDescriptor) => message.defaultMessage,
-        formatDate: (date: string | number | Date | undefined) => (date ? date.toString() : ''),
         locale: 'en-US',
     };
 

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { MessageDescriptor } from 'react-intl';
 
 import Button, { ButtonType } from '../button/Button';
 
@@ -7,9 +8,15 @@ import testImageSrc from './getTestImageSrc';
 import ImageTooltip from './ImageTooltip';
 import notes from './ImageTooltip.stories.md';
 
+const intlFake: any = {
+    formatMessage: (message: MessageDescriptor) => message.defaultMessage,
+    locale: 'en-US',
+};
+
 export const basic = () => (
     <div style={{ textAlign: 'center' }}>
         <ImageTooltip
+            intl={intlFake}
             content="Lorem ipsum dolor sit amet, consec tetur adipiscing elit. Ut at semper nisl."
             image={<img src={testImageSrc} alt="Lorem ipsum dolor" />}
             isShown
