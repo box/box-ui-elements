@@ -2,15 +2,15 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
-import Tooltip, { TooltipTheme } from '../tooltip';
+// @ts-ignore flow import
+import Tooltip, { TooltipProps as TooltipBase, TooltipTheme } from '../tooltip';
 import Button from '../button';
 // @ts-ignore flow import
 import messages from './messages';
 
 import './GuideTooltip.scss';
 
-type TooltipProps = Omit<JSX.LibraryManagedAttributes<typeof Tooltip, Tooltip['props']>, 'text' | 'theme'>;
-
+type TooltipProps = Omit<TooltipBase, 'intl' | 'text' | 'theme'>;
 type Props = TooltipProps & {
     body: React.ReactNode;
     title?: React.ReactNode;
