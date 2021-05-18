@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 import getProp from 'lodash/get';
 import TetherComponent from 'react-tether';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { injectIntl, IntlShape } from 'react-intl';
 
 import TetherPosition from '../../common/tether-positions';
 import IconClose from '../../icon/fill/X16';
@@ -81,7 +81,7 @@ export type DefaultTooltipProps = {
     theme: TooltipTheme;
 };
 
-export interface TooltipProps extends WrappedComponentProps, DefaultTooltipProps {
+export type TooltipProps = {
     /** An HTML element to append the tooltip container into (otherwise appends to body) */
     bodyElement?: HTMLElement;
     /** A React element to put the tooltip on */
@@ -104,7 +104,9 @@ export interface TooltipProps extends WrappedComponentProps, DefaultTooltipProps
     tetherElementClassName?: string;
     /** Text to show in the tooltip */
     text?: React.ReactNode;
-}
+    /** Translations library */
+    intl: IntlShape;
+} & Partial<DefaultTooltipProps>;
 
 type State = {
     isShown: boolean;
@@ -241,7 +243,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 isChildrenComponent = true;
             }
         }
-        if (getProp(children, 'props')) {
+        if (getProp(children, 'props') && getProp(children, 'props.aria-label')) {
             childComponentAriaLabel = getProp(children, 'props.aria-label');
         }
         const isChildLabelDifferentThanTooltipText =
@@ -278,7 +280,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             });
         }
 
-        if (tooltipText) {
+        if (!isChildLabelDifferentThanTooltipText && tooltipText) {
             componentProps['aria-label'] = tooltipText;
         }
 
