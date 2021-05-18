@@ -8,6 +8,7 @@ import ImageTooltip from '../ImageTooltip';
 import testImageSrc from '../getTestImageSrc';
 
 describe('components/image-tooltip/ImageTooltip', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const intlFake: any = {
         formatMessage: (message: MessageDescriptor) => message.defaultMessage,
         locale: 'en-US',
