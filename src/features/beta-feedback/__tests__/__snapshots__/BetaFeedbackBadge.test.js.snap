@@ -20,9 +20,6 @@ exports[`features/beta-feedback/BetaFeedbackBadge should render component with t
     target="_blank"
   >
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-right"
       text={
         <FormattedMessage
@@ -30,7 +27,6 @@ exports[`features/beta-feedback/BetaFeedbackBadge should render component with t
           id="be.feedbackCtaText"
         />
       }
-      theme="default"
     >
       <BetaBadge
         aria-hidden={true}

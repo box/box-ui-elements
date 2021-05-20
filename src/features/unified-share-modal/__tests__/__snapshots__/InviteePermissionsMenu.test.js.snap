@@ -10,9 +10,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     isRightAligned={false}
   >
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="bottom-center"
       text={
         <FormattedMessage
@@ -20,7 +17,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
           id="boxui.unifiedShare.inviteDisabledTooltip"
         />
       }
-      theme="default"
     >
       <div
         className="tooltip-target"
@@ -242,9 +238,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     isRightAligned={false}
   >
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="bottom-center"
       text={
         <FormattedMessage
@@ -252,7 +245,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
           id="boxui.unifiedShare.inviteDisabledTooltip"
         />
       }
-      theme="default"
     >
       <div
         className="tooltip-target"
@@ -474,9 +466,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     isRightAligned={false}
   >
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="bottom-center"
       text={
         <FormattedMessage
@@ -484,7 +473,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
           id="boxui.unifiedShare.inviteDisabledTooltip"
         />
       }
-      theme="default"
     >
       <div
         className="tooltip-target"
@@ -706,9 +694,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     isRightAligned={false}
   >
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="bottom-center"
       text={
         <FormattedMessage
@@ -716,7 +701,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
           id="boxui.unifiedShare.inviteDisabledTooltip"
         />
       }
-      theme="default"
     >
       <div
         className="tooltip-target"
@@ -938,9 +922,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     isRightAligned={false}
   >
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="bottom-center"
       text={
         <FormattedMessage
@@ -948,7 +929,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
           id="boxui.unifiedShare.inviteDisabledTooltip"
         />
       }
-      theme="default"
     >
       <div
         className="tooltip-target"
@@ -1170,9 +1150,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     isRightAligned={false}
   >
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="bottom-center"
       text={
         <FormattedMessage
@@ -1180,7 +1157,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
           id="boxui.unifiedShare.inviteDisabledTooltip"
         />
       }
-      theme="default"
     >
       <div
         className="tooltip-target"
@@ -1509,9 +1485,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
     isRightAligned={false}
   >
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="bottom-center"
       text={
         <FormattedMessage
@@ -1519,7 +1492,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
           id="boxui.unifiedShare.inviteDisabledTooltip"
         />
       }
-      theme="default"
     >
       <div
         className="tooltip-target"
@@ -1626,9 +1598,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() should render the correct disabled tooltip 1`] = `
 <Tooltip
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  isDisabled={false}
   position="bottom-center"
   text={
     <FormattedMessage
@@ -1636,7 +1605,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() should ren
       id="boxui.unifiedShare.inviteDisabledWeblinkTooltip"
     />
   }
-  theme="default"
 >
   <div
     className="tooltip-target"
@@ -1659,9 +1627,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() should ren
 
 exports[`features/unified-share-modal/InviteePermissionsMenu render() should render the correct disabled tooltip 2`] = `
 <Tooltip
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  isDisabled={false}
   position="bottom-center"
   text={
     <FormattedMessage
@@ -1669,7 +1634,6 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() should ren
       id="boxui.unifiedShare.inviteDisabledTooltip"
     />
   }
-  theme="default"
 >
   <div
     className="tooltip-target"

@@ -3,9 +3,6 @@
 exports[`features/unified-share-modal/SharedLinkAccessMenu render() should render correct menu when submitting is false 1`] = `
 <Tooltip
   className="usm-ftux-tooltip"
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  isDisabled={false}
   isShown={false}
   onDismiss={[Function]}
   position="middle-left"
@@ -43,9 +40,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
 exports[`features/unified-share-modal/SharedLinkAccessMenu render() should render correct menu when submitting is true 1`] = `
 <Tooltip
   className="usm-ftux-tooltip"
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  isDisabled={false}
   isShown={false}
   onDismiss={[Function]}
   position="middle-left"
@@ -83,9 +77,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
 exports[`features/unified-share-modal/SharedLinkAccessMenu render() should render no access level menu items if disabled by something other than access policy 1`] = `
 <Tooltip
   className="usm-ftux-tooltip"
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  isDisabled={false}
   isShown={false}
   onDismiss={[Function]}
   position="middle-left"
@@ -117,8 +108,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
       isSubmenu={false}
     >
       <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
         isDisabled={true}
         key="tooltip-peopleInThisItem"
         position="top-center"
@@ -128,7 +117,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
             id="boxui.unifiedShare.disabledShareLinkPermission"
           />
         }
-        theme="default"
       >
         <SelectMenuItem
           isDisabled={false}
@@ -152,9 +140,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
 exports[`features/unified-share-modal/SharedLinkAccessMenu render() should render tooltipContent if provided 1`] = `
 <Tooltip
   className="usm-ftux-tooltip"
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  isDisabled={false}
   isShown={true}
   onDismiss={[Function]}
   position="middle-left"
@@ -192,9 +177,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
 exports[`features/unified-share-modal/SharedLinkAccessMenu render() should render tooltips for access level menu items if disabled by access policy 1`] = `
 <Tooltip
   className="usm-ftux-tooltip"
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  isDisabled={false}
   isShown={false}
   onDismiss={[Function]}
   position="middle-left"
@@ -226,8 +208,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
       isSubmenu={false}
     >
       <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
         isDisabled={false}
         key="tooltip-peopleWithTheLink"
         position="top-center"
@@ -237,7 +217,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
             id="boxui.unifiedShare.disabledShareLinkPermission"
           />
         }
-        theme="default"
       >
         <SelectMenuItem
           isDisabled={true}
@@ -254,8 +233,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         </SelectMenuItem>
       </Tooltip>
       <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
         isDisabled={false}
         key="tooltip-peopleInYourCompany"
         position="top-center"
@@ -265,7 +242,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
             id="boxui.unifiedShare.disabledShareLinkPermission"
           />
         }
-        theme="default"
       >
         <SelectMenuItem
           isDisabled={true}
@@ -282,8 +258,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         </SelectMenuItem>
       </Tooltip>
       <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
         isDisabled={true}
         key="tooltip-peopleInThisItem"
         position="top-center"
@@ -293,7 +267,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
             id="boxui.unifiedShare.disabledShareLinkPermission"
           />
         }
-        theme="default"
       >
         <SelectMenuItem
           isDisabled={false}
@@ -317,9 +290,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
 exports[`features/unified-share-modal/SharedLinkAccessMenu render() should render tooltips for access level menu items if disabled by malicious content 1`] = `
 <Tooltip
   className="usm-ftux-tooltip"
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  isDisabled={false}
   isShown={false}
   onDismiss={[Function]}
   position="middle-left"
@@ -351,8 +321,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
       isSubmenu={false}
     >
       <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
         isDisabled={false}
         key="tooltip-peopleWithTheLink"
         position="top-center"
@@ -362,7 +330,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
             id="boxui.unifiedShare.disabledMaliciousContentShareLinkPermission"
           />
         }
-        theme="default"
       >
         <SelectMenuItem
           isDisabled={true}
@@ -379,8 +346,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         </SelectMenuItem>
       </Tooltip>
       <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
         isDisabled={false}
         key="tooltip-peopleInYourCompany"
         position="top-center"
@@ -390,7 +355,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
             id="boxui.unifiedShare.disabledMaliciousContentShareLinkPermission"
           />
         }
-        theme="default"
       >
         <SelectMenuItem
           isDisabled={true}
@@ -407,8 +371,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         </SelectMenuItem>
       </Tooltip>
       <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
         isDisabled={true}
         key="tooltip-peopleInThisItem"
         position="top-center"
@@ -418,7 +380,6 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
             id="boxui.unifiedShare.disabledShareLinkPermission"
           />
         }
-        theme="default"
       >
         <SelectMenuItem
           isDisabled={false}

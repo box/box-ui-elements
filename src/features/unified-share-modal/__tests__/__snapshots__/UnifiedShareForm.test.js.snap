@@ -9,9 +9,6 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -207,9 +204,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={false}
       position="middle-left"
       showCloseButton={true}
@@ -371,9 +365,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -534,9 +525,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -701,9 +689,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={true}
       position="middle-left"
       showCloseButton={true}
@@ -866,9 +851,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -1031,9 +1013,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -1165,9 +1144,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -1330,9 +1306,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -1495,9 +1468,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -1661,9 +1631,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -1837,9 +1804,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -2001,9 +1965,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -2169,9 +2130,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -2334,9 +2292,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -2498,9 +2453,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -2635,9 +2587,6 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-left"
       showCloseButton={true}
       text={

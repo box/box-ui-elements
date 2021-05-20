@@ -2,9 +2,6 @@
 
 exports[`components/select-button/SelectButton should not show error tooltip on button by default 1`] = `
 <Tooltip
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  isDisabled={false}
   isShown={false}
   position="middle-right"
   theme="error"
@@ -21,9 +18,6 @@ exports[`components/select-button/SelectButton should not show error tooltip on 
 
 exports[`components/select-button/SelectButton should show error tooltip on button when error is has some value 1`] = `
 <Tooltip
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  isDisabled={false}
   isShown={true}
   position="middle-right"
   text="error"

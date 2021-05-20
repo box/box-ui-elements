@@ -2,10 +2,6 @@
 
 exports[`elements/content-sidebar/ActivityFeed/common/ActivityTimestamp should correctly render timestamp from previous years 1`] = `
 <Tooltip
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  isDisabled={false}
-  position="top-center"
   text={
     <FormattedMessage
       defaultMessage="{time, date, full} at {time, time, short}"
@@ -17,7 +13,6 @@ exports[`elements/content-sidebar/ActivityFeed/common/ActivityTimestamp should c
       }
     />
   }
-  theme="default"
 >
   <small
     className="bcs-ActivityTimestamp"

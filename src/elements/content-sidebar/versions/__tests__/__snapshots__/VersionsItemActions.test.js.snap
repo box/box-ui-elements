@@ -34,8 +34,6 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ena
     isSubmenu={false}
   >
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
       isDisabled={true}
       isTabbable={false}
       position="middle-left"
@@ -45,7 +43,6 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ena
           id="be.sidebarVersions.disabledByRetention"
         />
       }
-      theme="default"
     >
       <VersionsItemAction
         action="remove"
@@ -97,8 +94,6 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ena
     isSubmenu={false}
   >
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
       isDisabled={false}
       isTabbable={false}
       position="middle-left"
@@ -108,7 +103,6 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ena
           id="be.sidebarVersions.disabledByRetention"
         />
       }
-      theme="default"
     >
       <VersionsItemAction
         action="remove"
@@ -203,8 +197,6 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
       />
     </VersionsItemAction>
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
       isDisabled={true}
       isTabbable={false}
       position="middle-left"
@@ -214,7 +206,6 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
           id="be.sidebarVersions.disabledByRetention"
         />
       }
-      theme="default"
     >
       <VersionsItemAction
         action="remove"

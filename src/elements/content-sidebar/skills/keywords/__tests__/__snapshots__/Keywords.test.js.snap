@@ -6,17 +6,12 @@ exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly rend
   isLoading={false}
 >
   <Tooltip
-    constrainToScrollParent={false}
-    constrainToWindow={true}
-    isDisabled={false}
-    position="top-center"
     text={
       <FormattedMessage
         defaultMessage="Edit"
         id="be.editLabel"
       />
     }
-    theme="default"
   >
     <PlainButton
       className="be-keyword-edit"
@@ -49,17 +44,12 @@ exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly rend
   isLoading={false}
 >
   <Tooltip
-    constrainToScrollParent={false}
-    constrainToWindow={true}
-    isDisabled={false}
-    position="top-center"
     text={
       <FormattedMessage
         defaultMessage="Edit"
         id="be.editLabel"
       />
     }
-    theme="default"
   >
     <PlainButton
       className="be-keyword-edit be-keyword-is-editing"

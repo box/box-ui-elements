@@ -10,9 +10,6 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -57,9 +54,6 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -109,9 +103,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -152,21 +143,14 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   onSubmit={[Function]}
 >
   <Tooltip
-    constrainToScrollParent={false}
-    constrainToWindow={true}
-    isDisabled={false}
     position="bottom-center"
     text="You do not have permission to invite collaborators."
-    theme="default"
   >
     <div
       className="tooltip-target"
     >
       <Tooltip
         className="usm-ftux-tooltip"
-        constrainToScrollParent={false}
-        constrainToWindow={true}
-        isDisabled={false}
         isShown={true}
         position="middle-right"
         showCloseButton={true}
@@ -250,9 +234,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -335,9 +316,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -387,9 +365,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -477,9 +452,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -562,9 +534,6 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -662,9 +631,6 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
     className="tooltip-target"
   >
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={true}
       position="middle-left"
       text={
@@ -713,9 +679,6 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -760,9 +723,6 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}
@@ -807,9 +767,6 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
   >
     <Tooltip
       className="usm-ftux-tooltip"
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={true}
       position="middle-right"
       showCloseButton={true}

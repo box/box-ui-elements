@@ -48,6 +48,6 @@ describe('components/thumbnail-card/ThumbnailCardDetails', () => {
 
         const wrapper = mount(<ThumbnailCardDetails title={<div>Foo Bar!</div>} />);
 
-        expect(wrapper.find('Tooltip').length).toBe(1);
+        expect(wrapper.find('Tooltip').length).toBe(2);
     });
 });

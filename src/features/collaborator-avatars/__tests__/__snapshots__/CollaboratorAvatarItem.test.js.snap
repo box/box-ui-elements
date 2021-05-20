@@ -58,9 +58,6 @@ exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should re
 <Badgeable
   topLeft={
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       position="middle-right"
       text={
         <FormattedMessage
@@ -73,7 +70,6 @@ exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should re
           }
         />
       }
-      theme="default"
     >
       <div>
         <IconExpirationBadge

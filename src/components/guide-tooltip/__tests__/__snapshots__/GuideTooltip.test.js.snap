@@ -3,11 +3,7 @@
 exports[`components/guide-tooltip/GuideTooltip should render with all options 1`] = `
 <Tooltip
   className="bdl-GuideTooltip "
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  isDisabled={false}
   isShown={true}
-  position="top-center"
   showCloseButton={true}
   text={
     <React.Fragment>
@@ -81,11 +77,7 @@ exports[`components/guide-tooltip/GuideTooltip should render with all options 1`
 exports[`components/guide-tooltip/GuideTooltip should render with just body 1`] = `
 <Tooltip
   className="bdl-GuideTooltip "
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  isDisabled={false}
   isShown={true}
-  position="top-center"
   showCloseButton={true}
   text={
     <React.Fragment>
@@ -109,11 +101,7 @@ exports[`components/guide-tooltip/GuideTooltip should render with just body 1`] 
 exports[`components/guide-tooltip/GuideTooltip should render with title and body 1`] = `
 <Tooltip
   className="bdl-GuideTooltip "
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  isDisabled={false}
   isShown={true}
-  position="top-center"
   showCloseButton={true}
   text={
     <React.Fragment>

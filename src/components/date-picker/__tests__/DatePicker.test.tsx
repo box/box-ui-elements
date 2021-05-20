@@ -169,7 +169,7 @@ describe('components/date-picker/DatePicker', () => {
             />,
         );
 
-        const tooltip = wrapper.find('Tooltip');
+        const tooltip = wrapper.find('Tooltip').at(1);
         expect(tooltip.prop('text')).toEqual('error!');
         expect(tooltip.prop('position')).toEqual('middle-right');
         expect(tooltip.prop('isShown')).toBe(true);

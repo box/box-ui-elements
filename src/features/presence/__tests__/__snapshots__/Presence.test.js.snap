@@ -21,9 +21,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     onKeyDown={[Function]}
   >
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={false}
       key="1"
       position="bottom-center"
@@ -55,7 +52,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           </div>
         </div>
       }
-      theme="default"
     >
       <PresenceAvatar
         avatarUrl=""
@@ -69,9 +65,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       />
     </Tooltip>
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={false}
       key="2"
       position="bottom-center"
@@ -103,7 +96,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           </div>
         </div>
       }
-      theme="default"
     >
       <PresenceAvatar
         avatarUrl=""
@@ -117,9 +109,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       />
     </Tooltip>
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={false}
       key="3"
       position="bottom-center"
@@ -151,7 +140,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           </div>
         </div>
       }
-      theme="default"
     >
       <PresenceAvatar
         avatarUrl=""
@@ -248,9 +236,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     onKeyDown={[Function]}
   >
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={false}
       key="1"
       position="bottom-center"
@@ -282,7 +267,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           </div>
         </div>
       }
-      theme="default"
     >
       <PresenceAvatar
         avatarUrl=""
@@ -296,9 +280,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       />
     </Tooltip>
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={false}
       key="2"
       position="bottom-center"
@@ -330,7 +311,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           </div>
         </div>
       }
-      theme="default"
     >
       <PresenceAvatar
         avatarUrl=""
@@ -344,9 +324,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       />
     </Tooltip>
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={false}
       key="3"
       position="bottom-center"
@@ -378,7 +355,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           </div>
         </div>
       }
-      theme="default"
     >
       <PresenceAvatar
         avatarUrl=""
@@ -517,9 +493,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     onKeyDown={[Function]}
   >
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={false}
       key="1"
       position="bottom-center"
@@ -551,7 +524,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           </div>
         </div>
       }
-      theme="default"
     >
       <PresenceAvatar
         avatarUrl=""
@@ -565,9 +537,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       />
     </Tooltip>
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={false}
       key="2"
       position="bottom-center"
@@ -599,7 +568,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           </div>
         </div>
       }
-      theme="default"
     >
       <PresenceAvatar
         avatarUrl=""
@@ -613,9 +581,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       />
     </Tooltip>
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={false}
       key="3"
       position="bottom-center"
@@ -647,7 +612,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           </div>
         </div>
       }
-      theme="default"
     >
       <PresenceAvatar
         avatarUrl=""
@@ -753,9 +717,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     onKeyDown={[Function]}
   >
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={false}
       key="1"
       position="bottom-center"
@@ -787,7 +748,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           </div>
         </div>
       }
-      theme="default"
     >
       <PresenceAvatar
         avatarUrl=""
@@ -801,9 +761,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       />
     </Tooltip>
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={false}
       key="2"
       position="bottom-center"
@@ -835,7 +792,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           </div>
         </div>
       }
-      theme="default"
     >
       <PresenceAvatar
         avatarUrl=""
@@ -849,9 +805,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       />
     </Tooltip>
     <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
       isShown={false}
       key="3"
       position="bottom-center"
@@ -883,7 +836,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           </div>
         </div>
       }
-      theme="default"
     >
       <PresenceAvatar
         avatarUrl=""
