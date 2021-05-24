@@ -25,6 +25,7 @@ exports[`components/pill-selector-dropdown/PillSelector render() should render d
       tabIndex={-1}
     />
     <textarea
+      aria-describedBy="errorMessage2"
       aria-errormessage="errorMessage2"
       aria-invalid={false}
       autoComplete="off"

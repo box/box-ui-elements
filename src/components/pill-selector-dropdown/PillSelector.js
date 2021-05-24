@@ -201,6 +201,7 @@ class PillSelector extends React.Component<Props, State> {
         const ariaAttrs = {
             'aria-invalid': hasError,
             'aria-errormessage': this.errorMessageID,
+            'aria-describedBy': this.errorMessageID,
         };
 
         return (
