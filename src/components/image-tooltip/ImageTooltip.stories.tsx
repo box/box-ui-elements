@@ -17,7 +17,6 @@ const intlFake: any = {
 export const basic = () => (
     <div style={{ textAlign: 'center' }}>
         <ImageTooltip
-            intl={intlFake}
             content="Lorem ipsum dolor sit amet, consec tetur adipiscing elit. Ut at semper nisl."
             image={<img src={testImageSrc} alt="Lorem ipsum dolor" />}
             isShown

@@ -18,7 +18,7 @@ describe('components/image-tooltip/ImageTooltip', () => {
         const image = <img src={testImageSrc} alt="foo" />;
 
         const wrapper: ShallowWrapper = shallow(
-            <ImageTooltip intl={intlFake} content="Foo content" image={image} isShown title="Bar">
+            <ImageTooltip content="Foo content" image={image} isShown title="Bar">
                 <Button>Callout</Button>
             </ImageTooltip>,
         );
