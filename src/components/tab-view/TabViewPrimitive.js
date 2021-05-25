@@ -197,7 +197,7 @@ class TabViewPrimitive extends React.Component<Props, State> {
     calculatePrevIndex = (currentIndex: number, childrenCount: number) =>
         (currentIndex - 1 + childrenCount) % childrenCount;
 
-    /* eslint-disable jsx-a11y/interactive-supports-focus */
+    /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
     renderTabs() {
         const { children, selectedIndex, isDynamic } = this.props;
         const { tabsContainerOffsetLeft } = this.state;
@@ -208,6 +208,7 @@ class TabViewPrimitive extends React.Component<Props, State> {
             <div
                 className="tabs"
                 role="tablist"
+                tabIndex="0"
                 ref={ref => {
                     this.tabsContainer = ref;
                 }}
