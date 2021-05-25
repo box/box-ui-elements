@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 import getProp from 'lodash/get';
 import TetherComponent from 'react-tether';
-import { injectIntl, IntlShape } from 'react-intl';
 
 import TetherPosition from '../../common/tether-positions';
 import IconClose from '../../icon/fill/X16';
@@ -104,8 +103,6 @@ export type TooltipProps = {
     tetherElementClassName?: string;
     /** Text to show in the tooltip */
     text?: React.ReactNode;
-    /** Translations library */
-    intl: IntlShape;
 } & Partial<DefaultTooltipProps>;
 
 type State = {
@@ -224,30 +221,18 @@ class Tooltip extends React.Component<TooltipProps, State> {
             tetherElementClassName,
             text,
             theme,
-            intl,
         } = this.props;
 
         let childComponentAriaLabel;
         let tooltipText;
-        let isChildrenComponent = false;
 
-        if (text) {
-            if (typeof text === 'string') {
-                tooltipText = text;
-            } else if (React.isValidElement(text) && getProp(text, 'props')) {
-                const { id, defaultMessage, description, values } = getProp(text, 'props');
-                if (id && defaultMessage) {
-                    tooltipText = intl.formatMessage({ id, defaultMessage, description }, values);
-                }
-            } else {
-                isChildrenComponent = true;
-            }
+        if (text && typeof text === 'string') {
+            tooltipText = text;
         }
         if (getProp(children, 'props') && getProp(children, 'props.aria-label')) {
             childComponentAriaLabel = getProp(children, 'props.aria-label');
         }
-        const isChildLabelDifferentThanTooltipText =
-            (childComponentAriaLabel && tooltipText !== childComponentAriaLabel) || isChildrenComponent;
+        const isLabelMatchingTooltipText = childComponentAriaLabel && tooltipText === childComponentAriaLabel;
 
         // If the tooltip is disabled just render the children
         if (isDisabled) {
@@ -280,12 +265,8 @@ class Tooltip extends React.Component<TooltipProps, State> {
             });
         }
 
-        if (!isChildLabelDifferentThanTooltipText && tooltipText) {
-            componentProps['aria-label'] = tooltipText;
-        }
-
         if (showTooltip) {
-            if (isChildLabelDifferentThanTooltipText) {
+            if (!isLabelMatchingTooltipText) {
                 componentProps['aria-describedby'] = this.tooltipID;
             }
 
@@ -359,7 +340,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 onContextMenu={this.handleTooltipEvent}
                 onKeyPress={this.handleTooltipEvent}
             >
-                <div role="tooltip" aria-live="polite" aria-hidden={!isChildLabelDifferentThanTooltipText}>
+                <div role="tooltip" aria-live="polite" aria-hidden={isLabelMatchingTooltipText}>
                     {tooltipInner}
                 </div>
             </div>
@@ -369,7 +350,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 id={this.tooltipID}
                 role="tooltip"
                 aria-live="polite"
-                aria-hidden={!isChildLabelDifferentThanTooltipText}
+                aria-hidden={isLabelMatchingTooltipText}
             >
                 {tooltipInner}
             </div>
@@ -384,5 +365,4 @@ class Tooltip extends React.Component<TooltipProps, State> {
     }
 }
 
-export { Tooltip as TooltipBase };
-export default injectIntl(Tooltip);
+export default Tooltip;

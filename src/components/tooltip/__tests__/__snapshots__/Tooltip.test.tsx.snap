@@ -3,14 +3,13 @@
 exports[`components/tooltip/Tooltip render() should match snapshot when stopBubble is set 1`] = `
 <div
   className="tooltip bdl-Tooltip"
-  id="tooltip27"
+  id="tooltip22"
   onClick={[Function]}
   onContextMenu={[Function]}
   onKeyPress={[Function]}
   role="presentation"
 >
   <div
-    aria-hidden={true}
     aria-live="polite"
     role="tooltip"
   >
@@ -37,9 +36,7 @@ exports[`components/tooltip/Tooltip render() should not render the close button 
   renderElementTo={null}
   targetAttachment="top center"
 >
-  <div
-    aria-label="hi"
-  >
+  <div>
     Hello
   </div>
 </TetherComponent>
@@ -63,9 +60,7 @@ exports[`components/tooltip/Tooltip render() should not render with close button
   renderElementTo={null}
   targetAttachment="top center"
 >
-  <div
-    aria-label="hi"
-  >
+  <div>
     Hello
   </div>
 </TetherComponent>
@@ -90,12 +85,11 @@ exports[`components/tooltip/Tooltip render() should not render with close button
   targetAttachment="top center"
 >
   <div
-    aria-label="hi"
+    aria-describedby="tooltip3"
   >
     Hello
   </div>
   <div
-    aria-hidden={true}
     aria-live="polite"
     className="tooltip bdl-Tooltip"
     id="tooltip3"
@@ -162,12 +156,11 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
   targetAttachment="top center"
 >
   <div
-    aria-label="hi"
+    aria-describedby="tooltip5"
   >
     Hello
   </div>
   <div
-    aria-hidden={true}
     aria-live="polite"
     className="tooltip bdl-Tooltip is-callout"
     id="tooltip5"
@@ -198,7 +191,6 @@ exports[`components/tooltip/Tooltip render() should render correctly with tether
   targetAttachment="top center"
 >
   <div
-    aria-label="hi"
     onBlur={[Function]}
     onFocus={[Function]}
     onKeyDown={[Function]}
@@ -230,12 +222,11 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
   targetAttachment="top center"
 >
   <div
-    aria-label="hi"
+    aria-describedby="tooltip1"
   >
     Hello
   </div>
   <div
-    aria-hidden={true}
     aria-live="polite"
     className="tooltip bdl-Tooltip with-close-button"
     id="tooltip1"
