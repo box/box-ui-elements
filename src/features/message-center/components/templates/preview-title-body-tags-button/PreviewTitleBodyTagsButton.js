@@ -29,6 +29,7 @@ function PreviewTitleBodyTagsButton({
     getToken,
     tags,
     title,
+    name,
 }: Props) {
     return (
         <div className="PreviewTitleBodyTagsButton">
@@ -42,7 +43,7 @@ function PreviewTitleBodyTagsButton({
             <BottomContentWrapper>
                 <MessageTextContent body={body} title={title} />
                 <MessageTags tags={tags} />
-                <MessageFooter actionItem={button1} date={date} />
+                <MessageFooter actionItem={button1} date={date} name={name} />
             </BottomContentWrapper>
         </div>
     );

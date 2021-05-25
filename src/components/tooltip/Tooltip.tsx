@@ -98,6 +98,8 @@ export type TooltipProps = {
     showCloseButton?: boolean;
     /** stop click|keypress event bubbling */
     stopBubble?: boolean;
+    /** A CSS class for the tether element component */
+    tetherElementClassName?: string;
     /** Text to show in the tooltip */
     text?: React.ReactNode;
 } & Partial<DefaultTooltipProps>;
@@ -215,6 +217,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             position = TooltipPosition.TOP_CENTER,
             showCloseButton,
             stopBubble,
+            tetherElementClassName,
             text,
             theme,
         } = this.props;
@@ -284,6 +287,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             enabled: boolean | undefined;
             targetAttachment: TetherPosition;
             offset?: string;
+            className?: string;
         } = {
             attachment: tetherPosition.attachment,
             bodyElement: bodyEl,
@@ -292,6 +296,10 @@ class Tooltip extends React.Component<TooltipProps, State> {
             enabled: showTooltip,
             targetAttachment: tetherPosition.targetAttachment,
         };
+
+        if (tetherElementClassName) {
+            tetherProps.className = tetherElementClassName;
+        }
 
         if (offset) {
             tetherProps.offset = offset;
