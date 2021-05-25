@@ -24,6 +24,7 @@ function Message({
     getToken,
     templateName,
     templateParams: { body, button1, fileUpload, tags, title },
+    name,
 }: Props) {
     const date = new Date(activateDate * 1000);
     if (templateName === PREVIEW_TITLE_BODY_TAGS && fileUpload) {
@@ -37,6 +38,7 @@ function Message({
                 getToken={getToken}
                 tags={tags}
                 title={title}
+                name={name}
             />
         );
     }
@@ -52,14 +54,15 @@ function Message({
                 getToken={getToken}
                 tags={tags}
                 title={title}
+                name={name}
             />
         );
     }
     if (templateName === TITLE_BODY_TAGS) {
-        return <TitleBodyTags body={body} date={date} tags={tags} title={title} />;
+        return <TitleBodyTags body={body} date={date} tags={tags} title={title} name={name} />;
     }
     if (templateName === TITLE_BODY_TAGS_BUTTON && button1) {
-        return <TitleBodyTagsButton body={body} button1={button1} date={date} tags={tags} title={title} />;
+        return <TitleBodyTagsButton body={body} button1={button1} date={date} tags={tags} title={title} name={name} />;
     }
 
     return null;
