@@ -5,6 +5,7 @@ import MessageFooter from '../MessageFooter';
 
 const defaultProps = {
     date: new Date(1600297599505),
+    name: 'testmessagename',
 };
 
 const getWrapper = props => shallow(<MessageFooter {...defaultProps} {...props} />);
