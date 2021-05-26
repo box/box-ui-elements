@@ -129,8 +129,7 @@ describe('components/tooltip/Tooltip', () => {
                     <button />
                 </Tooltip>,
             );
-
-            expect(wrapper.find('[role="tooltip"]').hasClass('testing')).toBe(true);
+            expect(wrapper.find('div.tooltip').hasClass('testing')).toBe(true);
         });
 
         test('should constrain to scroll parent when specified', () => {
@@ -288,7 +287,7 @@ describe('components/tooltip/Tooltip', () => {
             const component = wrapper.childAt(0);
             const tooltip = wrapper.childAt(1);
 
-            expect(wrapper.find('[role="tooltip"]').hasClass('is-error')).toBe(true);
+            expect(wrapper.find('div.tooltip').hasClass('is-error')).toBe(true);
             expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
             expect(component.prop('aria-errormessage')).toEqual(tooltip.prop('id'));
         });
