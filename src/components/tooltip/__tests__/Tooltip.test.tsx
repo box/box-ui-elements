@@ -224,6 +224,29 @@ describe('components/tooltip/Tooltip', () => {
             expect(tooltip.text()).toEqual('hi');
         });
 
+        test('should set aria-describedBy when aria-label exists and tooltipText is different than it', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="hi">
+                    <button aria-label="test" />
+                </Tooltip>,
+            );
+            const component = wrapper.childAt(0);
+            const tooltip = wrapper.childAt(1);
+
+            expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
+        });
+
+        test('should not set aria-describedBy when aria-label exists but tooltipText is equal to it', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="hi">
+                    <button aria-label="hi" />
+                </Tooltip>,
+            );
+            const component = wrapper.childAt(0);
+
+            expect(component.prop('aria-describedby')).toEqual(undefined);
+        });
+
         test('should set aria-hidden as true if aria-label and tooltipText are equal', () => {
             const wrapper = shallow(
                 <Tooltip isShown text="test">
