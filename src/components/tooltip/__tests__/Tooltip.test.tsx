@@ -109,7 +109,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should show tooltip when isShown state is true', () => {
             const wrapper = shallow(
                 <Tooltip text="hi">
-                    <button aria-label="tales" />
+                    <button />
                 </Tooltip>,
             );
             wrapper.setState({ isShown: true });
@@ -204,7 +204,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should show tooltip when isShown prop is true', () => {
             const wrapper = shallow(
                 <Tooltip isShown text="hi">
-                    <button aria-label="test" />
+                    <button />
                 </Tooltip>,
             );
             const component = wrapper.childAt(0);
