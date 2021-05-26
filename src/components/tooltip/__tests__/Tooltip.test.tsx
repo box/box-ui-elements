@@ -224,7 +224,7 @@ describe('components/tooltip/Tooltip', () => {
             expect(tooltip.text()).toEqual('hi');
         });
 
-        test('should set arria-hidden as true if aria-label and tooltipText are equal', () => {
+        test('should set aria-hidden as true if aria-label and tooltipText are equal', () => {
             const wrapper = shallow(
                 <Tooltip isShown text="test">
                     <button aria-label="test" />
@@ -235,9 +235,8 @@ describe('components/tooltip/Tooltip', () => {
         });
 
         test('should set aria-hidden as false if aria-label does not exist', () => {
-            const defautText = 'test';
             const wrapper = shallow(
-                <Tooltip isShown text={defautText}>
+                <Tooltip isShown text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -350,15 +349,14 @@ describe('components/tooltip/Tooltip', () => {
     describe('closeTooltip()', () => {
         test('should update the wasClosedByUser state', () => {
             const wrapper = shallow<Tooltip>(
-                <Tooltip text="hi" isShown>
+                <Tooltip text="hi">
                     <button />
                 </Tooltip>,
             );
 
-            const { tooltipID } = wrapper.instance();
-            expect(wrapper.find(`#${tooltipID}`).exists()).toBeTruthy();
+            expect(wrapper.state('wasClosedByUser')).toBe(false);
             wrapper.instance().closeTooltip();
-            expect(wrapper.find(`#${tooltipID}`).exists()).toBeFalsy();
+            expect(wrapper.state('wasClosedByUser')).toBe(true);
         });
 
         test('should call onDismiss if provided', () => {

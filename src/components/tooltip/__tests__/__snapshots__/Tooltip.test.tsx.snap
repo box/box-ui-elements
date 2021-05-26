@@ -10,6 +10,7 @@ exports[`components/tooltip/Tooltip render() should match snapshot when stopBubb
   role="presentation"
 >
   <div
+    aria-hidden={false}
     aria-live="polite"
     role="tooltip"
   >
@@ -90,6 +91,7 @@ exports[`components/tooltip/Tooltip render() should not render with close button
     Hello
   </div>
   <div
+    aria-hidden={false}
     aria-live="polite"
     className="tooltip bdl-Tooltip"
     id="tooltip3"
@@ -161,6 +163,7 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
     Hello
   </div>
   <div
+    aria-hidden={false}
     aria-live="polite"
     className="tooltip bdl-Tooltip is-callout"
     id="tooltip5"
@@ -227,6 +230,7 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
     Hello
   </div>
   <div
+    aria-hidden={false}
     aria-live="polite"
     className="tooltip bdl-Tooltip with-close-button"
     id="tooltip1"

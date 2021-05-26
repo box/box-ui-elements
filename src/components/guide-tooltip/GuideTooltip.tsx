@@ -9,7 +9,8 @@ import messages from './messages';
 
 import './GuideTooltip.scss';
 
-type TooltipProps = Omit<JSX.LibraryManagedAttributes<typeof Tooltip, TooltipBase['props']>, 'text' | 'theme'>;
+type TooltipProps = Omit<JSX.LibraryManagedAttributes<typeof Tooltip, Tooltip['props']>, 'text' | 'theme'>;
+
 type Props = TooltipProps & {
     body: React.ReactNode;
     title?: React.ReactNode;
