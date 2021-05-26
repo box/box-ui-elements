@@ -11,12 +11,6 @@ const sandbox = sinon.sandbox.create();
 
 describe('components/tooltip/Tooltip', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const intlFake: any = {
-        formatMessage: (message: MessageDescriptor) => message.defaultMessage,
-        locale: 'en-US',
-    };
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const getWrapper = (props: Record<string, any>) =>
         shallow<Tooltip>(
             <Tooltip text="hi" {...props}>
