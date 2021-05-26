@@ -26,6 +26,7 @@ type Props = {|
     contentPreviewProps?: ContentPreviewProps,
     getToken: (fileId: string) => Promise<Token>,
     messages: Array<EligibleMessageCenterMessage> | null | Error,
+    onMessageShown: EligibleMessageCenterMessage => void,
     onRequestClose: () => void,
     overscanRowCount?: number,
 |};
@@ -48,6 +49,7 @@ function MessageCenterModal({
     getToken,
     intl,
     overscanRowCount = 1,
+    onMessageShown,
 }: Props & InjectIntlProvidedProps) {
     const categories: Array<{ displayText: string, value: string }> | null = React.useMemo(() => {
         if (!Array.isArray(messages)) {
@@ -84,6 +86,7 @@ function MessageCenterModal({
     }, [intl, messages]);
     const listRef = React.useRef(null);
     const isMouseInTitleRef = React.useRef(false);
+    const messageLoadCacheRef = React.useRef(new Map<number, boolean>());
     const [category, setCategory] = React.useState(ALL);
     const [isExpanded, setIsExpanded] = React.useState(true);
     const [dimensions, setDimensions] = React.useState({ width: 0, height: 0 });
@@ -166,10 +169,17 @@ function MessageCenterModal({
         }
     }, [category]);
 
-    function rowRenderer({ index, parent, style }: Object) {
+    function rowRenderer({ index, parent, style, isVisible }: Object) {
         const message = filteredMessages[index];
+        const messageId = message.id;
+        const isFirstTimeBeingShown = !messageLoadCacheRef.current.has(messageId);
+        if (isVisible && isFirstTimeBeingShown) {
+            messageLoadCacheRef.current.set(messageId, true);
+            onMessageShown(message);
+        }
+
         return (
-            <CellMeasurer key={message.id} cache={cache} columnIndex={0} parent={parent} rowIndex={index}>
+            <CellMeasurer key={messageId} cache={cache} columnIndex={0} parent={parent} rowIndex={index}>
                 {({ registerChild }) => (
                     <div
                         ref={registerChild}
