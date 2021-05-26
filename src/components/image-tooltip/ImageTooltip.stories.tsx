@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { MessageDescriptor } from 'react-intl';
 
 import Button, { ButtonType } from '../button/Button';
 

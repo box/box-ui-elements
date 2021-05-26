@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { MessageDescriptor } from 'react-intl';
 
 import Button from '../../button/Button';
 import ImageTooltip from '../ImageTooltip';

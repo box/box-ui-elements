@@ -3,7 +3,6 @@
 import * as React from 'react';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
-import { MessageDescriptor } from 'react-intl';
 import Tooltip, { TooltipPosition, TooltipTheme } from '../Tooltip';
 import TetherPosition from '../../../common/tether-positions';
 
