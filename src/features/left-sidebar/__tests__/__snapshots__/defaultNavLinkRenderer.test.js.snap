@@ -3,8 +3,12 @@
 exports[`feature/left-sidebar/defaultNavLinkRenderer should render default NavLink comoponent 1`] = `
 <Tooltip
   className="nav-link-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
   isTabbable={false}
   position="middle-right"
+  theme="default"
 >
   <LinkBase
     className=""

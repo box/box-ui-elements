@@ -9,6 +9,9 @@ exports[`components/text-area/TextArea should not show optional text when hideOp
     text="label"
   >
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       position="bottom-left"
       text=""
@@ -48,6 +51,9 @@ exports[`components/text-area/TextArea should render text area with description 
       some description
     </div>
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       position="bottom-left"
       text=""
@@ -82,6 +88,9 @@ exports[`components/text-area/TextArea should show optional text when hideOption
     text="label"
   >
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       position="bottom-left"
       text=""

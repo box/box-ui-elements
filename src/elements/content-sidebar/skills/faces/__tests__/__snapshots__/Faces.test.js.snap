@@ -6,12 +6,17 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render edi
   isLoading={false}
 >
   <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    isDisabled={false}
+    position="top-center"
     text={
       <FormattedMessage
         defaultMessage="Edit"
         id="be.editLabel"
       />
     }
+    theme="default"
   >
     <PlainButton
       className="be-face-edit"
@@ -109,12 +114,17 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render sav
   isLoading={false}
 >
   <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    isDisabled={false}
+    position="top-center"
     text={
       <FormattedMessage
         defaultMessage="Edit"
         id="be.editLabel"
       />
     }
+    theme="default"
   >
     <PlainButton
       className="be-face-edit be-faces-is-editing"

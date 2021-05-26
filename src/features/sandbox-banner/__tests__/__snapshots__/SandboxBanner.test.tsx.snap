@@ -2,7 +2,12 @@
 
 exports[`features/sandbox-banner/SandboxBanner should correctly render default element 1`] = `
 <Tooltip
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
+  position="top-center"
   text="foo"
+  theme="default"
 >
   <div
     className="bdl-SandboxBanner"

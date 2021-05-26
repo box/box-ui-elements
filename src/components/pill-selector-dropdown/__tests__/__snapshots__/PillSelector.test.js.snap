@@ -2,6 +2,9 @@
 
 exports[`components/pill-selector-dropdown/PillSelector render() should render disabled component 1`] = `
 <Tooltip
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
   isShown={false}
   position="middle-right"
   text=""

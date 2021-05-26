@@ -3,9 +3,13 @@
 exports[`feature/left-sidebar/LeftSidebarLink should render BadgeCountElement 1`] = `
 <Tooltip
   className="nav-link-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
   isTabbable={false}
   position="middle-right"
   text="Feed"
+  theme="default"
 >
   <LinkBase
     className=""
@@ -23,9 +27,13 @@ exports[`feature/left-sidebar/LeftSidebarLink should render BadgeCountElement 1`
 exports[`feature/left-sidebar/LeftSidebarLink should render BadgeElement 1`] = `
 <Tooltip
   className="nav-link-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
   isTabbable={false}
   position="middle-right"
   text="Feed"
+  theme="default"
 >
   <LinkBase
     className=""
@@ -49,9 +57,13 @@ exports[`feature/left-sidebar/LeftSidebarLink should render RemoveButton 1`] = `
 >
   <Tooltip
     className="nav-link-tooltip"
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    isDisabled={false}
     isTabbable={false}
     position="middle-right"
     text="Feed"
+    theme="default"
   >
     <LinkBase
       className=""
@@ -74,9 +86,13 @@ exports[`feature/left-sidebar/LeftSidebarLink should render RemoveButton 1`] = `
 exports[`feature/left-sidebar/LeftSidebarLink should render a LinkComponent component 1`] = `
 <Tooltip
   className="nav-link-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
   isTabbable={false}
   position="middle-right"
   text="Feed"
+  theme="default"
 >
   <LinkBase
     className=""
@@ -94,9 +110,13 @@ exports[`feature/left-sidebar/LeftSidebarLink should render a LinkComponent comp
 exports[`feature/left-sidebar/LeftSidebarLink should render the IconComponent 1`] = `
 <Tooltip
   className="nav-link-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
   isTabbable={false}
   position="middle-right"
   text="Feed"
+  theme="default"
 >
   <LinkBase
     className=""
@@ -117,9 +137,13 @@ exports[`feature/left-sidebar/LeftSidebarLink should render the IconComponent 1`
 exports[`feature/left-sidebar/LeftSidebarLink should render the router link 1`] = `
 <Tooltip
   className="nav-link-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
   isTabbable={false}
   position="middle-right"
   text="Feed"
+  theme="default"
 >
   <routerLink
     className=""
@@ -151,9 +175,13 @@ exports[`feature/left-sidebar/LeftSidebarLink should render without a tooltip wr
 exports[`feature/left-sidebar/LeftSidebarLink should use a custom className 1`] = `
 <Tooltip
   className="nav-link-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
   isTabbable={false}
   position="middle-right"
   text="Feed"
+  theme="default"
 >
   <LinkBase
     className="custom-className"
@@ -171,9 +199,13 @@ exports[`feature/left-sidebar/LeftSidebarLink should use a custom className 1`] 
 exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on selected link and theme 1`] = `
 <Tooltip
   className="nav-link-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
   isTabbable={false}
   position="middle-right"
   text="Feed"
+  theme="default"
 >
   <LinkBase
     className=""
@@ -195,9 +227,13 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
 exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on selected link and theme 2`] = `
 <Tooltip
   className="nav-link-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
   isTabbable={false}
   position="middle-right"
   text="Feed"
+  theme="default"
 >
   <LinkBase
     className=""
@@ -215,9 +251,13 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
 exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on selected link and theme 3`] = `
 <Tooltip
   className="nav-link-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
   isTabbable={false}
   position="middle-right"
   text="Feed"
+  theme="default"
 >
   <LinkBase
     className=""
@@ -239,9 +279,13 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
 exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on selected link and theme 4`] = `
 <Tooltip
   className="nav-link-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
   isTabbable={false}
   position="middle-right"
   text="Feed"
+  theme="default"
 >
   <LinkBase
     className=""
@@ -259,9 +303,13 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
 exports[`feature/left-sidebar/LeftSidebarLink tooltip should take class from state 1`] = `
 <Tooltip
   className="nav-link-tooltip is-visible"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
   isTabbable={false}
   position="middle-right"
   text="Feed"
+  theme="default"
 >
   <LinkBase
     className=""

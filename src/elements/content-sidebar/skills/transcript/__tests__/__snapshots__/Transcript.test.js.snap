@@ -9,12 +9,17 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
     className="be-transcript-actions"
   >
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      position="top-center"
       text={
         <FormattedMessage
           defaultMessage="Copy"
           id="be.copy"
         />
       }
+      theme="default"
     >
       <PlainButton
         className="be-transcript-copy"
@@ -29,12 +34,17 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
       </PlainButton>
     </Tooltip>
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      position="top-center"
       text={
         <FormattedMessage
           defaultMessage="Edit"
           id="be.editLabel"
         />
       }
+      theme="default"
     >
       <PlainButton
         className="be-transcript-edit"
@@ -94,12 +104,17 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
     className="be-transcript-actions"
   >
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      position="top-center"
       text={
         <FormattedMessage
           defaultMessage="Copy"
           id="be.copy"
         />
       }
+      theme="default"
     >
       <PlainButton
         className="be-transcript-copy"
@@ -114,12 +129,17 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
       </PlainButton>
     </Tooltip>
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      position="top-center"
       text={
         <FormattedMessage
           defaultMessage="Expand"
           id="be.expand"
         />
       }
+      theme="default"
     >
       <PlainButton
         className="be-transcript-expand"
@@ -133,12 +153,17 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
       </PlainButton>
     </Tooltip>
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      position="top-center"
       text={
         <FormattedMessage
           defaultMessage="Edit"
           id="be.editLabel"
         />
       }
+      theme="default"
     >
       <PlainButton
         className="be-transcript-edit"
@@ -226,12 +251,17 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
     className="be-transcript-actions"
   >
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      position="top-center"
       text={
         <FormattedMessage
           defaultMessage="Copy"
           id="be.copy"
         />
       }
+      theme="default"
     >
       <PlainButton
         className="be-transcript-copy"

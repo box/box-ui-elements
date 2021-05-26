@@ -7,6 +7,9 @@ exports[`elements/content-uploader/ItemAction should render correctly with compl
   className="bcu-item-action"
 >
   <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    isDisabled={false}
     position="top-left"
     text={
       <span
@@ -14,6 +17,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with compl
         id="be.remove"
       />
     }
+    theme="default"
   >
     <PlainButton
       isDisabled={false}
@@ -43,6 +47,9 @@ exports[`elements/content-uploader/ItemAction should render correctly with error
   className="bcu-item-action"
 >
   <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    isDisabled={false}
     position="top-left"
     text={
       <span
@@ -50,6 +57,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with error
         id="be.retry"
       />
     }
+    theme="default"
   >
     <PlainButton
       isDisabled={false}
@@ -70,6 +78,9 @@ exports[`elements/content-uploader/ItemAction should render correctly with error
   className="bcu-item-action"
 >
   <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    isDisabled={false}
     position="top-left"
     text={
       <span
@@ -77,6 +88,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with error
         id="be.resume"
       />
     }
+    theme="default"
   >
     <PlainButton
       isDisabled={false}
@@ -97,6 +109,9 @@ exports[`elements/content-uploader/ItemAction should render correctly with inpro
   className="bcu-item-action"
 >
   <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    isDisabled={false}
     position="top-left"
     text={
       <span
@@ -104,6 +119,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with inpro
         id="be.uploadsCancelButtonTooltip"
       />
     }
+    theme="default"
   >
     <PlainButton
       isDisabled={false}
@@ -129,6 +145,9 @@ exports[`elements/content-uploader/ItemAction should render correctly with pendi
   className="bcu-item-action"
 >
   <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    isDisabled={false}
     position="top-left"
     text={
       <span
@@ -136,6 +155,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with pendi
         id="be.uploadsCancelButtonTooltip"
       />
     }
+    theme="default"
   >
     <PlainButton
       isDisabled={false}
@@ -161,6 +181,9 @@ exports[`elements/content-uploader/ItemAction should render correctly with stage
   className="bcu-item-action"
 >
   <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    isDisabled={false}
     position="top-left"
     text={
       <span
@@ -168,6 +191,7 @@ exports[`elements/content-uploader/ItemAction should render correctly with stage
         id="be.uploadsCancelButtonTooltip"
       />
     }
+    theme="default"
   >
     <PlainButton
       isDisabled={true}

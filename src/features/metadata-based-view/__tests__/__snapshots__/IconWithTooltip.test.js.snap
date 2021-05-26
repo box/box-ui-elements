@@ -2,12 +2,17 @@
 
 exports[`features/metadata-based-view/IconWithTooltip should get IconClose with Tooltip having text "cancel" 1`] = `
 <Tooltip
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
+  position="top-center"
   text={
     Object {
       "defaultMessage": "Cancel",
       "id": "be.cancel",
     }
   }
+  theme="default"
 >
   <PlainButton
     className="bdl-MetadataBasedItemList-cell--cancelIcon"
@@ -25,12 +30,17 @@ exports[`features/metadata-based-view/IconWithTooltip should get IconClose with 
 
 exports[`features/metadata-based-view/IconWithTooltip should get IconPencil with Tooltip having text "edit" 1`] = `
 <Tooltip
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
+  position="top-center"
   text={
     Object {
       "defaultMessage": "Edit",
       "id": "be.editLabel",
     }
   }
+  theme="default"
 >
   <PlainButton
     onClick={[Function]}
@@ -45,12 +55,17 @@ exports[`features/metadata-based-view/IconWithTooltip should get IconPencil with
 
 exports[`features/metadata-based-view/IconWithTooltip should get IconSave with Tooltip having text "save" 1`] = `
 <Tooltip
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
+  position="top-center"
   text={
     Object {
       "defaultMessage": "Save",
       "id": "be.save",
     }
   }
+  theme="default"
 >
   <Button
     className="bdl-MetadataBasedItemList-cell--saveIcon"

@@ -33,6 +33,9 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
               id="boxui.unifiedShare.linkShareOn"
             />
             <Tooltip
+              constrainToScrollParent={false}
+              constrainToWindow={true}
+              isDisabled={false}
               position="top-center"
               text={
                 <FormattedMessage
@@ -45,6 +48,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
                   }
                 />
               }
+              theme="default"
             >
               <span
                 className="shared-link-expiration-badge"
@@ -65,6 +69,9 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
   >
     <Tooltip
       className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       onDismiss={[Function]}
       position="middle-right"
@@ -97,6 +104,9 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
       />
     </Tooltip>
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       position="top-left"
       text={
         <FormattedMessage
@@ -104,6 +114,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
           id="boxui.unifiedShare.sendSharedLink"
         />
       }
+      theme="default"
     >
       <Button
         className="email-shared-link-btn"
@@ -176,6 +187,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
   >
     <Tooltip
       className="usm-disabled-message-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       position="top-right"
       text={
         <FormattedMessage
@@ -183,6 +197,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
           id="boxui.unifiedShare.removeLinkTooltip"
         />
       }
+      theme="default"
     >
       <div
         className="share-toggle-container"
@@ -206,6 +221,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
   >
     <Tooltip
       className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       onDismiss={[Function]}
       position="middle-right"
@@ -238,6 +256,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       />
     </Tooltip>
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       position="top-left"
       text={
         <FormattedMessage
@@ -245,6 +266,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
           id="boxui.unifiedShare.sendSharedLink"
         />
       }
+      theme="default"
     >
       <Button
         className="email-shared-link-btn"
@@ -312,6 +334,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     className="shared-link-toggle-row"
   >
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       position="top-right"
       text={
         <FormattedMessage
@@ -319,6 +344,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
           id="boxui.unifiedShare.sharedLinkDisabledTooltipCopy"
         />
       }
+      theme="default"
     >
       <div
         className="share-toggle-container"
@@ -381,6 +407,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
   >
     <Tooltip
       className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       onDismiss={[Function]}
       position="middle-right"
@@ -413,6 +442,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       />
     </Tooltip>
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       position="top-left"
       text={
         <FormattedMessage
@@ -420,6 +452,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
           id="boxui.unifiedShare.sendSharedLink"
         />
       }
+      theme="default"
     >
       <Button
         className="email-shared-link-btn"
@@ -512,6 +545,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
 exports[`features/unified-share-modal/SharedLinkSection should render disabled create shared link message when item share is false and url is empty 1`] = `
 <Tooltip
   className="usm-disabled-message-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
   position="top-right"
   text={
     <FormattedMessage
@@ -519,6 +555,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled c
       id="boxui.unifiedShare.disabledCreateLinkTooltip"
     />
   }
+  theme="default"
 >
   <div
     className="share-toggle-container"
@@ -541,6 +578,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled c
 exports[`features/unified-share-modal/SharedLinkSection should render disabled remove shared link message when url is not empty and canChangeAccessLevel is false 1`] = `
 <Tooltip
   className="usm-disabled-message-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
   position="top-right"
   text={
     <FormattedMessage
@@ -548,6 +588,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled r
       id="boxui.unifiedShare.removeLinkTooltip"
     />
   }
+  theme="default"
 >
   <div
     className="share-toggle-container"
@@ -589,6 +630,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
   >
     <Tooltip
       className="usm-disabled-message-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       position="top-right"
       text={
         <FormattedMessage
@@ -596,6 +640,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
           id="boxui.unifiedShare.removeLinkTooltip"
         />
       }
+      theme="default"
     >
       <div
         className="share-toggle-container"
@@ -619,6 +664,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
   >
     <Tooltip
       className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       onDismiss={[Function]}
       position="middle-right"
@@ -651,6 +699,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       />
     </Tooltip>
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       position="top-left"
       text={
         <FormattedMessage
@@ -658,6 +709,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
           id="boxui.unifiedShare.sendSharedLink"
         />
       }
+      theme="default"
     >
       <Button
         className="email-shared-link-btn"
@@ -688,12 +740,17 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       }
     />
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      position="top-center"
       text={
         <FormattedMessage
           defaultMessage="This permission can only be changed in Box Notes"
           id="boxui.unifiedShare.sharedLinkPermissionsEditTooltip"
         />
       }
+      theme="default"
     >
       <PlainButton
         className="can-edit-btn"
@@ -750,6 +807,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   >
     <Tooltip
       className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       onDismiss={[Function]}
       position="middle-right"
@@ -782,6 +842,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       />
     </Tooltip>
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       position="top-left"
       text={
         <FormattedMessage
@@ -789,6 +852,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
           id="boxui.unifiedShare.sendSharedLink"
         />
       }
+      theme="default"
     >
       <Button
         className="email-shared-link-btn"
@@ -881,6 +945,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   >
     <Tooltip
       className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       onDismiss={[Function]}
       position="middle-right"
@@ -913,6 +980,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       />
     </Tooltip>
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       position="top-left"
       text={
         <FormattedMessage
@@ -920,6 +990,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
           id="boxui.unifiedShare.sendSharedLink"
         />
       }
+      theme="default"
     >
       <Button
         className="email-shared-link-btn"
@@ -1037,6 +1108,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
   >
     <Tooltip
       className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       onDismiss={[Function]}
       position="middle-right"
@@ -1069,6 +1143,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
       />
     </Tooltip>
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       position="top-left"
       text={
         <FormattedMessage
@@ -1076,6 +1153,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
           id="boxui.unifiedShare.sendSharedLink"
         />
       }
+      theme="default"
     >
       <Button
         className="email-shared-link-btn"

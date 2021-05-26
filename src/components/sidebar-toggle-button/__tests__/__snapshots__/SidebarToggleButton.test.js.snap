@@ -15,45 +15,45 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
     isOpen={false}
   >
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       position="middle-left"
       text="Show Sidebar"
+      theme="default"
     >
-      <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
-        intl={
-          Object {
-            "formatDate": [Function],
-            "formatMessage": [Function],
-            "formatRelativeTime": [Function],
-          }
+      <TetherComponent
+        attachment="middle right"
+        bodyElement={<body />}
+        classPrefix="tooltip"
+        constraints={
+          Array [
+            Object {
+              "attachment": "together",
+              "to": "window",
+            },
+          ]
         }
-        isDisabled={false}
-        position="middle-left"
-        text="Show Sidebar"
-        theme="default"
+        enabled={false}
+        renderElementTag="div"
+        renderElementTo={null}
+        targetAttachment="middle left"
       >
-        <TetherComponent
-          attachment="middle right"
-          bodyElement={<body />}
-          classPrefix="tooltip"
-          constraints={
-            Array [
-              Object {
-                "attachment": "together",
-                "to": "window",
-              },
-            ]
-          }
-          enabled={false}
-          renderElementTag="div"
-          renderElementTo={null}
-          targetAttachment="middle left"
+        <PlainButton
+          aria-label="Show Sidebar"
+          className="bdl-SidebarToggleButton bdl-is-collapsed"
+          key=".0"
+          onBlur={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          tabIndex="0"
+          type="button"
         >
-          <PlainButton
+          <button
             aria-label="Show Sidebar"
-            className="bdl-SidebarToggleButton bdl-is-collapsed"
-            key=".0"
+            className="btn-plain bdl-SidebarToggleButton bdl-is-collapsed"
             onBlur={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}
@@ -62,47 +62,35 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
             tabIndex="0"
             type="button"
           >
-            <button
-              aria-label="Show Sidebar"
-              className="btn-plain bdl-SidebarToggleButton bdl-is-collapsed"
-              onBlur={[Function]}
-              onFocus={[Function]}
-              onKeyDown={[Function]}
-              onMouseEnter={[Function]}
-              onMouseLeave={[Function]}
-              tabIndex="0"
-              type="button"
+            <IconShow
+              height={16}
+              width={16}
             >
-              <IconShow
+              <AccessibleSVG
+                className="icon-show "
                 height={16}
+                viewBox="0 0 16 16"
                 width={16}
               >
-                <AccessibleSVG
+                <svg
                   className="icon-show "
+                  focusable="false"
                   height={16}
+                  role="presentation"
                   viewBox="0 0 16 16"
                   width={16}
                 >
-                  <svg
-                    className="icon-show "
-                    focusable="false"
-                    height={16}
-                    role="presentation"
-                    viewBox="0 0 16 16"
-                    width={16}
-                  >
-                    <path
-                      d="M7.354 7.646l3.292-3.292a.5.5 0 0 0 0-.708L9.354 2.354a.5.5 0 0 0-.708 0L3.354 7.646a.5.5 0 0 0 0 .708l5.292 5.292a.5.5 0 0 0 .708 0l1.292-1.292a.5.5 0 0 0 0-.708L7.354 8.354a.5.5 0 0 1 0-.708z"
-                      fill="#909090"
-                      fillRule="nonzero"
-                    />
-                  </svg>
-                </AccessibleSVG>
-              </IconShow>
-            </button>
-          </PlainButton>
-        </TetherComponent>
-      </Tooltip>
+                  <path
+                    d="M7.354 7.646l3.292-3.292a.5.5 0 0 0 0-.708L9.354 2.354a.5.5 0 0 0-.708 0L3.354 7.646a.5.5 0 0 0 0 .708l5.292 5.292a.5.5 0 0 0 .708 0l1.292-1.292a.5.5 0 0 0 0-.708L7.354 8.354a.5.5 0 0 1 0-.708z"
+                    fill="#909090"
+                    fillRule="nonzero"
+                  />
+                </svg>
+              </AccessibleSVG>
+            </IconShow>
+          </button>
+        </PlainButton>
+      </TetherComponent>
     </Tooltip>
   </SidebarToggleButton>
 </SidebarToggleButton>
@@ -125,45 +113,45 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
     isOpen={false}
   >
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       position="middle-right"
       text="Show Sidebar"
+      theme="default"
     >
-      <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
-        intl={
-          Object {
-            "formatDate": [Function],
-            "formatMessage": [Function],
-            "formatRelativeTime": [Function],
-          }
+      <TetherComponent
+        attachment="middle left"
+        bodyElement={<body />}
+        classPrefix="tooltip"
+        constraints={
+          Array [
+            Object {
+              "attachment": "together",
+              "to": "window",
+            },
+          ]
         }
-        isDisabled={false}
-        position="middle-right"
-        text="Show Sidebar"
-        theme="default"
+        enabled={false}
+        renderElementTag="div"
+        renderElementTo={null}
+        targetAttachment="middle right"
       >
-        <TetherComponent
-          attachment="middle left"
-          bodyElement={<body />}
-          classPrefix="tooltip"
-          constraints={
-            Array [
-              Object {
-                "attachment": "together",
-                "to": "window",
-              },
-            ]
-          }
-          enabled={false}
-          renderElementTag="div"
-          renderElementTo={null}
-          targetAttachment="middle right"
+        <PlainButton
+          aria-label="Show Sidebar"
+          className="bdl-SidebarToggleButton bdl-is-collapsed"
+          key=".0"
+          onBlur={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          tabIndex="0"
+          type="button"
         >
-          <PlainButton
+          <button
             aria-label="Show Sidebar"
-            className="bdl-SidebarToggleButton bdl-is-collapsed"
-            key=".0"
+            className="btn-plain bdl-SidebarToggleButton bdl-is-collapsed"
             onBlur={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}
@@ -172,47 +160,35 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
             tabIndex="0"
             type="button"
           >
-            <button
-              aria-label="Show Sidebar"
-              className="btn-plain bdl-SidebarToggleButton bdl-is-collapsed"
-              onBlur={[Function]}
-              onFocus={[Function]}
-              onKeyDown={[Function]}
-              onMouseEnter={[Function]}
-              onMouseLeave={[Function]}
-              tabIndex="0"
-              type="button"
+            <IconHide
+              height={16}
+              width={16}
             >
-              <IconHide
+              <AccessibleSVG
+                className="icon-hide "
                 height={16}
+                viewBox="0 0 16 16"
                 width={16}
               >
-                <AccessibleSVG
+                <svg
                   className="icon-hide "
+                  focusable="false"
                   height={16}
+                  role="presentation"
                   viewBox="0 0 16 16"
                   width={16}
                 >
-                  <svg
-                    className="icon-hide "
-                    focusable="false"
-                    height={16}
-                    role="presentation"
-                    viewBox="0 0 16 16"
-                    width={16}
-                  >
-                    <path
-                      d="M7.646 7.646L4.354 4.354a.5.5 0 0 1 0-.708l1.292-1.292a.5.5 0 0 1 .708 0l5.292 5.292a.5.5 0 0 1 0 .708l-5.292 5.292a.5.5 0 0 1-.708 0l-1.292-1.292a.5.5 0 0 1 0-.708l3.292-3.292a.5.5 0 0 0 0-.708z"
-                      fill="#909090"
-                      fillRule="nonzero"
-                    />
-                  </svg>
-                </AccessibleSVG>
-              </IconHide>
-            </button>
-          </PlainButton>
-        </TetherComponent>
-      </Tooltip>
+                  <path
+                    d="M7.646 7.646L4.354 4.354a.5.5 0 0 1 0-.708l1.292-1.292a.5.5 0 0 1 .708 0l5.292 5.292a.5.5 0 0 1 0 .708l-5.292 5.292a.5.5 0 0 1-.708 0l-1.292-1.292a.5.5 0 0 1 0-.708l3.292-3.292a.5.5 0 0 0 0-.708z"
+                    fill="#909090"
+                    fillRule="nonzero"
+                  />
+                </svg>
+              </AccessibleSVG>
+            </IconHide>
+          </button>
+        </PlainButton>
+      </TetherComponent>
     </Tooltip>
   </SidebarToggleButton>
 </SidebarToggleButton>
@@ -235,45 +211,45 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
     isOpen={true}
   >
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       position="middle-right"
       text="Hide Sidebar"
+      theme="default"
     >
-      <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
-        intl={
-          Object {
-            "formatDate": [Function],
-            "formatMessage": [Function],
-            "formatRelativeTime": [Function],
-          }
+      <TetherComponent
+        attachment="middle left"
+        bodyElement={<body />}
+        classPrefix="tooltip"
+        constraints={
+          Array [
+            Object {
+              "attachment": "together",
+              "to": "window",
+            },
+          ]
         }
-        isDisabled={false}
-        position="middle-right"
-        text="Hide Sidebar"
-        theme="default"
+        enabled={false}
+        renderElementTag="div"
+        renderElementTo={null}
+        targetAttachment="middle right"
       >
-        <TetherComponent
-          attachment="middle left"
-          bodyElement={<body />}
-          classPrefix="tooltip"
-          constraints={
-            Array [
-              Object {
-                "attachment": "together",
-                "to": "window",
-              },
-            ]
-          }
-          enabled={false}
-          renderElementTag="div"
-          renderElementTo={null}
-          targetAttachment="middle right"
+        <PlainButton
+          aria-label="Hide Sidebar"
+          className="bdl-SidebarToggleButton"
+          key=".0"
+          onBlur={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          tabIndex="0"
+          type="button"
         >
-          <PlainButton
+          <button
             aria-label="Hide Sidebar"
-            className="bdl-SidebarToggleButton"
-            key=".0"
+            className="btn-plain bdl-SidebarToggleButton"
             onBlur={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}
@@ -282,47 +258,35 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
             tabIndex="0"
             type="button"
           >
-            <button
-              aria-label="Hide Sidebar"
-              className="btn-plain bdl-SidebarToggleButton"
-              onBlur={[Function]}
-              onFocus={[Function]}
-              onKeyDown={[Function]}
-              onMouseEnter={[Function]}
-              onMouseLeave={[Function]}
-              tabIndex="0"
-              type="button"
+            <IconShow
+              height={16}
+              width={16}
             >
-              <IconShow
+              <AccessibleSVG
+                className="icon-show "
                 height={16}
+                viewBox="0 0 16 16"
                 width={16}
               >
-                <AccessibleSVG
+                <svg
                   className="icon-show "
+                  focusable="false"
                   height={16}
+                  role="presentation"
                   viewBox="0 0 16 16"
                   width={16}
                 >
-                  <svg
-                    className="icon-show "
-                    focusable="false"
-                    height={16}
-                    role="presentation"
-                    viewBox="0 0 16 16"
-                    width={16}
-                  >
-                    <path
-                      d="M7.354 7.646l3.292-3.292a.5.5 0 0 0 0-.708L9.354 2.354a.5.5 0 0 0-.708 0L3.354 7.646a.5.5 0 0 0 0 .708l5.292 5.292a.5.5 0 0 0 .708 0l1.292-1.292a.5.5 0 0 0 0-.708L7.354 8.354a.5.5 0 0 1 0-.708z"
-                      fill="#909090"
-                      fillRule="nonzero"
-                    />
-                  </svg>
-                </AccessibleSVG>
-              </IconShow>
-            </button>
-          </PlainButton>
-        </TetherComponent>
-      </Tooltip>
+                  <path
+                    d="M7.354 7.646l3.292-3.292a.5.5 0 0 0 0-.708L9.354 2.354a.5.5 0 0 0-.708 0L3.354 7.646a.5.5 0 0 0 0 .708l5.292 5.292a.5.5 0 0 0 .708 0l1.292-1.292a.5.5 0 0 0 0-.708L7.354 8.354a.5.5 0 0 1 0-.708z"
+                    fill="#909090"
+                    fillRule="nonzero"
+                  />
+                </svg>
+              </AccessibleSVG>
+            </IconShow>
+          </button>
+        </PlainButton>
+      </TetherComponent>
     </Tooltip>
   </SidebarToggleButton>
 </SidebarToggleButton>
@@ -343,45 +307,45 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
     isOpen={true}
   >
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       position="middle-left"
       text="Hide Sidebar"
+      theme="default"
     >
-      <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
-        intl={
-          Object {
-            "formatDate": [Function],
-            "formatMessage": [Function],
-            "formatRelativeTime": [Function],
-          }
+      <TetherComponent
+        attachment="middle right"
+        bodyElement={<body />}
+        classPrefix="tooltip"
+        constraints={
+          Array [
+            Object {
+              "attachment": "together",
+              "to": "window",
+            },
+          ]
         }
-        isDisabled={false}
-        position="middle-left"
-        text="Hide Sidebar"
-        theme="default"
+        enabled={false}
+        renderElementTag="div"
+        renderElementTo={null}
+        targetAttachment="middle left"
       >
-        <TetherComponent
-          attachment="middle right"
-          bodyElement={<body />}
-          classPrefix="tooltip"
-          constraints={
-            Array [
-              Object {
-                "attachment": "together",
-                "to": "window",
-              },
-            ]
-          }
-          enabled={false}
-          renderElementTag="div"
-          renderElementTo={null}
-          targetAttachment="middle left"
+        <PlainButton
+          aria-label="Hide Sidebar"
+          className="bdl-SidebarToggleButton"
+          key=".0"
+          onBlur={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          tabIndex="0"
+          type="button"
         >
-          <PlainButton
+          <button
             aria-label="Hide Sidebar"
-            className="bdl-SidebarToggleButton"
-            key=".0"
+            className="btn-plain bdl-SidebarToggleButton"
             onBlur={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}
@@ -390,47 +354,35 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
             tabIndex="0"
             type="button"
           >
-            <button
-              aria-label="Hide Sidebar"
-              className="btn-plain bdl-SidebarToggleButton"
-              onBlur={[Function]}
-              onFocus={[Function]}
-              onKeyDown={[Function]}
-              onMouseEnter={[Function]}
-              onMouseLeave={[Function]}
-              tabIndex="0"
-              type="button"
+            <IconHide
+              height={16}
+              width={16}
             >
-              <IconHide
+              <AccessibleSVG
+                className="icon-hide "
                 height={16}
+                viewBox="0 0 16 16"
                 width={16}
               >
-                <AccessibleSVG
+                <svg
                   className="icon-hide "
+                  focusable="false"
                   height={16}
+                  role="presentation"
                   viewBox="0 0 16 16"
                   width={16}
                 >
-                  <svg
-                    className="icon-hide "
-                    focusable="false"
-                    height={16}
-                    role="presentation"
-                    viewBox="0 0 16 16"
-                    width={16}
-                  >
-                    <path
-                      d="M7.646 7.646L4.354 4.354a.5.5 0 0 1 0-.708l1.292-1.292a.5.5 0 0 1 .708 0l5.292 5.292a.5.5 0 0 1 0 .708l-5.292 5.292a.5.5 0 0 1-.708 0l-1.292-1.292a.5.5 0 0 1 0-.708l3.292-3.292a.5.5 0 0 0 0-.708z"
-                      fill="#909090"
-                      fillRule="nonzero"
-                    />
-                  </svg>
-                </AccessibleSVG>
-              </IconHide>
-            </button>
-          </PlainButton>
-        </TetherComponent>
-      </Tooltip>
+                  <path
+                    d="M7.646 7.646L4.354 4.354a.5.5 0 0 1 0-.708l1.292-1.292a.5.5 0 0 1 .708 0l5.292 5.292a.5.5 0 0 1 0 .708l-5.292 5.292a.5.5 0 0 1-.708 0l-1.292-1.292a.5.5 0 0 1 0-.708l3.292-3.292a.5.5 0 0 0 0-.708z"
+                    fill="#909090"
+                    fillRule="nonzero"
+                  />
+                </svg>
+              </AccessibleSVG>
+            </IconHide>
+          </button>
+        </PlainButton>
+      </TetherComponent>
     </Tooltip>
   </SidebarToggleButton>
 </SidebarToggleButton>

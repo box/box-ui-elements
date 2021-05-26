@@ -2,10 +2,13 @@
 
 exports[`features/classification/ClassifiedBadge should render a classified badge with a tooltip 1`] = `
 <Tooltip
+  constrainToScrollParent={false}
+  constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
   position="bottom-center"
   text="fubar"
+  theme="default"
 >
   <SecurityBadge
     className="bdl-ClassifiedBadge"
@@ -23,9 +26,12 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
 
 exports[`features/classification/ClassifiedBadge should render a classified badge with tooltip disabled 1`] = `
 <Tooltip
+  constrainToScrollParent={false}
+  constrainToWindow={true}
   isDisabled={true}
   isTabbable={false}
   position="bottom-center"
+  theme="default"
 >
   <SecurityBadge
     className="bdl-ClassifiedBadge"
@@ -43,10 +49,13 @@ exports[`features/classification/ClassifiedBadge should render a classified badg
 
 exports[`features/classification/ClassifiedBadge should render a classified badge within a button when onClick is provided 1`] = `
 <Tooltip
+  constrainToScrollParent={false}
+  constrainToWindow={true}
   isDisabled={false}
   isTabbable={false}
   position="bottom-center"
   text="fubar"
+  theme="default"
 >
   <PlainButton
     className="bdl-ClassifiedBadge-editButton"

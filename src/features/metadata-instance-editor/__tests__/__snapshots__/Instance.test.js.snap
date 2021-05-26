@@ -13,6 +13,9 @@ exports[`features/metadata-instance-editor/fields/Instance collapsible isOpen pr
     hasStickyHeader={true}
     headerActionItems={
       <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        isDisabled={false}
         position="top-left"
         text={
           <FormattedMessage
@@ -20,6 +23,7 @@ exports[`features/metadata-instance-editor/fields/Instance collapsible isOpen pr
             id="boxui.metadataInstanceEditor.editTooltip"
           />
         }
+        theme="default"
       >
         <PlainButton
           className="metadata-instance-editor-instance-edit"
@@ -741,6 +745,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
     hasStickyHeader={true}
     headerActionItems={
       <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        isDisabled={false}
         position="top-left"
         text={
           <FormattedMessage
@@ -748,6 +755,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
             id="boxui.metadataInstanceEditor.editTooltip"
           />
         }
+        theme="default"
       >
         <PlainButton
           className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
@@ -937,6 +945,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
     hasStickyHeader={true}
     headerActionItems={
       <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        isDisabled={false}
         position="top-left"
         text={
           <FormattedMessage
@@ -944,6 +955,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
             id="boxui.metadataInstanceEditor.editTooltip"
           />
         }
+        theme="default"
       >
         <PlainButton
           className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
@@ -1042,6 +1054,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
     hasStickyHeader={true}
     headerActionItems={
       <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        isDisabled={false}
         position="top-left"
         text={
           <FormattedMessage
@@ -1049,6 +1064,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
             id="boxui.metadataInstanceEditor.editTooltip"
           />
         }
+        theme="default"
       >
         <PlainButton
           className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"

@@ -14,6 +14,9 @@ exports[`components/text-input/TextInput should render text input with descripti
       some description
     </div>
     <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
       isShown={false}
       position="middle-right"
       text=""
