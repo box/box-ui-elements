@@ -223,16 +223,12 @@ class Tooltip extends React.Component<TooltipProps, State> {
             theme,
         } = this.props;
 
-        let childComponentAriaLabel;
         let tooltipText;
-
         if (text && typeof text === 'string') {
             tooltipText = text;
         }
-        if (getProp(children, 'props') && getProp(children, 'props.aria-label')) {
-            childComponentAriaLabel = getProp(children, 'props.aria-label');
-        }
-        const isLabelMatchingTooltipText = childComponentAriaLabel && tooltipText === childComponentAriaLabel;
+        const childAriaLabel = getProp(children, 'props.aria-label');
+        const isLabelMatchingTooltipText = childAriaLabel && tooltipText === childAriaLabel;
 
         // If the tooltip is disabled just render the children
         if (isDisabled) {

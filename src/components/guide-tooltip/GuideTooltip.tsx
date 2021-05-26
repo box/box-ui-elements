@@ -2,8 +2,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
-// @ts-ignore flow import
-import Tooltip, { TooltipTheme, TooltipBase } from '../tooltip';
+import Tooltip, { TooltipTheme } from '../tooltip';
 import Button from '../button';
 // @ts-ignore flow import
 import messages from './messages';

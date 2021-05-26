@@ -231,7 +231,7 @@ describe('components/tooltip/Tooltip', () => {
                 </Tooltip>,
             );
             const tooltip = wrapper.childAt(1);
-            expect(tooltip.prop('aria-hidden')).toBeTruthy();
+            expect(tooltip.prop('aria-hidden')).toBe(true);
         });
 
         test('should set aria-hidden as false if aria-label does not exist', () => {
@@ -243,7 +243,7 @@ describe('components/tooltip/Tooltip', () => {
             );
             const tooltip = wrapper.childAt(1);
 
-            expect(tooltip.prop('aria-hidden')).toBeFalsy();
+            expect(tooltip.prop('aria-hidden')).toBe(false);
         });
 
         test('should set aria-hidden as false if aria-label is different than tooltipText', () => {
@@ -254,7 +254,7 @@ describe('components/tooltip/Tooltip', () => {
             );
             const tooltip = wrapper.childAt(1);
 
-            expect(tooltip.prop('aria-hidden')).toBeFalsy();
+            expect(tooltip.prop('aria-hidden')).toBe(false);
         });
 
         test('should render error class when theme is error', () => {
