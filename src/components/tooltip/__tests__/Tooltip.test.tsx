@@ -224,10 +224,65 @@ describe('components/tooltip/Tooltip', () => {
             expect(tooltip.text()).toEqual('hi');
         });
 
+        test('should set aria-describedBy when aria-label exists and tooltipText is different than it', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="hi">
+                    <button aria-label="test" />
+                </Tooltip>,
+            );
+            const component = wrapper.childAt(0);
+            const tooltip = wrapper.childAt(1);
+
+            expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
+        });
+
+        test('should not set aria-describedBy when aria-label exists but tooltipText is equal to it', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="hi">
+                    <button aria-label="hi" />
+                </Tooltip>,
+            );
+            const component = wrapper.childAt(0);
+
+            expect(component.prop('aria-describedby')).toEqual(undefined);
+        });
+
+        test('should set aria-hidden as true if aria-label and tooltipText are equal', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="test">
+                    <button aria-label="test" />
+                </Tooltip>,
+            );
+            const tooltip = wrapper.childAt(1);
+            expect(tooltip.prop('aria-hidden')).toBe(true);
+        });
+
+        test('should set aria-hidden as false if aria-label does not exist', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="hi">
+                    <button />
+                </Tooltip>,
+            );
+            const tooltip = wrapper.childAt(1);
+
+            expect(tooltip.prop('aria-hidden')).toBe(false);
+        });
+
+        test('should set aria-hidden as false if aria-label is different than tooltipText', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="Im a long tooltip description">
+                    <button aria-label="launch" />
+                </Tooltip>,
+            );
+            const tooltip = wrapper.childAt(1);
+
+            expect(tooltip.prop('aria-hidden')).toBe(false);
+        });
+
         test('should render error class when theme is error', () => {
             const wrapper = shallow(
                 <Tooltip isShown text="hi" theme={TooltipTheme.ERROR}>
-                    <button />
+                    <button aria-label="test" />
                 </Tooltip>,
             );
             const component = wrapper.childAt(0);
