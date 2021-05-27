@@ -23,7 +23,7 @@ type Props = {|
     getUnreadMessageCount: () => Promise<UnreadEligibleMessageCenterMessageCount>,
     language?: string,
     messages?: StringMap,
-    onMessageShown: EligibleMessageCenterMessage => void,
+    onMessageShown?: EligibleMessageCenterMessage => void,
     overscanRowCount?: number,
     postMarkAllMessagesAsSeen: (messageArray: Array<EligibleMessageCenterMessage> | Error) => Promise<null>,
 |};
