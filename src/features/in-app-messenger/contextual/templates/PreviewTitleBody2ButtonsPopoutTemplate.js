@@ -10,6 +10,7 @@ import * as React from 'react';
 import Button from '../../../../components/button/Button';
 import Overlay from '../../../../components/flyout/Overlay';
 import MessagePreviewContent from '../../../message-center/components/templates/common/MessagePreviewContent';
+import type { Token } from '../../../../common/types/core';
 
 import { type PreviewTitleBody2ButtonsPopoutParams } from '../../types';
 
@@ -18,7 +19,7 @@ import './styles/PreviewTitleBody2ButtonsPopoutTemplate.scss';
 type Props = {
     apiHost: string,
     contentPreviewProps?: ContentPreviewProps,
-    getToken: (folderID: string | number) => void,
+    getToken: (folderID: string | number) => Promise<Token>,
     onAction: Function,
     params: PreviewTitleBody2ButtonsPopoutParams,
 };
