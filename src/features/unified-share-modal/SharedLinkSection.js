@@ -156,6 +156,12 @@ class SharedLinkSection extends React.Component<Props, State> {
                     onCopyError();
                 });
         }
+
+        if (sharedLink.url === null) {
+            if (this.toggleRef) {
+                this.toggleRef.focus();
+            }
+        }
     }
 
     canAddSharedLink = (isSharedLinkEnabled: boolean, canAddLink: boolean) => {
