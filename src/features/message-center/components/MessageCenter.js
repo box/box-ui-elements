@@ -7,11 +7,11 @@ import Badgeable from '../../../components/badgeable/Badgeable';
 import type { Token, StringMap } from '../../../common/types/core';
 import MessageCenterModal from './message-center-modal/MessageCenterModal';
 import type {
-    ContentPreviewProps,
     GetEligibleMessageCenterMessages,
     UnreadEligibleMessageCenterMessageCount,
     EligibleMessageCenterMessage,
 } from '../types';
+import type { ContentPreviewProps } from '../../../common/types/contentPreview';
 import Internationalize from '../../../elements/common/Internationalize';
 
 type Props = {|
