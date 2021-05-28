@@ -5,7 +5,7 @@ import PreviewGhost from '../PreviewGhost';
 
 const getWrapper = () => shallow(<PreviewGhost />);
 
-describe('components/message-center/components/templates/common/PreviewGhost', () => {
+describe('components/preview-ghost/PreviewGhost.js', () => {
     test('should render correctly', () => {
         expect(getWrapper()).toMatchSnapshot();
     });

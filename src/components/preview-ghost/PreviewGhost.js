@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import Ghost from '../../../../../components/ghost/Ghost';
+import Ghost from '../ghost/Ghost';
 
 function PreviewGhost() {
     return (

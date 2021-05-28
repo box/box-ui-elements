@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/message-center/components/templates/common/PreviewGhost should render correctly 1`] = `
+exports[`components/preview-ghost/PreviewGhost.js should render correctly 1`] = `
 <div
   className="PreviewGhost"
 >

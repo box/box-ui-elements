@@ -1,11 +1,11 @@
 // // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import ContentPreview from '../../../../../elements/content-preview';
-import type { Token } from '../../../../../common/types/core';
-import type { ContentPreviewProps } from '../../../types';
-import Cache from '../../../../../utils/Cache';
-import PreviewGhost from './PreviewGhost';
+import ContentPreview from '../../elements/content-preview';
+import type { Token } from '../../common/types/core';
+import type { ContentPreviewProps } from '../../common/types/contentPreview';
+import Cache from '../../utils/Cache';
+import PreviewGhost from '../preview-ghost/PreviewGhost';
 import PreviewErrorNotification from './PreviewErrorNotification';
 import './styles/MessagePreviewContent.scss';
 

@@ -13,7 +13,7 @@ const defaultProps = {
 
 const getWrapper = props => mount(<MessagePreviewContent {...defaultProps} {...props} />);
 
-describe('components/message-center/components/templates/common/MessagePreviewContent', () => {
+describe('components/message-preview-content/MessagePreviewContent.js', () => {
     test('should hide ContentPreview behind Ghost component while loading content', () => {
         const wrapper = getWrapper();
         expect(

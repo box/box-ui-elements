@@ -1,9 +1,9 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Picture16 from '../../../../../icon/fill/Picture16';
+import Picture16 from '../../icon/fill/Picture16';
 
-import messages from '../../../messages';
+import messages from './messages';
 import './styles/PreviewErrorNotification.scss';
 
 function PreviewErrorNotification() {

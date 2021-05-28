@@ -13,9 +13,10 @@ import CategorySelector from '../../../../components/category-selector/CategoryS
 import CollapsibleScrollbar from '../collapsibile-scrollbar/CollapsibleScrollbar';
 import Message from '../message/Message';
 import intlMessages from '../../messages';
-import type { ContentPreviewProps, EligibleMessageCenterMessage } from '../../types';
+import type { EligibleMessageCenterMessage } from '../../types';
+import type { ContentPreviewProps } from '../../../../common/types/contentPreview';
 import './MessageCenterModal.scss';
-import PreviewGhost from '../templates/common/PreviewGhost';
+import PreviewGhost from '../../../../components/preview-ghost/PreviewGhost';
 import ContentGhost from '../templates/common/ContentGhost';
 import BottomContentWrapper from '../templates/common/BottomContentWrapper';
 import ErrorState from '../error-state/ErrorState';
