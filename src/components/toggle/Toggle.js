@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
+import noop from 'lodash/noop';
 
 import './Toggle.scss';
 
@@ -8,6 +9,8 @@ type Props = {
     className?: string,
     /** Description of the input */
     description?: React.Node,
+    /** Function to get the DOM reference to the html input */
+    getDOMRef?: React.LegacyRef<HTMLInputElement>,
     isDisabled?: boolean, // @TODO: eventually call this `disabled`
     /** Toggle state */
     isOn?: boolean, // @TODO: eventually call this `checked`
@@ -28,6 +31,7 @@ type Props = {
 const Toggle = ({
     className = '',
     description,
+    getDOMRef = noop,
     isDisabled,
     isOn,
     isToggleRightAligned = false,
@@ -59,6 +63,7 @@ const Toggle = ({
                     checked={isOn}
                     className="toggle-simple-input"
                     disabled={isDisabled}
+                    ref={getDOMRef}
                     name={name}
                     onBlur={onBlur}
                     onChange={onChange}

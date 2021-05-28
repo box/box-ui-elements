@@ -24,6 +24,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
       className="share-toggle-container"
     >
       <Toggle
+        getDOMRef={[Function]}
         isDisabled={false}
         isOn={true}
         label={
@@ -203,6 +204,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
         className="share-toggle-container"
       >
         <Toggle
+          getDOMRef={[Function]}
           isDisabled={true}
           isOn={true}
           label={
@@ -350,6 +352,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
         className="share-toggle-container"
       >
         <Toggle
+          getDOMRef={[Function]}
           isDisabled={false}
           isOn={false}
           label={
@@ -390,6 +393,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       className="share-toggle-container"
     >
       <Toggle
+        getDOMRef={[Function]}
         isDisabled={false}
         isOn={true}
         label={
@@ -527,6 +531,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       className="share-toggle-container"
     >
       <Toggle
+        getDOMRef={[Function]}
         isDisabled={true}
         isOn={false}
         label={
@@ -561,6 +566,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled c
     className="share-toggle-container"
   >
     <Toggle
+      getDOMRef={[Function]}
       isDisabled={true}
       isOn={false}
       label={
@@ -594,6 +600,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled r
     className="share-toggle-container"
   >
     <Toggle
+      getDOMRef={[Function]}
       isDisabled={true}
       isOn={true}
       label={
@@ -646,6 +653,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
         className="share-toggle-container"
       >
         <Toggle
+          getDOMRef={[Function]}
           isDisabled={true}
           isOn={true}
           label={
@@ -790,6 +798,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       className="share-toggle-container"
     >
       <Toggle
+        getDOMRef={[Function]}
         isDisabled={false}
         isOn={true}
         label={
@@ -928,6 +937,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       className="share-toggle-container"
     >
       <Toggle
+        getDOMRef={[Function]}
         isDisabled={false}
         isOn={true}
         label={
@@ -1091,6 +1101,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
       className="share-toggle-container"
     >
       <Toggle
+        getDOMRef={[Function]}
         isDisabled={false}
         isOn={true}
         label={
