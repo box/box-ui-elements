@@ -1,9 +1,7 @@
-// @flow
 /* eslint-disable react/jsx-sort-props */
 import * as React from 'react';
 import * as vars from '../../styles/variables';
-import AccessibleSVG from '../../icons/accessible-svg';
-import type { Icon } from '../../icons/flowTypes';
+import AccessibleSVG, { SVGProps } from '../../components/accessible-svg/AccessibleSVG';
 
 /**
  * This is an auto-generated component and should not be edited
@@ -16,13 +14,14 @@ import type { Icon } from '../../icons/flowTypes';
  * - https://github.com/box/box-ui-elements/issues/new?template=Feature_request.md
  */
 
-const Checkmark16 = (props: Icon) => (
+const ExportArrow16 = (props: SVGProps) => (
     <AccessibleSVG width={16} height={16} viewBox="0 0 16 16" {...props}>
         <path
             fill={vars.bdlGray50}
-            d="M6.617 14c.55 0 .968-.2 1.253-.603l6.34-9.273c.102-.15.175-.296.221-.438.046-.143.069-.28.069-.41a1.2 1.2 0 00-.387-.912C13.855 2.121 13.53 2 13.139 2c-.26 0-.482.05-.666.15-.183.101-.357.275-.52.523l-5.357 8.152-2.693-3.12a1.327 1.327 0 00-1.05-.476c-.39 0-.714.121-.97.364-.255.243-.383.55-.383.919 0 .163.029.319.087.466.058.147.162.302.311.466l3.518 4.023c.318.355.719.533 1.201.533z"
+            fillRule="evenodd"
+            d="M6 1a1 1 0 01.117 1.993L6 3H3v10h10v-3a1 1 0 011.993-.117L15 10v3a2 2 0 01-1.85 1.995L13 15H3a2 2 0 01-1.995-1.85L1 13V3a2 2 0 011.85-1.995L3 1h3zm9-1a1 1 0 01.993.883L16 1v5a1 1 0 01-1.993.117L14 6V3.414L8.707 8.707a1 1 0 01-1.497-1.32l.083-.094L12.584 2H10a1 1 0 01-.993-.883L9 1a1 1 0 01.883-.993L10 0h5z"
         />
     </AccessibleSVG>
 );
 
-export default Checkmark16;
+export default ExportArrow16;

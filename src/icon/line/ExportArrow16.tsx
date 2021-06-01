@@ -14,13 +14,14 @@ import AccessibleSVG, { SVGProps } from '../../components/accessible-svg/Accessi
  * - https://github.com/box/box-ui-elements/issues/new?template=Feature_request.md
  */
 
-const Checkmark16 = (props: SVGProps) => (
+const ExportArrow16 = (props: SVGProps) => (
     <AccessibleSVG width={16} height={16} viewBox="0 0 16 16" {...props}>
         <path
-            fill={vars.bdlGray50}
-            d="M6.617 14c.55 0 .968-.2 1.253-.603l6.34-9.273c.102-.15.175-.296.221-.438.046-.143.069-.28.069-.41a1.2 1.2 0 00-.387-.912C13.855 2.121 13.53 2 13.139 2c-.26 0-.482.05-.666.15-.183.101-.357.275-.52.523l-5.357 8.152-2.693-3.12a1.327 1.327 0 00-1.05-.476c-.39 0-.714.121-.97.364-.255.243-.383.55-.383.919 0 .163.029.319.087.466.058.147.162.302.311.466l3.518 4.023c.318.355.719.533 1.201.533z"
+            fill={vars.bdlGray}
+            fillRule="evenodd"
+            d="M6.5 1a.5.5 0 01.09.992L6.5 2h-4a.5.5 0 00-.492.41L2 2.5v11a.5.5 0 00.41.492L2.5 14h11a.5.5 0 00.492-.41L14 13.5v-4a.5.5 0 01.992-.09L15 9.5v4a1.5 1.5 0 01-1.356 1.493L13.5 15h-11a1.5 1.5 0 01-1.493-1.356L1 13.5v-11a1.5 1.5 0 011.356-1.493L2.5 1h4zm9-1a.5.5 0 01.492.41L16 .5v6a.5.5 0 01-.992.09L15 6.5V1.706L7.854 8.854a.5.5 0 01-.765-.638l.057-.07L14.292 1H9.5a.5.5 0 01-.492-.41L9 .5a.5.5 0 01.41-.492L9.5 0h6z"
         />
     </AccessibleSVG>
 );
 
-export default Checkmark16;
+export default ExportArrow16;
