@@ -79,9 +79,9 @@ describe('FeatureFlag', () => {
     });
 
     test('"not" prop inverts flag with children prop', () => {
-        const FeatEnabled = jest.fn(() => null);
-        const FeatEnabledNot = jest.fn(() => null);
-        const FeatDisabledNot = jest.fn(() => null);
+        const FeatEnabled = jest.fn().mockImplementation(() => <div />);
+        const FeatEnabledNot = jest.fn().mockImplementation(() => <div />);
+        const FeatDisabledNot = jest.fn().mockImplementation(() => <div />);
         mount(
             <FeatureProvider
                 features={{
@@ -124,7 +124,7 @@ describe('FeatureFlag', () => {
     });
 
     test('uses children prop instead of enabled prop if both are provided', () => {
-        const MockChild = jest.fn(() => null);
+        const MockChild = jest.fn().mockImplementation(() => <div />);
         const enabledFn = jest.fn(() => null);
         const foo = { otherProp: 'foo is enabled' };
         mount(
