@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import * as types from './types';
 import FeatureContext from './FeatureContext';
