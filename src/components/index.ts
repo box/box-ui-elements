@@ -81,3 +81,5 @@ export * from './section';
 
 export { default as TimeInput } from './time-input';
 export * from './time-input';
+
+export * from './inline-notice';
