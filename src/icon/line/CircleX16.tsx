@@ -1,9 +1,7 @@
-// @flow
 /* eslint-disable react/jsx-sort-props */
 import * as React from 'react';
 import * as vars from '../../styles/variables';
-import AccessibleSVG from '../../icons/accessible-svg';
-import type { Icon } from '../../icons/flowTypes';
+import AccessibleSVG, { SVGProps } from '../../components/accessible-svg/AccessibleSVG';
 
 /**
  * This is an auto-generated component and should not be edited
@@ -16,13 +14,14 @@ import type { Icon } from '../../icons/flowTypes';
  * - https://github.com/box/box-ui-elements/issues/new?template=Feature_request.md
  */
 
-const Checkmark16 = (props: Icon) => (
+const CircleX16 = (props: SVGProps) => (
     <AccessibleSVG width={16} height={16} viewBox="0 0 16 16" {...props}>
         <path
-            fill={vars.bdlGray50}
-            d="M6.617 14c.55 0 .968-.2 1.253-.603l6.34-9.273c.102-.15.175-.296.221-.438.046-.143.069-.28.069-.41a1.2 1.2 0 00-.387-.912C13.855 2.121 13.53 2 13.139 2c-.26 0-.482.05-.666.15-.183.101-.357.275-.52.523l-5.357 8.152-2.693-3.12a1.327 1.327 0 00-1.05-.476c-.39 0-.714.121-.97.364-.255.243-.383.55-.383.919 0 .163.029.319.087.466.058.147.162.302.311.466l3.518 4.023c.318.355.719.533 1.201.533z"
+            fill={vars.bdlGray}
+            fillRule="evenodd"
+            d="M8 1a7 7 0 110 14A7 7 0 018 1zm0 1a6 6 0 100 12A6 6 0 008 2zM5.784 5.089l.07.057L8 7.293l2.146-2.147a.5.5 0 01.765.638l-.057.07L8.707 8l2.147 2.146a.5.5 0 01-.638.765l-.07-.057L8 8.707l-2.146 2.147a.5.5 0 01-.765-.638l.057-.07L7.293 8 5.146 5.854a.5.5 0 01.638-.765z"
         />
     </AccessibleSVG>
 );
 
-export default Checkmark16;
+export default CircleX16;

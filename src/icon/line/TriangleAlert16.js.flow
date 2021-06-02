@@ -16,13 +16,13 @@ import type { Icon } from '../../icons/flowTypes';
  * - https://github.com/box/box-ui-elements/issues/new?template=Feature_request.md
  */
 
-const Checkmark16 = (props: Icon) => (
+const TriangleAlert16 = (props: Icon) => (
     <AccessibleSVG width={16} height={16} viewBox="0 0 16 16" {...props}>
-        <path
-            fill={vars.bdlGray50}
-            d="M6.617 14c.55 0 .968-.2 1.253-.603l6.34-9.273c.102-.15.175-.296.221-.438.046-.143.069-.28.069-.41a1.2 1.2 0 00-.387-.912C13.855 2.121 13.53 2 13.139 2c-.26 0-.482.05-.666.15-.183.101-.357.275-.52.523l-5.357 8.152-2.693-3.12a1.327 1.327 0 00-1.05-.476c-.39 0-.714.121-.97.364-.255.243-.383.55-.383.919 0 .163.029.319.087.466.058.147.162.302.311.466l3.518 4.023c.318.355.719.533 1.201.533z"
-        />
+        <g fill={vars.bdlGray} fillRule="evenodd">
+            <path d="M6.284 1.97a2 2 0 013.323-.164l.11.164 5.985 10.003a2 2 0 01-1.536 3.019l-.18.008H2.014a2 2 0 01-1.802-2.868l.086-.159L6.284 1.97zm2.23.17a1 1 0 00-1.306.247l-.066.097-5.986 10.002a1 1 0 00.741 1.507l.117.007h11.972a1 1 0 00.912-1.41l-.054-.104L8.858 2.484a1 1 0 00-.344-.345zM8 4.5a.75.75 0 01.743.648l.007.102v4.5a.75.75 0 01-1.493.102L7.25 9.75v-4.5A.75.75 0 018 4.5z" />
+            <circle cx={8} cy={12.25} r={1} />
+        </g>
     </AccessibleSVG>
 );
 
-export default Checkmark16;
+export default TriangleAlert16;
