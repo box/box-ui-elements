@@ -132,6 +132,8 @@ class SharedLinkSection extends React.Component<Props, State> {
 
         if (!prevProps.sharedLink.url && sharedLink.url) {
             this.setState({ isAutoCreatingSharedLink: false });
+        } else if (!sharedLink.url && this.toggleRef) {
+            this.toggleRef.focus();
         }
 
         if (
@@ -152,12 +154,6 @@ class SharedLinkSection extends React.Component<Props, State> {
                     this.setState({ isCopySuccessful: false });
                     onCopyError();
                 });
-        }
-
-        if (sharedLink.url === null) {
-            if (this.toggleRef) {
-                this.toggleRef.focus();
-            }
         }
     }
 
