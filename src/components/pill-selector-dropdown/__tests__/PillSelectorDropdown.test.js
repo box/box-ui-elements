@@ -77,7 +77,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         test.each([
             ['test', true],
             ['', false],
-        ])('label', (value, expected) => {
+        ])('should render Label component when label exists', (value, expected) => {
             const labelProp = { label: value };
             const wrapper = getWrapper(labelProp);
             expect(wrapper.exists('Label')).toBe(expected);
