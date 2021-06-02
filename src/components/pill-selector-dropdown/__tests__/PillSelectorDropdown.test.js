@@ -73,6 +73,15 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             instance.handleBlur();
             expect(addPillsFromInputMock).toHaveBeenCalledTimes(1);
         });
+
+        test.each([
+            ['test', true],
+            ['', false],
+        ])('label', (value, expected) => {
+            const labelProp = { label: value };
+            const wrapper = getWrapper(labelProp);
+            expect(wrapper.exists('Label')).toBe(expected);
+        });
     });
 
     describe('parsePills', () => {
