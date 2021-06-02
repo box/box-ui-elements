@@ -10,9 +10,13 @@ export enum InlineNoticeType {
 }
 
 export interface InlineNoticeProps {
+    /** Content, wrapped in div */
     children: React.ReactNode;
+    /** Additional CSS classname(s) */
     className?: string;
+    /** (Optional) Title of inline text, wrapped in strong */
     title?: React.ReactNode;
+    /** (Default: WARNING) Type of Inline Notice */
     type?: InlineNoticeType;
 }
 
@@ -28,5 +32,7 @@ const InlineNotice = ({
         <div>{children}</div>
     </div>
 );
+
+InlineNotice.displayName = 'InlineNotice';
 
 export default InlineNotice;
