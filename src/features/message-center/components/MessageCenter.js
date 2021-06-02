@@ -11,7 +11,7 @@ import type {
     UnreadEligibleMessageCenterMessageCount,
     EligibleMessageCenterMessage,
 } from '../types';
-import type { ContentPreviewProps } from '../../../common/types/contentPreview';
+import type { ContentPreviewProps } from '../../message-preview-content/MessagePreviewContent';
 import Internationalize from '../../../elements/common/Internationalize';
 
 type Props = {|

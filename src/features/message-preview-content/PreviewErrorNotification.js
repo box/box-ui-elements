@@ -11,7 +11,7 @@ function PreviewErrorNotification() {
         <div className="PreviewErrorNotification">
             <Picture16 className="PreviewErrorNotification-image" />
             <div className="PreviewErrorNotification-message">
-                <FormattedMessage {...messages.previewError} />
+                <FormattedMessage {...messages.messagePreviewError} />
             </div>
         </div>
     );

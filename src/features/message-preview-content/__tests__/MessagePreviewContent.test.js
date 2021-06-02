@@ -22,7 +22,7 @@ describe('components/message-preview-content/MessagePreviewContent.js', () => {
                 .first()
                 .hasClass('is-loading'),
         ).toBe(true);
-        expect(wrapper.find('PreviewGhost').exists()).toBe(true);
+        expect(wrapper.find('MessagePreviewGhost').exists()).toBe(true);
     });
 
     test('should show PreviewErrorNotification window on error', () => {
@@ -50,6 +50,6 @@ describe('components/message-preview-content/MessagePreviewContent.js', () => {
             contentPreview.props().onLoad();
         });
         wrapper.update();
-        expect(wrapper.find('PreviewGhost').exists()).toBe(false);
+        expect(wrapper.find('MessagePreviewGhost').exists()).toBe(false);
     });
 });

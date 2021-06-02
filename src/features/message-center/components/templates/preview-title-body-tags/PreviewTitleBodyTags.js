@@ -2,12 +2,12 @@
 import * as React from 'react';
 import type { Token } from '../../../../../common/types/core';
 import MessageTextContent from '../common/MessageTextContent';
-import MessagePreviewContent from '../../../../../components/message-preview-content/MessagePreviewContent';
+import MessagePreviewContent from '../../../../message-preview-content/MessagePreviewContent';
+import type { ContentPreviewProps } from '../../../../message-preview-content/MessagePreviewContent';
 import MessageTags from '../common/MessageTags';
 import MessageFooter from '../common/MessageFooter';
 import BottomContentWrapper from '../common/BottomContentWrapper';
 import type { PreviewTitleBodyTagsTemplateParams } from '../../../types';
-import type { ContentPreviewProps } from '../../../../../common/types/contentPreview';
 
 type Props = $Diff<
     {|
