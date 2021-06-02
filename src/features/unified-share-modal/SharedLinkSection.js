@@ -70,7 +70,7 @@ class SharedLinkSection extends React.Component<Props, State> {
         autoCreateSharedLink: false,
     };
 
-    toggleRef: HTMLInputElement | null | undefined;
+    toggleRef: HTMLInputElement | null;
 
     constructor(props: Props) {
         super(props);
