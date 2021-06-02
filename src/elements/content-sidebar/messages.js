@@ -7,6 +7,16 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    boxSignRequest: {
+        id: 'be.contentSidebar.boxSignRequest',
+        defaultMessage: 'Request Signature',
+        description: 'label for button that opens a Box Sign signature request experience',
+    },
+    boxSignSignature: {
+        id: 'be.contentSidebar.boxSignSignature',
+        defaultMessage: 'Sign',
+        description: 'label for button that opens a Box Sign signature fulfillment experience',
+    },
     tasksAddTask: {
         id: 'be.contentSidebar.addTask',
         defaultMessage: 'Add Task',
