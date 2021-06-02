@@ -78,8 +78,6 @@ type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN 
 
 type NoticeType = 'info' | 'error';
 
-type InlineNoticeType = NoticeType | 'warning' | 'success' | 'generic';
-
 type NotificationType = NoticeType | 'default' | 'warn';
 
 type ItemType = typeof ITEM_TYPE_FOLDER | typeof ITEM_TYPE_FILE | typeof ITEM_TYPE_WEBLINK;
@@ -479,7 +477,6 @@ export type {
     SortDirection,
     Order,
     SharedLink,
-    InlineNoticeType,
     ItemType,
     Delimiter,
     Size,
