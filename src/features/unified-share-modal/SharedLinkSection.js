@@ -373,7 +373,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                     <span>
                         <FormattedMessage {...messages.linkShareOn} />
                         <Tooltip
-                            isTabbable="false"
+                            isTabbable={false}
                             position="top-center"
                             text={
                                 <FormattedMessage
