@@ -12,6 +12,6 @@ describe('withFeatureConsumer HOC', () => {
                 <WrappedComponent />
             </FeatureProvider>,
         );
-        expect(container.find('MyComponent').props().features).toEqual(featureProp);
+        expect(container.find('MyComponent').prop('features')).toEqual(featureProp);
     });
 });

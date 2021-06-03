@@ -1,9 +1,8 @@
-// @flow
 import * as React from 'react';
+import * as types from './types';
 import FeatureContext from './FeatureContext';
-import * as types from './flowTypes';
 
-function FeatureProvider({ features = {}, children }: { children: ?React.Node, features?: types.FeatureConfig }) {
+function FeatureProvider({ features = {}, children }: { children?: React.ReactNode; features?: types.FeatureConfig }) {
     return <FeatureContext.Provider value={features}>{children}</FeatureContext.Provider>;
 }
 
