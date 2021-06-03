@@ -252,7 +252,7 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             const item = { grantedPermissions: { itemShare: false } };
             const wrapper = getWrapper({ sharedLink, item });
             const tooltip = wrapper.find(Tooltip);
-            const isTabbable = tooltip.props().isTabbable === 'true';
+            const { isTabbable } = tooltip.props();
             expect(isTabbable).toBe(false);
         });
     });
