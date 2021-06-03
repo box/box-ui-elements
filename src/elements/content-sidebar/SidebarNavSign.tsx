@@ -13,11 +13,11 @@ export type Props = PlainButtonProps & {
 };
 
 export function SidebarNavSign({ intl, status, ...rest }: Props) {
-    const label = status === 'active' ? messages.boxSignSignature : messages.boxSignRequest;
+    const label = intl.formatMessage(status === 'active' ? messages.boxSignSignature : messages.boxSignRequest);
 
     return (
-        <Tooltip position={TooltipPosition.MIDDLE_LEFT} text={intl.formatMessage(label)}>
-            <PlainButton aria-label={intl.formatMessage(label)} className="bcs-SidebarNavSign" {...rest}>
+        <Tooltip position={TooltipPosition.MIDDLE_LEFT} text={label}>
+            <PlainButton aria-label={label} className="bcs-SidebarNavSign" {...rest}>
                 <BoxSign28 className="bcs-SidebarNavSign-icon" />
             </PlainButton>
         </Tooltip>
