@@ -36,7 +36,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
               constrainToScrollParent={false}
               constrainToWindow={true}
               isDisabled={false}
-              isTabbable="false"
+              isTabbable={false}
               position="top-center"
               text={
                 <FormattedMessage
@@ -191,7 +191,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
-      isTabbable="false"
+      isTabbable={false}
       position="top-right"
       text={
         <FormattedMessage
@@ -339,7 +339,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
-      isTabbable="false"
+      isTabbable={false}
       position="top-right"
       text={
         <FormattedMessage
@@ -551,7 +551,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled c
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
-  isTabbable="false"
+  isTabbable={false}
   position="top-right"
   text={
     <FormattedMessage
@@ -585,7 +585,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled r
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
-  isTabbable="false"
+  isTabbable={false}
   position="top-right"
   text={
     <FormattedMessage
@@ -638,7 +638,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
-      isTabbable="false"
+      isTabbable={false}
       position="top-right"
       text={
         <FormattedMessage
