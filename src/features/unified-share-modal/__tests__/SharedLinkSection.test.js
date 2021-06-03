@@ -1,5 +1,6 @@
 import React from 'react';
 import sinon from 'sinon';
+import Tooltip from '../../../components/tooltip';
 
 import SharedLinkSection from '../SharedLinkSection';
 
@@ -396,6 +397,15 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             expect(onCopyErrorMock).toBeCalledTimes(1);
             expect(wrapper.find('TextInputWithCopyButton').prop('triggerCopyOnLoad')).toBe(false);
             expect(wrapper.state('isCopySuccessful')).toEqual(false);
+        });
+
+        test('should render without tabindex property in toggle component', () => {
+            const sharedLink = { url: '', canChangeAccessLevel: true };
+            const item = { grantedPermissions: { itemShare: false } };
+            const wrapper = getWrapper({ sharedLink, item });
+            const tooltip = wrapper.find(Tooltip);
+            const isTabbable = tooltip.props().isTabbable === 'true';
+            expect(isTabbable).toBe(false);
         });
     });
 });
