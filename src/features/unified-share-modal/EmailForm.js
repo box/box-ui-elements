@@ -11,6 +11,7 @@ import PrimaryButton from '../../components/primary-button';
 import { ModalActions } from '../../components/modal';
 import Button from '../../components/button';
 import Tooltip from '../../components/tooltip';
+// $FlowFixMe InlineNotice is in typescript
 import InlineNotice, { InlineNoticeType } from '../../components/inline-notice';
 import PillSelectorDropdown from '../../components/pill-selector-dropdown';
 import commonMessages from '../../common/messages';

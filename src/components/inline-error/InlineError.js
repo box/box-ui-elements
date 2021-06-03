@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+// $FlowFixMe InlineNotice is in typescript
 import InlineNotice from '../inline-notice';
 
 type Props = {
