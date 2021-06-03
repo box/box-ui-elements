@@ -1,5 +1,39 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`features/unified-share-modal/SharedLinkSection componentDidUpdate() should render without tabindex property in toggle component 1`] = `
+<Tooltip
+  className="usm-disabled-message-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
+  isTabbable="true"
+  position="top-right"
+  text={
+    <FormattedMessage
+      defaultMessage="You do not have permission to create the link."
+      id="boxui.unifiedShare.disabledCreateLinkTooltip"
+    />
+  }
+  theme="default"
+>
+  <div
+    className="share-toggle-container"
+  >
+    <Toggle
+      isDisabled={true}
+      isOn={false}
+      label={
+        <FormattedMessage
+          defaultMessage="Create shared link"
+          id="boxui.unifiedShare.linkShareOff"
+        />
+      }
+      name="toggle"
+    />
+  </div>
+</Tooltip>
+`;
+
 exports[`features/unified-share-modal/SharedLinkSection should account for shared link expirations being set 1`] = `
 <div
   className="be"
@@ -36,6 +70,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
               constrainToScrollParent={false}
               constrainToWindow={true}
               isDisabled={false}
+              isTabbable="false"
               position="top-center"
               text={
                 <FormattedMessage
@@ -190,6 +225,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isTabbable="false"
       position="top-right"
       text={
         <FormattedMessage
@@ -337,6 +373,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isTabbable="false"
       position="top-right"
       text={
         <FormattedMessage
@@ -548,6 +585,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled c
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  isTabbable="false"
   position="top-right"
   text={
     <FormattedMessage
@@ -581,6 +619,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled r
   constrainToScrollParent={false}
   constrainToWindow={true}
   isDisabled={false}
+  isTabbable="false"
   position="top-right"
   text={
     <FormattedMessage
@@ -633,6 +672,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isTabbable="false"
       position="top-right"
       text={
         <FormattedMessage
