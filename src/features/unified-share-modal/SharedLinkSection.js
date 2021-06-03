@@ -413,7 +413,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                 if (sharedLinkToggleTooltip) {
                     return (
                         <Tooltip
-                            isTabbable="false"
+                            isTabbable={false}
                             className="usm-ftux-tooltip"
                             isShown
                             onDismiss={() => onDismissTooltip('shared-link-toggle')}
@@ -428,7 +428,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                 }
                 return (
                     <Tooltip
-                        isTabbable="false"
+                        isTabbable={false}
                         position="top-right"
                         text={<FormattedMessage {...messages.sharedLinkDisabledTooltipCopy} />}
                     >
@@ -444,7 +444,7 @@ class SharedLinkSection extends React.Component<Props, State> {
 
                 return (
                     <Tooltip
-                        isTabbable="false"
+                        isTabbable={false}
                         className="usm-disabled-message-tooltip"
                         position="top-right"
                         text={<FormattedMessage {...tooltipDisabledMessage} />}
