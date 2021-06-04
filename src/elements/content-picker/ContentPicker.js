@@ -76,7 +76,7 @@ type Props = {
     canSetShareAccess: boolean,
     canUpload: boolean,
     cancelButtonLabel?: string,
-    chooseButtonLabel?: string,
+    chooseButtonLabel?: string | Array<string>,
     className: string,
     clientName: string,
     contentUploaderProps: ContentUploaderProps,
@@ -94,7 +94,7 @@ type Props = {
     measureRef?: Function,
     messages?: StringMap,
     onCancel: Function,
-    onChoose: Function,
+    onChoose: Function | Array<Function>,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     rootFolderId: string,
@@ -309,7 +309,27 @@ class ContentPicker extends Component<Props, State> {
             delete clone.selected;
             return clone;
         });
-        onChoose(results);
+
+        if (onChoose && typeof onChoose === 'function') {
+            onChoose(results);
+        }
+    };
+
+    chooseMultiple = (): Array<Function> => {
+        const { selected }: State = this.state;
+        const { onChoose }: Props = this.props;
+        const results: BoxItem[] = Object.keys(selected).map(key => {
+            const clone: BoxItem = { ...selected[key] };
+            delete clone.selected;
+            return clone;
+        });
+
+        if (Array.isArray(onChoose)) {
+            return onChoose.map(fn => {
+                return () => fn(results);
+            });
+        }
+        return [];
     };
 
     /**
@@ -1156,6 +1176,7 @@ class ContentPicker extends Component<Props, State> {
             cancelButtonLabel,
             requestInterceptor,
             responseInterceptor,
+            onChoose,
         }: Props = this.props;
         const {
             view,
@@ -1228,7 +1249,7 @@ class ContentPicker extends Component<Props, State> {
                             hasHitSelectionLimit={hasHitSelectionLimit}
                             isSingleSelect={isSingleSelect}
                             onSelectedClick={this.showSelected}
-                            onChoose={this.choose}
+                            onChoose={typeof onChoose === 'function' ? this.choose : this.chooseMultiple()}
                             onCancel={this.cancel}
                             chooseButtonLabel={chooseButtonLabel}
                             cancelButtonLabel={cancelButtonLabel}

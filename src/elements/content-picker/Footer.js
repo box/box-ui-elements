@@ -18,11 +18,11 @@ import './Footer.scss';
 type Props = {
     cancelButtonLabel?: string,
     children?: any,
-    chooseButtonLabel?: string,
+    chooseButtonLabel?: string | Array<string>,
     hasHitSelectionLimit: boolean,
     isSingleSelect: boolean,
     onCancel: Function,
-    onChoose: Function,
+    onChoose: Function | Array<Function>,
     onSelectedClick: Function,
     selectedCount: number,
 };
@@ -61,17 +61,31 @@ const Footer = ({
             <ButtonGroup className="bcp-footer-actions">
                 <Tooltip text={cancelButtonLabel || <FormattedMessage {...messages.cancel} />}>
                     <Button onClick={onCancel} type="button">
-                        <IconClose height={16} width={16} />
+                        {cancelButtonLabel || <IconClose height={16} width={16} />}
                     </Button>
                 </Tooltip>
-                <Tooltip
-                    isDisabled={!selectedCount}
-                    text={chooseButtonLabel || <FormattedMessage {...messages.choose} />}
-                >
-                    <PrimaryButton isDisabled={!selectedCount} onClick={onChoose} type="button">
-                        <IconCheck color="#fff" height={16} width={16} />
-                    </PrimaryButton>
-                </Tooltip>
+
+                {typeof onChoose === 'function' ? (
+                    <Tooltip
+                        isDisabled={!selectedCount}
+                        text={chooseButtonLabel || <FormattedMessage {...messages.choose} />}
+                    >
+                        <PrimaryButton isDisabled={!selectedCount} onClick={onChoose} type="button">
+                            <IconCheck color="#fff" height={16} width={16} />
+                        </PrimaryButton>
+                    </Tooltip>
+                ) : (
+                    onChoose.map((onChooseHandler, index) => {
+                        const label = chooseButtonLabel ? chooseButtonLabel[index] : '';
+                        return (
+                            <Tooltip key={label} isDisabled={!selectedCount} text={label || ''}>
+                                <PrimaryButton isDisabled={!selectedCount} onClick={onChooseHandler} type="button">
+                                    {label || <IconCheck color="#fff" height={16} width={16} />}
+                                </PrimaryButton>
+                            </Tooltip>
+                        );
+                    })
+                )}
             </ButtonGroup>
         </div>
     </footer>
