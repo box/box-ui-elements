@@ -40,13 +40,26 @@ describe('components/tooltip/Tooltip', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should not render with close button if showCloseButton is false', () => {
-            expect(
-                getWrapper({
-                    isShown: true,
-                    showCloseButton: false,
-                }),
-            ).toMatchSnapshot();
+        test('should not render the close button if wasClosedByUser state is true', () => {
+            const wrapper = getWrapper({
+                isShown: true,
+                showCloseButton: true,
+            });
+            wrapper.setState({ wasClosedByUser: true });
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render tooltip again if shouldTooltipShowAferUserClose is true after close', () => {
+            const wrapper = shallow<Tooltip>(
+                <Tooltip shouldTooltipShowAferUserClose text="hi">
+                    <button />
+                </Tooltip>,
+            );
+
+            expect(wrapper.state('wasClosedByUser')).toBe(false);
+            wrapper.instance().closeTooltip();
+            expect(wrapper.state('wasClosedByUser')).toBe(true);
+            expect(wrapper).toMatchSnapshot();
         });
 
         test('should not render with close button if isShown is false', () => {

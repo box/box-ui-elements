@@ -3,7 +3,7 @@
 exports[`components/tooltip/Tooltip render() should match snapshot when stopBubble is set 1`] = `
 <div
   className="tooltip bdl-Tooltip"
-  id="tooltip24"
+  id="tooltip25"
   onClick={[Function]}
   onContextMenu={[Function]}
   onKeyPress={[Function]}
@@ -20,6 +20,30 @@ exports[`components/tooltip/Tooltip render() should match snapshot when stopBubb
 `;
 
 exports[`components/tooltip/Tooltip render() should not render the close button if wasClosedByUser state is true 1`] = `
+<TetherComponent
+  attachment="bottom center"
+  bodyElement={<body />}
+  classPrefix="tooltip"
+  constraints={
+    Array [
+      Object {
+        "attachment": "together",
+        "to": "window",
+      },
+    ]
+  }
+  enabled={false}
+  renderElementTag="div"
+  renderElementTo={null}
+  targetAttachment="top center"
+>
+  <div>
+    Hello
+  </div>
+</TetherComponent>
+`;
+
+exports[`components/tooltip/Tooltip render() should not render the close button if wasClosedByUser state is true 2`] = `
 <TetherComponent
   attachment="bottom center"
   bodyElement={<body />}
@@ -63,41 +87,6 @@ exports[`components/tooltip/Tooltip render() should not render with close button
 >
   <div>
     Hello
-  </div>
-</TetherComponent>
-`;
-
-exports[`components/tooltip/Tooltip render() should not render with close button if showCloseButton is false 1`] = `
-<TetherComponent
-  attachment="bottom center"
-  bodyElement={<body />}
-  classPrefix="tooltip"
-  constraints={
-    Array [
-      Object {
-        "attachment": "together",
-        "to": "window",
-      },
-    ]
-  }
-  enabled={true}
-  renderElementTag="div"
-  renderElementTo={null}
-  targetAttachment="top center"
->
-  <div
-    aria-describedby="tooltip3"
-  >
-    Hello
-  </div>
-  <div
-    aria-hidden={false}
-    aria-live="polite"
-    className="tooltip bdl-Tooltip"
-    id="tooltip3"
-    role="tooltip"
-  >
-    hi
   </div>
 </TetherComponent>
 `;
@@ -158,7 +147,7 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
   targetAttachment="top center"
 >
   <div
-    aria-describedby="tooltip5"
+    aria-describedby="tooltip6"
   >
     Hello
   </div>
@@ -166,7 +155,7 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
     aria-hidden={false}
     aria-live="polite"
     className="tooltip bdl-Tooltip is-callout"
-    id="tooltip5"
+    id="tooltip6"
     role="tooltip"
   >
     hi
@@ -203,6 +192,35 @@ exports[`components/tooltip/Tooltip render() should render correctly with tether
   >
     Hello
   </div>
+</TetherComponent>
+`;
+
+exports[`components/tooltip/Tooltip render() should render tooltip again if shouldTooltipShowAferUserClose is true after close 1`] = `
+<TetherComponent
+  attachment="bottom center"
+  bodyElement={<body />}
+  classPrefix="tooltip"
+  constraints={
+    Array [
+      Object {
+        "attachment": "together",
+        "to": "window",
+      },
+    ]
+  }
+  enabled={false}
+  renderElementTag="div"
+  renderElementTo={null}
+  targetAttachment="top center"
+>
+  <button
+    onBlur={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    tabIndex="0"
+  />
 </TetherComponent>
 `;
 
