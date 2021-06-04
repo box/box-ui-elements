@@ -555,6 +555,7 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
 
         test('should return true if forced focus and link is loaded', () => {
             const wrapper = getWrapper({
+                createSharedLinkOnLoad: true,
                 focusSharedLinkOnLoad: true,
                 sharedLink: {
                     isNewSharedLink: false,
@@ -567,6 +568,7 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
 
         test('should return true if new shared link and link is loaded', () => {
             const wrapper = getWrapper({
+                createSharedLinkOnLoad: true,
                 focusSharedLinkOnLoad: false,
                 sharedLink: {
                     isNewSharedLink: true,
