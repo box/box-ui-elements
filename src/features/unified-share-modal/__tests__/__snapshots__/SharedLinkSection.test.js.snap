@@ -36,7 +36,6 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
               constrainToScrollParent={false}
               constrainToWindow={true}
               isDisabled={false}
-              isTabbable={false}
               position="top-center"
               text={
                 <FormattedMessage
