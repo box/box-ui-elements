@@ -129,10 +129,12 @@ class SharedLinkSection extends React.Component<Props, State> {
             this.setState({ isAutoCreatingSharedLink: true });
             addSharedLink();
         }
+
         if (!prevProps.sharedLink.url && sharedLink.url) {
             this.setState({ isAutoCreatingSharedLink: false });
-        } else if (!prevProps.sharedLink.url && !sharedLink.url && this.toggleRef) {
-            this.toggleRef.focus();
+            if (this.toggleRef) {
+                this.toggleRef.focus();
+            }
         }
 
         if (
