@@ -26,7 +26,7 @@ type Props = {
     onCancel: Function,
     onChoose: Function,
     onSelectedClick: Function,
-    renderCustomActionButtons?: (selectedCount: number, selectedItems: BoxItem[]) => Node,
+    renderCustomActionButtons?: ({ selectedCount: number, selectedItems: BoxItem[] }) => Node,
     selectedCount: number,
     selectedItems: BoxItem[],
 };
@@ -65,7 +65,7 @@ const Footer = ({
             {children}
 
             {renderCustomActionButtons ? (
-                renderCustomActionButtons(selectedCount, selectedItems)
+                renderCustomActionButtons({ selectedCount, selectedItems })
             ) : (
                 <ButtonGroup className="bcp-footer-actions">
                     <Tooltip text={cancelButtonLabel || <FormattedMessage {...messages.cancel} />}>
