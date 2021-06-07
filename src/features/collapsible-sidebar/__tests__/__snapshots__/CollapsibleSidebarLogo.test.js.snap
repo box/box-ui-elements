@@ -165,10 +165,10 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
                   width={71}
                 >
                   <svg
+                    aria-hidden="true"
                     className="CollapsibleSidebarLogo__StyledLogo-sc-6amevi-0 jTcBgl bdl-CollapsibleSidebar-logoIcon"
                     focusable="false"
                     height={42}
-                    role="presentation"
                     viewBox="0 0 461 244"
                     width={71}
                   >
