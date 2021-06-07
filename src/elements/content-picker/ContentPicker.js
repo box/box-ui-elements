@@ -6,6 +6,7 @@
 
 import 'regenerator-runtime/runtime';
 import React, { Component } from 'react';
+import type { Node } from 'react';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import getProp from 'lodash/get';
@@ -76,7 +77,7 @@ type Props = {
     canSetShareAccess: boolean,
     canUpload: boolean,
     cancelButtonLabel?: string,
-    chooseButtonLabel?: string | Array<string>,
+    chooseButtonLabel?: string,
     className: string,
     clientName: string,
     contentUploaderProps: ContentUploaderProps,
@@ -94,7 +95,8 @@ type Props = {
     measureRef?: Function,
     messages?: StringMap,
     onCancel: Function,
-    onChoose: Function | Array<Function>,
+    onChoose: Function,
+    renderCustomActionButtons?: (selectedCount: number) => Node,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     rootFolderId: string,
@@ -290,6 +292,15 @@ class ContentPicker extends Component<Props, State> {
         }
     }
 
+    getSelectedItems = (): BoxItem[] => {
+        const { selected }: State = this.state;
+        return Object.keys(selected).map(key => {
+            const clone: BoxItem = { ...selected[key] };
+            delete clone.selected;
+            return clone;
+        });
+    };
+
     /**
      * Choose button action.
      * Clones values before returning so that
@@ -302,34 +313,9 @@ class ContentPicker extends Component<Props, State> {
      * @return {void}
      */
     choose = (): void => {
-        const { selected }: State = this.state;
         const { onChoose }: Props = this.props;
-        const results: BoxItem[] = Object.keys(selected).map(key => {
-            const clone: BoxItem = { ...selected[key] };
-            delete clone.selected;
-            return clone;
-        });
-
-        if (onChoose && typeof onChoose === 'function') {
-            onChoose(results);
-        }
-    };
-
-    chooseMultiple = (): Array<Function> => {
-        const { selected }: State = this.state;
-        const { onChoose }: Props = this.props;
-        const results: BoxItem[] = Object.keys(selected).map(key => {
-            const clone: BoxItem = { ...selected[key] };
-            delete clone.selected;
-            return clone;
-        });
-
-        if (Array.isArray(onChoose)) {
-            return onChoose.map(fn => {
-                return () => fn(results);
-            });
-        }
-        return [];
+        const results = this.getSelectedItems();
+        onChoose(results);
     };
 
     /**
@@ -1176,7 +1162,7 @@ class ContentPicker extends Component<Props, State> {
             cancelButtonLabel,
             requestInterceptor,
             responseInterceptor,
-            onChoose,
+            renderCustomActionButtons,
         }: Props = this.props;
         const {
             view,
@@ -1246,13 +1232,15 @@ class ContentPicker extends Component<Props, State> {
                         />
                         <Footer
                             selectedCount={selectedCount}
+                            selectedItems={this.getSelectedItems()}
                             hasHitSelectionLimit={hasHitSelectionLimit}
                             isSingleSelect={isSingleSelect}
                             onSelectedClick={this.showSelected}
-                            onChoose={typeof onChoose === 'function' ? this.choose : this.chooseMultiple()}
+                            onChoose={this.choose}
                             onCancel={this.cancel}
                             chooseButtonLabel={chooseButtonLabel}
                             cancelButtonLabel={cancelButtonLabel}
+                            renderCustomActionButtons={renderCustomActionButtons}
                         >
                             <OffsetBasedPagination
                                 offset={offset}
