@@ -49,9 +49,9 @@ describe('components/tooltip/Tooltip', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should render tooltip again if shouldTooltipShowAferUserClose is true after close', () => {
+        test('should render tooltip again if shouldTooltipShowAfterUserClose is true after close', () => {
             const wrapper = shallow<Tooltip>(
-                <Tooltip shouldTooltipShowAferUserClose text="hi">
+                <Tooltip shouldTooltipShowAfterUserClose text="hi">
                     <button />
                 </Tooltip>,
             );
