@@ -59,7 +59,7 @@ describe('elements/content-picker/ContentPicker', () => {
         });
 
         test('should clear selected items on navigation', () => {
-            const wrapper = getWrapper();
+            const wrapper = getWrapper({ clearSelectedItemsOnNavigation: true });
             const selectedItems = [
                 {
                     folder_123: {

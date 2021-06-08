@@ -79,6 +79,7 @@ type Props = {
     cancelButtonLabel?: string,
     chooseButtonLabel?: string,
     className: string,
+    clearSelectedItemsOnNavigation: boolean,
     clientName: string,
     contentUploaderProps: ContentUploaderProps,
     currentFolderId?: string,
@@ -473,21 +474,24 @@ class ContentPicker extends Component<Props, State> {
      * @return {void}
      */
     fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
-        const { rootFolderId }: Props = this.props;
+        const { clearSelectedItemsOnNavigation, rootFolderId }: Props = this.props;
         const { id, name }: Collection = collection;
 
-        // New folder state
-        const newState = {
+        const commonState = {
             currentCollection: collection,
             rootName: id === rootFolderId ? name : '',
-            selected: {},
         };
+
+        // New folder state
+        const newState = clearSelectedItemsOnNavigation ? { ...commonState, selected: {} } : commonState;
 
         // Close any open modals
         this.closeModals();
 
         // Deletes selected keys
-        this.deleteSelectedKeys();
+        if (clearSelectedItemsOnNavigation) {
+            this.deleteSelectedKeys();
+        }
 
         if (triggerNavigationEvent) {
             // Fire folder navigation event
