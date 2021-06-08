@@ -129,7 +129,7 @@ describe('components/tooltip/Tooltip', () => {
                     <button />
                 </Tooltip>,
             );
-            expect(wrapper.find('div.tooltip').hasClass('testing')).toBe(true);
+            expect(wrapper.find('[role="tooltip"]').hasClass('testing')).toBe(true);
         });
 
         test('should constrain to scroll parent when specified', () => {
