@@ -224,6 +224,35 @@ exports[`components/tooltip/Tooltip render() should render tooltip again if shou
 </TetherComponent>
 `;
 
+exports[`components/tooltip/Tooltip render() should render tooltip again if shouldTooltipShowAfterUserClose is true after close 1`] = `
+<TetherComponent
+  attachment="bottom center"
+  bodyElement={<body />}
+  classPrefix="tooltip"
+  constraints={
+    Array [
+      Object {
+        "attachment": "together",
+        "to": "window",
+      },
+    ]
+  }
+  enabled={false}
+  renderElementTag="div"
+  renderElementTo={null}
+  targetAttachment="top center"
+>
+  <button
+    onBlur={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    tabIndex="0"
+  />
+</TetherComponent>
+`;
+
 exports[`components/tooltip/Tooltip render() should render with close button if isShown and showCloseButton are true 1`] = `
 <TetherComponent
   attachment="bottom center"
