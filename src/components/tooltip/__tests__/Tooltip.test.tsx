@@ -129,6 +129,7 @@ describe('components/tooltip/Tooltip', () => {
                     <button />
                 </Tooltip>,
             );
+
             expect(wrapper.find('[role="tooltip"]').hasClass('testing')).toBe(true);
         });
 
