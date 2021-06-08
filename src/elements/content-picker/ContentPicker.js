@@ -1242,6 +1242,7 @@ class ContentPicker extends Component<Props, State> {
                             onShareAccessChange={this.changeShareAccess}
                         />
                         <Footer
+                            currentCollection={currentCollection}
                             selectedCount={selectedCount}
                             selectedItems={this.getSelectedItems()}
                             hasHitSelectionLimit={hasHitSelectionLimit}
