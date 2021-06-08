@@ -96,7 +96,12 @@ type Props = {
     messages?: StringMap,
     onCancel: Function,
     onChoose: Function,
-    renderCustomActionButtons?: ({ selectedCount: number, selectedItems: BoxItem[] }) => Node,
+    renderCustomActionButtons?: ({
+        onCancel: Function,
+        onChoose: Function,
+        selectedCount: number,
+        selectedItems: BoxItem[],
+    }) => Node,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     rootFolderId: string,
