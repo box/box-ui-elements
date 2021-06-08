@@ -40,6 +40,7 @@ var ContentPicker = require('./ContentPicker').default;
 | onCancel | function |  | Callback function for when the cancel button is pressed. |
 | onChoose | function |  | Callback function for when the choose button is pressed. |
 | requestInterceptor | function | | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
+| renderCustomActionButtons | function | | Render prop that renders custom action buttons in the footer. |
 | responseInterceptor | function | | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | rootFolderId | string | `0` | The root folder for the content picker. |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
