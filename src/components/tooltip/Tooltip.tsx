@@ -88,7 +88,7 @@ export type TooltipProps = {
     /** A CSS class for the tooltip */
     className?: string;
     /** Should the tooltip show again after user closes it once it is eligible again. Defaults to `false` */
-    shouldTooltipShowAferUserClose?: boolean;
+    shouldTooltipShowAfterUserClose?: boolean;
     /** Forces the tooltip to be shown or hidden (useful for errors) */
     isShown?: boolean;
     /** Whether to add tabindex=0.  Defaults to `true` */
@@ -197,13 +197,13 @@ class Tooltip extends React.Component<TooltipProps, State> {
     };
 
     isShown = () => {
-        const { isShown: isShownProp, shouldTooltipShowAferUserClose = false } = this.props;
+        const { isShown: isShownProp, shouldTooltipShowAfterUserClose = false } = this.props;
         const isControlled = this.isControlled();
 
         const isShown = isControlled ? isShownProp : this.state.isShown;
 
         const showTooltip =
-            isShown && (shouldTooltipShowAferUserClose || !this.state.wasClosedByUser) && this.state.hasRendered;
+            isShown && (shouldTooltipShowAfterUserClose || !this.state.wasClosedByUser) && this.state.hasRendered;
 
         return showTooltip;
     };
