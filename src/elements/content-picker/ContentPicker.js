@@ -175,6 +175,7 @@ class ContentPicker extends Component<Props, State> {
         defaultView: DEFAULT_VIEW_FILES,
         contentUploaderProps: {},
         showSelectedButton: true,
+        clearSelectedItemsOnNavigation: false,
     };
 
     /**
@@ -332,6 +333,19 @@ class ContentPicker extends Component<Props, State> {
     };
 
     /**
+     * Deletes selected keys off of selected items in state.
+     *
+     * @private
+     * @return {void}
+     */
+    deleteSelectedKeys = (): void => {
+        const { selected }: State = this.state;
+
+        // Clear out the selected field
+        Object.keys(selected).forEach(key => delete selected[key].selected);
+    };
+
+    /**
      * Cancel button action
      *
      * @private
@@ -340,10 +354,8 @@ class ContentPicker extends Component<Props, State> {
      */
     cancel = (): void => {
         const { onCancel }: Props = this.props;
-        const { selected }: State = this.state;
 
-        // Clear out the selected field
-        Object.keys(selected).forEach(key => delete selected[key].selected);
+        this.deleteSelectedKeys();
 
         // Reset the selected state
         this.setState({ selected: {} }, () => onCancel());
@@ -468,10 +480,14 @@ class ContentPicker extends Component<Props, State> {
         const newState = {
             currentCollection: collection,
             rootName: id === rootFolderId ? name : '',
+            selected: {},
         };
 
         // Close any open modals
         this.closeModals();
+
+        // Deletes selected keys
+        this.deleteSelectedKeys();
 
         if (triggerNavigationEvent) {
             // Fire folder navigation event
