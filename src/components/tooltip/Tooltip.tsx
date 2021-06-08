@@ -332,7 +332,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 onContextMenu={this.handleTooltipEvent}
                 onKeyPress={this.handleTooltipEvent}
             >
-                <div role="tooltip" aria-live="polite" aria-hidden={isLabelMatchingTooltipText}>
+                <div aria-live="polite" aria-hidden={isLabelMatchingTooltipText}>
                     {tooltipInner}
                 </div>
             </div>
@@ -340,9 +340,9 @@ class Tooltip extends React.Component<TooltipProps, State> {
             <div
                 className={classes}
                 id={this.tooltipID}
-                role="tooltip"
                 aria-live="polite"
                 aria-hidden={isLabelMatchingTooltipText}
+                {...(theme === TooltipTheme.DEFAULT ? { role: 'tooltip' } : {})}
             >
                 {tooltipInner}
             </div>
