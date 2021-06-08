@@ -89,6 +89,7 @@ describe('components/message-center/components/message-center-modal/MessageCente
 
     const defaultProps = {
         messages: messageResponse,
+        onMessageShown: () => {},
     };
 
     function getWrapper(props) {
@@ -253,5 +254,11 @@ describe('components/message-center/components/message-center-modal/MessageCente
             messages,
         });
         expect(wrapper.find('CategorySelector').exists()).toBe(false);
+    });
+
+    test('should call onMessageShown when message rendered', async () => {
+        const onMessageShown = jest.fn();
+        await getWrapper({ onMessageShown });
+        expect(onMessageShown).toHaveBeenCalledTimes(3);
     });
 });

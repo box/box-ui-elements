@@ -2,6 +2,7 @@
 import * as React from 'react';
 import TetherComponent from 'react-tether';
 import uniqueId from 'lodash/uniqueId';
+import { KEYS } from '../../constants';
 
 import './Flyout.scss';
 
@@ -273,7 +274,6 @@ class Flyout extends React.Component<Props, State> {
         const { openOnHover, openOnHoverDelayTimeout } = this.props;
         if (openOnHover) {
             clearTimeout(this.hoverDelay);
-
             this.hoverDelay = setTimeout(() => {
                 this.openOverlay();
             }, openOnHoverDelayTimeout);
@@ -288,6 +288,13 @@ class Flyout extends React.Component<Props, State> {
             this.hoverDelay = setTimeout(() => {
                 this.closeOverlay();
             }, openOnHoverDelayTimeout);
+        }
+    };
+
+    handleKeyPress = () => {
+        if (KEYS.enter) {
+            this.openOverlay();
+            this.focusButton();
         }
     };
 
@@ -379,8 +386,10 @@ class Flyout extends React.Component<Props, State> {
             key: this.overlayButtonID,
             role: 'button',
             onClick: this.handleButtonClick,
+            onKeyPress: this.handleKeyPress,
             onMouseEnter: this.handleButtonHover,
             onMouseLeave: this.handleButtonHoverLeave,
+            tabindex: '0',
             'aria-haspopup': 'true',
             'aria-expanded': isVisible ? 'true' : 'false',
         };
