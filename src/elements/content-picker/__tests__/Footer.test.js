@@ -27,14 +27,21 @@ describe('elements/content-picker/Footer', () => {
         });
 
         test('should render Footer with custom action button', () => {
+            const renderCustomActionButtons = jest.fn();
             const footerProps = {
                 ...defaultProps,
-                renderCustomActionButtons: () => <div className="custom-button" />,
+                renderCustomActionButtons: renderCustomActionButtons.mockReturnValue(<div className="custom-button" />),
             };
 
             const wrapper = getWrapper({ ...footerProps });
 
             expect(wrapper.find('.custom-button').length).toBe(1);
+            expect(renderCustomActionButtons).toHaveBeenCalledWith({
+                onCancel: defaultProps.onCancel,
+                onChoose: defaultProps.onChoose,
+                selectedCount: defaultProps.selectedCount,
+                selectedItems: defaultProps.selectedItems,
+            });
         });
     });
 });
