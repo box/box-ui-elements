@@ -292,6 +292,16 @@ class ContentPicker extends Component<Props, State> {
         }
     }
 
+    /**
+     * Gets selected items from state.
+     * Clones values before returning so that
+     * object references are broken. Also cleans
+     * up the selected attribute since it was
+     * added by the file picker.
+     *
+     * @private
+     * @return {BoxItem[]}
+     */
     getSelectedItems = (): BoxItem[] => {
         const { selected }: State = this.state;
         return Object.keys(selected).map(key => {
@@ -303,10 +313,6 @@ class ContentPicker extends Component<Props, State> {
 
     /**
      * Choose button action.
-     * Clones values before returning so that
-     * object references are broken. Also cleans
-     * up the selected attribute since it was
-     * added by the file picker.
      *
      * @private
      * @fires choose
