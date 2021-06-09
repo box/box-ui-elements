@@ -7,12 +7,13 @@
 import React from 'react';
 import type { Node } from 'react';
 import { FormattedMessage } from 'react-intl';
+import type { Collection, BoxItem } from '../../common/types/core';
 import Button from '../../components/button';
 import ButtonGroup from '../../components/button-group';
 import IconCheck from '../../icons/general/IconCheck';
 import IconClose from '../../icons/general/IconClose';
 import messages from '../common/messages';
-import type { BoxItem } from '../../common/types/core';
+
 import PrimaryButton from '../../components/primary-button';
 import Tooltip from '../common/Tooltip';
 import './Footer.scss';
@@ -21,6 +22,7 @@ type Props = {
     cancelButtonLabel?: string,
     children?: any,
     chooseButtonLabel?: string,
+    currentCollection: Collection,
     hasHitSelectionLimit: boolean,
     isSingleSelect: boolean,
     onCancel: Function,
@@ -38,6 +40,7 @@ type Props = {
 };
 
 const Footer = ({
+    currentCollection,
     selectedCount,
     selectedItems,
     onSelectedClick,
@@ -72,7 +75,14 @@ const Footer = ({
             {children}
 
             {renderCustomActionButtons ? (
-                renderCustomActionButtons({ onCancel, onChoose, selectedCount, selectedItems })
+                renderCustomActionButtons({
+                    currentFolderId: currentCollection.id,
+                    currentFolderName: currentCollection.name,
+                    onCancel,
+                    onChoose,
+                    selectedCount,
+                    selectedItems,
+                })
             ) : (
                 <ButtonGroup className="bcp-footer-actions">
                     <Tooltip text={cancelButtonLabel || <FormattedMessage {...messages.cancel} />}>
