@@ -5,12 +5,14 @@
  */
 
 import React from 'react';
+import type { Node } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../components/button';
 import ButtonGroup from '../../components/button-group';
 import IconCheck from '../../icons/general/IconCheck';
 import IconClose from '../../icons/general/IconClose';
 import messages from '../common/messages';
+import type { BoxItem } from '../../common/types/core';
 import PrimaryButton from '../../components/primary-button';
 import Tooltip from '../common/Tooltip';
 import './Footer.scss';
@@ -24,11 +26,20 @@ type Props = {
     onCancel: Function,
     onChoose: Function,
     onSelectedClick: Function,
+    renderCustomActionButtons?: ({
+        onCancel: Function,
+        onChoose: Function,
+        selectedCount: number,
+        selectedItems: BoxItem[],
+    }) => Node,
     selectedCount: number,
+    selectedItems: BoxItem[],
+    showSelectedButton: boolean,
 };
 
 const Footer = ({
     selectedCount,
+    selectedItems,
     onSelectedClick,
     hasHitSelectionLimit,
     isSingleSelect,
@@ -37,10 +48,12 @@ const Footer = ({
     chooseButtonLabel,
     cancelButtonLabel,
     children,
+    renderCustomActionButtons,
+    showSelectedButton,
 }: Props) => (
     <footer className="bcp-footer">
         <div className="bcp-footer-left">
-            {!isSingleSelect && (
+            {showSelectedButton && !isSingleSelect && (
                 <Button className="bcp-selected" onClick={onSelectedClick} type="button">
                     <FormattedMessage
                         className="bcp-selected-count"
@@ -58,21 +71,25 @@ const Footer = ({
         <div className="bcp-footer-right">
             {children}
 
-            <ButtonGroup className="bcp-footer-actions">
-                <Tooltip text={cancelButtonLabel || <FormattedMessage {...messages.cancel} />}>
-                    <Button onClick={onCancel} type="button">
-                        <IconClose height={16} width={16} />
-                    </Button>
-                </Tooltip>
-                <Tooltip
-                    isDisabled={!selectedCount}
-                    text={chooseButtonLabel || <FormattedMessage {...messages.choose} />}
-                >
-                    <PrimaryButton isDisabled={!selectedCount} onClick={onChoose} type="button">
-                        <IconCheck color="#fff" height={16} width={16} />
-                    </PrimaryButton>
-                </Tooltip>
-            </ButtonGroup>
+            {renderCustomActionButtons ? (
+                renderCustomActionButtons({ onCancel, onChoose, selectedCount, selectedItems })
+            ) : (
+                <ButtonGroup className="bcp-footer-actions">
+                    <Tooltip text={cancelButtonLabel || <FormattedMessage {...messages.cancel} />}>
+                        <Button onClick={onCancel} type="button">
+                            <IconClose height={16} width={16} />
+                        </Button>
+                    </Tooltip>
+                    <Tooltip
+                        isDisabled={!selectedCount}
+                        text={chooseButtonLabel || <FormattedMessage {...messages.choose} />}
+                    >
+                        <PrimaryButton isDisabled={!selectedCount} onClick={onChoose} type="button">
+                            <IconCheck color="#fff" height={16} width={16} />
+                        </PrimaryButton>
+                    </Tooltip>
+                </ButtonGroup>
+            )}
         </div>
     </footer>
 );
