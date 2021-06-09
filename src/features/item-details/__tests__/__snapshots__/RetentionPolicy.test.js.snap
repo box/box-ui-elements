@@ -64,7 +64,7 @@ exports[`features/item-details/RetentionPolicy should render retention policy ex
       year="numeric"
     />
     <PlainButton
-      className="lnk"
+      className="lnk bdl-RetentionLink"
       onClick={[Function]}
     >
       <FormattedMessage
