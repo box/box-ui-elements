@@ -6,6 +6,7 @@
 
 import 'regenerator-runtime/runtime';
 import React, { Component } from 'react';
+import type { Node } from 'react';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import getProp from 'lodash/get';
@@ -95,6 +96,12 @@ type Props = {
     messages?: StringMap,
     onCancel: Function,
     onChoose: Function,
+    renderCustomActionButtons?: ({
+        onCancel: Function,
+        onChoose: Function,
+        selectedCount: number,
+        selectedItems: BoxItem[],
+    }) => Node,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     rootFolderId: string,
@@ -291,24 +298,34 @@ class ContentPicker extends Component<Props, State> {
     }
 
     /**
-     * Choose button action.
+     * Gets selected items from state.
      * Clones values before returning so that
      * object references are broken. Also cleans
      * up the selected attribute since it was
      * added by the file picker.
      *
      * @private
-     * @fires choose
-     * @return {void}
+     * @return {BoxItem[]}
      */
-    choose = (): void => {
+    getSelectedItems = (): BoxItem[] => {
         const { selected }: State = this.state;
-        const { onChoose }: Props = this.props;
-        const results: BoxItem[] = Object.keys(selected).map(key => {
+        return Object.keys(selected).map(key => {
             const clone: BoxItem = { ...selected[key] };
             delete clone.selected;
             return clone;
         });
+    };
+
+    /**
+     * Choose button action.
+     *
+     * @private
+     * @fires choose
+     * @return {void}
+     */
+    choose = (): void => {
+        const { onChoose }: Props = this.props;
+        const results = this.getSelectedItems();
         onChoose(results);
     };
 
@@ -1156,6 +1173,7 @@ class ContentPicker extends Component<Props, State> {
             cancelButtonLabel,
             requestInterceptor,
             responseInterceptor,
+            renderCustomActionButtons,
         }: Props = this.props;
         const {
             view,
@@ -1225,6 +1243,7 @@ class ContentPicker extends Component<Props, State> {
                         />
                         <Footer
                             selectedCount={selectedCount}
+                            selectedItems={this.getSelectedItems()}
                             hasHitSelectionLimit={hasHitSelectionLimit}
                             isSingleSelect={isSingleSelect}
                             onSelectedClick={this.showSelected}
@@ -1232,6 +1251,7 @@ class ContentPicker extends Component<Props, State> {
                             onCancel={this.cancel}
                             chooseButtonLabel={chooseButtonLabel}
                             cancelButtonLabel={cancelButtonLabel}
+                            renderCustomActionButtons={renderCustomActionButtons}
                         >
                             <OffsetBasedPagination
                                 offset={offset}
