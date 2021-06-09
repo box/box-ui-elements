@@ -5,6 +5,7 @@ import Footer from '../Footer';
 describe('elements/content-picker/Footer', () => {
     const defaultProps = {
         children: <div className="footer-child" />,
+        currentCollection: { id: '123', name: 'Folder' },
         hasHitSelectionLimit: false,
         isSingleSelect: false,
         onCancel: () => {},
@@ -33,6 +34,8 @@ describe('elements/content-picker/Footer', () => {
 
             expect(wrapper.find('.custom-button').length).toBe(1);
             expect(renderCustomActionButtons).toHaveBeenCalledWith({
+                currentFolderId: defaultProps.currentCollection.id,
+                currentFolderName: defaultProps.currentCollection.name,
                 onCancel: defaultProps.onCancel,
                 onChoose: defaultProps.onChoose,
                 selectedCount: defaultProps.selectedCount,
