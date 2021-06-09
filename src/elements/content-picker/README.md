@@ -26,6 +26,7 @@ var ContentPicker = require('./ContentPicker').default;
 | canSetShareAccess | boolean | `true` | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | canUpload | boolean | `true` | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | chooseButtonLabel | string |  | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
+| clearSelectedItemsOnNavigation | boolean | false | Indicates whether or not selected state should be cleared after every navigation. |
 | contentUploaderProps | Object | `{}` | Props to be forwarded to the `ContentUploader` UI Element.  *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/uploader/#Options).*
 | currentFolderId | string | | The current folder shown for the content picker. This should be a sub folder to the root folder. |
 | defaultView | string | `files` | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
