@@ -1,7 +1,8 @@
 // @flow
 import * as React from 'react';
 import type { Token } from '../../../../common/types/core';
-import type { ContentPreviewProps, EligibleMessageCenterMessage } from '../../types';
+import type { EligibleMessageCenterMessage } from '../../types';
+import type { ContentPreviewProps } from '../../../message-preview-content/MessagePreviewContent';
 import { PreviewTitleBodyTags, PreviewTitleBodyTagsButton, TitleBodyTags, TitleBodyTagsButton } from '../templates';
 import {
     PREVIEW_TITLE_BODY_TAGS,

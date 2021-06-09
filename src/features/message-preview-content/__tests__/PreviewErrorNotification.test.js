@@ -5,7 +5,7 @@ import PreviewErrorNotification from '../PreviewErrorNotification';
 
 const getWrapper = () => shallow(<PreviewErrorNotification />);
 
-describe('components/message-center/components/templates/common/PreviewErrorNotification', () => {
+describe('components/message-preview-content/PreviewErrorNotification.js', () => {
     test('should render correctly', () => {
         expect(getWrapper()).toMatchSnapshot();
     });

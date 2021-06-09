@@ -13,7 +13,7 @@ const defaultProps = {
 
 const getWrapper = props => mount(<MessagePreviewContent {...defaultProps} {...props} />);
 
-describe('components/message-center/components/templates/common/MessagePreviewContent', () => {
+describe('components/message-preview-content/MessagePreviewContent.js', () => {
     test('should hide ContentPreview behind Ghost component while loading content', () => {
         const wrapper = getWrapper();
         expect(
@@ -22,7 +22,7 @@ describe('components/message-center/components/templates/common/MessagePreviewCo
                 .first()
                 .hasClass('is-loading'),
         ).toBe(true);
-        expect(wrapper.find('PreviewGhost').exists()).toBe(true);
+        expect(wrapper.find('MessagePreviewGhost').exists()).toBe(true);
     });
 
     test('should show PreviewErrorNotification window on error', () => {
@@ -50,6 +50,6 @@ describe('components/message-center/components/templates/common/MessagePreviewCo
             contentPreview.props().onLoad();
         });
         wrapper.update();
-        expect(wrapper.find('PreviewGhost').exists()).toBe(false);
+        expect(wrapper.find('MessagePreviewGhost').exists()).toBe(false);
     });
 });

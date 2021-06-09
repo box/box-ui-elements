@@ -1,13 +1,27 @@
 // // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import ContentPreview from '../../../../../elements/content-preview';
-import type { Token } from '../../../../../common/types/core';
-import type { ContentPreviewProps } from '../../../types';
-import Cache from '../../../../../utils/Cache';
-import PreviewGhost from './PreviewGhost';
+import ContentPreview from '../../elements/content-preview';
+import type { Token } from '../../common/types/core';
+import Cache from '../../utils/Cache';
+import MessagePreviewGhost from '../message-preview-ghost/MessagePreviewGhost';
 import PreviewErrorNotification from './PreviewErrorNotification';
 import './styles/MessagePreviewContent.scss';
+
+export type ContentPreviewProps = $Diff<
+    React.ElementConfig<typeof ContentPreview>,
+    {
+        apiHost: any,
+        cache: any,
+        className: any,
+        componentRef: any,
+        fileId: any,
+        onError: any,
+        onLoad: any,
+        sharedLink: any,
+        token: any,
+    },
+>;
 
 type Props = {|
     apiHost: string,
@@ -32,7 +46,7 @@ function MessagePreviewContent({ contentPreviewProps, fileId, sharedLink, getTok
 
     return (
         <div className={classNames('MessagePreviewContent', className)}>
-            {isPreviewLoaded ? null : <PreviewGhost />}
+            {isPreviewLoaded ? null : <MessagePreviewGhost />}
             {isPreviewInErrorState ? (
                 <PreviewErrorNotification />
             ) : (
