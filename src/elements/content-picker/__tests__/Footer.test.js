@@ -14,13 +14,11 @@ describe('elements/content-picker/Footer', () => {
         selectedItems: [],
     };
 
-    const getWrapper = props => mount(<Footer {...props} />);
+    const getWrapper = props => mount(<Footer {...defaultProps} {...props} />);
 
     describe('render()', () => {
         test('should render Footer', () => {
-            const footerProps = { ...defaultProps };
-
-            const wrapper = getWrapper({ ...footerProps });
+            const wrapper = getWrapper();
 
             expect(wrapper.find('ButtonGroup').length).toBe(1);
             expect(wrapper.find('.footer-child').length).toBe(1);
@@ -28,12 +26,10 @@ describe('elements/content-picker/Footer', () => {
 
         test('should render Footer with custom action button', () => {
             const renderCustomActionButtons = jest.fn();
-            const footerProps = {
-                ...defaultProps,
-                renderCustomActionButtons: renderCustomActionButtons.mockReturnValue(<div className="custom-button" />),
-            };
 
-            const wrapper = getWrapper({ ...footerProps });
+            const wrapper = getWrapper({
+                renderCustomActionButtons: renderCustomActionButtons.mockReturnValue(<div className="custom-button" />),
+            });
 
             expect(wrapper.find('.custom-button').length).toBe(1);
             expect(renderCustomActionButtons).toHaveBeenCalledWith({
@@ -42,6 +38,18 @@ describe('elements/content-picker/Footer', () => {
                 selectedCount: defaultProps.selectedCount,
                 selectedItems: defaultProps.selectedItems,
             });
+        });
+
+        test.each`
+            showSelectedButton | isSingleSelect | shown    | should
+            ${false}           | ${false}       | ${false} | ${'should not show selected button'}
+            ${false}           | ${true}        | ${false} | ${'should not show selected button'}
+            ${true}            | ${false}       | ${true}  | ${'should show selected button'}
+            ${true}            | ${true}        | ${false} | ${'should not show selected button'}
+        `('$should', ({ isSingleSelect, shown, showSelectedButton }) => {
+            const wrapper = getWrapper({ isSingleSelect, showSelectedButton });
+
+            expect(wrapper.exists('.bcp-selected')).toBe(shown);
         });
     });
 });

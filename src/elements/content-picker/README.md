@@ -45,6 +45,7 @@ var ContentPicker = require('./ContentPicker').default;
 | rootFolderId | string | `0` | The root folder for the content picker. |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
+| showSelectedButton | boolean | `true` | Indicates whether or not the selected button is shown. |
 | sortBy | string | `name` | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | sortDirection | string | `asc` | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | type | string | `file, web_link` | Indicates which type of items can be picked. Should be a comma seperated combination of `file`, `folder` or `web_link`. |

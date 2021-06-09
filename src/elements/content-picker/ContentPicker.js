@@ -107,6 +107,7 @@ type Props = {
     rootFolderId: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
+    showSelectedButton: boolean,
     sortBy: SortBy,
     sortDirection: SortDirection,
     token: Token,
@@ -173,6 +174,7 @@ class ContentPicker extends Component<Props, State> {
         clientName: CLIENT_NAME_CONTENT_PICKER,
         defaultView: DEFAULT_VIEW_FILES,
         contentUploaderProps: {},
+        showSelectedButton: true,
     };
 
     /**
@@ -1174,6 +1176,7 @@ class ContentPicker extends Component<Props, State> {
             requestInterceptor,
             responseInterceptor,
             renderCustomActionButtons,
+            showSelectedButton,
         }: Props = this.props;
         const {
             view,
@@ -1244,6 +1247,7 @@ class ContentPicker extends Component<Props, State> {
                         <Footer
                             selectedCount={selectedCount}
                             selectedItems={this.getSelectedItems()}
+                            showSelectedButton={showSelectedButton}
                             hasHitSelectionLimit={hasHitSelectionLimit}
                             isSingleSelect={isSingleSelect}
                             onSelectedClick={this.showSelected}
