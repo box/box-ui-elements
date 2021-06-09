@@ -2,11 +2,11 @@ import { shallow } from 'enzyme';
 import React from 'react';
 import sinon from 'sinon';
 
-import PreviewTitleBody2ButtonsPopoutTemplate from '../PreviewTitleBody2ButtonsPopoutTemplate';
+import PreviewTitleBodyTwoButtonsPopoutTemplate from '../PreviewTitleBodyTwoButtonsPopoutTemplate';
 
 const sandbox = sinon.sandbox.create();
 
-describe('features/in-app-messenger/contextual/templates/PreviewTitleBody2ButtonsPopoutTemplate', () => {
+describe('features/in-app-messenger/contextual/templates/PreviewTitleBodyTwoButtonsPopoutTemplate', () => {
     const onActionSpy = sandbox.spy();
 
     const paramsConfigs = {
@@ -48,7 +48,7 @@ describe('features/in-app-messenger/contextual/templates/PreviewTitleBody2Button
     };
 
     const getWrapper = params =>
-        shallow(<PreviewTitleBody2ButtonsPopoutTemplate onAction={onActionSpy} params={params} />);
+        shallow(<PreviewTitleBodyTwoButtonsPopoutTemplate onAction={onActionSpy} params={params} />);
 
     beforeEach(() => {});
 

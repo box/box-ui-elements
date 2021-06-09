@@ -11,7 +11,7 @@ $primary-button-padding: 24px;
 $secondary-button-padding: 0;
 $secondary-button-margin-right: 15px;
 
-.bdl-PreviewTitleBody2ButtonsPopoutTemplate {
+.bdl-PreviewTitleBodyTwoButtonsPopoutTemplate {
     // media css should be in its separate file as convention, but this is an exception as this particular
     // media css here only applies to this template.
     @media only screen and (max-width: $supported-width - 1px) {
@@ -28,12 +28,12 @@ $secondary-button-margin-right: 15px;
         border: 1px solid $bdl-gray-10;
         border-radius: 2px;
 
-        .content-container {
+        .bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-contentContainer {
             display: flex;
             width: $width;
             padding: 30px;
 
-            .preview-container {
+            .bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-previewContainer {
                 display: flex;
                 flex-shrink: 0;
                 align-items: center;
@@ -49,7 +49,7 @@ $secondary-button-margin-right: 15px;
                 }
             }
 
-            .main-container {
+            .bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-mainContainer {
                 display: flex;
                 flex-direction: column;
                 flex-grow: 1;
@@ -58,7 +58,7 @@ $secondary-button-margin-right: 15px;
                 margin-left: 30px;
                 line-height: 20px;
 
-                .title {
+                .bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-title {
                     margin: 0;
                     margin-bottom: 16px;
                     font-weight: bold;
@@ -66,7 +66,7 @@ $secondary-button-margin-right: 15px;
                     word-wrap: break-word;
                 }
 
-                .body {
+                .bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-body {
                     font-size: 13px;
 
                     a {
@@ -74,12 +74,7 @@ $secondary-button-margin-right: 15px;
                     }
                 }
 
-                .footnote {
-                    margin-top: 10px;
-                    font-size: 8px;
-                }
-
-                .buttons {
+                .bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-buttons {
                     display: flex;
                     flex-direction: row;
                     justify-content: flex-end;
@@ -102,7 +97,7 @@ $secondary-button-margin-right: 15px;
                             }
                         }
 
-                        &.btn-primary {
+                        &.bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-btnPrimary {
                             padding-right: $primary-button-padding;
                             padding-left: $primary-button-padding;
                         }
