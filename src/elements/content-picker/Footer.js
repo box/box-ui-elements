@@ -34,6 +34,7 @@ type Props = {
     }) => Node,
     selectedCount: number,
     selectedItems: BoxItem[],
+    showSelectedButton: boolean,
 };
 
 const Footer = ({
@@ -48,10 +49,11 @@ const Footer = ({
     cancelButtonLabel,
     children,
     renderCustomActionButtons,
+    showSelectedButton,
 }: Props) => (
     <footer className="bcp-footer">
         <div className="bcp-footer-left">
-            {!isSingleSelect && (
+            {showSelectedButton && !isSingleSelect && (
                 <Button className="bcp-selected" onClick={onSelectedClick} type="button">
                     <FormattedMessage
                         className="bcp-selected-count"
