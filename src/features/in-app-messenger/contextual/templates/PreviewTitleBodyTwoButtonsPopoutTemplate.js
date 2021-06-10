@@ -11,6 +11,7 @@ import Button from '../../../../components/button/Button';
 import Overlay from '../../../../components/flyout/Overlay';
 import MessagePreviewContent from '../../../message-preview-content/MessagePreviewContent';
 import type { Token } from '../../../../common/types/core';
+import type { MessageActions } from '../../types';
 
 import { type PreviewTitleBodyTwoButtonsPopoutParams } from '../../types';
 
@@ -20,7 +21,7 @@ type Props = {
     apiHost: string,
     contentPreviewProps?: ContentPreviewProps,
     getToken: (folderID: string | number) => Promise<Token>,
-    onAction: Function,
+    onAction: (MessageActions, ...Array<any>) => any,
     params: PreviewTitleBodyTwoButtonsPopoutParams,
 };
 

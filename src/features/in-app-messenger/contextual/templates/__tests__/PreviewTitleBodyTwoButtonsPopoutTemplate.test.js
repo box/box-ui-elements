@@ -1,13 +1,10 @@
 import { shallow } from 'enzyme';
 import React from 'react';
-import sinon from 'sinon';
 
 import PreviewTitleBodyTwoButtonsPopoutTemplate from '../PreviewTitleBodyTwoButtonsPopoutTemplate';
 
-const sandbox = sinon.sandbox.create();
-
 describe('features/in-app-messenger/contextual/templates/PreviewTitleBodyTwoButtonsPopoutTemplate', () => {
-    const onActionSpy = sandbox.spy();
+    const onAction = jest.fn();
 
     const paramsConfigs = {
         all: {
@@ -48,13 +45,12 @@ describe('features/in-app-messenger/contextual/templates/PreviewTitleBodyTwoButt
     };
 
     const getWrapper = params =>
-        shallow(<PreviewTitleBodyTwoButtonsPopoutTemplate onAction={onActionSpy} params={params} />);
+        shallow(<PreviewTitleBodyTwoButtonsPopoutTemplate onAction={onAction} params={params} />);
 
     beforeEach(() => {});
 
     afterEach(() => {
-        sandbox.verify();
-        sandbox.reset();
+        jest.resetAllMocks();
     });
 
     describe.each([paramsConfigs.all, paramsConfigs.missingButton2])('%o', ({ params }) => {
@@ -67,10 +63,10 @@ describe('features/in-app-messenger/contextual/templates/PreviewTitleBodyTwoButt
         const element = findElement(getWrapper(paramsConfigs.all.params));
         element.simulate('click');
         if (expectCalled) {
-            expect(onActionSpy.callCount).toBe(1);
-            expect(onActionSpy.calledWith(...expectCalledWith)).toBe(true);
+            expect(onAction).toHaveBeenCalledTimes(1);
+            expect(onAction).toHaveBeenCalledWith(...expectCalledWith);
         } else {
-            expect(onActionSpy.callCount).toBe(0);
+            expect(onAction).toHaveBeenCalledTimes(0);
         }
     }
 
