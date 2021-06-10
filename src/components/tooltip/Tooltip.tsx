@@ -1,6 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
+import getProp from 'lodash/get';
 import TetherComponent from 'react-tether';
 
 import TetherPosition from '../../common/tether-positions';
@@ -222,6 +223,9 @@ class Tooltip extends React.Component<TooltipProps, State> {
             theme,
         } = this.props;
 
+        const childAriaLabel = getProp(children, 'props.aria-label');
+        const isLabelMatchingTooltipText = !!childAriaLabel && childAriaLabel === text;
+
         // If the tooltip is disabled just render the children
         if (isDisabled) {
             return React.Children.only(children);
@@ -254,7 +258,10 @@ class Tooltip extends React.Component<TooltipProps, State> {
         }
 
         if (showTooltip) {
-            componentProps['aria-describedby'] = this.tooltipID;
+            if (!isLabelMatchingTooltipText || childAriaLabel === undefined) {
+                componentProps['aria-describedby'] = this.tooltipID;
+            }
+
             if (theme === TooltipTheme.ERROR) {
                 componentProps['aria-errormessage'] = this.tooltipID;
             }
@@ -325,12 +332,18 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 onContextMenu={this.handleTooltipEvent}
                 onKeyPress={this.handleTooltipEvent}
             >
-                <div role="tooltip" aria-live="polite">
+                <div role="tooltip" aria-live="polite" aria-hidden={isLabelMatchingTooltipText}>
                     {tooltipInner}
                 </div>
             </div>
         ) : (
-            <div className={classes} id={this.tooltipID} role="tooltip" aria-live="polite">
+            <div
+                className={classes}
+                id={this.tooltipID}
+                role="tooltip"
+                aria-live="polite"
+                aria-hidden={isLabelMatchingTooltipText}
+            >
                 {tooltipInner}
             </div>
         );
