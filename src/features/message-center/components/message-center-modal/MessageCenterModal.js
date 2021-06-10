@@ -13,9 +13,10 @@ import CategorySelector from '../../../../components/category-selector/CategoryS
 import CollapsibleScrollbar from '../collapsibile-scrollbar/CollapsibleScrollbar';
 import Message from '../message/Message';
 import intlMessages from '../../messages';
-import type { ContentPreviewProps, EligibleMessageCenterMessage } from '../../types';
+import type { EligibleMessageCenterMessage } from '../../types';
+import type { ContentPreviewProps } from '../../../message-preview-content/MessagePreviewContent';
 import './MessageCenterModal.scss';
-import PreviewGhost from '../templates/common/PreviewGhost';
+import MessagePreviewGhost from '../../../message-preview-ghost/MessagePreviewGhost';
 import ContentGhost from '../templates/common/ContentGhost';
 import BottomContentWrapper from '../templates/common/BottomContentWrapper';
 import ErrorState from '../error-state/ErrorState';
@@ -221,7 +222,7 @@ function MessageCenterModal({
             return (
                 <div className="bdl-MessageCenterModal-message">
                     <div className="bdl-MessageCenterModal-ghost">
-                        <PreviewGhost />
+                        <MessagePreviewGhost />
                         <BottomContentWrapper>
                             <ContentGhost />
                         </BottomContentWrapper>
