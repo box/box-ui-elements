@@ -40,26 +40,13 @@ describe('components/tooltip/Tooltip', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should not render the close button if wasClosedByUser state is true', () => {
-            const wrapper = getWrapper({
-                isShown: true,
-                showCloseButton: true,
-            });
-            wrapper.setState({ wasClosedByUser: true });
-            expect(wrapper).toMatchSnapshot();
-        });
-
-        test('should render tooltip again if shouldTooltipShowAfterUserClose is true after close', () => {
-            const wrapper = shallow<Tooltip>(
-                <Tooltip shouldTooltipShowAfterUserClose text="hi">
-                    <button />
-                </Tooltip>,
-            );
-
-            expect(wrapper.state('wasClosedByUser')).toBe(false);
-            wrapper.instance().closeTooltip();
-            expect(wrapper.state('wasClosedByUser')).toBe(true);
-            expect(wrapper).toMatchSnapshot();
+        test('should not render with close button if showCloseButton is false', () => {
+            expect(
+                getWrapper({
+                    isShown: true,
+                    showCloseButton: false,
+                }),
+            ).toMatchSnapshot();
         });
 
         test('should not render with close button if isShown is false', () => {
@@ -379,6 +366,39 @@ describe('components/tooltip/Tooltip', () => {
             });
             expect(stop).toHaveBeenCalledTimes(1);
             expect(nativeStop).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('componentDidUpdate', () => {
+        test('should reset wasClosedByUser to false if isShown state is transitioned from false to true', () => {
+            const wrapper = shallow<Tooltip>(
+                <Tooltip text="hi">
+                    <button />
+                </Tooltip>,
+            );
+
+            expect(wrapper.state('wasClosedByUser')).toBe(false);
+            wrapper.instance().closeTooltip();
+            expect(wrapper.state('wasClosedByUser')).toBe(true);
+
+            wrapper.setState({ isShown: true });
+            expect(wrapper.state('wasClosedByUser')).toBe(false);
+        });
+
+        test('should reset wasClosedByUser to false if isShown prop is transitioned from false to true', () => {
+            const wrapper = shallow<Tooltip>(
+                <Tooltip text="hi" isShown>
+                    <button />
+                </Tooltip>,
+            );
+
+            expect(wrapper.state('wasClosedByUser')).toBe(false);
+            wrapper.instance().closeTooltip();
+
+            expect(wrapper.state('wasClosedByUser')).toBe(true);
+            wrapper.setProps({ isShown: false });
+            wrapper.setProps({ isShown: true });
+            expect(wrapper.state('wasClosedByUser')).toBe(false);
         });
     });
 

@@ -87,8 +87,6 @@ export type TooltipProps = {
     children: React.ReactChild;
     /** A CSS class for the tooltip */
     className?: string;
-    /** Should the tooltip show again after user closes it once it is eligible again. Defaults to `false` */
-    shouldTooltipShowAfterUserClose?: boolean;
     /** Forces the tooltip to be shown or hidden (useful for errors) */
     isShown?: boolean;
     /** Whether to add tabindex=0.  Defaults to `true` */
@@ -128,8 +126,24 @@ class Tooltip extends React.Component<TooltipProps, State> {
         this.state = { isShown: !!props.isShown, hasRendered: false, wasClosedByUser: false };
     }
 
+    isControlled = () => {
+        const { isShown: isShownProp } = this.props;
+        return typeof isShownProp !== 'undefined';
+    };
+
     componentDidMount() {
         this.setState({ hasRendered: true });
+    }
+
+    componentDidUpdate(prevProps: TooltipProps, prevState: State) {
+        // Reset wasClosedByUser state when isShown transitions from false to true
+        if (this.isControlled()) {
+            if (!prevProps.isShown && this.props.isShown) {
+                this.setState({ wasClosedByUser: false });
+            }
+        } else if (!prevState.isShown && this.state.isShown) {
+            this.setState({ wasClosedByUser: false });
+        }
     }
 
     tooltipID = uniqueId('tooltip');
@@ -191,19 +205,13 @@ class Tooltip extends React.Component<TooltipProps, State> {
         this.fireChildEvent('onKeyDown', event);
     };
 
-    isControlled = () => {
-        const { isShown: isShownProp } = this.props;
-        return typeof isShownProp !== 'undefined';
-    };
-
     isShown = () => {
-        const { isShown: isShownProp, shouldTooltipShowAfterUserClose = false } = this.props;
+        const { isShown: isShownProp } = this.props;
         const isControlled = this.isControlled();
 
         const isShown = isControlled ? isShownProp : this.state.isShown;
 
-        const showTooltip =
-            isShown && (shouldTooltipShowAfterUserClose || !this.state.wasClosedByUser) && this.state.hasRendered;
+        const showTooltip = isShown && !this.state.wasClosedByUser && this.state.hasRendered;
 
         return showTooltip;
     };
