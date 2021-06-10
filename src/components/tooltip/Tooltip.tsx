@@ -126,11 +126,6 @@ class Tooltip extends React.Component<TooltipProps, State> {
         this.state = { isShown: !!props.isShown, hasRendered: false, wasClosedByUser: false };
     }
 
-    isControlled = () => {
-        const { isShown: isShownProp } = this.props;
-        return typeof isShownProp !== 'undefined';
-    };
-
     componentDidMount() {
         this.setState({ hasRendered: true });
     }
@@ -194,6 +189,11 @@ class Tooltip extends React.Component<TooltipProps, State> {
     handleBlur = (event: React.SyntheticEvent<HTMLElement>) => {
         this.setState({ isShown: false });
         this.fireChildEvent('onBlur', event);
+    };
+
+    isControlled = () => {
+        const { isShown: isShownProp } = this.props;
+        return typeof isShownProp !== 'undefined';
     };
 
     handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
