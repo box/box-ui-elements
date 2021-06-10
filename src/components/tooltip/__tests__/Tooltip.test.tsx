@@ -370,21 +370,6 @@ describe('components/tooltip/Tooltip', () => {
     });
 
     describe('componentDidUpdate', () => {
-        test('should reset wasClosedByUser to false if isShown state is transitioned from false to true', () => {
-            const wrapper = shallow<Tooltip>(
-                <Tooltip text="hi">
-                    <button />
-                </Tooltip>,
-            );
-
-            expect(wrapper.state('wasClosedByUser')).toBe(false);
-            wrapper.instance().closeTooltip();
-            expect(wrapper.state('wasClosedByUser')).toBe(true);
-
-            wrapper.setState({ isShown: true });
-            expect(wrapper.state('wasClosedByUser')).toBe(false);
-        });
-
         test('should reset wasClosedByUser to false if isShown prop is transitioned from false to true', () => {
             const wrapper = shallow<Tooltip>(
                 <Tooltip text="hi" isShown>

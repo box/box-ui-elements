@@ -135,14 +135,12 @@ class Tooltip extends React.Component<TooltipProps, State> {
         this.setState({ hasRendered: true });
     }
 
-    componentDidUpdate(prevProps: TooltipProps, prevState: State) {
+    componentDidUpdate(prevProps: TooltipProps) {
         // Reset wasClosedByUser state when isShown transitions from false to true
         if (this.isControlled()) {
             if (!prevProps.isShown && this.props.isShown) {
                 this.setState({ wasClosedByUser: false });
             }
-        } else if (!prevState.isShown && this.state.isShown) {
-            this.setState({ wasClosedByUser: false });
         }
     }
 
