@@ -1,11 +1,12 @@
 // @flow
+import type { MessageActions } from './message-actions';
 
 type PreviewParams = {|
     fileUpload?: { fileId: string, sharedLinkUrl: string },
 |};
 
 type ButtonParam = {
-    actions: Array<{ target: string, type: string, url: string }>,
+    actions: MessageActions,
     label: string,
 };
 

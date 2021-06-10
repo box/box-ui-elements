@@ -1,4 +1,5 @@
 // @flow
+import { type MessageIdentifier } from './message';
 
 /**
  * Define MessageAction
@@ -21,6 +22,11 @@ export type MessageActionType = $Values<typeof messageActionTypes>;
 
 export type CloseMessageAction = {|
     type: typeof close,
+|};
+
+export type LaunchMessageAction = {|
+    messageIdentifier: MessageIdentifier,
+    type: typeof launch,
 |};
 
 export type OpenURLMessageAction = {|
