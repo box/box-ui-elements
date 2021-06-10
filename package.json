@@ -98,7 +98,7 @@
             "last 2 iOS versions",
             "IE 11"
         ],
-        "development": ["last 1 Chrome versions", "last 1 Firefox versions"]
+        "development": ["last 1 Chrome versions", "last 1 Firefox versions", "last 1 Safari versions"]
     },
     "lint-staged": {
         "*.js": ["eslint --fix", "git add"],
