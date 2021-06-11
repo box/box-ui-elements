@@ -23,8 +23,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
     <div
       className="share-toggle-container"
     >
-      <Toggle
-        getDOMRef={[Function]}
+      <ForwardRef
         isDisabled={false}
         isOn={true}
         label={
@@ -203,8 +202,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       <div
         className="share-toggle-container"
       >
-        <Toggle
-          getDOMRef={[Function]}
+        <ForwardRef
           isDisabled={true}
           isOn={true}
           label={
@@ -351,8 +349,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       <div
         className="share-toggle-container"
       >
-        <Toggle
-          getDOMRef={[Function]}
+        <ForwardRef
           isDisabled={false}
           isOn={false}
           label={
@@ -392,8 +389,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     <div
       className="share-toggle-container"
     >
-      <Toggle
-        getDOMRef={[Function]}
+      <ForwardRef
         isDisabled={false}
         isOn={true}
         label={
@@ -530,8 +526,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     <div
       className="share-toggle-container"
     >
-      <Toggle
-        getDOMRef={[Function]}
+      <ForwardRef
         isDisabled={true}
         isOn={false}
         label={
@@ -565,8 +560,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled c
   <div
     className="share-toggle-container"
   >
-    <Toggle
-      getDOMRef={[Function]}
+    <ForwardRef
       isDisabled={true}
       isOn={false}
       label={
@@ -599,8 +593,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled r
   <div
     className="share-toggle-container"
   >
-    <Toggle
-      getDOMRef={[Function]}
+    <ForwardRef
       isDisabled={true}
       isOn={true}
       label={
@@ -652,8 +645,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       <div
         className="share-toggle-container"
       >
-        <Toggle
-          getDOMRef={[Function]}
+        <ForwardRef
           isDisabled={true}
           isOn={true}
           label={
@@ -797,8 +789,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     <div
       className="share-toggle-container"
     >
-      <Toggle
-        getDOMRef={[Function]}
+      <ForwardRef
         isDisabled={false}
         isOn={true}
         label={
@@ -936,8 +927,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     <div
       className="share-toggle-container"
     >
-      <Toggle
-        getDOMRef={[Function]}
+      <ForwardRef
         isDisabled={false}
         isOn={true}
         label={
@@ -1100,8 +1090,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
     <div
       className="share-toggle-container"
     >
-      <Toggle
-        getDOMRef={[Function]}
+      <ForwardRef
         isDisabled={false}
         isOn={true}
         label={

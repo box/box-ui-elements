@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import noop from 'lodash/noop';
 
 import './Toggle.scss';
 
@@ -10,7 +9,6 @@ type Props = {
     /** Description of the input */
     description?: React.Node,
     /** Function to get the DOM reference to the html input */
-    getDOMRef?: Function,
     isDisabled?: boolean, // @TODO: eventually call this `disabled`
     /** Toggle state */
     isOn?: boolean, // @TODO: eventually call this `checked`
@@ -28,54 +26,58 @@ type Props = {
     value?: any,
 };
 
-const Toggle = ({
-    className = '',
-    description,
-    getDOMRef = noop,
-    isDisabled,
-    isOn,
-    isToggleRightAligned = false,
-    label,
-    name,
-    onBlur,
-    onChange,
-    ...rest
-}: Props) => {
-    const classes = classNames('toggle-container', className, {
-        'is-toggle-right-aligned': isToggleRightAligned,
-    });
-    let toggleElements = [
-        <div key="toggle-simple-switch" className="toggle-simple-switch" />,
-        <div key="toggle-simple-label" className="toggle-simple-label">
-            {label}
-        </div>,
-    ];
+const Toggle = React.forwardRef<Props, HTMLInputElement>(
+    (
+        {
+            className = '',
+            description,
+            isDisabled,
+            isOn,
+            isToggleRightAligned = false,
+            label,
+            name,
+            onBlur,
+            onChange,
+            ...rest
+        }: Props,
+        ref,
+    ) => {
+        const classes = classNames('toggle-container', className, {
+            'is-toggle-right-aligned': isToggleRightAligned,
+        });
+        let toggleElements = [
+            <div key="toggle-simple-switch" className="toggle-simple-switch" />,
+            <div key="toggle-simple-label" className="toggle-simple-label">
+                {label}
+            </div>,
+        ];
 
-    if (isToggleRightAligned) {
-        toggleElements = toggleElements.reverse();
-    }
+        if (isToggleRightAligned) {
+            toggleElements = toggleElements.reverse();
+        }
 
-    return (
-        <div className={classes}>
-            {/* eslint-disable-next-line jsx-a11y/label-has-for */}
-            <label className="toggle-simple">
-                <input
-                    checked={isOn}
-                    className="toggle-simple-input"
-                    disabled={isDisabled}
-                    ref={getDOMRef}
-                    name={name}
-                    onBlur={onBlur}
-                    onChange={onChange}
-                    type="checkbox"
-                    {...rest}
-                />
-                {toggleElements}
-            </label>
-            {description ? <div className="toggle-simple-description">{description}</div> : null}
-        </div>
-    );
-};
+        return (
+            <div className={classes}>
+                {/* eslint-disable-next-line jsx-a11y/label-has-for */}
+                <label className="toggle-simple">
+                    <input
+                        checked={isOn}
+                        className="toggle-simple-input"
+                        disabled={isDisabled}
+                        ref={ref}
+                        name={name}
+                        onBlur={onBlur}
+                        onChange={onChange}
+                        type="checkbox"
+                        {...rest}
+                    />
+                    {toggleElements}
+                </label>
+                {description ? <div className="toggle-simple-description">{description}</div> : null}
+            </div>
+        );
+    },
+);
 
 export type ToggleProps = Props;
 export default Toggle;

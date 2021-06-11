@@ -407,7 +407,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                     label={linkText}
                     name="toggle"
                     onChange={onToggleSharedLink}
-                    getDOMRef={ref => {
+                    ref={ref => {
                         this.toggleRef = ref;
                     }}
                 />
