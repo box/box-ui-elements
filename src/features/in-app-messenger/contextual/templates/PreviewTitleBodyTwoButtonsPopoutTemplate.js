@@ -79,7 +79,7 @@ const PreviewTitleBodyTwoButtonsPopoutTemplate = ({
                                 </Button>
                             )}
                             <Button
-                                className="bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-btnPrimary"
+                                className="btn-primary"
                                 data-resin-target="cta1"
                                 onClick={() => handleButton1Click(onAction, button1)}
                             >
