@@ -384,7 +384,6 @@ class Flyout extends React.Component<Props, State> {
         const overlayButtonProps: Object = {
             id: this.overlayButtonID,
             key: this.overlayButtonID,
-            role: 'button',
             onClick: this.handleButtonClick,
             onKeyPress: this.handleKeyPress,
             onMouseEnter: this.handleButtonHover,
