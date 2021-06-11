@@ -166,6 +166,7 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
     aria-live="polite"
     className="tooltip bdl-Tooltip is-callout"
     id="tooltip5"
+    role="tooltip"
   >
     hi
   </div>
