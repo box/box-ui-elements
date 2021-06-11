@@ -8,7 +8,6 @@ type Props = {
     className?: string,
     /** Description of the input */
     description?: React.Node,
-    /** Function to get the DOM reference to the html input */
     isDisabled?: boolean, // @TODO: eventually call this `disabled`
     /** Toggle state */
     isOn?: boolean, // @TODO: eventually call this `checked`
