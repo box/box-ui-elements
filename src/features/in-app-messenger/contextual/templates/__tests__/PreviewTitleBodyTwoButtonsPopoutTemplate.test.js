@@ -71,10 +71,10 @@ describe('features/in-app-messenger/contextual/templates/PreviewTitleBodyTwoButt
     }
 
     test('should call onAction(button1.actions) if button1 is clicked', () =>
-        checkClickElement(wrapper => wrapper.find('Button').at(1), true, 'actions1'));
+        checkClickElement(wrapper => wrapper.find('PrimaryButton'), true, 'actions1'));
 
     test('should call onAction(button2.actions) if button2 is clicked', () =>
-        checkClickElement(wrapper => wrapper.find('Button').at(0), true, 'actions2'));
+        checkClickElement(wrapper => wrapper.find('Button'), true, 'actions2'));
 
     test('should not call onAction if clicked else where', () =>
         checkClickElement(wrapper => wrapper.find('Overlay'), false));
