@@ -8,6 +8,7 @@
 import * as React from 'react';
 
 import Button from '../../../../components/button/Button';
+import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import Overlay from '../../../../components/flyout/Overlay';
 import MessagePreviewContent from '../../../message-preview-content/MessagePreviewContent';
 import type { Token } from '../../../../common/types/core';
@@ -78,13 +79,12 @@ const PreviewTitleBodyTwoButtonsPopoutTemplate = ({
                                     {button2.label}
                                 </Button>
                             )}
-                            <Button
-                                className="btn-primary"
+                            <PrimaryButton
                                 data-resin-target="cta1"
                                 onClick={() => handleButton1Click(onAction, button1)}
                             >
                                 {button1.label}
-                            </Button>
+                            </PrimaryButton>
                         </div>
                     </div>
                 </div>
