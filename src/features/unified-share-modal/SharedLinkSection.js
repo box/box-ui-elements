@@ -70,6 +70,8 @@ class SharedLinkSection extends React.Component<Props, State> {
         autoCreateSharedLink: false,
     };
 
+    toggleRef: HTMLInputElement | null;
+
     constructor(props: Props) {
         super(props);
 
@@ -130,6 +132,9 @@ class SharedLinkSection extends React.Component<Props, State> {
 
         if (!prevProps.sharedLink.url && sharedLink.url) {
             this.setState({ isAutoCreatingSharedLink: false });
+            if (this.toggleRef) {
+                this.toggleRef.focus();
+            }
         }
 
         if (
@@ -402,6 +407,9 @@ class SharedLinkSection extends React.Component<Props, State> {
                     label={linkText}
                     name="toggle"
                     onChange={onToggleSharedLink}
+                    ref={ref => {
+                        this.toggleRef = ref;
+                    }}
                 />
             </div>
         );
