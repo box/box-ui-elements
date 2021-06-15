@@ -88,6 +88,7 @@ class SidebarSection extends React.PureComponent<Props, State> {
                         data-resin-target={interactionTarget}
                         onClick={this.toggleVisibility}
                         type="button"
+                        aria-expanded={!!isOpen}
                     >
                         {title}
                         <IconCaretDown color={COLOR_999} width={8} />
