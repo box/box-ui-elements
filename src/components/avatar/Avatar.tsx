@@ -74,7 +74,7 @@ function Avatar({ avatarUrl, className, name, id, isExternal, shouldShowExternal
                 shouldShowExternal && isExternal ? <GlobeBadge16 className="bdl-Avatar-externalBadge" /> : undefined
             }
         >
-            <span role="presentation">{avatar}</span>
+            <span>{avatar}</span>
         </Badgeable>
     );
 }
