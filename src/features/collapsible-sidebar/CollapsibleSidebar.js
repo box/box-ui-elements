@@ -91,11 +91,11 @@ class CollapsibleSidebar extends React.Component<Props> {
         );
 
         return (
-            <aside className="bdl-CollapsibleSidebar-wrapper" {...htmlAttributes}>
+            <div className="bdl-CollapsibleSidebar-wrapper" {...htmlAttributes}>
                 <StyledNav ref={this.navRef} className={classes} onKeyDown={this.handleKeyDown}>
                     {children}
                 </StyledNav>
-            </aside>
+            </div>
         );
     }
 }
