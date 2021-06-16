@@ -31,7 +31,7 @@ describe('features/in-app-messenger/contextual/templates/PreviewTitleBodyTwoButt
                 body: 'body',
                 button1: {
                     label: 'button1',
-                    actions: 'actions1',
+                    actions: ['actions1'],
                 },
                 footnote: 'footnote',
                 fileUpload: {

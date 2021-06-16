@@ -10,16 +10,7 @@ type ButtonParam = {
     label: string,
 };
 
-export type PreviewTitleBodyTwoButtonsPopoutParams = {|
-    body: string,
-    button1: ButtonParam,
-    button2?: ButtonParam,
-    templateID: string,
-    title: string,
-    ...PreviewParams,
-|};
-
-export type PreviewTitleBodyTwoButtonsModalParams = {|
+export type PreviewTitleBodyTwoButtonsParams = {|
     body: string,
     button1: ButtonParam,
     button2?: ButtonParam,

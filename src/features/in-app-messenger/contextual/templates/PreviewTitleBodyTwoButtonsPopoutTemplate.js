@@ -14,7 +14,7 @@ import MessagePreviewContent from '../../../message-preview-content/MessagePrevi
 import type { Token } from '../../../../common/types/core';
 import type { MessageActions } from '../../types';
 
-import { type PreviewTitleBodyTwoButtonsPopoutParams } from '../../types';
+import { type PreviewTitleBodyTwoButtonsParams } from '../../types';
 
 import './styles/PreviewTitleBodyTwoButtonsPopoutTemplate.scss';
 
@@ -23,7 +23,7 @@ type Props = {
     contentPreviewProps?: ContentPreviewProps,
     getToken: (folderID: string | number) => Promise<Token>,
     onAction: (MessageActions, ...Array<any>) => any,
-    params: PreviewTitleBodyTwoButtonsPopoutParams,
+    params: PreviewTitleBodyTwoButtonsParams,
 };
 
 const handleButtonClick = (onAction, button) => {

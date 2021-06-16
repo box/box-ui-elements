@@ -13,7 +13,7 @@ import Button from '../../../../components/button';
 import MessagePreviewContent from '../../../message-preview-content/MessagePreviewContent';
 import type { Token } from '../../../../common/types/core';
 import { messageActions } from '../../types/message-actions';
-import { type MessageActions, type PreviewTitleBodyTwoButtonsModalParams } from '../../types';
+import { type MessageActions, type PreviewTitleBodyTwoButtonsParams } from '../../types';
 
 import './styles/PreviewTitleBodyTwoButtonsModalTemplate.scss';
 
@@ -22,7 +22,7 @@ type Props = {
     contentPreviewProps?: ContentPreviewProps,
     getToken: (folderID: string | number) => Promise<Token>,
     onAction: (MessageActions, ...Array<any>) => any,
-    params: PreviewTitleBodyTwoButtonsModalParams,
+    params: PreviewTitleBodyTwoButtonsParams,
 };
 
 const handleClose = onAction => {
