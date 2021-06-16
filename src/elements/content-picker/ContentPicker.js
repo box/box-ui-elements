@@ -87,6 +87,7 @@ type Props = {
     extensions: string[],
     initialPage: number,
     initialPageSize: number,
+    isHeaderLogoVisible?: boolean,
     isLarge: boolean,
     isSmall: boolean,
     isTouch: boolean,
@@ -177,6 +178,7 @@ class ContentPicker extends Component<Props, State> {
         contentUploaderProps: {},
         showSelectedButton: true,
         clearSelectedItemsOnNavigation: false,
+        isHeaderLogoVisible: true,
     };
 
     /**
@@ -1188,6 +1190,7 @@ class ContentPicker extends Component<Props, State> {
             sharedLinkPassword,
             apiHost,
             uploadHost,
+            isHeaderLogoVisible,
             isSmall,
             className,
             measureRef,
@@ -1228,6 +1231,7 @@ class ContentPicker extends Component<Props, State> {
                     <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                         <Header
                             view={view}
+                            isHeaderLogoVisible={isHeaderLogoVisible}
                             isSmall={isSmall}
                             searchQuery={searchQuery}
                             logoUrl={logoUrl}
