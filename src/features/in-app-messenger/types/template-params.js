@@ -18,3 +18,12 @@ export type PreviewTitleBodyTwoButtonsPopoutParams = {|
     title: string,
     ...PreviewParams,
 |};
+
+export type PreviewTitleBodyTwoButtonsModalParams = {|
+    body: string,
+    button1: ButtonParam,
+    button2?: ButtonParam,
+    templateID: string,
+    title: string,
+    ...PreviewParams,
+|};
