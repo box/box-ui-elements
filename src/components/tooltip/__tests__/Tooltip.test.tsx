@@ -288,7 +288,7 @@ describe('components/tooltip/Tooltip', () => {
             const component = wrapper.childAt(0);
             const tooltip = wrapper.childAt(1);
 
-            expect(wrapper.find('div.tooltip').hasClass('is-error')).toBe(true);
+            expect(wrapper.find('[data-testid="tooltip"]').hasClass('is-error')).toBe(true);
             expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
             expect(component.prop('aria-errormessage')).toEqual(tooltip.prop('id'));
         });
