@@ -26,15 +26,9 @@ type Props = {
     params: PreviewTitleBodyTwoButtonsPopoutParams,
 };
 
-const handleButton1Click = (onAction, button1) => {
-    if (button1) {
-        onAction(button1.actions);
-    }
-};
-
-const handleButton2Click = (onAction, button2) => {
-    if (button2) {
-        onAction(button2.actions);
+const handleButtonClick = (onAction, button) => {
+    if (button) {
+        onAction(button.actions);
     }
 };
 
@@ -75,13 +69,13 @@ const PreviewTitleBodyTwoButtonsPopoutTemplate = ({
                         {/* eslint-enable react/no-danger */}
                         <div className="bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-buttons">
                             {button2 && (
-                                <Button data-resin-target="cta2" onClick={() => handleButton2Click(onAction, button2)}>
+                                <Button data-resin-target="cta2" onClick={() => handleButtonClick(onAction, button2)}>
                                     {button2.label}
                                 </Button>
                             )}
                             <PrimaryButton
                                 data-resin-target="cta1"
-                                onClick={() => handleButton1Click(onAction, button1)}
+                                onClick={() => handleButtonClick(onAction, button1)}
                             >
                                 {button1.label}
                             </PrimaryButton>

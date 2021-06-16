@@ -11,8 +11,9 @@ import PrimaryButton from '../../../../components/primary-button';
 import { Modal, ModalActions } from '../../../../components/modal';
 import Button from '../../../../components/button';
 import MessagePreviewContent from '../../../message-preview-content/MessagePreviewContent';
+import type { Token } from '../../../../common/types/core';
 import { messageActions } from '../../types/message-actions';
-import { MessageActions, type PreviewTitleBodyTwoButtonsModalParams } from '../../types';
+import { type MessageActions, type PreviewTitleBodyTwoButtonsModalParams } from '../../types';
 
 import './styles/PreviewTitleBodyTwoButtonsModalTemplate.scss';
 
@@ -28,15 +29,9 @@ const handleClose = onAction => {
     onAction([messageActions.close]);
 };
 
-const handleButton1Click = (onAction, button1) => {
-    if (button1) {
-        onAction(button1.actions);
-    }
-};
-
-const handleButton2Click = (onAction, button2) => {
-    if (button2) {
-        onAction(button2.actions);
+const handleButtonClick = (onAction, button) => {
+    if (button) {
+        onAction(button.actions);
     }
 };
 
@@ -54,7 +49,6 @@ const PreviewTitleBodyTwoButtonsModalTemplate = ({
             isOpen
             onRequestClose={() => handleClose(onAction)}
             shouldNotUsePortal
-            title=""
         >
             <div className="bdl-PreviewTitleBodyTwoButtonsModalTemplate-contentContainer">
                 {/* eslint-disable react/no-danger */}
@@ -81,11 +75,11 @@ const PreviewTitleBodyTwoButtonsModalTemplate = ({
                     />
                 </div>
                 <ModalActions>
-                    <PrimaryButton data-resin-target="cta1" onClick={() => handleButton1Click(onAction, button1)}>
+                    <PrimaryButton data-resin-target="cta1" onClick={() => handleButtonClick(onAction, button1)}>
                         {button1.label}
                     </PrimaryButton>
                     {button2 && (
-                        <Button data-resin-target="cta2" onClick={() => handleButton2Click(onAction, button2)}>
+                        <Button data-resin-target="cta2" onClick={() => handleButtonClick(onAction, button2)}>
                             {button2.label}
                         </Button>
                     )}
