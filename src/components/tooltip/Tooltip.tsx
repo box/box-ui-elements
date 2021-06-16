@@ -225,7 +225,6 @@ class Tooltip extends React.Component<TooltipProps, State> {
 
         const childAriaLabel = getProp(children, 'props.aria-label');
         const isLabelMatchingTooltipText = !!childAriaLabel && childAriaLabel === text;
-        let tooltipRole;
 
         // If the tooltip is disabled just render the children
         if (isDisabled) {
@@ -313,12 +312,6 @@ class Tooltip extends React.Component<TooltipProps, State> {
             tetherProps.offset = offset;
         }
 
-        if (theme === TooltipTheme.ERROR) {
-            tooltipRole = undefined;
-        } else {
-            tooltipRole = 'tooltip';
-        }
-
         const tooltipInner = (
             <>
                 {text}
@@ -340,10 +333,10 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 onKeyPress={this.handleTooltipEvent}
             >
                 <div
-                    role={tooltipRole}
+                    role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
                     aria-live="polite"
                     aria-hidden={isLabelMatchingTooltipText}
-                    data-testid="tooltip"
+                    data-testid="bdl-Tooltip"
                 >
                     {tooltipInner}
                 </div>
@@ -351,11 +344,11 @@ class Tooltip extends React.Component<TooltipProps, State> {
         ) : (
             <div
                 className={classes}
-                data-testid="tooltip"
+                data-testid="bdl-Tooltip"
                 id={this.tooltipID}
                 aria-live="polite"
                 aria-hidden={isLabelMatchingTooltipText}
-                role={tooltipRole}
+                role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
             >
                 {tooltipInner}
             </div>
