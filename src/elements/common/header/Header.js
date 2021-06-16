@@ -15,6 +15,7 @@ import './Header.scss';
 
 type Props = {
     intl: any,
+    isHeaderLogoVisible?: boolean,
     isSmall: boolean,
     logoUrl?: string,
     onSearch: Function,
@@ -23,13 +24,13 @@ type Props = {
 };
 
 // eslint-disable-next-line react/prop-types
-const Header = ({ view, isSmall, searchQuery, onSearch, logoUrl, intl }: Props) => {
+const Header = ({ isHeaderLogoVisible = true, view, isSmall, searchQuery, onSearch, logoUrl, intl }: Props) => {
     const search = ({ currentTarget }: { currentTarget: HTMLInputElement }) => onSearch(currentTarget.value);
     const isFolder = view === VIEW_FOLDER;
     const isSearch = view === VIEW_SEARCH;
     return (
         <div className="be-header">
-            <Logo isSmall={isSmall} url={logoUrl} />
+            {isHeaderLogoVisible && <Logo isSmall={isSmall} url={logoUrl} />}
             <div className="be-search">
                 <input
                     aria-label="search"
