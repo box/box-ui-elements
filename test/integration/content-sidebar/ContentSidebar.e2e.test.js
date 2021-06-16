@@ -128,7 +128,7 @@ describe('ContentSidebar', () => {
 
     describe('activity feed comments', () => {
         const getDraftJSEditor = () => cy.getByTestId('bcs-CommentForm-body').find('[contenteditable]');
-        const getTooltip = () => cy.get('div.tooltip');
+        const getTooltip = () => cy.get('[data-testid="tooltip"]');
         const getCancelButton = () => cy.contains(localize('be.contentSidebar.activityFeed.commentForm.commentCancel'));
 
         beforeEach(() => {
