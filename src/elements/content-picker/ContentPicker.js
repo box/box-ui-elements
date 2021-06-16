@@ -87,7 +87,7 @@ type Props = {
     extensions: string[],
     initialPage: number,
     initialPageSize: number,
-    isHeaderLogoVisible: boolean,
+    isHeaderLogoVisible?: boolean,
     isLarge: boolean,
     isSmall: boolean,
     isTouch: boolean,
