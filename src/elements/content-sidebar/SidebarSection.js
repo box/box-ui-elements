@@ -84,6 +84,7 @@ class SidebarSection extends React.PureComponent<Props, State> {
             <div className={sectionClassName}>
                 {title && (
                     <PlainButton
+                        aria-expanded={isOpen}
                         className="bcs-section-title"
                         data-resin-target={interactionTarget}
                         onClick={this.toggleVisibility}
