@@ -9,7 +9,7 @@ $sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
         width: auto;
         min-width: $sidebarTabsWidth;
         max-width: $sidebarWidth;
-        background-color: $bdl-gray-02;
+        background-color: $white;
     }
 
     .bcs-loading {
