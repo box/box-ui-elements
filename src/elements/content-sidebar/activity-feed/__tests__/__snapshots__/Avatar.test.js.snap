@@ -12,9 +12,7 @@ exports[`elements/content-sidebar/ActivityFeed/Avatar should set the avatarUrl s
 <Badgeable
   className="avatar"
 >
-  <span
-    role="presentation"
-  >
+  <span>
     <AvatarInitials
       id="foo"
       name="foo bar"
