@@ -288,7 +288,7 @@ describe('components/tooltip/Tooltip', () => {
             const component = wrapper.childAt(0);
             const tooltip = wrapper.childAt(1);
 
-            expect(wrapper.find('[role="tooltip"]').hasClass('is-error')).toBe(true);
+            expect(wrapper.find('[data-testid="bdl-Tooltip"]').hasClass('is-error')).toBe(true);
             expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
             expect(component.prop('aria-errormessage')).toEqual(tooltip.prop('id'));
         });
@@ -366,6 +366,24 @@ describe('components/tooltip/Tooltip', () => {
             });
             expect(stop).toHaveBeenCalledTimes(1);
             expect(nativeStop).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('componentDidUpdate', () => {
+        test('should reset wasClosedByUser to false if isShown prop is transitioned from false to true', () => {
+            const wrapper = shallow<Tooltip>(
+                <Tooltip text="hi" isShown>
+                    <button />
+                </Tooltip>,
+            );
+
+            expect(wrapper.state('wasClosedByUser')).toBe(false);
+            wrapper.instance().closeTooltip();
+
+            expect(wrapper.state('wasClosedByUser')).toBe(true);
+            wrapper.setProps({ isShown: false });
+            wrapper.setProps({ isShown: true });
+            expect(wrapper.state('wasClosedByUser')).toBe(false);
         });
     });
 

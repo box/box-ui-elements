@@ -130,6 +130,15 @@ class Tooltip extends React.Component<TooltipProps, State> {
         this.setState({ hasRendered: true });
     }
 
+    componentDidUpdate(prevProps: TooltipProps) {
+        // Reset wasClosedByUser state when isShown transitions from false to true
+        if (this.isControlled()) {
+            if (!prevProps.isShown && this.props.isShown) {
+                this.setState({ wasClosedByUser: false });
+            }
+        }
+    }
+
     tooltipID = uniqueId('tooltip');
 
     tetherRef = React.createRef<TetherComponent>();
@@ -182,16 +191,16 @@ class Tooltip extends React.Component<TooltipProps, State> {
         this.fireChildEvent('onBlur', event);
     };
 
+    isControlled = () => {
+        const { isShown: isShownProp } = this.props;
+        return typeof isShownProp !== 'undefined';
+    };
+
     handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
         if (event.key === 'Escape') {
             this.setState({ isShown: false });
         }
         this.fireChildEvent('onKeyDown', event);
-    };
-
-    isControlled = () => {
-        const { isShown: isShownProp } = this.props;
-        return typeof isShownProp !== 'undefined';
     };
 
     isShown = () => {
@@ -332,17 +341,23 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 onContextMenu={this.handleTooltipEvent}
                 onKeyPress={this.handleTooltipEvent}
             >
-                <div role="tooltip" aria-live="polite" aria-hidden={isLabelMatchingTooltipText}>
+                <div
+                    role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
+                    aria-live="polite"
+                    aria-hidden={isLabelMatchingTooltipText}
+                    data-testid="bdl-Tooltip"
+                >
                     {tooltipInner}
                 </div>
             </div>
         ) : (
             <div
                 className={classes}
+                data-testid="bdl-Tooltip"
                 id={this.tooltipID}
-                role="tooltip"
                 aria-live="polite"
                 aria-hidden={isLabelMatchingTooltipText}
+                role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
             >
                 {tooltipInner}
             </div>

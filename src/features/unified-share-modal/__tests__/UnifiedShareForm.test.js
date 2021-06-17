@@ -565,8 +565,22 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             expect(wrapper.instance().shouldAutoFocusSharedLink()).toBe(true);
         });
 
+        test('should return true if forced focus and link is loaded and createSharedLinkOnLoad is true', () => {
+            const wrapper = getWrapper({
+                createSharedLinkOnLoad: true,
+                focusSharedLinkOnLoad: true,
+                sharedLink: {
+                    isNewSharedLink: false,
+                },
+                sharedLinkLoaded: true,
+            });
+
+            expect(wrapper.instance().shouldAutoFocusSharedLink()).toBe(true);
+        });
+
         test('should return true if new shared link and link is loaded', () => {
             const wrapper = getWrapper({
+                createSharedLinkOnLoad: true,
                 focusSharedLinkOnLoad: false,
                 sharedLink: {
                     isNewSharedLink: true,

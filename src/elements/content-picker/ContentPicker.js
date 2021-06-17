@@ -79,6 +79,7 @@ type Props = {
     cancelButtonLabel?: string,
     chooseButtonLabel?: string,
     className: string,
+    clearSelectedItemsOnNavigation: boolean,
     clientName: string,
     contentUploaderProps: ContentUploaderProps,
     currentFolderId?: string,
@@ -86,6 +87,7 @@ type Props = {
     extensions: string[],
     initialPage: number,
     initialPageSize: number,
+    isHeaderLogoVisible?: boolean,
     isLarge: boolean,
     isSmall: boolean,
     isTouch: boolean,
@@ -107,6 +109,7 @@ type Props = {
     rootFolderId: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
+    showSelectedButton: boolean,
     sortBy: SortBy,
     sortDirection: SortDirection,
     token: Token,
@@ -173,6 +176,9 @@ class ContentPicker extends Component<Props, State> {
         clientName: CLIENT_NAME_CONTENT_PICKER,
         defaultView: DEFAULT_VIEW_FILES,
         contentUploaderProps: {},
+        showSelectedButton: true,
+        clearSelectedItemsOnNavigation: false,
+        isHeaderLogoVisible: true,
     };
 
     /**
@@ -330,6 +336,19 @@ class ContentPicker extends Component<Props, State> {
     };
 
     /**
+     * Deletes selected keys off of selected items in state.
+     *
+     * @private
+     * @return {void}
+     */
+    deleteSelectedKeys = (): void => {
+        const { selected }: State = this.state;
+
+        // Clear out the selected field
+        Object.keys(selected).forEach(key => delete selected[key].selected);
+    };
+
+    /**
      * Cancel button action
      *
      * @private
@@ -338,10 +357,8 @@ class ContentPicker extends Component<Props, State> {
      */
     cancel = (): void => {
         const { onCancel }: Props = this.props;
-        const { selected }: State = this.state;
 
-        // Clear out the selected field
-        Object.keys(selected).forEach(key => delete selected[key].selected);
+        this.deleteSelectedKeys();
 
         // Reset the selected state
         this.setState({ selected: {} }, () => onCancel());
@@ -459,17 +476,24 @@ class ContentPicker extends Component<Props, State> {
      * @return {void}
      */
     fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
-        const { rootFolderId }: Props = this.props;
+        const { clearSelectedItemsOnNavigation, rootFolderId }: Props = this.props;
         const { id, name }: Collection = collection;
 
-        // New folder state
-        const newState = {
+        const commonState = {
             currentCollection: collection,
             rootName: id === rootFolderId ? name : '',
         };
 
+        // New folder state
+        const newState = clearSelectedItemsOnNavigation ? { ...commonState, selected: {} } : commonState;
+
         // Close any open modals
         this.closeModals();
+
+        // Deletes selected keys
+        if (clearSelectedItemsOnNavigation) {
+            this.deleteSelectedKeys();
+        }
 
         if (triggerNavigationEvent) {
             // Fire folder navigation event
@@ -1166,6 +1190,7 @@ class ContentPicker extends Component<Props, State> {
             sharedLinkPassword,
             apiHost,
             uploadHost,
+            isHeaderLogoVisible,
             isSmall,
             className,
             measureRef,
@@ -1174,6 +1199,7 @@ class ContentPicker extends Component<Props, State> {
             requestInterceptor,
             responseInterceptor,
             renderCustomActionButtons,
+            showSelectedButton,
         }: Props = this.props;
         const {
             view,
@@ -1205,6 +1231,7 @@ class ContentPicker extends Component<Props, State> {
                     <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                         <Header
                             view={view}
+                            isHeaderLogoVisible={isHeaderLogoVisible}
                             isSmall={isSmall}
                             searchQuery={searchQuery}
                             logoUrl={logoUrl}
@@ -1242,8 +1269,10 @@ class ContentPicker extends Component<Props, State> {
                             onShareAccessChange={this.changeShareAccess}
                         />
                         <Footer
+                            currentCollection={currentCollection}
                             selectedCount={selectedCount}
                             selectedItems={this.getSelectedItems()}
+                            showSelectedButton={showSelectedButton}
                             hasHitSelectionLimit={hasHitSelectionLimit}
                             isSingleSelect={isSingleSelect}
                             onSelectedClick={this.showSelected}
