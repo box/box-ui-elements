@@ -55,7 +55,12 @@ describe('features/in-app-messenger/contextual/templates/PreviewTitleBodyTwoButt
 
     describe.each([paramsConfigs.all, paramsConfigs.missingButton2])('%o', ({ params }) => {
         test('renders correctly', () => {
-            getWrapper(params);
+            const wrapper = getWrapper(params);
+            expect(wrapper.find('.bdl-PreviewTitleBodyTwoButtonsModalTemplate').length).toEqual(1);
+            expect(wrapper.find('.bdl-PreviewTitleBodyTwoButtonsModalTemplate-title').length).toEqual(1);
+            expect(wrapper.find('.bdl-PreviewTitleBodyTwoButtonsModalTemplate-body').length).toEqual(1);
+            expect(wrapper.find('.bdl-PreviewTitleBodyTwoButtonsModalTemplate-previewContainer').length).toEqual(1);
+            expect(wrapper.find('PrimaryButton').length).toEqual(1);
         });
     });
 

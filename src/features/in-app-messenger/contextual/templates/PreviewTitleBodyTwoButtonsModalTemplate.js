@@ -1,10 +1,5 @@
 // @flow
 
-/**
- * This component is intended to be passed to TemplateContainer as templateComponent prop, like this:
- *   <TemplateContainer templateID='my-template' templateComponent=MyTemplate/>
- */
-
 import * as React from 'react';
 
 import PrimaryButton from '../../../../components/primary-button';
