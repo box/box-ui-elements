@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/toggle/ToggleField should render isOn=false with value=null 1`] = `
-<Toggle
+<ForwardRef
   isOn={false}
   label="Enter things"
   name="toggle"
@@ -12,7 +12,7 @@ exports[`components/toggle/ToggleField should render isOn=false with value=null 
 `;
 
 exports[`components/toggle/ToggleField should render isOn=false with value=undefined 1`] = `
-<Toggle
+<ForwardRef
   isOn={false}
   label="Enter things"
   name="toggle"
@@ -22,7 +22,7 @@ exports[`components/toggle/ToggleField should render isOn=false with value=undef
 `;
 
 exports[`components/toggle/ToggleField should render isOn=true with value=value 1`] = `
-<Toggle
+<ForwardRef
   isOn={true}
   label="Enter things"
   name="toggle"
