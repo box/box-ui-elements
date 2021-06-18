@@ -35,7 +35,11 @@ type MentionStartStateProps = {
     message?: React.Node,
 };
 
-const MentionStartState = ({ message }: MentionStartStateProps) => <div className="mention-start-state">{message}</div>;
+const MentionStartState = ({ message }: MentionStartStateProps) => (
+    <div className="mention-start-state" aria-live="assertive" role="alert">
+        {message}
+    </div>
+);
 
 type Props = {
     className?: string,
@@ -250,8 +254,11 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         const showMentionStartState = !!(onMention && activeMention && !activeMention.mentionString && isFocused);
 
+        const Tales = ({ contactsL }) => <div aria-live="polite"> {contactsL} users found. </div>;
+
         return (
             <div className={classes}>
+                {this.shouldDisplayMentionLookup() ? <Tales contacts={contacts.length} /> : null}
                 <SelectorDropdown
                     onSelect={this.handleContactSelected}
                     selector={
