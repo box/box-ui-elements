@@ -77,6 +77,7 @@ const Toggle = React.forwardRef<Props, HTMLInputElement>(
         );
     },
 );
+Toggle.displayName = 'Toggle';
 
 export type ToggleProps = Props;
 export default Toggle;
