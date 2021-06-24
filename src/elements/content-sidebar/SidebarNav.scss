@@ -14,7 +14,8 @@
         flex-direction: column;
     }
 
-    .bcs-SidebarNav-main {
+    .bcs-SidebarNav-main,
+    .bcs-SidebarNav-secondary {
         flex: 0 1 auto;
     }
 
@@ -30,7 +31,7 @@
             flex: 0 0 1px;
             width: 44px;
             height: 1px;
-            margin: 0 auto;
+            margin: 8px auto 0;
             background: $bdl-gray-10;
             content: '';
         }
@@ -41,8 +42,8 @@
 
         .bdl-AdditionalTabs {
             flex: 1 1 100%;
-            padding-top: 16px;
-            padding-bottom: 16px;
+            padding-top: 8px;
+            padding-bottom: 8px;
             overflow-x: hidden;
             overflow-y: auto;
         }
