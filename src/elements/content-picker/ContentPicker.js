@@ -1285,14 +1285,14 @@ class ContentPicker extends Component<Props, State> {
                             cancelButtonLabel={cancelButtonLabel}
                             renderCustomActionButtons={renderCustomActionButtons}
                         >
-                            {isPaginationVisible && (
+                            {isPaginationVisible ? (
                                 <OffsetBasedPagination
                                     offset={offset}
                                     onOffsetChange={this.paginate}
                                     pageSize={currentPageSize}
                                     totalCount={totalCount}
                                 />
-                            )}
+                            ) : null}
                         </Footer>
                     </div>
                     {allowUpload && !!this.appElement ? (
