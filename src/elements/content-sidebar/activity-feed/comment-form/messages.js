@@ -14,7 +14,7 @@ const messages = defineMessages({
     },
     commentLabel: {
         id: 'be.contentSidebar.activityFeed.commentForm.commentLabel',
-        defaultMessage: 'Comment',
+        defaultMessage: 'Write a comment',
         description: 'Accessible label for comment input field',
     },
     commentPost: {
