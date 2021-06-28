@@ -242,13 +242,15 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         if (previousElement) {
             previousElement.remove();
         }
-        if (this.mentorSelectorRef.current !== null && addAlert) {
+        if (addAlert) {
             alertElement = document.createElement('span');
             alertElement.setAttribute('class', 'accessibility-hidden');
             alertElement.setAttribute('data-testid', 'accessibility-alert');
             alertElement.setAttribute('role', 'alert');
             alertElement.innerText = contacts.length > 0 ? `${contacts.length} users found` : 'No users found';
-            this.mentorSelectorRef.current.appendChild(alertElement);
+            if (this.mentorSelectorRef.current) {
+                this.mentorSelectorRef.current.appendChild(alertElement);
+            }
         }
     };
 
