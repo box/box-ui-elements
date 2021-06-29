@@ -34,6 +34,7 @@ var ContentPicker = require('./ContentPicker').default;
 | initialPage | number | 1 | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | initialPageSize | number | 50 | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | isHeaderLogoVisible | boolean | true | Indicates whether or not the Logo in the Header is shown. |
+| isPaginationVisible | boolean | true | Indicates whether or not the pagination buttons in the Footer are shown. |
 | isTouch | boolean |  | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | language | string |  | *See the [Internationalization](../README.md#internationalization) section* |
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |

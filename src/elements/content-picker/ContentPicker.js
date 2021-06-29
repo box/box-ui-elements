@@ -89,6 +89,7 @@ type Props = {
     initialPageSize: number,
     isHeaderLogoVisible?: boolean,
     isLarge: boolean,
+    isPaginationVisible?: boolean,
     isSmall: boolean,
     isTouch: boolean,
     language?: string,
@@ -179,6 +180,7 @@ class ContentPicker extends Component<Props, State> {
         showSelectedButton: true,
         clearSelectedItemsOnNavigation: false,
         isHeaderLogoVisible: true,
+        isPaginationVisible: true,
     };
 
     /**
@@ -1191,6 +1193,7 @@ class ContentPicker extends Component<Props, State> {
             apiHost,
             uploadHost,
             isHeaderLogoVisible,
+            isPaginationVisible,
             isSmall,
             className,
             measureRef,
@@ -1282,12 +1285,14 @@ class ContentPicker extends Component<Props, State> {
                             cancelButtonLabel={cancelButtonLabel}
                             renderCustomActionButtons={renderCustomActionButtons}
                         >
-                            <OffsetBasedPagination
-                                offset={offset}
-                                onOffsetChange={this.paginate}
-                                pageSize={currentPageSize}
-                                totalCount={totalCount}
-                            />
+                            {isPaginationVisible ? (
+                                <OffsetBasedPagination
+                                    offset={offset}
+                                    onOffsetChange={this.paginate}
+                                    pageSize={currentPageSize}
+                                    totalCount={totalCount}
+                                />
+                            ) : null}
                         </Footer>
                     </div>
                     {allowUpload && !!this.appElement ? (
