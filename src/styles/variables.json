@@ -1,6 +1,7 @@
 {
     "white": "#fff",
     "black": "#000",
+    "countBadgeBackground": "#e9163c",
     "bdl-box-blue": "#0061d5",
     "bdl-box-blue-80": "#3381dd",
     "bdl-box-blue-50": "#7fb0ea",
