@@ -11,6 +11,7 @@ import 'draft-js/dist/Draft.css';
 import Tooltip from '../tooltip';
 
 import commonMessages from '../../common/messages';
+import messages from '../../elements/content-sidebar/activity-feed/comment-form/messages';
 import './DraftJSEditor.scss';
 
 const OptionalFormattedMessage = () => (
@@ -79,6 +80,8 @@ class DraftJSEditor extends React.Component<Props> {
 
     labelID = uniqueId('label');
 
+    commentFormTip = uniqueId('comment-form-tip');
+
     render() {
         const {
             editorState,
@@ -117,6 +120,9 @@ class DraftJSEditor extends React.Component<Props> {
                     {label}
                     {!isRequired && <OptionalFormattedMessage />}
                 </span>
+                <span className={classNames({ 'accessibility-hidden': true })} id={this.commentFormTip}>
+                    <FormattedMessage {...messages.atMentionTipDescription} />
+                </span>
 
                 <Tooltip isShown={!!error} position="bottom-left" text={error ? error.message : ''} theme="error">
                     {/* need div so tooltip can set aria-describedby */}
@@ -124,6 +130,7 @@ class DraftJSEditor extends React.Component<Props> {
                         <Editor
                             {...a11yProps}
                             ariaLabelledBy={this.labelID}
+                            ariaDescribedBy={this.commentFormTip}
                             editorState={editorState}
                             handleReturn={this.handleReturn}
                             onBlur={handleBlur}
