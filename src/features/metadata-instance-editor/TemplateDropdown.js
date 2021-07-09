@@ -173,6 +173,7 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
                 placeholder={intl.formatMessage(messages.metadataTemplateSearchPlaceholder)}
                 type="text"
                 useClearButton
+                value={filterText}
             />
         );
     };
