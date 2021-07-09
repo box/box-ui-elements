@@ -34,7 +34,6 @@ exports[`features/metadata-instance-editor/fields/ should correctly render butto
           onChange={[Function]}
           type="text"
           useClearButton={true}
-          value=""
         />
       }
       shouldScroll={true}
@@ -99,7 +98,6 @@ exports[`features/metadata-instance-editor/fields/ should correctly render dropd
           onChange={[Function]}
           type="text"
           useClearButton={true}
-          value=""
         />
       }
       shouldScroll={true}
@@ -164,7 +162,6 @@ exports[`features/metadata-instance-editor/fields/ should correctly render dropd
           onChange={[Function]}
           type="text"
           useClearButton={true}
-          value=""
         />
       }
       shouldScroll={true}
@@ -229,7 +226,6 @@ exports[`features/metadata-instance-editor/fields/ should correctly render empty
           onChange={[Function]}
           type="text"
           useClearButton={true}
-          value=""
         />
       }
       shouldScroll={true}
@@ -286,7 +282,6 @@ exports[`features/metadata-instance-editor/fields/ should correctly render error
           onChange={[Function]}
           type="text"
           useClearButton={true}
-          value=""
         />
       }
       shouldScroll={true}
@@ -343,7 +338,6 @@ exports[`features/metadata-instance-editor/fields/ should correctly render loadi
           onChange={[Function]}
           type="text"
           useClearButton={true}
-          value=""
         />
       }
       shouldScroll={true}
@@ -395,7 +389,6 @@ exports[`features/metadata-instance-editor/fields/ should correctly render plain
           onChange={[Function]}
           type="text"
           useClearButton={true}
-          value=""
         />
       }
       shouldScroll={true}
