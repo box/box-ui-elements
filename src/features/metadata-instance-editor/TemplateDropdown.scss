@@ -93,8 +93,10 @@
             border-radius: 4px 4px 0 0;
 
             .action-button {
-                &:focus {
-                    border: 1px solid $bdl-box-blue;
+                .clear-button {
+                    &:focus {
+                        border: 1px solid $bdl-box-blue;
+                    }
                 }
             }
 
