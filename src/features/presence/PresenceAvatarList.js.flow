@@ -7,47 +7,34 @@
 import * as React from "react";
 import classNames from "classnames";
 import noop from "lodash/noop";
-import {
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps
-} from "react-intl";
-import messages from "./messages";
 import PresenceAvatar from "./PresenceAvatar";
+import PresenceAvatarTooltip from "./PresenceAvatarTooltip";
 import Tooltip, { TooltipPosition } from "../../components/tooltip";
-import { determineInteractionMessage } from "./utils/presenceUtils";
 import "./PresenceAvatarList.scss";
-declare type Collaborator = {
+export type Collaborator = {
   avatarUrl?: string,
   id: string,
   isActive: boolean,
   interactedAt: number,
   interactionType: string,
   name: string,
-  profileUrl: string,
+  profileUrl?: string,
   ...
 };
-declare type Props = {
+export type Props = {
   avatarAttributes?: React.HTMLAttributes<HTMLDivElement>,
   className?: string,
   collaborators: Array<Collaborator>,
-  containerAttributes?: React.HTMLAttributes<HTMLDivElement>,
   hideTooltips?: boolean,
   maxAdditionalCollaborators?: number,
   maxDisplayedAvatars?: number,
   onAvatarMouseEnter?: (id: string) => void,
   onAvatarMouseLeave?: () => void,
   ...
-} & WrappedComponentProps;
-declare class PresenceAvatarList mixins React.Component<Props> {
-  static defaultProps: any; // /* NO PRINT IMPLEMENTED: ObjectLiteralExpression */ any
-  constructor(props: Props): this;
-  state: any; // /* NO PRINT IMPLEMENTED: ObjectLiteralExpression */ any
-  hideTooltip: any; // /* NO PRINT IMPLEMENTED: ArrowFunction */ any
-  getRelativeTime: any; // /* NO PRINT IMPLEMENTED: ArrowFunction */ any
-  renderTimestampMessage: any; // /* NO PRINT IMPLEMENTED: ArrowFunction */ any
-  renderAvatarTooltip: any; // /* NO PRINT IMPLEMENTED: ArrowFunction */ any
-  showTooltip: any; // /* NO PRINT IMPLEMENTED: ArrowFunction */ any
-  render(): void;
-}
+};
+declare function PresenceAvatarList(
+  props: Props,
+  ref: React.Ref<HTMLDivElement>
+): React$Node | null;
+declare export { PresenceAvatarList as PresenceAvatarListComponent };
 declare export default typeof /* NO PRINT IMPLEMENTED: CallExpression */ any;
