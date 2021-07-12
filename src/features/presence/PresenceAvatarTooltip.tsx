@@ -13,16 +13,15 @@ export type Props = {
 } & WrappedComponentProps;
 
 const PresenceAvatarTooltip = ({ name, interactedAt, interactionType, intl, isActive }: Props): JSX.Element => {
-    const getRelativeTime = (): string => {
-        if (intl.formatRelativeTime) {
-            return intl.formatRelativeTime(interactedAt - Date.now());
-        }
-        // @ts-ignore: react-intl v2 backwards compatibility
-        return intl.formatRelative(interactedAt);
-    };
-
     const lastActionMessage = determineInteractionMessage(interactionType);
-    const timeAgo = getRelativeTime();
+    let timeAgo;
+
+    if (intl.formatRelativeTime) {
+        timeAgo = intl.formatRelativeTime(interactedAt - Date.now());
+    } else {
+        // @ts-ignore: react-intl v2 backwards compatibility
+        timeAgo = intl.formatRelative(interactedAt);
+    }
 
     return (
         <div className="bdl-PresenceAvatarTooltip">

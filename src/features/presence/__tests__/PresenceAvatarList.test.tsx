@@ -27,7 +27,6 @@ describe('features/presence/PresenceAvatarList', () => {
                 maxDisplayedAvatars,
             });
 
-            expect(wrapper.exists('.bdl-PresenceAvatarList')).toBe(true);
             expect(wrapper.find(PresenceAvatar).length).toBe(maxDisplayedAvatars);
             expect(wrapper.exists('.bdl-PresenceAvatarList-count')).toBe(false);
         });
@@ -38,7 +37,6 @@ describe('features/presence/PresenceAvatarList', () => {
                 maxDisplayedAvatars,
             });
 
-            expect(wrapper.exists('.bdl-PresenceAvatarList')).toBe(true);
             expect(wrapper.find(PresenceAvatar).length).toBe(maxDisplayedAvatars);
             expect(wrapper.exists('.bdl-PresenceAvatarList-count')).toBe(true);
         });
@@ -64,7 +62,7 @@ describe('features/presence/PresenceAvatarList', () => {
                     .first()
                     .simulate(event);
 
-                expect(onAvatarMouseEnter).toHaveBeenCalled();
+                expect(onAvatarMouseEnter).toHaveBeenCalledWith('1');
                 expect(
                     wrapper
                         .find(Tooltip)
@@ -129,9 +127,7 @@ describe('features/presence/PresenceAvatarList', () => {
             const maxAdditionalCollaborators = 1;
             const wrapper = getWrapper({ maxAdditionalCollaborators, maxDisplayedAvatars });
 
-            expect(wrapper.exists('.bdl-PresenceAvatarList')).toBe(true);
             expect(wrapper.find(PresenceAvatar).length).toBe(maxDisplayedAvatars);
-            expect(wrapper.exists('.bdl-PresenceAvatarList-count')).toBe(true);
             expect(wrapper.find('.bdl-PresenceAvatarList-count').text()).toBe('1+');
         });
 
@@ -140,9 +136,7 @@ describe('features/presence/PresenceAvatarList', () => {
             const maxAdditionalCollaborators = 10;
             const wrapper = getWrapper({ maxAdditionalCollaborators, maxDisplayedAvatars });
 
-            expect(wrapper.find('.bdl-PresenceAvatarList').length).toBe(1);
             expect(wrapper.find(PresenceAvatar).length).toBe(maxDisplayedAvatars);
-            expect(wrapper.exists('.bdl-PresenceAvatarList-count')).toBe(true);
             expect(wrapper.find('.bdl-PresenceAvatarList-count').text()).toBe('+3');
         });
     });
