@@ -11,7 +11,6 @@ import 'draft-js/dist/Draft.css';
 import Tooltip from '../tooltip';
 
 import commonMessages from '../../common/messages';
-import messages from '../../elements/content-sidebar/activity-feed/comment-form/messages';
 import './DraftJSEditor.scss';
 
 const OptionalFormattedMessage = () => (
@@ -20,6 +19,7 @@ const OptionalFormattedMessage = () => (
     </span>
 );
 type Props = {
+    description: React.Node,
     editorState: EditorState,
     error?: ?Object,
     hideLabel?: boolean,
@@ -91,6 +91,7 @@ class DraftJSEditor extends React.Component<Props> {
             isDisabled,
             isRequired,
             label,
+            description,
             onFocus,
             placeholder,
         } = this.props;
@@ -121,7 +122,7 @@ class DraftJSEditor extends React.Component<Props> {
                     {!isRequired && <OptionalFormattedMessage />}
                 </span>
                 <span className={classNames({ 'accessibility-hidden': true })} id={this.commentFormTip}>
-                    <FormattedMessage {...messages.atMentionTipDescription} />
+                    {description}
                 </span>
 
                 <Tooltip isShown={!!error} position="bottom-left" text={error ? error.message : ''} theme="error">
