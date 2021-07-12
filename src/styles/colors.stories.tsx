@@ -1,156 +1,126 @@
 import * as React from 'react';
+import Color from 'color';
 import * as variables from './variables';
 import mdNotes from './colors.md';
 
-const bdlColors: { [k: string]: Array<Array<string>> } = {};
+type TSwatch = { scssVariableName: string; colorHex: string; colorKey: string; contrastRatio: number };
+
+const bdlColors: { [k: string]: Array<TSwatch> } = {};
+
+const WCAG_AA = 4.5; // minimum contrast ratio for text
+
+const isPaletteColor = (hex: string, key: string) => {
+    return key.startsWith('bdl') && !key.includes('Neutral') && key !== 'bdlSecondaryBlue' && hex.startsWith('#');
+};
 
 Object.keys(variables).forEach(colorKey => {
-    const color = (variables as { [k: string]: string | Array<string> })[colorKey];
-    if (
-        colorKey.startsWith('bdl') &&
-        !colorKey.includes('Neutral') &&
-        colorKey !== 'bdlSecondaryBlue' &&
-        !Array.isArray(color) &&
-        color.startsWith('#')
-    ) {
-        const colorNameBreakDown = (colorKey.match(/(bdl)|([A-Z][a-z]+)|(\d+)/g) as Array<string>).join('-');
-        const allowColorKey = (colorKey.match(/[A-Z][a-z]+/g) as Array<string>).join(' ');
+    const colorHex = (variables as { [k: string]: string | Array<string> })[colorKey];
+    if (Array.isArray(colorHex)) return;
+    if (isPaletteColor(colorHex, colorKey)) {
+        const paletteGroup = (colorKey.match(/[A-Z][a-z]+/g) as Array<string>).join(' ');
 
-        if (!bdlColors[allowColorKey]) {
-            bdlColors[allowColorKey] = [];
+        if (!bdlColors[paletteGroup]) {
+            bdlColors[paletteGroup] = [];
         }
 
-        bdlColors[allowColorKey].push([colorNameBreakDown, color, colorKey]);
+        const color = Color(colorHex);
+        const scssVariableName = (colorKey.match(/(bdl)|([A-Z][a-z]+)|(\d+)/g) as Array<string>).join('-');
+        const contrastRatio = color.contrast(Color('#fff'));
+
+        bdlColors[paletteGroup].push({ scssVariableName, colorHex, colorKey, contrastRatio });
     }
 });
 
-const wrapper = {
-    margin: '20px',
-};
-
-const palette: React.CSSProperties = {
+const wrapper: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    margin: '20px 10px',
 };
 
-const swatch = {
-    borderRadius: '3px',
+const palette: React.CSSProperties = {};
+
+const swatchContainer: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+};
+
+const swatch: React.CSSProperties = {
+    borderRadius: '4px',
     height: '40px',
-    marginBottom: '4px',
     width: '200px',
+    display: 'inline-block',
 };
 
-const swatchContainer = {
-    margin: '10px',
+const label: React.CSSProperties = {
+    margin: '0 8px 0 16px',
 };
 
-const label = {
-    margin: '3px 0 5px',
-};
+const LabelCell = (props: { children: React.ReactNode }) => <td style={{ minWidth: 240 }}>{props.children}</td>;
 
-const Swatch = ({ color }: { color: Array<string> }) => (
+const Swatch = ({ color }: { color: TSwatch }) => (
     <div style={swatchContainer}>
-        <div style={{ ...swatch, backgroundColor: color[1] }} />
-        <label style={label}>
-            <strong>CSS:</strong> {color[1]}
-            <br />
-            <strong>SCSS:</strong> ${color[0].toLowerCase()}
-            <br />
-            <strong>JS:</strong> {color[2]}
-        </label>
-    </div>
-);
-
-const SwatchSection = ({ swatchColor }: { swatchColor: string }) => (
-    <div style={wrapper}>
-        <div style={palette}>
-            {bdlColors[swatchColor].map(color => (
-                <Swatch key={color[1]} color={color} />
-            ))}
-        </div>
+        <span style={{ ...swatch, backgroundColor: color.colorHex }} />
+        <table style={label}>
+            <tr>
+                <LabelCell>
+                    <strong>SCSS:</strong> <code>${color.scssVariableName.toLowerCase()}</code>
+                </LabelCell>
+                <LabelCell>
+                    <strong title="WCAG contrast ratio against white background">WCAG:</strong>{' '}
+                    <code>{color.contrastRatio.toFixed(2)}</code>{' '}
+                    {color.contrastRatio > WCAG_AA ? '(AA ✔︎)' : <s>(AA)</s>}
+                </LabelCell>
+            </tr>
+            <tr>
+                <LabelCell>
+                    <strong>JS:</strong> <code>{color.colorKey}</code>
+                </LabelCell>
+                <LabelCell>
+                    <strong>Hex:</strong> <code>{color.colorHex}</code>
+                </LabelCell>
+            </tr>
+        </table>
     </div>
 );
 
 const allColors = () => (
     <div style={wrapper}>
         <div>
-            <h4>White</h4>
+            <h4>Base</h4>
             <div style={palette}>
-                <div style={swatchContainer}>
-                    <div style={{ ...swatch, backgroundColor: '#fff' }} />
-                    <label style={label}>
-                        <strong>CSS:</strong> #fff
-                        <br />
-                        <strong>SCSS:</strong> $white
-                        <br />
-                        <strong>JS:</strong> white
-                    </label>
-                </div>
+                <Swatch
+                    key="black"
+                    color={{ scssVariableName: 'black', colorHex: '#000000', colorKey: 'black', contrastRatio: 100 }}
+                />
+                <Swatch
+                    key="white"
+                    color={{ scssVariableName: 'white', colorHex: '#ffffff', colorKey: 'white', contrastRatio: 0 }}
+                />
             </div>
         </div>
-        <div>
-            <h4>Black</h4>
-            <div style={palette}>
-                <div style={swatchContainer}>
-                    <div style={{ ...swatch, backgroundColor: '#000' }} />
-                    <label style={label}>
-                        <strong>CSS:</strong> #000
-                        <br />
-                        <strong>SCSS:</strong> $black
-                        <br />
-                        <strong>JS:</strong> black
-                    </label>
+        {Object.entries(bdlColors)
+            .sort((A, B) => {
+                // Sort the palette by grayness (hue/saturation = 0) and then by color
+                const a = Color(A[1][0].colorHex);
+                const b = Color(B[1][0].colorHex);
+                if (a.hsl().object().h === 0) return -1;
+                if (b.hsl().object().h === 0) return 1;
+                return a.rgbNumber() - b.rgbNumber();
+            })
+            .map(([name, colors]) => (
+                <div key={name}>
+                    <h4>{name}</h4>
+                    <div style={palette}>
+                        {colors.map(color => (
+                            <Swatch key={color.colorKey} color={color} />
+                        ))}
+                    </div>
                 </div>
-            </div>
-        </div>
-        {Object.keys(bdlColors).map(key => (
-            <div key={key}>
-                <h4>{key}</h4>
-                <div style={palette}>
-                    {bdlColors[key].map(color => (
-                        <Swatch key={color[1]} color={color} />
-                    ))}
-                </div>
-            </div>
-        ))}
+            ))}
     </div>
 );
 
-const boxBlue = () => <SwatchSection swatchColor="Box Blue" />;
-
-const gray = () => <SwatchSection swatchColor="Gray" />;
-
-const darkBlue = () => <SwatchSection swatchColor="Dark Blue" />;
-
-const lightBlue = () => <SwatchSection swatchColor="Light Blue" />;
-
-const yellorange = () => <SwatchSection swatchColor="Yellorange" />;
-
-const yellow = () => <SwatchSection swatchColor="Yellow" />;
-
-const grimace = () => <SwatchSection swatchColor="Grimace" />;
-
-const greenLight = () => <SwatchSection swatchColor="Green Light" />;
-
-const purpleRain = () => <SwatchSection swatchColor="Purple Rain" />;
-
-const watermelonRed = () => <SwatchSection swatchColor="Watermelon Red" />;
-
-export {
-    allColors,
-    boxBlue,
-    gray,
-    darkBlue,
-    lightBlue,
-    yellorange,
-    yellow,
-    greenLight,
-    grimace,
-    purpleRain,
-    watermelonRed,
-};
+export { allColors };
 
 export default {
     title: 'Theming|Colors',
