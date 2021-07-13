@@ -129,7 +129,18 @@ class SearchForm extends React.Component<Props, State> {
     searchInput: ?HTMLInputElement;
 
     render() {
-        const { action, className, intl, isLoading, method, name, queryParams, useClearButton, ...rest } = this.props;
+        const {
+            action,
+            className,
+            intl,
+            isLoading,
+            method,
+            name,
+            queryParams,
+            onSubmit,
+            useClearButton,
+            ...rest
+        } = this.props;
         const { isEmpty } = this.state;
 
         const inputProps = omit(rest, [
@@ -152,13 +163,24 @@ class SearchForm extends React.Component<Props, State> {
 
         const SearchActions = () => (
             <div className="action-buttons">
-                <button
-                    type="button"
-                    className="action-button search-button"
-                    title={formatMessage(messages.searchButtonTitle)}
-                >
-                    <Search16 />
-                </button>
+                {onSubmit ? (
+                    <button
+                        type="button"
+                        className="action-button search-button"
+                        title={formatMessage(messages.searchButtonTitle)}
+                    >
+                        <Search16 />
+                    </button>
+                ) : (
+                    <div
+                        type="button"
+                        className="action-button search-button"
+                        title={formatMessage(messages.searchButtonTitle)}
+                    >
+                        <Search16 />
+                    </div>
+                )}
+
                 <button
                     className="action-button clear-button"
                     onClick={this.onClearHandler}
