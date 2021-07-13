@@ -11,6 +11,7 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
     const requiredProps = {
         editorState: EditorState.createEmpty(),
         label: 'Label text',
+        description: 'talesss',
         onBlur: () => {},
         onChange: sandbox.stub(),
         onFocus: () => {},
@@ -40,6 +41,12 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
             const wrapper = shallow(<DraftJSEditor {...requiredProps} isRequired={false} />);
 
             expect(wrapper.find('OptionalFormattedMessage').exists()).toBe(true);
+        });
+
+        test('should set description when specified', () => {
+            const wrapper = shallow(<DraftJSEditor {...requiredProps} />);
+
+            expect(wrapper.find('.screenreader-description').text()).toEqual(requiredProps.description);
         });
 
         test('should call handleChange when <Editor /> onchange called', () => {

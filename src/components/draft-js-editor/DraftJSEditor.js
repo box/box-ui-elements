@@ -121,7 +121,7 @@ class DraftJSEditor extends React.Component<Props> {
                     {label}
                     {!isRequired && <OptionalFormattedMessage />}
                 </span>
-                <span className="accessibility-hidden" id={this.descriptionID}>
+                <span className="accessibility-hidden screenreader-description" id={this.descriptionID}>
                     {description}
                 </span>
 
