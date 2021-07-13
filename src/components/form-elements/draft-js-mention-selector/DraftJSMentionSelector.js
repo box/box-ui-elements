@@ -28,7 +28,7 @@ const mentionStrategy = (contentBlock, callback, contentState) => {
 type Props = {
     className?: string,
     contacts: SelectorItems<>,
-    description: React.Node,
+    description?: React.Node,
     editorState?: EditorState,
     hideLabel?: boolean,
     isDisabled?: boolean,

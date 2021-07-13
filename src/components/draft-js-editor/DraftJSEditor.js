@@ -19,7 +19,7 @@ const OptionalFormattedMessage = () => (
     </span>
 );
 type Props = {
-    description: React.Node,
+    description?: React.Node,
     editorState: EditorState,
     error?: ?Object,
     hideLabel?: boolean,
@@ -80,7 +80,7 @@ class DraftJSEditor extends React.Component<Props> {
 
     labelID = uniqueId('label');
 
-    commentFormTip = uniqueId('comment-form-tip');
+    commentFormTipID = uniqueId('comment-form-tip');
 
     render() {
         const {
@@ -121,7 +121,7 @@ class DraftJSEditor extends React.Component<Props> {
                     {label}
                     {!isRequired && <OptionalFormattedMessage />}
                 </span>
-                <span className={classNames({ 'accessibility-hidden': true })} id={this.commentFormTip}>
+                <span className="accessibility-hidden" id={this.commentFormTipID}>
                     {description}
                 </span>
 
@@ -131,7 +131,7 @@ class DraftJSEditor extends React.Component<Props> {
                         <Editor
                             {...a11yProps}
                             ariaLabelledBy={this.labelID}
-                            ariaDescribedBy={this.commentFormTip}
+                            ariaDescribedBy={this.commentFormTipID}
                             editorState={editorState}
                             handleReturn={this.handleReturn}
                             onBlur={handleBlur}
