@@ -80,7 +80,7 @@ class DraftJSEditor extends React.Component<Props> {
 
     labelID = uniqueId('label');
 
-    commentFormTipID = uniqueId('comment-form-tip');
+    descriptionID = uniqueId('description');
 
     render() {
         const {
@@ -121,7 +121,7 @@ class DraftJSEditor extends React.Component<Props> {
                     {label}
                     {!isRequired && <OptionalFormattedMessage />}
                 </span>
-                <span className="accessibility-hidden" id={this.commentFormTipID}>
+                <span className="accessibility-hidden" id={this.descriptionID}>
                     {description}
                 </span>
 
@@ -131,7 +131,7 @@ class DraftJSEditor extends React.Component<Props> {
                         <Editor
                             {...a11yProps}
                             ariaLabelledBy={this.labelID}
-                            ariaDescribedBy={this.commentFormTipID}
+                            ariaDescribedBy={this.descriptionID}
                             editorState={editorState}
                             handleReturn={this.handleReturn}
                             onBlur={handleBlur}
