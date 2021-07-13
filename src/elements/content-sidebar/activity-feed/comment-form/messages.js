@@ -63,6 +63,12 @@ const messages = defineMessages({
         defaultMessage: '@mention users to notify them.',
         description: 'Mentioning call to action displayed below the comment input',
     },
+    atMentionTipDescription: {
+        id: 'be.contentSidebar.activityFeed.commentForm.atMentionTipDescription',
+        defaultMessage:
+            'Use the @ symbol to mention users and use the up and down arrow keys to scroll through autocomplete suggestions.',
+        description: 'Mentioning call to action detailed description for screen reader users',
+    },
 });
 
 export default messages;

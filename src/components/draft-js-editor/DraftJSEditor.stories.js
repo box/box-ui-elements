@@ -31,6 +31,7 @@ export const basic = () => {
                     isDisabled={boolean('isDisabled', false)}
                     isRequired={boolean('isRequired', true)}
                     label="Draft.js Editor Example"
+                    description="Description for screenReader users"
                     onBlur={() => null}
                     onChange={setEditorState}
                     onFocus={() => null}

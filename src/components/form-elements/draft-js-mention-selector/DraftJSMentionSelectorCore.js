@@ -40,6 +40,7 @@ const MentionStartState = ({ message }: MentionStartStateProps) => <div classNam
 type Props = {
     className?: string,
     contacts: SelectorItems<>,
+    description?: React.Node,
     editorState: EditorState,
     error?: ?Object,
     hideLabel?: boolean,
@@ -238,6 +239,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             isDisabled,
             isRequired,
             label,
+            description,
             onReturn,
             placeholder,
             selectorRow,
@@ -263,6 +265,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                             isFocused={isFocused}
                             isRequired={isRequired}
                             label={label}
+                            description={description}
                             onBlur={this.handleBlur}
                             onFocus={this.handleFocus}
                             onChange={this.handleChange}
