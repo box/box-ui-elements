@@ -4,15 +4,16 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import collaboratorList from '../__mocks__/collaborators';
 // @ts-ignore flow import
 import messages from '../messages';
-import { PresenceAvatarTooltipContentComponent as PresenceAvatarTooltip } from '../PresenceAvatarTooltipContent';
+import { PresenceAvatarTooltipContentComponent as PresenceAvatarTooltipContent } from '../PresenceAvatarTooltipContent';
 
 const intl = createIntl({ locale: 'en' });
 
-describe('features/presence/PresenceAvatarTooltip', () => {
+describe('features/presence/PresenceAvatarTooltipContent', () => {
     const collaborator = collaboratorList[0];
     const getDefaults = () => ({ intl, ...collaborator });
 
-    const getWrapper = (props = {}): ShallowWrapper => shallow(<PresenceAvatarTooltip {...getDefaults()} {...props} />);
+    const getWrapper = (props = {}): ShallowWrapper =>
+        shallow(<PresenceAvatarTooltipContent {...getDefaults()} {...props} />);
 
     beforeEach(() => {
         jest.spyOn(Date, 'now').mockImplementation(() => 1000);
