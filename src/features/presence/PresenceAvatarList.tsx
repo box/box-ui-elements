@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import noop from 'lodash/noop';
 // @ts-ignore flow import
 import PresenceAvatar from './PresenceAvatar';
-import PresenceAvatarTooltip from './PresenceAvatarTooltip';
+import PresenceAvatarTooltipContent from './PresenceAvatarTooltipContent';
 import Tooltip, { TooltipPosition } from '../../components/tooltip';
 import './PresenceAvatarList.scss';
 
@@ -71,7 +71,7 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
                         isShown={!hideTooltips && activeTooltip === id}
                         position={TooltipPosition.BOTTOM_CENTER}
                         text={
-                            <PresenceAvatarTooltip
+                            <PresenceAvatarTooltipContent
                                 name={name}
                                 interactedAt={interactedAt}
                                 interactionType={interactionType}

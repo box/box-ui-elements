@@ -4,9 +4,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import collaboratorList from '../__mocks__/collaborators';
 // @ts-ignore flow import
 import messages from '../messages';
-import { PresenceAvatarTooltipComponent as PresenceAvatarTooltip } from '../PresenceAvatarTooltip';
-
-const GlobalDate = Date;
+import { PresenceAvatarTooltipContentComponent as PresenceAvatarTooltip } from '../PresenceAvatarTooltipContent';
 
 const intl = createIntl({ locale: 'en' });
 
@@ -17,21 +15,15 @@ describe('features/presence/PresenceAvatarTooltip', () => {
     const getWrapper = (props = {}): ShallowWrapper => shallow(<PresenceAvatarTooltip {...getDefaults()} {...props} />);
 
     beforeEach(() => {
-        // @ts-ignore Simple Date constructor
-        global.Date = jest.fn(date => new GlobalDate(date));
-        global.Date.now = () => 1000;
-    });
-
-    afterEach(() => {
-        global.Date = GlobalDate;
+        jest.spyOn(Date, 'now').mockImplementation(() => 1000);
     });
 
     describe('render()', () => {
         test('should render the name if interaction type is not preview', () => {
             const wrapper = getWrapper({ ...collaborator, interactionType: 'foo' });
 
-            expect(wrapper.find('.bdl-PresenceAvatarTooltip-name').text()).toBe('e');
-            expect(wrapper.exists('.bdl-PresenceAvatarTooltip-event')).toBe(false);
+            expect(wrapper.find('.bdl-PresenceAvatarTooltipContent-name').text()).toBe('e');
+            expect(wrapper.exists('.bdl-PresenceAvatarTooltipContent-event')).toBe(false);
         });
 
         test('should render the active now message if collaborator is active', () => {

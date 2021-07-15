@@ -8,7 +8,7 @@ const exts = ['.ts', '.js', '.tsx'];
 const features = 'formatRelativeTime|FormattedRelativeTime|createIntl|useIntl';
 const allowList = [
     'src/components/time/ReadableTime.js',
-    'src/features/presence/PresenceAvatarTooltip.tsx',
+    'src/features/presence/PresenceAvatarTooltipContent.tsx',
     'src/features/presence/PresenceDropdown.js',
     'src/features/virtualized-table-renderers/lastModifiedByCellRenderer.js',
 ];
