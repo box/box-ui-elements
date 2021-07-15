@@ -172,11 +172,7 @@ class SearchForm extends React.Component<Props, State> {
                         <Search16 />
                     </button>
                 ) : (
-                    <div
-                        type="button"
-                        className="action-button search-button"
-                        title={formatMessage(messages.searchButtonTitle)}
-                    >
+                    <div className="action-button search-button">
                         <Search16 />
                     </div>
                 )}
