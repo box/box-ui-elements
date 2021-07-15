@@ -1,11 +1,21 @@
-@import '../../styles/variables';
+@import './styles';
 
 .presence {
     position: relative;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, .1);
 }
 
-.presence-avatar-container,
+.presence-avatar-container {
+    position: relative;
+
+    &.dropdown-active {
+        .bdl-PresenceAvatarList-count {
+            color: $bdl-gray-80;
+            background-color: $bdl-gray-30;
+        }
+    }
+}
+
 .presence-link-container {
     position: relative;
     display: inline-block;
@@ -39,33 +49,12 @@
 }
 
 .presence-notehead {
-    width: 28px;
-    height: 28px;
+    width: $bdl-Presence-avatar-size;
+    height: $bdl-Presence-avatar-size;
 
     &:hover {
         cursor: pointer;
     }
-}
-
-.presence-count {
-    min-width: 28px;
-    max-width: 34px;
-    height: 28px;
-    color: $bdl-gray;
-    line-height: 28px;
-    text-align: center;
-    vertical-align: top;
-    background-color: $bdl-gray-20;
-    border-radius: 14px;
-
-    &:hover {
-        cursor: pointer;
-    }
-}
-
-.presence-count.dropdown-active {
-    color: $bdl-gray-80;
-    background-color: $bdl-gray-30;
 }
 
 .presence-dropdown {
@@ -126,19 +115,6 @@
     display: flex;
     justify-content: flex-end;
     margin-top: 20px;
-}
-
-.presence-avatar-tooltip-container {
-    text-align: center;
-}
-
-.presence-avatar-tooltip-name {
-    font-weight: bold;
-    font-size: 13px;
-}
-
-.presence-avatar-tooltip-event {
-    font-size: 11px;
 }
 
 .dropshadow-list,
