@@ -21,6 +21,7 @@ export type Props = {
     avatarAttributes?: React.HTMLAttributes<HTMLDivElement>;
     className?: string;
     collaborators: Array<Collaborator>;
+    hideAdditionalCount?: boolean;
     hideTooltips?: boolean;
     maxAdditionalCollaborators?: number;
     maxDisplayedAvatars?: number;
@@ -33,6 +34,7 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
         avatarAttributes,
         className,
         collaborators,
+        hideAdditionalCount,
         hideTooltips,
         maxAdditionalCollaborators = 99,
         maxDisplayedAvatars = 3,
@@ -94,7 +96,7 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
                 );
             })}
 
-            {collaborators.length > maxDisplayedAvatars && (
+            {!hideAdditionalCount && collaborators.length > maxDisplayedAvatars && (
                 <div
                     className={classNames('bdl-PresenceAvatarList-count', 'avatar')}
                     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
