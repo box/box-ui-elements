@@ -41,6 +41,18 @@ describe('features/presence/PresenceAvatarList', () => {
             expect(wrapper.exists('.bdl-PresenceAvatarList-count')).toBe(true);
         });
 
+        test('should hide additional count if hideAdditionalCount is specified', () => {
+            const maxDisplayedAvatars = 3;
+            const wrapper = getWrapper({
+                hideAdditionalCount: true,
+                maxDisplayedAvatars,
+            });
+
+            expect(wrapper.exists('.bdl-PresenceAvatarList')).toBe(true);
+            expect(wrapper.find(PresenceAvatar).length).toBe(maxDisplayedAvatars);
+            expect(wrapper.exists('.bdl-PresenceAvatarList-count')).toBe(false);
+        });
+
         test.each(['focus', 'mouseenter'])(
             'should show tooltip when correponding avatar encounters %s event',
             event => {
