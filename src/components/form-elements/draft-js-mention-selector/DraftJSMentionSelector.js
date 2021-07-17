@@ -3,6 +3,7 @@ import * as React from 'react';
 import { CompositeDecorator, EditorState } from 'draft-js';
 import noop from 'lodash/noop';
 
+import type { GetAvatarUrlCallback } from '../../../elements/common/flowTypes';
 import DraftJSMentionSelectorCore from './DraftJSMentionSelectorCore';
 import DraftMentionItem from './DraftMentionItem';
 import FormInput from '../form/FormInput';
@@ -30,6 +31,7 @@ type Props = {
     contacts: SelectorItems<>,
     description?: React.Node,
     editorState?: EditorState,
+    getAvatarUrl: GetAvatarUrlCallback,
     hideLabel?: boolean,
     isDisabled?: boolean,
     isRequired?: boolean,
@@ -259,6 +261,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             selectorRow,
             startMentionMessage,
             onReturn,
+            getAvatarUrl,
         } = this.props;
         const { contacts, internalEditorState, error } = this.state;
         const { handleBlur, handleChange, handleFocus } = this;
@@ -273,6 +276,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             >
                 <FormInput name={name} onValidityStateUpdate={this.handleValidityStateUpdateHandler}>
                     <DraftJSMentionSelectorCore
+                        getAvatarUrl={getAvatarUrl}
                         contacts={contacts}
                         editorState={editorState}
                         error={error}
