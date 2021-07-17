@@ -75,6 +75,8 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         startMentionMessage: <DefaultStartMentionMessage />,
     };
 
+    mentorSelectorRef: { current: null | HTMLDivElement } = React.createRef();
+
     constructor(props: Props) {
         super(props);
         const mentionTriggers = props.mentionTriggers.reduce((prev, current) => `${prev}\\${current}`, '');
@@ -180,8 +182,11 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
      */
     handleChange = (nextEditorState: EditorState) => {
         const { onChange } = this.props;
-
         const activeMention = this.getActiveMentionForEditorState(nextEditorState);
+
+        if (activeMention !== null) {
+            this.buildAccessibleAlert(activeMention);
+        }
 
         this.setState(
             {
@@ -229,6 +234,27 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         return !!(activeMention && activeMention.mentionString && contacts.length);
     };
 
+    buildAccessibleAlert = (activeMention: Object) => {
+        const { isFocused } = this.state;
+        const { contacts } = this.props;
+        let alertElement = null;
+        const addAlert = activeMention && activeMention.mentionString?.length > 0 && isFocused;
+        const previousElement = document.querySelector('[data-testid="accessibility-alert"]');
+        if (previousElement) {
+            previousElement.remove();
+        }
+        if (addAlert) {
+            alertElement = document.createElement('span');
+            alertElement.setAttribute('class', 'accessibility-hidden');
+            alertElement.setAttribute('data-testid', 'accessibility-alert');
+            alertElement.setAttribute('role', 'alert');
+            alertElement.innerText = contacts.length > 0 ? `${contacts.length} users found` : 'No users found';
+            if (this.mentorSelectorRef.current) {
+                this.mentorSelectorRef.current.appendChild(alertElement);
+            }
+        }
+    };
+
     render() {
         const {
             className,
@@ -253,7 +279,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const showMentionStartState = !!(onMention && activeMention && !activeMention.mentionString && isFocused);
 
         return (
-            <div className={classes}>
+            <div className={classes} ref={this.mentorSelectorRef}>
                 <SelectorDropdown
                     onSelect={this.handleContactSelected}
                     selector={
