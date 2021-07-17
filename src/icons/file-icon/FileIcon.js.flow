@@ -138,7 +138,7 @@ const EXTENSIONS = {
     IconFileGoogleSlides: mirror(['gslide', 'gslides']),
     IconFileVector: mirror(['eps']),
     IconFileIllustrator: mirror(['ai']),
-    IconFileIndesign: mirror(['indd']),
+    IconFileIndesign: mirror(['indb', 'indd', 'indl', 'indt', 'idml', 'inx', 'pmd']),
     IconFileKeynote: mirror(['key']),
     IconFileNumbers: mirror(['numbers']),
     IconFilePages: mirror(['pages']),
