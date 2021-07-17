@@ -8,6 +8,7 @@ import type { InjectIntlProvidedProps } from 'react-intl';
 
 import Tooltip from '../../components/tooltip';
 import PlainButton from '../../components/plain-button';
+// $FlowFixMe InlineNotice is in typescript
 import InlineNotice from '../../components/inline-notice';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import SingleSelectField from '../../components/select-field/SingleSelectField';
