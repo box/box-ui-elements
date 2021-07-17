@@ -31,6 +31,7 @@ const RadioButton = ({
         {/* eslint-disable-next-line jsx-a11y/label-has-for */}
         <label className="radio-label">
             <input
+                aria-label={name}
                 checked={isSelected}
                 disabled={isDisabled}
                 name={name}
