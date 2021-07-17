@@ -50,4 +50,18 @@ describe('components/popper/PopperComponent', () => {
         expect(popperWrapper.length).toBe(1);
         expect(popperWrapper.prop('placement')).toBe('bottom-end');
     });
+
+    test('should apply the positionFixed to the Popper', () => {
+        const wrapper = shallow(
+            <PopperComponent isOpen placement="bottom-end" positionFixed>
+                <div>Reference element</div>
+                <div>Popper content</div>
+            </PopperComponent>,
+        );
+
+        expect(wrapper.exists(Reference)).toBe(true);
+        const popperWrapper = wrapper.find(Popper);
+        expect(popperWrapper.length).toBe(1);
+        expect(popperWrapper.prop('positionFixed')).toBe(true);
+    });
 });
