@@ -1,0 +1,12 @@
+[
+  {
+    "id": "be.contentSidebar.activityFeed.commmon.showOriginalMessage",
+    "description": "Show original button for showing original comment",
+    "defaultMessage": "Show Original"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.common.translateMessage",
+    "description": "Translate button for translating comment",
+    "defaultMessage": "Translate"
+  }
+]

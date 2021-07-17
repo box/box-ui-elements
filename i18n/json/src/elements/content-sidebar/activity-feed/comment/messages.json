@@ -1,0 +1,22 @@
+[
+  {
+    "id": "be.contentSidebar.activityFeed.comment.commentDeleteMenuItem",
+    "description": "Text to show on menu item to delete comment",
+    "defaultMessage": "Delete"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.comment.commentDeletePrompt",
+    "description": "Confirmation prompt text to delete comment",
+    "defaultMessage": "Are you sure you want to permanently delete this comment?"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.comment.commentEditMenuItem",
+    "description": "Text to show on menu item to edit comment",
+    "defaultMessage": "Modify"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.comment.commentPostedFullDateTime",
+    "description": "Comment posted full date time for title",
+    "defaultMessage": "{time, date, full} at {time, time, short}"
+  }
+]

@@ -1,9 +1,0 @@
-build/
-dist/
-es/
-flow/
-flow-typed/npm/
-i18n/**
-node_modules/
-reports/
-styleguide/

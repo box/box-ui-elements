@@ -1,9 +1,0 @@
-@import './mixins';
-
-.bcs-SidebarNavSign {
-    @include bdl-SidebarNavButton;
-}
-
-.bcs-SidebarNavSign-icon {
-    @include bdl-SidebarNavIcon;
-}

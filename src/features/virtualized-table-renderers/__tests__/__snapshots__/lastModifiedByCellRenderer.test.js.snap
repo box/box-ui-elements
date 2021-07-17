@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`features/virtualized-table-renderers/lastModifiedByCellRenderer should render a LastModifiedByCell 1`] = `"1563482709000 eons ago by 123-Rando-a@a.com"`;

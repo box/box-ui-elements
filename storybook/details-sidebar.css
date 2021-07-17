@@ -1,0 +1,24 @@
+/*!
+ * Box UI Element
+ * 
+ * Copyright 2019 Box, Inc. All rights reserved.
+ * 
+ * This product includes software developed by Box, Inc. ("Box")
+ * (http://www.box.com)
+ * 
+ * ALL BOX SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL BOX BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
+ * See the Box license for the specific language governing permissions
+ * and limitations under the license.
+ */
+.access-stats-item{list-style:none}.access-stats-item .access-stats-item-content,.access-stats-item .access-stats-item-content.btn-plain,.access-stats-item .access-stats-item-content.btn-plain:focus,.access-stats-item .access-stats-item-content.btn-plain:hover{display:flex;align-items:center;width:100%;margin:0 0 5px;padding:9px;color:#003c84;line-height:10px;text-align:left;background:#ecf4fc;border-radius:2px}.access-stats-item .access-stats-item-content.btn-plain:focus .access-stats-label,.access-stats-item .access-stats-item-content.btn-plain:hover .access-stats-label{text-decoration:underline}.access-stats-item .access-stats-label{flex-grow:1}.access-stats-item svg{margin-right:8px}.access-stats .access-stats-view-details{margin-top:10px}.access-stats .access-stats-view-details:hover{text-decoration:underline}.access-stats .access-stats-header{margin:0 0 10px;color:#a7a7a7}.access-stats .access-stats-list{margin:0}.bcs-SidebarClassification{margin:0 8px 20px 25px}.bcs-SidebarClassification:empty{margin:0}.bcs-SidebarClassification-edit{position:absolute;top:10px;right:20px;color:#0061d5}.item-properties{margin:0}.item-properties dt{color:#767676}.item-properties dd{margin-bottom:20px;line-height:16px}.item-properties textarea.description-textarea{width:100%;min-height:34px;max-height:110px;margin-left:-1px;padding:0;background-color:transparent;border-color:transparent;box-shadow:none;transition:background-color .2s,border-color .2s,margin-left .2s,padding .2s;resize:none}.item-properties textarea.description-textarea:hover{box-shadow:none}.item-properties textarea.description-textarea:focus{max-height:none;margin-left:0;padding:7px;background-color:#fbfbfb;border-color:#e8e8e8}.item-properties .url-input input{width:100%;margin:0}.item-properties .url-input:not(.show-error) input{height:16px;padding:0;border:none;box-shadow:none;transition:border .2s,height .2s,padding .2s}.item-properties .url-input:not(.show-error) input:focus{height:32px;padding:7px;border:1px solid #0061d5}.item-properties .bdl-RetentionLink{margin-left:4px}.item-properties button{display:block}.bcs-SidebarVersions:not(:empty){margin-bottom:20px}.bcs-details .bcs-scroll-content{padding-top:15px}.bcs-details .item-properties dd{margin-left:0}.bcs-details .item-properties dd:last-child{margin-bottom:0}.bcs-DetailsSidebar-notices{margin:0 8px 20px 25px}.bcs-DetailsSidebar-notices:empty{margin:0}
+/*# sourceMappingURL=details-sidebar.css.map*/

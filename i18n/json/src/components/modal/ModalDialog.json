@@ -1,0 +1,7 @@
+[
+  {
+    "id": "boxui.modalDialog.closeModalText",
+    "description": "Button to close modal",
+    "defaultMessage": "Close Modal"
+  }
+]

@@ -1,0 +1,24 @@
+/*!
+ * Box UI Element
+ * 
+ * Copyright 2019 Box, Inc. All rights reserved.
+ * 
+ * This product includes software developed by Box, Inc. ("Box")
+ * (http://www.box.com)
+ * 
+ * ALL BOX SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL BOX BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
+ * See the Box license for the specific language governing permissions
+ * and limitations under the license.
+ */
+.bcs-VersionsItemAction .fill-color{fill:#222}.bcs-VersionsItemAction .stroke-color{stroke:#222}.bcs-VersionsItemActions-toggle{display:flex;align-items:center;align-self:flex-start;justify-content:center;width:32px;height:24px;border-radius:2px;outline:none;pointer-events:auto}.bcs-VersionsItemActions-toggle:focus,.bcs-VersionsItemActions-toggle:hover{background-color:#e8e8e8;fill:#222}.bcs-VersionsItemActions-toggle .fill-color{fill:#909090}.bcs-VersionsItemActions-toggle .icon-clock-past{margin-left:-2px}.bcs-VersionsItemButton{display:flex;align-items:flex-start;width:100%;color:#222;font-size:100%;line-height:20px;text-align:left;background-color:transparent;border-radius:4px;outline:none;transition:background-color 50ms ease-in,border 50ms ease-in}.bcs-VersionsItemButton,.bcs-VersionsItemButton:focus,.bcs-VersionsItemButton:hover{border:1px solid transparent}.bcs-VersionsItemButton:focus,.bcs-VersionsItemButton:hover{border-color:#909090}.bcs-VersionsItemButton.bcs-is-disabled{border-color:transparent;cursor:default;pointer-events:none}.bcs-VersionsItemButton.bcs-is-disabled .bcs-VersionsItemBadge{background-color:#f4f4f4}.bcs-VersionsItemButton.bcs-is-disabled .bcs-VersionsItem-current,.bcs-VersionsItemButton.bcs-is-disabled .bcs-VersionsItemBadge{color:inherit}.bcs-VersionsItemButton.bcs-is-selected{background-color:#f6fafd;border-color:#0061d5}.bcs-VersionsItemBadge{padding:10px 8px;color:#0061d5;font-size:18px;text-align:center;background-color:#ecf4fc;border-radius:4px}.bcs-VersionsItem{position:relative}.bcs-VersionsItem .bcs-VersionsItemButton{padding:15px 10px}.bcs-VersionsItem .bcs-VersionsItemActions .aria-menu{padding-top:8px;padding-bottom:8px}.bcs-VersionsItem .bcs-VersionsItemActions-toggle{position:absolute;top:15px;right:10px}.bcs-VersionsItem-badge{flex:1 0 auto;margin-right:10px}.bcs-VersionsItem-current{color:#0061d5;font-weight:700}.bcs-VersionsItem-details{flex:1 1 100%;overflow:hidden}.bcs-VersionsItem-details>:not(.bcs-VersionsItem-info){margin-right:35px}.bcs-VersionsItem-log{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.bcs-VersionsItem-info{display:flex;align-items:center;color:#767676;white-space:nowrap}.bcs-VersionsItem-retention{display:flex;align-items:center;margin-top:8px;color:#767676}.bcs-VersionsItem-footer{color:#767676;font-size:12px}.bcs-VersionsItem-size{overflow:hidden;text-overflow:ellipsis}.bcs-VersionsItem-size:before{padding-right:5px;padding-left:5px;font-size:8px;vertical-align:top;content:"•"}.be .bcs-VersionsList{margin:0}.bcs-VersionsList-item .bcs-VersionsItem{width:calc(100% + 20px);margin-right:-10px;margin-bottom:-1px;margin-left:-10px}.bcs-VersionsList-item .bcs-VersionsItem:focus,.bcs-VersionsList-item .bcs-VersionsItem:hover{z-index:2}.bcs-VersionsList-item .bcs-VersionsItem.bcs-is-selected{z-index:1}.bcs-VersionsList-item+.bcs-VersionsList-item{border-top:1px solid #e8e8e8}.bcs-VersionsList-item+.bcs-VersionsList-item .bcs-VersionsItem{margin-top:-1px}.bcs-VersionsGroup-heading{margin-top:0;margin-bottom:0;padding-top:20px;padding-bottom:10px;color:#909090;font-size:14px;line-height:1}.bcs-VersionsMenu-item+.bcs-VersionsMenu-item{border-top:1px solid #e8e8e8}.bcs-Versions .bcs-scroll-content{width:100%}.bcs-Versions .bcs-section-content:first-child{padding-top:0}.bcs-Versions .bdl-BackButton{margin-right:5px}.bcs-Versions .crawler{display:flex;align-items:center;height:50px}.bcs-Versions-content{height:100%;padding-right:25px;padding-left:25px}.bcs-Versions-empty,.bcs-Versions-maxEntries{padding-top:10px;text-align:center}.be .bcs-Versions-menu{padding-bottom:20px}
+/*# sourceMappingURL=versions-sidebar.css.map*/

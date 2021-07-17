@@ -1,0 +1,42 @@
+[
+  {
+    "id": "boxui.metadataInstanceFields.customAdd",
+    "description": "Label for the add button for custom metadata",
+    "defaultMessage": "Add"
+  },
+  {
+    "id": "boxui.metadataInstanceFields.customRemove",
+    "description": "Label for the remove button for custom metadata",
+    "defaultMessage": "Remove"
+  },
+  {
+    "id": "boxui.metadataInstanceFields.invalidMetadataFieldType",
+    "description": "Error message displayed if the template has an field type we don't recognize",
+    "defaultMessage": "Invalid metadata field type!"
+  },
+  {
+    "id": "boxui.metadataInstanceFields.fieldNoValue",
+    "description": "Text to indicate no value exists",
+    "defaultMessage": "No Value"
+  },
+  {
+    "id": "boxui.metadataInstanceFields.fieldSelectValue",
+    "description": "Text to indicate to select a value from drop down list",
+    "defaultMessage": "Select Value"
+  },
+  {
+    "id": "boxui.metadataInstanceFields.fieldMultiSelectValue",
+    "description": "Text to indicate to select one or more values from dropdown list",
+    "defaultMessage": "Select Values"
+  },
+  {
+    "id": "boxui.metadataInstanceFields.fieldSetValue",
+    "description": "Text to indicate to set a value",
+    "defaultMessage": "Set Value"
+  },
+  {
+    "id": "boxui.metadataInstanceFields.fieldSetDate",
+    "description": "Text to indicate to set a date",
+    "defaultMessage": "Set Date"
+  }
+]
