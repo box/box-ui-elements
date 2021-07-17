@@ -15,6 +15,7 @@ import IconFileGoogleSheets from '../../icon/content/FileSheets32';
 import IconFileGoogleSlides from '../../icon/content/FileSlides32';
 import IconFileIllustrator from '../../icon/content/FileIllustrator32';
 import IconFileImage from '../../icon/content/FileImage32';
+import IconFileIndesign from '../../icon/content/FileIndesign32';
 import IconFileKeynote from '../../icon/content/FileKeynote32';
 import IconFileNumbers from '../../icon/content/FileNumbers32';
 import IconFilePDF from '../../icon/content/FilePdf32';
@@ -135,6 +136,7 @@ register(IconFileImage, '#3FB87F', [
     'tif',
     'tiff',
 ]);
+register(IconFileIndesign, '#FF57A1', ['indb', 'indd', 'indl', 'indt', 'idml', 'inx', 'pmd']);
 register(IconFileKeynote, '#007AFF', ['key']);
 register(IconFileNumbers, '#00A650', ['numbers']);
 register(IconFilePDF, '#D0021B', ['pdf']);
