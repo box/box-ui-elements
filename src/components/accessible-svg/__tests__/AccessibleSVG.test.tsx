@@ -22,7 +22,7 @@ describe('icons/accessible-svg/AccessibleSVG', () => {
             expect(wrapper.prop('width')).toEqual(24);
             expect(wrapper.prop('height')).toEqual(24);
             expect(wrapper.prop('viewBox')).toEqual('0 0 24 24');
-            expect(wrapper.prop('role')).toEqual('presentation');
+            expect(wrapper.prop('aria-hidden')).toEqual('true');
             expect(wrapper.prop('aria-labelledby')).toBeUndefined();
             expect(wrapper.prop('focusable')).toEqual('false');
         });
@@ -51,7 +51,7 @@ describe('icons/accessible-svg/AccessibleSVG', () => {
 
             const title = wrapper.find('title');
             expect(title.length).toBe(0);
-            expect(wrapper.prop('role')).toEqual('presentation');
+            expect(wrapper.prop('aria-hidden')).toEqual('true');
             expect(wrapper.prop('aria-labelledby')).not.toBeDefined();
         });
     });
