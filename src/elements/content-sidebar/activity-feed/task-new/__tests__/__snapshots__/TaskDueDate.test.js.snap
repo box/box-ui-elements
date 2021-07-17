@@ -13,7 +13,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskDueDate should rende
       type="error"
     >
       <span
-        className="bdl-LabelPill bdl-LabelPill--error bdl-LabelPill--sizeRegular"
+        className="bdl-LabelPill bdl-LabelPill--error bdl-LabelPill--sizeLarge"
         data-testid="task-overdue-date"
       >
         <LabelPillText>
