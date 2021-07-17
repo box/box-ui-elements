@@ -21,9 +21,11 @@ describe('components/search-form/SearchForm', () => {
     });
 
     test('should correctly render default component', () => {
-        const wrapper = mount(<SearchForm placeholder="search" />);
+        const onSubmitSpy = sinon.spy();
+        const wrapper = mount(<SearchForm onSubmit={onSubmitSpy} placeholder="search" value="cheese" />);
         expect(wrapper.find('form').length === 1).toBeTruthy();
         expect(wrapper.find('input').length === 1).toBeTruthy();
+
         expect(wrapper.find('button').length === 2).toBeTruthy();
         expect(wrapper.find('form').prop('method')).toEqual('get');
         expect(wrapper.find('input').prop('name')).toEqual('search');
