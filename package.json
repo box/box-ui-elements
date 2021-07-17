@@ -296,7 +296,7 @@
         "sass-loader": "^8.0.2",
         "sass-variable-parser": "^1.2.2",
         "scroll-into-view-if-needed": "^2.2.20",
-        "semantic-release": "^16.0.2",
+        "semantic-release": "^17.2.3",
         "simple-git": "^1.131.0",
         "sinon": "^2.3.7",
         "source-map-loader": "^0.2.4",
