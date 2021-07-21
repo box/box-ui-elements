@@ -66,7 +66,7 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
                 'aria-autocomplete': 'list',
                 'aria-expanded': true,
                 'aria-owns': 'id',
-                role: 'combobox',
+                role: 'textbox',
             };
             const wrapper = shallow(<DraftJSEditor {...requiredProps} inputProps={inputProps} />);
 
@@ -75,7 +75,7 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
             expect(editor.prop('ariaAutoComplete')).toEqual(inputProps['aria-autocomplete']);
             expect(editor.prop('ariaExpanded')).toEqual(inputProps['aria-expanded']);
             expect(editor.prop('ariaOwneeID')).toEqual(inputProps['aria-owns']);
-            expect(editor.prop('role')).toEqual(inputProps.role);
+            expect(editor.prop('role')).toEqual(inputProps.textbox);
         });
     });
 
