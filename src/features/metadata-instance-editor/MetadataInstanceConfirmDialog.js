@@ -28,7 +28,7 @@ const MetadataInstanceConfirmDialog = ({ onCancel, onConfirm, confirmationMessag
         <div className="metadata-instance-confirm-cover">
             <div className="metadata-instance-confim-container">
                 {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-                <div role="alert" tabIndex="0" ref={confirmationMessageElement}>
+                <div tabIndex="0" ref={confirmationMessageElement}>
                     <p className="metadata-instance-confirm-text">{confirmationMessage}</p>
                 </div>
                 <div className="metadata-instance-confirm-buttons">
