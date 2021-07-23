@@ -7,9 +7,13 @@ exports[`features/metadata-instance-editor/MetadataInstanceConfirmDialog should 
   <div
     className="metadata-instance-confim-container"
   >
-    <p
-      className="metadata-instance-confirm-text"
-    />
+    <div
+      tabIndex="0"
+    >
+      <p
+        className="metadata-instance-confirm-text"
+      />
+    </div>
     <div
       className="metadata-instance-confirm-buttons"
     >
