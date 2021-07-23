@@ -68,11 +68,10 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     onKeyDown={[Function]}
   />
   <Overlay
-    className="presence-dropdown-container presence-autofly"
+    className="bdl-PresenceCollaboratorsList-container presence-autofly"
     shouldDefaultFocus={false}
   >
-    <PresenceDropdown
-      className="presence-dropdown"
+    <PresenceCollaboratorsList
       collaborators={
         Array [
           Object {
@@ -191,11 +190,10 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     onKeyDown={[Function]}
   />
   <Overlay
-    className="presence-dropdown-container"
+    className="bdl-PresenceCollaboratorsList-container"
     shouldDefaultFocus={false}
   >
-    <PresenceDropdown
-      className="presence-dropdown"
+    <PresenceCollaboratorsList
       collaborators={
         Array [
           Object {
@@ -271,16 +269,15 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     onKeyDown={[Function]}
   />
   <Overlay
-    className="presence-dropdown-container presence-autofly"
+    className="bdl-PresenceCollaboratorsList-container presence-autofly"
     shouldDefaultFocus={false}
   >
-    <PresenceDropdown
-      className="presence-dropdown"
+    <PresenceCollaboratorsList
       collaborators={Array []}
       experimentBucket="flyout"
     />
     <a
-      className="presence-dropdown-request-stats"
+      className="bdl-PresenceCollaboratorsList-request-stats"
       href="#"
     >
       <FormattedMessage
@@ -360,11 +357,10 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     onKeyDown={[Function]}
   />
   <Overlay
-    className="presence-dropdown-container presence-autofly"
+    className="bdl-PresenceCollaboratorsList-container presence-autofly"
     shouldDefaultFocus={false}
   >
-    <PresenceDropdown
-      className="presence-dropdown"
+    <PresenceCollaboratorsList
       collaborators={
         Array [
           Object {
@@ -412,7 +408,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       experimentBucket="flyout"
     />
     <a
-      className="presence-dropdown-request-stats"
+      className="bdl-PresenceCollaboratorsList-request-stats"
       href="#"
     >
       <FormattedMessage
@@ -492,7 +488,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     onKeyDown={[Function]}
   />
   <Overlay
-    className="presence-dropdown-container presence-autofly-first-load"
+    className="bdl-PresenceCollaboratorsList-container presence-autofly-first-load"
     shouldDefaultFocus={false}
   >
     <FormattedMessage

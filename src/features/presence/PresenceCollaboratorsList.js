@@ -12,7 +12,7 @@ import PresenceAvatar from './PresenceAvatar';
 import { determineInteractionMessage } from './utils/presenceUtils';
 import messages from './messages';
 
-class PresenceDropdown extends React.Component<Props> {
+class PresenceCollaboratorsList extends React.Component<Props> {
     static propTypes = {
         collaborators: PropTypes.arrayOf(
             PropTypes.shape({
@@ -92,7 +92,7 @@ class PresenceDropdown extends React.Component<Props> {
     });
 
     renderTitle = () => (
-        <div className="presence-dropdown-title">
+        <div className="bdl-PresenceCollaboratorsList-title">
             <FormattedMessage {...messages.recentActivity} />
         </div>
     );
@@ -123,10 +123,10 @@ class PresenceDropdown extends React.Component<Props> {
             const { avatarUrl, id, isActive, interactedAt, interactionType, name, profileUrl } = collaborator;
 
             return (
-                <div key={id} className="presence-dropdown-item">
+                <div key={id} className="bdl-PresenceCollaboratorsList-item">
                     <PresenceAvatar avatarUrl={avatarUrl} id={id} isActive={isActive} isDropDownAvatar name={name} />
-                    <div className="presence-dropdown-item-info-container">
-                        <div className="presence-dropdown-item-info-name">
+                    <div className="bdl-PresenceCollaboratorsList-item-info-container">
+                        <div className="bdl-PresenceCollaboratorsList-item-info-name">
                             {isEmpty(profileUrl) ? (
                                 <span>{name}</span>
                             ) : (
@@ -135,7 +135,7 @@ class PresenceDropdown extends React.Component<Props> {
                                 </Link>
                             )}
                         </div>
-                        <div className="presence-dropdown-item-info-time">
+                        <div className="bdl-PresenceCollaboratorsList-item-info-time">
                             {isActive ? (
                                 <FormattedMessage {...messages.activeNowText} />
                             ) : (
@@ -153,7 +153,7 @@ class PresenceDropdown extends React.Component<Props> {
 
         return (
             (getLinkCallback || inviteCallback) && (
-                <div className="presence-dropdown-actions">
+                <div className="bdl-PresenceCollaboratorsList-actions">
                     <div>
                         {getLinkCallback && (
                             <Button onClick={getLinkCallback}>
@@ -176,7 +176,7 @@ class PresenceDropdown extends React.Component<Props> {
         const { getLinkCallback, inviteCallback } = this.props;
         const buttonsPresent = getLinkCallback || inviteCallback;
 
-        const dropdownListClasses = classnames('presence-dropdown-list', {
+        const dropdownListClasses = classnames('bdl-PresenceCollaboratorsList-list', {
             'dropshadow-list': !buttonsPresent,
             'dropshadow-list-with-buttons': buttonsPresent,
             'is-scrollable-above': isScrollableAbove,
@@ -188,7 +188,7 @@ class PresenceDropdown extends React.Component<Props> {
         const actions = this.renderActions();
 
         return (
-            <div className="presence-dropdown">
+            <div className="bdl-PresenceCollaboratorsList">
                 {title}
                 <div
                     ref={list => {
@@ -205,5 +205,5 @@ class PresenceDropdown extends React.Component<Props> {
     }
 }
 
-export { PresenceDropdown as PresenceDropdownComponent };
-export default injectIntl(PresenceDropdown);
+export { PresenceCollaboratorsList as PresenceCollaboratorsListComponent };
+export default injectIntl(PresenceCollaboratorsList);

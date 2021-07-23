@@ -57,33 +57,33 @@
     }
 }
 
-.presence-dropdown {
+.bdl-PresenceCollaboratorsList {
     padding: 5px;
 }
 
-.presence-dropdown-title {
+.bdl-PresenceCollaboratorsList-title {
     margin-top: 0;
     margin-bottom: 10px;
     color: $bdl-gray;
     font-size: 15px;
 }
 
-.presence-dropdown-container {
+.bdl-PresenceCollaboratorsList-container {
     width: 275px;
 }
 
-.presence-dropdown-item {
+.bdl-PresenceCollaboratorsList-item {
     display: flex;
     align-items: center;
     margin-top: 10px;
 }
 
-.presence-dropdown-item-info-container {
+.bdl-PresenceCollaboratorsList-item-info-container {
     display: inline-block;
     margin-left: 10px;
 }
 
-.presence-dropdown-item-info-name {
+.bdl-PresenceCollaboratorsList-item-info-name {
     width: 180px;
     overflow: hidden;
     color: $bdl-gray;
@@ -100,18 +100,18 @@
     }
 }
 
-.presence-dropdown-item-info-time {
+.bdl-PresenceCollaboratorsList-item-info-time {
     color: $bdl-gray-62;
     font-size: 12px;
 }
 
-.presence-dropdown-list {
+.bdl-PresenceCollaboratorsList-list {
     max-height: 200px;
     overflow-x: hidden;
     overflow-y: auto;
 }
 
-.presence-dropdown-actions {
+.bdl-PresenceCollaboratorsList-actions {
     display: flex;
     justify-content: flex-end;
     margin-top: 20px;
@@ -172,7 +172,7 @@
     bottom: 28px;
 }
 
-.presence-autofly .presence-dropdown-request-stats {
+.presence-autofly .bdl-PresenceCollaboratorsList-request-stats {
     display: block;
     margin-top: 8px;
     margin-bottom: -18px;
