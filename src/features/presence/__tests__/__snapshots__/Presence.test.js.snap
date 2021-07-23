@@ -68,7 +68,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     onKeyDown={[Function]}
   />
   <Overlay
-    className="bdl-PresenceCollaboratorsList-container presence-autofly"
+    className="presence-overlay presence-autofly"
     shouldDefaultFocus={false}
   >
     <PresenceCollaboratorsList
@@ -190,7 +190,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     onKeyDown={[Function]}
   />
   <Overlay
-    className="bdl-PresenceCollaboratorsList-container"
+    className="presence-overlay"
     shouldDefaultFocus={false}
   >
     <PresenceCollaboratorsList
@@ -269,7 +269,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     onKeyDown={[Function]}
   />
   <Overlay
-    className="bdl-PresenceCollaboratorsList-container presence-autofly"
+    className="presence-overlay presence-autofly"
     shouldDefaultFocus={false}
   >
     <PresenceCollaboratorsList
@@ -277,7 +277,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       experimentBucket="flyout"
     />
     <a
-      className="bdl-PresenceCollaboratorsList-request-stats"
+      className="presence-overlay-request-stats"
       href="#"
     >
       <FormattedMessage
@@ -357,7 +357,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     onKeyDown={[Function]}
   />
   <Overlay
-    className="bdl-PresenceCollaboratorsList-container presence-autofly"
+    className="presence-overlay presence-autofly"
     shouldDefaultFocus={false}
   >
     <PresenceCollaboratorsList
@@ -408,7 +408,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       experimentBucket="flyout"
     />
     <a
-      className="bdl-PresenceCollaboratorsList-request-stats"
+      className="presence-overlay-request-stats"
       href="#"
     >
       <FormattedMessage
@@ -488,7 +488,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     onKeyDown={[Function]}
   />
   <Overlay
-    className="bdl-PresenceCollaboratorsList-container presence-autofly-first-load"
+    className="presence-overlay presence-autofly-first-load"
     shouldDefaultFocus={false}
   >
     <FormattedMessage

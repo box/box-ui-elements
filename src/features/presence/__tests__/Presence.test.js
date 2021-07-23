@@ -153,7 +153,7 @@ describe('features/presence/Presence', () => {
                 expect(wrapper.find('PresenceCollaboratorsList').length).toBe(0);
                 wrapper.setState({ showActivityPrompt: false }).update();
                 expect(wrapper.find('PresenceCollaboratorsList').length).toBe(1);
-                expect(wrapper.find('.bdl-PresenceCollaboratorsList-request-stats').length).toBe(1);
+                expect(wrapper.find('.presence-overlay-request-stats').length).toBe(1);
             });
 
             test('calls callback to open access stats when that link is clicked', () => {
@@ -169,7 +169,7 @@ describe('features/presence/Presence', () => {
                 );
                 wrapper.setState({ showActivityPrompt: false }).update();
 
-                wrapper.find('.bdl-PresenceCollaboratorsList-request-stats').simulate('click');
+                wrapper.find('.presence-overlay-request-stats').simulate('click');
 
                 expect(mockRequestAccessStats.mock.calls.length).toBe(1);
             });

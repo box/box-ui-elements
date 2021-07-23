@@ -164,13 +164,13 @@ class Presence extends Component {
         if (!showActivityPrompt && experimentBucket === GROWTH_382_EXPERIMENT_BUCKET) {
             requestAccessStats = (
                 // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                <a className="bdl-PresenceCollaboratorsList-request-stats" href="#" onClick={onAccessStatsRequested}>
+                <a className="presence-overlay-request-stats" href="#" onClick={onAccessStatsRequested}>
                     <FormattedMessage {...messages.previewPresenceFlyoutAccessStatsLink} />
                 </a>
             );
         }
 
-        const overlayClassNames = classNames('bdl-PresenceCollaboratorsList-container', {
+        const overlayClassNames = classNames('presence-overlay', {
             [GROWTH_382_AUTOFLY_CLASS]: experimentBucket && !showActivityPrompt,
             [GROWTH_382_AUTOFLY_CLASS_FIRST_LOAD]: experimentBucket && showActivityPrompt,
         });

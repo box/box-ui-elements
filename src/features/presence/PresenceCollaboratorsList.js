@@ -1,16 +1,15 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import throttle from 'lodash/throttle';
-import isEmpty from 'lodash/isEmpty';
 import classnames from 'classnames';
-
+import isEmpty from 'lodash/isEmpty';
+import PropTypes from 'prop-types';
+import throttle from 'lodash/throttle';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Button from '../../components/button';
 import Link from '../../components/link/LinkBase';
-
+import messages from './messages';
 import PresenceAvatar from './PresenceAvatar';
 import { determineInteractionMessage } from './utils/presenceUtils';
-import messages from './messages';
+import './PresenceCollaboratorsList.scss';
 
 class PresenceCollaboratorsList extends React.Component<Props> {
     static propTypes = {
