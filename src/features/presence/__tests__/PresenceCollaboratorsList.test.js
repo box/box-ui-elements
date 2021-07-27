@@ -1,59 +1,11 @@
 import React from 'react';
 import { createIntl } from 'react-intl';
-import { PresenceDropdownComponent as PresenceDropdown } from '../PresenceDropdown';
-
-const collaboratorList = [
-    // user item preview
-    {
-        avatarUrl: '',
-        id: '1',
-        isActive: false,
-        interactedAt: 999,
-        interactionType: 'user.item_preview',
-        name: 'e',
-    },
-    // user item upload
-    {
-        avatarUrl: '',
-        id: '2',
-        isActive: false,
-        interactedAt: 999,
-        interactionType: 'user.item_upload',
-        name: 'd',
-    },
-    // user comment create
-    {
-        avatarUrl: '',
-        id: '3',
-        isActive: false,
-        interactedAt: 999,
-        interactionType: 'user.comment_create',
-        name: 'c',
-    },
-    // user item preview
-    {
-        avatarUrl: '',
-        id: '4',
-        isActive: false,
-        interactedAt: 999,
-        interactionType: 'user.item_preview',
-        name: 'b',
-    },
-    // user item upload
-    {
-        avatarUrl: '',
-        id: '5',
-        isActive: false,
-        interactedAt: 999,
-        interactionType: 'user.item_upload',
-        name: 'a',
-        profileUrl: 'www.box.com',
-    },
-];
+import collaboratorList from '../__mocks__/collaborators';
+import { PresenceCollaboratorsListComponent as PresenceCollaboratorsList } from '../PresenceCollaboratorsList';
 
 const intl = createIntl({});
 
-describe('features/presence/PresenceDropdown', () => {
+describe('features/presence/PresenceCollaboratorsList', () => {
     describe('componentDidMount()', () => {
         [
             // isn't scrollable at all
@@ -78,7 +30,9 @@ describe('features/presence/PresenceDropdown', () => {
             },
         ].forEach(({ isScrollableAbove, isScrollableBelow }) => {
             test('should calculate and set overflow state', () => {
-                const wrapper = shallow(<PresenceDropdown collaborators={[]} />, { disableLifecycleMethods: true });
+                const wrapper = shallow(<PresenceCollaboratorsList collaborators={[]} />, {
+                    disableLifecycleMethods: true,
+                });
                 const instance = wrapper.instance();
                 const calculateOverflowSpy = jest.fn().mockReturnValue({
                     isScrollableBelow,
@@ -119,7 +73,7 @@ describe('features/presence/PresenceDropdown', () => {
             test('should calculate, call onScroll and set overflow state', () => {
                 const onScrollSpy = jest.fn();
                 const wrapper = shallow(
-                    <PresenceDropdown intl={intl} collaborators={collaboratorList} onScroll={onScrollSpy} />,
+                    <PresenceCollaboratorsList intl={intl} collaborators={collaboratorList} onScroll={onScrollSpy} />,
                     {
                         disableLifecycleMethods: true,
                     },
@@ -167,7 +121,9 @@ describe('features/presence/PresenceDropdown', () => {
             },
         ].forEach(({ elem, isScrollableAbove, isScrollableBelow }) => {
             test('should calculate overflow and return isScrollableAbove and isScrollableBelow', () => {
-                const wrapper = shallow(<PresenceDropdown collaborators={[]} />, { disableLifecycleMethods: true });
+                const wrapper = shallow(<PresenceCollaboratorsList collaborators={[]} />, {
+                    disableLifecycleMethods: true,
+                });
                 const instance = wrapper.instance();
                 const result = instance.calculateOverflow(elem);
                 expect(result.isScrollableAbove).toBe(isScrollableAbove);
@@ -178,7 +134,7 @@ describe('features/presence/PresenceDropdown', () => {
 
     describe('renderTimestampMessage()', () => {
         test('should return null when interactionType is an unkown type', () => {
-            const wrapper = shallow(<PresenceDropdown intl={intl} collaborators={collaboratorList} />, {
+            const wrapper = shallow(<PresenceCollaboratorsList intl={intl} collaborators={collaboratorList} />, {
                 disableLifecycleMethods: true,
             });
             const instance = wrapper.instance();
@@ -187,7 +143,7 @@ describe('features/presence/PresenceDropdown', () => {
         });
 
         test('should not return null when interactionType is a known type', () => {
-            const wrapper = shallow(<PresenceDropdown intl={intl} collaborators={collaboratorList} />, {
+            const wrapper = shallow(<PresenceCollaboratorsList intl={intl} collaborators={collaboratorList} />, {
                 disableLifecycleMethods: true,
             });
             const instance = wrapper.instance();
@@ -197,10 +153,10 @@ describe('features/presence/PresenceDropdown', () => {
     });
 
     describe('render()', () => {
-        test('should correctly render an empty PresenceDropdown', () => {
+        test('should correctly render an empty PresenceCollaboratorsList', () => {
             const collaborators = [];
 
-            const wrapper = shallow(<PresenceDropdown intl={intl} collaborators={collaborators} />, {
+            const wrapper = shallow(<PresenceCollaboratorsList intl={intl} collaborators={collaborators} />, {
                 disableLifecycleMethods: true,
             });
 
@@ -212,23 +168,23 @@ describe('features/presence/PresenceDropdown', () => {
             });
             instance.calculateOverflow = calculateOverflowSpy;
 
-            expect(wrapper.find('.presence-dropdown-list').length).toBe(1);
-            expect(wrapper.find('.presence-dropdown-item').length).toBe(0);
-            expect(wrapper.find('.presence-dropdown-actions').length).toBe(0);
+            expect(wrapper.find('.bdl-PresenceCollaboratorsList-list').length).toBe(1);
+            expect(wrapper.find('.bdl-PresenceCollaboratorsList-item').length).toBe(0);
+            expect(wrapper.find('.bdl-PresenceCollaboratorsList-actions').length).toBe(0);
         });
 
         test('should correctly render collaborators', () => {
-            const wrapper = shallow(<PresenceDropdown intl={intl} collaborators={collaboratorList} />, {
+            const wrapper = shallow(<PresenceCollaboratorsList intl={intl} collaborators={collaboratorList} />, {
                 disableLifecycleMethods: true,
             });
 
-            expect(wrapper.find('.presence-dropdown-list').length).toBe(1);
-            expect(wrapper.find('.presence-dropdown-item').length).toBe(5);
+            expect(wrapper.find('.bdl-PresenceCollaboratorsList-list').length).toBe(1);
+            expect(wrapper.find('.bdl-PresenceCollaboratorsList-item').length).toBe(5);
         });
 
         test('should correctly render dropdownActions', () => {
             const wrapper = shallow(
-                <PresenceDropdown
+                <PresenceCollaboratorsList
                     intl={intl}
                     collaborators={collaboratorList}
                     getLinkCallback={() => {}}
@@ -237,7 +193,7 @@ describe('features/presence/PresenceDropdown', () => {
                 { disableLifecycleMethods: true },
             );
 
-            expect(wrapper.find('.presence-dropdown-actions').length).toBe(1);
+            expect(wrapper.find('.bdl-PresenceCollaboratorsList-actions').length).toBe(1);
         });
     });
 });
