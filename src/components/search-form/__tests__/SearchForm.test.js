@@ -21,11 +21,13 @@ describe('components/search-form/SearchForm', () => {
     });
 
     test('should correctly render default component', () => {
-        const wrapper = mount(<SearchForm placeholder="search" />);
+        const onSubmitSpy = sinon.spy();
+        const wrapper = mount(<SearchForm onSubmit={onSubmitSpy} placeholder="search" value="cheese" />);
         expect(wrapper.find('form').length === 1).toBeTruthy();
         expect(wrapper.find('input').length === 1).toBeTruthy();
         expect(wrapper.find('button').length === 2).toBeTruthy();
         expect(wrapper.find('form').prop('method')).toEqual('get');
+        expect(wrapper.find('.search-button').type()).toEqual('button');
         expect(wrapper.find('input').prop('name')).toEqual('search');
         expect(wrapper.find('form').hasClass('search-form')).toBeTruthy();
         expect(wrapper.find('input').hasClass('search-input')).toBeTruthy();
@@ -41,6 +43,11 @@ describe('components/search-form/SearchForm', () => {
                 .at(1)
                 .hasClass('clear-button'),
         ).toBeTruthy();
+    });
+
+    test('should render search-button as a div when onSubmit is not present', () => {
+        const wrapper = mount(<SearchForm placeholder="search" value="cheese" />);
+        expect(wrapper.find('.search-button').type()).toEqual('div');
     });
 
     test('should call onsubmit on search icon click', () => {
