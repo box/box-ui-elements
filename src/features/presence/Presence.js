@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import Button from '../../components/button';
 import messages from './messages';
 import PresenceAvatarList from './PresenceAvatarList';
-import PresenceDropdown from './PresenceDropdown';
+import PresenceCollaboratorsList from './PresenceCollaboratorsList';
 import { ARROW_DOWN, ENTER, SPACE } from '../../common/keyboard-events';
 import { collaboratorsPropType, flyoutPositionPropType } from './propTypes';
 import { Flyout, Overlay } from '../../components/flyout';
@@ -164,13 +164,13 @@ class Presence extends Component {
         if (!showActivityPrompt && experimentBucket === GROWTH_382_EXPERIMENT_BUCKET) {
             requestAccessStats = (
                 // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                <a className="presence-dropdown-request-stats" href="#" onClick={onAccessStatsRequested}>
+                <a className="presence-overlay-request-stats" href="#" onClick={onAccessStatsRequested}>
                     <FormattedMessage {...messages.previewPresenceFlyoutAccessStatsLink} />
                 </a>
             );
         }
 
-        const overlayClassNames = classNames('presence-dropdown-container', {
+        const overlayClassNames = classNames('presence-overlay', {
             [GROWTH_382_AUTOFLY_CLASS]: experimentBucket && !showActivityPrompt,
             [GROWTH_382_AUTOFLY_CLASS_FIRST_LOAD]: experimentBucket && showActivityPrompt,
         });
@@ -183,8 +183,7 @@ class Presence extends Component {
                 </Button>
             </>
         ) : (
-            <PresenceDropdown
-                className="presence-dropdown"
+            <PresenceCollaboratorsList
                 collaborators={collaborators}
                 experimentBucket={experimentBucket}
                 getLinkCallback={getLinkCallback}
