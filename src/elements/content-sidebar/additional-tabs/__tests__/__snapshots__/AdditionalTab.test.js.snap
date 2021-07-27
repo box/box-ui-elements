@@ -4,7 +4,7 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render di
 <AdditionalTabTooltip
   defaultTooltipText={
     <FormattedMessage
-      defaultMessage="Use of this app has been disabled by the applied access policy"
+      defaultMessage="Use of this app is blocked due to a security policy."
       id="be.additionalTab.blockedByShieldAccessPolicy"
     />
   }
