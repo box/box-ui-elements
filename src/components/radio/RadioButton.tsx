@@ -29,7 +29,7 @@ const RadioButton = ({
 }: RadioButtonProps) => (
     <div className="radio-container">
         {/* eslint-disable-next-line jsx-a11y/label-has-for */}
-        <label className="radio-label">
+        <label className="radio-label" htmlFor={name}>
             <input
                 aria-label={name}
                 checked={isSelected}
