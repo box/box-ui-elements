@@ -20,7 +20,6 @@ const MetadataInstanceConfirmDialog = ({ onCancel, onConfirm, confirmationMessag
 
     React.useEffect(() => {
         if (cancelButtonRef.current) {
-            console.log('cancelButtonRef.current', cancelButtonRef.current);
             cancelButtonRef.current.btnElement.focus();
         }
     }, []);
