@@ -8,7 +8,7 @@ exports[`features/metadata-instance-editor/MetadataInstanceConfirmDialog should 
     className="metadata-instance-confim-container"
   >
     <div
-      tabIndex="0"
+      role="alert"
     >
       <p
         className="metadata-instance-confirm-text"
