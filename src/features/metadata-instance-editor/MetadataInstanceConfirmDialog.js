@@ -26,10 +26,8 @@ const MetadataInstanceConfirmDialog = ({ onCancel, onConfirm, confirmationMessag
 
     return (
         <div className="metadata-instance-confirm-cover">
-            <div className="metadata-instance-confim-container">
-                <div role="alert">
-                    <p className="metadata-instance-confirm-text">{confirmationMessage}</p>
-                </div>
+            <div className="metadata-instance-confim-container" role="alert">
+                <p className="metadata-instance-confirm-text">{confirmationMessage}</p>
                 <div className="metadata-instance-confirm-buttons">
                     <Button
                         ref={cancelButtonRef}
