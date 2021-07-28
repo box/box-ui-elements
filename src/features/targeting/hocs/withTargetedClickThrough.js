@@ -46,7 +46,6 @@ function withTargetedClickThrough<Config>(
                     data-testid="with-targeted-click-span"
                     onClickCapture={handleOnComplete}
                     onKeyPressCapture={handleOnComplete}
-                    role="button"
                     tabIndex={-1}
                 >
                     {children}
