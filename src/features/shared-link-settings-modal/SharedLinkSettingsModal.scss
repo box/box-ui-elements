@@ -23,6 +23,21 @@
         }
     }
 
+    .password-section {
+        .password-section-information {
+            display: flex;
+            color: $bdl-gray-62;
+        }
+
+        .password-section-information-icon path {
+            fill: $bdl-gray-62;
+        }
+
+        .password-section-information-text {
+            margin-left: $bdl-grid-unit * 2;
+        }
+    }
+
     .vanity-name-section {
         .text-input-container {
             margin-bottom: 10px;
