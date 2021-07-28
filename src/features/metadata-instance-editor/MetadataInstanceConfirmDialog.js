@@ -16,7 +16,7 @@ type Props = {
 };
 
 const MetadataInstanceConfirmDialog = ({ onCancel, onConfirm, confirmationMessage }: Props) => {
-    const cancelButtonRef = React.useRef(null);
+    const cancelButtonRef = React.useRef<any | null>(null);
 
     React.useEffect(() => {
         if (cancelButtonRef.current) {
