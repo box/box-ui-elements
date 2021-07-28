@@ -16,23 +16,28 @@ type Props = {
 };
 
 const MetadataInstanceConfirmDialog = ({ onCancel, onConfirm, confirmationMessage }: Props) => {
-    const confirmationMessageElement = React.useRef(null);
+    const cancelButtonRef = React.useRef(null);
 
     React.useEffect(() => {
-        if (confirmationMessageElement.current) {
-            confirmationMessageElement.current.focus();
+        if (cancelButtonRef.current) {
+            console.log('cancelButtonRef.current', cancelButtonRef.current);
+            cancelButtonRef.current.btnElement.focus();
         }
-    });
+    }, []);
 
     return (
         <div className="metadata-instance-confirm-cover">
             <div className="metadata-instance-confim-container">
-                {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-                <div tabIndex="0" ref={confirmationMessageElement}>
+                <div role="alert">
                     <p className="metadata-instance-confirm-text">{confirmationMessage}</p>
                 </div>
                 <div className="metadata-instance-confirm-buttons">
-                    <Button data-resin-target="metadata-confirmcancel" onClick={onCancel} type="button">
+                    <Button
+                        ref={cancelButtonRef}
+                        data-resin-target="metadata-confirmcancel"
+                        onClick={onCancel}
+                        type="button"
+                    >
                         <FormattedMessage {...messages.metadataCancel} />
                     </Button>
                     <PrimaryButton data-resin-target="metadata-confirmremove" onClick={onConfirm} type="button">
