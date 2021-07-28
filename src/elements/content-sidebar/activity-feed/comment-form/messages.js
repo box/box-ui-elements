@@ -14,7 +14,7 @@ const messages = defineMessages({
     },
     commentLabel: {
         id: 'be.contentSidebar.activityFeed.commentForm.commentLabel',
-        defaultMessage: 'Comment',
+        defaultMessage: 'Write a comment',
         description: 'Accessible label for comment input field',
     },
     commentPost: {
@@ -62,6 +62,12 @@ const messages = defineMessages({
         id: 'be.contentSidebar.activityFeed.commentForm.atMentionTip',
         defaultMessage: '@mention users to notify them.',
         description: 'Mentioning call to action displayed below the comment input',
+    },
+    atMentionTipDescription: {
+        id: 'be.contentSidebar.activityFeed.commentForm.atMentionTipDescription',
+        defaultMessage:
+            'Use the @ symbol to mention users and use the up and down arrow keys to scroll through autocomplete suggestions.',
+        description: 'Mentioning call to action detailed description for screen reader users',
     },
 });
 

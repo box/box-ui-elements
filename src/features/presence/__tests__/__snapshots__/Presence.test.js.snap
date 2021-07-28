@@ -16,167 +16,62 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   portaledClasses={Array []}
   position="bottom-left"
 >
-  <div
+  <ForwardRef(PresenceAvatarList)
     className="presence-avatar-container"
+    collaborators={
+      Array [
+        Object {
+          "avatarUrl": "",
+          "id": "1",
+          "interactedAt": 999,
+          "interactionType": "user.item_preview",
+          "isActive": false,
+          "name": "e",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "2",
+          "interactedAt": 999,
+          "interactionType": "user.item_upload",
+          "isActive": false,
+          "name": "d",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "3",
+          "interactedAt": 999,
+          "interactionType": "user.comment_create",
+          "isActive": false,
+          "name": "c",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "4",
+          "interactedAt": 999,
+          "interactionType": "user.item_preview",
+          "isActive": false,
+          "name": "b",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "5",
+          "interactedAt": 999,
+          "interactionType": "user.item_upload",
+          "isActive": false,
+          "name": "a",
+        },
+      ]
+    }
+    hideTooltips={false}
+    maxAdditionalCollaborators={99}
+    maxDisplayedAvatars={3}
     onKeyDown={[Function]}
-  >
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
-      isShown={false}
-      key="1"
-      position="bottom-center"
-      text={
-        <div
-          className="presence-avatar-tooltip-container"
-        >
-          <div>
-            <span
-              className="presence-avatar-tooltip-name"
-            >
-              e
-            </span>
-          </div>
-          <div>
-            <span
-              className="presence-avatar-tooltip-event"
-            >
-              <FormattedMessage
-                defaultMessage="Previewed {timeAgo}"
-                id="boxui.presence.timeSinceLastPreviewed"
-                values={
-                  Object {
-                    "timeAgo": "1 second ago",
-                  }
-                }
-              />
-            </span>
-          </div>
-        </div>
-      }
-      theme="default"
-    >
-      <PresenceAvatar
-        avatarUrl=""
-        id="1"
-        isActive={false}
-        name="e"
-        onBlur={[Function]}
-        onFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-      />
-    </Tooltip>
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
-      isShown={false}
-      key="2"
-      position="bottom-center"
-      text={
-        <div
-          className="presence-avatar-tooltip-container"
-        >
-          <div>
-            <span
-              className="presence-avatar-tooltip-name"
-            >
-              d
-            </span>
-          </div>
-          <div>
-            <span
-              className="presence-avatar-tooltip-event"
-            >
-              <FormattedMessage
-                defaultMessage="Edited {timeAgo}"
-                id="boxui.presence.timeSinceLastModified"
-                values={
-                  Object {
-                    "timeAgo": "1 second ago",
-                  }
-                }
-              />
-            </span>
-          </div>
-        </div>
-      }
-      theme="default"
-    >
-      <PresenceAvatar
-        avatarUrl=""
-        id="2"
-        isActive={false}
-        name="d"
-        onBlur={[Function]}
-        onFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-      />
-    </Tooltip>
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
-      isShown={false}
-      key="3"
-      position="bottom-center"
-      text={
-        <div
-          className="presence-avatar-tooltip-container"
-        >
-          <div>
-            <span
-              className="presence-avatar-tooltip-name"
-            >
-              c
-            </span>
-          </div>
-          <div>
-            <span
-              className="presence-avatar-tooltip-event"
-            >
-              <FormattedMessage
-                defaultMessage="Commented {timeAgo}"
-                id="boxui.presence.timeSinceLastCommented"
-                values={
-                  Object {
-                    "timeAgo": "1 second ago",
-                  }
-                }
-              />
-            </span>
-          </div>
-        </div>
-      }
-      theme="default"
-    >
-      <PresenceAvatar
-        avatarUrl=""
-        id="3"
-        isActive={false}
-        name="c"
-        onBlur={[Function]}
-        onFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-      />
-    </Tooltip>
-    <div
-      className="presence-avatar avatar presence-count"
-      tabIndex="0"
-    >
-      +2
-    </div>
-  </div>
+  />
   <Overlay
-    className="presence-dropdown-container presence-autofly"
+    className="presence-overlay presence-autofly"
     shouldDefaultFocus={false}
   >
-    <PresenceDropdown
-      className="presence-dropdown"
+    <PresenceCollaboratorsList
       collaborators={
         Array [
           Object {
@@ -243,167 +138,62 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   portaledClasses={Array []}
   position="bottom-left"
 >
-  <div
+  <ForwardRef(PresenceAvatarList)
     className="presence-avatar-container"
+    collaborators={
+      Array [
+        Object {
+          "avatarUrl": "",
+          "id": "1",
+          "interactedAt": 999,
+          "interactionType": "user.item_preview",
+          "isActive": false,
+          "name": "e",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "2",
+          "interactedAt": 999,
+          "interactionType": "user.item_upload",
+          "isActive": false,
+          "name": "d",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "3",
+          "interactedAt": 999,
+          "interactionType": "user.comment_create",
+          "isActive": false,
+          "name": "c",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "4",
+          "interactedAt": 999,
+          "interactionType": "user.item_preview",
+          "isActive": false,
+          "name": "b",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "5",
+          "interactedAt": 999,
+          "interactionType": "user.item_upload",
+          "isActive": false,
+          "name": "a",
+        },
+      ]
+    }
+    hideTooltips={false}
+    maxAdditionalCollaborators={99}
+    maxDisplayedAvatars={3}
     onKeyDown={[Function]}
-  >
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
-      isShown={false}
-      key="1"
-      position="bottom-center"
-      text={
-        <div
-          className="presence-avatar-tooltip-container"
-        >
-          <div>
-            <span
-              className="presence-avatar-tooltip-name"
-            >
-              e
-            </span>
-          </div>
-          <div>
-            <span
-              className="presence-avatar-tooltip-event"
-            >
-              <FormattedMessage
-                defaultMessage="Previewed {timeAgo}"
-                id="boxui.presence.timeSinceLastPreviewed"
-                values={
-                  Object {
-                    "timeAgo": "1 second ago",
-                  }
-                }
-              />
-            </span>
-          </div>
-        </div>
-      }
-      theme="default"
-    >
-      <PresenceAvatar
-        avatarUrl=""
-        id="1"
-        isActive={false}
-        name="e"
-        onBlur={[Function]}
-        onFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-      />
-    </Tooltip>
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
-      isShown={false}
-      key="2"
-      position="bottom-center"
-      text={
-        <div
-          className="presence-avatar-tooltip-container"
-        >
-          <div>
-            <span
-              className="presence-avatar-tooltip-name"
-            >
-              d
-            </span>
-          </div>
-          <div>
-            <span
-              className="presence-avatar-tooltip-event"
-            >
-              <FormattedMessage
-                defaultMessage="Edited {timeAgo}"
-                id="boxui.presence.timeSinceLastModified"
-                values={
-                  Object {
-                    "timeAgo": "1 second ago",
-                  }
-                }
-              />
-            </span>
-          </div>
-        </div>
-      }
-      theme="default"
-    >
-      <PresenceAvatar
-        avatarUrl=""
-        id="2"
-        isActive={false}
-        name="d"
-        onBlur={[Function]}
-        onFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-      />
-    </Tooltip>
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
-      isShown={false}
-      key="3"
-      position="bottom-center"
-      text={
-        <div
-          className="presence-avatar-tooltip-container"
-        >
-          <div>
-            <span
-              className="presence-avatar-tooltip-name"
-            >
-              c
-            </span>
-          </div>
-          <div>
-            <span
-              className="presence-avatar-tooltip-event"
-            >
-              <FormattedMessage
-                defaultMessage="Commented {timeAgo}"
-                id="boxui.presence.timeSinceLastCommented"
-                values={
-                  Object {
-                    "timeAgo": "1 second ago",
-                  }
-                }
-              />
-            </span>
-          </div>
-        </div>
-      }
-      theme="default"
-    >
-      <PresenceAvatar
-        avatarUrl=""
-        id="3"
-        isActive={false}
-        name="c"
-        onBlur={[Function]}
-        onFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-      />
-    </Tooltip>
-    <div
-      className="presence-avatar avatar presence-count"
-      tabIndex="0"
-    >
-      +2
-    </div>
-  </div>
+  />
   <Overlay
-    className="presence-dropdown-container"
+    className="presence-overlay"
     shouldDefaultFocus={false}
   >
-    <PresenceDropdown
-      className="presence-dropdown"
+    <PresenceCollaboratorsList
       collaborators={
         Array [
           Object {
@@ -470,21 +260,24 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   portaledClasses={Array []}
   position="bottom-left"
 >
-  <div
+  <ForwardRef(PresenceAvatarList)
     className="presence-avatar-container"
+    collaborators={Array []}
+    hideTooltips={false}
+    maxAdditionalCollaborators={99}
+    maxDisplayedAvatars={3}
     onKeyDown={[Function]}
   />
   <Overlay
-    className="presence-dropdown-container presence-autofly"
+    className="presence-overlay presence-autofly"
     shouldDefaultFocus={false}
   >
-    <PresenceDropdown
-      className="presence-dropdown"
+    <PresenceCollaboratorsList
       collaborators={Array []}
       experimentBucket="flyout"
     />
     <a
-      className="presence-dropdown-request-stats"
+      className="presence-overlay-request-stats"
       href="#"
     >
       <FormattedMessage
@@ -512,167 +305,62 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   portaledClasses={Array []}
   position="bottom-left"
 >
-  <div
+  <ForwardRef(PresenceAvatarList)
     className="presence-avatar-container"
+    collaborators={
+      Array [
+        Object {
+          "avatarUrl": "",
+          "id": "1",
+          "interactedAt": 999,
+          "interactionType": "user.item_preview",
+          "isActive": false,
+          "name": "e",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "2",
+          "interactedAt": 999,
+          "interactionType": "user.item_upload",
+          "isActive": false,
+          "name": "d",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "3",
+          "interactedAt": 999,
+          "interactionType": "user.comment_create",
+          "isActive": false,
+          "name": "c",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "4",
+          "interactedAt": 999,
+          "interactionType": "user.item_preview",
+          "isActive": false,
+          "name": "b",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "5",
+          "interactedAt": 999,
+          "interactionType": "user.item_upload",
+          "isActive": false,
+          "name": "a",
+        },
+      ]
+    }
+    hideTooltips={false}
+    maxAdditionalCollaborators={99}
+    maxDisplayedAvatars={3}
     onKeyDown={[Function]}
-  >
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
-      isShown={false}
-      key="1"
-      position="bottom-center"
-      text={
-        <div
-          className="presence-avatar-tooltip-container"
-        >
-          <div>
-            <span
-              className="presence-avatar-tooltip-name"
-            >
-              e
-            </span>
-          </div>
-          <div>
-            <span
-              className="presence-avatar-tooltip-event"
-            >
-              <FormattedMessage
-                defaultMessage="Previewed {timeAgo}"
-                id="boxui.presence.timeSinceLastPreviewed"
-                values={
-                  Object {
-                    "timeAgo": "1 second ago",
-                  }
-                }
-              />
-            </span>
-          </div>
-        </div>
-      }
-      theme="default"
-    >
-      <PresenceAvatar
-        avatarUrl=""
-        id="1"
-        isActive={false}
-        name="e"
-        onBlur={[Function]}
-        onFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-      />
-    </Tooltip>
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
-      isShown={false}
-      key="2"
-      position="bottom-center"
-      text={
-        <div
-          className="presence-avatar-tooltip-container"
-        >
-          <div>
-            <span
-              className="presence-avatar-tooltip-name"
-            >
-              d
-            </span>
-          </div>
-          <div>
-            <span
-              className="presence-avatar-tooltip-event"
-            >
-              <FormattedMessage
-                defaultMessage="Edited {timeAgo}"
-                id="boxui.presence.timeSinceLastModified"
-                values={
-                  Object {
-                    "timeAgo": "1 second ago",
-                  }
-                }
-              />
-            </span>
-          </div>
-        </div>
-      }
-      theme="default"
-    >
-      <PresenceAvatar
-        avatarUrl=""
-        id="2"
-        isActive={false}
-        name="d"
-        onBlur={[Function]}
-        onFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-      />
-    </Tooltip>
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
-      isShown={false}
-      key="3"
-      position="bottom-center"
-      text={
-        <div
-          className="presence-avatar-tooltip-container"
-        >
-          <div>
-            <span
-              className="presence-avatar-tooltip-name"
-            >
-              c
-            </span>
-          </div>
-          <div>
-            <span
-              className="presence-avatar-tooltip-event"
-            >
-              <FormattedMessage
-                defaultMessage="Commented {timeAgo}"
-                id="boxui.presence.timeSinceLastCommented"
-                values={
-                  Object {
-                    "timeAgo": "1 second ago",
-                  }
-                }
-              />
-            </span>
-          </div>
-        </div>
-      }
-      theme="default"
-    >
-      <PresenceAvatar
-        avatarUrl=""
-        id="3"
-        isActive={false}
-        name="c"
-        onBlur={[Function]}
-        onFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-      />
-    </Tooltip>
-    <div
-      className="presence-avatar avatar presence-count"
-      tabIndex="0"
-    >
-      +2
-    </div>
-  </div>
+  />
   <Overlay
-    className="presence-dropdown-container presence-autofly"
+    className="presence-overlay presence-autofly"
     shouldDefaultFocus={false}
   >
-    <PresenceDropdown
-      className="presence-dropdown"
+    <PresenceCollaboratorsList
       collaborators={
         Array [
           Object {
@@ -720,7 +408,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
       experimentBucket="flyout"
     />
     <a
-      className="presence-dropdown-request-stats"
+      className="presence-overlay-request-stats"
       href="#"
     >
       <FormattedMessage
@@ -748,163 +436,59 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   portaledClasses={Array []}
   position="bottom-left"
 >
-  <div
+  <ForwardRef(PresenceAvatarList)
     className="presence-avatar-container"
+    collaborators={
+      Array [
+        Object {
+          "avatarUrl": "",
+          "id": "1",
+          "interactedAt": 999,
+          "interactionType": "user.item_preview",
+          "isActive": false,
+          "name": "e",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "2",
+          "interactedAt": 999,
+          "interactionType": "user.item_upload",
+          "isActive": false,
+          "name": "d",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "3",
+          "interactedAt": 999,
+          "interactionType": "user.comment_create",
+          "isActive": false,
+          "name": "c",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "4",
+          "interactedAt": 999,
+          "interactionType": "user.item_preview",
+          "isActive": false,
+          "name": "b",
+        },
+        Object {
+          "avatarUrl": "",
+          "id": "5",
+          "interactedAt": 999,
+          "interactionType": "user.item_upload",
+          "isActive": false,
+          "name": "a",
+        },
+      ]
+    }
+    hideTooltips={false}
+    maxAdditionalCollaborators={99}
+    maxDisplayedAvatars={3}
     onKeyDown={[Function]}
-  >
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
-      isShown={false}
-      key="1"
-      position="bottom-center"
-      text={
-        <div
-          className="presence-avatar-tooltip-container"
-        >
-          <div>
-            <span
-              className="presence-avatar-tooltip-name"
-            >
-              e
-            </span>
-          </div>
-          <div>
-            <span
-              className="presence-avatar-tooltip-event"
-            >
-              <FormattedMessage
-                defaultMessage="Previewed {timeAgo}"
-                id="boxui.presence.timeSinceLastPreviewed"
-                values={
-                  Object {
-                    "timeAgo": "1 second ago",
-                  }
-                }
-              />
-            </span>
-          </div>
-        </div>
-      }
-      theme="default"
-    >
-      <PresenceAvatar
-        avatarUrl=""
-        id="1"
-        isActive={false}
-        name="e"
-        onBlur={[Function]}
-        onFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-      />
-    </Tooltip>
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
-      isShown={false}
-      key="2"
-      position="bottom-center"
-      text={
-        <div
-          className="presence-avatar-tooltip-container"
-        >
-          <div>
-            <span
-              className="presence-avatar-tooltip-name"
-            >
-              d
-            </span>
-          </div>
-          <div>
-            <span
-              className="presence-avatar-tooltip-event"
-            >
-              <FormattedMessage
-                defaultMessage="Edited {timeAgo}"
-                id="boxui.presence.timeSinceLastModified"
-                values={
-                  Object {
-                    "timeAgo": "1 second ago",
-                  }
-                }
-              />
-            </span>
-          </div>
-        </div>
-      }
-      theme="default"
-    >
-      <PresenceAvatar
-        avatarUrl=""
-        id="2"
-        isActive={false}
-        name="d"
-        onBlur={[Function]}
-        onFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-      />
-    </Tooltip>
-    <Tooltip
-      constrainToScrollParent={false}
-      constrainToWindow={true}
-      isDisabled={false}
-      isShown={false}
-      key="3"
-      position="bottom-center"
-      text={
-        <div
-          className="presence-avatar-tooltip-container"
-        >
-          <div>
-            <span
-              className="presence-avatar-tooltip-name"
-            >
-              c
-            </span>
-          </div>
-          <div>
-            <span
-              className="presence-avatar-tooltip-event"
-            >
-              <FormattedMessage
-                defaultMessage="Commented {timeAgo}"
-                id="boxui.presence.timeSinceLastCommented"
-                values={
-                  Object {
-                    "timeAgo": "1 second ago",
-                  }
-                }
-              />
-            </span>
-          </div>
-        </div>
-      }
-      theme="default"
-    >
-      <PresenceAvatar
-        avatarUrl=""
-        id="3"
-        isActive={false}
-        name="c"
-        onBlur={[Function]}
-        onFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-      />
-    </Tooltip>
-    <div
-      className="presence-avatar avatar presence-count"
-      tabIndex="0"
-    >
-      +2
-    </div>
-  </div>
+  />
   <Overlay
-    className="presence-dropdown-container presence-autofly-first-load"
+    className="presence-overlay presence-autofly-first-load"
     shouldDefaultFocus={false}
   >
     <FormattedMessage

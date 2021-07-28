@@ -6,10 +6,10 @@ const process = require('process');
 
 const exts = ['.ts', '.js', '.tsx'];
 const features = 'formatRelativeTime|FormattedRelativeTime|createIntl|useIntl';
-const whitelisted = [
+const allowList = [
     'src/components/time/ReadableTime.js',
-    'src/features/presence/Presence.js',
-    'src/features/presence/PresenceDropdown.js',
+    'src/features/presence/PresenceAvatarTooltipContent.tsx',
+    'src/features/presence/PresenceCollaboratorsList.js',
     'src/features/virtualized-table-renderers/lastModifiedByCellRenderer.js',
 ];
 function getFilesInDirectory(dir) {
@@ -27,7 +27,7 @@ function getFilesInDirectory(dir) {
             files = files.concat(nestedFiles);
         } else if (
             !filePath.includes('.stories.') &&
-            !whitelisted.includes(filePath) &&
+            !allowList.includes(filePath) &&
             exts.includes(path.extname(file))
         ) {
             files.push(filePath);
