@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import PlainButton from '../../components/plain-button';
 import { Flyout, Overlay } from '../../components/flyout';
 
-import PresenceDropdown from './PresenceDropdown';
+import PresenceCollaboratorsList from './PresenceCollaboratorsList';
 import { collaboratorsPropType, flyoutPositionPropType } from './propTypes';
 
 import './Presence.scss';
@@ -39,11 +39,7 @@ class PresenceLink extends Component {
                     <PlainButton>{children}</PlainButton>
                 </div>
                 <Overlay shouldDefaultFocus={false}>
-                    <PresenceDropdown
-                        className="presence-dropdown"
-                        collaborators={collaborators}
-                        onScroll={onFlyoutScroll}
-                    />
+                    <PresenceCollaboratorsList collaborators={collaborators} onScroll={onFlyoutScroll} />
                 </Overlay>
             </Flyout>
         );
