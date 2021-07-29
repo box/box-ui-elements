@@ -117,4 +117,30 @@ describe('features/shared-link-settings-modal/PasswordSection', () => {
             expect(wrapper.prop('data-prop')).toEqual('input');
         });
     });
+
+    describe('passwordInformationText', () => {
+        const getPassWordInformation = (props = {}) => {
+            return shallow(
+                getWrapper(props)
+                    .find('Checkbox')
+                    .prop('subsection'),
+            ).find('.password-section-information');
+        };
+
+        test.each`
+            text                                 | length | should
+            ${'Password should be 8 chars long'} | ${1}   | ${'should render passwordInformation if message provided'}
+            ${undefined}                         | ${0}   | ${'should not render passwordInformationBox if null'}
+        `('$should', ({ text, length }) => {
+            const props = {
+                passwordInformationText: text,
+            };
+
+            const wrapper = getPassWordInformation(props);
+
+            expect(wrapper.find('ExclamationMarkBadge16').length).toEqual(length);
+            expect(wrapper.find('.password-section-information-text').length).toEqual(length);
+            expect(wrapper.length).toEqual(length);
+        });
+    });
 });
