@@ -6,6 +6,8 @@ import Checkbox from '../../components/checkbox';
 import TextInput from '../../components/text-input';
 import Fieldset from '../../components/fieldset';
 
+import ExclamationMarkBadge16 from '../../icon/line/ExclamationMarkBadge16';
+
 import messages from './messages';
 
 const PasswordSection = ({
@@ -19,6 +21,7 @@ const PasswordSection = ({
     onPasswordChange,
     password,
     passwordCheckboxProps = {},
+    passwordInformationText,
     passwordInputProps = {},
 }) => {
     if (!isPasswordAvailable) {
@@ -40,6 +43,14 @@ const PasswordSection = ({
                 value={password}
                 {...passwordInputProps}
             />
+            {passwordInformationText && (
+                <div className="be password-section-information">
+                    <span>
+                        <ExclamationMarkBadge16 className="password-section-information-icon" height={12} width={12} />
+                    </span>
+                    <span className="password-section-information-text">{passwordInformationText}</span>
+                </div>
+            )}
         </div>
     );
     return (
@@ -59,7 +70,6 @@ const PasswordSection = ({
         </div>
     );
 };
-
 PasswordSection.propTypes = {
     canChangePassword: PropTypes.bool.isRequired,
     error: PropTypes.string,
@@ -71,6 +81,7 @@ PasswordSection.propTypes = {
     onPasswordChange: PropTypes.func.isRequired,
     password: PropTypes.string,
     passwordCheckboxProps: PropTypes.object,
+    passwordInformationText: PropTypes.string,
     passwordInputProps: PropTypes.object,
 };
 
