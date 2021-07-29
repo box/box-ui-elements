@@ -87,6 +87,8 @@ class SharedLinkSettingsModal extends Component {
         /** Whether or not password is currently enabled */
         isPasswordEnabled: PropTypes.bool.isRequired,
         passwordError: PropTypes.string,
+        /** Information shown below password input box * */
+        passwordInformationText: PropTypes.string,
 
         // Expiration props
         /** Whether or not user has permission to enable/disable/change expiration */
@@ -259,7 +261,13 @@ class SharedLinkSettingsModal extends Component {
     }
 
     renderPasswordSection() {
-        const { canChangePassword, isPasswordAvailable, passwordCheckboxProps, passwordInputProps } = this.props;
+        const {
+            canChangePassword,
+            isPasswordAvailable,
+            passwordCheckboxProps,
+            passwordInformationText,
+            passwordInputProps,
+        } = this.props;
         const { isPasswordEnabled, password, passwordError } = this.state;
 
         return (
@@ -273,6 +281,7 @@ class SharedLinkSettingsModal extends Component {
                 onPasswordChange={this.onPasswordChange}
                 password={password}
                 passwordCheckboxProps={passwordCheckboxProps}
+                passwordInformationText={passwordInformationText}
                 passwordInputProps={passwordInputProps}
             />
         );
