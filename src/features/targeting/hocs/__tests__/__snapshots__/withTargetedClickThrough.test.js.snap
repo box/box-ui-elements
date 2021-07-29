@@ -13,7 +13,6 @@ exports[`features/targeting/hocs/withTargetedClickThrough render() should render
     data-testid="with-targeted-click-span"
     onClickCapture={[Function]}
     onKeyPressCapture={[Function]}
-    role="button"
     tabIndex={-1}
   />
 </WrappedComponent>
