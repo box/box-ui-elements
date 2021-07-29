@@ -31,11 +31,18 @@ const DefaultSelectorRow = ({ item = {}, ...rest }: DefaultSelectorRowProps) => 
 
 const DefaultStartMentionMessage = () => <FormattedMessage {...messages.startMention} />;
 
-type MentionStartStateProps = {
+type MentionStateProps = {
+    contacts?: Number,
     message?: React.Node,
 };
 
-const MentionStartState = ({ message }: MentionStartStateProps) => <div className="mention-start-state">{message}</div>;
+const MentionStartState = ({ message }: MentionStateProps) => <div className="mention-start-state">{message}</div>;
+
+const MentionUsersFound = ({ contacts }: MentionStateProps) => (
+    <span className="accessibility-hidden" data-testid="accessibility-alert" role="alert">
+        {contacts > 0 ? `${contacts} users found` : 'No users found'}
+    </span>
+);
 
 type Props = {
     className?: string,
@@ -83,6 +90,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         this.state = {
             activeMention: null,
+            announceActiveMention: false,
             isFocused: false,
             mentionPattern: new RegExp(`([${mentionTriggers}])([^${mentionTriggers}]*)$`),
         };
@@ -182,10 +190,13 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
      */
     handleChange = (nextEditorState: EditorState) => {
         const { onChange } = this.props;
+        const { isFocused } = this.state;
         const activeMention = this.getActiveMentionForEditorState(nextEditorState);
 
-        if (activeMention !== null) {
-            this.buildAccessibleAlert(activeMention);
+        if (activeMention && activeMention.mentionString?.length > 0 && isFocused) {
+            this.setState({
+                announceActiveMention: true,
+            });
         }
 
         this.setState(
@@ -234,27 +245,6 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         return !!(activeMention && activeMention.mentionString && contacts.length);
     };
 
-    buildAccessibleAlert = (activeMention: Object) => {
-        const { isFocused } = this.state;
-        const { contacts } = this.props;
-        let alertElement = null;
-        const addAlert = activeMention && activeMention.mentionString?.length > 0 && isFocused;
-        const previousElement = document.querySelector('[data-testid="accessibility-alert"]');
-        if (previousElement) {
-            previousElement.remove();
-        }
-        if (addAlert) {
-            alertElement = document.createElement('span');
-            alertElement.setAttribute('class', 'accessibility-hidden');
-            alertElement.setAttribute('data-testid', 'accessibility-alert');
-            alertElement.setAttribute('role', 'alert');
-            alertElement.innerText = contacts.length > 0 ? `${contacts.length} users found` : 'No users found';
-            if (this.mentorSelectorRef.current) {
-                this.mentorSelectorRef.current.appendChild(alertElement);
-            }
-        }
-    };
-
     render() {
         const {
             className,
@@ -272,7 +262,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             startMentionMessage,
             onMention,
         } = this.props;
-        const { activeMention, isFocused } = this.state;
+        const { activeMention, isFocused, announceActiveMention } = this.state;
 
         const classes = classNames('mention-selector-wrapper', className);
 
@@ -311,6 +301,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                         : []}
                 </SelectorDropdown>
                 {showMentionStartState ? <MentionStartState message={startMentionMessage} /> : null}
+                {announceActiveMention ? <MentionUsersFound /> : null}
             </div>
         );
     }

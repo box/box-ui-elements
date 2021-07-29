@@ -81,6 +81,16 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
         });
     });
 
+    describe('should show MentionUsersFound', () => {
+        const wrapper = mount(<DraftJSMentionSelector {...requiredProps} />);
+
+        wrapper.setState({ announceActiveMention: true });
+
+        test('should show MentionUsersFound', () => {
+            expect(wrapper.find('MentionUsersFound').length).toBe(1);
+        });
+    });
+
     describe('shouldDisplayMentionLookup()', () => {
         const exampleMention = { mentionString: '@foo' };
         const exampleContacts = [{ id: 1, name: 'foo' }];
