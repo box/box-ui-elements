@@ -15,20 +15,35 @@ type Props = {
     onConfirm: Function,
 };
 
-const MetadataInstanceConfirmDialog = ({ onCancel, onConfirm, confirmationMessage }: Props) => (
-    <div className="metadata-instance-confirm-cover">
-        <div className="metadata-instance-confim-container">
-            <p className="metadata-instance-confirm-text">{confirmationMessage}</p>
-            <div className="metadata-instance-confirm-buttons">
-                <Button data-resin-target="metadata-confirmcancel" onClick={onCancel} type="button">
-                    <FormattedMessage {...messages.metadataCancel} />
-                </Button>
-                <PrimaryButton data-resin-target="metadata-confirmremove" onClick={onConfirm} type="button">
-                    <FormattedMessage {...messages.customRemove} />
-                </PrimaryButton>
+const MetadataInstanceConfirmDialog = ({ onCancel, onConfirm, confirmationMessage }: Props) => {
+    const cancelButtonRef = React.useRef<any | null>(null);
+
+    React.useEffect(() => {
+        if (cancelButtonRef.current) {
+            cancelButtonRef.current.btnElement.focus();
+        }
+    }, []);
+
+    return (
+        <div className="metadata-instance-confirm-cover">
+            <div className="metadata-instance-confim-container" role="alert">
+                <p className="metadata-instance-confirm-text">{confirmationMessage}</p>
+                <div className="metadata-instance-confirm-buttons">
+                    <Button
+                        ref={cancelButtonRef}
+                        data-resin-target="metadata-confirmcancel"
+                        onClick={onCancel}
+                        type="button"
+                    >
+                        <FormattedMessage {...messages.metadataCancel} />
+                    </Button>
+                    <PrimaryButton data-resin-target="metadata-confirmremove" onClick={onConfirm} type="button">
+                        <FormattedMessage {...messages.customRemove} />
+                    </PrimaryButton>
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
+};
 
 export default MetadataInstanceConfirmDialog;
