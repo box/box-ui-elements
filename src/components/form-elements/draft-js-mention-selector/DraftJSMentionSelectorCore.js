@@ -30,19 +30,16 @@ const DefaultSelectorRow = ({ item = {}, ...rest }: DefaultSelectorRowProps) => 
 );
 
 const DefaultStartMentionMessage = () => <FormattedMessage {...messages.startMention} />;
+const UsersFoundMessage = ({ contactsCount }: number) => (
+    <FormattedMessage {...messages.usersFound} values={{ usersFound: contactsCount }} />
+);
+const NoUsersFoundMessage = () => <FormattedMessage {...messages.noUsersFound} />;
 
-type MentionStateProps = {
-    contacts?: Number,
+type MentionStartStateProps = {
     message?: React.Node,
 };
 
-const MentionStartState = ({ message }: MentionStateProps) => <div className="mention-start-state">{message}</div>;
-
-const MentionUsersFound = ({ contacts }: MentionStateProps) => (
-    <span className="accessibility-hidden" data-testid="accessibility-alert" role="alert">
-        {contacts > 0 ? `${contacts} users found` : 'No users found'}
-    </span>
-);
+const MentionStartState = ({ message }: MentionStartStateProps) => <div className="mention-start-state">{message}</div>;
 
 type Props = {
     className?: string,
@@ -81,8 +78,6 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         selectorRow: <DefaultSelectorRow />,
         startMentionMessage: <DefaultStartMentionMessage />,
     };
-
-    mentorSelectorRef: { current: null | HTMLDivElement } = React.createRef();
 
     constructor(props: Props) {
         super(props);
@@ -193,12 +188,6 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const { isFocused } = this.state;
         const activeMention = this.getActiveMentionForEditorState(nextEditorState);
 
-        if (activeMention && activeMention.mentionString?.length > 0 && isFocused) {
-            this.setState({
-                announceActiveMention: true,
-            });
-        }
-
         this.setState(
             {
                 activeMention,
@@ -213,6 +202,11 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                 }
             },
         );
+
+        if (activeMention && activeMention.mentionString?.length > 0 && isFocused) {
+            this.setState({ announceActiveMention: true }); // wait while contacts finish loading
+            setTimeout(() => this.setState({ announceActiveMention: false }), 100); // wait while screenReader reads out
+        }
     };
 
     /**
@@ -269,7 +263,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const showMentionStartState = !!(onMention && activeMention && !activeMention.mentionString && isFocused);
 
         return (
-            <div className={classes} ref={this.mentorSelectorRef}>
+            <div className={classes}>
                 <SelectorDropdown
                     onSelect={this.handleContactSelected}
                     selector={
@@ -301,7 +295,15 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                         : []}
                 </SelectorDropdown>
                 {showMentionStartState ? <MentionStartState message={startMentionMessage} /> : null}
-                {announceActiveMention ? <MentionUsersFound /> : null}
+                {announceActiveMention && (
+                    <span className="accessibility-hidden" data-testid="accessibility-alert" role="alert">
+                        {this.shouldDisplayMentionLookup() ? (
+                            <UsersFoundMessage contactsCount={contacts.length} />
+                        ) : (
+                            <NoUsersFoundMessage />
+                        )}
+                    </span>
+                )}
             </div>
         );
     }
