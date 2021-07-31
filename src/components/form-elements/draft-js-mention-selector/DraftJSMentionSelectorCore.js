@@ -204,8 +204,8 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         );
 
         if (activeMention && activeMention.mentionString?.length > 0 && isFocused) {
-            this.setState({ announceActiveMention: true }); // wait while contacts finish loading
-            setTimeout(() => this.setState({ announceActiveMention: false }), 100); // wait while screenReader reads out
+            this.setState({ announceActiveMention: true });
+            setTimeout(() => this.setState({ announceActiveMention: false }), 100);
         }
     };
 
