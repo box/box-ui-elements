@@ -365,7 +365,8 @@ export const X_REP_HINT_PNG_DIMENSIONS_DEFAULT: '1024x1024' = '1024x1024';
 
 // If unable to fetch jpg thumbnail, grab png rep of first page. Certain file types do not have a thumbnail rep but do have a first page rep.
 // Get the PDF rep as well, which ensures that the Preview SDK loads linearized reps for customers with PDF optimization enabled.
-export const X_REP_HINT_HEADER_DIMENSIONS_DEFAULT = `[jpg?dimensions=${X_REP_HINT_JPG_DIMENSIONS_DEFAULT}&paged=false,png?dimensions=${X_REP_HINT_PNG_DIMENSIONS_DEFAULT}][pdf]`;
+// Get the text rep as well, which ensures that large text files load in the Preview SDK.
+export const X_REP_HINT_HEADER_DIMENSIONS_DEFAULT = `[jpg?dimensions=${X_REP_HINT_JPG_DIMENSIONS_DEFAULT}&paged=false,png?dimensions=${X_REP_HINT_PNG_DIMENSIONS_DEFAULT}][pdf][text]`;
 
 /* ------------------ Representations Response ---------- */
 export const REPRESENTATIONS_RESPONSE_ERROR: 'error' = 'error';
