@@ -25,8 +25,7 @@ exports[`features/presence/PresenceLink render() should change the flyoutPositio
   <Overlay
     shouldDefaultFocus={false}
   >
-    <PresenceDropdown
-      className="presence-dropdown"
+    <PresenceCollaboratorsList
       collaborators={
         Array [
           Object {
@@ -34,7 +33,7 @@ exports[`features/presence/PresenceLink render() should change the flyoutPositio
             "id": "1",
             "interactedAt": 999,
             "interactionType": "user.item_preview",
-            "isActive": true,
+            "isActive": false,
             "name": "e",
           },
           Object {
@@ -68,6 +67,14 @@ exports[`features/presence/PresenceLink render() should change the flyoutPositio
             "interactionType": "user.item_upload",
             "isActive": false,
             "name": "a",
+          },
+          Object {
+            "avatarUrl": "",
+            "id": "6",
+            "interactedAt": 999,
+            "interactionType": "user.item_preview",
+            "isActive": true,
+            "name": "f",
           },
         ]
       }
@@ -100,8 +107,7 @@ exports[`features/presence/PresenceLink render() should correctly render collabo
   <Overlay
     shouldDefaultFocus={false}
   >
-    <PresenceDropdown
-      className="presence-dropdown"
+    <PresenceCollaboratorsList
       collaborators={
         Array [
           Object {
@@ -109,7 +115,7 @@ exports[`features/presence/PresenceLink render() should correctly render collabo
             "id": "1",
             "interactedAt": 999,
             "interactionType": "user.item_preview",
-            "isActive": true,
+            "isActive": false,
             "name": "e",
           },
           Object {
@@ -143,6 +149,14 @@ exports[`features/presence/PresenceLink render() should correctly render collabo
             "interactionType": "user.item_upload",
             "isActive": false,
             "name": "a",
+          },
+          Object {
+            "avatarUrl": "",
+            "id": "6",
+            "interactedAt": 999,
+            "interactionType": "user.item_preview",
+            "isActive": true,
+            "name": "f",
           },
         ]
       }
@@ -178,8 +192,7 @@ exports[`features/presence/PresenceLink render() should pass through additional 
   <Overlay
     shouldDefaultFocus={false}
   >
-    <PresenceDropdown
-      className="presence-dropdown"
+    <PresenceCollaboratorsList
       collaborators={
         Array [
           Object {
@@ -187,7 +200,7 @@ exports[`features/presence/PresenceLink render() should pass through additional 
             "id": "1",
             "interactedAt": 999,
             "interactionType": "user.item_preview",
-            "isActive": true,
+            "isActive": false,
             "name": "e",
           },
           Object {
@@ -221,6 +234,14 @@ exports[`features/presence/PresenceLink render() should pass through additional 
             "interactionType": "user.item_upload",
             "isActive": false,
             "name": "a",
+          },
+          Object {
+            "avatarUrl": "",
+            "id": "6",
+            "interactedAt": 999,
+            "interactionType": "user.item_preview",
+            "isActive": true,
+            "name": "f",
           },
         ]
       }

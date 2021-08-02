@@ -7,7 +7,7 @@ const messages = defineMessages({
         id: 'boxui.unifiedShare.contentSharedWithExternalCollaborators',
     },
     disabledShareLinkPermission: {
-        defaultMessage: 'This option isn’t available for this item due to a security restriction or classification.',
+        defaultMessage: 'This option is not available due to a security policy.',
         description:
             'Tooltip text for when shared permission option is not available due to restriction or classification',
         id: 'boxui.unifiedShare.disabledShareLinkPermission',
