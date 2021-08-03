@@ -606,9 +606,19 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
         test('should set the feedItems in the state', () => {
             instance.getMentionContactsSuccessCallback(collaborators);
-            expect(instance.setState).toBeCalledWith({
-                mentionSelectorContacts: collaborators.entries,
-            });
+            expect(instance.setState.mock.calls).toEqual([
+                [
+                    {
+                        contactsLoaded: false,
+                    },
+                ],
+                [
+                    {
+                        mentionSelectorContacts: collaborators.entries,
+                        contactsLoaded: true,
+                    },
+                ],
+            ]);
         });
     });
 
