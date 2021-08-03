@@ -24,7 +24,7 @@ import './CommentForm.scss';
 
 type Props = {
     className: string,
-    contactsLoaded?: Boolean,
+    contactsLoaded?: boolean,
     createComment?: Function,
     entityId?: string,
     getAvatarUrl: GetAvatarUrlCallback,

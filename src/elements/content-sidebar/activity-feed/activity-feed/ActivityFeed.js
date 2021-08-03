@@ -28,7 +28,7 @@ type Props = {
     activeFeedEntryType?: FocusableFeedItemType,
     activityFeedError: ?Errors,
     approverSelectorContacts?: SelectorItems<User | GroupMini>,
-    contactsLoaded?: Boolean,
+    contactsLoaded?: boolean,
     currentUser?: User,
     feedItems?: FeedItems,
     file: BoxItem,

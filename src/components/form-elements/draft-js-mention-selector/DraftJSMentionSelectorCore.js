@@ -44,7 +44,7 @@ const MentionStartState = ({ message }: MentionStartStateProps) => (
 type Props = {
     className?: string,
     contacts: SelectorItems<>,
-    contactsLoaded?: Boolean,
+    contactsLoaded?: boolean,
     description?: React.Node,
     editorState: EditorState,
     error?: ?Object,

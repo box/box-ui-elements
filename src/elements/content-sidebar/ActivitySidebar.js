@@ -85,7 +85,7 @@ type Props = {
 type State = {
     activityFeedError?: Errors,
     approverSelectorContacts: SelectorItems<UserMini | GroupMini>,
-    contactsLoaded?: Boolean,
+    contactsLoaded?: boolean,
     currentUser?: User,
     currentUserError?: Errors,
     feedItems?: FeedItems,
