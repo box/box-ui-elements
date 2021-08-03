@@ -24,6 +24,7 @@ import './CommentForm.scss';
 
 type Props = {
     className: string,
+    contactsLoaded?: Boolean,
     createComment?: Function,
     entityId?: string,
     getAvatarUrl: GetAvatarUrlCallback,
@@ -110,6 +111,7 @@ class CommentForm extends React.Component<Props, State> {
             isDisabled,
             isOpen,
             mentionSelectorContacts = [],
+            contactsLoaded,
             onCancel,
             onFocus,
             user,
@@ -136,6 +138,7 @@ class CommentForm extends React.Component<Props, State> {
                         <DraftJSMentionSelector
                             className="bcs-CommentForm-input"
                             contacts={isOpen ? mentionSelectorContacts : []}
+                            contactsLoaded={contactsLoaded}
                             editorState={commentEditorState}
                             hideLabel
                             isDisabled={isDisabled}

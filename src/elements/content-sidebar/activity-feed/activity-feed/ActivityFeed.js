@@ -28,6 +28,7 @@ type Props = {
     activeFeedEntryType?: FocusableFeedItemType,
     activityFeedError: ?Errors,
     approverSelectorContacts?: SelectorItems<User | GroupMini>,
+    contactsLoaded?: Boolean,
     currentUser?: User,
     feedItems?: FeedItems,
     file: BoxItem,
@@ -207,6 +208,7 @@ class ActivityFeed extends React.Component<Props, State> {
             getUserProfileUrl,
             isDisabled,
             mentionSelectorContacts,
+            contactsLoaded,
             onAnnotationDelete,
             onAnnotationEdit,
             onAnnotationSelect,
@@ -314,6 +316,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         onSubmit={this.resetFeedScroll}
                         isDisabled={isDisabled}
                         mentionSelectorContacts={mentionSelectorContacts}
+                        contactsLoaded={contactsLoaded}
                         className={classNames('bcs-activity-feed-comment-input', {
                             'bcs-is-disabled': isDisabled,
                         })}
