@@ -66,7 +66,6 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
                 'aria-autocomplete': 'list',
                 'aria-expanded': true,
                 'aria-owns': 'id',
-                role: 'textbox',
             };
             const wrapper = shallow(<DraftJSEditor {...requiredProps} inputProps={inputProps} />);
 
