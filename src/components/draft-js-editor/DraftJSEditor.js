@@ -111,7 +111,8 @@ class DraftJSEditor extends React.Component<Props> {
                 ariaAutoComplete: inputProps['aria-autocomplete'],
                 ariaExpanded: inputProps['aria-expanded'],
                 ariaOwneeID: inputProps['aria-owns'],
-                role: inputProps.role,
+                ariaMultiline: true,
+                role: 'textbox',
             };
         }
 
