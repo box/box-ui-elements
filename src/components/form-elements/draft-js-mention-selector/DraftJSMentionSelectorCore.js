@@ -258,7 +258,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const showMentionStartState = !!(onMention && activeMention && !activeMention.mentionString && isFocused);
 
         const usersFoundMessage = this.shouldDisplayMentionLookup()
-            ? { ...messages.usersFound, values: { usersFound: contacts.length } }
+            ? { ...messages.usersFound, values: { usersCount: contacts.length } }
             : messages.noUsersFound;
 
         return (

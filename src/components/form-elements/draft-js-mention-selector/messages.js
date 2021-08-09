@@ -9,12 +9,12 @@ const messages = defineMessages({
     },
     noUsersFound: {
         defaultMessage: 'No users found',
-        description: 'Message for screenReader users when trying to mention a user but there are no matches',
+        description: 'Message for screenReader users when trying to tag a user but there are no matches',
         id: 'boxui.draftjs.mentionSelector.noUsersFound',
     },
     usersFound: {
-        defaultMessage: '{usersFound} users found',
-        description: 'Message for screenReader users when a certain number of users is being mentioned',
+        defaultMessage: '{usersCount, plural, one {one user found} other {{usersCount} users found}}',
+        description: 'Message for screenReader users when a certain number of users is being tagged',
         id: 'boxui.draftjs.mentionSelector.usersFound',
     },
 });
