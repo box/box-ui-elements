@@ -161,6 +161,7 @@ export type sharedLinkType = {
     isDownloadAllowed: boolean,
     isDownloadSettingAvailable: boolean,
     isEditAllowed: boolean,
+    isEditSettingAvailable: boolean,
     isNewSharedLink: boolean,
     isPreviewAllowed: boolean,
     permissionLevel: permissionLevelType,
