@@ -35,11 +35,16 @@ type MentionStartStateProps = {
     message?: React.Node,
 };
 
-const MentionStartState = ({ message }: MentionStartStateProps) => <div className="mention-start-state">{message}</div>;
+const MentionStartState = ({ message }: MentionStartStateProps) => (
+    <div role="alert" className="mention-start-state">
+        {message}
+    </div>
+);
 
 type Props = {
     className?: string,
     contacts: SelectorItems<>,
+    contactsLoaded?: boolean,
     description?: React.Node,
     editorState: EditorState,
     error?: ?Object,
@@ -180,7 +185,6 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
      */
     handleChange = (nextEditorState: EditorState) => {
         const { onChange } = this.props;
-
         const activeMention = this.getActiveMentionForEditorState(nextEditorState);
 
         this.setState(
@@ -233,6 +237,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const {
             className,
             contacts,
+            contactsLoaded,
             editorState,
             error,
             hideLabel,
@@ -251,6 +256,10 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const classes = classNames('mention-selector-wrapper', className);
 
         const showMentionStartState = !!(onMention && activeMention && !activeMention.mentionString && isFocused);
+
+        const usersFoundMessage = this.shouldDisplayMentionLookup()
+            ? { ...messages.usersFound, values: { usersCount: contacts.length } }
+            : messages.noUsersFound;
 
         return (
             <div className={classes}>
@@ -285,6 +294,11 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                         : []}
                 </SelectorDropdown>
                 {showMentionStartState ? <MentionStartState message={startMentionMessage} /> : null}
+                {contactsLoaded && (
+                    <span className="accessibility-hidden" data-testid="accessibility-alert" role="alert">
+                        <FormattedMessage {...usersFoundMessage} />
+                    </span>
+                )}
             </div>
         );
     }

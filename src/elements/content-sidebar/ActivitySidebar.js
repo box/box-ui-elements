@@ -85,6 +85,7 @@ type Props = {
 type State = {
     activityFeedError?: Errors,
     approverSelectorContacts: SelectorItems<UserMini | GroupMini>,
+    contactsLoaded?: boolean,
     currentUser?: User,
     currentUserError?: Errors,
     feedItems?: FeedItems,
@@ -530,7 +531,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     getMentionContactsSuccessCallback = (collaborators: { entries: SelectorItems<> }): void => {
         const { entries } = collaborators;
-        this.setState({ mentionSelectorContacts: entries });
+        this.setState({ contactsLoaded: false }, () =>
+            this.setState({
+                contactsLoaded: true,
+                mentionSelectorContacts: entries,
+            }),
+        );
     };
 
     /**
@@ -695,6 +701,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             currentUser,
             approverSelectorContacts,
             mentionSelectorContacts,
+            contactsLoaded,
             feedItems,
             activityFeedError,
             currentUserError,
@@ -723,6 +730,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     getUserProfileUrl={getUserProfileUrl}
                     isDisabled={isDisabled}
                     mentionSelectorContacts={mentionSelectorContacts}
+                    contactsLoaded={contactsLoaded}
                     onAnnotationDelete={this.handleAnnotationDelete}
                     onAnnotationEdit={this.handleAnnotationEdit}
                     onAnnotationSelect={this.handleAnnotationSelect}
