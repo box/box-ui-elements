@@ -12,6 +12,7 @@ const accessLevelValues = {
 export type accessLevelType = $Keys<typeof accessLevelValues>;
 
 const permissionLevelValues = {
+    [constants.CAN_EDIT]: 'CAN_EDIT',
     [constants.CAN_VIEW_DOWNLOAD]: 'CAN_VIEW_DOWNLOAD',
     [constants.CAN_VIEW_ONLY]: 'CAN_VIEW_ONLY',
 };

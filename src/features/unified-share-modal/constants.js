@@ -6,6 +6,7 @@ const ANYONE_IN_COMPANY: 'peopleInYourCompany' = 'peopleInYourCompany';
 const PEOPLE_IN_ITEM: 'peopleInThisItem' = 'peopleInThisItem';
 
 // Shared link permission level constants
+const CAN_EDIT: 'canEdit' = 'canEdit';
 const CAN_VIEW_DOWNLOAD: 'canViewDownload' = 'canViewDownload';
 const CAN_VIEW_ONLY: 'canViewOnly' = 'canViewOnly';
 
@@ -94,6 +95,7 @@ export {
     ALLOWED_ACCESS_LEVELS,
     ANYONE_IN_COMPANY,
     ANYONE_WITH_LINK,
+    CAN_EDIT,
     CAN_VIEW_DOWNLOAD,
     CAN_VIEW_ONLY,
     COLLAB_GROUP_TYPE,

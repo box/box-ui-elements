@@ -30,7 +30,7 @@ import type {
     tooltipComponentIdentifierType,
     USMConfig,
 } from './flowTypes';
-import { PEOPLE_IN_ITEM, ANYONE_WITH_LINK, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
+import { PEOPLE_IN_ITEM, ANYONE_WITH_LINK, CAN_EDIT, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
 
 type Props = {
     addSharedLink: () => void,
@@ -193,6 +193,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             canChangeAccessLevel,
             enterpriseName,
             isEditAllowed,
+            isEditSettingAvailable,
             isDownloadSettingAvailable,
             permissionLevel,
             url,
@@ -218,7 +219,7 @@ class SharedLinkSection extends React.Component<Props, State> {
         const hideEmailButton = config && config.showEmailSharedLinkForm === false;
 
         const isEditableBoxNote = isBoxNote(convertToBoxItem(item)) && isEditAllowed;
-        let allowedPermissionLevels = [CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];
+        let allowedPermissionLevels = [CAN_EDIT, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];
 
         if (!canChangeAccessLevel) {
             // remove all but current level
@@ -228,6 +229,11 @@ class SharedLinkSection extends React.Component<Props, State> {
         // if we cannot set the download value, we remove this option from the dropdown
         if (!isDownloadSettingAvailable) {
             allowedPermissionLevels = allowedPermissionLevels.filter(level => level !== CAN_VIEW_DOWNLOAD);
+        }
+
+        // if the user cannot edit, we remove this option from the dropdown
+        if (!isEditSettingAvailable) {
+            allowedPermissionLevels = allowedPermissionLevels.filter(level => level !== CAN_EDIT);
         }
 
         return (
