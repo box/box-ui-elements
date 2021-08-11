@@ -601,12 +601,24 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         beforeEach(() => {
             wrapper = getWrapper();
             instance = wrapper.instance();
+        });
+
+        test('should dinamycally set as false contacts loading state', () => {
             instance.setState = jest.fn();
+            instance.getMentionContactsSuccessCallback(collaborators);
+
+            expect(instance.setState).toBeCalledWith(
+                {
+                    contactsLoaded: false,
+                },
+                expect.any(Function),
+            );
         });
 
         test('should set the feedItems in the state', () => {
             instance.getMentionContactsSuccessCallback(collaborators);
-            expect(instance.setState.mock.calls.length).toEqual(1);
+            expect(wrapper.state('contactsLoaded')).toBeTruthy();
+            expect(wrapper.state('mentionSelectorContacts')).toEqual(collaborators.entries);
         });
     });
 
