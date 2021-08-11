@@ -531,11 +531,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     getMentionContactsSuccessCallback = (collaborators: { entries: SelectorItems<> }): void => {
         const { entries } = collaborators;
-        this.setState({ contactsLoaded: false });
-        this.setState({
-            mentionSelectorContacts: entries,
-            contactsLoaded: true,
-        });
+        this.setState({ contactsLoaded: false }, () =>
+            this.setState({
+                contactsLoaded: true,
+                mentionSelectorContacts: entries,
+            }),
+        );
     };
 
     /**
