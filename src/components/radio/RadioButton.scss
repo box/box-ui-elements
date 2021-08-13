@@ -37,7 +37,7 @@
         }
 
         &:focus + span::before {
-            box-shadow: 0 0 0 1px $primary-color;
+            box-shadow: 0 0 0 2px $primary-color;
         }
 
         &:disabled + span::before {
