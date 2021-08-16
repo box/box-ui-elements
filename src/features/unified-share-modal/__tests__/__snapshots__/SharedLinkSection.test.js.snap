@@ -1162,7 +1162,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     <SharedLinkPermissionMenu
       allowedPermissionLevels={
         Array [
-          "canEdit",
           "canViewOnly",
         ]
       }
