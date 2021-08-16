@@ -42,6 +42,7 @@ type Props = {
     ) => Promise<{ permissionLevel: permissionLevelType }>,
     config?: USMConfig,
     intl: any,
+    isAllowEditSharedLinkForFileEnabled: boolean,
     item: itemtype,
     itemType: ItemType,
     onCopyError?: () => void,
@@ -172,6 +173,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
             config,
+            isAllowEditSharedLinkForFileEnabled,
             item,
             itemType,
             intl,
@@ -232,7 +234,7 @@ class SharedLinkSection extends React.Component<Props, State> {
         }
 
         // if the user cannot edit, we remove this option from the dropdown
-        if (!isEditSettingAvailable) {
+        if (!isEditSettingAvailable || !isAllowEditSharedLinkForFileEnabled) {
             allowedPermissionLevels = allowedPermissionLevels.filter(level => level !== CAN_EDIT);
         }
 
