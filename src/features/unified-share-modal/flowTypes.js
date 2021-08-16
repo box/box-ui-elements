@@ -372,7 +372,7 @@ export type USFProps = BaseUnifiedShareProps & {
     /** Function for closing the FTUX tooltip */
     handleFtuxCloseClick: () => void,
     /** Whether the allow edit shared link for file FF is enabled */
-    isAllowEditSharedLinkForFileEnabled?: boolean,
+    isAllowEditSharedLinkForFileEnabled: boolean,
     /** Whether the data for the USM/USF is being fetched */
     isFetching: boolean,
     /** Function for opening the Remove Link Confirm Modal */
