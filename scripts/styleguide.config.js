@@ -16,6 +16,7 @@ const allSections = [
             '../src/elements/content-open-with/ContentOpenWith.js',
             '../src/elements/content-picker/ContentPicker.js',
             '../src/elements/content-preview/ContentPreview.js',
+            '../src/elements/content-sharing/ContentSharing.js',
             '../src/elements/content-sidebar/ContentSidebar.js',
             '../src/elements/content-uploader/ContentUploader.js',
         ],
@@ -85,6 +86,7 @@ const allSections = [
 
             '../src/components/avatar/Avatar.tsx',
             '../src/components/badgeable/Badgeable.tsx',
+            '../src/components/category-selector/CategorySelector.tsx',
             '../src/components/label/Label.tsx',
             '../src/components/button/Button.tsx',
             '../src/components/button-group/ButtonGroup.tsx',
@@ -101,6 +103,7 @@ const allSections = [
             '../src/components/radio/RadioButton.tsx',
             '../src/components/radio/RadioGroup.tsx',
             '../src/components/menu/SelectMenuLinkItem.tsx',
+            '../src/components/time-input/TimeInput.tsx',
             '../src/components/tooltip/Tooltip.tsx',
         ],
         description: 'Box UI Elements components implement the reusable building blocks of the Box Design Language',
@@ -223,10 +226,13 @@ const allSections = [
     {
         name: 'Features',
         components: () => [
+            '../src/features/beta-feedback/BetaFeedbackBadge.js',
             '../src/features/classification/Classification.js',
+            '../src/features/collapsible-sidebar/CollapsibleSidebarLogo.js',
             '../src/features/invite-collaborators-modal/InviteCollaboratorsModal.js',
             '../src/features/left-sidebar/LeftSidebar.js',
             '../src/features/header-flyout/HeaderFlyout.js',
+            '../src/features/message-center/components/MessageCenter.js',
             '../src/features/presence/Presence.js',
             '../src/features/presence/PresenceLink.js',
             '../src/features/security-cloud-game/SecurityCloudGame.js',
@@ -235,6 +241,7 @@ const allSections = [
             '../src/features/shared-link-modal/SharedLinkModal.js',
             '../src/features/shared-link-settings-modal/SharedLinkSettingsModal.js',
             '../src/features/unified-share-modal/UnifiedShareModal.js',
+            '../src/features/virtualized-table-renderers/FormattedUser.js',
         ],
         sections: [
             {
