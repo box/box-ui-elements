@@ -616,6 +616,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             getSharedLinkContacts,
             getContactAvatarUrl,
             intl,
+            isAllowEditSharedLinkForFileEnabled,
             isFetching,
             item,
             onAddLink,
@@ -659,6 +660,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                             changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
                             intl={intl}
+                            isAllowEditSharedLinkForFileEnabled={isAllowEditSharedLinkForFileEnabled}
                             item={item}
                             itemType={item.type}
                             onDismissTooltip={onDismissTooltip}

@@ -1,13 +1,21 @@
 import React from 'react';
 
-import { CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from '../constants';
+import { CAN_EDIT, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from '../constants';
 import SharedLinkPermissionMenu from '../SharedLinkPermissionMenu';
 
 describe('features/unified-share-modal/SharedLinkPermissionMenu', () => {
-    const allowedPermissionLevels = [CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];
+    const allowedPermissionLevels = [CAN_EDIT, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];
 
     describe('render()', () => {
         [
+            {
+                submitting: true,
+                permissionLevel: CAN_EDIT,
+            },
+            {
+                submitting: false,
+                permissionLevel: CAN_EDIT,
+            },
             {
                 submitting: true,
                 permissionLevel: CAN_VIEW_DOWNLOAD,

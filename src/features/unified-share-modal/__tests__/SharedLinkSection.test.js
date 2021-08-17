@@ -185,6 +185,29 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             expect(wrapper).toMatchSnapshot();
         });
     });
+    [
+        {
+            isEditSettingAvailable: true,
+        },
+        {
+            isEditSettingAvailable: false,
+        },
+    ].forEach(({ isEditSettingAvailable }) => {
+        test('should render proper list of permission options based on the the edit setting availability', () => {
+            const wrapper = getWrapper({
+                sharedLink: {
+                    accessLevel: 'peopleInYourCompany',
+                    canChangeAccessLevel: true,
+                    enterpriseName: 'Box',
+                    isEditSettingAvailable,
+                    expirationTimestamp: 0,
+                    url: 'https://example.com/shared-link',
+                },
+            });
+
+            expect(wrapper).toMatchSnapshot();
+        });
+    });
 
     test('should render disabled create shared link message when item share is false and url is empty', () => {
         const sharedLink = { url: '', canChangeAccessLevel: true };

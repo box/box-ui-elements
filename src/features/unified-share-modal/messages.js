@@ -203,11 +203,6 @@ const messages = defineMessages({
         description: 'Label for a shared link permission level',
         id: 'boxui.unifiedShare.sharedLinkPermissionsViewDownload',
     },
-    sharedLinkPermissionsViewDownloadDescription: {
-        defaultMessage: 'Users can view and download',
-        description: 'Description for Can view and download option',
-        id: 'boxui.unifiedShare.sharedLinkPermissionsViewDownloadDescription',
-    },
     sharedLinkPermissionsViewOnly: {
         defaultMessage: 'Can view only',
         description: 'Label for a shared link permission level',
@@ -215,18 +210,13 @@ const messages = defineMessages({
     },
     sharedLinkPermissionsEdit: {
         defaultMessage: 'Can edit',
-        description: 'Label for a shared link permission to show for editable box notes',
+        description: 'Label for a shared link permission to show for an editable box note / file',
         id: 'boxui.unifiedShare.sharedLinkPermissionsEdit',
     },
     sharedLinkPermissionsEditTooltip: {
         defaultMessage: 'This permission can only be changed in Box Notes',
         description: 'Text to use in the tooltip when presenting an editable Box Note (DO NOT TRANSLATE "Box Notes")',
         id: 'boxui.unifiedShare.sharedLinkPermissionsEditTooltip',
-    },
-    sharedLinkPermissionsViewOnlyDescription: {
-        defaultMessage: 'Users can view only',
-        description: 'Description for Can view only option',
-        id: 'boxui.unifiedShare.sharedLinkPermissionsViewOnlyDescription',
     },
     sharedLinkDisabledTooltipCopy: {
         defaultMessage: 'Create and copy link for sharing',
