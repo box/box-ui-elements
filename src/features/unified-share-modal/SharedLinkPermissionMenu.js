@@ -9,7 +9,7 @@ import PlainButton from '../../components/plain-button';
 import { Menu, SelectMenuItem } from '../../components/menu';
 
 import type { permissionLevelType } from './flowTypes';
-import { CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
+import { CAN_EDIT, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
 import messages from './messages';
 
 type Props = {
@@ -53,13 +53,14 @@ class SharedLinkPermissionMenu extends Component<Props> {
         }
 
         const permissionLevels = {
+            [CAN_EDIT]: {
+                label: <FormattedMessage {...messages.sharedLinkPermissionsEdit} />,
+            },
             [CAN_VIEW_DOWNLOAD]: {
                 label: <FormattedMessage {...messages.sharedLinkPermissionsViewDownload} />,
-                description: <FormattedMessage {...messages.sharedLinkPermissionsViewDownloadDescription} />,
             },
             [CAN_VIEW_ONLY]: {
                 label: <FormattedMessage {...messages.sharedLinkPermissionsViewOnly} />,
-                description: <FormattedMessage {...messages.sharedLinkPermissionsViewOnlyDescription} />,
             },
         };
 
@@ -83,8 +84,7 @@ class SharedLinkPermissionMenu extends Component<Props> {
                             onClick={() => this.onChangePermissionLevel(level)}
                         >
                             <div>
-                                <strong>{permissionLevels[level].label}</strong>
-                                <small className="usm-menu-description"> {permissionLevels[level].description} </small>
+                                <span>{permissionLevels[level].label}</span>
                             </div>
                         </SelectMenuItem>
                     ))}
