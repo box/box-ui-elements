@@ -63,6 +63,7 @@ type Props = {
 type State = {
     isAutoCreatingSharedLink: boolean,
     isCopySuccessful: ?boolean,
+    isPermissionElevatedToEdit: boolean,
 };
 
 class SharedLinkSection extends React.Component<Props, State> {
@@ -79,6 +80,7 @@ class SharedLinkSection extends React.Component<Props, State> {
         this.state = {
             isAutoCreatingSharedLink: false,
             isCopySuccessful: null,
+            isPermissionElevatedToEdit: false,
         };
     }
 
@@ -139,6 +141,14 @@ class SharedLinkSection extends React.Component<Props, State> {
         }
 
         if (
+            prevProps.sharedLink.permissionLevel !== '' &&
+            prevProps.sharedLink.permissionLevel !== CAN_EDIT &&
+            sharedLink.permissionLevel === CAN_EDIT
+        ) {
+            this.setState({ isPermissionElevatedToEdit: true });
+        }
+
+        if (
             Browser.canWriteToClipboard() &&
             triggerCopyOnLoad &&
             !isAutoCreatingSharedLink &&
@@ -186,7 +196,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             tooltips,
         } = this.props;
 
-        const { isCopySuccessful } = this.state;
+        const { isCopySuccessful, isPermissionElevatedToEdit } = this.state;
 
         const {
             accessLevel,
@@ -236,6 +246,32 @@ class SharedLinkSection extends React.Component<Props, State> {
         // if the user cannot edit, we remove this option from the dropdown
         if (!isEditSettingAvailable || !isAllowEditSharedLinkForFileEnabled) {
             allowedPermissionLevels = allowedPermissionLevels.filter(level => level !== CAN_EDIT);
+        }
+
+        let sharedLinkMessage;
+        if (permissionLevel === CAN_EDIT) {
+            if (isPermissionElevatedToEdit) {
+                sharedLinkMessage = (
+                    <FormattedMessage
+                        data-testid="shared-link-elevated-editable-publicly-available-message"
+                        {...messages.sharedLinkElevatedEditablePubliclyAvailable}
+                    />
+                );
+            } else {
+                sharedLinkMessage = (
+                    <FormattedMessage
+                        data-testid="shared-link-editable-publicly-available-message"
+                        {...messages.sharedLinkEditablePubliclyAvailable}
+                    />
+                );
+            }
+        } else {
+            sharedLinkMessage = (
+                <FormattedMessage
+                    data-testid="shared-link-publicly-available-message"
+                    {...messages.sharedLinkPubliclyAvailable}
+                />
+            );
         }
 
         return (
@@ -322,17 +358,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                         <span className="security-indicator-icon-globe">
                             <IconGlobe height={12} width={12} />
                         </span>
-                        {permissionLevel === CAN_EDIT ? (
-                            <FormattedMessage
-                                data-testid="shared-link-editable-publicly-available-message"
-                                {...messages.sharedLinkEditablePubliclyAvailable}
-                            />
-                        ) : (
-                            <FormattedMessage
-                                data-testid="shared-link-publicly-available-message"
-                                {...messages.sharedLinkPubliclyAvailable}
-                            />
-                        )}
+                        {sharedLinkMessage}
                     </div>
                 )}
             </>

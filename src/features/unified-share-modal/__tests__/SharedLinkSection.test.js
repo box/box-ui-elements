@@ -297,6 +297,34 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             global.navigator.clipboard = undefined;
         });
 
+        test('should render correct shared link message when permissionLevel is elevated to CAN_EDIT', () => {
+            const sharedLink = {
+                accessLevel: ANYONE_WITH_LINK,
+                url: 'http://example.com/',
+                isNewSharedLink: false,
+                permissionLevel: CAN_VIEW_DOWNLOAD,
+            };
+
+            const wrapper = getWrapper({ sharedLink });
+
+            expect(wrapper.state().isPermissionElevatedToEdit).toBe(false);
+
+            wrapper.setProps({
+                sharedLink: {
+                    accessLevel: ANYONE_WITH_LINK,
+                    url: 'http://example.com/',
+                    isNewSharedLink: false,
+                    permissionLevel: CAN_EDIT,
+                },
+            });
+
+            expect(wrapper.state().isPermissionElevatedToEdit).toBe(true);
+
+            expect(
+                wrapper.find(`[data-testid="shared-link-elevated-editable-publicly-available-message"]`).length,
+            ).toEqual(1);
+        });
+
         test('should call addSharedLink when modal is triggered to create a URL', () => {
             const sharedLink = { url: '', isNewSharedLink: false };
             const addSharedLink = jest.fn();
