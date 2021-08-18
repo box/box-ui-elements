@@ -1,5 +1,6 @@
 import React from 'react';
 import sinon from 'sinon';
+import { ANYONE_WITH_LINK, CAN_EDIT, CAN_VIEW_DOWNLOAD } from '../constants';
 
 import SharedLinkSection from '../SharedLinkSection';
 
@@ -52,6 +53,27 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             }),
         ).toMatchSnapshot();
     });
+
+    test.each`
+        permissionLevel      | testID
+        ${CAN_EDIT}          | ${'shared-link-editable-publicly-available-message'}
+        ${CAN_VIEW_DOWNLOAD} | ${'shared-link-publicly-available-message'}
+    `(
+        'should render correct message based on permissionLevel and when accessLevel is ANYONE_WITH_LINK',
+        ({ testID, permissionLevel }) => {
+            const wrapper = getWrapper({
+                sharedLink: {
+                    accessLevel: ANYONE_WITH_LINK,
+                    canChangeAccessLevel: false,
+                    enterpriseName: 'Box',
+                    expirationTimestamp: 0,
+                    url: 'https://example.com/shared-link',
+                    permissionLevel,
+                },
+            });
+            expect(wrapper.find(`[data-testid="${testID}"]`).length).toEqual(1);
+        },
+    );
 
     test('should render a default component when there is a shared link but user lacks permission to toggle off', () => {
         const wrapper = getWrapper({
