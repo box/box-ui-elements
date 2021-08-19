@@ -155,7 +155,10 @@ class SharedLinkSection extends React.Component<Props, State> {
             this.setState({ isPermissionElevatedToEdit: true });
         }
 
-        if (isPermissionElevatedToEdit && sharedLink.permissionLevel !== CAN_EDIT) {
+        if (
+            isPermissionElevatedToEdit &&
+            (sharedLink.permissionLevel !== CAN_EDIT || sharedLink.accessLevel !== ANYONE_IN_COMPANY)
+        ) {
             this.setState({ isPermissionElevatedToEdit: false });
         }
 

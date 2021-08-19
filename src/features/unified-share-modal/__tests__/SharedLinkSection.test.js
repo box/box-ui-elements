@@ -297,7 +297,7 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             global.navigator.clipboard = undefined;
         });
 
-        test('should render correct shared link message when permissionLevel is elevated to CAN_EDIT', () => {
+        test('should render correct shared link message when permissionLevel is elevated to CAN_EDIT and accessLevel is ANYONE_IN_COMPANY', () => {
             const sharedLink = {
                 accessLevel: ANYONE_IN_COMPANY,
                 url: 'http://example.com/',
@@ -325,42 +325,49 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             ).toEqual(1);
         });
 
-        test('should no longer show warning message after permissionLevel is elevated to CAN_EDIT and then updated to a non CAN_EDIT permission', () => {
-            const sharedLink = {
-                accessLevel: ANYONE_IN_COMPANY,
-                url: 'http://example.com/',
-                isNewSharedLink: false,
-                permissionLevel: CAN_VIEW_DOWNLOAD,
-            };
-
-            const wrapper = getWrapper({ sharedLink });
-
-            wrapper.setProps({
-                sharedLink: {
-                    accessLevel: ANYONE_IN_COMPANY,
-                    url: 'http://example.com/',
-                    isNewSharedLink: false,
-                    permissionLevel: CAN_EDIT,
-                },
-            });
-
-            expect(
-                wrapper.find(`[data-testid="shared-link-elevated-editable-company-available-message"]`).length,
-            ).toEqual(1);
-
-            wrapper.setProps({
-                sharedLink: {
+        test.each`
+            accessLevel          | should
+            ${ANYONE_IN_COMPANY} | ${'updated to a non CAN_EDIT permission'}
+            ${ANYONE_WITH_LINK}  | ${'accessLevel is updated to a non ANYONE_IN_COMPANY access level'}
+        `(
+            'should no longer show warning message after permissionLevel is elevated to CAN_EDIT and then',
+            ({ accessLevel }) => {
+                const sharedLink = {
                     accessLevel: ANYONE_IN_COMPANY,
                     url: 'http://example.com/',
                     isNewSharedLink: false,
                     permissionLevel: CAN_VIEW_DOWNLOAD,
-                },
-            });
+                };
 
-            expect(
-                wrapper.find(`[data-testid="shared-link-elevated-editable-company-available-message"]`).length,
-            ).toEqual(0);
-        });
+                const wrapper = getWrapper({ sharedLink });
+
+                wrapper.setProps({
+                    sharedLink: {
+                        accessLevel: ANYONE_IN_COMPANY,
+                        url: 'http://example.com/',
+                        isNewSharedLink: false,
+                        permissionLevel: CAN_EDIT,
+                    },
+                });
+
+                expect(
+                    wrapper.find(`[data-testid="shared-link-elevated-editable-company-available-message"]`).length,
+                ).toEqual(1);
+
+                wrapper.setProps({
+                    sharedLink: {
+                        accessLevel,
+                        url: 'http://example.com/',
+                        isNewSharedLink: false,
+                        permissionLevel: CAN_VIEW_DOWNLOAD,
+                    },
+                });
+
+                expect(
+                    wrapper.find(`[data-testid="shared-link-elevated-editable-company-available-message"]`).length,
+                ).toEqual(0);
+            },
+        );
 
         test('should call addSharedLink when modal is triggered to create a URL', () => {
             const sharedLink = { url: '', isNewSharedLink: false };
