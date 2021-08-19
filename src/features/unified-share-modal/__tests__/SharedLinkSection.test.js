@@ -330,7 +330,7 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             ${ANYONE_IN_COMPANY} | ${'updated to a non CAN_EDIT permission'}
             ${ANYONE_WITH_LINK}  | ${'accessLevel is updated to a non ANYONE_IN_COMPANY access level'}
         `(
-            'should no longer show warning message after permissionLevel is elevated to CAN_EDIT and then',
+            'should no longer show warning message after permissionLevel is elevated to CAN_EDIT and then $should',
             ({ accessLevel }) => {
                 const sharedLink = {
                     accessLevel: ANYONE_IN_COMPANY,
