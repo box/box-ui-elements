@@ -1,6 +1,6 @@
 import React from 'react';
 import sinon from 'sinon';
-import { ANYONE_WITH_LINK, CAN_EDIT, CAN_VIEW_DOWNLOAD } from '../constants';
+import { ANYONE_IN_COMPANY, ANYONE_WITH_LINK, CAN_EDIT, CAN_VIEW_DOWNLOAD } from '../constants';
 
 import SharedLinkSection from '../SharedLinkSection';
 
@@ -299,7 +299,7 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
 
         test('should render correct shared link message when permissionLevel is elevated to CAN_EDIT', () => {
             const sharedLink = {
-                accessLevel: ANYONE_WITH_LINK,
+                accessLevel: ANYONE_IN_COMPANY,
                 url: 'http://example.com/',
                 isNewSharedLink: false,
                 permissionLevel: CAN_VIEW_DOWNLOAD,
@@ -311,7 +311,7 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
 
             wrapper.setProps({
                 sharedLink: {
-                    accessLevel: ANYONE_WITH_LINK,
+                    accessLevel: ANYONE_IN_COMPANY,
                     url: 'http://example.com/',
                     isNewSharedLink: false,
                     permissionLevel: CAN_EDIT,
@@ -321,7 +321,7 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             expect(wrapper.state().isPermissionElevatedToEdit).toBe(true);
 
             expect(
-                wrapper.find(`[data-testid="shared-link-elevated-editable-publicly-available-message"]`).length,
+                wrapper.find(`[data-testid="shared-link-elevated-editable-company-available-message"]`).length,
             ).toEqual(1);
         });
 

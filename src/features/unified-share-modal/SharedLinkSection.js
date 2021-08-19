@@ -30,7 +30,14 @@ import type {
     tooltipComponentIdentifierType,
     USMConfig,
 } from './flowTypes';
-import { PEOPLE_IN_ITEM, ANYONE_WITH_LINK, CAN_EDIT, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
+import {
+    ANYONE_IN_COMPANY,
+    ANYONE_WITH_LINK,
+    CAN_EDIT,
+    CAN_VIEW_DOWNLOAD,
+    CAN_VIEW_ONLY,
+    PEOPLE_IN_ITEM,
+} from './constants';
 
 type Props = {
     addSharedLink: () => void,
@@ -248,32 +255,6 @@ class SharedLinkSection extends React.Component<Props, State> {
             allowedPermissionLevels = allowedPermissionLevels.filter(level => level !== CAN_EDIT);
         }
 
-        let sharedLinkMessage;
-        if (permissionLevel === CAN_EDIT) {
-            if (isPermissionElevatedToEdit) {
-                sharedLinkMessage = (
-                    <FormattedMessage
-                        data-testid="shared-link-elevated-editable-publicly-available-message"
-                        {...messages.sharedLinkElevatedEditablePubliclyAvailable}
-                    />
-                );
-            } else {
-                sharedLinkMessage = (
-                    <FormattedMessage
-                        data-testid="shared-link-editable-publicly-available-message"
-                        {...messages.sharedLinkEditablePubliclyAvailable}
-                    />
-                );
-            }
-        } else {
-            sharedLinkMessage = (
-                <FormattedMessage
-                    data-testid="shared-link-publicly-available-message"
-                    {...messages.sharedLinkPubliclyAvailable}
-                />
-            );
-        }
-
         return (
             <>
                 <div className="shared-link-field-row">
@@ -358,7 +339,28 @@ class SharedLinkSection extends React.Component<Props, State> {
                         <span className="security-indicator-icon-globe">
                             <IconGlobe height={12} width={12} />
                         </span>
-                        {sharedLinkMessage}
+                        {permissionLevel === CAN_EDIT ? (
+                            <FormattedMessage
+                                data-testid="shared-link-editable-publicly-available-message"
+                                {...messages.sharedLinkEditablePubliclyAvailable}
+                            />
+                        ) : (
+                            <FormattedMessage
+                                data-testid="shared-link-publicly-available-message"
+                                {...messages.sharedLinkPubliclyAvailable}
+                            />
+                        )}
+                    </div>
+                )}
+                {accessLevel === ANYONE_IN_COMPANY && isPermissionElevatedToEdit && (
+                    <div className="security-indicator-note">
+                        <span className="security-indicator-icon-globe">
+                            <IconGlobe height={12} width={12} />
+                        </span>
+                        <FormattedMessage
+                            data-testid="shared-link-elevated-editable-company-available-message"
+                            {...messages.sharedLinkElevatedEditableCompanyAvailable}
+                        />
                     </div>
                 )}
             </>
