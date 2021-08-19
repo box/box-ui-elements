@@ -127,7 +127,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             onCopyInit = () => {},
         } = this.props;
 
-        const { isAutoCreatingSharedLink, isCopySuccessful } = this.state;
+        const { isAutoCreatingSharedLink, isCopySuccessful, isPermissionElevatedToEdit } = this.state;
 
         if (
             autoCreateSharedLink &&
@@ -153,6 +153,10 @@ class SharedLinkSection extends React.Component<Props, State> {
             sharedLink.permissionLevel === CAN_EDIT
         ) {
             this.setState({ isPermissionElevatedToEdit: true });
+        }
+
+        if (isPermissionElevatedToEdit && sharedLink.permissionLevel !== CAN_EDIT) {
+            this.setState({ isPermissionElevatedToEdit: false });
         }
 
         if (
