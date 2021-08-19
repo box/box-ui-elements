@@ -26,6 +26,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
     static defaultProps = {
         displayInModal: true,
         initiallySelectedContacts: [],
+        isAllowEditSharedLinkForFileEnabled: false,
         createSharedLinkOnLoad: false,
         focusSharedLinkOnLoad: false,
         restrictedExternalCollabEmails: [],

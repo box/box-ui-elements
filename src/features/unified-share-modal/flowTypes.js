@@ -12,6 +12,7 @@ const accessLevelValues = {
 export type accessLevelType = $Keys<typeof accessLevelValues>;
 
 const permissionLevelValues = {
+    [constants.CAN_EDIT]: 'CAN_EDIT',
     [constants.CAN_VIEW_DOWNLOAD]: 'CAN_VIEW_DOWNLOAD',
     [constants.CAN_VIEW_ONLY]: 'CAN_VIEW_ONLY',
 };
@@ -160,6 +161,7 @@ export type sharedLinkType = {
     isDownloadAllowed: boolean,
     isDownloadSettingAvailable: boolean,
     isEditAllowed: boolean,
+    isEditSettingAvailable: boolean,
     isNewSharedLink: boolean,
     isPreviewAllowed: boolean,
     permissionLevel: permissionLevelType,
@@ -355,6 +357,8 @@ export type USMProps = BaseUnifiedShareProps & {
     closeConfirmModal: () => void,
     /** Whether initial data for the USM has already been received */
     initialDataReceived: boolean,
+    /** Whether the allow edit shared link for file FF is enabled */
+    isAllowEditSharedLinkForFileEnabled?: boolean,
     /** Whether the USM is open */
     isOpen?: boolean,
     /** Handler function that removes the shared link, used in the Remove Link Confirm Modal */
@@ -367,6 +371,8 @@ export type USMProps = BaseUnifiedShareProps & {
 export type USFProps = BaseUnifiedShareProps & {
     /** Function for closing the FTUX tooltip */
     handleFtuxCloseClick: () => void,
+    /** Whether the allow edit shared link for file FF is enabled */
+    isAllowEditSharedLinkForFileEnabled: boolean,
     /** Whether the data for the USM/USF is being fetched */
     isFetching: boolean,
     /** Function for opening the Remove Link Confirm Modal */

@@ -1,5 +1,6 @@
 import React from 'react';
 import sinon from 'sinon';
+import { ANYONE_WITH_LINK, CAN_EDIT, CAN_VIEW_DOWNLOAD } from '../constants';
 
 import SharedLinkSection from '../SharedLinkSection';
 
@@ -52,6 +53,27 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             }),
         ).toMatchSnapshot();
     });
+
+    test.each`
+        permissionLevel      | testID
+        ${CAN_EDIT}          | ${'shared-link-editable-publicly-available-message'}
+        ${CAN_VIEW_DOWNLOAD} | ${'shared-link-publicly-available-message'}
+    `(
+        'should render correct message based on permissionLevel and when accessLevel is ANYONE_WITH_LINK',
+        ({ testID, permissionLevel }) => {
+            const wrapper = getWrapper({
+                sharedLink: {
+                    accessLevel: ANYONE_WITH_LINK,
+                    canChangeAccessLevel: false,
+                    enterpriseName: 'Box',
+                    expirationTimestamp: 0,
+                    url: 'https://example.com/shared-link',
+                    permissionLevel,
+                },
+            });
+            expect(wrapper.find(`[data-testid="${testID}"]`).length).toEqual(1);
+        },
+    );
 
     test('should render a default component when there is a shared link but user lacks permission to toggle off', () => {
         const wrapper = getWrapper({
@@ -177,6 +199,29 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
                     canChangeAccessLevel: true,
                     enterpriseName: 'Box',
                     isDownloadSettingAvailable,
+                    expirationTimestamp: 0,
+                    url: 'https://example.com/shared-link',
+                },
+            });
+
+            expect(wrapper).toMatchSnapshot();
+        });
+    });
+    [
+        {
+            isEditSettingAvailable: true,
+        },
+        {
+            isEditSettingAvailable: false,
+        },
+    ].forEach(({ isEditSettingAvailable }) => {
+        test('should render proper list of permission options based on the the edit setting availability', () => {
+            const wrapper = getWrapper({
+                sharedLink: {
+                    accessLevel: 'peopleInYourCompany',
+                    canChangeAccessLevel: true,
+                    enterpriseName: 'Box',
+                    isEditSettingAvailable,
                     expirationTimestamp: 0,
                     url: 'https://example.com/shared-link',
                 },
