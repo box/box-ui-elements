@@ -122,7 +122,7 @@ button svg {
     &:not(.is-disabled) {
         &:focus {
             background-color: lighten($primary-color, 8%);
-            border: 2px solid $primary-color;
+            border: 1px solid $primary-color;
             box-shadow: inset 0 0 0 1px fade-out($white, .2), 0 1px 2px fade-out($black, .9);
         }
 
