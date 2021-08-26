@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
 import DropdownMenu, { MenuToggle } from '../../components/dropdown-menu';
+import LabelPill from '../../components/label-pill';
 import PlainButton from '../../components/plain-button';
 import { Menu, SelectMenuItem } from '../../components/menu';
 
@@ -18,6 +19,7 @@ type Props = {
     changePermissionLevel: (
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
+    isEditableSharedLinkFTUXEnabled: boolean,
     permissionLevel?: permissionLevelType,
     submitting: boolean,
     trackingProps: {
@@ -85,6 +87,13 @@ class SharedLinkPermissionMenu extends Component<Props> {
                         >
                             <div>
                                 <span>{permissionLevels[level].label}</span>
+                                {level === CAN_EDIT && (
+                                    <LabelPill.Pill type="ftux">
+                                        <LabelPill.Text>
+                                            <FormattedMessage {...messages.ftuxSharedLinkPermissionsEdit} />
+                                        </LabelPill.Text>
+                                    </LabelPill.Pill>
+                                )}
                             </div>
                         </SelectMenuItem>
                     ))}
