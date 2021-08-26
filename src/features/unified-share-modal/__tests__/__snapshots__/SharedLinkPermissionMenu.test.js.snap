@@ -34,6 +34,16 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
             id="boxui.unifiedShare.sharedLinkPermissionsEdit"
           />
         </span>
+        <LabelPill
+          type="ftux"
+        >
+          <LabelPillText>
+            <FormattedMessage
+              defaultMessage="NEW"
+              id="boxui.unifiedShare.ftuxSharedLinkPermissionsEdit"
+            />
+          </LabelPillText>
+        </LabelPill>
       </div>
     </SelectMenuItem>
     <SelectMenuItem
@@ -102,6 +112,16 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
             id="boxui.unifiedShare.sharedLinkPermissionsEdit"
           />
         </span>
+        <LabelPill
+          type="ftux"
+        >
+          <LabelPillText>
+            <FormattedMessage
+              defaultMessage="NEW"
+              id="boxui.unifiedShare.ftuxSharedLinkPermissionsEdit"
+            />
+          </LabelPillText>
+        </LabelPill>
       </div>
     </SelectMenuItem>
     <SelectMenuItem
@@ -170,6 +190,16 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
             id="boxui.unifiedShare.sharedLinkPermissionsEdit"
           />
         </span>
+        <LabelPill
+          type="ftux"
+        >
+          <LabelPillText>
+            <FormattedMessage
+              defaultMessage="NEW"
+              id="boxui.unifiedShare.ftuxSharedLinkPermissionsEdit"
+            />
+          </LabelPillText>
+        </LabelPill>
       </div>
     </SelectMenuItem>
     <SelectMenuItem
@@ -238,6 +268,16 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
             id="boxui.unifiedShare.sharedLinkPermissionsEdit"
           />
         </span>
+        <LabelPill
+          type="ftux"
+        >
+          <LabelPillText>
+            <FormattedMessage
+              defaultMessage="NEW"
+              id="boxui.unifiedShare.ftuxSharedLinkPermissionsEdit"
+            />
+          </LabelPillText>
+        </LabelPill>
       </div>
     </SelectMenuItem>
     <SelectMenuItem
@@ -306,6 +346,16 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
             id="boxui.unifiedShare.sharedLinkPermissionsEdit"
           />
         </span>
+        <LabelPill
+          type="ftux"
+        >
+          <LabelPillText>
+            <FormattedMessage
+              defaultMessage="NEW"
+              id="boxui.unifiedShare.ftuxSharedLinkPermissionsEdit"
+            />
+          </LabelPillText>
+        </LabelPill>
       </div>
     </SelectMenuItem>
     <SelectMenuItem
@@ -374,6 +424,16 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
             id="boxui.unifiedShare.sharedLinkPermissionsEdit"
           />
         </span>
+        <LabelPill
+          type="ftux"
+        >
+          <LabelPillText>
+            <FormattedMessage
+              defaultMessage="NEW"
+              id="boxui.unifiedShare.ftuxSharedLinkPermissionsEdit"
+            />
+          </LabelPillText>
+        </LabelPill>
       </div>
     </SelectMenuItem>
     <SelectMenuItem
