@@ -30,7 +30,14 @@ import type {
     tooltipComponentIdentifierType,
     USMConfig,
 } from './flowTypes';
-import { PEOPLE_IN_ITEM, ANYONE_WITH_LINK, CAN_EDIT, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
+import {
+    ANYONE_IN_COMPANY,
+    ANYONE_WITH_LINK,
+    CAN_EDIT,
+    CAN_VIEW_DOWNLOAD,
+    CAN_VIEW_ONLY,
+    PEOPLE_IN_ITEM,
+} from './constants';
 
 type Props = {
     addSharedLink: () => void,
@@ -63,6 +70,7 @@ type Props = {
 type State = {
     isAutoCreatingSharedLink: boolean,
     isCopySuccessful: ?boolean,
+    isPermissionElevatedToEdit: boolean,
 };
 
 class SharedLinkSection extends React.Component<Props, State> {
@@ -79,6 +87,7 @@ class SharedLinkSection extends React.Component<Props, State> {
         this.state = {
             isAutoCreatingSharedLink: false,
             isCopySuccessful: null,
+            isPermissionElevatedToEdit: false,
         };
     }
 
@@ -118,7 +127,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             onCopyInit = () => {},
         } = this.props;
 
-        const { isAutoCreatingSharedLink, isCopySuccessful } = this.state;
+        const { isAutoCreatingSharedLink, isCopySuccessful, isPermissionElevatedToEdit } = this.state;
 
         if (
             autoCreateSharedLink &&
@@ -136,6 +145,21 @@ class SharedLinkSection extends React.Component<Props, State> {
             if (this.toggleRef) {
                 this.toggleRef.focus();
             }
+        }
+
+        if (
+            prevProps.sharedLink.permissionLevel !== '' &&
+            prevProps.sharedLink.permissionLevel !== CAN_EDIT &&
+            sharedLink.permissionLevel === CAN_EDIT
+        ) {
+            this.setState({ isPermissionElevatedToEdit: true });
+        }
+
+        if (
+            isPermissionElevatedToEdit &&
+            (sharedLink.permissionLevel !== CAN_EDIT || sharedLink.accessLevel !== ANYONE_IN_COMPANY)
+        ) {
+            this.setState({ isPermissionElevatedToEdit: false });
         }
 
         if (
@@ -186,7 +210,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             tooltips,
         } = this.props;
 
-        const { isCopySuccessful } = this.state;
+        const { isCopySuccessful, isPermissionElevatedToEdit } = this.state;
 
         const {
             accessLevel,
@@ -333,6 +357,17 @@ class SharedLinkSection extends React.Component<Props, State> {
                                 {...messages.sharedLinkPubliclyAvailable}
                             />
                         )}
+                    </div>
+                )}
+                {accessLevel === ANYONE_IN_COMPANY && isPermissionElevatedToEdit && (
+                    <div className="security-indicator-note">
+                        <span className="security-indicator-icon-globe">
+                            <IconGlobe height={12} width={12} />
+                        </span>
+                        <FormattedMessage
+                            data-testid="shared-link-elevated-editable-company-available-message"
+                            {...messages.sharedLinkElevatedEditableCompanyAvailable}
+                        />
                     </div>
                 )}
             </>
