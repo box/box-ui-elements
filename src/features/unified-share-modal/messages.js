@@ -240,6 +240,11 @@ const messages = defineMessages({
         description: 'Text shown in share modal when shared link is editable and is open to public access',
         id: 'boxui.unifiedShare.sharedLinkEditablePubliclyAvailable',
     },
+    sharedLinkElevatedEditableCompanyAvailable: {
+        defaultMessage: 'People who have access to this link can edit.',
+        description: 'Text shown in share modal when shared link is editable and is open to company access',
+        id: 'boxui.unifiedShare.sharedLinkElevatedEditableCompanyAvailable',
+    },
     upgradeGetMoreAccessControlsDescription: {
         defaultMessage:
             '62% of customers on your plan {upgradeGetMoreAccessControlsLink} to manage collaborators’ access and permission settings',
