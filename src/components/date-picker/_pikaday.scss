@@ -94,7 +94,6 @@
     &.bdl-is-disabled,
     &.is-disabled {
         cursor: default;
-        opacity: .2;
     }
 }
 
@@ -110,6 +109,13 @@
         border-bottom: 4px solid transparent;
         content: '';
     }
+
+    &.bdl-is-disabled,
+    &.is-disabled {
+        &::before {
+            opacity: .2;
+        }
+    }
 }
 
 .pika-next {
@@ -124,6 +130,13 @@
         border-left: 4px solid $bdl-gray-80;
         border-radius: 2px;
         content: '';
+    }
+
+    &.bdl-is-disabled,
+    &.is-disabled {
+        &::after {
+            opacity: .2;
+        }
     }
 }
 
