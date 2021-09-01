@@ -8,10 +8,13 @@ import DropdownMenu, { MenuToggle } from '../../components/dropdown-menu';
 import LabelPill from '../../components/label-pill';
 import PlainButton from '../../components/plain-button';
 import { Menu, SelectMenuItem } from '../../components/menu';
+import type { TargetingApi } from '../targeting/types';
 
 import type { permissionLevelType } from './flowTypes';
 import { CAN_EDIT, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY } from './constants';
 import messages from './messages';
+
+import './SharedLinkPermissionMenu.scss';
 
 type Props = {
     allowedPermissionLevels: Array<permissionLevelType>,
@@ -21,6 +24,7 @@ type Props = {
     ) => Promise<{ permissionLevel: permissionLevelType }>,
     isEditableSharedLinkFTUXEnabled: boolean,
     permissionLevel?: permissionLevelType,
+    sharedLinkEditTagTargetingApi: TargetingApi,
     submitting: boolean,
     trackingProps: {
         onChangeSharedLinkPermissionLevel?: Function,
@@ -47,8 +51,15 @@ class SharedLinkPermissionMenu extends Component<Props> {
     };
 
     render() {
-        const { allowedPermissionLevels, permissionLevel, submitting, trackingProps } = this.props;
+        const {
+            allowedPermissionLevels,
+            permissionLevel,
+            sharedLinkEditTagTargetingApi,
+            submitting,
+            trackingProps,
+        } = this.props;
         const { sharedLinkPermissionsMenuButtonProps } = trackingProps;
+        const { canShow } = sharedLinkEditTagTargetingApi;
 
         if (!permissionLevel) {
             return null;
@@ -85,10 +96,10 @@ class SharedLinkPermissionMenu extends Component<Props> {
                             isSelected={level === permissionLevel}
                             onClick={() => this.onChangePermissionLevel(level)}
                         >
-                            <div>
+                            <div className="ums-share-permissions-menu-item">
                                 <span>{permissionLevels[level].label}</span>
-                                {level === CAN_EDIT && (
-                                    <LabelPill.Pill type="ftux">
+                                {level === CAN_EDIT && canShow && (
+                                    <LabelPill.Pill className="ftux-editable-shared-link" type="ftux">
                                         <LabelPill.Text>
                                             <FormattedMessage {...messages.ftuxSharedLinkPermissionsEdit} />
                                         </LabelPill.Text>

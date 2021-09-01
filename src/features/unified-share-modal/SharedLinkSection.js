@@ -14,6 +14,7 @@ import IconClock from '../../icons/general/IconClock';
 import IconGlobe from '../../icons/general/IconGlobe';
 import { bdlWatermelonRed } from '../../styles/variables';
 import type { ItemType } from '../../common/types/core';
+import type { TargetingApi } from '../targeting/types';
 import { isBoxNote } from '../../utils/file';
 import Browser from '../../utils/Browser';
 
@@ -60,6 +61,7 @@ type Props = {
     onSettingsClick?: Function,
     onToggleSharedLink: Function,
     sharedLink: sharedLinkType,
+    sharedLinkEditTagTargetingApi: TargetingApi,
     showSharedLinkSettingsCallout: boolean,
     submitting: boolean,
     tooltips: { [componentIdentifier: tooltipComponentIdentifierType]: React.Node },
@@ -204,6 +206,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             onDismissTooltip,
             onEmailSharedLinkClick,
             sharedLink,
+            sharedLinkEditTagTargetingApi,
             submitting,
             trackingProps,
             triggerCopyOnLoad,
@@ -326,6 +329,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                             canChangePermissionLevel={canChangeAccessLevel}
                             changePermissionLevel={changeSharedLinkPermissionLevel}
                             permissionLevel={permissionLevel}
+                            sharedLinkEditTagTargetingApi={sharedLinkEditTagTargetingApi}
                             submitting={submitting}
                             trackingProps={{
                                 onChangeSharedLinkPermissionLevel,

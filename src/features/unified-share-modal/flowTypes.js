@@ -2,6 +2,7 @@
 import * as React from 'react';
 import * as constants from './constants';
 import type { BoxItemPermission, ItemType } from '../../common/types/core';
+import type { TargetingApi } from '../targeting/types';
 
 // DRY: Invert the constants so that we can construct the appropriate enum types
 const accessLevelValues = {
@@ -377,6 +378,8 @@ export type USFProps = BaseUnifiedShareProps & {
     isFetching: boolean,
     /** Function for opening the Remove Link Confirm Modal */
     openConfirmModal: () => void,
+    /** Whether the FTUX tag should be rendered for the Can Edit option */
+    sharedLinkEditTagTargetingApi: TargetingApi,
     /** Whether the shared link has loaded */
     sharedLinkLoaded: boolean,
     /** Whether the FTUX tooltip should be rendered */
