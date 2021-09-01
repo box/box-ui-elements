@@ -24,7 +24,7 @@ type Props = {
     ) => Promise<{ permissionLevel: permissionLevelType }>,
     isEditableSharedLinkFTUXEnabled: boolean,
     permissionLevel?: permissionLevelType,
-    sharedLinkEditTagTargetingApi: TargetingApi,
+    sharedLinkEditTagTargetingApi?: TargetingApi,
     submitting: boolean,
     trackingProps: {
         onChangeSharedLinkPermissionLevel?: Function,
@@ -59,7 +59,7 @@ class SharedLinkPermissionMenu extends Component<Props> {
             trackingProps,
         } = this.props;
         const { sharedLinkPermissionsMenuButtonProps } = trackingProps;
-        const { canShow } = sharedLinkEditTagTargetingApi;
+        const canShow = sharedLinkEditTagTargetingApi ? sharedLinkEditTagTargetingApi.canShow : false;
 
         if (!permissionLevel) {
             return null;

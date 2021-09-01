@@ -61,7 +61,7 @@ type Props = {
     onSettingsClick?: Function,
     onToggleSharedLink: Function,
     sharedLink: sharedLinkType,
-    sharedLinkEditTagTargetingApi: TargetingApi,
+    sharedLinkEditTagTargetingApi?: TargetingApi,
     showSharedLinkSettingsCallout: boolean,
     submitting: boolean,
     tooltips: { [componentIdentifier: tooltipComponentIdentifierType]: React.Node },
