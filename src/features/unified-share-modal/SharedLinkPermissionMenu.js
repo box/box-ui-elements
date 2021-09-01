@@ -22,7 +22,6 @@ type Props = {
     changePermissionLevel: (
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
-    isEditableSharedLinkFTUXEnabled: boolean,
     permissionLevel?: permissionLevelType,
     sharedLinkEditTagTargetingApi?: TargetingApi,
     submitting: boolean,
@@ -101,7 +100,7 @@ class SharedLinkPermissionMenu extends Component<Props> {
                                 {level === CAN_EDIT && canShow && (
                                     <LabelPill.Pill className="ftux-editable-shared-link" type="ftux">
                                         <LabelPill.Text>
-                                            <FormattedMessage {...messages.ftuxSharedLinkPermissionsEdit} />
+                                            <FormattedMessage {...messages.ftuxSharedLinkPermissionsEditTag} />
                                         </LabelPill.Text>
                                     </LabelPill.Pill>
                                 )}
