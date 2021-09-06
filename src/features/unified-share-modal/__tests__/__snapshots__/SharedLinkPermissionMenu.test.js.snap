@@ -27,7 +27,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canEdit"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can edit"
@@ -41,7 +43,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canViewDownload"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can view and download"
@@ -55,7 +59,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canViewOnly"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can view only"
@@ -95,7 +101,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canEdit"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can edit"
@@ -109,7 +117,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canViewDownload"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can view and download"
@@ -123,7 +133,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canViewOnly"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can view only"
@@ -163,7 +175,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canEdit"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can edit"
@@ -177,7 +191,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canViewDownload"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can view and download"
@@ -191,7 +207,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canViewOnly"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can view only"
@@ -231,7 +249,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canEdit"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can edit"
@@ -245,7 +265,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canViewDownload"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can view and download"
@@ -259,7 +281,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canViewOnly"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can view only"
@@ -299,7 +323,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canEdit"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can edit"
@@ -313,7 +339,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canViewDownload"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can view and download"
@@ -327,7 +355,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canViewOnly"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can view only"
@@ -367,7 +397,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canEdit"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can edit"
@@ -381,7 +413,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canViewDownload"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can view and download"
@@ -395,7 +429,9 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
       key="canViewOnly"
       onClick={[Function]}
     >
-      <div>
+      <div
+        className="ums-share-permissions-menu-item"
+      >
         <span>
           <FormattedMessage
             defaultMessage="Can view only"

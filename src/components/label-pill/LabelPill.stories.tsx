@@ -11,6 +11,7 @@ const typeOptions: LabelPillStatus[] = [
     LabelPillStatus.DEFAULT,
     LabelPillStatus.ALERT,
     LabelPillStatus.ERROR,
+    LabelPillStatus.FTUX,
     LabelPillStatus.HIGHLIGHT,
     LabelPillStatus.INFO,
     LabelPillStatus.SUCCESS,
@@ -58,6 +59,9 @@ export const severalComponents = () => (
         <LabelPill.Pill type={LabelPillStatus.WARNING} size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)}>
             <LabelPill.Icon Component={Shield16} />
             <LabelPill.Text>CONFIDENTIAL</LabelPill.Text>
+        </LabelPill.Pill>{' '}
+        <LabelPill.Pill type={LabelPillStatus.FTUX} size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)}>
+            <LabelPill.Text>NEW</LabelPill.Text>
         </LabelPill.Pill>{' '}
         <LabelPill.Pill type={LabelPillStatus.ALERT} size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)}>
             <LabelPill.Text>DUE JUL 9 AT 11:59 PM</LabelPill.Text>

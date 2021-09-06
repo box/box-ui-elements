@@ -208,6 +208,12 @@ const messages = defineMessages({
         description: 'Label for a shared link permission level',
         id: 'boxui.unifiedShare.sharedLinkPermissionsViewOnly',
     },
+    ftuxSharedLinkPermissionsEditTag: {
+        defaultMessage: 'NEW',
+        description:
+            'Label for the LabelPill that is shown when the user first opens the SharedLinkPermissions dropdown and sees the Can Edit option',
+        id: 'boxui.unifiedShare.ftuxSharedLinkPermissionsEditTag',
+    },
     sharedLinkPermissionsEdit: {
         defaultMessage: 'Can edit',
         description: 'Label for a shared link permission to show for an editable box note / file',
