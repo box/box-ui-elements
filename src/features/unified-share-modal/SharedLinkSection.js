@@ -103,7 +103,6 @@ class SharedLinkSection extends React.Component<Props, State> {
             sharedLinkEditTooltipTargetingApi,
             submitting,
         } = this.props;
-        const { canShow, onShow } = sharedLinkEditTooltipTargetingApi;
 
         if (
             autoCreateSharedLink &&
@@ -118,7 +117,8 @@ class SharedLinkSection extends React.Component<Props, State> {
         }
 
         // if ESL ftux tooltip is showing on initial mount, we call onShow
-        if (canShow) {
+        if (sharedLinkEditTooltipTargetingApi && sharedLinkEditTooltipTargetingApi.canShow) {
+            const { onShow } = sharedLinkEditTooltipTargetingApi;
             onShow();
         }
     }
@@ -341,13 +341,15 @@ class SharedLinkSection extends React.Component<Props, State> {
                     {!isEditableBoxNote && accessLevel !== PEOPLE_IN_ITEM && (
                         <GuideTooltip
                             isShown={
-                                allowedPermissionLevels.includes(CAN_EDIT) && sharedLinkEditTooltipTargetingApi.canShow
+                                allowedPermissionLevels.includes(CAN_EDIT) && sharedLinkEditTooltipTargetingApi?.canShow
                             }
                             title={intl.formatMessage(messages.ftuxEditPermissionTooltipTitle)}
                             body={intl.formatMessage(messages.ftuxEditPermissionTooltipBody)}
                             onDismiss={() => {
-                                const { onComplete } = sharedLinkEditTooltipTargetingApi;
-                                onComplete();
+                                if (sharedLinkEditTooltipTargetingApi) {
+                                    const { onComplete } = sharedLinkEditTooltipTargetingApi;
+                                    onComplete();
+                                }
                             }}
                         >
                             <SharedLinkPermissionMenu
