@@ -628,6 +628,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             sendSharedLinkError,
             sharedLink,
             sharedLinkEditTagTargetingApi,
+            sharedLinkEditTooltipTargetingApi,
             showEnterEmailsCallout = false,
             showSharedLinkSettingsCallout = false,
             submitting,
@@ -673,6 +674,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             onCopyError={onCopyError}
                             sharedLink={sharedLink}
                             sharedLinkEditTagTargetingApi={sharedLinkEditTagTargetingApi}
+                            sharedLinkEditTooltipTargetingApi={sharedLinkEditTooltipTargetingApi}
                             showSharedLinkSettingsCallout={showSharedLinkSettingsCallout}
                             submitting={submitting || isFetching}
                             trackingProps={sharedLinkTracking}
