@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 import PlainButton from '../../components/plain-button';
 import Button from '../../components/button';
+import GuideTooltip from '../../components/guide-tooltip';
 import TextInputWithCopyButton from '../../components/text-input-with-copy-button';
 import Toggle from '../../components/toggle/Toggle';
 import Tooltip from '../../components/tooltip';
@@ -62,6 +63,7 @@ type Props = {
     onToggleSharedLink: Function,
     sharedLink: sharedLinkType,
     sharedLinkEditTagTargetingApi?: TargetingApi,
+    sharedLinkEditTooltipTargetingApi?: TargetingApi,
     showSharedLinkSettingsCallout: boolean,
     submitting: boolean,
     tooltips: { [componentIdentifier: tooltipComponentIdentifierType]: React.Node },
@@ -94,7 +96,14 @@ class SharedLinkSection extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        const { sharedLink, autoCreateSharedLink, addSharedLink, submitting } = this.props;
+        const {
+            sharedLink,
+            autoCreateSharedLink,
+            addSharedLink,
+            sharedLinkEditTooltipTargetingApi,
+            submitting,
+        } = this.props;
+        const { canShow, onShow } = sharedLinkEditTooltipTargetingApi;
 
         if (
             autoCreateSharedLink &&
@@ -106,6 +115,11 @@ class SharedLinkSection extends React.Component<Props, State> {
         ) {
             this.setState({ isAutoCreatingSharedLink: true });
             addSharedLink();
+        }
+
+        // if ESL ftux tooltip is showing on initial mount, we call onShow
+        if (canShow) {
+            onShow();
         }
     }
 
@@ -207,6 +221,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             onEmailSharedLinkClick,
             sharedLink,
             sharedLinkEditTagTargetingApi,
+            sharedLinkEditTooltipTargetingApi,
             submitting,
             trackingProps,
             triggerCopyOnLoad,
@@ -324,18 +339,30 @@ class SharedLinkSection extends React.Component<Props, State> {
                         }}
                     />
                     {!isEditableBoxNote && accessLevel !== PEOPLE_IN_ITEM && (
-                        <SharedLinkPermissionMenu
-                            allowedPermissionLevels={allowedPermissionLevels}
-                            canChangePermissionLevel={canChangeAccessLevel}
-                            changePermissionLevel={changeSharedLinkPermissionLevel}
-                            permissionLevel={permissionLevel}
-                            sharedLinkEditTagTargetingApi={sharedLinkEditTagTargetingApi}
-                            submitting={submitting}
-                            trackingProps={{
-                                onChangeSharedLinkPermissionLevel,
-                                sharedLinkPermissionsMenuButtonProps,
+                        <GuideTooltip
+                            isShown={
+                                allowedPermissionLevels.includes(CAN_EDIT) && sharedLinkEditTooltipTargetingApi.canShow
+                            }
+                            title={intl.formatMessage(messages.ftuxEditPermissionTooltipTitle)}
+                            body={intl.formatMessage(messages.ftuxEditPermissionTooltipBody)}
+                            onDismiss={() => {
+                                const { onComplete } = sharedLinkEditTooltipTargetingApi;
+                                onComplete();
                             }}
-                        />
+                        >
+                            <SharedLinkPermissionMenu
+                                allowedPermissionLevels={allowedPermissionLevels}
+                                canChangePermissionLevel={canChangeAccessLevel}
+                                changePermissionLevel={changeSharedLinkPermissionLevel}
+                                permissionLevel={permissionLevel}
+                                sharedLinkEditTagTargetingApi={sharedLinkEditTagTargetingApi}
+                                submitting={submitting}
+                                trackingProps={{
+                                    onChangeSharedLinkPermissionLevel,
+                                    sharedLinkPermissionsMenuButtonProps,
+                                }}
+                            />
+                        </GuideTooltip>
                     )}
                     {isEditableBoxNote && (
                         <Tooltip text={<FormattedMessage {...messages.sharedLinkPermissionsEditTooltip} />}>

@@ -55,6 +55,18 @@ const messages = defineMessages({
         description: 'This is label for the button so a user understands the new interface',
         id: 'boxui.unifiedShare.ftuxConfirmLabel',
     },
+    ftuxEditPermissionTooltipBody: {
+        defaultMessage: 'Select the new edit option to easily share your file with people or groups.',
+        description:
+            'Text for the body of the tooltip for the ftux experience when the edit option is available for the user',
+        id: 'boxui.unifiedShare.ftuxEditPermissionTooltipBody',
+    },
+    ftuxEditPermissionTooltipTitle: {
+        defaultMessage: 'Collaboration made easy',
+        description:
+            'Text for the title of the tooltip for the ftux experience when the edit option is available for the user',
+        id: 'boxui.unifiedShare.ftuxEditPermissionTooltipTitle',
+    },
     collaboratorListTitle: {
         defaultMessage: 'People in ‘{itemName}’',
         description: 'Title for collaborator list modal',

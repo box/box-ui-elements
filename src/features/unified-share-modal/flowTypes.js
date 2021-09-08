@@ -368,6 +368,8 @@ export type USMProps = BaseUnifiedShareProps & {
     onRequestClose?: Function,
     /** Whether the FTUX tag should be rendered for the Can Edit option */
     sharedLinkEditTagTargetingApi?: TargetingApi,
+    /** Whether the FTUX tooltip should be rendered for Editable Shared Links  */
+    sharedLinkEditTooltipTargetingApi?: TargetingApi,
 };
 
 // Prop types for the Unified Share Form, passed from the Unified Share Modal
@@ -382,6 +384,8 @@ export type USFProps = BaseUnifiedShareProps & {
     openConfirmModal: () => void,
     /** Whether the FTUX tag should be rendered for the Can Edit option */
     sharedLinkEditTagTargetingApi?: TargetingApi,
+    /** Whether the FTUX tooltip should be rendered for Editable Shared Links  */
+    sharedLinkEditTooltipTargetingApi?: TargetingApi,
     /** Whether the shared link has loaded */
     sharedLinkLoaded: boolean,
     /** Whether the FTUX tooltip should be rendered */
