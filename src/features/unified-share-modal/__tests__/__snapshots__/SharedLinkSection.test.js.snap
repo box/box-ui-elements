@@ -146,21 +146,26 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
         }
       }
     />
-    <SharedLinkPermissionMenu
-      allowedPermissionLevels={
-        Array [
-          "canViewOnly",
-        ]
-      }
-      canChangePermissionLevel={true}
-      changePermissionLevel={[Function]}
-      trackingProps={
-        Object {
-          "onChangeSharedLinkPermissionLevel": undefined,
-          "sharedLinkPermissionsMenuButtonProps": undefined,
+    <GuideTooltip
+      isShown={false}
+      onDismiss={[Function]}
+    >
+      <SharedLinkPermissionMenu
+        allowedPermissionLevels={
+          Array [
+            "canViewOnly",
+          ]
         }
-      }
-    />
+        canChangePermissionLevel={true}
+        changePermissionLevel={[Function]}
+        trackingProps={
+          Object {
+            "onChangeSharedLinkPermissionLevel": undefined,
+            "sharedLinkPermissionsMenuButtonProps": undefined,
+          }
+        }
+      />
+    </GuideTooltip>
   </div>
 </div>
 `;
@@ -298,17 +303,22 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
         }
       }
     />
-    <SharedLinkPermissionMenu
-      allowedPermissionLevels={Array []}
-      canChangePermissionLevel={false}
-      changePermissionLevel={[Function]}
-      trackingProps={
-        Object {
-          "onChangeSharedLinkPermissionLevel": undefined,
-          "sharedLinkPermissionsMenuButtonProps": undefined,
+    <GuideTooltip
+      isShown={false}
+      onDismiss={[Function]}
+    >
+      <SharedLinkPermissionMenu
+        allowedPermissionLevels={Array []}
+        canChangePermissionLevel={false}
+        changePermissionLevel={[Function]}
+        trackingProps={
+          Object {
+            "onChangeSharedLinkPermissionLevel": undefined,
+            "sharedLinkPermissionsMenuButtonProps": undefined,
+          }
         }
-      }
-    />
+      />
+    </GuideTooltip>
   </div>
 </div>
 `;
@@ -484,21 +494,26 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
         }
       }
     />
-    <SharedLinkPermissionMenu
-      allowedPermissionLevels={
-        Array [
-          "canViewOnly",
-        ]
-      }
-      canChangePermissionLevel={true}
-      changePermissionLevel={[Function]}
-      trackingProps={
-        Object {
-          "onChangeSharedLinkPermissionLevel": undefined,
-          "sharedLinkPermissionsMenuButtonProps": undefined,
+    <GuideTooltip
+      isShown={false}
+      onDismiss={[Function]}
+    >
+      <SharedLinkPermissionMenu
+        allowedPermissionLevels={
+          Array [
+            "canViewOnly",
+          ]
         }
-      }
-    />
+        canChangePermissionLevel={true}
+        changePermissionLevel={[Function]}
+        trackingProps={
+          Object {
+            "onChangeSharedLinkPermissionLevel": undefined,
+            "sharedLinkPermissionsMenuButtonProps": undefined,
+          }
+        }
+      />
+    </GuideTooltip>
   </div>
 </div>
 `;
@@ -884,22 +899,27 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         }
       }
     />
-    <SharedLinkPermissionMenu
-      allowedPermissionLevels={
-        Array [
-          "canViewDownload",
-          "canViewOnly",
-        ]
-      }
-      canChangePermissionLevel={true}
-      changePermissionLevel={[Function]}
-      trackingProps={
-        Object {
-          "onChangeSharedLinkPermissionLevel": undefined,
-          "sharedLinkPermissionsMenuButtonProps": undefined,
+    <GuideTooltip
+      isShown={false}
+      onDismiss={[Function]}
+    >
+      <SharedLinkPermissionMenu
+        allowedPermissionLevels={
+          Array [
+            "canViewDownload",
+            "canViewOnly",
+          ]
         }
-      }
-    />
+        canChangePermissionLevel={true}
+        changePermissionLevel={[Function]}
+        trackingProps={
+          Object {
+            "onChangeSharedLinkPermissionLevel": undefined,
+            "sharedLinkPermissionsMenuButtonProps": undefined,
+          }
+        }
+      />
+    </GuideTooltip>
   </div>
 </div>
 `;
@@ -1022,21 +1042,26 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         }
       }
     />
-    <SharedLinkPermissionMenu
-      allowedPermissionLevels={
-        Array [
-          "canViewOnly",
-        ]
-      }
-      canChangePermissionLevel={true}
-      changePermissionLevel={[Function]}
-      trackingProps={
-        Object {
-          "onChangeSharedLinkPermissionLevel": undefined,
-          "sharedLinkPermissionsMenuButtonProps": undefined,
+    <GuideTooltip
+      isShown={false}
+      onDismiss={[Function]}
+    >
+      <SharedLinkPermissionMenu
+        allowedPermissionLevels={
+          Array [
+            "canViewOnly",
+          ]
         }
-      }
-    />
+        canChangePermissionLevel={true}
+        changePermissionLevel={[Function]}
+        trackingProps={
+          Object {
+            "onChangeSharedLinkPermissionLevel": undefined,
+            "sharedLinkPermissionsMenuButtonProps": undefined,
+          }
+        }
+      />
+    </GuideTooltip>
   </div>
 </div>
 `;
@@ -1159,21 +1184,26 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         }
       }
     />
-    <SharedLinkPermissionMenu
-      allowedPermissionLevels={
-        Array [
-          "canViewOnly",
-        ]
-      }
-      canChangePermissionLevel={true}
-      changePermissionLevel={[Function]}
-      trackingProps={
-        Object {
-          "onChangeSharedLinkPermissionLevel": undefined,
-          "sharedLinkPermissionsMenuButtonProps": undefined,
+    <GuideTooltip
+      isShown={false}
+      onDismiss={[Function]}
+    >
+      <SharedLinkPermissionMenu
+        allowedPermissionLevels={
+          Array [
+            "canViewOnly",
+          ]
         }
-      }
-    />
+        canChangePermissionLevel={true}
+        changePermissionLevel={[Function]}
+        trackingProps={
+          Object {
+            "onChangeSharedLinkPermissionLevel": undefined,
+            "sharedLinkPermissionsMenuButtonProps": undefined,
+          }
+        }
+      />
+    </GuideTooltip>
   </div>
 </div>
 `;
@@ -1296,21 +1326,26 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         }
       }
     />
-    <SharedLinkPermissionMenu
-      allowedPermissionLevels={
-        Array [
-          "canViewOnly",
-        ]
-      }
-      canChangePermissionLevel={true}
-      changePermissionLevel={[Function]}
-      trackingProps={
-        Object {
-          "onChangeSharedLinkPermissionLevel": undefined,
-          "sharedLinkPermissionsMenuButtonProps": undefined,
+    <GuideTooltip
+      isShown={false}
+      onDismiss={[Function]}
+    >
+      <SharedLinkPermissionMenu
+        allowedPermissionLevels={
+          Array [
+            "canViewOnly",
+          ]
         }
-      }
-    />
+        canChangePermissionLevel={true}
+        changePermissionLevel={[Function]}
+        trackingProps={
+          Object {
+            "onChangeSharedLinkPermissionLevel": undefined,
+            "sharedLinkPermissionsMenuButtonProps": undefined,
+          }
+        }
+      />
+    </GuideTooltip>
   </div>
 </div>
 `;
