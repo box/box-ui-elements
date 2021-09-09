@@ -196,9 +196,12 @@ class DropdownMenu extends React.Component<Props, State> {
             key: this.menuButtonID,
             onClick: this.handleButtonClick, // NOTE: Overrides button's handler
             onKeyDown: this.handleButtonKeyDown, // NOTE: Overrides button's handler
-            'aria-haspopup': 'true',
             'aria-expanded': isOpen ? 'true' : 'false',
         };
+
+        if (menuButton.props['aria-haspopup'] === undefined) {
+            menuButtonProps['aria-haspopup'] = 'true';
+        }
 
         // Add this only when its open, otherwise the menuID element isn't rendered
         if (isOpen) {
