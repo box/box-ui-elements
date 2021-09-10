@@ -29,6 +29,10 @@
         text-overflow: ellipsis;
     }
 
+    .date-picker-input::-webkit-calendar-picker-indicator {
+        display: none;
+    }
+
     .date-picker-input:focus ~ .tooltip,
     .date-picker-input:focus ~ .bdl-Tooltip,
     .date-picker-unix-time-input {

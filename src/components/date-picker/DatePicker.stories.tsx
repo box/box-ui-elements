@@ -91,6 +91,17 @@ export const manuallyEditable = () => (
     </IntlProvider>
 );
 
+export const manuallyEditableWithDateType = () => (
+    <IntlProvider locale="en-US">
+        <DatePicker
+            isTextInputAllowedWithDateType
+            placeholder="Date"
+            label="Date Picker"
+            value={new Date('August 10, 2021')}
+        />
+    </IntlProvider>
+);
+
 export const withLimitedDateRange = () => {
     const maxDate = new Date('February 25, 2021');
     const sixDays = 1000 * 60 * 60 * 24 * 6;
