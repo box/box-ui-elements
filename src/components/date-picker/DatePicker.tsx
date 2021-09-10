@@ -2,7 +2,7 @@ import * as React from 'react';
 import { defineMessages, injectIntl, FormattedMessage, WrappedComponentProps } from 'react-intl';
 
 import classNames from 'classnames';
-import Pikaday from 'pikaday';
+import Pikaday, { PikadayOptions } from 'pikaday';
 import noop from 'lodash/noop';
 import range from 'lodash/range';
 import uniqueId from 'lodash/uniqueId';
@@ -148,6 +148,8 @@ export interface DatePickerProps extends WrappedComponentProps {
     placeholder?: string;
     /** Resin tag */
     resinTarget?: string;
+    /** isTextInputAllowedWithDateType */
+    isTextInputAllowedWithDateType?: boolean;
     /** Date to set the input */
     value?: Date | null;
     /** Number of years, or an array containing an upper and lower range */
@@ -180,12 +182,30 @@ class DatePicker extends React.Component<DatePickerProps> {
             isTextInputAllowed,
             maxDate,
             minDate,
+            isTextInputAllowedWithDateType,
             value,
             yearRange,
         } = this.props;
         const { formatDate, formatMessage } = intl;
         const { nextMonth, previousMonth } = messages;
         let defaultValue = value;
+
+        if (isTextInputAllowedWithDateType) {
+            // test whether a new date input falls back to a text input or not
+            const test = document.createElement('input');
+
+            try {
+                test.type = 'date';
+            } catch (e) {
+                // no-op
+            }
+
+            if (test.type === 'text') {
+                // if date input falls back to text input, show the fallback
+                this.canUseDateInputType = false;
+            }
+        }
+
         // When date format is utcTime, initial date needs to be converted from being relative to GMT to being
         // relative to browser timezone
         if (dateFormat === DateFormat.UTC_TIME_DATE_FORMAT && value) {
@@ -205,7 +225,7 @@ class DatePicker extends React.Component<DatePickerProps> {
 
         // If "bound" is true (default), the DatePicker will be appended at the end of the document, with absolute positioning
         // If "bound" is false, the DatePicker will be appended to the DOM right after the input, with relative positioning
-        this.datePicker = new Pikaday({
+        const datePickerConfig: PikadayOptions = {
             bound: !customInput,
             blurFieldOnSelect: false, // Available in pikaday > 1.5.1
             setDefaultDate: true,
@@ -220,7 +240,22 @@ class DatePicker extends React.Component<DatePickerProps> {
             onSelect: this.onSelectHandler,
             yearRange,
             toString: this.formatDisplay,
-        });
+        };
+        if (isTextInputAllowedWithDateType && this.canUseDateInputType) {
+            delete datePickerConfig.field;
+            datePickerConfig.keyboardInput = false; // TODO: Re-check if this config is necessary
+            datePickerConfig.parse = this.parseDisplayDateType; // TODO: Re-check if this config is necessary
+            datePickerConfig.toString = this.formatDisplayDateType;
+            datePickerConfig.trigger = this.dateInputEl; // TODO: Re-check if this config is necessary
+        }
+        this.datePicker = new Pikaday(datePickerConfig);
+
+        if (isTextInputAllowedWithDateType && this.canUseDateInputType) {
+            if (this.dateInputEl && this.dateInputEl.parentNode) {
+                this.datePicker.hide();
+                this.dateInputEl.parentNode.insertBefore(this.datePicker.el, this.dateInputEl.nextSibling);
+            }
+        }
 
         if (isTextInputAllowed) {
             this.updateDateInputValue(this.formatDisplay(defaultValue));
@@ -284,10 +319,14 @@ class DatePicker extends React.Component<DatePickerProps> {
     }
 
     onSelectHandler = (date: Date | null = null) => {
-        const { onChange } = this.props;
+        const { onChange, isTextInputAllowedWithDateType } = this.props;
         if (onChange) {
-            const formattedDate = this.formatValue(date);
+            const formattedDate = this.formatValue(date); // TODO: need a formatValue equivalent of formatDisplayDateType
             onChange(date, formattedDate);
+        }
+
+        if (isTextInputAllowedWithDateType && this.canUseDateInputType && this.dateInputEl && this.datePicker) {
+            this.dateInputEl.value = this.datePicker.toString();
         }
     };
 
@@ -303,6 +342,9 @@ class DatePicker extends React.Component<DatePickerProps> {
 
     datePickerButtonEl: HTMLButtonElement | null | undefined;
 
+    // Used to detect when a fallback is necessary when isTextInputAllowedWithDateType is enabled
+    canUseDateInputType = true;
+
     // Used to prevent bad sequences of hide/show when toggling the datepicker button
     shouldStayClosed = false;
 
@@ -314,14 +356,18 @@ class DatePicker extends React.Component<DatePickerProps> {
     };
 
     handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        const { isTextInputAllowed } = this.props;
+        const { isTextInputAllowed, isTextInputAllowedWithDateType } = this.props;
+
+        if (isTextInputAllowedWithDateType && !this.canUseDateInputType) {
+            return;
+        }
 
         if (this.datePicker && this.datePicker.isVisible()) {
             event.stopPropagation();
         }
 
         // Stops up/down arrow & spacebar from moving page scroll position since pikaday does not preventDefault correctly
-        if (!isTextInputAllowed && event.key !== TAB_KEY) {
+        if (!(isTextInputAllowed || isTextInputAllowedWithDateType) && event.key !== TAB_KEY) {
             event.preventDefault();
         }
 
@@ -333,6 +379,19 @@ class DatePicker extends React.Component<DatePickerProps> {
             // Since pikaday auto-selects when you move the select box, enter/space don't do anything but close the date picker
             if (this.datePicker && this.datePicker.isVisible()) {
                 this.datePicker.hide();
+            }
+        }
+    };
+
+    handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { isTextInputAllowedWithDateType } = this.props;
+        if (isTextInputAllowedWithDateType && this.canUseDateInputType) {
+            if (this.datePicker && this.datePicker.isVisible()) {
+                event.stopPropagation();
+            }
+
+            if (this.datePicker && event.target.value) {
+                this.datePicker.setDate(this.parseDisplayDateType(event.target.value), true);
             }
         }
     };
@@ -373,10 +432,18 @@ class DatePicker extends React.Component<DatePickerProps> {
     };
 
     handleButtonClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
+        const { isTextInputAllowedWithDateType } = this.props;
         event.preventDefault();
         event.stopPropagation();
 
-        if (!this.shouldStayClosed) {
+        if (isTextInputAllowedWithDateType && this.canUseDateInputType) {
+            if (this.datePicker && this.datePicker.isVisible()) {
+                this.datePicker.hide();
+            } else if (this.datePicker) {
+                this.datePicker.show();
+            }
+        } else if (!this.shouldStayClosed) {
+            // TODO: Determine correct isTextInputAllowedWithDateType behavior for shouldStayClosed
             this.focusDatePicker();
         }
     };
@@ -384,6 +451,21 @@ class DatePicker extends React.Component<DatePickerProps> {
     formatDisplay = (date?: Date | null): string => {
         const { displayFormat, intl } = this.props;
         return date ? intl.formatDate(date, displayFormat) : '';
+    };
+
+    formatDisplayDateType = (date?: Date | null): string => {
+        return date ? date.toISOString().slice(0, 10) : '';
+    };
+
+    parseDisplayDateType = (dateString?: string | null): Date | null => {
+        if (dateString) {
+            const parts = dateString.split('-');
+            const day = parseInt(parts[2], 10);
+            const month = parseInt(parts[1], 10) - 1;
+            const year = parseInt(parts[0], 10);
+            return new Date(year, month, day);
+        }
+        return null;
     };
 
     formatValue = (date: Date | null): string | number => {
@@ -415,6 +497,7 @@ class DatePicker extends React.Component<DatePickerProps> {
             isDisabled,
             isRequired,
             isTextInputAllowed,
+            isTextInputAllowedWithDateType,
             label,
             name,
             onFocus,
@@ -440,15 +523,23 @@ class DatePicker extends React.Component<DatePickerProps> {
 
         const resinTargetAttr = resinTarget ? { [RESIN_TAG_TARGET]: resinTarget } : {};
 
-        const valueAttr = isTextInputAllowed
-            ? { defaultValue: this.formatDisplay(value) }
-            : { value: this.formatDisplay(value) };
+        let valueAttr;
+        if (isTextInputAllowedWithDateType && this.canUseDateInputType) {
+            valueAttr = { defaultValue: this.formatDisplayDateType(value) };
+        } else if (isTextInputAllowed) {
+            valueAttr = { defaultValue: this.formatDisplay(value) };
+        } else {
+            valueAttr = { value: this.formatDisplay(value) };
+        }
 
-        const onChangeAttr = isTextInputAllowed
-            ? {}
-            : {
-                  onChange: noop,
-              };
+        let onChangeAttr;
+        if (isTextInputAllowedWithDateType && this.canUseDateInputType) {
+            onChangeAttr = { onChange: this.handleOnChange };
+        } else if (isTextInputAllowed) {
+            onChangeAttr = {};
+        } else {
+            onChangeAttr = { onChange: noop };
+        }
         /* fixes proptype error about readonly field (not adding readonly so constraint validation works) */
 
         return (
@@ -488,7 +579,7 @@ class DatePicker extends React.Component<DatePickerProps> {
                                         onBlur={this.handleInputBlur}
                                         placeholder={placeholder || formatMessage(messages.chooseDate)}
                                         required={isRequired}
-                                        type="text"
+                                        type={isTextInputAllowedWithDateType ? 'date' : 'text'}
                                         {...onChangeAttr}
                                         onFocus={onFocus}
                                         onKeyDown={this.handleInputKeyDown}
