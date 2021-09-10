@@ -81,7 +81,16 @@ export interface ItemIconProps {
 
 const ItemIcon = ({ className, dimension = 32, iconType, title }: ItemIconProps) => {
     const IconComponent = (itemIconTable as { [key: string]: React.FC<SVGProps> })[iconType] || IconFileDefault;
-    return <IconComponent className={className} height={dimension} title={title} width={dimension} />;
+    return (
+        <IconComponent
+            className={className}
+            height={dimension}
+            title={title}
+            width={dimension}
+            aria-hidden="true"
+            role="presentation"
+        />
+    );
 };
 
 export default ItemIcon;
