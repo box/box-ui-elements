@@ -550,7 +550,7 @@ class Instance extends React.PureComponent<Props, State> {
     }
 
     renderEditButton = () => {
-        const { isDirty, intl }: Props = this.props;
+        const { intl, isDirty }: Props = this.props;
         const { isBusy }: State = this.state;
         const canEdit = this.canEdit();
         const isEditing = this.isEditing();
@@ -563,11 +563,11 @@ class Instance extends React.PureComponent<Props, State> {
             return (
                 <Tooltip position="top-left" text={metadataLabelEditText}>
                     <PlainButton
+                        aria-label={metadataLabelEditText}
                         className={editClassName}
                         data-resin-target="metadata-instanceedit"
                         onClick={this.toggleIsEditing}
                         type="button"
-                        aria-label={metadataLabelEditText}
                     >
                         <IconEdit />
                     </PlainButton>
