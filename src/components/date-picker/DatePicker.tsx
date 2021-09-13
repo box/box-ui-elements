@@ -128,6 +128,8 @@ export interface DatePickerProps extends WrappedComponentProps {
     isDisabled?: boolean;
     /** Is input required */
     isRequired?: boolean;
+    /** Enables pikaday's default keyboard input support */
+    isKeyboardInputAllowed?: boolean;
     /** Is user allowed to manually input a value (WARNING: this doesn't work with internationalization) */
     isTextInputAllowed?: boolean;
     /** Label displayed for the text input */
@@ -314,9 +316,9 @@ class DatePicker extends React.Component<DatePickerProps> {
     };
 
     handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        const { isTextInputAllowed } = this.props;
+        const { isKeyboardInputAllowed, isTextInputAllowed } = this.props;
 
-        if (this.datePicker && this.datePicker.isVisible()) {
+        if (!isKeyboardInputAllowed && this.datePicker && this.datePicker.isVisible()) {
             event.stopPropagation();
         }
 

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IntlProvider } from 'react-intl';
 import { State, Store } from '@sambego/storybook-state';
+import { boolean } from '@storybook/addon-knobs';
 
 import { TooltipPosition } from '../tooltip';
 import DatePicker from './DatePicker';
@@ -28,6 +29,7 @@ export const basic = () => {
                             month: 'long',
                             year: 'numeric',
                         }}
+                        isKeyboardInputAllowed={boolean('isKeyboardInputAllowed', false)}
                         label="Date"
                         name="datepicker"
                         onChange={(date: Date) => {
@@ -45,13 +47,24 @@ export const basic = () => {
 
 export const withDescription = () => (
     <IntlProvider locale="en-US">
-        <DatePicker placeholder="Date" description="Date of your birth" label="Date Picker" />
+        <DatePicker
+            placeholder="Date"
+            description="Date of your birth"
+            isKeyboardInputAllowed={boolean('isKeyboardInputAllowed', false)}
+            label="Date Picker"
+        />
     </IntlProvider>
 );
 
 export const manuallyEditable = () => (
     <IntlProvider locale="en-US">
-        <DatePicker isTextInputAllowed placeholder="Date" label="Date Picker" value={new Date('September 27, 2019')} />
+        <DatePicker
+            isTextInputAllowed
+            placeholder="Date"
+            isKeyboardInputAllowed={boolean('isKeyboardInputAllowed', false)}
+            label="Date Picker"
+            value={new Date('September 27, 2019')}
+        />
     </IntlProvider>
 );
 
@@ -70,6 +83,7 @@ export const withLimitedDateRange = () => {
                 <IntlProvider locale="en-US">
                     <DatePicker
                         isTextInputAllowed
+                        isKeyboardInputAllowed={boolean('isKeyboardInputAllowed', false)}
                         placeholder="Date"
                         label="Date Picker"
                         minDate={minDate}
@@ -119,6 +133,7 @@ export const alwaysVisibleWithCustomInputField = () => {
                                 hideLabel
                                 isAlwaysVisible
                                 isClearable={false}
+                                isKeyboardInputAllowed={boolean('isKeyboardInputAllowed', false)}
                                 label="Date"
                                 name="datepicker"
                                 onChange={(date: Date) => {
@@ -155,6 +170,7 @@ export const alwaysVisibleWithCustomInputField = () => {
                                         Start Date
                                     </label>
                                     <input
+                                        disabled
                                         name="date-picker-custom-input"
                                         style={{
                                             background: bdlGray10,
@@ -184,6 +200,7 @@ export const disabledWithErrorMessage = () => (
         <DatePicker
             isDisabled
             error="Error Message"
+            isKeyboardInputAllowed={boolean('isKeyboardInputAllowed', false)}
             placeholder="Date"
             name="datepicker"
             label="Disabled Date Picker"
@@ -196,6 +213,7 @@ export const customErrorTooltipPosition = () => (
         <DatePicker
             error="Error Message"
             errorTooltipPosition={TooltipPosition.MIDDLE_RIGHT}
+            isKeyboardInputAllowed={boolean('isKeyboardInputAllowed', false)}
             placeholder="Date"
             name="datepicker"
             label="Disabled Date Picker"
@@ -242,6 +260,64 @@ export const withRange = () => {
                                 year: 'numeric',
                             }}
                             hideOptionalLabel
+                            label="To Date"
+                            minDate={state.fromDate || MIN_TIME}
+                            maxDate={TODAY}
+                            name="datepicker-to"
+                            onChange={(date: Date) => {
+                                componentStore.set({ toDate: date });
+                            }}
+                            placeholder="Choose a Date"
+                            value={state.toDate}
+                        />
+                    </div>
+                </IntlProvider>
+            )}
+        </State>
+    );
+};
+
+export const withRangeAndKeyboardInput = () => {
+    const MAX_TIME = new Date('3000-01-01T00:00:00.000Z');
+    const MIN_TIME = new Date(0);
+    const TODAY = new Date();
+    const componentStore: Store<{ date: Date; fromDate: Date | null; toDate: Date | null }> = new Store({
+        date: new Date(),
+        fromDate: null,
+        toDate: null,
+    });
+    return (
+        <State store={componentStore}>
+            {state => (
+                <IntlProvider locale="en-US">
+                    <div>
+                        <DatePicker
+                            className="date-picker-example"
+                            displayFormat={{
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric',
+                            }}
+                            hideOptionalLabel
+                            isKeyboardInputAllowed
+                            label="From Date"
+                            maxDate={state.toDate || MAX_TIME}
+                            name="datepicker-from"
+                            onChange={(date: Date) => {
+                                componentStore.set({ fromDate: date });
+                            }}
+                            placeholder="Choose a Date"
+                            value={state.fromDate}
+                        />
+                        <DatePicker
+                            className="date-picker-example"
+                            displayFormat={{
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric',
+                            }}
+                            hideOptionalLabel
+                            isKeyboardInputAllowed
                             label="To Date"
                             minDate={state.fromDate || MIN_TIME}
                             maxDate={TODAY}

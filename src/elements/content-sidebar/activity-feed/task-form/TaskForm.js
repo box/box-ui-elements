@@ -448,6 +448,7 @@ class TaskForm extends React.Component<Props, State> {
                                 'data-testid': 'task-form-date-input',
                             }}
                             isDisabled={isForbiddenErrorOnEdit}
+                            isKeyboardInputAllowed
                             isRequired={false}
                             label={<FormattedMessage {...messages.tasksAddTaskFormDueDateLabel} />}
                             minDate={new Date()}
