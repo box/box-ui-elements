@@ -10,7 +10,7 @@ exports[`components/select-field/BaseSelectField renderSelectButton() should sen
   isDisabled={false}
   onClick={[Function]}
   onKeyDown={[Function]}
-  role="combobox"
+  role="listbox"
   title=""
 />
 `;
