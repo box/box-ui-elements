@@ -228,7 +228,7 @@ class SharedLinkSection extends React.Component<Props, State> {
         isDownloadSettingAvailable: boolean,
         isEditSettingAvailable: boolean,
         isAllowEditSharedLinkForFileEnabled: boolean,
-    ) => {
+    ): Array<permissionLevelType> => {
         let allowedPermissionLevels = [CAN_EDIT, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];
 
         if (!canChangeAccessLevel) {
