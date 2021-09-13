@@ -96,13 +96,7 @@ class SharedLinkSection extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        const {
-            sharedLink,
-            autoCreateSharedLink,
-            addSharedLink,
-            sharedLinkEditTooltipTargetingApi,
-            submitting,
-        } = this.props;
+        const { sharedLink, autoCreateSharedLink, addSharedLink, submitting } = this.props;
 
         if (
             autoCreateSharedLink &&
@@ -114,12 +108,6 @@ class SharedLinkSection extends React.Component<Props, State> {
         ) {
             this.setState({ isAutoCreatingSharedLink: true });
             addSharedLink();
-        }
-
-        // if ESL ftux tooltip is showing on initial mount, we call onShow
-        if (sharedLinkEditTooltipTargetingApi && sharedLinkEditTooltipTargetingApi.canShow) {
-            const { onShow } = sharedLinkEditTooltipTargetingApi;
-            onShow();
         }
     }
 
@@ -136,12 +124,21 @@ class SharedLinkSection extends React.Component<Props, State> {
             sharedLink,
             autoCreateSharedLink,
             addSharedLink,
+            isAllowEditSharedLinkForFileEnabled,
+            sharedLinkEditTooltipTargetingApi,
             submitting,
             triggerCopyOnLoad,
             onCopyError = () => {},
             onCopySuccess = () => {},
             onCopyInit = () => {},
         } = this.props;
+
+        const {
+            canChangeAccessLevel,
+            isEditSettingAvailable,
+            isDownloadSettingAvailable,
+            permissionLevel,
+        } = sharedLink;
 
         const { isAutoCreatingSharedLink, isCopySuccessful, isPermissionElevatedToEdit } = this.state;
 
@@ -197,6 +194,24 @@ class SharedLinkSection extends React.Component<Props, State> {
                     onCopyError();
                 });
         }
+
+        // if ESL ftux tooltip is showing on initial mount, we call onShow
+        const allowedPermissionLevels = this.getAllowedPermissionLevels(
+            canChangeAccessLevel,
+            permissionLevel,
+            isDownloadSettingAvailable,
+            isEditSettingAvailable,
+            isAllowEditSharedLinkForFileEnabled,
+        );
+
+        if (
+            allowedPermissionLevels.includes(CAN_EDIT) &&
+            sharedLinkEditTooltipTargetingApi &&
+            sharedLinkEditTooltipTargetingApi.canShow
+        ) {
+            const { onShow } = sharedLinkEditTooltipTargetingApi;
+            onShow();
+        }
     }
 
     canAddSharedLink = (isSharedLinkEnabled: boolean, canAddLink: boolean) => {
@@ -205,6 +220,33 @@ class SharedLinkSection extends React.Component<Props, State> {
 
     canRemoveSharedLink = (isSharedLinkEnabled: boolean, canRemoveLink: boolean) => {
         return isSharedLinkEnabled && canRemoveLink;
+    };
+
+    getAllowedPermissionLevels = (
+        canChangeAccessLevel: boolean,
+        permissionLevel: permissionLevelType,
+        isDownloadSettingAvailable: boolean,
+        isEditSettingAvailable: boolean,
+        isAllowEditSharedLinkForFileEnabled: boolean,
+    ) => {
+        let allowedPermissionLevels = [CAN_EDIT, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];
+
+        if (!canChangeAccessLevel) {
+            // remove all but current level
+            allowedPermissionLevels = allowedPermissionLevels.filter(level => level === permissionLevel);
+        }
+
+        // if we cannot set the download value, we remove this option from the dropdown
+        if (!isDownloadSettingAvailable) {
+            allowedPermissionLevels = allowedPermissionLevels.filter(level => level !== CAN_VIEW_DOWNLOAD);
+        }
+
+        // if the user cannot edit, we remove this option from the dropdown
+        if (!isEditSettingAvailable || !isAllowEditSharedLinkForFileEnabled) {
+            allowedPermissionLevels = allowedPermissionLevels.filter(level => level !== CAN_EDIT);
+        }
+
+        return allowedPermissionLevels;
     };
 
     renderSharedLink() {
@@ -263,22 +305,13 @@ class SharedLinkSection extends React.Component<Props, State> {
         const hideEmailButton = config && config.showEmailSharedLinkForm === false;
 
         const isEditableBoxNote = isBoxNote(convertToBoxItem(item)) && isEditAllowed;
-        let allowedPermissionLevels = [CAN_EDIT, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];
-
-        if (!canChangeAccessLevel) {
-            // remove all but current level
-            allowedPermissionLevels = allowedPermissionLevels.filter(level => level === permissionLevel);
-        }
-
-        // if we cannot set the download value, we remove this option from the dropdown
-        if (!isDownloadSettingAvailable) {
-            allowedPermissionLevels = allowedPermissionLevels.filter(level => level !== CAN_VIEW_DOWNLOAD);
-        }
-
-        // if the user cannot edit, we remove this option from the dropdown
-        if (!isEditSettingAvailable || !isAllowEditSharedLinkForFileEnabled) {
-            allowedPermissionLevels = allowedPermissionLevels.filter(level => level !== CAN_EDIT);
-        }
+        const allowedPermissionLevels = this.getAllowedPermissionLevels(
+            canChangeAccessLevel,
+            permissionLevel,
+            isDownloadSettingAvailable,
+            isEditSettingAvailable,
+            isAllowEditSharedLinkForFileEnabled,
+        );
 
         return (
             <>

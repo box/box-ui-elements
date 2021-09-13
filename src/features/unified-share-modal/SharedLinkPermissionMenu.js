@@ -77,7 +77,14 @@ class SharedLinkPermissionMenu extends Component<Props> {
         };
 
         return (
-            <DropdownMenu constrainToWindow>
+            <DropdownMenu
+                constrainToWindow
+                onMenuOpen={() => {
+                    if (canShow) {
+                        sharedLinkEditTagTargetingApi.onShow();
+                    }
+                }}
+            >
                 <PlainButton
                     className={classNames('lnk', {
                         'is-disabled': submitting,
