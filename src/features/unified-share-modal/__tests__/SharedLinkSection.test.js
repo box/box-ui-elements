@@ -76,8 +76,8 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
         expect(wrapper.find('GuideTooltip').props().isShown).toBe(true);
     });
 
-    test('should call onDismiss when GuideTooltip is dismissed', () => {
-        const onDismiss = jest.fn();
+    test('should call onClose when GuideTooltip is dismissed', () => {
+        const onClose = jest.fn();
         const wrapper = getWrapper({
             isAllowEditSharedLinkForFileEnabled: true,
             sharedLink: {
@@ -91,7 +91,7 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             },
             sharedLinkEditTooltipTargetingApi: {
                 canShow: true,
-                onDismiss,
+                onClose,
                 onShow: jest.fn(),
             },
         });
@@ -101,7 +101,7 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             .dive()
             .simulate('dismiss');
 
-        expect(onDismiss).toHaveBeenCalledTimes(1);
+        expect(onClose).toHaveBeenCalledTimes(1);
     });
 
     test.each`
