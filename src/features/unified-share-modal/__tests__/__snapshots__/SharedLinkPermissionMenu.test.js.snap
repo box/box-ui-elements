@@ -5,6 +5,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={false}
+  onMenuClose={[Function]}
   onMenuOpen={[Function]}
 >
   <PlainButton
@@ -80,6 +81,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={false}
+  onMenuClose={[Function]}
   onMenuOpen={[Function]}
 >
   <PlainButton
@@ -155,6 +157,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={false}
+  onMenuClose={[Function]}
   onMenuOpen={[Function]}
 >
   <PlainButton
@@ -230,6 +233,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={false}
+  onMenuClose={[Function]}
   onMenuOpen={[Function]}
 >
   <PlainButton
@@ -305,6 +309,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={false}
+  onMenuClose={[Function]}
   onMenuOpen={[Function]}
 >
   <PlainButton
@@ -380,6 +385,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   constrainToScrollParent={false}
   constrainToWindow={true}
   isRightAligned={false}
+  onMenuClose={[Function]}
   onMenuOpen={[Function]}
 >
   <PlainButton
