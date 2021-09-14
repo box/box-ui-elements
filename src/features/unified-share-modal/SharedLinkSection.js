@@ -124,7 +124,6 @@ class SharedLinkSection extends React.Component<Props, State> {
             sharedLink,
             autoCreateSharedLink,
             addSharedLink,
-            isAllowEditSharedLinkForFileEnabled,
             sharedLinkEditTooltipTargetingApi,
             submitting,
             triggerCopyOnLoad,
@@ -132,13 +131,6 @@ class SharedLinkSection extends React.Component<Props, State> {
             onCopySuccess = () => {},
             onCopyInit = () => {},
         } = this.props;
-
-        const {
-            canChangeAccessLevel,
-            isEditSettingAvailable,
-            isDownloadSettingAvailable,
-            permissionLevel,
-        } = sharedLink;
 
         const { isAutoCreatingSharedLink, isCopySuccessful, isPermissionElevatedToEdit } = this.state;
 
@@ -196,13 +188,7 @@ class SharedLinkSection extends React.Component<Props, State> {
         }
 
         // if ESL ftux tooltip is showing on initial mount, we call onShow
-        const allowedPermissionLevels = this.getAllowedPermissionLevels(
-            canChangeAccessLevel,
-            permissionLevel,
-            isDownloadSettingAvailable,
-            isEditSettingAvailable,
-            isAllowEditSharedLinkForFileEnabled,
-        );
+        const allowedPermissionLevels = this.getAllowedPermissionLevels();
 
         if (
             allowedPermissionLevels.includes(CAN_EDIT) &&
@@ -222,13 +208,16 @@ class SharedLinkSection extends React.Component<Props, State> {
         return isSharedLinkEnabled && canRemoveLink;
     };
 
-    getAllowedPermissionLevels = (
-        canChangeAccessLevel: boolean,
-        permissionLevel: permissionLevelType,
-        isDownloadSettingAvailable: boolean,
-        isEditSettingAvailable: boolean,
-        isAllowEditSharedLinkForFileEnabled: boolean,
-    ): Array<permissionLevelType> => {
+    getAllowedPermissionLevels = (): Array<permissionLevelType> => {
+        const { isAllowEditSharedLinkForFileEnabled, sharedLink } = this.props;
+
+        const {
+            canChangeAccessLevel,
+            isEditSettingAvailable,
+            isDownloadSettingAvailable,
+            permissionLevel,
+        } = sharedLink;
+
         let allowedPermissionLevels = [CAN_EDIT, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];
 
         if (!canChangeAccessLevel) {
@@ -255,7 +244,6 @@ class SharedLinkSection extends React.Component<Props, State> {
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
             config,
-            isAllowEditSharedLinkForFileEnabled,
             item,
             itemType,
             intl,
@@ -279,8 +267,6 @@ class SharedLinkSection extends React.Component<Props, State> {
             canChangeAccessLevel,
             enterpriseName,
             isEditAllowed,
-            isEditSettingAvailable,
-            isDownloadSettingAvailable,
             permissionLevel,
             url,
         } = sharedLink;
@@ -305,13 +291,7 @@ class SharedLinkSection extends React.Component<Props, State> {
         const hideEmailButton = config && config.showEmailSharedLinkForm === false;
 
         const isEditableBoxNote = isBoxNote(convertToBoxItem(item)) && isEditAllowed;
-        const allowedPermissionLevels = this.getAllowedPermissionLevels(
-            canChangeAccessLevel,
-            permissionLevel,
-            isDownloadSettingAvailable,
-            isEditSettingAvailable,
-            isAllowEditSharedLinkForFileEnabled,
-        );
+        const allowedPermissionLevels = this.getAllowedPermissionLevels();
 
         return (
             <>
