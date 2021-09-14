@@ -42,5 +42,9 @@
     &.bcs-is-selected {
         background-color: $hover-blue-background;
         border-color: $bdl-box-blue;
+
+        .bcs-VersionsItem-info {
+            color: inherit;
+        }
     }
 }
