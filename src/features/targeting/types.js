@@ -27,6 +27,7 @@ export type TargetingApi = $ReadOnly<{
     canShow: boolean,
     onClose: () => void,
     onComplete: () => void,
+    onDismiss: () => void,
     onShow: () => void,
 }>;
 
