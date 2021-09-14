@@ -369,8 +369,8 @@ class SharedLinkSection extends React.Component<Props, State> {
                             body={intl.formatMessage(messages.ftuxEditPermissionTooltipBody)}
                             onDismiss={() => {
                                 if (sharedLinkEditTooltipTargetingApi) {
-                                    const { onDismiss } = sharedLinkEditTooltipTargetingApi;
-                                    onDismiss();
+                                    const { onClose } = sharedLinkEditTooltipTargetingApi;
+                                    onClose();
                                 }
                             }}
                         >

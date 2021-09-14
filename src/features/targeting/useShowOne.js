@@ -6,7 +6,7 @@ function makeUseShowOne(targetingApis: Array<UseTargetingApi>): Array<UseTargeti
     let shown: number | null = null;
 
     function useShowOne(useTargetingApi: UseTargetingApi, index: number): TargetingApi {
-        const { canShow, onDismiss, onShow, onClose, onComplete } = useTargetingApi();
+        const { canShow, onShow, onClose, onComplete } = useTargetingApi();
 
         return {
             canShow: (shown === null || shown === index) && canShow,
@@ -18,7 +18,6 @@ function makeUseShowOne(targetingApis: Array<UseTargetingApi>): Array<UseTargeti
             }, [canShow, index, onShow]),
             onClose,
             onComplete,
-            onDismiss,
         };
     }
 
