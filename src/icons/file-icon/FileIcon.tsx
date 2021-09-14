@@ -139,7 +139,7 @@ const EXTENSIONS: { [key: string]: { [key: string]: string } } = {
     IconFileGoogleSlides: mirror(['gslide', 'gslides']),
     IconFileVector: mirror(['eps']),
     IconFileIllustrator: mirror(['ai']),
-    IconFileIndesign: mirror(['indb', 'indd', 'indl', 'indt', 'idml', 'inx', 'pmd']),
+    IconFileIndesign: mirror(['idml', 'indd', 'indt', 'inx']),
     IconFileKeynote: mirror(['key']),
     IconFileNumbers: mirror(['numbers']),
     IconFilePages: mirror(['pages']),
