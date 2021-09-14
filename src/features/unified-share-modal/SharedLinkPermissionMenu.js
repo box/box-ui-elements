@@ -82,6 +82,11 @@ class SharedLinkPermissionMenu extends Component<Props> {
         return (
             <DropdownMenu
                 constrainToWindow
+                onMenuClose={() => {
+                    if (canShowTag && sharedLinkEditTagTargetingApi) {
+                        sharedLinkEditTagTargetingApi.onComplete();
+                    }
+                }}
                 onMenuOpen={() => {
                     if (canShowTag && sharedLinkEditTagTargetingApi) {
                         sharedLinkEditTagTargetingApi.onShow();
