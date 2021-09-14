@@ -360,8 +360,8 @@ class SharedLinkSection extends React.Component<Props, State> {
                             body={intl.formatMessage(messages.ftuxEditPermissionTooltipBody)}
                             onDismiss={() => {
                                 if (sharedLinkEditTooltipTargetingApi) {
-                                    const { onComplete } = sharedLinkEditTooltipTargetingApi;
-                                    onComplete();
+                                    const { onDismiss } = sharedLinkEditTooltipTargetingApi;
+                                    onDismiss();
                                 }
                             }}
                         >
@@ -371,6 +371,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                                 changePermissionLevel={changeSharedLinkPermissionLevel}
                                 permissionLevel={permissionLevel}
                                 sharedLinkEditTagTargetingApi={sharedLinkEditTagTargetingApi}
+                                sharedLinkEditTooltipTargetingApi={sharedLinkEditTooltipTargetingApi}
                                 submitting={submitting}
                                 trackingProps={{
                                     onChangeSharedLinkPermissionLevel,
