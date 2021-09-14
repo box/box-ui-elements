@@ -24,6 +24,7 @@ type Props = {
     ) => Promise<{ permissionLevel: permissionLevelType }>,
     permissionLevel?: permissionLevelType,
     sharedLinkEditTagTargetingApi?: TargetingApi,
+    sharedLinkEditTooltipTargetingApi?: TargetingApi,
     submitting: boolean,
     trackingProps: {
         onChangeSharedLinkPermissionLevel?: Function,
@@ -54,11 +55,13 @@ class SharedLinkPermissionMenu extends Component<Props> {
             allowedPermissionLevels,
             permissionLevel,
             sharedLinkEditTagTargetingApi,
+            sharedLinkEditTooltipTargetingApi,
             submitting,
             trackingProps,
         } = this.props;
         const { sharedLinkPermissionsMenuButtonProps } = trackingProps;
-        const canShow = sharedLinkEditTagTargetingApi ? sharedLinkEditTagTargetingApi.canShow : false;
+        const canShowTag = sharedLinkEditTagTargetingApi ? sharedLinkEditTagTargetingApi.canShow : false;
+        const canShowTooltip = sharedLinkEditTooltipTargetingApi ? sharedLinkEditTooltipTargetingApi.canShow : false;
 
         if (!permissionLevel) {
             return null;
@@ -80,8 +83,13 @@ class SharedLinkPermissionMenu extends Component<Props> {
             <DropdownMenu
                 constrainToWindow
                 onMenuOpen={() => {
-                    if (canShow && sharedLinkEditTagTargetingApi) {
+                    if (canShowTag && sharedLinkEditTagTargetingApi) {
                         sharedLinkEditTagTargetingApi.onShow();
+                    }
+
+                    // complete tooltip FTUX on opening of dropdown menu
+                    if (canShowTooltip && sharedLinkEditTooltipTargetingApi) {
+                        sharedLinkEditTooltipTargetingApi.onComplete();
                     }
                 }}
             >
@@ -104,7 +112,7 @@ class SharedLinkPermissionMenu extends Component<Props> {
                         >
                             <div className="ums-share-permissions-menu-item">
                                 <span>{permissionLevels[level].label}</span>
-                                {level === CAN_EDIT && canShow && (
+                                {level === CAN_EDIT && canShowTag && (
                                     <LabelPill.Pill className="ftux-editable-shared-link" type="ftux">
                                         <LabelPill.Text>
                                             <FormattedMessage {...messages.ftuxSharedLinkPermissionsEditTag} />
