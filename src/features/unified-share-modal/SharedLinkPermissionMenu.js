@@ -63,6 +63,7 @@ class SharedLinkPermissionMenu extends Component<Props> {
         } = this.props;
         const { sharedLinkPermissionsMenuButtonProps } = trackingProps;
         const canShowTag = sharedLinkEditTagTargetingApi ? sharedLinkEditTagTargetingApi.canShow : false;
+        const canShowTooltip = sharedLinkEditTooltipTargetingApi ? sharedLinkEditTooltipTargetingApi.canShow : false;
 
         if (!permissionLevel) {
             return null;
@@ -94,7 +95,7 @@ class SharedLinkPermissionMenu extends Component<Props> {
                     }
 
                     // complete tooltip FTUX on opening of dropdown menu
-                    if (isSharedLinkEditTooltipShown && sharedLinkEditTooltipTargetingApi) {
+                    if (isSharedLinkEditTooltipShown && canShowTooltip && sharedLinkEditTooltipTargetingApi) {
                         sharedLinkEditTooltipTargetingApi.onComplete();
                     }
                 }}
