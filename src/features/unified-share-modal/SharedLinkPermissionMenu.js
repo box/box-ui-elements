@@ -83,17 +83,21 @@ class SharedLinkPermissionMenu extends Component<Props> {
             <DropdownMenu
                 constrainToWindow
                 onMenuClose={() => {
-                    if (canShowTag && sharedLinkEditTagTargetingApi) {
+                    if (allowedPermissionLevels.includes(CAN_EDIT) && canShowTag && sharedLinkEditTagTargetingApi) {
                         sharedLinkEditTagTargetingApi.onComplete();
                     }
                 }}
                 onMenuOpen={() => {
-                    if (canShowTag && sharedLinkEditTagTargetingApi) {
+                    if (allowedPermissionLevels.includes(CAN_EDIT) && canShowTag && sharedLinkEditTagTargetingApi) {
                         sharedLinkEditTagTargetingApi.onShow();
                     }
 
                     // complete tooltip FTUX on opening of dropdown menu
-                    if (canShowTooltip && sharedLinkEditTooltipTargetingApi) {
+                    if (
+                        allowedPermissionLevels.includes(CAN_EDIT) &&
+                        canShowTooltip &&
+                        sharedLinkEditTooltipTargetingApi
+                    ) {
                         sharedLinkEditTooltipTargetingApi.onComplete();
                     }
                 }}
