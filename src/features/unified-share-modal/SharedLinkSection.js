@@ -74,8 +74,8 @@ type Props = {
 type State = {
     isAutoCreatingSharedLink: boolean,
     isCopySuccessful: ?boolean,
-    isFtuxTooltipShown: boolean,
     isPermissionElevatedToEdit: boolean,
+    isSharedLinkEditTooltipShown: boolean,
 };
 
 class SharedLinkSection extends React.Component<Props, State> {
@@ -92,7 +92,7 @@ class SharedLinkSection extends React.Component<Props, State> {
         this.state = {
             isAutoCreatingSharedLink: false,
             isCopySuccessful: null,
-            isFtuxTooltipShown: false,
+            isSharedLinkEditTooltipShown: false,
             isPermissionElevatedToEdit: false,
         };
     }
@@ -137,7 +137,7 @@ class SharedLinkSection extends React.Component<Props, State> {
         const {
             isAutoCreatingSharedLink,
             isCopySuccessful,
-            isFtuxTooltipShown,
+            isSharedLinkEditTooltipShown,
             isPermissionElevatedToEdit,
         } = this.state;
 
@@ -201,11 +201,11 @@ class SharedLinkSection extends React.Component<Props, State> {
             allowedPermissionLevels.includes(CAN_EDIT) &&
             sharedLinkEditTooltipTargetingApi &&
             sharedLinkEditTooltipTargetingApi.canShow &&
-            !isFtuxTooltipShown
+            !isSharedLinkEditTooltipShown
         ) {
             const { onShow } = sharedLinkEditTooltipTargetingApi;
             onShow();
-            this.setState({ isFtuxTooltipShown: true });
+            this.setState({ isSharedLinkEditTooltipShown: true });
         }
     }
 
