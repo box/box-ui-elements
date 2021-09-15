@@ -2,10 +2,8 @@
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 1`] = `
 <FileAudio32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -13,10 +11,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 2`] = `
 <FileBookmark32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -24,10 +20,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 3`] = `
 <FileBoxNote32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -35,10 +29,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 4`] = `
 <FileCode32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -46,10 +38,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 5`] = `
 <FileDefault32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -57,10 +47,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 6`] = `
 <FileText32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -68,10 +56,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 7`] = `
 <FileDwg32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -79,10 +65,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 8`] = `
 <FileExcel32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -90,10 +74,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 9`] = `
 <FolderShared32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -101,10 +83,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 10`] = `
 <FolderExternal32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -112,10 +92,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 11`] = `
 <FolderPersonal32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -123,10 +101,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 12`] = `
 <FileDocs32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -134,10 +110,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 13`] = `
 <FileSheets32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -145,10 +119,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 14`] = `
 <FileSlides32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -156,10 +128,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 15`] = `
 <FileIllustrator32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -167,10 +137,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 16`] = `
 <FileImage32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -178,10 +146,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 17`] = `
 <FileIndesign32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -189,10 +155,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 18`] = `
 <FileKeynote32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -200,10 +164,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 19`] = `
 <FileNumbers32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -211,10 +173,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 20`] = `
 <FilePages32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -222,10 +182,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 21`] = `
 <FilePdf32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -233,10 +191,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 22`] = `
 <FilePhotoshop32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -244,10 +200,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 23`] = `
 <FilePowerpoint32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -255,10 +209,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 24`] = `
 <FilePresentation32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -266,10 +218,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 25`] = `
 <FileSpreadsheet32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -277,10 +227,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 26`] = `
 <FileText32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -288,10 +236,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 27`] = `
 <FileThreeD32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -299,10 +245,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 28`] = `
 <FolderPersonal32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -310,10 +254,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 29`] = `
 <FileVector32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -321,10 +263,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 30`] = `
 <FileVideo32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -332,10 +272,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 31`] = `
 <FileWord32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -343,10 +281,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 32`] = `
 <FileZip32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -354,10 +290,8 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 33`] = `
 <FileDefault32
-  aria-hidden="true"
   className="test"
   height={10}
-  role="presentation"
   title="title"
   width={10}
 />
@@ -365,297 +299,231 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 
 exports[`icons/item-icon/ItemIcon render() should render default component 1`] = `
 <FileAudio32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 2`] = `
 <FileBookmark32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 3`] = `
 <FileBoxNote32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 4`] = `
 <FileCode32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 5`] = `
 <FileDefault32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 6`] = `
 <FileText32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 7`] = `
 <FileDwg32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 8`] = `
 <FileExcel32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 9`] = `
 <FolderShared32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 10`] = `
 <FolderExternal32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 11`] = `
 <FolderPersonal32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 12`] = `
 <FileDocs32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 13`] = `
 <FileSheets32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 14`] = `
 <FileSlides32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 15`] = `
 <FileIllustrator32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 16`] = `
 <FileImage32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 17`] = `
 <FileIndesign32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 18`] = `
 <FileKeynote32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 19`] = `
 <FileNumbers32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 20`] = `
 <FilePages32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 21`] = `
 <FilePdf32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 22`] = `
 <FilePhotoshop32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 23`] = `
 <FilePowerpoint32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 24`] = `
 <FilePresentation32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 25`] = `
 <FileSpreadsheet32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 26`] = `
 <FileText32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 27`] = `
 <FileThreeD32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 28`] = `
 <FolderPersonal32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 29`] = `
 <FileVector32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 30`] = `
 <FileVideo32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 31`] = `
 <FileWord32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 32`] = `
 <FileZip32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 33`] = `
 <FileDefault32
-  aria-hidden="true"
   height={32}
-  role="presentation"
   width={32}
 />
 `;
