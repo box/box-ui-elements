@@ -267,7 +267,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             tooltips,
         } = this.props;
 
-        const { isCopySuccessful, isPermissionElevatedToEdit } = this.state;
+        const { isCopySuccessful, isPermissionElevatedToEdit, isSharedLinkEditTooltipShown } = this.state;
 
         const {
             accessLevel,
@@ -378,6 +378,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                                 allowedPermissionLevels={allowedPermissionLevels}
                                 canChangePermissionLevel={canChangeAccessLevel}
                                 changePermissionLevel={changeSharedLinkPermissionLevel}
+                                isSharedLinkEditTooltipShown={isSharedLinkEditTooltipShown}
                                 permissionLevel={permissionLevel}
                                 sharedLinkEditTagTargetingApi={sharedLinkEditTagTargetingApi}
                                 sharedLinkEditTooltipTargetingApi={sharedLinkEditTooltipTargetingApi}
