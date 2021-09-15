@@ -94,7 +94,7 @@ class SharedLinkPermissionMenu extends Component<Props> {
                     }
 
                     // complete tooltip FTUX on opening of dropdown menu
-                    if (isSharedLinkEditTooltipShown) {
+                    if (isSharedLinkEditTooltipShown && sharedLinkEditTooltipTargetingApi) {
                         sharedLinkEditTooltipTargetingApi.onComplete();
                     }
                 }}
