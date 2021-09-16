@@ -118,6 +118,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
                     width={20}
                   >
                     <svg
+                      aria-hidden="true"
                       className="icon-hamburger CollapsibleSidebarLogo__StyledIconHamburger-sc-6amevi-1 jjgzkm"
                       focusable="false"
                       height={20}
@@ -165,6 +166,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
                   width={71}
                 >
                   <svg
+                    aria-hidden="true"
                     className="CollapsibleSidebarLogo__StyledLogo-sc-6amevi-0 jTcBgl bdl-CollapsibleSidebar-logoIcon"
                     focusable="false"
                     height={42}
@@ -284,6 +286,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 2`] = `
                       width={20}
                     >
                       <svg
+                        aria-hidden="true"
                         className="icon-hamburger CollapsibleSidebarLogo__StyledIconHamburger-sc-6amevi-1 jjgzkm"
                         focusable="false"
                         height={20}

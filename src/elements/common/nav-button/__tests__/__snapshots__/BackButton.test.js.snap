@@ -25,6 +25,7 @@ exports[`elements/common/nav-button/BackButton should match its snapshot 1`] = `
             width={24}
           >
             <svg
+              aria-hidden="true"
               className="icon-navigate-left "
               focusable="false"
               height={24}
