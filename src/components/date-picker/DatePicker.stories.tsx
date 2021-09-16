@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { IntlProvider } from 'react-intl';
 import { State, Store } from '@sambego/storybook-state';
-import { boolean } from '@storybook/addon-knobs';
 
 import { TooltipPosition } from '../tooltip';
 import DatePicker from './DatePicker';
@@ -29,7 +28,42 @@ export const basic = () => {
                             month: 'long',
                             year: 'numeric',
                         }}
-                        isKeyboardInputAllowed={boolean('isKeyboardInputAllowed', false)}
+                        label="Date"
+                        name="datepicker"
+                        onChange={(date: Date) => {
+                            componentStore.set({ date });
+                        }}
+                        placeholder="Date"
+                        value={state.date}
+                        yearRange={yearRange}
+                    />
+                </IntlProvider>
+            )}
+        </State>
+    );
+};
+
+export const basicWithKeyboardInput = () => {
+    const MIN_TIME = new Date(0);
+    const TODAY = new Date('July 18, 2018');
+    const yearRange = [MIN_TIME.getFullYear(), TODAY.getFullYear()];
+    const componentStore = new Store({
+        date: new Date('July 9, 2018'),
+        fromDate: null,
+        toDate: null,
+    });
+    return (
+        <State store={componentStore}>
+            {state => (
+                <IntlProvider locale="en-US">
+                    <DatePicker
+                        className="date-picker-example"
+                        displayFormat={{
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                        }}
+                        isKeyboardInputAllowed
                         label="Date"
                         name="datepicker"
                         onChange={(date: Date) => {
@@ -47,24 +81,13 @@ export const basic = () => {
 
 export const withDescription = () => (
     <IntlProvider locale="en-US">
-        <DatePicker
-            placeholder="Date"
-            description="Date of your birth"
-            isKeyboardInputAllowed={boolean('isKeyboardInputAllowed', false)}
-            label="Date Picker"
-        />
+        <DatePicker placeholder="Date" description="Date of your birth" label="Date Picker" />
     </IntlProvider>
 );
 
 export const manuallyEditable = () => (
     <IntlProvider locale="en-US">
-        <DatePicker
-            isTextInputAllowed
-            placeholder="Date"
-            isKeyboardInputAllowed={boolean('isKeyboardInputAllowed', false)}
-            label="Date Picker"
-            value={new Date('September 27, 2019')}
-        />
+        <DatePicker isTextInputAllowed placeholder="Date" label="Date Picker" value={new Date('September 27, 2019')} />
     </IntlProvider>
 );
 
@@ -83,7 +106,6 @@ export const withLimitedDateRange = () => {
                 <IntlProvider locale="en-US">
                     <DatePicker
                         isTextInputAllowed
-                        isKeyboardInputAllowed={boolean('isKeyboardInputAllowed', false)}
                         placeholder="Date"
                         label="Date Picker"
                         minDate={minDate}
@@ -133,7 +155,6 @@ export const alwaysVisibleWithCustomInputField = () => {
                                 hideLabel
                                 isAlwaysVisible
                                 isClearable={false}
-                                isKeyboardInputAllowed={boolean('isKeyboardInputAllowed', false)}
                                 label="Date"
                                 name="datepicker"
                                 onChange={(date: Date) => {
@@ -200,7 +221,6 @@ export const disabledWithErrorMessage = () => (
         <DatePicker
             isDisabled
             error="Error Message"
-            isKeyboardInputAllowed={boolean('isKeyboardInputAllowed', false)}
             placeholder="Date"
             name="datepicker"
             label="Disabled Date Picker"
@@ -213,7 +233,6 @@ export const customErrorTooltipPosition = () => (
         <DatePicker
             error="Error Message"
             errorTooltipPosition={TooltipPosition.MIDDLE_RIGHT}
-            isKeyboardInputAllowed={boolean('isKeyboardInputAllowed', false)}
             placeholder="Date"
             name="datepicker"
             label="Disabled Date Picker"

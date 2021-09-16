@@ -165,6 +165,7 @@ class DatePicker extends React.Component<DatePickerProps> {
         errorTooltipPosition: TooltipPosition.BOTTOM_LEFT,
         inputProps: {},
         isClearable: true,
+        isKeyboardInputAllowed: false,
         isTextInputAllowed: false,
         yearRange: 10,
     };
