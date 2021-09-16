@@ -27,6 +27,12 @@ describe('elements/common/logger/Logger', () => {
             const { source } = instance.props;
             expect(eventName).toBe(`${source}::${name}`);
         });
+        test('should create an event name with optional uniqueId', () => {
+            const name = 'bar';
+            const eventName = instance.createEventName(name, '123');
+            const { source } = instance.props;
+            expect(eventName).toBe(`${source}::${name}::123`);
+        });
     });
 
     describe('logMetric()', () => {
@@ -139,6 +145,17 @@ describe('elements/common/logger/Logger', () => {
                 METRIC_TYPE_ELEMENTS_LOAD_METRIC,
                 EVENT_DATA_READY,
                 data,
+                undefined,
+            );
+        });
+
+        test('should log a unique metric with uniqueId', () => {
+            instance.handleDataReadyMetric(data, '123');
+            expect(instance.logUniqueMetric).toHaveBeenCalledWith(
+                METRIC_TYPE_ELEMENTS_LOAD_METRIC,
+                EVENT_DATA_READY,
+                data,
+                '123',
             );
         });
     });

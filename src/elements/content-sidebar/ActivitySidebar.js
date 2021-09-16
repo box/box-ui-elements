@@ -460,15 +460,22 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     fetchFeedItemsSuccessCallback = (feedItems: FeedItems): void => {
-        const { logger } = this.props;
+        const {
+            file: { id: fileId },
+            logger,
+        } = this.props;
+
+        mark(MARK_NAME_DATA_READY);
 
         // Only emit metric if has >1 activity feed items (there should always at least be the current version)
         if (feedItems.length > 1) {
-            mark(MARK_NAME_DATA_READY);
-            logger.onDataReadyMetric({
-                endMarkName: MARK_NAME_DATA_READY,
-                startMarkName: MARK_NAME_DATA_LOADING,
-            });
+            logger.onDataReadyMetric(
+                {
+                    endMarkName: MARK_NAME_DATA_READY,
+                    startMarkName: MARK_NAME_DATA_LOADING,
+                },
+                fileId,
+            );
         }
 
         this.setState({ feedItems, activityFeedError: undefined });

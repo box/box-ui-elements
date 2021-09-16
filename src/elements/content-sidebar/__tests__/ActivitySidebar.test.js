@@ -419,10 +419,13 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
         test('should call onDataReadyMetric if feedItems is > 1', () => {
             instance.fetchFeedItemsSuccessCallback(['foo', 'bar']);
-            expect(logger.onDataReadyMetric).toHaveBeenCalledWith({
-                endMarkName: 'activity_sidebar_data_ready',
-                startMarkName: 'activity_sidebar_data_loading',
-            });
+            expect(logger.onDataReadyMetric).toHaveBeenCalledWith(
+                {
+                    endMarkName: 'activity_sidebar_data_ready',
+                    startMarkName: 'activity_sidebar_data_loading',
+                },
+                file.id,
+            );
         });
     });
 
