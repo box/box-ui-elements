@@ -76,8 +76,8 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
         expect(wrapper.find('GuideTooltip').props().isShown).toBe(true);
     });
 
-    test('should call onComplete when GuideTooltip is dismissed', () => {
-        const onComplete = jest.fn();
+    test('should call onClose when GuideTooltip is dismissed', () => {
+        const onClose = jest.fn();
         const wrapper = getWrapper({
             isAllowEditSharedLinkForFileEnabled: true,
             sharedLink: {
@@ -91,7 +91,7 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             },
             sharedLinkEditTooltipTargetingApi: {
                 canShow: true,
-                onComplete,
+                onClose,
                 onShow: jest.fn(),
             },
         });
@@ -101,7 +101,7 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             .dive()
             .simulate('dismiss');
 
-        expect(onComplete).toHaveBeenCalledTimes(1);
+        expect(onClose).toHaveBeenCalledTimes(1);
     });
 
     test.each`
@@ -340,29 +340,6 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             expect(addSharedLink).toBeCalledTimes(0);
             expect(wrapper.state().isAutoCreatingSharedLink).toBe(false);
         });
-
-        test('should call onShow when sharedLinkEditTooltipTargetingApi.canShow is true', () => {
-            const onShow = jest.fn();
-            getWrapper({
-                isAllowEditSharedLinkForFileEnabled: true,
-                sharedLink: {
-                    accessLevel: ANYONE_WITH_LINK,
-                    canChangeAccessLevel: false,
-                    enterpriseName: 'Box',
-                    expirationTimestamp: 0,
-                    isEditSettingAvailable: true,
-                    permissionLevel: CAN_EDIT,
-                    url: 'https://example.com/shared-link',
-                },
-                sharedLinkEditTooltipTargetingApi: {
-                    canShow: true,
-                    onComplete: jest.fn(),
-                    onShow,
-                },
-            });
-
-            expect(onShow).toHaveBeenCalledTimes(1);
-        });
     });
 
     describe('componentDidUpdate()', () => {
@@ -586,6 +563,44 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             expect(onCopyErrorMock).toBeCalledTimes(1);
             expect(wrapper.find('TextInputWithCopyButton').prop('triggerCopyOnLoad')).toBe(false);
             expect(wrapper.state('isCopySuccessful')).toEqual(false);
+        });
+
+        test.each`
+            isEditSettingAvailable | isAllowEditSharedLinkForFileEnabled | canShow  | expected | should
+            ${false}               | ${false}                            | ${false} | ${0}     | ${'should not call onShow if user cannot edit and ESL FF is off and canShow is false'}
+            ${true}                | ${false}                            | ${false} | ${0}     | ${'should not call onShow if user can edit but ESL FF is off and canShow is false'}
+            ${true}                | ${true}                             | ${false} | ${0}     | ${'should not call onShow if user can edit and ESL FF is on but canShow is false'}
+            ${true}                | ${true}                             | ${true}  | ${1}     | ${'should call onShow if user can edit and ESL FF is on and canShow is true'}
+        `('$should', ({ canShow, isAllowEditSharedLinkForFileEnabled, isEditSettingAvailable, expected }) => {
+            const onShow = jest.fn();
+            const onComplete = jest.fn();
+            const wrapper = getWrapper({
+                isAllowEditSharedLinkForFileEnabled,
+                sharedLink: {
+                    accessLevel: ANYONE_WITH_LINK,
+                    canChangeAccessLevel: false,
+                    enterpriseName: 'Box',
+                    expirationTimestamp: 0,
+                    isEditSettingAvailable,
+                    permissionLevel: CAN_EDIT,
+                    url: 'https://example.com/shared-link',
+                },
+                sharedLinkEditTooltipTargetingApi: {
+                    canShow: false,
+                    onComplete,
+                    onShow,
+                },
+            });
+
+            wrapper.setProps({
+                sharedLinkEditTooltipTargetingApi: {
+                    canShow,
+                    onComplete,
+                    onShow,
+                },
+            });
+
+            expect(onShow).toHaveBeenCalledTimes(expected);
         });
     });
 });
