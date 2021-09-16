@@ -5,6 +5,7 @@ exports[`elements/common/logger/Logger render() should decorate with logger prop
   fileId="123"
   logger={
     Object {
+      "onDataReadyMetric": [Function],
       "onPreviewMetric": [Function],
       "onReadyMetric": [Function],
     }

@@ -17,7 +17,7 @@ import API from '../../api';
 import messages from '../common/messages';
 import SidebarContent from './SidebarContent';
 import { WithAnnotatorContextProps, withAnnotatorContext } from '../common/annotator-context';
-import { EVENT_JS_READY } from '../common/logger/constants';
+import { EVENT_DATA_READY, EVENT_JS_READY } from '../common/logger/constants';
 import { getBadUserError, getBadItemError } from '../../utils/error';
 import { mark } from '../../utils/performance';
 import { withAPIContext } from '../common/api-context';
@@ -99,6 +99,8 @@ export const activityFeedInlineError: Errors = {
     },
 };
 
+const MARK_NAME_DATA_LOADING = `${ORIGIN_ACTIVITY_SIDEBAR}_data_loading`;
+const MARK_NAME_DATA_READY = `${ORIGIN_ACTIVITY_SIDEBAR}_${EVENT_DATA_READY}`;
 const MARK_NAME_JS_READY = `${ORIGIN_ACTIVITY_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
@@ -135,6 +137,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         const { currentUser } = this.props;
+
+        mark(MARK_NAME_DATA_LOADING);
         this.fetchFeedItems(true);
         this.fetchCurrentUser(currentUser);
     }
@@ -455,6 +459,17 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     fetchFeedItemsSuccessCallback = (feedItems: FeedItems): void => {
+        const { logger } = this.props;
+
+        // Only emit metric if has >1 activity feed items (there should always at least be the current version)
+        if (feedItems.length > 1) {
+            mark(MARK_NAME_DATA_READY);
+            logger.onDataReadyMetric({
+                endMarkName: MARK_NAME_DATA_READY,
+                startMarkName: MARK_NAME_DATA_LOADING,
+            });
+        }
+
         this.setState({ feedItems, activityFeedError: undefined });
     };
 

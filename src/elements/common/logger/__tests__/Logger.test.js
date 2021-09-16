@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Logger from '../Logger';
 import { METRIC_TYPE_PREVIEW, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../../../constants';
-import { EVENT_JS_READY } from '../constants';
+import { EVENT_DATA_READY, EVENT_JS_READY } from '../constants';
 
 jest.mock('../../../../utils/performance');
 
@@ -115,6 +115,31 @@ describe('elements/common/logger/Logger', () => {
                 ...data,
                 type: METRIC_TYPE_PREVIEW,
             });
+        });
+    });
+
+    describe('handleDataReadyMetric()', () => {
+        const END = 'end';
+        const START = 'start';
+        const data = {
+            foo: 'bar',
+            endMarkName: END,
+            startMarkName: START,
+        };
+        let instance;
+        beforeEach(() => {
+            const wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.logUniqueMetric = jest.fn();
+        });
+
+        test('should log a unique metric', () => {
+            instance.handleDataReadyMetric(data);
+            expect(instance.logUniqueMetric).toHaveBeenCalledWith(
+                METRIC_TYPE_ELEMENTS_LOAD_METRIC,
+                EVENT_DATA_READY,
+                data,
+            );
         });
     });
 

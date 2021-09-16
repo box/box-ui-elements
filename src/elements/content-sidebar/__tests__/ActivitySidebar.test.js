@@ -392,12 +392,14 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('fetchFeedItemsSuccessCallback()', () => {
+        const feedItems = ['foo'];
         let instance;
+        let logger;
         let wrapper;
-        const feedItems = 'foo';
 
         beforeEach(() => {
-            wrapper = getWrapper();
+            logger = { onDataReadyMetric: jest.fn(), onReadyMetric: jest.fn() };
+            wrapper = getWrapper({ logger });
             instance = wrapper.instance();
             instance.setState = jest.fn();
         });
@@ -407,6 +409,19 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(instance.setState).toBeCalledWith({
                 feedItems,
                 activityFeedError: undefined,
+            });
+        });
+
+        test('should not call onDataReadyMetric if feedItems is <= 1', () => {
+            instance.fetchFeedItemsSuccessCallback(feedItems);
+            expect(logger.onDataReadyMetric).not.toHaveBeenCalled();
+        });
+
+        test('should call onDataReadyMetric if feedItems is > 1', () => {
+            instance.fetchFeedItemsSuccessCallback(['foo', 'bar']);
+            expect(logger.onDataReadyMetric).toHaveBeenCalledWith({
+                endMarkName: 'activity_sidebar_data_ready',
+                startMarkName: 'activity_sidebar_data_loading',
             });
         });
     });

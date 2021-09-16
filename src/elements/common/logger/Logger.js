@@ -3,7 +3,7 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import uuidv4 from 'uuid/v4';
 import { isMarkSupported } from '../../../utils/performance';
-import { EVENT_JS_READY } from './constants';
+import { EVENT_DATA_READY, EVENT_JS_READY } from './constants';
 import { METRIC_TYPE_PREVIEW, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../../constants';
 import type { ElementOrigin } from '../flowTypes';
 import type { MetricType, ElementsLoadMetricData, LoggerProps } from '../../../common/types/logging';
@@ -35,6 +35,7 @@ class Logger extends React.Component<Props> {
     constructor(props: Props) {
         super(props);
         this.loggerProps = {
+            onDataReadyMetric: this.handleDataReadyMetric,
             onPreviewMetric: this.handlePreviewMetric,
             onReadyMetric: this.handleReadyMetric,
         };
@@ -122,6 +123,20 @@ class Logger extends React.Component<Props> {
             ...data,
             type: METRIC_TYPE_PREVIEW,
         });
+    };
+
+    /**
+     * Data ready metric handler
+     *
+     * @param {Object} data - the metric data
+     * @returns {void}
+     */
+    handleDataReadyMetric = (data: ElementsLoadMetricData) => {
+        if (!isMarkSupported) {
+            return;
+        }
+
+        this.logUniqueMetric(METRIC_TYPE_ELEMENTS_LOAD_METRIC, EVENT_DATA_READY, data);
     };
 
     /**
