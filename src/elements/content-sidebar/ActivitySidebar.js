@@ -129,6 +129,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         // eslint-disable-next-line react/prop-types
         const { logger } = this.props;
 
+        mark(MARK_NAME_DATA_LOADING);
+
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
@@ -138,7 +140,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     componentDidMount() {
         const { currentUser } = this.props;
 
-        mark(MARK_NAME_DATA_LOADING);
         this.fetchFeedItems(true);
         this.fetchCurrentUser(currentUser);
     }
