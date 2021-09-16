@@ -4,8 +4,8 @@ import uniqueId from 'lodash/uniqueId';
 import { SVGProps } from '../../components/accessible-svg/AccessibleSVG';
 
 export interface AccessibleSVGIconProps extends SVGProps {
-    'aria-labelledby'?: string;
     'aria-hidden'?: boolean | 'false' | 'true' | undefined;
+    'aria-labelledby'?: string;
     focusable?: boolean | 'false' | 'true' | 'auto' | undefined;
     opacity?: number;
 }
