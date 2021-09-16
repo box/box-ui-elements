@@ -17,12 +17,6 @@ exports[`features/metadata-instance-editor/fields/Instance collapsible isOpen pr
         constrainToWindow={true}
         isDisabled={false}
         position="top-left"
-        text={
-          <FormattedMessage
-            defaultMessage="Edit Metadata"
-            id="boxui.metadataInstanceEditor.editTooltip"
-          />
-        }
         theme="default"
       >
         <PlainButton
@@ -749,12 +743,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         constrainToWindow={true}
         isDisabled={false}
         position="top-left"
-        text={
-          <FormattedMessage
-            defaultMessage="Edit Metadata"
-            id="boxui.metadataInstanceEditor.editTooltip"
-          />
-        }
         theme="default"
       >
         <PlainButton
@@ -949,12 +937,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         constrainToWindow={true}
         isDisabled={false}
         position="top-left"
-        text={
-          <FormattedMessage
-            defaultMessage="Edit Metadata"
-            id="boxui.metadataInstanceEditor.editTooltip"
-          />
-        }
         theme="default"
       >
         <PlainButton
@@ -1058,12 +1040,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         constrainToWindow={true}
         isDisabled={false}
         position="top-left"
-        text={
-          <FormattedMessage
-            defaultMessage="Edit Metadata"
-            id="boxui.metadataInstanceEditor.editTooltip"
-          />
-        }
         theme="default"
       >
         <PlainButton

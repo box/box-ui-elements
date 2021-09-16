@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
@@ -51,6 +51,7 @@ type Props = {
     data: MetadataFields,
     hasError: boolean,
     id: string,
+    intl: Object,
     isCascadingPolicyApplicable?: boolean,
     isDirty: boolean,
     isOpen: boolean,
@@ -549,7 +550,7 @@ class Instance extends React.PureComponent<Props, State> {
     }
 
     renderEditButton = () => {
-        const { isDirty }: Props = this.props;
+        const { intl, isDirty }: Props = this.props;
         const { isBusy }: State = this.state;
         const canEdit = this.canEdit();
         const isEditing = this.isEditing();
@@ -558,9 +559,11 @@ class Instance extends React.PureComponent<Props, State> {
         });
 
         if (canEdit && !isDirty && !isBusy) {
+            const metadataLabelEditText = intl.formatMessage(messages.metadataEditTooltip);
             return (
-                <Tooltip position="top-left" text={<FormattedMessage {...messages.metadataEditTooltip} />}>
+                <Tooltip position="top-left" text={metadataLabelEditText}>
                     <PlainButton
+                        aria-label={metadataLabelEditText}
                         className={editClassName}
                         data-resin-target="metadata-instanceedit"
                         onClick={this.toggleIsEditing}
@@ -667,4 +670,5 @@ class Instance extends React.PureComponent<Props, State> {
     }
 }
 
-export default Instance;
+export { Instance as InstanceBase };
+export default injectIntl(Instance);
