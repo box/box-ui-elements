@@ -7,8 +7,8 @@
         justify-content: space-between;
         margin: 0 $sidebarActivityFeedSpacingHorizontal;
         padding: 9px;
-        color: $bdl-green-light;
-        background-color: fade-out($bdl-green-light, .9);
+        color: $bdl-gray;
+        background-color: fade-out($bdl-box-blue-05, .9);
         border-radius: 4px;
     }
 
@@ -23,7 +23,7 @@
         height: 16px;
 
         path {
-            fill: $bdl-green-light;
+            fill: $bdl-box-blue;
         }
     }
 
