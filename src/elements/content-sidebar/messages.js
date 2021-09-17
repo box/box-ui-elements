@@ -72,6 +72,16 @@ const messages = defineMessages({
         defaultMessage: 'Modify General Task',
         description: 'modal title for when editing an existing general task',
     },
+    securityBlockedErrorMessage: {
+        defaultMessage: 'This action is unavailable due to a security policy.',
+        description: 'Tooltip text for when Box Sign is blocked due to a security policy',
+        id: 'be.contentSidebar.securityBlockedError',
+    },
+    watermarkBlockedErrorMessage: {
+        defaultMessage: 'This action is unavailable, because the file is watermarked.',
+        description: 'Tooltip text for when Box Sign is blocked due to an item being watermarked',
+        id: 'be.contentSidebar.watermarkBlockedError',
+    },
 });
 
 export default messages;

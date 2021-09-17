@@ -59,6 +59,8 @@ const SidebarNav = ({
         onClick: onBoxSignClick,
         status: boxSignStatus,
         targetingApi: boxSignTargetingApi,
+        blockedReason: boxSignBlockedReason,
+        isBlocked: boxSignIsBlocked,
     } = useFeatureConfig('boxSign');
 
     return (
@@ -110,7 +112,9 @@ const SidebarNav = ({
                 {hasBoxSign && onBoxSignClick && (
                     <div className="bcs-SidebarNav-secondary">
                         <SidebarNavSign
+                            blockedReason={boxSignBlockedReason}
                             data-resin-target={SIDEBAR_NAV_TARGETS.SIGN}
+                            isDisabled={boxSignIsBlocked}
                             onClick={() => onBoxSignClick({ fileId })}
                             status={boxSignStatus}
                             targetingApi={boxSignTargetingApi}
