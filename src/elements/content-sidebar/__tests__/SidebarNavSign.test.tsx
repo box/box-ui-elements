@@ -40,15 +40,19 @@ describe('elements/content-sidebar/SidebarNavSign', () => {
     );
 
     test.each`
-        blockedReason        | tooltipMessage
-        ${'shield-download'} | ${'This action is unavailable due to a security policy.'}
-        ${'shared-link'}     | ${'This action is unavailable due to a security policy.'}
-        ${'watermark'}       | ${'This action is unavailable, because the file is watermarked.'}
-        ${'none'}            | ${'Request Signature'}
-    `('should render the correct tooltip based on the blockedReason', ({ blockedReason, tooltipMessage }) => {
-        const wrapper = getWrapper({ blockedReason });
+        blockedReason        | isDisabled | tooltipMessage
+        ${'shield-download'} | ${true}    | ${'This action is unavailable due to a security policy.'}
+        ${'shared-link'}     | ${true}    | ${'This action is unavailable due to a security policy.'}
+        ${'watermark'}       | ${true}    | ${'This action is unavailable, because the file is watermarked.'}
+        ${'none'}            | ${false}   | ${'Request Signature'}
+    `(
+        'should render the correct tooltip based on the blockedReason',
+        ({ blockedReason, isDisabled, tooltipMessage }) => {
+            const wrapper = getWrapper({ blockedReason });
 
-        expect(wrapper.find(Tooltip).prop('text')).toBe(tooltipMessage);
-        expect(wrapper.exists(BoxSign28)).toBe(true);
-    });
+            expect(wrapper.find(Tooltip).prop('text')).toBe(tooltipMessage);
+            expect(wrapper.exists(BoxSign28)).toBe(true);
+            expect(wrapper.find(PlainButton).prop('isDisabled')).toBe(isDisabled);
+        },
+    );
 });

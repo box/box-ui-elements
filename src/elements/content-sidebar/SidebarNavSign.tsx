@@ -30,18 +30,21 @@ export function SidebarNavSign({ blockedReason, intl, isDisabled, status, target
     const label = intl.formatMessage(status === 'active' ? messages.boxSignSignature : messages.boxSignRequest);
     let tooltipMessage = label;
 
+    let isSignDisabled = false;
     switch (blockedReason) {
         case 'shield-download':
         case 'shared-link':
+            isSignDisabled = true;
             tooltipMessage = intl.formatMessage(messages.boxSignSecurityBlockedTooltip);
             break;
         case 'watermark':
+            isSignDisabled = true;
             tooltipMessage = intl.formatMessage(messages.boxSignWatermarkBlockedTooltip);
             break;
         default:
     }
 
-    const buttonClassName = classnames('bcs-SidebarNavSign', { 'bdl-is-disabled': isDisabled });
+    const buttonClassName = classnames('bcs-SidebarNavSign', { 'bdl-is-disabled': isDisabled || isSignDisabled });
 
     return (
         <FtuxTooltip
@@ -52,7 +55,12 @@ export function SidebarNavSign({ blockedReason, intl, isDisabled, status, target
             useTargetingApi={() => targetingApi}
         >
             <Tooltip isDisabled={isTargeted} position={TooltipPosition.MIDDLE_LEFT} text={tooltipMessage}>
-                <PlainButton aria-label={label} className={buttonClassName} isDisabled={isDisabled} {...rest}>
+                <PlainButton
+                    aria-label={label}
+                    className={buttonClassName}
+                    isDisabled={isDisabled || isSignDisabled}
+                    {...rest}
+                >
                     <BoxSign28 className="bcs-SidebarNavSign-icon" />
                 </PlainButton>
             </Tooltip>

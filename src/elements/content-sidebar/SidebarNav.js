@@ -57,7 +57,6 @@ const SidebarNav = ({
     const {
         blockedReason: boxSignBlockedReason,
         enabled: hasBoxSign,
-        isBlocked: boxSignIsBlocked,
         onClick: onBoxSignClick,
         status: boxSignStatus,
         targetingApi: boxSignTargetingApi,
@@ -114,7 +113,6 @@ const SidebarNav = ({
                         <SidebarNavSign
                             blockedReason={boxSignBlockedReason}
                             data-resin-target={SIDEBAR_NAV_TARGETS.SIGN}
-                            isDisabled={boxSignIsBlocked}
                             onClick={() => onBoxSignClick({ fileId })}
                             status={boxSignStatus}
                             targetingApi={boxSignTargetingApi}
