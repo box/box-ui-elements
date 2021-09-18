@@ -44,7 +44,7 @@ describe('elements/content-sidebar/SidebarNavSign', () => {
         ${'shield-download'} | ${true}    | ${'This action is unavailable due to a security policy.'}
         ${'shared-link'}     | ${true}    | ${'This action is unavailable due to a security policy.'}
         ${'watermark'}       | ${true}    | ${'This action is unavailable, because the file is watermarked.'}
-        ${'none'}            | ${false}   | ${'Request Signature'}
+        ${''}                | ${false}   | ${'Request Signature'}
     `(
         'should render the correct main tooltip and ftux tooltip based on the blockedReason',
         ({ blockedReason, isDisabled, tooltipMessage }) => {

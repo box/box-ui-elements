@@ -24,28 +24,25 @@ export type Props = PlainButtonProps & {
 
 export const PlaceholderTooltip = ({ children }: { children: React.ReactNode }) => children;
 
-export function SidebarNavSign({ blockedReason, intl, isDisabled, status, targetingApi, ...rest }: Props) {
+export function SidebarNavSign({ blockedReason, intl, status, targetingApi, ...rest }: Props) {
+    const isSignDisabled = !!blockedReason;
     const isTargeted = targetingApi && targetingApi.canShow;
+    const FtuxTooltip = !isSignDisabled && isTargeted ? TargetedClickThroughGuideTooltip : PlaceholderTooltip;
     const label = intl.formatMessage(status === 'active' ? messages.boxSignSignature : messages.boxSignRequest);
+    const buttonClassName = classnames('bcs-SidebarNavSign', { 'bdl-is-disabled': isSignDisabled });
+
     let tooltipMessage = label;
 
-    let isSignDisabled = false;
     switch (blockedReason) {
         case 'shield-download':
         case 'shared-link':
-            isSignDisabled = true;
             tooltipMessage = intl.formatMessage(messages.boxSignSecurityBlockedTooltip);
             break;
         case 'watermark':
-            isSignDisabled = true;
             tooltipMessage = intl.formatMessage(messages.boxSignWatermarkBlockedTooltip);
             break;
         default:
     }
-
-    const FtuxTooltip = !isSignDisabled && isTargeted ? TargetedClickThroughGuideTooltip : PlaceholderTooltip;
-
-    const buttonClassName = classnames('bcs-SidebarNavSign', { 'bdl-is-disabled': isDisabled || isSignDisabled });
 
     return (
         <FtuxTooltip
@@ -56,12 +53,7 @@ export function SidebarNavSign({ blockedReason, intl, isDisabled, status, target
             useTargetingApi={() => targetingApi}
         >
             <Tooltip isDisabled={isTargeted} position={TooltipPosition.MIDDLE_LEFT} text={tooltipMessage}>
-                <PlainButton
-                    aria-label={label}
-                    className={buttonClassName}
-                    isDisabled={isDisabled || isSignDisabled}
-                    {...rest}
-                >
+                <PlainButton aria-label={label} className={buttonClassName} isDisabled={isSignDisabled} {...rest}>
                     <BoxSign28 className="bcs-SidebarNavSign-icon" />
                 </PlainButton>
             </Tooltip>
