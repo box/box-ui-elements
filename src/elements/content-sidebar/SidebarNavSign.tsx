@@ -26,7 +26,6 @@ export const PlaceholderTooltip = ({ children }: { children: React.ReactNode }) 
 
 export function SidebarNavSign({ blockedReason, intl, isDisabled, status, targetingApi, ...rest }: Props) {
     const isTargeted = targetingApi && targetingApi.canShow;
-    const FtuxTooltip = isTargeted ? TargetedClickThroughGuideTooltip : PlaceholderTooltip;
     const label = intl.formatMessage(status === 'active' ? messages.boxSignSignature : messages.boxSignRequest);
     let tooltipMessage = label;
 
@@ -43,6 +42,8 @@ export function SidebarNavSign({ blockedReason, intl, isDisabled, status, target
             break;
         default:
     }
+
+    const FtuxTooltip = !isSignDisabled && isTargeted ? TargetedClickThroughGuideTooltip : PlaceholderTooltip;
 
     const buttonClassName = classnames('bcs-SidebarNavSign', { 'bdl-is-disabled': isDisabled || isSignDisabled });
 

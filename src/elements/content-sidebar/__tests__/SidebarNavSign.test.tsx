@@ -46,13 +46,14 @@ describe('elements/content-sidebar/SidebarNavSign', () => {
         ${'watermark'}       | ${true}    | ${'This action is unavailable, because the file is watermarked.'}
         ${'none'}            | ${false}   | ${'Request Signature'}
     `(
-        'should render the correct tooltip based on the blockedReason',
+        'should render the correct main tooltip and ftux tooltip based on the blockedReason',
         ({ blockedReason, isDisabled, tooltipMessage }) => {
-            const wrapper = getWrapper({ blockedReason });
+            const wrapper = getWrapper({ blockedReason, targetingApi: { canShow: true } });
 
             expect(wrapper.find(Tooltip).prop('text')).toBe(tooltipMessage);
             expect(wrapper.exists(BoxSign28)).toBe(true);
             expect(wrapper.find(PlainButton).prop('isDisabled')).toBe(isDisabled);
+            expect(wrapper.exists(TargetedClickThroughGuideTooltip)).toBe(!isDisabled);
         },
     );
 });
