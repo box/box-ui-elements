@@ -33,15 +33,15 @@ export function SidebarNavSign({ blockedReason, intl, isDisabled, status, target
     switch (blockedReason) {
         case 'shield-download':
         case 'shared-link':
-            tooltipMessage = intl.formatMessage(messages.securityBlockedErrorMessage);
+            tooltipMessage = intl.formatMessage(messages.boxSignSecurityBlockedTooltip);
             break;
         case 'watermark':
-            tooltipMessage = intl.formatMessage(messages.watermarkBlockedErrorMessage);
+            tooltipMessage = intl.formatMessage(messages.boxSignWatermarkBlockedTooltip);
             break;
         default:
     }
 
-    const buttonClassName = classnames('bcs-SidebarNavSign', isDisabled && 'bdl-is-disabled');
+    const buttonClassName = classnames('bcs-SidebarNavSign', { 'bdl-is-disabled': isDisabled });
 
     return (
         <FtuxTooltip

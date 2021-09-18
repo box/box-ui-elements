@@ -55,12 +55,12 @@ const SidebarNav = ({
     onNavigate,
 }: Props) => {
     const {
+        blockedReason: boxSignBlockedReason,
         enabled: hasBoxSign,
+        isBlocked: boxSignIsBlocked,
         onClick: onBoxSignClick,
         status: boxSignStatus,
         targetingApi: boxSignTargetingApi,
-        blockedReason: boxSignBlockedReason,
-        isBlocked: boxSignIsBlocked,
     } = useFeatureConfig('boxSign');
 
     return (
