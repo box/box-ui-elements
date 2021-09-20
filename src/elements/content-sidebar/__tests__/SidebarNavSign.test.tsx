@@ -38,4 +38,22 @@ describe('elements/content-sidebar/SidebarNavSign', () => {
             expect(wrapper.exists(BoxSign28)).toBe(true); // Child components should always be rendered
         },
     );
+
+    test.each`
+        blockedReason        | isDisabled | tooltipMessage
+        ${'shield-download'} | ${true}    | ${'This action is unavailable due to a security policy.'}
+        ${'shared-link'}     | ${true}    | ${'This action is unavailable due to a security policy.'}
+        ${'watermark'}       | ${true}    | ${'This action is unavailable, because the file is watermarked.'}
+        ${''}                | ${false}   | ${'Request Signature'}
+    `(
+        'should render the correct main tooltip and ftux tooltip based on the blockedReason',
+        ({ blockedReason, isDisabled, tooltipMessage }) => {
+            const wrapper = getWrapper({ blockedReason, targetingApi: { canShow: true } });
+
+            expect(wrapper.find(Tooltip).prop('text')).toBe(tooltipMessage);
+            expect(wrapper.exists(BoxSign28)).toBe(true);
+            expect(wrapper.find(PlainButton).prop('isDisabled')).toBe(isDisabled);
+            expect(wrapper.exists(TargetedClickThroughGuideTooltip)).toBe(!isDisabled);
+        },
+    );
 });
