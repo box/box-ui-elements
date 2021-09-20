@@ -1,6 +1,7 @@
 /* File auto-generated */
 export const white = '#fff'; // white
 export const black = '#000'; // black
+export const countBadgeBackground = '#e9163c'; // countBadgeBackground
 export const bdlBoxBlue = '#0061d5'; // bdl-box-blue
 export const bdlBoxBlue80 = '#3381dd'; // bdl-box-blue-80
 export const bdlBoxBlue50 = '#7fb0ea'; // bdl-box-blue-50
@@ -76,6 +77,7 @@ export const bdlWatermelonRed05 = '#fef5f6'; // bdl-watermelon-red-05
 export const bdlWatermelonRed02 = '#fffbfc'; // bdl-watermelon-red-02
 export const bdlLineHeight = '20px'; // bdl-line-height
 export const bdlFontSize = '13px'; // bdl-fontSize
+export const bdlFontSizeMinimum = '11px'; // bdl-fontSize-minimum
 export const bdlFontSizeDejaBlue = '14px'; // bdl-fontSize--dejaBlue
 export const avatarColors = [
     '#2486fc',

@@ -332,8 +332,13 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         });
 
         test('should call closeMenu() when menu is currently open', () => {
+            const event = {
+                preventDefault: jest.fn(),
+                stopPropagation: jest.fn(),
+            };
+            const onMenuClose = jest.fn();
             const wrapper = shallow(
-                <DropdownMenu>
+                <DropdownMenu onMenuClose={onMenuClose}>
                     <FakeButton />
                     <FakeMenu />
                 </DropdownMenu>,
@@ -342,12 +347,11 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             const instance = wrapper.instance();
             instance.openMenuAndSetFocusIndex(1);
 
-            sandbox.mock(instance).expects('closeMenu');
+            wrapper.find(FakeButton).simulate('click', event);
 
-            wrapper.find(FakeButton).simulate('click', {
-                preventDefault: sandbox.mock(),
-                stopPropagation: sandbox.mock(),
-            });
+            expect(event.stopPropagation).toBeCalled();
+            expect(event.preventDefault).toBeCalled();
+            expect(onMenuClose).toBeCalledWith(event);
         });
     });
 
@@ -386,7 +390,8 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         });
 
         test('shoud not stop esc propagation if dropdown is closed', () => {
-            const wrapper = getWrapper();
+            const onMenuClose = jest.fn();
+            const wrapper = getWrapper({ onMenuClose });
             wrapper.setState({ isOpen: false });
 
             wrapper.find(FakeButton).simulate('keydown', {
@@ -394,10 +399,13 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock().never(),
             });
+
+            expect(onMenuClose).toBeCalled();
         });
 
         test('should stop esc propagation if dropdown is open', () => {
-            const wrapper = getWrapper();
+            const onMenuClose = jest.fn();
+            const wrapper = getWrapper({ onMenuClose });
             wrapper.setState({ isOpen: true });
 
             wrapper.find(FakeButton).simulate('keydown', {
@@ -405,6 +413,8 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
             });
+
+            expect(onMenuClose).toBeCalled();
         });
 
         test('should call openMenuAndSetFocus(-1) to last item when "up" is pressed', () => {
@@ -586,14 +596,12 @@ describe('components/dropdown-menu/DropdownMenu', () => {
 
                 const instance = wrapper.instance();
                 instance.openMenuAndSetFocusIndex(0);
-                instance.closeMenu = closeMenuSpy;
                 const handleDocumentClickEvent = {
                     target: document.createElement('div'),
                 };
                 instance.handleDocumentClick(handleDocumentClickEvent);
 
-                expect(closeMenuSpy).toHaveBeenCalled();
-                expect(onMenuCloseSpy).toHaveBeenCalled();
+                expect(onMenuCloseSpy).toHaveBeenCalledWith(handleDocumentClickEvent);
             });
 
             test.each`

@@ -3,14 +3,16 @@
 exports[`components/tooltip/Tooltip render() should match snapshot when stopBubble is set 1`] = `
 <div
   className="tooltip bdl-Tooltip"
-  id="tooltip19"
+  id="tooltip24"
   onClick={[Function]}
   onContextMenu={[Function]}
   onKeyPress={[Function]}
   role="presentation"
 >
   <div
+    aria-hidden={false}
     aria-live="polite"
+    data-testid="bdl-Tooltip"
     role="tooltip"
   >
     hi
@@ -90,8 +92,10 @@ exports[`components/tooltip/Tooltip render() should not render with close button
     Hello
   </div>
   <div
+    aria-hidden={false}
     aria-live="polite"
     className="tooltip bdl-Tooltip"
+    data-testid="bdl-Tooltip"
     id="tooltip3"
     role="tooltip"
   >
@@ -161,12 +165,46 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
     Hello
   </div>
   <div
+    aria-hidden={false}
     aria-live="polite"
     className="tooltip bdl-Tooltip is-callout"
+    data-testid="bdl-Tooltip"
     id="tooltip5"
     role="tooltip"
   >
     hi
+  </div>
+</TetherComponent>
+`;
+
+exports[`components/tooltip/Tooltip render() should render correctly with tetherElementClassName 1`] = `
+<TetherComponent
+  attachment="bottom center"
+  bodyElement={<body />}
+  className="tether-element-class-name"
+  classPrefix="tooltip"
+  constraints={
+    Array [
+      Object {
+        "attachment": "together",
+        "to": "window",
+      },
+    ]
+  }
+  enabled={false}
+  renderElementTag="div"
+  renderElementTo={null}
+  targetAttachment="top center"
+>
+  <div
+    onBlur={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    tabIndex="0"
+  >
+    Hello
   </div>
 </TetherComponent>
 `;
@@ -195,8 +233,10 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
     Hello
   </div>
   <div
+    aria-hidden={false}
     aria-live="polite"
     className="tooltip bdl-Tooltip with-close-button"
+    data-testid="bdl-Tooltip"
     id="tooltip1"
     role="tooltip"
   >

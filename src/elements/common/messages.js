@@ -40,7 +40,7 @@ const messages = defineMessages({
     previewErrorBlockedByPolicy: {
         id: 'be.previewErrorBlockedByPolicy',
         description: 'Error message when Preview fails due to the files call which is blocked by an access policy.',
-        defaultMessage: 'Your access is restricted due to the classification applied to this content.',
+        defaultMessage: 'Your access to this content is restricted due to a security policy.',
     },
     boxEditErrorBlockedByPolicy: {
         id: 'be.boxEditErrorBlockedByPolicy',

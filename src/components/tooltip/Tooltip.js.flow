@@ -47,6 +47,8 @@ type Props = {
     showCloseButton?: boolean,
     /** stop click|keypress event bubbling */
     stopBubble?: boolean,
+    /** A CSS class for the tether element component */
+    tetherElementClassName?: string,
     /** Text to show in the tooltip */
     text?: React.Node,
     /** Tooltip theme */

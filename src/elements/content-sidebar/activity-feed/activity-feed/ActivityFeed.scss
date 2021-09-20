@@ -47,18 +47,19 @@
 
         .bcs-ActivityItem {
             position: relative;
-            padding: 20px $container-padding;
             box-shadow: 0 $container-padding 0 -#{$container-padding - 1} $bdl-gray-10;
             backface-visibility: hidden; // Prevent visual shifting during pseudo-element scale transitions
             transition: box-shadow $container-transition-duration ease $container-transition-delay;
 
             &.bcs-is-focused {
-                box-shadow: 0 0 $bdl-grid-unit * 4 $bdl-gray-30;
-                animation: bcs-ActivityItem-callout 1s ease-in-out $container-transition-delay 0 normal none; // Disabled by default
+                .bcs-ActivityCard {
+                    box-shadow: 0 0 $bdl-grid-unit * 4 $bdl-gray-30;
+                    animation: bcs-ActivityItem-callout 1s ease-in-out $container-transition-delay 0 normal none; // Disabled by default
 
-                &:not(:focus-within) {
-                    animation-iteration-count: 1; // Only play the animation if the user is not interacting directly with the element or its descendents
-                    animation-fill-mode: forwards;
+                    &:not(:focus-within) {
+                        animation-iteration-count: 1; // Only play the animation if the user is not interacting directly with the element or its descendents
+                        animation-fill-mode: forwards;
+                    }
                 }
             }
         }
@@ -75,22 +76,30 @@
         }
 
         .bcs-activity-feed-annotation-activity {
-            &::before {
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                display: block;
-                width: $bdl-grid-unit;
-                background-color: $bdl-yellorange;
-                transform: scaleY(0); // Visually hidden, but available for transition
-                transition: transform $container-transition-duration ease $container-transition-delay;
-                content: '';
+            .bcs-ActivityCard {
+                &::before {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    display: block;
+                    width: $bdl-grid-unit;
+                    background-color: $bdl-yellorange;
+                    transform: scaleY(0); // Visually hidden, but available for transition
+                    transition: transform $container-transition-duration ease $container-transition-delay;
+                    content: '';
+                }
             }
 
             &.bcs-is-focused {
-                &::before {
-                    transform: scaleY(1);
+                .bcs-ActivityCard {
+                    &::before {
+                        transform: scaleY(1);
+                    }
+                }
+
+                .bcs-SelectableActivityCard {
+                    background-color: transparent;
                 }
             }
         }

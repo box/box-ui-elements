@@ -13,7 +13,7 @@ exports[`components/message-center/components/templates/common/MessageFooter sho
   </span>
   <a
     className="MessageFooter-action"
-    data-resin-target="messageCenterAction"
+    data-resin-target="messageCenterAction|testmessagename"
     href="testURL"
     target="_self"
   >

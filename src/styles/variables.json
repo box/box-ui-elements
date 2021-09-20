@@ -1,6 +1,7 @@
 {
     "white": "#fff",
     "black": "#000",
+    "countBadgeBackground": "#e9163c",
     "bdl-box-blue": "#0061d5",
     "bdl-box-blue-80": "#3381dd",
     "bdl-box-blue-50": "#7fb0ea",
@@ -76,6 +77,7 @@
     "bdl-watermelon-red-02": "#fffbfc",
     "bdl-line-height": "20px",
     "bdl-fontSize": "13px",
+    "bdl-fontSize-minimum": "11px",
     "bdl-fontSize--dejaBlue": "14px",
     "avatar-colors": [
         "#2486fc",

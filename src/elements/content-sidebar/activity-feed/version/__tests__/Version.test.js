@@ -59,7 +59,7 @@ describe('elements/content-sidebar/ActivityFeed/version/Version', () => {
 
         const wrapper = shallow(<Version {...version} {...translationProps} />);
 
-        expect(wrapper.exists('IconInfoInverted')).toBe(true);
+        expect(wrapper.exists('IconInfo')).toBe(true);
         expect(wrapper.hasClass('bcs-Version')).toBe(true);
     });
 

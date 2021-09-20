@@ -6,14 +6,12 @@ import {
     convertCollabsRequest,
     convertCollabsResponse,
     convertGroupContactsResponse,
-    convertIsDownloadSettingAvailable,
     convertItemResponse,
     convertSharedLinkPermissions,
     convertSharedLinkSettings,
     convertUserContactsResponse,
     convertUserContactsByEmailResponse,
     convertUserResponse,
-    convertEffectiveSharedLinkPermission,
 } from '../convertData';
 import {
     TYPE_FILE,
@@ -300,8 +298,6 @@ describe('convertItemResponse()', () => {
 
             const { download_url: isDirectLinkAvailable, password } = sharedLinkFeatures;
 
-            const isDownloadAvailable = can_download && extension !== ITEM_EXTENSION_GDOC;
-
             const convertedResponse = {
                 item: {
                     canUserSeeClassification: false,
@@ -325,7 +321,7 @@ describe('convertItemResponse()', () => {
                           accessLevelsDisabledReason: {},
                           allowedAccessLevels: ALLOWED_ACCESS_LEVELS,
                           canChangeAccessLevel: can_set_share_access,
-                          canChangeDownload: can_set_share_access && isDownloadAvailable,
+                          canChangeDownload: can_set_share_access && can_download,
                           canChangeExpiration: can_set_share_access,
                           canChangePassword: can_set_share_access && password,
                           canChangeVanityName: false,
@@ -333,19 +329,16 @@ describe('convertItemResponse()', () => {
                           directLink: download_url,
                           expirationTimestamp: MOCK_TIMESTAMP_MILLISECONDS,
                           isDirectLinkAvailable,
-                          isDownloadAllowed: isDownloadAvailable,
-                          isDownloadAvailable,
-                          isDownloadEnabled: isDownloadAvailable,
-                          isDownloadSettingAvailable: isDownloadAvailable,
+                          isDownloadAllowed: can_download,
+                          isDownloadAvailable: can_download,
+                          isDownloadEnabled: can_download,
+                          isDownloadSettingAvailable: can_download,
                           isEditAllowed: true,
                           isNewSharedLink: false,
                           isPasswordAvailable: password,
                           isPasswordEnabled: is_password_enabled,
                           isPreviewAllowed: can_preview,
-                          permissionLevel:
-                              extension !== ITEM_EXTENSION_GDOC
-                                  ? API_TO_USM_PERMISSION_LEVEL_MAP[effective_permission]
-                                  : CAN_VIEW_ONLY,
+                          permissionLevel: API_TO_USM_PERMISSION_LEVEL_MAP[effective_permission],
                           url,
                           vanityName: vanity_name || '',
                       }
@@ -834,37 +827,5 @@ describe('convertCollabsRequest()', () => {
         ${{ emails: '', groups: '', permission: 'Editor' }} | ${{ groups: [], users: [] }}                            | ${'no users or groups'}
     `('should convert a request with $description', ({ requestFromUSM, convertedResponse }) => {
         expect(convertCollabsRequest(requestFromUSM)).toEqual(convertedResponse);
-    });
-});
-
-describe('convertEffectiveSharedLinkPermission()', () => {
-    const ITEM_EXTENSION = 'png';
-    const ITEM_EXTENSION_GDOC = 'gdoc';
-
-    test.each`
-        extension              | permissionFromApi          | expectedPermission   | description
-        ${ITEM_EXTENSION}      | ${PERMISSION_CAN_DOWNLOAD} | ${CAN_VIEW_DOWNLOAD} | ${'file with download permission'}
-        ${ITEM_EXTENSION}      | ${PERMISSION_CAN_PREVIEW}  | ${CAN_VIEW_ONLY}     | ${'file with preview permission'}
-        ${ITEM_EXTENSION_GDOC} | ${PERMISSION_CAN_DOWNLOAD} | ${CAN_VIEW_ONLY}     | ${'g suite file with download permission'}
-        ${ITEM_EXTENSION_GDOC} | ${PERMISSION_CAN_PREVIEW}  | ${CAN_VIEW_ONLY}     | ${'g suite file with preview permission'}
-    `('should convert the permission for a $description', ({ extension, permissionFromApi, expectedPermission }) => {
-        expect(convertEffectiveSharedLinkPermission(permissionFromApi, extension)).toBe(expectedPermission);
-    });
-});
-
-describe('convertIsDownloadSettingAvailable()', () => {
-    const ITEM_EXTENSION = 'png';
-    const ITEM_EXTENSION_GDOC = 'gdoc';
-
-    test.each`
-        extension              | settingFromApi | expectedSetting | description
-        ${ITEM_EXTENSION}      | ${true}        | ${true}         | ${'file with download available'}
-        ${ITEM_EXTENSION}      | ${false}       | ${false}        | ${'file without download available'}
-        ${ITEM_EXTENSION}      | ${undefined}   | ${undefined}    | ${'file with undefined download available'}
-        ${ITEM_EXTENSION_GDOC} | ${true}        | ${false}        | ${'g suite file with download available'}
-        ${ITEM_EXTENSION_GDOC} | ${false}       | ${false}        | ${'g suite file without download available'}
-        ${ITEM_EXTENSION_GDOC} | ${undefined}   | ${undefined}    | ${'g suite file with undefined download available'}
-    `('should convert the setting for a $description', ({ extension, settingFromApi, expectedSetting }) => {
-        expect(convertIsDownloadSettingAvailable(settingFromApi, extension)).toBe(expectedSetting);
     });
 });

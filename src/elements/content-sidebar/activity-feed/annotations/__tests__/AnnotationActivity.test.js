@@ -2,11 +2,12 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 
 import AnnotationActivity from '../AnnotationActivity';
-import AnnotationActivityLink from '../AnnotationActivityLink';
 import AnnotationActivityMenu from '../AnnotationActivityMenu';
 import CommentForm from '../../comment-form/CommentForm';
+import DeleteConfirmation from '../../common/delete-confirmation';
 import Media from '../../../../../components/media';
 import messages from '../messages';
+import SelectableActivityCard from '../../SelectableActivityCard';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 
@@ -42,11 +43,6 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         item: mockAnnotation,
         mentionSelectorContacts,
     };
-    const generateReginTags = (isCurrentVersion = mockActivity.isCurrentVersion) => ({
-        'data-resin-iscurrent': isCurrentVersion,
-        'data-resin-itemid': mockAnnotation.id,
-        'data-resin-target': 'annotationLink',
-    });
 
     const getWrapper = (props = {}) => shallow(<AnnotationActivity {...mockActivity} {...props} />);
 
@@ -80,14 +76,15 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             };
 
             const wrapper = getWrapper({ item });
-            const activityLink = wrapper.find(AnnotationActivityLink);
 
             expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
-            expect(activityLink.prop('message')).toEqual({
-                ...messages.annotationActivityPageItem,
-                values: { number: 1 },
+            expect(wrapper.find('AnnotationActivityLink').props()).toMatchObject({
+                'data-resin-target': 'annotationLink',
+                message: {
+                    ...messages.annotationActivityPageItem,
+                    values: { number: 1 },
+                },
             });
-            expect(activityLink.props()).toMatchObject(generateReginTags());
             expect(wrapper.exists(AnnotationActivityMenu)).toBe(true);
             expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(
                 mockActivity.item.description.message,
@@ -129,16 +126,15 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
     test('should correctly render annotation activity of another file version', () => {
         const wrapper = getWrapper({ isCurrentVersion: false });
 
-        expect(wrapper.find(AnnotationActivityLink).prop('message')).toEqual({
+        expect(wrapper.find('AnnotationActivityLink').prop('message')).toEqual({
             ...messages.annotationActivityVersionLink,
             values: { number: '2' },
         });
-        expect(wrapper.find(AnnotationActivityLink).props()).toMatchObject(generateReginTags(false));
     });
 
     test('should render version unavailable if file version is null', () => {
         const wrapper = getWrapper({ item: { ...mockAnnotation, file_version: null } });
-        const activityLink = wrapper.find(AnnotationActivityLink);
+        const activityLink = wrapper.find('AnnotationActivityLink');
 
         expect(activityLink.prop('message')).toEqual({
             ...messages.annotationActivityVersionUnavailable,
@@ -207,5 +203,149 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         inlineErrorActionOnClick();
 
         expect(onActionSpy).toHaveBeenCalledTimes(1);
+    });
+
+    describe('delete confirmation behavior', () => {
+        test('should render the DeleteConfirmation when delete menu item is selected', () => {
+            const item = {
+                ...mockAnnotation,
+                permissions: { can_delete: true },
+            };
+
+            const wrapper = getWrapper({ item });
+
+            wrapper.find(AnnotationActivityMenu).prop('onDelete')();
+
+            expect(wrapper.exists(DeleteConfirmation));
+        });
+
+        test('should close the DeleteConfirmation when cancel is selected', () => {
+            const item = {
+                ...mockAnnotation,
+                permissions: { can_delete: true },
+            };
+
+            const wrapper = getWrapper({ item });
+
+            wrapper.find(AnnotationActivityMenu).prop('onDelete')();
+            wrapper.find(DeleteConfirmation).prop('onDeleteCancel')();
+
+            expect(wrapper.exists(DeleteConfirmation)).toBe(false);
+        });
+
+        test('should call onDelete when confirm delete is selected', () => {
+            const onDelete = jest.fn();
+            const permissions = { can_delete: true };
+            const item = {
+                ...mockAnnotation,
+                permissions,
+            };
+
+            const wrapper = getWrapper({ item, onDelete });
+
+            wrapper.find(AnnotationActivityMenu).prop('onDelete')();
+            wrapper.find(DeleteConfirmation).prop('onDeleteConfirm')();
+
+            expect(onDelete).toHaveBeenCalledWith({ id: mockAnnotation.id, permissions });
+            expect(wrapper.exists(DeleteConfirmation)).toBe(false);
+        });
+    });
+
+    describe('SelectableActivityCard', () => {
+        const getActivityItem = overrides => ({
+            ...mockAnnotation,
+            permissions: { can_delete: true, can_edit: true },
+            ...overrides,
+        });
+
+        test('should render as SelectableActivityCard', () => {
+            const wrapper = getWrapper();
+
+            expect(wrapper.exists(SelectableActivityCard)).toBe(true);
+            expect(wrapper.find(SelectableActivityCard).props()).toMatchObject({
+                className: 'bcs-AnnotationActivity',
+                'data-resin-iscurrent': true,
+                'data-resin-itemid': mockAnnotation.id,
+                'data-resin-feature': 'annotations',
+                'data-resin-target': 'annotationButton',
+                isDisabled: false,
+                onMouseDown: expect.any(Function),
+                onSelect: expect.any(Function),
+            });
+        });
+
+        test('should disable card if there is an error', () => {
+            const activity = {
+                item: {
+                    ...mockAnnotation,
+                    error: {
+                        title: 'error',
+                        message: 'This is an error message',
+                        action: {
+                            text: 'click',
+                        },
+                    },
+                },
+            };
+            const wrapper = getWrapper(activity);
+
+            expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
+        });
+
+        test('should disable card if the overflow menu is open', () => {
+            const wrapper = getWrapper({ item: getActivityItem() });
+
+            expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(false);
+
+            wrapper.find(AnnotationActivityMenu).prop('onMenuOpen')();
+
+            expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
+        });
+
+        test('should disable card if editing the comment', () => {
+            const wrapper = getWrapper({ item: getActivityItem() });
+
+            expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(false);
+
+            wrapper.find(AnnotationActivityMenu).prop('onEdit')();
+
+            expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
+        });
+
+        test('should disable card if file version is unavailable', () => {
+            const wrapper = getWrapper({ item: getActivityItem({ file_version: null }) });
+
+            expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
+        });
+
+        test('should disable card if the delete confirmation is open', () => {
+            const wrapper = getWrapper({ item: getActivityItem() });
+
+            expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(false);
+
+            wrapper.find(AnnotationActivityMenu).prop('onDelete')();
+
+            expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
+        });
+
+        test('should stop propagation of mousedown event from SelectableActivityCard', () => {
+            const event = { stopPropagation: jest.fn() };
+            const wrapper = getWrapper({ item: getActivityItem() });
+
+            wrapper.find(SelectableActivityCard).simulate('mousedown', event);
+
+            expect(event.stopPropagation).toHaveBeenCalled();
+        });
+
+        test('should not stop propagation of mousedown event from SelectableActivityCard when disabled', () => {
+            const event = { stopPropagation: jest.fn() };
+            const wrapper = getWrapper({ item: getActivityItem({ file_version: null }) });
+
+            expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
+
+            wrapper.find(SelectableActivityCard).simulate('mousedown', event);
+
+            expect(event.stopPropagation).not.toHaveBeenCalled();
+        });
     });
 });

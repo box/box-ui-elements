@@ -132,7 +132,7 @@ describe('components/message-center/MessageCenter.integration', () => {
         openModal(wrapper);
         wrapper.update();
 
-        expect(wrapper.find('PreviewGhost').exists()).toBe(true);
+        expect(wrapper.find('MessagePreviewGhost').exists()).toBe(true);
         expect(wrapper.find('ContentGhost').exists()).toBe(true);
     });
 

@@ -5,6 +5,8 @@
  */
 import getProp from 'lodash/get';
 
+import Browser from './Browser';
+
 import type {
     UploadFile,
     UploadFileWithAPIOptions,
@@ -335,10 +337,16 @@ function getDataTransferItemId(
 }
 
 /**
- * Multiput uploads require the use of crypto, which is only supported in secure contexts
+ * Multiput uploads require the use of crypto, which is only supported in secure contexts.
+ * Multiput uploads is not supported on mobile iOS Safari.
  */
 function isMultiputSupported(): boolean {
     const cryptoObj = window.crypto || window.msCrypto;
+
+    if (Browser.isMobileSafari()) {
+        return false;
+    }
+
     return window.location.protocol === 'https:' && cryptoObj && cryptoObj.subtle;
 }
 

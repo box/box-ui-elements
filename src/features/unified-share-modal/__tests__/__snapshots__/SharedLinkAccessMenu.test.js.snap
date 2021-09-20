@@ -124,7 +124,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         position="top-center"
         text={
           <FormattedMessage
-            defaultMessage="This option isn’t available for this item due to a security restriction or classification."
+            defaultMessage="This option is not available due to a security policy."
             id="boxui.unifiedShare.disabledShareLinkPermission"
           />
         }
@@ -233,7 +233,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         position="top-center"
         text={
           <FormattedMessage
-            defaultMessage="This option isn’t available for this item due to a security restriction or classification."
+            defaultMessage="This option is not available due to a security policy."
             id="boxui.unifiedShare.disabledShareLinkPermission"
           />
         }
@@ -261,7 +261,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         position="top-center"
         text={
           <FormattedMessage
-            defaultMessage="This option isn’t available for this item due to a security restriction or classification."
+            defaultMessage="This option is not available due to a security policy."
             id="boxui.unifiedShare.disabledShareLinkPermission"
           />
         }
@@ -289,7 +289,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         position="top-center"
         text={
           <FormattedMessage
-            defaultMessage="This option isn’t available for this item due to a security restriction or classification."
+            defaultMessage="This option is not available due to a security policy."
             id="boxui.unifiedShare.disabledShareLinkPermission"
           />
         }
@@ -414,7 +414,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
         position="top-center"
         text={
           <FormattedMessage
-            defaultMessage="This option isn’t available for this item due to a security restriction or classification."
+            defaultMessage="This option is not available due to a security policy."
             id="boxui.unifiedShare.disabledShareLinkPermission"
           />
         }

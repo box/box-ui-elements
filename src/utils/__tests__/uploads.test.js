@@ -1,9 +1,12 @@
+import browser from '../Browser';
+
 import {
     toISOStringNoMS,
     getFileLastModifiedAsISONoMSIfPossible,
     tryParseJson,
     isDataTransferItemAFolder,
     isDataTransferItemAPackage,
+    isMultiputSupported,
     getFileFromDataTransferItem,
     getPackageFileFromDataTransferItem,
     doesFileContainAPIOptions,
@@ -388,6 +391,30 @@ describe('util/uploads', () => {
             };
 
             expect(getDataTransferItemId(item, rootFolderId)).toBe('hi_0_123123');
+        });
+    });
+
+    describe('isMultiputSupported()', () => {
+        let windowSpy;
+
+        beforeEach(() => {
+            windowSpy = jest.spyOn(window, 'window', 'get');
+        });
+
+        afterEach(() => {
+            windowSpy.mockRestore();
+        });
+
+        test.each([
+            ['mobile safari', true, false],
+            ['mobile other browsers', false, true],
+        ])('should return whether multiput is supported on device: %o', (test, mobileSafari, expected) => {
+            windowSpy.mockImplementation(() => ({
+                crypto: { subtle: true },
+                location: { protocol: 'https:' },
+            }));
+            browser.isMobileSafari = jest.fn().mockReturnValueOnce(mobileSafari);
+            expect(isMultiputSupported()).toEqual(expected);
         });
     });
 });

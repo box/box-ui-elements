@@ -1,18 +1,17 @@
 // @flow
-import * as React from 'react';
 import {
     PREVIEW_TITLE_BODY_TAGS,
     PREVIEW_TITLE_BODY_TAGS_BUTTON,
     TITLE_BODY_TAGS,
     TITLE_BODY_TAGS_BUTTON,
 } from './constants';
-import ContentPreview from '../../elements/content-preview';
 
 export type UnreadEligibleMessageCenterMessageCount = {| count: number |};
 
 type CommonParams = {|
     body: string,
     category: string,
+    name: string,
     tags: string,
     title: string,
 |};
@@ -64,18 +63,3 @@ export type EligibleMessageCenterMessage = {|
 |};
 
 export type GetEligibleMessageCenterMessages = Array<EligibleMessageCenterMessage>;
-
-export type ContentPreviewProps = $Diff<
-    React.ElementConfig<typeof ContentPreview>,
-    {
-        apiHost: any,
-        cache: any,
-        className: any,
-        componentRef: any,
-        fileId: any,
-        onError: any,
-        onLoad: any,
-        sharedLink: any,
-        token: any,
-    },
->;

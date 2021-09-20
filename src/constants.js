@@ -169,7 +169,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '2.57.0';
+export const DEFAULT_PREVIEW_VERSION = '2.72.0';
 export const DEFAULT_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
@@ -177,11 +177,13 @@ export const DEFAULT_HOSTNAME_API = 'https://api.box.com';
 export const DEFAULT_HOSTNAME_STATIC = 'https://cdn01.boxcdn.net';
 export const DEFAULT_HOSTNAME_UPLOAD = 'https://upload.box.com';
 export const DEFAULT_HOSTNAME_UPLOAD_APP = 'https://upload.app.box.com';
+export const DEFAULT_HOSTNAME_UPLOAD_GOV = 'https://upload.app.box-gov.com';
 export const DEFAULT_HOSTNAME_APP = 'https://app.box.com';
 export const DEFAULT_CONTAINER = 'body';
 export const DEFAULT_ROOT = '0';
 export const DEFAULT_SEARCH_DEBOUNCE = 500;
 export const DEFAULT_COLLAB_DEBOUNCE = 500;
+export const DEFAULT_FORMAT_DEBOUNCE = 1000;
 export const DEFAULT_MAX_COLLABORATORS = 25;
 export const DEFAULT_MAX_CONTACTS = 50;
 export const DEFAULT_PAGE_NUMBER = 1;
@@ -363,7 +365,8 @@ export const X_REP_HINT_PNG_DIMENSIONS_DEFAULT: '1024x1024' = '1024x1024';
 
 // If unable to fetch jpg thumbnail, grab png rep of first page. Certain file types do not have a thumbnail rep but do have a first page rep.
 // Get the PDF rep as well, which ensures that the Preview SDK loads linearized reps for customers with PDF optimization enabled.
-export const X_REP_HINT_HEADER_DIMENSIONS_DEFAULT = `[jpg?dimensions=${X_REP_HINT_JPG_DIMENSIONS_DEFAULT}&paged=false,png?dimensions=${X_REP_HINT_PNG_DIMENSIONS_DEFAULT}][pdf]`;
+// Get the text rep as well, which ensures that large text files load in the Preview SDK.
+export const X_REP_HINT_HEADER_DIMENSIONS_DEFAULT = `[jpg?dimensions=${X_REP_HINT_JPG_DIMENSIONS_DEFAULT}&paged=false,png?dimensions=${X_REP_HINT_PNG_DIMENSIONS_DEFAULT}][pdf][text]`;
 
 /* ------------------ Representations Response ---------- */
 export const REPRESENTATIONS_RESPONSE_ERROR: 'error' = 'error';

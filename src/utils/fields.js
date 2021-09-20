@@ -60,7 +60,7 @@ import {
     PLACEHOLDER_USER,
 } from '../constants';
 
-// Minimum set of fields needed for Content Explorer / Picker
+// Minimum set of fields needed for folder requests
 const FOLDER_FIELDS_TO_FETCH = [
     FIELD_ID,
     FIELD_NAME,

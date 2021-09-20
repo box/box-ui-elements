@@ -1,55 +1,12 @@
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
 import { createIntl } from 'react-intl';
+import collaboratorList from '../__mocks__/collaborators';
 import { PresenceComponent as Presence } from '../Presence';
-import PresenceAvatar from '../PresenceAvatar';
 
 const GlobalDate = Date;
 
 const intl = createIntl({});
-
-const collaboratorList = [
-    {
-        avatarUrl: '',
-        id: '1',
-        isActive: false,
-        interactedAt: 999,
-        interactionType: 'user.item_preview',
-        name: 'e',
-    },
-    {
-        avatarUrl: '',
-        id: '2',
-        isActive: false,
-        interactedAt: 999,
-        interactionType: 'user.item_upload',
-        name: 'd',
-    },
-    {
-        avatarUrl: '',
-        id: '3',
-        isActive: false,
-        interactedAt: 999,
-        interactionType: 'user.comment_create',
-        name: 'c',
-    },
-    {
-        avatarUrl: '',
-        id: '4',
-        isActive: false,
-        interactedAt: 999,
-        interactionType: 'user.item_preview',
-        name: 'b',
-    },
-    {
-        avatarUrl: '',
-        id: '5',
-        isActive: false,
-        interactedAt: 999,
-        interactionType: 'user.item_upload',
-        name: 'a',
-    },
-];
 
 describe('features/presence/Presence', () => {
     beforeEach(() => {
@@ -69,32 +26,6 @@ describe('features/presence/Presence', () => {
             expect(wrapper.find('.presence-avatar-container').length).toBe(1);
             expect(wrapper.find('PresenceAvatar').length).toBe(0);
             expect(wrapper.find('.presence-count').length).toBe(0);
-        });
-
-        test('should correctly render collaborators without additional count when number of collaborators is less than or equal to maxDisplayedAvatars', () => {
-            const maxDisplayedAvatars = 3;
-            const wrapper = shallow(
-                <Presence
-                    intl={intl}
-                    collaborators={collaboratorList.slice(0, maxDisplayedAvatars)}
-                    maxDisplayedAvatars={maxDisplayedAvatars}
-                />,
-            );
-
-            expect(wrapper.find('.presence-avatar-container').length).toBe(1);
-            expect(wrapper.find('PresenceAvatar').length).toBe(maxDisplayedAvatars);
-            expect(wrapper.find('.presence-count').length).toBe(0);
-        });
-
-        test('should correctly render collaborators with additional count when number of collaborators is greater than maxDisplayedAvatars', () => {
-            const maxDisplayedAvatars = 3;
-            const wrapper = shallow(
-                <Presence intl={intl} collaborators={collaboratorList} maxDisplayedAvatars={maxDisplayedAvatars} />,
-            );
-
-            expect(wrapper.find('.presence-avatar-container').length).toBe(1);
-            expect(wrapper.find('PresenceAvatar').length).toBe(maxDisplayedAvatars);
-            expect(wrapper.find('.presence-count').length).toBe(1);
         });
 
         test('should set isDropdownActive to true and call OnFlyoutOpen when _handleOverlayOpen is called', () => {
@@ -129,90 +60,6 @@ describe('features/presence/Presence', () => {
             expect(wrapper.state('isDropdownActive')).toBe(false);
             expect(onFlyoutOpenSpy).toHaveBeenCalled();
             expect(onFlyoutCloseSpy).toHaveBeenCalled();
-        });
-
-        test('should set activeTooltip to the correct id and call onAvatarMouseEnter when _showTooltip is called', () => {
-            const onAvatarMouseEnter = jest.fn();
-            const wrapper = shallow(
-                <Presence intl={intl} collaborators={collaboratorList} onAvatarMouseEnter={onAvatarMouseEnter} />,
-            );
-
-            const instance = wrapper.instance();
-            instance._showTooltip('1');
-
-            expect(wrapper.state('activeTooltip')).toEqual('1');
-            expect(onAvatarMouseEnter).toHaveBeenCalled();
-        });
-
-        test('should set activeTooltip to null and call onAvatarMouseLeave when _hideTooltip is called', () => {
-            const onAvatarMouseLeave = jest.fn();
-            const wrapper = shallow(
-                <Presence intl={intl} collaborators={collaboratorList} onAvatarMouseLeave={onAvatarMouseLeave} />,
-            );
-
-            const instance = wrapper.instance();
-            instance._showTooltip('1');
-            instance._hideTooltip();
-
-            expect(wrapper.state('activeTooltip')).toEqual(null);
-            expect(onAvatarMouseLeave).toHaveBeenCalled();
-        });
-
-        test('should pass through additional attributes when specified', () => {
-            const avatarAttr = { 'data-resin-target': 'avatar' };
-            const containerAttr = { 'data-resin-feature': 'presence' };
-            const wrapper = shallow(
-                <Presence
-                    intl={intl}
-                    avatarAttributes={avatarAttr}
-                    collaborators={collaboratorList}
-                    containerAttributes={containerAttr}
-                />,
-            );
-
-            expect(wrapper.find('.presence-avatar-container').prop('data-resin-feature')).toEqual('presence');
-            expect(
-                wrapper
-                    .find(PresenceAvatar)
-                    .first()
-                    .prop('data-resin-target'),
-            ).toEqual('avatar');
-        });
-
-        test('should correctly render collaborators with additional count when number of collaborators is greater than maxAddionalCollaboratorsNum + maxDisplayedAvatars', () => {
-            const maxDisplayedAvatars = 2;
-            const maxAdditionalCollaboratorsNum = 1;
-            const wrapper = shallow(
-                <Presence
-                    intl={intl}
-                    collaborators={collaboratorList}
-                    maxAdditionalCollaboratorsNum={maxAdditionalCollaboratorsNum}
-                    maxDisplayedAvatars={maxDisplayedAvatars}
-                />,
-            );
-
-            expect(wrapper.find('.presence-avatar-container').length).toBe(1);
-            expect(wrapper.find('PresenceAvatar').length).toBe(maxDisplayedAvatars);
-            expect(wrapper.find('.presence-count').length).toBe(1);
-            expect(wrapper.find('.presence-count').text()).toBe('1+');
-        });
-
-        test('should correctly render collaborators with additional count when number of collaborators is less than maxAddionalCollaboratorsNum + maxDisplayedAvatars', () => {
-            const maxDisplayedAvatars = 2;
-            const maxAdditionalCollaboratorsNum = 10;
-            const wrapper = shallow(
-                <Presence
-                    intl={intl}
-                    collaborators={collaboratorList}
-                    maxAdditionalCollaboratorsNum={maxAdditionalCollaboratorsNum}
-                    maxDisplayedAvatars={maxDisplayedAvatars}
-                />,
-            );
-
-            expect(wrapper.find('.presence-avatar-container').length).toBe(1);
-            expect(wrapper.find('PresenceAvatar').length).toBe(maxDisplayedAvatars);
-            expect(wrapper.find('.presence-count').length).toBe(1);
-            expect(wrapper.find('.presence-count').text()).toBe('+3');
         });
 
         // GROWTH-382
@@ -303,10 +150,10 @@ describe('features/presence/Presence', () => {
                         onClickViewCollaborators={jest.fn()}
                     />,
                 );
-                expect(wrapper.find('.presence-dropdown').length).toBe(0);
+                expect(wrapper.find('PresenceCollaboratorsList').length).toBe(0);
                 wrapper.setState({ showActivityPrompt: false }).update();
-                expect(wrapper.find('.presence-dropdown').length).toBe(1);
-                expect(wrapper.find('.presence-dropdown-request-stats').length).toBe(1);
+                expect(wrapper.find('PresenceCollaboratorsList').length).toBe(1);
+                expect(wrapper.find('.presence-overlay-request-stats').length).toBe(1);
             });
 
             test('calls callback to open access stats when that link is clicked', () => {
@@ -322,29 +169,11 @@ describe('features/presence/Presence', () => {
                 );
                 wrapper.setState({ showActivityPrompt: false }).update();
 
-                wrapper.find('.presence-dropdown-request-stats').simulate('click');
+                wrapper.find('.presence-overlay-request-stats').simulate('click');
 
                 expect(mockRequestAccessStats.mock.calls.length).toBe(1);
             });
         });
         // end GROWTH-382
-    });
-
-    describe('_renderTimestampMessage()', () => {
-        test('should return null when interactionType is an unkown type', () => {
-            const wrapper = shallow(<Presence intl={intl} collaborators={collaboratorList} />);
-
-            const instance = wrapper.instance();
-            const res = instance._renderTimestampMessage(123, 'test1234');
-            expect(res).toEqual(null);
-        });
-
-        test('should not return null when interactionType is a known type', () => {
-            const wrapper = shallow(<Presence intl={intl} collaborators={collaboratorList} />);
-
-            const instance = wrapper.instance();
-            const res = instance._renderTimestampMessage(123, 'user.item_preview');
-            expect(res).not.toEqual(null);
-        });
     });
 });

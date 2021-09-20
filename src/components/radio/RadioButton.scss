@@ -37,7 +37,7 @@
         }
 
         &:focus + span::before {
-            box-shadow: 0 0 0 1px $primary-color;
+            box-shadow: 0 0 0 2px $primary-color;
         }
 
         &:disabled + span::before {
@@ -63,5 +63,5 @@
 .radio-description {
     margin-top: 2px;
     margin-left: 24px;
-    color: $bdl-gray-50;
+    color: $bdl-gray-62;
 }

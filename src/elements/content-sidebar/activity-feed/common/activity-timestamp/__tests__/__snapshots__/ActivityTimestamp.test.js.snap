@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/ActivityFeed/common/ActivityTimestamp should correctly render timestamp 1`] = `
+exports[`elements/content-sidebar/ActivityFeed/common/ActivityTimestamp should correctly render timestamp from previous years 1`] = `
 <Tooltip
   constrainToScrollParent={false}
   constrainToWindow={true}
@@ -22,10 +22,8 @@ exports[`elements/content-sidebar/ActivityFeed/common/ActivityTimestamp should c
   <small
     className="bcs-ActivityTimestamp"
   >
-    <ReadableTime
-      alwaysShowTime={true}
-      relativeThreshold={0}
-      timestamp={1506534041000}
+    <ActivityDatestamp
+      date={1506534041000}
     />
   </small>
 </Tooltip>

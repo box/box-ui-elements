@@ -47,8 +47,8 @@ global.BoxVisualTestUtils = {
     blurInput: async selector => global.page.$eval(selector, e => e.blur()),
 
     // Clears an input field - https://evanhalley.dev/post/clearing-input-field-puppeteer/
-    clearInput: async selector => {
-        const inputElement = await global.page.$(selector);
+    clearInput: async (selector, page = global.page) => {
+        const inputElement = await page.$(selector);
         await inputElement.click({ clickCount: 3 });
         await inputElement.press('Backspace');
     },

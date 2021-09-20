@@ -254,48 +254,48 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             validator,
         } = this.props;
 
-        return (
-            <Label text={label}>
-                <SelectorDropdown
-                    className={classNames('bdl-PillSelectorDropdown', 'pill-selector-wrapper', className)}
-                    dividerIndex={dividerIndex}
-                    onEnter={this.handleEnter}
-                    onSelect={this.handleSelect}
-                    overlayTitle={overlayTitle}
-                    scrollBoundarySelector={dropdownScrollBoundarySelector}
-                    shouldSetActiveItemOnOpen={shouldSetActiveItemOnOpen}
-                    selector={
-                        <PillSelector
-                            onChange={noop} // fix console error
-                            onCompositionEnd={this.handleCompositionEnd}
-                            onCompositionStart={this.handleCompositionStart}
-                            {...inputProps}
-                            allowInvalidPills={allowInvalidPills}
-                            disabled={disabled}
-                            error={error}
-                            getPillClassName={getPillClassName}
-                            getPillImageUrl={getPillImageUrl}
-                            onBlur={this.handleBlur}
-                            onInput={this.handleInput}
-                            onPaste={this.handlePaste}
-                            onRemove={onRemove}
-                            onSuggestedPillAdd={onSuggestedPillAdd}
-                            placeholder={placeholder}
-                            selectedOptions={selectedOptions}
-                            showRoundedPills={showRoundedPills}
-                            showAvatars={showAvatars && showRoundedPills}
-                            suggestedPillsData={suggestedPillsData}
-                            suggestedPillsFilter={suggestedPillsFilter}
-                            suggestedPillsTitle={suggestedPillsTitle}
-                            validator={validator}
-                            value={this.state.inputValue}
-                        />
-                    }
-                >
-                    {children}
-                </SelectorDropdown>
-            </Label>
+        const selectorDropdownElement = (
+            <SelectorDropdown
+                className={classNames('bdl-PillSelectorDropdown', 'pill-selector-wrapper', className)}
+                dividerIndex={dividerIndex}
+                onEnter={this.handleEnter}
+                onSelect={this.handleSelect}
+                overlayTitle={overlayTitle}
+                scrollBoundarySelector={dropdownScrollBoundarySelector}
+                shouldSetActiveItemOnOpen={shouldSetActiveItemOnOpen}
+                selector={
+                    <PillSelector
+                        onChange={noop} // fix console error
+                        onCompositionEnd={this.handleCompositionEnd}
+                        onCompositionStart={this.handleCompositionStart}
+                        {...inputProps}
+                        allowInvalidPills={allowInvalidPills}
+                        disabled={disabled}
+                        error={error}
+                        getPillClassName={getPillClassName}
+                        getPillImageUrl={getPillImageUrl}
+                        onBlur={this.handleBlur}
+                        onInput={this.handleInput}
+                        onPaste={this.handlePaste}
+                        onRemove={onRemove}
+                        onSuggestedPillAdd={onSuggestedPillAdd}
+                        placeholder={placeholder}
+                        selectedOptions={selectedOptions}
+                        showRoundedPills={showRoundedPills}
+                        showAvatars={showAvatars && showRoundedPills}
+                        suggestedPillsData={suggestedPillsData}
+                        suggestedPillsFilter={suggestedPillsFilter}
+                        suggestedPillsTitle={suggestedPillsTitle}
+                        validator={validator}
+                        value={this.state.inputValue}
+                    />
+                }
+            >
+                {children}
+            </SelectorDropdown>
         );
+
+        return label ? <Label text={label}>{selectorDropdownElement}</Label> : selectorDropdownElement;
     }
 }
 

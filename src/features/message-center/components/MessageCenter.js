@@ -1,17 +1,17 @@
 // @flow
 import * as React from 'react';
+import noop from 'lodash/noop';
 import Megaphone20 from '../../../icon/fill/Megaphone20';
 import CountBadge from '../../../components/count-badge/CountBadge';
 import Badgeable from '../../../components/badgeable/Badgeable';
 import type { Token, StringMap } from '../../../common/types/core';
-
 import MessageCenterModal from './message-center-modal/MessageCenterModal';
 import type {
-    ContentPreviewProps,
     GetEligibleMessageCenterMessages,
     UnreadEligibleMessageCenterMessageCount,
     EligibleMessageCenterMessage,
 } from '../types';
+import type { ContentPreviewProps } from '../../message-preview-content/MessagePreviewContent';
 import Internationalize from '../../../elements/common/Internationalize';
 
 type Props = {|
@@ -23,6 +23,7 @@ type Props = {|
     getUnreadMessageCount: () => Promise<UnreadEligibleMessageCenterMessageCount>,
     language?: string,
     messages?: StringMap,
+    onMessageShown?: EligibleMessageCenterMessage => void,
     overscanRowCount?: number,
     postMarkAllMessagesAsSeen: (messageArray: Array<EligibleMessageCenterMessage> | Error) => Promise<null>,
 |};
@@ -38,6 +39,7 @@ function MessageCenter({
     overscanRowCount,
     language,
     messages,
+    onMessageShown = noop,
 }: Props) {
     const [isOpen, setIsOpen] = React.useState(false);
     const [unreadMessageCount, setUnreadMessageCount] = React.useState(null);
@@ -129,6 +131,7 @@ function MessageCenter({
                             messages={eligibleMessages}
                             onRequestClose={onRequestClose}
                             overscanRowCount={overscanRowCount}
+                            onMessageShown={onMessageShown}
                         />
                     </>
                 ) : (

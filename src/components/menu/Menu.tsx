@@ -288,7 +288,9 @@ class Menu extends React.Component<MenuProps> {
                 setRef(ref);
             }
         };
-        menuProps.role = 'menu';
+        if (menuProps.role === undefined) {
+            menuProps.role = 'menu';
+        }
         menuProps.tabIndex = -1;
         menuProps.onClick = this.handleClick;
         menuProps.onKeyDown = this.handleKeyDown;

@@ -5,7 +5,13 @@
  */
 
 import Base from '../Base';
-import { DEFAULT_RETRY_DELAY_MS, MS_IN_S, DEFAULT_HOSTNAME_UPLOAD, DEFAULT_HOSTNAME_UPLOAD_APP } from '../../constants';
+import {
+    DEFAULT_RETRY_DELAY_MS,
+    MS_IN_S,
+    DEFAULT_HOSTNAME_UPLOAD,
+    DEFAULT_HOSTNAME_UPLOAD_APP,
+    DEFAULT_HOSTNAME_UPLOAD_GOV,
+} from '../../constants';
 
 const MAX_RETRY = 5;
 // Note: We may have to change this number if we add a lot more fast upload hosts.
@@ -108,7 +114,11 @@ class BaseUpload extends Base {
         // The default upload host should always be reachable
         // DEFAULT_HOSTNAME_UPLOAD is the original default upload host, while DEFAULT_HOSTNAME_UPLOAD_APP is recent.
         // Both of these hosts will resolve to the same IP so they are interchangeable.
-        if (uploadHost === `${DEFAULT_HOSTNAME_UPLOAD}/` || uploadHost === `${DEFAULT_HOSTNAME_UPLOAD_APP}/`) {
+        if (
+            uploadHost === `${DEFAULT_HOSTNAME_UPLOAD}/` ||
+            uploadHost === `${DEFAULT_HOSTNAME_UPLOAD_APP}/` ||
+            uploadHost === `${DEFAULT_HOSTNAME_UPLOAD_GOV}/`
+        ) {
             this.preflightSuccessHandler({ data });
             return;
         }

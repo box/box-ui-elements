@@ -85,10 +85,14 @@ class DropdownMenu extends React.Component<Props, State> {
         });
     };
 
-    closeMenu = () => {
-        this.setState({
-            isOpen: false,
-        });
+    closeMenu = (event: SyntheticEvent<> | MouseEvent) => {
+        const { onMenuClose = noop } = this.props;
+        this.setState(
+            {
+                isOpen: false,
+            },
+            () => onMenuClose(event),
+        );
     };
 
     focusButton = () => {
@@ -106,7 +110,7 @@ class DropdownMenu extends React.Component<Props, State> {
         event.preventDefault();
 
         if (isOpen) {
-            this.closeMenu();
+            this.closeMenu(event);
         } else {
             this.openMenuAndSetFocusIndex(null);
         }
@@ -138,7 +142,7 @@ class DropdownMenu extends React.Component<Props, State> {
                 }
 
                 event.preventDefault();
-                this.closeMenu();
+                this.closeMenu(event);
                 break;
 
             default:
@@ -147,10 +151,8 @@ class DropdownMenu extends React.Component<Props, State> {
     };
 
     handleMenuClose = (isKeyboardEvent: boolean, event: SyntheticEvent<> | MouseEvent) => {
-        const { onMenuClose = noop } = this.props;
-        this.closeMenu();
+        this.closeMenu(event);
         this.focusButton();
-        onMenuClose(event);
     };
 
     handleDocumentClick = (event: MouseEvent) => {
@@ -165,9 +167,7 @@ class DropdownMenu extends React.Component<Props, State> {
             !menuEl.contains(event.target) &&
             !menuButtonEl.contains(event.target)
         ) {
-            const { onMenuClose = noop } = this.props;
-            this.closeMenu();
-            onMenuClose(event);
+            this.closeMenu(event);
         }
     };
 
@@ -196,9 +196,12 @@ class DropdownMenu extends React.Component<Props, State> {
             key: this.menuButtonID,
             onClick: this.handleButtonClick, // NOTE: Overrides button's handler
             onKeyDown: this.handleButtonKeyDown, // NOTE: Overrides button's handler
-            'aria-haspopup': 'true',
             'aria-expanded': isOpen ? 'true' : 'false',
         };
+
+        if (menuButton.props['aria-haspopup'] === undefined) {
+            menuButtonProps['aria-haspopup'] = 'true';
+        }
 
         // Add this only when its open, otherwise the menuID element isn't rendered
         if (isOpen) {

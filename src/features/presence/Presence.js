@@ -1,29 +1,19 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import classnames from 'classnames';
-
-import { Flyout, Overlay } from '../../components/flyout';
-import Tooltip from '../../components/tooltip';
-
-// GROWTH-382
 import Button from '../../components/button';
-
+import messages from './messages';
+import PresenceAvatarList from './PresenceAvatarList';
+import PresenceCollaboratorsList from './PresenceCollaboratorsList';
 import { ARROW_DOWN, ENTER, SPACE } from '../../common/keyboard-events';
-
-import PresenceDropdown from './PresenceDropdown';
-import PresenceAvatar from './PresenceAvatar';
-import { determineInteractionMessage } from './utils/presenceUtils';
 import { collaboratorsPropType, flyoutPositionPropType } from './propTypes';
-
-// GROWTH-382
+import { Flyout, Overlay } from '../../components/flyout';
 import {
     GROWTH_382_EXPERIMENT_BUCKET,
     GROWTH_382_AUTOFLY_CLASS,
     GROWTH_382_AUTOFLY_CLASS_FIRST_LOAD,
 } from './constants';
-import messages from './messages';
-
 import './Presence.scss';
 
 class Presence extends Component {
@@ -80,7 +70,6 @@ class Presence extends Component {
     };
 
     state = {
-        activeTooltip: null,
         isDropdownActive: false,
         showActivityPrompt: Boolean(
             this.props.collaborators.length &&
@@ -91,26 +80,6 @@ class Presence extends Component {
 
     saveRefToContainer = el => {
         this.presenceContainerEl = el;
-    };
-
-    _showTooltip = id => {
-        const { onAvatarMouseEnter } = this.props;
-        this.setState({
-            activeTooltip: id,
-        });
-        if (onAvatarMouseEnter) {
-            onAvatarMouseEnter(id);
-        }
-    };
-
-    _hideTooltip = () => {
-        const { onAvatarMouseLeave } = this.props;
-        this.setState({
-            activeTooltip: null,
-        });
-        if (onAvatarMouseLeave) {
-            onAvatarMouseLeave();
-        }
     };
 
     _handleOverlayOpen = event => {
@@ -158,43 +127,6 @@ class Presence extends Component {
         }
     };
 
-    _renderTimestampMessage = (interactedAt, interactionType, isActive) => {
-        const lastActionMessage = determineInteractionMessage(interactionType);
-        const { intl } = this.props;
-        const timeAgo = intl.formatRelativeTime
-            ? intl.formatRelativeTime(interactedAt - Date.now())
-            : intl.formatRelative(interactedAt);
-
-        if (lastActionMessage) {
-            return (
-                <div>
-                    <span className="presence-avatar-tooltip-event">
-                        {isActive ? (
-                            <FormattedMessage {...messages.activeNowText} />
-                        ) : (
-                            <FormattedMessage
-                                {...lastActionMessage}
-                                values={{
-                                    timeAgo,
-                                }}
-                            />
-                        )}
-                    </span>
-                </div>
-            );
-        }
-        return null;
-    };
-
-    _renderAvatarTooltip = (name, interactedAt, interactionType, isActive) => (
-        <div className="presence-avatar-tooltip-container">
-            <div>
-                <span className="presence-avatar-tooltip-name">{name}</span>
-            </div>
-            {this._renderTimestampMessage(interactedAt, interactionType, isActive)}
-        </div>
-    );
-
     // GROWTH-382 click through the first CTA, spawn the normal Presence dropdown
     _showRecentsFlyout = event => {
         const { onClickViewCollaborators } = this.props;
@@ -205,25 +137,24 @@ class Presence extends Component {
 
     render() {
         const {
-            className,
-            collaborators,
-            maxDisplayedAvatars,
-            maxAdditionalCollaboratorsNum,
-            getLinkCallback,
-            inviteCallback,
-            onFlyoutScroll,
             avatarAttributes,
-            containerAttributes,
-            flyoutPosition,
+            className,
+            closeOnWindowBlur,
+            collaborators,
             constrainToScrollParent,
             constrainToWindow,
-            closeOnWindowBlur,
+            containerAttributes,
+            flyoutPosition,
+            getLinkCallback,
+            inviteCallback,
+            maxAdditionalCollaboratorsNum,
+            maxDisplayedAvatars,
+            onAvatarMouseEnter,
+            onAvatarMouseLeave,
+            onFlyoutScroll,
         } = this.props;
 
-        const { activeTooltip, isDropdownActive } = this.state;
-        const presenceCountClassName = classnames('presence-avatar', 'avatar', 'presence-count', {
-            'dropdown-active': isDropdownActive,
-        });
+        const { isDropdownActive } = this.state;
 
         // GROWTH-382
         const { experimentBucket, onAccessStatsRequested } = this.props;
@@ -233,13 +164,13 @@ class Presence extends Component {
         if (!showActivityPrompt && experimentBucket === GROWTH_382_EXPERIMENT_BUCKET) {
             requestAccessStats = (
                 // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                <a className="presence-dropdown-request-stats" href="#" onClick={onAccessStatsRequested}>
+                <a className="presence-overlay-request-stats" href="#" onClick={onAccessStatsRequested}>
                     <FormattedMessage {...messages.previewPresenceFlyoutAccessStatsLink} />
                 </a>
             );
         }
 
-        const overlayClassNames = classnames('presence-dropdown-container', {
+        const overlayClassNames = classNames('presence-overlay', {
             [GROWTH_382_AUTOFLY_CLASS]: experimentBucket && !showActivityPrompt,
             [GROWTH_382_AUTOFLY_CLASS_FIRST_LOAD]: experimentBucket && showActivityPrompt,
         });
@@ -252,8 +183,7 @@ class Presence extends Component {
                 </Button>
             </>
         ) : (
-            <PresenceDropdown
-                className="presence-dropdown"
+            <PresenceCollaboratorsList
                 collaborators={collaborators}
                 experimentBucket={experimentBucket}
                 getLinkCallback={getLinkCallback}
@@ -272,46 +202,19 @@ class Presence extends Component {
                 onOpen={this._handleOverlayOpen}
                 position={flyoutPosition}
             >
-                {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-                <div
+                <PresenceAvatarList
                     ref={this.saveRefToContainer}
-                    className="presence-avatar-container"
+                    avatarAttributes={avatarAttributes}
+                    className={classNames('presence-avatar-container', { 'dropdown-active': isDropdownActive })}
+                    collaborators={collaborators}
+                    hideTooltips={isDropdownActive}
+                    maxAdditionalCollaborators={maxAdditionalCollaboratorsNum}
+                    maxDisplayedAvatars={maxDisplayedAvatars}
+                    onAvatarMouseEnter={onAvatarMouseEnter}
+                    onAvatarMouseLeave={onAvatarMouseLeave}
                     onKeyDown={this.handleKeyDown}
                     {...containerAttributes}
-                >
-                    {collaborators.slice(0, maxDisplayedAvatars).map(collaborator => {
-                        const { id, avatarUrl, name, isActive, interactedAt, interactionType } = collaborator;
-                        return (
-                            <Tooltip
-                                key={id}
-                                isShown={!isDropdownActive && activeTooltip === id}
-                                position="bottom-center"
-                                text={this._renderAvatarTooltip(name, interactedAt, interactionType, isActive)}
-                            >
-                                <PresenceAvatar
-                                    avatarUrl={avatarUrl}
-                                    id={id}
-                                    isActive={isActive}
-                                    name={name}
-                                    onBlur={this._hideTooltip}
-                                    onFocus={this._showTooltip.bind(this, id)}
-                                    onMouseEnter={this._showTooltip.bind(this, id)}
-                                    onMouseLeave={this._hideTooltip}
-                                    {...avatarAttributes}
-                                />
-                            </Tooltip>
-                        );
-                    })}
-
-                    {collaborators.length > maxDisplayedAvatars && (
-                        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-                        <div className={presenceCountClassName} tabIndex="0" {...avatarAttributes}>
-                            {collaborators.length - maxDisplayedAvatars > maxAdditionalCollaboratorsNum
-                                ? `${maxAdditionalCollaboratorsNum}+`
-                                : `+${collaborators.length - maxDisplayedAvatars}`}
-                        </div>
-                    )}
-                </div>
+                />
                 <Overlay className={overlayClassNames} shouldDefaultFocus={false}>
                     {overlayContent}
                     {requestAccessStats}

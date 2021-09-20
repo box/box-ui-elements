@@ -1,16 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly render comment 1`] = `
-<div
+<ForwardRef(ActivityCard)
   className="bcs-Comment"
 >
   <Media
-    as="div"
     className="bcs-Comment-media"
   >
-    <MediaFigure
-      as="figure"
-    >
+    <MediaFigure>
       <Component
         user={
           Object {
@@ -38,7 +35,6 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
       >
         <MediaMenu
           data-testid="comment-actions-menu"
-          dropdownProps={Object {}}
           isDisabled={false}
           menuProps={
             Object {
@@ -81,20 +77,17 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
       />
     </MediaBody>
   </Media>
-</div>
+</ForwardRef(ActivityCard)>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly render comment when translation is enabled 1`] = `
-<div
+<ForwardRef(ActivityCard)
   className="bcs-Comment"
 >
   <Media
-    as="div"
     className="bcs-Comment-media"
   >
-    <MediaFigure
-      as="figure"
-    >
+    <MediaFigure>
       <Component
         user={
           Object {
@@ -128,20 +121,17 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
       />
     </MediaBody>
   </Media>
-</div>
+</ForwardRef(ActivityCard)>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an error when one is defined 1`] = `
-<div
+<ForwardRef(ActivityCard)
   className="bcs-Comment"
 >
   <Media
-    as="div"
     className="bcs-Comment-media bcs-is-pending"
   >
-    <MediaFigure
-      as="figure"
-    >
+    <MediaFigure>
       <Component
         user={
           Object {
@@ -178,20 +168,17 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
     message="errorrrrr"
     title="error"
   />
-</div>
+</ForwardRef(ActivityCard)>
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render commenter as a link 1`] = `
-<div
+<ForwardRef(ActivityCard)
   className="bcs-Comment"
 >
   <Media
-    as="div"
     className="bcs-Comment-media"
   >
-    <MediaFigure
-      as="figure"
-    >
+    <MediaFigure>
       <Component
         user={
           Object {
@@ -224,5 +211,5 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
       />
     </MediaBody>
   </Media>
-</div>
+</ForwardRef(ActivityCard)>
 `;

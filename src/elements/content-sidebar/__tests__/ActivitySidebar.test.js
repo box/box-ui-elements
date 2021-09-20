@@ -286,17 +286,32 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     describe('updateTaskAssignment()', () => {
         let instance;
         let wrapper;
+        let onTaskAssignmentUpdate;
 
         beforeEach(() => {
-            wrapper = getWrapper();
+            onTaskAssignmentUpdate = jest.fn();
+            wrapper = getWrapper({ onTaskAssignmentUpdate, file });
             instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
+            instance.feedSuccessCallback = jest.fn();
+            instance.feedErrorCallback = jest.fn();
+            instance.setState({ currentUser });
         });
 
         test('should call the update task assignment API and fetch the items', () => {
             instance.updateTaskAssignment('1', '2', 'foo', 'bar');
-            expect(feedAPI.updateTaskCollaborator).toBeCalled();
+            expect(feedAPI.updateTaskCollaborator).toHaveBeenCalledWith(
+                file,
+                '1',
+                '2',
+                'foo',
+                expect.any(Function),
+                instance.feedErrorCallback,
+            );
             expect(instance.fetchFeedItems).toBeCalled();
+            const successCallback = feedAPI.updateTaskCollaborator.mock.calls[0][4];
+            successCallback();
+            expect(onTaskAssignmentUpdate).toHaveBeenCalledWith('1', '2', 'foo', '123');
         });
     });
 
@@ -377,12 +392,14 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('fetchFeedItemsSuccessCallback()', () => {
+        const feedItems = ['foo'];
         let instance;
+        let logger;
         let wrapper;
-        const feedItems = 'foo';
 
         beforeEach(() => {
-            wrapper = getWrapper();
+            logger = { onDataReadyMetric: jest.fn(), onReadyMetric: jest.fn() };
+            wrapper = getWrapper({ logger });
             instance = wrapper.instance();
             instance.setState = jest.fn();
         });
@@ -393,6 +410,22 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 feedItems,
                 activityFeedError: undefined,
             });
+        });
+
+        test('should not call onDataReadyMetric if feedItems is <= 1', () => {
+            instance.fetchFeedItemsSuccessCallback(feedItems);
+            expect(logger.onDataReadyMetric).not.toHaveBeenCalled();
+        });
+
+        test('should call onDataReadyMetric if feedItems is > 1', () => {
+            instance.fetchFeedItemsSuccessCallback(['foo', 'bar']);
+            expect(logger.onDataReadyMetric).toHaveBeenCalledWith(
+                {
+                    endMarkName: 'activity_sidebar_data_ready',
+                    startMarkName: 'activity_sidebar_data_loading',
+                },
+                file.id,
+            );
         });
     });
 
@@ -586,14 +619,24 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         beforeEach(() => {
             wrapper = getWrapper();
             instance = wrapper.instance();
+        });
+
+        test('should dinamycally set as false contacts loading state', () => {
             instance.setState = jest.fn();
+            instance.getMentionContactsSuccessCallback(collaborators);
+
+            expect(instance.setState).toBeCalledWith(
+                {
+                    contactsLoaded: false,
+                },
+                expect.any(Function),
+            );
         });
 
         test('should set the feedItems in the state', () => {
             instance.getMentionContactsSuccessCallback(collaborators);
-            expect(instance.setState).toBeCalledWith({
-                mentionSelectorContacts: collaborators.entries,
-            });
+            expect(wrapper.state('contactsLoaded')).toBeTruthy();
+            expect(wrapper.state('mentionSelectorContacts')).toEqual(collaborators.entries);
         });
     });
 

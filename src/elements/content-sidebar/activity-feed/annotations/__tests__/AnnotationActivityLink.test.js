@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import AnnotationActivityLink from '../AnnotationActivityLink';
+import { AnnotationActivityLinkBase as AnnotationActivityLink } from '../AnnotationActivityLink';
 import messages from '../messages';
 
 describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLink', () => {
@@ -9,6 +9,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityLi
         'data-resin-itemid': '123',
         'data-resin-target': 'annotationLink',
         id: '123',
+        intl: { formatMessage: jest.fn() },
         message: { ...messages.annotationActivityPageItem, values: { number: 1 } },
     };
 

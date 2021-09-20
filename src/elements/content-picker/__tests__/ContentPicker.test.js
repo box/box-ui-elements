@@ -57,5 +57,25 @@ describe('elements/content-picker/ContentPicker', () => {
             expect(uploadDialogElement.length).toBe(1);
             expect(uploadDialogElement.prop('contentUploaderProps')).toEqual(contentUploaderProps);
         });
+
+        test('should clear selected items on navigation', () => {
+            const wrapper = getWrapper({ clearSelectedItemsOnNavigation: true });
+            const selectedItems = [
+                {
+                    folder_123: {
+                        id: '123',
+                        type: 'folder',
+                        name: 'Folder 123',
+                        selected: true,
+                    },
+                },
+            ];
+            const collection = { id: '222', name: 'Collection' };
+
+            wrapper.instance().setState({ selected: selectedItems });
+            wrapper.instance().fetchFolderSuccessCallback(collection, true);
+
+            expect(wrapper.instance().state.selected).toEqual({});
+        });
     });
 });

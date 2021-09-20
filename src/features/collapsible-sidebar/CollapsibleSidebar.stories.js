@@ -282,6 +282,35 @@ export const basic = () => {
                                 tooltipMessage="Overflow Hover Long Link"
                             />
                         </li>
+                        <li key="djb-leftnav-menu-item-all-file-disabled-tooltip">
+                            <CollapsibleSidebarItem
+                                collapsedElement={
+                                    <CollapsibleSidebarMenuItem
+                                        as={Link}
+                                        href="/"
+                                        shouldHideTooltip
+                                        icon={<Folder16 height={20} width={20} />}
+                                    />
+                                }
+                                expanded={boolean('isExpanded', true)}
+                                expandedElement={
+                                    <CollapsibleSidebarMenuItem
+                                        as={Link}
+                                        href="/"
+                                        shouldHideTooltip
+                                        icon={<Folder16 height={20} width={20} />}
+                                        overflowAction={
+                                            <Link href="/">
+                                                <IconPlusRound color="white" />
+                                            </Link>
+                                        }
+                                        showOverflowAction="hover"
+                                        text="Should Hide Tooltip"
+                                    />
+                                }
+                                tooltipMessage=""
+                            />
+                        </li>
                         {renderFiles()}
                     </ul>
                 </CollapsibleSidebarNav>
@@ -311,11 +340,11 @@ export const basic = () => {
 };
 
 basic.story = {
-    name: 'Top-left, basic',
+    name: 'Basic Usage',
 };
 
 export default {
-    title: 'Components|CollapsibleSidebar',
+    title: 'Features|CollapsibleSidebar',
     component: CollapsibleSidebar,
     parameters: {
         notes,

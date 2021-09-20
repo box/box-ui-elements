@@ -11,6 +11,7 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
     const requiredProps = {
         editorState: EditorState.createEmpty(),
         label: 'Label text',
+        description: 'talesss',
         onBlur: () => {},
         onChange: sandbox.stub(),
         onFocus: () => {},
@@ -42,6 +43,12 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
             expect(wrapper.find('OptionalFormattedMessage').exists()).toBe(true);
         });
 
+        test('should set description when specified', () => {
+            const wrapper = shallow(<DraftJSEditor {...requiredProps} />);
+
+            expect(wrapper.find('.screenreader-description').text()).toEqual(requiredProps.description);
+        });
+
         test('should call handleChange when <Editor /> onchange called', () => {
             const wrapper = shallow(<DraftJSEditor {...requiredProps} />);
 
@@ -59,7 +66,7 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
                 'aria-autocomplete': 'list',
                 'aria-expanded': true,
                 'aria-owns': 'id',
-                role: 'combobox',
+                role: 'textbox',
             };
             const wrapper = shallow(<DraftJSEditor {...requiredProps} inputProps={inputProps} />);
 
@@ -68,7 +75,7 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
             expect(editor.prop('ariaAutoComplete')).toEqual(inputProps['aria-autocomplete']);
             expect(editor.prop('ariaExpanded')).toEqual(inputProps['aria-expanded']);
             expect(editor.prop('ariaOwneeID')).toEqual(inputProps['aria-owns']);
-            expect(editor.prop('role')).toEqual(inputProps.role);
+            expect(editor.prop('role')).toEqual('textbox');
         });
     });
 

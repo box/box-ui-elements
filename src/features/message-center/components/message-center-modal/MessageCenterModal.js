@@ -13,9 +13,10 @@ import CategorySelector from '../../../../components/category-selector/CategoryS
 import CollapsibleScrollbar from '../collapsibile-scrollbar/CollapsibleScrollbar';
 import Message from '../message/Message';
 import intlMessages from '../../messages';
-import type { ContentPreviewProps, EligibleMessageCenterMessage } from '../../types';
+import type { EligibleMessageCenterMessage } from '../../types';
+import type { ContentPreviewProps } from '../../../message-preview-content/MessagePreviewContent';
 import './MessageCenterModal.scss';
-import PreviewGhost from '../templates/common/PreviewGhost';
+import MessagePreviewGhost from '../../../message-preview-ghost/MessagePreviewGhost';
 import ContentGhost from '../templates/common/ContentGhost';
 import BottomContentWrapper from '../templates/common/BottomContentWrapper';
 import ErrorState from '../error-state/ErrorState';
@@ -26,6 +27,7 @@ type Props = {|
     contentPreviewProps?: ContentPreviewProps,
     getToken: (fileId: string) => Promise<Token>,
     messages: Array<EligibleMessageCenterMessage> | null | Error,
+    onMessageShown: EligibleMessageCenterMessage => void,
     onRequestClose: () => void,
     overscanRowCount?: number,
 |};
@@ -48,8 +50,22 @@ function MessageCenterModal({
     getToken,
     intl,
     overscanRowCount = 1,
+    onMessageShown,
 }: Props & InjectIntlProvidedProps) {
-    const categories = React.useMemo(() => {
+    const categories: Array<{ displayText: string, value: string }> | null = React.useMemo(() => {
+        if (!Array.isArray(messages)) {
+            return null;
+        }
+
+        const messageCategoriesSet = new Set<string>();
+        messages.forEach(({ templateParams: { category } }) => {
+            messageCategoriesSet.add(category);
+        });
+
+        if (messageCategoriesSet.size <= 1) {
+            return null;
+        }
+
         return [
             {
                 value: ALL,
@@ -68,10 +84,11 @@ function MessageCenterModal({
                 displayText: intl.formatMessage(intlMessages.boxEducation),
             },
         ];
-    }, [intl]);
+    }, [intl, messages]);
     const listRef = React.useRef(null);
     const isMouseInTitleRef = React.useRef(false);
-    const [category, setCategory] = React.useState(categories[0].value);
+    const messageLoadCacheRef = React.useRef(new Map<number, boolean>());
+    const [category, setCategory] = React.useState(ALL);
     const [isExpanded, setIsExpanded] = React.useState(true);
     const [dimensions, setDimensions] = React.useState({ width: 0, height: 0 });
     const scrollRef = React.useRef<{ scrollbarRef: React.ElementRef<typeof Scrollbar> } | null>(null);
@@ -94,23 +111,25 @@ function MessageCenterModal({
             <div className="bdl-MessageCenterModal-whatsNew">
                 <FormattedMessage {...intlMessages.title} />
             </div>
-            <AnimateHeight duration={300} height={isExpanded ? 'auto' : 0}>
-                <section className="bdl-MessageCenterModal-categorySelector">
-                    <CategorySelector
-                        currentCategory={category}
-                        categories={categories}
-                        onSelect={value => {
-                            cache.clearAll();
-                            setCategory(value);
-                        }}
-                    />
-                </section>
-            </AnimateHeight>
+            {categories && (
+                <AnimateHeight duration={300} height={isExpanded ? 'auto' : 0}>
+                    <section className="bdl-MessageCenterModal-categorySelector">
+                        <CategorySelector
+                            currentCategory={category}
+                            categories={categories}
+                            onSelect={value => {
+                                cache.clearAll();
+                                setCategory(value);
+                            }}
+                        />
+                    </section>
+                </AnimateHeight>
+            )}
         </section>
     );
 
     const filteredMessages = React.useMemo(() => {
-        if (!messages || messages instanceof Error) {
+        if (!Array.isArray(messages)) {
             return [];
         }
 
@@ -151,10 +170,17 @@ function MessageCenterModal({
         }
     }, [category]);
 
-    function rowRenderer({ index, parent, style }: Object) {
+    function rowRenderer({ index, parent, style, isVisible }: Object) {
         const message = filteredMessages[index];
+        const messageId = message.id;
+        const isFirstTimeBeingShown = !messageLoadCacheRef.current.has(messageId);
+        if (isVisible && isFirstTimeBeingShown) {
+            messageLoadCacheRef.current.set(messageId, true);
+            onMessageShown(message);
+        }
+
         return (
-            <CellMeasurer key={message.id} cache={cache} columnIndex={0} parent={parent} rowIndex={index}>
+            <CellMeasurer key={messageId} cache={cache} columnIndex={0} parent={parent} rowIndex={index}>
                 {({ registerChild }) => (
                     <div
                         ref={registerChild}
@@ -196,7 +222,7 @@ function MessageCenterModal({
             return (
                 <div className="bdl-MessageCenterModal-message">
                     <div className="bdl-MessageCenterModal-ghost">
-                        <PreviewGhost />
+                        <MessagePreviewGhost />
                         <BottomContentWrapper>
                             <ContentGhost />
                         </BottomContentWrapper>
@@ -227,7 +253,6 @@ function MessageCenterModal({
             className="bdl-MessageCenterModal"
             data-resin-component="messageCenterModal"
             data-testid="messagecentermodal"
-            focusElementSelector=".bdl-CategorySelector .is-selected"
             isOpen
             onRequestClose={onRequestClose}
             title={title}

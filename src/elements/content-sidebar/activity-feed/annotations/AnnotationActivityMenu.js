@@ -1,56 +1,56 @@
 // @flow
 import * as React from 'react';
-import TetherComponent from 'react-tether';
+import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import DeleteConfirmation from '../common/delete-confirmation';
-import Media from '../../../../components/media';
+import DropdownMenu from '../../../../components/dropdown-menu';
+import IconEllipsis from '../../../../icons/general/IconEllipsis';
 import messages from './messages';
 import Pencil16 from '../../../../icon/line/Pencil16';
+import PlainButton from '../../../../components/plain-button';
 import Trash16 from '../../../../icon/fill/Trash16';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import { MenuItem } from '../../../../components/menu';
+import { bdlGray50 } from '../../../../styles/variables';
+import { Menu, MenuItem } from '../../../../components/menu';
 
 type AnnotationActivityMenuProps = {
     canDelete?: boolean,
     canEdit?: boolean,
+    className?: string,
     id: string,
-    onDeleteConfirm: () => void,
+    isDisabled?: boolean,
+    onDelete: () => void,
     onEdit: () => void,
+    onMenuClose: () => void,
+    onMenuOpen: () => void,
 };
 
-const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdit }: AnnotationActivityMenuProps) => {
-    const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
-
-    const handleDeleteCancel = (): void => {
-        setIsConfirmingDelete(false);
-    };
-
-    const handleDeleteClick = () => {
-        setIsConfirmingDelete(true);
-    };
-
-    const handleDeleteConfirm = () => {
-        setIsConfirmingDelete(false);
-        onDeleteConfirm();
-    };
-
-    const tetherProps = {
-        attachment: 'top right',
-        className: 'bcs-AnnotationActivity-deleteConfirmationModal',
-        constraints: [{ to: 'scrollParent', attachment: 'together' }],
-        targetAttachment: 'bottom right',
+const AnnotationActivityMenu = ({
+    canDelete,
+    canEdit,
+    className,
+    id,
+    isDisabled,
+    onDelete,
+    onEdit,
+    onMenuClose,
+    onMenuOpen,
+}: AnnotationActivityMenuProps) => {
+    const menuProps = {
+        'data-resin-component': 'preview',
+        'data-resin-feature': 'annotations',
     };
 
     return (
-        <TetherComponent {...tetherProps}>
-            <Media.Menu
-                isDisabled={isConfirmingDelete}
+        <DropdownMenu constrainToScrollParent isRightAligned onMenuClose={onMenuClose} onMenuOpen={onMenuOpen}>
+            <PlainButton
+                className={classNames('bcs-AnnotationActivityMenu', className)}
+                isDisabled={isDisabled}
                 data-testid="annotation-activity-actions-menu"
-                menuProps={{
-                    'data-resin-component': 'preview',
-                    'data-resin-feature': 'annotations',
-                }}
+                type="button"
             >
+                <IconEllipsis color={bdlGray50} height={16} width={16} />
+            </PlainButton>
+            <Menu {...menuProps}>
                 {canEdit && (
                     <MenuItem
                         data-resin-itemid={id}
@@ -67,23 +67,14 @@ const AnnotationActivityMenu = ({ canDelete, canEdit, id, onDeleteConfirm, onEdi
                         data-resin-itemid={id}
                         data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_DELETE}
                         data-testid="delete-annotation-activity"
-                        onClick={handleDeleteClick}
+                        onClick={onDelete}
                     >
                         <Trash16 />
                         <FormattedMessage {...messages.annotationActivityDeleteMenuItem} />
                     </MenuItem>
                 )}
-            </Media.Menu>
-            {isConfirmingDelete && (
-                <DeleteConfirmation
-                    data-resin-component={ACTIVITY_TARGETS.ANNOTATION_OPTIONS}
-                    isOpen={isConfirmingDelete}
-                    message={messages.annotationActivityDeletePrompt}
-                    onDeleteCancel={handleDeleteCancel}
-                    onDeleteConfirm={handleDeleteConfirm}
-                />
-            )}
-        </TetherComponent>
+            </Menu>
+        </DropdownMenu>
     );
 };
 

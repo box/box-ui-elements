@@ -2,6 +2,7 @@
 import * as React from 'react';
 import * as constants from './constants';
 import type { BoxItemPermission, ItemType } from '../../common/types/core';
+import type { TargetingApi } from '../targeting/types';
 
 // DRY: Invert the constants so that we can construct the appropriate enum types
 const accessLevelValues = {
@@ -12,6 +13,7 @@ const accessLevelValues = {
 export type accessLevelType = $Keys<typeof accessLevelValues>;
 
 const permissionLevelValues = {
+    [constants.CAN_EDIT]: 'CAN_EDIT',
     [constants.CAN_VIEW_DOWNLOAD]: 'CAN_VIEW_DOWNLOAD',
     [constants.CAN_VIEW_ONLY]: 'CAN_VIEW_ONLY',
 };
@@ -160,6 +162,7 @@ export type sharedLinkType = {
     isDownloadAllowed: boolean,
     isDownloadSettingAvailable: boolean,
     isEditAllowed: boolean,
+    isEditSettingAvailable: boolean,
     isNewSharedLink: boolean,
     isPreviewAllowed: boolean,
     permissionLevel: permissionLevelType,
@@ -355,22 +358,34 @@ export type USMProps = BaseUnifiedShareProps & {
     closeConfirmModal: () => void,
     /** Whether initial data for the USM has already been received */
     initialDataReceived: boolean,
+    /** Whether the allow edit shared link for file FF is enabled */
+    isAllowEditSharedLinkForFileEnabled?: boolean,
     /** Whether the USM is open */
     isOpen?: boolean,
     /** Handler function that removes the shared link, used in the Remove Link Confirm Modal */
     onRemoveLink: () => void,
     /** Handler function for when the USM is closed */
     onRequestClose?: Function,
+    /** Whether the FTUX tag should be rendered for the Can Edit option */
+    sharedLinkEditTagTargetingApi?: TargetingApi,
+    /** Whether the FTUX tooltip should be rendered for Editable Shared Links  */
+    sharedLinkEditTooltipTargetingApi?: TargetingApi,
 };
 
 // Prop types for the Unified Share Form, passed from the Unified Share Modal
 export type USFProps = BaseUnifiedShareProps & {
     /** Function for closing the FTUX tooltip */
     handleFtuxCloseClick: () => void,
+    /** Whether the allow edit shared link for file FF is enabled */
+    isAllowEditSharedLinkForFileEnabled: boolean,
     /** Whether the data for the USM/USF is being fetched */
     isFetching: boolean,
     /** Function for opening the Remove Link Confirm Modal */
     openConfirmModal: () => void,
+    /** Whether the FTUX tag should be rendered for the Can Edit option */
+    sharedLinkEditTagTargetingApi?: TargetingApi,
+    /** Whether the FTUX tooltip should be rendered for Editable Shared Links  */
+    sharedLinkEditTooltipTargetingApi?: TargetingApi,
     /** Whether the shared link has loaded */
     sharedLinkLoaded: boolean,
     /** Whether the FTUX tooltip should be rendered */

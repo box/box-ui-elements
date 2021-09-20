@@ -38,7 +38,8 @@ describe('ContentPreview with Annotations', () => {
             return cy
                 .contains(comment)
                 .siblings()
-                .filter('[data-testid="bcs-AnnotationActivity-link"]')
+                .filter('.bcs-AnnotationActivity-timestamp')
+                .find('[data-testid="bcs-AnnotationActivity-link"]')
                 .click();
         },
     };

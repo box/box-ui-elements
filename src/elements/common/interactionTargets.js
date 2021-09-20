@@ -2,6 +2,7 @@
 export const SIDEBAR_NAV_TARGETS = {
     ACTIVITY: 'sidebaractivity',
     DETAILS: 'sidebardetails',
+    SIGN: 'sidebarsign',
     SKILLS: 'sidebarskills',
     METADATA: 'sidebarmetadata',
     TOGGLE: 'sidebartoggle',

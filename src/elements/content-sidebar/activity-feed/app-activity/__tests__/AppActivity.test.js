@@ -55,7 +55,7 @@ describe('elements/content-sidebar/ActivityFeed/app-activity/AppActivity', () =>
             },
         });
 
-        expect(wrapper.hasClass('bcs-is-pending')).toBe(true);
+        expect(wrapper.find(Media).hasClass('bcs-is-pending')).toBe(true);
     });
 
     test('should render as pending if an error occurred', () => {
@@ -70,7 +70,7 @@ describe('elements/content-sidebar/ActivityFeed/app-activity/AppActivity', () =>
             },
         });
 
-        expect(wrapper.hasClass('bcs-is-pending')).toBe(true);
+        expect(wrapper.find(Media).hasClass('bcs-is-pending')).toBe(true);
     });
 
     test('should show the overflow menu if the current user is the one who made the activity', () => {

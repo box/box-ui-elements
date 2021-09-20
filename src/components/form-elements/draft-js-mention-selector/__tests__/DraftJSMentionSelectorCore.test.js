@@ -81,6 +81,32 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
         });
     });
 
+    describe('should announce amount of users tagged to screenReader users', () => {
+        const args = {
+            editorState: EditorState.createEmpty(),
+            label: 'mention selector',
+            contactsLoaded: true,
+        };
+        const wrapper = mount(<DraftJSMentionSelector {...args} />);
+
+        test('should show an alert', () => {
+            expect(wrapper.find('[data-testid="accessibility-alert"]').length).toBe(1);
+        });
+    });
+
+    describe('should not announce users tagged to screenReader users', () => {
+        const args = {
+            editorState: EditorState.createEmpty(),
+            label: 'mention selector',
+            contactsLoaded: false,
+        };
+        const wrapper = mount(<DraftJSMentionSelector {...args} />);
+
+        test('should not render any alert', () => {
+            expect(wrapper.find('[data-testid="accessibility-alert"]').length).toBe(0);
+        });
+    });
+
     describe('shouldDisplayMentionLookup()', () => {
         const exampleMention = { mentionString: '@foo' };
         const exampleContacts = [{ id: 1, name: 'foo' }];

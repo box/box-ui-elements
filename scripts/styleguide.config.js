@@ -39,7 +39,6 @@ const allSections = [
             '../src/components/count-badge/CountBadge.js',
             '../src/components/datalist-item/DatalistItem.js',
             '../src/components/date-picker/DatePicker.js',
-            '../src/components/draggable-list/DraggableList.js',
             '../src/components/dropdown-menu/DropdownMenu.js',
             '../src/components/error-mask/ErrorMask.js',
             '../src/components/flyout/Flyout.js',

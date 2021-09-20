@@ -2,10 +2,10 @@ import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import * as TokenService from '../../../utils/TokenService';
-import { PREVIEW_FIELDS_TO_FETCH } from '../../../utils/fields';
-import { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
-import PreviewLoading from '../PreviewLoading';
+import PreviewMask from '../PreviewMask';
 import SidebarUtils from '../../content-sidebar/SidebarUtils';
+import { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
+import { PREVIEW_FIELDS_TO_FETCH } from '../../../utils/fields';
 
 jest.mock('../../common/Internationalize', () => 'mock-internationalize');
 
@@ -24,6 +24,7 @@ describe('elements/content-preview/ContentPreview', () => {
             this.show = jest.fn();
             this.updateToken = jest.fn();
             this.addListener = jest.fn();
+            this.updateExperiences = jest.fn();
         };
         global.performance = {
             now: jest.fn().mockReturnValue(PERFORMANCE_TIME),
@@ -292,11 +293,13 @@ describe('elements/content-preview/ContentPreview', () => {
                 file.id,
                 expect.any(Function),
                 expect.objectContaining({
-                    showDownload: false,
-                    skipServerUpdate: true,
-                    header: 'none',
-                    useHotkeys: false,
                     container: expect.stringContaining('.bcpr-content'),
+                    header: 'none',
+                    showDownload: false,
+                    showLoading: false,
+                    showProgress: false,
+                    skipServerUpdate: true,
+                    useHotkeys: false,
                 }),
             );
         });
@@ -316,16 +319,18 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect.any(Function),
                 expect.objectContaining({
                     container: expect.stringContaining('.bcpr-content'),
-                    header: 'none',
-                    showDownload: false,
-                    skipServerUpdate: true,
-                    useHotkeys: false,
                     fileOptions: {
                         [file.id]: {
                             fileVersionId: '12345',
                             currentFileVersionId: '67890',
                         },
                     },
+                    header: 'none',
+                    showDownload: false,
+                    showLoading: false,
+                    showProgress: false,
+                    skipServerUpdate: true,
+                    useHotkeys: false,
                 }),
             );
         });
@@ -587,6 +592,12 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.file).toBeUndefined();
             expect(onError).toHaveBeenCalled();
         });
+
+        test('should set isLoading to false', () => {
+            instance.setState({ isLoading: true });
+            instance.fetchFileErrorCallback({ code: 'specialCode', message: 'specialMessage' }, 'code');
+            expect(instance.state.isLoading).toBe(false);
+        });
     });
 
     describe('getTotalFileFetchTime()', () => {
@@ -743,6 +754,11 @@ describe('elements/content-preview/ContentPreview', () => {
             instance.onPreviewLoad(data);
             expect(instance.prefetch).toBeCalled();
         });
+
+        test('should set isLoading to false', () => {
+            instance.onPreviewLoad(data);
+            expect(instance.state.isLoading).toBe(false);
+        });
     });
 
     describe('onPreviewMetric()', () => {
@@ -790,9 +806,28 @@ describe('elements/content-preview/ContentPreview', () => {
     });
 
     describe('render()', () => {
-        test('should render PreviewLoading if there is no file', () => {
+        test('should render PreviewMask', () => {
             const wrapper = getWrapper(props);
-            expect(wrapper.find(PreviewLoading).exists()).toBe(true);
+            expect(wrapper.find(PreviewMask).exists()).toBe(true);
+        });
+
+        test('should render PreviewMask with the current file extension if available', () => {
+            const fileId = '123';
+            const wrapper = getWrapper({ fileId });
+
+            wrapper.setState({ file: { extension: 'pdf', id: fileId } });
+
+            expect(wrapper.find(PreviewMask).prop('extension')).toBe('pdf');
+        });
+
+        test('should render PreviewMask with no extension if the file id recently changed', () => {
+            const fileId = '123';
+            const wrapper = getWrapper({ fileId });
+
+            wrapper.setState({ file: { extension: 'pdf', id: fileId } });
+            wrapper.setProps({ fileId: '456' }); // New file id means the internal file state is stale
+
+            expect(wrapper.find(PreviewMask).prop('extension')).toBe('');
         });
 
         test('should render nothing if there is no fileId', () => {
@@ -890,9 +925,7 @@ describe('elements/content-preview/ContentPreview', () => {
             instance.loadPreview = jest.fn();
         });
 
-        // Test fails in enzyme@3.9.0 due to regression
-        // https://github.com/airbnb/enzyme/issues/2020
-        test('should destroy preview and load the file if file id changed', () => {
+        test('should destroy preview and load the file if fileId changed', () => {
             wrapper.setProps({
                 fileId: 'bar',
             });
@@ -900,7 +933,14 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.fetchFile).toBeCalledTimes(1);
         });
 
-        test('should load preview if fileId hasnt changed and shouldLoadPreview returns ture', () => {
+        test('should update the loading state if fileId changes', () => {
+            wrapper.setState({ isLoading: false }); // Simulate existing preview
+            wrapper.setProps({ fileId: 'bar' });
+
+            expect(wrapper.state('isLoading')).toBe(true);
+        });
+
+        test("should load preview if fileId hasn't changed and shouldLoadPreview returns true", () => {
             instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
             wrapper.setProps({
                 foo: 'bar',
@@ -908,11 +948,28 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.loadPreview).toBeCalledTimes(1);
         });
 
+        test("should update the loading state if fileId hasn't changed and shouldLoadPreview returns true", () => {
+            instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
+            wrapper.setState({ isLoading: false }); // Simulate existing preview
+            wrapper.setProps({ fileId: 'bar' });
+
+            expect(wrapper.state('isLoading')).toBe(true);
+        });
+
         test('should update the preview with the new token if it changes', () => {
             wrapper.setProps({
                 token: 'bar',
             });
             expect(instance.updatePreviewToken).toBeCalledTimes(1);
+        });
+
+        test('should update experiences in preview when previewExperiences changes', async () => {
+            instance.preview = new global.Box.Preview();
+            wrapper.setProps({
+                previewExperiences: {},
+            });
+
+            expect(instance.preview.updateExperiences).toBeCalledTimes(1);
         });
     });
 

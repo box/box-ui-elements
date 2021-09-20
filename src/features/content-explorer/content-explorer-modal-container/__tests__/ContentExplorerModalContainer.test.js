@@ -5,7 +5,7 @@ import ContentExplorerModalContainer from '../ContentExplorerModalContainer';
 
 describe('features/content-explorer/content-explorer-modal-container/ContentExplorerModalContainer', () => {
     const sandbox = sinon.sandbox.create();
-
+    const initialSelectedItems = { '123': { id: '123', name: 'folder123' } };
     const renderComponent = props =>
         shallow(
             <ContentExplorerModalContainer
@@ -13,6 +13,7 @@ describe('features/content-explorer/content-explorer-modal-container/ContentExpl
                 isOpen
                 contentExplorerMode="selectFile"
                 initialFoldersPath={[{ id: '0', name: 'folder' }]}
+                initialSelectedItems={initialSelectedItems}
                 onEnterFolder={() => {}}
                 onSearchSubmit={() => {}}
                 onExitSearch={() => {}}
@@ -35,6 +36,7 @@ describe('features/content-explorer/content-explorer-modal-container/ContentExpl
             expect(wrapper.hasClass('content-explorer-modal-container')).toBe(true);
             expect(wrapper.find('ContentExplorerModal').length).toBe(1);
             expect(wrapper.find('ContentExplorerModal').hasClass('hidden')).toBe(false);
+            expect(wrapper.find('ContentExplorerModal').prop('initialSelectedItems')).toEqual(initialSelectedItems);
             expect(wrapper.find('NewFolderModal').length).toBe(0);
         });
 

@@ -9,9 +9,10 @@ type Props = {|
     actionItem?: ButtonParam,
     className?: string,
     date: Date,
+    name: string,
 |};
 
-const renderActionItem = (actionItem: ?ButtonParam) => {
+const renderActionItem = (actionItem: ?ButtonParam, name: string) => {
     if (!actionItem) {
         return null;
     }
@@ -26,7 +27,7 @@ const renderActionItem = (actionItem: ?ButtonParam) => {
         return (
             <a
                 className="MessageFooter-action"
-                data-resin-target="messageCenterAction"
+                data-resin-target={`messageCenterAction|${name}`}
                 href={openURLAction.url}
                 target={openURLAction.target}
             >
@@ -37,13 +38,13 @@ const renderActionItem = (actionItem: ?ButtonParam) => {
     return null;
 };
 
-function MessageFooter({ actionItem, className = '', date }: Props) {
+function MessageFooter({ actionItem, className = '', date, name }: Props) {
     return (
         <div className={classNames('MessageFooter', className)}>
             <span className="MessageFooter-date">
                 <MessageFormattedDate date={date} />
             </span>
-            {renderActionItem(actionItem)}
+            {renderActionItem(actionItem, name)}
         </div>
     );
 }

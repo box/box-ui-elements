@@ -61,6 +61,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={true}
       item={
         Object {
@@ -155,6 +156,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={true}
       item={
         Object {
@@ -249,6 +251,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={true}
       item={
         Object {
@@ -346,6 +349,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={true}
       item={
         Object {
@@ -440,6 +444,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={true}
       item={
         Object {
@@ -533,6 +538,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={false}
       item={
         Object {
@@ -627,6 +633,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={false}
       item={
         Object {
@@ -721,6 +728,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={true}
       item={
         Object {
@@ -815,6 +823,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={false}
       item={
         Object {
@@ -909,6 +918,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={false}
       item={
         Object {
@@ -1011,6 +1021,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={true}
       item={
         Object {
@@ -1105,6 +1116,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={false}
       item={
         Object {
@@ -1203,6 +1215,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={true}
       item={
         Object {
@@ -1300,6 +1313,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={false}
       item={
         Object {
@@ -1391,6 +1405,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "Editor",
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={false}
       item={
         Object {
@@ -1486,6 +1501,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={false}
       item={
         Object {
@@ -1585,6 +1601,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           },
         ]
       }
+      isAllowEditSharedLinkForFileEnabled={false}
       isFetching={false}
       item={
         Object {

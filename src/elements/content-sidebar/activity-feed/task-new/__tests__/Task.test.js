@@ -299,7 +299,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     });
 
     test('should not allow user to edit if the permissions do not allow it', () => {
-        const wrapper = mount(
+        const wrapper = shallow(
             <Task
                 {...task}
                 permissions={{ can_delete: true, can_update: false }}

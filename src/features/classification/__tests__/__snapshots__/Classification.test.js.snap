@@ -101,6 +101,63 @@ exports[`features/classification/Classification should render a classified badge
 </article>
 `;
 
+exports[`features/classification/Classification should render classification last modified information with message id (boxui.classification.importedBy)
+        when it has modifiedBy (and isImportedClassification: true) and message style is inline 1`] = `
+<FormattedMessage
+  defaultMessage="Imported from {modifiedBy} on {modifiedAt}"
+  id="boxui.classification.importedBy"
+  values={
+    Object {
+      "modifiedAt": <FormattedDate
+        day="numeric"
+        month="long"
+        value={2020-07-16T00:51:10.000Z}
+        year="numeric"
+      />,
+      "modifiedBy": "A User",
+    }
+  }
+/>
+`;
+
+exports[`features/classification/Classification should render classification last modified information with message id (boxui.classification.modifiedBy)
+        when it has modifiedBy (and isImportedClassification: false) and message style is inline 1`] = `
+<FormattedMessage
+  defaultMessage="Applied by {modifiedBy} on {modifiedAt}"
+  id="boxui.classification.modifiedBy"
+  values={
+    Object {
+      "modifiedAt": <FormattedDate
+        day="numeric"
+        month="long"
+        value={2020-07-16T00:51:10.000Z}
+        year="numeric"
+      />,
+      "modifiedBy": "A User",
+    }
+  }
+/>
+`;
+
+exports[`features/classification/Classification should render classification last modified information with message id (boxui.classification.modifiedBy)
+        when it has modifiedBy (and isImportedClassification: undefined) and message style is inline 1`] = `
+<FormattedMessage
+  defaultMessage="Applied by {modifiedBy} on {modifiedAt}"
+  id="boxui.classification.modifiedBy"
+  values={
+    Object {
+      "modifiedAt": <FormattedDate
+        day="numeric"
+        month="long"
+        value={2020-07-16T00:51:10.000Z}
+        year="numeric"
+      />,
+      "modifiedBy": "A User",
+    }
+  }
+/>
+`;
+
 exports[`features/classification/Classification should render not classified message 1`] = `
 <article
   className="bdl-Classification "

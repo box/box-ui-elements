@@ -388,7 +388,11 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     };
 
     shouldAutoFocusSharedLink = () => {
-        const { focusSharedLinkOnLoad, sharedLink, sharedLinkLoaded } = this.props;
+        const { focusSharedLinkOnLoad, sharedLink, sharedLinkLoaded, createSharedLinkOnLoad } = this.props;
+
+        if (!createSharedLinkOnLoad && !focusSharedLinkOnLoad) {
+            return false;
+        }
         // if not forcing focus or not a newly added shared link, return false
         if (!(focusSharedLinkOnLoad || sharedLink.isNewSharedLink)) {
             return false;
@@ -612,6 +616,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             getSharedLinkContacts,
             getContactAvatarUrl,
             intl,
+            isAllowEditSharedLinkForFileEnabled,
             isFetching,
             item,
             onAddLink,
@@ -622,6 +627,8 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             onSettingsClick,
             sendSharedLinkError,
             sharedLink,
+            sharedLinkEditTagTargetingApi,
+            sharedLinkEditTooltipTargetingApi,
             showEnterEmailsCallout = false,
             showSharedLinkSettingsCallout = false,
             submitting,
@@ -655,6 +662,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                             changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
                             intl={intl}
+                            isAllowEditSharedLinkForFileEnabled={isAllowEditSharedLinkForFileEnabled}
                             item={item}
                             itemType={item.type}
                             onDismissTooltip={onDismissTooltip}
@@ -665,6 +673,8 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             onCopySuccess={onCopySuccess}
                             onCopyError={onCopyError}
                             sharedLink={sharedLink}
+                            sharedLinkEditTagTargetingApi={sharedLinkEditTagTargetingApi}
+                            sharedLinkEditTooltipTargetingApi={sharedLinkEditTooltipTargetingApi}
                             showSharedLinkSettingsCallout={showSharedLinkSettingsCallout}
                             submitting={submitting || isFetching}
                             trackingProps={sharedLinkTracking}

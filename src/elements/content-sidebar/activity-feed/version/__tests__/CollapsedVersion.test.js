@@ -66,7 +66,7 @@ describe('elements/content-sidebar/ActivityFeed/version/CollapsedVersion', () =>
 
         const wrapper = render(item);
 
-        expect(wrapper.find('IconInfoInverted').length).toBe(1);
+        expect(wrapper.exists('IconInfo')).toBe(true);
     });
 
     test('should not render a message if action is not upload', () => {

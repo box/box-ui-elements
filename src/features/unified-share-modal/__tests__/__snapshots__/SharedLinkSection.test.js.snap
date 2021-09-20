@@ -146,21 +146,27 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
         }
       }
     />
-    <SharedLinkPermissionMenu
-      allowedPermissionLevels={
-        Array [
-          "canViewOnly",
-        ]
-      }
-      canChangePermissionLevel={true}
-      changePermissionLevel={[Function]}
-      trackingProps={
-        Object {
-          "onChangeSharedLinkPermissionLevel": undefined,
-          "sharedLinkPermissionsMenuButtonProps": undefined,
+    <GuideTooltip
+      isShown={false}
+      onDismiss={[Function]}
+    >
+      <SharedLinkPermissionMenu
+        allowedPermissionLevels={
+          Array [
+            "canViewOnly",
+          ]
         }
-      }
-    />
+        canChangePermissionLevel={true}
+        changePermissionLevel={[Function]}
+        isSharedLinkEditTooltipShown={false}
+        trackingProps={
+          Object {
+            "onChangeSharedLinkPermissionLevel": undefined,
+            "sharedLinkPermissionsMenuButtonProps": undefined,
+          }
+        }
+      />
+    </GuideTooltip>
   </div>
 </div>
 `;
@@ -298,17 +304,23 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
         }
       }
     />
-    <SharedLinkPermissionMenu
-      allowedPermissionLevels={Array []}
-      canChangePermissionLevel={false}
-      changePermissionLevel={[Function]}
-      trackingProps={
-        Object {
-          "onChangeSharedLinkPermissionLevel": undefined,
-          "sharedLinkPermissionsMenuButtonProps": undefined,
+    <GuideTooltip
+      isShown={false}
+      onDismiss={[Function]}
+    >
+      <SharedLinkPermissionMenu
+        allowedPermissionLevels={Array []}
+        canChangePermissionLevel={false}
+        changePermissionLevel={[Function]}
+        isSharedLinkEditTooltipShown={false}
+        trackingProps={
+          Object {
+            "onChangeSharedLinkPermissionLevel": undefined,
+            "sharedLinkPermissionsMenuButtonProps": undefined,
+          }
         }
-      }
-    />
+      />
+    </GuideTooltip>
   </div>
 </div>
 `;
@@ -484,21 +496,27 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
         }
       }
     />
-    <SharedLinkPermissionMenu
-      allowedPermissionLevels={
-        Array [
-          "canViewOnly",
-        ]
-      }
-      canChangePermissionLevel={true}
-      changePermissionLevel={[Function]}
-      trackingProps={
-        Object {
-          "onChangeSharedLinkPermissionLevel": undefined,
-          "sharedLinkPermissionsMenuButtonProps": undefined,
+    <GuideTooltip
+      isShown={false}
+      onDismiss={[Function]}
+    >
+      <SharedLinkPermissionMenu
+        allowedPermissionLevels={
+          Array [
+            "canViewOnly",
+          ]
         }
-      }
-    />
+        canChangePermissionLevel={true}
+        changePermissionLevel={[Function]}
+        isSharedLinkEditTooltipShown={false}
+        trackingProps={
+          Object {
+            "onChangeSharedLinkPermissionLevel": undefined,
+            "sharedLinkPermissionsMenuButtonProps": undefined,
+          }
+        }
+      />
+    </GuideTooltip>
   </div>
 </div>
 `;
@@ -884,22 +902,28 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         }
       }
     />
-    <SharedLinkPermissionMenu
-      allowedPermissionLevels={
-        Array [
-          "canViewDownload",
-          "canViewOnly",
-        ]
-      }
-      canChangePermissionLevel={true}
-      changePermissionLevel={[Function]}
-      trackingProps={
-        Object {
-          "onChangeSharedLinkPermissionLevel": undefined,
-          "sharedLinkPermissionsMenuButtonProps": undefined,
+    <GuideTooltip
+      isShown={false}
+      onDismiss={[Function]}
+    >
+      <SharedLinkPermissionMenu
+        allowedPermissionLevels={
+          Array [
+            "canViewDownload",
+            "canViewOnly",
+          ]
         }
-      }
-    />
+        canChangePermissionLevel={true}
+        changePermissionLevel={[Function]}
+        isSharedLinkEditTooltipShown={false}
+        trackingProps={
+          Object {
+            "onChangeSharedLinkPermissionLevel": undefined,
+            "sharedLinkPermissionsMenuButtonProps": undefined,
+          }
+        }
+      />
+    </GuideTooltip>
   </div>
 </div>
 `;
@@ -1022,21 +1046,313 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         }
       }
     />
-    <SharedLinkPermissionMenu
-      allowedPermissionLevels={
-        Array [
-          "canViewOnly",
-        ]
+    <GuideTooltip
+      isShown={false}
+      onDismiss={[Function]}
+    >
+      <SharedLinkPermissionMenu
+        allowedPermissionLevels={
+          Array [
+            "canViewOnly",
+          ]
+        }
+        canChangePermissionLevel={true}
+        changePermissionLevel={[Function]}
+        isSharedLinkEditTooltipShown={false}
+        trackingProps={
+          Object {
+            "onChangeSharedLinkPermissionLevel": undefined,
+            "sharedLinkPermissionsMenuButtonProps": undefined,
+          }
+        }
+      />
+    </GuideTooltip>
+  </div>
+</div>
+`;
+
+exports[`features/unified-share-modal/SharedLinkSection should render proper list of permission options based on the the edit setting availability 1`] = `
+<div
+  className="be"
+>
+  <hr
+    className="bdl-SharedLinkSection-separator"
+  />
+  <label>
+    <span
+      className="label bdl-Label"
+    >
+      <FormattedMessage
+        defaultMessage="Share Link"
+        id="boxui.unifiedShare.sharedLinkSectionLabel"
+      />
+    </span>
+  </label>
+  <div
+    className="shared-link-toggle-row"
+  >
+    <div
+      className="share-toggle-container"
+    >
+      <Toggle
+        isDisabled={false}
+        isOn={true}
+        label={
+          <FormattedMessage
+            defaultMessage="Shared link is created"
+            id="boxui.unifiedShare.linkShareOn"
+          />
+        }
+        name="toggle"
+      />
+    </div>
+  </div>
+  <div
+    className="shared-link-field-row"
+  >
+    <Tooltip
+      className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      isShown={false}
+      onDismiss={[Function]}
+      position="middle-right"
+      showCloseButton={true}
+      theme="callout"
+    >
+      <TextInputWithCopyButton
+        autofocus={false}
+        buttonDefaultText={
+          <FormattedMessage
+            defaultMessage="Copy"
+            id="boxui.core.copy"
+          />
+        }
+        buttonProps={Object {}}
+        buttonSuccessText={
+          <FormattedMessage
+            defaultMessage="Copied"
+            id="boxui.core.copied"
+          />
+        }
+        className="shared-link-field-container"
+        hideOptionalLabel={true}
+        label=""
+        readOnly={true}
+        successStateDuration={3000}
+        triggerCopyOnLoad={false}
+        type="url"
+        value="https://example.com/shared-link"
+      />
+    </Tooltip>
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      position="top-left"
+      text={
+        <FormattedMessage
+          defaultMessage="Send Shared Link"
+          id="boxui.unifiedShare.sendSharedLink"
+        />
       }
-      canChangePermissionLevel={true}
-      changePermissionLevel={[Function]}
+      theme="default"
+    >
+      <Button
+        className="email-shared-link-btn"
+        isLoading={false}
+        showRadar={false}
+        type="button"
+      >
+        <IconMail />
+      </Button>
+    </Tooltip>
+  </div>
+  <div
+    className="shared-link-access-row"
+  >
+    <SharedLinkAccessMenu
+      accessLevel="peopleInYourCompany"
+      accessLevelsDisabledReason={Object {}}
+      allowedAccessLevels={Object {}}
+      changeAccessLevel={[Function]}
+      enterpriseName="Box"
+      itemType="file"
+      onDismissTooltip={[Function]}
+      tooltipContent={null}
       trackingProps={
         Object {
-          "onChangeSharedLinkPermissionLevel": undefined,
-          "sharedLinkPermissionsMenuButtonProps": undefined,
+          "onChangeSharedLinkAccessLevel": undefined,
+          "onSharedLinkAccessMenuOpen": undefined,
+          "sharedLinkAccessMenuButtonProps": undefined,
         }
       }
     />
+    <GuideTooltip
+      isShown={false}
+      onDismiss={[Function]}
+    >
+      <SharedLinkPermissionMenu
+        allowedPermissionLevels={
+          Array [
+            "canViewOnly",
+          ]
+        }
+        canChangePermissionLevel={true}
+        changePermissionLevel={[Function]}
+        isSharedLinkEditTooltipShown={false}
+        trackingProps={
+          Object {
+            "onChangeSharedLinkPermissionLevel": undefined,
+            "sharedLinkPermissionsMenuButtonProps": undefined,
+          }
+        }
+      />
+    </GuideTooltip>
+  </div>
+</div>
+`;
+
+exports[`features/unified-share-modal/SharedLinkSection should render proper list of permission options based on the the edit setting availability 2`] = `
+<div
+  className="be"
+>
+  <hr
+    className="bdl-SharedLinkSection-separator"
+  />
+  <label>
+    <span
+      className="label bdl-Label"
+    >
+      <FormattedMessage
+        defaultMessage="Share Link"
+        id="boxui.unifiedShare.sharedLinkSectionLabel"
+      />
+    </span>
+  </label>
+  <div
+    className="shared-link-toggle-row"
+  >
+    <div
+      className="share-toggle-container"
+    >
+      <Toggle
+        isDisabled={false}
+        isOn={true}
+        label={
+          <FormattedMessage
+            defaultMessage="Shared link is created"
+            id="boxui.unifiedShare.linkShareOn"
+          />
+        }
+        name="toggle"
+      />
+    </div>
+  </div>
+  <div
+    className="shared-link-field-row"
+  >
+    <Tooltip
+      className="usm-ftux-tooltip"
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      isShown={false}
+      onDismiss={[Function]}
+      position="middle-right"
+      showCloseButton={true}
+      theme="callout"
+    >
+      <TextInputWithCopyButton
+        autofocus={false}
+        buttonDefaultText={
+          <FormattedMessage
+            defaultMessage="Copy"
+            id="boxui.core.copy"
+          />
+        }
+        buttonProps={Object {}}
+        buttonSuccessText={
+          <FormattedMessage
+            defaultMessage="Copied"
+            id="boxui.core.copied"
+          />
+        }
+        className="shared-link-field-container"
+        hideOptionalLabel={true}
+        label=""
+        readOnly={true}
+        successStateDuration={3000}
+        triggerCopyOnLoad={false}
+        type="url"
+        value="https://example.com/shared-link"
+      />
+    </Tooltip>
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      position="top-left"
+      text={
+        <FormattedMessage
+          defaultMessage="Send Shared Link"
+          id="boxui.unifiedShare.sendSharedLink"
+        />
+      }
+      theme="default"
+    >
+      <Button
+        className="email-shared-link-btn"
+        isLoading={false}
+        showRadar={false}
+        type="button"
+      >
+        <IconMail />
+      </Button>
+    </Tooltip>
+  </div>
+  <div
+    className="shared-link-access-row"
+  >
+    <SharedLinkAccessMenu
+      accessLevel="peopleInYourCompany"
+      accessLevelsDisabledReason={Object {}}
+      allowedAccessLevels={Object {}}
+      changeAccessLevel={[Function]}
+      enterpriseName="Box"
+      itemType="file"
+      onDismissTooltip={[Function]}
+      tooltipContent={null}
+      trackingProps={
+        Object {
+          "onChangeSharedLinkAccessLevel": undefined,
+          "onSharedLinkAccessMenuOpen": undefined,
+          "sharedLinkAccessMenuButtonProps": undefined,
+        }
+      }
+    />
+    <GuideTooltip
+      isShown={false}
+      onDismiss={[Function]}
+    >
+      <SharedLinkPermissionMenu
+        allowedPermissionLevels={
+          Array [
+            "canViewOnly",
+          ]
+        }
+        canChangePermissionLevel={true}
+        changePermissionLevel={[Function]}
+        isSharedLinkEditTooltipShown={false}
+        trackingProps={
+          Object {
+            "onChangeSharedLinkPermissionLevel": undefined,
+            "sharedLinkPermissionsMenuButtonProps": undefined,
+          }
+        }
+      />
+    </GuideTooltip>
   </div>
 </div>
 `;

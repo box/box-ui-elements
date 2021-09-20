@@ -23,6 +23,8 @@ type Props = {
     hideLabel?: boolean,
     /** Hides (optional) text from the label */
     hideOptionalLabel?: boolean,
+    /** Icon to display in the input field */
+    icon?: React.Node,
     inputRef?: Function, // @TODO: eventually rename to innerRef for consistancy across all form elements
     /** Renders a loading indicator within the component when true */
     isLoading?: boolean,
@@ -42,6 +44,7 @@ const TextInput = ({
     errorPosition,
     hideLabel,
     hideOptionalLabel,
+    icon,
     inputRef,
     isLoading,
     isRequired,
@@ -81,6 +84,7 @@ const TextInput = ({
                 </Tooltip>
                 {isLoading && !isValid && <LoadingIndicator className="text-input-loading" />}
                 {isValid && !isLoading && <IconVerified className="text-input-verified" />}
+                {!isLoading && !isValid && icon ? icon : null}
             </Label>
         </div>
     );

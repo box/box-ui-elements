@@ -5,7 +5,7 @@ import noop from 'lodash/noop';
 import * as utils from '../utils';
 import { ContentExplorerComponent as ContentExplorer } from '../ContentExplorer';
 import UploadDialog from '../../common/upload-dialog';
-import { FOLDER_FIELDS_TO_FETCH } from '../../../utils/fields';
+import CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH from '../constants';
 import { VIEW_MODE_GRID } from '../../../constants';
 
 jest.mock('../../common/header/Header', () => 'mock-header');
@@ -83,7 +83,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 'ASC',
                 expect.any(Function),
                 expect.any(Function),
-                { forceFetch: true, fields: FOLDER_FIELDS_TO_FETCH },
+                { forceFetch: true, fields: CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH },
             );
         });
     });

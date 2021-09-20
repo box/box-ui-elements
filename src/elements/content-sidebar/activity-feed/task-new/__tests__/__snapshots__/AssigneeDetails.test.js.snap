@@ -27,7 +27,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
         id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusApproved"
         values={
           Object {
-            "dateTime": <Datestamp
+            "dateTime": <ActivityDatestamp
               date="2019-01-01T00:00:000Z"
             />,
           }
@@ -67,7 +67,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
         id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusApproved"
         values={
           Object {
-            "dateTime": <Datestamp
+            "dateTime": <ActivityDatestamp
               date={2019-01-01T00:00:00.000Z}
             />,
           }
@@ -130,7 +130,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
         id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusRejected"
         values={
           Object {
-            "dateTime": <Datestamp
+            "dateTime": <ActivityDatestamp
               date="2019-01-01T00:00:000Z"
             />,
           }

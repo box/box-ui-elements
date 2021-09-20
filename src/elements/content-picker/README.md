@@ -26,12 +26,15 @@ var ContentPicker = require('./ContentPicker').default;
 | canSetShareAccess | boolean | `true` | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | canUpload | boolean | `true` | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | chooseButtonLabel | string |  | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
+| clearSelectedItemsOnNavigation | boolean | false | Indicates whether or not selected state should be cleared after every navigation. |
 | contentUploaderProps | Object | `{}` | Props to be forwarded to the `ContentUploader` UI Element.  *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/uploader/#Options).*
 | currentFolderId | string | | The current folder shown for the content picker. This should be a sub folder to the root folder. |
 | defaultView | string | `files` | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | extensions | Array&lt;string&gt; | `[]` | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | initialPage | number | 1 | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | initialPageSize | number | 50 | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
+| isHeaderLogoVisible | boolean | true | Indicates whether or not the Logo in the Header is shown. |
+| isPaginationVisible | boolean | true | Indicates whether or not the pagination buttons in the Footer are shown. |
 | isTouch | boolean |  | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | language | string |  | *See the [Internationalization](../README.md#internationalization) section* |
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
@@ -40,10 +43,12 @@ var ContentPicker = require('./ContentPicker').default;
 | onCancel | function |  | Callback function for when the cancel button is pressed. |
 | onChoose | function |  | Callback function for when the choose button is pressed. |
 | requestInterceptor | function | | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
+| renderCustomActionButtons | function | | Render prop that renders custom action buttons in the footer. |
 | responseInterceptor | function | | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | rootFolderId | string | `0` | The root folder for the content picker. |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
+| showSelectedButton | boolean | `true` | Indicates whether or not the selected button is shown. |
 | sortBy | string | `name` | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | sortDirection | string | `asc` | *See the [developer docs](https://developer.box.com/guides/embed/ui-elements/picker/#Options).* |
 | type | string | `file, web_link` | Indicates which type of items can be picked. Should be a comma seperated combination of `file`, `folder` or `web_link`. |

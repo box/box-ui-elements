@@ -73,6 +73,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
                 width={16}
               >
                 <svg
+                  aria-hidden="true"
                   className="icon-show "
                   focusable="false"
                   height={16}
@@ -171,6 +172,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
                 width={16}
               >
                 <svg
+                  aria-hidden="true"
                   className="icon-hide "
                   focusable="false"
                   height={16}
@@ -269,6 +271,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
                 width={16}
               >
                 <svg
+                  aria-hidden="true"
                   className="icon-show "
                   focusable="false"
                   height={16}
@@ -365,6 +368,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
                 width={16}
               >
                 <svg
+                  aria-hidden="true"
                   className="icon-hide "
                   focusable="false"
                   height={16}

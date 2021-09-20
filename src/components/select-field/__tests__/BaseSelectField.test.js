@@ -97,7 +97,7 @@ describe('components/select-field/BaseSelectField', () => {
             expect(buttonWrapper.prop('aria-autocomplete')).toEqual('list');
             expect(buttonWrapper.prop('aria-expanded')).toBe(false);
             expect(buttonWrapper.prop('aria-owns')).toEqual(instance.selectFieldID);
-            expect(buttonWrapper.prop('role')).toEqual('combobox');
+            expect(buttonWrapper.prop('role')).toEqual('listbox');
             expect(buttonWrapper.prop('isDisabled')).toEqual(false);
         });
 

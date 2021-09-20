@@ -7,7 +7,7 @@ const messages = defineMessages({
         id: 'boxui.unifiedShare.contentSharedWithExternalCollaborators',
     },
     disabledShareLinkPermission: {
-        defaultMessage: 'This option isn’t available for this item due to a security restriction or classification.',
+        defaultMessage: 'This option is not available due to a security policy.',
         description:
             'Tooltip text for when shared permission option is not available due to restriction or classification',
         id: 'boxui.unifiedShare.disabledShareLinkPermission',
@@ -54,6 +54,18 @@ const messages = defineMessages({
         defaultMessage: 'Got it',
         description: 'This is label for the button so a user understands the new interface',
         id: 'boxui.unifiedShare.ftuxConfirmLabel',
+    },
+    ftuxEditPermissionTooltipBody: {
+        defaultMessage: 'Select the new edit option to easily share your file with people or groups.',
+        description:
+            'Text for the body of the tooltip for the ftux experience when the edit option is available for the user',
+        id: 'boxui.unifiedShare.ftuxEditPermissionTooltipBody',
+    },
+    ftuxEditPermissionTooltipTitle: {
+        defaultMessage: 'Collaboration made easy',
+        description:
+            'Text for the title of the tooltip for the ftux experience when the edit option is available for the user',
+        id: 'boxui.unifiedShare.ftuxEditPermissionTooltipTitle',
     },
     collaboratorListTitle: {
         defaultMessage: 'People in ‘{itemName}’',
@@ -203,30 +215,26 @@ const messages = defineMessages({
         description: 'Label for a shared link permission level',
         id: 'boxui.unifiedShare.sharedLinkPermissionsViewDownload',
     },
-    sharedLinkPermissionsViewDownloadDescription: {
-        defaultMessage: 'Users can view and download',
-        description: 'Description for Can view and download option',
-        id: 'boxui.unifiedShare.sharedLinkPermissionsViewDownloadDescription',
-    },
     sharedLinkPermissionsViewOnly: {
         defaultMessage: 'Can view only',
         description: 'Label for a shared link permission level',
         id: 'boxui.unifiedShare.sharedLinkPermissionsViewOnly',
     },
+    ftuxSharedLinkPermissionsEditTag: {
+        defaultMessage: 'NEW',
+        description:
+            'Label for the LabelPill that is shown when the user first opens the SharedLinkPermissions dropdown and sees the Can Edit option',
+        id: 'boxui.unifiedShare.ftuxSharedLinkPermissionsEditTag',
+    },
     sharedLinkPermissionsEdit: {
         defaultMessage: 'Can edit',
-        description: 'Label for a shared link permission to show for editable box notes',
+        description: 'Label for a shared link permission to show for an editable box note / file',
         id: 'boxui.unifiedShare.sharedLinkPermissionsEdit',
     },
     sharedLinkPermissionsEditTooltip: {
         defaultMessage: 'This permission can only be changed in Box Notes',
         description: 'Text to use in the tooltip when presenting an editable Box Note (DO NOT TRANSLATE "Box Notes")',
         id: 'boxui.unifiedShare.sharedLinkPermissionsEditTooltip',
-    },
-    sharedLinkPermissionsViewOnlyDescription: {
-        defaultMessage: 'Users can view only',
-        description: 'Description for Can view only option',
-        id: 'boxui.unifiedShare.sharedLinkPermissionsViewOnlyDescription',
     },
     sharedLinkDisabledTooltipCopy: {
         defaultMessage: 'Create and copy link for sharing',
@@ -243,6 +251,17 @@ const messages = defineMessages({
         defaultMessage: 'This content is publicly available to anyone with the link.',
         description: 'Text shown in share modal when shared link is open to public access',
         id: 'boxui.unifiedShare.sharedLinkPubliclyAvailable',
+    },
+    sharedLinkEditablePubliclyAvailable: {
+        defaultMessage:
+            'Publicly available for anyone to view and download. Any logged in users with the link can edit.',
+        description: 'Text shown in share modal when shared link is editable and is open to public access',
+        id: 'boxui.unifiedShare.sharedLinkEditablePubliclyAvailable',
+    },
+    sharedLinkElevatedEditableCompanyAvailable: {
+        defaultMessage: 'People who have access to this link can edit.',
+        description: 'Text shown in share modal when shared link is editable and is open to company access',
+        id: 'boxui.unifiedShare.sharedLinkElevatedEditableCompanyAvailable',
     },
     upgradeGetMoreAccessControlsDescription: {
         defaultMessage:

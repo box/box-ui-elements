@@ -4,6 +4,7 @@ exports[`components/tooltip/LeftSidebarLinkCallout render() should hide callout 
 <TetherComponent
   attachment="middle left"
   classPrefix="nav-link-callout"
+  enabled={false}
   renderElementTag="div"
   renderElementTo={null}
   targetAttachment="middle right"
@@ -18,6 +19,7 @@ exports[`components/tooltip/LeftSidebarLinkCallout render() should render defaul
 <TetherComponent
   attachment="middle left"
   classPrefix="nav-link-callout"
+  enabled={true}
   renderElementTag="div"
   renderElementTo={null}
   targetAttachment="middle right"

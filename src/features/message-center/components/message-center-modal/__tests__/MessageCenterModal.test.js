@@ -89,6 +89,7 @@ describe('components/message-center/components/message-center-modal/MessageCente
 
     const defaultProps = {
         messages: messageResponse,
+        onMessageShown: () => {},
     };
 
     function getWrapper(props) {
@@ -197,5 +198,67 @@ describe('components/message-center/components/message-center-modal/MessageCente
                 .at(2)
                 .prop('id'),
         ).toBe(1);
+    });
+
+    test('should display all categories when > 1 categories in messages', async () => {
+        const wrapper = await getWrapper();
+        expect(wrapper.find('CategorySelector').exists()).toBe(true);
+    });
+
+    test('should not display any categories when 1 or less category in messages', async () => {
+        const messages = [
+            {
+                activateDate: 1598857200,
+                id: 1,
+                name: 'messagecenter_test_message1',
+                priority: 50,
+                templateName: 'preview-title-body-tags',
+                templateParams: {
+                    fileUpload: { fileId: '21313', sharedLinkUrl: 'https://app.box.com/s/e32eddass' },
+                    title: 'Test message 1',
+                    body: 'This is a <em>test</em>',
+                    tags: 'lorem,ipsum',
+                    category: 'product',
+                    button1: {
+                        label: 'learn more',
+                        actions: [
+                            { type: 'openURL', target: '_blank', url: 'https://support.box.com/hc/en-us' },
+                            { type: 'close' },
+                        ],
+                    },
+                },
+            },
+            {
+                activateDate: 1599202800,
+                id: 2,
+                name: 'messagecenter_test_message2',
+                priority: 30,
+                templateName: 'preview-title-body-tags',
+                templateParams: {
+                    fileUpload: { fileId: '21313', sharedLinkUrl: 'https://app.box.com/s/e32eddass' },
+                    title: 'Test message 2',
+                    body: 'lorem ipsum',
+                    tags: 'lorem,ipsum',
+                    category: 'product',
+                    button1: {
+                        label: 'check this out',
+                        actions: [
+                            { type: 'openURL', target: '_blank', url: 'http://community.box.com' },
+                            { type: 'close' },
+                        ],
+                    },
+                },
+            },
+        ];
+        const wrapper = await getWrapper({
+            messages,
+        });
+        expect(wrapper.find('CategorySelector').exists()).toBe(false);
+    });
+
+    test('should call onMessageShown when message rendered', async () => {
+        const onMessageShown = jest.fn();
+        await getWrapper({ onMessageShown });
+        expect(onMessageShown).toHaveBeenCalledTimes(3);
     });
 });

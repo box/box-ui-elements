@@ -466,7 +466,7 @@ class BaseSelectField extends React.Component<Props, State> {
             onClick: this.handleButtonClick,
             onKeyDown: this.handleButtonKeyDown,
             // @NOTE: Technically, only text inputs should be combo-boxes but ARIA specs do not cover custom select dropdowns
-            role: 'combobox',
+            role: 'listbox',
             title: buttonText,
         };
 
@@ -521,6 +521,8 @@ class BaseSelectField extends React.Component<Props, State> {
             if (index === activeItemIndex) {
                 itemProps.isActive = true;
             }
+
+            itemProps.isSelected = isSelected;
 
             // The below actually does have a key, but eslint can't catch that
             /* eslint-disable react/jsx-key */

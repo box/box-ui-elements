@@ -75,7 +75,7 @@ const Checkbox = ({
                     to the underlying <input> */}
             <span className="checkbox-pointer-target" />
             <span className={classNames('bdl-Checkbox-labelTooltipWrapper', { 'accessibility-hidden': hideLabel })}>
-                <label htmlFor={inputID}>{label}</label>
+                {label && <label htmlFor={inputID}>{label}</label>}
                 {tooltip && <CheckboxTooltip tooltip={tooltip} />}
             </span>
         </span>

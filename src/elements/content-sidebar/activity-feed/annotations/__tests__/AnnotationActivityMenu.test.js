@@ -31,15 +31,6 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
         expect(wrapper.exists('[data-testid="edit-annotation-activity"]')).toBe(true);
     });
 
-    test('should show the delete confirm menu when confirming delete', () => {
-        const wrapper = getWrapper({ canDelete: true });
-        const deleteButton = wrapper.find('MenuItem').prop('onClick');
-
-        deleteButton();
-
-        expect(wrapper.find('DeleteConfirmation').length).toEqual(1);
-    });
-
     test('should render resin tags', () => {
         const wrapper = getWrapper({ canDelete: true, canEdit: true });
 
