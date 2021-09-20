@@ -109,6 +109,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                           width={6}
                         >
                           <svg
+                            aria-hidden="true"
                             className="icon-page-back "
                             focusable="false"
                             height={9}
@@ -169,6 +170,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                       width={6}
                     >
                       <svg
+                        aria-hidden="true"
                         className="icon-page-forward "
                         focusable="false"
                         height={9}
@@ -255,6 +257,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                       width={6}
                     >
                       <svg
+                        aria-hidden="true"
                         className="icon-page-back "
                         focusable="false"
                         height={9}
@@ -355,6 +358,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                           width={6}
                         >
                           <svg
+                            aria-hidden="true"
                             className="icon-page-forward "
                             focusable="false"
                             height={9}
@@ -485,6 +489,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                           width={6}
                         >
                           <svg
+                            aria-hidden="true"
                             className="icon-page-back "
                             focusable="false"
                             height={9}
@@ -587,6 +592,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                           width={6}
                         >
                           <svg
+                            aria-hidden="true"
                             className="icon-page-forward "
                             focusable="false"
                             height={9}

@@ -136,7 +136,7 @@ register(IconFileImage, '#3FB87F', [
     'tif',
     'tiff',
 ]);
-register(IconFileIndesign, '#FF57A1', ['indb', 'indd', 'indl', 'indt', 'idml', 'inx', 'pmd']);
+register(IconFileIndesign, '#FF57A1', ['idml', 'indd', 'indt', 'inx']);
 register(IconFileKeynote, '#007AFF', ['key']);
 register(IconFileNumbers, '#00A650', ['numbers']);
 register(IconFilePDF, '#D0021B', ['pdf']);

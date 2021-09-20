@@ -55,6 +55,7 @@ const SidebarNav = ({
     onNavigate,
 }: Props) => {
     const {
+        blockedReason: boxSignBlockedReason,
         enabled: hasBoxSign,
         onClick: onBoxSignClick,
         status: boxSignStatus,
@@ -110,6 +111,7 @@ const SidebarNav = ({
                 {hasBoxSign && onBoxSignClick && (
                     <div className="bcs-SidebarNav-secondary">
                         <SidebarNavSign
+                            blockedReason={boxSignBlockedReason}
                             data-resin-target={SIDEBAR_NAV_TARGETS.SIGN}
                             onClick={() => onBoxSignClick({ fileId })}
                             status={boxSignStatus}
