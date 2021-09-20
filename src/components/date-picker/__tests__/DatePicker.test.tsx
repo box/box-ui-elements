@@ -304,6 +304,22 @@ describe('components/date-picker/DatePicker', () => {
             expect(stopPropagationSpy).not.toHaveBeenCalled();
         });
 
+        test('should not stop propagation when isKeyboardInputAllowed is enabled', () => {
+            const wrapper = renderDatePicker({ isKeyboardInputAllowed: true });
+            const instance = wrapper.instance();
+            const inputEl = wrapper.find('input').at(0);
+            const stopPropagationSpy = jest.fn();
+            if (instance.datePicker) {
+                instance.datePicker.isVisible = jest.fn().mockReturnValue(true);
+            }
+            inputEl.simulate('keyDown', {
+                preventDefault: noop,
+                stopPropagation: stopPropagationSpy,
+                key: 'anything',
+            });
+            expect(stopPropagationSpy).not.toHaveBeenCalled();
+        });
+
         test('should prevent default on input when key pressed was not a Tab', () => {
             const wrapper = renderDatePicker();
             const inputEl = wrapper.find('input').at(0);
