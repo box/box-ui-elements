@@ -27,6 +27,16 @@ const messages = defineMessages({
         defaultMessage: 'Sign',
         description: 'label for button that opens a Box Sign signature fulfillment experience',
     },
+    boxSignSecurityBlockedTooltip: {
+        defaultMessage: 'This action is unavailable due to a security policy.',
+        description: 'Tooltip text for when Box Sign is blocked due to a security policy',
+        id: 'be.contentSidebar.boxSignSecurityBlockedTooltip',
+    },
+    boxSignWatermarkBlockedTooltip: {
+        defaultMessage: 'This action is unavailable, because the file is watermarked.',
+        description: 'Tooltip text for when Box Sign is blocked due to an item being watermarked',
+        id: 'be.contentSidebar.boxSignWatermarkBlockedTooltip',
+    },
     tasksAddTask: {
         id: 'be.contentSidebar.addTask',
         defaultMessage: 'Add Task',
