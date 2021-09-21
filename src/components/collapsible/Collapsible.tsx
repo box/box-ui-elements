@@ -115,9 +115,9 @@ class Collapsible extends React.PureComponent<CollapsibleProps, CollapsibleState
                 <div className={buttonClassName}>
                     <PlainButton
                         {...modifiedButtonProps}
+                        aria-expanded={isOpen}
                         className="collapsible-card-title"
                         onClick={this.toggleVisibility}
-                        aria-expanded={isOpen ? 'true' : 'false'}
                         type={ButtonType.BUTTON}
                     >
                         {title}
