@@ -149,6 +149,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
     <GuideTooltip
       isShown={false}
       onDismiss={[Function]}
+      position="bottom-center"
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
@@ -307,6 +308,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
     <GuideTooltip
       isShown={false}
       onDismiss={[Function]}
+      position="bottom-center"
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={Array []}
@@ -499,6 +501,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     <GuideTooltip
       isShown={false}
       onDismiss={[Function]}
+      position="bottom-center"
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
@@ -905,6 +908,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     <GuideTooltip
       isShown={false}
       onDismiss={[Function]}
+      position="bottom-center"
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
@@ -1049,6 +1053,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     <GuideTooltip
       isShown={false}
       onDismiss={[Function]}
+      position="bottom-center"
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
@@ -1192,6 +1197,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     <GuideTooltip
       isShown={false}
       onDismiss={[Function]}
+      position="bottom-center"
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
@@ -1335,6 +1341,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     <GuideTooltip
       isShown={false}
       onDismiss={[Function]}
+      position="bottom-center"
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
