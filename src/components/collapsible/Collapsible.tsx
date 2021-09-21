@@ -102,7 +102,6 @@ class Collapsible extends React.PureComponent<CollapsibleProps, CollapsibleState
         const resinTagTarget: string = RESIN_TAG_TARGET;
         const modifiedButtonProps: { [index: string]: string } = omit(buttonProps, [resinTagTarget]);
         const interactionTarget = buttonProps[resinTagTarget];
-        const ariaExpanded = isOpen ? 'true' : 'false';
         const buttonClassName = hasStickyHeader
             ? 'collapsible-card-header has-sticky-header'
             : 'collapsible-card-header';
@@ -118,7 +117,7 @@ class Collapsible extends React.PureComponent<CollapsibleProps, CollapsibleState
                         {...modifiedButtonProps}
                         className="collapsible-card-title"
                         onClick={this.toggleVisibility}
-                        aria-expanded={ariaExpanded}
+                        aria-expanded={isOpen ? 'true' : 'false'}
                         type={ButtonType.BUTTON}
                     >
                         {title}
