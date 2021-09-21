@@ -20,7 +20,7 @@ exports[`features/metadata-instance-editor/fields/Instance collapsible isOpen pr
         theme="default"
       >
         <PlainButton
-          aria-pressed="false"
+          aria-pressed={false}
           className="metadata-instance-editor-instance-edit"
           data-resin-target="metadata-instanceedit"
           onClick={[Function]}
@@ -747,7 +747,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         theme="default"
       >
         <PlainButton
-          aria-pressed="true"
+          aria-pressed={true}
           className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
           data-resin-target="metadata-instanceedit"
           onClick={[Function]}
@@ -942,7 +942,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         theme="default"
       >
         <PlainButton
-          aria-pressed="true"
+          aria-pressed={true}
           className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
           data-resin-target="metadata-instanceedit"
           onClick={[Function]}
@@ -1046,7 +1046,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         theme="default"
       >
         <PlainButton
-          aria-pressed="true"
+          aria-pressed={true}
           className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
           data-resin-target="metadata-instanceedit"
           onClick={[Function]}
