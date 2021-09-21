@@ -9,6 +9,7 @@ exports[`components/collapsible/Collapsible should apply buttonProps correctly 1
   >
     <PlainButton
       a={1}
+      aria-expanded={true}
       b={2}
       className="collapsible-card-title"
       onClick={[Function]}
@@ -64,6 +65,7 @@ exports[`components/collapsible/Collapsible should apply correct border class 1`
     className="collapsible-card-header"
   >
     <PlainButton
+      aria-expanded={true}
       className="collapsible-card-title"
       onClick={[Function]}
       type="button"
@@ -118,6 +120,7 @@ exports[`components/collapsible/Collapsible should apply correct isOpen state 1`
     className="collapsible-card-header"
   >
     <PlainButton
+      aria-expanded={false}
       className="collapsible-card-title"
       onClick={[Function]}
       type="button"
@@ -172,6 +175,7 @@ exports[`components/collapsible/Collapsible should not render a PlainButton if a
     className="collapsible-card-header"
   >
     <PlainButton
+      aria-expanded={true}
       className="collapsible-card-title"
       onClick={[Function]}
       type="button"
@@ -226,6 +230,7 @@ exports[`components/collapsible/Collapsible should render a PlainButton if a but
     className="collapsible-card-header"
   >
     <PlainButton
+      aria-expanded={true}
       className="collapsible-card-title"
       onClick={[Function]}
       type="button"
@@ -280,6 +285,7 @@ exports[`components/collapsible/Collapsible should render component correctly 1`
     className="collapsible-card-header"
   >
     <PlainButton
+      aria-expanded={true}
       className="collapsible-card-title"
       onClick={[Function]}
       type="button"
@@ -336,6 +342,7 @@ exports[`components/collapsible/Collapsible should render with headerActionItems
     className="collapsible-card-header"
   >
     <PlainButton
+      aria-expanded={false}
       className="collapsible-card-title"
       onClick={[Function]}
       type="button"
