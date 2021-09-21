@@ -373,6 +373,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                                     onClose();
                                 }
                             }}
+                            position="bottom-center"
                         >
                             <SharedLinkPermissionMenu
                                 allowedPermissionLevels={allowedPermissionLevels}
