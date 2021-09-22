@@ -1,6 +1,7 @@
 export default {
-    SELECT_FILE: 'selectFile',
-    SELECT_FOLDER: 'selectFolder',
+    COPY: 'copy',
     MOVE_COPY: 'moveCopy',
     MULTI_SELECT: 'multiSelect',
+    SELECT_FILE: 'selectFile',
+    SELECT_FOLDER: 'selectFolder',
 };
