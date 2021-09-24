@@ -787,6 +787,17 @@ const MOCK_COLLABS_REQUEST_USERS_AND_GROUPS = {
     permission: 'Editor',
 };
 
+const MOCK_COLLABS_LIST = {
+    collaborators: [
+        { email: 'narwhal@box.com', type: 'user' },
+        { email: 'armadillo@box.com', type: 'user' },
+        { email: 'turtle@box.com', type: 'user' },
+        { userID: 12345, type: 'group' },
+        { userID: 67891, type: 'group' },
+        { userID: 13141, type: 'group' },
+    ],
+};
+
 const MOCK_COLLABS_CONVERTED_USERS = [
     {
         accessible_by: {
@@ -854,6 +865,27 @@ const MOCK_COLLABS_CONVERTED_REQUEST = {
     users: MOCK_COLLABS_CONVERTED_USERS,
 };
 
+const MOCK_COLLABS_CONVERTED_REQUEST_WITH_FILTER = {
+    groups: [
+        {
+            accessible_by: {
+                id: '01112',
+                type: 'group',
+            },
+            role: 'editor',
+        },
+    ],
+    users: [
+        {
+            accessible_by: {
+                login: 'hedgehog@box.com',
+                type: 'user',
+            },
+            role: 'editor',
+        },
+    ],
+};
+
 const MOCK_DISABLED_REASONS_FROM_API = {
     company: DISABLED_REASON_ACCESS_POLICY,
     open: DISABLED_REASON_MALICIOUS_CONTENT,
@@ -874,7 +906,9 @@ export {
     MOCK_COLLABS_CONVERTED_GROUPS,
     MOCK_COLLABS_CONVERTED_RESPONSE,
     MOCK_COLLABS_CONVERTED_REQUEST,
+    MOCK_COLLABS_CONVERTED_REQUEST_WITH_FILTER,
     MOCK_COLLABS_CONVERTED_USERS,
+    MOCK_COLLABS_LIST,
     MOCK_COLLABS_REQUEST_GROUPS_ONLY,
     MOCK_COLLABS_REQUEST_USERS_ONLY,
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
