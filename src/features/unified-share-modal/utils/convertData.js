@@ -458,30 +458,45 @@ export const convertCollabsResponse = (
  */
 export const convertCollabsRequest = (
     collabRequest: InviteCollaboratorsRequest,
+    collaboratorsList: collaboratorsListType | null,
 ): ContentSharingCollaborationsRequest => {
     const { emails, groupIDs, permission } = collabRequest;
     const emailArray = emails ? emails.split(',') : [];
     const groupIDArray = groupIDs ? groupIDs.split(',') : [];
+    const collabSet = new Set();
+    if (collaboratorsList) {
+        collaboratorsList.collaborators.forEach(collab => {
+            if (collab.type === COLLAB_USER_TYPE) {
+                collabSet.add(collab.email);
+            } else if (collab.type === COLLAB_GROUP_TYPE && !!collab.userID) {
+                collabSet.add(collab.userID.toString());
+            }
+        });
+    }
 
     const roleSettings = {
         role: permission.toLowerCase(), // USM permissions are identical to API roles, except for the casing
     };
 
-    const groups = groupIDArray.map(groupID => ({
-        accessible_by: {
-            id: groupID,
-            type: COLLAB_GROUP_TYPE,
-        },
-        ...roleSettings,
-    }));
+    const groups = groupIDArray
+        .filter(groupID => !collabSet.has(groupID))
+        .map(groupID => ({
+            accessible_by: {
+                id: groupID,
+                type: COLLAB_GROUP_TYPE,
+            },
+            ...roleSettings,
+        }));
 
-    const users = emailArray.map(email => ({
-        accessible_by: {
-            login: email,
-            type: COLLAB_USER_TYPE,
-        },
-        ...roleSettings,
-    }));
+    const users = emailArray
+        .filter(email => !collabSet.has(email))
+        .map(email => ({
+            accessible_by: {
+                login: email,
+                type: COLLAB_USER_TYPE,
+            },
+            ...roleSettings,
+        }));
 
     return { groups, users };
 };
