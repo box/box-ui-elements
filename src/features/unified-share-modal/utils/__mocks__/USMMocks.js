@@ -787,7 +787,7 @@ const MOCK_COLLABS_REQUEST_USERS_AND_GROUPS = {
     permission: 'Editor',
 };
 
-const MOCK_COLLABS_LIST = {
+const MOCK_COLLABS_EXISTING_LIST = {
     collaborators: [
         { email: 'narwhal@box.com', type: 'user' },
         { email: 'armadillo@box.com', type: 'user' },
@@ -908,7 +908,7 @@ export {
     MOCK_COLLABS_CONVERTED_REQUEST,
     MOCK_COLLABS_CONVERTED_REQUEST_WITH_FILTER,
     MOCK_COLLABS_CONVERTED_USERS,
-    MOCK_COLLABS_LIST,
+    MOCK_COLLABS_EXISTING_LIST,
     MOCK_COLLABS_REQUEST_GROUPS_ONLY,
     MOCK_COLLABS_REQUEST_USERS_ONLY,
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,

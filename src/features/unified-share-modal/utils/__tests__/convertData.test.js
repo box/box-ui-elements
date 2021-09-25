@@ -55,7 +55,7 @@ import {
     MOCK_COLLABS_CONVERTED_USERS,
     MOCK_COLLABS_REQUEST_USERS_ONLY,
     MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
-    MOCK_COLLABS_LIST,
+    MOCK_COLLABS_EXISTING_LIST,
     MOCK_COLLABS_CONVERTED_REQUEST_WITH_FILTER,
     MOCK_CONVERTED_DISABLED_REASONS,
     MOCK_DISABLED_REASONS_FROM_API,
@@ -822,13 +822,16 @@ describe('convertGroupContactsResponse()', () => {
 
 describe('convertCollabsRequest()', () => {
     test.each`
-        requestFromUSM                                      | collaboratorsList    | convertedResponse                                       | description
-        ${MOCK_COLLABS_REQUEST_USERS_ONLY}                  | ${null}              | ${{ groups: [], users: MOCK_COLLABS_CONVERTED_USERS }}  | ${'users only'}
-        ${MOCK_COLLABS_REQUEST_GROUPS_ONLY}                 | ${null}              | ${{ groups: MOCK_COLLABS_CONVERTED_GROUPS, users: [] }} | ${'groups only'}
-        ${MOCK_COLLABS_REQUEST_USERS_AND_GROUPS}            | ${null}              | ${MOCK_COLLABS_CONVERTED_REQUEST}                       | ${'users and groups'}
-        ${{ emails: '', groups: '', permission: 'Editor' }} | ${null}              | ${{ groups: [], users: [] }}                            | ${'no users or groups'}
-        ${MOCK_COLLABS_REQUEST_USERS_AND_GROUPS}            | ${MOCK_COLLABS_LIST} | ${MOCK_COLLABS_CONVERTED_REQUEST_WITH_FILTER}           | ${'filtered users and groups'}
-    `('should convert a request with $description', ({ requestFromUSM, collaboratorsList, convertedResponse }) => {
-        expect(convertCollabsRequest(requestFromUSM, collaboratorsList)).toEqual(convertedResponse);
-    });
+        requestFromUSM                                      | existingCollaboratorsList     | convertedResponse                                       | description
+        ${MOCK_COLLABS_REQUEST_USERS_ONLY}                  | ${null}                       | ${{ groups: [], users: MOCK_COLLABS_CONVERTED_USERS }}  | ${'users only'}
+        ${MOCK_COLLABS_REQUEST_GROUPS_ONLY}                 | ${null}                       | ${{ groups: MOCK_COLLABS_CONVERTED_GROUPS, users: [] }} | ${'groups only'}
+        ${MOCK_COLLABS_REQUEST_USERS_AND_GROUPS}            | ${null}                       | ${MOCK_COLLABS_CONVERTED_REQUEST}                       | ${'users and groups'}
+        ${{ emails: '', groups: '', permission: 'Editor' }} | ${null}                       | ${{ groups: [], users: [] }}                            | ${'no users or groups'}
+        ${MOCK_COLLABS_REQUEST_USERS_AND_GROUPS}            | ${MOCK_COLLABS_EXISTING_LIST} | ${MOCK_COLLABS_CONVERTED_REQUEST_WITH_FILTER}           | ${'filtered users and groups'}
+    `(
+        'should convert a request with $description',
+        ({ requestFromUSM, existingCollaboratorsList, convertedResponse }) => {
+            expect(convertCollabsRequest(requestFromUSM, existingCollaboratorsList)).toEqual(convertedResponse);
+        },
+    );
 });

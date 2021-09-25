@@ -458,15 +458,15 @@ export const convertCollabsResponse = (
  */
 export const convertCollabsRequest = (
     collabRequest: InviteCollaboratorsRequest,
-    collaboratorsList: collaboratorsListType | null,
+    existingCollaboratorsList: collaboratorsListType | null,
 ): ContentSharingCollaborationsRequest => {
     const { emails, groupIDs, permission } = collabRequest;
     const emailArray = emails ? emails.split(',') : [];
     const groupIDArray = groupIDs ? groupIDs.split(',') : [];
     const collabSet = new Set();
-    if (collaboratorsList) {
-        collaboratorsList.collaborators.forEach(collab => {
-            if (collab.type === COLLAB_USER_TYPE) {
+    if (existingCollaboratorsList) {
+        existingCollaboratorsList.collaborators.forEach(collab => {
+            if (collab.type === COLLAB_USER_TYPE && !!collab.email) {
                 collabSet.add(collab.email);
             } else if (collab.type === COLLAB_GROUP_TYPE && !!collab.userID) {
                 collabSet.add(collab.userID.toString());

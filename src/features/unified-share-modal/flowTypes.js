@@ -171,7 +171,7 @@ export type sharedLinkType = {
 
 export type collaboratorType = {
     collabID: number,
-    email: string,
+    email?: string,
     expiration?: {
         executeAt: string,
     },
