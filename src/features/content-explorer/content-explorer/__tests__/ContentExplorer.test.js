@@ -295,7 +295,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(onEnterFolderSpy.withArgs(clickedFolder, newFoldersPath).calledOnce).toBe(true);
         });
 
-        test('should not call onEnterFolder when clicking a disabled folder name', () => {
+        test('should not call onEnterFolder when clicking disabled folder name', () => {
             const disabledItems = [{ id: '123', name: 'item1', type: 'folder', isDisabled: true }];
             wrapper = renderComponent(
                 {
