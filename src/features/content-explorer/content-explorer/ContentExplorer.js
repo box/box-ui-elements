@@ -309,6 +309,10 @@ class ContentExplorer extends Component {
         const { items } = this.props;
         const item = items[index];
 
+        if (item.isDisabled || item.isLoading) {
+            return;
+        }
+
         if (item.type !== ItemTypes.FOLDER) {
             return;
         }
