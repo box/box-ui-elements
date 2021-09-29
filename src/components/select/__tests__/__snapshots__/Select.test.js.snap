@@ -111,7 +111,7 @@ exports[`components/select/Select should render infoTooltip when specified 1`] =
           >
             <IconInfo
               height={16}
-              title="hello"
+              title="hello!!!"
               width={16}
             />
           </span>
