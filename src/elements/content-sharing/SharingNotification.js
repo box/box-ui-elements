@@ -151,9 +151,9 @@ function SharingNotification({
     /**
      * Handle a successful shared link removal request.
      *
-     * Most of the data for the shared link will be removed, with the exception of the "canInvite" and "serverURL"
-     * properties, both of which are still necessary for rendering the form-only version of ContentSharing.
-     * We retain "serverURL" from the previous shared link, to avoid having to make another call to the Users API.
+     * Most of the data for the shared link will be removed, with the exception of the "canInvite", "enterpriseName",
+     * and "serverURL" properties, which are still necessary for rendering the form-only version of ContentSharing.
+     * We retain "serverURL" and "enterpriseName" from the previous shared link, to avoid having to make another call to the Users API.
      *
      * @param {ContentSharingItemAPIResponse} itemData
      */
@@ -164,6 +164,7 @@ function SharingNotification({
             return {
                 ...updatedSharedLink,
                 serverURL: prevSharedLink ? prevSharedLink.serverURL : '',
+                enterpriseName: prevSharedLink?.enterpriseName ? prevSharedLink.enterpriseName : '',
             };
         });
     };
