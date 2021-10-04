@@ -164,7 +164,7 @@ function SharingNotification({
             return {
                 ...updatedSharedLink,
                 serverURL: prevSharedLink ? prevSharedLink.serverURL : '',
-                enterpriseName: prevSharedLink?.enterpriseName ? prevSharedLink.enterpriseName : '',
+                enterpriseName: prevSharedLink && prevSharedLink.enterpriseName ? prevSharedLink.enterpriseName : '',
             };
         });
     };
