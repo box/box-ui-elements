@@ -53,6 +53,20 @@ export const withErrorOutline = () => (
     </Select>
 );
 
+export const withInfoTooltip = () => (
+    <Select name="select" label="Album" infoTooltip={"Here's your favorite 90s rap albums"}>
+        <option>Illmatic</option>
+        <option>The Marshall Mathers LP</option>
+        <option>All Eyez on Me</option>
+        <option>Ready To Die</option>
+        <option>Enter the Wu-Tang</option>
+        <option>The Eminem Show</option>
+        <option>The Chronic</option>
+        <option>Straight Outta Compton</option>
+        <option>Reasonable Doubt</option>
+    </Select>
+);
+
 export default {
     title: 'Components|Select',
     component: Select,
