@@ -16,9 +16,10 @@ const ContentExplorerNewFolderButton = ({
     isCreateNewFolderAllowed = true,
 }) => {
     const doesModeAllowCreateNewFolder =
-        contentExplorerMode === ContentExplorerModes.SELECT_FOLDER ||
+        contentExplorerMode === ContentExplorerModes.COPY ||
         contentExplorerMode === ContentExplorerModes.MOVE_COPY ||
-        contentExplorerMode === ContentExplorerModes.MULTI_SELECT;
+        contentExplorerMode === ContentExplorerModes.MULTI_SELECT ||
+        contentExplorerMode === ContentExplorerModes.SELECT_FOLDER;
 
     return doesModeAllowCreateNewFolder ? (
         <Button

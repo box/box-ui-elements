@@ -564,6 +564,7 @@ class Instance extends React.PureComponent<Props, State> {
                 <Tooltip position="top-left" text={metadataLabelEditText}>
                     <PlainButton
                         aria-label={metadataLabelEditText}
+                        aria-pressed={isEditing}
                         className={editClassName}
                         data-resin-target="metadata-instanceedit"
                         onClick={this.toggleIsEditing}

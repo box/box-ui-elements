@@ -199,6 +199,7 @@ export const basic = () => {
                     // convert the existing contact entries to compatible collaborator entries in this example
                     const collaborator: collaboratorType = {
                         collabID: 1234,
+                        email: contact.email,
                         id: contact.id,
                         name: contact.name || '',
                         type: contact.type !== 'group' ? constants.COLLAB_USER_TYPE : constants.COLLAB_GROUP_TYPE,

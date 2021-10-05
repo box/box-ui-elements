@@ -259,7 +259,7 @@ function SharingNotification({
             closeComponent();
         },
         setIsLoading,
-        transformRequest: data => convertCollabsRequest(data),
+        transformRequest: data => convertCollabsRequest(data, collaboratorsList),
     });
     if (sendInvitesFn && !sendInvites) {
         setSendInvites(() => sendInvitesFn);

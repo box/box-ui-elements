@@ -22,6 +22,7 @@
 /src/elements/content-open-with/            @box/partners
 /src/elements/content-picker/               @box/ui-elements
 /src/elements/content-preview/              @box/preview
+/src/elements/content-sharing/              @box/partners
 /src/elements/content-sidebar/              @box/preview
 /src/elements/content-uploader/             @box/create-communicate
 /src/elements/wrappers/                     @box/ui-elements
