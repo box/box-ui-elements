@@ -125,7 +125,8 @@ const ContentExplorerActionButtons = ({
                     <FormattedMessage {...messages.move} />
                 </PrimaryButton>
             )}
-            {contentExplorerMode === ContentExplorerModes.MOVE_COPY && (
+            {(contentExplorerMode === ContentExplorerModes.MOVE_COPY ||
+                contentExplorerMode === ContentExplorerModes.COPY) && (
                 <PrimaryButton
                     key="copy-btn"
                     type="button"
