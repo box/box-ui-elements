@@ -102,19 +102,22 @@ exports[`components/select/Select should render infoTooltip when specified 1`] =
           constrainToScrollParent={false}
           constrainToWindow={true}
           isDisabled={false}
+          isShown={false}
           position="middle-right"
           text="hello!!!"
           theme="default"
         >
-          <span
+          <PlainButton
             className="tooltip-icon-container"
+            onClick={[Function]}
+            type="button"
           >
             <IconInfo
               height={16}
               title="hello"
               width={16}
             />
-          </span>
+          </PlainButton>
         </Tooltip>
       </span>
     </Tooltip>

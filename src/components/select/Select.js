@@ -6,6 +6,7 @@ import IconInfo from '../../icons/general/IconInfo';
 
 import Tooltip from '../tooltip';
 import Label from '../label';
+import PlainButton from '../plain-button';
 
 import './Select.scss';
 
@@ -47,7 +48,7 @@ const Select = ({
         'is-disabled': isDisabled,
         'bdl-is-disabled': isDisabled,
     });
-
+    const [infoTooltipIsOpen, setInfoTooltipIsOpen] = React.useState(false);
     return (
         <div className={classes}>
             <Label hideLabel={!showLabel} text={label} tooltip={labelTooltip}>
@@ -61,10 +62,14 @@ const Select = ({
                             <span className="select-overlay" />
                         </span>
                         {infoTooltip && (
-                            <Tooltip position="middle-right" text={infoTooltip}>
-                                <span className="tooltip-icon-container">
+                            <Tooltip isShown={infoTooltipIsOpen} position="middle-right" text={infoTooltip}>
+                                <PlainButton
+                                    type="button"
+                                    className="tooltip-icon-container"
+                                    onClick={() => setInfoTooltipIsOpen(!infoTooltipIsOpen)}
+                                >
                                     <IconInfo height={16} width={16} {...infoIconProps} />
-                                </span>
+                                </PlainButton>
                             </Tooltip>
                         )}
                     </span>
