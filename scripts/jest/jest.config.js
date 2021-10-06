@@ -7,9 +7,9 @@ module.exports = {
         '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
             '<rootDir>/scripts/jest/fileMock.js',
         '\\.(css|less|scss|md)$': '<rootDir>/scripts/jest/mocks/styleMock.js',
-        'react-virtualized/dist/es': 'react-virtualized/dist/commonjs',
+        '@box/react-virtualized/dist/es': '@box/react-virtualized/dist/commonjs',
     },
-    transformIgnorePatterns: ['node_modules/(?!(react-virtualized/dist/es))'],
+    transformIgnorePatterns: ['node_modules/(?!(@box/react-virtualized/dist/es))'],
     preset: 'jest-puppeteer',
     testRegex: '(.*)?__tests__\\/.*\\.stories\\.test\\.(js|tsx)$',
     setupFilesAfterEnv: [
