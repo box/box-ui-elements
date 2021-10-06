@@ -3,7 +3,7 @@ import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
-import { AutoSizer } from 'react-virtualized';
+import { AutoSizer } from '@box/react-virtualized';
 
 import { mountConnected } from '../../../../../test-utils/enzyme';
 

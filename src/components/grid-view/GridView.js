@@ -1,12 +1,12 @@
 // @flow
 import * as React from 'react';
-import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/es/CellMeasurer';
-import Table, { Column } from 'react-virtualized/dist/es/Table';
+import { CellMeasurer, CellMeasurerCache } from '@box/react-virtualized/dist/es/CellMeasurer';
+import Table, { Column } from '@box/react-virtualized/dist/es/Table';
 import getProp from 'lodash/get';
 import GridViewSlot from './GridViewSlot';
 import type { Collection } from '../../common/types/core';
 
-import 'react-virtualized/styles.css';
+import '@box/react-virtualized/styles.css';
 import './GridView.scss';
 
 type TableCellRendererParams = {

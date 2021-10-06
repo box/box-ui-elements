@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import InfiniteLoader from 'react-virtualized/dist/commonjs/InfiniteLoader';
+import InfiniteLoader from '@box/react-virtualized/dist/commonjs/InfiniteLoader';
 
 function getDisplayName(WrappedComponent) {
     return WrappedComponent.displayName || WrappedComponent.name || 'Component';

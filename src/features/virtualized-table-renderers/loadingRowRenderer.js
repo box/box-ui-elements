@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { defaultRowRenderer } from 'react-virtualized/dist/es/Table/index';
+import { defaultRowRenderer } from '@box/react-virtualized/dist/es/Table/index';
 import Ghost from '../../components/ghost';
 import type { RowRendererParams } from './flowTypes';
 

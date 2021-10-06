@@ -2,7 +2,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { Draggable } from 'react-beautiful-dnd';
-import { defaultRowRenderer } from 'react-virtualized/dist/es/Table/index';
+import { defaultRowRenderer } from '@box/react-virtualized/dist/es/Table/index';
 
 import type { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
 import type { RowRendererParams } from './flowTypes';

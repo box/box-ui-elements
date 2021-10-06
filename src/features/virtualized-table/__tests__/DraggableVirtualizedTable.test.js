@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Column } from 'react-virtualized/dist/es/Table';
+import { Column } from '@box/react-virtualized/dist/es/Table';
 
 import { bdlGray } from '../../../styles/variables';
 import { VIRTUALIZED_TABLE_DEFAULTS } from '../constants';

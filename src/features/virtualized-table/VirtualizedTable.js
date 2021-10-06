@@ -2,8 +2,8 @@
 import * as React from 'react';
 import type { Node } from 'react';
 import { injectIntl } from 'react-intl';
-import { AutoSizer } from 'react-virtualized/dist/es/AutoSizer/index';
-import { WindowScroller } from 'react-virtualized/dist/es/WindowScroller/index';
+import { AutoSizer } from '@box/react-virtualized/dist/es/AutoSizer/index';
+import { WindowScroller } from '@box/react-virtualized/dist/es/WindowScroller/index';
 
 import type { InjectIntlProvidedProps } from 'react-intl';
 import type { SortParams } from './flowTypes';

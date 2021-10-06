@@ -1,6 +1,6 @@
 // @flow
 import { shallow } from 'enzyme';
-import { SortDirection } from 'react-virtualized/dist/es/Table';
+import { SortDirection } from '@box/react-virtualized/dist/es/Table';
 import IconSortChevron from '../../../icons/general/IconSortChevron';
 import sortableColumnHeaderRenderer from '../sortableColumnHeaderRenderer';
 
