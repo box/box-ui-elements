@@ -70,6 +70,26 @@ describe('components/select/Select', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should toggle infoTooltip when info icon is clicked', () => {
+        const wrapper = shallow(
+            <Select infoIconProps={{ title: 'hello' }} infoTooltip="hello!!!" label="Album" name="select" />,
+        );
+        const getButton = () => wrapper.find('PlainButton');
+        const getInfoTooltip = () => wrapper.find('Tooltip[text="hello!!!"]');
+        expect(getInfoTooltip().props().isShown).toBe(false);
+        // Toggle on
+        getButton()
+            .props()
+            .onClick();
+        expect(getInfoTooltip().props().isShown).toBe(true);
+        // Toggle off
+        getButton()
+            .props()
+            .onClick();
+
+        expect(getInfoTooltip().props().isShown).toBe(false);
+    });
+
     test('should show Tooltip when error exists', () => {
         const wrapper = shallow(<Select error="error" label="label" />);
 
