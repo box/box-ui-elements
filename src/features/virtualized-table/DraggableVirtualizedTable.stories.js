@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import isNil from 'lodash/isNil';
-import { Column } from 'react-virtualized/dist/es/Table/index';
+import { Column } from '@box/react-virtualized/dist/es/Table/index';
 import { boolean } from '@storybook/addon-knobs';
 
 import { baseCellRenderer } from '../virtualized-table-renderers';

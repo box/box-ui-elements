@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage, injectIntl, type InjectIntlProvidedProps } from 'react-intl';
 import classNames from 'classnames';
-import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
+import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from '@box/react-virtualized';
 import debounce from 'lodash/debounce';
 import AnimateHeight from 'react-animate-height';
 import Scrollbar from 'react-scrollbars-custom';

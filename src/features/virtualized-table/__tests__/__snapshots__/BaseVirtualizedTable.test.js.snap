@@ -14,6 +14,7 @@ exports[`features/virtualized-table/BaseVirtualizedTable should successfully ren
   onScroll={[Function]}
   overscanIndicesGetter={[Function]}
   overscanRowCount={10}
+  role="grid"
   rowCount={3}
   rowGetter={[Function]}
   rowHeight={52}
@@ -35,6 +36,7 @@ exports[`features/virtualized-table/BaseVirtualizedTable should successfully ren
     flexShrink={1}
     headerRenderer={[Function]}
     label="Name"
+    role="gridcell"
     style={Object {}}
     width={100}
   />
@@ -47,6 +49,7 @@ exports[`features/virtualized-table/BaseVirtualizedTable should successfully ren
     flexShrink={1}
     headerRenderer={[Function]}
     label="Description"
+    role="gridcell"
     style={Object {}}
     width={100}
   />

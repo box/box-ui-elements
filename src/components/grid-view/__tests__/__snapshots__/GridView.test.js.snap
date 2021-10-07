@@ -15,6 +15,7 @@ exports[`components/grid-view/GridView should render() 1`] = `
   onScroll={[Function]}
   overscanIndicesGetter={[Function]}
   overscanRowCount={10}
+  role="grid"
   rowClassName="bdl-GridView-tableRow"
   rowCount={1}
   rowGetter={[Function]}
@@ -35,6 +36,7 @@ exports[`components/grid-view/GridView should render() 1`] = `
     flexGrow={1}
     flexShrink={1}
     headerRenderer={[Function]}
+    role="gridcell"
     style={Object {}}
     width={400}
   />

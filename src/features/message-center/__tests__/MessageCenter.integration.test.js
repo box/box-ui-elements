@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
-import { AutoSizer } from 'react-virtualized';
+import { AutoSizer } from '@box/react-virtualized';
 
 import { mountConnected } from '../../../test-utils/enzyme';
 import MessageCenter from '../components/MessageCenter';

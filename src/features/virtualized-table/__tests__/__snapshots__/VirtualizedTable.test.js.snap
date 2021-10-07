@@ -35,6 +35,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
     flexShrink={1}
     headerRenderer={[Function]}
     label="Name"
+    role="gridcell"
     style={Object {}}
     width={100}
   />
@@ -47,6 +48,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
     flexShrink={1}
     headerRenderer={[Function]}
     label="Description"
+    role="gridcell"
     style={Object {}}
     width={100}
   />
@@ -93,6 +95,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
   onScroll={[Function]}
   overscanIndicesGetter={[Function]}
   overscanRowCount={10}
+  role="grid"
   rowCount={3}
   rowGetter={[Function]}
   rowHeight={52}
@@ -115,6 +118,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
     flexShrink={1}
     headerRenderer={[Function]}
     label="Name"
+    role="gridcell"
     style={Object {}}
     width={100}
   />
@@ -127,6 +131,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
     flexShrink={1}
     headerRenderer={[Function]}
     label="Description"
+    role="gridcell"
     style={Object {}}
     width={100}
   />
@@ -159,6 +164,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
   onScroll={[Function]}
   overscanIndicesGetter={[Function]}
   overscanRowCount={10}
+  role="grid"
   rowCount={3}
   rowGetter={[Function]}
   rowHeight={52}
@@ -180,6 +186,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
     flexShrink={1}
     headerRenderer={[Function]}
     label="Name"
+    role="gridcell"
     style={Object {}}
     width={100}
   />
@@ -192,6 +199,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
     flexShrink={1}
     headerRenderer={[Function]}
     label="Description"
+    role="gridcell"
     style={Object {}}
     width={100}
   />
