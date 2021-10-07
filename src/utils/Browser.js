@@ -42,6 +42,16 @@ class Browser {
     }
 
     /**
+     * Returns whether browser is Firefox.
+     *
+     * @return {boolean} Whether browser is Firefox
+     */
+    static isFirefox() {
+        const userAgent = Browser.getUserAgent();
+        return /Firefox/i.test(userAgent) && !/Seamonkey\//i.test(userAgent);
+    }
+
+    /**
      * Returns whether browser is Safari.
      *
      * @return {boolean} Whether browser is Safari

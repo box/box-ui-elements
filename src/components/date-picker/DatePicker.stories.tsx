@@ -55,14 +55,9 @@ export const manuallyEditable = () => (
     </IntlProvider>
 );
 
-export const manuallyEditableWithDateType = () => (
+export const manuallyEditableAndAccessible = () => (
     <IntlProvider locale="en-US">
-        <DatePicker
-            isTextInputAllowedWithDateType
-            placeholder="Date"
-            label="Date Picker"
-            value={new Date('August 10, 2021')}
-        />
+        <DatePicker isAccessible placeholder="Date" label="Date Picker" value={new Date('August 10, 2021')} />
     </IntlProvider>
 );
 

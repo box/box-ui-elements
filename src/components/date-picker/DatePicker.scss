@@ -42,16 +42,25 @@
     .date-picker-open-btn {
         position: absolute;
         right: 7px;
-        bottom: 10px;
+        bottom: 5px;
         display: inline-block;
-        height: 17px;
+        height: 23px;
+        padding: 1px 2px;
+
+        &:hover {
+            padding: 1px 2px;
+        }
+    }
+
+    div.date-picker-open-btn:hover {
+        cursor: pointer;
     }
 
     .date-picker-clear-btn,
     .date-picker-icon-alert {
         position: absolute;
         right: 30px;
-        bottom: 10px;
+        bottom: 8px;
         display: inline-block;
 
         span {
@@ -66,7 +75,8 @@
     .date-picker-clear-btn:active:focus,
     .date-picker-clear-btn:active:hover,
     .date-picker-clear-btn span {
-        height: 14px;
+        height: 18px;
+        padding: 2px;
     }
 
     .date-picker-clear-btn {
@@ -93,6 +103,12 @@
         .fill-color {
             fill: $bdl-gray-80;
         }
+    }
+
+    .date-picker-clear-btn:focus,
+    .date-picker-open-btn:focus {
+        border: 1px solid $bdl-box-blue;
+        border-radius: 4px;
     }
 
     .date-picker-icon-alert {
