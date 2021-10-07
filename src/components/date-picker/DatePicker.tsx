@@ -12,6 +12,8 @@ import { RESIN_TAG_TARGET } from '../../common/variables';
 import IconAlert from '../../icons/general/IconAlert';
 import IconCalendar from '../../icons/general/IconCalendar';
 import IconClear from '../../icons/general/IconClear';
+// @ts-ignore flow import
+import Browser from '../../utils/Browser';
 
 import { ButtonType } from '../button';
 import Label from '../label';
@@ -150,8 +152,8 @@ export interface DatePickerProps extends WrappedComponentProps {
     placeholder?: string;
     /** Resin tag */
     resinTarget?: string;
-    /** isTextInputAllowedWithDateType */
-    isTextInputAllowedWithDateType?: boolean;
+    /** Does the date input meet accessibility standards */
+    isAccessible?: boolean;
     /** Date to set the input */
     value?: Date | null;
     /** Number of years, or an array containing an upper and lower range */
@@ -185,7 +187,7 @@ class DatePicker extends React.Component<DatePickerProps> {
             isTextInputAllowed,
             maxDate,
             minDate,
-            isTextInputAllowedWithDateType,
+            isAccessible,
             value,
             yearRange,
         } = this.props;
@@ -193,7 +195,7 @@ class DatePicker extends React.Component<DatePickerProps> {
         const { nextMonth, previousMonth } = messages;
         let defaultValue = value;
 
-        if (isTextInputAllowedWithDateType) {
+        if (isAccessible) {
             // test whether a new date input falls back to a text input or not
             const test = document.createElement('input');
 
@@ -244,17 +246,25 @@ class DatePicker extends React.Component<DatePickerProps> {
             yearRange,
             toString: this.formatDisplay,
         };
-        if (isTextInputAllowedWithDateType && this.canUseDateInputType) {
+
+        if (isAccessible && !this.canUseDateInputType) {
+            // Do not bind to field, Pikaday's on change handling doesn't play well with input type "date"
             delete datePickerConfig.field;
-            datePickerConfig.keyboardInput = false; // TODO: Re-check if this config is necessary
-            datePickerConfig.parse = this.parseDisplayDateType; // TODO: Re-check if this config is necessary
+            datePickerConfig.keyboardInput = false;
+            datePickerConfig.parse = this.parseDisplayDateType;
             datePickerConfig.toString = this.formatDisplayDateType;
-            datePickerConfig.trigger = this.dateInputEl; // TODO: Re-check if this config is necessary
+            datePickerConfig.trigger = this.dateInputEl;
+        }
+        if (isAccessible && this.canUseDateInputType) {
+            delete datePickerConfig.field;
+            datePickerConfig.keyboardInput = false;
+            datePickerConfig.trigger = this.dateInputEl;
         }
         this.datePicker = new Pikaday(datePickerConfig);
 
-        if (isTextInputAllowedWithDateType && this.canUseDateInputType) {
+        if (isAccessible) {
             if (this.dateInputEl && this.dateInputEl.parentNode) {
+                // When not bound to a field, Pikaday shows date picker on initialization. Hide it instead.
                 this.datePicker.hide();
                 this.dateInputEl.parentNode.insertBefore(this.datePicker.el, this.dateInputEl.nextSibling);
             }
@@ -322,14 +332,21 @@ class DatePicker extends React.Component<DatePickerProps> {
     }
 
     onSelectHandler = (date: Date | null = null) => {
-        const { onChange, isTextInputAllowedWithDateType } = this.props;
+        const { onChange, isAccessible } = this.props;
         if (onChange) {
-            const formattedDate = this.formatValue(date); // TODO: need a formatValue equivalent of formatDisplayDateType
+            const formattedDate = this.formatValue(date);
             onChange(date, formattedDate);
         }
 
-        if (isTextInputAllowedWithDateType && this.canUseDateInputType && this.dateInputEl && this.datePicker) {
-            this.dateInputEl.value = this.datePicker.toString();
+        if (isAccessible) {
+            if (this.dateInputEl && this.datePicker) {
+                // Required because Pikaday instance is unbound
+                // See https://github.com/Pikaday/Pikaday#usage
+                this.dateInputEl.value = this.datePicker.toString();
+            }
+            if (this.datePicker && this.datePicker.isVisible()) {
+                this.datePicker.hide();
+            }
         }
     };
 
@@ -343,9 +360,9 @@ class DatePicker extends React.Component<DatePickerProps> {
 
     datePicker: Pikaday | null = null;
 
-    datePickerButtonEl: HTMLButtonElement | null | undefined;
+    datePickerButtonEl: HTMLButtonElement | HTMLDivElement | null | undefined;
 
-    // Used to detect when a fallback is necessary when isTextInputAllowedWithDateType is enabled
+    // Used to detect when a fallback is necessary when isAccessible is enabled
     canUseDateInputType = true;
 
     // Used to prevent bad sequences of hide/show when toggling the datepicker button
@@ -359,9 +376,9 @@ class DatePicker extends React.Component<DatePickerProps> {
     };
 
     handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        const { isKeyboardInputAllowed, isTextInputAllowed, isTextInputAllowedWithDateType } = this.props;
+        const { isKeyboardInputAllowed, isTextInputAllowed, isAccessible } = this.props;
 
-        if (isTextInputAllowedWithDateType && !this.canUseDateInputType) {
+        if (isAccessible && !this.canUseDateInputType) {
             return;
         }
 
@@ -370,11 +387,16 @@ class DatePicker extends React.Component<DatePickerProps> {
         }
 
         // Stops up/down arrow & spacebar from moving page scroll position since pikaday does not preventDefault correctly
-        if (!(isTextInputAllowed || isTextInputAllowedWithDateType) && event.key !== TAB_KEY) {
+        if (!(isTextInputAllowed || isAccessible) && event.key !== TAB_KEY) {
             event.preventDefault();
         }
 
         if (isTextInputAllowed && event.key === ENTER_KEY) {
+            event.preventDefault();
+        }
+
+        // In Firefox, enter & spacebar open up the browser's default date picker. Suppress it.
+        if (isAccessible && (event.key === ENTER_KEY || event.keyCode === 32) && Browser.isFirefox()) {
             event.preventDefault();
         }
 
@@ -387,14 +409,22 @@ class DatePicker extends React.Component<DatePickerProps> {
     };
 
     handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { isTextInputAllowedWithDateType } = this.props;
-        if (isTextInputAllowedWithDateType && this.canUseDateInputType) {
+        const { isAccessible, onChange } = this.props;
+        if (isAccessible && !this.canUseDateInputType) {
             if (this.datePicker && this.datePicker.isVisible()) {
                 event.stopPropagation();
             }
 
-            if (this.datePicker && event.target.value) {
-                this.datePicker.setDate(this.parseDisplayDateType(event.target.value), true);
+            const date = event.target.value;
+            if (this.datePicker && date) {
+                const parsedDate = this.parseDisplayDateType(date);
+                // Set date so Pikaday date picker value stays in sync with input
+                this.datePicker.setDate(parsedDate, true);
+
+                if (onChange) {
+                    const formattedDate = this.formatValue(parsedDate);
+                    onChange(parsedDate, formattedDate);
+                }
             }
         }
     };
@@ -435,19 +465,47 @@ class DatePicker extends React.Component<DatePickerProps> {
     };
 
     handleButtonClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
-        const { isTextInputAllowedWithDateType } = this.props;
         event.preventDefault();
         event.stopPropagation();
+        const { isAccessible } = this.props;
 
-        if (isTextInputAllowedWithDateType && this.canUseDateInputType) {
+        if (isAccessible) {
             if (this.datePicker && this.datePicker.isVisible()) {
                 this.datePicker.hide();
             } else if (this.datePicker) {
                 this.datePicker.show();
             }
         } else if (!this.shouldStayClosed) {
-            // TODO: Determine correct isTextInputAllowedWithDateType behavior for shouldStayClosed
             this.focusDatePicker();
+        }
+    };
+
+    handleDivClick = () => {
+        const { isAccessible, isDisabled } = this.props;
+
+        if (isDisabled) {
+            return;
+        }
+
+        if (isAccessible) {
+            if (this.datePicker && this.datePicker.isVisible()) {
+                this.datePicker.hide();
+            } else if (this.datePicker) {
+                this.datePicker.show();
+            }
+        } else if (!this.shouldStayClosed) {
+            this.focusDatePicker();
+        }
+    };
+
+    handleOnClick = (event: React.SyntheticEvent<HTMLInputElement>) => {
+        const { isAccessible } = this.props;
+
+        if (isAccessible) {
+            // Suppress Firefox default behavior: clicking on input type "date"
+            // opens the browser date picker.
+            event.preventDefault();
+            event.stopPropagation();
         }
     };
 
@@ -457,16 +515,16 @@ class DatePicker extends React.Component<DatePickerProps> {
     };
 
     formatDisplayDateType = (date?: Date | null): string => {
+        // Input type "date" only accepts the format YYYY-MM-DD
         return date ? date.toISOString().slice(0, 10) : '';
     };
 
     parseDisplayDateType = (dateString?: string | null): Date | null => {
         if (dateString) {
-            const parts = dateString.split('-');
-            const day = parseInt(parts[2], 10);
-            const month = parseInt(parts[1], 10) - 1;
-            const year = parseInt(parts[0], 10);
-            return new Date(year, month, day);
+            // Calling new Date('YYYY-MM-DD') without 'T00:00:00' yields undesired results:
+            // E.g. new Date('2017-06-01') => May 31 2017
+            // E.g. new Date('2017-06-01T00:00:00') => June 01 2017
+            return new Date(`${dateString}T00:00:00`);
         }
         return null;
     };
@@ -484,6 +542,60 @@ class DatePicker extends React.Component<DatePickerProps> {
         this.onSelectHandler(null);
     };
 
+    determineIfRequired = () => {
+        const { isAccessible, isRequired } = this.props;
+        // Firefox has no pseudo elements to hide the clear button for input type "date" via css
+        // Setting required=true hides the clear button
+        if (isAccessible && Browser.isFirefox()) {
+            return true;
+        }
+        return isRequired;
+    };
+
+    renderCalendarButton = () => {
+        const { intl, isAccessible, isAlwaysVisible, isDisabled } = this.props;
+        const { formatMessage } = intl;
+
+        if (isAlwaysVisible) {
+            return null;
+        }
+
+        // De-emphasizing the Pikaday date picker because it does not meet accessibility standards
+        // Screenreaders & navigating via keyboard will no longer pick up on this element
+        if (isAccessible) {
+            return (
+                /* eslint-disable jsx-a11y/click-events-have-key-events */
+                /* eslint-disable jsx-a11y/no-static-element-interactions */
+                <div
+                    className="date-picker-open-btn"
+                    ref={ref => {
+                        this.datePickerButtonEl = ref;
+                    }}
+                    onClick={this.handleDivClick}
+                >
+                    <IconCalendar height={17} width={16} />
+                </div>
+                /* eslint-enable jsx-a11y/click-events-have-key-events */
+                /* eslint-enable jsx-a11y/no-static-element-interactions */
+            );
+        }
+
+        return (
+            <PlainButton
+                aria-label={formatMessage(messages.chooseDate)}
+                className="date-picker-open-btn"
+                getDOMRef={ref => {
+                    this.datePickerButtonEl = ref;
+                }}
+                isDisabled={isDisabled}
+                onClick={this.handleButtonClick}
+                type={ButtonType.BUTTON}
+            >
+                <IconCalendar height={17} width={16} />
+            </PlainButton>
+        );
+    };
+
     render() {
         const {
             className,
@@ -495,12 +607,10 @@ class DatePicker extends React.Component<DatePickerProps> {
             hideOptionalLabel,
             inputProps,
             intl,
-            isAlwaysVisible,
             isClearable,
             isDisabled,
-            isRequired,
             isTextInputAllowed,
-            isTextInputAllowedWithDateType,
+            isAccessible,
             label,
             name,
             onFocus,
@@ -516,6 +626,7 @@ class DatePicker extends React.Component<DatePickerProps> {
         });
 
         const hasError = !!error;
+        const isRequired = this.determineIfRequired();
 
         const ariaAttrs = {
             'aria-invalid': hasError,
@@ -527,7 +638,7 @@ class DatePicker extends React.Component<DatePickerProps> {
         const resinTargetAttr = resinTarget ? { [RESIN_TAG_TARGET]: resinTarget } : {};
 
         let valueAttr;
-        if (isTextInputAllowedWithDateType && this.canUseDateInputType) {
+        if (isAccessible && this.canUseDateInputType) {
             valueAttr = { defaultValue: this.formatDisplayDateType(value) };
         } else if (isTextInputAllowed) {
             valueAttr = { defaultValue: this.formatDisplay(value) };
@@ -536,13 +647,14 @@ class DatePicker extends React.Component<DatePickerProps> {
         }
 
         let onChangeAttr;
-        if (isTextInputAllowedWithDateType && this.canUseDateInputType) {
+        if (isAccessible) {
             onChangeAttr = { onChange: this.handleOnChange };
         } else if (isTextInputAllowed) {
             onChangeAttr = {};
         } else {
             onChangeAttr = { onChange: noop };
         }
+
         /* fixes proptype error about readonly field (not adding readonly so constraint validation works) */
 
         return (
@@ -580,9 +692,10 @@ class DatePicker extends React.Component<DatePickerProps> {
                                         className="date-picker-input"
                                         disabled={isDisabled}
                                         onBlur={this.handleInputBlur}
+                                        onClick={this.handleOnClick}
                                         placeholder={placeholder || formatMessage(messages.chooseDate)}
                                         required={isRequired}
-                                        type={isTextInputAllowedWithDateType ? 'date' : 'text'}
+                                        type={isAccessible ? 'date' : 'text'}
                                         {...onChangeAttr}
                                         onFocus={onFocus}
                                         onKeyDown={this.handleInputKeyDown}
@@ -616,20 +729,7 @@ class DatePicker extends React.Component<DatePickerProps> {
                             width={13}
                         />
                     ) : null}
-                    {!isAlwaysVisible && (
-                        <PlainButton
-                            aria-label={formatMessage(messages.chooseDate)}
-                            className="date-picker-open-btn"
-                            getDOMRef={ref => {
-                                this.datePickerButtonEl = ref;
-                            }}
-                            isDisabled={isDisabled}
-                            onClick={this.handleButtonClick}
-                            type={ButtonType.BUTTON}
-                        >
-                            <IconCalendar height={17} width={16} />
-                        </PlainButton>
-                    )}
+                    {this.renderCalendarButton()}
                     <input
                         className="date-picker-unix-time-input"
                         name={name}
