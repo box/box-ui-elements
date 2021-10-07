@@ -1,12 +1,14 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
+import { FormattedMessage } from 'react-intl';
 
 import IconInfo from '../../icons/general/IconInfo';
 
 import Tooltip from '../tooltip';
 import Label from '../label';
-
+import PlainButton from '../plain-button';
+import messages from './messages';
 import './Select.scss';
 
 type Props = {
@@ -47,7 +49,7 @@ const Select = ({
         'is-disabled': isDisabled,
         'bdl-is-disabled': isDisabled,
     });
-
+    const [infoTooltipIsOpen, setInfoTooltipIsOpen] = React.useState(false);
     return (
         <div className={classes}>
             <Label hideLabel={!showLabel} text={label} tooltip={labelTooltip}>
@@ -61,10 +63,19 @@ const Select = ({
                             <span className="select-overlay" />
                         </span>
                         {infoTooltip && (
-                            <Tooltip position="middle-right" text={infoTooltip}>
-                                <span className="tooltip-icon-container">
-                                    <IconInfo height={16} width={16} {...infoIconProps} />
-                                </span>
+                            <Tooltip isShown={infoTooltipIsOpen} position="middle-right" text={infoTooltip}>
+                                <PlainButton
+                                    type="button"
+                                    className="tooltip-icon-container"
+                                    onClick={() => setInfoTooltipIsOpen(!infoTooltipIsOpen)}
+                                >
+                                    <IconInfo
+                                        height={16}
+                                        width={16}
+                                        title={<FormattedMessage {...messages.moreInfo} />}
+                                        {...infoIconProps}
+                                    />
+                                </PlainButton>
                             </Tooltip>
                         )}
                     </span>
