@@ -54,9 +54,6 @@ Box UI Elements use [SCSS stylesheets](https://sass-lang.com/guide). Each of the
 * Limited support for Internet Explorer 11 (requires ES2015 polyfill)
 * Mobile Chrome and Safari
 
-### React Virtualized
-As of September 2021, Box UI Elements has migrated to a forked version of `react-virtualized` under the Box namespace at `@box/react-virtualized`. This change is due to accessibility requirements and the main package being mostly unmaintained.
-
 # Contributing
 Our contributing guidelines can be found in [CONTRIBUTING.md](CONTRIBUTING.md). The development setup instructions can be found in [DEVELOPING.md](DEVELOPING.md).
 
