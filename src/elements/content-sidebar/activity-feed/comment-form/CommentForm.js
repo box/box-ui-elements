@@ -128,9 +128,9 @@ class CommentForm extends React.Component<Props, State> {
         return (
             <Media className={inputContainerClassNames}>
                 {!isEditing && (
-                    <div className="bcs-CommentForm-avatar">
+                    <Media.Figure as="div" className="bcs-CommentForm-avatar">
                         <Avatar getAvatarUrl={getAvatarUrl} user={user} />
-                    </div>
+                    </Media.Figure>
                 )}
 
                 <Media.Body className="bcs-CommentForm-body" data-testid="bcs-CommentForm-body">
