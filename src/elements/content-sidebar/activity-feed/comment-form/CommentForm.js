@@ -153,9 +153,9 @@ class CommentForm extends React.Component<Props, State> {
                             validateOnBlur={false}
                         />
                         {showTip && (
-                            <aside className="bcs-CommentForm-tip">
+                            <div className="bcs-CommentForm-tip">
                                 <FormattedMessage {...messages.atMentionTip} />
-                            </aside>
+                            </div>
                         )}
 
                         {isOpen && <CommentFormControls onCancel={onCancel} />}
