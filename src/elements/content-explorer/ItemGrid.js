@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import getProp from 'lodash/get';
-import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
+import AutoSizer from '@box/react-virtualized/dist/es/AutoSizer';
 import GridView from '../../components/grid-view/GridView';
 import ItemGridCell from './ItemGridCell';
 import type { ItemGridProps } from './flowTypes';

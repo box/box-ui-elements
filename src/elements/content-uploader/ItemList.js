@@ -5,14 +5,14 @@
 
 import React from 'react';
 import noop from 'lodash/noop';
-import { Table, Column } from 'react-virtualized/dist/es/Table';
-import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
+import { Table, Column } from '@box/react-virtualized/dist/es/Table';
+import AutoSizer from '@box/react-virtualized/dist/es/AutoSizer';
 import nameCellRenderer from './nameCellRenderer';
 import progressCellRenderer from './progressCellRenderer';
 import actionCellRenderer from './actionCellRenderer';
 import removeCellRenderer from './removeCellRenderer';
 import type { UploadItem } from '../../common/types/upload';
-import 'react-virtualized/styles.css';
+import '@box/react-virtualized/styles.css';
 import './ItemList.scss';
 
 type Props = {

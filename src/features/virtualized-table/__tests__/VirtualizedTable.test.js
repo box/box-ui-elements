@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
 import { shallow } from 'enzyme';
-import { AutoSizer } from 'react-virtualized/dist/es/AutoSizer';
-import { WindowScroller } from 'react-virtualized/dist/es/WindowScroller';
-import { Column, Table } from 'react-virtualized/dist/es/Table';
+import { AutoSizer } from '@box/react-virtualized/dist/es/AutoSizer';
+import { WindowScroller } from '@box/react-virtualized/dist/es/WindowScroller';
+import { Column, Table } from '@box/react-virtualized/dist/es/Table';
 
 import BaseVirtualizedTable from '../BaseVirtualizedTable';
 import VirtualizedTable from '../VirtualizedTable';

@@ -18,7 +18,7 @@ import {
 } from '../../metadata-instance-fields/constants';
 import { FIELD_METADATA } from '../../../constants';
 
-jest.mock('react-virtualized/dist/es/AutoSizer', () => () => 'AutoSizer');
+jest.mock('@box/react-virtualized/dist/es/AutoSizer', () => () => 'AutoSizer');
 
 describe('features/metadata-based-view/MetadataBasedItemList', () => {
     let wrapper;

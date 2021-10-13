@@ -2,7 +2,7 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
-import { Column } from 'react-virtualized/dist/es/Table/index';
+import { Column } from '@box/react-virtualized/dist/es/Table/index';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 import type { DroppableProvided } from 'react-beautiful-dnd';

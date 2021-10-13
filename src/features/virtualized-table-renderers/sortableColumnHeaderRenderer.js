@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import { SortDirection } from 'react-virtualized/dist/es/Table/index';
+import { SortDirection } from '@box/react-virtualized/dist/es/Table/index';
 import IconSortChevron from '../../icons/general/IconSortChevron';
 import type { HeaderRendererParams } from './flowTypes';
 

@@ -2,14 +2,14 @@
 
 import React, { type Element, Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
-import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
+import AutoSizer from '@box/react-virtualized/dist/es/AutoSizer';
 import classNames from 'classnames';
 import find from 'lodash/find';
 import getProp from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import isNil from 'lodash/isNil';
 import isString from 'lodash/isString';
-import MultiGrid from 'react-virtualized/dist/es/MultiGrid/MultiGrid';
+import MultiGrid from '@box/react-virtualized/dist/es/MultiGrid/MultiGrid';
 
 import MetadataField from '../metadata-instance-fields/MetadataField';
 import ReadOnlyMetadataField from '../metadata-instance-fields/ReadOnlyMetadataField';

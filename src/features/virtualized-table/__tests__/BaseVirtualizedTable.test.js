@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Column, Table } from 'react-virtualized/dist/es/Table';
+import { Column, Table } from '@box/react-virtualized/dist/es/Table';
 
 import BaseVirtualizedTable from '../BaseVirtualizedTable';
 import loadingRowRenderer from '../../virtualized-table-renderers/loadingRowRenderer';

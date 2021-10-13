@@ -3,10 +3,10 @@ import React from 'react';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
 
-import Column from 'react-virtualized/dist/commonjs/Table/Column';
-import Table from 'react-virtualized/dist/commonjs/Table';
-import defaultTableRowRenderer from 'react-virtualized/dist/commonjs/Table/defaultRowRenderer';
-import 'react-virtualized/styles.css';
+import Column from '@box/react-virtualized/dist/commonjs/Table/Column';
+import Table from '@box/react-virtualized/dist/commonjs/Table';
+import defaultTableRowRenderer from '@box/react-virtualized/dist/commonjs/Table/defaultRowRenderer';
+import '@box/react-virtualized/styles.css';
 
 import { withInfiniteLoader } from '../../../components/react-virtualized-helpers';
 

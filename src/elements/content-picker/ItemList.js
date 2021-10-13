@@ -6,8 +6,8 @@
 
 import React from 'react';
 import classNames from 'classnames';
-import { Table, Column } from 'react-virtualized/dist/es/Table';
-import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
+import { Table, Column } from '@box/react-virtualized/dist/es/Table';
+import AutoSizer from '@box/react-virtualized/dist/es/AutoSizer';
 import KeyBinder from '../common/KeyBinder';
 import nameCellRenderer from '../common/item/nameCellRenderer';
 import iconCellRenderer from '../common/item/iconCellRenderer';
@@ -17,7 +17,7 @@ import selectionCellRenderer from './selectionCellRenderer';
 import isRowSelectable from './cellRendererHelper';
 import { VIEW_SELECTED, FIELD_NAME, FIELD_ID, FIELD_SHARED_LINK, TYPE_FOLDER } from '../../constants';
 import type { View, Collection, BoxItem } from '../../common/types/core';
-import 'react-virtualized/styles.css';
+import '@box/react-virtualized/styles.css';
 import './ItemList.scss';
 
 type Props = {

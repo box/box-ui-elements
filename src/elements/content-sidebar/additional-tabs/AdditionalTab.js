@@ -112,6 +112,7 @@ class AdditionalTab extends React.PureComponent<Props, State> {
                 isFtuxVisible={!isLoading}
             >
                 <PlainButton
+                    aria-label={title}
                     className={className}
                     data-testid="additionaltab"
                     type="button"
