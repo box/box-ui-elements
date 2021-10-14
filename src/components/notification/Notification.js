@@ -118,7 +118,7 @@ class Notification extends React.Component<Props> {
                     onClick={this.onClose}
                     type="button"
                 >
-                    <IconClose color="#FFF" height={18} width={18} />
+                    <IconClose color="#222" height={18} width={18} />
                 </button>
             </div>
         );
