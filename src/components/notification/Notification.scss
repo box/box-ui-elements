@@ -72,7 +72,7 @@
     a {
         flex: none;
         color: $bdl-gray;
-        border-color: inherit;
+        border-color: $bdl-gray;
 
         &.btn.is-disabled,
         &.btn:not(.is-disabled) {
