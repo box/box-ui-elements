@@ -63,6 +63,7 @@ const Checkbox = ({
     const checkboxAndLabel = (
         <span className="checkbox-label">
             <input
+                aria-labelledby={description ? `description_${inputID}` : ''}
                 checked={isChecked}
                 disabled={isDisabled}
                 id={inputID}
@@ -85,7 +86,11 @@ const Checkbox = ({
         <div className={classNames('checkbox-container', className, { 'is-disabled bdl-is-disabled': isDisabled })}>
             {fieldLabel && <div className="label">{fieldLabel}</div>}
             {checkboxAndLabel}
-            {description ? <div className="checkbox-description">{description}</div> : null}
+            {description ? (
+                <div id={`description_${inputID}`} className="checkbox-description">
+                    {description}
+                </div>
+            ) : null}
             {subsection ? <div className="checkbox-subsection">{subsection}</div> : null}
         </div>
     );
