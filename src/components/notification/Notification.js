@@ -3,6 +3,8 @@ import * as React from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
 import classNames from 'classnames';
 
+import { bdlGray } from '../../styles/variables';
+
 import IconAlertCircle from '../../icons/general/IconAlertCircle';
 import IconBell from '../../icons/general/IconBell';
 import IconClose from '../../icons/general/IconClose';
@@ -107,7 +109,7 @@ class Notification extends React.Component<Props> {
         return (
             <div className={classes}>
                 {React.cloneElement(ICON_RENDERER[type](), {
-                    color: '#fff',
+                    color: bdlGray,
                     height: 20,
                     width: 20,
                 })}
@@ -118,7 +120,7 @@ class Notification extends React.Component<Props> {
                     onClick={this.onClose}
                     type="button"
                 >
-                    <IconClose color="#FFF" height={18} width={18} />
+                    <IconClose color={bdlGray} height={18} width={18} />
                 </button>
             </div>
         );
