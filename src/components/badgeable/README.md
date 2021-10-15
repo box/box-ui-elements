@@ -15,6 +15,7 @@ const BetaBadge = require('../badge/BetaBadge').default;
 const Badge = require('../badge/Badge').default;
 const IconGlobe = require('../../icons/general/IconGlobe').default;
 const IconClock = require('../../icons/general/IconClock').default;
+const CountBadge = require('../count-badge/CountBadge').default;
 const IconExpirationBadge = require('../../icons/general/IconExpirationBadge').default;
 const Avatar = require('../avatar/Avatar').default;
 const Tooltip = require('../tooltip/Tooltip').default;
