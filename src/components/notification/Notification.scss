@@ -55,10 +55,6 @@
     > svg {
         flex: none;
         margin-right: 15px;
-
-        .stroke-color {
-            stroke: $bdl-gray;
-        }
     }
 
     &.wrap > span {
@@ -76,7 +72,7 @@
     a {
         flex: none;
         color: $bdl-gray;
-        border-color: $bdl-gray;
+        border-color: inherit;
 
         &.btn.is-disabled,
         &.btn:not(.is-disabled) {
