@@ -4,6 +4,8 @@ import { defineMessages, injectIntl } from 'react-intl';
 import classNames from 'classnames';
 import { bdlGray } from '../../styles/variables';
 
+import { bdlGray } from '../../styles/variables';
+
 import IconAlertCircle from '../../icons/general/IconAlertCircle';
 import IconBell from '../../icons/general/IconBell';
 import IconClose from '../../icons/general/IconClose';
