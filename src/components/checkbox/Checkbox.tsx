@@ -63,7 +63,7 @@ const Checkbox = ({
     const checkboxAndLabel = (
         <span className="checkbox-label">
             <input
-                aria-labelledby={description ? `description_${inputID}` : ''}
+                aria-describedby={description ? `description_${inputID}` : ''}
                 checked={isChecked}
                 disabled={isDisabled}
                 id={inputID}
