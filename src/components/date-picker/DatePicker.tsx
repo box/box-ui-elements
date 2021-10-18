@@ -9,9 +9,9 @@ import uniqueId from 'lodash/uniqueId';
 
 // @ts-ignore flow import
 import { RESIN_TAG_TARGET } from '../../common/variables';
-import IconAlert from '../../icons/general/IconAlert';
-import IconCalendar from '../../icons/general/IconCalendar';
-import IconClear from '../../icons/general/IconClear';
+import Alert16 from '../../icon/fill/Alert16';
+import Calendar16 from '../../icon/fill/Calendar16';
+import ClearBadge16 from '../../icon/fill/ClearBadge16';
 // @ts-ignore flow import
 import Browser from '../../utils/Browser';
 
@@ -570,7 +570,7 @@ class DatePicker extends React.Component<DatePickerProps> {
                     }}
                     onClick={this.handleDivClick}
                 >
-                    <IconCalendar height={17} width={16} />
+                    <Calendar16 />
                 </div>
                 /* eslint-enable jsx-a11y/click-events-have-key-events */
                 /* eslint-enable jsx-a11y/no-static-element-interactions */
@@ -588,7 +588,7 @@ class DatePicker extends React.Component<DatePickerProps> {
                 onClick={this.handleButtonClick}
                 type={ButtonType.BUTTON}
             >
-                <IconCalendar height={17} width={16} />
+                <Calendar16 />
             </PlainButton>
         );
     };
@@ -653,7 +653,6 @@ class DatePicker extends React.Component<DatePickerProps> {
         }
 
         /* fixes proptype error about readonly field (not adding readonly so constraint validation works) */
-
         return (
             <div className={classes}>
                 <span className="date-picker-icon-holder">
@@ -715,15 +714,13 @@ class DatePicker extends React.Component<DatePickerProps> {
                             onClick={this.clearDate}
                             type={ButtonType.BUTTON}
                         >
-                            <IconClear height={12} width={12} />
+                            <ClearBadge16 />
                         </PlainButton>
                     ) : null}
                     {error ? (
-                        <IconAlert
+                        <Alert16
                             className="date-picker-icon-alert"
-                            height={13}
                             title={<FormattedMessage {...messages.iconAlertText} />}
-                            width={13}
                         />
                     ) : null}
                     {this.renderCalendarButton()}
