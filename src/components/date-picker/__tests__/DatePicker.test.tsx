@@ -128,7 +128,7 @@ describe('components/date-picker/DatePicker', () => {
         const wrapper = mount(<DatePicker name="dateinput" label="Date" placeholder="a date" value={new Date()} />);
 
         expect(wrapper.find('PlainButton.date-picker-clear-btn').length).toEqual(1);
-        expect(wrapper.find('IconClear').length).toEqual(1);
+        expect(wrapper.find('ClearBadge16').length).toEqual(1);
     });
 
     test('should clear datepicker and call onChange() prop when clear button is clicked', () => {
@@ -155,7 +155,8 @@ describe('components/date-picker/DatePicker', () => {
             <DatePicker name="dateinput" isClearable={false} label="Date" placeholder="a date" value={new Date()} />,
         );
 
-        expect(wrapper.find('IconClear').length).toEqual(0);
+        expect(wrapper.find('.date-picker-clear-btn').length).toEqual(0);
+        expect(wrapper.find('ClearBadge16').length).toEqual(0);
     });
 
     test('should show tooltip when error exists', () => {
