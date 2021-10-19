@@ -18,6 +18,7 @@ import Browser from '../../utils/Browser';
 import { ButtonType } from '../button';
 import Label from '../label';
 import PlainButton from '../plain-button';
+import Portal from '../portal';
 import Tooltip, { TooltipPosition, TooltipTheme } from '../tooltip';
 
 // @ts-ignore flow import
@@ -175,6 +176,8 @@ class DatePicker extends React.Component<DatePickerProps> {
 
     descriptionID = uniqueId('description');
 
+    private portalRef = React.createRef<HTMLDivElement>();
+
     componentDidMount() {
         const {
             customInput,
@@ -245,26 +248,22 @@ class DatePicker extends React.Component<DatePickerProps> {
         };
 
         if (isAccessible && !this.canUseDateInputType) {
-            // Do not bind to field, Pikaday's on change handling doesn't play well with input type "date"
-            delete datePickerConfig.field;
             datePickerConfig.keyboardInput = false;
             datePickerConfig.parse = this.parseDisplayDateType;
             datePickerConfig.toString = this.formatDisplayDateType;
             datePickerConfig.trigger = this.dateInputEl;
         }
         if (isAccessible && this.canUseDateInputType) {
-            delete datePickerConfig.field;
             datePickerConfig.keyboardInput = false;
             datePickerConfig.trigger = this.dateInputEl;
         }
+
         this.datePicker = new Pikaday(datePickerConfig);
 
-        if (isAccessible) {
-            if (this.dateInputEl && this.dateInputEl.parentNode) {
-                // When not bound to a field, Pikaday shows date picker on initialization. Hide it instead.
-                this.datePicker.hide();
-                this.dateInputEl.parentNode.insertBefore(this.datePicker.el, this.dateInputEl.nextSibling);
-            }
+        if (isAccessible && this.dateInputEl && this.portalRef.current) {
+            // When not bound to a field, Pikaday shows date picker on initialization. Hide it instead.
+            this.datePicker.hide();
+            this.portalRef.current.appendChild(this.datePicker.el);
         }
 
         if (isTextInputAllowed) {
@@ -732,6 +731,9 @@ class DatePicker extends React.Component<DatePickerProps> {
                         value={value ? this.formatValue(value) : ''}
                     />
                 </span>
+                <Portal>
+                    <div ref={this.portalRef} style={{ zIndex: 200 }} />
+                </Portal>
             </div>
         );
     }
