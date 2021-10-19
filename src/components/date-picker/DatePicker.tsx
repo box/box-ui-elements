@@ -18,7 +18,6 @@ import Browser from '../../utils/Browser';
 import { ButtonType } from '../button';
 import Label from '../label';
 import PlainButton from '../plain-button';
-import Portal from '../portal';
 import Tooltip, { TooltipPosition, TooltipTheme } from '../tooltip';
 
 // @ts-ignore flow import
@@ -176,8 +175,6 @@ class DatePicker extends React.Component<DatePickerProps> {
 
     descriptionID = uniqueId('description');
 
-    private portalRef = React.createRef<HTMLDivElement>();
-
     componentDidMount() {
         const {
             customInput,
@@ -259,12 +256,6 @@ class DatePicker extends React.Component<DatePickerProps> {
         }
 
         this.datePicker = new Pikaday(datePickerConfig);
-
-        if (isAccessible && this.dateInputEl && this.portalRef.current) {
-            // When not bound to a field, Pikaday shows date picker on initialization. Hide it instead.
-            this.datePicker.hide();
-            this.portalRef.current.appendChild(this.datePicker.el);
-        }
 
         if (isTextInputAllowed) {
             this.updateDateInputValue(this.formatDisplay(defaultValue));
@@ -731,9 +722,6 @@ class DatePicker extends React.Component<DatePickerProps> {
                         value={value ? this.formatValue(value) : ''}
                     />
                 </span>
-                <Portal>
-                    <div ref={this.portalRef} style={{ zIndex: 200 }} />
-                </Portal>
             </div>
         );
     }
