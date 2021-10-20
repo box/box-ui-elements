@@ -4,14 +4,14 @@ exports[`components/Media compound component 1`] = `
 <div
   class="bdl-Media"
 >
-  <figure
+  <div
     class="bdl-Media-figure"
   >
     <img
       alt="some img"
       src=""
     />
-  </figure>
+  </div>
   <div
     class="bdl-Media-body"
   >
