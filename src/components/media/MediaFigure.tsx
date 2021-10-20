@@ -17,7 +17,7 @@ export interface MediaFigureProps {
     style?: React.CSSProperties;
 }
 
-const MediaFigure = ({ as: Wrapper = 'figure', className, children, ...rest }: MediaFigureProps) => (
+const MediaFigure = ({ as: Wrapper = 'div', className, children, ...rest }: MediaFigureProps) => (
     <Wrapper className={classnames('bdl-Media-figure', className)} {...rest}>
         {children}
     </Wrapper>
