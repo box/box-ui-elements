@@ -4,12 +4,11 @@ import { defineMessages, injectIntl } from 'react-intl';
 import classNames from 'classnames';
 
 import { bdlGray } from '../../styles/variables';
-
-import IconAlertCircle from '../../icons/general/IconAlertCircle';
-import IconBell from '../../icons/general/IconBell';
+import InfoBadge from '../../icons/badges/InfoBadge';
+import CircleCheck16 from '../../icon/line/CircleCheck16';
+import TriangleAlert16 from '../../icon/line/TriangleAlert16';
+import XBadge16 from '../../icon/line/XBadge16';
 import IconClose from '../../icons/general/IconClose';
-import IconInfoThin from '../../icons/general/IconInfoThin';
-import IconSync from '../../icons/general/IconSync';
 
 import type { NotificationType } from '../../common/types/core';
 
@@ -32,10 +31,10 @@ const DURATION_TIMES = {
 };
 
 const ICON_RENDERER: { [string]: Function } = {
-    [TYPE_DEFAULT]: () => <IconBell />,
-    [TYPE_ERROR]: () => <IconAlertCircle />,
-    [TYPE_INFO]: () => <IconSync />,
-    [TYPE_WARN]: () => <IconInfoThin />,
+    [TYPE_DEFAULT]: () => <InfoBadge />,
+    [TYPE_ERROR]: () => <XBadge16 />,
+    [TYPE_INFO]: () => <CircleCheck16 />,
+    [TYPE_WARN]: () => <TriangleAlert16 />,
 };
 
 const messages = defineMessages({
