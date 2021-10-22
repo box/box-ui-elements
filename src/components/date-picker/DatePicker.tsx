@@ -2,7 +2,6 @@ import * as React from 'react';
 import { defineMessages, injectIntl, FormattedMessage, WrappedComponentProps } from 'react-intl';
 
 import classNames from 'classnames';
-import Pikaday, { PikadayOptions } from 'pikaday';
 import noop from 'lodash/noop';
 import range from 'lodash/range';
 import uniqueId from 'lodash/uniqueId';
@@ -23,6 +22,7 @@ import Tooltip, { TooltipPosition, TooltipTheme } from '../tooltip';
 // @ts-ignore flow import
 import { convertDateToUnixMidnightTime } from '../../utils/datetime';
 
+import AccessiblePikaday, { AccessiblePikadayOptions } from './AccessiblePikaday';
 import './DatePicker.scss';
 
 const messages = defineMessages({
@@ -227,7 +227,7 @@ class DatePicker extends React.Component<DatePickerProps> {
 
         // If "bound" is true (default), the DatePicker will be appended at the end of the document, with absolute positioning
         // If "bound" is false, the DatePicker will be appended to the DOM right after the input, with relative positioning
-        const datePickerConfig: PikadayOptions = {
+        const datePickerConfig: AccessiblePikadayOptions = {
             bound: !customInput,
             blurFieldOnSelect: false, // Available in pikaday > 1.5.1
             setDefaultDate: true,
@@ -244,18 +244,19 @@ class DatePicker extends React.Component<DatePickerProps> {
             toString: this.formatDisplay,
         };
 
-        if (isAccessible && !this.canUseDateInputType) {
+        if (isAccessible) {
+            if (this.canUseDateInputType) {
+                datePickerConfig.parse = this.parseDisplayDateType;
+                datePickerConfig.toString = this.formatDisplayDateType;
+            }
+
+            delete datePickerConfig.field;
             datePickerConfig.keyboardInput = false;
-            datePickerConfig.parse = this.parseDisplayDateType;
-            datePickerConfig.toString = this.formatDisplayDateType;
             datePickerConfig.trigger = this.dateInputEl;
-        }
-        if (isAccessible && this.canUseDateInputType) {
-            datePickerConfig.keyboardInput = false;
-            datePickerConfig.trigger = this.dateInputEl;
+            datePickerConfig.accessibleField = this.dateInputEl;
         }
 
-        this.datePicker = new Pikaday(datePickerConfig);
+        this.datePicker = new AccessiblePikaday(datePickerConfig);
 
         if (isTextInputAllowed) {
             this.updateDateInputValue(this.formatDisplay(defaultValue));
@@ -397,7 +398,7 @@ class DatePicker extends React.Component<DatePickerProps> {
 
     handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { isAccessible, onChange } = this.props;
-        if (isAccessible && !this.canUseDateInputType) {
+        if (isAccessible && this.canUseDateInputType) {
             if (this.datePicker && this.datePicker.isVisible()) {
                 event.stopPropagation();
             }
