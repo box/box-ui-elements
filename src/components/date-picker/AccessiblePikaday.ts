@@ -39,10 +39,33 @@ class AccessiblePikaday extends Pikaday {
         this.hide();
     };
 
+    handleClickOutside = (e: MouseEvent) => {
+        if (this.isVisible() && !this.el.contains(e.target as HTMLElement)) {
+            this.hide();
+        }
+    };
+
     show() {
         super.show();
         if (this.accessibleField) {
+            document.addEventListener('click', this.handleClickOutside, true);
             this.adjustPosition();
+        }
+    }
+
+    hide() {
+        super.hide();
+        if (this.accessibleField) {
+            document.removeEventListener('click', this.handleClickOutside);
+        }
+    }
+
+    destroy() {
+        super.destroy();
+        if (this.accessibleField) {
+            this.accessibleField.removeEventListener('click', this.handleClick);
+            this.accessibleField.removeEventListener('focus', this.handleFocus);
+            this.accessibleField.removeEventListener('blur', this.handleBlur);
         }
     }
 }

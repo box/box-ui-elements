@@ -455,33 +455,20 @@ class DatePicker extends React.Component<DatePickerProps> {
     handleButtonClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
-        const { isAccessible } = this.props;
 
-        if (isAccessible) {
-            if (this.datePicker && this.datePicker.isVisible()) {
-                this.datePicker.hide();
-            } else if (this.datePicker) {
-                this.datePicker.show();
-            }
-        } else if (!this.shouldStayClosed) {
+        if (!this.shouldStayClosed) {
             this.focusDatePicker();
         }
     };
 
     handleDivClick = () => {
-        const { isAccessible, isDisabled } = this.props;
+        const { isDisabled } = this.props;
 
         if (isDisabled) {
             return;
         }
 
-        if (isAccessible) {
-            if (this.datePicker && this.datePicker.isVisible()) {
-                this.datePicker.hide();
-            } else if (this.datePicker) {
-                this.datePicker.show();
-            }
-        } else if (!this.shouldStayClosed) {
+        if (!this.shouldStayClosed) {
             this.focusDatePicker();
         }
     };
