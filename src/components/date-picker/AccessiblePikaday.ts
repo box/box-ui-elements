@@ -6,19 +6,21 @@ export interface AccessiblePikadayOptions extends PikadayOptions {
 
 // An extended version of Pikaday to work when `isAccessible` prop is `true`. https://jira.inside-box.net/browse/A11Y-213
 class AccessiblePikaday extends Pikaday {
+    accessibleField: HTMLElement | null | undefined;
+
     constructor(options: AccessiblePikadayOptions) {
         super(options);
+        this.accessibleField = options.accessibleField;
 
         // Override behavior as if `options.field` and `options.bound` were set.
         // See https://github.com/Pikaday/Pikaday/blob/master/pikaday.js#L671
         //     https://github.com/Pikaday/Pikaday/blob/master/pikaday.js#L695-L703
-        const { accessibleField } = options;
-        if (accessibleField) {
+        if (this.accessibleField) {
             document.body.appendChild(this.el);
 
-            accessibleField.addEventListener('click', this.handleClick);
-            accessibleField.addEventListener('focus', this.handleFocus);
-            accessibleField.addEventListener('blur', this.handleBlur);
+            this.accessibleField.addEventListener('click', this.handleClick);
+            this.accessibleField.addEventListener('focus', this.handleFocus);
+            this.accessibleField.addEventListener('blur', this.handleBlur);
 
             this.hide();
         }
@@ -39,7 +41,9 @@ class AccessiblePikaday extends Pikaday {
 
     show() {
         super.show();
-        this.adjustPosition();
+        if (this.accessibleField) {
+            this.adjustPosition();
+        }
     }
 }
 
