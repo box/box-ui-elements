@@ -185,7 +185,7 @@ class TaskForm extends React.Component<Props, State> {
 
     handleInvalidSubmit = (invalidSubmitValidityState?: ?TaskFormInvalidSubmitState) => {
         if (!isEmpty(invalidSubmitValidityState)) {
-            this.validateForm(null, invalidSubmitValidityState);
+            this.validateForm(undefined, invalidSubmitValidityState);
         } else {
             this.validateForm();
         }
