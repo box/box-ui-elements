@@ -249,14 +249,14 @@ class DatePicker extends React.Component<DatePickerProps> {
 
         if (isAccessible) {
             if (this.canUseDateInputType) {
-                datePickerConfig.parse = this.parseDisplayDateType;
-                datePickerConfig.toString = this.formatDisplayDateType;
+                delete datePickerConfig.field;
+                datePickerConfig.trigger = this.dateInputEl;
+                datePickerConfig.accessibleField = this.dateInputEl;
             }
 
-            delete datePickerConfig.field;
+            datePickerConfig.parse = this.parseDisplayDateType;
+            datePickerConfig.toString = this.formatDisplayDateType;
             datePickerConfig.keyboardInput = false;
-            datePickerConfig.trigger = this.dateInputEl;
-            datePickerConfig.accessibleField = this.dateInputEl;
         }
 
         this.datePicker = new AccessiblePikaday(datePickerConfig);
@@ -369,10 +369,6 @@ class DatePicker extends React.Component<DatePickerProps> {
     handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         const { isKeyboardInputAllowed, isTextInputAllowed, isAccessible } = this.props;
 
-        if (isAccessible && !this.canUseDateInputType) {
-            return;
-        }
-
         if (!isKeyboardInputAllowed && this.datePicker && this.datePicker.isVisible()) {
             event.stopPropagation();
         }
@@ -382,7 +378,7 @@ class DatePicker extends React.Component<DatePickerProps> {
             event.preventDefault();
         }
 
-        if (isTextInputAllowed && event.key === ENTER_KEY) {
+        if ((isTextInputAllowed || (isAccessible && !this.canUseDateInputType)) && event.key === ENTER_KEY) {
             event.preventDefault();
         }
 
@@ -421,8 +417,7 @@ class DatePicker extends React.Component<DatePickerProps> {
     };
 
     handleInputBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-        const { onBlur, isTextInputAllowed } = this.props;
-
+        const { onBlur, isTextInputAllowed, isAccessible } = this.props;
         const nextActiveElement = event.relatedTarget || document.activeElement;
 
         // This is mostly here to cancel out the pikaday hide() on blur
@@ -447,10 +442,14 @@ class DatePicker extends React.Component<DatePickerProps> {
         let inputDate: Date | null | undefined = null;
 
         if (this.dateInputEl) {
-            inputDate = new Date(this.dateInputEl.value);
+            let dateInputElVal = null;
+            if (isAccessible && !this.canUseDateInputType) {
+                dateInputElVal = this.parseDisplayDateType(this.dateInputEl.value);
+            }
+            inputDate = new Date(dateInputElVal || this.dateInputEl.value);
         }
 
-        if (isTextInputAllowed && inputDate && inputDate.getDate()) {
+        if ((isTextInputAllowed || (isAccessible && !this.canUseDateInputType)) && inputDate && inputDate.getDate()) {
             this.onSelectHandler(inputDate);
         }
     };
@@ -616,21 +615,29 @@ class DatePicker extends React.Component<DatePickerProps> {
         const resinTargetAttr = resinTarget ? { [RESIN_TAG_TARGET]: resinTarget } : {};
 
         let valueAttr;
-        if (isAccessible && this.canUseDateInputType) {
+        if (isAccessible) {
             valueAttr = { defaultValue: this.formatDisplayDateType(value) };
         } else if (isTextInputAllowed) {
             valueAttr = { defaultValue: this.formatDisplay(value) };
         } else {
             valueAttr = { value: this.formatDisplay(value) };
         }
-
         let onChangeAttr;
-        if (isAccessible) {
+        if (isAccessible && this.canUseDateInputType) {
             onChangeAttr = { onChange: this.handleOnChange };
-        } else if (isTextInputAllowed) {
+        } else if (isTextInputAllowed || (isAccessible && !this.canUseDateInputType)) {
             onChangeAttr = {};
         } else {
             onChangeAttr = { onChange: noop };
+        }
+        let patternAttr = {};
+        if (isAccessible && !this.canUseDateInputType) {
+            patternAttr = { pattern: '\\d{4}-\\d{2}-\\d{2}' };
+        }
+        // "name" prop is required for pattern validation to be surfaced on form submit. See components/form-elements/form/Form.js
+        let nameAttr = {};
+        if (isAccessible && !this.canUseDateInputType) {
+            nameAttr = { name };
         }
 
         /* fixes proptype error about readonly field (not adding readonly so constraint validation works) */
@@ -672,13 +679,15 @@ class DatePicker extends React.Component<DatePickerProps> {
                                         onClick={this.handleOnClick}
                                         placeholder={placeholder || formatMessage(messages.chooseDate)}
                                         required={isRequired}
-                                        type={isAccessible ? 'date' : 'text'}
+                                        type={isAccessible && this.canUseDateInputType ? 'date' : 'text'}
                                         {...onChangeAttr}
                                         onFocus={onFocus}
                                         onKeyDown={this.handleInputKeyDown}
                                         {...resinTargetAttr}
                                         {...ariaAttrs}
                                         {...inputProps}
+                                        {...nameAttr}
+                                        {...patternAttr}
                                         {...valueAttr}
                                     />
                                 )}
