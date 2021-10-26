@@ -48,12 +48,12 @@ describe('components/notification/Notification', () => {
 
         test('should render a correct icon when initialized', () => {
             const component = mount(<Notification type={type}>test</Notification>);
-            const infoBadgeCount = type === TYPE_DEFAULT ? 1 : 0;
+            const infoBadge16Count = type === TYPE_DEFAULT ? 1 : 0;
             const CircleCheck16Count = type === TYPE_INFO ? 1 : 0;
             const XBadge16Count = type === TYPE_ERROR ? 1 : 0;
             const TriangleAlert16Count = type === TYPE_WARN ? 1 : 0;
 
-            expect(component.find('InfoBadge').length).toBe(infoBadgeCount);
+            expect(component.find('InfoBadge16').length).toBe(infoBadge16Count);
             expect(component.find('XBadge16').length).toBe(XBadge16Count);
             expect(component.find('CircleCheck16').length).toBe(CircleCheck16Count);
             expect(component.find('TriangleAlert16').length).toBe(TriangleAlert16Count);

@@ -4,7 +4,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import classNames from 'classnames';
 
 import { bdlGray } from '../../styles/variables';
-import InfoBadge from '../../icons/badges/InfoBadge';
+import InfoBadge16 from '../../icon/line/InfoBadge16';
 import CircleCheck16 from '../../icon/line/CircleCheck16';
 import TriangleAlert16 from '../../icon/line/TriangleAlert16';
 import XBadge16 from '../../icon/line/XBadge16';
@@ -31,7 +31,7 @@ const DURATION_TIMES = {
 };
 
 const ICON_RENDERER: { [string]: Function } = {
-    [TYPE_DEFAULT]: () => <InfoBadge />,
+    [TYPE_DEFAULT]: () => <InfoBadge16 />,
     [TYPE_ERROR]: () => <XBadge16 />,
     [TYPE_INFO]: () => <CircleCheck16 />,
     [TYPE_WARN]: () => <TriangleAlert16 />,
