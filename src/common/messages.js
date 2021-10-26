@@ -92,6 +92,11 @@ const messages = defineMessages({
         description: 'Error message for when a required field is missing',
         id: 'boxui.validation.requiredError',
     },
+    invalidDateError: {
+        defaultMessage: 'Invalid Date',
+        description: 'Error message for when an invalid Date is entered',
+        id: 'boxui.validation.invalidDateError',
+    },
 });
 
 export default messages;
