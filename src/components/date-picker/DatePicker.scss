@@ -67,6 +67,10 @@
             transition: fill linear .1s;
             fill: $bdl-gray-50;
         }
+
+        &.hide-for-firefox {
+            opacity: 0;
+        }
     }
 
     > .date-picker-clear-btn:hover,

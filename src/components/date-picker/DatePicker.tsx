@@ -516,16 +516,6 @@ class DatePicker extends React.Component<DatePickerProps> {
         this.onSelectHandler(null);
     };
 
-    determineIfRequired = () => {
-        const { isAccessible, isRequired } = this.props;
-        // Firefox has no pseudo elements to hide the clear button for input type "date" via css
-        // Setting required=true hides the clear button
-        if (isAccessible && Browser.isFirefox()) {
-            return true;
-        }
-        return isRequired;
-    };
-
     renderCalendarButton = () => {
         const { intl, isAccessible, isAlwaysVisible, isDisabled } = this.props;
         const { formatMessage } = intl;
@@ -583,6 +573,7 @@ class DatePicker extends React.Component<DatePickerProps> {
             intl,
             isClearable,
             isDisabled,
+            isRequired,
             isTextInputAllowed,
             isAccessible,
             label,
@@ -600,7 +591,6 @@ class DatePicker extends React.Component<DatePickerProps> {
         });
 
         const hasError = !!error;
-        const isRequired = this.determineIfRequired();
 
         const ariaAttrs = {
             'aria-invalid': hasError,
@@ -697,7 +687,9 @@ class DatePicker extends React.Component<DatePickerProps> {
                     {isClearable && !!value && !isDisabled ? (
                         <PlainButton
                             aria-label={formatMessage(messages.dateClearButton)}
-                            className="date-picker-clear-btn"
+                            className={classNames('date-picker-clear-btn', {
+                                'hide-for-firefox': isAccessible && Browser.isFirefox(),
+                            })}
                             onClick={this.clearDate}
                             type={ButtonType.BUTTON}
                         >
