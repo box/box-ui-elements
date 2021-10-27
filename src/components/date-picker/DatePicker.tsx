@@ -679,7 +679,7 @@ class DatePicker extends React.Component<DatePickerProps> {
                         <PlainButton
                             aria-label={formatMessage(messages.dateClearButton)}
                             className={classNames('date-picker-clear-btn', {
-                                hideForFirefox: isAccessible && Browser.isFirefox(),
+                                'hide-for-firefox': isAccessible && Browser.isFirefox(),
                             })}
                             onClick={this.clearDate}
                             type={ButtonType.BUTTON}
