@@ -69,7 +69,6 @@ type Props = {
     dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
     fileLimit: number,
     files?: Array<UploadFileWithAPIOptions | File>,
-    freemiumUpsellCTACb?: ?() => void,
     isDraggingItemsToUploadsManager?: boolean,
     isFolderUploadEnabled: boolean,
     isLarge: boolean,
@@ -89,6 +88,7 @@ type Props = {
     onClose: Function,
     onComplete: Function,
     onError: Function,
+    onFreemiumUpsellCTAClick?: ?() => void,
     onMinimize?: Function,
     onProgress: Function,
     onResume: Function,
@@ -1205,19 +1205,19 @@ class ContentUploader extends Component<Props, State> {
      */
     render() {
         const {
+            className,
+            fileLimit,
+            isDraggingItemsToUploadsManager = false,
+            isFolderUploadEnabled,
+            isResumableUploadsEnabled,
+            isTouch,
             language,
+            maxFileSize,
+            measureRef,
             messages,
             onClose,
-            className,
-            measureRef,
-            isTouch,
-            fileLimit,
+            onFreemiumUpsellCTAClick,
             useUploadsManager,
-            isResumableUploadsEnabled,
-            isFolderUploadEnabled,
-            isDraggingItemsToUploadsManager = false,
-            freemiumUpsellCTACb,
-            maxFileSize,
         }: Props = this.props;
         const { view, items, errorCode, isUploadsManagerExpanded }: State = this.state;
         const isEmpty = items.length === 0;
@@ -1237,13 +1237,13 @@ class ContentUploader extends Component<Props, State> {
                 {useUploadsManager ? (
                     <div ref={measureRef} className={styleClassName} id={this.id}>
                         <UploadsManager
-                            freemiumUpsellCTACb={freemiumUpsellCTACb}
                             isDragging={isDraggingItemsToUploadsManager}
                             isExpanded={isUploadsManagerExpanded}
                             isResumableUploadsEnabled={isResumableUploadsEnabled}
                             isVisible={isVisible}
                             items={items}
                             maxFileSize={maxFileSize}
+                            onFreemiumUpsellCTAClick={onFreemiumUpsellCTAClick}
                             onItemActionClick={this.onClick}
                             onRemoveActionClick={this.removeFileFromUploadQueue}
                             onUploadsManagerActionClick={this.clickAllWithStatus}

@@ -14,13 +14,13 @@ import type { View } from '../../common/types/core';
 import './UploadsManager.scss';
 
 type Props = {
-    freemiumUpsellCTACb?: ?() => void,
     isDragging: boolean,
     isExpanded: boolean,
     isResumableUploadsEnabled: boolean,
     isVisible: boolean,
     items: UploadItem[],
     maxFileSize?: ?string,
+    onFreemiumUpsellCTAClick?: ?() => void,
     onItemActionClick: Function,
     onRemoveActionClick: (item: UploadItem) => void,
     onUploadsManagerActionClick: Function,
@@ -29,13 +29,13 @@ type Props = {
 };
 
 const UploadsManager = ({
-    freemiumUpsellCTACb,
     isExpanded,
     isVisible,
     isResumableUploadsEnabled,
     isDragging,
     items,
     maxFileSize,
+    onFreemiumUpsellCTAClick,
     onItemActionClick,
     onRemoveActionClick,
     onUploadsManagerActionClick,
@@ -98,11 +98,11 @@ const UploadsManager = ({
             />
             <div className="bcu-uploads-manager-item-list">
                 <ItemList
-                    freemiumUpsellCTACb={freemiumUpsellCTACb}
                     isResumableUploadsEnabled={isResumableUploadsEnabled}
                     items={items}
                     maxFileSize={maxFileSize}
                     onClick={onItemActionClick}
+                    onFreemiumUpsellCTAClick={onFreemiumUpsellCTAClick}
                     onRemoveClick={onRemoveActionClick}
                     view={view}
                 />

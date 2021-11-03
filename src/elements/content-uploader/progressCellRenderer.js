@@ -66,7 +66,7 @@ const getErrorMessage = (errorCode: ?string, itemName: ?string, maxFileSize?: ?s
     }
 };
 
-export default (maxFileSize?: ?String) => ({ rowData }: Props) => {
+export default (maxFileSize?: ?string) => ({ rowData }: Props) => {
     const { status, error = {}, name, isFolder, file } = rowData;
     const { code } = error;
 

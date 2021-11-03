@@ -31,20 +31,20 @@ const ICON_CHECK_COLOR = '#26C281';
 
 type Props = {
     error?: Object,
-    freemiumUpsellCTACb?: ?() => void,
     isFolder?: boolean,
     isResumableUploadsEnabled: boolean,
     onClick: Function,
+    onFreemiumUpsellCTAClick?: ?() => void,
     status: UploadStatus,
 } & InjectIntlProvidedProps;
 
 const ItemAction = ({
     error = {},
-    freemiumUpsellCTACb,
     intl,
     isFolder = false,
     isResumableUploadsEnabled,
     onClick,
+    onFreemiumUpsellCTAClick,
     status,
 }: Props) => {
     let icon = <IconClose />;
@@ -85,10 +85,10 @@ const ItemAction = ({
             break;
     }
 
-    if (STATUS_ERROR && code === ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED && !!freemiumUpsellCTACb) {
+    if (STATUS_ERROR && code === ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED && !!onFreemiumUpsellCTAClick) {
         return (
             <PrimaryButton
-                onClick={freemiumUpsellCTACb}
+                onClick={onFreemiumUpsellCTAClick}
                 data-resin-target="large_version_error_inline_upgrade_cta"
                 type="button"
             >
