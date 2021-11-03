@@ -11,6 +11,13 @@ type Props = {
     rowData: UploadItem,
 };
 
-export default (isResumableUploadsEnabled: boolean, onClick: Function) => ({ rowData }: Props) => (
-    <ItemAction {...rowData} isResumableUploadsEnabled={isResumableUploadsEnabled} onClick={() => onClick(rowData)} />
+export default (isResumableUploadsEnabled: boolean, onClick: Function, freemiumUpsellCTACb: ?() => void) => ({
+    rowData,
+}: Props) => (
+    <ItemAction
+        {...rowData}
+        freemiumUpsellCTACb={freemiumUpsellCTACb}
+        isResumableUploadsEnabled={isResumableUploadsEnabled}
+        onClick={() => onClick(rowData)}
+    />
 );

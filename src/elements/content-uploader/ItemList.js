@@ -16,18 +16,27 @@ import '@box/react-virtualized/styles.css';
 import './ItemList.scss';
 
 type Props = {
+    freemiumUpsellCTACb?: ?() => void,
     isResumableUploadsEnabled?: boolean,
     items: UploadItem[],
+    maxFileSize?: ?String,
     onClick: Function,
     onRemoveClick?: (item: UploadItem) => void,
 };
 
-const ItemList = ({ isResumableUploadsEnabled = false, items, onClick, onRemoveClick = noop }: Props) => (
+const ItemList = ({
+    freemiumUpsellCTACb,
+    isResumableUploadsEnabled = false,
+    items,
+    maxFileSize,
+    onClick,
+    onRemoveClick = noop,
+}: Props) => (
     <AutoSizer>
         {({ width, height }) => {
             const nameCell = nameCellRenderer(isResumableUploadsEnabled);
-            const progressCell = progressCellRenderer();
-            const actionCell = actionCellRenderer(isResumableUploadsEnabled, onClick);
+            const progressCell = progressCellRenderer(maxFileSize);
+            const actionCell = actionCellRenderer(isResumableUploadsEnabled, onClick, freemiumUpsellCTACb);
             const removeCell = removeCellRenderer(onRemoveClick);
 
             return (
@@ -56,7 +65,6 @@ const ItemList = ({ isResumableUploadsEnabled = false, items, onClick, onRemoveC
                         cellRenderer={actionCell}
                         dataKey="status"
                         flexShrink={0}
-                        width={25}
                     />
                     {isResumableUploadsEnabled && (
                         <Column

@@ -14,11 +14,13 @@ import type { View } from '../../common/types/core';
 import './UploadsManager.scss';
 
 type Props = {
+    freemiumUpsellCTACb?: ?() => void,
     isDragging: boolean,
     isExpanded: boolean,
     isResumableUploadsEnabled: boolean,
     isVisible: boolean,
     items: UploadItem[],
+    maxFileSize?: ?string,
     onItemActionClick: Function,
     onRemoveActionClick: (item: UploadItem) => void,
     onUploadsManagerActionClick: Function,
@@ -27,16 +29,18 @@ type Props = {
 };
 
 const UploadsManager = ({
-    items,
-    view,
-    onItemActionClick,
-    onRemoveActionClick,
-    onUploadsManagerActionClick,
-    toggleUploadsManager,
+    freemiumUpsellCTACb,
     isExpanded,
     isVisible,
     isResumableUploadsEnabled,
     isDragging,
+    items,
+    maxFileSize,
+    onItemActionClick,
+    onRemoveActionClick,
+    onUploadsManagerActionClick,
+    toggleUploadsManager,
+    view,
 }: Props) => {
     /**
      * Keydown handler for progress bar
@@ -94,8 +98,10 @@ const UploadsManager = ({
             />
             <div className="bcu-uploads-manager-item-list">
                 <ItemList
+                    freemiumUpsellCTACb={freemiumUpsellCTACb}
                     isResumableUploadsEnabled={isResumableUploadsEnabled}
                     items={items}
+                    maxFileSize={maxFileSize}
                     onClick={onItemActionClick}
                     onRemoveClick={onRemoveActionClick}
                     view={view}

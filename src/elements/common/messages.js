@@ -687,6 +687,16 @@ const messages = defineMessages({
         description: 'Error message shown when file size exceeds the limit',
         defaultMessage: 'File size exceeds the folder owner’s file size limit',
     },
+    uploadsFileSizeLimitExceededErrorMessageForFreemiumCtaExperiment: {
+        id: 'be.uploadsFileSizeLimitExceededErrorMessageForFreemiumCtaExperiment',
+        description: 'Error message shown when file size exceeds the limit',
+        defaultMessage: 'This file exceeds the {maxFileSize} upload limit. Upgrade to store larger files.',
+    },
+    uploadsFileSizeLimitExceededUpgradeMessageForFreemiumCtaExperiment: {
+        id: 'be.uploadsFileSizeLimitExceededUpgradeMessageForFreemiumCtaExperiment',
+        description: 'Upgrade message shown when file size exceeds the limit',
+        defaultMessage: 'Upgrade',
+    },
     uploadsStorageLimitErrorMessage: {
         id: 'be.uploadsStorageLimitErrorMessage',
         description: 'Error message shown when account storage limit has been reached',
