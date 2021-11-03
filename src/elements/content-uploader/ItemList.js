@@ -20,8 +20,8 @@ type Props = {
     items: UploadItem[],
     maxFileSize?: ?string,
     onClick: Function,
-    onFreemiumUpsellCTAClick?: ?() => void,
     onRemoveClick?: (item: UploadItem) => void,
+    onUpgradeCTAClick?: ?() => void,
 };
 
 const ItemList = ({
@@ -29,14 +29,14 @@ const ItemList = ({
     items,
     maxFileSize,
     onClick,
-    onFreemiumUpsellCTAClick,
     onRemoveClick = noop,
+    onUpgradeCTAClick,
 }: Props) => (
     <AutoSizer>
         {({ width, height }) => {
             const nameCell = nameCellRenderer(isResumableUploadsEnabled);
             const progressCell = progressCellRenderer(maxFileSize);
-            const actionCell = actionCellRenderer(isResumableUploadsEnabled, onClick, onFreemiumUpsellCTAClick);
+            const actionCell = actionCellRenderer(isResumableUploadsEnabled, onClick, onUpgradeCTAClick);
             const removeCell = removeCellRenderer(onRemoveClick);
 
             return (

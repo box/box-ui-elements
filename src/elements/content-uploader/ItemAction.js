@@ -34,7 +34,7 @@ type Props = {
     isFolder?: boolean,
     isResumableUploadsEnabled: boolean,
     onClick: Function,
-    onFreemiumUpsellCTAClick?: ?() => void,
+    onUpgradeCTAClick?: ?() => void,
     status: UploadStatus,
 } & InjectIntlProvidedProps;
 
@@ -44,7 +44,7 @@ const ItemAction = ({
     isFolder = false,
     isResumableUploadsEnabled,
     onClick,
-    onFreemiumUpsellCTAClick,
+    onUpgradeCTAClick,
     status,
 }: Props) => {
     let icon = <IconClose />;
@@ -85,10 +85,10 @@ const ItemAction = ({
             break;
     }
 
-    if (STATUS_ERROR && code === ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED && !!onFreemiumUpsellCTAClick) {
+    if (STATUS_ERROR && code === ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED && !!onUpgradeCTAClick) {
         return (
             <PrimaryButton
-                onClick={onFreemiumUpsellCTAClick}
+                onClick={onUpgradeCTAClick}
                 data-resin-target="large_version_error_inline_upgrade_cta"
                 type="button"
             >

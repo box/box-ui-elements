@@ -20,9 +20,9 @@ type Props = {
     isVisible: boolean,
     items: UploadItem[],
     maxFileSize?: ?string,
-    onFreemiumUpsellCTAClick?: ?() => void,
     onItemActionClick: Function,
     onRemoveActionClick: (item: UploadItem) => void,
+    onUpgradeCTAClick?: ?() => void,
     onUploadsManagerActionClick: Function,
     toggleUploadsManager: Function,
     view: View,
@@ -35,9 +35,9 @@ const UploadsManager = ({
     isDragging,
     items,
     maxFileSize,
-    onFreemiumUpsellCTAClick,
     onItemActionClick,
     onRemoveActionClick,
+    onUpgradeCTAClick,
     onUploadsManagerActionClick,
     toggleUploadsManager,
     view,
@@ -102,8 +102,8 @@ const UploadsManager = ({
                     items={items}
                     maxFileSize={maxFileSize}
                     onClick={onItemActionClick}
-                    onFreemiumUpsellCTAClick={onFreemiumUpsellCTAClick}
                     onRemoveClick={onRemoveActionClick}
+                    onUpgradeCTAClick={onUpgradeCTAClick}
                     view={view}
                 />
             </div>

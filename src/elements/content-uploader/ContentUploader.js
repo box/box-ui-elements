@@ -88,10 +88,10 @@ type Props = {
     onClose: Function,
     onComplete: Function,
     onError: Function,
-    onFreemiumUpsellCTAClick?: ?() => void,
     onMinimize?: Function,
     onProgress: Function,
     onResume: Function,
+    onUpgradeCTAClick?: ?() => void,
     onUpload: Function,
     overwrite: boolean,
     requestInterceptor?: Function,
@@ -1216,7 +1216,7 @@ class ContentUploader extends Component<Props, State> {
             measureRef,
             messages,
             onClose,
-            onFreemiumUpsellCTAClick,
+            onUpgradeCTAClick,
             useUploadsManager,
         }: Props = this.props;
         const { view, items, errorCode, isUploadsManagerExpanded }: State = this.state;
@@ -1243,9 +1243,9 @@ class ContentUploader extends Component<Props, State> {
                             isVisible={isVisible}
                             items={items}
                             maxFileSize={maxFileSize}
-                            onFreemiumUpsellCTAClick={onFreemiumUpsellCTAClick}
                             onItemActionClick={this.onClick}
                             onRemoveActionClick={this.removeFileFromUploadQueue}
+                            onUpgradeCTAClick={onUpgradeCTAClick}
                             onUploadsManagerActionClick={this.clickAllWithStatus}
                             toggleUploadsManager={this.toggleUploadsManager}
                             view={view}
