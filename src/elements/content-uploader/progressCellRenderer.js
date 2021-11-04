@@ -35,7 +35,7 @@ type Props = {
  * @param {string} [itemName]
  * @returns {FormattedMessage}
  */
-const getErrorMessage = (errorCode: ?string, itemName: ?string, shouldShowUpgradeCTAMessage?: ?boolean) => {
+const getErrorMessage = (errorCode: ?string, itemName: ?string, shouldShowUpgradeCTAMessage?: boolean) => {
     switch (errorCode) {
         case ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED:
             return <FormattedMessage {...messages.uploadsOneOrMoreChildFoldersFailedToUploadMessage} />;
@@ -61,7 +61,7 @@ const getErrorMessage = (errorCode: ?string, itemName: ?string, shouldShowUpgrad
     }
 };
 
-export default (shouldShowUpgradeCTAMessage?: ?boolean) => ({ rowData }: Props) => {
+export default (shouldShowUpgradeCTAMessage?: boolean) => ({ rowData }: Props) => {
     const { status, error = {}, name, isFolder, file } = rowData;
     const { code } = error;
 

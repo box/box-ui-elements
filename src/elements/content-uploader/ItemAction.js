@@ -92,7 +92,7 @@ const ItemAction = ({
                 data-resin-target="large_version_error_inline_upgrade_cta"
                 type="button"
             >
-                <FormattedMessage {...messages.uploadsFileSizeLimitExceededUpgradeMessageForFreemiumCtaExperiment} />
+                <FormattedMessage {...messages.uploadsFileSizeLimitExceededUpgradeMessageForUpgradeCta} />
             </PrimaryButton>
         );
     }
