@@ -77,7 +77,6 @@ type Props = {
     isTouch: boolean,
     isUploadFallbackLogicEnabled: boolean,
     language?: string,
-    maxFileSize?: ?string,
     measureRef: Function,
     messages?: StringMap,
     onBeforeUpload: (file: Array<UploadFileWithAPIOptions | File>) => void,
@@ -1212,7 +1211,6 @@ class ContentUploader extends Component<Props, State> {
             isResumableUploadsEnabled,
             isTouch,
             language,
-            maxFileSize,
             measureRef,
             messages,
             onClose,
@@ -1242,7 +1240,6 @@ class ContentUploader extends Component<Props, State> {
                             isResumableUploadsEnabled={isResumableUploadsEnabled}
                             isVisible={isVisible}
                             items={items}
-                            maxFileSize={maxFileSize}
                             onItemActionClick={this.onClick}
                             onRemoveActionClick={this.removeFileFromUploadQueue}
                             onUpgradeCTAClick={onUpgradeCTAClick}

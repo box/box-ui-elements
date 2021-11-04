@@ -18,7 +18,6 @@ import './ItemList.scss';
 type Props = {
     isResumableUploadsEnabled?: boolean,
     items: UploadItem[],
-    maxFileSize?: ?string,
     onClick: Function,
     onRemoveClick?: (item: UploadItem) => void,
     onUpgradeCTAClick?: ?() => void,
@@ -27,7 +26,6 @@ type Props = {
 const ItemList = ({
     isResumableUploadsEnabled = false,
     items,
-    maxFileSize,
     onClick,
     onRemoveClick = noop,
     onUpgradeCTAClick,
@@ -35,7 +33,7 @@ const ItemList = ({
     <AutoSizer>
         {({ width, height }) => {
             const nameCell = nameCellRenderer(isResumableUploadsEnabled);
-            const progressCell = progressCellRenderer(maxFileSize);
+            const progressCell = progressCellRenderer(!!onUpgradeCTAClick);
             const actionCell = actionCellRenderer(isResumableUploadsEnabled, onClick, onUpgradeCTAClick);
             const removeCell = removeCellRenderer(onRemoveClick);
 

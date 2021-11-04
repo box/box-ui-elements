@@ -19,7 +19,6 @@ type Props = {
     isResumableUploadsEnabled: boolean,
     isVisible: boolean,
     items: UploadItem[],
-    maxFileSize?: ?string,
     onItemActionClick: Function,
     onRemoveActionClick: (item: UploadItem) => void,
     onUpgradeCTAClick?: ?() => void,
@@ -34,7 +33,6 @@ const UploadsManager = ({
     isResumableUploadsEnabled,
     isDragging,
     items,
-    maxFileSize,
     onItemActionClick,
     onRemoveActionClick,
     onUpgradeCTAClick,
@@ -100,7 +98,6 @@ const UploadsManager = ({
                 <ItemList
                     isResumableUploadsEnabled={isResumableUploadsEnabled}
                     items={items}
-                    maxFileSize={maxFileSize}
                     onClick={onItemActionClick}
                     onRemoveClick={onRemoveActionClick}
                     onUpgradeCTAClick={onUpgradeCTAClick}
