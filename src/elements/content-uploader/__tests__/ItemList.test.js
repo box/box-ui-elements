@@ -31,7 +31,7 @@ describe('elements/content-uploader/ItemList', () => {
                 { id: '3', name: 'item3', status: STATUS_COMPLETE },
             ];
             const wrapper = renderComponent({ items });
-            expect(wrapper).toMatchSnapshot();
+            expect(wrapper.find('div.bcu-item-row').length).toBe(3);
             const actionColumnStyle = wrapper
                 .find('.bcu-item-list-action-column')
                 .first()
@@ -44,7 +44,7 @@ describe('elements/content-uploader/ItemList', () => {
                 { id: '1', name: 'item1', status: STATUS_ERROR, code: ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED },
             ];
             const wrapper = renderComponent({ items, onUpgradeCTAClick: () => {} });
-            expect(wrapper).toMatchSnapshot();
+            expect(wrapper.find('div.bcu-item-row').length).toBe(1);
             const actionColumnStyle = wrapper.find('.bcu-item-list-action-column').prop('style');
             expect(actionColumnStyle.flex).toEqual('0 0 100px');
         });
