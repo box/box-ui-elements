@@ -20,7 +20,7 @@ type Props = {
     items: UploadItem[],
     onClick: Function,
     onRemoveClick?: (item: UploadItem) => void,
-    onUpgradeCTAClick?: ?() => void,
+    onUpgradeCTAClick?: Function,
 };
 
 const ItemList = ({

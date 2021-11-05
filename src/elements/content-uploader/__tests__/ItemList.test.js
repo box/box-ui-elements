@@ -1,6 +1,5 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import sinon from 'sinon';
 
 import { ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED, STATUS_COMPLETE, STATUS_ERROR } from '../../../constants';
 import ItemList from '../ItemList';
@@ -8,13 +7,7 @@ import ItemList from '../ItemList';
 jest.mock('@box/react-virtualized/dist/es/AutoSizer', () => ({ children }) => children({ height: 600, width: 600 }));
 
 describe('elements/content-uploader/ItemList', () => {
-    const sandbox = sinon.sandbox.create();
-
     const renderComponent = props => mount(<ItemList items={[]} onClick={() => {}} {...props} />);
-
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
 
     describe('render()', () => {
         test('should render default component', () => {

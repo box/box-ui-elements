@@ -21,7 +21,7 @@ type Props = {
     items: UploadItem[],
     onItemActionClick: Function,
     onRemoveActionClick: (item: UploadItem) => void,
-    onUpgradeCTAClick?: ?() => void,
+    onUpgradeCTAClick?: Function,
     onUploadsManagerActionClick: Function,
     toggleUploadsManager: Function,
     view: View,

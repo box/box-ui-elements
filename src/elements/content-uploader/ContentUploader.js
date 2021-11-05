@@ -90,7 +90,7 @@ type Props = {
     onMinimize?: Function,
     onProgress: Function,
     onResume: Function,
-    onUpgradeCTAClick?: ?() => void,
+    onUpgradeCTAClick?: Function,
     onUpload: Function,
     overwrite: boolean,
     requestInterceptor?: Function,

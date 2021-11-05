@@ -34,7 +34,7 @@ type Props = {
     isFolder?: boolean,
     isResumableUploadsEnabled: boolean,
     onClick: Function,
-    onUpgradeCTAClick?: ?() => void,
+    onUpgradeCTAClick?: Function,
     status: UploadStatus,
 } & InjectIntlProvidedProps;
 
