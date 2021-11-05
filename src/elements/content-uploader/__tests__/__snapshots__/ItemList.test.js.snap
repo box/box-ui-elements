@@ -1,0 +1,1280 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-uploader/ItemList render() should render action column with correct width for upgrade cta 1`] = `
+<ItemList
+  items={
+    Array [
+      Object {
+        "code": "file_size_limit_exceeded",
+        "id": "1",
+        "name": "item1",
+        "status": "error",
+      },
+    ]
+  }
+  onClick={[Function]}
+  onUpgradeCTAClick={[Function]}
+>
+  <Component>
+    <Table
+      className="bcu-item-list"
+      disableHeader={true}
+      estimatedRowSize={30}
+      headerHeight={0}
+      headerRowRenderer={[Function]}
+      headerStyle={Object {}}
+      height={600}
+      noRowsRenderer={[Function]}
+      onRowsRendered={[Function]}
+      onScroll={[Function]}
+      overscanIndicesGetter={[Function]}
+      overscanRowCount={10}
+      role="grid"
+      rowClassName="bcu-item-row"
+      rowCount={1}
+      rowGetter={[Function]}
+      rowHeight={50}
+      rowRenderer={[Function]}
+      rowStyle={Object {}}
+      scrollToAlignment="auto"
+      scrollToIndex={-1}
+      style={Object {}}
+      width={600}
+    >
+      <div
+        aria-colcount={3}
+        aria-rowcount={1}
+        className="ReactVirtualized__Table bcu-item-list"
+        role="grid"
+        style={Object {}}
+      >
+        <Grid
+          aria-label="grid"
+          aria-readonly={null}
+          autoContainerWidth={true}
+          autoHeight={false}
+          autoWidth={false}
+          cellRangeRenderer={[Function]}
+          cellRenderer={[Function]}
+          className="ReactVirtualized__Table__Grid"
+          columnCount={1}
+          columnWidth={600}
+          containerRole="row"
+          containerStyle={Object {}}
+          disableHeader={true}
+          estimatedColumnSize={100}
+          estimatedRowSize={30}
+          getScrollbarSize={[Function]}
+          headerHeight={0}
+          headerRowRenderer={[Function]}
+          headerStyle={Object {}}
+          height={600}
+          isScrollingOptOut={false}
+          noContentRenderer={[Function]}
+          noRowsRenderer={[Function]}
+          onRowsRendered={[Function]}
+          onScroll={[Function]}
+          onScrollbarPresenceChange={[Function]}
+          onSectionRendered={[Function]}
+          overscanColumnCount={0}
+          overscanIndicesGetter={[Function]}
+          overscanRowCount={10}
+          role="rowgroup"
+          rowClassName="bcu-item-row"
+          rowCount={1}
+          rowGetter={[Function]}
+          rowHeight={50}
+          rowRenderer={[Function]}
+          rowStyle={Object {}}
+          scrollToAlignment="auto"
+          scrollToColumn={-1}
+          scrollToIndex={-1}
+          scrollToRow={-1}
+          scrollbarWidth={0}
+          scrollingResetTimeInterval={150}
+          style={
+            Object {
+              "overflowX": "hidden",
+            }
+          }
+          tabIndex={0}
+          width={600}
+        >
+          <div
+            aria-label="grid"
+            aria-readonly={null}
+            className="ReactVirtualized__Grid ReactVirtualized__Table__Grid"
+            onScroll={[Function]}
+            role="rowgroup"
+            style={
+              Object {
+                "WebkitOverflowScrolling": "touch",
+                "boxSizing": "border-box",
+                "direction": "ltr",
+                "height": 600,
+                "overflowX": "hidden",
+                "overflowY": "hidden",
+                "position": "relative",
+                "width": 600,
+                "willChange": "transform",
+              }
+            }
+            tabIndex={0}
+          >
+            <div
+              className="ReactVirtualized__Grid__innerScrollContainer"
+              role="row"
+              style={
+                Object {
+                  "height": 50,
+                  "maxHeight": 50,
+                  "maxWidth": 600,
+                  "overflow": "hidden",
+                  "pointerEvents": "",
+                  "position": "relative",
+                  "width": "auto",
+                }
+              }
+            >
+              <div
+                aria-rowindex={1}
+                className="ReactVirtualized__Table__row bcu-item-row"
+                key="0-0"
+                role="row"
+                style={
+                  Object {
+                    "height": 50,
+                    "left": 0,
+                    "overflow": "hidden",
+                    "paddingRight": 0,
+                    "position": "absolute",
+                    "top": 0,
+                    "width": 600,
+                  }
+                }
+              >
+                <div
+                  aria-colindex={1}
+                  className="ReactVirtualized__Table__rowColumn"
+                  key="Row0-Col0"
+                  onClick={[Function]}
+                  role="gridcell"
+                  style={
+                    Object {
+                      "WebkitFlex": "1 1 300px",
+                      "flex": "1 1 300px",
+                      "msFlex": "1 1 300px",
+                      "overflow": "hidden",
+                    }
+                  }
+                  title={null}
+                >
+                  <IconName
+                    code="file_size_limit_exceeded"
+                    id="1"
+                    isResumableUploadsEnabled={false}
+                    name="item1"
+                    status="error"
+                  >
+                    <div
+                      className="bcu-item-icon-name"
+                    >
+                      <div
+                        className="bcu-item-icon"
+                      >
+                        <FileIcon>
+                          <FileDefault32
+                            height={32}
+                            width={32}
+                          >
+                            <AccessibleSVG
+                              height={32}
+                              viewBox="0 0 32 32"
+                              width={32}
+                            >
+                              <svg
+                                aria-hidden="true"
+                                focusable="false"
+                                height={32}
+                                role="presentation"
+                                viewBox="0 0 32 32"
+                                width={32}
+                              >
+                                <g
+                                  fill="none"
+                                >
+                                  <path
+                                    d="M9 3h9.586a1 1 0 01.707.293l6.415 6.414a1 1 0 01.293.707V26A3 3 0 0123 29H9a3 3 0 01-3-3V6a3 3 0 013-3z"
+                                    fill="#d3d3d3"
+                                  />
+                                  <path
+                                    d="M19.286 3.286l5.01 5.009 1.412 1.412a1 1 0 01.203.293H21a2 2 0 01-2-2V3.09a1 1 0 01.286.196z"
+                                    fill="#fff"
+                                    fillOpacity={0.5}
+                                  />
+                                </g>
+                              </svg>
+                            </AccessibleSVG>
+                          </FileDefault32>
+                        </FileIcon>
+                      </div>
+                      <div
+                        className="bcu-item-name"
+                      >
+                        <ItemName
+                          name="item1"
+                        >
+                          <span
+                            className="bcu-item-label"
+                          >
+                            item1
+                          </span>
+                        </ItemName>
+                      </div>
+                    </div>
+                  </IconName>
+                </div>
+                <div
+                  aria-colindex={2}
+                  className="ReactVirtualized__Table__rowColumn"
+                  key="Row0-Col1"
+                  onClick={[Function]}
+                  role="gridcell"
+                  style={
+                    Object {
+                      "WebkitFlex": "1 1 300px",
+                      "flex": "1 1 300px",
+                      "msFlex": "1 1 300px",
+                      "overflow": "hidden",
+                      "textAlign": "right",
+                    }
+                  }
+                  title={null}
+                >
+                  <FormattedMessage
+                    defaultMessage="Something went wrong with the upload. Please try again."
+                    id="be.uploadsDefaultErrorMessage"
+                  >
+                    <div />
+                  </FormattedMessage>
+                </div>
+                <div
+                  aria-colindex={3}
+                  className="ReactVirtualized__Table__rowColumn bcu-item-list-action-column"
+                  key="Row0-Col2"
+                  onClick={[Function]}
+                  role="gridcell"
+                  style={
+                    Object {
+                      "WebkitFlex": "0 0 100px",
+                      "flex": "0 0 100px",
+                      "msFlex": "0 0 100px",
+                      "overflow": "hidden",
+                    }
+                  }
+                  title={null}
+                >
+                  <ItemAction
+                    code="file_size_limit_exceeded"
+                    id="1"
+                    isResumableUploadsEnabled={false}
+                    name="item1"
+                    onClick={[Function]}
+                    onUpgradeCTAClick={[Function]}
+                    status="error"
+                  >
+                    <ItemAction
+                      code="file_size_limit_exceeded"
+                      id="1"
+                      intl={
+                        Object {
+                          "formatDate": [Function],
+                          "formatMessage": [Function],
+                          "formatRelativeTime": [Function],
+                        }
+                      }
+                      isResumableUploadsEnabled={false}
+                      name="item1"
+                      onClick={[Function]}
+                      onUpgradeCTAClick={[Function]}
+                      status="error"
+                    >
+                      <div
+                        className="bcu-item-action"
+                      >
+                        <Tooltip
+                          constrainToScrollParent={false}
+                          constrainToWindow={true}
+                          isDisabled={false}
+                          position="top-left"
+                          text="Retry"
+                          theme="default"
+                        >
+                          <TetherComponent
+                            attachment="bottom right"
+                            bodyElement={<body />}
+                            classPrefix="tooltip"
+                            constraints={
+                              Array [
+                                Object {
+                                  "attachment": "together",
+                                  "to": "window",
+                                },
+                              ]
+                            }
+                            enabled={false}
+                            renderElementTag="div"
+                            renderElementTo={null}
+                            targetAttachment="top right"
+                          >
+                            <PlainButton
+                              isDisabled={false}
+                              key=".0"
+                              onBlur={[Function]}
+                              onClick={[Function]}
+                              onFocus={[Function]}
+                              onKeyDown={[Function]}
+                              onMouseEnter={[Function]}
+                              onMouseLeave={[Function]}
+                              tabIndex="0"
+                              type="button"
+                            >
+                              <button
+                                className="btn-plain "
+                                onBlur={[Function]}
+                                onClick={[Function]}
+                                onFocus={[Function]}
+                                onKeyDown={[Function]}
+                                onMouseEnter={[Function]}
+                                onMouseLeave={[Function]}
+                                tabIndex="0"
+                                type="button"
+                              >
+                                <IconRetry
+                                  height={24}
+                                  width={24}
+                                >
+                                  <AccessibleSVG
+                                    className="bdl-IconRetry "
+                                    height={24}
+                                    viewBox="0 0 32 32"
+                                    width={24}
+                                  >
+                                    <svg
+                                      aria-hidden="true"
+                                      className="bdl-IconRetry "
+                                      focusable="false"
+                                      height={24}
+                                      role="presentation"
+                                      viewBox="0 0 32 32"
+                                      width={24}
+                                    >
+                                      <g
+                                        className="fill-color"
+                                        fill="#222"
+                                        fillRule="evenodd"
+                                      >
+                                        <path
+                                          d="M25.023 16c0-6.075-4.925-11-11-11s-11 4.925-11 11 4.925 11 11 11c2.601 0 5.06-.904 7.02-2.53a1 1 0 1 1 1.278 1.538A12.949 12.949 0 0 1 14.023 29c-7.18 0-13-5.82-13-13s5.82-13 13-13 13 5.82 13 13a1 1 0 0 1-2 0z"
+                                          fillRule="nonzero"
+                                        />
+                                        <path
+                                          d="M20 14l6 6 6-6z"
+                                        />
+                                      </g>
+                                    </svg>
+                                  </AccessibleSVG>
+                                </IconRetry>
+                              </button>
+                            </PlainButton>
+                          </TetherComponent>
+                        </Tooltip>
+                      </div>
+                    </ItemAction>
+                  </ItemAction>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Grid>
+      </div>
+    </Table>
+  </Component>
+</ItemList>
+`;
+
+exports[`elements/content-uploader/ItemList render() should render component with correct number of items 1`] = `
+<ItemList
+  items={
+    Array [
+      Object {
+        "id": "1",
+        "name": "item1",
+        "status": "complete",
+      },
+      Object {
+        "id": "2",
+        "name": "item2",
+        "status": "complete",
+      },
+      Object {
+        "id": "3",
+        "name": "item3",
+        "status": "complete",
+      },
+    ]
+  }
+  onClick={[Function]}
+>
+  <Component>
+    <Table
+      className="bcu-item-list"
+      disableHeader={true}
+      estimatedRowSize={30}
+      headerHeight={0}
+      headerRowRenderer={[Function]}
+      headerStyle={Object {}}
+      height={600}
+      noRowsRenderer={[Function]}
+      onRowsRendered={[Function]}
+      onScroll={[Function]}
+      overscanIndicesGetter={[Function]}
+      overscanRowCount={10}
+      role="grid"
+      rowClassName="bcu-item-row"
+      rowCount={3}
+      rowGetter={[Function]}
+      rowHeight={50}
+      rowRenderer={[Function]}
+      rowStyle={Object {}}
+      scrollToAlignment="auto"
+      scrollToIndex={-1}
+      style={Object {}}
+      width={600}
+    >
+      <div
+        aria-colcount={3}
+        aria-rowcount={3}
+        className="ReactVirtualized__Table bcu-item-list"
+        role="grid"
+        style={Object {}}
+      >
+        <Grid
+          aria-label="grid"
+          aria-readonly={null}
+          autoContainerWidth={true}
+          autoHeight={false}
+          autoWidth={false}
+          cellRangeRenderer={[Function]}
+          cellRenderer={[Function]}
+          className="ReactVirtualized__Table__Grid"
+          columnCount={1}
+          columnWidth={600}
+          containerRole="row"
+          containerStyle={Object {}}
+          disableHeader={true}
+          estimatedColumnSize={100}
+          estimatedRowSize={30}
+          getScrollbarSize={[Function]}
+          headerHeight={0}
+          headerRowRenderer={[Function]}
+          headerStyle={Object {}}
+          height={600}
+          isScrollingOptOut={false}
+          noContentRenderer={[Function]}
+          noRowsRenderer={[Function]}
+          onRowsRendered={[Function]}
+          onScroll={[Function]}
+          onScrollbarPresenceChange={[Function]}
+          onSectionRendered={[Function]}
+          overscanColumnCount={0}
+          overscanIndicesGetter={[Function]}
+          overscanRowCount={10}
+          role="rowgroup"
+          rowClassName="bcu-item-row"
+          rowCount={3}
+          rowGetter={[Function]}
+          rowHeight={50}
+          rowRenderer={[Function]}
+          rowStyle={Object {}}
+          scrollToAlignment="auto"
+          scrollToColumn={-1}
+          scrollToIndex={-1}
+          scrollToRow={-1}
+          scrollbarWidth={0}
+          scrollingResetTimeInterval={150}
+          style={
+            Object {
+              "overflowX": "hidden",
+            }
+          }
+          tabIndex={0}
+          width={600}
+        >
+          <div
+            aria-label="grid"
+            aria-readonly={null}
+            className="ReactVirtualized__Grid ReactVirtualized__Table__Grid"
+            onScroll={[Function]}
+            role="rowgroup"
+            style={
+              Object {
+                "WebkitOverflowScrolling": "touch",
+                "boxSizing": "border-box",
+                "direction": "ltr",
+                "height": 600,
+                "overflowX": "hidden",
+                "overflowY": "hidden",
+                "position": "relative",
+                "width": 600,
+                "willChange": "transform",
+              }
+            }
+            tabIndex={0}
+          >
+            <div
+              className="ReactVirtualized__Grid__innerScrollContainer"
+              role="row"
+              style={
+                Object {
+                  "height": 150,
+                  "maxHeight": 150,
+                  "maxWidth": 600,
+                  "overflow": "hidden",
+                  "pointerEvents": "",
+                  "position": "relative",
+                  "width": "auto",
+                }
+              }
+            >
+              <div
+                aria-rowindex={1}
+                className="ReactVirtualized__Table__row bcu-item-row"
+                key="0-0"
+                role="row"
+                style={
+                  Object {
+                    "height": 50,
+                    "left": 0,
+                    "overflow": "hidden",
+                    "paddingRight": 0,
+                    "position": "absolute",
+                    "top": 0,
+                    "width": 600,
+                  }
+                }
+              >
+                <div
+                  aria-colindex={1}
+                  className="ReactVirtualized__Table__rowColumn"
+                  key="Row0-Col0"
+                  onClick={[Function]}
+                  role="gridcell"
+                  style={
+                    Object {
+                      "WebkitFlex": "1 1 300px",
+                      "flex": "1 1 300px",
+                      "msFlex": "1 1 300px",
+                      "overflow": "hidden",
+                    }
+                  }
+                  title={null}
+                >
+                  <IconName
+                    id="1"
+                    isResumableUploadsEnabled={false}
+                    name="item1"
+                    status="complete"
+                  >
+                    <div
+                      className="bcu-item-icon-name"
+                    >
+                      <div
+                        className="bcu-item-icon"
+                      >
+                        <FileIcon>
+                          <FileDefault32
+                            height={32}
+                            width={32}
+                          >
+                            <AccessibleSVG
+                              height={32}
+                              viewBox="0 0 32 32"
+                              width={32}
+                            >
+                              <svg
+                                aria-hidden="true"
+                                focusable="false"
+                                height={32}
+                                role="presentation"
+                                viewBox="0 0 32 32"
+                                width={32}
+                              >
+                                <g
+                                  fill="none"
+                                >
+                                  <path
+                                    d="M9 3h9.586a1 1 0 01.707.293l6.415 6.414a1 1 0 01.293.707V26A3 3 0 0123 29H9a3 3 0 01-3-3V6a3 3 0 013-3z"
+                                    fill="#d3d3d3"
+                                  />
+                                  <path
+                                    d="M19.286 3.286l5.01 5.009 1.412 1.412a1 1 0 01.203.293H21a2 2 0 01-2-2V3.09a1 1 0 01.286.196z"
+                                    fill="#fff"
+                                    fillOpacity={0.5}
+                                  />
+                                </g>
+                              </svg>
+                            </AccessibleSVG>
+                          </FileDefault32>
+                        </FileIcon>
+                      </div>
+                      <div
+                        className="bcu-item-name"
+                      >
+                        <ItemName
+                          name="item1"
+                        >
+                          <span
+                            className="bcu-item-label"
+                          >
+                            item1
+                          </span>
+                        </ItemName>
+                      </div>
+                    </div>
+                  </IconName>
+                </div>
+                <div
+                  aria-colindex={2}
+                  className="ReactVirtualized__Table__rowColumn"
+                  key="Row0-Col1"
+                  onClick={[Function]}
+                  role="gridcell"
+                  style={
+                    Object {
+                      "WebkitFlex": "1 1 300px",
+                      "flex": "1 1 300px",
+                      "msFlex": "1 1 300px",
+                      "overflow": "hidden",
+                      "textAlign": "right",
+                    }
+                  }
+                  title={null}
+                />
+                <div
+                  aria-colindex={3}
+                  className="ReactVirtualized__Table__rowColumn bcu-item-list-action-column"
+                  key="Row0-Col2"
+                  onClick={[Function]}
+                  role="gridcell"
+                  style={
+                    Object {
+                      "WebkitFlex": "0 0 25px",
+                      "flex": "0 0 25px",
+                      "msFlex": "0 0 25px",
+                      "overflow": "hidden",
+                    }
+                  }
+                  title={null}
+                >
+                  <ItemAction
+                    id="1"
+                    isResumableUploadsEnabled={false}
+                    name="item1"
+                    onClick={[Function]}
+                    status="complete"
+                  >
+                    <ItemAction
+                      id="1"
+                      intl={
+                        Object {
+                          "formatDate": [Function],
+                          "formatMessage": [Function],
+                          "formatRelativeTime": [Function],
+                        }
+                      }
+                      isResumableUploadsEnabled={false}
+                      name="item1"
+                      onClick={[Function]}
+                      status="complete"
+                    >
+                      <div
+                        className="bcu-item-action"
+                      >
+                        <Tooltip
+                          constrainToScrollParent={false}
+                          constrainToWindow={true}
+                          isDisabled={false}
+                          position="top-left"
+                          text="Remove"
+                          theme="default"
+                        >
+                          <TetherComponent
+                            attachment="bottom right"
+                            bodyElement={<body />}
+                            classPrefix="tooltip"
+                            constraints={
+                              Array [
+                                Object {
+                                  "attachment": "together",
+                                  "to": "window",
+                                },
+                              ]
+                            }
+                            enabled={false}
+                            renderElementTag="div"
+                            renderElementTo={null}
+                            targetAttachment="top right"
+                          >
+                            <PlainButton
+                              isDisabled={false}
+                              key=".0"
+                              onBlur={[Function]}
+                              onClick={[Function]}
+                              onFocus={[Function]}
+                              onKeyDown={[Function]}
+                              onMouseEnter={[Function]}
+                              onMouseLeave={[Function]}
+                              tabIndex="0"
+                              type="button"
+                            >
+                              <button
+                                className="btn-plain "
+                                onBlur={[Function]}
+                                onClick={[Function]}
+                                onFocus={[Function]}
+                                onKeyDown={[Function]}
+                                onMouseEnter={[Function]}
+                                onMouseLeave={[Function]}
+                                tabIndex="0"
+                                type="button"
+                              >
+                                <IconCheck
+                                  color="#26C281"
+                                >
+                                  <AccessibleSVG
+                                    className="icon-check "
+                                    height={24}
+                                    viewBox="0 0 24 24"
+                                    width={24}
+                                  >
+                                    <svg
+                                      aria-hidden="true"
+                                      className="icon-check "
+                                      focusable="false"
+                                      height={24}
+                                      role="presentation"
+                                      viewBox="0 0 24 24"
+                                      width={24}
+                                    >
+                                      <path
+                                        d="M0 0h24v24H0z"
+                                        fill="none"
+                                      />
+                                      <path
+                                        className="fill-color"
+                                        d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                                        fill="#26C281"
+                                      />
+                                    </svg>
+                                  </AccessibleSVG>
+                                </IconCheck>
+                              </button>
+                            </PlainButton>
+                          </TetherComponent>
+                        </Tooltip>
+                      </div>
+                    </ItemAction>
+                  </ItemAction>
+                </div>
+              </div>
+              <div
+                aria-rowindex={2}
+                className="ReactVirtualized__Table__row bcu-item-row"
+                key="1-0"
+                role="row"
+                style={
+                  Object {
+                    "height": 50,
+                    "left": 0,
+                    "overflow": "hidden",
+                    "paddingRight": 0,
+                    "position": "absolute",
+                    "top": 50,
+                    "width": 600,
+                  }
+                }
+              >
+                <div
+                  aria-colindex={1}
+                  className="ReactVirtualized__Table__rowColumn"
+                  key="Row1-Col0"
+                  onClick={[Function]}
+                  role="gridcell"
+                  style={
+                    Object {
+                      "WebkitFlex": "1 1 300px",
+                      "flex": "1 1 300px",
+                      "msFlex": "1 1 300px",
+                      "overflow": "hidden",
+                    }
+                  }
+                  title={null}
+                >
+                  <IconName
+                    id="2"
+                    isResumableUploadsEnabled={false}
+                    name="item2"
+                    status="complete"
+                  >
+                    <div
+                      className="bcu-item-icon-name"
+                    >
+                      <div
+                        className="bcu-item-icon"
+                      >
+                        <FileIcon>
+                          <FileDefault32
+                            height={32}
+                            width={32}
+                          >
+                            <AccessibleSVG
+                              height={32}
+                              viewBox="0 0 32 32"
+                              width={32}
+                            >
+                              <svg
+                                aria-hidden="true"
+                                focusable="false"
+                                height={32}
+                                role="presentation"
+                                viewBox="0 0 32 32"
+                                width={32}
+                              >
+                                <g
+                                  fill="none"
+                                >
+                                  <path
+                                    d="M9 3h9.586a1 1 0 01.707.293l6.415 6.414a1 1 0 01.293.707V26A3 3 0 0123 29H9a3 3 0 01-3-3V6a3 3 0 013-3z"
+                                    fill="#d3d3d3"
+                                  />
+                                  <path
+                                    d="M19.286 3.286l5.01 5.009 1.412 1.412a1 1 0 01.203.293H21a2 2 0 01-2-2V3.09a1 1 0 01.286.196z"
+                                    fill="#fff"
+                                    fillOpacity={0.5}
+                                  />
+                                </g>
+                              </svg>
+                            </AccessibleSVG>
+                          </FileDefault32>
+                        </FileIcon>
+                      </div>
+                      <div
+                        className="bcu-item-name"
+                      >
+                        <ItemName
+                          name="item2"
+                        >
+                          <span
+                            className="bcu-item-label"
+                          >
+                            item2
+                          </span>
+                        </ItemName>
+                      </div>
+                    </div>
+                  </IconName>
+                </div>
+                <div
+                  aria-colindex={2}
+                  className="ReactVirtualized__Table__rowColumn"
+                  key="Row1-Col1"
+                  onClick={[Function]}
+                  role="gridcell"
+                  style={
+                    Object {
+                      "WebkitFlex": "1 1 300px",
+                      "flex": "1 1 300px",
+                      "msFlex": "1 1 300px",
+                      "overflow": "hidden",
+                      "textAlign": "right",
+                    }
+                  }
+                  title={null}
+                />
+                <div
+                  aria-colindex={3}
+                  className="ReactVirtualized__Table__rowColumn bcu-item-list-action-column"
+                  key="Row1-Col2"
+                  onClick={[Function]}
+                  role="gridcell"
+                  style={
+                    Object {
+                      "WebkitFlex": "0 0 25px",
+                      "flex": "0 0 25px",
+                      "msFlex": "0 0 25px",
+                      "overflow": "hidden",
+                    }
+                  }
+                  title={null}
+                >
+                  <ItemAction
+                    id="2"
+                    isResumableUploadsEnabled={false}
+                    name="item2"
+                    onClick={[Function]}
+                    status="complete"
+                  >
+                    <ItemAction
+                      id="2"
+                      intl={
+                        Object {
+                          "formatDate": [Function],
+                          "formatMessage": [Function],
+                          "formatRelativeTime": [Function],
+                        }
+                      }
+                      isResumableUploadsEnabled={false}
+                      name="item2"
+                      onClick={[Function]}
+                      status="complete"
+                    >
+                      <div
+                        className="bcu-item-action"
+                      >
+                        <Tooltip
+                          constrainToScrollParent={false}
+                          constrainToWindow={true}
+                          isDisabled={false}
+                          position="top-left"
+                          text="Remove"
+                          theme="default"
+                        >
+                          <TetherComponent
+                            attachment="bottom right"
+                            bodyElement={<body />}
+                            classPrefix="tooltip"
+                            constraints={
+                              Array [
+                                Object {
+                                  "attachment": "together",
+                                  "to": "window",
+                                },
+                              ]
+                            }
+                            enabled={false}
+                            renderElementTag="div"
+                            renderElementTo={null}
+                            targetAttachment="top right"
+                          >
+                            <PlainButton
+                              isDisabled={false}
+                              key=".0"
+                              onBlur={[Function]}
+                              onClick={[Function]}
+                              onFocus={[Function]}
+                              onKeyDown={[Function]}
+                              onMouseEnter={[Function]}
+                              onMouseLeave={[Function]}
+                              tabIndex="0"
+                              type="button"
+                            >
+                              <button
+                                className="btn-plain "
+                                onBlur={[Function]}
+                                onClick={[Function]}
+                                onFocus={[Function]}
+                                onKeyDown={[Function]}
+                                onMouseEnter={[Function]}
+                                onMouseLeave={[Function]}
+                                tabIndex="0"
+                                type="button"
+                              >
+                                <IconCheck
+                                  color="#26C281"
+                                >
+                                  <AccessibleSVG
+                                    className="icon-check "
+                                    height={24}
+                                    viewBox="0 0 24 24"
+                                    width={24}
+                                  >
+                                    <svg
+                                      aria-hidden="true"
+                                      className="icon-check "
+                                      focusable="false"
+                                      height={24}
+                                      role="presentation"
+                                      viewBox="0 0 24 24"
+                                      width={24}
+                                    >
+                                      <path
+                                        d="M0 0h24v24H0z"
+                                        fill="none"
+                                      />
+                                      <path
+                                        className="fill-color"
+                                        d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                                        fill="#26C281"
+                                      />
+                                    </svg>
+                                  </AccessibleSVG>
+                                </IconCheck>
+                              </button>
+                            </PlainButton>
+                          </TetherComponent>
+                        </Tooltip>
+                      </div>
+                    </ItemAction>
+                  </ItemAction>
+                </div>
+              </div>
+              <div
+                aria-rowindex={3}
+                className="ReactVirtualized__Table__row bcu-item-row"
+                key="2-0"
+                role="row"
+                style={
+                  Object {
+                    "height": 50,
+                    "left": 0,
+                    "overflow": "hidden",
+                    "paddingRight": 0,
+                    "position": "absolute",
+                    "top": 100,
+                    "width": 600,
+                  }
+                }
+              >
+                <div
+                  aria-colindex={1}
+                  className="ReactVirtualized__Table__rowColumn"
+                  key="Row2-Col0"
+                  onClick={[Function]}
+                  role="gridcell"
+                  style={
+                    Object {
+                      "WebkitFlex": "1 1 300px",
+                      "flex": "1 1 300px",
+                      "msFlex": "1 1 300px",
+                      "overflow": "hidden",
+                    }
+                  }
+                  title={null}
+                >
+                  <IconName
+                    id="3"
+                    isResumableUploadsEnabled={false}
+                    name="item3"
+                    status="complete"
+                  >
+                    <div
+                      className="bcu-item-icon-name"
+                    >
+                      <div
+                        className="bcu-item-icon"
+                      >
+                        <FileIcon>
+                          <FileDefault32
+                            height={32}
+                            width={32}
+                          >
+                            <AccessibleSVG
+                              height={32}
+                              viewBox="0 0 32 32"
+                              width={32}
+                            >
+                              <svg
+                                aria-hidden="true"
+                                focusable="false"
+                                height={32}
+                                role="presentation"
+                                viewBox="0 0 32 32"
+                                width={32}
+                              >
+                                <g
+                                  fill="none"
+                                >
+                                  <path
+                                    d="M9 3h9.586a1 1 0 01.707.293l6.415 6.414a1 1 0 01.293.707V26A3 3 0 0123 29H9a3 3 0 01-3-3V6a3 3 0 013-3z"
+                                    fill="#d3d3d3"
+                                  />
+                                  <path
+                                    d="M19.286 3.286l5.01 5.009 1.412 1.412a1 1 0 01.203.293H21a2 2 0 01-2-2V3.09a1 1 0 01.286.196z"
+                                    fill="#fff"
+                                    fillOpacity={0.5}
+                                  />
+                                </g>
+                              </svg>
+                            </AccessibleSVG>
+                          </FileDefault32>
+                        </FileIcon>
+                      </div>
+                      <div
+                        className="bcu-item-name"
+                      >
+                        <ItemName
+                          name="item3"
+                        >
+                          <span
+                            className="bcu-item-label"
+                          >
+                            item3
+                          </span>
+                        </ItemName>
+                      </div>
+                    </div>
+                  </IconName>
+                </div>
+                <div
+                  aria-colindex={2}
+                  className="ReactVirtualized__Table__rowColumn"
+                  key="Row2-Col1"
+                  onClick={[Function]}
+                  role="gridcell"
+                  style={
+                    Object {
+                      "WebkitFlex": "1 1 300px",
+                      "flex": "1 1 300px",
+                      "msFlex": "1 1 300px",
+                      "overflow": "hidden",
+                      "textAlign": "right",
+                    }
+                  }
+                  title={null}
+                />
+                <div
+                  aria-colindex={3}
+                  className="ReactVirtualized__Table__rowColumn bcu-item-list-action-column"
+                  key="Row2-Col2"
+                  onClick={[Function]}
+                  role="gridcell"
+                  style={
+                    Object {
+                      "WebkitFlex": "0 0 25px",
+                      "flex": "0 0 25px",
+                      "msFlex": "0 0 25px",
+                      "overflow": "hidden",
+                    }
+                  }
+                  title={null}
+                >
+                  <ItemAction
+                    id="3"
+                    isResumableUploadsEnabled={false}
+                    name="item3"
+                    onClick={[Function]}
+                    status="complete"
+                  >
+                    <ItemAction
+                      id="3"
+                      intl={
+                        Object {
+                          "formatDate": [Function],
+                          "formatMessage": [Function],
+                          "formatRelativeTime": [Function],
+                        }
+                      }
+                      isResumableUploadsEnabled={false}
+                      name="item3"
+                      onClick={[Function]}
+                      status="complete"
+                    >
+                      <div
+                        className="bcu-item-action"
+                      >
+                        <Tooltip
+                          constrainToScrollParent={false}
+                          constrainToWindow={true}
+                          isDisabled={false}
+                          position="top-left"
+                          text="Remove"
+                          theme="default"
+                        >
+                          <TetherComponent
+                            attachment="bottom right"
+                            bodyElement={<body />}
+                            classPrefix="tooltip"
+                            constraints={
+                              Array [
+                                Object {
+                                  "attachment": "together",
+                                  "to": "window",
+                                },
+                              ]
+                            }
+                            enabled={false}
+                            renderElementTag="div"
+                            renderElementTo={null}
+                            targetAttachment="top right"
+                          >
+                            <PlainButton
+                              isDisabled={false}
+                              key=".0"
+                              onBlur={[Function]}
+                              onClick={[Function]}
+                              onFocus={[Function]}
+                              onKeyDown={[Function]}
+                              onMouseEnter={[Function]}
+                              onMouseLeave={[Function]}
+                              tabIndex="0"
+                              type="button"
+                            >
+                              <button
+                                className="btn-plain "
+                                onBlur={[Function]}
+                                onClick={[Function]}
+                                onFocus={[Function]}
+                                onKeyDown={[Function]}
+                                onMouseEnter={[Function]}
+                                onMouseLeave={[Function]}
+                                tabIndex="0"
+                                type="button"
+                              >
+                                <IconCheck
+                                  color="#26C281"
+                                >
+                                  <AccessibleSVG
+                                    className="icon-check "
+                                    height={24}
+                                    viewBox="0 0 24 24"
+                                    width={24}
+                                  >
+                                    <svg
+                                      aria-hidden="true"
+                                      className="icon-check "
+                                      focusable="false"
+                                      height={24}
+                                      role="presentation"
+                                      viewBox="0 0 24 24"
+                                      width={24}
+                                    >
+                                      <path
+                                        d="M0 0h24v24H0z"
+                                        fill="none"
+                                      />
+                                      <path
+                                        className="fill-color"
+                                        d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                                        fill="#26C281"
+                                      />
+                                    </svg>
+                                  </AccessibleSVG>
+                                </IconCheck>
+                              </button>
+                            </PlainButton>
+                          </TetherComponent>
+                        </Tooltip>
+                      </div>
+                    </ItemAction>
+                  </ItemAction>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Grid>
+      </div>
+    </Table>
+  </Component>
+</ItemList>
+`;

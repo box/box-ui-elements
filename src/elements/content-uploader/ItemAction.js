@@ -85,7 +85,7 @@ const ItemAction = ({
             break;
     }
 
-    if (STATUS_ERROR && code === ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED && !!onUpgradeCTAClick) {
+    if (status === STATUS_ERROR && code === ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED && !!onUpgradeCTAClick) {
         return (
             <PrimaryButton
                 onClick={onUpgradeCTAClick}
