@@ -1,18 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-uploader/ItemAction should render PrimaryButton with STATUS_ERROR and upload file size exceeded 1`] = `
-<PrimaryButton
-  data-resin-target="large_version_error_inline_upgrade_cta"
-  onClick={[Function]}
-  type="button"
->
-  <FormattedMessage
-    defaultMessage="Upgrade"
-    id="be.uploadsFileSizeLimitExceededUpgradeMessageForUpgradeCta"
-  />
-</PrimaryButton>
-`;
-
 exports[`elements/content-uploader/ItemAction should render correctly with STATUS_ERROR and item is folder 1`] = `""`;
 
 exports[`elements/content-uploader/ItemAction should render correctly with complete 1`] = `
@@ -223,17 +210,4 @@ exports[`elements/content-uploader/ItemAction should render correctly with stage
 >
   <LoadingIndicator />
 </div>
-`;
-
-exports[`elements/content-uploader/ItemAction should render primarybutton with STATUS_ERROR and upload file size exceeded 1`] = `
-<PrimaryButton
-  data-resin-target="large_version_error_inline_upgrade_cta"
-  onClick={[Function]}
-  type="button"
->
-  <FormattedMessage
-    defaultMessage="Upgrade"
-    id="be.uploadsFileSizeLimitExceededUpgradeMessageForUpgradeCta"
-  />
-</PrimaryButton>
 `;

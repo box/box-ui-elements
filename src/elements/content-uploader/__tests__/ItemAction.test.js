@@ -73,7 +73,6 @@ describe('elements/content-uploader/ItemAction', () => {
             onUpgradeCTAClick: () => {},
         });
 
-        expect(wrapper).toMatchSnapshot();
         expect(wrapper.exists('PrimaryButton')).toBe(true);
         expect(wrapper.exists('PlainButton')).toBe(false);
     });
