@@ -82,7 +82,7 @@ class Button extends React.Component<ButtonProps> {
                 'is-disabled': isDisabled,
                 'is-loading': isLoading,
                 'is-selected': isSelected,
-                'bdl-Button--large': size === 'large',
+                'bdl-btn--large': size === 'large',
                 'bdl-has-icon': !!icon,
             },
             className,

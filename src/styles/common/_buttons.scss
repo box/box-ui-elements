@@ -41,7 +41,7 @@ $bdl-btn-border-width: 1px;
     zoom: 1;
     -webkit-font-smoothing: antialiased;
 
-    &.bdl-Button--large {
+    &.bdl-btn--large {
         // Instead of using line-height + padding + border = height like the base size,
         // just set the line-height + border; this already handles vertical alignment.
         padding: 0 $bdl-btn-padding-horizontal;
@@ -75,7 +75,7 @@ $bdl-btn-border-width: 1px;
             }
         }
 
-        &.bdl-Button--large {
+        &.bdl-btn--large {
             height: $bdl-btn-height-large;
 
             .bdl-btn-icon {
