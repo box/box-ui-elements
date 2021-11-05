@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import omit from 'lodash/omit';
 import LoadingIndicator from '../loading-indicator';
 import RadarAnimation from '../radar';
+import { SVGProps } from '../accessible-svg/AccessibleSVG';
 
 export enum ButtonType {
     BUTTON = 'button',
@@ -27,7 +28,7 @@ export interface ButtonProps {
     /** to set buttons inner ref */
     setRef?: Function;
     /** size of the button */
-    size?: 'large' | null;
+    size?: 'large';
     /** whether to show a radar */
     showRadar: boolean;
     /** type for the button */
@@ -75,32 +76,17 @@ class Button extends React.Component<ButtonProps> {
             buttonProps['aria-disabled'] = true;
         }
 
-        const hasIcon = !!icon;
-        const hasText = !!children;
-
         const styleClassName = classNames(
             'btn',
             {
                 'is-disabled': isDisabled,
                 'is-loading': isLoading,
                 'is-selected': isSelected,
-                'bdl-is-large': size === 'large',
-                'bdl-has-icon': hasIcon,
+                'bdl-Button--large': size === 'large',
+                'bdl-has-icon': !!icon,
             },
             className,
         );
-
-        const textContent = children ? <span className="btn-content">{children}</span> : null;
-        let iconContent = null;
-        if (icon) {
-            // Size of text+icon is 16px, just icon is 20px
-            const iconSize = hasIcon && hasText ? 16 : 20;
-            const fixedSizeIcon = React.cloneElement<{ width: number; height: number }>(icon, {
-                width: iconSize,
-                height: iconSize,
-            });
-            iconContent = <span className="bdl-btn-icon">{fixedSizeIcon}</span>;
-        }
 
         let button = (
             // eslint-disable-next-line react/button-has-type
@@ -116,8 +102,15 @@ class Button extends React.Component<ButtonProps> {
                 type={type}
                 {...buttonProps}
             >
-                {textContent}
-                {iconContent}
+                {children ? <span className="btn-content">{children}</span> : null}
+                {icon ? (
+                    <span className="bdl-btn-icon">
+                        {React.cloneElement<SVGProps>(icon, {
+                            width: icon && children ? 16 : 20,
+                            height: icon && children ? 16 : 20,
+                        })}
+                    </span>
+                ) : null}
                 {isLoading && <LoadingIndicator className="btn-loading-indicator" />}
             </button>
         );

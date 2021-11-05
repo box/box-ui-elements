@@ -73,10 +73,10 @@ describe('components/button/Button', () => {
         expect(wrapper.prop('type')).toEqual('submit');
     });
 
-    test('should add bdl-is-large modifier class when size is "large"', () => {
+    test('should add modifier class when size is "large"', () => {
         const wrapper = shallow(<Button size="large">Click Here</Button>);
 
-        expect(wrapper.prop('className')).toEqual('btn bdl-is-large');
+        expect(wrapper.prop('className')).toEqual('btn bdl-Button--large');
     });
 
     test('should render icon in icon container if icon prop is set', () => {

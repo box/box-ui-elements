@@ -6,18 +6,19 @@
  * Buttons
  **************************************/
 $bdl-btn-border-width: 1px;
-$bdl-btn-height: 32px;
-$bdl-btn-height-large: 40px;
-$bdl-btn-icon-size: 20px;
-$bdl-btn-text-icon-size: 16px;
-$bdl-btn-padding-horizontal: $bdl-grid-unit * 4;
-$bdl-btn-padding-vertical: 10px; // Do not reuse, use flexbox or line-height instead
 
 .btn {
+    $bdl-btn-height: 32px;
+    $bdl-btn-height-large: 40px;
+    $bdl-btn-icon-size: 20px;
+    $bdl-btn-text-icon-size: 16px;
+    $bdl-btn-padding-horizontal: $bdl-grid-unit * 4;
+    $bdl-btn-padding-vertical: 10px; // Use flexbox or line-height instead in future implementation
+
     position: relative;
     display: inline-block;
     box-sizing: border-box;
-    margin: 5px; // TODO: this causes problems for composition (breaking change needed to fix)
+    margin: 5px; // This causes problems for composition (breaking change needed to fix)
     padding: $bdl-btn-padding-vertical $bdl-btn-padding-horizontal;
     color: $bdl-gray-80;
     font-weight: bold;
@@ -41,7 +42,7 @@ $bdl-btn-padding-vertical: 10px; // Do not reuse, use flexbox or line-height ins
     zoom: 1;
     -webkit-font-smoothing: antialiased;
 
-    &.bdl-is-large {
+    &.bdl-Button--large {
         // Instead of using line-height + padding + border = height like the base size,
         // just set the line-height + border; this already handles vertical alignment.
         padding: 0 $bdl-btn-padding-horizontal;
@@ -50,8 +51,8 @@ $bdl-btn-padding-vertical: 10px; // Do not reuse, use flexbox or line-height ins
     }
 
     &.bdl-has-icon {
-        display: inline-flex;
         // Buttons with icons use flexbox to align content instead of line-height/padding
+        display: inline-flex;
         align-items: center;
         justify-content: center;
         height: $bdl-btn-height;
@@ -68,12 +69,14 @@ $bdl-btn-padding-vertical: 10px; // Do not reuse, use flexbox or line-height ins
 
             // Icon with text:
             & + .btn-content {
-                margin-right: 3 * $bdl-grid-unit;
+                // Buttons with icons have a smaller margin on the icon side for optical alignment:
+                margin-right: $bdl-grid-unit * 3;
+                // Spacing between button and text:
                 margin-left: $bdl-grid-unit * 2;
             }
         }
 
-        &.bdl-is-large {
+        &.bdl-Button--large {
             height: $bdl-btn-height-large;
 
             .bdl-btn-icon {
