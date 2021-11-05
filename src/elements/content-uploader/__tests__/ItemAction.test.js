@@ -2,7 +2,14 @@ import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import { ItemActionForTesting as ItemAction } from '../ItemAction';
-import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_STAGED, STATUS_ERROR } from '../../../constants';
+import {
+    ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED,
+    STATUS_PENDING,
+    STATUS_IN_PROGRESS,
+    STATUS_COMPLETE,
+    STATUS_STAGED,
+    STATUS_ERROR,
+} from '../../../constants';
 
 describe('elements/content-uploader/ItemAction', () => {
     const getWrapper = props =>
@@ -57,5 +64,16 @@ describe('elements/content-uploader/ItemAction', () => {
         });
 
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render PrimaryButton with STATUS_ERROR and upload file size exceeded', () => {
+        const wrapper = getWrapper({
+            status: STATUS_ERROR,
+            error: { code: ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED },
+            onUpgradeCTAClick: () => {},
+        });
+
+        expect(wrapper.exists('PrimaryButton')).toBe(true);
+        expect(wrapper.exists('PlainButton')).toBe(false);
     });
 });
