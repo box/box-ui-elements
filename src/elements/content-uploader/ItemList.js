@@ -63,6 +63,7 @@ const ItemList = ({
                         cellRenderer={actionCell}
                         dataKey="status"
                         flexShrink={0}
+                        width={onUpgradeCTAClick ? 100 : 25}
                     />
                     {isResumableUploadsEnabled && (
                         <Column
