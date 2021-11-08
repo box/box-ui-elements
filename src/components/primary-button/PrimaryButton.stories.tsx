@@ -20,7 +20,7 @@ export const loading = () => <PrimaryButton isLoading>Click Here</PrimaryButton>
 export const disabled = () => <PrimaryButton isDisabled>Click Here</PrimaryButton>;
 
 export default {
-    title: 'Components|PrimaryButton',
+    title: 'Components|Buttons/PrimaryButton',
     component: PrimaryButton,
     parameters: {
         notes,
