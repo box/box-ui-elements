@@ -1,17 +1,28 @@
+@import '../constants/typography';
+@import '../constants/layout';
+
 /**************************************
  * Buttons
  **************************************/
+$bdl-btn-border-width: 1px;
 
 .btn {
+    $bdl-btn-height: 32px;
+    $bdl-btn-height-large: 40px;
+    $bdl-btn-icon-size: 20px;
+    $bdl-btn-text-icon-size: 16px;
+    $bdl-btn-padding-horizontal: $bdl-grid-unit * 4;
+    $bdl-btn-padding-vertical: 10px; // Use flexbox or line-height instead in future implementation
+
     position: relative;
     display: inline-block;
     box-sizing: border-box;
-    margin: 5px;
-    padding: 10px 16px;
+    margin: 5px; // This causes problems for composition (breaking change needed to fix)
+    padding: $bdl-btn-padding-vertical $bdl-btn-padding-horizontal;
     color: $bdl-gray-80;
-    font-weight: normal;
-    font-size: 13px;
-    line-height: 10px;
+    font-weight: bold;
+    font-size: $bdl-fontSize;
+    line-height: $bdl-btn-height - 2 * $bdl-btn-border-width - 2 * $bdl-btn-padding-vertical;
     letter-spacing: .035em;
     white-space: nowrap;
     text-align: center;
@@ -19,16 +30,59 @@
     text-shadow: none;
     vertical-align: top;
     background-color: $white;
-    border: 1px solid $bdl-gray-30;
+    border-color: $bdl-gray-30;
     border-style: solid;
-    border-width: 1px;
-    border-radius: 4px;
+    border-width: $bdl-btn-border-width;
+    border-radius: $bdl-border-radius-med-size;
     cursor: pointer;
     -webkit-transition: border-color linear .15s, box-shadow linear .15s, background-color linear .15s;
     transition: background-color .05s ease-in-out, border-color .05s ease-in-out;
     -webkit-appearance: none;
     zoom: 1;
     -webkit-font-smoothing: antialiased;
+
+    &.bdl-btn--large {
+        // Instead of using line-height + padding + border = height like the base size,
+        // just set the line-height + border; this already handles vertical alignment.
+        padding: 0 $bdl-btn-padding-horizontal;
+        font-size: $bdl-fontSize--dejaBlue;
+        line-height: $bdl-btn-height-large - 2 * $bdl-btn-border-width;
+    }
+
+    &.bdl-has-icon {
+        // Buttons with icons use flexbox to align content instead of line-height/padding
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: $bdl-btn-height;
+        padding: 0; // Content provides padding
+        line-height: 0;
+
+        .btn-content {
+            margin-left: $bdl-btn-padding-horizontal;
+        }
+
+        .bdl-btn-icon {
+            // Icon without text:
+            margin: ($bdl-btn-height - $bdl-btn-icon-size) / 2 - $bdl-btn-border-width;
+
+            // Icon with text:
+            & + .btn-content {
+                // Buttons with icons have a smaller margin on the icon side for optical alignment:
+                margin-right: $bdl-grid-unit * 3;
+                // Spacing between button and text:
+                margin-left: $bdl-grid-unit * 2;
+            }
+        }
+
+        &.bdl-btn--large {
+            height: $bdl-btn-height-large;
+
+            .bdl-btn-icon {
+                margin: ($bdl-btn-height-large - $bdl-btn-icon-size) / 2 - $bdl-btn-border-width;
+            }
+        }
+    }
 
     &:active,
     &:hover,
@@ -62,7 +116,8 @@
     }
 
     &.is-loading {
-        .btn-content {
+        .btn-content,
+        .bdl-btn-icon {
             visibility: hidden;
         }
 
@@ -85,6 +140,8 @@
     }
 }
 
+// TODO: :hover/:active should inherit styles instead of specifying
+// This would be a breaking change to fix
 .btn-plain,
 .btn-plain:hover,
 .btn-plain:active {
@@ -122,7 +179,7 @@ button svg {
     &:not(.is-disabled) {
         &:focus {
             background-color: lighten($primary-color, 8%);
-            border: 1px solid $primary-color;
+            border: $bdl-btn-border-width solid $primary-color;
             box-shadow: inset 0 0 0 1px fade-out($white, .2), 0 1px 2px fade-out($black, .9);
         }
 
@@ -139,7 +196,8 @@ button svg {
     }
 
     &.is-loading {
-        .btn-content {
+        .btn-content,
+        .bdl-btn-icon {
             background-color: $bdl-gray-30;
         }
     }
