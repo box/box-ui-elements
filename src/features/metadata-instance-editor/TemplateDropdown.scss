@@ -15,7 +15,7 @@
         padding: 0;
         overflow: hidden;
         border: 1px solid $bdl-gray-30;
-        border-radius: 4px;
+        border-radius: $bdl-border-radius-size;
     }
 
     ul.overlay {
@@ -90,7 +90,7 @@
             margin: 0;
             padding: 10px 12px 12px;
             border-bottom: 1px solid $bdl-gray-30;
-            border-radius: 4px 4px 0 0;
+            border-radius: $bdl-border-radius-size 4px 0 0;
 
             .action-button {
                 .clear-button {

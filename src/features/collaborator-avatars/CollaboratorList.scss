@@ -7,7 +7,7 @@
         margin: 0;
         overflow-y: scroll;
         border: solid 1px $bdl-gray-20;
-        border-radius: 4px;
+        border-radius: $bdl-border-radius-size;
         box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .08) inset;
     }
 }

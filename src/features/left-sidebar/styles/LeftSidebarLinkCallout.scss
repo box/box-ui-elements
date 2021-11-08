@@ -11,7 +11,7 @@ $arrow-size: 6px;
     word-wrap: break-word;
     background-color: $bdl-dark-blue;
     border-color: $bdl-dark-blue;
-    border-radius: 4px;
+    border-radius: $bdl-border-radius-size;
 
     &::before {
         position: absolute;
@@ -74,7 +74,7 @@ $arrow-size: 6px;
 
         .left-nav-callout-button {
             padding: 10px;
-            border-radius: 4px;
+            border-radius: $bdl-border-radius-size;
         }
 
         .left-nav-callout-secondary-button {
