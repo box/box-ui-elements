@@ -90,6 +90,7 @@ type Props = {
     onMinimize?: Function,
     onProgress: Function,
     onResume: Function,
+    onUpgradeCTAClick?: Function,
     onUpload: Function,
     overwrite: boolean,
     requestInterceptor?: Function,
@@ -1203,17 +1204,18 @@ class ContentUploader extends Component<Props, State> {
      */
     render() {
         const {
+            className,
+            fileLimit,
+            isDraggingItemsToUploadsManager = false,
+            isFolderUploadEnabled,
+            isResumableUploadsEnabled,
+            isTouch,
             language,
+            measureRef,
             messages,
             onClose,
-            className,
-            measureRef,
-            isTouch,
-            fileLimit,
+            onUpgradeCTAClick,
             useUploadsManager,
-            isResumableUploadsEnabled,
-            isFolderUploadEnabled,
-            isDraggingItemsToUploadsManager = false,
         }: Props = this.props;
         const { view, items, errorCode, isUploadsManagerExpanded }: State = this.state;
         const isEmpty = items.length === 0;
@@ -1240,6 +1242,7 @@ class ContentUploader extends Component<Props, State> {
                             items={items}
                             onItemActionClick={this.onClick}
                             onRemoveActionClick={this.removeFileFromUploadQueue}
+                            onUpgradeCTAClick={onUpgradeCTAClick}
                             onUploadsManagerActionClick={this.clickAllWithStatus}
                             toggleUploadsManager={this.toggleUploadsManager}
                             view={view}
