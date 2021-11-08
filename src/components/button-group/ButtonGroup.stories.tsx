@@ -22,7 +22,7 @@ export const disabled = () => (
 );
 
 export default {
-    title: 'Components|Buttons/ButtonGroup',
+    title: 'Components|ButtonGroup',
     component: ButtonGroup,
     parameters: {
         notes,

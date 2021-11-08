@@ -7,9 +7,7 @@ $tooltip-z-index: 190 !default;
 
 // Borders
 $bdl-border-radius-size: 4px;
-$bdl-border-radius-med-size: $bdl-border-radius-size * 1.5;
-$bdl-border-radius-large-size: $bdl-border-radius-size * 2;
-$bdl-border-radius-xlarge-size: $bdl-border-radius-size * 3;
+$bdl-border-radius-large-size: 10px; // Slowly migrating certain components, such as Classification Labels, to this larger radius
 
 // Spacing
 $bdl-grid-unit: 4px !default;

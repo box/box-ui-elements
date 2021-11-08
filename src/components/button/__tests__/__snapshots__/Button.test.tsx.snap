@@ -22,25 +22,3 @@ exports[`components/button/Button should render a RadarAnimation if showRadar is
   </button>
 </RadarAnimation>
 `;
-
-exports[`components/button/Button should render icon next to text if icon and children props are both set 1`] = `
-<button
-  className="btn bdl-has-icon"
-  onClick={[Function]}
-  type="submit"
->
-  <span
-    className="btn-content"
-  >
-    Click Here
-  </span>
-  <span
-    className="bdl-btn-icon"
-  >
-    <FakeIcon
-      height={16}
-      width={16}
-    />
-  </span>
-</button>
-`;

@@ -73,37 +73,6 @@ describe('components/button/Button', () => {
         expect(wrapper.prop('type')).toEqual('submit');
     });
 
-    test('should add modifier class when size is "large"', () => {
-        const wrapper = shallow(<Button size="large">Click Here</Button>);
-
-        expect(wrapper.prop('className')).toEqual('btn bdl-btn--large');
-    });
-
-    test('should render icon in icon container if icon prop is set', () => {
-        const FakeIcon = (props: Record<string, unknown>) => <svg {...props} />;
-        const wrapper = shallow(<Button icon={<FakeIcon />} />);
-        const iconContainer = wrapper.find('.bdl-btn-icon');
-        const { width, height } = iconContainer.find('FakeIcon').props();
-        expect(wrapper.props().className).toEqual('btn bdl-has-icon');
-        expect(iconContainer.length).toBe(1);
-        expect(width).toEqual(height);
-        expect(width).toEqual(20);
-    });
-
-    test('should render icon next to text if icon and children props are both set', () => {
-        const FakeIcon = (props: Record<string, unknown>) => <svg {...props} />;
-        const wrapper = shallow(<Button icon={<FakeIcon />}>Click Here</Button>);
-        const iconContainer = wrapper.find('.bdl-btn-icon');
-        const textContainer = wrapper.find('.btn-content');
-        const { width, height } = iconContainer.find('FakeIcon').props();
-        expect(iconContainer.length).toBe(1);
-        expect(textContainer.length).toBe(1);
-        expect(width).toEqual(height);
-        expect(width).toEqual(16);
-
-        expect(wrapper).toMatchSnapshot();
-    });
-
     test('should set aria-disabled to true when isDisabled is true', () => {
         const wrapper = shallow(<Button isDisabled />);
 
