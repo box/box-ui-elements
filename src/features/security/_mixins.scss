@@ -5,7 +5,7 @@
     align-items: center;
     margin: 0;
     padding: 2px 8px;
-    border-radius: 10px; // Rounded sides: radius half the height of the badge
+    border-radius: $bdl-border-radius-large-size;
 }
 
 @mixin bdl-SecurityBadge-name {
