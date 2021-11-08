@@ -8,6 +8,7 @@ import IconBell from '../../icons/general/IconBell';
 import IconClose from '../../icons/general/IconClose';
 import IconInfoThin from '../../icons/general/IconInfoThin';
 import IconSync from '../../icons/general/IconSync';
+import { KEYS } from '../../constants';
 
 import type { NotificationType } from '../../common/types/core';
 
@@ -51,6 +52,8 @@ type Props = {
      * - Notification buttons must be the `<Button />` component.
      */
     children: React.Node,
+    /** If set it forces the notification to stay open and only close when clicked on buttons inside it */
+    closeOnClick?: boolean,
     /** Function that gets executed when close button is clicked or when duration expires. */
     duration?: 'short' | 'long',
     /** `duration`: When set, dictates how long the notification will exist before calling `onClose`.
@@ -77,7 +80,11 @@ class Notification extends React.Component<Props> {
     };
 
     componentDidMount() {
-        const { duration, onClose } = this.props;
+        const { closeOnClick, duration, onClose } = this.props;
+        if (closeOnClick) {
+            return;
+        }
+
         this.timeout = duration && onClose ? setTimeout(onClose, DURATION_TIMES[duration]) : null;
     }
 
@@ -88,6 +95,14 @@ class Notification extends React.Component<Props> {
         }
         if (onClose) {
             onClose(event);
+        }
+    };
+
+    handleKeyDown = (event: SyntheticKeyboardEvent<>) => {
+        if (event.key === KEYS.escape) {
+            event.stopPropagation();
+            event.preventDefault();
+            this.onClose();
         }
     };
 
@@ -105,7 +120,7 @@ class Notification extends React.Component<Props> {
         const classes = classNames('notification', type, overflow);
 
         return (
-            <div className={classes}>
+            <div className={classes} onKeyDown={this.handleKeyDown} role="presentation">
                 {React.cloneElement(ICON_RENDERER[type](), {
                     color: '#fff',
                     height: 20,
