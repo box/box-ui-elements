@@ -21,24 +21,24 @@
     margin: 10px auto;
     padding: 10px 10px 10px 20px;
     overflow: hidden;
-    color: $bdl-gray;
+    color: $white;
     font-weight: bold;
-    background-color: $bdl-gray-40;
+    background-color: $bdl-gray-80;
     border-radius: 4px;
     box-shadow: 0 2px 6px fade-out($black, .85);
     opacity: .9;
     transition: opacity .1s ease-out;
 
     &.info {
-        background-color: $bdl-green-light-50;
+        background-color: $bdl-green-light;
     }
 
     &.warn {
-        background-color: $bdl-yellorange-50;
+        background-color: $bdl-yellorange;
     }
 
     &.error {
-        background-color: $bdl-watermelon-red-50;
+        background-color: $bdl-watermelon-red;
     }
 
     &.is-hidden {
@@ -71,15 +71,14 @@
     button,
     a {
         flex: none;
-        color: $bdl-gray;
-        border-color: $bdl-gray;
+        color: $white;
 
         &.btn.is-disabled,
         &.btn:not(.is-disabled) {
             margin: 0 5px;
             padding: 7px 13px;
             background-color: transparent;
-            border-color: inherit;
+            border-color: $bdl-gray-10;
         }
 
         &.close-btn {
