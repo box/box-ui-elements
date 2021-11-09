@@ -21,7 +21,7 @@
         margin: 0;
         background-color: rgba($hover-blue-background, .75);
         border: 1px dashed $bdl-box-blue;
-        border-radius: 3px;
+        border-radius: $bdl-border-radius-size;
     }
 
     .left-sidebar-drop-wrapper-text {

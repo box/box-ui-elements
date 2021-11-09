@@ -210,7 +210,7 @@ textarea {
 .select-container .select-button {
     background-color: $white;
     border: 1px solid $bdl-gray-20;
-    border-radius: $bdl-border-radius-size;
+    border-radius: $bdl-border-radius-med-size;
     box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
     -webkit-transition: border-color linear .15s, box-shadow linear .1s;
     transition: border-color linear .15s, box-shadow linear .1s;

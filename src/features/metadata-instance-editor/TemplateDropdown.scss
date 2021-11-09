@@ -32,7 +32,7 @@
         .overlay-wrapper {
             overflow: hidden;
             border-top: none;
-            border-radius: 0 0 4px 4px;
+            border-radius: 0 0 $bdl-border-radius-med-size $bdl-border-radius-med-size;
 
             // NOTE (cwei): targets ie11
             @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {

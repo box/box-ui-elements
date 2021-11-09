@@ -15,6 +15,7 @@
     background: $white;
     border: 1px solid $bdl-gray-30;
     border-bottom-color: $bdl-gray-50;
+    border-radius: $bdl-border-radius-med-size;
 
     &.is-hidden {
         display: none;
@@ -188,7 +189,7 @@
     color: $white;
     font-weight: bold;
     background-color: $primary-color;
-    border-radius: 3px;
+    border-radius: $bdl-border-radius-med-size;
     cursor: pointer;
 }
 
