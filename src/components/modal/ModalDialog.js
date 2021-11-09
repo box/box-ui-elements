@@ -5,7 +5,7 @@ import omit from 'lodash/omit';
 import uniqueId from 'lodash/uniqueId';
 import { defineMessages, injectIntl } from 'react-intl';
 
-import IconClose from '../../icons/general/IconClose';
+import IconClose from '../../icon/fill/X16';
 
 const ALERT_TYPE = 'alert';
 const DIALOG_TYPE = 'dialog';

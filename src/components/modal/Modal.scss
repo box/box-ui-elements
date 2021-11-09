@@ -60,7 +60,7 @@
     background-color: $white;
     background-clip: padding-box;
     border: 1px solid $bdl-gray-30;
-    border-radius: $bdl-border-radius-size;
+    border-radius: $bdl-border-radius-xlarge-size;
     box-shadow: 0 1px 1px 1px fade-out($black, .95);
 }
 
@@ -70,6 +70,7 @@
     max-width: 100%;
     margin: 0;
     overflow: hidden;
+    font-weight: bold;
     font-size: 16px;
     line-height: inherit;
     word-wrap: break-word;
