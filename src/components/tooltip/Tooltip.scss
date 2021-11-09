@@ -11,14 +11,14 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
 .bdl-Tooltip {
     position: relative;
     max-width: 200px;
-    padding: 8px $horizontal-offset;
+    padding: $bdl-grid-unit * 2 $horizontal-offset;
     color: $white;
-    font-size: 13px;
+    font-size: $bdl-fontSize;
     line-height: 1.4;
     word-wrap: break-word;
     background-color: $bdl-gray-80;
     border-color: $bdl-gray-80;
-    border-radius: 4px;
+    border-radius: $bdl-border-radius-size;
 
     &::before {
         position: absolute;

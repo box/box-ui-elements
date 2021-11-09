@@ -16,7 +16,7 @@
     width: 2px;
     height: 10px;
     background-color: $primary-color;
-    border-radius: 4px;
+    border-radius: $bdl-border-radius-size;
     -webkit-animation: crawler .66s infinite ease-in-out;
     animation: crawler .66s infinite ease-in-out;
 }

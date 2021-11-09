@@ -25,7 +25,7 @@
     font-weight: bold;
     background-color: $bdl-gray-10;
     border: 2px solid $bdl-gray;
-    border-radius: $bdl-border-radius-size * 2;
+    border-radius: $bdl-border-radius-size-large;
     box-shadow: 0 2px 6px fade-out($black, .85);
     opacity: 1;
     transition: opacity .1s ease-out;

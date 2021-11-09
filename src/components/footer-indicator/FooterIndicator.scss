@@ -8,7 +8,7 @@
     height: 32px;
     margin: 0 15px;
     background: $bdl-gray-80;
-    border-radius: 4px 4px 0 0;
+    border-radius: $bdl-border-radius-size $bdl-border-radius-size 0 0;
 }
 
 .bdl-FooterIndicator-content {

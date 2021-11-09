@@ -29,7 +29,7 @@
     padding: $bdl-grid-unit * 3;
     background-color: $white;
     border: 1px solid $bdl-gray-10;
-    border-radius: $bdl-border-radius-size * 2;
+    border-radius: $bdl-border-radius-size-large;
 
     @include bdl-Overlay-containerShadow;
 }

@@ -12,6 +12,7 @@
     .overlay {
         display: block;
         width: 100%;
+        border-radius: $bdl-border-radius-size-med;
 
         .SelectorDropdown-divider {
             display: block;
@@ -34,6 +35,10 @@
             text-transform: uppercase;
             pointer-events: none;
         }
+    }
+
+    .datalist-item {
+        border-radius: 0;
     }
 
     .text-input-container {
