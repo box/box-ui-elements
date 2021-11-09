@@ -35,11 +35,14 @@ type Props = {
  * @param {string} [itemName]
  * @returns {FormattedMessage}
  */
-const getErrorMessage = (errorCode: ?string, itemName: ?string) => {
+const getErrorMessage = (errorCode: ?string, itemName: ?string, shouldShowUpgradeCTAMessage?: boolean) => {
     switch (errorCode) {
         case ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED:
             return <FormattedMessage {...messages.uploadsOneOrMoreChildFoldersFailedToUploadMessage} />;
         case ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED:
+            if (shouldShowUpgradeCTAMessage) {
+                return <FormattedMessage {...messages.uploadsFileSizeLimitExceededErrorMessageForUpgradeCta} />;
+            }
             return <FormattedMessage {...messages.uploadsFileSizeLimitExceededErrorMessage} />;
         case ERROR_CODE_ITEM_NAME_IN_USE:
             return <FormattedMessage {...messages.uploadsItemNameInUseErrorMessage} />;
@@ -58,7 +61,7 @@ const getErrorMessage = (errorCode: ?string, itemName: ?string) => {
     }
 };
 
-export default () => ({ rowData }: Props) => {
+export default (shouldShowUpgradeCTAMessage?: boolean) => ({ rowData }: Props) => {
     const { status, error = {}, name, isFolder, file } = rowData;
     const { code } = error;
 
@@ -74,7 +77,7 @@ export default () => ({ rowData }: Props) => {
             if (Browser.isSafari() && code === ERROR_CODE_UPLOAD_BAD_DIGEST && file.name.indexOf('.zip') !== -1) {
                 return getErrorMessage(ERROR_CODE_UPLOAD_FAILED_PACKAGE, file.name);
             }
-            return getErrorMessage(code, name);
+            return getErrorMessage(code, name, shouldShowUpgradeCTAMessage);
         default:
             return null;
     }

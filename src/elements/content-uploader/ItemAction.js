@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import type { InjectIntlProvidedProps } from 'react-intl';
 import IconCheck from '../../icons/general/IconCheck';
 import IconClose from '../../icons/general/IconClose';
@@ -12,9 +12,17 @@ import IconInProgress from './IconInProgress';
 import IconRetry from '../../icons/general/IconRetry';
 import LoadingIndicator from '../../components/loading-indicator';
 import PlainButton from '../../components/plain-button/PlainButton';
+import PrimaryButton from '../../components/primary-button/PrimaryButton';
 import Tooltip from '../../components/tooltip';
 import messages from '../common/messages';
-import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_STAGED, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
+import {
+    ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED,
+    STATUS_PENDING,
+    STATUS_IN_PROGRESS,
+    STATUS_STAGED,
+    STATUS_COMPLETE,
+    STATUS_ERROR,
+} from '../../constants';
 import type { UploadStatus } from '../../common/types/upload';
 
 import './ItemAction.scss';
@@ -22,15 +30,26 @@ import './ItemAction.scss';
 const ICON_CHECK_COLOR = '#26C281';
 
 type Props = {
+    error?: Object,
     isFolder?: boolean,
     isResumableUploadsEnabled: boolean,
     onClick: Function,
+    onUpgradeCTAClick?: Function,
     status: UploadStatus,
 } & InjectIntlProvidedProps;
 
-const ItemAction = ({ status, onClick, intl, isResumableUploadsEnabled, isFolder = false }: Props) => {
+const ItemAction = ({
+    error = {},
+    intl,
+    isFolder = false,
+    isResumableUploadsEnabled,
+    onClick,
+    onUpgradeCTAClick,
+    status,
+}: Props) => {
     let icon = <IconClose />;
     let tooltip;
+    const { code } = error;
 
     if (isFolder && status !== STATUS_PENDING) {
         return null;
@@ -64,6 +83,18 @@ const ItemAction = ({ status, onClick, intl, isResumableUploadsEnabled, isFolder
                 tooltip = messages.uploadsCancelButtonTooltip;
             }
             break;
+    }
+
+    if (status === STATUS_ERROR && code === ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED && !!onUpgradeCTAClick) {
+        return (
+            <PrimaryButton
+                onClick={onUpgradeCTAClick}
+                data-resin-target="large_version_error_inline_upgrade_cta"
+                type="button"
+            >
+                <FormattedMessage {...messages.uploadsFileSizeLimitExceededUpgradeMessageForUpgradeCta} />
+            </PrimaryButton>
+        );
     }
 
     return (

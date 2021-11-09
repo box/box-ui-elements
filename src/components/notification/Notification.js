@@ -108,7 +108,7 @@ class Notification extends React.Component<Props> {
         return (
             <div className={classes}>
                 {React.cloneElement(ICON_RENDERER[type](), {
-                    color: bdlGray,
+                    color: '#fff',
                     height: 20,
                     width: 20,
                 })}

@@ -20,14 +20,21 @@ type Props = {
     items: UploadItem[],
     onClick: Function,
     onRemoveClick?: (item: UploadItem) => void,
+    onUpgradeCTAClick?: Function,
 };
 
-const ItemList = ({ isResumableUploadsEnabled = false, items, onClick, onRemoveClick = noop }: Props) => (
+const ItemList = ({
+    isResumableUploadsEnabled = false,
+    items,
+    onClick,
+    onRemoveClick = noop,
+    onUpgradeCTAClick,
+}: Props) => (
     <AutoSizer>
         {({ width, height }) => {
             const nameCell = nameCellRenderer(isResumableUploadsEnabled);
-            const progressCell = progressCellRenderer();
-            const actionCell = actionCellRenderer(isResumableUploadsEnabled, onClick);
+            const progressCell = progressCellRenderer(!!onUpgradeCTAClick);
+            const actionCell = actionCellRenderer(isResumableUploadsEnabled, onClick, onUpgradeCTAClick);
             const removeCell = removeCellRenderer(onRemoveClick);
 
             return (
@@ -56,7 +63,7 @@ const ItemList = ({ isResumableUploadsEnabled = false, items, onClick, onRemoveC
                         cellRenderer={actionCell}
                         dataKey="status"
                         flexShrink={0}
-                        width={25}
+                        width={onUpgradeCTAClick ? 100 : 25}
                     />
                     {isResumableUploadsEnabled && (
                         <Column
