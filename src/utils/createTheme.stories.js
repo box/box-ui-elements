@@ -33,7 +33,7 @@ const BaseButton = styled(BoxButton)`
     color: ${props => props.theme.base.buttonForeground};
 
     font-weight: bold;
-    border-radius: ${vars.bdlBorderRadiusMedSize};
+    border-radius: ${vars.bdlBorderRadiusSizeMed};
     font-size: ${vars.bdlFontSizeDejaBlue};
 
     .btn:not(.is-disabled)&:hover {
@@ -52,7 +52,7 @@ const PrimaryButton = styled(BoxButton)`
     color: ${props => props.theme.primary.buttonForeground};
 
     font-weight: bold;
-    border-radius: ${vars.bdlBorderRadiusMedSize};
+    border-radius: ${vars.bdlBorderRadiusSizeMed};
     font-size: ${vars.bdlFontSizeDejaBlue};
 
     .btn:not(.is-disabled)&:hover {
@@ -82,7 +82,7 @@ const ThemeDemoMenuItem = styled.div`
     cursor: pointer;
     padding: 8px 12px;
     margin: 2px 4px;
-    border-radius: ${vars.bdlBorderRadiusLargeSize};
+    border-radius: ${vars.bdlBorderRadiusSizeLarge};
     font-weight: bold;
     transition: 0.15s;
     border: 1px solid;

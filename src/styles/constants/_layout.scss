@@ -7,9 +7,9 @@ $tooltip-z-index: 190 !default;
 
 // Borders
 $bdl-border-radius-size: 4px;
-$bdl-border-radius-med-size: $bdl-border-radius-size * 1.5;
-$bdl-border-radius-large-size: $bdl-border-radius-size * 2;
-$bdl-border-radius-xlarge-size: $bdl-border-radius-size * 3;
+$bdl-border-radius-size-med: $bdl-border-radius-size * 1.5;
+$bdl-border-radius-size-large: $bdl-border-radius-size * 2;
+$bdl-border-radius-size-xlarge: $bdl-border-radius-size * 3;
 
 // Spacing
 $bdl-grid-unit: 4px !default;

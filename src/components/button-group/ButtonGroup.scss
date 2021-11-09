@@ -15,7 +15,7 @@
             margin-left: 0;
             padding-right: 11px;
             padding-left: 11px;
-            border-radius: 0 $bdl-border-radius-med-size $bdl-border-radius-med-size 0;
+            border-radius: 0 $bdl-border-radius-size-med $bdl-border-radius-size-med 0;
 
             &.btn-primary {
                 border-left-color: darken($primary-color, 10%);
@@ -65,13 +65,13 @@
         }
 
         > .btn:first-child {
-            border-top-left-radius: $bdl-border-radius-med-size;
-            border-bottom-left-radius: $bdl-border-radius-med-size;
+            border-top-left-radius: $bdl-border-radius-size-med;
+            border-bottom-left-radius: $bdl-border-radius-size-med;
         }
 
         > .btn:last-child {
-            border-top-right-radius: $bdl-border-radius-med-size;
-            border-bottom-right-radius: $bdl-border-radius-med-size;
+            border-top-right-radius: $bdl-border-radius-size-med;
+            border-bottom-right-radius: $bdl-border-radius-size-med;
         }
 
         > .btn.is-selected {
