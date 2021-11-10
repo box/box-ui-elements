@@ -16,6 +16,8 @@ type Props = TooltipProps & {
     title?: React.ReactNode;
     /** 32px x 32px */
     icon?: React.ReactNode;
+    /** A React component representing the image */
+    image?: React.ReactNode;
     /** displays guide progress e.g. 1 of 4 */
     steps?: [number, number];
     primaryButtonProps?: JSX.LibraryManagedAttributes<typeof Button, Button['props']>;
@@ -27,6 +29,7 @@ function GuideTooltip({
     children,
     className = '',
     icon,
+    image,
     isShown = true,
     primaryButtonProps,
     steps,
@@ -46,6 +49,7 @@ function GuideTooltip({
                     {icon && <div className="bdl-GuideTooltip-icon">{icon}</div>}
                     <div className="bdl-GuideTooltip-right">
                         {title && <div className="bdl-GuideTooltip-title">{title}</div>}
+                        {!icon && image && <div className="bdl-GuideTooltip-image">{image}</div>}
                         <div className="bdl-GuideTooltip-body">{body}</div>
                         {(secondaryButtonProps || primaryButtonProps || steps) && (
                             <div className="bdl-GuideTooltip-bottom">

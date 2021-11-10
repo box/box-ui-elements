@@ -1,11 +1,13 @@
 @import '../../styles/variables';
 
+$bdl-guide-tooltip-max-width: 408px;
+
 .bdl-GuideTooltip {
     display: flex;
 }
 
 .bdl-GuideTooltip.bdl-Tooltip {
-    max-width: 408px;
+    max-width: $bdl-guide-tooltip-max-width;
     padding: ($bdl-grid-unit * 6) ($bdl-grid-unit * 12) ($bdl-grid-unit * 6) ($bdl-grid-unit * 6);
 }
 
@@ -19,6 +21,17 @@
 .bdl-GuideTooltip-icon {
     width: 32px;
     margin-right: ($bdl-grid-unit * 4);
+}
+
+.bdl-GuideTooltip-image {
+    margin-right: -($bdl-grid-unit * 6);
+    margin-left: -($bdl-grid-unit * 6);
+    padding: ($bdl-grid-unit * 4) 0 ($bdl-grid-unit * 5) 0;
+    text-align: center;
+
+    img {
+        max-width: $bdl-guide-tooltip-max-width;
+    }
 }
 
 .bdl-GuideTooltip-title {
