@@ -116,4 +116,10 @@
             padding-right: 50px;
         }
     }
+
+    &.is-accessible {
+        .date-picker-input {
+            min-width: 135px;
+        }
+    }
 }

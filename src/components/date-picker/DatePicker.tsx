@@ -249,6 +249,7 @@ class DatePicker extends React.Component<DatePickerProps> {
                 delete datePickerConfig.field;
                 datePickerConfig.trigger = this.dateInputEl;
                 datePickerConfig.accessibleField = this.dateInputEl;
+                datePickerConfig.datePickerButtonEl = this.datePickerButtonEl;
             }
 
             datePickerConfig.parse = this.parseDisplayDateType;
@@ -460,15 +461,22 @@ class DatePicker extends React.Component<DatePickerProps> {
         }
     };
 
-    handleDivClick = () => {
+    handleDivClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
         const { isDisabled } = this.props;
 
         if (isDisabled) {
             return;
         }
 
-        if (!this.shouldStayClosed) {
-            this.focusDatePicker();
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (this.datePicker) {
+            if (this.datePicker.isVisible()) {
+                this.datePicker.hide();
+            } else {
+                this.datePicker.show();
+            }
         }
     };
 
@@ -586,6 +594,7 @@ class DatePicker extends React.Component<DatePickerProps> {
 
         const { formatMessage } = intl;
         const classes = classNames(className, 'date-picker-wrapper', {
+            'is-accessible': isAccessible,
             'show-clear-btn': !!value,
             'show-error': !!error,
         });
