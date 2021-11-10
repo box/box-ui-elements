@@ -11,8 +11,6 @@ type Props = {
     children?: React.Node,
     /** Custom class for the button */
     className?: string,
-    /** icon */
-    icon?: React.ElementType,
     /** whether the button is disabled or not */
     isDisabled?: boolean,
     /** whether the button is loading or not */
@@ -25,8 +23,6 @@ type Props = {
     setRef?: Function,
     /** whether to show a radar */
     showRadar: boolean,
-    /** button size */
-    size?: 'large',
     /** type for the button */
     type: 'button' | 'reset' | 'submit',
 };
