@@ -2,15 +2,19 @@ import Pikaday, { PikadayOptions } from 'pikaday';
 
 export interface AccessiblePikadayOptions extends PikadayOptions {
     accessibleField?: HTMLElement | null;
+    datePickerButtonEl?: HTMLElement | null;
 }
 
 // An extended version of Pikaday to work when `isAccessible` prop is `true`. https://jira.inside-box.net/browse/A11Y-213
 class AccessiblePikaday extends Pikaday {
     accessibleField: HTMLElement | null | undefined;
 
+    datePickerButtonEl: HTMLElement | null | undefined;
+
     constructor(options: AccessiblePikadayOptions) {
         super(options);
         this.accessibleField = options.accessibleField;
+        this.datePickerButtonEl = options.datePickerButtonEl;
 
         // Override behavior as if `options.field` and `options.bound` were set.
         // See https://github.com/Pikaday/Pikaday/blob/master/pikaday.js#L671
@@ -18,21 +22,11 @@ class AccessiblePikaday extends Pikaday {
         if (this.accessibleField) {
             document.body.appendChild(this.el);
 
-            this.accessibleField.addEventListener('click', this.handleClick);
-            this.accessibleField.addEventListener('focus', this.handleFocus);
             this.accessibleField.addEventListener('blur', this.handleBlur);
 
             this.hide();
         }
     }
-
-    handleClick = () => {
-        this.show();
-    };
-
-    handleFocus = () => {
-        this.show();
-    };
 
     handleBlur = () => {
         // TODO: Test in IE11
@@ -40,6 +34,10 @@ class AccessiblePikaday extends Pikaday {
     };
 
     handleClickOutside = (e: MouseEvent) => {
+        if (this.isVisible() && this.datePickerButtonEl && this.datePickerButtonEl.contains(e.target as HTMLElement)) {
+            return;
+        }
+
         if (this.isVisible() && !this.el.contains(e.target as HTMLElement)) {
             this.hide();
         }
@@ -63,8 +61,6 @@ class AccessiblePikaday extends Pikaday {
     destroy() {
         super.destroy();
         if (this.accessibleField) {
-            this.accessibleField.removeEventListener('click', this.handleClick);
-            this.accessibleField.removeEventListener('focus', this.handleFocus);
             this.accessibleField.removeEventListener('blur', this.handleBlur);
         }
     }
