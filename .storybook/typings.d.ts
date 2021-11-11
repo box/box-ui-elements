@@ -5,6 +5,8 @@ declare module '*.md' {
 
 namespace BoxVisualTestUtils {
     import { Page } from 'puppeteer';
+
+    async function gotoStory(id: string): Promise<Page>;
     
     async function takeScreenshot(id: string): Promise<Buffer>;
 

@@ -1,4 +1,5 @@
-import puppeteer from 'puppeteer';
+// @ts-ignore flow import
+import { DEFAULT_FORMAT_DEBOUNCE } from '../../../constants';
 
 describe('components/time-input/TimeInput', () => {
     const INPUT_SELECTOR = 'input';
@@ -18,15 +19,13 @@ describe('components/time-input/TimeInput', () => {
         ${TIMEINPUT_STORIES[1]} | ${'abcde'}      | ${'shows an error for invalid input after blur'}
         ${TIMEINPUT_STORIES[1]} | ${''}           | ${'shows default time for empty input after blur'}
     `('$testCase for story $storyId', async ({ storyId, input }) => {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.goto(`http://localhost:6061/iframe.html?id=${storyId}`);
+        const page = await BoxVisualTestUtils.gotoStory(storyId);
         await page.waitForSelector(INPUT_SELECTOR);
         await BoxVisualTestUtils.clearInput(INPUT_SELECTOR, page);
         await page.type(INPUT_SELECTOR, input);
-        await page.$eval(INPUT_SELECTOR, element => (element as HTMLInputElement).blur());
+        await BoxVisualTestUtils.blurInput(INPUT_SELECTOR);
+
         const image = await page.screenshot();
-        await browser.close();
         return expect(image).toMatchImageSnapshot();
     });
 
@@ -39,15 +38,12 @@ describe('components/time-input/TimeInput', () => {
         ${TIMEINPUT_STORIES[1]} | ${'134525'}    | ${'shows an error for invalid input after change'}
         ${TIMEINPUT_STORIES[1]} | ${''}          | ${'shows default time for empty input after change'}
     `('$testCase for story $storyId', async ({ storyId, input }) => {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.goto(`http://localhost:6061/iframe.html?id=${storyId}`);
+        const page = await BoxVisualTestUtils.gotoStory(storyId);
         await page.waitForSelector(INPUT_SELECTOR);
         await BoxVisualTestUtils.clearInput(INPUT_SELECTOR, page);
         await page.type(INPUT_SELECTOR, input);
-        await BoxVisualTestUtils.sleep();
+        await BoxVisualTestUtils.sleep(DEFAULT_FORMAT_DEBOUNCE * 1.1);
         const image = await page.screenshot();
-        await browser.close();
         return expect(image).toMatchImageSnapshot();
     });
 });

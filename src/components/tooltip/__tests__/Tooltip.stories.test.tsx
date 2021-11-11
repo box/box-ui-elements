@@ -2,7 +2,7 @@ describe('components/tooltip/Tooltip', () => {
     test.each([
         ['components-tooltip--positioning'],
         ['components-tooltip--themes'],
-        ['components-tooltip--with-close-cutton'],
+        ['components-tooltip--with-close-button'],
         ['components-tooltip--is-shown'],
         ['components-tooltip--with-offset'],
         ['components-tooltip--with-disabled'],

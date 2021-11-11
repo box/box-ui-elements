@@ -1,5 +1,3 @@
-import puppeteer from 'puppeteer';
-
 describe('components/date-picker/DatePicker', () => {
     const INPUT_SELECTOR = 'input';
     const DATEPICKER_STORIES = [
@@ -28,14 +26,11 @@ describe('components/date-picker/DatePicker', () => {
     });
 
     test(`allows editing in story ${DATEPICKER_STORIES[2]}`, async () => {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.goto(`http://localhost:6061/iframe.html?id=${DATEPICKER_STORIES[2]}`);
+        const page = await BoxVisualTestUtils.gotoStory(DATEPICKER_STORIES[2]);
         await page.waitForSelector(INPUT_SELECTOR);
         await BoxVisualTestUtils.clearInput(INPUT_SELECTOR, page);
         await page.type(INPUT_SELECTOR, '1/28/2020');
         const image = await page.screenshot();
-        await browser.close();
         return expect(image).toMatchImageSnapshot();
     });
 
@@ -50,16 +45,13 @@ describe('components/date-picker/DatePicker', () => {
     });
 
     test(`allows keyboard selection in ${DATEPICKER_STORIES[4]}`, async () => {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.goto(`http://localhost:6061/iframe.html?id=${DATEPICKER_STORIES[4]}`);
+        const page = await BoxVisualTestUtils.gotoStory(DATEPICKER_STORIES[4]);
         await page.waitForSelector(INPUT_SELECTOR);
         await page.keyboard.down('Tab');
         await page.keyboard.down('Tab');
         await page.keyboard.down('ArrowLeft');
         await page.keyboard.down('ArrowUp');
         const image = await page.screenshot();
-        await browser.close();
         return expect(image).toMatchImageSnapshot();
     });
 });
