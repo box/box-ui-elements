@@ -459,7 +459,6 @@ class TaskForm extends React.Component<Props, State> {
                                 [INTERACTION_TARGET]: ACTIVITY_TARGETS.TASK_DATE_PICKER,
                                 'data-testid': 'task-form-date-input',
                             }}
-                            isAccessible
                             isDisabled={isForbiddenErrorOnEdit}
                             isRequired={false}
                             label={<FormattedMessage {...messages.tasksAddTaskFormDueDateLabel} />}
