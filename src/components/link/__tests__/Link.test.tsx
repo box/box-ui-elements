@@ -90,6 +90,13 @@ describe('components/link/Link', () => {
         expect(wrapper.find('a').prop('href')).toEqual('#');
     });
 
+    test('should correctly render LinkButton with size=large prop', () => {
+        const wrapper = mount(<LinkButton size="large">a link</LinkButton>);
+
+        expect(wrapper.find('a').hasClass('btn')).toBe(true);
+        expect(wrapper.find('a').hasClass('bdl-btn--large')).toBe(true);
+    });
+
     test('should correctly render LinkButton with proper href', () => {
         const wrapper = mount(<LinkButton href="foo">a link</LinkButton>);
 
@@ -116,6 +123,14 @@ describe('components/link/Link', () => {
         expect(wrapper.find('a').hasClass('btn-primary')).toBe(true);
         expect(wrapper.find('a').prop('children')).toEqual('a link');
         expect(wrapper.find('a').prop('href')).toEqual('#');
+    });
+
+    test('should correctly render LinkPrimaryButton with size=large prop', () => {
+        const wrapper = mount(<LinkPrimaryButton size="large">a link</LinkPrimaryButton>);
+
+        expect(wrapper.find('a').hasClass('btn')).toBe(true);
+        expect(wrapper.find('a').hasClass('btn-primary')).toBe(true);
+        expect(wrapper.find('a').hasClass('bdl-btn--large')).toBe(true);
     });
 
     test('should correctly render LinkPrimaryButton with proper href', () => {
