@@ -35,6 +35,8 @@ type Props = {
     /** Label displayed for the text input */
     label: React.Node,
     labelTooltip?: React.Node,
+    /** A CSS class for the tooltip's tether element component */
+    tooltipTetherClassName?: string,
 };
 
 const TextInput = ({
@@ -51,6 +53,7 @@ const TextInput = ({
     isValid,
     label,
     labelTooltip,
+    tooltipTetherClassName,
     ...rest
 }: Props) => {
     const hasError = !!error;
@@ -79,7 +82,13 @@ const TextInput = ({
                         {description}
                     </div>
                 )}
-                <Tooltip isShown={hasError} position={errorPosition || 'middle-right'} text={error || ''} theme="error">
+                <Tooltip
+                    isShown={hasError}
+                    position={errorPosition || 'middle-right'}
+                    tetherElementClassName={tooltipTetherClassName}
+                    text={error || ''}
+                    theme="error"
+                >
                     <input ref={inputRef} required={isRequired} {...ariaAttrs} {...rest} />
                 </Tooltip>
                 {isLoading && !isValid && <LoadingIndicator className="text-input-loading" />}
