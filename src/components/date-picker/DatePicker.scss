@@ -28,10 +28,10 @@
         margin-bottom: 0;
         padding-right: 30px;
         text-overflow: ellipsis;
-    }
 
-    .date-picker-input::-webkit-calendar-picker-indicator {
-        display: none;
+        &::-webkit-calendar-picker-indicator {
+            display: none;
+        }
     }
 
     .date-picker-input:focus ~ .tooltip,
@@ -47,7 +47,7 @@
         display: inline-flex;
     }
 
-    div.date-picker-open-btn:hover {
+    .date-picker-open-btn:hover {
         cursor: pointer;
     }
 
@@ -69,7 +69,7 @@
             fill: $bdl-gray-50;
         }
 
-        &.hide-for-firefox {
+        &.is-hidden {
             opacity: 0;
         }
     }

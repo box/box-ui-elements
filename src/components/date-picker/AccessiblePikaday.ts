@@ -1,28 +1,28 @@
 import Pikaday, { PikadayOptions } from 'pikaday';
 
 export interface AccessiblePikadayOptions extends PikadayOptions {
-    accessibleField?: HTMLElement | null;
-    datePickerButtonEl?: HTMLElement | null;
+    accessibleFieldEl?: HTMLElement | null | undefined;
+    datePickerButtonEl?: HTMLElement | null | undefined;
 }
 
-// An extended version of Pikaday to work when `isAccessible` prop is `true`. https://jira.inside-box.net/browse/A11Y-213
+// An extended version of Pikaday to work when `isAccessible` prop is `true`
 class AccessiblePikaday extends Pikaday {
-    accessibleField: HTMLElement | null | undefined;
+    accessibleFieldEl: HTMLElement | null | undefined;
 
     datePickerButtonEl: HTMLElement | null | undefined;
 
     constructor(options: AccessiblePikadayOptions) {
         super(options);
-        this.accessibleField = options.accessibleField;
+        this.accessibleFieldEl = options.accessibleFieldEl;
         this.datePickerButtonEl = options.datePickerButtonEl;
 
         // Override behavior as if `options.field` and `options.bound` were set.
         // See https://github.com/Pikaday/Pikaday/blob/master/pikaday.js#L671
         //     https://github.com/Pikaday/Pikaday/blob/master/pikaday.js#L695-L703
-        if (this.accessibleField) {
+        if (this.accessibleFieldEl) {
             document.body.appendChild(this.el);
 
-            this.accessibleField.addEventListener('blur', this.handleBlur);
+            this.accessibleFieldEl.addEventListener('blur', this.handleBlur);
 
             this.hide();
         }
@@ -33,19 +33,23 @@ class AccessiblePikaday extends Pikaday {
         this.hide();
     };
 
-    handleClickOutside = (e: MouseEvent) => {
-        if (this.isVisible() && this.datePickerButtonEl && this.datePickerButtonEl.contains(e.target as HTMLElement)) {
+    handleClickOutside = (event: MouseEvent) => {
+        if (
+            this.isVisible() &&
+            this.datePickerButtonEl &&
+            this.datePickerButtonEl.contains(event.target as HTMLElement)
+        ) {
             return;
         }
 
-        if (this.isVisible() && !this.el.contains(e.target as HTMLElement)) {
+        if (this.isVisible() && !this.el.contains(event.target as HTMLElement)) {
             this.hide();
         }
     };
 
     show() {
         super.show();
-        if (this.accessibleField) {
+        if (this.accessibleFieldEl) {
             document.addEventListener('click', this.handleClickOutside, true);
             this.adjustPosition();
         }
@@ -53,15 +57,16 @@ class AccessiblePikaday extends Pikaday {
 
     hide() {
         super.hide();
-        if (this.accessibleField) {
+        if (this.accessibleFieldEl) {
             document.removeEventListener('click', this.handleClickOutside);
         }
     }
 
     destroy() {
         super.destroy();
-        if (this.accessibleField) {
-            this.accessibleField.removeEventListener('blur', this.handleBlur);
+        if (this.accessibleFieldEl) {
+            this.accessibleFieldEl.removeEventListener('blur', this.handleBlur);
+            document.removeEventListener('click', this.handleClickOutside);
         }
     }
 }
