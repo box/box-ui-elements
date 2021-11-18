@@ -1,18 +1,14 @@
 @import '../constants/typography';
 @import '../constants/layout';
+@import '../constants/buttons';
+@import '../mixins/buttons';
 
 /**************************************
  * Buttons
  **************************************/
-$bdl-btn-border-width: 1px;
 
 .btn {
-    $bdl-btn-height: 32px;
-    $bdl-btn-height-large: 40px;
-    $bdl-btn-icon-size: 20px;
-    $bdl-btn-text-icon-size: 16px;
-    $bdl-btn-padding-horizontal: $bdl-grid-unit * 4;
-    $bdl-btn-padding-vertical: 10px; // Use flexbox or line-height instead in future implementation
+    $bdl-btn-padding-vertical: 10px; // @deprecated Use flexbox or line-height instead in future implementation
 
     position: relative;
     display: inline-block;
@@ -42,11 +38,7 @@ $bdl-btn-border-width: 1px;
     -webkit-font-smoothing: antialiased;
 
     &.bdl-btn--large {
-        // Instead of using line-height + padding + border = height like the base size,
-        // just set the line-height + border; this already handles vertical alignment.
-        padding: 0 $bdl-btn-padding-horizontal;
-        font-size: $bdl-fontSize--dejaBlue;
-        line-height: $bdl-btn-height-large - 2 * $bdl-btn-border-width;
+        @include bdl-Button--large;
     }
 
     &.bdl-has-icon {
