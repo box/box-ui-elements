@@ -1,5 +1,5 @@
 describe('components/radio/RadioButton', () => {
-    const RADIOGROUP_STORY = 'components-radio-radiogroup--example';
+    const RADIOGROUP_STORY = 'components-radio-radiogroup--basic';
     test(`looks visually correct when using story ${RADIOGROUP_STORY}`, async () => {
         const image = await BoxVisualTestUtils.takeScreenshot(RADIOGROUP_STORY);
         return expect(image).toMatchImageSnapshot();
