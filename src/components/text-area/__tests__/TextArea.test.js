@@ -69,6 +69,17 @@ describe('components/text-area/TextArea', () => {
         expect(tooltip.prop('isShown')).toBe(false);
     });
 
+    test('should render Tooltip with tetherElementClassName', () => {
+        const className = 'tether-element-class-name';
+        const wrapper = shallow(<TextArea error="error" label="label" tooltipTetherClassName={className} />);
+        const tetherEl = wrapper
+            .find('Tooltip')
+            .dive()
+            .find('TetherComponent');
+
+        expect(tetherEl.prop('className')).toBe(className);
+    });
+
     test('should not show optional text when hideOptionalLabel is true', () => {
         const wrapper = shallow(<TextArea label="label" hideOptionalLabel />);
         expect(wrapper).toMatchSnapshot();
