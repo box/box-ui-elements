@@ -4,9 +4,11 @@ import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import { EditorState } from 'draft-js';
 
+import type { GetAvatarUrlCallback } from '../../../elements/common/flowTypes';
 import DatalistItem from '../../datalist-item';
 import DraftJSEditor from '../../draft-js-editor';
 import SelectorDropdown from '../../selector-dropdown';
+import ContactDatalistItem from '../../contact-datalist-item/ContactDatalistItem';
 import { addMention, defaultMentionTriggers, getActiveMentionForEditorState } from './utils';
 
 import messages from './messages';
@@ -48,6 +50,7 @@ type Props = {
     description?: React.Node,
     editorState: EditorState,
     error?: ?Object,
+    getAvatarUrl: GetAvatarUrlCallback,
     hideLabel?: boolean,
     isDisabled?: boolean,
     isRequired?: boolean,
@@ -247,9 +250,9 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             description,
             onReturn,
             placeholder,
-            selectorRow,
             startMentionMessage,
             onMention,
+            getAvatarUrl,
         } = this.props;
         const { activeMention, isFocused } = this.state;
 
@@ -284,13 +287,16 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                     }
                 >
                     {this.shouldDisplayMentionLookup()
-                        ? contacts.map(contact =>
-                              React.cloneElement(selectorRow, {
-                                  ...selectorRow.props,
-                                  ...contact,
-                                  key: contact.id,
-                              }),
-                          )
+                        ? contacts.map(({ id, item = {} }) => (
+                              <ContactDatalistItem
+                                  getContactAvatarUrl={getAvatarUrl}
+                                  id={id}
+                                  key={id}
+                                  name={item.name}
+                                  subtitle={item.email}
+                                  showAvatar
+                              />
+                          ))
                         : []}
                 </SelectorDropdown>
                 {showMentionStartState ? <MentionStartState message={startMentionMessage} /> : null}

@@ -74,12 +74,12 @@
     &:not([aria-disabled]) {
         &:focus,
         &:hover {
-            color: $bdl-gray;
+            color: $bdl-gray-80;
             background-color: $bdl-gray-05;
         }
     }
 
-    svg:not(.menu-item-arrow) {
-        margin-right: $bdl-grid-unit * 4;
+    svg {
+        margin-right: 16px;
     }
 }

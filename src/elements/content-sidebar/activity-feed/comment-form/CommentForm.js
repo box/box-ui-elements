@@ -136,6 +136,7 @@ class CommentForm extends React.Component<Props, State> {
                 <Media.Body className="bcs-CommentForm-body" data-testid="bcs-CommentForm-body">
                     <Form onValidSubmit={this.onFormValidSubmitHandler}>
                         <DraftJSMentionSelector
+                            getAvatarUrl={getAvatarUrl}
                             className="bcs-CommentForm-input"
                             contacts={isOpen ? mentionSelectorContacts : []}
                             contactsLoaded={contactsLoaded}
