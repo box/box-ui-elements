@@ -7,7 +7,7 @@
  */
 @mixin bdl-Overlay-listItemContainer {
     padding: ($bdl-grid-unit * 2) ($bdl-grid-unit * 12) ($bdl-grid-unit * 2) ($bdl-grid-unit * 2);
-    border-radius: $bdl-border-radius-size * 2;
+    border-radius: $bdl-border-radius-size-large;
     cursor: pointer;
 
     &.is-active {
