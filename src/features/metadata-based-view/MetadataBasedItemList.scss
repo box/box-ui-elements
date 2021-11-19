@@ -44,7 +44,7 @@ $bdl-MetadataBasedItemList-insetShadowRight: 3px 0 3px -2px $bdl-gray-10 inset;
     height: 32px;
     background-color: $white;
     border: 1px solid $bdl-gray-20;
-    border-radius: 3px;
+    border-radius: $bdl-border-radius-size;
 
     .bdl-MetadataBasedItemList-cell--cancelIcon,
     .bdl-MetadataBasedItemList-cell--saveIcon {

@@ -1,10 +1,8 @@
 import * as React from 'react';
 
-import LinkButton from './LinkButton';
-import { LinkBaseProps } from './LinkBase';
+import LinkButton, { LinkButtonProps } from './LinkButton';
 
-export interface LinkPrimaryButtonProps extends LinkBaseProps {
-    children: React.ReactChild;
+export interface LinkPrimaryButtonProps extends LinkButtonProps {
     className?: string;
 }
 

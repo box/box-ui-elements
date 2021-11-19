@@ -16,9 +16,18 @@
         position: absolute;
         z-index: 90;
         width: 100%;
-        padding: 8px;
+        margin-top: $bdl-grid-unit * 2;
+        padding: $bdl-grid-unit * 2;
         background: $white;
         border: 1px solid $bdl-gray-30;
+        border-radius: $bdl-border-radius-size-med;
         box-shadow: 0 2px 6px 0 fade-out($black, .9);
+    }
+
+    // Normally .bdl-SelectorDropdown > .text-input-container has a bottom margin
+    // but the custom text box (DraftJSEditor) doesn't have one.
+    // Add spacing above dropdown wrapper here instead:
+    .overlay {
+        margin-top: $bdl-grid-unit * 2;
     }
 }
