@@ -1,5 +1,6 @@
 @import '../../styles/variables';
 @import './variables';
+@import '../../styles/mixins/buttons';
 
 .be-modal {
     .be-modal-btns {
@@ -8,6 +9,8 @@
         padding: 15px 0 0;
 
         .btn {
+            @include bdl-Button--large;
+
             margin-left: 8px;
         }
     }
