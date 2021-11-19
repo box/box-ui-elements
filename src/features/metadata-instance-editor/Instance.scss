@@ -30,7 +30,7 @@
     justify-content: center;
     width: 24px;
     height: 24px;
-    border-radius: 3px;
+    border-radius: $bdl-border-radius-size;
 
     &:hover svg path {
         fill: $bdl-gray;

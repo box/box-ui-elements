@@ -1,10 +1,24 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
+import { select } from '@storybook/addon-knobs';
 
 import LinkButton from '../LinkButton';
 import notes from './LinkButton.stories.md';
 
-export const basic = () => <LinkButton href="https://www.box.com/platform">A link that looks like a Button</LinkButton>;
+export const basic = () => (
+    <LinkButton
+        href="https://www.box.com/platform"
+        size={select('size', { None: undefined, Large: 'large' }, undefined)}
+    >
+        A link that looks like a Button
+    </LinkButton>
+);
+
+export const large = () => (
+    <LinkButton href="https://www.box.com/platform" size="large">
+        A link that looks like a Button
+    </LinkButton>
+);
 
 export const withCustomComponent = () => {
     // You can pass a custom component to be used instead of the default "a" tag, like a React Router link:

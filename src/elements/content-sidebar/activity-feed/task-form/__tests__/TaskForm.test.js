@@ -53,8 +53,8 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
         expect(container.find('[data-testid="task-form-assignee-input"]').length).toEqual(1);
         expect(container.find('[data-testid="task-form-name-input"]').length).toEqual(1);
         expect(container.find('[data-testid="task-form-date-input"]').length).toEqual(1);
-        expect(container.find('.bcs-task-input-controls').length).toEqual(1);
-        expect(container.find('.bcs-task-input-controls').find('button').length).toEqual(2);
+        expect(container.find('[data-testid="task-form-submit-button"]').length).toEqual(1);
+        expect(container.find('[data-testid="task-form-cancel-button"]').length).toEqual(1);
     });
 
     test('should call createTask prop on submit when form is valid', () => {

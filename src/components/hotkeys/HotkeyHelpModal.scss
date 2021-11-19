@@ -32,7 +32,7 @@
             padding: 2px 4px;
             background: $white;
             border: 1px solid $bdl-gray-30;
-            border-radius: 3px;
+            border-radius: $bdl-border-radius-size;
             box-shadow: 0 1px 0 $bdl-gray-30;
         }
     }

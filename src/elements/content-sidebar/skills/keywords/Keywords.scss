@@ -10,7 +10,7 @@
         width: 24px;
         height: 24px;
         padding-top: 1px;
-        border-radius: 3px;
+        border-radius: $bdl-border-radius-size;
 
         &:hover svg path {
             fill: $bdl-gray;

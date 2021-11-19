@@ -8,7 +8,7 @@
     width: 100%;
     height: 100%;
     background-image: linear-gradient(to left, $bdl-gray-02, $bdl-gray-05 14%);
-    border-radius: 8px;
+    border-radius: $bdl-border-radius-size-large;
 }
 
 .PreviewErrorNotification-image {

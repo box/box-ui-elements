@@ -25,9 +25,9 @@
     font-weight: bold;
     background-color: $bdl-gray-10;
     border: 2px solid $bdl-gray;
-    border-radius: $bdl-border-radius-size * 2;
+    border-radius: $bdl-border-radius-size-large;
     box-shadow: 0 2px 6px fade-out($black, .85);
-    opacity: .9;
+    opacity: 1;
     transition: opacity .1s ease-out;
 
     &.info {
@@ -76,6 +76,7 @@
     a {
         flex: none;
         color: $bdl-gray;
+        font-weight: bold;
 
         &.btn.is-disabled,
         &.btn:not(.is-disabled) {
@@ -87,14 +88,15 @@
 
         &.close-btn {
             display: flex;
-            padding: 2px 7px;
-            font-weight: bold;
-            font-size: 14px;
+            align-items: center;
             background: none;
             border: none;
             outline: none;
             cursor: pointer;
-            opacity: .6;
+
+            & path {
+                fill: $bdl-gray;
+            }
         }
     }
 }
