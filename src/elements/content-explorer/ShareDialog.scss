@@ -14,7 +14,7 @@
             max-width: 296px;
             text-overflow: ellipsis;
             border-right: 0 none;
-            border-radius: 3px 0 0 3px;
+            border-radius: $bdl-border-radius-size 0 0 $bdl-border-radius-size;
 
             .be-is-small & {
                 width: 237px;
@@ -37,7 +37,7 @@
         line-height: 34px;
         letter-spacing: 1px;
         text-transform: uppercase;
-        border-radius: 0 3px 3px 0;
+        border-radius: 0 $bdl-border-radius-size $bdl-border-radius-size 0;
     }
 
     .be-modal-btns {

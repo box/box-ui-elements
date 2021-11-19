@@ -96,9 +96,17 @@
     "overlay-z-index": "190",
     "tooltip-z-index": "190",
     "bdl-border-radius-size": "4px",
-    "bdl-border-radius-large-size": "10px",
+    "bdl-border-radius-size-med": "6px",
+    "bdl-border-radius-size-large": "8px",
+    "bdl-border-radius-size-xlarge": "12px",
     "bdl-grid-unit": "4px",
     "bdl-grid-unit-px": "4",
+    "bdl-btn-border-width": "1px",
+    "bdl-btn-height": "32px",
+    "bdl-btn-height-large": "40px",
+    "bdl-btn-icon-size": "20px",
+    "bdl-btn-text-icon-size": "16px",
+    "bdl-btn-padding-horizontal": "16px",
     "bdl-transitionDurationBase": "0.15s",
     "bdl-timingFunction": ["cubic-bezier(0", "0", "0.6", "1)"]
 }

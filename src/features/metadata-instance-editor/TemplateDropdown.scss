@@ -15,7 +15,7 @@
         padding: 0;
         overflow: hidden;
         border: 1px solid $bdl-gray-30;
-        border-radius: 4px;
+        border-radius: $bdl-border-radius-size-med;
     }
 
     ul.overlay {
@@ -32,7 +32,7 @@
         .overlay-wrapper {
             overflow: hidden;
             border-top: none;
-            border-radius: 0 0 4px 4px;
+            border-radius: 0 0 $bdl-border-radius-size-med $bdl-border-radius-size-med;
 
             // NOTE (cwei): targets ie11
             @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
@@ -90,7 +90,7 @@
             margin: 0;
             padding: 10px 12px 12px;
             border-bottom: 1px solid $bdl-gray-30;
-            border-radius: 4px 4px 0 0;
+            border-radius: $bdl-border-radius-size-med $bdl-border-radius-size-med 0 0;
 
             .action-button {
                 .clear-button {
@@ -153,7 +153,7 @@
         background-color: $white;
         border: 1px solid $bdl-gray-30;
         border-top-color: transparent;
-        border-radius: 0 0 4px 4px;
+        border-radius: 0 0 $bdl-border-radius-size-med $bdl-border-radius-size-med;
 
         &.template-dropdown-loading-indicator {
             display: flex;

@@ -116,7 +116,7 @@ $query-bar-button-width: 240px;
                 color: $white;
                 background-color: $bdl-box-blue;
                 border: none;
-                border-radius: 5px;
+                border-radius: $bdl-border-radius-size-med;
             }
         }
     }

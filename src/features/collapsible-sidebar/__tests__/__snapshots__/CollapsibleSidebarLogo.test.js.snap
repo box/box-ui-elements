@@ -94,12 +94,12 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
         >
           <PlainButton
             aria-label="Collapse"
-            className="CollapsibleSidebarLogo__StyledToggleButton-sc-6amevi-2 ehAKgQ bdl-CollapsibleSidebar-toggleButton"
+            className="CollapsibleSidebarLogo__StyledToggleButton-sc-6amevi-2 grnFTv bdl-CollapsibleSidebar-toggleButton"
             type="button"
           >
             <button
               aria-label="Collapse"
-              className="btn-plain CollapsibleSidebarLogo__StyledToggleButton-sc-6amevi-2 ehAKgQ bdl-CollapsibleSidebar-toggleButton"
+              className="btn-plain CollapsibleSidebarLogo__StyledToggleButton-sc-6amevi-2 grnFTv bdl-CollapsibleSidebar-toggleButton"
               type="button"
             >
               <CollapsibleSidebarLogo__StyledIconHamburger
@@ -155,19 +155,19 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
               width={71}
             >
               <BoxLogo
-                className="CollapsibleSidebarLogo__StyledLogo-sc-6amevi-0 jTcBgl bdl-CollapsibleSidebar-logoIcon"
+                className="CollapsibleSidebarLogo__StyledLogo-sc-6amevi-0 fwAwTE bdl-CollapsibleSidebar-logoIcon"
                 height={42}
                 width={71}
               >
                 <AccessibleSVG
-                  className="CollapsibleSidebarLogo__StyledLogo-sc-6amevi-0 jTcBgl bdl-CollapsibleSidebar-logoIcon"
+                  className="CollapsibleSidebarLogo__StyledLogo-sc-6amevi-0 fwAwTE bdl-CollapsibleSidebar-logoIcon"
                   height={42}
                   viewBox="0 0 461 244"
                   width={71}
                 >
                   <svg
                     aria-hidden="true"
-                    className="CollapsibleSidebarLogo__StyledLogo-sc-6amevi-0 jTcBgl bdl-CollapsibleSidebar-logoIcon"
+                    className="CollapsibleSidebarLogo__StyledLogo-sc-6amevi-0 fwAwTE bdl-CollapsibleSidebar-logoIcon"
                     focusable="false"
                     height={42}
                     role="presentation"
@@ -262,12 +262,12 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 2`] = `
           >
             <PlainButton
               aria-label="Expand"
-              className="CollapsibleSidebarLogo__StyledToggleButton-sc-6amevi-2 ehAKgQ bdl-CollapsibleSidebar-toggleButton"
+              className="CollapsibleSidebarLogo__StyledToggleButton-sc-6amevi-2 grnFTv bdl-CollapsibleSidebar-toggleButton"
               type="button"
             >
               <button
                 aria-label="Expand"
-                className="btn-plain CollapsibleSidebarLogo__StyledToggleButton-sc-6amevi-2 ehAKgQ bdl-CollapsibleSidebar-toggleButton"
+                className="btn-plain CollapsibleSidebarLogo__StyledToggleButton-sc-6amevi-2 grnFTv bdl-CollapsibleSidebar-toggleButton"
                 type="button"
               >
                 <CollapsibleSidebarLogo__StyledIconHamburger

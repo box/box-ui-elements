@@ -9,7 +9,7 @@
     max-width: $thumbnail-card-max-width;
     height: 200px;
     border: $thumbnail-card-border solid $bdl-gray-10;
-    border-radius: 8px;
+    border-radius: $bdl-border-radius-size-large;
     box-shadow: 0 5px 10px 0 rgba(198, 198, 198, .2);
 }
 

@@ -13,6 +13,7 @@ import commonMessages from '../../../../common/messages';
 import messages from './messages';
 import commentFormMessages from '../comment-form/messages';
 import Form from '../../../../components/form-elements/form/Form';
+import ModalActions from '../../../../components/modal/ModalActions';
 import ContactDatalistItem from '../../../../components/contact-datalist-item/ContactDatalistItem';
 import TextArea from '../../../../components/text-area';
 import DatePicker from '../../../../components/date-picker/DatePicker';
@@ -457,7 +458,7 @@ class TaskForm extends React.Component<Props, State> {
                             placeholder={intl.formatMessage(commentFormMessages.approvalSelectDate)}
                             value={dueDate || undefined}
                         />
-                        <div className="bcs-task-input-controls">
+                        <ModalActions>
                             <Button
                                 className="bcs-task-input-cancel-btn"
                                 data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_CANCEL}
@@ -479,7 +480,7 @@ class TaskForm extends React.Component<Props, State> {
                             >
                                 <FormattedMessage {...submitButtonMessage} />
                             </PrimaryButton>
-                        </div>
+                        </ModalActions>
                     </Form>
                 </div>
             </div>
