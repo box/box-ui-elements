@@ -16,7 +16,7 @@ type Props = TooltipProps & {
     title?: React.ReactNode;
     /** 32px x 32px */
     icon?: React.ReactNode;
-    /** A React component representing the image */
+    /** A React component representing the image, cannot be used together with icon */
     image?: React.ReactNode;
     /** displays guide progress e.g. 1 of 4 */
     steps?: [number, number];
