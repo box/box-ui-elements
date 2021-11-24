@@ -299,7 +299,7 @@ describe('elements/content-open-with/ContentOpenWith', () => {
 
             displayIntegration = {
                 appIntegrationId: '1',
-                displayName: 'Adobe Sign',
+                displayName: 'Google Docs',
             };
 
             instance.setState = jest.fn();

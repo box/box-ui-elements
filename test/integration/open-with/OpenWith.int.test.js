@@ -11,7 +11,7 @@ describe('OpenWith', () => {
     });
 
     it('A single integration', () => {
-        cy.route('GET', '**/files/*/open_with_integrations', 'fixture:open-with/integration-adobe');
+        cy.route('GET', '**/files/*/open_with_integrations', 'fixture:open-with/integration-box-edit');
         cy.visit('/Elements/ContentOpenWith');
 
         // The button should be enabled
@@ -53,9 +53,6 @@ describe('OpenWith', () => {
             .contains('Google Docs (beta)');
         cy.get('@menuItem')
             .eq(2)
-            .contains('Adobe Sign');
-        cy.get('@menuItem')
-            .eq(3)
             .contains('My custom integration');
     });
 
