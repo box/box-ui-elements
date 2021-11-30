@@ -18,7 +18,7 @@ $pillTextColorDark: lighten($black, 31%);
     white-space: nowrap;
     text-overflow: ellipsis;
     background-color: $primary-color;
-    border-radius: 3px;
+    border-radius: $bdl-border-radius-size;
 
     .bdl-Pill-text {
         display: block;

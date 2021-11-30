@@ -10,7 +10,7 @@
     width: 262px;
     padding: 8px 10px;
     border: 1px solid $bdl-gray-20;
-    border-radius: 3px;
+    border-radius: $bdl-border-radius-size;
 }
 
 .draft-js-editor {

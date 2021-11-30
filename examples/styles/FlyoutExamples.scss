@@ -12,10 +12,10 @@ button.amsterdam-survey-button {
     }
 
     &.btn-plain {
-        background: $box-blue;
-        border-radius: 4px;
+        width: 40px;
         height: 40px;
         margin-right: 100px;
-        width: 40px;
+        background: $box-blue;
+        border-radius: $bdl-border-radius-size;
     }
 }

@@ -8,6 +8,9 @@ const language = process.env.LANGUAGE;
 const webpackConfig = Array.isArray(webpackConf) ? webpackConf[0] : webpackConf;
 
 module.exports = async ({ config }) => {
+    config.watchOptions = {
+        ignored: [/node_modules/, /__tests__/],
+    };
     config.plugins = [...webpackConfig.plugins, ...config.plugins];
     config.resolve.extensions = [...config.resolve.extensions, ...webpackConfig.resolve.extensions];
     config.resolve.alias = {

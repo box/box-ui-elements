@@ -5,21 +5,6 @@ $assignee-dropdown-height: 215px;
 .be .bcs-task-input-container {
     display: flex;
 
-    .bcs-task-input-controls {
-        display: block;
-        text-align: right;
-
-        .btn {
-            margin-top: 0;
-            margin-right: 0;
-            margin-bottom: 10px;
-        }
-
-        .btn:last-child {
-            margin-left: 10px;
-        }
-    }
-
     .bcs-task-input-form-container {
         flex: 1;
         min-width: 0;

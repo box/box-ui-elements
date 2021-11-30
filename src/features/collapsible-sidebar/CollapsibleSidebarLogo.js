@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { injectIntl } from 'react-intl';
 import type { InjectIntlProvidedProps } from 'react-intl';
-import { bdlGridUnit } from '../../styles/variables';
+import { bdlGridUnit, bdlBorderRadiusSizeLarge } from '../../styles/variables';
 import Logo from '../../icon/logo/BoxLogo';
 import PlainButton from '../../components/plain-button/PlainButton';
 import LinkBase from '../../components/link/LinkBase';
@@ -18,7 +18,7 @@ import messages from './messages';
 const StyledLogo = styled(Logo)`
     padding: ${bdlGridUnit};
     border: 1px solid transparent;
-    border-radius: 8px;
+    border-radius: ${bdlBorderRadiusSizeLarge};
 
     & path,
     & .fill-color {
@@ -51,7 +51,7 @@ const StyledToggleButton = styled(PlainButton)`
         border-color: transparent;
         border-style: solid;
         border-width: 1px;
-        border-radius: 8px; /* we don't have unitless variables to multiply in JS yet */
+        border-radius: ${bdlBorderRadiusSizeLarge};
     }
 
     &:focus {

@@ -3,12 +3,11 @@ import * as React from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
 import classNames from 'classnames';
 
-import { bdlGray } from '../../styles/variables';
 import InfoBadge16 from '../../icon/line/InfoBadge16';
 import CircleCheck16 from '../../icon/line/CircleCheck16';
 import TriangleAlert16 from '../../icon/line/TriangleAlert16';
 import XBadge16 from '../../icon/line/XBadge16';
-import IconClose from '../../icons/general/IconClose';
+import X16 from '../../icon/fill/X16';
 
 import type { NotificationType } from '../../common/types/core';
 
@@ -119,7 +118,7 @@ class Notification extends React.Component<Props> {
                     onClick={this.onClose}
                     type="button"
                 >
-                    <IconClose color={bdlGray} height={18} width={18} />
+                    <X16 />
                 </button>
             </div>
         );

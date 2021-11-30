@@ -26,6 +26,8 @@ type Props = {
     /** Label displayed for the text area */
     label: React.Node,
     textareaRef?: Function, // @TODO: eventually rename to innerRef for consistancy across all form elements
+    /** A CSS class for the tooltip's tether element component */
+    tooltipTetherClassName?: string,
 };
 
 const TextArea = ({
@@ -39,6 +41,7 @@ const TextArea = ({
     isResizable,
     label,
     textareaRef,
+    tooltipTetherClassName,
     ...rest
 }: Props) => {
     const hasError = !!error;
@@ -67,6 +70,7 @@ const TextArea = ({
                 <Tooltip
                     isShown={hasError}
                     position={errorTooltipPosition || 'bottom-left'}
+                    tetherElementClassName={tooltipTetherClassName}
                     text={error || ''}
                     theme="error"
                 >

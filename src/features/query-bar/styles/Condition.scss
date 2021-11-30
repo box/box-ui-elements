@@ -8,7 +8,7 @@
     margin-top: auto;
     padding: 8px;
     border: 1px solid #d2d2d2;
-    border-radius: 5px;
+    border-radius: $bdl-border-radius-size-med;
     box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
 }
 
@@ -68,7 +68,7 @@
             .bdl-SelectButton,
             .select-button {
                 width: 160px;
-                border-radius: 5px;
+                border-radius: $bdl-border-radius-size-med;
             }
 
             .bdl-SelectButton.placeholder,
@@ -92,7 +92,7 @@
 
             .bdl-SelectButton,
             .select-button {
-                border-radius: 5px;
+                border-radius: $bdl-border-radius-size-med;
             }
         }
     }
@@ -144,7 +144,7 @@
             .bdl-SelectButton,
             .select-button {
                 width: 160px;
-                border-radius: 5px;
+                border-radius: $bdl-border-radius-size-med;
             }
 
             .bdl-SelectButton.placeholder,
