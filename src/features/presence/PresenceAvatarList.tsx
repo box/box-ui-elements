@@ -5,7 +5,6 @@ import noop from 'lodash/noop';
 import PresenceAvatar from './PresenceAvatar';
 import PresenceAvatarTooltipContent from './PresenceAvatarTooltipContent';
 import Tooltip, { TooltipPosition } from '../../components/tooltip';
-
 import './PresenceAvatarList.scss';
 
 export type Collaborator = {
@@ -83,6 +82,7 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
                         }
                     >
                         <PresenceAvatar
+                            aria-hidden="true"
                             avatarUrl={avatarUrl}
                             id={id}
                             isActive={isActive}

@@ -17,6 +17,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   position="bottom-left"
 >
   <ForwardRef(PresenceAvatarList)
+    aria-label="Presence Activity"
     className="presence-avatar-container"
     collaborators={
       Array [
@@ -139,6 +140,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   position="bottom-left"
 >
   <ForwardRef(PresenceAvatarList)
+    aria-label="Presence Activity"
     className="presence-avatar-container"
     collaborators={
       Array [
@@ -261,6 +263,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   position="bottom-left"
 >
   <ForwardRef(PresenceAvatarList)
+    aria-label="Presence Activity"
     className="presence-avatar-container"
     collaborators={Array []}
     hideTooltips={false}
@@ -306,6 +309,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   position="bottom-left"
 >
   <ForwardRef(PresenceAvatarList)
+    aria-label="Presence Activity"
     className="presence-avatar-container"
     collaborators={
       Array [
@@ -437,6 +441,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   position="bottom-left"
 >
   <ForwardRef(PresenceAvatarList)
+    aria-label="Presence Activity"
     className="presence-avatar-container"
     collaborators={
       Array [
