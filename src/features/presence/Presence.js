@@ -146,6 +146,7 @@ class Presence extends Component {
             containerAttributes,
             flyoutPosition,
             getLinkCallback,
+            intl,
             inviteCallback,
             maxAdditionalCollaboratorsNum,
             maxDisplayedAvatars,
@@ -204,6 +205,7 @@ class Presence extends Component {
             >
                 <PresenceAvatarList
                     ref={this.saveRefToContainer}
+                    aria-label={intl.formatMessage(messages.toggleOverlayLabel)}
                     avatarAttributes={avatarAttributes}
                     className={classNames('presence-avatar-container', { 'dropdown-active': isDropdownActive })}
                     collaborators={collaborators}
@@ -213,6 +215,7 @@ class Presence extends Component {
                     onAvatarMouseEnter={onAvatarMouseEnter}
                     onAvatarMouseLeave={onAvatarMouseLeave}
                     onKeyDown={this.handleKeyDown}
+                    role="button"
                     {...containerAttributes}
                 />
                 <Overlay className={overlayClassNames} shouldDefaultFocus={false}>

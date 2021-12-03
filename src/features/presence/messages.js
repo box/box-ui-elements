@@ -6,6 +6,11 @@ const messages = defineMessages({
         description: 'Description for someone who is currently viewing or editing a document',
         id: 'boxui.presence.activeNow',
     },
+    avatarLabel: {
+        defaultMessage: 'Avatar for {name}',
+        description: 'Description for the label of the avatar for a given user',
+        id: 'boxui.presence.avatarLabel',
+    },
     timeSinceLastAccessedText: {
         defaultMessage: 'Viewed {timeAgo}',
         description:
@@ -82,6 +87,11 @@ const messages = defineMessages({
         defaultMessage: 'See all activity',
         description: 'Text for link at footer of the Recent Activity panel',
         id: 'boxui.presence.previewPresenceFlyoutAccessStatsLink',
+    },
+    toggleOverlayLabel: {
+        defaultMessage: 'Toggle Presence Overlay',
+        description: 'Text on button to toggle the presence overlay',
+        id: 'boxui.presence.toggleOverlayLabel',
     },
 });
 

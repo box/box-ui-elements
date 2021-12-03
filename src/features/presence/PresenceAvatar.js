@@ -1,13 +1,28 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { injectIntl, InjectIntlProvidedProps } from 'react-intl';
 
 import Avatar from '../../components/avatar';
+import messages from './messages';
+
+type Props = {
+    avatarUrl?: string,
+    id: string | number,
+    isActive?: boolean,
+    isDropDownAvatar?: boolean,
+    name: string,
+    onBlur?: Function,
+    onFocus?: Function,
+    onMouseEnter?: Function,
+    onMouseLeave?: Function,
+} & InjectIntlProvidedProps;
 
 const PresenceAvatar = ({
     avatarUrl,
     id,
-    isActive,
+    intl,
+    isActive = false,
     name,
     onMouseEnter,
     onMouseLeave,
@@ -15,8 +30,9 @@ const PresenceAvatar = ({
     onBlur,
     isDropDownAvatar,
     ...rest
-}) => (
+}: Props) => (
     <div
+        aria-label={intl.formatMessage(messages.avatarLabel, { name })}
         className={classnames('presence-avatar', {
             'presence-avatar-notehead': !isDropDownAvatar,
             'presence-avatar-dropdown': isDropDownAvatar,
@@ -26,6 +42,7 @@ const PresenceAvatar = ({
         onFocus={onFocus}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
+        role="figure"
         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
         tabIndex={!isDropDownAvatar ? '0' : ''}
         {...rest}
@@ -34,20 +51,4 @@ const PresenceAvatar = ({
     </div>
 );
 
-PresenceAvatar.propTypes = {
-    avatarUrl: PropTypes.string,
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    isActive: PropTypes.bool,
-    name: PropTypes.string.isRequired,
-    onMouseEnter: PropTypes.func,
-    onMouseLeave: PropTypes.func,
-    onFocus: PropTypes.func,
-    onBlur: PropTypes.func,
-    isDropDownAvatar: PropTypes.bool,
-};
-
-PresenceAvatar.defaultProps = {
-    isActive: false,
-};
-
-export default PresenceAvatar;
+export default injectIntl(PresenceAvatar);

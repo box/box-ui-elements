@@ -5,6 +5,7 @@ import noop from 'lodash/noop';
 import PresenceAvatar from './PresenceAvatar';
 import PresenceAvatarTooltipContent from './PresenceAvatarTooltipContent';
 import Tooltip, { TooltipPosition } from '../../components/tooltip';
+
 import './PresenceAvatarList.scss';
 
 export type Collaborator = {
