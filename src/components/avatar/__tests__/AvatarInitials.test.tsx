@@ -32,7 +32,7 @@ describe('components/avatar/AvatarInitials', () => {
 
     test('should set data-bg-idx attribute based on id', () => {
         const wrapper = shallow(<AvatarInitials id="10" name="hello world" />);
-        expect(wrapper.prop('data-bg-idx')).toEqual(1);
+        expect(wrapper.prop('data-bg-idx')).toEqual(4);
     });
 
     test('should set a default data-bg-idx attribute if no id is passed in', () => {
