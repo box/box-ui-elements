@@ -84,8 +84,8 @@ const messages = defineMessages({
         id: 'boxui.presence.previewPresenceFlyoutAccessStatsLink',
     },
     toggleButtonLabel: {
-        defaultMessage: 'Presence Activity',
-        description: 'Description of the button to toggle the presence overlay',
+        defaultMessage: 'Recent Activity',
+        description: 'Description of the button to toggle the presence overlay with recent activity',
         id: 'boxui.presence.toggleButtonLabel',
     },
 });
