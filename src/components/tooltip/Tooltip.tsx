@@ -340,6 +340,8 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 onClick={this.handleTooltipEvent}
                 onContextMenu={this.handleTooltipEvent}
                 onKeyPress={this.handleTooltipEvent}
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
             >
                 <div
                     role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
@@ -358,6 +360,8 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 aria-live="polite"
                 aria-hidden={isLabelMatchingTooltipText}
                 role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
             >
                 {tooltipInner}
             </div>
