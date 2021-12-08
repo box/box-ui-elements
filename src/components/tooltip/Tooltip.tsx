@@ -336,12 +336,12 @@ class Tooltip extends React.Component<TooltipProps, State> {
             <div
                 className={classes}
                 id={this.tooltipID}
-                role="presentation"
                 onClick={this.handleTooltipEvent}
                 onContextMenu={this.handleTooltipEvent}
                 onKeyPress={this.handleTooltipEvent}
                 onMouseEnter={this.handleMouseEnter}
                 onMouseLeave={this.handleMouseLeave}
+                role="presentation"
             >
                 <div
                     role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
@@ -354,14 +354,14 @@ class Tooltip extends React.Component<TooltipProps, State> {
             </div>
         ) : (
             <div
+                aria-live="polite"
+                aria-hidden={isLabelMatchingTooltipText}
                 className={classes}
                 data-testid="bdl-Tooltip"
                 id={this.tooltipID}
-                aria-live="polite"
-                aria-hidden={isLabelMatchingTooltipText}
-                role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
                 onMouseEnter={this.handleMouseEnter}
                 onMouseLeave={this.handleMouseLeave}
+                role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
             >
                 {tooltipInner}
             </div>
