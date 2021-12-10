@@ -7,6 +7,8 @@ exports[`components/tooltip/Tooltip render() should match snapshot when stopBubb
   onClick={[Function]}
   onContextMenu={[Function]}
   onKeyPress={[Function]}
+  onMouseEnter={[Function]}
+  onMouseLeave={[Function]}
   role="presentation"
 >
   <div
@@ -97,6 +99,8 @@ exports[`components/tooltip/Tooltip render() should not render with close button
     className="tooltip bdl-Tooltip"
     data-testid="bdl-Tooltip"
     id="tooltip3"
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
     role="tooltip"
   >
     hi
@@ -170,6 +174,8 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
     className="tooltip bdl-Tooltip is-callout"
     data-testid="bdl-Tooltip"
     id="tooltip5"
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
     role="tooltip"
   >
     hi
@@ -238,6 +244,8 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
     className="tooltip bdl-Tooltip with-close-button"
     data-testid="bdl-Tooltip"
     id="tooltip1"
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
     role="tooltip"
   >
     hi
