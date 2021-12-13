@@ -16,11 +16,11 @@
 }
 
 // overrides for confirm/cancel button spacing
-.bcs-DeleteConfirmation-delete,
-.bcs-DeleteConfirmation-cancel {
+.btn.bcs-DeleteConfirmation-delete,
+.btn.bcs-DeleteConfirmation-cancel {
     margin-left: 0;
 }
 
-.bcs-DeleteConfirmation-cancel {
+.btn.bcs-DeleteConfirmation-cancel {
     margin-right: 10px;
 }
