@@ -266,6 +266,9 @@
 
     .upgrade-badge {
         margin-right: 5px;
+        padding: $bdl-grid-unit ($bdl-grid-unit * 2);
+        background-color: $bdl-grimace-20;
+        border-radius: 10px;
     }
 
     .upgrade-link {

@@ -9,6 +9,7 @@ import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingI
 import { Link } from '../../components/link';
 import Button from '../../components/button';
 import { UpgradeBadge } from '../../components/badge';
+import PlainButton from '../../components/plain-button';
 import { ITEM_TYPE_WEBLINK } from '../../common/constants';
 import Tooltip from '../../components/tooltip';
 import { CollaboratorAvatars, CollaboratorList } from '../collaborator-avatars';
@@ -507,7 +508,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             {...inviteCollabsEmailTracking}
                         >
                             {this.renderInviteePermissionsDropdown()}
-                            {isInviteSectionExpanded && showUpgradeOptions && this.renderUpgradeLinkDescription()}
+                            {showUpgradeOptions && this.renderUpgradeLinkDescription()}
                         </EmailForm>
                     </div>
                 </Tooltip>
@@ -539,19 +540,24 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     }
 
     renderUpgradeLinkDescription() {
-        const { trackingProps = {} } = this.props;
+        const { openUpgradePlanModal, trackingProps = {} } = this.props;
         const { inviteCollabsEmailTracking = {} } = trackingProps;
         const { upgradeLinkProps = {} } = inviteCollabsEmailTracking;
 
         return (
             <div className="upgrade-description">
-                <UpgradeBadge type="warning" />
+                <UpgradeBadge />
                 <FormattedMessage
                     values={{
                         upgradeGetMoreAccessControlsLink: (
-                            <Link className="upgrade-link" href="/upgrade" {...upgradeLinkProps}>
+                            <PlainButton
+                                className="upgrade-link"
+                                onClick={openUpgradePlanModal}
+                                type="button"
+                                {...upgradeLinkProps}
+                            >
                                 <FormattedMessage {...messages.upgradeGetMoreAccessControlsLink} />
-                            </Link>
+                            </PlainButton>
                         ),
                     }}
                     {...messages.upgradeGetMoreAccessControlsDescription}

@@ -211,10 +211,7 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
                 isFetching: false,
                 showUpgradeOptions: true,
             });
-            wrapper.setState({
-                isInviteSectionExpanded: true,
-            });
-            expect(wrapper).toMatchSnapshot();
+            expect(wrapper.exists('UpgradeBadge')).toBe(true);
         });
 
         test('should render a default component with correct Focus element and props when focusSharedLinkOnLoad is enabled', () => {
