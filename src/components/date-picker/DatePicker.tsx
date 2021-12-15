@@ -110,7 +110,10 @@ export interface DatePickerProps extends WrappedComponentProps {
     dateFormat?: DateFormat;
     /** Some optional description */
     description?: React.ReactNode;
-    /** The format of the date displayed in the input field */
+    /**
+     * The format of the date displayed in the input field
+     * @deprecated, will no longer be supported with accessible mode enabled (isAccessible = true)
+     */
     displayFormat?: Object;
     /** Error message */
     error?: React.ReactNode;
@@ -371,8 +374,8 @@ class DatePicker extends React.Component<DatePickerProps> {
             event.preventDefault();
         }
 
-        // In Firefox, enter & spacebar open up the browser's default date picker. Suppress it.
-        if (Browser.isFirefox() && isAccessible && (event.key === ENTER_KEY || event.keyCode === 32)) {
+        // Stops enter & spacebar from opening up the browser's default date picker
+        if (isAccessible && (event.key === ENTER_KEY || event.key === ' ')) {
             event.preventDefault();
         }
 
@@ -495,6 +498,7 @@ class DatePicker extends React.Component<DatePickerProps> {
             // Calling new Date('YYYY-MM-DD') without 'T00:00:00' yields undesired results:
             // E.g. new Date('2017-06-01') => May 31 2017
             // E.g. new Date('2017-06-01T00:00:00') => June 01 2017
+            // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date#parameters
             return new Date(`${dateString}T00:00:00`);
         }
         return null;
@@ -614,9 +618,13 @@ class DatePicker extends React.Component<DatePickerProps> {
         } else {
             onChangeAttr = { onChange: noop };
         }
+
+        const fallbackPattern = '\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])';
         // "name" prop is required for pattern validation to be surfaced on form submit. See components/form-elements/form/Form.js
+        // "title" prop is shown during constraint validation as a description of the pattern
+        // See https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/pattern#usability
         const additionalAttrs =
-            isAccessible && !this.canUseDateInputType ? { name, pattern: '\\d{4}-\\d{2}-\\d{2}' } : {};
+            isAccessible && !this.canUseDateInputType ? { name, pattern: fallbackPattern, title: 'YYYY-MM-DD' } : {};
 
         /* fixes proptype error about readonly field (not adding readonly so constraint validation works) */
         return (

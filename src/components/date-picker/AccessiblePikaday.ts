@@ -29,7 +29,6 @@ class AccessiblePikaday extends Pikaday {
     }
 
     handleBlur = () => {
-        // TODO: Test in IE11
         this.hide();
     };
 
