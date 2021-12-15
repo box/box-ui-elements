@@ -540,7 +540,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     }
 
     renderUpgradeLinkDescription() {
-        const { openUpgradePlanModal, trackingProps = {} } = this.props;
+        const { openUpgradePlanModal = () => {}, trackingProps = {} } = this.props;
         const { inviteCollabsEmailTracking = {} } = trackingProps;
         const { upgradeLinkProps = {} } = inviteCollabsEmailTracking;
 
