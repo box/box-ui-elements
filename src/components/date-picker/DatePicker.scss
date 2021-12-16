@@ -96,7 +96,7 @@
     .date-picker-open-btn:focus {
         margin: -1px;
         border: 1px solid $bdl-box-blue;
-        border-radius: 4px;
+        border-radius: $bdl-border-radius-size;
     }
 
     .date-picker-icon-alert {
