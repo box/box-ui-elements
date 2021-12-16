@@ -6,6 +6,7 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import getProp from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { InjectIntlProvidedProps } from 'react-intl';
@@ -83,6 +84,8 @@ type Props = TaskFormProps & TaskFormConsumerProps & InjectIntlProvidedProps;
 
 type TaskFormFieldName = 'taskName' | 'taskAssignees' | 'taskDueDate';
 
+type TaskFormInvalidSubmitState = { [key: TaskFormFieldName]: ?{ validityState: ?{ patternMismatch: boolean } } };
+
 type State = {|
     approverTextInput: string, // partial text input value for approver field before autocomplete/select
     approvers: Array<TaskCollabAssignee>,
@@ -135,7 +138,7 @@ class TaskForm extends React.Component<Props, State> {
         };
     }
 
-    validateForm = (only?: TaskFormFieldName) => {
+    validateForm = (only?: TaskFormFieldName, invalidSubmitValidityState?: ?TaskFormInvalidSubmitState) => {
         this.setState(state => {
             const { intl } = this.props;
             const { approvers, message, approverTextInput } = state;
@@ -151,12 +154,18 @@ class TaskForm extends React.Component<Props, State> {
                 code: 'required',
                 message: intl.formatMessage(commonMessages.requiredFieldError),
             };
+            const taskDueDateError = {
+                code: 'invalid',
+                message: intl.formatMessage(commonMessages.invalidDateError),
+            };
             const formValidityState = {
                 taskAssignees:
                     (approverTextInput.length ? assigneeFieldInvalidError : null) ||
                     (approvers.length ? null : assigneeFieldMissingError),
                 taskName: message ? null : messageFieldError,
-                taskDueDate: null,
+                taskDueDate: getProp(invalidSubmitValidityState, 'taskDueDate.validityState.patternMismatch')
+                    ? taskDueDateError
+                    : null,
             };
             const isValid = Object.values(formValidityState).every(val => val == null);
             return {
@@ -175,8 +184,12 @@ class TaskForm extends React.Component<Props, State> {
 
     clearForm = () => this.setState(this.getInitialFormState());
 
-    handleInvalidSubmit = () => {
-        this.validateForm();
+    handleInvalidSubmit = (invalidSubmitValidityState?: ?TaskFormInvalidSubmitState) => {
+        if (!isEmpty(invalidSubmitValidityState)) {
+            this.validateForm(undefined, invalidSubmitValidityState);
+        } else {
+            this.validateForm();
+        }
     };
 
     handleSubmitSuccess = () => {
@@ -273,7 +286,6 @@ class TaskForm extends React.Component<Props, State> {
             // Modify date to be the end of day (minus 1 millisecond) for the given due date
             dateValue.setHours(23, 59, 59, 999);
         }
-
         this.setState({ dueDate: dateValue });
         this.validateForm('taskDueDate');
     };
@@ -448,6 +460,7 @@ class TaskForm extends React.Component<Props, State> {
                                 [INTERACTION_TARGET]: ACTIVITY_TARGETS.TASK_DATE_PICKER,
                                 'data-testid': 'task-form-date-input',
                             }}
+                            isAccessible
                             isDisabled={isForbiddenErrorOnEdit}
                             isKeyboardInputAllowed
                             isRequired={false}
