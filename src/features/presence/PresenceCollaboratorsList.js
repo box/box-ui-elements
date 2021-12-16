@@ -122,7 +122,7 @@ class PresenceCollaboratorsList extends React.Component<Props> {
             const { avatarUrl, id, isActive, interactedAt, interactionType, name, profileUrl } = collaborator;
 
             return (
-                <div key={id} className="bdl-PresenceCollaboratorsList-item">
+                <div key={id} className="bdl-PresenceCollaboratorsList-item" role="listitem">
                     <PresenceAvatar avatarUrl={avatarUrl} id={id} isActive={isActive} isDropDownAvatar name={name} />
                     <div className="bdl-PresenceCollaboratorsList-item-info-container">
                         <div className="bdl-PresenceCollaboratorsList-item-info-name">
@@ -195,6 +195,7 @@ class PresenceCollaboratorsList extends React.Component<Props> {
                     }}
                     className={dropdownListClasses}
                     onScroll={this.throttledHandleScroll}
+                    role="list"
                 >
                     {collabList}
                 </div>
