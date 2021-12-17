@@ -490,7 +490,7 @@ class DatePicker extends React.Component<DatePickerProps> {
 
     formatDisplayDateType = (date?: Date | null): string => {
         // Input type "date" only accepts the format YYYY-MM-DD
-        return date ? date.toISOString().slice(0, 10) : '';
+        return date ? getFormattedDate(date, DateFormat.UTC_ISO_STRING_DATE_FORMAT).slice(0, 10) : '';
     };
 
     parseDisplayDateType = (dateString?: string | null): Date | null => {
