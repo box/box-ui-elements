@@ -11,10 +11,6 @@ describe('elements/content-open-with/OpenWithDropdownMenu', () => {
         const integrations = [
             {
                 appIntegrationId: 1,
-                displayName: 'Adobe Sign',
-            },
-            {
-                appIntegrationId: 2,
                 displayName: 'Google Docs',
             },
         ];
@@ -23,7 +19,7 @@ describe('elements/content-open-with/OpenWithDropdownMenu', () => {
             integrations,
             onClick: noop,
         });
-        expect(wrapper.find(Menu).children()).toHaveLength(2);
+        expect(wrapper.find(Menu).children()).toHaveLength(1);
 
         expect(wrapper).toMatchSnapshot();
     });

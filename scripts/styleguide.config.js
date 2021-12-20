@@ -126,7 +126,6 @@ const allSections = [
     {
         name: 'Icons',
         components: () => [
-            '../src/icons/adobe-sign/IconAdobeSign.tsx',
             '../src/icons/autocad/IconAutoCAD.tsx',
             // try not to add to this list but instead add new icons into the
             // families of icons below (or create new families where appropriate)
