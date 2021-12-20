@@ -2,6 +2,21 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { AddTaskButtonComponent as AddTaskButton } from '../AddTaskButton';
 
+jest.mock('../../../components/date-picker/DatePicker', () => props => {
+    // only spread `input` attritutes to the input field
+    const { name, value = '', className, onChange, placeholder } = props;
+    const localInputProps = {
+        name,
+        value,
+        className,
+        onChange,
+        placeholder,
+    };
+    return (
+        <input type="date" {...localInputProps} {...props.inputProps} /> // eslint-disable-line react/prop-types
+    );
+});
+
 describe('elements/content-sidebar/AddTaskButton', () => {
     /* 
     1. Pushing the open state into history keeps the sidebar open upon resize and refresh

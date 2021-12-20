@@ -39,7 +39,7 @@ describe('elements/content-open-with/OpenWithButton', () => {
 
     test('should render as disabled if the integration is disabled', () => {
         const wrapper = getWrapper({
-            displayIntegration: { isDisabled: true, displayName: 'Adobe Sign' },
+            displayIntegration: { isDisabled: true, displayName: 'Google Docs' },
             onClick: noop,
         });
         expect(wrapper).toMatchSnapshot();
