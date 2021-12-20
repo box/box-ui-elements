@@ -9,21 +9,9 @@
         },
         "items": [
             {
-                "display_name": "Adobe Sign",
-                "display_description": "Send for Signature",
-                "display_order": 1,
-                "is_disabled": false,
-                "should_show_consent_popup": false,
-                "disabled_reasons": [],
-                "app_integration": {
-                    "id": "3282",
-                    "type": "app_integration"
-                }
-            },
-            {
                 "display_name": "Google Docs",
                 "display_description": "Open with Google Docs",
-                "display_order": 3,
+                "display_order": 2,
                 "is_disabled": true,
                 "disabled_reasons": ["manually disabled"],
                 "should_show_consent_popup": false,
@@ -35,7 +23,7 @@
             {
                 "display_name": "Google Slides",
                 "display_description": "Open with Google Slides",
-                "display_order": 2,
+                "display_order": 1,
                 "is_disabled": false,
                 "disabled_reasons": [],
                 "should_show_consent_popup": false,
@@ -48,17 +36,6 @@
     },
     "defaultAsIntegrations": [
         [
-            {
-                "displayName": "Adobe Sign",
-                "displayDescription": "Send for Signature",
-                "displayOrder": 1,
-                "isDefault": true,
-                "isDisabled": false,
-                "requiresConsent": false,
-                "DisabledReasons": [],
-                "appIntegrationId": "3282",
-                "type": "app_integration"
-            },
             {
                 "displayName": "Google Docs",
                 "displayDescription": "Open with Google Docs",

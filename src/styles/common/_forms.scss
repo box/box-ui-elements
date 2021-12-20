@@ -7,6 +7,7 @@
 /* Inputs */
 
 input[type='text'],
+input[type='date'],
 input[type='password'],
 input[type='search'],
 input[type='email'],
@@ -21,6 +22,7 @@ textarea {
 }
 
 input[type='text']:hover,
+input[type='date']:hover,
 input[type='password']:hover,
 input[type='search']:hover,
 input[type='email']:hover,
@@ -33,6 +35,7 @@ textarea:hover {
 }
 
 input[type='text']:focus,
+input[type='date']:focus,
 input[type='password']:focus,
 input[type='search']:focus,
 input[type='email']:focus,
@@ -51,6 +54,7 @@ input:-ms-input-placeholder {
 }
 
 input[type='text'].is-invalid,
+input[type='date'].is-invalid,
 input[type='password'].is-invalid,
 input[type='search'].is-invalid,
 input[type='email'].is-invalid,
@@ -63,6 +67,7 @@ textarea.is-invalid {
 }
 
 input[type='text'].is-invalid:focus,
+input[type='date'].is-invalid:focus,
 input[type='password'].is-invalid:focus,
 input[type='search'].is-invalid:focus,
 input[type='email'].is-invalid:focus,
@@ -75,6 +80,7 @@ textarea.is-invalid:focus {
 }
 
 input[type='text']:disabled,
+input[type='date']:disabled,
 input[type='password']:disabled,
 input[type='search']:disabled,
 input[type='email']:disabled,

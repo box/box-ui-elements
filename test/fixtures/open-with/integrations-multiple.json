@@ -15,24 +15,12 @@
         {
             "app_integration": {
                 "type": "app_integration",
-                "id": "3282"
-            },
-            "should_show_consent_popup": true,
-            "disabled_reasons": [],
-            "is_disabled": false,
-            "display_order": 3,
-            "display_name": "Adobe Sign",
-            "display_description": "Send this document for signature"
-        },
-        {
-            "app_integration": {
-                "type": "app_integration",
                 "id": "1000000"
             },
             "should_show_consent_popup": true,
             "disabled_reasons": [],
             "is_disabled": false,
-            "display_order": 4,
+            "display_order": 3,
             "display_name": "My custom integration",
             "display_description": "This is a custom integration"
         },

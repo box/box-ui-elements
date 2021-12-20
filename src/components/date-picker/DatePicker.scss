@@ -23,10 +23,15 @@
     }
 
     .date-picker-input {
+        height: 32px;
         margin-top: 5px;
         margin-bottom: 0;
         padding-right: 30px;
         text-overflow: ellipsis;
+
+        &::-webkit-calendar-picker-indicator {
+            display: none;
+        }
     }
 
     .date-picker-input:focus ~ .tooltip,
@@ -38,31 +43,24 @@
     .date-picker-open-btn {
         position: absolute;
         right: 7px;
-        bottom: 10px;
-        display: inline-block;
-        height: 17px;
+        bottom: 8px;
+        display: inline-flex;
+    }
+
+    .date-picker-open-btn:hover {
+        cursor: pointer;
     }
 
     .date-picker-clear-btn,
     .date-picker-icon-alert {
         position: absolute;
         right: 30px;
-        bottom: 10px;
-        display: inline-block;
+        bottom: 8px;
+        display: inline-flex;
 
         span {
             display: inline-block;
         }
-    }
-
-    .date-picker-clear-btn,
-    .date-picker-clear-btn:active,
-    .date-picker-clear-btn:focus,
-    .date-picker-clear-btn:hover,
-    .date-picker-clear-btn:active:focus,
-    .date-picker-clear-btn:active:hover,
-    .date-picker-clear-btn span {
-        height: 14px;
     }
 
     .date-picker-clear-btn {
@@ -70,13 +68,16 @@
             transition: fill linear .1s;
             fill: $bdl-gray-50;
         }
+
+        &.is-hidden {
+            opacity: 0;
+        }
     }
 
     > .date-picker-clear-btn:hover,
     > .date-picker-clear-btn:focus {
         path {
             fill: $bdl-gray-80;
-            path: $bdl-gray-80;
         }
     }
 
@@ -89,6 +90,13 @@
         .fill-color {
             fill: $bdl-gray-80;
         }
+    }
+
+    .date-picker-clear-btn:focus,
+    .date-picker-open-btn:focus {
+        margin: -1px;
+        border: 1px solid $bdl-box-blue;
+        border-radius: $bdl-border-radius-size;
     }
 
     .date-picker-icon-alert {
@@ -106,6 +114,12 @@
 
         .date-picker-input {
             padding-right: 50px;
+        }
+    }
+
+    &.is-accessible {
+        .date-picker-input {
+            min-width: 135px;
         }
     }
 }
