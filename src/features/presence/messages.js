@@ -83,6 +83,11 @@ const messages = defineMessages({
         description: 'Text for link at footer of the Recent Activity panel',
         id: 'boxui.presence.previewPresenceFlyoutAccessStatsLink',
     },
+    toggleButtonLabel: {
+        defaultMessage: 'Recent Activity',
+        description: 'Description of the button to toggle the presence overlay with recent activity',
+        id: 'boxui.presence.toggleButtonLabel',
+    },
 });
 
 export default messages;

@@ -26,8 +26,6 @@ const PresenceAvatar = ({
         onFocus={onFocus}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-        tabIndex={!isDropDownAvatar ? '0' : ''}
         {...rest}
     >
         <Avatar avatarUrl={avatarUrl} className={!isDropDownAvatar ? 'presence-notehead' : ''} id={id} name={name} />
