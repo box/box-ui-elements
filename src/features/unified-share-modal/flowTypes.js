@@ -394,7 +394,7 @@ export type USFProps = BaseUnifiedShareProps & {
     /** Whether the FTUX tooltip should be rendered */
     shouldRenderFTUXTooltip: boolean,
     /** Whether the new upgrade text should be rendered */
-    showNewUpgradeText: boolean,
+    showNewUpgradeText?: boolean,
 };
 
 export type InviteCollaboratorsRequest = {
