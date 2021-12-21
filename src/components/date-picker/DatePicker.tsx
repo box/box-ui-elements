@@ -125,6 +125,8 @@ export interface DatePickerProps extends WrappedComponentProps {
     hideOptionalLabel?: boolean;
     /** Props that will be applied on the input element */
     inputProps?: Object;
+    /** Does the date input meet accessibility standards */
+    isAccessible?: boolean;
     /** Is the calendar always visible */
     isAlwaysVisible?: boolean;
     /** Is input clearable */
@@ -155,8 +157,6 @@ export interface DatePickerProps extends WrappedComponentProps {
     placeholder?: string;
     /** Resin tag */
     resinTarget?: string;
-    /** Does the date input meet accessibility standards */
-    isAccessible?: boolean;
     /** Date to set the input */
     value?: Date | null;
     /** Number of years, or an array containing an upper and lower range */
@@ -191,6 +191,7 @@ class DatePicker extends React.Component<DatePickerProps> {
             isTextInputAllowed,
             maxDate,
             minDate,
+            onChange,
             value,
             yearRange,
         } = this.props;
@@ -206,6 +207,11 @@ class DatePicker extends React.Component<DatePickerProps> {
         // relative to browser timezone
         if (dateFormat === DateFormat.UTC_TIME_DATE_FORMAT && value) {
             defaultValue = convertUTCToLocal(value);
+
+            if (onChange) {
+                const formattedDate = this.formatValue(defaultValue);
+                onChange(defaultValue, formattedDate);
+            }
         }
         // Make sure the DST detection algorithm in browsers is up-to-date
         const year = new Date().getFullYear();
