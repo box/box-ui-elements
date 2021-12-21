@@ -540,28 +540,55 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     }
 
     renderUpgradeLinkDescription() {
-        const { openUpgradePlanModal = () => {}, trackingProps = {} } = this.props;
+        const { openUpgradePlanModal = () => {}, showNewUpgradeText = false, trackingProps = {} } = this.props;
         const { inviteCollabsEmailTracking = {} } = trackingProps;
         const { upgradeLinkProps = {} } = inviteCollabsEmailTracking;
 
         return (
             <div className="upgrade-description">
                 <UpgradeBadge />
-                <FormattedMessage
-                    values={{
-                        upgradeGetMoreAccessControlsLink: (
-                            <PlainButton
-                                className="upgrade-link"
-                                onClick={openUpgradePlanModal}
-                                type="button"
-                                {...upgradeLinkProps}
-                            >
-                                <FormattedMessage {...messages.upgradeGetMoreAccessControlsLink} />
-                            </PlainButton>
-                        ),
-                    }}
-                    {...messages.upgradeGetMoreAccessControlsDescription}
-                />
+                {showNewUpgradeText ? (
+                    <FormattedMessage
+                        values={{
+                            upgradeGetMoreAccessControlsLink: (
+                                <PlainButton
+                                    className="upgrade-link"
+                                    data-resin-target="external_collab_newcopy_upgrade_cta"
+                                    onClick={openUpgradePlanModal}
+                                    type="button"
+                                >
+                                    <FormattedMessage {...messages.upgradeLink} />
+                                </PlainButton>
+                            ),
+                            collaboratorAccessLink: (
+                                <Link
+                                    className="upgrade-link"
+                                    href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
+                                    target="_blank"
+                                >
+                                    <FormattedMessage {...messages.collaboratorAccessLink} />
+                                </Link>
+                            ),
+                        }}
+                        {...messages.upgradeCollaboratorAccessDescription}
+                    />
+                ) : (
+                    <FormattedMessage
+                        values={{
+                            upgradeGetMoreAccessControlsLink: (
+                                <PlainButton
+                                    className="upgrade-link"
+                                    onClick={openUpgradePlanModal}
+                                    type="button"
+                                    {...upgradeLinkProps}
+                                >
+                                    <FormattedMessage {...messages.upgradeGetMoreAccessControlsLink} />
+                                </PlainButton>
+                            ),
+                        }}
+                        {...messages.upgradeGetMoreAccessControlsDescription}
+                    />
+                )}
             </div>
         );
     }
