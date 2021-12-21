@@ -202,6 +202,20 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
                 versions: [],
             });
         });
+        test('should set state to default values with error upsell message if showVersionUpsell is true', () => {
+            const wrapper = getWrapper({ showVersionUpsell: true });
+
+            wrapper.instance().handleFetchError();
+
+            expect(wrapper.state()).toEqual({
+                error: messages.versionFetchErrorUpsell,
+                isLoading: false,
+                isWatermarked: false,
+                versionCount: 0,
+                versionLimit: Infinity,
+                versions: [],
+            });
+        });
     });
 
     describe('handleFetchSuccess', () => {

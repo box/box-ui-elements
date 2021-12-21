@@ -28,6 +28,13 @@ describe('elements/content-sidebar/versions/VersionsSidebar', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
+        test('should show an upsell inline error if the errorUpsell prop is provided', () => {
+            const wrapper = getWrapper({ error: messages.versionFetchErrorUpsell, errorUpsell: true, versions: [] });
+
+            expect(wrapper.exists(InlineError)).toBe(true);
+            expect(wrapper).toMatchSnapshot();
+        });
+
         test('should show max versions text if max versions provided', () => {
             const versions = Array.from({ length: 1000 }).map((item, index) => ({ id: index }));
             const wrapper = getWrapper({ versions });
