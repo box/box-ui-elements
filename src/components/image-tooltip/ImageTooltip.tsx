@@ -31,8 +31,7 @@ const ImageTooltip = ({ children, className, content, image, title, ...otherTool
         </ImageTooltipContent>
     );
 
-    const imageTooltipClasses = classNames('bdl-ImageTooltip', {
-        className,
+    const imageTooltipClasses = classNames('bdl-ImageTooltip', className, {
         'bdl-is-image-loaded': isImageLoaded,
     });
 
