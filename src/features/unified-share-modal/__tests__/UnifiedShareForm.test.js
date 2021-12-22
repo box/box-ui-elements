@@ -76,7 +76,7 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             />,
         );
 
-    fdescribe('render()', () => {
+    describe('render()', () => {
         test('should render a default component with default props', () => {
             const wrapper = getWrapper({ isFetching: false });
             expect(wrapper).toMatchSnapshot();
