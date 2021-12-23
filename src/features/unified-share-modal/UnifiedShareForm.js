@@ -9,6 +9,7 @@ import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingI
 import { Link } from '../../components/link';
 import Button from '../../components/button';
 import { UpgradeBadge } from '../../components/badge';
+import InlineNotice from '../../components/inline-notice';
 import PlainButton from '../../components/plain-button';
 import { ITEM_TYPE_WEBLINK } from '../../common/constants';
 import Tooltip from '../../components/tooltip';
@@ -421,6 +422,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             shouldRenderFTUXTooltip,
             showEnterEmailsCallout = false,
             showCalloutForUser = false,
+            showUpgradeInlineNotice = false,
             showUpgradeOptions,
             submitting,
             suggestedCollaborators,
@@ -508,7 +510,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             {...inviteCollabsEmailTracking}
                         >
                             {this.renderInviteePermissionsDropdown()}
-                            {showUpgradeOptions && this.renderUpgradeLinkDescription()}
+                            {showUpgradeOptions && !showUpgradeInlineNotice && this.renderUpgradeLinkDescription()}
                         </EmailForm>
                     </div>
                 </Tooltip>
@@ -593,6 +595,38 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         );
     }
 
+    renderUpgradeInlineNotice() {
+        const { openUpgradePlanModal = () => {} } = this.props;
+        return (
+            <InlineNotice title={<FormattedMessage {...messages.upgradeInlineNoticeTitle} />} type="info">
+                <FormattedMessage
+                    values={{
+                        upgradeGetMoreAccessControlsLink: (
+                            <PlainButton
+                                className="upgrade-link"
+                                data-resin-target="external_collab_top_message_upgrade_cta"
+                                onClick={openUpgradePlanModal}
+                                type="button"
+                            >
+                                <FormattedMessage {...messages.upgradeLink} />
+                            </PlainButton>
+                        ),
+                        collaboratorAccessLink: (
+                            <Link
+                                className="upgrade-link"
+                                href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
+                                target="_blank"
+                            >
+                                <FormattedMessage {...messages.collaboratorAccessLink} />
+                            </Link>
+                        ),
+                    }}
+                    {...messages.upgradeCollaboratorAccessDescription}
+                />
+            </InlineNotice>
+        );
+    }
+
     renderInviteePermissionsDropdown() {
         const { inviteePermissions, item, submitting, canInvite, trackingProps } = this.props;
         const { type } = item;
@@ -664,6 +698,8 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             sharedLinkEditTooltipTargetingApi,
             showEnterEmailsCallout = false,
             showSharedLinkSettingsCallout = false,
+            showUpgradeInlineNotice = false,
+            showUpgradeOptions,
             submitting,
             tooltips = {},
             trackingProps,
@@ -682,6 +718,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             <div className={displayInModal ? '' : 'be bdl-UnifiedShareForm'}>
                 <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
                     {showShareRestrictionWarning && allShareRestrictionWarning}
+                    {showUpgradeOptions && showUpgradeInlineNotice && this.renderUpgradeInlineNotice()}
 
                     {!isEmailLinkSectionExpanded && !showCollaboratorList && this.renderInviteSection()}
 

@@ -285,6 +285,11 @@ const messages = defineMessages({
         description: 'Label for link to upgrade account',
         id: 'boxui.unifiedShare.upgradeLink',
     },
+    upgradeInlineNoticeTitle: {
+        defaultMessage: 'Upgrade Your Plan',
+        description: 'Title for the upgrade inline notice for upgrade user plan',
+        id: 'boxui.unifiedShare.upgradeInlineNoticeTitle',
+    },
     collaboratorAccessLink: {
         defaultMessage: 'collaborator access',
         description: 'Label for link to learn more about collaborator access',

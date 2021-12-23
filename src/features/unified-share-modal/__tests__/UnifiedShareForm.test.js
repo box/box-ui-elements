@@ -228,6 +228,17 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             expect(msg.prop('id')).toEqual(messages.upgradeCollaboratorAccessDescription.id);
         });
 
+        test('should render correct upgrade inline notice when showUpgradeInlineNotice and showUpgradeOptions is enabled', () => {
+            const wrapper = getWrapper({
+                canInvite: true,
+                isFetching: false,
+                showUpgradeInlineNotice: true,
+                showUpgradeOptions: true,
+            });
+            expect(wrapper.exists('UpgradeBadge')).toBe(false);
+            expect(wrapper.exists('InlineNotice')).toBe(true);
+        });
+
         test('should render a default component with correct Focus element and props when focusSharedLinkOnLoad is enabled', () => {
             const wrapper = getWrapper({
                 focusSharedLinkOnLoad: true,
