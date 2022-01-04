@@ -69,7 +69,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         });
     });
 
-    describe('handleActionDelete', () => {
+    describe(' Delete', () => {
         test('should call api endpoint helpers', () => {
             const handleDelete = jest.fn();
             const wrapper = getWrapper({ onVersionDelete: handleDelete, versionId: '123' });
@@ -191,10 +191,11 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         test('should set state to default values with error message', () => {
             const wrapper = getWrapper();
 
-            wrapper.instance().handleFetchError();
+            wrapper.instance().handleFetchError({ status: 500 });
 
             expect(wrapper.state()).toEqual({
                 error: messages.versionFetchError,
+                errorTitle: messages.versionServerError,
                 isLoading: false,
                 isWatermarked: false,
                 versionCount: 0,
@@ -203,12 +204,13 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             });
         });
         test('should set state to default values with error upsell message if showVersionUpsell is true', () => {
-            const wrapper = getWrapper({ showVersionUpsell: true });
+            const wrapper = getWrapper({ showVersionErrorWithUpsell: true });
 
-            wrapper.instance().handleFetchError();
+            wrapper.instance().handleFetchError({ status: 403 });
 
             expect(wrapper.state()).toEqual({
-                error: messages.versionFetchErrorUpsell,
+                error: messages.versionNotAvailable,
+                errorTitle: messages.versionAccessError,
                 isLoading: false,
                 isWatermarked: false,
                 versionCount: 0,

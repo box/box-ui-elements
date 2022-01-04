@@ -16,18 +16,18 @@ import PlainButton from '../../../components/plain-button/PlainButton';
 import { DEFAULT_FETCH_END } from '../../../constants';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
 import type { BoxItemVersion } from '../../../common/types/core';
-import type { openUpgradePlanModal } from './flowTypes';
 import './VersionsSidebar.scss';
 
 const MAX_VERSIONS = DEFAULT_FETCH_END;
 
 type Props = {
     error?: MessageDescriptor,
-    errorUpsell: boolean,
+    errorTitle?: MessageDescriptor,
     fileId: string,
     isLoading: boolean,
-    onUpgradeCTAClick: openUpgradePlanModal,
+    onUpgradeCTAClick: () => void,
     parentName: string,
+    showVersionHistoryErrorUpsell: boolean,
     versionCount: number,
     versionLimit: number,
     versions: Array<BoxItemVersion>,
@@ -35,17 +35,18 @@ type Props = {
 
 const VersionsSidebar = ({
     error,
-    errorUpsell,
+    errorTitle,
     onUpgradeCTAClick,
     isLoading,
     parentName,
+    showVersionHistoryErrorUpsell,
     versions,
     ...rest
 }: Props) => {
     const showLimit = versions.length >= MAX_VERSIONS;
     const showVersions = !!versions.length;
-    const showEmpty = !isLoading && !showVersions;
     const showError = !!error;
+    const showEmpty = !isLoading && !showVersions && !showError;
 
     return (
         <SidebarContent
@@ -61,24 +62,16 @@ const VersionsSidebar = ({
         >
             <LoadingIndicatorWrapper className="bcs-Versions-content" crawlerPosition="top" isLoading={isLoading}>
                 {showError && (
-                    <InlineError
-                        title={
-                            errorUpsell ? (
-                                <FormattedMessage {...messages.versionServerErrorUpsell} />
-                            ) : (
-                                <FormattedMessage {...messages.versionServerError} />
-                            )
-                        }
-                    >
+                    <InlineError title={<FormattedMessage {...errorTitle} />}>
                         <FormattedMessage {...error} />
-                        {errorUpsell && (
+                        {showVersionHistoryErrorUpsell && (
                             <PlainButton
                                 onClick={onUpgradeCTAClick}
-                                data-resin-target="jessica-to-update"
+                                data-resin-target="versioning_error_error_message_upgrade_cta"
                                 type="button"
-                                className="upgradeNowButton"
+                                className="bcs-Versions-upgrade"
                             >
-                                <FormattedMessage {...messages.versionServerErrorButton} />
+                                <FormattedMessage {...messages.versionUpgradeButton} />
                             </PlainButton>
                         )}
                     </InlineError>

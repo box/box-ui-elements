@@ -109,11 +109,12 @@ const messages = defineMessages({
         defaultMessage: 'File versions could not be retrieved.',
         description: 'Error message for the versions fetch call.',
     },
-    versionFetchErrorUpsell: {
-        id: 'be.sidebarVersions.fetchErrorUpsell',
+    versionNotAvailable: {
+        id: 'be.sidebarVersions.notAvailable',
         defaultMessage:
             'Sorry, version history is not available with your current account plan. To access versioning, select from one of our paid plans.',
-        description: 'Error message with upsell for the versions fetch call.',
+        description:
+            'Error message with upsell for the versions fetch call for users who dont have the version feature.',
     },
     versionLimitExceeded: {
         id: 'be.sidebarVersions.versionLimitExceeded',
@@ -146,13 +147,13 @@ const messages = defineMessages({
         defaultMessage: 'Server Error',
         description: 'Heading for inline error messages displayed due to a remote server issue.',
     },
-    versionServerErrorUpsell: {
-        id: 'be.sidebarVersions.serverErrorUpsell',
+    versionAccessError: {
+        id: 'be.sidebarVersions.accessError',
         defaultMessage: "You don't have access to versioning",
         description: 'Heading for inline error messages with upsell.',
     },
-    versionServerErrorButton: {
-        id: 'be.sidebarVersions.serverErrorButton',
+    versionUpgradeButton: {
+        id: 'be.sidebarVersions.versionUpgradeButton',
         defaultMessage: 'Upgrade Now',
         description: 'Text telling user to upgrade now.',
     },

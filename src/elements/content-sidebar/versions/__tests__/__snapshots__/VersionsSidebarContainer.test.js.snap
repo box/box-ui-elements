@@ -10,7 +10,6 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer render shoul
   onPreview={[Function]}
   onPromote={[Function]}
   onRestore={[Function]}
-  onUpgradeCTAClick={[Function]}
   parentName="activity"
   versionCount={Infinity}
   versionLimit={Infinity}

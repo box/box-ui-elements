@@ -18,7 +18,7 @@ import openUrlInsideIframe from '../../../utils/iframe';
 import VersionsSidebar from './VersionsSidebar';
 import VersionsSidebarAPI from './VersionsSidebarAPI';
 import { withAPIContext } from '../../common/api-context';
-import type { VersionActionCallback, VersionChangeCallback, openUpgradePlanModal } from './flowTypes';
+import type { VersionActionCallback, VersionChangeCallback } from './flowTypes';
 import type { BoxItemVersion, BoxItem, FileVersions } from '../../../common/types/core';
 
 type Props = {
@@ -27,7 +27,7 @@ type Props = {
     hasSidebarInitialized?: boolean,
     history: RouterHistory,
     match: Match,
-    onUpgradeCTAClick: openUpgradePlanModal,
+    onUpgradeCTAClick: () => void,
     onVersionChange: VersionChangeCallback,
     onVersionDelete: VersionActionCallback,
     onVersionDownload: VersionActionCallback,
@@ -35,15 +35,15 @@ type Props = {
     onVersionPromote: VersionActionCallback,
     onVersionRestore: VersionActionCallback,
     parentName: string,
-    showVersionUpsell: boolean,
+    showVersionErrorWithUpsell?: boolean,
     versionId?: string,
 };
 
 type State = {
     error?: MessageDescriptor,
+    errorTitle?: MessageDescriptor,
     isLoading: boolean,
     isWatermarked: boolean,
-    onUpgradeCTAClick: openUpgradePlanModal,
     versionCount: number,
     versionLimit: number,
     versions: Array<BoxItemVersion>,
@@ -67,7 +67,6 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     state: State = {
         isLoading: true,
         isWatermarked: false,
-        onUpgradeCTAClick: () => {},
         versionCount: Infinity,
         versionLimit: Infinity,
         versions: [],
@@ -167,12 +166,13 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.mergeResponse(data);
     };
 
-    handleFetchError = (): void => {
+    handleFetchError = (error: Object): void => {
+        const showVersionErrorWithUpsell = this.props.showVersionErrorWithUpsell && error.status === 403;
         this.setState({
-            error: this.props.showVersionUpsell ? messages.versionFetchErrorUpsell : messages.versionFetchError,
+            error: showVersionErrorWithUpsell ? messages.versionNotAvailable : messages.versionFetchError,
+            errorTitle: showVersionErrorWithUpsell ? messages.versionAccessError : messages.versionServerError,
             isLoading: false,
             isWatermarked: false,
-            onUpgradeCTAClick: this.props.onUpgradeCTAClick,
             versionCount: 0,
             versions: [],
         });
@@ -280,7 +280,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     render() {
-        const { fileId, parentName } = this.props;
+        const { fileId, parentName, onUpgradeCTAClick } = this.props;
 
         return (
             <VersionsSidebar
@@ -291,8 +291,8 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
                 onPromote={this.handleActionPromote}
                 onRestore={this.handleActionRestore}
                 parentName={parentName}
-                errorUpsell={this.props.showVersionUpsell}
-                onUpgradeCTAClick={this.props.onUpgradeCTAClick}
+                showVersionHistoryErrorUpsell={this.props.showVersionErrorWithUpsell}
+                onUpgradeCTAClick={onUpgradeCTAClick}
                 {...this.state}
             />
         );
