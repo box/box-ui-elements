@@ -542,7 +542,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     }
 
     renderUpgradeLinkDescription() {
-        const { openUpgradePlanModal = () => {}, showNewUpgradeText = false, trackingProps = {} } = this.props;
+        const { intl, openUpgradePlanModal = () => {}, showNewUpgradeText = false, trackingProps = {} } = this.props;
         const { inviteCollabsEmailTracking = {} } = trackingProps;
         const { upgradeLinkProps = {} } = inviteCollabsEmailTracking;
 
@@ -550,30 +550,30 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             <div className="upgrade-description">
                 <UpgradeBadge />
                 {showNewUpgradeText ? (
-                    <FormattedMessage
-                        values={{
-                            upgradeGetMoreAccessControlsLink: (
-                                <PlainButton
-                                    className="upgrade-link"
-                                    data-resin-target="external_collab_newcopy_upgrade_cta"
-                                    onClick={openUpgradePlanModal}
-                                    type="button"
-                                >
-                                    <FormattedMessage {...messages.upgradeLink} />
-                                </PlainButton>
-                            ),
-                            collaboratorAccessLink: (
-                                <Link
-                                    className="upgrade-link"
-                                    href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
-                                    target="_blank"
-                                >
-                                    <FormattedMessage {...messages.collaboratorAccessLink} />
-                                </Link>
-                            ),
-                        }}
-                        {...messages.upgradeCollaboratorAccessDescription}
-                    />
+                    <>
+                        <FormattedMessage
+                            values={{
+                                collaboratorAccessLink: (
+                                    <Link
+                                        className="upgrade-link"
+                                        href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
+                                        target="_blank"
+                                    >
+                                        {intl.formatMessage(messages.collaboratorAccessLink)}
+                                    </Link>
+                                ),
+                            }}
+                            {...messages.upgradeCollaboratorAccessDescription}
+                        />
+                        <PlainButton
+                            className="upgrade-link"
+                            data-resin-target="external_collab_newcopy_upgrade_cta"
+                            onClick={openUpgradePlanModal}
+                            type="button"
+                        >
+                            <FormattedMessage {...messages.upgradeGetMoreAccessControlsLink} />
+                        </PlainButton>
+                    </>
                 ) : (
                     <FormattedMessage
                         values={{
@@ -596,33 +596,31 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     }
 
     renderUpgradeInlineNotice() {
-        const { openUpgradePlanModal = () => {} } = this.props;
+        const { intl, openUpgradePlanModal = () => {} } = this.props;
         return (
             <InlineNotice title={<FormattedMessage {...messages.upgradeInlineNoticeTitle} />} type="info">
                 <FormattedMessage
                     values={{
-                        upgradeGetMoreAccessControlsLink: (
-                            <PlainButton
-                                className="upgrade-link"
-                                data-resin-target="external_collab_top_message_upgrade_cta"
-                                onClick={openUpgradePlanModal}
-                                type="button"
-                            >
-                                <FormattedMessage {...messages.upgradeLink} />
-                            </PlainButton>
-                        ),
                         collaboratorAccessLink: (
                             <Link
                                 className="upgrade-link"
                                 href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
                                 target="_blank"
                             >
-                                <FormattedMessage {...messages.collaboratorAccessLink} />
+                                {intl.formatMessage(messages.collaboratorAccessLink)}
                             </Link>
                         ),
                     }}
                     {...messages.upgradeCollaboratorAccessDescription}
                 />
+                <PlainButton
+                    className="upgrade-link"
+                    data-resin-target="external_collab_newcopy_upgrade_cta"
+                    onClick={openUpgradePlanModal}
+                    type="button"
+                >
+                    <FormattedMessage {...messages.upgradeLink} />
+                </PlainButton>
             </InlineNotice>
         );
     }

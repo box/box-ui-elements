@@ -276,7 +276,7 @@ const messages = defineMessages({
     },
     upgradeCollaboratorAccessDescription: {
         defaultMessage:
-            'Set the level of {collaboratorAccessLink} and increase security through one of our paid plans. {upgradeGetMoreAccessControlsLink}.',
+            'Set the level of {collaboratorAccessLink} and increase security through one of our paid plans. ',
         description: 'Description for cta to upgrade to get collaborator access controls',
         id: 'boxui.unifiedShare.upgradeCollaboratorAccessDescription',
     },

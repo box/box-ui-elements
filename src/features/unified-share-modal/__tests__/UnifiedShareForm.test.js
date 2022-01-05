@@ -224,7 +224,7 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
                 showUpgradeOptions: true,
             });
             expect(wrapper.exists('UpgradeBadge')).toBe(true);
-            const msg = wrapper.find('FormattedMessage');
+            const msg = wrapper.find('FormattedMessage').first();
             expect(msg.prop('id')).toEqual(messages.upgradeCollaboratorAccessDescription.id);
         });
 
