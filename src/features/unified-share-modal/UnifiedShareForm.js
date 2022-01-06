@@ -5,6 +5,7 @@ import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
+import FormattedCompMessage from '../../components/i18n/FormattedCompMessage';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
 import { Link } from '../../components/link';
 import Button from '../../components/button';
@@ -542,7 +543,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     }
 
     renderUpgradeLinkDescription() {
-        const { intl, openUpgradePlanModal = () => {}, showNewUpgradeText = false, trackingProps = {} } = this.props;
+        const { openUpgradePlanModal = () => {}, showNewUpgradeText = false, trackingProps = {} } = this.props;
         const { inviteCollabsEmailTracking = {} } = trackingProps;
         const { upgradeLinkProps = {} } = inviteCollabsEmailTracking;
 
@@ -551,27 +552,27 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                 <UpgradeBadge />
                 {showNewUpgradeText ? (
                     <>
-                        <FormattedMessage
-                            values={{
-                                collaboratorAccessLink: (
-                                    <Link
-                                        className="upgrade-link"
-                                        href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
-                                        target="_blank"
-                                    >
-                                        {intl.formatMessage(messages.collaboratorAccessLink)}
-                                    </Link>
-                                ),
-                            }}
-                            {...messages.upgradeCollaboratorAccessDescription}
-                        />
+                        <FormattedCompMessage
+                            id="boxui.unifiedShare.upgradeCollaboratorAccessDescription"
+                            description="Description for cta to upgrade to get collaborator access controls"
+                        >
+                            Set the level of{' '}
+                            <Link
+                                className="upgrade-link"
+                                href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
+                                target="_blank"
+                            >
+                                collaborator access
+                            </Link>{' '}
+                            and increase security through one of our paid plans.{' '}
+                        </FormattedCompMessage>
                         <PlainButton
                             className="upgrade-link"
                             data-resin-target="external_collab_newcopy_upgrade_cta"
                             onClick={openUpgradePlanModal}
                             type="button"
                         >
-                            <FormattedMessage {...messages.upgradeGetMoreAccessControlsLink} />
+                            <FormattedMessage {...messages.upgradeLink} />
                         </PlainButton>
                     </>
                 ) : (
@@ -596,26 +597,26 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     }
 
     renderUpgradeInlineNotice() {
-        const { intl, openUpgradePlanModal = () => {} } = this.props;
+        const { openUpgradePlanModal = () => {} } = this.props;
         return (
             <InlineNotice title={<FormattedMessage {...messages.upgradeInlineNoticeTitle} />} type="info">
-                <FormattedMessage
-                    values={{
-                        collaboratorAccessLink: (
-                            <Link
-                                className="upgrade-link"
-                                href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
-                                target="_blank"
-                            >
-                                {intl.formatMessage(messages.collaboratorAccessLink)}
-                            </Link>
-                        ),
-                    }}
-                    {...messages.upgradeCollaboratorAccessDescription}
-                />
+                <FormattedCompMessage
+                    id="boxui.unifiedShare.upgradeCollaboratorAccessDescription"
+                    description="Description for cta to upgrade to get collaborator access controls"
+                >
+                    Set the level of{' '}
+                    <Link
+                        className="upgrade-link"
+                        href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
+                        target="_blank"
+                    >
+                        collaborator access
+                    </Link>{' '}
+                    and increase security through one of our paid plans.{' '}
+                </FormattedCompMessage>
                 <PlainButton
                     className="upgrade-link"
-                    data-resin-target="external_collab_newcopy_upgrade_cta"
+                    data-resin-target="external_collab_top_message_upgrade_cta"
                     onClick={openUpgradePlanModal}
                     type="button"
                 >
