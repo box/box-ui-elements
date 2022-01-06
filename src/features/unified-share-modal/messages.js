@@ -274,12 +274,6 @@ const messages = defineMessages({
         description: 'Label for link to upgrade to get more access controls for inviting collaborators to an item',
         id: 'boxui.unifiedShare.upgradeGetMoreAccessControlsLink',
     },
-    upgradeCollaboratorAccessDescription: {
-        defaultMessage:
-            'Set the level of {collaboratorAccessLink} and increase security through one of our paid plans. {upgradeGetMoreAccessControlsLink}.',
-        description: 'Description for cta to upgrade to get collaborator access controls',
-        id: 'boxui.unifiedShare.upgradeCollaboratorAccessDescription',
-    },
     upgradeLink: {
         defaultMessage: 'Upgrade now',
         description: 'Label for link to upgrade account',
@@ -289,11 +283,6 @@ const messages = defineMessages({
         defaultMessage: 'Upgrade Your Plan',
         description: 'Title for the upgrade inline notice for upgrade user plan',
         id: 'boxui.unifiedShare.upgradeInlineNoticeTitle',
-    },
-    collaboratorAccessLink: {
-        defaultMessage: 'collaborator access',
-        description: 'Label for link to learn more about collaborator access',
-        id: 'boxui.unifiedShare.collaboratorAccessLink',
     },
     sharedLinkSettings: {
         defaultMessage: 'Link Settings',
