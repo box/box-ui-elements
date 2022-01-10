@@ -82,6 +82,7 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
                         }
                     >
                         <PresenceAvatar
+                            aria-hidden="true"
                             avatarUrl={avatarUrl}
                             id={id}
                             isActive={isActive}

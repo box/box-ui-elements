@@ -11,7 +11,7 @@ describe('OpenWith', () => {
     });
 
     it('A single integration', () => {
-        cy.route('GET', '**/files/*/open_with_integrations', 'fixture:open-with/integration-adobe');
+        cy.route('GET', '**/files/*/open_with_integrations', 'fixture:open-with/integration-google-docs');
         cy.visit('/Elements/ContentOpenWith');
 
         // The button should be enabled
@@ -20,7 +20,7 @@ describe('OpenWith', () => {
         // Hover over the Open With button
         getOpenWithContent().trigger('mouseover');
         // Tooltip should render on mouseover
-        cy.getTooltip().contains('Send this document for signature');
+        cy.getTooltip().contains('Open this file in your browser');
     });
 
     it('A custom integration', () => {
@@ -53,9 +53,6 @@ describe('OpenWith', () => {
             .contains('Google Docs (beta)');
         cy.get('@menuItem')
             .eq(2)
-            .contains('Adobe Sign');
-        cy.get('@menuItem')
-            .eq(3)
             .contains('My custom integration');
     });
 

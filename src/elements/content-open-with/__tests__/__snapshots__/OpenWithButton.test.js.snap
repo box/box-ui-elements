@@ -50,7 +50,7 @@ exports[`elements/content-open-with/OpenWithButton should render as disabled if 
     type="submit"
   >
     <OpenWithButtonContents>
-      <IconAdobeSign
+      <IconGoogleDocs
         className="bcow-integration-icon"
         dimension={26}
         height={26}

@@ -146,6 +146,7 @@ class Presence extends Component {
             containerAttributes,
             flyoutPosition,
             getLinkCallback,
+            intl,
             inviteCallback,
             maxAdditionalCollaboratorsNum,
             maxDisplayedAvatars,
@@ -204,6 +205,7 @@ class Presence extends Component {
             >
                 <PresenceAvatarList
                     ref={this.saveRefToContainer}
+                    aria-label={intl.formatMessage(messages.toggleButtonLabel)}
                     avatarAttributes={avatarAttributes}
                     className={classNames('presence-avatar-container', { 'dropdown-active': isDropdownActive })}
                     collaborators={collaborators}

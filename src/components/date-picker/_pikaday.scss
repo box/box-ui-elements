@@ -8,7 +8,6 @@
     @include common-typography;
     @include box-sizing;
 
-    position: relative;
     z-index: 9999;
     display: block;
     color: $bdl-gray-80;

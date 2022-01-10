@@ -383,6 +383,8 @@ export type USFProps = BaseUnifiedShareProps & {
     isFetching: boolean,
     /** Function for opening the Remove Link Confirm Modal */
     openConfirmModal: () => void,
+    /** Function for opening the Upgrade Plan Modal */
+    openUpgradePlanModal: () => void,
     /** Whether the FTUX tag should be rendered for the Can Edit option */
     sharedLinkEditTagTargetingApi?: TargetingApi,
     /** Whether the FTUX tooltip should be rendered for Editable Shared Links  */
@@ -391,6 +393,10 @@ export type USFProps = BaseUnifiedShareProps & {
     sharedLinkLoaded: boolean,
     /** Whether the FTUX tooltip should be rendered */
     shouldRenderFTUXTooltip: boolean,
+    /** Whether the new upgrade text should be rendered */
+    showNewUpgradeText?: boolean,
+    /** Whether the upgrade inline notice should be rendered */
+    showUpgradeInlineNotice?: boolean,
 };
 
 export type InviteCollaboratorsRequest = {

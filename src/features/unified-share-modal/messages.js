@@ -274,6 +274,16 @@ const messages = defineMessages({
         description: 'Label for link to upgrade to get more access controls for inviting collaborators to an item',
         id: 'boxui.unifiedShare.upgradeGetMoreAccessControlsLink',
     },
+    upgradeLink: {
+        defaultMessage: 'Upgrade now',
+        description: 'Label for link to upgrade account',
+        id: 'boxui.unifiedShare.upgradeLink',
+    },
+    upgradeInlineNoticeTitle: {
+        defaultMessage: 'Upgrade Your Plan',
+        description: 'Title for the upgrade inline notice for upgrade user plan',
+        id: 'boxui.unifiedShare.upgradeInlineNoticeTitle',
+    },
     sharedLinkSettings: {
         defaultMessage: 'Link Settings',
         description: 'Description of the shared link settings modal entry point. This shows link-specific options.',
