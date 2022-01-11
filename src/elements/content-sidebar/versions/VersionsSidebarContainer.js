@@ -27,7 +27,7 @@ type Props = {
     hasSidebarInitialized?: boolean,
     history: RouterHistory,
     match: Match,
-    onUpgradeCTAClick: () => void,
+    onUpgradeClick?: () => void,
     onVersionChange: VersionChangeCallback,
     onVersionDelete: VersionActionCallback,
     onVersionDownload: VersionActionCallback,
@@ -167,10 +167,11 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     handleFetchError = (error: Object): void => {
-        const showVersionErrorWithUpsell = this.props.showVersionErrorWithUpsell && error.status === 403;
+        const { showVersionErrorWithUpsell } = this.props;
+        const shouldShowVersionErrorWithUpsell = !!showVersionErrorWithUpsell && error.status === 403;
         this.setState({
-            error: showVersionErrorWithUpsell ? messages.versionNotAvailable : messages.versionFetchError,
-            errorTitle: showVersionErrorWithUpsell ? messages.versionAccessError : messages.versionServerError,
+            error: shouldShowVersionErrorWithUpsell ? messages.versionNotAvailable : messages.versionFetchError,
+            errorTitle: shouldShowVersionErrorWithUpsell ? messages.versionAccessError : messages.versionServerError,
             isLoading: false,
             isWatermarked: false,
             versionCount: 0,
@@ -280,7 +281,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     render() {
-        const { fileId, parentName, onUpgradeCTAClick } = this.props;
+        const { fileId, parentName, onUpgradeClick } = this.props;
 
         return (
             <VersionsSidebar
@@ -291,8 +292,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
                 onPromote={this.handleActionPromote}
                 onRestore={this.handleActionRestore}
                 parentName={parentName}
-                showVersionHistoryErrorUpsell={this.props.showVersionErrorWithUpsell}
-                onUpgradeCTAClick={onUpgradeCTAClick}
+                onUpgradeClick={onUpgradeClick}
                 {...this.state}
             />
         );

@@ -37,13 +37,12 @@ describe('elements/content-sidebar/versions/VersionsSidebar', () => {
             const wrapper = getWrapper({
                 error: messages.versionNotAvailable,
                 errorTitle: messages.versionAccessError,
-                showVersionHistoryErrorUpsell: true,
+                onUpgradeClick: () => {},
                 versions: [],
             });
 
             expect(wrapper.exists(InlineError)).toBe(true);
-            const errorButton = wrapper.find(PlainButton);
-            expect(errorButton.length).toBe(1);
+            expect(wrapper.exists(PlainButton)).toBe(true);
         });
 
         test('should show max versions text if max versions provided', () => {

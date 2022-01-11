@@ -25,28 +25,18 @@ type Props = {
     errorTitle?: MessageDescriptor,
     fileId: string,
     isLoading: boolean,
-    onUpgradeCTAClick: () => void,
+    onUpgradeClick?: () => void,
     parentName: string,
-    showVersionHistoryErrorUpsell: boolean,
     versionCount: number,
     versionLimit: number,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsSidebar = ({
-    error,
-    errorTitle,
-    onUpgradeCTAClick,
-    isLoading,
-    parentName,
-    showVersionHistoryErrorUpsell,
-    versions,
-    ...rest
-}: Props) => {
+const VersionsSidebar = ({ error, errorTitle, onUpgradeClick, isLoading, parentName, versions, ...rest }: Props) => {
     const showLimit = versions.length >= MAX_VERSIONS;
     const showVersions = !!versions.length;
     const showError = !!error;
-    const showEmpty = !isLoading && !showVersions && !showError;
+    const showEmpty = !isLoading && !showVersions && !onUpgradeClick;
 
     return (
         <SidebarContent
@@ -64,9 +54,9 @@ const VersionsSidebar = ({
                 {showError && (
                     <InlineError title={<FormattedMessage {...errorTitle} />}>
                         <FormattedMessage {...error} />
-                        {showVersionHistoryErrorUpsell && (
+                        {onUpgradeClick && (
                             <PlainButton
-                                onClick={onUpgradeCTAClick}
+                                onClick={onUpgradeClick}
                                 data-resin-target="versioning_error_error_message_upgrade_cta"
                                 type="button"
                                 className="bcs-Versions-upgrade"

@@ -37,6 +37,14 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show an
         id="be.sidebarVersions.fetchError"
       />
     </InlineError>
+    <div
+      className="bcs-Versions-empty"
+    >
+      <FormattedMessage
+        defaultMessage="No prior versions are available for this file."
+        id="be.sidebarVersions.empty"
+      />
+    </div>
   </LoadingIndicatorWrapper>
 </SidebarContent>
 `;
