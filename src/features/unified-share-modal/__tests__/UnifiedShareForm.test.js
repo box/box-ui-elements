@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { ITEM_TYPE_WEBLINK, ITEM_TYPE_FOLDER } from '../../../common/constants';
-import messages from '../messages';
 
 import { JUSTIFICATION_CHECKPOINT_EXTERNAL_COLLAB } from '../constants';
 
@@ -224,8 +223,8 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
                 showUpgradeOptions: true,
             });
             expect(wrapper.exists('UpgradeBadge')).toBe(true);
-            const msg = wrapper.find('FormattedMessage');
-            expect(msg.prop('id')).toEqual(messages.upgradeCollaboratorAccessDescription.id);
+            const msg = wrapper.find('FormattedCompMessage');
+            expect(msg.prop('id')).toEqual('boxui.unifiedShare.upgradeCollaboratorAccessDescription');
         });
 
         test('should render correct upgrade inline notice when showUpgradeInlineNotice and showUpgradeOptions is enabled', () => {
