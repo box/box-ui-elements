@@ -35,8 +35,8 @@ type Props = {
 const VersionsSidebar = ({ error, errorTitle, onUpgradeClick, isLoading, parentName, versions, ...rest }: Props) => {
     const showLimit = versions.length >= MAX_VERSIONS;
     const showVersions = !!versions.length;
-    const showError = !!error;
     const showEmpty = !isLoading && !showVersions && !onUpgradeClick;
+    const showError = !!error;
 
     return (
         <SidebarContent
