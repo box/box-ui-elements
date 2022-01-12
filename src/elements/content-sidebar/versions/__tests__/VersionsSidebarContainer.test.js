@@ -199,7 +199,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             });
         });
         test('should set state to default values with error upsell message if showVersionUpsell is true', () => {
-            const wrapper = getWrapper({ showVersionErrorWithUpsell: true });
+            const wrapper = getWrapper({ onUpgradeClick: () => {} });
 
             wrapper.instance().handleFetchError({ status: 403 });
 

@@ -35,7 +35,6 @@ type Props = {
     onVersionPromote: VersionActionCallback,
     onVersionRestore: VersionActionCallback,
     parentName: string,
-    showVersionErrorWithUpsell?: boolean,
     versionId?: string,
 };
 
@@ -167,8 +166,8 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     handleFetchError = (error: Object): void => {
-        const { showVersionErrorWithUpsell } = this.props;
-        const shouldShowVersionErrorWithUpsell = !!showVersionErrorWithUpsell && error.status === 403;
+        const { onUpgradeClick } = this.props;
+        const shouldShowVersionErrorWithUpsell = !!onUpgradeClick && error.status === 403;
         this.setState({
             error: shouldShowVersionErrorWithUpsell ? messages.versionNotAvailable : messages.versionFetchError,
             errorTitle: shouldShowVersionErrorWithUpsell ? messages.versionAccessError : messages.versionServerError,
@@ -291,8 +290,8 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
                 onPreview={this.handleActionPreview}
                 onPromote={this.handleActionPromote}
                 onRestore={this.handleActionRestore}
-                parentName={parentName}
                 onUpgradeClick={onUpgradeClick}
+                parentName={parentName}
                 {...this.state}
             />
         );
