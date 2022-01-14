@@ -5,7 +5,7 @@ import omit from 'lodash/omit';
 
 import ContentExplorerHeaderActions from './ContentExplorerHeaderActions';
 import ContentExplorerEmptyState from './ContentExplorerEmptyState';
-import ContentExplorerActionButtons from './ContentExplorerActionButtons';
+import ContentExplorerActionButtons, { getChosenItemsFromSelectedItems } from './ContentExplorerActionButtons';
 import ContentExplorerSelectAll from './ContentExplorerSelectAll';
 
 import ItemList from '../item-list';
@@ -380,6 +380,19 @@ class ContentExplorer extends Component {
         return <ContentExplorerEmptyState isSearch={isViewingSearchResults} />;
     };
 
+    getUpdatedChooseButtonProps = chooseButtonProps => {
+        const { selectedItems } = this.state;
+        const { contentExplorerMode } = this.props;
+        const chosenItems = getChosenItemsFromSelectedItems(selectedItems);
+        if (contentExplorerMode === ContentExplorerModes.SELECT_FOLDER && chosenItems.length === 0) {
+            return {
+                ...chooseButtonProps,
+                isDisabled: chooseButtonProps.isDisabled && this.getCurrentFolder().id === '0',
+            };
+        }
+        return chooseButtonProps;
+    };
+
     render() {
         const {
             actionButtonsProps,
@@ -504,7 +517,7 @@ class ContentExplorer extends Component {
                     actionButtonsProps={actionButtonsProps}
                     areButtonsDisabled={areActionButtonsDisabled}
                     cancelButtonProps={cancelButtonProps}
-                    chooseButtonProps={chooseButtonProps}
+                    chooseButtonProps={this.getUpdatedChooseButtonProps(chooseButtonProps)}
                     chooseButtonText={chooseButtonText}
                     contentExplorerMode={contentExplorerMode}
                     currentFolder={currentFolder}
