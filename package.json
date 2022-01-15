@@ -355,6 +355,7 @@
         "react-modal": "^3.8.1",
         "react-popper": "^1.3.4",
         "react-process-string": "^1.2.0",
+        "react-responsive": "^9.0.0-beta.5",
         "react-router-dom": "^5.0.0",
         "react-scrollbars-custom": "^4.0.21",
         "react-tether": "^1.0.0",
