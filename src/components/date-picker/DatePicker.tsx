@@ -51,6 +51,21 @@ const messages = defineMessages({
         description: 'Button for opening date picker',
         id: 'boxui.datePicker.chooseDate',
     },
+    dateInputRangeError: {
+        defaultMessage: 'Please enter a date between {minLocaleDate} and {maxLocaleDate}',
+        description: 'Error message when date is out of the minimum and maximum range',
+        id: 'boxui.datePicker.dateInputRangeError',
+    },
+    dateInputMaxError: {
+        defaultMessage: 'Please enter a date before {maxLocaleDate}',
+        description: 'Error message when date is later than the maximum date',
+        id: 'boxui.datePicker.dateInputMaxError',
+    },
+    dateInputMinError: {
+        defaultMessage: 'Please enter a date after {minLocaleDate}',
+        description: 'Error message when date is earlier than the minimum date',
+        id: 'boxui.datePicker.dateInputMinError',
+    },
 });
 
 const TOGGLE_DELAY_MS = 300;
@@ -58,8 +73,11 @@ const ENTER_KEY = 'Enter';
 const ESCAPE_KEY = 'Escape';
 const TAB_KEY = 'Tab';
 
+const ISO_DATE_FORMAT_PATTERN = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
+
 export enum DateFormat {
     ISO_STRING_DATE_FORMAT = 'isoString',
+    LOCALE_DATE_STRING_DATE_FORMAT = 'localeDateString',
     UTC_TIME_DATE_FORMAT = 'utcTime',
     UNIX_TIME_DATE_FORMAT = 'unixTime',
     UTC_ISO_STRING_DATE_FORMAT = 'utcISOString',
@@ -89,6 +107,8 @@ function getFormattedDate(date: Date | null, format: DateFormat) {
     switch (format) {
         case DateFormat.ISO_STRING_DATE_FORMAT:
             return date.toISOString();
+        case DateFormat.LOCALE_DATE_STRING_DATE_FORMAT:
+            return date.toLocaleDateString();
         case DateFormat.UTC_TIME_DATE_FORMAT:
             return convertDateToUnixMidnightTime(date);
         case DateFormat.UTC_ISO_STRING_DATE_FORMAT:
@@ -125,6 +145,8 @@ export interface DatePickerProps extends WrappedComponentProps {
     hideOptionalLabel?: boolean;
     /** Props that will be applied on the input element */
     inputProps?: Object;
+    /** Does the date input meet accessibility standards */
+    isAccessible?: boolean;
     /** Is the calendar always visible */
     isAlwaysVisible?: boolean;
     /** Is input clearable */
@@ -155,15 +177,20 @@ export interface DatePickerProps extends WrappedComponentProps {
     placeholder?: string;
     /** Resin tag */
     resinTarget?: string;
-    /** Does the date input meet accessibility standards */
-    isAccessible?: boolean;
     /** Date to set the input */
     value?: Date | null;
     /** Number of years, or an array containing an upper and lower range */
     yearRange?: number | Array<number>;
 }
 
-class DatePicker extends React.Component<DatePickerProps> {
+interface DatePickerState {
+    /** Is the date input invalid */
+    isDateInputInvalid: boolean;
+    /** Shows error message tooltip for invalid date input */
+    showDateInputError: boolean;
+}
+
+class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
     static defaultProps = {
         className: '',
         dateFormat: DateFormat.UNIX_TIME_DATE_FORMAT,
@@ -175,6 +202,11 @@ class DatePicker extends React.Component<DatePickerProps> {
         isKeyboardInputAllowed: false,
         isTextInputAllowed: false,
         yearRange: 10,
+    };
+
+    state = {
+        isDateInputInvalid: false,
+        showDateInputError: false,
     };
 
     errorMessageID = uniqueId('errorMessage');
@@ -191,6 +223,7 @@ class DatePicker extends React.Component<DatePickerProps> {
             isTextInputAllowed,
             maxDate,
             minDate,
+            onChange,
             value,
             yearRange,
         } = this.props;
@@ -206,6 +239,11 @@ class DatePicker extends React.Component<DatePickerProps> {
         // relative to browser timezone
         if (dateFormat === DateFormat.UTC_TIME_DATE_FORMAT && value) {
             defaultValue = convertUTCToLocal(value);
+
+            if (onChange) {
+                const formattedDate = this.formatValue(defaultValue);
+                onChange(defaultValue, formattedDate);
+            }
         }
         // Make sure the DST detection algorithm in browsers is up-to-date
         const year = new Date().getFullYear();
@@ -358,6 +396,28 @@ class DatePicker extends React.Component<DatePickerProps> {
         }
     };
 
+    getDateInputError = () => {
+        const { intl, maxDate = null, minDate = null } = this.props;
+        const { showDateInputError } = this.state;
+        const { formatMessage } = intl;
+
+        if (!showDateInputError) return '';
+
+        let dateInputError = '';
+        const maxLocaleDate = getFormattedDate(maxDate, DateFormat.LOCALE_DATE_STRING_DATE_FORMAT);
+        const minLocaleDate = getFormattedDate(minDate, DateFormat.LOCALE_DATE_STRING_DATE_FORMAT);
+
+        if (maxLocaleDate && minLocaleDate) {
+            dateInputError = formatMessage(messages.dateInputRangeError, { maxLocaleDate, minLocaleDate });
+        } else if (maxLocaleDate) {
+            dateInputError = formatMessage(messages.dateInputMaxError, { maxLocaleDate });
+        } else if (minLocaleDate) {
+            dateInputError = formatMessage(messages.dateInputMinError, { minLocaleDate });
+        }
+
+        return dateInputError;
+    };
+
     handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         const { isKeyboardInputAllowed, isTextInputAllowed, isAccessible } = this.props;
 
@@ -388,7 +448,8 @@ class DatePicker extends React.Component<DatePickerProps> {
     };
 
     handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { isAccessible, onChange } = this.props;
+        const { isAccessible, maxDate, minDate, onChange } = this.props;
+        const { isDateInputInvalid } = this.state;
 
         if (!isAccessible || !this.canUseDateInputType) {
             return;
@@ -398,9 +459,24 @@ class DatePicker extends React.Component<DatePickerProps> {
             event.stopPropagation();
         }
 
-        const date = event.target.value;
-        if (this.datePicker && date) {
-            const parsedDate = this.parseDisplayDateType(date);
+        const { value } = event.target;
+        if (this.datePicker && value) {
+            const parsedDate = this.parseDisplayDateType(value);
+
+            if (parsedDate) {
+                if ((minDate && parsedDate < minDate) || (maxDate && parsedDate > maxDate)) {
+                    this.datePicker.setDate(null, true);
+                    this.setState({ isDateInputInvalid: true });
+                    return;
+                }
+                // Reset the error styling on valid date input
+                if (isDateInputInvalid) {
+                    this.setState({ isDateInputInvalid: false, showDateInputError: false });
+                }
+            } else {
+                this.setState({ isDateInputInvalid: true });
+            }
+
             // Set date so Pikaday date picker value stays in sync with input
             this.datePicker.setDate(parsedDate, true);
 
@@ -408,11 +484,14 @@ class DatePicker extends React.Component<DatePickerProps> {
                 const formattedDate = this.formatValue(parsedDate);
                 onChange(parsedDate, formattedDate);
             }
+        } else if (isDateInputInvalid) {
+            this.setState({ isDateInputInvalid: false, showDateInputError: false });
         }
     };
 
     handleInputBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-        const { onBlur, isTextInputAllowed, isAccessible } = this.props;
+        const { isAccessible, isTextInputAllowed, onBlur } = this.props;
+        const { isDateInputInvalid } = this.state;
         const nextActiveElement = event.relatedTarget || document.activeElement;
 
         // This is mostly here to cancel out the pikaday hide() on blur
@@ -447,6 +526,8 @@ class DatePicker extends React.Component<DatePickerProps> {
         if ((isTextInputAllowed || (isAccessible && !this.canUseDateInputType)) && inputDate && inputDate.getDate()) {
             this.onSelectHandler(inputDate);
         }
+
+        if (isAccessible && isDateInputInvalid) this.setState({ showDateInputError: true });
     };
 
     handleButtonClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
@@ -494,7 +575,7 @@ class DatePicker extends React.Component<DatePickerProps> {
     };
 
     parseDisplayDateType = (dateString?: string | null): Date | null => {
-        if (dateString) {
+        if (dateString && ISO_DATE_FORMAT_PATTERN.test(dateString)) {
             // Calling new Date('YYYY-MM-DD') without 'T00:00:00' yields undesired results:
             // E.g. new Date('2017-06-01') => May 31 2017
             // E.g. new Date('2017-06-01T00:00:00') => June 01 2017
@@ -571,11 +652,11 @@ class DatePicker extends React.Component<DatePickerProps> {
             hideOptionalLabel,
             inputProps,
             intl,
+            isAccessible,
             isClearable,
             isDisabled,
             isRequired,
             isTextInputAllowed,
-            isAccessible,
             label,
             name,
             onFocus,
@@ -583,15 +664,17 @@ class DatePicker extends React.Component<DatePickerProps> {
             resinTarget,
             value,
         } = this.props;
-
+        const { isDateInputInvalid } = this.state;
         const { formatMessage } = intl;
+
+        const errorMessage = error || this.getDateInputError();
+        const hasError = !!errorMessage;
+
         const classes = classNames(className, 'date-picker-wrapper', {
             'is-accessible': isAccessible,
             'show-clear-btn': !!value,
-            'show-error': !!error,
+            'show-error': hasError,
         });
-
-        const hasError = !!error;
 
         const ariaAttrs = {
             'aria-invalid': hasError,
@@ -619,12 +702,13 @@ class DatePicker extends React.Component<DatePickerProps> {
             onChangeAttr = { onChange: noop };
         }
 
-        const fallbackPattern = '\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])';
         // "name" prop is required for pattern validation to be surfaced on form submit. See components/form-elements/form/Form.js
         // "title" prop is shown during constraint validation as a description of the pattern
         // See https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/pattern#usability
         const additionalAttrs =
-            isAccessible && !this.canUseDateInputType ? { name, pattern: fallbackPattern, title: 'YYYY-MM-DD' } : {};
+            isAccessible && !this.canUseDateInputType
+                ? { name, pattern: ISO_DATE_FORMAT_PATTERN.source, title: 'YYYY-MM-DD' }
+                : {};
 
         /* fixes proptype error about readonly field (not adding readonly so constraint validation works) */
         return (
@@ -639,9 +723,9 @@ class DatePicker extends React.Component<DatePickerProps> {
                             )}
                             <Tooltip
                                 className="date-picker-error-tooltip"
-                                isShown={!!error}
+                                isShown={hasError}
                                 position={errorTooltipPosition}
-                                text={error || ''}
+                                text={errorMessage || ''}
                                 theme={TooltipTheme.ERROR}
                             >
                                 {customInput ? (
@@ -678,7 +762,7 @@ class DatePicker extends React.Component<DatePickerProps> {
                                 )}
                             </Tooltip>
                             <span id={this.errorMessageID} className="accessibility-hidden" role="alert">
-                                {error}
+                                {errorMessage}
                             </span>
                         </>
                     </Label>
@@ -694,7 +778,7 @@ class DatePicker extends React.Component<DatePickerProps> {
                             <ClearBadge16 />
                         </PlainButton>
                     ) : null}
-                    {error ? (
+                    {errorMessage || isDateInputInvalid ? (
                         <Alert16
                             className="date-picker-icon-alert"
                             title={<FormattedMessage {...messages.iconAlertText} />}

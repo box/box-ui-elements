@@ -5,10 +5,12 @@ import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
+import FormattedCompMessage from '../../components/i18n/FormattedCompMessage';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
 import { Link } from '../../components/link';
 import Button from '../../components/button';
 import { UpgradeBadge } from '../../components/badge';
+import InlineNotice from '../../components/inline-notice';
 import PlainButton from '../../components/plain-button';
 import { ITEM_TYPE_WEBLINK } from '../../common/constants';
 import Tooltip from '../../components/tooltip';
@@ -421,6 +423,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             shouldRenderFTUXTooltip,
             showEnterEmailsCallout = false,
             showCalloutForUser = false,
+            showUpgradeInlineNotice = false,
             showUpgradeOptions,
             submitting,
             suggestedCollaborators,
@@ -508,7 +511,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             {...inviteCollabsEmailTracking}
                         >
                             {this.renderInviteePermissionsDropdown()}
-                            {showUpgradeOptions && this.renderUpgradeLinkDescription()}
+                            {showUpgradeOptions && !showUpgradeInlineNotice && this.renderUpgradeLinkDescription()}
                         </EmailForm>
                     </div>
                 </Tooltip>
@@ -539,30 +542,72 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         return avatarsContent;
     }
 
+    renderCollaboratorMessage(resinTarget: string) {
+        const { openUpgradePlanModal = () => {} } = this.props;
+        return (
+            <>
+                <FormattedCompMessage
+                    id="boxui.unifiedShare.upgradeCollaboratorAccessDescription"
+                    description="Description for cta to upgrade to get collaborator access controls"
+                >
+                    Set the level of{' '}
+                    <Link
+                        className="upgrade-link"
+                        href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
+                        target="_blank"
+                    >
+                        collaborator access
+                    </Link>{' '}
+                    and increase security through one of our paid plans.{' '}
+                </FormattedCompMessage>
+                <PlainButton
+                    className="upgrade-link"
+                    data-resin-target={resinTarget}
+                    onClick={openUpgradePlanModal}
+                    type="button"
+                >
+                    <FormattedMessage {...messages.upgradeLink} />
+                </PlainButton>
+            </>
+        );
+    }
+
     renderUpgradeLinkDescription() {
-        const { openUpgradePlanModal = () => {}, trackingProps = {} } = this.props;
+        const { openUpgradePlanModal = () => {}, showNewUpgradeText = false, trackingProps = {} } = this.props;
         const { inviteCollabsEmailTracking = {} } = trackingProps;
         const { upgradeLinkProps = {} } = inviteCollabsEmailTracking;
 
         return (
             <div className="upgrade-description">
                 <UpgradeBadge />
-                <FormattedMessage
-                    values={{
-                        upgradeGetMoreAccessControlsLink: (
-                            <PlainButton
-                                className="upgrade-link"
-                                onClick={openUpgradePlanModal}
-                                type="button"
-                                {...upgradeLinkProps}
-                            >
-                                <FormattedMessage {...messages.upgradeGetMoreAccessControlsLink} />
-                            </PlainButton>
-                        ),
-                    }}
-                    {...messages.upgradeGetMoreAccessControlsDescription}
-                />
+                {showNewUpgradeText ? (
+                    this.renderCollaboratorMessage('external_collab_newcopy_upgrade_cta')
+                ) : (
+                    <FormattedMessage
+                        values={{
+                            upgradeGetMoreAccessControlsLink: (
+                                <PlainButton
+                                    className="upgrade-link"
+                                    onClick={openUpgradePlanModal}
+                                    type="button"
+                                    {...upgradeLinkProps}
+                                >
+                                    <FormattedMessage {...messages.upgradeGetMoreAccessControlsLink} />
+                                </PlainButton>
+                            ),
+                        }}
+                        {...messages.upgradeGetMoreAccessControlsDescription}
+                    />
+                )}
             </div>
+        );
+    }
+
+    renderUpgradeInlineNotice() {
+        return (
+            <InlineNotice title={<FormattedMessage {...messages.upgradeInlineNoticeTitle} />} type="info">
+                {this.renderCollaboratorMessage('external_collab_top_message_upgrade_cta')}
+            </InlineNotice>
         );
     }
 
@@ -637,6 +682,8 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             sharedLinkEditTooltipTargetingApi,
             showEnterEmailsCallout = false,
             showSharedLinkSettingsCallout = false,
+            showUpgradeInlineNotice = false,
+            showUpgradeOptions,
             submitting,
             tooltips = {},
             trackingProps,
@@ -655,6 +702,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             <div className={displayInModal ? '' : 'be bdl-UnifiedShareForm'}>
                 <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
                     {showShareRestrictionWarning && allShareRestrictionWarning}
+                    {showUpgradeOptions && showUpgradeInlineNotice && this.renderUpgradeInlineNotice()}
 
                     {!isEmailLinkSectionExpanded && !showCollaboratorList && this.renderInviteSection()}
 
