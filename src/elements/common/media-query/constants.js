@@ -12,23 +12,20 @@ export const POINTER_COARSE = '(pointer: coarse)';
 export const ANY_POINTER_FINE = '(any-pointer: fine)';
 export const ANY_POINTER_COARSE = '(any-pointer: coarse)';
 
-export const POINTER_TYPE_FINE = 'fine';
-export const POINTER_TYPE_COARSE = 'coarse';
-export const POINTER_TYPE_NONE = 'none';
-
-export const HOVER_TYPE_HOVER = 'hover';
-export const HOVER_TYPE_NONE = 'none';
-
-export const VIEW_SIZE = {
-    SMALL: 'small',
-    MEDIUM: 'medium',
-    LARGE: 'large',
-    XLARGE: 'x-large',
+export const POINTER_TYPE = {
+    fine: 'fine',
+    coarse: 'coarse',
+    none: 'none',
 };
 
-// enum ViewSize {
-//     Small,
-//         Medium,
-//         Large,
-//         XLarge
-// }
+export const HOVER_TYPE = {
+    hover: 'hover',
+    none: 'none',
+};
+
+export const VIEW_SIZE = {
+    small: 'small',
+    medium: 'medium',
+    large: 'large',
+    xlarge: 'x-large',
+};

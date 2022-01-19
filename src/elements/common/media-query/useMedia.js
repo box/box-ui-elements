@@ -6,24 +6,30 @@ import {
     ANY_POINTER_COARSE,
     ANY_POINTER_FINE,
     HOVER,
-    HOVER_TYPE_HOVER,
-    HOVER_TYPE_NONE,
+    HOVER_TYPE,
     POINTER_COARSE,
     POINTER_FINE,
-    POINTER_TYPE_COARSE,
-    POINTER_TYPE_FINE,
-    POINTER_TYPE_NONE,
+    POINTER_TYPE,
     SIZE_LARGE,
     SIZE_MEDIUM,
     SIZE_SMALL,
     VIEW_SIZE,
 } from './constants';
-import type { MediaQuery, MediaPointerType, MediaShape } from './types';
+import type { MediaQuery, MediaShape } from './types';
 
-const getPointerCapabilities: MediaPointerType = (isFine: boolean, isCoarse: boolean) => {
-    if (!isFine && !isCoarse) return POINTER_TYPE_NONE;
-    if (isFine) return POINTER_TYPE_FINE;
-    return POINTER_TYPE_COARSE;
+const getPointerCapabilities = (isFine: boolean, isCoarse: boolean) => {
+    if (!isFine && !isCoarse) return POINTER_TYPE.none;
+    if (isFine) return POINTER_TYPE.fine;
+    return POINTER_TYPE.coarse;
+};
+
+const getViewDimensions = () => {
+    const viewWidth = window.innerWidth;
+    const viewHeight = window.innerHeight;
+    return {
+        viewWidth,
+        viewHeight,
+    };
 };
 
 /**
@@ -53,8 +59,8 @@ function useDeviceCapabilities() {
     const isHover: boolean = useQuery(HOVER);
     const isAnyHover: boolean = useQuery(ANY_HOVER);
 
-    const anyHover = isAnyHover ? HOVER_TYPE_HOVER : HOVER_TYPE_NONE;
-    const hover = isHover ? HOVER_TYPE_HOVER : HOVER_TYPE_NONE;
+    const anyHover = isAnyHover ? HOVER_TYPE.hover : HOVER_TYPE.none;
+    const hover = isHover ? HOVER_TYPE.hover : HOVER_TYPE.none;
     const pointer = getPointerCapabilities(useQuery(POINTER_FINE), useQuery(POINTER_COARSE));
     const anyPointer = getPointerCapabilities(useQuery(ANY_POINTER_FINE), useQuery(ANY_POINTER_COARSE));
 
@@ -75,17 +81,19 @@ function useDeviceSize() {
     const isMedium: boolean = useQuery(SIZE_MEDIUM);
     const isLarge: boolean = useQuery(SIZE_LARGE);
 
-    if (isSmall) return VIEW_SIZE.SMALL;
-    if (isMedium) return VIEW_SIZE.MEDIUM;
-    if (isLarge) return VIEW_SIZE.LARGE;
-    return VIEW_SIZE.XLARGE;
+    if (isSmall) return VIEW_SIZE.small;
+    if (isMedium) return VIEW_SIZE.medium;
+    if (isLarge) return VIEW_SIZE.large;
+    return VIEW_SIZE.xlarge;
 }
 
 function useMedia(): MediaShape {
     const deviceCapabilities = useDeviceCapabilities();
     const deviceSize = useDeviceSize();
+    const viewDimensions = getViewDimensions();
     return {
         ...deviceCapabilities,
+        ...viewDimensions,
         size: deviceSize,
     };
 }

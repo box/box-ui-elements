@@ -1,9 +1,9 @@
 // @flow
 
-import { POINTER_TYPE_NONE, POINTER_TYPE_FINE, POINTER_TYPE_COARSE } from './constants';
+import { POINTER_TYPE, HOVER_TYPE } from './constants';
 
-export type MediaPointerType = POINTER_TYPE_NONE | POINTER_TYPE_FINE | POINTER_TYPE_COARSE;
-export type MediaHoverType = 'none' | 'hover';
+export type MediaPointerType = POINTER_TYPE.none | POINTER_TYPE.coarse | POINTER_TYPE.fine;
+export type MediaHoverType = HOVER_TYPE.none | HOVER_TYPE.hover;
 
 export type MediaFeatures = {
     anyHover?: MediaHoverType,
@@ -17,10 +17,10 @@ export type MediaFeatures = {
 };
 
 export type MediaShape = {
-    anyHover: 'none' | 'hover',
-    anyPointer: 'none' | 'fine' | 'coarse',
-    hover: 'none' | 'hover',
-    pointer: 'none' | 'fine' | 'coarse',
+    anyHover: MediaHoverType,
+    anyPointer: MediaPointerType,
+    hover: MediaHoverType,
+    pointer: MediaPointerType,
     size: boolean,
 };
 
