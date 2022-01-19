@@ -1,10 +1,10 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import withMedia from '../withMedia';
+import withMediaQuery from '../withMediaQuery';
 
-describe('elements/common/media-query/withMedia', () => {
+describe('elements/common/media-query/withMediaQuery', () => {
     const WrappedComponent = () => <div />;
-    const WithMediaComponent = withMedia(WrappedComponent);
+    const WithMediaComponent = withMediaQuery(WrappedComponent);
 
     const getWrapper = props => shallow(<WithMediaComponent {...props} />);
 
