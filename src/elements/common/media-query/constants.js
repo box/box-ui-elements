@@ -18,3 +18,17 @@ export const POINTER_TYPE_NONE = 'none';
 
 export const HOVER_TYPE_HOVER = 'hover';
 export const HOVER_TYPE_NONE = 'none';
+
+export const VIEW_SIZE = {
+    SMALL: 'small',
+    MEDIUM: 'medium',
+    LARGE: 'large',
+    XLARGE: 'x-large',
+};
+
+// enum ViewSize {
+//     Small,
+//         Medium,
+//         Large,
+//         XLarge
+// }

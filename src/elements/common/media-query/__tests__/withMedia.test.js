@@ -13,10 +13,7 @@ describe('elements/common/media-query/withMedia', () => {
 
         const containerProps = container.find('WrappedComponent').props();
 
-        expect(containerProps.isSmall).not.toBeNull();
-        expect(containerProps.isMedium).not.toBeNull();
-        expect(containerProps.isLarge).not.toBeNull();
-        expect(containerProps.isExtraLarge).not.toBeNull();
+        expect(containerProps.size).not.toBeNull();
         expect(containerProps.pointer).not.toBeNull();
         expect(containerProps.anyPointer).not.toBeNull();
         expect(containerProps.hover).not.toBeNull();
