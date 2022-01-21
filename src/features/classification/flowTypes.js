@@ -44,11 +44,16 @@ type SharedLinkRestrictions = {
     accessLevel: SharedLinkAccessLevel,
 };
 
+type watermarkApplied = {
+    enabled?: boolean,
+};
+
 type Controls = {
     app?: ApplicationRestriction,
     download?: DownloadRestrictions,
     externalCollab?: ExternalCollabRestriction,
     sharedLink?: SharedLinkRestrictions,
+    watermark?: watermarkApplied,
 };
 
 type ControlsFormat = $Values<typeof SECURITY_CONTROLS_FORMAT>;
