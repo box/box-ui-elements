@@ -67,8 +67,7 @@ class SecurityControls extends React.Component<Props, State> {
         if (controlsFormat === FULL) {
             items = getFullSecurityControlsMessages(controls, maxAppCount);
         } else {
-            const shortMessage = getShortSecurityControlsMessage(controls);
-            items = shortMessage ? [shortMessage] : [];
+            items = getShortSecurityControlsMessage(controls);
 
             if (items.length && controlsFormat === SHORT_WITH_BTN) {
                 modalItems = getFullSecurityControlsMessages(controls, maxAppCount);

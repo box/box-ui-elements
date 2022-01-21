@@ -25,69 +25,75 @@ describe('features/classification/security-controls/utils', () => {
 
     describe('getShortSecurityControlsMessage()', () => {
         test('should return null when there are no restrictions', () => {
-            expect(getShortSecurityControlsMessage({})).toBeNull();
+            expect(getShortSecurityControlsMessage({})).toEqual([]);
         });
 
         test('should not return messages when shared link restriction has a "public" access level', () => {
             accessPolicy = { sharedLink: { accessLevel: PUBLIC } };
-            expect(getShortSecurityControlsMessage(accessPolicy)).toBeNull();
+            expect(getShortSecurityControlsMessage(accessPolicy)).toEqual([]);
         });
 
-        test('should return all restrictions message when all restrictions are present', () => {
-            accessPolicy = { sharedLink: {}, download: {}, externalCollab: {}, app: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy).message).toBe(messages.shortAllRestrictions);
+        test('should return correct message when all restrictions are present', () => {
+            accessPolicy = { sharedLink: {}, download: {}, externalCollab: {}, app: {}, watermark: {} };
+            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortAllRestrictions);
+            expect(getShortSecurityControlsMessage(accessPolicy)[1].message).toBe(messages.shortWatermarking);
         });
 
         test('should return all restrictions message when download, app and either shared link, or external collab restrictions are present', () => {
             accessPolicy = { sharedLink: {}, download: {}, app: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy).message).toBe(messages.shortAllRestrictions);
+            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortAllRestrictions);
             accessPolicy = { externalCollab: {}, download: {}, app: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy).message).toBe(messages.shortAllRestrictions);
+            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortAllRestrictions);
         });
 
         test('should return correct message when download and either shared link, or external collab restrictions are present', () => {
             accessPolicy = { sharedLink: {}, download: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy).message).toBe(messages.shortSharingDownload);
+            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortSharingDownload);
             accessPolicy = { externalCollab: {}, download: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy).message).toBe(messages.shortSharingDownload);
+            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortSharingDownload);
         });
 
         test('should return correct message when app and either shared link, or external collab restrictions are present', () => {
             accessPolicy = { sharedLink: {}, app: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy).message).toBe(messages.shortSharingApp);
+            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortSharingApp);
             accessPolicy = { externalCollab: {}, app: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy).message).toBe(messages.shortSharingApp);
+            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortSharingApp);
         });
 
         test('should return correct message when app and download restrictions are present', () => {
             accessPolicy = { download: {}, app: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy).message).toBe(messages.shortDownloadApp);
+            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortDownloadApp);
         });
 
         test('should return correct message when there are shared link or external collab restrictions', () => {
             accessPolicy = { sharedLink: {}, externalCollab: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy).message).toBe(messages.shortSharing);
+            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortSharing);
 
             accessPolicy = { sharedLink: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy).message).toBe(messages.shortSharing);
+            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortSharing);
 
             accessPolicy = { externalCollab: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy).message).toBe(messages.shortSharing);
+            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortSharing);
         });
 
         test('should return correct message when there is a download restriction', () => {
             accessPolicy = { download: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy).message).toBe(messages.shortDownload);
+            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortDownload);
         });
 
         test('should return correct message when there is a download restriction', () => {
             accessPolicy = { app: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy).message).toBe(messages.shortApp);
+            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortApp);
+        });
+
+        test('should return correct message when there is a watermark restriction', () => {
+            accessPolicy = { watermark: {} };
+            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortWatermarking);
         });
 
         test('should not return tooltipMessage', () => {
             accessPolicy = { sharedLink: {}, download: {}, externalCollab: {}, app: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy).tooltipMessage).toBeUndefined();
+            expect(getShortSecurityControlsMessage(accessPolicy)[0].tooltipMessage).toBeUndefined();
         });
     });
 
@@ -110,6 +116,15 @@ describe('features/classification/security-controls/utils', () => {
             expect(getFullSecurityControlsMessages(accessPolicy)).toEqual([
                 { message: messages.sharingCollabAndCompanyOnly },
             ]);
+        });
+
+        test('should include correct message when watermark is applied', () => {
+            accessPolicy = {
+                watermark: {
+                    enabled: true,
+                },
+            };
+            expect(getFullSecurityControlsMessages(accessPolicy)).toEqual([{ message: messages.watermarkingApplied }]);
         });
 
         test('should include correct message when external collab is blocked', () => {
