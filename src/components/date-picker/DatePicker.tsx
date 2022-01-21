@@ -708,8 +708,8 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         let additionalAttrs;
         if (isAccessible && this.canUseDateInputType) {
             additionalAttrs = {
-                ...(maxDate && { max: this.formatDisplayDateType(maxDate) }),
-                ...(minDate && { min: this.formatDisplayDateType(minDate) }),
+                max: this.formatDisplayDateType(maxDate) || '9999-12-31',
+                min: this.formatDisplayDateType(minDate) || '0001-01-01',
             };
         } else if (isAccessible && !this.canUseDateInputType) {
             // "name" prop is required for pattern validation to be surfaced on form submit. See components/form-elements/form/Form.js
