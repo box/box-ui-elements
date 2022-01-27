@@ -620,7 +620,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
 
         // De-emphasizing the Pikaday date picker because it does not meet accessibility standards
         // Screenreaders & navigating via keyboard will no longer pick up on this element
-        const accessibleAttrs = isAccessible ? { 'aria-hidden': true, tabindex: -1 } : {};
+        const accessibleAttrs = isAccessible ? { 'aria-hidden': true, tabIndex: -1 } : {};
 
         return (
             <PlainButton
