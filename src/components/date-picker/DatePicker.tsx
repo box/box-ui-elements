@@ -11,8 +11,6 @@ import { RESIN_TAG_TARGET } from '../../common/variables';
 import Alert16 from '../../icon/fill/Alert16';
 import Calendar16 from '../../icon/fill/Calendar16';
 import ClearBadge16 from '../../icon/fill/ClearBadge16';
-// @ts-ignore flow import
-import Browser from '../../utils/Browser';
 
 import AccessiblePikaday, { AccessiblePikadayOptions } from './AccessiblePikaday';
 import { ButtonType } from '../button';
@@ -668,11 +666,11 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         const { formatMessage } = intl;
 
         const errorMessage = error || this.getDateInputError();
-        const hasError = !!errorMessage;
+        const hasError = !!errorMessage || isDateInputInvalid;
+        const hasValue = !!value || isDateInputInvalid;
 
         const classes = classNames(className, 'date-picker-wrapper', {
-            'is-accessible': isAccessible,
-            'show-clear-btn': !!value,
+            'show-clear-btn': isClearable && hasValue && !isDisabled,
             'show-error': hasError,
         });
 
@@ -723,7 +721,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
                             )}
                             <Tooltip
                                 className="date-picker-error-tooltip"
-                                isShown={hasError}
+                                isShown={!!errorMessage}
                                 position={errorTooltipPosition}
                                 text={errorMessage || ''}
                                 theme={TooltipTheme.ERROR}
@@ -766,19 +764,17 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
                             </span>
                         </>
                     </Label>
-                    {isClearable && !!value && !isDisabled ? (
+                    {isClearable && hasValue && !isDisabled ? (
                         <PlainButton
                             aria-label={formatMessage(messages.dateClearButton)}
-                            className={classNames('date-picker-clear-btn', {
-                                'is-hidden': isAccessible && Browser.isFirefox(),
-                            })}
+                            className="date-picker-clear-btn"
                             onClick={this.clearDate}
                             type={ButtonType.BUTTON}
                         >
                             <ClearBadge16 />
                         </PlainButton>
                     ) : null}
-                    {errorMessage || isDateInputInvalid ? (
+                    {hasError ? (
                         <Alert16
                             className="date-picker-icon-alert"
                             title={<FormattedMessage {...messages.iconAlertText} />}
