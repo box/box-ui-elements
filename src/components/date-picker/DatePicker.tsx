@@ -352,6 +352,8 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
 
     onSelectHandler = (date: Date | null = null) => {
         const { onChange, isAccessible } = this.props;
+        const { isDateInputInvalid } = this.state;
+
         if (onChange) {
             const formattedDate = this.formatValue(date);
             onChange(date, formattedDate);
@@ -365,7 +367,12 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             }
             if (this.datePicker && this.datePicker.isVisible()) {
                 this.datePicker.hide();
+                this.focusDatePicker();
             }
+        }
+
+        if (isDateInputInvalid) {
+            this.setState({ isDateInputInvalid: false, showDateInputError: false });
         }
     };
 
@@ -388,7 +395,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
     shouldStayClosed = false;
 
     focusDatePicker = () => {
-        // By default, this will open the datepicker too
+        // This also opens the date picker when isAccessible is disabled
         if (this.dateInputEl) {
             this.dateInputEl.focus();
         }
@@ -463,7 +470,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
 
             if (parsedDate) {
                 if ((minDate && parsedDate < minDate) || (maxDate && parsedDate > maxDate)) {
-                    this.datePicker.setDate(null, true);
+                    this.datePicker.setDate(null);
                     this.setState({ isDateInputInvalid: true });
                     return;
                 }
@@ -540,6 +547,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
 
             if (this.datePicker.isVisible()) {
                 this.datePicker.hide();
+                this.focusDatePicker();
             } else {
                 this.datePicker.show();
             }
@@ -589,11 +597,18 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
     };
 
     clearDate = (event: React.SyntheticEvent<HTMLButtonElement>) => {
-        event.preventDefault(); // so datepicker doesn't open after clearing
+        // Prevents the date picker from opening after clearing
+        event.preventDefault();
+        const { isAccessible } = this.props;
+
         if (this.datePicker) {
             this.datePicker.setDate(null);
         }
         this.onSelectHandler(null);
+
+        if (isAccessible) {
+            this.focusDatePicker();
+        }
     };
 
     /** Determines whether a new date input falls back to a text input or not */
