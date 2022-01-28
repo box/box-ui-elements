@@ -2,6 +2,7 @@ const setDate = jest.fn();
 
 const Pikaday = jest.fn().mockImplementation(() => {
     return {
+        el: document.createElement('div'),
         getDate: () => {},
         gotoDate: () => {},
         setDate,

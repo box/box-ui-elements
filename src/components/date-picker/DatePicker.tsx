@@ -671,6 +671,8 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             isRequired,
             isTextInputAllowed,
             label,
+            maxDate,
+            minDate,
             name,
             onFocus,
             placeholder,
@@ -706,6 +708,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         } else {
             valueAttr = { value: this.formatDisplay(value) };
         }
+
         let onChangeAttr;
         if (isAccessible && this.canUseDateInputType) {
             onChangeAttr = { onChange: this.handleOnChange };
@@ -717,13 +720,20 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             onChangeAttr = { onChange: noop };
         }
 
-        // "name" prop is required for pattern validation to be surfaced on form submit. See components/form-elements/form/Form.js
-        // "title" prop is shown during constraint validation as a description of the pattern
-        // See https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/pattern#usability
-        const additionalAttrs =
-            isAccessible && !this.canUseDateInputType
-                ? { name, pattern: ISO_DATE_FORMAT_PATTERN.source, title: 'YYYY-MM-DD' }
-                : {};
+        let additionalAttrs;
+        if (isAccessible && this.canUseDateInputType) {
+            additionalAttrs = {
+                max: this.formatDisplayDateType(maxDate) || '9999-12-31',
+                min: this.formatDisplayDateType(minDate) || '0001-01-01',
+            };
+        } else if (isAccessible && !this.canUseDateInputType) {
+            // "name" prop is required for pattern validation to be surfaced on form submit. See components/form-elements/form/Form.js
+            // "title" prop is shown during constraint validation as a description of the pattern
+            // See https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/pattern#usability
+            additionalAttrs = { name, pattern: ISO_DATE_FORMAT_PATTERN.source, title: 'YYYY-MM-DD' };
+        } else {
+            additionalAttrs = {};
+        }
 
         return (
             <div className={classes}>
