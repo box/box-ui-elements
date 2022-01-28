@@ -516,7 +516,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             onBlur(event);
         }
 
-        // Since we Fire parent onChange event if isTextInputAllowed
+        // Since we fire parent onChange event if isTextInputAllowed,
         // fire it on blur if the user typed a correct date format
         let inputDate: Date | null | undefined = null;
 
@@ -712,6 +712,8 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         } else if (isTextInputAllowed || (isAccessible && !this.canUseDateInputType)) {
             onChangeAttr = {};
         } else {
+            // Fixes prop type error about read-only field
+            // Not adding readOnly so constraint validation works
             onChangeAttr = { onChange: noop };
         }
 
@@ -723,7 +725,6 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
                 ? { name, pattern: ISO_DATE_FORMAT_PATTERN.source, title: 'YYYY-MM-DD' }
                 : {};
 
-        /* fixes proptype error about readonly field (not adding readonly so constraint validation works) */
         return (
             <div className={classes}>
                 <span className="date-picker-icon-holder">

@@ -20,6 +20,7 @@ class AccessiblePikaday extends Pikaday {
         // See https://github.com/Pikaday/Pikaday/blob/master/pikaday.js#L671
         //     https://github.com/Pikaday/Pikaday/blob/master/pikaday.js#L695-L703
         if (this.accessibleFieldEl) {
+            this.el.classList.add('is-bound');
             document.body.appendChild(this.el);
 
             this.accessibleFieldEl.addEventListener('blur', this.handleBlur);
