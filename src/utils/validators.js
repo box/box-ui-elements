@@ -1,5 +1,5 @@
 // @flow
-import Address from '@hapi/address';
+import Address from '@sideway/address';
 
 function hostnameValidator(value: string): boolean {
     // @see https://github.com/hapijs/joi/blame/3516cf0b995c9fe415634c4612c0ac2f8792f0b4/lib/types/string/index.js#L530
