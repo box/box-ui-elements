@@ -23,10 +23,11 @@
     }
 
     .date-picker-input {
+        min-width: 160px;
         height: 32px;
         margin-top: 5px;
         margin-bottom: 0;
-        padding-right: 30px;
+        padding-right: 6px;
         text-overflow: ellipsis;
 
         &::-webkit-calendar-picker-indicator {
@@ -45,6 +46,7 @@
         right: 7px;
         bottom: 8px;
         display: inline-flex;
+        background-color: $white;
     }
 
     .date-picker-open-btn:hover {
@@ -67,10 +69,6 @@
         path {
             transition: fill linear .1s;
             fill: $bdl-gray-50;
-        }
-
-        &.is-hidden {
-            opacity: 0;
         }
     }
 
@@ -105,21 +103,19 @@
         }
     }
 
-    &.show-clear-btn.show-error {
-        .date-picker-clear-btn,
-        .date-picker-clear-btn:hover,
-        .date-picker-clear-btn:active {
-            right: 25px;
-        }
-
+    &.show-error {
         .date-picker-input {
-            padding-right: 50px;
+            border-color: $bdl-watermelon-red;
         }
     }
 
-    &.is-accessible {
-        .date-picker-input {
-            min-width: 135px;
+    &.show-clear-btn.show-error {
+        .date-picker-clear-btn {
+            right: 25px;
+        }
+
+        .date-picker-icon-alert {
+            right: 42px;
         }
     }
 }

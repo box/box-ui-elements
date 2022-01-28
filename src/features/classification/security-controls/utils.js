@@ -15,47 +15,41 @@ import {
     SHARED_LINK_ACCESS_LEVEL,
 } from '../constants';
 
-const { SHARED_LINK, DOWNLOAD, EXTERNAL_COLLAB, APP } = ACCESS_POLICY_RESTRICTION;
+const { SHARED_LINK, DOWNLOAD, EXTERNAL_COLLAB, APP, WATERMARK } = ACCESS_POLICY_RESTRICTION;
 const { DEFAULT, WITH_APP_LIST, WITH_OVERFLOWN_APP_LIST } = APP_RESTRICTION_MESSAGE_TYPE;
 const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
 const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
 const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY, PUBLIC } = SHARED_LINK_ACCESS_LEVEL;
 
-const getShortSecurityControlsMessage = (controls: Controls): ?MessageItem => {
-    const { sharedLink, download, externalCollab, app } = controls;
+const getShortSecurityControlsMessage = (controls: Controls): Array<MessageItem> => {
+    const items = [];
+    const { sharedLink, download, externalCollab, app, watermark } = controls;
+
     // Shared link and external collab restrictions are grouped
     // together as generic "sharing" restrictions
     const sharing = (sharedLink && sharedLink.accessLevel !== PUBLIC) || externalCollab;
 
     if (sharing && download && app) {
-        return { message: messages.shortAllRestrictions };
+        items.push({ message: messages.shortAllRestrictions });
+    } else if (sharing && download) {
+        items.push({ message: messages.shortSharingDownload });
+    } else if (sharing && app) {
+        items.push({ message: messages.shortSharingApp });
+    } else if (download && app) {
+        items.push({ message: messages.shortDownloadApp });
+    } else if (sharing) {
+        items.push({ message: messages.shortSharing });
+    } else if (download) {
+        items.push({ message: messages.shortDownload });
+    } else if (app) {
+        items.push({ message: messages.shortApp });
     }
 
-    if (sharing && download) {
-        return { message: messages.shortSharingDownload };
+    if (watermark) {
+        items.push({ message: messages.shortWatermarking });
     }
 
-    if (sharing && app) {
-        return { message: messages.shortSharingApp };
-    }
-
-    if (download && app) {
-        return { message: messages.shortDownloadApp };
-    }
-
-    if (sharing) {
-        return { message: messages.shortSharing };
-    }
-
-    if (download) {
-        return { message: messages.shortDownload };
-    }
-
-    if (app) {
-        return { message: messages.shortApp };
-    }
-
-    return null;
+    return items;
 };
 
 const getSharedLinkMessages = (controls: Controls): Array<MessageItem> => {
@@ -73,6 +67,16 @@ const getSharedLinkMessages = (controls: Controls): Array<MessageItem> => {
             // no-op
             break;
     }
+    return items;
+};
+
+const getWatermarkingMessages = (controls: Controls): Array<MessageItem> => {
+    const items = [];
+    const isWatermarkEnabled = getProp(controls, `${WATERMARK}.enabled`, false);
+    if (isWatermarkEnabled) {
+        items.push({ message: messages.watermarkingApplied });
+    }
+
     return items;
 };
 
@@ -191,6 +195,7 @@ const getFullSecurityControlsMessages = (controls: Controls, maxAppCount?: numbe
         ...getExternalCollabMessages(controls),
         ...getDownloadMessages(controls),
         ...getAppDownloadMessages(controls, maxAppCount),
+        ...getWatermarkingMessages(controls),
     ];
     return items;
 };

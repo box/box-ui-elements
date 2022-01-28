@@ -24,6 +24,11 @@ const messages = defineMessages({
             'Short summary displayed for classification when an application download restriction is applied to it',
         id: 'boxui.securityControls.shortApp',
     },
+    shortWatermarking: {
+        defaultMessage: 'Watermarking applied',
+        description: 'Short summary displayed for classification when watermarking is applied to it',
+        id: 'boxui.securityControls.shortWatermarking',
+    },
     shortSharingDownload: {
         defaultMessage: 'Sharing and download restrictions apply',
         description:
@@ -57,6 +62,11 @@ const messages = defineMessages({
         defaultMessage: 'Shared links cannot be made publicly accessible.',
         description: 'Bullet point that summarizes collaborators shared link restriction applied to classification',
         id: 'boxui.securityControls.sharingCollabAndCompanyOnly',
+    },
+    watermarkingApplied: {
+        defaultMessage: 'Watermarking will be applied for Previewer Uploaders, Previewers and Viewers.',
+        description: 'Bullet point that summarizes watermarking applied to classification',
+        id: 'boxui.securityControls.watermarkingApplied',
     },
     externalCollabBlock: {
         defaultMessage: 'External collaboration restricted.',
