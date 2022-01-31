@@ -389,7 +389,7 @@ class Flyout extends React.Component<Props, State> {
             onMouseEnter: this.handleButtonHover,
             onMouseLeave: this.handleButtonHoverLeave,
             role: 'button',
-            tabindex: '0',
+            tabIndex: '0',
             'aria-haspopup': 'true',
             'aria-expanded': isVisible ? 'true' : 'false',
         };
