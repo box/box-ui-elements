@@ -89,7 +89,6 @@ describe('components/tooltip/Tooltip', () => {
             expect(component.is('button')).toBe(true);
             expect(component.prop('onBlur')).toBeTruthy();
             expect(component.prop('onFocus')).toBeTruthy();
-            expect(component.prop('onKeyDown')).toBeTruthy();
             expect(component.prop('onMouseEnter')).toBeTruthy();
             expect(component.prop('onMouseLeave')).toBeTruthy();
             expect(component.prop('tabIndex')).toEqual('0');
@@ -477,18 +476,26 @@ describe('components/tooltip/Tooltip', () => {
 
     describe('handleKeyDown()', () => {
         test('should update isShown state only when escape key is pressed', () => {
+            const map: { [key: string]: Function } = {};
+            document.addEventListener = jest.fn().mockImplementationOnce((event, cb) => {
+                map[event] = cb;
+            });
             const wrapper = shallow(
                 <Tooltip text="hi">
                     <button />
                 </Tooltip>,
             );
             wrapper.setState({ isShown: true });
-
-            wrapper.find('button').simulate('keydown', { key: 'Escape' });
+            map.keydown({ key: 'Escape' });
+            expect(document.addEventListener).toHaveBeenCalledWith('keydown', expect.anything());
             expect(wrapper.state('isShown')).toBe(false);
         });
 
         test('should not update isShown state only when some other key is pressed', () => {
+            const map: { [key: string]: Function } = {};
+            document.addEventListener = jest.fn().mockImplementationOnce((event, cb) => {
+                map[event] = cb;
+            });
             const wrapper = shallow(
                 <Tooltip text="hi">
                     <button />
@@ -496,7 +503,8 @@ describe('components/tooltip/Tooltip', () => {
             );
             wrapper.setState({ isShown: true });
 
-            wrapper.find('button').simulate('keydown', { key: 'Space' });
+            map.keydown({ key: 'Space' });
+            expect(document.addEventListener).toHaveBeenCalledWith('keydown', expect.anything());
             expect(wrapper.state('isShown')).toBe(true);
         });
 

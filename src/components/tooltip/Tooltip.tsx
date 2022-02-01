@@ -130,11 +130,20 @@ class Tooltip extends React.Component<TooltipProps, State> {
         this.setState({ hasRendered: true });
     }
 
-    componentDidUpdate(prevProps: TooltipProps) {
+    componentDidUpdate(prevProps: TooltipProps, prevState: State) {
+        const isControlled = this.isControlled();
+
         // Reset wasClosedByUser state when isShown transitions from false to true
-        if (this.isControlled()) {
+        if (isControlled) {
             if (!prevProps.isShown && this.props.isShown) {
                 this.setState({ wasClosedByUser: false });
+            }
+        } else {
+            if (!prevState.isShown && this.state.isShown) {
+                document.addEventListener('keydown', this.handleKeyDown);
+            }
+            if (prevState.isShown && !this.state.isShown) {
+                document.removeEventListener('keydown', this.handleKeyDown);
             }
         }
     }
@@ -158,7 +167,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
         }
     };
 
-    fireChildEvent = (type: string, event: React.SyntheticEvent<HTMLElement>) => {
+    fireChildEvent = (type: string, event: React.SyntheticEvent<HTMLElement> | Event) => {
         const { children } = this.props;
         const handler = (children as React.ReactElement).props[type];
         if (handler) {
@@ -196,7 +205,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
         return typeof isShownProp !== 'undefined';
     };
 
-    handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+    handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
             this.setState({ isShown: false });
         }
@@ -278,7 +287,6 @@ class Tooltip extends React.Component<TooltipProps, State> {
         if (!isControlled) {
             componentProps.onBlur = this.handleBlur;
             componentProps.onFocus = this.handleFocus;
-            componentProps.onKeyDown = this.handleKeyDown;
             componentProps.onMouseEnter = this.handleMouseEnter;
             componentProps.onMouseLeave = this.handleMouseLeave;
 
