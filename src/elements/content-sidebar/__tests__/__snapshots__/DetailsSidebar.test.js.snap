@@ -1,28 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsSidebar with access stats 1`] = `
-<SidebarContent
-  className="bcs-details"
-  elementId=""
-  sidebarView="details"
-  title={
-    <FormattedMessage
-      defaultMessage="Details"
-      id="be.sidebarDetailsTitle"
-    />
-  }
->
-  <SidebarAccessStats
-    file={
-      Object {
-        "description": "bar",
-        "id": "foo",
-      }
-    }
-  />
-</SidebarContent>
-`;
-
 exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsSidebar with all components 1`] = `
 <SidebarContent
   className="bcs-details"
@@ -62,14 +39,6 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
     }
     onEdit={[Function]}
   />
-  <SidebarAccessStats
-    file={
-      Object {
-        "description": "bar",
-        "id": "foo",
-      }
-    }
-  />
   <SidebarSection
     className=""
     interactionTarget="fileproperties"
@@ -97,7 +66,6 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
         }
       }
       hasRetentionPolicy={true}
-      isLoading={false}
       onDescriptionChange={[Function]}
     />
   </SidebarSection>
@@ -162,7 +130,6 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
         }
       }
       hasRetentionPolicy={false}
-      isLoading={false}
       onDescriptionChange={[Function]}
     />
   </SidebarSection>

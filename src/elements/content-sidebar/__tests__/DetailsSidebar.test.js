@@ -6,7 +6,6 @@ import { SIDEBAR_FIELDS_TO_FETCH } from '../../../utils/fields';
 import { DetailsSidebarComponent as DetailsSidebar } from '../DetailsSidebar';
 
 jest.mock('../SidebarFileProperties', () => 'SidebarFileProperties');
-jest.mock('../SidebarAccessStats', () => 'SidebarAccessStats');
 jest.mock('../SidebarClassification', () => 'SidebarClassification');
 
 const file = {
@@ -17,7 +16,6 @@ const file = {
 describe('elements/content-sidebar/DetailsSidebar', () => {
     let api;
     let getFile;
-    let getStats;
     let setFileDescription;
     const onError = jest.fn();
     const getWrapper = (props, options) =>
@@ -34,15 +32,11 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
 
     beforeEach(() => {
         getFile = jest.fn().mockResolvedValue(file);
-        getStats = jest.fn();
         setFileDescription = jest.fn();
         api = {
             getFileAPI: jest.fn().mockImplementation(() => ({
                 getFile,
                 setFileDescription,
-            })),
-            getFileAccessStatsAPI: jest.fn().mockImplementation(() => ({
-                getFileAccessStats: getStats,
             })),
         };
     });
@@ -74,7 +68,6 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                     classification: { definition: 'message', name: 'name' },
                     hasProperties: true,
                     hasNotices: true,
-                    hasAccessStats: true,
                     hasClassification: true,
                     hasRetentionPolicy: true,
                     hasVersions: true,
@@ -102,18 +95,6 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             const wrapper = getWrapper(
                 {
                     hasNotices: true,
-                },
-                { disableLifecycleMethods: true },
-            );
-            wrapper.setState({ file });
-
-            expect(wrapper).toMatchSnapshot();
-        });
-
-        test('should render DetailsSidebar with access stats', () => {
-            const wrapper = getWrapper(
-                {
-                    hasAccessStats: true,
                 },
                 { disableLifecycleMethods: true },
             );
@@ -151,145 +132,11 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             });
             instance = wrapper.instance();
             instance.fetchFile = jest.fn();
-            instance.fetchAccessStats = jest.fn();
         });
 
         test('should fetch the file information', () => {
             instance.componentDidMount();
             expect(instance.fetchFile).toHaveBeenCalled();
-            expect(instance.fetchAccessStats).not.toHaveBeenCalled();
-        });
-
-        test('should fetch the file info and access stats', () => {
-            wrapper.setProps({
-                hasAccessStats: true,
-                hasClassification: true,
-            });
-            instance.componentDidMount();
-            expect(instance.fetchFile).toHaveBeenCalled();
-            expect(instance.fetchAccessStats).toHaveBeenCalled();
-        });
-    });
-
-    describe('fetchAccessStatsSuccessCallback()', () => {
-        let wrapper;
-        let instance;
-        beforeEach(() => {
-            wrapper = getWrapper(
-                {
-                    hasAccessStats: true,
-                },
-                {
-                    disableLifecycleMethods: true,
-                },
-            );
-            instance = wrapper.instance();
-            instance.setState = jest.fn();
-        });
-
-        test('should short circuit if access stats is disabled', () => {
-            wrapper.setProps({
-                hasAccessStats: false,
-            });
-            instance.fetchAccessStatsSuccessCallback('stats');
-            expect(instance.setState).not.toHaveBeenCalled();
-        });
-
-        test('should update the file state', () => {
-            instance.fetchAccessStatsSuccessCallback('stats');
-            expect(instance.setState).toBeCalledWith({
-                isLoadingAccessStats: false,
-                accessStats: 'stats',
-                accessStatsError: undefined,
-            });
-        });
-    });
-
-    describe('fetchAccessStatsErrorCallback()', () => {
-        let wrapper;
-        let instance;
-        beforeEach(() => {
-            wrapper = getWrapper(
-                {
-                    hasAccessStats: true,
-                },
-                {
-                    disableLifecycleMethods: true,
-                },
-            );
-            instance = wrapper.instance();
-            instance.setState = jest.fn();
-        });
-
-        test('should short circuit if access stats is disabled', () => {
-            wrapper.setProps({
-                hasAccessStats: false,
-            });
-            instance.fetchAccessStatsSuccessCallback('stats');
-            expect(instance.setState).not.toHaveBeenCalled();
-        });
-
-        test('should set a maskError if there is an error in fetching the access stats', () => {
-            instance.fetchAccessStatsErrorCallback();
-            expect(instance.setState).toBeCalledWith({
-                isLoadingAccessStats: false,
-                accessStats: undefined,
-                accessStatsError: {
-                    maskError: {
-                        errorHeader: messages.fileAccessStatsErrorHeaderMessage,
-                        errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
-                    },
-                },
-            });
-        });
-
-        test('should set an error if user is forbidden from fetching the access stats', () => {
-            const error = {
-                status: 403,
-            };
-            instance.fetchAccessStatsErrorCallback(error);
-            expect(instance.setState).toBeCalledWith({
-                isLoadingAccessStats: false,
-                accessStats: undefined,
-                accessStatsError: {
-                    error: messages.fileAccessStatsPermissionsError,
-                },
-            });
-        });
-    });
-
-    describe('fetchAccessStats()', () => {
-        let wrapper;
-        let instance;
-        beforeEach(() => {
-            wrapper = getWrapper(
-                {
-                    hasAccessStats: true,
-                },
-                {
-                    disableLifecycleMethods: true,
-                },
-            );
-            instance = wrapper.instance();
-        });
-
-        test('should short circuit if it is already fetching', () => {
-            wrapper.setState({
-                isLoadingAccessStats: true,
-            });
-            instance.fetchAccessStats();
-            expect(getStats).not.toHaveBeenCalled();
-        });
-
-        test('should fetch the file access stats', () => {
-            instance.setState = jest.fn();
-            instance.fetchAccessStats();
-            expect(instance.setState).toBeCalledWith({ isLoadingAccessStats: true });
-            expect(getStats).toBeCalledWith(
-                file.id,
-                instance.fetchAccessStatsSuccessCallback,
-                instance.fetchAccessStatsErrorCallback,
-            );
         });
     });
 
@@ -433,42 +280,6 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             expect(onError).toBeCalledWith(error, code, {
                 e: error,
             });
-        });
-    });
-
-    describe('componentDidUpdate()', () => {
-        let wrapper;
-        let instance;
-
-        beforeEach(() => {
-            wrapper = getWrapper({
-                file,
-                hasAccessStats: false,
-                hasClassification: false,
-                refreshIdentity: false,
-            });
-            instance = wrapper.instance();
-            instance.fetchAccessStats = jest.fn();
-        });
-
-        test('should fetch the access stats data if the access stats visibility changed', () => {
-            wrapper.setProps({
-                hasAccessStats: true,
-            });
-
-            expect(instance.fetchAccessStats).toHaveBeenCalled();
-        });
-    });
-
-    describe('refresh', () => {
-        test('should refetch data when refresh is called', () => {
-            const instance = getWrapper().instance();
-            const fetchAccessStats = jest.fn();
-            instance.fetchAccessStats = fetchAccessStats;
-
-            instance.refresh();
-
-            expect(fetchAccessStats).toHaveBeenCalled();
         });
     });
 });

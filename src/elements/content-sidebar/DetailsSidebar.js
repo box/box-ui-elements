@@ -6,12 +6,10 @@
 
 import React from 'react';
 import flow from 'lodash/flow';
-import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import API from '../../api';
 import messages from '../common/messages';
-import SidebarAccessStats from './SidebarAccessStats';
 import SidebarClassification from './SidebarClassification';
 import SidebarContent from './SidebarContent';
 import SidebarFileProperties from './SidebarFileProperties';
@@ -26,12 +24,7 @@ import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
-import {
-    HTTP_STATUS_CODE_FORBIDDEN,
-    ORIGIN_DETAILS_SIDEBAR,
-    IS_ERROR_DISPLAYED,
-    SIDEBAR_VIEW_DETAILS,
-} from '../../constants';
+import { ORIGIN_DETAILS_SIDEBAR, SIDEBAR_VIEW_DETAILS } from '../../constants';
 import type { ClassificationInfo, FileAccessStats, Errors } from './flowTypes';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
@@ -42,14 +35,12 @@ type ExternalProps = {
     classification?: ClassificationInfo,
     elementId: string,
     fileId: string,
-    hasAccessStats?: boolean,
     hasClassification?: boolean,
     hasNotices?: boolean,
     hasProperties?: boolean,
     hasRetentionPolicy?: boolean,
     hasSidebarInitialized?: boolean,
     hasVersions?: boolean,
-    onAccessStatsClick?: Function,
     onClassificationClick?: (e: SyntheticEvent<HTMLButtonElement>) => void,
     onRetentionPolicyExtendClick?: Function,
     onVersionHistoryClick?: Function,
@@ -78,7 +69,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     static defaultProps = {
         hasNotices: false,
         hasProperties: false,
-        hasAccessStats: false,
         hasClassification: false,
         hasRetentionPolicy: false,
         hasVersions: false,
@@ -87,9 +77,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.state = {
-            isLoadingAccessStats: false,
-        };
+        this.state = {};
         const { logger } = this.props;
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
@@ -98,26 +86,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         this.fetchFile();
-        if (this.props.hasAccessStats) {
-            this.fetchAccessStats();
-        }
-    }
-
-    componentDidUpdate({ hasAccessStats: prevHasAccessStats }: Props) {
-        const { hasAccessStats } = this.props;
-        // Component visibility props such as hasAccessStats can sometimes be flipped after an async call
-        const hasAccessStatsChanged = prevHasAccessStats !== hasAccessStats;
-        if (hasAccessStatsChanged) {
-            if (hasAccessStats) {
-                this.fetchAccessStats();
-            } else {
-                this.setState({
-                    isLoadingAccessStats: false,
-                    accessStats: undefined,
-                    accessStatsError: undefined,
-                });
-            }
-        }
     }
 
     /**
@@ -227,110 +195,22 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         );
     };
 
-    /**
-     * Handles a failed file access stats fetch
-     *
-     * @private
-     * @param {Error} e - API error
-     * @param {string} code - error code
-     * @return {void}
-     */
-    fetchAccessStatsErrorCallback = (e: ElementsXhrError, code: string) => {
-        if (!this.props.hasAccessStats) {
-            return;
-        }
-
-        const isForbidden = getProp(e, 'status') === HTTP_STATUS_CODE_FORBIDDEN;
-        let accessStatsError;
-
-        if (isForbidden) {
-            accessStatsError = {
-                error: messages.fileAccessStatsPermissionsError,
-            };
-        } else {
-            accessStatsError = {
-                maskError: {
-                    errorHeader: messages.fileAccessStatsErrorHeaderMessage,
-                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
-                },
-            };
-        }
-
-        this.setState({
-            isLoadingAccessStats: false,
-            accessStats: undefined,
-            accessStatsError,
-        });
-
-        this.props.onError(e, code, {
-            e,
-            [IS_ERROR_DISPLAYED]: !isForbidden,
-        });
-    };
-
-    /**
-     * File access stats fetch success callback
-     *
-     * @private
-     * @param {Object} accessStats - access stats for a file
-     * @return {void}
-     */
-    fetchAccessStatsSuccessCallback = (accessStats: FileAccessStats): void => {
-        if (!this.props.hasAccessStats) {
-            return;
-        }
-
-        this.setState({
-            accessStats,
-            accessStatsError: undefined,
-            isLoadingAccessStats: false,
-        });
-    };
-
-    /**
-     * Fetches the access stats for a file
-     *
-     * @private
-     * @return {void}
-     */
-    fetchAccessStats(): void {
-        const { api, fileId }: Props = this.props;
-        const { isLoadingAccessStats } = this.state;
-
-        if (isLoadingAccessStats) {
-            return;
-        }
-
-        this.setState({ isLoadingAccessStats: true });
-        api.getFileAccessStatsAPI(false).getFileAccessStats(
-            fileId,
-            this.fetchAccessStatsSuccessCallback,
-            this.fetchAccessStatsErrorCallback,
-        );
-    }
-
-    refresh(): void {
-        this.fetchAccessStats();
-    }
-
     render() {
         const {
             classification,
             elementId,
             hasProperties,
             hasNotices,
-            hasAccessStats,
             hasClassification,
             hasRetentionPolicy,
             hasVersions,
-            onAccessStatsClick,
             onVersionHistoryClick,
             onClassificationClick,
             onRetentionPolicyExtendClick,
             retentionPolicy,
         }: Props = this.props;
 
-        const { accessStats, accessStatsError, file, fileError, isLoadingAccessStats }: State = this.state;
+        const { file, fileError }: State = this.state;
 
         // TODO: Add loading indicator and handle errors once file call is split out
         return (
@@ -348,14 +228,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                 {file && hasClassification && (
                     <SidebarClassification classification={classification} file={file} onEdit={onClassificationClick} />
                 )}
-                {file && hasAccessStats && (
-                    <SidebarAccessStats
-                        accessStats={accessStats}
-                        file={file}
-                        onAccessStatsClick={onAccessStatsClick}
-                        {...accessStatsError}
-                    />
-                )}
                 {file && hasProperties && (
                     <SidebarSection
                         interactionTarget={SECTION_TARGETS.FILE_PROPERTIES}
@@ -367,7 +239,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                             onDescriptionChange={this.onDescriptionChange}
                             {...fileError}
                             hasRetentionPolicy={hasRetentionPolicy}
-                            isLoading={isLoadingAccessStats}
                             onRetentionPolicyExtendClick={onRetentionPolicyExtendClick}
                             retentionPolicy={retentionPolicy}
                         />
