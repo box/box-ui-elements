@@ -140,12 +140,18 @@ class Tooltip extends React.Component<TooltipProps, State> {
             }
         } else {
             if (!prevState.isShown && this.state.isShown) {
-                document.addEventListener('keydown', this.handleKeyDown);
+                // capture event so that tooltip closes before any other floating components that can be closed by
+                // "Escape" key(e.g. Modal, Menu, etc.)
+                document.addEventListener('keydown', this.handleKeyDown, true);
             }
             if (prevState.isShown && !this.state.isShown) {
-                document.removeEventListener('keydown', this.handleKeyDown);
+                document.removeEventListener('keydown', this.handleKeyDown, true);
             }
         }
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown, true);
     }
 
     tooltipID = uniqueId('tooltip');
@@ -207,6 +213,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
 
     handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
+            event.stopPropagation();
             this.setState({ isShown: false });
         }
         this.fireChildEvent('onKeyDown', event);

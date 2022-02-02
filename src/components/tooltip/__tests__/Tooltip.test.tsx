@@ -3,6 +3,8 @@
 import * as React from 'react';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
+import noop from 'lodash/noop';
+
 import Tooltip, { TooltipPosition, TooltipTheme } from '../Tooltip';
 import TetherPosition from '../../../common/tether-positions';
 
@@ -486,8 +488,11 @@ describe('components/tooltip/Tooltip', () => {
                 </Tooltip>,
             );
             wrapper.setState({ isShown: true });
-            map.keydown({ key: 'Escape' });
-            expect(document.addEventListener).toHaveBeenCalledWith('keydown', expect.anything());
+            map.keydown({
+                key: 'Escape',
+                stopPropagation: noop,
+            });
+            expect(document.addEventListener).toHaveBeenCalledWith('keydown', expect.anything(), true);
             expect(wrapper.state('isShown')).toBe(false);
         });
 
@@ -504,7 +509,7 @@ describe('components/tooltip/Tooltip', () => {
             wrapper.setState({ isShown: true });
 
             map.keydown({ key: 'Space' });
-            expect(document.addEventListener).toHaveBeenCalledWith('keydown', expect.anything());
+            expect(document.addEventListener).toHaveBeenCalledWith('keydown', expect.anything(), true);
             expect(wrapper.state('isShown')).toBe(true);
         });
 
