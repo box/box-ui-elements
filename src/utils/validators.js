@@ -1,5 +1,6 @@
 // @flow
 import Address from '@hapi/address';
+import tldsHapi from '@hapi/address/lib/tlds';
 
 function hostnameValidator(value: string): boolean {
     // @see https://github.com/hapijs/joi/blame/3516cf0b995c9fe415634c4612c0ac2f8792f0b4/lib/types/string/index.js#L530
@@ -17,8 +18,29 @@ function domainNameValidator(value: string): boolean {
     return Address.domain.isValid(value);
 }
 
-function emailValidator(value: string): boolean {
-    return Address.email.isValid(value);
-}
+// @sideway/address ^4 has exhaustive TLDs, but upgrading requires a TextEncoder polyfill (such as fast-text-encoder) for IE11 support.
+// We can freely upgrade and remove manual TLD supplementation after IE11 EOL.
+
+// Diff of '@hapi/address/lib/tlds' and:
+// https://data.iana.org/TLD/tlds-alpha-by-domain.txt
+// Version 2022020100, Last Updated Tue Feb  1 07:07:01 2022 UTC,
+const tldSupplements = [
+    'AMAZON',
+    'CPA',
+    'LLP',
+    'MUSIC',
+    'SPA',
+    'XN--4DBRK0CE',
+    'XN--CCKWCXETD',
+    'XN--JLQ480N2RG',
+    'XN--MGBCPQ6GPA1A',
+    'XN--Q7CE6A',
+    'ZW',
+];
+
+const emailValidator = (value: string): boolean =>
+    Address.email.isValid(value, {
+        tlds: { allow: new Set([...tldsHapi, ...tldSupplements.map(tld => tld.toLowerCase())]) },
+    });
 
 export { domainNameValidator, emailValidator, hostnameValidator, ipv4AddressValidator };
