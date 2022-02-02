@@ -159,6 +159,47 @@ describe('components/date-picker/DatePicker', () => {
         expect(wrapper.find('ClearBadge16').length).toEqual(0);
     });
 
+    test.each`
+        maxDate                            | minDate                            | maxAttr         | minAttr
+        ${new Date('2022-12-31T00:00:00')} | ${new Date('2022-01-01T00:00:00')} | ${'2022-12-31'} | ${'2022-01-01'}
+        ${null}                            | ${null}                            | ${'9999-12-31'} | ${'0001-01-01'}
+    `(
+        'should pass { max: $maxAttr, min: $minAttr } attributes to date picker input',
+        ({ maxDate, minDate, maxAttr, minAttr }) => {
+            const wrapper = getWrapper({
+                isAccessible: true,
+                maxDate,
+                minDate,
+            });
+
+            const dateInput = wrapper.find('.date-picker-input');
+            expect(dateInput.prop('max')).toEqual(maxAttr);
+            expect(dateInput.prop('min')).toEqual(minAttr);
+        },
+    );
+
+    test('should show alert icon when date value is after maximum date', () => {
+        const wrapper = getWrapper({
+            isAccessible: true,
+            maxDate: new Date('2021-12-31T00:00:00'),
+        });
+
+        expect(wrapper.find('Alert16').length).toEqual(0);
+        wrapper.find('.date-picker-input').simulate('change', { target: { value: '2022-01-01' } });
+        expect(wrapper.find('Alert16').length).toEqual(1);
+    });
+
+    test('should show alert icon when date value is before minimum date', () => {
+        const wrapper = getWrapper({
+            isAccessible: true,
+            minDate: new Date('2022-01-01T00:00:00'),
+        });
+
+        expect(wrapper.find('Alert16').length).toEqual(0);
+        wrapper.find('.date-picker-input').simulate('change', { target: { value: '2021-12-31' } });
+        expect(wrapper.find('Alert16').length).toEqual(1);
+    });
+
     test('should show tooltip when error exists', () => {
         const wrapper = mount(
             <DatePicker

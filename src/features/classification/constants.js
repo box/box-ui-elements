@@ -17,12 +17,14 @@ const ACCESS_POLICY_RESTRICTION: {
     EXTERNAL_COLLAB: 'externalCollab',
     FTP: 'ftp',
     SHARED_LINK: 'sharedLink',
+    WATERMARK: 'watermark',
 } = {
     SHARED_LINK: 'sharedLink',
     DOWNLOAD: 'download',
     EXTERNAL_COLLAB: 'externalCollab',
     APP: 'app',
     FTP: 'ftp',
+    WATERMARK: 'watermark',
 };
 
 const DOWNLOAD_CONTROL: {
