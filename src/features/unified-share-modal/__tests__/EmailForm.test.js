@@ -403,6 +403,15 @@ describe('features/unified-share-modal/EmailForm', () => {
                 email: 'test@@example.com',
                 expectedValue: false,
             },
+            // manually supplemented TLD:
+            {
+                email: 'test@@example.cpa',
+                expectedValue: true,
+            },
+            {
+                email: 'test@@example.badTLD',
+                expectedValue: true,
+            },
         ].forEach(({ email, expectedValue }) => {
             test('should show an error if it detects an invalid email address', () => {
                 const wrapper = getWrapper();
