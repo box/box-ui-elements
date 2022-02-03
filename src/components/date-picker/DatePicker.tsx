@@ -352,6 +352,8 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
 
     onSelectHandler = (date: Date | null = null) => {
         const { onChange, isAccessible } = this.props;
+        const { isDateInputInvalid } = this.state;
+
         if (onChange) {
             const formattedDate = this.formatValue(date);
             onChange(date, formattedDate);
@@ -365,7 +367,12 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             }
             if (this.datePicker && this.datePicker.isVisible()) {
                 this.datePicker.hide();
+                this.focusDatePicker();
             }
+        }
+
+        if (isDateInputInvalid) {
+            this.setState({ isDateInputInvalid: false, showDateInputError: false });
         }
     };
 
@@ -388,7 +395,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
     shouldStayClosed = false;
 
     focusDatePicker = () => {
-        // By default, this will open the datepicker too
+        // This also opens the date picker when isAccessible is disabled
         if (this.dateInputEl) {
             this.dateInputEl.focus();
         }
@@ -463,7 +470,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
 
             if (parsedDate) {
                 if ((minDate && parsedDate < minDate) || (maxDate && parsedDate > maxDate)) {
-                    this.datePicker.setDate(null, true);
+                    this.datePicker.setDate(null);
                     this.setState({ isDateInputInvalid: true });
                     return;
                 }
@@ -509,7 +516,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             onBlur(event);
         }
 
-        // Since we Fire parent onChange event if isTextInputAllowed
+        // Since we fire parent onChange event if isTextInputAllowed,
         // fire it on blur if the user typed a correct date format
         let inputDate: Date | null | undefined = null;
 
@@ -540,6 +547,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
 
             if (this.datePicker.isVisible()) {
                 this.datePicker.hide();
+                this.focusDatePicker();
             } else {
                 this.datePicker.show();
             }
@@ -589,11 +597,18 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
     };
 
     clearDate = (event: React.SyntheticEvent<HTMLButtonElement>) => {
-        event.preventDefault(); // so datepicker doesn't open after clearing
+        // Prevents the date picker from opening after clearing
+        event.preventDefault();
+        const { isAccessible } = this.props;
+
         if (this.datePicker) {
             this.datePicker.setDate(null);
         }
         this.onSelectHandler(null);
+
+        if (isAccessible) {
+            this.focusDatePicker();
+        }
     };
 
     /** Determines whether a new date input falls back to a text input or not */
@@ -656,6 +671,8 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             isRequired,
             isTextInputAllowed,
             label,
+            maxDate,
+            minDate,
             name,
             onFocus,
             placeholder,
@@ -691,24 +708,33 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         } else {
             valueAttr = { value: this.formatDisplay(value) };
         }
+
         let onChangeAttr;
         if (isAccessible && this.canUseDateInputType) {
             onChangeAttr = { onChange: this.handleOnChange };
         } else if (isTextInputAllowed || (isAccessible && !this.canUseDateInputType)) {
             onChangeAttr = {};
         } else {
+            // Fixes prop type error about read-only field
+            // Not adding readOnly so constraint validation works
             onChangeAttr = { onChange: noop };
         }
 
-        // "name" prop is required for pattern validation to be surfaced on form submit. See components/form-elements/form/Form.js
-        // "title" prop is shown during constraint validation as a description of the pattern
-        // See https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/pattern#usability
-        const additionalAttrs =
-            isAccessible && !this.canUseDateInputType
-                ? { name, pattern: ISO_DATE_FORMAT_PATTERN.source, title: 'YYYY-MM-DD' }
-                : {};
+        let additionalAttrs;
+        if (isAccessible && this.canUseDateInputType) {
+            additionalAttrs = {
+                max: this.formatDisplayDateType(maxDate) || '9999-12-31',
+                min: this.formatDisplayDateType(minDate) || '0001-01-01',
+            };
+        } else if (isAccessible && !this.canUseDateInputType) {
+            // "name" prop is required for pattern validation to be surfaced on form submit. See components/form-elements/form/Form.js
+            // "title" prop is shown during constraint validation as a description of the pattern
+            // See https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/pattern#usability
+            additionalAttrs = { name, pattern: ISO_DATE_FORMAT_PATTERN.source, title: 'YYYY-MM-DD' };
+        } else {
+            additionalAttrs = {};
+        }
 
-        /* fixes proptype error about readonly field (not adding readonly so constraint validation works) */
         return (
             <div className={classes}>
                 <span className="date-picker-icon-holder">
