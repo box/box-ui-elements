@@ -207,7 +207,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
-                  onKeyDown={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
                   showRadar={false}
@@ -219,7 +218,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
-                    onKeyDown={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     tabIndex="0"
@@ -476,7 +474,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
-                  onKeyDown={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
                   showRadar={false}
@@ -488,7 +485,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
-                    onKeyDown={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     tabIndex="0"
@@ -745,7 +741,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
-                  onKeyDown={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
                   showRadar={false}
@@ -757,7 +752,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
-                    onKeyDown={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     tabIndex="0"
@@ -955,7 +949,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
-                  onKeyDown={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
                   showRadar={false}
@@ -967,7 +960,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
-                    onKeyDown={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     tabIndex="0"
@@ -1058,7 +1050,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
-                  onKeyDown={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
                   showRadar={false}
@@ -1070,7 +1061,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
-                    onKeyDown={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     tabIndex="0"
@@ -1268,7 +1258,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
-                  onKeyDown={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
                   showRadar={false}
@@ -1280,7 +1269,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
-                    onKeyDown={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     tabIndex="0"
@@ -1371,7 +1359,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
-                  onKeyDown={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
                   showRadar={false}
@@ -1383,7 +1370,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
-                    onKeyDown={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     tabIndex="0"
@@ -1581,7 +1567,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
-                  onKeyDown={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
                   showRadar={false}
@@ -1593,7 +1578,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
-                    onKeyDown={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     tabIndex="0"
