@@ -135,7 +135,6 @@ exports[`components/tooltip/Tooltip render() should render children wrapped in t
   <div
     onBlur={[Function]}
     onFocus={[Function]}
-    onKeyDown={[Function]}
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
     tabIndex="0"
@@ -205,7 +204,6 @@ exports[`components/tooltip/Tooltip render() should render correctly with tether
   <div
     onBlur={[Function]}
     onFocus={[Function]}
-    onKeyDown={[Function]}
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
     tabIndex="0"
