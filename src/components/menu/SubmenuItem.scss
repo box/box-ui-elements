@@ -10,6 +10,7 @@
         top: $bdl-submenu-offset;
         right: auto;
         left: calc(100% - #{$bdl-submenu-offset});
+        z-index: 9999;
 
         &.is-left-aligned {
             right: 100%;
@@ -17,8 +18,8 @@
         }
 
         &.is-hidden {
-            right: auto;
-            left: -9999px;
+            right: auto !important;
+            left: -9999px !important;
         }
 
         &.is-bottom-aligned {

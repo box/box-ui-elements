@@ -3,6 +3,7 @@ import omit from 'lodash/omit';
 import classNames from 'classnames';
 
 import './Menu.scss';
+import SubmenuItem from '../menu/SubmenuItem';
 
 /**
  * The selectors are used to identify the menu item that is selected. We need to eventually
@@ -199,7 +200,7 @@ class Menu extends React.Component<MenuProps> {
         const { menuItemEl }: { menuItemEl?: HTMLElement | null } =
             event.target instanceof Node ? this.getMenuItemElFromEventTarget(event.target) : {};
 
-        if (!menuItemEl) {
+        if (!menuItemEl || (event.target as Element).className.includes('submenu-target')) {
             return;
         }
         this.fireOnCloseHandler(false, event);

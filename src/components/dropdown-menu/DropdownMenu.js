@@ -5,7 +5,11 @@ import uniqueId from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 
 import { KEYS } from '../../constants';
+import ResponsiveMenuContainer from './ResponsiveMenuContainer';
+import { withMediaQuery } from '../media-query';
+import { VIEW_SIZE_TYPE } from '../media-query/constants';
 import './DropdownMenu.scss';
+import type { ResponsiveMenuProps } from './ResponsiveMenuContainer';
 
 type Props = {
     bodyElement?: HTMLElement,
@@ -22,6 +26,10 @@ type Props = {
     onMenuClose?: (event: SyntheticEvent<> | MouseEvent) => void,
     /** Handler for dropdown menu open events */
     onMenuOpen?: () => void,
+    /** Menu props for responsive menu */
+    responsiveMenuProps?: ResponsiveMenuProps,
+    /** Screen size injected by withMediaQuery */
+    size?: string,
     /** Set true to close dropdown menu on event bubble instead of event capture */
     useBubble?: boolean,
 };
@@ -179,7 +187,10 @@ class DropdownMenu extends React.Component<Props, State> {
             constrainToScrollParent,
             constrainToWindow,
             className,
+            size,
+            responsiveMenuProps,
         } = this.props;
+
         const { isOpen, initialFocusIndex } = this.state;
 
         const elements = React.Children.toArray(children);
@@ -242,6 +253,23 @@ class DropdownMenu extends React.Component<Props, State> {
 
         const bodyEl = bodyElement instanceof HTMLElement ? bodyElement : document.body;
 
+        const isMobile = size === VIEW_SIZE_TYPE.medium || size === VIEW_SIZE_TYPE.small;
+
+        let attachedComponent = React.cloneElement(menu, menuProps);
+        if (isMobile) {
+            const menuWrapperProps = {
+                id: this.menuID,
+                key: this.menuID,
+                onCloseClick: this.handleButtonClick,
+                ...responsiveMenuProps,
+            };
+
+            attachment = 'auto auto';
+            attachedComponent = (
+                <ResponsiveMenuContainer {...menuWrapperProps}>{attachedComponent}</ResponsiveMenuContainer>
+            );
+        }
+
         return (
             <TetherComponent
                 attachment={attachment}
@@ -253,10 +281,11 @@ class DropdownMenu extends React.Component<Props, State> {
                 targetAttachment={targetAttachment}
             >
                 {React.cloneElement(menuButton, menuButtonProps)}
-                {isOpen ? React.cloneElement(menu, menuProps) : null}
+                {isOpen ? attachedComponent : null}
             </TetherComponent>
         );
     }
 }
 
+export const ResponsiveDropdownMenu = withMediaQuery(DropdownMenu);
 export default DropdownMenu;

@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/dropdown-menu/ResponsiveMenuContainer should correctly render toggle 1`] = `
+<div
+  className="menu-container"
+>
+  <div
+    className="menu-header"
+  >
+    <div
+      className="menu-header-text"
+    >
+      <div
+        className="menu-header-subtitle"
+      >
+        subtitle
+      </div>
+      <div
+        className="menu-header-title"
+      >
+        title
+      </div>
+    </div>
+    <div
+      className="menu-header-right"
+    >
+      <PrimaryButton
+        className="menu-header-btn"
+      >
+        click me
+      </PrimaryButton>
+      <Button
+        className="menu-header-close-btn"
+        isLoading={false}
+        showRadar={false}
+        type="button"
+      >
+        <IconClose
+          color="#767676"
+          height={18}
+          width={18}
+        />
+      </Button>
+    </div>
+  </div>
+  <Menu
+    className=""
+    isHidden={false}
+    isSubmenu={false}
+  >
+    <MenuItem>
+      View Profile
+    </MenuItem>
+    <MenuItem>
+      Help
+    </MenuItem>
+  </Menu>
+</div>
+`;

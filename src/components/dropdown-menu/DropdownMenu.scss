@@ -19,4 +19,17 @@
     margin-top: 5px;
     perspective: 500px;
     perspective-origin: center top;
+
+    &.be-is-small,
+    &.be-is-medium {
+        width: 100%;
+        height: 100%;
+        margin: unset;
+
+        .submenu {
+            top: 100%;
+            right: 0;
+            left: auto;
+        }
+    }
 }
