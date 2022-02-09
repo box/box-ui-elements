@@ -3,7 +3,6 @@ import omit from 'lodash/omit';
 import classNames from 'classnames';
 
 import './Menu.scss';
-import SubmenuItem from '../menu/SubmenuItem';
 
 /**
  * The selectors are used to identify the menu item that is selected. We need to eventually
