@@ -8,6 +8,7 @@ import { CLASS_IS_MEDIUM, CLASS_IS_SMALL, SIZE_MEDIUM, SIZE_SMALL } from '../../
 
 type PropsShape = {
     children: React.Node,
+    className: string,
 };
 
 function withMediaQuery<Props: PropsShape>(WrappedComponent: React.ComponentType<any>): React.ComponentType<any> {

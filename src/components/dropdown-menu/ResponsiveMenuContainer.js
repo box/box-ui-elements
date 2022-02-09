@@ -10,10 +10,10 @@ import './ResponsiveMenuContainer.scss';
 
 export type ResponsiveMenuProps = {
     buttonText?: string,
-    children?: React.node,
+    children?: React.Node,
     className?: string,
-    onButtonClick?: func,
-    onCloseClick?: func,
+    onButtonClick?: Function,
+    onCloseClick?: Function,
     reverseTitle: boolean,
     subtitle?: string,
     title?: string,
