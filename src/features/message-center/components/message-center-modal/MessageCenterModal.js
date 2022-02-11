@@ -118,7 +118,6 @@ function MessageCenterModal({
                             currentCategory={category}
                             categories={categories}
                             onSelect={value => {
-                                cache.clearAll();
                                 setCategory(value);
                             }}
                         />
