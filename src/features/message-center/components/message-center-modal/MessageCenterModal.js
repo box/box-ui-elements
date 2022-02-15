@@ -118,6 +118,7 @@ function MessageCenterModal({
                             currentCategory={category}
                             categories={categories}
                             onSelect={value => {
+                                cache.clearAll();
                                 setCategory(value);
                             }}
                         />
@@ -241,6 +242,7 @@ function MessageCenterModal({
                 rowCount={filteredMessages.length}
                 rowHeight={cache.rowHeight}
                 rowRenderer={rowRenderer}
+                scrollToIndex={0}
                 style={listStyle}
                 width={width - SCROLLBAR_MARGIN}
             />
