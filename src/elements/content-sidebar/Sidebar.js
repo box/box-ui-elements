@@ -235,7 +235,7 @@ class Sidebar extends React.Component<Props, State> {
         });
 
         return (
-            <aside id={this.id} className={styleClassName}>
+            <aside id={this.id} className={styleClassName} data-testid="preview-sidebar">
                 {isLoading ? (
                     <div className="bcs-loading">
                         <LoadingIndicator />
