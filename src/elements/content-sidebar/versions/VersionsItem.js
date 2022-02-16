@@ -35,6 +35,7 @@ type Props = {
     onPreview?: VersionActionCallback,
     onPromote?: VersionActionCallback,
     onRestore?: VersionActionCallback,
+    showVersionPreview: boolean,
     version: BoxItemVersion,
     versionCount: number,
     versionLimit: number,
@@ -59,6 +60,7 @@ const VersionsItem = ({
     onPreview,
     onPromote,
     onRestore,
+    showVersionPreview,
     version,
     versionCount,
     versionLimit,
@@ -126,6 +128,7 @@ const VersionsItem = ({
                 isDisabled={!canPreview}
                 isSelected={isSelected}
                 onClick={handleAction(onPreview)}
+                showVersionPreview={showVersionPreview}
             >
                 <div className="bcs-VersionsItem-badge">
                     <VersionsItemBadge versionNumber={versionNumber} />
