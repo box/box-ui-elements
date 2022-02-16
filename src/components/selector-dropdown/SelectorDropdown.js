@@ -204,7 +204,8 @@ class SelectorDropdown extends React.Component<Props, State> {
                     this.resetActiveItem();
                 }
                 break;
-            // no default
+            default:
+                this.handleInput();
         }
     };
 
@@ -307,7 +308,6 @@ class SelectorDropdown extends React.Component<Props, State> {
                 className={classNames('SelectorDropdown', className)}
                 onFocus={this.handleFocus}
                 onKeyDown={this.handleKeyDown}
-                onKeyPress={this.handleInput}
                 onPaste={this.handleInput}
                 ref={this.selectorDropdownRef}
             >
