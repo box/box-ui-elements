@@ -13,6 +13,7 @@ import './VersionsList.scss';
 type Props = {
     currentId?: string,
     fileId: string,
+    showVersionPreview: boolean,
     versionCount: number,
     versionLimit: number,
     versions: Array<BoxItemVersion>,

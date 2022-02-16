@@ -187,6 +187,17 @@ const messages = defineMessages({
         defaultMessage: 'Retention policy expires on {time}.',
         description: 'Message describing when the version retention policy will expire.',
     },
+    versionUpsell: {
+        defaultMessage:
+            'Sorry, version history is not available with your current account plan. To access versioning, select from one of our paid plans.',
+        description: 'upgrade now description',
+        id: 'sidebar.version.upsell',
+    },
+    upgradeButton: {
+        defaultMessage: 'Upgrade',
+        description: 'upgrade button text',
+        id: 'sidebar.version.upgrade',
+    },
 });
 
 export default messages;

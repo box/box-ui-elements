@@ -16,6 +16,7 @@ import './VersionsMenu.scss';
 type Props = {
     fileId: string,
     intl: any,
+    showVersionPreview: boolean,
     versionCount: number,
     versionLimit: number,
     versions: Array<BoxItemVersion>,

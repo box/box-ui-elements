@@ -17,6 +17,7 @@ type Props = {
     isDisabled: boolean,
     isSelected: boolean,
     onClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
+    showVersionPreview: boolean,
 };
 
 class VersionsItemButton extends React.Component<Props> {
@@ -53,9 +54,9 @@ class VersionsItemButton extends React.Component<Props> {
     };
 
     render() {
-        const { children, fileId, isCurrent, isDisabled, isSelected, onClick } = this.props;
+        const { children, fileId, isCurrent, isDisabled, isSelected, onClick, showVersionPreview } = this.props;
         const buttonClassName = classNames('bcs-VersionsItemButton', {
-            'bcs-is-disabled': isDisabled,
+            'bcs-is-disabled': showVersionPreview ? !showVersionPreview : isDisabled,
             'bcs-is-selected': isSelected && !isDisabled,
         });
 

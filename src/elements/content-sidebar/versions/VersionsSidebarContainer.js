@@ -17,12 +17,14 @@ import messages from './messages';
 import openUrlInsideIframe from '../../../utils/iframe';
 import VersionsSidebar from './VersionsSidebar';
 import VersionsSidebarAPI from './VersionsSidebarAPI';
+import type { User } from '../../common/types/core';
 import { withAPIContext } from '../../common/api-context';
 import type { VersionActionCallback, VersionChangeCallback } from './flowTypes';
 import type { BoxItemVersion, BoxItem, FileVersions } from '../../../common/types/core';
 
 type Props = {
     api: API,
+    currentUser: User,
     fileId: string,
     hasSidebarInitialized?: boolean,
     history: RouterHistory,
@@ -35,6 +37,8 @@ type Props = {
     onVersionPromote: VersionActionCallback,
     onVersionRestore: VersionActionCallback,
     parentName: string,
+    showUpsell: boolean,
+    showUpsellWithPicture: boolean,
     versionId?: string,
 };
 
@@ -166,16 +170,85 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     handleFetchError = (error: Object): void => {
-        const { onUpgradeClick } = this.props;
+        const { currentUser, onUpgradeClick, showUpsell, showUpsellWithPicture } = this.props;
         const shouldShowVersionErrorWithUpsell = !!onUpgradeClick && error.status === 403;
-        this.setState({
-            error: shouldShowVersionErrorWithUpsell ? messages.versionNotAvailable : messages.versionFetchError,
-            errorTitle: shouldShowVersionErrorWithUpsell ? messages.versionAccessError : messages.versionServerError,
-            isLoading: false,
-            isWatermarked: false,
-            versionCount: 0,
-            versions: [],
-        });
+        const shouldShowVersions = showUpsell || showUpsellWithPicture;
+
+        if (!shouldShowVersions) {
+            this.setState({
+                error: shouldShowVersionErrorWithUpsell ? messages.versionNotAvailable : messages.versionFetchError,
+                errorTitle: shouldShowVersionErrorWithUpsell
+                    ? messages.versionAccessError
+                    : messages.versionServerError,
+                isLoading: false,
+                isWatermarked: false,
+                versionCount: 0,
+                versions: [],
+            });
+        } else {
+            const isWatermarked = false;
+            const versionLimit = Infinity;
+            const versionCount = 3;
+            const versions = [
+                {
+                    type: 'file_version',
+                    id: '28338883546',
+                    permissions: {
+                        can_delete: false,
+                        can_download: false,
+                        can_preview: false,
+                        can_upload: false,
+                    },
+                    created_at: '2021-11-29T15:01:19-08:00',
+                    modified_at: '2021-11-29T15:01:19-08:00',
+                    modified_by: currentUser,
+                    trashed_at: null,
+                    size: 1875887,
+                    uploader_display_name: 'Jessica Larsen',
+                    version_number: '1',
+                },
+                {
+                    type: 'file_version',
+                    id: '283388835467',
+                    permissions: {
+                        can_delete: false,
+                        can_download: false,
+                        can_preview: false,
+                        can_upload: false,
+                    },
+                    created_at: '2021-11-29T15:01:19-08:00',
+                    modified_by: currentUser,
+                    size: 1875887,
+                    trashed_at: null,
+                    uploader_display_name: 'Jessica Larsen',
+                    version_number: '2',
+                },
+                {
+                    type: 'file_version',
+                    id: '28338883548',
+                    permissions: {
+                        can_delete: false,
+                        can_download: false,
+                        can_preview: false,
+                        can_upload: false,
+                    },
+                    created_at: '2021-11-29T15:01:19-08:00',
+                    currentUser,
+                    size: 1875887,
+                    trashed_at: null,
+                    uploader_display_name: 'Jessica Larsen',
+                    version_number: '3',
+                },
+            ];
+            this.setState({
+                error: undefined,
+                isLoading: false,
+                isWatermarked,
+                versionCount,
+                versionLimit,
+                versions: this.sortVersions(versions),
+            });
+        }
     };
 
     handleFetchSuccess = ([fileResponse, versionsResponse]): [BoxItem, FileVersions] => {
@@ -280,7 +353,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     render() {
-        const { fileId, parentName, onUpgradeClick } = this.props;
+        const { fileId, parentName, onUpgradeClick, showUpsell, showUpsellWithPicture } = this.props;
 
         return (
             <VersionsSidebar
@@ -292,6 +365,8 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
                 onRestore={this.handleActionRestore}
                 onUpgradeClick={onUpgradeClick}
                 parentName={parentName}
+                showUpsell={showUpsell}
+                showUpsellWithPicture={showUpsellWithPicture}
                 {...this.state}
             />
         );
