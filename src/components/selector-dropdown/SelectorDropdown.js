@@ -297,7 +297,7 @@ class SelectorDropdown extends React.Component<Props, State> {
             </ul>
         );
 
-        // change onKeyPress/onPaste back to onInput when React fixes this IE11 bug: https://github.com/facebook/react/issues/7280
+        // change onPaste back to onInput when React fixes this IE11 bug: https://github.com/facebook/react/issues/7280
 
         // We're simulating the blur event with the tab key listener and the
         // click listener as a proxy because IE will trigger a blur when
