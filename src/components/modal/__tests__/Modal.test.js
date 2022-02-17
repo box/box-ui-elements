@@ -154,6 +154,7 @@ describe('components/modal/Modal', () => {
         });
 
         test('should focus first element when opening', () => {
+            wrapper.setState({ initialWidth: 460, fullscreen: false });
             wrapper.setProps({ isOpen: true });
             clock.tick(1);
             expect(document.activeElement.id).toEqual('first');
@@ -166,6 +167,8 @@ describe('components/modal/Modal', () => {
                     <button id="last" />
                 </Modal>,
             );
+
+            wrapper.setState({ initialWidth: 460, fullscreen: false });
             wrapper.setProps({ isLoading: false });
             clock.tick(1);
             expect(document.activeElement.id).toEqual('first');
@@ -188,6 +191,7 @@ describe('components/modal/Modal', () => {
                     <button className="custom-element" />
                 </Modal>,
             );
+            wrapper.setState({ initialWidth: 460, fullscreen: false });
             wrapper.setProps({ isOpen: true });
             clock.tick(1);
             expect(document.activeElement.className).toContain('custom-element');
@@ -200,7 +204,7 @@ describe('components/modal/Modal', () => {
                     <button className="custom-element" />
                 </Modal>,
             );
-
+            wrapper.setState({ initialWidth: 460, fullscreen: false });
             wrapper.setProps({ isLoading: false });
             clock.tick(1);
             expect(document.activeElement.className).toContain('custom-element');
@@ -215,9 +219,30 @@ describe('components/modal/Modal', () => {
             );
 
             expect(() => {
+                wrapper.setState({ initialWidth: 460, fullscreen: false });
                 wrapper.setProps({ isOpen: true });
                 clock.tick(1);
             }).toThrow();
+        });
+
+        test('should render in fullscreen mode when viewport width is smaller than initial modal width', () => {
+            wrapper.setProps({
+                isOpen: true,
+                isLoading: false,
+                viewWidth: 375,
+            });
+            wrapper.setState({ initialWidth: 460 });
+            expect(wrapper.state('fullscreen')).toEqual(true);
+        });
+
+        test('should not render in fullscreen mode when viewport width is larger than initial modal width', () => {
+            wrapper.setProps({
+                isOpen: true,
+                isLoading: false,
+                viewWidth: 600,
+            });
+            wrapper.setState({ initialWidth: 460 });
+            expect(wrapper.state('fullscreen')).toEqual(false);
         });
     });
 });

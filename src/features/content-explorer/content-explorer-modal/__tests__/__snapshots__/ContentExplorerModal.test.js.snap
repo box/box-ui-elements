@@ -11,6 +11,8 @@ exports[`features/content-explorer/content-explorer-modal/ContentExplorerModal r
     }
   }
   title=""
+  viewHeight={null}
+  viewWidth={null}
 >
   <ContentExplorer
     actionButtonsProps={Object {}}

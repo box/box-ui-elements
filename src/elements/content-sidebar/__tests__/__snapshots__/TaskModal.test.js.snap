@@ -19,6 +19,8 @@ exports[`elements/content-sidebar/TaskModal render should render a default compo
       id="be.contentSidebar.addTask.approval.title"
     />
   }
+  viewHeight={null}
+  viewWidth={null}
 >
   <div
     className="be"
@@ -55,6 +57,8 @@ exports[`elements/content-sidebar/TaskModal render using type APPROVAL and mode 
       id="be.contentSidebar.addTask.approval.title"
     />
   }
+  viewHeight={null}
+  viewWidth={null}
 >
   <div
     className="be"
@@ -92,6 +96,8 @@ exports[`elements/content-sidebar/TaskModal render using type APPROVAL and mode 
       id="be.contentSidebar.editTask.approval.title"
     />
   }
+  viewHeight={null}
+  viewWidth={null}
 >
   <div
     className="be"
@@ -129,6 +135,8 @@ exports[`elements/content-sidebar/TaskModal render using type GENERAL and mode C
       id="be.contentSidebar.addTask.general.title"
     />
   }
+  viewHeight={null}
+  viewWidth={null}
 >
   <div
     className="be"
@@ -166,6 +174,8 @@ exports[`elements/content-sidebar/TaskModal render using type GENERAL and mode E
       id="be.contentSidebar.editTask.general.title"
     />
   }
+  viewHeight={null}
+  viewWidth={null}
 >
   <div
     className="be"

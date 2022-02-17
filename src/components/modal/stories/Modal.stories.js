@@ -7,7 +7,7 @@ import Button from '../../button/Button';
 import ModalActions from '../ModalActions';
 import PrimaryButton from '../../primary-button/PrimaryButton';
 
-import Modal from '../Modal';
+import Modal, { ResponsiveModal } from '../Modal';
 import notes from './Modal.stories.md';
 
 export const basic = () => {
@@ -110,6 +110,55 @@ export const withCustomBackdropClickHandler = () => {
                             </ModalActions>
                         </Modal>
                         <PrimaryButton onClick={openModal}>Launch standard modal</PrimaryButton>
+                    </div>
+                </IntlProvider>
+            )}
+        </State>
+    );
+};
+
+export const responsiveModal = () => {
+    const componentStore = new Store({
+        isModalOpen: false,
+    });
+
+    const openModal = () =>
+        componentStore.set({
+            isModalOpen: true,
+        });
+
+    const closeModal = () => componentStore.set({ isModalOpen: false });
+
+    return (
+        <State store={componentStore}>
+            {state => (
+                <IntlProvider locale="en">
+                    <div>
+                        <ResponsiveModal
+                            title="Box: Responsive Modal"
+                            onRequestClose={closeModal}
+                            isOpen={state.isModalOpen}
+                            focusElementSelector="input"
+                        >
+                            <p>
+                                This modal supports responsiveness. Try changing the device type, resizing your browser
+                                window, or using developer tools to shrink the viewport width. The modal will expand to
+                                fullscreen mode when the viewport is too small.
+                            </p>
+                            <p>
+                                <input type="text" />
+                            </p>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum congue, lacus ut
+                                scelerisque porttitor, libero diam luctus ante, non porta lectus dolor eu lectus.
+                                Suspendisse sagittis ut orci eget placerat.
+                            </p>
+                            <ModalActions>
+                                <Button onClick={closeModal}>Cancel</Button>
+                                <PrimaryButton onClick={closeModal}>Okay</PrimaryButton>
+                            </ModalActions>
+                        </ResponsiveModal>
+                        <PrimaryButton onClick={openModal}>Launch responsive modal</PrimaryButton>
                     </div>
                 </IntlProvider>
             )}

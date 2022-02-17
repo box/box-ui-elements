@@ -22,6 +22,8 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
       }
     />
   }
+  viewHeight={null}
+  viewWidth={null}
 >
   <p>
     <FormattedMessage

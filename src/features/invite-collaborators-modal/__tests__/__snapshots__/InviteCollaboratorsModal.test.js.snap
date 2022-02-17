@@ -28,6 +28,8 @@ exports[`features/invite-collaborators-modal/InviteCollaboratorsModal render() s
       }
     />
   }
+  viewHeight={null}
+  viewWidth={null}
 >
   <PillSelectorDropdown
     allowCustomPills={true}

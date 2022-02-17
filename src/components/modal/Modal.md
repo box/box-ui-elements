@@ -94,3 +94,45 @@ confirmBackdropClose = () => {
     </PrimaryButton>
 </div>
 ```
+
+**Responsive Modal**
+
+This modal will expand to fullscreen mode when the viewport is too small - making it more user-friendly for small device sizes and viewports.
+
+```
+const AllDeviceModal = ({ isOpen, onRequestClose }) => (
+    <ResponsiveModal
+        title="Box: Sharing is simple"
+        onRequestClose={ onRequestClose }
+        isOpen={ isOpen }
+        focusElementSelector="input"
+    >
+        <p>
+            Elements can be auto-focused by implementing transition logic in componentDidUpdate. Focus is trapped inside the modal while it is open, so pressing tab will cycle through the elements inside.
+        </p>
+        <p><input type="text" /></p>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum congue, lacus ut scelerisque porttitor, libero diam luctus ante, non porta lectus dolor eu lectus. Suspendisse sagittis ut orci eget placerat.
+        </p>
+        <ModalActions>
+            <Button onClick={ onRequestClose }>Cancel</Button>
+            <PrimaryButton onClick={ onRequestClose }>Okay</PrimaryButton>
+        </ModalActions>
+    </ResponsiveModal>
+);
+openModal = () =>
+    setState({
+        isModalOpen: true,
+    });
+closeModal = () => setState({ isModalOpen: false });
+
+<div>
+    <AllDeviceModal
+        onRequestClose={ closeModal }
+        isOpen={ state.isModalOpen }
+    />
+    <PrimaryButton onClick={ openModal }>
+        Launch standard modal
+    </PrimaryButton>
+</div>
+```

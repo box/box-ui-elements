@@ -22,6 +22,7 @@ type Props = {
     children: React.Node,
     className?: string,
     closeButtonProps: Object,
+    fullscreen?: Boolean,
     intl: Object,
     modalRef?: Function,
     onRequestClose?: Function,
@@ -54,7 +55,7 @@ class ModalDialog extends React.Component<Props> {
      * @return {ReactElement|null} - Returns the button, or null if the button shouldn't be rendered
      */
     renderCloseButton() {
-        const { closeButtonProps, onRequestClose, intl } = this.props;
+        const { closeButtonProps, onRequestClose, intl, fullscreen } = this.props;
         const { formatMessage } = intl;
         if (!onRequestClose) {
             return null;
@@ -65,7 +66,7 @@ class ModalDialog extends React.Component<Props> {
             <button
                 {...closeButtonProps}
                 aria-label={formatMessage(messages.closeModalText)}
-                className="modal-close-button"
+                className={classNames('modal-close-button', fullscreen && 'fullscreen')}
                 onClick={this.onCloseButtonClick}
             >
                 <IconClose color="#909090" height={18} width={18} />

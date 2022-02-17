@@ -10,6 +10,9 @@ import Portal from '../portal';
 import ModalDialog from './ModalDialog';
 
 import './Modal.scss';
+import withViewportSize from '../media-query/withViewportSize';
+
+const MODAL_FULLSCREEN_BUFFER = 50;
 
 type Props = {
     children: React.Node,
@@ -28,14 +31,28 @@ type Props = {
         dialog?: Object,
     },
     title?: React.Node,
+    viewHeight: ?number,
+    viewWidth: ?number,
 };
 
-class Modal extends React.Component<Props> {
+type State = {
+    fullscreen: ?boolean,
+    initialWidth: number,
+};
+
+class Modal extends React.Component<Props, State> {
+    state = {
+        initialWidth: 0,
+        fullscreen: false,
+    };
+
     static defaultProps = {
         style: {
             backdrop: {},
             dialog: {},
         },
+        viewWidth: null,
+        viewHeight: null,
     };
 
     componentDidMount() {
@@ -48,11 +65,29 @@ class Modal extends React.Component<Props> {
 
     componentDidUpdate(prevProps: Props) {
         const { isLoading, isOpen } = this.props;
+        const { fullscreen, initialWidth } = this.state;
 
         // Set focus if modal is transitioning from closed -> open and/or loading -> not loading
         if ((!prevProps.isOpen || prevProps.isLoading) && isOpen && !isLoading) {
             this.onModalOpen();
         }
+
+        if (this.dialog) {
+            const { offsetWidth } = this.dialog;
+            let shouldFullscreen = this.shouldRenderFullscreen(initialWidth);
+
+            if (initialWidth === 0 && initialWidth !== offsetWidth) {
+                shouldFullscreen = this.shouldRenderFullscreen(offsetWidth);
+                this.setState({ initialWidth: offsetWidth, fullscreen: shouldFullscreen });
+            } else if (shouldFullscreen !== fullscreen) this.setState({ fullscreen: shouldFullscreen });
+        }
+    }
+
+    shouldRenderFullscreen(modalWidth: number): boolean {
+        const { viewWidth } = this.props;
+        if (!viewWidth) return false;
+
+        return viewWidth < modalWidth + MODAL_FULLSCREEN_BUFFER;
     }
 
     /**
@@ -130,7 +165,18 @@ class Modal extends React.Component<Props> {
     };
 
     render() {
-        const { className, isLoading, isOpen, onRequestClose, shouldNotUsePortal, style, ...rest } = this.props;
+        const {
+            className,
+            isLoading,
+            isOpen,
+            onRequestClose,
+            shouldNotUsePortal,
+            style,
+            viewWidth,
+            ...rest
+        } = this.props;
+
+        const { fullscreen } = this.state;
 
         if (!isOpen) {
             return null;
@@ -141,6 +187,7 @@ class Modal extends React.Component<Props> {
                 overflow:hidden;
             }
         `;
+        const responsiveWidthStyle = viewWidth ? { maxWidth: `${viewWidth}px` } : null;
 
         // used `omit` here to prevent certain key/value pairs from going into the spread on `ModalDialog`
         const modalProps = omit(rest, ['onBackdropClick', 'focusElementSelector']);
@@ -148,14 +195,22 @@ class Modal extends React.Component<Props> {
         const WrapperComponent = shouldNotUsePortal ? 'div' : Portal;
         // Render a style tag to prevent body from scrolling as long as the Modal is open
         return (
-            <WrapperComponent className={classNames('modal', className)} onKeyDown={this.onKeyDown} tabIndex="-1">
+            <WrapperComponent
+                className={classNames('modal', fullscreen && 'modal-fullscreen', className)}
+                onKeyDown={this.onKeyDown}
+                tabIndex="-1"
+                style={responsiveWidthStyle}
+            >
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
                 <div className="modal-backdrop" onClick={this.onBackdropClick} style={style.backdrop} />
-                <FocusTrap className="modal-dialog-container">
+                <FocusTrap
+                    className={classNames('modal-dialog-container', fullscreen && 'modal-dialog-container-fullscreen')}
+                >
                     {isLoading ? (
                         <LoadingIndicator size="large" />
                     ) : (
                         <ModalDialog
+                            fullscreen
                             modalRef={modalEl => {
                                 // This callback gets passed through as a regular prop since
                                 // ModalDialog is wrapped in a HOC
@@ -172,5 +227,7 @@ class Modal extends React.Component<Props> {
         );
     }
 }
+const ResponsiveModal = withViewportSize(Modal);
 
+export { ResponsiveModal };
 export default Modal;

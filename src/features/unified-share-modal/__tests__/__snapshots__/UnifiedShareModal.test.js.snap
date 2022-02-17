@@ -28,6 +28,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       classification={
@@ -123,6 +125,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       classification={
@@ -218,6 +222,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       classification={
@@ -316,6 +322,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       classification={
@@ -411,6 +419,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       classification={
@@ -505,6 +515,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       classification={
@@ -599,6 +611,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       canInvite={false}
@@ -694,6 +708,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       canInvite={false}
@@ -789,6 +805,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       canInvite={true}
@@ -884,6 +902,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       canInvite={true}
@@ -979,6 +999,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showCollaboratorList={true}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       classification={
@@ -1083,6 +1105,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       classification={
@@ -1182,6 +1206,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       classification={
@@ -1280,6 +1306,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       classification={
@@ -1374,6 +1402,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       canInvite={true}
@@ -1467,6 +1497,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       canInvite={true}
@@ -1567,6 +1599,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         showCollaboratorList={false}
       />
     }
+    viewHeight={null}
+    viewWidth={null}
   >
     <UnifiedShareForm
       canInvite={true}

@@ -1,5 +1,6 @@
 @import '../../styles/variables';
 @import '../../styles/mixins/buttons';
+@import '../../styles/constants/media-queries';
 
 /**************************************
  * Modal
@@ -30,6 +31,10 @@
     overflow: auto;
     outline: 0;
 
+    @include breakpoint($large-screen) {
+        padding: 0;
+    }
+
     .modal-dialog {
         border: none;
         box-shadow: none;
@@ -48,6 +53,7 @@
 }
 
 .modal-dialog-container {
+    min-width: 100%;
     margin: auto;
 }
 
@@ -62,6 +68,18 @@
     background-clip: padding-box;
     border-radius: $bdl-border-radius-size-xlarge;
     box-shadow: 0 1px 1px 1px fade-out($black, .95);
+}
+
+.modal-dialog-container-fullscreen {
+    height: 100%;
+
+    .modal-dialog {
+        min-width: 100%;
+        max-width: 100%;
+        min-height: 100%;
+        padding: 22px 16px 12px 16px;
+        border-radius: 0;
+    }
 }
 
 .modal-title {
@@ -92,6 +110,10 @@
     background: none;
     border: 0;
     cursor: pointer;
+
+    .fullscreen {
+        right: 10px;
+    }
 }
 
 .modal-backdrop {
