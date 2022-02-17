@@ -13,11 +13,10 @@ type Props = {
     children: any,
     className?: string,
     elementId: string,
-    overlay?: ?React$Element<'div'>,
     sidebarView: string,
     title: React.Node,
 };
-const SidebarContent = ({ actions, children, className, title, elementId, overlay, sidebarView, ...rest }: Props) => {
+const SidebarContent = ({ actions, children, className, title, elementId, sidebarView, ...rest }: Props) => {
     const label = `${elementId}${elementId === '' ? '' : '_'}${sidebarView}`;
     const id = `${label}-content`;
 
@@ -37,7 +36,6 @@ const SidebarContent = ({ actions, children, className, title, elementId, overla
             <div className="bcs-scroll-content-wrapper">
                 <div className="bcs-scroll-content">{children}</div>
             </div>
-            {overlay}
         </div>
     );
 };

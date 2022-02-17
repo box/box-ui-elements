@@ -13,8 +13,6 @@ import SidebarContent from '../SidebarContent';
 import VersionsMenu from './VersionsMenu';
 import { BackButton } from '../../common/nav-button';
 import PlainButton from '../../../components/plain-button/PlainButton';
-import Button from '../../../components/button';
-import BoxDrive140 from '../../../../es/illustration/BoxDrive140';
 import { DEFAULT_FETCH_END } from '../../../constants';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
 import type { BoxItemVersion } from '../../../common/types/core';
@@ -29,59 +27,22 @@ type Props = {
     isLoading: boolean,
     onUpgradeClick?: () => void,
     parentName: string,
-    showUpsell: boolean,
-    showUpsellWithPicture: boolean,
     versionCount: number,
     versionLimit: number,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsSidebar = ({
-    error,
-    errorTitle,
-    onUpgradeClick,
-    isLoading,
-    parentName,
-    showUpsell,
-    showUpsellWithPicture,
-    versions,
-    ...rest
-}: Props) => {
+const VersionsSidebar = ({ error, errorTitle, onUpgradeClick, isLoading, parentName, versions, ...rest }: Props) => {
     const showLimit = versions.length >= MAX_VERSIONS;
     const showVersions = !!versions.length;
     const showEmpty = !isLoading && !showVersions && !onUpgradeClick;
     const showError = !!error;
-
-    const upsellOverlay = () => {
-        if (showUpsell || showUpsellWithPicture) {
-            return (
-                <div className="bcs-upsell-wrapper">
-                    <div className="bcs-version-upsell">
-                        {showUpsellWithPicture && <BoxDrive140 className="bcs-version-upsell-icon" />}
-                        <p className="bcs-upgrade-now">Upgrade Now</p>
-                        <p className="bcs-upgrade-now-message">
-                            <FormattedMessage {...messages.versionUpsell} />
-                        </p>
-                        <Button
-                            className="bcs-upgrade-button"
-                            data-resin-target="versioning_error_error_message_upgrade_cta"
-                            onClick={onUpgradeClick}
-                        >
-                            <FormattedMessage {...messages.upgradeButton} />
-                        </Button>
-                    </div>
-                </div>
-            );
-        }
-        return null;
-    };
 
     return (
         <SidebarContent
             className="bcs-Versions"
             data-resin-component="preview"
             data-resin-feature="versions"
-            overlay={upsellOverlay()}
             title={
                 <>
                     <BackButton data-resin-target="back" to={`/${parentName}`} />
@@ -114,7 +75,7 @@ const VersionsSidebar = ({
 
                 {showVersions && (
                     <div className="bcs-Versions-menu">
-                        <VersionsMenu versions={versions} showVersionPreview {...rest} />
+                        <VersionsMenu versions={versions} {...rest} />
                     </div>
                 )}
                 {showLimit && (

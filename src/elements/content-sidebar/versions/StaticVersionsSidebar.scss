@@ -1,0 +1,50 @@
+@import '../../../styles/variables';
+
+.btn-plain.bcs-Versions-upgrade {
+    color: $bdl-box-blue;
+    font-weight: bold;
+}
+
+.bcs-upsell-wrapper {
+    position: relative;
+    height: 100%;
+    text-align: center;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 30%);
+}
+
+.bcs-version-upsell {
+    position: absolute;
+    top: 30%;
+    padding: 48px;
+}
+
+.bcs-upgrade-now {
+    margin: 0 0 10px;
+    font-weight: bold;
+}
+
+.bcs-upgrade-button {
+    padding: 10px 15px;
+    border-radius: 5px;
+
+    &.btn {
+        color: $white;
+        background-color: $bdl-box-blue;
+        border-color: $bdl-box-blue;
+    }
+
+    &:hover {
+        color: $bdl-gray;
+        background-color: $bdl-box-blue-50;
+        border-color: $bdl-box-blue-50;
+    }
+}
+
+.bcs-version-upsell-icon {
+    width: 80px;
+    height: 80px;
+}
+
+.bcs-upgrade-now-message {
+    margin-bottom: 10px;
+}
