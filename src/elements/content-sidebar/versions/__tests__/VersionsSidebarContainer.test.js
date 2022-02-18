@@ -191,10 +191,21 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         test('should set state to default values with error message', () => {
             const wrapper = getWrapper();
 
-            wrapper.instance().handleFetchError();
+            wrapper.instance().handleFetchError({ status: 500 });
+
+            expect(wrapper.state()).toMatchObject({
+                error: messages.versionFetchError,
+                errorTitle: messages.versionServerError,
+            });
+        });
+        test('should set state to default values with error upsell message if showVersionUpsell is true', () => {
+            const wrapper = getWrapper({ onUpgradeClick: () => {} });
+
+            wrapper.instance().handleFetchError({ status: 403 });
 
             expect(wrapper.state()).toEqual({
-                error: messages.versionFetchError,
+                error: messages.versionNotAvailable,
+                errorTitle: messages.versionAccessError,
                 isLoading: false,
                 isWatermarked: false,
                 versionCount: 0,

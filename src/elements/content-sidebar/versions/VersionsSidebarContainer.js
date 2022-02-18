@@ -27,6 +27,7 @@ type Props = {
     hasSidebarInitialized?: boolean,
     history: RouterHistory,
     match: Match,
+    onUpgradeClick?: () => void,
     onVersionChange: VersionChangeCallback,
     onVersionDelete: VersionActionCallback,
     onVersionDownload: VersionActionCallback,
@@ -39,6 +40,7 @@ type Props = {
 
 type State = {
     error?: MessageDescriptor,
+    errorTitle?: MessageDescriptor,
     isLoading: boolean,
     isWatermarked: boolean,
     versionCount: number,
@@ -163,9 +165,12 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.mergeResponse(data);
     };
 
-    handleFetchError = (): void => {
+    handleFetchError = (error: Object): void => {
+        const { onUpgradeClick } = this.props;
+        const shouldShowVersionErrorWithUpsell = !!onUpgradeClick && error.status === 403;
         this.setState({
-            error: messages.versionFetchError,
+            error: shouldShowVersionErrorWithUpsell ? messages.versionNotAvailable : messages.versionFetchError,
+            errorTitle: shouldShowVersionErrorWithUpsell ? messages.versionAccessError : messages.versionServerError,
             isLoading: false,
             isWatermarked: false,
             versionCount: 0,
@@ -275,7 +280,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     render() {
-        const { fileId, parentName } = this.props;
+        const { fileId, parentName, onUpgradeClick } = this.props;
 
         return (
             <VersionsSidebar
@@ -285,6 +290,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
                 onPreview={this.handleActionPreview}
                 onPromote={this.handleActionPromote}
                 onRestore={this.handleActionRestore}
+                onUpgradeClick={onUpgradeClick}
                 parentName={parentName}
                 {...this.state}
             />
