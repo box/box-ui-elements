@@ -1,6 +1,7 @@
 import React from 'react';
 import { createIntl } from 'react-intl';
 import collaboratorList from '../__mocks__/collaborators';
+import PresenceCollaborator from '../PresenceCollaborator';
 import { PresenceCollaboratorsListComponent as PresenceCollaboratorsList } from '../PresenceCollaboratorsList';
 
 const intl = createIntl({});
@@ -132,68 +133,23 @@ describe('features/presence/PresenceCollaboratorsList', () => {
         });
     });
 
-    describe('renderTimestampMessage()', () => {
-        test('should return null when interactionType is an unkown type', () => {
-            const wrapper = shallow(<PresenceCollaboratorsList intl={intl} collaborators={collaboratorList} />, {
-                disableLifecycleMethods: true,
-            });
-            const instance = wrapper.instance();
-            const res = instance.renderTimestampMessage(123, 'test1234');
-            expect(res).toEqual(null);
-        });
-
-        test('should not return null when interactionType is a known type', () => {
-            const wrapper = shallow(<PresenceCollaboratorsList intl={intl} collaborators={collaboratorList} />, {
-                disableLifecycleMethods: true,
-            });
-            const instance = wrapper.instance();
-            const res = instance.renderTimestampMessage(123, 'user.item_preview');
-            expect(res).not.toEqual(null);
-        });
-    });
-
     describe('render()', () => {
-        test('should correctly render an empty PresenceCollaboratorsList', () => {
-            const collaborators = [];
+        const wrapper = shallow(
+            <PresenceCollaboratorsList
+                intl={intl}
+                collaborators={collaboratorList}
+                getLinkCallback={() => {}}
+                inviteCallback={() => {}}
+            />,
+            { disableLifecycleMethods: true },
+        );
 
-            const wrapper = shallow(<PresenceCollaboratorsList intl={intl} collaborators={collaborators} />, {
-                disableLifecycleMethods: true,
-            });
-
-            const instance = wrapper.instance();
-
-            const calculateOverflowSpy = jest.fn().mockReturnValue({
-                isScrollableBelow: false,
-                isScrollableAbove: false,
-            });
-            instance.calculateOverflow = calculateOverflowSpy;
-
-            expect(wrapper.find('.bdl-PresenceCollaboratorsList-list').length).toBe(1);
-            expect(wrapper.find('.bdl-PresenceCollaboratorsList-item').length).toBe(0);
-            expect(wrapper.find('.bdl-PresenceCollaboratorsList-actions').length).toBe(0);
+        test('should correctly render dropdownActions', () => {
+            expect(wrapper.find('.bdl-PresenceCollaboratorsList-actions').length).toBe(1);
         });
 
         test('should correctly render collaborators', () => {
-            const wrapper = shallow(<PresenceCollaboratorsList intl={intl} collaborators={collaboratorList} />, {
-                disableLifecycleMethods: true,
-            });
-
-            expect(wrapper.find('.bdl-PresenceCollaboratorsList-list').length).toBe(1);
-            expect(wrapper.find('.bdl-PresenceCollaboratorsList-item').length).toBe(5);
-        });
-
-        test('should correctly render dropdownActions', () => {
-            const wrapper = shallow(
-                <PresenceCollaboratorsList
-                    intl={intl}
-                    collaborators={collaboratorList}
-                    getLinkCallback={() => {}}
-                    inviteCallback={() => {}}
-                />,
-                { disableLifecycleMethods: true },
-            );
-
-            expect(wrapper.find('.bdl-PresenceCollaboratorsList-actions').length).toBe(1);
+            expect(wrapper.find(PresenceCollaborator)).toHaveLength(5);
         });
     });
 });
