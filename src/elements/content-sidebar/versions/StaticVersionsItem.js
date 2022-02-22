@@ -13,28 +13,23 @@ import VersionsItemBadge from './VersionsItemBadge';
 import { ReadableTime } from '../../../components/time';
 import PlainButton from '../../../components/plain-button';
 
-import './VersionsItem.scss';
-
 type Props = {
     versionNumber: string,
-    versionTime: string,
 };
 
-const FIVE_MINUTES_MS = 5 * 60 * 1000;
+const StaticVersionsItem = ({ versionNumber }: Props) => {
+    const versionDisplayName = <FormattedMessage {...messages.versionStaticUser} />;
 
-const StaticVersionsItem = ({ versionNumber, versionTime }: Props) => {
-    // Version info helpers
-    const versionTimestamp = new Date(versionTime).getTime();
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const versionTimestamp = new Date(yesterday).getTime();
 
-    const versionDisplayName = <FormattedMessage {...messages.versionUserUnknown} />;
-
-    const buttonClassName = classNames('bcs-VersionsItemButton', {
-        'bcs-is-disabled': false,
-        'bcs-is-selected': false,
+    const buttonClassName = classNames('bcs-static-VersionsItemButton', {
+        'bcs-is-selected': versionNumber === '1',
     });
 
     return (
-        <div className="bcs-VersionsItem">
+        <div className="bcs-static-VersionsItem">
             <PlainButton
                 aria-disabled={false}
                 className={buttonClassName}
@@ -42,28 +37,30 @@ const StaticVersionsItem = ({ versionNumber, versionTime }: Props) => {
                 isDisabled
                 type="button"
             >
-                <div className="bcs-VersionsItem-badge">
+                <div className="bcs-static-VersionsItem-badge">
                     <VersionsItemBadge versionNumber={versionNumber} />
                 </div>
 
-                <div className="bcs-VersionsItem-details">
-                    <div className="bcs-VersionsItem-current">
-                        <FormattedMessage {...messages.versionCurrent} />
-                    </div>
+                <div className="bcs-static-VersionsItem-details">
+                    {versionNumber === '1' && (
+                        <div className="bcs-static-VersionsItem-current">
+                            <FormattedMessage {...messages.versionCurrent} />
+                        </div>
+                    )}
 
-                    <div className="bcs-VersionsItem-log" data-testid="bcs-VersionsItem-log" title={versionDisplayName}>
+                    <div
+                        className="bcs-static-VersionsItem-log"
+                        data-testid="bcs-VersionsItem-log"
+                        title={versionDisplayName}
+                    >
                         <FormattedMessage {...messages.versionUploadedBy} values={{ name: versionDisplayName }} />
                     </div>
 
-                    <div className="bcs-VersionsItem-info">
-                        <time className="bcs-VersionsItem-date" dateTime={versionTime}>
-                            <ReadableTime
-                                alwaysShowTime
-                                relativeThreshold={FIVE_MINUTES_MS}
-                                timestamp={versionTimestamp}
-                            />
+                    <div className="bcs-static-VersionsItem-info">
+                        <time dateTime={yesterday}>
+                            <ReadableTime timestamp={versionTimestamp} />
                         </time>
-                        <span className="bcs-VersionsItem-size">{sizeUtil(1000)}</span>
+                        <span className="bcs-static-VersionsItem-size">{sizeUtil(3000000)}</span>
                     </div>
                 </div>
             </PlainButton>

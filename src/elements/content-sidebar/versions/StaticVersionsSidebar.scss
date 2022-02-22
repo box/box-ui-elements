@@ -1,8 +1,109 @@
 @import '../../../styles/variables';
+@import '../../common/variables';
 
-.btn-plain.bcs-Versions-upgrade {
+.bcs-static-Versions {
+    position: relative;
+    width: 341px; // 1px extra to account for the margin left
+    margin-left: -1px; // -1px to make nav button hover not have blank space
+    border-left: 1px solid $bdl-gray-10;
+
+    .bcs-static-content-header {
+        display: flex;
+        align-items: center;
+        height: 60px;
+        margin: 0 25px;
+        border-bottom: 1px solid $bdl-gray-10;
+
+        .bcs-static-title {
+            display: flex;
+            font-size: 16px;
+        }
+    }
+
+    .bcs-static-scroll-content-wrapper {
+        position: absolute;
+        width: calc(100% - 20px);
+
+        .bcs-static-Versions-content {
+            padding-left: 25px;
+
+            .bcs-static-VersionsGroup-heading {
+                margin-top: 0;
+                margin-bottom: 0;
+                padding-top: 20px;
+                padding-bottom: 10px;
+                color: $bdl-gray-62;
+                font-size: 14px;
+                line-height: 1;
+            }
+        }
+    }
+}
+
+.bcs-static-VersionsItemButton {
+    display: flex;
+    text-align: left;
+    border-radius: $bdl-border-radius-size;
+    transition: background-color 50ms ease-in, border 50ms ease-in;
+
+    &.bcs-is-selected {
+        width: 100%;
+        background-color: $hover-blue-background;
+        border: 1px solid $bdl-box-blue;
+    }
+}
+
+.bcs-static-VersionsItem {
+    position: relative;
+
+    .bcs-static-VersionsItemButton {
+        padding: 15px 10px;
+    }
+}
+
+.bcs-static-VersionsItem-badge {
+    flex: 1 0 auto;
+    margin-right: 10px;
+}
+
+.bcs-static-VersionsItem-current {
     color: $bdl-box-blue;
     font-weight: bold;
+}
+
+.bcs-static-VersionsItem-details {
+    flex: 1 1 100%;
+    overflow: hidden;
+
+    & > :not(.bcs-static-VersionsItem-info) {
+        margin-right: 35px; // Avoid flowing under action toggle button
+    }
+}
+
+.bcs-static-VersionsItem-log {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.bcs-static-VersionsItem-info {
+    display: flex;
+    align-items: center;
+    color: $bdl-gray-62;
+    white-space: nowrap;
+}
+
+.bcs-static-VersionsItem-size {
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &::before {
+        padding-right: 5px;
+        padding-left: 5px;
+        font-size: 8px;
+        vertical-align: top;
+        content: '•';
+    }
 }
 
 .bcs-upsell-wrapper {
@@ -10,41 +111,38 @@
     height: 100%;
     text-align: center;
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 30%);
-}
 
-.bcs-version-upsell {
-    position: absolute;
-    top: 30%;
-    padding: 48px;
-}
+    .bcs-version-upsell {
+        position: absolute;
+        top: 30%;
+        padding: 48px;
 
-.bcs-upgrade-now {
-    margin: 0 0 10px;
-    font-weight: bold;
-}
+        .bcs-version-upsell-icon {
+            width: 80px;
+            height: 80px;
+        }
 
-.bcs-upgrade-button {
-    padding: 10px 15px;
-    border-radius: 5px;
+        .bcs-upgrade-now {
+            margin: 0 0 10px;
+            font-weight: bold;
+        }
 
-    &.btn {
-        color: $white;
-        background-color: $bdl-box-blue;
-        border-color: $bdl-box-blue;
+        .bcs-upgrade-button {
+            margin-top: -8px;
+            padding: 10px 15px;
+            border-radius: 5px;
+
+            &.btn {
+                color: $white;
+                background-color: $bdl-box-blue;
+                border-color: $bdl-box-blue;
+            }
+
+            &:hover {
+                color: $bdl-gray;
+                background-color: $bdl-box-blue-50;
+                border-color: $bdl-box-blue-50;
+            }
+        }
     }
-
-    &:hover {
-        color: $bdl-gray;
-        background-color: $bdl-box-blue-50;
-        border-color: $bdl-box-blue-50;
-    }
-}
-
-.bcs-version-upsell-icon {
-    width: 80px;
-    height: 80px;
-}
-
-.bcs-upgrade-now-message {
-    margin-bottom: 10px;
 }

@@ -153,9 +153,9 @@ const messages = defineMessages({
         description: 'Heading for inline error messages with upsell.',
     },
     versionUpgradeButton: {
-        id: 'be.sidebarVersions.versionUpgradeButton',
+        id: 'be.sidebarVersions.upgradeLink',
         defaultMessage: 'Upgrade Now',
-        description: 'Text telling user to upgrade now.',
+        description: 'Text on the upgrade button shown when user does not have access to Version History',
     },
     versionUploadedBy: {
         id: 'be.sidebarVersions.uploadedBy',
@@ -166,6 +166,11 @@ const messages = defineMessages({
         id: 'be.sidebarVersions.versionUserUnknown',
         defaultMessage: 'Unknown',
         description: 'Name displayed for unknown or deleted users.',
+    },
+    versionStaticUser: {
+        id: 'be.sidebarVersions.versionStaticUser',
+        defaultMessage: 'John Doe',
+        description: 'Name displayed for static preview of version history',
     },
     versionMaxEntries: {
         id: 'be.sidebarVersions.versionMaxEntries',
@@ -190,13 +195,13 @@ const messages = defineMessages({
     versionUpsell: {
         defaultMessage:
             'Sorry, version history is not available with your current account plan. To access versioning, select from one of our paid plans.',
-        description: 'upgrade now description',
-        id: 'sidebar.version.upsell',
+        description: 'Upgrade message shown when user does not have access to Version History',
+        id: 'be.sidebarVersions.versionUpsell',
     },
     upgradeButton: {
         defaultMessage: 'Upgrade',
-        description: 'upgrade button text',
-        id: 'sidebar.version.upgrade',
+        description: 'Text on the upgrade button shown when user does not have access to Version History',
+        id: 'be.sidebarVersions.upgradeButton',
     },
 });
 
