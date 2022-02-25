@@ -13,8 +13,8 @@ import Button from '../../../components/button';
 import BoxDrive140 from '../../../illustration/BoxDrive140';
 
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
-import StaticVersionsItem from './StaticVersionsItem';
 
+import VersionsMenu from './VersionsMenu';
 import './StaticVersionsSidebar.scss';
 
 type Props = {
@@ -24,7 +24,27 @@ type Props = {
     showUpsellWithPicture: boolean,
 };
 
-const StaticVersionsSidebar = ({ onUpgradeClick, isLoading, parentName, showUpsellWithPicture }: Props) => {
+const StaticVersionsSidebar = ({ onUpgradeClick, isLoading, parentName, showUpsellWithPicture }: Props): Object => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const versionTimestamp = new Date(yesterday);
+
+    const versions = ['1', '2', '3'].map(versionNumber => {
+        return {
+            id: versionNumber,
+            version_number: versionNumber,
+            type: 'file_version',
+            permissions: {
+                can_preview: true,
+            },
+            created_at: versionTimestamp.toUTCString(),
+            modified_by: null,
+            size: 1875887,
+            trashed_at: null,
+            uploader_display_name: messages.versionStaticUser.defaultMessage,
+        };
+    });
+
     return (
         <div
             className="bcs-static-Versions"
@@ -46,22 +66,9 @@ const StaticVersionsSidebar = ({ onUpgradeClick, isLoading, parentName, showUpse
                     crawlerPosition="top"
                     isLoading={isLoading}
                 >
-                    <section>
-                        <h4 className="bcs-static-VersionsGroup-heading">
-                            <FormattedMessage {...messages.versionsToday} />
-                        </h4>
-                        <ul>
-                            <li>
-                                <StaticVersionsItem versionNumber="1" />
-                            </li>
-                            <li>
-                                <StaticVersionsItem versionNumber="2" />
-                            </li>
-                            <li>
-                                <StaticVersionsItem versionNumber="3" />
-                            </li>
-                        </ul>
-                    </section>
+                    <div className="bcs-Versions-menu">
+                        <VersionsMenu versions={versions} fileId="1" versionCount={3} versionLimit={3} />
+                    </div>
                 </LoadingIndicatorWrapper>
             </div>
 

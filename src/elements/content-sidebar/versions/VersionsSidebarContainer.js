@@ -36,9 +36,15 @@ type Props = {
     onVersionPromote: VersionActionCallback,
     onVersionRestore: VersionActionCallback,
     parentName: string,
-    showUpsell: boolean,
-    showUpsellWithPicture: boolean,
     versionId?: string,
+    versionUpsellExperience: string,
+};
+
+// Epoxy Experiment Bucks
+const UPSELL_TYPE = {
+    STATIC_VERSION_HISTORY: 'STATIC_VERSION_HISTORY',
+    STATIC_VERSION_HISTORY_WITH_PICTURE: 'STATIC_VERSION_HISTORY_WITH_PICTURE',
+    ERROR_MESSAGE: 'ERROR_MESSAGE',
 };
 
 type State = {
@@ -284,13 +290,16 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     render() {
-        const { fileId, parentName, onUpgradeClick, showUpsell, showUpsellWithPicture } = this.props;
-        if (showUpsell || showUpsellWithPicture) {
+        const { fileId, parentName, onUpgradeClick, versionUpsellExperience } = this.props;
+        if (
+            versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY ||
+            versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY_WITH_PICTURE
+        ) {
             return (
                 <StaticVersionsSidebar
                     onUpgradeClick={onUpgradeClick}
                     parentName={parentName}
-                    showUpsellWithPicture={showUpsellWithPicture}
+                    showUpsellWithPicture={versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY_WITH_PICTURE}
                     {...this.state}
                 />
             );
