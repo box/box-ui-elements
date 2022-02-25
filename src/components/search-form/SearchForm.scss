@@ -17,11 +17,6 @@
         border: 0;
         cursor: pointer;
 
-        &:hover,
-        &:focus {
-            outline: none;
-        }
-
         path {
             transition: fill linear .1s;
         }
