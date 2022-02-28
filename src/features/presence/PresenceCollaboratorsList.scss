@@ -77,50 +77,23 @@
     /* end GROWTH-382 */
 }
 
-.bdl-PresenceCollaboratorsList-title {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: $bdl-gray;
-    font-size: 15px;
-}
-
-.bdl-PresenceCollaboratorsList-item {
+.bdl-PresenceCollaborator {
     display: flex;
     align-items: center;
     margin-top: 10px;
-}
-
-.bdl-PresenceCollaboratorsList-item-info-container {
-    display: inline-block;
-    margin-left: 10px;
-}
-
-.bdl-PresenceCollaboratorsList-item-info-name {
-    width: 180px;
-    overflow: hidden;
-    color: $bdl-gray;
-    font-size: 13px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-
-    a {
-        color: $bdl-gray;
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
-}
-
-.bdl-PresenceCollaboratorsList-item-info-time {
-    color: $bdl-gray-62;
-    font-size: 12px;
 }
 
 .bdl-PresenceCollaboratorsList-list {
     max-height: 200px;
     overflow-x: hidden;
     overflow-y: auto;
+}
+
+.bdl-PresenceCollaboratorsList-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: $bdl-gray;
+    font-size: 15px;
 }
 
 .bdl-PresenceCollaboratorsList-actions {

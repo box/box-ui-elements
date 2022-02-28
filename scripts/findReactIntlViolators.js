@@ -9,7 +9,7 @@ const features = 'formatRelativeTime|FormattedRelativeTime|createIntl|useIntl';
 const allowList = [
     'src/components/time/ReadableTime.js',
     'src/features/presence/PresenceAvatarTooltipContent.tsx',
-    'src/features/presence/PresenceCollaboratorsList.js',
+    'src/features/presence/PresenceCollaborator.js',
     'src/features/virtualized-table-renderers/lastModifiedByCellRenderer.js',
 ];
 function getFilesInDirectory(dir) {
