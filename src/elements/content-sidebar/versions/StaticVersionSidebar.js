@@ -5,6 +5,7 @@
  */
 
 import * as React from 'react';
+
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
@@ -24,10 +25,9 @@ type Props = {
     showUpsellWithPicture: boolean,
 };
 
-const StaticVersionsSidebar = ({ onUpgradeClick, isLoading, parentName, showUpsellWithPicture }: Props): Object => {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const versionTimestamp = new Date(yesterday);
+const StaticVersionsSidebar = ({ isLoading, onUpgradeClick, parentName, showUpsellWithPicture }: Props): React.Node => {
+    const versionTimestamp = new Date();
+    versionTimestamp.setDate(versionTimestamp.getDate() - 1);
 
     const versions = ['1', '2', '3'].map(versionNumber => {
         return {
@@ -76,14 +76,14 @@ const StaticVersionsSidebar = ({ onUpgradeClick, isLoading, parentName, showUpse
                 <div className="bcs-version-upsell">
                     {showUpsellWithPicture && <BoxDrive140 className="bcs-version-upsell-icon" />}
                     <p className="bcs-upgrade-now">
-                        <FormattedMessage {...messages.versionUpgradeButton} />
+                        <FormattedMessage {...messages.versionUpgradeLink} />
                     </p>
                     <p>
                         <FormattedMessage {...messages.versionUpsell} />
                     </p>
                     <Button
                         className="bcs-upgrade-button"
-                        data-resin-target="versioning_error_error_message_upgrade_cta"
+                        data-resin-target="versioning_error_upgrade_cta"
                         onClick={onUpgradeClick}
                     >
                         <FormattedMessage {...messages.upgradeButton} />

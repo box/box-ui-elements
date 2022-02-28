@@ -37,7 +37,7 @@ type Props = {
     onVersionRestore: VersionActionCallback,
     parentName: string,
     versionId?: string,
-    versionUpsellExperience: string,
+    versionUpsellExperience?: string,
 };
 
 // Epoxy Experiment Bucks

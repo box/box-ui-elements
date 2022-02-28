@@ -152,7 +152,7 @@ const messages = defineMessages({
         defaultMessage: "You don't have access to versioning",
         description: 'Heading for inline error messages with upsell.',
     },
-    versionUpgradeButton: {
+    versionUpgradeLink: {
         id: 'be.sidebarVersions.upgradeLink',
         defaultMessage: 'Upgrade Now',
         description: 'Text on the upgrade button shown when user does not have access to Version History',
