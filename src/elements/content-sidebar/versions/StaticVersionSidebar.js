@@ -5,22 +5,21 @@
  */
 
 import * as React from 'react';
-
 import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+
+import BoxDrive140 from '../../../illustration/BoxDrive140';
 
 import { BackButton } from '../../common/nav-button';
 import Button from '../../../components/button';
-import BoxDrive140 from '../../../illustration/BoxDrive140';
-
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
-
 import VersionsMenu from './VersionsMenu';
+
+import messages from './messages';
 import './StaticVersionsSidebar.scss';
 
 type Props = {
     isLoading: boolean,
-    onUpgradeClick?: () => void,
+    onUpgradeClick: () => void,
     parentName: string,
     showUpsellWithPicture: boolean,
 };

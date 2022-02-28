@@ -292,8 +292,9 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     render() {
         const { fileId, parentName, onUpgradeClick, versionUpsellExperience } = this.props;
         if (
-            versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY ||
-            versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY_WITH_PICTURE
+            onUpgradeClick &&
+            (versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY ||
+                versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY_WITH_PICTURE)
         ) {
             return (
                 <StaticVersionsSidebar
