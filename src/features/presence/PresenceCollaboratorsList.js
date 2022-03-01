@@ -1,14 +1,13 @@
 import * as React from 'react';
 import classnames from 'classnames';
-import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
 import { FormattedMessage, injectIntl } from 'react-intl';
+
 import Button from '../../components/button';
-import Link from '../../components/link/LinkBase';
+import PresenceCollaborator from './PresenceCollaborator';
 import messages from './messages';
-import PresenceAvatar from './PresenceAvatar';
-import { determineInteractionMessage } from './utils/presenceUtils';
+
 import './PresenceCollaboratorsList.scss';
 
 class PresenceCollaboratorsList extends React.Component<Props> {
@@ -96,57 +95,6 @@ class PresenceCollaboratorsList extends React.Component<Props> {
         </div>
     );
 
-    renderTimestampMessage = (interactedAt, interactionType) => {
-        const lastActionMessage = determineInteractionMessage(interactionType, interactedAt);
-        const { intl } = this.props;
-        const timeAgo = intl.formatRelativeTime
-            ? intl.formatRelativeTime(interactedAt - Date.now())
-            : intl.formatRelative(interactedAt);
-
-        if (lastActionMessage) {
-            return (
-                <FormattedMessage
-                    {...lastActionMessage}
-                    values={{
-                        timeAgo,
-                    }}
-                />
-            );
-        }
-        return null;
-    };
-
-    renderCollabList = () => {
-        const { collaborators } = this.props;
-        return collaborators.map(collaborator => {
-            const { avatarUrl, id, isActive, interactedAt, interactionType, name, profileUrl } = collaborator;
-
-            return (
-                <div key={id} className="bdl-PresenceCollaboratorsList-item" role="listitem">
-                    <PresenceAvatar avatarUrl={avatarUrl} id={id} isActive={isActive} isDropDownAvatar name={name} />
-                    <div className="bdl-PresenceCollaboratorsList-item-info-container">
-                        <div className="bdl-PresenceCollaboratorsList-item-info-name">
-                            {isEmpty(profileUrl) ? (
-                                <span>{name}</span>
-                            ) : (
-                                <Link href={profileUrl} target="_blank">
-                                    {name}
-                                </Link>
-                            )}
-                        </div>
-                        <div className="bdl-PresenceCollaboratorsList-item-info-time">
-                            {isActive ? (
-                                <FormattedMessage {...messages.activeNowText} />
-                            ) : (
-                                this.renderTimestampMessage(interactedAt, interactionType)
-                            )}
-                        </div>
-                    </div>
-                </div>
-            );
-        });
-    };
-
     renderActions = () => {
         const { getLinkCallback, inviteCallback } = this.props;
 
@@ -172,7 +120,7 @@ class PresenceCollaboratorsList extends React.Component<Props> {
 
     render() {
         const { isScrollableAbove, isScrollableBelow } = this.state;
-        const { getLinkCallback, inviteCallback } = this.props;
+        const { collaborators, getLinkCallback, inviteCallback } = this.props;
         const buttonsPresent = getLinkCallback || inviteCallback;
 
         const dropdownListClasses = classnames('bdl-PresenceCollaboratorsList-list', {
@@ -183,7 +131,6 @@ class PresenceCollaboratorsList extends React.Component<Props> {
         });
 
         const title = this.renderTitle();
-        const collabList = this.renderCollabList();
         const actions = this.renderActions();
 
         return (
@@ -197,7 +144,9 @@ class PresenceCollaboratorsList extends React.Component<Props> {
                     onScroll={this.throttledHandleScroll}
                     role="list"
                 >
-                    {collabList}
+                    {collaborators.map(collaborator => (
+                        <PresenceCollaborator collaborator={collaborator} key={collaborator.id} role="listitem" />
+                    ))}
                 </div>
                 {actions}
             </div>
