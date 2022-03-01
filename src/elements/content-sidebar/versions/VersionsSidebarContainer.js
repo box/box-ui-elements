@@ -15,12 +15,12 @@ import type { MessageDescriptor } from 'react-intl';
 import API from '../../../api';
 import messages from './messages';
 import openUrlInsideIframe from '../../../utils/iframe';
+import StaticVersionsSidebar from './StaticVersionSidebar';
 import VersionsSidebar from './VersionsSidebar';
 import VersionsSidebarAPI from './VersionsSidebarAPI';
 import { withAPIContext } from '../../common/api-context';
 import type { VersionActionCallback, VersionChangeCallback } from './flowTypes';
 import type { BoxItemVersion, BoxItem, FileVersions } from '../../../common/types/core';
-import StaticVersionsSidebar from './StaticVersionSidebar';
 
 type Props = {
     api: API,
@@ -37,10 +37,9 @@ type Props = {
     onVersionRestore: VersionActionCallback,
     parentName: string,
     versionId?: string,
-    versionUpsellExperience?: string,
+    versionUpsellExperience: ?string,
 };
 
-// Epoxy Experiment Bucks
 const UPSELL_TYPE = {
     STATIC_VERSION_HISTORY: 'STATIC_VERSION_HISTORY',
     STATIC_VERSION_HISTORY_WITH_PICTURE: 'STATIC_VERSION_HISTORY_WITH_PICTURE',
@@ -291,6 +290,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
     render() {
         const { fileId, parentName, onUpgradeClick, versionUpsellExperience } = this.props;
+
         if (
             onUpgradeClick &&
             (versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY ||
@@ -305,6 +305,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
                 />
             );
         }
+
         return (
             <VersionsSidebar
                 fileId={fileId}

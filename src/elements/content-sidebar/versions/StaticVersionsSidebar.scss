@@ -1,82 +1,67 @@
 @import '../../../styles/variables';
 @import '../../common/variables';
 
-.bcs-static-Versions {
+.bcs-StaticVersionSidebar {
     position: relative;
     width: 341px; // 1px extra to account for the margin left
     margin-left: -1px; // -1px to make nav button hover not have blank space
     border-left: 1px solid $bdl-gray-10;
 
-    .bcs-static-content-header {
+    .bcs-StaticVersionSidebar-header {
         display: flex;
         align-items: center;
         height: 60px;
         margin: 0 25px;
         border-bottom: 1px solid $bdl-gray-10;
 
-        .bcs-static-title {
+        .bcs-StaticVersionSidebar-title {
             display: flex;
             font-size: 16px;
         }
     }
 
-    .bcs-static-scroll-content-wrapper {
+    .bcs-StaticVersionSidebar-content-wrapper {
         position: absolute;
         width: calc(100% - 20px);
 
-        .bcs-static-Versions-content {
+        .bcs-StaticVersionSidebar-content {
             padding-left: 25px;
+            pointer-events: none;
+
+            button[data-resin-iscurrent='true'].bcs-VersionsItemButton {
+                width: 100%;
+                background-color: $hover-blue-background;
+                border: 1px solid $bdl-box-blue;
+            }
         }
     }
 }
 
-.bcs-static-Versions-content {
-    pointer-events: none;
-
-    button[data-resin-iscurrent='true'].bcs-VersionsItemButton {
-        width: 100%;
-        background-color: $hover-blue-background;
-        border: 1px solid $bdl-box-blue;
-    }
-}
-
-.bcs-upsell-wrapper {
+.bcs-StaticVersionSidebar-upsell-wrapper {
     position: relative;
     height: 100%;
     text-align: center;
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 30%);
 
-    .bcs-version-upsell {
+    .bcs-StaticVersionSidebar-upsell {
         position: absolute;
         top: 30%;
         padding: 48px;
 
-        .bcs-version-upsell-icon {
+        .bcs-StaticVersionSidebar-upsell-icon {
             width: 80px;
             height: 80px;
         }
 
-        .bcs-upgrade-now {
+        .bcs-StaticVersionSidebar-upsell-header {
             margin: 0 0 10px;
             font-weight: bold;
         }
 
-        .bcs-upgrade-button {
+        .bcs-StaticVersionSidebar-upsell-button {
             margin-top: -8px;
             padding: 10px 15px;
             border-radius: 5px;
-
-            &.btn {
-                color: $white;
-                background-color: $bdl-box-blue;
-                border-color: $bdl-box-blue;
-            }
-
-            &:hover {
-                color: $bdl-gray;
-                background-color: $bdl-box-blue-50;
-                border-color: $bdl-box-blue-50;
-            }
         }
     }
 }

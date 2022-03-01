@@ -167,11 +167,6 @@ const messages = defineMessages({
         defaultMessage: 'Unknown',
         description: 'Name displayed for unknown or deleted users.',
     },
-    versionStaticUser: {
-        id: 'be.sidebarVersions.versionStaticUser',
-        defaultMessage: 'John Doe',
-        description: 'Name displayed for static preview of version history',
-    },
     versionMaxEntries: {
         id: 'be.sidebarVersions.versionMaxEntries',
         defaultMessage: 'Version history is limited to the last {maxVersions} entries.',

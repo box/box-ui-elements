@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Versions Sidebar component
+ * @file Static Versions Sidebar component
  * @author Box
  */
 
@@ -10,11 +10,12 @@ import { FormattedMessage } from 'react-intl';
 import BoxDrive140 from '../../../illustration/BoxDrive140';
 
 import { BackButton } from '../../common/nav-button';
-import Button from '../../../components/button';
+import PrimaryButton from '../../../components/primary-button';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
 import VersionsMenu from './VersionsMenu';
 
 import messages from './messages';
+
 import './StaticVersionsSidebar.scss';
 
 type Props = {
@@ -40,53 +41,53 @@ const StaticVersionsSidebar = ({ isLoading, onUpgradeClick, parentName, showUpse
             modified_by: null,
             size: 1875887,
             trashed_at: null,
-            uploader_display_name: messages.versionStaticUser.defaultMessage,
+            uploader_display_name: 'John Doe',
         };
     });
 
     return (
         <div
-            className="bcs-static-Versions"
+            className="bcs-StaticVersionSidebar"
             role="tabpanel"
             data-resin-component="preview"
             data-resin-feature="versions"
         >
-            <div className="bcs-static-content-header">
-                <h3 className="bcs-static-title">
+            <div className="bcs-StaticVersionSidebar-header">
+                <h3 className="bcs-StaticVersionSidebar-title">
                     <>
                         <BackButton data-resin-target="back" to={`/${parentName}`} />
                         <FormattedMessage {...messages.versionsTitle} />
                     </>
                 </h3>
             </div>
-            <div className="bcs-static-scroll-content-wrapper">
+
+            <div className="bcs-StaticVersionSidebar-content-wrapper">
                 <LoadingIndicatorWrapper
-                    className="bcs-static-Versions-content"
+                    className="bcs-StaticVersionSidebar-content"
                     crawlerPosition="top"
                     isLoading={isLoading}
                 >
-                    <div className="bcs-Versions-menu">
-                        <VersionsMenu versions={versions} fileId="1" versionCount={3} versionLimit={3} />
-                    </div>
+                    <VersionsMenu versions={versions} fileId="1" versionCount={3} versionLimit={3} />
                 </LoadingIndicatorWrapper>
             </div>
 
-            <div className="bcs-upsell-wrapper">
-                <div className="bcs-version-upsell">
-                    {showUpsellWithPicture && <BoxDrive140 className="bcs-version-upsell-icon" />}
-                    <p className="bcs-upgrade-now">
+            <div className="bcs-StaticVersionSidebar-upsell-wrapper">
+                <div className="bcs-StaticVersionSidebar-upsell">
+                    {showUpsellWithPicture && <BoxDrive140 className="bcs-StaticVersionSidebar-upsell-icon" />}
+                    <p className="bcs-StaticVersionSidebar-upsell-header">
                         <FormattedMessage {...messages.versionUpgradeLink} />
                     </p>
                     <p>
                         <FormattedMessage {...messages.versionUpsell} />
                     </p>
-                    <Button
-                        className="bcs-upgrade-button"
+                    <PrimaryButton
+                        className="bcs-StaticVersionSidebar-upsell-button"
                         data-resin-target="versioning_error_upgrade_cta"
                         onClick={onUpgradeClick}
+                        type="button"
                     >
                         <FormattedMessage {...messages.upgradeButton} />
-                    </Button>
+                    </PrimaryButton>
                 </div>
             </div>
         </div>
