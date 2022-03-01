@@ -162,6 +162,7 @@
         "@svgr/core": "^5.0.1",
         "@svgr/plugin-prettier": "^5.0.1",
         "@svgr/plugin-svgo": "^5.1.0",
+        "@testing-library/jest-dom": "^5.16.2",
         "@testing-library/react": "^10.4.3",
         "@testing-library/react-hooks": "^3.3.0",
         "@types/classnames": "^2.2.9",
