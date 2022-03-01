@@ -1,5 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { render, screen } from '@testing-library/react';
+import { ThemeProvider } from 'styled-components';
 
 import { mountConnected } from '../../../test-utils/enzyme';
 import CollapsibleSidebar from '../CollapsibleSidebar';
@@ -110,6 +112,36 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
                 expect(preventDefaultMock).toHaveBeenCalledTimes(expectedCallTime);
                 expect(stopPropagationMock).toHaveBeenCalledTimes(expectedCallTime);
             });
+        });
+    });
+    describe('responsiveness', () => {
+        const wrapper = params => {
+            const theme = {
+                primary: {
+                    background: '',
+                    foreground: '',
+                    border: '',
+                },
+            };
+
+            return render(
+                <ThemeProvider theme={theme}>
+                    <CollapsibleSidebar isHidden={params.isHidden} />
+                </ThemeProvider>,
+            );
+        };
+
+        test('should NOT be hidden when isHidden is false', () => {
+            wrapper({ isHidden: false });
+            expect(screen.getByTestId('CollapsibleSidebar-wrapper')).not.toHaveAttribute('aria-hidden', 'true');
+        });
+        test('should NOT be hidden when isHidden is undefined', () => {
+            wrapper({ isHidden: undefined });
+            expect(screen.getByTestId('CollapsibleSidebar-wrapper')).not.toHaveAttribute('aria-hidden', 'true');
+        });
+        test('should be hidden when isHidden is true', () => {
+            wrapper({ isHidden: true });
+            expect(screen.getByTestId('CollapsibleSidebar-wrapper')).toHaveAttribute('aria-hidden', 'true');
         });
     });
 });

@@ -36,6 +36,9 @@ type Props = {
 
     /** Optional HTML attributes to append to menu item */
     htmlAttributes?: Object,
+
+    /** Optionally apply display:none to collapsibleSidebar wrapper */
+    isHidden?: boolean,
 };
 
 class CollapsibleSidebar extends React.Component<Props> {
@@ -81,7 +84,7 @@ class CollapsibleSidebar extends React.Component<Props> {
     };
 
     render() {
-        const { children, className, expanded, htmlAttributes } = this.props;
+        const { children, className, expanded, isHidden } = this.props;
         const classes = classNames(
             {
                 'is-expanded': expanded,
@@ -90,8 +93,16 @@ class CollapsibleSidebar extends React.Component<Props> {
             className,
         );
 
+        const htmlAttributes = isHidden
+            ? { ...this.props.htmlAttributes, 'aria-hidden': 'true' }
+            : this.props.htmlAttributes;
+
         return (
-            <div className="bdl-CollapsibleSidebar-wrapper" {...htmlAttributes}>
+            <div
+                className={`bdl-CollapsibleSidebar-wrapper${isHidden ? ' hidden' : ''}`}
+                {...htmlAttributes}
+                data-testid="CollapsibleSidebar-wrapper"
+            >
                 <StyledNav ref={this.navRef} className={classes} onKeyDown={this.handleKeyDown}>
                     {children}
                 </StyledNav>
