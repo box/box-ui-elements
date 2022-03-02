@@ -61,7 +61,7 @@ const VersionsSidebar = ({ error, errorTitle, onUpgradeClick, isLoading, parentN
                                 type="button"
                                 className="bcs-Versions-upgrade"
                             >
-                                <FormattedMessage {...messages.versionUpgradeButton} />
+                                <FormattedMessage {...messages.versionUpgradeLink} />
                             </PlainButton>
                         )}
                     </InlineError>
