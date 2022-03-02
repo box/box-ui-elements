@@ -1,5 +1,3 @@
-const path = require('path');
-
 module.exports = {
     clearMocks: true,
     restoreMocks: true,
@@ -17,7 +15,7 @@ module.exports = {
     collectCoverageFrom: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.js', '!**/node_modules/**', '!**/__tests__/**'],
     globalSetup: '<rootDir>/scripts/jest/env-setup.js',
     roots: ['src'],
-    rootDir: path.join(__dirname),
+    rootDir: '../../',
     setupFilesAfterEnv: [
         '<rootDir>/node_modules/regenerator-runtime/runtime.js',
         '<rootDir>/scripts/jest/enzyme-adapter.js',
