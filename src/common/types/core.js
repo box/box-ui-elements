@@ -49,6 +49,7 @@ type ClassComponent<P, S> = Class<React$Component<P, S>>;
 // }
 type StringMap = { [string]: string };
 type StringAnyMap = { [string]: any };
+type StringMixedMap = { [string]: mixed };
 type StringBooleanMap = { [string]: boolean };
 type NumberBooleanMap = { [number]: boolean };
 
@@ -470,6 +471,7 @@ export type {
     ClassComponent,
     StringMap,
     StringAnyMap,
+    StringMixedMap,
     StringBooleanMap,
     NumberBooleanMap,
     Access,
