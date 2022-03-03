@@ -35,3 +35,38 @@ exports[`features/classification/security-controls/SecurityControlsItem should r
   </Tooltip>
 </li>
 `;
+
+exports[`features/classification/security-controls/SecurityControlsItem should render message as if it is a valid element and not render FormattedMessage 1`] = `
+<li
+  className="bdl-SecurityControlsItem"
+>
+  <div>
+    Test Element
+  </div>
+  <Tooltip
+    className="bdl-SecurityControlsItem-tooltip"
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    isDisabled={false}
+    isTabbable={false}
+    position="middle-right"
+    text={
+      <FormattedMessage
+        defaultMessage="message2"
+        id="id2"
+      />
+    }
+    theme="default"
+  >
+    <span
+      className="bdl-SecurityControlsItem-tooltipIcon"
+    >
+      <IconInfo
+        color="#0061d5"
+        height={13}
+        width={13}
+      />
+    </span>
+  </Tooltip>
+</li>
+`;

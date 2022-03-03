@@ -53,8 +53,8 @@ const SecurityControlsModal = ({
                 <p className="bdl-SecurityControlsModal-definition">{definition}</p>
             </Label>
             <ul className="bdl-SecurityControlsModal-controlsItemList">
-                {modalItems.map(({ message, tooltipMessage }) => (
-                    <SecurityControlsItem key={message.id} message={message} tooltipMessage={tooltipMessage} />
+                {modalItems.map(({ message, tooltipMessage }, index) => (
+                    <SecurityControlsItem key={index} message={message} tooltipMessage={tooltipMessage} />
                 ))}
             </ul>
             <ModalActions>
