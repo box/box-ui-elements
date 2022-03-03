@@ -198,8 +198,11 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
                 errorTitle: messages.versionServerError,
             });
         });
-        test('should set state to default values with error upsell message if showVersionUpsell is true', () => {
-            const wrapper = getWrapper({ onUpgradeClick: () => {} });
+        test('should set state to default values with error upsell message if onUpgradeClick is set', () => {
+            const wrapper = getWrapper({
+                onUpgradeClick: () => {},
+                versionUpsellExperience: 'STATIC_VERSION_HISTORY',
+            });
 
             wrapper.instance().handleFetchError({ status: 403 });
 
@@ -212,6 +215,28 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
                 versionLimit: Infinity,
                 versions: [],
             });
+
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should create StaticVersionSidebar if versionUpsellExperience is STATIC_VERSION_HISTORY', () => {
+            const wrapper = getWrapper({
+                onUpgradeClick: () => {},
+                versionUpsellExperience: 'STATIC_VERSION_HISTORY',
+            });
+            wrapper.instance().handleFetchError({ status: 403 });
+
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should create StaticVersionSidebar if versionUpsellExperience is STATIC_VERSION_HISTORY_WITH_PICTURE', () => {
+            const wrapper = getWrapper({
+                onUpgradeClick: () => {},
+                versionUpsellExperience: 'STATIC_VERSION_HISTORY_WITH_PICTURE',
+            });
+            wrapper.instance().handleFetchError({ status: 403 });
+
+            expect(wrapper).toMatchSnapshot();
         });
     });
 

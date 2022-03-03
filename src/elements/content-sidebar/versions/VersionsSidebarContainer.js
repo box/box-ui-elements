@@ -15,6 +15,7 @@ import type { MessageDescriptor } from 'react-intl';
 import API from '../../../api';
 import messages from './messages';
 import openUrlInsideIframe from '../../../utils/iframe';
+import StaticVersionsSidebar from './StaticVersionSidebar';
 import VersionsSidebar from './VersionsSidebar';
 import VersionsSidebarAPI from './VersionsSidebarAPI';
 import { withAPIContext } from '../../common/api-context';
@@ -36,6 +37,13 @@ type Props = {
     onVersionRestore: VersionActionCallback,
     parentName: string,
     versionId?: string,
+    versionUpsellExperience: ?string,
+};
+
+const UPSELL_TYPE = {
+    STATIC_VERSION_HISTORY: 'STATIC_VERSION_HISTORY',
+    STATIC_VERSION_HISTORY_WITH_PICTURE: 'STATIC_VERSION_HISTORY_WITH_PICTURE',
+    ERROR_MESSAGE: 'ERROR_MESSAGE',
 };
 
 type State = {
@@ -168,6 +176,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     handleFetchError = (error: Object): void => {
         const { onUpgradeClick } = this.props;
         const shouldShowVersionErrorWithUpsell = !!onUpgradeClick && error.status === 403;
+
         this.setState({
             error: shouldShowVersionErrorWithUpsell ? messages.versionNotAvailable : messages.versionFetchError,
             errorTitle: shouldShowVersionErrorWithUpsell ? messages.versionAccessError : messages.versionServerError,
@@ -280,7 +289,22 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     render() {
-        const { fileId, parentName, onUpgradeClick } = this.props;
+        const { fileId, parentName, onUpgradeClick, versionUpsellExperience } = this.props;
+
+        if (
+            onUpgradeClick &&
+            (versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY ||
+                versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY_WITH_PICTURE)
+        ) {
+            return (
+                <StaticVersionsSidebar
+                    onUpgradeClick={onUpgradeClick}
+                    parentName={parentName}
+                    showUpsellWithPicture={versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY_WITH_PICTURE}
+                    {...this.state}
+                />
+            );
+        }
 
         return (
             <VersionsSidebar
