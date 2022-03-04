@@ -139,15 +139,12 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
             wrapper({ isHidden });
             const CollapsibleSidebarWrapper = screen.getByTestId('CollapsibleSidebar-wrapper');
             expect(CollapsibleSidebarWrapper).not.toHaveAttribute('aria-hidden', 'true');
-            // TODO: better verify that CollapsibleSidebarWrapper is not displayed
-            // expect(CollapsibleSidebarWrapper).not.toHaveStyle('display: none');
         });
 
         test('should be hidden when isHidden is true', () => {
             wrapper({ isHidden: true });
             const CollapsibleSidebarWrapper = screen.getByTestId('CollapsibleSidebar-wrapper');
             expect(CollapsibleSidebarWrapper).toHaveAttribute('aria-hidden', 'true');
-            // expect(CollapsibleSidebarWrapper).toHaveStyle('display: none');
         });
     });
 });

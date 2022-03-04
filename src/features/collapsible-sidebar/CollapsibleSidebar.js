@@ -92,7 +92,7 @@ class CollapsibleSidebar extends React.Component<Props> {
             'bdl-CollapsibleSidebar',
             className,
         );
-        const wrapperClasses = classNames('bdl-CollapsibleSidebar-wrapper', { 'is-hidden': isHidden });
+        const wrapperClasses = classNames('bdl-CollapsibleSidebar-wrapper', { hidden: isHidden });
         const ariaAttributes = { 'aria-hidden': isHidden ? 'true' : undefined };
         return (
             <div
