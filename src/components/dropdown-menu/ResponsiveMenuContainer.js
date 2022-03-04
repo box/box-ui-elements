@@ -21,30 +21,22 @@ export type ResponsiveMenuProps = {
 
 const ResponsiveMenuContainer = (props: ResponsiveMenuProps) => {
     const { children, title, subtitle, buttonText, reverseTitle, onButtonClick, onCloseClick, ...rest } = props;
-    const primaryTitle = title && <div className="menu-header-title">{title}</div>;
-    const secondaryTitle = subtitle && <div className="menu-header-subtitle">{subtitle}</div>;
+    const primaryTitle = title && <div className="rm-header-title">{title}</div>;
+    const secondaryTitle = subtitle && <div className="rm-header-subtitle">{subtitle}</div>;
 
     const titleComponents = [secondaryTitle, primaryTitle];
 
-    const btnProps = {
-        onClick: onButtonClick,
-    };
-
-    const closeBtnProps = {
-        onClick: onCloseClick,
-    };
-
     return (
-        <div className="menu-container" {...rest}>
-            <div className="menu-header">
-                <div className="menu-header-text">{reverseTitle ? titleComponents.reverse() : titleComponents}</div>
-                <div className="menu-header-right">
+        <div className="rm-container" {...rest}>
+            <div className="rm-header">
+                <div className="rm-header-text">{reverseTitle ? titleComponents.reverse() : titleComponents}</div>
+                <div className="rm-header-right">
                     {buttonText && (
-                        <PrimaryButton {...btnProps} className="menu-header-btn">
+                        <PrimaryButton onClick={onButtonClick} className="rm-header-btn">
                             {buttonText}
                         </PrimaryButton>
                     )}
-                    <Button {...closeBtnProps} className="menu-header-close-btn" type="button">
+                    <Button onClick={onCloseClick} className="rm-header-close-btn" type="button">
                         <IconClose color={bdlGray62} height={18} width={18} />
                     </Button>
                 </div>

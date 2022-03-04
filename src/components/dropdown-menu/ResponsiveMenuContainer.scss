@@ -1,17 +1,17 @@
 @import '../../styles/variables';
 
-.menu-container {
+.rm-container {
     position: relative;
     top: 0;
     left: 0;
-    z-index: 9999;
+    z-index: $menu-z-index;
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
     background-color: $bdl-gray-02;
 
-    .menu-header {
+    .rm-header {
         position: relative;
         display: flex;
         align-items: center;
@@ -20,21 +20,21 @@
         background-color: white;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
 
-        .menu-header-text {
-            .menu-header-title {
+        .rm-header-text {
+            .rm-header-title {
                 color: $bdl-gray;
                 font-weight: bold;
                 font-size: 16px;
             }
 
-            .menu-header-subtitle {
+            .rm-header-subtitle {
                 color: $bdl-gray-62;
                 font-size: 12px;
             }
         }
 
-        .menu-header-right {
-            .menu-header-close-btn {
+        .rm-header-right {
+            .rm-header-close-btn {
                 width: 32px;
                 height: 32px;
                 padding: unset;
@@ -44,7 +44,7 @@
         }
     }
 
-    & > .aria-menu {
+    > .aria-menu {
         flex-grow: 1;
         background: unset;
         background-color: unset;
