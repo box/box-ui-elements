@@ -6,8 +6,6 @@ import { ThemeProvider } from 'styled-components';
 import { mountConnected } from '../../../test-utils/enzyme';
 import CollapsibleSidebar from '../CollapsibleSidebar';
 
-import 'styles/modifiers/_visibility.scss';
-
 describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
     const getWrapper = (props = {}) => shallow(<CollapsibleSidebar {...props} />);
 
