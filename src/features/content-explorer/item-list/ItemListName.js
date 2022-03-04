@@ -9,10 +9,11 @@ import { ItemTypePropType } from '../prop-types';
 
 const ITEM_LIST_NAME_CLASS = 'item-list-name';
 
-const ItemListName = ({ type, name, label = '', isSelected = false, onClick, linkRenderer }) => {
+const ItemListName = ({ id = '', type, name, label = '', isSelected = false, onClick, linkRenderer }) => {
     const isFolder = type === ItemTypes.FOLDER;
 
     const linkProps = {
+        id,
         className: `lnk ${ITEM_LIST_NAME_CLASS}`,
         onClick,
         children: [
@@ -37,6 +38,7 @@ const ItemListName = ({ type, name, label = '', isSelected = false, onClick, lin
 };
 
 ItemListName.propTypes = {
+    id: PropTypes.string,
     type: ItemTypePropType,
     name: PropTypes.string.isRequired,
     label: PropTypes.string,

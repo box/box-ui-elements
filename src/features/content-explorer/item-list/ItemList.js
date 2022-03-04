@@ -57,6 +57,7 @@ const itemNameCellRenderer = rendererParams => {
         name && (
             <div className={TABLE_CELL_CLASS}>
                 <ItemListName
+                    id={id}
                     type={type}
                     name={name}
                     label={label}

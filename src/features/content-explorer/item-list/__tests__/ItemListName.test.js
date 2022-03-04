@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import sinon from 'sinon';
 
 import ItemListName from '../ItemListName';
@@ -53,15 +54,17 @@ describe('features/content-explorer/item-list/ItemListName', () => {
 
     describe('linkRenderer', () => {
         test('should use linkRenderer when specified', () => {
+            const id = '1';
             const name = 'item';
-            const linkRenderer = () => <button type="button" className="name-test" />;
+            const linkRenderer = props => <button type="button" className={`name-${props.id}`} />;
+            linkRenderer.propTypes = { id: PropTypes.string };
             const wrapper = renderComponent({
+                id,
                 name,
                 type: 'folder',
                 linkRenderer,
             });
-
-            expect(wrapper.find('button.name-test').length).toBe(1);
+            expect(wrapper.find(`button.name-${id}`).length).toBe(1);
         });
     });
 });
