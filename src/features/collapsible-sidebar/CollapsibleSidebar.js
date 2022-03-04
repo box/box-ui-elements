@@ -13,7 +13,6 @@ import tabbable from 'tabbable';
 import { KEYS } from '../../constants';
 
 import './CollapsibleSidebar.scss';
-import 'styles/modifiers/_visibility.scss';
 
 const StyledNav = styled.nav`
     background-color: ${props => props.theme.primary.background};
@@ -93,7 +92,7 @@ class CollapsibleSidebar extends React.Component<Props> {
             'bdl-CollapsibleSidebar',
             className,
         );
-        const wrapperClasses = classNames('bdl-CollapsibleSidebar-wrapper', { hidden: isHidden });
+        const wrapperClasses = classNames('bdl-CollapsibleSidebar-wrapper', { 'is-hidden': isHidden });
         const ariaAttributes = { 'aria-hidden': isHidden ? 'true' : undefined };
         return (
             <div
