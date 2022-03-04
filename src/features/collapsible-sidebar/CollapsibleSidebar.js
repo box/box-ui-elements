@@ -13,6 +13,7 @@ import tabbable from 'tabbable';
 import { KEYS } from '../../constants';
 
 import './CollapsibleSidebar.scss';
+import 'styles/modifiers/_visibility.scss';
 
 const StyledNav = styled.nav`
     background-color: ${props => props.theme.primary.background};
@@ -37,7 +38,7 @@ type Props = {
     /** Optional HTML attributes to append to menu item */
     htmlAttributes?: Object,
 
-    /** Optionally apply display:none to collapsibleSidebar wrapper */
+    /** Optionally apply hidden class (__visibility.scss) and "aria-hidden": "true" to CollapsibleSidebar wrapper */
     isHidden?: boolean,
 };
 
@@ -84,26 +85,24 @@ class CollapsibleSidebar extends React.Component<Props> {
     };
 
     render() {
-        const { children, className, expanded, isHidden } = this.props;
-        const classes = classNames(
+        const { children, className, expanded, isHidden, htmlAttributes } = this.props;
+        const navClasses = classNames(
             {
                 'is-expanded': expanded,
             },
             'bdl-CollapsibleSidebar',
             className,
         );
-
-        const htmlAttributes = isHidden
-            ? { ...this.props.htmlAttributes, 'aria-hidden': 'true' }
-            : this.props.htmlAttributes;
-
+        const wrapperClasses = classNames('bdl-CollapsibleSidebar-wrapper', { hidden: isHidden });
+        const ariaAttributes = { 'aria-hidden': isHidden ? 'true' : undefined };
         return (
             <div
-                className={`bdl-CollapsibleSidebar-wrapper${isHidden ? ' hidden' : ''}`}
+                className={wrapperClasses}
                 {...htmlAttributes}
+                {...ariaAttributes}
                 data-testid="CollapsibleSidebar-wrapper"
             >
-                <StyledNav ref={this.navRef} className={classes} onKeyDown={this.handleKeyDown}>
+                <StyledNav ref={this.navRef} className={navClasses} onKeyDown={this.handleKeyDown}>
                     {children}
                 </StyledNav>
             </div>
