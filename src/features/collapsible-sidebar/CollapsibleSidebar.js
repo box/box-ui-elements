@@ -13,7 +13,6 @@ import tabbable from 'tabbable';
 import { KEYS } from '../../constants';
 
 import './CollapsibleSidebar.scss';
-import 'styles/modifiers/_visibility.scss';
 
 const StyledNav = styled.nav`
     background-color: ${props => props.theme.primary.background};
