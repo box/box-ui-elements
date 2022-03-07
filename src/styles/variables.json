@@ -82,6 +82,7 @@
     "avatar-colors": ["#0061d5", "#003c84", "#767676", "#222", "#4826c2", "#9f3fed"],
     "modal-dialog-z-index": "160",
     "menu-z-index": "170",
+    "submenu-z-index": "171",
     "notifications-wrapper-z-index": "180",
     "overlay-z-index": "190",
     "tooltip-z-index": "190",

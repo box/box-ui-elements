@@ -82,6 +82,7 @@ export const bdlFontSizeDejaBlue = '14px'; // bdl-fontSize--dejaBlue
 export const avatarColors = ['#0061d5', '#003c84', '#767676', '#222', '#4826c2', '#9f3fed']; // avatar-colors
 export const modalDialogZIndex = '160'; // modal-dialog-z-index
 export const menuZIndex = '170'; // menu-z-index
+export const submenuZIndex = '171'; // submenu-z-index
 export const notificationsWrapperZIndex = '180'; // notifications-wrapper-z-index
 export const overlayZIndex = '190'; // overlay-z-index
 export const tooltipZIndex = '190'; // tooltip-z-index
