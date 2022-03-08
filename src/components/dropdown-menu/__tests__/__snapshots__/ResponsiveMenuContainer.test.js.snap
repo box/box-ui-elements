@@ -2,35 +2,35 @@
 
 exports[`components/dropdown-menu/ResponsiveMenuContainer should correctly render toggle 1`] = `
 <div
-  className="menu-container"
+  className="rm-container"
 >
   <div
-    className="menu-header"
+    className="rm-header"
   >
     <div
-      className="menu-header-text"
+      className="rm-header-text"
     >
       <div
-        className="menu-header-subtitle"
+        className="rm-header-subtitle"
       >
         subtitle
       </div>
       <div
-        className="menu-header-title"
+        className="rm-header-title"
       >
         title
       </div>
     </div>
     <div
-      className="menu-header-right"
+      className="rm-header-right"
     >
       <PrimaryButton
-        className="menu-header-btn"
+        className="rm-header-btn"
       >
         click me
       </PrimaryButton>
       <Button
-        className="menu-header-close-btn"
+        className="rm-header-close-btn"
         isLoading={false}
         showRadar={false}
         type="button"
