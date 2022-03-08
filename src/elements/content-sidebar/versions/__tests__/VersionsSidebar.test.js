@@ -4,6 +4,7 @@ import InlineError from '../../../../components/inline-error';
 import messages from '../messages';
 import VersionsMenu from '../VersionsMenu';
 import VersionsSidebar from '../VersionsSidebar';
+import PlainButton from '../../../../components/plain-button/PlainButton';
 
 jest.mock('../../../common/nav-button', () => ({
     BackButton: () => <button type="button">Back</button>,
@@ -22,10 +23,26 @@ describe('elements/content-sidebar/versions/VersionsSidebar', () => {
         });
 
         test('should show an inline error if the prop is provided', () => {
-            const wrapper = getWrapper({ error: messages.versionFetchError, versions: [] });
+            const wrapper = getWrapper({
+                error: messages.versionFetchError,
+                errorTitle: messages.versionServerError,
+                versions: [],
+            });
 
             expect(wrapper.exists(InlineError)).toBe(true);
             expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should show an upsell inline error if the errorUpsell prop is provided', () => {
+            const wrapper = getWrapper({
+                error: messages.versionNotAvailable,
+                errorTitle: messages.versionAccessError,
+                onUpgradeClick: () => {},
+                versions: [],
+            });
+
+            expect(wrapper.exists(InlineError)).toBe(true);
+            expect(wrapper.exists(PlainButton)).toBe(true);
         });
 
         test('should show max versions text if max versions provided', () => {

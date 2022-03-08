@@ -107,10 +107,6 @@
         }
     }
 
-    .tab:focus {
-        outline: 1px dotted $primary-color;
-    }
-
     .tab:hover,
     .tab:focus {
         .tab-title {
