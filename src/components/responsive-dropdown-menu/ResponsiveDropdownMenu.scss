@@ -1,0 +1,40 @@
+@import '../../styles/variables';
+
+.dropdown-menu-element-attached-left,
+.dropdown-menu-element-attached-right,
+.dropdown-menu-element-attached-center {
+    .aria-menu {
+        @include bdl-openComponentAnimation($bdl-transitionDurationBase);
+    }
+}
+
+// Drop down menu is a tethered element and as such attached to body
+// however the body may not have box specific classes and hence the
+// menu needs to manually inherit few of the body styles to look correct.
+.dropdown-menu-element {
+    @include box-sizing;
+    @include bdl-commonTypography-dejaBlue;
+
+    z-index: $menu-z-index;
+    margin-top: 5px;
+    perspective: 500px;
+    perspective-origin: center top;
+
+    &.be-is-small,
+    &.be-is-medium {
+        width: 100%;
+        height: 100%;
+        margin: unset;
+
+        .submenu {
+            top: 100%;
+            right: 0;
+            left: auto;
+
+            &.is-hidden {
+                right: auto;
+                left: -9999px;
+            }
+        }
+    }
+}
