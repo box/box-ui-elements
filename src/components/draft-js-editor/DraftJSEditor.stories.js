@@ -42,7 +42,7 @@ export const basic = () => {
 };
 
 export default {
-    title: 'Components|DraftJSEditor',
+    title: 'Components|Forms & Inputs/DraftJSEditor',
     component: DraftJSEditor,
     parameters: {
         notes,

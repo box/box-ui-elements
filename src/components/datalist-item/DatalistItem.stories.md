@@ -1,4 +1,5 @@
 ### Description
+
 **Datalist Item (ARIA-compliant)**
 
 This component renders a list item compatible with a datalist such as `SelectorDropdown`.

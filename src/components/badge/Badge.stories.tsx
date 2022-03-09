@@ -1,9 +1,6 @@
 import * as React from 'react';
 
 import Badge from './Badge';
-import BetaBadge from './BetaBadge';
-import TrialBadge from './TrialBadge';
-import UpgradeBadge from './UpgradeBadge';
 import notes from './Badge.stories.md';
 import { BadgeType } from './types';
 
@@ -21,14 +18,8 @@ export const alert = () => <Badge type={BadgeType.ALERT}>Alert Badge</Badge>;
 
 export const success = () => <Badge type={BadgeType.SUCCESS}>Success Badge</Badge>;
 
-export const betaBadge = () => <BetaBadge />;
-
-export const trialBadge = () => <TrialBadge />;
-
-export const upgradeBadge = () => <UpgradeBadge />;
-
 export default {
-    title: 'Components|Badge',
+    title: 'Components|Badges/Badge',
     component: Badge,
     parameters: {
         notes,

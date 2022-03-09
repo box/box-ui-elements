@@ -58,24 +58,26 @@ export const basic = () => (
 );
 
 export const withLinkMenu = () => (
-    // When using `MenuToggle` in an element with the `lnk` class, the caret icon is automatically colored blue.
-    <DropdownMenu>
-        <PlainButton className="lnk">
-            <MenuToggle>Hello</MenuToggle>
-        </PlainButton>
-        <Menu>
-            <MenuItem
-                /* eslint-disable-next-line no-console */
-                onClick={() => console.log('hey')}
-            >
-                Menu Item
-            </MenuItem>
-        </Menu>
-    </DropdownMenu>
+    <>
+        <p>When using `MenuToggle` in an element with the `lnk` class, the caret icon is automatically colored blue.</p>
+        <DropdownMenu>
+            <PlainButton className="lnk">
+                <MenuToggle>Hello</MenuToggle>
+            </PlainButton>
+            <Menu>
+                <MenuItem
+                    /* eslint-disable-next-line no-console */
+                    onClick={() => console.log('hey')}
+                >
+                    Menu Item
+                </MenuItem>
+            </Menu>
+        </DropdownMenu>
+    </>
 );
 
 export default {
-    title: 'Components|DropdownMenu',
+    title: 'Components|Dropdowns/DropdownMenu',
     component: DropdownMenu,
     parameters: {
         notes,
