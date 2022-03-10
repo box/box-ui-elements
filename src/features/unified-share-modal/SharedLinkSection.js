@@ -74,7 +74,6 @@ type Props = {
 type State = {
     isAutoCreatingSharedLink: boolean,
     isCopySuccessful: ?boolean,
-    isPermissionElevatedToEdit: boolean,
     isSharedLinkEditTooltipShown: boolean,
 };
 
@@ -93,7 +92,6 @@ class SharedLinkSection extends React.Component<Props, State> {
             isAutoCreatingSharedLink: false,
             isCopySuccessful: null,
             isSharedLinkEditTooltipShown: false,
-            isPermissionElevatedToEdit: false,
         };
     }
 
@@ -134,12 +132,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             onCopyInit = () => {},
         } = this.props;
 
-        const {
-            isAutoCreatingSharedLink,
-            isCopySuccessful,
-            isSharedLinkEditTooltipShown,
-            isPermissionElevatedToEdit,
-        } = this.state;
+        const { isAutoCreatingSharedLink, isCopySuccessful, isSharedLinkEditTooltipShown } = this.state;
 
         if (
             autoCreateSharedLink &&
@@ -157,21 +150,6 @@ class SharedLinkSection extends React.Component<Props, State> {
             if (this.toggleRef) {
                 this.toggleRef.focus();
             }
-        }
-
-        if (
-            prevProps.sharedLink.permissionLevel !== '' &&
-            prevProps.sharedLink.permissionLevel !== CAN_EDIT &&
-            sharedLink.permissionLevel === CAN_EDIT
-        ) {
-            this.setState({ isPermissionElevatedToEdit: true });
-        }
-
-        if (
-            isPermissionElevatedToEdit &&
-            (sharedLink.permissionLevel !== CAN_EDIT || sharedLink.accessLevel !== ANYONE_IN_COMPANY)
-        ) {
-            this.setState({ isPermissionElevatedToEdit: false });
         }
 
         if (
@@ -267,7 +245,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             tooltips,
         } = this.props;
 
-        const { isCopySuccessful, isPermissionElevatedToEdit, isSharedLinkEditTooltipShown } = this.state;
+        const { isCopySuccessful, isSharedLinkEditTooltipShown } = this.state;
 
         const {
             accessLevel,
@@ -417,7 +395,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                         )}
                     </div>
                 )}
-                {accessLevel === ANYONE_IN_COMPANY && isPermissionElevatedToEdit && (
+                {accessLevel === ANYONE_IN_COMPANY && permissionLevel === CAN_EDIT && (
                     <div className="security-indicator-note">
                         <span className="security-indicator-icon-globe">
                             <IconGlobe height={12} width={12} />
