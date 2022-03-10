@@ -69,6 +69,19 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         });
     });
 
+    describe('componentDidMount', () => {
+        test('should call onLoad after a successful fetchData() call', async () => {
+            const onLoad = jest.fn();
+            const fetchData = jest.fn(() => Promise.resolve());
+            const instance = getWrapper({ onLoad }).instance();
+
+            instance.fetchData = fetchData;
+
+            await instance.componentDidMount();
+            expect(onLoad).toHaveBeenCalled();
+        });
+    });
+
     describe('handleActionDelete', () => {
         test('should call api endpoint helpers', () => {
             const handleDelete = jest.fn();
