@@ -39,4 +39,27 @@ describe('features/unified-share-modal/utils/mergeContacts', () => {
 
         expect(mergedContacts).toEqual(expectedMergedContacts);
     });
+
+    test('should return existing contact information if value matches but case does not match', () => {
+        const caseSensitiveEmail = 'DeV@Box.COM';
+        const fetchedContacts = { [email]: { email, id, isExternalUser, name, type } };
+        const existingContactWithCaseChanges = [
+            { displayText: caseSensitiveEmail, text: caseSensitiveEmail, value: caseSensitiveEmail },
+        ];
+
+        const expectedMergedContacts = [{ email, id, isExternalUser, text: name, name, type, value }];
+        const mergedContacts = mergeContacts(existingContactWithCaseChanges, fetchedContacts);
+
+        expect(mergedContacts).toEqual(expectedMergedContacts);
+    });
+
+    test('should return external user if not matched to internal user record', () => {
+        const newEmail = 'dev+test@box.com';
+        const newContact = [{ displayText: newEmail, text: newEmail, value: newEmail }];
+        const expected = [
+            { email: newEmail, id: newEmail, isExternalUser, text: newEmail, type: 'user', value: newEmail },
+        ];
+
+        expect(mergeContacts(newContact, {})).toEqual(expected);
+    });
 });
