@@ -357,8 +357,6 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
 
             const wrapper = getWrapper({ sharedLink });
 
-            expect(wrapper.state().isPermissionElevatedToEdit).toBe(false);
-
             wrapper.setProps({
                 sharedLink: {
                     accessLevel: ANYONE_IN_COMPANY,
@@ -367,8 +365,6 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
                     permissionLevel: CAN_EDIT,
                 },
             });
-
-            expect(wrapper.state().isPermissionElevatedToEdit).toBe(true);
 
             expect(
                 wrapper.find(`[data-testid="shared-link-elevated-editable-company-available-message"]`).length,
