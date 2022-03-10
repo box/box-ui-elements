@@ -84,8 +84,8 @@ class SecurityControls extends React.Component<Props, State> {
 
         let itemsList = (
             <ul className="bdl-SecurityControls">
-                {items.map(({ message, tooltipMessage }) => (
-                    <SecurityControlsItem key={message.id} message={message} tooltipMessage={tooltipMessage} />
+                {items.map(({ message, tooltipMessage }, index) => (
+                    <SecurityControlsItem key={index} message={message} tooltipMessage={tooltipMessage} />
                 ))}
             </ul>
         );

@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/classification/security-controls/utils getFullSecurityControlsMessages() should include correct message when watermark is applied 1`] = `
+<FormattedCompMessage
+  description="Bullet point that summarizes watermarking applied to classification"
+  id="boxui.securityControls.watermarkingAppliedWithLink"
+>
+  Watermarking will be applied, click
+   
+  <Link
+    className="support-link"
+    href="https://support.box.com/hc/en-us/articles/360044195253"
+    target="_blank"
+  >
+    here
+  </Link>
+   
+  more details on Watermarking
+</FormattedCompMessage>
+`;

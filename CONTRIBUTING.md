@@ -48,7 +48,7 @@ longer description here if necessary.
 include BREAKING CHANGE keyword for breaking changes.
 ```
 
-The message summary should be a one-sentence description of the change, and it must be 72 characters in length or shorter. For a list of tags, please [click here](https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional#type-enum). See the [default release rules](https://github.com/conventional-changelog/commitlint/blob/master/%40commitlint/config-conventional/index.js) based on the commit tag. Note that you must include the exact keyword "BREAKING CHANGE" for breaking changes, to learn more [click here](https://github.com/conventional-changelog/conventional-changelog/blob/master/packages/conventional-changelog-conventionalcommits/parser-opts.js#L13).
+The message summary should be a one-sentence description of the change, and it must be 72 characters in length or shorter. For a list of tags, please [click here](https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional#type-enum). See the [default release rules](https://github.com/conventional-changelog/commitlint/blob/master/%40commitlint/config-conventional/index.js) based on the commit tag. Note that you must include the exact keyword "BREAKING CHANGE" for breaking changes, to learn more [click here](https://github.com/conventional-changelog/conventional-changelog/blob/master/packages/conventional-changelog-conventionalcommits/parser-opts.js#L13). IMPORTANT: Add "BREAKING CHANGE" to your PR title as well, because when multiple commits are merged the PR title takes precedence as the merge commit message.
 
 Shown below are examples of the release type that will be done based on a commit message.
 

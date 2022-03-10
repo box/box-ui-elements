@@ -9,7 +9,7 @@ import { ItemTypePropType } from '../prop-types';
 
 const ITEM_LIST_NAME_CLASS = 'item-list-name';
 
-const ItemListName = ({ type, name, label = '', isSelected = false, onClick, linkRenderer }) => {
+const ItemListName = ({ itemId = '', type, name, label = '', isSelected = false, onClick, linkRenderer }) => {
     const isFolder = type === ItemTypes.FOLDER;
 
     const linkProps = {
@@ -26,7 +26,7 @@ const ItemListName = ({ type, name, label = '', isSelected = false, onClick, lin
             />,
         ],
     };
-    const renderLink = () => (linkRenderer ? linkRenderer(linkProps) : <PlainButton {...linkProps} />);
+    const renderLink = () => (linkRenderer ? linkRenderer({ ...linkProps, itemId }) : <PlainButton {...linkProps} />);
 
     return (
         <div className="item-list-name-container">
@@ -37,6 +37,7 @@ const ItemListName = ({ type, name, label = '', isSelected = false, onClick, lin
 };
 
 ItemListName.propTypes = {
+    itemId: PropTypes.string,
     type: ItemTypePropType,
     name: PropTypes.string.isRequired,
     label: PropTypes.string,

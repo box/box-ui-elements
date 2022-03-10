@@ -51,7 +51,7 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
     className="bdl-SecurityControlsModal-controlsItemList"
   >
     <SecurityControlsItem
-      key="msg1"
+      key="0"
       message={
         Object {
           "defaultMessage": "message1",
@@ -60,7 +60,7 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
       }
     />
     <SecurityControlsItem
-      key="msg2"
+      key="1"
       message={
         Object {
           "defaultMessage": "message2",

@@ -124,7 +124,12 @@ describe('features/classification/security-controls/utils', () => {
                     enabled: true,
                 },
             };
-            expect(getFullSecurityControlsMessages(accessPolicy)).toEqual([{ message: messages.watermarkingApplied }]);
+            const { message: formattedCompMessage } = getFullSecurityControlsMessages(accessPolicy)[0];
+            const { props: formattedCompMessageProps = {} } = formattedCompMessage;
+            const expectedMessageId = 'boxui.securityControls.watermarkingAppliedWithLink';
+
+            expect(formattedCompMessageProps.id).toEqual(expectedMessageId);
+            expect(formattedCompMessage).toMatchSnapshot();
         });
 
         test('should include correct message when external collab is blocked', () => {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import sinon from 'sinon';
 
 import ItemListName from '../ItemListName';
@@ -53,15 +54,28 @@ describe('features/content-explorer/item-list/ItemListName', () => {
 
     describe('linkRenderer', () => {
         test('should use linkRenderer when specified', () => {
+            const itemId = '1';
             const name = 'item';
-            const linkRenderer = () => <button type="button" className="name-test" />;
+            const linkRenderer = props => <button type="button" className={`name-${props.itemId}`} />;
+            linkRenderer.propTypes = { itemId: PropTypes.string };
             const wrapper = renderComponent({
+                itemId,
                 name,
                 type: 'folder',
                 linkRenderer,
             });
+            expect(wrapper.find(`button.name-${itemId}`)).toHaveLength(1);
+        });
 
-            expect(wrapper.find('button.name-test').length).toBe(1);
+        test('should not pass id to PlainButton', () => {
+            const itemId = 'abc'; // Must be a valid html ID for this test. wrapper.find('#1') will crash.
+            const name = 'item';
+            const wrapper = renderComponent({
+                itemId,
+                name,
+                type: 'folder',
+            });
+            expect(wrapper.find(`#${itemId}`)).toHaveLength(0);
         });
     });
 });

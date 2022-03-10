@@ -152,10 +152,10 @@ const messages = defineMessages({
         defaultMessage: "You don't have access to versioning",
         description: 'Heading for inline error messages with upsell.',
     },
-    versionUpgradeButton: {
-        id: 'be.sidebarVersions.versionUpgradeButton',
+    versionUpgradeLink: {
+        id: 'be.sidebarVersions.upgradeLink',
         defaultMessage: 'Upgrade Now',
-        description: 'Text telling user to upgrade now.',
+        description: 'Text on the upgrade button shown when user does not have access to Version History',
     },
     versionUploadedBy: {
         id: 'be.sidebarVersions.uploadedBy',
@@ -186,6 +186,17 @@ const messages = defineMessages({
         id: 'be.sidebarVersions.versionRetentionRemove',
         defaultMessage: 'Retention policy expires on {time}.',
         description: 'Message describing when the version retention policy will expire.',
+    },
+    versionUpsell: {
+        defaultMessage:
+            'Sorry, version history is not available with your current account plan. To access versioning, select from one of our paid plans.',
+        description: 'Upgrade message shown when user does not have access to Version History',
+        id: 'be.sidebarVersions.versionUpsell',
+    },
+    upgradeButton: {
+        defaultMessage: 'Upgrade',
+        description: 'Text on the upgrade button shown when user does not have access to Version History',
+        id: 'be.sidebarVersions.upgradeButton',
     },
 });
 
