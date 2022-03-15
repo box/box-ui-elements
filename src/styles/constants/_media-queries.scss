@@ -1,0 +1,13 @@
+$size-small-max: 374px;
+$size-medium-max: 767px;
+$size-large-max: 1023px;
+
+$small-screen: unquote('(max-width: #{$size-small-max})');
+$medium-screen: unquote('(max-width: #{$size-medium-max})');
+$large-screen: unquote('(max-width: #{$size-large-max})');
+
+@mixin breakpoint($media-query) {
+    @media #{$media-query} {
+        @content;
+    }
+}
