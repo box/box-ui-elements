@@ -312,6 +312,22 @@
         }
     }
 
+    .shared-link-checkgroup-row {
+        margin: 10px 0;
+
+        .checkbox-container {
+            margin: 5px 0 0 20px;
+        }
+    }
+
+    .ContentInsightsSection-toggle {
+        display: flex;
+
+        .toggle-container {
+            flex: 0 1 50%;
+        }
+    }
+
     .shared-link-access-row {
         .btn-plain {
             margin-right: 10px;

@@ -11,12 +11,20 @@ const DEFAULT_SIZE = 50;
 interface Props {
     color?: string;
     direction?: Direction;
-    onMouseEnter?: () => void;
+    label?: string | null;
+    onMouseEnter?: (arg1: { left: number; top: number }) => void;
     onMouseLeave?: () => void;
     size: number;
 }
 
-function Bar({ color, direction = 'vertical', onMouseEnter = noop, onMouseLeave = noop, size = DEFAULT_SIZE }: Props) {
+function Bar({
+    color,
+    direction = 'vertical',
+    onMouseEnter = noop,
+    onMouseLeave = noop,
+    label = null,
+    size = DEFAULT_SIZE,
+}: Props) {
     const isHorizontal = direction === 'horizontal';
     const cssProperty = direction === 'horizontal' ? 'width' : 'height';
     const [style, setStyle] = React.useState({
@@ -25,6 +33,17 @@ function Bar({ color, direction = 'vertical', onMouseEnter = noop, onMouseLeave 
     });
 
     const adjustedSize = Math.max(0, size);
+    const barRef = React.useRef<HTMLDivElement | null>(null);
+
+    const handleMouseEnter = React.useCallback(() => {
+        const offsetPosition = { top: 0, left: 0 };
+        if (barRef && barRef.current) {
+            const boundingClientRect = barRef.current.getBoundingClientRect();
+            offsetPosition.top = boundingClientRect.top;
+            offsetPosition.left = boundingClientRect.left + boundingClientRect.width / 2;
+        }
+        onMouseEnter(offsetPosition);
+    }, [onMouseEnter]);
 
     React.useEffect(() => {
         setStyle({
@@ -35,12 +54,14 @@ function Bar({ color, direction = 'vertical', onMouseEnter = noop, onMouseLeave 
 
     return (
         <div
+            ref={barRef}
             className={classNames('ca-Bar', { 'is-horizontal': isHorizontal })}
-            onMouseEnter={onMouseEnter}
+            onMouseEnter={handleMouseEnter}
             onMouseLeave={onMouseLeave}
             role="presentation"
         >
             <div className="ca-Bar-value" style={style} />
+            {label && <div className="ca-Bar-Label">{label}</div>}
         </div>
     );
 }

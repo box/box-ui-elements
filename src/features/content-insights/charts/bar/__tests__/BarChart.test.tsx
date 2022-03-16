@@ -84,6 +84,12 @@ describe('features/content-insights/charts/bar/BarChart', () => {
             expect(element.children.item(1)?.querySelector('.ca-Bar-value')).toHaveStyle(`height: 2px`);
             expect(element.children.item(2)?.querySelector('.ca-Bar-value')).toHaveStyle(`height: 2px`);
         });
+
+        test('should render with label', () => {
+            const wrapper = getWrapper({ showAxisLabel: true });
+            const element = getFirstChild(wrapper);
+            expect(element.querySelectorAll('.ca-Bar-Label').length).toBe(3);
+        });
     });
 
     describe('callbacks', () => {
@@ -94,7 +100,7 @@ describe('features/content-insights/charts/bar/BarChart', () => {
 
             fireEvent.mouseEnter(element.children.item(0) as HTMLElement);
 
-            expect(onBarMouseEnter).toBeCalledWith({ datum: { x: 1, y: 2 } });
+            expect(onBarMouseEnter).toBeCalledWith({ datum: { x: 1, y: 2 } }, { left: 0, top: 0 });
         });
 
         test('should call onBarMouseLeave with the data', () => {

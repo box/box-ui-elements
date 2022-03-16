@@ -55,6 +55,7 @@ import {
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
+import type { AdvancedContentInsights } from '../../features/advanced-content-insights/flowTypes';
 import type { Annotation } from '../../common/types/feed';
 import type { TargetingApi } from '../../features/targeting/types';
 import type { ErrorType, AdditionalVersionInfo } from '../common/flowTypes';
@@ -75,6 +76,7 @@ type StartAt = {
 };
 
 type Props = {
+    advancedContentInsights: AdvancedContentInsights,
     apiHost: string,
     appHost: string,
     autoFocus: boolean,
@@ -100,6 +102,7 @@ type Props = {
     onAnnotator: Function,
     onAnnotatorEvent: Function,
     onClose?: Function,
+    onContentInsightsEventReport: Function,
     onDownload: Function,
     onLoad: Function,
     onNavigate: Function,
@@ -216,6 +219,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
     };
 
     static defaultProps = {
+        advancedContentInsights: {
+            enabled: false,
+            config: {},
+        },
         apiHost: DEFAULT_HOSTNAME_API,
         appHost: DEFAULT_HOSTNAME_APP,
         autoFocus: false,
@@ -229,6 +236,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         language: DEFAULT_LOCALE,
         onAnnotator: noop,
         onAnnotatorEvent: noop,
+        onContentInsightsEventReport: noop,
         onDownload: noop,
         onError: noop,
         onLoad: noop,
@@ -362,7 +370,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidUpdate(prevProps: Props, prevState: State): void {
-        const { previewExperiences, token } = this.props;
+        const { advancedContentInsights, previewExperiences, token } = this.props;
         const { previewExperiences: prevPreviewExperiences, token: prevToken } = prevProps;
         const { currentFileId } = this.state;
         const hasFileIdChanged = prevState.currentFileId !== currentFileId;
@@ -383,6 +391,15 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         if (haveExperiencesChanged && this.preview && this.preview.updateExperiences) {
             this.preview.updateExperiences(previewExperiences);
+        }
+
+        if (advancedContentInsights.enabled) {
+            const { advancedContentInsights: prevContentInsightsOptions } = prevProps;
+            const haveContentInsightsChanged = prevContentInsightsOptions !== advancedContentInsights;
+
+            if (haveContentInsightsChanged && this.preview && this.preview.updateContentInsightsOptions) {
+                this.preview.updateContentInsightsOptions(advancedContentInsights);
+            }
         }
     }
 
@@ -750,11 +767,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     loadPreview = async (): Promise<void> => {
         const {
+            advancedContentInsights,
             annotatorState: { activeAnnotationId } = {},
             enableThumbnailsSidebar,
             fileOptions,
             onAnnotatorEvent,
             onAnnotator,
+            onContentInsightsEventReport,
             previewExperiences,
             showAnnotationsControls,
             token: tokenOrTokenFunction,
@@ -789,6 +808,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         const previewOptions = {
+            advancedContentInsights,
             container: `#${this.id} .bcpr-content`,
             enableThumbnailsSidebar,
             fileOptions: fileOpts,
@@ -820,6 +840,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
             ...previewOptions,
             ...omit(rest, Object.keys(previewOptions)),
         });
+        if (advancedContentInsights && advancedContentInsights.enabled) {
+            this.preview.addListener('advanced_insights_report', onContentInsightsEventReport);
+        }
     };
 
     /**
@@ -1209,6 +1232,20 @@ class ContentPreview extends React.PureComponent<Props, State> {
             contentSidebar.refresh();
         }
     }
+
+    /**
+     * Fetches a thumbnail for the page given
+     *
+     * @return {void}
+     */
+    getThumbnail = (pageNumber: ?number) => {
+        const preview = this.getPreview();
+        if (preview && preview.viewer) {
+            return preview.viewer.getThumbnail(pageNumber);
+        }
+
+        return null;
+    };
 
     /**
      * Renders the file preview

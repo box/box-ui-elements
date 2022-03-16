@@ -1,0 +1,168 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/unified-share-modal/ContentInsightsSection should not render aything if contentInsightsConfig is empty 1`] = `""`;
+
+exports[`features/unified-share-modal/ContentInsightsSection should render default component with content insights off 1`] = `
+<Fragment>
+  <div
+    className="be"
+  >
+    <div
+      className="bdl-SharedLinkSection-separator"
+    />
+    <div
+      className="shared-link-toggle-row"
+    >
+      <div
+        className="ContentInsightsSection-toggle share-toggle-container"
+      >
+        <Toggle
+          data-testid="insights-toggle"
+          isOn={false}
+          label={
+            <FormattedMessage
+              defaultMessage="Advanced Insights"
+              id="boxui.unifiedShare.advancedInsights"
+            />
+          }
+          onChange={[Function]}
+        />
+        <Tooltip
+          constrainToScrollParent={false}
+          constrainToWindow={true}
+          isDisabled={false}
+          position="top-center"
+          text={
+            <FormattedMessage
+              defaultMessage="Get actionable insights into how viewers are engaging with this content. Measure average time spent, page-by-page engagement, per person and per visit details. {helpLink}"
+              id="boxui.unifiedShare.contentInsightsDescription"
+              values={
+                Object {
+                  "helpLink": false,
+                }
+              }
+            />
+          }
+          theme="default"
+        >
+          <span
+            className="tooltip-icon-container"
+            role="img"
+          >
+            <IconInfo
+              color="#909090"
+              height={14}
+              width={14}
+            />
+          </span>
+        </Tooltip>
+      </div>
+    </div>
+  </div>
+</Fragment>
+`;
+
+exports[`features/unified-share-modal/ContentInsightsSection should render default component with content insights on 1`] = `
+<Fragment>
+  <div
+    className="be"
+  >
+    <div
+      className="bdl-SharedLinkSection-separator"
+    />
+    <div
+      className="shared-link-toggle-row"
+    >
+      <div
+        className="ContentInsightsSection-toggle share-toggle-container"
+      >
+        <Toggle
+          data-testid="insights-toggle"
+          isOn={true}
+          label={
+            <FormattedMessage
+              defaultMessage="Advanced Insights"
+              id="boxui.unifiedShare.advancedInsights"
+            />
+          }
+          onChange={[Function]}
+        />
+        <Tooltip
+          constrainToScrollParent={false}
+          constrainToWindow={true}
+          isDisabled={false}
+          position="top-center"
+          text={
+            <FormattedMessage
+              defaultMessage="Get actionable insights into how viewers are engaging with this content. Measure average time spent, page-by-page engagement, per person and per visit details. {helpLink}"
+              id="boxui.unifiedShare.contentInsightsDescription"
+              values={
+                Object {
+                  "helpLink": false,
+                }
+              }
+            />
+          }
+          theme="default"
+        >
+          <span
+            className="tooltip-icon-container"
+            role="img"
+          >
+            <IconInfo
+              color="#909090"
+              height={14}
+              width={14}
+            />
+          </span>
+        </Tooltip>
+      </div>
+    </div>
+    <div
+      className="shared-link-checkgroup-row"
+    >
+      <CheckboxWrapper
+        wrapComponent={false}
+      >
+        <Checkbox
+          data-testid="require-email"
+          isChecked={false}
+          label={
+            <FormattedMessage
+              defaultMessage="Request email from anonymous viewers"
+              id="boxui.unifiedShare.contentInsightsRequireEmail"
+            />
+          }
+          onChange={[Function]}
+          onClick={[Function]}
+        />
+      </CheckboxWrapper>
+      <CheckboxWrapper
+        wrapComponent={false}
+      >
+        <Checkbox
+          data-testid="require-notify"
+          isChecked={false}
+          label={
+            <FormattedMessage
+              defaultMessage="Notify me when someone previews this file"
+              id="boxui.unifiedShare.contentInsightsNotify"
+            />
+          }
+          onChange={[Function]}
+          onClick={[Function]}
+        />
+      </CheckboxWrapper>
+    </div>
+  </div>
+</Fragment>
+`;
+
+exports[`features/unified-share-modal/ContentInsightsSection should wrap the component inside a MenuItem component 1`] = `
+<li
+  className="menu-item"
+  onClick={[Function]}
+  role="menuitem"
+  tabIndex={-1}
+/>
+`;

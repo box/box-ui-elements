@@ -5,7 +5,9 @@ import omit from 'lodash/omit';
 import uniqueId from 'lodash/uniqueId';
 import { defineMessages, injectIntl } from 'react-intl';
 
+import { bdlGray50 } from '../../styles/variables';
 import IconClose from '../../icon/fill/X16';
+import IconBack from '../../icons/general/IconShow';
 
 const ALERT_TYPE = 'alert';
 const DIALOG_TYPE = 'dialog';
@@ -24,7 +26,9 @@ type Props = {
     closeButtonProps: Object,
     intl: Object,
     modalRef?: Function,
+    onBackClick?: Function,
     onRequestClose?: Function,
+    showBackButton?: boolean,
     title?: React.Node,
     type?: 'alert' | 'dialog',
 };
@@ -33,6 +37,18 @@ class ModalDialog extends React.Component<Props> {
     static defaultProps = {
         type: DIALOG_TYPE,
         closeButtonProps: {},
+    };
+
+    /**
+     * Handles clicking on the back button
+     * @param {SyntheticMouseEvent} event
+     * @return {void}
+     */
+    onBackButtonClick = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
+        const { onBackClick } = this.props;
+        if (onBackClick) {
+            onBackClick(event);
+        }
     };
 
     /**
@@ -48,6 +64,28 @@ class ModalDialog extends React.Component<Props> {
     };
 
     modalID: string = uniqueId('modal');
+
+    /**
+     * Renders a button if onBackButtonClick is passed in
+     * @return {ReactElement|null} - Returns the button, or null if the button shouldn't be rendered
+     */
+    renderBackButton() {
+        const { onBackClick } = this.props;
+        if (!onBackClick) {
+            return null;
+        }
+
+        return (
+            <button
+                data-testid="modal-back-button"
+                className="modal-back-button"
+                type="button"
+                onClick={this.onBackButtonClick}
+            >
+                <IconBack color={bdlGray50} height={18} width={18} />
+            </button>
+        );
+    }
 
     /**
      * Renders a button if onRequestClose is passed in
@@ -99,6 +137,7 @@ class ModalDialog extends React.Component<Props> {
             modalRef,
             title,
             type,
+            showBackButton,
             ...rest // Useful for resin tagging, and other misc tags such as a11y
         } = this.props;
         const isAlertType = type === ALERT_TYPE;
@@ -114,6 +153,7 @@ class ModalDialog extends React.Component<Props> {
             <div ref={modalRef} className={classNames('modal-dialog', className)} {...divProps}>
                 <div className="modal-header-container">
                     <div className="modal-header">
+                        {showBackButton && this.renderBackButton()}
                         <h2 className="modal-title" id={`${this.modalID}-label`}>
                             {title}
                         </h2>

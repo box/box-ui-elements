@@ -16,6 +16,7 @@ import { ITEM_TYPE_WEBLINK } from '../../common/constants';
 import Tooltip from '../../components/tooltip';
 import { CollaboratorAvatars, CollaboratorList } from '../collaborator-avatars';
 
+import ContentInsightsSection from '../advanced-content-insights/ContentInsightsSection';
 import InviteePermissionsMenu from './InviteePermissionsMenu';
 import messages from './messages';
 import SharedLinkSection from './SharedLinkSection';
@@ -667,18 +668,23 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         const {
             allShareRestrictionWarning,
             changeSharedLinkAccessLevel,
-            createSharedLinkOnLoad,
             changeSharedLinkPermissionLevel,
             config,
+            contentInsightsConfig,
+            createSharedLinkOnLoad,
             displayInModal,
             focusSharedLinkOnLoad,
             getSharedLinkContacts,
             getContactAvatarUrl,
             intl,
+            isAdvancedContentInsightsEnabled,
             isAllowEditSharedLinkForFileEnabled,
             isFetching,
             item,
             onAddLink,
+            onAdvancedInsightsEmailToggle,
+            onAdvancedInsightsNotificationToggle,
+            onAdvancedInsightsToggle,
             onCopyError,
             onCopyInit,
             onCopySuccess,
@@ -705,6 +711,12 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             !isInviteSectionExpanded &&
             !showCollaboratorList &&
             allShareRestrictionWarning;
+
+        const showContentInsightsToggle =
+            !isEmailLinkSectionExpanded &&
+            !isInviteSectionExpanded &&
+            !showCollaboratorList &&
+            isAdvancedContentInsightsEnabled;
 
         return (
             <div className={displayInModal ? '' : 'be bdl-UnifiedShareForm'}>
@@ -741,6 +753,17 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             submitting={submitting || isFetching}
                             trackingProps={sharedLinkTracking}
                             tooltips={tooltips}
+                        />
+                    )}
+
+                    {showContentInsightsToggle && (
+                        <ContentInsightsSection
+                            contentInsightsConfig={contentInsightsConfig}
+                            item={item}
+                            onAdvancedInsightsToggle={onAdvancedInsightsToggle}
+                            onAdvancedInsightsEmailToggle={onAdvancedInsightsEmailToggle}
+                            onAdvancedInsightsNotificationToggle={onAdvancedInsightsNotificationToggle}
+                            submitting={submitting || isFetching}
                         />
                     )}
 

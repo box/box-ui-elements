@@ -276,6 +276,16 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             wrapper.setState({ showCollaboratorList: true });
             expect(wrapper).toMatchSnapshot();
         });
+
+        test('should render a default component with ACI toggle if enabled ', () => {
+            const wrapper = getWrapper({ isAdvancedContentInsightsEnabled: true });
+            expect(wrapper.exists('ContentInsightsSection')).toBe(true);
+        });
+
+        test('should not render a default component with ACI toggle if disabled ', () => {
+            const wrapper = getWrapper({ isAdvancedContentInsightsEnabled: false });
+            expect(wrapper.exists('ContentInsightsSection')).toBe(false);
+        });
     });
 
     describe('renderCollaboratorAvatars()', () => {

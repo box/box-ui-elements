@@ -9,14 +9,19 @@ import './BarChart.scss';
 
 type ValueAccessor = string | AccessorFunction;
 
+interface OffsetPosition {
+    left: number;
+    top: number;
+}
 interface Props {
     className?: string;
     data: Array<any>;
     direction?: Direction;
     label: string;
     labelAccessor: string;
-    onBarMouseEnter?: (arg1: { datum: any }) => void;
+    onBarMouseEnter?: (arg1: { datum: any }, arg2: OffsetPosition) => void;
     onBarMouseLeave?: (arg1: { datum: any }) => void;
+    showAxisLabel?: boolean;
     valueAccessor: ValueAccessor;
 }
 
@@ -33,6 +38,7 @@ function BarChart({
     onBarMouseLeave,
     labelAccessor,
     valueAccessor,
+    showAxisLabel = false,
 }: Props) {
     const isHorizontal = direction === 'horizontal';
     const isInteractive = !!onBarMouseEnter || !!onBarMouseLeave;
@@ -66,7 +72,8 @@ function BarChart({
                 <Bar
                     key={datum[labelAccessor]}
                     direction={direction}
-                    onMouseEnter={() => handleBarMouseEnter({ datum })}
+                    label={showAxisLabel && datum[labelAccessor]}
+                    onMouseEnter={(position: OffsetPosition) => handleBarMouseEnter({ datum }, position)}
                     onMouseLeave={() => handleBarMouseLeave({ datum })}
                     size={getSize(datum)}
                 />

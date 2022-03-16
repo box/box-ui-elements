@@ -6,7 +6,9 @@ import { ModalDialogBase } from '../ModalDialog';
 const sandbox = sinon.sandbox.create();
 
 describe('components/modal/ModalDialog', () => {
+    let onBackClick;
     let onRequestClose;
+    let showBackButton;
     let wrapper;
     let instance;
     const title = 'hello';
@@ -16,8 +18,15 @@ describe('components/modal/ModalDialog', () => {
             formatMessage: message => message.id,
         };
         onRequestClose = sinon.spy();
+        onBackClick = sinon.spy();
         wrapper = shallow(
-            <ModalDialogBase intl={intlShape} onRequestClose={onRequestClose} title={title}>
+            <ModalDialogBase
+                intl={intlShape}
+                onBackClick={onBackClick}
+                onRequestClose={onRequestClose}
+                showBackButton={showBackButton}
+                title={title}
+            >
                 children
             </ModalDialogBase>,
         );
@@ -67,5 +76,25 @@ describe('components/modal/ModalDialog', () => {
     test('should not render close button when onRequestClose is falsey', () => {
         wrapper.setProps({ onRequestClose: undefined });
         expect(wrapper.find('.modal-close-button').length).toBeFalsy();
+    });
+
+    test('should not render back button when showBackButton is falsy', () => {
+        expect(wrapper.find('.modal-back-button').length).toBeFalsy();
+    });
+
+    test('render back button when showBackButton is truthy', () => {
+        wrapper.setProps({ showBackButton: true });
+        expect(wrapper.find('.modal-back-button').length).toBeTruthy();
+    });
+
+    test('should not render back button if onBackClick is undefined', () => {
+        wrapper.setProps({ onBackClick: null, showBackButton: true });
+        expect(wrapper.find('.modal-back-button').length).toBeFalsy();
+    });
+
+    test('should call onBackClick when back button is clicked on', () => {
+        wrapper.setProps({ showBackButton: true });
+        wrapper.find('.modal-back-button').simulate('click');
+        sinon.assert.calledOnce(onBackClick);
     });
 });
