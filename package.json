@@ -299,7 +299,7 @@
         "sass-variable-parser": "^1.2.2",
         "scroll-into-view-if-needed": "^2.2.20",
         "semantic-release": "^16.0.2",
-        "simple-git": "^1.131.0",
+        "simple-git": "^3.3.0",
         "sinon": "^2.3.7",
         "source-map-loader": "^0.2.4",
         "start-server-and-test": "^1.10.8",
