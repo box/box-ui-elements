@@ -7,7 +7,7 @@ const UnknownUserAvatar = ({ className = '', height = 28, title, width = 28 }: S
         className={`unknown-user-avatar ${className}`}
         height={height}
         title={title}
-        viewBox="0 0 28 28"
+        viewBox="0 0 16 16"
         width={width}
     >
         <path
