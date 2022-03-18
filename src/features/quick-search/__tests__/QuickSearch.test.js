@@ -107,6 +107,23 @@ describe('features/quick-search/QuickSearch', () => {
         });
     });
 
+    test('should render title when specified', () => {
+        const children = (
+            <>
+                <li key="1" />
+                <li key="2" />
+            </>
+        );
+        const title = <div>title</div>;
+        const wrapper = shallow(
+            <QuickSearch title={title} inputProps={inputProps}>
+                {children}
+            </QuickSearch>,
+        );
+        const selectorDropdown = wrapper.find('SelectorDropdown');
+        expect(selectorDropdown.prop('title')).toEqual(title);
+    });
+
     describe('onFocus', () => {
         test('should set showMessage state to true when focused', () => {
             const wrapper = shallow(<QuickSearch inputProps={inputProps} />);
