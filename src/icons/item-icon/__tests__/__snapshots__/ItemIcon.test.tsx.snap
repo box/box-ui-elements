@@ -1,5 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`icons/item-icon/ItemIcon render() should render  component 1`] = `
+<FileDefault32
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render audio component 1`] = `
+<FileAudio32
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render bookmark component 1`] = `
+<FileBookmark32
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render boxnote component 1`] = `
+<FileBoxNote32
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render code component 1`] = `
+<FileCode32
+  height={32}
+  width={32}
+/>
+`;
+
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 1`] = `
 <FileAudio32
   className="test"
@@ -280,7 +315,7 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 32`] = `
-<FileZip32
+<FileXbd32
   className="test"
   height={10}
   title="title"
@@ -289,6 +324,24 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render component with additional props 33`] = `
+<FileXdw32
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 34`] = `
+<FileZip32
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render component with additional props 35`] = `
 <FileDefault32
   className="test"
   height={10}
@@ -298,231 +351,210 @@ exports[`icons/item-icon/ItemIcon render() should render component with addition
 `;
 
 exports[`icons/item-icon/ItemIcon render() should render default component 1`] = `
-<FileAudio32
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 2`] = `
-<FileBookmark32
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 3`] = `
-<FileBoxNote32
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 4`] = `
-<FileCode32
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 5`] = `
 <FileDefault32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 6`] = `
+exports[`icons/item-icon/ItemIcon render() should render document component 1`] = `
 <FileText32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 7`] = `
+exports[`icons/item-icon/ItemIcon render() should render dwg component 1`] = `
 <FileDwg32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 8`] = `
+exports[`icons/item-icon/ItemIcon render() should render excel-spreadsheet component 1`] = `
 <FileExcel32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 9`] = `
+exports[`icons/item-icon/ItemIcon render() should render folder-collab component 1`] = `
 <FolderShared32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 10`] = `
+exports[`icons/item-icon/ItemIcon render() should render folder-external component 1`] = `
 <FolderExternal32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 11`] = `
+exports[`icons/item-icon/ItemIcon render() should render folder-plain component 1`] = `
 <FolderPersonal32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 12`] = `
+exports[`icons/item-icon/ItemIcon render() should render folder-plain component 2`] = `
+<FolderPersonal32
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render google-docs component 1`] = `
 <FileDocs32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 13`] = `
+exports[`icons/item-icon/ItemIcon render() should render google-sheets component 1`] = `
 <FileSheets32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 14`] = `
+exports[`icons/item-icon/ItemIcon render() should render google-slides component 1`] = `
 <FileSlides32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 15`] = `
+exports[`icons/item-icon/ItemIcon render() should render illustrator component 1`] = `
 <FileIllustrator32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 16`] = `
+exports[`icons/item-icon/ItemIcon render() should render image component 1`] = `
 <FileImage32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 17`] = `
+exports[`icons/item-icon/ItemIcon render() should render indesign component 1`] = `
 <FileIndesign32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 18`] = `
+exports[`icons/item-icon/ItemIcon render() should render keynote component 1`] = `
 <FileKeynote32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 19`] = `
+exports[`icons/item-icon/ItemIcon render() should render numbers component 1`] = `
 <FileNumbers32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 20`] = `
+exports[`icons/item-icon/ItemIcon render() should render pages component 1`] = `
 <FilePages32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 21`] = `
+exports[`icons/item-icon/ItemIcon render() should render pdf component 1`] = `
 <FilePdf32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 22`] = `
+exports[`icons/item-icon/ItemIcon render() should render photoshop component 1`] = `
 <FilePhotoshop32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 23`] = `
+exports[`icons/item-icon/ItemIcon render() should render powerpoint-presentation component 1`] = `
 <FilePowerpoint32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 24`] = `
+exports[`icons/item-icon/ItemIcon render() should render presentation component 1`] = `
 <FilePresentation32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 25`] = `
+exports[`icons/item-icon/ItemIcon render() should render spreadsheet component 1`] = `
 <FileSpreadsheet32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 26`] = `
+exports[`icons/item-icon/ItemIcon render() should render text component 1`] = `
 <FileText32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 27`] = `
+exports[`icons/item-icon/ItemIcon render() should render threed component 1`] = `
 <FileThreeD32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 28`] = `
-<FolderPersonal32
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/item-icon/ItemIcon render() should render default component 29`] = `
+exports[`icons/item-icon/ItemIcon render() should render vector component 1`] = `
 <FileVector32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 30`] = `
+exports[`icons/item-icon/ItemIcon render() should render video component 1`] = `
 <FileVideo32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 31`] = `
+exports[`icons/item-icon/ItemIcon render() should render word-document component 1`] = `
 <FileWord32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 32`] = `
-<FileZip32
+exports[`icons/item-icon/ItemIcon render() should render xbd component 1`] = `
+<FileXbd32
   height={32}
   width={32}
 />
 `;
 
-exports[`icons/item-icon/ItemIcon render() should render default component 33`] = `
-<FileDefault32
+exports[`icons/item-icon/ItemIcon render() should render xdw component 1`] = `
+<FileXdw32
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render zip component 1`] = `
+<FileZip32
   height={32}
   width={32}
 />

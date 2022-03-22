@@ -27,6 +27,8 @@ import IconFileThreeD from '../../icon/content/FileThreeD32';
 import IconFileVector from '../../icon/content/FileVector32';
 import IconFileVideo from '../../icon/content/FileVideo32';
 import IconFileWordDocument from '../../icon/content/FileWord32';
+import IconFileXbd from '../../icon/content/FileXbd32';
+import IconFileXdw from '../../icon/content/FileXdw32';
 import IconFileZip from '../../icon/content/FileZip32';
 
 const Components: { [key: string]: (props: SVGProps) => JSX.Element } = {
@@ -56,6 +58,8 @@ const Components: { [key: string]: (props: SVGProps) => JSX.Element } = {
     IconFileVector,
     IconFileVideo,
     IconFileWordDocument,
+    IconFileXbd,
+    IconFileXdw,
     IconFileZip,
 };
 
@@ -184,6 +188,8 @@ const EXTENSIONS: { [key: string]: { [key: string]: string } } = {
         'wmv',
     ]),
     IconFileWordDocument: mirror(['docx', 'doc', 'docm']),
+    IconFileXbd: mirror(['xbd']),
+    IconFileXdw: mirror(['xdw']),
     IconFileZip: mirror(['rar', 'tgz', 'zip']),
 };
 
