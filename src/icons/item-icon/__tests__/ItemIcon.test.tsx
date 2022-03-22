@@ -101,13 +101,19 @@ describe('icons/item-icon/ItemIcon', () => {
                 iconType: 'word-document',
             },
             {
+                iconType: 'xbd',
+            },
+            {
+                iconType: 'xdw',
+            },
+            {
                 iconType: 'zip',
             },
             {
                 iconType: '',
             },
         ].forEach(({ iconType }) => {
-            test('should render default component', () => {
+            test(`should render ${iconType} component`, () => {
                 const wrapper = getWrapper({ iconType });
 
                 expect(wrapper).toMatchSnapshot();
