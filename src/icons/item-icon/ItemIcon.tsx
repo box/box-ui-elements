@@ -43,6 +43,8 @@ const itemIconTable = {
     code: IconFileCode,
     default: IconFileDefault,
     document: IconFileText,
+    'docuworks-binder': IconFileXbd,
+    'docuworks-file': IconFileXdw,
     dwg: IconFileDwg,
     'excel-spreadsheet': IconFileExcelSpreadsheet,
     'folder-collab': IconFolderCollab,
@@ -67,8 +69,6 @@ const itemIconTable = {
     vector: IconFileVector,
     video: IconFileVideo,
     'word-document': IconFileWordDocument,
-    xbd: IconFileXbd,
-    xdw: IconFileXdw,
     zip: IconFileZip,
 };
 
