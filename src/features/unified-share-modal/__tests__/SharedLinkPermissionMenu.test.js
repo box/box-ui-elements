@@ -84,6 +84,45 @@ describe('features/unified-share-modal/SharedLinkPermissionMenu', () => {
 
             expect(wrapper.find('LabelPillText')).toHaveLength(length);
         });
+
+        test.each`
+            isSharedLinkEditTooltipShown | length | should
+            ${true}                      | ${1}   | ${'should render LabelPillText if tooltip was shown'}
+            ${false}                     | ${0}   | ${'should not render LabelPillText if tooltip was not shown'}
+        `('$should ', ({ isSharedLinkEditTooltipShown, length }) => {
+            const wrapper = shallow(
+                <SharedLinkPermissionMenu
+                    allowedPermissionLevels={allowedPermissionLevels}
+                    changePermissionLevel={() => {}}
+                    isSharedLinkEditTooltipShown={isSharedLinkEditTooltipShown}
+                    permissionLevel={CAN_EDIT}
+                    sharedLinkEditTagTargetingApi={{ canShow: false }}
+                    submitting={false}
+                />,
+            );
+
+            expect(wrapper.find('LabelPillText')).toHaveLength(length);
+        });
+
+        test('should not render LabelPillText if tooltip was shown and menu was reopened', () => {
+            const wrapper = shallow(
+                <SharedLinkPermissionMenu
+                    allowedPermissionLevels={allowedPermissionLevels}
+                    changePermissionLevel={() => {}}
+                    isSharedLinkEditTooltipShown
+                    permissionLevel={CAN_EDIT}
+                    sharedLinkEditTagTargetingApi={{ canShow: false, onShow: jest.fn(), onComplete: jest.fn() }}
+                    submitting={false}
+                />,
+            );
+
+            wrapper.find('DropdownMenu').invoke('onMenuOpen')();
+            expect(wrapper.find('LabelPillText')).toHaveLength(1);
+
+            wrapper.find('DropdownMenu').invoke('onMenuClose')();
+            wrapper.find('DropdownMenu').invoke('onMenuOpen')();
+            expect(wrapper.find('LabelPillText')).toHaveLength(0);
+        });
     });
 
     describe('onChangePermissionLevel()', () => {
