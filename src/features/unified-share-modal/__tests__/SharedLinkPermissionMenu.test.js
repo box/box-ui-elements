@@ -85,23 +85,34 @@ describe('features/unified-share-modal/SharedLinkPermissionMenu', () => {
             expect(wrapper.find('LabelPillText')).toHaveLength(length);
         });
 
-        test.each`
-            isSharedLinkEditTooltipShown | length | should
-            ${true}                      | ${1}   | ${'should render LabelPillText if tooltip was shown'}
-            ${false}                     | ${0}   | ${'should not render LabelPillText if tooltip was not shown'}
-        `('$should ', ({ isSharedLinkEditTooltipShown, length }) => {
+        test('should render LabelPillText if tooltip was shown', () => {
             const wrapper = shallow(
                 <SharedLinkPermissionMenu
                     allowedPermissionLevels={allowedPermissionLevels}
                     changePermissionLevel={() => {}}
-                    isSharedLinkEditTooltipShown={isSharedLinkEditTooltipShown}
+                    isSharedLinkEditTooltipShown
                     permissionLevel={CAN_EDIT}
                     sharedLinkEditTagTargetingApi={{ canShow: false }}
                     submitting={false}
                 />,
             );
 
-            expect(wrapper.find('LabelPillText')).toHaveLength(length);
+            expect(wrapper.find('LabelPillText')).toHaveLength(1);
+        });
+
+        test('should not render LabelPillText if tooltip was not shown', () => {
+            const wrapper = shallow(
+                <SharedLinkPermissionMenu
+                    allowedPermissionLevels={allowedPermissionLevels}
+                    changePermissionLevel={() => {}}
+                    isSharedLinkEditTooltipShown={false}
+                    permissionLevel={CAN_EDIT}
+                    sharedLinkEditTagTargetingApi={{ canShow: false }}
+                    submitting={false}
+                />,
+            );
+
+            expect(wrapper.find('LabelPillText')).toHaveLength(0);
         });
 
         test('should not render LabelPillText if tooltip was shown and menu was reopened', () => {
