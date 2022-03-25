@@ -33,9 +33,17 @@ type Props = {
     },
 };
 
-class SharedLinkPermissionMenu extends Component<Props> {
+type State = {
+    hasSeenEditTag: boolean,
+};
+
+class SharedLinkPermissionMenu extends Component<Props, State> {
     static defaultProps = {
         trackingProps: {},
+    };
+
+    state = {
+        hasSeenEditTag: false,
     };
 
     onChangePermissionLevel = (newPermissionLevel: permissionLevelType) => {
@@ -62,8 +70,10 @@ class SharedLinkPermissionMenu extends Component<Props> {
             trackingProps,
         } = this.props;
         const { sharedLinkPermissionsMenuButtonProps } = trackingProps;
-        const canShowTag = sharedLinkEditTagTargetingApi ? sharedLinkEditTagTargetingApi.canShow : false;
         const canShowTooltip = sharedLinkEditTooltipTargetingApi ? sharedLinkEditTooltipTargetingApi.canShow : false;
+        const canShowTag = sharedLinkEditTagTargetingApi
+            ? (isSharedLinkEditTooltipShown && !this.state.hasSeenEditTag) || sharedLinkEditTagTargetingApi.canShow
+            : false;
 
         if (!permissionLevel) {
             return null;
@@ -88,6 +98,10 @@ class SharedLinkPermissionMenu extends Component<Props> {
                     if (allowedPermissionLevels.includes(CAN_EDIT) && canShowTag && sharedLinkEditTagTargetingApi) {
                         sharedLinkEditTagTargetingApi.onComplete();
                     }
+
+                    if (canShowTag) {
+                        this.setState({ hasSeenEditTag: true });
+                    }
                 }}
                 onMenuOpen={() => {
                     if (allowedPermissionLevels.includes(CAN_EDIT) && canShowTag && sharedLinkEditTagTargetingApi) {
@@ -110,7 +124,7 @@ class SharedLinkPermissionMenu extends Component<Props> {
                 >
                     <MenuToggle>{permissionLevels[permissionLevel].label}</MenuToggle>
                 </PlainButton>
-                <Menu className="ums-share-permissions-menu">
+                <Menu className="ums-share-permissions-menu" onClose={() => this.onMenuClose(canShowTag)}>
                     {allowedPermissionLevels.map(level => (
                         <SelectMenuItem
                             key={level}
