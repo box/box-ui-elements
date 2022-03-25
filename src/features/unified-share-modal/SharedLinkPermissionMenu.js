@@ -100,7 +100,7 @@ class SharedLinkPermissionMenu extends Component<Props, State> {
                         sharedLinkEditTagTargetingApi.onComplete();
                     }
 
-                    if (canShowTag) {
+                    if (isSharedLinkEditTooltipShown && canShowTag) {
                         this.setState({ hasSeenEditTag: true });
                     }
                 }}
