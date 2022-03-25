@@ -71,6 +71,7 @@ class SharedLinkPermissionMenu extends Component<Props, State> {
         } = this.props;
         const { sharedLinkPermissionsMenuButtonProps } = trackingProps;
         const canShowTooltip = sharedLinkEditTooltipTargetingApi ? sharedLinkEditTooltipTargetingApi.canShow : false;
+        // we show the "new" tag if the tooltip is shown, otherwise we follow the normal targeting api flow
         const canShowTag = sharedLinkEditTagTargetingApi
             ? (isSharedLinkEditTooltipShown && !this.state.hasSeenEditTag) || sharedLinkEditTagTargetingApi.canShow
             : false;
@@ -124,7 +125,7 @@ class SharedLinkPermissionMenu extends Component<Props, State> {
                 >
                     <MenuToggle>{permissionLevels[permissionLevel].label}</MenuToggle>
                 </PlainButton>
-                <Menu className="ums-share-permissions-menu" onClose={() => this.onMenuClose(canShowTag)}>
+                <Menu className="ums-share-permissions-menu">
                     {allowedPermissionLevels.map(level => (
                         <SelectMenuItem
                             key={level}
