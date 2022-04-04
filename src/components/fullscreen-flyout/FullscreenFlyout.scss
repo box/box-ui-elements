@@ -1,0 +1,29 @@
+@import '../../styles/variables';
+
+.fullscreen-flyout.flyout-overlay {
+    .overlay {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: 0;
+        padding: 0;
+        background-color: $bdl-gray-02;
+        border: unset;
+        border-radius: unset;
+        box-shadow: unset;
+
+        .aria-menu {
+            flex-grow: 1;
+            background: unset;
+            border: unset;
+            border-radius: unset;
+            box-shadow: unset;
+
+            .menu-item {
+                color: $bdl-gray-80;
+            }
+        }
+    }
+}

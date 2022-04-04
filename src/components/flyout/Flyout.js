@@ -54,9 +54,20 @@ const positions = {
  * Checks if there is a clickable ancestor or self
  * @param {Node} rootNode The base node we should stop at
  * @param {Node} targetNode The target node of the event
+ * @param clickableOverrideSelector CSS selector that identifies additional clickable elements
  * @returns {boolean}
  */
-const hasClickableAncestor = (rootNode, targetNode) => {
+const hasClickableAncestor = (rootNode, targetNode, clickableOverrideSelector) => {
+    if (clickableOverrideSelector) {
+        const queryNodes = [...rootNode.querySelectorAll(clickableOverrideSelector)];
+        for (let i = 0; i < queryNodes.length; i += 1) {
+            if (queryNodes[i].contains(targetNode)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Check if the element or any of the ancestors are click-able (stopping at the component boundary)
     let currentNode = targetNode;
     while (currentNode && currentNode instanceof Node && currentNode.parentNode && currentNode !== rootNode) {
@@ -92,7 +103,11 @@ export type FlyoutProps = {
      */
     className?: string,
     /**
-     * If set to true, closes the overlay on clicking buttons/links inside
+     * Element classes that are considered clickable when closeOnClick is set to true
+     */
+    clickableOverrideSelector?: string,
+    /**
+     * If set to true, closes the overlay on clicking buttons/links or css selector clickableOverrideSelector inside
      * of it
      */
     closeOnClick?: boolean,
@@ -116,6 +131,10 @@ export type FlyoutProps = {
      * Sets tether constrain to window
      */
     constrainToWindow?: boolean,
+    /**
+     * Disables tethering
+     */
+    disableTether?: boolean,
     /**
      * Whether overlay should be visible by default
      */
@@ -173,6 +192,7 @@ class Flyout extends React.Component<Props, State> {
         closeOnClick: true,
         closeOnClickOutside: true,
         closeOnWindowBlur: false,
+        disableTether: false,
         constrainToScrollParent: true,
         constrainToWindow: false,
         isVisibleByDefault: false,
@@ -231,8 +251,8 @@ class Flyout extends React.Component<Props, State> {
 
     handleOverlayClick = (event: SyntheticEvent<>) => {
         const overlayNode = document.getElementById(this.overlayID);
-        const { closeOnClick, closeOnClickPredicate } = this.props;
-        if (!closeOnClick || !hasClickableAncestor(overlayNode, event.target)) {
+        const { clickableOverrideSelector, closeOnClick, closeOnClickPredicate } = this.props;
+        if (!closeOnClick || !hasClickableAncestor(overlayNode, event.target, clickableOverrideSelector)) {
             return;
         }
         if (closeOnClickPredicate && !closeOnClickPredicate(event)) {
@@ -369,6 +389,7 @@ class Flyout extends React.Component<Props, State> {
             openOnHover,
             position,
             shouldDefaultFocus,
+            disableTether,
         } = this.props;
         const { isButtonClicked, isVisible } = this.state;
         const elements = React.Children.toArray(children);
@@ -430,7 +451,7 @@ class Flyout extends React.Component<Props, State> {
             classPrefix: 'flyout-overlay',
             attachment: tetherPosition.attachment,
             targetAttachment: tetherPosition.targetAttachment,
-            enabled: isVisible,
+            enabled: !disableTether && isVisible,
             classes: {
                 element: `flyout-overlay ${className}`,
             },
