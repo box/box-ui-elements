@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
 import './FullscreenFlyout.scss';
 import classNames from 'classnames';
@@ -12,14 +12,14 @@ export type FullscreenFlyoutProps = {
     /** Set className to the overlay wrapper */
     className?: string,
     /** Custom <OverlayHeader> */
-    header?: React.Node,
+    header?: React.Element<any>,
     /** CSS selector that identifies additional clickable elements that closes the overlay */
     onCloseClassSelector?: string,
 };
 
 type Props = FullscreenFlyoutProps;
 
-const FullscreenFlyout = (props: Props = { className: '', onCloseClassSelector: '' }) => {
+const FullscreenFlyout = (props: Props) => {
     const { children, className, header, onCloseClassSelector, ...rest } = props;
 
     const elements = React.Children.toArray(children);
@@ -31,7 +31,7 @@ const FullscreenFlyout = (props: Props = { className: '', onCloseClassSelector: 
     const [button, content] = elements;
 
     // Close flyout button in header should be clickable by default if using selector override
-    const clickableSelector = `.close-btn, ${onCloseClassSelector}`;
+    const clickableSelector = onCloseClassSelector ? `.close-btn, ${onCloseClassSelector}` : '.close-btn';
 
     return (
         <Flyout

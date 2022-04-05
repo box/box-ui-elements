@@ -58,7 +58,7 @@ const positions = {
  * @returns {boolean}
  */
 const hasClickableAncestor = (rootNode, targetNode, clickableOverrideSelector) => {
-    if (clickableOverrideSelector) {
+    if (rootNode && rootNode instanceof Node && targetNode instanceof Node && clickableOverrideSelector) {
         const queryNodes = [...rootNode.querySelectorAll(clickableOverrideSelector)];
         for (let i = 0; i < queryNodes.length; i += 1) {
             if (queryNodes[i].contains(targetNode)) {

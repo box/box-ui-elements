@@ -9,7 +9,7 @@ import IconClose from '../../icons/general/IconClose';
 
 export type ResponsiveMenuProps = {
     /** Custom primary action button that appears on the right header */
-    actionButton?: React.node,
+    actionButton?: React.Element<any>,
     /** Set className to the overlay header */
     className?: string,
     /** Set click handler when close button is clicked */
