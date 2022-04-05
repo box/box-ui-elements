@@ -8,7 +8,7 @@ describe('icons/general/IconSearchJuicy', () => {
         const dimension = 14;
         const wrapper = shallow(<IconSearchJuicy />);
 
-        expect(wrapper.hasClass('icon-search')).toEqual(true);
+        expect(wrapper.hasClass('icon-search-juicy')).toEqual(true);
         expect(wrapper.find('path').prop('fill')).toEqual(bdlGray40);
         expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(dimension);
         expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(dimension);
