@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/full-screen-popover/CloseButton should correctly render button 1`] = `
+<Button
+  className="close-btn"
+  isLoading={false}
+  showRadar={false}
+  type="button"
+>
+  <IconClose
+    color="#767676"
+    height={18}
+    width={18}
+  />
+</Button>
+`;

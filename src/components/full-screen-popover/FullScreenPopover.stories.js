@@ -8,6 +8,7 @@ import MenuItem from '../menu/MenuItem';
 import MenuSeparator from '../menu/MenuSeparator';
 import FullScreenPopover from './FullScreenPopover';
 import notes from './FullScreenPopover.stories.md';
+import './styles/FullScreenPopover.stories.scss';
 
 export const basic = () => (
     <FullScreenPopover>

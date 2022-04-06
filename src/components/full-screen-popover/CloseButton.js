@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import Button from '../button';
 import IconClose from '../../icons/general/IconClose';
 import { bdlGray62 } from '../../styles/variables';
-import './CloseButton.scss';
+import './styles/CloseButton.scss';
 
 export type CloseButtonProps = {
     className?: string,

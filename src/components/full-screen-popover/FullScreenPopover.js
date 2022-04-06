@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { Overlay } from '../flyout';
 import { KEYS } from '../../constants';
 import OverlayHeader from './OverlayHeader';
-import './FullScreenPopover.scss';
+import './styles/FullScreenPopover.scss';
 
 export type FullScreenPopoverProps = {
     /** Components to render in the overlay */

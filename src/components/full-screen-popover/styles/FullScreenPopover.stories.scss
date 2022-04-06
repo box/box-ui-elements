@@ -1,0 +1,13 @@
+@import '../../../styles/variables';
+
+.aria-menu {
+    flex-grow: 1;
+    background: unset;
+    border: unset;
+    border-radius: unset;
+    box-shadow: unset;
+
+    .menu-item {
+        color: $bdl-gray-80;
+    }
+}

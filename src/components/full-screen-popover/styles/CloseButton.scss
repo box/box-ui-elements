@@ -1,0 +1,10 @@
+@import '../../../styles/variables';
+@import './variables';
+
+.btn.close-btn {
+    width: $close-btn-size;
+    height: $close-btn-size;
+    padding: unset;
+    background-color: $bdl-gray-10;
+    border: unset;
+}

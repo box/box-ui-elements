@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import classNames from 'classnames';
 import CloseButton from './CloseButton';
-import './OverlayHeader.scss';
+import './styles/OverlayHeader.scss';
 
 export type Props = {
     /** Components to render in the header */
