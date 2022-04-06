@@ -1,7 +1,7 @@
 @import '../../styles/variables';
 
-.fullscreen-flyout.flyout-overlay {
-    .overlay {
+.full-screen-popover {
+    .full-screen-overlay .overlay {
         position: fixed;
         top: 0;
         right: 0;

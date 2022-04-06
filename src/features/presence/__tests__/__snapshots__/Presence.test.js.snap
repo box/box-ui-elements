@@ -8,7 +8,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
-  disableTether={false}
   isVisibleByDefault={false}
   onClose={[Function]}
   onOpen={[Function]}
@@ -132,7 +131,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
-  disableTether={false}
   isVisibleByDefault={false}
   onClose={[Function]}
   onOpen={[Function]}
@@ -256,7 +254,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
-  disableTether={false}
   isVisibleByDefault={false}
   onClose={[Function]}
   onOpen={[Function]}
@@ -303,7 +300,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
-  disableTether={false}
   isVisibleByDefault={false}
   onClose={[Function]}
   onOpen={[Function]}
@@ -436,7 +432,6 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
-  disableTether={false}
   isVisibleByDefault={true}
   onClose={[Function]}
   onOpen={[Function]}
