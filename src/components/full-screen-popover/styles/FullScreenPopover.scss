@@ -1,8 +1,8 @@
 @import '../../../styles/variables';
 @import './variables';
 
-.full-screen-popover {
-    .full-screen-overlay .overlay {
+.bdl-full-screen-popover {
+    .bdl-full-screen-overlay .overlay {
         position: fixed;
         top: 0;
         right: 0;
@@ -14,14 +14,5 @@
         border: unset;
         border-radius: unset;
         box-shadow: unset;
-
-        .fs-content {
-            position: absolute;
-            top: $overlay-header-height;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            overflow: auto;
-        }
     }
 }

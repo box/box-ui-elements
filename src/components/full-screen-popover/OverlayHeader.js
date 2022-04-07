@@ -17,9 +17,9 @@ export type Props = {
 const OverlayHeader = (props: Props) => {
     const { children, onCloseClick, className } = props;
     return (
-        <div className={classNames('overlay-header', className)}>
-            <div className="oh-content">{children}</div>
-            <CloseButton className="oh-close-btn" onClick={onCloseClick} />
+        <div className={classNames('bdl-overlay-header', className)}>
+            <div className="bdl-oh-content">{children}</div>
+            <CloseButton className="bdl-oh-close-btn" onClick={onCloseClick} />
         </div>
     );
 };

@@ -2,7 +2,7 @@
 
 exports[`components/full-screen-popover/CloseButton should correctly render button 1`] = `
 <Button
-  className="close-btn"
+  className="bdl-close-btn"
   isLoading={false}
   showRadar={false}
   type="button"

@@ -16,7 +16,7 @@ type Props = CloseButtonProps;
 
 const CloseButton = ({ className, onClick }: Props) => {
     return (
-        <Button onClick={onClick} className={classNames('close-btn', className)} type="button">
+        <Button onClick={onClick} className={classNames('bdl-close-btn', className)} type="button">
             <IconClose color={bdlGray62} height={18} width={18} />
         </Button>
     );

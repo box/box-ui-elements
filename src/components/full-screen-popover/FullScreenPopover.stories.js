@@ -11,8 +11,7 @@ import notes from './FullScreenPopover.stories.md';
 import './styles/FullScreenPopover.stories.scss';
 
 export const basic = () => (
-    <FullScreenPopover>
-        <PrimaryButton>Click (basic)</PrimaryButton>
+    <FullScreenPopover popoverButton={<PrimaryButton>Click (basic)</PrimaryButton>}>
         <h1>Content</h1>
     </FullScreenPopover>
 );
@@ -26,8 +25,7 @@ export const withCustomHeader = () => {
     );
 
     return (
-        <FullScreenPopover header={header}>
-            <PrimaryButton>Click (with header)</PrimaryButton>
+        <FullScreenPopover header={header} popoverButton={<PrimaryButton>Click (with header)</PrimaryButton>}>
             <h1>Content</h1>
         </FullScreenPopover>
     );
@@ -37,8 +35,10 @@ export const withCustomCloseOnClickElements = () => {
     const selector = '.menu-item, #close';
 
     return (
-        <FullScreenPopover onCloseClassSelector={selector}>
-            <PrimaryButton>Click (custom close on click elements)</PrimaryButton>
+        <FullScreenPopover
+            onCloseCssSelector={selector}
+            popoverButton={<PrimaryButton>Click (custom close on click elements)</PrimaryButton>}
+        >
             <TabView>
                 <Tab key="menu-tab" title="Menu">
                     <Menu>

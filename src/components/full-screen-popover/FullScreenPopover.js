@@ -6,11 +6,12 @@ import classNames from 'classnames';
 import { Overlay } from '../flyout';
 import { KEYS } from '../../constants';
 import OverlayHeader from './OverlayHeader';
+import ScrollWrapper from '../scroll-wrapper';
 import './styles/FullScreenPopover.scss';
 
 export type FullScreenPopoverProps = {
     /** Components to render in the overlay */
-    children: React.Node,
+    children?: React.Node,
     /** Set className to the overlay wrapper */
     className?: string,
     /** Content nested inside of the popover header */
@@ -18,9 +19,11 @@ export type FullScreenPopoverProps = {
     /** Fires this callback when overlay is closed */
     onClose?: Function,
     /** CSS selector that identifies clickable elements that closes the overlay */
-    onCloseClassSelector?: string,
+    onCloseCssSelector?: string,
     /** Fires this callback when overlay is opened */
     onOpen?: Function,
+    /** Custom button that toggles the overlay */
+    popoverButton: React.Element<any>,
 };
 
 type Props = FullScreenPopoverProps;
@@ -28,18 +31,12 @@ type Props = FullScreenPopoverProps;
 const FullScreenPopover = (props: Props) => {
     const [isVisible, setVisibility] = React.useState(false);
 
-    const overlayID = uniqueId('overlay');
-    const popoverButtonID = uniqueId('popoverbutton');
+    let overlayRef = null;
 
-    const { className, header, children, onClose, onCloseClassSelector, onOpen } = props;
+    const overlayID = React.useMemo(() => uniqueId('overlay'), []);
+    const popoverButtonID = React.useMemo(() => uniqueId('popoverbutton'), []);
 
-    const elements = React.Children.toArray(children);
-
-    if (elements.length !== 2) {
-        throw new Error('FullScreenPopover must have exactly two children: A button component and a content element');
-    }
-
-    const [popoverButton, overlayContent] = elements;
+    const { className, header, children, onClose, onCloseCssSelector, onOpen, popoverButton } = props;
 
     const openOverlay = () => {
         setVisibility(true);
@@ -56,7 +53,7 @@ const FullScreenPopover = (props: Props) => {
     };
 
     const focusButton = () => {
-        const buttonEl = document.getElementById(popoverButtonID);
+        const buttonEl = popoverButton.ref;
         if (buttonEl) {
             buttonEl.focus();
         }
@@ -64,10 +61,10 @@ const FullScreenPopover = (props: Props) => {
 
     const handleOverlayClick = (event: SyntheticEvent<>) => {
         // Searches overlay for classes that match event.target and closes overlay if match
-        const overlayNode: HTMLElement | null = document.getElementById(overlayID);
+        const overlayNode = overlayRef;
         const targetNode = event.target;
-        if (overlayNode && overlayNode instanceof Node && targetNode instanceof Node && onCloseClassSelector) {
-            const queryNodes = [...overlayNode.querySelectorAll(onCloseClassSelector)];
+        if (overlayNode && overlayNode instanceof Node && targetNode instanceof Node && onCloseCssSelector) {
+            const queryNodes = [...overlayNode.querySelectorAll(onCloseCssSelector)];
             for (let i = 0; i < queryNodes.length; i += 1) {
                 if (queryNodes[i].contains(targetNode)) {
                     closeOverlay();
@@ -93,6 +90,10 @@ const FullScreenPopover = (props: Props) => {
         event.preventDefault();
     };
 
+    const saveScrollRef = (ref: ?HTMLElement) => {
+        overlayRef = ref;
+    };
+
     const popoverButtonProps: Object = {
         onClick: handleButtonClick,
         onKeyPress: handleKeyPress,
@@ -110,22 +111,29 @@ const FullScreenPopover = (props: Props) => {
 
     const overlayProps = {
         role: 'dialog',
-        className: 'full-screen-overlay',
+        className: 'bdl-full-screen-overlay',
         key: overlayID,
         id: overlayID,
     };
 
     return (
-        <div className={classNames('full-screen-popover', className)}>
+        <div className={classNames('bdl-full-screen-popover', className)}>
             {React.cloneElement(popoverButton, popoverButtonProps)}
             {isVisible ? (
                 <Overlay {...overlayProps}>
-                    <OverlayHeader className="fs-header" onCloseClick={closeOverlay}>
+                    <OverlayHeader className="bdl-fs-header" onCloseClick={closeOverlay}>
                         {header}
                     </OverlayHeader>
-                    <div role="presentation" className="fs-content" onClick={handleOverlayClick}>
-                        {overlayContent}
-                    </div>
+                    {children != null && (
+                        <ScrollWrapper
+                            className="bdl-fs-content"
+                            scrollRefFn={saveScrollRef}
+                            shadowSize="contain"
+                            onClick={handleOverlayClick}
+                        >
+                            {children}
+                        </ScrollWrapper>
+                    )}
                 </Overlay>
             ) : null}
         </div>

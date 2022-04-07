@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/full-screen-popover/FullScreenPopover should render correctly with button and no content with closed overlay 1`] = `
+<div
+  className="bdl-full-screen-popover"
+>
+  <FakeButton
+    aria-expanded="false"
+    aria-haspopup="true"
+    id="popoverbutton4"
+    key="popoverbutton4"
+    onClick={[Function]}
+    onKeyPress={[Function]}
+    role="button"
+    tabIndex="0"
+  />
+</div>
+`;
+
+exports[`components/full-screen-popover/FullScreenPopover should render correctly with no content with opened overlay 1`] = `
+<div
+  className="bdl-full-screen-popover"
+>
+  <FakeButton
+    aria-controls="overlay5"
+    aria-expanded="true"
+    aria-haspopup="true"
+    id="popoverbutton6"
+    key="popoverbutton6"
+    onClick={[Function]}
+    onKeyPress={[Function]}
+    role="button"
+    tabIndex="0"
+  />
+  <Overlay
+    className="bdl-full-screen-overlay"
+    id="overlay5"
+    key="overlay5"
+    role="dialog"
+  >
+    <OverlayHeader
+      className="bdl-fs-header"
+      onCloseClick={[Function]}
+    />
+  </Overlay>
+</div>
+`;
+
+exports[`components/full-screen-popover/FullScreenPopover should render correctly with no content with opened overlay 2`] = `
+<div
+  className="bdl-full-screen-popover"
+>
+  <FakeButton
+    aria-controls="overlay7"
+    aria-expanded="true"
+    aria-haspopup="true"
+    id="popoverbutton8"
+    key="popoverbutton8"
+    onClick={[Function]}
+    onKeyPress={[Function]}
+    role="button"
+    tabIndex="0"
+  />
+  <Overlay
+    className="bdl-full-screen-overlay"
+    id="overlay7"
+    key="overlay7"
+    role="dialog"
+  >
+    <OverlayHeader
+      className="bdl-fs-header"
+      onCloseClick={[Function]}
+    />
+    <ScrollWrapper
+      className="bdl-fs-content"
+      onClick={[Function]}
+      scrollRefFn={[Function]}
+      shadowSize="contain"
+    >
+      <FakeContent />
+    </ScrollWrapper>
+  </Overlay>
+</div>
+`;
