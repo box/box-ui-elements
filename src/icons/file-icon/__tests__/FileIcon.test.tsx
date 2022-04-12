@@ -10,76 +10,35 @@ describe('icons/file-icon/FileIcon', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
-    [
-        {
-            extension: 'doc',
-        },
-        {
-            extension: 'docx',
-        },
-        {
-            extension: 'docm',
-        },
-        {
-            extension: 'gdoc',
-        },
-        {
-            extension: 'gsheet',
-        },
-        {
-            extension: 'gslides',
-        },
-        {
-            extension: 'gslide',
-        },
-        {
-            extension: 'key',
-        },
-        {
-            extension: 'numbers',
-        },
-        {
-            extension: 'pages',
-        },
-        {
-            extension: 'ppt',
-        },
-        {
-            extension: 'pptx',
-        },
-        {
-            extension: 'pptm',
-        },
-        {
-            extension: 'xls',
-        },
-        {
-            extension: 'xlsm',
-        },
-        {
-            extension: 'xlsb',
-        },
-        {
-            extension: 'zip',
-        },
-        {
-            extension: 'heic',
-        },
-        {
-            extension: 'heif',
-        },
-        {
-            extension: 'HEIC',
-        },
-        {
-            extension: 'HEIF',
-        },
-    ].forEach(({ extension }) => {
-        test('should render the expected icon when extension is defined', () => {
-            const wrapper = getWrapper({ extension });
 
-            expect(wrapper).toMatchSnapshot();
-        });
+    test.each([
+        'doc',
+        'docx',
+        'docm',
+        'gdoc',
+        'gsheet',
+        'gslides',
+        'gslide',
+        'key',
+        'numbers',
+        'pages',
+        'ppt',
+        'pptx',
+        'pptm',
+        'xls',
+        'xlsm',
+        'xlsb',
+        'zip',
+        'heic',
+        'heif',
+        'HEIC',
+        'HEIF',
+        'xbd',
+        'xdw',
+    ])(`should render the expected icon when %s is defined`, extension => {
+        const wrapper = getWrapper({ extension });
+
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render 64 icon when dimension is defined', () => {

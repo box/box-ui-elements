@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-sort-props */
 import * as React from 'react';
+import * as vars from '../../styles/variables';
 import AccessibleSVG, { SVGProps } from '../../components/accessible-svg/AccessibleSVG';
 
 /**
@@ -21,14 +22,14 @@ const FileXdw32 = (props: SVGProps) => (
         />
         <path
             d="M19.286 3.286l5.01 5.009 1.412 1.412a1 1 0 01.203.293H21a2 2 0 01-2-2V3.09a1 1 0 01.286.196z"
-            fill="#fff"
+            fill={vars.white}
             fillOpacity={0.5}
         />
         <path
             fillRule="evenodd"
             clipRule="evenodd"
             d="M9.352 21H8l1.627-2.523L8.005 16h1.457l1.004 1.666.997-1.666h1.4l-1.683 2.495L12.837 21H11.42l-1.036-1.62L9.352 21zm3.918 0v-5h2.035c.75 0 1.354.222 1.771.649.417.427.634 1.046.634 1.816v.007c0 .792-.214 1.427-.629 1.864-.416.438-1.021.664-1.776.664H13.27zm6.01 0l-1.356-5h1.283l.717 3.208.838-3.208h1.024l.854 3.21.71-3.21h1.277l-1.358 5h-1.117l-.88-3.057L20.405 21h-1.125zM14.5 17.031v2.938h.64c.433 0 .757-.133.975-.374.218-.243.342-.61.342-1.107v-.006c0-.476-.127-.837-.348-1.078-.22-.239-.545-.373-.969-.373h-.64z"
-            fill="#fff"
+            fill={vars.white}
         />
     </AccessibleSVG>
 );

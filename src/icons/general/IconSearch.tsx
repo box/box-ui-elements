@@ -5,7 +5,7 @@ import { bdlGray40 } from '../../styles/variables';
 
 import { Icon } from '../iconTypes';
 
-const IconSearch = ({ className = 'icon-search', color = bdlGray40, height = 14, title, width = 14 }: Icon) => (
+const IconSearch = ({ className = '', color = bdlGray40, height = 14, title, width = 14 }: Icon) => (
     <AccessibleSVG
         className={`icon-search ${className}`}
         height={height}
