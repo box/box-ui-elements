@@ -304,6 +304,7 @@ export const ORIGIN_METADATA_SIDEBAR: 'metadata_sidebar' = 'metadata_sidebar';
 export const ORIGIN_SKILLS_SIDEBAR: 'skills_sidebar' = 'skills_sidebar';
 export const ORIGIN_VERSIONS_SIDEBAR: 'versions_sidebar' = 'versions_sidebar';
 export const ORIGIN_PREVIEW: 'preview' = 'preview';
+export const ORIGIN_PREVIEW_SIDEBAR: 'preview_sidebar' = 'preview_sidebar';
 export const ORIGIN_CONTENT_EXPLORER: 'content_explorer' = 'content_explorer';
 export const ORIGIN_OPEN_WITH: 'open_with' = 'open_with';
 
