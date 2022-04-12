@@ -1,7 +1,8 @@
-export const SIZE_SMALL = '(max-width: 374px)';
-export const SIZE_MEDIUM = '(min-width: 375px) and (max-width: 767px)';
-export const SIZE_LARGE = '(min-width: 768px) and (max-width: 1023px)';
-export const SIZE_XLARGE = '(min-width: 1024px)';
+import { smallScreen, mediumScreen, largeScreen } from '../../styles/variables';
+
+export const SIZE_SMALL = smallScreen;
+export const SIZE_MEDIUM = mediumScreen;
+export const SIZE_LARGE = largeScreen;
 
 export const HOVER = '(hover: hover)';
 export const ANY_HOVER = '(any-hover: hover)';

@@ -109,6 +109,13 @@ const messages = defineMessages({
         defaultMessage: 'File versions could not be retrieved.',
         description: 'Error message for the versions fetch call.',
     },
+    versionNotAvailable: {
+        id: 'be.sidebarVersions.notAvailable',
+        defaultMessage:
+            'Sorry, version history is not available with your current account plan. To access versioning, select from one of our paid plans.',
+        description:
+            'Error message with upsell for the versions fetch call for users who dont have the version feature.',
+    },
     versionLimitExceeded: {
         id: 'be.sidebarVersions.versionLimitExceeded',
         defaultMessage:
@@ -140,6 +147,16 @@ const messages = defineMessages({
         defaultMessage: 'Server Error',
         description: 'Heading for inline error messages displayed due to a remote server issue.',
     },
+    versionAccessError: {
+        id: 'be.sidebarVersions.accessError',
+        defaultMessage: "You don't have access to versioning",
+        description: 'Heading for inline error messages with upsell.',
+    },
+    versionUpgradeLink: {
+        id: 'be.sidebarVersions.upgradeLink',
+        defaultMessage: 'Upgrade Now',
+        description: 'Text on the upgrade button shown when user does not have access to Version History',
+    },
     versionUploadedBy: {
         id: 'be.sidebarVersions.uploadedBy',
         defaultMessage: 'Uploaded by {name}',
@@ -169,6 +186,17 @@ const messages = defineMessages({
         id: 'be.sidebarVersions.versionRetentionRemove',
         defaultMessage: 'Retention policy expires on {time}.',
         description: 'Message describing when the version retention policy will expire.',
+    },
+    versionUpsell: {
+        defaultMessage:
+            'Sorry, version history is not available with your current account plan. To access versioning, select from one of our paid plans.',
+        description: 'Upgrade message shown when user does not have access to Version History',
+        id: 'be.sidebarVersions.versionUpsell',
+    },
+    upgradeButton: {
+        defaultMessage: 'Upgrade',
+        description: 'Text on the upgrade button shown when user does not have access to Version History',
+        id: 'be.sidebarVersions.upgradeButton',
     },
 });
 

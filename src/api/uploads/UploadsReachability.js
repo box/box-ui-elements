@@ -7,7 +7,7 @@
 import axios from 'axios';
 import LocalStore from '../../utils/LocalStore';
 import { DEFAULT_HOSTNAME_UPLOAD, DEFAULT_HOSTNAME_UPLOAD_APP, HEADER_CONTENT_TYPE } from '../../constants';
-import type { StringAnyMap, StringMap } from '../../common/types/core';
+import type { StringAnyMap, StringMixedMap } from '../../common/types/core';
 
 const CACHED_RESULTS_LOCAL_STORE_KEY = 'bcu-uploads-reachability-cached-results';
 
@@ -175,7 +175,7 @@ class UploadsReachability {
      */
     async makeReachabilityRequest(uploadHost: string) {
         const url = `${uploadHost}html5?reachability_test=run`;
-        const headers: StringMap = {
+        const headers: StringMixedMap = {
             [HEADER_CONTENT_TYPE]: 'application/x-www-form-urlencoded; charset=UTF-8',
             'X-File-Name': 'reachability_pseudofile.txt',
             'X-File-Size': '1234',

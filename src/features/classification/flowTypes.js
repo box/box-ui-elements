@@ -1,4 +1,5 @@
 // @flow
+import * as React from 'react';
 import type { MessageDescriptor } from 'react-intl';
 
 import {
@@ -59,7 +60,7 @@ type Controls = {
 type ControlsFormat = $Values<typeof SECURITY_CONTROLS_FORMAT>;
 
 type MessageItem = {
-    message: MessageDescriptor,
+    message: MessageDescriptor | React.Node,
     tooltipMessage?: MessageDescriptor,
 };
 

@@ -1,9 +1,12 @@
 // @flow
+import * as React from 'react';
 import getProp from 'lodash/get';
 import isNil from 'lodash/isNil';
 
 import type { Controls, MessageItem } from '../flowTypes';
 
+import FormattedCompMessage from '../../../components/i18n/FormattedCompMessage';
+import Link from '../../../components/link/Link';
 import appRestrictionsMessageMap from './appRestrictionsMessageMap';
 import downloadRestrictionsMessageMap from './downloadRestrictionsMessageMap';
 import messages from './messages';
@@ -74,7 +77,23 @@ const getWatermarkingMessages = (controls: Controls): Array<MessageItem> => {
     const items = [];
     const isWatermarkEnabled = getProp(controls, `${WATERMARK}.enabled`, false);
     if (isWatermarkEnabled) {
-        items.push({ message: messages.watermarkingApplied });
+        const formattedCompMessage = (
+            <FormattedCompMessage
+                id="boxui.securityControls.watermarkingAppliedWithLink"
+                description="Bullet point that summarizes watermarking applied to classification"
+            >
+                Watermarking will be applied, click{' '}
+                <Link
+                    className="support-link"
+                    href="https://support.box.com/hc/en-us/articles/360044195253"
+                    target="_blank"
+                >
+                    here
+                </Link>{' '}
+                more details on Watermarking
+            </FormattedCompMessage>
+        );
+        items.push({ message: formattedCompMessage });
     }
 
     return items;

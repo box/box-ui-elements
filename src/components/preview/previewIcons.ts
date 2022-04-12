@@ -29,6 +29,8 @@ import IconFileThreeD from '../../icon/content/FileThreeD32';
 import IconFileVector from '../../icon/content/FileVector32';
 import IconFileVideo from '../../icon/content/FileVideo32';
 import IconFileWord from '../../icon/content/FileWord32';
+import IconFileXbd from '../../icon/content/FileXbd32';
+import IconFileXdw from '../../icon/content/FileXdw32';
 import IconFileZip from '../../icon/content/FileZip32';
 import { SVGProps } from '../accessible-svg/AccessibleSVG';
 
@@ -168,6 +170,8 @@ register(IconFileVideo, '#009AED', [
     'wmv',
 ]);
 register(IconFileWord, '#185ABD', ['doc', 'docx']);
+register(IconFileXbd, '#00838D', ['xbd']);
+register(IconFileXdw, '#00838D', ['xdw']);
 register(IconFileZip, vars.bdlGray20, ['tgz', 'zip']);
 
 export const getColor = (extension?: string): Config['color'] => {

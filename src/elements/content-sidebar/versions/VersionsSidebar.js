@@ -12,6 +12,7 @@ import messages from './messages';
 import SidebarContent from '../SidebarContent';
 import VersionsMenu from './VersionsMenu';
 import { BackButton } from '../../common/nav-button';
+import PlainButton from '../../../components/plain-button/PlainButton';
 import { DEFAULT_FETCH_END } from '../../../constants';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
 import type { BoxItemVersion } from '../../../common/types/core';
@@ -21,18 +22,20 @@ const MAX_VERSIONS = DEFAULT_FETCH_END;
 
 type Props = {
     error?: MessageDescriptor,
+    errorTitle?: MessageDescriptor,
     fileId: string,
     isLoading: boolean,
+    onUpgradeClick?: () => void,
     parentName: string,
     versionCount: number,
     versionLimit: number,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsSidebar = ({ error, isLoading, parentName, versions, ...rest }: Props) => {
+const VersionsSidebar = ({ error, errorTitle, onUpgradeClick, isLoading, parentName, versions, ...rest }: Props) => {
     const showLimit = versions.length >= MAX_VERSIONS;
     const showVersions = !!versions.length;
-    const showEmpty = !isLoading && !showVersions;
+    const showEmpty = !isLoading && !showVersions && !onUpgradeClick;
     const showError = !!error;
 
     return (
@@ -49,8 +52,18 @@ const VersionsSidebar = ({ error, isLoading, parentName, versions, ...rest }: Pr
         >
             <LoadingIndicatorWrapper className="bcs-Versions-content" crawlerPosition="top" isLoading={isLoading}>
                 {showError && (
-                    <InlineError title={<FormattedMessage {...messages.versionServerError} />}>
+                    <InlineError title={<FormattedMessage {...errorTitle} />}>
                         <FormattedMessage {...error} />
+                        {onUpgradeClick && (
+                            <PlainButton
+                                onClick={onUpgradeClick}
+                                data-resin-target="versioning_error_error_message_upgrade_cta"
+                                type="button"
+                                className="bcs-Versions-upgrade"
+                            >
+                                <FormattedMessage {...messages.versionUpgradeLink} />
+                            </PlainButton>
+                        )}
                     </InlineError>
                 )}
 

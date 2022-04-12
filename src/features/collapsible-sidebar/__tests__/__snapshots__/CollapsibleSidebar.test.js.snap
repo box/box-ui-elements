@@ -3,6 +3,7 @@
 exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
 <div
   className="bdl-CollapsibleSidebar-wrapper"
+  data-testid="CollapsibleSidebar-wrapper"
 >
   <CollapsibleSidebar__StyledNav
     className="is-expanded bdl-CollapsibleSidebar foo"

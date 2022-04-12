@@ -69,6 +69,19 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         });
     });
 
+    describe('componentDidMount', () => {
+        test('should call onLoad after a successful fetchData() call', async () => {
+            const onLoad = jest.fn();
+            const fetchData = jest.fn(() => Promise.resolve());
+            const instance = getWrapper({ onLoad }).instance();
+
+            instance.fetchData = fetchData;
+
+            await instance.componentDidMount();
+            expect(onLoad).toHaveBeenCalled();
+        });
+    });
+
     describe('handleActionDelete', () => {
         test('should call api endpoint helpers', () => {
             const handleDelete = jest.fn();
@@ -191,16 +204,52 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         test('should set state to default values with error message', () => {
             const wrapper = getWrapper();
 
-            wrapper.instance().handleFetchError();
+            wrapper.instance().handleFetchError({ status: 500 });
+
+            expect(wrapper.state()).toMatchObject({
+                error: messages.versionFetchError,
+                errorTitle: messages.versionServerError,
+            });
+        });
+        test('should set state to default values with error upsell message if onUpgradeClick is set', () => {
+            const wrapper = getWrapper({
+                onUpgradeClick: () => {},
+                versionUpsellExperience: 'STATIC_VERSION_HISTORY',
+            });
+
+            wrapper.instance().handleFetchError({ status: 403 });
 
             expect(wrapper.state()).toEqual({
-                error: messages.versionFetchError,
+                error: messages.versionNotAvailable,
+                errorTitle: messages.versionAccessError,
                 isLoading: false,
                 isWatermarked: false,
                 versionCount: 0,
                 versionLimit: Infinity,
                 versions: [],
             });
+
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should create StaticVersionSidebar if versionUpsellExperience is STATIC_VERSION_HISTORY', () => {
+            const wrapper = getWrapper({
+                onUpgradeClick: () => {},
+                versionUpsellExperience: 'STATIC_VERSION_HISTORY',
+            });
+            wrapper.instance().handleFetchError({ status: 403 });
+
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should create StaticVersionSidebar if versionUpsellExperience is STATIC_VERSION_HISTORY_WITH_PICTURE', () => {
+            const wrapper = getWrapper({
+                onUpgradeClick: () => {},
+                versionUpsellExperience: 'STATIC_VERSION_HISTORY_WITH_PICTURE',
+            });
+            wrapper.instance().handleFetchError({ status: 403 });
+
+            expect(wrapper).toMatchSnapshot();
         });
     });
 
