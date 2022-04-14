@@ -132,7 +132,9 @@ export interface DatePickerProps extends WrappedComponentProps {
      * The format of the date displayed in the input field
      * @deprecated, will no longer be supported with accessible mode enabled (isAccessible = true)
      */
-    displayFormat?: Object;
+    displayFormat?: {
+        [key: string]: string;
+    };
     /** Error message */
     error?: React.ReactNode;
     /** Position of error message tooltip */
@@ -215,6 +217,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         const {
             customInput,
             dateFormat,
+            displayFormat,
             intl,
             isAccessible,
             isAlwaysVisible,
@@ -245,14 +248,29 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         }
         // Make sure the DST detection algorithm in browsers is up-to-date
         const year = new Date().getFullYear();
-
+        const { timeZone } = displayFormat || {};
         const i18n = {
             previousMonth: formatMessage(previousMonth),
             nextMonth: formatMessage(nextMonth),
-            months: range(12).map(month => formatDate(new Date(year, month, 15), { month: 'long' })),
+            months: range(12).map(month =>
+                formatDate(new Date(year, month, 15), {
+                    month: 'long',
+                    timeZone,
+                }),
+            ),
             // weekdays must start with Sunday, so array of dates below is May 1st-8th, 2016
-            weekdays: range(1, 8).map(date => formatDate(new Date(2016, 4, date), { weekday: 'long' })),
-            weekdaysShort: range(1, 8).map(date => formatDate(new Date(2016, 4, date), { weekday: 'narrow' })),
+            weekdays: range(1, 8).map(date =>
+                formatDate(new Date(2016, 4, date), {
+                    weekday: 'long',
+                    timeZone,
+                }),
+            ),
+            weekdaysShort: range(1, 8).map(date =>
+                formatDate(new Date(2016, 4, date), {
+                    weekday: 'narrow',
+                    timeZone,
+                }),
+            ),
         };
 
         // If "bound" is true (default), the DatePicker will be appended at the end of the document, with absolute positioning
