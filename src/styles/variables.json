@@ -100,9 +100,11 @@
     "bdl-transitionDurationBase": "0.15s",
     "bdl-timingFunction": ["cubic-bezier(0", "0", "0.6", "1)"],
     "size-small-max": "374px",
+    "size-small-medium-max": "460px",
     "size-medium-max": "767px",
     "size-large-max": "1023px",
     "small-screen": "(max-width: 374px)",
+    "small-medium-screen": "(max-width: 460px)",
     "medium-screen": "(max-width: 767px)",
     "large-screen": "(max-width: 1023px)"
 }
