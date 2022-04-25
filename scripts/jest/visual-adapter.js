@@ -43,8 +43,8 @@ const BoxVisualTestUtils = {
     },
 
     // Takes image screenshots for modals
-    takeModalScreenshot: async id => {
-        await global.page.setViewport({ width: 800, height: 800 });
+    takeModalScreenshot: async (id, width = 800, height = 800) => {
+        await global.page.setViewport({ width, height });
         await BoxVisualTestUtils.gotoStory(id);
         await global.page.waitForSelector(BUTTON_SELECTOR);
         await global.page.click(BUTTON_SELECTOR);
