@@ -33,12 +33,12 @@ type OnContainerScrollParams = Pick<Required<InfiniteScrollProps>, 'threshold' |
     };
 
 function onContainerScroll({
-    isLoading,
     hasMore,
-    threshold,
-    scrollContainerNode,
+    isLoading,
     onLoadMore,
+    scrollContainerNode,
     sentinelRef,
+    threshold,
     useWindow,
 }: OnContainerScrollParams) {
     if (isLoading || !hasMore) return;
@@ -73,32 +73,18 @@ function InfiniteScroll({
     const sentinelRef = React.createRef<HTMLDivElement>();
 
     React.useEffect(() => {
-        const scrollHandler = throttleFn(
-            () =>
-                onContainerScroll({
-                    isLoading,
-                    hasMore,
-                    threshold,
-                    onLoadMore,
-                    scrollContainerNode,
-                    sentinelRef,
-                    useWindow,
-                }),
-            throttle,
-        );
-        const resizeHandler = throttleFn(
-            () =>
-                onContainerScroll({
-                    isLoading,
-                    hasMore,
-                    threshold,
-                    onLoadMore,
-                    scrollContainerNode,
-                    sentinelRef,
-                    useWindow,
-                }),
-            throttle,
-        );
+        const params = {
+            hasMore,
+            isLoading,
+            onLoadMore,
+            scrollContainerNode,
+            sentinelRef,
+            threshold,
+            useWindow,
+        };
+
+        const scrollHandler = throttleFn(() => onContainerScroll(params), throttle);
+        const resizeHandler = throttleFn(() => onContainerScroll(params), throttle);
 
         const container = useWindow ? window : scrollContainerNode;
 
@@ -107,7 +93,7 @@ function InfiniteScroll({
             container.addEventListener('resize', resizeHandler);
         }
 
-        return function() {
+        return function removeEventListeners() {
             if (container) {
                 container.removeEventListener('scroll', scrollHandler);
                 container.removeEventListener('resize', resizeHandler);
