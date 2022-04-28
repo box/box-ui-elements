@@ -1,4 +1,5 @@
 @import '../../styles/variables';
+@import './variables';
 
 .flyout-overlay {
     @include common-typography;
@@ -22,15 +23,11 @@
             @include bdl-openComponentAnimation($bdl-transitionDurationBase);
         }
     }
-
-    .bdl-OverlayHeader {
-        display: none;
-    }
 }
 
 @include breakpoint($medium-screen) {
-    .bdl-Flyout--responsive {
-        .flyout-overlay-enabled {
+    .flyout-overlay.bdl-Flyout--responsive {
+        &.flyout-overlay-enabled {
             // cancels out the tether inline styling without having to set enabled=false
             transform: none !important;
         }
@@ -48,9 +45,21 @@
             border-radius: 0;
             box-shadow: none;
         }
-    }
 
-    .bdl-OverlayHeader {
-        display: flex;
+        .bdl-OverlayHeader {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: $bdl-OverlayHeader-height;
+            padding: ($bdl-grid-unit * 3) ($bdl-grid-unit * 4);
+            background-color: $white;
+            box-shadow: $bdl-header-box-shadow;
+
+            .bdl-CloseButton {
+                display: block;
+            }
+        }
     }
 }
