@@ -161,7 +161,7 @@ const EXTENSIONS = {
     IconFilePresentation: mirror(['odp', 'otp', 'pot', 'potx']),
     IconFilePowerpointPresentation: mirror(['ppt', 'pptx', 'pptm']),
     IconFilePhotoshop: mirror(['psd']),
-    IconFileSpreadsheet: mirror(['csv', 'tsv', 'ods', 'xlt', 'xltx']),
+    IconFileSpreadsheet: mirror(['csv', 'ods', 'tsv', 'xlt', 'xltx']),
     IconFileText: mirror(['txt', 'vi', 'vim', 'webdoc']),
     IconFileThreeD: mirror(['3ds', 'dae', 'fbx', 'obj', 'ply', 'stl']),
     IconFileVideo: mirror([
