@@ -153,6 +153,15 @@
         .modal-close-button {
             right: 10px;
         }
+
+        .modal-actions {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            padding: 10px 16px;
+            background-color: #fff;
+        }
     }
 
     .modal-dialog-container {
