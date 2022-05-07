@@ -4,9 +4,6 @@ $bdl-guide-tooltip-max-width: 408px;
 
 .bdl-GuideTooltip {
     display: flex;
-}
-
-.bdl-GuideTooltip.bdl-Tooltip {
     max-width: $bdl-guide-tooltip-max-width;
     padding: ($bdl-grid-unit * 6) ($bdl-grid-unit * 12) ($bdl-grid-unit * 6) ($bdl-grid-unit * 6);
 }
