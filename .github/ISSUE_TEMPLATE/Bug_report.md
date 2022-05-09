@@ -1,6 +1,10 @@
+**_If you are a box employee do not create an issue, please contact maintaining team internally_**
+
 ---
+
 name: Bug/Issue report
 about: Create a report to help us improve
+
 ---
 
 Please fill out the following template so we can reproduce and fix your issue as quickly as possible!

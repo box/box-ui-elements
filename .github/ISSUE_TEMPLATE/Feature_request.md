@@ -1,6 +1,10 @@
+**_If you are a box employee do not create an issue, please contact maintaining team internally_**
+
 ---
+
 name: Feature request
 about: Suggest an idea for this project
+
 ---
 
 **Describe the solution you'd like**
