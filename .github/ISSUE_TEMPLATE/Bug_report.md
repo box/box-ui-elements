@@ -1,4 +1,4 @@
-**_If you are a box employee do not create an issue, please contact maintaining team internally_**
+**_If you are a Box employee, you do not need to create an issue to open a pull request_**
 
 ---
 
