@@ -1,6 +1,10 @@
+**_If you are a Box employee, you do not need to create an issue to open a pull request_**
+
 ---
+
 name: Bug/Issue report
 about: Create a report to help us improve
+
 ---
 
 Please fill out the following template so we can reproduce and fix your issue as quickly as possible!
