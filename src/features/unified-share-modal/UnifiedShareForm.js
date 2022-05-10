@@ -223,8 +223,9 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     };
 
     handleSendSharedLink = (data: Object) => {
-        const { sendSharedLink, trackingProps } = this.props;
+        const { sendSharedLink, sharedLink, trackingProps } = this.props;
         const { sharedLinkEmailTracking } = trackingProps;
+        const { permissionLevel } = sharedLink;
         const { onSendClick } = sharedLinkEmailTracking;
 
         const { emails, groupIDs } = data;
@@ -234,6 +235,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                 ...data,
                 numsOfRecipients: emails.length,
                 numOfRecipientGroups: groupIDs.length,
+                permissionLevel,
             };
             onSendClick(params);
         }
