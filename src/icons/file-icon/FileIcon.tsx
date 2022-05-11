@@ -135,7 +135,7 @@ const EXTENSIONS: { [key: string]: { [key: string]: string } } = {
         'wabba',
         'yaml',
     ]),
-    IconFileDocument: mirror(['dot', 'dotx', 'msg', 'odt', 'rtf', 'wpd', 'xhtml', 'xml', 'xsd', 'xsl']),
+    IconFileDocument: mirror(['csv', 'dot', 'dotx', 'msg', 'odt', 'rtf', 'tsv', 'wpd', 'xhtml', 'xml', 'xsd', 'xsl']),
     IconFileDwg: mirror(['dwg', 'dwgzip']),
     IconFileExcelSpreadsheet: mirror(['xls', 'xlsx', 'xlsm', 'xlsb']),
     IconFileGoogleDocs: mirror(['gdoc']),
@@ -166,7 +166,7 @@ const EXTENSIONS: { [key: string]: { [key: string]: string } } = {
     IconFilePresentation: mirror(['odp', 'otp', 'pot', 'potx']),
     IconFilePowerpointPresentation: mirror(['ppt', 'pptx', 'pptm']),
     IconFilePhotoshop: mirror(['psd']),
-    IconFileSpreadsheet: mirror(['csv', 'ods', 'tsv', 'xlt', 'xltx']),
+    IconFileSpreadsheet: mirror(['ods', 'xlt', 'xltx']),
     IconFileText: mirror(['txt', 'vi', 'vim', 'webdoc']),
     IconFileThreeD: mirror(['3ds', 'dae', 'fbx', 'obj', 'ply', 'stl']),
     IconFileVideo: mirror([
