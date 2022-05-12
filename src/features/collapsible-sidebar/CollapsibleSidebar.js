@@ -37,7 +37,7 @@ type Props = {
     /** Optional HTML attributes to append to menu item */
     htmlAttributes?: Object,
 
-    /** Optionally apply hidden class (__visibility.scss) and "aria-hidden": "true" to CollapsibleSidebar wrapper */
+    /** Optionally apply "aria-hidden": "true" to CollapsibleSidebar wrapper */
     isHidden?: boolean,
 };
 
