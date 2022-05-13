@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { ITEM_TYPE_WEBLINK, ITEM_TYPE_FOLDER } from '../../../common/constants';
 
-import { JUSTIFICATION_CHECKPOINT_EXTERNAL_COLLAB } from '../constants';
+import { CAN_EDIT, JUSTIFICATION_CHECKPOINT_EXTERNAL_COLLAB } from '../constants';
 
 import { UnifiedShareFormBase as UnifiedShareForm } from '../UnifiedShareForm';
 
@@ -434,6 +434,34 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
                     },
                 }),
             );
+        });
+    });
+
+    describe('handleSendSharedLink()', () => {
+        test('should call onSendClick  and sendSharedLink with the correct params', async () => {
+            const data = {
+                emails: ['dvader@example.com', 'fbar@example.com'],
+                groupIDs: ['eng@example.com', 'product@example.com'],
+            };
+            const onSendClick = jest.fn();
+            const sendSharedLink = jest.fn();
+            const sharedLink = { permissionLevel: CAN_EDIT };
+            const trackingProps = {
+                ...defaultTrackingProps,
+                sharedLinkEmailTracking: { onSendClick },
+            };
+            const expectedParams = {
+                ...data,
+                numsOfRecipients: 2,
+                numOfRecipientGroups: 2,
+                permissionLevel: CAN_EDIT,
+            };
+            const wrapper = getWrapper({ sendSharedLink, sharedLink, trackingProps });
+
+            await wrapper.instance().handleSendSharedLink(data);
+
+            expect(onSendClick).toBeCalledWith(expectedParams);
+            expect(sendSharedLink).toBeCalledWith(data);
         });
     });
 
