@@ -18,8 +18,6 @@ type Props = FlyoutProps & {
     footer?: React.Element<any>,
     /** What content to display in the header */
     header?: React.Element<any>,
-    /** Enable responsive behaviors of Flyout */
-    isResponsive?: boolean,
     /** Optional function to get the scrollRef in parent components */
     scrollRefFn?: any => any,
 };
@@ -29,18 +27,16 @@ class HeaderFlyout extends React.Component<Props> {
 
     static defaultProps = {
         position: 'bottom-left',
-        isResponsive: false,
     };
 
     render() {
-        const { header, footer, flyoutButton, children, isResponsive, scrollRefFn, className, ...rest } = this.props;
+        const { header, footer, flyoutButton, children, scrollRefFn, className, ...rest } = this.props;
 
         return (
             <Flyout
                 className={classNames('header-flyout', className)}
                 closeOnClick={false}
                 constrainToWindow
-                isResponsive={isResponsive}
                 offset={HeaderFlyout.panelOffset}
                 {...rest}
             >

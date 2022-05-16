@@ -64,45 +64,47 @@
 }
 
 @include breakpoint($medium-screen) {
-    .header-flyout-list-container {
-        .flyout-list-container-body {
-            $header-height: $bdl-OverlayHeader-height;
+    .bdl-Flyout--responsive {
+        .header-flyout-list-container {
+            .flyout-list-container-body {
+                $header-height: $bdl-OverlayHeader-height;
 
-            height: calc(100vh - #{$header-height});
-
-            &.with-header {
                 height: calc(100vh - #{$header-height});
-            }
 
-            &.with-footer {
-                height: calc(100vh - #{$flyout-footer-height});
-            }
+                &.with-header {
+                    height: calc(100vh - #{$header-height});
+                }
 
-            &.with-header.with-footer {
-                height: calc(100vh - #{$header-height} - #{$flyout-footer-height});
-            }
+                &.with-footer {
+                    height: calc(100vh - #{$flyout-footer-height});
+                }
 
-            .scroll-container {
-                overflow-y: auto;
+                &.with-header.with-footer {
+                    height: calc(100vh - #{$header-height} - #{$flyout-footer-height});
+                }
 
-                .scroll-wrap-container {
-                    &::before,
-                    &::after {
-                        display: none;
+                .scroll-container {
+                    overflow-y: auto;
+
+                    .scroll-wrap-container {
+                        &::before,
+                        &::after {
+                            display: none;
+                        }
                     }
                 }
             }
+
+            .flyout-list-container-footer {
+                height: $flyout-footer-height;
+                padding: $flyout-footer-spacer;
+            }
         }
 
-        .flyout-list-container-footer {
-            height: $flyout-footer-height;
-            padding: $flyout-footer-spacer;
-        }
-    }
-
-    .header-flyout-overlay {
-        .header-flyout-title {
-            padding-bottom: 0;
+        .header-flyout-overlay {
+            .header-flyout-title {
+                padding-bottom: 0;
+            }
         }
     }
 }
