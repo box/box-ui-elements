@@ -42,5 +42,11 @@ describe('features/presence/PresenceCollaborator', () => {
 
             expect(userInfo.prop('title')).toEqual('Pooh Bear');
         });
+
+        test('should correctly render an anonymous avatar', () => {
+            const wrapper = getWrapper({ isAnonymous: true });
+
+            expect(wrapper.exists('Avatar')).toBe(true);
+        });
     });
 });
