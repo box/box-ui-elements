@@ -34,6 +34,8 @@ describe('features/presence/PresenceCollaborator', () => {
             const wrapper = getWrapper();
 
             expect(wrapper.find('.bdl-PresenceCollaborator').length).toBe(1);
+            expect(wrapper.exists('Avatar')).toBe(false);
+            expect(wrapper.exists('PresenceAvatar')).toBe(true);
         });
 
         test('should have the correct title prop for the default browser tooltip', () => {
@@ -41,6 +43,13 @@ describe('features/presence/PresenceCollaborator', () => {
             const userInfo = wrapper.find('.bdl-PresenceCollaborator-info-name');
 
             expect(userInfo.prop('title')).toEqual('Pooh Bear');
+        });
+
+        test('should correctly render an anonymous avatar', () => {
+            const wrapper = getWrapper({ isAnonymous: true });
+
+            expect(wrapper.exists('Avatar')).toBe(true);
+            expect(wrapper.exists('PresenceAvatar')).toBe(false);
         });
     });
 });
