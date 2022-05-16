@@ -36,7 +36,7 @@ const PresenceCollaborator = ({ collaborator, intl, ...props }) => {
         <div className="bdl-PresenceCollaborator" {...props}>
             <PresenceAvatar avatarUrl={avatarUrl} id={id} isActive={isActive} isDropDownAvatar name={name} />
             <div className="bdl-PresenceCollaborator-info-container">
-                <div className="bdl-PresenceCollaborator-info-name">
+                <div className="bdl-PresenceCollaborator-info-name" title={name}>
                     {isEmpty(profileUrl) ? (
                         <span>{name}</span>
                     ) : (
