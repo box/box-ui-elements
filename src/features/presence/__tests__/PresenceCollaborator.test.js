@@ -34,6 +34,8 @@ describe('features/presence/PresenceCollaborator', () => {
             const wrapper = getWrapper();
 
             expect(wrapper.find('.bdl-PresenceCollaborator').length).toBe(1);
+            expect(wrapper.exists('Avatar')).toBe(false);
+            expect(wrapper.exists('PresenceAvatar')).toBe(true);
         });
 
         test('should have the correct title prop for the default browser tooltip', () => {
@@ -47,6 +49,7 @@ describe('features/presence/PresenceCollaborator', () => {
             const wrapper = getWrapper({ isAnonymous: true });
 
             expect(wrapper.exists('Avatar')).toBe(true);
+            expect(wrapper.exists('PresenceAvatar')).toBe(false);
         });
     });
 });
