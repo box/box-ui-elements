@@ -155,6 +155,39 @@ $left-sidebar-z-index: 40 !default;
             width: calc(100vw - (#{$collapsible-side-bar-h-padding} * 2));
         }
 
+        .bdl-CollapsibleSidebar-logo {
+            height: fit-content;
+            margin: 0;
+
+            .bdl-CollapsibleSidebar-toggleButton {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 18px;
+                border: none;
+
+                .icon-hamburger {
+                    top: 0;
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+
+            .bdl-CollapsibleSidebar-logoLink {
+                max-width: 170px;
+                height: 31.5px;
+                margin: 0;
+
+                .bdl-CollapsibleSidebar-logoIcon {
+                    width: 49px;
+                    height: 27px;
+                    padding: 0;
+                    border: none;
+                    border-radius: 0;
+                }
+            }
+        }
+
         .bdl-CollapsibleSidebar {
             width: 0;
             border: none;

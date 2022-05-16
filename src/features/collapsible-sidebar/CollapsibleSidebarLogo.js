@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { injectIntl } from 'react-intl';
 import type { InjectIntlProvidedProps } from 'react-intl';
 import { bdlGridUnit, bdlBorderRadiusSizeLarge } from '../../styles/variables';
-import Logo from '../../icon/logo/BoxLogo';
+import Logo from '../../icons/General/IconLogo';
 import PlainButton from '../../components/plain-button/PlainButton';
 import LinkBase from '../../components/link/LinkBase';
 import IconHamburger from '../../icons/general/IconHamburger';
