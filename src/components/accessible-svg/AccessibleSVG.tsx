@@ -5,6 +5,8 @@ import uniqueId from 'lodash/uniqueId';
 export interface SVGProps {
     /** Class for the svg */
     className?: string;
+    /** Fill for the svg */
+    fill?: string;
     /** Height for the svg */
     height?: number;
     /** Accessibility role for the svg */
