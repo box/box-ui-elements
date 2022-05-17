@@ -89,6 +89,7 @@
     "bdl-border-radius-size-med": "6px",
     "bdl-border-radius-size-large": "8px",
     "bdl-border-radius-size-xlarge": "12px",
+    "bdl-header-box-shadow": ["0 0 10px 0 rgba(0", "0", "0", "0.05)"],
     "bdl-grid-unit": "4px",
     "bdl-grid-unit-px": "4",
     "bdl-btn-border-width": "1px",
@@ -100,9 +101,11 @@
     "bdl-transitionDurationBase": "0.15s",
     "bdl-timingFunction": ["cubic-bezier(0", "0", "0.6", "1)"],
     "size-small-max": "374px",
+    "size-small-medium-max": "460px",
     "size-medium-max": "767px",
     "size-large-max": "1023px",
     "small-screen": "(max-width: 374px)",
+    "small-medium-screen": "(max-width: 460px)",
     "medium-screen": "(max-width: 767px)",
     "large-screen": "(max-width: 1023px)"
 }

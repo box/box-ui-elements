@@ -1,6 +1,7 @@
 // @flow
 
 import * as React from 'react';
+import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 
 import PlainButton from '../../components/plain-button';
@@ -263,7 +264,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             onChangeSharedLinkAccessLevel,
             onChangeSharedLinkPermissionLevel,
             onSharedLinkAccessMenuOpen,
-            onSharedLinkCopy,
+            onSharedLinkCopy = noop,
             sendSharedLinkButtonProps,
             sharedLinkAccessMenuButtonProps,
             sharedLinkPermissionsMenuButtonProps,
@@ -299,7 +300,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                             className="shared-link-field-container"
                             disabled={submitting}
                             label=""
-                            onCopySuccess={onSharedLinkCopy}
+                            onCopySuccess={() => onSharedLinkCopy(permissionLevel)}
                             triggerCopyOnLoad={shouldTriggerCopyOnLoad}
                             type="url"
                             value={url}

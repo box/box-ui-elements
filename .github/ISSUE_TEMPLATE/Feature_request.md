@@ -1,6 +1,10 @@
+**_If you are a Box employee, you do not need to create an issue to open a pull request_**
+
 ---
+
 name: Feature request
 about: Suggest an idea for this project
+
 ---
 
 **Describe the solution you'd like**

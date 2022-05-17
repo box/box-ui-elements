@@ -8,6 +8,7 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
+  isResponsive={false}
   isVisibleByDefault={false}
   onClose={[Function]}
   onOpen={[Function]}
@@ -50,6 +51,7 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
+  isResponsive={false}
   isVisibleByDefault={false}
   onClose={[Function]}
   onOpen={[Function]}
@@ -114,6 +116,7 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
+  isResponsive={false}
   isVisibleByDefault={false}
   onClose={[Function]}
   onOpen={[Function]}
