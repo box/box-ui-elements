@@ -15,7 +15,7 @@ import AccessibleSVG, { SVGProps } from '../../components/accessible-svg/Accessi
  */
 
 const FilePages16 = (props: SVGProps) => (
-    <AccessibleSVG width={16} height={16} viewBox="0 0 16 16" fill="none" {...props}>
+    <AccessibleSVG width={16} height={16} viewBox="0 0 16 16" {...props}>
         <path
             fillRule="evenodd"
             clipRule="evenodd"

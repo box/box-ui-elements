@@ -14,7 +14,7 @@ import AccessibleSVG, { SVGProps } from '../../components/accessible-svg/Accessi
  */
 
 const FilePages32 = (props: SVGProps) => (
-    <AccessibleSVG width={32} height={32} viewBox="0 0 32 32" fill="none" {...props}>
+    <AccessibleSVG width={32} height={32} viewBox="0 0 32 32" {...props}>
         <path
             d="M9 3h9.586a1 1 0 01.707.293l6.414 6.414a1 1 0 01.293.707V26a3 3 0 01-3 3H9a3 3 0 01-3-3V6a3 3 0 013-3z"
             fill="#FB8517"
