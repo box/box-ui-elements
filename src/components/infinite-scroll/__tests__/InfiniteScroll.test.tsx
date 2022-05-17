@@ -1,14 +1,16 @@
+import { mount, ReactWrapper } from 'enzyme';
 import * as React from 'react';
 import sinon from 'sinon';
 
-import InfiniteScroll from '../InfiniteScroll';
+import InfiniteScroll, { InfiniteScrollProps } from '../InfiniteScroll';
 
 const sandbox = sinon.sandbox.create();
 
 const mockOnLoadMore = jest.fn();
 
 const threshold = 100;
-const propsList = {
+const propsList: InfiniteScrollProps = {
+    children: null,
     isLoading: false,
     hasMore: false,
     useWindow: true,
@@ -22,7 +24,7 @@ const getSentinel = () => {
 };
 
 describe('components/infinite-scroll/InfiniteScroll', () => {
-    let attachTo;
+    let attachTo: HTMLDivElement;
     beforeEach(() => {
         const container = document.createElement('div');
         document.body.appendChild(container);
@@ -37,21 +39,20 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
     it('should render with default props', () => {
         const component = mount(<InfiniteScroll {...propsList} />);
         expect(component).toMatchInlineSnapshot(`
-<InfiniteScroll
-  hasMore={false}
-  isLoading={false}
-  onLoadMore={[MockFunction]}
-  threshold={100}
-  throttle={64}
-  useWindow={true}
->
-  <div>
-    <div
-      data-testid="sentinel"
-    />
-  </div>
-</InfiniteScroll>
-`);
+            <InfiniteScroll
+              hasMore={false}
+              isLoading={false}
+              onLoadMore={[MockFunction]}
+              threshold={100}
+              useWindow={true}
+            >
+              <div>
+                <div
+                  data-testid="sentinel"
+                />
+              </div>
+            </InfiniteScroll>
+        `);
     });
 
     it('should render sentinel to calculate scroll position', () => {
@@ -75,10 +76,12 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
         );
 
         const sentinel = getSentinel();
-        sandbox.stub(sentinel, 'getBoundingClientRect').returns({ top: window.innerHeight + (threshold - 1) });
+        sandbox
+            .stub(sentinel, 'getBoundingClientRect')
+            .returns({ top: window.innerHeight + (threshold - 1) } as DOMRect);
 
         window.dispatchEvent(new Event('scroll'));
-        expect(mockOnLoadMore).toHaveBeenCalled();
+        expect(mockOnLoadMore).toHaveBeenCalledTimes(1);
     });
 
     it('should not call onLoadMore if sentinel is not in threshold range while scrolling in window', () => {
@@ -95,7 +98,9 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
         );
 
         const sentinel = getSentinel();
-        sandbox.stub(sentinel, 'getBoundingClientRect').returns({ top: window.innerHeight + (threshold + 1) });
+        sandbox
+            .stub(sentinel, 'getBoundingClientRect')
+            .returns({ top: window.innerHeight + (threshold + 1) } as DOMRect);
 
         window.dispatchEvent(new Event('scroll'));
         expect(mockOnLoadMore).not.toHaveBeenCalled();
@@ -103,7 +108,7 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
 
     it('should call onLoadMore if sentinel is in threshold range while scrolling scrollContainerNode', () => {
         const scrollContainer = document.createElement('div');
-        sandbox.stub(scrollContainer, 'getBoundingClientRect').returns({ bottom: 500 });
+        sandbox.stub(scrollContainer, 'getBoundingClientRect').returns({ bottom: 500 } as DOMRect);
 
         const items = new Array(20).fill('ITEM');
         mount(
@@ -120,15 +125,15 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
         );
 
         const sentinel = getSentinel();
-        sandbox.stub(sentinel, 'getBoundingClientRect').returns({ top: 500 + (threshold - 1) });
+        sandbox.stub(sentinel, 'getBoundingClientRect').returns({ top: 500 + (threshold - 1) } as DOMRect);
 
         scrollContainer.dispatchEvent(new Event('scroll'));
-        expect(mockOnLoadMore).toHaveBeenCalled();
+        expect(mockOnLoadMore).toHaveBeenCalledTimes(1);
     });
 
     it('should call onLoadMore if sentinel is in threshold range while scrolling scrollContainerNode', () => {
         const scrollContainer = document.createElement('div');
-        sandbox.stub(scrollContainer, 'getBoundingClientRect').returns({ bottom: 500 });
+        sandbox.stub(scrollContainer, 'getBoundingClientRect').returns({ bottom: 500 } as DOMRect);
 
         const items = new Array(20).fill('ITEM');
         mount(
@@ -145,31 +150,14 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
         );
 
         const sentinel = getSentinel();
-        sandbox.stub(sentinel, 'getBoundingClientRect').returns({ top: 500 + (threshold + 1) });
+        sandbox.stub(sentinel, 'getBoundingClientRect').returns({ top: 500 + (threshold + 1) } as DOMRect);
 
         scrollContainer.dispatchEvent(new Event('scroll'));
         expect(mockOnLoadMore).not.toHaveBeenCalled();
     });
 
-    it('should reset event listeners on useWindow or scrollContainerNode update', () => {
-        const component = mount(<InfiniteScroll {...propsList} />);
-        const mockAddEventListeners = jest.spyOn(component.instance(), 'addEventListeners');
-        const mockRemoveEventListeners = jest.spyOn(component.instance(), 'removeEventListeners');
-        component.update();
-
-        component.setProps({ useWindow: false });
-        expect(mockAddEventListeners).toHaveBeenCalledTimes(1);
-        expect(mockRemoveEventListeners).toHaveBeenCalledTimes(1);
-
-        component.setProps({
-            scrollContainerNode: document.createElement('div'),
-        });
-        expect(mockAddEventListeners).toHaveBeenCalledTimes(2);
-        expect(mockRemoveEventListeners).toHaveBeenCalledTimes(2);
-    });
-
     describe('with sentinel in range', () => {
-        let component;
+        let component: ReactWrapper;
         const mockedOnLoadMore = jest.fn();
         beforeEach(() => {
             const items = new Array(20).fill('ITEM');
@@ -188,7 +176,9 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
             );
 
             const sentinel = getSentinel();
-            sandbox.stub(sentinel, 'getBoundingClientRect').returns({ top: window.innerHeight + (threshold - 1) });
+            sandbox
+                .stub(sentinel, 'getBoundingClientRect')
+                .returns({ top: window.innerHeight + (threshold - 1) } as DOMRect);
         });
 
         afterEach(() => {
@@ -207,6 +197,54 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
                 window.dispatchEvent(new Event('scroll'));
                 expect(mockedOnLoadMore).not.toHaveBeenCalled();
             });
+        });
+    });
+
+    describe('event handlers', () => {
+        function assertScrollAndResizeEvents(spyInstance: jest.SpyInstance, numberOfCalls = 1) {
+            // there are a lot of 'error' event listeners, we're only interested in scroll and resize
+            const scrollEvents = spyInstance.mock.calls.filter(([event]) => event === 'scroll');
+            const resizeEvents = spyInstance.mock.calls.filter(([event]) => event === 'resize');
+            expect(scrollEvents).toHaveLength(numberOfCalls);
+            expect(resizeEvents).toHaveLength(numberOfCalls);
+        }
+
+        it('should check if listeners are added and removed', () => {
+            const addEventListenerWindow = jest.spyOn(window, 'addEventListener');
+            const removeEventListenerWindow = jest.spyOn(window, 'removeEventListener');
+
+            const scrollContainerNode = document.createElement('div');
+
+            const addEventListenerScrollContainer = jest.spyOn(scrollContainerNode, 'addEventListener');
+            const removeEventListenerScrollContainer = jest.spyOn(scrollContainerNode, 'removeEventListener');
+
+            assertScrollAndResizeEvents(addEventListenerWindow, 0);
+            assertScrollAndResizeEvents(removeEventListenerWindow, 0);
+            assertScrollAndResizeEvents(addEventListenerScrollContainer, 0);
+            assertScrollAndResizeEvents(removeEventListenerScrollContainer, 0);
+
+            const component = mount(<InfiniteScroll {...propsList} />);
+
+            assertScrollAndResizeEvents(addEventListenerWindow);
+
+            component.setProps({ useWindow: false });
+
+            assertScrollAndResizeEvents(removeEventListenerWindow);
+
+            component.setProps({
+                scrollContainerNode,
+            });
+
+            assertScrollAndResizeEvents(addEventListenerScrollContainer);
+
+            component.setProps({
+                useWindow: true,
+            });
+
+            assertScrollAndResizeEvents(removeEventListenerScrollContainer);
+
+            // we should have another pair of addEventsListeners on window
+            assertScrollAndResizeEvents(addEventListenerWindow, 2);
         });
     });
 });

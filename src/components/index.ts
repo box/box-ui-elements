@@ -31,6 +31,9 @@ export * from './ghost';
 export { default as Header } from './header';
 export * from './header';
 
+export { default as InfiniteScroll } from './infinite-scroll';
+export * from './infinite-scroll';
+
 export { default as Label } from './label';
 export * from './label';
 
