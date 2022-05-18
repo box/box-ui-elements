@@ -143,11 +143,6 @@ $left-sidebar-z-index: 40 !default;
     .Body.is-responsive-web {
         .bdl-CollapsibleSidebar-wrapper {
             width: 0;
-            margin-top: 60px;
-        }
-
-        .bdl-CollapsibleSidebar-logo {
-            display: none;
         }
 
         .bdl-CollapsibleSidebar-footer {
