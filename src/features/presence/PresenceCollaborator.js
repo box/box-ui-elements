@@ -3,6 +3,7 @@ import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
+import Avatar from '../../components/avatar';
 import Link from '../../components/link/LinkBase';
 import messages from './messages';
 import PresenceAvatar from './PresenceAvatar';
@@ -29,14 +30,18 @@ export const renderTimestampMessage = (interactedAt, interactionType, intl) => {
     return null;
 };
 
-const PresenceCollaborator = ({ collaborator, intl, ...props }) => {
+const PresenceCollaborator = ({ collaborator, isAnonymous = false, intl, ...props }) => {
     const { avatarUrl, id, interactedAt, interactionType, isActive, name, profileUrl } = collaborator;
 
     return (
         <div className="bdl-PresenceCollaborator" {...props}>
-            <PresenceAvatar avatarUrl={avatarUrl} id={id} isActive={isActive} isDropDownAvatar name={name} />
+            {isAnonymous ? (
+                <Avatar />
+            ) : (
+                <PresenceAvatar avatarUrl={avatarUrl} id={id} isActive={isActive} isDropDownAvatar name={name} />
+            )}
             <div className="bdl-PresenceCollaborator-info-container">
-                <div className="bdl-PresenceCollaborator-info-name">
+                <div className="bdl-PresenceCollaborator-info-name" title={name}>
                     {isEmpty(profileUrl) ? (
                         <span>{name}</span>
                     ) : (
@@ -73,6 +78,7 @@ PresenceCollaborator.propTypes = {
         /** Custom Profile URL */
         profileUrl: PropTypes.string,
     }).isRequired,
+    isAnonymous: PropTypes.bool,
     /* Intl object */
     intl: PropTypes.any,
 };

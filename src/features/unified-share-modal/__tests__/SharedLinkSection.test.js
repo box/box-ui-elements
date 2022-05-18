@@ -493,6 +493,20 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
             expect(onCopyErrorMock).toBeCalledTimes(0);
         });
 
+        test('should call onSharedLinkCopy with current permission level when copy button is clicked', () => {
+            const onSharedLinkCopy = jest.fn();
+            const sharedLink = { url: 'http://example.com/', isNewSharedLink: false, permissionLevel: CAN_EDIT };
+
+            const wrapper = getWrapper({
+                sharedLink,
+                trackingProps: { onSharedLinkCopy },
+            });
+
+            wrapper.find('TextInputWithCopyButton').prop('onCopySuccess')();
+
+            expect(onSharedLinkCopy).toBeCalledWith(CAN_EDIT);
+        });
+
         test('should only initiate copy when we specifically request a copy to be triggered', () => {
             const sharedLink = { url: '', isNewSharedLink: false };
             const addSharedLink = jest.fn();

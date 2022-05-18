@@ -938,4 +938,19 @@ describe('components/flyout/Flyout', () => {
             instance.handleOverlayClose();
         });
     });
+
+    describe('isResponsive', () => {
+        test('should have correct className when isResponsive is true', () => {
+            const wrapper = shallow(
+                <Flyout isResponsive>
+                    <FakeButton />
+                    <FakeOverlay />
+                </Flyout>,
+            );
+
+            expect(wrapper.prop('classes')).toEqual({
+                element: `flyout-overlay bdl-Flyout--responsive`,
+            });
+        });
+    });
 });

@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import { Flyout, Overlay } from '../../components/flyout';
+import { Flyout, Overlay, OverlayHeader } from '../../components/flyout';
 import ScrollWrapper from '../../components/scroll-wrapper';
 import type { FlyoutProps } from '../../components/flyout/Flyout';
 
@@ -34,20 +34,16 @@ class HeaderFlyout extends React.Component<Props> {
 
         return (
             <Flyout
-                closeOnClick={false}
-                offset={HeaderFlyout.panelOffset}
                 className={classNames('header-flyout', className)}
+                closeOnClick={false}
                 constrainToWindow
+                offset={HeaderFlyout.panelOffset}
                 {...rest}
             >
                 {flyoutButton}
                 <Overlay className="header-flyout-overlay">
+                    <OverlayHeader>{header && <h4 className="header-flyout-title">{header}</h4>}</OverlayHeader>
                     <div className="header-flyout-list-container">
-                        {header && (
-                            <div className="flyout-list-container-title">
-                                <h4 className="flyout-list-title">{header}</h4>
-                            </div>
-                        )}
                         <div
                             className={classNames('flyout-list-container-body', {
                                 'with-header': !!header,
