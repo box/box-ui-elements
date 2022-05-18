@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import DatalistItem from '../../components/datalist-item/index';
+import DatalistItem from '../../components/datalist-item';
 import SelectorDropdown from '../../components/selector-dropdown';
 import SearchForm from '../../components/search-form/SearchForm';
 import PlainButton from '../../components/plain-button';

@@ -60,9 +60,9 @@ class DatalistItem extends React.Component<DatalistItemProps> {
             className,
         );
         const itemProps = omit(rest, ['closeDropdown', 'setActiveItemID']);
-        // required aria props are added dynamically
 
         /* eslint-disable jsx-a11y/role-has-required-aria-props */
+        // required aria props are added dynamically
         return (
             <li {...itemProps} className={classes} id={this.id} role="option" aria-selected={isSelected}>
                 {children}

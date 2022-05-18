@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import DatalistItem from '../datalist-item/index';
+import DatalistItem from '../datalist-item';
 import type { Option } from './flowTypes';
 
 function defaultDropdownRenderer(options: Array<Option>): React.Node {

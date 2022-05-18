@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import Avatar from '../avatar';
-import DatalistItem from '../datalist-item/index';
+import DatalistItem from '../datalist-item';
 
 import './ContactDatalistItem.scss';
 

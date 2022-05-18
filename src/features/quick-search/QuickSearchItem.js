@@ -6,7 +6,7 @@ import { RecordOf } from 'immutable';
 
 import type { ItemType } from '../../common/types/core';
 import { convertToMs, isToday, isYesterday } from '../../utils/datetime';
-import DatalistItem from '../../components/datalist-item/index';
+import DatalistItem from '../../components/datalist-item';
 import Folder16 from '../../icon/fill/Folder16';
 import ItemIcon from '../../icons/item-icon';
 import { Link } from '../../components/link';
