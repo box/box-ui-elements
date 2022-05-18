@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import { EditorState } from 'draft-js';
 
-import DatalistItem from '../../datalist-item';
+import DatalistItem from '../../datalist-item/index';
 import DraftJSEditor from '../../draft-js-editor';
 import SelectorDropdown from '../../selector-dropdown';
 import { addMention, defaultMentionTriggers, getActiveMentionForEditorState } from './utils';

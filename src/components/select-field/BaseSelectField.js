@@ -8,7 +8,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { scrollIntoView } from '../../utils/dom';
 import IconCheck from '../../icons/general/IconCheck';
 import SelectButton from '../select-button';
-import DatalistItem from '../datalist-item';
+import DatalistItem from '../datalist-item/index';
 import PopperComponent from '../popper';
 import SelectFieldDropdown from './SelectFieldDropdown';
 import type { SelectOptionValueProp, SelectOptionProp } from './props';
