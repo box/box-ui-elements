@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
@@ -8,15 +7,15 @@ import './DatalistItem.scss';
 
 type Props = {
     /** Content to render in the list item */
-    children: React.Node,
+    children: React.ReactNode;
     /** CSS class for the list item */
-    className?: string,
+    className?: string;
     /** Set by a parent datalist component to indicate when the item is highlighted (but not necessarily selected) */
-    isActive?: boolean,
+    isActive?: boolean;
     /** Set by a parent datalist component to indicate when the item is selected */
-    isSelected?: boolean,
+    isSelected?: boolean;
     /** Set by a parent datalist component to receive the updated active item ID */
-    setActiveItemID?: Function,
+    setActiveItemID?: Function;
 };
 
 class DatalistItem extends React.Component<Props> {

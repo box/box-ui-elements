@@ -38,7 +38,7 @@ const allSections = [
             '../src/components/breadcrumb/Breadcrumb.js',
             '../src/components/checkbox/Checkbox.js',
             '../src/components/count-badge/CountBadge.js',
-            '../src/components/datalist-item/DatalistItem.js',
+            '../src/components/datalist-item/DatalistItem.tsx',
             '../src/components/date-picker/DatePicker.js',
             '../src/components/dropdown-menu/DropdownMenu.js',
             '../src/components/error-mask/ErrorMask.js',

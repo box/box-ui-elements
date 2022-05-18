@@ -1,7 +1,8 @@
 import React from 'react';
 import sinon from 'sinon';
+import { shallow } from 'enzyme';
 
-import DatalistItem from '..';
+import DatalistItem from '../DatalistItem';
 
 const sandbox = sinon.sandbox.create();
 
@@ -17,7 +18,8 @@ describe('components/datalist-item/DatalistItem', () => {
 
             expect(wrapper.is('li')).toBe(true);
             expect(wrapper.hasClass('datalist-item')).toBe(true);
-            expect(wrapper.prop('id')).toBeTruthy();
+            expect(wrapper.prop('id')).toMatch(new RegExp('^datalistitem?'));
+            expect(wrapper.prop('role')).toEqual('option');
             expect(wrapper.text()).toEqual(child);
         });
 
@@ -45,19 +47,6 @@ describe('components/datalist-item/DatalistItem', () => {
             const wrapper = shallow(<DatalistItem data-resin-target="test">Test</DatalistItem>);
 
             expect(wrapper.prop('data-resin-target')).toEqual('test');
-        });
-
-        test('should not override id or role on li when props are specified', () => {
-            const id = 'test';
-            const role = 'listitem';
-            const wrapper = shallow(
-                <DatalistItem id={id} role={role}>
-                    Test
-                </DatalistItem>,
-            );
-
-            expect(wrapper.prop('id')).not.toEqual(id);
-            expect(wrapper.prop('role')).toEqual('option');
         });
     });
 
