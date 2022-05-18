@@ -14,6 +14,7 @@ describe('components/datalist-item/DatalistItem', () => {
         test('should render default component', () => {
             const child = 'Test';
             const wrapper = shallow(<DatalistItem>{child}</DatalistItem>);
+
             expect(wrapper.is('li')).toBe(true);
             expect(wrapper.hasClass('datalist-item')).toBe(true);
             expect(wrapper.prop('id')).toMatch(/^datalistitem?/);
@@ -28,6 +29,7 @@ describe('components/datalist-item/DatalistItem', () => {
                     Test
                 </DatalistItem>,
             );
+
             expect(wrapper.hasClass('datalist-item')).toBe(true);
             expect(wrapper.hasClass('is-active')).toBe(true);
             expect(wrapper.hasClass(className)).toBe(true);
@@ -36,11 +38,13 @@ describe('components/datalist-item/DatalistItem', () => {
         test('should render the correct aria-selected according to isSelected prop', () => {
             const isSelectedValue = true;
             const wrapper = shallow(<DatalistItem isSelected={isSelectedValue}>test</DatalistItem>);
+
             expect(wrapper.prop('aria-selected')).toBe(isSelectedValue);
         });
 
         test('should render custom attributes when specified', () => {
             const wrapper = shallow(<DatalistItem data-resin-target="test">Test</DatalistItem>);
+
             expect(wrapper.prop('data-resin-target')).toEqual('test');
         });
     });
@@ -48,20 +52,24 @@ describe('components/datalist-item/DatalistItem', () => {
     describe('setActiveItemID()', () => {
         test('should call setActiveItemID() in componentDidUpdate when isActive is true', () => {
             const setActiveItemIDSpy = sandbox.spy();
+
             shallow(
                 <DatalistItem isActive setActiveItemID={setActiveItemIDSpy}>
                     Test
                 </DatalistItem>,
             );
+
             expect(setActiveItemIDSpy.calledOnce).toBe(true);
         });
 
         test('should call setActiveItemID() when prop isActive becomes true', () => {
             const setActiveItemIDSpy = sandbox.spy();
             const wrapper = shallow(<DatalistItem setActiveItemID={setActiveItemIDSpy}>Test</DatalistItem>);
+
             wrapper.setProps({
                 isActive: true,
             });
+
             expect(setActiveItemIDSpy.calledOnce).toBe(true);
         });
     });
