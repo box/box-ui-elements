@@ -110,14 +110,14 @@ describe('api/MarkerBasedAPI', () => {
             markerBasedAPI.xhr = {
                 get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: markerBasedAPIResponse })),
             };
-            markerBasedAPI.marker = '';
+            markerBasedAPI.next_marker = '';
 
             return markerBasedAPI
                 .markerGet({
                     id: 'id',
                     successCallback,
                     errorCallback,
-                    marker: 'next_marker',
+                    next_marker: 'next_marker',
                     limit: LIMIT,
                     shouldFetchAll: true,
                     requestData,
@@ -130,7 +130,6 @@ describe('api/MarkerBasedAPI', () => {
                         id: 'file_id',
                         url,
                         params: {
-                            marker: 'next_marker',
                             limit: LIMIT,
                             ...requestData,
                         },
@@ -149,7 +148,7 @@ describe('api/MarkerBasedAPI', () => {
                     id: 'id',
                     successCallback,
                     errorCallback,
-                    marker: '',
+                    next_marker: '',
                     limit: LIMIT,
                     shouldFetchAll: true,
                     errorCode,
@@ -161,7 +160,6 @@ describe('api/MarkerBasedAPI', () => {
                         id: 'file_id',
                         url,
                         params: {
-                            marker: '',
                             limit: LIMIT,
                         },
                     });

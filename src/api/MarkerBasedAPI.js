@@ -9,7 +9,7 @@ import type { ElementsErrorCallback } from '../common/types/api';
 
 type Params = {
     limit: number,
-    marker: string,
+    next_marker?: string,
 };
 
 type Data = {
@@ -38,7 +38,7 @@ class MarkerBasedApi extends Base {
      * Helper for get
      *
      * @param {string} id the file id
-     * @param {string} marker the marker from the start to start fetching at
+     * @param {string} nextMarker the marker from the start to start fetching at
      * @param {number} limit the number of items to fetch
      * @param {Object} requestData the request query params
      * @param {boolean} shouldFetchAll true if should get all the pages before calling
@@ -46,7 +46,7 @@ class MarkerBasedApi extends Base {
      */
     async markerGetRequest(
         id: string,
-        marker: string,
+        nextMarker: string,
         limit: number,
         shouldFetchAll: boolean,
         requestData: Object = {},
@@ -60,7 +60,7 @@ class MarkerBasedApi extends Base {
             const url = this.getUrl(id);
             const queryParams: Params = {
                 ...requestData,
-                marker,
+                ...(this.hasMoreItems(nextMarker) ? { next_marker: nextMarker } : {}),
                 limit,
             };
 
@@ -75,9 +75,9 @@ class MarkerBasedApi extends Base {
                 ...data,
                 entries: entries.concat(data.entries),
             };
-            const nextMarker = data.next_marker;
-            if (shouldFetchAll && this.hasMoreItems(nextMarker)) {
-                this.markerGetRequest(id, nextMarker, limit, shouldFetchAll, requestData);
+            const nextMarkerId = data.next_marker;
+            if (shouldFetchAll && this.hasMoreItems(nextMarkerId)) {
+                this.markerGetRequest(id, nextMarkerId, limit, shouldFetchAll, requestData);
                 return;
             }
 
@@ -93,7 +93,7 @@ class MarkerBasedApi extends Base {
      * @param {string} options.id the file id
      * @param {Function} options.successCallback the success callback
      * @param {Function} options.errorCallback the error callback
-     * @param {string} [options.marker] the marker from the start to start fetching at
+     * @param {string} [options.nextMarker] the marker from the start to start fetching at
      * @param {number} [options.limit] the number of items to fetch
      * @param {Object} options.requestData the request query params
      * @param {boolean} [options.shouldFetchAll] true if should get all the pages before calling the sucessCallback
@@ -102,7 +102,7 @@ class MarkerBasedApi extends Base {
         id,
         successCallback,
         errorCallback,
-        marker = '',
+        nextMarker = '',
         limit = 1000,
         requestData,
         shouldFetchAll = true,
@@ -110,7 +110,7 @@ class MarkerBasedApi extends Base {
         errorCallback: ElementsErrorCallback,
         id: string,
         limit?: number,
-        marker?: string,
+        nextMarker?: string,
         requestData?: Object,
         shouldFetchAll?: boolean,
         successCallback: Function,
@@ -118,7 +118,7 @@ class MarkerBasedApi extends Base {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
-        return this.markerGetRequest(id, marker, limit, shouldFetchAll, requestData);
+        return this.markerGetRequest(id, nextMarker, limit, shouldFetchAll, requestData);
     }
 }
 
