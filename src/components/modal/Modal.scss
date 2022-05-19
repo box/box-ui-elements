@@ -155,12 +155,12 @@
         }
 
         .modal-actions {
-            position: fixed;
+            position: absolute;
             right: 0;
             bottom: 0;
             width: 100%;
-            padding: 10px 16px;
-            background-color: #fff;
+            padding: 2.5 * $bdl-grid-unit 4 * $bdl-grid-unit;
+            background-color: $white;
         }
     }
 
