@@ -1,6 +1,6 @@
 import React from 'react';
 import sinon from 'sinon';
-
+import { shallow } from 'enzyme';
 import DatalistItem from '..';
 
 const sandbox = sinon.sandbox.create();
@@ -17,7 +17,8 @@ describe('components/datalist-item/DatalistItem', () => {
 
             expect(wrapper.is('li')).toBe(true);
             expect(wrapper.hasClass('datalist-item')).toBe(true);
-            expect(wrapper.prop('id')).toBeTruthy();
+            expect(wrapper.prop('id')).toMatch(/^datalistitem?/);
+            expect(wrapper.prop('role')).toEqual('option');
             expect(wrapper.text()).toEqual(child);
         });
 
@@ -46,24 +47,12 @@ describe('components/datalist-item/DatalistItem', () => {
 
             expect(wrapper.prop('data-resin-target')).toEqual('test');
         });
-
-        test('should not override id or role on li when props are specified', () => {
-            const id = 'test';
-            const role = 'listitem';
-            const wrapper = shallow(
-                <DatalistItem id={id} role={role}>
-                    Test
-                </DatalistItem>,
-            );
-
-            expect(wrapper.prop('id')).not.toEqual(id);
-            expect(wrapper.prop('role')).toEqual('option');
-        });
     });
 
     describe('setActiveItemID()', () => {
         test('should call setActiveItemID() in componentDidUpdate when isActive is true', () => {
             const setActiveItemIDSpy = sandbox.spy();
+
             shallow(
                 <DatalistItem isActive setActiveItemID={setActiveItemIDSpy}>
                     Test
@@ -76,7 +65,10 @@ describe('components/datalist-item/DatalistItem', () => {
         test('should call setActiveItemID() when prop isActive becomes true', () => {
             const setActiveItemIDSpy = sandbox.spy();
             const wrapper = shallow(<DatalistItem setActiveItemID={setActiveItemIDSpy}>Test</DatalistItem>);
-            wrapper.setProps({ isActive: true });
+
+            wrapper.setProps({
+                isActive: true,
+            });
 
             expect(setActiveItemIDSpy.calledOnce).toBe(true);
         });

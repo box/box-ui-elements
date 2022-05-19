@@ -111,6 +111,12 @@ $left-sidebar-z-index: 40 !default;
     }
 }
 
+@include large-size {
+    .bdl-CollapsibleSidebar-logo {
+        margin-left: $collapsible-side-bar-h-padding + $bdl-grid-unit * 2 - 1px /* border */;
+    }
+}
+
 @include medium-minus-size {
     .bdl-CollapsibleSidebar-logo {
         .bdl-CollapsibleSidebar-toggleButton {
@@ -133,8 +139,34 @@ $left-sidebar-z-index: 40 !default;
     }
 }
 
-@include large-size {
-    .bdl-CollapsibleSidebar-logo {
-        margin-left: $collapsible-side-bar-h-padding + $bdl-grid-unit * 2 - 1px /* border */;
+@include breakpoint($medium-screen) {
+    .Body.is-responsive-web {
+        .bdl-CollapsibleSidebar-wrapper {
+            width: 0;
+        }
+
+        .bdl-CollapsibleSidebar-footer {
+            display: none;
+        }
+
+        .bdl-CollapsibleSidebar-nav ul {
+            display: none;
+            // using fixed width due to performance issues during expand transition
+            width: calc(100vw - (#{$collapsible-side-bar-h-padding} * 2));
+        }
+
+        .bdl-CollapsibleSidebar {
+            width: 0;
+            border: none;
+
+            &.is-expanded {
+                width: 100vw;
+
+                .bdl-CollapsibleSidebar-nav ul,
+                .bdl-CollapsibleSidebar-footer {
+                    display: block;
+                }
+            }
+        }
     }
 }

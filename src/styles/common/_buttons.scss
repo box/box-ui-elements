@@ -152,6 +152,10 @@
     box-shadow: none;
 }
 
+.btn-plain[aria-disabled] {
+    cursor: default;
+}
+
 /* This setting is being used to override the dotted border on a firefox button */
 button.btn-plain::-moz-focus-inner {
     border: 0 none;
