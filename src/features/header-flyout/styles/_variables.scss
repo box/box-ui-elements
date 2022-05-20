@@ -11,10 +11,6 @@ $flyout-title-line-height: 16px;
 $flyout-footer-font-size: 13px;
 $flyout-footer-line-height: 16px;
 
-// Variables for title and footer height to help calculate component height
-$flyout-title-height: $flyout-title-line-height + $flyout-header-spacer;
-$flyout-footer-height: $flyout-title-line-height + 2 * $flyout-footer-spacer;
-
 // Consumable mixins - to use with the contents of a header flyout
 @mixin header-flyout-row-padding {
     padding: 12px 0;

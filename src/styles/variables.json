@@ -89,7 +89,6 @@
     "bdl-border-radius-size-med": "6px",
     "bdl-border-radius-size-large": "8px",
     "bdl-border-radius-size-xlarge": "12px",
-    "bdl-header-box-shadow": ["0 0 10px 0 rgba(0", "0", "0", "0.05)"],
     "bdl-grid-unit": "4px",
     "bdl-grid-unit-px": "4",
     "bdl-btn-border-width": "1px",
