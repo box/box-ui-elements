@@ -8,7 +8,6 @@ exports[`features/presence/PresenceLink render() should change the flyoutPositio
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
-  isResponsive={false}
   isVisibleByDefault={false}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
@@ -92,7 +91,6 @@ exports[`features/presence/PresenceLink render() should correctly render collabo
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
-  isResponsive={false}
   isVisibleByDefault={false}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
@@ -177,7 +175,6 @@ exports[`features/presence/PresenceLink render() should pass through additional 
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
-  isResponsive={false}
   isVisibleByDefault={false}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
