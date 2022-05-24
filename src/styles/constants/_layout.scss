@@ -3,7 +3,9 @@ $modal-dialog-z-index: 160 !default;
 $menu-z-index: 170 !default;
 $notifications-wrapper-z-index: 180 !default;
 $overlay-z-index: 190 !default;
+$overlay-low-visual-priority-z-index: 150 !default;
 $tooltip-z-index: 190 !default;
+$tooltip-low-visual-priority-z-index: 150 !default;
 
 // Borders
 $bdl-border-radius-size: 4px;

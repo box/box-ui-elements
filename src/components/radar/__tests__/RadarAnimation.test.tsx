@@ -73,6 +73,14 @@ describe('components/radar/RadarAnimation', () => {
         expect(wrapper.prop('offset')).toEqual(offset);
     });
 
+    test('should render with "radar-animation-element--with-low-visual-priority" class when hasLowVisualPriority prop is true', () => {
+        const wrapper = getWrapper({
+            hasLowVisualPriority: true,
+        });
+
+        expect(wrapper.hasClass('radar-animation-element--with-low-visual-priority')).toBe(true);
+    });
+
     describe('isShown', () => {
         test('should be shown when isShown is not provided', () => {
             expect(

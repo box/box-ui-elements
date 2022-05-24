@@ -233,6 +233,10 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
     @include common-typography;
 
     z-index: $tooltip-z-index;
+
+    &.tooltip-element--with-low-visual-priority {
+        z-index: $tooltip-low-visual-priority-z-index;
+    }
 }
 
 /*

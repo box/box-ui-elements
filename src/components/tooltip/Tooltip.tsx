@@ -87,6 +87,8 @@ export type TooltipProps = {
     children: React.ReactChild;
     /** A CSS class for the tooltip */
     className?: string;
+    /** Property for controlling the visual priority (whether to display below modal and menu elements) */
+    hasLowVisualPriority?: boolean;
     /** Forces the tooltip to be shown or hidden (useful for errors) */
     isShown?: boolean;
     /** Whether to add tabindex=0.  Defaults to `true` */
@@ -237,6 +239,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             className,
             constrainToScrollParent,
             constrainToWindow,
+            hasLowVisualPriority = false,
             isDisabled,
             isTabbable = true,
             offset,
@@ -322,6 +325,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
         } = {
             attachment: tetherPosition.attachment,
             bodyElement: bodyEl,
+            className: hasLowVisualPriority ? 'tooltip-element--with-low-visual-priority' : undefined,
             classPrefix: 'tooltip',
             constraints,
             enabled: showTooltip,

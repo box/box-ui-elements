@@ -64,6 +64,8 @@ export interface RadarAnimationProps {
     constrainToScrollParent: boolean;
     /** Whether to constrain the radar to window. Defaults to `true` */
     constrainToWindow: boolean;
+    /** Property for controlling the visual priority (whether to display below modal and menu elements) */
+    hasLowVisualPriority?: boolean;
     /** Forces the radar to be shown or hidden - defaults to true */
     isShown: boolean;
     /** A string of the form 'vert-offset horiz-offset' which controls positioning */
@@ -98,6 +100,7 @@ class RadarAnimation extends React.Component<RadarAnimationProps> {
             className = '',
             constrainToScrollParent,
             constrainToWindow,
+            hasLowVisualPriority = false,
             position,
             isShown,
             offset,
@@ -127,12 +130,14 @@ class RadarAnimation extends React.Component<RadarAnimationProps> {
         // Typescript defs seem busted for older versions of react-tether
         const tetherProps: {
             attachment: string;
+            className?: string;
             classPrefix: string;
             constraints: {};
             targetAttachment: string;
             offset?: string;
         } = {
             attachment,
+            className: hasLowVisualPriority ? 'radar-animation-element--with-low-visual-priority' : undefined,
             classPrefix: 'radar-animation',
             constraints,
             targetAttachment,

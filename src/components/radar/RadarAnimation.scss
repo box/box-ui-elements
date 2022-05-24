@@ -115,4 +115,18 @@ $radar-animation-offset: 1px;
 
 .radar-animation-element {
     z-index: $overlay-z-index;
+
+    &.radar-animation-element--with-low-visual-priority {
+        z-index: $overlay-low-visual-priority-z-index;
+
+        .radar-dot::before {
+            z-index: $overlay-low-visual-priority-z-index + 3;
+        }
+
+        .radar-dot::after,
+        .radar-circle::before,
+        .radar-circle::after {
+            z-index: $overlay-low-visual-priority-z-index + 2;
+        }
+    }
 }

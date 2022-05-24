@@ -346,6 +346,14 @@ describe('components/tooltip/Tooltip', () => {
                 }),
             ).toMatchSnapshot();
         });
+
+        test('should render with "tooltip-element--with-low-visual-priority" class when hasLowVisualPriority prop is true', () => {
+            const wrapper = getWrapper({
+                hasLowVisualPriority: true,
+            });
+
+            expect(wrapper.hasClass('tooltip-element--with-low-visual-priority')).toBe(true);
+        });
     });
 
     describe('should stop event propagation when stopBubble is set', () => {

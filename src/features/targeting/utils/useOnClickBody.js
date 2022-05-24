@@ -2,30 +2,34 @@
 import { useEffect } from 'react';
 /**
  * onClick will be called if enable is true when document is clicked.
+ * optionally shouldAct function can be passed to decide whether onClick
+ * should be called or not
  * options such as capture and once are directly passed to event listener.
  * Recommend to use once
  */
-const useOnClickBody = (onClick: () => void, enable: boolean) => {
+const useOnClickBody = (
+    onClick: () => void,
+    enable: boolean,
+    shouldAct: (e: React.nativeEvent) => boolean = () => true,
+) => {
     useEffect(() => {
+        const clickHandler = (e: React.nativeEvent) => {
+            if (shouldAct(e)) {
+                onClick();
+            }
+        };
+
         if (enable) {
-            if (document.body) {
-                document.body.addEventListener('click', onClick);
-            }
-            if (document.body) {
-                document.body.addEventListener('contextmenu', onClick);
-            }
+            document.addEventListener('click', clickHandler, true);
+            document.addEventListener('contextmenu', clickHandler, true);
         }
         return () => {
             if (enable) {
-                if (document.body) {
-                    document.body.removeEventListener('click', onClick);
-                }
-                if (document.body) {
-                    document.body.removeEventListener('contextmenu', onClick);
-                }
+                document.removeEventListener('click', clickHandler, true);
+                document.removeEventListener('contextmenu', clickHandler, true);
             }
         };
-    }, [onClick, enable]);
+    }, [onClick, enable, shouldAct]);
 };
 
 export default useOnClickBody;
