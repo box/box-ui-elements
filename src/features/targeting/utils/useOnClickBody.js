@@ -20,21 +20,13 @@ const useOnClickBody = (
         };
 
         if (enable) {
-            if (document.body) {
-                document.body.addEventListener('click', clickHandler, true);
-            }
-            if (document.body) {
-                document.body.addEventListener('contextmenu', clickHandler, true);
-            }
+            document.addEventListener('click', clickHandler, true);
+            document.addEventListener('contextmenu', clickHandler, true);
         }
         return () => {
             if (enable) {
-                if (document.body) {
-                    document.body.removeEventListener('click', clickHandler, true);
-                }
-                if (document.body) {
-                    document.body.removeEventListener('contextmenu', clickHandler, true);
-                }
+                document.removeEventListener('click', clickHandler, true);
+                document.removeEventListener('contextmenu', clickHandler, true);
             }
         };
     }, [onClick, enable, shouldAct]);
