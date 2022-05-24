@@ -89,7 +89,6 @@ export const bdlBorderRadiusSize = '4px'; // bdl-border-radius-size
 export const bdlBorderRadiusSizeMed = '6px'; // bdl-border-radius-size-med
 export const bdlBorderRadiusSizeLarge = '8px'; // bdl-border-radius-size-large
 export const bdlBorderRadiusSizeXlarge = '12px'; // bdl-border-radius-size-xlarge
-export const bdlHeaderBoxShadow = ['0 0 10px 0 rgba(0', '0', '0', '0.05)']; // bdl-header-box-shadow
 export const bdlGridUnit = '4px'; // bdl-grid-unit
 export const bdlGridUnitPx = '4'; // bdl-grid-unit-px
 export const bdlBtnBorderWidth = '1px'; // bdl-btn-border-width
