@@ -7,13 +7,9 @@ import * as React from 'react';
  * options such as capture and once are directly passed to event listener.
  * Recommend to use once
  */
-const useOnClickBody = (
-    onClick: () => void,
-    enable: boolean,
-    shouldAct: (e: SyntheticEvent<>) => boolean = () => true,
-) => {
+const useOnClickBody = (onClick: () => void, enable: boolean, shouldAct: (e: MouseEvent) => boolean = () => true) => {
     React.useEffect(() => {
-        const clickHandler = (e: SyntheticEvent<>) => {
+        const clickHandler = (e: MouseEvent) => {
             if (shouldAct(e)) {
                 onClick();
             }
