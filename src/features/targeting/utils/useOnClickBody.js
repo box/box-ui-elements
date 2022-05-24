@@ -10,10 +10,10 @@ import * as React from 'react';
 const useOnClickBody = (
     onClick: () => void,
     enable: boolean,
-    shouldAct: (e: SyntheticEvent) => boolean = () => true,
+    shouldAct: (e: SyntheticEvent<>) => boolean = () => true,
 ) => {
     React.useEffect(() => {
-        const clickHandler = (e: SyntheticEvent) => {
+        const clickHandler = (e: SyntheticEvent<>) => {
             if (shouldAct(e)) {
                 onClick();
             }
