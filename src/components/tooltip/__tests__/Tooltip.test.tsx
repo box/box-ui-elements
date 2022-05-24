@@ -354,6 +354,16 @@ describe('components/tooltip/Tooltip', () => {
 
             expect(wrapper.hasClass('tooltip-element--with-low-visual-priority')).toBe(true);
         });
+
+        test('should render with appropriate class names when hasLowVisualPriority prop is true and tetherElementClassName is set', () => {
+            const wrapper = getWrapper({
+                hasLowVisualPriority: true,
+                tetherElementClassName: 'custom-class',
+            });
+
+            expect(wrapper.hasClass('tooltip-element--with-low-visual-priority')).toBe(true);
+            expect(wrapper.hasClass('custom-class')).toBe(true);
+        });
     });
 
     describe('should stop event propagation when stopBubble is set', () => {

@@ -333,7 +333,9 @@ class Tooltip extends React.Component<TooltipProps, State> {
         };
 
         if (tetherElementClassName) {
-            tetherProps.className = tetherElementClassName;
+            tetherProps.className = tetherProps.className
+                ? `${tetherProps.className} ${tetherElementClassName}`
+                : tetherElementClassName;
         }
 
         if (offset) {
