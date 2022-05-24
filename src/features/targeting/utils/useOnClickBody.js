@@ -1,5 +1,5 @@
 // @flow
-import * as React from 'react';
+import { useEffect } from 'react';
 /**
  * onClick will be called if enable is true when document is clicked.
  * optionally shouldAct function can be passed to decide whether onClick
@@ -8,7 +8,7 @@ import * as React from 'react';
  * Recommend to use once
  */
 const useOnClickBody = (onClick: () => void, enable: boolean, shouldAct: (e: MouseEvent) => boolean = () => true) => {
-    React.useEffect(() => {
+    useEffect(() => {
         const clickHandler = (e: MouseEvent) => {
             if (shouldAct(e)) {
                 onClick();
