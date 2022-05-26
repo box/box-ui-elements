@@ -116,8 +116,8 @@ class ModalDialog extends React.Component<Props> {
                     <h2 className="modal-title" id={`${this.modalID}-label`}>
                         {title}
                     </h2>
+                    <>{this.renderCloseButton()}</>
                 </div>
-                {this.renderCloseButton()}
                 {this.renderContent()}
             </div>
         );
