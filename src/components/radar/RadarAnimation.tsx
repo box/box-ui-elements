@@ -70,6 +70,8 @@ export interface RadarAnimationProps {
     offset?: string;
     /** Where to position the radar relative to the wrapped component */
     position: RadarAnimationPosition;
+    /** A CSS class for the tether element component */
+    tetherElementClassName?: string;
 }
 
 class RadarAnimation extends React.Component<RadarAnimationProps> {
@@ -101,6 +103,7 @@ class RadarAnimation extends React.Component<RadarAnimationProps> {
             position,
             isShown,
             offset,
+            tetherElementClassName,
             ...rest
         } = this.props;
 
@@ -127,6 +130,7 @@ class RadarAnimation extends React.Component<RadarAnimationProps> {
         // Typescript defs seem busted for older versions of react-tether
         const tetherProps: {
             attachment: string;
+            className?: string;
             classPrefix: string;
             constraints: {};
             targetAttachment: string;
@@ -137,6 +141,10 @@ class RadarAnimation extends React.Component<RadarAnimationProps> {
             constraints,
             targetAttachment,
         };
+
+        if (tetherElementClassName) {
+            tetherProps.className = tetherElementClassName;
+        }
 
         if (offset) {
             tetherProps.offset = offset;
