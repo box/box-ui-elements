@@ -210,6 +210,42 @@ exports[`components/radar/RadarAnimation should render correctly with middle-rig
 </TetherComponent>
 `;
 
+exports[`components/radar/RadarAnimation should render correctly with tetherElementClassName 1`] = `
+<TetherComponent
+  attachment="middle left"
+  className="tether-element-class-name"
+  classPrefix="radar-animation"
+  constraints={
+    Array [
+      Object {
+        "attachment": "together",
+        "to": "window",
+      },
+    ]
+  }
+  renderElementTag="div"
+  renderElementTo={null}
+  targetAttachment="middle right"
+>
+  <div
+    aria-describedby="radarAnimation12"
+  >
+    Hello
+  </div>
+  <div
+    className="radar "
+    id="radarAnimation12"
+  >
+    <div
+      className="radar-dot"
+    />
+    <div
+      className="radar-circle"
+    />
+  </div>
+</TetherComponent>
+`;
+
 exports[`components/radar/RadarAnimation should render correctly with top-center positioning 1`] = `
 <TetherComponent
   attachment="bottom center"

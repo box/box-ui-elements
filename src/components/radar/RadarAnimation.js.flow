@@ -71,6 +71,8 @@ type Props = {
     offset?: string,
     /** Where to position the radar relative to the wrapped component */
     position: Position,
+    /** A CSS class for the tether element component */
+    tetherElementClassName?: string;
 };
 
 class RadarAnimation extends React.Component<Props> {
