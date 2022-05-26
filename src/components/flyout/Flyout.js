@@ -1,8 +1,11 @@
 // @flow
 import * as React from 'react';
+import classNames from 'classnames';
 import TetherComponent from 'react-tether';
 import uniqueId from 'lodash/uniqueId';
 import { KEYS } from '../../constants';
+
+import FlyoutContext from './FlyoutContext';
 
 import './Flyout.scss';
 
@@ -117,6 +120,10 @@ export type FlyoutProps = {
      */
     constrainToWindow?: boolean,
     /**
+     * Toggles responsive behavior
+     */
+    isResponsive?: boolean,
+    /**
      * Whether overlay should be visible by default
      */
     isVisibleByDefault: boolean,
@@ -175,6 +182,7 @@ class Flyout extends React.Component<Props, State> {
         closeOnWindowBlur: false,
         constrainToScrollParent: true,
         constrainToWindow: false,
+        isResponsive: false,
         isVisibleByDefault: false,
         openOnHover: false,
         openOnHoverDelayTimeout: 300,
@@ -365,6 +373,7 @@ class Flyout extends React.Component<Props, State> {
             className = '',
             constrainToScrollParent,
             constrainToWindow,
+            isResponsive,
             offset,
             openOnHover,
             position,
@@ -432,7 +441,7 @@ class Flyout extends React.Component<Props, State> {
             targetAttachment: tetherPosition.targetAttachment,
             enabled: isVisible,
             classes: {
-                element: `flyout-overlay ${className}`,
+                element: classNames('flyout-overlay', { 'bdl-Flyout--responsive': isResponsive }, className),
             },
             constraints,
         };
@@ -465,7 +474,11 @@ class Flyout extends React.Component<Props, State> {
         return (
             <TetherComponent {...tetherProps}>
                 {React.cloneElement(overlayButton, overlayButtonProps)}
-                {isVisible ? React.cloneElement(overlayContent, overlayProps) : null}
+                {isVisible && (
+                    <FlyoutContext.Provider value={{ closeOverlay: this.closeOverlay }}>
+                        {React.cloneElement(overlayContent, overlayProps)}
+                    </FlyoutContext.Provider>
+                )}
             </TetherComponent>
         );
     }
