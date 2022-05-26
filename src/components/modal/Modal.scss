@@ -155,7 +155,9 @@
         }
 
         .modal-close-button {
+            top: initial;
             right: 10px;
+            line-height: 0;
         }
 
         .modal-actions {
