@@ -7,7 +7,7 @@ import { SuggestedPillType } from '../pill-selector-dropdown/types';
 
 import './ContactDatalistItem.scss';
 
-interface ContactDatalistItemProps {
+export interface ContactDatalistItemProps {
     getContactAvatarUrl?: (contact: ContactType) => string | Promise<string | null | undefined>;
     getPillImageUrl?: (data: SuggestedPillType) => string | Promise<string>;
     id?: string;
