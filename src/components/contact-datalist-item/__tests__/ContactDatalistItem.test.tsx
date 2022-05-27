@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 import ContactDatalistItem from '../ContactDatalistItem';
+import DatalistItem from '../../datalist-item';
 import Avatar from '../../avatar';
 
 import { ContactType } from '../../../features/unified-share-modal/types';
@@ -10,7 +11,7 @@ describe('components/contact-datalist-item/ContactDatalistItem', () => {
     test('should render a DatalistItem with name and subtitle', () => {
         const wrapper = shallow(<ContactDatalistItem name="name" subtitle="subtitle" />);
 
-        expect(wrapper.find('DatalistItem').length).toBe(1);
+        expect(wrapper.find(DatalistItem).length).toBe(1);
         expect(wrapper.find('.contact-name').text()).toEqual('name');
         expect(wrapper.find('.contact-sub-name').text()).toEqual('subtitle');
         expect(wrapper.find(Avatar).length).toBe(0);
@@ -30,7 +31,7 @@ describe('components/contact-datalist-item/ContactDatalistItem', () => {
             expect(wrapper.find(Avatar).length).toBe(1);
         });
 
-        test('should do nothing when getPillImageUrl returns a rejected Promise', () => {
+        test('should do nothing when getPillImageUrl returns a rejected Promise', async () => {
             const wrapper = shallow(
                 <ContactDatalistItem
                     name="name"
@@ -40,7 +41,7 @@ describe('components/contact-datalist-item/ContactDatalistItem', () => {
                 />,
             );
 
-            const instance = wrapper.instance();
+            const instance = await wrapper.instance();
             instance.componentDidMount?.();
 
             wrapper.update();
