@@ -144,6 +144,10 @@
             padding: 0;
         }
 
+        .modal-content {
+            padding-bottom: 60px;
+        }
+
         .modal-dialog {
             min-height: 100%;
             padding: 22px 16px 12px 16px;
@@ -154,6 +158,15 @@
             top: initial;
             right: 10px;
             line-height: 0;
+        }
+
+        .modal-actions {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            padding: 10px 16px;
+            background-color: $white;
         }
     }
 
