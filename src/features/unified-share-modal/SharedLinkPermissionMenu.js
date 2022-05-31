@@ -105,12 +105,13 @@ class SharedLinkPermissionMenu extends Component<Props> {
                         'is-disabled': submitting,
                         'bdl-is-disabled': submitting,
                     })}
+                    data-testid="usm-share-permissions-toggle"
                     disabled={submitting}
                     {...sharedLinkPermissionsMenuButtonProps}
                 >
                     <MenuToggle>{permissionLevels[permissionLevel].label}</MenuToggle>
                 </PlainButton>
-                <Menu className="ums-share-permissions-menu">
+                <Menu className="ums-share-permissions-menu" data-testid="usm-share-permissions-menu">
                     {allowedPermissionLevels.map(level => (
                         <SelectMenuItem
                             key={level}

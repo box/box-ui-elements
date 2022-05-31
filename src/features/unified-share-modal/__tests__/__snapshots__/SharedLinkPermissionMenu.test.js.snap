@@ -10,6 +10,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 >
   <PlainButton
     className="lnk is-disabled bdl-is-disabled"
+    data-testid="usm-share-permissions-toggle"
     disabled={true}
   >
     <MenuToggle>
@@ -21,6 +22,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   </PlainButton>
   <Menu
     className="ums-share-permissions-menu"
+    data-testid="usm-share-permissions-menu"
     isHidden={false}
     isSubmenu={false}
   >
@@ -86,6 +88,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 >
   <PlainButton
     className="lnk"
+    data-testid="usm-share-permissions-toggle"
     disabled={false}
   >
     <MenuToggle>
@@ -97,6 +100,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   </PlainButton>
   <Menu
     className="ums-share-permissions-menu"
+    data-testid="usm-share-permissions-menu"
     isHidden={false}
     isSubmenu={false}
   >
@@ -162,6 +166,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 >
   <PlainButton
     className="lnk is-disabled bdl-is-disabled"
+    data-testid="usm-share-permissions-toggle"
     disabled={true}
   >
     <MenuToggle>
@@ -173,6 +178,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   </PlainButton>
   <Menu
     className="ums-share-permissions-menu"
+    data-testid="usm-share-permissions-menu"
     isHidden={false}
     isSubmenu={false}
   >
@@ -238,6 +244,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 >
   <PlainButton
     className="lnk"
+    data-testid="usm-share-permissions-toggle"
     disabled={false}
   >
     <MenuToggle>
@@ -249,6 +256,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   </PlainButton>
   <Menu
     className="ums-share-permissions-menu"
+    data-testid="usm-share-permissions-menu"
     isHidden={false}
     isSubmenu={false}
   >
@@ -314,6 +322,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 >
   <PlainButton
     className="lnk is-disabled bdl-is-disabled"
+    data-testid="usm-share-permissions-toggle"
     disabled={true}
   >
     <MenuToggle>
@@ -325,6 +334,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   </PlainButton>
   <Menu
     className="ums-share-permissions-menu"
+    data-testid="usm-share-permissions-menu"
     isHidden={false}
     isSubmenu={false}
   >
@@ -390,6 +400,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 >
   <PlainButton
     className="lnk"
+    data-testid="usm-share-permissions-toggle"
     disabled={false}
   >
     <MenuToggle>
@@ -401,6 +412,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   </PlainButton>
   <Menu
     className="ums-share-permissions-menu"
+    data-testid="usm-share-permissions-menu"
     isHidden={false}
     isSubmenu={false}
   >
