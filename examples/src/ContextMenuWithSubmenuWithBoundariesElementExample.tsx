@@ -15,10 +15,11 @@ class ContextMenuWithSubmenuWithBoundariesElementExample extends React.Component
             <ContextMenu>
                 <div
                     ref={ref => {
-                        !this.state.rightBoundaryElement &&
+                        if (!this.state.rightBoundaryElement) {
                             this.setState({
                                 rightBoundaryElement: ref,
                             });
+                        }
                     }}
                     className="context-menu-example-target"
                     style={{
@@ -29,10 +30,11 @@ class ContextMenuWithSubmenuWithBoundariesElementExample extends React.Component
                 </div>
                 <Menu
                     setRef={(ref: React.RefObject<HTMLDivElement>) => {
-                        !this.state.bottomBoundaryElement &&
+                        if (!this.state.bottomBoundaryElement) {
                             this.setState({
                                 bottomBoundaryElement: ref,
                             });
+                        }
                     }}
                 >
                     <MenuItem>View Profile</MenuItem>

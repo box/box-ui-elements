@@ -16,6 +16,9 @@ export * from './checkbox';
 export { default as Collapsible } from './collapsible';
 export * from './collapsible';
 
+export { default as ContactDatalistItem } from './contact-datalist-item';
+export * from './contact-datalist-item';
+
 export { default as ContextMenu } from './context-menu';
 export * from './context-menu';
 
