@@ -5,8 +5,8 @@
  */
 import * as vars from '../../styles/variables';
 import IconFileAudio from '../../icon/content/FileAudio32';
+import IconFileBoxCanvas from '../../icon/content/FileCanvas32';
 import IconFileBoxNote from '../../icon/content/FileBoxNote32';
-import IconFileCanvas from '../../icon/content/FileCanvas32';
 import IconFileCode from '../../icon/content/FileCode32';
 import IconFileDefault from '../../icon/content/FileDefault32';
 import IconFileDwg from '../../icon/content/FileDwg32';
@@ -60,7 +60,7 @@ register(IconFileAudio, vars.bdlPurpleRain, [
     'wav',
     'wma',
 ]);
-register(IconFileCanvas, vars.bdlOrange, ['boxcanvas']);
+register(IconFileBoxCanvas, vars.bdlOrange, ['boxcanvas']);
 register(IconFileBoxNote, vars.bdlGray20, ['boxnote']);
 register(IconFileCode, '#E33D55', [
     'as',
