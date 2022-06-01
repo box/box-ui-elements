@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import TetherComponent from 'react-tether';
 import uniqueId from 'lodash/uniqueId';
@@ -9,7 +8,7 @@ import './DropdownMenu.scss';
 
 type Props = {
     bodyElement?: HTMLElement,
-    children: React.Node,
+    children: React.ReactNode,
     /** Forces menu to render within the scroll parent */
     className?: string,
     /** Forces menu to render within the visible window */
@@ -19,16 +18,16 @@ type Props = {
     /** Function called when menu is opened */
     isRightAligned: boolean,
     /** Handler for dropdown menu close events */
-    onMenuClose?: (event: SyntheticEvent<> | MouseEvent) => void,
+    onMenuClose?: (event: React.SyntheticEvent | MouseEvent) => void,
     /** Handler for dropdown menu open events */
     onMenuOpen?: () => void,
     /** Set true to close dropdown menu on event bubble instead of event capture */
-    useBubble?: boolean,
+    useBubble?: boolean
 };
 
 type State = {
-    initialFocusIndex: ?number,
-    isOpen: boolean,
+    initialFocusIndex: number | null | undefined,
+    isOpen: boolean
 };
 
 class DropdownMenu extends React.Component<Props, State> {
@@ -78,14 +77,14 @@ class DropdownMenu extends React.Component<Props, State> {
 
     menuButtonID: string;
 
-    openMenuAndSetFocusIndex = (initialFocusIndex: ?number) => {
+    openMenuAndSetFocusIndex = (initialFocusIndex?: number | null) => {
         this.setState({
             initialFocusIndex,
             isOpen: true,
         });
     };
 
-    closeMenu = (event: SyntheticEvent<> | MouseEvent) => {
+    closeMenu = (event: React.SyntheticEvent | MouseEvent) => {
         const { onMenuClose = noop } = this.props;
         this.setState(
             {
@@ -103,7 +102,7 @@ class DropdownMenu extends React.Component<Props, State> {
         }
     };
 
-    handleButtonClick = (event: SyntheticEvent<>) => {
+    handleButtonClick = (event: React.SyntheticEvent) => {
         const { isOpen } = this.state;
 
         event.stopPropagation();
@@ -116,7 +115,7 @@ class DropdownMenu extends React.Component<Props, State> {
         }
     };
 
-    handleButtonKeyDown = (event: SyntheticKeyboardEvent<>) => {
+    handleButtonKeyDown = (event: React.KeyboardEvent) => {
         const { isOpen } = this.state;
 
         switch (event.key) {
@@ -150,7 +149,7 @@ class DropdownMenu extends React.Component<Props, State> {
         }
     };
 
-    handleMenuClose = (isKeyboardEvent: boolean, event: SyntheticEvent<> | MouseEvent) => {
+    handleMenuClose = (isKeyboardEvent: boolean, event: React.SyntheticEvent | MouseEvent) => {
         this.closeMenu(event);
         this.focusButton();
     };
@@ -191,7 +190,7 @@ class DropdownMenu extends React.Component<Props, State> {
         const menuButton = elements[0];
         const menu = elements[1];
 
-        const menuButtonProps: Object = {
+        const menuButtonProps: any = {
             id: this.menuButtonID,
             key: this.menuButtonID,
             onClick: this.handleButtonClick, // NOTE: Overrides button's handler
@@ -214,7 +213,7 @@ class DropdownMenu extends React.Component<Props, State> {
             initialFocusIndex,
             onClose: this.handleMenuClose,
             'aria-labelledby': this.menuButtonID,
-        };
+        } as const;
 
         let attachment = 'top left';
         let targetAttachment = 'bottom left';
@@ -224,7 +223,10 @@ class DropdownMenu extends React.Component<Props, State> {
             targetAttachment = 'bottom right';
         }
 
-        const constraints = [];
+        const constraints: Array<{
+          attachment: string,
+          to: string
+        }> = [];
 
         if (constrainToScrollParent) {
             constraints.push({

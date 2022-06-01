@@ -6,6 +6,7 @@ export interface LinkBaseProps {
     component?: React.ElementType;
     href?: string;
     linkRef?: Function;
+    onClick?: Function;
     refProp?: string;
     rel?: string;
     target?: string;

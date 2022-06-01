@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import { boolean } from '@storybook/addon-knobs';
 
@@ -13,9 +12,10 @@ import PlainButton from '../plain-button/PlainButton';
 
 import DropdownMenu from './DropdownMenu';
 import notes from './DropdownMenu.stories.md';
+import { ButtonType } from '../button';
 
-function generateClickHandler(message) {
-    return event => {
+function generateClickHandler(message: string) {
+    return (event: any) => {
         event.preventDefault();
         /* eslint-disable-next-line no-console */
         console.log(`${message} menu option selected`);
@@ -33,7 +33,7 @@ export const basic = () => (
             console.log('menu closed');
         }}
     >
-        <PlainButton className="dropdown-menu-example-button" type="button">
+        <PlainButton className="dropdown-menu-example-button" type={ButtonType.BUTTON}>
             <MenuToggle>
                 <Avatar id="123" name="Jay Tee" />
             </MenuToggle>

@@ -21,8 +21,6 @@
 
 [options]
 sharedmemory.hash_table_pow=21
-esproposal.export_star_as=enable
-esproposal.optional_chaining=enable
 module.file_ext=.js
 module.file_ext=.scss
 module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/flow/EmptyFlowStub.js.flow'
@@ -38,7 +36,6 @@ module.name_mapper='draft-js/CompositeDecorator' -> '<PROJECT_ROOT>/flow/DraftJS
 module.name_mapper='draft-js/Modifier' -> '<PROJECT_ROOT>/flow/DraftJSFlowStub.js.flow'
 module.name_mapper='react-measure' -> '<PROJECT_ROOT>/flow/ReactMeasure.js.flow'
 server.max_workers=1
-suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 
 # Options to enforce in files with strict header: // @flow strict
 # https://flow.org/en/docs/strict/

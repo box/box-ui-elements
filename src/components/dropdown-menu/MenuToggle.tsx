@@ -1,15 +1,14 @@
-// @flow
 import * as React from 'react';
 
 import IconCaretDown from '../../icons/general/IconCaretDown';
 
 import './MenuToggle.scss';
 
-type Props = {
-    children?: React.Node,
-};
+export interface MenuToggleProps {
+    children?: React.ReactNode;
+}
 
-const MenuToggle = ({ children }: Props) => (
+const MenuToggle = ({ children }: MenuToggleProps) => (
     <span className="menu-toggle">
         {children}
         <IconCaretDown className="toggle-arrow" width={7} />
