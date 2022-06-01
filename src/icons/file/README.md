@@ -24,12 +24,12 @@ const icons = [
         component: require('../../icon/content/FileAudio32').default,
     },
     {
-        name: 'FileCanvas32',
-        component: require('../../icon/content/FileCanvas32').default,
-    },
-    {
         name: 'FileBoxNote32',
         component: require('../../icon/content/FileBoxNote32').default,
+    },
+    {
+        name: 'FileCanvas32',
+        component: require('../../icon/content/FileCanvas32').default,
     },
     {
         name: 'FileCode32',

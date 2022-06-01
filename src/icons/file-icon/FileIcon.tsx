@@ -3,8 +3,8 @@ import * as React from 'react';
 import { SVGProps } from '../../components/accessible-svg/AccessibleSVG';
 
 import IconFileAudio from '../../icon/content/FileAudio32';
-import IconFileCanvas from '../../icon/content/FileCanvas32';
 import IconFileBoxNote from '../../icon/content/FileBoxNote32';
+import IconFileCanvas from '../../icon/content/FileCanvas32';
 import IconFileCode from '../../icon/content/FileCode32';
 import IconFileDefault from '../../icon/content/FileDefault32';
 import IconFileDwg from '../../icon/content/FileDwg32';
