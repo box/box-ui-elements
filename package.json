@@ -85,8 +85,10 @@
         "test": "NODE_ICU_DATA=node_modules/full-icu BABEL_ENV=test NODE_ENV=test yarn jest -c scripts/jest/jest.config.js",
         "test:e2e": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:run",
         "test:e2e:open": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:open",
-        "test:images": "yarn test -c scripts/jest/jest.images.config.js --maxWorkers=4",
+        "test:images": "NODE_ICU_DATA=node_modules/full-icu BABEL_ENV=test NODE_ENV=test yarn jest -c scripts/jest/jest.images.config.js --maxWorkers=4",
+        "test:images:snapshots": "NODE_ICU_DATA=node_modules/full-icu BABEL_ENV=test NODE_ENV=test yarn jest -c scripts/jest/jest.images.config.js -u --maxWorkers=4",
         "test:visuals": "start-server-and-test start:storybook:ci http-get://localhost:6061 test:images",
+        "test:visuals:snapshots": "start-server-and-test start:storybook:ci http-get://localhost:6061 test:images:snapshots",
         "ts:defs": "tsc --declaration --emitDeclarationOnly --declarationDir es --noEmit false"
     },
     "browserslist": {
