@@ -32,6 +32,22 @@ exports[`icons/item-icon/ItemIcon render() should render bookmark component with
 />
 `;
 
+exports[`icons/item-icon/ItemIcon render() should render boxcanvas component 1`] = `
+<FileCanvas32
+  height={32}
+  width={32}
+/>
+`;
+
+exports[`icons/item-icon/ItemIcon render() should render boxcanvas component with additional props 1`] = `
+<FileCanvas32
+  className="test"
+  height={10}
+  title="title"
+  width={10}
+/>
+`;
+
 exports[`icons/item-icon/ItemIcon render() should render boxnote component 1`] = `
 <FileBoxNote32
   height={32}
