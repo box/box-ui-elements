@@ -62,6 +62,7 @@
         "cy:open": "yarn cy:wait; yarn cypress open",
         "cy:run": "yarn cy:wait; yarn cypress run --spec \"test/integration/**/*.test.js\"",
         "cy:wait": "wait-on http-get://localhost:6060/#",
+        "flow:check": "flow check",
         "lint": "npm-run-all lint:*",
         "lint:js": "eslint --max-warnings=0 .",
         "lint:ts": "tsc && eslint --ext=.tsx,.ts --max-warnings=0 .",
@@ -86,6 +87,7 @@
         "test:e2e": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:run",
         "test:e2e:open": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:open",
         "test:images": "yarn test -c scripts/jest/jest.images.config.js --maxWorkers=4",
+        "test:ts:migration": "npm-run-all flow:check lint start:storybook",
         "test:visuals": "start-server-and-test start:storybook:ci http-get://localhost:6061 test:images",
         "ts:defs": "tsc --declaration --emitDeclarationOnly --declarationDir es --noEmit false"
     },

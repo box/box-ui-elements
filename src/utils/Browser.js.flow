@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file Helper for some browser utilities
- * @author Box
- */
-
 let isDashSupported;
 
 class Browser {
@@ -27,9 +21,7 @@ class Browser {
      */
     static isMobile(): boolean {
         const userAgent = Browser.getUserAgent();
-        return (
-            /iphone|ipad|ipod|android|blackberry|bb10|mini|windows\sce|palm/i.test(userAgent) || /Mobi/i.test(userAgent)
-        );
+        return /iphone|ipad|ipod|android|blackberry|bb10|mini|windows\sce|palm/i.test(userAgent) || /Mobi/i.test(userAgent);
     }
 
     /**

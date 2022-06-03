@@ -213,7 +213,7 @@ class DropdownMenu extends React.Component<Props, State> {
             initialFocusIndex,
             onClose: this.handleMenuClose,
             'aria-labelledby': this.menuButtonID,
-        } as const;
+        };
 
         let attachment = 'top left';
         let targetAttachment = 'bottom left';
