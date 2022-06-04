@@ -39,6 +39,7 @@ import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentSidebar.scss';
+import './SidebarResponsiveness.scss';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,

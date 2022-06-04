@@ -2,6 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { injectIntl, IntlShape } from 'react-intl';
 import BoxSign28 from '../../icon/logo/BoxSign28';
+import Sign16 from '../../icon/fill/Sign16';
 import PlainButton, { PlainButtonProps } from '../../components/plain-button';
 // @ts-ignore Module is written in Flow
 import TargetedClickThroughGuideTooltip from '../../features/targeting/TargetedClickThroughGuideTooltip';
@@ -56,6 +57,7 @@ export function SidebarNavSign({ blockedReason, intl, status, targetingApi, ...r
             <Tooltip isDisabled={isTargeted} position={TooltipPosition.MIDDLE_LEFT} text={tooltipMessage}>
                 <PlainButton aria-label={label} className={buttonClassName} isDisabled={isSignDisabled} {...rest}>
                     <BoxSign28 className="bcs-SidebarNavSign-icon" />
+                    <Sign16 className="u-md-bcs-SidebarNavSign-icon" />
                 </PlainButton>
             </Tooltip>
         </FtuxTooltip>
