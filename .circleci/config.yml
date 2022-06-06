@@ -26,7 +26,7 @@ aliases:
 defaults: &defaults
   working_directory: ~/buie
   docker:
-    - image: cypress/base:12.4.0
+    - image: cypress/base:14.17.6
 
 version: 2
 jobs:
