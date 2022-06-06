@@ -64,6 +64,7 @@ module.exports = {
                 'no-shadow': 'off',
                 '@typescript-eslint/no-shadow': ['error'],
                 "@typescript-eslint/no-unused-expressions": 'error', // moves eslint no-unused-expressions to a typescript error
+                'import/order': 'warn',
             },
         },
     ],

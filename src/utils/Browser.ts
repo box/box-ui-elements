@@ -1,5 +1,4 @@
-
-let isDashSupported;
+let isDashSupported: boolean;
 
 class Browser {
     /**
@@ -9,7 +8,7 @@ class Browser {
      * @return {String} navigator userAgent
      */
     static getUserAgent(): string {
-        return global.navigator.userAgent;
+        return (global as any).navigator.userAgent;
     }
 
     /**
@@ -86,9 +85,9 @@ class Browser {
      * @param {boolean} recheck - recheck support
      * @return {boolean} true if dash is usable
      */
-    static canPlayDash(recheck: boolean = false) {
+    static canPlayDash(recheck = false) {
         if (typeof isDashSupported === 'undefined' || recheck) {
-            const mse = global.MediaSource;
+            const mse = (global as any).MediaSource;
             isDashSupported =
                 !!mse &&
                 typeof mse.isTypeSupported === 'function' &&
@@ -109,7 +108,7 @@ class Browser {
      * @return {boolean} whether writing to the clipboard is possible
      */
     static canWriteToClipboard() {
-        return !!(global.navigator.clipboard && global.navigator.clipboard.writeText);
+        return !!((global as any).navigator.clipboard && (global as any).navigator.clipboard.writeText);
     }
 
     /**
@@ -123,7 +122,7 @@ class Browser {
      * @return {boolean} whether reading from the clipboard is possible
      */
     static canReadFromClipboard() {
-        return !!(global.navigator.clipboard && global.navigator.clipboard.readText);
+        return !!((global as any).navigator.clipboard && (global as any).navigator.clipboard.readText);
     }
 }
 

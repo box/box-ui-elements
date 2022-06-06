@@ -5,7 +5,7 @@ import {
     FIELD_TYPE_MULTISELECT,
     FIELD_TYPE_STRING,
 } from '../../features/metadata-instance-fields/constants';
-import type { SkillCards } from './skills';
+import type {SkillCards} from './skills';
 
 type MetadataFieldType =
     | typeof FIELD_TYPE_DATE
@@ -15,96 +15,96 @@ type MetadataFieldType =
     | typeof FIELD_TYPE_STRING;
 
 type MetadataTemplateFieldOption = {
-    id?: string,
-    key: string,
+    id?: string;
+    key: string;
 };
 
 type MetadataTemplateField = {
-    description?: string,
-    displayName: string,
-    hidden?: boolean,
-    id: string,
-    isHidden?: boolean,
-    key: string, // V2
-    options?: Array<MetadataTemplateFieldOption>, // V3
-    type: MetadataFieldType,
+    description?: string;
+    displayName: string;
+    hidden?: boolean;
+    id: string;
+    isHidden?: boolean;
+    key: string; // V2
+    options?: Array<MetadataTemplateFieldOption>; // V3
+    type: MetadataFieldType;
 };
 
 type MetadataTemplate = {
-    displayName?: string,
-    fields?: Array<MetadataTemplateField>,
-    hidden?: boolean,
-    id: string,
-    isHidden?: boolean,
-    scope: string, // V2
-    templateKey: string, // V3
+    displayName?: string;
+    fields?: Array<MetadataTemplateField>;
+    hidden?: boolean;
+    id: string;
+    isHidden?: boolean;
+    scope: string; // V2
+    templateKey: string; // V3
 };
 
 type MetadataTemplateSchemaResponse = {
-    data?: MetadataTemplate,
+    data?: MetadataTemplate;
 };
 
 type MetadataSkillsTemplate = {
-    boxSkillsCards?: SkillCards,
+    boxSkillsCards?: SkillCards;
 };
 
 // $FlowFixMe flow strict doesn't like use of "any"
 type MetadataFieldValue = string | number | Array<any>;
 
-type MetadataFields = { [string]: MetadataFieldValue };
+type MetadataFields = { [key: string]: MetadataFieldValue };
 
 type MetadataQueryInstanceTypeField = {
-    displayName: string,
-    key: string,
-    options?: MetadataTemplateFieldOption,
-    type: string,
-    value: ?MetadataFieldValue,
+    displayName: string;
+    key: string;
+    options?: MetadataTemplateFieldOption;
+    type: string;
+    value?: MetadataFieldValue | null;
 };
 
 type MetadataQueryInstanceTemplate = {
-    fields: Array<MetadataQueryInstanceTypeField>,
-    id: string,
+    fields: Array<MetadataQueryInstanceTypeField>;
+    id: string;
 };
 
 type MetadataType = {
-    enterprise?: MetadataQueryInstanceTemplate,
-    global?: MetadataSkillsTemplate,
+    enterprise?: MetadataQueryInstanceTemplate;
+    global?: MetadataSkillsTemplate;
 };
 
 type MetadataCascadePolicy = {
-    canEdit?: boolean,
-    id?: string,
+    canEdit?: boolean;
+    id?: string;
 };
 
 type MetadataCascadingPolicyData = {
-    id?: string,
-    isEnabled: boolean,
-    overwrite: boolean,
+    id?: string;
+    isEnabled: boolean;
+    overwrite: boolean;
 };
 
 type MetadataInstance = {
-    canEdit: boolean,
-    cascadePolicy?: MetadataCascadePolicy,
-    data: MetadataFields,
-    id: string,
+    canEdit: boolean;
+    cascadePolicy?: MetadataCascadePolicy;
+    data: MetadataFields;
+    id: string;
 };
 
 type MetadataInstanceV2 = {
-    $canEdit: boolean,
-    $id: string,
-    $parent: string,
-    $scope: string,
-    $template: string,
-    $type: string,
-    $typeVersion: number,
-    $version: number,
+    $canEdit: boolean;
+    $id: string;
+    $parent: string;
+    $scope: string;
+    $template: string;
+    $type: string;
+    $typeVersion: number;
+    $version: number;
 };
 
 type MetadataEditor = {
-    hasError?: boolean,
-    instance: MetadataInstance,
-    isDirty?: boolean,
-    template: MetadataTemplate,
+    hasError?: boolean;
+    instance: MetadataInstance;
+    isDirty?: boolean;
+    template: MetadataTemplate;
 };
 
 export {

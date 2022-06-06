@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 import { SKILLS_KEYWORD, SKILLS_TIMELINE, SKILLS_TRANSCRIPT, SKILLS_FACE, SKILLS_STATUS } from '../../constants';
 import type { BoxItemVersion } from './core';
 
@@ -11,45 +13,39 @@ type SkillCardType =
 type SkillCardEntryType = 'text' | 'image';
 
 type SkillCardLocalizableType = {
-    code?: string,
-    message?: string,
+    code?: string;
+    message?: string;
 };
 
 type SkillCardEntryTimeSlice = {
-    end?: number,
-    start: number,
+    end?: number;
+    start: number;
 };
 
 type SkillCardEntry = {
-    appears?: Array<SkillCardEntryTimeSlice>,
-    image_url?: string,
-    label?: string,
-    text?: string,
-    type?: SkillCardEntryType,
+    appears?: Array<SkillCardEntryTimeSlice>;
+    // eslint-disable-next-line camelcase
+    image_url?: string;
+    label?: string;
+    text?: string;
+    type?: SkillCardEntryType;
 };
 
 type SkillCard = {
-    duration?: number,
-    entries: Array<SkillCardEntry>,
-    error?: string,
-    file_version: BoxItemVersion,
-    id?: string,
-    skill_card_title: SkillCardLocalizableType,
-    skill_card_type: SkillCardType,
-    status?: SkillCardLocalizableType,
-    title?: string,
-    type: 'skill_card',
+    duration?: number;
+    entries: Array<SkillCardEntry>;
+    error?: string;
+    file_version: BoxItemVersion;
+    id?: string;
+    skill_card_title: SkillCardLocalizableType;
+    skill_card_type: SkillCardType;
+    status?: SkillCardLocalizableType;
+    title?: string;
+    type: 'skill_card';
 };
 
 type SkillCards = {
-    cards: Array<SkillCard>,
+    cards: Array<SkillCard>;
 };
 
-export {
-    SkillCardEntryType,
-    SkillCardLocalizableType,
-    SkillCardEntryTimeSlice,
-    SkillCardEntry,
-    SkillCard,
-    SkillCards,
-};
+export { SkillCardEntryType, SkillCardLocalizableType, SkillCardEntryTimeSlice, SkillCardEntry, SkillCard, SkillCards };
