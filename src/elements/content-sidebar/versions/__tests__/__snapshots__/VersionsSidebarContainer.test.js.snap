@@ -1,31 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchError should create StaticVersionSidebar if versionUpsellExperience is STATIC_VERSION_HISTORY 1`] = `
+exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchError should create StaticVersionSidebar if onUpgradeClick is present 1`] = `
 <StaticVersionsSidebar
   error={
     Object {
-      "defaultMessage": "Sorry, version history is not available with your current account plan. To access versioning, select from one of our paid plans.",
-      "id": "be.sidebarVersions.notAvailable",
-    }
-  }
-  errorTitle={
-    Object {
-      "defaultMessage": "You don't have access to versioning",
-      "id": "be.sidebarVersions.accessError",
+      "defaultMessage": "File versions could not be retrieved.",
+      "id": "be.sidebarVersions.fetchError",
     }
   }
   isLoading={false}
   isWatermarked={false}
   onUpgradeClick={[Function]}
   parentName=""
-  showUpsellWithPicture={false}
   versionCount={0}
   versionLimit={Infinity}
   versions={Array []}
 />
 `;
 
-exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchError should create StaticVersionSidebar if versionUpsellExperience is STATIC_VERSION_HISTORY_WITH_PICTURE 1`] = `
+exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchError should create StaticVersionSidebar if showUpsellExperience is true 1`] = `
 <StaticVersionsSidebar
   error={
     Object {
@@ -33,42 +26,57 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchE
       "id": "be.sidebarVersions.notAvailable",
     }
   }
-  errorTitle={
-    Object {
-      "defaultMessage": "You don't have access to versioning",
-      "id": "be.sidebarVersions.accessError",
-    }
-  }
   isLoading={false}
   isWatermarked={false}
   onUpgradeClick={[Function]}
   parentName=""
-  showUpsellWithPicture={true}
   versionCount={0}
   versionLimit={Infinity}
   versions={Array []}
 />
 `;
 
-exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchError should set state to default values with error upsell message if onUpgradeClick is set 1`] = `
-<StaticVersionsSidebar
+exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchError should set state to default values with error message 1`] = `
+<VersionsSidebar
+  error={
+    Object {
+      "defaultMessage": "File versions could not be retrieved.",
+      "id": "be.sidebarVersions.fetchError",
+    }
+  }
+  fileId="12345"
+  isLoading={false}
+  isWatermarked={false}
+  onDelete={[Function]}
+  onDownload={[Function]}
+  onPreview={[Function]}
+  onPromote={[Function]}
+  onRestore={[Function]}
+  parentName=""
+  versionCount={0}
+  versionLimit={Infinity}
+  versions={Array []}
+/>
+`;
+
+exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchError should set state to default values with error upsell message if showVersionUpsell is true 1`] = `
+<VersionsSidebar
   error={
     Object {
       "defaultMessage": "Sorry, version history is not available with your current account plan. To access versioning, select from one of our paid plans.",
       "id": "be.sidebarVersions.notAvailable",
     }
   }
-  errorTitle={
-    Object {
-      "defaultMessage": "You don't have access to versioning",
-      "id": "be.sidebarVersions.accessError",
-    }
-  }
+  fileId="12345"
   isLoading={false}
   isWatermarked={false}
+  onDelete={[Function]}
+  onDownload={[Function]}
+  onPreview={[Function]}
+  onPromote={[Function]}
+  onRestore={[Function]}
   onUpgradeClick={[Function]}
   parentName=""
-  showUpsellWithPicture={false}
   versionCount={0}
   versionLimit={Infinity}
   versions={Array []}
