@@ -37,14 +37,8 @@ type Props = {
     onVersionPromote: VersionActionCallback,
     onVersionRestore: VersionActionCallback,
     parentName: string,
+    showUpsellExperience: boolean,
     versionId?: string,
-    versionUpsellExperience: ?string,
-};
-
-const UPSELL_TYPE = {
-    STATIC_VERSION_HISTORY: 'STATIC_VERSION_HISTORY',
-    STATIC_VERSION_HISTORY_WITH_PICTURE: 'STATIC_VERSION_HISTORY_WITH_PICTURE',
-    ERROR_MESSAGE: 'ERROR_MESSAGE',
 };
 
 type State = {
@@ -67,6 +61,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         onVersionPromote: noop,
         onVersionRestore: noop,
         parentName: '',
+        showUpsellExperience: false,
     };
 
     api: VersionsSidebarAPI;
@@ -84,10 +79,10 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     window: any = window;
 
     componentDidMount() {
-        const { onLoad, versionUpsellExperience } = this.props;
+        const { onLoad, showUpsellExperience } = this.props;
         this.initialize();
         this.fetchData().then(() => {
-            onLoad({ component: 'preview', feature: 'versions', versionUpsellExperience });
+            onLoad({ component: 'preview', feature: 'versions', showUpsellExperience });
         });
     }
 
@@ -294,21 +289,10 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     render() {
-        const { fileId, parentName, onUpgradeClick, versionUpsellExperience } = this.props;
+        const { fileId, parentName, onUpgradeClick, showUpsellExperience } = this.props;
 
-        if (
-            onUpgradeClick &&
-            (versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY ||
-                versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY_WITH_PICTURE)
-        ) {
-            return (
-                <StaticVersionsSidebar
-                    onUpgradeClick={onUpgradeClick}
-                    parentName={parentName}
-                    showUpsellWithPicture={versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY_WITH_PICTURE}
-                    {...this.state}
-                />
-            );
+        if (onUpgradeClick && showUpsellExperience) {
+            return <StaticVersionsSidebar onUpgradeClick={onUpgradeClick} parentName={parentName} {...this.state} />;
         }
 
         return (
