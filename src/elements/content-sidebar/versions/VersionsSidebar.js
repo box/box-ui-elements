@@ -23,17 +23,16 @@ type Props = {
     error?: MessageDescriptor,
     fileId: string,
     isLoading: boolean,
-    onUpgradeClick?: () => void,
     parentName: string,
     versionCount: number,
     versionLimit: number,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsSidebar = ({ error, isLoading, onUpgradeClick, parentName, versions, ...rest }: Props) => {
+const VersionsSidebar = ({ error, isLoading, parentName, versions, ...rest }: Props) => {
     const showLimit = versions.length >= MAX_VERSIONS;
     const showVersions = !!versions.length;
-    const showEmpty = !isLoading && !showVersions && !onUpgradeClick;
+    const showEmpty = !isLoading && !showVersions;
     const showError = !!error;
 
     return (

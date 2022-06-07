@@ -18,24 +18,6 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchE
 />
 `;
 
-exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchError should create StaticVersionSidebar if showUpsellExperience is true 1`] = `
-<StaticVersionsSidebar
-  error={
-    Object {
-      "defaultMessage": "Sorry, version history is not available with your current account plan. To access versioning, select from one of our paid plans.",
-      "id": "be.sidebarVersions.notAvailable",
-    }
-  }
-  isLoading={false}
-  isWatermarked={false}
-  onUpgradeClick={[Function]}
-  parentName=""
-  versionCount={0}
-  versionLimit={Infinity}
-  versions={Array []}
-/>
-`;
-
 exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchError should set state to default values with error message 1`] = `
 <VersionsSidebar
   error={
@@ -52,30 +34,6 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchE
   onPreview={[Function]}
   onPromote={[Function]}
   onRestore={[Function]}
-  parentName=""
-  versionCount={0}
-  versionLimit={Infinity}
-  versions={Array []}
-/>
-`;
-
-exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchError should set state to default values with error upsell message if showVersionUpsell is true 1`] = `
-<VersionsSidebar
-  error={
-    Object {
-      "defaultMessage": "Sorry, version history is not available with your current account plan. To access versioning, select from one of our paid plans.",
-      "id": "be.sidebarVersions.notAvailable",
-    }
-  }
-  fileId="12345"
-  isLoading={false}
-  isWatermarked={false}
-  onDelete={[Function]}
-  onDownload={[Function]}
-  onPreview={[Function]}
-  onPromote={[Function]}
-  onRestore={[Function]}
-  onUpgradeClick={[Function]}
   parentName=""
   versionCount={0}
   versionLimit={Infinity}
