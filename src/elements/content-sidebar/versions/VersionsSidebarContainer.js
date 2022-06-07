@@ -296,7 +296,6 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
                 onPreview={this.handleActionPreview}
                 onPromote={this.handleActionPromote}
                 onRestore={this.handleActionRestore}
-                onUpgradeClick={onUpgradeClick}
                 parentName={parentName}
                 {...this.state}
             />
