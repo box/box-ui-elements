@@ -147,11 +147,6 @@ const messages = defineMessages({
         defaultMessage: 'Server Error',
         description: 'Heading for inline error messages displayed due to a remote server issue.',
     },
-    versionAccessError: {
-        id: 'be.sidebarVersions.accessError',
-        defaultMessage: "You don't have access to versioning",
-        description: 'Heading for inline error messages with upsell.',
-    },
     versionUpgradeLink: {
         id: 'be.sidebarVersions.upgradeLink',
         defaultMessage: 'Upgrade Now',

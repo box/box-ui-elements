@@ -22,10 +22,9 @@ type Props = {
     isLoading: boolean,
     onUpgradeClick: () => void,
     parentName: string,
-    showUpsellWithPicture: boolean,
 };
 
-const StaticVersionsSidebar = ({ isLoading, onUpgradeClick, parentName, showUpsellWithPicture }: Props): React.Node => {
+const StaticVersionsSidebar = ({ isLoading, onUpgradeClick, parentName }: Props): React.Node => {
     const versionTimestamp = new Date();
     versionTimestamp.setDate(versionTimestamp.getDate() - 1);
 
@@ -73,7 +72,7 @@ const StaticVersionsSidebar = ({ isLoading, onUpgradeClick, parentName, showUpse
 
             <div className="bcs-StaticVersionSidebar-upsell-wrapper">
                 <div className="bcs-StaticVersionSidebar-upsell">
-                    {showUpsellWithPicture && <BoxDrive140 className="bcs-StaticVersionSidebar-upsell-icon" />}
+                    <BoxDrive140 className="bcs-StaticVersionSidebar-upsell-icon" />
                     <p className="bcs-StaticVersionSidebar-upsell-header">
                         <FormattedMessage {...messages.versionUpgradeLink} />
                     </p>
