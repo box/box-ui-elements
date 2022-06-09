@@ -20,6 +20,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   >
     <PlainButton
       className="lnk"
+      data-testid="usm-share-access-toggle"
       disabled={false}
     >
       <MenuToggle>
@@ -33,6 +34,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
     </PlainButton>
     <Menu
       className="usm-share-access-menu"
+      data-testid="usm-share-access-menu"
       isHidden={false}
       isSubmenu={false}
     />
@@ -60,6 +62,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   >
     <PlainButton
       className="lnk is-disabled bdl-is-disabled"
+      data-testid="usm-share-access-toggle"
       disabled={true}
     >
       <MenuToggle>
@@ -73,6 +76,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
     </PlainButton>
     <Menu
       className="usm-share-access-menu"
+      data-testid="usm-share-access-menu"
       isHidden={false}
       isSubmenu={false}
     />
@@ -100,6 +104,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   >
     <PlainButton
       className="lnk"
+      data-testid="usm-share-access-toggle"
       disabled={false}
     >
       <MenuToggle>
@@ -113,6 +118,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
     </PlainButton>
     <Menu
       className="usm-share-access-menu"
+      data-testid="usm-share-access-menu"
       isHidden={false}
       isSubmenu={false}
     >
@@ -169,6 +175,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   >
     <PlainButton
       className="lnk"
+      data-testid="usm-share-access-toggle"
       disabled={false}
     >
       <MenuToggle>
@@ -182,6 +189,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
     </PlainButton>
     <Menu
       className="usm-share-access-menu"
+      data-testid="usm-share-access-menu"
       isHidden={false}
       isSubmenu={false}
     />
@@ -209,6 +217,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   >
     <PlainButton
       className="lnk"
+      data-testid="usm-share-access-toggle"
       disabled={false}
     >
       <MenuToggle>
@@ -222,6 +231,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
     </PlainButton>
     <Menu
       className="usm-share-access-menu"
+      data-testid="usm-share-access-menu"
       isHidden={false}
       isSubmenu={false}
     >
@@ -334,6 +344,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   >
     <PlainButton
       className="lnk"
+      data-testid="usm-share-access-toggle"
       disabled={false}
     >
       <MenuToggle>
@@ -347,6 +358,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
     </PlainButton>
     <Menu
       className="usm-share-access-menu"
+      data-testid="usm-share-access-menu"
       isHidden={false}
       isSubmenu={false}
     >

@@ -73,6 +73,14 @@ describe('components/radar/RadarAnimation', () => {
         expect(wrapper.prop('offset')).toEqual(offset);
     });
 
+    test('should render correctly with tetherElementClassName', () => {
+        expect(
+            getWrapper({
+                tetherElementClassName: 'tether-element-class-name',
+            }),
+        ).toMatchSnapshot();
+    });
+
     describe('isShown', () => {
         test('should be shown when isShown is not provided', () => {
             expect(

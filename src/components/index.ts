@@ -16,8 +16,14 @@ export * from './checkbox';
 export { default as Collapsible } from './collapsible';
 export * from './collapsible';
 
+export { default as ContactDatalistItem } from './contact-datalist-item';
+export * from './contact-datalist-item';
+
 export { default as ContextMenu } from './context-menu';
 export * from './context-menu';
+
+export { default as DatalistItem } from './datalist-item';
+export * from './datalist-item';
 
 export { default as ErrorMask } from './error-mask';
 export * from './error-mask';
@@ -30,6 +36,9 @@ export * from './ghost';
 
 export { default as Header } from './header';
 export * from './header';
+
+export { default as InfiniteScroll } from './infinite-scroll';
+export * from './infinite-scroll';
 
 export { default as Label } from './label';
 export * from './label';
