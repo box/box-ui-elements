@@ -36,6 +36,7 @@ export function SidebarNavSign({ blockedReason, intl, status, targetingApi, ...r
     switch (blockedReason) {
         case 'shield-download':
         case 'shared-link':
+        case 'shield-sign':
             tooltipMessage = intl.formatMessage(messages.boxSignSecurityBlockedTooltip);
             break;
         case 'watermark':
