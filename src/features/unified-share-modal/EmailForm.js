@@ -11,11 +11,11 @@ import PrimaryButton from '../../components/primary-button';
 import { ModalActions } from '../../components/modal';
 import Button from '../../components/button';
 import Tooltip from '../../components/tooltip';
-import InlineNotice from '../../components/inline-notice';
+// $FlowFixMe InlineNotice is in typescript
+import InlineNotice, { InlineNoticeType } from '../../components/inline-notice';
 import PillSelectorDropdown from '../../components/pill-selector-dropdown';
 import commonMessages from '../../common/messages';
 import { emailValidator } from '../../utils/validators';
-import type { InlineNoticeType } from '../../common/types/core';
 import IconGlobe from '../../icons/general/IconGlobe';
 
 import ContactRestrictionNotice from './ContactRestrictionNotice';
