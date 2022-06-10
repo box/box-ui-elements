@@ -215,18 +215,6 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             expect(wrapper.exists('UpgradeBadge')).toBe(true);
         });
 
-        test('should render correct copy of upgrade CTA when showUpgradeOptions and showNewUpgradeText is enabled', () => {
-            const wrapper = getWrapper({
-                canInvite: true,
-                isFetching: false,
-                showNewUpgradeText: true,
-                showUpgradeOptions: true,
-            });
-            expect(wrapper.exists('UpgradeBadge')).toBe(true);
-            const msg = wrapper.find('FormattedCompMessage');
-            expect(msg.prop('id')).toEqual('boxui.unifiedShare.upgradeCollaboratorAccessDescription');
-        });
-
         test('should render correct upgrade inline notice when showUpgradeInlineNotice and showUpgradeOptions is enabled', () => {
             const wrapper = getWrapper({
                 canInvite: true,
