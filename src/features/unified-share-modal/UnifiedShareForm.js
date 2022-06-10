@@ -575,32 +575,28 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     }
 
     renderUpgradeLinkDescription() {
-        const { openUpgradePlanModal = () => {}, showNewUpgradeText = false, trackingProps = {} } = this.props;
+        const { openUpgradePlanModal = () => {}, trackingProps = {} } = this.props;
         const { inviteCollabsEmailTracking = {} } = trackingProps;
         const { upgradeLinkProps = {} } = inviteCollabsEmailTracking;
 
         return (
             <div className="upgrade-description">
                 <UpgradeBadge />
-                {showNewUpgradeText ? (
-                    this.renderCollaboratorMessage('external_collab_newcopy_upgrade_cta')
-                ) : (
-                    <FormattedMessage
-                        values={{
-                            upgradeGetMoreAccessControlsLink: (
-                                <PlainButton
-                                    className="upgrade-link"
-                                    onClick={openUpgradePlanModal}
-                                    type="button"
-                                    {...upgradeLinkProps}
-                                >
-                                    <FormattedMessage {...messages.upgradeGetMoreAccessControlsLink} />
-                                </PlainButton>
-                            ),
-                        }}
-                        {...messages.upgradeGetMoreAccessControlsDescription}
-                    />
-                )}
+                <FormattedMessage
+                    values={{
+                        upgradeGetMoreAccessControlsLink: (
+                            <PlainButton
+                                className="upgrade-link"
+                                onClick={openUpgradePlanModal}
+                                type="button"
+                                {...upgradeLinkProps}
+                            >
+                                <FormattedMessage {...messages.upgradeGetMoreAccessControlsLink} />
+                            </PlainButton>
+                        ),
+                    }}
+                    {...messages.upgradeGetMoreAccessControlsDescription}
+                />
             </div>
         );
     }
