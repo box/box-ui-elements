@@ -43,6 +43,7 @@ describe('elements/content-sidebar/SidebarNavSign', () => {
         blockedReason        | isDisabled | tooltipMessage
         ${'shield-download'} | ${true}    | ${'This action is unavailable due to a security policy.'}
         ${'shared-link'}     | ${true}    | ${'This action is unavailable due to a security policy.'}
+        ${'shield-sign'}     | ${true}    | ${'This action is unavailable due to a security policy.'}
         ${'watermark'}       | ${true}    | ${'This action is unavailable, because the file is watermarked.'}
         ${''}                | ${false}   | ${'Request Signature'}
     `(

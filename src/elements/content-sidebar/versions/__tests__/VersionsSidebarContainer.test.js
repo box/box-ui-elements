@@ -208,20 +208,6 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
             expect(wrapper.state()).toMatchObject({
                 error: messages.versionFetchError,
-                errorTitle: messages.versionServerError,
-            });
-        });
-        test('should set state to default values with error upsell message if onUpgradeClick is set', () => {
-            const wrapper = getWrapper({
-                onUpgradeClick: () => {},
-                versionUpsellExperience: 'STATIC_VERSION_HISTORY',
-            });
-
-            wrapper.instance().handleFetchError({ status: 403 });
-
-            expect(wrapper.state()).toEqual({
-                error: messages.versionNotAvailable,
-                errorTitle: messages.versionAccessError,
                 isLoading: false,
                 isWatermarked: false,
                 versionCount: 0,
@@ -232,20 +218,9 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should create StaticVersionSidebar if versionUpsellExperience is STATIC_VERSION_HISTORY', () => {
+        test('should create StaticVersionSidebar if onUpgradeClick is present', () => {
             const wrapper = getWrapper({
                 onUpgradeClick: () => {},
-                versionUpsellExperience: 'STATIC_VERSION_HISTORY',
-            });
-            wrapper.instance().handleFetchError({ status: 403 });
-
-            expect(wrapper).toMatchSnapshot();
-        });
-
-        test('should create StaticVersionSidebar if versionUpsellExperience is STATIC_VERSION_HISTORY_WITH_PICTURE', () => {
-            const wrapper = getWrapper({
-                onUpgradeClick: () => {},
-                versionUpsellExperience: 'STATIC_VERSION_HISTORY_WITH_PICTURE',
             });
             wrapper.instance().handleFetchError({ status: 403 });
 

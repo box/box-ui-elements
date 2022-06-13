@@ -38,18 +38,10 @@ type Props = {
     onVersionRestore: VersionActionCallback,
     parentName: string,
     versionId?: string,
-    versionUpsellExperience: ?string,
-};
-
-const UPSELL_TYPE = {
-    STATIC_VERSION_HISTORY: 'STATIC_VERSION_HISTORY',
-    STATIC_VERSION_HISTORY_WITH_PICTURE: 'STATIC_VERSION_HISTORY_WITH_PICTURE',
-    ERROR_MESSAGE: 'ERROR_MESSAGE',
 };
 
 type State = {
     error?: MessageDescriptor,
-    errorTitle?: MessageDescriptor,
     isLoading: boolean,
     isWatermarked: boolean,
     versionCount: number,
@@ -84,10 +76,10 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     window: any = window;
 
     componentDidMount() {
-        const { onLoad, versionUpsellExperience } = this.props;
+        const { onLoad } = this.props;
         this.initialize();
         this.fetchData().then(() => {
-            onLoad({ component: 'preview', feature: 'versions', versionUpsellExperience });
+            onLoad({ component: 'preview', feature: 'versions' });
         });
     }
 
@@ -178,13 +170,9 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.mergeResponse(data);
     };
 
-    handleFetchError = (error: Object): void => {
-        const { onUpgradeClick } = this.props;
-        const shouldShowVersionErrorWithUpsell = !!onUpgradeClick && error.status === 403;
-
+    handleFetchError = (): void => {
         this.setState({
-            error: shouldShowVersionErrorWithUpsell ? messages.versionNotAvailable : messages.versionFetchError,
-            errorTitle: shouldShowVersionErrorWithUpsell ? messages.versionAccessError : messages.versionServerError,
+            error: messages.versionFetchError,
             isLoading: false,
             isWatermarked: false,
             versionCount: 0,
@@ -294,21 +282,10 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     render() {
-        const { fileId, parentName, onUpgradeClick, versionUpsellExperience } = this.props;
+        const { fileId, parentName, onUpgradeClick } = this.props;
 
-        if (
-            onUpgradeClick &&
-            (versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY ||
-                versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY_WITH_PICTURE)
-        ) {
-            return (
-                <StaticVersionsSidebar
-                    onUpgradeClick={onUpgradeClick}
-                    parentName={parentName}
-                    showUpsellWithPicture={versionUpsellExperience === UPSELL_TYPE.STATIC_VERSION_HISTORY_WITH_PICTURE}
-                    {...this.state}
-                />
-            );
+        if (onUpgradeClick) {
+            return <StaticVersionsSidebar onUpgradeClick={onUpgradeClick} parentName={parentName} {...this.state} />;
         }
 
         return (
@@ -319,7 +296,6 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
                 onPreview={this.handleActionPreview}
                 onPromote={this.handleActionPromote}
                 onRestore={this.handleActionRestore}
-                onUpgradeClick={onUpgradeClick}
                 parentName={parentName}
                 {...this.state}
             />
