@@ -1,7 +1,7 @@
 queue_rules:
     - name: default
       conditions:
-        - status-success="Semantic Pull Request / Validate (pull_request_target)"
+        - status-success="Validate"
         - status-success=license/cla
         - status-success=lint_test_build
 
@@ -12,7 +12,7 @@ pull_request_rules:
       - "#approved-reviews-by>=1"
       - "#changes-requested-reviews-by=0"
       - "#review-requested=0"
-      - status-success="Semantic Pull Request / Validate (pull_request_target)"
+      - status-success="Validate"
       - status-success=license/cla
       - status-success=lint_test_build
       - label=ready-to-merge
