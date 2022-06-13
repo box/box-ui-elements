@@ -1,4 +1,5 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
 import ProgressBar from '..';
 
@@ -13,7 +14,7 @@ describe('components/progress-bar/ProgressBar', () => {
         const component = renderComponent({
             progress: 20,
         });
-        expect(component.find('.progress-bar').prop('style').width).toEqual(expected.width);
+        expect(component.find('.progress-bar').props().style?.width).toEqual(expected.width);
     });
 
     test('should render a progress bar with the input width and className', () => {
@@ -30,9 +31,9 @@ describe('components/progress-bar/ProgressBar', () => {
         expect(
             component
                 .find('.progress-bar')
-                .prop('className')
-                .indexOf(expected.className) !== -1,
+                .props()
+                .className?.indexOf(expected.className) !== -1,
         ).toBeTruthy();
-        expect(component.find('.progress-bar').prop('style').width).toEqual(expected.width);
+        expect(component.find('.progress-bar').props().style?.width).toEqual(expected.width);
     });
 });
