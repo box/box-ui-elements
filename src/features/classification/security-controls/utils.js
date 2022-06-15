@@ -18,7 +18,7 @@ import {
     SHARED_LINK_ACCESS_LEVEL,
 } from '../constants';
 
-const { SHARED_LINK, DOWNLOAD, EXTERNAL_COLLAB, APP, WATERMARK } = ACCESS_POLICY_RESTRICTION;
+const { APP, BOX_SIGN_REQUEST, DOWNLOAD, EXTERNAL_COLLAB, SHARED_LINK, WATERMARK } = ACCESS_POLICY_RESTRICTION;
 const { DEFAULT, WITH_APP_LIST, WITH_OVERFLOWN_APP_LIST } = APP_RESTRICTION_MESSAGE_TYPE;
 const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
 const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
@@ -26,20 +26,43 @@ const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY, PUBLIC } = SHARED_LINK_ACCESS_LEVE
 
 const getShortSecurityControlsMessage = (controls: Controls): Array<MessageItem> => {
     const items = [];
-    const { sharedLink, download, externalCollab, app, watermark } = controls;
+    const { app, boxSignRequest, download, externalCollab, sharedLink, watermark } = controls;
 
     // Shared link and external collab restrictions are grouped
     // together as generic "sharing" restrictions
     const sharing = (sharedLink && sharedLink.accessLevel !== PUBLIC) || externalCollab;
 
-    if (sharing && download && app) {
-        items.push({ message: messages.shortAllRestrictions });
+    // 4 restriction combinations
+    if (sharing && download && app && boxSignRequest) {
+        items.push({ message: messages.shortSharingDownloadAppSign });
+    }
+    // 3 restriction combinations
+    else if (sharing && download && app) {
+        items.push({ message: messages.shortSharingDownloadApp });
+    } else if (download && app && boxSignRequest) {
+        items.push({ message: messages.shortDownloadAppSign });
+    } else if (sharing && app && boxSignRequest) {
+        items.push({ message: messages.shortSharingAppSign });
+    } else if (sharing && download && boxSignRequest) {
+        items.push({ message: messages.shortSharingDownloadSign });
+    }
+    // 2 restriction combinations
+    else if (sharing && boxSignRequest) {
+        items.push({ message: messages.shortSharingSign });
+    } else if (download && boxSignRequest) {
+        items.push({ message: messages.shortDownloadSign });
+    } else if (app && boxSignRequest) {
+        items.push({ message: messages.shortAppSign });
     } else if (sharing && download) {
         items.push({ message: messages.shortSharingDownload });
     } else if (sharing && app) {
         items.push({ message: messages.shortSharingApp });
     } else if (download && app) {
         items.push({ message: messages.shortDownloadApp });
+    }
+    // 1 restriction combinations
+    else if (boxSignRequest) {
+        items.push({ message: messages.shortSign });
     } else if (sharing) {
         items.push({ message: messages.shortSharing });
     } else if (download) {
@@ -208,6 +231,13 @@ const getDownloadMessages = (controls: Controls): Array<MessageItem> => {
     return items;
 };
 
+const getBoxSignRequestMessages = (controls: Controls): Array<MessageItem> => {
+    const isBoxSignRequestRestrictionEnabled = getProp(controls, `${BOX_SIGN_REQUEST}.enabled`, false);
+    const items = isBoxSignRequestRestrictionEnabled ? [{ message: messages.boxSignRequestRestricted }] : [];
+
+    return items;
+};
+
 const getFullSecurityControlsMessages = (controls: Controls, maxAppCount?: number): Array<MessageItem> => {
     const items = [
         ...getSharedLinkMessages(controls),
@@ -215,6 +245,7 @@ const getFullSecurityControlsMessages = (controls: Controls, maxAppCount?: numbe
         ...getDownloadMessages(controls),
         ...getAppDownloadMessages(controls, maxAppCount),
         ...getWatermarkingMessages(controls),
+        ...getBoxSignRequestMessages(controls),
     ];
     return items;
 };
