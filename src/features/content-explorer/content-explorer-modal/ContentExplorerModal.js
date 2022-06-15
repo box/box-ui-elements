@@ -13,6 +13,7 @@ type Props = {
     customInput?: React.ComponentType<any>,
     description?: string,
     isOpen?: boolean,
+    isResponsive?: boolean,
     onRequestClose?: Function,
     onSelectItem?: (item: Object, index: number) => void,
     onSelectedClick?: () => void,
@@ -25,6 +26,7 @@ const ContentExplorerModal = ({
     title = '',
     description = '',
     isOpen = false,
+    isResponsive = false,
     onRequestClose,
     onSelectedClick,
     onSelectItem,
@@ -32,13 +34,18 @@ const ContentExplorerModal = ({
 }: Props) => (
     <Modal
         title={title}
-        className={classNames('content-explorer-modal', className)}
+        className={classNames(
+            'content-explorer-modal',
+            isResponsive ? 'content-explorer-modal--isResponsive' : '',
+            className,
+        )}
         isOpen={isOpen}
         onRequestClose={onRequestClose}
     >
         {description}
         <ContentExplorer
             customInput={customInput}
+            isResponsive={isResponsive}
             onCancelButtonClick={onRequestClose}
             onSelectedClick={onSelectedClick}
             onSelectItem={onSelectItem}

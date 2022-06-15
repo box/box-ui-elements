@@ -102,3 +102,10 @@
         }
     }
 }
+
+.content-explorer-modal--isResponsive .modal-content,
+.content-explorer--isResponsive {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}

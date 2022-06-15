@@ -5,6 +5,7 @@ import getProp from 'lodash/get';
 
 import Column from '@box/react-virtualized/dist/commonjs/Table/Column';
 import Table from '@box/react-virtualized/dist/commonjs/Table';
+import AutoSizer from '@box/react-virtualized/dist/commonjs/AutoSizer';
 import defaultTableRowRenderer from '@box/react-virtualized/dist/commonjs/Table/defaultRowRenderer';
 import '@box/react-virtualized/styles.css';
 
@@ -111,6 +112,7 @@ const itemLoadingPlaceholderRenderer = rendererParams => {
 const ItemList = ({
     contentExplorerMode,
     className = '',
+    isResponsive = false,
     items,
     numItemsPerPage,
     numTotalItems,
@@ -188,8 +190,30 @@ const ItemList = ({
         };
     }
 
+    const addAutoSizer = WrappedComponent => {
+        return props => {
+            return isResponsive ? (
+                <div style={{ flex: 1 }}>
+                    <AutoSizer>
+                        {({ width: w, height: h }) => <WrappedComponent {...props} width={w} height={h} />}
+                    </AutoSizer>
+                </div>
+            ) : (
+                <WrappedComponent {...props} />
+            );
+        };
+    };
+
+    TableComponent = addAutoSizer(TableComponent);
+
     return (
-        <div className={classNames('content-explorer-item-list table', className)}>
+        <div
+            className={classNames(
+                'content-explorer-item-list table',
+                isResponsive ? 'content-explorer-item-list--isResponsive' : '',
+                className,
+            )}
+        >
             <TableComponent
                 gridClassName="table-body"
                 headerClassName="table-header-item"
@@ -247,6 +271,7 @@ ItemList.displayName = 'ItemList';
 ItemList.propTypes = {
     className: PropTypes.string,
     contentExplorerMode: ContentExplorerModePropType.isRequired,
+    isResponsive: PropTypes.bool,
     items: ItemsPropType.isRequired,
     numItemsPerPage: PropTypes.number,
     numTotalItems: PropTypes.number,

@@ -88,7 +88,7 @@ const ContentExplorerActionButtons = ({
     };
 
     return (
-        <div className="content-explorer-action-buttons-container" {...actionButtonsProps}>
+        <div className="modal-actions" {...actionButtonsProps}>
             {renderStatus()}
             <Button
                 className="content-explorer-cancel-button"
