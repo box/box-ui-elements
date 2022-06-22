@@ -96,17 +96,6 @@ const messages = defineMessages({
         defaultMessage: 'Sharing, download and app restrictions apply',
         description:
             'Short summary displayed for items when sharing, download and app download restrictions are applied to them.',
-        id: 'boxui.securityControls.shortAllRestrictions',
-    },
-    // TODO
-    // The shortSharingDownloadApp message above is using the old shortAllRestrictions id in order to avoid introducing
-    // a breaking change (since changing the id would cause us to lose existing translations temporarily).
-    // Once translations with the new id are available, we can keep a single shortSharingDownloadApp message
-    // (with the correct matching id) and remove the old one.
-    shortSharingDownloadAppRenameMe: {
-        defaultMessage: 'Sharing, download and app restrictions apply',
-        description:
-            'Short summary displayed for items when sharing, download and app download restrictions are applied to them.',
         id: 'boxui.securityControls.shortSharingDownloadApp',
     },
     // Short summary messages - 4 restrictions
