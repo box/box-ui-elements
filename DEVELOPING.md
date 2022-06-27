@@ -179,6 +179,6 @@ gyp verb check python checking for Python executable "/usr/bin/python" in the PA
 gyp verb `which` failed Error: not found: /usr/bin/python
 ```
 
-1. Ensure you have python 2 installed.
-2. Get the location of your python installation via `which python`
+1. Ensure you have Python 2 installed
+2. Get the location of your Python installation via `which python`
 3. `yarn config set python /path/to/python`
