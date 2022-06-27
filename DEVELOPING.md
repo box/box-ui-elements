@@ -169,3 +169,15 @@ test('something happens', () => {
 ```
 
 See [React Testing Recipes](https://reactjs.org/docs/testing-recipes.html) for more examples.
+
+## Troubleshooting
+
+### Python
+
+```
+gyp verb check python checking for Python executable "/usr/bin/python" in the PATH
+gyp verb `which` failed Error: not found: /usr/bin/python
+```
+
+1. Get the location of your python installation via `which python`
+2. `yarn config set python /path/to/python`
