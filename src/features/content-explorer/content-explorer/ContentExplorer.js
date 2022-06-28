@@ -113,6 +113,8 @@ class ContentExplorer extends Component {
         itemNameLinkRenderer: PropTypes.func,
         /** Used to render item buttons in the list. Overrides the default buttons. */
         itemButtonRenderer: PropTypes.func,
+        /** Used to render the row element for items on the list. Allows row customizations such as adding tooltips, etc. */
+        itemRowRenderer: PropTypes.func,
         /** Width of the item list */
         listWidth: PropTypes.number.isRequired,
         /** Height of the item list */
@@ -409,6 +411,7 @@ class ContentExplorer extends Component {
             itemIconRenderer,
             itemNameLinkRenderer,
             itemButtonRenderer,
+            itemRowRenderer,
             listWidth,
             listHeight,
             searchInputProps,
@@ -490,6 +493,7 @@ class ContentExplorer extends Component {
                     itemIconRenderer={itemIconRenderer}
                     itemNameLinkRenderer={itemNameLinkRenderer}
                     items={items}
+                    itemRowRenderer={itemRowRenderer}
                     noItemsRenderer={this.renderItemListEmptyState}
                     numItemsPerPage={numItemsPerPage}
                     numTotalItems={numTotalItems}
