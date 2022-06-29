@@ -15,7 +15,7 @@ import AccessibleSVG, { SVGProps } from '../../components/accessible-svg/Accessi
  */
 
 const AdminFaq32 = (props: SVGProps) => (
-    <AccessibleSVG width={32} height={32} viewBox="0 0 32 32" {...props}>
+    <AccessibleSVG width={32} height={32} viewBox="0 0 32 30" {...props}>
         <path
             fillRule="evenodd"
             clipRule="evenodd"
