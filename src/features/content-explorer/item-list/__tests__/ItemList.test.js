@@ -227,6 +227,34 @@ describe('features/content-explorer/item-list/ItemList', () => {
         });
     });
 
+    describe('itemRowRenderer', () => {
+        test('should use defaultTableRowRenderer when itemRowRenderer is not provided', () => {
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+            ];
+            const wrapper = renderComponent({
+                items,
+            });
+
+            expect(wrapper.find('Grid [role="row"].ReactVirtualized__Table__row').length).toBe(items.length);
+        });
+
+        test('should use itemRowRenderer when specified', () => {
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+            ];
+            const itemRowRenderer = params => <div key={params.index} className="row-test" />;
+            const wrapper = renderComponent({
+                items,
+                itemRowRenderer,
+            });
+
+            expect(wrapper.find('Grid .row-test').length).toBe(items.length);
+        });
+    });
+
     describe('noItemsRenderer', () => {
         test('should use noItemsRenderer when no items are specified', () => {
             const emptyText = 'Empty';
