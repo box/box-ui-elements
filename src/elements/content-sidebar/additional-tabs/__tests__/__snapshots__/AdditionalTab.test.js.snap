@@ -35,7 +35,7 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
 >
   <PlainButton
     aria-label="test title"
-    className="bdl-AdditionalTab bdl-MoreOptions"
+    className="bdl-AdditionalTab bdl-is-overflow"
     data-testid="additionaltab"
     isDisabled={false}
     onClick={[Function]}
@@ -55,7 +55,7 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
 >
   <PlainButton
     aria-label="test title"
-    className="bdl-AdditionalTab bdl-MoreOptions"
+    className="bdl-AdditionalTab bdl-is-overflow"
     data-testid="additionaltab"
     isDisabled={false}
     onClick={[Function]}

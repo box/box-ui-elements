@@ -28,3 +28,26 @@ $sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
         }
     }
 }
+
+.is-responsive-web {
+    @include breakpoint($medium-screen) {
+        .be.bcs {
+            flex-basis: 100%;
+            flex-direction: column;
+            width: 100%;
+            min-width: 0;
+            max-width: none;
+            max-height: 48px;
+            transition: max-height .5s ease-in-out 0s;
+
+            &.bcs-is-open {
+                position: absolute;
+                bottom: 0;
+                z-index: 2;
+                flex-basis: 100%;
+                max-height: 100%;
+                transition: max-height .5s ease-in-out 0s;
+            }
+        }
+    }
+}

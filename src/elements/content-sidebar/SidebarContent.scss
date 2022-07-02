@@ -38,3 +38,16 @@
         width: 323px; // 17px less than the total width for scroll bar
     }
 }
+
+.is-responsive-web {
+    @include breakpoint($medium-screen) {
+        .bcs-content {
+            flex-basis: 100%;
+            width: auto;
+
+            .bcs-scroll-content {
+                width: auto;
+            }
+        }
+    }
+}

@@ -101,7 +101,7 @@ class AdditionalTab extends React.PureComponent<Props, State> {
         const className = classNames('bdl-AdditionalTab', {
             'bdl-is-hidden': isLoading,
             'bdl-is-disabled': isDisabled,
-            'bdl-MoreOptions': id && id < 0,
+            'bdl-is-overflow': id && id < 0,
         });
 
         const tooltipText = isDisabled ? this.getDisabledReason() : title;

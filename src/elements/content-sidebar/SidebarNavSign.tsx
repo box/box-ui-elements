@@ -57,7 +57,7 @@ export function SidebarNavSign({ blockedReason, intl, status, targetingApi, ...r
             <Tooltip isDisabled={isTargeted} position={TooltipPosition.MIDDLE_LEFT} text={tooltipMessage}>
                 <PlainButton aria-label={label} className={buttonClassName} isDisabled={isSignDisabled} {...rest}>
                     <BoxSign28 className="bcs-SidebarNavSign-icon" />
-                    <Sign16 className="u-md-bcs-SidebarNavSign-icon" />
+                    <Sign16 width={20} height={20} className="bcs-SidebarNavSign-icon--greyscale" />
                 </PlainButton>
             </Tooltip>
         </FtuxTooltip>

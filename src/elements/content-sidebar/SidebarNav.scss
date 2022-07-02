@@ -63,3 +63,88 @@
         }
     }
 }
+
+.is-responsive-web {
+    @include breakpoint($small-screen) {
+        .bcs .bcs-NavButton,
+        .bcs-SidebarNav-secondary .btn-plain,
+        .bdl-AdditionalTab {
+            width: 46px;
+            margin-right: 0;
+        }
+    }
+
+    @include breakpoint($medium-screen) {
+        .bcs-SidebarNav,
+        .bcs-SidebarNav-tabs {
+            flex-direction: row;
+        }
+
+        .bcs-SidebarNav-main {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .bcs-NavButton::before {
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+        }
+
+        .bcs-SidebarNav-secondary .btn-plain,
+        .bdl-AdditionalTab {
+            width: 48px;
+            height: 48px;
+            margin-right: 12px;
+        }
+
+        .bdl-AdditionalTabs > .bdl-AdditionalTab:not(.bdl-is-overflow),
+        .bdl-AdditionalTabs > .bdl-AdditionalTabPlaceholder {
+            display: none;
+        }
+
+        .bdl-AdditionalTabs > :last-child,
+        .bcs-SidebarNav-secondary > :last-child {
+            margin-right: 0;
+        }
+
+        .bcs-SidebarNav-overflow {
+            .bdl-AdditionalTabs {
+                padding: 0;
+            }
+
+            &::after,
+            &::before {
+                display: none;
+            }
+        }
+
+        .bcs-NavButton {
+            width: 48px;
+            height: 48px;
+            margin-right: 12px;
+
+            &::before {
+                top: 48px;
+                width: auto;
+            }
+        }
+
+        .bcs-SidebarNav-footer {
+            .btn-plain.bdl-SidebarToggleButton {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 32px;
+                height: 32px;
+                background-color: $bdl-gray-10;
+                transform: rotate(90deg);
+            }
+
+            .btn-plain.bdl-SidebarToggleButton.bdl-is-collapsed {
+                background-color: $bdl-box-blue;
+            }
+        }
+    }
+}
