@@ -315,7 +315,7 @@ class SharedLinkSettingsModal extends Component {
                 <div className="link-settings-modal-notice">
                     <FormattedMessage {...message} />{' '}
                     <Link
-                        href="https://community.box.com/t5/Using-Shared-Links/Shared-Link-Settings/ta-p/50250"
+                        href="https://support.box.com/hc/en-us/articles/360043697554-Configuring-Individual-Shared-Link-Settings"
                         target="_blank"
                     >
                         <FormattedMessage {...messages.sharedLinkSettingWarningLinkText} />

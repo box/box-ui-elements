@@ -8,6 +8,7 @@ const messages = defineMessages({
             'Label displayed above the security restrictions on the file due to the classification label and associated policies.',
         id: 'boxui.securityControls.securityControlsLabel',
     },
+    // Short summary messages - 1 restriction
     shortSharing: {
         defaultMessage: 'Sharing restriction applies',
         description: 'Short summary displayed for classification when a sharing restriction is applied to it',
@@ -29,6 +30,13 @@ const messages = defineMessages({
         description: 'Short summary displayed for classification when watermarking is applied to it',
         id: 'boxui.securityControls.shortWatermarking',
     },
+    shortSign: {
+        defaultMessage: 'Sign restrictions apply',
+        description:
+            'Short summary displayed for items when Sign restriction is applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortSign',
+    },
+    // Short summary messages - 2 restrictions
     shortSharingDownload: {
         defaultMessage: 'Sharing and download restrictions apply',
         description:
@@ -47,12 +55,57 @@ const messages = defineMessages({
             'Short summary displayed for classification when both download and app download restrictions are applied to it',
         id: 'boxui.securityControls.shortDownloadApp',
     },
-    shortAllRestrictions: {
+    shortSharingSign: {
+        defaultMessage: 'Sharing and Sign restrictions apply',
+        description:
+            'Short summary displayed for items when both sharing and Sign restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortSharingSign',
+    },
+    shortDownloadSign: {
+        defaultMessage: 'Download and Sign restrictions apply',
+        description:
+            'Short summary displayed for items when both download and Sign restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortDownloadSign',
+    },
+    shortAppSign: {
+        defaultMessage: 'App and Sign restrictions apply',
+        description:
+            'Short summary displayed for items when both app download and Sign restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortAppSign',
+    },
+    // Short summary messages - 3 restrictions
+    shortDownloadAppSign: {
+        defaultMessage: 'Download, app and Sign restrictions apply',
+        description:
+            'Short summary displayed for items when download, app download and Sign restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortDownloadAppSign',
+    },
+    shortSharingAppSign: {
+        defaultMessage: 'Sharing, app and Sign restrictions apply',
+        description:
+            'Short summary displayed for items when sharing, app download and Sign restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortSharingAppSign',
+    },
+    shortSharingDownloadSign: {
+        defaultMessage: 'Sharing, download and Sign restrictions apply',
+        description:
+            'Short summary displayed for items when sharing, download and Sign restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortSharingDownloadSign',
+    },
+    shortSharingDownloadApp: {
         defaultMessage: 'Sharing, download and app restrictions apply',
         description:
-            'Short summary displayed for classification when sharing, download and app download restrictions are applied to it',
-        id: 'boxui.securityControls.shortAllRestrictions',
+            'Short summary displayed for items when sharing, download and app download restrictions are applied to them.',
+        id: 'boxui.securityControls.shortSharingDownloadApp',
     },
+    // Short summary messages - 4 restrictions
+    shortSharingDownloadAppSign: {
+        defaultMessage: 'Sharing, download, app and Sign restrictions apply',
+        description:
+            'Short summary displayed for items when sharing, download, app download and Sign restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortSharingDownloadAppSign',
+    },
+    // Full list individual restriction bullets
     sharingCollabOnly: {
         defaultMessage: 'Shared links allowed for collaborators only.',
         description: 'Bullet point that summarizes shared link restriction applied to classification',
@@ -138,6 +191,12 @@ const messages = defineMessages({
             'Bullet point that summarizes web download restrictions applied to classification, when restriction applies to external users',
         id: 'boxui.securityControls.webDownloadExternal',
     },
+    boxSignRequestRestricted: {
+        defaultMessage: 'Sign restrictions apply.',
+        description:
+            'Bullet point that summarizes Box Sign request restrictions applied to items. Box Sign is a product name',
+        id: 'boxui.securityControls.boxSignRequestRestricted',
+    },
     // Mobile Download Restrictions
     mobileDownloadOwners: {
         defaultMessage: 'Download restricted on mobile, except Owners/Co-Owners.',
@@ -203,7 +262,7 @@ const messages = defineMessages({
             'Bullet point that summarizes desktop download restrictions applied to classification, when restriction applies to external users. Box Drive is a product name and not translated',
         id: 'boxui.securityControls.downloadExternal',
     },
-    // Security Constrols Modal
+    // Security Controls Modal
     viewAll: {
         defaultMessage: 'View All',
         description: 'Button to display security controls modal',

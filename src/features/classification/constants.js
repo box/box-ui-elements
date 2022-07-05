@@ -13,17 +13,19 @@ const SECURITY_CONTROLS_FORMAT: {
 
 const ACCESS_POLICY_RESTRICTION: {
     APP: 'app',
+    BOX_SIGN_REQUEST: 'boxSignRequest',
     DOWNLOAD: 'download',
     EXTERNAL_COLLAB: 'externalCollab',
     FTP: 'ftp',
     SHARED_LINK: 'sharedLink',
     WATERMARK: 'watermark',
 } = {
-    SHARED_LINK: 'sharedLink',
+    APP: 'app',
+    BOX_SIGN_REQUEST: 'boxSignRequest',
     DOWNLOAD: 'download',
     EXTERNAL_COLLAB: 'externalCollab',
-    APP: 'app',
     FTP: 'ftp',
+    SHARED_LINK: 'sharedLink',
     WATERMARK: 'watermark',
 };
 
