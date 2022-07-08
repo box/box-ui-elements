@@ -34,11 +34,9 @@ const ContentExplorerModal = ({
 }: Props) => (
     <Modal
         title={title}
-        className={classNames(
-            'content-explorer-modal',
-            isResponsive ? 'content-explorer-modal--isResponsive' : '',
-            className,
-        )}
+        className={classNames('content-explorer-modal', className, {
+            'bdl-ContentExplorerModal--responsive': isResponsive,
+        })}
         isOpen={isOpen}
         onRequestClose={onRequestClose}
     >

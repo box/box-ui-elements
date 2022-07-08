@@ -2,10 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
-
+import AutoSizer from '@box/react-virtualized/dist/commonjs/AutoSizer';
 import Column from '@box/react-virtualized/dist/commonjs/Table/Column';
 import Table from '@box/react-virtualized/dist/commonjs/Table';
-import AutoSizer from '@box/react-virtualized/dist/commonjs/AutoSizer';
 import defaultTableRowRenderer from '@box/react-virtualized/dist/commonjs/Table/defaultRowRenderer';
 import '@box/react-virtualized/styles.css';
 
@@ -190,7 +189,7 @@ const ItemList = ({
         };
     }
 
-    const addAutoSizer = WrappedComponent => {
+    const withAutoSizer = WrappedComponent => {
         return props => {
             return isResponsive ? (
                 <div style={{ flex: 1 }}>
@@ -204,15 +203,13 @@ const ItemList = ({
         };
     };
 
-    TableComponent = addAutoSizer(TableComponent);
+    TableComponent = withAutoSizer(TableComponent);
 
     return (
         <div
-            className={classNames(
-                'content-explorer-item-list table',
-                isResponsive ? 'content-explorer-item-list--isResponsive' : '',
-                className,
-            )}
+            className={classNames('content-explorer-item-list table', className, {
+                'bdl-ContentExplorerItemList--responsive': isResponsive,
+            })}
         >
             <TableComponent
                 gridClassName="table-body"
