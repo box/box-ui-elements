@@ -1,0 +1,8 @@
+.CommentForm {
+    width: 300px;
+
+    &__actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+}
