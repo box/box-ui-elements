@@ -51,7 +51,7 @@ const CommentForm = ({
     return (
         <div className="CommentForm">
             <Media>
-                { shouldShowAvatar && (
+                {shouldShowAvatar && (
                     <Media.Figure>
                         <Avatar avatarUrl={avatarUrl} />
                     </Media.Figure>
@@ -72,7 +72,7 @@ const CommentForm = ({
                             onChange={handleChange}
                             onFocus={() => setIsOpen(true)}
                             // onMention={getMentionWithQuery}
-                            placeholder={entityId ? undefined : formatMessage(messages.commentWrite)}
+                            placeholder={entityId ? undefined : messages.commentWrite}
                             validateOnBlur={false}
                         />
                         {isOpen && (
