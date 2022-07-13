@@ -36,7 +36,7 @@ export interface CommentProps {
     userName: string;
 }
 
-function Comment({ className }: CommentProps) {
+function Comment({ className, userName }: CommentProps) {
     const actions: ActionDropdownItem[] = [
         {
             icon: <Checkmark16 />,
@@ -71,7 +71,7 @@ function Comment({ className }: CommentProps) {
             </Media.Figure>
             <Media.Body>
                 <ActionDropdown items={actions} />
-                <div className="bdl-ThreadedComment-author">John Doe</div>
+                <div className="bdl-ThreadedComment-author">{userName}</div>
                 <div>Today at 9:42 AM</div>
             </Media.Body>
         </Media>
