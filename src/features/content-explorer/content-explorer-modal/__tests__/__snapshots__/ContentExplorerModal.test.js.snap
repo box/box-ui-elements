@@ -21,6 +21,7 @@ exports[`features/content-explorer/content-explorer-modal/ContentExplorerModal r
     customInput={[Function]}
     formatMessage={[Function]}
     initialFoldersPath={Array []}
+    isResponsive={false}
     items={Array []}
     listHeight={285}
     listWidth={560}
