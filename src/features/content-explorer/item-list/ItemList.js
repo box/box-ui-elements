@@ -123,6 +123,7 @@ const ItemList = ({
     itemIconRenderer,
     itemNameLinkRenderer,
     itemButtonRenderer,
+    itemRowRenderer = defaultTableRowRenderer,
     noItemsRenderer,
     width,
     height,
@@ -168,7 +169,7 @@ const ItemList = ({
             );
         }
 
-        const defaultRow = defaultTableRowRenderer({
+        const defaultRow = itemRowRenderer({
             ...rendererParams,
             className: itemRowClassname,
         });
@@ -280,6 +281,7 @@ ItemList.propTypes = {
     itemIconRenderer: PropTypes.func,
     itemNameLinkRenderer: PropTypes.func,
     itemButtonRenderer: PropTypes.func,
+    itemRowRenderer: PropTypes.func,
     noItemsRenderer: PropTypes.func,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
