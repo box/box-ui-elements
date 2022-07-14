@@ -69,38 +69,28 @@
         .bcs .bcs-NavButton,
         .bcs-SidebarNav-secondary .btn-plain,
         .bdl-AdditionalTab {
-            width: 46px;
+            width: $sidebarTabResponsiveSize - 2; //Reducing by 2px allows all the icons to fit on the smallest supported screen size (320px)
             margin-right: 0;
         }
     }
 
     @include breakpoint($medium-screen) {
         .bcs-SidebarNav,
-        .bcs-SidebarNav-tabs {
-            flex-direction: row;
-        }
-
+        .bcs-SidebarNav-tabs,
         .bcs-SidebarNav-main {
             display: flex;
             flex-direction: row;
         }
 
-        .bcs-NavButton::before {
-            right: 0;
-            bottom: 0;
-            left: 0;
-            height: 2px;
-        }
-
         .bcs-SidebarNav-secondary .btn-plain,
         .bdl-AdditionalTab {
-            width: 48px;
-            height: 48px;
+            width: $sidebarTabResponsiveSize;
+            height: $sidebarTabResponsiveSize;
             margin-right: 12px;
         }
 
-        .bdl-AdditionalTabs > .bdl-AdditionalTab:not(.bdl-is-overflow),
-        .bdl-AdditionalTabs > .bdl-AdditionalTabPlaceholder {
+        .bdl-AdditionalTab:not(.bdl-is-overflow),
+        .bdl-AdditionalTabPlaceholder {
             display: none;
         }
 
@@ -117,17 +107,6 @@
             &::after,
             &::before {
                 display: none;
-            }
-        }
-
-        .bcs-NavButton {
-            width: 48px;
-            height: 48px;
-            margin-right: 12px;
-
-            &::before {
-                top: 48px;
-                width: auto;
             }
         }
 

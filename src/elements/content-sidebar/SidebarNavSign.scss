@@ -9,7 +9,7 @@
     @include bdl-SidebarNavIcon;
 }
 
-.bcs-SidebarNavSign-icon--greyscale {
+.bcs-SidebarNavSign-icon--grayscale {
     display: none;
     margin-top: 2px; //for visual alignment
 }
@@ -20,7 +20,7 @@
             display: none;
         }
 
-        .bcs-SidebarNavSign-icon--greyscale {
+        .bcs-SidebarNavSign-icon--grayscale {
             display: inline;
         }
     }
