@@ -1,3 +1,18 @@
-.bdl-ThreadedComment-author {
+@import '../../styles/variables';
+
+.bdl-Comment {
+    font-size: .875rem;
+}
+
+.bdl-Comment-author {
+    margin-bottom: $bdl-grid-unit;
     font-weight: bold;
+}
+
+.bdl-Comment-date {
+    font-size: .75rem;
+}
+
+.bdl-Comment-content {
+    margin-top: 4 * $bdl-grid-unit;
 }

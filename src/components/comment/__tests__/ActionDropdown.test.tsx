@@ -1,57 +1,108 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import ActionDropdown, { ActionDropdownItem } from '../ActionDropdown';
+import noop from 'lodash/noop';
+import ActionDropdown from '../ActionDropdown';
 
 describe('components/comment/ActionDropdown', () => {
-    const fn1 = jest.fn();
-    const fn2 = jest.fn();
+    const commentId = '123';
 
-    const items: ActionDropdownItem[] = [
-        {
-            text: 'First',
-            onClick: fn1,
-        },
-        {
-            text: 'Second',
-            onClick: fn2,
-            icon: <div>Icon</div>,
-        },
-    ];
+    describe('should render if at least one callback function is passed', () => {
+        test('onResolve', () => {
+            render(<ActionDropdown commentId={commentId} onResolve={noop} />);
 
-    test('should render', async () => {
-        render(<ActionDropdown items={items} />);
+            expect(screen.getByTestId('Comment-actionDropdown')).toBeVisible();
+        });
 
-        expect(screen.getByTestId('ThreadedComment-actionDropdown')).toBeVisible();
+        test('onEdit', () => {
+            render(<ActionDropdown commentId={commentId} onEdit={noop} />);
+
+            expect(screen.getByTestId('Comment-actionDropdown')).toBeVisible();
+        });
+
+        test('onDelete', () => {
+            render(<ActionDropdown commentId={commentId} onDelete={noop} />);
+
+            expect(screen.getByTestId('Comment-actionDropdown')).toBeVisible();
+        });
     });
 
-    test('should not render if items list is empty', async () => {
-        render(<ActionDropdown items={[]} />);
+    test('should not render if callback functions are not passed', () => {
+        render(<ActionDropdown commentId={commentId} />);
 
-        expect(screen.queryByTestId('ThreadedComment-actionDropdown')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('Comment-actionDropdown')).not.toBeInTheDocument();
     });
 
-    test('should open menu with items visible when button is clicked', async () => {
-        render(<ActionDropdown items={items} />);
+    test('menu items corresponding to each callback function should be visible in the dropdown', async () => {
+        render(<ActionDropdown commentId={commentId} onEdit={noop} onResolve={noop} onDelete={noop} />);
 
-        fireEvent.click(screen.getByTestId('ThreadedComment-actionDropdown'));
+        fireEvent.click(screen.getByTestId('Comment-actionDropdown'));
 
-        expect(await screen.findByText('First')).toBeVisible();
-        expect(await screen.findByText('Second')).toBeVisible();
-        expect(await screen.findByText('Icon')).toBeVisible();
+        expect(await screen.findByTestId('ActionDropdownItem-resolve')).toBeVisible();
+        expect(await screen.findByTestId('ActionDropdownItem-edit')).toBeVisible();
+        expect(await screen.findByTestId('ActionDropdownItem-delete')).toBeVisible();
     });
 
-    test('should run onClick functions when cliked on menu items', async () => {
-        render(<ActionDropdown items={items} />);
+    describe('menu items should not be visible if corresponding callback functions are not passed', () => {
+        test('onResolve', () => {
+            render(<ActionDropdown commentId={commentId} onEdit={noop} onDelete={noop} />);
 
-        const menuBtn = screen.getByTestId('ThreadedComment-actionDropdown');
+            fireEvent.click(screen.getByTestId('Comment-actionDropdown'));
 
-        fireEvent.click(menuBtn);
-        fireEvent.click(await screen.findByText('First'));
+            expect(screen.queryByTestId('ActionDropdownItem-resolve')).not.toBeInTheDocument();
+        });
 
-        fireEvent.click(menuBtn);
-        fireEvent.click(await screen.findByText('Second'));
+        test('onEdit', () => {
+            render(<ActionDropdown commentId={commentId} onResolve={noop} onDelete={noop} />);
 
-        expect(fn1).toHaveBeenCalled();
-        expect(fn2).toHaveBeenCalled();
+            fireEvent.click(screen.getByTestId('Comment-actionDropdown'));
+
+            expect(screen.queryByTestId('ActionDropdownItem-edit')).not.toBeInTheDocument();
+        });
+
+        test('onDelete', () => {
+            render(<ActionDropdown commentId={commentId} onResolve={noop} onEdit={noop} />);
+
+            fireEvent.click(screen.getByTestId('Comment-actionDropdown'));
+
+            expect(screen.queryByTestId('ActionDropdownItem-delete')).not.toBeInTheDocument();
+        });
+    });
+
+    describe('should run each callback function with commentId when cliked on corresponding menu item', () => {
+        test('onResolve', async () => {
+            const onResolve = jest.fn();
+            render(<ActionDropdown commentId={commentId} onResolve={onResolve} />);
+
+            const menuBtn = screen.getByTestId('Comment-actionDropdown');
+
+            fireEvent.click(menuBtn);
+            fireEvent.click(await screen.findByTestId('ActionDropdownItem-resolve'));
+
+            expect(onResolve).toHaveBeenCalledWith(commentId);
+        });
+
+        test('onEdit', async () => {
+            const onEdit = jest.fn();
+            render(<ActionDropdown commentId={commentId} onEdit={onEdit} />);
+
+            const menuBtn = screen.getByTestId('Comment-actionDropdown');
+
+            fireEvent.click(menuBtn);
+            fireEvent.click(await screen.findByTestId('ActionDropdownItem-edit'));
+
+            expect(onEdit).toHaveBeenCalledWith(commentId);
+        });
+
+        test('onDelete', async () => {
+            const onDelete = jest.fn();
+            render(<ActionDropdown commentId={commentId} onDelete={onDelete} />);
+
+            const menuBtn = screen.getByTestId('Comment-actionDropdown');
+
+            fireEvent.click(menuBtn);
+            fireEvent.click(await screen.findByTestId('ActionDropdownItem-delete'));
+
+            expect(onDelete).toHaveBeenCalledWith(commentId);
+        });
     });
 });
