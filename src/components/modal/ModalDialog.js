@@ -112,12 +112,14 @@ class ModalDialog extends React.Component<Props> {
 
         return (
             <div ref={modalRef} className={classNames('modal-dialog', className)} {...divProps}>
-                <div className="modal-header">
-                    <h2 className="modal-title" id={`${this.modalID}-label`}>
-                        {title}
-                    </h2>
+                <div className="modal-header-container">
+                    <div className="modal-header">
+                        <h2 className="modal-title" id={`${this.modalID}-label`}>
+                            {title}
+                        </h2>
+                    </div>
+                    {this.renderCloseButton()}
                 </div>
-                {this.renderCloseButton()}
                 {this.renderContent()}
             </div>
         );
