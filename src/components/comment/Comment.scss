@@ -1,7 +1,7 @@
 @import '../../styles/variables';
 
 .bdl-Comment {
-    font-size: .875rem;
+    font-size: $bdl-fontSize--dejaBlue;
 }
 
 .bdl-Comment-author {
@@ -10,7 +10,7 @@
 }
 
 .bdl-Comment-date {
-    font-size: .75rem;
+    font-size: $bdl-fontSize-medium;
 }
 
 .bdl-Comment-content {

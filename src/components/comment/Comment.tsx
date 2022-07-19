@@ -2,7 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import Avatar from '../avatar';
 import Media from '../media/Media';
-import ActionDropdown from './ActionDropdown';
+import CommentActionDropdown from './CommentActionDropdown';
 
 import './Comment.scss';
 
@@ -12,9 +12,9 @@ export enum CommentType {
 }
 
 export interface CommentMention {
-    userName: string;
     name: string;
     profileUrl: string;
+    userName: string;
 }
 
 export interface CommentProps {
@@ -43,7 +43,7 @@ function Comment({ className, content, id, onDelete, onEdit, onResolve, userName
                     <Avatar className="bdl-Comment-avatar" />
                 </Media.Figure>
                 <Media.Body>
-                    <ActionDropdown commentId={id} onDelete={onDelete} onEdit={onEdit} onResolve={onResolve} />
+                    <CommentActionDropdown commentId={id} onDelete={onDelete} onEdit={onEdit} onResolve={onResolve} />
                     <div className="bdl-Comment-author">{userName}</div>
                     <div className="bdl-Comment-date">Today at 9:42 AM</div>
                 </Media.Body>

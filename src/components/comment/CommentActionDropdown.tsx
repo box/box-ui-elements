@@ -7,36 +7,36 @@ import Pencil16 from '../../icon/fill/Pencil16';
 import Trash16 from '../../icon/fill/Trash16';
 import messages from './messages';
 
-import './ActionDropdown.scss';
+import './CommentActionDropdown.scss';
 
-export interface ActionDropdownProps {
+export interface CommentActionDropdownProps {
     commentId: string;
     onDelete?: (commentId: string) => void;
     onEdit?: (commentId: string) => void;
     onResolve?: (commentId: string) => void;
 }
 
-function ActionDropdown({ commentId, onDelete, onEdit, onResolve }: ActionDropdownProps) {
+function CommentActionDropdown({ commentId, onDelete, onEdit, onResolve }: CommentActionDropdownProps) {
     if (!onDelete && !onEdit && !onResolve) {
         return null;
     }
 
     return (
-        <Media.Menu data-testid="Comment-actionDropdown" className="bdl-Comment-actionDropdown">
+        <Media.Menu data-testid="CommentActionDropdown" className="bdl-CommentActionDropdown">
             {onResolve && (
-                <MenuItem data-testid="ActionDropdownItem-resolve" onClick={() => onResolve(commentId)}>
+                <MenuItem onClick={() => onResolve(commentId)}>
                     <Checkmark16 />
                     <FormattedMessage {...messages.commentResolveMenuItem} />
                 </MenuItem>
             )}
             {onEdit && (
-                <MenuItem data-testid="ActionDropdownItem-edit" onClick={() => onEdit(commentId)}>
+                <MenuItem onClick={() => onEdit(commentId)}>
                     <Pencil16 />
                     <FormattedMessage {...messages.commentEditMenuItem} />
                 </MenuItem>
             )}
             {onDelete && (
-                <MenuItem data-testid="ActionDropdownItem-delete" onClick={() => onDelete(commentId)}>
+                <MenuItem onClick={() => onDelete(commentId)}>
                     <Trash16 />
                     <FormattedMessage {...messages.commentDeleteMenuItem} />
                 </MenuItem>
@@ -45,4 +45,4 @@ function ActionDropdown({ commentId, onDelete, onEdit, onResolve }: ActionDropdo
     );
 }
 
-export default ActionDropdown;
+export default CommentActionDropdown;
