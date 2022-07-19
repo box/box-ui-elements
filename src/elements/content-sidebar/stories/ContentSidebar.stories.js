@@ -24,6 +24,25 @@ export const Sidebar = () => (
         />
     </IntlProvider>
 );
+export const Sidebar2 = () => (
+    <IntlProvider locale="en">
+        <ContentSidebar
+            activitySidebarProps={{
+                hasTasks: false,
+                hasVersions: false,
+            }}
+            features={global.FEATURES}
+            fileId={global.FILE_ID}
+            hasActivityFeed
+            hasMetadata={false}
+            hasNav={false}
+            hasSkills={false}
+            hasVersions={false}
+            token={global.TOKEN}
+            {...global.PROPS}
+        />
+    </IntlProvider>
+);
 
 export default {
     title: 'Elements|ContentSidebar',

@@ -302,7 +302,8 @@ class Feed extends Base {
         {
             shouldShowAnnotations = false,
             shouldShowAppActivity = false,
-        }: { shouldShowAnnotations?: boolean, shouldShowAppActivity?: boolean } = {},
+            shouldShowVersions = true,
+        }: { shouldShowAnnotations?: boolean, shouldShowAppActivity?: boolean, shouldShowVersions?: boolean } = {},
     ): void {
         const { id, permissions = {} } = file;
         const cachedItems = this.getCachedItems(id);
@@ -323,8 +324,8 @@ class Feed extends Base {
         this.errors = [];
         this.errorCallback = onError;
         const annotationsPromise = shouldShowAnnotations ? this.fetchAnnotations(permissions) : Promise.resolve();
-        const versionsPromise = this.fetchVersions();
-        const currentVersionPromise = this.fetchCurrentVersion();
+        const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
+        const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
         const commentsPromise = this.fetchComments(permissions);
         const tasksPromise = this.fetchTasksNew();
         const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
@@ -337,7 +338,9 @@ class Feed extends Base {
             appActivityPromise,
             annotationsPromise,
         ]).then(([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
-            const versionsWithCurrent = this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file);
+            const versionsWithCurrent = currentVersion
+                ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
+                : [];
             const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
             if (!this.isDestroyed()) {
                 this.setCachedItems(id, sortedFeedItems);
