@@ -1,3 +1,4 @@
+jest.retryTimes(3);
 describe('features/sandbox-banner/SandboxBanner', () => {
     test.each([['features-sandboxbanner--basic']])('looks visually correct when using story %s', async id => {
         const image = await BoxVisualTestUtils.takeScreenshot(id);
@@ -9,6 +10,8 @@ describe('features/sandbox-banner/SandboxBanner', () => {
             'features-sandboxbanner--basic',
             '.bdl-SandboxBanner',
             'hover',
+            undefined,
+            '.bdl-Tooltip',
         );
         return expect(image).toMatchImageSnapshot();
     });
