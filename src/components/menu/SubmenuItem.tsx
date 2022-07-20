@@ -103,6 +103,12 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
         if (onClick) {
             onClick(event);
         }
+
+        // If event target is triggering submenu element, do not propagate to close menu
+        if (this.submenuEl && !this.submenuEl.contains(event.target as Node)) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
     };
 
     submenuTriggerEl: HTMLElement | null | undefined;
