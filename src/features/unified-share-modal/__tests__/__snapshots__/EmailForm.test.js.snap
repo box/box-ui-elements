@@ -217,7 +217,9 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       className=""
       isDisabled={false}
       isLoading={false}
+      isResponsive={false}
       onClick={[Function]}
+      showIcon={true}
       showRadar={false}
       type="button"
     >
@@ -302,7 +304,9 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       className=""
       isDisabled={false}
       isLoading={false}
+      isResponsive={false}
       onClick={[Function]}
+      showIcon={true}
       showRadar={false}
       type="button"
     >
@@ -439,7 +443,9 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       className=""
       isDisabled={false}
       isLoading={false}
+      isResponsive={false}
       onClick={[Function]}
+      showIcon={true}
       showRadar={false}
       type="button"
     >
@@ -529,7 +535,9 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       className=""
       isDisabled={false}
       isLoading={false}
+      isResponsive={false}
       onClick={[Function]}
+      showIcon={true}
       showRadar={false}
       type="button"
     >
@@ -630,7 +638,9 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       className=""
       isDisabled={false}
       isLoading={false}
+      isResponsive={false}
       onClick={[Function]}
+      showIcon={true}
       showRadar={false}
       type="button"
     >

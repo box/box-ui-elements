@@ -24,6 +24,8 @@ exports[`features/metadata-instance-editor/fields/Footer should correctly render
       className=""
       data-resin-target="metadata-instancecancel"
       isLoading={false}
+      isResponsive={false}
+      showIcon={true}
       showRadar={false}
       type="button"
     >

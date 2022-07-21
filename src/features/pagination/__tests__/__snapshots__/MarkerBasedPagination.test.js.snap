@@ -73,12 +73,14 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                   className=""
                   isDisabled={false}
                   isLoading={false}
+                  isResponsive={false}
                   key=".0"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
+                  showIcon={true}
                   showRadar={false}
                   tabIndex="0"
                   type="submit"
@@ -144,7 +146,9 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
               className=""
               isDisabled={true}
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -231,7 +235,9 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
               className=""
               isDisabled={true}
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -320,12 +326,14 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                   className=""
                   isDisabled={false}
                   isLoading={false}
+                  isResponsive={false}
                   key=".0"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
+                  showIcon={true}
                   showRadar={false}
                   tabIndex="0"
                   type="submit"
@@ -449,12 +457,14 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                   className=""
                   isDisabled={false}
                   isLoading={false}
+                  isResponsive={false}
                   key=".0"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
+                  showIcon={true}
                   showRadar={false}
                   tabIndex="0"
                   type="submit"
@@ -550,12 +560,14 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                   className=""
                   isDisabled={false}
                   isLoading={false}
+                  isResponsive={false}
                   key=".0"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
+                  showIcon={true}
                   showRadar={false}
                   tabIndex="0"
                   type="submit"

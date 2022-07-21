@@ -41,7 +41,7 @@
         @include bdl-Button--large;
     }
 
-    &.bdl-has-icon {
+    &.bdl-show-icon {
         // Buttons with icons use flexbox to align content instead of line-height/padding
         display: inline-flex;
         align-items: center;
@@ -74,6 +74,10 @@
                 margin: ($bdl-btn-height-large - $bdl-btn-icon-size) / 2 - $bdl-btn-border-width;
             }
         }
+    }
+
+    &:not(.bdl-show-icon) .bdl-btn-icon {
+        display: none;
     }
 
     &:active,
@@ -195,6 +199,18 @@ button svg {
         .btn-content,
         .bdl-btn-icon {
             background-color: $bdl-gray-30;
+        }
+    }
+}
+
+@include breakpoint($medium-screen) {
+    .btn.bdl-Button--responsive {
+        .btn-content {
+            display: none;
+        }
+
+        .bdl-btn-icon {
+            display: block;
         }
     }
 }

@@ -93,6 +93,8 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render d
     <Button
       className="btn-done"
       isLoading={false}
+      isResponsive={false}
+      showIcon={true}
       showRadar={false}
       type="submit"
     >
@@ -199,6 +201,8 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render e
     <Button
       className="btn-done"
       isLoading={false}
+      isResponsive={false}
+      showIcon={true}
       showRadar={false}
       type="submit"
     >

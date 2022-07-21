@@ -11,6 +11,8 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
   <Button
     className="bdl-Pagination-toggle"
     isLoading={false}
+    isResponsive={false}
+    showIcon={true}
     showRadar={false}
     type="submit"
   >
@@ -52,6 +54,8 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
   <Button
     className="bdl-Pagination-toggle"
     isLoading={false}
+    isResponsive={false}
+    showIcon={true}
     showRadar={false}
     type="submit"
   >
@@ -121,6 +125,8 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
   <Button
     className="bdl-Pagination-toggle"
     isLoading={false}
+    isResponsive={false}
+    showIcon={true}
     showRadar={false}
     type="submit"
   >

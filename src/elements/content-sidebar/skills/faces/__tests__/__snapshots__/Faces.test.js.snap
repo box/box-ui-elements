@@ -164,7 +164,9 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render sav
       className=""
       data-resin-target="skill-faceeditcancel"
       isLoading={false}
+      isResponsive={false}
       onClick={[Function]}
+      showIcon={true}
       showRadar={false}
       type="button"
     >

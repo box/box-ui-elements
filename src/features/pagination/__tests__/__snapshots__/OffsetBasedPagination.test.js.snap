@@ -59,9 +59,11 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 className="bdl-Pagination-toggle"
                 id="menubutton2"
                 isLoading={false}
+                isResponsive={false}
                 key=".$menubutton2"
                 onClick={[Function]}
                 onKeyDown={[Function]}
+                showIcon={true}
                 showRadar={false}
                 type="submit"
               >
@@ -115,7 +117,9 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               className=""
               isDisabled={true}
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -204,12 +208,14 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   className=""
                   isDisabled={false}
                   isLoading={false}
+                  isResponsive={false}
                   key=".0"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
+                  showIcon={true}
                   showRadar={false}
                   tabIndex="0"
                   type="submit"
@@ -327,9 +333,11 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 className="bdl-Pagination-toggle"
                 id="menubutton7"
                 isLoading={false}
+                isResponsive={false}
                 key=".$menubutton7"
                 onClick={[Function]}
                 onKeyDown={[Function]}
+                showIcon={true}
                 showRadar={false}
                 type="submit"
               >
@@ -383,7 +391,9 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               className=""
               isDisabled={true}
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -472,12 +482,14 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   className=""
                   isDisabled={false}
                   isLoading={false}
+                  isResponsive={false}
                   key=".0"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
+                  showIcon={true}
                   showRadar={false}
                   tabIndex="0"
                   type="submit"
@@ -595,9 +607,11 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 className="bdl-Pagination-toggle"
                 id="menubutton12"
                 isLoading={false}
+                isResponsive={false}
                 key=".$menubutton12"
                 onClick={[Function]}
                 onKeyDown={[Function]}
+                showIcon={true}
                 showRadar={false}
                 type="submit"
               >
@@ -651,7 +665,9 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               className=""
               isDisabled={true}
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -740,12 +756,14 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   className=""
                   isDisabled={false}
                   isLoading={false}
+                  isResponsive={false}
                   key=".0"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
+                  showIcon={true}
                   showRadar={false}
                   tabIndex="0"
                   type="submit"
@@ -863,9 +881,11 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 className="bdl-Pagination-toggle"
                 id="menubutton17"
                 isLoading={false}
+                isResponsive={false}
                 key=".$menubutton17"
                 onClick={[Function]}
                 onKeyDown={[Function]}
+                showIcon={true}
                 showRadar={false}
                 type="submit"
               >
@@ -949,12 +969,14 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   className=""
                   isDisabled={false}
                   isLoading={false}
+                  isResponsive={false}
                   key=".0"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
+                  showIcon={true}
                   showRadar={false}
                   tabIndex="0"
                   type="submit"
@@ -1050,12 +1072,14 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   className=""
                   isDisabled={false}
                   isLoading={false}
+                  isResponsive={false}
                   key=".0"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
+                  showIcon={true}
                   showRadar={false}
                   tabIndex="0"
                   type="submit"
@@ -1173,9 +1197,11 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 className="bdl-Pagination-toggle"
                 id="menubutton23"
                 isLoading={false}
+                isResponsive={false}
                 key=".$menubutton23"
                 onClick={[Function]}
                 onKeyDown={[Function]}
+                showIcon={true}
                 showRadar={false}
                 type="submit"
               >
@@ -1259,12 +1285,14 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   className=""
                   isDisabled={false}
                   isLoading={false}
+                  isResponsive={false}
                   key=".0"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
+                  showIcon={true}
                   showRadar={false}
                   tabIndex="0"
                   type="submit"
@@ -1360,12 +1388,14 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   className=""
                   isDisabled={false}
                   isLoading={false}
+                  isResponsive={false}
                   key=".0"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
+                  showIcon={true}
                   showRadar={false}
                   tabIndex="0"
                   type="submit"
@@ -1483,9 +1513,11 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 className="bdl-Pagination-toggle"
                 id="menubutton29"
                 isLoading={false}
+                isResponsive={false}
                 key=".$menubutton29"
                 onClick={[Function]}
                 onKeyDown={[Function]}
+                showIcon={true}
                 showRadar={false}
                 type="submit"
               >
@@ -1569,12 +1601,14 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                   className=""
                   isDisabled={false}
                   isLoading={false}
+                  isResponsive={false}
                   key=".0"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
                   onMouseEnter={[Function]}
                   onMouseLeave={[Function]}
+                  showIcon={true}
                   showRadar={false}
                   tabIndex="0"
                   type="submit"
@@ -1640,7 +1674,9 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               className=""
               isDisabled={true}
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >

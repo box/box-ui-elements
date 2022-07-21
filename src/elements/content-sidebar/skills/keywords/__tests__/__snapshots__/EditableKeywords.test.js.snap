@@ -39,7 +39,9 @@ exports[`elements/content-sidebar/Skills/Keywords/EditableKeywords should correc
       className=""
       data-resin-target="skill-keywordeditcancel"
       isLoading={false}
+      isResponsive={false}
       onClick={[MockFunction]}
+      showIcon={true}
       showRadar={false}
       type="button"
     >

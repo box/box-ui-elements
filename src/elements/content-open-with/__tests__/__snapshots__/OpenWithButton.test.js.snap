@@ -13,7 +13,9 @@ exports[`elements/content-open-with/OpenWithButton should force the tooltip open
     data-testid="singleintegrationbutton"
     isDisabled={true}
     isLoading={false}
+    isResponsive={false}
     onClick={[Function]}
+    showIcon={true}
     showRadar={false}
     type="submit"
   >
@@ -45,7 +47,9 @@ exports[`elements/content-open-with/OpenWithButton should render as disabled if 
     data-testid="singleintegrationbutton"
     isDisabled={true}
     isLoading={false}
+    isResponsive={false}
     onClick={[Function]}
+    showIcon={true}
     showRadar={false}
     type="submit"
   >
@@ -77,7 +81,9 @@ exports[`elements/content-open-with/OpenWithButton should render as disabled if 
     data-testid="singleintegrationbutton"
     isDisabled={true}
     isLoading={false}
+    isResponsive={false}
     onClick={[Function]}
+    showIcon={true}
     showRadar={false}
     type="submit"
   >
@@ -109,7 +115,9 @@ exports[`elements/content-open-with/OpenWithButton should render with the correc
     data-testid="singleintegrationbutton"
     isDisabled={false}
     isLoading={false}
+    isResponsive={false}
     onClick={[Function]}
+    showIcon={true}
     showRadar={false}
     type="submit"
   >

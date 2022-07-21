@@ -29,7 +29,9 @@ exports[`elements/Pagination/PaginationControls should render properly for offse
         className=""
         isDisabled={false}
         isLoading={false}
+        isResponsive={false}
         onClick={[MockFunction]}
+        showIcon={true}
         showRadar={false}
         type="submit"
       >
@@ -52,7 +54,9 @@ exports[`elements/Pagination/PaginationControls should render properly for offse
         className=""
         isDisabled={true}
         isLoading={false}
+        isResponsive={false}
         onClick={[MockFunction]}
+        showIcon={true}
         showRadar={false}
         type="submit"
       >
@@ -86,7 +90,9 @@ exports[`elements/Pagination/PaginationControls should render properly for offse
         className=""
         isDisabled={false}
         isLoading={false}
+        isResponsive={false}
         onClick={[MockFunction]}
+        showIcon={true}
         showRadar={false}
         type="submit"
       >
@@ -109,7 +115,9 @@ exports[`elements/Pagination/PaginationControls should render properly for offse
         className=""
         isDisabled={true}
         isLoading={false}
+        isResponsive={false}
         onClick={[MockFunction]}
+        showIcon={true}
         showRadar={false}
         type="submit"
       >

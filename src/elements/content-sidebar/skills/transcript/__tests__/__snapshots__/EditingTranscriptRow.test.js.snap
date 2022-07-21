@@ -27,6 +27,8 @@ exports[`elements/content-sidebar/Skills/Transcript/TranscriptRow should correct
         className=""
         data-resin-target="skill-transcripteditcancel"
         isLoading={false}
+        isResponsive={false}
+        showIcon={true}
         showRadar={false}
         type="button"
       >
@@ -71,6 +73,8 @@ exports[`elements/content-sidebar/Skills/Transcript/TranscriptRow should correct
         className=""
         data-resin-target="skill-transcripteditcancel"
         isLoading={false}
+        isResponsive={false}
+        showIcon={true}
         showRadar={false}
         type="button"
       >

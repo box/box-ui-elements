@@ -21,6 +21,8 @@ exports[`features/metadata-instance-editor/fields/ should correctly render butto
   <Button
     className=""
     isLoading={false}
+    isResponsive={false}
+    showIcon={true}
     showRadar={false}
     type="submit"
   />

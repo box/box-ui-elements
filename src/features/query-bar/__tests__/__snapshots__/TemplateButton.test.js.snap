@@ -18,7 +18,9 @@ exports[`feature/query-bar/components/TemplateButton render() should render Temp
       className="query-bar-button"
       isDisabled={true}
       isLoading={false}
+      isResponsive={false}
       onClick={[Function]}
+      showIcon={true}
       showRadar={false}
       type="button"
     >

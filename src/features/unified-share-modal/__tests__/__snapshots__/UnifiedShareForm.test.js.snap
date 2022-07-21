@@ -49,7 +49,9 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -248,7 +250,9 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -411,7 +415,9 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -574,7 +580,9 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -742,7 +750,9 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -906,7 +916,9 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -1071,7 +1083,9 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -1205,7 +1219,9 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -1370,7 +1386,9 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -1535,7 +1553,9 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -1701,7 +1721,9 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -1877,7 +1899,9 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -2041,7 +2065,9 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -2209,7 +2235,9 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -2374,7 +2402,9 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >
@@ -2538,7 +2568,9 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             <Button
               className="ftux-tooltip-button"
               isLoading={false}
+              isResponsive={false}
               onClick={[Function]}
+              showIcon={true}
               showRadar={false}
               type="submit"
             >

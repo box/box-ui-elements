@@ -508,7 +508,9 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     <Button
       className="btn-primary"
       isLoading={false}
+      isResponsive={false}
       onClick={[Function]}
+      showIcon={true}
       showRadar={false}
       type="submit"
     >

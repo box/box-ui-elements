@@ -84,7 +84,7 @@ describe('components/button/Button', () => {
         const wrapper = shallow(<Button icon={<FakeIcon />} />);
         const iconContainer = wrapper.find('.bdl-btn-icon');
         const { width, height } = iconContainer.find('FakeIcon').props();
-        expect(wrapper.props().className).toEqual('btn bdl-has-icon');
+        expect(wrapper.props().className).toEqual('btn bdl-show-icon');
         expect(iconContainer.length).toBe(1);
         expect(width).toEqual(height);
         expect(width).toEqual(20);
@@ -118,5 +118,20 @@ describe('components/button/Button', () => {
     test('should render a RadarAnimation if showRadar is true', () => {
         const wrapper = shallow(<Button showRadar>Test</Button>);
         expect(wrapper.find('RadarAnimation')).toMatchSnapshot();
+    });
+
+    test.each`
+        isResponsive | icon                          | showIcon
+        ${false}     | ${null}                       | ${false}
+        ${false}     | ${(<span>fakeContent</span>)} | ${false}
+        ${true}      | ${null}                       | ${true}
+        ${true}      | ${(<span>fakeContent</span>)} | ${true}
+    `('should render responsive behavior correctly', ({ icon, isResponsive, showIcon }) => {
+        const wrapper = shallow(
+            <Button icon={icon} isResponsive={isResponsive} showIcon={showIcon}>
+                Test
+            </Button>,
+        );
+        expect(wrapper).toMatchSnapshot();
     });
 });

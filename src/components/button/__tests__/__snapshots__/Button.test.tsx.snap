@@ -25,7 +25,7 @@ exports[`components/button/Button should render a RadarAnimation if showRadar is
 
 exports[`components/button/Button should render icon next to text if icon and children props are both set 1`] = `
 <button
-  className="btn bdl-has-icon"
+  className="btn bdl-show-icon"
   onClick={[Function]}
   type="submit"
 >
@@ -41,6 +41,82 @@ exports[`components/button/Button should render icon next to text if icon and ch
       height={16}
       width={16}
     />
+  </span>
+</button>
+`;
+
+exports[`components/button/Button should render responsive behavior correctly 1`] = `
+<button
+  className="btn"
+  onClick={[Function]}
+  type="submit"
+>
+  <span
+    className="btn-content"
+  >
+    Test
+  </span>
+</button>
+`;
+
+exports[`components/button/Button should render responsive behavior correctly 2`] = `
+<button
+  className="btn"
+  onClick={[Function]}
+  type="submit"
+>
+  <span
+    className="btn-content"
+  >
+    Test
+  </span>
+  <span
+    className="bdl-btn-icon"
+  >
+    <span
+      height={16}
+      width={16}
+    >
+      fakeContent
+    </span>
+  </span>
+</button>
+`;
+
+exports[`components/button/Button should render responsive behavior correctly 3`] = `
+<button
+  className="btn"
+  onClick={[Function]}
+  type="submit"
+>
+  <span
+    className="btn-content"
+  >
+    Test
+  </span>
+</button>
+`;
+
+exports[`components/button/Button should render responsive behavior correctly 4`] = `
+<button
+  className="btn bdl-show-icon bdl-Button--responsive"
+  onClick={[Function]}
+  type="submit"
+>
+  <span
+    className="btn-content"
+  >
+    Test
+  </span>
+  <span
+    className="bdl-btn-icon"
+  >
+    <span
+      height={16}
+      width={16}
+    >
+      fakeContent
+    </span>
   </span>
 </button>
 `;

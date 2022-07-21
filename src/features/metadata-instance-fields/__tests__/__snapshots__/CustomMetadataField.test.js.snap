@@ -29,7 +29,9 @@ exports[`features/metadata-instance-editor/fields/CustomMetadataField should cor
       className=""
       data-resin-target="metadata-customfieldremove"
       isLoading={false}
+      isResponsive={false}
       onClick={[Function]}
+      showIcon={true}
       showRadar={false}
       type="button"
     >

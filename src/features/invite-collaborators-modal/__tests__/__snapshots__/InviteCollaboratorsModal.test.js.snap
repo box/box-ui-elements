@@ -61,7 +61,9 @@ exports[`features/invite-collaborators-modal/InviteCollaboratorsModal render() s
       className=""
       data-resin-target="cancel"
       isLoading={false}
+      isResponsive={false}
       onClick={[Function]}
+      showIcon={true}
       showRadar={false}
       type="button"
     >

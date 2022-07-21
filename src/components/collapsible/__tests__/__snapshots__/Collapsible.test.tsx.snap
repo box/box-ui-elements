@@ -360,6 +360,8 @@ exports[`components/collapsible/Collapsible should render with headerActionItems
       <Button
         className=""
         isLoading={false}
+        isResponsive={false}
+        showIcon={true}
         showRadar={false}
         type="submit"
       >

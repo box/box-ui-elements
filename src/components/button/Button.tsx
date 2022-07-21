@@ -21,6 +21,8 @@ export interface ButtonProps {
     isDisabled?: boolean;
     /** whether the button is loading or not */
     isLoading: boolean;
+    /** toggles responsive behavior */
+    isResponsive?: boolean;
     /** whether the button is selected or not */
     isSelected?: boolean;
     /** onClick handler for the button */
@@ -29,6 +31,8 @@ export interface ButtonProps {
     setRef?: Function;
     /** size of the button */
     size?: 'large';
+    /** whether to show icon when the button is not responsive or on large screens */
+    showIcon?: boolean;
     /** whether to show a radar */
     showRadar: boolean;
     /** type for the button */
@@ -41,6 +45,8 @@ class Button extends React.Component<ButtonProps> {
     static defaultProps = {
         className: '',
         isLoading: false,
+        isResponsive: false,
+        showIcon: true,
         showRadar: false,
         type: ButtonType.SUBMIT,
     };
@@ -64,10 +70,12 @@ class Button extends React.Component<ButtonProps> {
             icon,
             isDisabled,
             isLoading,
+            isResponsive,
             isSelected,
             setRef,
             size,
             type,
+            showIcon,
             showRadar,
             ...rest
         } = this.props;
@@ -83,7 +91,8 @@ class Button extends React.Component<ButtonProps> {
                 'is-loading': isLoading,
                 'is-selected': isSelected,
                 'bdl-btn--large': size === 'large',
-                'bdl-has-icon': !!icon,
+                'bdl-show-icon': !!icon && showIcon,
+                'bdl-Button--responsive': isResponsive && !!icon,
             },
             className,
         );

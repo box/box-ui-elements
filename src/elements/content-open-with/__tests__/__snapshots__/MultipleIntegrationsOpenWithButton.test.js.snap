@@ -14,6 +14,8 @@ exports[`elements/content-open-with/MultipleIntegrationsOpenWithButton should pa
     className=""
     data-testid="multipleintegrationsbutton"
     isLoading={false}
+    isResponsive={false}
+    showIcon={true}
     showRadar={false}
     type="submit"
     width={50}
@@ -46,6 +48,8 @@ exports[`elements/content-open-with/MultipleIntegrationsOpenWithButton should re
     className=""
     data-testid="multipleintegrationsbutton"
     isLoading={false}
+    isResponsive={false}
+    showIcon={true}
     showRadar={false}
     type="submit"
   >

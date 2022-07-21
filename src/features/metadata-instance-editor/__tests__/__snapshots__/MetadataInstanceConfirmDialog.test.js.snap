@@ -18,7 +18,9 @@ exports[`features/metadata-instance-editor/MetadataInstanceConfirmDialog should 
         className=""
         data-resin-target="metadata-confirmcancel"
         isLoading={false}
+        isResponsive={false}
         onClick={[Function]}
+        showIcon={true}
         showRadar={false}
         type="button"
       >

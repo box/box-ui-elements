@@ -21,7 +21,9 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
     className="query-bar-button"
     isDisabled={true}
     isLoading={false}
+    isResponsive={false}
     onClick={[Function]}
+    showIcon={true}
     showRadar={false}
     type="button"
   >
@@ -64,7 +66,9 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
     className="query-bar-button"
     isDisabled={true}
     isLoading={false}
+    isResponsive={false}
     onClick={[Function]}
+    showIcon={true}
     showRadar={false}
     type="button"
   >
@@ -129,7 +133,9 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
     className="query-bar-button"
     isDisabled={false}
     isLoading={false}
+    isResponsive={false}
     onClick={[Function]}
+    showIcon={true}
     showRadar={false}
     type="button"
   >
