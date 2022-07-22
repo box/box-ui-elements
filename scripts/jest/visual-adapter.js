@@ -45,11 +45,11 @@ const BoxVisualTestUtils = {
     },
 
     // Takes image screenshots after user input, e.g., clicking or entering text
-    takeScreenshotAfterInput: async (id, selector, action = 'click', userInput, afterInputSelector = null) => {
+    takeScreenshotAfterInput: async (id, selector, action = 'click', userInput, afterInputSelector) => {
         await BoxVisualTestUtils.gotoStory(id);
         await global.page.waitForSelector(selector, { visible: true });
         await global.page[action](selector, userInput);
-        (await afterInputSelector) !== null
+        afterInputSelector
             ? await global.page.waitForSelector(afterInputSelector, { visible: true })
             : await global.page.waitFor(125);
         return global.page.screenshot();
