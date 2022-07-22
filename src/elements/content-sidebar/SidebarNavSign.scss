@@ -1,4 +1,5 @@
 @import './mixins';
+@import '../common/variables';
 
 .bcs-SidebarNavSign {
     @include bdl-SidebarNavButton;
@@ -6,4 +7,21 @@
 
 .bcs-SidebarNavSign-icon {
     @include bdl-SidebarNavIcon;
+}
+
+.bcs-SidebarNavSign-icon--grayscale {
+    display: none;
+    margin-top: 2px; //for visual alignment
+}
+
+.is-responsive-web {
+    @include breakpoint($medium-screen) {
+        .bcs-SidebarNavSign-icon {
+            display: none;
+        }
+
+        .bcs-SidebarNavSign-icon--grayscale {
+            display: inline;
+        }
+    }
 }
