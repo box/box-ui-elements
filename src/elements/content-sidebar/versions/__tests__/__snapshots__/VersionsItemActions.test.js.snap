@@ -5,6 +5,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ena
   className="bcs-VersionsItemActions"
   constrainToScrollParent={true}
   constrainToWindow={true}
+  isResponsive={false}
   isRightAligned={true}
   onMenuClose={[Function]}
 >
@@ -68,6 +69,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ena
   className="bcs-VersionsItemActions"
   constrainToScrollParent={true}
   constrainToWindow={true}
+  isResponsive={false}
   isRightAligned={true}
   onMenuClose={[Function]}
 >
@@ -131,6 +133,7 @@ exports[`elements/content-sidebar/versions/VersionsItemActions render should ret
   className="bcs-VersionsItemActions"
   constrainToScrollParent={true}
   constrainToWindow={true}
+  isResponsive={false}
   isRightAligned={true}
   onMenuClose={[Function]}
 >

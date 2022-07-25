@@ -1,8 +1,9 @@
 // @flow
 import * as React from 'react';
 import TetherComponent from 'react-tether';
-import uniqueId from 'lodash/uniqueId';
+import classNames from 'classnames';
 import noop from 'lodash/noop';
+import uniqueId from 'lodash/uniqueId';
 
 import { KEYS } from '../../constants';
 import './DropdownMenu.scss';
@@ -16,6 +17,8 @@ type Props = {
     constrainToScrollParent: boolean,
     /** Right aligns menu to button */
     constrainToWindow: boolean,
+    /** Enables responsive behaviors for this component */
+    isResponsive?: boolean,
     /** Function called when menu is opened */
     isRightAligned: boolean,
     /** Handler for dropdown menu close events */
@@ -35,6 +38,7 @@ class DropdownMenu extends React.Component<Props, State> {
     static defaultProps = {
         constrainToScrollParent: false,
         constrainToWindow: false,
+        isResponsive: false,
         isRightAligned: false,
     };
 
@@ -175,11 +179,13 @@ class DropdownMenu extends React.Component<Props, State> {
         const {
             bodyElement,
             children,
-            isRightAligned,
+            className,
             constrainToScrollParent,
             constrainToWindow,
-            className,
+            isResponsive,
+            isRightAligned,
         } = this.props;
+
         const { isOpen, initialFocusIndex } = this.state;
 
         const elements = React.Children.toArray(children);
@@ -246,14 +252,14 @@ class DropdownMenu extends React.Component<Props, State> {
             <TetherComponent
                 attachment={attachment}
                 bodyElement={bodyEl}
-                className={className}
+                className={classNames({ 'bdl-DropdownMenu--responsive': isResponsive }, className)}
                 classPrefix="dropdown-menu"
                 constraints={constraints}
                 enabled={isOpen}
                 targetAttachment={targetAttachment}
             >
                 {React.cloneElement(menuButton, menuButtonProps)}
-                {isOpen ? React.cloneElement(menu, menuProps) : null}
+                {isOpen && React.cloneElement(menu, menuProps)}
             </TetherComponent>
         );
     }

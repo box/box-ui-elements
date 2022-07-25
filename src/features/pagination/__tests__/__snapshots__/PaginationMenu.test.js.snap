@@ -5,6 +5,7 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
   className="bdl-Pagination-dropdown"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isResponsive={false}
   isRightAligned={true}
 >
   <Button
@@ -45,6 +46,7 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
   className="bdl-Pagination-dropdown"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isResponsive={false}
   isRightAligned={true}
 >
   <Button
@@ -113,6 +115,7 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
   className="bdl-Pagination-dropdown"
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isResponsive={false}
   isRightAligned={true}
 >
   <Button

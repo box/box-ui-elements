@@ -2,6 +2,8 @@ import * as React from 'react';
 import omit from 'lodash/omit';
 import classNames from 'classnames';
 
+import MenuContext from './MenuContext';
+
 import './Menu.scss';
 
 /**
@@ -295,7 +297,11 @@ class Menu extends React.Component<MenuProps> {
         menuProps.onClick = this.handleClick;
         menuProps.onKeyDown = this.handleKeyDown;
 
-        return <ul {...menuProps}>{children}</ul>;
+        return (
+            <ul {...menuProps}>
+                <MenuContext.Provider value={{ closeMenu: this.fireOnCloseHandler }}>{children}</MenuContext.Provider>
+            </ul>
+        );
     }
 }
 

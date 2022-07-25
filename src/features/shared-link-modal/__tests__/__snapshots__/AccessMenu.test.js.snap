@@ -5,6 +5,7 @@ exports[`features/shared-link-modal/AccessMenu render() should render component 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
