@@ -31,7 +31,6 @@ const ContentExplorerActionButtons = ({
     isChooseButtonLoading = false,
     isCopyButtonLoading = false,
     isMoveButtonLoading = false,
-    isResponsive = false,
     onCancelClick,
     onChooseClick,
     onCopyClick,
@@ -87,12 +86,9 @@ const ContentExplorerActionButtons = ({
 
         return contentExplorerMode === ContentExplorerModes.MULTI_SELECT && statusElement;
     };
-    const contentExplorerActionButtonsStyle = isResponsive
-        ? 'modal-actions'
-        : 'content-explorer-action-buttons-container';
 
     return (
-        <div className={contentExplorerActionButtonsStyle} {...actionButtonsProps}>
+        <div className="content-explorer-action-buttons-container" {...actionButtonsProps}>
             {renderStatus()}
             <Button
                 className="content-explorer-cancel-button"
@@ -157,7 +153,6 @@ ContentExplorerActionButtons.propTypes = {
     isChooseButtonLoading: PropTypes.bool,
     isCopyButtonLoading: PropTypes.bool,
     isMoveButtonLoading: PropTypes.bool,
-    isResponsive: PropTypes.bool,
     onCancelClick: PropTypes.func,
     onChooseClick: PropTypes.func,
     onCopyClick: PropTypes.func,
