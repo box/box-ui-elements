@@ -83,6 +83,7 @@ class SharedLinkPermissionMenu extends Component<Props> {
 
         return (
             <DropdownMenu
+                isRightAligned
                 constrainToWindow
                 onMenuClose={() => {
                     if (allowedPermissionLevels.includes(CAN_EDIT) && canShowTag && sharedLinkEditTagTargetingApi) {

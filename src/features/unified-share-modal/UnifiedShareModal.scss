@@ -3,6 +3,71 @@
 @import '../../styles/mixins/overlay';
 @import '../../components/pill-selector-dropdown/mixins';
 
+.is-responsive-web {
+    .collaborator-list {
+        min-width: 0;
+    }
+
+    @include breakpoint($medium-screen) {
+        .usm-menu-description {
+            white-space: normal;
+        }
+
+        .usm-share-access-menu {
+            width: min(400px, 90%);
+        }
+    }
+
+    @include breakpoint($small-medium-screen) {
+        .collaborator-list {
+            height: auto;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .shared-link-field-container {
+            align-items: center;
+            height: 34px;
+
+            .btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 60px;
+                min-width: 0;
+                height: 34px;
+            }
+        }
+
+        .email-shared-link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+        }
+
+        .unified-share-modal {
+            .modal-content {
+                padding-top: $bdl-grid-unit * 3;
+            }
+
+            .shared-link-field-row .email-shared-link-btn {
+                margin-left: $bdl-grid-unit * 4;
+            }
+        }
+
+        .text-input-container {
+            height: 34px;
+
+            input {
+                height: 100%;
+            }
+        }
+    }
+}
+
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
     display: block;
@@ -237,8 +302,11 @@
     }
 
     .shared-link-access-row {
+        display: flex;
+        justify-content: space-between;
+
         .btn-plain {
-            margin-right: 10px;
+            margin-right: 0;
 
             &.can-edit-btn {
                 color: $bdl-gray-62;
