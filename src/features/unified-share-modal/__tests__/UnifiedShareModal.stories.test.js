@@ -11,19 +11,21 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
     const USF_STORY = 'features-unifiedsharemodal--with-form-only';
 
     describe(`${USF_STORY}`, () => {
-        beforeEach(async () => {
+        test('looks visually correct', async () => {
             await global.page.goto(`http://localhost:6061/iframe.html?id=${USF_STORY}`);
             await global.page.waitFor(2000); // wait for loading animation to finish
-        });
-
-        test('looks visually correct', async () => {
             const image = await global.page.screenshot();
             return expect(image).toMatchImageSnapshot();
         });
 
         test('looks visually correct when adding emails', async () => {
-            await global.page.type('textarea', 's');
-            const image = await global.page.screenshot();
+            const image = await BoxVisualTestUtils.takeScreenshotAfterInput(
+                USF_STORY,
+                'textarea',
+                'type',
+                's',
+                '.overlay-wrapper',
+            );
             return expect(image).toMatchImageSnapshot();
         });
     });
