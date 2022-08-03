@@ -7,13 +7,15 @@ import MenuContext from './MenuContext';
 import './MenuHeader.scss';
 
 export interface MenuHeaderProps {
-    /** children - menu section header content */
-    children?: Array<React.ReactChild> | React.ReactChild;
     /** className - CSS class name for the menu section header */
     className?: string;
+    /** subtitle - Secondary title of header below Title */
+    subtitle?: React.ReactChild;
+    /** title - Title of header */
+    title?: React.ReactChild;
 }
 
-const MenuHeader = ({ children, className, ...rest }: MenuHeaderProps) => {
+const MenuHeader = ({ className, subtitle, title, ...rest }: MenuHeaderProps) => {
     const { closeMenu } = React.useContext(MenuContext);
 
     return (
@@ -23,8 +25,11 @@ const MenuHeader = ({ children, className, ...rest }: MenuHeaderProps) => {
             role="presentation"
             {...rest}
         >
-            <div className="bdl-MenuHeader-content">{children}</div>
-            <CloseButton onClick={closeMenu} />
+            <div className="bdl-MenuHeader-content">
+                <div className="bdl-MenuHeader-title">{title}</div>
+                <div className="bdl-MenuHeader-subtitle">{subtitle}</div>
+            </div>
+            <CloseButton className="bdl-MenuHeader-close-button" onClick={closeMenu} />
         </div>
     );
 };

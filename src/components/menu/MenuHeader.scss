@@ -3,8 +3,29 @@
 .bdl-MenuHeader {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    max-width: 100%;
 }
 
 .bdl-MenuHeader-content {
-    flex-grow: 1;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    padding-right: 5px;
+}
+
+.bdl-MenuHeader-title {
+    margin: 0;
+    overflow: hidden;
+    color: $bdl-gray;
+    font-weight: bold;
+    font-size: 16px;
+    text-overflow: ellipsis;
+}
+
+.bdl-MenuHeader-subtitle {
+    margin: 0;
+    color: $bdl-gray-62;
+    font-size: 12px;
 }
