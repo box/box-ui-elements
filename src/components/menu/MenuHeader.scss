@@ -1,0 +1,10 @@
+@import '../../styles/variables';
+
+.bdl-MenuHeader {
+    display: flex;
+    align-items: center;
+}
+
+.bdl-MenuHeader-content {
+    flex-grow: 1;
+}

@@ -7,6 +7,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <Tooltip
@@ -132,6 +133,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
@@ -239,6 +241,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <Tooltip
@@ -364,6 +367,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
@@ -471,6 +475,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <Tooltip
@@ -596,6 +601,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
@@ -703,6 +709,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <Tooltip
@@ -828,6 +835,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
@@ -935,6 +943,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <Tooltip
@@ -1060,6 +1069,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
@@ -1167,6 +1177,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <Tooltip
@@ -1292,6 +1303,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
@@ -1399,6 +1411,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
@@ -1506,6 +1519,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <Tooltip
