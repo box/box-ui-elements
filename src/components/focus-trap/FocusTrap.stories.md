@@ -1,0 +1,1 @@
+Traps tab focus within the children of the focus. Should be used for overlays, modals, and similar features, for accessibility. It will also save and return focus to the previously focused element on mount/unmount.
