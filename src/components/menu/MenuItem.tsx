@@ -7,8 +7,8 @@ import RadarAnimation from '../radar';
 export interface MenuItemProps {
     /** 'aria-checked' - ARIA attribute for checkbox elements */
     'aria-checked'?: boolean;
-    /** 'aria-disabled' - ARIA attribute describing whether the menu item is disabled */
-    'aria-disabled'?: boolean | 'true' | 'false';
+    /** 'aria-readonly' - ARIA attribute describing whether the menu item is readonly */
+    'aria-readonly'?: boolean | 'true' | 'false';
     /** children - menu item content */
     children?: Array<React.ReactChild> | React.ReactChild;
     /** className - CSS class name for the menu item */
@@ -63,7 +63,8 @@ class MenuItem extends React.Component<MenuItemProps> {
         }
 
         if (isDisabled) {
-            menuItemProps['aria-disabled'] = 'true';
+            // Using aria-readonly to preserve tabbing behavior
+            menuItemProps['aria-readonly'] = 'true';
         }
 
         let menuItem = <li {...menuItemProps}>{children}</li>;

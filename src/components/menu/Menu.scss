@@ -50,7 +50,7 @@
         font-size: 10px;
     }
 
-    &[aria-disabled] {
+    &[aria-readonly] {
         cursor: default;
         opacity: .4;
     }

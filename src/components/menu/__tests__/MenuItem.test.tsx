@@ -45,6 +45,12 @@ describe('components/menu/MenuItem', () => {
             expect(wrapper.prop('aria-checked')).toBe(true);
         });
 
+        test('should add correct aria attribute when item has isDisabled prop', () => {
+            const wrapper = shallow(<MenuItem isDisabled>Test</MenuItem>);
+
+            expect(wrapper.prop('aria-readonly')).toBe('true');
+        });
+
         test('should not render a RadarAnimation if showRadar is false', () => {
             const wrapper = shallow(<MenuItem showRadar={false}>Test</MenuItem>);
             expect(wrapper.find('RadarAnimation')).toMatchSnapshot();
