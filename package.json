@@ -85,8 +85,10 @@
         "test": "NODE_ICU_DATA=node_modules/full-icu BABEL_ENV=test NODE_ENV=test yarn jest -c scripts/jest/jest.config.js",
         "test:e2e": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:run",
         "test:e2e:open": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:open",
-        "test:images": "yarn test -c scripts/jest/jest.images.config.js --maxWorkers=4",
+        "test:images": "NODE_ICU_DATA=node_modules/full-icu BABEL_ENV=test NODE_ENV=test yarn jest -c scripts/jest/jest.images.config.js --maxWorkers=4",
+        "test:images:update": "NODE_ICU_DATA=node_modules/full-icu BABEL_ENV=test NODE_ENV=test yarn jest -c scripts/jest/jest.images.config.js -u --maxWorkers=4",
         "test:visuals": "start-server-and-test start:storybook:ci http-get://localhost:6061 test:images",
+        "test:visuals:update": "start-server-and-test start:storybook:ci http-get://localhost:6061 test:images:update",
         "ts:defs": "tsc --declaration --emitDeclarationOnly --declarationDir es --noEmit false"
     },
     "browserslist": {
@@ -256,7 +258,6 @@
         "mocha": "^6.2.2",
         "mousetrap": "^1.6.3",
         "mutationobserver-shim": "^0.3.3",
-        "node-sass": "^4.13.1",
         "npm-run-all": "^4.1.3",
         "nsp": "^3.2.1",
         "optimize-css-assets-webpack-plugin": "^5.0.3",
@@ -294,6 +295,7 @@
         "regenerator-runtime": "^0.13.3",
         "rimraf": "^3.0.1",
         "sanitize-html": "1.21.1",
+        "sass": "1.34.1",
         "sass-lint": "^1.13.1",
         "sass-loader": "^8.0.2",
         "sass-variable-parser": "^1.2.2",
@@ -364,6 +366,7 @@
         "react-textarea-autosize": "^7.1.0",
         "regenerator-runtime": "^0.13.2",
         "sanitize-html": "1.21.1",
+        "sass": "1.34.1",
         "scroll-into-view-if-needed": "^2.2.20",
         "tabbable": "^1.1.2",
         "uuid": "^3.3.2"
