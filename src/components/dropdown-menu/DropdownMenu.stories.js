@@ -3,13 +3,16 @@ import * as React from 'react';
 import { boolean } from '@storybook/addon-knobs';
 
 import Avatar from '../avatar/Avatar';
+import Button from '../button/Button';
 import Link from '../link/Link';
 import Menu from '../menu/Menu';
 import MenuItem from '../menu/MenuItem';
 import MenuLinkItem from '../menu/MenuLinkItem';
 import MenuSeparator from '../menu/MenuSeparator';
+import MenuHeader from '../menu/MenuHeader';
 import MenuToggle from './MenuToggle';
 import PlainButton from '../plain-button/PlainButton';
+import SubmenuItem from '../menu/SubmenuItem';
 
 import DropdownMenu from './DropdownMenu';
 import notes from './DropdownMenu.stories.md';
@@ -24,6 +27,7 @@ function generateClickHandler(message) {
 
 export const basic = () => (
     <DropdownMenu
+        isResponsive
         onMenuOpen={() => {
             /* eslint-disable-next-line no-console */
             console.log('menu opened');
@@ -70,6 +74,30 @@ export const withLinkMenu = () => (
             >
                 Menu Item
             </MenuItem>
+        </Menu>
+    </DropdownMenu>
+);
+
+export const responsiveWithHeader = () => (
+    <DropdownMenu isResponsive>
+        <PlainButton className="dropdown-menu-example-button" type="button">
+            <MenuToggle>
+                <Button>View in mobile</Button>
+            </MenuToggle>
+        </PlainButton>
+        <Menu>
+            <MenuHeader title="Optional Title" subtitle="Subtitle" /> <MenuItem>View Profile</MenuItem>
+            <MenuItem>Help</MenuItem>
+            <MenuItem isDisabled={boolean('isDisabled', true)}>Disabled Option</MenuItem>
+            <MenuSeparator />
+            <SubmenuItem>
+                Submenu
+                <Menu>
+                    <MenuItem>View Profile</MenuItem>
+                    <MenuItem>Help</MenuItem>
+                </Menu>
+            </SubmenuItem>
+            <MenuItem>Help</MenuItem>
         </Menu>
     </DropdownMenu>
 );

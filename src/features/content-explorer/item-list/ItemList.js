@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
-
+import AutoSizer from '@box/react-virtualized/dist/commonjs/AutoSizer';
 import Column from '@box/react-virtualized/dist/commonjs/Table/Column';
 import Table from '@box/react-virtualized/dist/commonjs/Table';
 import defaultTableRowRenderer from '@box/react-virtualized/dist/commonjs/Table/defaultRowRenderer';
@@ -22,6 +22,20 @@ import './ItemList.scss';
 const TABLE_CELL_CLASS = 'table-cell';
 
 const InfiniteLoaderTable = withInfiniteLoader(Table);
+
+const withAutoSizer = WrappedComponent => {
+    return props => {
+        return (
+            <div style={{ flex: 1 }}>
+                <AutoSizer>
+                    {({ width: w, height: h }) => <WrappedComponent {...props} width={w} height={h} />}
+                </AutoSizer>
+            </div>
+        );
+    };
+};
+
+const TableResponsive = withAutoSizer(Table);
 
 const itemIconCellRenderer = rendererParams => {
     const {
@@ -111,6 +125,7 @@ const itemLoadingPlaceholderRenderer = rendererParams => {
 const ItemList = ({
     contentExplorerMode,
     className = '',
+    isResponsive = false,
     items,
     numItemsPerPage,
     numTotalItems,
@@ -175,7 +190,7 @@ const ItemList = ({
         return React.cloneElement(defaultRow, { 'data-testid': `item-row-${testId}` });
     };
 
-    let TableComponent = Table;
+    let TableComponent = isResponsive ? TableResponsive : Table;
     const tableProps = {};
 
     if (onLoadMoreItems) {
@@ -190,7 +205,11 @@ const ItemList = ({
     }
 
     return (
-        <div className={classNames('content-explorer-item-list table', className)}>
+        <div
+            className={classNames('content-explorer-item-list table', className, {
+                'bdl-ContentExplorerItemList--responsive': isResponsive,
+            })}
+        >
             <TableComponent
                 gridClassName="table-body"
                 headerClassName="table-header-item"
@@ -248,6 +267,7 @@ ItemList.displayName = 'ItemList';
 ItemList.propTypes = {
     className: PropTypes.string,
     contentExplorerMode: ContentExplorerModePropType.isRequired,
+    isResponsive: PropTypes.bool,
     items: ItemsPropType.isRequired,
     numItemsPerPage: PropTypes.number,
     numTotalItems: PropTypes.number,
