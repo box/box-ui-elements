@@ -510,6 +510,19 @@ const messages = defineMessages({
             'Text for the notice that is displayed when there are collaboration restrictions that apply to one or more of the selected contacts',
         id: 'boxui.unifiedShare.contactRestrictionNoticeSingular',
     },
+    contactRestrictionNoticeInformationBarrier: {
+        defaultMessage:
+            'Invitations cannot be sent to {count, plural, one {{count} person} other {{count} people}} due to a security policy.',
+        description:
+            'Text for the notice that is displayed when there are Information Barrier collaboration restrictions that apply to one or more of the selected contacts',
+        id: 'boxui.unifiedShare.contactRestrictionNoticeInformationBarrier',
+    },
+    contactRestrictionNoticeInformationBarrierSingular: {
+        defaultMessage: 'Invitations cannot be sent to {email} due to a security policy.',
+        description:
+            'Text for the notice that is displayed when there are Information Barrier collaboration restrictions that apply to only one of the selected contacts',
+        id: 'boxui.unifiedShare.contactRestrictionNoticeInformationBarrierSingular',
+    },
     contactRestrictionRemoveButtonLabel: {
         defaultMessage: 'Remove {count, plural, one {the person} other {{count} people}} and continue',
         description: 'Label for the button that removes restricted contacts on the contact restriction notice',
