@@ -106,7 +106,7 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
@@ -305,7 +305,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
@@ -468,7 +468,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
@@ -631,7 +631,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
@@ -799,7 +799,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
@@ -963,7 +963,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
@@ -1128,7 +1128,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
@@ -1263,7 +1263,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
@@ -1428,7 +1428,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
@@ -1593,7 +1593,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
@@ -1759,7 +1759,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
@@ -1934,7 +1934,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
@@ -2098,7 +2098,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
@@ -2266,7 +2266,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
@@ -2432,7 +2432,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           submitting={false}
@@ -2598,7 +2598,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedExternalEmails={Array []}
+          restrictedEmails={Array []}
           selectedContacts={Array []}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
