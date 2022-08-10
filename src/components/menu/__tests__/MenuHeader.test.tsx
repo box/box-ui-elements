@@ -10,9 +10,7 @@ describe('components/menu/MenuHeader', () => {
             const classNameCustom = 'oh-class';
             const classNameChild = 'child-class';
             const { container } = render(
-                <MenuHeader className={classNameCustom}>
-                    <div className={classNameChild} />
-                </MenuHeader>,
+                <MenuHeader title={<div className={classNameChild} />} className={classNameCustom} />,
             );
 
             expect(container.firstChild).toHaveClass('bdl-MenuHeader');
@@ -27,9 +25,7 @@ describe('components/menu/MenuHeader', () => {
             const closeMenu = jest.fn();
             render(
                 <MenuContext.Provider value={{ closeMenu }}>
-                    <MenuHeader>
-                        <p>Hi</p>
-                    </MenuHeader>
+                    <MenuHeader />
                 </MenuContext.Provider>,
             );
 

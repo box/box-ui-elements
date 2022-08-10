@@ -2,6 +2,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
+import { COLLAB_RESTRICTION_TYPE_ACCESS_POLICY, COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER } from '../constants';
+
 import messages from '../messages';
 
 import { ContactRestrictionNoticeComponent as ContactRestrictionNotice } from '../ContactRestrictionNotice';
@@ -9,19 +11,20 @@ import { ContactRestrictionNoticeComponent as ContactRestrictionNotice } from '.
 describe('features/unified-share-modal/ContactRestrictionNotice', () => {
     let wrapper;
     let selectedContacts;
-    let restrictedExternalEmails;
+    let restrictedEmails;
 
     const getWrapper = (props = {}) => {
         return shallow(
             <ContactRestrictionNotice
+                collabRestrictionType={undefined}
                 error=""
                 intl={{ formatMessage: jest.fn() }}
                 isFetchingJustificationReasons={false}
                 isRestrictionJustificationEnabled={false}
                 justificationReasons={[]}
-                onRemoveRestrictedExternalContacts={jest.fn()}
+                onRemoveRestrictedContacts={jest.fn()}
                 onSelectJustificationReason={jest.fn()}
-                restrictedExternalEmails={restrictedExternalEmails}
+                restrictedEmails={restrictedEmails}
                 selectedContacts={selectedContacts}
                 selectedJustificationReason={null}
                 {...props}
@@ -53,7 +56,7 @@ describe('features/unified-share-modal/ContactRestrictionNotice', () => {
                 value: 'z@example.com',
             },
         ];
-        restrictedExternalEmails = ['x@example.com', 'y@example.com'];
+        restrictedEmails = ['x@example.com', 'y@example.com'];
 
         wrapper = getWrapper();
     });
@@ -65,42 +68,45 @@ describe('features/unified-share-modal/ContactRestrictionNotice', () => {
             expect(wrapper.find('[data-resin-target="removeBtn"]')).toHaveLength(1);
         });
 
-        test('should render nothing when there are no restricted external contacts', () => {
-            wrapper.setProps({ restrictedExternalEmails: [], selectedContacts });
+        test('should render nothing when there are no restricted contacts', () => {
+            wrapper.setProps({ restrictedEmails: [], selectedContacts });
             expect(wrapper.isEmptyRender()).toBe(true);
 
-            wrapper.setProps({ restrictedExternalEmails, selectedContacts: [] });
+            wrapper.setProps({ restrictedEmails, selectedContacts: [] });
             expect(wrapper.isEmptyRender()).toBe(true);
         });
 
         test.each`
-            isRestrictionJustificationEnabled | restrictedExternalContactCount | restrictionNoticeMessageId                                 | removeButtonMessageId
-            ${false}                          | ${1}                           | ${messages.contactRestrictionNoticeSingular.id}            | ${messages.contactRestrictionRemoveButtonLabel.id}
-            ${false}                          | ${2}                           | ${messages.contactRestrictionNotice.id}                    | ${messages.contactRestrictionRemoveButtonLabel.id}
-            ${true}                           | ${1}                           | ${messages.justifiableContactRestrictionNoticeSingular.id} | ${messages.justifiableContactRestrictionRemoveButtonLabel.id}
-            ${true}                           | ${2}                           | ${messages.justifiableContactRestrictionNotice.id}         | ${messages.justifiableContactRestrictionRemoveButtonLabel.id}
+            collabRestrictionType                          | isRestrictionJustificationEnabled | restrictedContactCount | restrictionNoticeMessageId                                        | removeButtonMessageId
+            ${COLLAB_RESTRICTION_TYPE_ACCESS_POLICY}       | ${false}                          | ${1}                   | ${messages.contactRestrictionNoticeSingular.id}                   | ${messages.contactRestrictionRemoveButtonLabel.id}
+            ${COLLAB_RESTRICTION_TYPE_ACCESS_POLICY}       | ${false}                          | ${2}                   | ${messages.contactRestrictionNotice.id}                           | ${messages.contactRestrictionRemoveButtonLabel.id}
+            ${COLLAB_RESTRICTION_TYPE_ACCESS_POLICY}       | ${true}                           | ${1}                   | ${messages.justifiableContactRestrictionNoticeSingular.id}        | ${messages.justifiableContactRestrictionRemoveButtonLabel.id}
+            ${COLLAB_RESTRICTION_TYPE_ACCESS_POLICY}       | ${true}                           | ${2}                   | ${messages.justifiableContactRestrictionNotice.id}                | ${messages.justifiableContactRestrictionRemoveButtonLabel.id}
+            ${COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER} | ${false}                          | ${1}                   | ${messages.contactRestrictionNoticeInformationBarrierSingular.id} | ${messages.contactRestrictionRemoveButtonLabel.id}
+            ${COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER} | ${false}                          | ${2}                   | ${messages.contactRestrictionNoticeInformationBarrier.id}         | ${messages.contactRestrictionRemoveButtonLabel.id}
         `(
-            'should select appropriate messages when isRestrictionJustificationEnabled is $isRestrictionJustificationEnabled and restricted external contact count is $restrictedExternalContactCount',
+            'should select appropriate messages when restriction type is "$collabRestrictionType",  isRestrictionJustificationEnabled is $isRestrictionJustificationEnabled and restricted contact count is $restrictedContactCount',
             ({
+                collabRestrictionType,
                 isRestrictionJustificationEnabled,
-                restrictedExternalContactCount,
+                restrictedContactCount,
                 restrictionNoticeMessageId,
                 removeButtonMessageId,
             }) => {
-                restrictedExternalEmails = restrictedExternalEmails.slice(0, restrictedExternalContactCount);
-                wrapper.setProps({ isRestrictionJustificationEnabled, restrictedExternalEmails });
+                restrictedEmails = restrictedEmails.slice(0, restrictedContactCount);
+                wrapper.setProps({ collabRestrictionType, isRestrictionJustificationEnabled, restrictedEmails });
 
                 const restrictionNoticeMessage = wrapper.find(`FormattedMessage[id="${restrictionNoticeMessageId}"]`);
                 const removeButtonMessage = wrapper.find(`FormattedMessage[id="${removeButtonMessageId}"]`);
 
                 expect(restrictionNoticeMessage).toHaveLength(1);
                 expect(restrictionNoticeMessage.props().values).toEqual({
-                    count: restrictedExternalEmails.length,
+                    count: restrictedEmails.length,
                     email: selectedContacts[0].value,
                 });
                 expect(removeButtonMessage).toHaveLength(1);
                 expect(removeButtonMessage.props().values).toEqual({
-                    count: restrictedExternalEmails.length,
+                    count: restrictedEmails.length,
                 });
             },
         );
@@ -151,13 +157,13 @@ describe('features/unified-share-modal/ContactRestrictionNotice', () => {
     });
 
     describe('handlers', () => {
-        test('should call onRemoveRestrictedExternalContacts when remove button is clicked', () => {
-            const onRemoveRestrictedExternalContacts = jest.fn();
-            wrapper.setProps({ onRemoveRestrictedExternalContacts });
+        test('should call onRemoveRestrictedContacts when remove button is clicked', () => {
+            const onRemoveRestrictedContacts = jest.fn();
+            wrapper.setProps({ onRemoveRestrictedContacts });
 
-            expect(onRemoveRestrictedExternalContacts).toHaveBeenCalledTimes(0);
+            expect(onRemoveRestrictedContacts).toHaveBeenCalledTimes(0);
             wrapper.find('[data-resin-target="removeBtn"]').simulate('click');
-            expect(onRemoveRestrictedExternalContacts).toHaveBeenCalledTimes(1);
+            expect(onRemoveRestrictedContacts).toHaveBeenCalledTimes(1);
         });
 
         test('should call onSelectJustificationReason with newly selected option on justification reason select change', () => {
