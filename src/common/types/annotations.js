@@ -36,6 +36,8 @@ export type AnnotationPermission = {
     can_edit?: boolean,
 };
 
+export type AnnotationStatus = 'open' | 'deleted' | 'resolved';
+
 export type Annotation = {
     created_at: string,
     created_by: User,
@@ -48,7 +50,7 @@ export type Annotation = {
     modified_by: User,
     permissions: AnnotationPermission,
     replies?: Array<Reply>,
-    status?: 'deleted' | 'open' | 'resolved',
+    status?: AnnotationStatus,
     target: Target,
     type: 'annotation',
 };
