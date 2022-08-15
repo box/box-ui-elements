@@ -150,7 +150,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
             >
               <button
                 aria-disabled={true}
-                className="btn is-disabled"
+                className="btn is-disabled bdl-is-disabled"
                 onClick={[Function]}
                 type="submit"
               >
@@ -237,7 +237,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
             >
               <button
                 aria-disabled={true}
-                className="btn is-disabled"
+                className="btn is-disabled bdl-is-disabled"
                 onClick={[Function]}
                 type="submit"
               >

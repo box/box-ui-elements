@@ -240,9 +240,15 @@ type InviteSectionTypes = {
     suggestedCollaborators?: SuggestedCollabLookup,
 };
 
-// Additional invite section types that related with external collab r
+// Additional invite section types that related with information barrier, external collab
 // restrictions and business justifications.
+export type CollabRestrictionType =
+    | typeof constants.COLLAB_RESTRICTION_TYPE_ACCESS_POLICY
+    | typeof constants.COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER;
+
 type ExternalCollabRestrictionsTypes = {
+    /** The type of restriction that applies to restrictedCollabEmails */
+    collabRestrictionType?: CollabRestrictionType,
     /** Function that fetches the array of justification reason options to display on the justification select field */
     getJustificationReasons?: (
         itemTypedID: string,
@@ -250,10 +256,10 @@ type ExternalCollabRestrictionsTypes = {
     ) => Promise<getJustificationReasonsResponseType>,
     /** Determines whether or not a business justification can be provided to bypass external collab restrictions */
     isCollabRestrictionJustificationAllowed?: boolean,
-    /** Function that is called when all restricted external collaborators are removed from the email form */
-    onRemoveAllRestrictedExternalCollabs?: () => void,
-    /** An array of all the external collab email addresses that have been determined to be restriced by an access policy. */
-    restrictedExternalCollabEmails: Array<string>,
+    /** Function that is called when all restricted collaborators are removed from the email form */
+    onRemoveAllRestrictedCollabs?: () => void,
+    /** An array of all the collab email addresses that have been determined to be restricted by a security policy. */
+    restrictedCollabEmails: Array<string>,
 };
 
 // Prop types used in the shared link section of the Unified Share Form
