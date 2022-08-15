@@ -37,6 +37,8 @@ class ContentExplorer extends Component {
         initialFoldersPath: FoldersPathPropType.isRequired,
         /** Initial items that will show up as selected */
         initialSelectedItems: PropTypes.object,
+        /** Whether to use the responsive version */
+        isResponsive: PropTypes.bool,
         /**
          * Called when the current folder changes
          *
@@ -403,6 +405,7 @@ class ContentExplorer extends Component {
             isCopyButtonLoading,
             isCreateNewFolderAllowed,
             isMoveButtonLoading,
+            isResponsive = false,
             isSelectAllAllowed,
             items,
             numItemsPerPage,
@@ -456,7 +459,9 @@ class ContentExplorer extends Component {
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
             <div
-                className={classNames('content-explorer', className)}
+                className={classNames('content-explorer', className, {
+                    'bdl-ContentExplorer--responsive': isResponsive,
+                })}
                 data-testid="content-explorer"
                 onClick={this.handleContentExplorerClick}
                 ref={ref => {
@@ -489,6 +494,7 @@ class ContentExplorer extends Component {
                 <ItemList
                     contentExplorerMode={contentExplorerMode}
                     height={listHeight}
+                    isResponsive={isResponsive}
                     itemButtonRenderer={itemButtonRenderer}
                     itemIconRenderer={itemIconRenderer}
                     itemNameLinkRenderer={itemNameLinkRenderer}
@@ -515,6 +521,7 @@ class ContentExplorer extends Component {
                     isChooseButtonLoading={isChooseButtonLoading}
                     isCopyButtonLoading={isCopyButtonLoading}
                     isMoveButtonLoading={isMoveButtonLoading}
+                    isResponsive={isResponsive}
                     onCancelClick={onCancelButtonClick}
                     onChooseClick={onChooseItems}
                     onCopyClick={onCopyItem}
