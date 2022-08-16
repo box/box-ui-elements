@@ -25,7 +25,8 @@
         }
 
         .usm-share-access-menu {
-            width: min(400px, 90%);
+            //can't use just 'min' b/c SASS compiler error
+            width: #{'min(400px, 90%)'};
         }
     }
 

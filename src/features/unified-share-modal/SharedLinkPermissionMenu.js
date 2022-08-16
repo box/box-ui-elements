@@ -143,5 +143,8 @@ class SharedLinkPermissionMenu extends Component<Props> {
     }
 }
 
-export { SharedLinkPermissionMenu };
-export default withMediaQuery(SharedLinkPermissionMenu);
+const sharedLinkPermissionMenu = withMediaQuery(SharedLinkPermissionMenu);
+sharedLinkPermissionMenu.displayName = 'SharedLinkPermissionMenu';
+
+export { SharedLinkPermissionMenu as SharedLinkPermissionMenuBase };
+export default sharedLinkPermissionMenu;
