@@ -14,6 +14,8 @@ import { Flyout, Overlay } from '../../../components/flyout';
 import { DatePicker } from '../../../components';
 import Button from '../../../components/button';
 
+import IconAdvancedFilters from '../../../icons/general/IconAdvancedFilters';
+
 import './Header.scss';
 
 type Props = {
@@ -49,15 +51,19 @@ const Header = ({ isHeaderLogoVisible = true, view, isSmall, onSearch, logoUrl, 
                     disabled={!isFolder && !isSearch}
                     onChange={e => {
                         setValues({ ...values, query: e.currentTarget.value });
-                        search(e.currentTarget.value, values.fromDate, values.toDate);
+                        if (e.currentTarget.value !== '') {
+                            search(e.currentTarget.value, values.fromDate, values.toDate);
+                        } else search(e.currentTarget.value, '', '');
                     }}
                     placeholder={intl.formatMessage(messages.searchPlaceholder)}
                     type="search"
                     value={values.query}
                 />
             </div>
-            <Flyout position="middle-left">
-                <Button>Search Options</Button>
+            <Flyout position="bottom-left">
+                <Button>
+                    <IconAdvancedFilters />
+                </Button>
                 <Overlay>
                     <div className="accessible-overlay-content">
                         <div>

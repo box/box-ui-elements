@@ -651,7 +651,7 @@ class ContentExplorer extends Component<Props, State> {
     debouncedSearch = debounce((id: string, query: string, fromDate: string, toDate: string) => {
         const { currentOffset, currentPageSize }: State = this.state;
         const searchFromDate = fromDate ? `${fromDate.toISOString().slice(0, 10)}T00:00:00+00:00` : '';
-        const searchToDate = toDate ? `${toDate.toISOString().slice(0, 10)}T14:00:00+00:00` : '';
+        const searchToDate = toDate ? `${toDate.toISOString().slice(0, 10)}T23:00:00+00:00` : '';
         const createdAtRange = [searchFromDate, searchToDate];
         this.api
             .getSearchAPI()
