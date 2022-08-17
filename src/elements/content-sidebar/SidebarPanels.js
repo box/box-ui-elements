@@ -42,6 +42,7 @@ type Props = {
     hasActivity: boolean,
     hasDetails: boolean,
     hasMetadata: boolean,
+    hasReplies?: boolean,
     hasSkills: boolean,
     hasVersions: boolean,
     isOpen: boolean,
@@ -86,6 +87,10 @@ const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
 );
 
 class SidebarPanels extends React.Component<Props, State> {
+    static defaultProps = {
+        hasReplies: false,
+    };
+
     activitySidebar: ElementRefType = React.createRef();
 
     detailsSidebar: ElementRefType = React.createRef();
@@ -140,6 +145,7 @@ class SidebarPanels extends React.Component<Props, State> {
             hasActivity,
             hasDetails,
             hasMetadata,
+            hasReplies,
             hasSkills,
             hasVersions,
             isOpen,
@@ -195,6 +201,7 @@ class SidebarPanels extends React.Component<Props, State> {
                                     elementId={elementId}
                                     currentUser={currentUser}
                                     file={file}
+                                    hasReplies={hasReplies}
                                     hasSidebarInitialized={isInitialized}
                                     onAnnotationSelect={onAnnotationSelect}
                                     onVersionChange={onVersionChange}

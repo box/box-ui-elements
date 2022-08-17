@@ -532,6 +532,15 @@ describe('api/Feed', () => {
                 done();
             });
         });
+
+        test('should not include versions in feed items if shouldShowVersions is false', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowVersions: false });
+            setImmediate(() => {
+                expect(feed.versionsAPI.addCurrentVersion).not.toHaveBeenCalled();
+                expect(sorter.sortFeedItems).toHaveBeenCalledWith([], comments, tasks, undefined, undefined);
+                done();
+            });
+        });
     });
 
     describe('fetchAnnotations()', () => {

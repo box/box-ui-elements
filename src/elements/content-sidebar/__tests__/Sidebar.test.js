@@ -7,6 +7,7 @@ import {
     SIDEBAR_FORCE_VALUE_OPEN,
     SidebarComponent as Sidebar,
 } from '../Sidebar';
+import SidebarNav from '../SidebarNav';
 
 jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 jest.mock('../../../utils/LocalStore');
@@ -205,6 +206,12 @@ describe('elements/content-sidebar/Sidebar', () => {
                 expect(wrapper.hasClass('bcs-is-open')).toBe(expected);
             },
         );
+
+        test('should not render SidebarNav when hasNav is false', () => {
+            const wrapper = getWrapper({ hasNav: false });
+
+            expect(wrapper.containsMatchingElement(<SidebarNav />)).toBe(false);
+        });
     });
 
     describe('refresh()', () => {

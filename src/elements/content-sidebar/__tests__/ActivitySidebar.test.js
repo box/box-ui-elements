@@ -356,14 +356,21 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
 
         test.each`
-            annotationsEnabled | appActivityEnabled | expectedAnnotations | expectedAppActivity
-            ${false}           | ${false}           | ${false}            | ${false}
-            ${false}           | ${true}            | ${false}            | ${true}
-            ${true}            | ${false}           | ${true}             | ${false}
-            ${true}            | ${true}            | ${true}             | ${true}
+            annotationsEnabled | appActivityEnabled | versionsEnabled | expectedAnnotations | expectedAppActivity | expectedVersions
+            ${false}           | ${false}           | ${false}        | ${false}            | ${false}            | ${false}
+            ${false}           | ${true}            | ${false}        | ${false}            | ${true}             | ${false}
+            ${true}            | ${false}           | ${true}         | ${true}             | ${false}            | ${true}
+            ${true}            | ${true}            | ${true}         | ${true}             | ${true}             | ${true}
         `(
-            'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled and appActivityEnabled=$appActivityEnabled',
-            ({ annotationsEnabled, appActivityEnabled, expectedAnnotations, expectedAppActivity }) => {
+            'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled, appActivityEnabled=$appActivityEnabled and versionsEnabled=$versionsEnabled',
+            ({
+                annotationsEnabled,
+                appActivityEnabled,
+                versionsEnabled,
+                expectedAnnotations,
+                expectedAppActivity,
+                expectedVersions,
+            }) => {
                 wrapper = getWrapper({
                     features: {
                         activityFeed: {
@@ -371,6 +378,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                             appActivity: { enabled: appActivityEnabled },
                         },
                     },
+                    hasVersions: versionsEnabled,
                 });
 
                 instance = wrapper.instance();
@@ -385,7 +393,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     instance.fetchFeedItemsSuccessCallback,
                     instance.fetchFeedItemsErrorCallback,
                     instance.errorCallback,
-                    { shouldShowAnnotations: expectedAnnotations, shouldShowAppActivity: expectedAppActivity },
+                    {
+                        shouldShowAnnotations: expectedAnnotations,
+                        shouldShowAppActivity: expectedAppActivity,
+                        shouldShowVersions: expectedVersions,
+                    },
                 );
             },
         );
@@ -852,6 +864,14 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             expect(mockEmitRemoveEvent).toBeCalledWith('123');
             expect(mockFeedSuccess).toBeCalled();
+        });
+    });
+
+    describe('renderAddTaskButton()', () => {
+        test('should return null when hasTasks is false', () => {
+            const wrapper = getWrapper({ hasTasks: false });
+            const instance = wrapper.instance();
+            expect(instance.renderAddTaskButton()).toBe(null);
         });
     });
 });
