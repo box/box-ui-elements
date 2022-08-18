@@ -340,7 +340,7 @@ class Feed extends Base {
         ]).then(([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
             const versionsWithCurrent = currentVersion
                 ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
-                : [];
+                : undefined;
             const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
             if (!this.isDestroyed()) {
                 this.setCachedItems(id, sortedFeedItems);

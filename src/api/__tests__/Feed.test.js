@@ -537,7 +537,7 @@ describe('api/Feed', () => {
             feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowVersions: false });
             setImmediate(() => {
                 expect(feed.versionsAPI.addCurrentVersion).not.toHaveBeenCalled();
-                expect(sorter.sortFeedItems).toHaveBeenCalledWith([], comments, tasks, undefined, undefined);
+                expect(sorter.sortFeedItems).toHaveBeenCalledWith(undefined, comments, tasks, undefined, undefined);
                 done();
             });
         });
