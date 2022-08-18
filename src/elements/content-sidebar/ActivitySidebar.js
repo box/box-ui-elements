@@ -145,7 +145,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         const { currentUser } = this.props;
-        console.log('hasReplies', this.props.hasReplies);
 
         this.fetchFeedItems(true);
         this.fetchCurrentUser(currentUser);
