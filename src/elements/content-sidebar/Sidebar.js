@@ -42,7 +42,6 @@ type Props = {
     hasAdditionalTabs: boolean,
     hasMetadata: boolean,
     hasNav: boolean,
-    hasReplies?: boolean,
     hasSkills: boolean,
     hasVersions: boolean,
     history: RouterHistory,
@@ -72,7 +71,6 @@ class Sidebar extends React.Component<Props, State> {
         isLoading: false,
         getAnnotationsMatchPath: noop,
         getAnnotationsPath: noop,
-        hasReplies: false,
     };
 
     id: string = uniqueid('bcs_');
@@ -219,7 +217,6 @@ class Sidebar extends React.Component<Props, State> {
             getViewer,
             hasAdditionalTabs,
             hasNav,
-            hasReplies,
             hasVersions,
             isDefaultOpen,
             isLoading,
@@ -272,7 +269,6 @@ class Sidebar extends React.Component<Props, State> {
                             hasActivity={hasActivity}
                             hasDetails={hasDetails}
                             hasMetadata={hasMetadata}
-                            hasReplies={hasReplies}
                             hasSkills={hasSkills}
                             hasVersions={hasVersions}
                             isOpen={isOpen}
