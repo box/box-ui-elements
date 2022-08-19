@@ -361,6 +361,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             ${false}           | ${true}            | ${false}        | ${false}            | ${true}             | ${false}
             ${true}            | ${false}           | ${true}         | ${true}             | ${false}            | ${true}
             ${true}            | ${true}            | ${true}         | ${true}             | ${true}             | ${true}
+            ${false}           | ${true}            | ${true}         | ${false}            | ${true}             | ${true}
+            ${false}           | ${false}           | ${true}         | ${false}            | ${false}            | ${true}
+            ${true}            | ${true}            | ${false}        | ${true}             | ${true}             | ${false}
+            ${true}            | ${false}           | ${false}        | ${true}             | ${false}            | ${false}
         `(
             'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled, appActivityEnabled=$appActivityEnabled and versionsEnabled=$versionsEnabled',
             ({

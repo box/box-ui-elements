@@ -711,6 +711,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 isDisabled={isDisabled}
                 onTaskModalClose={onTaskModalClose}
                 taskFormProps={{
+                    approvers: [],
                     approverSelectorContacts,
                     completionRule: TASK_COMPLETION_RULE_ALL,
                     createTask,
@@ -718,7 +719,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     getAvatarUrl,
                     id: '',
                     message: '',
-                    approvers: [],
                 }}
             />
         );
