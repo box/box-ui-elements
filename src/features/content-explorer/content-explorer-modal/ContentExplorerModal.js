@@ -2,13 +2,15 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
+import ContentExplorer from '../content-explorer';
 import { Modal } from '../../../components/modal';
 
-import ContentExplorer from '../content-explorer';
+import type { BreadcrumbProps } from '../../../components/breadcrumb/Breadcrumb';
 
 import './ContentExplorerModal.scss';
 
 type Props = {
+    breadcrumbProps?: BreadcrumbProps,
     className?: string,
     customInput?: React.ComponentType<any>,
     description?: string,
@@ -21,6 +23,7 @@ type Props = {
 };
 
 const ContentExplorerModal = ({
+    breadcrumbProps = {},
     className = '',
     customInput,
     title = '',
@@ -42,6 +45,7 @@ const ContentExplorerModal = ({
     >
         {description}
         <ContentExplorer
+            breadcrumbProps={breadcrumbProps}
             customInput={customInput}
             isResponsive={isResponsive}
             onCancelButtonClick={onRequestClose}
