@@ -1,7 +1,7 @@
 // @flow
 
 import type { BoxItemVersionMini, Reply, User } from './core';
-import type { ActionItemError } from './feed';
+import type { ActionItemError, Comment } from './feed';
 
 export type Page = {
     type: 'page',
@@ -49,7 +49,8 @@ export type Annotation = {
     modified_at: string,
     modified_by: User,
     permissions: AnnotationPermission,
-    replies?: Array<Reply>,
+    replies?: Array<Comment>,
+    repliesTotal?: number,
     status?: AnnotationStatus,
     target: Target,
     type: 'annotation',

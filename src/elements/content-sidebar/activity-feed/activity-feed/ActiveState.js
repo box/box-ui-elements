@@ -4,6 +4,7 @@
  */
 import * as React from 'react';
 import getProp from 'lodash/get';
+import ActivityThread from './ActivityThread';
 import ActivityItem from './ActivityItem';
 import AppActivity from '../app-activity';
 import AnnotationActivity from '../annotations';
@@ -33,6 +34,7 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasReplies?: boolean,
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems<>,
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
@@ -57,6 +59,7 @@ const ActiveState = ({
     approverSelectorContacts,
     currentFileVersionId,
     currentUser,
+    hasReplies = false,
     items,
     mentionSelectorContacts,
     getMentionWithQuery,
@@ -85,6 +88,35 @@ const ActiveState = ({
                 const isFocused = item === activeEntry;
                 const refValue = isFocused ? activeFeedItemRef : undefined;
                 const itemFileVersionId = getProp(item, 'file_version.id');
+                const isCurrentVersion = currentFileVersionId === itemFileVersionId;
+
+                if (hasReplies && (item.type === 'comment' || item.type === 'annotation')) {
+                    return (
+                        <ActivityItem
+                            key={item.type + item.id}
+                            className="bcs-activity-thread"
+                            data-testid="activity-thread"
+                            isFocused={isFocused}
+                            ref={refValue}
+                        >
+                            <ActivityThread
+                                currentFileVersionId={currentFileVersionId}
+                                getAvatarUrl={getAvatarUrl}
+                                isCurrentVersion={isCurrentVersion}
+                                item={item}
+                                onAnnotationDelete={onAnnotationDelete}
+                                onAnnotationEdit={onAnnotationEdit}
+                                onAnnotationSelect={onAnnotationSelect}
+                                // onAnnotationReplyCreate={() => {}} // TODO will be implemented in next PR
+                                // onCommentReplyCreate={() => {}} // TODO will be implemented in next PR
+                                onCommentDelete={onCommentDelete}
+                                onCommentEdit={onCommentEdit}
+                                // onGetAnnotationReplies={() => {}} // TODO will be implemented in next PR
+                                // onGetCommentReplies={() => {}} // TODO will be implemented in next PR
+                            />
+                        </ActivityItem>
+                    );
+                }
 
                 switch (item.type) {
                     case 'comment':

@@ -40,6 +40,8 @@ type Comment = {
     message?: string,
     modified_at: string,
     permissions: BoxCommentPermission,
+    replies?: Array<Comment>,
+    repliesTotal?: number,
     tagged_message: string,
     type: 'comment',
 };
