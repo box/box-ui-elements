@@ -45,7 +45,7 @@ describe('api/ThreadedComments', () => {
         });
     });
 
-    describe('create()', () => {
+    describe('createComment()', () => {
         const file = {
             id: 'foo',
             permissions: {},
@@ -60,7 +60,7 @@ describe('api/ThreadedComments', () => {
                 can_comment: true,
             };
 
-            threadedComments.create({
+            threadedComments.createComment({
                 file: { ...file, permissions },
                 message,
                 errorCallback,
@@ -85,7 +85,12 @@ describe('api/ThreadedComments', () => {
         });
 
         test('should reject with an error code for calls with invalid permission ', () => {
-            threadedComments.create({ file: { ...file, can_comment: false }, message, errorCallback, successCallback });
+            threadedComments.createComment({
+                file: { ...file, can_comment: false },
+                message,
+                errorCallback,
+                successCallback,
+            });
 
             expect(errorCallback).toBeCalledWith(expect.any(Error), ERROR_CODE_CREATE_COMMENT);
             expect(threadedComments.post).not.toBeCalled();

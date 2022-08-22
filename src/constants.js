@@ -156,11 +156,11 @@ export const PERMISSION_CAN_DOWNLOAD = 'can_download';
 export const PERMISSION_CAN_EDIT = 'can_edit';
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
 export const PERMISSION_CAN_RENAME = 'can_rename';
+export const PERMISSION_CAN_RESOLVE = 'can_resolve';
 export const PERMISSION_CAN_SET_SHARE_ACCESS = 'can_set_share_access';
 export const PERMISSION_CAN_SHARE = 'can_share';
 export const PERMISSION_CAN_UPLOAD = 'can_upload';
 export const PERMISSION_CAN_VIEW_ANNOTATIONS = 'can_view_annotations';
-export const PERMISSION_CAN_RESOLVE = 'can_resolve';
 
 /* --------------------- Invitee roles --------------------------- */
 export const INVITEE_ROLE_EDITOR: 'editor' = 'editor';

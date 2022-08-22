@@ -4,7 +4,6 @@
  * @author Box
  */
 
-import type { ThreadedCommentPermission, ThreadedCommentStatus } from '../common/types/threadedComments';
 import MarkerBasedApi from './MarkerBasedAPI';
 import {
     PERMISSION_CAN_COMMENT,
@@ -18,6 +17,8 @@ import {
     ERROR_CODE_FETCH_REPLIES,
     ERROR_CODE_CREATE_REPLY,
 } from '../constants';
+
+import type { ThreadedCommentPermission, ThreadedCommentStatus } from '../common/types/threadedComments';
 import type { ElementsXhrError, ElementsErrorCallback } from '../common/types/api';
 import type { BoxItem, BoxItemPermission } from '../common/types/core';
 
@@ -60,7 +61,7 @@ class ThreadedComments extends MarkerBasedApi {
      * @param {Function} errorCallback - Error callback
      * @return {void}
      */
-    create({
+    createComment({
         file,
         message,
         successCallback,
@@ -72,7 +73,7 @@ class ThreadedComments extends MarkerBasedApi {
         successCallback: Function,
     }): void {
         this.errorCode = ERROR_CODE_CREATE_COMMENT;
-        const { id = '', permissions, type } = file;
+        const { id, permissions, type } = file;
 
         try {
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, id);
@@ -81,20 +82,18 @@ class ThreadedComments extends MarkerBasedApi {
             return;
         }
 
-        const requestData = {
-            data: {
-                item: {
-                    id,
-                    type,
-                },
-                message,
-            },
-        };
-
         this.post({
             id,
             url: this.getUrl(),
-            data: requestData,
+            data: {
+                data: {
+                    item: {
+                        id,
+                        type,
+                    },
+                    message,
+                },
+            },
             successCallback,
             errorCallback,
         });
