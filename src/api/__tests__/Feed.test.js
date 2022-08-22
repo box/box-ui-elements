@@ -536,8 +536,8 @@ describe('api/Feed', () => {
         test('should not include versions in feed items if shouldShowVersions is false', done => {
             feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowVersions: false });
             setImmediate(() => {
-                expect(feed.versionsAPI.addCurrentVersion).not.toHaveBeenCalled();
-                expect(sorter.sortFeedItems).toHaveBeenCalledWith(undefined, comments, tasks, undefined, undefined);
+                expect(feed.versionsAPI.addCurrentVersion).not.toBeCalled();
+                expect(sorter.sortFeedItems).toBeCalledWith(undefined, comments, tasks, undefined, undefined);
                 done();
             });
         });
@@ -545,8 +545,8 @@ describe('api/Feed', () => {
         test('should not fetch tasks and include them in feed items if shouldShowTasks is false', done => {
             feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowTasks: false });
             setImmediate(() => {
-                expect(feed.fetchTasksNew).not.toHaveBeenCalled();
-                expect(sorter.sortFeedItems).toHaveBeenCalledWith(
+                expect(feed.fetchTasksNew).not.toBeCalled();
+                expect(sorter.sortFeedItems).toBeCalledWith(
                     versionsWithCurrent,
                     comments,
                     undefined,
