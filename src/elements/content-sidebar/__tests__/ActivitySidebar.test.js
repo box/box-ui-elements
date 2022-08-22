@@ -356,23 +356,33 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
 
         test.each`
-            annotationsEnabled | appActivityEnabled | versionsEnabled | expectedAnnotations | expectedAppActivity | expectedVersions
-            ${false}           | ${false}           | ${false}        | ${false}            | ${false}            | ${false}
-            ${false}           | ${true}            | ${false}        | ${false}            | ${true}             | ${false}
-            ${true}            | ${false}           | ${true}         | ${true}             | ${false}            | ${true}
-            ${true}            | ${true}            | ${true}         | ${true}             | ${true}             | ${true}
-            ${false}           | ${true}            | ${true}         | ${false}            | ${true}             | ${true}
-            ${false}           | ${false}           | ${true}         | ${false}            | ${false}            | ${true}
-            ${true}            | ${true}            | ${false}        | ${true}             | ${true}             | ${false}
-            ${true}            | ${false}           | ${false}        | ${true}             | ${false}            | ${false}
+            annotationsEnabled | appActivityEnabled | tasksEnabled | versionsEnabled | expectedAnnotations | expectedAppActivity | expectedTasks | expectedVersions
+            ${false}           | ${false}           | ${false}     | ${false}        | ${false}            | ${false}            | ${false}      | ${false}
+            ${false}           | ${true}            | ${false}     | ${false}        | ${false}            | ${true}             | ${false}      | ${false}
+            ${true}            | ${false}           | ${false}     | ${true}         | ${true}             | ${false}            | ${false}      | ${true}
+            ${true}            | ${true}            | ${false}     | ${true}         | ${true}             | ${true}             | ${false}      | ${true}
+            ${false}           | ${true}            | ${false}     | ${true}         | ${false}            | ${true}             | ${false}      | ${true}
+            ${false}           | ${false}           | ${false}     | ${true}         | ${false}            | ${false}            | ${false}      | ${true}
+            ${true}            | ${true}            | ${false}     | ${false}        | ${true}             | ${true}             | ${false}      | ${false}
+            ${true}            | ${false}           | ${false}     | ${false}        | ${true}             | ${false}            | ${false}      | ${false}
+            ${false}           | ${false}           | ${true}      | ${false}        | ${false}            | ${false}            | ${true}       | ${false}
+            ${false}           | ${true}            | ${true}      | ${false}        | ${false}            | ${true}             | ${true}       | ${false}
+            ${true}            | ${false}           | ${true}      | ${true}         | ${true}             | ${false}            | ${true}       | ${true}
+            ${true}            | ${true}            | ${true}      | ${true}         | ${true}             | ${true}             | ${true}       | ${true}
+            ${false}           | ${true}            | ${true}      | ${true}         | ${false}            | ${true}             | ${true}       | ${true}
+            ${false}           | ${false}           | ${true}      | ${true}         | ${false}            | ${false}            | ${true}       | ${true}
+            ${true}            | ${true}            | ${true}      | ${false}        | ${true}             | ${true}             | ${true}       | ${false}
+            ${true}            | ${false}           | ${true}      | ${false}        | ${true}             | ${false}            | ${true}       | ${false}
         `(
-            'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled, appActivityEnabled=$appActivityEnabled and versionsEnabled=$versionsEnabled',
+            'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled, appActivityEnabled=$appActivityEnabled, tasksEnabled=$tasksEnabled and versionsEnabled=$versionsEnabled',
             ({
                 annotationsEnabled,
                 appActivityEnabled,
+                tasksEnabled,
                 versionsEnabled,
                 expectedAnnotations,
                 expectedAppActivity,
+                expectedTasks,
                 expectedVersions,
             }) => {
                 wrapper = getWrapper({
@@ -382,6 +392,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                             appActivity: { enabled: appActivityEnabled },
                         },
                     },
+                    hasTasks: tasksEnabled,
                     hasVersions: versionsEnabled,
                 });
 
@@ -400,6 +411,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     {
                         shouldShowAnnotations: expectedAnnotations,
                         shouldShowAppActivity: expectedAppActivity,
+                        shouldShowTasks: expectedTasks,
                         shouldShowVersions: expectedVersions,
                     },
                 );

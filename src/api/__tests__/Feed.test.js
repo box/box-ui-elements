@@ -541,6 +541,21 @@ describe('api/Feed', () => {
                 done();
             });
         });
+
+        test('should not fetch tasks and include them in feed items if shouldShowTasks is false', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowTasks: false });
+            setImmediate(() => {
+                expect(feed.fetchTasksNew).not.toHaveBeenCalled();
+                expect(sorter.sortFeedItems).toHaveBeenCalledWith(
+                    versionsWithCurrent,
+                    comments,
+                    undefined,
+                    undefined,
+                    undefined,
+                );
+                done();
+            });
+        });
     });
 
     describe('fetchAnnotations()', () => {

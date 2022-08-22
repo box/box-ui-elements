@@ -302,8 +302,14 @@ class Feed extends Base {
         {
             shouldShowAnnotations = false,
             shouldShowAppActivity = false,
+            shouldShowTasks = true,
             shouldShowVersions = true,
-        }: { shouldShowAnnotations?: boolean, shouldShowAppActivity?: boolean, shouldShowVersions?: boolean } = {},
+        }: {
+            shouldShowAnnotations?: boolean,
+            shouldShowAppActivity?: boolean,
+            shouldShowTasks?: boolean,
+            shouldShowVersions?: boolean,
+        } = {},
     ): void {
         const { id, permissions = {} } = file;
         const cachedItems = this.getCachedItems(id);
@@ -327,7 +333,7 @@ class Feed extends Base {
         const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
         const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
         const commentsPromise = this.fetchComments(permissions);
-        const tasksPromise = this.fetchTasksNew();
+        const tasksPromise = shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
         const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
 
         Promise.all([

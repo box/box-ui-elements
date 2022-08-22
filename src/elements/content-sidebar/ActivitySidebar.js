@@ -445,7 +445,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {boolean} shouldDestroy true if the api factory should be destroyed
      */
     fetchFeedItems(shouldRefreshCache: boolean = false, shouldDestroy: boolean = false) {
-        const { file, api, features, hasVersions: shouldShowVersions } = this.props;
+        const { file, api, features, hasTasks: shouldShowTasks, hasVersions: shouldShowVersions } = this.props;
         const shouldShowAppActivity = isFeatureEnabled(features, 'activityFeed.appActivity.enabled');
         const shouldShowAnnotations = isFeatureEnabled(features, 'activityFeed.annotations.enabled');
 
@@ -455,7 +455,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             this.fetchFeedItemsSuccessCallback,
             this.fetchFeedItemsErrorCallback,
             this.errorCallback,
-            { shouldShowAnnotations, shouldShowAppActivity, shouldShowVersions },
+            { shouldShowAnnotations, shouldShowAppActivity, shouldShowTasks, shouldShowVersions },
         );
     }
 
