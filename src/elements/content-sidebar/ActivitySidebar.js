@@ -55,6 +55,7 @@ type ExternalProps = {
     getUserProfileUrl?: GetProfileUrlCallback,
     hasReplies?: boolean,
     hasTasks?: boolean,
+    hasTitle?: boolean,
     hasVersions?: boolean,
     onCommentCreate: Function,
     onCommentDelete: (comment: Comment) => any,
@@ -116,6 +117,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         getAnnotationsPath: noop,
         hasReplies: false,
         hasTasks: true,
+        hasTitle: true,
         hasVersions: true,
         isDisabled: false,
         onAnnotationSelect: noop,
@@ -731,6 +733,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             isDisabled = false,
             onVersionHistoryClick,
             getUserProfileUrl,
+            hasTitle,
             activeFeedEntryId,
             activeFeedEntryType,
             onTaskView,
@@ -751,7 +754,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 className="bcs-activity"
                 elementId={elementId}
                 sidebarView={SIDEBAR_VIEW_ACTIVITY}
-                title={<FormattedMessage {...messages.sidebarActivityTitle} />}
+                title={hasTitle ? <FormattedMessage {...messages.sidebarActivityTitle} /> : undefined}
             >
                 <ActivityFeed
                     activeFeedEntryId={activeFeedEntryId}
