@@ -532,6 +532,30 @@ describe('api/Feed', () => {
                 done();
             });
         });
+
+        test('should not include versions in feed items if shouldShowVersions is false', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowVersions: false });
+            setImmediate(() => {
+                expect(feed.versionsAPI.addCurrentVersion).not.toBeCalled();
+                expect(sorter.sortFeedItems).toBeCalledWith(undefined, comments, tasks, undefined, undefined);
+                done();
+            });
+        });
+
+        test('should not fetch tasks and include them in feed items if shouldShowTasks is false', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowTasks: false });
+            setImmediate(() => {
+                expect(feed.fetchTasksNew).not.toBeCalled();
+                expect(sorter.sortFeedItems).toBeCalledWith(
+                    versionsWithCurrent,
+                    comments,
+                    undefined,
+                    undefined,
+                    undefined,
+                );
+                done();
+            });
+        });
     });
 
     describe('fetchAnnotations()', () => {
