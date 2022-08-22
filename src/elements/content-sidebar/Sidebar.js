@@ -41,6 +41,7 @@ type Props = {
     hasActivityFeed: boolean,
     hasAdditionalTabs: boolean,
     hasMetadata: boolean,
+    hasNav: boolean,
     hasSkills: boolean,
     hasVersions: boolean,
     history: RouterHistory,
@@ -215,6 +216,7 @@ class Sidebar extends React.Component<Props, State> {
             getPreview,
             getViewer,
             hasAdditionalTabs,
+            hasNav,
             hasVersions,
             isDefaultOpen,
             isLoading,
@@ -242,17 +244,19 @@ class Sidebar extends React.Component<Props, State> {
                     </div>
                 ) : (
                     <>
-                        <SidebarNav
-                            additionalTabs={additionalTabs}
-                            elementId={this.id}
-                            fileId={fileId}
-                            hasActivity={hasActivity}
-                            hasAdditionalTabs={hasAdditionalTabs}
-                            hasDetails={hasDetails}
-                            hasMetadata={hasMetadata}
-                            hasSkills={hasSkills}
-                            isOpen={isOpen}
-                        />
+                        {hasNav && (
+                            <SidebarNav
+                                additionalTabs={additionalTabs}
+                                elementId={this.id}
+                                fileId={fileId}
+                                hasActivity={hasActivity}
+                                hasAdditionalTabs={hasAdditionalTabs}
+                                hasDetails={hasDetails}
+                                hasMetadata={hasMetadata}
+                                hasSkills={hasSkills}
+                                isOpen={isOpen}
+                            />
+                        )}
                         <SidebarPanels
                             activitySidebarProps={activitySidebarProps}
                             currentUser={currentUser}

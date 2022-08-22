@@ -53,6 +53,9 @@ type ExternalProps = {
     activeFeedEntryType?: FocusableFeedItemType,
     currentUser?: User,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasReplies?: boolean,
+    hasTasks?: boolean,
+    hasVersions?: boolean,
     onCommentCreate: Function,
     onCommentDelete: (comment: Comment) => any,
     onCommentUpdate: () => any,
@@ -111,6 +114,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         emitAnnotatorActiveChangeEvent: noop,
         getAnnotationsMatchPath: noop,
         getAnnotationsPath: noop,
+        hasReplies: false,
+        hasTasks: true,
+        hasVersions: true,
         isDisabled: false,
         onAnnotationSelect: noop,
         onCommentCreate: noop,
@@ -188,7 +194,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {boolean} shouldDestroy
      * @return {void}
      */
-    fetchCurrentUser(user?: User, shouldDestroy?: boolean = false): void {
+    fetchCurrentUser(user?: User, shouldDestroy: boolean = false): void {
         const { api, file } = this.props;
 
         if (!file) {
@@ -435,10 +441,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     /**
      * Fetches the feed items for the sidebar
      *
+     * @param {boolean} shouldRefreshCache true if the cache should be refreshed
      * @param {boolean} shouldDestroy true if the api factory should be destroyed
      */
     fetchFeedItems(shouldRefreshCache: boolean = false, shouldDestroy: boolean = false) {
-        const { file, api, features } = this.props;
+        const { file, api, features, hasTasks: shouldShowTasks, hasVersions: shouldShowVersions } = this.props;
         const shouldShowAppActivity = isFeatureEnabled(features, 'activityFeed.appActivity.enabled');
         const shouldShowAnnotations = isFeatureEnabled(features, 'activityFeed.annotations.enabled');
 
@@ -448,7 +455,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             this.fetchFeedItemsSuccessCallback,
             this.fetchFeedItemsErrorCallback,
             this.errorCallback,
-            { shouldShowAnnotations, shouldShowAppActivity },
+            { shouldShowAnnotations, shouldShowAppActivity, shouldShowTasks, shouldShowVersions },
         );
     }
 
@@ -691,21 +698,29 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     renderAddTaskButton = () => {
-        const { isDisabled } = this.props;
+        const { isDisabled, hasTasks } = this.props;
         const { approverSelectorContacts } = this.state;
         const { getApproverWithQuery, getAvatarUrl, createTask, onTaskModalClose } = this;
-        const taskFormProps = {
-            approverSelectorContacts,
-            completionRule: TASK_COMPLETION_RULE_ALL,
-            createTask,
-            getApproverWithQuery,
-            getAvatarUrl,
-            id: '',
-            message: '',
-            approvers: [],
-        };
+
+        if (!hasTasks) {
+            return null;
+        }
+
         return (
-            <AddTaskButton isDisabled={isDisabled} onTaskModalClose={onTaskModalClose} taskFormProps={taskFormProps} />
+            <AddTaskButton
+                isDisabled={isDisabled}
+                onTaskModalClose={onTaskModalClose}
+                taskFormProps={{
+                    approvers: [],
+                    approverSelectorContacts,
+                    completionRule: TASK_COMPLETION_RULE_ALL,
+                    createTask,
+                    getApproverWithQuery,
+                    getAvatarUrl,
+                    id: '',
+                    message: '',
+                }}
+            />
         );
     };
 
