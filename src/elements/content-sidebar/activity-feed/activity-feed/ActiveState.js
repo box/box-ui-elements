@@ -110,7 +110,19 @@ const ActiveState = ({
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <ActivityThread hasReplies={hasReplies} data-testid="activity-thread">
+                                <ActivityThread
+                                    data-testid="activity-thread"
+                                    onReplyDelete={onCommentDelete}
+                                    onReplyEdit={onCommentEdit}
+                                    currentUser={currentUser}
+                                    getAvatarUrl={getAvatarUrl}
+                                    hasReplies={hasReplies}
+                                    getMentionWithQuery={getMentionWithQuery}
+                                    getUserProfileUrl={getUserProfileUrl}
+                                    id={item.id}
+                                    mentionSelectorContacts={mentionSelectorContacts}
+                                    translations={translations}
+                                >
                                     <Comment
                                         {...item}
                                         currentUser={currentUser}
@@ -187,7 +199,19 @@ const ActiveState = ({
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <ActivityThread hasReplies={hasReplies} data-testid="activity-thread">
+                                <ActivityThread
+                                    data-testid="activity-thread"
+                                    onReplyDelete={onCommentDelete}
+                                    onReplyEdit={onCommentEdit}
+                                    currentUser={currentUser}
+                                    getAvatarUrl={getAvatarUrl}
+                                    getMentionWithQuery={getMentionWithQuery}
+                                    getUserProfileUrl={getUserProfileUrl}
+                                    id={item.id}
+                                    hasReplies={hasReplies}
+                                    mentionSelectorContacts={mentionSelectorContacts}
+                                    translations={translations}
+                                >
                                     <AnnotationActivity
                                         currentUser={currentUser}
                                         getAvatarUrl={getAvatarUrl}

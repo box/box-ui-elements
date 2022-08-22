@@ -1,0 +1,32 @@
+@import '../../../common/variables';
+
+.bcs-ActivityThread {
+    &-reply.bcs-ActivityItem {
+        margin-left: $sidebarActivityFeedSpacingHorizontal;
+    }
+
+    &-replies {
+        position: relative;
+
+        &::before {
+            position: absolute;
+            top: $sidebarActivityFeedSpacingVertical;
+            bottom: $sidebarActivityFeedSpacingVertical;
+            left: $sidebarActivityFeedSpacingHorizontal;
+            width: $bdl-grid-unit;
+            background: $bdl-gray-10;
+            content: '';
+        }
+    }
+
+    &-button {
+        margin-left: $sidebarActivityFeedSpacingHorizontal;
+        color: $bdl-box-blue;
+        font-weight: bold;
+
+        &:hover {
+            margin-left: $sidebarActivityFeedSpacingHorizontal;
+            font-weight: bold;
+        }
+    }
+}

@@ -50,8 +50,15 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
     key="annotationanno_123"
   >
     <ActivityThread
+      currentUser={
+        Object {
+          "id": "user_123445",
+          "name": "Rihanna",
+        }
+      }
       data-testid="activity-thread"
       hasReplies={false}
+      id="anno_123"
     >
       <AnnotationActivity
         currentUser={
@@ -94,8 +101,15 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
     key="commentc_123"
   >
     <ActivityThread
+      currentUser={
+        Object {
+          "id": "user_123445",
+          "name": "Rihanna",
+        }
+      }
       data-testid="activity-thread"
       hasReplies={false}
+      id="c_123"
     >
       <Comment
         created_at="2018-07-03T14:43:52-07:00"
