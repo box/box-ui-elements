@@ -88,38 +88,38 @@ const ActiveState = ({
                 const isFocused = item === activeEntry;
                 const refValue = isFocused ? activeFeedItemRef : undefined;
                 const itemFileVersionId = getProp(item, 'file_version.id');
-                const isCurrentVersion = currentFileVersionId === itemFileVersionId;
-
-                if (hasReplies && (item.type === 'comment' || item.type === 'annotation')) {
-                    return (
-                        <ActivityItem
-                            key={item.type + item.id}
-                            className="bcs-activity-thread"
-                            data-testid="activity-thread"
-                            isFocused={isFocused}
-                            ref={refValue}
-                        >
-                            <ActivityThread
-                                currentFileVersionId={currentFileVersionId}
-                                getAvatarUrl={getAvatarUrl}
-                                isCurrentVersion={isCurrentVersion}
-                                item={item}
-                                onAnnotationDelete={onAnnotationDelete}
-                                onAnnotationEdit={onAnnotationEdit}
-                                onAnnotationSelect={onAnnotationSelect}
-                                // onAnnotationReplyCreate={() => {}} // TODO will be implemented in next PR
-                                // onCommentReplyCreate={() => {}} // TODO will be implemented in next PR
-                                onCommentDelete={onCommentDelete}
-                                onCommentEdit={onCommentEdit}
-                                // onGetAnnotationReplies={() => {}} // TODO will be implemented in next PR
-                                // onGetCommentReplies={() => {}} // TODO will be implemented in next PR
-                            />
-                        </ActivityItem>
-                    );
-                }
 
                 switch (item.type) {
                     case 'comment':
+                        if (hasReplies) {
+                            return (
+                                <ActivityItem
+                                    key={item.type + item.id}
+                                    className="bcs-activity-thread"
+                                    data-testid="activity-thread"
+                                    isFocused={isFocused}
+                                    ref={refValue}
+                                >
+                                    <ActivityThread>
+                                        <Comment
+                                            {...item}
+                                            currentUser={currentUser}
+                                            getAvatarUrl={getAvatarUrl}
+                                            getMentionWithQuery={getMentionWithQuery}
+                                            getUserProfileUrl={getUserProfileUrl}
+                                            mentionSelectorContacts={mentionSelectorContacts}
+                                            onDelete={onCommentDelete}
+                                            onEdit={onCommentEdit}
+                                            permissions={{
+                                                can_delete: getProp(item.permissions, 'can_delete', false),
+                                                can_edit: getProp(item.permissions, 'can_edit', false),
+                                            }}
+                                            translations={translations}
+                                        />
+                                    </ActivityThread>
+                                </ActivityItem>
+                            );
+                        }
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
@@ -193,6 +193,32 @@ const ActiveState = ({
                             </ActivityItem>
                         );
                     case 'annotation':
+                        if (hasReplies) {
+                            return (
+                                <ActivityItem
+                                    key={item.type + item.id}
+                                    className="bcs-activity-thread"
+                                    data-testid="activity-thread"
+                                    isFocused={isFocused}
+                                    ref={refValue}
+                                >
+                                    <ActivityThread>
+                                        <AnnotationActivity
+                                            currentUser={currentUser}
+                                            getAvatarUrl={getAvatarUrl}
+                                            getUserProfileUrl={getUserProfileUrl}
+                                            getMentionWithQuery={getMentionWithQuery}
+                                            isCurrentVersion={currentFileVersionId === itemFileVersionId}
+                                            item={item}
+                                            mentionSelectorContacts={mentionSelectorContacts}
+                                            onEdit={onAnnotationEdit}
+                                            onDelete={onAnnotationDelete}
+                                            onSelect={onAnnotationSelect}
+                                        />
+                                    </ActivityThread>
+                                </ActivityItem>
+                            );
+                        }
                         return (
                             <ActivityItem
                                 key={item.type + item.id}

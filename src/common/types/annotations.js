@@ -53,6 +53,7 @@ export type Annotation = {
     repliesTotal?: number,
     status?: AnnotationStatus,
     target: Target,
+    total_reply_count?: number,
     type: 'annotation',
 };
 
