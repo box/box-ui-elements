@@ -106,11 +106,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const wrapper = getWrapper();
             expect(wrapper).toMatchSnapshot();
         });
-
-        test('should pass undefined as title prop to SidebarContent when hasTitle is false', () => {
-            const wrapper = getWrapper({ hasTitle: false });
-            expect(wrapper.find('SidebarContent').props().title).toBe(undefined);
-        });
     });
 
     describe('createTask()', () => {
