@@ -1,24 +1,24 @@
 @import '../../styles/variables';
 
-.sidebar-collapsible-container {
+.accordion-collapsible-container {
     width: 100%;
     background-color: $white;
     box-shadow: 0 0 0 1px $bdl-gray-10;
 
     @include bdl-transition($bdl-transitionDurationBase, background-color);
 
-    .sidebar-collapsible-header {
+    .accordion-collapsible-header {
         height: 58px;
     }
 
-    .sidebar-collapsible-dropdown-container {
+    .accordion-collapsible-dropdown-container {
         padding-right: 15px;
         padding-bottom: 20px;
         padding-left: 25px;
         background-color: $bdl-gray-02;
     }
 
-    .sidebar-collapsible-header-btn {
+    .accordion-collapsible-header-btn {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -33,12 +33,12 @@
         }
     }
 
-    .sidebar-collapsible-title {
+    .accordion-collapsible-title {
         font-weight: bold;
         font-size: 15px;
     }
 
-    .sidebar-collapsible-icon {
+    .accordion-collapsible-icon {
         @include bdl-transition($bdl-transitionDurationBase, transform);
 
         transform: rotateZ(90deg);
@@ -47,7 +47,7 @@
     &.is-open {
         background-color: $bdl-gray-02;
 
-        .sidebar-collapsible-icon {
+        .accordion-collapsible-icon {
             transform: rotateZ(360deg);
         }
     }

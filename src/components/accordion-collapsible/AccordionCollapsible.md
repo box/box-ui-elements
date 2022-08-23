@@ -3,7 +3,7 @@
 **Regular Dropdown**
 
 ```js
-<SidebarCollapsible isOpen title="Collapsible card title">
+<AccordionCollapsible isOpen title="Collapsible card title" buttonProps={{"data-testid":"hello"}}>
     <div>This is content of a collapsible component</div>
     <div>
         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
@@ -13,8 +13,8 @@
         Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
         of Lorem Ipsum.
     </div>
-</SidebarCollapsible>
-<SidebarCollapsible isOpen title="Collapsible card title">
+</AccordionCollapsible>
+<AccordionCollapsible title="Collapsible card title">
     <div>This is content of a collapsible component</div>
     <div>
         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
@@ -24,8 +24,8 @@
         Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
         of Lorem Ipsum.
     </div>
-</SidebarCollapsible>
-<SidebarCollapsible isOpen title="Collapsible card title">
+</AccordionCollapsible>
+<AccordionCollapsible title="Collapsible card title">
     <div>This is content of a collapsible component</div>
     <div>
         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
@@ -35,5 +35,5 @@
         Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
         of Lorem Ipsum.
     </div>
-</SidebarCollapsible>
+</AccordionCollapsible>
 ```

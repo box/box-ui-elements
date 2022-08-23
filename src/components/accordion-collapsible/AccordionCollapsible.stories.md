@@ -1,1 +1,1 @@
-`import SidebarCollapsible from 'box-ui-elements/es/components/sidebar-collapsible/SidebarCollapsible';`
+`import AccordionCollapsible from 'box-ui-elements/es/components/accordion-collapsible/AccordionCollapsible';`

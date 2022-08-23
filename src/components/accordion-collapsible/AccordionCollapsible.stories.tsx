@@ -6,7 +6,7 @@ import notes from './AccordionCollapsible.stories.md';
 import AccordionCollapsible from './AccordionCollapsible';
 
 export default {
-    title: 'Components|SidebarCollapsible',
+    title: 'Components|AccordionCollapsible',
     component: AccordionCollapsible,
     parameters: {
         notes,

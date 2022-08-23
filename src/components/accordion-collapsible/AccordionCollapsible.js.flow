@@ -1,3 +1,4 @@
+// @flow
 import * as React from 'react';
 import classNames from 'classnames';
 import AnimateHeight from 'react-animate-height';
@@ -9,30 +10,25 @@ import { ButtonType } from '../button';
 
 import './AccordionCollapsible.scss';
 
-type AccordionCollapsibleProps = {
+type Props = {
     /** animationDuration - duration of animation in milliseconds */
-    animationDuration?: number;
-    /** containerProps - other props (e.g. resin target names) to be included in wrapper div */
-    containerProps?: Record<string, React.ReactNode>;
+    animationDuration?: number,
     /** buttonProps - other props (e.g. resin target names) to be included in the button */
-    buttonProps?: Record<string, React.ReactNode>;
+    buttonProps?: Object,
     /** children - content to be displayed in the card when it is expanded */
-    children: Array<React.ReactChild> | React.ReactChild;
+    children: React.Node,
     /** className - CSS class for the wrapper div */
-    className?: string;
+    className?: string,
+    /** containerProps - other props (e.g. resin target names) to be included in wrapper div */
+    containerProps?: Object,
     /** isOpen - initial state of the collapsible card */
-    isOpen: boolean;
+    isOpen: boolean,
     /** onClose - callback called when collapsible is opened */
-    onClose?: Function;
+    onClose?: Function,
     /** onOpen - callback called when collapsible is collapsed */
-    onOpen?: Function;
+    onOpen?: Function,
     /** title - string or component in the title of the collapsible card */
-    title: string | React.ReactElement;
-};
-
-type AccordionCollapsibleState = {
-    /** isOpen - initial state of the collapsible card */
-    isOpen: boolean;
+    title: string | React.ReactNode,
 };
 
 const AccordionCollapsible = ({
@@ -45,8 +41,8 @@ const AccordionCollapsible = ({
     onClose,
     onOpen,
     title,
-}: AccordionCollapsibleProps) => {
-    const [state, setState] = React.useState<AccordionCollapsibleState>({ isOpen });
+}: Props) => {
+    const [state, setState] = React.useState({ isOpen });
 
     const toggleVisibility = () => {
         if (state.isOpen && onClose) {
@@ -87,5 +83,4 @@ const AccordionCollapsible = ({
     );
 };
 
-export { AccordionCollapsibleProps };
 export default AccordionCollapsible;
