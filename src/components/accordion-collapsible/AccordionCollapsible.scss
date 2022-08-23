@@ -2,10 +2,8 @@
 
 .sidebar-collapsible-container {
     width: 100%;
-    // border: 1px solid $bdl-gray-10;
     background-color: $white;
     box-shadow: 0 0 0 1px $bdl-gray-10;
-    // margin-top: -1px;
 
     @include bdl-transition($bdl-transitionDurationBase, background-color);
 
@@ -18,7 +16,6 @@
         padding-bottom: 20px;
         padding-left: 25px;
         background-color: $bdl-gray-02;
-        // margin-top: -2px;
     }
 
     .sidebar-collapsible-header-btn {

@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { boolean } from '@storybook/addon-knobs';
 
-import notes from './SidebarCollapsible.stories.md';
+import notes from './AccordionCollapsible.stories.md';
 
-import SidebarCollapsible from './SidebarCollapsible';
+import AccordionCollapsible from './AccordionCollapsible';
 
 export default {
     title: 'Components|SidebarCollapsible',
-    component: SidebarCollapsible,
+    component: AccordionCollapsible,
     parameters: {
         notes,
     },

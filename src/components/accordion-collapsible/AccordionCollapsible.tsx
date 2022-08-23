@@ -11,7 +11,7 @@ import { ButtonType } from '../button';
 
 import './SidebarCollapsible.scss';
 
-type SidebarCollapsibleProps = {
+type AccordionCollapsibleProps = {
     /** animationDuration - duration of animation in milliseconds */
     animationDuration?: number;
     /** buttonProps - other props (e.g. resin target names) to be included in the button */
@@ -30,12 +30,12 @@ type SidebarCollapsibleProps = {
     title: string | React.ReactElement;
 };
 
-type SidebarCollapsibleState = {
+type AccordionCollapsibleState = {
     /** isOpen - initial state of the collapsible card */
     isOpen: boolean;
 };
 
-const SidebarCollapsible = ({
+const AccordionCollapsible = ({
     animationDuration = 100,
     buttonProps,
     children,
@@ -44,8 +44,8 @@ const SidebarCollapsible = ({
     onClose,
     onOpen,
     title,
-}: SidebarCollapsibleProps) => {
-    const [state, setState] = React.useState<SidebarCollapsibleState>({ isOpen });
+}: AccordionCollapsibleProps) => {
+    const [state, setState] = React.useState<AccordionCollapsibleState>({ isOpen });
 
     const toggleVisibility = () => {
         if (state.isOpen && onClose) {
@@ -84,5 +84,5 @@ const SidebarCollapsible = ({
     );
 };
 
-export { SidebarCollapsibleProps };
-export default SidebarCollapsible;
+export { AccordionCollapsibleProps };
+export default AccordionCollapsible;
