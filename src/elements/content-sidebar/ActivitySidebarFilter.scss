@@ -1,0 +1,14 @@
+@import '../../styles/variables';
+
+// Change size and weight of menu-toggle in ActivitySidebarFilter
+.bcs-ActivitySidebarFilter .menu-toggle {
+    font-weight: bold;
+    font-size: $bdl-fontSize-large;
+}
+
+// Extend left padding for unselected menu items with icon width and padding in order to align
+// with the selected menu item that is displayed with checkmark icon
+.bcs-ActivitySidebarFilter-dropdownMenu .menu-item:not(.is-selected) {
+    // Original padding + icon with + icon padding
+    padding-left: 8px + 16px + 16px;
+}

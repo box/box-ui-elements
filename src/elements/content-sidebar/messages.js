@@ -7,6 +7,21 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    activitySidebarFilterOptionAll: {
+        id: 'be.activitySidebarFilter.status.all',
+        defaultMessage: 'All Comments',
+        description: 'option "All Comments" for sidebar activities filter dropdown',
+    },
+    activitySidebarFilterOptionOpen: {
+        id: 'be.activitySidebarFilter.status.open',
+        defaultMessage: 'Unresolved Comments',
+        description: 'option "Unresolved Comments" for sidebar activities filter dropdown',
+    },
+    activitySidebarFilterOptionResolved: {
+        id: 'be.activitySidebarFilter.status.resolved',
+        defaultMessage: 'Resolved Comments',
+        description: 'option "Resolved Comments" for sidebar activities filter dropdown',
+    },
     boxSignFtuxBody: {
         id: 'be.contentSidebar.boxSignFtuxBody',
         defaultMessage: 'Sign documents or send signature requests, right from where your content lives',

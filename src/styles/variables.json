@@ -77,6 +77,7 @@
     "bdl-watermelon-red-02": "#fffbfc",
     "bdl-line-height": "20px",
     "bdl-fontSize": "13px",
+    "bdl-fontSize-large": "16px",
     "bdl-fontSize-minimum": "11px",
     "bdl-fontSize--dejaBlue": "14px",
     "avatar-colors": ["#0061d5", "#003c84", "#767676", "#222", "#4826c2", "#9f3fed"],

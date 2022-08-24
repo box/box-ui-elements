@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import messages from '../../common/messages';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
 
@@ -432,9 +432,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             instance.setState = jest.fn();
         });
 
-        test('should set the feedItems in the state', () => {
+        test('should set the allFeedItems and feedItems in the state', () => {
             instance.fetchFeedItemsSuccessCallback(feedItems);
             expect(instance.setState).toBeCalledWith({
+                allFeedItems: feedItems,
                 feedItems,
                 activityFeedError: undefined,
             });
@@ -468,9 +469,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             instance.setState = jest.fn();
         });
 
-        test('should set the feedItems in the state', () => {
+        test('should set the allFeedItems feedItems in the state', () => {
             instance.fetchFeedItemsErrorCallback(feedItems);
             expect(instance.setState).toBeCalledWith({
+                allFeedItems: feedItems,
                 feedItems,
                 activityFeedError: activityFeedInlineError,
             });
@@ -883,11 +885,212 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
+    describe('getItemsFilteredStateChangeFn()', () => {
+        let instance;
+        let wrapper;
+
+        const itemOpen1 = {
+            type: 'comment',
+            id: 'open1',
+            tagged_message: '',
+            message: 'test',
+            created_at: '2022-07-26T09:08:20-07:00',
+            created_by: {
+                type: 'user',
+                id: '6187936317',
+                name: 'Jhon',
+                login: 'jdoe@box.com',
+            },
+            modified_at: '2022-07-26T09:08:20-07:00',
+            permissions: {
+                can_delete: true,
+                can_edit: true,
+                can_reply: true,
+            },
+            status: 'open',
+        };
+        const itemOpen2 = {
+            type: 'annotation',
+            id: 'open2',
+            tagged_message: '',
+            message: 'test',
+            created_at: '2022-07-26T09:08:20-07:00',
+            created_by: {
+                type: 'user',
+                id: '6187936317',
+                name: 'Jhon',
+                login: 'jdoe@box.com',
+            },
+            modified_at: '2022-07-26T09:08:20-07:00',
+            permissions: {
+                can_delete: true,
+                can_edit: true,
+                can_reply: true,
+            },
+            status: 'open',
+        };
+        const itemResolved1 = {
+            type: 'comment',
+            id: 'open1',
+            tagged_message: '',
+            message: 'test',
+            created_at: '2022-07-26T09:08:20-07:00',
+            created_by: {
+                type: 'user',
+                id: '6187936317',
+                name: 'Jhon',
+                login: 'jdoe@box.com',
+            },
+            modified_at: '2022-07-26T09:08:20-07:00',
+            permissions: {
+                can_delete: true,
+                can_edit: true,
+                can_reply: true,
+            },
+            status: 'resolved',
+        };
+        const itemResolved2 = {
+            type: 'annotation',
+            id: 'open2',
+            tagged_message: '',
+            message: 'test',
+            created_at: '2022-07-26T09:08:20-07:00',
+            created_by: {
+                type: 'user',
+                id: '6187936317',
+                name: 'Jhon',
+                login: 'jdoe@box.com',
+            },
+            modified_at: '2022-07-26T09:08:20-07:00',
+            permissions: {
+                can_delete: true,
+                can_edit: true,
+                can_reply: true,
+            },
+            status: 'resolved',
+        };
+        const items = [itemOpen1, itemOpen2, itemResolved1, itemResolved2];
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.setState({
+                allFeedItems: items,
+            });
+        });
+
+        describe('based on particular status should return a fn that when called with state returns a proper state change object', () => {
+            test('undefined', () => {
+                const fn = instance.getItemsFilteredStateChangeFn();
+                expect(fn(instance.state)).toMatchObject({
+                    feedItems: items,
+                    feedItemsStatusFilter: undefined,
+                });
+            });
+
+            test('open', () => {
+                const fn = instance.getItemsFilteredStateChangeFn('open');
+                expect(fn(instance.state)).toMatchObject({
+                    feedItems: [itemOpen1, itemOpen2],
+                    feedItemsStatusFilter: 'open',
+                });
+            });
+
+            test('resolved', () => {
+                const fn = instance.getItemsFilteredStateChangeFn('resolved');
+                expect(fn(instance.state)).toMatchObject({
+                    feedItems: [itemResolved1, itemResolved2],
+                    feedItemsStatusFilter: 'resolved',
+                });
+            });
+        });
+    });
+
+    describe('handleItemsFiltered()', () => {
+        test.each`
+            state         | expected
+            ${undefined}  | ${undefined}
+            ${'open'}     | ${'open'}
+            ${'resolved'} | ${'resolved'}
+        `('given $state should call getItemsFilteredStateChangeFn with $expected', ({ state, expected }) => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.getItemsFilteredStateChangeFn = jest.fn();
+            instance.handleItemsFiltered(state);
+            expect(instance.getItemsFilteredStateChangeFn).toBeCalledWith(expected);
+        });
+    });
+
     describe('renderAddTaskButton()', () => {
         test('should return null when hasTasks is false', () => {
             const wrapper = getWrapper({ hasTasks: false });
             const instance = wrapper.instance();
             expect(instance.renderAddTaskButton()).toBe(null);
+        });
+    });
+
+    describe('renderActivitySidebarFilter()', () => {
+        describe('should return null', () => {
+            test('when activityFeed.filter feature is not set', () => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                expect(instance.renderActivitySidebarFilter()).toBe(null);
+            });
+
+            test('when activityFeed.filter feature is disabled', () => {
+                const wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            filter: { enabled: false },
+                        },
+                    },
+                });
+                const instance = wrapper.instance();
+                expect(instance.renderActivitySidebarFilter()).toBe(null);
+            });
+        });
+
+        test('should return ActivitySidebarFilter when activityFeed.filter feature is enabled', () => {
+            const wrapper = getWrapper({
+                features: {
+                    activityFeed: {
+                        filter: { enabled: true },
+                    },
+                },
+            });
+            const instance = wrapper.instance();
+            const resultWrapper = mount(instance.renderActivitySidebarFilter());
+            expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
+        });
+    });
+
+    describe('renderTitle()', () => {
+        describe('should return FormattedMessage', () => {
+            test('when activityFeed.filter feature is not set', () => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                const resultWrapper = mount(instance.renderTitle());
+                expect(resultWrapper.name()).toBe('FormattedMessage');
+            });
+
+            test('when activityFeed.filter feature is disabled', () => {
+                const wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            filter: { enabled: false },
+                        },
+                    },
+                });
+                const instance = wrapper.instance();
+                const resultWrapper = mount(instance.renderTitle());
+                expect(resultWrapper.name()).toBe('FormattedMessage');
+            });
+        });
+
+        test('should return undefined when activityFeed.filter feature is enabled', () => {
+            const wrapper = getWrapper({ features: { activityFeed: { filter: { enabled: true } } } });
+            const instance = wrapper.instance();
+            expect(instance.renderTitle()).toBe(undefined);
         });
     });
 });

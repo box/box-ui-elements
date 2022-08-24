@@ -451,6 +451,10 @@ export const TASK_EDIT_MODE_EDIT: 'EDIT' = 'EDIT';
 /* ----------------- Task Validation ---------------- */
 export const TASK_MAX_GROUP_ASSIGNEES: 250 = 250;
 
+/* ------------------ Activity Feed Item Statuses ----------------- */
+export const ACTIVITY_FEED_ITEM_OPEN: 'open' = 'open';
+export const ACTIVITY_FEED_ITEM_RESOLVED: 'resolved' = 'resolved';
+
 /* ----------------- Theme ---------------------------*/
 export const THEME_VERY_DARK = 'vDark';
 export const THEME_DARK = 'dark';

@@ -25,6 +25,7 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
 import { withRouterAndRef } from '../common/routing';
+import ActivitySidebarFilter from './ActivitySidebarFilter';
 import {
     DEFAULT_COLLAB_DEBOUNCE,
     ERROR_CODE_FETCH_ACTIVITY,
@@ -39,7 +40,13 @@ import type {
     TaskUpdatePayload,
     TaskCollabStatus,
 } from '../../common/types/tasks';
-import type { Annotation, AnnotationPermission, FocusableFeedItemType, FeedItems } from '../../common/types/feed';
+import type {
+    Annotation,
+    AnnotationPermission,
+    FocusableFeedItemType,
+    FeedItems,
+    FeedItemStatus,
+} from '../../common/types/feed';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { SelectorItems, User, UserMini, GroupMini, BoxItem, BoxItemPermission } from '../../common/types/core';
@@ -87,11 +94,13 @@ type Props = {
 
 type State = {
     activityFeedError?: Errors,
+    allFeedItems?: FeedItems,
     approverSelectorContacts: SelectorItems<UserMini | GroupMini>,
     contactsLoaded?: boolean,
     currentUser?: User,
     currentUserError?: Errors,
     feedItems?: FeedItems,
+    feedItemsStatusFilter?: FeedItemStatus,
     mentionSelectorContacts?: SelectorItems<UserMini>,
 };
 
@@ -485,7 +494,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             );
         }
 
-        this.setState({ feedItems, activityFeedError: undefined });
+        // eslint bug: allFeedItems state is used in getItemsFilteredStateChangeFn
+        // eslint-disable-next-line react/no-unused-state
+        this.setState({ feedItems, allFeedItems: feedItems, activityFeedError: undefined });
     };
 
     /**
@@ -500,6 +511,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         this.setState({
             feedItems,
+            // eslint bug: allFeedItems state is used in getItemsFilteredStateChangeFn
+            // eslint-disable-next-line react/no-unused-state
+            allFeedItems: feedItems,
             activityFeedError: activityFeedInlineError,
         });
 
@@ -687,6 +701,32 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onAnnotationSelect(annotation);
     };
 
+    /**
+     * Returns a function that should be passed to setState in order to filter feed items
+     * and set current status filter state
+     *
+     * @param {FeedItemStatus} status - Feed item status
+     * @return {Function}
+     */
+    getItemsFilteredStateChangeFn = (status?: FeedItemStatus) => ({ allFeedItems }: State) => {
+        let newFeedItems: FeedItems | typeof undefined = allFeedItems;
+        if (status && allFeedItems) {
+            newFeedItems = allFeedItems.filter(item => item.status && item.status === status);
+        }
+
+        return { feedItems: newFeedItems, feedItemsStatusFilter: status };
+    };
+
+    /**
+     * Filters visible feed items based on given feed item status.
+     *
+     * @param {FeedItemStatus} status - Feed item status
+     * @return void
+     */
+    handleItemsFiltered = (status?: FeedItemStatus) => {
+        this.setState(this.getItemsFilteredStateChangeFn(status));
+    };
+
     onTaskModalClose = () => {
         this.setState({
             approverSelectorContacts: [],
@@ -724,6 +764,41 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         );
     };
 
+    renderActivitySidebarFilter = () => {
+        const { features } = this.props;
+        const { feedItemsStatusFilter } = this.state;
+        const shouldShowActivityFeedFilter = isFeatureEnabled(features, 'activityFeed.filter.enabled');
+
+        if (!shouldShowActivityFeedFilter) {
+            return null;
+        }
+        return (
+            <ActivitySidebarFilter
+                feedItemStatus={feedItemsStatusFilter}
+                onFeedItemStatusClick={selectedStatus => {
+                    if (selectedStatus !== feedItemsStatusFilter) {
+                        this.handleItemsFiltered(selectedStatus);
+                    }
+                }}
+            />
+        );
+    };
+
+    renderActions = () => (
+        <>
+            {this.renderActivitySidebarFilter()}
+            {this.renderAddTaskButton()}
+        </>
+    );
+
+    renderTitle = () => {
+        const { features } = this.props;
+        if (isFeatureEnabled(features, 'activityFeed.filter.enabled')) {
+            return undefined;
+        }
+        return <FormattedMessage {...messages.sidebarActivityTitle} />;
+    };
+
     render() {
         const {
             elementId,
@@ -747,11 +822,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         return (
             <SidebarContent
-                actions={this.renderAddTaskButton()}
+                actions={this.renderActions()}
                 className="bcs-activity"
                 elementId={elementId}
                 sidebarView={SIDEBAR_VIEW_ACTIVITY}
-                title={<FormattedMessage {...messages.sidebarActivityTitle} />}
+                title={this.renderTitle()}
             >
                 <ActivityFeed
                     activeFeedEntryId={activeFeedEntryId}
