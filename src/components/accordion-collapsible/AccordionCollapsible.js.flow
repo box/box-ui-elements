@@ -4,9 +4,8 @@ import classNames from 'classnames';
 import AnimateHeight from 'react-animate-height';
 
 import { bdlGray50 } from '../../styles/variables';
-import IconChevron, { DirectionType } from '../../icons/general/IconChevron';
+import IconChevron from '../../icons/general/IconChevron';
 import PlainButton from '../plain-button';
-import { ButtonType } from '../button';
 
 import './AccordionCollapsible.scss';
 
@@ -28,7 +27,7 @@ type Props = {
     /** onOpen - callback called when collapsible is collapsed */
     onOpen?: Function,
     /** title - string or component in the title of the collapsible card */
-    title: string | React.ReactNode,
+    title: string | React.Node,
 };
 
 const AccordionCollapsible = ({
@@ -66,13 +65,13 @@ const AccordionCollapsible = ({
                     aria-expanded={state.isOpen}
                     className="accordion-collapsible-header-btn"
                     onClick={toggleVisibility}
-                    type={ButtonType.BUTTON}
+                    type="button"
                 >
                     <div className="accordion-collapsible-title">{title}</div>
                     <IconChevron
                         className="accordion-collapsible-icon"
                         color={bdlGray50}
-                        direction={state.isOpen ? DirectionType.DOWN : DirectionType.RIGHT}
+                        direction={state.isOpen ? 'down' : 'right'}
                     />
                 </PlainButton>
             </div>
