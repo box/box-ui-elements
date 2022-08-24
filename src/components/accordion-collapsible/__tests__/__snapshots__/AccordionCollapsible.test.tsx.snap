@@ -1,0 +1,365 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/accordion-collapsible/AccordionCollapsible should apply buttonProps correctly 1`] = `
+<div
+  className="accordion-collapsible-container is-open"
+>
+  <div
+    className="accordion-collapsible-header"
+  >
+    <PlainButton
+      a={1}
+      aria-expanded={true}
+      b={2}
+      className="accordion-collapsible-header-btn"
+      onClick={[Function]}
+      type="button"
+    >
+      <div
+        className="accordion-collapsible-title"
+      >
+        foo
+      </div>
+      <IconChevron
+        className="accordion-collapsible-icon"
+        color="#909090"
+        direction="down"
+      />
+    </PlainButton>
+  </div>
+  <AnimateHeight
+    animateOpacity={false}
+    animationStateClasses={
+      Object {
+        "animating": "rah-animating",
+        "animatingDown": "rah-animating--down",
+        "animatingToHeightAuto": "rah-animating--to-height-auto",
+        "animatingToHeightSpecific": "rah-animating--to-height-specific",
+        "animatingToHeightZero": "rah-animating--to-height-zero",
+        "animatingUp": "rah-animating--up",
+        "static": "rah-static",
+        "staticHeightAuto": "rah-static--height-auto",
+        "staticHeightSpecific": "rah-static--height-specific",
+        "staticHeightZero": "rah-static--height-zero",
+      }
+    }
+    applyInlineTransitions={true}
+    delay={0}
+    duration={100}
+    easing="ease"
+    height="auto"
+    style={Object {}}
+  >
+    <div
+      className="accordion-collapsible-dropdown-container"
+    >
+      <span>
+        foobar
+      </span>
+    </div>
+  </AnimateHeight>
+</div>
+`;
+
+exports[`components/accordion-collapsible/AccordionCollapsible should apply containerProps correctly 1`] = `
+<div
+  a={1}
+  b={2}
+  className="accordion-collapsible-container is-open"
+>
+  <div
+    className="accordion-collapsible-header"
+  >
+    <PlainButton
+      aria-expanded={true}
+      className="accordion-collapsible-header-btn"
+      onClick={[Function]}
+      type="button"
+    >
+      <div
+        className="accordion-collapsible-title"
+      >
+        foo
+      </div>
+      <IconChevron
+        className="accordion-collapsible-icon"
+        color="#909090"
+        direction="down"
+      />
+    </PlainButton>
+  </div>
+  <AnimateHeight
+    animateOpacity={false}
+    animationStateClasses={
+      Object {
+        "animating": "rah-animating",
+        "animatingDown": "rah-animating--down",
+        "animatingToHeightAuto": "rah-animating--to-height-auto",
+        "animatingToHeightSpecific": "rah-animating--to-height-specific",
+        "animatingToHeightZero": "rah-animating--to-height-zero",
+        "animatingUp": "rah-animating--up",
+        "static": "rah-static",
+        "staticHeightAuto": "rah-static--height-auto",
+        "staticHeightSpecific": "rah-static--height-specific",
+        "staticHeightZero": "rah-static--height-zero",
+      }
+    }
+    applyInlineTransitions={true}
+    delay={0}
+    duration={100}
+    easing="ease"
+    height="auto"
+    style={Object {}}
+  >
+    <div
+      className="accordion-collapsible-dropdown-container"
+    >
+      <span>
+        foobar
+      </span>
+    </div>
+  </AnimateHeight>
+</div>
+`;
+
+exports[`components/accordion-collapsible/AccordionCollapsible should apply correct isOpen state 1`] = `
+<div
+  className="accordion-collapsible-container"
+>
+  <div
+    className="accordion-collapsible-header"
+  >
+    <PlainButton
+      aria-expanded={false}
+      className="accordion-collapsible-header-btn"
+      onClick={[Function]}
+      type="button"
+    >
+      <div
+        className="accordion-collapsible-title"
+      >
+        foo
+      </div>
+      <IconChevron
+        className="accordion-collapsible-icon"
+        color="#909090"
+        direction="right"
+      />
+    </PlainButton>
+  </div>
+  <AnimateHeight
+    animateOpacity={false}
+    animationStateClasses={
+      Object {
+        "animating": "rah-animating",
+        "animatingDown": "rah-animating--down",
+        "animatingToHeightAuto": "rah-animating--to-height-auto",
+        "animatingToHeightSpecific": "rah-animating--to-height-specific",
+        "animatingToHeightZero": "rah-animating--to-height-zero",
+        "animatingUp": "rah-animating--up",
+        "static": "rah-static",
+        "staticHeightAuto": "rah-static--height-auto",
+        "staticHeightSpecific": "rah-static--height-specific",
+        "staticHeightZero": "rah-static--height-zero",
+      }
+    }
+    applyInlineTransitions={true}
+    delay={0}
+    duration={100}
+    easing="ease"
+    height={0}
+    style={Object {}}
+  >
+    <div
+      className="accordion-collapsible-dropdown-container"
+    >
+      <span>
+        foobar
+      </span>
+    </div>
+  </AnimateHeight>
+</div>
+`;
+
+exports[`components/accordion-collapsible/AccordionCollapsible should render component correctly 1`] = `
+<div
+  className="accordion-collapsible-container is-open"
+>
+  <div
+    className="accordion-collapsible-header"
+  >
+    <PlainButton
+      aria-expanded={true}
+      className="accordion-collapsible-header-btn"
+      onClick={[Function]}
+      type="button"
+    >
+      <div
+        className="accordion-collapsible-title"
+      >
+        foo
+      </div>
+      <IconChevron
+        className="accordion-collapsible-icon"
+        color="#909090"
+        direction="down"
+      />
+    </PlainButton>
+  </div>
+  <AnimateHeight
+    animateOpacity={false}
+    animationStateClasses={
+      Object {
+        "animating": "rah-animating",
+        "animatingDown": "rah-animating--down",
+        "animatingToHeightAuto": "rah-animating--to-height-auto",
+        "animatingToHeightSpecific": "rah-animating--to-height-specific",
+        "animatingToHeightZero": "rah-animating--to-height-zero",
+        "animatingUp": "rah-animating--up",
+        "static": "rah-static",
+        "staticHeightAuto": "rah-static--height-auto",
+        "staticHeightSpecific": "rah-static--height-specific",
+        "staticHeightZero": "rah-static--height-zero",
+      }
+    }
+    applyInlineTransitions={true}
+    delay={0}
+    duration={100}
+    easing="ease"
+    height="auto"
+    style={Object {}}
+  >
+    <div
+      className="accordion-collapsible-dropdown-container"
+    >
+      <span
+        className="test-content"
+      >
+        foobar
+      </span>
+    </div>
+  </AnimateHeight>
+</div>
+`;
+
+exports[`components/accordion-collapsible/AccordionCollapsible should toggle visibility on click 1`] = `
+<div
+  className="accordion-collapsible-container"
+>
+  <div
+    className="accordion-collapsible-header"
+  >
+    <PlainButton
+      aria-expanded={false}
+      className="accordion-collapsible-header-btn"
+      onClick={[Function]}
+      type="button"
+    >
+      <div
+        className="accordion-collapsible-title"
+      >
+        foo
+      </div>
+      <IconChevron
+        className="accordion-collapsible-icon"
+        color="#909090"
+        direction="right"
+      />
+    </PlainButton>
+  </div>
+  <AnimateHeight
+    animateOpacity={false}
+    animationStateClasses={
+      Object {
+        "animating": "rah-animating",
+        "animatingDown": "rah-animating--down",
+        "animatingToHeightAuto": "rah-animating--to-height-auto",
+        "animatingToHeightSpecific": "rah-animating--to-height-specific",
+        "animatingToHeightZero": "rah-animating--to-height-zero",
+        "animatingUp": "rah-animating--up",
+        "static": "rah-static",
+        "staticHeightAuto": "rah-static--height-auto",
+        "staticHeightSpecific": "rah-static--height-specific",
+        "staticHeightZero": "rah-static--height-zero",
+      }
+    }
+    applyInlineTransitions={true}
+    delay={0}
+    duration={100}
+    easing="ease"
+    height={0}
+    style={Object {}}
+  >
+    <div
+      className="accordion-collapsible-dropdown-container"
+    >
+      <span
+        className="test-content"
+      >
+        foobar
+      </span>
+    </div>
+  </AnimateHeight>
+</div>
+`;
+
+exports[`components/accordion-collapsible/AccordionCollapsible should toggle visibility on click 2`] = `
+<div
+  className="accordion-collapsible-container is-open"
+>
+  <div
+    className="accordion-collapsible-header"
+  >
+    <PlainButton
+      aria-expanded={true}
+      className="accordion-collapsible-header-btn"
+      onClick={[Function]}
+      type="button"
+    >
+      <div
+        className="accordion-collapsible-title"
+      >
+        foo
+      </div>
+      <IconChevron
+        className="accordion-collapsible-icon"
+        color="#909090"
+        direction="down"
+      />
+    </PlainButton>
+  </div>
+  <AnimateHeight
+    animateOpacity={false}
+    animationStateClasses={
+      Object {
+        "animating": "rah-animating",
+        "animatingDown": "rah-animating--down",
+        "animatingToHeightAuto": "rah-animating--to-height-auto",
+        "animatingToHeightSpecific": "rah-animating--to-height-specific",
+        "animatingToHeightZero": "rah-animating--to-height-zero",
+        "animatingUp": "rah-animating--up",
+        "static": "rah-static",
+        "staticHeightAuto": "rah-static--height-auto",
+        "staticHeightSpecific": "rah-static--height-specific",
+        "staticHeightZero": "rah-static--height-zero",
+      }
+    }
+    applyInlineTransitions={true}
+    delay={0}
+    duration={100}
+    easing="ease"
+    height="auto"
+    style={Object {}}
+  >
+    <div
+      className="accordion-collapsible-dropdown-container"
+    >
+      <span
+        className="test-content"
+      >
+        foobar
+      </span>
+    </div>
+  </AnimateHeight>
+</div>
+`;

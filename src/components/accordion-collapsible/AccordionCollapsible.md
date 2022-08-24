@@ -3,7 +3,8 @@
 **Regular Dropdown**
 
 ```js
-<AccordionCollapsible isOpen title="Collapsible card title" buttonProps={{"data-testid":"hello"}}>
+
+<AccordionCollapsible isOpen title="Collapsible card title">
     <div>This is content of a collapsible component</div>
     <div>
         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
