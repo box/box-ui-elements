@@ -89,6 +89,7 @@ const allSections = [
             '../src/components/button-group/ButtonGroup.tsx',
             '../src/components/category-selector/CategorySelector.tsx',
             '../src/components/collapsible/Collapsible.tsx',
+            '../src/components/accordion-collapsible/AccordionCollapsible.tsx',
             '../src/components/context-menu/ContextMenu.tsx',
             '../src/components/datalist-item/DatalistItem.tsx',
             '../src/components/label/Label.tsx',

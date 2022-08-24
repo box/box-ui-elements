@@ -1,0 +1,54 @@
+@import '../../styles/variables';
+
+.accordion-collapsible-container {
+    width: 100%;
+    background-color: $white;
+    box-shadow: 0 0 0 1px $bdl-gray-10;
+
+    @include bdl-transition($bdl-transitionDurationBase, background-color);
+
+    .accordion-collapsible-header {
+        height: 58px;
+    }
+
+    .accordion-collapsible-dropdown-container {
+        padding-right: 15px;
+        padding-bottom: 20px;
+        padding-left: 25px;
+        background-color: $bdl-gray-02;
+    }
+
+    .accordion-collapsible-header-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+        padding-right: 15px;
+        padding-left: 25px;
+
+        &:hover {
+            padding-right: 15px;
+            padding-left: 25px;
+        }
+    }
+
+    .accordion-collapsible-title {
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    .accordion-collapsible-icon {
+        @include bdl-transition($bdl-transitionDurationBase, transform);
+
+        transform: rotateZ(90deg);
+    }
+
+    &.is-open {
+        background-color: $bdl-gray-02;
+
+        .accordion-collapsible-icon {
+            transform: rotateZ(360deg);
+        }
+    }
+}

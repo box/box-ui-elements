@@ -1,6 +1,9 @@
 export { default as AccessibleSVG } from './accessible-svg';
 export * from './accessible-svg';
 
+export { default as AccordionCollapsible } from './accordion-collapsible';
+export * from './accordion-collapsible';
+
 export { default as Avatar } from './avatar';
 export * from './avatar';
 
