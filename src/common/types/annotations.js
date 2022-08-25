@@ -50,7 +50,6 @@ export type Annotation = {
     modified_by: User,
     permissions: AnnotationPermission,
     replies?: Array<Comment>,
-    repliesTotal?: number,
     status?: AnnotationStatus,
     target: Target,
     total_reply_count?: number,
