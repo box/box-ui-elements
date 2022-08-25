@@ -1,6 +1,7 @@
 // @flow
 import merge from 'lodash/merge';
 import {
+    ACTIVITY_FEED_ITEM_OPEN,
     ERROR_CODE_CREATE_ANNOTATION,
     ERROR_CODE_CREATE_REPLY,
     ERROR_CODE_DELETE_ANNOTATION,
@@ -20,11 +21,11 @@ import type {
     Annotation,
     AnnotationPermission,
     Annotations as AnnotationsType,
-    AnnotationStatus,
     NewAnnotation,
 } from '../common/types/annotations';
 import type { BoxItemPermission } from '../common/types/core';
 import type { ElementsXhrError } from '../common/types/api';
+import type { FeedItemStatus } from '../common/types/feed';
 
 export default class Annotations extends MarkerBasedApi {
     getUrl() {
@@ -64,7 +65,7 @@ export default class Annotations extends MarkerBasedApi {
                 id: fileVersionId,
                 type: 'file_version',
             },
-            status: 'open',
+            status: ACTIVITY_FEED_ITEM_OPEN,
             type: 'annotation',
         };
 
@@ -83,7 +84,7 @@ export default class Annotations extends MarkerBasedApi {
         fileId: string,
         annotationId: string,
         permissions: AnnotationPermission,
-        payload: { message?: string, status?: AnnotationStatus },
+        payload: { message?: string, status?: FeedItemStatus },
         successCallback: (annotation: Annotation) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
     ): void {
