@@ -251,7 +251,7 @@ jest.mock('../Annotations', () =>
         deleteAnnotation: jest.fn().mockImplementation((file, id, permissions, successCallback) => {
             successCallback();
         }),
-        updateAnnotation: jest.fn().mockImplementation((file, id, text, permissions, successCallback) => {
+        updateAnnotation: jest.fn().mockImplementation((file, id, payload, permissions, successCallback) => {
             successCallback();
         }),
         getAnnotations: jest.fn(),
