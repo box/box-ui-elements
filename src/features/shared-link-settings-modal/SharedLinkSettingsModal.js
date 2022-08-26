@@ -8,7 +8,7 @@ import { Modal, ModalActions } from '../../components/modal';
 import InlineNotice from '../../components/inline-notice';
 import Link from '../../components/link/LinkBase';
 import commonMessages from '../../common/messages';
-import Classification from '../classification';
+import Classification, { getClassificationLabelColor } from '../classification';
 
 import VanityNameSection from './VanityNameSection';
 import PasswordSection from './PasswordSection';
@@ -363,15 +363,17 @@ class SharedLinkSettingsModal extends Component {
     renderModalTitle() {
         const { item } = this.props;
         const { bannerPolicy, classification } = item;
+        const classificationColor = getClassificationLabelColor(bannerPolicy);
 
         return (
             <span className="bdl-SharedLinkSettingsModal-title">
                 <FormattedMessage {...messages.modalTitle} />
                 <Classification
+                    className="bdl-SharedLinkSettingsModal-classification"
+                    color={classificationColor}
                     definition={bannerPolicy ? bannerPolicy.body : undefined}
                     messageStyle="tooltip"
                     name={classification}
-                    className="bdl-SharedLinkSettingsModal-classification"
                 />
             </span>
         );
