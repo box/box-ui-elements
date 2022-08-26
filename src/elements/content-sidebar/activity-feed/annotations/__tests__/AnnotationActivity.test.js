@@ -50,10 +50,10 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         CommentForm.default = jest.fn().mockReturnValue(<div />);
     });
 
-    test('should not render annotation activity menu when both can_delete is false and can_edit is false', () => {
+    test('should not render annotation activity menu when can_delete is false and can_edit is false and can_resolve is false', () => {
         const item = {
             ...mockAnnotation,
-            permissions: { can_delete: false, can_edit: false },
+            permissions: { can_delete: false, can_edit: false, can_resolve: false },
         };
 
         const wrapper = getWrapper({ item });
@@ -61,21 +61,36 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         expect(wrapper.exists(AnnotationActivityMenu)).toBe(false);
     });
 
+    test('should not render annotation activity menu when can_delete is false, can_edit is false and isResolvingEnabled is false', () => {
+        const item = {
+            ...mockAnnotation,
+            permissions: { can_delete: false, can_edit: false, can_resolve: true },
+        };
+
+        const wrapper = getWrapper({ item, isResolvingEnabled: false });
+
+        expect(wrapper.exists(AnnotationActivityMenu)).toBe(false);
+    });
+
     test.each`
-        canDelete | canEdit
-        ${false}  | ${true}
-        ${true}   | ${false}
-        ${true}   | ${true}
+        canDelete | canEdit  | canResolve
+        ${false}  | ${false} | ${true}
+        ${true}   | ${false} | ${false}
+        ${false}  | ${true}  | ${false}
+        ${false}  | ${true}  | ${true}
+        ${true}   | ${true}  | ${false}
+        ${true}   | ${false} | ${true}
+        ${true}   | ${true}  | ${true}
     `(
-        'should correctly render annotation activity when canDelete: $canDelete and canEdit: $canEdit',
-        ({ canDelete, canEdit }) => {
+        'should correctly render annotation activity when canDelete: $canDelete and canEdit: $canEdit and canResolve: $canResolve',
+        ({ canDelete, canEdit, canResolve }) => {
             const unixTime = new Date(TIME_STRING_SEPT_27_2017).getTime();
             const item = {
                 ...mockAnnotation,
-                permissions: { can_delete: canDelete, can_edit: canEdit },
+                permissions: { can_delete: canDelete, can_edit: canEdit, can_resolve: canResolve },
             };
 
-            const wrapper = getWrapper({ item });
+            const wrapper = getWrapper({ item, isResolvingEnabled: true });
 
             expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
             expect(wrapper.find('AnnotationActivityLink').props()).toMatchObject({
