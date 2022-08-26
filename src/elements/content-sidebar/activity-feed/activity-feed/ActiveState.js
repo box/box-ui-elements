@@ -91,60 +91,34 @@ const ActiveState = ({
 
                 switch (item.type) {
                     case 'comment':
-                        if (hasReplies) {
-                            return (
-                                <ActivityItem
-                                    key={item.type + item.id}
-                                    className="bcs-activity-thread"
-                                    data-testid="activity-thread"
-                                    isFocused={isFocused}
-                                    ref={refValue}
-                                >
-                                    <ActivityThread>
-                                        <Comment
-                                            {...item}
-                                            currentUser={currentUser}
-                                            getAvatarUrl={getAvatarUrl}
-                                            getMentionWithQuery={getMentionWithQuery}
-                                            getUserProfileUrl={getUserProfileUrl}
-                                            mentionSelectorContacts={mentionSelectorContacts}
-                                            onDelete={onCommentDelete}
-                                            onEdit={onCommentEdit}
-                                            permissions={{
-                                                can_delete: getProp(item.permissions, 'can_delete', false),
-                                                can_edit: getProp(item.permissions, 'can_edit', false),
-                                            }}
-                                            translations={translations}
-                                        />
-                                    </ActivityThread>
-                                </ActivityItem>
-                            );
-                        }
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
-                                className="bcs-activity-feed-comment"
-                                data-testid="comment"
+                                className={hasReplies ? 'bcs-activity-thread' : 'bcs-activity-feed-comment'}
+                                data-testid={hasReplies ? 'activity-thread' : 'comment'}
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <Comment
-                                    {...item}
-                                    currentUser={currentUser}
-                                    getAvatarUrl={getAvatarUrl}
-                                    getMentionWithQuery={getMentionWithQuery}
-                                    getUserProfileUrl={getUserProfileUrl}
-                                    mentionSelectorContacts={mentionSelectorContacts}
-                                    onDelete={onCommentDelete}
-                                    onEdit={onCommentEdit}
-                                    permissions={{
-                                        can_delete: getProp(item.permissions, 'can_delete', false),
-                                        can_edit: getProp(item.permissions, 'can_edit', false),
-                                    }}
-                                    translations={translations}
-                                />
+                                <ActivityThread hasReplies={hasReplies}>
+                                    <Comment
+                                        {...item}
+                                        currentUser={currentUser}
+                                        getAvatarUrl={getAvatarUrl}
+                                        getMentionWithQuery={getMentionWithQuery}
+                                        getUserProfileUrl={getUserProfileUrl}
+                                        mentionSelectorContacts={mentionSelectorContacts}
+                                        onDelete={onCommentDelete}
+                                        onEdit={onCommentEdit}
+                                        permissions={{
+                                            can_delete: getProp(item.permissions, 'can_delete', false),
+                                            can_edit: getProp(item.permissions, 'can_edit', false),
+                                        }}
+                                        translations={translations}
+                                    />
+                                </ActivityThread>
                             </ActivityItem>
                         );
+
                     case 'task':
                         return (
                             <ActivityItem
@@ -193,54 +167,31 @@ const ActiveState = ({
                             </ActivityItem>
                         );
                     case 'annotation':
-                        if (hasReplies) {
-                            return (
-                                <ActivityItem
-                                    key={item.type + item.id}
-                                    className="bcs-activity-thread"
-                                    data-testid="activity-thread"
-                                    isFocused={isFocused}
-                                    ref={refValue}
-                                >
-                                    <ActivityThread>
-                                        <AnnotationActivity
-                                            currentUser={currentUser}
-                                            getAvatarUrl={getAvatarUrl}
-                                            getUserProfileUrl={getUserProfileUrl}
-                                            getMentionWithQuery={getMentionWithQuery}
-                                            isCurrentVersion={currentFileVersionId === itemFileVersionId}
-                                            item={item}
-                                            mentionSelectorContacts={mentionSelectorContacts}
-                                            onEdit={onAnnotationEdit}
-                                            onDelete={onAnnotationDelete}
-                                            onSelect={onAnnotationSelect}
-                                        />
-                                    </ActivityThread>
-                                </ActivityItem>
-                            );
-                        }
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
-                                className="bcs-activity-feed-annotation-activity"
-                                data-testid="annotation-activity"
+                                className={hasReplies ? 'bcs-activity-thread' : 'bcs-activity-feed-annotation-activity'}
+                                data-testid={hasReplies ? 'activity-thread' : 'annotation-activity'}
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <AnnotationActivity
-                                    currentUser={currentUser}
-                                    getAvatarUrl={getAvatarUrl}
-                                    getUserProfileUrl={getUserProfileUrl}
-                                    getMentionWithQuery={getMentionWithQuery}
-                                    isCurrentVersion={currentFileVersionId === itemFileVersionId}
-                                    item={item}
-                                    mentionSelectorContacts={mentionSelectorContacts}
-                                    onEdit={onAnnotationEdit}
-                                    onDelete={onAnnotationDelete}
-                                    onSelect={onAnnotationSelect}
-                                />
+                                <ActivityThread hasReplies={hasReplies}>
+                                    <AnnotationActivity
+                                        currentUser={currentUser}
+                                        getAvatarUrl={getAvatarUrl}
+                                        getUserProfileUrl={getUserProfileUrl}
+                                        getMentionWithQuery={getMentionWithQuery}
+                                        isCurrentVersion={currentFileVersionId === itemFileVersionId}
+                                        item={item}
+                                        mentionSelectorContacts={mentionSelectorContacts}
+                                        onEdit={onAnnotationEdit}
+                                        onDelete={onAnnotationDelete}
+                                        onSelect={onAnnotationSelect}
+                                    />
+                                </ActivityThread>
                             </ActivityItem>
                         );
+
                     default:
                         return null;
                 }

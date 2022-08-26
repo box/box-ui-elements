@@ -8,10 +8,16 @@ import ActivityCard from '../../ActivityCard';
 describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThread', () => {
     const getWrapper = (props = {}): ShallowWrapper => shallow(<ActivityThread {...props}>Test</ActivityThread>);
 
-    test('should render children component wrapped in ActivityCard', () => {
-        const wrapper = getWrapper();
+    test('should render children component wrapped in ActivityCard if hasReplies is true', () => {
+        const wrapper = getWrapper({ hasReplies: true });
 
         expect(wrapper.find(ActivityCard)).toHaveLength(1);
+        expect(wrapper.text()).toEqual('Test');
+    });
+    test('should render children component if hasReplies if false', () => {
+        const wrapper = getWrapper({ hasReplies: false });
+
+        expect(wrapper.find(ActivityCard)).toHaveLength(0);
         expect(wrapper.text()).toEqual('Test');
     });
 });

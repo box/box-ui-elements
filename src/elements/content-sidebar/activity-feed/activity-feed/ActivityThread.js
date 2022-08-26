@@ -4,10 +4,14 @@ import ActivityCard from '../ActivityCard';
 
 type Props = {
     children: React.Node,
+    hasReplies: boolean,
 };
 
-const ActivityThread = ({ children }: Props) => {
-    return <ActivityCard className="bcs-ActivityThread">{children}</ActivityCard>;
+const ActivityThread = ({ children, hasReplies }: Props) => {
+    if (hasReplies) {
+        return <ActivityCard className="bcs-ActivityThread">{children}</ActivityCard>;
+    }
+    return children;
 };
 
 export default ActivityThread;
