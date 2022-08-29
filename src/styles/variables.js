@@ -80,7 +80,6 @@ export const bdlWatermelonRed05 = "#fef5f6"; // bdl-watermelon-red-05
 export const bdlWatermelonRed02 = "#fffbfc"; // bdl-watermelon-red-02
 export const bdlLineHeight = "20px"; // bdl-line-height
 export const bdlFontSize = "13px"; // bdl-fontSize
-export const bdlFontSizeLarge = "16px"; // bdl-fontSize-large
 export const bdlFontSizeMinimum = "11px"; // bdl-fontSize-minimum
 export const bdlFontSizeDejaBlue = "14px"; // bdl-fontSize--dejaBlue
 export const avatarColors = ["#0061d5","#003c84","#767676","#222","#4826c2","#9f3fed"]; // avatar-colors

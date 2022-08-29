@@ -2,7 +2,7 @@
 import type { MessageDescriptor } from 'react-intl';
 import type { BoxItemPermission, BoxItemVersion, Reply, User } from './core';
 import type { Annotation, AnnotationPermission, Annotations } from './annotations';
-import { ACTIVITY_FEED_ITEM_OPEN, ACTIVITY_FEED_ITEM_RESOLVED } from '../../constants';
+import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../constants';
 
 // Feed item types that can receive deeplinks inline in the feed
 type FocusableFeedItemType = 'task' | 'comment' | 'annotation';
@@ -24,7 +24,7 @@ type BaseFeedItem = {|
 |};
 
 // Used in Annotation and Comment
-type FeedItemStatus = typeof ACTIVITY_FEED_ITEM_OPEN | typeof ACTIVITY_FEED_ITEM_RESOLVED;
+type FeedItemStatus = typeof COMMENT_STATUS_OPEN | typeof COMMENT_STATUS_RESOLVED;
 
 // this is a subset of TaskNew, which imports as `any`
 type Task = {

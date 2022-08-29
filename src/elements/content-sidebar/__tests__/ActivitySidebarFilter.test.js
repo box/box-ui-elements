@@ -10,18 +10,6 @@ jest.mock('react-intl', () => ({
     FormattedMessage: ({ defaultMessage }: { defaultMessage: string }) => <span>{defaultMessage}</span>,
 }));
 
-jest.mock('../messages', () => ({
-    activitySidebarFilterOptionAll: {
-        defaultMessage: 'All Comments',
-    },
-    activitySidebarFilterOptionOpen: {
-        defaultMessage: 'Unresolved Comments',
-    },
-    activitySidebarFilterOptionResolved: {
-        defaultMessage: 'Resolved Comments',
-    },
-}));
-
 const onFeedItemStatusClick = jest.fn();
 
 const Wrapper = ({ children }: { children?: React.ReactNode }) => {
@@ -34,58 +22,35 @@ const renderWithWrapper = (feedItemStatus?: FeedItemStatus) =>
     });
 
 describe('elements/content-sidebar/ActivitySidebarFilter', () => {
-    describe('should render selected status name based on feedItemStatus prop', () => {
-        test('undefined', () => {
-            renderWithWrapper();
+    test.each`
+        feedItemStatus | option
+        ${undefined}   | ${'All Comments'}
+        ${'open'}      | ${'Unresolved Comments'}
+        ${'resolved'}  | ${'Resolved Comments'}
+    `(
+        'should render "$option" as the selected status when feedItemStatus prop is equal to $feedItemStatus',
+        ({ feedItemStatus, option }) => {
+            renderWithWrapper(feedItemStatus);
+            expect(screen.getByText(option)).toBeVisible();
+        },
+    );
 
-            expect(screen.getByText('All Comments')).toBeVisible();
-        });
+    test.each`
+        expected      | option                   | initialOption          | initialStatus
+        ${undefined}  | ${'All Comments'}        | ${'Resolved Comments'} | ${'resolved'}
+        ${'open'}     | ${'Unresolved Comments'} | ${'All Comments'}      | ${undefined}
+        ${'resolved'} | ${'Resolved Comments'}   | ${'All Comments'}      | ${undefined}
+    `(
+        'onFeedItemStatusClick should be called with $expected when clicked on $option',
+        async ({ initialOption, option, initialStatus, expected }) => {
+            renderWithWrapper(initialStatus);
 
-        test('open', () => {
-            renderWithWrapper('open');
-
-            expect(screen.getByText('Unresolved Comments')).toBeVisible();
-        });
-
-        test('resolved', () => {
-            renderWithWrapper('resolved');
-
-            expect(screen.getByText('Resolved Comments')).toBeVisible();
-        });
-    });
-
-    describe('onFeedItemStatusClick function should be called when clicked on specific option', () => {
-        test('Unresolved Comments', async () => {
-            renderWithWrapper();
-
-            const dropdownBtn = screen.getByText('All Comments');
-
-            fireEvent.click(dropdownBtn);
-            fireEvent.click(await screen.findByText('Unresolved Comments'));
-
-            expect(onFeedItemStatusClick).toBeCalledWith('open');
-        });
-
-        test('Resolved Comments', async () => {
-            renderWithWrapper();
-
-            const dropdownBtn = screen.getByText('All Comments');
+            const dropdownBtn = screen.getByText(initialOption);
 
             fireEvent.click(dropdownBtn);
-            fireEvent.click(await screen.findByText('Resolved Comments'));
+            fireEvent.click(await screen.findByText(option));
 
-            expect(onFeedItemStatusClick).toBeCalledWith('resolved');
-        });
-
-        test('Resolved Comments', async () => {
-            renderWithWrapper('open');
-
-            const dropdownBtn = screen.getByText('Unresolved Comments');
-
-            fireEvent.click(dropdownBtn);
-            fireEvent.click(await screen.findByText('All Comments'));
-
-            expect(onFeedItemStatusClick).toBeCalledWith(undefined);
-        });
-    });
+            expect(onFeedItemStatusClick).toBeCalledWith(expected);
+        },
+    );
 });

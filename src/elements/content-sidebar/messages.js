@@ -10,17 +10,17 @@ const messages = defineMessages({
     activitySidebarFilterOptionAll: {
         id: 'be.activitySidebarFilter.status.all',
         defaultMessage: 'All Comments',
-        description: 'option "All Comments" for sidebar activities filter dropdown',
+        description: 'One of the dropdown options to select in order to filter comments',
     },
     activitySidebarFilterOptionOpen: {
         id: 'be.activitySidebarFilter.status.open',
         defaultMessage: 'Unresolved Comments',
-        description: 'option "Unresolved Comments" for sidebar activities filter dropdown',
+        description: 'One of the dropdown options to select in order to filter comments',
     },
     activitySidebarFilterOptionResolved: {
         id: 'be.activitySidebarFilter.status.resolved',
         defaultMessage: 'Resolved Comments',
-        description: 'option "Resolved Comments" for sidebar activities filter dropdown',
+        description: 'One of the dropdown options to select in order to filter comments',
     },
     boxSignFtuxBody: {
         id: 'be.contentSidebar.boxSignFtuxBody',

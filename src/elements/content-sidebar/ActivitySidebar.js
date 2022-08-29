@@ -94,7 +94,6 @@ type Props = {
 
 type State = {
     activityFeedError?: Errors,
-    allFeedItems?: FeedItems,
     approverSelectorContacts: SelectorItems<UserMini | GroupMini>,
     contactsLoaded?: boolean,
     currentUser?: User,
@@ -494,9 +493,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             );
         }
 
-        // eslint bug: allFeedItems state is used in getItemsFilteredStateChangeFn
-        // eslint-disable-next-line react/no-unused-state
-        this.setState({ feedItems, allFeedItems: feedItems, activityFeedError: undefined });
+        this.setState({ feedItems, activityFeedError: undefined });
     };
 
     /**
@@ -511,9 +508,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         this.setState({
             feedItems,
-            // eslint bug: allFeedItems state is used in getItemsFilteredStateChangeFn
-            // eslint-disable-next-line react/no-unused-state
-            allFeedItems: feedItems,
             activityFeedError: activityFeedInlineError,
         });
 
@@ -702,29 +696,27 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     /**
-     * Returns a function that should be passed to setState in order to filter feed items
-     * and set current status filter state
-     *
-     * @param {FeedItemStatus} status - Feed item status
-     * @return {Function}
-     */
-    getItemsFilteredStateChangeFn = (status?: FeedItemStatus) => ({ allFeedItems }: State) => {
-        let newFeedItems: FeedItems | typeof undefined = allFeedItems;
-        if (status && allFeedItems) {
-            newFeedItems = allFeedItems.filter(item => item.status && item.status === status);
-        }
-
-        return { feedItems: newFeedItems, feedItemsStatusFilter: status };
-    };
-
-    /**
      * Filters visible feed items based on given feed item status.
      *
      * @param {FeedItemStatus} status - Feed item status
      * @return void
      */
     handleItemsFiltered = (status?: FeedItemStatus) => {
-        this.setState(this.getItemsFilteredStateChangeFn(status));
+        this.setState({ feedItemsStatusFilter: status });
+    };
+
+    getFilteredFeedItems = (): FeedItems | typeof undefined => {
+        const { feedItems, feedItemsStatusFilter } = this.state;
+        if (feedItems && feedItemsStatusFilter) {
+            return feedItems.filter(item => {
+                // Filter only Comments and Annotations
+                if (item.type !== 'comment' && item.type !== 'annotation') {
+                    return true;
+                }
+                return item.status && item.status === feedItemsStatusFilter;
+            });
+        }
+        return feedItems;
     };
 
     onTaskModalClose = () => {
@@ -815,7 +807,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             approverSelectorContacts,
             mentionSelectorContacts,
             contactsLoaded,
-            feedItems,
             activityFeedError,
             currentUserError,
         } = this.state;
@@ -835,7 +826,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     approverSelectorContacts={approverSelectorContacts}
                     currentUser={currentUser}
                     currentUserError={currentUserError}
-                    feedItems={feedItems}
+                    feedItems={this.getFilteredFeedItems()}
                     file={file}
                     getApproverWithQuery={this.getApproverWithQuery}
                     getAvatarUrl={this.getAvatarUrl}

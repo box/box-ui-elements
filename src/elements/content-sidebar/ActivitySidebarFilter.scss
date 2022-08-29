@@ -1,9 +1,7 @@
-@import '../../styles/variables';
-
 // Change size and weight of menu-toggle in ActivitySidebarFilter
 .bcs-ActivitySidebarFilter .menu-toggle {
     font-weight: bold;
-    font-size: $bdl-fontSize-large;
+    font-size: 16px;
 }
 
 // Extend left padding for unselected menu items with icon width and padding in order to align

@@ -1,7 +1,6 @@
 // @flow
 import merge from 'lodash/merge';
 import {
-    ACTIVITY_FEED_ITEM_OPEN,
     ERROR_CODE_CREATE_ANNOTATION,
     ERROR_CODE_CREATE_REPLY,
     ERROR_CODE_DELETE_ANNOTATION,
@@ -65,8 +64,6 @@ export default class Annotations extends MarkerBasedApi {
                 id: fileVersionId,
                 type: 'file_version',
             },
-            status: ACTIVITY_FEED_ITEM_OPEN,
-            type: 'annotation',
         };
 
         this.post({

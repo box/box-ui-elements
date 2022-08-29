@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
+import { TASK_NEW_NOT_STARTED } from '../../../constants';
 import messages from '../../common/messages';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
 
@@ -432,10 +433,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             instance.setState = jest.fn();
         });
 
-        test('should set the allFeedItems and feedItems in the state', () => {
+        test('should set the feedItems in the state', () => {
             instance.fetchFeedItemsSuccessCallback(feedItems);
             expect(instance.setState).toBeCalledWith({
-                allFeedItems: feedItems,
                 feedItems,
                 activityFeedError: undefined,
             });
@@ -469,10 +469,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             instance.setState = jest.fn();
         });
 
-        test('should set the allFeedItems feedItems in the state', () => {
+        test('should set the feedItems in the state', () => {
             instance.fetchFeedItemsErrorCallback(feedItems);
             expect(instance.setState).toBeCalledWith({
-                allFeedItems: feedItems,
                 feedItems,
                 activityFeedError: activityFeedInlineError,
             });
@@ -885,7 +884,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
-    describe('getItemsFilteredStateChangeFn()', () => {
+    describe('getFilteredFeedItems()', () => {
         let instance;
         let wrapper;
 
@@ -969,55 +968,106 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             },
             status: 'resolved',
         };
-        const items = [itemOpen1, itemOpen2, itemResolved1, itemResolved2];
+        const taskItem = {
+            created_by: {
+                type: 'task_collaborator',
+                target: { name: 'Jay-Z', id: '100' },
+                id: '000',
+                role: 'CREATOR',
+                status: TASK_NEW_NOT_STARTED,
+            },
+            created_at: '2019-01-01',
+            due_at: '2019-02-02',
+            id: '0',
+            name: 'task message',
+            type: 'task',
+            assigned_to: {
+                entries: [
+                    {
+                        id: '1',
+                        target: { name: 'Beyonce', id: '2', avatar_url: '', type: 'user' },
+                        status: TASK_NEW_NOT_STARTED,
+                        permissions: {
+                            can_delete: false,
+                            can_update: false,
+                        },
+                        role: 'ASSIGNEE',
+                        type: 'task_collaborator',
+                    },
+                ],
+                limit: 10,
+                next_marker: null,
+            },
+            permissions: {
+                can_update: false,
+                can_delete: false,
+                can_create_task_collaborator: false,
+                can_create_task_link: false,
+            },
+            task_links: {
+                entries: [
+                    {
+                        id: '03',
+                        type: 'task_link',
+                        target: {
+                            type: 'file',
+                            id: '4',
+                        },
+                        permissions: {
+                            can_delete: false,
+                            can_update: false,
+                        },
+                    },
+                ],
+                limit: 1,
+                next_marker: null,
+            },
+            status: TASK_NEW_NOT_STARTED,
+        };
+        const items = [itemOpen1, itemOpen2, itemResolved1, itemResolved2, taskItem];
 
         beforeEach(() => {
             wrapper = getWrapper();
             instance = wrapper.instance();
             instance.setState({
-                allFeedItems: items,
+                feedItems: items,
             });
         });
 
-        describe('based on particular status should return a fn that when called with state returns a proper state change object', () => {
-            test('undefined', () => {
-                const fn = instance.getItemsFilteredStateChangeFn();
-                expect(fn(instance.state)).toMatchObject({
-                    feedItems: items,
-                    feedItemsStatusFilter: undefined,
+        test.each`
+            status        | expected
+            ${undefined}  | ${[itemOpen1, itemOpen2, itemResolved1, itemResolved2, taskItem]}
+            ${'open'}     | ${[itemOpen1, itemOpen2, taskItem]}
+            ${'resolved'} | ${[itemResolved1, itemResolved2, taskItem]}
+        `(
+            'should filter feed items of type "comment" or "annotation" based on status equal to $status',
+            ({ status, expected }) => {
+                instance.setState({
+                    feedItemsStatusFilter: status,
                 });
-            });
-
-            test('open', () => {
-                const fn = instance.getItemsFilteredStateChangeFn('open');
-                expect(fn(instance.state)).toMatchObject({
-                    feedItems: [itemOpen1, itemOpen2],
-                    feedItemsStatusFilter: 'open',
-                });
-            });
-
-            test('resolved', () => {
-                const fn = instance.getItemsFilteredStateChangeFn('resolved');
-                expect(fn(instance.state)).toMatchObject({
-                    feedItems: [itemResolved1, itemResolved2],
-                    feedItemsStatusFilter: 'resolved',
-                });
-            });
-        });
+                expect(instance.getFilteredFeedItems()).toMatchObject(expected);
+            },
+        );
     });
 
     describe('handleItemsFiltered()', () => {
+        let instance;
+        let wrapper;
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.setState = jest.fn();
+        });
+
         test.each`
-            state         | expected
+            status        | expected
             ${undefined}  | ${undefined}
             ${'open'}     | ${'open'}
             ${'resolved'} | ${'resolved'}
-        `('given $state should call getItemsFilteredStateChangeFn with $expected', ({ state, expected }) => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            instance.getItemsFilteredStateChangeFn = jest.fn();
-            instance.handleItemsFiltered(state);
-            expect(instance.getItemsFilteredStateChangeFn).toBeCalledWith(expected);
+        `('given $status should update feedItemsStatusFilter state with $expected', ({ status, expected }) => {
+            instance.handleItemsFiltered(status);
+            expect(instance.setState).toBeCalledWith({ feedItemsStatusFilter: expected });
         });
     });
 
