@@ -94,7 +94,6 @@ const ActiveState = ({
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
-                                className={hasReplies ? 'bcs-activity-thread' : 'bcs-activity-feed-comment'}
                                 data-testid={hasReplies ? 'activity-thread' : 'comment'}
                                 isFocused={isFocused}
                                 ref={refValue}
@@ -170,7 +169,7 @@ const ActiveState = ({
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
-                                className={hasReplies ? 'bcs-activity-thread' : 'bcs-activity-feed-annotation-activity'}
+                                className={!hasReplies && 'bcs-activity-feed-annotation-activity'}
                                 data-testid={hasReplies ? 'activity-thread' : 'annotation-activity'}
                                 isFocused={isFocused}
                                 ref={refValue}

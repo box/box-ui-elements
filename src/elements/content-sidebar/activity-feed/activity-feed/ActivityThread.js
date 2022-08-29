@@ -9,7 +9,11 @@ type Props = {
 
 const ActivityThread = ({ children, hasReplies }: Props) => {
     if (hasReplies) {
-        return <ActivityCard className="bcs-ActivityThread">{children}</ActivityCard>;
+        return (
+            <ActivityCard className="bcs-ActivityThread" data-testid="activity-thread">
+                {children}
+            </ActivityCard>
+        );
     }
     return children;
 };

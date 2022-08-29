@@ -88,7 +88,6 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
     </ActivityThread>
   </ForwardRef(ActivityItem)>
   <ForwardRef(ActivityItem)
-    className="bcs-activity-feed-comment"
     data-testid="comment"
     isFocused={false}
     key="commentc_123"
