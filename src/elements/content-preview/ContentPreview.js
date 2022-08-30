@@ -32,6 +32,7 @@ import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
 import { withFeatureProvider } from '../common/feature-checking';
 import { EVENT_JS_READY } from '../common/logger/constants';
+import importV4Annotations from '../common/async';
 import ReloadNotification from './ReloadNotification';
 import API from '../../api';
 import PreviewHeader from './preview-header';
@@ -118,6 +119,7 @@ type Props = {
     staticPath: string,
     token: Token,
     useHotkeys: boolean,
+    useV4BoxAnnotations?: boolean,
 } & ErrorContextProps &
     WithLoggerProps &
     WithAnnotationsProps &
@@ -184,37 +186,6 @@ const LoadableSidebar = AsyncLoad({
 });
 
 class ContentPreview extends React.PureComponent<Props, State> {
-    id: string;
-
-    props: Props;
-
-    state: State;
-
-    preview: any;
-
-    api: API;
-
-    // Defines a generic type for ContentSidebar, since an import would interfere with code splitting
-    contentSidebar: { current: null | { refresh: Function } } = React.createRef();
-
-    previewContainer: ?HTMLDivElement;
-
-    mouseMoveTimeoutID: TimeoutID;
-
-    rootElement: HTMLElement;
-
-    stagedFile: ?BoxItem;
-
-    updateVersionToCurrent: ?() => void;
-
-    initialState: State = {
-        canPrint: false,
-        error: undefined,
-        isLoading: true,
-        isReloadNotificationVisible: false,
-        isThumbnailSidebarOpen: false,
-    };
-
     static defaultProps = {
         apiHost: DEFAULT_HOSTNAME_API,
         appHost: DEFAULT_HOSTNAME_APP,
@@ -240,6 +211,41 @@ class ContentPreview extends React.PureComponent<Props, State> {
         staticHost: DEFAULT_HOSTNAME_STATIC,
         staticPath: DEFAULT_PATH_STATIC_PREVIEW,
         useHotkeys: true,
+        useV4BoxAnnotations: false,
+    };
+
+    id: string;
+
+    props: Props;
+
+    state: State;
+
+    preview: any;
+
+    api: API;
+
+    // populated when consumer sets useV4BoxAnnotations to true and they did not provide their own boxAnnotations dependency
+    boxAnnotations: object;
+
+    // Defines a generic type for ContentSidebar, since an import would interfere with code splitting
+    contentSidebar: { current: null | { refresh: Function } } = React.createRef();
+
+    previewContainer: ?HTMLDivElement;
+
+    mouseMoveTimeoutID: TimeoutID;
+
+    rootElement: HTMLElement;
+
+    stagedFile: ?BoxItem;
+
+    updateVersionToCurrent: ?() => void;
+
+    initialState: State = {
+        canPrint: false,
+        error: undefined,
+        isLoading: true,
+        isReloadNotificationVisible: false,
+        isThumbnailSidebarOpen: false,
     };
 
     /**
@@ -289,10 +295,34 @@ class ContentPreview extends React.PureComponent<Props, State> {
             // eslint-disable-next-line react/no-unused-state
             prevFileIdProp: fileId,
         };
+
         const { logger } = props;
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
+
+        if (this.props.useV4BoxAnnotations && !this.props.boxAnnotations && !global.BoxAnnotations) {
+            importV4Annotations().then(() => {
+                const features = {
+                    discoverability: true,
+                    drawing: true,
+                };
+                this.boxAnnotations = new global.BoxAnnotations(null, { features });
+            });
+        }
+    }
+
+    static getDerivedStateFromProps(props: Props, state: State) {
+        const { fileId } = props;
+
+        if (fileId !== state.prevFileIdProp) {
+            return {
+                currentFileId: fileId,
+                prevFileIdProp: fileId,
+            };
+        }
+
+        return null;
     }
 
     /**
@@ -341,19 +371,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         this.fetchFile(this.state.currentFileId);
         this.focusPreview();
-    }
-
-    static getDerivedStateFromProps(props: Props, state: State) {
-        const { fileId } = props;
-
-        if (fileId !== state.prevFileIdProp) {
-            return {
-                currentFileId: fileId,
-                prevFileIdProp: fileId,
-            };
-        }
-
-        return null;
     }
 
     /**
@@ -751,6 +768,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
     loadPreview = async (): Promise<void> => {
         const {
             annotatorState: { activeAnnotationId } = {},
+            boxAnnotations,
             enableThumbnailsSidebar,
             fileOptions,
             onAnnotatorEvent,
@@ -758,6 +776,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             previewExperiences,
             showAnnotationsControls,
             token: tokenOrTokenFunction,
+            useV4BoxAnnotations,
             ...rest
         }: Props = this.props;
         const { file, selectedVersion, startAt }: State = this.state;
@@ -803,6 +822,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
             skipServerUpdate: true,
             useHotkeys: false,
         };
+
+        previewOptions.boxAnnotations = useV4BoxAnnotations && !boxAnnotations ? this.boxAnnotations : boxAnnotations;
+
         const { Preview } = global.Box;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
