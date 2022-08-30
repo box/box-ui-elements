@@ -17,6 +17,9 @@ type Props = {
     constrainToScrollParent: boolean,
     /** Right aligns menu to button */
     constrainToWindow: boolean,
+    /** Right aligns menu to button */
+    constrainToWindowWithPin: boolean,
+    /** Forces menu to render within the visible window and pins the dropdown if scrolled */
     /** Enables responsive behaviors for this component */
     isResponsive?: boolean,
     /** Function called when menu is opened */
@@ -182,6 +185,7 @@ class DropdownMenu extends React.Component<Props, State> {
             className,
             constrainToScrollParent,
             constrainToWindow,
+            constrainToWindowWithPin,
             isResponsive,
             isRightAligned,
         } = this.props;
@@ -243,6 +247,14 @@ class DropdownMenu extends React.Component<Props, State> {
             constraints.push({
                 to: 'window',
                 attachment: 'together',
+            });
+        }
+
+        if (constrainToWindowWithPin) {
+            constraints.push({
+                to: 'window',
+                attachment: 'together',
+                pin: true,
             });
         }
 
