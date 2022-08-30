@@ -173,6 +173,34 @@ describe('components/menu/Menu', () => {
             });
         });
 
+        test('should call setFocus(focusIndex) when num children changes and focused element is removed', () => {
+            const clock = sandbox.useFakeTimers();
+            const wrapper = mount(
+                <Menu initialFocusIndex={1}>
+                    <li key="1" className="menu-item" role="menuitem" />
+                    <li key="2" role="separator" />
+                    <li key="3" className="menu-item" role="menuitem" />
+                    <li key="4" className="menu-item" role="menuitem" />
+                    {false}
+                </Menu>,
+            );
+            clock.tick(0);
+
+            const instance = wrapper.instance();
+            const instanceMock = sandbox.mock(instance);
+            instanceMock.expects('setMenuItemEls');
+            instanceMock.expects('getMenuItemElFromEventTarget').returns({ menuIndex: -1 });
+            instanceMock.expects('setFocus').withExactArgs(1);
+
+            wrapper.setProps({
+                children: [
+                    <li key="1" className="menu-item" role="menuitem" />,
+                    <li key="2" role="separator" />,
+                    <li key="4" className="menu-item" role="menuitem" />,
+                ],
+            });
+        });
+
         test('should not call setMenuItemEls() when the number of children stays the same', () => {
             const wrapper = mount(
                 <Menu>

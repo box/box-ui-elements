@@ -89,7 +89,11 @@ class Menu extends React.Component<MenuProps> {
             const focusedMenuItemEl = this.menuItemEls[this.focusIndex];
             this.setMenuItemEls();
             const { menuIndex } = this.getMenuItemElFromEventTarget(focusedMenuItemEl);
-            this.setFocus(menuIndex);
+
+            const isFocusedElementMissing = menuIndex === -1;
+            const isFocusIndexOutOfBounds = this.focusIndex >= this.menuItemEls.length;
+
+            this.setFocus(isFocusedElementMissing && !isFocusIndexOutOfBounds ? this.focusIndex : menuIndex);
         }
     }
 

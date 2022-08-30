@@ -251,7 +251,7 @@ jest.mock('../Annotations', () =>
         deleteAnnotation: jest.fn().mockImplementation((file, id, permissions, successCallback) => {
             successCallback();
         }),
-        updateAnnotation: jest.fn().mockImplementation((file, id, text, permissions, successCallback) => {
+        updateAnnotation: jest.fn().mockImplementation((file, id, payload, permissions, successCallback) => {
             successCallback();
         }),
         getAnnotations: jest.fn(),
@@ -529,6 +529,30 @@ describe('api/Feed', () => {
             // refresh cache
             setImmediate(() => {
                 expect(successCb).toHaveBeenCalledTimes(2);
+                done();
+            });
+        });
+
+        test('should not include versions in feed items if shouldShowVersions is false', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowVersions: false });
+            setImmediate(() => {
+                expect(feed.versionsAPI.addCurrentVersion).not.toBeCalled();
+                expect(sorter.sortFeedItems).toBeCalledWith(undefined, comments, tasks, undefined, undefined);
+                done();
+            });
+        });
+
+        test('should not fetch tasks and include them in feed items if shouldShowTasks is false', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowTasks: false });
+            setImmediate(() => {
+                expect(feed.fetchTasksNew).not.toBeCalled();
+                expect(sorter.sortFeedItems).toBeCalledWith(
+                    versionsWithCurrent,
+                    comments,
+                    undefined,
+                    undefined,
+                    undefined,
+                );
                 done();
             });
         });

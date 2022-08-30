@@ -39,8 +39,14 @@ type Comment = {
     is_reply_comment?: boolean,
     message?: string,
     modified_at: string,
+    parent?: {
+        id: string,
+        type: 'comment' | 'annotation',
+    },
     permissions: BoxCommentPermission,
+    replies?: Array<Comment>,
     tagged_message: string,
+    total_reply_count?: number,
     type: 'comment',
 };
 
