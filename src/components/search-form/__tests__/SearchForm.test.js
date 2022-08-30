@@ -50,7 +50,7 @@ describe('components/search-form/SearchForm', () => {
         expect(wrapper.find('.search-button').type()).toEqual('div');
     });
 
-    test('should call onsubmit on search icon click', () => {
+    test('should call onsubmit on form submit event', () => {
         const onSubmitSpy = sinon.spy();
         const event = {
             target: {
@@ -64,6 +64,23 @@ describe('components/search-form/SearchForm', () => {
         const wrapper = mount(<SearchForm onSubmit={onSubmitSpy} placeholder="search" value="cheese" />);
         const form = wrapper.find('form');
         form.simulate('submit', event);
+        sinon.assert.calledWithMatch(onSubmitSpy, 'cheese', event);
+    });
+
+    test('should call onsubmit on search icon submit event', () => {
+        const onSubmitSpy = sinon.spy();
+        const event = {
+            target: {
+                elements: [
+                    {
+                        value: 'cheese',
+                    },
+                ],
+            },
+        };
+        const wrapper = mount(<SearchForm onSubmit={onSubmitSpy} placeholder="search" value="cheese" />);
+        const searchButton = wrapper.find('form').find('button.search-button');
+        searchButton.simulate('submit', event);
         sinon.assert.calledWithMatch(onSubmitSpy, 'cheese', event);
     });
 
