@@ -29,7 +29,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
         isAllowEditSharedLinkForFileEnabled: false,
         createSharedLinkOnLoad: false,
         focusSharedLinkOnLoad: false,
-        restrictedExternalCollabEmails: [],
+        restrictedCollabEmails: [],
         trackingProps: {
             inviteCollabsEmailTracking: {},
             sharedLinkEmailTracking: {},
@@ -130,6 +130,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
     renderUSF = () => {
         const { sharedLinkEditTagTargetingApi, sharedLinkEditTooltipTargetingApi } = this.props;
         const { isFetching, sharedLinkLoaded, shouldRenderFTUXTooltip } = this.state;
+
         return (
             <UnifiedShareForm
                 {...this.props}

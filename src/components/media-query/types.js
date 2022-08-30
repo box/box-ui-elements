@@ -21,7 +21,7 @@ export type MediaShape = {
     anyPointer: MediaPointerType,
     hover: MediaHoverType,
     pointer: MediaPointerType,
-    size: boolean,
+    size: string,
     viewHeight: number,
     viewWidth: number,
 };

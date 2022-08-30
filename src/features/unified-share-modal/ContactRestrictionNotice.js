@@ -11,11 +11,12 @@ import PlainButton from '../../components/plain-button';
 import InlineNotice from '../../components/inline-notice';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import SingleSelectField from '../../components/select-field/SingleSelectField';
+import { COLLAB_RESTRICTION_TYPE_ACCESS_POLICY, COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER } from './constants';
 
 import messages from './messages';
 
 import type { SelectOptionProp } from '../../components/select-field/props';
-import type { contactType as Contact } from './flowTypes';
+import type { CollabRestrictionType, contactType as Contact } from './flowTypes';
 
 import './ContactRestrictionNotice.scss';
 
@@ -25,60 +26,77 @@ const RESTRICTION_JUSTIFICATION_ENABLED = 'restrictionJustificationEnabled';
 const RESTRICTION_JUSTIFICATION_DISABLED = 'restrictionJustificationDisabled';
 
 const restrictionNoticeMessageMap = {
-    [RESTRICTION_JUSTIFICATION_ENABLED]: {
-        [SINGLE_CONTACT]: messages.justifiableContactRestrictionNoticeSingular,
-        [MULTIPLE_CONTACTS]: messages.justifiableContactRestrictionNotice,
+    [COLLAB_RESTRICTION_TYPE_ACCESS_POLICY]: {
+        [RESTRICTION_JUSTIFICATION_ENABLED]: {
+            [SINGLE_CONTACT]: messages.justifiableContactRestrictionNoticeSingular,
+            [MULTIPLE_CONTACTS]: messages.justifiableContactRestrictionNotice,
+        },
+        [RESTRICTION_JUSTIFICATION_DISABLED]: {
+            [SINGLE_CONTACT]: messages.contactRestrictionNoticeSingular,
+            [MULTIPLE_CONTACTS]: messages.contactRestrictionNotice,
+        },
     },
-    [RESTRICTION_JUSTIFICATION_DISABLED]: {
-        [SINGLE_CONTACT]: messages.contactRestrictionNoticeSingular,
-        [MULTIPLE_CONTACTS]: messages.contactRestrictionNotice,
+    [COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER]: {
+        [SINGLE_CONTACT]: messages.contactRestrictionNoticeInformationBarrierSingular,
+        [MULTIPLE_CONTACTS]: messages.contactRestrictionNoticeInformationBarrier,
     },
 };
 
 type Props = {
+    collabRestrictionType?: CollabRestrictionType,
     error?: React.Node,
     isFetchingJustificationReasons?: boolean,
     isRestrictionJustificationEnabled?: boolean,
     justificationReasons: Array<SelectOptionProp>,
-    onRemoveRestrictedExternalContacts: () => void,
+    onRemoveRestrictedContacts: () => void,
     onSelectJustificationReason: (justificationReasonOption: SelectOptionProp) => void,
-    restrictedExternalEmails: Array<string>,
+    restrictedEmails: Array<string>,
     selectedContacts: Array<Contact>,
     selectedJustificationReason: ?SelectOptionProp,
 } & InjectIntlProvidedProps;
 
 const ContactRestrictionNotice = ({
+    collabRestrictionType = COLLAB_RESTRICTION_TYPE_ACCESS_POLICY,
     error,
     intl,
     isFetchingJustificationReasons,
     isRestrictionJustificationEnabled,
     justificationReasons,
-    onRemoveRestrictedExternalContacts,
+    onRemoveRestrictedContacts,
     onSelectJustificationReason,
-    restrictedExternalEmails,
+    restrictedEmails,
     selectedContacts,
     selectedJustificationReason,
 }: Props) => {
-    const restrictedExternalContacts = selectedContacts.filter(({ value }) => restrictedExternalEmails.includes(value));
-    const restrictedExternalContactCount = restrictedExternalContacts.length;
+    const restrictedContacts = selectedContacts.filter(({ value }) => restrictedEmails.includes(value));
+    const restrictedContactCount = restrictedContacts.length;
 
-    if (!restrictedExternalContactCount) {
+    if (!restrictedContactCount) {
         return null;
     }
 
-    const firstEmail = restrictedExternalContacts[0].value;
+    const firstEmail = restrictedContacts[0].value;
     const selectedValue = getProp(selectedJustificationReason, 'value', null);
     const isErrorTooltipShown = !!error;
 
     const justificationStatus = isRestrictionJustificationEnabled
         ? RESTRICTION_JUSTIFICATION_ENABLED
         : RESTRICTION_JUSTIFICATION_DISABLED;
-    const restrictedContactCountType = restrictedExternalContactCount === 1 ? SINGLE_CONTACT : MULTIPLE_CONTACTS;
+    const restrictedContactCountType = restrictedContactCount === 1 ? SINGLE_CONTACT : MULTIPLE_CONTACTS;
 
     const removeButtonLabelMessage = isRestrictionJustificationEnabled
         ? messages.justifiableContactRestrictionRemoveButtonLabel
         : messages.contactRestrictionRemoveButtonLabel;
-    const restrictionNoticeMessage = restrictionNoticeMessageMap[justificationStatus][restrictedContactCountType];
+
+    let restrictionNoticeMessage;
+    // Information Barrier restrictions do not allow justifications
+    if (collabRestrictionType === COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER) {
+        restrictionNoticeMessage =
+            restrictionNoticeMessageMap[COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER][restrictedContactCountType];
+    } else {
+        restrictionNoticeMessage =
+            restrictionNoticeMessageMap[collabRestrictionType][justificationStatus][restrictedContactCountType];
+    }
 
     const justificationSelectSection = isFetchingJustificationReasons ? (
         <LoadingIndicator className="bdl-ContactRestrictionNotice-loadingIndicator" />
@@ -101,19 +119,16 @@ const ContactRestrictionNotice = ({
             >
                 <FormattedMessage
                     {...restrictionNoticeMessage}
-                    values={{ count: restrictedExternalContactCount, email: firstEmail }}
+                    values={{ count: restrictedContactCount, email: firstEmail }}
                 />
                 &nbsp;
                 {isRestrictionJustificationEnabled && justificationSelectSection}
                 <PlainButton
                     className="bdl-ContactRestrictionNotice-removeBtn"
                     data-resin-target="removeBtn"
-                    onClick={onRemoveRestrictedExternalContacts}
+                    onClick={onRemoveRestrictedContacts}
                 >
-                    <FormattedMessage
-                        {...removeButtonLabelMessage}
-                        values={{ count: restrictedExternalContactCount }}
-                    />
+                    <FormattedMessage {...removeButtonLabelMessage} values={{ count: restrictedContactCount }} />
                 </PlainButton>
             </InlineNotice>
         </Tooltip>
@@ -124,7 +139,7 @@ ContactRestrictionNotice.displayName = 'ContactRestrictionNotice';
 
 ContactRestrictionNotice.defaultProps = {
     justificationReasons: [],
-    onRemoveRestrictedExternalContacts: noop,
+    onRemoveRestrictedContacts: noop,
     onSelectJustificationReason: noop,
 };
 

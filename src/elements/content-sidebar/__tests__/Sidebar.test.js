@@ -205,6 +205,12 @@ describe('elements/content-sidebar/Sidebar', () => {
                 expect(wrapper.hasClass('bcs-is-open')).toBe(expected);
             },
         );
+
+        test('should not render SidebarNav when hasNav is false', () => {
+            const wrapper = getWrapper({ hasNav: false });
+
+            expect(wrapper.exists('SidebarNav')).toBe(false);
+        });
     });
 
     describe('refresh()', () => {

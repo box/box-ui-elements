@@ -1,11 +1,13 @@
-**_If you are a Box employee, you do not need to create an issue to open a pull request_**
-
 ---
-
 name: Feature request
 about: Suggest an idea for this project
+title: ''
+labels: ''
+assignees: ''
 
 ---
+
+**_If you are a Box employee, you do not need to create an issue to open a pull request_**
 
 **Describe the solution you'd like**
 A clear and concise description of what you want to happen.
