@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import ActivityCard from '../ActivityCard';
 
 type Props = {
     children: React.Node,
@@ -9,11 +8,7 @@ type Props = {
 
 const ActivityThread = ({ children, hasReplies }: Props) => {
     if (hasReplies) {
-        return (
-            <ActivityCard className="bcs-ActivityThread" data-testid="activity-thread">
-                {children}
-            </ActivityCard>
-        );
+        return <div className="bcs-ActivityThread">{children}</div>;
     }
     return children;
 };

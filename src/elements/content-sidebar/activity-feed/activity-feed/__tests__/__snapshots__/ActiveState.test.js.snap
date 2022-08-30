@@ -50,6 +50,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
     key="annotationanno_123"
   >
     <ActivityThread
+      data-testid="activity-thread"
       hasReplies={false}
     >
       <AnnotationActivity
@@ -93,6 +94,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
     key="commentc_123"
   >
     <ActivityThread
+      data-testid="activity-thread"
       hasReplies={false}
     >
       <Comment

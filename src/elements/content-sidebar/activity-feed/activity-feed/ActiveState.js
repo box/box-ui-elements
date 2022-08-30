@@ -94,11 +94,11 @@ const ActiveState = ({
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
-                                data-testid={hasReplies ? 'activity-thread' : 'comment'}
+                                data-testid="comment"
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <ActivityThread hasReplies={hasReplies}>
+                                <ActivityThread hasReplies={hasReplies} data-testid="activity-thread">
                                     <Comment
                                         {...item}
                                         currentUser={currentUser}
@@ -169,12 +169,12 @@ const ActiveState = ({
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
-                                className={!hasReplies && 'bcs-activity-feed-annotation-activity'}
-                                data-testid={hasReplies ? 'activity-thread' : 'annotation-activity'}
+                                className="bcs-activity-feed-annotation-activity"
+                                data-testid="annotation-activity"
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <ActivityThread hasReplies={hasReplies}>
+                                <ActivityThread hasReplies={hasReplies} data-testid="activity-thread">
                                     <AnnotationActivity
                                         currentUser={currentUser}
                                         getAvatarUrl={getAvatarUrl}
