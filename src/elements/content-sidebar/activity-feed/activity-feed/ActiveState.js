@@ -4,6 +4,7 @@
  */
 import * as React from 'react';
 import getProp from 'lodash/get';
+import ActivityThread from './ActivityThread';
 import ActivityItem from './ActivityItem';
 import AppActivity from '../app-activity';
 import AnnotationActivity from '../annotations';
@@ -33,6 +34,7 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasReplies?: boolean,
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems<>,
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
@@ -57,6 +59,7 @@ const ActiveState = ({
     approverSelectorContacts,
     currentFileVersionId,
     currentUser,
+    hasReplies = false,
     items,
     mentionSelectorContacts,
     getMentionWithQuery,
@@ -91,28 +94,30 @@ const ActiveState = ({
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
-                                className="bcs-activity-feed-comment"
                                 data-testid="comment"
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <Comment
-                                    {...item}
-                                    currentUser={currentUser}
-                                    getAvatarUrl={getAvatarUrl}
-                                    getMentionWithQuery={getMentionWithQuery}
-                                    getUserProfileUrl={getUserProfileUrl}
-                                    mentionSelectorContacts={mentionSelectorContacts}
-                                    onDelete={onCommentDelete}
-                                    onEdit={onCommentEdit}
-                                    permissions={{
-                                        can_delete: getProp(item.permissions, 'can_delete', false),
-                                        can_edit: getProp(item.permissions, 'can_edit', false),
-                                    }}
-                                    translations={translations}
-                                />
+                                <ActivityThread hasReplies={hasReplies} data-testid="activity-thread">
+                                    <Comment
+                                        {...item}
+                                        currentUser={currentUser}
+                                        getAvatarUrl={getAvatarUrl}
+                                        getMentionWithQuery={getMentionWithQuery}
+                                        getUserProfileUrl={getUserProfileUrl}
+                                        mentionSelectorContacts={mentionSelectorContacts}
+                                        onDelete={onCommentDelete}
+                                        onEdit={onCommentEdit}
+                                        permissions={{
+                                            can_delete: getProp(item.permissions, 'can_delete', false),
+                                            can_edit: getProp(item.permissions, 'can_edit', false),
+                                        }}
+                                        translations={translations}
+                                    />
+                                </ActivityThread>
                             </ActivityItem>
                         );
+
                     case 'task':
                         return (
                             <ActivityItem
@@ -169,20 +174,23 @@ const ActiveState = ({
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <AnnotationActivity
-                                    currentUser={currentUser}
-                                    getAvatarUrl={getAvatarUrl}
-                                    getUserProfileUrl={getUserProfileUrl}
-                                    getMentionWithQuery={getMentionWithQuery}
-                                    isCurrentVersion={currentFileVersionId === itemFileVersionId}
-                                    item={item}
-                                    mentionSelectorContacts={mentionSelectorContacts}
-                                    onEdit={onAnnotationEdit}
-                                    onDelete={onAnnotationDelete}
-                                    onSelect={onAnnotationSelect}
-                                />
+                                <ActivityThread hasReplies={hasReplies} data-testid="activity-thread">
+                                    <AnnotationActivity
+                                        currentUser={currentUser}
+                                        getAvatarUrl={getAvatarUrl}
+                                        getUserProfileUrl={getUserProfileUrl}
+                                        getMentionWithQuery={getMentionWithQuery}
+                                        isCurrentVersion={currentFileVersionId === itemFileVersionId}
+                                        item={item}
+                                        mentionSelectorContacts={mentionSelectorContacts}
+                                        onEdit={onAnnotationEdit}
+                                        onDelete={onAnnotationDelete}
+                                        onSelect={onAnnotationSelect}
+                                    />
+                                </ActivityThread>
                             </ActivityItem>
                         );
+
                     default:
                         return null;
                 }
