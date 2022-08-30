@@ -8,9 +8,8 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import type { MessageDescriptor } from 'react-intl';
 import DropdownMenu, { MenuToggle } from '../../components/dropdown-menu';
-import { Menu, MenuItem } from '../../components/menu';
+import { Menu, SelectMenuItem } from '../../components/menu';
 import PlainButton from '../../components/plain-button';
-import Checkmark16 from '../../icon/fill/Checkmark16';
 import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../constants';
 import messages from './messages';
 import type { FeedItemStatus } from '../../common/types/feed';
@@ -39,21 +38,20 @@ function ActivitySidebarFilter({ feedItemStatus, onFeedItemStatusClick }: Activi
     return (
         <div className="bcs-ActivitySidebarFilter">
             <DropdownMenu className="bcs-ActivitySidebarFilter-dropdownMenu" constrainToWindow>
-                <PlainButton>
+                <PlainButton type="button">
                     <MenuToggle>
                         <FormattedMessage {...selectedMsg} />
                     </MenuToggle>
                 </PlainButton>
                 <Menu>
                     {options.map(({ key, msg, status }) => (
-                        <MenuItem
+                        <SelectMenuItem
                             isSelected={status === feedItemStatus}
                             key={key}
                             onClick={() => onFeedItemStatusClick(status)}
                         >
-                            {status === feedItemStatus && <Checkmark16 />}
                             <FormattedMessage {...msg} />
-                        </MenuItem>
+                        </SelectMenuItem>
                     ))}
                 </Menu>
             </DropdownMenu>

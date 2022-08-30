@@ -695,12 +695,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onAnnotationSelect(annotation);
     };
 
-    /**
-     * Filters visible feed items based on given feed item status.
-     *
-     * @param {FeedItemStatus} status - Feed item status
-     * @return void
-     */
     handleItemsFiltered = (status?: FeedItemStatus) => {
         this.setState({ feedItemsStatusFilter: status });
     };
@@ -768,9 +762,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             <ActivitySidebarFilter
                 feedItemStatus={feedItemsStatusFilter}
                 onFeedItemStatusClick={selectedStatus => {
-                    if (selectedStatus !== feedItemsStatusFilter) {
-                        this.handleItemsFiltered(selectedStatus);
-                    }
+                    this.handleItemsFiltered(selectedStatus);
                 }}
             />
         );

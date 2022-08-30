@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import { TASK_NEW_NOT_STARTED } from '../../../constants';
 import messages from '../../common/messages';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
+import { filterableActivityFeedItems } from '../fixtures';
 
 const { defaultErrorMaskSubHeaderMessage, currentUserErrorHeaderMessage } = messages;
 
@@ -885,167 +885,45 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('getFilteredFeedItems()', () => {
+        let annotationOpen;
+        let annotationResolved;
+        let commentOpen;
+        let commentResolved;
+        let taskItem;
         let instance;
         let wrapper;
 
-        const itemOpen1 = {
-            type: 'comment',
-            id: 'open1',
-            tagged_message: '',
-            message: 'test',
-            created_at: '2022-07-26T09:08:20-07:00',
-            created_by: {
-                type: 'user',
-                id: '6187936317',
-                name: 'Jhon',
-                login: 'jdoe@box.com',
-            },
-            modified_at: '2022-07-26T09:08:20-07:00',
-            permissions: {
-                can_delete: true,
-                can_edit: true,
-                can_reply: true,
-            },
-            status: 'open',
-        };
-        const itemOpen2 = {
-            type: 'annotation',
-            id: 'open2',
-            tagged_message: '',
-            message: 'test',
-            created_at: '2022-07-26T09:08:20-07:00',
-            created_by: {
-                type: 'user',
-                id: '6187936317',
-                name: 'Jhon',
-                login: 'jdoe@box.com',
-            },
-            modified_at: '2022-07-26T09:08:20-07:00',
-            permissions: {
-                can_delete: true,
-                can_edit: true,
-                can_reply: true,
-            },
-            status: 'open',
-        };
-        const itemResolved1 = {
-            type: 'comment',
-            id: 'open1',
-            tagged_message: '',
-            message: 'test',
-            created_at: '2022-07-26T09:08:20-07:00',
-            created_by: {
-                type: 'user',
-                id: '6187936317',
-                name: 'Jhon',
-                login: 'jdoe@box.com',
-            },
-            modified_at: '2022-07-26T09:08:20-07:00',
-            permissions: {
-                can_delete: true,
-                can_edit: true,
-                can_reply: true,
-            },
-            status: 'resolved',
-        };
-        const itemResolved2 = {
-            type: 'annotation',
-            id: 'open2',
-            tagged_message: '',
-            message: 'test',
-            created_at: '2022-07-26T09:08:20-07:00',
-            created_by: {
-                type: 'user',
-                id: '6187936317',
-                name: 'Jhon',
-                login: 'jdoe@box.com',
-            },
-            modified_at: '2022-07-26T09:08:20-07:00',
-            permissions: {
-                can_delete: true,
-                can_edit: true,
-                can_reply: true,
-            },
-            status: 'resolved',
-        };
-        const taskItem = {
-            created_by: {
-                type: 'task_collaborator',
-                target: { name: 'Jay-Z', id: '100' },
-                id: '000',
-                role: 'CREATOR',
-                status: TASK_NEW_NOT_STARTED,
-            },
-            created_at: '2019-01-01',
-            due_at: '2019-02-02',
-            id: '0',
-            name: 'task message',
-            type: 'task',
-            assigned_to: {
-                entries: [
-                    {
-                        id: '1',
-                        target: { name: 'Beyonce', id: '2', avatar_url: '', type: 'user' },
-                        status: TASK_NEW_NOT_STARTED,
-                        permissions: {
-                            can_delete: false,
-                            can_update: false,
-                        },
-                        role: 'ASSIGNEE',
-                        type: 'task_collaborator',
-                    },
-                ],
-                limit: 10,
-                next_marker: null,
-            },
-            permissions: {
-                can_update: false,
-                can_delete: false,
-                can_create_task_collaborator: false,
-                can_create_task_link: false,
-            },
-            task_links: {
-                entries: [
-                    {
-                        id: '03',
-                        type: 'task_link',
-                        target: {
-                            type: 'file',
-                            id: '4',
-                        },
-                        permissions: {
-                            can_delete: false,
-                            can_update: false,
-                        },
-                    },
-                ],
-                limit: 1,
-                next_marker: null,
-            },
-            status: TASK_NEW_NOT_STARTED,
-        };
-        const items = [itemOpen1, itemOpen2, itemResolved1, itemResolved2, taskItem];
+        const getAllItems = () => [annotationOpen, annotationResolved, commentOpen, commentResolved, taskItem];
+        const getOpenItems = () => [annotationOpen, commentOpen, taskItem];
+        const getResolvedItems = () => [annotationResolved, commentResolved, taskItem];
 
         beforeEach(() => {
+            ({
+                annotationOpen,
+                annotationResolved,
+                commentOpen,
+                commentResolved,
+                taskItem,
+            } = filterableActivityFeedItems);
             wrapper = getWrapper();
             instance = wrapper.instance();
             instance.setState({
-                feedItems: items,
+                feedItems: [annotationOpen, annotationResolved, commentOpen, commentResolved, taskItem],
             });
         });
 
         test.each`
-            status        | expected
-            ${undefined}  | ${[itemOpen1, itemOpen2, itemResolved1, itemResolved2, taskItem]}
-            ${'open'}     | ${[itemOpen1, itemOpen2, taskItem]}
-            ${'resolved'} | ${[itemResolved1, itemResolved2, taskItem]}
+            status        | getExpected
+            ${undefined}  | ${getAllItems}
+            ${'open'}     | ${getOpenItems}
+            ${'resolved'} | ${getResolvedItems}
         `(
             'should filter feed items of type "comment" or "annotation" based on status equal to $status',
-            ({ status, expected }) => {
+            ({ status, getExpected }) => {
                 instance.setState({
                     feedItemsStatusFilter: status,
                 });
-                expect(instance.getFilteredFeedItems()).toMatchObject(expected);
+                expect(instance.getFilteredFeedItems()).toMatchObject(getExpected());
             },
         );
     });
