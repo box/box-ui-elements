@@ -7,10 +7,10 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import DropdownMenu, { MenuToggle } from '../../components/dropdown-menu';
-import { Menu, SelectMenuItem } from '../../components/menu';
 import PlainButton from '../../components/plain-button';
-import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../constants';
 import messages from './messages';
+import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../constants';
+import { Menu, SelectMenuItem } from '../../components/menu';
 import type { FeedItemStatus } from '../../common/types/feed';
 import './ActivitySidebarFilter.scss';
 
