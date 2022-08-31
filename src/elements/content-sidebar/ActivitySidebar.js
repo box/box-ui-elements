@@ -25,6 +25,7 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
 import { withRouterAndRef } from '../common/routing';
+import ActivitySidebarFilter from './ActivitySidebarFilter';
 import {
     DEFAULT_COLLAB_DEBOUNCE,
     ERROR_CODE_FETCH_ACTIVITY,
@@ -39,7 +40,13 @@ import type {
     TaskUpdatePayload,
     TaskCollabStatus,
 } from '../../common/types/tasks';
-import type { Annotation, AnnotationPermission, FocusableFeedItemType, FeedItems } from '../../common/types/feed';
+import type {
+    Annotation,
+    AnnotationPermission,
+    FocusableFeedItemType,
+    FeedItems,
+    FeedItemStatus,
+} from '../../common/types/feed';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { SelectorItems, User, UserMini, GroupMini, BoxItem, BoxItemPermission } from '../../common/types/core';
@@ -92,6 +99,7 @@ type State = {
     currentUser?: User,
     currentUserError?: Errors,
     feedItems?: FeedItems,
+    feedItemsStatusFilter?: FeedItemStatus,
     mentionSelectorContacts?: SelectorItems<UserMini>,
 };
 
@@ -687,6 +695,20 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onAnnotationSelect(annotation);
     };
 
+    handleItemsFiltered = (status?: FeedItemStatus) => {
+        this.setState({ feedItemsStatusFilter: status });
+    };
+
+    getFilteredFeedItems = (): FeedItems | typeof undefined => {
+        const { feedItems, feedItemsStatusFilter } = this.state;
+        if (!feedItems || !feedItemsStatusFilter) {
+            return feedItems;
+        }
+        return feedItems.filter(item => {
+            return item.status === feedItemsStatusFilter || item.type === 'file_version';
+        });
+    };
+
     onTaskModalClose = () => {
         this.setState({
             approverSelectorContacts: [],
@@ -724,6 +746,39 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         );
     };
 
+    renderActivitySidebarFilter = () => {
+        const { features } = this.props;
+        const { feedItemsStatusFilter } = this.state;
+        const shouldShowActivityFeedFilter = isFeatureEnabled(features, 'activityFeed.filter.enabled');
+
+        if (!shouldShowActivityFeedFilter) {
+            return null;
+        }
+        return (
+            <ActivitySidebarFilter
+                feedItemStatus={feedItemsStatusFilter}
+                onFeedItemStatusClick={selectedStatus => {
+                    this.handleItemsFiltered(selectedStatus);
+                }}
+            />
+        );
+    };
+
+    renderActions = () => (
+        <>
+            {this.renderActivitySidebarFilter()}
+            {this.renderAddTaskButton()}
+        </>
+    );
+
+    renderTitle = () => {
+        const { features } = this.props;
+        if (isFeatureEnabled(features, 'activityFeed.filter.enabled')) {
+            return undefined;
+        }
+        return <FormattedMessage {...messages.sidebarActivityTitle} />;
+    };
+
     render() {
         const {
             elementId,
@@ -740,18 +795,17 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             approverSelectorContacts,
             mentionSelectorContacts,
             contactsLoaded,
-            feedItems,
             activityFeedError,
             currentUserError,
         } = this.state;
 
         return (
             <SidebarContent
-                actions={this.renderAddTaskButton()}
+                actions={this.renderActions()}
                 className="bcs-activity"
                 elementId={elementId}
                 sidebarView={SIDEBAR_VIEW_ACTIVITY}
-                title={<FormattedMessage {...messages.sidebarActivityTitle} />}
+                title={this.renderTitle()}
             >
                 <ActivityFeed
                     activeFeedEntryId={activeFeedEntryId}
@@ -760,7 +814,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     approverSelectorContacts={approverSelectorContacts}
                     currentUser={currentUser}
                     currentUserError={currentUserError}
-                    feedItems={feedItems}
+                    feedItems={this.getFilteredFeedItems()}
                     file={file}
                     getApproverWithQuery={this.getApproverWithQuery}
                     getAvatarUrl={this.getAvatarUrl}

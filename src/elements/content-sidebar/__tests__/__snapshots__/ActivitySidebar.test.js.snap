@@ -3,22 +3,24 @@
 exports[`elements/content-sidebar/ActivitySidebar render() should render the activity feed sidebar 1`] = `
 <SidebarContent
   actions={
-    <withRouter(AddTaskButton)
-      isDisabled={false}
-      onTaskModalClose={[Function]}
-      taskFormProps={
-        Object {
-          "approverSelectorContacts": undefined,
-          "approvers": Array [],
-          "completionRule": "ALL_ASSIGNEES",
-          "createTask": [Function],
-          "getApproverWithQuery": [Function],
-          "getAvatarUrl": [Function],
-          "id": "",
-          "message": "",
+    <React.Fragment>
+      <withRouter(AddTaskButton)
+        isDisabled={false}
+        onTaskModalClose={[Function]}
+        taskFormProps={
+          Object {
+            "approverSelectorContacts": undefined,
+            "approvers": Array [],
+            "completionRule": "ALL_ASSIGNEES",
+            "createTask": [Function],
+            "getApproverWithQuery": [Function],
+            "getAvatarUrl": [Function],
+            "id": "",
+            "message": "",
+          }
         }
-      }
-    />
+      />
+    </React.Fragment>
   }
   className="bcs-activity"
   elementId=""

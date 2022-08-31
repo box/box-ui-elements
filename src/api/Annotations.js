@@ -20,11 +20,11 @@ import type {
     Annotation,
     AnnotationPermission,
     Annotations as AnnotationsType,
-    AnnotationStatus,
     NewAnnotation,
 } from '../common/types/annotations';
 import type { BoxItemPermission } from '../common/types/core';
 import type { ElementsXhrError } from '../common/types/api';
+import type { FeedItemStatus } from '../common/types/feed';
 
 export default class Annotations extends MarkerBasedApi {
     getUrl() {
@@ -64,8 +64,6 @@ export default class Annotations extends MarkerBasedApi {
                 id: fileVersionId,
                 type: 'file_version',
             },
-            status: 'open',
-            type: 'annotation',
         };
 
         this.post({
@@ -83,7 +81,7 @@ export default class Annotations extends MarkerBasedApi {
         fileId: string,
         annotationId: string,
         permissions: AnnotationPermission,
-        payload: { message?: string, status?: AnnotationStatus },
+        payload: { message?: string, status?: FeedItemStatus },
         successCallback: (annotation: Annotation) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
     ): void {
