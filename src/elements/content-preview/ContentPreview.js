@@ -225,7 +225,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
     api: API;
 
     // populated when consumer sets useV4BoxAnnotations to true and they did not provide their own boxAnnotations dependency
-    boxAnnotations: object;
+    boxAnnotations: Object;
 
     // Defines a generic type for ContentSidebar, since an import would interfere with code splitting
     contentSidebar: { current: null | { refresh: Function } } = React.createRef();
