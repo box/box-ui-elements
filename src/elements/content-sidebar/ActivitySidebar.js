@@ -701,16 +701,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     getFilteredFeedItems = (): FeedItems | typeof undefined => {
         const { feedItems, feedItemsStatusFilter } = this.state;
-        if (feedItems && feedItemsStatusFilter) {
-            return feedItems.filter(item => {
-                // Filter only Comments and Annotations
-                if (item.type !== 'comment' && item.type !== 'annotation') {
-                    return true;
-                }
-                return item.status && item.status === feedItemsStatusFilter;
-            });
+        if (!feedItems || !feedItemsStatusFilter) {
+            return feedItems;
         }
-        return feedItems;
+        return feedItems.filter(item => {
+            return item.status === feedItemsStatusFilter || item.type === 'file_version';
+        });
     };
 
     onTaskModalClose = () => {

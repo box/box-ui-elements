@@ -6,7 +6,6 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import type { MessageDescriptor } from 'react-intl';
 import DropdownMenu, { MenuToggle } from '../../components/dropdown-menu';
 import { Menu, SelectMenuItem } from '../../components/menu';
 import PlainButton from '../../components/plain-button';
@@ -20,37 +19,37 @@ type ActivitySidebarFilterProps = {
     onFeedItemStatusClick: (status?: FeedItemStatus) => void,
 };
 
-function ActivitySidebarFilter({ feedItemStatus, onFeedItemStatusClick }: ActivitySidebarFilterProps) {
-    const options: Array<{ key: string, msg: MessageDescriptor, status?: FeedItemStatus }> = [
-        { key: 'all', msg: messages.activitySidebarFilterOptionAll },
-        { key: 'open', msg: messages.activitySidebarFilterOptionOpen, status: COMMENT_STATUS_OPEN },
-        { key: 'resolved', msg: messages.activitySidebarFilterOptionResolved, status: COMMENT_STATUS_RESOLVED },
-    ];
-    let selectedMsg: MessageDescriptor = messages.activitySidebarFilterOptionAll;
-    if (feedItemStatus) {
-        if (feedItemStatus === COMMENT_STATUS_OPEN) {
-            selectedMsg = messages.activitySidebarFilterOptionOpen;
-        } else if (feedItemStatus === COMMENT_STATUS_RESOLVED) {
-            selectedMsg = messages.activitySidebarFilterOptionResolved;
-        }
-    }
+const ACTIVITY_FEED_ITEM_ALL = 'all';
+const ACTIVITY_FEED_ITEM_OPEN = COMMENT_STATUS_OPEN;
+const ACTIVITY_FEED_ITEM_RESOLVED = COMMENT_STATUS_RESOLVED;
 
+const statuses = [ACTIVITY_FEED_ITEM_ALL, ACTIVITY_FEED_ITEM_OPEN, ACTIVITY_FEED_ITEM_RESOLVED];
+const statusMap = {
+    [ACTIVITY_FEED_ITEM_ALL]: { msg: messages.activitySidebarFilterOptionAll, val: undefined },
+    [ACTIVITY_FEED_ITEM_OPEN]: { msg: messages.activitySidebarFilterOptionOpen, val: COMMENT_STATUS_OPEN },
+    [ACTIVITY_FEED_ITEM_RESOLVED]: { msg: messages.activitySidebarFilterOptionResolved, val: COMMENT_STATUS_RESOLVED },
+};
+
+function ActivitySidebarFilter({
+    feedItemStatus = ACTIVITY_FEED_ITEM_ALL,
+    onFeedItemStatusClick,
+}: ActivitySidebarFilterProps) {
     return (
         <div className="bcs-ActivitySidebarFilter">
             <DropdownMenu className="bcs-ActivitySidebarFilter-dropdownMenu" constrainToWindow>
                 <PlainButton type="button">
                     <MenuToggle>
-                        <FormattedMessage {...selectedMsg} />
+                        <FormattedMessage {...statusMap[feedItemStatus].msg} />
                     </MenuToggle>
                 </PlainButton>
                 <Menu>
-                    {options.map(({ key, msg, status }) => (
+                    {statuses.map(status => (
                         <SelectMenuItem
+                            key={status}
                             isSelected={status === feedItemStatus}
-                            key={key}
-                            onClick={() => onFeedItemStatusClick(status)}
+                            onClick={() => onFeedItemStatusClick(statusMap[status].val)}
                         >
-                            <FormattedMessage {...msg} />
+                            <FormattedMessage {...statusMap[status].msg} />
                         </SelectMenuItem>
                     ))}
                 </Menu>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
+import cloneDeep from 'lodash/cloneDeep';
 import messages from '../../common/messages';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
 import { filterableActivityFeedItems } from '../fixtures';
@@ -885,65 +886,61 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('getFilteredFeedItems()', () => {
-        let annotationOpen;
-        let annotationResolved;
-        let commentOpen;
-        let commentResolved;
-        let taskItem;
-        let instance;
-        let wrapper;
-
-        const getAllItems = () => [annotationOpen, annotationResolved, commentOpen, commentResolved, taskItem];
-        const getOpenItems = () => [annotationOpen, commentOpen, taskItem];
-        const getResolvedItems = () => [annotationResolved, commentResolved, taskItem];
-
-        beforeEach(() => {
-            ({
-                annotationOpen,
-                annotationResolved,
-                commentOpen,
-                commentResolved,
-                taskItem,
-            } = filterableActivityFeedItems);
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            instance.setState({
-                feedItems: [annotationOpen, annotationResolved, commentOpen, commentResolved, taskItem],
-            });
-        });
+        const {
+            annotationOpen: expectedAnnotationOpen,
+            annotationResolved: expectedAnnotationResolved,
+            commentOpen: expectedCommentOpen,
+            commentResolved: expectedCommentResolved,
+            taskItem: expectedTaskItem,
+            versionItem: expectedVersionItem,
+        } = filterableActivityFeedItems;
 
         test.each`
-            status        | getExpected
-            ${undefined}  | ${getAllItems}
-            ${'open'}     | ${getOpenItems}
-            ${'resolved'} | ${getResolvedItems}
+            status        | expected
+            ${undefined}  | ${[expectedAnnotationOpen, expectedAnnotationResolved, expectedCommentOpen, expectedCommentResolved, expectedTaskItem, expectedVersionItem]}
+            ${'open'}     | ${[expectedAnnotationOpen, expectedCommentOpen, expectedVersionItem]}
+            ${'resolved'} | ${[expectedAnnotationResolved, expectedCommentResolved, expectedVersionItem]}
         `(
             'should filter feed items of type "comment" or "annotation" based on status equal to $status',
-            ({ status, getExpected }) => {
+            ({ status, expected }) => {
+                const {
+                    annotationOpen,
+                    annotationResolved,
+                    commentOpen,
+                    commentResolved,
+                    taskItem,
+                    versionItem,
+                } = cloneDeep(filterableActivityFeedItems);
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                instance.setState({
+                    feedItems: [
+                        annotationOpen,
+                        annotationResolved,
+                        commentOpen,
+                        commentResolved,
+                        taskItem,
+                        versionItem,
+                    ],
+                });
                 instance.setState({
                     feedItemsStatusFilter: status,
                 });
-                expect(instance.getFilteredFeedItems()).toMatchObject(getExpected());
+                expect(instance.getFilteredFeedItems()).toMatchObject(expected);
             },
         );
     });
 
     describe('handleItemsFiltered()', () => {
-        let instance;
-        let wrapper;
-
-        beforeEach(() => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            instance.setState = jest.fn();
-        });
-
         test.each`
             status        | expected
             ${undefined}  | ${undefined}
             ${'open'}     | ${'open'}
             ${'resolved'} | ${'resolved'}
         `('given $status should update feedItemsStatusFilter state with $expected', ({ status, expected }) => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
             instance.handleItemsFiltered(status);
             expect(instance.setState).toBeCalledWith({ feedItemsStatusFilter: expected });
         });
