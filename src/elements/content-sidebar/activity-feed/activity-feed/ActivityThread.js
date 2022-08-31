@@ -45,7 +45,7 @@ const ActivityThread = ({
     onGetReplies,
     onReplyDelete,
     onReplyEdit,
-    replies,
+    replies = [],
     total_reply_count = 0,
     translations,
 }: Props) => {
