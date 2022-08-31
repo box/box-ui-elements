@@ -808,6 +808,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         const previewOptions = {
+            boxAnnotations: useV4BoxAnnotations && !boxAnnotations ? this.boxAnnotations : boxAnnotations,
             container: `#${this.id} .bcpr-content`,
             enableThumbnailsSidebar,
             fileOptions: fileOpts,
@@ -822,8 +823,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             skipServerUpdate: true,
             useHotkeys: false,
         };
-
-        previewOptions.boxAnnotations = useV4BoxAnnotations && !boxAnnotations ? this.boxAnnotations : boxAnnotations;
 
         const { Preview } = global.Box;
         this.preview = new Preview();
