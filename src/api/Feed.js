@@ -185,7 +185,7 @@ class Feed extends Base {
             this.file.id,
             annotationId,
             permissions,
-            text,
+            { message: text },
             (annotation: Annotation) => {
                 this.updateFeedItem(
                     {
