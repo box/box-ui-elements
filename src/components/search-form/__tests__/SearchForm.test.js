@@ -78,7 +78,7 @@ describe('components/search-form/SearchForm', () => {
         test('should call onsubmit on search icon button submit event', () => {
             const wrapper = mount(<SearchForm onSubmit={onSubmitMock} placeholder="search" value="cheese" />);
             const searchButton = wrapper.find('.search-button');
-            expect(searchButton.props()).toHaveProperty('type', 'submit');
+            expect(searchButton.prop('type')).toEqual('submit');
 
             searchButton.simulate('submit', event);
             expect(onSubmitMock).toHaveBeenCalledTimes(1);
