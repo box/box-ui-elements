@@ -179,6 +179,23 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             file,
             id,
             text,
+            undefined,
+            permissions,
+            this.feedSuccessCallback,
+            this.feedErrorCallback,
+        );
+
+        this.fetchFeedItems();
+    };
+
+    handleAnnotationStatusChange = (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => {
+        const { api, file } = this.props;
+
+        api.getFeedAPI(false).updateAnnotation(
+            file,
+            id,
+            undefined,
+            status,
             permissions,
             this.feedSuccessCallback,
             this.feedErrorCallback,
@@ -453,7 +470,14 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {boolean} shouldDestroy true if the api factory should be destroyed
      */
     fetchFeedItems(shouldRefreshCache: boolean = false, shouldDestroy: boolean = false) {
-        const { file, api, features, hasTasks: shouldShowTasks, hasVersions: shouldShowVersions } = this.props;
+        const {
+            file,
+            api,
+            features,
+            hasReplies: shouldShowReplies,
+            hasTasks: shouldShowTasks,
+            hasVersions: shouldShowVersions,
+        } = this.props;
         const shouldShowAppActivity = isFeatureEnabled(features, 'activityFeed.appActivity.enabled');
         const shouldShowAnnotations = isFeatureEnabled(features, 'activityFeed.annotations.enabled');
 
@@ -463,7 +487,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             this.fetchFeedItemsSuccessCallback,
             this.fetchFeedItemsErrorCallback,
             this.errorCallback,
-            { shouldShowAnnotations, shouldShowAppActivity, shouldShowTasks, shouldShowVersions },
+            { shouldShowAnnotations, shouldShowAppActivity, shouldShowReplies, shouldShowTasks, shouldShowVersions },
         );
     }
 
@@ -826,6 +850,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     onAnnotationDelete={this.handleAnnotationDelete}
                     onAnnotationEdit={this.handleAnnotationEdit}
                     onAnnotationSelect={this.handleAnnotationSelect}
+                    onAnnotationStatusChange={this.handleAnnotationStatusChange}
                     onAppActivityDelete={this.deleteAppActivity}
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
