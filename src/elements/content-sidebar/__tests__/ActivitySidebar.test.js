@@ -1,7 +1,9 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
+import cloneDeep from 'lodash/cloneDeep';
 import messages from '../../common/messages';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
+import { filterableActivityFeedItems } from '../fixtures';
 
 const { defaultErrorMaskSubHeaderMessage, currentUserErrorHeaderMessage } = messages;
 
@@ -883,11 +885,137 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
+    describe('getFilteredFeedItems()', () => {
+        const {
+            annotationOpen: expectedAnnotationOpen,
+            annotationResolved: expectedAnnotationResolved,
+            commentOpen: expectedCommentOpen,
+            commentResolved: expectedCommentResolved,
+            taskItem: expectedTaskItem,
+            versionItem: expectedVersionItem,
+        } = filterableActivityFeedItems;
+
+        test.each`
+            status        | expected
+            ${undefined}  | ${[expectedAnnotationOpen, expectedAnnotationResolved, expectedCommentOpen, expectedCommentResolved, expectedTaskItem, expectedVersionItem]}
+            ${'open'}     | ${[expectedAnnotationOpen, expectedCommentOpen, expectedVersionItem]}
+            ${'resolved'} | ${[expectedAnnotationResolved, expectedCommentResolved, expectedVersionItem]}
+        `(
+            'should filter feed items of type "comment" or "annotation" based on status equal to $status',
+            ({ status, expected }) => {
+                const {
+                    annotationOpen,
+                    annotationResolved,
+                    commentOpen,
+                    commentResolved,
+                    taskItem,
+                    versionItem,
+                } = cloneDeep(filterableActivityFeedItems);
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                instance.setState({
+                    feedItems: [
+                        annotationOpen,
+                        annotationResolved,
+                        commentOpen,
+                        commentResolved,
+                        taskItem,
+                        versionItem,
+                    ],
+                });
+                instance.setState({
+                    feedItemsStatusFilter: status,
+                });
+                expect(instance.getFilteredFeedItems()).toMatchObject(expected);
+            },
+        );
+    });
+
+    describe('handleItemsFiltered()', () => {
+        test.each`
+            status        | expected
+            ${undefined}  | ${undefined}
+            ${'open'}     | ${'open'}
+            ${'resolved'} | ${'resolved'}
+        `('given $status should update feedItemsStatusFilter state with $expected', ({ status, expected }) => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+            instance.handleItemsFiltered(status);
+            expect(instance.setState).toBeCalledWith({ feedItemsStatusFilter: expected });
+        });
+    });
+
     describe('renderAddTaskButton()', () => {
         test('should return null when hasTasks is false', () => {
             const wrapper = getWrapper({ hasTasks: false });
             const instance = wrapper.instance();
             expect(instance.renderAddTaskButton()).toBe(null);
+        });
+    });
+
+    describe('renderActivitySidebarFilter()', () => {
+        describe('should return null', () => {
+            test('when activityFeed.filter feature is not set', () => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                expect(instance.renderActivitySidebarFilter()).toBe(null);
+            });
+
+            test('when activityFeed.filter feature is disabled', () => {
+                const wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            filter: { enabled: false },
+                        },
+                    },
+                });
+                const instance = wrapper.instance();
+                expect(instance.renderActivitySidebarFilter()).toBe(null);
+            });
+        });
+
+        test('should return ActivitySidebarFilter when activityFeed.filter feature is enabled', () => {
+            const wrapper = getWrapper({
+                features: {
+                    activityFeed: {
+                        filter: { enabled: true },
+                    },
+                },
+            });
+            const instance = wrapper.instance();
+            const resultWrapper = mount(instance.renderActivitySidebarFilter());
+            expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
+        });
+    });
+
+    describe('renderTitle()', () => {
+        describe('should return FormattedMessage', () => {
+            test('when activityFeed.filter feature is not set', () => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                const resultWrapper = mount(instance.renderTitle());
+                expect(resultWrapper.name()).toBe('FormattedMessage');
+            });
+
+            test('when activityFeed.filter feature is disabled', () => {
+                const wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            filter: { enabled: false },
+                        },
+                    },
+                });
+                const instance = wrapper.instance();
+                const resultWrapper = mount(instance.renderTitle());
+                expect(resultWrapper.name()).toBe('FormattedMessage');
+            });
+        });
+
+        test('should return undefined when activityFeed.filter feature is enabled', () => {
+            const wrapper = getWrapper({ features: { activityFeed: { filter: { enabled: true } } } });
+            const instance = wrapper.instance();
+            expect(instance.renderTitle()).toBe(undefined);
         });
     });
 });

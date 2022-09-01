@@ -18,9 +18,10 @@ import {
     ERROR_CODE_CREATE_REPLY,
 } from '../constants';
 
-import type { ThreadedCommentPermission, ThreadedCommentStatus } from '../common/types/threadedComments';
+import type { ThreadedCommentPermission } from '../common/types/threadedComments';
 import type { ElementsXhrError, ElementsErrorCallback } from '../common/types/api';
 import type { BoxItem, BoxItemPermission } from '../common/types/core';
+import type { FeedItemStatus } from '../common/types/feed';
 
 class ThreadedComments extends MarkerBasedApi {
     /**
@@ -104,7 +105,7 @@ class ThreadedComments extends MarkerBasedApi {
      *
      * @param {string} fileId - File id for which we are updating a comment
      * @param {string} commentId - Comment to be edited
-     * @param {ThreadedCommentStatus} status - Comment status
+     * @param {FeedItemStatus} status - Comment status
      * @param {string} message - Comment message
      * @param {BoxItemPermission} permissions - The known permissions of the comment we're updating
      * @param {Function} successCallback - Success callback
@@ -125,7 +126,7 @@ class ThreadedComments extends MarkerBasedApi {
         fileId: string,
         message?: string,
         permissions: ThreadedCommentPermission,
-        status?: ThreadedCommentStatus,
+        status?: FeedItemStatus,
         successCallback: Function,
     }): void {
         this.errorCode = ERROR_CODE_UPDATE_COMMENT;
