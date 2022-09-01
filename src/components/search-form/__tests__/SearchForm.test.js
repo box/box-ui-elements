@@ -71,7 +71,7 @@ describe('components/search-form/SearchForm', () => {
             const form = wrapper.find('form');
 
             form.simulate('submit', event);
-            expect(onSubmitMock).toHaveBeenCalledTimes(1);
+            expect(onSubmitMock).toBeCalledTimes(1);
             expect(onSubmitMock).toBeCalledWith('cheese', expect.objectContaining(event));
         });
 
@@ -81,7 +81,7 @@ describe('components/search-form/SearchForm', () => {
             expect(searchButton.prop('type')).toEqual('submit');
 
             searchButton.simulate('submit', event);
-            expect(onSubmitMock).toHaveBeenCalledTimes(1);
+            expect(onSubmitMock).toBeCalledTimes(1);
             expect(onSubmitMock).toBeCalledWith('cheese', expect.objectContaining(event));
         });
     });
