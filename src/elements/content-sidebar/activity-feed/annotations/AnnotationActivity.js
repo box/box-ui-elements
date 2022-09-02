@@ -17,7 +17,7 @@ import messages from './messages';
 import SelectableActivityCard from '../SelectableActivityCard';
 import UserLink from '../common/user-link';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import { COMMENT_STATUS_RESOLVED, PLACEHOLDER_USER } from '../../../../constants';
+import { PLACEHOLDER_USER } from '../../../../constants';
 import type { Annotation, AnnotationPermission, FeedItemStatus } from '../../../../common/types/feed';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
@@ -30,7 +30,6 @@ type Props = {
     getMentionWithQuery?: (searchStr: string) => void,
     getUserProfileUrl?: GetProfileUrlCallback,
     isCurrentVersion: boolean,
-    isResolvingEnabled?: boolean,
     item: Annotation,
     mentionSelectorContacts?: SelectorItems<User>,
     onDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
@@ -46,7 +45,6 @@ const AnnotationActivity = ({
     getMentionWithQuery,
     getUserProfileUrl,
     isCurrentVersion,
-    isResolvingEnabled = false,
     mentionSelectorContacts,
     onDelete = noop,
     onEdit = noop,
@@ -71,8 +69,7 @@ const AnnotationActivity = ({
     const { can_delete: canDelete, can_edit: canEdit, can_resolve: canResolve } = permissions;
     const isFileVersionUnavailable = file_version === null;
     const isCardDisabled = !!error || isConfirmingDelete || isMenuOpen || isEditing || isFileVersionUnavailable;
-    const isMenuVisible = (canDelete || canEdit || (canResolve && isResolvingEnabled)) && !isPending;
-    const isResolved = status === COMMENT_STATUS_RESOLVED;
+    const isMenuVisible = (canDelete || canEdit || canResolve) && !isPending;
 
     const handleDelete = (): void => setIsConfirmingDelete(true);
     const handleDeleteCancel = (): void => setIsConfirmingDelete(false);
@@ -100,9 +97,7 @@ const AnnotationActivity = ({
     };
     const handleSelect = () => onSelect(item);
 
-    const handleStatusChange = (newStatus: FeedItemStatus) => {
-        onStatusChange(id, newStatus, permissions);
-    };
+    const handleStatusChange = (newStatus: FeedItemStatus) => onStatusChange(id, newStatus, permissions);
 
     const createdAtTimestamp = new Date(created_at).getTime();
     const createdByUser = created_by || PLACEHOLDER_USER;
@@ -190,8 +185,7 @@ const AnnotationActivity = ({
                         className="bcs-AnnotationActivity-menu"
                         id={id}
                         isDisabled={isConfirmingDelete}
-                        isResolved={isResolved}
-                        isResolvingEnabled={isResolvingEnabled}
+                        status={status}
                         onDelete={handleDelete}
                         onEdit={handleEdit}
                         onMenuClose={handleMenuClose}

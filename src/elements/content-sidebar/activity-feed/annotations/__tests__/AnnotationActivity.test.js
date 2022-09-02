@@ -61,17 +61,6 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         expect(wrapper.exists(AnnotationActivityMenu)).toBe(false);
     });
 
-    test('should not render annotation activity menu when can_delete is false, can_edit is false and isResolvingEnabled is false', () => {
-        const item = {
-            ...mockAnnotation,
-            permissions: { can_delete: false, can_edit: false, can_resolve: true },
-        };
-
-        const wrapper = getWrapper({ item, isResolvingEnabled: false });
-
-        expect(wrapper.exists(AnnotationActivityMenu)).toBe(false);
-    });
-
     test.each`
         canDelete | canEdit  | canResolve
         ${false}  | ${false} | ${true}
@@ -90,7 +79,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
                 permissions: { can_delete: canDelete, can_edit: canEdit, can_resolve: canResolve },
             };
 
-            const wrapper = getWrapper({ item, isResolvingEnabled: true });
+            const wrapper = getWrapper({ item });
 
             expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
             expect(wrapper.find('AnnotationActivityLink').props()).toMatchObject({

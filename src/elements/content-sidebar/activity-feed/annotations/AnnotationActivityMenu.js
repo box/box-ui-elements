@@ -23,13 +23,12 @@ type AnnotationActivityMenuProps = {
     className?: string,
     id: string,
     isDisabled?: boolean,
-    isResolved?: boolean,
-    isResolvingEnabled: boolean,
     onDelete: () => void,
     onEdit: () => void,
     onMenuClose: () => void,
     onMenuOpen: () => void,
     onStatusChange: (newStatus: FeedItemStatus) => void,
+    status?: FeedItemStatus,
 };
 
 const AnnotationActivityMenu = ({
@@ -39,18 +38,18 @@ const AnnotationActivityMenu = ({
     className,
     id,
     isDisabled,
-    isResolved,
-    isResolvingEnabled,
     onDelete,
     onEdit,
     onMenuClose,
     onMenuOpen,
     onStatusChange,
+    status,
 }: AnnotationActivityMenuProps) => {
     const menuProps = {
         'data-resin-component': 'preview',
         'data-resin-feature': 'annotations',
     };
+    const isResolved = status === COMMENT_STATUS_RESOLVED;
 
     return (
         <DropdownMenu constrainToScrollParent isRightAligned onMenuClose={onMenuClose} onMenuOpen={onMenuOpen}>
@@ -63,7 +62,7 @@ const AnnotationActivityMenu = ({
                 <IconEllipsis color={bdlGray50} height={16} width={16} />
             </PlainButton>
             <Menu {...menuProps}>
-                {isResolvingEnabled && canResolve && isResolved && (
+                {canResolve && isResolved && (
                     <MenuItem
                         data-resin-itemid={id}
                         data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_UNRESOLVE}
@@ -74,7 +73,7 @@ const AnnotationActivityMenu = ({
                         <FormattedMessage {...messages.annotationActivityUnresolveMenuItem} />
                     </MenuItem>
                 )}
-                {isResolvingEnabled && canResolve && !isResolved && (
+                {canResolve && !isResolved && (
                     <MenuItem
                         data-resin-itemid={id}
                         data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_RESOLVE}

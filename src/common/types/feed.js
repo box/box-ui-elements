@@ -1,8 +1,8 @@
 // @flow strict
 import type { MessageDescriptor } from 'react-intl';
+import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../constants';
 import type { BoxItemPermission, BoxItemVersion, Reply, User } from './core';
 import type { Annotation, AnnotationPermission, Annotations } from './annotations';
-import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../constants';
 
 // Feed item types that can receive deeplinks inline in the feed
 type FocusableFeedItemType = 'task' | 'comment' | 'annotation';

@@ -31,14 +31,14 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
         expect(wrapper.exists('[data-testid="edit-annotation-activity"]')).toBe(true);
     });
 
-    test('should render the resolve annotation activity menu item if canResolve is true and isResolvingEnabled is true for unresolved item', () => {
-        const wrapper = getWrapper({ canResolve: true, isResolvingEnabled: true, isResolved: false });
+    test('should render the resolve annotation activity menu item if canResolve is true for unresolved item', () => {
+        const wrapper = getWrapper({ canResolve: true, status: 'open' });
 
         expect(wrapper.exists('[data-testid="resolve-annotation-activity"]')).toBe(true);
     });
 
-    test('should render the unresolve annotation activity menu item if canResolve is true and isResolvingEnabled is true for resolved item', () => {
-        const wrapper = getWrapper({ canResolve: true, isResolvingEnabled: true, isResolved: true });
+    test('should render the unresolve annotation activity menu item if canResolve is true for resolved item', () => {
+        const wrapper = getWrapper({ canResolve: true, status: 'resolved' });
 
         expect(wrapper.exists('[data-testid="unresolve-annotation-activity"]')).toBe(true);
     });
@@ -48,8 +48,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
             canDelete: true,
             canEdit: true,
             canResolve: true,
-            isResolvingEnabled: true,
-            isResolved: false,
+            status: 'open',
         });
 
         expect(wrapper.find("[data-testid='delete-annotation-activity']").props()).toMatchObject({
@@ -71,8 +70,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
     test('should render resin tags for unresolve activity', () => {
         const wrapper = getWrapper({
             canResolve: true,
-            isResolvingEnabled: true,
-            isResolved: true,
+            status: 'resolved',
         });
 
         expect(wrapper.find("[data-testid='unresolve-annotation-activity']").props()).toMatchObject({
