@@ -1,12 +1,9 @@
 @import '../../../common/variables';
 
 .bcs-ActivityThread {
-    &-reply.bcs-ActivityItem {
-        margin-left: $sidebarActivityFeedSpacingHorizontal;
-    }
-
-    &-replies {
+    .bcs-ActivityThread-replies {
         position: relative;
+        padding-left: $sidebarActivityFeedSpacingHorizontal;
 
         &::before {
             position: absolute;
@@ -19,7 +16,7 @@
         }
     }
 
-    &-button {
+    .bcs-ActivityThread-button {
         margin-left: $sidebarActivityFeedSpacingHorizontal;
         color: $bdl-box-blue;
         font-weight: bold;

@@ -29,7 +29,7 @@ const messages = defineMessages({
     },
     getMoreReplies: {
         id: 'be.activitySidebar.activityFeed.getMoreReplies',
-        defaultMessage: 'See {repliesToLoad, plural, one {# reply} other {# replies}}',
+        defaultMessage: 'See {repliesToLoadCount, plural, one {# reply} other {# replies}}',
         description: 'Text to show to get more replies of comment or annotation',
     },
     hideReplies: {

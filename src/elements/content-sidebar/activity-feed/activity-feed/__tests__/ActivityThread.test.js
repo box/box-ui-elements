@@ -3,6 +3,7 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import ActivityThread from '../ActivityThread.js';
+import ActivityThreadReplies from '../ActivityThreadReplies';
 import PlainButton from '../../../../../components/plain-button';
 
 describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThread', () => {
@@ -43,33 +44,14 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         expect(wrapper.text()).toEqual('Test');
     });
 
-    test('should render last reply by dafeult', () => {
-        const wrapper = getWrapper();
-        expect(wrapper.find('[data-testid="reply"]')).toHaveLength(1);
-    });
-
-    test('should call onGetReplies function and show all replies on button click', () => {
+    test('should call onGetReplies on button click', () => {
         const onGetReplies = jest.fn();
         const wrapper = getWrapper({ onGetReplies });
 
         const button = wrapper.find(PlainButton);
         button.simulate('click');
+
         expect(onGetReplies).toBeCalled();
-
-        expect(wrapper.find('[data-testid="reply"]')).toHaveLength(2);
-    });
-
-    test('should show and hide replies on button click', () => {
-        const onGetReplies = jest.fn();
-        const wrapper = getWrapper({ onGetReplies });
-
-        const button = wrapper.find("[data-testid='bcs-ActivityThread-button']");
-        button.simulate('click');
-
-        expect(wrapper.find('[data-testid="reply"]')).toHaveLength(2);
-
-        button.simulate('click');
-        expect(wrapper.find('[data-testid="reply"]')).toHaveLength(1);
     });
 
     test('should not render button if total_reply_count is 1 or less', () => {
@@ -79,8 +61,8 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
     });
 
     test('should not render replies if there is no replies', () => {
-        const wrapper = getWrapper({ total_reply_count: 0 });
+        const wrapper = getWrapper({ replies: [] });
 
-        expect(wrapper.find('[data-testid="reply"]')).toHaveLength(0);
+        expect(wrapper.find(ActivityThreadReplies)).toHaveLength(0);
     });
 });

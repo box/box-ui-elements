@@ -1,12 +1,10 @@
 // @flow
 import * as React from 'react';
-import getProp from 'lodash/get';
-import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
+import noop from 'lodash/noop';
 
-import Comment from '../comment';
-import ActivityItem from './ActivityItem';
 import PlainButton from '../../../../components/plain-button';
+import ActivityThreadReplies from './ActivityThreadReplies';
 
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
@@ -42,73 +40,52 @@ const ActivityThread = ({
     hasReplies,
     id,
     mentionSelectorContacts,
-    onGetReplies,
-    onReplyDelete,
-    onReplyEdit,
+    onGetReplies = noop,
+    onReplyDelete = noop,
+    onReplyEdit = noop,
     replies = [],
     total_reply_count = 0,
     translations,
 }: Props) => {
-    const [repliesExpanded, setRepliesExpanded] = React.useState(false);
+    const [isExpanded, setIsExpanded] = React.useState(false);
 
-    const toggleReplyMessage = repliesExpanded ? messages.hideReplies : messages.getMoreReplies;
-    const repliesToLoad = total_reply_count - 1;
+    const toggleButtonLabel = isExpanded ? messages.hideReplies : messages.getMoreReplies;
+    const repliesToLoadCount = total_reply_count - 1;
 
     const toggleReplies = () => {
-        !repliesExpanded && onGetReplies && onGetReplies(id);
-        setRepliesExpanded(previousState => !previousState);
+        !isExpanded && onGetReplies(id);
+        setIsExpanded(previousState => !previousState);
     };
 
-    const renderReply = (reply: CommentType) => (
-        <ActivityItem key={reply.type + reply.id} className="bcs-ActivityThread-reply" data-testid="reply">
-            <Comment
-                {...reply}
-                currentUser={currentUser}
-                getAvatarUrl={getAvatarUrl}
-                getMentionWithQuery={getMentionWithQuery}
-                getUserProfileUrl={getUserProfileUrl}
-                mentionSelectorContacts={mentionSelectorContacts}
-                onDelete={onReplyDelete}
-                onEdit={onReplyEdit}
-                permissions={{
-                    can_delete: getProp(reply.permissions, 'can_delete', false),
-                    can_edit: getProp(reply.permissions, 'can_edit', false),
-                    can_resolve: getProp(reply.permissions, 'can_resolve', false),
-                }}
-                translations={translations}
-            />
-        </ActivityItem>
-    );
-
-    if (hasReplies) {
-        return (
-            <div className="bcs-ActivityThread">
-                {children}
-
-                {total_reply_count > 1 && (
-                    <PlainButton
-                        className={classNames('bcs-ActivityThread-button')}
-                        data-testid="bcs-ActivityThread-button"
-                        onClick={toggleReplies}
-                        title={toggleReplyMessage.defaultMessage}
-                        type="button"
-                    >
-                        <FormattedMessage values={{ repliesToLoad }} {...toggleReplyMessage} />
-                    </PlainButton>
-                )}
-
-                {total_reply_count > 0 && (
-                    <div className="bcs-ActivityThread-replies">
-                        {!repliesExpanded
-                            ? renderReply(replies[replies.length - 1])
-                            : replies.map((reply: CommentType) => renderReply(reply))}
-                    </div>
-                )}
-            </div>
-        );
+    if (!hasReplies) {
+        return children;
     }
+    return (
+        <div className="bcs-ActivityThread">
+            {children}
 
-    return children;
+            {total_reply_count > 1 && (
+                <PlainButton className="bcs-ActivityThread-button" onClick={toggleReplies} type="button">
+                    <FormattedMessage values={{ repliesToLoadCount }} {...toggleButtonLabel} />
+                </PlainButton>
+            )}
+
+            {total_reply_count > 0 && replies.length && (
+                <ActivityThreadReplies
+                    isExpanded={isExpanded}
+                    replies={replies}
+                    currentUser={currentUser}
+                    getAvatarUrl={getAvatarUrl}
+                    getMentionWithQuery={getMentionWithQuery}
+                    getUserProfileUrl={getUserProfileUrl}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onDelete={onReplyDelete}
+                    onEdit={onReplyEdit}
+                    translations={translations}
+                />
+            )}
+        </div>
+    );
 };
 
 export default ActivityThread;

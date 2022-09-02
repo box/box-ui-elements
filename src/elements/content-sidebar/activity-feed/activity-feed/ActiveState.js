@@ -70,7 +70,7 @@ const ActiveState = ({
     approverSelectorContacts,
     currentFileVersionId,
     currentUser,
-    hasReplies = false,
+    hasReplies = true,
     items,
     mentionSelectorContacts,
     getMentionWithQuery,
@@ -111,6 +111,7 @@ const ActiveState = ({
                                 ref={refValue}
                             >
                                 <ActivityThread
+                                    {...item}
                                     data-testid="activity-thread"
                                     onReplyDelete={onCommentDelete}
                                     onReplyEdit={onCommentEdit}
@@ -119,7 +120,6 @@ const ActiveState = ({
                                     hasReplies={hasReplies}
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
-                                    id={item.id}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     translations={translations}
                                 >
@@ -200,6 +200,7 @@ const ActiveState = ({
                                 ref={refValue}
                             >
                                 <ActivityThread
+                                    {...item}
                                     data-testid="activity-thread"
                                     onReplyDelete={onCommentDelete}
                                     onReplyEdit={onCommentEdit}
@@ -207,7 +208,6 @@ const ActiveState = ({
                                     getAvatarUrl={getAvatarUrl}
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
-                                    id={item.id}
                                     hasReplies={hasReplies}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     translations={translations}
