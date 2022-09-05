@@ -34,6 +34,7 @@ export type Target = TargetRegion;
 export type AnnotationPermission = {
     can_delete?: boolean,
     can_edit?: boolean,
+    can_resolve?: boolean,
 };
 
 export type Annotation = {
