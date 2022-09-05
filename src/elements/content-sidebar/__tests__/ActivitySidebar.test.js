@@ -360,37 +360,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         test.each`
             annotationsEnabled | appActivityEnabled | repliesEnabled | tasksEnabled | versionsEnabled | expectedAnnotations | expectedAppActivity | expectedReplies | expectedTasks | expectedVersions
             ${false}           | ${false}           | ${false}       | ${false}     | ${false}        | ${false}            | ${false}            | ${false}        | ${false}      | ${false}
-            ${false}           | ${true}            | ${false}       | ${false}     | ${false}        | ${false}            | ${true}             | ${false}        | ${false}      | ${false}
-            ${true}            | ${false}           | ${false}       | ${false}     | ${true}         | ${true}             | ${false}            | ${false}        | ${false}      | ${true}
-            ${true}            | ${true}            | ${false}       | ${false}     | ${true}         | ${true}             | ${true}             | ${false}        | ${false}      | ${true}
-            ${false}           | ${true}            | ${false}       | ${false}     | ${true}         | ${false}            | ${true}             | ${false}        | ${false}      | ${true}
-            ${false}           | ${false}           | ${false}       | ${false}     | ${true}         | ${false}            | ${false}            | ${false}        | ${false}      | ${true}
-            ${true}            | ${true}            | ${false}       | ${false}     | ${false}        | ${true}             | ${true}             | ${false}        | ${false}      | ${false}
-            ${true}            | ${false}           | ${false}       | ${false}     | ${false}        | ${true}             | ${false}            | ${false}        | ${false}      | ${false}
-            ${false}           | ${false}           | ${false}       | ${true}      | ${false}        | ${false}            | ${false}            | ${false}        | ${true}       | ${false}
-            ${false}           | ${true}            | ${false}       | ${true}      | ${false}        | ${false}            | ${true}             | ${false}        | ${true}       | ${false}
-            ${true}            | ${false}           | ${false}       | ${true}      | ${true}         | ${true}             | ${false}            | ${false}        | ${true}       | ${true}
-            ${true}            | ${true}            | ${false}       | ${true}      | ${true}         | ${true}             | ${true}             | ${false}        | ${true}       | ${true}
-            ${false}           | ${true}            | ${false}       | ${true}      | ${true}         | ${false}            | ${true}             | ${false}        | ${true}       | ${true}
-            ${false}           | ${false}           | ${false}       | ${true}      | ${true}         | ${false}            | ${false}            | ${false}        | ${true}       | ${true}
-            ${true}            | ${true}            | ${false}       | ${true}      | ${false}        | ${true}             | ${true}             | ${false}        | ${true}       | ${false}
-            ${true}            | ${false}           | ${false}       | ${true}      | ${false}        | ${true}             | ${false}            | ${false}        | ${true}       | ${false}
-            ${false}           | ${false}           | ${true}        | ${false}     | ${false}        | ${false}            | ${false}            | ${true}         | ${false}      | ${false}
-            ${false}           | ${true}            | ${true}        | ${false}     | ${false}        | ${false}            | ${true}             | ${true}         | ${false}      | ${false}
-            ${true}            | ${false}           | ${true}        | ${false}     | ${true}         | ${true}             | ${false}            | ${true}         | ${false}      | ${true}
-            ${true}            | ${true}            | ${true}        | ${false}     | ${true}         | ${true}             | ${true}             | ${true}         | ${false}      | ${true}
-            ${false}           | ${true}            | ${true}        | ${false}     | ${true}         | ${false}            | ${true}             | ${true}         | ${false}      | ${true}
-            ${false}           | ${false}           | ${true}        | ${false}     | ${true}         | ${false}            | ${false}            | ${true}         | ${false}      | ${true}
-            ${true}            | ${true}            | ${true}        | ${false}     | ${false}        | ${true}             | ${true}             | ${true}         | ${false}      | ${false}
-            ${true}            | ${false}           | ${true}        | ${false}     | ${false}        | ${true}             | ${false}            | ${true}         | ${false}      | ${false}
-            ${false}           | ${false}           | ${true}        | ${true}      | ${false}        | ${false}            | ${false}            | ${true}         | ${true}       | ${false}
-            ${false}           | ${true}            | ${true}        | ${true}      | ${false}        | ${false}            | ${true}             | ${true}         | ${true}       | ${false}
-            ${true}            | ${false}           | ${true}        | ${true}      | ${true}         | ${true}             | ${false}            | ${true}         | ${true}       | ${true}
             ${true}            | ${true}            | ${true}        | ${true}      | ${true}         | ${true}             | ${true}             | ${true}         | ${true}       | ${true}
-            ${false}           | ${true}            | ${true}        | ${true}      | ${true}         | ${false}            | ${true}             | ${true}         | ${true}       | ${true}
-            ${false}           | ${false}           | ${true}        | ${true}      | ${true}         | ${false}            | ${false}            | ${true}         | ${true}       | ${true}
-            ${true}            | ${true}            | ${true}        | ${true}      | ${false}        | ${true}             | ${true}             | ${true}         | ${true}       | ${false}
-            ${true}            | ${false}           | ${true}        | ${true}      | ${false}        | ${true}             | ${false}            | ${true}         | ${true}       | ${false}
         `(
             'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled, appActivityEnabled=$appActivityEnabled, repliesEnabled=$repliesEnabled, tasksEnabled=$tasksEnabled and versionsEnabled=$versionsEnabled',
             ({

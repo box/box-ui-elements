@@ -590,11 +590,11 @@ describe('api/Feed', () => {
             const annotationItems = feed.fetchAnnotations({ can_edit: true }, true);
             expect(annotationItems instanceof Promise).toBeTruthy();
             expect(feed.annotationsAPI.getAnnotations).toBeCalledWith(
-                expect.anything(),
+                feed.file.id,
                 undefined,
-                expect.anything(),
-                expect.anything(),
-                expect.anything(),
+                { can_edit: true },
+                expect.any(Function),
+                expect.any(Function),
                 undefined,
                 undefined,
                 true,
@@ -1425,11 +1425,11 @@ describe('api/Feed', () => {
 
         describe('should updateFeedItem with isPending set to true', () => {
             test.each`
-                testText     | testStatus   | expected                                                 | description
-                ${'hello'}   | ${undefined} | ${{ message: 'hello', isPending: true }}                 | ${'only text'}
-                ${undefined} | ${'open'}    | ${{ status: 'open', isPending: true }}                   | ${'only status'}
-                ${'hello'}   | ${'open'}    | ${{ message: 'hello', status: 'open', isPending: true }} | ${'text and status'}
-            `('given $description', ({ testText, testStatus, expected }) => {
+                testText     | testStatus   | expected
+                ${'hello'}   | ${undefined} | ${{ message: 'hello', isPending: true }}
+                ${undefined} | ${'open'}    | ${{ status: 'open', isPending: true }}
+                ${'hello'}   | ${'open'}    | ${{ message: 'hello', status: 'open', isPending: true }}
+            `('given text=$testText and status=$testStatus', ({ testText, testStatus, expected }) => {
                 feed.updateFeedItem = jest.fn();
                 feed.updateAnnotation(
                     file,
@@ -1447,11 +1447,11 @@ describe('api/Feed', () => {
 
         describe('should call the updateAnnotation API and call updateFeedItem on success', () => {
             test.each`
-                testText     | testStatus   | expected                                | description
-                ${'hello'}   | ${undefined} | ${{ message: 'hello' }}                 | ${'only text'}
-                ${undefined} | ${'open'}    | ${{ status: 'open' }}                   | ${'only status'}
-                ${'hello'}   | ${'open'}    | ${{ message: 'hello', status: 'open' }} | ${'text and status'}
-            `('given $description', ({ testText, testStatus, expected }) => {
+                testText     | testStatus   | expected
+                ${'hello'}   | ${undefined} | ${{ message: 'hello' }}
+                ${undefined} | ${'open'}    | ${{ status: 'open' }}
+                ${'hello'}   | ${'open'}    | ${{ message: 'hello', status: 'open' }}
+            `('given text=$testText and status=$testStatus', ({ testText, testStatus, expected }) => {
                 feed.updateFeedItem = jest.fn();
                 feed.updateAnnotation(
                     file,
