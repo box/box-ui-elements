@@ -53,7 +53,7 @@ const getPercent = (view: string, percent: number): number => {
 };
 
 type Props = {
-    customPrompt: { defaultMessage: string, description: string, id: string },
+    customPrompt?: { defaultMessage: string, description: string, id: string },
     hasMultipleFailedUploads: boolean,
     isDragging: boolean,
     isExpanded: boolean,
