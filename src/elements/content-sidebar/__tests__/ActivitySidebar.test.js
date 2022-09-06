@@ -358,32 +358,20 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
 
         test.each`
-            annotationsEnabled | appActivityEnabled | tasksEnabled | versionsEnabled | expectedAnnotations | expectedAppActivity | expectedTasks | expectedVersions
-            ${false}           | ${false}           | ${false}     | ${false}        | ${false}            | ${false}            | ${false}      | ${false}
-            ${false}           | ${true}            | ${false}     | ${false}        | ${false}            | ${true}             | ${false}      | ${false}
-            ${true}            | ${false}           | ${false}     | ${true}         | ${true}             | ${false}            | ${false}      | ${true}
-            ${true}            | ${true}            | ${false}     | ${true}         | ${true}             | ${true}             | ${false}      | ${true}
-            ${false}           | ${true}            | ${false}     | ${true}         | ${false}            | ${true}             | ${false}      | ${true}
-            ${false}           | ${false}           | ${false}     | ${true}         | ${false}            | ${false}            | ${false}      | ${true}
-            ${true}            | ${true}            | ${false}     | ${false}        | ${true}             | ${true}             | ${false}      | ${false}
-            ${true}            | ${false}           | ${false}     | ${false}        | ${true}             | ${false}            | ${false}      | ${false}
-            ${false}           | ${false}           | ${true}      | ${false}        | ${false}            | ${false}            | ${true}       | ${false}
-            ${false}           | ${true}            | ${true}      | ${false}        | ${false}            | ${true}             | ${true}       | ${false}
-            ${true}            | ${false}           | ${true}      | ${true}         | ${true}             | ${false}            | ${true}       | ${true}
-            ${true}            | ${true}            | ${true}      | ${true}         | ${true}             | ${true}             | ${true}       | ${true}
-            ${false}           | ${true}            | ${true}      | ${true}         | ${false}            | ${true}             | ${true}       | ${true}
-            ${false}           | ${false}           | ${true}      | ${true}         | ${false}            | ${false}            | ${true}       | ${true}
-            ${true}            | ${true}            | ${true}      | ${false}        | ${true}             | ${true}             | ${true}       | ${false}
-            ${true}            | ${false}           | ${true}      | ${false}        | ${true}             | ${false}            | ${true}       | ${false}
+            annotationsEnabled | appActivityEnabled | repliesEnabled | tasksEnabled | versionsEnabled | expectedAnnotations | expectedAppActivity | expectedReplies | expectedTasks | expectedVersions
+            ${false}           | ${false}           | ${false}       | ${false}     | ${false}        | ${false}            | ${false}            | ${false}        | ${false}      | ${false}
+            ${true}            | ${true}            | ${true}        | ${true}      | ${true}         | ${true}             | ${true}             | ${true}         | ${true}       | ${true}
         `(
-            'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled, appActivityEnabled=$appActivityEnabled, tasksEnabled=$tasksEnabled and versionsEnabled=$versionsEnabled',
+            'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled, appActivityEnabled=$appActivityEnabled, repliesEnabled=$repliesEnabled, tasksEnabled=$tasksEnabled and versionsEnabled=$versionsEnabled',
             ({
                 annotationsEnabled,
                 appActivityEnabled,
+                repliesEnabled,
                 tasksEnabled,
                 versionsEnabled,
                 expectedAnnotations,
                 expectedAppActivity,
+                expectedReplies,
                 expectedTasks,
                 expectedVersions,
             }) => {
@@ -394,6 +382,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                             appActivity: { enabled: appActivityEnabled },
                         },
                     },
+                    hasReplies: repliesEnabled,
                     hasTasks: tasksEnabled,
                     hasVersions: versionsEnabled,
                 });
@@ -413,6 +402,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     {
                         shouldShowAnnotations: expectedAnnotations,
                         shouldShowAppActivity: expectedAppActivity,
+                        shouldShowReplies: expectedReplies,
                         shouldShowTasks: expectedTasks,
                         shouldShowVersions: expectedVersions,
                     },
@@ -843,17 +833,47 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
 
-            wrapper.instance().handleAnnotationEdit({
-                id: '123',
-                text: 'hello',
-                permissions: {
-                    can_edit: true,
-                    can_delete: true,
-                },
+            wrapper.instance().handleAnnotationEdit('123', 'hello', {
+                can_edit: true,
+                can_delete: true,
+                can_resolve: true,
             });
 
-            expect(api.getFeedAPI().updateAnnotation).toHaveBeenCalled();
-            expect(instance.fetchFeedItems).toHaveBeenCalled();
+            expect(api.getFeedAPI().updateAnnotation).toBeCalledWith(
+                expect.anything(),
+                '123',
+                'hello',
+                undefined,
+                { can_edit: true, can_delete: true, can_resolve: true },
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(instance.fetchFeedItems).toBeCalled();
+        });
+    });
+
+    describe('handleAnnotationStatusChange()', () => {
+        test('should call updateAnnotation API', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+
+            wrapper.instance().handleAnnotationStatusChange('123', 'open', {
+                can_edit: true,
+                can_delete: true,
+                can_resolve: true,
+            });
+
+            expect(api.getFeedAPI().updateAnnotation).toBeCalledWith(
+                expect.anything(),
+                '123',
+                undefined,
+                'open',
+                { can_edit: true, can_delete: true, can_resolve: true },
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(instance.fetchFeedItems).toBeCalled();
         });
     });
 
