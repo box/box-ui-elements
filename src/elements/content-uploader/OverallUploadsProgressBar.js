@@ -53,6 +53,7 @@ const getPercent = (view: string, percent: number): number => {
 };
 
 type Props = {
+    customPrompt: { defaultMessage: string, description: string, id: string },
     hasMultipleFailedUploads: boolean,
     isDragging: boolean,
     isExpanded: boolean,
@@ -76,15 +77,13 @@ const OverallUploadsProgressBar = ({
     isVisible,
     isExpanded,
     hasMultipleFailedUploads,
+    customPrompt,
 }: Props) => {
     // Show the upload prompt and set progress to 0 when the uploads manager
     // is invisible or is having files dragged to it
     const shouldShowPrompt = isDragging || !isVisible;
-    const status = shouldShowPrompt ? (
-        <FormattedMessage {...messages.uploadsManagerUploadPrompt} />
-    ) : (
-        getUploadStatus(view)
-    );
+    const message = customPrompt || messages.uploadsManagerUploadPrompt;
+    const status = shouldShowPrompt ? <FormattedMessage {...message} /> : getUploadStatus(view);
     const updatedPercent = shouldShowPrompt ? 0 : getPercent(view, percent);
 
     return (
