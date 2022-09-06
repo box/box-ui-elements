@@ -488,6 +488,22 @@ describe('api/Feed', () => {
             });
         });
 
+        test.each`
+            shouldShowReplies | expected
+            ${undefined}      | ${false}
+            ${false}          | ${false}
+            ${true}           | ${true}
+        `(
+            'should pass $expected as shouldShowReplies when calling fetchAnnotations when $shouldShowReplies is given as shouldShowReplies',
+            ({ shouldShowReplies, expected }) => {
+                feed.feedItems(file, false, successCb, errorCb, errorCb, {
+                    shouldShowAnnotations: true,
+                    shouldShowReplies,
+                });
+                expect(feed.fetchAnnotations).toBeCalledWith(expect.anything(), expected);
+            },
+        );
+
         test('should not use the annotations api if shouldShowannotations is false', done => {
             feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowAnnotations: false });
             setImmediate(() => {
@@ -568,6 +584,21 @@ describe('api/Feed', () => {
             const annotationItems = feed.fetchAnnotations();
             expect(annotationItems instanceof Promise).toBeTruthy();
             expect(feed.annotationsAPI.getAnnotations).toBeCalled();
+        });
+
+        test('when called with shouldFetchReplies = true, should return a promise and call the annotations api with shouldFetchReplies param as true', () => {
+            const annotationItems = feed.fetchAnnotations({ can_edit: true }, true);
+            expect(annotationItems instanceof Promise).toBeTruthy();
+            expect(feed.annotationsAPI.getAnnotations).toBeCalledWith(
+                feed.file.id,
+                undefined,
+                { can_edit: true },
+                expect.any(Function),
+                expect.any(Function),
+                undefined,
+                undefined,
+                true,
+            );
         });
     });
 
@@ -1367,31 +1398,81 @@ describe('api/Feed', () => {
 
         test('should throw if file does not have an id', () => {
             expect(() =>
-                feed.updateAnnotation({}, annotationId, text, permissions, successCallback, errorCallback),
+                feed.updateAnnotation({}, annotationId, text, undefined, permissions, successCallback, errorCallback),
             ).toThrow(fileError);
         });
 
+        test('should throw if no text or status', () => {
+            expect(() =>
+                feed.updateAnnotation(
+                    file,
+                    annotationId,
+                    undefined,
+                    undefined,
+                    permissions,
+                    successCallback,
+                    errorCallback,
+                ),
+            ).toThrowError();
+        });
+
         test('should set error callback and file', () => {
-            feed.updateAnnotation(file, annotationId, text, permissions, successCallback, errorCallback);
+            feed.updateAnnotation(file, annotationId, text, undefined, permissions, successCallback, errorCallback);
 
             expect(feed.errorCallback).toEqual(errorCallback);
             expect(feed.file).toEqual(file);
         });
 
-        test('should updateFeedItem with isPending set to true', () => {
-            feed.updateFeedItem = jest.fn();
-            feed.updateAnnotation(file, annotationId, text, permissions, successCallback, errorCallback);
+        describe('should updateFeedItem with isPending set to true', () => {
+            test.each`
+                testText     | testStatus   | expected
+                ${'hello'}   | ${undefined} | ${{ message: 'hello', isPending: true }}
+                ${undefined} | ${'open'}    | ${{ status: 'open', isPending: true }}
+                ${'hello'}   | ${'open'}    | ${{ message: 'hello', status: 'open', isPending: true }}
+            `('given text=$testText and status=$testStatus', ({ testText, testStatus, expected }) => {
+                feed.updateFeedItem = jest.fn();
+                feed.updateAnnotation(
+                    file,
+                    annotationId,
+                    testText,
+                    testStatus,
+                    permissions,
+                    successCallback,
+                    errorCallback,
+                );
 
-            expect(feed.updateFeedItem).toBeCalledWith({ message: text, isPending: true }, annotationId);
+                expect(feed.updateFeedItem).toBeCalledWith(expected, annotationId);
+            });
         });
 
-        test('should call the updateAnnotation API and call updateFeedItem on success', () => {
-            feed.updateFeedItem = jest.fn();
-            feed.updateAnnotation(file, annotationId, permissions, text, successCallback, errorCallback);
-
-            expect(feed.annotationsAPI.updateAnnotation).toHaveBeenCalled();
-            expect(feed.updateFeedItem).toHaveBeenCalled();
-            expect(successCallback).toHaveBeenCalled();
+        describe('should call the updateAnnotation API and call updateFeedItem on success', () => {
+            test.each`
+                testText     | testStatus   | expected
+                ${'hello'}   | ${undefined} | ${{ message: 'hello' }}
+                ${undefined} | ${'open'}    | ${{ status: 'open' }}
+                ${'hello'}   | ${'open'}    | ${{ message: 'hello', status: 'open' }}
+            `('given text=$testText and status=$testStatus', ({ testText, testStatus, expected }) => {
+                feed.updateFeedItem = jest.fn();
+                feed.updateAnnotation(
+                    file,
+                    annotationId,
+                    testText,
+                    testStatus,
+                    permissions,
+                    successCallback,
+                    errorCallback,
+                );
+                expect(feed.annotationsAPI.updateAnnotation).toBeCalledWith(
+                    file.id,
+                    annotationId,
+                    permissions,
+                    expected,
+                    expect.any(Function),
+                    expect.any(Function),
+                );
+                expect(feed.updateFeedItem).toBeCalled();
+                expect(successCallback).toBeCalled();
+            });
         });
     });
 

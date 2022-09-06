@@ -48,6 +48,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     onAnnotationDelete={[Function]}
     onAnnotationEdit={[Function]}
     onAnnotationSelect={[Function]}
+    onAnnotationStatusChange={[Function]}
     onAppActivityDelete={[Function]}
     onCommentCreate={[Function]}
     onCommentDelete={[Function]}

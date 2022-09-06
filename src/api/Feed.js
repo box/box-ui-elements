@@ -63,6 +63,7 @@ import type {
     Comments,
     FeedItem,
     FeedItems,
+    FeedItemStatus,
     Task,
     Tasks,
 } from '../common/types/feed';
@@ -165,7 +166,8 @@ class Feed extends Base {
     updateAnnotation = (
         file: BoxItem,
         annotationId: string,
-        text: string,
+        text?: string,
+        status?: FeedItemStatus,
         permissions: AnnotationPermission,
         successCallback: (annotation: Annotation) => void,
         errorCallback: ErrorCallback,
@@ -173,19 +175,29 @@ class Feed extends Base {
         if (!file.id) {
             throw getBadItemError();
         }
+        if (!text && !status) {
+            throw new Error('Missing text or status!');
+        }
 
         this.annotationsAPI = new AnnotationsAPI(this.options);
 
         this.file = file;
         this.errorCallback = errorCallback;
 
-        this.updateFeedItem({ message: text, isPending: true }, annotationId);
+        const feedItemChanges = {};
+        if (text) {
+            feedItemChanges.message = text;
+        }
+        if (status) {
+            feedItemChanges.status = status;
+        }
+        this.updateFeedItem({ ...feedItemChanges, isPending: true }, annotationId);
 
         this.annotationsAPI.updateAnnotation(
             this.file.id,
             annotationId,
             permissions,
-            { message: text },
+            feedItemChanges,
             (annotation: Annotation) => {
                 this.updateFeedItem(
                     {
@@ -302,11 +314,13 @@ class Feed extends Base {
         {
             shouldShowAnnotations = false,
             shouldShowAppActivity = false,
+            shouldShowReplies = false,
             shouldShowTasks = true,
             shouldShowVersions = true,
         }: {
             shouldShowAnnotations?: boolean,
             shouldShowAppActivity?: boolean,
+            shouldShowReplies?: boolean,
             shouldShowTasks?: boolean,
             shouldShowVersions?: boolean,
         } = {},
@@ -329,7 +343,9 @@ class Feed extends Base {
         this.file = file;
         this.errors = [];
         this.errorCallback = onError;
-        const annotationsPromise = shouldShowAnnotations ? this.fetchAnnotations(permissions) : Promise.resolve();
+        const annotationsPromise = shouldShowAnnotations
+            ? this.fetchAnnotations(permissions, shouldShowReplies)
+            : Promise.resolve();
         const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
         const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
         const commentsPromise = this.fetchComments(permissions);
@@ -359,7 +375,7 @@ class Feed extends Base {
         });
     }
 
-    fetchAnnotations(permissions: BoxItemPermission): Promise<?Annotations> {
+    fetchAnnotations(permissions: BoxItemPermission, shouldFetchReplies?: boolean): Promise<?Annotations> {
         this.annotationsAPI = new AnnotationsAPI(this.options);
         return new Promise(resolve => {
             this.annotationsAPI.getAnnotations(
@@ -368,6 +384,9 @@ class Feed extends Base {
                 permissions,
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
+                undefined,
+                undefined,
+                shouldFetchReplies,
             );
         });
     }
