@@ -17,6 +17,7 @@ import type {
     AnnotationPermission,
     FeedItem,
     FeedItems,
+    FeedItemStatus,
     FocusableFeedItemType,
 } from '../../../../common/types/feed';
 import type { SelectorItems, User } from '../../../../common/types/core';
@@ -40,6 +41,7 @@ type Props = {
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
     onAnnotationEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
     onAnnotationSelect?: (annotation: Annotation) => void,
+    onAnnotationStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
     onCommentEdit?: Function,
@@ -66,6 +68,7 @@ const ActiveState = ({
     onAnnotationDelete,
     onAnnotationEdit,
     onAnnotationSelect,
+    onAnnotationStatusChange,
     onAppActivityDelete,
     onCommentDelete,
     onCommentEdit,
@@ -117,7 +120,6 @@ const ActiveState = ({
                                 </ActivityThread>
                             </ActivityItem>
                         );
-
                     case 'task':
                         return (
                             <ActivityItem
@@ -186,11 +188,11 @@ const ActiveState = ({
                                         onEdit={onAnnotationEdit}
                                         onDelete={onAnnotationDelete}
                                         onSelect={onAnnotationSelect}
+                                        onStatusChange={onAnnotationStatusChange}
                                     />
                                 </ActivityThread>
                             </ActivityItem>
                         );
-
                     default:
                         return null;
                 }
