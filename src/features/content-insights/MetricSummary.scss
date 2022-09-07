@@ -1,0 +1,14 @@
+@import '../../styles/variables';
+
+.MetricSummary-period-count {
+    font-size: 21px;
+}
+
+.MetricSummary-period {
+    display: flex;
+    margin-top: $bdl-grid-unit * 1.5;
+
+    .MetricSummary-period-count {
+        margin-right: $bdl-grid-unit * 2;
+    }
+}
