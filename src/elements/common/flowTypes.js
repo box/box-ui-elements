@@ -11,6 +11,7 @@ import {
     ORIGIN_SKILLS_SIDEBAR,
     ORIGIN_METADATA_SIDEBAR,
     ORIGIN_OPEN_WITH,
+    ORIGIN_ANNOTATION_THREAD,
 } from '../../constants';
 
 type ViewMode = typeof VIEW_MODE_GRID | typeof VIEW_MODE_LIST;
@@ -44,7 +45,8 @@ type ElementOrigin =
     | typeof ORIGIN_ACTIVITY_SIDEBAR
     | typeof ORIGIN_SKILLS_SIDEBAR
     | typeof ORIGIN_METADATA_SIDEBAR
-    | typeof ORIGIN_OPEN_WITH;
+    | typeof ORIGIN_OPEN_WITH
+    | typeof ORIGIN_ANNOTATION_THREAD;
 
 type Alignment = 'left' | 'right';
 
