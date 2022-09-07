@@ -67,17 +67,17 @@ type Props = {
 };
 
 const OverallUploadsProgressBar = ({
-    percent,
-    view,
+    customPrompt,
+    hasMultipleFailedUploads,
+    isDragging,
+    isExpanded,
+    isResumeVisible,
+    isVisible,
     onClick,
     onKeyDown,
     onUploadsManagerActionClick,
-    isDragging,
-    isResumeVisible,
-    isVisible,
-    isExpanded,
-    hasMultipleFailedUploads,
-    customPrompt,
+    percent,
+    view,
 }: Props) => {
     // Show the upload prompt and set progress to 0 when the uploads manager
     // is invisible or is having files dragged to it
