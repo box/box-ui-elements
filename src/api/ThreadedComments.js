@@ -18,12 +18,24 @@ import {
     ERROR_CODE_CREATE_REPLY,
 } from '../constants';
 
-import type { ThreadedCommentPermission } from '../common/types/threadedComments';
 import type { ElementsXhrError, ElementsErrorCallback } from '../common/types/api';
 import type { BoxItem, BoxItemPermission } from '../common/types/core';
-import type { FeedItemStatus } from '../common/types/feed';
+import type { BoxCommentPermission, Comment, FeedItemStatus } from '../common/types/feed';
 
 class ThreadedComments extends MarkerBasedApi {
+    /**
+     * Formats comment data for use in components.
+     *
+     * @param {Comment} comment - An individual comment entry from the API
+     * @return {Comment} Updated comment
+     */
+    format(comment: Comment): Comment {
+        return {
+            ...comment,
+            tagged_message: comment.message,
+        };
+    }
+
     /**
      * API URL for comments
      *
@@ -95,7 +107,9 @@ class ThreadedComments extends MarkerBasedApi {
                     message,
                 },
             },
-            successCallback,
+            successCallback: comment => {
+                successCallback(this.format(comment));
+            },
             errorCallback,
         });
     }
@@ -107,7 +121,7 @@ class ThreadedComments extends MarkerBasedApi {
      * @param {string} commentId - Comment to be edited
      * @param {FeedItemStatus} status - Comment status
      * @param {string} message - Comment message
-     * @param {BoxItemPermission} permissions - The known permissions of the comment we're updating
+     * @param {BoxCommentPermission} permissions - The known permissions of the comment we're updating
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
@@ -125,7 +139,7 @@ class ThreadedComments extends MarkerBasedApi {
         errorCallback: ElementsErrorCallback,
         fileId: string,
         message?: string,
-        permissions: ThreadedCommentPermission,
+        permissions: BoxCommentPermission,
         status?: FeedItemStatus,
         successCallback: Function,
     }): void {
@@ -157,7 +171,9 @@ class ThreadedComments extends MarkerBasedApi {
             id: fileId,
             url: this.getUrlForId(commentId),
             data: requestData,
-            successCallback,
+            successCallback: comment => {
+                successCallback(this.format(comment));
+            },
             errorCallback,
         });
     }
@@ -167,7 +183,7 @@ class ThreadedComments extends MarkerBasedApi {
      *
      * @param {string} fileId - Id of an object for which we are deleting a comment
      * @param {string} commentId - Id of the comment we are deleting
-     * @param {ThreadedCommentPermission} permissions - The known permissions of the comment we're deleting
+     * @param {BoxCommentPermission} permissions - The known permissions of the comment we're deleting
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
@@ -182,7 +198,7 @@ class ThreadedComments extends MarkerBasedApi {
         commentId: string,
         errorCallback: ElementsErrorCallback,
         fileId: string,
-        permissions: ThreadedCommentPermission,
+        permissions: BoxCommentPermission,
         successCallback: Function,
     }): void {
         this.errorCode = ERROR_CODE_DELETE_COMMENT;
@@ -245,7 +261,9 @@ class ThreadedComments extends MarkerBasedApi {
 
         this.markerGet({
             id: fileId,
-            successCallback,
+            successCallback: data => {
+                successCallback({ ...data, entries: data.entries.map(this.format) });
+            },
             errorCallback,
             marker,
             limit,

@@ -15,6 +15,7 @@ import withErrorHandling from '../../withErrorHandling';
 import type {
     Annotation,
     AnnotationPermission,
+    BoxCommentPermission,
     FeedItem,
     FeedItems,
     FeedItemStatus,
@@ -45,6 +46,13 @@ type Props = {
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
     onCommentEdit?: Function,
+    onCommentStatusChange?: (
+        id: string,
+        status: FeedItemStatus,
+        permissions: BoxCommentPermission,
+        onSuccess?: Function,
+        onError?: Function,
+    ) => void,
     onTaskAssignmentUpdate?: Function,
     onTaskDelete?: Function,
     onTaskEdit?: Function,
@@ -72,6 +80,7 @@ const ActiveState = ({
     onAppActivityDelete,
     onCommentDelete,
     onCommentEdit,
+    onCommentStatusChange,
     onTaskDelete,
     onTaskEdit,
     onTaskView,
@@ -111,6 +120,7 @@ const ActiveState = ({
                                         mentionSelectorContacts={mentionSelectorContacts}
                                         onDelete={onCommentDelete}
                                         onEdit={onCommentEdit}
+                                        onStatusChange={onCommentStatusChange}
                                         permissions={{
                                             can_delete: getProp(item.permissions, 'can_delete', false),
                                             can_edit: getProp(item.permissions, 'can_edit', false),

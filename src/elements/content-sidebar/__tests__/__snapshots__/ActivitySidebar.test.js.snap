@@ -52,6 +52,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     onAppActivityDelete={[Function]}
     onCommentCreate={[Function]}
     onCommentDelete={[Function]}
+    onCommentStatusChange={[Function]}
     onCommentUpdate={[Function]}
     onTaskAssignmentUpdate={[Function]}
     onTaskCreate={[Function]}

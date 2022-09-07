@@ -15,11 +15,12 @@ import InlineError from '../../../../components/inline-error/InlineError';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import messages from './messages';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
-import { PERMISSION_CAN_CREATE_ANNOTATIONS } from '../../../../constants';
+import { PERMISSION_CAN_CREATE_ANNOTATIONS, PERMISSION_CAN_RESOLVE } from '../../../../constants';
 import { scrollIntoView } from '../../../../utils/dom';
 import type {
     Annotation,
     AnnotationPermission,
+    BoxCommentPermission,
     FocusableFeedItemType,
     FeedItems,
     FeedItemStatus,
@@ -51,6 +52,13 @@ type Props = {
     onAppActivityDelete?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
+    onCommentStatusChange?: (
+        id: string,
+        status: FeedItemStatus,
+        permissions: BoxCommentPermission,
+        onSuccess?: Function,
+        onError?: Function,
+    ) => void,
     onCommentUpdate?: Function,
     onTaskAssignmentUpdate?: Function,
     onTaskCreate?: Function,
@@ -223,6 +231,7 @@ class ActivityFeed extends React.Component<Props, State> {
             onAppActivityDelete,
             onCommentCreate,
             onCommentDelete,
+            onCommentStatusChange,
             onCommentUpdate,
             onTaskAssignmentUpdate,
             onTaskDelete,
@@ -235,6 +244,7 @@ class ActivityFeed extends React.Component<Props, State> {
         const { isInputOpen } = this.state;
         const hasAnnotationCreatePermission = getProp(file, ['permissions', PERMISSION_CAN_CREATE_ANNOTATIONS], false);
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
+        const hasResolvePermission = getProp(file, ['permissions', PERMISSION_CAN_RESOLVE], false);
         const showCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate && feedItems);
 
         const isEmpty = this.isEmpty(this.props);
@@ -293,6 +303,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
+                            onCommentStatusChange={hasResolvePermission ? onCommentStatusChange : noop}
                             onTaskDelete={onTaskDelete}
                             onTaskEdit={onTaskUpdate}
                             onTaskView={onTaskView}

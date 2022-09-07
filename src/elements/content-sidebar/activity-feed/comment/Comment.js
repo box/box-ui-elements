@@ -22,7 +22,7 @@ import messages from './messages';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
-import type { BoxCommentPermission, ActionItemError } from '../../../../common/types/feed';
+import type { ActionItemError, BoxCommentPermission, FeedItemStatus } from '../../../../common/types/feed';
 import './Comment.scss';
 
 type Props = {
@@ -40,6 +40,13 @@ type Props = {
     modified_at?: string | number,
     onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any,
     onEdit: (id: string, text: string, hasMention: boolean, permissions?: BoxCommentPermission) => any,
+    onStatusChange?: (
+        id: string,
+        status: FeedItemStatus,
+        permissions: BoxCommentPermission,
+        onSuccess?: Function,
+        onError?: Function,
+    ) => void,
     permissions?: BoxCommentPermission,
     tagged_message: string,
     translatedTaggedMessage?: string,

@@ -43,13 +43,14 @@ import type {
 import type {
     Annotation,
     AnnotationPermission,
+    BoxCommentPermission,
     FocusableFeedItemType,
     FeedItems,
     FeedItemStatus,
 } from '../../common/types/feed';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
-import type { SelectorItems, User, UserMini, GroupMini, BoxItem, BoxItemPermission } from '../../common/types/core';
+import type { SelectorItems, User, UserMini, GroupMini, BoxItem } from '../../common/types/core';
 import type { GetProfileUrlCallback } from '../common/flowTypes';
 import type { Translations, Collaborators, Errors } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
@@ -368,13 +369,14 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {Object} args - A subset of the comment
      * @return void
      */
-    deleteComment = ({ id, permissions }: { id: string, permissions: BoxItemPermission }): void => {
-        const { file, api, onCommentDelete } = this.props;
+    deleteComment = ({ id, permissions }: { id: string, permissions: BoxCommentPermission }): void => {
+        const { file, api, hasReplies, onCommentDelete } = this.props;
 
         api.getFeedAPI(false).deleteComment(
             file,
             id,
             permissions,
+            hasReplies,
             (comment: Comment) => {
                 this.feedSuccessCallback();
                 onCommentDelete(comment);
@@ -390,11 +392,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         id: string,
         text: string,
         hasMention: boolean,
-        permissions: BoxItemPermission,
+        permissions: BoxCommentPermission,
         onSuccess: ?Function,
         onError: ?Function,
     ): void => {
-        const { file, api, onCommentUpdate } = this.props;
+        const { api, file, hasReplies, onCommentUpdate } = this.props;
 
         const errorCallback = (e, code) => {
             if (onError) {
@@ -411,7 +413,57 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             onCommentUpdate();
         };
 
-        api.getFeedAPI(false).updateComment(file, id, text, hasMention, permissions, successCallback, errorCallback);
+        api.getFeedAPI(false).updateComment(
+            file,
+            id,
+            text,
+            undefined,
+            hasMention,
+            permissions,
+            hasReplies,
+            successCallback,
+            errorCallback,
+        );
+
+        // need to load the pending item
+        this.fetchFeedItems();
+    };
+
+    updateCommentStatus = (
+        id: string,
+        status: FeedItemStatus,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ): void => {
+        const { api, file, hasReplies, onCommentUpdate } = this.props;
+
+        const errorCallback = (e, code) => {
+            if (onError) {
+                onError(e, code);
+            }
+            this.feedErrorCallback(e, code);
+        };
+
+        const successCallback = () => {
+            this.feedSuccessCallback();
+            if (onSuccess) {
+                onSuccess();
+            }
+            onCommentUpdate();
+        };
+
+        api.getFeedAPI(false).updateComment(
+            file,
+            id,
+            undefined,
+            status,
+            undefined,
+            permissions,
+            hasReplies,
+            successCallback,
+            errorCallback,
+        );
 
         // need to load the pending item
         this.fetchFeedItems();
@@ -425,7 +477,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     createComment = (text: string, hasMention: boolean): void => {
-        const { file, api, onCommentCreate } = this.props;
+        const { file, api, hasReplies, onCommentCreate } = this.props;
         const { currentUser } = this.state;
 
         if (!currentUser) {
@@ -437,6 +489,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             currentUser,
             text,
             hasMention,
+            hasReplies,
             (comment: Comment) => {
                 onCommentCreate(comment);
                 this.feedSuccessCallback();
@@ -854,6 +907,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     onAppActivityDelete={this.deleteAppActivity}
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
+                    onCommentStatusChange={this.updateCommentStatus}
                     onCommentUpdate={this.updateComment}
                     onTaskAssignmentUpdate={this.updateTaskAssignment}
                     onTaskCreate={this.createTask}
