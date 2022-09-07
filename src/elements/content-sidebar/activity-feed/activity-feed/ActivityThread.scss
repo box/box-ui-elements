@@ -1,21 +1,6 @@
 @import '../../../common/variables';
 
 .bcs-ActivityThread {
-    .bcs-ActivityThread-replies {
-        position: relative;
-        padding-left: $sidebarActivityFeedSpacingHorizontal;
-
-        &::before {
-            position: absolute;
-            top: $sidebarActivityFeedSpacingVertical;
-            bottom: $sidebarActivityFeedSpacingVertical;
-            left: $sidebarActivityFeedSpacingHorizontal;
-            width: $bdl-grid-unit;
-            background: $bdl-gray-10;
-            content: '';
-        }
-    }
-
     .bcs-ActivityThread-button {
         margin-left: $sidebarActivityFeedSpacingHorizontal;
         color: $bdl-box-blue;
@@ -25,5 +10,20 @@
             margin-left: $sidebarActivityFeedSpacingHorizontal;
             font-weight: bold;
         }
+    }
+}
+
+.bcs-ActivityThreadReplies {
+    position: relative;
+    padding-left: $sidebarActivityFeedSpacingHorizontal;
+
+    &::before {
+        position: absolute;
+        top: $sidebarActivityFeedSpacingVertical;
+        bottom: $sidebarActivityFeedSpacingVertical;
+        left: $sidebarActivityFeedSpacingHorizontal;
+        width: $bdl-grid-unit;
+        background: $bdl-gray-10;
+        content: '';
     }
 }

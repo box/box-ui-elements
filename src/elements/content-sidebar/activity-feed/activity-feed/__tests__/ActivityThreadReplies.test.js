@@ -27,7 +27,7 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
     test('should render last reply by dafeult', () => {
         const wrapper = getWrapper();
 
-        const reply = wrapper.find('[data-testid="reply"]');
+        const reply = wrapper.find('[data-testid="activity-thread-latest-reply"]');
         expect(reply).toHaveLength(1);
         expect(reply.key()).toContain('comment2');
     });
@@ -35,6 +35,6 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
     test('should render all replies if isExpanded is true', () => {
         const wrapper = getWrapper({ isExpanded: true });
 
-        expect(wrapper.find('[data-testid="reply"]')).toHaveLength(2);
+        expect(wrapper.find('[data-testid="activity-thread-reply"]')).toHaveLength(2);
     });
 });

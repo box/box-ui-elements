@@ -6,7 +6,7 @@ import Comment from '../comment';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
-import type { Comment as CommentType } from '../../../../common/types/feed';
+import type { BoxCommentPermission, Comment as CommentType } from '../../../../common/types/feed';
 
 type Props = {
     currentUser?: User,
@@ -34,12 +34,19 @@ const ActivityThreadReplies = ({
     translations,
 }: Props) => {
     const lastReply = replies[replies.length - 1];
+
+    const getReplyPermissions = (reply: CommentType): BoxCommentPermission => ({
+        can_delete: getProp(reply.permissions, 'can_delete', false),
+        can_edit: getProp(reply.permissions, 'can_edit', false),
+        can_resolve: getProp(reply.permissions, 'can_resolve', false),
+    });
+
     return (
-        <div className="bcs-ActivityThread-replies">
+        <div className="bcs-ActivityThreadReplies">
             {!isExpanded ? (
                 <Comment
                     key={lastReply.type + lastReply.id}
-                    data-testid="reply"
+                    data-testid="activity-thread-latest-reply"
                     {...lastReply}
                     currentUser={currentUser}
                     getAvatarUrl={getAvatarUrl}
@@ -48,17 +55,13 @@ const ActivityThreadReplies = ({
                     mentionSelectorContacts={mentionSelectorContacts}
                     onDelete={onDelete}
                     onEdit={onEdit}
-                    permissions={{
-                        can_delete: getProp(lastReply.permissions, 'can_delete', false),
-                        can_edit: getProp(lastReply.permissions, 'can_edit', false),
-                        can_resolve: getProp(lastReply.permissions, 'can_resolve', false),
-                    }}
+                    permissions={getReplyPermissions(lastReply)}
                     translations={translations}
                 />
             ) : (
                 replies.map((reply: CommentType) => (
                     <Comment
-                        data-testid="reply"
+                        data-testid="activity-thread-reply"
                         key={reply.type + reply.id}
                         {...reply}
                         currentUser={currentUser}
@@ -68,11 +71,7 @@ const ActivityThreadReplies = ({
                         mentionSelectorContacts={mentionSelectorContacts}
                         onDelete={onDelete}
                         onEdit={onEdit}
-                        permissions={{
-                            can_delete: getProp(reply.permissions, 'can_delete', false),
-                            can_edit: getProp(reply.permissions, 'can_edit', false),
-                            can_resolve: getProp(reply.permissions, 'can_resolve', false),
-                        }}
+                        permissions={getReplyPermissions(reply)}
                         translations={translations}
                     />
                 ))
