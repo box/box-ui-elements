@@ -402,7 +402,7 @@ class Feed extends Base {
      * Fetches the comments for a file
      *
      * @param {Object} permissions - the file permissions
-     * @param {boolean} shouldFetchReplies - indicator for fetchhing comment with replies
+     * @param {boolean} shouldFetchReplies - indicator for fetching comment with replies
      * @return {Promise} - the file comments
      */
     fetchComments(permissions: BoxItemPermission, shouldFetchReplies?: boolean): Promise<?Comments> {
