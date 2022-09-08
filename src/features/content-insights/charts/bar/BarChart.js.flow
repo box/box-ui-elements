@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
@@ -11,16 +10,24 @@ type ValueAccessor = string | AccessorFunction;
 
 type Props = {
     className?: string,
-    data: Array<Object>,
+    data: Array<any>,
     direction?: Direction,
     label: string,
     labelAccessor: string,
-    onBarMouseEnter?: ({ datum: Object }) => void,
-    onBarMouseLeave?: ({ datum: Object }) => void,
-    valueAccessor: ValueAccessor,
+    onBarMouseEnter?: (
+        arg1: {
+            datum: any
+        },
+    ) => void,
+    onBarMouseLeave?: (
+        arg1: {
+            datum: any
+        },
+    ) => void,
+    valueAccessor: ValueAccessor
 };
 
-function isFunction(valueAccessor: ValueAccessor): boolean %checks {
+function isFunction(valueAccessor: ValueAccessor): boolean {
     return typeof valueAccessor === 'function';
 }
 

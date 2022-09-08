@@ -1,11 +1,12 @@
-// @flow
 import * as React from 'react';
 
 import { render, screen } from '@testing-library/react';
 
 import GraphCardPreviewsSummary from '../GraphCardPreviewsSummary';
+// @ts-ignore: No ts definition
 import localize from '../../../../test/support/i18n';
 import messages from '../messages';
+import { GraphData } from '../types';
 
 const mockData = [
     { start: 1, previewsCount: 0, type: 'day' },
@@ -15,19 +16,11 @@ const mockData = [
     { start: 5, previewsCount: 0, type: 'day' },
     { start: 6, previewsCount: 1, type: 'day' },
     { start: 7, previewsCount: 1, type: 'day' },
-];
+] as GraphData;
 
 describe('features/content-insights/GraphCardPreviewsSummary', () => {
     const getWrapper = (props = {}) =>
-        render(
-            <GraphCardPreviewsSummary
-                graphData={mockData}
-                intl={jest.fn()}
-                previousPeriodCount={1}
-                totalCount={10}
-                {...props}
-            />,
-        );
+        render(<GraphCardPreviewsSummary graphData={mockData} previousPeriodCount={1} totalCount={10} {...props} />);
 
     describe('render()', () => {
         test('should render correctly', () => {

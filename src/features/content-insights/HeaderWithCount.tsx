@@ -1,15 +1,14 @@
-// @flow
 import * as React from 'react';
 import CompactCount from './CompactCount';
 
 import './HeaderWithCount.scss';
 
-type Props = {
-    title: string,
-    totalCount?: number,
-};
+interface Props {
+    title: string;
+    totalCount?: number;
+}
 
-function isNumber(count?: number): boolean %checks {
+function isNumber(count?: number): count is number {
     return typeof count === 'number';
 }
 

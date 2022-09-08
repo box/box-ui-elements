@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 
@@ -6,11 +5,10 @@ import CompactCount from '../CompactCount';
 
 // Mocked numAbbreviate to append '+' to the end of the provided number since
 // we are relying on that module's unit tests to ensure it works correctly
-jest.mock('../../../utils/numAbbr', () => count => `${count}+`);
+jest.mock('../../../utils/numAbbr', () => (count: number) => `${count}+`);
 
 describe('features/content-insights/CompactCount', () => {
-    const mockIntl = { formatNumber: number => number };
-    const getWrapper = (props = {}) => render(<CompactCount count={0} intl={mockIntl} {...props} />);
+    const getWrapper = (props = {}) => render(<CompactCount count={0} {...props} />);
 
     describe('render()', () => {
         test('should apply a provided classname', () => {

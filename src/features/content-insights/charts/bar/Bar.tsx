@@ -1,21 +1,20 @@
-// @flow
 import React from 'react';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
 
-import type { Direction } from '../types';
+import { Direction } from '../types';
 
 import './Bar.scss';
 
 const DEFAULT_SIZE = 50;
 
-type Props = {
-    color?: string,
-    direction: Direction,
-    onMouseEnter?: () => void,
-    onMouseLeave?: () => void,
-    size: number,
-};
+interface Props {
+    color?: string;
+    direction?: Direction;
+    onMouseEnter?: () => void;
+    onMouseLeave?: () => void;
+    size: number;
+}
 
 function Bar({ color, direction = 'vertical', onMouseEnter = noop, onMouseLeave = noop, size = DEFAULT_SIZE }: Props) {
     const isHorizontal = direction === 'horizontal';

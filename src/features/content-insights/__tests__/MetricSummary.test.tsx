@@ -1,11 +1,12 @@
-// @flow
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+// @ts-ignore: No ts definition
 import localize from '../../../../test/support/i18n';
 
 import messages from '../messages';
 import MetricSummary from '../MetricSummary';
 import { METRIC, PERIOD } from '../constants';
+import { GraphData } from '../types';
 
 const mockPreviewData = [
     { start: 1, previewsCount: 0 },
@@ -15,7 +16,7 @@ const mockPreviewData = [
     { start: 5, previewsCount: 0 },
     { start: 6, previewsCount: 1 },
     { start: 7, previewsCount: 1 },
-];
+] as GraphData;
 
 const mockDownloadData = [
     { start: 1, downloadsCount: 0 },
@@ -25,9 +26,9 @@ const mockDownloadData = [
     { start: 5, downloadsCount: 0 },
     { start: 6, downloadsCount: 1 },
     { start: 7, downloadsCount: 1 },
-];
+] as GraphData;
 
-const mockUserData = [
+const mockUserData = ([
     { start: 1, users: [] },
     { start: 2, users: [] },
     { start: 3, users: [] },
@@ -35,7 +36,7 @@ const mockUserData = [
     { start: 5, users: [] },
     { start: 6, users: [1, 2] },
     { start: 7, users: [] },
-];
+] as unknown) as GraphData;
 
 describe('features/content-insights/MetricSummary', () => {
     const downloadHeaderMessage = localize(messages.downloadGraphType.id);

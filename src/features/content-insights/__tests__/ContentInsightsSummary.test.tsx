@@ -1,10 +1,11 @@
-// @flow
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 
 import ContentInsightsSummary from '../ContentInsightsSummary';
+// @ts-ignore: no ts definition
 import localize from '../../../../test/support/i18n';
 import messages from '../messages';
+import { GraphData } from '../types';
 
 const mockData = [
     { start: 1, previewsCount: 0, type: 'day' },
@@ -14,7 +15,7 @@ const mockData = [
     { start: 5, previewsCount: 0, type: 'day' },
     { start: 6, previewsCount: 1, type: 'day' },
     { start: 7, previewsCount: 1, type: 'day' },
-];
+] as GraphData;
 
 describe('features/content-insights/ContentInsightsSummary', () => {
     const getWrapper = (props = {}) =>

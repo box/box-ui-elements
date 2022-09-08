@@ -1,25 +1,25 @@
-// @flow
 import * as React from 'react';
 import isFinite from 'lodash/isFinite';
 import isNaN from 'lodash/isNaN';
-import { injectIntl, type InjectIntlProvidedProps } from 'react-intl';
+import { injectIntl, IntlShape } from 'react-intl';
 
 import HeaderWithCount from './HeaderWithCount';
 import messages from './messages';
 import TrendPill from './TrendPill';
 import { formatCount } from './CompactCount';
 import { METRIC } from './constants';
-import type { GraphData, Metric, Period } from './types';
+import { GraphData, Metric, Period } from './types';
 
 import './MetricSummary.scss';
 
-type Props = {
-    data: GraphData,
-    metric: Metric,
-    period: Period,
-    previousPeriodCount: number,
-    totalCount?: number,
-} & InjectIntlProvidedProps;
+interface Props {
+    data: GraphData;
+    intl: IntlShape;
+    metric: Metric;
+    period: Period;
+    previousPeriodCount: number;
+    totalCount?: number;
+}
 
 const METRIC_MAP = {
     [METRIC.PREVIEWS]: {
@@ -32,12 +32,15 @@ const METRIC_MAP = {
     },
     [METRIC.USERS]: {
         getPeriodCount: (data: GraphData) => {
-            const periodUsers = data.reduce((totalUsers, { users }) => new Set([...totalUsers, ...users]), new Set());
+            const periodUsers = data.reduce(
+                (totalUsers, { users }) => new Set([...Array.from(totalUsers), ...Array.from(users)]),
+                new Set(),
+            );
             return periodUsers.size;
         },
         headerMessage: messages.peopleTitle,
     },
-};
+} as const;
 
 // Limit the trend to a finite number (in case the previous period count was 0 and the calculated trend is Infinity)
 const formatTrend = (calculatedTrend: number) => (!isFinite(calculatedTrend) ? 1 : calculatedTrend);

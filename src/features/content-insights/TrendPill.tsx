@@ -1,23 +1,23 @@
-// @flow
 import React from 'react';
 import classNames from 'classnames';
-import { FormattedMessage, injectIntl, type InjectIntlProvidedProps } from 'react-intl';
+import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 
 import LabelPill from '../../components/label-pill';
 import messages from './messages';
 
-import type { Period } from './types';
+import { Period } from './types';
 
 import './TrendPill.scss';
 
-type Props = {
-    period: Period,
-    trend: number,
-} & InjectIntlProvidedProps;
+interface Props {
+    intl: IntlShape;
+    period: Period;
+    trend: number;
+}
 
 type Trend = 'up' | 'down' | 'neutral';
 
-const getTrendStatus = (trend): Trend => {
+const getTrendStatus = (trend: number): Trend => {
     if (trend === 0) {
         return 'neutral';
     }
@@ -40,7 +40,7 @@ const getTrendByPeriod = (period: Period) => {
 };
 
 function TrendPill({ intl, period, trend }: Props) {
-    const getTrendLabel = (value): string => {
+    const getTrendLabel = (value: number): string => {
         return intl.formatMessage(value > 0 ? messages.trendUp : messages.trendDown);
     };
 
@@ -54,11 +54,15 @@ function TrendPill({ intl, period, trend }: Props) {
                 'TrendPill--down': trendStatus === 'down',
             })}
         >
-            {trendStatus !== 'neutral' && <span aria-label={trendLabel} className="TrendPill-trend" role="img" />}
-            <LabelPill.Text>
-                <span className="TrendPill-percentage">{intl.formatNumber(trend, { style: 'percent' })}</span>
-                <FormattedMessage {...getTrendByPeriod(period)} />
-            </LabelPill.Text>
+            <>
+                {trendStatus !== 'neutral' && <span aria-label={trendLabel} className="TrendPill-trend" role="img" />}
+                <LabelPill.Text>
+                    <>
+                        <span className="TrendPill-percentage">{intl.formatNumber(trend, { style: 'percent' })}</span>
+                        <FormattedMessage {...getTrendByPeriod(period)} />
+                    </>
+                </LabelPill.Text>
+            </>
         </LabelPill.Pill>
     );
 }
