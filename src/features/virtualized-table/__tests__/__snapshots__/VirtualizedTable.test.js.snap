@@ -6,6 +6,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
     Object {
       "formatDate": [Function],
       "formatMessage": [Function],
+      "formatNumber": [Function],
       "formatRelativeTime": [Function],
     }
   }

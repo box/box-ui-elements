@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import Ghost from 'box-ui-elements/es/components/ghost';
+import Ghost from '../../components/ghost';
 
 import './GraphGhostState.scss';
 
