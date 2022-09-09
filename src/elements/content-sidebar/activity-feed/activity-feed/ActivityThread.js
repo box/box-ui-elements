@@ -53,7 +53,9 @@ const ActivityThread = ({
     const repliesToLoadCount = total_reply_count - 1;
 
     const toggleReplies = () => {
-        !isExpanded && onGetReplies(id);
+        if (!isExpanded) {
+            onGetReplies(id);
+        }
         setIsExpanded(previousState => !previousState);
     };
 

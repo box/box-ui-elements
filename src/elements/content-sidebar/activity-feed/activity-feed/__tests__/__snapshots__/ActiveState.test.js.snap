@@ -50,13 +50,6 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
     key="annotationanno_123"
   >
     <ActivityThread
-      created_at="2018-07-03T14:43:52-07:00"
-      created_by={
-        Object {
-          "id": "user_123445",
-          "name": "Rihanna",
-        }
-      }
       currentUser={
         Object {
           "id": "user_123445",
@@ -64,28 +57,8 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
         }
       }
       data-testid="activity-thread"
-      description={
-        Object {
-          "message": "This is an annotation",
-        }
-      }
-      file_version={
-        Object {
-          "id": "123",
-        }
-      }
-      hasReplies={true}
+      hasReplies={false}
       id="anno_123"
-      target={
-        Object {
-          "location": Object {
-            "type": "page",
-            "value": 1,
-          },
-          "type": "region",
-        }
-      }
-      type="annotation"
     >
       <AnnotationActivity
         currentUser={
@@ -142,7 +115,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
         }
       }
       data-testid="activity-thread"
-      hasReplies={true}
+      hasReplies={false}
       id="c_123"
       tagged_message="test @[123:Jeezy] @[10:Kanye West]"
       type="comment"
