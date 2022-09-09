@@ -4,19 +4,6 @@
     display: flex;
     flex-direction: column;
 
-    .ContentInsightsSummary-header {
-        position: relative;
-        margin: $bdl-grid-unit * 7.5 0 $bdl-grid-unit * 2.5;
-        padding-bottom: $bdl-grid-unit * 2.5;
-        color: $bdl-gray;
-        font-size: $bdl-fontSize;
-        border-bottom: 1px solid $bdl-gray-10;
-    }
-
-    .crawler {
-        margin: $bdl-grid-unit * 5 auto;
-    }
-
     .OpenContentInsightsButton {
         margin-top: $bdl-grid-unit * 5;
         margin-right: 0;

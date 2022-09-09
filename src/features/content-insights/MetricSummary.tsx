@@ -6,7 +6,7 @@ import { injectIntl, IntlShape } from 'react-intl';
 import HeaderWithCount from './HeaderWithCount';
 import messages from './messages';
 import TrendPill from './TrendPill';
-import { formatCount } from './CompactCount';
+import { formatCount } from './numberUtils';
 import { METRIC } from './constants';
 import { GraphData, Metric, Period } from './types';
 
@@ -55,7 +55,7 @@ function MetricSummary({ data = [], intl, metric, period, previousPeriodCount = 
         <div className="MetricSummary">
             <HeaderWithCount title={intl.formatMessage(headerMessage)} totalCount={totalCount} />
             <div className="MetricSummary-period">
-                <span className="MetricSummary-period-count">{formatCount(periodCount, intl)}</span>
+                <span className="MetricSummary-periodCount">{formatCount(periodCount, intl)}</span>
                 <TrendPill period={period} trend={trend} />
             </div>
         </div>

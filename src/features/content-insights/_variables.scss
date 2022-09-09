@@ -2,12 +2,5 @@
 
 @import '../../styles/variables';
 
-$ActivityList-event-spaceBetween: $bdl-grid-unit * 3;
-$ActivityList-header-spaceBetween: $bdl-grid-unit * 2;
-$ActivityList-eventGroupTitle-spaceAbove: $bdl-grid-unit * 4;
-
-$ContentInsights-chart-color-downloads: linear-gradient($bdl-grimace, color.scale($bdl-grimace, $alpha: -30%));
 $ContentInsights-chart-color-previews: linear-gradient($bdl-light-blue, color.scale($bdl-light-blue, $alpha: -30%));
-$ContentInsights-chart-color-users: linear-gradient($bdl-orange, color.scale($bdl-orange, $alpha: -30%));
-$ContentInsights-chart-height-large: 120px;
 $ContentInsights-chart-height-small: 80px;
