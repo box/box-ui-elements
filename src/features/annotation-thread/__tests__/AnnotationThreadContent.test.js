@@ -4,8 +4,8 @@ import { mount } from 'enzyme';
 import React from 'react';
 import { AnnotationThreadContentComponent } from '../AnnotationThreadContent';
 import { annotation } from '../../../__mocks__/annotations';
-import ActivityThread from '../../content-sidebar/activity-feed/activity-feed/ActivityThread';
-import AnnotationActivity from '../../content-sidebar/activity-feed/annotations';
+import ActivityThread from '../../../elements/content-sidebar/activity-feed/activity-feed/ActivityThread';
+import AnnotationActivity from '../../../elements/content-sidebar/activity-feed/annotations';
 
 describe('elements/annotation-thread/AnnotationThreadContent', () => {
     const runAllPromises = () => new Promise(setImmediate);

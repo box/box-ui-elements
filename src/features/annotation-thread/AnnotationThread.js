@@ -5,13 +5,12 @@
  */
 
 import React from 'react';
-import flow from 'lodash/flow';
 import AnnotationThreadContent from './AnnotationThreadContent';
 import API from '../../api/APIFactory';
-import APIContext from '../common/api-context';
-import Internationalize from '../common/Internationalize';
+import APIContext from '../../elements/common/api-context';
+import Internationalize from '../../elements/common/Internationalize';
 import { DEFAULT_HOSTNAME_API, ORIGIN_ANNOTATION_THREAD } from '../../constants';
-import { withErrorBoundary } from '../common/error-boundary';
+import { withErrorBoundary } from '../../elements/common/error-boundary';
 
 import type APICache from '../../utils/Cache';
 import type { BoxItemPermission, StringMap, Token } from '../../common/types/core';
@@ -78,4 +77,4 @@ const AnnotationThread = ({
     );
 };
 
-export default flow([withErrorBoundary(ORIGIN_ANNOTATION_THREAD)])(AnnotationThread);
+export default withErrorBoundary(ORIGIN_ANNOTATION_THREAD)(AnnotationThread);

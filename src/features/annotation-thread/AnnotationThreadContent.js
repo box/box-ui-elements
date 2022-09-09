@@ -3,20 +3,20 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
-import ActivityThread from '../content-sidebar/activity-feed/activity-feed/ActivityThread';
-import AnnotationActivity from '../content-sidebar/activity-feed/annotations';
+import ActivityThread from '../../elements/content-sidebar/activity-feed/activity-feed/ActivityThread';
+import AnnotationActivity from '../../elements/content-sidebar/activity-feed/annotations';
 import API from '../../api/APIFactory';
-import commonMessages from '../common/messages';
+import commonMessages from '../../elements/common/messages';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import { DEFAULT_COLLAB_DEBOUNCE } from '../../constants';
-import { withAPIContext } from '../common/api-context';
-import withErrorHandling from '../content-sidebar/withErrorHandling';
+import { withAPIContext } from '../../elements/common/api-context';
+import withErrorHandling from '../../elements/content-sidebar/withErrorHandling';
 
 import type { Annotation, AnnotationPermission } from '../../common/types/annotations';
 import type { ElementOrigin, ElementsErrorCallback, ElementsXhrError } from '../../common/types/api';
 import type { FeedItemStatus } from '../../common/types/feed';
 import type { BoxItemPermission, SelectorItems } from '../../common/types/core';
-import type { Collaborators } from '../content-sidebar/flowTypes';
+import type { Collaborators } from '../../elements/content-sidebar/flowTypes';
 
 type Props = {
     annotationId: string,
