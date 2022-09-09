@@ -24,6 +24,7 @@
 /src/elements/wrappers/                     @box/ui-elements
 /src/features/                              @box/webapp
 /src/features/access-stats/                 @box/preview
+/src/features/content-insights/             @box/preview
 /src/features/item-details/                 @box/preview
 /src/features/metadata-based-view/          @box/ui-elements
 /src/features/metadata-instance-editor/     @box/ui-elements

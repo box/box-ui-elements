@@ -10,32 +10,26 @@ import './ContentInsightsSummary.scss';
 interface Props {
     graphData: GraphData;
     isLoading: boolean;
-    onCtaClick: () => void;
+    onClick: () => void;
     previousPeriodCount: number;
     totalCount: number;
 }
 
-export default function ContentInsightsSummary({
-    graphData,
-    isLoading,
-    previousPeriodCount,
-    onCtaClick,
-    totalCount,
-}: Props) {
-    return (
-        <div className="ContentInsightsSummary">
-            {isLoading ? (
-                <ContentInsightsSummaryGhostState />
-            ) : (
-                <>
-                    <GraphCardPreviewsSummary
-                        graphData={graphData}
-                        previousPeriodCount={previousPeriodCount}
-                        totalCount={totalCount}
-                    />
-                    <OpenContentInsightsButton onClick={onCtaClick} />
-                </>
-            )}
-        </div>
-    );
-}
+const ContentInsightsSummary = ({ graphData, isLoading, previousPeriodCount, onClick, totalCount }: Props) => (
+    <div className="ContentInsightsSummary">
+        {isLoading ? (
+            <ContentInsightsSummaryGhostState />
+        ) : (
+            <>
+                <GraphCardPreviewsSummary
+                    graphData={graphData}
+                    previousPeriodCount={previousPeriodCount}
+                    totalCount={totalCount}
+                />
+                <OpenContentInsightsButton onClick={onClick} />
+            </>
+        )}
+    </div>
+);
+
+export default ContentInsightsSummary;

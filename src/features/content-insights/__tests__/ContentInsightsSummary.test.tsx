@@ -23,7 +23,7 @@ describe('features/content-insights/ContentInsightsSummary', () => {
             <ContentInsightsSummary
                 graphData={mockData}
                 isLoading={false}
-                onCtaClick={jest.fn()}
+                onClick={jest.fn()}
                 previousPeriodCount={1}
                 totalCount={10}
                 {...props}
@@ -45,15 +45,15 @@ describe('features/content-insights/ContentInsightsSummary', () => {
             expect(screen.getByLabelText(localize(messages.previewGraphLabel.id))).toBeVisible();
         });
 
-        test('should call the onCtaClick callback', () => {
-            const onCtaClick = jest.fn();
-            getWrapper({ onCtaClick });
+        test('should call the onClick callback', () => {
+            const onClick = jest.fn();
+            getWrapper({ onClick });
 
-            expect(onCtaClick).toBeCalledTimes(0);
+            expect(onClick).toBeCalledTimes(0);
 
             screen.getByRole('button').click();
 
-            expect(onCtaClick).toBeCalledTimes(1);
+            expect(onClick).toBeCalledTimes(1);
         });
     });
 });

@@ -12,7 +12,7 @@ function isNumber(count?: number): count is number {
     return typeof count === 'number';
 }
 
-export default function HeaderWithCount({ title, totalCount }: Props) {
+function HeaderWithCount({ title, totalCount }: Props) {
     return (
         <div className="HeaderWithCount">
             <span className="HeaderWithCount-title">{title}</span>
@@ -20,3 +20,5 @@ export default function HeaderWithCount({ title, totalCount }: Props) {
         </div>
     );
 }
+
+export default HeaderWithCount;
