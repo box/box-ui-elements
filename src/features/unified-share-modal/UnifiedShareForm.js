@@ -57,6 +57,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         createSharedLinkOnLoad: false,
         focusSharedLinkOnLoad: false,
         restrictedCollabEmails: [],
+        retrictedGroups: [],
         trackingProps: {
             collaboratorListTracking: {},
             inviteCollabsEmailTracking: {},
@@ -85,13 +86,15 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     }
 
     componentDidUpdate(prevProps: USFProps) {
-        const { isCollabRestrictionJustificationAllowed, item, restrictedCollabEmails } = this.props;
+        const { isCollabRestrictionJustificationAllowed, item, restrictedCollabEmails, restrictedGroups } = this.props;
         const {
+            restrictedGroups: prevRestrictedGroups,
             restrictedCollabEmails: prevRestrictedCollabEmails,
             isCollabRestrictionJustificationAllowed: prevIsCollabRestrictionJustificationAllowed,
         } = prevProps;
 
         const didCollabRestrictionsChange =
+            !isEqual(restrictedGroups, prevRestrictedGroups) ||
             !isEqual(restrictedCollabEmails, prevRestrictedCollabEmails) ||
             isCollabRestrictionJustificationAllowed !== prevIsCollabRestrictionJustificationAllowed;
 
@@ -127,9 +130,13 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
 
     shouldRequireCollabJustification = () => {
         const { inviteCollabsContacts } = this.state;
-        const { isCollabRestrictionJustificationAllowed, restrictedCollabEmails } = this.props;
+        const { isCollabRestrictionJustificationAllowed, restrictedCollabEmails, restrictedGroups } = this.props;
 
-        const hasRestrictedCollabs = hasRestrictedContacts(inviteCollabsContacts, restrictedCollabEmails);
+        const hasRestrictedCollabs = hasRestrictedContacts(
+            inviteCollabsContacts,
+            restrictedCollabEmails,
+            restrictedGroups,
+        );
         return hasRestrictedCollabs && isCollabRestrictionJustificationAllowed;
     };
 
@@ -185,7 +192,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         const { classificationLabelId, inviteePermissionLevel } = this.state;
         const defaultPermissionLevel = getDefaultPermissionLevel(inviteePermissions);
         const selectedPermissionLevel = inviteePermissionLevel || defaultPermissionLevel;
-        const { emails, groupIDs, justificationReason, message, restrictedEmails } = data;
+        const { emails, groupIDs, justificationReason, message, restrictedEmails, restrictedGroups } = data;
 
         let params = {
             emails: emails.join(','),
@@ -197,7 +204,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         };
 
         const hasJustificationReason = !!justificationReason;
-        const hasRestrictedInvitees = !isEmpty(restrictedEmails);
+        const hasRestrictedInvitees = !isEmpty(restrictedEmails) || !isEmpty(restrictedGroups);
         const shouldSubmitJustificationReason =
             hasJustificationReason && hasRestrictedInvitees && isCollabRestrictionJustificationAllowed;
 
@@ -348,10 +355,18 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         currentInviteCollabsContacts: Array<Contact>,
         newInviteCollabsContacts: Array<Contact>,
     ) => {
-        const { restrictedCollabEmails } = this.props;
+        const { restrictedCollabEmails, restrictedGroups } = this.props;
 
-        const hasRestrictedCollabs = hasRestrictedContacts(currentInviteCollabsContacts, restrictedCollabEmails);
-        const hasRestrictedCollabsAfterUpdate = hasRestrictedContacts(newInviteCollabsContacts, restrictedCollabEmails);
+        const hasRestrictedCollabs = hasRestrictedContacts(
+            currentInviteCollabsContacts,
+            restrictedCollabEmails,
+            restrictedGroups,
+        );
+        const hasRestrictedCollabsAfterUpdate = hasRestrictedContacts(
+            newInviteCollabsContacts,
+            restrictedCollabEmails,
+            restrictedGroups,
+        );
 
         return hasRestrictedCollabs && !hasRestrictedCollabsAfterUpdate;
     };
@@ -413,6 +428,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             item,
             recommendedSharingTooltipCalloutName = null,
             restrictedCollabEmails,
+            restrictedGroups,
             sendInvitesError,
             shouldRenderFTUXTooltip,
             showEnterEmailsCallout = false,
@@ -498,6 +514,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             openInviteCollaboratorsSection={this.openInviteCollaboratorsSection}
                             recommendedSharingTooltipCalloutName={recommendedSharingTooltipCalloutName}
                             restrictedEmails={restrictedCollabEmails}
+                            restrictedGroups={restrictedGroups}
                             showEnterEmailsCallout={showEnterEmailsCallout}
                             submitting={submitting}
                             selectedContacts={this.state.inviteCollabsContacts}

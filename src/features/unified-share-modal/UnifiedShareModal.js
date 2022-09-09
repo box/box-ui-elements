@@ -30,6 +30,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
         createSharedLinkOnLoad: false,
         focusSharedLinkOnLoad: false,
         restrictedCollabEmails: [],
+        restrictedGroups: [],
         trackingProps: {
             inviteCollabsEmailTracking: {},
             sharedLinkEmailTracking: {},
