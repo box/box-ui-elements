@@ -355,7 +355,9 @@ class Feed extends Base {
             : Promise.resolve();
         const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
         const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
-        const commentsPromise = this.fetchComments(permissions, shouldShowReplies);
+        const commentsPromise = shouldShowReplies
+            ? this.fetchThreadedComments(permissions)
+            : this.fetchComments(permissions);
         const tasksPromise = shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
         const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
 
@@ -402,23 +404,9 @@ class Feed extends Base {
      * Fetches the comments for a file
      *
      * @param {Object} permissions - the file permissions
-     * @param {boolean} shouldFetchReplies - indicator for fetching comment with replies
      * @return {Promise} - the file comments
      */
-    fetchComments(permissions: BoxItemPermission, shouldFetchReplies?: boolean): Promise<?Comments> {
-        if (shouldFetchReplies) {
-            this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
-            return new Promise(resolve => {
-                this.threadedCommentsAPI.getComments({
-                    errorCallback: this.fetchFeedItemErrorCallback.bind(this, resolve),
-                    fileId: this.file.id,
-                    permissions,
-                    repliesCount: 1,
-                    successCallback: resolve,
-                });
-            });
-        }
-
+    fetchComments(permissions: BoxItemPermission): Promise<?Comments> {
         this.commentsAPI = new CommentsAPI(this.options);
         return new Promise(resolve => {
             this.commentsAPI.getComments(
@@ -427,6 +415,24 @@ class Feed extends Base {
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
             );
+        });
+    }
+
+    /**
+     * Fetches the comments with replies for a file
+     *
+     * @param {Object} permissions - the file permissions
+     * @return {Promise} - the file comments
+     */
+    fetchThreadedComments(permissions: BoxItemPermission): Promise<?Comments> {
+        this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
+        return new Promise(resolve => {
+            this.threadedCommentsAPI.getComments({
+                errorCallback: this.fetchFeedItemErrorCallback.bind(this, resolve),
+                fileId: this.file.id,
+                permissions,
+                successCallback: resolve,
+            });
         });
     }
 
@@ -683,16 +689,51 @@ class Feed extends Base {
      * @param {BoxItem} file - The file to which the comment belongs to
      * @param {string} commentId - Comment ID
      * @param {BoxCommentPermission} permissions - Permissions for the comment
-     * @param {boolean} shouldUseThreadedComments - Indicator for using ThreadedComments api
      * @param {Function} successCallback - the function which will be called on success
-     * @param {Function} errorCallback - the function which will be called on error     *
+     * @param {Function} errorCallback - the function which will be called on error
      * @return {void}
      */
     deleteComment = (
         file: BoxItem,
         commentId: string,
         permissions: BoxCommentPermission,
-        shouldUseThreadedComments?: boolean,
+        successCallback: Function,
+        errorCallback: ErrorCallback,
+    ): void => {
+        this.commentsAPI = new CommentsAPI(this.options);
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+        this.updateFeedItem({ isPending: true }, commentId);
+
+        this.commentsAPI.deleteComment({
+            file,
+            commentId,
+            permissions,
+            successCallback: this.deleteFeedItem.bind(this, commentId, successCallback),
+            errorCallback: (e: ElementsXhrError, code: string) => {
+                this.deleteCommentErrorCallback(e, code, commentId);
+            },
+        });
+    };
+
+    /**
+     * Deletes a threaded comment (using ThreadedComments API).
+     *
+     * @param {BoxItem} file - The file to which the comment belongs to
+     * @param {string} commentId - Comment ID
+     * @param {BoxCommentPermission} permissions - Permissions for the comment
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @return {void}
+     */
+    deleteThreadedComment = (
+        file: BoxItem,
+        commentId: string,
+        permissions: BoxCommentPermission,
         successCallback: Function,
         errorCallback: ErrorCallback,
     ): void => {
@@ -704,32 +745,17 @@ class Feed extends Base {
         this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, commentId);
 
-        const successCallbackFn = this.deleteFeedItem.bind(this, commentId, successCallback);
-        const errorCallbackFn = (e: ElementsXhrError, code: string) => {
-            this.deleteCommentErrorCallback(e, code, commentId);
-        };
+        this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
 
-        if (shouldUseThreadedComments) {
-            this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
-
-            this.threadedCommentsAPI.deleteComment({
-                fileId: file.id,
-                commentId,
-                permissions,
-                successCallback: successCallbackFn,
-                errorCallback: errorCallbackFn,
-            });
-        } else {
-            this.commentsAPI = new CommentsAPI(this.options);
-
-            this.commentsAPI.deleteComment({
-                file,
-                commentId,
-                permissions,
-                successCallback: successCallbackFn,
-                errorCallback: errorCallbackFn,
-            });
-        }
+        this.threadedCommentsAPI.deleteComment({
+            fileId: file.id,
+            commentId,
+            permissions,
+            successCallback: this.deleteFeedItem.bind(this, commentId, successCallback),
+            errorCallback: (e: ElementsXhrError, code: string) => {
+                this.deleteCommentErrorCallback(e, code, commentId);
+            },
+        });
     };
 
     /**
@@ -1237,9 +1263,7 @@ class Feed extends Base {
      * @param {BoxItem} file - The file to which the task is assigned
      * @param {Object} currentUser - the user who performed the action
      * @param {string} text - the comment text
-     * @param {FeedItemStatus} status - status of the comment
      * @param {boolean} hasMention - true if there is an @mention in the text
-     * @param {boolean} shouldUseThreadedComments - Indicator for using ThreadedComments api
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
      * @return {void}
@@ -1249,7 +1273,62 @@ class Feed extends Base {
         currentUser: User,
         text: string,
         hasMention: boolean,
-        shouldUseThreadedComments?: boolean,
+        successCallback: Function,
+        errorCallback: ErrorCallback,
+    ): void => {
+        const uuid = uniqueId('comment_');
+        const commentData = {
+            id: uuid,
+            tagged_message: text,
+            type: 'comment',
+        };
+
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+        this.addPendingItem(this.file.id, currentUser, commentData);
+
+        const message = {};
+        if (hasMention) {
+            message.taggedMessage = text;
+        } else {
+            message.message = text;
+        }
+
+        this.commentsAPI = new CommentsAPI(this.options);
+
+        this.commentsAPI.createComment({
+            file,
+            ...message,
+            successCallback: (comment: Comment) => {
+                this.createCommentSuccessCallback(comment, uuid, successCallback);
+            },
+            errorCallback: (e: ErrorResponseData, code: string) => {
+                this.createCommentErrorCallback(e, code, uuid);
+            },
+        });
+    };
+
+    /**
+     * Create a threaded comment (using ThreadedComments API),
+     * and make a pending item to be replaced once the API is successful.
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {Object} currentUser - the user who performed the action
+     * @param {string} text - the comment text
+     * @param {boolean} hasMention - true if there is an @mention in the text
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @return {void}
+     */
+    createThreadedComment = (
+        file: BoxItem,
+        currentUser: User,
+        text: string,
+        hasMention: boolean,
         successCallback: Function,
         errorCallback: ErrorCallback,
     ): void => {
@@ -1268,39 +1347,18 @@ class Feed extends Base {
         this.errorCallback = errorCallback;
         this.addPendingItem(this.file.id, currentUser, commentData);
 
-        const successCallbackFn = (comment: Comment) => {
-            this.createCommentSuccessCallback(comment, uuid, successCallback);
-        };
-        const errorCallbackFn = (e: ErrorResponseData, code: string) => {
-            this.createCommentErrorCallback(e, code, uuid);
-        };
+        this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
 
-        if (shouldUseThreadedComments) {
-            this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
-
-            this.threadedCommentsAPI.createComment({
-                file,
-                message: text,
-                successCallback: successCallbackFn,
-                errorCallback: errorCallbackFn,
-            });
-        } else {
-            const message = {};
-            if (hasMention) {
-                message.taggedMessage = text;
-            } else {
-                message.message = text;
-            }
-
-            this.commentsAPI = new CommentsAPI(this.options);
-
-            this.commentsAPI.createComment({
-                file,
-                ...message,
-                successCallback: successCallbackFn,
-                errorCallback: errorCallbackFn,
-            });
-        }
+        this.threadedCommentsAPI.createComment({
+            file,
+            message: text,
+            successCallback: (comment: Comment) => {
+                this.createCommentSuccessCallback(comment, uuid, successCallback);
+            },
+            errorCallback: (e: ErrorResponseData, code: string) => {
+                this.createCommentErrorCallback(e, code, uuid);
+            },
+        });
     };
 
     /**
@@ -1309,10 +1367,8 @@ class Feed extends Base {
      * @param {BoxItem} file - The file to which the task is assigned
      * @param {string} commentId - Comment ID
      * @param {string} text - the comment text
-     * @param {FeedItemStatus} status - status of the comment
      * @param {boolean} hasMention - true if there is an @mention in the text
      * @param {BoxCommentPermission} permissions - Permissions to attach to the app activity items
-     * @param {boolean} shouldUseThreadedComments - Indicator for using ThreadedComments api
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
      * @return {void}
@@ -1320,11 +1376,79 @@ class Feed extends Base {
     updateComment = (
         file: BoxItem,
         commentId: string,
+        text: string,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        successCallback: Function,
+        errorCallback: ErrorCallback,
+    ): void => {
+        const commentData = {
+            tagged_message: text,
+        };
+
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+        this.updateFeedItem({ ...commentData, isPending: true }, commentId);
+
+        const message = {};
+        if (hasMention) {
+            message.tagged_message = text;
+        } else {
+            message.message = text;
+        }
+
+        this.commentsAPI = new CommentsAPI(this.options);
+
+        this.commentsAPI.updateComment({
+            file,
+            commentId,
+            permissions,
+            ...message,
+            successCallback: (comment: Comment) => {
+                // use the request payload instead of response in the
+                // feed item update because response may not contain
+                // the tagged version of the message
+                this.updateFeedItem(
+                    {
+                        ...message,
+                        isPending: false,
+                    },
+                    commentId,
+                );
+                if (!this.isDestroyed()) {
+                    successCallback(comment);
+                }
+            },
+            errorCallback: (e: ErrorResponseData, code: string) => {
+                this.updateCommentErrorCallback(e, code, commentId);
+            },
+        });
+    };
+
+    /**
+     * Update a threaded comment
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {string} commentId - Comment ID
+     * @param {string} text - the comment text
+     * @param {FeedItemStatus} status - status of the comment
+     * @param {boolean} hasMention - true if there is an @mention in the text
+     * @param {BoxCommentPermission} permissions - Permissions to attach to the app activity items
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @return {void}
+     */
+    updateThreadedComment = (
+        file: BoxItem,
+        commentId: string,
         text?: string,
         status?: FeedItemStatus,
         hasMention?: boolean,
         permissions: BoxCommentPermission,
-        shouldUseThreadedComments?: boolean,
         successCallback: Function,
         errorCallback: ErrorCallback,
     ): void => {
@@ -1347,8 +1471,15 @@ class Feed extends Base {
         this.errorCallback = errorCallback;
         this.updateFeedItem({ ...commentData, isPending: true }, commentId);
 
-        const successCallbackFn = (comment: Comment) => {
-            if (shouldUseThreadedComments) {
+        this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
+
+        this.threadedCommentsAPI.updateComment({
+            fileId: file.id,
+            commentId,
+            permissions,
+            message: text,
+            status,
+            successCallback: (comment: Comment) => {
                 this.updateFeedItem(
                     {
                         ...comment,
@@ -1356,57 +1487,14 @@ class Feed extends Base {
                     },
                     commentId,
                 );
-            } else {
-                // In case of legacy comments:
-                // do not use response in order to update
-                // feed item update because response may not contain
-                // the tagged version of the message
-                this.updateFeedItem(
-                    {
-                        isPending: false,
-                    },
-                    commentId,
-                );
-            }
-            if (!this.isDestroyed()) {
-                successCallback(comment);
-            }
-        };
-        const errorCallbackFn = (e: ErrorResponseData, code: string) => {
-            this.updateCommentErrorCallback(e, code, commentId);
-        };
-
-        if (shouldUseThreadedComments) {
-            this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
-
-            this.threadedCommentsAPI.updateComment({
-                fileId: file.id,
-                commentId,
-                permissions,
-                message: text,
-                status,
-                successCallback: successCallbackFn,
-                errorCallback: errorCallbackFn,
-            });
-        } else {
-            const message = {};
-            if (hasMention) {
-                message.tagged_message = text;
-            } else {
-                message.message = text;
-            }
-
-            this.commentsAPI = new CommentsAPI(this.options);
-
-            this.commentsAPI.updateComment({
-                file,
-                commentId,
-                permissions,
-                ...message,
-                successCallback: successCallbackFn,
-                errorCallback: errorCallbackFn,
-            });
-        }
+                if (!this.isDestroyed()) {
+                    successCallback(comment);
+                }
+            },
+            errorCallback: (e: ErrorResponseData, code: string) => {
+                this.updateCommentErrorCallback(e, code, commentId);
+            },
+        });
     };
 
     destroyTaskCollaborators() {

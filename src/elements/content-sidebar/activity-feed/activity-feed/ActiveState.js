@@ -45,13 +45,14 @@ type Props = {
     onAnnotationStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
-    onCommentEdit?: Function,
-    onCommentStatusChange?: (
+    onCommentEdit?: (
         id: string,
-        status: FeedItemStatus,
+        text?: string,
+        status?: FeedItemStatus,
+        hasMention: boolean,
         permissions: BoxCommentPermission,
-        onSuccess?: Function,
-        onError?: Function,
+        onSuccess: ?Function,
+        onError: ?Function,
     ) => void,
     onTaskAssignmentUpdate?: Function,
     onTaskDelete?: Function,
@@ -80,7 +81,6 @@ const ActiveState = ({
     onAppActivityDelete,
     onCommentDelete,
     onCommentEdit,
-    onCommentStatusChange,
     onTaskDelete,
     onTaskEdit,
     onTaskView,
@@ -120,10 +120,11 @@ const ActiveState = ({
                                         mentionSelectorContacts={mentionSelectorContacts}
                                         onDelete={onCommentDelete}
                                         onEdit={onCommentEdit}
-                                        onStatusChange={onCommentStatusChange}
                                         permissions={{
                                             can_delete: getProp(item.permissions, 'can_delete', false),
                                             can_edit: getProp(item.permissions, 'can_edit', false),
+                                            can_reply: getProp(item.permissions, 'can_reply', false),
+                                            can_resolve: getProp(item.permissions, 'can_resolve', false),
                                         }}
                                         translations={translations}
                                     />

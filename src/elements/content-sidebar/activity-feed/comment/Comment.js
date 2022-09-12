@@ -39,15 +39,16 @@ type Props = {
     mentionSelectorContacts?: SelectorItems<>,
     modified_at?: string | number,
     onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any,
-    onEdit: (id: string, text: string, hasMention: boolean, permissions?: BoxCommentPermission) => any,
-    onStatusChange?: (
+    onEdit: (
         id: string,
-        status: FeedItemStatus,
+        text?: string,
+        status?: FeedItemStatus,
+        hasMention: boolean,
         permissions: BoxCommentPermission,
-        onSuccess?: Function,
-        onError?: Function,
+        onSuccess: ?Function,
+        onError: ?Function,
     ) => void,
-    permissions?: BoxCommentPermission,
+    permissions: BoxCommentPermission,
     tagged_message: string,
     translatedTaggedMessage?: string,
     translations?: Translations,
@@ -94,9 +95,9 @@ class Comment extends React.Component<Props, State> {
 
     commentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
 
-    handleUpdate = ({ id, text, hasMention }: { hasMention: boolean, id: string, text: string }): void => {
+    handleMessageUpdate = ({ id, text, hasMention }: { hasMention: boolean, id: string, text: string }): void => {
         const { onEdit, permissions } = this.props;
-        onEdit(id, text, hasMention, permissions);
+        onEdit(id, text, undefined, hasMention, permissions);
         this.commentFormSubmitHandler();
     };
 
@@ -200,7 +201,7 @@ class Comment extends React.Component<Props, State> {
                                 className={classNames('bcs-Comment-editor', {
                                     'bcs-is-disabled': isDisabled,
                                 })}
-                                updateComment={this.handleUpdate}
+                                updateComment={this.handleMessageUpdate}
                                 isOpen={isInputOpen}
                                 // $FlowFixMe
                                 user={currentUser}

@@ -118,6 +118,8 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
           Object {
             "can_delete": false,
             "can_edit": false,
+            "can_reply": false,
+            "can_resolve": false,
           }
         }
         tagged_message="test @[123:Jeezy] @[10:Kanye West]"

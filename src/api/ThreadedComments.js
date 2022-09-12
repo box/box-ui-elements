@@ -333,7 +333,6 @@ class ThreadedComments extends MarkerBasedApi {
         fileId: string,
         message: string,
         permissions: BoxItemPermission,
-        shouldFetchReplies?: boolean,
         successCallback: Function,
     }): void {
         this.errorCode = ERROR_CODE_CREATE_REPLY;

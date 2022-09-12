@@ -13,14 +13,17 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     const feedAPI = {
         createComment: jest.fn(),
         createTaskNew: jest.fn(),
+        createThreadedComment: jest.fn(),
         deleteAnnotation: jest.fn(),
         deleteComment: jest.fn(),
         deleteTaskNew: jest.fn(),
+        deleteThreadedComment: jest.fn(),
         feedItems: jest.fn(),
         updateAnnotation: jest.fn(),
         updateComment: jest.fn(),
         updateTaskCollaborator: jest.fn(),
         updateTaskNew: jest.fn(),
+        updateThreadedComment: jest.fn(),
     };
     const usersAPI = {
         get: jest.fn(),
@@ -166,13 +169,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
     describe('deleteComment()', () => {
         test.each`
-            hasReplies   | expected
-            ${undefined} | ${false}
-            ${false}     | ${false}
-            ${true}      | ${true}
+            hasReplies
+            ${undefined}
+            ${false}
         `(
-            'should call the deleteComment prop if it exists when hasReplies prop equals to $hasReplies',
-            ({ hasReplies, expected }) => {
+            'should call the deleteComment API if it exists when hasReplies prop equals to $hasReplies',
+            ({ hasReplies }) => {
                 const wrapper = getWrapper({ hasReplies });
                 const instance = wrapper.instance();
                 instance.fetchFeedItems = jest.fn();
@@ -187,13 +189,33 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     file,
                     id,
                     permissions,
-                    expected,
                     expect.any(Function),
                     expect.any(Function),
                 );
                 expect(instance.fetchFeedItems).toBeCalled();
             },
         );
+
+        test('should call the deleteThreadedComment API if it exists when hasReplies prop equals to true', () => {
+            const wrapper = getWrapper({ hasReplies: true });
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+
+            const id = '1';
+            const permissions = {
+                can_edit: false,
+                can_delete: true,
+            };
+            instance.deleteComment({ id, permissions });
+            expect(feedAPI.deleteThreadedComment).toBeCalledWith(
+                file,
+                id,
+                permissions,
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(instance.fetchFeedItems).toBeCalled();
+        });
     });
 
     describe('fetchCurrentUser()', () => {
@@ -338,13 +360,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
 
         test.each`
-            hasReplies   | expected
-            ${undefined} | ${false}
-            ${false}     | ${false}
-            ${true}      | ${true}
+            hasReplies
+            ${undefined}
+            ${false}
         `(
-            'should call the create comment API and fetch the items when hasReplies prop equals to $hasReplies',
-            ({ hasReplies, expected }) => {
+            'should call the createComment API and fetch the items when hasReplies prop equals to $hasReplies',
+            ({ hasReplies }) => {
                 const wrapper = getWrapper({ hasReplies });
                 const instance = wrapper.instance();
                 instance.fetchFeedItems = jest.fn();
@@ -360,27 +381,47 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     currentUser,
                     message,
                     hasMention,
-                    expected,
                     expect.any(Function),
                     expect.any(Function),
                 );
                 expect(instance.fetchFeedItems).toBeCalled();
             },
         );
+
+        test('should call the createThreadedComment API and fetch the items when hasReplies prop equals to true', () => {
+            const wrapper = getWrapper({ hasReplies: true });
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+            const message = 'foo';
+            const hasMention = true;
+
+            instance.setState({
+                currentUser,
+            });
+            instance.createComment(message, hasMention);
+            expect(feedAPI.createThreadedComment).toBeCalledWith(
+                file,
+                currentUser,
+                message,
+                hasMention,
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(instance.fetchFeedItems).toBeCalled();
+        });
     });
 
     describe('updateComment()', () => {
         test.each`
-            hasReplies   | expected
-            ${undefined} | ${false}
-            ${false}     | ${false}
-            ${true}      | ${true}
-        `('should call updateComment API when hasReplies prop equals to $hasReplies', ({ hasReplies, expected }) => {
+            hasReplies
+            ${undefined}
+            ${false}
+        `('should call updateComment API when hasReplies prop equals to $hasReplies', ({ hasReplies }) => {
             const wrapper = getWrapper({ hasReplies });
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
 
-            wrapper.instance().updateComment('123', 'hello', false, {
+            wrapper.instance().updateComment('123', 'hello', undefined, false, {
                 can_edit: true,
                 can_delete: true,
             });
@@ -389,46 +430,41 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 file,
                 '123',
                 'hello',
-                undefined,
                 false,
                 { can_edit: true, can_delete: true },
-                expected,
                 expect.any(Function),
                 expect.any(Function),
             );
             expect(instance.fetchFeedItems).toBeCalled();
         });
-    });
 
-    describe('updateCommentStatus()', () => {
-        test.each`
-            hasReplies   | expected
-            ${undefined} | ${false}
-            ${false}     | ${false}
-            ${true}      | ${true}
-        `('should call updateComment API when hasReplies prop equals to $hasReplies', ({ hasReplies, expected }) => {
-            const wrapper = getWrapper({ hasReplies });
-            const instance = wrapper.instance();
-            instance.fetchFeedItems = jest.fn();
+        describe('should call updateThreadedComment API when hasReplies prop equals to true', () => {
+            test.each`
+                status       | text         | expectedStatus | expectedText
+                ${undefined} | ${undefined} | ${undefined}   | ${undefined}
+                ${'open'}    | ${'foo'}     | ${'open'}      | ${'foo'}
+            `('given status=$status and text=$text', ({ status, text, expectedStatus, expectedText }) => {
+                const wrapper = getWrapper({ hasReplies: true });
+                const instance = wrapper.instance();
+                instance.fetchFeedItems = jest.fn();
 
-            wrapper.instance().updateCommentStatus('123', 'open', {
-                can_edit: true,
-                can_delete: true,
-                can_resolve: true,
+                wrapper.instance().updateComment('123', text, status, false, {
+                    can_edit: true,
+                    can_delete: true,
+                });
+
+                expect(api.getFeedAPI().updateThreadedComment).toBeCalledWith(
+                    file,
+                    '123',
+                    expectedText,
+                    expectedStatus,
+                    false,
+                    { can_edit: true, can_delete: true },
+                    expect.any(Function),
+                    expect.any(Function),
+                );
+                expect(instance.fetchFeedItems).toBeCalled();
             });
-
-            expect(api.getFeedAPI().updateComment).toBeCalledWith(
-                file,
-                '123',
-                undefined,
-                'open',
-                undefined,
-                { can_edit: true, can_delete: true, can_resolve: true },
-                expected,
-                expect.any(Function),
-                expect.any(Function),
-            );
-            expect(instance.fetchFeedItems).toBeCalled();
         });
     });
 
