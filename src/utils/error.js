@@ -22,6 +22,10 @@ function getBadUserError(): Error {
     return new Error('Bad box user!');
 }
 
+function getMissingItemTextOrStatus(): Error {
+    return new Error('Missing text or status!');
+}
+
 function isUserCorrectableError(status: number) {
     return (
         status === HTTP_STATUS_CODE_RATE_LIMIT ||
@@ -31,4 +35,4 @@ function isUserCorrectableError(status: number) {
     );
 }
 
-export { getBadItemError, getBadPermissionsError, getBadUserError, isUserCorrectableError };
+export { getBadItemError, getBadPermissionsError, getBadUserError, getMissingItemTextOrStatus, isUserCorrectableError };

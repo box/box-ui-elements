@@ -199,14 +199,15 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         instance.commentFormFocusHandler();
         expect(wrapper.state('isInputOpen')).toBe(true);
 
-        const updatePayload = { id: '000', hasMention: true, text: 'updated message' };
-        instance.handleUpdate(updatePayload);
+        const updateMessagePayload = { id: '000', hasMention: true, text: 'updated message' };
+        instance.handleMessageUpdate(updateMessagePayload);
         expect(wrapper.state('isEditing')).toBe(false);
         expect(wrapper.state('isInputOpen')).toBe(false);
         expect(mockOnEdit).toHaveBeenCalledWith(
-            updatePayload.id,
-            updatePayload.text,
-            updatePayload.hasMention,
+            updateMessagePayload.id,
+            updateMessagePayload.text,
+            undefined,
+            updateMessagePayload.hasMention,
             comment.permissions,
         );
     });

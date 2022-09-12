@@ -10,6 +10,8 @@ type FocusableFeedItemType = 'task' | 'comment' | 'annotation';
 type BoxCommentPermission = {
     can_delete?: boolean,
     can_edit?: boolean,
+    can_reply?: boolean,
+    can_resolve?: boolean,
 };
 
 type BoxTaskPermission = {
