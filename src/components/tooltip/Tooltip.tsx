@@ -81,6 +81,8 @@ export type DefaultTooltipProps = {
 };
 
 export type TooltipProps = {
+    /** Sets aria-hidden attribute on tooltip */
+    ariaHidden?: boolean;
     /** An HTML element to append the tooltip container into (otherwise appends to body) */
     bodyElement?: HTMLElement;
     /** A React element to put the tooltip on */
@@ -103,8 +105,6 @@ export type TooltipProps = {
     tetherElementClassName?: string;
     /** Text to show in the tooltip */
     text?: React.ReactNode;
-    /** Sets aria-hidden attribute on tooltip */
-    ariaHidden?: boolean;
 } & Partial<DefaultTooltipProps>;
 
 type State = {
