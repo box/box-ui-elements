@@ -2,66 +2,10 @@ import commonMessages from '../../elements/common/messages';
 import messages from '../messages';
 import * as sorter from '../../utils/sorter';
 import * as error from '../../utils/error';
-import { IS_ERROR_DISPLAYED, TASK_NEW_NOT_STARTED, TASK_MAX_GROUP_ASSIGNEES } from '../../constants';
+import { IS_ERROR_DISPLAYED, TASK_MAX_GROUP_ASSIGNEES } from '../../constants';
 import Feed from '../Feed';
 import { annotation as mockAnnotation } from '../../__mocks__/annotations';
-
-const mockTask = {
-    created_by: {
-        type: 'task_collaborator',
-        target: { name: 'Jay-Z', id: '100' },
-        id: '000',
-        role: 'CREATOR',
-        status: TASK_NEW_NOT_STARTED,
-    },
-    created_at: '2019-01-01',
-    due_at: '2019-02-02',
-    id: '0',
-    name: 'task message',
-    type: 'task',
-    assigned_to: {
-        entries: [
-            {
-                id: '1',
-                target: { name: 'Beyonce', id: '2', avatar_url: '', type: 'user' },
-                status: TASK_NEW_NOT_STARTED,
-                permissions: {
-                    can_delete: false,
-                    can_update: false,
-                },
-                role: 'ASSIGNEE',
-                type: 'task_collaborator',
-            },
-        ],
-        limit: 10,
-        next_marker: null,
-    },
-    permissions: {
-        can_update: false,
-        can_delete: false,
-        can_create_task_collaborator: false,
-        can_create_task_link: false,
-    },
-    task_links: {
-        entries: [
-            {
-                id: '03',
-                type: 'task_link',
-                target: {
-                    type: 'file',
-                    id: '4',
-                },
-                permissions: {
-                    can_delete: false,
-                    can_update: false,
-                },
-            },
-        ],
-        limit: 1,
-        next_marker: null,
-    },
-    status: TASK_NEW_NOT_STARTED,
-};
+import { task as mockTask, threadedComments as mockThreadedComments } from '../fixtures';
 
 const mockErrors = [{ code: 'error_code_0' }, { code: 'error_code_1' }];
 
@@ -107,6 +51,12 @@ const annotations = {
     next_marker: null,
 };
 
+const threadedComments = {
+    entries: mockThreadedComments,
+    limit: 1000,
+    next_marker: null,
+};
+
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
 const mockCreateTaskWithDeps = jest.fn().mockImplementation(({ successCallback }) => {
@@ -114,7 +64,6 @@ const mockCreateTaskWithDeps = jest.fn().mockImplementation(({ successCallback }
 });
 
 jest.mock('../tasks/TasksNew', () => {
-    const task = mockTask;
     return jest.fn().mockImplementation(() => ({
         createTaskWithDeps: mockCreateTaskWithDeps,
         updateTaskWithDeps: jest.fn().mockImplementation(({ successCallback }) => {
@@ -123,9 +72,9 @@ jest.mock('../tasks/TasksNew', () => {
         deleteTask: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
         }),
-        getTasksForFile: jest.fn().mockReturnValue({ entries: [task], next_marker: null, limit: 1000 }),
+        getTasksForFile: jest.fn().mockReturnValue({ entries: [mockTask], next_marker: null, limit: 1000 }),
         getTask: jest.fn(({ successCallback }) => {
-            successCallback(task);
+            successCallback(mockTask);
         }),
     }));
 });
@@ -226,6 +175,25 @@ jest.mock('../Comments', () =>
                     created_by: { name: 'Akon', id: 11 },
                 },
             ],
+        }),
+        deleteComment: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
+        updateComment: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
+        createComment: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
+    })),
+);
+
+jest.mock('../ThreadedComments', () =>
+    jest.fn().mockImplementation(() => ({
+        getComments: jest.fn().mockReturnValue({
+            entries: mockThreadedComments,
+            limit: 1000,
+            next_marker: null,
         }),
         deleteComment: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
@@ -414,6 +382,7 @@ describe('api/Feed', () => {
             feed.fetchCurrentVersion = jest.fn().mockResolvedValue(mockCurrentVersion);
             feed.fetchTasksNew = jest.fn().mockResolvedValue(tasks);
             feed.fetchComments = jest.fn().mockResolvedValue(comments);
+            feed.fetchThreadedComments = jest.fn().mockResolvedValue(threadedComments);
             feed.fetchAppActivity = jest.fn().mockReturnValue(appActivities);
             feed.fetchAnnotations = jest.fn().mockReturnValue(annotations);
             feed.setCachedItems = jest.fn();
@@ -508,6 +477,14 @@ describe('api/Feed', () => {
             feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowAnnotations: false });
             setImmediate(() => {
                 expect(feed.fetchAnnotations).not.toHaveBeenCalled();
+                done();
+            });
+        });
+
+        test('should use the threaded comments api if shouldShowReplies is true', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowReplies: true });
+            setImmediate(() => {
+                expect(feed.fetchThreadedComments).toBeCalledWith(file.permissions);
                 done();
             });
         });
@@ -615,6 +592,25 @@ describe('api/Feed', () => {
         });
     });
 
+    describe('fetchThreadedComments()', () => {
+        beforeEach(() => {
+            feed.file = file;
+            feed.fetchFeedItemErrorCallback = jest.fn();
+        });
+
+        test('should return a promise and call the threaded comments api', () => {
+            const permissions = { can_edit: true, can_delete: true, can_resolve: true };
+            const commentItems = feed.fetchThreadedComments(permissions);
+            expect(commentItems instanceof Promise).toBeTruthy();
+            expect(feed.threadedCommentsAPI.getComments).toBeCalledWith({
+                errorCallback: expect.any(Function),
+                fileId: feed.file.id,
+                permissions,
+                successCallback: expect.any(Function),
+            });
+        });
+    });
+
     describe('Fetching Base Items', () => {
         beforeEach(() => {
             feed.file = file;
@@ -694,7 +690,7 @@ describe('api/Feed', () => {
                 successCb,
             );
             expect(feed.tasksNewAPI.getTask).toBeCalled();
-            expect(feed.updateFeedItem).toBeCalledWith({ isPending: false }, taskId);
+            expect(feed.updateFeedItem).toBeCalledWith({ ...mockTask, isPending: false }, taskId);
             expect(successCb).toBeCalled();
         });
     });
@@ -950,6 +946,68 @@ describe('api/Feed', () => {
         });
     });
 
+    describe('updateThreadedComment()', () => {
+        beforeEach(() => {
+            feed.updateFeedItem = jest.fn();
+        });
+
+        test('should throw if no file id', () => {
+            expect(() => feed.updateThreadedComment({})).toThrow(fileError);
+        });
+
+        test('should throw if no text or status', () => {
+            expect(() =>
+                feed.updateThreadedComment(
+                    file,
+                    '123',
+                    undefined,
+                    undefined,
+                    true,
+                    { can_delete: true },
+                    undefined,
+                    jest.fn(),
+                    jest.fn(),
+                ),
+            ).toThrowError();
+        });
+
+        describe('should call the threaded comments api and update the feed items', () => {
+            test.each`
+                testText     | testStatus   | expected
+                ${'hello'}   | ${undefined} | ${{ message: 'hello' }}
+                ${undefined} | ${'open'}    | ${{ status: 'open' }}
+                ${'hello'}   | ${'open'}    | ${{ message: 'hello', status: 'open' }}
+            `('given text=$testText and status=$testStatus', ({ testText, testStatus, expected }) => {
+                const successCallback = jest.fn();
+                const errorCallback = jest.fn();
+                const comment = {
+                    id: '1',
+                    permissions: { can_edit: true },
+                };
+                feed.updateThreadedComment(
+                    file,
+                    comment.id,
+                    testText,
+                    testStatus,
+                    true,
+                    comment.permissions,
+                    successCallback,
+                    errorCallback,
+                );
+                expect(feed.threadedCommentsAPI.updateComment).toBeCalledWith({
+                    fileId: file.id,
+                    commentId: comment.id,
+                    permissions: comment.permissions,
+                    ...expected,
+                    successCallback: expect.any(Function),
+                    errorCallback: expect.any(Function),
+                });
+                expect(feed.updateFeedItem).toBeCalled();
+                expect(successCallback).toBeCalled();
+            });
+        });
+    });
+
     describe('deleteComment()', () => {
         beforeEach(() => {
             feed.updateFeedItem = jest.fn();
@@ -961,8 +1019,51 @@ describe('api/Feed', () => {
         });
 
         test('should call the comments api and if successful, the success callback', () => {
-            feed.deleteComment(file);
-            expect(feed.commentsAPI.deleteComment).toBeCalled();
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            const comment = {
+                id: '1',
+                permissions: { can_edit: true },
+            };
+
+            feed.deleteComment(file, comment.id, comment.permissions, successCallback, errorCallback);
+            expect(feed.commentsAPI.deleteComment).toBeCalledWith({
+                file,
+                commentId: comment.id,
+                permissions: comment.permissions,
+                successCallback: expect.any(Function),
+                errorCallback: expect.any(Function),
+            });
+            expect(feed.deleteFeedItem).toBeCalled();
+        });
+    });
+
+    describe('deleteThreadedComment()', () => {
+        beforeEach(() => {
+            feed.updateFeedItem = jest.fn();
+            feed.deleteFeedItem = jest.fn();
+        });
+
+        test('should throw if no file id', () => {
+            expect(() => feed.deleteComment({})).toThrow(fileError);
+        });
+
+        test('should call the threaded comments api and if successful, the success callback', () => {
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            const comment = {
+                id: '1',
+                permissions: { can_edit: true },
+            };
+
+            feed.deleteThreadedComment(file, comment.id, comment.permissions, true, successCallback, errorCallback);
+            expect(feed.threadedCommentsAPI.deleteComment).toBeCalledWith({
+                fileId: file.id,
+                commentId: comment.id,
+                permissions: comment.permissions,
+                successCallback: expect.any(Function),
+                errorCallback: expect.any(Function),
+            });
             expect(feed.deleteFeedItem).toBeCalled();
         });
     });
@@ -1248,7 +1349,60 @@ describe('api/Feed', () => {
         test('should create the comment and invoke the success callback', done => {
             feed.createComment(file, currentUser, text, hasMention, successCb, errorCb);
             setImmediate(() => {
-                expect(feed.commentsAPI.createComment).toBeCalled();
+                expect(feed.commentsAPI.createComment).toBeCalledWith({
+                    file,
+                    taggedMessage: text,
+                    successCallback: expect.any(Function),
+                    errorCallback: expect.any(Function),
+                });
+                expect(feed.createCommentSuccessCallback).toBeCalled();
+                expect(feed.createCommentErrorCallback).not.toBeCalled();
+                done();
+            });
+        });
+    });
+
+    describe('createThreadedComment()', () => {
+        let successCb;
+        let errorCb;
+        const currentUser = {
+            id: 'bar',
+        };
+        const text = 'textfoo';
+        const hasMention = true;
+
+        beforeEach(() => {
+            successCb = jest.fn();
+            errorCb = jest.fn();
+            feed.addPendingItem = jest.fn();
+            feed.createCommentSuccessCallback = jest.fn();
+            feed.createCommentErrorCallback = jest.fn();
+            feed.createFeedError = jest.fn().mockReturnValue('foo');
+        });
+
+        test('should throw if no file id', () => {
+            expect(() => feed.createComment({}, currentUser, text, true, successCb, errorCb)).toThrow(fileError);
+        });
+
+        test('should create a pending item', () => {
+            feed.createComment(file, currentUser, text, true, successCb, errorCb);
+
+            expect(feed.addPendingItem).toBeCalledWith(file.id, currentUser, {
+                id: 'uniqueId',
+                tagged_message: text,
+                type: 'comment',
+            });
+        });
+
+        test('should create the comment using threaded comments api and invoke the success callback', done => {
+            feed.createThreadedComment(file, currentUser, text, hasMention, true, successCb, errorCb);
+            setImmediate(() => {
+                expect(feed.threadedCommentsAPI.createComment).toBeCalledWith({
+                    file,
+                    message: text,
+                    successCallback: expect.any(Function),
+                    errorCallback: expect.any(Function),
+                });
                 expect(feed.createCommentSuccessCallback).toBeCalled();
                 expect(feed.createCommentErrorCallback).not.toBeCalled();
                 done();
@@ -1285,12 +1439,14 @@ describe('api/Feed', () => {
     describe('destroy()', () => {
         let annotationFn;
         let commentFn;
+        let theadedCommentFn;
         let versionFn;
         let taskFn;
 
         beforeEach(() => {
             annotationFn = jest.fn();
             commentFn = jest.fn();
+            theadedCommentFn = jest.fn();
             versionFn = jest.fn();
             taskFn = jest.fn();
 
@@ -1305,6 +1461,9 @@ describe('api/Feed', () => {
             };
             feed.commentsAPI = {
                 destroy: commentFn,
+            };
+            feed.threadedCommentsAPI = {
+                destroy: theadedCommentFn,
             };
         });
 

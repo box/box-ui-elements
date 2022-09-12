@@ -79,7 +79,7 @@ describe('api/ThreadedComments', () => {
                     },
                 },
                 errorCallback,
-                successCallback,
+                successCallback: expect.any(Function),
                 url: 'https://api.box.com/2.0/undoc/comments',
             });
         });
@@ -120,7 +120,7 @@ describe('api/ThreadedComments', () => {
                 id: '12345',
                 data: { data: { status, message } },
                 errorCallback,
-                successCallback,
+                successCallback: expect.any(Function),
                 url: 'https://api.box.com/2.0/undoc/comments/abc',
             });
         });
@@ -206,7 +206,7 @@ describe('api/ThreadedComments', () => {
                     file_id: '12345',
                     replies_count: 1,
                 },
-                successCallback,
+                successCallback: expect.any(Function),
             });
         });
 

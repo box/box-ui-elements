@@ -22,7 +22,7 @@ import messages from './messages';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
-import type { BoxCommentPermission, ActionItemError } from '../../../../common/types/feed';
+import type { ActionItemError, BoxCommentPermission, FeedItemStatus } from '../../../../common/types/feed';
 import './Comment.scss';
 
 type Props = {
@@ -39,8 +39,16 @@ type Props = {
     mentionSelectorContacts?: SelectorItems<>,
     modified_at?: string | number,
     onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any,
-    onEdit: (id: string, text: string, hasMention: boolean, permissions?: BoxCommentPermission) => any,
-    permissions?: BoxCommentPermission,
+    onEdit: (
+        id: string,
+        text?: string,
+        status?: FeedItemStatus,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
+    permissions: BoxCommentPermission,
     tagged_message: string,
     translatedTaggedMessage?: string,
     translations?: Translations,
@@ -87,9 +95,9 @@ class Comment extends React.Component<Props, State> {
 
     commentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
 
-    handleUpdate = ({ id, text, hasMention }: { hasMention: boolean, id: string, text: string }): void => {
+    handleMessageUpdate = ({ id, text, hasMention }: { hasMention: boolean, id: string, text: string }): void => {
         const { onEdit, permissions } = this.props;
-        onEdit(id, text, hasMention, permissions);
+        onEdit(id, text, undefined, hasMention, permissions);
         this.commentFormSubmitHandler();
     };
 
@@ -193,7 +201,7 @@ class Comment extends React.Component<Props, State> {
                                 className={classNames('bcs-Comment-editor', {
                                     'bcs-is-disabled': isDisabled,
                                 })}
-                                updateComment={this.handleUpdate}
+                                updateComment={this.handleMessageUpdate}
                                 isOpen={isInputOpen}
                                 // $FlowFixMe
                                 user={currentUser}
