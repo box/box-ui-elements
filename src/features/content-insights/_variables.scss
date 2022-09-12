@@ -1,0 +1,6 @@
+@use "sass:color";
+
+@import '../../styles/variables';
+
+$ContentInsights-chart-color-previews: linear-gradient($bdl-light-blue, color.scale($bdl-light-blue, $alpha: -30%));
+$ContentInsights-chart-height-small: 80px;
