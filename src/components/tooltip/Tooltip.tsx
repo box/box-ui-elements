@@ -103,7 +103,7 @@ export type TooltipProps = {
     tetherElementClassName?: string;
     /** Text to show in the tooltip */
     text?: React.ReactNode;
-    /** Sets aria-hidden to true */
+    /** Sets aria-hidden attribute on tooltip */
     ariaHidden?: boolean;
 } & Partial<DefaultTooltipProps>;
 
