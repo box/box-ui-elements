@@ -606,7 +606,6 @@ describe('api/Feed', () => {
                 errorCallback: expect.any(Function),
                 fileId: feed.file.id,
                 permissions,
-                repliesCount: 1,
                 successCallback: expect.any(Function),
             });
         });
