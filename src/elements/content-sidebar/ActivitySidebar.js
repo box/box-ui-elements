@@ -43,13 +43,14 @@ import type {
 import type {
     Annotation,
     AnnotationPermission,
+    BoxCommentPermission,
     FocusableFeedItemType,
     FeedItems,
     FeedItemStatus,
 } from '../../common/types/feed';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
-import type { SelectorItems, User, UserMini, GroupMini, BoxItem, BoxItemPermission } from '../../common/types/core';
+import type { SelectorItems, User, UserMini, GroupMini, BoxItem } from '../../common/types/core';
 import type { GetProfileUrlCallback } from '../common/flowTypes';
 import type { Translations, Collaborators, Errors } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
@@ -368,19 +369,19 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {Object} args - A subset of the comment
      * @return void
      */
-    deleteComment = ({ id, permissions }: { id: string, permissions: BoxItemPermission }): void => {
-        const { file, api, onCommentDelete } = this.props;
+    deleteComment = ({ id, permissions }: { id: string, permissions: BoxCommentPermission }): void => {
+        const { file, api, hasReplies, onCommentDelete } = this.props;
 
-        api.getFeedAPI(false).deleteComment(
-            file,
-            id,
-            permissions,
-            (comment: Comment) => {
-                this.feedSuccessCallback();
-                onCommentDelete(comment);
-            },
-            this.feedErrorCallback,
-        );
+        const successCallback = (comment: Comment) => {
+            this.feedSuccessCallback();
+            onCommentDelete(comment);
+        };
+
+        if (hasReplies) {
+            api.getFeedAPI(false).deleteThreadedComment(file, id, permissions, successCallback, this.feedErrorCallback);
+        } else {
+            api.getFeedAPI(false).deleteComment(file, id, permissions, successCallback, this.feedErrorCallback);
+        }
 
         // need to load the pending item
         this.fetchFeedItems();
@@ -388,13 +389,14 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     updateComment = (
         id: string,
-        text: string,
+        text?: string,
+        status?: FeedItemStatus,
         hasMention: boolean,
-        permissions: BoxItemPermission,
+        permissions: BoxCommentPermission,
         onSuccess: ?Function,
         onError: ?Function,
     ): void => {
-        const { file, api, onCommentUpdate } = this.props;
+        const { api, file, hasReplies, onCommentUpdate } = this.props;
 
         const errorCallback = (e, code) => {
             if (onError) {
@@ -411,7 +413,28 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             onCommentUpdate();
         };
 
-        api.getFeedAPI(false).updateComment(file, id, text, hasMention, permissions, successCallback, errorCallback);
+        if (hasReplies) {
+            api.getFeedAPI(false).updateThreadedComment(
+                file,
+                id,
+                text,
+                status,
+                hasMention,
+                permissions,
+                successCallback,
+                errorCallback,
+            );
+        } else {
+            api.getFeedAPI(false).updateComment(
+                file,
+                id,
+                text || '',
+                hasMention,
+                permissions,
+                successCallback,
+                errorCallback,
+            );
+        }
 
         // need to load the pending item
         this.fetchFeedItems();
@@ -425,24 +448,37 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     createComment = (text: string, hasMention: boolean): void => {
-        const { file, api, onCommentCreate } = this.props;
+        const { file, api, hasReplies, onCommentCreate } = this.props;
         const { currentUser } = this.state;
 
         if (!currentUser) {
             throw getBadUserError();
         }
 
-        api.getFeedAPI(false).createComment(
-            file,
-            currentUser,
-            text,
-            hasMention,
-            (comment: Comment) => {
-                onCommentCreate(comment);
-                this.feedSuccessCallback();
-            },
-            this.feedErrorCallback,
-        );
+        const successCallback = (comment: Comment) => {
+            onCommentCreate(comment);
+            this.feedSuccessCallback();
+        };
+
+        if (hasReplies) {
+            api.getFeedAPI(false).createThreadedComment(
+                file,
+                currentUser,
+                text,
+                hasMention,
+                successCallback,
+                this.feedErrorCallback,
+            );
+        } else {
+            api.getFeedAPI(false).createComment(
+                file,
+                currentUser,
+                text,
+                hasMention,
+                successCallback,
+                this.feedErrorCallback,
+            );
+        }
 
         // need to load the pending item
         this.fetchFeedItems();
