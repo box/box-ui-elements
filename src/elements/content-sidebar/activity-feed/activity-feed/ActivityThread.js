@@ -3,6 +3,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
 
+import LoadingIndicator from '../../../../components/loading-indicator';
 import PlainButton from '../../../../components/plain-button';
 import ActivityThreadReplies from './ActivityThreadReplies';
 
@@ -27,6 +28,7 @@ type Props = {
     onReplyDelete?: Function,
     onReplyEdit?: Function,
     replies?: Array<CommentType>,
+    repliesLoading?: boolean,
     total_reply_count?: number,
     translations?: Translations,
 };
@@ -44,6 +46,7 @@ const ActivityThread = ({
     onReplyDelete = noop,
     onReplyEdit = noop,
     replies = [],
+    repliesLoading,
     total_reply_count = 0,
     translations,
 }: Props) => {
@@ -63,26 +66,37 @@ const ActivityThread = ({
         return children;
     }
     return (
-        <div className="bcs-ActivityThread">
+        <div className="bcs-ActivityThread" data-testid="activity-thread">
             {children}
 
-            {total_reply_count > 1 && (
-                <PlainButton className="bcs-ActivityThread-button" onClick={toggleReplies} type="button">
+            {repliesLoading && (
+                <div className="bcs-ActivityThread-loading" data-testid="activity-thread-loading">
+                    <LoadingIndicator />
+                </div>
+            )}
+            {!repliesLoading && total_reply_count > 1 && (
+                <PlainButton
+                    className="bcs-ActivityThread-button"
+                    onClick={toggleReplies}
+                    type="button"
+                    data-testid="activity-thread-button"
+                >
                     <FormattedMessage values={{ repliesToLoadCount }} {...toggleButtonLabel} />
                 </PlainButton>
             )}
 
-            {total_reply_count > 0 && replies.length && (
+            {!repliesLoading && total_reply_count > 0 && replies.length && (
                 <ActivityThreadReplies
-                    isExpanded={isExpanded}
-                    replies={replies}
                     currentUser={currentUser}
+                    data-testid="activity-thread-replies"
                     getAvatarUrl={getAvatarUrl}
                     getMentionWithQuery={getMentionWithQuery}
                     getUserProfileUrl={getUserProfileUrl}
+                    isExpanded={isExpanded}
                     mentionSelectorContacts={mentionSelectorContacts}
                     onDelete={onReplyDelete}
                     onEdit={onReplyEdit}
+                    replies={replies}
                     translations={translations}
                 />
             )}

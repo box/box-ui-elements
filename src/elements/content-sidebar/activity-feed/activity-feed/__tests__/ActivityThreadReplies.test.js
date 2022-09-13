@@ -1,40 +1,30 @@
 // @flow
 
 import React from 'react';
-import { shallow, ShallowWrapper } from 'enzyme';
+import { render } from '@testing-library/react';
 import ActivityThreadReplies from '../ActivityThreadReplies.js';
+import replies from '../../../../../__mocks__/replies';
 
-describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThread', () => {
+describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThreadReplies', () => {
     const defaultProps = {
-        replies: [
-            {
-                type: 'comment',
-                id: '1',
-                message: 'test reply',
-            },
-            {
-                type: 'comment',
-                id: '2',
-                message: 'second test reply',
-            },
-        ],
+        replies,
         total_reply_count: 2,
         isExpanded: false,
     };
 
-    const getWrapper = (props = {}): ShallowWrapper => shallow(<ActivityThreadReplies {...defaultProps} {...props} />);
+    const getWrapper = (props = {}) => render(<ActivityThreadReplies {...defaultProps} {...props} />);
 
-    test('should render last reply by dafeult', () => {
-        const wrapper = getWrapper();
+    test('should render last reply by dafault', () => {
+        const { queryByText } = getWrapper();
 
-        const reply = wrapper.find('[data-testid="activity-thread-latest-reply"]');
-        expect(reply).toHaveLength(1);
-        expect(reply.key()).toContain('comment2');
+        expect(queryByText('Last reply')).toBeVisible();
+        expect(queryByText('Firsy reply')).not.toBeInTheDocument();
     });
 
     test('should render all replies if isExpanded is true', () => {
-        const wrapper = getWrapper({ isExpanded: true });
+        const { queryByText } = getWrapper({ isExpanded: true });
 
-        expect(wrapper.find('[data-testid="activity-thread-reply"]')).toHaveLength(2);
+        expect(queryByText('Last reply')).toBeVisible();
+        expect(queryByText('First reply')).toBeVisible();
     });
 });

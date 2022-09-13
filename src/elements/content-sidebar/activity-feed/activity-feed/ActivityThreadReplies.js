@@ -46,7 +46,6 @@ const ActivityThreadReplies = ({
             {!isExpanded ? (
                 <Comment
                     key={lastReply.type + lastReply.id}
-                    data-testid="activity-thread-latest-reply"
                     {...lastReply}
                     currentUser={currentUser}
                     getAvatarUrl={getAvatarUrl}
@@ -61,7 +60,6 @@ const ActivityThreadReplies = ({
             ) : (
                 replies.map((reply: CommentType) => (
                     <Comment
-                        data-testid="activity-thread-reply"
                         key={reply.type + reply.id}
                         {...reply}
                         currentUser={currentUser}

@@ -1,16 +1,20 @@
 @import '../../../common/variables';
 
-.bcs-ActivityThread {
-    .bcs-ActivityThread-button {
-        margin-left: $sidebarActivityFeedSpacingHorizontal;
-        color: $bdl-box-blue;
-        font-weight: bold;
+$activityThreadReplies-bar-wdth: 4px;
 
-        &:hover {
-            margin-left: $sidebarActivityFeedSpacingHorizontal;
-            font-weight: bold;
-        }
+.bcs-ActivityThread-button {
+    margin-left: $sidebarActivityFeedSpacingHorizontal;
+    color: $bdl-box-blue;
+    font-weight: bold;
+
+    &:hover {
+        margin-left: $sidebarActivityFeedSpacingHorizontal;
+        font-weight: bold;
     }
+}
+
+.bcs-ActivityThread-loading {
+    padding-bottom: $bdl-grid-unit * 5;
 }
 
 .bcs-ActivityThreadReplies {
@@ -22,7 +26,7 @@
         top: $sidebarActivityFeedSpacingVertical;
         bottom: $sidebarActivityFeedSpacingVertical;
         left: $sidebarActivityFeedSpacingHorizontal;
-        width: $bdl-grid-unit;
+        width: $activityThreadReplies-bar-wdth;
         background: $bdl-gray-10;
         content: '';
     }
