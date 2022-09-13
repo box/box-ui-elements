@@ -1,32 +1,40 @@
 // @flow
 import React from 'react';
-import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
-import noop from 'lodash/noop';
 import ActivityThread from '../../elements/content-sidebar/activity-feed/activity-feed/ActivityThread';
 import AnnotationActivity from '../../elements/content-sidebar/activity-feed/annotations';
 import API from '../../api/APIFactory';
 import commonMessages from '../../elements/common/messages';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
-import { DEFAULT_COLLAB_DEBOUNCE } from '../../constants';
 import { withAPIContext } from '../../elements/common/api-context';
 import withErrorHandling from '../../elements/content-sidebar/withErrorHandling';
+import withCollaborators from '../../elements/common/collaborators/withCollaborators';
 
 import type { Annotation, AnnotationPermission } from '../../common/types/annotations';
-import type { ElementOrigin, ElementsErrorCallback, ElementsXhrError } from '../../common/types/api';
+import type { ElementOrigin, ElementsXhrError } from '../../common/types/api';
 import type { FeedItemStatus } from '../../common/types/feed';
+import type { GetProfileUrlCallback } from '../../elements/common/flowTypes';
 import type { BoxItemPermission, SelectorItems } from '../../common/types/core';
-import type { Collaborators } from '../../elements/content-sidebar/flowTypes';
 
 type Props = {
     annotationId: string,
     api: API,
     fileId: string,
     filePermissions: BoxItemPermission,
+    getCollaboratorsWithQuery: Function,
+    getUserProfileUrl?: GetProfileUrlCallback,
     onError: (error: ElementsXhrError | Error, code: string, contextInfo?: Object, origin?: ElementOrigin) => void,
 };
 
-const AnnotationThreadContent = ({ annotationId, api, fileId, filePermissions, onError }: Props) => {
+const AnnotationThreadContent = ({
+    annotationId,
+    api,
+    fileId,
+    getCollaboratorsWithQuery,
+    getUserProfileUrl,
+    filePermissions,
+    onError,
+}: Props) => {
     const [mentionSelectorContacts, setMentionSelectorContacts] = React.useState();
     const [annotation, setAnnotation] = React.useState();
     const [annotationError, setAnnotationError] = React.useState();
@@ -38,29 +46,35 @@ const AnnotationThreadContent = ({ annotationId, api, fileId, filePermissions, o
         setIsLoading(false);
     };
 
-    const errorCallback = (error: ElementsXhrError, code: string, contextInfo: Object = {}): void => {
-        /* eslint-disable no-console */
-        console.error(error);
-        /* eslint-enable no-console */
-        onError && onError(error, code, contextInfo);
-    };
+    const errorCallback = React.useCallback(
+        (error: ElementsXhrError, code: string, contextInfo: Object = {}): void => {
+            /* eslint-disable no-console */
+            console.error(error);
+            /* eslint-enable no-console */
+            onError && onError(error, code, contextInfo);
+        },
+        [onError],
+    );
 
-    const annotationErrorCallback = (e: ElementsXhrError, code: string) => {
-        setAnnotation(undefined);
-        setIsLoading(false);
-        setAnnotationError({
-            maskError: {
-                errorHeader: commonMessages.defaultErrorMaskHeaderMessage,
-                errorSubHeader: commonMessages.defaultErrorMaskSubHeaderMessage,
-            },
-        });
+    const annotationErrorCallback = React.useCallback(
+        (e: ElementsXhrError, code: string) => {
+            setAnnotation(undefined);
+            setIsLoading(false);
+            setAnnotationError({
+                maskError: {
+                    errorHeader: commonMessages.defaultErrorMaskHeaderMessage,
+                    errorSubHeader: commonMessages.defaultErrorMaskSubHeaderMessage,
+                },
+            });
 
-        errorCallback(e, code, {
-            error: e,
-        });
-    };
+            errorCallback(e, code, {
+                error: e,
+            });
+        },
+        [errorCallback],
+    );
 
-    const fetchAnnotation = () => {
+    const fetchAnnotation = React.useCallback(() => {
         api.getAnnotationsAPI(false).getAnnotation(
             fileId,
             annotationId,
@@ -69,22 +83,34 @@ const AnnotationThreadContent = ({ annotationId, api, fileId, filePermissions, o
             annotationErrorCallback,
             true,
         );
-    };
+    }, [annotationErrorCallback, annotationId, api, fileId, filePermissions]);
 
     React.useEffect(() => {
         fetchAnnotation();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [annotationId]);
+    }, [annotationId, fetchAnnotation]);
 
     const annotationSuccessCallback = () => {
+        setAnnotation({ ...annotation, isPendind: false });
         fetchAnnotation();
     };
 
+    const annotationDeleteSuccessCallback = () => {
+        setAnnotation({ ...annotation, isPendind: false });
+    };
+
     const handleAnnotationDelete = ({ id, permissions }: { id: string, permissions: AnnotationPermission }) => {
-        api.getAnnotationsAPI(false).deleteAnnotation(fileId, id, permissions, noop, annotationErrorCallback);
+        setAnnotation({ ...annotation, isPendind: true });
+        api.getAnnotationsAPI(false).deleteAnnotation(
+            fileId,
+            id,
+            permissions,
+            annotationDeleteSuccessCallback,
+            annotationErrorCallback,
+        );
     };
 
     const handleAnnotationEdit = (id: string, text: string, permissions: AnnotationPermission) => {
+        setAnnotation({ ...annotation, isPendind: true });
         api.getAnnotationsAPI(false).updateAnnotation(
             fileId,
             id,
@@ -96,6 +122,7 @@ const AnnotationThreadContent = ({ annotationId, api, fileId, filePermissions, o
     };
 
     const handleAnnotationResolve = (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => {
+        setAnnotation({ ...annotation, isPendind: true });
         api.getAnnotationsAPI(false).updateAnnotation(
             fileId,
             id,
@@ -117,51 +144,12 @@ const AnnotationThreadContent = ({ annotationId, api, fileId, filePermissions, o
         setMentionSelectorContacts(collaborators.entries);
     };
 
-    /**
-     * Fetches file collaborators
-     *
-     * @param {Function} successCallback - the success callback
-     * @param {Function} onErrorCallback - the error callback
-     * @param {string} searchStr - the search string
-     * @param {Object} [options]
-     * @param {boolean} [options.includeGroups] - return groups as well as users
-     * @return {void}
-     */
-    const getCollaborators = (
-        successCallback: Collaborators => void,
-        onErrorCallback: ElementsErrorCallback,
-        searchStr: string,
-        { includeGroups = false }: { includeGroups: boolean } = {},
-    ): void => {
-        // Do not fetch without filter
-        if (!searchStr || searchStr.trim() === '') {
-            return;
-        }
-
-        api.getFileCollaboratorsAPI(true).getFileCollaborators(fileId, successCallback, onErrorCallback, {
-            filter_term: searchStr,
-            include_groups: includeGroups,
-            include_uploader_collabs: false,
-        });
-    };
-
-    /**
-     * Fetches file @mention's
-     *
-     * @private
-     * @param {string} searchStr - Search string to filter file collaborators by
-     * @return {void}
-     */
-    const getMentionWithQuery = debounce(
-        (searchStr: string) => getCollaborators(getMentionContactsSuccessCallback, errorCallback, searchStr),
-        DEFAULT_COLLAB_DEBOUNCE,
-    );
+    const getMentions = (searchStr: string) =>
+        getCollaboratorsWithQuery(fileId, getMentionContactsSuccessCallback, errorCallback, searchStr);
 
     const getAvatarUrl = async (userId: string): Promise<?string> => {
         return api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, fileId);
     };
-
-    const getUserProfileUrl = (userID: string) => Promise.resolve(`/profile/${userID}`);
 
     if (annotationError) {
         return null;
@@ -176,7 +164,7 @@ const AnnotationThreadContent = ({ annotationId, api, fileId, filePermissions, o
                     isCurrentVersion
                     item={annotation}
                     getUserProfileUrl={getUserProfileUrl}
-                    getMentionWithQuery={getMentionWithQuery}
+                    getMentionWithQuery={getMentions}
                     mentionSelectorContacts={mentionSelectorContacts}
                     onEdit={handleAnnotationEdit}
                     onDelete={handleAnnotationDelete}
@@ -189,4 +177,4 @@ const AnnotationThreadContent = ({ annotationId, api, fileId, filePermissions, o
 
 export { AnnotationThreadContent as AnnotationThreadContentComponent };
 
-export default flow([withAPIContext, withErrorHandling])(AnnotationThreadContent);
+export default flow([withCollaborators, withAPIContext, withErrorHandling])(AnnotationThreadContent);

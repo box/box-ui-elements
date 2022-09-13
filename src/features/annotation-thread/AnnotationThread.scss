@@ -1,10 +1,10 @@
-@import 'src/elements/common/variables';
+@import 'src/styles/variables';
 
-$annotationThreadWidth: 340px;
-$annotationThreadHeight: 600px;
+$annotationThread-width: 340px;
+$annotationThread-height: 600px;
 
 .bat {
-    max-width: $annotationThreadWidth;
-    max-height: $annotationThreadHeight;
+    max-width: $annotationThread-width;
+    max-height: $annotationThread-height;
     background-color: $white;
 }

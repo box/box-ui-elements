@@ -5,7 +5,6 @@
  */
 
 import * as React from 'react';
-import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
@@ -27,7 +26,6 @@ import { withLogger } from '../common/logger';
 import { withRouterAndRef } from '../common/routing';
 import ActivitySidebarFilter from './ActivitySidebarFilter';
 import {
-    DEFAULT_COLLAB_DEBOUNCE,
     ERROR_CODE_FETCH_ACTIVITY,
     ORIGIN_ACTIVITY_SIDEBAR,
     SIDEBAR_VIEW_ACTIVITY,
@@ -49,13 +47,14 @@ import type {
     FeedItems,
     FeedItemStatus,
 } from '../../common/types/feed';
-import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
+import type { ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { SelectorItems, User, UserMini, GroupMini, BoxItem } from '../../common/types/core';
 import type { Errors, GetProfileUrlCallback } from '../common/flowTypes';
 import type { Translations, Collaborators } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 import './ActivitySidebar.scss';
+import withCollaborators from '../common/collaborators/withCollaborators';
 
 type ExternalProps = {
     activeFeedEntryId?: string,
@@ -841,7 +840,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     renderAddTaskButton = () => {
         const { isDisabled, hasTasks } = this.props;
         const { approverSelectorContacts } = this.state;
-        const { getApproverWithQuery, getAvatarUrl, createTask, onTaskModalClose } = this;
+        const { getApprover, getAvatarUrl, createTask, onTaskModalClose } = this;
 
         if (!hasTasks) {
             return null;
@@ -856,7 +855,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     approverSelectorContacts,
                     completionRule: TASK_COMPLETION_RULE_ALL,
                     createTask,
-                    getApproverWithQuery,
+                    getApproverWithQuery: getApprover,
                     getAvatarUrl,
                     id: '',
                     message: '',
@@ -930,9 +929,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     currentUserError={currentUserError}
                     feedItems={this.getFilteredFeedItems()}
                     file={file}
-                    getApproverWithQuery={this.getApproverWithQuery}
+                    getApproverWithQuery={this.getApprover}
                     getAvatarUrl={this.getAvatarUrl}
-                    getMentionWithQuery={this.getMentionWithQuery}
+                    getMentionWithQuery={this.getMention}
                     getUserProfileUrl={getUserProfileUrl}
                     isDisabled={isDisabled}
                     mentionSelectorContacts={mentionSelectorContacts}
@@ -965,6 +964,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 export type ActivitySidebarProps = ExternalProps;
 export { ActivitySidebar as ActivitySidebarComponent };
 export default flow([
+    withCollaborators,
     withLogger(ORIGIN_ACTIVITY_SIDEBAR),
     withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR),
     withAPIContext,

@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import classNames from 'classnames';
 import AnnotationThreadContent from './AnnotationThreadContent';
 import API from '../../api/APIFactory';
 import APIContext from '../../elements/common/api-context';
@@ -15,6 +16,7 @@ import { withErrorBoundary } from '../../elements/common/error-boundary';
 import type APICache from '../../utils/Cache';
 import type { BoxItemPermission, StringMap, Token } from '../../common/types/core';
 import type { ErrorContextProps } from '../../common/types/api';
+import type { GetProfileUrlCallback } from '../../elements/common/flowTypes';
 
 import './AnnotationThread.scss';
 
@@ -26,6 +28,7 @@ type Props = {
     clientName: string,
     fileId: string,
     filePermissions: BoxItemPermission,
+    getUserProfileUrl?: GetProfileUrlCallback,
     isDefaultOpen?: boolean,
     language?: string,
     messages?: StringMap,
@@ -42,6 +45,7 @@ const AnnotationThread = ({
     clientName,
     fileId,
     filePermissions,
+    getUserProfileUrl,
     language,
     messages,
     requestInterceptor,
@@ -65,9 +69,10 @@ const AnnotationThread = ({
     return (
         <Internationalize language={language} messages={messages}>
             <APIContext.Provider value={(api: any)}>
-                <div className={`be bat ${className}`}>
+                <div className={classNames('bat', className)}>
                     <AnnotationThreadContent
                         annotationId={annotationId}
+                        getUserProfileUrl={getUserProfileUrl}
                         fileId={fileId}
                         filePermissions={filePermissions}
                     />
