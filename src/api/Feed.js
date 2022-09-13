@@ -22,8 +22,6 @@ import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
 import TaskLinksAPI from './tasks/TaskLinks';
 import AppActivityAPI from './AppActivity';
 import {
-    DEFAULT_FETCH_START,
-    DEFAULT_FETCH_END,
     ERROR_CODE_CREATE_TASK,
     ERROR_CODE_UPDATE_TASK,
     ERROR_CODE_GROUP_EXCEEDS_LIMIT,
@@ -452,8 +450,8 @@ class Feed extends Base {
                 this.file.id,
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
-                DEFAULT_FETCH_START,
-                DEFAULT_FETCH_END,
+                undefined,
+                undefined,
                 FEED_FILE_VERSIONS_FIELDS_TO_FETCH,
             );
         });
