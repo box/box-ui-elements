@@ -128,14 +128,12 @@ const PREVIEW_FIELDS_TO_FETCH = [
 
 // Fields needed to get versions for a file in activity feed
 const FEED_FILE_VERSIONS_FIELDS_TO_FETCH = [
-    FIELD_AUTHENTICATED_DOWNLOAD_URL, // Increases load time for the activity feed
     FIELD_CREATED_AT,
     FIELD_EXTENSION,
     FIELD_IS_DOWNLOAD_AVAILABLE,
     FIELD_MODIFIED_AT,
     FIELD_MODIFIED_BY,
     FIELD_NAME,
-    FIELD_PERMISSIONS, // Increases load time for the activity feed
     FIELD_RESTORED_AT,
     FIELD_RESTORED_BY,
     FIELD_SIZE,
@@ -158,14 +156,14 @@ const FILE_VERSION_FIELDS_TO_FETCH = [
 
 // Fields needed to get versions for a file
 const FILE_VERSIONS_FIELDS_TO_FETCH = [
-    FIELD_AUTHENTICATED_DOWNLOAD_URL,
+    FIELD_AUTHENTICATED_DOWNLOAD_URL, // Expensive field to fetch
     FIELD_CREATED_AT,
     FIELD_EXTENSION,
     FIELD_IS_DOWNLOAD_AVAILABLE,
     FIELD_MODIFIED_AT,
     FIELD_MODIFIED_BY,
     FIELD_NAME,
-    FIELD_PERMISSIONS,
+    FIELD_PERMISSIONS, // Expensive field to fetch
     FIELD_RESTORED_AT,
     FIELD_RESTORED_BY,
     FIELD_RETENTION,
