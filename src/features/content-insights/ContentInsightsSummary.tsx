@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { AxiosError } from 'axios';
 
 import ContentAnalyticsErrorState from './ContentAnalyticsErrorState';
 import ContentInsightsSummaryGhostState from './ContentInsightsSummaryGhostState';
@@ -9,17 +10,19 @@ import { GraphData } from './types';
 import './ContentInsightsSummary.scss';
 
 interface Props {
+    error: AxiosError | null;
     graphData: GraphData;
-    isError: boolean;
     isLoading: boolean;
     onClick: () => void;
     previousPeriodCount: number;
     totalCount: number;
 }
 
-const ContentInsightsSummary = ({ graphData, isError, isLoading, previousPeriodCount, onClick, totalCount }: Props) => {
+const ContentInsightsSummary = ({ error, graphData, isLoading, previousPeriodCount, onClick, totalCount }: Props) => {
+    const errorStatus = !!error && !!error.response ? error.response.status : null;
+
     const renderContentAnalyticsSummary = () => {
-        if (isError) {
+        if (!!errorStatus && errorStatus !== 403) {
             return <ContentAnalyticsErrorState />;
         }
 
