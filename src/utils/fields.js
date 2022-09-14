@@ -166,7 +166,7 @@ const FILE_VERSIONS_FIELDS_TO_FETCH = [
     FIELD_PERMISSIONS, // Expensive field to fetch
     FIELD_RESTORED_AT,
     FIELD_RESTORED_BY,
-    FIELD_RETENTION,
+    FIELD_RETENTION, // Expensive field to fetch
     FIELD_SIZE,
     FIELD_TRASHED_AT,
     FIELD_TRASHED_BY,
