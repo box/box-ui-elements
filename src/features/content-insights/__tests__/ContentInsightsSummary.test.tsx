@@ -17,12 +17,14 @@ const mockData = [
     { start: 7, previewsCount: 1, type: 'day' },
 ] as GraphData;
 
+const mockError = jest.fn();
+
 describe('features/content-insights/ContentInsightsSummary', () => {
     const getWrapper = (props = {}) =>
         render(
             <ContentInsightsSummary
+                error={mockError()}
                 graphData={mockData}
-                isError={false}
                 isLoading={false}
                 onClick={jest.fn()}
                 previousPeriodCount={1}
@@ -39,18 +41,30 @@ describe('features/content-insights/ContentInsightsSummary', () => {
             expect(screen.queryByLabelText(localize(messages.previewGraphLabel.id))).toBeNull();
         });
 
-        test('should render correctly when isLoading and isError is false', () => {
+        test('should render correctly when isLoading is false and error is null', () => {
+            mockError.mockReturnValueOnce(null);
             getWrapper();
 
+            expect(screen.queryByTestId('ContentAnalyticsErrorState')).toBeNull();
             expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
             expect(screen.getByLabelText(localize(messages.previewGraphLabel.id))).toBeVisible();
         });
         test('should show the error state when isError is true', () => {
-            getWrapper({ isError: true });
+            mockError.mockReturnValueOnce({ response: { status: 400 } });
+            getWrapper();
 
             expect(screen.getByTestId('ContentAnalyticsErrorState')).toBeVisible();
             expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
             expect(screen.queryByLabelText(localize(messages.previewGraphLabel.id))).toBeNull();
+        });
+
+        test('should not show the default error state when there is a permission error', () => {
+            mockError.mockReturnValueOnce({ response: { status: 403 } });
+            getWrapper();
+
+            expect(screen.queryByTestId('ContentAnalyticsErrorState')).toBeNull();
+            expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
+            expect(screen.getByLabelText(localize(messages.previewGraphLabel.id))).toBeVisible();
         });
 
         test('should call the onClick callback', () => {
