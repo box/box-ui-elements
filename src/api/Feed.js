@@ -10,6 +10,7 @@ import { getBadItemError, getBadUserError, getMissingItemTextOrStatus, isUserCor
 import commonMessages from '../elements/common/messages';
 import messages from './messages';
 import { sortFeedItems } from '../utils/sorter';
+import { FEED_FILE_VERSIONS_FIELDS_TO_FETCH } from '../utils/fields';
 import Base from './Base';
 import AnnotationsAPI from './Annotations';
 import CommentsAPI from './Comments';
@@ -445,7 +446,14 @@ class Feed extends Base {
         this.versionsAPI = new VersionsAPI(this.options);
 
         return new Promise(resolve => {
-            this.versionsAPI.getVersions(this.file.id, resolve, this.fetchFeedItemErrorCallback.bind(this, resolve));
+            this.versionsAPI.getVersions(
+                this.file.id,
+                resolve,
+                this.fetchFeedItemErrorCallback.bind(this, resolve),
+                undefined,
+                undefined,
+                FEED_FILE_VERSIONS_FIELDS_TO_FETCH,
+            );
         });
     }
 

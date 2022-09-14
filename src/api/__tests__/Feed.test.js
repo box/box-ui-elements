@@ -2,6 +2,7 @@ import commonMessages from '../../elements/common/messages';
 import messages from '../messages';
 import * as sorter from '../../utils/sorter';
 import * as error from '../../utils/error';
+import { FEED_FILE_VERSIONS_FIELDS_TO_FETCH } from '../../utils/fields';
 import { IS_ERROR_DISPLAYED, TASK_MAX_GROUP_ASSIGNEES } from '../../constants';
 import Feed from '../Feed';
 import { annotation as mockAnnotation } from '../../__mocks__/annotations';
@@ -622,6 +623,18 @@ describe('api/Feed', () => {
                 const versionItems = feed.fetchVersions();
                 expect(versionItems instanceof Promise).toBeTruthy();
                 expect(feed.versionsAPI.getVersions).toBeCalled();
+            });
+
+            test('should call the versions api with the correct fields', () => {
+                feed.fetchVersions();
+                expect(feed.versionsAPI.getVersions).toBeCalledWith(
+                    file.id,
+                    expect.any(Function),
+                    expect.any(Function),
+                    undefined,
+                    undefined,
+                    FEED_FILE_VERSIONS_FIELDS_TO_FETCH,
+                );
             });
         });
 
