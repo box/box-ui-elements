@@ -628,7 +628,7 @@ describe('api/Feed', () => {
             test('should call the versions api with the correct fields', () => {
                 feed.fetchVersions();
                 expect(feed.versionsAPI.getVersions).toBeCalledWith(
-                    '12345',
+                    file.id,
                     expect.any(Function),
                     expect.any(Function),
                     undefined,
