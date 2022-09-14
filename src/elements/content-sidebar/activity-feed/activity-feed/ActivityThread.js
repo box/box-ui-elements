@@ -22,14 +22,13 @@ type Props = {
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
     hasReplies: boolean,
-    id: string,
     mentionSelectorContacts?: SelectorItems<>,
-    onGetReplies?: (id: string) => void,
+    onGetReplies?: () => void,
     onReplyDelete?: Function,
     onReplyEdit?: Function,
     replies?: Array<CommentType>,
     repliesLoading?: boolean,
-    total_reply_count?: number,
+    totalReplyCount?: number,
     translations?: Translations,
 };
 
@@ -40,24 +39,23 @@ const ActivityThread = ({
     getMentionWithQuery,
     getUserProfileUrl,
     hasReplies,
-    id,
     mentionSelectorContacts,
     onGetReplies = noop,
     onReplyDelete = noop,
     onReplyEdit = noop,
     replies = [],
     repliesLoading,
-    total_reply_count = 0,
+    totalReplyCount = 0,
     translations,
 }: Props) => {
     const [isExpanded, setIsExpanded] = React.useState(false);
 
-    const toggleButtonLabel = isExpanded ? messages.hideReplies : messages.getMoreReplies;
-    const repliesToLoadCount = total_reply_count - 1;
+    const toggleButtonLabel = isExpanded ? messages.hideReplies : messages.showReplies;
+    const repliesToLoadCount = Math.max(totalReplyCount - 1, 0);
 
     const toggleReplies = () => {
         if (!isExpanded) {
-            onGetReplies(id);
+            onGetReplies();
         }
         setIsExpanded(previousState => !previousState);
     };
@@ -74,9 +72,9 @@ const ActivityThread = ({
                     <LoadingIndicator />
                 </div>
             )}
-            {!repliesLoading && total_reply_count > 1 && (
+            {!repliesLoading && totalReplyCount > 1 && (
                 <PlainButton
-                    className="bcs-ActivityThread-button"
+                    className="bcs-ActivityThread-toggle"
                     onClick={toggleReplies}
                     type="button"
                     data-testid="activity-thread-button"
@@ -85,7 +83,7 @@ const ActivityThread = ({
                 </PlainButton>
             )}
 
-            {!repliesLoading && total_reply_count > 0 && replies.length && (
+            {!repliesLoading && totalReplyCount > 0 && replies.length && (
                 <ActivityThreadReplies
                     currentUser={currentUser}
                     data-testid="activity-thread-replies"

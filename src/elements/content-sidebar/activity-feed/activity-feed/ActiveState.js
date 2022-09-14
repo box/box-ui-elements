@@ -111,7 +111,6 @@ const ActiveState = ({
                                 ref={refValue}
                             >
                                 <ActivityThread
-                                    {...item}
                                     data-testid="activity-thread"
                                     onReplyDelete={onCommentDelete}
                                     onReplyEdit={onCommentEdit}
@@ -121,6 +120,8 @@ const ActiveState = ({
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
                                     mentionSelectorContacts={mentionSelectorContacts}
+                                    totalReplyCount={item.total_reply_count}
+                                    replies={item.replies}
                                     translations={translations}
                                 >
                                     <Comment
@@ -208,7 +209,6 @@ const ActiveState = ({
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
                                     hasReplies={hasReplies}
-                                    id={item.id}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     totalReplyCount={item.total_reply_count}
                                     replies={item.replies}

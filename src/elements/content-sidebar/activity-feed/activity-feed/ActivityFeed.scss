@@ -47,12 +47,9 @@
 
         .bcs-ActivityItem {
             position: relative;
+            box-shadow: 0 $container-padding 0 -#{$container-padding - 1} $bdl-gray-10;
             backface-visibility: hidden; // Prevent visual shifting during pseudo-element scale transitions
             transition: box-shadow $container-transition-duration ease $container-transition-delay;
-
-            &:not(.bcs-ActivityThread-reply) {
-                box-shadow: 0 $container-padding 0 -#{$container-padding - 1} $bdl-gray-10;
-            }
 
             &.bcs-is-focused {
                 .bcs-ActivityCard {

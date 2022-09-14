@@ -1,8 +1,6 @@
 @import '../../../common/variables';
 
-$activityThreadReplies-bar-wdth: 4px;
-
-.bcs-ActivityThread-button {
+.bcs-ActivityThread-toggle {
     margin-left: $sidebarActivityFeedSpacingHorizontal;
     color: $bdl-box-blue;
     font-weight: bold;
@@ -15,19 +13,4 @@ $activityThreadReplies-bar-wdth: 4px;
 
 .bcs-ActivityThread-loading {
     padding-bottom: $bdl-grid-unit * 5;
-}
-
-.bcs-ActivityThreadReplies {
-    position: relative;
-    padding-left: $sidebarActivityFeedSpacingHorizontal;
-
-    &::before {
-        position: absolute;
-        top: $sidebarActivityFeedSpacingVertical;
-        bottom: $sidebarActivityFeedSpacingVertical;
-        left: $sidebarActivityFeedSpacingHorizontal;
-        width: $activityThreadReplies-bar-wdth;
-        background: $bdl-gray-10;
-        content: '';
-    }
 }

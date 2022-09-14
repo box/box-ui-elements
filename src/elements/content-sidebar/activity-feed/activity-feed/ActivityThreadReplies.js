@@ -1,12 +1,13 @@
 // @flow
 import React from 'react';
-import getProp from 'lodash/get';
 import Comment from '../comment';
 
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
 import type { BoxCommentPermission, Comment as CommentType } from '../../../../common/types/feed';
+
+import './ActivityThreadReplies.scss';
 
 type Props = {
     currentUser?: User,
@@ -35,11 +36,16 @@ const ActivityThreadReplies = ({
 }: Props) => {
     const lastReply = replies[replies.length - 1];
 
-    const getReplyPermissions = (reply: CommentType): BoxCommentPermission => ({
-        can_delete: getProp(reply.permissions, 'can_delete', false),
-        can_edit: getProp(reply.permissions, 'can_edit', false),
-        can_resolve: getProp(reply.permissions, 'can_resolve', false),
-    });
+    const getReplyPermissions = (reply: CommentType): BoxCommentPermission => {
+        const {
+            permissions: { can_delete = false, can_edit = false, can_resolve = false },
+        } = reply;
+        return {
+            can_delete,
+            can_edit,
+            can_resolve,
+        };
+    };
 
     return (
         <div className="bcs-ActivityThreadReplies">

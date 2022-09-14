@@ -9,7 +9,7 @@ jest.mock('react-intl', () => jest.requireActual('react-intl'));
 describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThread', () => {
     const defaultProps = {
         replies,
-        total_reply_count: 2,
+        totalReplyCount: 2,
         hasReplies: true,
     };
 
@@ -54,7 +54,7 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
     });
 
     test('should not render button if total_reply_count is 1 or less', () => {
-        const { queryByTestId } = getWrapper({ total_reply_count: 1 });
+        const { queryByTestId } = getWrapper({ totalReplyCount: 1 });
         expect(queryByTestId('activity-thread-button')).not.toBeInTheDocument();
     });
 
@@ -64,7 +64,7 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         expect(queryByTestId('activity-thread-replies')).not.toBeInTheDocument();
     });
 
-    test('should render LoadingIndicator amd do not render replies or button if repliesLoading is true', () => {
+    test('should render LoadingIndicator and do not render replies or button if repliesLoading is true', () => {
         const { queryByTestId } = getWrapper({ repliesLoading: true });
 
         expect(queryByTestId('activity-thread-replies')).not.toBeInTheDocument();
