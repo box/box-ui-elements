@@ -11,6 +11,7 @@ import PlainButton from '../../components/plain-button';
 import InlineNotice from '../../components/inline-notice';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import SingleSelectField from '../../components/select-field/SingleSelectField';
+import isRestrictedContact from './utils/isRestrictedContact';
 import { COLLAB_RESTRICTION_TYPE_ACCESS_POLICY, COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER } from './constants';
 
 import messages from './messages';
@@ -22,6 +23,8 @@ import './ContactRestrictionNotice.scss';
 
 const SINGLE_CONTACT = 'singleContact';
 const MULTIPLE_CONTACTS = 'multipleContacts';
+const EMAIL_CONTACT = 'email';
+const GROUP_CONTACT = 'group';
 const RESTRICTION_JUSTIFICATION_ENABLED = 'restrictionJustificationEnabled';
 const RESTRICTION_JUSTIFICATION_DISABLED = 'restrictionJustificationDisabled';
 
@@ -37,7 +40,10 @@ const restrictionNoticeMessageMap = {
         },
     },
     [COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER]: {
-        [SINGLE_CONTACT]: messages.contactRestrictionNoticeInformationBarrierSingular,
+        [SINGLE_CONTACT]: {
+            [EMAIL_CONTACT]: messages.contactRestrictionNoticeInformationBarrierSingular,
+            [GROUP_CONTACT]: messages.contactRestrictionNoticeInformationBarrierSingularGroup,
+        },
         [MULTIPLE_CONTACTS]: messages.contactRestrictionNoticeInformationBarrier,
     },
 };
@@ -51,6 +57,7 @@ type Props = {
     onRemoveRestrictedContacts: () => void,
     onSelectJustificationReason: (justificationReasonOption: SelectOptionProp) => void,
     restrictedEmails: Array<string>,
+    restrictedGroups: Array<number>,
     selectedContacts: Array<Contact>,
     selectedJustificationReason: ?SelectOptionProp,
 } & InjectIntlProvidedProps;
@@ -65,17 +72,24 @@ const ContactRestrictionNotice = ({
     onRemoveRestrictedContacts,
     onSelectJustificationReason,
     restrictedEmails,
+    restrictedGroups,
     selectedContacts,
     selectedJustificationReason,
 }: Props) => {
-    const restrictedContacts = selectedContacts.filter(({ value }) => restrictedEmails.includes(value));
+    const restrictedContacts = selectedContacts.filter(contact =>
+        isRestrictedContact(contact, restrictedEmails, restrictedGroups),
+    );
     const restrictedContactCount = restrictedContacts.length;
 
     if (!restrictedContactCount) {
         return null;
     }
 
-    const firstEmail = restrictedContacts[0].value;
+    const [firstContact] = restrictedContacts;
+    const isFirstContactAGroup = firstContact.type === 'group';
+    const firstContactEmail = isFirstContactAGroup ? undefined : firstContact.value;
+    const firstContactGroupName = isFirstContactAGroup ? firstContact.text : undefined;
+
     const selectedValue = getProp(selectedJustificationReason, 'value', null);
     const isErrorTooltipShown = !!error;
 
@@ -91,8 +105,17 @@ const ContactRestrictionNotice = ({
     let restrictionNoticeMessage;
     // Information Barrier restrictions do not allow justifications
     if (collabRestrictionType === COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER) {
-        restrictionNoticeMessage =
-            restrictionNoticeMessageMap[COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER][restrictedContactCountType];
+        if (restrictedContactCountType === SINGLE_CONTACT) {
+            const contactType = isFirstContactAGroup ? GROUP_CONTACT : EMAIL_CONTACT;
+
+            // Group names are displayed in quotes, which need to be localized, hence why
+            // we need to use different messages for groups and emails
+            restrictionNoticeMessage =
+                restrictionNoticeMessageMap[COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER][SINGLE_CONTACT][contactType];
+        } else {
+            restrictionNoticeMessage =
+                restrictionNoticeMessageMap[COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER][MULTIPLE_CONTACTS];
+        }
     } else {
         restrictionNoticeMessage =
             restrictionNoticeMessageMap[collabRestrictionType][justificationStatus][restrictedContactCountType];
@@ -119,7 +142,13 @@ const ContactRestrictionNotice = ({
             >
                 <FormattedMessage
                     {...restrictionNoticeMessage}
-                    values={{ count: restrictedContactCount, email: firstEmail }}
+                    values={{
+                        count: restrictedContactCount,
+                        // We use the first contact because email address and
+                        // group name are only displayed for single contact messages
+                        email: firstContactEmail,
+                        groupName: firstContactGroupName,
+                    }}
                 />
                 &nbsp;
                 {isRestrictionJustificationEnabled && justificationSelectSection}
@@ -128,6 +157,7 @@ const ContactRestrictionNotice = ({
                     data-resin-target="removeBtn"
                     onClick={onRemoveRestrictedContacts}
                 >
+                    {/* TODO: count was removed but need to keep it while translations are updated otherwise non-English messages will break */}
                     <FormattedMessage {...removeButtonLabelMessage} values={{ count: restrictedContactCount }} />
                 </PlainButton>
             </InlineNotice>

@@ -269,6 +269,44 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 },
             ]);
         });
+
+        test('should render TetherComponent with window constraints and pinned when constrainToWindowWithPin=true', () => {
+            const wrapper = shallow(
+                <DropdownMenu constrainToWindowWithPin>
+                    <FakeButton />
+                    <FakeMenu />
+                </DropdownMenu>,
+            );
+
+            expect(wrapper.prop('constraints')).toEqual([
+                {
+                    to: 'window',
+                    attachment: 'together',
+                    pin: true,
+                },
+            ]);
+        });
+
+        test('should render TetherComponent with window constraints, pinned and scroll parent when constrainToWindowWithPin=true and constrainToScrollParent=true', () => {
+            const wrapper = shallow(
+                <DropdownMenu constrainToScrollParent constrainToWindowWithPin>
+                    <FakeButton />
+                    <FakeMenu />
+                </DropdownMenu>,
+            );
+
+            expect(wrapper.prop('constraints')).toEqual([
+                {
+                    to: 'scrollParent',
+                    attachment: 'together',
+                },
+                {
+                    to: 'window',
+                    attachment: 'together',
+                    pin: true,
+                },
+            ]);
+        });
     });
 
     describe('openMenuAndSetFocusIndex()', () => {

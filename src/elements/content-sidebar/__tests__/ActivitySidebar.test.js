@@ -1,7 +1,9 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
+import cloneDeep from 'lodash/cloneDeep';
 import messages from '../../common/messages';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
+import { filterableActivityFeedItems } from '../fixtures';
 
 const { defaultErrorMaskSubHeaderMessage, currentUserErrorHeaderMessage } = messages;
 
@@ -11,13 +13,17 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     const feedAPI = {
         createComment: jest.fn(),
         createTaskNew: jest.fn(),
+        createThreadedComment: jest.fn(),
         deleteAnnotation: jest.fn(),
         deleteComment: jest.fn(),
         deleteTaskNew: jest.fn(),
+        deleteThreadedComment: jest.fn(),
         feedItems: jest.fn(),
         updateAnnotation: jest.fn(),
+        updateComment: jest.fn(),
         updateTaskCollaborator: jest.fn(),
         updateTaskNew: jest.fn(),
+        updateThreadedComment: jest.fn(),
     };
     const usersAPI = {
         get: jest.fn(),
@@ -162,24 +168,53 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('deleteComment()', () => {
-        let wrapper;
-        let instance;
-        beforeEach(() => {
-            const onCommentDelete = jest.fn();
-            wrapper = getWrapper({ onCommentDelete });
-            instance = wrapper.instance();
-            instance.fetchFeedItems = jest.fn();
-        });
+        test.each`
+            hasReplies
+            ${undefined}
+            ${false}
+        `(
+            'should call the deleteComment API if it exists when hasReplies prop equals to $hasReplies',
+            ({ hasReplies }) => {
+                const wrapper = getWrapper({ hasReplies });
+                const instance = wrapper.instance();
+                instance.fetchFeedItems = jest.fn();
 
-        test('should call the deleteComment prop if it exists', () => {
+                const id = '1';
+                const permissions = {
+                    can_edit: false,
+                    can_delete: true,
+                };
+                instance.deleteComment({ id, permissions });
+                expect(feedAPI.deleteComment).toBeCalledWith(
+                    file,
+                    id,
+                    permissions,
+                    expect.any(Function),
+                    expect.any(Function),
+                );
+                expect(instance.fetchFeedItems).toBeCalled();
+            },
+        );
+
+        test('should call the deleteThreadedComment API if it exists when hasReplies prop equals to true', () => {
+            const wrapper = getWrapper({ hasReplies: true });
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+
             const id = '1';
             const permissions = {
                 can_edit: false,
                 can_delete: true,
             };
             instance.deleteComment({ id, permissions });
-            expect(feedAPI.deleteComment).toHaveBeenCalled();
-            expect(instance.fetchFeedItems).toHaveBeenCalled();
+            expect(feedAPI.deleteThreadedComment).toBeCalledWith(
+                file,
+                id,
+                permissions,
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(instance.fetchFeedItems).toBeCalled();
         });
     });
 
@@ -316,27 +351,120 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('createComment()', () => {
-        let instance;
-        let wrapper;
-        const message = 'foo';
-
-        beforeEach(() => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            instance.fetchFeedItems = jest.fn();
-        });
-
         test('should throw an error if missing current user', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const message = 'foo';
+
             expect(() => instance.createComment(message, true)).toThrow('Bad box user!');
         });
 
-        test('should call the create comment API and fetch the items', () => {
+        test.each`
+            hasReplies
+            ${undefined}
+            ${false}
+        `(
+            'should call the createComment API and fetch the items when hasReplies prop equals to $hasReplies',
+            ({ hasReplies }) => {
+                const wrapper = getWrapper({ hasReplies });
+                const instance = wrapper.instance();
+                instance.fetchFeedItems = jest.fn();
+                const message = 'foo';
+                const hasMention = true;
+
+                instance.setState({
+                    currentUser,
+                });
+                instance.createComment(message, hasMention);
+                expect(feedAPI.createComment).toBeCalledWith(
+                    file,
+                    currentUser,
+                    message,
+                    hasMention,
+                    expect.any(Function),
+                    expect.any(Function),
+                );
+                expect(instance.fetchFeedItems).toBeCalled();
+            },
+        );
+
+        test('should call the createThreadedComment API and fetch the items when hasReplies prop equals to true', () => {
+            const wrapper = getWrapper({ hasReplies: true });
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+            const message = 'foo';
+            const hasMention = true;
+
             instance.setState({
                 currentUser,
             });
-            instance.createComment(message, true);
-            expect(feedAPI.createComment).toBeCalled();
+            instance.createComment(message, hasMention);
+            expect(feedAPI.createThreadedComment).toBeCalledWith(
+                file,
+                currentUser,
+                message,
+                hasMention,
+                expect.any(Function),
+                expect.any(Function),
+            );
             expect(instance.fetchFeedItems).toBeCalled();
+        });
+    });
+
+    describe('updateComment()', () => {
+        test.each`
+            hasReplies
+            ${undefined}
+            ${false}
+        `('should call updateComment API when hasReplies prop equals to $hasReplies', ({ hasReplies }) => {
+            const wrapper = getWrapper({ hasReplies });
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+
+            wrapper.instance().updateComment('123', 'hello', undefined, false, {
+                can_edit: true,
+                can_delete: true,
+            });
+
+            expect(api.getFeedAPI().updateComment).toBeCalledWith(
+                file,
+                '123',
+                'hello',
+                false,
+                { can_edit: true, can_delete: true },
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(instance.fetchFeedItems).toBeCalled();
+        });
+
+        describe('should call updateThreadedComment API when hasReplies prop equals to true', () => {
+            test.each`
+                status       | text         | expectedStatus | expectedText
+                ${undefined} | ${undefined} | ${undefined}   | ${undefined}
+                ${'open'}    | ${'foo'}     | ${'open'}      | ${'foo'}
+            `('given status=$status and text=$text', ({ status, text, expectedStatus, expectedText }) => {
+                const wrapper = getWrapper({ hasReplies: true });
+                const instance = wrapper.instance();
+                instance.fetchFeedItems = jest.fn();
+
+                wrapper.instance().updateComment('123', text, status, false, {
+                    can_edit: true,
+                    can_delete: true,
+                });
+
+                expect(api.getFeedAPI().updateThreadedComment).toBeCalledWith(
+                    file,
+                    '123',
+                    expectedText,
+                    expectedStatus,
+                    false,
+                    { can_edit: true, can_delete: true },
+                    expect.any(Function),
+                    expect.any(Function),
+                );
+                expect(instance.fetchFeedItems).toBeCalled();
+            });
         });
     });
 
@@ -356,14 +484,23 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
 
         test.each`
-            annotationsEnabled | appActivityEnabled | expectedAnnotations | expectedAppActivity
-            ${false}           | ${false}           | ${false}            | ${false}
-            ${false}           | ${true}            | ${false}            | ${true}
-            ${true}            | ${false}           | ${true}             | ${false}
-            ${true}            | ${true}            | ${true}             | ${true}
+            annotationsEnabled | appActivityEnabled | repliesEnabled | tasksEnabled | versionsEnabled | expectedAnnotations | expectedAppActivity | expectedReplies | expectedTasks | expectedVersions
+            ${false}           | ${false}           | ${false}       | ${false}     | ${false}        | ${false}            | ${false}            | ${false}        | ${false}      | ${false}
+            ${true}            | ${true}            | ${true}        | ${true}      | ${true}         | ${true}             | ${true}             | ${true}         | ${true}       | ${true}
         `(
-            'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled and appActivityEnabled=$appActivityEnabled',
-            ({ annotationsEnabled, appActivityEnabled, expectedAnnotations, expectedAppActivity }) => {
+            'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled, appActivityEnabled=$appActivityEnabled, repliesEnabled=$repliesEnabled, tasksEnabled=$tasksEnabled and versionsEnabled=$versionsEnabled',
+            ({
+                annotationsEnabled,
+                appActivityEnabled,
+                repliesEnabled,
+                tasksEnabled,
+                versionsEnabled,
+                expectedAnnotations,
+                expectedAppActivity,
+                expectedReplies,
+                expectedTasks,
+                expectedVersions,
+            }) => {
                 wrapper = getWrapper({
                     features: {
                         activityFeed: {
@@ -371,6 +508,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                             appActivity: { enabled: appActivityEnabled },
                         },
                     },
+                    hasReplies: repliesEnabled,
+                    hasTasks: tasksEnabled,
+                    hasVersions: versionsEnabled,
                 });
 
                 instance = wrapper.instance();
@@ -385,7 +525,13 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     instance.fetchFeedItemsSuccessCallback,
                     instance.fetchFeedItemsErrorCallback,
                     instance.errorCallback,
-                    { shouldShowAnnotations: expectedAnnotations, shouldShowAppActivity: expectedAppActivity },
+                    {
+                        shouldShowAnnotations: expectedAnnotations,
+                        shouldShowAppActivity: expectedAppActivity,
+                        shouldShowReplies: expectedReplies,
+                        shouldShowTasks: expectedTasks,
+                        shouldShowVersions: expectedVersions,
+                    },
                 );
             },
         );
@@ -813,17 +959,47 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
 
-            wrapper.instance().handleAnnotationEdit({
-                id: '123',
-                text: 'hello',
-                permissions: {
-                    can_edit: true,
-                    can_delete: true,
-                },
+            wrapper.instance().handleAnnotationEdit('123', 'hello', {
+                can_edit: true,
+                can_delete: true,
+                can_resolve: true,
             });
 
-            expect(api.getFeedAPI().updateAnnotation).toHaveBeenCalled();
-            expect(instance.fetchFeedItems).toHaveBeenCalled();
+            expect(api.getFeedAPI().updateAnnotation).toBeCalledWith(
+                expect.anything(),
+                '123',
+                'hello',
+                undefined,
+                { can_edit: true, can_delete: true, can_resolve: true },
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(instance.fetchFeedItems).toBeCalled();
+        });
+    });
+
+    describe('handleAnnotationStatusChange()', () => {
+        test('should call updateAnnotation API', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+
+            wrapper.instance().handleAnnotationStatusChange('123', 'open', {
+                can_edit: true,
+                can_delete: true,
+                can_resolve: true,
+            });
+
+            expect(api.getFeedAPI().updateAnnotation).toBeCalledWith(
+                expect.anything(),
+                '123',
+                undefined,
+                'open',
+                { can_edit: true, can_delete: true, can_resolve: true },
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(instance.fetchFeedItems).toBeCalled();
         });
     });
 
@@ -852,6 +1028,140 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             expect(mockEmitRemoveEvent).toBeCalledWith('123');
             expect(mockFeedSuccess).toBeCalled();
+        });
+    });
+
+    describe('getFilteredFeedItems()', () => {
+        const {
+            annotationOpen: expectedAnnotationOpen,
+            annotationResolved: expectedAnnotationResolved,
+            commentOpen: expectedCommentOpen,
+            commentResolved: expectedCommentResolved,
+            taskItem: expectedTaskItem,
+            versionItem: expectedVersionItem,
+        } = filterableActivityFeedItems;
+
+        test.each`
+            status        | expected
+            ${undefined}  | ${[expectedAnnotationOpen, expectedAnnotationResolved, expectedCommentOpen, expectedCommentResolved, expectedTaskItem, expectedVersionItem]}
+            ${'open'}     | ${[expectedAnnotationOpen, expectedCommentOpen, expectedVersionItem]}
+            ${'resolved'} | ${[expectedAnnotationResolved, expectedCommentResolved, expectedVersionItem]}
+        `(
+            'should filter feed items of type "comment" or "annotation" based on status equal to $status',
+            ({ status, expected }) => {
+                const {
+                    annotationOpen,
+                    annotationResolved,
+                    commentOpen,
+                    commentResolved,
+                    taskItem,
+                    versionItem,
+                } = cloneDeep(filterableActivityFeedItems);
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                instance.setState({
+                    feedItems: [
+                        annotationOpen,
+                        annotationResolved,
+                        commentOpen,
+                        commentResolved,
+                        taskItem,
+                        versionItem,
+                    ],
+                });
+                instance.setState({
+                    feedItemsStatusFilter: status,
+                });
+                expect(instance.getFilteredFeedItems()).toMatchObject(expected);
+            },
+        );
+    });
+
+    describe('handleItemsFiltered()', () => {
+        test.each`
+            status        | expected
+            ${undefined}  | ${undefined}
+            ${'open'}     | ${'open'}
+            ${'resolved'} | ${'resolved'}
+        `('given $status should update feedItemsStatusFilter state with $expected', ({ status, expected }) => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+            instance.handleItemsFiltered(status);
+            expect(instance.setState).toBeCalledWith({ feedItemsStatusFilter: expected });
+        });
+    });
+
+    describe('renderAddTaskButton()', () => {
+        test('should return null when hasTasks is false', () => {
+            const wrapper = getWrapper({ hasTasks: false });
+            const instance = wrapper.instance();
+            expect(instance.renderAddTaskButton()).toBe(null);
+        });
+    });
+
+    describe('renderActivitySidebarFilter()', () => {
+        describe('should return null', () => {
+            test('when activityFeed.filter feature is not set', () => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                expect(instance.renderActivitySidebarFilter()).toBe(null);
+            });
+
+            test('when activityFeed.filter feature is disabled', () => {
+                const wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            filter: { enabled: false },
+                        },
+                    },
+                });
+                const instance = wrapper.instance();
+                expect(instance.renderActivitySidebarFilter()).toBe(null);
+            });
+        });
+
+        test('should return ActivitySidebarFilter when activityFeed.filter feature is enabled', () => {
+            const wrapper = getWrapper({
+                features: {
+                    activityFeed: {
+                        filter: { enabled: true },
+                    },
+                },
+            });
+            const instance = wrapper.instance();
+            const resultWrapper = mount(instance.renderActivitySidebarFilter());
+            expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
+        });
+    });
+
+    describe('renderTitle()', () => {
+        describe('should return FormattedMessage', () => {
+            test('when activityFeed.filter feature is not set', () => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                const resultWrapper = mount(instance.renderTitle());
+                expect(resultWrapper.name()).toBe('FormattedMessage');
+            });
+
+            test('when activityFeed.filter feature is disabled', () => {
+                const wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            filter: { enabled: false },
+                        },
+                    },
+                });
+                const instance = wrapper.instance();
+                const resultWrapper = mount(instance.renderTitle());
+                expect(resultWrapper.name()).toBe('FormattedMessage');
+            });
+        });
+
+        test('should return undefined when activityFeed.filter feature is enabled', () => {
+            const wrapper = getWrapper({ features: { activityFeed: { filter: { enabled: true } } } });
+            const instance = wrapper.instance();
+            expect(instance.renderTitle()).toBe(undefined);
         });
     });
 });

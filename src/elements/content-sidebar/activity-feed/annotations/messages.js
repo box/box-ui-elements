@@ -26,6 +26,11 @@ const messages = defineMessages({
         defaultMessage: 'Page {number}',
         description: 'Annotation activity item link shown on annotation activity',
     },
+    annotationActivityResolveMenuItem: {
+        id: 'be.contentSidebar.activityFeed.annotationActivity.annotationActivityResolveMenuItem',
+        defaultMessage: 'Resolve',
+        description: 'Text to show on menu item to resolve the annotation comment',
+    },
     annotationActivityVersionLink: {
         id: 'be.contentSidebar.activityFeed.annotationActivityVersionLink',
         defaultMessage: 'Version {number}',
@@ -36,6 +41,11 @@ const messages = defineMessages({
         defaultMessage: 'Version Unavailable',
         description:
             'Annotation activity item link shown on annotation activity for previous file version that is unavailable',
+    },
+    annotationActivityUnresolveMenuItem: {
+        id: 'be.contentSidebar.activityFeed.annotationActivity.annotationActivityUnresolveMenuItem',
+        defaultMessage: 'Unresolve',
+        description: 'Text to show on menu item to unresolve the annotation comment',
     },
 });
 

@@ -165,7 +165,7 @@ class SearchForm extends React.Component<Props, State> {
             <div className="action-buttons">
                 {onSubmit ? (
                     <button
-                        type="button"
+                        type="submit"
                         className="action-button search-button"
                         title={formatMessage(messages.searchButtonTitle)}
                     >

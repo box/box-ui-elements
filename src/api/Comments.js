@@ -17,6 +17,7 @@ import {
 } from '../constants';
 import type { ElementsXhrError, ElementsErrorCallback } from '../common/types/api';
 import type { BoxItem, BoxItemPermission } from '../common/types/core';
+import type { BoxCommentPermission } from '../common/types/feed';
 
 class Comments extends OffsetBasedAPI {
     /**
@@ -144,7 +145,7 @@ class Comments extends OffsetBasedAPI {
      * @param {BoxItem} file - File object for which we are updating a comment
      * @param {string} commentId - Comment to be edited
      * @param {string} message - Comment message
-     * @param {BoxItemPermission} permissions - The known permissions of the comment we're updating
+     * @param {BoxCommentPermission} permissions - The known permissions of the comment we're updating
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
@@ -162,7 +163,7 @@ class Comments extends OffsetBasedAPI {
         errorCallback: ElementsErrorCallback,
         file: BoxItem,
         message: string,
-        permissions: BoxItemPermission,
+        permissions: BoxCommentPermission,
         successCallback: Function,
         tagged_message?: string,
     }): void {
@@ -194,7 +195,7 @@ class Comments extends OffsetBasedAPI {
      *
      * @param {BoxItem} file - File object for which we are deleting a comment
      * @param {string} commentId - Id of the comment we are deleting
-     * @param {BoxItemPermission} permissions - The known permissions of the comment we're deleting
+     * @param {BoxCommentPermission} permissions - The known permissions of the comment we're deleting
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
@@ -209,7 +210,7 @@ class Comments extends OffsetBasedAPI {
         commentId: string,
         errorCallback: ElementsErrorCallback,
         file: BoxItem,
-        permissions: BoxItemPermission,
+        permissions: BoxCommentPermission,
         successCallback: Function,
     }): void {
         this.errorCode = ERROR_CODE_DELETE_COMMENT;

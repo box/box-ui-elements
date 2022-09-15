@@ -1,5 +1,6 @@
 // @flow strict
 import type { MessageDescriptor } from 'react-intl';
+import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../constants';
 import type { BoxItemPermission, BoxItemVersion, Reply, User } from './core';
 import type { Annotation, AnnotationPermission, Annotations } from './annotations';
 
@@ -9,6 +10,8 @@ type FocusableFeedItemType = 'task' | 'comment' | 'annotation';
 type BoxCommentPermission = {
     can_delete?: boolean,
     can_edit?: boolean,
+    can_reply?: boolean,
+    can_resolve?: boolean,
 };
 
 type BoxTaskPermission = {
@@ -21,6 +24,9 @@ type BaseFeedItem = {|
     created_by: User,
     id: string,
 |};
+
+// Used in Annotation and Comment
+type FeedItemStatus = typeof COMMENT_STATUS_OPEN | typeof COMMENT_STATUS_RESOLVED;
 
 // this is a subset of TaskNew, which imports as `any`
 type Task = {
@@ -39,8 +45,15 @@ type Comment = {
     is_reply_comment?: boolean,
     message?: string,
     modified_at: string,
+    parent?: {
+        id: string,
+        type: 'comment' | 'annotation',
+    },
     permissions: BoxCommentPermission,
+    replies?: Array<Comment>,
+    status?: FeedItemStatus,
     tagged_message: string,
+    total_reply_count?: number,
     type: 'comment',
 };
 
@@ -120,6 +133,7 @@ export type {
     Comments,
     FeedItem,
     FeedItems,
+    FeedItemStatus,
     FocusableFeedItemType,
     Reply,
     Task,

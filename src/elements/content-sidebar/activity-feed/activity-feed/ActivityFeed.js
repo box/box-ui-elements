@@ -17,7 +17,14 @@ import messages from './messages';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import { PERMISSION_CAN_CREATE_ANNOTATIONS } from '../../../../constants';
 import { scrollIntoView } from '../../../../utils/dom';
-import type { Annotation, AnnotationPermission, FocusableFeedItemType, FeedItems } from '../../../../common/types/feed';
+import type {
+    Annotation,
+    AnnotationPermission,
+    BoxCommentPermission,
+    FocusableFeedItemType,
+    FeedItems,
+    FeedItemStatus,
+} from '../../../../common/types/feed';
 import type { SelectorItems, User, GroupMini, BoxItem } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations, Errors } from '../../flowTypes';
@@ -41,10 +48,19 @@ type Props = {
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
     onAnnotationEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
     onAnnotationSelect?: (annotation: Annotation) => void,
+    onAnnotationStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
     onAppActivityDelete?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
-    onCommentUpdate?: Function,
+    onCommentUpdate?: (
+        id: string,
+        text?: string,
+        status?: FeedItemStatus,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
     onTaskAssignmentUpdate?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
@@ -212,6 +228,7 @@ class ActivityFeed extends React.Component<Props, State> {
             onAnnotationDelete,
             onAnnotationEdit,
             onAnnotationSelect,
+            onAnnotationStatusChange,
             onAppActivityDelete,
             onCommentCreate,
             onCommentDelete,
@@ -281,6 +298,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             onAnnotationDelete={onAnnotationDelete}
                             onAnnotationEdit={onAnnotationEdit}
                             onAnnotationSelect={onAnnotationSelect}
+                            onAnnotationStatusChange={onAnnotationStatusChange}
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
