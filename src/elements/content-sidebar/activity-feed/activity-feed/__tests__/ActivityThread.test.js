@@ -3,8 +3,8 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import ActivityThread from '../ActivityThread.js';
-import replies from '../../../../../__mocks__/replies';
 import localize from '../../../../../../test/support/i18n';
+import { replies } from '../fixtures';
 import messages from '../messages';
 
 jest.mock('react-intl', () => jest.requireActual('react-intl'));
