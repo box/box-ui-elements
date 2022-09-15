@@ -49,7 +49,7 @@ import {
     VIEW_ERROR,
     VIEW_RECENTS,
     VIEW_METADATA,
-    VIEW_MODE_LIST,
+    VIEW_MODE_GRID,
     TYPE_FILE,
     TYPE_WEBLINK,
     TYPE_FOLDER,
@@ -1471,7 +1471,7 @@ class ContentExplorer extends Component<Props, State> {
      *
      * @return {ViewMode}
      */
-    getViewMode = (): ViewMode => this.store.getItem(localStoreViewMode) || VIEW_MODE_LIST;
+    getViewMode = (): ViewMode => this.store.getItem(localStoreViewMode) || VIEW_MODE_GRID;
 
     /**
      * Get the maximum number of grid view columns based on the current width of the
