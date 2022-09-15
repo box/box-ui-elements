@@ -10,19 +10,17 @@ import { GraphData } from './types';
 import './ContentInsightsSummary.scss';
 
 interface Props {
-    error: AxiosError | null;
     graphData: GraphData;
+    isError: AxiosError | null;
     isLoading: boolean;
     onClick: () => void;
     previousPeriodCount: number;
     totalCount: number;
 }
 
-const ContentInsightsSummary = ({ error, graphData, isLoading, previousPeriodCount, onClick, totalCount }: Props) => {
-    const errorStatus = !!error && !!error.response ? error.response.status : null;
-
+const ContentInsightsSummary = ({ isError, graphData, isLoading, previousPeriodCount, onClick, totalCount }: Props) => {
     const renderContentAnalyticsSummary = () => {
-        if (!!errorStatus && errorStatus !== 403) {
+        if (isError) {
             return <ContentAnalyticsErrorState />;
         }
 

@@ -23,8 +23,8 @@ describe('features/content-insights/ContentInsightsSummary', () => {
     const getWrapper = (props = {}) =>
         render(
             <ContentInsightsSummary
-                error={mockError()}
                 graphData={mockData}
+                isError={mockError()}
                 isLoading={false}
                 onClick={jest.fn()}
                 previousPeriodCount={1}
@@ -56,15 +56,6 @@ describe('features/content-insights/ContentInsightsSummary', () => {
             expect(screen.getByTestId('ContentAnalyticsErrorState')).toBeVisible();
             expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
             expect(screen.queryByLabelText(localize(messages.previewGraphLabel.id))).toBeNull();
-        });
-
-        test('should not show the default error state when there is a permission error', () => {
-            mockError.mockReturnValueOnce({ response: { status: 403 } });
-            getWrapper();
-
-            expect(screen.queryByTestId('ContentAnalyticsErrorState')).toBeNull();
-            expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
-            expect(screen.getByLabelText(localize(messages.previewGraphLabel.id))).toBeVisible();
         });
 
         test('should call the onClick callback', () => {
