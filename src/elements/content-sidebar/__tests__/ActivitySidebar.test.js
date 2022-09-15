@@ -687,10 +687,29 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
-    describe('getApproverWithQuery()', () => {
+    describe('fetchCurrentUserSuccessCallback()', () => {
         let instance;
         let wrapper;
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.setState = jest.fn();
+        });
+
+        test('should set the feedItems in the state', () => {
+            instance.fetchCurrentUserSuccessCallback(currentUser);
+            expect(instance.setState).toBeCalledWith({
+                currentUser,
+                currentUserError: undefined,
+            });
+        });
+    });
+
+    describe('getApproverWithQuery()', () => {
         const getCollaboratorsWithQuery = jest.fn();
+        let instance;
+        let wrapper;
 
         test('should get collaborators with groups', () => {
             wrapper = getWrapper({ getCollaboratorsWithQuery });
@@ -730,9 +749,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('getMention()', () => {
+        const getCollaboratorsWithQuery = jest.fn();
         let instance;
         let wrapper;
-        const getCollaboratorsWithQuery = jest.fn();
 
         test('should get collaborators without groups', () => {
             wrapper = getWrapper({ getCollaboratorsWithQuery });

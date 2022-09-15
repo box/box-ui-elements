@@ -1,77 +1,92 @@
+// @flow
 import * as React from 'react';
-import { shallow } from 'enzyme';
+import { fireEvent, render } from '@testing-library/react';
+import { act } from '@testing-library/react-hooks';
+import type { WithCollaboratorsProps } from '../withCollaborators';
+
 import withCollaborators from '../withCollaborators';
 
 jest.mock('lodash/debounce', () => jest.fn(i => i));
 
-describe('elements/common/withCollaborators', () => {
-    const TestComponent = props => <div {...props} />;
+describe('elements/common/collaborators/withCollaborators', () => {
+    const fileId = '1';
+    let wrapper;
+    let successCb;
+    let errorCb;
+    let searchStr;
+    let includeGroups;
+
+    const TestComponent = (props: WithCollaboratorsProps) => (
+        <div>
+            <button
+                type="button"
+                data-testid="mocked-button"
+                onClick={() =>
+                    props.getCollaboratorsWithQuery(fileId, successCb, errorCb, searchStr, { includeGroups })
+                }
+            />
+        </div>
+    );
     const WrappedComponent = withCollaborators(TestComponent);
+
     const fileCollaboratorsAPI = {
         getFileCollaborators: jest.fn(),
     };
     const api = {
         getFileCollaboratorsAPI: () => fileCollaboratorsAPI,
     };
-    const defaultProps = { api };
-    const getWrapper = props => shallow(<WrappedComponent {...defaultProps} {...props} />);
-    let fileId;
-    let wrapper;
-    let instance;
-    let successCb;
-    let errorCb;
+
+    const getWrapper = () => render(<WrappedComponent api={api} />);
+
     beforeEach(() => {
-        fileId = '1';
         successCb = jest.fn();
         errorCb = jest.fn();
-        wrapper = getWrapper({
-            api,
-        });
-        instance = wrapper.instance();
+        wrapper = getWrapper();
     });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
     describe('getCollaborators', () => {
-        test('should short circuit if there is no search string', () => {
-            instance.getCollaborators(fileId, successCb, errorCb);
-            instance.getCollaborators(fileId, successCb, errorCb, '');
-            instance.getCollaborators(fileId, successCb, errorCb, '  ');
-            expect(fileCollaboratorsAPI.getFileCollaborators).not.toHaveBeenCalled();
+        test.each(['', ' ', '   ', null])('should short circuit if there is no search string', string => {
+            searchStr = string;
+            const button = wrapper.getByTestId('mocked-button');
+
+            act(() => {
+                fireEvent.click(button);
+            });
+
+            expect(fileCollaboratorsAPI.getFileCollaborators).not.toBeCalled();
         });
+
         test('should call the file collaborators api', () => {
-            const searchStr = 'foo';
-            instance.getCollaborators(fileId, successCb, errorCb, searchStr);
-            expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(fileId, successCb, errorCb, {
+            searchStr = 'foo';
+            includeGroups = false;
+            const button = wrapper.getByTestId('mocked-button');
+
+            act(() => {
+                fireEvent.click(button);
+            });
+
+            expect(fileCollaboratorsAPI.getFileCollaborators).toBeCalledWith(fileId, successCb, errorCb, {
                 filter_term: searchStr,
                 include_groups: false,
                 include_uploader_collabs: false,
             });
         });
-    });
-    describe('getCollaboratorsWithQuery', () => {
-        let getCollaboratorsSpy;
-        beforeEach(() => {
-            getCollaboratorsSpy = jest.spyOn(instance, 'getCollaborators');
-        });
-        test('should get collaborators without groups', () => {
-            const search = 'Santa Claus';
-            instance.getCollaboratorsWithQuery(fileId, successCb, errorCb, search);
-            expect(getCollaboratorsSpy).toHaveBeenCalledWith(fileId, successCb, errorCb, search, {
-                includeGroups: false,
-            });
-            expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(fileId, successCb, errorCb, {
-                filter_term: search,
-                include_groups: false,
-                include_uploader_collabs: false,
-            });
-        });
+
         test('should get collaborators with groups', () => {
-            getCollaboratorsSpy = jest.spyOn(instance, 'getCollaborators');
-            const search = 'Santa Claus';
-            instance.getCollaboratorsWithQuery(fileId, successCb, errorCb, search, { includeGroups: true });
-            expect(getCollaboratorsSpy).toHaveBeenCalledWith(fileId, successCb, errorCb, search, {
-                includeGroups: true,
+            searchStr = 'foo';
+            includeGroups = true;
+            const button = wrapper.getByTestId('mocked-button');
+
+            act(() => {
+                fireEvent.click(button);
             });
-            expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(fileId, successCb, errorCb, {
-                filter_term: search,
+
+            expect(fileCollaboratorsAPI.getFileCollaborators).toBeCalledWith(fileId, successCb, errorCb, {
+                filter_term: searchStr,
                 include_groups: true,
                 include_uploader_collabs: false,
             });

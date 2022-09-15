@@ -11,75 +11,73 @@ type Props = {
     api: API,
 };
 
-export default function withCollaborators(WrappedComponent: React.ComponentType<Props>): React.ComponentType<Props> {
-    class WithMentions extends React.Component<Props> {
-        static displayName: ?string;
+export type WithCollaboratorsProps = {
+    getCollaboratorsWithQuery: (
+        fileId: string,
+        successCallback: (Collaborators) => void,
+        errorCallback: ElementsErrorCallback,
+        searchStr: string,
+        options?: { includeGroups?: boolean },
+    ) => void,
+};
 
-        props: Props;
+const withCollaborators = (WrappedComponent: React.ComponentType<any>) => ({ api, ...rest }: Props) => {
+    /**
+     * Fetches file collaborators
+     *
+     * @param {string} fileId
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @param {string} searchStr - the search string
+     * @param {Object} [options]
+     * @param {boolean} [options.includeGroups] - return groups as well as users
+     * @return {void}
+     */
+    const getCollaborators = (
+        fileId,
+        successCallback: Collaborators => void,
+        errorCallback: ElementsErrorCallback,
+        searchStr: string,
+        { includeGroups = false }: { includeGroups: boolean } = {},
+    ) => {
+        // Do not fetch without filter
+        if (!searchStr || searchStr.trim() === '') {
+            return;
+        }
 
-        /**
-         * Fetches file collaborators
-         *
-         * @param {string} fileId
-         * @param {Function} successCallback - the success callback
-         * @param {Function} errorCallback - the error callback
-         * @param {string} searchStr - the search string
-         * @param {Object} [options]
-         * @param {boolean} [options.includeGroups] - return groups as well as users
-         * @return {void}
-         */
-        getCollaborators = (
-            fileId,
+        api.getFileCollaboratorsAPI(true).getFileCollaborators(fileId, successCallback, errorCallback, {
+            filter_term: searchStr,
+            include_groups: includeGroups,
+            include_uploader_collabs: false,
+        });
+    };
+
+    /**
+     * Fetches file @mention's
+     *
+     * @private
+     * @oaram {string} fileId
+     * @param {Function} successCallback
+     * @param {Function} errorCallback
+     * @param {string} searchStr - Search string to filter file collaborators by
+     * @param {Object} [options]
+     * @param {boolean} [options.includeGroups] - return groups as well as users
+     * @return {void}
+     */
+    const getCollaboratorsWithQuery = debounce(
+        (
+            fileId: string,
             successCallback: Collaborators => void,
             errorCallback: ElementsErrorCallback,
             searchStr: string,
             { includeGroups = false }: { includeGroups: boolean } = {},
         ) => {
-            const { api } = this.props;
-            // Do not fetch without filter
-            if (!searchStr || searchStr.trim() === '') {
-                return;
-            }
+            getCollaborators(fileId, successCallback, errorCallback, searchStr, { includeGroups });
+        },
+        DEFAULT_COLLAB_DEBOUNCE,
+    );
 
-            api.getFileCollaboratorsAPI(true).getFileCollaborators(fileId, successCallback, errorCallback, {
-                filter_term: searchStr,
-                include_groups: includeGroups,
-                include_uploader_collabs: false,
-            });
-        };
+    return <WrappedComponent {...rest} api={api} getCollaboratorsWithQuery={getCollaboratorsWithQuery} />;
+};
 
-        /**
-         * Fetches file @mention's
-         *
-         * @private
-         * @oaram {string} fileId
-         * @param {Function} successCallback
-         * @param {Function} errorCallback
-         * @param {string} searchStr - Search string to filter file collaborators by
-         * @param {Object} [options]
-         * @param {boolean} [options.includeGroups] - return groups as well as users
-         * @return {void}
-         */
-        getCollaboratorsWithQuery = debounce(
-            (
-                fileId: string,
-                successCallback,
-                errorCallback,
-                searchStr: string,
-                { includeGroups = false }: { includeGroups: boolean } = {},
-            ) => {
-                this.getCollaborators(fileId, successCallback, errorCallback, searchStr, { includeGroups });
-            },
-            DEFAULT_COLLAB_DEBOUNCE,
-        );
-
-        render() {
-            return <WrappedComponent {...this.props} getCollaboratorsWithQuery={this.getCollaboratorsWithQuery} />;
-        }
-    }
-
-    const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
-    WithMentions.displayName = `WithCollaborators(${displayName})`;
-
-    return WithMentions;
-}
+export default withCollaborators;

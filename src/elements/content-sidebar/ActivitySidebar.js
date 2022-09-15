@@ -24,6 +24,7 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
 import { withRouterAndRef } from '../common/routing';
+import withCollaborators from '../common/collaborators/withCollaborators';
 import ActivitySidebarFilter from './ActivitySidebarFilter';
 import {
     ERROR_CODE_FETCH_ACTIVITY,
@@ -53,8 +54,8 @@ import type { SelectorItems, User, UserMini, GroupMini, BoxItem } from '../../co
 import type { Errors, GetProfileUrlCallback } from '../common/flowTypes';
 import type { Translations, Collaborators } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
+import type { WithCollaboratorsProps } from '../common/collaborators/withCollaborators';
 import './ActivitySidebar.scss';
-import withCollaborators from '../common/collaborators/withCollaborators';
 
 type ExternalProps = {
     activeFeedEntryId?: string,
@@ -74,7 +75,8 @@ type ExternalProps = {
     onTaskUpdate: () => any,
     onTaskView: (id: string, isCreator: boolean) => any,
 } & ErrorContextProps &
-    WithAnnotatorContextProps;
+    WithAnnotatorContextProps &
+    WithCollaboratorsProps;
 
 type PropsWithoutContext = {
     elementId: string,
