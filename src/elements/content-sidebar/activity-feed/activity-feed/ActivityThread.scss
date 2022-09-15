@@ -5,7 +5,8 @@
     color: $bdl-box-blue;
     font-weight: bold;
 
-    &:hover {
+    &:hover,
+    &:active {
         margin-left: $sidebarActivityFeedSpacingHorizontal;
         font-weight: bold;
     }

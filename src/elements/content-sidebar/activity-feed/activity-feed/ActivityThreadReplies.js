@@ -48,7 +48,7 @@ const ActivityThreadReplies = ({
     };
 
     return (
-        <div className="bcs-ActivityThreadReplies">
+        <div className="bcs-ActivityThreadReplies" data-testid="activity-thread-replies">
             {!isExpanded ? (
                 <Comment
                     key={lastReply.type + lastReply.id}

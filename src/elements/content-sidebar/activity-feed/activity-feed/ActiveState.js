@@ -120,7 +120,7 @@ const ActiveState = ({
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
                                     mentionSelectorContacts={mentionSelectorContacts}
-                                    totalReplyCount={item.total_reply_count}
+                                    repliesTotalCount={item.total_reply_count}
                                     replies={item.replies}
                                     translations={translations}
                                 >
@@ -210,7 +210,7 @@ const ActiveState = ({
                                     getUserProfileUrl={getUserProfileUrl}
                                     hasReplies={hasReplies}
                                     mentionSelectorContacts={mentionSelectorContacts}
-                                    totalReplyCount={item.total_reply_count}
+                                    repliesTotalCount={item.total_reply_count}
                                     replies={item.replies}
                                     translations={translations}
                                 >

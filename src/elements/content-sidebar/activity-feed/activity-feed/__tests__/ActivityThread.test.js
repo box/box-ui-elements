@@ -4,27 +4,21 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import ActivityThread from '../ActivityThread.js';
 import replies from '../../../../../__mocks__/replies';
+import localize from '../../../../../../test/support/i18n';
+import messages from '../messages';
 
 jest.mock('react-intl', () => jest.requireActual('react-intl'));
 describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThread', () => {
-    const defaultProps = {
-        replies,
-        totalReplyCount: 2,
-        hasReplies: true,
+    const Wrapper = ({ children }: { children?: React.ReactNode }) => {
+        return <IntlProvider locale="en">{children}</IntlProvider>;
     };
 
-    function customRender(ui, { locale = 'en', ...renderOptions } = {}) {
-        function Wrapper({ children }: { children: React.Component }) {
-            return <IntlProvider locale={locale}>{children}</IntlProvider>;
-        }
-        return render(ui, { wrapper: Wrapper, ...renderOptions });
-    }
-
     const getWrapper = props =>
-        customRender(
-            <ActivityThread {...defaultProps} {...props}>
+        render(
+            <ActivityThread replies={replies} repliesTotalCount={2} hasReplies {...props}>
                 Test
             </ActivityThread>,
+            { wrapper: Wrapper },
         );
 
     test('should render children component wrapped in ActivityThread if hasReplies is true', () => {
@@ -45,16 +39,16 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         const onGetReplies = jest.fn();
         const { getByText } = getWrapper({ onGetReplies });
 
-        const button = getByText('See 1 reply');
+        const button = getByText(localize(messages.showReplies.id, { repliesToLoadCount: 1 }));
         expect(button).toBeVisible();
         fireEvent.click(button);
 
         expect(onGetReplies).toBeCalled();
-        expect(screen.getByText('Hide replies')).toBeVisible();
+        expect(getByText(localize(messages.hideReplies.id))).toBeVisible();
     });
 
     test('should not render button if total_reply_count is 1 or less', () => {
-        const { queryByTestId } = getWrapper({ totalReplyCount: 1 });
+        const { queryByTestId } = getWrapper({ repliesTotalCount: 1 });
         expect(queryByTestId('activity-thread-button')).not.toBeInTheDocument();
     });
 
@@ -65,7 +59,7 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
     });
 
     test('should render LoadingIndicator and do not render replies or button if repliesLoading is true', () => {
-        const { queryByTestId } = getWrapper({ repliesLoading: true });
+        const { queryByTestId } = getWrapper({ isRepliesLoading: true });
 
         expect(queryByTestId('activity-thread-replies')).not.toBeInTheDocument();
         expect(queryByTestId('activity-thread-button')).not.toBeInTheDocument();

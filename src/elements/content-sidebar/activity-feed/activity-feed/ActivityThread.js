@@ -22,13 +22,13 @@ type Props = {
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
     hasReplies: boolean,
+    isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onGetReplies?: () => void,
     onReplyDelete?: Function,
     onReplyEdit?: Function,
     replies?: Array<CommentType>,
-    repliesLoading?: boolean,
-    totalReplyCount?: number,
+    repliesTotalCount?: number,
     translations?: Translations,
 };
 
@@ -39,19 +39,19 @@ const ActivityThread = ({
     getMentionWithQuery,
     getUserProfileUrl,
     hasReplies,
+    isRepliesLoading,
     mentionSelectorContacts,
     onGetReplies = noop,
     onReplyDelete = noop,
     onReplyEdit = noop,
     replies = [],
-    repliesLoading,
-    totalReplyCount = 0,
+    repliesTotalCount = 0,
     translations,
 }: Props) => {
     const [isExpanded, setIsExpanded] = React.useState(false);
 
     const toggleButtonLabel = isExpanded ? messages.hideReplies : messages.showReplies;
-    const repliesToLoadCount = Math.max(totalReplyCount - 1, 0);
+    const repliesToLoadCount = Math.max(repliesTotalCount - 1, 0);
 
     const toggleReplies = () => {
         if (!isExpanded) {
@@ -67,12 +67,12 @@ const ActivityThread = ({
         <div className="bcs-ActivityThread" data-testid="activity-thread">
             {children}
 
-            {repliesLoading && (
+            {isRepliesLoading && (
                 <div className="bcs-ActivityThread-loading" data-testid="activity-thread-loading">
                     <LoadingIndicator />
                 </div>
             )}
-            {!repliesLoading && totalReplyCount > 1 && (
+            {!isRepliesLoading && repliesTotalCount > 1 && (
                 <PlainButton
                     className="bcs-ActivityThread-toggle"
                     onClick={toggleReplies}
@@ -83,10 +83,9 @@ const ActivityThread = ({
                 </PlainButton>
             )}
 
-            {!repliesLoading && totalReplyCount > 0 && replies.length && (
+            {!isRepliesLoading && repliesTotalCount > 0 && replies.length && (
                 <ActivityThreadReplies
                     currentUser={currentUser}
-                    data-testid="activity-thread-replies"
                     getAvatarUrl={getAvatarUrl}
                     getMentionWithQuery={getMentionWithQuery}
                     getUserProfileUrl={getUserProfileUrl}
