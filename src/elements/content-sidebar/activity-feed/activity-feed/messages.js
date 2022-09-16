@@ -27,6 +27,16 @@ const messages = defineMessages({
         defaultMessage: 'This comment no longer exists',
         description: 'Text to show when comment no longer exists',
     },
+    showReplies: {
+        id: 'be.activitySidebar.activityFeed.showReplies',
+        defaultMessage: 'See {repliesToLoadCount, plural, one {# reply} other {# replies}}',
+        description: 'Text to show to get more replies of comment or annotation',
+    },
+    hideReplies: {
+        id: 'be.activitySidebar.activityFeed.hideReplies',
+        defaultMessage: 'Hide replies',
+        description: 'Text to show to hide more replies of comment or annotation',
+    },
 });
 
 export default messages;

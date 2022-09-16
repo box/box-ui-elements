@@ -110,7 +110,20 @@ const ActiveState = ({
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <ActivityThread hasReplies={hasReplies} data-testid="activity-thread">
+                                <ActivityThread
+                                    data-testid="activity-thread"
+                                    onReplyDelete={onCommentDelete}
+                                    onReplyEdit={onCommentEdit}
+                                    currentUser={currentUser}
+                                    getAvatarUrl={getAvatarUrl}
+                                    hasReplies={hasReplies}
+                                    getMentionWithQuery={getMentionWithQuery}
+                                    getUserProfileUrl={getUserProfileUrl}
+                                    mentionSelectorContacts={mentionSelectorContacts}
+                                    repliesTotalCount={item.total_reply_count}
+                                    replies={item.replies}
+                                    translations={translations}
+                                >
                                     <Comment
                                         {...item}
                                         currentUser={currentUser}
@@ -187,7 +200,20 @@ const ActiveState = ({
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <ActivityThread hasReplies={hasReplies} data-testid="activity-thread">
+                                <ActivityThread
+                                    data-testid="activity-thread"
+                                    onReplyDelete={onCommentDelete}
+                                    onReplyEdit={onCommentEdit}
+                                    currentUser={currentUser}
+                                    getAvatarUrl={getAvatarUrl}
+                                    getMentionWithQuery={getMentionWithQuery}
+                                    getUserProfileUrl={getUserProfileUrl}
+                                    hasReplies={hasReplies}
+                                    mentionSelectorContacts={mentionSelectorContacts}
+                                    repliesTotalCount={item.total_reply_count}
+                                    replies={item.replies}
+                                    translations={translations}
+                                >
                                     <AnnotationActivity
                                         currentUser={currentUser}
                                         getAvatarUrl={getAvatarUrl}
