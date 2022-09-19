@@ -1,11 +1,8 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import cloneDeep from 'lodash/cloneDeep';
-import messages from '../../common/messages';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
 import { filterableActivityFeedItems } from '../fixtures';
-
-const { defaultErrorMaskSubHeaderMessage, currentUserErrorHeaderMessage } = messages;
 
 jest.mock('lodash/debounce', () => jest.fn(i => i));
 
@@ -47,8 +44,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             id: '123',
         },
     };
-    let currentUser = {
-        id: 'foo',
+    const currentUser = {
+        id: '123',
+        name: 'foo bar',
     };
     const collaborators = {
         entries: [
@@ -64,6 +62,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         shallow(
             <ActivitySidebarComponent
                 api={api}
+                currentUser={currentUser}
                 file={file}
                 logger={{ onReadyMetric: jest.fn() }}
                 onError={onError}
@@ -88,15 +87,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     describe('componentDidMount()', () => {
         let wrapper;
         let instance;
-        currentUser = {
-            id: '123',
-        };
         beforeEach(() => {
             jest.spyOn(ActivitySidebarComponent.prototype, 'fetchFeedItems');
-            jest.spyOn(ActivitySidebarComponent.prototype, 'fetchCurrentUser');
-            wrapper = getWrapper({
-                currentUser,
-            });
+
+            wrapper = getWrapper();
             instance = wrapper.instance();
         });
 
@@ -106,7 +100,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
         test('should fetch the file and refresh the cache and fetch the current user', () => {
             expect(instance.fetchFeedItems).toHaveBeenCalledWith(true);
-            expect(instance.fetchCurrentUser).toHaveBeenCalledWith(currentUser);
         });
     });
 
@@ -118,22 +111,15 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('createTask()', () => {
-        let instance;
-        let wrapper;
-
-        beforeEach(() => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-        });
-
         test('should throw an error if there is not the current user in the state', () => {
+            const wrapper = getWrapper({ currentUser: undefined });
+            const instance = wrapper.instance();
             expect(() => instance.createTask()).toThrow('Bad box user!');
         });
 
         test('should create the task and fetch the feed items', () => {
-            wrapper.setState({
-                currentUser,
-            });
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
             const message = 'message';
             const assignees = ['1', '2'];
             const dueAt = 'test';
@@ -221,51 +207,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
-    describe('fetchCurrentUser()', () => {
-        let instance;
-        let wrapper;
-        beforeEach(() => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            instance.errorCallback = jest.fn();
-        });
-        test('should invoke setState() directly if user parameter is not missing', () => {
-            instance.setState = jest.fn();
-            instance.fetchCurrentUser(currentUser);
-            expect(instance.setState).toBeCalledWith({
-                currentUser,
-                currentUserError: undefined,
-            });
-        });
-
-        test('should get the user', () => {
-            instance.fetchCurrentUser();
-            expect(usersAPI.getUser).toBeCalled();
-        });
-    });
-
-    describe('fetchCurrentUserErrorCallback()', () => {
-        let instance;
-        let wrapper;
-
-        beforeEach(() => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            instance.errorCallback = jest.fn();
-            instance.fetchFeedItems = jest.fn();
-            instance.fetchCurrentUser = jest.fn();
-        });
-
-        test('should set a maskError if there is an error in fetching the current user', () => {
-            instance.fetchCurrentUserErrorCallback();
-            const inlineErrorState = wrapper.state().currentUserError.maskError;
-            expect(typeof currentUserErrorHeaderMessage).toBe('object');
-            expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
-            expect(inlineErrorState.errorHeader).toEqual(currentUserErrorHeaderMessage);
-            expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
-        });
-    });
-
     describe('feedSuccessCallback()', () => {
         let instance;
         let wrapper;
@@ -333,7 +274,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             instance.fetchFeedItems = jest.fn();
             instance.feedSuccessCallback = jest.fn();
             instance.feedErrorCallback = jest.fn();
-            instance.setState({ currentUser });
         });
 
         test('should call the update task assignment API and fetch the items', () => {
@@ -355,7 +295,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
     describe('createComment()', () => {
         test('should throw an error if missing current user', () => {
-            const wrapper = getWrapper();
+            const wrapper = getWrapper({ currentUser: null });
             const instance = wrapper.instance();
             const message = 'foo';
 
@@ -375,9 +315,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 const message = 'foo';
                 const hasMention = true;
 
-                instance.setState({
-                    currentUser,
-                });
                 instance.createComment(message, hasMention);
                 expect(feedAPI.createComment).toBeCalledWith(
                     file,
@@ -398,9 +335,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const message = 'foo';
             const hasMention = true;
 
-            instance.setState({
-                currentUser,
-            });
             instance.createComment(message, hasMention);
             expect(feedAPI.createThreadedComment).toBeCalledWith(
                 file,
@@ -676,44 +610,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
-    describe('fetchCurrentUserSuccessCallback()', () => {
-        let instance;
-        let wrapper;
-
-        beforeEach(() => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            instance.setState = jest.fn();
-        });
-
-        test('should set the feedItems in the state', () => {
-            instance.fetchCurrentUserSuccessCallback(currentUser);
-            expect(instance.setState).toBeCalledWith({
-                currentUser,
-                currentUserError: undefined,
-            });
-        });
-    });
-
-    describe('fetchCurrentUserSuccessCallback()', () => {
-        let instance;
-        let wrapper;
-
-        beforeEach(() => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            instance.setState = jest.fn();
-        });
-
-        test('should set the feedItems in the state', () => {
-            instance.fetchCurrentUserSuccessCallback(currentUser);
-            expect(instance.setState).toBeCalledWith({
-                currentUser,
-                currentUserError: undefined,
-            });
-        });
-    });
-
     describe('getApproverWithQuery()', () => {
         let instance;
         let wrapper;
@@ -821,29 +717,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             instance.getMentionContactsSuccessCallback(collaborators);
             expect(wrapper.state('contactsLoaded')).toBeTruthy();
             expect(wrapper.state('mentionSelectorContacts')).toEqual(collaborators.entries);
-        });
-    });
-
-    describe('fetchCurrentUserErrorCallback()', () => {
-        let wrapper;
-        let instance;
-
-        beforeEach(() => {
-            wrapper = getWrapper({
-                file,
-            });
-            instance = wrapper.instance();
-            instance.setState = jest.fn();
-            instance.errorCallback = jest.fn();
-        });
-
-        test('should set the current user error and call the error callback', () => {
-            instance.fetchCurrentUserErrorCallback({ status: 500 });
-            expect(instance.setState).toBeCalledWith({
-                currentUser: undefined,
-                currentUserError: expect.any(Object),
-            });
-            expect(instance.errorCallback).toBeCalled();
         });
     });
 

@@ -1,28 +1,64 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import LocalStore from '../../../utils/LocalStore';
 import {
+    SidebarComponent,
     SIDEBAR_FORCE_KEY,
     SIDEBAR_FORCE_VALUE_CLOSED,
     SIDEBAR_FORCE_VALUE_OPEN,
     SidebarComponent as Sidebar,
 } from '../Sidebar';
+import messages from '../../common/messages';
+import LocalStore from '../../../utils/LocalStore';
+
+const { defaultErrorMaskSubHeaderMessage, currentUserErrorHeaderMessage } = messages;
 
 jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 jest.mock('../../../utils/LocalStore');
 
 describe('elements/content-sidebar/Sidebar', () => {
+    const usersAPI = {
+        getUser: jest.fn(),
+    };
+    const api = {
+        getUsersAPI: () => usersAPI,
+    };
     const file = {
         id: 'id',
         file_version: {
             id: '123',
         },
     };
+    let currentUser = {
+        id: 'foo',
+    };
 
-    const getWrapper = props => shallow(<Sidebar file={file} location={{ pathname: '/' }} {...props} />);
+    const getWrapper = props => shallow(<Sidebar api={api} file={file} location={{ pathname: '/' }} {...props} />);
 
     beforeEach(() => {
         LocalStore.mockClear();
+    });
+
+    describe('componentDidMount()', () => {
+        let wrapper;
+        let instance;
+        currentUser = {
+            id: '123',
+        };
+        beforeEach(() => {
+            jest.spyOn(SidebarComponent.prototype, 'fetchCurrentUser');
+            wrapper = getWrapper({
+                currentUser,
+            });
+            instance = wrapper.instance();
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        test('should fetch the current user', () => {
+            expect(instance.fetchCurrentUser).toHaveBeenCalledWith(currentUser);
+        });
     });
 
     describe('componentDidUpdate', () => {
@@ -222,6 +258,79 @@ describe('elements/content-sidebar/Sidebar', () => {
             instance.refresh(shouldRefreshCache);
 
             expect(refresh).toHaveBeenCalledWith(shouldRefreshCache);
+        });
+    });
+
+    describe('fetchCurrentUser()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+        });
+        test('should invoke setState() directly if user parameter is not missing', () => {
+            instance.setState = jest.fn();
+            instance.fetchCurrentUser(currentUser);
+            expect(instance.setState).toBeCalledWith({
+                currentUser,
+                currentUserError: undefined,
+            });
+        });
+
+        test('should get the user', () => {
+            instance.fetchCurrentUser();
+            expect(usersAPI.getUser).toBeCalled();
+        });
+    });
+
+    describe('fetchCurrentUserSuccessCallback()', () => {
+        let instance;
+        let wrapper;
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.setState = jest.fn();
+        });
+
+        test('should set the feedItems in the state', () => {
+            instance.fetchCurrentUserSuccessCallback(currentUser);
+            expect(instance.setState).toBeCalledWith({
+                currentUser,
+                currentUserError: undefined,
+            });
+        });
+    });
+
+    describe('fetchCurrentUserErrorCallback()', () => {
+        let instance;
+        let wrapper;
+
+        beforeEach(() => {
+            wrapper = getWrapper({ file });
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+            instance.fetchCurrentUser = jest.fn();
+        });
+
+        test('should set a maskError if there is an error in fetching the current user', () => {
+            instance.fetchCurrentUserErrorCallback();
+            const inlineErrorState = wrapper.state().currentUserError.maskError;
+            expect(typeof currentUserErrorHeaderMessage).toBe('object');
+            expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
+            expect(inlineErrorState.errorHeader).toEqual(currentUserErrorHeaderMessage);
+            expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
+        });
+
+        test('should set the current user error and call the error callback', () => {
+            instance.setState = jest.fn();
+            instance.fetchCurrentUserErrorCallback({ status: 500 });
+            expect(instance.setState).toBeCalledWith({
+                currentUser: undefined,
+                currentUserError: expect.any(Object),
+            });
+            expect(instance.errorCallback).toBeCalled();
         });
     });
 });

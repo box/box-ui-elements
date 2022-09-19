@@ -12,6 +12,11 @@ import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import { withRouter } from 'react-router-dom';
 import type { Location, RouterHistory } from 'react-router-dom';
+import type { ElementsXhrError } from 'common/types/api';
+import { getBadItemError } from '../../utils/error';
+import messages from '../common/messages';
+import { withAPIContext } from '../common/api-context';
+import API from '../../api';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import LocalStore from '../../utils/LocalStore';
 import SidebarNav from './SidebarNav';
@@ -23,13 +28,14 @@ import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
-import type { AdditionalSidebarTab } from './flowTypes';
+import type { AdditionalSidebarTab, Errors } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
     additionalTabs?: Array<AdditionalSidebarTab>,
+    api: API,
     className: string,
     currentUser?: User,
     detailsSidebarProps: DetailsSidebarProps,
@@ -57,6 +63,8 @@ type Props = {
 };
 
 type State = {
+    currentUser?: User,
+    currentUserError?: Errors,
     isDirty: boolean,
 };
 
@@ -91,6 +99,11 @@ class Sidebar extends React.Component<Props, State> {
         };
 
         this.setForcedByLocation();
+    }
+
+    componentDidMount() {
+        const { currentUser } = this.props;
+        this.fetchCurrentUser(currentUser);
     }
 
     componentDidUpdate(prevProps: Props): void {
@@ -204,12 +217,71 @@ class Sidebar extends React.Component<Props, State> {
         }
     }
 
+    /**
+     * Fetches a Users info
+     *
+     * @private
+     * @param {User} [user] - Box User. If missing, gets user that the current token was generated for.
+     * @param {boolean} shouldDestroy
+     * @return {void}
+     */
+    fetchCurrentUser(user?: User, shouldDestroy: boolean = false): void {
+        const { api, file } = this.props;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        if (typeof user === 'undefined') {
+            api.getUsersAPI(shouldDestroy).getUser(
+                file.id,
+                this.fetchCurrentUserSuccessCallback,
+                this.fetchCurrentUserErrorCallback,
+            );
+        } else {
+            this.setState({ currentUser: user, currentUserError: undefined });
+        }
+    }
+
+    /**
+     * User fetch success callback
+     *
+     * @private
+     * @param {Object} currentUser - User info object
+     * @return {void}
+     */
+    fetchCurrentUserSuccessCallback = (currentUser: User): void => {
+        this.setState({ currentUser, currentUserError: undefined });
+    };
+
+    /**
+     * Handles a failed file user info fetch
+     *
+     * @private
+     * @param {ElementsXhrError} e - API error
+     * @return {void}
+     */
+    fetchCurrentUserErrorCallback = (e: ElementsXhrError, code: string) => {
+        this.setState({
+            currentUser: undefined,
+            currentUserError: {
+                maskError: {
+                    errorHeader: messages.currentUserErrorHeaderMessage,
+                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
+                },
+            },
+        });
+
+        this.errorCallback(e, code, {
+            error: e,
+        });
+    };
+
     render() {
         const {
             activitySidebarProps,
             additionalTabs,
             className,
-            currentUser,
             detailsSidebarProps,
             file,
             fileId,
@@ -236,6 +308,8 @@ class Sidebar extends React.Component<Props, State> {
             'bcs-is-open': isOpen,
         });
 
+        const { currentUser, currentUserError } = this.state;
+
         return (
             <aside id={this.id} className={styleClassName} data-testid="preview-sidebar">
                 {isLoading ? (
@@ -260,6 +334,7 @@ class Sidebar extends React.Component<Props, State> {
                         <SidebarPanels
                             activitySidebarProps={activitySidebarProps}
                             currentUser={currentUser}
+                            currentUserError={currentUserError}
                             elementId={this.id}
                             detailsSidebarProps={detailsSidebarProps}
                             file={file}
@@ -288,4 +363,4 @@ class Sidebar extends React.Component<Props, State> {
 }
 
 export { Sidebar as SidebarComponent };
-export default flow([withFeatureConsumer, withRouter])(Sidebar);
+export default flow([withAPIContext, withFeatureConsumer, withRouter])(Sidebar);

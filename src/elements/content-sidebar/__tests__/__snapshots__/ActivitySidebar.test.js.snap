@@ -33,6 +33,12 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
   }
 >
   <ActivityFeed
+    currentUser={
+      Object {
+        "id": "123",
+        "name": "foo bar",
+      }
+    }
     file={
       Object {
         "file_version": Object {
