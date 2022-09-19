@@ -144,6 +144,13 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         expect(wrapper.find('[data-testid="annotation-activity"]')).toHaveLength(1);
     });
 
+    test('should correctly render ActivityThread for annotations and comments if has replies', () => {
+        const wrapper = getShallowWrapper({
+            hasReplies: true,
+        }).dive();
+        expect(wrapper.find('[data-testid="activity-thread"]')).toHaveLength(2);
+    });
+
     test('should correctly render with an inline error if some feed items fail to fetch', () => {
         const wrapper = getShallowWrapper({ inlineError: activityFeedError, items: [] });
         expect(wrapper).toMatchSnapshot();

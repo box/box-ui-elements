@@ -31,8 +31,25 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
         expect(wrapper.exists('[data-testid="edit-annotation-activity"]')).toBe(true);
     });
 
+    test('should render the resolve annotation activity menu item if canResolve is true for unresolved item', () => {
+        const wrapper = getWrapper({ canResolve: true, status: 'open' });
+
+        expect(wrapper.exists('[data-testid="resolve-annotation-activity"]')).toBe(true);
+    });
+
+    test('should render the unresolve annotation activity menu item if canResolve is true for resolved item', () => {
+        const wrapper = getWrapper({ canResolve: true, status: 'resolved' });
+
+        expect(wrapper.exists('[data-testid="unresolve-annotation-activity"]')).toBe(true);
+    });
+
     test('should render resin tags', () => {
-        const wrapper = getWrapper({ canDelete: true, canEdit: true });
+        const wrapper = getWrapper({
+            canDelete: true,
+            canEdit: true,
+            canResolve: true,
+            status: 'open',
+        });
 
         expect(wrapper.find("[data-testid='delete-annotation-activity']").props()).toMatchObject({
             'data-resin-itemid': '123',
@@ -42,6 +59,23 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
         expect(wrapper.find("[data-testid='edit-annotation-activity']").props()).toMatchObject({
             'data-resin-itemid': '123',
             'data-resin-target': 'activityfeed-annotation-edit',
+        });
+
+        expect(wrapper.find("[data-testid='resolve-annotation-activity']").props()).toMatchObject({
+            'data-resin-itemid': '123',
+            'data-resin-target': 'activityfeed-annotation-resolve',
+        });
+    });
+
+    test('should render resin tags for unresolve activity', () => {
+        const wrapper = getWrapper({
+            canResolve: true,
+            status: 'resolved',
+        });
+
+        expect(wrapper.find("[data-testid='unresolve-annotation-activity']").props()).toMatchObject({
+            'data-resin-itemid': '123',
+            'data-resin-target': 'activityfeed-annotation-unresolve',
         });
     });
 });

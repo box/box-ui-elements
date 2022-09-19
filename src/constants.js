@@ -156,6 +156,7 @@ export const PERMISSION_CAN_DOWNLOAD = 'can_download';
 export const PERMISSION_CAN_EDIT = 'can_edit';
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
 export const PERMISSION_CAN_RENAME = 'can_rename';
+export const PERMISSION_CAN_RESOLVE = 'can_resolve';
 export const PERMISSION_CAN_SET_SHARE_ACCESS = 'can_set_share_access';
 export const PERMISSION_CAN_SHARE = 'can_share';
 export const PERMISSION_CAN_UPLOAD = 'can_upload';
@@ -243,6 +244,7 @@ export const ERROR_CODE_FETCH_FOLDER = 'fetch_folder_error';
 export const ERROR_CODE_FETCH_WEBLINK = 'fetch_weblink_error';
 export const ERROR_CODE_FETCH_CLASSIFICATION = 'fetch_classification_error';
 export const ERROR_CODE_FETCH_COMMENTS = 'fetch_comments_error';
+export const ERROR_CODE_FETCH_REPLIES = 'fetch_replies_error';
 export const ERROR_CODE_FETCH_VERSION = 'fetch_version_error';
 export const ERROR_CODE_FETCH_VERSIONS = 'fetch_versions_error';
 export const ERROR_CODE_FETCH_TASKS = 'fetch_tasks_error';
@@ -260,6 +262,7 @@ export const ERROR_CODE_FETCH_RECENTS = 'fetch_recents_error';
 export const ERROR_CODE_EXECUTE_INTEGRATION = 'execute_integrations_error';
 export const ERROR_CODE_CREATE_ANNOTATION = 'create_annotation_error';
 export const ERROR_CODE_CREATE_COMMENT = 'create_comment_error';
+export const ERROR_CODE_CREATE_REPLY = 'create_reply_error';
 export const ERROR_CODE_CREATE_TASK = 'create_task_error';
 export const ERROR_CODE_CREATE_TASK_LINK = 'create_task_link_error';
 export const ERROR_CODE_CREATE_TASK_ASSIGNMENT = 'create_task_assignment_error';
@@ -447,6 +450,10 @@ export const TASK_EDIT_MODE_EDIT: 'EDIT' = 'EDIT';
 
 /* ----------------- Task Validation ---------------- */
 export const TASK_MAX_GROUP_ASSIGNEES: 250 = 250;
+
+/* ------------------ Comment (and Annotation) Statuses ----------------- */
+export const COMMENT_STATUS_OPEN: 'open' = 'open';
+export const COMMENT_STATUS_RESOLVED: 'resolved' = 'resolved';
 
 /* ----------------- Theme ---------------------------*/
 export const THEME_VERY_DARK = 'vDark';

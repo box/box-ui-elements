@@ -1,6 +1,8 @@
 import React from 'react';
 import sinon from 'sinon';
 
+import classificationColorsMap from '../../classification/classificationColorsMap';
+
 import SharedLinkSettingsModal from '../SharedLinkSettingsModal';
 
 const sandbox = sinon.sandbox.create();
@@ -285,9 +287,26 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
     });
 
     describe('renderModalTitle()', () => {
-        const wrapper = getWrapper();
-        const title = shallow(wrapper.instance().renderModalTitle());
-        expect(title).toMatchSnapshot();
+        test('should render modal title and match snapshot', () => {
+            const wrapper = getWrapper();
+            const title = shallow(wrapper.instance().renderModalTitle());
+            expect(title).toMatchSnapshot();
+        });
+
+        test('should render classification label with fill and stroke colors that match the classification color id', () => {
+            const colorID = 3;
+            const { color } = classificationColorsMap[colorID];
+
+            const item = {
+                bannerPolicy: {
+                    colorID,
+                },
+            };
+
+            const wrapper = getWrapper({ item });
+            const title = shallow(wrapper.instance().renderModalTitle());
+            expect(title.find('Classification').props().color).toBe(color);
+        });
     });
 
     describe('render()', () => {

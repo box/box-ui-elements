@@ -81,6 +81,8 @@ export type DefaultTooltipProps = {
 };
 
 export type TooltipProps = {
+    /** Sets aria-hidden attribute on tooltip */
+    ariaHidden?: boolean;
     /** An HTML element to append the tooltip container into (otherwise appends to body) */
     bodyElement?: HTMLElement;
     /** A React element to put the tooltip on */
@@ -232,6 +234,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
 
     render() {
         const {
+            ariaHidden,
             bodyElement,
             children,
             className,
@@ -361,7 +364,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 <div
                     role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
                     aria-live="polite"
-                    aria-hidden={isLabelMatchingTooltipText}
+                    aria-hidden={ariaHidden || isLabelMatchingTooltipText}
                     data-testid="bdl-Tooltip"
                 >
                     {tooltipInner}
@@ -370,7 +373,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
         ) : (
             <div
                 aria-live="polite"
-                aria-hidden={isLabelMatchingTooltipText}
+                aria-hidden={ariaHidden || isLabelMatchingTooltipText}
                 className={classes}
                 data-testid="bdl-Tooltip"
                 id={this.tooltipID}

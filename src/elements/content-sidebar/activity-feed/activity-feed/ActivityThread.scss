@@ -1,0 +1,17 @@
+@import '../../../common/variables';
+
+.bcs-ActivityThread-toggle {
+    margin-left: $sidebarActivityFeedSpacingHorizontal;
+    color: $bdl-box-blue;
+    font-weight: bold;
+
+    &:hover,
+    &:active {
+        margin-left: $sidebarActivityFeedSpacingHorizontal;
+        font-weight: bold;
+    }
+}
+
+.bcs-ActivityThread-loading {
+    padding-bottom: $bdl-grid-unit * 5;
+}

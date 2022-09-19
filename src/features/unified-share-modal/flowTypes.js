@@ -246,7 +246,7 @@ export type CollabRestrictionType =
     | typeof constants.COLLAB_RESTRICTION_TYPE_ACCESS_POLICY
     | typeof constants.COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER;
 
-type ExternalCollabRestrictionsTypes = {
+type CollabRestrictionsTypes = {
     /** The type of restriction that applies to restrictedCollabEmails */
     collabRestrictionType?: CollabRestrictionType,
     /** Function that fetches the array of justification reason options to display on the justification select field */
@@ -260,6 +260,8 @@ type ExternalCollabRestrictionsTypes = {
     onRemoveAllRestrictedCollabs?: () => void,
     /** An array of all the collab email addresses that have been determined to be restricted by a security policy. */
     restrictedCollabEmails: Array<string>,
+    /** An array of all the group ids that have been determined to be restricted by a security policy. */
+    restrictedGroups: Array<number>,
 };
 
 // Prop types used in the shared link section of the Unified Share Form
@@ -326,7 +328,7 @@ export type USMConfig = {
 // Prop types shared by both the Unified Share Modal and the Unified Share Form
 type BaseUnifiedShareProps = CollaboratorAvatarsTypes &
     EmailFormTypes &
-    ExternalCollabRestrictionsTypes &
+    CollabRestrictionsTypes &
     InviteSectionTypes &
     SharedLinkSectionTypes & {
         /** Inline message */

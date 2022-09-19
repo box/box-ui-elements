@@ -4,6 +4,7 @@
  */
 import * as React from 'react';
 import getProp from 'lodash/get';
+import ActivityThread from './ActivityThread';
 import ActivityItem from './ActivityItem';
 import AppActivity from '../app-activity';
 import AnnotationActivity from '../annotations';
@@ -14,8 +15,10 @@ import withErrorHandling from '../../withErrorHandling';
 import type {
     Annotation,
     AnnotationPermission,
+    BoxCommentPermission,
     FeedItem,
     FeedItems,
+    FeedItemStatus,
     FocusableFeedItemType,
 } from '../../../../common/types/feed';
 import type { SelectorItems, User } from '../../../../common/types/core';
@@ -33,14 +36,24 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasReplies?: boolean,
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems<>,
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
     onAnnotationEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
     onAnnotationSelect?: (annotation: Annotation) => void,
+    onAnnotationStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
-    onCommentEdit?: Function,
+    onCommentEdit?: (
+        id: string,
+        text?: string,
+        status?: FeedItemStatus,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
     onTaskAssignmentUpdate?: Function,
     onTaskDelete?: Function,
     onTaskEdit?: Function,
@@ -57,12 +70,14 @@ const ActiveState = ({
     approverSelectorContacts,
     currentFileVersionId,
     currentUser,
+    hasReplies = false,
     items,
     mentionSelectorContacts,
     getMentionWithQuery,
     onAnnotationDelete,
     onAnnotationEdit,
     onAnnotationSelect,
+    onAnnotationStatusChange,
     onAppActivityDelete,
     onCommentDelete,
     onCommentEdit,
@@ -91,26 +106,42 @@ const ActiveState = ({
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
-                                className="bcs-activity-feed-comment"
                                 data-testid="comment"
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <Comment
-                                    {...item}
+                                <ActivityThread
+                                    data-testid="activity-thread"
+                                    onReplyDelete={onCommentDelete}
+                                    onReplyEdit={onCommentEdit}
                                     currentUser={currentUser}
                                     getAvatarUrl={getAvatarUrl}
+                                    hasReplies={hasReplies}
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
                                     mentionSelectorContacts={mentionSelectorContacts}
-                                    onDelete={onCommentDelete}
-                                    onEdit={onCommentEdit}
-                                    permissions={{
-                                        can_delete: getProp(item.permissions, 'can_delete', false),
-                                        can_edit: getProp(item.permissions, 'can_edit', false),
-                                    }}
+                                    repliesTotalCount={item.total_reply_count}
+                                    replies={item.replies}
                                     translations={translations}
-                                />
+                                >
+                                    <Comment
+                                        {...item}
+                                        currentUser={currentUser}
+                                        getAvatarUrl={getAvatarUrl}
+                                        getMentionWithQuery={getMentionWithQuery}
+                                        getUserProfileUrl={getUserProfileUrl}
+                                        mentionSelectorContacts={mentionSelectorContacts}
+                                        onDelete={onCommentDelete}
+                                        onEdit={onCommentEdit}
+                                        permissions={{
+                                            can_delete: getProp(item.permissions, 'can_delete', false),
+                                            can_edit: getProp(item.permissions, 'can_edit', false),
+                                            can_reply: getProp(item.permissions, 'can_reply', false),
+                                            can_resolve: getProp(item.permissions, 'can_resolve', false),
+                                        }}
+                                        translations={translations}
+                                    />
+                                </ActivityThread>
                             </ActivityItem>
                         );
                     case 'task':
@@ -169,18 +200,34 @@ const ActiveState = ({
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <AnnotationActivity
+                                <ActivityThread
+                                    data-testid="activity-thread"
+                                    onReplyDelete={onCommentDelete}
+                                    onReplyEdit={onCommentEdit}
                                     currentUser={currentUser}
                                     getAvatarUrl={getAvatarUrl}
-                                    getUserProfileUrl={getUserProfileUrl}
                                     getMentionWithQuery={getMentionWithQuery}
-                                    isCurrentVersion={currentFileVersionId === itemFileVersionId}
-                                    item={item}
+                                    getUserProfileUrl={getUserProfileUrl}
+                                    hasReplies={hasReplies}
                                     mentionSelectorContacts={mentionSelectorContacts}
-                                    onEdit={onAnnotationEdit}
-                                    onDelete={onAnnotationDelete}
-                                    onSelect={onAnnotationSelect}
-                                />
+                                    repliesTotalCount={item.total_reply_count}
+                                    replies={item.replies}
+                                    translations={translations}
+                                >
+                                    <AnnotationActivity
+                                        currentUser={currentUser}
+                                        getAvatarUrl={getAvatarUrl}
+                                        getUserProfileUrl={getUserProfileUrl}
+                                        getMentionWithQuery={getMentionWithQuery}
+                                        isCurrentVersion={currentFileVersionId === itemFileVersionId}
+                                        item={item}
+                                        mentionSelectorContacts={mentionSelectorContacts}
+                                        onEdit={onAnnotationEdit}
+                                        onDelete={onAnnotationDelete}
+                                        onSelect={onAnnotationSelect}
+                                        onStatusChange={onAnnotationStatusChange}
+                                    />
+                                </ActivityThread>
                             </ActivityItem>
                         );
                     default:
