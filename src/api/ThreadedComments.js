@@ -17,25 +17,18 @@ import {
     ERROR_CODE_FETCH_REPLIES,
     ERROR_CODE_CREATE_REPLY,
 } from '../constants';
+import { formatComment } from './utils';
 
 import type { ElementsXhrError, ElementsErrorCallback } from '../common/types/api';
 import type { BoxItem, BoxItemPermission } from '../common/types/core';
-import type { BoxCommentPermission, Comment, FeedItemStatus } from '../common/types/feed';
+import type {
+    BoxCommentPermission,
+    Comment,
+    FeedItemStatus,
+    ThreadedComments as ThreadedCommentsType,
+} from '../common/types/feed';
 
 class ThreadedComments extends MarkerBasedApi {
-    /**
-     * Formats comment data for use in components.
-     *
-     * @param {Comment} comment - An individual comment entry from the API
-     * @return {Comment} Updated comment
-     */
-    format(comment: Comment): Comment {
-        return {
-            ...comment,
-            tagged_message: comment.message,
-        };
-    }
-
     /**
      * API URL for comments
      *
@@ -83,7 +76,7 @@ class ThreadedComments extends MarkerBasedApi {
         errorCallback: ElementsErrorCallback,
         file: BoxItem,
         message?: string,
-        successCallback: Function,
+        successCallback: (comment: Comment) => void,
     }): void {
         this.errorCode = ERROR_CODE_CREATE_COMMENT;
         const { id, permissions, type } = file;
@@ -107,8 +100,8 @@ class ThreadedComments extends MarkerBasedApi {
                     message,
                 },
             },
-            successCallback: comment => {
-                successCallback(this.format(comment));
+            successCallback: (comment: Comment) => {
+                successCallback(formatComment(comment));
             },
             errorCallback,
         });
@@ -141,7 +134,7 @@ class ThreadedComments extends MarkerBasedApi {
         message?: string,
         permissions: BoxCommentPermission,
         status?: FeedItemStatus,
-        successCallback: Function,
+        successCallback: (comment: Comment) => void,
     }): void {
         this.errorCode = ERROR_CODE_UPDATE_COMMENT;
 
@@ -171,8 +164,8 @@ class ThreadedComments extends MarkerBasedApi {
             id: fileId,
             url: this.getUrlForId(commentId),
             data: requestData,
-            successCallback: comment => {
-                successCallback(this.format(comment));
+            successCallback: (comment: Comment) => {
+                successCallback(formatComment(comment));
             },
             errorCallback,
         });
@@ -249,7 +242,7 @@ class ThreadedComments extends MarkerBasedApi {
         permissions: BoxItemPermission,
         repliesCount?: number,
         shouldFetchAll?: boolean,
-        successCallback: Function,
+        successCallback: (threadedComments: ThreadedCommentsType) => void,
     }): void {
         this.errorCode = ERROR_CODE_FETCH_COMMENTS;
         try {
@@ -261,8 +254,8 @@ class ThreadedComments extends MarkerBasedApi {
 
         this.markerGet({
             id: fileId,
-            successCallback: data => {
-                successCallback({ ...data, entries: data.entries.map(this.format) });
+            successCallback: (threadedComments: ThreadedCommentsType) => {
+                successCallback({ ...threadedComments, entries: threadedComments.entries.map(formatComment) });
             },
             errorCallback,
             marker,
@@ -293,7 +286,7 @@ class ThreadedComments extends MarkerBasedApi {
         errorCallback: (e: ElementsXhrError, code: string) => void,
         fileId: string,
         permissions: BoxItemPermission,
-        successCallback: Function,
+        successCallback: (comments: Array<Comment>) => void,
     }): void {
         this.errorCode = ERROR_CODE_FETCH_REPLIES;
 
@@ -307,7 +300,9 @@ class ThreadedComments extends MarkerBasedApi {
         this.get({
             id: fileId,
             errorCallback,
-            successCallback,
+            successCallback: ({ entries }: ThreadedCommentsType) => {
+                successCallback(entries.map(formatComment));
+            },
             url: this.getUrlWithRepliesForId(commentId),
         });
     }
@@ -333,7 +328,7 @@ class ThreadedComments extends MarkerBasedApi {
         fileId: string,
         message: string,
         permissions: BoxItemPermission,
-        successCallback: Function,
+        successCallback: (comment: Comment) => void,
     }): void {
         this.errorCode = ERROR_CODE_CREATE_REPLY;
 
@@ -348,7 +343,9 @@ class ThreadedComments extends MarkerBasedApi {
             id: fileId,
             data: { data: { message } },
             errorCallback,
-            successCallback,
+            successCallback: (comment: Comment) => {
+                successCallback(formatComment(comment));
+            },
             url: this.getUrlWithRepliesForId(commentId),
         });
     }

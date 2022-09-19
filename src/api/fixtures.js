@@ -146,7 +146,99 @@ export const threadedComments = [
     },
 ];
 
+export const threadedCommentsFormatted = [
+    {
+        created_at: '1970-01-01T00:00:00.001Z',
+        created_by: {
+            id: '10',
+            type: 'user',
+            name: 'u1_name',
+            login: 'u1@box.com',
+        },
+        id: '20',
+        item: {
+            type: 'file',
+            id: 'f1',
+        },
+        message: '@[111:Aaron Levie] these tigers are cool!',
+        modified_at: '1970-01-01T00:00:00.001Z',
+        tagged_message: '@[111:Aaron Levie] these tigers are cool!',
+        type: 'comment',
+        parent: null,
+        permissions: {
+            can_delete: false,
+            can_edit: false,
+            can_reply: true,
+            can_resolve: true,
+        },
+        replies: [
+            {
+                created_at: '1970-01-01T00:00:00.002Z',
+                created_by: {
+                    id: '11',
+                    type: 'user',
+                    name: 'u2_name',
+                    login: 'u2@box.com',
+                },
+                id: '21',
+                item: {
+                    type: 'file',
+                    id: 'f1',
+                },
+                message: '@[u1:Mateusz Mamczarz] Yes, they really are!',
+                modified_at: '1970-01-01T00:00:00.002Z',
+                tagged_message: '@[u1:Mateusz Mamczarz] Yes, they really are!',
+                type: 'comment',
+                parent: {
+                    id: 'c1',
+                    type: 'comment',
+                },
+                permissions: {
+                    can_delete: false,
+                    can_edit: false,
+                    can_reply: false,
+                    can_resolve: true,
+                },
+                replies: [],
+                total_reply_count: 0,
+                status: 'open',
+            },
+        ],
+        total_reply_count: 1,
+        status: 'open',
+    },
+    {
+        created_at: '1970-01-01T00:00:00.003Z',
+        created_by: {
+            id: '12',
+            type: 'user',
+            name: 'u3_name',
+            login: 'u3@box.com',
+        },
+        id: '21',
+        item: {
+            type: 'file',
+            id: 'f1',
+        },
+        message: 'Test message',
+        modified_at: '1970-01-01T00:00:00.003Z',
+        tagged_message: 'Test message',
+        type: 'comment',
+        parent: null,
+        permissions: {
+            can_delete: false,
+            can_edit: false,
+            can_reply: true,
+            can_resolve: true,
+        },
+        replies: [],
+        total_reply_count: 0,
+        status: 'open',
+    },
+];
+
 export default {
     task,
     threadedComments,
+    threadedCommentsFormatted,
 };

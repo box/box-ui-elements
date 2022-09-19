@@ -10,7 +10,7 @@ import ActivityThreadReplies from './ActivityThreadReplies';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
-import type { Comment as CommentType } from '../../../../common/types/feed';
+import type { Comment as CommentType, CommentFeedItemType } from '../../../../common/types/feed';
 
 import messages from './messages';
 import './ActivityThread.scss';
@@ -25,6 +25,7 @@ type Props = {
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onGetReplies?: () => void,
+    onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string, hasMention: boolean) => void,
     onReplyDelete?: Function,
     onReplyEdit?: Function,
     replies?: Array<CommentType>,

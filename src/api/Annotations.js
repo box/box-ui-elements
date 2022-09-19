@@ -15,6 +15,7 @@ import {
     PERMISSION_CAN_RESOLVE,
 } from '../constants';
 import MarkerBasedApi from './MarkerBasedAPI';
+import { formatComment } from './utils';
 
 import type {
     Annotation,
@@ -24,9 +25,26 @@ import type {
 } from '../common/types/annotations';
 import type { BoxItemPermission } from '../common/types/core';
 import type { ElementsXhrError } from '../common/types/api';
-import type { FeedItemStatus } from '../common/types/feed';
+import type { Comment, FeedItemStatus, ThreadedComments as ThreadedCommentsType } from '../common/types/feed';
 
 export default class Annotations extends MarkerBasedApi {
+    /**
+     * Formats annotation replies' comment data for use in components.
+     *
+     * @param {Annotation} annotation - An individual annotation entry from the API
+     * @return {Annotation} Updated annotation
+     */
+    format(annotation: Annotation): Annotation {
+        if (annotation.replies && annotation.replies.length) {
+            return {
+                ...annotation,
+                replies: annotation.replies.map(formatComment),
+            };
+        }
+
+        return annotation;
+    }
+
     getUrl() {
         return `${this.getBaseApiUrl()}/undoc/annotations`;
     }
@@ -115,7 +133,9 @@ export default class Annotations extends MarkerBasedApi {
                 },
             },
             errorCallback,
-            successCallback,
+            successCallback: (annotation: Annotation) => {
+                successCallback(this.format(annotation));
+            },
             url: this.getUrlForId(annotationId),
         });
     }
@@ -166,7 +186,9 @@ export default class Annotations extends MarkerBasedApi {
         this.get({
             id: fileId,
             errorCallback,
-            successCallback,
+            successCallback: (annotation: Annotation) => {
+                successCallback(this.format(annotation));
+            },
             url: this.getUrlForId(annotationId),
             requestData,
         });
@@ -203,7 +225,10 @@ export default class Annotations extends MarkerBasedApi {
             limit,
             requestData,
             shouldFetchAll,
-            successCallback,
+            successCallback: (annotations: AnnotationsType): AnnotationsType => ({
+                ...annotations,
+                entries: annotations.entries.map(this.format),
+            }),
         });
     }
 
@@ -211,7 +236,7 @@ export default class Annotations extends MarkerBasedApi {
         fileId: string,
         annotationId: string,
         permissions: BoxItemPermission,
-        successCallback: (annotation: Annotation) => void,
+        successCallback: (comments: Array<Comment>) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
     ): void {
         this.errorCode = ERROR_CODE_FETCH_REPLIES;
@@ -226,7 +251,9 @@ export default class Annotations extends MarkerBasedApi {
         this.get({
             id: fileId,
             errorCallback,
-            successCallback,
+            successCallback: ({ entries }: ThreadedCommentsType) => {
+                successCallback(entries.map(formatComment));
+            },
             url: this.getUrlWithRepliesForId(annotationId),
         });
     }
@@ -236,7 +263,7 @@ export default class Annotations extends MarkerBasedApi {
         annotationId: string,
         permissions: BoxItemPermission,
         message: string,
-        successCallback: (annotation: Annotation) => void,
+        successCallback: (comment: Comment) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
     ): void {
         this.errorCode = ERROR_CODE_CREATE_REPLY;
@@ -252,7 +279,9 @@ export default class Annotations extends MarkerBasedApi {
             id: fileId,
             data: { data: { message } },
             errorCallback,
-            successCallback,
+            successCallback: (comment: Comment) => {
+                successCallback(formatComment(comment));
+            },
             url: this.getUrlWithRepliesForId(annotationId),
         });
     }

@@ -120,7 +120,7 @@ describe('api/Annotations', () => {
                 id: '12345',
                 data: { data: { description: { message: 'hello' } } },
                 errorCallback,
-                successCallback,
+                successCallback: expect.any(Function),
                 url: 'https://api.box.com/2.0/undoc/annotations/abc',
             });
         });
@@ -147,7 +147,7 @@ describe('api/Annotations', () => {
                     },
                 },
                 errorCallback,
-                successCallback,
+                successCallback: expect.any(Function),
                 url: 'https://api.box.com/2.0/undoc/annotations/abc',
             });
         });
@@ -204,7 +204,7 @@ describe('api/Annotations', () => {
             expect(annotations.get).toBeCalledWith({
                 id: '12345',
                 errorCallback,
-                successCallback,
+                successCallback: expect.any(Function),
                 url: 'https://api.box.com/2.0/undoc/annotations/abc',
                 requestData: undefined,
             });
@@ -221,7 +221,7 @@ describe('api/Annotations', () => {
             expect(annotations.get).toBeCalledWith({
                 id: '12345',
                 errorCallback,
-                successCallback,
+                successCallback: expect.any(Function),
                 url: 'https://api.box.com/2.0/undoc/annotations/abc',
                 requestData: { params: { fields: 'replies' } },
             });
@@ -257,7 +257,7 @@ describe('api/Annotations', () => {
                     file_id: '12345',
                     file_version_id: '67890',
                 },
-                successCallback,
+                successCallback: expect.any(Function),
             });
         });
 
@@ -272,7 +272,7 @@ describe('api/Annotations', () => {
             expect(annotations.markerGet).toBeCalledWith({
                 id: '12345',
                 errorCallback,
-                successCallback,
+                successCallback: expect.any(Function),
                 limit: 100,
                 shouldFetchAll: false,
                 requestData: {
@@ -309,7 +309,7 @@ describe('api/Annotations', () => {
             expect(annotations.get).toBeCalledWith({
                 id: '12345',
                 errorCallback,
-                successCallback,
+                successCallback: expect.any(Function),
                 url: 'https://api.box.com/2.0/undoc/annotations/67890/replies',
             });
         });
@@ -339,7 +339,7 @@ describe('api/Annotations', () => {
                 id: '12345',
                 data: { data: { message } },
                 errorCallback,
-                successCallback,
+                successCallback: expect.any(Function),
                 url: 'https://api.box.com/2.0/undoc/annotations/67890/replies',
             });
         });
