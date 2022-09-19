@@ -305,7 +305,7 @@ class ThreadedComments extends MarkerBasedApi {
         errorCallback: (e: ElementsXhrError, code: string) => void,
         fileId: string,
         permissions: BoxItemPermission,
-        successCallback: (comments: Array<Comment>) => void,
+        successCallback: (comments: ThreadedCommentsType) => void,
     }): void {
         this.errorCode = ERROR_CODE_FETCH_REPLIES;
 
