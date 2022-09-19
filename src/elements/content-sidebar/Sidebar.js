@@ -12,7 +12,7 @@ import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import { withRouter } from 'react-router-dom';
 import type { Location, RouterHistory } from 'react-router-dom';
-import type { ElementsXhrError } from 'common/types/api';
+import type { ElementsXhrError, ErrorContextProps } from '../../common/types/api';
 import { getBadItemError } from '../../utils/error';
 import messages from '../common/messages';
 import { withAPIContext } from '../common/api-context';
@@ -60,7 +60,7 @@ type Props = {
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
-};
+} & ErrorContextProps;
 
 type State = {
     currentUser?: User,
@@ -216,6 +216,24 @@ class Sidebar extends React.Component<Props, State> {
             this.isForced(isLocationOpen);
         }
     }
+
+    /**
+     * Network error callback
+     *
+     * @private
+     * @param {Error} error - Error object
+     * @param {Error} code - the code for the error
+     * @param {Object} contextInfo - the context info for the error
+     * @return {void}
+     */
+    errorCallback = (error: ElementsXhrError, code: string, contextInfo: Object = {}): void => {
+        /* eslint-disable no-console */
+        console.error(error);
+        /* eslint-enable no-console */
+
+        // eslint-disable-next-line react/prop-types
+        this.props.onError(error, code, contextInfo);
+    };
 
     /**
      * Fetches a Users info

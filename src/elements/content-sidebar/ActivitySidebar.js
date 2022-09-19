@@ -316,7 +316,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         const successCallback = () => {
             this.feedSuccessCallback();
-            onTaskAssignmentUpdate(taskId, taskAssignmentId, status, currentUser.id);
+            onTaskAssignmentUpdate(taskId, taskAssignmentId, status, currentUser?.id);
         };
 
         api.getFeedAPI(false).updateTaskCollaborator(
