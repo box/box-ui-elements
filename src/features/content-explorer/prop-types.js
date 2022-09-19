@@ -43,7 +43,15 @@ const ItemsPropType = PropTypes.arrayOf(ItemOrPlaceholderPropType);
 
 const ItemsMapPropType = PropTypes.objectOf(ItemPropType);
 
+const BreadcrumbPropType = PropTypes.shape({
+    className: PropTypes.string,
+    itemsBeforeOverflow: PropTypes.number,
+    overflowIcon: PropTypes.node,
+    threshold: PropTypes.number,
+});
+
 export {
+    BreadcrumbPropType,
     ContentExplorerModePropType,
     FolderPropType,
     FoldersPathPropType,

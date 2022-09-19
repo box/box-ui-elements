@@ -2,12 +2,14 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import classNames from 'classnames';
 
-import { ContentExplorerModePropType, FoldersPathPropType, ItemsPropType } from '../prop-types';
+import { BreadcrumbPropType, ContentExplorerModePropType, FoldersPathPropType, ItemsPropType } from '../prop-types';
 import ContentExplorerModal from '../content-explorer-modal';
 import NewFolderModal from '../new-folder-modal';
 
 class ContentExplorerModalContainer extends Component {
     static propTypes = {
+        /** Breadcrumb component options */
+        breadcrumbProps: BreadcrumbPropType,
         /** Adds class name. */
         className: PropTypes.string,
         /** Any extra items in the header to the right of the search input (and new folder button) */
@@ -161,6 +163,7 @@ class ContentExplorerModalContainer extends Component {
 
     render() {
         const {
+            breadcrumbProps,
             className,
             headerActionsAccessory,
             modalTitle,
@@ -199,6 +202,7 @@ class ContentExplorerModalContainer extends Component {
         return (
             <div className={classNames('content-explorer-modal-container', className)}>
                 <ContentExplorerModal
+                    breadcrumbProps={breadcrumbProps}
                     className={isNewFolderModalOpen ? 'hidden' : ''}
                     headerActionsAccessory={headerActionsAccessory}
                     title={modalTitle}
