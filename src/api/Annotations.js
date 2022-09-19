@@ -225,10 +225,12 @@ export default class Annotations extends MarkerBasedApi {
             limit,
             requestData,
             shouldFetchAll,
-            successCallback: (annotations: AnnotationsType): AnnotationsType => ({
-                ...annotations,
-                entries: annotations.entries.map(this.format),
-            }),
+            successCallback: (annotations: AnnotationsType): AnnotationsType => {
+                successCallback({
+                    ...annotations,
+                    entries: annotations.entries.map(this.format),
+                });
+            },
         });
     }
 
