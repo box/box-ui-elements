@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { AxiosError } from 'axios';
 
 import ContentAnalyticsErrorState from './ContentAnalyticsErrorState';
 import ContentInsightsSummaryGhostState from './ContentInsightsSummaryGhostState';
@@ -11,7 +10,7 @@ import './ContentInsightsSummary.scss';
 
 interface Props {
     graphData: GraphData;
-    error: AxiosError | null;
+    error: Object | null;
     isLoading: boolean;
     onClick: () => void;
     previousPeriodCount: number;

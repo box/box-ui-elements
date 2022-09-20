@@ -17,14 +17,6 @@ const mockData = [
     { start: 7, previewsCount: 1, type: 'day' },
 ] as GraphData;
 
-const mockError = {
-    config: {},
-    isAxiosError: true,
-    message: 'An error has occured.',
-    name: 'error',
-    toJSON: () => ({}),
-};
-
 describe('features/content-insights/ContentInsightsSummary', () => {
     const getWrapper = (props = {}) =>
         render(
@@ -55,7 +47,7 @@ describe('features/content-insights/ContentInsightsSummary', () => {
             expect(screen.getByLabelText(localize(messages.previewGraphLabel.id))).toBeVisible();
         });
         test('should show the error state when isError is true', () => {
-            getWrapper({ error: mockError });
+            getWrapper({ error: new Error('An error has occured.') });
 
             expect(screen.getByTestId('ContentAnalyticsErrorState')).toBeVisible();
             expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
