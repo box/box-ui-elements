@@ -17,14 +17,20 @@ const mockData = [
     { start: 7, previewsCount: 1, type: 'day' },
 ] as GraphData;
 
-const mockError = jest.fn();
+const mockError = {
+    config: {},
+    isAxiosError: true,
+    message: 'An error has occured.',
+    name: 'error',
+    toJSON: () => ({}),
+};
 
 describe('features/content-insights/ContentInsightsSummary', () => {
     const getWrapper = (props = {}) =>
         render(
             <ContentInsightsSummary
                 graphData={mockData}
-                isError={mockError()}
+                error={null}
                 isLoading={false}
                 onClick={jest.fn()}
                 previousPeriodCount={1}
@@ -42,7 +48,6 @@ describe('features/content-insights/ContentInsightsSummary', () => {
         });
 
         test('should render correctly when isLoading is false and error is null', () => {
-            mockError.mockReturnValueOnce(null);
             getWrapper();
 
             expect(screen.queryByTestId('ContentAnalyticsErrorState')).toBeNull();
@@ -50,8 +55,7 @@ describe('features/content-insights/ContentInsightsSummary', () => {
             expect(screen.getByLabelText(localize(messages.previewGraphLabel.id))).toBeVisible();
         });
         test('should show the error state when isError is true', () => {
-            mockError.mockReturnValueOnce({ response: { status: 400 } });
-            getWrapper();
+            getWrapper({ error: mockError });
 
             expect(screen.getByTestId('ContentAnalyticsErrorState')).toBeVisible();
             expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();

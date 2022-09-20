@@ -11,16 +11,16 @@ import './ContentInsightsSummary.scss';
 
 interface Props {
     graphData: GraphData;
-    isError: AxiosError | null;
+    error: AxiosError | null;
     isLoading: boolean;
     onClick: () => void;
     previousPeriodCount: number;
     totalCount: number;
 }
 
-const ContentInsightsSummary = ({ isError, graphData, isLoading, previousPeriodCount, onClick, totalCount }: Props) => {
+const ContentInsightsSummary = ({ error, graphData, isLoading, previousPeriodCount, onClick, totalCount }: Props) => {
     const renderContentAnalyticsSummary = () => {
-        if (isError) {
+        if (error) {
             return <ContentAnalyticsErrorState />;
         }
 
