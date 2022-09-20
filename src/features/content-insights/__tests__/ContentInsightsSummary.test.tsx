@@ -22,7 +22,7 @@ describe('features/content-insights/ContentInsightsSummary', () => {
         render(
             <ContentInsightsSummary
                 graphData={mockData}
-                error={null}
+                error={undefined}
                 isLoading={false}
                 onClick={jest.fn()}
                 previousPeriodCount={1}

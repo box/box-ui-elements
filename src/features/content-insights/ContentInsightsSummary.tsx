@@ -10,7 +10,7 @@ import './ContentInsightsSummary.scss';
 
 interface Props {
     graphData: GraphData;
-    error: Object | null;
+    error?: Object;
     isLoading: boolean;
     onClick: () => void;
     previousPeriodCount: number;
