@@ -8,6 +8,14 @@ type ClassificationInfo = {
     name: string,
 };
 
+type ContentInsights = {
+    error?: Object,
+    graphData: Array<Object>,
+    isLoading: boolean,
+    previousPeriodCount: number,
+    totalCount: number,
+};
+
 type NavigateOptions = {
     isToggle?: boolean,
 };
@@ -61,6 +69,7 @@ type Errors = {
 
 export type {
     ClassificationInfo,
+    ContentInsights,
     NavigateOptions,
     AdditionalSidebarTab,
     AdditionalSidebarTabFtuxData,

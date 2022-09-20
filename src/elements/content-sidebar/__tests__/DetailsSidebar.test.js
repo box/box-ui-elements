@@ -8,6 +8,7 @@ import { DetailsSidebarComponent as DetailsSidebar } from '../DetailsSidebar';
 jest.mock('../SidebarFileProperties', () => 'SidebarFileProperties');
 jest.mock('../SidebarAccessStats', () => 'SidebarAccessStats');
 jest.mock('../SidebarClassification', () => 'SidebarClassification');
+jest.mock('../SidebarContentInsights', () => 'SidebarContentInsights');
 
 const file = {
     id: 'foo',
@@ -120,6 +121,25 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             wrapper.setState({ file });
 
             expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render DetailsSidebar with content insights', () => {
+            const wrapper = getWrapper(
+                {
+                    contentInsights: {},
+                    hasContentInsights: true,
+                    onContentInsightsClick: jest.fn(),
+                    onContentInsightsMount: jest.fn(),
+                },
+                { disableLifecycleMethods: true },
+            );
+            wrapper.setState({ file });
+
+            expect(wrapper.find('SidebarContentInsights').props()).toMatchObject({
+                contentInsights: {},
+                onContentInsightsClick: expect.any(Function),
+                onContentInsightsMount: expect.any(Function),
+            });
         });
 
         test('should render DetailsSidebar with versions', () => {

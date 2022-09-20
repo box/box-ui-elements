@@ -13,6 +13,8 @@ import API from '../../api';
 import messages from '../common/messages';
 import SidebarAccessStats from './SidebarAccessStats';
 import SidebarClassification from './SidebarClassification';
+// $FlowFixMe typescript component
+import SidebarContentInsights from './SidebarContentInsights';
 import SidebarContent from './SidebarContent';
 import SidebarFileProperties from './SidebarFileProperties';
 import SidebarNotices from './SidebarNotices';
@@ -32,7 +34,7 @@ import {
     IS_ERROR_DISPLAYED,
     SIDEBAR_VIEW_DETAILS,
 } from '../../constants';
-import type { ClassificationInfo, FileAccessStats, Errors } from './flowTypes';
+import type { ClassificationInfo, ContentInsights, FileAccessStats, Errors } from './flowTypes';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { BoxItem } from '../../common/types/core';
@@ -40,10 +42,12 @@ import './DetailsSidebar.scss';
 
 type ExternalProps = {
     classification?: ClassificationInfo,
+    contentInsights: ContentInsights,
     elementId: string,
     fileId: string,
     hasAccessStats?: boolean,
     hasClassification?: boolean,
+    hasContentInsights?: boolean,
     hasNotices?: boolean,
     hasProperties?: boolean,
     hasRetentionPolicy?: boolean,
@@ -51,6 +55,8 @@ type ExternalProps = {
     hasVersions?: boolean,
     onAccessStatsClick?: Function,
     onClassificationClick?: (e: SyntheticEvent<HTMLButtonElement>) => void,
+    onContentInsightsClick?: () => void,
+    onContentInsightsMount?: () => void,
     onRetentionPolicyExtendClick?: Function,
     onVersionHistoryClick?: Function,
     retentionPolicy?: Object,
@@ -316,16 +322,20 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     render() {
         const {
             classification,
+            contentInsights,
             elementId,
             hasProperties,
             hasNotices,
             hasAccessStats,
             hasClassification,
+            hasContentInsights,
             hasRetentionPolicy,
             hasVersions,
             onAccessStatsClick,
             onVersionHistoryClick,
             onClassificationClick,
+            onContentInsightsClick,
+            onContentInsightsMount,
             onRetentionPolicyExtendClick,
             retentionPolicy,
         }: Props = this.props;
@@ -354,6 +364,13 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                         file={file}
                         onAccessStatsClick={onAccessStatsClick}
                         {...accessStatsError}
+                    />
+                )}
+                {file && hasContentInsights && (
+                    <SidebarContentInsights
+                        contentInsights={contentInsights}
+                        onContentInsightsClick={onContentInsightsClick}
+                        onContentInsightsMount={onContentInsightsMount}
                     />
                 )}
                 {file && hasProperties && (
