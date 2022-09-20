@@ -1312,13 +1312,13 @@ class Feed extends Base {
      * @param {string} id - ID of the feed item to update
      * @return {void}
      */
-    createReplyErrorCallback = (e: ElementsXhrError, code: string, parentId: string, id: string) => {
+    createReplyErrorCallback = (error: ElementsXhrError, code: string, parentId: string, id: string) => {
         const errorMessage =
-            e.status === HTTP_STATUS_CODE_CONFLICT
+            error.status === HTTP_STATUS_CODE_CONFLICT
                 ? messages.commentCreateConflictMessage
                 : messages.commentCreateErrorMessage;
         this.updateReplyItem(this.createFeedError(errorMessage), parentId, id);
-        this.feedErrorCallback(false, e, code);
+        this.feedErrorCallback(false, error, code);
     };
 
     /**
@@ -1561,8 +1561,8 @@ class Feed extends Base {
         const successCallbackFn = (comment: Comment) => {
             this.createReplySuccessCallback(comment, parentId, uuid, successCallback);
         };
-        const errorCallbackFn = (e: ErrorResponseData, code: string) => {
-            this.createReplyErrorCallback(e, code, parentId, uuid);
+        const errorCallbackFn = (error: ErrorResponseData, code: string) => {
+            this.createReplyErrorCallback(error, code, parentId, uuid);
         };
 
         if (parentType === 'annotation') {

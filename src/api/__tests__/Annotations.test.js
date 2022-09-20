@@ -8,6 +8,10 @@ import {
     ERROR_CODE_FETCH_ANNOTATION,
     ERROR_CODE_FETCH_ANNOTATIONS,
 } from '../../constants';
+import { threadedCommentsFormatted } from '../fixtures';
+
+const mockFormattedReply = threadedCommentsFormatted[1];
+jest.mock('../utils', () => ({ formatComment: () => mockFormattedReply }));
 
 describe('api/Annotations', () => {
     let annotations;
@@ -350,6 +354,35 @@ describe('api/Annotations', () => {
             annotations.createAnnotationReply('12345', '67890', permissions, message, successCallback, errorCallback);
             expect(errorCallback).toBeCalledWith(expect.any(Error), ERROR_CODE_CREATE_REPLY);
             expect(annotations.post).not.toBeCalled();
+        });
+    });
+
+    describe('annotationSuccessCallback()', () => {
+        test('should call formatReplies with given annotation and call given successCallback fn', () => {
+            const annotation = { id: '123', message: 'test', replies: [] };
+            const successCallback = jest.fn();
+            annotations.formatReplies = jest.fn();
+
+            annotations.annotationSuccessCallback(successCallback, annotation);
+            expect(successCallback).toBeCalled();
+            expect(annotations.formatReplies).toBeCalledWith(annotation);
+        });
+    });
+
+    describe('formatReplies()', () => {
+        test('should return annotation with formatted replies when replies are present', () => {
+            const annotation = { id: '1234', replies: [{ id: '567' }] };
+            const expectedUpdatedAnnotation = { ...annotation, replies: [mockFormattedReply] };
+            const updatedAnnotation = annotations.formatReplies(annotation);
+
+            expect(updatedAnnotation).toMatchObject(expectedUpdatedAnnotation);
+        });
+
+        test('should return given annotation when replies are not present', () => {
+            const annotation = { id: '1234' };
+            const updatedAnnotation = annotations.formatReplies(annotation);
+
+            expect(updatedAnnotation).toMatchObject(annotation);
         });
     });
 });

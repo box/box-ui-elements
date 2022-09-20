@@ -34,15 +34,15 @@ export default class Annotations extends MarkerBasedApi {
      * @param {Annotation} annotation - An individual annotation entry from the API
      * @return {Annotation} Updated annotation
      */
-    format(annotation: Annotation): Annotation {
-        if (annotation.replies && annotation.replies.length) {
-            return {
-                ...annotation,
-                replies: annotation.replies.map(formatComment),
-            };
+    formatReplies(annotation: Annotation): Annotation {
+        if (!annotation.replies || !annotation.replies.length) {
+            return annotation;
         }
 
-        return annotation;
+        return {
+            ...annotation,
+            replies: annotation.replies.map(formatComment),
+        };
     }
 
     getUrl() {
@@ -133,9 +133,7 @@ export default class Annotations extends MarkerBasedApi {
                 },
             },
             errorCallback,
-            successCallback: (annotation: Annotation) => {
-                successCallback(this.format(annotation));
-            },
+            successCallback: this.annotationSuccessCallback.bind(this, successCallback),
             url: this.getUrlForId(annotationId),
         });
     }
@@ -186,9 +184,7 @@ export default class Annotations extends MarkerBasedApi {
         this.get({
             id: fileId,
             errorCallback,
-            successCallback: (annotation: Annotation) => {
-                successCallback(this.format(annotation));
-            },
+            successCallback: this.annotationSuccessCallback.bind(this, successCallback),
             url: this.getUrlForId(annotationId),
             requestData,
         });
@@ -228,7 +224,7 @@ export default class Annotations extends MarkerBasedApi {
             successCallback: (annotations: AnnotationsType) => {
                 successCallback({
                     ...annotations,
-                    entries: annotations.entries.map(this.format),
+                    entries: annotations.entries.map(this.formatReplies),
                 });
             },
         });
@@ -286,5 +282,9 @@ export default class Annotations extends MarkerBasedApi {
             },
             url: this.getUrlWithRepliesForId(annotationId),
         });
+    }
+
+    annotationSuccessCallback(successCallback: (annotation: Annotation) => void, annotation: Annotation) {
+        successCallback(this.formatReplies(annotation));
     }
 }
