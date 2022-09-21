@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import ContentAnalyticsErrorState from './ContentAnalyticsErrorState';
 import ContentInsightsSummaryGhostState from './ContentInsightsSummaryGhostState';
 import GraphCardPreviewsSummary from './GraphCardPreviewsSummary';
 import OpenContentInsightsButton from './OpenContentInsightsButton';
@@ -9,17 +10,24 @@ import './ContentInsightsSummary.scss';
 
 interface Props {
     graphData: GraphData;
+    error?: Object;
     isLoading: boolean;
     onClick: () => void;
     previousPeriodCount: number;
     totalCount: number;
 }
 
-const ContentInsightsSummary = ({ graphData, isLoading, previousPeriodCount, onClick, totalCount }: Props) => (
-    <div className="ContentInsightsSummary">
-        {isLoading ? (
-            <ContentInsightsSummaryGhostState />
-        ) : (
+const ContentInsightsSummary = ({ error, graphData, isLoading, previousPeriodCount, onClick, totalCount }: Props) => {
+    const renderContentAnalyticsSummary = () => {
+        if (error) {
+            return <ContentAnalyticsErrorState />;
+        }
+
+        if (isLoading) {
+            return <ContentInsightsSummaryGhostState />;
+        }
+
+        return (
             <>
                 <GraphCardPreviewsSummary
                     graphData={graphData}
@@ -28,8 +36,10 @@ const ContentInsightsSummary = ({ graphData, isLoading, previousPeriodCount, onC
                 />
                 <OpenContentInsightsButton onClick={onClick} />
             </>
-        )}
-    </div>
-);
+        );
+    };
+
+    return <div className="ContentInsightsSummary">{renderContentAnalyticsSummary()}</div>;
+};
 
 export default ContentInsightsSummary;

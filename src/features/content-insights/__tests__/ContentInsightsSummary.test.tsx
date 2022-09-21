@@ -22,6 +22,7 @@ describe('features/content-insights/ContentInsightsSummary', () => {
         render(
             <ContentInsightsSummary
                 graphData={mockData}
+                error={undefined}
                 isLoading={false}
                 onClick={jest.fn()}
                 previousPeriodCount={1}
@@ -38,11 +39,19 @@ describe('features/content-insights/ContentInsightsSummary', () => {
             expect(screen.queryByLabelText(localize(messages.previewGraphLabel.id))).toBeNull();
         });
 
-        test('should render correctly when isLoading is false', () => {
+        test('should render correctly when isLoading is false and error is null', () => {
             getWrapper();
 
+            expect(screen.queryByTestId('ContentAnalyticsErrorState')).toBeNull();
             expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
             expect(screen.getByLabelText(localize(messages.previewGraphLabel.id))).toBeVisible();
+        });
+        test('should show the error state when isError is true', () => {
+            getWrapper({ error: new Error('An error has occured.') });
+
+            expect(screen.getByTestId('ContentAnalyticsErrorState')).toBeVisible();
+            expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
+            expect(screen.queryByLabelText(localize(messages.previewGraphLabel.id))).toBeNull();
         });
 
         test('should call the onClick callback', () => {
