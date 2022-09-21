@@ -7949,11 +7949,6 @@ bottleneck@^2.18.1:
   resolved "https://registry.yarnpkg.com/bottleneck/-/bottleneck-2.19.5.tgz#5df0b90f59fd47656ebe63c78a98419205cadd91"
   integrity sha512-VHiNCbI1lKdl44tGrhNfU3lup0Tj/ZBMJB5/2ZbNXRCPuRCO7ed2mgcK4r17y+KB2EfuYuRaVlwNbAeaWGSpbw==
 
-box-annotations@^4.1.1-beta.1:
-  version "4.1.1-beta.1"
-  resolved "https://registry.yarnpkg.com/box-annotations/-/box-annotations-4.1.1-beta.1.tgz#90952ec8a02811b3210a5741eb1b66352cad62c7"
-  integrity sha512-R8dUND4X2T7zMCEnVUe0RpXsruqe1je9G7c4LceYHKVjcG6FWH8ifsrVxjDemzoO1K/rqAUKiIGD4Xr2FrBRUg==
-
 boxen@^1.2.1:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/boxen/-/boxen-1.3.0.tgz#55c6c39a8ba58d9c61ad22cd877532deb665a20b"

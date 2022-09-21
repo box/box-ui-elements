@@ -237,7 +237,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onSuccess: ?Function,
         onError: ?Function,
     ): void => {
-        const { currentUser, file, api } = this.props;
+        const { api, currentUser, file } = this.props;
 
         if (!currentUser) {
             throw getBadUserError();
@@ -288,7 +288,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     updateTask = (task: TaskUpdatePayload, onSuccess: ?Function, onError: ?Function): void => {
-        const { file, api, onTaskUpdate } = this.props;
+        const { api, file, onTaskUpdate } = this.props;
         const errorCallback = (e, code) => {
             if (onError) {
                 onError(e, code);
@@ -312,7 +312,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: TaskCollabStatus): void => {
-        const { currentUser, file, api, onTaskAssignmentUpdate } = this.props;
+        const { api, currentUser, file, onTaskAssignmentUpdate } = this.props;
 
         const successCallback = () => {
             this.feedSuccessCallback();
@@ -339,7 +339,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return void
      */
     deleteComment = ({ id, permissions }: { id: string, permissions: BoxCommentPermission }): void => {
-        const { file, api, hasReplies, onCommentDelete } = this.props;
+        const { api, file, hasReplies, onCommentDelete } = this.props;
 
         const successCallback = (comment: Comment) => {
             this.feedSuccessCallback();
@@ -417,7 +417,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     createComment = (text: string, hasMention: boolean): void => {
-        const { currentUser, file, api, hasReplies, onCommentCreate } = this.props;
+        const { api, currentUser, file, hasReplies, onCommentCreate } = this.props;
 
         if (!currentUser) {
             throw getBadUserError();
@@ -491,7 +491,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return void
      */
     deleteAppActivity = ({ id }: { id: string }): void => {
-        const { file, api } = this.props;
+        const { api, file } = this.props;
 
         api.getFeedAPI(false).deleteAppActivity(file, id, this.feedSuccessCallback, this.feedErrorCallback);
 
@@ -507,8 +507,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     fetchFeedItems(shouldRefreshCache: boolean = false, shouldDestroy: boolean = false) {
         const {
-            file,
             api,
+            file,
             features,
             hasReplies: shouldShowReplies,
             hasTasks: shouldShowTasks,
@@ -613,6 +613,21 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * File @mention contacts fetch success callback
      *
      * @private
+     * @param {string} searchStr - Search string to filter file collaborators by
+     * @return {void}
+     */
+    getApproverWithQuery = debounce(
+        (searchStr: string) =>
+            this.getCollaborators(this.getApproverContactsSuccessCallback, this.errorCallback, searchStr, {
+                includeGroups: true,
+            }),
+        DEFAULT_COLLAB_DEBOUNCE,
+    );
+
+    /**
+     * File @mention contacts fetch success callback
+     *
+     * @private
      * @param {BoxItemCollection} collaborators - Collaborators response data
      * @return {void}
      */
@@ -625,21 +640,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             }),
         );
     };
-
-    /**
-     * File @mention contacts fetch success callback
-     *
-     * @private
-     * @param {string} searchStr - Search string to filter file collaborators by
-     * @return {void}
-     */
-    getApproverWithQuery = debounce(
-        (searchStr: string) =>
-            this.getCollaborators(this.getApproverContactsSuccessCallback, this.errorCallback, searchStr, {
-                includeGroups: true,
-            }),
-        DEFAULT_COLLAB_DEBOUNCE,
-    );
 
     /**
      * Fetches file @mention's
@@ -671,7 +671,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         { includeGroups = false }: { includeGroups: boolean } = {},
     ): void {
         // Do not fetch without filter
-        const { file, api } = this.props;
+        const { api, file } = this.props;
         if (!searchStr || searchStr.trim() === '') {
             return;
         }
@@ -818,7 +818,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             activeFeedEntryType,
             onTaskView,
         } = this.props;
-        const { approverSelectorContacts, mentionSelectorContacts, contactsLoaded, activityFeedError } = this.state;
+        const { activityFeedError, approverSelectorContacts, contactsLoaded, mentionSelectorContacts } = this.state;
 
         return (
             <SidebarContent
