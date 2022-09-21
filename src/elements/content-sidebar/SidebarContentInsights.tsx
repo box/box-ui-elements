@@ -24,7 +24,6 @@ interface Props {
     contentInsights?: ContentInsights;
     error?: Object;
     onContentInsightsClick?: () => void;
-    onContentInsightsMount?: () => void;
 }
 
 const defaultContentInsights = {
@@ -34,22 +33,8 @@ const defaultContentInsights = {
     totalCount: 0,
 };
 
-const SidebarContentInsights = ({
-    contentInsights = defaultContentInsights,
-    onContentInsightsClick = noop,
-    onContentInsightsMount = noop,
-}: Props) => {
-    const [hasMounted, setHasMounted] = React.useState(false);
+const SidebarContentInsights = ({ contentInsights = defaultContentInsights, onContentInsightsClick = noop }: Props) => {
     const { graphData, isLoading, previousPeriodCount, totalCount } = contentInsights;
-
-    React.useEffect(() => {
-        if (hasMounted) {
-            return;
-        }
-
-        onContentInsightsMount();
-        setHasMounted(true);
-    }, [hasMounted, onContentInsightsMount]);
 
     return (
         <SidebarSection title={<FormattedMessage {...messages.sidebarContentInsights} />}>

@@ -44,6 +44,7 @@ type ExternalProps = {
     classification?: ClassificationInfo,
     contentInsights: ContentInsights,
     elementId: string,
+    fetchContentInsights?: () => void,
     fileId: string,
     hasAccessStats?: boolean,
     hasClassification?: boolean,
@@ -56,7 +57,6 @@ type ExternalProps = {
     onAccessStatsClick?: Function,
     onClassificationClick?: (e: SyntheticEvent<HTMLButtonElement>) => void,
     onContentInsightsClick?: () => void,
-    onContentInsightsMount?: () => void,
     onRetentionPolicyExtendClick?: Function,
     onVersionHistoryClick?: Function,
     retentionPolicy?: Object,
@@ -103,16 +103,24 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
+        const { hasAccessStats, hasContentInsights, fetchContentInsights } = this.props;
+
         this.fetchFile();
-        if (this.props.hasAccessStats) {
+        if (hasAccessStats) {
             this.fetchAccessStats();
+        }
+
+        if (hasContentInsights && fetchContentInsights) {
+            fetchContentInsights();
         }
     }
 
-    componentDidUpdate({ hasAccessStats: prevHasAccessStats }: Props) {
-        const { hasAccessStats } = this.props;
+    componentDidUpdate({ hasAccessStats: prevHasAccessStats, hasContentInsights: prevHasContentInsights }: Props) {
+        const { hasAccessStats, hasContentInsights, fetchContentInsights } = this.props;
         // Component visibility props such as hasAccessStats can sometimes be flipped after an async call
         const hasAccessStatsChanged = prevHasAccessStats !== hasAccessStats;
+        const hasContentInsightsChanged = prevHasContentInsights !== hasContentInsights;
+
         if (hasAccessStatsChanged) {
             if (hasAccessStats) {
                 this.fetchAccessStats();
@@ -123,6 +131,10 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                     accessStatsError: undefined,
                 });
             }
+        }
+
+        if (hasContentInsightsChanged && hasContentInsights && fetchContentInsights) {
+            fetchContentInsights();
         }
     }
 
@@ -335,7 +347,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             onVersionHistoryClick,
             onClassificationClick,
             onContentInsightsClick,
-            onContentInsightsMount,
             onRetentionPolicyExtendClick,
             retentionPolicy,
         }: Props = this.props;
@@ -370,7 +381,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                     <SidebarContentInsights
                         contentInsights={contentInsights}
                         onContentInsightsClick={onContentInsightsClick}
-                        onContentInsightsMount={onContentInsightsMount}
                     />
                 )}
                 {file && hasProperties && (

@@ -17,7 +17,6 @@ describe('elements/content-sidebar/SidebarContentInsights', () => {
             <SidebarContentInsights
                 contentInsights={{ graphData: [], isLoading: true, previousPeriodCount: 0, totalCount: 0 }}
                 onContentInsightsClick={jest.fn()}
-                onContentInsightsMount={jest.fn()}
                 {...props}
             />,
             {
@@ -44,19 +43,6 @@ describe('elements/content-sidebar/SidebarContentInsights', () => {
             fireEvent.click(wrapper.getByText(localize(contentInsightsMessages.openContentInsightsButton.id)));
 
             expect(onContentInsightsClick).toBeCalledTimes(1);
-        });
-    });
-
-    describe('effects', () => {
-        test('should only call onContentInsightsMount once after component mounts', () => {
-            const onContentInsightsMount = jest.fn();
-            const { rerender } = getWrapper({ onContentInsightsMount });
-
-            expect(onContentInsightsMount).toBeCalledTimes(1);
-
-            rerender(<SidebarContentInsights onContentInsightsMount={onContentInsightsMount} />);
-
-            expect(onContentInsightsMount).toBeCalledTimes(1);
         });
     });
 });

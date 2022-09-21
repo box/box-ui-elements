@@ -127,9 +127,9 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             const wrapper = getWrapper(
                 {
                     contentInsights: {},
+                    fetchContentInsights: jest.fn(),
                     hasContentInsights: true,
                     onContentInsightsClick: jest.fn(),
-                    onContentInsightsMount: jest.fn(),
                 },
                 { disableLifecycleMethods: true },
             );
@@ -138,7 +138,6 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             expect(wrapper.find('SidebarContentInsights').props()).toMatchObject({
                 contentInsights: {},
                 onContentInsightsClick: expect.any(Function),
-                onContentInsightsMount: expect.any(Function),
             });
         });
 
@@ -188,6 +187,20 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             instance.componentDidMount();
             expect(instance.fetchFile).toHaveBeenCalled();
             expect(instance.fetchAccessStats).toHaveBeenCalled();
+        });
+
+        test('should fetch the content insights', () => {
+            const fetchContentInsights = jest.fn();
+
+            wrapper.setProps({
+                fetchContentInsights,
+                hasClassification: true,
+                hasContentInsights: true,
+            });
+            instance.componentDidMount();
+            expect(instance.fetchFile).toHaveBeenCalled();
+            expect(instance.fetchAccessStats).not.toBeCalled();
+            expect(fetchContentInsights).toBeCalled();
         });
     });
 
@@ -464,6 +477,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             wrapper = getWrapper({
                 file,
                 hasAccessStats: false,
+                hasContentInsights: false,
                 hasClassification: false,
                 refreshIdentity: false,
             });
@@ -477,6 +491,17 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             });
 
             expect(instance.fetchAccessStats).toHaveBeenCalled();
+        });
+
+        test('should fetch the content insights data if the content insights visibility changed', () => {
+            const fetchContentInsights = jest.fn();
+
+            wrapper.setProps({
+                fetchContentInsights,
+                hasContentInsights: true,
+            });
+
+            expect(fetchContentInsights).toBeCalled();
         });
     });
 
