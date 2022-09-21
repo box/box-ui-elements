@@ -17,6 +17,8 @@ const mockData = [
     { start: 7, previewsCount: 1, type: 'day' },
 ] as GraphData;
 
+const baseError = new Error('An error has occured');
+
 describe('features/content-insights/ContentInsightsSummary', () => {
     const getWrapper = (props = {}) =>
         render(
@@ -46,10 +48,21 @@ describe('features/content-insights/ContentInsightsSummary', () => {
             expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
             expect(screen.getByLabelText(localize(messages.previewGraphLabel.id))).toBeVisible();
         });
-        test('should show the error state when isError is true', () => {
-            getWrapper({ error: new Error('An error has occured.') });
 
-            expect(screen.getByTestId('ContentAnalyticsErrorState')).toBeVisible();
+        test('should show the error state when error exists', () => {
+            getWrapper({ error: baseError });
+
+            expect(screen.getByTestId('ContentAnalyticsErrorState-image')).toBeVisible();
+            expect(screen.queryByTestId('ContentAnalyticsPermissionError-image')).not.toBeInTheDocument();
+            expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
+            expect(screen.queryByLabelText(localize(messages.previewGraphLabel.id))).toBeNull();
+        });
+
+        test('should show the permission error state when error exists and is a permission error', () => {
+            getWrapper({ error: { ...baseError, status: 403 } });
+
+            expect(screen.getByTestId('ContentAnalyticsPermissionError-image')).toBeVisible();
+            expect(screen.queryByTestId('ContentAnalyticsErrorState-image')).not.toBeInTheDocument();
             expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
             expect(screen.queryByLabelText(localize(messages.previewGraphLabel.id))).toBeNull();
         });

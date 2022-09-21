@@ -6,6 +6,11 @@ const messages = defineMessages({
         description: 'Text shown to users when opening the content insights flyout and there is an error',
         id: 'be.contentInsights.contentAnalyticsErrorText',
     },
+    contentAnalyticsPermissionError: {
+        defaultMessage: 'Oops! You no longer have access to view content insights.',
+        description: 'Message shown when the user does not have access to view content insights anymore',
+        id: 'enduser.contentInsights.contentAnalyticsPermissionError',
+    },
     contentInsightsTitle: {
         defaultMessage: 'Content Insights',
         description: 'Title for Content Insights section in file sidebar',
