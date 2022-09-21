@@ -87,6 +87,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     describe('componentDidMount()', () => {
         let wrapper;
         let instance;
+
         beforeEach(() => {
             jest.spyOn(ActivitySidebarComponent.prototype, 'fetchFeedItems');
 

@@ -29,7 +29,7 @@ import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
 import type { User, BoxItem } from '../../common/types/core';
-import type { Errors } from './flowTypes';
+import type { Errors } from '../common/flowTypes';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,

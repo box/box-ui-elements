@@ -32,7 +32,6 @@ import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
 import { withFeatureProvider } from '../common/feature-checking';
 import { EVENT_JS_READY } from '../common/logger/constants';
-import importV4Annotations from '../common/async';
 import ReloadNotification from './ReloadNotification';
 import API from '../../api';
 import PreviewHeader from './preview-header';
@@ -119,7 +118,6 @@ type Props = {
     staticPath: string,
     token: Token,
     useHotkeys: boolean,
-    useV4BoxAnnotations?: boolean,
 } & ErrorContextProps &
     WithLoggerProps &
     WithAnnotationsProps &
@@ -211,7 +209,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
         staticHost: DEFAULT_HOSTNAME_STATIC,
         staticPath: DEFAULT_PATH_STATIC_PREVIEW,
         useHotkeys: true,
-        useV4BoxAnnotations: false,
     };
 
     id: string;
@@ -224,7 +221,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     api: API;
 
-    // populated when consumer sets useV4BoxAnnotations to true and they did not provide their own boxAnnotations dependency
     boxAnnotations: Object;
 
     // Defines a generic type for ContentSidebar, since an import would interfere with code splitting
@@ -270,6 +266,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             cache,
             fileId,
             language,
+            logger,
             requestInterceptor,
             responseInterceptor,
             sharedLink,
@@ -296,20 +293,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
             prevFileIdProp: fileId,
         };
 
-        const { logger } = props;
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
-
-        if (this.props.useV4BoxAnnotations && !this.props.boxAnnotations && !global.BoxAnnotations) {
-            importV4Annotations().then(() => {
-                const features = {
-                    discoverability: true,
-                    drawing: true,
-                };
-                this.boxAnnotations = new global.BoxAnnotations(null, { features });
-            });
-        }
     }
 
     static getDerivedStateFromProps(props: Props, state: State) {
@@ -776,7 +762,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             previewExperiences,
             showAnnotationsControls,
             token: tokenOrTokenFunction,
-            useV4BoxAnnotations,
             ...rest
         }: Props = this.props;
         const { file, selectedVersion, startAt }: State = this.state;
@@ -808,7 +793,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         const previewOptions = {
-            boxAnnotations: useV4BoxAnnotations && !boxAnnotations ? this.boxAnnotations : boxAnnotations,
             container: `#${this.id} .bcpr-content`,
             enableThumbnailsSidebar,
             fileOptions: fileOpts,
@@ -985,6 +969,41 @@ class ContentPreview extends React.PureComponent<Props, State> {
     };
 
     /**
+     * Mouse move handler that is throttled and show
+     * the navigation arrows if applicable.
+     *
+     * @return {void}
+     */
+    onMouseMove = throttle(() => {
+        const viewer = this.getViewer();
+        const isPreviewing = !!viewer;
+        const CLASS_NAVIGATION_VISIBILITY = 'bcpr-nav-is-visible';
+
+        clearTimeout(this.mouseMoveTimeoutID);
+
+        if (!this.previewContainer) {
+            return;
+        }
+
+        // Always assume that navigation arrows will be hidden
+        this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
+
+        // Only show it if either we aren't previewing or if we are then the viewer
+        // is not blocking the show. If we are previewing then the viewer may choose
+        // to not allow navigation arrows. This is mostly useful for videos since the
+        // navigation arrows may interfere with the settings menu inside video player.
+        if (this.previewContainer && (!isPreviewing || viewer.allowNavigationArrows())) {
+            this.previewContainer.classList.add(CLASS_NAVIGATION_VISIBILITY);
+        }
+
+        this.mouseMoveTimeoutID = setTimeout(() => {
+            if (this.previewContainer) {
+                this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
+            }
+        }, 1500);
+    }, 1000);
+
+    /**
      * Finds the index of current file inside the collection
      *
      * @return {number} -1 if not indexed
@@ -1088,41 +1107,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.preview.print();
         }
     };
-
-    /**
-     * Mouse move handler that is throttled and show
-     * the navigation arrows if applicable.
-     *
-     * @return {void}
-     */
-    onMouseMove = throttle(() => {
-        const viewer = this.getViewer();
-        const isPreviewing = !!viewer;
-        const CLASS_NAVIGATION_VISIBILITY = 'bcpr-nav-is-visible';
-
-        clearTimeout(this.mouseMoveTimeoutID);
-
-        if (!this.previewContainer) {
-            return;
-        }
-
-        // Always assume that navigation arrows will be hidden
-        this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
-
-        // Only show it if either we aren't previewing or if we are then the viewer
-        // is not blocking the show. If we are previewing then the viewer may choose
-        // to not allow navigation arrows. This is mostly useful for videos since the
-        // navigation arrows may interfere with the settings menu inside video player.
-        if (this.previewContainer && (!isPreviewing || viewer.allowNavigationArrows())) {
-            this.previewContainer.classList.add(CLASS_NAVIGATION_VISIBILITY);
-        }
-
-        this.mouseMoveTimeoutID = setTimeout(() => {
-            if (this.previewContainer) {
-                this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
-            }
-        }, 1500);
-    }, 1000);
 
     /**
      * Keyboard events

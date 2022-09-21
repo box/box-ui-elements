@@ -6,10 +6,8 @@ import PreviewMask from '../PreviewMask';
 import SidebarUtils from '../../content-sidebar/SidebarUtils';
 import { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../../utils/fields';
-import importV4Annotations from '../../common/async';
 
 jest.mock('../../common/Internationalize', () => 'mock-internationalize');
-jest.mock('../../common/async', () => jest.fn());
 
 describe('elements/content-preview/ContentPreview', () => {
     const getWrapper = (props = {}) =>
@@ -385,87 +383,6 @@ describe('elements/content-preview/ContentPreview', () => {
                             },
                         },
                     },
-                }),
-            );
-        });
-
-        test('should use boxAnnotations instance if provided', async () => {
-            const boxAnnotations = jest.fn();
-            const wrapper = getWrapper({ ...props, boxAnnotations });
-
-            wrapper.setState({ file });
-
-            const instance = wrapper.instance();
-
-            await instance.loadPreview();
-
-            expect(instance.preview.show).toHaveBeenCalledWith(
-                file.id,
-                expect.any(Function),
-                expect.objectContaining({
-                    boxAnnotations,
-                }),
-            );
-        });
-
-        test('should populate boxAnnotations if useV4BoxAnnotations is true', async () => {
-            const boxAnnotationsMock = jest.fn();
-
-            importV4Annotations.mockImplementation(() => {
-                global.BoxAnnotations = () => boxAnnotationsMock;
-                return Promise.resolve();
-            });
-
-            const wrapper = await getWrapper({ ...props, useV4BoxAnnotations: true });
-
-            wrapper.setState({ file });
-
-            const instance = wrapper.instance();
-
-            await instance.loadPreview();
-
-            expect(instance.preview.show).toHaveBeenCalledWith(
-                file.id,
-                expect.any(Function),
-                expect.objectContaining({
-                    boxAnnotations: boxAnnotationsMock,
-                }),
-            );
-        });
-
-        test('should not populate boxAnnotations if useV4BoxAnnotations is false', async () => {
-            const wrapper = await getWrapper({ ...props, useV4BoxAnnotations: false });
-
-            wrapper.setState({ file });
-
-            const instance = wrapper.instance();
-
-            await instance.loadPreview();
-
-            expect(instance.preview.show).toHaveBeenCalledWith(
-                file.id,
-                expect.any(Function),
-                expect.objectContaining({
-                    boxAnnotations: undefined,
-                }),
-            );
-        });
-
-        test('should not replace provided boxAnnotations if useV4BoxAnnotations is true', async () => {
-            const boxAnnotations = jest.fn();
-            const wrapper = await getWrapper({ ...props, boxAnnotations, useV4BoxAnnotations: true });
-
-            wrapper.setState({ file });
-
-            const instance = wrapper.instance();
-
-            await instance.loadPreview();
-
-            expect(instance.preview.show).toHaveBeenCalledWith(
-                file.id,
-                expect.any(Function),
-                expect.objectContaining({
-                    boxAnnotations,
                 }),
             );
         });

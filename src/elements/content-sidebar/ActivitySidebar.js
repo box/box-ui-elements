@@ -52,8 +52,8 @@ import type {
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { SelectorItems, User, UserMini, GroupMini, BoxItem } from '../../common/types/core';
-import type { GetProfileUrlCallback } from '../common/flowTypes';
-import type { Translations, Collaborators, Errors } from './flowTypes';
+import type { Errors, GetProfileUrlCallback } from '../common/flowTypes';
+import type { Translations, Collaborators } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 import './ActivitySidebar.scss';
 

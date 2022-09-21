@@ -34,7 +34,8 @@ import {
     IS_ERROR_DISPLAYED,
     SIDEBAR_VIEW_DETAILS,
 } from '../../constants';
-import type { ClassificationInfo, ContentInsights, FileAccessStats, Errors } from './flowTypes';
+import type { Errors } from '../common/flowTypes';
+import type { ClassificationInfo, ContentInsights, FileAccessStats } from './flowTypes';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { BoxItem } from '../../common/types/core';

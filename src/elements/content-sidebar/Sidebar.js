@@ -12,32 +12,29 @@ import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import { withRouter } from 'react-router-dom';
 import type { Location, RouterHistory } from 'react-router-dom';
-import type { ElementsXhrError, ErrorContextProps } from '../../common/types/api';
-import { getBadItemError } from '../../utils/error';
-import messages from '../common/messages';
-import { withAPIContext } from '../common/api-context';
-import API from '../../api';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import LocalStore from '../../utils/LocalStore';
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
+import { withCurrentUser } from '../common/current-user';
 import { withFeatureConsumer } from '../common/feature-checking';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
-import type { AdditionalSidebarTab, Errors } from './flowTypes';
+import type { AdditionalSidebarTab } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
+import type { Errors } from '../common/flowTypes';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
     additionalTabs?: Array<AdditionalSidebarTab>,
-    api: API,
     className: string,
     currentUser?: User,
+    currentUserError?: Errors,
     detailsSidebarProps: DetailsSidebarProps,
     features: FeatureConfig,
     file: BoxItem,
@@ -60,11 +57,9 @@ type Props = {
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
-} & ErrorContextProps;
+};
 
 type State = {
-    currentUser?: User,
-    currentUserError?: Errors,
     isDirty: boolean,
 };
 
@@ -99,11 +94,6 @@ class Sidebar extends React.Component<Props, State> {
         };
 
         this.setForcedByLocation();
-    }
-
-    componentDidMount() {
-        const { currentUser } = this.props;
-        this.fetchCurrentUser(currentUser);
     }
 
     componentDidUpdate(prevProps: Props): void {
@@ -217,89 +207,13 @@ class Sidebar extends React.Component<Props, State> {
         }
     }
 
-    /**
-     * Network error callback
-     *
-     * @private
-     * @param {Error} error - Error object
-     * @param {Error} code - the code for the error
-     * @param {Object} contextInfo - the context info for the error
-     * @return {void}
-     */
-    errorCallback = (error: ElementsXhrError, code: string, contextInfo: Object = {}): void => {
-        /* eslint-disable no-console */
-        console.error(error);
-        /* eslint-enable no-console */
-
-        // eslint-disable-next-line react/prop-types
-        this.props.onError(error, code, contextInfo);
-    };
-
-    /**
-     * Fetches a Users info
-     *
-     * @private
-     * @param {User} [user] - Box User. If missing, gets user that the current token was generated for.
-     * @param {boolean} shouldDestroy
-     * @return {void}
-     */
-    fetchCurrentUser(user?: User, shouldDestroy: boolean = false): void {
-        const { api, file } = this.props;
-
-        if (!file) {
-            throw getBadItemError();
-        }
-
-        if (typeof user === 'undefined') {
-            api.getUsersAPI(shouldDestroy).getUser(
-                file.id,
-                this.fetchCurrentUserSuccessCallback,
-                this.fetchCurrentUserErrorCallback,
-            );
-        } else {
-            this.setState({ currentUser: user, currentUserError: undefined });
-        }
-    }
-
-    /**
-     * User fetch success callback
-     *
-     * @private
-     * @param {Object} currentUser - User info object
-     * @return {void}
-     */
-    fetchCurrentUserSuccessCallback = (currentUser: User): void => {
-        this.setState({ currentUser, currentUserError: undefined });
-    };
-
-    /**
-     * Handles a failed file user info fetch
-     *
-     * @private
-     * @param {ElementsXhrError} e - API error
-     * @return {void}
-     */
-    fetchCurrentUserErrorCallback = (e: ElementsXhrError, code: string) => {
-        this.setState({
-            currentUser: undefined,
-            currentUserError: {
-                maskError: {
-                    errorHeader: messages.currentUserErrorHeaderMessage,
-                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
-                },
-            },
-        });
-
-        this.errorCallback(e, code, {
-            error: e,
-        });
-    };
-
     render() {
         const {
             activitySidebarProps,
             additionalTabs,
             className,
+            currentUser,
+            currentUserError,
             detailsSidebarProps,
             file,
             fileId,
@@ -325,8 +239,6 @@ class Sidebar extends React.Component<Props, State> {
         const styleClassName = classNames('be bcs', className, {
             'bcs-is-open': isOpen,
         });
-
-        const { currentUser, currentUserError } = this.state;
 
         return (
             <aside id={this.id} className={styleClassName} data-testid="preview-sidebar">
@@ -381,4 +293,4 @@ class Sidebar extends React.Component<Props, State> {
 }
 
 export { Sidebar as SidebarComponent };
-export default flow([withAPIContext, withFeatureConsumer, withRouter])(Sidebar);
+export default flow([withCurrentUser, withFeatureConsumer, withRouter])(Sidebar);

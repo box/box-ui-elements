@@ -1,5 +1,4 @@
 // @flow
-import type { MessageDescriptor } from 'react-intl';
 import type { SelectorItem, UserMini, GroupMini } from '../../common/types/core';
 import type { UseTargetingApi } from '../../features/targeting/types';
 
@@ -51,22 +50,6 @@ type FileAccessStats = {
     preview_count?: number,
 };
 
-type MaskError = {
-    errorHeader: MessageDescriptor,
-    errorSubHeader?: MessageDescriptor,
-};
-
-type InlineError = {
-    content: MessageDescriptor,
-    title: MessageDescriptor,
-};
-
-type Errors = {
-    error?: MessageDescriptor,
-    inlineError?: InlineError,
-    maskError?: MaskError,
-};
-
 export type {
     ClassificationInfo,
     ContentInsights,
@@ -76,5 +59,4 @@ export type {
     Translations,
     Collaborators,
     FileAccessStats,
-    Errors,
 };
