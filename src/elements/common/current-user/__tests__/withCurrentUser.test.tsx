@@ -35,7 +35,7 @@ describe('elements/common/current-user/withCurrentUser', () => {
         id: 'foo',
     };
 
-    let instance: React.Component<{}, {}, any> & ComponentWithCurrentUser;
+    let instance: React.Component<{}, {}, {}> & ComponentWithCurrentUser;
     let wrapper: WrapperType;
 
     describe('fetchCurrentUser()', () => {
