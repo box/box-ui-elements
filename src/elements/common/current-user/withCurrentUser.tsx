@@ -61,6 +61,7 @@ export default function withCurrentUser<P extends object>(
          * @return {void}
          */
         errorCallback = (error: ElementsXhrError, code: string, contextInfo: Object = {}): void => {
+            // eslint-disable-next-line no-console
             console.error(error);
             this.props.onError(error, code, contextInfo);
         };
