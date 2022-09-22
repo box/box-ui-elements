@@ -1,18 +1,22 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import PropTypes from 'prop-types';
 import HatWand140 from '../../illustration/HatWand140';
 import MetricsReview56 from '../../illustration/MetricsReview56';
 import messages from './messages';
+import { ResponseError } from './types';
 
 import './ContentAnalyticsErrorState.scss';
 
 interface Props {
-    isPermissionError?: boolean;
+    error: ResponseError;
 }
 
-const ContentAnalyticsErrorState = ({ isPermissionError = false }: Props) => {
+const ContentAnalyticsErrorState = ({ error }: Props) => {
     const renderErrorContent = () => {
+        const isPermissionError = error.status === 403;
+
         if (isPermissionError) {
             return (
                 <>
@@ -39,6 +43,10 @@ const ContentAnalyticsErrorState = ({ isPermissionError = false }: Props) => {
             {renderErrorContent()}
         </div>
     );
+};
+
+ContentAnalyticsErrorState.propTypes = {
+    error: PropTypes.object,
 };
 
 export default ContentAnalyticsErrorState;

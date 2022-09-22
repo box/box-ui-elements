@@ -21,8 +21,7 @@ interface Props {
 const ContentInsightsSummary = ({ error, graphData, isLoading, previousPeriodCount, onClick, totalCount }: Props) => {
     const renderContentAnalyticsSummary = () => {
         if (error) {
-            const isPermissionError = error.status === 403;
-            return <ContentAnalyticsErrorState isPermissionError={isPermissionError} />;
+            return <ContentAnalyticsErrorState error={error} />;
         }
 
         if (isLoading) {
