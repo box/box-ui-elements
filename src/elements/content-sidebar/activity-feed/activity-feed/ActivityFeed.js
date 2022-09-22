@@ -21,6 +21,7 @@ import type {
     Annotation,
     AnnotationPermission,
     BoxCommentPermission,
+    CommentFeedItemType,
     FocusableFeedItemType,
     FeedItems,
     FeedItemStatus,
@@ -61,6 +62,7 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
+    onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string, hasMention: boolean) => void,
     onTaskAssignmentUpdate?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
@@ -233,6 +235,7 @@ class ActivityFeed extends React.Component<Props, State> {
             onCommentCreate,
             onCommentDelete,
             onCommentUpdate,
+            onReplyCreate,
             onTaskAssignmentUpdate,
             onTaskDelete,
             onTaskModalClose,
@@ -302,6 +305,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
+                            onReplyCreate={hasCommentPermission ? onReplyCreate : noop}
                             onTaskDelete={onTaskDelete}
                             onTaskEdit={onTaskUpdate}
                             onTaskView={onTaskView}

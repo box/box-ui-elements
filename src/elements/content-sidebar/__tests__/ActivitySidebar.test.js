@@ -9,9 +9,12 @@ const { defaultErrorMaskSubHeaderMessage, currentUserErrorHeaderMessage } = mess
 
 jest.mock('lodash/debounce', () => jest.fn(i => i));
 
+const userError = 'Bad box user!';
+
 describe('elements/content-sidebar/ActivitySidebar', () => {
     const feedAPI = {
         createComment: jest.fn(),
+        createReply: jest.fn(),
         createTaskNew: jest.fn(),
         createThreadedComment: jest.fn(),
         deleteAnnotation: jest.fn(),
@@ -402,6 +405,41 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(feedAPI.createThreadedComment).toBeCalledWith(
                 file,
                 currentUser,
+                message,
+                hasMention,
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(instance.fetchFeedItems).toBeCalled();
+        });
+    });
+
+    describe('createReply()', () => {
+        test('should throw an error if missing current user', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            expect(() => instance.createReply('123', 'comment', 'abc', true)).toThrow(userError);
+        });
+
+        test('should call the createReply API and fetch the items', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+            const parentId = '123';
+            const parentType = 'comment';
+            const message = 'abc';
+            const hasMention = true;
+
+            instance.setState({
+                currentUser,
+            });
+            instance.createReply(parentId, parentType, message, hasMention);
+            expect(feedAPI.createReply).toBeCalledWith(
+                file,
+                currentUser,
+                parentId,
+                parentType,
                 message,
                 hasMention,
                 expect.any(Function),

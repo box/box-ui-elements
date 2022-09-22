@@ -15,6 +15,7 @@ import {
     PERMISSION_CAN_RESOLVE,
 } from '../constants';
 import MarkerBasedApi from './MarkerBasedAPI';
+import { formatComment } from './utils';
 
 import type {
     Annotation,
@@ -24,9 +25,64 @@ import type {
 } from '../common/types/annotations';
 import type { BoxItemPermission } from '../common/types/core';
 import type { ElementsXhrError } from '../common/types/api';
-import type { FeedItemStatus } from '../common/types/feed';
+import type { Comment, FeedItemStatus } from '../common/types/feed';
 
 export default class Annotations extends MarkerBasedApi {
+    /**
+     * Formats annotation replies' comment data for use in components.
+     *
+     * @param {Annotation} annotation - An individual annotation entry from the API
+     * @return {Annotation} Updated annotation
+     */
+    formatReplies(annotation: Annotation): Annotation {
+        if (!annotation.replies || !annotation.replies.length) {
+            return annotation;
+        }
+
+        return {
+            ...annotation,
+            replies: annotation.replies.map(formatComment),
+        };
+    }
+
+    /**
+     * Formats the annotations api response to usable data
+     * @param {Object} data the api response data
+     */
+    successHandler = (data: Object): void => {
+        if (this.isDestroyed() || typeof this.successCallback !== 'function') {
+            return;
+        }
+
+        // There is no response data when deleting an annotation
+        if (!data) {
+            this.successCallback();
+            return;
+        }
+
+        // We don't have entries when updating/creating an annotation
+        if (!data.entries) {
+            // Check if the response is a comment (result of createAnnotationReply)
+            if (data.type && data.type === 'comment') {
+                this.successCallback(formatComment(data));
+                return;
+            }
+
+            this.successCallback(this.formatReplies(data));
+            return;
+        }
+
+        // Check if the response is the replies of an annotation (result of getAnnotationReplies)
+        if (data.entries.length && data.entries[0].type === 'comment') {
+            const replies = data.entries.map(formatComment);
+            this.successCallback({ ...data, entries: replies });
+            return;
+        }
+
+        const annotations = data.entries.map(this.formatReplies);
+        this.successCallback({ ...data, entries: annotations });
+    };
+
     getUrl() {
         return `${this.getBaseApiUrl()}/undoc/annotations`;
     }
@@ -211,7 +267,7 @@ export default class Annotations extends MarkerBasedApi {
         fileId: string,
         annotationId: string,
         permissions: BoxItemPermission,
-        successCallback: (annotation: Annotation) => void,
+        successCallback: (comments: Array<Comment>) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
     ): void {
         this.errorCode = ERROR_CODE_FETCH_REPLIES;
@@ -236,7 +292,7 @@ export default class Annotations extends MarkerBasedApi {
         annotationId: string,
         permissions: BoxItemPermission,
         message: string,
-        successCallback: (annotation: Annotation) => void,
+        successCallback: (comment: Comment) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
     ): void {
         this.errorCode = ERROR_CODE_CREATE_REPLY;

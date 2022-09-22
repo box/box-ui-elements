@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash/cloneDeep';
 import commonMessages from '../../elements/common/messages';
 import messages from '../messages';
 import * as sorter from '../../utils/sorter';
@@ -6,7 +7,7 @@ import { FEED_FILE_VERSIONS_FIELDS_TO_FETCH } from '../../utils/fields';
 import { IS_ERROR_DISPLAYED, TASK_MAX_GROUP_ASSIGNEES } from '../../constants';
 import Feed from '../Feed';
 import { annotation as mockAnnotation } from '../../__mocks__/annotations';
-import { task as mockTask, threadedComments as mockThreadedComments } from '../fixtures';
+import { task as mockTask, threadedComments as mockThreadedComments, threadedCommentsFormatted } from '../fixtures';
 
 const mockErrors = [{ code: 'error_code_0' }, { code: 'error_code_1' }];
 
@@ -205,6 +206,9 @@ jest.mock('../ThreadedComments', () =>
         createComment: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
         }),
+        createCommentReply: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
     })),
 );
 
@@ -224,6 +228,11 @@ jest.mock('../Annotations', () =>
             successCallback();
         }),
         getAnnotations: jest.fn(),
+        createAnnotationReply: jest
+            .fn()
+            .mockImplementation((fileId, annotationId, permissions, message, successCallback) => {
+                successCallback();
+            }),
     })),
 );
 
@@ -1234,6 +1243,36 @@ describe('api/Feed', () => {
         });
     });
 
+    describe('addPendingReply()', () => {
+        test('should create a comment and add it to the replies array of the parent item in feed with populated cache', () => {
+            const feedComments = cloneDeep(threadedCommentsFormatted);
+            const { id: parentId } = feedComments[0];
+            const commentBase = {
+                id: '1234',
+                tagged_message: 'abc',
+                type: 'comment',
+            };
+
+            feed.file = file;
+            feed.setCachedItems = jest.fn();
+            feed.getCachedItems = jest.fn().mockReturnValue({
+                errors: [],
+                items: feedComments,
+            });
+
+            const reply = feed.addPendingReply(parentId, user, commentBase);
+
+            const updatedFeedComments = cloneDeep(threadedCommentsFormatted);
+            updatedFeedComments[0].replies = [...updatedFeedComments[0].replies, reply];
+
+            expect(typeof reply.created_at).toBe('string');
+            expect(reply.created_by).toBe(user);
+            expect(typeof reply.modified_at).toBe('string');
+            expect(reply.isPending).toBe(true);
+            expect(feed.setCachedItems).toBeCalledWith(file.id, updatedFeedComments);
+        });
+    });
+
     describe('createCommentSuccessCallback()', () => {
         let successCb;
         beforeEach(() => {
@@ -1324,6 +1363,36 @@ describe('api/Feed', () => {
             const updatedFeedItems = feed.updateFeedItem(updates, id);
             expect(updatedFeedItems).not.toBeNull();
             expect(feed.setCachedItems).toBeCalledWith(file.id, updatedFeedItems);
+        });
+    });
+
+    describe('updateReplyItem()', () => {
+        test('should throw if no file id', () => {
+            feed.file = {};
+            expect(() => feed.updateReplyItem({}, '123', '456')).toThrow(fileError);
+        });
+
+        test('should update the cache with the updated reply', () => {
+            const feedComments = cloneDeep(threadedCommentsFormatted);
+            const { id: parentId, replies } = feedComments[0];
+            const updates = {
+                tagged_message: 'updated',
+                isPending: true,
+            };
+            const { id } = replies[0];
+
+            feed.setCachedItems = jest.fn();
+            feed.getCachedItems = jest.fn().mockReturnValue({
+                errors: [],
+                items: feedComments,
+            });
+
+            const updatedFeedComments = cloneDeep(feedComments);
+            updatedFeedComments[0].replies[0] = { ...updatedFeedComments[0].replies[0], ...updates };
+
+            feed.file = file;
+            feed.updateReplyItem(updates, parentId, id);
+            expect(feed.setCachedItems).toBeCalledWith(file.id, updatedFeedComments);
         });
     });
 
@@ -1418,6 +1487,94 @@ describe('api/Feed', () => {
                 });
                 expect(feed.createCommentSuccessCallback).toBeCalled();
                 expect(feed.createCommentErrorCallback).not.toBeCalled();
+                done();
+            });
+        });
+    });
+
+    describe('createReply()', () => {
+        test('should throw if no file id', () => {
+            const currentUser = {
+                id: '123',
+            };
+
+            expect(() =>
+                feed.createReply({}, currentUser, '123', 'comment', 'abc', true, jest.fn(), jest.fn()),
+            ).toThrow(fileError);
+        });
+
+        test('should create a pending reply', () => {
+            feed.addPendingReply = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+            const parentId = '123';
+            const parentType = 'comment';
+            const text = 'abc';
+            const currentUser = {
+                id: '123',
+            };
+
+            feed.createReply(file, currentUser, parentId, parentType, text, true, successCb, errorCb);
+
+            expect(feed.addPendingReply).toBeCalledWith(parentId, currentUser, {
+                id: 'uniqueId',
+                tagged_message: text,
+                type: 'comment',
+            });
+        });
+
+        test('given parentType=annotation, should create the reply using annotationsAPI and invoke the success callback', done => {
+            feed.createReplySuccessCallback = jest.fn();
+            feed.createReplyErrorCallback = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+            const annotationId = '123';
+            const parentType = 'annotation';
+            const text = 'abc';
+            const currentUser = {
+                id: '123',
+            };
+
+            feed.createReply(file, currentUser, annotationId, parentType, text, true, successCb, errorCb);
+            setImmediate(() => {
+                expect(feed.annotationsAPI.createAnnotationReply).toBeCalledWith(
+                    file.id,
+                    annotationId,
+                    file.permissions,
+                    text,
+                    expect.any(Function),
+                    expect.any(Function),
+                );
+                expect(feed.createReplySuccessCallback).toBeCalled();
+                expect(feed.createReplyErrorCallback).not.toBeCalled();
+                done();
+            });
+        });
+
+        test('given parentType=comment, should create the reply using threadedCommentsAPI and invoke the success callback', done => {
+            feed.createReplySuccessCallback = jest.fn();
+            feed.createReplyErrorCallback = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+            const commentId = '123';
+            const parentType = 'comment';
+            const text = 'abc';
+            const currentUser = {
+                id: '123',
+            };
+
+            feed.createReply(file, currentUser, commentId, parentType, text, true, successCb, errorCb);
+            setImmediate(() => {
+                expect(feed.threadedCommentsAPI.createCommentReply).toBeCalledWith({
+                    fileId: file.id,
+                    commentId,
+                    permissions: file.permissions,
+                    message: text,
+                    successCallback: expect.any(Function),
+                    errorCallback: expect.any(Function),
+                });
+                expect(feed.createReplySuccessCallback).toBeCalled();
+                expect(feed.createReplyErrorCallback).not.toBeCalled();
                 done();
             });
         });
