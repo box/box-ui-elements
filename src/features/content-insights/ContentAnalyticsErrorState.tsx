@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import MetricsReview56 from '../../illustration/MetricsReview56';
 import messages from './messages';
@@ -8,11 +9,6 @@ import { ResponseError } from './types';
 
 import './ContentAnalyticsErrorState.scss';
 
-const SIZE_MAP = {
-    small: 56,
-    medium: 80,
-    large: 95,
-};
 interface Props {
     error: ResponseError;
     size?: 'small' | 'medium' | 'large';
@@ -41,12 +37,8 @@ const ContentAnalyticsErrorState = ({ error, size = 'small' }: Props) => {
     };
 
     return (
-        <div className="ContentAnalyticsErrorState" data-testid="ContentAnalyticsErrorState">
-            <MetricsReview56
-                height={SIZE_MAP[size]}
-                width={SIZE_MAP[size]}
-                data-testid="ContentAnalyticsErrorState-image"
-            />
+        <div className={classNames('ContentAnalyticsErrorState', size)} data-testid="ContentAnalyticsErrorState">
+            <MetricsReview56 data-testid="ContentAnalyticsErrorState-image" />
             {renderErrorMessage()}
         </div>
     );
