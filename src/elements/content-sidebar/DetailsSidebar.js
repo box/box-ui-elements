@@ -42,7 +42,7 @@ import './DetailsSidebar.scss';
 
 type ExternalProps = {
     classification?: ClassificationInfo,
-    contentInsights: ContentInsights,
+    contentInsights?: ContentInsights,
     elementId: string,
     fetchContentInsights?: () => void,
     fileId: string,
