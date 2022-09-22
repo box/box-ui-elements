@@ -221,8 +221,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     api: API;
 
-    boxAnnotations: Object;
-
     // Defines a generic type for ContentSidebar, since an import would interfere with code splitting
     contentSidebar: { current: null | { refresh: Function } } = React.createRef();
 
@@ -754,7 +752,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
     loadPreview = async (): Promise<void> => {
         const {
             annotatorState: { activeAnnotationId } = {},
-            boxAnnotations,
             enableThumbnailsSidebar,
             fileOptions,
             onAnnotatorEvent,
