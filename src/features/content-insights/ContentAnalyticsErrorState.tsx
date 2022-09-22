@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import MetricsReview56 from '../../illustration/MetricsReview56';
 import messages from './messages';
@@ -11,18 +10,17 @@ import './ContentAnalyticsErrorState.scss';
 
 interface Props {
     error: ResponseError;
-    size?: 'small' | 'medium' | 'large';
 }
 
-const ContentAnalyticsErrorState = ({ error, size = 'small' }: Props) => {
+const ContentAnalyticsErrorState = ({ error }: Props) => {
     const renderErrorMessage = () => {
         const isPermissionError = error.status === 403;
 
         if (isPermissionError) {
             return (
                 <div
-                    className="ContentAnalyticsPermissionError-text"
-                    data-testid="ContentAnalyticsPermissionError-text"
+                    className="ContentAnalyticsErrorState-text--permission"
+                    data-testid="ContentAnalyticsErrorState-text--permission"
                 >
                     <FormattedMessage {...messages.contentAnalyticsPermissionError} />
                 </div>
@@ -37,7 +35,7 @@ const ContentAnalyticsErrorState = ({ error, size = 'small' }: Props) => {
     };
 
     return (
-        <div className={classNames('ContentAnalyticsErrorState', size)} data-testid="ContentAnalyticsErrorState">
+        <div className="ContentAnalyticsErrorState" data-testid="ContentAnalyticsErrorState">
             <MetricsReview56 data-testid="ContentAnalyticsErrorState-image" />
             {renderErrorMessage()}
         </div>

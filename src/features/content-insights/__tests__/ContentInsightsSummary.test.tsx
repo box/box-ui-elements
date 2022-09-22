@@ -53,7 +53,7 @@ describe('features/content-insights/ContentInsightsSummary', () => {
             getWrapper({ error: baseError });
 
             expect(screen.getByTestId('ContentAnalyticsErrorState-text')).toBeVisible();
-            expect(screen.queryByTestId('ContentAnalyticsPermissionError-text')).not.toBeInTheDocument();
+            expect(screen.queryByTestId('ContentAnalyticsErrorState-text--permission')).not.toBeInTheDocument();
             expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
             expect(screen.queryByLabelText(localize(messages.previewGraphLabel.id))).toBeNull();
         });
@@ -61,7 +61,7 @@ describe('features/content-insights/ContentInsightsSummary', () => {
         test('should show the permission error state when error exists and is a permission error', () => {
             getWrapper({ error: { ...baseError, status: 403 } });
 
-            expect(screen.getByTestId('ContentAnalyticsPermissionError-text')).toBeVisible();
+            expect(screen.getByTestId('ContentAnalyticsErrorState-text--permission')).toBeVisible();
             expect(screen.queryByTestId('ContentAnalyticsErrorState-text')).not.toBeInTheDocument();
             expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
             expect(screen.queryByLabelText(localize(messages.previewGraphLabel.id))).toBeNull();

@@ -20,7 +20,7 @@ interface Props {
 const ContentInsightsSummary = ({ error, graphData, isLoading, previousPeriodCount, onClick, totalCount }: Props) => {
     const renderContentAnalyticsSummary = () => {
         if (error) {
-            return <ContentAnalyticsErrorState error={error} size="small" />;
+            return <ContentAnalyticsErrorState error={error} />;
         }
 
         if (isLoading) {
