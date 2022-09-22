@@ -19,6 +19,7 @@ import './AnnotationThread.scss';
 
 type Props = {
     annotationId?: string,
+    apiHost?: string,
     cache?: APICache,
     className: string,
     clientName: string,
@@ -31,6 +32,7 @@ type Props = {
 
 const AnnotationThread = ({
     annotationId,
+    apiHost = DEFAULT_HOSTNAME_API,
     cache,
     className = '',
     clientName,
@@ -38,19 +40,20 @@ const AnnotationThread = ({
     filePermissions,
     language,
     messages,
+    onError,
     token,
 }: Props) => {
+    if (!annotationId) {
+        return null;
+    }
+
     const api = new API({
-        DEFAULT_HOSTNAME_API,
+        apiHost,
         cache,
         clientName,
         language,
         token,
     });
-
-    if (!annotationId) {
-        return null;
-    }
 
     return (
         <div className={classNames('AnnotationThread', className)} data-testid="annotation-thread">
@@ -60,6 +63,7 @@ const AnnotationThread = ({
                     annotationId={annotationId}
                     fileId={fileId}
                     filePermissions={filePermissions}
+                    onError={onError}
                 />
             </IntlProvider>
         </div>

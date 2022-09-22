@@ -1,0 +1,21 @@
+import { defineMessages } from 'react-intl';
+
+const messages = defineMessages({
+    errorFetchAnnotation: {
+        id: 'annotattionThread.errorFetchAnnotation',
+        description: 'Error message when an annotation fetch fails',
+        defaultMessage: 'Cannot fetch annotation.',
+    },
+    errorEditAnnotation: {
+        id: 'annotationThread.errorEditAnnotation',
+        description: 'Error message when an annotation update fails',
+        defaultMessage: 'This annotation could not be modified.',
+    },
+    errorDeleteAnnotation: {
+        id: 'annotationThread.errorDeleteAnnotation',
+        description: 'Error message when an annotation deletion fails',
+        defaultMessage: 'There was an error deleting this item.',
+    },
+});
+
+export default messages;

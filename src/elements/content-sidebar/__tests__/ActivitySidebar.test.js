@@ -34,7 +34,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         getUser: jest.fn(),
     };
     const fileCollaboratorsAPI = {
-        getFileCollaborators: jest.fn(),
+        getCollaboratorsWithQuery: jest.fn(),
     };
     const api = {
         getUsersAPI: () => usersAPI,
@@ -706,19 +706,18 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
-    describe('getApproverWithQuery()', () => {
-        const getCollaboratorsWithQuery = jest.fn();
+    describe('getApprover()', () => {
         let instance;
         let wrapper;
 
         test('should get collaborators with groups', () => {
-            wrapper = getWrapper({ getCollaboratorsWithQuery });
+            wrapper = getWrapper();
             instance = wrapper.instance();
 
             const search = 'Santa Claus';
             instance.getApprover(search);
 
-            expect(getCollaboratorsWithQuery).toHaveBeenCalledWith(
+            expect(api.getFileCollaboratorsAPI().getCollaboratorsWithQuery).toBeCalledWith(
                 file.id,
                 instance.getApproverContactsSuccessCallback,
                 instance.errorCallback,
@@ -749,18 +748,17 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('getMention()', () => {
-        const getCollaboratorsWithQuery = jest.fn();
         let instance;
         let wrapper;
 
         test('should get collaborators without groups', () => {
-            wrapper = getWrapper({ getCollaboratorsWithQuery });
+            wrapper = getWrapper();
             instance = wrapper.instance();
 
             const search = 'Santa Claus';
             instance.getMention(search);
 
-            expect(getCollaboratorsWithQuery).toHaveBeenCalledWith(
+            expect(api.getFileCollaboratorsAPI().getCollaboratorsWithQuery).toBeCalledWith(
                 file.id,
                 instance.getMentionContactsSuccessCallback,
                 instance.errorCallback,

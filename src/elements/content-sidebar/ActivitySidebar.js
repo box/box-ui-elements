@@ -24,7 +24,6 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
 import { withRouterAndRef } from '../common/routing';
-import withCollaborators from '../common/collaborators/withCollaborators';
 import ActivitySidebarFilter from './ActivitySidebarFilter';
 import {
     ERROR_CODE_FETCH_ACTIVITY,
@@ -54,7 +53,6 @@ import type { SelectorItems, User, UserMini, GroupMini, BoxItem } from '../../co
 import type { Errors, GetProfileUrlCallback } from '../common/flowTypes';
 import type { Translations, Collaborators } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
-import type { WithCollaboratorsProps } from '../common/collaborators/withCollaborators';
 import './ActivitySidebar.scss';
 
 type ExternalProps = {
@@ -75,8 +73,7 @@ type ExternalProps = {
     onTaskUpdate: () => any,
     onTaskView: (id: string, isCreator: boolean) => any,
 } & ErrorContextProps &
-    WithAnnotatorContextProps &
-    WithCollaboratorsProps;
+    WithAnnotatorContextProps;
 
 type PropsWithoutContext = {
     elementId: string,
@@ -720,17 +717,41 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     /**
+     * Fetches file @mention's with groups
+     *
+     * @private
+     * @param {string} searchStr - Search string to filter file collaborators by
+     * @return {void}
+     */
+    getApprover = (searchStr: string) => {
+        const { file, api } = this.props;
+        api.getFileCollaboratorsAPI(false).getCollaboratorsWithQuery(
+            file.id,
+            this.getApproverContactsSuccessCallback,
+            this.errorCallback,
+            searchStr,
+            {
+                includeGroups: true,
+            },
+        );
+    };
+
+    /**
      * Fetches file @mention's
      *
      * @private
      * @param {string} searchStr - Search string to filter file collaborators by
      * @return {void}
      */
-    getMentionWithQuery = debounce(
-        (searchStr: string) =>
-            this.getCollaborators(this.getMentionContactsSuccessCallback, this.errorCallback, searchStr),
-        DEFAULT_COLLAB_DEBOUNCE,
-    );
+    getMention = (searchStr: string) => {
+        const { file, api } = this.props;
+        api.getFileCollaboratorsAPI(false).getCollaboratorsWithQuery(
+            file.id,
+            this.getMentionContactsSuccessCallback,
+            this.errorCallback,
+            searchStr,
+        );
+    };
 
     /**
      * Fetches file collaborators
@@ -966,7 +987,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 export type ActivitySidebarProps = ExternalProps;
 export { ActivitySidebar as ActivitySidebarComponent };
 export default flow([
-    withCollaborators,
     withLogger(ORIGIN_ACTIVITY_SIDEBAR),
     withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR),
     withAPIContext,

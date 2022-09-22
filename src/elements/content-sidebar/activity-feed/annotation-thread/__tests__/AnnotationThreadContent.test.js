@@ -1,18 +1,22 @@
 // @flow
-
 import React from 'react';
 import { render } from '@testing-library/react';
-import { AnnotationThreadContentComponent } from '../AnnotationThreadContent';
+import { IntlProvider } from 'react-intl';
+import AnnotationThreadContent from '../AnnotationThreadContent';
 import { annotation } from '../../../../../__mocks__/annotations';
 
+import commonMessages from '../../../../common/messages';
+import messages from '../messages';
+
 let mockedAnnotation = annotation;
-let mockedIsError = false;
+let mockedError;
 let mockedIsLoading = false;
 
+jest.mock('react-intl', () => jest.requireActual('react-intl'));
 jest.mock('../useAnnotationAPI', () => {
     return jest.fn(() => ({
         annotation: mockedAnnotation,
-        isError: mockedIsError,
+        error: mockedError,
         isLoading: mockedIsLoading,
         handleDelete: jest.fn(),
         handleEdit: jest.fn(),
@@ -40,7 +44,10 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
         },
     };
 
-    const getWrapper = (props = {}) => render(<AnnotationThreadContentComponent {...defaultProps} {...props} />);
+    const IntlWrapper = ({ children }: { children?: React.ReactNode }) => {
+        return <IntlProvider locale="en">{children}</IntlProvider>;
+    };
+    const getWrapper = () => render(<AnnotationThreadContent {...defaultProps} />, { wrapper: IntlWrapper });
 
     test('Should render properly', () => {
         const { getByText, queryByTestId } = getWrapper();
@@ -63,12 +70,16 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
         expect(getByTestId('annotation-loading')).toBeInTheDocument();
     });
 
-    test('Should not render if api call fails', () => {
-        mockedIsError = true;
+    test('Should render error state properly', () => {
+        mockedError = {
+            title: commonMessages.errorOccured,
+            message: messages.errorFetchAnnotation,
+        };
         mockedAnnotation = undefined;
         mockedIsLoading = false;
 
-        const { container } = getWrapper();
-        expect(container).toBeEmptyDOMElement();
+        const { queryByText, getByText } = getWrapper();
+        expect(getByText(commonMessages.errorOccured.defaultMessage)).toBeInTheDocument();
+        expect(queryByText(messages.errorFetchAnnotation.defaultMessage)).toBeInTheDocument();
     });
 });

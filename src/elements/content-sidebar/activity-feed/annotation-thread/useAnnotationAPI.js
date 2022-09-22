@@ -1,12 +1,21 @@
 // @flow
 
 import React from 'react';
+import type { MessageDescriptor } from 'react-intl';
 import API from '../../../../api/APIFactory';
+import {
+    ERROR_CODE_DELETE_ANNOTATION,
+    ERROR_CODE_EDIT_ANNOTATION,
+    ERROR_CODE_FETCH_ANNOTATION,
+} from '../../../../constants';
 
 import type { Annotation, AnnotationPermission } from '../../../../common/types/annotations';
 import type { BoxItemPermission } from '../../../../common/types/core';
 import type { FeedItemStatus } from '../../../../common/types/feed';
 import type { ElementOrigin, ElementsXhrError } from '../../../../common/types/api';
+
+import commonMessages from '../../../common/messages';
+import messages from './messages';
 
 type Props = {
     annotationId: string,
@@ -21,23 +30,26 @@ type Props = {
     filePermissions: BoxItemPermission,
 };
 
-type returnValues = {
+type UseAnnotationAPI = {
     annotation?: Annotation,
+    error?: {
+        message?: MessageDescriptor,
+        title?: MessageDescriptor,
+    },
     handleDelete: ({ id: string, permissions: AnnotationPermission }) => any,
     handleEdit: (id: string, text: string, permissions: AnnotationPermission) => void,
-    handleResolve: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
-    isError: boolean,
+    handleStatusChange: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
     isLoading: boolean,
 };
 
-const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCallback }: Props): returnValues => {
+const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCallback }: Props): UseAnnotationAPI => {
     const [annotation, setAnnotation] = React.useState();
-    const [isError, setIsError] = React.useState(false);
+    const [error, setError] = React.useState();
     const [isLoading, setIsLoading] = React.useState(true);
 
     const getAnnotationSuccess = (fetchedAnnotation: Annotation): void => {
         setAnnotation(fetchedAnnotation);
-        setIsError(false);
+        setError(undefined);
         setIsLoading(false);
     };
 
@@ -53,10 +65,31 @@ const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCal
         // will emit delete event
     };
 
+    const createAnnotationErrorCallback = (code: string) => {
+        let message;
+        switch (code) {
+            case ERROR_CODE_FETCH_ANNOTATION:
+                message = messages.errorFetchAnnotation;
+                break;
+            case ERROR_CODE_EDIT_ANNOTATION:
+                message = messages.errorEditAnnotation;
+                break;
+            case ERROR_CODE_DELETE_ANNOTATION:
+                message = messages.errorDeleteAnnotation;
+                break;
+            default:
+                message = commonMessages.error;
+        }
+        setError({
+            title: commonMessages.errorOccured,
+            message,
+        });
+    };
+
     const annotationErrorCallback = React.useCallback(
         (e: ElementsXhrError, code: string): void => {
             setIsLoading(false);
-            setIsError(true);
+            createAnnotationErrorCallback(code);
 
             errorCallback(e, code, {
                 error: e,
@@ -73,7 +106,7 @@ const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCal
             filePermissions,
             getAnnotationSuccess,
             annotationErrorCallback,
-            true,
+            true, // to fetch aanotation with its replies
         );
     }, [api, fileId, annotationId, filePermissions, annotationErrorCallback]);
 
@@ -104,7 +137,7 @@ const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCal
         );
     };
 
-    const handleResolve = (id: string, status: FeedItemStatus, permissions: AnnotationPermission): void => {
+    const handleStatusChange = (id: string, status: FeedItemStatus, permissions: AnnotationPermission): void => {
         setAnnotation({ ...annotation, isPending: true });
         api.getAnnotationsAPI(false).updateAnnotation(
             fileId,
@@ -116,7 +149,7 @@ const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCal
         );
     };
 
-    return { annotation, isError, isLoading, handleDelete, handleEdit, handleResolve };
+    return { annotation, error, isLoading, handleDelete, handleEdit, handleStatusChange };
 };
 
 export default useAnnotationAPI;

@@ -4,10 +4,12 @@
  * @author Box
  */
 
+import debounce from 'lodash/debounce';
 import MarkerBasedAPI from './MarkerBasedAPI';
-import { DEFAULT_MAX_COLLABORATORS } from '../constants';
+import { DEFAULT_COLLAB_DEBOUNCE, DEFAULT_MAX_COLLABORATORS } from '../constants';
 import type { ElementsErrorCallback } from '../common/types/api';
 import type { SelectorItem, SelectorItems, UserMini, GroupMini } from '../common/types/core';
+import type { Collaborators } from '../elements/content-sidebar/flowTypes';
 
 type CollaboratorsAPIResponse = {
     entries: Array<GroupMini | UserMini>,
@@ -87,6 +89,40 @@ class FileCollaborators extends MarkerBasedAPI {
             requestData,
         });
     }
+
+    /**
+     * Fetches file @mention's
+     *
+     * @private
+     * @oaram {string} fileId
+     * @param {Function} successCallback
+     * @param {Function} errorCallback
+     * @param {string} searchStr - Search string to filter file collaborators by
+     * @param {Object} [options]
+     * @param {boolean} [options.includeGroups] - return groups as well as users
+     * @return {void}
+     */
+    getCollaboratorsWithQuery = debounce(
+        (
+            fileId: string,
+            successCallback: Collaborators => void,
+            errorCallback: ElementsErrorCallback,
+            searchStr: string,
+            { includeGroups = false }: { includeGroups: boolean } = {},
+        ) => {
+            // Do not fetch without filter
+            if (!searchStr || searchStr.trim() === '') {
+                return;
+            }
+
+            this.getFileCollaborators(fileId, successCallback, errorCallback, {
+                filter_term: searchStr,
+                include_groups: includeGroups,
+                include_uploader_collabs: false,
+            });
+        },
+        DEFAULT_COLLAB_DEBOUNCE,
+    );
 }
 
 export default FileCollaborators;

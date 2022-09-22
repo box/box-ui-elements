@@ -1,35 +1,29 @@
 // @flow
 import React from 'react';
+import ActivityError from '../common/activity-error';
 import ActivityThread from '../activity-feed/ActivityThread';
 import AnnotationActivity from '../annotations';
 import API from '../../../../api/APIFactory';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
-import withCollaborators from '../../../common/collaborators/withCollaborators';
-
-import type { ElementOrigin, ElementsXhrError } from '../../../../common/types/api';
-import type { BoxItemPermission, SelectorItems } from '../../../../common/types/core';
-import type { WithCollaboratorsProps } from '../../../common/collaborators/withCollaborators';
 import useAnnotationAPI from './useAnnotationAPI';
+
+import type { BoxItemPermission, SelectorItems } from '../../../../common/types/core';
+import type { ErrorContextProps } from '../../../../common/types/api';
+
+import './AnnotationThreadContent.scss';
 
 type Props = {
     annotationId: string,
     api: API,
     fileId: string,
     filePermissions: BoxItemPermission,
-    onError: (error: ElementsXhrError | Error, code: string, contextInfo?: Object, origin?: ElementOrigin) => void,
-} & WithCollaboratorsProps;
+    onError: ErrorContextProps.onError,
+};
 
-const AnnotationThreadContent = ({
-    annotationId,
-    api,
-    fileId,
-    getCollaboratorsWithQuery,
-    filePermissions,
-    onError,
-}: Props) => {
+const AnnotationThreadContent = ({ annotationId, api, fileId, filePermissions, onError }: Props) => {
     const [mentionSelectorContacts, setMentionSelectorContacts] = React.useState([]);
 
-    const { annotation, isLoading, isError, handleEdit, handleResolve, handleDelete } = useAnnotationAPI({
+    const { annotation, isLoading, error, handleEdit, handleStatusChange, handleDelete } = useAnnotationAPI({
         api,
         fileId,
         annotationId,
@@ -44,29 +38,28 @@ const AnnotationThreadContent = ({
      * @param {BoxItemCollection} collaborators - Collaborators response data
      * @return {void}
      */
-    const getMentionContactsSuccessCallback = (collaborators: { entries: SelectorItems<> }): void => {
-        setMentionSelectorContacts(collaborators.entries);
+    const getMentionContactsSuccessCallback = ({ entries }: { entries: SelectorItems<> }): void => {
+        setMentionSelectorContacts(entries);
     };
 
     const getMentions = (searchStr: string) =>
-        getCollaboratorsWithQuery(fileId, getMentionContactsSuccessCallback, onError, searchStr);
+        api
+            .getFileCollaboratorsAPI(false)
+            .getCollaboratorsWithQuery(fileId, getMentionContactsSuccessCallback, onError, searchStr);
 
     const getAvatarUrl = async (userId: string): Promise<?string> => {
         return api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, fileId);
     };
 
-    if (isError) {
-        return null;
-    }
-
     return (
         <ActivityThread hasReplies getAvatarUrl={getAvatarUrl}>
+            {error && <ActivityError {...error} />}
             {isLoading && (
-                <div className="bcs-ActivityThreadContent-loading" data-testid="annotation-loading">
+                <div className="AnnotationThreadContent-loading" data-testid="annotation-loading">
                     <LoadingIndicator />
                 </div>
             )}
-            {!isLoading && annotation && (
+            {annotation && (
                 <AnnotationActivity
                     getAvatarUrl={getAvatarUrl}
                     isCurrentVersion
@@ -75,13 +68,11 @@ const AnnotationThreadContent = ({
                     mentionSelectorContacts={mentionSelectorContacts}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
-                    onResolve={handleResolve}
+                    onStatusChange={handleStatusChange}
                 />
             )}
         </ActivityThread>
     );
 };
 
-export { AnnotationThreadContent as AnnotationThreadContentComponent };
-
-export default withCollaborators(AnnotationThreadContent);
+export default AnnotationThreadContent;

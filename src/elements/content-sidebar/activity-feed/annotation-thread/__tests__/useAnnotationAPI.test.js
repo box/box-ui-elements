@@ -4,8 +4,8 @@ import useAnnotationAPI from '../useAnnotationAPI';
 
 describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
     let mockGetAnnotation = jest.fn();
-    const mockUpdateAnnotation = jest.fn();
-    const mockDeleteAnnotation = jest.fn();
+    let mockUpdateAnnotation = jest.fn();
+    let mockDeleteAnnotation = jest.fn();
 
     const getAnnotationsAPI = () => ({
         getAnnotation: mockGetAnnotation,
@@ -31,6 +31,8 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
 
     beforeEach(() => {
         mockGetAnnotation = jest.fn();
+        mockUpdateAnnotation = jest.fn();
+        mockDeleteAnnotation = jest.fn();
     });
 
     test('Should return correct default values', () => {
@@ -38,7 +40,7 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
 
         expect(result.current.annotation).toEqual(undefined);
         expect(result.current.isLoading).toEqual(true);
-        expect(result.current.isError).toEqual(false);
+        expect(result.current.error).toEqual(undefined);
     });
 
     test('Should call fetch annotation on mount', async () => {
@@ -56,7 +58,7 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
             true,
         );
         expect(result.current.isLoading).toEqual(false);
-        expect(result.current.isError).toEqual(false);
+        expect(result.current.error).toEqual(undefined);
         expect(result.current.annotation).toEqual(annotation);
     });
 
@@ -78,11 +80,11 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
         expect(result.current.annotation.isPending).toEqual(true);
     });
 
-    test('should call api function on handleResolve with correct arguments', () => {
+    test('should call api function on handleStatusChange with correct arguments', () => {
         const { result } = getHook();
 
         act(() => {
-            result.current.handleResolve(annotation.id, 'resolved', { can_resolve: true });
+            result.current.handleStatusChange(annotation.id, 'resolved', { can_resolve: true });
         });
 
         expect(mockUpdateAnnotation).toBeCalledWith(
