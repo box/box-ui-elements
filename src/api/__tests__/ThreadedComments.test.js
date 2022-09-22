@@ -252,7 +252,7 @@ describe('api/ThreadedComments', () => {
                 id: '12345',
                 errorCallback,
                 url: 'https://api.box.com/2.0/undoc/comments/67890/replies',
-                successCallback: expect.any(Function),
+                successCallback,
             });
         });
 
@@ -298,7 +298,7 @@ describe('api/ThreadedComments', () => {
                 errorCallback,
                 url: 'https://api.box.com/2.0/undoc/comments/67890/replies',
                 data: { data: { message } },
-                successCallback: expect.any(Function),
+                successCallback,
             });
         });
 
