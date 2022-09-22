@@ -239,6 +239,33 @@ class Feed extends Base {
         this.feedErrorCallback(true, e, code);
     };
 
+    /**
+     * Error callback for updating a reply
+     *
+     * @param {ElementsXhrError} error - the error returned by the API
+     * @param {string} code - the error code
+     * @param {string} id - the id of the reply (comment)
+     * @param {string} parentId - the id of either the parent item (an annotation or comment)
+     * @return {void}
+     */
+    updateReplyErrorCallback = (error: ElementsXhrError, code: string, id: string, parentId: string) => {
+        this.updateReplyItem(this.createFeedError(messages.commentUpdateErrorMessage), parentId, id);
+        this.feedErrorCallback(true, error, code);
+    };
+
+    /**
+     * Error callback for fetching replies
+     *
+     * @param {ElementsXhrError} error - the error returned by the API
+     * @param {string} code - the error code
+     * @param {string} id - the id of either an annotation or comment
+     * @return {void}
+     */
+    fetchRepliesErrorCallback = (error: ElementsXhrError, code: string, id: string) => {
+        this.updateFeedItem(this.createFeedError(messages.repliesFetchErrorMessage), id);
+        this.feedErrorCallback(true, error, code);
+    };
+
     deleteAnnotation = (
         file: BoxItem,
         annotationId: string,
@@ -437,6 +464,58 @@ class Feed extends Base {
                 successCallback: resolve,
             });
         });
+    }
+
+    /**
+     * Fetches replies (comments) of a comment or annotation
+     *
+     * @param {BoxItem} file - The file to which the comment or annotation belongs to
+     * @param {string} itemId - ID of the comment or annotation
+     * @param {CommentFeedItemType} itemType - Type of the comment or annotation
+     * @param {Function} successCallback
+     * @param {ErrorCallback} errorCallback
+     * @return {void}
+     */
+    fetchReplies(
+        file: BoxItem,
+        itemId: string,
+        itemType: CommentFeedItemType,
+        successCallback: (comments: Array<Comment>) => void,
+        errorCallback: ErrorCallback,
+    ): void {
+        const { id, permissions } = file;
+        if (!id || !permissions) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+
+        this.updateFeedItem({ isRepliesLoading: true }, itemId);
+
+        const successCallbackFn = (comments: ThreadedCommentsType) => {
+            this.updateFeedItem({ isRepliesLoading: false, replies: comments.entries }, itemId);
+            successCallback(comments.entries);
+        };
+        const errorCallbackFn = (e: ErrorResponseData, code: string) => {
+            this.fetchRepliesErrorCallback(e, code, itemId);
+        };
+
+        if (itemType === 'annotation') {
+            this.annotationsAPI = new AnnotationsAPI(this.options);
+
+            this.annotationsAPI.getAnnotationReplies(file.id, itemId, permissions, successCallbackFn, errorCallbackFn);
+        } else if (itemType === 'comment') {
+            this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
+
+            this.threadedCommentsAPI.getCommentReplies({
+                fileId: file.id,
+                commentId: itemId,
+                permissions,
+                successCallback: successCallbackFn,
+                errorCallback: errorCallbackFn,
+            });
+        }
     }
 
     /**
@@ -769,6 +848,46 @@ class Feed extends Base {
     };
 
     /**
+     * Deletes a reply (using ThreadedComments API).
+     *
+     * @param {BoxItem} file - The file to which the comment belongs to
+     * @param {string} id - id of the reply (comment)
+     * @param {string} parentId - id of the parent feed item
+     * @param {BoxCommentPermission} permissions - Permissions for the comment
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @return {void}
+     */
+    deleteReply = (
+        file: BoxItem,
+        id: string,
+        parentId: string,
+        permissions: BoxCommentPermission,
+        successCallback: Function,
+        errorCallback: ErrorCallback,
+    ): void => {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+        this.updateReplyItem({ isPending: true }, parentId, id);
+
+        this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
+
+        this.threadedCommentsAPI.deleteComment({
+            fileId: file.id,
+            commentId: id,
+            permissions,
+            successCallback: this.deleteReplyItem.bind(this, id, parentId, successCallback),
+            errorCallback: (e: ElementsXhrError, code: string) => {
+                this.deleteReplyErrorCallback(e, code, id, parentId);
+            },
+        });
+    };
+
+    /**
      * Error callback for deleting a comment
      *
      * @param {ElementsXhrError} e - the error returned by the API
@@ -779,6 +898,20 @@ class Feed extends Base {
     deleteCommentErrorCallback = (e: ElementsXhrError, code: string, commentId: string) => {
         this.updateFeedItem(this.createFeedError(messages.commentDeleteErrorMessage), commentId);
         this.feedErrorCallback(true, e, code);
+    };
+
+    /**
+     * Error callback for deleting a reply
+     *
+     * @param {ElementsXhrError} error - the error returned by the API
+     * @param {string} code - the error code
+     * @param {string} id - the reply (comment) id
+     * @param {string} parentId - the comment id of the parent feed item
+     * @return {void}
+     */
+    deleteReplyErrorCallback = (error: ElementsXhrError, code: string, id: string, parentId: string) => {
+        this.updateReplyItem(this.createFeedError(messages.commentDeleteErrorMessage), parentId, id);
+        this.feedErrorCallback(true, error, code);
     };
 
     /**
@@ -1124,6 +1257,45 @@ class Feed extends Base {
 
             if (!this.isDestroyed()) {
                 successCallback(id);
+            }
+        }
+    };
+
+    /**
+     * Deletes a reply from the cache
+     *
+     * @param {string} id - The id of the feed item to be deleted
+     * @param {string} parentId - The id of the parent feed item
+     * @param {Function} successCallback - function to be called after the delete
+     */
+    deleteReplyItem = (id: string, parentId: string, successCallback: Function = noop) => {
+        const cachedItems = this.getCachedItems(this.file.id);
+
+        const getItemWithFilteredReplies = <T: { replies?: Array<Comment> }>(item: T, replyId: string): T => {
+            if (!item.replies) {
+                return item;
+            }
+            const replies = item.replies.filter(reply => reply.id !== replyId);
+            return { ...item, replies };
+        };
+
+        if (cachedItems) {
+            const feedItems = cachedItems.items.map(item => {
+                if (item.id !== parentId) {
+                    return item;
+                }
+                if (item.type === 'annotation') {
+                    return getItemWithFilteredReplies<Annotation>(item, id);
+                }
+                if (item.type === 'comment') {
+                    return getItemWithFilteredReplies<Comment>(item, id);
+                }
+                return item;
+            });
+            this.setCachedItems(this.file.id, feedItems);
+
+            if (!this.isDestroyed()) {
+                successCallback(id, parentId);
             }
         }
     };
@@ -1524,7 +1696,7 @@ class Feed extends Base {
      *
      * @param {BoxItem} file - The file to which the task is assigned
      * @param {Object} currentUser - the user who performed the action
-     * @param {string} parentId - id of the parent annotation
+     * @param {string} parentId - id of the parent item
      * @param {CommentFeedItemType} parentType - type of the parent item
      * @param {string} text - the comment text
      * @param {boolean} hasMention - true if there is an @mention in the text
@@ -1722,6 +1894,64 @@ class Feed extends Base {
             },
             errorCallback: (e: ErrorResponseData, code: string) => {
                 this.updateCommentErrorCallback(e, code, commentId);
+            },
+        });
+    };
+
+    /**
+     * Update a reply
+     *
+     * @param {BoxItem} file - The file to which the reply with its parent is assigned
+     * @param {string} id - id of the reply
+     * @param {string} parentId - id of the parent item
+     * @param {string} text - the updated text
+     * @param {boolean} hasMention - true if there is an @mention in the text
+     * @param {BoxCommentPermission} permissions - Permissions to attach to the app activity items
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @return {void}
+     */
+    updateReply = (
+        file: BoxItem,
+        id: string,
+        parentId: string,
+        text: string,
+        hasMention?: boolean,
+        permissions: BoxCommentPermission,
+        successCallback: Function,
+        errorCallback: ErrorCallback,
+    ): void => {
+        if (!file.id) {
+            throw getBadItemError();
+        }
+
+        this.file = file;
+        this.errorCallback = errorCallback;
+        this.updateReplyItem({ tagged_message: text, isPending: true }, parentId, id);
+
+        this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
+
+        this.threadedCommentsAPI.updateComment({
+            fileId: file.id,
+            commentId: id,
+            permissions,
+            message: text,
+            undefined,
+            successCallback: (comment: Comment) => {
+                this.updateReplyItem(
+                    {
+                        ...comment,
+                        isPending: false,
+                    },
+                    parentId,
+                    id,
+                );
+                if (!this.isDestroyed()) {
+                    successCallback(comment);
+                }
+            },
+            errorCallback: (error: ErrorResponseData, code: string) => {
+                this.updateReplyErrorCallback(error, code, id, parentId);
             },
         });
     };

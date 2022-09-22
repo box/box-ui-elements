@@ -55,7 +55,18 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
+    onGetReplies?: (id: string, type: CommentFeedItemType) => void,
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string, hasMention: boolean) => void,
+    onReplyDelete?: ({ id: string, parentId: string, permissions: BoxCommentPermission }) => void,
+    onReplyUpdate?: (
+        id: string,
+        parentId: string,
+        text: string,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
     onTaskAssignmentUpdate?: Function,
     onTaskDelete?: Function,
     onTaskEdit?: Function,
@@ -83,6 +94,10 @@ const ActiveState = ({
     onAppActivityDelete,
     onCommentDelete,
     onCommentEdit,
+    onGetReplies,
+    onReplyCreate,
+    onReplyDelete,
+    onReplyUpdate,
     onTaskDelete,
     onTaskEdit,
     onTaskView,
@@ -114,14 +129,18 @@ const ActiveState = ({
                             >
                                 <ActivityThread
                                     data-testid="activity-thread"
-                                    onReplyDelete={onCommentDelete}
-                                    onReplyEdit={onCommentEdit}
                                     currentUser={currentUser}
                                     getAvatarUrl={getAvatarUrl}
                                     hasReplies={hasReplies}
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
                                     mentionSelectorContacts={mentionSelectorContacts}
+                                    onGetReplies={onGetReplies}
+                                    onReplyCreate={onReplyCreate}
+                                    onReplyDelete={onReplyDelete}
+                                    onReplyEdit={onReplyUpdate}
+                                    parentId={item.id}
+                                    parentType={item.type}
                                     repliesTotalCount={item.total_reply_count}
                                     replies={item.replies}
                                     translations={translations}
@@ -204,14 +223,18 @@ const ActiveState = ({
                             >
                                 <ActivityThread
                                     data-testid="activity-thread"
-                                    onReplyDelete={onCommentDelete}
-                                    onReplyEdit={onCommentEdit}
                                     currentUser={currentUser}
                                     getAvatarUrl={getAvatarUrl}
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
                                     hasReplies={hasReplies}
                                     mentionSelectorContacts={mentionSelectorContacts}
+                                    onGetReplies={onGetReplies}
+                                    onReplyCreate={onReplyCreate}
+                                    onReplyDelete={onReplyDelete}
+                                    onReplyEdit={onReplyUpdate}
+                                    parentId={item.id}
+                                    parentType={item.type}
                                     repliesTotalCount={item.total_reply_count}
                                     replies={item.replies}
                                     translations={translations}

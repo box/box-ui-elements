@@ -45,6 +45,7 @@ type Tasks = {
 
 type Comment = {
     ...BaseFeedItem,
+    isRepliesLoading?: boolean,
     is_reply_comment?: boolean,
     message?: string,
     modified_at: string,

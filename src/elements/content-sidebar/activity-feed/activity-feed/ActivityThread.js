@@ -10,7 +10,12 @@ import ActivityThreadReplies from './ActivityThreadReplies';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
-import type { Comment as CommentType, CommentFeedItemType } from '../../../../common/types/feed';
+import type {
+    BoxCommentPermission,
+    Comment as CommentType,
+    CommentFeedItemType,
+    FeedItemStatus,
+} from '../../../../common/types/feed';
 
 import messages from './messages';
 import './ActivityThread.scss';
@@ -24,10 +29,20 @@ type Props = {
     hasReplies: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
-    onGetReplies?: () => void,
+    onGetReplies?: (id: string, type: CommentFeedItemType) => void,
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string, hasMention: boolean) => void,
-    onReplyDelete?: Function,
-    onReplyEdit?: Function,
+    onReplyDelete?: ({ id: string, parentId: string, permissions: BoxCommentPermission }) => void,
+    onReplyEdit?: (
+        id: string,
+        parentId: string,
+        text: string,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
+    parentId: string,
+    parentType: CommentFeedItemType,
     replies?: Array<CommentType>,
     repliesTotalCount?: number,
     translations?: Translations,
@@ -45,6 +60,8 @@ const ActivityThread = ({
     onGetReplies = noop,
     onReplyDelete = noop,
     onReplyEdit = noop,
+    parentId,
+    parentType,
     replies = [],
     repliesTotalCount = 0,
     translations,
@@ -56,9 +73,25 @@ const ActivityThread = ({
 
     const toggleReplies = () => {
         if (!isExpanded) {
-            onGetReplies();
+            onGetReplies(parentId, parentType);
         }
         setIsExpanded(previousState => !previousState);
+    };
+
+    const onDelete = (options: { id: string, permissions: BoxCommentPermission }) => {
+        onReplyDelete({ ...options, parentId });
+    };
+
+    const onEdit = (
+        id: string,
+        text: string,
+        status?: FeedItemStatus,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => {
+        onReplyEdit(id, parentId, text, hasMention, permissions, onSuccess, onError);
     };
 
     if (!hasReplies) {
@@ -92,8 +125,8 @@ const ActivityThread = ({
                     getUserProfileUrl={getUserProfileUrl}
                     isExpanded={isExpanded}
                     mentionSelectorContacts={mentionSelectorContacts}
-                    onDelete={onReplyDelete}
-                    onEdit={onReplyEdit}
+                    onDelete={onDelete}
+                    onEdit={onEdit}
                     replies={replies}
                     translations={translations}
                 />
