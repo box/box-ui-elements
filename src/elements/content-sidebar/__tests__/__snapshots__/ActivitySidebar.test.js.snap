@@ -53,6 +53,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     onCommentCreate={[Function]}
     onCommentDelete={[Function]}
     onCommentUpdate={[Function]}
+    onReplyCreate={[Function]}
     onTaskAssignmentUpdate={[Function]}
     onTaskCreate={[Function]}
     onTaskDelete={[Function]}

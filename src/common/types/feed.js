@@ -7,6 +7,9 @@ import type { Annotation, AnnotationPermission, Annotations } from './annotation
 // Feed item types that can receive deeplinks inline in the feed
 type FocusableFeedItemType = 'task' | 'comment' | 'annotation';
 
+// Feed item types that represent user's written response (that also can have replies)
+type CommentFeedItemType = 'comment' | 'annotation';
+
 type BoxCommentPermission = {
     can_delete?: boolean,
     can_edit?: boolean,
@@ -47,7 +50,7 @@ type Comment = {
     modified_at: string,
     parent?: {
         id: string,
-        type: 'comment' | 'annotation',
+        type: CommentFeedItemType,
     },
     permissions: BoxCommentPermission,
     replies?: Array<Comment>,
@@ -60,6 +63,12 @@ type Comment = {
 type Comments = {
     entries: Array<Comment>,
     total_count: number,
+};
+
+type ThreadedComments = {
+    entries: Array<Comment>,
+    limit: number,
+    next_marker: string,
 };
 
 type ActivityTemplateItem = {|
@@ -130,6 +139,7 @@ export type {
     AppItem,
     BoxCommentPermission,
     Comment,
+    CommentFeedItemType,
     Comments,
     FeedItem,
     FeedItems,
@@ -138,4 +148,5 @@ export type {
     Reply,
     Task,
     Tasks,
+    ThreadedComments,
 };

@@ -44,6 +44,7 @@ import type {
     Annotation,
     AnnotationPermission,
     BoxCommentPermission,
+    CommentFeedItemType,
     FocusableFeedItemType,
     FeedItems,
     FeedItemStatus,
@@ -485,6 +486,38 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     /**
+     * Posts a new reply to the API
+     *
+     * @param {string} parentId - The id of the parent item
+     * @param {CommentFeedItemType} parentType - The type of the parent item
+     * @param {string} text - The text of reply
+     * @param {boolean} hasMention - Indicator of using mention feature
+     * @return {void}
+     */
+    createReply = (parentId: string, parentType: CommentFeedItemType, text: string, hasMention: boolean): void => {
+        const { file, api } = this.props;
+        const { currentUser } = this.state;
+
+        if (!currentUser) {
+            throw getBadUserError();
+        }
+
+        api.getFeedAPI(false).createReply(
+            file,
+            currentUser,
+            parentId,
+            parentType,
+            text,
+            hasMention,
+            this.feedSuccessCallback,
+            this.feedErrorCallback,
+        );
+
+        // need to load the pending item
+        this.fetchFeedItems();
+    };
+
+    /**
      * Deletes an app activity item via the API.
      *
      * @param {Object} args - A subset of the app activity
@@ -891,6 +924,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
                     onCommentUpdate={this.updateComment}
+                    onReplyCreate={this.createReply}
                     onTaskAssignmentUpdate={this.updateTaskAssignment}
                     onTaskCreate={this.createTask}
                     onTaskDelete={this.deleteTask}
