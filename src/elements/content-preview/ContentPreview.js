@@ -184,33 +184,6 @@ const LoadableSidebar = AsyncLoad({
 });
 
 class ContentPreview extends React.PureComponent<Props, State> {
-    static defaultProps = {
-        apiHost: DEFAULT_HOSTNAME_API,
-        appHost: DEFAULT_HOSTNAME_APP,
-        autoFocus: false,
-        canDownload: true,
-        className: '',
-        collection: [],
-        contentOpenWithProps: {},
-        contentSidebarProps: {},
-        enableThumbnailsSidebar: false,
-        hasHeader: false,
-        language: DEFAULT_LOCALE,
-        onAnnotator: noop,
-        onAnnotatorEvent: noop,
-        onDownload: noop,
-        onError: noop,
-        onLoad: noop,
-        onNavigate: noop,
-        onPreviewDestroy: noop,
-        onVersionChange: noop,
-        previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
-        showAnnotations: false,
-        staticHost: DEFAULT_HOSTNAME_STATIC,
-        staticPath: DEFAULT_PATH_STATIC_PREVIEW,
-        useHotkeys: true,
-    };
-
     id: string;
 
     props: Props;
@@ -242,6 +215,33 @@ class ContentPreview extends React.PureComponent<Props, State> {
         isThumbnailSidebarOpen: false,
     };
 
+    static defaultProps = {
+        apiHost: DEFAULT_HOSTNAME_API,
+        appHost: DEFAULT_HOSTNAME_APP,
+        autoFocus: false,
+        canDownload: true,
+        className: '',
+        collection: [],
+        contentOpenWithProps: {},
+        contentSidebarProps: {},
+        enableThumbnailsSidebar: false,
+        hasHeader: false,
+        language: DEFAULT_LOCALE,
+        onAnnotator: noop,
+        onAnnotatorEvent: noop,
+        onDownload: noop,
+        onError: noop,
+        onLoad: noop,
+        onNavigate: noop,
+        onPreviewDestroy: noop,
+        onVersionChange: noop,
+        previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
+        showAnnotations: false,
+        staticHost: DEFAULT_HOSTNAME_STATIC,
+        staticPath: DEFAULT_PATH_STATIC_PREVIEW,
+        useHotkeys: true,
+    };
+
     /**
      * @property {number}
      */
@@ -264,7 +264,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             cache,
             fileId,
             language,
-            logger,
             requestInterceptor,
             responseInterceptor,
             sharedLink,
@@ -290,23 +289,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
             // eslint-disable-next-line react/no-unused-state
             prevFileIdProp: fileId,
         };
-
+        const { logger } = props;
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
-    }
-
-    static getDerivedStateFromProps(props: Props, state: State) {
-        const { fileId } = props;
-
-        if (fileId !== state.prevFileIdProp) {
-            return {
-                currentFileId: fileId,
-                prevFileIdProp: fileId,
-            };
-        }
-
-        return null;
     }
 
     /**
@@ -355,6 +341,19 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         this.fetchFile(this.state.currentFileId);
         this.focusPreview();
+    }
+
+    static getDerivedStateFromProps(props: Props, state: State) {
+        const { fileId } = props;
+
+        if (fileId !== state.prevFileIdProp) {
+            return {
+                currentFileId: fileId,
+                prevFileIdProp: fileId,
+            };
+        }
+
+        return null;
     }
 
     /**
@@ -804,7 +803,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             skipServerUpdate: true,
             useHotkeys: false,
         };
-
         const { Preview } = global.Box;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
@@ -966,41 +964,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
     };
 
     /**
-     * Mouse move handler that is throttled and show
-     * the navigation arrows if applicable.
-     *
-     * @return {void}
-     */
-    onMouseMove = throttle(() => {
-        const viewer = this.getViewer();
-        const isPreviewing = !!viewer;
-        const CLASS_NAVIGATION_VISIBILITY = 'bcpr-nav-is-visible';
-
-        clearTimeout(this.mouseMoveTimeoutID);
-
-        if (!this.previewContainer) {
-            return;
-        }
-
-        // Always assume that navigation arrows will be hidden
-        this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
-
-        // Only show it if either we aren't previewing or if we are then the viewer
-        // is not blocking the show. If we are previewing then the viewer may choose
-        // to not allow navigation arrows. This is mostly useful for videos since the
-        // navigation arrows may interfere with the settings menu inside video player.
-        if (this.previewContainer && (!isPreviewing || viewer.allowNavigationArrows())) {
-            this.previewContainer.classList.add(CLASS_NAVIGATION_VISIBILITY);
-        }
-
-        this.mouseMoveTimeoutID = setTimeout(() => {
-            if (this.previewContainer) {
-                this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
-            }
-        }, 1500);
-    }, 1000);
-
-    /**
      * Finds the index of current file inside the collection
      *
      * @return {number} -1 if not indexed
@@ -1104,6 +1067,41 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.preview.print();
         }
     };
+
+    /**
+     * Mouse move handler that is throttled and show
+     * the navigation arrows if applicable.
+     *
+     * @return {void}
+     */
+    onMouseMove = throttle(() => {
+        const viewer = this.getViewer();
+        const isPreviewing = !!viewer;
+        const CLASS_NAVIGATION_VISIBILITY = 'bcpr-nav-is-visible';
+
+        clearTimeout(this.mouseMoveTimeoutID);
+
+        if (!this.previewContainer) {
+            return;
+        }
+
+        // Always assume that navigation arrows will be hidden
+        this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
+
+        // Only show it if either we aren't previewing or if we are then the viewer
+        // is not blocking the show. If we are previewing then the viewer may choose
+        // to not allow navigation arrows. This is mostly useful for videos since the
+        // navigation arrows may interfere with the settings menu inside video player.
+        if (this.previewContainer && (!isPreviewing || viewer.allowNavigationArrows())) {
+            this.previewContainer.classList.add(CLASS_NAVIGATION_VISIBILITY);
+        }
+
+        this.mouseMoveTimeoutID = setTimeout(() => {
+            if (this.previewContainer) {
+                this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
+            }
+        }, 1500);
+    }, 1000);
 
     /**
      * Keyboard events

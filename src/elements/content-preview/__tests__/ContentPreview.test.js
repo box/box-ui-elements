@@ -387,6 +387,25 @@ describe('elements/content-preview/ContentPreview', () => {
             );
         });
 
+        test('should use boxAnnotations instance if provided', async () => {
+            const boxAnnotations = jest.fn();
+            const wrapper = getWrapper({ ...props, boxAnnotations });
+
+            wrapper.setState({ file });
+
+            const instance = wrapper.instance();
+
+            await instance.loadPreview();
+
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({
+                    boxAnnotations,
+                }),
+            );
+        });
+
         test.each`
             called   | showAnnotationsControls
             ${true}  | ${true}

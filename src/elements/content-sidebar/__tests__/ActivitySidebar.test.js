@@ -351,7 +351,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
     describe('createReply()', () => {
         test('should throw an error if missing current user', () => {
-            const wrapper = getWrapper();
+            const wrapper = getWrapper({ currentUser: undefined });
             const instance = wrapper.instance();
 
             expect(() => instance.createReply('123', 'comment', 'abc', true)).toThrow(userError);

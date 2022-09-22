@@ -312,7 +312,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: TaskCollabStatus): void => {
-        const { api, currentUser, file, onTaskAssignmentUpdate } = this.props;
+        const { api, currentUser = {}, file, onTaskAssignmentUpdate } = this.props;
 
         const successCallback = () => {
             this.feedSuccessCallback();
@@ -462,8 +462,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     createReply = (parentId: string, parentType: CommentFeedItemType, text: string, hasMention: boolean): void => {
-        const { file, api } = this.props;
-        const { currentUser } = this.state;
+        const { api, currentUser, file } = this.props;
 
         if (!currentUser) {
             throw getBadUserError();
