@@ -1306,7 +1306,7 @@ class Feed extends Base {
     /**
      * Callback for failed creation of a reply.
      *
-     * @param {Object} e - The axios error
+     * @param {ElementsXhrError} error - The axios error
      * @param {string} code - the error code
      * @param {string} parentId - ID of the parent feed item
      * @param {string} id - ID of the feed item to update

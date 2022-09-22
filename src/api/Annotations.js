@@ -25,7 +25,7 @@ import type {
 } from '../common/types/annotations';
 import type { BoxItemPermission } from '../common/types/core';
 import type { ElementsXhrError } from '../common/types/api';
-import type { Comment, FeedItemStatus, ThreadedComments as ThreadedCommentsType } from '../common/types/feed';
+import type { Comment, FeedItemStatus } from '../common/types/feed';
 
 export default class Annotations extends MarkerBasedApi {
     /**
@@ -44,6 +44,44 @@ export default class Annotations extends MarkerBasedApi {
             replies: annotation.replies.map(formatComment),
         };
     }
+
+    /**
+     * Formats the annotations api response to usable data
+     * @param {Object} data the api response data
+     */
+    successHandler = (data: Object): void => {
+        if (this.isDestroyed() || typeof this.successCallback !== 'function') {
+            return;
+        }
+
+        // There is no response data when deleting an annotation
+        if (!data) {
+            this.successCallback();
+            return;
+        }
+
+        // We don't have entries when updating/creating an annotation
+        if (!data.entries) {
+            // Check if the response is a comment (result of createAnnotationReply)
+            if (data.type && data.type === 'comment') {
+                this.successCallback(formatComment(data));
+                return;
+            }
+
+            this.successCallback(this.formatReplies(data));
+            return;
+        }
+
+        // Check if the response is the replies of an annotation (result of getAnnotationReplies)
+        if (data.entries.length && data.entries[0].type === 'comment') {
+            const replies = data.entries.map(formatComment);
+            this.successCallback({ ...data, entries: replies });
+            return;
+        }
+
+        const annotations = data.entries.map(this.formatReplies);
+        this.successCallback({ ...data, entries: annotations });
+    };
 
     getUrl() {
         return `${this.getBaseApiUrl()}/undoc/annotations`;
@@ -133,7 +171,7 @@ export default class Annotations extends MarkerBasedApi {
                 },
             },
             errorCallback,
-            successCallback: this.annotationSuccessCallback.bind(this, successCallback),
+            successCallback,
             url: this.getUrlForId(annotationId),
         });
     }
@@ -184,7 +222,7 @@ export default class Annotations extends MarkerBasedApi {
         this.get({
             id: fileId,
             errorCallback,
-            successCallback: this.annotationSuccessCallback.bind(this, successCallback),
+            successCallback,
             url: this.getUrlForId(annotationId),
             requestData,
         });
@@ -221,12 +259,7 @@ export default class Annotations extends MarkerBasedApi {
             limit,
             requestData,
             shouldFetchAll,
-            successCallback: (annotations: AnnotationsType) => {
-                successCallback({
-                    ...annotations,
-                    entries: annotations.entries.map(this.formatReplies),
-                });
-            },
+            successCallback,
         });
     }
 
@@ -249,9 +282,7 @@ export default class Annotations extends MarkerBasedApi {
         this.get({
             id: fileId,
             errorCallback,
-            successCallback: ({ entries }: ThreadedCommentsType) => {
-                successCallback(entries.map(formatComment));
-            },
+            successCallback,
             url: this.getUrlWithRepliesForId(annotationId),
         });
     }
@@ -277,14 +308,8 @@ export default class Annotations extends MarkerBasedApi {
             id: fileId,
             data: { data: { message } },
             errorCallback,
-            successCallback: (comment: Comment) => {
-                successCallback(formatComment(comment));
-            },
+            successCallback,
             url: this.getUrlWithRepliesForId(annotationId),
         });
-    }
-
-    annotationSuccessCallback(successCallback: (annotation: Annotation) => void, annotation: Annotation) {
-        successCallback(this.formatReplies(annotation));
     }
 }

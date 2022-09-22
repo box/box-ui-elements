@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash/cloneDeep';
 import Annotations from '../Annotations';
 import {
     ERROR_CODE_CREATE_ANNOTATION,
@@ -8,10 +9,15 @@ import {
     ERROR_CODE_FETCH_ANNOTATION,
     ERROR_CODE_FETCH_ANNOTATIONS,
 } from '../../constants';
-import { threadedCommentsFormatted } from '../fixtures';
+import { formatComment } from '../utils';
+import {
+    annotations as mockAnnotations,
+    threadedComments as mockThreadedComments,
+    threadedCommentsFormatted as mockThreadedCommentsFormatted,
+} from '../fixtures';
 
-const mockFormattedReply = threadedCommentsFormatted[1];
-jest.mock('../utils', () => ({ formatComment: () => mockFormattedReply }));
+const mockFormattedReply = cloneDeep(mockThreadedCommentsFormatted[1]);
+jest.mock('../utils', () => ({ formatComment: jest.fn(() => mockFormattedReply) }));
 
 describe('api/Annotations', () => {
     let annotations;
@@ -124,7 +130,7 @@ describe('api/Annotations', () => {
                 id: '12345',
                 data: { data: { description: { message: 'hello' } } },
                 errorCallback,
-                successCallback: expect.any(Function),
+                successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/abc',
             });
         });
@@ -151,7 +157,7 @@ describe('api/Annotations', () => {
                     },
                 },
                 errorCallback,
-                successCallback: expect.any(Function),
+                successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/abc',
             });
         });
@@ -208,7 +214,7 @@ describe('api/Annotations', () => {
             expect(annotations.get).toBeCalledWith({
                 id: '12345',
                 errorCallback,
-                successCallback: expect.any(Function),
+                successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/abc',
                 requestData: undefined,
             });
@@ -225,7 +231,7 @@ describe('api/Annotations', () => {
             expect(annotations.get).toBeCalledWith({
                 id: '12345',
                 errorCallback,
-                successCallback: expect.any(Function),
+                successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/abc',
                 requestData: { params: { fields: 'replies' } },
             });
@@ -261,7 +267,7 @@ describe('api/Annotations', () => {
                     file_id: '12345',
                     file_version_id: '67890',
                 },
-                successCallback: expect.any(Function),
+                successCallback,
             });
         });
 
@@ -313,7 +319,7 @@ describe('api/Annotations', () => {
             expect(annotations.get).toBeCalledWith({
                 id: '12345',
                 errorCallback,
-                successCallback: expect.any(Function),
+                successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/67890/replies',
             });
         });
@@ -343,7 +349,7 @@ describe('api/Annotations', () => {
                 id: '12345',
                 data: { data: { message } },
                 errorCallback,
-                successCallback: expect.any(Function),
+                successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/67890/replies',
             });
         });
@@ -357,15 +363,52 @@ describe('api/Annotations', () => {
         });
     });
 
-    describe('annotationSuccessCallback()', () => {
-        test('should call formatReplies with given annotation and call given successCallback fn', () => {
-            const annotation = { id: '123', message: 'test', replies: [] };
-            const successCallback = jest.fn();
+    describe('successHandler()', () => {
+        beforeEach(() => {
             annotations.formatReplies = jest.fn();
+            annotations.successCallback = jest.fn();
+        });
 
-            annotations.annotationSuccessCallback(successCallback, annotation);
-            expect(successCallback).toBeCalled();
-            expect(annotations.formatReplies).toBeCalledWith(annotation);
+        test('should call the success callback with no data if none provided from API', () => {
+            annotations.successHandler();
+            expect(annotations.successCallback).toBeCalledWith();
+        });
+
+        test('should call formatReplies method and call the success callback if the response does not contain entries property', () => {
+            const response = cloneDeep(mockAnnotations[0]);
+            annotations.successHandler(response);
+            expect(annotations.formatReplies).toBeCalledWith(response);
+            expect(annotations.successCallback).toBeCalled();
+        });
+
+        test('should call formatComment util and call the success callback if the response does not contain entries property and has type = comment', () => {
+            const response = cloneDeep(mockThreadedComments[0]);
+            annotations.successHandler(response);
+            expect(formatComment).toBeCalledWith(response);
+            expect(annotations.successCallback).toBeCalled();
+        });
+
+        test('should call formatComment util, not call the formatReplies method and should call the success callback if the response contains comments (replies)', () => {
+            const response = {
+                entries: cloneDeep(mockThreadedComments),
+                limit: 1000,
+                next_marker: null,
+            };
+            annotations.successHandler(response);
+            expect(formatComment).toBeCalled();
+            expect(annotations.formatReplies).not.toBeCalled();
+            expect(annotations.successCallback).toBeCalled();
+        });
+
+        test('should call formatReplies method and call the success callback if the response contains annotations', () => {
+            const response = {
+                entries: cloneDeep(mockAnnotations),
+                limit: 1000,
+                next_marker: null,
+            };
+            annotations.successHandler(response);
+            expect(annotations.formatReplies).toBeCalled();
+            expect(annotations.successCallback).toBeCalled();
         });
     });
 

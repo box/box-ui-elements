@@ -59,6 +59,31 @@ class ThreadedComments extends MarkerBasedApi {
     }
 
     /**
+     * Formats the threaded comments api response to usable data
+     * @param {Object} data the api response data
+     */
+    successHandler = (data: Object): void => {
+        if (this.isDestroyed() || typeof this.successCallback !== 'function') {
+            return;
+        }
+
+        // There is no response data when deleting a comment
+        if (!data) {
+            this.successCallback();
+            return;
+        }
+
+        // We don't have entries when updating/creating a comment
+        if (!data.entries) {
+            this.successCallback(formatComment(data));
+            return;
+        }
+
+        const comments = data.entries.map(formatComment);
+        this.successCallback({ ...data, entries: comments });
+    };
+
+    /**
      * API for creating a comment on a file
      *
      * @param {BoxItem} file - File object for which we are creating a comment
@@ -100,9 +125,7 @@ class ThreadedComments extends MarkerBasedApi {
                     message,
                 },
             },
-            successCallback: (comment: Comment) => {
-                successCallback(formatComment(comment));
-            },
+            successCallback,
             errorCallback,
         });
     }
@@ -164,9 +187,7 @@ class ThreadedComments extends MarkerBasedApi {
             id: fileId,
             url: this.getUrlForId(commentId),
             data: requestData,
-            successCallback: (comment: Comment) => {
-                successCallback(formatComment(comment));
-            },
+            successCallback,
             errorCallback,
         });
     }
@@ -254,9 +275,7 @@ class ThreadedComments extends MarkerBasedApi {
 
         this.markerGet({
             id: fileId,
-            successCallback: (threadedComments: ThreadedCommentsType) => {
-                successCallback({ ...threadedComments, entries: threadedComments.entries.map(formatComment) });
-            },
+            successCallback,
             errorCallback,
             marker,
             limit,
@@ -300,9 +319,7 @@ class ThreadedComments extends MarkerBasedApi {
         this.get({
             id: fileId,
             errorCallback,
-            successCallback: ({ entries }: ThreadedCommentsType) => {
-                successCallback(entries.map(formatComment));
-            },
+            successCallback,
             url: this.getUrlWithRepliesForId(commentId),
         });
     }
@@ -343,9 +360,7 @@ class ThreadedComments extends MarkerBasedApi {
             id: fileId,
             data: { data: { message } },
             errorCallback,
-            successCallback: (comment: Comment) => {
-                successCallback(formatComment(comment));
-            },
+            successCallback,
             url: this.getUrlWithRepliesForId(commentId),
         });
     }
