@@ -3,26 +3,25 @@ import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 
 import ContentInsightsSummary from '../../features/content-insights/ContentInsightsSummary';
-import { GraphData } from '../../features/content-insights/types';
+import { GraphData, ResponseError } from '../../features/content-insights/types';
 // @ts-ignore Module is written in Flow
 import messages from '../common/messages';
 // @ts-ignore Module is written in Flow
 import SidebarSection from './SidebarSection';
 // @ts-ignore Module is written in Flow
 // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
-import withErrorHandling from './withErrorHandling';
+import withErrorHandling from './withErrorHandling'; // Above eslint rules disabled because typescript chokes on flow type import in withErrorHandling
 
-interface ContentInsights {
-    error?: Object;
+export interface ContentInsights {
+    error?: ResponseError;
     graphData: GraphData;
     isLoading: boolean;
     previousPeriodCount: number;
     totalCount: number;
 }
 
-interface Props {
+export interface Props {
     contentInsights?: ContentInsights;
-    error?: Object;
     onContentInsightsClick?: () => void;
 }
 
