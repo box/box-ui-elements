@@ -8,7 +8,7 @@ import LoadingIndicator from '../../../../components/loading-indicator/LoadingIn
 import useAnnotationAPI from './useAnnotationAPI';
 
 import type { BoxItemPermission, SelectorItems } from '../../../../common/types/core';
-import type { ErrorContextProps } from '../../../../common/types/api';
+import type { ElementOrigin, ElementsXhrError } from '../../../../common/types/api';
 
 import './AnnotationThreadContent.scss';
 
@@ -17,7 +17,7 @@ type Props = {
     api: API,
     fileId: string,
     filePermissions: BoxItemPermission,
-    onError: ErrorContextProps.onError,
+    onError: (error: ElementsXhrError | Error, code: string, contextInfo?: Object, origin?: ElementOrigin) => void,
 };
 
 const AnnotationThreadContent = ({ annotationId, api, fileId, filePermissions, onError }: Props) => {

@@ -2,8 +2,6 @@ import FileCollaborators from '../FileCollaborators';
 
 let fileCollaborators;
 
-jest.mock('lodash/debounce', () => jest.fn(i => i));
-
 describe('api/FileCollaborators', () => {
     beforeEach(() => {
         fileCollaborators = new FileCollaborators({});

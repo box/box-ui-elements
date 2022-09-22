@@ -5,6 +5,7 @@
  */
 
 import * as React from 'react';
+import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
@@ -26,6 +27,7 @@ import { withLogger } from '../common/logger';
 import { withRouterAndRef } from '../common/routing';
 import ActivitySidebarFilter from './ActivitySidebarFilter';
 import {
+    DEFAULT_COLLAB_DEBOUNCE,
     ERROR_CODE_FETCH_ACTIVITY,
     ORIGIN_ACTIVITY_SIDEBAR,
     SIDEBAR_VIEW_ACTIVITY,
@@ -723,7 +725,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {string} searchStr - Search string to filter file collaborators by
      * @return {void}
      */
-    getApprover = (searchStr: string) => {
+    getApprover = debounce((searchStr: string) => {
         const { file, api } = this.props;
         api.getFileCollaboratorsAPI(false).getCollaboratorsWithQuery(
             file.id,
@@ -734,7 +736,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 includeGroups: true,
             },
         );
-    };
+    }, DEFAULT_COLLAB_DEBOUNCE);
 
     /**
      * Fetches file @mention's
@@ -743,7 +745,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {string} searchStr - Search string to filter file collaborators by
      * @return {void}
      */
-    getMention = (searchStr: string) => {
+    getMention = debounce((searchStr: string) => {
         const { file, api } = this.props;
         api.getFileCollaboratorsAPI(false).getCollaboratorsWithQuery(
             file.id,
@@ -751,7 +753,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             this.errorCallback,
             searchStr,
         );
-    };
+    }, DEFAULT_COLLAB_DEBOUNCE);
 
     /**
      * Fetches file collaborators

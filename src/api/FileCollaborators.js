@@ -4,9 +4,8 @@
  * @author Box
  */
 
-import debounce from 'lodash/debounce';
 import MarkerBasedAPI from './MarkerBasedAPI';
-import { DEFAULT_COLLAB_DEBOUNCE, DEFAULT_MAX_COLLABORATORS } from '../constants';
+import { DEFAULT_MAX_COLLABORATORS } from '../constants';
 import type { ElementsErrorCallback } from '../common/types/api';
 import type { SelectorItem, SelectorItems, UserMini, GroupMini } from '../common/types/core';
 import type { Collaborators } from '../elements/content-sidebar/flowTypes';
@@ -93,7 +92,6 @@ class FileCollaborators extends MarkerBasedAPI {
     /**
      * Fetches file @mention's
      *
-     * @private
      * @oaram {string} fileId
      * @param {Function} successCallback
      * @param {Function} errorCallback
@@ -102,27 +100,24 @@ class FileCollaborators extends MarkerBasedAPI {
      * @param {boolean} [options.includeGroups] - return groups as well as users
      * @return {void}
      */
-    getCollaboratorsWithQuery = debounce(
-        (
-            fileId: string,
-            successCallback: Collaborators => void,
-            errorCallback: ElementsErrorCallback,
-            searchStr: string,
-            { includeGroups = false }: { includeGroups: boolean } = {},
-        ) => {
-            // Do not fetch without filter
-            if (!searchStr || searchStr.trim() === '') {
-                return;
-            }
+    getCollaboratorsWithQuery = (
+        fileId: string,
+        successCallback: Collaborators => void,
+        errorCallback: ElementsErrorCallback,
+        searchStr: string,
+        { includeGroups = false }: { includeGroups: boolean } = {},
+    ) => {
+        // Do not fetch without filter
+        if (!searchStr || searchStr.trim() === '') {
+            return;
+        }
 
-            this.getFileCollaborators(fileId, successCallback, errorCallback, {
-                filter_term: searchStr,
-                include_groups: includeGroups,
-                include_uploader_collabs: false,
-            });
-        },
-        DEFAULT_COLLAB_DEBOUNCE,
-    );
+        this.getFileCollaborators(fileId, successCallback, errorCallback, {
+            filter_term: searchStr,
+            include_groups: includeGroups,
+            include_uploader_collabs: false,
+        });
+    };
 }
 
 export default FileCollaborators;
