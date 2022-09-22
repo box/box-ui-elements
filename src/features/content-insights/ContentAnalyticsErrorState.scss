@@ -4,9 +4,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
-.ContentAnalyticsErrorState-text {
+.ContentAnalyticsErrorState-text,
+.ContentAnalyticsPermissionError-text {
     width: 100%;
     margin-top: $bdl-grid-unit * 5;
     font-size: $bdl-fontSize--dejaBlue;

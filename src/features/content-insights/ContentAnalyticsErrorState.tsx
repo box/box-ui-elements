@@ -2,45 +2,52 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import PropTypes from 'prop-types';
-import HatWand140 from '../../illustration/HatWand140';
 import MetricsReview56 from '../../illustration/MetricsReview56';
 import messages from './messages';
 import { ResponseError } from './types';
 
 import './ContentAnalyticsErrorState.scss';
 
+const SIZE_MAP = {
+    small: 56,
+    medium: 80,
+    large: 95,
+};
 interface Props {
     error: ResponseError;
+    size?: 'small' | 'medium' | 'large';
 }
 
-const ContentAnalyticsErrorState = ({ error }: Props) => {
-    const renderErrorContent = () => {
+const ContentAnalyticsErrorState = ({ error, size = 'small' }: Props) => {
+    const renderErrorMessage = () => {
         const isPermissionError = error.status === 403;
 
         if (isPermissionError) {
             return (
-                <>
-                    <MetricsReview56 data-testid="ContentAnalyticsPermissionError-image" />
-                    <div className="ContentAnalyticsErrorState-text">
-                        <FormattedMessage {...messages.contentAnalyticsPermissionError} />
-                    </div>
-                </>
+                <div
+                    className="ContentAnalyticsPermissionError-text"
+                    data-testid="ContentAnalyticsPermissionError-text"
+                >
+                    <FormattedMessage {...messages.contentAnalyticsPermissionError} />
+                </div>
             );
         }
 
         return (
-            <>
-                <HatWand140 data-testid="ContentAnalyticsErrorState-image" />
-                <div className="ContentAnalyticsErrorState-text">
-                    <FormattedMessage {...messages.contentAnalyticsErrorText} />
-                </div>
-            </>
+            <div className="ContentAnalyticsErrorState-text" data-testid="ContentAnalyticsErrorState-text">
+                <FormattedMessage {...messages.contentAnalyticsErrorText} />
+            </div>
         );
     };
 
     return (
         <div className="ContentAnalyticsErrorState" data-testid="ContentAnalyticsErrorState">
-            {renderErrorContent()}
+            <MetricsReview56
+                height={SIZE_MAP[size]}
+                width={SIZE_MAP[size]}
+                data-testid="ContentAnalyticsErrorState-image"
+            />
+            {renderErrorMessage()}
         </div>
     );
 };

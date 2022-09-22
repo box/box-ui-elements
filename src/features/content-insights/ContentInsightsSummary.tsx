@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import PropTypes from 'prop-types';
 import ContentAnalyticsErrorState from './ContentAnalyticsErrorState';
 import ContentInsightsSummaryGhostState from './ContentInsightsSummaryGhostState';
 import GraphCardPreviewsSummary from './GraphCardPreviewsSummary';
@@ -21,7 +20,7 @@ interface Props {
 const ContentInsightsSummary = ({ error, graphData, isLoading, previousPeriodCount, onClick, totalCount }: Props) => {
     const renderContentAnalyticsSummary = () => {
         if (error) {
-            return <ContentAnalyticsErrorState error={error} />;
+            return <ContentAnalyticsErrorState error={error} size="small" />;
         }
 
         if (isLoading) {
@@ -41,10 +40,6 @@ const ContentInsightsSummary = ({ error, graphData, isLoading, previousPeriodCou
     };
 
     return <div className="ContentInsightsSummary">{renderContentAnalyticsSummary()}</div>;
-};
-
-ContentInsightsSummary.propTypes = {
-    error: PropTypes.object,
 };
 
 export default ContentInsightsSummary;
