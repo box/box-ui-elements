@@ -28,6 +28,6 @@ export type ResponseError = Error & {
     data?: string;
     detail?: string;
     errorCode?: string;
-    status?: number;
+    status: number;
     title?: string;
 };

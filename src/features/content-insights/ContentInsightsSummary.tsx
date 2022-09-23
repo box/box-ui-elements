@@ -4,13 +4,13 @@ import ContentAnalyticsErrorState from './ContentAnalyticsErrorState';
 import ContentInsightsSummaryGhostState from './ContentInsightsSummaryGhostState';
 import GraphCardPreviewsSummary from './GraphCardPreviewsSummary';
 import OpenContentInsightsButton from './OpenContentInsightsButton';
-import { GraphData } from './types';
+import { GraphData, ResponseError } from './types';
 
 import './ContentInsightsSummary.scss';
 
 interface Props {
     graphData: GraphData;
-    error?: Object;
+    error?: ResponseError;
     isLoading: boolean;
     onClick: () => void;
     previousPeriodCount: number;
@@ -20,7 +20,7 @@ interface Props {
 const ContentInsightsSummary = ({ error, graphData, isLoading, previousPeriodCount, onClick, totalCount }: Props) => {
     const renderContentAnalyticsSummary = () => {
         if (error) {
-            return <ContentAnalyticsErrorState />;
+            return <ContentAnalyticsErrorState error={error} />;
         }
 
         if (isLoading) {
