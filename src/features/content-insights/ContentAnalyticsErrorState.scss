@@ -6,31 +6,10 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-
-    &.small {
-        svg {
-            width: 56px;
-            height: 56px;
-        }
-    }
-
-    &.medium {
-        svg {
-            width: 80px;
-            height: 80px;
-        }
-    }
-
-    &.large {
-        svg {
-            width: 95px;
-            height: 95px;
-        }
-    }
 }
 
 .ContentAnalyticsErrorState-text,
-.ContentAnalyticsPermissionError-text {
+.ContentAnalyticsErrorState-text--permission {
     width: 100%;
     margin-top: $bdl-grid-unit * 5;
     font-size: $bdl-fontSize--dejaBlue;

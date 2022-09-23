@@ -9,7 +9,7 @@ const messages = defineMessages({
     contentAnalyticsPermissionError: {
         defaultMessage: 'Oops! You no longer have access to view content insights.',
         description: 'Message shown when the user does not have access to view content insights anymore',
-        id: 'enduser.contentInsights.contentAnalyticsPermissionError',
+        id: 'be.contentInsights.contentAnalyticsPermissionError',
     },
     contentInsightsTitle: {
         defaultMessage: 'Content Insights',

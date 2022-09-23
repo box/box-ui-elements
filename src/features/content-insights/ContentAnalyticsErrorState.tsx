@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import PropTypes from 'prop-types';
 import MetricsReview56 from '../../illustration/MetricsReview56';
 import messages from './messages';
 import { ResponseError } from './types';
@@ -13,8 +12,8 @@ interface Props {
 }
 
 const ContentAnalyticsErrorState = ({ error }: Props) => {
-    const renderErrorMessage = () => {
-        const isPermissionError = error.status === 403;
+    const renderErrorMessage = (responseError: ResponseError) => {
+        const isPermissionError = responseError.status === 403;
 
         if (isPermissionError) {
             return (
@@ -37,13 +36,9 @@ const ContentAnalyticsErrorState = ({ error }: Props) => {
     return (
         <div className="ContentAnalyticsErrorState" data-testid="ContentAnalyticsErrorState">
             <MetricsReview56 data-testid="ContentAnalyticsErrorState-image" />
-            {renderErrorMessage()}
+            {renderErrorMessage(error)}
         </div>
     );
-};
-
-ContentAnalyticsErrorState.propTypes = {
-    error: PropTypes.object,
 };
 
 export default ContentAnalyticsErrorState;
