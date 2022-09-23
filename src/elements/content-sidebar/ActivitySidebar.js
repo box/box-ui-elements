@@ -18,7 +18,7 @@ import messages from '../common/messages';
 import SidebarContent from './SidebarContent';
 import { WithAnnotatorContextProps, withAnnotatorContext } from '../common/annotator-context';
 import { EVENT_DATA_READY, EVENT_JS_READY } from '../common/logger/constants';
-import { getBadUserError, getBadItemError } from '../../utils/error';
+import { getBadUserError } from '../../utils/error';
 import { mark } from '../../utils/performance';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
@@ -52,8 +52,8 @@ import type {
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { SelectorItems, User, UserMini, GroupMini, BoxItem } from '../../common/types/core';
-import type { GetProfileUrlCallback } from '../common/flowTypes';
-import type { Translations, Collaborators, Errors } from './flowTypes';
+import type { Errors, GetProfileUrlCallback } from '../common/flowTypes';
+import type { Translations, Collaborators } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 import './ActivitySidebar.scss';
 
@@ -61,6 +61,7 @@ type ExternalProps = {
     activeFeedEntryId?: string,
     activeFeedEntryType?: FocusableFeedItemType,
     currentUser?: User,
+    currentUserError?: Errors,
     getUserProfileUrl?: GetProfileUrlCallback,
     hasReplies?: boolean,
     hasTasks?: boolean,
@@ -98,8 +99,6 @@ type State = {
     activityFeedError?: Errors,
     approverSelectorContacts: SelectorItems<UserMini | GroupMini>,
     contactsLoaded?: boolean,
-    currentUser?: User,
-    currentUserError?: Errors,
     feedItems?: FeedItems,
     feedItemsStatusFilter?: FeedItemStatus,
     mentionSelectorContacts?: SelectorItems<UserMini>,
@@ -154,10 +153,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
-        const { currentUser } = this.props;
-
         this.fetchFeedItems(true);
-        this.fetchCurrentUser(currentUser);
     }
 
     handleAnnotationDelete = ({ id, permissions }: { id: string, permissions: AnnotationPermission }) => {
@@ -214,32 +210,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     /**
-     * Fetches a Users info
-     *
-     * @private
-     * @param {User} [user] - Box User. If missing, gets user that the current token was generated for.
-     * @param {boolean} shouldDestroy
-     * @return {void}
-     */
-    fetchCurrentUser(user?: User, shouldDestroy: boolean = false): void {
-        const { api, file } = this.props;
-
-        if (!file) {
-            throw getBadItemError();
-        }
-
-        if (typeof user === 'undefined') {
-            api.getUsersAPI(shouldDestroy).getUser(
-                file.id,
-                this.fetchCurrentUserSuccessCallback,
-                this.fetchCurrentUserErrorCallback,
-            );
-        } else {
-            this.setState({ currentUser: user, currentUserError: undefined });
-        }
-    }
-
-    /**
      * Success callback for fetching feed items
      */
     feedSuccessCallback = (): void => {
@@ -267,8 +237,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onSuccess: ?Function,
         onError: ?Function,
     ): void => {
-        const { currentUser } = this.state;
-        const { file, api } = this.props;
+        const { api, currentUser, file } = this.props;
 
         if (!currentUser) {
             throw getBadUserError();
@@ -319,7 +288,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     updateTask = (task: TaskUpdatePayload, onSuccess: ?Function, onError: ?Function): void => {
-        const { file, api, onTaskUpdate } = this.props;
+        const { api, file, onTaskUpdate } = this.props;
         const errorCallback = (e, code) => {
             if (onError) {
                 onError(e, code);
@@ -343,8 +312,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: TaskCollabStatus): void => {
-        const { file, api, onTaskAssignmentUpdate } = this.props;
-        const { currentUser = {} } = this.state;
+        const { api, currentUser = {}, file, onTaskAssignmentUpdate } = this.props;
 
         const successCallback = () => {
             this.feedSuccessCallback();
@@ -371,7 +339,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return void
      */
     deleteComment = ({ id, permissions }: { id: string, permissions: BoxCommentPermission }): void => {
-        const { file, api, hasReplies, onCommentDelete } = this.props;
+        const { api, file, hasReplies, onCommentDelete } = this.props;
 
         const successCallback = (comment: Comment) => {
             this.feedSuccessCallback();
@@ -449,8 +417,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     createComment = (text: string, hasMention: boolean): void => {
-        const { file, api, hasReplies, onCommentCreate } = this.props;
-        const { currentUser } = this.state;
+        const { api, currentUser, file, hasReplies, onCommentCreate } = this.props;
 
         if (!currentUser) {
             throw getBadUserError();
@@ -495,8 +462,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     createReply = (parentId: string, parentType: CommentFeedItemType, text: string, hasMention: boolean): void => {
-        const { file, api } = this.props;
-        const { currentUser } = this.state;
+        const { api, currentUser, file } = this.props;
 
         if (!currentUser) {
             throw getBadUserError();
@@ -524,7 +490,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return void
      */
     deleteAppActivity = ({ id }: { id: string }): void => {
-        const { file, api } = this.props;
+        const { api, file } = this.props;
 
         api.getFeedAPI(false).deleteAppActivity(file, id, this.feedSuccessCallback, this.feedErrorCallback);
 
@@ -540,8 +506,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     fetchFeedItems(shouldRefreshCache: boolean = false, shouldDestroy: boolean = false) {
         const {
-            file,
             api,
+            file,
             features,
             hasReplies: shouldShowReplies,
             hasTasks: shouldShowTasks,
@@ -631,17 +597,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     /**
-     * User fetch success callback
-     *
-     * @private
-     * @param {Object} currentUser - User info object
-     * @return {void}
-     */
-    fetchCurrentUserSuccessCallback = (currentUser: User): void => {
-        this.setState({ currentUser, currentUserError: undefined });
-    };
-
-    /**
      * File approver contacts fetch success callback
      *
      * @private
@@ -652,6 +607,21 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const { entries } = collaborators;
         this.setState({ approverSelectorContacts: entries });
     };
+
+    /**
+     * File @mention contacts fetch success callback
+     *
+     * @private
+     * @param {string} searchStr - Search string to filter file collaborators by
+     * @return {void}
+     */
+    getApproverWithQuery = debounce(
+        (searchStr: string) =>
+            this.getCollaborators(this.getApproverContactsSuccessCallback, this.errorCallback, searchStr, {
+                includeGroups: true,
+            }),
+        DEFAULT_COLLAB_DEBOUNCE,
+    );
 
     /**
      * File @mention contacts fetch success callback
@@ -669,21 +639,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             }),
         );
     };
-
-    /**
-     * File @mention contacts fetch success callback
-     *
-     * @private
-     * @param {string} searchStr - Search string to filter file collaborators by
-     * @return {void}
-     */
-    getApproverWithQuery = debounce(
-        (searchStr: string) =>
-            this.getCollaborators(this.getApproverContactsSuccessCallback, this.errorCallback, searchStr, {
-                includeGroups: true,
-            }),
-        DEFAULT_COLLAB_DEBOUNCE,
-    );
 
     /**
      * Fetches file @mention's
@@ -715,7 +670,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         { includeGroups = false }: { includeGroups: boolean } = {},
     ): void {
         // Do not fetch without filter
-        const { file, api } = this.props;
+        const { api, file } = this.props;
         if (!searchStr || searchStr.trim() === '') {
             return;
         }
@@ -726,29 +681,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             include_uploader_collabs: false,
         });
     }
-
-    /**
-     * Handles a failed file user info fetch
-     *
-     * @private
-     * @param {ElementsXhrError} e - API error
-     * @return {void}
-     */
-    fetchCurrentUserErrorCallback = (e: ElementsXhrError, code: string) => {
-        this.setState({
-            currentUser: undefined,
-            currentUserError: {
-                maskError: {
-                    errorHeader: messages.currentUserErrorHeaderMessage,
-                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
-                },
-            },
-        });
-
-        this.errorCallback(e, code, {
-            error: e,
-        });
-    };
 
     /**
      * Gets the user avatar URL
@@ -874,6 +806,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     render() {
         const {
+            currentUser,
+            currentUserError,
             elementId,
             file,
             isDisabled = false,
@@ -883,14 +817,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             activeFeedEntryType,
             onTaskView,
         } = this.props;
-        const {
-            currentUser,
-            approverSelectorContacts,
-            mentionSelectorContacts,
-            contactsLoaded,
-            activityFeedError,
-            currentUserError,
-        } = this.state;
+        const { activityFeedError, approverSelectorContacts, contactsLoaded, mentionSelectorContacts } = this.state;
 
         return (
             <SidebarContent
