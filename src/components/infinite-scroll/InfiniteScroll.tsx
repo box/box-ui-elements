@@ -23,7 +23,7 @@ export interface InfiniteScrollProps {
     threshold?: number;
     /** Throttle rate */
     throttle?: number;
-    /** Set useWindow to true to use the window as scroll container. If set to true, will ignore scrollContainerRef. */
+    /** Set useWindow to true to use the window as scroll container. If set to true, will ignore scrollContainerNode. */
     useWindow?: boolean;
 }
 

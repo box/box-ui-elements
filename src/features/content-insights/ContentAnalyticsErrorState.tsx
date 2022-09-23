@@ -8,12 +8,12 @@ import { ResponseError } from './types';
 import './ContentAnalyticsErrorState.scss';
 
 interface Props {
-    error: ResponseError;
+    error?: ResponseError;
 }
 
 const ContentAnalyticsErrorState = ({ error }: Props) => {
-    const renderErrorMessage = (responseError: ResponseError) => {
-        const isPermissionError = responseError.status === 403;
+    const renderErrorMessage = (responseError?: ResponseError) => {
+        const isPermissionError = !!responseError && responseError.status === 403;
 
         if (isPermissionError) {
             return (
