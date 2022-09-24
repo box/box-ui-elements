@@ -83,7 +83,7 @@
     "modal-dialog-z-index": "160",
     "menu-z-index": "170",
     "submenu-z-index": "171",
-    "notifications-wrapper-z-index": "180",
+    "notifications-wrapper-z-index": "191",
     "overlay-z-index": "190",
     "tooltip-z-index": "190",
     "bdl-border-radius-size": "4px",
