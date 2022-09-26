@@ -41,6 +41,7 @@ export const deleteDialog = () => {
                                 'somethinggjsdlkfjsdkajfksdajfdjsomethinggjsdlkfjsdkajfksdajfdjsomethinggjsdlkfjsdkajfksdajfdjsomethinggjsdlkfjsdkajfksdajfdjsomethinggjsdlkfjsdkajfksdajfdjsomethinggjsdlkfjsdkajfksdajfdjsomethinggjsdlkfjsdkajfksdajfdjsomethinggjsdlkfjsdkajfksdajfdjsomethinggjsdlkfjsdkajfksdajfdjsomethinggjsdlkfjsdkajfksdajfdjsomethinggjsdlkfjsdkajfksdajfdjsomethinggjsdlkfjsdkajfksdajfdjsomethinggjsdlkfjsdkajfksdajfdjsomethinggjsdlkfjsdkajfksdajfdjsomethinggjsdlkfjsdkajfksdajfdjsomethinggjsdlkfjsdkajfksdajfdj ',
                         }}
                         onCancel={closeModal}
+                        onDelete={() => {}}
                         parentElement={rootElement}
                     />
                     <PrimaryButton onClick={openModal}>Launch DeleteConfirmationDialog</PrimaryButton>
