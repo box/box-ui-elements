@@ -1289,25 +1289,23 @@ class Feed extends Base {
         parentId: string,
         successCallback: (id: string, parentId: string) => void = noop,
     ) => {
-        const cachedItems = this.getCachedItems(this.file.id);
-        if (cachedItems) {
-            const feedItems = cachedItems.items.map(item => {
-                if (item.id !== parentId) {
-                    return item;
-                }
-                if (item.type === 'annotation') {
-                    return getItemWithFilteredReplies<Annotation>(item, id);
-                }
-                if (item.type === 'comment') {
-                    return getItemWithFilteredReplies<Comment>(item, id);
-                }
+        const cachedItems = this.getCachedItems(this.file.id) || { items: [], errors: [] };
+        const feedItems = cachedItems.items.map(item => {
+            if (item.id !== parentId) {
                 return item;
-            });
-            this.setCachedItems(this.file.id, feedItems);
-
-            if (!this.isDestroyed()) {
-                successCallback(id, parentId);
             }
+            if (item.type === 'annotation') {
+                return getItemWithFilteredReplies<Annotation>(item, id);
+            }
+            if (item.type === 'comment') {
+                return getItemWithFilteredReplies<Comment>(item, id);
+            }
+            return item;
+        });
+        this.setCachedItems(this.file.id, feedItems);
+
+        if (!this.isDestroyed()) {
+            successCallback(id, parentId);
         }
     };
 
