@@ -35,15 +35,15 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         expect(getByText('Test')).toBeVisible();
     });
 
-    test('should call onGetReplies on button click', () => {
-        const onGetReplies = jest.fn();
-        const { getByText } = getWrapper({ onGetReplies });
+    test('should call onShowReplies on button click', () => {
+        const onShowReplies = jest.fn();
+        const { getByText } = getWrapper({ onShowReplies });
 
         const button = getByText(localize(messages.showReplies.id, { repliesToLoadCount: 1 }));
         expect(button).toBeVisible();
         fireEvent.click(button);
 
-        expect(onGetReplies).toBeCalled();
+        expect(onShowReplies).toBeCalled();
         expect(getByText(localize(messages.hideReplies.id))).toBeVisible();
     });
 

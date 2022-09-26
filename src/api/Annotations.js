@@ -25,7 +25,7 @@ import type {
 } from '../common/types/annotations';
 import type { BoxItemPermission } from '../common/types/core';
 import type { ElementsXhrError } from '../common/types/api';
-import type { Comment, FeedItemStatus } from '../common/types/feed';
+import type { Comment, FeedItemStatus, ThreadedComments } from '../common/types/feed';
 
 export default class Annotations extends MarkerBasedApi {
     /**
@@ -267,7 +267,7 @@ export default class Annotations extends MarkerBasedApi {
         fileId: string,
         annotationId: string,
         permissions: BoxItemPermission,
-        successCallback: (comments: Array<Comment>) => void,
+        successCallback: (comments: ThreadedComments) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
     ): void {
         this.errorCode = ERROR_CODE_FETCH_REPLIES;

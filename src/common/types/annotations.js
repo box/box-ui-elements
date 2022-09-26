@@ -46,6 +46,7 @@ export type Annotation = {
     file_version: BoxItemVersionMini | null,
     id: string,
     isPending?: boolean, // Doesn't come from the API but used in the FeedItems
+    isRepliesLoading?: boolean,
     modified_at: string,
     modified_by: User,
     permissions: AnnotationPermission,

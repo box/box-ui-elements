@@ -356,6 +356,36 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.fetchFeedItems();
     };
 
+    /**
+     * Deletes a reply via the API.
+     *
+     * @param {Object} args - A subset of the comment
+     * @return void
+     */
+    deleteReply = ({
+        id,
+        parentId,
+        permissions,
+    }: {
+        id: string,
+        parentId: string,
+        permissions: BoxCommentPermission,
+    }): void => {
+        const { file, api } = this.props;
+
+        api.getFeedAPI(false).deleteReply(
+            file,
+            id,
+            parentId,
+            permissions,
+            this.feedSuccessCallback,
+            this.feedErrorCallback,
+        );
+
+        // need to load the pending item
+        this.fetchFeedItems();
+    };
+
     updateComment = (
         id: string,
         text?: string,
@@ -404,6 +434,54 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 errorCallback,
             );
         }
+
+        // need to load the pending item
+        this.fetchFeedItems();
+    };
+
+    /**
+     * Updates a reply
+     *
+     * @param {string} id - id of the reply
+     * @param {string} parentId - id of the parent item
+     * @param {string} text - the reply updated text
+     * @param {boolean} hasMention - true if there is an @mention in the text
+     * @param {BoxCommentPermission} permissions - permissions associated with the reply
+     * @param {Function} onSuccess - the success callback
+     * @param {Function} onError - the error callback
+     * @return {void}
+     */
+    updateReply = (
+        id: string,
+        parentId: string,
+        text: string,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ): void => {
+        const { api, file } = this.props;
+
+        api.getFeedAPI(false).updateReply(
+            file,
+            id,
+            parentId,
+            text,
+            hasMention,
+            permissions,
+            () => {
+                this.feedSuccessCallback();
+                if (onSuccess) {
+                    onSuccess();
+                }
+            },
+            (error, code) => {
+                if (onError) {
+                    onError(error, code);
+                }
+                this.feedErrorCallback(error, code);
+            },
+        );
 
         // need to load the pending item
         this.fetchFeedItems();
@@ -683,6 +761,22 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     /**
+     * Fetches replies (comments) of a comment or annotation
+     *
+     * @param {string} id - id of the feed item
+     * @param {CommentFeedItemType} type - type of the feed item
+     * @return {void}
+     */
+    getReplies = (id: string, type: CommentFeedItemType): void => {
+        const { api, file } = this.props;
+
+        api.getFeedAPI(false).fetchReplies(file, id, type, this.feedSuccessCallback, this.feedErrorCallback);
+
+        // need to load the pending item
+        this.fetchFeedItems();
+    };
+
+    /**
      * Gets the user avatar URL
      *
      * @param {string} userId the user id
@@ -852,6 +946,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     onCommentDelete={this.deleteComment}
                     onCommentUpdate={this.updateComment}
                     onReplyCreate={this.createReply}
+                    onReplyDelete={this.deleteReply}
+                    onReplyUpdate={this.updateReply}
+                    onShowReplies={this.getReplies}
                     onTaskAssignmentUpdate={this.updateTaskAssignment}
                     onTaskCreate={this.createTask}
                     onTaskDelete={this.deleteTask}

@@ -16,11 +16,14 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         createThreadedComment: jest.fn(),
         deleteAnnotation: jest.fn(),
         deleteComment: jest.fn(),
+        deleteReply: jest.fn(),
         deleteTaskNew: jest.fn(),
         deleteThreadedComment: jest.fn(),
         feedItems: jest.fn(),
+        fetchReplies: jest.fn(),
         updateAnnotation: jest.fn(),
         updateComment: jest.fn(),
+        updateReply: jest.fn(),
         updateTaskCollaborator: jest.fn(),
         updateTaskNew: jest.fn(),
         updateThreadedComment: jest.fn(),
@@ -200,6 +203,31 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(feedAPI.deleteThreadedComment).toBeCalledWith(
                 file,
                 id,
+                permissions,
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(instance.fetchFeedItems).toBeCalled();
+        });
+    });
+
+    describe('deleteReply()', () => {
+        test('should call the deleteReply API', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+
+            const id = '1';
+            const parentId = '123';
+            const permissions = {
+                can_edit: false,
+                can_delete: true,
+            };
+            instance.deleteReply({ id, parentId, permissions });
+            expect(feedAPI.deleteReply).toBeCalledWith(
+                file,
+                id,
+                parentId,
                 permissions,
                 expect.any(Function),
                 expect.any(Function),
@@ -438,6 +466,35 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 );
                 expect(instance.fetchFeedItems).toBeCalled();
             });
+        });
+    });
+
+    describe('updateReply()', () => {
+        test('should call updateReply API', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const parentId = '123';
+            const text = 'abc';
+            const hasMention = true;
+            const reply = {
+                id: '1',
+                permissions: { can_edit: true },
+            };
+            instance.fetchFeedItems = jest.fn();
+
+            wrapper.instance().updateReply(reply.id, parentId, text, hasMention, reply.permissions);
+
+            expect(api.getFeedAPI().updateReply).toBeCalledWith(
+                file,
+                reply.id,
+                parentId,
+                text,
+                hasMention,
+                reply.permissions,
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(instance.fetchFeedItems).toBeCalled();
         });
     });
 
@@ -718,6 +775,27 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             instance.getMentionContactsSuccessCallback(collaborators);
             expect(wrapper.state('contactsLoaded')).toBeTruthy();
             expect(wrapper.state('mentionSelectorContacts')).toEqual(collaborators.entries);
+        });
+    });
+
+    describe('getReplies()', () => {
+        test('should call fetchReplies API', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const itemId = '123';
+            const itemType = 'comment';
+            instance.fetchFeedItems = jest.fn();
+
+            wrapper.instance().getReplies(itemId, itemType);
+
+            expect(api.getFeedAPI().fetchReplies).toBeCalledWith(
+                file,
+                itemId,
+                itemType,
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(instance.fetchFeedItems).toBeCalled();
         });
     });
 

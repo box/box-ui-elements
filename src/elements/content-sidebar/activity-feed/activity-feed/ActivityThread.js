@@ -10,7 +10,7 @@ import ActivityThreadReplies from './ActivityThreadReplies';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
-import type { Comment as CommentType, CommentFeedItemType } from '../../../../common/types/feed';
+import type { BoxCommentPermission, Comment as CommentType, FeedItemStatus } from '../../../../common/types/feed';
 
 import messages from './messages';
 import './ActivityThread.scss';
@@ -24,10 +24,18 @@ type Props = {
     hasReplies: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
-    onGetReplies?: () => void,
-    onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string, hasMention: boolean) => void,
-    onReplyDelete?: Function,
-    onReplyEdit?: Function,
+    onReplyCreate?: (text: string, hasMention: boolean) => void,
+    onReplyDelete?: ({ id: string, permissions: BoxCommentPermission }) => void,
+    onReplyEdit?: (
+        id: string,
+        text: string,
+        status?: FeedItemStatus,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
+    onShowReplies?: () => void,
     replies?: Array<CommentType>,
     repliesTotalCount?: number,
     translations?: Translations,
@@ -42,9 +50,9 @@ const ActivityThread = ({
     hasReplies,
     isRepliesLoading,
     mentionSelectorContacts,
-    onGetReplies = noop,
     onReplyDelete = noop,
     onReplyEdit = noop,
+    onShowReplies = noop,
     replies = [],
     repliesTotalCount = 0,
     translations,
@@ -56,7 +64,7 @@ const ActivityThread = ({
 
     const toggleReplies = () => {
         if (!isExpanded) {
-            onGetReplies();
+            onShowReplies();
         }
         setIsExpanded(previousState => !previousState);
     };
