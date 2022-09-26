@@ -62,7 +62,6 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
-    onGetReplies?: (id: string, type: CommentFeedItemType) => void,
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string, hasMention: boolean) => void,
     onReplyDelete?: ({ id: string, parentId: string, permissions: BoxCommentPermission }) => void,
     onReplyUpdate?: (
@@ -74,6 +73,7 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
+    onShowReplies?: (id: string, type: CommentFeedItemType) => void,
     onTaskAssignmentUpdate?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
@@ -246,10 +246,10 @@ class ActivityFeed extends React.Component<Props, State> {
             onCommentCreate,
             onCommentDelete,
             onCommentUpdate,
-            onGetReplies,
             onReplyCreate,
             onReplyDelete,
             onReplyUpdate,
+            onShowReplies,
             onTaskAssignmentUpdate,
             onTaskDelete,
             onTaskModalClose,
@@ -319,7 +319,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
-                            onGetReplies={onGetReplies}
+                            onShowReplies={onShowReplies}
                             onReplyCreate={hasCommentPermission ? onReplyCreate : noop}
                             onReplyDelete={hasCommentPermission ? onReplyDelete : noop}
                             onReplyUpdate={hasCommentPermission ? onReplyUpdate : noop}

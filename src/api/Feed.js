@@ -83,6 +83,16 @@ type FeedItemsCache = {
 
 type ErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
+const getItemWithFilteredReplies = <T: { replies?: Array<Comment> }>(item: T, replyId: string): T => {
+    const { replies = [], ...rest } = item;
+    return { replies: replies.filter(({ id }) => id !== replyId), ...rest };
+};
+
+const getItemWithPendingReply = <T: { replies?: Array<Comment> }>(item: T, reply: Comment): T => {
+    const { replies = [], ...rest } = item;
+    return { replies: [...replies, reply], ...rest };
+};
+
 class Feed extends Base {
     /**
      * @property {AnnotationsAPI}
@@ -470,16 +480,16 @@ class Feed extends Base {
      * Fetches replies (comments) of a comment or annotation
      *
      * @param {BoxItem} file - The file to which the comment or annotation belongs to
-     * @param {string} itemId - ID of the comment or annotation
-     * @param {CommentFeedItemType} itemType - Type of the comment or annotation
+     * @param {string} commentFeedItemId - ID of the comment or annotation
+     * @param {CommentFeedItemType} commentFeedItemType - Type of the comment or annotation
      * @param {Function} successCallback
      * @param {ErrorCallback} errorCallback
      * @return {void}
      */
     fetchReplies(
         file: BoxItem,
-        itemId: string,
-        itemType: CommentFeedItemType,
+        commentFeedItemId: string,
+        commentFeedItemType: CommentFeedItemType,
         successCallback: (comments: Array<Comment>) => void,
         errorCallback: ErrorCallback,
     ): void {
@@ -491,26 +501,32 @@ class Feed extends Base {
         this.file = file;
         this.errorCallback = errorCallback;
 
-        this.updateFeedItem({ isRepliesLoading: true }, itemId);
+        this.updateFeedItem({ isRepliesLoading: true }, commentFeedItemId);
 
         const successCallbackFn = (comments: ThreadedCommentsType) => {
-            this.updateFeedItem({ isRepliesLoading: false, replies: comments.entries }, itemId);
+            this.updateFeedItem({ isRepliesLoading: false, replies: comments.entries }, commentFeedItemId);
             successCallback(comments.entries);
         };
-        const errorCallbackFn = (e: ErrorResponseData, code: string) => {
-            this.fetchRepliesErrorCallback(e, code, itemId);
+        const errorCallbackFn = (error: ErrorResponseData, code: string) => {
+            this.fetchRepliesErrorCallback(error, code, commentFeedItemId);
         };
 
-        if (itemType === 'annotation') {
+        if (commentFeedItemType === 'annotation') {
             this.annotationsAPI = new AnnotationsAPI(this.options);
 
-            this.annotationsAPI.getAnnotationReplies(file.id, itemId, permissions, successCallbackFn, errorCallbackFn);
-        } else if (itemType === 'comment') {
+            this.annotationsAPI.getAnnotationReplies(
+                file.id,
+                commentFeedItemId,
+                permissions,
+                successCallbackFn,
+                errorCallbackFn,
+            );
+        } else if (commentFeedItemType === 'comment') {
             this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
 
             this.threadedCommentsAPI.getCommentReplies({
                 fileId: file.id,
-                commentId: itemId,
+                commentId: commentFeedItemId,
                 permissions,
                 successCallback: successCallbackFn,
                 errorCallback: errorCallbackFn,
@@ -863,7 +879,7 @@ class Feed extends Base {
         id: string,
         parentId: string,
         permissions: BoxCommentPermission,
-        successCallback: Function,
+        successCallback: () => void,
         errorCallback: ErrorCallback,
     ): void => {
         if (!file.id) {
@@ -1268,17 +1284,12 @@ class Feed extends Base {
      * @param {string} parentId - The id of the parent feed item
      * @param {Function} successCallback - function to be called after the delete
      */
-    deleteReplyItem = (id: string, parentId: string, successCallback: Function = noop) => {
+    deleteReplyItem = (
+        id: string,
+        parentId: string,
+        successCallback: (id: string, parentId: string) => void = noop,
+    ) => {
         const cachedItems = this.getCachedItems(this.file.id);
-
-        const getItemWithFilteredReplies = <T: { replies?: Array<Comment> }>(item: T, replyId: string): T => {
-            if (!item.replies) {
-                return item;
-            }
-            const replies = item.replies.filter(reply => reply.id !== replyId);
-            return { ...item, replies };
-        };
-
         if (cachedItems) {
             const feedItems = cachedItems.items.map(item => {
                 if (item.id !== parentId) {
@@ -1375,15 +1386,6 @@ class Feed extends Base {
             modified_at: date,
             isPending: true,
             ...commentBase,
-        };
-
-        const getItemWithPendingReply = <T: { replies?: Array<Comment> }>(item: T, reply: Comment): T => {
-            const updatedItem: T = { ...item };
-            if (!updatedItem.replies) {
-                updatedItem.replies = [];
-            }
-            updatedItem.replies.push(reply);
-            return updatedItem;
         };
 
         const cachedItems = this.getCachedItems(this.file.id);
@@ -1918,7 +1920,7 @@ class Feed extends Base {
         text: string,
         hasMention?: boolean,
         permissions: BoxCommentPermission,
-        successCallback: Function,
+        successCallback: (comment: Comment) => void,
         errorCallback: ErrorCallback,
     ): void => {
         if (!file.id) {

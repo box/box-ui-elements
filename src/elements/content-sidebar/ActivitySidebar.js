@@ -945,10 +945,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
                     onCommentUpdate={this.updateComment}
-                    onGetReplies={this.getReplies}
                     onReplyCreate={this.createReply}
                     onReplyDelete={this.deleteReply}
                     onReplyUpdate={this.updateReply}
+                    onShowReplies={this.getReplies}
                     onTaskAssignmentUpdate={this.updateTaskAssignment}
                     onTaskCreate={this.createTask}
                     onTaskDelete={this.deleteTask}
