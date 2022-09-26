@@ -668,44 +668,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
-    describe('fetchCurrentUserSuccessCallback()', () => {
-        let instance;
-        let wrapper;
-
-        beforeEach(() => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            instance.setState = jest.fn();
-        });
-
-        test('should set the feedItems in the state', () => {
-            instance.fetchCurrentUserSuccessCallback(currentUser);
-            expect(instance.setState).toBeCalledWith({
-                currentUser,
-                currentUserError: undefined,
-            });
-        });
-    });
-
-    describe('fetchCurrentUserSuccessCallback()', () => {
-        let instance;
-        let wrapper;
-
-        beforeEach(() => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            instance.setState = jest.fn();
-        });
-
-        test('should set the feedItems in the state', () => {
-            instance.fetchCurrentUserSuccessCallback(currentUser);
-            expect(instance.setState).toBeCalledWith({
-                currentUser,
-                currentUserError: undefined,
-            });
-        });
-    });
-
     describe('getApprover()', () => {
         let instance;
         let wrapper;

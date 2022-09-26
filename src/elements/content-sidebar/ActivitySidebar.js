@@ -690,21 +690,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * File @mention contacts fetch success callback
      *
      * @private
-     * @param {string} searchStr - Search string to filter file collaborators by
-     * @return {void}
-     */
-    getApproverWithQuery = debounce(
-        (searchStr: string) =>
-            this.getCollaborators(this.getApproverContactsSuccessCallback, this.errorCallback, searchStr, {
-                includeGroups: true,
-            }),
-        DEFAULT_COLLAB_DEBOUNCE,
-    );
-
-    /**
-     * File @mention contacts fetch success callback
-     *
-     * @private
      * @param {BoxItemCollection} collaborators - Collaborators response data
      * @return {void}
      */
