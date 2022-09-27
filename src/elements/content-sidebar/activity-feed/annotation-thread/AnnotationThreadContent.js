@@ -6,8 +6,9 @@ import AnnotationActivity from '../annotations';
 import API from '../../../../api/APIFactory';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import useAnnotationAPI from './useAnnotationAPI';
+import useReplies from './useReplies';
 
-import type { BoxItem, SelectorItems } from '../../../../common/types/core';
+import type { BoxItem, SelectorItems, User } from '../../../../common/types/core';
 import type { ErrorContextProps } from '../../../../common/types/api';
 
 import './AnnotationThreadContent.scss';
@@ -15,6 +16,7 @@ import './AnnotationThreadContent.scss';
 type Props = {
     annotationId: string,
     api: API,
+    currentUser: User,
     file: BoxItem,
     getAvatarUrl: string => Promise<?string>,
     getMentionWithQuery: (searchStr: string) => void,
@@ -24,6 +26,7 @@ type Props = {
 const AnnotationThreadContent = ({
     annotationId,
     api,
+    currentUser,
     file,
     getAvatarUrl,
     getMentionWithQuery,
@@ -32,7 +35,15 @@ const AnnotationThreadContent = ({
 }: Props) => {
     const { id: fileId, permissions = {} } = file;
 
-    const { annotation, isLoading, error, handleEdit, handleStatusChange, handleDelete } = useAnnotationAPI({
+    const {
+        annotation,
+        initialReplies,
+        isLoading,
+        error,
+        handleEdit,
+        handleStatusChange,
+        handleDelete,
+    } = useAnnotationAPI({
         api,
         annotationId,
         fileId,
@@ -40,8 +51,29 @@ const AnnotationThreadContent = ({
         errorCallback: onError,
     });
 
+    const { replies, handleCreateReply, handleEditReply, handleDeleteReply } = useReplies({
+        annotationId,
+        api,
+        initialReplies,
+        currentUser,
+        fileId,
+        filePermissions: permissions,
+    });
+
     return (
-        <ActivityThread hasReplies getAvatarUrl={getAvatarUrl}>
+        <ActivityThread
+            hasReplies
+            getAvatarUrl={getAvatarUrl}
+            getMentionWithQuery={getMentionWithQuery}
+            isAlwaysExpanded
+            isRepliesLoading={isLoading}
+            mentionSelectorContacts={mentionSelectorContacts}
+            onReplyCreate={handleCreateReply}
+            onReplyDelete={handleDeleteReply}
+            onReplyEdit={handleEditReply}
+            replies={replies}
+            repliesTotalCount={replies.length}
+        >
             {error && <ActivityError {...error} />}
             {isLoading && (
                 <div className="AnnotationThreadContent-loading" data-testid="annotation-loading">

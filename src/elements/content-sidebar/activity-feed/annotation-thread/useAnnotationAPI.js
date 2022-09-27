@@ -3,11 +3,11 @@
 import React from 'react';
 import type { MessageDescriptor } from 'react-intl';
 import API from '../../../../api/APIFactory';
-import annotationErrors from './errors';
+import { annotationErrors } from './errors';
 
 import type { Annotation, AnnotationPermission } from '../../../../common/types/annotations';
 import type { BoxItemPermission } from '../../../../common/types/core';
-import type { FeedItemStatus } from '../../../../common/types/feed';
+import type { Comment, FeedItemStatus } from '../../../../common/types/feed';
 import type { ElementOrigin, ElementsXhrError } from '../../../../common/types/api';
 
 import commonMessages from '../../../common/messages';
@@ -34,26 +34,28 @@ type UseAnnotationAPI = {
     handleDelete: ({ id: string, permissions: AnnotationPermission }) => any,
     handleEdit: (id: string, text: string, permissions: AnnotationPermission) => void,
     handleStatusChange: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
+    initialReplies: Array<Comment>,
     isLoading: boolean,
 };
 
 const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCallback }: Props): UseAnnotationAPI => {
     const [annotation, setAnnotation] = React.useState();
+    const [initialReplies, setInitialReplies] = React.useState([]);
     const [error, setError] = React.useState();
     const [isLoading, setIsLoading] = React.useState(true);
 
     const getAnnotationSuccess = (fetchedAnnotation: Annotation): void => {
         setAnnotation(fetchedAnnotation);
+        setInitialReplies(fetchedAnnotation.replies || []);
         setError(undefined);
         setIsLoading(false);
     };
 
     const annotationSuccessCallback = (updatedAnnotation: Annotation): void => {
-        setAnnotation(prevAnnotation => ({
+        setAnnotation({
             ...updatedAnnotation,
-            replies: prevAnnotation ? prevAnnotation.replies : [],
             isPending: false,
-        }));
+        });
     };
 
     const annotationDeleteSuccessCallback = () => {
@@ -130,7 +132,7 @@ const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCal
         );
     };
 
-    return { annotation, error, isLoading, handleDelete, handleEdit, handleStatusChange };
+    return { annotation, initialReplies, error, isLoading, handleDelete, handleEdit, handleStatusChange };
 };
 
 export default useAnnotationAPI;

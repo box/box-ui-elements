@@ -24,6 +24,7 @@ type Props = {
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
     hasReplies: boolean,
+    isAlwaysExpanded?: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onReplyCreate?: (text: string) => void,
@@ -49,6 +50,7 @@ const ActivityThread = ({
     getMentionWithQuery,
     getUserProfileUrl,
     hasReplies,
+    isAlwaysExpanded = false,
     isRepliesLoading,
     mentionSelectorContacts,
     onReplyCreate,
@@ -59,7 +61,7 @@ const ActivityThread = ({
     repliesTotalCount = 0,
     translations,
 }: Props) => {
-    const [isExpanded, setIsExpanded] = React.useState(false);
+    const [isExpanded, setIsExpanded] = React.useState(isAlwaysExpanded);
 
     const toggleButtonLabel = isExpanded ? messages.hideReplies : messages.showReplies;
     const repliesToLoadCount = Math.max(repliesTotalCount - 1, 0);
@@ -83,7 +85,7 @@ const ActivityThread = ({
                     <LoadingIndicator />
                 </div>
             )}
-            {!isRepliesLoading && repliesTotalCount > 1 && (
+            {!isAlwaysExpanded && !isRepliesLoading && repliesTotalCount > 1 && (
                 <PlainButton
                     className="bcs-ActivityThread-toggle"
                     onClick={toggleReplies}
