@@ -107,8 +107,7 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
     });
 
     describe('using scrollContainerNode', () => {
-        let scrollContainer = document.createElement('div');
-        scrollContainer.getBoundingClientRect = jest.fn().mockReturnValue({ bottom: 500 } as DOMRect);
+        let scrollContainer: HTMLDivElement;
 
         beforeEach(() => {
             scrollContainer = document.createElement('div');
