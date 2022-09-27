@@ -3,7 +3,7 @@
 import React from 'react';
 import type { MessageDescriptor } from 'react-intl';
 import API from '../../../../api/APIFactory';
-import AnnotationErrors from './errors';
+import annotationErrors from './errors';
 
 import type { Annotation, AnnotationPermission } from '../../../../common/types/annotations';
 import type { BoxItemPermission } from '../../../../common/types/core';
@@ -63,7 +63,7 @@ const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCal
     const createAnnotationErrorCallback = (code: string) => {
         setError({
             title: commonMessages.errorOccured,
-            message: AnnotationErrors[code],
+            message: annotationErrors[code] || annotationErrors.default,
         });
     };
 

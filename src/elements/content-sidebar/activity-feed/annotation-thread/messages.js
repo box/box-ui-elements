@@ -4,7 +4,7 @@ const messages = defineMessages({
     errorFetchAnnotation: {
         id: 'be.annotattionThread.errorFetchAnnotation',
         description: 'Error message when an annotation fetch fails',
-        defaultMessage: 'Cannot fetch annotation.',
+        defaultMessage: 'The annotation could not be fetched.',
     },
     errorEditAnnotation: {
         id: 'be.annotationThread.errorEditAnnotation',
