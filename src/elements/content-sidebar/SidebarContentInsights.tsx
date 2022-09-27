@@ -12,6 +12,8 @@ import SidebarSection from './SidebarSection';
 // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import withErrorHandling from './withErrorHandling'; // Above eslint rules disabled because typescript chokes on flow type import in withErrorHandling
 
+import './SidebarContentInsights.scss';
+
 export interface ContentInsights {
     error?: ResponseError;
     graphData: GraphData;
@@ -33,11 +35,15 @@ const defaultContentInsights = {
 };
 
 const SidebarContentInsights = ({ contentInsights = defaultContentInsights, onContentInsightsClick = noop }: Props) => {
-    const { graphData, isLoading, previousPeriodCount, totalCount } = contentInsights;
+    const { error, graphData, isLoading, previousPeriodCount, totalCount } = contentInsights;
 
     return (
-        <SidebarSection title={<FormattedMessage {...messages.sidebarContentInsights} />}>
+        <SidebarSection
+            className="bcs-SidebarContentInsights"
+            title={<FormattedMessage {...messages.sidebarContentInsights} />}
+        >
             <ContentInsightsSummary
+                error={error}
                 graphData={graphData}
                 isLoading={isLoading}
                 onClick={onContentInsightsClick}
