@@ -1,4 +1,4 @@
-import { mount, ReactWrapper } from 'enzyme';
+import { mount, ReactWrapper, shallow } from 'enzyme';
 import * as React from 'react';
 
 import InfiniteScroll, { InfiniteScrollProps } from '../InfiniteScroll';
@@ -13,7 +13,7 @@ const propsList: InfiniteScrollProps = {
     useWindow: true,
     onLoadMore: mockOnLoadMore,
     threshold,
-    throttle: 1,
+    throttle: 0, // tests run too fast - keep it 0 for sanity
 };
 
 describe('components/infinite-scroll/InfiniteScroll', () => {
@@ -33,7 +33,6 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
 
         // Element initializes with sentinel above threshold (no initial load).
         // Without this, top will always be 0 due to jest limitation.
-        // Element.prototype.getBoundingClientRect = mockGetBoundingClientRect;
         Element.prototype.getBoundingClientRect = jest.fn().mockReturnValue({
             top: window.innerHeight + (threshold + 1),
         } as DOMRect);
@@ -49,28 +48,19 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
     });
 
     it('should render with default props', () => {
-        component = mount(<InfiniteScroll {...propsList} />);
-        expect(component).toMatchInlineSnapshot(`
-            <InfiniteScroll
-              hasMore={false}
-              isLoading={false}
-              onLoadMore={[MockFunction]}
-              threshold={100}
-              throttle={1}
-              useWindow={true}
-            >
+        const wrapper = shallow(<InfiniteScroll {...propsList} />);
+        expect(wrapper).toMatchInlineSnapshot(`
               <div>
                 <div
                   data-testid="sentinel"
                 />
               </div>
-            </InfiniteScroll>
         `);
     });
 
     it('should render sentinel to calculate scroll position', () => {
-        component = mount(<InfiniteScroll {...propsList} />);
-        expect(component.find('[data-testid="sentinel"]').length).toEqual(1);
+        const wrapper = shallow(<InfiniteScroll {...propsList} />);
+        expect(wrapper.find('[data-testid="sentinel"]').length).toEqual(1);
     });
 
     describe('using window', () => {
@@ -90,12 +80,13 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
         });
 
         it('should call onLoadMore if sentinel is in threshold range and window is not scrollable', () => {
-            Element.prototype.getBoundingClientRect = jest.fn().mockReturnValue({
-                top: window.innerHeight + (threshold - 1),
-            } as DOMRect);
-            // update prop to trigger useEffect
-            component.setProps({ throttle: 2 });
+            const sentinel = getSentinel();
+            sentinel.getBoundingClientRect = jest
+                .fn()
+                .mockReturnValue({ top: window.innerHeight + (threshold - 1) } as DOMRect);
 
+            // update prop to trigger useEffect
+            component.setProps({ throttle: 1 });
             expect(mockOnLoadMore).toHaveBeenCalledTimes(1);
         });
 
@@ -116,7 +107,8 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
     });
 
     describe('using scrollContainerNode', () => {
-        let scrollContainer: HTMLDivElement;
+        let scrollContainer = document.createElement('div');
+        scrollContainer.getBoundingClientRect = jest.fn().mockReturnValue({ bottom: 500 } as DOMRect);
 
         beforeEach(() => {
             scrollContainer = document.createElement('div');
@@ -137,12 +129,11 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
         });
 
         it('should call onLoadMore if sentinel is in threshold range and window is not scrollable', () => {
-            Element.prototype.getBoundingClientRect = jest.fn().mockReturnValue({
-                top: 500 + (threshold - 1),
-            } as DOMRect);
-            // update prop to trigger useEffect
-            component.setProps({ throttle: 2 });
+            const sentinel = getSentinel();
+            sentinel.getBoundingClientRect = jest.fn().mockReturnValue({ top: 500 + (threshold - 1) } as DOMRect);
 
+            // update prop to trigger useEffect
+            component.setProps({ throttle: 1 });
             expect(mockOnLoadMore).toHaveBeenCalledTimes(1);
         });
 
