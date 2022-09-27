@@ -40,6 +40,10 @@ export const createIntl = ({ locale = 'en' }) => ({
         const rtf = new IntlRelativeTimeFormat(locale, options);
         return rtf.format(value, unit);
     },
+    formatNumber: (number, options = {}) => {
+        const inf = new Intl.NumberFormat(locale, options);
+        return inf.format(number);
+    },
 });
 
 export const injectIntl = Component => {

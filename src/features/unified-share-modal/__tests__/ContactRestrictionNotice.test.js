@@ -12,6 +12,7 @@ describe('features/unified-share-modal/ContactRestrictionNotice', () => {
     let wrapper;
     let selectedContacts;
     let restrictedEmails;
+    let restrictedGroups;
 
     const getWrapper = (props = {}) => {
         return shallow(
@@ -25,6 +26,7 @@ describe('features/unified-share-modal/ContactRestrictionNotice', () => {
                 onRemoveRestrictedContacts={jest.fn()}
                 onSelectJustificationReason={jest.fn()}
                 restrictedEmails={restrictedEmails}
+                restrictedGroups={restrictedGroups}
                 selectedContacts={selectedContacts}
                 selectedJustificationReason={null}
                 {...props}
@@ -36,27 +38,38 @@ describe('features/unified-share-modal/ContactRestrictionNotice', () => {
         selectedContacts = [
             {
                 email: 'x@example.com',
-                id: '12345',
+                id: 12345,
                 text: 'X User',
-                type: 'group',
+                type: 'user',
                 value: 'x@example.com',
             },
             {
                 email: 'y@example.com',
-                id: '23456',
+                id: 23456,
                 text: 'Y User',
                 type: 'user',
                 value: 'y@example.com',
             },
             {
                 email: 'z@example.com',
-                id: '34567',
+                id: 34567,
                 text: 'Z User',
                 type: 'user',
                 value: 'z@example.com',
             },
+            {
+                id: 45678,
+                text: 'Test Group 1',
+                type: 'group',
+            },
+            {
+                id: 56789,
+                text: 'Test Group 2',
+                type: 'group',
+            },
         ];
         restrictedEmails = ['x@example.com', 'y@example.com'];
+        restrictedGroups = [45678, 56789];
 
         wrapper = getWrapper();
     });
@@ -69,7 +82,7 @@ describe('features/unified-share-modal/ContactRestrictionNotice', () => {
         });
 
         test('should render nothing when there are no restricted contacts', () => {
-            wrapper.setProps({ restrictedEmails: [], selectedContacts });
+            wrapper.setProps({ restrictedEmails: [], restrictedGroups: [], selectedContacts });
             expect(wrapper.isEmptyRender()).toBe(true);
 
             wrapper.setProps({ restrictedEmails, selectedContacts: [] });
@@ -94,7 +107,12 @@ describe('features/unified-share-modal/ContactRestrictionNotice', () => {
                 removeButtonMessageId,
             }) => {
                 restrictedEmails = restrictedEmails.slice(0, restrictedContactCount);
-                wrapper.setProps({ collabRestrictionType, isRestrictionJustificationEnabled, restrictedEmails });
+                wrapper.setProps({
+                    collabRestrictionType,
+                    isRestrictionJustificationEnabled,
+                    restrictedEmails,
+                    restrictedGroups: [],
+                });
 
                 const restrictionNoticeMessage = wrapper.find(`FormattedMessage[id="${restrictionNoticeMessageId}"]`);
                 const removeButtonMessage = wrapper.find(`FormattedMessage[id="${removeButtonMessageId}"]`);
@@ -103,10 +121,41 @@ describe('features/unified-share-modal/ContactRestrictionNotice', () => {
                 expect(restrictionNoticeMessage.props().values).toEqual({
                     count: restrictedEmails.length,
                     email: selectedContacts[0].value,
+                    groupName: undefined,
                 });
                 expect(removeButtonMessage).toHaveLength(1);
                 expect(removeButtonMessage.props().values).toEqual({
                     count: restrictedEmails.length,
+                });
+            },
+        );
+
+        test.each`
+            restrictedGroupCount | restrictionNoticeMessageId                                             | removeButtonMessageId
+            ${1}                 | ${messages.contactRestrictionNoticeInformationBarrierSingularGroup.id} | ${messages.contactRestrictionRemoveButtonLabel.id}
+            ${2}                 | ${messages.contactRestrictionNoticeInformationBarrier.id}              | ${messages.contactRestrictionRemoveButtonLabel.id}
+        `(
+            'should select appropriate messages when restricted group count is $restrictedGroupCount',
+            ({ restrictedGroupCount, restrictionNoticeMessageId, removeButtonMessageId }) => {
+                restrictedGroups = restrictedGroups.slice(0, restrictedGroupCount);
+                wrapper.setProps({
+                    collabRestrictionType: COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER,
+                    restrictedEmails: [],
+                    restrictedGroups,
+                });
+
+                const restrictionNoticeMessage = wrapper.find(`FormattedMessage[id="${restrictionNoticeMessageId}"]`);
+                const removeButtonMessage = wrapper.find(`FormattedMessage[id="${removeButtonMessageId}"]`);
+
+                expect(restrictionNoticeMessage).toHaveLength(1);
+                expect(restrictionNoticeMessage.props().values).toEqual({
+                    count: restrictedGroups.length,
+                    email: undefined,
+                    groupName: selectedContacts[3].text,
+                });
+                expect(removeButtonMessage).toHaveLength(1);
+                expect(removeButtonMessage.props().values).toEqual({
+                    count: restrictedGroups.length,
                 });
             },
         );

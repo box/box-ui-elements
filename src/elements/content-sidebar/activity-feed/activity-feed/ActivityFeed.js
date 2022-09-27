@@ -17,10 +17,18 @@ import messages from './messages';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import { PERMISSION_CAN_CREATE_ANNOTATIONS } from '../../../../constants';
 import { scrollIntoView } from '../../../../utils/dom';
-import type { Annotation, AnnotationPermission, FocusableFeedItemType, FeedItems } from '../../../../common/types/feed';
+import type {
+    Annotation,
+    AnnotationPermission,
+    BoxCommentPermission,
+    CommentFeedItemType,
+    FocusableFeedItemType,
+    FeedItems,
+    FeedItemStatus,
+} from '../../../../common/types/feed';
 import type { SelectorItems, User, GroupMini, BoxItem } from '../../../../common/types/core';
-import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
-import type { Translations, Errors } from '../../flowTypes';
+import type { Errors, GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { Translations } from '../../flowTypes';
 import './ActivityFeed.scss';
 
 type Props = {
@@ -41,10 +49,31 @@ type Props = {
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
     onAnnotationEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
     onAnnotationSelect?: (annotation: Annotation) => void,
+    onAnnotationStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
     onAppActivityDelete?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
-    onCommentUpdate?: Function,
+    onCommentUpdate?: (
+        id: string,
+        text?: string,
+        status?: FeedItemStatus,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
+    onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string, hasMention: boolean) => void,
+    onReplyDelete?: ({ id: string, parentId: string, permissions: BoxCommentPermission }) => void,
+    onReplyUpdate?: (
+        id: string,
+        parentId: string,
+        text: string,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
+    onShowReplies?: (id: string, type: CommentFeedItemType) => void,
     onTaskAssignmentUpdate?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
@@ -212,10 +241,15 @@ class ActivityFeed extends React.Component<Props, State> {
             onAnnotationDelete,
             onAnnotationEdit,
             onAnnotationSelect,
+            onAnnotationStatusChange,
             onAppActivityDelete,
             onCommentCreate,
             onCommentDelete,
             onCommentUpdate,
+            onReplyCreate,
+            onReplyDelete,
+            onReplyUpdate,
+            onShowReplies,
             onTaskAssignmentUpdate,
             onTaskDelete,
             onTaskModalClose,
@@ -273,32 +307,37 @@ class ActivityFeed extends React.Component<Props, State> {
                     {!isEmpty && !isLoading && (
                         <ActiveState
                             {...activityFeedError}
-                            items={collapseFeedState(feedItems)}
-                            isDisabled={isDisabled}
-                            currentUser={currentUser}
-                            currentFileVersionId={currentFileVersionId}
-                            onTaskAssignmentUpdate={onTaskAssignmentUpdate}
-                            onAnnotationDelete={onAnnotationDelete}
-                            onAnnotationEdit={onAnnotationEdit}
-                            onAnnotationSelect={onAnnotationSelect}
-                            onAppActivityDelete={onAppActivityDelete}
-                            onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
-                            onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
-                            onTaskDelete={onTaskDelete}
-                            onTaskEdit={onTaskUpdate}
-                            onTaskView={onTaskView}
-                            onTaskModalClose={onTaskModalClose}
-                            onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
-                            translations={translations}
-                            getAvatarUrl={getAvatarUrl}
-                            getUserProfileUrl={getUserProfileUrl}
-                            mentionSelectorContacts={mentionSelectorContacts}
-                            getMentionWithQuery={getMentionWithQuery}
-                            approverSelectorContacts={approverSelectorContacts}
-                            getApproverWithQuery={getApproverWithQuery}
                             activeFeedEntryId={activeFeedEntryId}
                             activeFeedEntryType={activeFeedEntryType}
                             activeFeedItemRef={this.activeFeedItemRef}
+                            approverSelectorContacts={approverSelectorContacts}
+                            currentFileVersionId={currentFileVersionId}
+                            currentUser={currentUser}
+                            getApproverWithQuery={getApproverWithQuery}
+                            getAvatarUrl={getAvatarUrl}
+                            getMentionWithQuery={getMentionWithQuery}
+                            getUserProfileUrl={getUserProfileUrl}
+                            isDisabled={isDisabled}
+                            items={collapseFeedState(feedItems)}
+                            mentionSelectorContacts={mentionSelectorContacts}
+                            onAnnotationDelete={onAnnotationDelete}
+                            onAnnotationEdit={onAnnotationEdit}
+                            onAnnotationSelect={onAnnotationSelect}
+                            onAnnotationStatusChange={onAnnotationStatusChange}
+                            onAppActivityDelete={onAppActivityDelete}
+                            onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
+                            onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
+                            onReplyCreate={hasCommentPermission ? onReplyCreate : noop}
+                            onReplyDelete={hasCommentPermission ? onReplyDelete : noop}
+                            onReplyUpdate={hasCommentPermission ? onReplyUpdate : noop}
+                            onShowReplies={onShowReplies}
+                            onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                            onTaskDelete={onTaskDelete}
+                            onTaskEdit={onTaskUpdate}
+                            onTaskModalClose={onTaskModalClose}
+                            onTaskView={onTaskView}
+                            onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
+                            translations={translations}
                         />
                     )}
                     {isInlineFeedItemErrorVisible && inlineFeedItemErrorMessage && (

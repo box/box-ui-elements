@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash/cloneDeep';
 import ThreadedComments from '../ThreadedComments';
 import {
     ERROR_CODE_CREATE_COMMENT,
@@ -7,6 +8,10 @@ import {
     ERROR_CODE_FETCH_REPLIES,
     ERROR_CODE_CREATE_REPLY,
 } from '../../constants';
+import { formatComment } from '../utils';
+import { threadedComments as mockThreadedComments } from '../fixtures';
+
+jest.mock('../utils', () => ({ formatComment: jest.fn() }));
 
 describe('api/ThreadedComments', () => {
     let threadedComments;
@@ -313,6 +318,35 @@ describe('api/ThreadedComments', () => {
 
             expect(errorCallback).toBeCalledWith(expect.any(Error), ERROR_CODE_CREATE_REPLY);
             expect(threadedComments.get).not.toBeCalled();
+        });
+    });
+
+    describe('successHandler()', () => {
+        beforeEach(() => {
+            threadedComments.successCallback = jest.fn();
+        });
+
+        test('should call the success callback with no data if none provided from API', () => {
+            threadedComments.successHandler();
+            expect(threadedComments.successCallback).toBeCalledWith();
+        });
+
+        test('should call formatReplies method and call the success callback if the response does not contain entries property', () => {
+            const response = cloneDeep(mockThreadedComments[0]);
+            threadedComments.successHandler(response);
+            expect(formatComment).toBeCalledWith(response);
+            expect(threadedComments.successCallback).toBeCalled();
+        });
+
+        test('should call formatReplies method and call the success callback if the response contains entries (comments)', () => {
+            const response = {
+                entries: cloneDeep(mockThreadedComments),
+                limit: 1000,
+                next_marker: null,
+            };
+            threadedComments.successHandler(response);
+            expect(formatComment).toBeCalled();
+            expect(threadedComments.successCallback).toBeCalled();
         });
     });
 });

@@ -19,6 +19,8 @@ class ContentExplorer extends Component {
     static propTypes = {
         /** Props for the action buttons container */
         actionButtonsProps: PropTypes.object,
+        /** Props for breadcrumbs */
+        breadcrumbProps: PropTypes.object,
         /** Props for the cancel button */
         cancelButtonProps: PropTypes.object,
         /** Props for the choose button */
@@ -387,6 +389,7 @@ class ContentExplorer extends Component {
     render() {
         const {
             actionButtonsProps,
+            breadcrumbProps,
             cancelButtonProps,
             chooseButtonProps,
             chooseButtonText,
@@ -470,6 +473,7 @@ class ContentExplorer extends Component {
                 {...contentExplorerProps}
             >
                 <ContentExplorerHeaderActions
+                    breadcrumbProps={breadcrumbProps}
                     contentExplorerMode={contentExplorerMode}
                     customInput={customInput}
                     foldersPath={foldersPath}

@@ -29,7 +29,7 @@ describe('features/content-explorer/content-explorer/ContentExplorerBreadcrumbs'
             expect(wrapper.find('Breadcrumb').length).toBe(1);
             expect(wrapper.find('IconAllFiles').length).toBe(1);
 
-            const breadcrumbs = wrapper.find('.lnk');
+            const breadcrumbs = wrapper.find('[data-testid="breadcrumb-lnk"]');
 
             expect(breadcrumbs.length).toBe(foldersPath.length);
 
@@ -76,7 +76,7 @@ describe('features/content-explorer/content-explorer/ContentExplorerBreadcrumbs'
             });
 
             wrapper
-                .find('.lnk')
+                .find('[data-testid="breadcrumb-lnk"]')
                 .at(breadcrumbIndex)
                 .simulate('click', event);
 

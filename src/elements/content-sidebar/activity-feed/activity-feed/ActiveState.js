@@ -4,6 +4,7 @@
  */
 import * as React from 'react';
 import getProp from 'lodash/get';
+import noop from 'lodash/noop';
 import ActivityThread from './ActivityThread';
 import ActivityItem from './ActivityItem';
 import AppActivity from '../app-activity';
@@ -15,8 +16,11 @@ import withErrorHandling from '../../withErrorHandling';
 import type {
     Annotation,
     AnnotationPermission,
+    BoxCommentPermission,
+    CommentFeedItemType,
     FeedItem,
     FeedItems,
+    FeedItemStatus,
     FocusableFeedItemType,
 } from '../../../../common/types/feed';
 import type { SelectorItems, User } from '../../../../common/types/core';
@@ -40,9 +44,30 @@ type Props = {
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
     onAnnotationEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
     onAnnotationSelect?: (annotation: Annotation) => void,
+    onAnnotationStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
-    onCommentEdit?: Function,
+    onCommentEdit?: (
+        id: string,
+        text?: string,
+        status?: FeedItemStatus,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
+    onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string, hasMention: boolean) => void,
+    onReplyDelete?: ({ id: string, parentId: string, permissions: BoxCommentPermission }) => void,
+    onReplyUpdate?: (
+        id: string,
+        parentId: string,
+        text: string,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
+    onShowReplies?: (id: string, type: CommentFeedItemType) => void,
     onTaskAssignmentUpdate?: Function,
     onTaskDelete?: Function,
     onTaskEdit?: Function,
@@ -66,9 +91,14 @@ const ActiveState = ({
     onAnnotationDelete,
     onAnnotationEdit,
     onAnnotationSelect,
+    onAnnotationStatusChange,
     onAppActivityDelete,
     onCommentDelete,
     onCommentEdit,
+    onReplyCreate = noop,
+    onReplyDelete = noop,
+    onReplyUpdate = noop,
+    onShowReplies = noop,
     onTaskDelete,
     onTaskEdit,
     onTaskView,
@@ -81,6 +111,30 @@ const ActiveState = ({
     getUserProfileUrl,
 }: Props): React.Node => {
     const activeEntry = items.find(({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType);
+
+    const onReplyCreateHandler = (parentId: string, parentType: CommentFeedItemType) => (
+        text: string,
+        hasMention: boolean,
+    ) => {
+        onReplyCreate(parentId, parentType, text, hasMention);
+    };
+    const onReplyDeleteHandler = (parentId: string) => (options: { id: string, permissions: BoxCommentPermission }) => {
+        onReplyDelete({ ...options, parentId });
+    };
+    const onReplyUpdateHandler = (parentId: string) => (
+        id: string,
+        text: string,
+        status?: FeedItemStatus,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => {
+        onReplyUpdate(id, parentId, text, hasMention, permissions, onSuccess, onError);
+    };
+    const onShowRepliesHandler = (id: string, type: CommentFeedItemType) => () => {
+        onShowReplies(id, type);
+    };
 
     return (
         <ul className="bcs-activity-feed-active-state">
@@ -98,7 +152,22 @@ const ActiveState = ({
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <ActivityThread hasReplies={hasReplies} data-testid="activity-thread">
+                                <ActivityThread
+                                    data-testid="activity-thread"
+                                    currentUser={currentUser}
+                                    getAvatarUrl={getAvatarUrl}
+                                    hasReplies={hasReplies}
+                                    getMentionWithQuery={getMentionWithQuery}
+                                    getUserProfileUrl={getUserProfileUrl}
+                                    mentionSelectorContacts={mentionSelectorContacts}
+                                    onReplyCreate={onReplyCreateHandler(item.id, item.type)}
+                                    onReplyDelete={onReplyDeleteHandler(item.id)}
+                                    onReplyEdit={onReplyUpdateHandler(item.id)}
+                                    onShowReplies={onShowRepliesHandler(item.id, item.type)}
+                                    repliesTotalCount={item.total_reply_count}
+                                    replies={item.replies}
+                                    translations={translations}
+                                >
                                     <Comment
                                         {...item}
                                         currentUser={currentUser}
@@ -111,13 +180,14 @@ const ActiveState = ({
                                         permissions={{
                                             can_delete: getProp(item.permissions, 'can_delete', false),
                                             can_edit: getProp(item.permissions, 'can_edit', false),
+                                            can_reply: getProp(item.permissions, 'can_reply', false),
+                                            can_resolve: getProp(item.permissions, 'can_resolve', false),
                                         }}
                                         translations={translations}
                                     />
                                 </ActivityThread>
                             </ActivityItem>
                         );
-
                     case 'task':
                         return (
                             <ActivityItem
@@ -174,7 +244,22 @@ const ActiveState = ({
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <ActivityThread hasReplies={hasReplies} data-testid="activity-thread">
+                                <ActivityThread
+                                    data-testid="activity-thread"
+                                    currentUser={currentUser}
+                                    getAvatarUrl={getAvatarUrl}
+                                    getMentionWithQuery={getMentionWithQuery}
+                                    getUserProfileUrl={getUserProfileUrl}
+                                    hasReplies={hasReplies}
+                                    mentionSelectorContacts={mentionSelectorContacts}
+                                    onReplyCreate={onReplyCreateHandler(item.id, item.type)}
+                                    onReplyDelete={onReplyDeleteHandler(item.id)}
+                                    onReplyEdit={onReplyUpdateHandler(item.id)}
+                                    onShowReplies={onShowRepliesHandler(item.id, item.type)}
+                                    repliesTotalCount={item.total_reply_count}
+                                    replies={item.replies}
+                                    translations={translations}
+                                >
                                     <AnnotationActivity
                                         currentUser={currentUser}
                                         getAvatarUrl={getAvatarUrl}
@@ -186,11 +271,11 @@ const ActiveState = ({
                                         onEdit={onAnnotationEdit}
                                         onDelete={onAnnotationDelete}
                                         onSelect={onAnnotationSelect}
+                                        onStatusChange={onAnnotationStatusChange}
                                     />
                                 </ActivityThread>
                             </ActivityItem>
                         );
-
                     default:
                         return null;
                 }

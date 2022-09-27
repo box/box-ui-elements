@@ -3,22 +3,24 @@
 exports[`elements/content-sidebar/ActivitySidebar render() should render the activity feed sidebar 1`] = `
 <SidebarContent
   actions={
-    <withRouter(AddTaskButton)
-      isDisabled={false}
-      onTaskModalClose={[Function]}
-      taskFormProps={
-        Object {
-          "approverSelectorContacts": undefined,
-          "approvers": Array [],
-          "completionRule": "ALL_ASSIGNEES",
-          "createTask": [Function],
-          "getApproverWithQuery": [Function],
-          "getAvatarUrl": [Function],
-          "id": "",
-          "message": "",
+    <React.Fragment>
+      <withRouter(AddTaskButton)
+        isDisabled={false}
+        onTaskModalClose={[Function]}
+        taskFormProps={
+          Object {
+            "approverSelectorContacts": undefined,
+            "approvers": Array [],
+            "completionRule": "ALL_ASSIGNEES",
+            "createTask": [Function],
+            "getApproverWithQuery": [Function],
+            "getAvatarUrl": [Function],
+            "id": "",
+            "message": "",
+          }
         }
-      }
-    />
+      />
+    </React.Fragment>
   }
   className="bcs-activity"
   elementId=""
@@ -31,6 +33,12 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
   }
 >
   <ActivityFeed
+    currentUser={
+      Object {
+        "id": "123",
+        "name": "foo bar",
+      }
+    }
     file={
       Object {
         "file_version": Object {
@@ -46,10 +54,15 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     onAnnotationDelete={[Function]}
     onAnnotationEdit={[Function]}
     onAnnotationSelect={[Function]}
+    onAnnotationStatusChange={[Function]}
     onAppActivityDelete={[Function]}
     onCommentCreate={[Function]}
     onCommentDelete={[Function]}
     onCommentUpdate={[Function]}
+    onReplyCreate={[Function]}
+    onReplyDelete={[Function]}
+    onReplyUpdate={[Function]}
+    onShowReplies={[Function]}
     onTaskAssignmentUpdate={[Function]}
     onTaskCreate={[Function]}
     onTaskDelete={[Function]}

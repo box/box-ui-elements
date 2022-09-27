@@ -50,8 +50,18 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
     key="annotationanno_123"
   >
     <ActivityThread
+      currentUser={
+        Object {
+          "id": "user_123445",
+          "name": "Rihanna",
+        }
+      }
       data-testid="activity-thread"
       hasReplies={false}
+      onReplyCreate={[Function]}
+      onReplyDelete={[Function]}
+      onReplyEdit={[Function]}
+      onShowReplies={[Function]}
     >
       <AnnotationActivity
         currentUser={
@@ -94,8 +104,18 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
     key="commentc_123"
   >
     <ActivityThread
+      currentUser={
+        Object {
+          "id": "user_123445",
+          "name": "Rihanna",
+        }
+      }
       data-testid="activity-thread"
       hasReplies={false}
+      onReplyCreate={[Function]}
+      onReplyDelete={[Function]}
+      onReplyEdit={[Function]}
+      onShowReplies={[Function]}
     >
       <Comment
         created_at="2018-07-03T14:43:52-07:00"
@@ -118,6 +138,8 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
           Object {
             "can_delete": false,
             "can_edit": false,
+            "can_reply": false,
+            "can_resolve": false,
           }
         }
         tagged_message="test @[123:Jeezy] @[10:Kanye West]"

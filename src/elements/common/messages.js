@@ -362,6 +362,11 @@ const messages = defineMessages({
         description: 'Title for the sidebar access stats.',
         defaultMessage: 'Access Stats',
     },
+    sidebarContentInsights: {
+        id: 'be.sidebarContentInsights',
+        description: 'Title for the sidebar content insights.',
+        defaultMessage: 'Content Insights',
+    },
     sidebarShow: {
         id: 'be.sidebarShow',
         description: 'Label for the show sidebar button.',
