@@ -67,7 +67,10 @@ const Breadcrumb = ({
         return React.Children.map(newChildren, (item, i) => {
             const isLastCrumb = length === 0 || i === length - 1;
             return (
-                <Crumb className={classNames({ 'no-shrink': hasEllipsis && i === 1 })} isLastCrumb={isLastCrumb}>
+                <Crumb
+                    className={classNames({ 'no-shrink': hasEllipsis && i === numItemsBeforeOverflow })}
+                    isLastCrumb={isLastCrumb}
+                >
                     {item}
                 </Crumb>
             );
