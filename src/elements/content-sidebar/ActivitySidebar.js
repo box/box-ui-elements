@@ -19,7 +19,7 @@ import SidebarContent from './SidebarContent';
 import { WithAnnotatorContextProps, withAnnotatorContext } from '../common/annotator-context';
 import { EVENT_DATA_READY, EVENT_JS_READY } from '../common/logger/constants';
 import { getBadUserError } from '../../utils/error';
-import { mark } from ]]]]]]]]]]]]]]]]]]]]]]]]]]'../../utils/performance';
+import { mark } from '../../utils/performance';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';

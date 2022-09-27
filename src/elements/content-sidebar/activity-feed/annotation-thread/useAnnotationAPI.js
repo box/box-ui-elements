@@ -3,11 +3,7 @@
 import React from 'react';
 import type { MessageDescriptor } from 'react-intl';
 import API from '../../../../api/APIFactory';
-import {
-    ERROR_CODE_DELETE_ANNOTATION,
-    ERROR_CODE_EDIT_ANNOTATION,
-    ERROR_CODE_FETCH_ANNOTATION,
-} from '../../../../constants';
+import AnnotationErrors from './errors';
 
 import type { Annotation, AnnotationPermission } from '../../../../common/types/annotations';
 import type { BoxItemPermission } from '../../../../common/types/core';
@@ -15,7 +11,6 @@ import type { FeedItemStatus } from '../../../../common/types/feed';
 import type { ElementOrigin, ElementsXhrError } from '../../../../common/types/api';
 
 import commonMessages from '../../../common/messages';
-import messages from './messages';
 
 type Props = {
     annotationId: string,
@@ -66,23 +61,9 @@ const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCal
     };
 
     const createAnnotationErrorCallback = (code: string) => {
-        let message;
-        switch (code) {
-            case ERROR_CODE_FETCH_ANNOTATION:
-                message = messages.errorFetchAnnotation;
-                break;
-            case ERROR_CODE_EDIT_ANNOTATION:
-                message = messages.errorEditAnnotation;
-                break;
-            case ERROR_CODE_DELETE_ANNOTATION:
-                message = messages.errorDeleteAnnotation;
-                break;
-            default:
-                message = commonMessages.error;
-        }
         setError({
             title: commonMessages.errorOccured,
-            message,
+            message: AnnotationErrors[code],
         });
     };
 

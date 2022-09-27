@@ -8,7 +8,6 @@ import MarkerBasedAPI from './MarkerBasedAPI';
 import { DEFAULT_MAX_COLLABORATORS } from '../constants';
 import type { ElementsErrorCallback } from '../common/types/api';
 import type { SelectorItem, SelectorItems, UserMini, GroupMini } from '../common/types/core';
-import type { Collaborators } from '../elements/content-sidebar/flowTypes';
 
 type CollaboratorsAPIResponse = {
     entries: Array<GroupMini | UserMini>,
@@ -102,7 +101,7 @@ class FileCollaborators extends MarkerBasedAPI {
      */
     getCollaboratorsWithQuery = (
         fileId: string,
-        successCallback: Collaborators => void,
+        successCallback: ({ entries: Array<SelectorItem<UserMini | GroupMini>>, next_marker: ?string }) => void,
         errorCallback: ElementsErrorCallback,
         searchStr: string,
         { includeGroups = false }: { includeGroups: boolean } = {},

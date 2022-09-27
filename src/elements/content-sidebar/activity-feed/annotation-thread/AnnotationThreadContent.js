@@ -31,25 +31,21 @@ const AnnotationThreadContent = ({ annotationId, api, fileId, filePermissions, o
         errorCallback: onError,
     });
 
-    /**
-     * File @mention contacts fetch success callback
-     *
-     * @private
-     * @param {BoxItemCollection} collaborators - Collaborators response data
-     * @return {void}
-     */
     const getMentionContactsSuccessCallback = ({ entries }: { entries: SelectorItems<> }): void => {
         setMentionSelectorContacts(entries);
     };
 
-    const getMentions = (searchStr: string) =>
-        api
-            .getFileCollaboratorsAPI(false)
-            .getCollaboratorsWithQuery(fileId, getMentionContactsSuccessCallback, onError, searchStr);
-
-    const getAvatarUrl = async (userId: string): Promise<?string> => {
-        return api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, fileId);
+    const getMentions = (searchStr: string): void => {
+        api.getFileCollaboratorsAPI(false).getCollaboratorsWithQuery(
+            fileId,
+            getMentionContactsSuccessCallback,
+            onError,
+            searchStr,
+        );
     };
+
+    const getAvatarUrl = async (userId: string): Promise<?string> =>
+        api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, fileId);
 
     return (
         <ActivityThread hasReplies getAvatarUrl={getAvatarUrl}>
