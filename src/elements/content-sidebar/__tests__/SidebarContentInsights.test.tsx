@@ -31,6 +31,7 @@ describe('elements/content-sidebar/SidebarContentInsights', () => {
             const wrapper = getWrapper();
 
             expect(wrapper.getByText(localize(messages.sidebarContentInsights.id))).toBeVisible();
+            expect(wrapper.queryByTestId('ContentAnalyticsErrorState-image')).toBe(null);
         });
 
         test('should call click handler when ContentInsightsSummary button is clicked', () => {
@@ -43,6 +44,13 @@ describe('elements/content-sidebar/SidebarContentInsights', () => {
             fireEvent.click(wrapper.getByText(localize(contentInsightsMessages.openContentInsightsButton.id)));
 
             expect(onContentInsightsClick).toBeCalledTimes(1);
+        });
+
+        test('should render error state', () => {
+            const contentInsights = { error: new Error() };
+            const wrapper = getWrapper({ contentInsights });
+
+            expect(wrapper.getByTestId('ContentAnalyticsErrorState-image')).toBeVisible();
         });
     });
 });
