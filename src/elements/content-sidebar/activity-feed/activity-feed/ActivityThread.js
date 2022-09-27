@@ -92,7 +92,7 @@ const ActivityThread = ({
                 </PlainButton>
             )}
 
-            {!isRepliesLoading && repliesTotalCount > 0 && replies.length && (
+            {!isRepliesLoading && repliesTotalCount > 0 && replies.length > 0 && (
                 <ActivityThreadReplies
                     currentUser={currentUser}
                     getAvatarUrl={getAvatarUrl}

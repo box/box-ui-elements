@@ -34,6 +34,10 @@ describe('api/ThreadedComments', () => {
         test('should return correct url for threaded comments', () => {
             expect(threadedComments.getUrl()).toBe('https://api.box.com/2.0/undoc/comments');
         });
+
+        test('should return correct url for threaded comments if fileId is given', () => {
+            expect(threadedComments.getUrl('123')).toBe('https://api.box.com/2.0/undoc/comments?file_id=123');
+        });
     });
 
     describe('getUrlForId()', () => {
@@ -46,6 +50,12 @@ describe('api/ThreadedComments', () => {
         test('should return the correct replies url for a given threaded comment id', () => {
             expect(threadedComments.getUrlWithRepliesForId('test')).toBe(
                 'https://api.box.com/2.0/undoc/comments/test/replies',
+            );
+        });
+
+        test('should return the correct replies url for a given threaded comment id if fileId is given', () => {
+            expect(threadedComments.getUrlWithRepliesForId('test', '123')).toBe(
+                'https://api.box.com/2.0/undoc/comments/test/replies?file_id=123',
             );
         });
     });
@@ -75,17 +85,11 @@ describe('api/ThreadedComments', () => {
             expect(threadedComments.post).toBeCalledWith({
                 id: 'foo',
                 data: {
-                    data: {
-                        item: {
-                            id: 'foo',
-                            type: 'file',
-                        },
-                        message,
-                    },
+                    data: { message },
                 },
                 errorCallback,
                 successCallback,
-                url: 'https://api.box.com/2.0/undoc/comments',
+                url: 'https://api.box.com/2.0/undoc/comments?file_id=foo',
             });
         });
 
@@ -296,7 +300,7 @@ describe('api/ThreadedComments', () => {
             expect(threadedComments.post).toBeCalledWith({
                 id: '12345',
                 errorCallback,
-                url: 'https://api.box.com/2.0/undoc/comments/67890/replies',
+                url: 'https://api.box.com/2.0/undoc/comments/67890/replies?file_id=12345',
                 data: { data: { message } },
                 successCallback,
             });
