@@ -33,7 +33,7 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
 
         // Element initializes with sentinel above threshold (no initial load).
         // Without this, top will always be 0 due to jest limitation.
-        Element.prototype.getBoundingClientRect = jest.fn().mockReturnValue({
+        jest.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue({
             top: window.innerHeight + (threshold + 1),
         } as DOMRect);
     });
@@ -44,7 +44,7 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
         document.body.innerHTML = '';
         document.head.innerHTML = '';
 
-        jest.resetAllMocks();
+        jest.restoreAllMocks();
     });
 
     it('should render with default props', () => {
