@@ -44,6 +44,7 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasReplies?: boolean,
     isDisabled?: boolean,
     mentionSelectorContacts?: SelectorItems<User>,
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
@@ -235,6 +236,7 @@ class ActivityFeed extends React.Component<Props, State> {
             getAvatarUrl,
             getMentionWithQuery,
             getUserProfileUrl,
+            hasReplies,
             isDisabled,
             mentionSelectorContacts,
             contactsLoaded,
@@ -317,6 +319,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             getAvatarUrl={getAvatarUrl}
                             getMentionWithQuery={getMentionWithQuery}
                             getUserProfileUrl={getUserProfileUrl}
+                            hasReplies={hasReplies}
                             isDisabled={isDisabled}
                             items={collapseFeedState(feedItems)}
                             mentionSelectorContacts={mentionSelectorContacts}
