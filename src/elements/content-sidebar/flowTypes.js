@@ -1,5 +1,4 @@
 // @flow
-import type { SelectorItem, UserMini, GroupMini } from '../../common/types/core';
 import type { UseTargetingApi } from '../../features/targeting/types';
 
 type ClassificationInfo = {
@@ -37,11 +36,6 @@ type Translations = {
     translationEnabled?: boolean,
 };
 
-type Collaborators = {
-    entries: Array<SelectorItem<UserMini | GroupMini>>,
-    next_marker: ?string,
-};
-
 type FileAccessStats = {
     comment_count?: number,
     download_count?: number,
@@ -57,6 +51,5 @@ export type {
     AdditionalSidebarTab,
     AdditionalSidebarTabFtuxData,
     Translations,
-    Collaborators,
     FileAccessStats,
 };
