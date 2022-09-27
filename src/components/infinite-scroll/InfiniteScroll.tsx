@@ -93,8 +93,8 @@ function InfiniteScroll({
             container.addEventListener('resize', resizeHandler);
         }
 
-        // calls scrollHandler until page becomes scrollable
-        scrollHandler();
+        // calls onContainerScroll until page becomes scrollable
+        onContainerScroll(params);
 
         return function removeEventListeners() {
             if (container) {
