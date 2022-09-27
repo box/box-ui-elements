@@ -1,10 +1,7 @@
 import { mount, ReactWrapper } from 'enzyme';
 import * as React from 'react';
-import sinon from 'sinon';
 
 import InfiniteScroll, { InfiniteScrollProps } from '../InfiniteScroll';
-
-const sandbox = sinon.sandbox.create();
 
 const mockOnLoadMore = jest.fn();
 
@@ -16,34 +13,50 @@ const propsList: InfiniteScrollProps = {
     useWindow: true,
     onLoadMore: mockOnLoadMore,
     threshold,
-};
-
-const getSentinel = () => {
-    const nodes = document.querySelectorAll('[data-testid="sentinel"]');
-    return nodes[nodes.length - 1];
+    throttle: 1,
 };
 
 describe('components/infinite-scroll/InfiniteScroll', () => {
+    const items = new Array(20).fill('ITEM');
+
     let attachTo: HTMLDivElement;
+    let component: ReactWrapper;
+
+    const getSentinel = () => {
+        return component?.find('[data-testid="sentinel"]').getDOMNode();
+    };
+
     beforeEach(() => {
         const container = document.createElement('div');
         document.body.appendChild(container);
         attachTo = container;
+
+        // Element initializes with sentinel above threshold (no initial load).
+        // Without this, top will always be 0 due to jest limitation.
+        // Element.prototype.getBoundingClientRect = mockGetBoundingClientRect;
+        Element.prototype.getBoundingClientRect = jest.fn().mockReturnValue({
+            top: window.innerHeight + (threshold + 1),
+        } as DOMRect);
     });
 
     afterEach(() => {
-        mockOnLoadMore.mockReset();
-        sandbox.verifyAndRestore();
+        component?.unmount();
+
+        document.body.innerHTML = '';
+        document.head.innerHTML = '';
+
+        jest.resetAllMocks();
     });
 
     it('should render with default props', () => {
-        const component = mount(<InfiniteScroll {...propsList} />);
+        component = mount(<InfiniteScroll {...propsList} />);
         expect(component).toMatchInlineSnapshot(`
             <InfiniteScroll
               hasMore={false}
               isLoading={false}
               onLoadMore={[MockFunction]}
               threshold={100}
+              throttle={1}
               useWindow={true}
             >
               <div>
@@ -56,114 +69,101 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
     });
 
     it('should render sentinel to calculate scroll position', () => {
-        const component = mount(<InfiniteScroll {...propsList} />);
+        component = mount(<InfiniteScroll {...propsList} />);
         expect(component.find('[data-testid="sentinel"]').length).toEqual(1);
     });
 
-    it('should call onLoadMore if sentinel is in threshold range while scrolling in window', () => {
-        const items = new Array(20).fill('ITEM');
-        mount(
-            <InfiniteScroll {...propsList} hasMore>
-                <div>
-                    {items.map((item, i) => (
-                        <div key={i} style={{ height: '100px' }}>
-                            {item}
-                        </div>
-                    ))}
-                </div>
-            </InfiniteScroll>,
-            { attachTo },
-        );
+    describe('using window', () => {
+        beforeEach(() => {
+            component = mount(
+                <InfiniteScroll {...propsList} hasMore>
+                    <div>
+                        {items.map((item, i) => (
+                            <div key={i} style={{ height: '100px' }}>
+                                {item}
+                            </div>
+                        ))}
+                    </div>
+                </InfiniteScroll>,
+                { attachTo },
+            );
+        });
 
-        const sentinel = getSentinel();
-        sandbox
-            .stub(sentinel, 'getBoundingClientRect')
-            .returns({ top: window.innerHeight + (threshold - 1) } as DOMRect);
+        it('should call onLoadMore if sentinel is in threshold range and window is not scrollable', () => {
+            Element.prototype.getBoundingClientRect = jest.fn().mockReturnValue({
+                top: window.innerHeight + (threshold - 1),
+            } as DOMRect);
+            // update prop to trigger useEffect
+            component.setProps({ throttle: 2 });
 
-        window.dispatchEvent(new Event('scroll'));
-        expect(mockOnLoadMore).toHaveBeenCalledTimes(1);
+            expect(mockOnLoadMore).toHaveBeenCalledTimes(1);
+        });
+
+        it('should call onLoadMore if sentinel is in threshold range while scrolling in window', () => {
+            const sentinel = getSentinel();
+            sentinel.getBoundingClientRect = jest
+                .fn()
+                .mockReturnValue({ top: window.innerHeight + (threshold - 1) } as DOMRect);
+
+            window.dispatchEvent(new Event('scroll'));
+            expect(mockOnLoadMore).toHaveBeenCalledTimes(1);
+        });
+
+        it('should not call onLoadMore if sentinel is not in threshold range while scrolling in window', () => {
+            window.dispatchEvent(new Event('scroll'));
+            expect(mockOnLoadMore).toHaveBeenCalledTimes(0);
+        });
     });
 
-    it('should not call onLoadMore if sentinel is not in threshold range while scrolling in window', () => {
-        const items = new Array(20).fill('ITEM');
-        mount(
-            <InfiniteScroll {...propsList} hasMore>
-                <div>
-                    {items.map((item, i) => (
-                        <div key={i}>{item}</div>
-                    ))}
-                </div>
-            </InfiniteScroll>,
-            { attachTo },
-        );
+    describe('using scrollContainerNode', () => {
+        let scrollContainer: HTMLDivElement;
 
-        const sentinel = getSentinel();
-        sandbox
-            .stub(sentinel, 'getBoundingClientRect')
-            .returns({ top: window.innerHeight + (threshold + 1) } as DOMRect);
+        beforeEach(() => {
+            scrollContainer = document.createElement('div');
+            scrollContainer.getBoundingClientRect = jest.fn().mockReturnValue({ bottom: 500 } as DOMRect);
 
-        window.dispatchEvent(new Event('scroll'));
-        expect(mockOnLoadMore).not.toHaveBeenCalled();
-    });
+            component = mount(
+                <InfiniteScroll {...propsList} hasMore scrollContainerNode={scrollContainer} useWindow={false}>
+                    <div>
+                        {items.map((item, i) => (
+                            <div key={i} style={{ height: '100px' }}>
+                                {item}
+                            </div>
+                        ))}
+                    </div>
+                </InfiniteScroll>,
+                { attachTo },
+            );
+        });
 
-    it('should call onLoadMore if sentinel is in threshold range while scrolling scrollContainerNode', () => {
-        const scrollContainer = document.createElement('div');
-        sandbox.stub(scrollContainer, 'getBoundingClientRect').returns({ bottom: 500 } as DOMRect);
+        it('should call onLoadMore if sentinel is in threshold range and window is not scrollable', () => {
+            Element.prototype.getBoundingClientRect = jest.fn().mockReturnValue({
+                top: 500 + (threshold - 1),
+            } as DOMRect);
+            // update prop to trigger useEffect
+            component.setProps({ throttle: 2 });
 
-        const items = new Array(20).fill('ITEM');
-        mount(
-            <InfiniteScroll {...propsList} hasMore scrollContainerNode={scrollContainer} useWindow={false}>
-                <div>
-                    {items.map((item, i) => (
-                        <div key={i} style={{ height: '100px' }}>
-                            {item}
-                        </div>
-                    ))}
-                </div>
-            </InfiniteScroll>,
-            { attachTo },
-        );
+            expect(mockOnLoadMore).toHaveBeenCalledTimes(1);
+        });
 
-        const sentinel = getSentinel();
-        sandbox.stub(sentinel, 'getBoundingClientRect').returns({ top: 500 + (threshold - 1) } as DOMRect);
+        it('should call onLoadMore if sentinel is in threshold range while scrolling scrollContainerNode', () => {
+            const sentinel = getSentinel();
+            sentinel.getBoundingClientRect = jest.fn().mockReturnValue({ top: 500 + (threshold - 1) } as DOMRect);
 
-        scrollContainer.dispatchEvent(new Event('scroll'));
-        expect(mockOnLoadMore).toHaveBeenCalledTimes(1);
-    });
+            scrollContainer.dispatchEvent(new Event('scroll'));
+            expect(mockOnLoadMore).toHaveBeenCalledTimes(1);
+        });
 
-    it('should call onLoadMore if sentinel is in threshold range while scrolling scrollContainerNode', () => {
-        const scrollContainer = document.createElement('div');
-        sandbox.stub(scrollContainer, 'getBoundingClientRect').returns({ bottom: 500 } as DOMRect);
-
-        const items = new Array(20).fill('ITEM');
-        mount(
-            <InfiniteScroll {...propsList} hasMore scrollContainerNode={scrollContainer} useWindow={false}>
-                <div>
-                    {items.map((item, i) => (
-                        <div key={i} style={{ height: '100px' }}>
-                            {item}
-                        </div>
-                    ))}
-                </div>
-            </InfiniteScroll>,
-            { attachTo },
-        );
-
-        const sentinel = getSentinel();
-        sandbox.stub(sentinel, 'getBoundingClientRect').returns({ top: 500 + (threshold + 1) } as DOMRect);
-
-        scrollContainer.dispatchEvent(new Event('scroll'));
-        expect(mockOnLoadMore).not.toHaveBeenCalled();
+        it('should not call onLoadMore if sentinel is not in threshold range while scrolling scrollContainerNode', () => {
+            scrollContainer.dispatchEvent(new Event('scroll'));
+            expect(mockOnLoadMore).not.toHaveBeenCalled();
+        });
     });
 
     describe('with sentinel in range', () => {
-        let component: ReactWrapper;
-        const mockedOnLoadMore = jest.fn();
         beforeEach(() => {
-            const items = new Array(20).fill('ITEM');
-
             component = mount(
-                <InfiniteScroll {...propsList} hasMore onLoadMore={mockedOnLoadMore} useWindow>
+                <InfiniteScroll {...propsList} hasMore useWindow>
                     <div>
                         {items.map((item, i) => (
                             <div key={i} style={{ height: '100px' }}>
@@ -176,26 +176,24 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
             );
 
             const sentinel = getSentinel();
-            sandbox
-                .stub(sentinel, 'getBoundingClientRect')
-                .returns({ top: window.innerHeight + (threshold - 1) } as DOMRect);
-        });
+            sentinel.getBoundingClientRect = jest
+                .fn()
+                .mockReturnValue({ top: window.innerHeight + (threshold - 1) } as DOMRect);
 
-        afterEach(() => {
-            mockedOnLoadMore.mockReset();
+            jest.resetAllMocks();
         });
 
         it('should not call onLoadMore if isLoading', () => {
             component.setProps({ isLoading: true }, () => {
                 window.dispatchEvent(new Event('scroll'));
-                expect(mockedOnLoadMore).not.toHaveBeenCalled();
+                expect(mockOnLoadMore).not.toHaveBeenCalled();
             });
         });
 
         it('should not call onLoadMore if !hasMore', () => {
             component.setProps({ hasMore: false }, () => {
                 window.dispatchEvent(new Event('scroll'));
-                expect(mockedOnLoadMore).not.toHaveBeenCalled();
+                expect(mockOnLoadMore).not.toHaveBeenCalled();
             });
         });
     });
@@ -223,7 +221,7 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
             assertScrollAndResizeEvents(addEventListenerScrollContainer, 0);
             assertScrollAndResizeEvents(removeEventListenerScrollContainer, 0);
 
-            const component = mount(<InfiniteScroll {...propsList} />);
+            component = mount(<InfiniteScroll {...propsList} />);
 
             assertScrollAndResizeEvents(addEventListenerWindow);
 
