@@ -36,6 +36,7 @@ type Props = {
     onCancel: Function,
     onFocus?: Function,
     onSubmit?: Function,
+    renderCommentFormAvatar?: Function,
     showTip?: boolean,
     tagged_message?: string,
     updateComment?: Function,
@@ -49,6 +50,7 @@ type State = {
 class CommentForm extends React.Component<Props, State> {
     static defaultProps = {
         isOpen: false,
+        renderCommentFormAvatar: avatar => avatar,
     };
 
     state = {
@@ -119,6 +121,7 @@ class CommentForm extends React.Component<Props, State> {
             tagged_message,
             getAvatarUrl,
             showTip = true,
+            renderCommentFormAvatar,
         } = this.props;
         const { commentEditorState } = this.state;
         const inputContainerClassNames = classNames('bcs-CommentForm', className, {
@@ -129,7 +132,7 @@ class CommentForm extends React.Component<Props, State> {
             <Media className={inputContainerClassNames}>
                 {!isEditing && (
                     <Media.Figure className="bcs-CommentForm-avatar">
-                        <Avatar getAvatarUrl={getAvatarUrl} user={user} />
+                        {renderCommentFormAvatar(<Avatar getAvatarUrl={getAvatarUrl} user={user} />)}
                     </Media.Figure>
                 )}
 

@@ -82,6 +82,7 @@ type Props = {
     onTaskUpdate?: Function,
     onTaskView?: Function,
     onVersionHistoryClick?: Function,
+    renderCommentFormAvatar?: Function,
     translations?: Translations,
 };
 
@@ -258,6 +259,7 @@ class ActivityFeed extends React.Component<Props, State> {
             onTaskUpdate,
             onTaskView,
             onVersionHistoryClick,
+            renderCommentFormAvatar,
             translations,
         } = this.props;
         const { isInputOpen } = this.state;
@@ -369,6 +371,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         user={currentUser}
                         onCancel={this.commentFormCancelHandler}
                         onFocus={this.commentFormFocusHandler}
+                        renderCommentFormAvatar={renderCommentFormAvatar}
                         getAvatarUrl={getAvatarUrl}
                     />
                 ) : null}

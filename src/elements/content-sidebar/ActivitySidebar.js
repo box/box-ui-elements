@@ -74,6 +74,7 @@ type ExternalProps = {
     onTaskDelete: (id: string) => any,
     onTaskUpdate: () => any,
     onTaskView: (id: string, isCreator: boolean) => any,
+    renderCommentFormAvatar?: Function,
 } & ErrorContextProps &
     WithAnnotatorContextProps;
 
@@ -891,6 +892,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             activeFeedEntryId,
             activeFeedEntryType,
             onTaskView,
+            renderCommentFormAvatar,
         } = this.props;
         const { activityFeedError, approverSelectorContacts, contactsLoaded, mentionSelectorContacts } = this.state;
 
@@ -938,6 +940,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     onTaskUpdate={this.updateTask}
                     onTaskView={onTaskView}
                     onVersionHistoryClick={onVersionHistoryClick}
+                    renderCommentFormAvatar={renderCommentFormAvatar}
                 />
             </SidebarContent>
         );
