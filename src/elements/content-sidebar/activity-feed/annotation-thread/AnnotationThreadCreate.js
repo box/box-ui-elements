@@ -17,7 +17,7 @@ type Props = {
     file: BoxItem,
     getAvatarUrl: string => Promise<?string>,
     getMentionWithQuery: (searchStr: string) => void,
-    handleCancel: Function,
+    handleCancel: () => void,
     mentionSelectorContacts: SelectorItems<>,
     onAnnotationCreate: (annotation: Annotation) => void,
     target: Target,
@@ -46,7 +46,6 @@ const AnnotationThreadCreate = ({
 
         const successCallback = (annotation: Annotation) => {
             onAnnotationCreate(annotation);
-            // will emit create event
         };
 
         const payload = {

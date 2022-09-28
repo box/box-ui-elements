@@ -16,7 +16,7 @@ import { DEFAULT_COLLAB_DEBOUNCE, DEFAULT_HOSTNAME_API } from '../../../../const
 import type APICache from '../../../../utils/Cache';
 import type { BoxItem, SelectorItems, StringMap, Token, User } from '../../../../common/types/core';
 import type { ErrorContextProps } from '../../../../common/types/api';
-import type { Target } from '../../../../common/types/annotations';
+import type { Annotation, Target } from '../../../../common/types/annotations';
 
 import './AnnotationThread.scss';
 
@@ -28,10 +28,10 @@ type Props = {
     clientName: string,
     currentUser: User,
     file: BoxItem,
-    handleCancel: Function,
+    handleCancel: () => void,
     language?: string,
     messages?: StringMap,
-    onAnnotationCreate: Function,
+    onAnnotationCreate: (annotation: Annotation) => void,
     target: Target,
     token: Token,
 } & ErrorContextProps;
