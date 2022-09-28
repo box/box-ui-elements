@@ -32,10 +32,11 @@ class ThreadedComments extends MarkerBasedApi {
     /**
      * API URL for comments
      *
+     * @param {string} [fileId]
      * @return {string} base url for comments
      */
-    getUrl(): string {
-        return `${this.getBaseApiUrl()}/undoc/comments`;
+    getUrl(fileId?: string): string {
+        return `${this.getBaseApiUrl()}/undoc/comments${fileId ? `?file_id=${fileId}` : ''}`;
     }
 
     /**
@@ -51,11 +52,12 @@ class ThreadedComments extends MarkerBasedApi {
     /**
      * API URL for specific comment
      *
-     * @param {string} [commentId]
+     * @param {string} commentId
+     * @param {string} [fileId]
      * @return {string}  base url for specific comment replies
      */
-    getUrlWithRepliesForId(commentId: string): string {
-        return `${this.getUrlForId(commentId)}/replies`;
+    getUrlWithRepliesForId(commentId: string, fileId?: string): string {
+        return `${this.getUrlForId(commentId)}/replies${fileId ? `?file_id=${fileId}` : ''}`;
     }
 
     /**
@@ -104,7 +106,7 @@ class ThreadedComments extends MarkerBasedApi {
         successCallback: (comment: Comment) => void,
     }): void {
         this.errorCode = ERROR_CODE_CREATE_COMMENT;
-        const { id, permissions, type } = file;
+        const { id, permissions } = file;
 
         try {
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, id);
@@ -115,15 +117,9 @@ class ThreadedComments extends MarkerBasedApi {
 
         this.post({
             id,
-            url: this.getUrl(),
+            url: this.getUrl(id),
             data: {
-                data: {
-                    item: {
-                        id,
-                        type,
-                    },
-                    message,
-                },
+                data: { message },
             },
             successCallback,
             errorCallback,
@@ -361,7 +357,7 @@ class ThreadedComments extends MarkerBasedApi {
             data: { data: { message } },
             errorCallback,
             successCallback,
-            url: this.getUrlWithRepliesForId(commentId),
+            url: this.getUrlWithRepliesForId(commentId, fileId),
         });
     }
 }

@@ -50,6 +50,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     getApproverWithQuery={[Function]}
     getAvatarUrl={[Function]}
     getMentionWithQuery={[Function]}
+    hasReplies={false}
     isDisabled={false}
     onAnnotationDelete={[Function]}
     onAnnotationEdit={[Function]}

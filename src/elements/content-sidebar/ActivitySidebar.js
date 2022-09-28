@@ -884,6 +884,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             currentUserError,
             elementId,
             file,
+            hasReplies,
             isDisabled = false,
             onVersionHistoryClick,
             getUserProfileUrl,
@@ -914,6 +915,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     getAvatarUrl={this.getAvatarUrl}
                     getMentionWithQuery={this.getMention}
                     getUserProfileUrl={getUserProfileUrl}
+                    hasReplies={hasReplies}
                     isDisabled={isDisabled}
                     mentionSelectorContacts={mentionSelectorContacts}
                     contactsLoaded={contactsLoaded}
