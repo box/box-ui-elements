@@ -49,11 +49,11 @@ import type {
     FeedItems,
     FeedItemStatus,
 } from '../../common/types/feed';
-import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
+import type { ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { SelectorItems, User, UserMini, GroupMini, BoxItem } from '../../common/types/core';
 import type { Errors, GetProfileUrlCallback } from '../common/flowTypes';
-import type { Translations, Collaborators } from './flowTypes';
+import type { Translations } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 import './ActivitySidebar.scss';
 
@@ -690,21 +690,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * File @mention contacts fetch success callback
      *
      * @private
-     * @param {string} searchStr - Search string to filter file collaborators by
-     * @return {void}
-     */
-    getApproverWithQuery = debounce(
-        (searchStr: string) =>
-            this.getCollaborators(this.getApproverContactsSuccessCallback, this.errorCallback, searchStr, {
-                includeGroups: true,
-            }),
-        DEFAULT_COLLAB_DEBOUNCE,
-    );
-
-    /**
-     * File @mention contacts fetch success callback
-     *
-     * @private
      * @param {BoxItemCollection} collaborators - Collaborators response data
      * @return {void}
      */
@@ -719,46 +704,41 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     /**
+     * Fetches file @mention's with groups
+     *
+     * @private
+     * @param {string} searchStr - Search string to filter file collaborators by
+     * @return {void}
+     */
+    getApprover = debounce((searchStr: string) => {
+        const { file, api } = this.props;
+        api.getFileCollaboratorsAPI(false).getCollaboratorsWithQuery(
+            file.id,
+            this.getApproverContactsSuccessCallback,
+            this.errorCallback,
+            searchStr,
+            {
+                includeGroups: true,
+            },
+        );
+    }, DEFAULT_COLLAB_DEBOUNCE);
+
+    /**
      * Fetches file @mention's
      *
      * @private
      * @param {string} searchStr - Search string to filter file collaborators by
      * @return {void}
      */
-    getMentionWithQuery = debounce(
-        (searchStr: string) =>
-            this.getCollaborators(this.getMentionContactsSuccessCallback, this.errorCallback, searchStr),
-        DEFAULT_COLLAB_DEBOUNCE,
-    );
-
-    /**
-     * Fetches file collaborators
-     *
-     * @param {Function} successCallback - the success callback
-     * @param {Function} errorCallback - the error callback
-     * @param {string} searchStr - the search string
-     * @param {Object} [options]
-     * @param {boolean} [options.includeGroups] - return groups as well as users
-     * @return {void}
-     */
-    getCollaborators(
-        successCallback: Collaborators => void,
-        errorCallback: ElementsErrorCallback,
-        searchStr: string,
-        { includeGroups = false }: { includeGroups: boolean } = {},
-    ): void {
-        // Do not fetch without filter
-        const { api, file } = this.props;
-        if (!searchStr || searchStr.trim() === '') {
-            return;
-        }
-
-        api.getFileCollaboratorsAPI(true).getFileCollaborators(file.id, successCallback, errorCallback, {
-            filter_term: searchStr,
-            include_groups: includeGroups,
-            include_uploader_collabs: false,
-        });
-    }
+    getMention = debounce((searchStr: string) => {
+        const { file, api } = this.props;
+        api.getFileCollaboratorsAPI(false).getCollaboratorsWithQuery(
+            file.id,
+            this.getMentionContactsSuccessCallback,
+            this.errorCallback,
+            searchStr,
+        );
+    }, DEFAULT_COLLAB_DEBOUNCE);
 
     /**
      * Fetches replies (comments) of a comment or annotation
@@ -841,7 +821,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     renderAddTaskButton = () => {
         const { isDisabled, hasTasks } = this.props;
         const { approverSelectorContacts } = this.state;
-        const { getApproverWithQuery, getAvatarUrl, createTask, onTaskModalClose } = this;
+        const { getApprover, getAvatarUrl, createTask, onTaskModalClose } = this;
 
         if (!hasTasks) {
             return null;
@@ -856,7 +836,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     approverSelectorContacts,
                     completionRule: TASK_COMPLETION_RULE_ALL,
                     createTask,
-                    getApproverWithQuery,
+                    getApproverWithQuery: getApprover,
                     getAvatarUrl,
                     id: '',
                     message: '',
@@ -930,9 +910,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     currentUserError={currentUserError}
                     feedItems={this.getFilteredFeedItems()}
                     file={file}
-                    getApproverWithQuery={this.getApproverWithQuery}
+                    getApproverWithQuery={this.getApprover}
                     getAvatarUrl={this.getAvatarUrl}
-                    getMentionWithQuery={this.getMentionWithQuery}
+                    getMentionWithQuery={this.getMention}
                     getUserProfileUrl={getUserProfileUrl}
                     isDisabled={isDisabled}
                     mentionSelectorContacts={mentionSelectorContacts}

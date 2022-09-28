@@ -34,7 +34,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         getUser: jest.fn(),
     };
     const fileCollaboratorsAPI = {
-        getFileCollaborators: jest.fn(),
+        getCollaboratorsWithQuery: jest.fn(),
     };
     const api = {
         getUsersAPI: () => usersAPI,
@@ -668,33 +668,24 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
-    describe('getApproverWithQuery()', () => {
+    describe('getApprover()', () => {
         let instance;
         let wrapper;
-        let getCollaboratorsSpy;
 
         test('should get collaborators with groups', () => {
             wrapper = getWrapper();
             instance = wrapper.instance();
-            getCollaboratorsSpy = jest.spyOn(instance, 'getCollaborators');
 
             const search = 'Santa Claus';
-            instance.getApproverWithQuery(search);
+            instance.getApprover(search);
 
-            expect(getCollaboratorsSpy).toBeCalledWith(
-                instance.getApproverContactsSuccessCallback,
-                instance.errorCallback,
-                search,
-                { includeGroups: true },
-            );
-            expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(
+            expect(api.getFileCollaboratorsAPI().getCollaboratorsWithQuery).toBeCalledWith(
                 file.id,
                 instance.getApproverContactsSuccessCallback,
                 instance.errorCallback,
+                search,
                 {
-                    filter_term: search,
-                    include_groups: true,
-                    include_uploader_collabs: false,
+                    includeGroups: true,
                 },
             );
         });
@@ -718,34 +709,22 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
-    describe('getMentionWithQuery()', () => {
+    describe('getMention()', () => {
         let instance;
         let wrapper;
-        let getCollaboratorsSpy;
-
-        beforeEach(() => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            getCollaboratorsSpy = jest.spyOn(instance, 'getCollaborators');
-        });
 
         test('should get collaborators without groups', () => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+
             const search = 'Santa Claus';
-            instance.getMentionWithQuery(search);
-            expect(getCollaboratorsSpy).toBeCalledWith(
-                instance.getMentionContactsSuccessCallback,
-                instance.errorCallback,
-                search,
-            );
-            expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(
+            instance.getMention(search);
+
+            expect(api.getFileCollaboratorsAPI().getCollaboratorsWithQuery).toBeCalledWith(
                 file.id,
                 instance.getMentionContactsSuccessCallback,
                 instance.errorCallback,
-                {
-                    filter_term: search,
-                    include_groups: false,
-                    include_uploader_collabs: false,
-                },
+                search,
             );
         });
     });
@@ -814,39 +793,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const avatarUrl = instance.getAvatarUrl(currentUser.id);
             expect(avatarUrl instanceof Promise).toBe(true);
             expect(usersAPI.getAvatarUrlWithAccessToken).toBeCalledWith(currentUser.id, file.id);
-        });
-    });
-
-    describe('getCollaborators()', () => {
-        let wrapper;
-        let instance;
-        let successCb;
-        let errorCb;
-
-        beforeEach(() => {
-            successCb = jest.fn();
-            errorCb = jest.fn();
-            wrapper = getWrapper({
-                file,
-            });
-            instance = wrapper.instance();
-        });
-
-        test('should short circuit if there is no search string', () => {
-            instance.getCollaborators(successCb, errorCb);
-            instance.getCollaborators(successCb, errorCb, '');
-            instance.getCollaborators(successCb, errorCb, '  ');
-            expect(fileCollaboratorsAPI.getFileCollaborators).not.toHaveBeenCalled();
-        });
-
-        test('should call the file collaborators api', () => {
-            const searchStr = 'foo';
-            instance.getCollaborators(successCb, errorCb, searchStr);
-            expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(file.id, successCb, errorCb, {
-                filter_term: searchStr,
-                include_groups: false,
-                include_uploader_collabs: false,
-            });
         });
     });
 

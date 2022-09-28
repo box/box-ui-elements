@@ -55,4 +55,45 @@ describe('api/FileCollaborators', () => {
             expect(fileCollaborators.successCallback).toBeCalledWith(formattedResponse);
         });
     });
+
+    describe('getCollaboratorsWithQuery', () => {
+        beforeEach(() => {
+            fileCollaborators.getFileCollaborators = jest.fn();
+        });
+
+        test.each(['', ' ', '   ', null])('should short circuit if there is no search string', string => {
+            fileCollaborators.getCollaboratorsWithQuery('file_id', jest.fn(), jest.fn(), string);
+
+            expect(fileCollaborators.getFileCollaborators).not.toBeCalled();
+        });
+
+        test('should call the file collaborators api withoutGroups', () => {
+            const searchStr = 'foo';
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            fileCollaborators.getCollaboratorsWithQuery('file_id', successCb, errorCb, searchStr);
+
+            expect(fileCollaborators.getFileCollaborators).toBeCalledWith('file_id', successCb, errorCb, {
+                filter_term: searchStr,
+                include_groups: false,
+                include_uploader_collabs: false,
+            });
+        });
+
+        test('should get collaborators with groups', () => {
+            const searchStr = 'foo';
+            const includeGroups = true;
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            fileCollaborators.getCollaboratorsWithQuery('file_id', successCb, errorCb, searchStr, { includeGroups });
+
+            expect(fileCollaborators.getFileCollaborators).toBeCalledWith('file_id', successCb, errorCb, {
+                filter_term: searchStr,
+                include_groups: true,
+                include_uploader_collabs: false,
+            });
+        });
+    });
 });
