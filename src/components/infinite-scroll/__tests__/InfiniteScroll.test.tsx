@@ -13,7 +13,7 @@ const propsList: InfiniteScrollProps = {
     useWindow: true,
     onLoadMore: mockOnLoadMore,
     threshold,
-    throttle: 0, // tests run too fast - keep it 0 for sanity
+    throttle: 2,
 };
 
 describe('components/infinite-scroll/InfiniteScroll', () => {
@@ -87,7 +87,7 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
 
             // update prop to trigger useEffect
             component.setProps({ throttle: 1 });
-            expect(mockOnLoadMore).toHaveBeenCalledTimes(1);
+            expect(mockOnLoadMore).toBeCalledTimes(1);
         });
 
         it('should call onLoadMore if sentinel is in threshold range while scrolling in window', () => {
@@ -97,12 +97,12 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
                 .mockReturnValue({ top: window.innerHeight + (threshold - 1) } as DOMRect);
 
             window.dispatchEvent(new Event('scroll'));
-            expect(mockOnLoadMore).toHaveBeenCalledTimes(1);
+            expect(mockOnLoadMore).toBeCalledTimes(1);
         });
 
         it('should not call onLoadMore if sentinel is not in threshold range while scrolling in window', () => {
             window.dispatchEvent(new Event('scroll'));
-            expect(mockOnLoadMore).toHaveBeenCalledTimes(0);
+            expect(mockOnLoadMore).toBeCalledTimes(0);
         });
     });
 
@@ -133,7 +133,7 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
 
             // update prop to trigger useEffect
             component.setProps({ throttle: 1 });
-            expect(mockOnLoadMore).toHaveBeenCalledTimes(1);
+            expect(mockOnLoadMore).toBeCalledTimes(1);
         });
 
         it('should call onLoadMore if sentinel is in threshold range while scrolling scrollContainerNode', () => {
@@ -141,12 +141,12 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
             sentinel.getBoundingClientRect = jest.fn().mockReturnValue({ top: 500 + (threshold - 1) } as DOMRect);
 
             scrollContainer.dispatchEvent(new Event('scroll'));
-            expect(mockOnLoadMore).toHaveBeenCalledTimes(1);
+            expect(mockOnLoadMore).toBeCalledTimes(1);
         });
 
         it('should not call onLoadMore if sentinel is not in threshold range while scrolling scrollContainerNode', () => {
             scrollContainer.dispatchEvent(new Event('scroll'));
-            expect(mockOnLoadMore).not.toHaveBeenCalled();
+            expect(mockOnLoadMore).not.toBeCalled();
         });
     });
 
@@ -176,14 +176,14 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
         it('should not call onLoadMore if isLoading', () => {
             component.setProps({ isLoading: true }, () => {
                 window.dispatchEvent(new Event('scroll'));
-                expect(mockOnLoadMore).not.toHaveBeenCalled();
+                expect(mockOnLoadMore).not.toBeCalled();
             });
         });
 
         it('should not call onLoadMore if !hasMore', () => {
             component.setProps({ hasMore: false }, () => {
                 window.dispatchEvent(new Event('scroll'));
-                expect(mockOnLoadMore).not.toHaveBeenCalled();
+                expect(mockOnLoadMore).not.toBeCalled();
             });
         });
     });

@@ -70,7 +70,7 @@ function InfiniteScroll({
     throttle = 64,
     useWindow = false,
 }: InfiniteScrollProps) {
-    const sentinelRef = React.useRef<HTMLDivElement>(null);
+    const sentinelRef = React.useRef<HTMLDivElement | null>(null);
 
     React.useEffect(() => {
         const params = {
@@ -93,7 +93,7 @@ function InfiniteScroll({
             container.addEventListener('resize', resizeHandler);
         }
 
-        // calls onContainerScroll until page becomes scrollable
+        // loads more content until page becomes scrollable, or until there is no more data to fetch
         onContainerScroll(params);
 
         return function removeEventListeners() {
