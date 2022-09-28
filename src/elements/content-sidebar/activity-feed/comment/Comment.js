@@ -25,12 +25,7 @@ import messages from './messages';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
-import type {
-    ActionItemError,
-    BoxCommentPermission,
-    CommentFeedItemType,
-    FeedItemStatus,
-} from '../../../../common/types/feed';
+import type { ActionItemError, BoxCommentPermission, FeedItemStatus } from '../../../../common/types/feed';
 import './Comment.scss';
 
 type Props = {
@@ -56,10 +51,6 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
-    parent?: {
-        id: string,
-        type: CommentFeedItemType,
-    },
     permissions: BoxCommentPermission,
     status?: FeedItemStatus,
     tagged_message: string,
@@ -137,7 +128,6 @@ class Comment extends React.Component<Props, State> {
             getMentionWithQuery,
             mentionSelectorContacts,
             onEdit,
-            parent,
             status,
         } = this.props;
         const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
@@ -145,8 +135,7 @@ class Comment extends React.Component<Props, State> {
         const createdByUser = created_by || PLACEHOLDER_USER;
         const canEdit = onEdit !== noop && permissions.can_edit;
         const canDelete = permissions.can_delete;
-        // Replies can't be resolved
-        const canResolve = !parent && onEdit !== noop && permissions.can_resolve;
+        const canResolve = onEdit !== noop && permissions.can_resolve;
         const isMenuVisible = (canDelete || canEdit || canResolve) && !isPending;
         const isResolved = status === COMMENT_STATUS_RESOLVED;
 

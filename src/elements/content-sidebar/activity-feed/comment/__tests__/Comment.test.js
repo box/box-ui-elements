@@ -139,35 +139,24 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
     );
 
     test.each`
-        can_resolve | onEdit       | parent                          | status        | expectedResolveMenuExistance | expectedUnresolvedMenuExistance
-        ${false}    | ${noop}      | ${undefined}                    | ${'open'}     | ${false}                     | ${false}
-        ${false}    | ${jest.fn()} | ${undefined}                    | ${'open'}     | ${false}                     | ${false}
-        ${true}     | ${noop}      | ${undefined}                    | ${'open'}     | ${false}                     | ${false}
-        ${true}     | ${jest.fn()} | ${undefined}                    | ${'open'}     | ${true}                      | ${false}
-        ${false}    | ${noop}      | ${{ id: '1', type: 'comment' }} | ${'open'}     | ${false}                     | ${false}
-        ${false}    | ${jest.fn()} | ${{ id: '1', type: 'comment' }} | ${'open'}     | ${false}                     | ${false}
-        ${true}     | ${noop}      | ${{ id: '1', type: 'comment' }} | ${'open'}     | ${false}                     | ${false}
-        ${true}     | ${jest.fn()} | ${{ id: '1', type: 'comment' }} | ${'open'}     | ${false}                     | ${false}
-        ${false}    | ${noop}      | ${undefined}                    | ${'resolved'} | ${false}                     | ${false}
-        ${false}    | ${jest.fn()} | ${undefined}                    | ${'resolved'} | ${false}                     | ${false}
-        ${true}     | ${noop}      | ${undefined}                    | ${'resolved'} | ${false}                     | ${false}
-        ${true}     | ${jest.fn()} | ${undefined}                    | ${'resolved'} | ${false}                     | ${true}
-        ${false}    | ${noop}      | ${{ id: '1', type: 'comment' }} | ${'resolved'} | ${false}                     | ${false}
-        ${false}    | ${jest.fn()} | ${{ id: '1', type: 'comment' }} | ${'resolved'} | ${false}                     | ${false}
-        ${true}     | ${noop}      | ${{ id: '1', type: 'comment' }} | ${'resolved'} | ${false}                     | ${false}
-        ${true}     | ${jest.fn()} | ${{ id: '1', type: 'comment' }} | ${'resolved'} | ${false}                     | ${false}
+        can_resolve | onEdit       | expectedResolveMenuExistance
+        ${false}    | ${noop}      | ${false}
+        ${false}    | ${jest.fn()} | ${false}
+        ${true}     | ${noop}      | ${false}
+        ${true}     | ${jest.fn()} | ${true}
     `(
-        `given can_resolve permission = $can_resolve, parent prop = $parent and onEdit prop = $onEdit, resolve menu existance should be: $expectedResolveMenuExistance and unresolve menu existance should be: $expectedUnresolvedMenuExistance`,
-        ({ can_resolve, onEdit, parent, status, expectedResolveMenuExistance, expectedUnresolvedMenuExistance }) => {
+        `given can_resolve permission = $can_resolve and onEdit prop = $onEdit, resolve menu existance should be: $expectedResolveMenuExistance`,
+        ({ can_resolve, onEdit, expectedResolveMenuExistance }) => {
             const comment = {
                 created_at: TIME_STRING_SEPT_27_2017,
-                tagged_message: 'test',
                 created_by: { name: '50 Cent', id: 10 },
+                id: '123',
+                status: 'open',
+                tagged_message: 'test',
             };
 
             const wrapper = shallow(
                 <Comment
-                    id="123"
                     {...comment}
                     approverSelectorContacts={approverSelectorContacts}
                     currentUser={currentUser}
@@ -175,9 +164,39 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                     mentionSelectorContacts={mentionSelectorContacts}
                     onDelete={jest.fn()}
                     onEdit={onEdit}
-                    parent={parent}
                     permissions={{ can_resolve }}
-                    status={status}
+                />,
+            );
+
+            expect(wrapper.find('[data-testid="resolve-comment"]').exists()).toBe(expectedResolveMenuExistance);
+        },
+    );
+
+    test.each`
+        status        | expectedResolveMenuExistance | expectedUnresolvedMenuExistance
+        ${'open'}     | ${true}                      | ${false}
+        ${'resolved'} | ${false}                     | ${true}
+    `(
+        `given status = $status, resolve menu existance should be: $expectedResolveMenuExistance and unresolve menu existance should be: $expectedUnresolvedMenuExistance`,
+        ({ status, expectedResolveMenuExistance, expectedUnresolvedMenuExistance }) => {
+            const comment = {
+                created_at: TIME_STRING_SEPT_27_2017,
+                created_by: { name: '50 Cent', id: 10 },
+                id: '123',
+                permissions: { can_resolve: true },
+                tagged_message: 'test',
+                status,
+            };
+
+            const wrapper = shallow(
+                <Comment
+                    {...comment}
+                    approverSelectorContacts={approverSelectorContacts}
+                    currentUser={currentUser}
+                    handlers={allHandlers}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onDelete={jest.fn()}
+                    onEdit={jest.fn()}
                 />,
             );
 
