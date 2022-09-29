@@ -29,6 +29,7 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         fireEvent.click(replyButton);
 
         expect(screen.getByTestId('bcs-CommentForm-body')).toBeInTheDocument();
+        expect(screen.getByText(localize(messages.replyInThread.id))).toBeInTheDocument();
     });
 
     test('should hide opened reply form when clicked on Cancel button', () => {

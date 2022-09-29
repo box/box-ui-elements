@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import PlainButton from '../../../../components/plain-button';
 import ArrowArcRight from '../../../../icon/fill/ArrowArcRight';
@@ -29,6 +29,7 @@ export default function ActivityThreadReplyForm({
     onReplyCreate,
 }: Props) {
     const [showReplyForm, setShowReplyForm] = React.useState(false);
+    const placeholder = useIntl().formatMessage(messages.replyInThread);
 
     return showReplyForm ? (
         <CommentForm
@@ -45,6 +46,7 @@ export default function ActivityThreadReplyForm({
             }}
             mentionSelectorContacts={mentionSelectorContacts}
             getMentionWithQuery={getMentionWithQuery}
+            placeholder={placeholder}
         />
     ) : (
         <PlainButton role="button" className="bcs-ActivityThread-replyForm" onClick={() => setShowReplyForm(true)}>

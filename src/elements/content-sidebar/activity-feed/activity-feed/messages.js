@@ -42,6 +42,11 @@ const messages = defineMessages({
         defaultMessage: 'Reply',
         description: 'Text to show on button to start replying to comment',
     },
+    replyInThread: {
+        id: 'be.activitySidebar.activityFeed.replyInThread',
+        defaultMessage: 'Reply in thread',
+        description: 'Text to show on reply form input placeholder',
+    },
 });
 
 export default messages;
