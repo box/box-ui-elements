@@ -15,7 +15,7 @@ import { DEFAULT_COLLAB_DEBOUNCE, DEFAULT_HOSTNAME_API } from '../../../../const
 
 import type APICache from '../../../../utils/Cache';
 import type { BoxItem, SelectorItems, StringMap, Token, User } from '../../../../common/types/core';
-import type { ErrorContextProps } from '../../../../common/types/api';
+import type { ElementOrigin, ElementsXhrError } from '../../../../common/types/api';
 import type { Annotation, Target } from '../../../../common/types/annotations';
 
 import './AnnotationThread.scss';
@@ -32,9 +32,10 @@ type Props = {
     language?: string,
     messages?: StringMap,
     onAnnotationCreate: (annotation: Annotation) => void,
+    onError: (error: ElementsXhrError | Error, code: string, contextInfo?: Object, origin?: ElementOrigin) => void,
     target: Target,
     token: Token,
-} & ErrorContextProps;
+};
 
 const AnnotationThread = ({
     annotationId,
