@@ -677,7 +677,7 @@ class ContentExplorer extends Component<Props, State> {
      * @param {string} query search string
      * @return {void}
      */
-    search = (query: string, fromDate: String, toDate: string) => {
+    search = (query: string, fromDate: string, toDate: string) => {
         const { rootFolderId }: Props = this.props;
         const {
             currentCollection: { id },
