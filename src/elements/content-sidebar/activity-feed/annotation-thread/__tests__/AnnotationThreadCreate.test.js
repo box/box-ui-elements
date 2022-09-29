@@ -29,7 +29,7 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
     const mockOnError = jest.fn();
     let mockCreateAnnotation = jest.fn();
 
-    const defaultProps = {
+    const getDefaultProps = () => ({
         api: {
             getAnnotationsAPI: () => ({
                 createAnnotation: mockCreateAnnotation,
@@ -39,7 +39,7 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
         file: {
             id: 'file_id',
             file_version: { id: 'file_version' },
-            permissions: { cann_annotate: true },
+            permissions: { can_annotate: true },
         },
         handleCancel: mockHandleCancel,
         onAnnotationCreate: mockOnAnnotationCreate,
@@ -50,12 +50,12 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
             x: 12,
             y: 10,
         },
-    };
+    });
 
     const IntlWrapper = ({ children }: { children?: React.ReactNode }) => {
         return <IntlProvider locale="en">{children}</IntlProvider>;
     };
-    const getWrapper = () => render(<AnnotationThreadCreate {...defaultProps} />, { wrapper: IntlWrapper });
+    const getWrapper = () => render(<AnnotationThreadCreate {...getDefaultProps()} />, { wrapper: IntlWrapper });
 
     test('Should render correctly', () => {
         const { container, getByText } = getWrapper();
@@ -78,14 +78,19 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
             'file_version',
             {
                 description: { message: 'example message' },
-                target: defaultProps.target,
+                target: {
+                    location: { type: 'page', value: 1 },
+                    type: 'point',
+                    x: 12,
+                    y: 10,
+                },
             },
-            defaultProps.file.permissions,
+            { can_annotate: true },
             expect.any(Function),
             mockOnError,
         );
 
-        expect(getByTestId('annotation-create')).toHaveClass('AnnotationThreadCreate-is-pending');
+        expect(getByTestId('annotation-create')).toHaveClass('is-pending');
     });
 
     test('Should call handleCancel on cancel', () => {

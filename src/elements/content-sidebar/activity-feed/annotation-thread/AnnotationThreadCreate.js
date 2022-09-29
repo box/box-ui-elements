@@ -66,7 +66,7 @@ const AnnotationThreadCreate = ({
     return (
         <div
             data-testid="annotation-create"
-            className={classNames('AnnotationThreadCreate', { 'AnnotationThreadCreate-is-pending': isPending })}
+            className={classNames('AnnotationThreadCreate', { 'is-pending': isPending })}
         >
             <CommentForm
                 className="AnnotationThreadCreate-editor"

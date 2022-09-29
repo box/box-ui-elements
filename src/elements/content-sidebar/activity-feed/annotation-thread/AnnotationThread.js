@@ -65,8 +65,8 @@ const AnnotationThread = ({
     const getAvatarUrl = async (userId: string): Promise<?string> =>
         api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, file.id);
 
-    const getMentionContactsSuccessCallback = (collaborators: { entries: SelectorItems<> }): void => {
-        setMentionSelectorContacts(collaborators.entries);
+    const getMentionContactsSuccessCallback = ({ entries }: { entries: SelectorItems<> }): void => {
+        setMentionSelectorContacts(entries);
     };
 
     const getMentionWithQuery = debounce(searchStr => {

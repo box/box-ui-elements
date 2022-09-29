@@ -15,14 +15,14 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
     const getWrapper = props => render(<AnnotationThread {...props} />, { wrapper: IntlWrapper });
 
     test('should render AnnotationThreadCreate if annotationId is undefined', async () => {
-        const { getByTestId } = getWrapper();
-        expect(getByTestId('annotation-thread')).toBeInTheDocument();
-        expect(getByTestId('annotation-create')).toBeInTheDocument();
+        const { queryByTestId } = getWrapper();
+        expect(queryByTestId('annotation-create')).toBeInTheDocument();
+        expect(queryByTestId('annotation-content')).toBeNull();
     });
 
     test('should render AnnotationThreadContent if annotationId is defined', () => {
-        const { getByTestId } = getWrapper({ annotationId: '1' });
-        expect(getByTestId('annotation-thread')).toBeInTheDocument();
-        expect(getByTestId('annotation-content')).toBeInTheDocument();
+        const { queryByTestId } = getWrapper({ annotationId: '1' });
+        expect(queryByTestId('annotation-content')).toBeInTheDocument();
+        expect(queryByTestId('annotation-create')).toBeNull();
     });
 });
