@@ -1,0 +1,18 @@
+@import '../../../common/variables';
+
+.bcs-ActivityThread-replyForm {
+    $replyPadding: $bdl-grid-unit $sidebarActivityFeedSpacingHorizontal ($bdl-grid-unit * 5);
+
+    display: flex;
+    align-items: center;
+    padding: $replyPadding;
+
+    &:hover {
+        padding: $replyPadding;
+    }
+
+    .bcs-ActivityThread-replyForm-arrow {
+        margin-right: $bdl-grid-unit;
+        transform: matrix(-1, 0, 0, 1, 0, 0);
+    }
+}

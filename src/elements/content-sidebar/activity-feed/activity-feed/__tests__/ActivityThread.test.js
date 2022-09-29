@@ -65,4 +65,10 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         expect(queryByTestId('activity-thread-button')).not.toBeInTheDocument();
         expect(queryByTestId('activity-thread-loading')).toBeInTheDocument();
     });
+
+    test('should have reply button when onReplyCreate is passed', () => {
+        getWrapper({ onReplayCreate: () => {} });
+
+        expect(screen.getByRole('button', { name: localize(messages.reply.id) })).toBeInTheDocument();
+    });
 });

@@ -13,6 +13,8 @@ import type { SelectorItems, User } from '../../../../common/types/core';
 import type { BoxCommentPermission, Comment as CommentType, FeedItemStatus } from '../../../../common/types/feed';
 
 import messages from './messages';
+import ActivityThreadReplyForm from './ActivityThreadReplyForm';
+
 import './ActivityThread.scss';
 
 type Props = {
@@ -50,6 +52,7 @@ const ActivityThread = ({
     hasReplies,
     isRepliesLoading,
     mentionSelectorContacts,
+    onReplyCreate = noop,
     onReplyDelete = noop,
     onReplyEdit = noop,
     onShowReplies = noop,
@@ -106,6 +109,16 @@ const ActivityThread = ({
                     translations={translations}
                 />
             )}
+
+            {onReplyCreate ? (
+                <ActivityThreadReplyForm
+                    currentUser={currentUser}
+                    getMentionWithQuery={getMentionWithQuery}
+                    getUserProfileUrl={getUserProfileUrl}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onReplyCreate={onReplyCreate}
+                />
+            ) : null}
         </div>
     );
 };

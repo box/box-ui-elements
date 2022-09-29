@@ -37,6 +37,11 @@ const messages = defineMessages({
         defaultMessage: 'Hide replies',
         description: 'Text to show to hide more replies of comment or annotation',
     },
+    reply: {
+        id: 'be.activitySidebar.activityFeed.reply',
+        defaultMessage: 'Reply',
+        description: 'Text to show on button to start replying to comment',
+    },
 });
 
 export default messages;
