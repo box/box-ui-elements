@@ -186,7 +186,7 @@
         "@types/webpack": "^4.41.3",
         "@typescript-eslint/eslint-plugin": "^4.11.1",
         "@typescript-eslint/parser": "^4.11.1",
-        "@wojtekmaj/enzyme-adapter-react-17": "^0.4.0",
+        "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
         "autoprefixer": "^9.7.4",
         "axios": "0.25.0",
         "babel-core": "^7.0.0-bridge.0",

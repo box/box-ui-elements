@@ -17,32 +17,26 @@ import {
     ERROR_CODE_FETCH_REPLIES,
     ERROR_CODE_CREATE_REPLY,
 } from '../constants';
+import { formatComment } from './utils';
 
 import type { ElementsXhrError, ElementsErrorCallback } from '../common/types/api';
 import type { BoxItem, BoxItemPermission } from '../common/types/core';
-import type { BoxCommentPermission, Comment, FeedItemStatus } from '../common/types/feed';
+import type {
+    BoxCommentPermission,
+    Comment,
+    FeedItemStatus,
+    ThreadedComments as ThreadedCommentsType,
+} from '../common/types/feed';
 
 class ThreadedComments extends MarkerBasedApi {
     /**
-     * Formats comment data for use in components.
-     *
-     * @param {Comment} comment - An individual comment entry from the API
-     * @return {Comment} Updated comment
-     */
-    format(comment: Comment): Comment {
-        return {
-            ...comment,
-            tagged_message: comment.message,
-        };
-    }
-
-    /**
      * API URL for comments
      *
+     * @param {string} [fileId]
      * @return {string} base url for comments
      */
-    getUrl(): string {
-        return `${this.getBaseApiUrl()}/undoc/comments`;
+    getUrl(fileId?: string): string {
+        return `${this.getBaseApiUrl()}/undoc/comments${fileId ? `?file_id=${fileId}` : ''}`;
     }
 
     /**
@@ -58,12 +52,38 @@ class ThreadedComments extends MarkerBasedApi {
     /**
      * API URL for specific comment
      *
-     * @param {string} [commentId]
+     * @param {string} commentId
+     * @param {string} [fileId]
      * @return {string}  base url for specific comment replies
      */
-    getUrlWithRepliesForId(commentId: string): string {
-        return `${this.getUrlForId(commentId)}/replies`;
+    getUrlWithRepliesForId(commentId: string, fileId?: string): string {
+        return `${this.getUrlForId(commentId)}/replies${fileId ? `?file_id=${fileId}` : ''}`;
     }
+
+    /**
+     * Formats the threaded comments api response to usable data
+     * @param {Object} data the api response data
+     */
+    successHandler = (data: Object): void => {
+        if (this.isDestroyed() || typeof this.successCallback !== 'function') {
+            return;
+        }
+
+        // There is no response data when deleting a comment
+        if (!data) {
+            this.successCallback();
+            return;
+        }
+
+        // We don't have entries when updating/creating a comment
+        if (!data.entries) {
+            this.successCallback(formatComment(data));
+            return;
+        }
+
+        const comments = data.entries.map(formatComment);
+        this.successCallback({ ...data, entries: comments });
+    };
 
     /**
      * API for creating a comment on a file
@@ -83,10 +103,10 @@ class ThreadedComments extends MarkerBasedApi {
         errorCallback: ElementsErrorCallback,
         file: BoxItem,
         message?: string,
-        successCallback: Function,
+        successCallback: (comment: Comment) => void,
     }): void {
         this.errorCode = ERROR_CODE_CREATE_COMMENT;
-        const { id, permissions, type } = file;
+        const { id, permissions } = file;
 
         try {
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, id);
@@ -97,19 +117,11 @@ class ThreadedComments extends MarkerBasedApi {
 
         this.post({
             id,
-            url: this.getUrl(),
+            url: this.getUrl(id),
             data: {
-                data: {
-                    item: {
-                        id,
-                        type,
-                    },
-                    message,
-                },
+                data: { message },
             },
-            successCallback: comment => {
-                successCallback(this.format(comment));
-            },
+            successCallback,
             errorCallback,
         });
     }
@@ -141,7 +153,7 @@ class ThreadedComments extends MarkerBasedApi {
         message?: string,
         permissions: BoxCommentPermission,
         status?: FeedItemStatus,
-        successCallback: Function,
+        successCallback: (comment: Comment) => void,
     }): void {
         this.errorCode = ERROR_CODE_UPDATE_COMMENT;
 
@@ -171,9 +183,7 @@ class ThreadedComments extends MarkerBasedApi {
             id: fileId,
             url: this.getUrlForId(commentId),
             data: requestData,
-            successCallback: comment => {
-                successCallback(this.format(comment));
-            },
+            successCallback,
             errorCallback,
         });
     }
@@ -249,7 +259,7 @@ class ThreadedComments extends MarkerBasedApi {
         permissions: BoxItemPermission,
         repliesCount?: number,
         shouldFetchAll?: boolean,
-        successCallback: Function,
+        successCallback: (threadedComments: ThreadedCommentsType) => void,
     }): void {
         this.errorCode = ERROR_CODE_FETCH_COMMENTS;
         try {
@@ -261,9 +271,7 @@ class ThreadedComments extends MarkerBasedApi {
 
         this.markerGet({
             id: fileId,
-            successCallback: data => {
-                successCallback({ ...data, entries: data.entries.map(this.format) });
-            },
+            successCallback,
             errorCallback,
             marker,
             limit,
@@ -293,7 +301,7 @@ class ThreadedComments extends MarkerBasedApi {
         errorCallback: (e: ElementsXhrError, code: string) => void,
         fileId: string,
         permissions: BoxItemPermission,
-        successCallback: Function,
+        successCallback: (comments: ThreadedCommentsType) => void,
     }): void {
         this.errorCode = ERROR_CODE_FETCH_REPLIES;
 
@@ -333,7 +341,7 @@ class ThreadedComments extends MarkerBasedApi {
         fileId: string,
         message: string,
         permissions: BoxItemPermission,
-        successCallback: Function,
+        successCallback: (comment: Comment) => void,
     }): void {
         this.errorCode = ERROR_CODE_CREATE_REPLY;
 
@@ -349,7 +357,7 @@ class ThreadedComments extends MarkerBasedApi {
             data: { data: { message } },
             errorCallback,
             successCallback,
-            url: this.getUrlWithRepliesForId(commentId),
+            url: this.getUrlWithRepliesForId(commentId, fileId),
         });
     }
 }

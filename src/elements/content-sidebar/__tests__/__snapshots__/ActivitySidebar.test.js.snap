@@ -33,6 +33,12 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
   }
 >
   <ActivityFeed
+    currentUser={
+      Object {
+        "id": "123",
+        "name": "foo bar",
+      }
+    }
     file={
       Object {
         "file_version": Object {
@@ -44,6 +50,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     getApproverWithQuery={[Function]}
     getAvatarUrl={[Function]}
     getMentionWithQuery={[Function]}
+    hasReplies={false}
     isDisabled={false}
     onAnnotationDelete={[Function]}
     onAnnotationEdit={[Function]}
@@ -53,6 +60,10 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     onCommentCreate={[Function]}
     onCommentDelete={[Function]}
     onCommentUpdate={[Function]}
+    onReplyCreate={[Function]}
+    onReplyDelete={[Function]}
+    onReplyUpdate={[Function]}
+    onShowReplies={[Function]}
     onTaskAssignmentUpdate={[Function]}
     onTaskCreate={[Function]}
     onTaskDelete={[Function]}

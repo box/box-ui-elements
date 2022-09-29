@@ -21,13 +21,14 @@ import type {
     Annotation,
     AnnotationPermission,
     BoxCommentPermission,
+    CommentFeedItemType,
     FocusableFeedItemType,
     FeedItems,
     FeedItemStatus,
 } from '../../../../common/types/feed';
 import type { SelectorItems, User, GroupMini, BoxItem } from '../../../../common/types/core';
-import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
-import type { Translations, Errors } from '../../flowTypes';
+import type { Errors, GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { Translations } from '../../flowTypes';
 import './ActivityFeed.scss';
 
 type Props = {
@@ -43,6 +44,7 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasReplies?: boolean,
     isDisabled?: boolean,
     mentionSelectorContacts?: SelectorItems<User>,
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
@@ -61,6 +63,18 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
+    onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string, hasMention: boolean) => void,
+    onReplyDelete?: ({ id: string, parentId: string, permissions: BoxCommentPermission }) => void,
+    onReplyUpdate?: (
+        id: string,
+        parentId: string,
+        text: string,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
+    onShowReplies?: (id: string, type: CommentFeedItemType) => void,
     onTaskAssignmentUpdate?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
@@ -222,6 +236,7 @@ class ActivityFeed extends React.Component<Props, State> {
             getAvatarUrl,
             getMentionWithQuery,
             getUserProfileUrl,
+            hasReplies,
             isDisabled,
             mentionSelectorContacts,
             contactsLoaded,
@@ -233,6 +248,10 @@ class ActivityFeed extends React.Component<Props, State> {
             onCommentCreate,
             onCommentDelete,
             onCommentUpdate,
+            onReplyCreate,
+            onReplyDelete,
+            onReplyUpdate,
+            onShowReplies,
             onTaskAssignmentUpdate,
             onTaskDelete,
             onTaskModalClose,
@@ -290,11 +309,20 @@ class ActivityFeed extends React.Component<Props, State> {
                     {!isEmpty && !isLoading && (
                         <ActiveState
                             {...activityFeedError}
-                            items={collapseFeedState(feedItems)}
-                            isDisabled={isDisabled}
-                            currentUser={currentUser}
+                            activeFeedEntryId={activeFeedEntryId}
+                            activeFeedEntryType={activeFeedEntryType}
+                            activeFeedItemRef={this.activeFeedItemRef}
+                            approverSelectorContacts={approverSelectorContacts}
                             currentFileVersionId={currentFileVersionId}
-                            onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                            currentUser={currentUser}
+                            getApproverWithQuery={getApproverWithQuery}
+                            getAvatarUrl={getAvatarUrl}
+                            getMentionWithQuery={getMentionWithQuery}
+                            getUserProfileUrl={getUserProfileUrl}
+                            hasReplies={hasReplies}
+                            isDisabled={isDisabled}
+                            items={collapseFeedState(feedItems)}
+                            mentionSelectorContacts={mentionSelectorContacts}
                             onAnnotationDelete={onAnnotationDelete}
                             onAnnotationEdit={onAnnotationEdit}
                             onAnnotationSelect={onAnnotationSelect}
@@ -302,21 +330,17 @@ class ActivityFeed extends React.Component<Props, State> {
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
+                            onReplyCreate={hasCommentPermission ? onReplyCreate : noop}
+                            onReplyDelete={hasCommentPermission ? onReplyDelete : noop}
+                            onReplyUpdate={hasCommentPermission ? onReplyUpdate : noop}
+                            onShowReplies={onShowReplies}
+                            onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                             onTaskDelete={onTaskDelete}
                             onTaskEdit={onTaskUpdate}
-                            onTaskView={onTaskView}
                             onTaskModalClose={onTaskModalClose}
+                            onTaskView={onTaskView}
                             onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
                             translations={translations}
-                            getAvatarUrl={getAvatarUrl}
-                            getUserProfileUrl={getUserProfileUrl}
-                            mentionSelectorContacts={mentionSelectorContacts}
-                            getMentionWithQuery={getMentionWithQuery}
-                            approverSelectorContacts={approverSelectorContacts}
-                            getApproverWithQuery={getApproverWithQuery}
-                            activeFeedEntryId={activeFeedEntryId}
-                            activeFeedEntryType={activeFeedEntryType}
-                            activeFeedItemRef={this.activeFeedItemRef}
                         />
                     )}
                     {isInlineFeedItemErrorVisible && inlineFeedItemErrorMessage && (

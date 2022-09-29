@@ -1,0 +1,16 @@
+@import '../../../common/variables';
+
+.bcs-ActivityThreadReplies {
+    position: relative;
+    padding-left: $sidebarActivityFeedSpacingHorizontal;
+
+    &::before {
+        position: absolute;
+        top: $sidebarActivityFeedSpacingVertical;
+        bottom: $sidebarActivityFeedSpacingVertical;
+        left: $sidebarActivityFeedSpacingHorizontal;
+        width: 4px;
+        background: $bdl-gray-10;
+        content: '';
+    }
+}

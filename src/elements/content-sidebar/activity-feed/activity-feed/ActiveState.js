@@ -4,6 +4,7 @@
  */
 import * as React from 'react';
 import getProp from 'lodash/get';
+import noop from 'lodash/noop';
 import ActivityThread from './ActivityThread';
 import ActivityItem from './ActivityItem';
 import AppActivity from '../app-activity';
@@ -16,6 +17,7 @@ import type {
     Annotation,
     AnnotationPermission,
     BoxCommentPermission,
+    CommentFeedItemType,
     FeedItem,
     FeedItems,
     FeedItemStatus,
@@ -54,6 +56,18 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
+    onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string, hasMention: boolean) => void,
+    onReplyDelete?: ({ id: string, parentId: string, permissions: BoxCommentPermission }) => void,
+    onReplyUpdate?: (
+        id: string,
+        parentId: string,
+        text: string,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
+    onShowReplies?: (id: string, type: CommentFeedItemType) => void,
     onTaskAssignmentUpdate?: Function,
     onTaskDelete?: Function,
     onTaskEdit?: Function,
@@ -81,6 +95,10 @@ const ActiveState = ({
     onAppActivityDelete,
     onCommentDelete,
     onCommentEdit,
+    onReplyCreate = noop,
+    onReplyDelete = noop,
+    onReplyUpdate = noop,
+    onShowReplies = noop,
     onTaskDelete,
     onTaskEdit,
     onTaskView,
@@ -93,6 +111,30 @@ const ActiveState = ({
     getUserProfileUrl,
 }: Props): React.Node => {
     const activeEntry = items.find(({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType);
+
+    const onReplyCreateHandler = (parentId: string, parentType: CommentFeedItemType) => (
+        text: string,
+        hasMention: boolean,
+    ) => {
+        onReplyCreate(parentId, parentType, text, hasMention);
+    };
+    const onReplyDeleteHandler = (parentId: string) => (options: { id: string, permissions: BoxCommentPermission }) => {
+        onReplyDelete({ ...options, parentId });
+    };
+    const onReplyUpdateHandler = (parentId: string) => (
+        id: string,
+        text: string,
+        status?: FeedItemStatus,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => {
+        onReplyUpdate(id, parentId, text, hasMention, permissions, onSuccess, onError);
+    };
+    const onShowRepliesHandler = (id: string, type: CommentFeedItemType) => () => {
+        onShowReplies(id, type);
+    };
 
     return (
         <ul className="bcs-activity-feed-active-state">
@@ -110,7 +152,23 @@ const ActiveState = ({
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <ActivityThread hasReplies={hasReplies} data-testid="activity-thread">
+                                <ActivityThread
+                                    data-testid="activity-thread"
+                                    currentUser={currentUser}
+                                    getAvatarUrl={getAvatarUrl}
+                                    getMentionWithQuery={getMentionWithQuery}
+                                    getUserProfileUrl={getUserProfileUrl}
+                                    hasReplies={hasReplies}
+                                    isRepliesLoading={item.isRepliesLoading}
+                                    mentionSelectorContacts={mentionSelectorContacts}
+                                    onReplyCreate={onReplyCreateHandler(item.id, item.type)}
+                                    onReplyDelete={onReplyDeleteHandler(item.id)}
+                                    onReplyEdit={onReplyUpdateHandler(item.id)}
+                                    onShowReplies={onShowRepliesHandler(item.id, item.type)}
+                                    repliesTotalCount={item.total_reply_count}
+                                    replies={item.replies}
+                                    translations={translations}
+                                >
                                     <Comment
                                         {...item}
                                         currentUser={currentUser}
@@ -187,7 +245,23 @@ const ActiveState = ({
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <ActivityThread hasReplies={hasReplies} data-testid="activity-thread">
+                                <ActivityThread
+                                    data-testid="activity-thread"
+                                    currentUser={currentUser}
+                                    getAvatarUrl={getAvatarUrl}
+                                    getMentionWithQuery={getMentionWithQuery}
+                                    getUserProfileUrl={getUserProfileUrl}
+                                    hasReplies={hasReplies}
+                                    isRepliesLoading={item.isRepliesLoading}
+                                    mentionSelectorContacts={mentionSelectorContacts}
+                                    onReplyCreate={onReplyCreateHandler(item.id, item.type)}
+                                    onReplyDelete={onReplyDeleteHandler(item.id)}
+                                    onReplyEdit={onReplyUpdateHandler(item.id)}
+                                    onShowReplies={onShowRepliesHandler(item.id, item.type)}
+                                    repliesTotalCount={item.total_reply_count}
+                                    replies={item.replies}
+                                    translations={translations}
+                                >
                                     <AnnotationActivity
                                         currentUser={currentUser}
                                         getAvatarUrl={getAvatarUrl}

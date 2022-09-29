@@ -6,6 +6,7 @@ import noop from 'lodash/noop';
 import TetherComponent from 'react-tether';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
+import ActivityStatus from '../common/activity-status';
 import ActivityTimestamp from '../common/activity-timestamp';
 import AnnotationActivityLink from './AnnotationActivityLink';
 import AnnotationActivityMenu from './AnnotationActivityMenu';
@@ -154,6 +155,7 @@ const AnnotationActivity = ({
                                 onClick={handleSelect}
                             />
                         </div>
+                        <ActivityStatus status={status} />
                         {isEditing && currentUser ? (
                             <CommentForm
                                 className="bcs-AnnotationActivity-editor"

@@ -4,8 +4,10 @@ import classNames from 'classnames';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import TetherComponent from 'react-tether';
+import Checkmark16 from '../../../../icon/line/Checkmark16';
 import Trash16 from '../../../../icon/line/Trash16';
 import Pencil16 from '../../../../icon/line/Pencil16';
+import X16 from '../../../../icon/fill/X16';
 import Avatar from '../Avatar';
 import Media from '../../../../components/media';
 import { MenuItem } from '../../../../components/menu';
@@ -16,8 +18,9 @@ import UserLink from '../common/user-link';
 import ActivityCard from '../ActivityCard';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
+import ActivityStatus from '../common/activity-status';
 import CommentForm from '../comment-form';
-import { PLACEHOLDER_USER } from '../../../../constants';
+import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED, PLACEHOLDER_USER } from '../../../../constants';
 import messages from './messages';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
@@ -49,6 +52,7 @@ type Props = {
         onError: ?Function,
     ) => void,
     permissions: BoxCommentPermission,
+    status?: FeedItemStatus,
     tagged_message: string,
     translatedTaggedMessage?: string,
     translations?: Translations,
@@ -101,6 +105,11 @@ class Comment extends React.Component<Props, State> {
         this.commentFormSubmitHandler();
     };
 
+    handleStatusUpdate = (status: FeedItemStatus): void => {
+        const { id, onEdit, permissions } = this.props;
+        onEdit(id, undefined, status, false, permissions);
+    };
+
     render(): React.Node {
         const {
             created_by,
@@ -119,13 +128,16 @@ class Comment extends React.Component<Props, State> {
             getMentionWithQuery,
             mentionSelectorContacts,
             onEdit,
+            status,
         } = this.props;
         const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
         const createdByUser = created_by || PLACEHOLDER_USER;
         const canEdit = onEdit !== noop && permissions.can_edit;
         const canDelete = permissions.can_delete;
-        const isMenuVisible = (canDelete || canEdit) && !isPending;
+        const canResolve = onEdit !== noop && permissions.can_resolve;
+        const isMenuVisible = (canDelete || canEdit || canResolve) && !isPending;
+        const isResolved = status === COMMENT_STATUS_RESOLVED;
 
         return (
             <ActivityCard className="bcs-Comment">
@@ -152,6 +164,26 @@ class Comment extends React.Component<Props, State> {
                                         'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS,
                                     }}
                                 >
+                                    {canResolve && isResolved && (
+                                        <MenuItem
+                                            data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
+                                            data-testid="unresolve-comment"
+                                            onClick={() => this.handleStatusUpdate(COMMENT_STATUS_OPEN)}
+                                        >
+                                            <X16 />
+                                            <FormattedMessage {...messages.commentUnresolveMenuItem} />
+                                        </MenuItem>
+                                    )}
+                                    {canResolve && !isResolved && (
+                                        <MenuItem
+                                            data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
+                                            data-testid="resolve-comment"
+                                            onClick={() => this.handleStatusUpdate(COMMENT_STATUS_RESOLVED)}
+                                        >
+                                            <Checkmark16 />
+                                            <FormattedMessage {...messages.commentResolveMenuItem} />
+                                        </MenuItem>
+                                    )}
                                     {canEdit && (
                                         <MenuItem
                                             data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
@@ -195,6 +227,7 @@ class Comment extends React.Component<Props, State> {
                         <div>
                             <ActivityTimestamp date={createdAtTimestamp} />
                         </div>
+                        <ActivityStatus status={status} />
                         {isEditing ? (
                             <CommentForm
                                 isDisabled={isDisabled}

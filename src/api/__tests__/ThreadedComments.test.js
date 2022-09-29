@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash/cloneDeep';
 import ThreadedComments from '../ThreadedComments';
 import {
     ERROR_CODE_CREATE_COMMENT,
@@ -7,6 +8,10 @@ import {
     ERROR_CODE_FETCH_REPLIES,
     ERROR_CODE_CREATE_REPLY,
 } from '../../constants';
+import { formatComment } from '../utils';
+import { threadedComments as mockThreadedComments } from '../fixtures';
+
+jest.mock('../utils', () => ({ formatComment: jest.fn() }));
 
 describe('api/ThreadedComments', () => {
     let threadedComments;
@@ -29,6 +34,10 @@ describe('api/ThreadedComments', () => {
         test('should return correct url for threaded comments', () => {
             expect(threadedComments.getUrl()).toBe('https://api.box.com/2.0/undoc/comments');
         });
+
+        test('should return correct url for threaded comments if fileId is given', () => {
+            expect(threadedComments.getUrl('123')).toBe('https://api.box.com/2.0/undoc/comments?file_id=123');
+        });
     });
 
     describe('getUrlForId()', () => {
@@ -41,6 +50,12 @@ describe('api/ThreadedComments', () => {
         test('should return the correct replies url for a given threaded comment id', () => {
             expect(threadedComments.getUrlWithRepliesForId('test')).toBe(
                 'https://api.box.com/2.0/undoc/comments/test/replies',
+            );
+        });
+
+        test('should return the correct replies url for a given threaded comment id if fileId is given', () => {
+            expect(threadedComments.getUrlWithRepliesForId('test', '123')).toBe(
+                'https://api.box.com/2.0/undoc/comments/test/replies?file_id=123',
             );
         });
     });
@@ -70,17 +85,11 @@ describe('api/ThreadedComments', () => {
             expect(threadedComments.post).toBeCalledWith({
                 id: 'foo',
                 data: {
-                    data: {
-                        item: {
-                            id: 'foo',
-                            type: 'file',
-                        },
-                        message,
-                    },
+                    data: { message },
                 },
                 errorCallback,
-                successCallback: expect.any(Function),
-                url: 'https://api.box.com/2.0/undoc/comments',
+                successCallback,
+                url: 'https://api.box.com/2.0/undoc/comments?file_id=foo',
             });
         });
 
@@ -120,7 +129,7 @@ describe('api/ThreadedComments', () => {
                 id: '12345',
                 data: { data: { status, message } },
                 errorCallback,
-                successCallback: expect.any(Function),
+                successCallback,
                 url: 'https://api.box.com/2.0/undoc/comments/abc',
             });
         });
@@ -206,7 +215,7 @@ describe('api/ThreadedComments', () => {
                     file_id: '12345',
                     replies_count: 1,
                 },
-                successCallback: expect.any(Function),
+                successCallback,
             });
         });
 
@@ -291,7 +300,7 @@ describe('api/ThreadedComments', () => {
             expect(threadedComments.post).toBeCalledWith({
                 id: '12345',
                 errorCallback,
-                url: 'https://api.box.com/2.0/undoc/comments/67890/replies',
+                url: 'https://api.box.com/2.0/undoc/comments/67890/replies?file_id=12345',
                 data: { data: { message } },
                 successCallback,
             });
@@ -313,6 +322,35 @@ describe('api/ThreadedComments', () => {
 
             expect(errorCallback).toBeCalledWith(expect.any(Error), ERROR_CODE_CREATE_REPLY);
             expect(threadedComments.get).not.toBeCalled();
+        });
+    });
+
+    describe('successHandler()', () => {
+        beforeEach(() => {
+            threadedComments.successCallback = jest.fn();
+        });
+
+        test('should call the success callback with no data if none provided from API', () => {
+            threadedComments.successHandler();
+            expect(threadedComments.successCallback).toBeCalledWith();
+        });
+
+        test('should call formatReplies method and call the success callback if the response does not contain entries property', () => {
+            const response = cloneDeep(mockThreadedComments[0]);
+            threadedComments.successHandler(response);
+            expect(formatComment).toBeCalledWith(response);
+            expect(threadedComments.successCallback).toBeCalled();
+        });
+
+        test('should call formatReplies method and call the success callback if the response contains entries (comments)', () => {
+            const response = {
+                entries: cloneDeep(mockThreadedComments),
+                limit: 1000,
+                next_marker: null,
+            };
+            threadedComments.successHandler(response);
+            expect(formatComment).toBeCalled();
+            expect(threadedComments.successCallback).toBeCalled();
         });
     });
 });

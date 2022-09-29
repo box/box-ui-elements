@@ -23,3 +23,11 @@ export type MetricsData = {
 export type GraphDatum = TimeRange & MetricsData;
 
 export type GraphData = Array<GraphDatum>;
+
+export type ResponseError = Error & {
+    data?: string;
+    detail?: string;
+    errorCode?: string;
+    status: number;
+    title?: string;
+};

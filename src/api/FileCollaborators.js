@@ -87,6 +87,36 @@ class FileCollaborators extends MarkerBasedAPI {
             requestData,
         });
     }
+
+    /**
+     * Fetches file @mention's
+     *
+     * @oaram {string} fileId
+     * @param {Function} successCallback
+     * @param {Function} errorCallback
+     * @param {string} searchStr - Search string to filter file collaborators by
+     * @param {Object} [options]
+     * @param {boolean} [options.includeGroups] - return groups as well as users
+     * @return {void}
+     */
+    getCollaboratorsWithQuery = (
+        fileId: string,
+        successCallback: ({ entries: Array<SelectorItem<UserMini | GroupMini>>, next_marker: ?string }) => void,
+        errorCallback: ElementsErrorCallback,
+        searchStr: string,
+        { includeGroups = false }: { includeGroups: boolean } = {},
+    ) => {
+        // Do not fetch without filter
+        if (!searchStr || searchStr.trim() === '') {
+            return;
+        }
+
+        this.getFileCollaborators(fileId, successCallback, errorCallback, {
+            filter_term: searchStr,
+            include_groups: includeGroups,
+            include_uploader_collabs: false,
+        });
+    };
 }
 
 export default FileCollaborators;
