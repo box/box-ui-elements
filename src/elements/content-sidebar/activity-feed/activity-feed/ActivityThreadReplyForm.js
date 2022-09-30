@@ -1,7 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 
 import PlainButton from '../../../../components/plain-button';
 import ArrowArcRight from '../../../../icon/fill/ArrowArcRight';
@@ -14,7 +15,7 @@ import CommentForm from '../comment-form';
 import messages from './messages';
 import './ActivityThreadReplyForm.scss';
 
-type Props = {
+type ActivityThreadReplyFromProps = {
     currentUser?: User,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
@@ -22,14 +23,17 @@ type Props = {
     onReplyCreate: Function,
 };
 
-export default function ActivityThreadReplyForm({
+type Props = ActivityThreadReplyFromProps & InjectIntlProvidedProps;
+
+function ActivityThreadReplyForm({
     currentUser,
     mentionSelectorContacts,
     getMentionWithQuery,
     onReplyCreate,
+    intl,
 }: Props) {
     const [showReplyForm, setShowReplyForm] = React.useState(false);
-    const placeholder = useIntl().formatMessage(messages.replyInThread);
+    const placeholder = intl.formatMessage(messages.replyInThread);
 
     return showReplyForm ? (
         <CommentForm
@@ -55,3 +59,5 @@ export default function ActivityThreadReplyForm({
         </PlainButton>
     );
 }
+
+export default injectIntl(ActivityThreadReplyForm);
