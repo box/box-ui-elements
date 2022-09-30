@@ -1,12 +1,11 @@
 // @flow
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import noop from 'lodash/noop';
 import { IntlProvider } from 'react-intl';
 import localize from '../../../../../../test/support/i18n';
 import messages from '../messages';
 import ActivityThreadReplyForm from '../ActivityThreadReplyForm.js';
-
-const noop = () => {};
 
 jest.mock('react-intl', () => jest.requireActual('react-intl'));
 
@@ -16,7 +15,7 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
     };
 
     const renderComponent = props =>
-        render(<ActivityThreadReplyForm currentUser={{}} getAvatarUrl={noop} onReplyCreate={noop} {...props} />, {
+        render(<ActivityThreadReplyForm onReplyCreate={noop} {...props} />, {
             wrapper: Wrapper,
         });
 

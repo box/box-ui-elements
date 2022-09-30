@@ -112,9 +112,7 @@ const ActivityThread = ({
 
             {onReplyCreate ? (
                 <ActivityThreadReplyForm
-                    currentUser={currentUser}
                     getMentionWithQuery={getMentionWithQuery}
-                    getUserProfileUrl={getUserProfileUrl}
                     mentionSelectorContacts={mentionSelectorContacts}
                     onReplyCreate={onReplyCreate}
                 />
