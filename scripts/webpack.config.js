@@ -86,6 +86,11 @@ function getConfig(isReactExternalized) {
         module: {
             rules: [
                 {
+                    test: /\.(js|ts|tsx)$/,
+                    include: /node_modules\/@box\/cldr-data/,
+                    loader: 'babel-loader',
+                },
+                {
                     test: /\.(js|mjs|ts|tsx)$/,
                     loader: 'babel-loader',
                     // For webpack dev build perf we want to exclude node_modules unless we want to support legacy browsers like IE11
