@@ -1,6 +1,5 @@
 import React from 'react';
 import sinon from 'sinon';
-import 'full-icu';
 import { createIntl } from 'react-intl';
 import russianMessages from '../../../../i18n/ru-RU.js';
 import japaneseMessages from '../../../../i18n/ja-JP.js';
