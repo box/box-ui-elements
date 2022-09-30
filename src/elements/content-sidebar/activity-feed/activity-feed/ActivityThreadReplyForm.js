@@ -28,7 +28,7 @@ function ActivityThreadReplyForm({ mentionSelectorContacts, getMentionWithQuery,
 
     return showReplyForm ? (
         <CommentForm
-            className=""
+            className="bcs-ActivityThreadReplyForm-comment"
             isOpen
             isEditing
             showTip={false}

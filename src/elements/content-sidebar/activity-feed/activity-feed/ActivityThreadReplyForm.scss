@@ -15,3 +15,8 @@
         transform: matrix(-1, 0, 0, 1, 0, 0);
     }
 }
+
+.bcs-CommentForm.bcs-ActivityThreadReplyForm-comment {
+    padding-top: 0;
+    border-top: none;
+}
