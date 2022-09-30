@@ -53,8 +53,12 @@ function ActivityThreadReplyForm({
             placeholder={placeholder}
         />
     ) : (
-        <PlainButton role="button" className="bcs-ActivityThread-replyForm" onClick={() => setShowReplyForm(true)}>
-            <ArrowArcRight className="bcs-ActivityThread-replyForm-arrow" />
+        <PlainButton
+            role="button"
+            className="bcs-ActivityThreadReplyForm-toggle"
+            onClick={() => setShowReplyForm(true)}
+        >
+            <ArrowArcRight className="bcs-ActivityThreadReplyForm-arrow" />
             <FormattedMessage {...messages.reply} />
         </PlainButton>
     );

@@ -1,18 +1,17 @@
 @import '../../../common/variables';
 
-.bcs-ActivityThread-replyForm {
-    $replyPadding: $bdl-grid-unit $sidebarActivityFeedSpacingHorizontal ($bdl-grid-unit * 5);
-
+.bcs-ActivityThreadReplyForm-toggle {
     display: flex;
     align-items: center;
-    padding: $replyPadding;
 
+    &,
     &:hover {
-        padding: $replyPadding;
+        padding: $bdl-grid-unit $sidebarActivityFeedSpacingHorizontal ($bdl-grid-unit * 5);
     }
 
-    .bcs-ActivityThread-replyForm-arrow {
+    .bcs-ActivityThreadReplyForm-arrow {
         margin-right: $bdl-grid-unit;
+        // in design arrow is turning left, but we only have ArrowArcRight, so will transfrom it to left one
         transform: matrix(-1, 0, 0, 1, 0, 0);
     }
 }
