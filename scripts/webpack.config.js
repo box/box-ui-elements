@@ -87,16 +87,16 @@ function getConfig(isReactExternalized) {
             rules: [
                 {
                     test: /\.(js|ts|tsx)$/,
+                    loader: 'babel-loader',
                     include: /node_modules\/@box\/cldr-data/,
-                    loader: require.resolve('babel-loader'),
                 },
                 {
                     test: /\.(js|mjs|ts|tsx)$/,
                     loader: 'babel-loader',
-                    // For webpack dev build perf we want to exlcude node_modules unless we want to support legacy browsers like IE11
+                    // For webpack dev build perf we want to exclude node_modules unless we want to support legacy browsers like IE11
                     exclude: shouldIncludeAllSupportedBrowsers
                         ? /@babel(?:\/|\\{1,2})runtime|pikaday|core-js/
-                        : /node_modules/, // Exclude node_modules except for @box/cldr-data which is needed for styleguidist
+                        : /node_modules/,
                 },
                 {
                     test: /\.s?css$/,
