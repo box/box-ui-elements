@@ -391,5 +391,8 @@ module.exports = {
         maxWidth: '100%',
         spaceFactor: 6,
     },
+    moduleAliases: {
+        'box-local-data': path.resolve(`node_modules/@box/cldr-data/locale-data/en-US`),
+    },
     webpackConfig,
 };
