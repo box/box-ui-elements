@@ -22,8 +22,10 @@ function makeSelectable(BaseTable) {
             className: PropTypes.string,
             /** Array of unique IDs of the items in the table. Each item should be a string or number, in the order they appear in the table. */
             data: PropTypes.array.isRequired,
+            isListViewEnhancementsEnabled: PropTypes.bool,
             /** Called when focus changes. `(focusedIndex: number) => void` */
             onFocus: PropTypes.func,
+            onItemDoubleClick: PropTypes.func,
             /** Called when selection changes. `(selectedItems: Array<string> | Array<number> | Set<string> | Set<number>) => void` */
             onSelect: PropTypes.func.isRequired,
             /**
@@ -274,7 +276,7 @@ function makeSelectable(BaseTable) {
             });
         };
 
-        handleRowClick = (event, index) => {
+        handleSelect = (event, index) => {
             if (event.metaKey || event.ctrlKey) {
                 this.selectToggle(index);
             } else if (event.shiftKey) {
@@ -282,6 +284,12 @@ function makeSelectable(BaseTable) {
             } else {
                 this.selectOne(index);
             }
+        };
+
+        handleRowClick = (event, index) => {
+            this.props.isListViewEnhancementsEnabled
+                ? this.props.onItemDoubleClick(event, index)
+                : this.handleSelect(event, index);
         };
 
         handleRowFocus = (event, index) => {
