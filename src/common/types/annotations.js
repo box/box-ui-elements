@@ -29,7 +29,14 @@ export type TargetRegion = {
     type: 'region',
 };
 
-export type Target = TargetRegion;
+export type TargetPoint = {
+    location: Page,
+    type: 'point',
+    x: number,
+    y: number,
+};
+
+export type Target = TargetRegion | TargetPoint;
 
 export type AnnotationPermission = {
     can_delete?: boolean,
@@ -63,12 +70,9 @@ export type Annotations = {
     next_marker: string | null,
 };
 
-export type NewReply = {
-    message: string,
-    type: 'reply',
-};
-
 export type NewAnnotation = {
-    description?: NewReply,
+    description?: {
+        message: string,
+    },
     target: Target,
 };
