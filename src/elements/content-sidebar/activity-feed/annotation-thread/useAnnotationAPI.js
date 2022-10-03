@@ -46,7 +46,9 @@ const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCal
 
     const getAnnotationSuccess = (fetchedAnnotation: Annotation): void => {
         setAnnotation(fetchedAnnotation);
-        setInitialReplies(fetchedAnnotation.replies || []);
+        if (fetchedAnnotation.replies) {
+            setInitialReplies(fetchedAnnotation.replies);
+        }
         setError(undefined);
         setIsLoading(false);
     };
