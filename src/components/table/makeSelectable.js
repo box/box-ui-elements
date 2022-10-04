@@ -22,6 +22,8 @@ function makeSelectable(BaseTable) {
             className: PropTypes.string,
             /** Array of unique IDs of the items in the table. Each item should be a string or number, in the order they appear in the table. */
             data: PropTypes.array.isRequired,
+            gridColumnCount: PropTypes.number,
+            isGridView: PropTypes.bool,
             /** Called when focus changes. `(focusedIndex: number) => void` */
             onFocus: PropTypes.func,
             /** Called when selection changes. `(selectedItems: Array<string> | Array<number> | Set<string> | Set<number>) => void` */
@@ -98,109 +100,128 @@ function makeSelectable(BaseTable) {
             }
         };
 
+        getSharedHotkeyConfigs = () => {
+            const { hotkeyType } = this.props;
+            return [
+                new HotkeyRecord({
+                    key: 'shift+x',
+                    description: <FormattedMessage {...messages.shiftXDescription} />,
+                    handler: () => {
+                        const { focusedIndex } = this.state;
+
+                        if (focusedIndex === undefined) {
+                            return;
+                        }
+
+                        this.selectToggle(focusedIndex);
+                    },
+                    type: hotkeyType,
+                }),
+                new HotkeyRecord({
+                    key: ['meta+a', 'ctrl+a'],
+                    description: <FormattedMessage {...messages.selectAllDescription} />,
+                    handler: event => {
+                        const { data } = this.props;
+
+                        event.preventDefault();
+
+                        this.onSelect(new Set(data), this.state.focusedIndex);
+                    },
+                    type: hotkeyType,
+                }),
+                new HotkeyRecord({
+                    key: 'esc',
+                    description: <FormattedMessage {...messages.deselectAllDescription} />,
+                    handler: () => {
+                        this.onSelect(new Set(), this.state.focusedIndex);
+                    },
+                    type: hotkeyType,
+                }),
+            ];
+        };
+
+        getListViewHotKeyConfigs = () => {
+            const { hotkeyType } = this.props;
+            return [
+                new HotkeyRecord({
+                    key: 'down',
+                    description: <FormattedMessage {...messages.downDescription} />,
+                    handler: event => {
+                        const { data } = this.props;
+                        const { focusedIndex } = this.state;
+
+                        event.preventDefault();
+
+                        const newFocusedIndex =
+                            focusedIndex !== undefined ? Math.min(focusedIndex + 1, data.length - 1) : 0;
+                        this.setState({ focusedIndex: newFocusedIndex });
+                    },
+                    type: hotkeyType,
+                }),
+                new HotkeyRecord({
+                    key: 'up',
+                    description: <FormattedMessage {...messages.upDescription} />,
+                    handler: event => {
+                        const { focusedIndex = 0 } = this.state;
+
+                        event.preventDefault();
+
+                        const newFocusedIndex = Math.max(focusedIndex - 1, 0);
+                        this.setState({ focusedIndex: newFocusedIndex });
+                    },
+                    type: hotkeyType,
+                }),
+                new HotkeyRecord({
+                    key: 'shift+down',
+                    description: <FormattedMessage {...messages.shiftDownDescription} />,
+                    handler: () => {
+                        const { data } = this.props;
+                        const { focusedIndex } = this.state;
+
+                        if (focusedIndex === undefined) {
+                            return;
+                        }
+
+                        const newFocusedIndex = Math.min(focusedIndex + 1, data.length - 1);
+                        this.handleShiftKeyDown(newFocusedIndex, data.length - 1);
+                    },
+                    type: hotkeyType,
+                }),
+                new HotkeyRecord({
+                    key: 'shift+up',
+                    description: <FormattedMessage {...messages.shiftUpDescription} />,
+                    handler: () => {
+                        const { focusedIndex } = this.state;
+
+                        if (focusedIndex === undefined) {
+                            return;
+                        }
+
+                        const newFocusedIndex = Math.max(focusedIndex - 1, 0);
+                        this.handleShiftKeyDown(newFocusedIndex, 0);
+                    },
+                    type: hotkeyType,
+                }),
+            ];
+        };
+
+        getGridViewHotKeyConfigs = () => {
+            return [];
+        };
+
         getHotkeyConfigs = () => {
-            const { enableHotkeys, hotkeyType } = this.props;
+            const { enableHotkeys, isGridView } = this.props;
 
             if (!enableHotkeys && !this.hotkeys) {
                 this.hotkeys = [];
             }
 
             if (!this.hotkeys) {
-                this.hotkeys = [
-                    new HotkeyRecord({
-                        key: 'down',
-                        description: <FormattedMessage {...messages.downDescription} />,
-                        handler: event => {
-                            const { data } = this.props;
-                            const { focusedIndex } = this.state;
+                const viewSpecificHotKeyConfigs = isGridView
+                    ? this.getGridViewHotKeyConfigs()
+                    : this.getListViewHotKeyConfigs();
 
-                            event.preventDefault();
-
-                            const newFocusedIndex =
-                                focusedIndex !== undefined ? Math.min(focusedIndex + 1, data.length - 1) : 0;
-                            this.setState({ focusedIndex: newFocusedIndex });
-                        },
-                        type: hotkeyType,
-                    }),
-                    new HotkeyRecord({
-                        key: 'up',
-                        description: <FormattedMessage {...messages.upDescription} />,
-                        handler: event => {
-                            const { focusedIndex = 0 } = this.state;
-
-                            event.preventDefault();
-
-                            const newFocusedIndex = Math.max(focusedIndex - 1, 0);
-                            this.setState({ focusedIndex: newFocusedIndex });
-                        },
-                        type: hotkeyType,
-                    }),
-                    new HotkeyRecord({
-                        key: 'shift+x',
-                        description: <FormattedMessage {...messages.shiftXDescription} />,
-                        handler: () => {
-                            const { focusedIndex } = this.state;
-
-                            if (focusedIndex === undefined) {
-                                return;
-                            }
-
-                            this.selectToggle(focusedIndex);
-                        },
-                        type: hotkeyType,
-                    }),
-                    new HotkeyRecord({
-                        key: ['meta+a', 'ctrl+a'],
-                        description: <FormattedMessage {...messages.selectAllDescription} />,
-                        handler: event => {
-                            const { data } = this.props;
-
-                            event.preventDefault();
-
-                            this.onSelect(new Set(data), this.state.focusedIndex);
-                        },
-                        type: hotkeyType,
-                    }),
-                    new HotkeyRecord({
-                        key: 'shift+down',
-                        description: <FormattedMessage {...messages.shiftDownDescription} />,
-                        handler: () => {
-                            const { data } = this.props;
-                            const { focusedIndex } = this.state;
-
-                            if (focusedIndex === undefined) {
-                                return;
-                            }
-
-                            const newFocusedIndex = Math.min(focusedIndex + 1, data.length - 1);
-                            this.handleShiftKeyDown(newFocusedIndex, data.length - 1);
-                        },
-                        type: hotkeyType,
-                    }),
-                    new HotkeyRecord({
-                        key: 'shift+up',
-                        description: <FormattedMessage {...messages.shiftUpDescription} />,
-                        handler: () => {
-                            const { focusedIndex } = this.state;
-
-                            if (focusedIndex === undefined) {
-                                return;
-                            }
-
-                            const newFocusedIndex = Math.max(focusedIndex - 1, 0);
-                            this.handleShiftKeyDown(newFocusedIndex, 0);
-                        },
-                        type: hotkeyType,
-                    }),
-                    new HotkeyRecord({
-                        key: 'esc',
-                        description: <FormattedMessage {...messages.deselectAllDescription} />,
-                        handler: () => {
-                            this.onSelect(new Set(), this.state.focusedIndex);
-                        },
-                        type: hotkeyType,
-                    }),
-                ];
+                this.hotkeys = [...this.getSharedHotkeyConfigs(), ...viewSpecificHotKeyConfigs];
             }
 
             return this.hotkeys;
