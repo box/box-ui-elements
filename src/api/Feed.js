@@ -1649,7 +1649,6 @@ class Feed extends Base {
      * @param {BoxItem} file - The file to which the task is assigned
      * @param {Object} currentUser - the user who performed the action
      * @param {string} text - the comment text
-     * @param {boolean} hasMention - true if there is an @mention in the text
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
      * @return {void}
@@ -1658,7 +1657,6 @@ class Feed extends Base {
         file: BoxItem,
         currentUser: User,
         text: string,
-        hasMention: boolean,
         successCallback: Function,
         errorCallback: ErrorCallback,
     ): void => {
@@ -1699,7 +1697,6 @@ class Feed extends Base {
      * @param {string} parentId - id of the parent item
      * @param {CommentFeedItemType} parentType - type of the parent item
      * @param {string} text - the comment text
-     * @param {boolean} hasMention - true if there is an @mention in the text
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
      * @return {void}
@@ -1710,7 +1707,6 @@ class Feed extends Base {
         parentId: string,
         parentType: CommentFeedItemType,
         text: string,
-        hasMention: boolean,
         successCallback: Function,
         errorCallback: ErrorCallback,
     ): void {
@@ -1837,7 +1833,6 @@ class Feed extends Base {
      * @param {string} commentId - Comment ID
      * @param {string} text - the comment text
      * @param {FeedItemStatus} status - status of the comment
-     * @param {boolean} hasMention - true if there is an @mention in the text
      * @param {BoxCommentPermission} permissions - Permissions to attach to the app activity items
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
@@ -1848,7 +1843,6 @@ class Feed extends Base {
         commentId: string,
         text?: string,
         status?: FeedItemStatus,
-        hasMention?: boolean,
         permissions: BoxCommentPermission,
         successCallback: Function,
         errorCallback: ErrorCallback,
@@ -1905,7 +1899,6 @@ class Feed extends Base {
      * @param {string} id - id of the reply
      * @param {string} parentId - id of the parent item
      * @param {string} text - the updated text
-     * @param {boolean} hasMention - true if there is an @mention in the text
      * @param {BoxCommentPermission} permissions - Permissions to attach to the app activity items
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
@@ -1916,7 +1909,6 @@ class Feed extends Base {
         id: string,
         parentId: string,
         text: string,
-        hasMention?: boolean,
         permissions: BoxCommentPermission,
         successCallback: (comment: Comment) => void,
         errorCallback: ErrorCallback,

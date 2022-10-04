@@ -418,7 +418,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 id,
                 text,
                 status,
-                hasMention,
                 permissions,
                 successCallback,
                 errorCallback,
@@ -445,7 +444,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {string} id - id of the reply
      * @param {string} parentId - id of the parent item
      * @param {string} text - the reply updated text
-     * @param {boolean} hasMention - true if there is an @mention in the text
      * @param {BoxCommentPermission} permissions - permissions associated with the reply
      * @param {Function} onSuccess - the success callback
      * @param {Function} onError - the error callback
@@ -455,7 +453,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         id: string,
         parentId: string,
         text: string,
-        hasMention: boolean,
         permissions: BoxCommentPermission,
         onSuccess: ?Function,
         onError: ?Function,
@@ -467,7 +464,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             id,
             parentId,
             text,
-            hasMention,
             permissions,
             () => {
                 this.feedSuccessCallback();
@@ -511,7 +507,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 file,
                 currentUser,
                 text,
-                hasMention,
                 successCallback,
                 this.feedErrorCallback,
             );
@@ -536,10 +531,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {string} parentId - The id of the parent item
      * @param {CommentFeedItemType} parentType - The type of the parent item
      * @param {string} text - The text of reply
-     * @param {boolean} hasMention - Indicator of using mention feature
      * @return {void}
      */
-    createReply = (parentId: string, parentType: CommentFeedItemType, text: string, hasMention: boolean): void => {
+    createReply = (parentId: string, parentType: CommentFeedItemType, text: string): void => {
         const { api, currentUser, file } = this.props;
 
         if (!currentUser) {
@@ -552,7 +546,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             parentId,
             parentType,
             text,
-            hasMention,
             this.feedSuccessCallback,
             this.feedErrorCallback,
         );

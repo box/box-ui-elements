@@ -17,7 +17,7 @@ import './ActivityThreadReplyForm.scss';
 type ActivityThreadReplyFromProps = {
     getMentionWithQuery?: (searchStr: string) => void,
     mentionSelectorContacts?: SelectorItems<>,
-    onReplyCreate: (text: string, hasMention: boolean) => void,
+    onReplyCreate: (text: string) => void,
 };
 
 type Props = ActivityThreadReplyFromProps & InjectIntlProvidedProps;
@@ -36,8 +36,8 @@ function ActivityThreadReplyForm({ mentionSelectorContacts, getMentionWithQuery,
             user={{}}
             getAvatarUrl={() => Promise.resolve()}
             onCancel={() => setShowReplyForm(false)}
-            createComment={({ text, hasMentions }) => {
-                onReplyCreate(text, hasMentions);
+            createComment={({ text }) => {
+                onReplyCreate(text);
                 setShowReplyForm(false);
             }}
             mentionSelectorContacts={mentionSelectorContacts}
