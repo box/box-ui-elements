@@ -65,4 +65,16 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         expect(queryByTestId('activity-thread-button')).not.toBeInTheDocument();
         expect(queryByTestId('activity-thread-loading')).toBeInTheDocument();
     });
+
+    test('should NOT have reply button when onReplyCreate is not passed', () => {
+        getWrapper({ onReplyCreate: undefined });
+
+        expect(screen.queryByRole('button', { name: localize(messages.reply.id) })).not.toBeInTheDocument();
+    });
+
+    test('should have reply button when onReplyCreate is passed', () => {
+        getWrapper({ onReplyCreate: function someFunction() {} });
+
+        expect(screen.getByRole('button', { name: localize(messages.reply.id) })).toBeInTheDocument();
+    });
 });
