@@ -4,29 +4,27 @@ import { threadedCommentsFormatted as replies } from '../../../../../api/fixture
 import useRepliesAPI from '../useRepliesAPI';
 
 describe('src/elements/content-sidebar/activity-feed/annotation-thread/useRepliesAPI', () => {
-    let mockCreateAnnotationReply = jest.fn();
-    let mockDeleteComment = jest.fn();
-    let mockUpdateComment = jest.fn();
+    const getApi = ({ createAnnotationReply = jest.fn, deleteComment = jest.fn(), updateComment = jest.fn() }) => {
+        const getAnnotationsAPI = () => ({
+            createAnnotationReply,
+        });
 
-    const getAnnotationsAPI = () => ({
-        createAnnotationReply: mockCreateAnnotationReply,
-    });
+        const getThreadedCommentsAPI = () => ({
+            deleteComment,
+            updateComment,
+        });
 
-    const getThreadedCommentsAPI = () => ({
-        deleteComment: mockDeleteComment,
-        updateComment: mockUpdateComment,
-    });
+        return {
+            getAnnotationsAPI,
+            getThreadedCommentsAPI,
+        };
+    };
 
-    const getApi = () => ({
-        getAnnotationsAPI,
-        getThreadedCommentsAPI,
-    });
-
-    const getHook = props =>
+    const getHook = (props, mockedApiFunctions = {}) =>
         renderHook(() =>
             useRepliesAPI({
                 annotationId: annotation.id,
-                api: getApi(),
+                api: getApi(mockedApiFunctions),
                 currentUser: user,
                 fileId: 'fileId',
                 filePermissions: { can_comment: true },
@@ -35,11 +33,7 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
             }),
         );
 
-    beforeEach(() => {
-        mockCreateAnnotationReply = jest.fn();
-        mockDeleteComment = jest.fn();
-        mockUpdateComment = jest.fn();
-    });
+    const getHookWithMockedApi = mockedApiFunctions => getHook({}, mockedApiFunctions);
 
     test('Should return correct replies based on initialValues', () => {
         const { result } = getHook({ initialReplies: [] });
@@ -53,7 +47,9 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
     });
 
     test('should call api function on handleDeleteReply with correct arguments and set pending state', () => {
-        const { result } = getHook();
+        const mockDeleteComment = jest.fn();
+
+        const { result } = getHookWithMockedApi({ deleteComment: mockDeleteComment });
         const { id, permissions } = replies[0];
 
         act(() => {
@@ -71,7 +67,9 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
     });
 
     test('should call api function on handleEditReply with correct arguments and set pending state', () => {
-        const { result } = getHook();
+        const mockUpdateComment = jest.fn();
+
+        const { result } = getHookWithMockedApi({ updateComment: mockUpdateComment });
         const { id, permissions } = replies[0];
         const message = 'Text';
 
@@ -91,7 +89,9 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
     });
 
     test('should call api function on handleCreateReply with correct arguments and set pending state', () => {
-        const { result } = getHook();
+        const mockCreateAnnotationReply = jest.fn();
+
+        const { result } = getHookWithMockedApi({ createAnnotationReply: mockCreateAnnotationReply });
         const message = 'Text';
 
         act(() => {
@@ -112,10 +112,10 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
     });
 
     test('should call api function on handleDeleteReply and set correct values on successCallback', () => {
-        mockDeleteComment = jest.fn(({ successCallback }) => {
+        const mockDeleteComment = jest.fn(({ successCallback }) => {
             successCallback();
         });
-        const { result } = getHook();
+        const { result } = getHookWithMockedApi({ deleteComment: mockDeleteComment });
         const { id, permissions } = replies[0];
 
         act(() => {
@@ -127,11 +127,11 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
     test('should call api function on handleEditReply and set correct values on successCallback', () => {
         const message = 'New message';
         const updatedReply = { ...replies[0], message };
-        mockUpdateComment = jest.fn(({ successCallback }) => {
+        const mockUpdateComment = jest.fn(({ successCallback }) => {
             successCallback(updatedReply);
         });
 
-        const { result } = getHook();
+        const { result } = getHookWithMockedApi({ updateComment: mockUpdateComment });
         const { id, permissions } = replies[0];
 
         act(() => {
