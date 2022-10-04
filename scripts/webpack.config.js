@@ -91,7 +91,7 @@ function getConfig(isReactExternalized) {
                     // For webpack dev build perf we want to exlcude node_modules unless we want to support legacy browsers like IE11
                     exclude: shouldIncludeAllSupportedBrowsers
                         ? /@babel(?:\/|\\{1,2})runtime|pikaday|core-js/
-                        : /node_modules\/(?!@box\/cldr-data)/, // Exclude node_modules except for @box/cldr-data which is needed for styleguidist
+                        : /node_modules/, // Exclude node_modules except for @box/cldr-data which is needed for styleguidist
                 },
                 {
                     test: /\.s?css$/,

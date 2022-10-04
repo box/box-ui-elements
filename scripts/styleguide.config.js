@@ -1,10 +1,20 @@
 const path = require('path');
+const isRelease = process.env.NODE_ENV === 'production';
+const shouldIncludeAllSupportedBrowsers = isRelease || process.env.BROWSERSLIST_ENV === 'production';
 // const typescriptDocGen = require('react-docgen-typescript');
 // const reactDocGen = require('react-docgen');
 const webpackConf = require('./webpack.config.js');
 
 const webpackConfig = Array.isArray(webpackConf) ? webpackConf[0] : webpackConf;
 
+webpackConfig.module.rules[0] = {
+    test: /\.(js|mjs|ts|tsx)$/,
+    loader: 'babel-loader',
+    // For webpack dev build perf we want to exclude node_modules unless we want to support legacy browsers like IE11
+    exclude: shouldIncludeAllSupportedBrowsers
+        ? /@babel(?:\/|\\{1,2})runtime|pikaday|core-js/
+        : /node_modules\/(?!@box\/cldr-data)/, // Exclude node_modules except for @box/cldr-data which is needed for styleguidist
+}
 // theme variables
 const vars = require('../src/styles/variables.json');
 
