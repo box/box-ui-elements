@@ -3,7 +3,7 @@ import React from 'react';
 import uniqueId from 'lodash/uniqueId';
 import APIFactory from '../../../../api';
 import commonMessages from '../../../common/messages';
-import { repliesErrors } from './errors';
+import { commentsErrors } from './errors';
 
 import type { BoxItemPermission, User } from '../../../../common/types/core';
 import type { BoxCommentPermission, Comment, FeedItemStatus } from '../../../../common/types/feed';
@@ -15,53 +15,61 @@ type Props = {
     currentUser: User,
     fileId: string,
     filePermissions: BoxItemPermission,
-    initialReplies: Array<Comment>,
+    initialReplies?: Array<Comment>,
 };
-const useReplies = ({ annotationId, api, initialReplies = [], currentUser, fileId, filePermissions }: Props) => {
-    const [replies: Array<Comment>, setReplies] = React.useState(initialReplies);
+const useRepliesAPI = ({ annotationId, api, initialReplies, currentUser, fileId, filePermissions }: Props) => {
+    const transformArrayToMap = (replies: Array<Comment>): Map<string, Comment> => {
+        return new Map(replies.map(reply => [reply.id, reply]));
+    };
+
+    const transformMapToArray = (repliesMap: Map<string, Comment>): Array<Comment> => {
+        return Array.from<Comment>(repliesMap.values());
+    };
+
+    const [replies, setReplies] = React.useState<Map<string, Comment>>(transformArrayToMap(initialReplies || []));
 
     React.useEffect(() => {
-        setReplies(initialReplies);
+        if (initialReplies) {
+            setReplies(transformArrayToMap(initialReplies));
+        }
     }, [initialReplies]);
 
     const updateReplyItem = (updatedReplyValues: Object, replyId: string) => {
         if (!replies) {
             return;
         }
-        const updatedReplies: Array<Comment> = replies.map(reply => {
-            if (reply.id === replyId) {
-                return {
-                    ...reply,
-                    ...updatedReplyValues,
-                };
-            }
-            return reply;
-        });
 
-        setReplies(updatedReplies);
+        setReplies(
+            new Map(
+                replies.set(replyId, {
+                    ...replies.get(replyId),
+                    ...updatedReplyValues,
+                }),
+            ),
+        );
     };
 
     const setReplyPendingStatus = (replyId: string, pendingStatus: boolean) => {
         updateReplyItem({ isPending: pendingStatus }, replyId);
     };
 
-    const addNewPendingReply = (baseComment: Object) => {
+    const addNewPendingReply = (baseReply: Object) => {
         const date = new Date().toISOString();
         const pendingReply: Comment = {
             created_at: date,
             created_by: currentUser,
             modified_at: date,
             isPending: true,
-            ...baseComment,
+            ...baseReply,
         };
 
-        setReplies([...replies, pendingReply]);
+        setReplies(new Map([...replies, [pendingReply.id, pendingReply]]));
     };
 
-    const createReplySuccessCallback = (replyId: string, comment: Comment) => {
+    const createReplySuccessCallback = (replyId: string, reply: Comment) => {
         updateReplyItem(
             {
-                ...comment,
+                ...reply,
                 isPending: false,
             },
             replyId,
@@ -69,9 +77,8 @@ const useReplies = ({ annotationId, api, initialReplies = [], currentUser, fileI
     };
 
     const removeReplyItem = (replyId: string) => {
-        const updatedReplies: Array<Comment> = replies.filter((reply: Comment) => reply.id !== replyId);
-
-        setReplies(updatedReplies);
+        replies.delete(replyId);
+        setReplies(new Map(replies));
     };
 
     const createReplyErrorCallback = (error: ElementsXhrError, code: string, replyId: string) => {
@@ -79,7 +86,7 @@ const useReplies = ({ annotationId, api, initialReplies = [], currentUser, fileI
             {
                 error: {
                     title: commonMessages.errorOccured,
-                    message: repliesErrors[code] || repliesErrors.default,
+                    message: commentsErrors[code] || commentsErrors.default,
                 },
             },
             replyId,
@@ -87,13 +94,13 @@ const useReplies = ({ annotationId, api, initialReplies = [], currentUser, fileI
     };
 
     const handleCreateReply = (message: string) => {
-        const uuid = uniqueId('comment_');
-        const commentData = {
+        const uuid = uniqueId('reply_');
+        const replyData = {
             id: uuid,
             tagged_message: message,
             type: 'comment',
         };
-        addNewPendingReply(commentData);
+        addNewPendingReply(replyData);
 
         const successCallback = (reply: Comment) => createReplySuccessCallback(uuid, reply);
         const errorCallbackFn = (error, code) => createReplyErrorCallback(error, code, uuid);
@@ -141,7 +148,7 @@ const useReplies = ({ annotationId, api, initialReplies = [], currentUser, fileI
         });
     };
 
-    return { replies, handleDeleteReply, handleEditReply, handleCreateReply };
+    return { replies: transformMapToArray(replies), handleDeleteReply, handleEditReply, handleCreateReply };
 };
 
-export default useReplies;
+export default useRepliesAPI;

@@ -6,7 +6,7 @@ import AnnotationActivity from '../annotations';
 import API from '../../../../api/APIFactory';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import useAnnotationAPI from './useAnnotationAPI';
-import useReplies from './useReplies';
+import useRepliesAPI from './useRepliesAPI';
 
 import type { BoxItem, SelectorItems, User } from '../../../../common/types/core';
 import type { ErrorContextProps } from '../../../../common/types/api';
@@ -35,15 +35,7 @@ const AnnotationThreadContent = ({
 }: Props) => {
     const { id: fileId, permissions = {} } = file;
 
-    const {
-        annotation,
-        initialReplies,
-        isLoading,
-        error,
-        handleEdit,
-        handleStatusChange,
-        handleDelete,
-    } = useAnnotationAPI({
+    const { annotation, isLoading, error, handleEdit, handleStatusChange, handleDelete } = useAnnotationAPI({
         api,
         annotationId,
         fileId,
@@ -51,10 +43,10 @@ const AnnotationThreadContent = ({
         errorCallback: onError,
     });
 
-    const { replies, handleCreateReply, handleEditReply, handleDeleteReply } = useReplies({
+    const { replies, handleCreateReply, handleEditReply, handleDeleteReply } = useRepliesAPI({
         annotationId,
         api,
-        initialReplies,
+        initialReplies: annotation ? annotation.replies : undefined,
         currentUser,
         fileId,
         filePermissions: permissions,
@@ -83,6 +75,7 @@ const AnnotationThreadContent = ({
             {annotation && (
                 <AnnotationActivity
                     getAvatarUrl={getAvatarUrl}
+                    currentUser={currentUser}
                     isCurrentVersion
                     item={annotation}
                     getMentionWithQuery={getMentionWithQuery}

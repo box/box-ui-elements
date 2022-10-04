@@ -1,9 +1,9 @@
 import { renderHook, act } from '@testing-library/react-hooks';
 import { annotation, user } from '../../../../../__mocks__/annotations';
-import useReplies from '../useReplies';
-import { replies } from '../__mocks__/replies';
+import { threadedCommentsFormatted as replies } from '../../../../../api/fixtures';
+import useRepliesAPI from '../useRepliesAPI';
 
-describe('src/elements/content-sidebar/activity-feed/useReplies', () => {
+describe('src/elements/content-sidebar/activity-feed/annotation-thread/useRepliesAPI', () => {
     let mockCreateAnnotationReply = jest.fn();
     let mockDeleteComment = jest.fn();
     let mockUpdateComment = jest.fn();
@@ -24,7 +24,7 @@ describe('src/elements/content-sidebar/activity-feed/useReplies', () => {
 
     const getHook = props =>
         renderHook(() =>
-            useReplies({
+            useRepliesAPI({
                 annotationId: annotation.id,
                 api: getApi(),
                 currentUser: user,
@@ -41,7 +41,6 @@ describe('src/elements/content-sidebar/activity-feed/useReplies', () => {
         mockUpdateComment = jest.fn();
     });
 
-    // TODO make each
     test('Should return correct replies based on initialValues', () => {
         const { result } = getHook({ initialReplies: [] });
 
@@ -107,7 +106,7 @@ describe('src/elements/content-sidebar/activity-feed/useReplies', () => {
             expect.any(Function),
             expect.any(Function),
         );
-        const createdReply = result.current.replies[3];
+        const createdReply = result.current.replies[2];
         expect(createdReply.isPending).toEqual(true);
         expect(createdReply.created_by).toEqual(user);
     });
@@ -122,7 +121,7 @@ describe('src/elements/content-sidebar/activity-feed/useReplies', () => {
         act(() => {
             result.current.handleDeleteReply({ id, permissions });
         });
-        expect(result.current.replies.length).toEqual(2);
+        expect(result.current.replies.length).toEqual(1);
     });
 
     test('should call api function on handleEditReply and set correct values on successCallback', () => {

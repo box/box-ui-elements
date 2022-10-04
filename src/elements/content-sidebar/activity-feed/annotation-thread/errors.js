@@ -16,11 +16,11 @@ const annotationErrors = {
     default: commonMessages.error,
 };
 
-const repliesErrors = {
+const commentsErrors = {
     [ERROR_CODE_UPDATE_COMMENT]: messages.commentUpdateErrorMessage,
     [ERROR_CODE_CREATE_REPLY]: messages.commentCreateErrorMessage,
     [ERROR_CODE_DELETE_COMMENT]: messages.commentDeleteErrorMessage,
     default: commonMessages.error,
 };
 
-export { annotationErrors, repliesErrors };
+export { annotationErrors, commentsErrors };
