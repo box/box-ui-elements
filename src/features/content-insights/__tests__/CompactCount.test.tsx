@@ -3,10 +3,6 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import CompactCount from '../CompactCount';
 
-// Mocked numAbbreviate to append '+' to the end of the provided number since
-// we are relying on that module's unit tests to ensure it works correctly
-jest.mock('../../../utils/numAbbr', () => (count: number) => `${count}+`);
-
 describe('features/content-insights/CompactCount', () => {
     const getWrapper = (props = {}) => render(<CompactCount count={0} {...props} />);
 
@@ -30,11 +26,11 @@ describe('features/content-insights/CompactCount', () => {
 
         test.each`
             count      | expectedCount
-            ${10000}   | ${'10000+'}
-            ${11123}   | ${'11123+'}
-            ${100123}  | ${'100123+'}
-            ${1000000} | ${'1000000+'}
-            ${2000123} | ${'2000123+'}
+            ${10000}   | ${'10K'}
+            ${11123}   | ${'11K'}
+            ${100123}  | ${'100K'}
+            ${1000000} | ${'1M'}
+            ${2000123} | ${'2M'}
         `('should display the count $count as $expectedCount', ({ count, expectedCount }) => {
             const wrapper = getWrapper({ count });
 
