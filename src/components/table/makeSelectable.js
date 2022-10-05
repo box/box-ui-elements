@@ -23,7 +23,7 @@ function makeSelectable(BaseTable) {
             /** Array of unique IDs of the items in the table. Each item should be a string or number, in the order they appear in the table. */
             data: PropTypes.array.isRequired,
             gridColumnCount: PropTypes.number,
-            isGridViewEnhancementsEnabled: PropTypes.bool,
+            isGridView: PropTypes.bool,
             /** Called when focus changes. `(focusedIndex: number) => void` */
             onFocus: PropTypes.func,
             /** Called when selection changes. `(selectedItems: Array<string> | Array<number> | Set<string> | Set<number>) => void` */
@@ -206,20 +206,141 @@ function makeSelectable(BaseTable) {
         };
 
         getGridViewHotKeyConfigs = () => {
-            return [];
+            const { hotkeyType } = this.props;
+            return [
+                new HotkeyRecord({
+                    key: 'right',
+                    description: <FormattedMessage {...messages.downDescription} />,
+                    handler: event => {
+                        const { data } = this.props;
+                        const { focusedIndex } = this.state;
+
+                        event.preventDefault();
+
+                        const newFocusedIndex =
+                            focusedIndex !== undefined ? Math.min(focusedIndex + 1, data.length - 1) : 0;
+                        this.setState({ focusedIndex: newFocusedIndex });
+                    },
+                    type: hotkeyType,
+                }),
+                new HotkeyRecord({
+                    key: 'left',
+                    description: <FormattedMessage {...messages.upDescription} />,
+                    handler: event => {
+                        const { focusedIndex = 0 } = this.state;
+
+                        event.preventDefault();
+
+                        const newFocusedIndex = Math.max(focusedIndex - 1, 0);
+                        this.setState({ focusedIndex: newFocusedIndex });
+                    },
+                    type: hotkeyType,
+                }),
+                new HotkeyRecord({
+                    key: 'down',
+                    description: <FormattedMessage {...messages.downDescription} />,
+                    handler: event => {
+                        const { data, gridColumnCount } = this.props;
+                        const { focusedIndex } = this.state;
+
+                        event.preventDefault();
+
+                        const newFocusedIndex =
+                            focusedIndex !== undefined ? Math.min(focusedIndex + gridColumnCount, data.length - 1) : 0;
+                        this.setState({ focusedIndex: newFocusedIndex });
+                    },
+                    type: hotkeyType,
+                }),
+                new HotkeyRecord({
+                    key: 'up',
+                    description: <FormattedMessage {...messages.upDescription} />,
+                    handler: event => {
+                        const { gridColumnCount } = this.props;
+                        const { focusedIndex = 0 } = this.state;
+
+                        event.preventDefault();
+
+                        const newFocusedIndex = Math.max(focusedIndex - gridColumnCount, 0);
+                        this.setState({ focusedIndex: newFocusedIndex });
+                    },
+                    type: hotkeyType,
+                }),
+                new HotkeyRecord({
+                    key: 'shift+right',
+                    description: <FormattedMessage {...messages.shiftDownDescription} />,
+                    handler: () => {
+                        const { data } = this.props;
+                        const { focusedIndex } = this.state;
+
+                        if (focusedIndex === undefined) {
+                            return;
+                        }
+
+                        const newFocusedIndex = Math.min(focusedIndex + 1, data.length - 1);
+                        this.handleShiftKeyDown(newFocusedIndex, data.length - 1);
+                    },
+                    type: hotkeyType,
+                }),
+                new HotkeyRecord({
+                    key: 'shift+left',
+                    description: <FormattedMessage {...messages.shiftUpDescription} />,
+                    handler: () => {
+                        const { focusedIndex } = this.state;
+
+                        if (focusedIndex === undefined) {
+                            return;
+                        }
+
+                        const newFocusedIndex = Math.max(focusedIndex - 1, 0);
+                        this.handleShiftKeyDown(newFocusedIndex, 0);
+                    },
+                    type: hotkeyType,
+                }),
+                new HotkeyRecord({
+                    key: 'shift+down',
+                    description: <FormattedMessage {...messages.shiftDownDescription} />,
+                    handler: () => {
+                        const { data, gridColumnCount } = this.props;
+                        const { focusedIndex } = this.state;
+
+                        if (focusedIndex === undefined) {
+                            return;
+                        }
+
+                        const newFocusedIndex = Math.min(focusedIndex + gridColumnCount, data.length - 1);
+                        this.handleShiftKeyDownForGridRow(newFocusedIndex, data.length - 1);
+                    },
+                    type: hotkeyType,
+                }),
+                new HotkeyRecord({
+                    key: 'shift+up',
+                    description: <FormattedMessage {...messages.shiftUpDescription} />,
+                    handler: () => {
+                        const { gridColumnCount } = this.props;
+                        const { focusedIndex } = this.state;
+
+                        if (focusedIndex === undefined) {
+                            return;
+                        }
+
+                        const newFocusedIndex = Math.max(focusedIndex - gridColumnCount, 0);
+                        this.handleShiftKeyDownForGridRow(newFocusedIndex, 0);
+                    },
+                    type: hotkeyType,
+                }),
+            ];
         };
 
         getHotkeyConfigs = () => {
-            const { enableHotkeys, isGridViewEnhancementsEnabled } = this.props;
+            const { enableHotkeys, isGridView, gridColumnCount } = this.props;
 
             if (!enableHotkeys && !this.hotkeys) {
                 this.hotkeys = [];
             }
 
             if (!this.hotkeys) {
-                const viewSpecificHotKeyConfigs = isGridViewEnhancementsEnabled
-                    ? this.getGridViewHotKeyConfigs()
-                    : this.getListViewHotKeyConfigs();
+                const viewSpecificHotKeyConfigs =
+                    isGridView && gridColumnCount ? this.getGridViewHotKeyConfigs() : this.getListViewHotKeyConfigs();
 
                 this.hotkeys = [...this.getSharedHotkeyConfigs(), ...viewSpecificHotKeyConfigs];
             }
@@ -345,6 +466,18 @@ function makeSelectable(BaseTable) {
 
             // if target is selected and source is not, select source
             this.onSelect(selectedItems.add(data[focusedIndex]), newFocusedIndex);
+        };
+
+        handleShiftKeyDownForGridRow = (newFocusedIndex, boundary) => {
+            const { data, selectedItems } = this.getProcessedProps();
+            const { focusedIndex } = this.state;
+
+            // if we're at a boundary of the table and the row is selected, no-op
+            if (focusedIndex === boundary && selectedItems.has(data[focusedIndex])) {
+                return;
+            }
+
+            this.selectRange(newFocusedIndex);
         };
 
         handleKeyboardSearch = event => {
