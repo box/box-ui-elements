@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react-hooks';
-import useAnnotationAPI from '../useAnnotationAPI';
 import { annotationsWithFormattedReplies as annotations } from '../../../../../api/fixtures';
+import useAnnotationAPI from '../useAnnotationAPI';
 
 describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
     const annotation = annotations[0];
