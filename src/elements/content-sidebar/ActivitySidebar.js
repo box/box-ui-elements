@@ -120,7 +120,6 @@ mark(MARK_NAME_JS_READY);
 class ActivitySidebar extends React.PureComponent<Props, State> {
     static defaultProps = {
         annotatorState: {},
-        emitAnnotatorActiveChangeEvent: noop,
         getAnnotationsMatchPath: noop,
         getAnnotationsPath: noop,
         hasReplies: false,
@@ -137,6 +136,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onTaskUpdate: noop,
         onVersionChange: noop,
         onVersionHistoryClick: noop,
+        publishActiveAnnotationChangeInSidebar: noop,
+        publishAnnotationDeleteEnd: noop,
+        publishAnnotationDeleteStart: noop,
+        publishAnnotationUpdateEnd: noop,
+        publishAnnotationUpdateStart: noop,
     };
 
     constructor(props: Props) {
@@ -157,8 +161,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     handleAnnotationDelete = ({ id, permissions }: { id: string, permissions: AnnotationPermission }) => {
-        const { api, file } = this.props;
+        const { api, publishAnnotationDeleteStart, file } = this.props;
 
+        publishAnnotationDeleteStart(id);
         api.getFeedAPI(false).deleteAnnotation(
             file,
             id,
@@ -171,15 +176,24 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     handleAnnotationEdit = (id: string, text: string, permissions: AnnotationPermission) => {
-        const { api, file } = this.props;
+        const { api, publishAnnotationUpdateEnd, publishAnnotationUpdateStart, file } = this.props;
 
+        publishAnnotationUpdateStart({
+            id,
+            description: {
+                message: text,
+            },
+        });
         api.getFeedAPI(false).updateAnnotation(
             file,
             id,
             text,
             undefined,
             permissions,
-            this.feedSuccessCallback,
+            (annotation: Annotation) => {
+                publishAnnotationUpdateEnd(annotation);
+                this.feedSuccessCallback();
+            },
             this.feedErrorCallback,
         );
 
@@ -187,15 +201,19 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     handleAnnotationStatusChange = (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => {
-        const { api, file } = this.props;
+        const { api, publishAnnotationUpdateEnd, publishAnnotationUpdateStart, file } = this.props;
 
+        publishAnnotationUpdateStart({ id, status });
         api.getFeedAPI(false).updateAnnotation(
             file,
             id,
             undefined,
             status,
             permissions,
-            this.feedSuccessCallback,
+            (annotation: Annotation) => {
+                publishAnnotationUpdateEnd(annotation);
+                this.feedSuccessCallback();
+            },
             this.feedErrorCallback,
         );
 
@@ -203,10 +221,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     deleteAnnotationSuccess(id: string) {
-        const { emitRemoveEvent } = this.props;
+        const { publishAnnotationDeleteEnd } = this.props;
 
         this.feedSuccessCallback();
-        emitRemoveEvent(id);
+        publishAnnotationDeleteEnd(id);
     }
 
     /**
@@ -765,20 +783,20 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     handleAnnotationSelect = (annotation: Annotation): void => {
         const { file_version, id: nextActiveAnnotationId } = annotation;
         const {
-            emitAnnotatorActiveChangeEvent,
             file,
             getAnnotationsMatchPath,
             getAnnotationsPath,
             history,
             location,
             onAnnotationSelect,
+            publishActiveAnnotationChangeInSidebar,
         } = this.props;
         const annotationFileVersionId = getProp(file_version, 'id');
         const currentFileVersionId = getProp(file, 'file_version.id');
         const match = getAnnotationsMatchPath(location);
         const selectedFileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
 
-        emitAnnotatorActiveChangeEvent(nextActiveAnnotationId);
+        publishActiveAnnotationChangeInSidebar(nextActiveAnnotationId);
 
         if (annotationFileVersionId && annotationFileVersionId !== selectedFileVersionId) {
             history.push(getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));

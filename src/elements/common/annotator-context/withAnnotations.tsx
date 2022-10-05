@@ -8,10 +8,12 @@ import { Action, Annotator, AnnotationActionEvent, AnnotatorState, GetMatchPath,
 export type ActiveChangeEvent = {
     annotationId: string | null;
     fileVersionId: string;
+    origin?: string;
 };
 
 export type ActiveChangeEventHandler = (event: ActiveChangeEvent) => void;
 
+// TODO: Check and update this type:
 export type ComponentWithAnnotations = {
     emitActiveChangeEvent: (id: string | null) => void;
     emitRemoveEvent: (id: string) => void;
@@ -24,6 +26,13 @@ export type ComponentWithAnnotations = {
     handleAnnotationFetchError: ({ error }: { error: Error }) => void;
     handleAnnotator: (annotator: Annotator) => void;
     handlePreviewDestroy: (shouldReset?: boolean) => void;
+    publishActiveAnnotationChangeInSidebar: (id: string | null) => void;
+    publishAnnotationDelete: (id: string, action: Action.DELETE_START | Action.DELETE_END, origin: string) => void;
+    publishAnnotationDeleteEnd: (id: string, origin?: string) => void;
+    publishAnnotationDeleteStart: (id: string, origin?: string) => void;
+    publishAnnotationUpdate: (annotation: Object, action: Action, origin: string) => void;
+    publishAnnotationUpdateEnd: (annotation: Object, origin?: string) => void;
+    publishAnnotationUpdateStart: (annotation: Object, origin?: string) => void;
 };
 
 export type WithAnnotationsProps = {
@@ -110,7 +119,7 @@ export default function withAnnotations<P extends object>(
         }
 
         handleAnnotationCreate = (eventData: AnnotationActionEvent): void => {
-            const { annotation = null, error = null, meta = null } = eventData;
+            const { annotation = null, error = null, meta = null, origin } = eventData;
             const { onError } = this.props;
 
             if (onError && error) {
@@ -123,11 +132,18 @@ export default function withAnnotations<P extends object>(
                 annotation,
                 error,
                 meta,
+                origin,
             });
         };
 
-        handleActiveChange: ActiveChangeEventHandler = ({ annotationId, fileVersionId }): void => {
-            this.setState({ activeAnnotationFileVersionId: fileVersionId, activeAnnotationId: annotationId });
+        // Handle active annotation change done outside of Sidebar
+        handleActiveChange: ActiveChangeEventHandler = ({ annotationId, fileVersionId, origin }): void => {
+            this.setState({
+                action: Action.SET_ACTIVE,
+                activeAnnotationFileVersionId: fileVersionId,
+                activeAnnotationId: annotationId,
+                origin,
+            });
         };
 
         handleAnnotationFetchError = ({ error }: { error: Error }): void => {
@@ -159,14 +175,64 @@ export default function withAnnotations<P extends object>(
             this.annotator = null;
         };
 
+        // Publish active annotation change done in Sidebar
+        publishActiveAnnotationChangeInSidebar = (id: string | null) => {
+            this.setState({
+                ...this.state,
+                action: Action.SET_ACTIVE,
+                activeAnnotationId: id,
+                origin: 'sidebar',
+            });
+            this.emitActiveChangeEvent(id);
+        };
+
+        publishAnnotationDelete = (id: string, action: Action.DELETE_START | Action.DELETE_END, origin: string) => {
+            this.setState({
+                ...this.state,
+                action,
+                annotation: { id },
+                origin,
+            });
+        };
+
+        publishAnnotationDeleteStart = (id: string, origin = 'sidebar') => {
+            this.publishAnnotationDelete(id, Action.DELETE_START, origin);
+        };
+
+        publishAnnotationDeleteEnd = (id: string, origin = 'sidebar') => {
+            this.publishAnnotationDelete(id, Action.DELETE_END, origin);
+            this.emitRemoveEvent(id);
+        };
+
+        publishAnnotationUpdate = (annotation: Object, action: Action, origin: string) => {
+            this.setState({
+                ...this.state,
+                action,
+                annotation,
+                origin,
+            });
+        };
+
+        publishAnnotationUpdateStart = (annotation: Object, origin = 'sidebar') => {
+            this.publishAnnotationUpdate(annotation, Action.UPDATE_START, origin);
+        };
+
+        publishAnnotationUpdateEnd = (annotation: Object, origin = 'sidebar') => {
+            this.publishAnnotationUpdate(annotation, Action.UPDATE_END, origin);
+        };
+
         render(): JSX.Element {
             return (
                 <AnnotatorContext.Provider
                     value={{
-                        emitActiveChangeEvent: this.emitActiveChangeEvent,
-                        emitRemoveEvent: this.emitRemoveEvent,
                         getAnnotationsMatchPath: this.getMatchPath,
                         getAnnotationsPath: this.getAnnotationsPath,
+                        publishActiveAnnotationChange: this.handleActiveChange,
+                        publishActiveAnnotationChangeInSidebar: this.publishActiveAnnotationChangeInSidebar,
+                        publishAnnotationDeleteEnd: this.publishAnnotationDeleteEnd,
+                        publishAnnotationDeleteStart: this.publishAnnotationDeleteStart,
+                        publishAnnotationUpdateEnd: this.publishAnnotationUpdateEnd,
+                        publishAnnotationUpdateStart: this.publishAnnotationUpdateStart,
                         state: this.state,
                     }}
                 >

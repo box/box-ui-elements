@@ -66,8 +66,6 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         const contextProvider = getContextProvider(wrapper);
 
         expect(contextProvider.exists()).toBeTruthy();
-        expect(contextProvider.prop('value').emitActiveChangeEvent).toEqual(instance.emitActiveChangeEvent);
-        expect(contextProvider.prop('value').emitRemoveEvent).toEqual(instance.emitRemoveEvent);
         expect(contextProvider.prop('value').getAnnotationsMatchPath).toEqual(instance.getMatchPath);
         expect(contextProvider.prop('value').getAnnotationsPath).toEqual(instance.getAnnotationsPath);
         expect(contextProvider.prop('value').state).toEqual({
@@ -78,6 +76,18 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             error: null,
             meta: null,
         });
+        expect(contextProvider.prop('value').publishActiveAnnotationChange).toEqual(instance.handleActiveChange);
+        expect(contextProvider.prop('value').publishActiveAnnotationChangeInSidebar).toEqual(
+            instance.publishActiveAnnotationChangeInSidebar,
+        );
+        expect(contextProvider.prop('value').publishAnnotationDeleteEnd).toEqual(instance.publishAnnotationDeleteEnd);
+        expect(contextProvider.prop('value').publishAnnotationDeleteStart).toEqual(
+            instance.publishAnnotationDeleteStart,
+        );
+        expect(contextProvider.prop('value').publishAnnotationUpdateEnd).toEqual(instance.publishAnnotationUpdateEnd);
+        expect(contextProvider.prop('value').publishAnnotationUpdateStart).toEqual(
+            instance.publishAnnotationUpdateStart,
+        );
     });
 
     describe('emitActiveChangeEvent', () => {
@@ -164,20 +174,27 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
     describe('handleActiveChange()', () => {
         test.each`
-            annotationId | fileVersionId | expectedAnnotationId | expectedFileVersionId
-            ${null}      | ${'456'}      | ${null}              | ${'456'}
-            ${'123'}     | ${'456'}      | ${'123'}             | ${'456'}
+            annotationId | fileVersionId | origin             | expectedAnnotationId | expectedFileVersionId | expectedOrigin
+            ${null}      | ${'456'}      | ${undefined}       | ${null}              | ${'456'}              | ${undefined}
+            ${'123'}     | ${'456'}      | ${'someComponent'} | ${'123'}             | ${'456'}              | ${'someComponent'}
         `(
             'should update activeAnnotationId state to reflect value $annotationId',
-            ({ annotationId, fileVersionId, expectedAnnotationId, expectedFileVersionId }) => {
+            ({ annotationId, fileVersionId, origin, expectedAnnotationId, expectedFileVersionId, expectedOrigin }) => {
                 const wrapper = getWrapper();
 
-                wrapper.instance().handleActiveChange({ annotationId, fileVersionId });
+                wrapper.instance().handleActiveChange({ annotationId, fileVersionId, origin });
                 const contextProvider = getContextProvider(wrapper);
-                const { activeAnnotationFileVersionId, activeAnnotationId } = contextProvider.prop('value').state;
+                const {
+                    action,
+                    activeAnnotationFileVersionId,
+                    activeAnnotationId,
+                    origin: newOrigin,
+                } = contextProvider.prop('value').state;
                 expect(contextProvider.exists()).toBeTruthy();
+                expect(action).toEqual(Action.SET_ACTIVE);
                 expect(activeAnnotationFileVersionId).toEqual(expectedFileVersionId);
                 expect(activeAnnotationId).toEqual(expectedAnnotationId);
+                expect(newOrigin).toEqual(expectedOrigin);
             },
         );
     });
@@ -256,5 +273,155 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             const instance = wrapper.instance();
             expect(instance.getAnnotationsPath(fileVersionId, annotationId)).toBe(expectedPath);
         });
+    });
+
+    describe('publishActiveAnnotationChangeInSidebar()', () => {
+        test.each`
+            annotationId | expectedAnnotationId
+            ${null}      | ${null}
+            ${'123'}     | ${'123'}
+        `(
+            'given annotationId = $annotationId should update state accordingly and call emitActiveChangeEvent',
+            ({ annotationId, expectedAnnotationId }) => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                instance.emitActiveChangeEvent = jest.fn();
+
+                instance.publishActiveAnnotationChangeInSidebar(annotationId);
+                const contextProvider = getContextProvider(wrapper);
+                const { action, activeAnnotationId, origin } = contextProvider.prop('value').state;
+                expect(contextProvider.exists()).toBeTruthy();
+                expect(action).toEqual(Action.SET_ACTIVE);
+                expect(activeAnnotationId).toEqual(expectedAnnotationId);
+                expect(origin).toEqual('sidebar');
+                expect(instance.emitActiveChangeEvent).toBeCalledWith(expectedAnnotationId);
+            },
+        );
+    });
+
+    describe('publishAnnotationDelete()', () => {
+        test('should update state accordingly', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.publishAnnotationDelete('123', Action.DELETE_START, 'someComponent');
+            const contextProvider = getContextProvider(wrapper);
+            const { action, annotation, origin } = contextProvider.prop('value').state;
+            expect(contextProvider.exists()).toBeTruthy();
+            expect(action).toEqual(Action.DELETE_START);
+            expect(annotation).toEqual({ id: '123' });
+            expect(origin).toEqual('someComponent');
+        });
+    });
+
+    describe('publishAnnotationDeleteStart()', () => {
+        test.each`
+            annotationId | expectedAnnotationId | origin             | expectedOrigin
+            ${null}      | ${null}              | ${undefined}       | ${'sidebar'}
+            ${'123'}     | ${'123'}             | ${'someComponent'} | ${'someComponent'}
+        `(
+            'given annotationId = $annotationId and origin = $origin should call publishAnnotationDelete',
+            ({ annotationId, origin, expectedAnnotationId, expectedOrigin }) => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                instance.publishAnnotationDelete = jest.fn();
+
+                instance.publishAnnotationDeleteStart(annotationId, origin);
+                expect(instance.publishAnnotationDelete).toBeCalledWith(
+                    expectedAnnotationId,
+                    Action.DELETE_START,
+                    expectedOrigin,
+                );
+            },
+        );
+    });
+
+    describe('publishAnnotationDeleteEnd()', () => {
+        test.each`
+            annotationId | expectedAnnotationId | origin             | expectedOrigin
+            ${null}      | ${null}              | ${undefined}       | ${'sidebar'}
+            ${'123'}     | ${'123'}             | ${'someComponent'} | ${'someComponent'}
+        `(
+            'given annotationId = $annotationId and origin = $origin should call publishAnnotationDelete and call emitRemoveEvent',
+            ({ annotationId, origin, expectedAnnotationId, expectedOrigin }) => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                instance.publishAnnotationDelete = jest.fn();
+                instance.emitRemoveEvent = jest.fn();
+
+                instance.publishAnnotationDeleteEnd(annotationId, origin);
+                expect(instance.publishAnnotationDelete).toBeCalledWith(
+                    expectedAnnotationId,
+                    Action.DELETE_END,
+                    expectedOrigin,
+                );
+                expect(instance.emitRemoveEvent).toBeCalledWith(expectedAnnotationId);
+            },
+        );
+    });
+
+    describe('publishAnnotationUpdate()', () => {
+        test('should update state accordingly', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const annotationUpdate = {
+                id: '123',
+                description: {
+                    message: 'text',
+                },
+            };
+
+            instance.publishAnnotationUpdate(annotationUpdate, Action.UPDATE_START, 'someComponent');
+            const contextProvider = getContextProvider(wrapper);
+            const { action, annotation, origin } = contextProvider.prop('value').state;
+            expect(contextProvider.exists()).toBeTruthy();
+            expect(action).toEqual(Action.UPDATE_START);
+            expect(annotation).toEqual(annotationUpdate);
+            expect(origin).toEqual('someComponent');
+        });
+    });
+
+    describe('publishAnnotationUpdateStart()', () => {
+        test.each`
+            annotationId | expectedAnnotationId | origin             | expectedOrigin
+            ${null}      | ${null}              | ${undefined}       | ${'sidebar'}
+            ${'123'}     | ${'123'}             | ${'someComponent'} | ${'someComponent'}
+        `(
+            'given annotationId = $annotationId and origin = $origin should call publishAnnotationUpdate',
+            ({ annotationId, origin, expectedAnnotationId, expectedOrigin }) => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                instance.publishAnnotationUpdate = jest.fn();
+
+                instance.publishAnnotationUpdateStart(annotationId, origin);
+                expect(instance.publishAnnotationUpdate).toBeCalledWith(
+                    expectedAnnotationId,
+                    Action.UPDATE_START,
+                    expectedOrigin,
+                );
+            },
+        );
+    });
+
+    describe('publishAnnotationUpdateEnd()', () => {
+        test.each`
+            annotationId | expectedAnnotationId | origin             | expectedOrigin
+            ${null}      | ${null}              | ${undefined}       | ${'sidebar'}
+            ${'123'}     | ${'123'}             | ${'someComponent'} | ${'someComponent'}
+        `(
+            'given annotationId = $annotationId and origin = $origin should call publishAnnotationUpdate',
+            ({ annotationId, origin, expectedAnnotationId, expectedOrigin }) => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                instance.publishAnnotationUpdate = jest.fn();
+
+                instance.publishAnnotationUpdateEnd(annotationId, origin);
+                expect(instance.publishAnnotationUpdate).toBeCalledWith(
+                    expectedAnnotationId,
+                    Action.UPDATE_END,
+                    expectedOrigin,
+                );
+            },
+        );
     });
 });

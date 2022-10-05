@@ -29,17 +29,23 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             annotation: { foo: 'bar' },
             action: Action.CREATE_START,
         };
-        const mockEmitAnnotatorChangeEvent = jest.fn();
-        const mockEmitRemoveEvent = jest.fn();
         const mockGetAnnotationsMatchPath = jest.fn();
         const mockGetAnnotationsPath = jest.fn();
+        const mockPublishActiveAnnotationChangeInSidebar = jest.fn();
+        const mockPublishAnnotationUpdateEnd = jest.fn();
+        const mockPublishAnnotationUpdateStart = jest.fn();
+        const mockPublishAnnotationDeleteEnd = jest.fn();
+        const mockPublishAnnotationDeleteStart = jest.fn();
 
         mockContext.mockReturnValue({
-            state: annotatorState,
-            emitActiveChangeEvent: mockEmitAnnotatorChangeEvent,
-            emitRemoveEvent: mockEmitRemoveEvent,
             getAnnotationsMatchPath: mockGetAnnotationsMatchPath,
             getAnnotationsPath: mockGetAnnotationsPath,
+            publishActiveAnnotationChangeInSidebar: mockPublishActiveAnnotationChangeInSidebar,
+            publishAnnotationUpdateEnd: mockPublishAnnotationUpdateEnd,
+            publishAnnotationUpdateStart: mockPublishAnnotationUpdateStart,
+            publishAnnotationDeleteEnd: mockPublishAnnotationDeleteEnd,
+            publishAnnotationDeleteStart: mockPublishAnnotationDeleteStart,
+            state: annotatorState,
         });
 
         const wrapper = getWrapper();
@@ -51,9 +57,12 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             annotation: { foo: 'bar' },
             action: Action.CREATE_START,
         });
-        expect(props.emitAnnotatorActiveChangeEvent).toEqual(mockEmitAnnotatorChangeEvent);
-        expect(props.emitRemoveEvent).toEqual(mockEmitRemoveEvent);
         expect(props.getAnnotationsMatchPath).toEqual(mockGetAnnotationsMatchPath);
         expect(props.getAnnotationsPath).toEqual(mockGetAnnotationsPath);
+        expect(props.publishActiveAnnotationChangeInSidebar).toEqual(mockPublishActiveAnnotationChangeInSidebar);
+        expect(props.publishAnnotationUpdateEnd).toEqual(mockPublishAnnotationUpdateEnd);
+        expect(props.publishAnnotationUpdateStart).toEqual(mockPublishAnnotationUpdateStart);
+        expect(props.publishAnnotationDeleteEnd).toEqual(mockPublishAnnotationDeleteEnd);
+        expect(props.publishAnnotationDeleteStart).toEqual(mockPublishAnnotationDeleteStart);
     });
 });
