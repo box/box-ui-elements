@@ -23,7 +23,7 @@ function makeSelectable(BaseTable) {
             /** Array of unique IDs of the items in the table. Each item should be a string or number, in the order they appear in the table. */
             data: PropTypes.array.isRequired,
             gridColumnCount: PropTypes.number,
-            isGridView: PropTypes.bool,
+            isGridViewEnhancementsEnabled: PropTypes.bool,
             /** Called when focus changes. `(focusedIndex: number) => void` */
             onFocus: PropTypes.func,
             /** Called when selection changes. `(selectedItems: Array<string> | Array<number> | Set<string> | Set<number>) => void` */
@@ -210,14 +210,14 @@ function makeSelectable(BaseTable) {
         };
 
         getHotkeyConfigs = () => {
-            const { enableHotkeys, isGridView } = this.props;
+            const { enableHotkeys, isGridViewEnhancementsEnabled } = this.props;
 
             if (!enableHotkeys && !this.hotkeys) {
                 this.hotkeys = [];
             }
 
             if (!this.hotkeys) {
-                const viewSpecificHotKeyConfigs = isGridView
+                const viewSpecificHotKeyConfigs = isGridViewEnhancementsEnabled
                     ? this.getGridViewHotKeyConfigs()
                     : this.getListViewHotKeyConfigs();
 
