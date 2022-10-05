@@ -4,24 +4,39 @@ import { AnnotatorState, GetMatchPath } from './types';
 
 export interface WithAnnotatorContextProps {
     annotatorState?: AnnotatorState;
-    emitAnnotatorActiveChangeEvent?: (id: string) => void;
-    emitRemoveEvent?: (id: string) => void;
     getAnnotationsMatchPath?: GetMatchPath;
     getAnnotationsPath?: (fileVersionId?: string, annotationId?: string) => string;
+    publishActiveAnnotationChangeInSidebar?: (id: string | null) => void;
+    publishAnnotationDeleteEnd?: (id: string) => void;
+    publishAnnotationDeleteStart?: (id: string) => void;
+    publishAnnotationUpdateEnd?: (id: string) => void;
+    publishAnnotationUpdateStart?: (annotation: Object) => void;
 }
 
 export default function withAnnotatorContext<P extends {}>(WrappedComponent: React.ComponentType<P>) {
     return React.forwardRef<React.RefForwardingComponent<React.ComponentType<P>>, P>((props, ref) => (
         <AnnotatorContext.Consumer>
-            {({ emitActiveChangeEvent, emitRemoveEvent, getAnnotationsMatchPath, getAnnotationsPath, state }) => (
+            {({
+                publishActiveAnnotationChangeInSidebar,
+                publishAnnotationUpdateEnd,
+                publishAnnotationUpdateStart,
+                publishAnnotationDeleteEnd,
+                publishAnnotationDeleteStart,
+                getAnnotationsMatchPath,
+                getAnnotationsPath,
+                state,
+            }) => (
                 <WrappedComponent
                     ref={ref}
                     {...props}
                     annotatorState={state}
-                    emitAnnotatorActiveChangeEvent={emitActiveChangeEvent}
-                    emitRemoveEvent={emitRemoveEvent}
                     getAnnotationsMatchPath={getAnnotationsMatchPath}
                     getAnnotationsPath={getAnnotationsPath}
+                    publishActiveAnnotationChangeInSidebar={publishActiveAnnotationChangeInSidebar}
+                    publishAnnotationDeleteEnd={publishAnnotationDeleteEnd}
+                    publishAnnotationDeleteStart={publishAnnotationDeleteStart}
+                    publishAnnotationUpdateEnd={publishAnnotationUpdateEnd}
+                    publishAnnotationUpdateStart={publishAnnotationUpdateStart}
                 />
             )}
         </AnnotatorContext.Consumer>

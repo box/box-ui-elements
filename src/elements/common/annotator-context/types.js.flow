@@ -9,6 +9,8 @@ declare export var CREATE: "create";
 declare export var Action: {|
   +CREATE_START: "create_start", // "create_start"
   +CREATE_END: "create_end" // "create_end"
+  +UPDATE_START: "update_start" // "update_start"
+  +UPDATE_END: "update_end" // "update_end"
 |};
 export interface Annotator {
   addListener: (

@@ -1,12 +1,17 @@
 import { Location } from 'history';
 import { match } from 'react-router-dom';
+import { ActiveChangeEventHandler } from './withAnnotations';
 
 export const CREATE = 'create';
 
 export enum Action {
     CREATE_START = 'create_start',
     CREATE_END = 'create_end',
-    // Can extend to other actions: update_start, update_end, delete_start, delete_end
+    DELETE_START = 'delete_start',
+    DELETE_END = 'delete_end',
+    SET_ACTIVE = 'set_active',
+    UPDATE_START = 'update_start',
+    UPDATE_END = 'update_end',
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -21,19 +26,24 @@ export interface Annotator {
 export interface AnnotatorState {
     activeAnnotationFileVersionId?: string | null;
     activeAnnotationId?: string | null;
-    annotation?: object | null;
+    annotation?: { id?: string } | null;
     action?: Action | null;
     error?: Error | null;
     meta?: Metadata | null;
+    origin?: string;
 }
 
 export type GetMatchPath = (location?: Location) => match<MatchParams> | null;
 
 export interface AnnotatorContext {
-    emitActiveChangeEvent: (id: string) => void;
-    emitRemoveEvent: (id: string) => void;
     getAnnotationsMatchPath: GetMatchPath;
     getAnnotationsPath: (fileVersionId?: string, annotationId?: string) => string;
+    publishActiveAnnotationChange: ActiveChangeEventHandler;
+    publishActiveAnnotationChangeInSidebar: (id: string | null) => void;
+    publishAnnotationDeleteEnd: (id: string, origin?: string) => void;
+    publishAnnotationDeleteStart: (id: string, origin?: string) => void;
+    publishAnnotationUpdateEnd: (annotation: Object, origin?: string) => void;
+    publishAnnotationUpdateStart: (annotation: Object, origin?: string) => void;
     state: AnnotatorState;
 }
 
@@ -57,4 +67,5 @@ export interface AnnotationActionEvent {
     annotation?: object;
     error?: Error;
     meta: Metadata;
+    origin?: string;
 }
