@@ -1,5 +1,4 @@
 // @flow
-import React from 'react';
 import uniqueId from 'lodash/uniqueId';
 import APIFactory from '../../../../api';
 import commonMessages from '../../../common/messages';
@@ -9,44 +8,26 @@ import type { BoxItemPermission, User } from '../../../../common/types/core';
 import type { BoxCommentPermission, Comment, FeedItemStatus } from '../../../../common/types/feed';
 import type { ElementsXhrError } from '../../../../common/types/api';
 
+type setRepliesCallback = (prevReplies: { [string]: Comment }) => { [string]: Comment };
+
 type Props = {
     annotationId: string,
     api: APIFactory,
     currentUser: User,
     fileId: string,
     filePermissions: BoxItemPermission,
-    initialReplies?: Array<Comment>,
+    setReplies: (setRepliesCallback: setRepliesCallback | { [string]: Comment }) => void,
 };
-const useRepliesAPI = ({ annotationId, api, initialReplies, currentUser, fileId, filePermissions }: Props) => {
-    const transformArrayToMap = (replies: Array<Comment>): Map<string, Comment> => {
-        return new Map(replies.map(reply => [reply.id, reply]));
-    };
 
-    const transformMapToArray = (repliesMap: Map<string, Comment>): Array<Comment> => {
-        return Array.from<Comment>(repliesMap.values());
-    };
-
-    const [replies, setReplies] = React.useState<Map<string, Comment>>(transformArrayToMap(initialReplies || []));
-
-    React.useEffect(() => {
-        if (initialReplies) {
-            setReplies(transformArrayToMap(initialReplies));
-        }
-    }, [initialReplies]);
-
+const useRepliesAPI = ({ annotationId, api, currentUser, fileId, filePermissions, setReplies }: Props) => {
     const updateReplyItem = (updatedReplyValues: Object, replyId: string) => {
-        if (!replies) {
-            return;
-        }
-
-        setReplies(
-            new Map(
-                replies.set(replyId, {
-                    ...replies.get(replyId),
-                    ...updatedReplyValues,
-                }),
-            ),
-        );
+        setReplies(prevReplies => ({
+            ...prevReplies,
+            [replyId]: {
+                ...prevReplies[replyId],
+                ...updatedReplyValues,
+            },
+        }));
     };
 
     const setReplyPendingStatus = (replyId: string, pendingStatus: boolean) => {
@@ -63,7 +44,10 @@ const useRepliesAPI = ({ annotationId, api, initialReplies, currentUser, fileId,
             ...baseReply,
         };
 
-        setReplies(new Map([...replies, [pendingReply.id, pendingReply]]));
+        setReplies(prevReplies => ({
+            ...prevReplies,
+            [pendingReply.id]: pendingReply,
+        }));
     };
 
     const createReplySuccessCallback = (replyId: string, reply: Comment) => {
@@ -77,8 +61,11 @@ const useRepliesAPI = ({ annotationId, api, initialReplies, currentUser, fileId,
     };
 
     const removeReplyItem = (replyId: string) => {
-        replies.delete(replyId);
-        setReplies(new Map(replies));
+        setReplies(prevReplies => {
+            const newReplies = { ...prevReplies };
+            delete newReplies[replyId];
+            return newReplies;
+        });
     };
 
     const createReplyErrorCallback = (error: ElementsXhrError, code: string, replyId: string) => {
@@ -148,7 +135,7 @@ const useRepliesAPI = ({ annotationId, api, initialReplies, currentUser, fileId,
         });
     };
 
-    return { replies: transformMapToArray(replies), handleDeleteReply, handleEditReply, handleCreateReply };
+    return { handleDeleteReply, handleEditReply, handleCreateReply };
 };
 
 export default useRepliesAPI;

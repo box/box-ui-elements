@@ -6,7 +6,6 @@ import AnnotationActivity from '../annotations';
 import API from '../../../../api/APIFactory';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import useAnnotationAPI from './useAnnotationAPI';
-import useRepliesAPI from './useRepliesAPI';
 
 import type { BoxItem, SelectorItems, User } from '../../../../common/types/core';
 import type { ErrorContextProps } from '../../../../common/types/api';
@@ -35,21 +34,24 @@ const AnnotationThreadContent = ({
 }: Props) => {
     const { id: fileId, permissions = {} } = file;
 
-    const { annotation, isLoading, error, handleEdit, handleStatusChange, handleDelete } = useAnnotationAPI({
+    const {
+        annotation,
+        replies,
+        isLoading,
+        error,
+        handleEdit,
+        handleStatusChange,
+        handleDelete,
+        handleCreateReply,
+        handleDeleteReply,
+        handleEditReply,
+    } = useAnnotationAPI({
         api,
         annotationId,
-        fileId,
-        filePermissions: permissions,
-        errorCallback: onError,
-    });
-
-    const { replies, handleCreateReply, handleEditReply, handleDeleteReply } = useRepliesAPI({
-        annotationId,
-        api,
-        initialReplies: annotation ? annotation.replies : undefined,
         currentUser,
         fileId,
         filePermissions: permissions,
+        errorCallback: onError,
     });
 
     return (
