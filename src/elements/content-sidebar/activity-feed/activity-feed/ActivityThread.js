@@ -6,6 +6,7 @@ import noop from 'lodash/noop';
 import LoadingIndicator from '../../../../components/loading-indicator';
 import PlainButton from '../../../../components/plain-button';
 import ActivityThreadReplies from './ActivityThreadReplies';
+import ActivityThreadReplyForm from './ActivityThreadReplyForm';
 
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
@@ -13,6 +14,7 @@ import type { SelectorItems, User } from '../../../../common/types/core';
 import type { BoxCommentPermission, Comment as CommentType, FeedItemStatus } from '../../../../common/types/feed';
 
 import messages from './messages';
+
 import './ActivityThread.scss';
 
 type Props = {
@@ -50,6 +52,7 @@ const ActivityThread = ({
     hasReplies,
     isRepliesLoading,
     mentionSelectorContacts,
+    onReplyCreate,
     onReplyDelete = noop,
     onReplyEdit = noop,
     onShowReplies = noop,
@@ -106,6 +109,14 @@ const ActivityThread = ({
                     translations={translations}
                 />
             )}
+
+            {onReplyCreate ? (
+                <ActivityThreadReplyForm
+                    getMentionWithQuery={getMentionWithQuery}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onReplyCreate={onReplyCreate}
+                />
+            ) : null}
         </div>
     );
 };
