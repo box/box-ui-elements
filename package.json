@@ -317,7 +317,7 @@
         "ts-loader": "^6.2.1",
         "typescript": "^3.7.5",
         "uniqid": "^5.2.0",
-        "uuid": "^3.3.2",
+        "uuid": "^8.3.2",
         "wait-on": "^3.3.0",
         "webpack": "^4.41.5",
         "webpack-bundle-analyzer": "^3.6.0",
@@ -368,7 +368,7 @@
         "sass": "1.34.1",
         "scroll-into-view-if-needed": "^2.2.20",
         "tabbable": "^1.1.2",
-        "uuid": "^3.3.2"
+        "uuid": "^8.3.2"
     },
     "comments": {
         "dependencies": {
