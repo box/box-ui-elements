@@ -21,6 +21,10 @@ jest.mock('../useAnnotationAPI', () => {
         handleDelete: jest.fn(),
         handleEdit: jest.fn(),
         handleResolve: jest.fn(),
+        replies: [],
+        handleCreateReply: jest.fn(),
+        handleEditReply: jest.fn(),
+        handleDeleteReply: jest.fn(),
     }));
 });
 

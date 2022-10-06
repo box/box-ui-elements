@@ -17,6 +17,7 @@ import CommentsAPI from './Comments';
 import TasksNewAPI from './tasks/TasksNew';
 import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
 import TaskLinksAPI from './tasks/TaskLinks';
+import ThreadedCommentsAPI from './ThreadedComments';
 import FileAccessStatsAPI from './FileAccessStats';
 import MarkerBasedGroupsAPI from './MarkerBasedGroups';
 import MarkerBasedUsersAPI from './MarkerBasedUsers';
@@ -90,6 +91,11 @@ class APIFactory {
      * @property {CommentsAPI}
      */
     commentsAPI: CommentsAPI;
+
+    /**
+     * @property {ThreadedCommentsAPI}
+     */
+    threadedCommentsAPI: ThreadedCommentsAPI;
 
     /**
      * @property {TasksNewAPI}
@@ -278,6 +284,11 @@ class APIFactory {
         if (this.commentsAPI) {
             this.commentsAPI.destroy();
             delete this.commentsAPI;
+        }
+
+        if (this.threadedCommentsAPI) {
+            this.threadedCommentsAPI.destroy();
+            delete this.threadedCommentsAPI;
         }
 
         if (this.markerBasedGroupsAPI) {
@@ -508,6 +519,21 @@ class APIFactory {
 
         this.commentsAPI = new CommentsAPI(this.options);
         return this.commentsAPI;
+    }
+
+    /**
+     * API for threaded comments
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {ThreadedCommentsAPI} ThreadedCommentsAPI instance
+     */
+    getThreadedCommentsAPI(shouldDestroy: boolean): ThreadedCommentsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
+        return this.threadedCommentsAPI;
     }
 
     /**
