@@ -8,30 +8,29 @@ import type { BoxItemPermission, User } from '../../../../common/types/core';
 import type { BoxCommentPermission, Comment, FeedItemStatus } from '../../../../common/types/feed';
 import type { ElementsXhrError } from '../../../../common/types/api';
 
-type setRepliesCallback = (prevReplies: { [string]: Comment }) => { [string]: Comment };
-
 type Props = {
     annotationId: string,
     api: APIFactory,
     currentUser: User,
     fileId: string,
     filePermissions: BoxItemPermission,
-    setReplies: (setRepliesCallback: setRepliesCallback | { [string]: Comment }) => void,
+    handleAddReplyItem: Comment => void,
+    handleRemoveReplyItem: (id: string) => void,
+    handleUpdateReplyItem: (updatedValues: Object, id: string) => void,
 };
 
-const useRepliesAPI = ({ annotationId, api, currentUser, fileId, filePermissions, setReplies }: Props) => {
-    const updateReplyItem = (updatedReplyValues: Object, replyId: string) => {
-        setReplies(prevReplies => ({
-            ...prevReplies,
-            [replyId]: {
-                ...prevReplies[replyId],
-                ...updatedReplyValues,
-            },
-        }));
-    };
-
+const useRepliesAPI = ({
+    annotationId,
+    api,
+    currentUser,
+    fileId,
+    filePermissions,
+    handleAddReplyItem,
+    handleRemoveReplyItem,
+    handleUpdateReplyItem,
+}: Props) => {
     const setReplyPendingStatus = (replyId: string, pendingStatus: boolean) => {
-        updateReplyItem({ isPending: pendingStatus }, replyId);
+        handleUpdateReplyItem({ isPending: pendingStatus }, replyId);
     };
 
     const addNewPendingReply = (baseReply: Object) => {
@@ -44,14 +43,11 @@ const useRepliesAPI = ({ annotationId, api, currentUser, fileId, filePermissions
             ...baseReply,
         };
 
-        setReplies(prevReplies => ({
-            ...prevReplies,
-            [pendingReply.id]: pendingReply,
-        }));
+        handleAddReplyItem(pendingReply);
     };
 
     const createReplySuccessCallback = (replyId: string, reply: Comment) => {
-        updateReplyItem(
+        handleUpdateReplyItem(
             {
                 ...reply,
                 isPending: false,
@@ -60,16 +56,8 @@ const useRepliesAPI = ({ annotationId, api, currentUser, fileId, filePermissions
         );
     };
 
-    const removeReplyItem = (replyId: string) => {
-        setReplies(prevReplies => {
-            const newReplies = { ...prevReplies };
-            delete newReplies[replyId];
-            return newReplies;
-        });
-    };
-
     const createReplyErrorCallback = (error: ElementsXhrError, code: string, replyId: string) => {
-        updateReplyItem(
+        handleUpdateReplyItem(
             {
                 error: {
                     title: commonMessages.errorOccured,
@@ -110,7 +98,7 @@ const useRepliesAPI = ({ annotationId, api, currentUser, fileId, filePermissions
             fileId,
             commentId: id,
             permissions,
-            successCallback: () => removeReplyItem(id),
+            successCallback: () => handleRemoveReplyItem(id),
             errorCallback: errorCallbackFn,
         });
     };
@@ -119,7 +107,6 @@ const useRepliesAPI = ({ annotationId, api, currentUser, fileId, filePermissions
         replyId: string,
         message: string,
         status?: FeedItemStatus,
-        hasMention: boolean,
         permissions: BoxCommentPermission,
     ) => {
         setReplyPendingStatus(replyId, true);
@@ -130,7 +117,7 @@ const useRepliesAPI = ({ annotationId, api, currentUser, fileId, filePermissions
             commentId: replyId,
             message,
             permissions,
-            successCallback: updatedReply => updateReplyItem({ ...updatedReply, isPending: false }, replyId),
+            successCallback: updatedReply => handleUpdateReplyItem({ ...updatedReply, isPending: false }, replyId),
             errorCallback: errorCallbackFn,
         });
     };

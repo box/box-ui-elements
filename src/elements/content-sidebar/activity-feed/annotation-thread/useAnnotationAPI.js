@@ -4,14 +4,30 @@ import React from 'react';
 import type { MessageDescriptor } from 'react-intl';
 import API from '../../../../api/APIFactory';
 import { annotationErrors } from './errors';
+import useRepliesAPI from './useRepliesAPI';
 
 import type { Annotation, AnnotationPermission } from '../../../../common/types/annotations';
 import type { BoxItemPermission, User } from '../../../../common/types/core';
 import type { FeedItemStatus, Comment, BoxCommentPermission } from '../../../../common/types/feed';
 import type { ElementOrigin, ElementsXhrError } from '../../../../common/types/api';
-import useRepliesAPI from './useRepliesAPI';
 
 import commonMessages from '../../../common/messages';
+
+const normalizeReplies = (repliesArray?: Array<Comment>): { [string]: Comment } => {
+    if (!repliesArray) {
+        return {};
+    }
+    return repliesArray.reduce((prevValues, reply) => {
+        return {
+            ...prevValues,
+            [reply.id]: reply,
+        };
+    }, {});
+};
+
+const denormalizeReplies = (repliesMap: { [string]: Comment }): Array<Comment> => {
+    return Object.keys(repliesMap).map(key => repliesMap[key]);
+};
 
 type Props = {
     annotationId: string,
@@ -41,7 +57,6 @@ type UseAnnotationAPI = {
         replyId: string,
         message: string,
         status?: FeedItemStatus,
-        hasMention: boolean,
         permissions: BoxCommentPermission,
     ) => void,
     handleStatusChange: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
@@ -62,20 +77,29 @@ const useAnnotationAPI = ({
     const [error, setError] = React.useState();
     const [isLoading, setIsLoading] = React.useState(true);
 
-    const normalizeReplies = (repliesArray: Array<Comment>): { [string]: Comment } => {
-        if (!repliesArray) {
-            return {};
-        }
-        return repliesArray.reduce((prevValues, reply) => {
-            return {
-                ...prevValues,
-                [reply.id]: reply,
-            };
-        }, {});
+    const handleUpdateReplyItem = (updatedReplyValues: Object, replyId: string) => {
+        setReplies(prevReplies => ({
+            ...prevReplies,
+            [replyId]: {
+                ...prevReplies[replyId],
+                ...updatedReplyValues,
+            },
+        }));
     };
 
-    const denormalizeReplies = (repliesMap: { [string]: Comment }): Array<Comment> => {
-        return Object.keys(repliesMap).map(key => repliesMap[key]);
+    const handleAddReplyItem = (newReply: Comment) => {
+        setReplies(prevReplies => ({
+            ...prevReplies,
+            [newReply.id]: newReply,
+        }));
+    };
+
+    const handleRemoveReplyItem = (replyId: string) => {
+        setReplies(prevReplies => {
+            const newReplies = { ...prevReplies };
+            delete newReplies[replyId];
+            return newReplies;
+        });
     };
 
     const { handleCreateReply, handleEditReply, handleDeleteReply } = useRepliesAPI({
@@ -84,7 +108,9 @@ const useAnnotationAPI = ({
         currentUser,
         fileId,
         filePermissions,
-        setReplies,
+        handleAddReplyItem,
+        handleRemoveReplyItem,
+        handleUpdateReplyItem,
     });
 
     const annotationSuccessCallback = (updatedAnnotation: Annotation): void => {
@@ -117,9 +143,7 @@ const useAnnotationAPI = ({
         const getAnnotationSuccess = (fetchedAnnotation: Annotation) => {
             const { replies: fetchedReplies, ...normalizedAnnotation } = fetchedAnnotation;
             setAnnotation({ ...normalizedAnnotation });
-            if (fetchedReplies) {
-                setReplies(normalizeReplies(fetchedReplies));
-            }
+            setReplies(normalizeReplies(fetchedReplies));
             setError(undefined);
             setIsLoading(false);
         };
@@ -172,15 +196,15 @@ const useAnnotationAPI = ({
 
     return {
         annotation,
-        replies: denormalizeReplies(replies),
         error,
-        isLoading,
+        handleCreateReply,
+        handleDeleteReply,
+        handleEditReply,
         handleDelete,
         handleEdit,
         handleStatusChange,
-        handleCreateReply,
-        handleEditReply,
-        handleDeleteReply,
+        isLoading,
+        replies: denormalizeReplies(replies),
     };
 };
 

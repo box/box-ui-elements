@@ -28,7 +28,9 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
                 currentUser: user,
                 fileId: 'fileId',
                 filePermissions: { can_comment: true },
-                setReplies: jest.fn(),
+                handleAddReplyItem: jest.fn(),
+                handleRemoveReplyItem: jest.fn(),
+                handleUpdateReplyItem: jest.fn(),
                 ...props,
             }),
         );
@@ -62,7 +64,7 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
         const { result } = getHook({ api });
 
         act(() => {
-            result.current.handleEditReply(id, message, undefined, false, permissions);
+            result.current.handleEditReply(id, message, false, permissions);
         });
 
         expect(mockUpdateComment).toBeCalledWith({
