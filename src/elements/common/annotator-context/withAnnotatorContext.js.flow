@@ -8,15 +8,18 @@ import * as React from "react";
 import AnnotatorContext from "./AnnotatorContext";
 import { AnnotatorState, GetMatchPath } from "./types";
 export interface WithAnnotatorContextProps {
-  annotatorState?: AnnotatorState;
-  emitAnnotatorActiveChangeEvent?: (id: string) => void;
-  emitRemoveEvent?: (id: string) => void;
-  getAnnotationsMatchPath?: GetMatchPath;
-  getAnnotationsPath?: (
-    fileVersionId?: string,
-    annotationId?: string
-  ) => string;
+    annotatorState?: AnnotatorState;
+    getAnnotationsMatchPath?: GetMatchPath;
+    getAnnotationsPath?: (
+        fileVersionId?: string,
+        annotationId?: string
+    ) => string;
+    publishActiveAnnotationChangeInSidebar?: (id: string | null) => void;
+    publishAnnotationDeleteEnd?: (id: string) => void;
+    publishAnnotationDeleteStart?: (id: string) => void;
+    publishAnnotationUpdateEnd?: (id: string) => void;
+    publishAnnotationUpdateStart?: (annotation: Object) => void;
 }
 declare export default function withAnnotatorContext<P: { ... }>(
-  WrappedComponent: React.ComponentType<P>
+    WrappedComponent: React.ComponentType<P>
 ): void;
