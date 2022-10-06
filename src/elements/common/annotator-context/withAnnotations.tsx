@@ -13,7 +13,6 @@ export type ActiveChangeEvent = {
 
 export type ActiveChangeEventHandler = (event: ActiveChangeEvent) => void;
 
-// TODO: Check and update this type:
 export type ComponentWithAnnotations = {
     emitActiveChangeEvent: (id: string | null) => void;
     emitRemoveEvent: (id: string) => void;
