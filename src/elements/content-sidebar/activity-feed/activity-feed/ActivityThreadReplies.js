@@ -37,9 +37,7 @@ const ActivityThreadReplies = ({
     const lastReply = replies[replies.length - 1];
 
     const getReplyPermissions = (reply: CommentType): BoxCommentPermission => {
-        const {
-            permissions: { can_delete = false, can_edit = false, can_resolve = false },
-        } = reply;
+        const { permissions: { can_delete = false, can_edit = false, can_resolve = false } = {} } = reply;
         return {
             can_delete,
             can_edit,

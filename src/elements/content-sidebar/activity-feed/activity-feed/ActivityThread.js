@@ -6,6 +6,7 @@ import noop from 'lodash/noop';
 import LoadingIndicator from '../../../../components/loading-indicator';
 import PlainButton from '../../../../components/plain-button';
 import ActivityThreadReplies from './ActivityThreadReplies';
+import ActivityThreadReplyForm from './ActivityThreadReplyForm';
 
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
@@ -13,6 +14,7 @@ import type { SelectorItems, User } from '../../../../common/types/core';
 import type { BoxCommentPermission, Comment as CommentType, FeedItemStatus } from '../../../../common/types/feed';
 
 import messages from './messages';
+
 import './ActivityThread.scss';
 
 type Props = {
@@ -22,15 +24,15 @@ type Props = {
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
     hasReplies: boolean,
+    isAlwaysExpanded?: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
-    onReplyCreate?: (text: string, hasMention: boolean) => void,
+    onReplyCreate?: (text: string) => void,
     onReplyDelete?: ({ id: string, permissions: BoxCommentPermission }) => void,
     onReplyEdit?: (
         id: string,
         text: string,
         status?: FeedItemStatus,
-        hasMention: boolean,
         permissions: BoxCommentPermission,
         onSuccess: ?Function,
         onError: ?Function,
@@ -48,8 +50,10 @@ const ActivityThread = ({
     getMentionWithQuery,
     getUserProfileUrl,
     hasReplies,
+    isAlwaysExpanded = false,
     isRepliesLoading,
     mentionSelectorContacts,
+    onReplyCreate,
     onReplyDelete = noop,
     onReplyEdit = noop,
     onShowReplies = noop,
@@ -57,7 +61,7 @@ const ActivityThread = ({
     repliesTotalCount = 0,
     translations,
 }: Props) => {
-    const [isExpanded, setIsExpanded] = React.useState(false);
+    const [isExpanded, setIsExpanded] = React.useState(isAlwaysExpanded);
 
     const toggleButtonLabel = isExpanded ? messages.hideReplies : messages.showReplies;
     const repliesToLoadCount = Math.max(repliesTotalCount - 1, 0);
@@ -81,7 +85,7 @@ const ActivityThread = ({
                     <LoadingIndicator />
                 </div>
             )}
-            {!isRepliesLoading && repliesTotalCount > 1 && (
+            {!isAlwaysExpanded && !isRepliesLoading && repliesTotalCount > 1 && (
                 <PlainButton
                     className="bcs-ActivityThread-toggle"
                     onClick={toggleReplies}
@@ -106,6 +110,14 @@ const ActivityThread = ({
                     translations={translations}
                 />
             )}
+
+            {onReplyCreate ? (
+                <ActivityThreadReplyForm
+                    getMentionWithQuery={getMentionWithQuery}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onReplyCreate={onReplyCreate}
+                />
+            ) : null}
         </div>
     );
 };

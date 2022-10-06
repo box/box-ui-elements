@@ -3,7 +3,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import AnnotationThreadContent from '../AnnotationThreadContent';
-import { annotation } from '../../../../../__mocks__/annotations';
+import { annotation, user } from '../../../../../__mocks__/annotations';
 
 import commonMessages from '../../../../common/messages';
 import messages from '../messages';
@@ -21,11 +21,15 @@ jest.mock('../useAnnotationAPI', () => {
         handleDelete: jest.fn(),
         handleEdit: jest.fn(),
         handleResolve: jest.fn(),
+        replies: [],
+        handleCreateReply: jest.fn(),
+        handleEditReply: jest.fn(),
+        handleDeleteReply: jest.fn(),
     }));
 });
 
 describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThreadContent', () => {
-    const mockGetAvatarUrlWithAccessToken = jest.fn();
+    const mockGetAvatarUrl = jest.fn(() => Promise.resolve());
 
     const defaultProps = {
         annotationId: mockedAnnotation.id,
@@ -33,15 +37,15 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
             getAnnotationApi: () => ({
                 getAnnotation: jest.fn(),
             }),
-            getUsersAPI: () => ({
-                getAvatarUrlWithAccessToken: mockGetAvatarUrlWithAccessToken,
-            }),
         },
-        fileId: 'fileId',
-        filePermissions: {
-            can_view_annotations: true,
-            can_annotate: true,
+        file: {
+            id: 'fileId',
+            permissions: {
+                can_view_annotations: true,
+                can_annotate: true,
+            },
         },
+        getAvatarUrl: mockGetAvatarUrl,
     };
 
     const IntlWrapper = ({ children }: { children?: React.ReactNode }) => {
@@ -58,7 +62,7 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
 
     test('Should call getAvatarUrl with creator id', async () => {
         getWrapper();
-        expect(mockGetAvatarUrlWithAccessToken).toBeCalledWith('1', 'fileId');
+        expect(mockGetAvatarUrl).toBeCalledWith(user.id);
     });
 
     test('Should render loading state properly', () => {

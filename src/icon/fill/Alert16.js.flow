@@ -19,9 +19,10 @@ import type { Icon } from '../../icons/flowTypes';
 const Alert16 = (props: Icon) => (
     <AccessibleSVG width={16} height={16} viewBox="0 0 16 16" {...props}>
         <path
-            fill={vars.bdlGray50}
             fillRule="evenodd"
-            d="M8 1a7 7 0 110 14A7 7 0 018 1zm0 10a1 1 0 100 2 1 1 0 000-2zm0-8a1 1 0 00-1 1v5a1 1 0 002 0V4a1 1 0 00-1-1z"
+            clipRule="evenodd"
+            d="M8 11.6A1.2 1.2 0 108 14a1.2 1.2 0 000-2.4zM8 2a1.2 1.2 0 00-1.2 1.2v6a1.2 1.2 0 002.4 0v-6A1.2 1.2 0 008 2z"
+            fill={vars.bdlGray50}
         />
     </AccessibleSVG>
 );

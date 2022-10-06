@@ -369,7 +369,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 file,
                 currentUser,
                 message,
-                hasMention,
                 expect.any(Function),
                 expect.any(Function),
             );
@@ -392,19 +391,17 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const parentId = '123';
             const parentType = 'comment';
             const message = 'abc';
-            const hasMention = true;
 
             instance.setState({
                 currentUser,
             });
-            instance.createReply(parentId, parentType, message, hasMention);
+            instance.createReply(parentId, parentType, message);
             expect(feedAPI.createReply).toBeCalledWith(
                 file,
                 currentUser,
                 parentId,
                 parentType,
                 message,
-                hasMention,
                 expect.any(Function),
                 expect.any(Function),
             );
@@ -459,7 +456,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     '123',
                     expectedText,
                     expectedStatus,
-                    false,
                     { can_edit: true, can_delete: true },
                     expect.any(Function),
                     expect.any(Function),
@@ -475,21 +471,19 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const instance = wrapper.instance();
             const parentId = '123';
             const text = 'abc';
-            const hasMention = true;
             const reply = {
                 id: '1',
                 permissions: { can_edit: true },
             };
             instance.fetchFeedItems = jest.fn();
 
-            wrapper.instance().updateReply(reply.id, parentId, text, hasMention, reply.permissions);
+            wrapper.instance().updateReply(reply.id, parentId, text, reply.permissions);
 
             expect(api.getFeedAPI().updateReply).toBeCalledWith(
                 file,
                 reply.id,
                 parentId,
                 text,
-                hasMention,
                 reply.permissions,
                 expect.any(Function),
                 expect.any(Function),
