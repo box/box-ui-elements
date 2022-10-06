@@ -14,9 +14,8 @@ type Props = {
     currentUser: User,
     fileId: string,
     filePermissions: BoxItemPermission,
-    handleAddReplyItem: Comment => void,
     handleRemoveReplyItem: (id: string) => void,
-    handleUpdateReplyItem: (updatedValues: Object, id: string) => void,
+    handleUpdateOrCreateReplyItem: (id: string, updatedValues: Object) => void,
 };
 
 const useRepliesAPI = ({
@@ -25,12 +24,11 @@ const useRepliesAPI = ({
     currentUser,
     fileId,
     filePermissions,
-    handleAddReplyItem,
     handleRemoveReplyItem,
-    handleUpdateReplyItem,
+    handleUpdateOrCreateReplyItem,
 }: Props) => {
     const setReplyPendingStatus = (replyId: string, pendingStatus: boolean) => {
-        handleUpdateReplyItem({ isPending: pendingStatus }, replyId);
+        handleUpdateOrCreateReplyItem(replyId, { isPending: pendingStatus });
     };
 
     const addNewPendingReply = (baseReply: Object) => {
@@ -43,29 +41,23 @@ const useRepliesAPI = ({
             ...baseReply,
         };
 
-        handleAddReplyItem(pendingReply);
+        handleUpdateOrCreateReplyItem(pendingReply.id, pendingReply);
     };
 
     const createReplySuccessCallback = (replyId: string, reply: Comment) => {
-        handleUpdateReplyItem(
-            {
-                ...reply,
-                isPending: false,
-            },
-            replyId,
-        );
+        handleUpdateOrCreateReplyItem(replyId, {
+            ...reply,
+            isPending: false,
+        });
     };
 
     const createReplyErrorCallback = (error: ElementsXhrError, code: string, replyId: string) => {
-        handleUpdateReplyItem(
-            {
-                error: {
-                    title: commonMessages.errorOccured,
-                    message: commentsErrors[code] || commentsErrors.default,
-                },
+        handleUpdateOrCreateReplyItem(replyId, {
+            error: {
+                title: commonMessages.errorOccured,
+                message: commentsErrors[code] || commentsErrors.default,
             },
-            replyId,
-        );
+        });
     };
 
     const handleCreateReply = (message: string) => {
@@ -117,7 +109,8 @@ const useRepliesAPI = ({
             commentId: replyId,
             message,
             permissions,
-            successCallback: updatedReply => handleUpdateReplyItem({ ...updatedReply, isPending: false }, replyId),
+            successCallback: updatedReply =>
+                handleUpdateOrCreateReplyItem(replyId, { ...updatedReply, isPending: false }),
             errorCallback: errorCallbackFn,
         });
     };

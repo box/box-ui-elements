@@ -28,9 +28,8 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
                 currentUser: user,
                 fileId: 'fileId',
                 filePermissions: { can_comment: true },
-                handleAddReplyItem: jest.fn(),
+                handleUpdateOrCreateReplyItem: jest.fn(),
                 handleRemoveReplyItem: jest.fn(),
-                handleUpdateReplyItem: jest.fn(),
                 ...props,
             }),
         );

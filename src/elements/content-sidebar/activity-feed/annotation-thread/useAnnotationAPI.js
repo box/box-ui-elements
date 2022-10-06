@@ -77,20 +77,13 @@ const useAnnotationAPI = ({
     const [error, setError] = React.useState();
     const [isLoading, setIsLoading] = React.useState(true);
 
-    const handleUpdateReplyItem = (updatedReplyValues: Object, replyId: string) => {
+    const handleUpdateOrCreateReplyItem = (replyId: string, updatedReplyValues: Object) => {
         setReplies(prevReplies => ({
             ...prevReplies,
             [replyId]: {
                 ...prevReplies[replyId],
                 ...updatedReplyValues,
             },
-        }));
-    };
-
-    const handleAddReplyItem = (newReply: Comment) => {
-        setReplies(prevReplies => ({
-            ...prevReplies,
-            [newReply.id]: newReply,
         }));
     };
 
@@ -108,9 +101,8 @@ const useAnnotationAPI = ({
         currentUser,
         fileId,
         filePermissions,
-        handleAddReplyItem,
         handleRemoveReplyItem,
-        handleUpdateReplyItem,
+        handleUpdateOrCreateReplyItem,
     });
 
     const annotationSuccessCallback = (updatedAnnotation: Annotation): void => {
