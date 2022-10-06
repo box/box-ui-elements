@@ -58,7 +58,7 @@ export default function withSidebarAnnotations(
         componentDidUpdate(prevProps: Props) {
             const { annotatorState, fileId, getAnnotationsMatchPath, location, onVersionChange }: Props = this.props;
             const { annotatorState: prevAnnotatorState, fileId: prevFileId, location: prevLocation }: Props = prevProps;
-            const { action, activeAnnotationId, annotation, origin } = annotatorState;
+            const { action, activeAnnotationId, annotation } = annotatorState;
             const { activeAnnotationId: prevActiveAnnotationId, annotation: prevAnnotation } = prevAnnotatorState;
 
             const match = getAnnotationsMatchPath(location);
@@ -69,6 +69,22 @@ export default function withSidebarAnnotations(
             const isTransitioningToAnnotationPath = activeAnnotationId && !isAnnotationsPath;
             const prevFileVersionId = getProp(prevMatch, 'params.fileVersionId');
 
+            if (action === 'update_start' || action === 'update_end') {
+                this.updateAnnotation();
+                return;
+            }
+
+            if (annotation && prevAnnotation !== annotation) {
+                this.addAnnotation();
+            }
+
+            // Active annotation id changed. If location is currently an annotation path or
+            // if location is not currently an annotation path but the active annotation id
+            // transitioned from falsy to truthy, update the location accordingly
+            if (hasActiveAnnotationChanged && (isAnnotationsPath || isTransitioningToAnnotationPath)) {
+                this.updateActiveAnnotation();
+            }
+
             if (fileVersionId && prevFileVersionId !== fileVersionId) {
                 this.updateActiveVersion();
             }
@@ -77,30 +93,6 @@ export default function withSidebarAnnotations(
                 // If the file id has changed, reset the current version id since the previous (possibly versioned)
                 // location is no longer active
                 onVersionChange(null);
-            }
-
-            // Do not take action when the change has not originated in Sidebar
-            if (origin === 'sidebar') {
-                return;
-            }
-
-            if (action === 'update_start' || action === 'update_end') {
-                this.updateAnnotation();
-            }
-
-            if ((action === 'create_start' || action === 'create_end') && annotation && prevAnnotation !== annotation) {
-                this.addAnnotation();
-            }
-
-            // Active annotation id changed. If location is currently an annotation path or
-            // if location is not currently an annotation path but the active annotation id
-            // transitioned from falsy to truthy, update the location accordingly
-            if (
-                action === 'set_active' &&
-                hasActiveAnnotationChanged &&
-                (isAnnotationsPath || isTransitioningToAnnotationPath)
-            ) {
-                this.updateActiveAnnotation();
             }
         }
 
@@ -149,12 +141,9 @@ export default function withSidebarAnnotations(
                 api,
                 file,
                 isOpen,
-                location,
             } = this.props;
 
             const feedAPI = api.getFeedAPI(false);
-            const pathname = getProp(location, 'pathname', '');
-            const isActivity = matchPath(pathname, '/activity');
             feedAPI.file = file;
 
             const { current } = this.sidebarPanels;
@@ -162,8 +151,7 @@ export default function withSidebarAnnotations(
             const isPending = action === 'update_start';
             feedAPI.updateFeedItem({ ...annotation, isPending }, annotation.id);
 
-            // If the activity sidebar is currently open, then force it to refresh with the updated data
-            if (current && isActivity && isOpen) {
+            if (current && isOpen) {
                 current.refresh(false);
             }
         }

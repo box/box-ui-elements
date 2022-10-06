@@ -1,64 +1,82 @@
 import * as React from 'react';
 import AnnotatorContext from './AnnotatorContext';
-import { Action } from './types';
+import { AnnotationActionEvent, Annotator, Status } from './types';
 
-export interface UseAnnotatorEventsProps {
-    onAnnotationDeleteEnd?: (annotationId: string) => void;
-    onAnnotationDeleteStart?: (annotationId: string) => void;
-    onAnnotationUpdateEnd?: (annotation: Object) => void;
-    onAnnotationUpdateStart?: (annotation: Object) => void;
-    onSidebarAnnotationSelected?: (annotationId: string | null) => void;
-    origin?: string;
+interface useAnnotatorEvents {
+    onAnnotationDeleted: (annotationId: string) => void;
+    onAnnotationSelected: (annotationId: string) => void;
+    onAnnotationUpdated: (annotation: Object) => void;
 }
 
-function useAnnotatorEvents({
-    onAnnotationDeleteEnd,
-    onAnnotationDeleteStart,
-    onAnnotationUpdateEnd,
-    onAnnotationUpdateStart,
-    onSidebarAnnotationSelected,
-    origin: originProp,
-}: UseAnnotatorEventsProps) {
-    const {
-        publishActiveAnnotationChange: publishActiveAnnotationChangeToContext,
-        publishAnnotationUpdateEnd: publishAnnotationUpdateEndToContext,
-        publishAnnotationUpdateStart: publishAnnotationUpdateStartToContext,
-        state: { action, activeAnnotationId = null, annotation, origin },
-    } = React.useContext(AnnotatorContext);
+const annotatorNotDefinedError = new Error('Annotator not defined');
 
-    const publishActiveAnnotationChange = (annotationId: string | null, fileVersionId: string) => {
-        publishActiveAnnotationChangeToContext({ annotationId, fileVersionId, origin: originProp });
+const updateAnnotation = (annotator: Annotator | null, annotation: Object, status: Status) => {
+    if (!annotator) {
+        throw annotatorNotDefinedError;
+    }
+    const actionEvent: AnnotationActionEvent = {
+        annotation,
+        meta: {
+            // TODO: Potentialy make requestId optional - not needed for all actions except Creation
+            requestId: '',
+            status,
+        },
     };
+    annotator.emit('annotations_update', actionEvent);
+};
 
-    const publishAnnotationUpdateStart = (annotationData: Object) => {
-        publishAnnotationUpdateStartToContext(annotationData, originProp);
-    };
-    const publishAnnotationUpdateEnd = (annotationData: Object) => {
-        publishAnnotationUpdateEndToContext(annotationData, originProp);
-    };
+function useAnnotatorEvents() {
+    const { annotator, onAnnotationDeleted, onAnnotationSelected, onAnnotationUpdated } = React.useContext(AnnotatorContext);
 
-    // Take action only if change has not originated from the hook user
-    if (origin !== originProp) {
-        if (action === Action.DELETE_START && annotation?.id && onAnnotationDeleteStart) {
-            onAnnotationDeleteStart(annotation.id);
-        } else if (action === Action.DELETE_END && annotation?.id && onAnnotationDeleteEnd) {
-            onAnnotationDeleteEnd(annotation.id);
-        } else if (action === Action.UPDATE_START && annotation && onAnnotationUpdateStart) {
-            onAnnotationUpdateStart(annotation);
-        } else if (action === Action.UPDATE_END && annotation && onAnnotationUpdateEnd) {
-            onAnnotationUpdateEnd(annotation);
+    const setActiveAnnotation = (annotationId: string | null, fileVersionId: string) => {
+        if (!annotator) {
+            throw annotatorNotDefinedError;
         }
-    }
+        annotator.emit('annotations_active_change', { annotationId, fileVersionId });
+    };
 
-    // Take action only if annotation became active in Sidebar
-    if (origin === 'sidebar' && action === Action.SET_ACTIVE && onSidebarAnnotationSelected) {
-        onSidebarAnnotationSelected(activeAnnotationId);
-    }
+    const updateAnnotationStart = (annotation: Object) => {
+        updateAnnotation(annotator, annotation, Status.PENDING);
+    };
+    const updateAnnotationEnd = (annotation: Object) => {
+        updateAnnotation(annotator, annotation, Status.SUCCESS);
+    };
+
+    const annotationSelectedListener = (annotationId: string) => {
+        if (onAnnotationSelected) {
+            onAnnotationSelected(annotationId);
+        }
+    };
+    const annotationDeletedListener = (annotationId: string) => {
+        if (onAnnotationDeleted) {
+            onAnnotationDeleted(annotationId);
+        }
+    };
+    const annotationUpdateListener = (annotation: Object) => {
+        if (onAnnotationUpdated) {
+            onAnnotationUpdated(annotation);
+        }
+    };
+
+    React.useEffect(() => {
+        if (annotator) {
+            annotator.addListener('annotations_active_set', annotationSelectedListener);
+            annotator.addListener('annotations_remove', annotationDeletedListener);
+            annotator.addListener('annotations_update_sidebar', annotationUpdateListener);
+        }
+        return () => {
+            if (annotator) {
+                annotator.removeListener('annotations_active_set', annotationSelectedListener);
+                annotator.removeListener('annotations_remove', annotationDeletedListener);
+                annotator.removeListener('annotations_update_sidebar', annotationUpdateListener);
+            }
+        };
+    });
 
     return {
-        publishActiveAnnotationChange,
-        publishAnnotationUpdateEnd,
-        publishAnnotationUpdateStart,
+        setActiveAnnotation,
+        updateAnnotationEnd,
+        updateAnnotationStart,
     };
 }
 
