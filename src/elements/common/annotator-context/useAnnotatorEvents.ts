@@ -25,8 +25,8 @@ const updateAnnotation = (annotator: Annotator | null, annotation: Object, statu
     annotator.emit('annotations_update', actionEvent);
 };
 
-function useAnnotatorEvents() {
-    const { annotator, onAnnotationDeleted, onAnnotationSelected, onAnnotationUpdated } = React.useContext(AnnotatorContext);
+function useAnnotatorEvents({ onAnnotationDeleted, onAnnotationSelected, onAnnotationUpdated }: useAnnotatorEvents) {
+    const { annotator } = React.useContext(AnnotatorContext);
 
     const setActiveAnnotation = (annotationId: string | null, fileVersionId: string) => {
         if (!annotator) {
