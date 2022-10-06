@@ -12,6 +12,16 @@ const messages = defineMessages({
         defaultMessage: 'Translate',
         description: 'Translate button for translating comment',
     },
+    activityMessageSeeMore: {
+        id: 'be.contentSidebar.activityFeed.common.seeMore',
+        defaultMessage: 'See more',
+        description: 'See more button for showing whole long message',
+    },
+    activityMessageSeeLess: {
+        id: 'be.contentSidebar.activityFeed.common.seeLess',
+        defaultMessage: 'See less',
+        description: 'See less button for hiding part of long message',
+    },
     activityMessageEdited: {
         id: 'be.contentSidebar.activityFeed.common.editedMessage',
         defaultMessage: ' (edited)',

@@ -6,6 +6,7 @@ import LoadingIndicator from '../../../../../components/loading-indicator';
 import formatTaggedMessage from '../../utils/formatTaggedMessage';
 import ShowOriginalButton from './ShowOriginalButton';
 import TranslateButton from './TranslateButton';
+import TruncatableMessage from './TruncatableMessage';
 import type { GetProfileUrlCallback } from '../../../../common/flowTypes';
 import messages from './messages';
 import './ActivityMessage.scss';
@@ -95,12 +96,14 @@ class ActivityMessage extends React.Component<Props, State> {
             </div>
         ) : (
             <div className="bcs-ActivityMessage">
-                {formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl)}
-                {isEdited && (
-                    <span className="bcs-ActivityMessage-edited">
-                        <FormattedMessage {...messages.activityMessageEdited} />
-                    </span>
-                )}
+                <TruncatableMessage>
+                    {formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl)}
+                    {isEdited && (
+                        <span className="bcs-ActivityMessage-edited">
+                            <FormattedMessage {...messages.activityMessageEdited} />
+                        </span>
+                    )}
+                </TruncatableMessage>
                 {translationEnabled ? this.getButton(isTranslation) : null}
             </div>
         );
