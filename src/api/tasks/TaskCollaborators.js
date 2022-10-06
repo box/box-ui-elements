@@ -12,6 +12,7 @@ import {
     ERROR_CODE_UPDATE_TASK_COLLABORATOR,
     ERROR_CODE_DELETE_TASK_COLLABORATOR,
     API_PAGE_LIMIT,
+    FEED_ITEM_TYPE_TASK,
 } from '../../constants';
 import type { ElementsErrorCallback } from '../../common/types/api';
 import type { BoxItem } from '../../common/types/core';
@@ -51,7 +52,7 @@ class TaskCollaborators extends TasksBase {
         const requestData = {
             data: {
                 task: {
-                    type: 'task',
+                    type: FEED_ITEM_TYPE_TASK,
                     id: task.id,
                 },
                 target: {
@@ -88,7 +89,7 @@ class TaskCollaborators extends TasksBase {
         const requestData = {
             data: {
                 task: {
-                    type: 'task',
+                    type: FEED_ITEM_TYPE_TASK,
                     id: task.id,
                 },
                 target: {

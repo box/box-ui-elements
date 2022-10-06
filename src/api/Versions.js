@@ -15,6 +15,7 @@ import {
     ERROR_CODE_FETCH_VERSIONS,
     ERROR_CODE_PROMOTE_VERSION,
     ERROR_CODE_RESTORE_VERSION,
+    FEED_ITEM_TYPE_VERSION,
     PERMISSION_CAN_DELETE,
     PERMISSION_CAN_UPLOAD,
 } from '../constants';
@@ -249,7 +250,7 @@ class Versions extends OffsetBasedAPI {
             data: {
                 data: {
                     id: versionId,
-                    type: 'file_version',
+                    type: FEED_ITEM_TYPE_VERSION,
                 },
             },
             url: this.getVersionUrl(fileId, 'current'),

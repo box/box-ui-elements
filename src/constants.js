@@ -35,6 +35,13 @@ export const TYPE_FOLDER: 'folder' = 'folder';
 export const TYPE_FILE: 'file' = 'file';
 export const TYPE_WEBLINK: 'web_link' = 'web_link';
 
+/* ----------------------- Feed Items Types ---------------------------- */
+export const FEED_ITEM_TYPE_APP_ACTIVITY: 'app_activity' = 'app_activity';
+export const FEED_ITEM_TYPE_ANNOTATION: 'annotation' = 'annotation';
+export const FEED_ITEM_TYPE_COMMENT: 'comment' = 'comment';
+export const FEED_ITEM_TYPE_TASK: 'task' = 'task';
+export const FEED_ITEM_TYPE_VERSION: 'file_version' = 'file_version';
+
 /* -------------------- Typed Prefix-------------------------- */
 export const TYPED_ID_FOLDER_PREFIX = 'folder_';
 export const TYPED_ID_FILE_PREFIX = 'file_';

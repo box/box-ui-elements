@@ -1,5 +1,11 @@
 // @flow
-import { TASK_NEW_NOT_STARTED } from '../constants';
+import {
+    FEED_ITEM_TYPE_ANNOTATION,
+    FEED_ITEM_TYPE_COMMENT,
+    FEED_ITEM_TYPE_TASK,
+    FEED_ITEM_TYPE_VERSION,
+    TASK_NEW_NOT_STARTED,
+} from '../constants';
 
 export const annotations = [
     {
@@ -51,7 +57,7 @@ export const annotations = [
                 },
                 message: 'Test message',
                 modified_at: '1970-01-01T00:00:00.003Z',
-                type: 'comment',
+                type: FEED_ITEM_TYPE_COMMENT,
                 parent: null,
                 permissions: {
                     can_delete: false,
@@ -65,7 +71,7 @@ export const annotations = [
             },
         ],
         status: 'open',
-        type: 'annotation',
+        type: FEED_ITEM_TYPE_ANNOTATION,
         permissions: {
             can_edit: true,
             can_delete: true,
@@ -74,7 +80,7 @@ export const annotations = [
         file_version: {
             id: '1080675498428',
             version_number: 1,
-            type: 'file_version',
+            type: FEED_ITEM_TYPE_VERSION,
         },
     },
 ];
@@ -130,7 +136,7 @@ export const annotationsWithFormattedReplies = [
                 message: 'Test message',
                 modified_at: '1970-01-01T00:00:00.003Z',
                 tagged_message: 'Test message',
-                type: 'comment',
+                type: FEED_ITEM_TYPE_COMMENT,
                 parent: null,
                 permissions: {
                     can_delete: false,
@@ -144,7 +150,7 @@ export const annotationsWithFormattedReplies = [
             },
         ],
         status: 'open',
-        type: 'annotation',
+        type: FEED_ITEM_TYPE_ANNOTATION,
         permissions: {
             can_edit: true,
             can_delete: true,
@@ -153,7 +159,7 @@ export const annotationsWithFormattedReplies = [
         file_version: {
             id: '1080675498428',
             version_number: 1,
-            type: 'file_version',
+            type: FEED_ITEM_TYPE_VERSION,
         },
     },
 ];
@@ -170,7 +176,7 @@ export const task = {
     due_at: '2019-02-02',
     id: '0',
     name: 'task message',
-    type: 'task',
+    type: FEED_ITEM_TYPE_TASK,
     assigned_to: {
         entries: [
             {
@@ -231,7 +237,7 @@ export const threadedComments = [
         },
         message: '@[111:Aaron Levie] these tigers are cool!',
         modified_at: '1970-01-01T00:00:00.001Z',
-        type: 'comment',
+        type: FEED_ITEM_TYPE_COMMENT,
         parent: null,
         permissions: {
             can_delete: false,
@@ -255,10 +261,10 @@ export const threadedComments = [
                 },
                 message: '@[u1:Mateusz Mamczarz] Yes, they really are!',
                 modified_at: '1970-01-01T00:00:00.002Z',
-                type: 'comment',
+                type: FEED_ITEM_TYPE_COMMENT,
                 parent: {
                     id: 'c1',
-                    type: 'comment',
+                    type: FEED_ITEM_TYPE_COMMENT,
                 },
                 permissions: {
                     can_delete: false,
@@ -289,7 +295,7 @@ export const threadedComments = [
         },
         message: 'Test message',
         modified_at: '1970-01-01T00:00:00.003Z',
-        type: 'comment',
+        type: FEED_ITEM_TYPE_COMMENT,
         parent: null,
         permissions: {
             can_delete: false,
@@ -320,7 +326,7 @@ export const threadedCommentsFormatted = [
         message: '@[111:Aaron Levie] these tigers are cool!',
         modified_at: '1970-01-01T00:00:00.001Z',
         tagged_message: '@[111:Aaron Levie] these tigers are cool!',
-        type: 'comment',
+        type: FEED_ITEM_TYPE_COMMENT,
         parent: null,
         permissions: {
             can_delete: false,
@@ -345,10 +351,10 @@ export const threadedCommentsFormatted = [
                 message: '@[u1:Mateusz Mamczarz] Yes, they really are!',
                 modified_at: '1970-01-01T00:00:00.002Z',
                 tagged_message: '@[u1:Mateusz Mamczarz] Yes, they really are!',
-                type: 'comment',
+                type: FEED_ITEM_TYPE_COMMENT,
                 parent: {
                     id: 'c1',
-                    type: 'comment',
+                    type: FEED_ITEM_TYPE_COMMENT,
                 },
                 permissions: {
                     can_delete: false,
@@ -380,7 +386,7 @@ export const threadedCommentsFormatted = [
         message: 'Test message',
         modified_at: '1970-01-01T00:00:00.003Z',
         tagged_message: 'Test message',
-        type: 'comment',
+        type: FEED_ITEM_TYPE_COMMENT,
         parent: null,
         permissions: {
             can_delete: false,

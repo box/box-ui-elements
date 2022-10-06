@@ -1,6 +1,6 @@
 import Cache from '../Cache';
 import sort, { sortFeedItems } from '../sorter';
-import { SORT_ASC, SORT_DESC } from '../../constants';
+import { FEED_ITEM_TYPE_COMMENT, FEED_ITEM_TYPE_TASK, SORT_ASC, SORT_DESC } from '../../constants';
 import { annotation as mockAnnotation } from '../../__mocks__/annotations';
 
 let cache;
@@ -270,7 +270,7 @@ describe('util/sorter', () => {
             total_count: 1,
             entries: [
                 {
-                    type: 'comment',
+                    type: FEED_ITEM_TYPE_COMMENT,
                     id: '123',
                     created_at: 'Thu Sep 26 33658 19:46:39 GMT-0600 (CST)',
                     tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
@@ -282,7 +282,7 @@ describe('util/sorter', () => {
             total_count: 1,
             entries: [
                 {
-                    type: 'task',
+                    type: FEED_ITEM_TYPE_TASK,
                     id: '1234',
                     created_at: 'Thu Sep 25 33658 19:45:39 GMT-0600 (CST)',
                     modified_at: 'Thu Sep 25 33658 19:46:39 GMT-0600 (CST)',

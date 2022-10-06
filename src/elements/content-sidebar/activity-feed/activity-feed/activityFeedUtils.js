@@ -4,11 +4,11 @@
  */
 
 import selectors from '../../../common/selectors/version';
-import { PLACEHOLDER_USER, VERSION_UPLOAD_ACTION } from '../../../../constants';
+import { FEED_ITEM_TYPE_VERSION, PLACEHOLDER_USER, VERSION_UPLOAD_ACTION } from '../../../../constants';
 import type { FeedItems } from '../../../../common/types/feed';
 
 export const ItemTypes = {
-    fileVersion: 'file_version',
+    fileVersion: FEED_ITEM_TYPE_VERSION,
 };
 
 export function collapseFeedState(feedState: ?FeedItems): FeedItems {

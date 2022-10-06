@@ -1,4 +1,5 @@
 import TaskLinks from '../TaskLinks';
+import { FEED_ITEM_TYPE_TASK } from '../../../constants';
 
 let taskLinks;
 const BASE_URL = 'https://www.foo.com';
@@ -43,7 +44,7 @@ describe('api/TaskLinks', () => {
                     data: {
                         task: {
                             id: task.id,
-                            type: 'task',
+                            type: FEED_ITEM_TYPE_TASK,
                         },
                         target: {
                             id: FILE_ID,

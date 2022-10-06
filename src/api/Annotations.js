@@ -8,6 +8,8 @@ import {
     ERROR_CODE_FETCH_ANNOTATION,
     ERROR_CODE_FETCH_ANNOTATIONS,
     ERROR_CODE_FETCH_REPLIES,
+    FEED_ITEM_TYPE_COMMENT,
+    FEED_ITEM_TYPE_VERSION,
     PERMISSION_CAN_CREATE_ANNOTATIONS,
     PERMISSION_CAN_DELETE,
     PERMISSION_CAN_EDIT,
@@ -63,7 +65,7 @@ export default class Annotations extends MarkerBasedApi {
         // We don't have entries when updating/creating an annotation
         if (!data.entries) {
             // Check if the response is a comment (result of createAnnotationReply)
-            if (data.type && data.type === 'comment') {
+            if (data.type && data.type === FEED_ITEM_TYPE_COMMENT) {
                 this.successCallback(formatComment(data));
                 return;
             }
@@ -73,7 +75,7 @@ export default class Annotations extends MarkerBasedApi {
         }
 
         // Check if the response is the replies of an annotation (result of getAnnotationReplies)
-        if (data.entries.length && data.entries[0].type === 'comment') {
+        if (data.entries.length && data.entries[0].type === FEED_ITEM_TYPE_COMMENT) {
             const replies = data.entries.map(formatComment);
             this.successCallback({ ...data, entries: replies });
             return;
@@ -118,7 +120,7 @@ export default class Annotations extends MarkerBasedApi {
             },
             file_version: {
                 id: fileVersionId,
-                type: 'file_version',
+                type: FEED_ITEM_TYPE_VERSION,
             },
         };
 

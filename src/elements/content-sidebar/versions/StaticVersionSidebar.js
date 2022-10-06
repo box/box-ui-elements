@@ -10,6 +10,7 @@ import { FormattedMessage } from 'react-intl';
 import BoxDrive140 from '../../../illustration/BoxDrive140';
 
 import { BackButton } from '../../common/nav-button';
+import { FEED_ITEM_TYPE_VERSION } from '../../../constants';
 import PrimaryButton from '../../../components/primary-button';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
 import VersionsMenu from './VersionsMenu';
@@ -32,7 +33,7 @@ const StaticVersionsSidebar = ({ isLoading, onUpgradeClick, parentName }: Props)
         return {
             id: versionNumber,
             version_number: versionNumber,
-            type: 'file_version',
+            type: FEED_ITEM_TYPE_VERSION,
             permissions: {
                 can_preview: true,
             },

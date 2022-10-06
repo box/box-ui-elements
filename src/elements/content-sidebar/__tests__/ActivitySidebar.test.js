@@ -3,6 +3,7 @@ import { shallow, mount } from 'enzyme';
 import cloneDeep from 'lodash/cloneDeep';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
 import { filterableActivityFeedItems } from '../fixtures';
+import { FEED_ITEM_TYPE_COMMENT } from '../../../constants';
 
 jest.mock('lodash/debounce', () => jest.fn(i => i));
 
@@ -381,7 +382,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const wrapper = getWrapper({ currentUser: undefined });
             const instance = wrapper.instance();
 
-            expect(() => instance.createReply('123', 'comment', 'abc', true)).toThrow(userError);
+            expect(() => instance.createReply('123', FEED_ITEM_TYPE_COMMENT, 'abc', true)).toThrow(userError);
         });
 
         test('should call the createReply API and fetch the items', () => {
@@ -389,7 +390,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
             const parentId = '123';
-            const parentType = 'comment';
+            const parentType = FEED_ITEM_TYPE_COMMENT;
             const message = 'abc';
 
             instance.setState({
@@ -756,7 +757,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             const itemId = '123';
-            const itemType = 'comment';
+            const itemType = FEED_ITEM_TYPE_COMMENT;
             instance.fetchFeedItems = jest.fn();
 
             wrapper.instance().getReplies(itemId, itemType);

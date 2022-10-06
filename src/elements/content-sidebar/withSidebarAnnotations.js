@@ -3,6 +3,7 @@ import * as React from 'react';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import { matchPath, type ContextRouter } from 'react-router-dom';
+import { FEED_ITEM_TYPE_VERSION } from '../../constants';
 import { getBadUserError } from '../../utils/error';
 import type { WithAnnotatorContextProps } from '../common/annotator-context';
 import type { BoxItem, User } from '../../common/types/core';
@@ -204,7 +205,7 @@ export default function withSidebarAnnotations(
             const fileVersionId = getProp(match, 'params.fileVersionId');
             const { items: feedItems = [] } = feedAPI.getCachedItems(fileId) || {};
             const version = feedItems
-                .filter(item => item.type === 'file_version')
+                .filter(item => item.type === FEED_ITEM_TYPE_VERSION)
                 .find(item => item.id === fileVersionId);
 
             if (version) {

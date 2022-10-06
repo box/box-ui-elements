@@ -29,6 +29,7 @@ import ActivitySidebarFilter from './ActivitySidebarFilter';
 import {
     DEFAULT_COLLAB_DEBOUNCE,
     ERROR_CODE_FETCH_ACTIVITY,
+    FEED_ITEM_TYPE_VERSION,
     ORIGIN_ACTIVITY_SIDEBAR,
     SIDEBAR_VIEW_ACTIVITY,
     TASK_COMPLETION_RULE_ALL,
@@ -821,7 +822,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             return feedItems;
         }
         return feedItems.filter(item => {
-            return item.status === feedItemsStatusFilter || item.type === 'file_version';
+            return item.status === feedItemsStatusFilter || item.type === FEED_ITEM_TYPE_VERSION;
         });
     };
 

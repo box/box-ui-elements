@@ -8,6 +8,7 @@ import type {
     MarkerPaginatedCollection,
     SelectorItems,
 } from './core';
+import { FEED_ITEM_TYPE_TASK } from '../../constants';
 
 type ID = string;
 
@@ -22,7 +23,7 @@ type TaskMini = {|
     id: ID,
     modified_at: ISODate,
     status: TaskStatus,
-    type: 'task',
+    type: typeof FEED_ITEM_TYPE_TASK,
 |};
 
 type TaskCollab<R> = {|
@@ -84,7 +85,7 @@ type TaskNew = {|
     status: TaskStatus,
     task_links: TaskLinkCollection,
     task_type: TaskType,
-    type: 'task',
+    type: typeof FEED_ITEM_TYPE_TASK,
 |};
 
 type TaskPayload = {

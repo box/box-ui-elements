@@ -25,6 +25,9 @@ import {
     ERROR_CODE_CREATE_TASK,
     ERROR_CODE_UPDATE_TASK,
     ERROR_CODE_GROUP_EXCEEDS_LIMIT,
+    FEED_ITEM_TYPE_ANNOTATION,
+    FEED_ITEM_TYPE_COMMENT,
+    FEED_ITEM_TYPE_TASK,
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
     TASK_NEW_APPROVED,
@@ -74,7 +77,6 @@ import type {
 } from '../common/types/feed';
 
 const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
-const TASK = 'task';
 
 type FeedItemsCache = {
     errors: ErrorResponseData[],
@@ -172,7 +174,7 @@ class Feed extends Base {
                 ...annotation,
                 created_by: currentUser,
                 id,
-                type: 'annotation',
+                type: FEED_ITEM_TYPE_ANNOTATION,
             };
 
             this.addPendingItem(this.file.id, currentUser, newAnnotation);
@@ -511,7 +513,7 @@ class Feed extends Base {
             this.fetchRepliesErrorCallback(error, code, commentFeedItemId);
         };
 
-        if (commentFeedItemType === 'annotation') {
+        if (commentFeedItemType === FEED_ITEM_TYPE_ANNOTATION) {
             this.annotationsAPI = new AnnotationsAPI(this.options);
 
             this.annotationsAPI.getAnnotationReplies(
@@ -521,7 +523,7 @@ class Feed extends Base {
                 successCallbackFn,
                 errorCallbackFn,
             );
-        } else if (commentFeedItemType === 'comment') {
+        } else if (commentFeedItemType === FEED_ITEM_TYPE_COMMENT) {
             this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
 
             this.threadedCommentsAPI.getCommentReplies({
@@ -980,7 +982,7 @@ class Feed extends Base {
             due_at: dueAtString,
             id: uuid,
             description: message,
-            type: TASK,
+            type: FEED_ITEM_TYPE_TASK,
             assigned_to: {
                 entries: assignees.map((assignee: SelectorItem<UserMini | GroupMini>) => ({
                     id: uniqueId(),
@@ -1294,10 +1296,10 @@ class Feed extends Base {
             if (item.id !== parentId) {
                 return item;
             }
-            if (item.type === 'annotation') {
+            if (item.type === FEED_ITEM_TYPE_ANNOTATION) {
                 return getItemWithFilteredReplies<Annotation>(item, id);
             }
-            if (item.type === 'comment') {
+            if (item.type === FEED_ITEM_TYPE_COMMENT) {
                 return getItemWithFilteredReplies<Comment>(item, id);
             }
             return item;
@@ -1389,10 +1391,10 @@ class Feed extends Base {
         const cachedItems = this.getCachedItems(this.file.id);
         if (cachedItems) {
             const updatedFeedItems = cachedItems.items.map(item => {
-                if (item.id === parentId && item.type === 'comment') {
+                if (item.id === parentId && item.type === FEED_ITEM_TYPE_COMMENT) {
                     return getItemWithPendingReply<Comment>(item, pendingReply);
                 }
-                if (item.id === parentId && item.type === 'annotation') {
+                if (item.id === parentId && item.type === FEED_ITEM_TYPE_ANNOTATION) {
                     return getItemWithPendingReply<Annotation>(item, pendingReply);
                 }
                 return item;
@@ -1574,10 +1576,10 @@ class Feed extends Base {
         const cachedItems = this.getCachedItems(this.file.id);
         if (cachedItems) {
             const updatedFeedItems = cachedItems.items.map((item: FeedItem) => {
-                if (item.id === parentId && item.type === 'comment') {
+                if (item.id === parentId && item.type === FEED_ITEM_TYPE_COMMENT) {
                     return getItemWithUpdatedReply<Comment>(item, id, replyUpdates);
                 }
-                if (item.id === parentId && item.type === 'annotation') {
+                if (item.id === parentId && item.type === FEED_ITEM_TYPE_ANNOTATION) {
                     return getItemWithUpdatedReply<Annotation>(item, id, replyUpdates);
                 }
                 return item;
@@ -1610,7 +1612,7 @@ class Feed extends Base {
         const commentData = {
             id: uuid,
             tagged_message: text,
-            type: 'comment',
+            type: FEED_ITEM_TYPE_COMMENT,
         };
 
         if (!file.id) {
@@ -1668,7 +1670,7 @@ class Feed extends Base {
         const commentData = {
             id: uuid,
             tagged_message: text,
-            type: 'comment',
+            type: FEED_ITEM_TYPE_COMMENT,
         };
 
         this.file = file;
@@ -1719,7 +1721,7 @@ class Feed extends Base {
         const commentData = {
             id: uuid,
             tagged_message: text,
-            type: 'comment',
+            type: FEED_ITEM_TYPE_COMMENT,
         };
 
         this.file = file;
@@ -1733,7 +1735,7 @@ class Feed extends Base {
             this.createReplyErrorCallback(error, code, parentId, uuid);
         };
 
-        if (parentType === 'annotation') {
+        if (parentType === FEED_ITEM_TYPE_ANNOTATION) {
             this.annotationsAPI = new AnnotationsAPI(this.options);
 
             this.annotationsAPI.createAnnotationReply(
@@ -1744,7 +1746,7 @@ class Feed extends Base {
                 successCallbackFn,
                 errorCallbackFn,
             );
-        } else if (parentType === 'comment') {
+        } else if (parentType === FEED_ITEM_TYPE_COMMENT) {
             this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
 
             this.threadedCommentsAPI.createCommentReply({

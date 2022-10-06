@@ -8,6 +8,7 @@ import {
     ERROR_CODE_EDIT_ANNOTATION,
     ERROR_CODE_FETCH_ANNOTATION,
     ERROR_CODE_FETCH_ANNOTATIONS,
+    FEED_ITEM_TYPE_VERSION,
 } from '../../constants';
 import { formatComment } from '../utils';
 import {
@@ -97,7 +98,7 @@ describe('api/Annotations', () => {
                         },
                         file_version: {
                             id: '67890',
-                            type: 'file_version',
+                            type: FEED_ITEM_TYPE_VERSION,
                         },
                         target: payload.target,
                     },

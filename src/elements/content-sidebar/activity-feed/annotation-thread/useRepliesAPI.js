@@ -3,6 +3,7 @@ import uniqueId from 'lodash/uniqueId';
 import APIFactory from '../../../../api';
 import commonMessages from '../../../common/messages';
 import { commentsErrors } from './errors';
+import { FEED_ITEM_TYPE_COMMENT } from '../../../../constants';
 
 import type { BoxItemPermission, User } from '../../../../common/types/core';
 import type { BoxCommentPermission, Comment, FeedItemStatus } from '../../../../common/types/feed';
@@ -65,7 +66,7 @@ const useRepliesAPI = ({
         const replyData = {
             id: uuid,
             tagged_message: message,
-            type: 'comment',
+            type: FEED_ITEM_TYPE_COMMENT,
         };
         addNewPendingReply(replyData);
 

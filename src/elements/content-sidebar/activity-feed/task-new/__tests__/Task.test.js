@@ -2,6 +2,7 @@ import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import cloneDeep from 'lodash/cloneDeep';
 
+import { FEED_ITEM_TYPE_TASK } from '../../../../../constants';
 import { TaskComponent as Task } from '..';
 
 const allHandlers = {
@@ -68,7 +69,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 {
                     type: 'task_link',
                     id: '6231775',
-                    task: { id: taskId, type: 'task', due_at: null },
+                    task: { id: taskId, type: FEED_ITEM_TYPE_TASK, due_at: null },
                     target: {
                         type: 'file',
                         id: '7895970959',
@@ -85,14 +86,14 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             next_marker: null,
         },
         task_type: 'GENERAL',
-        type: 'task',
+        type: FEED_ITEM_TYPE_TASK,
     };
 
     const taskMultifile = cloneDeep(task);
     taskMultifile.task_links.entries.push({
         type: 'task_link',
         id: taskId,
-        task: { id: '16431755', type: 'task', due_at: null },
+        task: { id: '16431755', type: FEED_ITEM_TYPE_TASK, due_at: null },
         target: {
             type: 'file',
             id: '7895975164',

@@ -13,6 +13,13 @@ import Comment from '../comment';
 import TaskNew from '../task-new';
 import Version, { CollapsedVersion } from '../version';
 import withErrorHandling from '../../withErrorHandling';
+import {
+    FEED_ITEM_TYPE_ANNOTATION,
+    FEED_ITEM_TYPE_APP_ACTIVITY,
+    FEED_ITEM_TYPE_COMMENT,
+    FEED_ITEM_TYPE_TASK,
+    FEED_ITEM_TYPE_VERSION,
+} from '../../../../constants';
 import type {
     Annotation,
     AnnotationPermission,
@@ -139,7 +146,7 @@ const ActiveState = ({
                 const itemFileVersionId = getProp(item, 'file_version.id');
 
                 switch (item.type) {
-                    case 'comment':
+                    case FEED_ITEM_TYPE_COMMENT:
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
@@ -184,7 +191,7 @@ const ActiveState = ({
                                 </ActivityThread>
                             </ActivityItem>
                         );
-                    case 'task':
+                    case FEED_ITEM_TYPE_TASK:
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
@@ -209,7 +216,7 @@ const ActiveState = ({
                                 />
                             </ActivityItem>
                         );
-                    case 'file_version':
+                    case FEED_ITEM_TYPE_VERSION:
                         return (
                             <ActivityItem key={item.type + item.id} className="bcs-version-item" data-testid="version">
                                 {item.versions ? (
@@ -221,7 +228,7 @@ const ActiveState = ({
                                 )}
                             </ActivityItem>
                         );
-                    case 'app_activity':
+                    case FEED_ITEM_TYPE_APP_ACTIVITY:
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
@@ -231,7 +238,7 @@ const ActiveState = ({
                                 <AppActivity currentUser={currentUser} onDelete={onAppActivityDelete} {...item} />
                             </ActivityItem>
                         );
-                    case 'annotation':
+                    case FEED_ITEM_TYPE_ANNOTATION:
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
