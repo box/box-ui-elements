@@ -56,9 +56,6 @@ function useAnnotatorEvents({
     }
 
     return {
-        onAnnotationDeleteEnd,
-        onAnnotationDeleteStart,
-        onSidebarAnnotationSelected,
         publishActiveAnnotationChange,
         publishAnnotationUpdateEnd,
         publishAnnotationUpdateStart,
