@@ -1045,7 +1045,6 @@ describe('api/Feed', () => {
                     '123',
                     undefined,
                     undefined,
-                    true,
                     { can_delete: true },
                     undefined,
                     jest.fn(),
@@ -1072,7 +1071,6 @@ describe('api/Feed', () => {
                     comment.id,
                     testText,
                     testStatus,
-                    true,
                     comment.permissions,
                     successCallback,
                     errorCallback,
@@ -1106,7 +1104,7 @@ describe('api/Feed', () => {
                 id: '1',
                 permissions: { can_edit: true },
             };
-            feed.updateReply(file, reply.id, parentId, text, true, reply.permissions, successCallback, errorCallback);
+            feed.updateReply(file, reply.id, parentId, text, reply.permissions, successCallback, errorCallback);
             expect(feed.threadedCommentsAPI.updateComment).toBeCalledWith({
                 fileId: file.id,
                 commentId: reply.id,
@@ -1619,7 +1617,6 @@ describe('api/Feed', () => {
             id: 'bar',
         };
         const text = 'textfoo';
-        const hasMention = true;
 
         beforeEach(() => {
             successCb = jest.fn();
@@ -1645,7 +1642,7 @@ describe('api/Feed', () => {
         });
 
         test('should create the comment using threaded comments api and invoke the success callback', done => {
-            feed.createThreadedComment(file, currentUser, text, hasMention, true, successCb, errorCb);
+            feed.createThreadedComment(file, currentUser, text, true, successCb, errorCb);
             setImmediate(() => {
                 expect(feed.threadedCommentsAPI.createComment).toBeCalledWith({
                     file,
@@ -1666,9 +1663,9 @@ describe('api/Feed', () => {
                 id: '123',
             };
 
-            expect(() =>
-                feed.createReply({}, currentUser, '123', 'comment', 'abc', true, jest.fn(), jest.fn()),
-            ).toThrow(fileError);
+            expect(() => feed.createReply({}, currentUser, '123', 'comment', 'abc', jest.fn(), jest.fn())).toThrow(
+                fileError,
+            );
         });
 
         test('should create a pending reply', () => {
@@ -1682,7 +1679,7 @@ describe('api/Feed', () => {
                 id: '123',
             };
 
-            feed.createReply(file, currentUser, parentId, parentType, text, true, successCb, errorCb);
+            feed.createReply(file, currentUser, parentId, parentType, text, successCb, errorCb);
 
             expect(feed.addPendingReply).toBeCalledWith(parentId, currentUser, {
                 id: 'uniqueId',
@@ -1703,7 +1700,7 @@ describe('api/Feed', () => {
                 id: '123',
             };
 
-            feed.createReply(file, currentUser, annotationId, parentType, text, true, successCb, errorCb);
+            feed.createReply(file, currentUser, annotationId, parentType, text, successCb, errorCb);
             setImmediate(() => {
                 expect(feed.annotationsAPI.createAnnotationReply).toBeCalledWith(
                     file.id,
@@ -1731,7 +1728,7 @@ describe('api/Feed', () => {
                 id: '123',
             };
 
-            feed.createReply(file, currentUser, commentId, parentType, text, true, successCb, errorCb);
+            feed.createReply(file, currentUser, commentId, parentType, text, successCb, errorCb);
             setImmediate(() => {
                 expect(feed.threadedCommentsAPI.createCommentReply).toBeCalledWith({
                     fileId: file.id,

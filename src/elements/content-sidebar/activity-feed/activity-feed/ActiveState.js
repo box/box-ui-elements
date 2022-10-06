@@ -56,13 +56,12 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
-    onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string, hasMention: boolean) => void,
+    onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void,
     onReplyDelete?: ({ id: string, parentId: string, permissions: BoxCommentPermission }) => void,
     onReplyUpdate?: (
         id: string,
         parentId: string,
         text: string,
-        hasMention: boolean,
         permissions: BoxCommentPermission,
         onSuccess: ?Function,
         onError: ?Function,
@@ -112,11 +111,8 @@ const ActiveState = ({
 }: Props): React.Node => {
     const activeEntry = items.find(({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType);
 
-    const onReplyCreateHandler = (parentId: string, parentType: CommentFeedItemType) => (
-        text: string,
-        hasMention: boolean,
-    ) => {
-        onReplyCreate(parentId, parentType, text, hasMention);
+    const onReplyCreateHandler = (parentId: string, parentType: CommentFeedItemType) => (text: string) => {
+        onReplyCreate(parentId, parentType, text);
     };
     const onReplyDeleteHandler = (parentId: string) => (options: { id: string, permissions: BoxCommentPermission }) => {
         onReplyDelete({ ...options, parentId });
@@ -125,12 +121,11 @@ const ActiveState = ({
         id: string,
         text: string,
         status?: FeedItemStatus,
-        hasMention: boolean,
         permissions: BoxCommentPermission,
         onSuccess: ?Function,
         onError: ?Function,
     ) => {
-        onReplyUpdate(id, parentId, text, hasMention, permissions, onSuccess, onError);
+        onReplyUpdate(id, parentId, text, permissions, onSuccess, onError);
     };
     const onShowRepliesHandler = (id: string, type: CommentFeedItemType) => () => {
         onShowReplies(id, type);
