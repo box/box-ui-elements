@@ -28,15 +28,15 @@
             bottom: 0;
             left: 0;
             margin-top: 0;
+            margin-bottom: $bdl-header-height;
             // cancels out the tether inline styling without having to set enabled=false
             transform: none !important;
         }
 
         .aria-menu:not(.submenu) {
-            position: relative;
             height: 100%;
-            margin: 0;
-            padding-top: $bdl-header-height + $bdl-grid-unit * 3;
+            margin-top: $bdl-header-height;
+            overflow: scroll;
             background-color: $bdl-gray-02;
             border: none;
             border-radius: 0;
