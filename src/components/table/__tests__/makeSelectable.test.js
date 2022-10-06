@@ -315,6 +315,89 @@ describe('components/table/makeSelectable', () => {
         });
     });
 
+    describe('handleShiftKeyDownForGridRow()', () => {
+        afterEach(() => {
+            shiftSelect.mockReset();
+        });
+
+        test('should be no-op when target is the boundary and already selected', () => {
+            const wrapper = getWrapper({
+                selectedItems: ['a'],
+                onSelect: sandbox.mock().never(),
+            });
+            wrapper.setState({ focusedIndex: 0 });
+
+            wrapper.instance().handleShiftKeyDownForGridRow(0, 0);
+            expect(shiftSelect).not.toHaveBeenCalled();
+        });
+
+        test('should select target when it is not already selected', () => {
+            const selectedItems = [];
+            const focusedIndex = 1;
+            const rowIndex = 0;
+            const anchorIndex = 1;
+
+            const wrapper = getWrapper({
+                selectedItems,
+            });
+            wrapper.setState({ focusedIndex });
+            const instance = wrapper.instance();
+            instance.previousIndex = focusedIndex;
+            shiftSelect.mockImplementation(() => new Set([0]));
+            instance.onSelect = (funcSelectedItems, funcFocusedIndex) => {
+                expect(funcSelectedItems.equals(new Set(['a']))).toBe(true);
+                expect(funcFocusedIndex).toEqual(0);
+            };
+
+            instance.handleShiftKeyDownForGridRow(0, 0);
+            expect(shiftSelect).toHaveBeenCalledWith(Set(selectedItems), focusedIndex, rowIndex, anchorIndex);
+        });
+
+        test('should deselect source when both source and target are selected', () => {
+            const selectedItems = ['a', 'b'];
+            const focusedIndex = 0;
+            const rowIndex = 1;
+            const anchorIndex = 0;
+
+            const wrapper = getWrapper({
+                selectedItems,
+            });
+            wrapper.setState({ focusedIndex });
+            const instance = wrapper.instance();
+            instance.previousIndex = focusedIndex;
+            shiftSelect.mockImplementation(() => new Set([1]));
+            instance.onSelect = (funcSelectedItems, funcFocusedIndex) => {
+                expect(funcSelectedItems.equals(new Set(['b']))).toBe(true);
+                expect(funcFocusedIndex).toEqual(1);
+            };
+
+            instance.handleShiftKeyDownForGridRow(1, 4);
+            expect(shiftSelect).toHaveBeenCalledWith(Set([0, 1]), focusedIndex, rowIndex, anchorIndex);
+        });
+
+        test('should select source when target is selected but not source', () => {
+            const selectedItems = ['b'];
+            const focusedIndex = 0;
+            const rowIndex = 1;
+            const anchorIndex = 0;
+
+            const wrapper = getWrapper({
+                selectedItems,
+            });
+            wrapper.setState({ focusedIndex });
+            const instance = wrapper.instance();
+            instance.previousIndex = focusedIndex;
+            shiftSelect.mockImplementation(() => new Set([0, 1]));
+            instance.onSelect = (funcSelectedItems, funcFocusedIndex) => {
+                expect(funcSelectedItems.equals(new Set(['a', 'b']))).toBe(true);
+                expect(funcFocusedIndex).toEqual(1);
+            };
+
+            instance.handleShiftKeyDownForGridRow(1, 0);
+            expect(shiftSelect).toHaveBeenCalledWith(Set([1]), focusedIndex, rowIndex, anchorIndex);
+        });
+    });
+
     describe('clearFocus()', () => {
         test('should clear focus', () => {
             const wrapper = getWrapper();

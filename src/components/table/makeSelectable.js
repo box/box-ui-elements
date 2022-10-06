@@ -40,6 +40,8 @@ function makeSelectable(BaseTable) {
              * with an ImmutableJS Set.
              */
             selectedItems: PropTypes.oneOfType([PropTypes.array, ImmutablePropTypes.set]),
+            /** Array of unique IDs of the items in the table that are visible to the user. If not provided, this will default to all data */
+            visibleData: PropTypes.array,
             enableHotkeys: PropTypes.bool,
             /** Translated type for hotkeys. If not provided, then the hotkeys will not appear in the help modal. */
             hotkeyType: PropTypes.string,
@@ -277,7 +279,7 @@ function makeSelectable(BaseTable) {
                         }
 
                         const newFocusedIndex = Math.min(focusedIndex + 1, data.length - 1);
-                        this.handleShiftKeyDown(newFocusedIndex, data.length - 1);
+                        this.handleShiftKeyDownForGrid(newFocusedIndex, data.length - 1);
                     },
                     type: hotkeyType,
                 }),
@@ -292,7 +294,7 @@ function makeSelectable(BaseTable) {
                         }
 
                         const newFocusedIndex = Math.max(focusedIndex - 1, 0);
-                        this.handleShiftKeyDown(newFocusedIndex, 0);
+                        this.handleShiftKeyDownForGrid(newFocusedIndex, 0);
                     },
                     type: hotkeyType,
                 }),
@@ -308,7 +310,7 @@ function makeSelectable(BaseTable) {
                         }
 
                         const newFocusedIndex = Math.min(focusedIndex + gridColumnCount, data.length - 1);
-                        this.handleShiftKeyDownForGridRow(newFocusedIndex, data.length - 1);
+                        this.handleShiftKeyDownForGrid(newFocusedIndex, data.length - 1);
                     },
                     type: hotkeyType,
                 }),
@@ -324,7 +326,7 @@ function makeSelectable(BaseTable) {
                         }
 
                         const newFocusedIndex = Math.max(focusedIndex - gridColumnCount, 0);
-                        this.handleShiftKeyDownForGridRow(newFocusedIndex, 0);
+                        this.handleShiftKeyDownForGrid(newFocusedIndex, 0);
                     },
                     type: hotkeyType,
                 }),
@@ -349,9 +351,10 @@ function makeSelectable(BaseTable) {
         };
 
         getProcessedProps = () => {
-            const { selectedItems } = this.props;
+            const { data, visibleData, selectedItems } = this.props;
             return {
                 ...this.props,
+                visibleData: visibleData ? Set(visibleData) : Set(data),
                 selectedItems: Set.isSet(selectedItems) ? selectedItems : new Set(selectedItems),
             };
         };
@@ -468,16 +471,56 @@ function makeSelectable(BaseTable) {
             this.onSelect(selectedItems.add(data[focusedIndex]), newFocusedIndex);
         };
 
-        handleShiftKeyDownForGridRow = (newFocusedIndex, boundary) => {
-            const { data, selectedItems } = this.getProcessedProps();
+        isContinuation = (selectedItemIndecies, sourceIndex, targetIndex) => {
+            if (sourceIndex < targetIndex && selectedItemIndecies.has(sourceIndex - 1)) {
+                return true;
+            }
+            if (targetIndex < sourceIndex && selectedItemIndecies.has(sourceIndex + 1)) {
+                return true;
+            }
+            return false;
+        };
+
+        handleShiftKeyDownForGrid = newFocusedIndex => {
+            const { data, visibleData, selectedItems } = this.getProcessedProps();
             const { focusedIndex } = this.state;
 
-            // if we're at a boundary of the table and the row is selected, no-op
-            if (focusedIndex === boundary && selectedItems.has(data[focusedIndex])) {
+            const dataSize = data.length;
+            const targetIndex = newFocusedIndex < 0 ? 0 : Math.min(newFocusedIndex, dataSize - 1);
+            const isSourceSelected = selectedItems.has(data[focusedIndex]);
+            const isTargetSelected = selectedItems.has(data[targetIndex]);
+
+            if (!visibleData.has(data[targetIndex])) {
                 return;
             }
 
-            this.selectRange(newFocusedIndex);
+            const selectedItemIndecies = new Set(
+                data.reduce((rows, item, i) => {
+                    if (selectedItems.has(item)) {
+                        rows.push(i);
+                    }
+                    return rows;
+                }, []),
+            );
+
+            if (
+                !isSourceSelected &&
+                !isTargetSelected &&
+                !this.isContinuation(selectedItemIndecies, focusedIndex, targetIndex)
+            ) {
+                this.anchorIndex = focusedIndex;
+            }
+
+            const newSelectedItemIndecies = shiftSelect(
+                selectedItemIndecies,
+                focusedIndex,
+                targetIndex,
+                this.anchorIndex,
+            );
+
+            const newSelectedItems = newSelectedItemIndecies.map(i => data[i]);
+
+            this.onSelect(newSelectedItems, targetIndex);
         };
 
         handleKeyboardSearch = event => {
