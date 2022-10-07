@@ -40,8 +40,8 @@ function makeSelectable(BaseTable) {
              * with an ImmutableJS Set.
              */
             selectedItems: PropTypes.oneOfType([PropTypes.array, ImmutablePropTypes.set]),
-            /** Array of unique IDs of the items in the table that are visible to the user. If not provided, this will default to all data */
-            visibleData: PropTypes.array,
+            /** Array of unique IDs of the items in the table that are loaded and accessible. If not provided, this will default to all data */
+            loadedData: PropTypes.array,
             enableHotkeys: PropTypes.bool,
             /** Translated type for hotkeys. If not provided, then the hotkeys will not appear in the help modal. */
             hotkeyType: PropTypes.string,
@@ -351,10 +351,10 @@ function makeSelectable(BaseTable) {
         };
 
         getProcessedProps = () => {
-            const { data, visibleData, selectedItems } = this.props;
+            const { data, loadedData, selectedItems } = this.props;
             return {
                 ...this.props,
-                visibleData: visibleData ? Set(visibleData) : Set(data),
+                loadedData: loadedData ? Set(loadedData) : Set(data),
                 selectedItems: Set.isSet(selectedItems) ? selectedItems : new Set(selectedItems),
             };
         };
@@ -482,7 +482,7 @@ function makeSelectable(BaseTable) {
         };
 
         handleShiftKeyDownForGrid = newFocusedIndex => {
-            const { data, visibleData, selectedItems } = this.getProcessedProps();
+            const { data, loadedData, selectedItems } = this.getProcessedProps();
             const { focusedIndex } = this.state;
 
             const dataSize = data.length;
@@ -490,7 +490,8 @@ function makeSelectable(BaseTable) {
             const isSourceSelected = selectedItems.has(data[focusedIndex]);
             const isTargetSelected = selectedItems.has(data[targetIndex]);
 
-            if (!visibleData.has(data[targetIndex])) {
+            // if data is not loaded, we don't want it to be able to be selected
+            if (!loadedData.has(data[targetIndex])) {
                 return;
             }
 
@@ -503,9 +504,11 @@ function makeSelectable(BaseTable) {
                 }, []),
             );
 
+            // reset the anchor on a new selection block
             if (
                 !isSourceSelected &&
                 !isTargetSelected &&
+                // if we are starting a new mass selection adjacent selected block, we want to connect them
                 !this.isContinuation(selectedItemIndecies, focusedIndex, targetIndex)
             ) {
                 this.anchorIndex = focusedIndex;

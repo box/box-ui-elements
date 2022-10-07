@@ -315,26 +315,40 @@ describe('components/table/makeSelectable', () => {
         });
     });
 
-    describe('handleShiftKeyDownForGridRow()', () => {
-        afterEach(() => {
-            shiftSelect.mockReset();
+    describe('isContinuation()', () => {
+        const wrapper = getWrapper();
+        const instance = wrapper.instance();
+        const { isContinuation } = instance;
+        test('returns true if source is less than target and source - 1 is selected', () => {
+            expect(isContinuation(Set([0]), 1, 2)).toEqual(true);
         });
 
-        test('should be no-op when target is the boundary and already selected', () => {
-            const wrapper = getWrapper({
-                selectedItems: ['a'],
-                onSelect: sandbox.mock().never(),
-            });
-            wrapper.setState({ focusedIndex: 0 });
+        test('returns false if source is less than target and source - 1 is not selected', () => {
+            expect(isContinuation(Set(), 1, 2)).toEqual(false);
+        });
 
-            wrapper.instance().handleShiftKeyDownForGridRow(0, 0);
-            expect(shiftSelect).not.toHaveBeenCalled();
+        test('returns true if source is grater than target and source + 1 is selected', () => {
+            expect(isContinuation(Set([2]), 1, 0)).toEqual(true);
+        });
+
+        test('returns false if source is greater than target and source + 1 is not selected', () => {
+            expect(isContinuation(Set(), 1, 2)).toEqual(false);
+        });
+
+        test('returns false if source and target are equal', () => {
+            expect(isContinuation(Set([0, 2]), 1, 1)).toEqual(false);
+        });
+    });
+
+    describe('handleShiftKeyDownForGrid()', () => {
+        afterEach(() => {
+            shiftSelect.mockReset();
         });
 
         test('should select target when it is not already selected', () => {
             const selectedItems = [];
             const focusedIndex = 1;
-            const rowIndex = 0;
+            const targetIndex = 0;
             const anchorIndex = 1;
 
             const wrapper = getWrapper({
@@ -342,21 +356,20 @@ describe('components/table/makeSelectable', () => {
             });
             wrapper.setState({ focusedIndex });
             const instance = wrapper.instance();
-            instance.previousIndex = focusedIndex;
             shiftSelect.mockImplementation(() => new Set([0]));
             instance.onSelect = (funcSelectedItems, funcFocusedIndex) => {
                 expect(funcSelectedItems.equals(new Set(['a']))).toBe(true);
                 expect(funcFocusedIndex).toEqual(0);
             };
 
-            instance.handleShiftKeyDownForGridRow(0, 0);
-            expect(shiftSelect).toHaveBeenCalledWith(Set(selectedItems), focusedIndex, rowIndex, anchorIndex);
+            instance.handleShiftKeyDownForGrid(targetIndex);
+            expect(shiftSelect).toHaveBeenCalledWith(Set(selectedItems), focusedIndex, targetIndex, anchorIndex);
         });
 
         test('should deselect source when both source and target are selected', () => {
             const selectedItems = ['a', 'b'];
             const focusedIndex = 0;
-            const rowIndex = 1;
+            const targetIndex = 1;
             const anchorIndex = 0;
 
             const wrapper = getWrapper({
@@ -364,21 +377,20 @@ describe('components/table/makeSelectable', () => {
             });
             wrapper.setState({ focusedIndex });
             const instance = wrapper.instance();
-            instance.previousIndex = focusedIndex;
             shiftSelect.mockImplementation(() => new Set([1]));
             instance.onSelect = (funcSelectedItems, funcFocusedIndex) => {
                 expect(funcSelectedItems.equals(new Set(['b']))).toBe(true);
                 expect(funcFocusedIndex).toEqual(1);
             };
 
-            instance.handleShiftKeyDownForGridRow(1, 4);
-            expect(shiftSelect).toHaveBeenCalledWith(Set([0, 1]), focusedIndex, rowIndex, anchorIndex);
+            instance.handleShiftKeyDownForGrid(targetIndex);
+            expect(shiftSelect).toHaveBeenCalledWith(Set([0, 1]), focusedIndex, targetIndex, anchorIndex);
         });
 
         test('should select source when target is selected but not source', () => {
             const selectedItems = ['b'];
             const focusedIndex = 0;
-            const rowIndex = 1;
+            const targetIndex = 1;
             const anchorIndex = 0;
 
             const wrapper = getWrapper({
@@ -386,15 +398,90 @@ describe('components/table/makeSelectable', () => {
             });
             wrapper.setState({ focusedIndex });
             const instance = wrapper.instance();
-            instance.previousIndex = focusedIndex;
             shiftSelect.mockImplementation(() => new Set([0, 1]));
             instance.onSelect = (funcSelectedItems, funcFocusedIndex) => {
                 expect(funcSelectedItems.equals(new Set(['a', 'b']))).toBe(true);
                 expect(funcFocusedIndex).toEqual(1);
             };
 
-            instance.handleShiftKeyDownForGridRow(1, 0);
-            expect(shiftSelect).toHaveBeenCalledWith(Set([1]), focusedIndex, rowIndex, anchorIndex);
+            instance.handleShiftKeyDownForGrid(targetIndex);
+            expect(shiftSelect).toHaveBeenCalledWith(Set([1]), focusedIndex, targetIndex, anchorIndex);
+        });
+
+        test('should select source and target and set anchor when both are unselected', () => {
+            const selectedItems = [];
+            const focusedIndex = 2;
+            const targetIndex = 3;
+            const anchorIndex = 2;
+
+            const wrapper = getWrapper({
+                selectedItems,
+            });
+            wrapper.setState({ focusedIndex });
+            const instance = wrapper.instance();
+            shiftSelect.mockImplementation(() => new Set([2, 3]));
+            instance.onSelect = (funcSelectedItems, funcFocusedIndex) => {
+                expect(funcSelectedItems.equals(new Set(['c', 'd']))).toBe(true);
+                expect(funcFocusedIndex).toEqual(targetIndex);
+            };
+
+            instance.handleShiftKeyDownForGrid(targetIndex);
+            expect(shiftSelect).toHaveBeenCalledWith(Set([]), focusedIndex, targetIndex, anchorIndex);
+        });
+
+        test('should select source and target and not set anchor when both are unselected and it is a continuation', () => {
+            const selectedItems = ['a', 'b'];
+            const focusedIndex = 2;
+            const targetIndex = 3;
+            const anchorIndex = 0;
+
+            const wrapper = getWrapper({
+                selectedItems,
+            });
+            wrapper.setState({ focusedIndex });
+            const instance = wrapper.instance();
+            shiftSelect.mockImplementation(() => new Set([0, 1, 2, 3]));
+            instance.onSelect = (funcSelectedItems, funcFocusedIndex) => {
+                expect(funcSelectedItems.equals(new Set(['a', 'b', 'c', 'd']))).toBe(true);
+                expect(funcFocusedIndex).toEqual(targetIndex);
+            };
+
+            instance.handleShiftKeyDownForGrid(targetIndex);
+            expect(shiftSelect).toHaveBeenCalledWith(Set([0, 1]), focusedIndex, targetIndex, anchorIndex);
+        });
+
+        test('should set targetIndex to 0 when it is below 0', () => {
+            const selectedItems = ['b'];
+            const focusedIndex = 1;
+            const targetIndex = -1;
+            const anchorIndex = 0;
+
+            const wrapper = getWrapper({
+                selectedItems,
+            });
+            wrapper.setState({ focusedIndex });
+            const instance = wrapper.instance();
+            shiftSelect.mockImplementation(() => new Set([0, 1]));
+
+            instance.handleShiftKeyDownForGrid(targetIndex);
+            expect(shiftSelect).toHaveBeenCalledWith(Set([1]), focusedIndex, 0, anchorIndex);
+        });
+
+        test('should set targetIndex to max index when it is greater than the max index', () => {
+            const selectedItems = ['b'];
+            const focusedIndex = 1;
+            const targetIndex = data.length;
+            const anchorIndex = 0;
+
+            const wrapper = getWrapper({
+                selectedItems,
+            });
+            wrapper.setState({ focusedIndex });
+            const instance = wrapper.instance();
+            shiftSelect.mockImplementation(() => new Set([0, 1]));
+
+            instance.handleShiftKeyDownForGrid(targetIndex);
+            expect(shiftSelect).toHaveBeenCalledWith(Set([1]), focusedIndex, data.length - 1, anchorIndex);
         });
     });
 
@@ -871,7 +958,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler();
                 });
 
-                test('should call handleShiftKeyDown() with the index of the next item in the table', () => {
+                test('should call handleShiftKeyDownForGrid() with the index of the next item in the table', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
                         isGridView: true,
@@ -880,13 +967,13 @@ describe('components/table/makeSelectable', () => {
                     wrapper.setState({ focusedIndex: 0 });
 
                     const instance = wrapper.instance();
-                    instance.handleShiftKeyDown = sandbox.mock().withArgs(1, data.length - 1);
+                    instance.handleShiftKeyDownForGrid = sandbox.mock().withArgs(1);
 
                     const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
                     shortcut.handler();
                 });
 
-                test('should not call handleShiftKeyDown() with an index greater than the highest index', () => {
+                test('should not call handleShiftKeyDownForGrid() with an index greater than the highest index', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
                         isGridView: true,
@@ -895,7 +982,7 @@ describe('components/table/makeSelectable', () => {
                     wrapper.setState({ focusedIndex: 4 });
 
                     const instance = wrapper.instance();
-                    instance.handleShiftKeyDown = sandbox.mock().withArgs(data.length - 1, data.length - 1);
+                    instance.handleShiftKeyDownForGrid = sandbox.mock().withArgs(data.length - 1);
 
                     const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
                     shortcut.handler();
@@ -919,7 +1006,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler();
                 });
 
-                test('should call handleShiftKeyDown() with index of the next item in the table', () => {
+                test('should call handleShiftKeyDownForGrid() with index of the next item in the table', () => {
                     const wrapper = getWrapper({
                         focusedItem: 'b',
                         gridColumnCount,
@@ -929,13 +1016,13 @@ describe('components/table/makeSelectable', () => {
                     wrapper.setState({ focusedIndex: 1 });
 
                     const instance = wrapper.instance();
-                    instance.handleShiftKeyDown = sandbox.mock().withArgs(0, 0);
+                    instance.handleShiftKeyDownForGrid = sandbox.mock().withArgs(0);
 
                     const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
                     shortcut.handler();
                 });
 
-                test('should not call handleShiftKeyDown() with an index lower than 0', () => {
+                test('should not call handleShiftKeyDownForGrid() with an index lower than 0', () => {
                     const wrapper = getWrapper({
                         focusedItem: 'a',
                         gridColumnCount,
@@ -945,7 +1032,7 @@ describe('components/table/makeSelectable', () => {
                     wrapper.setState({ focusedIndex: 0 });
 
                     const instance = wrapper.instance();
-                    instance.handleShiftKeyDown = sandbox.mock().withArgs(0, 0);
+                    instance.handleShiftKeyDownForGrid = sandbox.mock().withArgs(0);
 
                     const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
                     shortcut.handler();
@@ -969,7 +1056,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler();
                 });
 
-                test('should call handleShiftKeyDownForGridRow() with the index of the next row item in the table', () => {
+                test('should call handleShiftKeyDownForGrid() with the index of the next row item in the table', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
                         isGridView: true,
@@ -978,13 +1065,13 @@ describe('components/table/makeSelectable', () => {
                     wrapper.setState({ focusedIndex: 0 });
 
                     const instance = wrapper.instance();
-                    instance.handleShiftKeyDownForGridRow = sandbox.mock().withArgs(gridColumnCount, data.length - 1);
+                    instance.handleShiftKeyDownForGrid = sandbox.mock().withArgs(gridColumnCount);
 
                     const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
                     shortcut.handler();
                 });
 
-                test('should not call handleShiftKeyDownForGridRow() with an index greater than the highest index', () => {
+                test('should not call handleShiftKeyDownForGrid() with an index greater than the highest index', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
                         isGridView: true,
@@ -993,7 +1080,7 @@ describe('components/table/makeSelectable', () => {
                     wrapper.setState({ focusedIndex: 4 });
 
                     const instance = wrapper.instance();
-                    instance.handleShiftKeyDownForGridRow = sandbox.mock().withArgs(data.length - 1, data.length - 1);
+                    instance.handleShiftKeyDownForGrid = sandbox.mock().withArgs(data.length - 1);
 
                     const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
                     shortcut.handler();
@@ -1017,7 +1104,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler();
                 });
 
-                test('should call handleShiftKeyDownForGridRow() with index of the next item in the table', () => {
+                test('should call handleShiftKeyDownForGrid() with index of the next item in the table', () => {
                     const wrapper = getWrapper({
                         focusedItem: 'b',
                         gridColumnCount,
@@ -1027,13 +1114,13 @@ describe('components/table/makeSelectable', () => {
                     wrapper.setState({ focusedIndex: 1 });
 
                     const instance = wrapper.instance();
-                    instance.handleShiftKeyDownForGridRow = sandbox.mock().withArgs(0, 0);
+                    instance.handleShiftKeyDownForGrid = sandbox.mock().withArgs(0);
 
                     const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
                     shortcut.handler();
                 });
 
-                test('should not call handleShiftKeyDownForGridRow() with an index lower than 0', () => {
+                test('should not call handleShiftKeyDownForGrid() with an index lower than 0', () => {
                     const wrapper = getWrapper({
                         focusedItem: 'a',
                         gridColumnCount,
@@ -1043,7 +1130,7 @@ describe('components/table/makeSelectable', () => {
                     wrapper.setState({ focusedIndex: 0 });
 
                     const instance = wrapper.instance();
-                    instance.handleShiftKeyDownForGridRow = sandbox.mock().withArgs(0, 0);
+                    instance.handleShiftKeyDownForGrid = sandbox.mock().withArgs(0);
 
                     const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
                     shortcut.handler();
