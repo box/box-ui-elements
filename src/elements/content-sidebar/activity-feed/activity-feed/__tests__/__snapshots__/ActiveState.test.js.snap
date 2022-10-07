@@ -142,6 +142,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
             "can_resolve": false,
           }
         }
+        shouldTruncate={true}
         tagged_message="test @[123:Jeezy] @[10:Kanye West]"
         type="comment"
       />

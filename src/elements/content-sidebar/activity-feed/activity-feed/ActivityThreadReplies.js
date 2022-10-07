@@ -59,6 +59,7 @@ const ActivityThreadReplies = ({
                     onDelete={onDelete}
                     onEdit={onEdit}
                     permissions={getReplyPermissions(lastReply)}
+                    shouldTruncate
                     translations={translations}
                 />
             ) : (
@@ -74,6 +75,7 @@ const ActivityThreadReplies = ({
                         onDelete={onDelete}
                         onEdit={onEdit}
                         permissions={getReplyPermissions(reply)}
+                        shouldTruncate
                         translations={translations}
                     />
                 ))

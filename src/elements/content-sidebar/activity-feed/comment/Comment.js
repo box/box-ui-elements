@@ -52,6 +52,7 @@ type Props = {
         onError: ?Function,
     ) => void,
     permissions: BoxCommentPermission,
+    shouldTruncate?: boolean,
     status?: FeedItemStatus,
     tagged_message: string,
     translatedTaggedMessage?: string,
@@ -68,6 +69,7 @@ class Comment extends React.Component<Props, State> {
     static defaultProps = {
         onDelete: noop,
         onEdit: noop,
+        shouldTruncate: false,
     };
 
     state = {
@@ -130,6 +132,7 @@ class Comment extends React.Component<Props, State> {
             modified_at,
             onEdit,
             status,
+            shouldTruncate,
         } = this.props;
         const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
         const canDelete = permissions.can_delete;
@@ -258,6 +261,7 @@ class Comment extends React.Component<Props, State> {
                                 {...translations}
                                 translationFailed={error ? true : null}
                                 getUserProfileUrl={getUserProfileUrl}
+                                shouldTruncate={shouldTruncate}
                             />
                         )}
                     </Media.Body>
