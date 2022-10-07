@@ -16,6 +16,7 @@ type Props = {
     id: string,
     isEdited?: boolean,
     onTranslate?: Function,
+    shouldTruncate?: boolean,
     tagged_message: string,
     translatedTaggedMessage?: string,
     translationEnabled?: boolean,
@@ -31,6 +32,7 @@ class ActivityMessage extends React.Component<Props, State> {
     static defaultProps = {
         isEdited: false,
         translationEnabled: false,
+        shouldTruncate: false,
     };
 
     state = {
@@ -90,20 +92,22 @@ class ActivityMessage extends React.Component<Props, State> {
         const { isLoading, isTranslation } = this.state;
         const commentToDisplay =
             translationEnabled && isTranslation && translatedTaggedMessage ? translatedTaggedMessage : tagged_message;
+        const MessageWrapper = this.props.shouldTruncate ? TruncatableMessage : React.Fragment;
+
         return isLoading ? (
             <div className="bcs-ActivityMessageLoading">
                 <LoadingIndicator size="small" />
             </div>
         ) : (
             <div className="bcs-ActivityMessage">
-                <TruncatableMessage>
+                <MessageWrapper>
                     {formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl)}
                     {isEdited && (
                         <span className="bcs-ActivityMessage-edited">
                             <FormattedMessage {...messages.activityMessageEdited} />
                         </span>
                     )}
-                </TruncatableMessage>
+                </MessageWrapper>
                 {translationEnabled ? this.getButton(isTranslation) : null}
             </div>
         );

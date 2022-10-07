@@ -73,6 +73,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
       <ActivityMessage
         id="123"
         isEdited={false}
+        shouldTruncate={false}
         tagged_message="test"
         translationEnabled={false}
         translationFailed={null}
@@ -119,6 +120,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
         id="123"
         isEdited={false}
         onTranslate={[MockFunction]}
+        shouldTruncate={false}
         tagged_message="test"
         translationEnabled={true}
         translationFailed={null}
@@ -164,6 +166,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
       <ActivityMessage
         id="123"
         isEdited={false}
+        shouldTruncate={false}
         tagged_message="test"
         translationEnabled={false}
         translationFailed={true}
@@ -213,6 +216,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
       <ActivityMessage
         id="123"
         isEdited={false}
+        shouldTruncate={false}
         tagged_message="test"
         translationEnabled={false}
         translationFailed={null}

@@ -137,6 +137,16 @@ describe('elements/content-sidebar/ActivityFeed/common/activity-message', () => 
         expect(wrapper.state('isLoading')).toBe(false);
     });
 
+    test('should have TruncatableMessage when `shouldTruncate` is passed', () => {
+        const commentText = {
+            tagged_message: 'How u doing @[2030326577:Young Jeezy]?',
+        };
+
+        const wrapper = shallow(<ActivityMessage id="123" {...commentText} shouldTruncate />);
+
+        expect(wrapper.find('TruncatableMessage').length).toEqual(1);
+    });
+
     test.each`
         isEdited | expected
         ${false} | ${false}
