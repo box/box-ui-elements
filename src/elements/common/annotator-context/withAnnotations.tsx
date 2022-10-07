@@ -13,8 +13,9 @@ export type ActiveChangeEvent = {
 export type ActiveChangeEventHandler = (event: ActiveChangeEvent) => void;
 
 export type ComponentWithAnnotations = {
-    emitActiveChangeEvent: (id: string | null) => void;
-    emitRemoveEvent: (id: string) => void;
+    emitActiveAnnotationChangeEvent: (id: string | null) => void;
+    emitAnnotationRemoveEvent: (id: string, isStartEvent?: boolean) => void;
+    emitAnnotationUpdateEvent: (annotation: Object, isStartEvent?: boolean) => void;
     getAction: (eventData: AnnotationActionEvent) => Action;
     getAnnotationsPath: (fileVersionId?: string, annotationId?: string | null) => string;
     getMatchPath: GetMatchPath;
@@ -66,7 +67,7 @@ export default function withAnnotations<P extends object>(
             this.state = { ...defaultState, activeAnnotationId };
         }
 
-        emitActiveChangeEvent = (id: string | null) => {
+        emitActiveAnnotationChangeEvent = (id: string | null) => {
             const { annotator } = this;
 
             if (!annotator) {
@@ -76,24 +77,29 @@ export default function withAnnotations<P extends object>(
             annotator.emit('annotations_active_set', id);
         };
 
-        emitRemoveEvent = (id: string) => {
+        emitAnnotationRemoveEvent = (id: string, isStartEvent = false) => {
             const { annotator } = this;
 
             if (!annotator) {
                 return;
             }
 
-            annotator.emit('annotations_remove', id);
+            // Event name does not include "sidebar" namespace because of backwards compatibility with Preview
+            const event = isStartEvent ? 'annotations_remove_start' : 'annotations_remove';
+
+            annotator.emit(event, id);
         };
 
-        emitUpdateEvent = (annotation: Object) => {
+        emitAnnotationUpdateEvent = (annotation: Object, isStartEvent = false) => {
             const { annotator } = this;
 
             if (!annotator) {
                 return;
             }
 
-            annotator.emit('annotations_update_sidebar', annotation);
+            const event = isStartEvent ? 'sidebar.annotations_update_start' : 'sidebar.annotations_update';
+
+            annotator.emit(event, annotation);
         };
 
         getAction({ meta: { status }, error }: AnnotationActionEvent): Action {
@@ -143,12 +149,6 @@ export default function withAnnotations<P extends object>(
 
         handleAnnotationUpdate = (eventData: AnnotationActionEvent) => {
             const { annotation = null, error = null, meta = null } = eventData;
-            const { onError } = this.props;
-
-            if (onError && error) {
-                // TODO: Change code
-                onError(error, 'create_annotation_error', { showNotification: true });
-            }
 
             this.setState({
                 ...this.state,
@@ -188,6 +188,7 @@ export default function withAnnotations<P extends object>(
                 this.annotator.removeListener('annotations_active_change', this.handleActiveChange);
                 this.annotator.removeListener('annotations_create', this.handleAnnotationCreate);
                 this.annotator.removeListener('annotations_fetch_error', this.handleAnnotationFetchError);
+                this.annotator.removeListener('annotations_update', this.handleAnnotationUpdate);
             }
 
             this.annotator = null;
@@ -197,10 +198,9 @@ export default function withAnnotations<P extends object>(
             return (
                 <AnnotatorContext.Provider
                     value={{
-                        annotator: this.annotator,
-                        emitActiveChangeEvent: this.emitActiveChangeEvent,
-                        emitRemoveEvent: this.emitRemoveEvent,
-                        emitUpdateEvent: this.emitUpdateEvent,
+                        emitActiveAnnotationChangeEvent: this.emitActiveAnnotationChangeEvent,
+                        emitAnnotationRemoveEvent: this.emitAnnotationRemoveEvent,
+                        emitAnnotationUpdateEvent: this.emitAnnotationUpdateEvent,
                         getAnnotationsMatchPath: this.getMatchPath,
                         getAnnotationsPath: this.getAnnotationsPath,
                         state: this.state,

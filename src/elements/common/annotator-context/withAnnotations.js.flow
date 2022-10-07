@@ -21,13 +21,16 @@ import {
 export type ActiveChangeEvent = {
     annotationId: string | null,
     fileVersionId: string,
-    origin?: string,
     ...
 };
 export type ActiveChangeEventHandler = (event: ActiveChangeEvent) => void;
 export type ComponentWithAnnotations = {
-    emitActiveChangeEvent: (id: string | null) => void,
-    emitRemoveEvent: (id: string) => void,
+    emitActiveAnnotationChangeEvent: (id: string | null) => void,
+    emitAnnotationRemoveEvent: (id: string, isStartEvent?: boolean) => void,
+    emitAnnotationUpdateEvent: (
+        annotation: Object,
+        isStartEvent?: boolean
+    ) => void,
     getAction: (eventData: AnnotationActionEvent) => Action,
     getAnnotationsPath: (
         fileVersionId?: string,
@@ -41,23 +44,9 @@ export type ComponentWithAnnotations = {
         error: Error,
         ...
     }) => void,
+    handleAnnotationUpdate: (eventData: AnnotationActionEvent) => void,
     handleAnnotator: (annotator: Annotator) => void,
     handlePreviewDestroy: (shouldReset?: boolean) => void,
-    publishActiveAnnotationChangeInSidebar: (id: string | null) => void,
-    publishAnnotationDelete: (
-        id: string,
-        action: typeof Action.DELETE_START | typeof Action.DELETE_END,
-        origin: string
-    ) => void,
-    publishAnnotationDeleteEnd: (id: string, origin?: string) => void,
-    publishAnnotationDeleteStart: (id: string, origin?: string) => void,
-    publishAnnotationUpdate: (
-        annotation: Object,
-        action: Action,
-        origin: string
-    ) => void,
-    publishAnnotationUpdateEnd: (annotation: Object, origin?: string) => void,
-    publishAnnotationUpdateStart: (annotation: Object, origin?: string) => void,
     ...
 };
 export type WithAnnotationsProps = {

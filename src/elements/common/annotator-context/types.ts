@@ -1,6 +1,5 @@
 import { Location } from 'history';
 import { match } from 'react-router-dom';
-import { ActiveChangeEventHandler } from './withAnnotations';
 
 export const CREATE = 'create';
 
@@ -36,14 +35,11 @@ export interface AnnotatorState {
 export type GetMatchPath = (location?: Location) => match<MatchParams> | null;
 
 export interface AnnotatorContext {
+    emitActiveAnnotationChangeEvent?: (id: string) => void;
+    emitAnnotationRemoveEvent?: (id: string, isStartEvent?: boolean) => void;
+    emitAnnotationUpdateEvent?: (annotation: Object, isStartEvent?: boolean) => void;
     getAnnotationsMatchPath: GetMatchPath;
     getAnnotationsPath: (fileVersionId?: string, annotationId?: string) => string;
-    publishActiveAnnotationChange: ActiveChangeEventHandler;
-    publishActiveAnnotationChangeInSidebar: (id: string | null) => void;
-    publishAnnotationDeleteEnd: (id: string, origin?: string) => void;
-    publishAnnotationDeleteStart: (id: string, origin?: string) => void;
-    publishAnnotationUpdateEnd: (annotation: Object, origin?: string) => void;
-    publishAnnotationUpdateStart: (annotation: Object, origin?: string) => void;
     state: AnnotatorState;
 }
 
@@ -59,7 +55,7 @@ export type MatchParams = {
 };
 
 export interface Metadata {
-    requestId: string;
+    requestId?: string;
     status: Status;
 }
 
@@ -67,5 +63,4 @@ export interface AnnotationActionEvent {
     annotation?: object;
     error?: Error;
     meta: Metadata;
-    origin?: string;
 }

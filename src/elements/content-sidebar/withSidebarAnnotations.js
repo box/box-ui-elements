@@ -71,10 +71,9 @@ export default function withSidebarAnnotations(
 
             if (action === 'update_start' || action === 'update_end') {
                 this.updateAnnotation();
-                return;
             }
 
-            if (annotation && prevAnnotation !== annotation) {
+            if ((action === 'create_start' || action === 'create_end') && annotation && prevAnnotation !== annotation) {
                 this.addAnnotation();
             }
 
@@ -141,17 +140,21 @@ export default function withSidebarAnnotations(
                 api,
                 file,
                 isOpen,
+                location,
             } = this.props;
 
             const feedAPI = api.getFeedAPI(false);
+            const pathname = getProp(location, 'pathname', '');
+            const isActivity = matchPath(pathname, '/activity');
+            const isPending = action === 'update_start';
             feedAPI.file = file;
 
             const { current } = this.sidebarPanels;
 
-            const isPending = action === 'update_start';
             feedAPI.updateFeedItem({ ...annotation, isPending }, annotation.id);
 
-            if (current && isOpen) {
+            // If the activity sidebar is currently open, then force it to refresh with the updated data
+            if (current && isActivity && isOpen) {
                 current.refresh(false);
             }
         }

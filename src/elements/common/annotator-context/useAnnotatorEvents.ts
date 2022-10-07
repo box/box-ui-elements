@@ -1,82 +1,90 @@
 import * as React from 'react';
-import AnnotatorContext from './AnnotatorContext';
-import { AnnotationActionEvent, Annotator, Status } from './types';
+import { EventEmitter } from 'events';
+import { AnnotationActionEvent, Status } from './types';
 
-interface useAnnotatorEvents {
-    onAnnotationDeleted: (annotationId: string) => void;
-    onAnnotationSelected: (annotationId: string) => void;
-    onAnnotationUpdated: (annotation: Object) => void;
+export interface UseAnnotatorEventsProps {
+    eventEmitter: EventEmitter;
+    onAnnotationDeleteEnd?: (annotationId: string) => void;
+    onAnnotationDeleteStart?: (annotationId: string) => void;
+    onAnnotationUpdateEnd?: (annotation: Object) => void;
+    onAnnotationUpdateStart?: (annotation: Object) => void;
+    onSidebarAnnotationSelected?: (annotationId: string) => void;
 }
 
-const annotatorNotDefinedError = new Error('Annotator not defined');
-
-const updateAnnotation = (annotator: Annotator | null, annotation: Object, status: Status) => {
-    if (!annotator) {
-        throw annotatorNotDefinedError;
-    }
+const emitUpdateAnnotationEvent = (eventEmitter: EventEmitter, annotation: Object, status: Status) => {
     const actionEvent: AnnotationActionEvent = {
         annotation,
-        meta: {
-            // TODO: Potentialy make requestId optional - not needed for all actions except Creation
-            requestId: '',
-            status,
-        },
+        meta: { status },
     };
-    annotator.emit('annotations_update', actionEvent);
+    eventEmitter.emit('annotations_update', actionEvent);
 };
 
-function useAnnotatorEvents({ onAnnotationDeleted, onAnnotationSelected, onAnnotationUpdated }: useAnnotatorEvents) {
-    const { annotator } = React.useContext(AnnotatorContext);
-
-    const setActiveAnnotation = (annotationId: string | null, fileVersionId: string) => {
-        if (!annotator) {
-            throw annotatorNotDefinedError;
-        }
-        annotator.emit('annotations_active_change', { annotationId, fileVersionId });
+function useAnnotatorEvents({
+    eventEmitter,
+    onAnnotationDeleteEnd,
+    onAnnotationDeleteStart,
+    onAnnotationUpdateEnd,
+    onAnnotationUpdateStart,
+    onSidebarAnnotationSelected,
+}: UseAnnotatorEventsProps) {
+    const emitAnnotationActiveChangeEvent = (annotationId: string | null, fileVersionId: string) => {
+        eventEmitter.emit('annotations_active_change', { annotationId, fileVersionId });
     };
 
-    const updateAnnotationStart = (annotation: Object) => {
-        updateAnnotation(annotator, annotation, Status.PENDING);
+    const emitUpdateAnnotationStartEvent = (annotation: Object) => {
+        emitUpdateAnnotationEvent(eventEmitter, annotation, Status.PENDING);
     };
-    const updateAnnotationEnd = (annotation: Object) => {
-        updateAnnotation(annotator, annotation, Status.SUCCESS);
+    const emitUpdateAnnotationEndEvent = (annotation: Object) => {
+        emitUpdateAnnotationEvent(eventEmitter, annotation, Status.SUCCESS);
     };
 
-    const annotationSelectedListener = (annotationId: string) => {
-        if (onAnnotationSelected) {
-            onAnnotationSelected(annotationId);
+    const annotationSidebarSelectedListener = (annotationId: string) => {
+        if (onSidebarAnnotationSelected) {
+            onSidebarAnnotationSelected(annotationId);
         }
     };
-    const annotationDeletedListener = (annotationId: string) => {
-        if (onAnnotationDeleted) {
-            onAnnotationDeleted(annotationId);
+
+    const annotationDeleteStartListener = (annotationId: string) => {
+        if (onAnnotationDeleteStart) {
+            onAnnotationDeleteStart(annotationId);
         }
     };
-    const annotationUpdateListener = (annotation: Object) => {
-        if (onAnnotationUpdated) {
-            onAnnotationUpdated(annotation);
+    const annotationDeleteEndListener = (annotationId: string) => {
+        if (onAnnotationDeleteEnd) {
+            onAnnotationDeleteEnd(annotationId);
+        }
+    };
+
+    const annotationUpdateStartListener = (annotation: Object) => {
+        if (onAnnotationUpdateStart) {
+            onAnnotationUpdateStart(annotation);
+        }
+    };
+    const annotationUpdateEndListener = (annotation: Object) => {
+        if (onAnnotationUpdateEnd) {
+            onAnnotationUpdateEnd(annotation);
         }
     };
 
     React.useEffect(() => {
-        if (annotator) {
-            annotator.addListener('annotations_active_set', annotationSelectedListener);
-            annotator.addListener('annotations_remove', annotationDeletedListener);
-            annotator.addListener('annotations_update_sidebar', annotationUpdateListener);
-        }
+        eventEmitter.addListener('annotations_active_set', annotationSidebarSelectedListener);
+        eventEmitter.addListener('annotations_remove', annotationDeleteEndListener);
+        eventEmitter.addListener('annotations_remove_start', annotationDeleteStartListener);
+        eventEmitter.addListener('sidebar.annotations_update', annotationUpdateEndListener);
+        eventEmitter.addListener('sidebar.annotations_update_start', annotationUpdateStartListener);
         return () => {
-            if (annotator) {
-                annotator.removeListener('annotations_active_set', annotationSelectedListener);
-                annotator.removeListener('annotations_remove', annotationDeletedListener);
-                annotator.removeListener('annotations_update_sidebar', annotationUpdateListener);
-            }
+            eventEmitter.removeListener('annotations_active_set', annotationSidebarSelectedListener);
+            eventEmitter.removeListener('annotations_remove', annotationDeleteEndListener);
+            eventEmitter.removeListener('annotations_remove_start', annotationDeleteStartListener);
+            eventEmitter.removeListener('sidebar.annotations_update', annotationUpdateEndListener);
+            eventEmitter.removeListener('sidebar.annotations_update_start', annotationUpdateStartListener);
         };
     });
 
     return {
-        setActiveAnnotation,
-        updateAnnotationEnd,
-        updateAnnotationStart,
+        emitAnnotationActiveChangeEvent,
+        emitUpdateAnnotationEndEvent,
+        emitUpdateAnnotationStartEvent,
     };
 }
 

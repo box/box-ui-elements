@@ -29,23 +29,19 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             annotation: { foo: 'bar' },
             action: Action.CREATE_START,
         };
+        const mockEmitActiveAnnotationChangeEvent = jest.fn();
+        const mockEmitAnnotationRemoveEvent = jest.fn();
+        const mockEmitAnnotationUpdateEvent = jest.fn();
         const mockGetAnnotationsMatchPath = jest.fn();
         const mockGetAnnotationsPath = jest.fn();
-        const mockPublishActiveAnnotationChangeInSidebar = jest.fn();
-        const mockPublishAnnotationUpdateEnd = jest.fn();
-        const mockPublishAnnotationUpdateStart = jest.fn();
-        const mockPublishAnnotationDeleteEnd = jest.fn();
-        const mockPublishAnnotationDeleteStart = jest.fn();
 
         mockContext.mockReturnValue({
+            state: annotatorState,
+            emitActiveAnnotationChangeEvent: mockEmitActiveAnnotationChangeEvent,
+            emitAnnotationRemoveEvent: mockEmitAnnotationRemoveEvent,
+            emitAnnotationUpdateEvent: mockEmitAnnotationUpdateEvent,
             getAnnotationsMatchPath: mockGetAnnotationsMatchPath,
             getAnnotationsPath: mockGetAnnotationsPath,
-            publishActiveAnnotationChangeInSidebar: mockPublishActiveAnnotationChangeInSidebar,
-            publishAnnotationUpdateEnd: mockPublishAnnotationUpdateEnd,
-            publishAnnotationUpdateStart: mockPublishAnnotationUpdateStart,
-            publishAnnotationDeleteEnd: mockPublishAnnotationDeleteEnd,
-            publishAnnotationDeleteStart: mockPublishAnnotationDeleteStart,
-            state: annotatorState,
         });
 
         const wrapper = getWrapper();
@@ -57,12 +53,10 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             annotation: { foo: 'bar' },
             action: Action.CREATE_START,
         });
+        expect(props.emitActiveAnnotationChangeEvent).toEqual(mockEmitActiveAnnotationChangeEvent);
+        expect(props.emitAnnotationRemoveEvent).toEqual(mockEmitAnnotationRemoveEvent);
+        expect(props.emitAnnotationUpdateEvent).toEqual(mockEmitAnnotationUpdateEvent);
         expect(props.getAnnotationsMatchPath).toEqual(mockGetAnnotationsMatchPath);
         expect(props.getAnnotationsPath).toEqual(mockGetAnnotationsPath);
-        expect(props.publishActiveAnnotationChangeInSidebar).toEqual(mockPublishActiveAnnotationChangeInSidebar);
-        expect(props.publishAnnotationUpdateEnd).toEqual(mockPublishAnnotationUpdateEnd);
-        expect(props.publishAnnotationUpdateStart).toEqual(mockPublishAnnotationUpdateStart);
-        expect(props.publishAnnotationDeleteEnd).toEqual(mockPublishAnnotationDeleteEnd);
-        expect(props.publishAnnotationDeleteStart).toEqual(mockPublishAnnotationDeleteStart);
     });
 });

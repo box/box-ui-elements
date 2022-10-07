@@ -80,9 +80,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         `(
             'should call updateActiveAnnotation $expectedCount times if $condition',
             ({ prevActiveAnnotationId, activeAnnotationId, isAnnotationsPath, expectedCount }) => {
-                const wrapper = getWrapper({
-                    annotatorState: { activeAnnotationId: prevActiveAnnotationId },
-                });
+                const wrapper = getWrapper({ annotatorState: { activeAnnotationId: prevActiveAnnotationId } });
                 const instance = wrapper.instance();
 
                 instance.updateActiveAnnotation = jest.fn();
@@ -93,22 +91,6 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 expect(instance.updateActiveAnnotation).toHaveBeenCalledTimes(expectedCount);
             },
         );
-
-        test('should not call updateActiveAnnotation if origin is sidebar', () => {
-            const wrapper = getWrapper({
-                annotatorState: { activeAnnotationId: '1' },
-            });
-            const instance = wrapper.instance();
-
-            instance.updateActiveAnnotation = jest.fn();
-            annotatorContextProps.getAnnotationsMatchPath.mockReturnValue(true);
-
-            wrapper.setProps({
-                annotatorState: { activeAnnotationId: '2', action: Action.SET_ACTIVE, origin: 'sidebar' },
-            });
-
-            expect(instance.updateActiveAnnotation).not.toBeCalled();
-        });
 
         test.each`
             annotation   | expectedCount
@@ -126,12 +108,18 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
             },
         );
 
-        test('should not call addAnnotation if origin is sidebar', () => {
-            const wrapper = getWrapper();
-            wrapper.instance().addAnnotation = jest.fn();
-            wrapper.setProps({ annotatorState: { annotation: {}, action: Action.CREATE_END, origin: 'sidebar' } });
+        test.each`
+            action
+            ${Action.UPDATE_START}
+            ${Action.UPDATE_END}
+        `('should call updateAnnotation if given action = $action', ({ action }) => {
+            const annotation = { id: '123', status: 'resolved' };
 
-            expect(wrapper.instance().addAnnotation).not.toBeCalled();
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.updateAnnotation = jest.fn();
+            wrapper.setProps({ annotatorState: { annotation, action } });
+            expect(instance.updateAnnotation).toBeCalled();
         });
 
         test.each`
@@ -145,26 +133,6 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
             wrapper.setProps({ fileId });
 
             expect(onVersionChange).toHaveBeenCalledTimes(expectedCount);
-        });
-
-        test.each`
-            action
-            ${Action.UPDATE_START}
-            ${Action.UPDATE_END}
-        `('should call updateAnnotation if action = $action', ({ action }) => {
-            const wrapper = getWrapper();
-            wrapper.instance().updateAnnotation = jest.fn();
-            wrapper.setProps({ annotatorState: { annotation: {}, action } });
-
-            expect(wrapper.instance().updateAnnotation).toBeCalled();
-        });
-
-        test('should not call updateAnnotation if origin is sidebar', () => {
-            const wrapper = getWrapper();
-            wrapper.instance().updateAnnotation = jest.fn();
-            wrapper.setProps({ annotatorState: { annotation: {}, action: Action.UPDATE_END, origin: 'sidebar' } });
-
-            expect(wrapper.instance().updateAnnotation).not.toBeCalled();
         });
     });
 
@@ -305,17 +273,12 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
             ${Action.UPDATE_START} | ${true}
             ${Action.UPDATE_END}   | ${false}
         `(
-            'should update the annotation in the feed cache accordingly given action = $action',
+            'should update appropriate annotation in the feed given action = $action',
             ({ action, expectedIsPending }) => {
-                const annotationUpdate = {
-                    id: '123',
-                    description: {
-                        message: 'text',
-                    },
-                };
+                const annotation = { id: '123', status: 'resolved' };
                 const annotatorStateMock = {
+                    annotation,
                     action,
-                    annotation: annotationUpdate,
                 };
 
                 const wrapper = getWrapper({ annotatorState: annotatorStateMock });
@@ -323,8 +286,8 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
 
                 instance.updateAnnotation();
 
-                const expectedAnnotationData = { ...annotationUpdate, isPending: expectedIsPending };
-                expect(feedAPI.updateFeedItem).toBeCalledWith(expectedAnnotationData, annotationUpdate.id);
+                const expectedAnnotationData = { ...annotation, isPending: expectedIsPending };
+                expect(feedAPI.updateFeedItem).toBeCalledWith(expectedAnnotationData, annotation.id);
             },
         );
 

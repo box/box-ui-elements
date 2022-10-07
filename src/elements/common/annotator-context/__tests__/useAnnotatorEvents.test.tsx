@@ -1,168 +1,158 @@
-import * as React from 'react';
 import { renderHook, act } from '@testing-library/react-hooks';
-import useAnnotatorEvents, { UseAnnotatorEventsProps } from '../useAnnotatorEvents';
-import AnnotatorContext from '../AnnotatorContext';
-import { Action, AnnotatorState } from '../types';
+import useAnnotatorEvents from '../useAnnotatorEvents';
+import { Status } from '../types';
 
 describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
-    const mockPublishActiveAnnotationChange = jest.fn();
-    const mockPublishAnnotationUpdateEnd = jest.fn();
-    const mockPublishAnnotationUpdateStart = jest.fn();
+    const mockAddListener = jest.fn();
+    const mockEmit = jest.fn();
+    const mockRemoveListener = jest.fn();
 
     afterEach(() => {
         jest.clearAllMocks();
     });
 
-    const getHookOrigin = () => 'hookUser';
-
-    const getProviderValues = (state: AnnotatorState) => ({
-        getAnnotationsMatchPath: jest.fn(),
-        getAnnotationsPath: jest.fn(),
-        publishActiveAnnotationChange: mockPublishActiveAnnotationChange,
-        publishActiveAnnotationChangeInSidebar: jest.fn(),
-        publishAnnotationDeleteEnd: jest.fn(),
-        publishAnnotationDeleteStart: jest.fn(),
-        publishAnnotationUpdateEnd: mockPublishAnnotationUpdateEnd,
-        publishAnnotationUpdateStart: mockPublishAnnotationUpdateStart,
-        state,
-    });
-
-    const getHook = (annotatorState: AnnotatorState = {}, props: UseAnnotatorEventsProps = {}) => {
-        const wrapper = ({ children }: { children?: React.ReactNode }) => (
-            <AnnotatorContext.Provider value={getProviderValues(annotatorState)}>{children}</AnnotatorContext.Provider>
-        );
-        return renderHook(() => useAnnotatorEvents({ ...props, origin: getHookOrigin() }), { wrapper });
+    const getHook = (props: Object = {}) => {
+        const mockEventEmitter = {
+            addListener: mockAddListener,
+            emit: mockEmit,
+            eventNames: jest.fn(),
+            getMaxListeners: jest.fn(),
+            listenerCount: jest.fn(),
+            listeners: jest.fn(),
+            off: jest.fn(),
+            on: jest.fn(),
+            once: jest.fn(),
+            prependListener: jest.fn(),
+            prependOnceListener: jest.fn(),
+            rawListeners: jest.fn(),
+            removeAllListeners: jest.fn(),
+            removeListener: mockRemoveListener,
+            setMaxListeners: jest.fn(),
+        };
+        return renderHook(() => useAnnotatorEvents({ ...props, eventEmitter: mockEventEmitter }));
     };
 
-    test('should call onAnnotationDeleteStart', () => {
-        const annotationDeleteStartHandler = jest.fn();
-        const annotatorState = {
-            action: Action.DELETE_START,
-            annotation: { id: '123' },
-        };
-        getHook(annotatorState, { onAnnotationDeleteStart: annotationDeleteStartHandler });
-
-        expect(annotationDeleteStartHandler).toBeCalledWith('123');
+    test('should call onAnnotationDeleteStart when proper event is emitted', () => {
+        const mockAnnotationDeleteStart = jest.fn();
+        const mockAnnotationId = '123';
+        mockAddListener.mockImplementation((event: string, callback: (id: string) => void) => {
+            if (event === 'annotations_remove_start') {
+                callback(mockAnnotationId);
+            }
+        });
+        getHook({ onAnnotationDeleteStart: mockAnnotationDeleteStart });
+        expect(mockAddListener).toBeCalledWith('annotations_remove_start', expect.any(Function));
+        expect(mockAnnotationDeleteStart).toBeCalledWith(mockAnnotationId);
     });
 
-    test('should call onAnnotationDeleteEnd', () => {
-        const annotationDeleteEndHandler = jest.fn();
-        const annotatorState = {
-            action: Action.DELETE_END,
-            annotation: { id: '123' },
-        };
-        getHook(annotatorState, { onAnnotationDeleteEnd: annotationDeleteEndHandler });
-
-        expect(annotationDeleteEndHandler).toBeCalledWith('123');
+    test('should call onAnnotationDeleteEnd when proper event is emitted', () => {
+        const mockAnnotationDeleteEnd = jest.fn();
+        const mockAnnotationId = '123';
+        mockAddListener.mockImplementation((event: string, callback: (id: string) => void) => {
+            if (event === 'annotations_remove') {
+                callback(mockAnnotationId);
+            }
+        });
+        getHook({ onAnnotationDeleteEnd: mockAnnotationDeleteEnd });
+        expect(mockAddListener).toBeCalledWith('annotations_remove', expect.any(Function));
+        expect(mockAnnotationDeleteEnd).toBeCalledWith(mockAnnotationId);
     });
 
-    test('should call onAnnotationUpdateStart', () => {
-        const annotationUpdateStartHandler = jest.fn();
-        const annotation = { id: '123', status: 'resolved' };
-        const annotatorState = {
-            action: Action.UPDATE_START,
-            annotation,
-        };
-        getHook(annotatorState, { onAnnotationUpdateStart: annotationUpdateStartHandler });
-
-        expect(annotationUpdateStartHandler).toBeCalledWith(annotation);
+    test('should call onAnnotationUpdateStart when proper event is emitted', () => {
+        const mockAnnotationUpdateStart = jest.fn();
+        const mockAnnotation = { id: '123', status: 'resolved' };
+        mockAddListener.mockImplementation((event: string, callback: (annotation: Object) => void) => {
+            if (event === 'sidebar.annotations_update_start') {
+                callback(mockAnnotation);
+            }
+        });
+        getHook({ onAnnotationUpdateStart: mockAnnotationUpdateStart });
+        expect(mockAddListener).toBeCalledWith('sidebar.annotations_update_start', expect.any(Function));
+        expect(mockAnnotationUpdateStart).toBeCalledWith(mockAnnotation);
     });
 
-    test('should call onAnnotationUpdateEnd', () => {
-        const annotationUpdateEndHandler = jest.fn();
-        const annotation = { id: '123', status: 'resolved' };
-        const annotatorState = {
-            action: Action.UPDATE_END,
-            annotation,
-        };
-        getHook(annotatorState, { onAnnotationUpdateEnd: annotationUpdateEndHandler });
-
-        expect(annotationUpdateEndHandler).toBeCalledWith(annotation);
+    test('should call onAnnotationUpdateEnd when proper event is emitted', () => {
+        const mockAnnotationUpdateEnd = jest.fn();
+        const mockAnnotation = { id: '123', status: 'resolved' };
+        mockAddListener.mockImplementation((event: string, callback: (annotation: Object) => void) => {
+            if (event === 'sidebar.annotations_update') {
+                callback(mockAnnotation);
+            }
+        });
+        getHook({ onAnnotationUpdateEnd: mockAnnotationUpdateEnd });
+        expect(mockAddListener).toBeCalledWith('sidebar.annotations_update', expect.any(Function));
+        expect(mockAnnotationUpdateEnd).toBeCalledWith(mockAnnotation);
     });
 
-    test('should call onSidebarAnnotationSelected', () => {
-        const onSidebarAnnotationSelectedHandler = jest.fn();
-        const annotatorState = {
-            action: Action.SET_ACTIVE,
-            activeAnnotationId: '123',
-            origin: 'sidebar',
-        };
-        getHook(annotatorState, { onSidebarAnnotationSelected: onSidebarAnnotationSelectedHandler });
-
-        expect(onSidebarAnnotationSelectedHandler).toBeCalledWith('123');
+    test('should call onSidebarAnnotationSelected when proper event is emitted', () => {
+        const mockOnSidebarAnnotationSelected = jest.fn();
+        const mockAnnotationId = '123';
+        mockAddListener.mockImplementation((event: string, callback: (id: string) => void) => {
+            if (event === 'annotations_active_set') {
+                callback(mockAnnotationId);
+            }
+        });
+        getHook({ onSidebarAnnotationSelected: mockOnSidebarAnnotationSelected });
+        expect(mockAddListener).toBeCalledWith('annotations_active_set', expect.any(Function));
+        expect(mockOnSidebarAnnotationSelected).toBeCalledWith(mockAnnotationId);
     });
 
-    test.each`
-        action
-        ${Action.DELETE_START}
-        ${Action.DELETE_END}
-        ${Action.UPDATE_START}
-        ${Action.UPDATE_END}
-    `(
-        'should not call update and delete handlers if change originated from hook user given action = $action',
-        ({ action }) => {
-            const annotationDeleteEndHandler = jest.fn();
-            const annotationDeleteStartHandler = jest.fn();
-            const annotationUpdateEndHandler = jest.fn();
-            const annotationUpdateStartHandler = jest.fn();
-            const annotatorState = {
-                action,
-                annotation: { id: '123' },
-                origin: getHookOrigin(),
-            };
-
-            getHook(annotatorState, {
-                onAnnotationDeleteEnd: annotationDeleteEndHandler,
-                onAnnotationDeleteStart: annotationDeleteStartHandler,
-                onAnnotationUpdateEnd: annotationUpdateEndHandler,
-                onAnnotationUpdateStart: annotationUpdateStartHandler,
-            });
-
-            expect(annotationDeleteEndHandler).not.toBeCalled();
-            expect(annotationDeleteStartHandler).not.toBeCalled();
-            expect(annotationUpdateEndHandler).not.toBeCalled();
-            expect(annotationUpdateStartHandler).not.toBeCalled();
-        },
-    );
-
-    test('should publish active annotation change to the context', () => {
+    test('should emit annotation active change event', () => {
         const annotationId = '123';
         const fileVersionId = '456';
 
         const { result } = getHook();
 
         act(() => {
-            result.current.publishActiveAnnotationChange(annotationId, fileVersionId);
+            result.current.emitAnnotationActiveChangeEvent(annotationId, fileVersionId);
         });
 
-        expect(mockPublishActiveAnnotationChange).toBeCalledWith({
-            annotationId,
-            fileVersionId,
-            origin: getHookOrigin(),
-        });
+        expect(mockEmit).toBeCalledWith('annotations_active_change', { annotationId, fileVersionId });
     });
 
-    test('should publish annotation update start to the context', () => {
+    test('should emit annotation update start event', () => {
         const annotation = { id: '123', status: 'resolved' };
 
         const { result } = getHook();
 
         act(() => {
-            result.current.publishAnnotationUpdateStart(annotation);
+            result.current.emitUpdateAnnotationStartEvent(annotation);
         });
 
-        expect(mockPublishAnnotationUpdateStart).toBeCalledWith(annotation, getHookOrigin());
+        const expectedAnnotationActionEvent = {
+            annotation,
+            meta: { status: Status.PENDING },
+        };
+
+        expect(mockEmit).toBeCalledWith('annotations_update', expectedAnnotationActionEvent);
     });
 
-    test('should publish annotation update end to the context', () => {
+    test('should emit annotation update end event', () => {
         const annotation = { id: '123', status: 'resolved' };
 
         const { result } = getHook();
 
         act(() => {
-            result.current.publishAnnotationUpdateEnd(annotation);
+            result.current.emitUpdateAnnotationEndEvent(annotation);
         });
 
-        expect(mockPublishAnnotationUpdateEnd).toBeCalledWith(annotation, getHookOrigin());
+        const expectedAnnotationActionEvent = {
+            annotation,
+            meta: { status: Status.SUCCESS },
+        };
+
+        expect(mockEmit).toBeCalledWith('annotations_update', expectedAnnotationActionEvent);
+    });
+
+    test('should remove all listeneres on cleanup', () => {
+        const { unmount } = getHook();
+
+        unmount();
+
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(1, 'annotations_active_set', expect.any(Function));
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(2, 'annotations_remove', expect.any(Function));
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(3, 'annotations_remove_start', expect.any(Function));
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(4, 'sidebar.annotations_update', expect.any(Function));
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(5, 'sidebar.annotations_update_start', expect.any(Function));
     });
 });

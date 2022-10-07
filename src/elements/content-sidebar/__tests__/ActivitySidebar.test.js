@@ -812,7 +812,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
     describe('handleAnnotationSelect()', () => {
         const annotatorState = { activeAnnotationId: '123' };
-        const publishActiveAnnotationChangeInSidebar = jest.fn();
+        const emitActiveAnnotationChangeEvent = jest.fn();
         const getAnnotationsMatchPath = jest.fn().mockReturnValue({ params: { fileVersionId: '456' } });
         const getAnnotationsPath = jest.fn().mockReturnValue('/activity/annotations/235/124');
         const history = {
@@ -824,22 +824,22 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         const getAnnotationWrapper = () =>
             getWrapper({
                 annotatorState,
+                emitActiveAnnotationChangeEvent,
                 file,
                 getAnnotationsMatchPath,
                 getAnnotationsPath,
                 history,
                 onAnnotationSelect,
-                publishActiveAnnotationChangeInSidebar,
             });
 
-        test('should call publishActiveAnnotationChangeInSidebar and onAnnotatorSelect appropriately', () => {
+        test('should call emitAnnotatorActiveChangeEvent and onAnnotatorSelect appropriately', () => {
             const wrapper = getAnnotationWrapper();
             const instance = wrapper.instance();
             const annotation = { file_version: { id: '235' }, id: '124' };
 
             instance.handleAnnotationSelect(annotation);
 
-            expect(publishActiveAnnotationChangeInSidebar).toBeCalledWith('124');
+            expect(emitActiveAnnotationChangeEvent).toBeCalledWith('124');
             expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
             expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
@@ -851,7 +851,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             instance.handleAnnotationSelect(annotation);
 
-            expect(publishActiveAnnotationChangeInSidebar).toBeCalledWith('124');
+            expect(emitActiveAnnotationChangeEvent).toBeCalledWith('124');
             expect(history.push).not.toHaveBeenCalled();
             expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
@@ -864,7 +864,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             instance.handleAnnotationSelect(annotation);
 
-            expect(publishActiveAnnotationChangeInSidebar).toBeCalledWith('124');
+            expect(emitActiveAnnotationChangeEvent).toBeCalledWith('124');
             expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
             expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
@@ -877,16 +877,16 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             instance.handleAnnotationSelect(annotation);
 
-            expect(publishActiveAnnotationChangeInSidebar).toBeCalledWith('124');
+            expect(emitActiveAnnotationChangeEvent).toBeCalledWith('124');
             expect(history.push).not.toHaveBeenCalled();
             expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
     });
 
     describe('handleAnnotationEdit()', () => {
-        test('should call publishAnnotationUpdateStart and call updateAnnotation API', () => {
-            const publishAnnotationUpdateStart = jest.fn();
-            const wrapper = getWrapper({ publishAnnotationUpdateStart });
+        test('should call updateAnnotation API and call emitAnnotationUpdateEvent', () => {
+            const mockEmitAnnotationUpdateEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationUpdateEvent: mockEmitAnnotationUpdateEvent });
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
 
@@ -896,12 +896,15 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 can_resolve: true,
             });
 
-            expect(publishAnnotationUpdateStart).toBeCalledWith({
-                id: '123',
-                description: {
-                    message: 'hello',
+            expect(mockEmitAnnotationUpdateEvent).toBeCalledWith(
+                {
+                    id: '123',
+                    description: {
+                        message: 'hello',
+                    },
                 },
-            });
+                true,
+            );
             expect(api.getFeedAPI().updateAnnotation).toBeCalledWith(
                 expect.anything(),
                 '123',
@@ -916,9 +919,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('handleAnnotationStatusChange()', () => {
-        test('should call publishAnnotationUpdateStart and call updateAnnotation API', () => {
-            const publishAnnotationUpdateStart = jest.fn();
-            const wrapper = getWrapper({ publishAnnotationUpdateStart });
+        test('should call updateAnnotation API and call emitAnnotationUpdateEvent', () => {
+            const mockEmitAnnotationUpdateEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationUpdateEvent: mockEmitAnnotationUpdateEvent });
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
 
@@ -928,7 +931,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 can_resolve: true,
             });
 
-            expect(publishAnnotationUpdateStart).toBeCalledWith({ id: '123', status: 'open' });
+            expect(mockEmitAnnotationUpdateEvent).toBeCalledWith({ id: '123', status: 'open' }, true);
             expect(api.getFeedAPI().updateAnnotation).toBeCalledWith(
                 expect.anything(),
                 '123',
@@ -943,15 +946,15 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('handleAnnotationDelete()', () => {
-        test('should call publishAnnotationDeleteStart and call deleteAnnotation API', () => {
-            const publishAnnotationDeleteStart = jest.fn();
-            const wrapper = getWrapper({ publishAnnotationDeleteStart });
+        test('should call deleteAnnotation API and call emitAnnotationDeleteEvent', () => {
+            const mockEmitAnnotationRemoveEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationRemoveEvent: mockEmitAnnotationRemoveEvent });
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
 
             wrapper.instance().handleAnnotationDelete({ id: '123' });
 
-            expect(publishAnnotationDeleteStart).toBeCalledWith('123');
+            expect(mockEmitAnnotationRemoveEvent).toBeCalledWith('123', true);
             expect(api.getFeedAPI().deleteAnnotation).toBeCalled();
             expect(instance.fetchFeedItems).toHaveBeenCalled();
         });
@@ -959,15 +962,15 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
     describe('deleteAnnotationSuccess()', () => {
         test('should handle successful annotation deletion', () => {
-            const mockPublishAnnotationDeleteEnd = jest.fn();
+            const mockEmitAnnotationRemoveEvent = jest.fn();
             const mockFeedSuccess = jest.fn();
-            const wrapper = getWrapper({ publishAnnotationDeleteEnd: mockPublishAnnotationDeleteEnd });
+            const wrapper = getWrapper({ emitAnnotationRemoveEvent: mockEmitAnnotationRemoveEvent });
             const instance = wrapper.instance();
 
             instance.feedSuccessCallback = mockFeedSuccess;
             instance.deleteAnnotationSuccess('123');
 
-            expect(mockPublishAnnotationDeleteEnd).toBeCalledWith('123');
+            expect(mockEmitAnnotationRemoveEvent).toBeCalledWith('123');
             expect(mockFeedSuccess).toBeCalled();
         });
     });

@@ -5,15 +5,16 @@
  */
 
 import * as React from "react";
-import AnnotatorContext from "./AnnotatorContext";
-import { Action } from "./types";
+import { EventEmitter } from "events";
+import { AnnotationActionEvent, Status } from "./types";
 export interface UseAnnotatorEventsProps {
-  onAnnotationDeleteEnd?: (annotationId: string) => void;
-  onAnnotationDeleteStart?: (annotationId: string) => void;
-  onAnnotationUpdateEnd?: (annotation: Object) => void;
-  onAnnotationUpdateStart?: (annotation: Object) => void;
-  onSidebarAnnotationSelected?: (annotationId: string | null) => void;
-  origin?: string;
+    eventEmitter: EventEmitter;
+    onAnnotationDeleteEnd?: (annotationId: string) => void;
+    onAnnotationDeleteStart?: (annotationId: string) => void;
+    onAnnotationUpdateEnd?: (annotation: Object) => void;
+    onAnnotationUpdateStart?: (annotation: Object) => void;
+    onSidebarAnnotationSelected?: (annotationId: string) => void;
 }
+declare var emitUpdateAnnotationEvent: any; // /* NO PRINT IMPLEMENTED: ArrowFunction */ any
 declare function useAnnotatorEvents(x: UseAnnotatorEventsProps): void;
 declare export default typeof useAnnotatorEvents;

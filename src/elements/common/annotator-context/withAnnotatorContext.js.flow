@@ -9,16 +9,17 @@ import AnnotatorContext from "./AnnotatorContext";
 import { AnnotatorState, GetMatchPath } from "./types";
 export interface WithAnnotatorContextProps {
     annotatorState?: AnnotatorState;
+    emitActiveAnnotationChangeEvent?: (id: string) => void;
+    emitAnnotationRemoveEvent?: (id: string, isStartEvent?: boolean) => void;
+    emitAnnotationUpdateEvent?: (
+        annotation: Object,
+        isStartEvent?: boolean
+    ) => void;
     getAnnotationsMatchPath?: GetMatchPath;
     getAnnotationsPath?: (
         fileVersionId?: string,
         annotationId?: string
     ) => string;
-    publishActiveAnnotationChangeInSidebar?: (id: string | null) => void;
-    publishAnnotationDeleteEnd?: (id: string) => void;
-    publishAnnotationDeleteStart?: (id: string) => void;
-    publishAnnotationUpdateEnd?: (id: string) => void;
-    publishAnnotationUpdateStart?: (annotation: Object) => void;
 }
 declare export default function withAnnotatorContext<P: { ... }>(
     WrappedComponent: React.ComponentType<P>

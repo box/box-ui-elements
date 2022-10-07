@@ -4,9 +4,9 @@ import { AnnotatorState, GetMatchPath } from './types';
 
 export interface WithAnnotatorContextProps {
     annotatorState?: AnnotatorState;
-    emitAnnotatorActiveChangeEvent?: (id: string) => void;
-    emitRemoveEvent?: (id: string) => void;
-    emitUpdateEvent?: (annotation: Object) => void;
+    emitActiveAnnotationChangeEvent?: (id: string) => void;
+    emitAnnotationRemoveEvent?: (id: string, isStartEvent?: boolean) => void;
+    emitAnnotationUpdateEvent?: (annotation: Object, isStartEvent?: boolean) => void;
     getAnnotationsMatchPath?: GetMatchPath;
     getAnnotationsPath?: (fileVersionId?: string, annotationId?: string) => string;
 }
@@ -15,9 +15,9 @@ export default function withAnnotatorContext<P extends {}>(WrappedComponent: Rea
     return React.forwardRef<React.RefForwardingComponent<React.ComponentType<P>>, P>((props, ref) => (
         <AnnotatorContext.Consumer>
             {({
-                emitActiveChangeEvent,
-                emitRemoveEvent,
-                emitUpdateEvent,
+                emitActiveAnnotationChangeEvent,
+                emitAnnotationRemoveEvent,
+                emitAnnotationUpdateEvent,
                 getAnnotationsMatchPath,
                 getAnnotationsPath,
                 state,
@@ -26,9 +26,9 @@ export default function withAnnotatorContext<P extends {}>(WrappedComponent: Rea
                     ref={ref}
                     {...props}
                     annotatorState={state}
-                    emitAnnotatorActiveChangeEvent={emitActiveChangeEvent}
-                    emitRemoveEvent={emitRemoveEvent}
-                    emitUpdateEven={emitUpdateEvent}
+                    emitActiveAnnotationChangeEvent={emitActiveAnnotationChangeEvent}
+                    emitAnnotationRemoveEvent={emitAnnotationRemoveEvent}
+                    emitAnnotationUpdateEvent={emitAnnotationUpdateEvent}
                     getAnnotationsMatchPath={getAnnotationsMatchPath}
                     getAnnotationsPath={getAnnotationsPath}
                 />
