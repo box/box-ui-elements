@@ -26,7 +26,8 @@
     position: relative;
     display: flex;
     flex-flow: column;
-    background-color: $bdl-dark-blue;
+    // better color contrast for accessibility
+    background-color: $bdl-box-blue;
 
     .box-ui-security-cloud-game-message {
         flex: none;
@@ -44,10 +45,19 @@
     }
 }
 
+.live-text {
+    position: absolute;
+    clip-path: inset(50%);
+}
+
 .drag-cloud {
     position: absolute;
     cursor: move;
     fill: $white;
+}
+
+.drag-cloud--moving {
+    fill: $bdl-gray-20;
 }
 
 .drop-cloud {

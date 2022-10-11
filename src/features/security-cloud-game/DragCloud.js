@@ -1,7 +1,13 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
+import { injectIntl } from 'react-intl';
+import classNames from 'classnames';
+import throttle from 'lodash/throttle';
+import Draggable from 'react-draggable';
 
 import IconCloud from '../../icons/general/IconCloud';
+import messages from './messages';
+import { getGridPosition } from './utils';
 
 const DropShadowFilter = () => (
     <filter id="drop-shadow">
@@ -16,52 +22,148 @@ const DropShadowFilter = () => (
     </filter>
 );
 
-/**
- * react-draggable requires component that supports onMouseDown, onMouseUp, onTouchStart, and onTouchEnd so we need
- * to explicitly pass them through here.
- */
 const DragCloud = ({
-    className,
-    cloudSize = 64,
-    onMouseDown,
-    onMouseUp,
-    onTouchEnd,
-    onTouchStart,
+    boardHeight,
+    boardWidth,
+    cloudSize,
+    disabled,
+    gridTrackSize,
+    intl,
+    onDrop,
     position,
-    style,
+    updateLiveText,
+    updatePosition,
 }) => {
-    const { x, y } = position;
+    const [isMoving, setIsMoving] = useState(false);
+
+    const dragCloudClasses = classNames('drag-cloud', {
+        'drag-cloud--moving': isMoving,
+    });
+
+    const moveLeft = () => {
+        const newX = position.x - gridTrackSize;
+        if (newX >= 0) {
+            updatePosition({ ...position, x: newX }, true);
+        } else {
+            updateLiveText(intl.formatMessage(messages.reachLeftEdge));
+        }
+    };
+
+    const moveRight = () => {
+        const newX = position.x + gridTrackSize;
+        if (newX + cloudSize <= boardWidth) {
+            updatePosition({ ...position, x: newX }, true);
+        } else {
+            updateLiveText(intl.formatMessage(messages.reachRightEdge));
+        }
+    };
+
+    const moveUp = () => {
+        const newY = position.y - gridTrackSize;
+        if (newY >= 0) {
+            updatePosition({ ...position, y: newY }, true);
+        } else {
+            updateLiveText(intl.formatMessage(messages.reachTopEdge));
+        }
+    };
+
+    const moveDown = () => {
+        const newY = position.y + gridTrackSize;
+        if (newY + cloudSize <= boardHeight) {
+            updatePosition({ ...position, y: newY }, true);
+        } else {
+            updateLiveText(intl.formatMessage(messages.reachBottomEdge));
+        }
+    };
+
+    const handleSpaceBar = () => {
+        const cloudStatusText = intl.formatMessage(isMoving ? messages.cloudDropped : messages.cloudGrabbed);
+        const currentPositionText = intl.formatMessage(
+            messages.currentPosition,
+            getGridPosition(position, gridTrackSize),
+        );
+        updateLiveText(`${cloudStatusText} ${currentPositionText}`, true);
+
+        if (isMoving) {
+            onDrop();
+        }
+
+        setIsMoving(!isMoving);
+    };
+
+    /**
+     * DragCloud keyboard event handler. Supports Up/Down/Left/Right arrow keys and Space Bar
+     * @param {KeyboardEvent} event - The drag event
+     * @returns {void}
+     */
+    const onKeyDown = event => {
+        if (disabled) {
+            return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (event.key === ' ') {
+            handleSpaceBar();
+        } else if (isMoving) {
+            switch (event.key) {
+                case 'ArrowUp':
+                    moveUp();
+                    break;
+                case 'ArrowDown':
+                    moveDown();
+                    break;
+                case 'ArrowLeft':
+                    moveLeft();
+                    break;
+                case 'ArrowRight':
+                    moveRight();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    /**
+     * DragCloud drag event handler. Updates current position.
+     * @param {MouseEvent} e - The drag event
+     * @param {object} { x, y } - Object which contains x and y coordiante of the drag event.
+     * @returns {void}
+     */
+    const onDrag = throttle((e, { x, y }) => updatePosition({ x, y }), 100, { leading: true, trailing: true });
+
     return (
-        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-        <div
-            className={`drag-cloud ${className}`}
-            onMouseDown={onMouseDown}
-            onMouseUp={onMouseUp}
-            onTouchEnd={onTouchEnd}
-            onTouchStart={onTouchStart}
-            style={{ ...style, top: `${y}px`, left: `${x}px` }}
-        >
-            <IconCloud
-                filter={{ id: 'drop-shadow', definition: <DropShadowFilter /> }}
-                height={cloudSize}
-                width={cloudSize}
-            />
-        </div>
+        <Draggable bounds="parent" disabled={disabled} onDrag={onDrag} onStop={onDrop} position={position}>
+            {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+            <div className={dragCloudClasses} onKeyDown={onKeyDown} role="presentation" tabIndex={0}>
+                <IconCloud
+                    filter={{ id: 'drop-shadow', definition: <DropShadowFilter /> }}
+                    height={cloudSize}
+                    title={intl.formatMessage(messages.cloudObject)}
+                    width={cloudSize}
+                />
+            </div>
+        </Draggable>
     );
 };
 
 DragCloud.displayName = 'DragCloud';
 
 DragCloud.propTypes = {
-    className: PropTypes.string,
+    boardHeight: PropTypes.number,
+    boardWidth: PropTypes.number,
     cloudSize: PropTypes.number,
-    onMouseUp: PropTypes.func,
-    onMouseDown: PropTypes.func,
-    onTouchEnd: PropTypes.func,
-    onTouchStart: PropTypes.func,
+    disabled: PropTypes.bool,
+    gridTrackSize: PropTypes.number,
+    intl: PropTypes.any,
     position: PropTypes.objectOf(PropTypes.number).isRequired,
-    style: PropTypes.object,
+    onDrop: PropTypes.func,
+    updateLiveText: PropTypes.func,
+    updatePosition: PropTypes.func,
 };
 
 // Actual export
-export default DragCloud;
+export { DragCloud as DragCloudBase };
+export default injectIntl(DragCloud);
