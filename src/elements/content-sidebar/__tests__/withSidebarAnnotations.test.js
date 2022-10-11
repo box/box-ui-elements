@@ -183,8 +183,6 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
     });
 
     describe('addAnnotation()', () => {
-        const sidebarPanelsRef = { refresh: jest.fn() };
-
         beforeEach(() => {
             annotatorContextProps.getAnnotationsMatchPath.mockReturnValueOnce({ params: { fileVersionId: '123' } });
         });
@@ -226,48 +224,9 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 expect(feedAPI.addAnnotation).toHaveBeenCalledTimes(expectedAddCount);
             },
         );
-
-        test.each`
-            pathname                            | isOpen   | current             | expectedCount
-            ${'/'}                              | ${false} | ${null}             | ${0}
-            ${'/details'}                       | ${true}  | ${null}             | ${0}
-            ${'/activity'}                      | ${false} | ${null}             | ${0}
-            ${'/activity'}                      | ${true}  | ${null}             | ${0}
-            ${'/activity'}                      | ${false} | ${sidebarPanelsRef} | ${0}
-            ${'/activity'}                      | ${true}  | ${sidebarPanelsRef} | ${1}
-            ${'/activity/versions/12345'}       | ${true}  | ${sidebarPanelsRef} | ${1}
-            ${'/activity/versions/12345/67890'} | ${true}  | ${sidebarPanelsRef} | ${1}
-            ${'/details'}                       | ${true}  | ${sidebarPanelsRef} | ${0}
-            ${'/'}                              | ${true}  | ${sidebarPanelsRef} | ${0}
-        `(
-            'should refresh the sidebarPanels ref accordingly if pathname=$pathname, isOpen=$isOpen, current=$current',
-            ({ current, expectedCount, isOpen, pathname }) => {
-                const annotatorStateMock = {
-                    meta: {
-                        requestId: '123',
-                    },
-                };
-                const wrapper = getWrapper({
-                    annotatorState: annotatorStateMock,
-                    currentUser,
-                    isOpen,
-                    location: { pathname },
-                });
-                const instance = wrapper.instance();
-                instance.sidebarPanels = {
-                    current,
-                };
-
-                instance.addAnnotation();
-
-                expect(sidebarPanelsRef.refresh).toHaveBeenCalledTimes(expectedCount);
-            },
-        );
     });
 
     describe('updateAnnotation()', () => {
-        const sidebarPanelsRef = { refresh: jest.fn() };
-
         test.each`
             action                 | expectedIsPending
             ${Action.UPDATE_START} | ${true}
@@ -288,48 +247,6 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
 
                 const expectedAnnotationData = { ...annotation, isPending: expectedIsPending };
                 expect(feedAPI.updateFeedItem).toBeCalledWith(expectedAnnotationData, annotation.id);
-            },
-        );
-
-        test.each`
-            pathname                            | isOpen   | current             | expectedCount
-            ${'/'}                              | ${false} | ${null}             | ${0}
-            ${'/details'}                       | ${true}  | ${null}             | ${0}
-            ${'/activity'}                      | ${false} | ${null}             | ${0}
-            ${'/activity'}                      | ${true}  | ${null}             | ${0}
-            ${'/activity'}                      | ${false} | ${sidebarPanelsRef} | ${0}
-            ${'/activity'}                      | ${true}  | ${sidebarPanelsRef} | ${1}
-            ${'/activity/versions/12345'}       | ${true}  | ${sidebarPanelsRef} | ${1}
-            ${'/activity/versions/12345/67890'} | ${true}  | ${sidebarPanelsRef} | ${1}
-            ${'/details'}                       | ${true}  | ${sidebarPanelsRef} | ${0}
-            ${'/'}                              | ${true}  | ${sidebarPanelsRef} | ${0}
-        `(
-            'should refresh the sidebarPanels ref accordingly if pathname=$pathname, isOpen=$isOpen, current=$current',
-            ({ current, expectedCount, isOpen, pathname }) => {
-                const annotationUpdate = {
-                    id: '123',
-                    description: {
-                        message: 'text',
-                    },
-                };
-                const annotatorStateMock = {
-                    action: Action.UPDATE_END,
-                    annotation: annotationUpdate,
-                };
-                const wrapper = getWrapper({
-                    annotatorState: annotatorStateMock,
-                    currentUser,
-                    isOpen,
-                    location: { pathname },
-                });
-                const instance = wrapper.instance();
-                instance.sidebarPanels = {
-                    current,
-                };
-
-                instance.updateAnnotation();
-
-                expect(sidebarPanelsRef.refresh).toBeCalledTimes(expectedCount);
             },
         );
     });
@@ -410,6 +327,54 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 instance.updateActiveVersion();
 
                 expect(onVersionChange).toHaveBeenCalledTimes(expectedCallCount);
+            },
+        );
+    });
+
+    describe('refreshActivitySidebar()', () => {
+        const history = { replace: jest.fn() };
+        const sidebarPanelsRef = { refresh: jest.fn() };
+
+        test.each`
+            pathname                            | isOpen   | current             | expectedCount
+            ${'/'}                              | ${false} | ${null}             | ${0}
+            ${'/details'}                       | ${true}  | ${null}             | ${0}
+            ${'/activity'}                      | ${false} | ${null}             | ${0}
+            ${'/activity'}                      | ${true}  | ${null}             | ${0}
+            ${'/activity'}                      | ${false} | ${sidebarPanelsRef} | ${0}
+            ${'/activity'}                      | ${true}  | ${sidebarPanelsRef} | ${1}
+            ${'/activity/versions/12345'}       | ${true}  | ${sidebarPanelsRef} | ${1}
+            ${'/activity/versions/12345/67890'} | ${true}  | ${sidebarPanelsRef} | ${1}
+            ${'/details'}                       | ${true}  | ${sidebarPanelsRef} | ${0}
+            ${'/'}                              | ${true}  | ${sidebarPanelsRef} | ${0}
+        `(
+            'should refresh the sidebarPanels ref accordingly if pathname=$pathname, isOpen=$isOpen, current=$current',
+            ({ current, expectedCount, isOpen, pathname }) => {
+                const annotationUpdate = {
+                    id: '123',
+                    description: {
+                        message: 'text',
+                    },
+                };
+                const annotatorStateMock = {
+                    action: Action.UPDATE_END,
+                    annotation: annotationUpdate,
+                };
+                const wrapper = getWrapper({
+                    annotatorState: annotatorStateMock,
+                    currentUser,
+                    history,
+                    isOpen,
+                    location: { pathname },
+                });
+                const instance = wrapper.instance();
+                instance.sidebarPanels = {
+                    current,
+                };
+
+                instance.updateAnnotation();
+
+                expect(sidebarPanelsRef.refresh).toBeCalledTimes(expectedCount);
             },
         );
     });

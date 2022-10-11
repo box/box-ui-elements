@@ -7,10 +7,6 @@ describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
     const mockEmit = jest.fn();
     const mockRemoveListener = jest.fn();
 
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
-
     const getHook = (props: Object = {}) => {
         const mockEventEmitter = {
             addListener: mockAddListener,
@@ -41,7 +37,7 @@ describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
             }
         });
         getHook({ onAnnotationDeleteStart: mockAnnotationDeleteStart });
-        expect(mockAddListener).toBeCalledWith('annotations_remove_start', expect.any(Function));
+        expect(mockAddListener).toBeCalledWith('annotations_remove_start', mockAnnotationDeleteStart);
         expect(mockAnnotationDeleteStart).toBeCalledWith(mockAnnotationId);
     });
 
@@ -54,7 +50,7 @@ describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
             }
         });
         getHook({ onAnnotationDeleteEnd: mockAnnotationDeleteEnd });
-        expect(mockAddListener).toBeCalledWith('annotations_remove', expect.any(Function));
+        expect(mockAddListener).toBeCalledWith('annotations_remove', mockAnnotationDeleteEnd);
         expect(mockAnnotationDeleteEnd).toBeCalledWith(mockAnnotationId);
     });
 
@@ -67,7 +63,7 @@ describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
             }
         });
         getHook({ onAnnotationUpdateStart: mockAnnotationUpdateStart });
-        expect(mockAddListener).toBeCalledWith('sidebar.annotations_update_start', expect.any(Function));
+        expect(mockAddListener).toBeCalledWith('sidebar.annotations_update_start', mockAnnotationUpdateStart);
         expect(mockAnnotationUpdateStart).toBeCalledWith(mockAnnotation);
     });
 
@@ -80,7 +76,7 @@ describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
             }
         });
         getHook({ onAnnotationUpdateEnd: mockAnnotationUpdateEnd });
-        expect(mockAddListener).toBeCalledWith('sidebar.annotations_update', expect.any(Function));
+        expect(mockAddListener).toBeCalledWith('sidebar.annotations_update', mockAnnotationUpdateEnd);
         expect(mockAnnotationUpdateEnd).toBeCalledWith(mockAnnotation);
     });
 
@@ -93,7 +89,7 @@ describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
             }
         });
         getHook({ onSidebarAnnotationSelected: mockOnSidebarAnnotationSelected });
-        expect(mockAddListener).toBeCalledWith('annotations_active_set', expect.any(Function));
+        expect(mockAddListener).toBeCalledWith('annotations_active_set', mockOnSidebarAnnotationSelected);
         expect(mockOnSidebarAnnotationSelected).toBeCalledWith(mockAnnotationId);
     });
 
@@ -145,14 +141,34 @@ describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
     });
 
     test('should remove all listeneres on cleanup', () => {
-        const { unmount } = getHook();
+        const mockOnSidebarAnnotationSelected = jest.fn();
+        const mockOnAnnotationDeleteEnd = jest.fn();
+        const mockOnAnnotationDeleteStart = jest.fn();
+        const mockOnAnnotationUpdateEnd = jest.fn();
+        const mockOnAnnotationUpdateStart = jest.fn();
+
+        const { unmount } = getHook({
+            onSidebarAnnotationSelected: mockOnSidebarAnnotationSelected,
+            onAnnotationDeleteEnd: mockOnAnnotationDeleteEnd,
+            onAnnotationDeleteStart: mockOnAnnotationDeleteStart,
+            onAnnotationUpdateEnd: mockOnAnnotationUpdateEnd,
+            onAnnotationUpdateStart: mockOnAnnotationUpdateStart,
+        });
 
         unmount();
 
-        expect(mockRemoveListener).toHaveBeenNthCalledWith(1, 'annotations_active_set', expect.any(Function));
-        expect(mockRemoveListener).toHaveBeenNthCalledWith(2, 'annotations_remove', expect.any(Function));
-        expect(mockRemoveListener).toHaveBeenNthCalledWith(3, 'annotations_remove_start', expect.any(Function));
-        expect(mockRemoveListener).toHaveBeenNthCalledWith(4, 'sidebar.annotations_update', expect.any(Function));
-        expect(mockRemoveListener).toHaveBeenNthCalledWith(5, 'sidebar.annotations_update_start', expect.any(Function));
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(
+            1,
+            'annotations_active_set',
+            mockOnSidebarAnnotationSelected,
+        );
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(2, 'annotations_remove', mockOnAnnotationDeleteEnd);
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(3, 'annotations_remove_start', mockOnAnnotationDeleteStart);
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(4, 'sidebar.annotations_update', mockOnAnnotationUpdateEnd);
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(
+            5,
+            'sidebar.annotations_update_start',
+            mockOnAnnotationUpdateStart,
+        );
     });
 });

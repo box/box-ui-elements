@@ -6,6 +6,7 @@
 
 import * as React from "react";
 import { EventEmitter } from "events";
+import noop from "lodash/noop";
 import { AnnotationActionEvent, Status } from "./types";
 export interface UseAnnotatorEventsProps {
     eventEmitter: EventEmitter;
@@ -15,6 +16,5 @@ export interface UseAnnotatorEventsProps {
     onAnnotationUpdateStart?: (annotation: Object) => void;
     onSidebarAnnotationSelected?: (annotationId: string) => void;
 }
-declare var emitUpdateAnnotationEvent: any; // /* NO PRINT IMPLEMENTED: ArrowFunction */ any
 declare function useAnnotatorEvents(x: UseAnnotatorEventsProps): void;
 declare export default typeof useAnnotatorEvents;

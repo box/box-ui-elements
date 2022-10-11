@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { EventEmitter } from 'events';
+import noop from 'lodash/noop';
 import { AnnotationActionEvent, Status } from './types';
 
 export interface UseAnnotatorEventsProps {
@@ -11,73 +12,45 @@ export interface UseAnnotatorEventsProps {
     onSidebarAnnotationSelected?: (annotationId: string) => void;
 }
 
-const emitUpdateAnnotationEvent = (eventEmitter: EventEmitter, annotation: Object, status: Status) => {
-    const actionEvent: AnnotationActionEvent = {
-        annotation,
-        meta: { status },
-    };
-    eventEmitter.emit('annotations_update', actionEvent);
-};
-
 function useAnnotatorEvents({
     eventEmitter,
-    onAnnotationDeleteEnd,
-    onAnnotationDeleteStart,
-    onAnnotationUpdateEnd,
-    onAnnotationUpdateStart,
-    onSidebarAnnotationSelected,
+    onAnnotationDeleteEnd = noop,
+    onAnnotationDeleteStart = noop,
+    onAnnotationUpdateEnd = noop,
+    onAnnotationUpdateStart = noop,
+    onSidebarAnnotationSelected = noop,
 }: UseAnnotatorEventsProps) {
     const emitAnnotationActiveChangeEvent = (annotationId: string | null, fileVersionId: string) => {
         eventEmitter.emit('annotations_active_change', { annotationId, fileVersionId });
     };
 
+    const emitUpdateAnnotationEvent = (annotation: Object, status: Status) => {
+        const actionEvent: AnnotationActionEvent = {
+            annotation,
+            meta: { status },
+        };
+        eventEmitter.emit('annotations_update', actionEvent);
+    };
+
     const emitUpdateAnnotationStartEvent = (annotation: Object) => {
-        emitUpdateAnnotationEvent(eventEmitter, annotation, Status.PENDING);
+        emitUpdateAnnotationEvent(annotation, Status.PENDING);
     };
     const emitUpdateAnnotationEndEvent = (annotation: Object) => {
-        emitUpdateAnnotationEvent(eventEmitter, annotation, Status.SUCCESS);
-    };
-
-    const annotationSidebarSelectedListener = (annotationId: string) => {
-        if (onSidebarAnnotationSelected) {
-            onSidebarAnnotationSelected(annotationId);
-        }
-    };
-
-    const annotationDeleteStartListener = (annotationId: string) => {
-        if (onAnnotationDeleteStart) {
-            onAnnotationDeleteStart(annotationId);
-        }
-    };
-    const annotationDeleteEndListener = (annotationId: string) => {
-        if (onAnnotationDeleteEnd) {
-            onAnnotationDeleteEnd(annotationId);
-        }
-    };
-
-    const annotationUpdateStartListener = (annotation: Object) => {
-        if (onAnnotationUpdateStart) {
-            onAnnotationUpdateStart(annotation);
-        }
-    };
-    const annotationUpdateEndListener = (annotation: Object) => {
-        if (onAnnotationUpdateEnd) {
-            onAnnotationUpdateEnd(annotation);
-        }
+        emitUpdateAnnotationEvent(annotation, Status.SUCCESS);
     };
 
     React.useEffect(() => {
-        eventEmitter.addListener('annotations_active_set', annotationSidebarSelectedListener);
-        eventEmitter.addListener('annotations_remove', annotationDeleteEndListener);
-        eventEmitter.addListener('annotations_remove_start', annotationDeleteStartListener);
-        eventEmitter.addListener('sidebar.annotations_update', annotationUpdateEndListener);
-        eventEmitter.addListener('sidebar.annotations_update_start', annotationUpdateStartListener);
+        eventEmitter.addListener('annotations_active_set', onSidebarAnnotationSelected);
+        eventEmitter.addListener('annotations_remove', onAnnotationDeleteEnd);
+        eventEmitter.addListener('annotations_remove_start', onAnnotationDeleteStart);
+        eventEmitter.addListener('sidebar.annotations_update', onAnnotationUpdateEnd);
+        eventEmitter.addListener('sidebar.annotations_update_start', onAnnotationUpdateStart);
         return () => {
-            eventEmitter.removeListener('annotations_active_set', annotationSidebarSelectedListener);
-            eventEmitter.removeListener('annotations_remove', annotationDeleteEndListener);
-            eventEmitter.removeListener('annotations_remove_start', annotationDeleteStartListener);
-            eventEmitter.removeListener('sidebar.annotations_update', annotationUpdateEndListener);
-            eventEmitter.removeListener('sidebar.annotations_update_start', annotationUpdateStartListener);
+            eventEmitter.removeListener('annotations_active_set', onSidebarAnnotationSelected);
+            eventEmitter.removeListener('annotations_remove', onAnnotationDeleteEnd);
+            eventEmitter.removeListener('annotations_remove_start', onAnnotationDeleteStart);
+            eventEmitter.removeListener('sidebar.annotations_update', onAnnotationUpdateEnd);
+            eventEmitter.removeListener('sidebar.annotations_update_start', onAnnotationUpdateStart);
         };
     });
 
