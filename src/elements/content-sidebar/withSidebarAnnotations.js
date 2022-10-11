@@ -58,7 +58,7 @@ export default function withSidebarAnnotations(
         componentDidUpdate(prevProps: Props) {
             const { annotatorState, fileId, getAnnotationsMatchPath, location, onVersionChange }: Props = this.props;
             const { annotatorState: prevAnnotatorState, fileId: prevFileId, location: prevLocation }: Props = prevProps;
-            const { activeAnnotationId, annotation } = annotatorState;
+            const { action, activeAnnotationId, annotation } = annotatorState;
             const { activeAnnotationId: prevActiveAnnotationId, annotation: prevAnnotation } = prevAnnotatorState;
 
             const match = getAnnotationsMatchPath(location);
@@ -69,7 +69,11 @@ export default function withSidebarAnnotations(
             const isTransitioningToAnnotationPath = activeAnnotationId && !isAnnotationsPath;
             const prevFileVersionId = getProp(prevMatch, 'params.fileVersionId');
 
-            if (annotation && prevAnnotation !== annotation) {
+            if (action === 'update_start' || action === 'update_end') {
+                this.updateAnnotation();
+            }
+
+            if ((action === 'create_start' || action === 'create_end') && annotation && prevAnnotation !== annotation) {
                 this.addAnnotation();
             }
 
@@ -98,8 +102,6 @@ export default function withSidebarAnnotations(
                 currentUser,
                 file,
                 fileId,
-                isOpen,
-                location,
             } = this.props;
 
             if (!requestId) {
@@ -112,11 +114,8 @@ export default function withSidebarAnnotations(
             }
 
             const feedAPI = api.getFeedAPI(false);
-            const pathname = getProp(location, 'pathname', '');
-            const isActivity = matchPath(pathname, '/activity');
             const isPending = action === 'create_start';
             const { items: hasItems } = feedAPI.getCachedItems(fileId) || {};
-            const { current } = this.sidebarPanels;
 
             // If there are existing items in the cache for this file, then patch the cache with the new annotation
             // If there are no cache entry for feeditems, then it is assumed that it has not yet been fetched.
@@ -124,10 +123,23 @@ export default function withSidebarAnnotations(
                 feedAPI.addAnnotation(file, currentUser, annotation, requestId, isPending);
             }
 
-            // If the activity sidebar is currently open, then force it to refresh with the updated data
-            if (current && isActivity && isOpen) {
-                current.refresh(false);
-            }
+            this.refreshActivitySidebar();
+        }
+
+        updateAnnotation() {
+            const {
+                annotatorState: { action, annotation },
+                api,
+                file,
+            } = this.props;
+
+            const feedAPI = api.getFeedAPI(false);
+            const isPending = action === 'update_start';
+            feedAPI.file = file;
+
+            feedAPI.updateFeedItem({ ...annotation, isPending }, annotation.id);
+
+            this.refreshActivitySidebar();
         }
 
         updateActiveAnnotation = () => {
@@ -177,6 +189,19 @@ export default function withSidebarAnnotations(
                     currentVersionId: currentFileVersionId,
                     updateVersionToCurrent: () => history.push(getAnnotationsPath(currentFileVersionId)),
                 });
+            }
+        };
+
+        refreshActivitySidebar = () => {
+            const { isOpen, location } = this.props;
+
+            const pathname = getProp(location, 'pathname', '');
+            const isActivity = matchPath(pathname, '/activity');
+            const { current } = this.sidebarPanels;
+
+            // If the activity sidebar is currently open, then force it to refresh with the updated data
+            if (current && isActivity && isOpen) {
+                current.refresh(false);
             }
         };
 

@@ -29,15 +29,17 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             annotation: { foo: 'bar' },
             action: Action.CREATE_START,
         };
-        const mockEmitAnnotatorChangeEvent = jest.fn();
-        const mockEmitRemoveEvent = jest.fn();
+        const mockEmitActiveAnnotationChangeEvent = jest.fn();
+        const mockEmitAnnotationRemoveEvent = jest.fn();
+        const mockEmitAnnotationUpdateEvent = jest.fn();
         const mockGetAnnotationsMatchPath = jest.fn();
         const mockGetAnnotationsPath = jest.fn();
 
         mockContext.mockReturnValue({
             state: annotatorState,
-            emitActiveChangeEvent: mockEmitAnnotatorChangeEvent,
-            emitRemoveEvent: mockEmitRemoveEvent,
+            emitActiveAnnotationChangeEvent: mockEmitActiveAnnotationChangeEvent,
+            emitAnnotationRemoveEvent: mockEmitAnnotationRemoveEvent,
+            emitAnnotationUpdateEvent: mockEmitAnnotationUpdateEvent,
             getAnnotationsMatchPath: mockGetAnnotationsMatchPath,
             getAnnotationsPath: mockGetAnnotationsPath,
         });
@@ -51,8 +53,9 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             annotation: { foo: 'bar' },
             action: Action.CREATE_START,
         });
-        expect(props.emitAnnotatorActiveChangeEvent).toEqual(mockEmitAnnotatorChangeEvent);
-        expect(props.emitRemoveEvent).toEqual(mockEmitRemoveEvent);
+        expect(props.emitActiveAnnotationChangeEvent).toEqual(mockEmitActiveAnnotationChangeEvent);
+        expect(props.emitAnnotationRemoveEvent).toEqual(mockEmitAnnotationRemoveEvent);
+        expect(props.emitAnnotationUpdateEvent).toEqual(mockEmitAnnotationUpdateEvent);
         expect(props.getAnnotationsMatchPath).toEqual(mockGetAnnotationsMatchPath);
         expect(props.getAnnotationsPath).toEqual(mockGetAnnotationsPath);
     });

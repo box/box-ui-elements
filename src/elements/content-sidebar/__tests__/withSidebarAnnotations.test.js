@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
 import withSidebarAnnotations from '../withSidebarAnnotations';
+import { Action } from '../../common/annotator-context/types';
 
 describe('elements/content-sidebar/withSidebarAnnotations', () => {
     const TestComponent = props => <div {...props} />;
@@ -27,6 +28,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         feedItems: jest.fn(),
         getCachedItems: jest.fn(),
         deleteAnnotation: jest.fn(),
+        updateFeedItem: jest.fn(),
     };
 
     const api = {
@@ -84,7 +86,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 instance.updateActiveAnnotation = jest.fn();
                 annotatorContextProps.getAnnotationsMatchPath.mockReturnValue(isAnnotationsPath);
 
-                wrapper.setProps({ annotatorState: { activeAnnotationId } });
+                wrapper.setProps({ annotatorState: { activeAnnotationId, action: Action.SET_ACTIVE } });
 
                 expect(instance.updateActiveAnnotation).toHaveBeenCalledTimes(expectedCount);
             },
@@ -100,11 +102,25 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
             ({ annotation, expectedCount }) => {
                 const wrapper = getWrapper();
                 wrapper.instance().addAnnotation = jest.fn();
-                wrapper.setProps({ annotatorState: { annotation } });
+                wrapper.setProps({ annotatorState: { annotation, action: Action.CREATE_END } });
 
                 expect(wrapper.instance().addAnnotation).toHaveBeenCalledTimes(expectedCount);
             },
         );
+
+        test.each`
+            action
+            ${Action.UPDATE_START}
+            ${Action.UPDATE_END}
+        `('should call updateAnnotation if given action = $action', ({ action }) => {
+            const annotation = { id: '123', status: 'resolved' };
+
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.updateAnnotation = jest.fn();
+            wrapper.setProps({ annotatorState: { annotation, action } });
+            expect(instance.updateAnnotation).toBeCalled();
+        });
 
         test.each`
             fileId   | expectedCount
@@ -167,8 +183,6 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
     });
 
     describe('addAnnotation()', () => {
-        const sidebarPanelsRef = { refresh: jest.fn() };
-
         beforeEach(() => {
             annotatorContextProps.getAnnotationsMatchPath.mockReturnValueOnce({ params: { fileVersionId: '123' } });
         });
@@ -210,41 +224,29 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 expect(feedAPI.addAnnotation).toHaveBeenCalledTimes(expectedAddCount);
             },
         );
+    });
 
+    describe('updateAnnotation()', () => {
         test.each`
-            pathname                            | isOpen   | current             | expectedCount
-            ${'/'}                              | ${false} | ${null}             | ${0}
-            ${'/details'}                       | ${true}  | ${null}             | ${0}
-            ${'/activity'}                      | ${false} | ${null}             | ${0}
-            ${'/activity'}                      | ${true}  | ${null}             | ${0}
-            ${'/activity'}                      | ${false} | ${sidebarPanelsRef} | ${0}
-            ${'/activity'}                      | ${true}  | ${sidebarPanelsRef} | ${1}
-            ${'/activity/versions/12345'}       | ${true}  | ${sidebarPanelsRef} | ${1}
-            ${'/activity/versions/12345/67890'} | ${true}  | ${sidebarPanelsRef} | ${1}
-            ${'/details'}                       | ${true}  | ${sidebarPanelsRef} | ${0}
-            ${'/'}                              | ${true}  | ${sidebarPanelsRef} | ${0}
+            action                 | expectedIsPending
+            ${Action.UPDATE_START} | ${true}
+            ${Action.UPDATE_END}   | ${false}
         `(
-            'should refresh the sidebarPanels ref accordingly if pathname=$pathname, isOpen=$isOpen, current=$current',
-            ({ current, expectedCount, isOpen, pathname }) => {
+            'should update appropriate annotation in the feed given action = $action',
+            ({ action, expectedIsPending }) => {
+                const annotation = { id: '123', status: 'resolved' };
                 const annotatorStateMock = {
-                    meta: {
-                        requestId: '123',
-                    },
+                    annotation,
+                    action,
                 };
-                const wrapper = getWrapper({
-                    annotatorState: annotatorStateMock,
-                    currentUser,
-                    isOpen,
-                    location: { pathname },
-                });
+
+                const wrapper = getWrapper({ annotatorState: annotatorStateMock });
                 const instance = wrapper.instance();
-                instance.sidebarPanels = {
-                    current,
-                };
 
-                instance.addAnnotation();
+                instance.updateAnnotation();
 
-                expect(sidebarPanelsRef.refresh).toHaveBeenCalledTimes(expectedCount);
+                const expectedAnnotationData = { ...annotation, isPending: expectedIsPending };
+                expect(feedAPI.updateFeedItem).toBeCalledWith(expectedAnnotationData, annotation.id);
             },
         );
     });
@@ -325,6 +327,54 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 instance.updateActiveVersion();
 
                 expect(onVersionChange).toHaveBeenCalledTimes(expectedCallCount);
+            },
+        );
+    });
+
+    describe('refreshActivitySidebar()', () => {
+        const history = { replace: jest.fn() };
+        const sidebarPanelsRef = { refresh: jest.fn() };
+
+        test.each`
+            pathname                            | isOpen   | current             | expectedCount
+            ${'/'}                              | ${false} | ${null}             | ${0}
+            ${'/details'}                       | ${true}  | ${null}             | ${0}
+            ${'/activity'}                      | ${false} | ${null}             | ${0}
+            ${'/activity'}                      | ${true}  | ${null}             | ${0}
+            ${'/activity'}                      | ${false} | ${sidebarPanelsRef} | ${0}
+            ${'/activity'}                      | ${true}  | ${sidebarPanelsRef} | ${1}
+            ${'/activity/versions/12345'}       | ${true}  | ${sidebarPanelsRef} | ${1}
+            ${'/activity/versions/12345/67890'} | ${true}  | ${sidebarPanelsRef} | ${1}
+            ${'/details'}                       | ${true}  | ${sidebarPanelsRef} | ${0}
+            ${'/'}                              | ${true}  | ${sidebarPanelsRef} | ${0}
+        `(
+            'should refresh the sidebarPanels ref accordingly if pathname=$pathname, isOpen=$isOpen, current=$current',
+            ({ current, expectedCount, isOpen, pathname }) => {
+                const annotationUpdate = {
+                    id: '123',
+                    description: {
+                        message: 'text',
+                    },
+                };
+                const annotatorStateMock = {
+                    action: Action.UPDATE_END,
+                    annotation: annotationUpdate,
+                };
+                const wrapper = getWrapper({
+                    annotatorState: annotatorStateMock,
+                    currentUser,
+                    history,
+                    isOpen,
+                    location: { pathname },
+                });
+                const instance = wrapper.instance();
+                instance.sidebarPanels = {
+                    current,
+                };
+
+                instance.updateAnnotation();
+
+                expect(sidebarPanelsRef.refresh).toBeCalledTimes(expectedCount);
             },
         );
     });

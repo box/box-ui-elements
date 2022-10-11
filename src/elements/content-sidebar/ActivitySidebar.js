@@ -120,7 +120,9 @@ mark(MARK_NAME_JS_READY);
 class ActivitySidebar extends React.PureComponent<Props, State> {
     static defaultProps = {
         annotatorState: {},
-        emitAnnotatorActiveChangeEvent: noop,
+        emitActiveAnnotationChangeEvent: noop,
+        emitAnnotationRemoveEvent: noop,
+        emitAnnotationUpdateEvent: noop,
         getAnnotationsMatchPath: noop,
         getAnnotationsPath: noop,
         hasReplies: false,
@@ -157,8 +159,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     handleAnnotationDelete = ({ id, permissions }: { id: string, permissions: AnnotationPermission }) => {
-        const { api, file } = this.props;
+        const { api, emitAnnotationRemoveEvent, file } = this.props;
 
+        emitAnnotationRemoveEvent(id, true);
         api.getFeedAPI(false).deleteAnnotation(
             file,
             id,
@@ -171,15 +174,27 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     handleAnnotationEdit = (id: string, text: string, permissions: AnnotationPermission) => {
-        const { api, file } = this.props;
+        const { api, emitAnnotationUpdateEvent, file } = this.props;
 
+        emitAnnotationUpdateEvent(
+            {
+                id,
+                description: {
+                    message: text,
+                },
+            },
+            true,
+        );
         api.getFeedAPI(false).updateAnnotation(
             file,
             id,
             text,
             undefined,
             permissions,
-            this.feedSuccessCallback,
+            (annotation: Annotation) => {
+                emitAnnotationUpdateEvent(annotation);
+                this.feedSuccessCallback();
+            },
             this.feedErrorCallback,
         );
 
@@ -187,15 +202,19 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     handleAnnotationStatusChange = (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => {
-        const { api, file } = this.props;
+        const { api, emitAnnotationUpdateEvent, file } = this.props;
 
+        emitAnnotationUpdateEvent({ id, status }, true);
         api.getFeedAPI(false).updateAnnotation(
             file,
             id,
             undefined,
             status,
             permissions,
-            this.feedSuccessCallback,
+            (annotation: Annotation) => {
+                emitAnnotationUpdateEvent(annotation);
+                this.feedSuccessCallback();
+            },
             this.feedErrorCallback,
         );
 
@@ -203,10 +222,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     deleteAnnotationSuccess(id: string) {
-        const { emitRemoveEvent } = this.props;
+        const { emitAnnotationRemoveEvent } = this.props;
 
         this.feedSuccessCallback();
-        emitRemoveEvent(id);
+        emitAnnotationRemoveEvent(id);
     }
 
     /**
@@ -765,7 +784,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     handleAnnotationSelect = (annotation: Annotation): void => {
         const { file_version, id: nextActiveAnnotationId } = annotation;
         const {
-            emitAnnotatorActiveChangeEvent,
+            emitActiveAnnotationChangeEvent,
             file,
             getAnnotationsMatchPath,
             getAnnotationsPath,
@@ -778,7 +797,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const match = getAnnotationsMatchPath(location);
         const selectedFileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
 
-        emitAnnotatorActiveChangeEvent(nextActiveAnnotationId);
+        emitActiveAnnotationChangeEvent(nextActiveAnnotationId);
 
         if (annotationFileVersionId && annotationFileVersionId !== selectedFileVersionId) {
             history.push(getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));
