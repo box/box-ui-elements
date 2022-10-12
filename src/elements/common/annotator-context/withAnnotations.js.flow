@@ -26,6 +26,7 @@ export type ActiveChangeEvent = {
 export type ActiveChangeEventHandler = (event: ActiveChangeEvent) => void;
 export type ComponentWithAnnotations = {
     emitActiveAnnotationChangeEvent: (id: string | null) => void,
+    emitActivitySidebarFilterChangeEvent: (status: string) => void,
     emitAnnotationRemoveEvent: (id: string, isStartEvent?: boolean) => void,
     emitAnnotationUpdateEvent: (
         annotation: Object,

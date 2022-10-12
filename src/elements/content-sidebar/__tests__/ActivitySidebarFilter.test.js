@@ -26,7 +26,6 @@ describe('elements/content-sidebar/ActivitySidebarFilter', () => {
         feedItemStatus | option
         ${undefined}   | ${'All Comments'}
         ${'open'}      | ${'Unresolved Comments'}
-        ${'resolved'}  | ${'Resolved Comments'}
     `(
         'should render "$option" as the selected status when feedItemStatus prop is equal to $feedItemStatus',
         ({ feedItemStatus, option }) => {
@@ -36,10 +35,9 @@ describe('elements/content-sidebar/ActivitySidebarFilter', () => {
     );
 
     test.each`
-        expected      | option                   | initialOption          | initialStatus
-        ${undefined}  | ${'All Comments'}        | ${'Resolved Comments'} | ${'resolved'}
-        ${'open'}     | ${'Unresolved Comments'} | ${'All Comments'}      | ${undefined}
-        ${'resolved'} | ${'Resolved Comments'}   | ${'All Comments'}      | ${undefined}
+        expected     | option                   | initialOption            | initialStatus
+        ${undefined} | ${'All Comments'}        | ${'Unresolved Comments'} | ${'open'}
+        ${'open'}    | ${'Unresolved Comments'} | ${'All Comments'}        | ${undefined}
     `(
         'onFeedItemStatusClick should be called with $expected when clicked on $option',
         async ({ initialOption, option, initialStatus, expected }) => {

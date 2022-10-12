@@ -69,6 +69,9 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         expect(contextProvider.prop('value').emitActiveAnnotationChangeEvent).toEqual(
             instance.emitActiveAnnotationChangeEvent,
         );
+        expect(contextProvider.prop('value').emitActivitySidebarFilterChangeEvent).toEqual(
+            instance.emitActivitySidebarFilterChangeEvent,
+        );
         expect(contextProvider.prop('value').emitAnnotationRemoveEvent).toEqual(instance.emitAnnotationRemoveEvent);
         expect(contextProvider.prop('value').emitAnnotationUpdateEvent).toEqual(instance.emitAnnotationUpdateEvent);
         expect(contextProvider.prop('value').getAnnotationsMatchPath).toEqual(instance.getMatchPath);
@@ -94,6 +97,20 @@ describe('elements/common/annotator-context/withAnnotations', () => {
 
             expect(mockAnnotator.emit).toBeCalled();
             expect(mockAnnotator.emit).toBeCalledWith('annotations_active_set', '123');
+        });
+    });
+
+    describe('emitActivitySidebarFilterChangeEvent', () => {
+        test('should call annotator emit on action', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            // Set the annotator on the withAnnotations instance
+            instance.handleAnnotator(mockAnnotator);
+            instance.emitActivitySidebarFilterChangeEvent('open');
+
+            expect(mockAnnotator.emit).toBeCalled();
+            expect(mockAnnotator.emit).toBeCalledWith('sidebar.activity_sidebar_filter_change', 'open');
         });
     });
 

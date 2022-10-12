@@ -10,6 +10,7 @@ import { AnnotatorState, GetMatchPath } from "./types";
 export interface WithAnnotatorContextProps {
     annotatorState?: AnnotatorState;
     emitActiveAnnotationChangeEvent?: (id: string) => void;
+    emitActivitySidebarFilterChangeEvent?: (status: string) => void;
     emitAnnotationRemoveEvent?: (id: string, isStartEvent?: boolean) => void;
     emitAnnotationUpdateEvent?: (
         annotation: Object,

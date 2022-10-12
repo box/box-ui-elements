@@ -121,6 +121,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     static defaultProps = {
         annotatorState: {},
         emitActiveAnnotationChangeEvent: noop,
+        emitActivitySidebarFilterChangeEvent: noop,
         emitAnnotationRemoveEvent: noop,
         emitAnnotationUpdateEvent: noop,
         getAnnotationsMatchPath: noop,
@@ -807,7 +808,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     handleItemsFiltered = (status?: FeedItemStatus) => {
+        const { emitActivitySidebarFilterChangeEvent } = this.props;
+
         this.setState({ feedItemsStatusFilter: status });
+        emitActivitySidebarFilterChangeEvent(status);
     };
 
     getFilteredFeedItems = (): FeedItems | typeof undefined => {

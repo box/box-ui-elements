@@ -5,6 +5,7 @@ import { AnnotatorState, GetMatchPath } from './types';
 export interface WithAnnotatorContextProps {
     annotatorState?: AnnotatorState;
     emitActiveAnnotationChangeEvent?: (id: string) => void;
+    emitActivitySidebarFilterChangeEvent?: (status: string) => void;
     emitAnnotationRemoveEvent?: (id: string, isStartEvent?: boolean) => void;
     emitAnnotationUpdateEvent?: (annotation: Object, isStartEvent?: boolean) => void;
     getAnnotationsMatchPath?: GetMatchPath;
@@ -16,6 +17,7 @@ export default function withAnnotatorContext<P extends {}>(WrappedComponent: Rea
         <AnnotatorContext.Consumer>
             {({
                 emitActiveAnnotationChangeEvent,
+                emitActivitySidebarFilterChangeEvent,
                 emitAnnotationRemoveEvent,
                 emitAnnotationUpdateEvent,
                 getAnnotationsMatchPath,
@@ -27,6 +29,7 @@ export default function withAnnotatorContext<P extends {}>(WrappedComponent: Rea
                     {...props}
                     annotatorState={state}
                     emitActiveAnnotationChangeEvent={emitActiveAnnotationChangeEvent}
+                    emitActivitySidebarFilterChangeEvent={emitActivitySidebarFilterChangeEvent}
                     emitAnnotationRemoveEvent={emitAnnotationRemoveEvent}
                     emitAnnotationUpdateEvent={emitAnnotationUpdateEvent}
                     getAnnotationsMatchPath={getAnnotationsMatchPath}
