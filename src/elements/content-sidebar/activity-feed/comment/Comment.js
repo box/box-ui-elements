@@ -127,6 +127,7 @@ class Comment extends React.Component<Props, State> {
             getUserProfileUrl,
             getMentionWithQuery,
             mentionSelectorContacts,
+            modified_at,
             onEdit,
             status,
         } = this.props;
@@ -138,6 +139,7 @@ class Comment extends React.Component<Props, State> {
         const canResolve = onEdit !== noop && permissions.can_resolve;
         const isMenuVisible = (canDelete || canEdit || canResolve) && !isPending;
         const isResolved = status === COMMENT_STATUS_RESOLVED;
+        const isEdited = modified_at !== undefined && modified_at !== created_at;
 
         return (
             <ActivityCard className="bcs-Comment">
@@ -250,6 +252,7 @@ class Comment extends React.Component<Props, State> {
                         ) : (
                             <ActivityMessage
                                 id={id}
+                                isEdited={isEdited}
                                 tagged_message={tagged_message}
                                 translatedTaggedMessage={translatedTaggedMessage}
                                 {...translations}
