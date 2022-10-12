@@ -15,8 +15,8 @@ type Props = {
     onClick: Function,
 };
 
-const ToggleMoreLessButton = ({ onClick, isMore }: Props): React.Node => (
-    <PlainButton className="bcs-ActivityMessage-toggleMoreLess" onClick={onClick}>
+const ToggleMoreLessButton = ({ isMore, onClick }: Props): React.Node => (
+    <PlainButton type="button" className="bcs-ActivityMessage-toggleMoreLess" onClick={onClick}>
         <FormattedMessage {...(isMore ? messages.activityMessageSeeMore : messages.activityMessageSeeLess)} />
     </PlainButton>
 );
