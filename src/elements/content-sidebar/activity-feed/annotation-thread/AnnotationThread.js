@@ -8,6 +8,7 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import classNames from 'classnames';
 import { IntlProvider } from 'react-intl';
+import type EventEmitter from 'events';
 import AnnotationThreadContent from './AnnotationThreadContent';
 import AnnotationThreadCreate from './AnnotationThreadCreate';
 import API from '../../../../api/APIFactory';
@@ -27,6 +28,7 @@ type Props = {
     className: string,
     clientName: string,
     currentUser: User,
+    eventEmitter?: EventEmitter,
     file: BoxItem,
     handleCancel: () => void,
     language?: string,

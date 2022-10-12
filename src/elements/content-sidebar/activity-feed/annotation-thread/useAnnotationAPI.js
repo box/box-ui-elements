@@ -3,18 +3,36 @@
 import React from 'react';
 import type { MessageDescriptor } from 'react-intl';
 import API from '../../../../api/APIFactory';
-import annotationErrors from './errors';
+import { annotationErrors } from './errors';
+import useRepliesAPI from './useRepliesAPI';
 
 import type { Annotation, AnnotationPermission } from '../../../../common/types/annotations';
-import type { BoxItemPermission } from '../../../../common/types/core';
-import type { FeedItemStatus } from '../../../../common/types/feed';
+import type { BoxItemPermission, User } from '../../../../common/types/core';
+import type { FeedItemStatus, Comment, BoxCommentPermission } from '../../../../common/types/feed';
 import type { ElementOrigin, ElementsXhrError } from '../../../../common/types/api';
 
 import commonMessages from '../../../common/messages';
 
+const normalizeReplies = (repliesArray?: Array<Comment>): { [string]: Comment } => {
+    if (!repliesArray) {
+        return {};
+    }
+    return repliesArray.reduce((prevValues, reply) => {
+        return {
+            ...prevValues,
+            [reply.id]: reply,
+        };
+    }, {});
+};
+
+const denormalizeReplies = (repliesMap: { [string]: Comment }): Array<Comment> => {
+    return Object.keys(repliesMap).map(key => repliesMap[key]);
+};
+
 type Props = {
     annotationId: string,
     api: API,
+    currentUser: User,
     errorCallback: (
         error: ElementsXhrError | Error,
         code: string,
@@ -31,46 +49,80 @@ type UseAnnotationAPI = {
         message?: MessageDescriptor,
         title?: MessageDescriptor,
     },
+    handleCreateReply: (message: string) => void,
     handleDelete: ({ id: string, permissions: AnnotationPermission }) => any,
+    handleDeleteReply: ({ id: string, permissions: BoxCommentPermission }) => void,
     handleEdit: (id: string, text: string, permissions: AnnotationPermission) => void,
+    handleEditReply: (
+        replyId: string,
+        message: string,
+        status?: FeedItemStatus,
+        permissions: BoxCommentPermission,
+    ) => void,
     handleStatusChange: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
     isLoading: boolean,
+    replies: Array<Comment>,
 };
 
-const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCallback }: Props): UseAnnotationAPI => {
+const useAnnotationAPI = ({
+    annotationId,
+    api,
+    currentUser,
+    fileId,
+    filePermissions,
+    errorCallback,
+}: Props): UseAnnotationAPI => {
     const [annotation, setAnnotation] = React.useState();
+    const [replies, setReplies] = React.useState<{ [string]: Comment }>({});
     const [error, setError] = React.useState();
     const [isLoading, setIsLoading] = React.useState(true);
 
-    const getAnnotationSuccess = (fetchedAnnotation: Annotation): void => {
-        setAnnotation(fetchedAnnotation);
-        setError(undefined);
-        setIsLoading(false);
+    const handleUpdateOrCreateReplyItem = (replyId: string, updatedReplyValues: Object) => {
+        setReplies(prevReplies => ({
+            ...prevReplies,
+            [replyId]: {
+                ...prevReplies[replyId],
+                ...updatedReplyValues,
+            },
+        }));
     };
 
+    const handleRemoveReplyItem = (replyId: string) => {
+        setReplies(prevReplies => {
+            const newReplies = { ...prevReplies };
+            delete newReplies[replyId];
+            return newReplies;
+        });
+    };
+
+    const { handleCreateReply, handleEditReply, handleDeleteReply } = useRepliesAPI({
+        annotationId,
+        api,
+        currentUser,
+        fileId,
+        filePermissions,
+        handleRemoveReplyItem,
+        handleUpdateOrCreateReplyItem,
+    });
+
     const annotationSuccessCallback = (updatedAnnotation: Annotation): void => {
-        setAnnotation(prevAnnotation => ({
+        setAnnotation({
             ...updatedAnnotation,
-            replies: prevAnnotation ? prevAnnotation.replies : [],
             isPending: false,
-        }));
+        });
     };
 
     const annotationDeleteSuccessCallback = () => {
         // will emit delete event
     };
 
-    const createAnnotationErrorCallback = (code: string) => {
-        setError({
-            title: commonMessages.errorOccured,
-            message: annotationErrors[code] || annotationErrors.default,
-        });
-    };
-
     const annotationErrorCallback = React.useCallback(
         (e: ElementsXhrError, code: string): void => {
             setIsLoading(false);
-            createAnnotationErrorCallback(code);
+            setError({
+                title: commonMessages.errorOccured,
+                message: annotationErrors[code] || annotationErrors.default,
+            });
 
             errorCallback(e, code, {
                 error: e,
@@ -79,7 +131,15 @@ const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCal
         [errorCallback],
     );
 
-    const handleFetch = React.useCallback(() => {
+    React.useEffect(() => {
+        const getAnnotationSuccess = (fetchedAnnotation: Annotation) => {
+            const { replies: fetchedReplies, ...normalizedAnnotation } = fetchedAnnotation;
+            setAnnotation({ ...normalizedAnnotation });
+            setReplies(normalizeReplies(fetchedReplies));
+            setError(undefined);
+            setIsLoading(false);
+        };
+
         setIsLoading(true);
         api.getAnnotationsAPI(false).getAnnotation(
             fileId,
@@ -89,14 +149,10 @@ const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCal
             annotationErrorCallback,
             true, // to fetch aanotation with its replies
         );
-    }, [api, fileId, annotationId, filePermissions, annotationErrorCallback]);
-
-    React.useEffect(() => {
-        handleFetch();
-    }, [handleFetch]);
+    }, [fileId, annotationId, filePermissions, api, annotationErrorCallback]);
 
     const handleDelete = ({ id, permissions }: { id: string, permissions: AnnotationPermission }): void => {
-        setAnnotation({ ...annotation, isPending: true });
+        setAnnotation(prevAnnotation => ({ ...prevAnnotation, isPending: true }));
         api.getAnnotationsAPI(false).deleteAnnotation(
             fileId,
             id,
@@ -107,7 +163,7 @@ const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCal
     };
 
     const handleEdit = (id: string, text: string, permissions: AnnotationPermission): void => {
-        setAnnotation({ ...annotation, isPending: true });
+        setAnnotation(prevAnnotation => ({ ...prevAnnotation, isPending: true }));
         api.getAnnotationsAPI(false).updateAnnotation(
             fileId,
             id,
@@ -119,7 +175,7 @@ const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCal
     };
 
     const handleStatusChange = (id: string, status: FeedItemStatus, permissions: AnnotationPermission): void => {
-        setAnnotation({ ...annotation, isPending: true });
+        setAnnotation(prevAnnotation => ({ ...prevAnnotation, isPending: true }));
         api.getAnnotationsAPI(false).updateAnnotation(
             fileId,
             id,
@@ -130,7 +186,18 @@ const useAnnotationAPI = ({ annotationId, api, fileId, filePermissions, errorCal
         );
     };
 
-    return { annotation, error, isLoading, handleDelete, handleEdit, handleStatusChange };
+    return {
+        annotation,
+        error,
+        handleCreateReply,
+        handleDeleteReply,
+        handleEditReply,
+        handleDelete,
+        handleEdit,
+        handleStatusChange,
+        isLoading,
+        replies: denormalizeReplies(replies),
+    };
 };
 
 export default useAnnotationAPI;

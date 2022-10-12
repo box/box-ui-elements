@@ -369,7 +369,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 file,
                 currentUser,
                 message,
-                hasMention,
                 expect.any(Function),
                 expect.any(Function),
             );
@@ -392,19 +391,17 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const parentId = '123';
             const parentType = 'comment';
             const message = 'abc';
-            const hasMention = true;
 
             instance.setState({
                 currentUser,
             });
-            instance.createReply(parentId, parentType, message, hasMention);
+            instance.createReply(parentId, parentType, message);
             expect(feedAPI.createReply).toBeCalledWith(
                 file,
                 currentUser,
                 parentId,
                 parentType,
                 message,
-                hasMention,
                 expect.any(Function),
                 expect.any(Function),
             );
@@ -459,7 +456,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     '123',
                     expectedText,
                     expectedStatus,
-                    false,
                     { can_edit: true, can_delete: true },
                     expect.any(Function),
                     expect.any(Function),
@@ -475,21 +471,19 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const instance = wrapper.instance();
             const parentId = '123';
             const text = 'abc';
-            const hasMention = true;
             const reply = {
                 id: '1',
                 permissions: { can_edit: true },
             };
             instance.fetchFeedItems = jest.fn();
 
-            wrapper.instance().updateReply(reply.id, parentId, text, hasMention, reply.permissions);
+            wrapper.instance().updateReply(reply.id, parentId, text, reply.permissions);
 
             expect(api.getFeedAPI().updateReply).toBeCalledWith(
                 file,
                 reply.id,
                 parentId,
                 text,
-                hasMention,
                 reply.permissions,
                 expect.any(Function),
                 expect.any(Function),
@@ -818,7 +812,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
     describe('handleAnnotationSelect()', () => {
         const annotatorState = { activeAnnotationId: '123' };
-        const emitAnnotatorActiveChangeEvent = jest.fn();
+        const emitActiveAnnotationChangeEvent = jest.fn();
         const getAnnotationsMatchPath = jest.fn().mockReturnValue({ params: { fileVersionId: '456' } });
         const getAnnotationsPath = jest.fn().mockReturnValue('/activity/annotations/235/124');
         const history = {
@@ -830,7 +824,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         const getAnnotationWrapper = () =>
             getWrapper({
                 annotatorState,
-                emitAnnotatorActiveChangeEvent,
+                emitActiveAnnotationChangeEvent,
                 file,
                 getAnnotationsMatchPath,
                 getAnnotationsPath,
@@ -845,7 +839,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             instance.handleAnnotationSelect(annotation);
 
-            expect(emitAnnotatorActiveChangeEvent).toHaveBeenCalledWith('124');
+            expect(emitActiveAnnotationChangeEvent).toBeCalledWith('124');
             expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
             expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
@@ -857,7 +851,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             instance.handleAnnotationSelect(annotation);
 
-            expect(emitAnnotatorActiveChangeEvent).toHaveBeenCalledWith('124');
+            expect(emitActiveAnnotationChangeEvent).toBeCalledWith('124');
             expect(history.push).not.toHaveBeenCalled();
             expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
@@ -870,7 +864,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             instance.handleAnnotationSelect(annotation);
 
-            expect(emitAnnotatorActiveChangeEvent).toHaveBeenCalledWith('124');
+            expect(emitActiveAnnotationChangeEvent).toBeCalledWith('124');
             expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
             expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
@@ -883,15 +877,16 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             instance.handleAnnotationSelect(annotation);
 
-            expect(emitAnnotatorActiveChangeEvent).toHaveBeenCalledWith('124');
+            expect(emitActiveAnnotationChangeEvent).toBeCalledWith('124');
             expect(history.push).not.toHaveBeenCalled();
             expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
     });
 
     describe('handleAnnotationEdit()', () => {
-        test('should call updateAnnotation API', () => {
-            const wrapper = getWrapper();
+        test('should call updateAnnotation API and call emitAnnotationUpdateEvent', () => {
+            const mockEmitAnnotationUpdateEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationUpdateEvent: mockEmitAnnotationUpdateEvent });
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
 
@@ -901,6 +896,15 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 can_resolve: true,
             });
 
+            expect(mockEmitAnnotationUpdateEvent).toBeCalledWith(
+                {
+                    id: '123',
+                    description: {
+                        message: 'hello',
+                    },
+                },
+                true,
+            );
             expect(api.getFeedAPI().updateAnnotation).toBeCalledWith(
                 expect.anything(),
                 '123',
@@ -915,8 +919,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('handleAnnotationStatusChange()', () => {
-        test('should call updateAnnotation API', () => {
-            const wrapper = getWrapper();
+        test('should call updateAnnotation API and call emitAnnotationUpdateEvent', () => {
+            const mockEmitAnnotationUpdateEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationUpdateEvent: mockEmitAnnotationUpdateEvent });
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
 
@@ -926,6 +931,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 can_resolve: true,
             });
 
+            expect(mockEmitAnnotationUpdateEvent).toBeCalledWith({ id: '123', status: 'open' }, true);
             expect(api.getFeedAPI().updateAnnotation).toBeCalledWith(
                 expect.anything(),
                 '123',
@@ -940,13 +946,15 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('handleAnnotationDelete()', () => {
-        test('should call deleteAnnotation API', () => {
-            const wrapper = getWrapper();
+        test('should call deleteAnnotation API and call emitAnnotationDeleteEvent', () => {
+            const mockEmitAnnotationRemoveEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationRemoveEvent: mockEmitAnnotationRemoveEvent });
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
 
             wrapper.instance().handleAnnotationDelete({ id: '123' });
 
+            expect(mockEmitAnnotationRemoveEvent).toBeCalledWith('123', true);
             expect(api.getFeedAPI().deleteAnnotation).toBeCalled();
             expect(instance.fetchFeedItems).toHaveBeenCalled();
         });
@@ -954,15 +962,15 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
     describe('deleteAnnotationSuccess()', () => {
         test('should handle successful annotation deletion', () => {
-            const mockEmitRemoveEvent = jest.fn();
+            const mockEmitAnnotationRemoveEvent = jest.fn();
             const mockFeedSuccess = jest.fn();
-            const wrapper = getWrapper({ emitRemoveEvent: mockEmitRemoveEvent });
+            const wrapper = getWrapper({ emitAnnotationRemoveEvent: mockEmitAnnotationRemoveEvent });
             const instance = wrapper.instance();
 
             instance.feedSuccessCallback = mockFeedSuccess;
             instance.deleteAnnotationSuccess('123');
 
-            expect(mockEmitRemoveEvent).toBeCalledWith('123');
+            expect(mockEmitAnnotationRemoveEvent).toBeCalledWith('123');
             expect(mockFeedSuccess).toBeCalled();
         });
     });

@@ -6,7 +6,11 @@ export const CREATE = 'create';
 export enum Action {
     CREATE_START = 'create_start',
     CREATE_END = 'create_end',
-    // Can extend to other actions: update_start, update_end, delete_start, delete_end
+    DELETE_START = 'delete_start',
+    DELETE_END = 'delete_end',
+    SET_ACTIVE = 'set_active',
+    UPDATE_START = 'update_start',
+    UPDATE_END = 'update_end',
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -21,17 +25,19 @@ export interface Annotator {
 export interface AnnotatorState {
     activeAnnotationFileVersionId?: string | null;
     activeAnnotationId?: string | null;
-    annotation?: object | null;
+    annotation?: { id?: string } | null;
     action?: Action | null;
     error?: Error | null;
     meta?: Metadata | null;
+    origin?: string;
 }
 
 export type GetMatchPath = (location?: Location) => match<MatchParams> | null;
 
 export interface AnnotatorContext {
-    emitActiveChangeEvent: (id: string) => void;
-    emitRemoveEvent: (id: string) => void;
+    emitActiveAnnotationChangeEvent?: (id: string) => void;
+    emitAnnotationRemoveEvent?: (id: string, isStartEvent?: boolean) => void;
+    emitAnnotationUpdateEvent?: (annotation: Object, isStartEvent?: boolean) => void;
     getAnnotationsMatchPath: GetMatchPath;
     getAnnotationsPath: (fileVersionId?: string, annotationId?: string) => string;
     state: AnnotatorState;
@@ -49,7 +55,7 @@ export type MatchParams = {
 };
 
 export interface Metadata {
-    requestId: string;
+    requestId?: string;
     status: Status;
 }
 

@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import noop from 'lodash/noop';
-import uuidv4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 import { isMarkSupported } from '../../../utils/performance';
 import { EVENT_DATA_READY, EVENT_JS_READY } from './constants';
 import { METRIC_TYPE_PREVIEW, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../../constants';

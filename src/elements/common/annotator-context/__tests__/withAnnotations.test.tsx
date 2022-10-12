@@ -66,8 +66,11 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         const contextProvider = getContextProvider(wrapper);
 
         expect(contextProvider.exists()).toBeTruthy();
-        expect(contextProvider.prop('value').emitActiveChangeEvent).toEqual(instance.emitActiveChangeEvent);
-        expect(contextProvider.prop('value').emitRemoveEvent).toEqual(instance.emitRemoveEvent);
+        expect(contextProvider.prop('value').emitActiveAnnotationChangeEvent).toEqual(
+            instance.emitActiveAnnotationChangeEvent,
+        );
+        expect(contextProvider.prop('value').emitAnnotationRemoveEvent).toEqual(instance.emitAnnotationRemoveEvent);
+        expect(contextProvider.prop('value').emitAnnotationUpdateEvent).toEqual(instance.emitAnnotationUpdateEvent);
         expect(contextProvider.prop('value').getAnnotationsMatchPath).toEqual(instance.getMatchPath);
         expect(contextProvider.prop('value').getAnnotationsPath).toEqual(instance.getAnnotationsPath);
         expect(contextProvider.prop('value').state).toEqual({
@@ -80,30 +83,59 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         });
     });
 
-    describe('emitActiveChangeEvent', () => {
+    describe('emitActiveAnnotationChangeEvent', () => {
         test('should call annotator emit on action', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
             // Set the annotator on the withAnnotations instance
             instance.handleAnnotator(mockAnnotator);
-            instance.emitActiveChangeEvent('123');
+            instance.emitActiveAnnotationChangeEvent('123');
 
             expect(mockAnnotator.emit).toBeCalled();
             expect(mockAnnotator.emit).toBeCalledWith('annotations_active_set', '123');
         });
     });
 
-    describe('emitRemoveEvent', () => {
-        test('should call annotator on delete with a delete event', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
+    describe('emitAnnotationRemoveEvent', () => {
+        test.each`
+            isStartEvent | expectedEvent
+            ${undefined} | ${'annotations_remove'}
+            ${false}     | ${'annotations_remove'}
+            ${true}      | ${'annotations_remove_start'}
+        `(
+            'given isStartEvent = $isStartEvent should call annotator emit with event = $expectedEvent',
+            ({ isStartEvent, expectedEvent }) => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
 
-            instance.handleAnnotator(mockAnnotator);
-            instance.emitRemoveEvent('123');
+                instance.handleAnnotator(mockAnnotator);
+                instance.emitAnnotationRemoveEvent('123', isStartEvent);
 
-            expect(mockAnnotator.emit).toBeCalledWith('annotations_remove', '123');
-        });
+                expect(mockAnnotator.emit).toBeCalledWith(expectedEvent, '123');
+            },
+        );
+    });
+
+    describe('emitAnnotationUpdateEvent', () => {
+        test.each`
+            isStartEvent | expectedEvent
+            ${undefined} | ${'sidebar.annotations_update'}
+            ${false}     | ${'sidebar.annotations_update'}
+            ${true}      | ${'sidebar.annotations_update_start'}
+        `(
+            'given isStartEvent = $isStartEvent should call annotator emit with event = $expectedEvent',
+            ({ isStartEvent, expectedEvent }) => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                const annotation = { id: '123', status: 'resolved' };
+
+                instance.handleAnnotator(mockAnnotator);
+                instance.emitAnnotationUpdateEvent(annotation, isStartEvent);
+
+                expect(mockAnnotator.emit).toBeCalledWith(expectedEvent, annotation);
+            },
+        );
     });
 
     describe('handleAnnotationCreate()', () => {
@@ -159,6 +191,34 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             });
 
             expect(onError).toHaveBeenCalledWith(mockError, 'create_annotation_error', { showNotification: true });
+        });
+    });
+
+    describe('handleAnnotationUpdate()', () => {
+        test.each`
+            status            | expectedAction
+            ${Status.PENDING} | ${Action.UPDATE_START}
+            ${Status.SUCCESS} | ${Action.UPDATE_END}
+        `('should update the context provider value if $status status received', ({ status, expectedAction }) => {
+            const wrapper = getWrapper();
+            const annotation = { id: '123', status: 'resolved' };
+            const eventData = {
+                annotation,
+                meta: { status },
+            };
+
+            wrapper.instance().handleAnnotationUpdate(eventData);
+            const contextProvider = getContextProvider(wrapper);
+
+            expect(contextProvider.exists()).toBeTruthy();
+            expect(contextProvider.prop('value').state).toEqual({
+                action: expectedAction,
+                activeAnnotationFileVersionId: null,
+                activeAnnotationId: null,
+                annotation,
+                error: null,
+                meta: { status },
+            });
         });
     });
 
