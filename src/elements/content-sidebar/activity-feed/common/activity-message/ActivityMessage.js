@@ -82,17 +82,18 @@ class ActivityMessage extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
+            getUserProfileUrl,
             id,
             isEdited,
+            shouldTruncate,
             tagged_message,
             translatedTaggedMessage,
             translationEnabled,
-            getUserProfileUrl,
         } = this.props;
         const { isLoading, isTranslation } = this.state;
         const commentToDisplay =
             translationEnabled && isTranslation && translatedTaggedMessage ? translatedTaggedMessage : tagged_message;
-        const MessageWrapper = this.props.shouldTruncate ? TruncatableMessage : React.Fragment;
+        const MessageWrapper = shouldTruncate ? TruncatableMessage : React.Fragment;
 
         return isLoading ? (
             <div className="bcs-ActivityMessageLoading">
