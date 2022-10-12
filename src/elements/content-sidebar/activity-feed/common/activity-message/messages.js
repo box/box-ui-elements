@@ -12,6 +12,11 @@ const messages = defineMessages({
         defaultMessage: 'Translate',
         description: 'Translate button for translating comment',
     },
+    activityMessageEdited: {
+        id: 'be.contentSidebar.activityFeed.common.editedMessage',
+        defaultMessage: 'edited',
+        description: 'Label indicating that message was edited, should be lowercase',
+    },
 });
 
 export default messages;
