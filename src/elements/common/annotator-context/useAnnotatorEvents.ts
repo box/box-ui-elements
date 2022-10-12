@@ -24,6 +24,37 @@ function useAnnotatorEvents({
         eventEmitter.emit('annotations_active_change', { annotationId, fileVersionId });
     };
 
+    const emitAddAnnotationEvent = (annotation: Object, requestId: string, status: Status) => {
+        const actionEvent: AnnotationActionEvent = {
+            annotation,
+            meta: { status, requestId },
+        };
+        eventEmitter.emit('annotations_create', actionEvent);
+    };
+
+    const emitAddAnnotationStartEvent = (annotation: Object, requestId: string) => {
+        emitAddAnnotationEvent(annotation, requestId, Status.PENDING);
+    };
+    const emitAddAnnotationEndEvent = (annotation: Object, requestId: string) => {
+        emitAddAnnotationEvent(annotation, requestId, Status.SUCCESS);
+    };
+
+    const emitDeleteAnnotationEvent = (id: string, status: Status) => {
+        const actionEvent: AnnotationActionEvent = {
+            annotation: { id },
+            meta: { status },
+        };
+        eventEmitter.emit('annotations_delete', actionEvent);
+    };
+
+    const emitDeleteAnnotationStartEvent = (id: string) => {
+        emitDeleteAnnotationEvent(id, Status.PENDING);
+    };
+    const emitDeleteAnnotationEndEvent = (id: string) => {
+        emitDeleteAnnotationEvent(id, Status.SUCCESS);
+        eventEmitter.emit('annotations_remove', id);
+    };
+
     const emitUpdateAnnotationEvent = (annotation: Object, status: Status) => {
         const actionEvent: AnnotationActionEvent = {
             annotation,
@@ -55,7 +86,11 @@ function useAnnotatorEvents({
     });
 
     return {
+        emitAddAnnotationEndEvent,
+        emitAddAnnotationStartEvent,
         emitAnnotationActiveChangeEvent,
+        emitDeleteAnnotationEndEvent,
+        emitDeleteAnnotationStartEvent,
         emitUpdateAnnotationEndEvent,
         emitUpdateAnnotationStartEvent,
     };

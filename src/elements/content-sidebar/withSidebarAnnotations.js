@@ -73,6 +73,10 @@ export default function withSidebarAnnotations(
                 this.updateAnnotation();
             }
 
+            if (action === 'delete_start' || action === 'delete_end') {
+                this.deleteAnnotation();
+            }
+
             if ((action === 'create_start' || action === 'create_end') && annotation && prevAnnotation !== annotation) {
                 this.addAnnotation();
             }
@@ -121,6 +125,25 @@ export default function withSidebarAnnotations(
             // If there are no cache entry for feeditems, then it is assumed that it has not yet been fetched.
             if (hasItems) {
                 feedAPI.addAnnotation(file, currentUser, annotation, requestId, isPending);
+            }
+
+            this.refreshActivitySidebar();
+        }
+
+        deleteAnnotation() {
+            const {
+                annotatorState: { action, annotation },
+                api,
+                file,
+            } = this.props;
+
+            const feedAPI = api.getFeedAPI(false);
+            feedAPI.file = file;
+
+            if (action === 'delete_start') {
+                feedAPI.updateFeedItem({ isPending: true }, annotation.id);
+            } else {
+                feedAPI.deleteFeedItem(annotation.id);
             }
 
             this.refreshActivitySidebar();
