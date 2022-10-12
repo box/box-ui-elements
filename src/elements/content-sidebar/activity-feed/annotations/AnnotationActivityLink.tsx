@@ -4,28 +4,45 @@ import noop from 'lodash/noop';
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from 'react-intl';
 import PlainButton from '../../../../components/plain-button';
 import { ButtonType } from '../../../../components/button';
+import messages from './messages';
 import './AnnotationActivityLink.scss';
 
 type MessageDescriptorWithValues = {
-    values?: Record<string, number>;
+    values?: { number: string };
 } & MessageDescriptor;
 export interface AnnotationActivityLinkProps extends WrappedComponentProps {
     className?: string;
+    fileVersion: string;
     id: string;
-    isDisabled: boolean;
-    message: MessageDescriptorWithValues;
+    isCurrentVersion?: boolean;
+    locationValue: string;
     onClick: (id: string) => void;
+    shouldHideLink: boolean;
 }
 
 const AnnotationActivityLink = ({
     className,
     id,
+    fileVersion,
     intl,
-    isDisabled = false,
-    message,
+    isCurrentVersion,
+    locationValue,
     onClick = noop,
+    shouldHideLink,
     ...rest
-}: AnnotationActivityLinkProps): JSX.Element => {
+}: AnnotationActivityLinkProps): JSX.Element | null => {
+    if (shouldHideLink) {
+        return null;
+    }
+
+    const isFileVersionUnavailable = fileVersion == null;
+
+    const linkMessage = isCurrentVersion ? messages.annotationActivityPageItem : messages.annotationActivityVersionLink;
+    const linkValue = isCurrentVersion ? locationValue : fileVersion;
+    const message: MessageDescriptorWithValues = isFileVersionUnavailable
+        ? messages.annotationActivityVersionUnavailable
+        : { ...linkMessage, values: { number: linkValue } };
+
     const { values, ...messageDescriptor } = message;
     const translatedMessage = intl.formatMessage(messageDescriptor, values);
 
@@ -38,7 +55,7 @@ const AnnotationActivityLink = ({
     };
 
     const handleMouseDown = (event: React.MouseEvent<HTMLButtonElement>) => {
-        if (isDisabled) {
+        if (isFileVersionUnavailable) {
             return;
         }
 
@@ -52,7 +69,7 @@ const AnnotationActivityLink = ({
         <PlainButton
             className={classNames('bcs-AnnotationActivityLink', className)}
             data-testid="bcs-AnnotationActivity-link"
-            isDisabled={isDisabled}
+            isDisabled={isFileVersionUnavailable}
             onClick={handleClick}
             onMouseDown={handleMouseDown}
             title={translatedMessage}
