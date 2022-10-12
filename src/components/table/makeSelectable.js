@@ -471,7 +471,7 @@ function makeSelectable(BaseTable) {
             this.onSelect(selectedItems.add(data[focusedIndex]), newFocusedIndex);
         };
 
-        isContinuation = (selectedItemIndecies, sourceIndex, targetIndex) => {
+        isContiguousSelection = (selectedItemIndecies, sourceIndex, targetIndex) => {
             if (sourceIndex < targetIndex && selectedItemIndecies.has(sourceIndex - 1)) {
                 return true;
             }
@@ -495,7 +495,7 @@ function makeSelectable(BaseTable) {
                 return;
             }
 
-            const selectedItemIndecies = new Set(
+            const selectedItemIndices = new Set(
                 data.reduce((rows, item, i) => {
                     if (selectedItems.has(item)) {
                         rows.push(i);
@@ -509,19 +509,19 @@ function makeSelectable(BaseTable) {
                 !isSourceSelected &&
                 !isTargetSelected &&
                 // if we are starting a new mass selection adjacent selected block, we want to connect them
-                !this.isContinuation(selectedItemIndecies, focusedIndex, targetIndex)
+                !this.isContiguousSelection(selectedItemIndices, focusedIndex, targetIndex)
             ) {
                 this.anchorIndex = focusedIndex;
             }
 
-            const newSelectedItemIndecies = shiftSelect(
-                selectedItemIndecies,
+            const newSelectedItemIndices = shiftSelect(
+                selectedItemIndices,
                 focusedIndex,
                 targetIndex,
                 this.anchorIndex,
             );
 
-            const newSelectedItems = newSelectedItemIndecies.map(i => data[i]);
+            const newSelectedItems = newSelectedItemIndices.map(i => data[i]);
 
             this.onSelect(newSelectedItems, targetIndex);
         };

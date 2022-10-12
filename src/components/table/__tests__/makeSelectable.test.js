@@ -315,28 +315,28 @@ describe('components/table/makeSelectable', () => {
         });
     });
 
-    describe('isContinuation()', () => {
+    describe('isContiguousSelection()', () => {
         const wrapper = getWrapper();
         const instance = wrapper.instance();
-        const { isContinuation } = instance;
+        const { isContiguousSelection } = instance;
         test('returns true if source is less than target and source - 1 is selected', () => {
-            expect(isContinuation(Set([0]), 1, 2)).toEqual(true);
+            expect(isContiguousSelection(Set([0]), 1, 2)).toEqual(true);
         });
 
         test('returns false if source is less than target and source - 1 is not selected', () => {
-            expect(isContinuation(Set(), 1, 2)).toEqual(false);
+            expect(isContiguousSelection(Set(), 1, 2)).toEqual(false);
         });
 
-        test('returns true if source is grater than target and source + 1 is selected', () => {
-            expect(isContinuation(Set([2]), 1, 0)).toEqual(true);
+        test('returns true if source is greater than target and source + 1 is selected', () => {
+            expect(isContiguousSelection(Set([2]), 1, 0)).toEqual(true);
         });
 
         test('returns false if source is greater than target and source + 1 is not selected', () => {
-            expect(isContinuation(Set(), 1, 2)).toEqual(false);
+            expect(isContiguousSelection(Set(), 1, 2)).toEqual(false);
         });
 
         test('returns false if source and target are equal', () => {
-            expect(isContinuation(Set([0, 2]), 1, 1)).toEqual(false);
+            expect(isContiguousSelection(Set([0, 2]), 1, 1)).toEqual(false);
         });
     });
 
