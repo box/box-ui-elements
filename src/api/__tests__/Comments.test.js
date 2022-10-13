@@ -1,11 +1,6 @@
 import { COMMENTS_FIELDS_TO_FETCH } from '../../utils/fields';
 import Comments from '../Comments';
-import {
-    FEED_ITEM_TYPE_COMMENT,
-    PERMISSION_CAN_COMMENT,
-    PERMISSION_CAN_DELETE,
-    PERMISSION_CAN_EDIT,
-} from '../../constants';
+import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_DELETE, PERMISSION_CAN_EDIT } from '../../constants';
 
 let comments;
 
@@ -33,7 +28,7 @@ describe('api/Comments', () => {
 
     describe('successHandler()', () => {
         const comment = {
-            type: FEED_ITEM_TYPE_COMMENT,
+            type: 'comment',
             id: '123',
             created_at: 1234567890,
             message: 'NOT A TAGGED MESSAGE',
@@ -44,7 +39,7 @@ describe('api/Comments', () => {
         };
 
         const taggedComment = {
-            type: FEED_ITEM_TYPE_COMMENT,
+            type: 'comment',
             id: '456',
             created_at: 1234567890,
             tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',

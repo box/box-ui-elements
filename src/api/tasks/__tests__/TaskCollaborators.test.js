@@ -1,4 +1,4 @@
-import { API_PAGE_LIMIT, FEED_ITEM_TYPE_TASK } from '../../../constants';
+import { API_PAGE_LIMIT } from '../../../constants';
 import TaskCollaborators from '../TaskCollaborators';
 
 let taskCollaborators;
@@ -54,7 +54,7 @@ describe('api/TaskCollaborators', () => {
                     data: {
                         task: {
                             id: taskId,
-                            type: FEED_ITEM_TYPE_TASK,
+                            type: 'task',
                         },
                         target: user,
                     },
@@ -84,7 +84,7 @@ describe('api/TaskCollaborators', () => {
                     data: {
                         task: {
                             id: taskId,
-                            type: FEED_ITEM_TYPE_TASK,
+                            type: 'task',
                         },
                         target: {
                             id: groupId,

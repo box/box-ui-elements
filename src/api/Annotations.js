@@ -8,7 +8,6 @@ import {
     ERROR_CODE_FETCH_ANNOTATION,
     ERROR_CODE_FETCH_ANNOTATIONS,
     ERROR_CODE_FETCH_REPLIES,
-    FEED_ITEM_TYPE_VERSION,
     PERMISSION_CAN_CREATE_ANNOTATIONS,
     PERMISSION_CAN_DELETE,
     PERMISSION_CAN_EDIT,
@@ -119,7 +118,7 @@ export default class Annotations extends MarkerBasedApi {
             },
             file_version: {
                 id: fileVersionId,
-                type: FEED_ITEM_TYPE_VERSION,
+                type: 'file_version',
             },
         };
 

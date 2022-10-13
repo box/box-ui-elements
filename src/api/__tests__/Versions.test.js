@@ -1,5 +1,5 @@
 import Versions from '../Versions';
-import { FEED_ITEM_TYPE_VERSION, PERMISSION_CAN_DELETE, PERMISSION_CAN_UPLOAD } from '../../constants';
+import { PERMISSION_CAN_DELETE, PERMISSION_CAN_UPLOAD } from '../../constants';
 import { FILE_VERSIONS_FIELDS_TO_FETCH } from '../../utils/fields';
 
 let versions;
@@ -220,7 +220,7 @@ describe('api/Versions', () => {
                 const requestData = {
                     data: {
                         id: versionId,
-                        type: FEED_ITEM_TYPE_VERSION,
+                        type: 'file_version',
                     },
                 };
 

@@ -1,6 +1,5 @@
 // @flow
 
-import { FEED_ITEM_TYPE_ANNOTATION } from '../../constants';
 import type { BoxItemVersionMini, Reply, User } from './core';
 import type { ActionItemError, Comment, FeedItemStatus } from './feed';
 
@@ -62,7 +61,7 @@ export type Annotation = {
     status?: FeedItemStatus,
     target: Target,
     total_reply_count?: number,
-    type: typeof FEED_ITEM_TYPE_ANNOTATION,
+    type: 'annotation',
 };
 
 export type Annotations = {

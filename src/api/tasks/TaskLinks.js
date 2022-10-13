@@ -5,7 +5,7 @@
  */
 
 import TasksBase from './TasksBase';
-import { ERROR_CODE_CREATE_TASK_LINK, FEED_ITEM_TYPE_TASK } from '../../constants';
+import { ERROR_CODE_CREATE_TASK_LINK } from '../../constants';
 import type { ElementsXhrError } from '../../common/types/api';
 import type { BoxItem } from '../../common/types/core';
 
@@ -35,7 +35,7 @@ class TaskLinks extends TasksBase {
                 },
                 task: {
                     id: task.id,
-                    type: FEED_ITEM_TYPE_TASK,
+                    type: 'task',
                 },
             },
         };
