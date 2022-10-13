@@ -96,14 +96,11 @@ class ActivityMessage extends React.Component<Props, State> {
         ) : (
             <div className="bcs-ActivityMessage">
                 {formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl)}
-                {isEdited ? (
-                    <>
-                        {' '}
-                        <span className="bcs-ActivityMessage-edited">
-                            (<FormattedMessage {...messages.activityMessageEdited} />)
-                        </span>
-                    </>
-                ) : null}
+                {isEdited && (
+                    <span className="bcs-ActivityMessage-edited">
+                        <FormattedMessage {...messages.activityMessageEdited} />
+                    </span>
+                )}
                 {translationEnabled ? this.getButton(isTranslation) : null}
             </div>
         );

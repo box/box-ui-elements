@@ -137,25 +137,18 @@ describe('elements/content-sidebar/ActivityFeed/common/activity-message', () => 
         expect(wrapper.state('isLoading')).toBe(false);
     });
 
-    test('should not show label `(edited)` when `isEdited` prop is false', () => {
+    test.each`
+        isEdited | expected
+        ${false} | ${false}
+        ${true}  | ${true}
+    `(`given isEdited = $isEdited prop message should text "(edited)" be $expected`, ({ isEdited, expected }) => {
         const comment = {
             tagged_message: 'Hi ﹫[123:Half] ＠[222:Full] @[432:Latin]',
-            isEdited: false,
+            isEdited,
         };
 
         const wrapper = shallow(<ActivityMessage id="123" {...comment} />);
 
-        expect(wrapper.find('.bcs-ActivityMessage-edited').length).toEqual(0);
-    });
-
-    test('should show label `(edited)` when `isEdited` prop is true', () => {
-        const comment = {
-            tagged_message: 'Hi ﹫[123:Half] ＠[222:Full] @[432:Latin]',
-            isEdited: true,
-        };
-
-        const wrapper = shallow(<ActivityMessage id="123" {...comment} />);
-
-        expect(wrapper.find('.bcs-ActivityMessage-edited').length).toEqual(1);
+        expect(wrapper.exists({ id: 'be.contentSidebar.activityFeed.common.editedMessage' })).toBe(expected);
     });
 });

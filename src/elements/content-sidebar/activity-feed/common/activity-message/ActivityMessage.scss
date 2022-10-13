@@ -24,8 +24,15 @@
 }
 
 .bcs-ActivityMessage-edited {
-    // Text on Light/Secondary
-    color: #767676;
+    color: $bdl-gray-62;
+
+    &::before {
+        content: ' (';
+    }
+
+    &::after {
+        content: ')';
+    }
 }
 
 .bcs-ActivityMessageLoading {
