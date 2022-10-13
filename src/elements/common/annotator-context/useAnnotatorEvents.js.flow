@@ -15,7 +15,6 @@ export interface UseAnnotatorEventsProps {
     onAnnotationUpdateEnd?: (annotation: Object) => void;
     onAnnotationUpdateStart?: (annotation: Object) => void;
     onSidebarAnnotationSelected?: (annotationId: string) => void;
-    onSidebarFilterChange?: (status: string) => void;
 }
 declare function useAnnotatorEvents(x: UseAnnotatorEventsProps): void;
 declare export default typeof useAnnotatorEvents;

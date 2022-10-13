@@ -93,19 +93,6 @@ describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
         expect(mockOnSidebarAnnotationSelected).toBeCalledWith(mockAnnotationId);
     });
 
-    test('should call onSidebarFilterChange when proper event is emitted', () => {
-        const mockOnSidebarFilterChange = jest.fn();
-        const mockStatus = 'open';
-        mockAddListener.mockImplementation((event: string, callback: (id: string) => void) => {
-            if (event === 'sidebar.activity_sidebar_filter_change') {
-                callback(mockStatus);
-            }
-        });
-        getHook({ onSidebarFilterChange: mockOnSidebarFilterChange });
-        expect(mockAddListener).toBeCalledWith('sidebar.activity_sidebar_filter_change', mockOnSidebarFilterChange);
-        expect(mockOnSidebarFilterChange).toBeCalledWith(mockStatus);
-    });
-
     test('should emit annotation active change event', () => {
         const annotationId = '123';
         const fileVersionId = '456';
@@ -248,7 +235,6 @@ describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
         const mockOnAnnotationDeleteStart = jest.fn();
         const mockOnAnnotationUpdateEnd = jest.fn();
         const mockOnAnnotationUpdateStart = jest.fn();
-        const mockOnSidebarFilterChange = jest.fn();
 
         const { unmount } = getHook({
             onSidebarAnnotationSelected: mockOnSidebarAnnotationSelected,
@@ -256,7 +242,6 @@ describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
             onAnnotationDeleteStart: mockOnAnnotationDeleteStart,
             onAnnotationUpdateEnd: mockOnAnnotationUpdateEnd,
             onAnnotationUpdateStart: mockOnAnnotationUpdateStart,
-            onSidebarFilterChange: mockOnSidebarFilterChange,
         });
 
         unmount();
@@ -273,11 +258,6 @@ describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
             5,
             'sidebar.annotations_update_start',
             mockOnAnnotationUpdateStart,
-        );
-        expect(mockRemoveListener).toHaveBeenNthCalledWith(
-            6,
-            'sidebar.activity_sidebar_filter_change',
-            mockOnSidebarFilterChange,
         );
     });
 });

@@ -14,7 +14,6 @@ export type ActiveChangeEventHandler = (event: ActiveChangeEvent) => void;
 
 export type ComponentWithAnnotations = {
     emitActiveAnnotationChangeEvent: (id: string | null) => void;
-    emitActivitySidebarFilterChangeEvent: (status: string) => void;
     emitAnnotationRemoveEvent: (id: string, isStartEvent?: boolean) => void;
     emitAnnotationUpdateEvent: (annotation: Object, isStartEvent?: boolean) => void;
     getAction: (eventData: AnnotationActionEvent) => Action;
@@ -77,16 +76,6 @@ export default function withAnnotations<P extends object>(
             }
 
             annotator.emit('annotations_active_set', id);
-        };
-
-        emitActivitySidebarFilterChangeEvent = (status: string) => {
-            const { annotator } = this;
-
-            if (!annotator) {
-                return;
-            }
-
-            annotator.emit('sidebar.activity_sidebar_filter_change', status);
         };
 
         emitAnnotationRemoveEvent = (id: string, isStartEvent = false) => {
@@ -167,7 +156,6 @@ export default function withAnnotations<P extends object>(
             const { annotation = null, error = null, meta = null } = eventData;
 
             this.setState({
-                ...this.state,
                 action: this.getDeleteAction(eventData),
                 annotation,
                 error,
@@ -179,7 +167,6 @@ export default function withAnnotations<P extends object>(
             const { annotation = null, error = null, meta = null } = eventData;
 
             this.setState({
-                ...this.state,
                 action: this.getUpdateAction(eventData),
                 annotation,
                 error,
@@ -229,7 +216,6 @@ export default function withAnnotations<P extends object>(
                 <AnnotatorContext.Provider
                     value={{
                         emitActiveAnnotationChangeEvent: this.emitActiveAnnotationChangeEvent,
-                        emitActivitySidebarFilterChangeEvent: this.emitActivitySidebarFilterChangeEvent,
                         emitAnnotationRemoveEvent: this.emitAnnotationRemoveEvent,
                         emitAnnotationUpdateEvent: this.emitAnnotationUpdateEvent,
                         getAnnotationsMatchPath: this.getMatchPath,

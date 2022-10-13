@@ -1027,17 +1027,15 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             ${undefined} | ${undefined}
             ${'open'}    | ${'open'}
         `(
-            'given $status should update feedItemsStatusFilter state with $expected and emit filter change event',
+            'given $status should update feedItemsStatusFilter state with $expected and call filter change event callback',
             ({ status, expected }) => {
-                const mockEmitActivitySidebarFilterChangeEvent = jest.fn();
-                const wrapper = getWrapper({
-                    emitActivitySidebarFilterChangeEvent: mockEmitActivitySidebarFilterChangeEvent,
-                });
+                const mockOnFilterChange = jest.fn();
+                const wrapper = getWrapper({ onFilterChange: mockOnFilterChange });
                 const instance = wrapper.instance();
                 instance.setState = jest.fn();
                 instance.handleItemsFiltered(status);
                 expect(instance.setState).toBeCalledWith({ feedItemsStatusFilter: expected });
-                expect(mockEmitActivitySidebarFilterChangeEvent).toBeCalledWith(expected);
+                expect(mockOnFilterChange).toBeCalledWith(expected);
             },
         );
     });

@@ -36,7 +36,6 @@ export type GetMatchPath = (location?: Location) => match<MatchParams> | null;
 
 export interface AnnotatorContext {
     emitActiveAnnotationChangeEvent?: (id: string) => void;
-    emitActivitySidebarFilterChangeEvent?: (status: string) => void;
     emitAnnotationRemoveEvent?: (id: string, isStartEvent?: boolean) => void;
     emitAnnotationUpdateEvent?: (annotation: Object, isStartEvent?: boolean) => void;
     getAnnotationsMatchPath: GetMatchPath;

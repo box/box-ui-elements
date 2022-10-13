@@ -10,7 +10,6 @@ export interface UseAnnotatorEventsProps {
     onAnnotationUpdateEnd?: (annotation: Object) => void;
     onAnnotationUpdateStart?: (annotation: Object) => void;
     onSidebarAnnotationSelected?: (annotationId: string) => void;
-    onSidebarFilterChange?: (status: string) => void;
 }
 
 function useAnnotatorEvents({
@@ -20,7 +19,6 @@ function useAnnotatorEvents({
     onAnnotationUpdateEnd = noop,
     onAnnotationUpdateStart = noop,
     onSidebarAnnotationSelected = noop,
-    onSidebarFilterChange = noop,
 }: UseAnnotatorEventsProps) {
     const emitAnnotationActiveChangeEvent = (annotationId: string | null, fileVersionId: string) => {
         eventEmitter.emit('annotations_active_change', { annotationId, fileVersionId });
@@ -78,14 +76,12 @@ function useAnnotatorEvents({
         eventEmitter.addListener('annotations_remove_start', onAnnotationDeleteStart);
         eventEmitter.addListener('sidebar.annotations_update', onAnnotationUpdateEnd);
         eventEmitter.addListener('sidebar.annotations_update_start', onAnnotationUpdateStart);
-        eventEmitter.addListener('sidebar.activity_sidebar_filter_change', onSidebarFilterChange);
         return () => {
             eventEmitter.removeListener('annotations_active_set', onSidebarAnnotationSelected);
             eventEmitter.removeListener('annotations_remove', onAnnotationDeleteEnd);
             eventEmitter.removeListener('annotations_remove_start', onAnnotationDeleteStart);
             eventEmitter.removeListener('sidebar.annotations_update', onAnnotationUpdateEnd);
             eventEmitter.removeListener('sidebar.annotations_update_start', onAnnotationUpdateStart);
-            eventEmitter.removeListener('sidebar.activity_sidebar_filter_change', onSidebarFilterChange);
         };
     });
 

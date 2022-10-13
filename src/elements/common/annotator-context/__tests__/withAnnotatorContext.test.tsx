@@ -30,7 +30,6 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             action: Action.CREATE_START,
         };
         const mockEmitActiveAnnotationChangeEvent = jest.fn();
-        const mockEmitActivitySidebarFilterChangeEvent = jest.fn();
         const mockEmitAnnotationRemoveEvent = jest.fn();
         const mockEmitAnnotationUpdateEvent = jest.fn();
         const mockGetAnnotationsMatchPath = jest.fn();
@@ -39,7 +38,6 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
         mockContext.mockReturnValue({
             state: annotatorState,
             emitActiveAnnotationChangeEvent: mockEmitActiveAnnotationChangeEvent,
-            emitActivitySidebarFilterChangeEvent: mockEmitActivitySidebarFilterChangeEvent,
             emitAnnotationRemoveEvent: mockEmitAnnotationRemoveEvent,
             emitAnnotationUpdateEvent: mockEmitAnnotationUpdateEvent,
             getAnnotationsMatchPath: mockGetAnnotationsMatchPath,
@@ -56,7 +54,6 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             action: Action.CREATE_START,
         });
         expect(props.emitActiveAnnotationChangeEvent).toEqual(mockEmitActiveAnnotationChangeEvent);
-        expect(props.emitActivitySidebarFilterChangeEvent).toEqual(mockEmitActivitySidebarFilterChangeEvent);
         expect(props.emitAnnotationRemoveEvent).toEqual(mockEmitAnnotationRemoveEvent);
         expect(props.emitAnnotationUpdateEvent).toEqual(mockEmitAnnotationUpdateEvent);
         expect(props.getAnnotationsMatchPath).toEqual(mockGetAnnotationsMatchPath);
