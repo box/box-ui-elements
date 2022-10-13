@@ -29,6 +29,7 @@ import type { ActionItemError, BoxCommentPermission, FeedItemStatus } from '../.
 import './Comment.scss';
 
 type Props = {
+    allowCollapse?: boolean,
     created_at: string | number,
     created_by: User,
     currentUser?: User,
@@ -52,7 +53,6 @@ type Props = {
         onError: ?Function,
     ) => void,
     permissions: BoxCommentPermission,
-    shouldTruncate?: boolean,
     status?: FeedItemStatus,
     tagged_message: string,
     translatedTaggedMessage?: string,
@@ -67,9 +67,9 @@ type State = {
 
 class Comment extends React.Component<Props, State> {
     static defaultProps = {
+        allowCollapse: false,
         onDelete: noop,
         onEdit: noop,
-        shouldTruncate: false,
     };
 
     state = {
@@ -114,6 +114,7 @@ class Comment extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
+            allowCollapse,
             created_by,
             created_at,
             permissions = {},
@@ -132,7 +133,6 @@ class Comment extends React.Component<Props, State> {
             modified_at,
             onEdit,
             status,
-            shouldTruncate,
         } = this.props;
         const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
         const canDelete = permissions.can_delete;
@@ -254,6 +254,7 @@ class Comment extends React.Component<Props, State> {
                             />
                         ) : (
                             <ActivityMessage
+                                allowCollapse={allowCollapse}
                                 id={id}
                                 isEdited={(isEdited: boolean)}
                                 tagged_message={tagged_message}
@@ -261,7 +262,6 @@ class Comment extends React.Component<Props, State> {
                                 {...translations}
                                 translationFailed={error ? true : null}
                                 getUserProfileUrl={getUserProfileUrl}
-                                shouldTruncate={shouldTruncate}
                             />
                         )}
                     </Media.Body>

@@ -187,7 +187,7 @@ const ActiveState = ({
                                             can_reply: getProp(item.permissions, 'can_reply', false),
                                             can_resolve: getProp(item.permissions, 'can_resolve', false),
                                         }}
-                                        shouldTruncate
+                                        allowCollapse
                                         translations={translations}
                                     />
                                 </ActivityThread>

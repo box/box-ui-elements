@@ -6,17 +6,17 @@ import LoadingIndicator from '../../../../../components/loading-indicator';
 import formatTaggedMessage from '../../utils/formatTaggedMessage';
 import ShowOriginalButton from './ShowOriginalButton';
 import TranslateButton from './TranslateButton';
-import TruncatableMessage from './TruncatableMessage';
+import CollapsableMessage from './CollapsableMessage';
 import type { GetProfileUrlCallback } from '../../../../common/flowTypes';
 import messages from './messages';
 import './ActivityMessage.scss';
 
 type Props = {
+    allowCollapse?: boolean,
     getUserProfileUrl?: GetProfileUrlCallback,
     id: string,
     isEdited?: boolean,
     onTranslate?: Function,
-    shouldTruncate?: boolean,
     tagged_message: string,
     translatedTaggedMessage?: string,
     translationEnabled?: boolean,
@@ -30,9 +30,9 @@ type State = {
 
 class ActivityMessage extends React.Component<Props, State> {
     static defaultProps = {
+        allowCollapse: false,
         isEdited: false,
         translationEnabled: false,
-        shouldTruncate: false,
     };
 
     state = {
@@ -82,10 +82,10 @@ class ActivityMessage extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
+            allowCollapse,
             getUserProfileUrl,
             id,
             isEdited,
-            shouldTruncate,
             tagged_message,
             translatedTaggedMessage,
             translationEnabled,
@@ -93,7 +93,7 @@ class ActivityMessage extends React.Component<Props, State> {
         const { isLoading, isTranslation } = this.state;
         const commentToDisplay =
             translationEnabled && isTranslation && translatedTaggedMessage ? translatedTaggedMessage : tagged_message;
-        const MessageWrapper = shouldTruncate ? TruncatableMessage : React.Fragment;
+        const MessageWrapper = allowCollapse ? CollapsableMessage : React.Fragment;
 
         return isLoading ? (
             <div className="bcs-ActivityMessageLoading">
