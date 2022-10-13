@@ -83,6 +83,7 @@ type PropsWithoutContext = {
     hasSidebarInitialized?: boolean,
     isDisabled: boolean,
     onAnnotationSelect: Function,
+    onFilterChange: (status?: FeedItemStatus) => void,
     onVersionChange: Function,
     onVersionHistoryClick?: Function,
     translations?: Translations,
@@ -133,6 +134,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onCommentCreate: noop,
         onCommentDelete: noop,
         onCommentUpdate: noop,
+        onFilterChange: noop,
         onTaskAssignmentUpdate: noop,
         onTaskCreate: noop,
         onTaskDelete: noop,
@@ -807,7 +809,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     handleItemsFiltered = (status?: FeedItemStatus) => {
+        const { onFilterChange } = this.props;
+
         this.setState({ feedItemsStatusFilter: status });
+        onFilterChange(status);
     };
 
     getFilteredFeedItems = (): FeedItems | typeof undefined => {

@@ -40,6 +40,7 @@ export type ComponentWithAnnotations = {
     handleActiveChange: ActiveChangeEventHandler,
     handleAnnotationChangeEvent: (id: string | null) => void,
     handleAnnotationCreate: (eventData: AnnotationActionEvent) => void,
+    handleAnnotationDelete: (eventData: AnnotationActionEvent) => void,
     handleAnnotationFetchError: (x: {
         error: Error,
         ...

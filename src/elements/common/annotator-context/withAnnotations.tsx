@@ -22,6 +22,7 @@ export type ComponentWithAnnotations = {
     handleActiveChange: ActiveChangeEventHandler;
     handleAnnotationChangeEvent: (id: string | null) => void;
     handleAnnotationCreate: (eventData: AnnotationActionEvent) => void;
+    handleAnnotationDelete: (eventData: AnnotationActionEvent) => void;
     handleAnnotationFetchError: ({ error }: { error: Error }) => void;
     handleAnnotationUpdate: (eventData: AnnotationActionEvent) => void;
     handleAnnotator: (annotator: Annotator) => void;
@@ -106,6 +107,10 @@ export default function withAnnotations<P extends object>(
             return status === Status.SUCCESS || error ? Action.CREATE_END : Action.CREATE_START;
         }
 
+        getDeleteAction({ meta: { status }, error }: AnnotationActionEvent): Action {
+            return status === Status.SUCCESS || error ? Action.DELETE_END : Action.DELETE_START;
+        }
+
         getUpdateAction({ meta: { status }, error }: AnnotationActionEvent): Action {
             return status === Status.SUCCESS || error ? Action.UPDATE_END : Action.UPDATE_START;
         }
@@ -147,11 +152,21 @@ export default function withAnnotations<P extends object>(
             });
         };
 
+        handleAnnotationDelete = (eventData: AnnotationActionEvent) => {
+            const { annotation = null, error = null, meta = null } = eventData;
+
+            this.setState({
+                action: this.getDeleteAction(eventData),
+                annotation,
+                error,
+                meta,
+            });
+        };
+
         handleAnnotationUpdate = (eventData: AnnotationActionEvent) => {
             const { annotation = null, error = null, meta = null } = eventData;
 
             this.setState({
-                ...this.state,
                 action: this.getUpdateAction(eventData),
                 annotation,
                 error,
@@ -175,6 +190,7 @@ export default function withAnnotations<P extends object>(
             this.annotator = annotator;
             this.annotator.addListener('annotations_active_change', this.handleActiveChange);
             this.annotator.addListener('annotations_create', this.handleAnnotationCreate);
+            this.annotator.addListener('annotations_delete', this.handleAnnotationDelete);
             this.annotator.addListener('annotations_fetch_error', this.handleAnnotationFetchError);
             this.annotator.addListener('annotations_update', this.handleAnnotationUpdate);
         };
@@ -187,6 +203,7 @@ export default function withAnnotations<P extends object>(
             if (this.annotator) {
                 this.annotator.removeListener('annotations_active_change', this.handleActiveChange);
                 this.annotator.removeListener('annotations_create', this.handleAnnotationCreate);
+                this.annotator.removeListener('annotations_delete', this.handleAnnotationDelete);
                 this.annotator.removeListener('annotations_fetch_error', this.handleAnnotationFetchError);
                 this.annotator.removeListener('annotations_update', this.handleAnnotationUpdate);
             }

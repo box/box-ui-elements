@@ -1023,17 +1023,21 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
     describe('handleItemsFiltered()', () => {
         test.each`
-            status        | expected
-            ${undefined}  | ${undefined}
-            ${'open'}     | ${'open'}
-            ${'resolved'} | ${'resolved'}
-        `('given $status should update feedItemsStatusFilter state with $expected', ({ status, expected }) => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            instance.setState = jest.fn();
-            instance.handleItemsFiltered(status);
-            expect(instance.setState).toBeCalledWith({ feedItemsStatusFilter: expected });
-        });
+            status       | expected
+            ${undefined} | ${undefined}
+            ${'open'}    | ${'open'}
+        `(
+            'given $status should update feedItemsStatusFilter state with $expected and call filter change event callback',
+            ({ status, expected }) => {
+                const mockOnFilterChange = jest.fn();
+                const wrapper = getWrapper({ onFilterChange: mockOnFilterChange });
+                const instance = wrapper.instance();
+                instance.setState = jest.fn();
+                instance.handleItemsFiltered(status);
+                expect(instance.setState).toBeCalledWith({ feedItemsStatusFilter: expected });
+                expect(mockOnFilterChange).toBeCalledWith(expected);
+            },
+        );
     });
 
     describe('renderAddTaskButton()', () => {

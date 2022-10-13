@@ -194,6 +194,34 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         });
     });
 
+    describe('handleAnnotationDelete()', () => {
+        test.each`
+            status            | expectedAction
+            ${Status.PENDING} | ${Action.DELETE_START}
+            ${Status.SUCCESS} | ${Action.DELETE_END}
+        `('should update the context provider value if $status status received', ({ status, expectedAction }) => {
+            const wrapper = getWrapper();
+            const annotation = { id: '123' };
+            const eventData = {
+                annotation,
+                meta: { status },
+            };
+
+            wrapper.instance().handleAnnotationDelete(eventData);
+            const contextProvider = getContextProvider(wrapper);
+
+            expect(contextProvider.exists()).toBeTruthy();
+            expect(contextProvider.prop('value').state).toEqual({
+                action: expectedAction,
+                activeAnnotationFileVersionId: null,
+                activeAnnotationId: null,
+                annotation,
+                error: null,
+                meta: { status },
+            });
+        });
+    });
+
     describe('handleAnnotationUpdate()', () => {
         test.each`
             status            | expectedAction

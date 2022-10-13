@@ -28,6 +28,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         feedItems: jest.fn(),
         getCachedItems: jest.fn(),
         deleteAnnotation: jest.fn(),
+        deleteFeedItem: jest.fn(),
         updateFeedItem: jest.fn(),
     };
 
@@ -120,6 +121,20 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
             instance.updateAnnotation = jest.fn();
             wrapper.setProps({ annotatorState: { annotation, action } });
             expect(instance.updateAnnotation).toBeCalled();
+        });
+
+        test.each`
+            action
+            ${Action.DELETE_START}
+            ${Action.DELETE_END}
+        `('should call deleteAnnotation if given action = $action', ({ action }) => {
+            const annotation = { id: '123' };
+
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.deleteAnnotation = jest.fn();
+            wrapper.setProps({ annotatorState: { annotation, action } });
+            expect(instance.deleteAnnotation).toBeCalled();
         });
 
         test.each`
@@ -224,6 +239,38 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 expect(feedAPI.addAnnotation).toHaveBeenCalledTimes(expectedAddCount);
             },
         );
+    });
+
+    describe('deleteAnnotation()', () => {
+        test('should change appropriate annotation to pending when action = delete_start', () => {
+            const annotation = { id: '123' };
+            const annotatorStateMock = {
+                annotation,
+                action: Action.DELETE_START,
+            };
+
+            const wrapper = getWrapper({ annotatorState: annotatorStateMock });
+            const instance = wrapper.instance();
+
+            instance.deleteAnnotation();
+
+            expect(feedAPI.updateFeedItem).toBeCalledWith({ isPending: true }, annotation.id);
+        });
+
+        test('should remove appropriate annotation from feed when action = delete_end', () => {
+            const annotation = { id: '123' };
+            const annotatorStateMock = {
+                annotation,
+                action: Action.DELETE_END,
+            };
+
+            const wrapper = getWrapper({ annotatorState: annotatorStateMock });
+            const instance = wrapper.instance();
+
+            instance.deleteAnnotation();
+
+            expect(feedAPI.deleteFeedItem).toBeCalledWith(annotation.id);
+        });
     });
 
     describe('updateAnnotation()', () => {

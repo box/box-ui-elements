@@ -17,11 +17,6 @@ const messages = defineMessages({
         defaultMessage: 'Unresolved Comments',
         description: 'One of the dropdown options to select in order to filter comments',
     },
-    activitySidebarFilterOptionResolved: {
-        id: 'be.activitySidebarFilter.status.resolved',
-        defaultMessage: 'Resolved Comments',
-        description: 'One of the dropdown options to select in order to filter comments',
-    },
     boxSignFtuxBody: {
         id: 'be.contentSidebar.boxSignFtuxBody',
         defaultMessage: 'Sign documents or send signature requests, right from where your content lives',

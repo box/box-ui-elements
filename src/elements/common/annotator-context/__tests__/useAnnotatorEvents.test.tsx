@@ -106,6 +106,95 @@ describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
         expect(mockEmit).toBeCalledWith('annotations_active_change', { annotationId, fileVersionId });
     });
 
+    test('should emit annotation add start event', () => {
+        const annotation = {
+            description: {
+                message: 'New Annotation',
+            },
+        };
+        const requestId = 'annotation_123';
+
+        const { result } = getHook();
+
+        act(() => {
+            result.current.emitAddAnnotationStartEvent(annotation, requestId);
+        });
+
+        const expectedAnnotationActionEvent = {
+            annotation,
+            meta: { requestId, status: Status.PENDING },
+        };
+
+        expect(mockEmit).toBeCalledWith('annotations_create', expectedAnnotationActionEvent);
+    });
+
+    test('should emit annotation add end event', () => {
+        const annotation = {
+            description: {
+                message: 'New Annotation',
+            },
+            id: '1234',
+            target: {
+                location: {
+                    value: 1,
+                    type: 'page',
+                },
+                shape: {
+                    height: 41.66666666666667,
+                    type: 'rect',
+                    width: 41.66666666666667,
+                    x: 20.833333333333336,
+                    y: 25,
+                },
+                type: 'region',
+            },
+        };
+        const requestId = 'annotation_123';
+
+        const { result } = getHook();
+
+        act(() => {
+            result.current.emitAddAnnotationEndEvent(annotation, requestId);
+        });
+
+        const expectedAnnotationActionEvent = {
+            annotation,
+            meta: { requestId, status: Status.SUCCESS },
+        };
+
+        expect(mockEmit).toBeCalledWith('annotations_create', expectedAnnotationActionEvent);
+    });
+
+    test('should emit annotation delete start event', () => {
+        const { result } = getHook();
+
+        act(() => {
+            result.current.emitDeleteAnnotationStartEvent('123');
+        });
+
+        const expectedAnnotationActionEvent = {
+            annotation: { id: '123' },
+            meta: { status: Status.PENDING },
+        };
+
+        expect(mockEmit).toBeCalledWith('annotations_delete', expectedAnnotationActionEvent);
+    });
+
+    test('should emit annotation delete end event', () => {
+        const { result } = getHook();
+
+        act(() => {
+            result.current.emitDeleteAnnotationEndEvent('123');
+        });
+
+        const expectedAnnotationActionEvent = {
+            annotation: { id: '123' },
+            meta: { status: Status.SUCCESS },
+        };
+
+        expect(mockEmit).toBeCalledWith('annotations_delete', expectedAnnotationActionEvent);
+    });
+
     test('should emit annotation update start event', () => {
         const annotation = { id: '123', status: 'resolved' };
 
