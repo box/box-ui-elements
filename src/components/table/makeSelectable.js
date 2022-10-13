@@ -342,7 +342,9 @@ function makeSelectable(BaseTable) {
 
             if (!this.hotkeys) {
                 const viewSpecificHotKeyConfigs =
-                    isGridView && gridColumnCount ? this.getGridViewHotKeyConfigs() : this.getListViewHotKeyConfigs();
+                    isGridView && gridColumnCount !== undefined
+                        ? this.getGridViewHotKeyConfigs()
+                        : this.getListViewHotKeyConfigs();
 
                 this.hotkeys = [...this.getSharedHotkeyConfigs(), ...viewSpecificHotKeyConfigs];
             }
