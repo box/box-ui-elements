@@ -71,7 +71,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
       </div>
       <ActivityStatus />
       <ActivityMessage
-        allowCollapse={false}
+        canCollapse={false}
         id="123"
         isEdited={false}
         tagged_message="test"
@@ -117,7 +117,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
       </div>
       <ActivityStatus />
       <ActivityMessage
-        allowCollapse={false}
+        canCollapse={false}
         id="123"
         isEdited={false}
         onTranslate={[MockFunction]}
@@ -164,7 +164,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
       </div>
       <ActivityStatus />
       <ActivityMessage
-        allowCollapse={false}
+        canCollapse={false}
         id="123"
         isEdited={false}
         tagged_message="test"
@@ -214,7 +214,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
       </div>
       <ActivityStatus />
       <ActivityMessage
-        allowCollapse={false}
+        canCollapse={false}
         id="123"
         isEdited={false}
         tagged_message="test"

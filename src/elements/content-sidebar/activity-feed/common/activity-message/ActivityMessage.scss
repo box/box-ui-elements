@@ -27,8 +27,8 @@
     color: $bdl-box-blue;
 }
 
-.bcs-ActivityMessage-truncated {
-    /* webkit-line-clamp only works in combinatio with -webkit-box */
+.bcs-ActivityMessage-collapsed {
+    /* webkit-line-clamp only works in combination with -webkit-box */
     /* stylelint-disable-next-line value-no-vendor-prefix */
     display: -webkit-box;
     max-height: 140px;

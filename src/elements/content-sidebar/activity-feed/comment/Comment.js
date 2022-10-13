@@ -254,7 +254,7 @@ class Comment extends React.Component<Props, State> {
                             />
                         ) : (
                             <ActivityMessage
-                                allowCollapse={allowCollapse}
+                                canCollapse={allowCollapse}
                                 id={id}
                                 isEdited={(isEdited: boolean)}
                                 tagged_message={tagged_message}

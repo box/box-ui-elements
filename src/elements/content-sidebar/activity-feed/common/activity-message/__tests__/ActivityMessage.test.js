@@ -152,7 +152,7 @@ describe('elements/content-sidebar/ActivityFeed/common/activity-message', () => 
             tagged_message: 'How u doing @[2030326577:Young Jeezy]?',
         };
 
-        const wrapper = shallow(<ActivityMessage id="123" {...commentText} allowCollapse />);
+        const wrapper = shallow(<ActivityMessage canCollapse id="123" {...commentText} />);
 
         expect(wrapper.exists('CollapsableMessage')).toBe(true);
     });

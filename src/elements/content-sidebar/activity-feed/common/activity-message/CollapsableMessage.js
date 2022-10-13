@@ -24,7 +24,7 @@ export default function CollapsableMessage({ children }: Props) {
         <>
             <div
                 className={classNames({
-                    'bcs-ActivityMessage-truncated': isCollapsed,
+                    'bcs-ActivityMessage-collapsed': isCollapsed,
                 })}
                 ref={messageContainer}
             >

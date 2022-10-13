@@ -12,7 +12,7 @@ import messages from './messages';
 import './ActivityMessage.scss';
 
 type Props = {
-    allowCollapse?: boolean,
+    canCollapse?: boolean,
     getUserProfileUrl?: GetProfileUrlCallback,
     id: string,
     isEdited?: boolean,
@@ -30,7 +30,7 @@ type State = {
 
 class ActivityMessage extends React.Component<Props, State> {
     static defaultProps = {
-        allowCollapse: false,
+        canCollapse: false,
         isEdited: false,
         translationEnabled: false,
     };
@@ -82,7 +82,7 @@ class ActivityMessage extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
-            allowCollapse,
+            canCollapse,
             getUserProfileUrl,
             id,
             isEdited,
@@ -93,7 +93,7 @@ class ActivityMessage extends React.Component<Props, State> {
         const { isLoading, isTranslation } = this.state;
         const commentToDisplay =
             translationEnabled && isTranslation && translatedTaggedMessage ? translatedTaggedMessage : tagged_message;
-        const MessageWrapper = allowCollapse ? CollapsableMessage : React.Fragment;
+        const MessageWrapper = canCollapse ? CollapsableMessage : React.Fragment;
 
         return isLoading ? (
             <div className="bcs-ActivityMessageLoading">
