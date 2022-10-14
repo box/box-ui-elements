@@ -7,7 +7,6 @@ import { FormattedMessage } from 'react-intl';
 
 import { Hotkeys, HotkeyRecord } from '../hotkeys';
 import messages from './messages';
-
 import shiftSelect from './shiftSelect';
 
 const SEARCH_TIMER_DURATION = 1000;
@@ -342,7 +341,9 @@ function makeSelectable(BaseTable) {
 
             if (!this.hotkeys) {
                 const viewSpecificHotKeyConfigs =
-                    isGridView && gridColumnCount ? this.getGridViewHotKeyConfigs() : this.getListViewHotKeyConfigs();
+                    isGridView && gridColumnCount !== undefined
+                        ? this.getGridViewHotKeyConfigs()
+                        : this.getListViewHotKeyConfigs();
 
                 this.hotkeys = [...this.getSharedHotkeyConfigs(), ...viewSpecificHotKeyConfigs];
             }
