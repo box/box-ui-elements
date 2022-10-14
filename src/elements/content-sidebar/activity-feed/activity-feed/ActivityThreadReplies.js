@@ -51,7 +51,6 @@ const ActivityThreadReplies = ({
                 <Comment
                     key={lastReply.type + lastReply.id}
                     {...lastReply}
-                    allowCollapse
                     currentUser={currentUser}
                     getAvatarUrl={getAvatarUrl}
                     getMentionWithQuery={getMentionWithQuery}
@@ -67,7 +66,6 @@ const ActivityThreadReplies = ({
                     <Comment
                         key={reply.type + reply.id}
                         {...reply}
-                        allowCollapse
                         currentUser={currentUser}
                         getAvatarUrl={getAvatarUrl}
                         getMentionWithQuery={getMentionWithQuery}

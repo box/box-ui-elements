@@ -117,8 +117,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       onReplyEdit={[Function]}
       onShowReplies={[Function]}
     >
-      <Comment
-        allowCollapse={true}
+      <ForwardRef(withFeatureConsumer(Comment))
         created_at="2018-07-03T14:43:52-07:00"
         created_by={
           Object {
@@ -133,8 +132,6 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
           }
         }
         id="c_123"
-        onDelete={[Function]}
-        onEdit={[Function]}
         permissions={
           Object {
             "can_delete": false,

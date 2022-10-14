@@ -2,7 +2,7 @@ import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import noop from 'lodash/noop';
 
-import Comment from '../Comment';
+import { CommentComponent as Comment } from '../Comment';
 import CommentForm from '../../comment-form/CommentForm';
 import { FEED_ITEM_TYPE_TASK } from '../../../../../constants';
 
@@ -51,7 +51,6 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 mentionSelectorContacts={mentionSelectorContacts}
             />,
         );
-
         // validating that the Tooltip and the comment posted time are properly set
         expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
 
@@ -384,6 +383,39 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
 
         expect(onActionSpy).toHaveBeenCalledTimes(1);
     });
+
+    test.each`
+        featureEnabled | canCollapse
+        ${false}       | ${false}
+        ${true}        | ${true}
+    `(
+        'should pass canCollapse=$canCollapse to ActivityMessage when feature enabled is $featureEnabled',
+        ({ canCollapse, featureEnabled }) => {
+            const comment = {
+                created_at: TIME_STRING_SEPT_27_2017,
+                tagged_message: 'test',
+                created_by: { name: '50 Cent', id: 10 },
+                permissions: { can_delete: true, can_edit: true },
+            };
+            const wrapper = shallow(
+                <Comment
+                    id="123"
+                    {...comment}
+                    approverSelectorContacts={approverSelectorContacts}
+                    currentUser={currentUser}
+                    handlers={allHandlers}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    features={{
+                        activityFeed: {
+                            collapsableMessages: { enabled: featureEnabled },
+                        },
+                    }}
+                />,
+            );
+
+            expect(wrapper.find('ActivityMessage').prop('canCollapse')).toBe(canCollapse);
+        },
+    );
 
     test.each`
         created_at                  | modified_at                 | expectedIsEdited

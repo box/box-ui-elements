@@ -22,18 +22,20 @@ import ActivityStatus from '../common/activity-status';
 import CommentForm from '../comment-form';
 import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED, PLACEHOLDER_USER } from '../../../../constants';
 import messages from './messages';
+import { withFeatureConsumer, isFeatureEnabled } from '../../../common/feature-checking';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
 import type { ActionItemError, BoxCommentPermission, FeedItemStatus } from '../../../../common/types/feed';
+import type { FeatureConfig } from '../../../common/feature-checking';
 import './Comment.scss';
 
 type Props = {
-    allowCollapse?: boolean,
     created_at: string | number,
     created_by: User,
     currentUser?: User,
     error?: ActionItemError,
+    features: FeatureConfig,
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
@@ -114,13 +116,13 @@ class Comment extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
-            allowCollapse,
             created_by,
             created_at,
             permissions = {},
             id,
             isPending,
             error,
+            features,
             tagged_message = '',
             translatedTaggedMessage,
             translations,
@@ -134,6 +136,7 @@ class Comment extends React.Component<Props, State> {
             onEdit,
             status,
         } = this.props;
+        const allowCollapse = isFeatureEnabled(features, 'activityFeed.collapsableMessages.enabled');
         const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
         const canDelete = permissions.can_delete;
         const canEdit = onEdit !== noop && permissions.can_edit;
@@ -273,4 +276,5 @@ class Comment extends React.Component<Props, State> {
     }
 }
 
-export default Comment;
+export { Comment as CommentComponent };
+export default withFeatureConsumer(Comment);
