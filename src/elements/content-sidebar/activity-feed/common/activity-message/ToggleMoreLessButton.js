@@ -16,7 +16,7 @@ type Props = {
 };
 
 const ToggleMoreLessButton = ({ isMore, onClick }: Props): React.Node => (
-    <PlainButton type="button" className="bcs-ActivityMessage-toggleMoreLess" onClick={onClick}>
+    <PlainButton className="bcs-ActivityMessage-toggleMoreLess" onClick={onClick} type="button">
         <FormattedMessage {...(isMore ? messages.activityMessageSeeMore : messages.activityMessageSeeLess)} />
     </PlainButton>
 );

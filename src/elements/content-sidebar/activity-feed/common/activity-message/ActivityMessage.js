@@ -2,11 +2,11 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
-import LoadingIndicator from '../../../../../components/loading-indicator';
+import CollapsableMessage from './CollapsableMessage';
 import formatTaggedMessage from '../../utils/formatTaggedMessage';
+import LoadingIndicator from '../../../../../components/loading-indicator';
 import ShowOriginalButton from './ShowOriginalButton';
 import TranslateButton from './TranslateButton';
-import CollapsableMessage from './CollapsableMessage';
 import type { GetProfileUrlCallback } from '../../../../common/flowTypes';
 import messages from './messages';
 import './ActivityMessage.scss';

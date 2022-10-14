@@ -51,6 +51,7 @@ const ActivityThreadReplies = ({
                 <Comment
                     key={lastReply.type + lastReply.id}
                     {...lastReply}
+                    allowCollapse
                     currentUser={currentUser}
                     getAvatarUrl={getAvatarUrl}
                     getMentionWithQuery={getMentionWithQuery}
@@ -59,7 +60,6 @@ const ActivityThreadReplies = ({
                     onDelete={onDelete}
                     onEdit={onEdit}
                     permissions={getReplyPermissions(lastReply)}
-                    allowCollapse
                     translations={translations}
                 />
             ) : (
@@ -67,6 +67,7 @@ const ActivityThreadReplies = ({
                     <Comment
                         key={reply.type + reply.id}
                         {...reply}
+                        allowCollapse
                         currentUser={currentUser}
                         getAvatarUrl={getAvatarUrl}
                         getMentionWithQuery={getMentionWithQuery}
@@ -75,7 +76,6 @@ const ActivityThreadReplies = ({
                         onDelete={onDelete}
                         onEdit={onEdit}
                         permissions={getReplyPermissions(reply)}
-                        allowCollapse
                         translations={translations}
                     />
                 ))
