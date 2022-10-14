@@ -31,7 +31,6 @@
     /* webkit-line-clamp only works in combination with -webkit-box */
     /* stylelint-disable-next-line value-no-vendor-prefix */
     display: -webkit-box;
-    max-height: 140px;
     overflow: hidden;
     text-overflow: ellipsis;
     overflow-wrap: break-word;
