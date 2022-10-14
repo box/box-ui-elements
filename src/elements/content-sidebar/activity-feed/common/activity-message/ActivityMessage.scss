@@ -25,14 +25,6 @@
 
 .bcs-ActivityMessage-edited {
     color: $bdl-gray-62;
-
-    &::before {
-        content: ' (';
-    }
-
-    &::after {
-        content: ')';
-    }
 }
 
 .bcs-ActivityMessageLoading {
