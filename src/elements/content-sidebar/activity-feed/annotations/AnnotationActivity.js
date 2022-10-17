@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import noop from 'lodash/noop';
 import getProp from 'lodash/get';
+import noop from 'lodash/noop';
 import TetherComponent from 'react-tether';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
