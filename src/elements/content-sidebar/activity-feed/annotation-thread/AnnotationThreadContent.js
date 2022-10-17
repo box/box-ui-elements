@@ -9,6 +9,7 @@ import useAnnotationAPI from './useAnnotationAPI';
 
 import type { BoxItem, SelectorItems, User } from '../../../../common/types/core';
 import type { ErrorContextProps } from '../../../../common/types/api';
+import type { BoxCommentPermission, FeedItemStatus } from '../../../../common/types/feed';
 
 import './AnnotationThreadContent.scss';
 
@@ -54,6 +55,16 @@ const AnnotationThreadContent = ({
         errorCallback: onError,
     });
 
+    const onReplyEditHandler = (
+        id: string,
+        text: string,
+        status?: FeedItemStatus,
+        hasMention?: boolean,
+        replyPermissions: BoxCommentPermission,
+    ) => {
+        handleEditReply(id, text, status, replyPermissions);
+    };
+
     return (
         <ActivityThread
             hasReplies
@@ -64,7 +75,7 @@ const AnnotationThreadContent = ({
             mentionSelectorContacts={mentionSelectorContacts}
             onReplyCreate={handleCreateReply}
             onReplyDelete={handleDeleteReply}
-            onReplyEdit={handleEditReply}
+            onReplyEdit={onReplyEditHandler}
             replies={replies}
             repliesTotalCount={replies.length}
         >
