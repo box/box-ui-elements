@@ -69,7 +69,6 @@ type State = {
 
 class Comment extends React.Component<Props, State> {
     static defaultProps = {
-        allowCollapse: false,
         onDelete: noop,
         onEdit: noop,
     };

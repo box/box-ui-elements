@@ -8,9 +8,6 @@ type Props = {
     children: React.Node,
 };
 
-// this is for backward support for IE11
-const MAX_MESSAGE_HEIGHT = 140;
-
 export default function CollapsableMessage({ children }: Props) {
     const [isCollapsed, setIsCollapsed] = React.useState(true);
     const [shouldCollapse, setShouldCollapse] = React.useState(false);
@@ -19,7 +16,7 @@ export default function CollapsableMessage({ children }: Props) {
     React.useLayoutEffect(() => {
         if (messageContainer.current) {
             const { clientHeight, scrollHeight } = messageContainer.current;
-            setShouldCollapse(clientHeight !== scrollHeight || clientHeight > MAX_MESSAGE_HEIGHT);
+            setShouldCollapse(clientHeight !== scrollHeight);
         }
     }, []);
 
@@ -29,7 +26,6 @@ export default function CollapsableMessage({ children }: Props) {
                 className={classNames({
                     'bcs-ActivityMessage-collapsed': isCollapsed,
                 })}
-                style={{ maxHeight: isCollapsed ? MAX_MESSAGE_HEIGHT : 'none' }}
                 ref={messageContainer}
             >
                 {children}
