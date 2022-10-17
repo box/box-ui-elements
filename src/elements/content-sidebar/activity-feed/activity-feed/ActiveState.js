@@ -128,6 +128,7 @@ const ActiveState = ({
         id: string,
         text: string,
         status?: FeedItemStatus,
+        hasMention?: boolean,
         permissions: BoxCommentPermission,
         onSuccess: ?Function,
         onError: ?Function,

@@ -276,7 +276,6 @@ class ThreadedComments extends MarkerBasedApi {
             marker,
             limit,
             requestData: {
-                file_id: fileId,
                 ...(repliesCount ? { replies_count: repliesCount } : null),
             },
             shouldFetchAll,

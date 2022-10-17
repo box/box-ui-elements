@@ -212,7 +212,6 @@ describe('api/ThreadedComments', () => {
                 id: '12345',
                 errorCallback,
                 requestData: {
-                    file_id: '12345',
                     replies_count: 1,
                 },
                 successCallback,
