@@ -136,4 +136,19 @@ describe('elements/content-sidebar/ActivityFeed/common/activity-message', () => 
         expect(wrapper.state('isTranslation')).toBe(false);
         expect(wrapper.state('isLoading')).toBe(false);
     });
+
+    test.each`
+        isEdited | expected
+        ${false} | ${false}
+        ${true}  | ${true}
+    `(`given isEdited = $isEdited prop message should text "(edited)" be $expected`, ({ isEdited, expected }) => {
+        const comment = {
+            tagged_message: 'Hi ﹫[123:Half] ＠[222:Full] @[432:Latin]',
+            isEdited,
+        };
+
+        const wrapper = shallow(<ActivityMessage id="123" {...comment} />);
+
+        expect(wrapper.exists({ id: 'be.contentSidebar.activityFeed.common.editedMessage' })).toBe(expected);
+    });
 });

@@ -15,6 +15,7 @@ const currentUser = {
 const approverSelectorContacts = [];
 const mentionSelectorContacts = [];
 const TIME_STRING_SEPT_27_2017 = '2017-09-27T10:40:41-07:00';
+const TIME_STRING_SEPT_28_2017 = '2017-09-28T10:40:41-07:00';
 
 const allHandlers = {
     tasks: {
@@ -383,4 +384,35 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
 
         expect(onActionSpy).toHaveBeenCalledTimes(1);
     });
+
+    test.each`
+        created_at                  | modified_at                 | expectedIsEdited
+        ${TIME_STRING_SEPT_27_2017} | ${undefined}                | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_27_2017} | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_28_2017} | ${true}
+    `(
+        `given created_at = $created_at and modified_at = $modified_at, isEdited prop on ActivityMessage should be: $expectedIsEdited`,
+        ({ created_at, modified_at, expectedIsEdited }) => {
+            const comment = {
+                created_at,
+                modified_at,
+                tagged_message: 'test',
+                created_by: { name: '50 Cent', id: 10 },
+                permissions: { can_delete: true, can_edit: true },
+            };
+
+            const wrapper = shallow(
+                <Comment
+                    id="123"
+                    {...comment}
+                    approverSelectorContacts={approverSelectorContacts}
+                    currentUser={currentUser}
+                    handlers={allHandlers}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                />,
+            );
+
+            expect(wrapper.find('ActivityMessage').prop('isEdited')).toEqual(expectedIsEdited);
+        },
+    );
 });

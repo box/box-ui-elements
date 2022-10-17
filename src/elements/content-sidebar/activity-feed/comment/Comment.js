@@ -127,15 +127,17 @@ class Comment extends React.Component<Props, State> {
             getUserProfileUrl,
             getMentionWithQuery,
             mentionSelectorContacts,
+            modified_at,
             onEdit,
             status,
         } = this.props;
         const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
+        const canDelete = permissions.can_delete;
+        const canEdit = onEdit !== noop && permissions.can_edit;
+        const canResolve = onEdit !== noop && permissions.can_resolve;
         const createdAtTimestamp = new Date(created_at).getTime();
         const createdByUser = created_by || PLACEHOLDER_USER;
-        const canEdit = onEdit !== noop && permissions.can_edit;
-        const canDelete = permissions.can_delete;
-        const canResolve = onEdit !== noop && permissions.can_resolve;
+        const isEdited = modified_at !== undefined && modified_at !== created_at;
         const isMenuVisible = (canDelete || canEdit || canResolve) && !isPending;
         const isResolved = status === COMMENT_STATUS_RESOLVED;
 
@@ -250,6 +252,7 @@ class Comment extends React.Component<Props, State> {
                         ) : (
                             <ActivityMessage
                                 id={id}
+                                isEdited={(isEdited: boolean)}
                                 tagged_message={tagged_message}
                                 translatedTaggedMessage={translatedTaggedMessage}
                                 {...translations}

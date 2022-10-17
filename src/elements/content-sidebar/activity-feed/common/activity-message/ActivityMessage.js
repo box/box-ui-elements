@@ -1,16 +1,19 @@
 // @flow
 import * as React from 'react';
 import noop from 'lodash/noop';
+import { FormattedMessage } from 'react-intl';
 import LoadingIndicator from '../../../../../components/loading-indicator';
 import formatTaggedMessage from '../../utils/formatTaggedMessage';
 import ShowOriginalButton from './ShowOriginalButton';
 import TranslateButton from './TranslateButton';
 import type { GetProfileUrlCallback } from '../../../../common/flowTypes';
+import messages from './messages';
 import './ActivityMessage.scss';
 
 type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
     id: string,
+    isEdited?: boolean,
     onTranslate?: Function,
     tagged_message: string,
     translatedTaggedMessage?: string,
@@ -25,6 +28,7 @@ type State = {
 
 class ActivityMessage extends React.Component<Props, State> {
     static defaultProps = {
+        isEdited: false,
         translationEnabled: false,
     };
 
@@ -74,7 +78,14 @@ class ActivityMessage extends React.Component<Props, State> {
     };
 
     render(): React.Node {
-        const { id, tagged_message, translatedTaggedMessage, translationEnabled, getUserProfileUrl } = this.props;
+        const {
+            id,
+            isEdited,
+            tagged_message,
+            translatedTaggedMessage,
+            translationEnabled,
+            getUserProfileUrl,
+        } = this.props;
         const { isLoading, isTranslation } = this.state;
         const commentToDisplay =
             translationEnabled && isTranslation && translatedTaggedMessage ? translatedTaggedMessage : tagged_message;
@@ -85,6 +96,11 @@ class ActivityMessage extends React.Component<Props, State> {
         ) : (
             <div className="bcs-ActivityMessage">
                 {formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl)}
+                {isEdited && (
+                    <span className="bcs-ActivityMessage-edited">
+                        <FormattedMessage {...messages.activityMessageEdited} />
+                    </span>
+                )}
                 {translationEnabled ? this.getButton(isTranslation) : null}
             </div>
         );
