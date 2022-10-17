@@ -4,6 +4,7 @@ import noop from 'lodash/noop';
 
 import Comment from '../Comment';
 import CommentForm from '../../comment-form/CommentForm';
+import { FEED_ITEM_TYPE_TASK } from '../../../../../constants';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 
@@ -234,7 +235,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            type: 'task',
+            type: FEED_ITEM_TYPE_TASK,
             permissions: { can_edit: true, can_delete: true },
         };
         const mockOnEdit = jest.fn();
@@ -294,7 +295,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 id: '123',
                 permissions: { can_resolve: true, can_edit: false, can_delete: false },
                 tagged_message: 'test',
-                type: 'task',
+                type: FEED_ITEM_TYPE_TASK,
             };
             const onEdit = jest.fn();
             const wrapper = mount(

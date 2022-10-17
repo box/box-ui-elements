@@ -4,7 +4,14 @@ import messages from '../messages';
 import * as sorter from '../../utils/sorter';
 import * as error from '../../utils/error';
 import { FEED_FILE_VERSIONS_FIELDS_TO_FETCH } from '../../utils/fields';
-import { IS_ERROR_DISPLAYED, TASK_MAX_GROUP_ASSIGNEES } from '../../constants';
+import {
+    FEED_ITEM_TYPE_APP_ACTIVITY,
+    FEED_ITEM_TYPE_ANNOTATION,
+    FEED_ITEM_TYPE_COMMENT,
+    FEED_ITEM_TYPE_VERSION,
+    IS_ERROR_DISPLAYED,
+    TASK_MAX_GROUP_ASSIGNEES,
+} from '../../constants';
 import Feed from '../Feed';
 import { annotation as mockAnnotation } from '../../__mocks__/annotations';
 import { task as mockTask, threadedComments as mockThreadedComments, threadedCommentsFormatted } from '../fixtures';
@@ -13,7 +20,7 @@ const mockErrors = [{ code: 'error_code_0' }, { code: 'error_code_1' }];
 
 const mockFirstVersion = {
     action: 'upload',
-    type: 'file_version',
+    type: FEED_ITEM_TYPE_VERSION,
     id: 123,
     created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
     trashed_at: 1234567891,
@@ -23,13 +30,13 @@ const mockFirstVersion = {
 
 const mockCurrentVersion = {
     action: 'restore',
-    type: 'file_version',
+    type: FEED_ITEM_TYPE_VERSION,
     id: '123',
 };
 
 const deleted_version = {
     action: 'delete',
-    type: 'file_version',
+    type: FEED_ITEM_TYPE_VERSION,
     id: 234,
     created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
     trashed_at: 1234567891,
@@ -270,7 +277,7 @@ const MOCK_APP_ACTIVITY_ITEM = {
     id: '3782',
     occurred_at: '2019-02-21T04:00:00Z',
     rendered_text: 'You shared this file in <a href="https://some-app.com" rel="noreferrer noopener">Some App</a>',
-    type: 'app_activity',
+    type: FEED_ITEM_TYPE_APP_ACTIVITY,
 };
 
 jest.mock('../AppActivity', () =>
@@ -291,7 +298,7 @@ describe('api/Feed', () => {
         total_count: 1,
         entries: [
             {
-                type: 'comment',
+                type: FEED_ITEM_TYPE_COMMENT,
                 id: '123',
                 created_at: 'Thu Sep 26 33658 19:46:39 GMT-0600 (CST)',
                 tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
@@ -653,7 +660,7 @@ describe('api/Feed', () => {
             const commentId = '123';
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
-            feed.fetchReplies(file, commentId, 'comment', successCallback, errorCallback);
+            feed.fetchReplies(file, commentId, FEED_ITEM_TYPE_COMMENT, successCallback, errorCallback);
             expect(feed.updateFeedItem).toBeCalledWith({ isRepliesLoading: true }, commentId);
             expect(feed.threadedCommentsAPI.getCommentReplies).toBeCalledWith({
                 fileId: feed.file.id,
@@ -669,7 +676,7 @@ describe('api/Feed', () => {
             const annotationId = '1234';
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
-            feed.fetchReplies(file, annotationId, 'annotation', successCallback, errorCallback);
+            feed.fetchReplies(file, annotationId, FEED_ITEM_TYPE_ANNOTATION, successCallback, errorCallback);
             expect(feed.updateFeedItem).toBeCalledWith({ isRepliesLoading: true }, annotationId);
             expect(feed.annotationsAPI.getAnnotationReplies).toBeCalledWith(
                 feed.file.id,
@@ -1416,7 +1423,7 @@ describe('api/Feed', () => {
             const commentBase = {
                 id: '1234',
                 tagged_message: 'abc',
-                type: 'comment',
+                type: FEED_ITEM_TYPE_COMMENT,
             };
 
             feed.file = file;
@@ -1590,7 +1597,7 @@ describe('api/Feed', () => {
             expect(feed.addPendingItem).toBeCalledWith(file.id, currentUser, {
                 id: 'uniqueId',
                 tagged_message: text,
-                type: 'comment',
+                type: FEED_ITEM_TYPE_COMMENT,
             });
         });
 
@@ -1637,7 +1644,7 @@ describe('api/Feed', () => {
             expect(feed.addPendingItem).toBeCalledWith(file.id, currentUser, {
                 id: 'uniqueId',
                 tagged_message: text,
-                type: 'comment',
+                type: FEED_ITEM_TYPE_COMMENT,
             });
         });
 
@@ -1663,9 +1670,9 @@ describe('api/Feed', () => {
                 id: '123',
             };
 
-            expect(() => feed.createReply({}, currentUser, '123', 'comment', 'abc', jest.fn(), jest.fn())).toThrow(
-                fileError,
-            );
+            expect(() =>
+                feed.createReply({}, currentUser, '123', FEED_ITEM_TYPE_COMMENT, 'abc', jest.fn(), jest.fn()),
+            ).toThrow(fileError);
         });
 
         test('should create a pending reply', () => {
@@ -1673,7 +1680,7 @@ describe('api/Feed', () => {
             const successCb = jest.fn();
             const errorCb = jest.fn();
             const parentId = '123';
-            const parentType = 'comment';
+            const parentType = FEED_ITEM_TYPE_COMMENT;
             const text = 'abc';
             const currentUser = {
                 id: '123',
@@ -1684,7 +1691,7 @@ describe('api/Feed', () => {
             expect(feed.addPendingReply).toBeCalledWith(parentId, currentUser, {
                 id: 'uniqueId',
                 tagged_message: text,
-                type: 'comment',
+                type: FEED_ITEM_TYPE_COMMENT,
             });
         });
 
@@ -1694,7 +1701,7 @@ describe('api/Feed', () => {
             const successCb = jest.fn();
             const errorCb = jest.fn();
             const annotationId = '123';
-            const parentType = 'annotation';
+            const parentType = FEED_ITEM_TYPE_ANNOTATION;
             const text = 'abc';
             const currentUser = {
                 id: '123',
@@ -1722,7 +1729,7 @@ describe('api/Feed', () => {
             const successCb = jest.fn();
             const errorCb = jest.fn();
             const commentId = '123';
-            const parentType = 'comment';
+            const parentType = FEED_ITEM_TYPE_COMMENT;
             const text = 'abc';
             const currentUser = {
                 id: '123',
@@ -1858,7 +1865,7 @@ describe('api/Feed', () => {
             const expectedAnnotation = {
                 created_by: user,
                 id: '123',
-                type: 'annotation',
+                type: FEED_ITEM_TYPE_ANNOTATION,
             };
 
             feed.addAnnotation(file, user, {}, '123', true);

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 import withSidebarAnnotations from '../withSidebarAnnotations';
 import { Action } from '../../common/annotator-context/types';
+import { FEED_ITEM_TYPE_VERSION } from '../../../constants';
 
 describe('elements/content-sidebar/withSidebarAnnotations', () => {
     const TestComponent = props => <div {...props} />;
@@ -352,7 +353,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
 
     describe('updateActiveVersion()', () => {
         const onVersionChange = jest.fn();
-        const version = { type: 'file_version', id: '124' };
+        const version = { type: FEED_ITEM_TYPE_VERSION, id: '124' };
 
         beforeEach(() => {
             annotatorContextProps.getAnnotationsMatchPath.mockReturnValueOnce({ params: { fileVersionId: '123' } });

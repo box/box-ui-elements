@@ -1,14 +1,24 @@
 // @flow strict
 import type { MessageDescriptor } from 'react-intl';
-import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../constants';
+import {
+    COMMENT_STATUS_OPEN,
+    COMMENT_STATUS_RESOLVED,
+    FEED_ITEM_TYPE_ANNOTATION,
+    FEED_ITEM_TYPE_APP_ACTIVITY,
+    FEED_ITEM_TYPE_COMMENT,
+    FEED_ITEM_TYPE_TASK,
+} from '../../constants';
 import type { BoxItemPermission, BoxItemVersion, Reply, User } from './core';
 import type { Annotation, AnnotationPermission, Annotations } from './annotations';
 
 // Feed item types that can receive deeplinks inline in the feed
-type FocusableFeedItemType = 'task' | 'comment' | 'annotation';
+type FocusableFeedItemType =
+    | typeof FEED_ITEM_TYPE_TASK
+    | typeof FEED_ITEM_TYPE_COMMENT
+    | typeof FEED_ITEM_TYPE_ANNOTATION;
 
 // Feed item types that represent user's written response (that also can have replies)
-type CommentFeedItemType = 'comment' | 'annotation';
+type CommentFeedItemType = typeof FEED_ITEM_TYPE_COMMENT | typeof FEED_ITEM_TYPE_ANNOTATION;
 
 type BoxCommentPermission = {
     can_delete?: boolean,
@@ -35,7 +45,7 @@ type FeedItemStatus = typeof COMMENT_STATUS_OPEN | typeof COMMENT_STATUS_RESOLVE
 type Task = {
     ...BaseFeedItem,
     permissions: BoxTaskPermission,
-    type: 'task',
+    type: typeof FEED_ITEM_TYPE_TASK,
 };
 
 type Tasks = {
@@ -58,7 +68,7 @@ type Comment = {
     status?: FeedItemStatus,
     tagged_message: string,
     total_reply_count?: number,
-    type: 'comment',
+    type: typeof FEED_ITEM_TYPE_COMMENT,
 };
 
 type Comments = {
@@ -90,7 +100,7 @@ type BaseAppActivityItem = {|
     created_by: User,
     id: string,
     rendered_text: string,
-    type: 'app_activity',
+    type: typeof FEED_ITEM_TYPE_APP_ACTIVITY,
 |};
 
 type AppActivityAPIItem = {|
