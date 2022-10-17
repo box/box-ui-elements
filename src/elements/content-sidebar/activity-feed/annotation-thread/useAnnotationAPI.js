@@ -2,8 +2,10 @@
 
 import React from 'react';
 import type { MessageDescriptor } from 'react-intl';
+import type EventEmitter from 'events';
 import API from '../../../../api/APIFactory';
 import { annotationErrors } from './errors';
+import useAnnotatorEvents from '../../../common/annotator-context/useAnnotatorEvents';
 import useRepliesAPI from './useRepliesAPI';
 
 import type { Annotation, AnnotationPermission } from '../../../../common/types/annotations';
@@ -39,6 +41,7 @@ type Props = {
         contextInfo?: Object,
         origin?: ElementOrigin,
     ) => void,
+    eventEmitter: EventEmitter,
     fileId: string,
     filePermissions: BoxItemPermission,
 };
@@ -68,14 +71,15 @@ const useAnnotationAPI = ({
     annotationId,
     api,
     currentUser,
+    eventEmitter,
     fileId,
     filePermissions,
     errorCallback,
 }: Props): UseAnnotationAPI => {
-    const [annotation, setAnnotation] = React.useState();
+    const [annotation, setAnnotation] = React.useState<Annotation | typeof undefined>();
     const [replies, setReplies] = React.useState<{ [string]: Comment }>({});
     const [error, setError] = React.useState();
-    const [isLoading, setIsLoading] = React.useState(true);
+    const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
     const handleUpdateOrCreateReplyItem = (replyId: string, updatedReplyValues: Object) => {
         setReplies(prevReplies => ({
@@ -103,6 +107,31 @@ const useAnnotationAPI = ({
         filePermissions,
         handleRemoveReplyItem,
         handleUpdateOrCreateReplyItem,
+    });
+
+    const onAnnotationDeleteStart = (id: string) => {
+        if (annotation !== undefined && id === annotationId) {
+            setAnnotation(prevAnnotation => ({ ...prevAnnotation, isPending: true }));
+        }
+    };
+
+    const onAnnotationUpdateStart = (id: string) => {
+        if (annotation !== undefined && id === annotationId) {
+            setAnnotation(prevAnnotation => ({ ...prevAnnotation, isPending: true }));
+        }
+    };
+
+    const onAnnotationUpdateEnd = (updatedAnnotation: Annotation) => {
+        if (annotation !== undefined && updatedAnnotation.id === annotationId) {
+            setAnnotation(prevAnnotation => ({ ...prevAnnotation, ...updatedAnnotation, isPending: false }));
+        }
+    };
+
+    useAnnotatorEvents({
+        eventEmitter,
+        onAnnotationDeleteStart,
+        onAnnotationUpdateStart,
+        onAnnotationUpdateEnd,
     });
 
     const annotationSuccessCallback = (updatedAnnotation: Annotation): void => {

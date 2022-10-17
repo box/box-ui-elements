@@ -31,6 +31,24 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
         };
     };
 
+    const getMockEventEmitter = ({ mockAddListener = jest.fn() }) => ({
+        addListener: mockAddListener,
+        emit: jest.fn(),
+        eventNames: jest.fn(),
+        getMaxListeners: jest.fn(),
+        listenerCount: jest.fn(),
+        listeners: jest.fn(),
+        off: jest.fn(),
+        on: jest.fn(),
+        once: jest.fn(),
+        prependListener: jest.fn(),
+        prependOnceListener: jest.fn(),
+        rawListeners: jest.fn(),
+        removeAllListeners: jest.fn(),
+        removeListener: jest.fn(),
+        setMaxListeners: jest.fn(),
+    });
+
     const filePermissions = { can_annotate: true, can_view_annotations: true };
     const errorCallback = jest.fn();
 
@@ -39,6 +57,7 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
             useAnnotationAPI({
                 api: getApi({}),
                 currentUser: {},
+                eventEmitter: getMockEventEmitter({}),
                 fileId: 'fileId',
                 filePermissions,
                 annotationId: annotation.id,
@@ -198,5 +217,86 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
         const createdReply = result.current.replies[1];
         expect(createdReply.isPending).toEqual(false);
         expect(createdReply.message).toEqual(message);
+    });
+
+    test('should handle onDeleteAnnotationStart and update annotation state to pending', () => {
+        jest.useFakeTimers();
+        const { replies, ...normalizedAnnotation } = annotation;
+        const mockGetAnnotation = jest.fn((fileId, annotationId, permissions, successCallback) => {
+            successCallback(annotation);
+        });
+        const api = getApi({ getAnnotation: mockGetAnnotation });
+        const mockAddListener = jest.fn().mockImplementation((event, callback) => {
+            setTimeout(() => {
+                if (event === 'annotations_remove_start') {
+                    callback(normalizedAnnotation.id);
+                }
+            }, 100);
+        });
+
+        const mockEventEmitter = getMockEventEmitter({
+            mockAddListener,
+        });
+
+        const { result } = getHook({ eventEmitter: mockEventEmitter, api });
+        act(() => {
+            jest.advanceTimersByTime(100);
+        });
+
+        expect(result.current.annotation.isPending).toEqual(true);
+    });
+
+    test('should handle onUpdateAnnotationStart and update annotation state to pending', () => {
+        jest.useFakeTimers();
+        const { replies, ...normalizedAnnotation } = annotation;
+        const mockGetAnnotation = jest.fn((fileId, annotationId, permissions, successCallback) => {
+            successCallback(annotation);
+        });
+        const api = getApi({ getAnnotation: mockGetAnnotation });
+        const mockAddListener = jest.fn().mockImplementation((event, callback) => {
+            setTimeout(() => {
+                if (event === 'sidebar.annotations_update_start') {
+                    callback(normalizedAnnotation.id);
+                }
+            }, 100);
+        });
+
+        const mockEventEmitter = getMockEventEmitter({
+            mockAddListener,
+        });
+
+        const { result } = getHook({ eventEmitter: mockEventEmitter, api });
+        act(() => {
+            jest.advanceTimersByTime(100);
+        });
+
+        expect(result.current.annotation.isPending).toEqual(true);
+    });
+
+    test('should handle onUpdateAnnotationEnd and update annotation values accordingly', () => {
+        jest.useFakeTimers();
+        const { replies, ...normalizedAnnotation } = annotation;
+        const mockGetAnnotation = jest.fn((fileId, annotationId, permissions, successCallback) => {
+            successCallback(annotation);
+        });
+        const api = getApi({ getAnnotation: mockGetAnnotation });
+        const mockAddListener = jest.fn().mockImplementation((event, callback) => {
+            setTimeout(() => {
+                if (event === 'sidebar.annotations_update') {
+                    callback({ ...normalizedAnnotation, status: 'resolved' });
+                }
+            }, 100);
+        });
+
+        const mockEventEmitter = getMockEventEmitter({
+            mockAddListener,
+        });
+
+        const { result } = getHook({ eventEmitter: mockEventEmitter, api });
+        act(() => {
+            jest.advanceTimersByTime(100);
+        });
+
+        expect(result.current.annotation.status).toEqual('resolved');
     });
 });

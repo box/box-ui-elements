@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import type EventEmitter from 'events';
 import ActivityError from '../common/activity-error';
 import ActivityThread from '../activity-feed/ActivityThread';
 import AnnotationActivity from '../annotations';
@@ -17,6 +18,7 @@ type Props = {
     annotationId: string,
     api: API,
     currentUser: User,
+    eventEmitter: EventEmitter,
     file: BoxItem,
     getAvatarUrl: string => Promise<?string>,
     getMentionWithQuery: (searchStr: string) => void,
@@ -27,6 +29,7 @@ const AnnotationThreadContent = ({
     annotationId,
     api,
     currentUser,
+    eventEmitter,
     file,
     getAvatarUrl,
     getMentionWithQuery,
@@ -50,6 +53,7 @@ const AnnotationThreadContent = ({
         api,
         annotationId,
         currentUser,
+        eventEmitter,
         fileId,
         filePermissions: permissions,
         errorCallback: onError,
