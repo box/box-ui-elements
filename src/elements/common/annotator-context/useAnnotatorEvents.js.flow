@@ -12,6 +12,38 @@ export interface UseAnnotatorEventsProps {
     eventEmitter: EventEmitter;
     onAnnotationDeleteEnd?: (annotationId: string) => void;
     onAnnotationDeleteStart?: (annotationId: string) => void;
+    onAnnotationReplyAddEnd?: (eventData: {
+        annotationId: string,
+        reply: Object,
+        requestId: string,
+        ...
+    }) => void;
+    onAnnotationReplyAddStart?: (eventData: {
+        annotationId: string,
+        reply: Object,
+        requestId: string,
+        ...
+    }) => void;
+    onAnnotationReplyDeleteEnd?: (eventData: {
+        annotationId: string,
+        id: string,
+        ...
+    }) => void;
+    onAnnotationReplyDeleteStart?: (eventData: {
+        annotationId: string,
+        id: string,
+        ...
+    }) => void;
+    onAnnotationReplyUpdateEnd?: (eventData: {
+        annotationId: string,
+        reply: Object,
+        ...
+    }) => void;
+    onAnnotationReplyUpdateStart?: (eventData: {
+        annotationId: string,
+        reply: Object,
+        ...
+    }) => void;
     onAnnotationUpdateEnd?: (annotation: Object) => void;
     onAnnotationUpdateStart?: (annotation: Object) => void;
     onSidebarAnnotationSelected?: (annotationId: string) => void;

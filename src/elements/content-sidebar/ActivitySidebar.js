@@ -9,6 +9,7 @@ import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
+import uniqueId from 'lodash/uniqueId';
 import { FormattedMessage } from 'react-intl';
 import { type ContextRouter } from 'react-router-dom';
 import ActivityFeed from './activity-feed';
@@ -124,6 +125,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         annotatorState: {},
         emitActiveAnnotationChangeEvent: noop,
         emitAnnotationRemoveEvent: noop,
+        emitAnnotationReplyCreateEvent: noop,
+        emitAnnotationReplyDeleteEvent: noop,
+        emitAnnotationReplyUpdateEvent: noop,
         emitAnnotationUpdateEvent: noop,
         getAnnotationsMatchPath: noop,
         getAnnotationsPath: noop,
@@ -393,14 +397,18 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         parentId: string,
         permissions: BoxCommentPermission,
     }): void => {
-        const { file, api } = this.props;
+        const { api, emitAnnotationReplyDeleteEvent, file } = this.props;
 
+        emitAnnotationReplyDeleteEvent(id, parentId, true);
         api.getFeedAPI(false).deleteReply(
             file,
             id,
             parentId,
             permissions,
-            this.feedSuccessCallback,
+            () => {
+                this.feedSuccessCallback();
+                emitAnnotationReplyDeleteEvent(id, parentId);
+            },
             this.feedErrorCallback,
         );
 
@@ -479,16 +487,18 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onSuccess: ?Function,
         onError: ?Function,
     ): void => {
-        const { api, file } = this.props;
+        const { api, emitAnnotationReplyUpdateEvent, file } = this.props;
 
+        emitAnnotationReplyUpdateEvent({ id, tagged_message: text }, parentId, true);
         api.getFeedAPI(false).updateReply(
             file,
             id,
             parentId,
             text,
             permissions,
-            () => {
+            reply => {
                 this.feedSuccessCallback();
+                emitAnnotationReplyUpdateEvent(reply, parentId);
                 if (onSuccess) {
                     onSuccess();
                 }
@@ -556,19 +566,24 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     createReply = (parentId: string, parentType: CommentFeedItemType, text: string): void => {
-        const { api, currentUser, file } = this.props;
+        const { api, currentUser, emitAnnotationReplyCreateEvent, file } = this.props;
 
         if (!currentUser) {
             throw getBadUserError();
         }
 
+        const eventRequestId = uniqueId('comment_');
+        emitAnnotationReplyCreateEvent({ tagged_message: text }, eventRequestId, parentId, true);
         api.getFeedAPI(false).createReply(
             file,
             currentUser,
             parentId,
             parentType,
             text,
-            this.feedSuccessCallback,
+            reply => {
+                this.feedSuccessCallback();
+                emitAnnotationReplyCreateEvent(reply, eventRequestId, parentId);
+            },
             this.feedErrorCallback,
         );
 

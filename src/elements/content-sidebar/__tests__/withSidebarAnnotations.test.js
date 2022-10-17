@@ -26,11 +26,14 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
 
     const feedAPI = {
         addAnnotation: jest.fn(),
+        addPendingReply: jest.fn(),
         feedItems: jest.fn(),
         getCachedItems: jest.fn(),
         deleteAnnotation: jest.fn(),
         deleteFeedItem: jest.fn(),
+        deleteReplyItem: jest.fn(),
         updateFeedItem: jest.fn(),
+        updateReplyItem: jest.fn(),
     };
 
     const api = {
@@ -139,6 +142,51 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         });
 
         test.each`
+            action
+            ${Action.REPLY_CREATE_START}
+            ${Action.REPLY_CREATE_END}
+        `('should call addAnnotationReply if given action = $action', ({ action }) => {
+            const annotation = { id: '123' };
+            const annotationReply = { id: '456', tagged_message: 'abc' };
+
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.addAnnotationReply = jest.fn();
+            wrapper.setProps({ annotatorState: { action, annotation, annotationReply } });
+            expect(instance.addAnnotationReply).toBeCalled();
+        });
+
+        test.each`
+            action
+            ${Action.REPLY_DELETE_START}
+            ${Action.REPLY_DELETE_END}
+        `('should call deleteAnnotationReply if given action = $action', ({ action }) => {
+            const annotation = { id: '123' };
+            const annotationReply = { id: '456' };
+
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.deleteAnnotationReply = jest.fn();
+            wrapper.setProps({ annotatorState: { action, annotation, annotationReply } });
+            expect(instance.deleteAnnotationReply).toBeCalled();
+        });
+
+        test.each`
+            action
+            ${Action.REPLY_UPDATE_START}
+            ${Action.REPLY_UPDATE_END}
+        `('should call updateAnnotationReply if given action = $action', ({ action }) => {
+            const annotation = { id: '123' };
+            const annotationReply = { id: '456', tagged_message: 'abc' };
+
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.updateAnnotationReply = jest.fn();
+            wrapper.setProps({ annotatorState: { action, annotation, annotationReply } });
+            expect(instance.updateAnnotationReply).toBeCalled();
+        });
+
+        test.each`
             fileId   | expectedCount
             ${'123'} | ${0}
             ${'456'} | ${1}
@@ -242,6 +290,58 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         );
     });
 
+    describe('addAnnotationReply()', () => {
+        test('should add appropriate reply into the feed given action = reply_create_start', () => {
+            const annotation = { id: '123' };
+            const annotationReply = { tagged_message: 'abc' };
+            const requestId = 'comment_456';
+            const annotatorStateMock = {
+                action: Action.REPLY_CREATE_START,
+                annotation,
+                annotationReply,
+                meta: { requestId },
+            };
+
+            const wrapper = getWrapper({ annotatorState: annotatorStateMock, currentUser });
+            const instance = wrapper.instance();
+
+            instance.addAnnotationReply();
+
+            const expectedReplyData = { ...annotationReply, id: requestId };
+            expect(feedAPI.addPendingReply).toBeCalledWith(annotation.id, currentUser, expectedReplyData);
+        });
+
+        test('should update appropriate annotation and its reply in the feed given action = reply_create_end', () => {
+            feedAPI.getCachedItems.mockReturnValueOnce({
+                items: [
+                    {
+                        id: '123',
+                        replies: [{ id: 'comment_456', tagged_message: 'abc' }],
+                        total_reply_count: 2,
+                    },
+                ],
+            });
+            const annotation = { id: '123' };
+            const annotationReply = { id: '456', tagged_message: 'abc' };
+            const requestId = 'comment_456';
+            const annotatorStateMock = {
+                action: Action.REPLY_CREATE_END,
+                annotation,
+                annotationReply,
+                meta: { requestId },
+            };
+
+            const wrapper = getWrapper({ annotatorState: annotatorStateMock, currentUser });
+            const instance = wrapper.instance();
+
+            instance.addAnnotationReply();
+
+            const expectedReplyData = { ...annotationReply, isPending: false };
+            expect(feedAPI.updateFeedItem).toBeCalledWith({ total_reply_count: 3 }, annotation.id);
+            expect(feedAPI.updateReplyItem).toBeCalledWith(expectedReplyData, annotation.id, requestId);
+        });
+    });
+
     describe('deleteAnnotation()', () => {
         test('should change appropriate annotation to pending when action = delete_start', () => {
             const annotation = { id: '123' };
@@ -274,6 +374,77 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         });
     });
 
+    describe('deleteAnnotationReply()', () => {
+        test('should update appropriate reply in the feed given action = reply_delete_start', () => {
+            const annotation = { id: '123' };
+            const annotationReply = { id: '456' };
+            const annotatorStateMock = {
+                action: Action.REPLY_DELETE_START,
+                annotation,
+                annotationReply,
+            };
+
+            const wrapper = getWrapper({ annotatorState: annotatorStateMock });
+            const instance = wrapper.instance();
+
+            instance.deleteAnnotationReply();
+
+            expect(feedAPI.updateReplyItem).toBeCalledWith({ isPending: true }, annotation.id, annotationReply.id);
+        });
+
+        test('should update appropriate annotation if reply is currently not in the feed given action = reply_delete_end', () => {
+            feedAPI.getCachedItems.mockReturnValueOnce({
+                items: [
+                    {
+                        id: '123',
+                        replies: [{ id: '999', tagged_message: 'abc' }],
+                        total_reply_count: 2,
+                    },
+                ],
+            });
+            const annotation = { id: '123' };
+            const annotationReply = { id: '456', tagged_message: 'abc' };
+            const annotatorStateMock = {
+                action: Action.REPLY_DELETE_END,
+                annotation,
+                annotationReply,
+            };
+
+            const wrapper = getWrapper({ annotatorState: annotatorStateMock });
+            const instance = wrapper.instance();
+
+            instance.deleteAnnotationReply();
+
+            expect(feedAPI.updateFeedItem).toBeCalledWith({ total_reply_count: 1 }, annotation.id);
+        });
+
+        test('should delete appropriate reply from the feed if it is currently in the feed given action = reply_delete_end', () => {
+            feedAPI.getCachedItems.mockReturnValueOnce({
+                items: [
+                    {
+                        id: '123',
+                        replies: [{ id: '456', tagged_message: 'abc' }],
+                        total_reply_count: 2,
+                    },
+                ],
+            });
+            const annotation = { id: '123' };
+            const annotationReply = { id: '456', tagged_message: 'abc' };
+            const annotatorStateMock = {
+                action: Action.REPLY_DELETE_END,
+                annotation,
+                annotationReply,
+            };
+
+            const wrapper = getWrapper({ annotatorState: annotatorStateMock });
+            const instance = wrapper.instance();
+
+            instance.deleteAnnotationReply();
+
+            expect(feedAPI.deleteReplyItem).toBeCalledWith(annotationReply.id, annotation.id);
+        });
+    });
+
     describe('updateAnnotation()', () => {
         test.each`
             action                 | expectedIsPending
@@ -297,6 +468,30 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 expect(feedAPI.updateFeedItem).toBeCalledWith(expectedAnnotationData, annotation.id);
             },
         );
+    });
+
+    describe('updateAnnotationReply()', () => {
+        test.each`
+            action                       | expectedIsPending
+            ${Action.REPLY_UPDATE_START} | ${true}
+            ${Action.REPLY_UPDATE_END}   | ${false}
+        `('should update appropriate reply in the feed given action = $action', ({ action, expectedIsPending }) => {
+            const annotation = { id: '123', status: 'resolved' };
+            const annotationReply = { id: '456', tagged_message: 'abc' };
+            const annotatorStateMock = {
+                annotation,
+                annotationReply,
+                action,
+            };
+
+            const wrapper = getWrapper({ annotatorState: annotatorStateMock });
+            const instance = wrapper.instance();
+
+            instance.updateAnnotationReply();
+
+            const expectedReplyData = { ...annotationReply, isPending: expectedIsPending };
+            expect(feedAPI.updateReplyItem).toBeCalledWith(expectedReplyData, annotation.id, annotationReply.id);
+        });
     });
 
     describe('updateActiveAnnotation()', () => {

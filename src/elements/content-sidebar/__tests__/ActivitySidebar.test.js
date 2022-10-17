@@ -6,6 +6,7 @@ import { filterableActivityFeedItems } from '../fixtures';
 import { FEED_ITEM_TYPE_COMMENT } from '../../../constants';
 
 jest.mock('lodash/debounce', () => jest.fn(i => i));
+jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
 const userError = 'Bad box user!';
 
@@ -385,8 +386,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(() => instance.createReply('123', FEED_ITEM_TYPE_COMMENT, 'abc', true)).toThrow(userError);
         });
 
-        test('should call the createReply API and fetch the items', () => {
-            const wrapper = getWrapper();
+        test('should call the createReply API, fetch the items and call emitAnnotationReplyCreateEvent', () => {
+            const mockEmitAnnotationReplyCreateEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationReplyCreateEvent: mockEmitAnnotationReplyCreateEvent });
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
             const parentId = '123';
@@ -407,6 +409,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect.any(Function),
             );
             expect(instance.fetchFeedItems).toBeCalled();
+            expect(mockEmitAnnotationReplyCreateEvent).toBeCalledWith(
+                { tagged_message: message },
+                'uniqueId',
+                parentId,
+                true,
+            );
         });
     });
 
@@ -467,8 +475,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('updateReply()', () => {
-        test('should call updateReply API', () => {
-            const wrapper = getWrapper();
+        test('should call updateReply API and call emitAnnotationReplyUpdateEvent', () => {
+            const mockEmitAnnotationReplyUpdateEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationReplyUpdateEvent: mockEmitAnnotationReplyUpdateEvent });
             const instance = wrapper.instance();
             const parentId = '123';
             const text = 'abc';
@@ -490,6 +499,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect.any(Function),
             );
             expect(instance.fetchFeedItems).toBeCalled();
+            expect(mockEmitAnnotationReplyUpdateEvent).toBeCalledWith(
+                { id: reply.id, tagged_message: text },
+                parentId,
+                true,
+            );
         });
     });
 
