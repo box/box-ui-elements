@@ -2,7 +2,7 @@ import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import noop from 'lodash/noop';
 
-import { CommentComponent as Comment } from '../Comment';
+import Comment from '../Comment';
 import CommentForm from '../../comment-form/CommentForm';
 import { FEED_ITEM_TYPE_TASK } from '../../../../../constants';
 
@@ -385,39 +385,6 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
     });
 
     test.each`
-        featureEnabled | canCollapse
-        ${false}       | ${false}
-        ${true}        | ${true}
-    `(
-        'should pass canCollapse=$canCollapse to ActivityMessage when feature enabled is $featureEnabled',
-        ({ canCollapse, featureEnabled }) => {
-            const comment = {
-                created_at: TIME_STRING_SEPT_27_2017,
-                tagged_message: 'test',
-                created_by: { name: '50 Cent', id: 10 },
-                permissions: { can_delete: true, can_edit: true },
-            };
-            const wrapper = shallow(
-                <Comment
-                    id="123"
-                    {...comment}
-                    approverSelectorContacts={approverSelectorContacts}
-                    currentUser={currentUser}
-                    handlers={allHandlers}
-                    mentionSelectorContacts={mentionSelectorContacts}
-                    features={{
-                        activityFeed: {
-                            collapsableMessages: { enabled: featureEnabled },
-                        },
-                    }}
-                />,
-            );
-
-            expect(wrapper.find('ActivityMessage').prop('canCollapse')).toBe(canCollapse);
-        },
-    );
-
-    test.each`
         created_at                  | modified_at                 | expectedIsEdited
         ${TIME_STRING_SEPT_27_2017} | ${undefined}                | ${false}
         ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_27_2017} | ${false}
@@ -444,7 +411,9 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 />,
             );
 
-            expect(wrapper.find('ActivityMessage').prop('isEdited')).toEqual(expectedIsEdited);
+            expect(wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))').prop('isEdited')).toEqual(
+                expectedIsEdited,
+            );
         },
     );
 });

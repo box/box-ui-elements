@@ -5,14 +5,18 @@ import { FormattedMessage } from 'react-intl';
 import CollapsableMessage from './CollapsableMessage';
 import formatTaggedMessage from '../../utils/formatTaggedMessage';
 import LoadingIndicator from '../../../../../components/loading-indicator';
+import messages from './messages';
 import ShowOriginalButton from './ShowOriginalButton';
 import TranslateButton from './TranslateButton';
+import { withFeatureConsumer, isFeatureEnabled } from '../../../../common/feature-checking';
+
 import type { GetProfileUrlCallback } from '../../../../common/flowTypes';
-import messages from './messages';
+import type { FeatureConfig } from '../../../../common/feature-checking';
+
 import './ActivityMessage.scss';
 
 type Props = {
-    canCollapse?: boolean,
+    features: FeatureConfig,
     getUserProfileUrl?: GetProfileUrlCallback,
     id: string,
     isEdited?: boolean,
@@ -30,7 +34,6 @@ type State = {
 
 class ActivityMessage extends React.Component<Props, State> {
     static defaultProps = {
-        canCollapse: false,
         isEdited: false,
         translationEnabled: false,
     };
@@ -82,7 +85,7 @@ class ActivityMessage extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
-            canCollapse,
+            features,
             getUserProfileUrl,
             id,
             isEdited,
@@ -93,7 +96,9 @@ class ActivityMessage extends React.Component<Props, State> {
         const { isLoading, isTranslation } = this.state;
         const commentToDisplay =
             translationEnabled && isTranslation && translatedTaggedMessage ? translatedTaggedMessage : tagged_message;
-        const MessageWrapper = canCollapse ? CollapsableMessage : React.Fragment;
+        const MessageWrapper = isFeatureEnabled(features, 'activityFeed.collapsableMessages.enabled')
+            ? CollapsableMessage
+            : React.Fragment;
 
         return isLoading ? (
             <div className="bcs-ActivityMessageLoading">
@@ -115,4 +120,5 @@ class ActivityMessage extends React.Component<Props, State> {
     }
 }
 
-export default ActivityMessage;
+export { ActivityMessage };
+export default withFeatureConsumer(ActivityMessage);

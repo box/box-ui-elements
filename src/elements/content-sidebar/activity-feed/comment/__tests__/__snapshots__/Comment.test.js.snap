@@ -70,12 +70,10 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
         />
       </div>
       <ActivityStatus />
-      <ActivityMessage
-        canCollapse={false}
+      <ForwardRef(withFeatureConsumer(ActivityMessage))
         id="123"
         isEdited={false}
         tagged_message="test"
-        translationEnabled={false}
         translationFailed={null}
       />
     </MediaBody>
@@ -116,8 +114,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
         />
       </div>
       <ActivityStatus />
-      <ActivityMessage
-        canCollapse={false}
+      <ForwardRef(withFeatureConsumer(ActivityMessage))
         id="123"
         isEdited={false}
         onTranslate={[MockFunction]}
@@ -163,12 +160,10 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
         />
       </div>
       <ActivityStatus />
-      <ActivityMessage
-        canCollapse={false}
+      <ForwardRef(withFeatureConsumer(ActivityMessage))
         id="123"
         isEdited={false}
         tagged_message="test"
-        translationEnabled={false}
         translationFailed={true}
       />
     </MediaBody>
@@ -213,12 +208,10 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
         />
       </div>
       <ActivityStatus />
-      <ActivityMessage
-        canCollapse={false}
+      <ForwardRef(withFeatureConsumer(ActivityMessage))
         id="123"
         isEdited={false}
         tagged_message="test"
-        translationEnabled={false}
         translationFailed={null}
       />
     </MediaBody>

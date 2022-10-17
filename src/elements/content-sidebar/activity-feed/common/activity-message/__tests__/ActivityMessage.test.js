@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 
-import ActivityMessage from '../ActivityMessage';
+import { ActivityMessage } from '../ActivityMessage';
 
 describe('elements/content-sidebar/ActivityFeed/common/activity-message', () => {
     test('should properly format tagged comment', () => {
@@ -137,22 +137,34 @@ describe('elements/content-sidebar/ActivityFeed/common/activity-message', () => 
         expect(wrapper.state('isLoading')).toBe(false);
     });
 
-    test('should not have TruncatableMessage when `canCollapse` is not passed', () => {
+    test('should not have CollapsableMessage when `collapsableMessages` is not enabled in features', () => {
         const commentText = {
+            features: {
+                activityFeed: {
+                    collapsableMessages: { enabled: false },
+                },
+            },
+            id: '123',
             tagged_message: 'How u doing @[2030326577:Young Jeezy]?',
         };
 
-        const wrapper = shallow(<ActivityMessage id="123" {...commentText} />);
+        const wrapper = shallow(<ActivityMessage {...commentText} />);
 
         expect(wrapper.exists('CollapsableMessage')).toBe(false);
     });
 
-    test('should have TruncatableMessage when `canCollapse` is passed', () => {
+    test('should have CollapsableMessage when `collapsableMessages` is enabled in features', () => {
         const commentText = {
+            features: {
+                activityFeed: {
+                    collapsableMessages: { enabled: true },
+                },
+            },
+            id: '123',
             tagged_message: 'How u doing @[2030326577:Young Jeezy]?',
         };
 
-        const wrapper = shallow(<ActivityMessage canCollapse id="123" {...commentText} />);
+        const wrapper = shallow(<ActivityMessage {...commentText} />);
 
         expect(wrapper.exists('CollapsableMessage')).toBe(true);
     });
