@@ -28,8 +28,8 @@ type State = {
 
 class ActivityMessage extends React.Component<Props, State> {
     static defaultProps = {
-        translationEnabled: false,
         isEdited: false,
+        translationEnabled: false,
     };
 
     state = {
