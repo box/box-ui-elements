@@ -90,7 +90,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
                 },
             });
             expect(wrapper.exists(AnnotationActivityMenu)).toBe(true);
-            expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(
+            expect(wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))').prop('tagged_message')).toEqual(
                 mockActivity.item.description.message,
             );
         },

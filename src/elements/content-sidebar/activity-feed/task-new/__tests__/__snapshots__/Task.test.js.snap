@@ -115,11 +115,9 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
         className="bcs-Task-dueDate"
       />
       <div>
-        <ActivityMessage
+        <ForwardRef(withFeatureConsumer(ActivityMessage))
           id="123125"
-          isEdited={false}
           tagged_message="This is where we tell each other what we need to do"
-          translationEnabled={false}
           translationFailed={null}
         />
       </div>

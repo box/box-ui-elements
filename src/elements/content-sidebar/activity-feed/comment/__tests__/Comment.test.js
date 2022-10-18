@@ -51,7 +51,6 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 mentionSelectorContacts={mentionSelectorContacts}
             />,
         );
-
         // validating that the Tooltip and the comment posted time are properly set
         expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
 
@@ -412,7 +411,9 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 />,
             );
 
-            expect(wrapper.find('ActivityMessage').prop('isEdited')).toEqual(expectedIsEdited);
+            expect(wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))').prop('isEdited')).toEqual(
+                expectedIsEdited,
+            );
         },
     );
 });
