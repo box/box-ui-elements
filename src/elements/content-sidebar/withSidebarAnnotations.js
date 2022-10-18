@@ -227,7 +227,7 @@ export default function withSidebarAnnotations(
                 const replyItem = annotationItem.replies.find(({ id }) => id === replyId);
                 if (replyItem) {
                     feedAPI.deleteReplyItem(replyId, annotationId);
-                } else if (annotationItem.total_reply_count !== undefined) {
+                } else if (annotationItem.total_reply_count > 0) {
                     // Decrease the amount of replies by 1
                     feedAPI.updateFeedItem({ total_reply_count: annotationItem.total_reply_count - 1 }, annotationId);
                 }

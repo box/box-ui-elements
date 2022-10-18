@@ -214,8 +214,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('deleteReply()', () => {
-        test('should call the deleteReply API', () => {
-            const wrapper = getWrapper();
+        test('should call the deleteReply API and call emitAnnotationReplyDeleteEvent', () => {
+            const mockEmitAnnotationReplyDeleteEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationReplyDeleteEvent: mockEmitAnnotationReplyDeleteEvent });
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
 
@@ -235,6 +236,23 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect.any(Function),
             );
             expect(instance.fetchFeedItems).toBeCalled();
+            expect(mockEmitAnnotationReplyDeleteEvent).toBeCalledWith(id, parentId, true);
+        });
+    });
+
+    describe('deleteReplySuccessCallback()', () => {
+        test('should call the feedSuccessCallback and emitAnnotationReplyDeleteEvent', () => {
+            const mockEmitAnnotationReplyDeleteEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationReplyDeleteEvent: mockEmitAnnotationReplyDeleteEvent });
+            const instance = wrapper.instance();
+            instance.feedSuccessCallback = jest.fn();
+
+            const id = '1';
+            const parentId = '123';
+
+            instance.deleteReplySuccessCallback(id, parentId);
+            expect(instance.feedSuccessCallback).toBeCalled();
+            expect(mockEmitAnnotationReplyDeleteEvent).toBeCalledWith(id, parentId);
         });
     });
 
@@ -418,6 +436,23 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
+    describe('createReplySuccessCallback()', () => {
+        test('should call the feedSuccessCallback and emitAnnotationReplyCreateEvent', () => {
+            const mockEmitAnnotationReplyCreateEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationReplyCreateEvent: mockEmitAnnotationReplyCreateEvent });
+            const instance = wrapper.instance();
+            instance.feedSuccessCallback = jest.fn();
+
+            const reply = { id: '1', status: 'resolved' };
+            const parentId = '123';
+            const eventRequestId = 'comment_123';
+
+            instance.createReplySuccessCallback(eventRequestId, parentId, reply);
+            expect(instance.feedSuccessCallback).toBeCalled();
+            expect(mockEmitAnnotationReplyCreateEvent).toBeCalledWith(reply, eventRequestId, parentId);
+        });
+    });
+
     describe('updateComment()', () => {
         test.each`
             hasReplies
@@ -504,6 +539,24 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 parentId,
                 true,
             );
+        });
+    });
+
+    describe('updateReplySuccessCallback()', () => {
+        test('should call the feedSuccessCallback and emitAnnotationReplyUpdateEvent', () => {
+            const mockEmitAnnotationReplyUpdateEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationReplyUpdateEvent: mockEmitAnnotationReplyUpdateEvent });
+            const instance = wrapper.instance();
+            instance.feedSuccessCallback = jest.fn();
+
+            const onSuccess = jest.fn();
+            const reply = { id: '1', status: 'resolved' };
+            const parentId = '123';
+
+            instance.updateReplySuccessCallback(parentId, onSuccess, reply);
+            expect(instance.feedSuccessCallback).toBeCalled();
+            expect(mockEmitAnnotationReplyUpdateEvent).toBeCalledWith(reply, parentId);
+            expect(onSuccess).toBeCalled();
         });
     });
 

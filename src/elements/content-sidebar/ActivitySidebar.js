@@ -46,6 +46,7 @@ import type {
     Annotation,
     AnnotationPermission,
     BoxCommentPermission,
+    Comment,
     CommentFeedItemType,
     FocusableFeedItemType,
     FeedItems,
@@ -405,15 +406,27 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             id,
             parentId,
             permissions,
-            () => {
-                this.feedSuccessCallback();
-                emitAnnotationReplyDeleteEvent(id, parentId);
-            },
+            this.deleteReplySuccessCallback.bind(this, id, parentId),
             this.feedErrorCallback,
         );
 
         // need to load the pending item
         this.fetchFeedItems();
+    };
+
+    /**
+     * Handles a successful deletion of a reply
+     *
+     * @private
+     * @param {string} id - The id of the reply
+     * @param {string} parentId - The id of the reply's parent item
+     * @return {void}
+     */
+    deleteReplySuccessCallback = (id: string, parentId: string) => {
+        const { emitAnnotationReplyDeleteEvent } = this.props;
+
+        this.feedSuccessCallback();
+        emitAnnotationReplyDeleteEvent(id, parentId);
     };
 
     updateComment = (
@@ -496,13 +509,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             parentId,
             text,
             permissions,
-            reply => {
-                this.feedSuccessCallback();
-                emitAnnotationReplyUpdateEvent(reply, parentId);
-                if (onSuccess) {
-                    onSuccess();
-                }
-            },
+            this.updateReplySuccessCallback.bind(this, parentId, onSuccess),
             (error, code) => {
                 if (onError) {
                     onError(error, code);
@@ -513,6 +520,25 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         // need to load the pending item
         this.fetchFeedItems();
+    };
+
+    /**
+     * Handles a successful update of a reply
+     *
+     * @private
+     * @param {string} parentId - The id of the reply's parent item
+     * @param {Function} onSuccess - the success callback
+     * @param {Comment} reply - The reply comment object
+     * @return {void}
+     */
+    updateReplySuccessCallback = (parentId: string, onSuccess: ?Function, reply: Comment) => {
+        const { emitAnnotationReplyUpdateEvent } = this.props;
+
+        this.feedSuccessCallback();
+        emitAnnotationReplyUpdateEvent(reply, parentId);
+        if (onSuccess) {
+            onSuccess();
+        }
     };
 
     /**
@@ -580,15 +606,28 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             parentId,
             parentType,
             text,
-            reply => {
-                this.feedSuccessCallback();
-                emitAnnotationReplyCreateEvent(reply, eventRequestId, parentId);
-            },
+            this.createReplySuccessCallback.bind(this, eventRequestId, parentId),
             this.feedErrorCallback,
         );
 
         // need to load the pending item
         this.fetchFeedItems();
+    };
+
+    /**
+     * Handles a successful creation of a reply
+     *
+     * @private
+     * @param {string} eventRequestId - The id of the parent item
+     * @param {string} parentId - The id of the reply's parent item
+     * @param {Comment} reply - The reply comment object
+     * @return {void}
+     */
+    createReplySuccessCallback = (eventRequestId: string, parentId: string, reply: Comment) => {
+        const { emitAnnotationReplyCreateEvent } = this.props;
+
+        this.feedSuccessCallback();
+        emitAnnotationReplyCreateEvent(reply, eventRequestId, parentId);
     };
 
     /**

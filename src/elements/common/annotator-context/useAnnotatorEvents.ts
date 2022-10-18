@@ -155,7 +155,20 @@ function useAnnotatorEvents({
             eventEmitter.removeListener('sidebar.annotations_reply_update', onAnnotationReplyUpdateEnd);
             eventEmitter.removeListener('sidebar.annotations_reply_update_start', onAnnotationReplyUpdateStart);
         };
-    });
+    }, [
+        eventEmitter,
+        onAnnotationDeleteEnd,
+        onAnnotationDeleteStart,
+        onAnnotationReplyAddEnd,
+        onAnnotationReplyAddStart,
+        onAnnotationReplyDeleteEnd,
+        onAnnotationReplyDeleteStart,
+        onAnnotationReplyUpdateEnd,
+        onAnnotationReplyUpdateStart,
+        onAnnotationUpdateEnd,
+        onAnnotationUpdateStart,
+        onSidebarAnnotationSelected,
+    ]);
 
     return {
         emitAddAnnotationEndEvent,
