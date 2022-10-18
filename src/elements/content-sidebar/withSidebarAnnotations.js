@@ -70,6 +70,18 @@ export default function withSidebarAnnotations(
             const isTransitioningToAnnotationPath = activeAnnotationId && !isAnnotationsPath;
             const prevFileVersionId = getProp(prevMatch, 'params.fileVersionId');
 
+            if (action === 'reply_create_start' || action === 'reply_create_end') {
+                this.addAnnotationReply();
+            }
+
+            if (action === 'reply_delete_start' || action === 'reply_delete_end') {
+                this.deleteAnnotationReply();
+            }
+
+            if (action === 'reply_update_start' || action === 'reply_update_end') {
+                this.updateAnnotationReply();
+            }
+
             if (action === 'update_start' || action === 'update_end') {
                 this.updateAnnotation();
             }
@@ -131,6 +143,43 @@ export default function withSidebarAnnotations(
             this.refreshActivitySidebar();
         }
 
+        addAnnotationReply() {
+            const {
+                annotatorState: {
+                    action,
+                    annotation: { id: annotationId },
+                    annotationReply,
+                    meta: { requestId },
+                },
+                api,
+                currentUser,
+                file,
+            } = this.props;
+
+            if (!currentUser) {
+                throw getBadUserError();
+            }
+
+            const feedAPI = api.getFeedAPI(false);
+            feedAPI.file = file;
+
+            if (action === 'reply_create_start') {
+                feedAPI.addPendingReply(annotationId, currentUser, { ...annotationReply, id: requestId });
+            } else {
+                const { items: feedItems = [] } = feedAPI.getCachedItems(file.id) || {};
+                const annotationItem = feedItems.find(({ id }) => id === annotationId);
+
+                if (!annotationItem) {
+                    return;
+                }
+
+                feedAPI.updateFeedItem({ total_reply_count: annotationItem.total_reply_count + 1 }, annotationId);
+                feedAPI.updateReplyItem({ ...annotationReply, isPending: false }, annotationId, requestId);
+            }
+
+            this.refreshActivitySidebar();
+        }
+
         deleteAnnotation() {
             const {
                 annotatorState: { action, annotation },
@@ -150,6 +199,43 @@ export default function withSidebarAnnotations(
             this.refreshActivitySidebar();
         }
 
+        deleteAnnotationReply() {
+            const {
+                annotatorState: {
+                    action,
+                    annotation: { id: annotationId },
+                    annotationReply: { id: replyId },
+                },
+                api,
+                file,
+            } = this.props;
+
+            const feedAPI = api.getFeedAPI(false);
+            feedAPI.file = file;
+
+            if (action === 'reply_delete_start') {
+                feedAPI.updateReplyItem({ isPending: true }, annotationId, replyId);
+            } else {
+                const { items: feedItems = [] } = feedAPI.getCachedItems(file.id) || {};
+                const annotationItem = feedItems.find(({ id }) => id === annotationId);
+
+                if (!annotationItem) {
+                    return;
+                }
+
+                // Check if the parent annotation has the reply currently visible
+                const replyItem = annotationItem.replies.find(({ id }) => id === replyId);
+                if (replyItem) {
+                    feedAPI.deleteReplyItem(replyId, annotationId);
+                } else if (annotationItem.total_reply_count > 0) {
+                    // Decrease the amount of replies by 1
+                    feedAPI.updateFeedItem({ total_reply_count: annotationItem.total_reply_count - 1 }, annotationId);
+                }
+            }
+
+            this.refreshActivitySidebar();
+        }
+
         updateAnnotation() {
             const {
                 annotatorState: { action, annotation },
@@ -162,6 +248,22 @@ export default function withSidebarAnnotations(
             feedAPI.file = file;
 
             feedAPI.updateFeedItem({ ...annotation, isPending }, annotation.id);
+
+            this.refreshActivitySidebar();
+        }
+
+        updateAnnotationReply() {
+            const {
+                annotatorState: { action, annotation, annotationReply },
+                api,
+                file,
+            } = this.props;
+
+            const feedAPI = api.getFeedAPI(false);
+            const isPending = action === 'reply_update_start';
+            feedAPI.file = file;
+
+            feedAPI.updateReplyItem({ ...annotationReply, isPending }, annotation.id, annotationReply.id);
 
             this.refreshActivitySidebar();
         }

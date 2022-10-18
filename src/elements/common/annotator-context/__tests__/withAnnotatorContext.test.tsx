@@ -31,6 +31,9 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
         };
         const mockEmitActiveAnnotationChangeEvent = jest.fn();
         const mockEmitAnnotationRemoveEvent = jest.fn();
+        const mockEmitAnnotationReplyCreateEvent = jest.fn();
+        const mockEmitAnnotationReplyDeleteEvent = jest.fn();
+        const mockMmitAnnotationReplyUpdateEvent = jest.fn();
         const mockEmitAnnotationUpdateEvent = jest.fn();
         const mockGetAnnotationsMatchPath = jest.fn();
         const mockGetAnnotationsPath = jest.fn();
@@ -39,6 +42,9 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             state: annotatorState,
             emitActiveAnnotationChangeEvent: mockEmitActiveAnnotationChangeEvent,
             emitAnnotationRemoveEvent: mockEmitAnnotationRemoveEvent,
+            emitAnnotationReplyCreateEvent: mockEmitAnnotationReplyCreateEvent,
+            emitAnnotationReplyDeleteEvent: mockEmitAnnotationReplyDeleteEvent,
+            emitAnnotationReplyUpdateEvent: mockMmitAnnotationReplyUpdateEvent,
             emitAnnotationUpdateEvent: mockEmitAnnotationUpdateEvent,
             getAnnotationsMatchPath: mockGetAnnotationsMatchPath,
             getAnnotationsPath: mockGetAnnotationsPath,
@@ -55,6 +61,9 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
         });
         expect(props.emitActiveAnnotationChangeEvent).toEqual(mockEmitActiveAnnotationChangeEvent);
         expect(props.emitAnnotationRemoveEvent).toEqual(mockEmitAnnotationRemoveEvent);
+        expect(props.emitAnnotationReplyCreateEvent).toEqual(mockEmitAnnotationReplyCreateEvent);
+        expect(props.emitAnnotationReplyDeleteEvent).toEqual(mockEmitAnnotationReplyDeleteEvent);
+        expect(props.emitAnnotationReplyUpdateEvent).toEqual(mockMmitAnnotationReplyUpdateEvent);
         expect(props.emitAnnotationUpdateEvent).toEqual(mockEmitAnnotationUpdateEvent);
         expect(props.getAnnotationsMatchPath).toEqual(mockGetAnnotationsMatchPath);
         expect(props.getAnnotationsPath).toEqual(mockGetAnnotationsPath);

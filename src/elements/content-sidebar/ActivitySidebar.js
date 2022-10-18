@@ -9,6 +9,7 @@ import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
+import uniqueId from 'lodash/uniqueId';
 import { FormattedMessage } from 'react-intl';
 import { type ContextRouter } from 'react-router-dom';
 import ActivityFeed from './activity-feed';
@@ -45,6 +46,7 @@ import type {
     Annotation,
     AnnotationPermission,
     BoxCommentPermission,
+    Comment,
     CommentFeedItemType,
     FocusableFeedItemType,
     FeedItems,
@@ -124,6 +126,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         annotatorState: {},
         emitActiveAnnotationChangeEvent: noop,
         emitAnnotationRemoveEvent: noop,
+        emitAnnotationReplyCreateEvent: noop,
+        emitAnnotationReplyDeleteEvent: noop,
+        emitAnnotationReplyUpdateEvent: noop,
         emitAnnotationUpdateEvent: noop,
         getAnnotationsMatchPath: noop,
         getAnnotationsPath: noop,
@@ -393,19 +398,35 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         parentId: string,
         permissions: BoxCommentPermission,
     }): void => {
-        const { file, api } = this.props;
+        const { api, emitAnnotationReplyDeleteEvent, file } = this.props;
 
+        emitAnnotationReplyDeleteEvent(id, parentId, true);
         api.getFeedAPI(false).deleteReply(
             file,
             id,
             parentId,
             permissions,
-            this.feedSuccessCallback,
+            this.deleteReplySuccessCallback.bind(this, id, parentId),
             this.feedErrorCallback,
         );
 
         // need to load the pending item
         this.fetchFeedItems();
+    };
+
+    /**
+     * Handles a successful deletion of a reply
+     *
+     * @private
+     * @param {string} id - The id of the reply
+     * @param {string} parentId - The id of the reply's parent item
+     * @return {void}
+     */
+    deleteReplySuccessCallback = (id: string, parentId: string) => {
+        const { emitAnnotationReplyDeleteEvent } = this.props;
+
+        this.feedSuccessCallback();
+        emitAnnotationReplyDeleteEvent(id, parentId);
     };
 
     updateComment = (
@@ -479,20 +500,16 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onSuccess: ?Function,
         onError: ?Function,
     ): void => {
-        const { api, file } = this.props;
+        const { api, emitAnnotationReplyUpdateEvent, file } = this.props;
 
+        emitAnnotationReplyUpdateEvent({ id, tagged_message: text }, parentId, true);
         api.getFeedAPI(false).updateReply(
             file,
             id,
             parentId,
             text,
             permissions,
-            () => {
-                this.feedSuccessCallback();
-                if (onSuccess) {
-                    onSuccess();
-                }
-            },
+            this.updateReplySuccessCallback.bind(this, parentId, onSuccess),
             (error, code) => {
                 if (onError) {
                     onError(error, code);
@@ -503,6 +520,25 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         // need to load the pending item
         this.fetchFeedItems();
+    };
+
+    /**
+     * Handles a successful update of a reply
+     *
+     * @private
+     * @param {string} parentId - The id of the reply's parent item
+     * @param {Function} onSuccess - the success callback
+     * @param {Comment} reply - The reply comment object
+     * @return {void}
+     */
+    updateReplySuccessCallback = (parentId: string, onSuccess: ?Function, reply: Comment) => {
+        const { emitAnnotationReplyUpdateEvent } = this.props;
+
+        this.feedSuccessCallback();
+        emitAnnotationReplyUpdateEvent(reply, parentId);
+        if (onSuccess) {
+            onSuccess();
+        }
     };
 
     /**
@@ -556,24 +592,42 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     createReply = (parentId: string, parentType: CommentFeedItemType, text: string): void => {
-        const { api, currentUser, file } = this.props;
+        const { api, currentUser, emitAnnotationReplyCreateEvent, file } = this.props;
 
         if (!currentUser) {
             throw getBadUserError();
         }
 
+        const eventRequestId = uniqueId('comment_');
+        emitAnnotationReplyCreateEvent({ tagged_message: text }, eventRequestId, parentId, true);
         api.getFeedAPI(false).createReply(
             file,
             currentUser,
             parentId,
             parentType,
             text,
-            this.feedSuccessCallback,
+            this.createReplySuccessCallback.bind(this, eventRequestId, parentId),
             this.feedErrorCallback,
         );
 
         // need to load the pending item
         this.fetchFeedItems();
+    };
+
+    /**
+     * Handles a successful creation of a reply
+     *
+     * @private
+     * @param {string} eventRequestId - The id of the parent item
+     * @param {string} parentId - The id of the reply's parent item
+     * @param {Comment} reply - The reply comment object
+     * @return {void}
+     */
+    createReplySuccessCallback = (eventRequestId: string, parentId: string, reply: Comment) => {
+        const { emitAnnotationReplyCreateEvent } = this.props;
+
+        this.feedSuccessCallback();
+        emitAnnotationReplyCreateEvent(reply, eventRequestId, parentId);
     };
 
     /**

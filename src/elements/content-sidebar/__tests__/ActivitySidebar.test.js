@@ -6,6 +6,7 @@ import { filterableActivityFeedItems } from '../fixtures';
 import { FEED_ITEM_TYPE_COMMENT } from '../../../constants';
 
 jest.mock('lodash/debounce', () => jest.fn(i => i));
+jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
 const userError = 'Bad box user!';
 
@@ -213,8 +214,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('deleteReply()', () => {
-        test('should call the deleteReply API', () => {
-            const wrapper = getWrapper();
+        test('should call the deleteReply API and call emitAnnotationReplyDeleteEvent', () => {
+            const mockEmitAnnotationReplyDeleteEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationReplyDeleteEvent: mockEmitAnnotationReplyDeleteEvent });
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
 
@@ -234,6 +236,23 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect.any(Function),
             );
             expect(instance.fetchFeedItems).toBeCalled();
+            expect(mockEmitAnnotationReplyDeleteEvent).toBeCalledWith(id, parentId, true);
+        });
+    });
+
+    describe('deleteReplySuccessCallback()', () => {
+        test('should call the feedSuccessCallback and emitAnnotationReplyDeleteEvent', () => {
+            const mockEmitAnnotationReplyDeleteEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationReplyDeleteEvent: mockEmitAnnotationReplyDeleteEvent });
+            const instance = wrapper.instance();
+            instance.feedSuccessCallback = jest.fn();
+
+            const id = '1';
+            const parentId = '123';
+
+            instance.deleteReplySuccessCallback(id, parentId);
+            expect(instance.feedSuccessCallback).toBeCalled();
+            expect(mockEmitAnnotationReplyDeleteEvent).toBeCalledWith(id, parentId);
         });
     });
 
@@ -385,8 +404,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(() => instance.createReply('123', FEED_ITEM_TYPE_COMMENT, 'abc', true)).toThrow(userError);
         });
 
-        test('should call the createReply API and fetch the items', () => {
-            const wrapper = getWrapper();
+        test('should call the createReply API, fetch the items and call emitAnnotationReplyCreateEvent', () => {
+            const mockEmitAnnotationReplyCreateEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationReplyCreateEvent: mockEmitAnnotationReplyCreateEvent });
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
             const parentId = '123';
@@ -407,6 +427,29 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect.any(Function),
             );
             expect(instance.fetchFeedItems).toBeCalled();
+            expect(mockEmitAnnotationReplyCreateEvent).toBeCalledWith(
+                { tagged_message: message },
+                'uniqueId',
+                parentId,
+                true,
+            );
+        });
+    });
+
+    describe('createReplySuccessCallback()', () => {
+        test('should call the feedSuccessCallback and emitAnnotationReplyCreateEvent', () => {
+            const mockEmitAnnotationReplyCreateEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationReplyCreateEvent: mockEmitAnnotationReplyCreateEvent });
+            const instance = wrapper.instance();
+            instance.feedSuccessCallback = jest.fn();
+
+            const reply = { id: '1', status: 'resolved' };
+            const parentId = '123';
+            const eventRequestId = 'comment_123';
+
+            instance.createReplySuccessCallback(eventRequestId, parentId, reply);
+            expect(instance.feedSuccessCallback).toBeCalled();
+            expect(mockEmitAnnotationReplyCreateEvent).toBeCalledWith(reply, eventRequestId, parentId);
         });
     });
 
@@ -467,8 +510,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('updateReply()', () => {
-        test('should call updateReply API', () => {
-            const wrapper = getWrapper();
+        test('should call updateReply API and call emitAnnotationReplyUpdateEvent', () => {
+            const mockEmitAnnotationReplyUpdateEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationReplyUpdateEvent: mockEmitAnnotationReplyUpdateEvent });
             const instance = wrapper.instance();
             const parentId = '123';
             const text = 'abc';
@@ -490,6 +534,29 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect.any(Function),
             );
             expect(instance.fetchFeedItems).toBeCalled();
+            expect(mockEmitAnnotationReplyUpdateEvent).toBeCalledWith(
+                { id: reply.id, tagged_message: text },
+                parentId,
+                true,
+            );
+        });
+    });
+
+    describe('updateReplySuccessCallback()', () => {
+        test('should call the feedSuccessCallback and emitAnnotationReplyUpdateEvent', () => {
+            const mockEmitAnnotationReplyUpdateEvent = jest.fn();
+            const wrapper = getWrapper({ emitAnnotationReplyUpdateEvent: mockEmitAnnotationReplyUpdateEvent });
+            const instance = wrapper.instance();
+            instance.feedSuccessCallback = jest.fn();
+
+            const onSuccess = jest.fn();
+            const reply = { id: '1', status: 'resolved' };
+            const parentId = '123';
+
+            instance.updateReplySuccessCallback(parentId, onSuccess, reply);
+            expect(instance.feedSuccessCallback).toBeCalled();
+            expect(mockEmitAnnotationReplyUpdateEvent).toBeCalledWith(reply, parentId);
+            expect(onSuccess).toBeCalled();
         });
     });
 

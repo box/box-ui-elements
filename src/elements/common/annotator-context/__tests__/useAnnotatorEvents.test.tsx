@@ -28,6 +28,80 @@ describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
         return renderHook(() => useAnnotatorEvents({ ...props, eventEmitter: mockEventEmitter }));
     };
 
+    test('should remove all listeneres on cleanup', () => {
+        const mockOnSidebarAnnotationSelected = jest.fn();
+        const mockOnAnnotationDeleteEnd = jest.fn();
+        const mockOnAnnotationDeleteStart = jest.fn();
+        const mockOnAnnotationUpdateEnd = jest.fn();
+        const mockOnAnnotationUpdateStart = jest.fn();
+        const mockOnAnnotationReplyAddEnd = jest.fn();
+        const mockOnAnnotationReplyAddStart = jest.fn();
+        const mockOnAnnotationReplyDeleteEnd = jest.fn();
+        const mockOnAnnotationReplyDeleteStart = jest.fn();
+        const mockOnAnnotationReplyUpdateEnd = jest.fn();
+        const mockOnAnnotationReplyUpdateStart = jest.fn();
+
+        const { unmount } = getHook({
+            onSidebarAnnotationSelected: mockOnSidebarAnnotationSelected,
+            onAnnotationDeleteEnd: mockOnAnnotationDeleteEnd,
+            onAnnotationDeleteStart: mockOnAnnotationDeleteStart,
+            onAnnotationUpdateEnd: mockOnAnnotationUpdateEnd,
+            onAnnotationUpdateStart: mockOnAnnotationUpdateStart,
+            onAnnotationReplyAddEnd: mockOnAnnotationReplyAddEnd,
+            onAnnotationReplyAddStart: mockOnAnnotationReplyAddStart,
+            onAnnotationReplyDeleteEnd: mockOnAnnotationReplyDeleteEnd,
+            onAnnotationReplyDeleteStart: mockOnAnnotationReplyDeleteStart,
+            onAnnotationReplyUpdateEnd: mockOnAnnotationReplyUpdateEnd,
+            onAnnotationReplyUpdateStart: mockOnAnnotationReplyUpdateStart,
+        });
+
+        unmount();
+
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(
+            1,
+            'annotations_active_set',
+            mockOnSidebarAnnotationSelected,
+        );
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(2, 'annotations_remove', mockOnAnnotationDeleteEnd);
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(3, 'annotations_remove_start', mockOnAnnotationDeleteStart);
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(4, 'sidebar.annotations_update', mockOnAnnotationUpdateEnd);
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(
+            5,
+            'sidebar.annotations_update_start',
+            mockOnAnnotationUpdateStart,
+        );
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(
+            6,
+            'sidebar.annotations_reply_create',
+            mockOnAnnotationReplyAddEnd,
+        );
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(
+            7,
+            'sidebar.annotations_reply_create_start',
+            mockOnAnnotationReplyAddStart,
+        );
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(
+            8,
+            'sidebar.annotations_reply_delete',
+            mockOnAnnotationReplyDeleteEnd,
+        );
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(
+            9,
+            'sidebar.annotations_reply_delete_start',
+            mockOnAnnotationReplyDeleteStart,
+        );
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(
+            10,
+            'sidebar.annotations_reply_update',
+            mockOnAnnotationReplyUpdateEnd,
+        );
+        expect(mockRemoveListener).toHaveBeenNthCalledWith(
+            11,
+            'sidebar.annotations_reply_update_start',
+            mockOnAnnotationReplyUpdateStart,
+        );
+    });
+
     test('should call onAnnotationDeleteStart when proper event is emitted', () => {
         const mockAnnotationDeleteStart = jest.fn();
         const mockAnnotationId = '123';
@@ -78,6 +152,94 @@ describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
         getHook({ onAnnotationUpdateEnd: mockAnnotationUpdateEnd });
         expect(mockAddListener).toBeCalledWith('sidebar.annotations_update', mockAnnotationUpdateEnd);
         expect(mockAnnotationUpdateEnd).toBeCalledWith(mockAnnotation);
+    });
+
+    test('should call onAnnotationReplyAddStart when proper event is emitted', () => {
+        const mockAnnotationReplyAddStart = jest.fn();
+        const mockEventData = { annotationId: '123', reply: { tagged_message: 'abc' }, requestId: 'comment_456' };
+        mockAddListener.mockImplementation((event: string, callback: (eventData: Object) => void) => {
+            if (event === 'sidebar.annotations_reply_create_start') {
+                callback(mockEventData);
+            }
+        });
+        getHook({ onAnnotationReplyAddStart: mockAnnotationReplyAddStart });
+        expect(mockAddListener).toBeCalledWith('sidebar.annotations_reply_create_start', mockAnnotationReplyAddStart);
+        expect(mockAnnotationReplyAddStart).toBeCalledWith(mockEventData);
+    });
+
+    test('should call onAnnotationReplyAddEnd when proper event is emitted', () => {
+        const mockAnnotationReplyAddEnd = jest.fn();
+        const mockEventData = {
+            annotationId: '123',
+            reply: { id: '456', tagged_message: 'abc' },
+            requestId: 'comment_456',
+        };
+        mockAddListener.mockImplementation((event: string, callback: (eventData: Object) => void) => {
+            if (event === 'sidebar.annotations_reply_create') {
+                callback(mockEventData);
+            }
+        });
+        getHook({ onAnnotationReplyAddEnd: mockAnnotationReplyAddEnd });
+        expect(mockAddListener).toBeCalledWith('sidebar.annotations_reply_create', mockAnnotationReplyAddEnd);
+        expect(mockAnnotationReplyAddEnd).toBeCalledWith(mockEventData);
+    });
+
+    test('should call onAnnotationReplyDeleteStart when proper event is emitted', () => {
+        const mockAnnotationReplyDeleteStart = jest.fn();
+        const mockEventData = { annotationId: '123', id: '456' };
+        mockAddListener.mockImplementation((event: string, callback: (eventData: Object) => void) => {
+            if (event === 'sidebar.annotations_reply_delete_start') {
+                callback(mockEventData);
+            }
+        });
+        getHook({ onAnnotationReplyDeleteStart: mockAnnotationReplyDeleteStart });
+        expect(mockAddListener).toBeCalledWith(
+            'sidebar.annotations_reply_delete_start',
+            mockAnnotationReplyDeleteStart,
+        );
+        expect(mockAnnotationReplyDeleteStart).toBeCalledWith(mockEventData);
+    });
+
+    test('should call onAnnotationReplyDeleteEnd when proper event is emitted', () => {
+        const mockAnnotationReplyDeleteEnd = jest.fn();
+        const mockEventData = { annotationId: '123', id: '456' };
+        mockAddListener.mockImplementation((event: string, callback: (eventData: Object) => void) => {
+            if (event === 'sidebar.annotations_reply_delete') {
+                callback(mockEventData);
+            }
+        });
+        getHook({ onAnnotationReplyDeleteEnd: mockAnnotationReplyDeleteEnd });
+        expect(mockAddListener).toBeCalledWith('sidebar.annotations_reply_delete', mockAnnotationReplyDeleteEnd);
+        expect(mockAnnotationReplyDeleteEnd).toBeCalledWith(mockEventData);
+    });
+
+    test('should call onAnnotationReplyUpdateStart when proper event is emitted', () => {
+        const mockAnnotationReplyUpdateStart = jest.fn();
+        const mockEventData = { annotationId: '123', reply: { id: '123', tagged_message: 'abc' } };
+        mockAddListener.mockImplementation((event: string, callback: (eventData: Object) => void) => {
+            if (event === 'sidebar.annotations_reply_update_start') {
+                callback(mockEventData);
+            }
+        });
+        getHook({ onAnnotationReplyUpdateStart: mockAnnotationReplyUpdateStart });
+        expect(mockAddListener).toBeCalledWith(
+            'sidebar.annotations_reply_update_start',
+            mockAnnotationReplyUpdateStart,
+        );
+        expect(mockAnnotationReplyUpdateStart).toBeCalledWith(mockEventData);
+    });
+
+    test('should call onAnnotationReplyUpdateEnd when proper event is emitted', () => {
+        const mockAnnotationReplyUpdateEnd = jest.fn();
+        const mockEventData = { annotationId: '123', reply: { id: '123', tagged_message: 'abc' } };
+        mockAddListener.mockImplementation((event: string, callback: (eventData: Object) => void) => {
+            if (event === 'sidebar.annotations_reply_update') {
+                callback(mockEventData);
+            }
+        });
+        getHook({ onAnnotationReplyUpdateEnd: mockAnnotationReplyUpdateEnd });
+        expect(mockAddListener).toBeCalledWith('sidebar.annotations_reply_update', mockAnnotationReplyUpdateEnd);
+        expect(mockAnnotationReplyUpdateEnd).toBeCalledWith(mockEventData);
     });
 
     test('should call onSidebarAnnotationSelected when proper event is emitted', () => {
@@ -229,35 +391,119 @@ describe('src/elements/common/annotator-context/useAnnotatorEvents', () => {
         expect(mockEmit).toBeCalledWith('annotations_update', expectedAnnotationActionEvent);
     });
 
-    test('should remove all listeneres on cleanup', () => {
-        const mockOnSidebarAnnotationSelected = jest.fn();
-        const mockOnAnnotationDeleteEnd = jest.fn();
-        const mockOnAnnotationDeleteStart = jest.fn();
-        const mockOnAnnotationUpdateEnd = jest.fn();
-        const mockOnAnnotationUpdateStart = jest.fn();
+    test('should emit annotation reply create start event', () => {
+        const annotationId = '123';
+        const reply = { tagged_message: 'abc' };
+        const requestId = 'comment_456';
 
-        const { unmount } = getHook({
-            onSidebarAnnotationSelected: mockOnSidebarAnnotationSelected,
-            onAnnotationDeleteEnd: mockOnAnnotationDeleteEnd,
-            onAnnotationDeleteStart: mockOnAnnotationDeleteStart,
-            onAnnotationUpdateEnd: mockOnAnnotationUpdateEnd,
-            onAnnotationUpdateStart: mockOnAnnotationUpdateStart,
+        const { result } = getHook();
+
+        act(() => {
+            result.current.emitAddAnnotationReplyStartEvent(reply, annotationId, requestId);
         });
 
-        unmount();
+        const expectedAnnotationActionEvent = {
+            annotation: { id: annotationId },
+            annotationReply: reply,
+            meta: { status: Status.PENDING, requestId },
+        };
 
-        expect(mockRemoveListener).toHaveBeenNthCalledWith(
-            1,
-            'annotations_active_set',
-            mockOnSidebarAnnotationSelected,
-        );
-        expect(mockRemoveListener).toHaveBeenNthCalledWith(2, 'annotations_remove', mockOnAnnotationDeleteEnd);
-        expect(mockRemoveListener).toHaveBeenNthCalledWith(3, 'annotations_remove_start', mockOnAnnotationDeleteStart);
-        expect(mockRemoveListener).toHaveBeenNthCalledWith(4, 'sidebar.annotations_update', mockOnAnnotationUpdateEnd);
-        expect(mockRemoveListener).toHaveBeenNthCalledWith(
-            5,
-            'sidebar.annotations_update_start',
-            mockOnAnnotationUpdateStart,
-        );
+        expect(mockEmit).toBeCalledWith('annotations_reply_create', expectedAnnotationActionEvent);
+    });
+
+    test('should emit annotation reply create end event', () => {
+        const annotationId = '123';
+        const reply = { id: '456', tagged_message: 'abc' };
+        const requestId = 'comment_456';
+
+        const { result } = getHook();
+
+        act(() => {
+            result.current.emitAddAnnotationReplyEndEvent(reply, annotationId, requestId);
+        });
+
+        const expectedAnnotationActionEvent = {
+            annotation: { id: annotationId },
+            annotationReply: reply,
+            meta: { status: Status.SUCCESS, requestId },
+        };
+
+        expect(mockEmit).toBeCalledWith('annotations_reply_create', expectedAnnotationActionEvent);
+    });
+
+    test('should emit annotation reply delete start event', () => {
+        const annotationId = '123';
+        const replyId = '456';
+
+        const { result } = getHook();
+
+        act(() => {
+            result.current.emitDeleteAnnotationReplyStartEvent(replyId, annotationId);
+        });
+
+        const expectedAnnotationActionEvent = {
+            annotation: { id: annotationId },
+            annotationReply: { id: replyId },
+            meta: { status: Status.PENDING },
+        };
+
+        expect(mockEmit).toBeCalledWith('annotations_reply_delete', expectedAnnotationActionEvent);
+    });
+
+    test('should emit annotation reply delete end event', () => {
+        const annotationId = '123';
+        const replyId = '456';
+
+        const { result } = getHook();
+
+        act(() => {
+            result.current.emitDeleteAnnotationReplyEndEvent(replyId, annotationId);
+        });
+
+        const expectedAnnotationActionEvent = {
+            annotation: { id: annotationId },
+            annotationReply: { id: replyId },
+            meta: { status: Status.SUCCESS },
+        };
+
+        expect(mockEmit).toBeCalledWith('annotations_reply_delete', expectedAnnotationActionEvent);
+    });
+
+    test('should emit annotation reply update start event', () => {
+        const annotationId = '123';
+        const reply = { id: '456', tagged_message: 'abc' };
+
+        const { result } = getHook();
+
+        act(() => {
+            result.current.emitUpdateAnnotationReplyStartEvent(reply, annotationId);
+        });
+
+        const expectedAnnotationActionEvent = {
+            annotation: { id: annotationId },
+            annotationReply: reply,
+            meta: { status: Status.PENDING },
+        };
+
+        expect(mockEmit).toBeCalledWith('annotations_reply_update', expectedAnnotationActionEvent);
+    });
+
+    test('should emit annotation reply update end event', () => {
+        const annotationId = '123';
+        const reply = { id: '456', tagged_message: 'abc' };
+
+        const { result } = getHook();
+
+        act(() => {
+            result.current.emitUpdateAnnotationReplyEndEvent(reply, annotationId);
+        });
+
+        const expectedAnnotationActionEvent = {
+            annotation: { id: annotationId },
+            annotationReply: reply,
+            meta: { status: Status.SUCCESS },
+        };
+
+        expect(mockEmit).toBeCalledWith('annotations_reply_update', expectedAnnotationActionEvent);
     });
 });

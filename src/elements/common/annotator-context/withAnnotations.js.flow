@@ -27,6 +27,22 @@ export type ActiveChangeEventHandler = (event: ActiveChangeEvent) => void;
 export type ComponentWithAnnotations = {
     emitActiveAnnotationChangeEvent: (id: string | null) => void,
     emitAnnotationRemoveEvent: (id: string, isStartEvent?: boolean) => void,
+    emitAnnotationReplyCreateEvent: (
+        reply: Object,
+        requestId: string,
+        annotationId: string,
+        isStartEvent?: boolean
+    ) => void,
+    emitAnnotationReplyDeleteEvent: (
+        id: string,
+        annotationId: string,
+        isStartEvent?: boolean
+    ) => void,
+    emitAnnotationReplyUpdateEvent: (
+        reply: Object,
+        annotationId: string,
+        isStartEvent?: boolean
+    ) => void,
     emitAnnotationUpdateEvent: (
         annotation: Object,
         isStartEvent?: boolean
@@ -45,6 +61,9 @@ export type ComponentWithAnnotations = {
         error: Error,
         ...
     }) => void,
+    handleAnnotationReplyCreate: (eventData: AnnotationActionEvent) => void,
+    handleAnnotationReplyDelete: (eventData: AnnotationActionEvent) => void,
+    handleAnnotationReplyUpdate: (eventData: AnnotationActionEvent) => void,
     handleAnnotationUpdate: (eventData: AnnotationActionEvent) => void,
     handleAnnotator: (annotator: Annotator) => void,
     handlePreviewDestroy: (shouldReset?: boolean) => void,
