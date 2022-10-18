@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import ToggleMoreLessButton from './ToggleMoreLessButton';
+import CollapsableMessageToggle from './CollapsableMessageToggle';
 import './ActivityMessage.scss';
 
 type Props = {
@@ -32,7 +32,10 @@ export default function CollapsableMessage({ children }: Props) {
             </div>
 
             {shouldCollapse && (
-                <ToggleMoreLessButton isMore={isCollapsed} onClick={() => setIsCollapsed(prevState => !prevState)} />
+                <CollapsableMessageToggle
+                    isMore={isCollapsed}
+                    onClick={() => setIsCollapsed(prevState => !prevState)}
+                />
             )}
         </>
     );

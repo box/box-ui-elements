@@ -15,10 +15,10 @@ type Props = {
     onClick: () => void,
 };
 
-const ToggleMoreLessButton = ({ isMore, onClick }: Props): React.Node => (
+const CollapsableMessageToggle = ({ isMore, onClick }: Props): React.Node => (
     <PlainButton className="bcs-ActivityMessage-toggleMoreLess" onClick={onClick} type="button">
         <FormattedMessage {...(isMore ? messages.activityMessageSeeMore : messages.activityMessageSeeLess)} />
     </PlainButton>
 );
 
-export default ToggleMoreLessButton;
+export default CollapsableMessageToggle;
