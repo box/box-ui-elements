@@ -117,7 +117,6 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       <div>
         <ForwardRef(withFeatureConsumer(ActivityMessage))
           id="123125"
-          isEdited={false}
           tagged_message="This is where we tell each other what we need to do"
           translationFailed={null}
         />

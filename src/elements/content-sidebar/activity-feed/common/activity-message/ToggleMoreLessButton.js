@@ -12,7 +12,7 @@ import messages from './messages';
 
 type Props = {
     isMore: boolean,
-    onClick: Function,
+    onClick: () => void,
 };
 
 const ToggleMoreLessButton = ({ isMore, onClick }: Props): React.Node => (
