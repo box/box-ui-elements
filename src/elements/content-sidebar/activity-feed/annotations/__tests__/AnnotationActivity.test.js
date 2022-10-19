@@ -139,6 +139,13 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         });
     });
 
+    test('should show AnnotationActivityLink if hasVersions is true', () => {
+        const wrapper = getWrapper({ hasVersions: true });
+        expect(wrapper.find('AnnotationActivityLink').props()).toMatchObject({
+            shouldHideLink: false,
+        });
+    });
+
     test('should not show actions menu when annotation activity is pending', () => {
         const item = {
             ...mockAnnotation,

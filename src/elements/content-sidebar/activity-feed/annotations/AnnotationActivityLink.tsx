@@ -20,7 +20,7 @@ export interface AnnotationActivityLinkProps extends WrappedComponentProps {
     shouldHideLink: boolean;
 }
 
-const AnnotationActivityLink = ({
+const AnnotationActivityLink: React.FC<AnnotationActivityLinkProps> = ({
     className,
     id,
     fileVersion,
@@ -30,20 +30,22 @@ const AnnotationActivityLink = ({
     onClick = noop,
     shouldHideLink,
     ...rest
-}: AnnotationActivityLinkProps): JSX.Element | null => {
+}: AnnotationActivityLinkProps) => {
     if (shouldHideLink) {
         return null;
     }
 
-    const isFileVersionUnavailable = fileVersion == null;
+    const getMessage = (): MessageDescriptorWithValues => {
+        const linkMessage = isCurrentVersion
+            ? messages.annotationActivityPageItem
+            : messages.annotationActivityVersionLink;
+        const linkValue = isCurrentVersion ? locationValue : fileVersion;
+        return !fileVersion
+            ? messages.annotationActivityVersionUnavailable
+            : { ...linkMessage, values: { number: linkValue } };
+    };
 
-    const linkMessage = isCurrentVersion ? messages.annotationActivityPageItem : messages.annotationActivityVersionLink;
-    const linkValue = isCurrentVersion ? locationValue : fileVersion;
-    const message: MessageDescriptorWithValues = isFileVersionUnavailable
-        ? messages.annotationActivityVersionUnavailable
-        : { ...linkMessage, values: { number: linkValue } };
-
-    const { values, ...messageDescriptor } = message;
+    const { values, ...messageDescriptor } = getMessage();
     const translatedMessage = intl.formatMessage(messageDescriptor, values);
 
     const handleClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
@@ -55,7 +57,7 @@ const AnnotationActivityLink = ({
     };
 
     const handleMouseDown = (event: React.MouseEvent<HTMLButtonElement>) => {
-        if (isFileVersionUnavailable) {
+        if (!fileVersion) {
             return;
         }
 
@@ -69,7 +71,7 @@ const AnnotationActivityLink = ({
         <PlainButton
             className={classNames('bcs-AnnotationActivityLink', className)}
             data-testid="bcs-AnnotationActivity-link"
-            isDisabled={isFileVersionUnavailable}
+            isDisabled={!fileVersion}
             onClick={handleClick}
             onMouseDown={handleMouseDown}
             title={translatedMessage}
