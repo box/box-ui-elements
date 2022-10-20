@@ -221,10 +221,11 @@ class Feed extends Base {
             permissions,
             feedItemChanges,
             // Do not update replies and total_reply_count props as their current values are not included in the response
-            ({ replies, total_reply_count, ...annotation }: Annotation) => {
+            (annotation: Annotation) => {
+                const { replies, total_reply_count, ...annotationBase } = annotation;
                 this.updateFeedItem(
                     {
-                        ...annotation,
+                        ...annotationBase,
                         isPending: false,
                     },
                     annotationId,
@@ -1895,10 +1896,11 @@ class Feed extends Base {
             message: text,
             status,
             // Do not update replies and total_reply_count props as their current values are not included in the response
-            successCallback: ({ replies, total_reply_count, ...comment }: Comment) => {
+            successCallback: (comment: Comment) => {
+                const { replies, total_reply_count, ...commentBase } = comment;
                 this.updateFeedItem(
                     {
-                        ...comment,
+                        ...commentBase,
                         isPending: false,
                     },
                     commentId,
@@ -1984,7 +1986,7 @@ class Feed extends Base {
         const { items: feedItems = [] } = this.getCachedItems(this.file.id) || {};
         const feedItem = feedItems.find(({ id: itemId }) => itemId === id);
 
-        if (!feedItem) {
+        if (!feedItem || (feedItem.type !== 'annotation' && feedItem.type !== 'comment')) {
             return;
         }
 
