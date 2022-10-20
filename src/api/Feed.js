@@ -220,11 +220,11 @@ class Feed extends Base {
             annotationId,
             permissions,
             feedItemChanges,
-            // Do not update replies and total_reply_count props as their current values are not included in the response
             (annotation: Annotation) => {
                 const { replies, total_reply_count, ...annotationBase } = annotation;
                 this.updateFeedItem(
                     {
+                        // Do not update replies and total_reply_count props as their current values are not included in the response
                         ...annotationBase,
                         isPending: false,
                     },
@@ -1895,11 +1895,11 @@ class Feed extends Base {
             permissions,
             message: text,
             status,
-            // Do not update replies and total_reply_count props as their current values are not included in the response
             successCallback: (comment: Comment) => {
                 const { replies, total_reply_count, ...commentBase } = comment;
                 this.updateFeedItem(
                     {
+                        // Do not update replies and total_reply_count props as their current values are not included in the response
                         ...commentBase,
                         isPending: false,
                     },
