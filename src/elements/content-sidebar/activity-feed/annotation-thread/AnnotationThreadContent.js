@@ -1,12 +1,12 @@
 // @flow
 import React from 'react';
 import type EventEmitter from 'events';
+import useAnnotationThread from './useAnnotationThread';
 import ActivityError from '../common/activity-error';
 import ActivityThread from '../activity-feed/ActivityThread';
 import AnnotationActivity from '../annotations';
 import API from '../../../../api/APIFactory';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
-import useAnnotationAPI from './useAnnotationAPI';
 
 import type { BoxItem, SelectorItems, User } from '../../../../common/types/core';
 import type { ErrorContextProps } from '../../../../common/types/api';
@@ -43,13 +43,9 @@ const AnnotationThreadContent = ({
         replies,
         isLoading,
         error,
-        handleEdit,
-        handleStatusChange,
-        handleDelete,
-        handleCreateReply,
-        handleDeleteReply,
-        handleEditReply,
-    } = useAnnotationAPI({
+        annotationActions: { handleAnnotationStatusChange, handleAnnotationDelete, handleAnnotationEdit },
+        repliesActions: { handleReplyEdit, handleReplyCreate, handleReplyDelete },
+    } = useAnnotationThread({
         api,
         annotationId,
         currentUser,
@@ -66,7 +62,7 @@ const AnnotationThreadContent = ({
         hasMention?: boolean,
         replyPermissions: BoxCommentPermission,
     ) => {
-        handleEditReply(id, text, status, replyPermissions);
+        handleReplyEdit(id, text, status, replyPermissions);
     };
 
     return (
@@ -77,8 +73,8 @@ const AnnotationThreadContent = ({
             isAlwaysExpanded
             isRepliesLoading={isLoading}
             mentionSelectorContacts={mentionSelectorContacts}
-            onReplyCreate={handleCreateReply}
-            onReplyDelete={handleDeleteReply}
+            onReplyCreate={handleReplyCreate}
+            onReplyDelete={handleReplyDelete}
             onReplyEdit={onReplyEditHandler}
             replies={replies}
             repliesTotalCount={replies.length}
@@ -97,9 +93,9 @@ const AnnotationThreadContent = ({
                     item={annotation}
                     getMentionWithQuery={getMentionWithQuery}
                     mentionSelectorContacts={mentionSelectorContacts}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                    onStatusChange={handleStatusChange}
+                    onEdit={handleAnnotationEdit}
+                    onDelete={handleAnnotationDelete}
+                    onStatusChange={handleAnnotationStatusChange}
                 />
             )}
         </ActivityThread>
