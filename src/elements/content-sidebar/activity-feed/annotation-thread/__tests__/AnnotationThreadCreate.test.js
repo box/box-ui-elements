@@ -4,7 +4,9 @@ import { render, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import AnnotationThreadCreate from '../AnnotationThreadCreate';
 import { annotation } from '../../../../../__mocks__/annotations';
+import useAnnotatorEvents from '../../../../common/annotator-context/useAnnotatorEvents';
 
+jest.mock('lodash/uniqueId', () => prefix => `${prefix}42`);
 jest.mock('react-intl', () => jest.requireActual('react-intl'));
 jest.mock('../../comment-form', () => props => {
     return (
@@ -22,12 +24,22 @@ jest.mock('../../comment-form', () => props => {
         </div>
     );
 });
+jest.mock('../../../../common/annotator-context/useAnnotatorEvents', () => {
+    const mockedEmitAddAnnotationStartEvent = jest.fn();
+    const mockedEmitAddAnnotationEndEvent = jest.fn();
+
+    return jest.fn(() => ({
+        emitAddAnnotationStartEvent: mockedEmitAddAnnotationStartEvent,
+        emitAddAnnotationEndEvent: mockedEmitAddAnnotationEndEvent,
+    }));
+});
 
 describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThreadCreate', () => {
     const mockHandleCancel = jest.fn();
     const mockOnAnnotationCreate = jest.fn();
     const mockOnError = jest.fn();
     let mockCreateAnnotation = jest.fn();
+    const mockEventEmitter = {};
 
     const getDefaultProps = () => ({
         api: {
@@ -36,6 +48,7 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
             }),
         },
         currentUser: { id: 'user_id' },
+        eventEmitter: mockEventEmitter,
         file: {
             id: 'file_id',
             file_version: { id: 'file_version' },
@@ -55,7 +68,8 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
     const IntlWrapper = ({ children }: { children?: React.ReactNode }) => {
         return <IntlProvider locale="en">{children}</IntlProvider>;
     };
-    const getWrapper = () => render(<AnnotationThreadCreate {...getDefaultProps()} />, { wrapper: IntlWrapper });
+    const getWrapper = (props = getDefaultProps()) =>
+        render(<AnnotationThreadCreate {...props} />, { wrapper: IntlWrapper });
 
     test('Should render correctly', () => {
         const { container, getByText } = getWrapper();
@@ -91,6 +105,24 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
         );
 
         expect(getByTestId('annotation-create')).toHaveClass('is-pending');
+    });
+
+    test('should use annotatorEvents on annotation add', () => {
+        mockCreateAnnotation = jest.fn((fileId, fileVersionId, payload, filePermissions, successCallback) => {
+            successCallback(annotation);
+        });
+        const props = getDefaultProps();
+        const { getByText } = getWrapper(props);
+        const { eventEmitter } = props;
+
+        fireEvent.click(getByText('Post'));
+
+        expect(useAnnotatorEvents).toHaveBeenCalledWith({ eventEmitter });
+        expect(useAnnotatorEvents().emitAddAnnotationStartEvent).toHaveBeenCalledWith(
+            { text: 'example message' },
+            'annotation_42',
+        );
+        expect(useAnnotatorEvents().emitAddAnnotationEndEvent).toHaveBeenCalledWith(annotation, 'annotation_42');
     });
 
     test('Should call handleCancel on cancel', () => {

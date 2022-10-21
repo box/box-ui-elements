@@ -1,9 +1,14 @@
 // @flow
 import React from 'react';
 import classNames from 'classnames';
+import uniqueId from 'lodash/uniqueId';
+
+import type EventEmitter from 'events';
+
 import API from '../../../../api/APIFactory';
 import CommentForm from '../comment-form';
 import { getBadUserError } from '../../../../utils/error';
+import useAnnotatorEvents from '../../../common/annotator-context/useAnnotatorEvents';
 
 import type { Annotation, Target } from '../../../../common/types/annotations';
 import type { BoxItem, SelectorItems, User } from '../../../../common/types/core';
@@ -14,6 +19,7 @@ import './AnnotationThreadCreate.scss';
 type Props = {
     api: API,
     currentUser: User,
+    eventEmitter: EventEmitter,
     file: BoxItem,
     getAvatarUrl: string => Promise<?string>,
     getMentionWithQuery: (searchStr: string) => void,
@@ -28,6 +34,7 @@ const AnnotationThreadCreate = ({
     currentUser,
     getAvatarUrl,
     getMentionWithQuery,
+    eventEmitter,
     file,
     handleCancel,
     mentionSelectorContacts,
@@ -36,16 +43,21 @@ const AnnotationThreadCreate = ({
     target,
 }: Props) => {
     const [isPending, setIsPending] = React.useState(false);
+    const events = useAnnotatorEvents({ eventEmitter });
 
     const handleCreate = (text: string): void => {
         const { id, permissions = {}, file_version = {} } = file;
+        const requestId = uniqueId('annotation_');
         setIsPending(true);
+        events.emitAddAnnotationStartEvent({ text }, requestId);
+
         if (!currentUser) {
             throw getBadUserError();
         }
 
         const successCallback = (annotation: Annotation) => {
             onAnnotationCreate(annotation);
+            events.emitAddAnnotationEndEvent(annotation, requestId);
         };
 
         const payload = {

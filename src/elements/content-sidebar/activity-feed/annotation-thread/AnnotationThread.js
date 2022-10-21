@@ -89,6 +89,7 @@ const AnnotationThread = ({
                     <AnnotationThreadCreate
                         api={api}
                         currentUser={currentUser}
+                        eventEmitter={eventEmitter}
                         file={file}
                         getAvatarUrl={getAvatarUrl}
                         getMentionWithQuery={getMentionWithQuery}
