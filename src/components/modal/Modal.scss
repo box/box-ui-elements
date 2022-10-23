@@ -141,6 +141,10 @@
         $responsive-modal-header-height: 64px;
         $responsive-modal-actions-height: 60px;
 
+        .modal-title {
+            @include line-clamp(2);
+        }
+
         .modal {
             flex-direction: column;
             padding: 0;

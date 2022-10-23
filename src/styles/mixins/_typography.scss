@@ -42,3 +42,30 @@
     line-height: $bdl-line-height;
     letter-spacing: .3px;
 }
+
+@mixin target-ie11 {
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+        @content;
+    }
+}
+
+@mixin line-clamp($max-lines: 2, $line-height: 1.5) {
+    display: -webkit-box; /* stylelint-disable-line value-no-vendor-prefix */
+    overflow: hidden;
+    line-height: $line-height;
+    white-space: normal;
+    overflow-wrap: break-word;
+
+    /* autoprefixer: ignore next */
+    -webkit-box-orient: vertical; /* stylelint-disable-line property-no-vendor-prefix */
+
+    /* autoprefixer: ignore next */
+    -webkit-line-clamp: $max-lines;
+
+    // On IE11 we truncate to a single line since line-clamp
+    // is not supported
+    @include target-ie11 {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
