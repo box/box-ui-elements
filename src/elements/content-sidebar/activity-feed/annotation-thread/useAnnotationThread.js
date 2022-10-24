@@ -65,6 +65,7 @@ type UseAnnotationThread = {
             replyId: string,
             message: string,
             status?: FeedItemStatus,
+            hasMention?: boolean,
             permissions: BoxCommentPermission,
         ) => void,
     },
@@ -84,13 +85,7 @@ const useAnnotationThread = ({
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
     // handling events from Sidebar
-    const onAnnotationDeleteStart = (id: string) => {
-        if (annotation !== undefined && id === annotationId) {
-            setAnnotation(prevAnnotation => ({ ...prevAnnotation, isPending: true }));
-        }
-    };
-
-    const onAnnotationUpdateStart = (id: string) => {
+    const setAnnotationPending = (id: string) => {
         if (annotation !== undefined && id === annotationId) {
             setAnnotation(prevAnnotation => ({ ...prevAnnotation, isPending: true }));
         }
@@ -103,9 +98,9 @@ const useAnnotationThread = ({
     };
 
     useAnnotatorEvents({
-        onAnnotationDeleteStart,
+        onAnnotationDeleteStart: setAnnotationPending,
         onAnnotationUpdateEnd,
-        onAnnotationUpdateStart,
+        onAnnotationUpdateStart: setAnnotationPending,
     });
 
     const handleUpdateOrCreateReplyItem = (replyId: string, updatedReplyValues: Object) => {
@@ -130,8 +125,7 @@ const useAnnotationThread = ({
         setAnnotation(prevAnnotation => ({ ...prevAnnotation, ...updatedValues }));
     };
 
-    const handleFetchAnnotationSuccess = (fetchedAnnotation: Annotation) => {
-        const { replies: fetchedReplies, ...normalizedAnnotation } = fetchedAnnotation;
+    const handleFetchAnnotationSuccess = ({ replies: fetchedReplies, ...normalizedAnnotation }: Annotation) => {
         setAnnotation({ ...normalizedAnnotation });
         setReplies(normalizeReplies(fetchedReplies));
         setError(undefined);

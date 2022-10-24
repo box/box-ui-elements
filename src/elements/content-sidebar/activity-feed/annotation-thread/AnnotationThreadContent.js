@@ -10,7 +10,6 @@ import LoadingIndicator from '../../../../components/loading-indicator/LoadingIn
 
 import type { BoxItem, SelectorItems, User } from '../../../../common/types/core';
 import type { ErrorContextProps } from '../../../../common/types/api';
-import type { BoxCommentPermission, FeedItemStatus } from '../../../../common/types/feed';
 
 import './AnnotationThreadContent.scss';
 
@@ -55,16 +54,6 @@ const AnnotationThreadContent = ({
         errorCallback: onError,
     });
 
-    const onReplyEditHandler = (
-        id: string,
-        text: string,
-        status?: FeedItemStatus,
-        hasMention?: boolean,
-        replyPermissions: BoxCommentPermission,
-    ) => {
-        handleReplyEdit(id, text, status, replyPermissions);
-    };
-
     return (
         <ActivityThread
             hasReplies
@@ -75,7 +64,7 @@ const AnnotationThreadContent = ({
             mentionSelectorContacts={mentionSelectorContacts}
             onReplyCreate={handleReplyCreate}
             onReplyDelete={handleReplyDelete}
-            onReplyEdit={onReplyEditHandler}
+            onReplyEdit={handleReplyEdit}
             replies={replies}
             repliesTotalCount={replies.length}
         >

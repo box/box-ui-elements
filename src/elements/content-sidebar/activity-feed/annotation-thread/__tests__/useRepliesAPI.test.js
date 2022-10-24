@@ -63,7 +63,7 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
         const { result } = getHook({ api });
 
         act(() => {
-            result.current.handleReplyEdit(id, message, false, permissions);
+            result.current.handleReplyEdit(id, message, false, undefined, permissions);
         });
 
         expect(mockUpdateComment).toBeCalledWith({

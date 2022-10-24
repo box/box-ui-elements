@@ -99,6 +99,7 @@ const useRepliesAPI = ({
         replyId: string,
         message: string,
         status?: FeedItemStatus,
+        hasMention?: boolean,
         permissions: BoxCommentPermission,
     ) => {
         setReplyPendingStatus(replyId, true);
