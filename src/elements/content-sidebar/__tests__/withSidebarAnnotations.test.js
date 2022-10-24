@@ -32,6 +32,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         deleteAnnotation: jest.fn(),
         deleteFeedItem: jest.fn(),
         deleteReplyItem: jest.fn(),
+        modifyFeedItemRepliesCountBy: jest.fn(),
         updateFeedItem: jest.fn(),
         updateReplyItem: jest.fn(),
     };
@@ -337,7 +338,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
             instance.addAnnotationReply();
 
             const expectedReplyData = { ...annotationReply, isPending: false };
-            expect(feedAPI.updateFeedItem).toBeCalledWith({ total_reply_count: 3 }, annotation.id);
+            expect(feedAPI.modifyFeedItemRepliesCountBy).toBeCalledWith(annotation.id, 1);
             expect(feedAPI.updateReplyItem).toBeCalledWith(expectedReplyData, annotation.id, requestId);
         });
     });
@@ -415,7 +416,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
 
             instance.deleteAnnotationReply();
 
-            expect(feedAPI.updateFeedItem).toBeCalledWith({ total_reply_count: 1 }, annotation.id);
+            expect(feedAPI.modifyFeedItemRepliesCountBy).toBeCalledWith(annotation.id, -1);
         });
 
         test('should delete appropriate reply from the feed if it is currently in the feed given action = reply_delete_end', () => {
@@ -442,6 +443,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
             instance.deleteAnnotationReply();
 
             expect(feedAPI.deleteReplyItem).toBeCalledWith(annotationReply.id, annotation.id);
+            expect(feedAPI.modifyFeedItemRepliesCountBy).toBeCalledWith(annotation.id, -1);
         });
     });
 

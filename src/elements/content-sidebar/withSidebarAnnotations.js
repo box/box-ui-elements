@@ -173,7 +173,7 @@ export default function withSidebarAnnotations(
                     return;
                 }
 
-                feedAPI.updateFeedItem({ total_reply_count: annotationItem.total_reply_count + 1 }, annotationId);
+                feedAPI.modifyFeedItemRepliesCountBy(annotationId, 1);
                 feedAPI.updateReplyItem({ ...annotationReply, isPending: false }, annotationId, requestId);
             }
 
@@ -223,14 +223,14 @@ export default function withSidebarAnnotations(
                     return;
                 }
 
-                // Check if the parent annotation has the reply currently visible
+                // Check if the parent annotation has the reply currently visible and if so, remove it
                 const replyItem = annotationItem.replies.find(({ id }) => id === replyId);
                 if (replyItem) {
                     feedAPI.deleteReplyItem(replyId, annotationId);
-                } else if (annotationItem.total_reply_count > 0) {
-                    // Decrease the amount of replies by 1
-                    feedAPI.updateFeedItem({ total_reply_count: annotationItem.total_reply_count - 1 }, annotationId);
                 }
+
+                // Decrease the amount of replies by 1
+                feedAPI.modifyFeedItemRepliesCountBy(annotationId, -1);
             }
 
             this.refreshActivitySidebar();

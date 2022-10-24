@@ -221,9 +221,11 @@ class Feed extends Base {
             permissions,
             feedItemChanges,
             (annotation: Annotation) => {
+                const { replies, total_reply_count, ...annotationBase } = annotation;
                 this.updateFeedItem(
                     {
-                        ...annotation,
+                        // Do not update replies and total_reply_count props as their current values are not included in the response
+                        ...annotationBase,
                         isPending: false,
                     },
                     annotationId,
@@ -505,9 +507,12 @@ class Feed extends Base {
 
         this.updateFeedItem({ isRepliesLoading: true }, commentFeedItemId);
 
-        const successCallbackFn = (comments: ThreadedCommentsType) => {
-            this.updateFeedItem({ isRepliesLoading: false, replies: comments.entries }, commentFeedItemId);
-            successCallback(comments.entries);
+        const successCallbackFn = ({ entries }: ThreadedCommentsType) => {
+            this.updateFeedItem(
+                { isRepliesLoading: false, replies: entries, total_reply_count: entries.length },
+                commentFeedItemId,
+            );
+            successCallback(entries);
         };
         const errorCallbackFn = (error: ErrorResponseData, code: string) => {
             this.fetchRepliesErrorCallback(error, code, commentFeedItemId);
@@ -898,11 +903,24 @@ class Feed extends Base {
             fileId: file.id,
             commentId: id,
             permissions,
-            successCallback: this.deleteReplyItem.bind(this, id, parentId, successCallback),
+            successCallback: this.deleteReplySuccessCallback.bind(this, id, parentId, successCallback),
             errorCallback: (e: ElementsXhrError, code: string) => {
                 this.deleteReplyErrorCallback(e, code, id, parentId);
             },
         });
+    };
+
+    /**
+     * Callback for successful deletion of a reply.
+     *
+     * @param {string} id - ID of the reply
+     * @param {string} parentId - ID of the parent feed item
+     * @param {Function} successCallback - success callback
+     * @return {void}
+     */
+    deleteReplySuccessCallback = (id: string, parentId: string, successCallback: Function): void => {
+        this.deleteReplyItem(id, parentId, successCallback);
+        this.modifyFeedItemRepliesCountBy(parentId, -1);
     };
 
     /**
@@ -1727,6 +1745,7 @@ class Feed extends Base {
         this.file = file;
         this.errorCallback = errorCallback;
         this.addPendingReply(parentId, currentUser, commentData);
+        this.modifyFeedItemRepliesCountBy(parentId, 1);
 
         const successCallbackFn = (comment: Comment) => {
             this.createReplySuccessCallback(comment, parentId, uuid, successCallback);
@@ -1877,9 +1896,11 @@ class Feed extends Base {
             message: text,
             status,
             successCallback: (comment: Comment) => {
+                const { replies, total_reply_count, ...commentBase } = comment;
                 this.updateFeedItem(
                     {
-                        ...comment,
+                        // Do not update replies and total_reply_count props as their current values are not included in the response
+                        ...commentBase,
                         isPending: false,
                     },
                     commentId,
@@ -1948,6 +1969,31 @@ class Feed extends Base {
                 this.updateReplyErrorCallback(error, code, id, parentId);
             },
         });
+    };
+
+    /**
+     * Modify feed item replies count
+     *
+     * @param {string} id - id of the item
+     * @param {number} n - number to modify the count by
+     * @return {void}
+     */
+    modifyFeedItemRepliesCountBy = (id: string, n: number) => {
+        if (!this.file.id) {
+            throw getBadItemError();
+        }
+
+        const { items: feedItems = [] } = this.getCachedItems(this.file.id) || {};
+        const feedItem = feedItems.find(({ id: itemId }) => itemId === id);
+
+        if (!feedItem || (feedItem.type !== 'annotation' && feedItem.type !== 'comment')) {
+            return;
+        }
+
+        const newReplyCount = (feedItem.total_reply_count || 0) + n;
+        if (newReplyCount >= 0) {
+            this.updateFeedItem({ total_reply_count: newReplyCount }, id);
+        }
     };
 
     destroyTaskCollaborators() {
