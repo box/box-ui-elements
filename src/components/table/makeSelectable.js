@@ -585,6 +585,7 @@ function makeSelectable(BaseTable) {
                         onRowFocus={this.handleRowFocus}
                         onTableBlur={this.handleTableBlur}
                         onTableFocus={this.handleTableFocus}
+                        selectToggle={this.selectToggle}
                     />
                 </Hotkeys>
             );

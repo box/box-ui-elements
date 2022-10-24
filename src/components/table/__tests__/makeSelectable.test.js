@@ -1230,6 +1230,7 @@ describe('components/table/makeSelectable', () => {
             expect(table.prop('focusedIndex')).toEqual(1);
             expect(table.prop('onTableBlur')).toBe(instance.handleTableBlur);
             expect(table.prop('onTableFocus')).toBe(instance.handleTableFocus);
+            expect(table.prop('selectToggle')).toBe(instance.selectToggle);
         });
     });
 });
