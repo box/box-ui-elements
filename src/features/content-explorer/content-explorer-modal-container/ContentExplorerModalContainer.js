@@ -163,38 +163,15 @@ class ContentExplorerModalContainer extends Component {
 
     render() {
         const {
-            breadcrumbProps,
             className,
-            headerActionsAccessory,
             modalTitle,
             modalDescription,
-            onRequestClose,
             onCreateFolderSubmit,
             onCreateFolderInput,
             isCreatingFolder,
             createFolderError,
-            contentExplorerMode,
             initialFoldersPath,
-            onChooseItems,
-            onMoveItem,
-            onCopyItem,
-            isCreateNewFolderAllowed,
-            onSearchSubmit,
-            onExitSearch,
-            onSelectedClick,
-            onSelectItem,
-            items,
-            numItemsPerPage,
-            numTotalItems,
-            onLoadMoreItems,
-            itemIconRenderer,
-            itemNameLinkRenderer,
-            itemButtonRenderer,
-            showCreateNewFolderButton,
-            searchInputProps,
-            chooseButtonText,
-            initialSelectedItems,
-            isSelectAllAllowed,
+            ...rest
         } = this.props;
         const { foldersPath, isNewFolderModalOpen } = this.state;
         const currentFolder = foldersPath[foldersPath.length - 1];
@@ -202,37 +179,14 @@ class ContentExplorerModalContainer extends Component {
         return (
             <div className={classNames('content-explorer-modal-container', className)}>
                 <ContentExplorerModal
-                    breadcrumbProps={breadcrumbProps}
                     className={isNewFolderModalOpen ? 'hidden' : ''}
-                    headerActionsAccessory={headerActionsAccessory}
                     title={modalTitle}
                     description={modalDescription}
-                    isOpen
-                    onRequestClose={onRequestClose}
-                    contentExplorerMode={contentExplorerMode}
                     initialFoldersPath={initialFoldersPath}
+                    isOpen
                     onEnterFolder={this.handleEnterFolder}
-                    onChooseItems={onChooseItems}
-                    onMoveItem={onMoveItem}
-                    onCopyItem={onCopyItem}
-                    onSelectedClick={onSelectedClick}
-                    onSelectItem={onSelectItem}
                     onCreateNewFolderButtonClick={this.handleCreateNewFolderButtonClick}
-                    isCreateNewFolderAllowed={isCreateNewFolderAllowed}
-                    isSelectAllAllowed={isSelectAllAllowed}
-                    onSearchSubmit={onSearchSubmit}
-                    onExitSearch={onExitSearch}
-                    items={items}
-                    numItemsPerPage={numItemsPerPage}
-                    numTotalItems={numTotalItems}
-                    onLoadMoreItems={onLoadMoreItems}
-                    itemIconRenderer={itemIconRenderer}
-                    itemNameLinkRenderer={itemNameLinkRenderer}
-                    itemButtonRenderer={itemButtonRenderer}
-                    showCreateNewFolderButton={showCreateNewFolderButton}
-                    searchInputProps={searchInputProps}
-                    chooseButtonText={chooseButtonText}
-                    initialSelectedItems={initialSelectedItems}
+                    {...rest}
                 />
                 {isNewFolderModalOpen && (
                     <NewFolderModal
