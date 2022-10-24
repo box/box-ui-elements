@@ -4,6 +4,7 @@ import { render } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import AnnotationThreadContent from '../AnnotationThreadContent';
 import { annotation, user } from '../../../../../__mocks__/annotations';
+import useAnnotatorEvents from '../../../../common/annotator-context/useAnnotatorEvents';
 
 import commonMessages from '../../../../common/messages';
 import messages from '../messages';
@@ -32,17 +33,26 @@ jest.mock('../useAnnotationThread', () => {
     }));
 });
 
+jest.mock('../../../../common/annotator-context/useAnnotatorEvents', () => {
+    const mockedEmitAnnotationActiveChangeEvent = jest.fn();
+
+    return jest.fn(() => ({
+        emitAnnotationActiveChangeEvent: mockedEmitAnnotationActiveChangeEvent,
+    }));
+});
+
 describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThreadContent', () => {
     const mockGetAvatarUrl = jest.fn(() => Promise.resolve());
+    const mockEventEmitter = {};
 
-    const defaultProps = {
-        annotationId: mockedAnnotation.id,
+    const defaultProps = () => ({
+        annotationId: mockedAnnotation?.id,
         api: {
             getAnnotationApi: () => ({
                 getAnnotation: jest.fn(),
             }),
         },
-        eventEmitter: {},
+        eventEmitter: mockEventEmitter,
         file: {
             id: 'fileId',
             permissions: {
@@ -51,12 +61,19 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
             },
         },
         getAvatarUrl: mockGetAvatarUrl,
-    };
+    });
+
+    beforeEach(() => {
+        mockedAnnotation = annotation;
+        mockedError = null;
+        mockedIsLoading = false;
+    });
 
     const IntlWrapper = ({ children }: { children?: React.ReactNode }) => {
         return <IntlProvider locale="en">{children}</IntlProvider>;
     };
-    const getWrapper = () => render(<AnnotationThreadContent {...defaultProps} />, { wrapper: IntlWrapper });
+    const getWrapper = (props = defaultProps()) =>
+        render(<AnnotationThreadContent {...props} />, { wrapper: IntlWrapper });
 
     test('Should render properly', () => {
         const { getByText, queryByTestId } = getWrapper();
@@ -90,5 +107,18 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
         const { queryByText, getByText } = getWrapper();
         expect(getByText(commonMessages.errorOccured.defaultMessage)).toBeInTheDocument();
         expect(queryByText(messages.errorFetchAnnotation.defaultMessage)).toBeInTheDocument();
+    });
+
+    test('Should call emit event when rendered', () => {
+        const props = defaultProps();
+        const { eventEmitter } = props;
+        getWrapper(props);
+
+        expect(useAnnotatorEvents).toHaveBeenCalledWith({ eventEmitter });
+
+        expect(useAnnotatorEvents().emitAnnotationActiveChangeEvent).toHaveBeenCalledWith(
+            mockedAnnotation.id,
+            'fileId',
+        );
     });
 });
