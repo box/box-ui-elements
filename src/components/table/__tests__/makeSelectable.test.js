@@ -1224,13 +1224,13 @@ describe('components/table/makeSelectable', () => {
 
             const table = wrapper.find('Table');
             expect(table.hasClass('is-selectable')).toBe(true);
+            expect(table.prop('onCheckboxClick')).toEqual(instance.onCheckboxClick);
             expect(table.prop('onRowClick')).toEqual(wrapper.instance().handleRowClick);
             expect(table.prop('onRowFocus')).toEqual(wrapper.instance().handleRowFocus);
             expect(table.prop('focusedItem')).toEqual('b');
             expect(table.prop('focusedIndex')).toEqual(1);
             expect(table.prop('onTableBlur')).toBe(instance.handleTableBlur);
             expect(table.prop('onTableFocus')).toBe(instance.handleTableFocus);
-            expect(table.prop('selectToggle')).toBe(instance.selectToggle);
         });
     });
 });

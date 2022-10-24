@@ -569,6 +569,10 @@ function makeSelectable(BaseTable) {
             }
         };
 
+        onCheckboxClick = (event, index) => {
+            this.selectToggle(index);
+        };
+
         render() {
             const { className, data } = this.props;
             const { focusedIndex } = this.state;
@@ -581,11 +585,11 @@ function makeSelectable(BaseTable) {
                         className={classNames(className, 'is-selectable')}
                         focusedIndex={focusedIndex}
                         focusedItem={focusedItem}
+                        onCheckboxClick={this.onCheckboxClick}
                         onRowClick={this.handleRowClick}
                         onRowFocus={this.handleRowFocus}
                         onTableBlur={this.handleTableBlur}
                         onTableFocus={this.handleTableFocus}
-                        selectToggle={this.selectToggle}
                     />
                 </Hotkeys>
             );
