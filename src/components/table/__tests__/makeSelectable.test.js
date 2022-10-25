@@ -246,6 +246,30 @@ describe('components/table/makeSelectable', () => {
         });
     });
 
+    describe('handleCheckboxClick()', () => {
+        test('should call selectRange() when shift key pressed', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            const index = 1;
+
+            instance.selectRange = sandbox.mock().withArgs(index);
+
+            instance.handleCheckboxClick({ nativeEvent: { shiftKey: true } }, index);
+        });
+
+        test('should call selectToggle() when no modifier key pressed', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            const index = 1;
+
+            instance.selectToggle = sandbox.mock().withArgs(index);
+
+            instance.handleCheckboxClick({ nativeEvent: {} }, index);
+        });
+    });
+
     describe('handleRowFocus()', () => {
         test('should call onSelect() with correct args', () => {
             const wrapper = getWrapper({
