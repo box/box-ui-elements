@@ -1,12 +1,15 @@
 @import '../../../common/variables';
 
-.bcs-ActivityThreadReplyForm-toggle {
+.btn-plain.bcs-ActivityThreadReplyForm-toggle {
     display: flex;
     align-items: center;
+    color: $bdl-gray-62;
+    font-weight: bold;
 
     &,
     &:hover {
         padding: $bdl-grid-unit $sidebarActivityFeedSpacingHorizontal ($bdl-grid-unit * 5);
+        font-weight: bold;
     }
 
     .bcs-ActivityThreadReplyForm-arrow {
