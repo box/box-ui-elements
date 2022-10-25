@@ -246,6 +246,30 @@ describe('components/table/makeSelectable', () => {
         });
     });
 
+    describe('handleCheckboxClick()', () => {
+        test('should call selectRange() when shift key pressed', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            const index = 1;
+
+            instance.selectRange = sandbox.mock().withArgs(index);
+
+            instance.handleCheckboxClick({ nativeEvent: { shiftKey: true } }, index);
+        });
+
+        test('should call selectToggle() when no modifier key pressed', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            const index = 1;
+
+            instance.selectToggle = sandbox.mock().withArgs(index);
+
+            instance.handleCheckboxClick({ nativeEvent: {} }, index);
+        });
+    });
+
     describe('handleRowFocus()', () => {
         test('should call onSelect() with correct args', () => {
             const wrapper = getWrapper({
@@ -1224,7 +1248,7 @@ describe('components/table/makeSelectable', () => {
 
             const table = wrapper.find('Table');
             expect(table.hasClass('is-selectable')).toBe(true);
-            expect(table.prop('onCheckboxClick')).toEqual(instance.onCheckboxClick);
+            expect(table.prop('onCheckboxClick')).toEqual(instance.handleCheckboxClick);
             expect(table.prop('onRowClick')).toEqual(wrapper.instance().handleRowClick);
             expect(table.prop('onRowFocus')).toEqual(wrapper.instance().handleRowFocus);
             expect(table.prop('focusedItem')).toEqual('b');

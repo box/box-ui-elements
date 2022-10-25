@@ -569,8 +569,12 @@ function makeSelectable(BaseTable) {
             }
         };
 
-        onCheckboxClick = (event, index) => {
-            this.selectToggle(index);
+        handleCheckboxClick = (event, index) => {
+            if (event.nativeEvent.shiftKey) {
+                this.selectRange(index);
+            } else {
+                this.selectToggle(index);
+            }
         };
 
         render() {
@@ -585,7 +589,7 @@ function makeSelectable(BaseTable) {
                         className={classNames(className, 'is-selectable')}
                         focusedIndex={focusedIndex}
                         focusedItem={focusedItem}
-                        onCheckboxClick={this.onCheckboxClick}
+                        onCheckboxClick={this.handleCheckboxClick}
                         onRowClick={this.handleRowClick}
                         onRowFocus={this.handleRowFocus}
                         onTableBlur={this.handleTableBlur}
