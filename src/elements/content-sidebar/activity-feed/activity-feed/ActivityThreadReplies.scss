@@ -6,17 +6,12 @@
 
     &::before {
         position: absolute;
-        top: 0;
-        bottom: 0;
+        top: $sidebarActivityFeedSpacingVertical;
+        bottom: $sidebarActivityFeedSpacingVertical;
         left: $sidebarActivityFeedSpacingHorizontal;
         width: 4px;
         background: $bdl-gray-10;
         border-radius: 2px;
         content: '';
-    }
-
-    .bcs-Comment {
-        margin: $sidebarActivityFeedSpacingVertical $sidebarActivityFeedSpacingHorizontal;
-        padding: 0;
     }
 }

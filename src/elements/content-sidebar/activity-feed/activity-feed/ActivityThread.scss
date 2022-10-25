@@ -2,12 +2,14 @@
 
 .bcs-ActivityThread {
     .bcs-ActivityThread-toggle {
+        margin-top: -9px;
         margin-left: $sidebarActivityFeedSpacingHorizontal;
         color: $bdl-box-blue;
         font-weight: bold;
 
         &:hover,
         &:active {
+            margin-top: -9px;
             margin-left: $sidebarActivityFeedSpacingHorizontal;
             font-weight: bold;
         }
