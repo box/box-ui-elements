@@ -6,12 +6,12 @@
 
     &::before {
         position: absolute;
-        top: $sidebarActivityFeedSpacingVertical;
-        bottom: $sidebarActivityFeedSpacingVertical;
+        top: 0;
+        bottom: 0;
         left: $sidebarActivityFeedSpacingHorizontal;
-        width: 4px;
+        width: $bdl-grid-unit;
         background: $bdl-gray-10;
-        border-radius: 2px;
+        border-radius: $bdl-border-radius-size;
         content: '';
     }
 }

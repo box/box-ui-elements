@@ -2,17 +2,24 @@
 
 .bcs-ActivityThread {
     .bcs-ActivityThread-toggle {
-        margin-top: -9px;
-        margin-left: $sidebarActivityFeedSpacingHorizontal;
         color: $bdl-box-blue;
-        font-weight: bold;
 
+        &,
         &:hover,
         &:active {
-            margin-top: -9px;
+            margin-top: -$bdl-grid-unit * 2; // to decreased spacing with parent comment
             margin-left: $sidebarActivityFeedSpacingHorizontal;
             font-weight: bold;
         }
+    }
+
+    .bcs-ActivityCard {
+        margin: $sidebarActivityFeedSpacingVertical $sidebarActivityFeedSpacingHorizontal;
+        padding: 0;
+    }
+
+    button:focus-visible {
+        outline: -webkit-focus-ring-color auto 1px;
     }
 }
 
