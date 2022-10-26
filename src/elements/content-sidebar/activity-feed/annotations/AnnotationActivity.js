@@ -30,7 +30,8 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: (searchStr: string) => void,
     getUserProfileUrl?: GetProfileUrlCallback,
-    isCurrentVersion: boolean,
+    hasVersions?: boolean,
+    isCurrentVersion?: boolean,
     item: Annotation,
     mentionSelectorContacts?: SelectorItems<User>,
     onDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
@@ -45,6 +46,7 @@ const AnnotationActivity = ({
     getAvatarUrl,
     getMentionWithQuery,
     getUserProfileUrl,
+    hasVersions,
     isCurrentVersion,
     mentionSelectorContacts,
     onDelete = noop,
@@ -102,12 +104,9 @@ const AnnotationActivity = ({
 
     const createdAtTimestamp = new Date(created_at).getTime();
     const createdByUser = created_by || PLACEHOLDER_USER;
-    const linkMessage = isCurrentVersion ? messages.annotationActivityPageItem : messages.annotationActivityVersionLink;
-    const linkValue = isCurrentVersion ? target.location.value : getProp(file_version, 'version_number');
+
     const message = (description && description.message) || '';
-    const activityLinkMessage = isFileVersionUnavailable
-        ? messages.annotationActivityVersionUnavailable
-        : { ...linkMessage, values: { number: linkValue } };
+
     const tetherProps = {
         attachment: 'top right',
         className: 'bcs-AnnotationActivity-deleteConfirmationModal',
@@ -149,10 +148,12 @@ const AnnotationActivity = ({
                             <AnnotationActivityLink
                                 className="bcs-AnnotationActivity-link"
                                 data-resin-target="annotationLink"
+                                fileVersion={getProp(file_version, 'version_number')}
                                 id={id}
-                                isDisabled={isFileVersionUnavailable}
-                                message={activityLinkMessage}
+                                isCurrentVersion={isCurrentVersion}
+                                locationValue={target.location.value}
                                 onClick={handleSelect}
+                                shouldHideLink={!hasVersions}
                             />
                         </div>
                         <ActivityStatus status={status} />
