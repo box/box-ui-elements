@@ -28,7 +28,7 @@ type Props = {
     className: string,
     clientName: string,
     currentUser: User,
-    eventEmitter?: EventEmitter,
+    eventEmitter: EventEmitter,
     file: BoxItem,
     handleCancel: () => void,
     language?: string,
@@ -46,6 +46,7 @@ const AnnotationThread = ({
     className = '',
     clientName,
     currentUser,
+    eventEmitter,
     file,
     handleCancel,
     language,
@@ -102,6 +103,7 @@ const AnnotationThread = ({
                         api={api}
                         annotationId={annotationId}
                         currentUser={currentUser}
+                        eventEmitter={eventEmitter}
                         file={file}
                         getAvatarUrl={getAvatarUrl}
                         getMentionWithQuery={getMentionWithQuery}
