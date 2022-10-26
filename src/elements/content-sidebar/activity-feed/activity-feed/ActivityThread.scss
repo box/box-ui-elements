@@ -3,6 +3,10 @@
 .bcs-ActivityThread {
     box-shadow: 0 1px 0 0 $bdl-gray-10;
 
+    &:hover {
+        background-color: $bdl-light-blue-05;
+    }
+
     .bcs-ActivityThread-toggle {
         color: $bdl-box-blue;
 
