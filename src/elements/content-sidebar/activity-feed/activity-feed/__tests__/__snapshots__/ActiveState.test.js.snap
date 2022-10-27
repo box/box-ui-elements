@@ -113,6 +113,8 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       }
       data-testid="activity-thread"
       hasReplies={false}
+      isThreadSelected={false}
+      onCommentSelect={[Function]}
       onHideReplies={[Function]}
       onReplyCreate={[Function]}
       onReplyDelete={[Function]}
@@ -134,6 +136,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
           }
         }
         id="c_123"
+        onCommentSelect={[Function]}
         onDelete={[Function]}
         onEdit={[Function]}
         permissions={

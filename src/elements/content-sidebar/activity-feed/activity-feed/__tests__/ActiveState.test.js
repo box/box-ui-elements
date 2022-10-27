@@ -158,6 +158,18 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         expect(wrapper.find('[data-testid="activity-thread"]')).toHaveLength(2);
     });
 
+    test('should select thread', () => {
+        const selector = '[data-testid="comment"] > [data-testid="activity-thread"]';
+        const wrapper = getShallowWrapper().dive();
+
+        expect(wrapper.find(selector).prop('isThreadSelected')).toBe(false);
+
+        wrapper.find(selector).simulate('commentSelect', true);
+        wrapper.update();
+
+        expect(wrapper.find(selector).prop('isThreadSelected')).toBe(true);
+    });
+
     test('should correctly render with an inline error if some feed items fail to fetch', () => {
         const wrapper = getShallowWrapper({ inlineError: activityFeedError, items: [] });
         expect(wrapper).toMatchSnapshot();

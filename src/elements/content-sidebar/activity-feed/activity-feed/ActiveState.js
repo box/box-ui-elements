@@ -118,6 +118,11 @@ const ActiveState = ({
     onVersionInfo,
     translations,
 }: Props): React.Node => {
+    const [selectedThreadParentId, setSelectedThreadParentId] = React.useState(null);
+
+    const onThreadSelected = (parentId: string) => (isSelected: boolean) => {
+        setSelectedThreadParentId(isSelected ? parentId : null);
+    };
     const onHideRepliesHandler = (parentId: string) => (lastReply: CommentType) => {
         onHideReplies(parentId, [lastReply]);
     };
@@ -166,7 +171,9 @@ const ActiveState = ({
                                     getUserProfileUrl={getUserProfileUrl}
                                     hasReplies={hasReplies}
                                     isRepliesLoading={item.isRepliesLoading}
+                                    isThreadSelected={selectedThreadParentId === item.id}
                                     mentionSelectorContacts={mentionSelectorContacts}
+                                    onCommentSelect={onThreadSelected(item.id)}
                                     onHideReplies={onHideRepliesHandler(item.id)}
                                     onReplyCreate={onReplyCreateHandler(item.id, item.type)}
                                     onReplyDelete={onReplyDeleteHandler(item.id)}
@@ -183,6 +190,7 @@ const ActiveState = ({
                                         getMentionWithQuery={getMentionWithQuery}
                                         getUserProfileUrl={getUserProfileUrl}
                                         mentionSelectorContacts={mentionSelectorContacts}
+                                        onCommentSelect={onThreadSelected(item.id)}
                                         onDelete={onCommentDelete}
                                         onEdit={onCommentEdit}
                                         permissions={{

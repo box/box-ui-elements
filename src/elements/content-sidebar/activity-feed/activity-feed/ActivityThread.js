@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
 
@@ -25,7 +26,9 @@ type Props = {
     hasReplies: boolean,
     isAlwaysExpanded?: boolean,
     isRepliesLoading?: boolean,
+    isThreadSelected?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
+    onCommentSelect?: (isSelected: boolean) => void,
     onHideReplies?: (lastReply: CommentType) => void,
     onReplyCreate?: (text: string) => void,
     onReplyDelete?: ({ id: string, permissions: BoxCommentPermission }) => void,
@@ -53,7 +56,9 @@ const ActivityThread = ({
     hasReplies,
     isAlwaysExpanded = false,
     isRepliesLoading,
+    isThreadSelected = false,
     mentionSelectorContacts,
+    onCommentSelect,
     onHideReplies = noop,
     onReplyCreate,
     onReplyDelete = noop,
@@ -109,7 +114,12 @@ const ActivityThread = ({
         return children;
     }
     return (
-        <div className="bcs-ActivityThread" data-testid="activity-thread">
+        <div
+            className={classNames('bcs-ActivityThread', {
+                'bcs-is-selected': isThreadSelected,
+            })}
+            data-testid="activity-thread"
+        >
             {children}
 
             {renderButton()}
@@ -122,6 +132,7 @@ const ActivityThread = ({
                     getUserProfileUrl={getUserProfileUrl}
                     isRepliesLoading={isRepliesLoading}
                     mentionSelectorContacts={mentionSelectorContacts}
+                    onCommentSelect={onCommentSelect}
                     onDelete={onReplyDelete}
                     onEdit={onReplyEdit}
                     replies={replies}

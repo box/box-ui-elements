@@ -17,6 +17,7 @@ type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
+    onCommentSelect?: (isSelected: boolean) => void,
     onDelete?: Function,
     onEdit?: Function,
     replies: Array<CommentType>,
@@ -30,6 +31,7 @@ const ActivityThreadReplies = ({
     getUserProfileUrl,
     isRepliesLoading,
     mentionSelectorContacts,
+    onCommentSelect,
     onDelete,
     onEdit,
     replies,
@@ -60,6 +62,7 @@ const ActivityThreadReplies = ({
                     getMentionWithQuery={getMentionWithQuery}
                     getUserProfileUrl={getUserProfileUrl}
                     mentionSelectorContacts={mentionSelectorContacts}
+                    onCommentSelect={onCommentSelect}
                     onDelete={onDelete}
                     onEdit={onEdit}
                     permissions={getReplyPermissions(reply)}

@@ -420,4 +420,47 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             );
         },
     );
+
+    test('should call `onCommentSelect` when comment is begin edited or consider delete', () => {
+        const onCommentSelect = jest.fn();
+        const uslessEditHandler = () => {};
+        const comment = {
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 10 },
+            permissions: { can_delete: true, can_edit: true },
+        };
+        const wrapper = shallow(
+            <Comment
+                id="123"
+                {...comment}
+                approverSelectorContacts={approverSelectorContacts}
+                currentUser={currentUser}
+                handlers={allHandlers}
+                mentionSelectorContacts={mentionSelectorContacts}
+                onCommentSelect={onCommentSelect}
+                onEdit={uslessEditHandler}
+            />,
+        );
+
+        wrapper.find('MenuItem[data-testid="delete-comment"]').simulate('click');
+        expect(onCommentSelect).toHaveBeenCalledWith(true);
+
+        wrapper.find('DeleteConfirmation').simulate('deleteCancel');
+        expect(onCommentSelect).toHaveBeenCalledWith(false);
+
+        wrapper.find('MenuItem[data-testid="delete-comment"]').simulate('click');
+        wrapper.find('DeleteConfirmation').simulate('deleteConfirm');
+        expect(onCommentSelect).toHaveBeenCalledWith(false);
+
+        wrapper.find('MenuItem[data-testid="edit-comment"]').simulate('click');
+        expect(onCommentSelect).toHaveBeenCalledWith(true);
+
+        wrapper.find('CommentForm').simulate('cancel');
+        expect(onCommentSelect).toHaveBeenCalledWith(false);
+
+        wrapper.find('MenuItem[data-testid="edit-comment"]').simulate('click');
+        wrapper.find('CommentForm').simulate('updateComment');
+        expect(onCommentSelect).toHaveBeenCalledWith(false);
+    });
 });

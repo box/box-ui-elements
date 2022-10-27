@@ -7,6 +7,10 @@
         background-color: $bdl-light-blue-05;
     }
 
+    &.bcs-is-selected {
+        background-color: $bdl-gray-05;
+    }
+
     .bcs-ActivityThread-toggle {
         color: $bdl-box-blue;
 

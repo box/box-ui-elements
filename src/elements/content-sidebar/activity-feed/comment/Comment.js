@@ -41,6 +41,7 @@ type Props = {
     isPending?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     modified_at?: string | number,
+    onCommentSelect?: (isSelected: boolean) => void,
     onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any,
     onEdit: (
         id: string,
@@ -76,28 +77,44 @@ class Comment extends React.Component<Props, State> {
         isInputOpen: false,
     };
 
+    selectComment = (isSelected: boolean) => {
+        if (this.props.onCommentSelect) {
+            this.props.onCommentSelect(isSelected);
+        }
+    };
+
     handleDeleteConfirm = (): void => {
         const { id, onDelete, permissions } = this.props;
         onDelete({ id, permissions });
+        this.selectComment(false);
     };
 
     handleDeleteCancel = (): void => {
         this.setState({ isConfirmingDelete: false });
+        this.selectComment(false);
     };
 
     handleDeleteClick = () => {
         this.setState({ isConfirmingDelete: true });
+        this.selectComment(true);
     };
 
     handleEditClick = (): void => {
         this.setState({ isEditing: true, isInputOpen: true });
+        this.selectComment(true);
     };
 
     commentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
 
-    commentFormCancelHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
+    commentFormCancelHandler = (): void => {
+        this.setState({ isInputOpen: false, isEditing: false });
+        this.selectComment(false);
+    };
 
-    commentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
+    commentFormSubmitHandler = (): void => {
+        this.setState({ isInputOpen: false, isEditing: false });
+        this.selectComment(false);
+    };
 
     handleMessageUpdate = ({ id, text, hasMention }: { hasMention: boolean, id: string, text: string }): void => {
         const { onEdit, permissions } = this.props;
