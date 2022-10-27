@@ -60,7 +60,7 @@ const useRepliesAPI = ({
         });
     };
 
-    const handleCreateReply = (message: string) => {
+    const handleReplyCreate = (message: string) => {
         const uuid = uniqueId('reply_');
         const replyData = {
             id: uuid,
@@ -82,7 +82,7 @@ const useRepliesAPI = ({
         );
     };
 
-    const handleDeleteReply = ({ id, permissions }: { id: string, permissions: BoxCommentPermission }) => {
+    const handleReplyDelete = ({ id, permissions }: { id: string, permissions: BoxCommentPermission }) => {
         setReplyPendingStatus(id, true);
         const errorCallbackFn = (error, code) => createReplyErrorCallback(error, code, id);
 
@@ -95,10 +95,11 @@ const useRepliesAPI = ({
         });
     };
 
-    const handleEditReply = (
+    const handleReplyEdit = (
         replyId: string,
         message: string,
         status?: FeedItemStatus,
+        hasMention?: boolean,
         permissions: BoxCommentPermission,
     ) => {
         setReplyPendingStatus(replyId, true);
@@ -115,7 +116,7 @@ const useRepliesAPI = ({
         });
     };
 
-    return { handleDeleteReply, handleEditReply, handleCreateReply };
+    return { handleReplyDelete, handleReplyEdit, handleReplyCreate };
 };
 
 export default useRepliesAPI;

@@ -42,7 +42,7 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
         const { id, permissions } = replies[0];
 
         act(() => {
-            result.current.handleDeleteReply({ id, permissions });
+            result.current.handleReplyDelete({ id, permissions });
         });
 
         expect(mockDeleteComment).toBeCalledWith({
@@ -63,7 +63,7 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
         const { result } = getHook({ api });
 
         act(() => {
-            result.current.handleEditReply(id, message, false, permissions);
+            result.current.handleReplyEdit(id, message, false, undefined, permissions);
         });
 
         expect(mockUpdateComment).toBeCalledWith({
@@ -84,7 +84,7 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
         const { result } = getHook({ api });
 
         act(() => {
-            result.current.handleCreateReply(message);
+            result.current.handleReplyCreate(message);
         });
 
         expect(mockCreateAnnotationReply).toBeCalledWith(
