@@ -18,8 +18,8 @@
         padding: 0;
     }
 
-    button:focus-visible {
-        outline: -webkit-focus-ring-color auto 1px;
+    .btn-plain:focus-visible {
+        outline: auto;
     }
 }
 
