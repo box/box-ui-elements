@@ -23,12 +23,11 @@ const DropShadowFilter = () => (
 );
 
 const DragCloud = ({
-    boardHeight,
-    boardWidth,
+    gameBoardSize: { height, width },
     cloudSize,
     disabled,
     gridTrackSize,
-    intl,
+    intl: { formatMessage },
     onDrop,
     position,
     updateLiveText,
@@ -36,8 +35,8 @@ const DragCloud = ({
 }) => {
     const [isMoving, setIsMoving] = useState(false);
 
-    const dragCloudClasses = classNames('drag-cloud', {
-        'drag-cloud--moving': isMoving,
+    const dragCloudClasses = classNames('bdl-DragCloud', {
+        'is-moving': isMoving,
     });
 
     const moveLeft = () => {
@@ -45,16 +44,16 @@ const DragCloud = ({
         if (newX >= 0) {
             updatePosition({ ...position, x: newX }, true);
         } else {
-            updateLiveText(intl.formatMessage(messages.reachLeftEdge));
+            updateLiveText(formatMessage(messages.reachLeftEdge));
         }
     };
 
     const moveRight = () => {
         const newX = position.x + gridTrackSize;
-        if (newX + cloudSize <= boardWidth) {
+        if (newX + cloudSize <= width) {
             updatePosition({ ...position, x: newX }, true);
         } else {
-            updateLiveText(intl.formatMessage(messages.reachRightEdge));
+            updateLiveText(formatMessage(messages.reachRightEdge));
         }
     };
 
@@ -63,25 +62,22 @@ const DragCloud = ({
         if (newY >= 0) {
             updatePosition({ ...position, y: newY }, true);
         } else {
-            updateLiveText(intl.formatMessage(messages.reachTopEdge));
+            updateLiveText(formatMessage(messages.reachTopEdge));
         }
     };
 
     const moveDown = () => {
         const newY = position.y + gridTrackSize;
-        if (newY + cloudSize <= boardHeight) {
+        if (newY + cloudSize <= height) {
             updatePosition({ ...position, y: newY }, true);
         } else {
-            updateLiveText(intl.formatMessage(messages.reachBottomEdge));
+            updateLiveText(formatMessage(messages.reachBottomEdge));
         }
     };
 
     const handleSpaceBar = () => {
-        const cloudStatusText = intl.formatMessage(isMoving ? messages.cloudDropped : messages.cloudGrabbed);
-        const currentPositionText = intl.formatMessage(
-            messages.currentPosition,
-            getGridPosition(position, gridTrackSize),
-        );
+        const cloudStatusText = formatMessage(isMoving ? messages.cloudDropped : messages.cloudGrabbed);
+        const currentPositionText = formatMessage(messages.currentPosition, getGridPosition(position, gridTrackSize));
         updateLiveText(`${cloudStatusText} ${currentPositionText}`, true);
 
         if (isMoving) {
@@ -127,21 +123,27 @@ const DragCloud = ({
     };
 
     /**
+     * Reset isMoving state when DragCloud loses focus
+     * @returns {void}
+     */
+    const onBlur = () => setIsMoving(false);
+
+    /**
      * DragCloud drag event handler. Updates current position.
      * @param {MouseEvent} e - The drag event
-     * @param {object} { x, y } - Object which contains x and y coordiante of the drag event.
+     * @param {object} { x, y } - Object which contains x and y coordinate of the drag event.
      * @returns {void}
      */
     const onDrag = throttle((e, { x, y }) => updatePosition({ x, y }), 100, { leading: true, trailing: true });
 
     return (
         <Draggable bounds="parent" disabled={disabled} onDrag={onDrag} onStop={onDrop} position={position}>
-            {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-            <div className={dragCloudClasses} onKeyDown={onKeyDown} role="presentation" tabIndex={0}>
+            {/* eslint-disable-next-line */}
+            <div className={dragCloudClasses} onBlur={onBlur} onKeyDown={onKeyDown} tabIndex={0}>
                 <IconCloud
                     filter={{ id: 'drop-shadow', definition: <DropShadowFilter /> }}
                     height={cloudSize}
-                    title={intl.formatMessage(messages.cloudObject)}
+                    title={formatMessage(messages.cloudObject)}
                     width={cloudSize}
                 />
             </div>
@@ -152,8 +154,7 @@ const DragCloud = ({
 DragCloud.displayName = 'DragCloud';
 
 DragCloud.propTypes = {
-    boardHeight: PropTypes.number,
-    boardWidth: PropTypes.number,
+    gameBoardSize: PropTypes.objectOf(PropTypes.number),
     cloudSize: PropTypes.number,
     disabled: PropTypes.bool,
     gridTrackSize: PropTypes.number,

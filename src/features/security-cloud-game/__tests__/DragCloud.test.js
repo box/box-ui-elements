@@ -10,12 +10,18 @@ const intl = {
 describe('features/security-cloud-game/DragCloud', () => {
     test('should correctly render', () => {
         const wrapper = shallow(
-            <DragCloud cloudSize={100} gridTrackSize={20} intl={intl} position={{ x: 10, y: 20 }} />,
+            <DragCloud
+                gameBoardSize={{ height: 500, width: 500 }}
+                cloudSize={100}
+                gridTrackSize={20}
+                intl={intl}
+                position={{ x: 10, y: 20 }}
+            />,
         );
 
         const draggable = wrapper.find(Draggable);
         expect(draggable.prop('position')).toEqual({ x: 10, y: 20 });
-        expect(draggable.find('.drag-cloud').length).toEqual(1);
+        expect(draggable.find('.bdl-DragCloud').length).toEqual(1);
 
         const iconCloud = wrapper.find('IconCloud');
         expect(iconCloud.prop('height')).toEqual(100);
@@ -32,8 +38,7 @@ describe('features/security-cloud-game/DragCloud', () => {
 
         const wrapper = mount(
             <DragCloud
-                boardHeight={500}
-                boardWidth={500}
+                gameBoardSize={{ height: 500, width: 500 }}
                 cloudSize={50}
                 gridTrackSize={10}
                 intl={intl}
@@ -45,36 +50,42 @@ describe('features/security-cloud-game/DragCloud', () => {
         );
 
         // grab
-        wrapper.find('.drag-cloud').simulate('keydown', { key: ' ' });
-        expect(wrapper.find('.drag-cloud').hasClass('drag-cloud--moving')).toBe(true);
+        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: ' ' });
+        expect(wrapper.find('.bdl-DragCloud').hasClass('is-moving')).toBe(true);
         expect(updateLiveText).toHaveBeenLastCalledWith(
             'Cloud object grabbed. Current position: Row {row}, Column {column}.',
             true,
         );
 
         // move
-        wrapper.find('.drag-cloud').simulate('keydown', { key: 'ArrowUp' });
+        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowUp' });
         expect(updatePosition).toHaveBeenLastCalledWith({ x: 20, y: 0 }, true);
-        wrapper.find('.drag-cloud').simulate('keydown', { key: 'ArrowRight' });
+        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowRight' });
         expect(updatePosition).toHaveBeenLastCalledWith({ x: 30, y: 10 }, true);
-        wrapper.find('.drag-cloud').simulate('keydown', { key: 'ArrowDown' });
+        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowDown' });
         expect(updatePosition).toHaveBeenLastCalledWith({ x: 20, y: 20 }, true);
-        wrapper.find('.drag-cloud').simulate('keydown', { key: 'ArrowLeft' });
+        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowLeft' });
         expect(updatePosition).toHaveBeenLastCalledWith({ x: 10, y: 10 }, true);
 
         // hit edge
         wrapper.setProps({ position: { x: 20, y: 0 } });
-        wrapper.find('.drag-cloud').simulate('keydown', { key: 'ArrowUp' });
+        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowUp' });
         expect(updateLiveText).toHaveBeenLastCalledWith('Reached top edge of grid.');
 
         // drop
-        wrapper.find('.drag-cloud').simulate('keydown', { key: ' ' });
+        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: ' ' });
         expect(updateLiveText).toHaveBeenLastCalledWith(
             'Cloud object dropped. Current position: Row {row}, Column {column}.',
             true,
         );
         expect(onDrop).toHaveBeenCalledTimes(1);
-        expect(wrapper.find('.drag-cloud').hasClass('drag-cloud--moving')).toBe(false);
+        expect(wrapper.find('.bdl-DragCloud').hasClass('is-moving')).toBe(false);
+
+        // reset isMoving on blur
+        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: ' ' });
+        expect(wrapper.find('.bdl-DragCloud').hasClass('is-moving')).toBe(true);
+        wrapper.find('.bdl-DragCloud').simulate('blur');
+        expect(wrapper.find('.bdl-DragCloud').hasClass('is-moving')).toBe(false);
     });
 
     test('should handle dragging correctly', () => {
@@ -83,8 +94,7 @@ describe('features/security-cloud-game/DragCloud', () => {
 
         const wrapper = shallow(
             <DragCloud
-                boardHeight={500}
-                boardWidth={500}
+                gameBoardSize={{ height: 500, width: 500 }}
                 cloudSize={50}
                 gridTrackSize={10}
                 intl={intl}

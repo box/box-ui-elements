@@ -69,7 +69,7 @@ const messages = defineMessages({
         id: 'boxui.securityCloudGame.reachBottomEdge',
     },
     targetInRange: {
-        defaultMessage: 'Target in range, you can drop the Cloud object.',
+        defaultMessage: 'Target in range, you can drop the cloud object.',
         description: 'Message for the screen reader to tell when the white cloud overlaps with the target cloud.',
         id: 'boxui.securityCloudGame.targetInRange',
     },

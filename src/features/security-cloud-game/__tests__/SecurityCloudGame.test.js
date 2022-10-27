@@ -24,12 +24,12 @@ describe('features/security-cloud-game/SecurityCloudGame', () => {
     test('should correctly render', () => {
         const wrapper = getWrapper();
 
-        expect(wrapper.find('.box-ui-security-cloud-game').length).toEqual(1);
-        expect(wrapper.find('.box-ui-security-cloud-game').prop('style')).toEqual({
+        expect(wrapper.find('.bdl-SecurityCloudGame').length).toEqual(1);
+        expect(wrapper.find('.bdl-SecurityCloudGame').prop('style')).toEqual({
             height: '1000px',
             width: '1000px',
         });
-        expect(wrapper.find('.box-ui-security-cloud-game-message').length).toEqual(1);
+        expect(wrapper.find('.bdl-SecurityCloudGame-message').length).toEqual(1);
         expect(wrapper.find(DropCloud).length).toEqual(1);
         expect(wrapper.find(DragCloud).length).toEqual(1);
     });
@@ -79,7 +79,7 @@ describe('features/security-cloud-game/SecurityCloudGame', () => {
             wrapper.find(DragCloud).prop('updatePosition')(dropCloudPosition);
         });
         wrapper.update();
-        expect(wrapper.find('.drop-cloud').hasClass('is-over')).toBe(true);
+        expect(wrapper.find('.bdl-DropCloud').hasClass('is-over')).toBe(true);
 
         // verify isValidDrop
         act(() => {
@@ -88,13 +88,16 @@ describe('features/security-cloud-game/SecurityCloudGame', () => {
         wrapper.update();
         expect(wrapper.find(DropCloud).length).toEqual(0);
         expect(wrapper.find(DragCloud).prop('disabled')).toEqual(true);
-        expect(wrapper.find(FormattedMessage).prop('id')).toEqual('boxui.securityCloudGame.success');
+
+        const messageElement = wrapper.find('.bdl-SecurityCloudGame-message');
+        expect(messageElement.find(FormattedMessage).prop('id')).toEqual('boxui.securityCloudGame.success');
     });
 
     test('should render an instructional message when renderMessage is called', () => {
         const wrapper = getWrapper();
+        const messageElement = wrapper.find('.bdl-SecurityCloudGame-message');
 
-        expect(wrapper.find(FormattedMessage).prop('id')).toEqual('boxui.securityCloudGame.instructions');
+        expect(messageElement.find(FormattedMessage).prop('id')).toEqual('boxui.securityCloudGame.instructions');
     });
 
     test('should update live text when target position is included', () => {
@@ -105,7 +108,9 @@ describe('features/security-cloud-game/SecurityCloudGame', () => {
         });
         wrapper.update();
 
-        expect(wrapper.find('.live-text').text()).toEqual('Some text. Target position: Row {row}, Column {column}.');
+        expect(wrapper.find('.bdl-SecurityCloudGame-liveText').text()).toEqual(
+            'Some text. Target position: Row {row}, Column {column}.',
+        );
     });
 
     test('should handle resize event correctly', () => {

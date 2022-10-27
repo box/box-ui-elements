@@ -15,12 +15,10 @@ import './SecurityCloudGame.scss';
 const CLOUD_SIZE_RATIO = 5;
 const GRID_TRACK_SIZE_RATIO = 20;
 
-const SecurityCloudGame = ({ height, intl, onValidDrop, width }) => {
-    const [cloudSize, setCloudSize] = useState(null);
-    const [gridTrackSize, setGridTrackSize] = useState(null);
+const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width }) => {
     const [dropCloudPosition, setDropCloudPosition] = useState(null);
     const [dragCloudPosition, setDragCloudPosition] = useState(null);
-    const [gameBoardHeight, setGameBoardHeight] = useState(null);
+    const [layout, setLayout] = useState({});
     const [gameState, setGameState] = useState({
         isValidDrop: false,
         isOverlap: false,
@@ -29,36 +27,32 @@ const SecurityCloudGame = ({ height, intl, onValidDrop, width }) => {
 
     const messageElementRef = useRef();
     // to handle resize events
-    const prevHeight = useRef();
-    const prevWidth = useRef();
+    const gameBoardSizeRef = useRef({});
+
+    const { cloudSize, gameBoardHeight, gridTrackSize } = layout;
+    const { liveText, isOverlap, isValidDrop } = gameState;
 
     useLayoutEffect(() => {
         const { current: messageElement } = messageElementRef;
         const newGameBoardHeight = height - messageElement.getBoundingClientRect().height;
-        const smallerDimension = Math.min(newGameBoardHeight, width);
-        const newGridTrackSize = smallerDimension / GRID_TRACK_SIZE_RATIO;
-        const newCloudSize = smallerDimension / CLOUD_SIZE_RATIO;
-        setGameBoardHeight(newGameBoardHeight);
-        setGridTrackSize(newGridTrackSize);
-        setCloudSize(newCloudSize);
+        const minGameBoardLength = Math.min(newGameBoardHeight, width);
+        setLayout({
+            gameBoardHeight: newGameBoardHeight,
+            cloudSize: minGameBoardLength / CLOUD_SIZE_RATIO,
+            gridTrackSize: minGameBoardLength / GRID_TRACK_SIZE_RATIO,
+        });
 
-        messageElement.setAttribute(
-            'aria-label',
-            intl.formatMessage(
-                messages.accessibilityInstructions,
-                getGridPosition({ x: width - newCloudSize, y: newGameBoardHeight - newCloudSize }, newGridTrackSize),
-            ),
-        );
         messageElement.focus();
-    }, [height, intl, width]);
+    }, [height, width]);
 
     useEffect(() => {
         if (!gameBoardHeight) {
             return;
         }
 
-        const heightRatio = prevHeight.current ? gameBoardHeight / prevHeight.current : 1;
-        const widthRatio = prevWidth.current ? width / prevWidth.current : 1;
+        const { height: prevHeight, width: prevWidth } = gameBoardSizeRef.current;
+        const heightRatio = prevHeight ? gameBoardHeight / prevHeight : 1;
+        const widthRatio = prevWidth ? width / prevWidth : 1;
 
         let newDropCloudPosition;
         setDropCloudPosition(prevPos => {
@@ -68,19 +62,18 @@ const SecurityCloudGame = ({ height, intl, onValidDrop, width }) => {
             return newDropCloudPosition;
         });
         setDragCloudPosition(prevPos => {
-            if (!prevPos) {
-                let newPos = getRandomCloudPosition(cloudSize, gameBoardHeight, width);
-                while (checkOverlap(newPos, newDropCloudPosition, cloudSize)) {
-                    newPos = getRandomCloudPosition(cloudSize, gameBoardHeight, width);
-                }
-                return newPos;
+            if (prevPos) {
+                return { x: prevPos.x * widthRatio, y: prevPos.y * heightRatio };
             }
-            return { x: prevPos.x * widthRatio, y: prevPos.y * heightRatio };
+            let nextPos = getRandomCloudPosition(cloudSize, gameBoardHeight, width);
+            while (checkOverlap(nextPos, newDropCloudPosition, cloudSize)) {
+                nextPos = getRandomCloudPosition(cloudSize, gameBoardHeight, width);
+            }
+            return nextPos;
         });
 
         // update previous height and width for ratio calculation
-        prevHeight.current = gameBoardHeight;
-        prevWidth.current = width;
+        gameBoardSizeRef.current = { height: gameBoardHeight, width };
     }, [cloudSize, gameBoardHeight, width]);
 
     /**
@@ -90,7 +83,7 @@ const SecurityCloudGame = ({ height, intl, onValidDrop, width }) => {
      */
     const updateLiveText = (text, includeTargetPosition = false) => {
         if (includeTargetPosition) {
-            const targetPositionText = intl.formatMessage(
+            const targetPositionText = formatMessage(
                 messages.targetPosition,
                 getGridPosition(dropCloudPosition, gridTrackSize),
             );
@@ -107,9 +100,9 @@ const SecurityCloudGame = ({ height, intl, onValidDrop, width }) => {
      * @returns {void}
      */
     const onDrop = () => {
-        if (gameState.isOverlap) {
+        if (isOverlap) {
             setGameState(prevState => ({ ...prevState, isValidDrop: true }));
-            updateLiveText(intl.formatMessage(messages.success));
+            updateLiveText(formatMessage(messages.success));
 
             if (onValidDrop) {
                 // call onValidDrop if passed in through props
@@ -125,24 +118,35 @@ const SecurityCloudGame = ({ height, intl, onValidDrop, width }) => {
      */
     const updatePosition = (newPosition, shouldUpdateLiveText = false) => {
         setDragCloudPosition(newPosition);
-        const isOverlap = checkOverlap(newPosition, dropCloudPosition, cloudSize);
-        setGameState(prevState => ({ ...prevState, isOverlap }));
+        const isOverlapping = checkOverlap(newPosition, dropCloudPosition, cloudSize);
+        setGameState(prevState => ({ ...prevState, isOverlap: isOverlapping }));
 
         if (shouldUpdateLiveText) {
-            const liveText = isOverlap
-                ? intl.formatMessage(messages.targetInRange)
-                : intl.formatMessage(messages.currentPosition, getGridPosition(newPosition, gridTrackSize));
-            updateLiveText(liveText, !isOverlap);
+            const newliveText = isOverlap
+                ? formatMessage(messages.targetInRange)
+                : formatMessage(messages.currentPosition, getGridPosition(newPosition, gridTrackSize));
+            updateLiveText(newliveText, !isOverlap);
         }
     };
+
+    /**
+     * Get aria label for the message element.
+     * @returns {string|null}
+     */
+    const getAccessibilityInstructions = () =>
+        gameBoardHeight &&
+        cloudSize &&
+        gridTrackSize &&
+        formatMessage(
+            messages.accessibilityInstructions,
+            getGridPosition({ x: width - cloudSize, y: gameBoardHeight - cloudSize }, gridTrackSize),
+        );
 
     /**
      * Renders the drop cloud.
      * @returns {JSX}
      */
     const renderDropCloud = () => {
-        const { isValidDrop, isOverlap } = gameState;
-
         if (dropCloudPosition && !isValidDrop) {
             return (
                 <DropCloud className={isOverlap ? 'is-over' : ''} cloudSize={cloudSize} position={dropCloudPosition} />
@@ -157,13 +161,14 @@ const SecurityCloudGame = ({ height, intl, onValidDrop, width }) => {
      * @returns {JSX}
      */
     const renderDragCloud = () => {
+        const { current: gameBoardSize } = gameBoardSizeRef;
+
         if (dragCloudPosition) {
             return (
                 <DragCloud
-                    boardHeight={gameBoardHeight}
-                    boardWidth={width}
+                    gameBoardSize={gameBoardSize}
                     cloudSize={cloudSize}
-                    disabled={gameState.isValidDrop}
+                    disabled={isValidDrop}
                     gridTrackSize={gridTrackSize}
                     onDrop={onDrop}
                     position={dragCloudPosition}
@@ -181,20 +186,18 @@ const SecurityCloudGame = ({ height, intl, onValidDrop, width }) => {
      * @returns {JSX}
      */
     const renderMessage = () => {
-        if (gameState.isValidDrop) {
+        if (isValidDrop) {
             return <FormattedMessage {...messages.success} />;
         }
 
         return <FormattedMessage {...messages.instructions} />;
     };
 
-    const renderAriaLiveText = () => {
-        return (
-            <div aria-live="assertive">
-                <span className="live-text">{gameState.liveText}</span>
-            </div>
-        );
-    };
+    const renderAriaLiveText = () => (
+        <div className="bdl-SecurityCloudGame-liveText" aria-live="polite">
+            {liveText}
+        </div>
+    );
 
     /**
      * Renders the cloud game
@@ -203,11 +206,16 @@ const SecurityCloudGame = ({ height, intl, onValidDrop, width }) => {
     return (
         <FocusTrap>
             {renderAriaLiveText()}
-            <div className="box-ui-security-cloud-game" style={{ height: `${height}px`, width: `${width}px` }}>
-                <div ref={messageElementRef} className="box-ui-security-cloud-game-message" tabIndex={-1}>
+            <div className="bdl-SecurityCloudGame" style={{ height: `${height}px`, width: `${width}px` }}>
+                <div
+                    ref={messageElementRef}
+                    className="bdl-SecurityCloudGame-message"
+                    aria-label={getAccessibilityInstructions()}
+                    tabIndex={-1}
+                >
                     {renderMessage()}
                 </div>
-                <div className="box-ui-security-cloud-game-board">
+                <div className="bdl-SecurityCloudGame-board">
                     {renderDropCloud()}
                     {renderDragCloud()}
                 </div>
@@ -223,7 +231,7 @@ SecurityCloudGame.propTypes = {
     height: PropTypes.number.isRequired,
     /* Intl object */
     intl: PropTypes.any,
-    /** Function to call when the `DragCloud` is successfuly dropped onto the `DropCloud` */
+    /** Function to call when the `DragCloud` is successfully dropped onto the `DropCloud` */
     onValidDrop: PropTypes.func,
     /** Width to set the game to */
     width: PropTypes.number.isRequired,

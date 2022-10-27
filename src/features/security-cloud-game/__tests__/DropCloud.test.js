@@ -1,27 +1,23 @@
 import React from 'react';
 import logo from '../../../components/logo';
 
-import { DropCloudBase as DropCloud } from '../DropCloud';
-
-const intl = {
-    formatMessage: message => message.defaultMessage,
-};
+import DropCloud from '../DropCloud';
 
 describe('features/security-cloud-game/DropCloud', () => {
     test('should correctly render', () => {
-        const component = shallow(<DropCloud cloudSize={100} intl={intl} position={{ x: 10, y: 20 }} />);
+        const wrapper = shallow(<DropCloud cloudSize={100} position={{ x: 10, y: 20 }} />);
 
-        expect(component.hasClass('drop-cloud')).toBe(true);
-        expect(component.prop('style')).toEqual({
+        expect(wrapper.hasClass('bdl-DropCloud')).toBe(true);
+        expect(wrapper.prop('style')).toEqual({
             top: '20px',
             left: '10px',
         });
-        expect(component.find('IconCloud').length).toEqual(1);
-        expect(component.find('IconCloud').prop('height')).toEqual(100);
-        expect(component.find('IconCloud').prop('width')).toEqual(100);
-        expect(component.find('IconCloud').prop('title')).toEqual('Target');
-        expect(component.find('IconCloud').prop('filter')).toBeDefined();
-        expect(component.find('IconCloud').prop('filter').id).toEqual('inset-shadow');
-        expect(component.find(logo).prop('title')).toEqual('Box');
+        expect(wrapper.find('IconCloud').length).toEqual(1);
+        expect(wrapper.find('IconCloud').prop('height')).toEqual(100);
+        expect(wrapper.find('IconCloud').prop('width')).toEqual(100);
+        expect(wrapper.find('IconCloud').prop('title').props.id).toEqual('boxui.securityCloudGame.target');
+        expect(wrapper.find('IconCloud').prop('filter')).toBeDefined();
+        expect(wrapper.find('IconCloud').prop('filter').id).toEqual('inset-shadow');
+        expect(wrapper.find(logo).prop('title')).toEqual('Box');
     });
 });
