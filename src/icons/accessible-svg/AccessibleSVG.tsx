@@ -8,7 +8,6 @@ export interface AccessibleSVGIconProps extends SVGProps {
     'aria-labelledby'?: string;
     focusable?: boolean | 'false' | 'true' | 'auto' | undefined;
     opacity?: number;
-    style?: Object;
 }
 
 class AccessibleSVG extends React.Component<AccessibleSVGIconProps> {

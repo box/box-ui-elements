@@ -17,8 +17,6 @@ export interface Icon extends TwoTonedIcon {
     /** A string describing the fill color for the icon */
     fillColor?: string;
     /** A number specifying the opacity of the icon */
-    isEnhancement?: boolean;
-    /** A number specifying the opacity of the icon */
     opacity?: number;
     /** A string describing the color of the icon's stroke */
     strokeColor?: string;
