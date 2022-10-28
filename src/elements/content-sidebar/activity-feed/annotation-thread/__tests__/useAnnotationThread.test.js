@@ -15,6 +15,7 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
     const annotation = annotations[0];
 
     const mockUseAnnotatorEventsResult = {
+        emitAnnotationActiveChangeEvent: jest.fn(),
         emitDeleteAnnotationEndEvent: jest.fn(),
         emitDeleteAnnotationStartEvent: jest.fn(),
         emitUpdateAnnotationEndEvent: jest.fn(),
@@ -234,6 +235,14 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
             });
 
             expect(result.current.annotation).toEqual({ ...updatedAnnotation, isPending: false });
+        });
+
+        test('Should emit annotation active change event when used', () => {
+            const event = useAnnotatorEvents();
+
+            getHook();
+
+            expect(event.emitAnnotationActiveChangeEvent).toHaveBeenCalled();
         });
     });
 });

@@ -97,11 +97,15 @@ const useAnnotationThread = ({
         }
     };
 
-    useAnnotatorEvents({
+    const events = useAnnotatorEvents({
         onAnnotationDeleteStart: setAnnotationPending,
         onAnnotationUpdateEnd,
         onAnnotationUpdateStart: setAnnotationPending,
     });
+
+    React.useEffect(() => {
+        events.emitAnnotationActiveChangeEvent(annotationId, fileId);
+    }, [annotationId, events, fileId]);
 
     const handleUpdateOrCreateReplyItem = (replyId: string, updatedReplyValues: Object) => {
         setReplies(prevReplies => ({

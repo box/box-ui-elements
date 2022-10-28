@@ -7,7 +7,6 @@ import ActivityThread from '../activity-feed/ActivityThread';
 import AnnotationActivity from '../annotations';
 import API from '../../../../api/APIFactory';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
-import useAnnotatorEvents from '../../../common/annotator-context/useAnnotatorEvents';
 
 import type { BoxItem, SelectorItems, User } from '../../../../common/types/core';
 import type { ErrorContextProps } from '../../../../common/types/api';
@@ -54,12 +53,6 @@ const AnnotationThreadContent = ({
         filePermissions: permissions,
         errorCallback: onError,
     });
-
-    const events = useAnnotatorEvents({ eventEmitter });
-
-    React.useEffect(() => {
-        events.emitAnnotationActiveChangeEvent(annotationId, file.id);
-    }, [annotationId, events, file.id]);
 
     return (
         <ActivityThread

@@ -4,7 +4,6 @@ import { render } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import AnnotationThreadContent from '../AnnotationThreadContent';
 import { annotation, user } from '../../../../../__mocks__/annotations';
-import useAnnotatorEvents from '../../../../common/annotator-context/useAnnotatorEvents';
 
 import commonMessages from '../../../../common/messages';
 import messages from '../messages';
@@ -107,18 +106,5 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
         const { queryByText, getByText } = getWrapper();
         expect(getByText(commonMessages.errorOccured.defaultMessage)).toBeInTheDocument();
         expect(queryByText(messages.errorFetchAnnotation.defaultMessage)).toBeInTheDocument();
-    });
-
-    test('Should call emit event when rendered', () => {
-        const props = defaultProps();
-        const { eventEmitter } = props;
-        getWrapper(props);
-
-        expect(useAnnotatorEvents).toHaveBeenCalledWith({ eventEmitter });
-
-        expect(useAnnotatorEvents().emitAnnotationActiveChangeEvent).toHaveBeenCalledWith(
-            mockedAnnotation.id,
-            'fileId',
-        );
     });
 });
