@@ -35,6 +35,9 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
     useLayoutEffect(() => {
         const { current: messageElement } = messageElementRef;
         const newGameBoardHeight = height - messageElement.getBoundingClientRect().height;
+        // guardrail to prevent further rendering if the game board height is not positive
+        if (newGameBoardHeight <= 0) return;
+
         const minGameBoardLength = Math.min(newGameBoardHeight, width);
         setLayout({
             gameBoardHeight: newGameBoardHeight,
