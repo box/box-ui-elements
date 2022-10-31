@@ -57,18 +57,22 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
         const heightRatio = prevHeight ? gameBoardHeight / prevHeight : 1;
         const widthRatio = prevWidth ? width / prevWidth : 1;
 
+        // declare and update this variable first in order to generate the starting position for drag cloud
         let newDropCloudPosition;
+        // use prevState => {} to avoid referencing and updating the state at the same time
         setDropCloudPosition(prevPos => {
             newDropCloudPosition = !prevPos
-                ? getRandomCloudPosition(cloudSize, gameBoardHeight, width)
-                : { x: prevPos.x * widthRatio, y: prevPos.y * heightRatio };
+                ? getRandomCloudPosition(cloudSize, gameBoardHeight, width) // initial render
+                : { x: prevPos.x * widthRatio, y: prevPos.y * heightRatio }; // on board resize
             return newDropCloudPosition;
         });
         setDragCloudPosition(prevPos => {
+            // on board resize
             if (prevPos) {
                 return { x: prevPos.x * widthRatio, y: prevPos.y * heightRatio };
             }
             let nextPos = getRandomCloudPosition(cloudSize, gameBoardHeight, width);
+            // keep generating new ramdom position until there is no overlap
             while (checkOverlap(nextPos, newDropCloudPosition, cloudSize)) {
                 nextPos = getRandomCloudPosition(cloudSize, gameBoardHeight, width);
             }
