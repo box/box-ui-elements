@@ -53,10 +53,10 @@
     position: absolute;
     cursor: move;
     fill: $white;
-}
 
-.bdl-DragCloud.is-moving {
-    fill: $bdl-gray-20;
+    &.is-moving {
+        fill: $bdl-gray-20;
+    }
 }
 
 .bdl-DropCloud {

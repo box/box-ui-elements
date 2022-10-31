@@ -24,14 +24,14 @@ describe('features/security-cloud-game/SecurityCloudGame', () => {
     test('should correctly render', () => {
         const wrapper = getWrapper();
 
-        expect(wrapper.find('.bdl-SecurityCloudGame').length).toEqual(1);
+        expect(wrapper.exists('.bdl-SecurityCloudGame')).toBe(true);
         expect(wrapper.find('.bdl-SecurityCloudGame').prop('style')).toEqual({
             height: '1000px',
             width: '1000px',
         });
-        expect(wrapper.find('.bdl-SecurityCloudGame-message').length).toEqual(1);
-        expect(wrapper.find(DropCloud).length).toEqual(1);
-        expect(wrapper.find(DragCloud).length).toEqual(1);
+        expect(wrapper.exists('.bdl-SecurityCloudGame-message')).toBe(true);
+        expect(wrapper.exists(DropCloud)).toBe(true);
+        expect(wrapper.exists(DragCloud)).toBe(true);
     });
 
     test('should correctly calculate cloud positions', () => {
@@ -67,7 +67,7 @@ describe('features/security-cloud-game/SecurityCloudGame', () => {
         getWrapper();
 
         // Math.random() should be called 6 times (2x2 for first call, 2x1 for second)
-        expect(randomSpy).toHaveBeenCalledTimes(6);
+        expect(randomSpy).toBeCalledTimes(6);
     });
 
     test('should render correctly on state changes', () => {
@@ -86,7 +86,7 @@ describe('features/security-cloud-game/SecurityCloudGame', () => {
             wrapper.find(DragCloud).prop('onDrop')();
         });
         wrapper.update();
-        expect(wrapper.find(DropCloud).length).toEqual(0);
+        expect(wrapper.exists(DropCloud)).toBe(false);
         expect(wrapper.find(DragCloud).prop('disabled')).toEqual(true);
 
         const messageElement = wrapper.find('.bdl-SecurityCloudGame-message');

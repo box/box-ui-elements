@@ -23,9 +23,9 @@ const DropShadowFilter = () => (
 );
 
 const DragCloud = ({
-    gameBoardSize: { height, width },
     cloudSize,
     disabled,
+    gameBoardSize: { height, width },
     gridTrackSize,
     intl: { formatMessage },
     onDrop,
@@ -138,8 +138,7 @@ const DragCloud = ({
 
     return (
         <Draggable bounds="parent" disabled={disabled} onDrag={onDrag} onStop={onDrop} position={position}>
-            {/* eslint-disable-next-line */}
-            <div className={dragCloudClasses} onBlur={onBlur} onKeyDown={onKeyDown} tabIndex={0}>
+            <div className={dragCloudClasses} onBlur={onBlur} onKeyDown={onKeyDown} role="button" tabIndex={0}>
                 <IconCloud
                     filter={{ id: 'drop-shadow', definition: <DropShadowFilter /> }}
                     height={cloudSize}
@@ -154,9 +153,9 @@ const DragCloud = ({
 DragCloud.displayName = 'DragCloud';
 
 DragCloud.propTypes = {
-    gameBoardSize: PropTypes.objectOf(PropTypes.number),
     cloudSize: PropTypes.number,
     disabled: PropTypes.bool,
+    gameBoardSize: PropTypes.objectOf(PropTypes.number),
     gridTrackSize: PropTypes.number,
     intl: PropTypes.any,
     position: PropTypes.objectOf(PropTypes.number).isRequired,

@@ -131,7 +131,7 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
 
     /**
      * Get aria label for the message element.
-     * @returns {string|null}
+     * @returns {string|undefined}
      */
     const getAccessibilityInstructions = () =>
         gameBoardHeight &&
@@ -166,9 +166,9 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
         if (dragCloudPosition) {
             return (
                 <DragCloud
-                    gameBoardSize={gameBoardSize}
                     cloudSize={cloudSize}
                     disabled={isValidDrop}
+                    gameBoardSize={gameBoardSize}
                     gridTrackSize={gridTrackSize}
                     onDrop={onDrop}
                     position={dragCloudPosition}
@@ -193,19 +193,15 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
         return <FormattedMessage {...messages.instructions} />;
     };
 
-    const renderAriaLiveText = () => (
-        <div className="bdl-SecurityCloudGame-liveText" aria-live="polite">
-            {liveText}
-        </div>
-    );
-
     /**
      * Renders the cloud game
      * @returns {JSX}
      */
     return (
         <FocusTrap>
-            {renderAriaLiveText()}
+            <div className="bdl-SecurityCloudGame-liveText" aria-live="polite">
+                {liveText}
+            </div>
             <div className="bdl-SecurityCloudGame" style={{ height: `${height}px`, width: `${width}px` }}>
                 <div
                     ref={messageElementRef}

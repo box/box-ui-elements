@@ -21,7 +21,7 @@ describe('features/security-cloud-game/DragCloud', () => {
 
         const draggable = wrapper.find(Draggable);
         expect(draggable.prop('position')).toEqual({ x: 10, y: 20 });
-        expect(draggable.find('.bdl-DragCloud').length).toEqual(1);
+        expect(draggable.exists('.bdl-DragCloud')).toBe(true);
 
         const iconCloud = wrapper.find('IconCloud');
         expect(iconCloud.prop('height')).toEqual(100);
@@ -31,61 +31,73 @@ describe('features/security-cloud-game/DragCloud', () => {
         expect(iconCloud.prop('filter').id).toEqual('drop-shadow');
     });
 
-    test('should handle keyboard navigation correctly', () => {
-        const updatePosition = jest.fn();
-        const onDrop = jest.fn();
-        const updateLiveText = jest.fn();
+    describe('should handle keyboard navigation correctly', () => {
+        let updatePosition;
+        let onDrop;
+        let updateLiveText;
+        let wrapper;
 
-        const wrapper = mount(
-            <DragCloud
-                gameBoardSize={{ height: 500, width: 500 }}
-                cloudSize={50}
-                gridTrackSize={10}
-                intl={intl}
-                onDrop={onDrop}
-                position={{ x: 20, y: 10 }}
-                updateLiveText={updateLiveText}
-                updatePosition={updatePosition}
-            />,
-        );
+        beforeEach(() => {
+            updatePosition = jest.fn();
+            onDrop = jest.fn();
+            updateLiveText = jest.fn();
 
-        // grab
-        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: ' ' });
-        expect(wrapper.find('.bdl-DragCloud').hasClass('is-moving')).toBe(true);
-        expect(updateLiveText).toHaveBeenLastCalledWith(
-            'Cloud object grabbed. Current position: Row {row}, Column {column}.',
-            true,
-        );
+            wrapper = mount(
+                <DragCloud
+                    gameBoardSize={{ height: 500, width: 500 }}
+                    cloudSize={50}
+                    gridTrackSize={10}
+                    intl={intl}
+                    onDrop={onDrop}
+                    position={{ x: 20, y: 10 }}
+                    updateLiveText={updateLiveText}
+                    updatePosition={updatePosition}
+                />,
+            );
 
-        // move
-        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowUp' });
-        expect(updatePosition).toHaveBeenLastCalledWith({ x: 20, y: 0 }, true);
-        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowRight' });
-        expect(updatePosition).toHaveBeenLastCalledWith({ x: 30, y: 10 }, true);
-        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowDown' });
-        expect(updatePosition).toHaveBeenLastCalledWith({ x: 20, y: 20 }, true);
-        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowLeft' });
-        expect(updatePosition).toHaveBeenLastCalledWith({ x: 10, y: 10 }, true);
+            // we need to grab the cloud first in order to take further actions
+            wrapper.find('.bdl-DragCloud').simulate('keydown', { key: ' ' });
+        });
 
-        // hit edge
-        wrapper.setProps({ position: { x: 20, y: 0 } });
-        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowUp' });
-        expect(updateLiveText).toHaveBeenLastCalledWith('Reached top edge of grid.');
+        test('when grabbing the cloud object', () => {
+            expect(wrapper.find('.bdl-DragCloud').hasClass('is-moving')).toBe(true);
+            expect(updateLiveText).lastCalledWith(
+                'Cloud object grabbed. Current position: Row {row}, Column {column}.',
+                true,
+            );
+        });
 
-        // drop
-        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: ' ' });
-        expect(updateLiveText).toHaveBeenLastCalledWith(
-            'Cloud object dropped. Current position: Row {row}, Column {column}.',
-            true,
-        );
-        expect(onDrop).toHaveBeenCalledTimes(1);
-        expect(wrapper.find('.bdl-DragCloud').hasClass('is-moving')).toBe(false);
+        test('when moving the cloud object', () => {
+            wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowUp' });
+            expect(updatePosition).lastCalledWith({ x: 20, y: 0 }, true);
+            wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowRight' });
+            expect(updatePosition).lastCalledWith({ x: 30, y: 10 }, true);
+            wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowDown' });
+            expect(updatePosition).lastCalledWith({ x: 20, y: 20 }, true);
+            wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowLeft' });
+            expect(updatePosition).lastCalledWith({ x: 10, y: 10 }, true);
+        });
 
-        // reset isMoving on blur
-        wrapper.find('.bdl-DragCloud').simulate('keydown', { key: ' ' });
-        expect(wrapper.find('.bdl-DragCloud').hasClass('is-moving')).toBe(true);
-        wrapper.find('.bdl-DragCloud').simulate('blur');
-        expect(wrapper.find('.bdl-DragCloud').hasClass('is-moving')).toBe(false);
+        test('when hitting the board edge', () => {
+            wrapper.setProps({ position: { x: 20, y: 0 } });
+            wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowUp' });
+            expect(updateLiveText).lastCalledWith('Reached top edge of grid.');
+        });
+
+        test('when dropping the cloud object', () => {
+            wrapper.find('.bdl-DragCloud').simulate('keydown', { key: ' ' });
+            expect(updateLiveText).lastCalledWith(
+                'Cloud object dropped. Current position: Row {row}, Column {column}.',
+                true,
+            );
+            expect(onDrop).toBeCalledTimes(1);
+            expect(wrapper.find('.bdl-DragCloud').hasClass('is-moving')).toBe(false);
+        });
+
+        test('when losing focus', () => {
+            wrapper.find('.bdl-DragCloud').simulate('blur');
+            expect(wrapper.find('.bdl-DragCloud').hasClass('is-moving')).toBe(false);
+        });
     });
 
     test('should handle dragging correctly', () => {
@@ -106,9 +118,9 @@ describe('features/security-cloud-game/DragCloud', () => {
         );
 
         wrapper.find(Draggable).prop('onDrag')({}, { x: 50, y: 70 });
-        expect(updatePosition).toHaveBeenLastCalledWith({ x: 50, y: 70 });
+        expect(updatePosition).lastCalledWith({ x: 50, y: 70 });
 
         wrapper.find(Draggable).prop('onStop')();
-        expect(onDrop).toHaveBeenCalledTimes(1);
+        expect(onDrop).toBeCalledTimes(1);
     });
 });
