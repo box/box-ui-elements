@@ -72,7 +72,7 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
                 return { x: prevPos.x * widthRatio, y: prevPos.y * heightRatio };
             }
             let nextPos = getRandomCloudPosition(cloudSize, gameBoardHeight, width);
-            // keep generating new ramdom position until there is no overlap
+            // keep generating new random position until there is no overlap
             while (checkOverlap(nextPos, newDropCloudPosition, cloudSize)) {
                 nextPos = getRandomCloudPosition(cloudSize, gameBoardHeight, width);
             }
