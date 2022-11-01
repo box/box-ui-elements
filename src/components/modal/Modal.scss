@@ -142,7 +142,7 @@
         $responsive-modal-actions-height: 60px;
 
         .modal-title {
-            @include line-clamp(2);
+            @include bdl-line-clamp(2);
         }
 
         .modal {
