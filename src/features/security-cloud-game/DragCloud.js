@@ -75,7 +75,7 @@ const DragCloud = ({
         }
     };
 
-    const handleSpaceBar = () => {
+    const handleSpacebar = () => {
         const cloudStatusText = formatMessage(isMoving ? messages.cloudDropped : messages.cloudGrabbed);
         const currentPositionText = formatMessage(messages.currentPosition, getGridPosition(position, gridTrackSize));
         updateLiveText(`${cloudStatusText} ${currentPositionText}`, true);
@@ -88,7 +88,7 @@ const DragCloud = ({
     };
 
     /**
-     * DragCloud keyboard event handler. Supports Up/Down/Left/Right arrow keys and Space Bar
+     * DragCloud keyboard event handler. Supports Up/Down/Left/Right arrow keys and Spacebar
      * @param {KeyboardEvent} event - The drag event
      * @returns {void}
      */
@@ -101,7 +101,7 @@ const DragCloud = ({
         event.stopPropagation();
 
         if (event.key === ' ') {
-            handleSpaceBar();
+            handleSpacebar();
         } else if (isMoving) {
             switch (event.key) {
                 case 'ArrowUp':

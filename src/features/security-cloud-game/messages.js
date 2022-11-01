@@ -8,13 +8,13 @@ const messages = defineMessages({
     },
     instructions: {
         defaultMessage:
-            'For security purposes, please drag the white cloud onto the dark cloud. Keyboard users: Press space bar to grab the cloud, arrow keys to move, and space bar to drop.',
+            'For security purposes, please drag the white cloud onto the dark cloud. Keyboard users: Press spacebar to grab the cloud, arrow keys to move, and spacebar to drop.',
         description: 'Instructional message displayed on the embed widget security drag-drop game',
         id: 'boxui.securityCloudGame.instructions',
     },
     accessibilityInstructions: {
         defaultMessage:
-            'For security purposes, please drag the cloud object onto the target. You are on a {row} by {column} grid with a movable cloud object and a target area. Press space bar to grab the cloud object, arrow keys to move, and space bar to drop on the target.',
+            'For security purposes, please drag the cloud object onto the target. You are on a {row} by {column} grid with a movable cloud object and a target area. Press spacebar to grab the cloud object, arrow keys to move, and spacebar to drop on the target.',
         description: 'Instructional message displayed on the embed widget security drag-drop game for screen readers',
         id: 'boxui.securityCloudGame.accessibilityInstructions',
     },

@@ -1,6 +1,5 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 
 import DragCloud from '../DragCloud';
@@ -11,14 +10,7 @@ const intl = {
     formatMessage: message => message.defaultMessage,
 };
 
-const getWrapper = () => {
-    let wrapper;
-    act(() => {
-        wrapper = mount(<SecurityCloudGame height={1000} intl={intl} width={1000} />);
-    });
-    wrapper.update();
-    return wrapper;
-};
+const getWrapper = () => mount(<SecurityCloudGame height={1000} intl={intl} width={1000} />);
 
 describe('features/security-cloud-game/SecurityCloudGame', () => {
     test('should correctly render', () => {
@@ -75,17 +67,11 @@ describe('features/security-cloud-game/SecurityCloudGame', () => {
 
         // verify isOverlap
         const dropCloudPosition = wrapper.find(DropCloud).prop('position');
-        act(() => {
-            wrapper.find(DragCloud).prop('updatePosition')(dropCloudPosition);
-        });
-        wrapper.update();
+        wrapper.find(DragCloud).invoke('updatePosition')(dropCloudPosition);
         expect(wrapper.find('.bdl-DropCloud').hasClass('is-over')).toBe(true);
 
         // verify isValidDrop
-        act(() => {
-            wrapper.find(DragCloud).prop('onDrop')();
-        });
-        wrapper.update();
+        wrapper.find(DragCloud).invoke('onDrop')();
         expect(wrapper.exists(DropCloud)).toBe(false);
         expect(wrapper.find(DragCloud).prop('disabled')).toEqual(true);
 
@@ -103,10 +89,7 @@ describe('features/security-cloud-game/SecurityCloudGame', () => {
     test('should update live text when target position is included', () => {
         const wrapper = getWrapper();
 
-        act(() => {
-            wrapper.find(DragCloud).prop('updateLiveText')('Some text.', true);
-        });
-        wrapper.update();
+        wrapper.find(DragCloud).invoke('updateLiveText')('Some text.', true);
 
         expect(wrapper.find('.bdl-SecurityCloudGame-liveText').text()).toEqual(
             'Some text. Target position: Row {row}, Column {column}.',
@@ -126,9 +109,7 @@ describe('features/security-cloud-game/SecurityCloudGame', () => {
         const cloudSize = wrapper.find(DragCloud).prop('cloudSize');
         const position = wrapper.find(DragCloud).prop('position');
 
-        act(() => {
-            wrapper.setProps({ height: 500, width: 500 });
-        });
+        wrapper.setProps({ height: 500, width: 500 });
         wrapper.update();
 
         expect(wrapper.find(DragCloud).prop('gridTrackSize')).toEqual(gridTrackSize / 2);
