@@ -102,8 +102,6 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
 
     /**
      * DragCloud drop event handler. Checks if it's valid drop and handles valid drop if it is.
-     * @param {MouseEvent} e - The Drop event
-     * @param {object} {x, y} - Object which contains x and y coordiante of the drop event.
      * @returns {void}
      */
     const onDrop = () => {
@@ -120,7 +118,8 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
 
     /**
      * Pass along to the drag cloud to set position on moving.
-     * @param {number} position - new drag cloud position
+     * @param {number} newPosition - new drag cloud position
+     * @param {boolean} shouldUpdateLiveText - default to false
      * @returns {void}
      */
     const updatePosition = (newPosition, shouldUpdateLiveText = false) => {
@@ -129,10 +128,10 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
         setGameState(prevState => ({ ...prevState, isOverlap: isOverlapping }));
 
         if (shouldUpdateLiveText) {
-            const newliveText = isOverlap
+            const newliveText = isOverlapping
                 ? formatMessage(messages.targetInRange)
                 : formatMessage(messages.currentPosition, getGridPosition(newPosition, gridTrackSize));
-            updateLiveText(newliveText, !isOverlap);
+            updateLiveText(newliveText, !isOverlapping);
         }
     };
 

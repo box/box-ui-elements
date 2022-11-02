@@ -41,36 +41,34 @@ const DragCloud = ({
 
     const moveLeft = () => {
         const newX = position.x - gridTrackSize;
-        if (newX >= 0) {
-            updatePosition({ ...position, x: newX }, true);
-        } else {
+        updatePosition({ ...position, x: Math.max(newX, 0) }, true);
+        if (newX < 0) {
             updateLiveText(formatMessage(messages.reachLeftEdge));
         }
     };
 
     const moveRight = () => {
+        const maxX = width - cloudSize;
         const newX = position.x + gridTrackSize;
-        if (newX + cloudSize <= width) {
-            updatePosition({ ...position, x: newX }, true);
-        } else {
+        updatePosition({ ...position, x: Math.min(newX, maxX) }, true);
+        if (newX > maxX) {
             updateLiveText(formatMessage(messages.reachRightEdge));
         }
     };
 
     const moveUp = () => {
         const newY = position.y - gridTrackSize;
-        if (newY >= 0) {
-            updatePosition({ ...position, y: newY }, true);
-        } else {
+        updatePosition({ ...position, y: Math.max(newY, 0) }, true);
+        if (newY < 0) {
             updateLiveText(formatMessage(messages.reachTopEdge));
         }
     };
 
     const moveDown = () => {
+        const maxY = height - cloudSize;
         const newY = position.y + gridTrackSize;
-        if (newY + cloudSize <= height) {
-            updatePosition({ ...position, y: newY }, true);
-        } else {
+        updatePosition({ ...position, y: Math.min(newY, maxY) }, true);
+        if (newY > maxY) {
             updateLiveText(formatMessage(messages.reachBottomEdge));
         }
     };

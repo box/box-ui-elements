@@ -79,9 +79,25 @@ describe('features/security-cloud-game/DragCloud', () => {
         });
 
         test('when hitting the board edge', () => {
-            wrapper.setProps({ position: { x: 20, y: 0 } });
+            wrapper.setProps({ position: { x: 20, y: 5 } });
             wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowUp' });
+            expect(updatePosition).lastCalledWith({ x: 20, y: 0 }, true);
             expect(updateLiveText).lastCalledWith('Reached top edge of grid.');
+
+            wrapper.setProps({ position: { x: 445, y: 20 } });
+            wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowRight' });
+            expect(updatePosition).lastCalledWith({ x: 450, y: 20 }, true);
+            expect(updateLiveText).lastCalledWith('Reached right edge of grid.');
+
+            wrapper.setProps({ position: { x: 20, y: 445 } });
+            wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowDown' });
+            expect(updatePosition).lastCalledWith({ x: 20, y: 450 }, true);
+            expect(updateLiveText).lastCalledWith('Reached bottom edge of grid.');
+
+            wrapper.setProps({ position: { x: 5, y: 20 } });
+            wrapper.find('.bdl-DragCloud').simulate('keydown', { key: 'ArrowLeft' });
+            expect(updatePosition).lastCalledWith({ x: 0, y: 20 }, true);
+            expect(updateLiveText).lastCalledWith('Reached left edge of grid.');
         });
 
         test('when dropping the cloud object', () => {
