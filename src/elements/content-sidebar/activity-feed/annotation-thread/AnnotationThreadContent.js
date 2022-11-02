@@ -1,15 +1,15 @@
 // @flow
 import React from 'react';
+import type EventEmitter from 'events';
+import useAnnotationThread from './useAnnotationThread';
 import ActivityError from '../common/activity-error';
 import ActivityThread from '../activity-feed/ActivityThread';
 import AnnotationActivity from '../annotations';
 import API from '../../../../api/APIFactory';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
-import useAnnotationAPI from './useAnnotationAPI';
 
 import type { BoxItem, SelectorItems, User } from '../../../../common/types/core';
 import type { ErrorContextProps } from '../../../../common/types/api';
-import type { BoxCommentPermission, FeedItemStatus } from '../../../../common/types/feed';
 
 import './AnnotationThreadContent.scss';
 
@@ -17,6 +17,7 @@ type Props = {
     annotationId: string,
     api: API,
     currentUser: User,
+    eventEmitter: EventEmitter,
     file: BoxItem,
     getAvatarUrl: string => Promise<?string>,
     getMentionWithQuery: (searchStr: string) => void,
@@ -27,6 +28,7 @@ const AnnotationThreadContent = ({
     annotationId,
     api,
     currentUser,
+    eventEmitter,
     file,
     getAvatarUrl,
     getMentionWithQuery,
@@ -40,30 +42,17 @@ const AnnotationThreadContent = ({
         replies,
         isLoading,
         error,
-        handleEdit,
-        handleStatusChange,
-        handleDelete,
-        handleCreateReply,
-        handleDeleteReply,
-        handleEditReply,
-    } = useAnnotationAPI({
+        annotationActions: { handleAnnotationStatusChange, handleAnnotationDelete, handleAnnotationEdit },
+        repliesActions: { handleReplyEdit, handleReplyCreate, handleReplyDelete },
+    } = useAnnotationThread({
         api,
         annotationId,
         currentUser,
+        eventEmitter,
         fileId,
         filePermissions: permissions,
         errorCallback: onError,
     });
-
-    const onReplyEditHandler = (
-        id: string,
-        text: string,
-        status?: FeedItemStatus,
-        hasMention?: boolean,
-        replyPermissions: BoxCommentPermission,
-    ) => {
-        handleEditReply(id, text, status, replyPermissions);
-    };
 
     return (
         <ActivityThread
@@ -73,9 +62,9 @@ const AnnotationThreadContent = ({
             isAlwaysExpanded
             isRepliesLoading={isLoading}
             mentionSelectorContacts={mentionSelectorContacts}
-            onReplyCreate={handleCreateReply}
-            onReplyDelete={handleDeleteReply}
-            onReplyEdit={onReplyEditHandler}
+            onReplyCreate={handleReplyCreate}
+            onReplyDelete={handleReplyDelete}
+            onReplyEdit={handleReplyEdit}
             replies={replies}
             repliesTotalCount={replies.length}
         >
@@ -93,9 +82,9 @@ const AnnotationThreadContent = ({
                     item={annotation}
                     getMentionWithQuery={getMentionWithQuery}
                     mentionSelectorContacts={mentionSelectorContacts}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                    onStatusChange={handleStatusChange}
+                    onEdit={handleAnnotationEdit}
+                    onDelete={handleAnnotationDelete}
+                    onStatusChange={handleAnnotationStatusChange}
                 />
             )}
         </ActivityThread>

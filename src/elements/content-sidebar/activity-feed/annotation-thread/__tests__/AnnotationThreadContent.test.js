@@ -13,18 +13,22 @@ let mockedError;
 let mockedIsLoading = false;
 
 jest.mock('react-intl', () => jest.requireActual('react-intl'));
-jest.mock('../useAnnotationAPI', () => {
+jest.mock('../useAnnotationThread', () => {
     return jest.fn(() => ({
         annotation: mockedAnnotation,
+        annotationActions: {
+            handleDelete: jest.fn(),
+            handleEdit: jest.fn(),
+            handleResolve: jest.fn(),
+        },
         error: mockedError,
         isLoading: mockedIsLoading,
-        handleDelete: jest.fn(),
-        handleEdit: jest.fn(),
-        handleResolve: jest.fn(),
         replies: [],
-        handleCreateReply: jest.fn(),
-        handleEditReply: jest.fn(),
-        handleDeleteReply: jest.fn(),
+        repliesActions: {
+            handleCreateReply: jest.fn(),
+            handleEditReply: jest.fn(),
+            handleDeleteReply: jest.fn(),
+        },
     }));
 });
 
@@ -38,6 +42,7 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
                 getAnnotation: jest.fn(),
             }),
         },
+        eventEmitter: {},
         file: {
             id: 'fileId',
             permissions: {
