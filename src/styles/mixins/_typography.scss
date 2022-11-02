@@ -43,13 +43,13 @@
     letter-spacing: .3px;
 }
 
-@mixin bdl-target-ie11 {
+@mixin bdl-targetIE11 {
     @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
         @content;
     }
 }
 
-@mixin bdl-line-clamp($max-lines: 2, $line-height: 1.5) {
+@mixin bdl-lineClamp($max-lines: 2, $line-height: 1.5) {
     display: -webkit-box; /* stylelint-disable-line value-no-vendor-prefix */
     overflow: hidden;
     line-height: $line-height;
@@ -57,13 +57,11 @@
     word-break: normal;
     overflow-wrap: anywhere;
     -webkit-box-orient: vertical; /* stylelint-disable-line property-no-vendor-prefix */
-
-    /* autoprefixer: ignore next */
     -webkit-line-clamp: $max-lines;
 
     // On IE11 we truncate to a single line since line-clamp
     // is not supported
-    @include bdl-target-ie11 {
+    @include bdl-targetIE11 {
         white-space: nowrap;
         text-overflow: ellipsis;
     }
