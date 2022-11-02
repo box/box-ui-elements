@@ -6,13 +6,6 @@
     color: $bdl-box-blue;
     font-weight: bold;
 
-    &::before {
-        margin-right: 2 * $bdl-grid-unit;
-        margin-left: 2 * $bdl-grid-unit;
-        color: $bdl-gray-50;
-        content: '\2022';
-    }
-
     &[aria-disabled='true'] {
         color: $bdl-gray-62;
     }
