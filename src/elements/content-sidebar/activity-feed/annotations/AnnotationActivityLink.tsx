@@ -4,48 +4,29 @@ import noop from 'lodash/noop';
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from 'react-intl';
 import PlainButton from '../../../../components/plain-button';
 import { ButtonType } from '../../../../components/button';
-import messages from './messages';
 import './AnnotationActivityLink.scss';
 
 type MessageDescriptorWithValues = {
-    values?: { number: string };
+    values?: Record<string, number>;
 } & MessageDescriptor;
 export interface AnnotationActivityLinkProps extends WrappedComponentProps {
     className?: string;
-    fileVersion: string;
     id: string;
-    isCurrentVersion?: boolean;
-    locationValue: string;
+    isDisabled: boolean;
+    message: MessageDescriptorWithValues;
     onClick: (id: string) => void;
-    shouldHideLink: boolean;
 }
 
-const AnnotationActivityLink: React.FC<AnnotationActivityLinkProps> = ({
+const AnnotationActivityLink = ({
     className,
     id,
-    fileVersion,
     intl,
-    isCurrentVersion,
-    locationValue,
+    isDisabled = false,
+    message,
     onClick = noop,
-    shouldHideLink,
     ...rest
-}: AnnotationActivityLinkProps) => {
-    if (shouldHideLink) {
-        return null;
-    }
-
-    const getMessage = (): MessageDescriptorWithValues => {
-        const linkMessage = isCurrentVersion
-            ? messages.annotationActivityPageItem
-            : messages.annotationActivityVersionLink;
-        const linkValue = isCurrentVersion ? locationValue : fileVersion;
-        return !fileVersion
-            ? messages.annotationActivityVersionUnavailable
-            : { ...linkMessage, values: { number: linkValue } };
-    };
-
-    const { values, ...messageDescriptor } = getMessage();
+}: AnnotationActivityLinkProps): JSX.Element => {
+    const { values, ...messageDescriptor } = message;
     const translatedMessage = intl.formatMessage(messageDescriptor, values);
 
     const handleClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
@@ -57,7 +38,7 @@ const AnnotationActivityLink: React.FC<AnnotationActivityLinkProps> = ({
     };
 
     const handleMouseDown = (event: React.MouseEvent<HTMLButtonElement>) => {
-        if (!fileVersion) {
+        if (isDisabled) {
             return;
         }
 
@@ -71,7 +52,7 @@ const AnnotationActivityLink: React.FC<AnnotationActivityLinkProps> = ({
         <PlainButton
             className={classNames('bcs-AnnotationActivityLink', className)}
             data-testid="bcs-AnnotationActivity-link"
-            isDisabled={!fileVersion}
+            isDisabled={isDisabled}
             onClick={handleClick}
             onMouseDown={handleMouseDown}
             title={translatedMessage}
