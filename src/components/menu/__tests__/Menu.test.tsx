@@ -301,7 +301,7 @@ describe('components/menu/Menu', () => {
 
         test('should call fireOnCloseHandler() when click occurred on a valid menu item', () => {
             const wrapper = mount(
-                <Menu data>
+                <Menu>
                     <li role="menuitem" />
                     <li role="separator" />
                 </Menu>,
