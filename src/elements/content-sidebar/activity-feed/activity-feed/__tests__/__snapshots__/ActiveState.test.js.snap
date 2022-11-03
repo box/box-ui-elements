@@ -58,6 +58,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       }
       data-testid="activity-thread"
       hasReplies={false}
+      onHideReplies={[Function]}
       onReplyCreate={[Function]}
       onReplyDelete={[Function]}
       onReplyEdit={[Function]}
@@ -112,6 +113,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       }
       data-testid="activity-thread"
       hasReplies={false}
+      onHideReplies={[Function]}
       onReplyCreate={[Function]}
       onReplyDelete={[Function]}
       onReplyEdit={[Function]}

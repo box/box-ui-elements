@@ -27,6 +27,7 @@ type Props = {
     isAlwaysExpanded?: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
+    onHideReplies?: (lastReply: CommentType) => void,
     onReplyCreate?: (text: string) => void,
     onReplyDelete?: ({ id: string, permissions: BoxCommentPermission }) => void,
     onReplyEdit?: (
@@ -54,6 +55,7 @@ const ActivityThread = ({
     isAlwaysExpanded = false,
     isRepliesLoading,
     mentionSelectorContacts,
+    onHideReplies = noop,
     onReplyCreate,
     onReplyDelete = noop,
     onReplyEdit = noop,
@@ -62,16 +64,44 @@ const ActivityThread = ({
     repliesTotalCount = 0,
     translations,
 }: Props) => {
-    const [isExpanded, setIsExpanded] = React.useState(isAlwaysExpanded);
+    const { length: repliesLength } = replies;
+    const repliesToLoadCount = Math.max(repliesTotalCount - repliesLength, 0);
 
-    const toggleButtonLabel = isExpanded ? messages.hideReplies : messages.showReplies;
-    const repliesToLoadCount = Math.max(repliesTotalCount - 1, 0);
+    const onHideRepliesHandler = () => {
+        onHideReplies(replies[repliesLength - 1]);
+    };
 
-    const toggleReplies = () => {
-        if (!isExpanded) {
-            onShowReplies();
+    const renderButton = () => {
+        if (isAlwaysExpanded || isRepliesLoading) {
+            return null;
         }
-        setIsExpanded(previousState => !previousState);
+
+        if (repliesTotalCount > repliesLength) {
+            return (
+                <PlainButton
+                    className="bcs-ActivityThread-toggle"
+                    onClick={onShowReplies}
+                    type="button"
+                    data-testid="activity-thread-button"
+                >
+                    <FormattedMessage values={{ repliesToLoadCount }} {...messages.showReplies} />
+                </PlainButton>
+            );
+        }
+        if (repliesTotalCount > 1 && repliesTotalCount === repliesLength) {
+            return (
+                <PlainButton
+                    className="bcs-ActivityThread-toggle"
+                    onClick={onHideRepliesHandler}
+                    type="button"
+                    data-testid="activity-thread-button"
+                >
+                    <FormattedMessage {...messages.hideReplies} />
+                </PlainButton>
+            );
+        }
+
+        return null;
     };
 
     if (!hasReplies) {
@@ -86,24 +116,14 @@ const ActivityThread = ({
                     <LoadingIndicator />
                 </div>
             )}
-            {!isAlwaysExpanded && !isRepliesLoading && repliesTotalCount > 1 && (
-                <PlainButton
-                    className="bcs-ActivityThread-toggle"
-                    onClick={toggleReplies}
-                    type="button"
-                    data-testid="activity-thread-button"
-                >
-                    <FormattedMessage values={{ repliesToLoadCount }} {...toggleButtonLabel} />
-                </PlainButton>
-            )}
+            {renderButton()}
 
-            {!isRepliesLoading && repliesTotalCount > 0 && replies.length > 0 && (
+            {!isRepliesLoading && repliesTotalCount > 0 && repliesLength > 0 && (
                 <ActivityThreadReplies
                     currentUser={currentUser}
                     getAvatarUrl={getAvatarUrl}
                     getMentionWithQuery={getMentionWithQuery}
                     getUserProfileUrl={getUserProfileUrl}
-                    isExpanded={isExpanded}
                     mentionSelectorContacts={mentionSelectorContacts}
                     onDelete={onReplyDelete}
                     onEdit={onReplyEdit}
