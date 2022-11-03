@@ -1,6 +1,5 @@
 import React, { SyntheticEvent } from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { fireEvent, render, screen } from '@testing-library/react';
 
 import Checkbox from '..';
 
@@ -85,31 +84,5 @@ describe('components/checkbox/Checkbox', () => {
         const label = wrapper.find('.label');
         expect(label.length).toBe(1);
         expect(label.contains(fieldLabel)).toBe(true);
-    });
-
-    test('should call outer function when shouldStopPropagationOnClick is false', () => {
-        const outerClickFunc = jest.fn();
-        render(
-            /* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */
-            <div onClick={outerClickFunc}>
-                <Checkbox id="1" label="Check things" name="name" onChange={onChange} />
-            </div>,
-        );
-
-        fireEvent.click(screen.getByRole('checkbox'));
-        expect(outerClickFunc).toHaveBeenCalled();
-    });
-
-    test('should not call outer function when shouldStopPropagationOnClick is true', () => {
-        const outerClickFunc = jest.fn();
-        render(
-            /* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */
-            <div onClick={outerClickFunc}>
-                <Checkbox id="1" label="Check things" name="name" onChange={onChange} shouldStopPropagationOnClick />
-            </div>,
-        );
-
-        fireEvent.click(screen.getByRole('checkbox'));
-        expect(outerClickFunc).not.toHaveBeenCalled();
     });
 });

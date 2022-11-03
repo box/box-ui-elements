@@ -33,8 +33,6 @@ export interface CheckboxProps {
           };
     /** onChange - change callback function that takes the event as the argument */
     onChange?: (e: React.SyntheticEvent<HTMLInputElement, Event>) => string | number | boolean | void;
-    /** Stops propagation when the checkbox container is clicked */
-    shouldStopPropagationOnClick?: boolean;
     /** Subsection below the checkbox */
     subsection?: React.ReactNode;
     /** Tooltip text next to the checkbox label */
@@ -54,7 +52,6 @@ const Checkbox = ({
     label,
     name,
     onChange,
-    shouldStopPropagationOnClick,
     subsection,
     tooltip,
     ...rest // @TODO: eventually remove `rest` in favor of explicit props
@@ -62,12 +59,6 @@ const Checkbox = ({
     const generatedID = React.useRef(uniqueId('checkbox')).current;
     // use passed-in ID from props; otherwise generate one
     const inputID = id || generatedID;
-
-    const handleOnClick = (e: React.SyntheticEvent<HTMLDivElement>) => {
-        if (shouldStopPropagationOnClick) {
-            e.stopPropagation();
-        }
-    };
 
     const checkboxAndLabel = (
         <span className="checkbox-label">
@@ -92,12 +83,7 @@ const Checkbox = ({
     );
 
     return (
-        /* The <div> element has a child <input type="checkbox"> element that allows keyboard interaction */
-        /* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */
-        <div
-            className={classNames('checkbox-container', className, { 'is-disabled bdl-is-disabled': isDisabled })}
-            onClick={handleOnClick}
-        >
+        <div className={classNames('checkbox-container', className, { 'is-disabled bdl-is-disabled': isDisabled })}>
             {fieldLabel && <div className="label">{fieldLabel}</div>}
             {checkboxAndLabel}
             {description ? (
