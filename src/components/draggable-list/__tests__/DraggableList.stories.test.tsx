@@ -1,8 +1,9 @@
 describe('components/draggable-list/DraggableList', () => {
-    const DRAGGABLE_LIST_STORY = 'components-draggablelist--example';
-
-    test(`looks correct when using story ${DRAGGABLE_LIST_STORY}`, async () => {
-        const image = await BoxVisualTestUtils.takeScreenshot(DRAGGABLE_LIST_STORY);
-        return expect(image).toMatchImageSnapshot();
-    });
+    test.each([['components-draggablelist--example'], ['components-draggablelist--example-is-draggable-via-handle']])(
+        `looks correct when using story %s`,
+        async id => {
+            const image = await BoxVisualTestUtils.takeScreenshot(id);
+            return expect(image).toMatchImageSnapshot();
+        },
+    );
 });

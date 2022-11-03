@@ -109,3 +109,4 @@ workflows:
       - lint
       - build-unit-tests
       - e2e-tests
+      - visual-tests
