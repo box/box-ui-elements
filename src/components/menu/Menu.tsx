@@ -51,6 +51,7 @@ interface MenuProps {
     setRef?: Function;
     /** shouldOutlineFocus - whether the focused menu item should have an outline */
     shouldOutlineFocus?: boolean;
+    shouldStopPropagationOnClick?: boolean;
     /** tabIndex - indicator of whether the menu is focusable */
     tabIndex?: number;
 }
@@ -202,6 +203,12 @@ class Menu extends React.Component<MenuProps> {
     };
 
     handleClick = (event: React.MouseEvent<HTMLUListElement, MouseEvent>) => {
+        const { shouldStopPropagationOnClick } = this.props;
+
+        if (shouldStopPropagationOnClick) {
+            event.stopPropagation();
+        }
+
         const { menuItemEl }: { menuItemEl?: HTMLElement | null } =
             event.target instanceof Node ? this.getMenuItemElFromEventTarget(event.target) : {};
 
