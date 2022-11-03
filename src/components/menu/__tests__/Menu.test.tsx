@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { mount, shallow } from 'enzyme';
+import { fireEvent, render, screen } from '@testing-library/react';
 import sinon from 'sinon';
 
 import Menu from '../Menu';
@@ -264,9 +265,43 @@ describe('components/menu/Menu', () => {
             });
         });
 
+        test('should call outer function onClick when shouldStopPropagationOnClick is false', () => {
+            const outerClickFunc = jest.fn();
+
+            render(
+                /* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */
+                <div onClick={outerClickFunc}>
+                    <Menu>
+                        <li role="menuitem" />
+                    </Menu>
+                    ,
+                </div>,
+            );
+
+            fireEvent.click(screen.getByRole('menu'));
+            expect(outerClickFunc).toHaveBeenCalled();
+        });
+
+        test('should not call outer function onClick when shouldStopPropagationOnClick is true', () => {
+            const outerClickFunc = jest.fn();
+
+            render(
+                /* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */
+                <div onClick={outerClickFunc}>
+                    <Menu shouldStopPropagationOnClick>
+                        <li role="menuitem" />
+                    </Menu>
+                    ,
+                </div>,
+            );
+
+            fireEvent.click(screen.getByRole('menu'));
+            expect(outerClickFunc).not.toHaveBeenCalled();
+        });
+
         test('should call fireOnCloseHandler() when click occurred on a valid menu item', () => {
             const wrapper = mount(
-                <Menu>
+                <Menu data>
                     <li role="menuitem" />
                     <li role="separator" />
                 </Menu>,

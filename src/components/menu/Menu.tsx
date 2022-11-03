@@ -51,6 +51,7 @@ interface MenuProps {
     setRef?: Function;
     /** shouldOutlineFocus - whether the focused menu item should have an outline */
     shouldOutlineFocus?: boolean;
+    /** shouldStopPropagationOnClick - whether we should stop propagation on menu click */
     shouldStopPropagationOnClick?: boolean;
     /** tabIndex - indicator of whether the menu is focusable */
     tabIndex?: number;
@@ -290,7 +291,13 @@ class Menu extends React.Component<MenuProps> {
     render() {
         const { children, className, isHidden, setRef, shouldOutlineFocus, ...rest } = this.props;
 
-        const menuProps = omit(rest, ['onClose', 'initialFocusIndex', 'isSubmenu', 'menuItemSelector']) as MenuProps;
+        const menuProps = omit(rest, [
+            'onClose',
+            'initialFocusIndex',
+            'isSubmenu',
+            'menuItemSelector',
+            'shouldStopPropagationOnClick',
+        ]) as MenuProps;
         menuProps.className = classNames('aria-menu', className, {
             'is-hidden': isHidden,
             'should-outline-focus': shouldOutlineFocus,
