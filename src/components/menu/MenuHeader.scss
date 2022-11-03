@@ -23,11 +23,9 @@
     @include bdl-lineClamp;
 
     margin: 0;
-    overflow: hidden;
     color: $bdl-gray;
     font-weight: bold;
     font-size: 16px;
-    text-overflow: ellipsis;
 }
 
 .bdl-MenuHeader-subtitle {
