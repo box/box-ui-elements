@@ -66,7 +66,7 @@ type Props = {
     messages?: StringMap,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
-    onFetchFileSuccess?: Function,
+    onFetchFileSuccess?: () => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     requestInterceptor?: Function,
@@ -272,7 +272,7 @@ class ContentSidebar extends React.Component<Props, State> {
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
         const { onFetchFileSuccess }: Props = this.props;
-        onFetchFileSuccess && onFetchFileSuccess();
+        !!onFetchFileSuccess && onFetchFileSuccess();
         this.setState(
             {
                 file,
