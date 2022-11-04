@@ -180,6 +180,70 @@ export const filterableActivityFeedItems = {
     },
 };
 
+export const formattedReplies = [
+    {
+        created_at: '1970-01-01T00:00:00.002Z',
+        created_by: {
+            id: '11',
+            type: 'user',
+            name: 'u2_name',
+            login: 'u2@box.com',
+        },
+        id: '21',
+        item: {
+            type: 'file',
+            id: 'f1',
+        },
+        tagged_message: '@[u1:Mateusz Mamczarz] Yes, they really are!',
+        modified_at: '1970-01-01T00:00:00.002Z',
+        type: 'comment',
+        parent: {
+            id: 'c1',
+            type: 'comment',
+        },
+        permissions: {
+            can_delete: false,
+            can_edit: false,
+            can_reply: false,
+            can_resolve: true,
+        },
+        replies: [],
+        total_reply_count: 0,
+        status: 'open',
+    },
+    {
+        created_at: '1970-01-01T00:00:00.002Z',
+        created_by: {
+            id: '11',
+            type: 'user',
+            name: 'u2_name',
+            login: 'u2@box.com',
+        },
+        id: '22',
+        item: {
+            type: 'file',
+            id: 'f1',
+        },
+        tagged_message: '@[u1:Mateusz Mamczarz] Yes, they really are!',
+        modified_at: '1970-01-01T00:00:00.002Z',
+        type: 'comment',
+        parent: {
+            id: 'c1',
+            type: 'comment',
+        },
+        permissions: {
+            can_delete: false,
+            can_edit: false,
+            can_reply: false,
+            can_resolve: true,
+        },
+        replies: [],
+        total_reply_count: 0,
+        status: 'open',
+    },
+];
+
 export default {
     filterableActivityFeedItems,
+    formattedReplies,
 };

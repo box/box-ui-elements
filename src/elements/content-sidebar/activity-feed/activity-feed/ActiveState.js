@@ -24,6 +24,7 @@ import type {
     Annotation,
     AnnotationPermission,
     BoxCommentPermission,
+    Comment as CommentType,
     CommentFeedItemType,
     FeedItem,
     FeedItems,
@@ -63,6 +64,7 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
+    onHideReplies?: (id: string, replies: Array<CommentType>) => void,
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void,
     onReplyDelete?: ({ id: string, parentId: string, permissions: BoxCommentPermission }) => void,
     onReplyUpdate?: (
@@ -90,10 +92,13 @@ const ActiveState = ({
     approverSelectorContacts,
     currentFileVersionId,
     currentUser,
+    getApproverWithQuery,
+    getAvatarUrl,
+    getMentionWithQuery,
+    getUserProfileUrl,
     hasReplies = false,
     items,
     mentionSelectorContacts,
-    getMentionWithQuery,
     onAnnotationDelete,
     onAnnotationEdit,
     onAnnotationSelect,
@@ -101,23 +106,24 @@ const ActiveState = ({
     onAppActivityDelete,
     onCommentDelete,
     onCommentEdit,
+    onHideReplies = noop,
     onReplyCreate = noop,
     onReplyDelete = noop,
     onReplyUpdate = noop,
     onShowReplies = noop,
+    onTaskAssignmentUpdate,
     onTaskDelete,
     onTaskEdit,
-    onTaskView,
-    onTaskAssignmentUpdate,
     onTaskModalClose,
+    onTaskView,
     onVersionInfo,
     translations,
-    getApproverWithQuery,
-    getAvatarUrl,
-    getUserProfileUrl,
 }: Props): React.Node => {
     const activeEntry = items.find(({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType);
 
+    const onHideRepliesHandler = (parentId: string) => (lastReply: CommentType) => {
+        onHideReplies(parentId, [lastReply]);
+    };
     const onReplyCreateHandler = (parentId: string, parentType: CommentFeedItemType) => (text: string) => {
         onReplyCreate(parentId, parentType, text);
     };
@@ -164,6 +170,7 @@ const ActiveState = ({
                                     hasReplies={hasReplies}
                                     isRepliesLoading={item.isRepliesLoading}
                                     mentionSelectorContacts={mentionSelectorContacts}
+                                    onHideReplies={onHideRepliesHandler(item.id)}
                                     onReplyCreate={onReplyCreateHandler(item.id, item.type)}
                                     onReplyDelete={onReplyDeleteHandler(item.id)}
                                     onReplyEdit={onReplyUpdateHandler(item.id)}
@@ -257,6 +264,7 @@ const ActiveState = ({
                                     hasReplies={hasReplies}
                                     isRepliesLoading={item.isRepliesLoading}
                                     mentionSelectorContacts={mentionSelectorContacts}
+                                    onHideReplies={onHideRepliesHandler(item.id)}
                                     onReplyCreate={onReplyCreateHandler(item.id, item.type)}
                                     onReplyDelete={onReplyDeleteHandler(item.id)}
                                     onReplyEdit={onReplyUpdateHandler(item.id)}

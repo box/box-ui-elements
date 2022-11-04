@@ -1,10 +1,11 @@
 // @flow
 import React from 'react';
+import cloneDeep from 'lodash/cloneDeep';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import ActivityThread from '../ActivityThread.js';
 import localize from '../../../../../../test/support/i18n';
-import { replies } from '../fixtures';
+import { replies as repliesMock } from '../fixtures';
 import messages from '../messages';
 
 jest.mock('react-intl', () => jest.requireActual('react-intl'));
@@ -13,13 +14,16 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         return <IntlProvider locale="en">{children}</IntlProvider>;
     };
 
-    const getWrapper = props =>
-        render(
+    const getWrapper = props => {
+        const replies = cloneDeep(repliesMock);
+
+        return render(
             <ActivityThread replies={replies} repliesTotalCount={2} hasReplies {...props}>
                 Test
             </ActivityThread>,
             { wrapper: Wrapper },
         );
+    };
 
     test('should render children component wrapped in ActivityThread if hasReplies is true', () => {
         getWrapper();
@@ -35,22 +39,41 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         expect(getByText('Test')).toBeVisible();
     });
 
-    test('should call onShowReplies on button click', () => {
+    test('should render button and call onShowReplies on click if total replies is greater than the number of replies in Feed', () => {
         const onShowReplies = jest.fn();
-        const { getByText } = getWrapper({ onShowReplies });
+        const replies = [cloneDeep(repliesMock[0])];
+        const { getByText } = getWrapper({ onShowReplies, replies });
 
         const button = getByText(localize(messages.showReplies.id, { repliesToLoadCount: 1 }));
         expect(button).toBeVisible();
         fireEvent.click(button);
 
         expect(onShowReplies).toBeCalled();
-        expect(getByText(localize(messages.hideReplies.id))).toBeVisible();
     });
 
-    test('should not render button if total_reply_count is 1 or less', () => {
-        const { queryByTestId } = getWrapper({ repliesTotalCount: 1 });
-        expect(queryByTestId('activity-thread-button')).not.toBeInTheDocument();
+    test('should render button and call onHideReplies on click if total replies is equal to the number of replies in Feed', () => {
+        const onHideReplies = jest.fn();
+        const lastReply = cloneDeep(repliesMock[repliesMock.length - 1]);
+        const { getByText } = getWrapper({ onHideReplies });
+
+        const button = getByText(localize(messages.hideReplies.id));
+        expect(button).toBeVisible();
+        fireEvent.click(button);
+
+        expect(onHideReplies).toBeCalledWith(lastReply);
     });
+
+    test.each`
+        repliesTotalCount | replies
+        ${0}              | ${[]}
+        ${1}              | ${[{ id: 1 }]}
+    `(
+        'should not render button if repliesTotalCount = $repliesTotalCount and replies = $replies',
+        ({ replies, repliesTotalCount }) => {
+            const { queryByTestId } = getWrapper({ replies, repliesTotalCount });
+            expect(queryByTestId('activity-thread-button')).not.toBeInTheDocument();
+        },
+    );
 
     test('should not render replies if there is no replies', () => {
         const { queryByTestId } = getWrapper({ replies: [] });

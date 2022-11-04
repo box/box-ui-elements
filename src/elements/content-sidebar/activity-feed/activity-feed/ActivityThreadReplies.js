@@ -14,7 +14,6 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
-    isExpanded: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onDelete?: Function,
     onEdit?: Function,
@@ -27,15 +26,12 @@ const ActivityThreadReplies = ({
     getAvatarUrl,
     getMentionWithQuery,
     getUserProfileUrl,
-    isExpanded,
     mentionSelectorContacts,
     onDelete,
     onEdit,
     replies,
     translations,
 }: Props) => {
-    const lastReply = replies[replies.length - 1];
-
     const getReplyPermissions = (reply: CommentType): BoxCommentPermission => {
         const { permissions: { can_delete = false, can_edit = false, can_resolve = false } = {} } = reply;
         return {
@@ -47,10 +43,10 @@ const ActivityThreadReplies = ({
 
     return (
         <div className="bcs-ActivityThreadReplies" data-testid="activity-thread-replies">
-            {!isExpanded ? (
+            {replies.map((reply: CommentType) => (
                 <Comment
-                    key={lastReply.type + lastReply.id}
-                    {...lastReply}
+                    key={`${reply.type}${reply.id}`}
+                    {...reply}
                     currentUser={currentUser}
                     getAvatarUrl={getAvatarUrl}
                     getMentionWithQuery={getMentionWithQuery}
@@ -58,26 +54,10 @@ const ActivityThreadReplies = ({
                     mentionSelectorContacts={mentionSelectorContacts}
                     onDelete={onDelete}
                     onEdit={onEdit}
-                    permissions={getReplyPermissions(lastReply)}
+                    permissions={getReplyPermissions(reply)}
                     translations={translations}
                 />
-            ) : (
-                replies.map((reply: CommentType) => (
-                    <Comment
-                        key={reply.type + reply.id}
-                        {...reply}
-                        currentUser={currentUser}
-                        getAvatarUrl={getAvatarUrl}
-                        getMentionWithQuery={getMentionWithQuery}
-                        getUserProfileUrl={getUserProfileUrl}
-                        mentionSelectorContacts={mentionSelectorContacts}
-                        onDelete={onDelete}
-                        onEdit={onEdit}
-                        permissions={getReplyPermissions(reply)}
-                        translations={translations}
-                    />
-                ))
-            )}
+            ))}
         </div>
     );
 };

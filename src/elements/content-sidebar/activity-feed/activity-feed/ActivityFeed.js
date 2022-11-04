@@ -21,6 +21,7 @@ import type {
     Annotation,
     AnnotationPermission,
     BoxCommentPermission,
+    Comment,
     CommentFeedItemType,
     FocusableFeedItemType,
     FeedItems,
@@ -63,6 +64,7 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
+    onHideReplies?: (id: string, replies: Array<Comment>) => void,
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void,
     onReplyDelete?: ({ id: string, parentId: string, permissions: BoxCommentPermission }) => void,
     onReplyUpdate?: (
@@ -247,6 +249,7 @@ class ActivityFeed extends React.Component<Props, State> {
             onCommentCreate,
             onCommentDelete,
             onCommentUpdate,
+            onHideReplies,
             onReplyCreate,
             onReplyDelete,
             onReplyUpdate,
@@ -329,6 +332,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
+                            onHideReplies={onHideReplies}
                             onReplyCreate={hasCommentPermission ? onReplyCreate : noop}
                             onReplyDelete={hasCommentPermission ? onReplyDelete : noop}
                             onReplyUpdate={hasCommentPermission ? onReplyUpdate : noop}
