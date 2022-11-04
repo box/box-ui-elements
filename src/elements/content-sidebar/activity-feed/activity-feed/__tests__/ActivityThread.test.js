@@ -39,7 +39,7 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         expect(getByText('Test')).toBeVisible();
     });
 
-    test('should call onShowReplies on button click if total replies is greater than the number of replies in Feed', () => {
+    test('should render button and call onShowReplies on click if total replies is greater than the number of replies in Feed', () => {
         const onShowReplies = jest.fn();
         const replies = [cloneDeep(repliesMock[0])];
         const { getByText } = getWrapper({ onShowReplies, replies });
@@ -51,7 +51,7 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         expect(onShowReplies).toBeCalled();
     });
 
-    test('should call onHideReplies on button click if total replies is equal to the number of replies in Feed', () => {
+    test('should render button and call onHideReplies on click if total replies is equal to the number of replies in Feed', () => {
         const onHideReplies = jest.fn();
         const lastReply = cloneDeep(repliesMock[repliesMock.length - 1]);
         const { getByText } = getWrapper({ onHideReplies });
@@ -63,10 +63,17 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         expect(onHideReplies).toBeCalledWith(lastReply);
     });
 
-    test('should not render button if total_reply_count is 1 or less', () => {
-        const { queryByTestId } = getWrapper({ repliesTotalCount: 1 });
-        expect(queryByTestId('activity-thread-button')).not.toBeInTheDocument();
-    });
+    test.each`
+        repliesTotalCount | replies
+        ${0}              | ${[]}
+        ${1}              | ${[{ id: 1 }]}
+    `(
+        'should not render button if repliesTotalCount = $repliesTotalCount and replies = $replies',
+        ({ replies, repliesTotalCount }) => {
+            const { queryByTestId } = getWrapper({ replies, repliesTotalCount });
+            expect(queryByTestId('activity-thread-button')).not.toBeInTheDocument();
+        },
+    );
 
     test('should not render replies if there is no replies', () => {
         const { queryByTestId } = getWrapper({ replies: [] });

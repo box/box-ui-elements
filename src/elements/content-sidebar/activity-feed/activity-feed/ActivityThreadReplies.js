@@ -45,7 +45,7 @@ const ActivityThreadReplies = ({
         <div className="bcs-ActivityThreadReplies" data-testid="activity-thread-replies">
             {replies.map((reply: CommentType) => (
                 <Comment
-                    key={reply.type + reply.id}
+                    key={`${reply.type}${reply.id}`}
                     {...reply}
                     currentUser={currentUser}
                     getAvatarUrl={getAvatarUrl}

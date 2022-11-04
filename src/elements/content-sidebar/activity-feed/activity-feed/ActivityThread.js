@@ -68,7 +68,9 @@ const ActivityThread = ({
     const repliesToLoadCount = Math.max(repliesTotalCount - repliesLength, 0);
 
     const onHideRepliesHandler = () => {
-        onHideReplies(replies[repliesLength - 1]);
+        if (repliesLength) {
+            onHideReplies(replies[repliesLength - 1]);
+        }
     };
 
     const renderButton = () => {
