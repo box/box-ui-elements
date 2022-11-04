@@ -94,11 +94,13 @@ type Props = {
 };
 
 type State = {
+    isHeaderShadowVisible: boolean,
     isInputOpen: boolean,
 };
 
 class ActivityFeed extends React.Component<Props, State> {
     state = {
+        isHeaderShadowVisible: false,
         isInputOpen: false,
     };
 
@@ -183,6 +185,13 @@ class ActivityFeed extends React.Component<Props, State> {
     resetFeedScroll = () => {
         if (this.feedContainer) {
             this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
+        }
+    };
+
+    handleToggleHeaderShadow = () => {
+        if (this.feedContainer) {
+            const shouldHaveShadow = this.feedContainer.scrollTop !== 0;
+            this.setState({ isHeaderShadowVisible: shouldHaveShadow });
         }
     };
 
@@ -321,12 +330,13 @@ class ActivityFeed extends React.Component<Props, State> {
 
         return (
             // eslint-disable-next-line
-            <div className="bcs-activity-feed" data-testid="activityfeed" onKeyDown={this.onKeyDown}>
+            <div className={classNames("bcs-activity-feed", { "bcs-header-shadow": this.state.isHeaderShadowVisible })} data-testid="activityfeed" onKeyDown={this.onKeyDown}>
                 <div
                     ref={ref => {
                         this.feedContainer = ref;
                     }}
                     className="bcs-activity-feed-items-container"
+                    onScroll={this.handleToggleHeaderShadow}
                 >
                     {isLoading && (
                         <div className="bcs-activity-feed-loading-state">

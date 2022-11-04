@@ -28,6 +28,17 @@
         line-height: 20px;
     }
 
+    &.bcs-header-shadow::before {
+        position: absolute;
+        // position it behind bcs-content-header
+        top: -60px;
+        right: 20px;
+        left: 20px;
+        height: 60px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
+        content: ' ';
+    }
+
     .bcs-activity-feed-items-container {
         $container-padding: 25px;
         $container-transition-delay: 25ms;
