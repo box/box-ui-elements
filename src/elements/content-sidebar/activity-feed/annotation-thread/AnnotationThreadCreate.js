@@ -43,13 +43,12 @@ const AnnotationThreadCreate = ({
     target,
 }: Props) => {
     const [isPending, setIsPending] = React.useState(false);
-    const events = useAnnotatorEvents({ eventEmitter });
+    const { emitAddAnnotationStartEvent, emitAddAnnotationEndEvent } = useAnnotatorEvents({ eventEmitter });
 
     const handleCreate = (text: string): void => {
         const { id, permissions = {}, file_version = {} } = file;
         const requestId = uniqueId('annotation_');
         setIsPending(true);
-        events.emitAddAnnotationStartEvent({ text }, requestId);
 
         if (!currentUser) {
             throw getBadUserError();
@@ -57,7 +56,7 @@ const AnnotationThreadCreate = ({
 
         const successCallback = (annotation: Annotation) => {
             onAnnotationCreate(annotation);
-            events.emitAddAnnotationEndEvent(annotation, requestId);
+            emitAddAnnotationEndEvent(annotation, requestId);
         };
 
         const payload = {
@@ -65,6 +64,7 @@ const AnnotationThreadCreate = ({
             target,
         };
 
+        emitAddAnnotationStartEvent({ text }, requestId);
         api.getAnnotationsAPI(false).createAnnotation(
             id,
             file_version.id,

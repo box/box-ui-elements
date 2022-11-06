@@ -97,15 +97,17 @@ const useAnnotationThread = ({
         }
     };
 
-    const events = useAnnotatorEvents({
+    const { emitAnnotationActiveChangeEvent } = useAnnotatorEvents({
         onAnnotationDeleteStart: setAnnotationPending,
         onAnnotationUpdateEnd,
         onAnnotationUpdateStart: setAnnotationPending,
     });
 
     React.useEffect(() => {
-        events.emitAnnotationActiveChangeEvent(annotationId, fileId);
-    }, [annotationId, events, fileId]);
+        emitAnnotationActiveChangeEvent(annotationId, fileId);
+        // we want to emit this event only on component mount; the annotationId and fileId are stable
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [annotationId, fileId]);
 
     const handleUpdateOrCreateReplyItem = (replyId: string, updatedReplyValues: Object) => {
         setReplies(prevReplies => ({
