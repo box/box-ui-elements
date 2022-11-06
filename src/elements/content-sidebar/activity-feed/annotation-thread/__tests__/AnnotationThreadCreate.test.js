@@ -38,8 +38,8 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
     const mockHandleCancel = jest.fn();
     const mockOnAnnotationCreate = jest.fn();
     const mockOnError = jest.fn();
-    let mockCreateAnnotation = jest.fn();
     const mockEventEmitter = {};
+    let mockCreateAnnotation = jest.fn();
 
     const getDefaultProps = () => ({
         api: {
@@ -117,12 +117,12 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
 
         fireEvent.click(getByText('Post'));
 
-        expect(useAnnotatorEvents).toHaveBeenCalledWith({ eventEmitter });
-        expect(useAnnotatorEvents().emitAddAnnotationStartEvent).toHaveBeenCalledWith(
+        expect(useAnnotatorEvents).toBeCalledWith({ eventEmitter });
+        expect(useAnnotatorEvents().emitAddAnnotationStartEvent).toBeCalledWith(
             { text: 'example message' },
             'annotation_42',
         );
-        expect(useAnnotatorEvents().emitAddAnnotationEndEvent).toHaveBeenCalledWith(annotation, 'annotation_42');
+        expect(useAnnotatorEvents().emitAddAnnotationEndEvent).toBeCalledWith(annotation, 'annotation_42');
     });
 
     test('Should call handleCancel on cancel', () => {

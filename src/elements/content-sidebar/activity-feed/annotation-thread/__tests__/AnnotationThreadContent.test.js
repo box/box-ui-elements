@@ -32,19 +32,17 @@ jest.mock('../useAnnotationThread', () => {
     }));
 });
 
-jest.mock('../../../../common/annotator-context/useAnnotatorEvents', () => {
-    const mockedEmitAnnotationActiveChangeEvent = jest.fn();
-
-    return jest.fn(() => ({
-        emitAnnotationActiveChangeEvent: mockedEmitAnnotationActiveChangeEvent,
-    }));
-});
+jest.mock('../../../../common/annotator-context/useAnnotatorEvents', () =>
+    jest.fn({
+        emitAnnotationActiveChangeEvent: jest.fn(),
+    }),
+);
 
 describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThreadContent', () => {
     const mockGetAvatarUrl = jest.fn(() => Promise.resolve());
     const mockEventEmitter = {};
 
-    const defaultProps = () => ({
+    const getDefaultProps = () => ({
         annotationId: mockedAnnotation?.id,
         api: {
             getAnnotationApi: () => ({
@@ -71,7 +69,7 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
     const IntlWrapper = ({ children }: { children?: React.ReactNode }) => {
         return <IntlProvider locale="en">{children}</IntlProvider>;
     };
-    const getWrapper = (props = defaultProps()) =>
+    const getWrapper = (props = getDefaultProps()) =>
         render(<AnnotationThreadContent {...props} />, { wrapper: IntlWrapper });
 
     test('Should render properly', () => {

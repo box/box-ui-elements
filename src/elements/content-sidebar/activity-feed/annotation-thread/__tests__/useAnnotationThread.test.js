@@ -237,12 +237,14 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
             expect(result.current.annotation).toEqual({ ...updatedAnnotation, isPending: false });
         });
 
-        test('Should emit annotation active change event when used', () => {
+        test('Should emit annotation active change event when used only once', () => {
             const event = useAnnotatorEvents();
 
-            getHook();
+            const { rerender } = getHook();
 
-            expect(event.emitAnnotationActiveChangeEvent).toHaveBeenCalled();
+            rerender();
+
+            expect(event.emitAnnotationActiveChangeEvent).toBeCalledTimes(1);
         });
     });
 });
