@@ -28,7 +28,7 @@
         line-height: 20px;
     }
 
-    &.bcs-header-shadow::before {
+    &.bcs-is-scrolled::before {
         position: absolute;
         // position it behind bcs-content-header
         top: -60px;
@@ -40,7 +40,6 @@
     }
 
     .bcs-activity-feed-items-container {
-        $container-padding: 25px;
         $container-transition-delay: 25ms;
         $container-transition-duration: 200ms;
 
