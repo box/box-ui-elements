@@ -168,6 +168,7 @@ class Comment extends React.Component<Props, State> {
                                 >
                                     {canResolve && isResolved && (
                                         <MenuItem
+                                            className="bcs-Comment-unresolveComment"
                                             data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
                                             data-testid="unresolve-comment"
                                             onClick={() => this.handleStatusUpdate(COMMENT_STATUS_OPEN)}

@@ -15,6 +15,7 @@ import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../../../consta
 import { bdlGray50 } from '../../../../styles/variables';
 import type { FeedItemStatus } from '../../../../common/types/feed';
 import messages from './messages';
+import './AnnotationActivityMenu.scss';
 
 type AnnotationActivityMenuProps = {
     canDelete?: boolean,
@@ -64,6 +65,7 @@ const AnnotationActivityMenu = ({
             <Menu {...menuProps}>
                 {canResolve && isResolved && (
                     <MenuItem
+                        className="bcs-AnnotationActivityMenu-unresolveAnnotation"
                         data-resin-itemid={id}
                         data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_UNRESOLVE}
                         data-testid="unresolve-annotation-activity"
