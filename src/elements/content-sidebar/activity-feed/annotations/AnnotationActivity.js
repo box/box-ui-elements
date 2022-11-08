@@ -30,6 +30,7 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: (searchStr: string) => void,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasVersions?: boolean,
     isCurrentVersion: boolean,
     item: Annotation,
     mentionSelectorContacts?: SelectorItems<User>,
@@ -45,6 +46,7 @@ const AnnotationActivity = ({
     getAvatarUrl,
     getMentionWithQuery,
     getUserProfileUrl,
+    hasVersions,
     isCurrentVersion,
     mentionSelectorContacts,
     onDelete = noop,
@@ -78,6 +80,7 @@ const AnnotationActivity = ({
         setIsConfirmingDelete(false);
         onDelete({ id, permissions });
     };
+
     const handleEdit = (): void => setIsEditing(true);
     const handleFormCancel = (): void => setIsEditing(false);
     const handleFormSubmit = ({ text }): void => {
@@ -146,14 +149,16 @@ const AnnotationActivity = ({
                         </div>
                         <div className="bcs-AnnotationActivity-timestamp">
                             <ActivityTimestamp date={createdAtTimestamp} />
-                            <AnnotationActivityLink
-                                className="bcs-AnnotationActivity-link"
-                                data-resin-target="annotationLink"
-                                id={id}
-                                isDisabled={isFileVersionUnavailable}
-                                message={activityLinkMessage}
-                                onClick={handleSelect}
-                            />
+                            {hasVersions && (
+                                <AnnotationActivityLink
+                                    className="bcs-AnnotationActivity-link"
+                                    data-resin-target="annotationLink"
+                                    id={id}
+                                    isDisabled={isFileVersionUnavailable}
+                                    message={activityLinkMessage}
+                                    onClick={handleSelect}
+                                />
+                            )}
                         </div>
                         <ActivityStatus status={status} />
                         {isEditing && currentUser ? (

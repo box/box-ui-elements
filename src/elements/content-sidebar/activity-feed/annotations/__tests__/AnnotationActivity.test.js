@@ -39,6 +39,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
     const mockActivity = {
         currentUser,
         handlers: allHandlers,
+        hasVersions: true,
         isCurrentVersion: true,
         item: mockAnnotation,
         mentionSelectorContacts,
@@ -144,6 +145,11 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             ...messages.annotationActivityVersionUnavailable,
         });
         expect(activityLink.prop('isDisabled')).toBe(true);
+    });
+
+    test('should not render file version link if hasVersions is false', () => {
+        const wrapper = getWrapper({ hasVersions: false });
+        expect(wrapper.exists('AnnotationActivityLink')).toBe(false);
     });
 
     test('should render commenter as a link', () => {
