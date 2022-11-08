@@ -111,13 +111,7 @@ $left-sidebar-z-index: 40 !default;
     }
 }
 
-@include large-size {
-    .bdl-CollapsibleSidebar-logo {
-        margin-left: $collapsible-side-bar-h-padding + $bdl-grid-unit * 2 - 1px /* border */;
-    }
-}
-
-@include medium-minus-size {
+@include breakpoint($xlarge-screen) {
     .bdl-CollapsibleSidebar-logo {
         .bdl-CollapsibleSidebar-toggleButton {
             display: block;
