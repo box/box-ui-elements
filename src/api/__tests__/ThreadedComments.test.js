@@ -191,6 +191,51 @@ describe('api/ThreadedComments', () => {
         });
     });
 
+    describe('getComment()', () => {
+        const errorCallback = jest.fn();
+        const successCallback = jest.fn();
+
+        test('should format its parameters and call the get method', () => {
+            const permissions = {
+                can_comment: true,
+            };
+            const url = 'http://test-url.com';
+
+            threadedComments.getUrlForId = jest.fn().mockImplementationOnce(() => url);
+
+            threadedComments.getComment({
+                commentId: '123',
+                fileId: '12345',
+                permissions,
+                successCallback,
+                errorCallback,
+            });
+
+            expect(threadedComments.get).toBeCalledWith({
+                id: '12345',
+                errorCallback,
+                successCallback,
+                url,
+            });
+        });
+
+        test('should reject with an error code for calls with invalid permissions', () => {
+            const permissions = {
+                can_comment: false,
+            };
+            threadedComments.getComment({
+                commentId: '123',
+                fileId: '12345',
+                permissions,
+                successCallback,
+                errorCallback,
+            });
+
+            expect(errorCallback).toBeCalledWith(expect.any(Error), ERROR_CODE_FETCH_COMMENTS);
+            expect(threadedComments.get).not.toBeCalled();
+        });
+    });
+
     describe('getComments()', () => {
         const errorCallback = jest.fn();
         const successCallback = jest.fn();

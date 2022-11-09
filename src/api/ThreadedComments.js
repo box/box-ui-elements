@@ -229,6 +229,45 @@ class ThreadedComments extends MarkerBasedApi {
     }
 
     /**
+     * API for fetching comment
+     *
+     * @param {string} commentId - comment id
+     * @param {string} fileId - the file id
+     * @param {BoxItemPermission} permissions - the permissions for the file
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @returns {void}
+     */
+    getComment({
+        commentId,
+        errorCallback,
+        fileId,
+        permissions,
+        successCallback,
+    }: {
+        commentId: string,
+        errorCallback: (e: ElementsXhrError, code: string) => void,
+        fileId: string,
+        permissions: BoxItemPermission,
+        successCallback: (comment: Comment) => void,
+    }): void {
+        this.errorCode = ERROR_CODE_FETCH_COMMENTS;
+        try {
+            this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, fileId);
+        } catch (e) {
+            errorCallback(e, this.errorCode);
+            return;
+        }
+
+        this.get({
+            id: fileId,
+            errorCallback,
+            successCallback,
+            url: this.getUrlForId(commentId),
+        });
+    }
+
+    /**
      * API for fetching comments
      *
      * @param {string} fileId - the file id

@@ -23,6 +23,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         deleteThreadedComment: jest.fn(),
         feedItems: jest.fn(),
         fetchReplies: jest.fn(),
+        fetchThreadedComment: jest.fn(),
         updateAnnotation: jest.fn(),
         updateComment: jest.fn(),
         updateFeedItem: jest.fn(),
@@ -834,6 +835,20 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             instance.getMentionContactsSuccessCallback(collaborators);
             expect(wrapper.state('contactsLoaded')).toBeTruthy();
             expect(wrapper.state('mentionSelectorContacts')).toEqual(collaborators.entries);
+        });
+    });
+
+    describe('getComment()', () => {
+        test('should call fetchThreadedComment API', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const id = '123';
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+
+            instance.getComment(id, successCallback, errorCallback);
+
+            expect(api.getFeedAPI().fetchThreadedComment).toBeCalledWith(file, id, successCallback, errorCallback);
         });
     });
 

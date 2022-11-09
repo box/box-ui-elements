@@ -828,6 +828,24 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }, DEFAULT_COLLAB_DEBOUNCE);
 
     /**
+     * Fetches comment data
+     *
+     * @param {string} id - id of the comment
+     * @param {Function} onSuccess - the success callback
+     * @param {ErrorCallback} onError -the error callback
+     * @return {void}
+     */
+    getComment = (
+        id: string,
+        onSuccess: (comment: Comment) => void,
+        onError: (error: ElementsXhrError, code: string, contextInfo?: Object) => void,
+    ): void => {
+        const { api, file } = this.props;
+
+        api.getFeedAPI(false).fetchThreadedComment(file, id, onSuccess, onError);
+    };
+
+    /**
      * Fetches replies (comments) of a comment or annotation
      *
      * @param {string} id - id of the feed item
@@ -1004,6 +1022,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     file={file}
                     getApproverWithQuery={this.getApprover}
                     getAvatarUrl={this.getAvatarUrl}
+                    getComment={this.getComment}
                     getMentionWithQuery={this.getMention}
                     getUserProfileUrl={getUserProfileUrl}
                     hasReplies={hasReplies}

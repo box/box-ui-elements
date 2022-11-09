@@ -49,6 +49,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     }
     getApproverWithQuery={[Function]}
     getAvatarUrl={[Function]}
+    getComment={[Function]}
     getMentionWithQuery={[Function]}
     hasReplies={false}
     hasVersions={true}

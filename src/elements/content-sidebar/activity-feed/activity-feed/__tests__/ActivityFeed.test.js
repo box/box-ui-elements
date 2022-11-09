@@ -287,10 +287,10 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             expect(instance.feedContainer.scrollTop).toEqual(100);
         });
 
-        test('should call scrollToActiveFeedItemOrErrorMessage if feed items loaded', () => {
+        test('should call getActiveEntry if feed items loaded', () => {
             const wrapper = getWrapper({ feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }] });
             const instance = wrapper.instance();
-            instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
+            instance.getActiveEntry = jest.fn();
 
             instance.componentDidUpdate(
                 {
@@ -299,13 +299,13 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
                 { isInputOpen: false },
             );
 
-            expect(instance.scrollToActiveFeedItemOrErrorMessage).toHaveBeenCalled();
+            expect(instance.getActiveEntry).toBeCalledWith(expect.any(Function));
         });
 
-        test('should call scrollToActiveFeedItemOrErrorMessage if activeFeedEntryId changed', () => {
+        test('should call getActiveEntry if activeFeedEntryId changed', () => {
             const wrapper = getWrapper({ activeFeedEntryId: '123' });
             const instance = wrapper.instance();
-            instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
+            instance.getActiveEntry = jest.fn();
 
             instance.componentDidUpdate(
                 {
@@ -314,13 +314,13 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
                 { isInputOpen: false },
             );
 
-            expect(instance.scrollToActiveFeedItemOrErrorMessage).toHaveBeenCalled();
+            expect(instance.getActiveEntry).toBeCalledWith(expect.any(Function));
         });
 
-        test('should not call scrollToActiveFeedItemOrErrorMessage if activeFeedEntryId changed', () => {
+        test('should not call getActiveEntry if activeFeedEntryId did not change', () => {
             const wrapper = getWrapper({ activeFeedEntryId: '456' });
             const instance = wrapper.instance();
-            instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
+            instance.getActiveEntry = jest.fn();
 
             instance.componentDidUpdate(
                 {
@@ -329,8 +329,49 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
                 { isInputOpen: false },
             );
 
-            expect(instance.scrollToActiveFeedItemOrErrorMessage).not.toHaveBeenCalled();
+            expect(instance.getActiveEntry).not.toHaveBeenCalled();
         });
+
+        test('should call scrollToActiveFeedItemOrErrorMessage if activeEntry changed', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            wrapper.setState({
+                activeEntry: { id: '123' },
+            });
+            instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
+
+            instance.componentDidUpdate({}, { activeEntry: undefined, isInputOpen: false });
+
+            expect(instance.scrollToActiveFeedItemOrErrorMessage).toBeCalled();
+        });
+
+        test('should not call scrollToActiveFeedItemOrErrorMessage if activeEntry did not change', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            wrapper.setState({
+                activeEntry: { id: '123' },
+            });
+            instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
+
+            instance.componentDidUpdate({}, { activeEntry: { id: '123' }, isInputOpen: false });
+
+            expect(instance.scrollToActiveFeedItemOrErrorMessage).not.toBeCalled();
+        });
+
+        // test('should not call scrollToActiveFeedItemOrErrorMessage if activeFeedEntryId changed', () => {
+        //     const wrapper = getWrapper({ activeFeedEntryId: '456' });
+        //     const instance = wrapper.instance();
+        //     instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
+        //
+        //     instance.componentDidUpdate(
+        //         {
+        //             activeFeedEntryId: '456',
+        //         },
+        //         { isInputOpen: false },
+        //     );
+        //
+        //     expect(instance.scrollToActiveFeedItemOrErrorMessage).not.toHaveBeenCalled();
+        // });
     });
 
     test('should pass activeFeedItemRef to the ActiveState', () => {
@@ -352,10 +393,8 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         const instance = wrapper.instance();
         const li = document.createElement('li');
         instance.activeFeedItemRef.current = li;
-        wrapper.setProps({
-            feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
-        });
-        expect(scrollIntoView).toHaveBeenCalledWith(li);
+        instance.scrollToActiveFeedItemOrErrorMessage();
+        expect(scrollIntoView).toBeCalledWith(li);
     });
 
     test('should not scroll to active feed item when activeFeedItemRef is null', () => {
@@ -426,28 +465,28 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
     test('should correctly handle an inline error for a comment id being invalid', () => {
         const wrapper = getWrapper({
-            feedItems,
             activeFeedEntryId: 'invalid id',
             activeFeedEntryType: comments.entries[0].type,
         });
+        wrapper.setProps({ feedItems });
         expect(wrapper.exists('InlineError')).toBe(true);
     });
 
     test('should correctly handle an inline error for a task id being invalid', () => {
         const wrapper = getWrapper({
-            feedItems,
             activeFeedEntryId: 'invalid id',
             activeFeedEntryType: taskWithAssignment.type,
         });
+        wrapper.setProps({ feedItems });
         expect(wrapper.exists('InlineError')).toBe(true);
     });
 
     test('should correctly handle an inline error for an annotation id being invalid', () => {
         const wrapper = getWrapper({
-            feedItems,
             activeFeedEntryId: 'invalid id',
             activeFeedEntryType: annotations.entries[0].type,
         });
+        wrapper.setProps({ feedItems });
         expect(wrapper.exists('InlineError')).toBe(true);
     });
 
@@ -459,6 +498,142 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         });
 
         expect(wrapper.exists('InlineError')).toBe(false);
+    });
+
+    describe('getActiveEntry()', () => {
+        test.each`
+            activeFeedEntryId | feedItems
+            ${undefined}      | ${undefined}
+            ${undefined}      | ${[{ id: 1 }]}
+            ${'1234'}         | ${undefined}
+        `(
+            'should call callback with null if activeFeedEntryId or feedItems is not available (activeFeedEntryId = $activeFeedEntryId and mockFeedItems = $feedItems)',
+            ({ activeFeedEntryId, feedItems: mockFeedItems }) => {
+                const wrapper = getWrapper({
+                    activeFeedEntryId,
+                    feedItems: mockFeedItems,
+                });
+                const instance = wrapper.instance();
+                const callback = jest.fn();
+
+                instance.getActiveEntry(callback);
+                expect(callback).toBeCalledWith(null);
+            },
+        );
+
+        describe('given activeFeedEntryId and feedItems exist', () => {
+            test.each`
+                hasReplies   | activeFeedEntryType | activeFeedEntryId | feedItems                                                        | expectedActiveItem
+                ${undefined} | ${'comment'}        | ${'456'}          | ${[{ id: '456', type: 'comment' }]}                              | ${{ id: '456', type: 'comment' }}
+                ${true}      | ${'comment'}        | ${'456'}          | ${[{ id: '456', type: 'comment' }]}                              | ${{ id: '456', type: 'comment' }}
+                ${undefined} | ${'comment'}        | ${'123'}          | ${[{ id: '456', replies: [], type: 'comment' }]}                 | ${null}
+                ${undefined} | ${'task'}           | ${'123'}          | ${[{ id: '456', replies: [], type: 'comment' }]}                 | ${null}
+                ${undefined} | ${'comment'}        | ${'123'}          | ${[{ id: '456', replies: [{ id: '123' }], type: 'comment' }]}    | ${null}
+                ${undefined} | ${'task'}           | ${'123'}          | ${[{ id: '456', replies: [{ id: '123' }], type: 'comment' }]}    | ${null}
+                ${true}      | ${'comment'}        | ${'123'}          | ${[{ id: '456', replies: [{ id: '123' }], type: 'comment' }]}    | ${{ id: '456', replies: [{ id: '123' }], type: 'comment' }}
+                ${true}      | ${'comment'}        | ${'123'}          | ${[{ id: '456', replies: [{ id: '123' }], type: 'annotation' }]} | ${{ id: '456', replies: [{ id: '123' }], type: 'annotation' }}
+                ${true}      | ${'comment'}        | ${'123'}          | ${[{ id: '456', replies: [{ id: '123' }], type: 'task' }]}       | ${null}
+                ${true}      | ${'task'}           | ${'123'}          | ${[{ id: '456', replies: [{ id: '123' }], type: 'comment' }]}    | ${null}
+            `(
+                'given hasReplies = $hasReplies, activeFeedEntryType = $activeFeedEntryType, activeFeedEntryId = $activeFeedEntryId and feedItem = $feedItems, should call callback with $expectedActiveItem ',
+                ({
+                    hasReplies,
+                    activeFeedEntryType,
+                    activeFeedEntryId,
+                    feedItems: mockFeedItems,
+                    expectedActiveItem,
+                }) => {
+                    const wrapper = getWrapper({
+                        activeFeedEntryId,
+                        activeFeedEntryType,
+                        hasReplies,
+                        feedItems: mockFeedItems,
+                    });
+                    const instance = wrapper.instance();
+                    const callback = jest.fn();
+
+                    instance.getActiveEntry(callback);
+                    expect(callback).toBeCalledWith(expectedActiveItem);
+                },
+            );
+
+            describe("given hasReplies = true and active item not found within first level feed items and its' replies", () => {
+                test('should call callback with null if getComment is not defined', () => {
+                    const mockFeedItem = { id: '123', replies: [{ id: '456' }] };
+                    const mockFeedItems = [mockFeedItem];
+                    const wrapper = getWrapper({
+                        activeFeedEntryId: '999',
+                        feedItems: mockFeedItems,
+                        hasReplies: true,
+                    });
+                    const instance = wrapper.instance();
+                    const callback = jest.fn();
+
+                    instance.getActiveEntry(callback);
+                    expect(callback).toBeCalledWith(null);
+                });
+
+                test('should call getComment and if onError is called, should call callback with null', () => {
+                    const mockFeedItem = { id: '123', replies: [{ id: '456' }] };
+                    const mockFeedItems = [mockFeedItem];
+                    const activeFeedEntryId = '999';
+                    const activeFeedEntryType = 'comment';
+                    const getComment = jest.fn().mockImplementation((id, onSuccess, onError) => {
+                        onError();
+                    });
+                    const wrapper = getWrapper({
+                        activeFeedEntryId,
+                        activeFeedEntryType,
+                        feedItems: mockFeedItems,
+                        getComment,
+                        hasReplies: true,
+                    });
+                    const instance = wrapper.instance();
+                    instance.setState = jest.fn();
+                    const callback = jest.fn();
+
+                    instance.getActiveEntry(callback);
+                    expect(instance.setState).toBeCalledWith({ isReplyDataLoading: true });
+                    expect(getComment).toBeCalledWith(activeFeedEntryId, expect.any(Function), expect.any(Function));
+                    expect(callback).toBeCalledWith(null);
+                });
+
+                test.each`
+                    returnedReply                           | feedItems                                    | expectedActiveItem
+                    ${{ id: '999' }}                        | ${[{ id: '456', replies: [{ id: '123' }] }]} | ${null}
+                    ${{ id: '999', parent: { id: '888' } }} | ${[{ id: '456', replies: [{ id: '123' }] }]} | ${null}
+                    ${{ id: '999', parent: { id: '456' } }} | ${[{ id: '456', replies: [{ id: '123' }] }]} | ${{ id: '456', replies: [{ id: '123' }] }}
+                `(
+                    'should call getComment and if onSuccess is called with $returnedReply, should call callback with $expectedActiveItem',
+                    ({ returnedReply, feedItems: mockFeedItems, expectedActiveItem }) => {
+                        const activeFeedEntryId = '999';
+                        const activeFeedEntryType = 'comment';
+                        const getComment = jest.fn().mockImplementation((id, onSuccess) => {
+                            onSuccess(returnedReply);
+                        });
+                        const wrapper = getWrapper({
+                            activeFeedEntryId,
+                            activeFeedEntryType,
+                            feedItems: mockFeedItems,
+                            getComment,
+                            hasReplies: true,
+                        });
+                        const instance = wrapper.instance();
+                        instance.setState = jest.fn();
+                        const callback = jest.fn();
+
+                        instance.getActiveEntry(callback);
+                        expect(instance.setState).toBeCalledWith({ isReplyDataLoading: true });
+                        expect(getComment).toBeCalledWith(
+                            activeFeedEntryId,
+                            expect.any(Function),
+                            expect.any(Function),
+                        );
+                        expect(callback).toBeCalledWith(expectedActiveItem, true);
+                    },
+                );
+            });
+        });
     });
 
     describe('hasLoaded()', () => {
