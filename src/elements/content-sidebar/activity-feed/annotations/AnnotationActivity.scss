@@ -44,6 +44,13 @@
     white-space: nowrap;
 }
 
+.bcs-AnnotationActivity-link::before {
+    margin-right: 2 * $bdl-grid-unit;
+    margin-left: 2 * $bdl-grid-unit;
+    color: $bdl-gray-50;
+    content: '\2022';
+}
+
 // override for activity feed defaults
 .be {
     .bcs-AnnotationActivity-editor.bcs-CommentForm {
