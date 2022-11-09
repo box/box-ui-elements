@@ -357,21 +357,6 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
             expect(instance.scrollToActiveFeedItemOrErrorMessage).not.toBeCalled();
         });
-
-        // test('should not call scrollToActiveFeedItemOrErrorMessage if activeFeedEntryId changed', () => {
-        //     const wrapper = getWrapper({ activeFeedEntryId: '456' });
-        //     const instance = wrapper.instance();
-        //     instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
-        //
-        //     instance.componentDidUpdate(
-        //         {
-        //             activeFeedEntryId: '456',
-        //         },
-        //         { isInputOpen: false },
-        //     );
-        //
-        //     expect(instance.scrollToActiveFeedItemOrErrorMessage).not.toHaveBeenCalled();
-        // });
     });
 
     test('should pass activeFeedItemRef to the ActiveState', () => {
