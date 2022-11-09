@@ -7,7 +7,7 @@ import Checkmark16 from '../../../../icon/fill/Checkmark16';
 import IconEllipsis from '../../../../icons/general/IconEllipsis';
 import Pencil16 from '../../../../icon/line/Pencil16';
 import PlainButton from '../../../../components/plain-button';
-import Trash16 from '../../../../icon/fill/Trash16';
+import Trash16 from '../../../../icon/line/Trash16';
 import X16 from '../../../../icon/fill/X16';
 import { Menu, MenuItem } from '../../../../components/menu';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
