@@ -14,4 +14,16 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         expect(queryByText(replies[1].message)).toBeVisible();
         expect(queryByText(replies[0].message)).toBeVisible();
     });
+
+    test('should render loading indicator if isRepliesLoading is true', () => {
+        const { queryByTestId } = getWrapper({ isRepliesLoading: true });
+
+        expect(queryByTestId('activity-thread-replies-loading')).toBeInTheDocument();
+    });
+
+    test('should not render loading indicator if isRepliesLoading is false', () => {
+        const { queryByTestId } = getWrapper({ isRepliesLoading: false });
+
+        expect(queryByTestId('activity-thread-replies-loading')).not.toBeInTheDocument();
+    });
 });

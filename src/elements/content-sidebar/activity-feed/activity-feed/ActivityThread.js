@@ -3,7 +3,6 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
 
-import LoadingIndicator from '../../../../components/loading-indicator';
 import PlainButton from '../../../../components/plain-button';
 import ActivityThreadReplies from './ActivityThreadReplies';
 import ActivityThreadReplyForm from './ActivityThreadReplyForm';
@@ -113,19 +112,15 @@ const ActivityThread = ({
         <div className="bcs-ActivityThread" data-testid="activity-thread">
             {children}
 
-            {isRepliesLoading && (
-                <div className="bcs-ActivityThread-loading" data-testid="activity-thread-loading">
-                    <LoadingIndicator />
-                </div>
-            )}
             {renderButton()}
 
-            {!isRepliesLoading && repliesTotalCount > 0 && repliesLength > 0 && (
+            {repliesTotalCount > 0 && repliesLength > 0 && (
                 <ActivityThreadReplies
                     currentUser={currentUser}
                     getAvatarUrl={getAvatarUrl}
                     getMentionWithQuery={getMentionWithQuery}
                     getUserProfileUrl={getUserProfileUrl}
+                    isRepliesLoading={isRepliesLoading}
                     mentionSelectorContacts={mentionSelectorContacts}
                     onDelete={onReplyDelete}
                     onEdit={onReplyEdit}
