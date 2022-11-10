@@ -81,12 +81,11 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         expect(queryByTestId('activity-thread-replies')).not.toBeInTheDocument();
     });
 
-    test('should render LoadingIndicator and do not render replies or button if repliesLoading is true', () => {
+    test('should render LoadingIndicator and do not render button if repliesLoading is true', () => {
         const { queryByTestId } = getWrapper({ isRepliesLoading: true });
 
-        expect(queryByTestId('activity-thread-replies')).not.toBeInTheDocument();
         expect(queryByTestId('activity-thread-button')).not.toBeInTheDocument();
-        expect(queryByTestId('activity-thread-loading')).toBeInTheDocument();
+        expect(queryByTestId('activity-thread-replies-loading')).toBeInTheDocument();
     });
 
     test('should NOT have reply button when onReplyCreate is not passed', () => {

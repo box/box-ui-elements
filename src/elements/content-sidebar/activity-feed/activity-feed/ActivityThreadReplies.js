@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import Comment from '../comment';
+import LoadingIndicator from '../../../../components/loading-indicator';
 
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
@@ -14,6 +15,7 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
+    isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onDelete?: Function,
     onEdit?: Function,
@@ -26,6 +28,7 @@ const ActivityThreadReplies = ({
     getAvatarUrl,
     getMentionWithQuery,
     getUserProfileUrl,
+    isRepliesLoading,
     mentionSelectorContacts,
     onDelete,
     onEdit,
@@ -43,6 +46,11 @@ const ActivityThreadReplies = ({
 
     return (
         <div className="bcs-ActivityThreadReplies" data-testid="activity-thread-replies">
+            {isRepliesLoading && (
+                <div className="bcs-ActivityThreadReplies-loading" data-testid="activity-thread-replies-loading">
+                    <LoadingIndicator />
+                </div>
+            )}
             {replies.map((reply: CommentType) => (
                 <Comment
                     key={`${reply.type}${reply.id}`}
