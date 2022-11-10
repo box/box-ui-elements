@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 import Comment from '../comment';
-
 import LoadingIndicator from '../../../../components/loading-indicator';
+
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
@@ -47,7 +47,7 @@ const ActivityThreadReplies = ({
     return (
         <div className="bcs-ActivityThreadReplies" data-testid="activity-thread-replies">
             {isRepliesLoading && (
-                <div className="bcs-ActivityThread-loading" data-testid="activity-thread-loading">
+                <div className="bcs-ActivityThreadReplies-loading" data-testid="activity-thread-replies-loading">
                     <LoadingIndicator />
                 </div>
             )}

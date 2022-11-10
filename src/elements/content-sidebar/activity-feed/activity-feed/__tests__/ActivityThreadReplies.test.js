@@ -18,6 +18,12 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
     test('should render loading indicator if isRepliesLoading is true', () => {
         const { queryByTestId } = getWrapper({ isRepliesLoading: true });
 
-        expect(queryByTestId('activity-thread-loading')).toBeInTheDocument();
+        expect(queryByTestId('activity-thread-replies-loading')).toBeInTheDocument();
+    });
+
+    test('should not render loading indicator if isRepliesLoading is false', () => {
+        const { queryByTestId } = getWrapper({ isRepliesLoading: false });
+
+        expect(queryByTestId('activity-thread-replies-loading')).not.toBeInTheDocument();
     });
 });
