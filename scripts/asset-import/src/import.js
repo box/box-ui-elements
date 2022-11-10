@@ -91,6 +91,7 @@ module.exports = async cliOptions => {
 
     const git = new SimpleGit(config.workingDir);
     const sourcePath = `${config.workingDir}/${uniqid('design-assets-')}`;
+    const assetDirectory = `${sourcePath}/${config.assetDirectory}`;
 
     rimraf(sourcePath, async () => {
         try {
@@ -104,8 +105,8 @@ module.exports = async cliOptions => {
                 await git.checkout(config.branch);
                 progress.succeed();
 
-                progress.start(colors.cyan(`Parse contents of ${sourcePath}. . .`));
-                util.parseContentsOf(sourcePath, sourcePath, config.destinationDir, parser);
+                progress.start(colors.cyan(`Parse contents of ${assetDirectory}. . .`));
+                util.parseContentsOf(assetDirectory, assetDirectory, config.destinationDir, parser);
                 progress.succeed(colors.cyan('Parsing completed successfully.'));
 
                 progress.start('Cleaning up. . .');
