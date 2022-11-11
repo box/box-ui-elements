@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import CloseButton from '../close-button/CloseButton';
 // @ts-ignore flow
 import FlyoutContext from './FlyoutContext';
-
 import './OverlayHeader.scss';
 
 export interface OverlayHeaderProps {
@@ -20,7 +19,7 @@ const OverlayHeader = ({ children, className }: OverlayHeaderProps) => {
         event.stopPropagation();
     };
 
-    const { closeOverlay } = React.useContext(FlyoutContext);
+    const { closeOverlay } = React.useContext<any>(FlyoutContext);
 
     return (
         <div

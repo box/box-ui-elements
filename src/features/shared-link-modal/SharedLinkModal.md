@@ -5,8 +5,6 @@ Modal to get/manage a Shared Link for an item. It is configurable to show featur
 ### Examples
 
 ```js
-const Button = require('box-ui-elements/es/components/button').default;
-
 const contacts = [
   { id: 0, name: 'Jackie', email: 'j@example.com', type: 'user' },
   { id: 1, name: 'Jeff', email: 'jt@example.com', type: 'user' },

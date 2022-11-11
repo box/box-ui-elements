@@ -14,32 +14,30 @@ const customValidFn = function customFn(value) {
     return null;
 };
 
-initialState = {
-    formData: {
-        showtextareatoggle: '',
-    },
-    formValidityState: {},
-};
+const [formData ,setFormData] = React.useState({showtextareatoggle: ''})
+const [formValidityState ,setFormValidityState] = React.useState({})
 
-<Form
-    onChange={ formData => {
-        setState({ formValidityState: {}, formData });
-    } }
-    onValidSubmit={ () => {
+const onChangeForm = (formData) => {
+        setFormValidityState({})
+        setFormData(formData)
+    }
+    const onValidSubmit =  () => {
         // On a server validation error, set formValidityState to
         // push error states to child inputs
-        setState({
-            formValidityState: {
+        setFormValidityState({
                 username: {
                     code: 'usernametaken',
                     message: 'Username already taken.',
                 },
             },
-        });
-    } }
+        )
+    }
+<Form
+    onChange={onChangeForm}
+    onValidSubmit={onValidSubmit}
     onInvalidSubmit={ formValidityState =>
         console.log(formValidityState) }
-    formValidityState={ state.formValidityState }
+    formValidityState={ formValidityState }
 >
     <div>
         <TextInput
@@ -87,12 +85,12 @@ initialState = {
                 id="showtextareatoggle"
                 label="Show TextArea"
                 isOn={
-                    state.formData
+                    formData
                         .showtextareatoggle === 'on'
                 }
             />
         </div>
-        {state.formData.showtextareatoggle === 'on'
+        {formData.showtextareatoggle === 'on'
             ? <TextArea
                     name="textarea"
                     label="Your story"

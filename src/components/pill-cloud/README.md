@@ -20,20 +20,16 @@ const pills = [
     { value: 15, displayText: 'another long pill, very very long pill, so long that it breaks css boundaries' },
 ];
 
-initialState = {
-    selectedItem: pills[5],
-};
+const [selectedItem, setSelectedItem] = React.useState(pills[5])
 
 const handleSelect = pillOption => {
-    setState({
-        selectedItem:pillOption,
-    });
+    setSelectedItem(pillOption)
 };
 
 <div>
-    <PillCloud onSelect={handleSelect} options={pills} selectedOptions={[state.selectedItem]} buttonProps={{ 'data-button-type': 'pill-btn'}} />
+    <PillCloud onSelect={handleSelect} options={pills} selectedOptions={[selectedItem]} buttonProps={{ 'data-button-type': 'pill-btn'}} />
     <div id="pill-cloud-output">
-        {state.selectedItem.displayText}
+        {selectedItem.displayText}
     </div>
 </div>
 ```

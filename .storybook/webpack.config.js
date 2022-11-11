@@ -7,9 +7,9 @@ const shouldIncludeAllSupportedBrowsers =
 const language = process.env.LANGUAGE;
 const webpackConfig = Array.isArray(webpackConf) ? webpackConf[0] : webpackConf;
 
-module.exports = async ({ config }) => {
+module.exports = async ({config}) => {
     config.watchOptions = {
-        ignored: [/node_modules/, /__tests__/],
+        ignored: ['**/node_modules', '**/__tests__'],
     };
     config.plugins = [...webpackConfig.plugins, ...config.plugins];
     config.resolve.extensions = [...config.resolve.extensions, ...webpackConfig.resolve.extensions];
@@ -26,7 +26,7 @@ module.exports = async ({ config }) => {
         {
             test: /\.(ts|tsx)?$/,
             exclude: /node_modules\/(?!@box\/cldr-data)/,
-            use: [{ loader: 'babel-loader' }, { loader: 'react-docgen-typescript-loader' }],
+            use: [{loader: 'babel-loader'}, {loader: 'react-docgen-typescript-loader'}],
         },
         {
             test: /\.(js?|ts?)$/,

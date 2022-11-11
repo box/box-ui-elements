@@ -34,7 +34,7 @@ module.exports = {
         '@babel/plugin-syntax-dynamic-import',
         '@babel/plugin-transform-flow-strip-types',
         '@babel/plugin-transform-object-assign',
-        '@babel/plugin-proposal-class-properties',
+        ['@babel/plugin-proposal-class-properties', { loose: true }],
         '@babel/plugin-proposal-object-rest-spread',
         'babel-plugin-styled-components',
         [

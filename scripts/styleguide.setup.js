@@ -1,4 +1,3 @@
-import { IntlProvider } from 'react-intl';
 import features from '../examples/src/features';
 // Constants
 global.FEATURES = global.FEATURES || features;
@@ -7,6 +6,3 @@ global.FOLDER_ID = global.FOLDER_ID || __FOLDERID__ || '69083462919'; // eslint-
 // NOTE: The token used is a readonly token accessing public data in a demo enterprise. DO NOT PUT A WRITE TOKEN
 global.TOKEN = global.TOKEN || __TOKEN__ || 'P1n3ID8nYMxHRWvenDatQ9k6JKzWzYrz'; // eslint-disable-line
 global.PROPS = global.PROPS || {}; // eslint-disable-line
-
-// Components
-global.IntlProvider = IntlProvider;

@@ -25,15 +25,12 @@ const IconRelay = require('./icons/IconRelay').default;
 const IconFavorites = require('./icons/IconFavorites').default;
 const IconFilePDF = require('../../icons/file/IconFilePDF').default;
 
+const [collapsed, setCollapsed] = React.useState({});
+
 const onToggleCollapse = () => {
-  setState(prevState => {
-    const prevCollapsed = prevState.collapsed;
-    return {
-      collapsed: {
-        ...prevCollapsed,
-        favorites: !prevCollapsed.favorites,
-      },
-    };
+  setCollapsed({
+    ...collapsed,
+    favorites: !collapsed.favorites,
   });
 };
 
@@ -70,11 +67,6 @@ const leftSidebarProps = {
   isInstantLoggedIn: true,
   isDragging: true,
 };
-
-initialState = {
-  collapsed: {},
-};
-
 const menuItems = [
   {
     id: 'all-files',
@@ -243,7 +235,7 @@ const menuItems = [
     iconComponent: IconFavorites,
     showLoadingIndicator: false,
     onToggleCollapse: onToggleCollapse,
-    collapsed: state.collapsed.favorites,
+    collapsed: collapsed.favorites,
     placeholder: 'Drag items here for quick access',
     menuItems: [
       {

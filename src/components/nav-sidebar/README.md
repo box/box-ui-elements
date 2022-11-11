@@ -23,15 +23,10 @@ const NavList = require('./NavList').default;
 const NavList = require('./NavList').default;
 const NavListCollapseHeader = require('./NavListCollapseHeader').default;
 
-const handleOnToggle = (ev) => {
-    setState((prevState) => {
-        prevState.collapsed = !prevState.collapsed;
-        return prevState;
-    });
-};
+const [isCollapsed, setIsCollapsed] = React.useState(false);
 
-initialState = {
-    collapsed: true
+const handleOnToggle = (ev) => {
+    setIsCollapsed(!isCollapsed)
 };
 
 <NavSidebar data-resin-component="leftnav">
@@ -42,7 +37,7 @@ initialState = {
             </NavListCollapseHeader>
         }
         className="is-collapsible example-collapsible"
-        collapsed={state.collapsed}
+        collapsed={isCollapsed}
     >
         <Link>Item 1-1</Link>
         <Link>Item 1-2</Link>

@@ -29,16 +29,15 @@ const SimpleModal = ({ isOpen, onRequestClose }) => (
         </ModalActions>
     </Modal>
 );
-openModal = () =>
-    setState({
-        isModalOpen: true,
-    });
-closeModal = () => setState({ isModalOpen: false });
+
+const [isModalOpen, setIsModalOpen] = React.useState(false)
+openModal = () => setIsModalOpen(true);
+closeModal = () => setIsModalOpen(false);
 
 <div>
     <SimpleModal
         onRequestClose={ closeModal }
-        isOpen={ state.isModalOpen }
+        isOpen={ isModalOpen }
     />
     <PrimaryButton onClick={ openModal }>
         Launch standard modal
@@ -70,11 +69,10 @@ const SimpleModal = ({ isOpen, onRequestClose }) => (
         </ModalActions>
     </Modal>
 );
-openModal = () =>
-    setState({
-        isModalOpen: true,
-    });
-closeModal = () => setState({ isModalOpen: false });
+
+const [isModalOpen, setIsModalOpen] = React.useState(false)
+openModal = () => setIsModalOpen(true);
+closeModal = () => setIsModalOpen(false);
 
 confirmBackdropClose = () => {
     // We can call the defined `closeModal` message after any custom processing,
@@ -87,7 +85,7 @@ confirmBackdropClose = () => {
 <div>
     <SimpleModal
         onRequestClose={ closeModal }
-        isOpen={ state.isModalOpen }
+        isOpen={ isModalOpen }
     />
     <PrimaryButton onClick={ openModal }>
         Launch standard modal

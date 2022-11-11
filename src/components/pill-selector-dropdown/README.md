@@ -17,11 +17,9 @@ const users = [
     { id: 7, name: 'ccc@foo.bar' },
 ];
 
-initialState = {
-    error: '',
-    selectedOptions: [],
-    selectorOptions: [],
-};
+const [error, setError] = React.useState('');
+const [selectedOptions, setSelectedOptions] = React.useState([]);
+const [selectorOptions, setSelectorOptions] = React.useState([]);
 
 const handleInput = value => {
     const selectorOptions = [];
@@ -39,21 +37,18 @@ const handleInput = value => {
     }
 
     // As user is typing, reset error and update selectorOptions
-    setState({ selectorOptions, error: '' });
+    setSelectorOptions(selectorOptions)
+    setError('')
 };
 
 const handleSelect = pills => {
-    setState(prevState => ({
-        selectedOptions: [...prevState.selectedOptions, ...pills],
-    }));
+    setSelectedOptions([...selectedOptions, ...pills])
 };
 
 const handleRemove = (option, index) => {
-    setState(prevState => {
-        const selectedOptions = prevState.selectedOptions.slice();
-        selectedOptions.splice(index, 1);
-        return { selectedOptions };
-    });
+    const _selectedOptions = selectedOptions.slice();
+    _selectedOptions.splice(index, 1);
+    setSelectedOptions(_selectedOptions)
 };
 
 const validateForError = text => {
@@ -67,7 +62,7 @@ const validateForError = text => {
         error = 'Invalid Email Address';
     }
 
-    setState({ error });
+    setError( error );
 };
 
 const validator = text => {
@@ -78,17 +73,17 @@ const validator = text => {
 
 <PillSelectorDropdown
     allowCustomPills
-    error={state.error}
+    error={error}
     onInput={handleInput}
     onRemove={handleRemove}
     onSelect={handleSelect}
     placeholder="Name or email addresses"
-    selectedOptions={state.selectedOptions}
-    selectorOptions={state.selectorOptions}
+    selectedOptions={selectedOptions}
+    selectorOptions={selectorOptions}
     validateForError={validateForError}
     validator={validator}
 >
-    {state.selectorOptions.map(option => (
+    {selectorOptions.map(option => (
         <DatalistItem key={ option.value }>
             {option.displayText}
         </DatalistItem>

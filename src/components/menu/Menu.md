@@ -14,7 +14,6 @@ Following the following standards: [WAI-ARIA Menu](https://www.w3.org/TR/wai-ari
 **Basic Menu**
 
 ```js
-const Menu = require('box-ui-elements/es/components/menu').Menu;
 const MenuItem = require('box-ui-elements/es/components/menu').MenuItem;
 const MenuSeparator = require('box-ui-elements/es/components/menu')
   .MenuSeparator;
@@ -79,10 +78,7 @@ const SubmenuItem = require('box-ui-elements/es/components/menu').SubmenuItem;
 **Select Menu**
 
 ```
-const Menu = require('box-ui-elements/es/components/menu').Menu;
-const MenuItem = require('box-ui-elements/es/components/menu').MenuItem;
-const MenuSeparator = require('box-ui-elements/es/components/menu').MenuSeparator;
-const MenuLinkItem = require('box-ui-elements/es/components/menu').MenuLinkItem;
+const SelectMenuLinkItem = require('box-ui-elements/es/components/menu').SelectMenuLinkItem;
 
 <Menu>
     <SelectMenuLinkItem isSelected>
@@ -97,7 +93,6 @@ const MenuLinkItem = require('box-ui-elements/es/components/menu').MenuLinkItem;
 **Menu with new child when window is resized to < 700px**
 
 ```js
-const Menu = require('box-ui-elements/es/components/menu').Menu;
 const MenuItem = require('box-ui-elements/es/components/menu').MenuItem;
 
 class MenuWithChildOnResize extends React.Component {
