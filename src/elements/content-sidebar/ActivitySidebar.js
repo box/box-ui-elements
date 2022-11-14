@@ -523,6 +523,24 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     /**
+     * Updates replies of a comment or annotation in the Feed
+     *
+     * @param {string} id - id of the feed item
+     * @param {Array<Comment>} replies - replies
+     * @return {void}
+     */
+    updateReplies = (id: string, replies: Array<Comment>) => {
+        const { api, file } = this.props;
+
+        const feedAPI = api.getFeedAPI(false);
+
+        feedAPI.file = file;
+        feedAPI.updateFeedItem({ replies }, id);
+
+        this.fetchFeedItems();
+    };
+
+    /**
      * Handles a successful update of a reply
      *
      * @private
@@ -1001,6 +1019,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
                     onCommentUpdate={this.updateComment}
+                    onHideReplies={this.updateReplies}
                     onReplyCreate={this.createReply}
                     onReplyDelete={this.deleteReply}
                     onReplyUpdate={this.updateReply}

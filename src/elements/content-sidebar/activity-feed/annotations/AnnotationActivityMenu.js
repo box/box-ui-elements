@@ -7,7 +7,7 @@ import Checkmark16 from '../../../../icon/fill/Checkmark16';
 import IconEllipsis from '../../../../icons/general/IconEllipsis';
 import Pencil16 from '../../../../icon/line/Pencil16';
 import PlainButton from '../../../../components/plain-button';
-import Trash16 from '../../../../icon/fill/Trash16';
+import Trash16 from '../../../../icon/line/Trash16';
 import X16 from '../../../../icon/fill/X16';
 import { Menu, MenuItem } from '../../../../components/menu';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
@@ -15,6 +15,7 @@ import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../../../consta
 import { bdlGray50 } from '../../../../styles/variables';
 import type { FeedItemStatus } from '../../../../common/types/feed';
 import messages from './messages';
+import './AnnotationActivityMenu.scss';
 
 type AnnotationActivityMenuProps = {
     canDelete?: boolean,
@@ -64,6 +65,7 @@ const AnnotationActivityMenu = ({
             <Menu {...menuProps}>
                 {canResolve && isResolved && (
                     <MenuItem
+                        className="bcs-AnnotationActivityMenu-unresolveAnnotation"
                         data-resin-itemid={id}
                         data-resin-target={ACTIVITY_TARGETS.ANNOTATION_OPTIONS_UNRESOLVE}
                         data-testid="unresolve-annotation-activity"

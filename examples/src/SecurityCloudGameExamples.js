@@ -9,7 +9,7 @@ const SecurityCloudGameExamples = () => {
             <h3>Click-jacking Cloud Game</h3>
             <Section id="cloud game" title="">
                 <div>
-                    <SecurityCloudGame cloudSize={100} height={500} width={500} />
+                    <SecurityCloudGame height={500} width={500} />
                 </div>
             </Section>
         </div>

@@ -6,6 +6,7 @@ import AnnotationActivityMenu from '../AnnotationActivityMenu';
 import CommentForm from '../../comment-form/CommentForm';
 import DeleteConfirmation from '../../common/delete-confirmation';
 import Media from '../../../../../components/media';
+import messages from '../messages';
 import SelectableActivityCard from '../../SelectableActivityCard';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
@@ -84,10 +85,10 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
             expect(wrapper.find('AnnotationActivityLink').props()).toMatchObject({
                 'data-resin-target': 'annotationLink',
-                isCurrentVersion: true,
-                fileVersion: mockAnnotation.file_version.version_number,
-                locationValue: mockAnnotation.target.location.value,
-                shouldHideLink: false,
+                message: {
+                    ...messages.annotationActivityPageItem,
+                    values: { number: 1 },
+                },
             });
             expect(wrapper.exists(AnnotationActivityMenu)).toBe(true);
             expect(wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))').prop('tagged_message')).toEqual(
@@ -127,23 +128,33 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         expect(wrapper.exists('CommentForm')).toBe(false);
     });
 
+    test('should correctly render annotation activity of another file version', () => {
+        const wrapper = getWrapper({ isCurrentVersion: false });
+
+        expect(wrapper.find('AnnotationActivityLink').prop('message')).toEqual({
+            ...messages.annotationActivityVersionLink,
+            values: { number: '2' },
+        });
+    });
+
+    test('should render version unavailable if file version is null', () => {
+        const wrapper = getWrapper({ item: { ...mockAnnotation, file_version: null } });
+        const activityLink = wrapper.find('AnnotationActivityLink');
+
+        expect(activityLink.prop('message')).toEqual({
+            ...messages.annotationActivityVersionUnavailable,
+        });
+        expect(activityLink.prop('isDisabled')).toBe(true);
+    });
+
+    test('should not render file version link if hasVersions is false', () => {
+        const wrapper = getWrapper({ hasVersions: false });
+        expect(wrapper.exists('AnnotationActivityLink')).toBe(false);
+    });
+
     test('should render commenter as a link', () => {
         const wrapper = getWrapper();
         expect(wrapper.find('UserLink').prop('name')).toEqual(mockActivity.item.created_by.name);
-    });
-
-    test('should hide AnnotationActivityLink if hasVersions is false', () => {
-        const wrapper = getWrapper({ hasVersions: false });
-        expect(wrapper.find('AnnotationActivityLink').props()).toMatchObject({
-            shouldHideLink: true,
-        });
-    });
-
-    test('should show AnnotationActivityLink if hasVersions is true', () => {
-        const wrapper = getWrapper({ hasVersions: true });
-        expect(wrapper.find('AnnotationActivityLink').props()).toMatchObject({
-            shouldHideLink: false,
-        });
     });
 
     test('should not show actions menu when annotation activity is pending', () => {

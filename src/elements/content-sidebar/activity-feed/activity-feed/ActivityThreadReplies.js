@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import Comment from '../comment';
+import LoadingIndicator from '../../../../components/loading-indicator';
 
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
@@ -14,7 +15,7 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
-    isExpanded: boolean,
+    isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onDelete?: Function,
     onEdit?: Function,
@@ -27,15 +28,13 @@ const ActivityThreadReplies = ({
     getAvatarUrl,
     getMentionWithQuery,
     getUserProfileUrl,
-    isExpanded,
+    isRepliesLoading,
     mentionSelectorContacts,
     onDelete,
     onEdit,
     replies,
     translations,
 }: Props) => {
-    const lastReply = replies[replies.length - 1];
-
     const getReplyPermissions = (reply: CommentType): BoxCommentPermission => {
         const { permissions: { can_delete = false, can_edit = false, can_resolve = false } = {} } = reply;
         return {
@@ -47,10 +46,15 @@ const ActivityThreadReplies = ({
 
     return (
         <div className="bcs-ActivityThreadReplies" data-testid="activity-thread-replies">
-            {!isExpanded ? (
+            {isRepliesLoading && (
+                <div className="bcs-ActivityThreadReplies-loading" data-testid="activity-thread-replies-loading">
+                    <LoadingIndicator />
+                </div>
+            )}
+            {replies.map((reply: CommentType) => (
                 <Comment
-                    key={lastReply.type + lastReply.id}
-                    {...lastReply}
+                    key={`${reply.type}${reply.id}`}
+                    {...reply}
                     currentUser={currentUser}
                     getAvatarUrl={getAvatarUrl}
                     getMentionWithQuery={getMentionWithQuery}
@@ -58,26 +62,10 @@ const ActivityThreadReplies = ({
                     mentionSelectorContacts={mentionSelectorContacts}
                     onDelete={onDelete}
                     onEdit={onEdit}
-                    permissions={getReplyPermissions(lastReply)}
+                    permissions={getReplyPermissions(reply)}
                     translations={translations}
                 />
-            ) : (
-                replies.map((reply: CommentType) => (
-                    <Comment
-                        key={reply.type + reply.id}
-                        {...reply}
-                        currentUser={currentUser}
-                        getAvatarUrl={getAvatarUrl}
-                        getMentionWithQuery={getMentionWithQuery}
-                        getUserProfileUrl={getUserProfileUrl}
-                        mentionSelectorContacts={mentionSelectorContacts}
-                        onDelete={onDelete}
-                        onEdit={onEdit}
-                        permissions={getReplyPermissions(reply)}
-                        translations={translations}
-                    />
-                ))
-            )}
+            ))}
         </div>
     );
 };

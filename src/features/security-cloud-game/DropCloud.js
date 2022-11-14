@@ -1,8 +1,11 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import Logo from '../../components/logo';
 import IconCloud from '../../icons/general/IconCloud';
+import messages from './messages';
 
 const InsetFilter = () => (
     <filter id="inset-shadow">
@@ -15,16 +18,17 @@ const InsetFilter = () => (
     </filter>
 );
 
-const DropCloud = ({ className, cloudSize = 64, position }) => {
+const DropCloud = ({ className, cloudSize, position }) => {
     const { x, y } = position;
     return (
-        <div className={`drop-cloud ${className}`} style={{ top: `${y}px`, left: `${x}px` }}>
+        <div className={classNames('bdl-DropCloud', className)} style={{ top: `${y}px`, left: `${x}px` }}>
             <IconCloud
                 filter={{ id: 'inset-shadow', definition: <InsetFilter /> }}
                 height={cloudSize}
+                title={<FormattedMessage {...messages.target} />}
                 width={cloudSize}
             />
-            <Logo />
+            <Logo title="Box" />
         </div>
     );
 };
@@ -34,6 +38,7 @@ DropCloud.displayName = 'DropCloud';
 DropCloud.propTypes = {
     className: PropTypes.string,
     cloudSize: PropTypes.number,
+    intl: PropTypes.any,
     position: PropTypes.objectOf(PropTypes.number).isRequired,
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import cloneDeep from 'lodash/cloneDeep';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
-import { filterableActivityFeedItems } from '../fixtures';
+import { filterableActivityFeedItems, formattedReplies } from '../fixtures';
 import { FEED_ITEM_TYPE_COMMENT } from '../../../constants';
 
 jest.mock('lodash/debounce', () => jest.fn(i => i));
@@ -25,6 +25,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         fetchReplies: jest.fn(),
         updateAnnotation: jest.fn(),
         updateComment: jest.fn(),
+        updateFeedItem: jest.fn(),
         updateReply: jest.fn(),
         updateTaskCollaborator: jest.fn(),
         updateTaskNew: jest.fn(),
@@ -539,6 +540,23 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 parentId,
                 true,
             );
+        });
+    });
+
+    describe('updateReplies()', () => {
+        test('should call updateFeedItem API', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            const id = '123';
+            const replies = cloneDeep(formattedReplies);
+
+            instance.fetchFeedItems = jest.fn();
+
+            instance.updateReplies(id, replies);
+
+            expect(api.getFeedAPI().updateFeedItem).toBeCalledWith({ replies }, id);
+            expect(instance.fetchFeedItems).toBeCalled();
         });
     });
 

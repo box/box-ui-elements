@@ -1,17 +1,24 @@
 @import '../../../common/variables';
 
-.bcs-ActivityThread-toggle {
-    margin-left: $sidebarActivityFeedSpacingHorizontal;
-    color: $bdl-box-blue;
-    font-weight: bold;
+.bcs-ActivityThread {
+    .bcs-ActivityThread-toggle {
+        color: $bdl-box-blue;
 
-    &:hover,
-    &:active {
-        margin-left: $sidebarActivityFeedSpacingHorizontal;
-        font-weight: bold;
+        &,
+        &:hover,
+        &:active {
+            margin-top: -$bdl-grid-unit * 2; // to decreased spacing with parent comment
+            margin-left: $sidebarActivityFeedSpacingHorizontal;
+            font-weight: bold;
+        }
     }
-}
 
-.bcs-ActivityThread-loading {
-    padding-bottom: $bdl-grid-unit * 5;
+    .bcs-ActivityCard {
+        margin: $sidebarActivityFeedSpacingVertical $sidebarActivityFeedSpacingHorizontal;
+        padding: 0;
+    }
+
+    .btn-plain:focus-visible {
+        outline: auto;
+    }
 }
