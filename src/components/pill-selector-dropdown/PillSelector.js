@@ -205,7 +205,7 @@ class PillSelector extends React.Component<Props, State> {
         };
 
         return (
-            <Tooltip isShown={hasError} text={error || ''} position="middle-right" theme="error">
+            <Tooltip isShown={hasError} text={error || ''} position="bottom-left" theme="error">
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
                 <span
                     className={classes}
