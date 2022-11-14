@@ -16,7 +16,7 @@ exports[`components/label/InfoIconWithTooltip should render correctly 1`] = `
     <span
       className="info-icon-container"
     >
-      <Info16
+      <InfoBadge16
         a="a"
         b="b"
         c="c"
