@@ -152,9 +152,7 @@ class ActivityFeed extends React.Component<Props, State> {
             currFeedItems &&
             !isItemInFeed(currFeedItems, activeFeedEntryReplyId)
         ) {
-            if (activeFeedEntryType === FEED_ITEM_TYPE_COMMENT || activeFeedEntryType === FEED_ITEM_TYPE_ANNOTATION) {
-                onShowReplies(activeFeedEntryId, activeFeedEntryType);
-            }
+            onShowReplies(activeFeedEntryId, activeFeedEntryType);
         }
     }
 
