@@ -4,6 +4,7 @@ import {
     ERROR_CODE_CREATE_COMMENT,
     ERROR_CODE_UPDATE_COMMENT,
     ERROR_CODE_DELETE_COMMENT,
+    ERROR_CODE_FETCH_COMMENT,
     ERROR_CODE_FETCH_COMMENTS,
     ERROR_CODE_FETCH_REPLIES,
     ERROR_CODE_CREATE_REPLY,
@@ -231,7 +232,7 @@ describe('api/ThreadedComments', () => {
                 errorCallback,
             });
 
-            expect(errorCallback).toBeCalledWith(expect.any(Error), ERROR_CODE_FETCH_COMMENTS);
+            expect(errorCallback).toBeCalledWith(expect.any(Error), ERROR_CODE_FETCH_COMMENT);
             expect(threadedComments.get).not.toBeCalled();
         });
     });

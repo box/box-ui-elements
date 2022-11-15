@@ -9,7 +9,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
         onTaskModalClose={[Function]}
         taskFormProps={
           Object {
-            "approverSelectorContacts": undefined,
+            "approverSelectorContacts": Array [],
             "approvers": Array [],
             "completionRule": "ALL_ASSIGNEES",
             "createTask": [Function],
@@ -33,6 +33,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
   }
 >
   <ActivityFeed
+    approverSelectorContacts={Array []}
     currentUser={
       Object {
         "id": "123",
@@ -49,11 +50,11 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     }
     getApproverWithQuery={[Function]}
     getAvatarUrl={[Function]}
-    getComment={[Function]}
     getMentionWithQuery={[Function]}
     hasReplies={false}
     hasVersions={true}
     isDisabled={false}
+    isItemInFeed={[Function]}
     onAnnotationDelete={[Function]}
     onAnnotationEdit={[Function]}
     onAnnotationSelect={[Function]}

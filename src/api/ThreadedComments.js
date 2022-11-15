@@ -12,6 +12,7 @@ import {
     ERROR_CODE_CREATE_COMMENT,
     ERROR_CODE_UPDATE_COMMENT,
     ERROR_CODE_DELETE_COMMENT,
+    ERROR_CODE_FETCH_COMMENT,
     ERROR_CODE_FETCH_COMMENTS,
     PERMISSION_CAN_RESOLVE,
     ERROR_CODE_FETCH_REPLIES,
@@ -251,7 +252,7 @@ class ThreadedComments extends MarkerBasedApi {
         permissions: BoxItemPermission,
         successCallback: (comment: Comment) => void,
     }): void {
-        this.errorCode = ERROR_CODE_FETCH_COMMENTS;
+        this.errorCode = ERROR_CODE_FETCH_COMMENT;
         try {
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, fileId);
         } catch (e) {

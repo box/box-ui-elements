@@ -21,7 +21,6 @@ import {
     PERMISSION_CAN_CREATE_ANNOTATIONS,
 } from '../../../../constants';
 import { scrollIntoView } from '../../../../utils/dom';
-import type { ElementsXhrError } from '../../../../common/types/api';
 import type {
     Annotation,
     AnnotationPermission,
@@ -29,7 +28,6 @@ import type {
     Comment,
     CommentFeedItemType,
     FocusableFeedItemType,
-    FeedItem,
     FeedItems,
     FeedItemStatus,
 } from '../../../../common/types/feed';
@@ -40,6 +38,7 @@ import './ActivityFeed.scss';
 
 type Props = {
     activeFeedEntryId?: string,
+    activeFeedEntryReplyId?: string,
     activeFeedEntryType?: FocusableFeedItemType,
     activityFeedError: ?Errors,
     approverSelectorContacts?: SelectorItems<User | GroupMini>,
@@ -49,16 +48,12 @@ type Props = {
     file: BoxItem,
     getApproverWithQuery?: Function,
     getAvatarUrl: GetAvatarUrlCallback,
-    getComment?: (
-        id: string,
-        onSuccess: (comment: Comment) => void,
-        onError: (error: ElementsXhrError, code: string, contextInfo?: Object) => void,
-    ) => void,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
     hasReplies?: boolean,
     hasVersions?: boolean,
     isDisabled?: boolean,
+    isItemInFeed: (feedItems: FeedItems, itemId: string) => boolean,
     mentionSelectorContacts?: SelectorItems<User>,
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
     onAnnotationEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
@@ -99,16 +94,12 @@ type Props = {
 };
 
 type State = {
-    activeEntry?: FeedItem | null,
     isInputOpen: boolean,
-    isReplyDataLoading: boolean,
 };
 
 class ActivityFeed extends React.Component<Props, State> {
     state = {
-        activeEntry: undefined,
         isInputOpen: false,
-        isReplyDataLoading: false,
     };
 
     activeFeedItemRef = React.createRef<null | HTMLElement>();
@@ -125,37 +116,45 @@ class ActivityFeed extends React.Component<Props, State> {
             currentUser: prevCurrentUser,
             feedItems: prevFeedItems,
         } = prevProps;
-        const { feedItems: currFeedItems, activeFeedEntryId, onShowReplies = noop } = this.props;
-        const { activeEntry, isInputOpen: prevIsInputOpen } = prevState;
-        const { activeEntry: prevActiveEntry, isInputOpen: currIsInputOpen } = this.state;
+        const {
+            activeFeedEntryId,
+            activeFeedEntryReplyId,
+            activeFeedEntryType,
+            feedItems: currFeedItems,
+            isItemInFeed,
+            onShowReplies,
+        } = this.props;
+        const { isInputOpen: prevIsInputOpen } = prevState;
+        const { isInputOpen: currIsInputOpen } = this.state;
 
         const hasLoaded = this.hasLoaded(prevCurrentUser, prevFeedItems);
         const hasMoreItems = prevFeedItems && currFeedItems && prevFeedItems.length < currFeedItems.length;
         const didLoadFeedItems = prevFeedItems === undefined && currFeedItems !== undefined;
         const hasInputOpened = currIsInputOpen !== prevIsInputOpen;
         const hasActiveFeedEntryIdChanged = activeFeedEntryId !== prevActiveFeedEntryId;
-        const hasActiveEntryChanged = activeEntry?.id !== prevActiveEntry?.id;
 
         if ((hasLoaded || hasMoreItems || didLoadFeedItems || hasInputOpened) && activeFeedEntryId === undefined) {
             this.resetFeedScroll();
         }
 
-        if (hasActiveEntryChanged) {
+        if (didLoadFeedItems || hasActiveFeedEntryIdChanged) {
             this.scrollToActiveFeedItemOrErrorMessage();
         }
 
-        if (didLoadFeedItems || hasActiveFeedEntryIdChanged) {
-            this.getActiveEntry((activeItem, repliesNeedToBeLoaded = false) => {
-                if (
-                    repliesNeedToBeLoaded &&
-                    activeItem &&
-                    (activeItem.type === FEED_ITEM_TYPE_ANNOTATION || activeItem.type === FEED_ITEM_TYPE_COMMENT)
-                ) {
-                    onShowReplies(activeItem.id, activeItem.type);
-                }
-
-                this.setState({ activeEntry: activeItem });
-            });
+        // Load replies if active entry reply is set and it's not currently within feed items or its replies
+        if (
+            onShowReplies &&
+            activeFeedEntryId &&
+            activeFeedEntryType &&
+            (activeFeedEntryType === FEED_ITEM_TYPE_COMMENT || activeFeedEntryType === FEED_ITEM_TYPE_ANNOTATION) &&
+            hasLoaded &&
+            activeFeedEntryReplyId &&
+            currFeedItems &&
+            !isItemInFeed(currFeedItems, activeFeedEntryReplyId)
+        ) {
+            if (activeFeedEntryType === FEED_ITEM_TYPE_COMMENT || activeFeedEntryType === FEED_ITEM_TYPE_ANNOTATION) {
+                onShowReplies(activeFeedEntryId, activeFeedEntryType);
+            }
         }
     }
 
@@ -188,61 +187,6 @@ class ActivityFeed extends React.Component<Props, State> {
             return false;
         }
         return feedItems.length === 0 || (feedItems.length === 1 && feedItems[0].type === ItemTypes.fileVersion);
-    };
-
-    getActiveEntry = (callback: (activeEntry: FeedItem | null, repliesNeedToBeLoaded?: boolean) => void) => {
-        const { activeFeedEntryId, activeFeedEntryType, feedItems, getComment, hasReplies } = this.props;
-
-        if (!activeFeedEntryId || !Array.isArray(feedItems)) {
-            return callback(null);
-        }
-
-        const firstLevelItem = feedItems.find(
-            ({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType,
-        );
-        // If the active entry is a first level Feed item, return it
-        if (firstLevelItem) {
-            return callback(firstLevelItem);
-        }
-
-        // Check if hasReplies is enabled and active entry's type is comment
-        if (!hasReplies || activeFeedEntryType !== FEED_ITEM_TYPE_COMMENT) {
-            return callback(null);
-        }
-
-        const firstLevelItemWithActiveReply = feedItems.find(item => {
-            if (
-                (item.type !== FEED_ITEM_TYPE_ANNOTATION && item.type !== FEED_ITEM_TYPE_COMMENT) ||
-                !item.replies ||
-                !Array.isArray(item.replies)
-            ) {
-                return false;
-            }
-            return item.replies.some(({ id }) => id === activeFeedEntryId);
-        });
-        // If the active entry is within present replies of any first level Feed items (if it's a comment or annotation),
-        // return that first level Feed item
-        if (firstLevelItemWithActiveReply) {
-            return callback(firstLevelItemWithActiveReply);
-        }
-
-        if (!getComment) {
-            return callback(null);
-        }
-
-        this.setState({ isReplyDataLoading: true });
-        return getComment(
-            activeFeedEntryId,
-            ({ parent }) => {
-                this.setState({ isReplyDataLoading: false });
-                const parentItem = feedItems.find(({ id }) => id === parent?.id) || null;
-                callback(parentItem, true);
-            },
-            () => {
-                this.setState({ isReplyDataLoading: false });
-                callback(null);
-            },
-        );
     };
 
     /**
@@ -312,6 +256,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
+            activeFeedEntryId,
             activeFeedEntryType,
             activityFeedError,
             approverSelectorContacts,
@@ -348,13 +293,17 @@ class ActivityFeed extends React.Component<Props, State> {
             onVersionHistoryClick,
             translations,
         } = this.props;
-        const { activeEntry, isInputOpen, isReplyDataLoading } = this.state;
+        const { isInputOpen } = this.state;
         const hasAnnotationCreatePermission = getProp(file, ['permissions', PERMISSION_CAN_CREATE_ANNOTATIONS], false);
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
         const showCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate && feedItems);
 
         const isEmpty = this.isEmpty(this.props);
         const isLoading = !this.hasLoaded();
+
+        const activeEntry =
+            Array.isArray(feedItems) &&
+            feedItems.find(({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType);
 
         const errorMessageByEntryType = {
             annotation: messages.annotationMissingError,
@@ -366,7 +315,7 @@ class ActivityFeed extends React.Component<Props, State> {
             ? errorMessageByEntryType[activeFeedEntryType]
             : undefined;
 
-        const isInlineFeedItemErrorVisible = !isLoading && activeFeedEntryType && activeEntry === null;
+        const isInlineFeedItemErrorVisible = !isLoading && activeFeedEntryType && !activeEntry;
         const currentFileVersionId = getProp(file, 'file_version.id');
 
         return (
@@ -378,7 +327,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     }}
                     className="bcs-activity-feed-items-container"
                 >
-                    {(isLoading || isReplyDataLoading) && (
+                    {isLoading && (
                         <div className="bcs-activity-feed-loading-state">
                             <LoadingIndicator />
                         </div>
@@ -393,8 +342,8 @@ class ActivityFeed extends React.Component<Props, State> {
                     {!isEmpty && !isLoading && (
                         <ActiveState
                             {...activityFeedError}
-                            activeFeedEntryId={activeEntry?.id}
-                            activeFeedEntryType={activeEntry?.type}
+                            activeFeedEntryId={activeFeedEntryId}
+                            activeFeedEntryType={activeFeedEntryType}
                             activeFeedItemRef={this.activeFeedItemRef}
                             approverSelectorContacts={approverSelectorContacts}
                             currentFileVersionId={currentFileVersionId}
