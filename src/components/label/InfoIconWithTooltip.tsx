@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Info16 from '../../icon/fill/Info16';
+import InfoBadge16 from '../../icon/fill/InfoBadge16';
 import Tooltip, { TooltipPosition } from '../tooltip';
 
 export interface InfoIconWithTooltipProps {
@@ -16,7 +16,7 @@ const InfoIconWithTooltip = ({ className = '', iconProps, tooltipText }: InfoIco
     <span key="infoIcon" className={`${className} tooltip-icon-container`}>
         <Tooltip position={TooltipPosition.TOP_CENTER} text={tooltipText}>
             <span className="info-icon-container">
-                <Info16 {...iconProps} />
+                <InfoBadge16 {...iconProps} />
             </span>
         </Tooltip>
     </span>
