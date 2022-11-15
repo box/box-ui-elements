@@ -1,5 +1,5 @@
 module.exports = {
-    assetDirectory: '_Deprecated',
+    assetPath: './_Deprecated',
     branch: 'master',
     workingDir: '/tmp',
     destinationDir: 'src',

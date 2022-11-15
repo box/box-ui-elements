@@ -16,9 +16,9 @@ const { argv } = yargs
         alias: 'b',
         description: 'The branch or tag to use',
     })
-    .option('assetDirectory', {
+    .option('asset-path', {
         alias: 'a',
-        description: 'Directory from which to take assets',
+        description: 'Path under root repo directory, from which to take assets',
     })
     .option('working-dir', {
         alias: 'w',
@@ -37,9 +37,7 @@ const { argv } = yargs
 
 (async function cli() {
     try {
-        await importer(
-            pick(argv, ['repository', 'branch', 'workingDir', 'destinationDir', 'verbose', 'assetDirectory']),
-        );
+        await importer(pick(argv, ['repository', 'branch', 'workingDir', 'destinationDir', 'verbose', 'assetPath']));
     } catch (e) {
         // eslint-disable-next-line
         console.log(colors.red('There was an unexpected error when processing assets\n'), e);
