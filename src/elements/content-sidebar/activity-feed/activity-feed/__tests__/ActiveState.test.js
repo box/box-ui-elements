@@ -162,12 +162,12 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         const selector = '[data-testid="comment"] > [data-testid="activity-thread"]';
         const wrapper = getShallowWrapper().dive();
 
-        expect(wrapper.find(selector).prop('isThreadSelected')).toBe(false);
+        expect(wrapper.find(selector).prop('isSelected')).toBe(false);
 
-        wrapper.find(selector).simulate('commentSelect', true);
+        wrapper.find(selector).simulate('replySelect', true);
         wrapper.update();
 
-        expect(wrapper.find(selector).prop('isThreadSelected')).toBe(true);
+        expect(wrapper.find(selector).prop('isSelected')).toBe(true);
     });
 
     test('should correctly render with an inline error if some feed items fail to fetch', () => {

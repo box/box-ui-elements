@@ -26,9 +26,8 @@ type Props = {
     hasReplies: boolean,
     isAlwaysExpanded?: boolean,
     isRepliesLoading?: boolean,
-    isThreadSelected?: boolean,
+    isSelected?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
-    onCommentSelect?: (isSelected: boolean) => void,
     onHideReplies?: (lastReply: CommentType) => void,
     onReplyCreate?: (text: string) => void,
     onReplyDelete?: ({ id: string, permissions: BoxCommentPermission }) => void,
@@ -41,6 +40,7 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
+    onReplySelect?: (isSelected: boolean) => void,
     onShowReplies?: () => void,
     replies?: Array<CommentType>,
     repliesTotalCount?: number,
@@ -56,9 +56,9 @@ const ActivityThread = ({
     hasReplies,
     isAlwaysExpanded = false,
     isRepliesLoading,
-    isThreadSelected = false,
+    isSelected = false,
     mentionSelectorContacts,
-    onCommentSelect,
+    onReplySelect,
     onHideReplies = noop,
     onReplyCreate,
     onReplyDelete = noop,
@@ -116,7 +116,7 @@ const ActivityThread = ({
     return (
         <div
             className={classNames('bcs-ActivityThread', {
-                'bcs-is-selected': isThreadSelected,
+                'bcs-is-selected': isSelected,
             })}
             data-testid="activity-thread"
         >
@@ -132,7 +132,7 @@ const ActivityThread = ({
                     getUserProfileUrl={getUserProfileUrl}
                     isRepliesLoading={isRepliesLoading}
                     mentionSelectorContacts={mentionSelectorContacts}
-                    onCommentSelect={onCommentSelect}
+                    onReplySelect={onReplySelect}
                     onDelete={onReplyDelete}
                     onEdit={onReplyEdit}
                     replies={replies}

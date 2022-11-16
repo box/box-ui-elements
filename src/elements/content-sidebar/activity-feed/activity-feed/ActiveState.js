@@ -171,9 +171,9 @@ const ActiveState = ({
                                     getUserProfileUrl={getUserProfileUrl}
                                     hasReplies={hasReplies}
                                     isRepliesLoading={item.isRepliesLoading}
-                                    isThreadSelected={selectedThreadParentId === item.id}
+                                    isSelected={selectedThreadParentId === item.id}
                                     mentionSelectorContacts={mentionSelectorContacts}
-                                    onCommentSelect={onThreadSelected(item.id)}
+                                    onReplySelect={onThreadSelected(item.id)}
                                     onHideReplies={onHideRepliesHandler(item.id)}
                                     onReplyCreate={onReplyCreateHandler(item.id, item.type)}
                                     onReplyDelete={onReplyDeleteHandler(item.id)}
@@ -190,7 +190,7 @@ const ActiveState = ({
                                         getMentionWithQuery={getMentionWithQuery}
                                         getUserProfileUrl={getUserProfileUrl}
                                         mentionSelectorContacts={mentionSelectorContacts}
-                                        onCommentSelect={onThreadSelected(item.id)}
+                                        onSelect={onThreadSelected(item.id)}
                                         onDelete={onCommentDelete}
                                         onEdit={onCommentEdit}
                                         permissions={{

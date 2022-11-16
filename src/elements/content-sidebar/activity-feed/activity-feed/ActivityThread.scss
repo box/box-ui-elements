@@ -8,7 +8,9 @@
     }
 
     &.bcs-is-selected {
-        background-color: $bdl-gray-05;
+        background-color: $bdl-light-blue-05;
+        border: 2px solid $bdl-box-blue;
+        border-radius: 6px;
     }
 
     .bcs-ActivityThread-toggle {
@@ -24,8 +26,8 @@
     }
 
     .bcs-ActivityCard {
-        margin: $sidebarActivityFeedSpacingVertical $sidebarActivityFeedSpacingHorizontal;
-        padding: 0;
+        padding: $sidebarActivityFeedSpacingVertical $sidebarActivityFeedSpacingHorizontal;
+        padding-top: 10;
     }
 
     .bcs-Comment-timestamp {

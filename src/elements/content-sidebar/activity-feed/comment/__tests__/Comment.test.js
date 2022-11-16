@@ -421,8 +421,8 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         },
     );
 
-    test('should call `onCommentSelect` when comment is begin edited or consider delete', () => {
-        const onCommentSelect = jest.fn();
+    test('should call `onSelect` when comment is begin edited or consider delete', () => {
+        const onSelect = jest.fn();
         const uslessEditHandler = () => {};
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
@@ -438,29 +438,29 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 currentUser={currentUser}
                 handlers={allHandlers}
                 mentionSelectorContacts={mentionSelectorContacts}
-                onCommentSelect={onCommentSelect}
+                onSelect={onSelect}
                 onEdit={uslessEditHandler}
             />,
         );
 
         wrapper.find('MenuItem[data-testid="delete-comment"]').simulate('click');
-        expect(onCommentSelect).toHaveBeenCalledWith(true);
+        expect(onSelect).toHaveBeenCalledWith(true);
 
         wrapper.find('DeleteConfirmation').simulate('deleteCancel');
-        expect(onCommentSelect).toHaveBeenCalledWith(false);
+        expect(onSelect).toHaveBeenCalledWith(false);
 
         wrapper.find('MenuItem[data-testid="delete-comment"]').simulate('click');
         wrapper.find('DeleteConfirmation').simulate('deleteConfirm');
-        expect(onCommentSelect).toHaveBeenCalledWith(false);
+        expect(onSelect).toHaveBeenCalledWith(false);
 
         wrapper.find('MenuItem[data-testid="edit-comment"]').simulate('click');
-        expect(onCommentSelect).toHaveBeenCalledWith(true);
+        expect(onSelect).toHaveBeenCalledWith(true);
 
         wrapper.find('CommentForm').simulate('cancel');
-        expect(onCommentSelect).toHaveBeenCalledWith(false);
+        expect(onSelect).toHaveBeenCalledWith(false);
 
         wrapper.find('MenuItem[data-testid="edit-comment"]').simulate('click');
         wrapper.find('CommentForm').simulate('updateComment');
-        expect(onCommentSelect).toHaveBeenCalledWith(false);
+        expect(onSelect).toHaveBeenCalledWith(false);
     });
 });

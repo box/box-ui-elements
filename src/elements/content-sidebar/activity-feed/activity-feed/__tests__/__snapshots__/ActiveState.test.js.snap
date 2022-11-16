@@ -113,12 +113,12 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       }
       data-testid="activity-thread"
       hasReplies={false}
-      isThreadSelected={false}
-      onCommentSelect={[Function]}
+      isSelected={false}
       onHideReplies={[Function]}
       onReplyCreate={[Function]}
       onReplyDelete={[Function]}
       onReplyEdit={[Function]}
+      onReplySelect={[Function]}
       onShowReplies={[Function]}
     >
       <Comment
@@ -136,9 +136,9 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
           }
         }
         id="c_123"
-        onCommentSelect={[Function]}
         onDelete={[Function]}
         onEdit={[Function]}
+        onSelect={[Function]}
         permissions={
           Object {
             "can_delete": false,

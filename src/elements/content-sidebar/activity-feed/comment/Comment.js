@@ -41,7 +41,6 @@ type Props = {
     isPending?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     modified_at?: string | number,
-    onCommentSelect?: (isSelected: boolean) => void,
     onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any,
     onEdit: (
         id: string,
@@ -52,6 +51,7 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
+    onSelect: (isSelected: boolean) => void,
     permissions: BoxCommentPermission,
     status?: FeedItemStatus,
     tagged_message: string,
@@ -69,6 +69,7 @@ class Comment extends React.Component<Props, State> {
     static defaultProps = {
         onDelete: noop,
         onEdit: noop,
+        onSelect: noop,
     };
 
     state = {
@@ -78,9 +79,7 @@ class Comment extends React.Component<Props, State> {
     };
 
     selectComment = (isSelected: boolean) => {
-        if (this.props.onCommentSelect) {
-            this.props.onCommentSelect(isSelected);
-        }
+        this.props.onSelect(isSelected);
     };
 
     handleDeleteConfirm = (): void => {

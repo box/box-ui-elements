@@ -63,14 +63,22 @@
             transition: box-shadow $container-transition-duration ease $container-transition-delay;
 
             &.bcs-is-focused {
-                .bcs-ActivityCard {
-                    box-shadow: 0 0 $bdl-grid-unit * 4 $bdl-gray-30;
-                    animation: bcs-ActivityItem-callout 1s ease-in-out $container-transition-delay 0 normal none; // Disabled by default
+                :not(.bcs-ActivityThread) {
+                    .bcs-ActivityCard {
+                        box-shadow: 0 0 $bdl-grid-unit * 4 $bdl-gray-30;
+                        animation: bcs-ActivityItem-callout 1s ease-in-out $container-transition-delay 0 normal none; // Disabled by default
 
-                    &:not(:focus-within) {
-                        animation-iteration-count: 1; // Only play the animation if the user is not interacting directly with the element or its descendents
-                        animation-fill-mode: forwards;
+                        &:not(:focus-within) {
+                            animation-iteration-count: 1; // Only play the animation if the user is not interacting directly with the element or its descendents
+                            animation-fill-mode: forwards;
+                        }
                     }
+                }
+
+                .bcs-ActivityThread {
+                    background-color: $bdl-light-blue-05;
+                    border: 2px solid $bdl-box-blue;
+                    border-radius: 6px;
                 }
             }
         }
