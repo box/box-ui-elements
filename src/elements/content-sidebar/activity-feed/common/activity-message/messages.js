@@ -24,8 +24,8 @@ const messages = defineMessages({
     },
     activityMessageEdited: {
         id: 'be.contentSidebar.activityFeed.common.editedMessage',
-        defaultMessage: ' (edited)',
-        description: 'Label indicating that message was edited, should be lowercase',
+        defaultMessage: '\\ (edited)',
+        description: 'Label indicating that message was edited, should be lowercase, should have escaped leading space',
     },
 });
 
