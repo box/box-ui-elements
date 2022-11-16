@@ -40,6 +40,7 @@
     }
 
     .bcs-activity-feed-items-container {
+        $container-padding: 25px;
         $container-transition-delay: 25ms;
         $container-transition-duration: 200ms;
 
@@ -57,7 +58,7 @@
 
         .bcs-ActivityItem {
             position: relative;
-            box-shadow: 0 1px 0 0 $bdl-gray-10;
+            box-shadow: 0 $container-padding 0 -#{$container-padding - 1} $bdl-gray-10;
             backface-visibility: hidden; // Prevent visual shifting during pseudo-element scale transitions
             transition: box-shadow $container-transition-duration ease $container-transition-delay;
 
