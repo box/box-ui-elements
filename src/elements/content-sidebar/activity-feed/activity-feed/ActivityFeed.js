@@ -15,11 +15,7 @@ import InlineError from '../../../../components/inline-error/InlineError';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import messages from './messages';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
-import {
-    FEED_ITEM_TYPE_ANNOTATION,
-    FEED_ITEM_TYPE_COMMENT,
-    PERMISSION_CAN_CREATE_ANNOTATIONS,
-} from '../../../../constants';
+import { PERMISSION_CAN_CREATE_ANNOTATIONS } from '../../../../constants';
 import { scrollIntoView } from '../../../../utils/dom';
 import type {
     Annotation,
@@ -38,7 +34,6 @@ import './ActivityFeed.scss';
 
 type Props = {
     activeFeedEntryId?: string,
-    activeFeedEntryReplyId?: string,
     activeFeedEntryType?: FocusableFeedItemType,
     activityFeedError: ?Errors,
     approverSelectorContacts?: SelectorItems<User | GroupMini>,
@@ -53,7 +48,6 @@ type Props = {
     hasReplies?: boolean,
     hasVersions?: boolean,
     isDisabled?: boolean,
-    isItemInFeed: (feedItems: FeedItems, itemId: string) => boolean,
     mentionSelectorContacts?: SelectorItems<User>,
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
     onAnnotationEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
@@ -116,14 +110,7 @@ class ActivityFeed extends React.Component<Props, State> {
             currentUser: prevCurrentUser,
             feedItems: prevFeedItems,
         } = prevProps;
-        const {
-            activeFeedEntryId,
-            activeFeedEntryReplyId,
-            activeFeedEntryType,
-            feedItems: currFeedItems,
-            isItemInFeed,
-            onShowReplies,
-        } = this.props;
+        const { feedItems: currFeedItems, activeFeedEntryId } = this.props;
         const { isInputOpen: prevIsInputOpen } = prevState;
         const { isInputOpen: currIsInputOpen } = this.state;
 
@@ -139,20 +126,6 @@ class ActivityFeed extends React.Component<Props, State> {
 
         if (didLoadFeedItems || hasActiveFeedEntryIdChanged) {
             this.scrollToActiveFeedItemOrErrorMessage();
-        }
-
-        // Load replies if active entry reply is set and it's not currently within feed items or its replies
-        if (
-            onShowReplies &&
-            activeFeedEntryId &&
-            activeFeedEntryType &&
-            (activeFeedEntryType === FEED_ITEM_TYPE_COMMENT || activeFeedEntryType === FEED_ITEM_TYPE_ANNOTATION) &&
-            hasLoaded &&
-            activeFeedEntryReplyId &&
-            currFeedItems &&
-            !isItemInFeed(currFeedItems, activeFeedEntryReplyId)
-        ) {
-            onShowReplies(activeFeedEntryId, activeFeedEntryType);
         }
     }
 

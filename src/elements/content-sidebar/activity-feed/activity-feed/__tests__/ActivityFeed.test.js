@@ -331,54 +331,6 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
             expect(instance.scrollToActiveFeedItemOrErrorMessage).not.toHaveBeenCalled();
         });
-
-        test('should call onShowReplies if feed items have loaded, active feed entry reply is set and it is not within current feed items and its replies', () => {
-            const isItemInFeed = jest.fn().mockImplementation(() => false);
-            const onShowReplies = jest.fn();
-
-            const wrapper = getWrapper({
-                activeFeedEntryId: '456',
-                activeFeedEntryReplyId: '123',
-                activeFeedEntryType: 'comment',
-                isItemInFeed,
-                onShowReplies,
-            });
-            wrapper.setProps({ feedItems: [{ id: '789' }] });
-
-            const instance = wrapper.instance();
-            instance.hasLoaded = jest.fn().mockImplementation(() => true);
-
-            expect(onShowReplies).toBeCalledWith('456', 'comment');
-        });
-
-        test.each`
-            hasLoadedResult | activeFeedEntryReplyId | isItemInFeedResult
-            ${false}        | ${undefined}           | ${false}
-            ${true}         | ${undefined}           | ${false}
-            ${false}        | ${'123'}               | ${false}
-            ${false}        | ${undefined}           | ${true}
-            ${true}         | ${'123'}               | ${false}
-            ${true}         | ${undefined}           | ${true}
-            ${false}        | ${'123'}               | ${true}
-        `(
-            'should NOT call onShowReplies given hasLoaded=$hasLoaded, activeFeedEntryReplyId=$activeFeedEntryReplyId and isItemInFeed=$isItemInFeedResult',
-            ({ hasLoadedResult, activeFeedEntryReplyId, isItemInFeedResult }) => {
-                const isItemInFeed = jest.fn().mockImplementation(() => isItemInFeedResult);
-                const onShowReplies = jest.fn();
-
-                const wrapper = getWrapper({
-                    activeFeedEntryId: '456',
-                    activeFeedEntryReplyId,
-                    activeEntryType: 'comment',
-                    isItemInFeed,
-                    onShowReplies,
-                });
-                const instance = wrapper.instance();
-                instance.hasLoaded = jest.fn().mockImplementation(() => hasLoadedResult);
-
-                expect(onShowReplies).not.toBeCalled();
-            },
-        );
     });
 
     test('should pass activeFeedItemRef to the ActiveState', () => {
