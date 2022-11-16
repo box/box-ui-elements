@@ -64,7 +64,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           name="50 Cent"
         />
       </div>
-      <div>
+      <div
+        className="bcs-Comment-separator"
+      >
         <ActivityTimestamp
           date={1506534041000}
         />
@@ -108,7 +110,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           name="50 Cent"
         />
       </div>
-      <div>
+      <div
+        className="bcs-Comment-separator"
+      >
         <ActivityTimestamp
           date={1506534041000}
         />
@@ -154,7 +158,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
           name="50 Cent"
         />
       </div>
-      <div>
+      <div
+        className="bcs-Comment-separator"
+      >
         <ActivityTimestamp
           date={1506534041000}
         />
@@ -202,7 +208,9 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
           name="50 Cent"
         />
       </div>
-      <div>
+      <div
+        className="bcs-Comment-separator"
+      >
         <ActivityTimestamp
           date={1506534041000}
         />
