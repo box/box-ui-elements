@@ -106,8 +106,6 @@ type Props = {
 } & PropsWithoutContext;
 
 type State = {
-    activeFeedEntryId?: string,
-    activeFeedEntryType?: FocusableFeedItemType,
     activityFeedError?: Errors,
     approverSelectorContacts: SelectorItems<UserMini | GroupMini>,
     contactsLoaded?: boolean,
@@ -160,29 +158,18 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         // eslint-disable-next-line react/prop-types
-        const { activeFeedEntryId, activeFeedEntryType, logger } = this.props;
+        const { logger } = this.props;
 
         mark(MARK_NAME_DATA_LOADING);
 
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
-        this.state = { activeFeedEntryId, activeFeedEntryType, approverSelectorContacts: [] };
+        this.state = {};
     }
 
     componentDidMount() {
         this.fetchFeedItems(true);
-    }
-
-    componentDidUpdate(prevProps: Props) {
-        const { activeFeedEntryId: prevActiveFeedEntryId } = prevProps;
-        const { activeFeedEntryId, activeFeedEntryType } = this.props;
-
-        const hasActiveFeedEntryIdChanged = prevActiveFeedEntryId !== activeFeedEntryId;
-
-        if (hasActiveFeedEntryIdChanged) {
-            this.setState({ activeFeedEntryId, activeFeedEntryType });
-        }
     }
 
     handleAnnotationDelete = ({ id, permissions }: { id: string, permissions: AnnotationPermission }) => {
@@ -690,6 +677,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     fetchFeedItems(shouldRefreshCache: boolean = false, shouldDestroy: boolean = false) {
         const {
+            activeFeedEntryId,
+            activeFeedEntryType,
             api,
             file,
             features,
@@ -697,16 +686,18 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             hasTasks: shouldShowTasks,
             hasVersions: shouldShowVersions,
         } = this.props;
-        const { activeFeedEntryId, activeFeedEntryType, feedItems: feedItemsState } = this.state;
+        const shouldFetchReplies =
+            shouldRefreshCache &&
+            shouldShowReplies &&
+            activeFeedEntryId &&
+            activeFeedEntryType === FEED_ITEM_TYPE_COMMENT;
         const shouldShowAppActivity = isFeatureEnabled(features, 'activityFeed.appActivity.enabled');
         const shouldShowAnnotations = isFeatureEnabled(features, 'activityFeed.annotations.enabled');
-        const shouldFetchRepliesOnLoad =
-            shouldShowReplies && !feedItemsState && activeFeedEntryId && activeFeedEntryType === FEED_ITEM_TYPE_COMMENT;
 
         api.getFeedAPI(shouldDestroy).feedItems(
             file,
             shouldRefreshCache,
-            shouldFetchRepliesOnLoad ? this.fetchRepliesForFeedItems : this.fetchFeedItemsSuccessCallback,
+            shouldFetchReplies ? this.fetchRepliesForFeedItems : this.fetchFeedItemsSuccessCallback,
             this.fetchFeedItemsErrorCallback,
             this.errorCallback,
             { shouldShowAnnotations, shouldShowAppActivity, shouldShowReplies, shouldShowTasks, shouldShowVersions },
@@ -716,31 +707,36 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     fetchRepliesForFeedItems = (feedItems: FeedItems) => {
         const { activeFeedEntryId } = this.props;
 
+        if (!activeFeedEntryId) {
+            return;
+        }
+
+        const handleError = (error: ElementsXhrError) => {
+            this.fetchFeedItemsErrorCallback(feedItems, [error]);
+        };
+
         this.getActiveFeedEntryData(feedItems)
             .then(({ id, type }) => {
                 if (
                     !id ||
                     !type ||
-                    !activeFeedEntryId ||
-                    !this.isItemTypeComment(type) ||
-                    this.isActiveEntryInFeed(feedItems, activeFeedEntryId)
+                    this.isActiveEntryInFeed(feedItems, activeFeedEntryId) ||
+                    !this.isItemTypeComment(type)
                 ) {
-                    this.fetchFeedItemsSuccessCallback(feedItems, id, type);
+                    this.fetchFeedItemsSuccessCallback(feedItems);
                     return;
                 }
 
-                // $FlowFixMe: type has been checked to be either 'comment' or 'annotation' by this.isItemTypeComment(type)
-                this.getFeedItemsWithReplies(feedItems, id, type)
+                const parentType: CommentFeedItemType =
+                    type === FEED_ITEM_TYPE_COMMENT ? FEED_ITEM_TYPE_COMMENT : FEED_ITEM_TYPE_ANNOTATION;
+
+                this.getFeedItemsWithReplies(feedItems, id, parentType)
                     .then(updatedItems => {
-                        this.fetchFeedItemsSuccessCallback(updatedItems, id, type);
+                        this.fetchFeedItemsSuccessCallback(updatedItems);
                     })
-                    .catch((error: ElementsXhrError) => {
-                        this.fetchFeedItemsErrorCallback(feedItems, [error]);
-                    });
+                    .catch(handleError);
             })
-            .catch((error: ElementsXhrError) => {
-                this.fetchFeedItemsErrorCallback(feedItems, [error]);
-            });
+            .catch(handleError);
     };
 
     /**
@@ -748,15 +744,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      *
      * @private
      * @param {Array} feedItems - the feed items
-     * @param {string} activeFeedEntryId - active feed entry id
-     * @param {FocusableFeedItemType} activeFeedEntryType - active feed entry type
      * @return {void}
      */
-    fetchFeedItemsSuccessCallback = (
-        feedItems: FeedItems,
-        activeFeedEntryId?: string,
-        activeFeedEntryType?: FocusableFeedItemType,
-    ): void => {
+    fetchFeedItemsSuccessCallback = (feedItems: FeedItems): void => {
         const {
             file: { id: fileId },
             logger,
@@ -775,12 +765,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             );
         }
 
-        this.setState({
-            activeFeedEntryId: activeFeedEntryId || this.state.activeFeedEntryId,
-            activeFeedEntryType: activeFeedEntryType || this.state.activeFeedEntryType,
-            feedItems,
-            activityFeedError: undefined,
-        });
+        this.setState({ feedItems, activityFeedError: undefined });
     };
 
     /**
@@ -806,6 +791,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         }
     };
 
+    getCommentFeedItemWithReplies = <T: { replies?: Array<Comment> }>(feedItem: T, replies: Array<Comment>): T => ({
+        ...feedItem,
+        replies,
+    });
+
     getFeedItemsWithReplies = (feedItems: FeedItems, id?: string, type?: CommentFeedItemType): Promise<FeedItems> => {
         const { api, file } = this.props;
 
@@ -821,8 +811,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 replies => {
                     const updatedFeedItems = feedItems.map(item => {
                         if (item.id === id && this.isItemTypeComment(item.type)) {
-                            // $FlowFixMe: item.type has been checked to be either 'comment' or 'annotation' by this.isItemTypeComment(item.type) so the item is of type CommentFeedItem
-                            return { ...item, replies };
+                            if (item.type === FEED_ITEM_TYPE_ANNOTATION) {
+                                return this.getCommentFeedItemWithReplies<Annotation>(item, replies);
+                            }
+                            if (item.type === FEED_ITEM_TYPE_COMMENT) {
+                                return this.getCommentFeedItemWithReplies<Comment>(item, replies);
+                            }
                         }
                         return item;
                     });
@@ -956,7 +950,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     /**
-     * Returns true if item (based on given item id) is found within feed items or its replies
+     * Returns true if item (based on given item id) is found within feed items or its replies and it, or its parent, can be active (focusable)
      *
      * @param {FeedItems} feedItems - the feed items
      * @param {string} itemId - feed item id
@@ -978,7 +972,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {FeedItems} feedItems - the feed items
      * @return {Promise<{ id: string, type?: FocusableFeedItemType }>}
      */
-    getActiveFeedEntryData = (feedItems: FeedItems): Promise<{ id?: string, type?: FocusableFeedItemType }> => {
+    getActiveFeedEntryData = (feedItems: FeedItems): Promise<{ id?: string, type?: FeedItemType }> => {
         const { activeFeedEntryId, activeFeedEntryType, api, file } = this.props;
         return new Promise((resolve, reject) => {
             if (!activeFeedEntryId || !activeFeedEntryType || !this.isItemTypeFocusable(activeFeedEntryType)) {
@@ -1009,15 +1003,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 activeFeedEntryId,
                 ({ parent }) => {
                     const parentItem = this.getFocusableFeedItemById(feedItems, parent?.id);
-                    if (parentItem) {
-                        const { id, type } = parentItem;
-                        resolve({ id, type });
-                    } else {
-                        resolve({});
-                    }
+                    const { id, type } = parentItem || {};
+                    resolve({ id, type });
                 },
                 (error: ElementsXhrError) => {
-                    // If parent item not found resolve with values from props
                     if (error.status === 404) {
                         resolve({});
                     } else {
@@ -1171,6 +1160,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     render() {
         const {
+            activeFeedEntryId,
+            activeFeedEntryType,
             currentUser,
             currentUserError,
             elementId,
@@ -1182,14 +1173,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             getUserProfileUrl,
             onTaskView,
         } = this.props;
-        const {
-            activeFeedEntryId,
-            activeFeedEntryType,
-            activityFeedError,
-            approverSelectorContacts,
-            contactsLoaded,
-            mentionSelectorContacts,
-        } = this.state;
+        const { activityFeedError, approverSelectorContacts, contactsLoaded, mentionSelectorContacts } = this.state;
 
         return (
             <SidebarContent

@@ -15,7 +15,12 @@ import InlineError from '../../../../components/inline-error/InlineError';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import messages from './messages';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
-import { PERMISSION_CAN_CREATE_ANNOTATIONS } from '../../../../constants';
+import {
+    FEED_ITEM_TYPE_ANNOTATION,
+    FEED_ITEM_TYPE_COMMENT,
+    FEED_ITEM_TYPE_TASK,
+    PERMISSION_CAN_CREATE_ANNOTATIONS,
+} from '../../../../constants';
 import { scrollIntoView } from '../../../../utils/dom';
 import type {
     Annotation,
@@ -23,9 +28,10 @@ import type {
     BoxCommentPermission,
     Comment,
     CommentFeedItemType,
-    FocusableFeedItemType,
-    FeedItems,
     FeedItemStatus,
+    FeedItems,
+    FocusableFeedItemType,
+    Task,
 } from '../../../../common/types/feed';
 import type { SelectorItems, User, GroupMini, BoxItem } from '../../../../common/types/core';
 import type { Errors, GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
@@ -225,9 +231,22 @@ class ActivityFeed extends React.Component<Props, State> {
         versionInfoHandler(data);
     };
 
+    isFeedItemActive = <T, U: { id: string, type: T }>({ id, type }: U): boolean => {
+        const { activeFeedEntryId, activeFeedEntryType } = this.props;
+
+        return id === activeFeedEntryId && type === activeFeedEntryType;
+    };
+
+    isCommentFeedItemActive = <T, U: { id: string, replies?: Array<Comment>, type: T }>(item: U): boolean => {
+        const { activeFeedEntryId } = this.props;
+        const { replies } = item;
+
+        const isActive = this.isFeedItemActive<T, U>(item);
+        return isActive || (!!replies && replies.some(reply => reply.id === activeFeedEntryId));
+    };
+
     render(): React.Node {
         const {
-            activeFeedEntryId,
             activeFeedEntryType,
             activityFeedError,
             approverSelectorContacts,
@@ -265,6 +284,7 @@ class ActivityFeed extends React.Component<Props, State> {
             translations,
         } = this.props;
         const { isInputOpen } = this.state;
+        const currentFileVersionId = getProp(file, 'file_version.id');
         const hasAnnotationCreatePermission = getProp(file, ['permissions', PERMISSION_CAN_CREATE_ANNOTATIONS], false);
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
         const showCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate && feedItems);
@@ -272,9 +292,20 @@ class ActivityFeed extends React.Component<Props, State> {
         const isEmpty = this.isEmpty(this.props);
         const isLoading = !this.hasLoaded();
 
-        const activeEntry =
+        const activeFeedItem =
             Array.isArray(feedItems) &&
-            feedItems.find(({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType);
+            feedItems.find(item => {
+                switch (item.type) {
+                    case FEED_ITEM_TYPE_ANNOTATION:
+                        return this.isCommentFeedItemActive<typeof FEED_ITEM_TYPE_ANNOTATION, Annotation>(item);
+                    case FEED_ITEM_TYPE_COMMENT:
+                        return this.isCommentFeedItemActive<typeof FEED_ITEM_TYPE_COMMENT, Comment>(item);
+                    case FEED_ITEM_TYPE_TASK:
+                        return this.isFeedItemActive<typeof FEED_ITEM_TYPE_TASK, Task>(item);
+                    default:
+                        return false;
+                }
+            });
 
         const errorMessageByEntryType = {
             annotation: messages.annotationMissingError,
@@ -286,8 +317,7 @@ class ActivityFeed extends React.Component<Props, State> {
             ? errorMessageByEntryType[activeFeedEntryType]
             : undefined;
 
-        const isInlineFeedItemErrorVisible = !isLoading && activeFeedEntryType && !activeEntry;
-        const currentFileVersionId = getProp(file, 'file_version.id');
+        const isInlineFeedItemErrorVisible = !isLoading && activeFeedEntryType && !activeFeedItem;
 
         return (
             // eslint-disable-next-line
@@ -313,8 +343,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     {!isEmpty && !isLoading && (
                         <ActiveState
                             {...activityFeedError}
-                            activeFeedEntryId={activeFeedEntryId}
-                            activeFeedEntryType={activeFeedEntryType}
+                            activeFeedItem={activeFeedItem}
                             activeFeedItemRef={this.activeFeedItemRef}
                             approverSelectorContacts={approverSelectorContacts}
                             currentFileVersionId={currentFileVersionId}
