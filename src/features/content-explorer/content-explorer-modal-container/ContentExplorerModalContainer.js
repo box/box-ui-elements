@@ -116,6 +116,8 @@ class ContentExplorerModalContainer extends Component {
         searchInputProps: PropTypes.object,
         /** Custom text for the choose button */
         chooseButtonText: PropTypes.node,
+        /** Table row height */
+        rowHeight: PropTypes.number,
     };
 
     static defaultProps = {

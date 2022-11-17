@@ -19,6 +19,7 @@ type Props = {
     onRequestClose?: Function,
     onSelectItem?: (item: Object, index: number) => void,
     onSelectedClick?: () => void,
+    rowHeight?: number,
     title?: string,
 };
 

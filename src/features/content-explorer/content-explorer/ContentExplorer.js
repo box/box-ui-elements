@@ -125,6 +125,8 @@ class ContentExplorer extends Component {
         listHeight: PropTypes.number.isRequired,
         /** Props for the search input */
         searchInputProps: PropTypes.object,
+        /** Height of the row */
+        rowHeight: PropTypes.number,
     };
 
     static defaultProps = {
@@ -421,6 +423,7 @@ class ContentExplorer extends Component {
             listWidth,
             listHeight,
             searchInputProps,
+            rowHeight,
             ...rest
         } = this.props;
         const { isInSearchMode, foldersPath, selectedItems, isSelectAllChecked } = this.state;
@@ -513,6 +516,7 @@ class ContentExplorer extends Component {
                     onLoadMoreItems={onLoadMoreItems}
                     selectedItems={selectedItems}
                     width={listWidth}
+                    rowHeight={rowHeight}
                 />
                 <ContentExplorerActionButtons
                     actionButtonsProps={actionButtonsProps}
