@@ -291,4 +291,26 @@ describe('features/content-explorer/item-list/ItemList', () => {
             expect(wrapper.find('.item-list-accessLevel-col').length).toBe(3);
         });
     });
+
+    describe('headerHeight', () => {
+        test('should display folder name header label', () => {
+            const headerHeight = 30;
+            const wrapper = renderComponent({
+                headerHeight,
+            });
+
+            const header = wrapper.find('.ReactVirtualized__Table__headerRow');
+            expect(header.props().style.height).toBe(headerHeight);
+        });
+    });
+
+    describe('headerRowRenderer', () => {
+        test('should display custom header', () => {
+            const wrapper = renderComponent({
+                headerRowRenderer: () => <div data-testid="customHeader">Custom Header</div>,
+            });
+            const headerRow = wrapper.find("[data-testid='customHeader']");
+            expect(headerRow.length).toBe(1);
+        });
+    });
 });

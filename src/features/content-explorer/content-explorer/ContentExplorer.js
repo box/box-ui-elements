@@ -132,6 +132,10 @@ class ContentExplorer extends Component {
          * Each column has to be a Column element
          */
         additionalColumns: PropTypes.arrayOf(PropTypes.element),
+        /** Height of the table header, defaults to 0, which makes header not visible */
+        headerHeight: PropTypes.number,
+        /** Custom header row function */
+        headerRowRenderer: PropTypes.func,
     };
 
     static defaultProps = {
@@ -430,6 +434,8 @@ class ContentExplorer extends Component {
             searchInputProps,
             rowHeight,
             additionalColumns,
+            headerHeight,
+            headerRowRenderer,
             ...rest
         } = this.props;
         const { isInSearchMode, foldersPath, selectedItems, isSelectAllChecked } = this.state;
@@ -524,6 +530,8 @@ class ContentExplorer extends Component {
                     selectedItems={selectedItems}
                     width={listWidth}
                     rowHeight={rowHeight}
+                    headerHeight={headerHeight}
+                    headerRowRenderer={headerRowRenderer}
                 />
                 <ContentExplorerActionButtons
                     actionButtonsProps={actionButtonsProps}

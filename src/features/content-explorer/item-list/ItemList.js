@@ -145,6 +145,8 @@ const ItemList = ({
     width,
     height,
     rowHeight = DEFAULT_ROW_HEIGHT,
+    headerHeight,
+    headerRowRenderer,
 }) => {
     const getRow = ({ index }) => items[index];
 
@@ -226,6 +228,8 @@ const ItemList = ({
                 rowGetter={getRow}
                 rowRenderer={renderRow}
                 noRowsRenderer={noItemsRenderer}
+                headerHeight={headerHeight}
+                headerRowRenderer={headerRowRenderer}
                 {...tableProps}
             >
                 <Column
@@ -290,6 +294,8 @@ ItemList.propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     rowHeight: PropTypes.number,
+    headerHeight: PropTypes.number,
+    headerRowRenderer: PropTypes.func,
 };
 
 export { ItemList as ItemListBase };

@@ -16,6 +16,8 @@ type Props = {
     className?: string,
     customInput?: React.ComponentType<any>,
     description?: string,
+    headerHeight?: number,
+    headerRowRenderer?: Function,
     isOpen?: boolean,
     isResponsive?: boolean,
     onRequestClose?: Function,
