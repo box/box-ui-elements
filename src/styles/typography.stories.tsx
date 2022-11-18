@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './typography.scss';
+import './typography.stories.scss';
 
 export const lato = () => (
     <div className="typography">
