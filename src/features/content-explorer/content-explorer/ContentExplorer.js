@@ -19,6 +19,8 @@ class ContentExplorer extends Component {
     static propTypes = {
         /** Props for the action buttons container */
         actionButtonsProps: PropTypes.object,
+        /** Props for breadcrumbs */
+        breadcrumbProps: PropTypes.object,
         /** Props for the cancel button */
         cancelButtonProps: PropTypes.object,
         /** Props for the choose button */
@@ -123,6 +125,8 @@ class ContentExplorer extends Component {
         listHeight: PropTypes.number.isRequired,
         /** Props for the search input */
         searchInputProps: PropTypes.object,
+        /** Height of the row */
+        rowHeight: PropTypes.number,
     };
 
     static defaultProps = {
@@ -387,6 +391,7 @@ class ContentExplorer extends Component {
     render() {
         const {
             actionButtonsProps,
+            breadcrumbProps,
             cancelButtonProps,
             chooseButtonProps,
             chooseButtonText,
@@ -418,6 +423,7 @@ class ContentExplorer extends Component {
             listWidth,
             listHeight,
             searchInputProps,
+            rowHeight,
             ...rest
         } = this.props;
         const { isInSearchMode, foldersPath, selectedItems, isSelectAllChecked } = this.state;
@@ -470,6 +476,7 @@ class ContentExplorer extends Component {
                 {...contentExplorerProps}
             >
                 <ContentExplorerHeaderActions
+                    breadcrumbProps={breadcrumbProps}
                     contentExplorerMode={contentExplorerMode}
                     customInput={customInput}
                     foldersPath={foldersPath}
@@ -509,6 +516,7 @@ class ContentExplorer extends Component {
                     onLoadMoreItems={onLoadMoreItems}
                     selectedItems={selectedItems}
                     width={listWidth}
+                    rowHeight={rowHeight}
                 />
                 <ContentExplorerActionButtons
                     actionButtonsProps={actionButtonsProps}

@@ -6,7 +6,7 @@ import ContentExplorerSearch from './ContentExplorerSearch';
 import ContentExplorerNewFolderButton from './ContentExplorerNewFolderButton';
 import ContentExplorerBreadcrumbs from './ContentExplorerBreadcrumbs';
 
-import { ContentExplorerModePropType, FoldersPathPropType } from '../prop-types';
+import { BreadcrumbPropType, ContentExplorerModePropType, FoldersPathPropType } from '../prop-types';
 import messages from '../messages';
 
 const SEARCH_RESULTS_FOLDER_ID = 'search_results_id';
@@ -15,6 +15,7 @@ const isSearchResultsFolder = folder => folder && folder.id === SEARCH_RESULTS_F
 
 class ContentExplorerHeaderActions extends Component {
     static propTypes = {
+        breadcrumbProps: BreadcrumbPropType,
         children: PropTypes.node,
         contentExplorerMode: ContentExplorerModePropType.isRequired,
         customInput: PropTypes.func,
@@ -147,6 +148,7 @@ class ContentExplorerHeaderActions extends Component {
 
     render() {
         const {
+            breadcrumbProps,
             children,
             contentExplorerMode,
             customInput: CustomInput,
@@ -184,6 +186,7 @@ class ContentExplorerHeaderActions extends Component {
                     {children}
                 </div>
                 <ContentExplorerBreadcrumbs
+                    breadcrumbProps={breadcrumbProps}
                     foldersPath={foldersPath}
                     isUpButtonDisabled={foldersPath.length <= 1 && !isInSearchMode}
                     onUpButtonClick={this.handleBreadcrumbsUpButtonClick}

@@ -141,6 +141,10 @@
         $responsive-modal-header-height: 64px;
         $responsive-modal-actions-height: 60px;
 
+        .modal-title {
+            @include bdl-lineClamp(2);
+        }
+
         .modal {
             flex-direction: column;
             padding: 0;
@@ -163,6 +167,7 @@
         }
 
         .modal-content {
+            flex-basis: 100%;
             margin-top: $responsive-modal-header-height;
             margin-bottom: $responsive-modal-actions-height;
             padding: 24px 16px 12px 16px;
@@ -193,11 +198,14 @@
             padding: 10px 16px;
             background-color: $white;
         }
+
+        .modal-dialog-container {
+            overflow: hidden;
+        }
     }
 
     .modal-dialog-container {
         flex-basis: 100%;
         width: 100%;
-        overflow: hidden;
     }
 }

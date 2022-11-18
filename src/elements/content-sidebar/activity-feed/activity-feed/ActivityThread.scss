@@ -1,0 +1,24 @@
+@import '../../../common/variables';
+
+.bcs-ActivityThread {
+    .bcs-ActivityThread-toggle {
+        color: $bdl-box-blue;
+
+        &,
+        &:hover,
+        &:active {
+            margin-top: -$bdl-grid-unit * 2; // to decreased spacing with parent comment
+            margin-left: $sidebarActivityFeedSpacingHorizontal;
+            font-weight: bold;
+        }
+    }
+
+    .bcs-ActivityCard {
+        margin: $sidebarActivityFeedSpacingVertical $sidebarActivityFeedSpacingHorizontal;
+        padding: 0;
+    }
+
+    .btn-plain:focus-visible {
+        outline: auto;
+    }
+}

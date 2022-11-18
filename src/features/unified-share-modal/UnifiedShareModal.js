@@ -2,8 +2,6 @@
 
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
-import isNil from 'lodash/isNil';
-import isEmpty from 'lodash/isEmpty';
 
 import { Modal } from '../../components/modal';
 
@@ -32,6 +30,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
         createSharedLinkOnLoad: false,
         focusSharedLinkOnLoad: false,
         restrictedCollabEmails: [],
+        restrictedGroups: [],
         trackingProps: {
             inviteCollabsEmailTracking: {},
             sharedLinkEmailTracking: {},
@@ -130,33 +129,12 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
     };
 
     renderUSF = () => {
-        const {
-            onRemoveAllRestrictedCollabs,
-            // $FlowFixMe - For temporary backwards compatibility
-            onRemoveAllRestrictedExternalCollabs,
-            restrictedCollabEmails,
-            // $FlowFixMe - For temporary backwards compatibility
-            restrictedExternalCollabEmails,
-            sharedLinkEditTagTargetingApi,
-            sharedLinkEditTooltipTargetingApi,
-        } = this.props;
+        const { sharedLinkEditTagTargetingApi, sharedLinkEditTooltipTargetingApi } = this.props;
         const { isFetching, sharedLinkLoaded, shouldRenderFTUXTooltip } = this.state;
-
-        // TODO
-        // For temporary backwards compatibility. Remove legacy onRemoveAllRestrictedExternalCollabs
-        // and restrictedExternalCollabEmails props once EUA has been updated not to pass them
-        const onRemoveAllRestrictedCollabsValue = isNil(onRemoveAllRestrictedExternalCollabs)
-            ? onRemoveAllRestrictedCollabs
-            : onRemoveAllRestrictedExternalCollabs;
-        const restrictedCollabEmailsValue = isEmpty(restrictedExternalCollabEmails)
-            ? restrictedCollabEmails
-            : restrictedExternalCollabEmails;
 
         return (
             <UnifiedShareForm
                 {...this.props}
-                onRemoveAllRestrictedCollabs={onRemoveAllRestrictedCollabsValue}
-                restrictedCollabEmails={restrictedCollabEmailsValue}
                 handleFtuxCloseClick={this.handleFtuxCloseClick}
                 isFetching={isFetching}
                 openConfirmModal={this.openConfirmModal}

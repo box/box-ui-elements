@@ -1,12 +1,12 @@
 import { collapseFeedState } from '../activityFeedUtils';
-import { PLACEHOLDER_USER } from '../../../../../constants';
+import { FEED_ITEM_TYPE_COMMENT, FEED_ITEM_TYPE_VERSION, PLACEHOLDER_USER } from '../../../../../constants';
 
 describe('collapseFeedState', () => {
     const mario = { id: '1', name: 'mario' };
     const luigi = { id: '2', name: 'luigi' };
 
     const version1 = {
-        type: 'file_version',
+        type: FEED_ITEM_TYPE_VERSION,
         version_number: '2',
         modified_by: mario,
     };
@@ -18,10 +18,10 @@ describe('collapseFeedState', () => {
     test('should keep file_version & comment distinct', () => {
         const origFeed = [
             {
-                type: 'comment',
+                type: FEED_ITEM_TYPE_COMMENT,
             },
             {
-                type: 'file_version',
+                type: FEED_ITEM_TYPE_VERSION,
             },
         ];
         const expFeed = origFeed;
@@ -32,7 +32,7 @@ describe('collapseFeedState', () => {
 
     test('should collapse two file_version items into 1', () => {
         const version2 = {
-            type: 'file_version',
+            type: FEED_ITEM_TYPE_VERSION,
             version_number: '1',
             modified_by: luigi,
         };
@@ -40,7 +40,7 @@ describe('collapseFeedState', () => {
         const origFeed = [version1, version2];
         const expFeed = [
             {
-                type: 'file_version',
+                type: FEED_ITEM_TYPE_VERSION,
                 version_number: '1',
                 modified_by: luigi,
                 created_at: undefined,
@@ -63,7 +63,7 @@ describe('collapseFeedState', () => {
 
     test('should collapse two file_version items and handle null users', () => {
         const version2 = {
-            type: 'file_version',
+            type: FEED_ITEM_TYPE_VERSION,
             version_number: '1',
             modified_by: null,
         };
@@ -71,7 +71,7 @@ describe('collapseFeedState', () => {
         const origFeed = [version1, version2];
         const expFeed = [
             {
-                type: 'file_version',
+                type: FEED_ITEM_TYPE_VERSION,
                 version_number: '1',
                 modified_by: PLACEHOLDER_USER,
                 created_at: undefined,

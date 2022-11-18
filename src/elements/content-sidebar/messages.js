@@ -7,6 +7,16 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    activitySidebarFilterOptionAll: {
+        id: 'be.activitySidebarFilter.status.all',
+        defaultMessage: 'All Comments',
+        description: 'One of the dropdown options to select in order to filter comments',
+    },
+    activitySidebarFilterOptionOpen: {
+        id: 'be.activitySidebarFilter.status.open',
+        defaultMessage: 'Unresolved Comments',
+        description: 'One of the dropdown options to select in order to filter comments',
+    },
     boxSignFtuxBody: {
         id: 'be.contentSidebar.boxSignFtuxBody',
         defaultMessage: 'Sign documents or send signature requests, right from where your content lives',

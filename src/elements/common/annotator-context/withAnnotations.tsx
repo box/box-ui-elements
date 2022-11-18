@@ -13,15 +13,29 @@ export type ActiveChangeEvent = {
 export type ActiveChangeEventHandler = (event: ActiveChangeEvent) => void;
 
 export type ComponentWithAnnotations = {
-    emitActiveChangeEvent: (id: string | null) => void;
-    emitRemoveEvent: (id: string) => void;
+    emitActiveAnnotationChangeEvent: (id: string | null) => void;
+    emitAnnotationRemoveEvent: (id: string, isStartEvent?: boolean) => void;
+    emitAnnotationReplyCreateEvent: (
+        reply: Object,
+        requestId: string,
+        annotationId: string,
+        isStartEvent?: boolean,
+    ) => void;
+    emitAnnotationReplyDeleteEvent: (id: string, annotationId: string, isStartEvent?: boolean) => void;
+    emitAnnotationReplyUpdateEvent: (reply: Object, annotationId: string, isStartEvent?: boolean) => void;
+    emitAnnotationUpdateEvent: (annotation: Object, isStartEvent?: boolean) => void;
     getAction: (eventData: AnnotationActionEvent) => Action;
     getAnnotationsPath: (fileVersionId?: string, annotationId?: string | null) => string;
     getMatchPath: GetMatchPath;
     handleActiveChange: ActiveChangeEventHandler;
     handleAnnotationChangeEvent: (id: string | null) => void;
     handleAnnotationCreate: (eventData: AnnotationActionEvent) => void;
+    handleAnnotationDelete: (eventData: AnnotationActionEvent) => void;
     handleAnnotationFetchError: ({ error }: { error: Error }) => void;
+    handleAnnotationReplyCreate: (eventData: AnnotationActionEvent) => void;
+    handleAnnotationReplyDelete: (eventData: AnnotationActionEvent) => void;
+    handleAnnotationReplyUpdate: (eventData: AnnotationActionEvent) => void;
+    handleAnnotationUpdate: (eventData: AnnotationActionEvent) => void;
     handleAnnotator: (annotator: Annotator) => void;
     handlePreviewDestroy: (shouldReset?: boolean) => void;
 };
@@ -41,6 +55,7 @@ const defaultState: AnnotatorState = {
     activeAnnotationFileVersionId: null,
     activeAnnotationId: null,
     annotation: null,
+    annotationReply: null,
     error: null,
     meta: null,
 };
@@ -65,7 +80,7 @@ export default function withAnnotations<P extends object>(
             this.state = { ...defaultState, activeAnnotationId };
         }
 
-        emitActiveChangeEvent = (id: string | null) => {
+        emitActiveAnnotationChangeEvent = (id: string | null) => {
             const { annotator } = this;
 
             if (!annotator) {
@@ -75,18 +90,94 @@ export default function withAnnotations<P extends object>(
             annotator.emit('annotations_active_set', id);
         };
 
-        emitRemoveEvent = (id: string) => {
+        emitAnnotationRemoveEvent = (id: string, isStartEvent = false) => {
             const { annotator } = this;
 
             if (!annotator) {
                 return;
             }
 
-            annotator.emit('annotations_remove', id);
+            // Event name does not include "sidebar" namespace because of backwards compatibility with Preview
+            const event = isStartEvent ? 'annotations_remove_start' : 'annotations_remove';
+
+            annotator.emit(event, id);
+        };
+
+        emitAnnotationUpdateEvent = (annotation: Object, isStartEvent = false) => {
+            const { annotator } = this;
+
+            if (!annotator) {
+                return;
+            }
+
+            const event = isStartEvent ? 'sidebar.annotations_update_start' : 'sidebar.annotations_update';
+
+            annotator.emit(event, annotation);
+        };
+
+        emitAnnotationReplyCreateEvent = (
+            reply: Object,
+            requestId: string,
+            annotationId: string,
+            isStartEvent = false,
+        ) => {
+            const { annotator } = this;
+
+            if (!annotator) {
+                return;
+            }
+
+            const event = isStartEvent ? 'sidebar.annotations_reply_create_start' : 'sidebar.annotations_reply_create';
+
+            annotator.emit(event, { annotationId, reply, requestId });
+        };
+
+        emitAnnotationReplyDeleteEvent = (id: string, annotationId: string, isStartEvent = false) => {
+            const { annotator } = this;
+
+            if (!annotator) {
+                return;
+            }
+
+            const event = isStartEvent ? 'sidebar.annotations_reply_delete_start' : 'sidebar.annotations_reply_delete';
+
+            annotator.emit(event, { annotationId, id });
+        };
+
+        emitAnnotationReplyUpdateEvent = (reply: Object, annotationId: string, isStartEvent = false) => {
+            const { annotator } = this;
+
+            if (!annotator) {
+                return;
+            }
+
+            const event = isStartEvent ? 'sidebar.annotations_reply_update_start' : 'sidebar.annotations_reply_update';
+
+            annotator.emit(event, { annotationId, reply });
         };
 
         getAction({ meta: { status }, error }: AnnotationActionEvent): Action {
             return status === Status.SUCCESS || error ? Action.CREATE_END : Action.CREATE_START;
+        }
+
+        getDeleteAction({ meta: { status }, error }: AnnotationActionEvent): Action {
+            return status === Status.SUCCESS || error ? Action.DELETE_END : Action.DELETE_START;
+        }
+
+        getUpdateAction({ meta: { status }, error }: AnnotationActionEvent): Action {
+            return status === Status.SUCCESS || error ? Action.UPDATE_END : Action.UPDATE_START;
+        }
+
+        getReplyCreateAction({ meta: { status }, error }: AnnotationActionEvent): Action {
+            return status === Status.SUCCESS || error ? Action.REPLY_CREATE_END : Action.REPLY_CREATE_START;
+        }
+
+        getReplyDeleteAction({ meta: { status }, error }: AnnotationActionEvent): Action {
+            return status === Status.SUCCESS || error ? Action.REPLY_DELETE_END : Action.REPLY_DELETE_START;
+        }
+
+        getReplyUpdateAction({ meta: { status }, error }: AnnotationActionEvent): Action {
+            return status === Status.SUCCESS || error ? Action.REPLY_UPDATE_END : Action.REPLY_UPDATE_START;
         }
 
         getAnnotationsPath(fileVersionId?: string, annotationId?: string | null): string {
@@ -126,6 +217,64 @@ export default function withAnnotations<P extends object>(
             });
         };
 
+        handleAnnotationDelete = (eventData: AnnotationActionEvent) => {
+            const { annotation = null, error = null, meta = null } = eventData;
+
+            this.setState({
+                action: this.getDeleteAction(eventData),
+                annotation,
+                error,
+                meta,
+            });
+        };
+
+        handleAnnotationUpdate = (eventData: AnnotationActionEvent) => {
+            const { annotation = null, error = null, meta = null } = eventData;
+
+            this.setState({
+                action: this.getUpdateAction(eventData),
+                annotation,
+                error,
+                meta,
+            });
+        };
+
+        handleAnnotationReplyCreate = (eventData: AnnotationActionEvent) => {
+            const { annotation = null, annotationReply = null, error = null, meta = null } = eventData;
+
+            this.setState({
+                action: this.getReplyCreateAction(eventData),
+                annotation,
+                annotationReply,
+                error,
+                meta,
+            });
+        };
+
+        handleAnnotationReplyDelete = (eventData: AnnotationActionEvent) => {
+            const { annotation = null, annotationReply = null, error = null, meta = null } = eventData;
+
+            this.setState({
+                action: this.getReplyDeleteAction(eventData),
+                annotation,
+                annotationReply,
+                error,
+                meta,
+            });
+        };
+
+        handleAnnotationReplyUpdate = (eventData: AnnotationActionEvent) => {
+            const { annotation = null, annotationReply = null, error = null, meta = null } = eventData;
+
+            this.setState({
+                action: this.getReplyUpdateAction(eventData),
+                annotation,
+                annotationReply,
+                error,
+                meta,
+            });
+        };
+
         handleActiveChange: ActiveChangeEventHandler = ({ annotationId, fileVersionId }): void => {
             this.setState({ activeAnnotationFileVersionId: fileVersionId, activeAnnotationId: annotationId });
         };
@@ -142,7 +291,12 @@ export default function withAnnotations<P extends object>(
             this.annotator = annotator;
             this.annotator.addListener('annotations_active_change', this.handleActiveChange);
             this.annotator.addListener('annotations_create', this.handleAnnotationCreate);
+            this.annotator.addListener('annotations_delete', this.handleAnnotationDelete);
             this.annotator.addListener('annotations_fetch_error', this.handleAnnotationFetchError);
+            this.annotator.addListener('annotations_update', this.handleAnnotationUpdate);
+            this.annotator.addListener('annotations_reply_create', this.handleAnnotationReplyCreate);
+            this.annotator.addListener('annotations_reply_delete', this.handleAnnotationReplyDelete);
+            this.annotator.addListener('annotations_reply_update', this.handleAnnotationReplyUpdate);
         };
 
         handlePreviewDestroy = (shouldReset = true): void => {
@@ -153,7 +307,12 @@ export default function withAnnotations<P extends object>(
             if (this.annotator) {
                 this.annotator.removeListener('annotations_active_change', this.handleActiveChange);
                 this.annotator.removeListener('annotations_create', this.handleAnnotationCreate);
+                this.annotator.removeListener('annotations_delete', this.handleAnnotationDelete);
                 this.annotator.removeListener('annotations_fetch_error', this.handleAnnotationFetchError);
+                this.annotator.removeListener('annotations_update', this.handleAnnotationUpdate);
+                this.annotator.removeListener('annotations_reply_create', this.handleAnnotationReplyCreate);
+                this.annotator.removeListener('annotations_reply_delete', this.handleAnnotationReplyDelete);
+                this.annotator.removeListener('annotations_reply_update', this.handleAnnotationReplyUpdate);
             }
 
             this.annotator = null;
@@ -163,8 +322,12 @@ export default function withAnnotations<P extends object>(
             return (
                 <AnnotatorContext.Provider
                     value={{
-                        emitActiveChangeEvent: this.emitActiveChangeEvent,
-                        emitRemoveEvent: this.emitRemoveEvent,
+                        emitActiveAnnotationChangeEvent: this.emitActiveAnnotationChangeEvent,
+                        emitAnnotationRemoveEvent: this.emitAnnotationRemoveEvent,
+                        emitAnnotationReplyCreateEvent: this.emitAnnotationReplyCreateEvent,
+                        emitAnnotationReplyDeleteEvent: this.emitAnnotationReplyDeleteEvent,
+                        emitAnnotationReplyUpdateEvent: this.emitAnnotationReplyUpdateEvent,
+                        emitAnnotationUpdateEvent: this.emitAnnotationUpdateEvent,
                         getAnnotationsMatchPath: this.getMatchPath,
                         getAnnotationsPath: this.getAnnotationsPath,
                         state: this.state,

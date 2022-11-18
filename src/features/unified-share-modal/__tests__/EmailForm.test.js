@@ -9,24 +9,29 @@ describe('features/unified-share-modal/EmailForm', () => {
     const expectedContacts = [
         {
             email: 'x@example.com',
-            id: '12345',
+            id: 12345,
             text: 'X User',
-            type: 'group',
+            type: 'user',
             value: 'x@example.com',
         },
         {
             email: 'y@example.com',
-            id: '23456',
+            id: 23456,
             text: 'Y User',
             type: 'user',
             value: 'y@example.com',
         },
         {
             email: 'z@example.com',
-            id: '34567',
+            id: 34567,
             text: 'Z User',
             type: 'user',
             value: 'z@example.com',
+        },
+        {
+            id: 45678,
+            text: 'Test Group',
+            type: 'group',
         },
     ];
     const expectedJustificationReason = { displayText: 'Reason', value: '123' };
@@ -43,6 +48,7 @@ describe('features/unified-share-modal/EmailForm', () => {
                 onRequestClose={jest.fn()}
                 onSubmit={jest.fn()}
                 openInviteSection={jest.fn()}
+                restrictedGroups={[]}
                 selectedContacts={[]}
                 showEnterEmailsCallout
                 inlineNotice={{}}
@@ -135,7 +141,31 @@ describe('features/unified-share-modal/EmailForm', () => {
             expect(onContactRemove).toHaveBeenCalledWith(expectedContacts[0]);
             expect(onContactRemove).toHaveBeenCalledWith(expectedContacts[2]);
             expect(updateSelectedContacts).toHaveBeenCalledTimes(1);
-            expect(updateSelectedContacts).toHaveBeenCalledWith([expectedContacts[1]]);
+            expect(updateSelectedContacts).toHaveBeenCalledWith([expectedContacts[1], expectedContacts[3]]);
+        });
+
+        test('should remove all contacts with matches in restrictedEmails or restrictedGroups', () => {
+            const onContactRemove = jest.fn();
+            const updateSelectedContacts = jest.fn();
+            const restrictedGroups = [expectedContacts[3].id, '1111'];
+            const restrictedEmails = [expectedContacts[0].value, 'not_included_in_contacts@example.com'];
+
+            const wrapper = getWrapper({
+                onContactRemove,
+                restrictedEmails,
+                restrictedGroups,
+                selectedContacts: expectedContacts,
+                updateSelectedContacts,
+            });
+
+            wrapper.instance().handleRemoveRestrictedContacts();
+
+            // The two restricted emails that match values in expectedContacts
+            expect(onContactRemove).toHaveBeenCalledTimes(2);
+            expect(onContactRemove).toHaveBeenCalledWith(expectedContacts[0]);
+            expect(onContactRemove).toHaveBeenCalledWith(expectedContacts[3]);
+            expect(updateSelectedContacts).toHaveBeenCalledTimes(1);
+            expect(updateSelectedContacts).toHaveBeenCalledWith([expectedContacts[1], expectedContacts[2]]);
         });
 
         test('should reset contact limit error when contact removal results in a contact count within the limit', () => {
@@ -257,11 +287,12 @@ describe('features/unified-share-modal/EmailForm', () => {
         test('should call sendInvites prop with the correct params', () => {
             const message = 'test message';
             const expectedParam = {
-                emails: ['y@example.com'],
-                groupIDs: ['x@example.com'],
+                emails: ['x@example.com', 'y@example.com'],
+                groupIDs: [],
                 justificationReason: null,
                 message,
                 restrictedEmails: [],
+                restrictedGroups: [],
             };
             const onSubmit = jest.fn().mockReturnValue(Promise.resolve());
             const wrapper = getWrapper({
@@ -290,6 +321,7 @@ describe('features/unified-share-modal/EmailForm', () => {
                     expectedContacts[2].value,
                     'not_included_in_contacts@example.com',
                 ],
+                restrictedGroups: [expectedContacts[3].id],
                 selectedContacts: expectedContacts,
                 isRestrictionJustificationEnabled: true,
             });
@@ -302,24 +334,28 @@ describe('features/unified-share-modal/EmailForm', () => {
                 expect.objectContaining({
                     justificationReason: expectedJustificationReason,
                     restrictedEmails: [expectedContacts[1].value, expectedContacts[2].value],
+                    restrictedGroups: [expectedContacts[3].id],
                 }),
             );
         });
 
         test.each`
-            isRestrictionJustificationEnabled | expectedErrorId                                    | conditionDescription
-            ${true}                           | ${'boxui.unifiedShare.justificationRequiredError'} | ${'justification is allowed but not selected'}
-            ${false}                          | ${'boxui.unifiedShare.restrictedContactsError'}    | ${'justification is not allowed'}
+            isRestrictionJustificationEnabled | restrictedEmails               | restrictedGroups            | expectedErrorId                                    | conditionDescription
+            ${true}                           | ${[expectedContacts[1].value]} | ${[]}                       | ${'boxui.unifiedShare.justificationRequiredError'} | ${'there are restricted emails and justification is allowed but not selected'}
+            ${false}                          | ${[expectedContacts[1].value]} | ${[]}                       | ${'boxui.unifiedShare.restrictedContactsError'}    | ${'there are restricted emails and justification is not allowed'}
+            ${false}                          | ${[]}                          | ${[expectedContacts[3].id]} | ${'boxui.unifiedShare.restrictedContactsError'}    | ${'there are restricted groups and justification is not allowed'}
+            ${false}                          | ${[expectedContacts[1].value]} | ${[expectedContacts[3].id]} | ${'boxui.unifiedShare.restrictedContactsError'}    | ${'there are restricted emails and groups and justification is not allowed'}
         `(
-            'should trigger an error and abort submit action when restricted contacts are present and $conditionDescription',
-            ({ isRestrictionJustificationEnabled, expectedErrorId }) => {
+            'should trigger an error and abort submit action when $conditionDescription',
+            ({ isRestrictionJustificationEnabled, expectedErrorId, restrictedEmails, restrictedGroups }) => {
                 const message = 'test message';
                 const event = { preventDefault: jest.fn() };
                 const onSubmit = jest.fn();
 
                 const wrapper = getWrapper({
                     onSubmit,
-                    restrictedEmails: [expectedContacts[1].value, expectedContacts[2].value],
+                    restrictedEmails,
+                    restrictedGroups,
                     selectedContacts: expectedContacts,
                     isRestrictionJustificationEnabled,
                 });
@@ -335,11 +371,12 @@ describe('features/unified-share-modal/EmailForm', () => {
         test('should handle errors from onSubmit prop', () => {
             const message = 'test message';
             const expectedParam = {
-                emails: [],
-                groupIDs: ['x@example.com'],
+                emails: ['x@example.com'],
+                groupIDs: [],
                 justificationReason: null,
                 message,
                 restrictedEmails: [],
+                restrictedGroups: [],
             };
             const onSubmit = jest.fn().mockReturnValue(
                 // eslint-disable-next-line prefer-promise-reject-errors
@@ -427,18 +464,26 @@ describe('features/unified-share-modal/EmailForm', () => {
 
     describe('validateContactsRestrictions()', () => {
         test.each`
-            isRestrictionJustificationEnabled | restrictedEmails               | selectedJustificationReason    | expectedError
-            ${false}                          | ${[]}                          | ${null}                        | ${''}
-            ${false}                          | ${[]}                          | ${expectedJustificationReason} | ${''}
-            ${true}                           | ${[expectedContacts[0].value]} | ${null}                        | ${'boxui.unifiedShare.justificationRequiredError'}
-            ${true}                           | ${[expectedContacts[0].value]} | ${expectedJustificationReason} | ${''}
-            ${false}                          | ${[]}                          | ${null}                        | ${''}
-            ${false}                          | ${[expectedContacts[0].value]} | ${null}                        | ${'boxui.unifiedShare.restrictedContactsError'}
+            isRestrictionJustificationEnabled | restrictedEmails               | restrictedGroups            | selectedJustificationReason    | expectedError
+            ${false}                          | ${[]}                          | ${[]}                       | ${null}                        | ${''}
+            ${false}                          | ${[]}                          | ${[]}                       | ${expectedJustificationReason} | ${''}
+            ${true}                           | ${[expectedContacts[0].value]} | ${[]}                       | ${null}                        | ${'boxui.unifiedShare.justificationRequiredError'}
+            ${true}                           | ${[expectedContacts[0].value]} | ${[]}                       | ${expectedJustificationReason} | ${''}
+            ${false}                          | ${[]}                          | ${[]}                       | ${null}                        | ${''}
+            ${false}                          | ${[expectedContacts[0].value]} | ${[]}                       | ${null}                        | ${'boxui.unifiedShare.restrictedContactsError'}
+            ${false}                          | ${[]}                          | ${[expectedContacts[3].id]} | ${null}                        | ${'boxui.unifiedShare.restrictedContactsError'}
         `(
-            'should return "$expectedError" when isRestrictionJustificationEnabled is $isRestrictionJustificationEnabled, restrictedEmails is $restrictedEmails and selectedJustificationReason is $selectedJustificationReason',
-            ({ isRestrictionJustificationEnabled, restrictedEmails, selectedJustificationReason, expectedError }) => {
+            'should return "$expectedError" when isRestrictionJustificationEnabled is $isRestrictionJustificationEnabled, restrictedEmails is $restrictedEmails, restrictedGroups is $restrictedGroups and selectedJustificationReason is $selectedJustificationReason',
+            ({
+                isRestrictionJustificationEnabled,
+                restrictedEmails,
+                restrictedGroups,
+                selectedJustificationReason,
+                expectedError,
+            }) => {
                 const wrapper = getWrapper({
                     restrictedEmails,
+                    restrictedGroups,
                     selectedContacts: expectedContacts,
                     isRestrictionJustificationEnabled,
                 });
@@ -516,6 +561,28 @@ describe('features/unified-share-modal/EmailForm', () => {
                 expect(isValidContactPill).toBe(expectedIsValid);
             },
         );
+
+        test.each`
+            isRestrictionJustificationEnabled | selectedJustificationReason    | restrictedGroups            | expectedIsValid
+            ${false}                          | ${null}                        | ${[]}                       | ${true}
+            ${false}                          | ${expectedJustificationReason} | ${[expectedContacts[3].id]} | ${false}
+            ${false}                          | ${null}                        | ${[expectedContacts[3].id]} | ${false}
+            ${true}                           | ${null}                        | ${[expectedContacts[3].id]} | ${false}
+            ${true}                           | ${null}                        | ${[]}                       | ${true}
+            ${true}                           | ${expectedJustificationReason} | ${[expectedContacts[3].id]} | ${true}
+        `(
+            'should have isValidContactPill return $expectedIsValid when isRestrictionJustificationEnabled = $isRestrictionJustificationEnabled, selectedJustificationReason = $selectedJustificationReason and restrictedGroups = $restrictedGroups',
+            ({ isRestrictionJustificationEnabled, selectedJustificationReason, restrictedGroups, expectedIsValid }) => {
+                const wrapper = getWrapper();
+                const contact = expectedContacts[3];
+
+                wrapper.instance().handleSelectJustificationReason(selectedJustificationReason);
+                wrapper.setProps({ restrictedGroups, isRestrictionJustificationEnabled });
+
+                const isValidContactPill = wrapper.instance().isValidContactPill(contact);
+                expect(isValidContactPill).toBe(expectedIsValid);
+            },
+        );
     });
 
     describe('getContactPillClassName()', () => {
@@ -540,6 +607,33 @@ describe('features/unified-share-modal/EmailForm', () => {
 
                 wrapper.instance().handleSelectJustificationReason(selectedJustificationReason);
                 wrapper.setProps({ restrictedEmails, isRestrictionJustificationEnabled });
+
+                const contactPillClassName = wrapper.instance().getContactPillClassName(contact);
+                expect(contactPillClassName).toBe(expectedClassName);
+            },
+        );
+
+        test.each`
+            isRestrictionJustificationEnabled | selectedJustificationReason    | restrictedGroups            | expectedClassName
+            ${false}                          | ${null}                        | ${[]}                       | ${''}
+            ${false}                          | ${expectedJustificationReason} | ${[expectedContacts[3].id]} | ${''}
+            ${false}                          | ${null}                        | ${[expectedContacts[3].id]} | ${''}
+            ${true}                           | ${null}                        | ${[expectedContacts[3].id]} | ${''}
+            ${true}                           | ${null}                        | ${[]}                       | ${''}
+            ${true}                           | ${expectedJustificationReason} | ${[expectedContacts[3].id]} | ${'is-waived'}
+        `(
+            'should return "$expectedClassName" when isRestrictionJustificationEnabled = $isRestrictionJustificationEnabled, selectedJustificationReason = $selectedJustificationReason and restrictedGroups = $restrictedGroups',
+            ({
+                isRestrictionJustificationEnabled,
+                selectedJustificationReason,
+                restrictedGroups,
+                expectedClassName,
+            }) => {
+                const wrapper = getWrapper();
+                const contact = expectedContacts[3];
+
+                wrapper.instance().handleSelectJustificationReason(selectedJustificationReason);
+                wrapper.setProps({ restrictedGroups, isRestrictionJustificationEnabled });
 
                 const contactPillClassName = wrapper.instance().getContactPillClassName(contact);
                 expect(contactPillClassName).toBe(expectedClassName);
@@ -716,6 +810,19 @@ describe('features/unified-share-modal/EmailForm', () => {
                     selectedContacts,
                 }),
             );
+        });
+
+        test('should render ContactRestrictionNotice  when isExpanded is true and restrictedGroups has matching values in selectedContacts', () => {
+            const restrictedGroups = [expectedContacts[3].id];
+            const selectedContacts = expectedContacts;
+
+            const wrapper = getWrapper({
+                isExpanded: true,
+                restrictedGroups,
+                selectedContacts,
+            });
+
+            expect(wrapper.find('ContactRestrictionNotice')).toHaveLength(1);
         });
 
         test.each`

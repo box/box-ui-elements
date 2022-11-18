@@ -9,6 +9,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
       Object {
         "formatDate": [Function],
         "formatMessage": [Function],
+        "formatNumber": [Function],
         "formatRelativeTime": [Function],
       }
     }
@@ -106,6 +107,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
       Object {
         "formatDate": [Function],
         "formatMessage": [Function],
+        "formatNumber": [Function],
         "formatRelativeTime": [Function],
       }
     }
@@ -203,6 +205,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
       Object {
         "formatDate": [Function],
         "formatMessage": [Function],
+        "formatNumber": [Function],
         "formatRelativeTime": [Function],
       }
     }
@@ -298,6 +301,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
       Object {
         "formatDate": [Function],
         "formatMessage": [Function],
+        "formatNumber": [Function],
         "formatRelativeTime": [Function],
       }
     }

@@ -17,8 +17,8 @@ import AccessibleSVG, { SVGProps } from '../../components/accessible-svg/Accessi
 const Info16 = (props: SVGProps) => (
     <AccessibleSVG width={16} height={16} viewBox="0 0 16 16" {...props}>
         <path
+            d="M8.5 6.5H6.25a.75.75 0 000 1.5H7v4.5h-.75a.75.75 0 100 1.5H10a.75.75 0 100-1.5h-.75V7.41s.006-.217-.02-.327A.753.753 0 008.5 6.5zM7.75 2a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"
             fill={vars.bdlGray50}
-            d="M8 1a7 7 0 110 14A7 7 0 018 1zm.5 6H7a.5.5 0 000 1h.5v3H7a.5.5 0 100 1h2.5a.5.5 0 100-1H9V7.75a.783.783 0 00-.012-.139A.502.502 0 008.5 7zM8 4a1 1 0 100 2 1 1 0 000-2z"
         />
     </AccessibleSVG>
 );

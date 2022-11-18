@@ -1,0 +1,21 @@
+@import '../../../common/variables';
+
+.bcs-ActivityThreadReplies {
+    position: relative;
+    padding-left: $sidebarActivityFeedSpacingHorizontal;
+
+    &::before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: $sidebarActivityFeedSpacingHorizontal;
+        width: $bdl-grid-unit;
+        background: $bdl-gray-10;
+        border-radius: $bdl-border-radius-size;
+        content: '';
+    }
+}
+
+.bcs-ActivityThreadReplies-loading {
+    padding-bottom: $bdl-grid-unit * 5;
+}

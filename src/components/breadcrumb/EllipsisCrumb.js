@@ -7,13 +7,17 @@ import PlainButton from '../plain-button';
 
 type Props = {
     children: React.Node,
+    menuButton?: React.Node,
 };
 
-const EllipsisCrumb = ({ children }: Props) => (
-    <DropdownMenu>
-        <PlainButton className="breadcrumb-toggler">⋯</PlainButton>
-        <Menu>{children}</Menu>
-    </DropdownMenu>
-);
+const EllipsisCrumb = ({ children, menuButton }: Props) => {
+    const defaultMenuButton = <PlainButton className="breadcrumb-toggler">⋯</PlainButton>;
+    return (
+        <DropdownMenu>
+            {menuButton || defaultMenuButton}
+            <Menu>{children}</Menu>
+        </DropdownMenu>
+    );
+};
 
 export default EllipsisCrumb;

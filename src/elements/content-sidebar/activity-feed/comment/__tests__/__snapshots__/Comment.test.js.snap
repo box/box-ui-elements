@@ -69,10 +69,11 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           date={1506534041000}
         />
       </div>
-      <ActivityMessage
+      <ActivityStatus />
+      <ForwardRef(withFeatureConsumer(ActivityMessage))
         id="123"
+        isEdited={false}
         tagged_message="test"
-        translationEnabled={false}
         translationFailed={null}
       />
     </MediaBody>
@@ -112,8 +113,10 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           date={1506534041000}
         />
       </div>
-      <ActivityMessage
+      <ActivityStatus />
+      <ForwardRef(withFeatureConsumer(ActivityMessage))
         id="123"
+        isEdited={false}
         onTranslate={[MockFunction]}
         tagged_message="test"
         translationEnabled={true}
@@ -156,10 +159,11 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
           date={1506534041000}
         />
       </div>
-      <ActivityMessage
+      <ActivityStatus />
+      <ForwardRef(withFeatureConsumer(ActivityMessage))
         id="123"
+        isEdited={false}
         tagged_message="test"
-        translationEnabled={false}
         translationFailed={true}
       />
     </MediaBody>
@@ -203,10 +207,11 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
           date={1506534041000}
         />
       </div>
-      <ActivityMessage
+      <ActivityStatus />
+      <ForwardRef(withFeatureConsumer(ActivityMessage))
         id="123"
+        isEdited={false}
         tagged_message="test"
-        translationEnabled={false}
         translationFailed={null}
       />
     </MediaBody>

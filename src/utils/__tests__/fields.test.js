@@ -1,14 +1,15 @@
 import {
+    COMMENTS_FIELDS_TO_FETCH,
+    FEED_FILE_VERSIONS_FIELDS_TO_FETCH,
+    FILE_VERSIONS_FIELDS_TO_FETCH,
     FOLDER_FIELDS_TO_FETCH,
     PREVIEW_FIELDS_TO_FETCH,
     SIDEBAR_FIELDS_TO_FETCH,
-    TASKS_FIELDS_TO_FETCH,
-    FILE_VERSIONS_FIELDS_TO_FETCH,
     TASK_ASSIGNMENTS_FIELDS_TO_FETCH,
-    COMMENTS_FIELDS_TO_FETCH,
-    findMissingProperties,
+    TASKS_FIELDS_TO_FETCH,
     fillMissingProperties,
     fillUserPlaceholder,
+    findMissingProperties,
 } from '../fields';
 import {
     FIELD_ID,
@@ -97,6 +98,24 @@ describe('util/fields', () => {
             FIELD_WATERMARK_INFO,
             FIELD_AUTHENTICATED_DOWNLOAD_URL,
             FIELD_IS_DOWNLOAD_AVAILABLE,
+        ]);
+    });
+
+    test('should fetch correct activity feed fields', () => {
+        expect(FEED_FILE_VERSIONS_FIELDS_TO_FETCH).toEqual([
+            FIELD_CREATED_AT,
+            FIELD_EXTENSION,
+            FIELD_IS_DOWNLOAD_AVAILABLE,
+            FIELD_MODIFIED_AT,
+            FIELD_MODIFIED_BY,
+            FIELD_NAME,
+            FIELD_RESTORED_AT,
+            FIELD_RESTORED_BY,
+            FIELD_SIZE,
+            FIELD_TRASHED_AT,
+            FIELD_TRASHED_BY,
+            FIELD_UPLOADER_DISPLAY_NAME,
+            FIELD_VERSION_NUMBER,
         ]);
     });
 

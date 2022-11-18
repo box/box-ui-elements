@@ -6,6 +6,7 @@ import noop from 'lodash/noop';
 import TetherComponent from 'react-tether';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
+import ActivityStatus from '../common/activity-status';
 import ActivityTimestamp from '../common/activity-timestamp';
 import AnnotationActivityLink from './AnnotationActivityLink';
 import AnnotationActivityMenu from './AnnotationActivityMenu';
@@ -18,7 +19,7 @@ import SelectableActivityCard from '../SelectableActivityCard';
 import UserLink from '../common/user-link';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { PLACEHOLDER_USER } from '../../../../constants';
-import type { Annotation, AnnotationPermission } from '../../../../common/types/feed';
+import type { Annotation, AnnotationPermission, FeedItemStatus } from '../../../../common/types/feed';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
 
@@ -29,12 +30,14 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: (searchStr: string) => void,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasVersions?: boolean,
     isCurrentVersion: boolean,
     item: Annotation,
     mentionSelectorContacts?: SelectorItems<User>,
     onDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
     onEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
     onSelect?: (annotation: Annotation) => any,
+    onStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
 };
 
 const AnnotationActivity = ({
@@ -43,20 +46,33 @@ const AnnotationActivity = ({
     getAvatarUrl,
     getMentionWithQuery,
     getUserProfileUrl,
+    hasVersions,
     isCurrentVersion,
     mentionSelectorContacts,
     onDelete = noop,
     onEdit = noop,
     onSelect = noop,
+    onStatusChange = noop,
 }: Props) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
     const [isEditing, setIsEditing] = React.useState(false);
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-    const { created_at, created_by, description, error, file_version, id, isPending, permissions = {}, target } = item;
-    const { can_delete: canDelete, can_edit: canEdit } = permissions;
+    const {
+        created_at,
+        created_by,
+        description,
+        error,
+        file_version,
+        id,
+        isPending,
+        permissions = {},
+        status,
+        target,
+    } = item;
+    const { can_delete: canDelete, can_edit: canEdit, can_resolve: canResolve } = permissions;
     const isFileVersionUnavailable = file_version === null;
     const isCardDisabled = !!error || isConfirmingDelete || isMenuOpen || isEditing || isFileVersionUnavailable;
-    const isMenuVisible = (canDelete || canEdit) && !isPending;
+    const isMenuVisible = (canDelete || canEdit || canResolve) && !isPending;
 
     const handleDelete = (): void => setIsConfirmingDelete(true);
     const handleDeleteCancel = (): void => setIsConfirmingDelete(false);
@@ -64,6 +80,7 @@ const AnnotationActivity = ({
         setIsConfirmingDelete(false);
         onDelete({ id, permissions });
     };
+
     const handleEdit = (): void => setIsEditing(true);
     const handleFormCancel = (): void => setIsEditing(false);
     const handleFormSubmit = ({ text }): void => {
@@ -83,6 +100,8 @@ const AnnotationActivity = ({
         event.stopPropagation();
     };
     const handleSelect = () => onSelect(item);
+
+    const handleStatusChange = (newStatus: FeedItemStatus) => onStatusChange(id, newStatus, permissions);
 
     const createdAtTimestamp = new Date(created_at).getTime();
     const createdByUser = created_by || PLACEHOLDER_USER;
@@ -130,15 +149,18 @@ const AnnotationActivity = ({
                         </div>
                         <div className="bcs-AnnotationActivity-timestamp">
                             <ActivityTimestamp date={createdAtTimestamp} />
-                            <AnnotationActivityLink
-                                className="bcs-AnnotationActivity-link"
-                                data-resin-target="annotationLink"
-                                id={id}
-                                isDisabled={isFileVersionUnavailable}
-                                message={activityLinkMessage}
-                                onClick={handleSelect}
-                            />
+                            {hasVersions && (
+                                <AnnotationActivityLink
+                                    className="bcs-AnnotationActivity-link"
+                                    data-resin-target="annotationLink"
+                                    id={id}
+                                    isDisabled={isFileVersionUnavailable}
+                                    message={activityLinkMessage}
+                                    onClick={handleSelect}
+                                />
+                            )}
                         </div>
+                        <ActivityStatus status={status} />
                         {isEditing && currentUser ? (
                             <CommentForm
                                 className="bcs-AnnotationActivity-editor"
@@ -166,13 +188,16 @@ const AnnotationActivity = ({
                     <AnnotationActivityMenu
                         canDelete={canDelete}
                         canEdit={canEdit}
+                        canResolve={canResolve}
                         className="bcs-AnnotationActivity-menu"
                         id={id}
                         isDisabled={isConfirmingDelete}
+                        status={status}
                         onDelete={handleDelete}
                         onEdit={handleEdit}
                         onMenuClose={handleMenuClose}
                         onMenuOpen={handleMenuOpen}
+                        onStatusChange={handleStatusChange}
                     />
                 )}
                 {isConfirmingDelete && (

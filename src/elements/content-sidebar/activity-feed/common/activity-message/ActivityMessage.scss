@@ -13,14 +13,51 @@
     }
 }
 
+.bcs-ActivityMessage-edited {
+    color: $bdl-gray-62;
+}
+
 .bcs-ActivityMessage-mention {
     overflow: initial;
     white-space: normal;
 }
 
-.bcs-ActivityMessage-translate {
-    display: block;
-    color: $bdl-box-blue;
+.bcs-ActivityMessage-collapsed {
+    /* webkit-line-clamp only works in combination with -webkit-box */
+    /* stylelint-disable-next-line value-no-vendor-prefix */
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: break-word;
+    -webkit-line-clamp: 7;
+    -webkit-box-orient: vertical;
+}
+
+.bcs-ActivityMessage-translate,
+.bcs-ActivityMessage-toggleMoreLess {
+    &.btn-plain {
+        display: block;
+        margin-left: -2px;
+        color: $bdl-box-blue;
+        font-weight: bold;
+        // to align with rest of text despite invisible border
+        line-height: $bdl-line-height - 4px;
+        border: 2px solid transparent;
+        border-radius: 2px;
+
+        &:hover,
+        &:active {
+            text-decoration: underline;
+        }
+
+        &:active {
+            color: $bdl-light-blue;
+        }
+
+        &:focus-visible {
+            border-color: $bdl-box-blue;
+        }
+    }
 }
 
 .bcs-ActivityMessageLoading {
