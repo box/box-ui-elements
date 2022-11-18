@@ -113,7 +113,6 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       }
       data-testid="activity-thread"
       hasReplies={false}
-      isSelected={false}
       onHideReplies={[Function]}
       onReplyCreate={[Function]}
       onReplyDelete={[Function]}

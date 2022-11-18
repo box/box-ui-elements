@@ -119,6 +119,11 @@ const ActiveState = ({
     translations,
 }: Props): React.Node => {
     const [selectedThreadParentId, setSelectedThreadParentId] = React.useState(null);
+    const activeEntry = items.find(
+        ({ id, type }) =>
+            selectedThreadParentId === id ||
+            (selectedThreadParentId === null && id === activeFeedEntryId && type === activeFeedEntryType),
+    );
 
     const onThreadSelected = (parentId: string) => (isSelected: boolean) => {
         setSelectedThreadParentId(isSelected ? parentId : null);
@@ -171,7 +176,6 @@ const ActiveState = ({
                                     getUserProfileUrl={getUserProfileUrl}
                                     hasReplies={hasReplies}
                                     isRepliesLoading={item.isRepliesLoading}
-                                    isSelected={selectedThreadParentId === item.id}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     onReplySelect={onThreadSelected(item.id)}
                                     onHideReplies={onHideRepliesHandler(item.id)}

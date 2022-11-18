@@ -99,10 +99,4 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
 
         expect(screen.getByRole('button', { name: localize(messages.reply.id) })).toBeInTheDocument();
     });
-
-    test('should have class `bcs-ActivityThread bcs-is-selected` when isThreadSelected is passed', () => {
-        const { queryByTestId } = getWrapper({ isSelected: true });
-
-        expect(queryByTestId('activity-thread')).toHaveClass('bcs-ActivityThread bcs-is-selected');
-    });
 });

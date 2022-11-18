@@ -38,11 +38,19 @@ const annotation = {
     created_by: currentUser,
 };
 
-const comment = {
+const comment1 = {
     type: FEED_ITEM_TYPE_COMMENT,
     id: 'c_123',
     created_at: '2018-07-03T14:43:52-07:00',
     tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
+    created_by: otherUser,
+};
+
+const comment2 = {
+    type: FEED_ITEM_TYPE_COMMENT,
+    id: 'c_420',
+    created_at: '2022-11-18T14:43:52-07:00',
+    tagged_message: 'Hello there',
     created_by: otherUser,
 };
 
@@ -123,7 +131,7 @@ const activityFeedError = { title: 't', content: 'm' };
 const getShallowWrapper = (params = {}) =>
     shallow(
         <ActiveState
-            items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
+            items={[annotation, comment1, fileVersion, taskWithAssignment, appActivity]}
             currentUser={currentUser}
             currentFileVersionId="123"
             {...params}
@@ -158,18 +166,6 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         expect(wrapper.find('[data-testid="activity-thread"]')).toHaveLength(2);
     });
 
-    test('should select thread', () => {
-        const selector = '[data-testid="comment"] > [data-testid="activity-thread"]';
-        const wrapper = getShallowWrapper().dive();
-
-        expect(wrapper.find(selector).prop('isSelected')).toBe(false);
-
-        wrapper.find(selector).simulate('replySelect', true);
-        wrapper.update();
-
-        expect(wrapper.find(selector).prop('isSelected')).toBe(true);
-    });
-
     test('should correctly render with an inline error if some feed items fail to fetch', () => {
         const wrapper = getShallowWrapper({ inlineError: activityFeedError, items: [] });
         expect(wrapper).toMatchSnapshot();
@@ -192,4 +188,107 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
             ).toBe(isCurrentVersion);
         },
     );
+
+    test("should have ActivityItem focused when it's activeFeedEntry", () => {
+        const wrapper = getShallowWrapper({
+            activeFeedEntryId: comment1.id,
+            activeFeedEntryType: comment1.type,
+        }).dive();
+
+        expect(wrapper.find('[data-testid="comment"]').prop('isFocused')).toBe(true);
+    });
+
+    test('should have ActiveItem focused when AnnotationThead', () => {
+        const commentItemSelor = '[data-testid="comment"]';
+        const threadselector = '[data-testid="comment"] > [data-testid="activity-thread"]';
+        const wrapper = getShallowWrapper().dive();
+
+        expect(wrapper.find(commentItemSelor).prop('isFocused')).toBe(false);
+
+        wrapper.find(threadselector).simulate('replySelect', true);
+
+        expect(wrapper.find(commentItemSelor).prop('isFocused')).toBe(true);
+    });
+
+    test('should have only one ActiveItem selected at a time', () => {
+        const commentItemSelor = '[data-testid="comment"]';
+        const threadselector = '[data-testid="comment"] > [data-testid="activity-thread"]';
+        const wrapper = getShallowWrapper({
+            items: [comment1, comment2],
+            activeFeedEntryId: comment1.id,
+            activeFeedEntryType: comment1.type,
+        }).dive();
+
+        expect(
+            wrapper
+                .find(commentItemSelor)
+                .at(0)
+                .prop('isFocused'),
+        ).toBe(true);
+        expect(
+            wrapper
+                .find(commentItemSelor)
+                .at(1)
+                .prop('isFocused'),
+        ).toBe(false);
+
+        wrapper
+            .find(threadselector)
+            .at(1)
+            .simulate('replySelect', true);
+
+        expect(
+            wrapper
+                .find(commentItemSelor)
+                .at(0)
+                .prop('isFocused'),
+        ).toBe(false);
+        expect(
+            wrapper
+                .find(commentItemSelor)
+                .at(1)
+                .prop('isFocused'),
+        ).toBe(true);
+    });
+
+    test('should have only one ActiveItem selected at a time no matter the order', () => {
+        const commentItemSelor = '[data-testid="comment"]';
+        const threadselector = '[data-testid="comment"] > [data-testid="activity-thread"]';
+        const wrapper = getShallowWrapper({
+            items: [comment1, comment2],
+            activeFeedEntryId: comment2.id,
+            activeFeedEntryType: comment2.type,
+        }).dive();
+
+        expect(
+            wrapper
+                .find(commentItemSelor)
+                .at(0)
+                .prop('isFocused'),
+        ).toBe(false);
+        expect(
+            wrapper
+                .find(commentItemSelor)
+                .at(1)
+                .prop('isFocused'),
+        ).toBe(true);
+
+        wrapper
+            .find(threadselector)
+            .at(0)
+            .simulate('replySelect', true);
+
+        expect(
+            wrapper
+                .find(commentItemSelor)
+                .at(0)
+                .prop('isFocused'),
+        ).toBe(true);
+        expect(
+            wrapper
+                .find(commentItemSelor)
+                .at(1)
+                .prop('isFocused'),
+        ).toBe(false);
+    });
 });

@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
 
@@ -26,7 +25,6 @@ type Props = {
     hasReplies: boolean,
     isAlwaysExpanded?: boolean,
     isRepliesLoading?: boolean,
-    isSelected?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onHideReplies?: (lastReply: CommentType) => void,
     onReplyCreate?: (text: string) => void,
@@ -56,7 +54,6 @@ const ActivityThread = ({
     hasReplies,
     isAlwaysExpanded = false,
     isRepliesLoading,
-    isSelected = false,
     mentionSelectorContacts,
     onReplySelect,
     onHideReplies = noop,
@@ -114,12 +111,7 @@ const ActivityThread = ({
         return children;
     }
     return (
-        <div
-            className={classNames('bcs-ActivityThread', {
-                'bcs-is-selected': isSelected,
-            })}
-            data-testid="activity-thread"
-        >
+        <div className="bcs-ActivityThread" data-testid="activity-thread">
             {children}
 
             {renderButton()}
