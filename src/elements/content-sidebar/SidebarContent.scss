@@ -11,7 +11,7 @@
         align-items: center;
         justify-content: space-between;
         height: $sidebarHeaderHeight;
-        margin: 0 25px;
+        margin: 0 $sidebarActivityFeedSpacingHorizontal;
         padding: 0;
         border-bottom: 1px solid $bdl-gray-10;
 
