@@ -9,8 +9,7 @@
 
         &:hover,
         &:focus {
-            background-color: $bdl-box-blue-05;
-            box-shadow: 0 0 8px 0 lighten($bdl-gray-20, 10%);
+            @include selected-item;
         }
     }
 }
