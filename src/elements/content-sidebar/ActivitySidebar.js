@@ -11,7 +11,7 @@ import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueId from 'lodash/uniqueId';
 import { FormattedMessage } from 'react-intl';
-import { type ContextRouter } from 'react-router-dom';
+import { generatePath, type ContextRouter } from 'react-router-dom';
 import ActivityFeed from './activity-feed';
 import AddTaskButton from './AddTaskButton';
 import API from '../../api';
@@ -50,10 +50,10 @@ import type {
     AnnotationPermission,
     BoxCommentPermission,
     Comment,
-    CommentFeedItem,
     CommentFeedItemType,
     FocusableFeedItem,
     FocusableFeedItemType,
+    FeedItem,
     FeedItems,
     FeedItemStatus,
     FeedItemType,
@@ -536,11 +536,32 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     updateReplies = (id: string, replies: Array<Comment>) => {
-        const { api, file } = this.props;
+        const { activeFeedEntryId, api, file, history } = this.props;
+        const { feedItems } = this.state;
+
+        if (!feedItems) {
+            return;
+        }
 
         const feedAPI = api.getFeedAPI(false);
-
         feedAPI.file = file;
+
+        // Detect if replies are being hidden and activeFeedEntryId belongs to a reply
+        // that is in currently being updated parent, in order to disable active item
+        if (
+            activeFeedEntryId &&
+            replies.length === 1 &&
+            feedItems.find(
+                (item: FeedItem) =>
+                    item.id === id &&
+                    (item.type === FEED_ITEM_TYPE_ANNOTATION || item.type === FEED_ITEM_TYPE_COMMENT) &&
+                    item.replies &&
+                    item.replies.some(({ id: replyId }) => replyId === activeFeedEntryId),
+            )
+        ) {
+            history.replace(this.getActiveCommentPath());
+        }
+
         feedAPI.updateFeedItem({ replies }, id);
 
         this.fetchFeedItems();
@@ -920,11 +941,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {string} itemId - feed item id
      * @return {FeedItem | undefined}
      */
-    getFocusableFeedItemById = (feedItems: FeedItems, itemId?: string): FocusableFeedItem | typeof undefined => {
+    getFocusableFeedItemById = (feedItems: FeedItems, itemId?: string): FeedItem | typeof undefined => {
         if (!itemId) {
             return undefined;
         }
-        // $FlowFixMe: type has been checked to be either 'comment', 'annotation' or 'task' by this.isItemTypeFocusable(type)
         return feedItems.find(({ id, type }) => id === itemId && this.isItemTypeFocusable(type));
     };
 
@@ -935,14 +955,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {string} replyId - feed item's reply id
      * @return {FeedItem | undefined}
      */
-    getCommentFeedItemByReplyId = (feedItems: FeedItems, replyId?: string): CommentFeedItem | typeof undefined => {
+    getCommentFeedItemByReplyId = (feedItems: FeedItems, replyId?: string): FeedItem | typeof undefined => {
         if (!replyId) {
             return undefined;
         }
-        // $FlowFixMe: type has been checked to be either 'comment' or 'annotation' by !this.isItemTypeComment(type)
         return feedItems.find(item => {
-            // $FlowFixMe: type has been checked to be either 'comment' or 'annotation' by !this.isItemTypeComment(type)
-            if (!this.isItemTypeComment(item.type) || !item.replies || !Array.isArray(item.replies)) {
+            if ((item.type !== FEED_ITEM_TYPE_ANNOTATION && item.type !== FEED_ITEM_TYPE_COMMENT) || !item.replies) {
                 return false;
             }
             return item.replies.some(({ id }) => id === replyId);
@@ -1016,6 +1034,17 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             );
         });
     };
+
+    getActiveCommentPath(commentId?: string): string {
+        if (!commentId) {
+            return '/activity';
+        }
+
+        return generatePath('/:sidebar/comments/:commentId?', {
+            sidebar: 'activity',
+            commentId,
+        });
+    }
 
     /**
      * Fetches replies (comments) of a comment or annotation
