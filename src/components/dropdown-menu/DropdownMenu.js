@@ -122,6 +122,11 @@ class DropdownMenu extends React.Component<Props, State> {
         }
     };
 
+    handleDoubleClick = (event: SyntheticEvent<>) => {
+        event.stopPropagation();
+        event.preventDefault();
+    };
+
     handleButtonKeyDown = (event: SyntheticKeyboardEvent<>) => {
         const { isOpen } = this.state;
 
@@ -205,6 +210,7 @@ class DropdownMenu extends React.Component<Props, State> {
             key: this.menuButtonID,
             onClick: this.handleButtonClick, // NOTE: Overrides button's handler
             onKeyDown: this.handleButtonKeyDown, // NOTE: Overrides button's handler
+            onDoubleClick: this.handleDoubleClick, // NOTE: Overrides button's handler
             'aria-expanded': isOpen ? 'true' : 'false',
         };
 
@@ -222,6 +228,7 @@ class DropdownMenu extends React.Component<Props, State> {
             key: this.menuID,
             initialFocusIndex,
             onClose: this.handleMenuClose,
+            onDoubleClick: this.handleDoubleClick,
             'aria-labelledby': this.menuButtonID,
         };
 
