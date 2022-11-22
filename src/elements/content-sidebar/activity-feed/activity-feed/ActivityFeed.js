@@ -193,7 +193,7 @@ class ActivityFeed extends React.Component<Props, State> {
         const { target } = event;
         if (target instanceof Element) {
             const { scrollTop } = target;
-            this.setState({ isScrolled: scrollTop !== 0 });
+            this.setState({ isScrolled: scrollTop > 0 });
         }
     };
 

@@ -65,7 +65,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
         />
       </div>
       <div
-        className="bcs-Comment-separator"
+        className="bcs-Comment-timestamp"
       >
         <ActivityTimestamp
           date={1506534041000}
@@ -111,7 +111,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
         />
       </div>
       <div
-        className="bcs-Comment-separator"
+        className="bcs-Comment-timestamp"
       >
         <ActivityTimestamp
           date={1506534041000}
@@ -159,7 +159,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
         />
       </div>
       <div
-        className="bcs-Comment-separator"
+        className="bcs-Comment-timestamp"
       >
         <ActivityTimestamp
           date={1506534041000}
@@ -209,7 +209,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
         />
       </div>
       <div
-        className="bcs-Comment-separator"
+        className="bcs-Comment-timestamp"
       >
         <ActivityTimestamp
           date={1506534041000}

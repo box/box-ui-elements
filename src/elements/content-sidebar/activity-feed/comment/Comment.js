@@ -227,7 +227,7 @@ class Comment extends React.Component<Props, State> {
                                 getUserProfileUrl={getUserProfileUrl}
                             />
                         </div>
-                        <div className="bcs-Comment-separator">
+                        <div className="bcs-Comment-timestamp">
                             <ActivityTimestamp date={createdAtTimestamp} />
                         </div>
                         <ActivityStatus status={status} />

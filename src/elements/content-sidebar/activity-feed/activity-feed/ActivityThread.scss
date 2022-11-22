@@ -20,6 +20,14 @@
         padding: 0;
     }
 
+    .bcs-Comment-timestamp {
+        margin-bottom: 16px;
+
+        .bcs-ActivityTimestamp {
+            color: $bdl-gray;
+        }
+    }
+
     .btn-plain:focus-visible {
         outline: auto;
     }

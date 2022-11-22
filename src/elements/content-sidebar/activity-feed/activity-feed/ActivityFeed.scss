@@ -32,10 +32,10 @@
         position: absolute;
         // position it behind bcs-content-header
         top: -$sidebarHeaderHeight;
-        right: 20px;
-        left: 20px;
+        right: $sidebarActivityFeedSpacingHorizontal;
+        left: $sidebarActivityFeedSpacingHorizontal;
         height: $sidebarHeaderHeight;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
+        box-shadow: 0 $bdl-grid-unit $bdl-grid-unit * 3 $bdl-gray-10;
         content: ' ';
     }
 
