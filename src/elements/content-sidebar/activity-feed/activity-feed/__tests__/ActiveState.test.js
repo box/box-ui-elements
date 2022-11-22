@@ -211,8 +211,8 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
     });
 
     test('should have only one ActiveItem selected at a time', () => {
-        const commentItemSelor = '[data-testid="comment"]';
-        const threadselector = '[data-testid="comment"] > [data-testid="activity-thread"]';
+        const commentSelector = '[data-testid="comment"]';
+        const threadSelector = '[data-testid="comment"] > [data-testid="activity-thread"]';
         const wrapper = getShallowWrapper({
             items: [comment1, comment2],
             activeFeedEntryId: comment1.id,
@@ -221,31 +221,31 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
 
         expect(
             wrapper
-                .find(commentItemSelor)
+                .find(commentSelector)
                 .at(0)
                 .prop('isFocused'),
         ).toBe(true);
         expect(
             wrapper
-                .find(commentItemSelor)
+                .find(commentSelector)
                 .at(1)
                 .prop('isFocused'),
         ).toBe(false);
 
         wrapper
-            .find(threadselector)
+            .find(threadSelector)
             .at(1)
             .simulate('replySelect', true);
 
         expect(
             wrapper
-                .find(commentItemSelor)
+                .find(commentSelector)
                 .at(0)
                 .prop('isFocused'),
         ).toBe(false);
         expect(
             wrapper
-                .find(commentItemSelor)
+                .find(commentSelector)
                 .at(1)
                 .prop('isFocused'),
         ).toBe(true);
