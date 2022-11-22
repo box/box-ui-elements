@@ -137,6 +137,8 @@ const ItemList = ({
     onItemDoubleClick,
     onItemNameClick,
     onLoadMoreItems,
+    headerHeight,
+    headerRenderer,
     itemIconRenderer,
     itemNameLinkRenderer,
     itemButtonRenderer,
@@ -145,8 +147,6 @@ const ItemList = ({
     width,
     height,
     rowHeight = DEFAULT_ROW_HEIGHT,
-    headerHeight,
-    headerRowRenderer,
 }) => {
     const getRow = ({ index }) => items[index];
 
@@ -221,6 +221,8 @@ const ItemList = ({
                 headerClassName="table-header-item"
                 width={width}
                 height={height}
+                headerHeight={headerHeight}
+                headerRowRenderer={headerRenderer}
                 rowHeight={rowHeight}
                 rowCount={items.length}
                 onRowClick={onItemClick}
@@ -228,8 +230,6 @@ const ItemList = ({
                 rowGetter={getRow}
                 rowRenderer={renderRow}
                 noRowsRenderer={noItemsRenderer}
-                headerHeight={headerHeight}
-                headerRowRenderer={headerRowRenderer}
                 {...tableProps}
             >
                 <Column
@@ -286,6 +286,8 @@ ItemList.propTypes = {
     onItemDoubleClick: PropTypes.func,
     onItemNameClick: PropTypes.func,
     onLoadMoreItems: PropTypes.func,
+    headerHeight: PropTypes.number,
+    headerRenderer: PropTypes.func,
     itemIconRenderer: PropTypes.func,
     itemNameLinkRenderer: PropTypes.func,
     itemButtonRenderer: PropTypes.func,
@@ -294,8 +296,6 @@ ItemList.propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     rowHeight: PropTypes.number,
-    headerHeight: PropTypes.number,
-    headerRowRenderer: PropTypes.func,
 };
 
 export { ItemList as ItemListBase };

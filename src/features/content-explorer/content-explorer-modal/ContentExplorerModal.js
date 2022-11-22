@@ -16,14 +16,15 @@ type Props = {
     className?: string,
     customInput?: React.ComponentType<any>,
     description?: string,
-    headerHeight?: number,
-    headerRowRenderer?: Function,
     isOpen?: boolean,
     isResponsive?: boolean,
+    itemRowHeight?: number,
+    itemRowRenderer?: Function,
+    listHeaderHeight?: number,
+    listHeaderRenderer?: Function,
     onRequestClose?: Function,
     onSelectItem?: (item: Object, index: number) => void,
     onSelectedClick?: () => void,
-    rowHeight?: number,
     title?: string,
 };
 

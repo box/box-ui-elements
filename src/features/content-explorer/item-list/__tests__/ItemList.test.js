@@ -293,7 +293,7 @@ describe('features/content-explorer/item-list/ItemList', () => {
     });
 
     describe('headerHeight', () => {
-        test('should display folder name header label', () => {
+        test('should display header row with specified height', () => {
             const headerHeight = 30;
             const wrapper = renderComponent({
                 headerHeight,
@@ -304,10 +304,10 @@ describe('features/content-explorer/item-list/ItemList', () => {
         });
     });
 
-    describe('headerRowRenderer', () => {
-        test('should display custom header', () => {
+    describe('headerRenderer', () => {
+        test('should use headerRenderer when specified', () => {
             const wrapper = renderComponent({
-                headerRowRenderer: () => <div data-testid="customHeader">Custom Header</div>,
+                headerRenderer: () => <div data-testid="customHeader">Custom Header</div>,
             });
             const headerRow = wrapper.find("[data-testid='customHeader']");
             expect(headerRow.length).toBe(1);
