@@ -34,7 +34,7 @@
             border-top: none;
             border-radius: 0 0 $bdl-border-radius-size-med $bdl-border-radius-size-med;
 
-            // NOTE (cwei): targets ie11
+            // NOTE: targets ie11
             @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
                 max-height: 300px;
             }
@@ -67,7 +67,7 @@
 
             // NOTE: targets ie11
             @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-                // Note (lbarrick) Avoids cutting off the last item in the list.
+                // NOTE: Avoids cutting off the last item in the list
                 height: 300px;
             }
 

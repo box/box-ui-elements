@@ -449,7 +449,7 @@ class ContentExplorer extends Component {
         // ContentExplorerActionButtons instead. There's a lot of implicit knowledge
         // of what the action buttons are and what they should be doing.
         if (contentExplorerMode === ContentExplorerModes.MULTI_SELECT) {
-            // NOTE:o nly expecting to have 1 (choose) button so as long as something
+            // NOTE: only expecting to have 1 (choose) button so as long as something
             // is selected and that item's isActionDisabled is false, we enable the action button
             areActionButtonsDisabled =
                 selectedItemsIds.length === 0 ||
