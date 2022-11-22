@@ -2,6 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 
+import { Column } from '@box/react-virtualized';
 import { ItemListBase as ItemList } from '../ItemList';
 import ContentExplorerMode from '../../modes';
 
@@ -265,6 +266,29 @@ describe('features/content-explorer/item-list/ItemList', () => {
             });
 
             expect(wrapper.find('h1').text()).toEqual(emptyText);
+        });
+    });
+
+    describe('additionalColumns', () => {
+        test('should render extra column', () => {
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+                { id: '3', name: 'item3' },
+            ];
+
+            const additionalColumns = [
+                <Column
+                    key="accessLevel"
+                    className="item-list-accessLevel-col"
+                    dataKey="accessLevel"
+                    flexGrow={1}
+                    flexShrink={0}
+                    width={0}
+                />,
+            ];
+            const wrapper = renderComponent({ items, additionalColumns });
+            expect(wrapper.find('.item-list-accessLevel-col').length).toBe(3);
         });
     });
 });

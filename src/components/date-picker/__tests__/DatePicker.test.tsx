@@ -184,9 +184,9 @@ describe('components/date-picker/DatePicker', () => {
             maxDate: new Date('2021-12-31T00:00:00'),
         });
 
-        expect(wrapper.find('Alert16').length).toEqual(0);
+        expect(wrapper.find('AlertBadge16').length).toEqual(0);
         wrapper.find('.date-picker-input').simulate('change', { target: { value: '2022-01-01' } });
-        expect(wrapper.find('Alert16').length).toEqual(1);
+        expect(wrapper.find('AlertBadge16').length).toEqual(1);
     });
 
     test('should show alert icon when date value is before minimum date', () => {
@@ -195,9 +195,9 @@ describe('components/date-picker/DatePicker', () => {
             minDate: new Date('2022-01-01T00:00:00'),
         });
 
-        expect(wrapper.find('Alert16').length).toEqual(0);
+        expect(wrapper.find('AlertBadge16').length).toEqual(0);
         wrapper.find('.date-picker-input').simulate('change', { target: { value: '2021-12-31' } });
-        expect(wrapper.find('Alert16').length).toEqual(1);
+        expect(wrapper.find('AlertBadge16').length).toEqual(1);
     });
 
     test('should show tooltip when error exists', () => {

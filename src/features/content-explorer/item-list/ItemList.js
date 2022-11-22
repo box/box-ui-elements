@@ -23,6 +23,8 @@ const TABLE_CELL_CLASS = 'table-cell';
 
 const InfiniteLoaderTable = withInfiniteLoader(Table);
 
+const DEFAULT_ROW_HEIGHT = 40;
+
 const withAutoSizer = WrappedComponent => {
     return props => {
         return (
@@ -123,6 +125,7 @@ const itemLoadingPlaceholderRenderer = rendererParams => {
 };
 
 const ItemList = ({
+    additionalColumns,
     contentExplorerMode,
     className = '',
     isResponsive = false,
@@ -141,6 +144,7 @@ const ItemList = ({
     noItemsRenderer,
     width,
     height,
+    rowHeight = DEFAULT_ROW_HEIGHT,
 }) => {
     const getRow = ({ index }) => items[index];
 
@@ -215,7 +219,7 @@ const ItemList = ({
                 headerClassName="table-header-item"
                 width={width}
                 height={height}
-                rowHeight={40}
+                rowHeight={rowHeight}
                 rowCount={items.length}
                 onRowClick={onItemClick}
                 onRowDoubleClick={onItemDoubleClick}
@@ -246,6 +250,7 @@ const ItemList = ({
                     flexGrow={1}
                     flexShrink={0}
                 />
+                {additionalColumns}
                 <Column
                     className="item-list-button-col"
                     cellRenderer={itemButtonCellRenderer}
@@ -265,6 +270,7 @@ const ItemList = ({
 ItemList.displayName = 'ItemList';
 
 ItemList.propTypes = {
+    additionalColumns: PropTypes.arrayOf(PropTypes.element),
     className: PropTypes.string,
     contentExplorerMode: ContentExplorerModePropType.isRequired,
     isResponsive: PropTypes.bool,
@@ -283,6 +289,7 @@ ItemList.propTypes = {
     noItemsRenderer: PropTypes.func,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
+    rowHeight: PropTypes.number,
 };
 
 export { ItemList as ItemListBase };

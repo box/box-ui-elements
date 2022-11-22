@@ -125,6 +125,13 @@ class ContentExplorer extends Component {
         listHeight: PropTypes.number.isRequired,
         /** Props for the search input */
         searchInputProps: PropTypes.object,
+        /** Height of the row */
+        rowHeight: PropTypes.number,
+        /**
+         * Extra columns displayed in the folders table after folder name column
+         * Each column has to be a Column element
+         */
+        additionalColumns: PropTypes.arrayOf(PropTypes.element),
     };
 
     static defaultProps = {
@@ -421,6 +428,8 @@ class ContentExplorer extends Component {
             listWidth,
             listHeight,
             searchInputProps,
+            rowHeight,
+            additionalColumns,
             ...rest
         } = this.props;
         const { isInSearchMode, foldersPath, selectedItems, isSelectAllChecked } = this.state;
@@ -496,6 +505,7 @@ class ContentExplorer extends Component {
                     />
                 )}
                 <ItemList
+                    additionalColumns={additionalColumns}
                     contentExplorerMode={contentExplorerMode}
                     height={listHeight}
                     isResponsive={isResponsive}
@@ -513,6 +523,7 @@ class ContentExplorer extends Component {
                     onLoadMoreItems={onLoadMoreItems}
                     selectedItems={selectedItems}
                     width={listWidth}
+                    rowHeight={rowHeight}
                 />
                 <ContentExplorerActionButtons
                     actionButtonsProps={actionButtonsProps}

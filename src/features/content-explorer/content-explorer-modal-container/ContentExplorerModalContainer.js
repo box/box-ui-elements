@@ -116,6 +116,13 @@ class ContentExplorerModalContainer extends Component {
         searchInputProps: PropTypes.object,
         /** Custom text for the choose button */
         chooseButtonText: PropTypes.node,
+        /** Table row height */
+        rowHeight: PropTypes.number,
+        /**
+         * Extra columns displayed in the folders table after folder name column
+         * Each column has to be a Column element
+         */
+        additionalColumns: PropTypes.arrayOf(PropTypes.element),
     };
 
     static defaultProps = {
