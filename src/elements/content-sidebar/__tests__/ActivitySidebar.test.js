@@ -8,6 +8,9 @@ import { FEED_ITEM_TYPE_COMMENT } from '../../../constants';
 jest.mock('lodash/debounce', () => jest.fn(i => i));
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
+// const mockReplace = jest.fn();
+// jest.mock('lodash/uniqueId', () => () => 'uniqueId');
+
 const userError = 'Bad box user!';
 
 describe('elements/content-sidebar/ActivitySidebar', () => {
@@ -23,6 +26,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         deleteThreadedComment: jest.fn(),
         feedItems: jest.fn(),
         fetchReplies: jest.fn(),
+        fetchThreadedComment: jest.fn(),
         updateAnnotation: jest.fn(),
         updateComment: jest.fn(),
         updateFeedItem: jest.fn(),
@@ -548,6 +552,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
+            wrapper.setState({
+                feedItems: [],
+            });
+
             const id = '123';
             const replies = cloneDeep(formattedReplies);
 
@@ -557,6 +565,97 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             expect(api.getFeedAPI().updateFeedItem).toBeCalledWith({ replies }, id);
             expect(instance.fetchFeedItems).toBeCalled();
+        });
+
+        test('should disable active item if replies are being hidden and activeFeedEntryId belongs to a reply that is in currently being updated parent', () => {
+            const historyReplace = jest.fn();
+            const activeReplyId = '123';
+
+            const wrapper = getWrapper({
+                activeFeedEntryId: activeReplyId,
+                history: { replace: historyReplace },
+            });
+            const instance = wrapper.instance();
+            instance.getActiveCommentPath = jest.fn();
+
+            const itemId = '999';
+            const lastReplyId = '456';
+            const replies = [{ id: lastReplyId }];
+
+            wrapper.setState({
+                feedItems: [{ id: itemId, replies: [{ id: activeReplyId }, { id: lastReplyId }], type: 'comment' }],
+            });
+
+            instance.updateReplies(itemId, replies);
+
+            expect(instance.getActiveCommentPath).toBeCalledWith();
+            expect(historyReplace).toBeCalled();
+        });
+    });
+
+    describe('fetchRepliesForFeedItems()', () => {
+        test('should not call getActiveFeedEntryData if activeFeedEntryId is not set', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.getActiveFeedEntryData = jest.fn();
+
+            instance.fetchRepliesForFeedItems([]);
+
+            expect(instance.getActiveFeedEntryData).not.toBeCalled();
+        });
+
+        test('should call getActiveFeedEntryData with given feedItems if activeFeedEntryId is set', () => {
+            const wrapper = getWrapper({
+                activeFeedEntryId: '123',
+            });
+            const instance = wrapper.instance();
+            instance.getActiveFeedEntryData = jest.fn().mockImplementation(() => Promise.resolve());
+            const feedItems = [{ id: '123' }];
+
+            instance.fetchRepliesForFeedItems(feedItems);
+
+            expect(instance.getActiveFeedEntryData).toBeCalledWith(feedItems);
+        });
+
+        test.each`
+            id           | type         | isActiveEntryInFeedResult
+            ${undefined} | ${undefined} | ${true}
+            ${'123'}     | ${'comment'} | ${true}
+            ${undefined} | ${undefined} | ${false}
+            ${'123'}     | ${'task'}    | ${false}
+        `(
+            'should call fetchFeedItemsSuccessCallback with given feedItems unchanged if isActiveEntryInFeed results with $isActiveEntryInFeedResult and getActiveFeedEntryData resolves with id=$id and type=$type',
+            async ({ id, type, isActiveEntryInFeedResult }) => {
+                const wrapper = getWrapper({
+                    activeFeedEntryId: '123',
+                });
+                const instance = wrapper.instance();
+                instance.fetchFeedItemsSuccessCallback = jest.fn();
+                instance.isActiveEntryInFeed = jest.fn().mockImplementation(() => isActiveEntryInFeedResult);
+                instance.getActiveFeedEntryData = jest.fn().mockImplementation(() => Promise.resolve({ id, type }));
+                const feedItems = [{ id: '123' }];
+
+                await instance.fetchRepliesForFeedItems(feedItems);
+
+                expect(instance.fetchFeedItemsSuccessCallback).toBeCalledWith(feedItems);
+            },
+        );
+
+        test('should call getFeedItemsWithReplies if getActiveFeedEntryData resolves with id and type of feed item that is not the feed ', async () => {
+            const wrapper = getWrapper({
+                activeFeedEntryId: '123',
+            });
+            const instance = wrapper.instance();
+            instance.isActiveEntryInFeed = jest.fn().mockImplementation(() => false);
+            instance.getActiveFeedEntryData = jest
+                .fn()
+                .mockImplementation(() => Promise.resolve({ id: '123', type: 'comment' }));
+            instance.getFeedItemsWithReplies = jest.fn().mockImplementation(() => Promise.resolve());
+            const feedItems = [{ id: '123', replies: [{ id: '456' }] }];
+
+            await instance.fetchRepliesForFeedItems(feedItems);
+
+            expect(instance.getFeedItemsWithReplies).toBeCalledWith(feedItems, '123', 'comment');
         });
     });
 
@@ -645,6 +744,37 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 );
             },
         );
+
+        test('should call feedItems with fetchRepliesForFeedItems as success callback instead of fetchFeedItemsSuccessCallback when shouldShowReplies and shouldRefreshCache are true and active comment is set, ', () => {
+            const shouldShowReplies = true;
+            const shouldRefreshCache = true;
+            wrapper = getWrapper({
+                activeFeedEntryId: '123',
+                activeFeedEntryType: 'comment',
+                hasReplies: shouldShowReplies,
+            });
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+            instance.fetchFeedItemsErrorCallback = jest.fn();
+            instance.fetchRepliesForFeedItems = jest.fn();
+
+            instance.fetchFeedItems(shouldRefreshCache);
+
+            expect(feedAPI.feedItems).toHaveBeenCalledWith(
+                file,
+                true,
+                instance.fetchRepliesForFeedItems,
+                instance.fetchFeedItemsErrorCallback,
+                instance.errorCallback,
+                {
+                    shouldShowAnnotations: false,
+                    shouldShowAppActivity: false,
+                    shouldShowReplies: true,
+                    shouldShowTasks: true,
+                    shouldShowVersions: true,
+                },
+            );
+        });
     });
 
     describe('fetchFeedItemsSuccessCallback()', () => {
@@ -716,6 +846,83 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 showNotification: true,
                 errors: ['0', '1'],
             });
+        });
+    });
+
+    describe('getCommentFeedItemWithReplies()', () => {
+        test('should return given feedItem with given replies', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            const item = { id: '123' };
+            const replies = [{ id: '456' }];
+            const expectedItem = { id: '123', replies: [{ id: '456' }] };
+
+            expect(instance.getCommentFeedItemWithReplies(item, replies)).toMatchObject(expectedItem);
+        });
+    });
+
+    describe('getFeedItemsWithReplies()', () => {
+        test.each`
+            id           | type
+            ${undefined} | ${'comment'}
+            ${'123'}     | ${undefined}
+            ${undefined} | ${undefined}
+        `('should resolve with given feedItems if id=$id and type=$type', async ({ id, type }) => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const feedItems = [{ id: '123' }];
+
+            const result = await instance.getFeedItemsWithReplies(feedItems, id, type);
+
+            expect(result).toMatchObject(feedItems);
+        });
+
+        test('should call fetchReplies feed api and resolve with updated feedItems', async () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const feedItems = [{ id: '123', type: 'comment' }];
+            const id = '123';
+            const type = 'comment';
+            const replies = [{ id: '456' }, { id: '789' }];
+            const expectedItem = { id: '123', type: 'comment', replies };
+            const expectedItems = [expectedItem];
+
+            instance.isItemTypeComment = jest.fn().mockImplementation(() => true);
+            instance.getCommentFeedItemWithReplies = jest.fn().mockImplementation(() => expectedItem);
+            api.getFeedAPI().fetchReplies = jest
+                .fn()
+                .mockImplementationOnce((fileParam, idParam, typeParam, successCallback) => {
+                    successCallback(replies);
+                });
+
+            const result = await instance.getFeedItemsWithReplies(feedItems, id, type);
+
+            expect(api.getFeedAPI().fetchReplies).toBeCalledWith(
+                file,
+                id,
+                type,
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(result).toMatchObject(expectedItems);
+        });
+
+        test('should reject with error if fetchReplies is called and fails', async () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const feedItems = [{ id: '123', type: 'comment' }];
+            const id = '123';
+            const type = 'comment';
+            const error = { status: '500' };
+
+            api.getFeedAPI().fetchReplies = jest
+                .fn()
+                .mockImplementationOnce((fileParam, idParam, typeParam, successCallback, errorCallback) => {
+                    errorCallback(error);
+                });
+
+            await expect(instance.getFeedItemsWithReplies(feedItems, id, type)).rejects.toMatchObject(error);
         });
     });
 
@@ -806,6 +1013,224 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.errorCallback,
                 search,
             );
+        });
+    });
+
+    describe('getFocusableFeedItemById()', () => {
+        test.each`
+            feedItems                                | itemId       | expected
+            ${[]}                                    | ${undefined} | ${undefined}
+            ${[]}                                    | ${'123'}     | ${undefined}
+            ${[{ id: '123', type: 'comment' }]}      | ${'123'}     | ${{ id: '123', type: 'comment' }}
+            ${[{ id: '123', type: 'annotation' }]}   | ${'123'}     | ${{ id: '123', type: 'annotation' }}
+            ${[{ id: '123', type: 'task' }]}         | ${'123'}     | ${{ id: '123', type: 'task' }}
+            ${[{ id: '123', type: 'app_activity' }]} | ${'123'}     | ${undefined}
+            ${[{ id: '123', type: 'comment' }]}      | ${'456'}     | ${undefined}
+        `(
+            'given feedItems=$feedItems and itemId=$itemId should return $expected',
+            ({ feedItems, itemId, expected }) => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+
+                expect(instance.getFocusableFeedItemById(feedItems, itemId)).toEqual(expected);
+            },
+        );
+    });
+
+    describe('getCommentFeedItemByReplyId()', () => {
+        test.each`
+            feedItems                                                     | itemId       | expected
+            ${[]}                                                         | ${'123'}     | ${undefined}
+            ${[]}                                                         | ${undefined} | ${undefined}
+            ${[{ id: '123', type: 'comment', replies: [{ id: '456' }] }]} | ${'123'}     | ${undefined}
+            ${[{ id: '123', type: 'comment', replies: [{ id: '456' }] }]} | ${'999'}     | ${undefined}
+            ${[{ id: '123', type: 'comment', replies: [{ id: '456' }] }]} | ${'456'}     | ${{ id: '123', type: 'comment', replies: [{ id: '456' }] }}
+            ${[{ id: '123', type: 'comment' }]}                           | ${'456'}     | ${undefined}
+            ${[{ id: '123', type: 'task', replies: [{ id: '456' }] }]}    | ${'456'}     | ${undefined}
+        `(
+            'given feedItems=$feedItems and itemId=$itemId should return $expected',
+            ({ feedItems, itemId, expected }) => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+
+                expect(instance.getCommentFeedItemByReplyId(feedItems, itemId)).toEqual(expected);
+            },
+        );
+    });
+
+    describe('isActiveEntryInFeed()', () => {
+        test.each`
+            getFocusableFeedItemByIdResult | getCommentFeedItemByReplyIdResult | expected
+            ${false}                       | ${false}                          | ${false}
+            ${true}                        | ${false}                          | ${true}
+            ${false}                       | ${true}                           | ${true}
+        `(
+            'should return $expected when getFocusableFeedItemByIdResult returns $getFocusableFeedItemByIdResult and getCommentFeedItemByReplyId returns $getCommentFeedItemByReplyIdResult',
+            ({ getFocusableFeedItemByIdResult, getCommentFeedItemByReplyIdResult, expected }) => {
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                instance.getFocusableFeedItemById = jest
+                    .fn()
+                    .mockImplementationOnce(() => getFocusableFeedItemByIdResult);
+                instance.getCommentFeedItemByReplyId = jest
+                    .fn()
+                    .mockImplementationOnce(() => getCommentFeedItemByReplyIdResult);
+
+                expect(instance.isActiveEntryInFeed([], '123')).toEqual(expected);
+            },
+        );
+    });
+
+    describe('isItemTypeFocusable()', () => {
+        test.each`
+            type              | expected
+            ${'annotation'}   | ${true}
+            ${'app_activity'} | ${false}
+            ${'comment'}      | ${true}
+            ${'file_version'} | ${false}
+            ${'task'}         | ${true}
+        `('should return $expected given type=$type', ({ type, expected }) => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            expect(instance.isItemTypeFocusable(type)).toEqual(expected);
+        });
+    });
+
+    describe('isItemTypeComment()', () => {
+        test.each`
+            type              | expected
+            ${'annotation'}   | ${true}
+            ${'app_activity'} | ${false}
+            ${'comment'}      | ${true}
+            ${'file_version'} | ${false}
+            ${'task'}         | ${false}
+        `('should return $expected given type=$type', ({ type, expected }) => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            expect(instance.isItemTypeComment(type)).toEqual(expected);
+        });
+    });
+
+    describe('getActiveFeedEntryData()', () => {
+        test('should resolve with active feed entry data if active entry is a first level Feed item', async () => {
+            const wrapper = getWrapper({
+                activeFeedEntryId: '123',
+                activeFeedEntryType: 'annotation',
+            });
+            const instance = wrapper.instance();
+            const data = { id: '123', type: 'comment' };
+
+            instance.getFocusableFeedItemById = jest.fn().mockImplementation(() => data);
+
+            const result = await instance.getActiveFeedEntryData([]);
+
+            expect(result).toEqual(data);
+        });
+
+        test('should resolve with active feed entry data if active entry is within replies of any first level Feed items', async () => {
+            const wrapper = getWrapper({
+                activeFeedEntryId: '123',
+                activeFeedEntryType: 'annotation',
+            });
+            const instance = wrapper.instance();
+            const data = { id: '123', type: 'comment' };
+
+            instance.getFocusableFeedItemById = jest.fn().mockImplementation(() => undefined);
+            instance.getCommentFeedItemByReplyId = jest.fn().mockImplementation(() => data);
+
+            const result = await instance.getActiveFeedEntryData([]);
+
+            expect(result).toEqual(data);
+        });
+
+        test('should call fetchThreadedComment from feed api if the active entry could not be found within feed items', async () => {
+            const wrapper = getWrapper({
+                activeFeedEntryId: '123',
+                activeFeedEntryType: 'comment',
+            });
+            const instance = wrapper.instance();
+            const expectedData = { id: '123', type: 'comment' };
+            const parentItem = { id: '123', type: 'comment', replies: [{ id: '456' }] };
+            const feedItems = [parentItem];
+
+            instance.getFocusableFeedItemById = jest
+                .fn()
+                .mockImplementation(() => parentItem)
+                .mockImplementationOnce(() => undefined);
+            instance.getCommentFeedItemByReplyId = jest.fn().mockImplementation(() => undefined);
+            api.getFeedAPI().fetchThreadedComment = jest
+                .fn()
+                .mockImplementationOnce((f, commentId, successCallback) => {
+                    successCallback({ parent: {} });
+                });
+
+            const result = await instance.getActiveFeedEntryData(feedItems);
+
+            expect(api.getFeedAPI().fetchThreadedComment).toBeCalledWith(
+                file,
+                '123',
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(result).toMatchObject(expectedData);
+        });
+
+        test('if fetchThreadedComment is called unsuccessfuly and error status is 404, should resolve with {}', async () => {
+            const wrapper = getWrapper({
+                activeFeedEntryId: '123',
+                activeFeedEntryType: 'comment',
+            });
+            const instance = wrapper.instance();
+            const feedItems = [{ id: '123', type: 'comment' }];
+            const error = { status: 404 };
+
+            api.getFeedAPI().fetchThreadedComment = jest
+                .fn()
+                .mockImplementationOnce((f, commentId, successCallback, errorCallback) => {
+                    errorCallback(error);
+                });
+            instance.getFocusableFeedItemById = jest.fn().mockImplementation(() => undefined);
+            instance.getCommentFeedItemByReplyId = jest.fn().mockImplementation(() => undefined);
+
+            const result = await instance.getActiveFeedEntryData(feedItems);
+
+            expect(result).toMatchObject({});
+        });
+
+        test('if fetchThreadedComment is called unsuccessfuly and error status != 404, should reject with received error', async () => {
+            const wrapper = getWrapper({
+                activeFeedEntryId: '123',
+                activeFeedEntryType: 'comment',
+            });
+            const instance = wrapper.instance();
+            const feedItems = [{ id: '123', type: 'comment' }];
+            const error = { status: 500 };
+
+            api.getFeedAPI().fetchThreadedComment = jest
+                .fn()
+                .mockImplementationOnce((f, commentId, successCallback, errorCallback) => {
+                    errorCallback(error);
+                });
+            instance.getFocusableFeedItemById = jest.fn().mockImplementation(() => undefined);
+            instance.getCommentFeedItemByReplyId = jest.fn().mockImplementation(() => undefined);
+
+            await expect(instance.getActiveFeedEntryData(feedItems)).rejects.toMatchObject(error);
+        });
+    });
+
+    describe('getActiveCommentPath()', () => {
+        test.each`
+            commentId    | expected
+            ${undefined} | ${'/activity'}
+            ${'123'}     | ${'/activity/comments/123'}
+            ${'456'}     | ${'/activity/comments/456'}
+        `('should return $expected given commentId=$commentId', ({ commentId, expected }) => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            expect(instance.getActiveCommentPath(commentId)).toEqual(expected);
         });
     });
 
