@@ -125,6 +125,7 @@ const itemLoadingPlaceholderRenderer = rendererParams => {
 };
 
 const ItemList = ({
+    additionalColumns,
     contentExplorerMode,
     className = '',
     isResponsive = false,
@@ -249,6 +250,7 @@ const ItemList = ({
                     flexGrow={1}
                     flexShrink={0}
                 />
+                {additionalColumns}
                 <Column
                     className="item-list-button-col"
                     cellRenderer={itemButtonCellRenderer}
@@ -268,6 +270,7 @@ const ItemList = ({
 ItemList.displayName = 'ItemList';
 
 ItemList.propTypes = {
+    additionalColumns: PropTypes.arrayOf(PropTypes.element),
     className: PropTypes.string,
     contentExplorerMode: ContentExplorerModePropType.isRequired,
     isResponsive: PropTypes.bool,
