@@ -29,15 +29,13 @@ import type {
     FeedItem,
     FeedItems,
     FeedItemStatus,
-    FocusableFeedItemType,
 } from '../../../../common/types/feed';
 import type { SelectorItems, User } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 
 type Props = {
-    activeFeedEntryId?: string,
-    activeFeedEntryType?: FocusableFeedItemType,
+    activeFeedItem: FeedItem,
     activeFeedItemRef: { current: null | HTMLElement },
     approverSelectorContacts?: SelectorItems<>,
     currentFileVersionId: string,
@@ -87,8 +85,7 @@ type Props = {
 };
 
 const ActiveState = ({
-    activeFeedEntryId,
-    activeFeedEntryType,
+    activeFeedItem,
     activeFeedItemRef,
     approverSelectorContacts,
     currentFileVersionId,
@@ -121,8 +118,6 @@ const ActiveState = ({
     onVersionInfo,
     translations,
 }: Props): React.Node => {
-    const activeEntry = items.find(({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType);
-
     const onHideRepliesHandler = (parentId: string) => (lastReply: CommentType) => {
         onHideReplies(parentId, [lastReply]);
     };
@@ -150,7 +145,7 @@ const ActiveState = ({
     return (
         <ul className="bcs-activity-feed-active-state">
             {items.map((item: FeedItem) => {
-                const isFocused = item === activeEntry;
+                const isFocused = item === activeFeedItem;
                 const refValue = isFocused ? activeFeedItemRef : undefined;
                 const itemFileVersionId = getProp(item, 'file_version.id');
 

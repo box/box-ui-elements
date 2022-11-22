@@ -11,7 +11,7 @@ import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueId from 'lodash/uniqueId';
 import { FormattedMessage } from 'react-intl';
-import { type ContextRouter } from 'react-router-dom';
+import { generatePath, type ContextRouter } from 'react-router-dom';
 import ActivityFeed from './activity-feed';
 import AddTaskButton from './AddTaskButton';
 import API from '../../api';
@@ -30,6 +30,9 @@ import ActivitySidebarFilter from './ActivitySidebarFilter';
 import {
     DEFAULT_COLLAB_DEBOUNCE,
     ERROR_CODE_FETCH_ACTIVITY,
+    FEED_ITEM_TYPE_ANNOTATION,
+    FEED_ITEM_TYPE_COMMENT,
+    FEED_ITEM_TYPE_TASK,
     FEED_ITEM_TYPE_VERSION,
     ORIGIN_ACTIVITY_SIDEBAR,
     SIDEBAR_VIEW_ACTIVITY,
@@ -48,9 +51,12 @@ import type {
     BoxCommentPermission,
     Comment,
     CommentFeedItemType,
+    FocusableFeedItem,
     FocusableFeedItemType,
+    FeedItem,
     FeedItems,
     FeedItemStatus,
+    FeedItemType,
 } from '../../common/types/feed';
 import type { ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { WithLoggerProps } from '../../common/types/logging';
@@ -530,11 +536,32 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     updateReplies = (id: string, replies: Array<Comment>) => {
-        const { api, file } = this.props;
+        const { activeFeedEntryId, api, file, history } = this.props;
+        const { feedItems } = this.state;
+
+        if (!feedItems) {
+            return;
+        }
 
         const feedAPI = api.getFeedAPI(false);
-
         feedAPI.file = file;
+
+        // Detect if replies are being hidden and activeFeedEntryId belongs to a reply
+        // that is in currently being updated parent, in order to disable active item
+        if (
+            activeFeedEntryId &&
+            replies.length === 1 &&
+            feedItems.find(
+                (item: FeedItem) =>
+                    item.id === id &&
+                    (item.type === FEED_ITEM_TYPE_ANNOTATION || item.type === FEED_ITEM_TYPE_COMMENT) &&
+                    item.replies &&
+                    item.replies.some(({ id: replyId }) => replyId === activeFeedEntryId),
+            )
+        ) {
+            history.replace(this.getActiveCommentPath());
+        }
+
         feedAPI.updateFeedItem({ replies }, id);
 
         this.fetchFeedItems();
@@ -671,6 +698,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     fetchFeedItems(shouldRefreshCache: boolean = false, shouldDestroy: boolean = false) {
         const {
+            activeFeedEntryId,
+            activeFeedEntryType,
             api,
             file,
             features,
@@ -678,18 +707,58 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             hasTasks: shouldShowTasks,
             hasVersions: shouldShowVersions,
         } = this.props;
+        const shouldFetchReplies =
+            shouldRefreshCache &&
+            shouldShowReplies &&
+            activeFeedEntryId &&
+            activeFeedEntryType === FEED_ITEM_TYPE_COMMENT;
         const shouldShowAppActivity = isFeatureEnabled(features, 'activityFeed.appActivity.enabled');
         const shouldShowAnnotations = isFeatureEnabled(features, 'activityFeed.annotations.enabled');
 
         api.getFeedAPI(shouldDestroy).feedItems(
             file,
             shouldRefreshCache,
-            this.fetchFeedItemsSuccessCallback,
+            shouldFetchReplies ? this.fetchRepliesForFeedItems : this.fetchFeedItemsSuccessCallback,
             this.fetchFeedItemsErrorCallback,
             this.errorCallback,
             { shouldShowAnnotations, shouldShowAppActivity, shouldShowReplies, shouldShowTasks, shouldShowVersions },
         );
     }
+
+    fetchRepliesForFeedItems = (feedItems: FeedItems) => {
+        const { activeFeedEntryId } = this.props;
+
+        if (!activeFeedEntryId) {
+            return;
+        }
+
+        const handleError = (error: ElementsXhrError) => {
+            this.fetchFeedItemsErrorCallback(feedItems, [error]);
+        };
+
+        this.getActiveFeedEntryData(feedItems)
+            .then(({ id, type }) => {
+                if (
+                    !id ||
+                    !type ||
+                    this.isActiveEntryInFeed(feedItems, activeFeedEntryId) ||
+                    !this.isItemTypeComment(type)
+                ) {
+                    this.fetchFeedItemsSuccessCallback(feedItems);
+                    return;
+                }
+
+                const parentType: CommentFeedItemType =
+                    type === FEED_ITEM_TYPE_COMMENT ? FEED_ITEM_TYPE_COMMENT : FEED_ITEM_TYPE_ANNOTATION;
+
+                this.getFeedItemsWithReplies(feedItems, id, parentType)
+                    .then(updatedItems => {
+                        this.fetchFeedItemsSuccessCallback(updatedItems);
+                    })
+                    .catch(handleError);
+            })
+            .catch(handleError);
+    };
 
     /**
      * Handles a successful feed API fetch
@@ -741,6 +810,44 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 errors: errors.map(({ code }) => code),
             });
         }
+    };
+
+    getCommentFeedItemWithReplies = <T: { replies?: Array<Comment> }>(feedItem: T, replies: Array<Comment>): T => ({
+        ...feedItem,
+        replies,
+    });
+
+    getFeedItemsWithReplies = (feedItems: FeedItems, id?: string, type?: CommentFeedItemType): Promise<FeedItems> => {
+        const { api, file } = this.props;
+
+        return new Promise((resolve, reject) => {
+            if (!id || !type) {
+                resolve(feedItems);
+                return;
+            }
+            api.getFeedAPI(false).fetchReplies(
+                file,
+                id,
+                type,
+                replies => {
+                    const updatedFeedItems = feedItems.map(item => {
+                        if (item.id === id && this.isItemTypeComment(item.type)) {
+                            if (item.type === FEED_ITEM_TYPE_ANNOTATION) {
+                                return this.getCommentFeedItemWithReplies<Annotation>(item, replies);
+                            }
+                            if (item.type === FEED_ITEM_TYPE_COMMENT) {
+                                return this.getCommentFeedItemWithReplies<Comment>(item, replies);
+                            }
+                        }
+                        return item;
+                    });
+                    resolve(updatedFeedItems);
+                },
+                error => {
+                    reject(error);
+                },
+            );
+        });
     };
 
     /**
@@ -826,6 +933,118 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             searchStr,
         );
     }, DEFAULT_COLLAB_DEBOUNCE);
+
+    /**
+     * Returns feed item based on the item id
+     *
+     * @param {FeedItems} feedItems - the feed items
+     * @param {string} itemId - feed item id
+     * @return {FeedItem | undefined}
+     */
+    getFocusableFeedItemById = (feedItems: FeedItems, itemId?: string): FeedItem | typeof undefined => {
+        if (!itemId) {
+            return undefined;
+        }
+        return feedItems.find(({ id, type }) => id === itemId && this.isItemTypeFocusable(type));
+    };
+
+    /**
+     * Returns parent feed item based on the reply id
+     *
+     * @param {FeedItems} feedItems - the feed items
+     * @param {string} replyId - feed item's reply id
+     * @return {FeedItem | undefined}
+     */
+    getCommentFeedItemByReplyId = (feedItems: FeedItems, replyId?: string): FeedItem | typeof undefined => {
+        if (!replyId) {
+            return undefined;
+        }
+        return feedItems.find(item => {
+            if ((item.type !== FEED_ITEM_TYPE_ANNOTATION && item.type !== FEED_ITEM_TYPE_COMMENT) || !item.replies) {
+                return false;
+            }
+            return item.replies.some(({ id }) => id === replyId);
+        });
+    };
+
+    /**
+     * Returns true if item (based on given item id) is found within feed items or its replies and it, or its parent, can be active (focusable)
+     *
+     * @param {FeedItems} feedItems - the feed items
+     * @param {string} itemId - feed item id
+     * @return {boolean}
+     */
+    isActiveEntryInFeed = (feedItems: FeedItems, itemId: string): boolean =>
+        !!(this.getFocusableFeedItemById(feedItems, itemId) || this.getCommentFeedItemByReplyId(feedItems, itemId));
+
+    isItemTypeFocusable = (type?: FeedItemType | FocusableFeedItem | CommentFeedItemType): boolean =>
+        type === FEED_ITEM_TYPE_ANNOTATION || type === FEED_ITEM_TYPE_COMMENT || type === FEED_ITEM_TYPE_TASK;
+
+    isItemTypeComment = (type?: FeedItemType | FocusableFeedItem | CommentFeedItemType): boolean =>
+        type === FEED_ITEM_TYPE_ANNOTATION || type === FEED_ITEM_TYPE_COMMENT;
+
+    /**
+     * Returns active entry data (id, type) based on the activeFeedEntryId and activeFeedEntryType values
+     * (it can be existing item or parent if the active entry id belongs to a reply)
+     *
+     * @param {FeedItems} feedItems - the feed items
+     * @return {Promise<{ id: string, type?: FocusableFeedItemType }>}
+     */
+    getActiveFeedEntryData = (feedItems: FeedItems): Promise<{ id?: string, type?: FeedItemType }> => {
+        const { activeFeedEntryId, activeFeedEntryType, api, file } = this.props;
+        return new Promise((resolve, reject) => {
+            if (!activeFeedEntryId || !activeFeedEntryType || !this.isItemTypeFocusable(activeFeedEntryType)) {
+                resolve({});
+                return;
+            }
+
+            // Check if the active entry is a first level Feed item
+            const firstLevelItem = this.getFocusableFeedItemById(feedItems, activeFeedEntryId);
+            if (firstLevelItem) {
+                const { id, type } = firstLevelItem;
+                resolve({ id, type });
+                return;
+            }
+
+            // Check if the active entry is within replies of any first level Feed items
+            const firstLevelItemWithActiveReply = this.getCommentFeedItemByReplyId(feedItems, activeFeedEntryId);
+            if (firstLevelItemWithActiveReply) {
+                const { id, type } = firstLevelItemWithActiveReply;
+                resolve({ id, type });
+                return;
+            }
+
+            // If the active entry could not be found within feed items, it's most likely a reply that
+            // is not yet visible in feed and we need to fetch its data in order to find parent
+            api.getFeedAPI(false).fetchThreadedComment(
+                file,
+                activeFeedEntryId,
+                ({ parent }) => {
+                    const parentItem = this.getFocusableFeedItemById(feedItems, parent?.id);
+                    const { id, type } = parentItem || {};
+                    resolve({ id, type });
+                },
+                (error: ElementsXhrError) => {
+                    if (error.status === 404) {
+                        resolve({});
+                    } else {
+                        reject(error);
+                    }
+                },
+            );
+        });
+    };
+
+    getActiveCommentPath(commentId?: string): string {
+        if (!commentId) {
+            return '/activity';
+        }
+
+        return generatePath('/:sidebar/comments/:commentId?', {
+            sidebar: 'activity',
+            commentId,
+        });
+    }
 
     /**
      * Fetches replies (comments) of a comment or annotation
@@ -970,6 +1189,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     render() {
         const {
+            activeFeedEntryId,
+            activeFeedEntryType,
             currentUser,
             currentUserError,
             elementId,
@@ -979,8 +1200,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             isDisabled = false,
             onVersionHistoryClick,
             getUserProfileUrl,
-            activeFeedEntryId,
-            activeFeedEntryType,
             onTaskView,
         } = this.props;
         const { activityFeedError, approverSelectorContacts, contactsLoaded, mentionSelectorContacts } = this.state;
