@@ -624,20 +624,20 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             ${undefined} | ${undefined} | ${false}
             ${'123'}     | ${'task'}    | ${false}
         `(
-            'should call fetchFeedItemsSuccessCallback with given feedItems unchanged if isActiveEntryInFeed results with $isActiveEntryInFeedResult and getActiveFeedEntryData resolves with id=$id and type=$type',
+            'should not call getFeedItemsWithReplies if isActiveEntryInFeed results with $isActiveEntryInFeedResult and getActiveFeedEntryData resolves with id=$id and type=$type',
             async ({ id, type, isActiveEntryInFeedResult }) => {
                 const wrapper = getWrapper({
                     activeFeedEntryId: '123',
                 });
                 const instance = wrapper.instance();
-                instance.fetchFeedItemsSuccessCallback = jest.fn();
+                instance.getFeedItemsWithReplies = jest.fn();
                 instance.isActiveEntryInFeed = jest.fn().mockImplementation(() => isActiveEntryInFeedResult);
                 instance.getActiveFeedEntryData = jest.fn().mockImplementation(() => Promise.resolve({ id, type }));
                 const feedItems = [{ id: '123' }];
 
                 await instance.fetchRepliesForFeedItems(feedItems);
 
-                expect(instance.fetchFeedItemsSuccessCallback).toBeCalledWith(feedItems);
+                expect(instance.getFeedItemsWithReplies).not.toBeCalled();
             },
         );
 
