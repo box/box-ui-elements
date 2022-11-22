@@ -34,3 +34,9 @@
         margin: 0;
     }
 }
+
+@mixin bcs-selected-item {
+    background-color: $bdl-light-blue-05;
+    border: 2px solid $bdl-box-blue;
+    border-radius: $bdl-border-radius-size-med;
+}
