@@ -14,6 +14,12 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
     />
   </InlineError>
   <ActiveState
+    activeFeedItem={
+      Object {
+        "id": "something",
+        "type": "other",
+      }
+    }
     currentFileVersionId="123"
     currentUser={
       Object {
@@ -28,6 +34,12 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
 
 exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should render empty state 1`] = `
 <ActiveState
+  activeFeedItem={
+    Object {
+      "id": "something",
+      "type": "other",
+    }
+  }
   currentFileVersionId="123"
   currentUser={
     Object {

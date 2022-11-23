@@ -119,11 +119,6 @@ const ActiveState = ({
     translations,
 }: Props): React.Node => {
     const [selectedThreadParentId, setSelectedThreadParentId] = React.useState(null);
-    const activeEntry = items.find(
-        ({ id, type }) =>
-            selectedThreadParentId === id ||
-            (selectedThreadParentId === null && id === activeFeedEntryId && type === activeFeedEntryType),
-    );
 
     const onThreadSelected = (parentId: string) => (isSelected: boolean) => {
         setSelectedThreadParentId(isSelected ? parentId : null);
@@ -155,7 +150,9 @@ const ActiveState = ({
     return (
         <ul className="bcs-activity-feed-active-state">
             {items.map((item: FeedItem) => {
-                const isFocused = item === activeFeedItem;
+                const isFocused =
+                    selectedThreadParentId === item.id ||
+                    (selectedThreadParentId === null && activeFeedItem !== null && item === activeFeedItem);
                 const refValue = isFocused ? activeFeedItemRef : undefined;
                 const itemFileVersionId = getProp(item, 'file_version.id');
 
@@ -169,22 +166,22 @@ const ActiveState = ({
                                 ref={refValue}
                             >
                                 <ActivityThread
-                                    data-testid="activity-thread"
                                     currentUser={currentUser}
+                                    data-testid="activity-thread"
                                     getAvatarUrl={getAvatarUrl}
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
                                     hasReplies={hasReplies}
                                     isRepliesLoading={item.isRepliesLoading}
                                     mentionSelectorContacts={mentionSelectorContacts}
-                                    onReplySelect={onThreadSelected(item.id)}
                                     onHideReplies={onHideRepliesHandler(item.id)}
                                     onReplyCreate={onReplyCreateHandler(item.id, item.type)}
                                     onReplyDelete={onReplyDeleteHandler(item.id)}
                                     onReplyEdit={onReplyUpdateHandler(item.id)}
+                                    onReplySelect={onThreadSelected(item.id)}
                                     onShowReplies={onShowRepliesHandler(item.id, item.type)}
-                                    repliesTotalCount={item.total_reply_count}
                                     replies={item.replies}
+                                    repliesTotalCount={item.total_reply_count}
                                     translations={translations}
                                 >
                                     <Comment
@@ -194,9 +191,9 @@ const ActiveState = ({
                                         getMentionWithQuery={getMentionWithQuery}
                                         getUserProfileUrl={getUserProfileUrl}
                                         mentionSelectorContacts={mentionSelectorContacts}
-                                        onSelect={onThreadSelected(item.id)}
                                         onDelete={onCommentDelete}
                                         onEdit={onCommentEdit}
+                                        onSelect={onThreadSelected(item.id)}
                                         permissions={{
                                             can_delete: getProp(item.permissions, 'can_delete', false),
                                             can_edit: getProp(item.permissions, 'can_edit', false),
@@ -227,8 +224,8 @@ const ActiveState = ({
                                     onAssignmentUpdate={onTaskAssignmentUpdate}
                                     onDelete={onTaskDelete}
                                     onEdit={onTaskEdit}
-                                    onView={onTaskView}
                                     onModalClose={onTaskModalClose}
+                                    onView={onTaskView}
                                     translations={translations}
                                 />
                             </ActivityItem>
@@ -265,8 +262,8 @@ const ActiveState = ({
                                 ref={refValue}
                             >
                                 <ActivityThread
-                                    data-testid="activity-thread"
                                     currentUser={currentUser}
+                                    data-testid="activity-thread"
                                     getAvatarUrl={getAvatarUrl}
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
@@ -278,21 +275,21 @@ const ActiveState = ({
                                     onReplyDelete={onReplyDeleteHandler(item.id)}
                                     onReplyEdit={onReplyUpdateHandler(item.id)}
                                     onShowReplies={onShowRepliesHandler(item.id, item.type)}
-                                    repliesTotalCount={item.total_reply_count}
                                     replies={item.replies}
+                                    repliesTotalCount={item.total_reply_count}
                                     translations={translations}
                                 >
                                     <AnnotationActivity
                                         currentUser={currentUser}
                                         getAvatarUrl={getAvatarUrl}
-                                        getUserProfileUrl={getUserProfileUrl}
                                         getMentionWithQuery={getMentionWithQuery}
+                                        getUserProfileUrl={getUserProfileUrl}
                                         hasVersions={hasVersions}
                                         isCurrentVersion={currentFileVersionId === itemFileVersionId}
                                         item={item}
                                         mentionSelectorContacts={mentionSelectorContacts}
-                                        onEdit={onAnnotationEdit}
                                         onDelete={onAnnotationDelete}
+                                        onEdit={onAnnotationEdit}
                                         onSelect={onAnnotationSelect}
                                         onStatusChange={onAnnotationStatusChange}
                                     />

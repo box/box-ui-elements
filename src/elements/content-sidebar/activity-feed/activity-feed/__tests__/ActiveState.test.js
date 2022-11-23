@@ -131,6 +131,7 @@ const activityFeedError = { title: 't', content: 'm' };
 const getShallowWrapper = (params = {}) =>
     shallow(
         <ActiveState
+            activeFeedItem={{ id: 'something', type: 'other' }}
             items={[annotation, comment1, fileVersion, taskWithAssignment, appActivity]}
             currentUser={currentUser}
             currentFileVersionId="123"
@@ -191,8 +192,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
 
     test("should have ActivityItem focused when it's activeFeedEntry", () => {
         const wrapper = getShallowWrapper({
-            activeFeedEntryId: comment1.id,
-            activeFeedEntryType: comment1.type,
+            activeFeedItem: comment1,
         }).dive();
 
         expect(wrapper.find('[data-testid="comment"]').prop('isFocused')).toBe(true);
@@ -215,8 +215,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         const threadSelector = '[data-testid="comment"] > [data-testid="activity-thread"]';
         const wrapper = getShallowWrapper({
             items: [comment1, comment2],
-            activeFeedEntryId: comment1.id,
-            activeFeedEntryType: comment1.type,
+            activeFeedItem: comment1,
         }).dive();
 
         expect(
@@ -256,8 +255,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         const threadselector = '[data-testid="comment"] > [data-testid="activity-thread"]';
         const wrapper = getShallowWrapper({
             items: [comment1, comment2],
-            activeFeedEntryId: comment2.id,
-            activeFeedEntryType: comment2.type,
+            activeFeedItem: comment2,
         }).dive();
 
         expect(
