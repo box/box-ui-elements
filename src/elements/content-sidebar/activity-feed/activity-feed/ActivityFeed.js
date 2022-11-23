@@ -6,6 +6,7 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
+import throttle from 'lodash/throttle';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import ActiveState from './ActiveState';
@@ -95,10 +96,12 @@ type Props = {
 
 type State = {
     isInputOpen: boolean,
+    isScrolled: boolean,
 };
 
 class ActivityFeed extends React.Component<Props, State> {
     state = {
+        isScrolled: false,
         isInputOpen: false,
     };
 
@@ -185,6 +188,16 @@ class ActivityFeed extends React.Component<Props, State> {
             this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
         }
     };
+
+    handleFeedScroll = (event: UIEvent): void => {
+        const { target } = event;
+        if (target instanceof Element) {
+            const { scrollTop } = target;
+            this.setState({ isScrolled: scrollTop > 0 });
+        }
+    };
+
+    throttledFeedScroll = throttle(this.handleFeedScroll, 100);
 
     onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
         const { nativeEvent } = event;
@@ -283,7 +296,7 @@ class ActivityFeed extends React.Component<Props, State> {
             onVersionHistoryClick,
             translations,
         } = this.props;
-        const { isInputOpen } = this.state;
+        const { isInputOpen, isScrolled } = this.state;
         const currentFileVersionId = getProp(file, 'file_version.id');
         const hasAnnotationCreatePermission = getProp(file, ['permissions', PERMISSION_CAN_CREATE_ANNOTATIONS], false);
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
@@ -320,13 +333,18 @@ class ActivityFeed extends React.Component<Props, State> {
         const isInlineFeedItemErrorVisible = !isLoading && activeFeedEntryType && !activeFeedItem;
 
         return (
-            // eslint-disable-next-line
-            <div className="bcs-activity-feed" data-testid="activityfeed" onKeyDown={this.onKeyDown}>
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+            <div
+                className={classNames('bcs-activity-feed', { 'bcs-is-scrolled': isScrolled })}
+                data-testid="activityfeed"
+                onKeyDown={this.onKeyDown}
+            >
                 <div
                     ref={ref => {
                         this.feedContainer = ref;
                     }}
                     className="bcs-activity-feed-items-container"
+                    onScroll={this.throttledFeedScroll}
                 >
                     {isLoading && (
                         <div className="bcs-activity-feed-loading-state">

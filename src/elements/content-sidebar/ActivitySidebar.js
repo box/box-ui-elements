@@ -5,6 +5,7 @@
  */
 
 import * as React from 'react';
+import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
@@ -1207,7 +1208,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         return (
             <SidebarContent
                 actions={this.renderActions()}
-                className="bcs-activity"
+                className={classNames('bcs-activity', { 'bcs-activity--full': hasReplies })}
                 elementId={elementId}
                 sidebarView={SIDEBAR_VIEW_ACTIVITY}
                 title={this.renderTitle()}

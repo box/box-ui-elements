@@ -16,7 +16,7 @@ type Props = {
     sidebarView: string,
     title?: React.Node,
 };
-const SidebarContent = ({ actions, children, className, title, elementId, sidebarView, ...rest }: Props) => {
+const SidebarContent = ({ actions, children, className, elementId, sidebarView, title, ...rest }: Props) => {
     const label = `${elementId}${elementId === '' ? '' : '_'}${sidebarView}`;
     const id = `${label}-content`;
 
