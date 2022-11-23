@@ -36,7 +36,7 @@
         .aria-menu:not(.submenu) {
             height: 100%;
             margin-top: $bdl-header-height;
-            overflow: scroll;
+            overflow-x: auto;
             background-color: $bdl-gray-02;
             border: none;
             border-radius: 0;
