@@ -552,12 +552,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         if (
             activeFeedEntryId &&
             replies.length === 1 &&
-            feedItems.find(
+            feedItems.some(
                 (item: FeedItem) =>
-                    item.id === id &&
-                    (item.type === FEED_ITEM_TYPE_ANNOTATION || item.type === FEED_ITEM_TYPE_COMMENT) &&
-                    item.replies &&
-                    item.replies.some(({ id: replyId }) => replyId === activeFeedEntryId),
+                    item.id === id && item === this.getCommentFeedItemByReplyId(feedItems, activeFeedEntryId),
             )
         ) {
             history.replace(this.getActiveCommentPath());
@@ -733,10 +730,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             return;
         }
 
-        const handleError = (error: ElementsXhrError) => {
-            this.fetchFeedItemsErrorCallback(feedItems, [error]);
-        };
-
         this.getActiveFeedEntryData(feedItems)
             .then(({ id, type }) => {
                 if (
@@ -745,20 +738,16 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     this.isActiveEntryInFeed(feedItems, activeFeedEntryId) ||
                     !this.isItemTypeComment(type)
                 ) {
-                    this.fetchFeedItemsSuccessCallback(feedItems);
-                    return;
+                    return Promise.resolve(feedItems);
                 }
 
                 const parentType: CommentFeedItemType =
                     type === FEED_ITEM_TYPE_COMMENT ? FEED_ITEM_TYPE_COMMENT : FEED_ITEM_TYPE_ANNOTATION;
 
-                this.getFeedItemsWithReplies(feedItems, id, parentType)
-                    .then(updatedItems => {
-                        this.fetchFeedItemsSuccessCallback(updatedItems);
-                    })
-                    .catch(handleError);
+                return this.getFeedItemsWithReplies(feedItems, id, parentType);
             })
-            .catch(handleError);
+            .then(updatedItems => this.fetchFeedItemsSuccessCallback(updatedItems))
+            .catch(error => this.fetchFeedItemsErrorCallback(feedItems, [error]));
     };
 
     /**
