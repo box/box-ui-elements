@@ -137,6 +137,8 @@ const ItemList = ({
     onItemDoubleClick,
     onItemNameClick,
     onLoadMoreItems,
+    headerHeight,
+    headerRenderer,
     itemIconRenderer,
     itemNameLinkRenderer,
     itemButtonRenderer,
@@ -219,6 +221,8 @@ const ItemList = ({
                 headerClassName="table-header-item"
                 width={width}
                 height={height}
+                headerHeight={headerHeight}
+                headerRowRenderer={headerRenderer}
                 rowHeight={rowHeight}
                 rowCount={items.length}
                 onRowClick={onItemClick}
@@ -282,6 +286,8 @@ ItemList.propTypes = {
     onItemDoubleClick: PropTypes.func,
     onItemNameClick: PropTypes.func,
     onLoadMoreItems: PropTypes.func,
+    headerHeight: PropTypes.number,
+    headerRenderer: PropTypes.func,
     itemIconRenderer: PropTypes.func,
     itemNameLinkRenderer: PropTypes.func,
     itemButtonRenderer: PropTypes.func,

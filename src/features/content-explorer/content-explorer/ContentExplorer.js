@@ -19,6 +19,11 @@ class ContentExplorer extends Component {
     static propTypes = {
         /** Props for the action buttons container */
         actionButtonsProps: PropTypes.object,
+        /**
+         * Extra columns displayed in the folders table after folder name column
+         * Each column has to be a Column element
+         */
+        additionalColumns: PropTypes.arrayOf(PropTypes.element),
         /** Props for breadcrumbs */
         breadcrumbProps: PropTypes.object,
         /** Props for the cancel button */
@@ -117,21 +122,20 @@ class ContentExplorer extends Component {
         itemNameLinkRenderer: PropTypes.func,
         /** Used to render item buttons in the list. Overrides the default buttons. */
         itemButtonRenderer: PropTypes.func,
+        /** Height of an item row */
+        itemRowHeight: PropTypes.number,
         /** Used to render the row element for items on the list. Allows row customizations such as adding tooltips, etc. */
         itemRowRenderer: PropTypes.func,
+        /** Height of the item list header, defaults to 0, which makes header not visible */
+        listHeaderHeight: PropTypes.number,
+        /** Used to render the header row on the item list */
+        listHeaderRenderer: PropTypes.func,
         /** Width of the item list */
         listWidth: PropTypes.number.isRequired,
         /** Height of the item list */
         listHeight: PropTypes.number.isRequired,
         /** Props for the search input */
         searchInputProps: PropTypes.object,
-        /** Height of the row */
-        rowHeight: PropTypes.number,
-        /**
-         * Extra columns displayed in the folders table after folder name column
-         * Each column has to be a Column element
-         */
-        additionalColumns: PropTypes.arrayOf(PropTypes.element),
     };
 
     static defaultProps = {
@@ -396,6 +400,7 @@ class ContentExplorer extends Component {
     render() {
         const {
             actionButtonsProps,
+            additionalColumns,
             breadcrumbProps,
             cancelButtonProps,
             chooseButtonProps,
@@ -424,12 +429,13 @@ class ContentExplorer extends Component {
             itemIconRenderer,
             itemNameLinkRenderer,
             itemButtonRenderer,
+            itemRowHeight,
             itemRowRenderer,
+            listHeaderHeight,
+            listHeaderRenderer,
             listWidth,
             listHeight,
             searchInputProps,
-            rowHeight,
-            additionalColumns,
             ...rest
         } = this.props;
         const { isInSearchMode, foldersPath, selectedItems, isSelectAllChecked } = this.state;
@@ -507,6 +513,8 @@ class ContentExplorer extends Component {
                 <ItemList
                     additionalColumns={additionalColumns}
                     contentExplorerMode={contentExplorerMode}
+                    headerHeight={listHeaderHeight}
+                    headerRenderer={listHeaderRenderer}
                     height={listHeight}
                     isResponsive={isResponsive}
                     itemButtonRenderer={itemButtonRenderer}
@@ -521,9 +529,9 @@ class ContentExplorer extends Component {
                     onItemDoubleClick={this.handleItemDoubleClick}
                     onItemNameClick={this.handleItemNameClick}
                     onLoadMoreItems={onLoadMoreItems}
+                    rowHeight={itemRowHeight}
                     selectedItems={selectedItems}
                     width={listWidth}
-                    rowHeight={rowHeight}
                 />
                 <ContentExplorerActionButtons
                     actionButtonsProps={actionButtonsProps}

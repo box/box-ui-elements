@@ -18,10 +18,13 @@ type Props = {
     description?: string,
     isOpen?: boolean,
     isResponsive?: boolean,
+    itemRowHeight?: number,
+    itemRowRenderer?: Function,
+    listHeaderHeight?: number,
+    listHeaderRenderer?: Function,
     onRequestClose?: Function,
     onSelectItem?: (item: Object, index: number) => void,
     onSelectedClick?: () => void,
-    rowHeight?: number,
     title?: string,
 };
 
