@@ -447,6 +447,7 @@ class ContentExplorer extends Component {
             'onSelectItem',
             'onSearchSubmit',
             'onExitSearch',
+            'initialSelectedItems',
         ]);
 
         const selectedItemsIds = Object.keys(selectedItems);
