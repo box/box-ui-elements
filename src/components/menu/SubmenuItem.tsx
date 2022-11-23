@@ -1,13 +1,13 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-import debounce from 'lodash/debounce';
 
 import './SubmenuItem.scss';
 import Arrow16 from '../../icon/fill/Arrow16';
 
 const SUBMENU_LEFT_ALIGNED_CLASS = 'is-left-aligned';
 const SUBMENU_BOTTOM_ALIGNED_CLASS = 'is-bottom-aligned';
+const SUBMENU_INLINE_CLASS = 'is-inline-bottom';
 
 export interface SubmenuItemProps {
     /** 'aria-disabled' - ARIA attribute describing whether the submenu item is disabled */
@@ -82,10 +82,12 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
             submenuTriggerElBounding.right + submenuElBounding.width > rightBoundaryElementBounding.right;
         const isBottomAligned =
             submenuTriggerElBounding.top + submenuElBounding.height > bottomBoundaryElementBounding.bottom;
-
+        const isInlineBottom =
+            submenuTriggerElBounding.bottom + submenuElBounding.height > bottomBoundaryElementBounding.bottom;
         return {
             [SUBMENU_LEFT_ALIGNED_CLASS]: isLeftAligned,
             [SUBMENU_BOTTOM_ALIGNED_CLASS]: isBottomAligned,
+            [SUBMENU_INLINE_CLASS]: isInlineBottom, // Used only in medium-screen viewport sizes
         };
     };
 

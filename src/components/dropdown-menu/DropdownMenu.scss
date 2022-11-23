@@ -54,13 +54,15 @@
                 box-shadow: $bdl-header-box-shadow;
             }
 
-            .submenu {
+            .submenu:not(.is-hidden) {
                 top: 100%;
                 right: 0;
+                bottom: auto;
                 left: auto;
 
-                &.is-hidden {
-                    display: none;
+                &.is-inline-bottom {
+                    top: auto;
+                    bottom: 100%;
                 }
             }
         }
