@@ -272,7 +272,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         instance.handleMessageUpdate(updateMessagePayload);
         expect(wrapper.state('isEditing')).toBe(false);
         expect(wrapper.state('isInputOpen')).toBe(false);
-        expect(mockOnEdit).toHaveBeenCalledWith(
+        expect(mockOnEdit).toBeCalledWith(
             updateMessagePayload.id,
             updateMessagePayload.text,
             undefined,
@@ -444,23 +444,23 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         );
 
         wrapper.find('MenuItem[data-testid="delete-comment"]').simulate('click');
-        expect(onSelect).toHaveBeenCalledWith(true);
+        expect(onSelect).toBeCalledWith(true);
 
         wrapper.find('DeleteConfirmation').simulate('deleteCancel');
-        expect(onSelect).toHaveBeenCalledWith(false);
+        expect(onSelect).toBeCalledWith(false);
 
         wrapper.find('MenuItem[data-testid="delete-comment"]').simulate('click');
         wrapper.find('DeleteConfirmation').simulate('deleteConfirm');
-        expect(onSelect).toHaveBeenCalledWith(false);
+        expect(onSelect).toBeCalledWith(false);
 
         wrapper.find('MenuItem[data-testid="edit-comment"]').simulate('click');
-        expect(onSelect).toHaveBeenCalledWith(true);
+        expect(onSelect).toBeCalledWith(true);
 
         wrapper.find('CommentForm').simulate('cancel');
-        expect(onSelect).toHaveBeenCalledWith(false);
+        expect(onSelect).toBeCalledWith(false);
 
         wrapper.find('MenuItem[data-testid="edit-comment"]').simulate('click');
         wrapper.find('CommentForm').simulate('updateComment');
-        expect(onSelect).toHaveBeenCalledWith(false);
+        expect(onSelect).toBeCalledWith(false);
     });
 });

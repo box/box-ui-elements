@@ -138,6 +138,9 @@ const getShallowWrapper = (params = {}) =>
             {...params}
         />,
     );
+const createGetElementBySelector = selector => (wrapper, index = 0) => wrapper.find(selector).at(index);
+const getComment = createGetElementBySelector('[data-testid="comment"]');
+const getActivityThread = createGetElementBySelector('[data-testid="comment"] > [data-testid="activity-thread"]');
 
 describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () => {
     test('should render empty state', () => {
@@ -153,7 +156,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
 
     test('should render card for item type', () => {
         const wrapper = getShallowWrapper().dive();
-        expect(wrapper.find('[data-testid="comment"]')).toHaveLength(1);
+        expect(getComment(wrapper)).toHaveLength(1);
         expect(wrapper.find('[data-testid="version"]')).toHaveLength(1);
         expect(wrapper.find('[data-testid="task"]')).toHaveLength(1);
         expect(wrapper.find('[data-testid="app-activity"]')).toHaveLength(1);
@@ -195,98 +198,46 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
             activeFeedItem: comment1,
         }).dive();
 
-        expect(wrapper.find('[data-testid="comment"]').prop('isFocused')).toBe(true);
+        expect(getComment(wrapper).prop('isFocused')).toBe(true);
     });
 
     test('should have ActiveItem focused when AnnotationThead', () => {
-        const commentItemSelor = '[data-testid="comment"]';
-        const threadselector = '[data-testid="comment"] > [data-testid="activity-thread"]';
         const wrapper = getShallowWrapper().dive();
 
-        expect(wrapper.find(commentItemSelor).prop('isFocused')).toBe(false);
+        expect(getComment(wrapper).prop('isFocused')).toBe(false);
 
-        wrapper.find(threadselector).simulate('replySelect', true);
+        getActivityThread(wrapper).simulate('replySelect', true);
 
-        expect(wrapper.find(commentItemSelor).prop('isFocused')).toBe(true);
+        expect(getComment(wrapper).prop('isFocused')).toBe(true);
     });
 
     test('should have only one ActiveItem selected at a time', () => {
-        const commentSelector = '[data-testid="comment"]';
-        const threadSelector = '[data-testid="comment"] > [data-testid="activity-thread"]';
         const wrapper = getShallowWrapper({
             items: [comment1, comment2],
             activeFeedItem: comment1,
         }).dive();
 
-        expect(
-            wrapper
-                .find(commentSelector)
-                .at(0)
-                .prop('isFocused'),
-        ).toBe(true);
-        expect(
-            wrapper
-                .find(commentSelector)
-                .at(1)
-                .prop('isFocused'),
-        ).toBe(false);
+        expect(getComment(wrapper).prop('isFocused')).toBe(true);
+        expect(getComment(wrapper, 1).prop('isFocused')).toBe(false);
 
-        wrapper
-            .find(threadSelector)
-            .at(1)
-            .simulate('replySelect', true);
+        getActivityThread(wrapper, 1).simulate('replySelect', true);
 
-        expect(
-            wrapper
-                .find(commentSelector)
-                .at(0)
-                .prop('isFocused'),
-        ).toBe(false);
-        expect(
-            wrapper
-                .find(commentSelector)
-                .at(1)
-                .prop('isFocused'),
-        ).toBe(true);
+        expect(getComment(wrapper).prop('isFocused')).toBe(false);
+        expect(getComment(wrapper, 1).prop('isFocused')).toBe(true);
     });
 
     test('should have only one ActiveItem selected at a time no matter the order', () => {
-        const commentItemSelor = '[data-testid="comment"]';
-        const threadselector = '[data-testid="comment"] > [data-testid="activity-thread"]';
         const wrapper = getShallowWrapper({
             items: [comment1, comment2],
             activeFeedItem: comment2,
         }).dive();
 
-        expect(
-            wrapper
-                .find(commentItemSelor)
-                .at(0)
-                .prop('isFocused'),
-        ).toBe(false);
-        expect(
-            wrapper
-                .find(commentItemSelor)
-                .at(1)
-                .prop('isFocused'),
-        ).toBe(true);
+        expect(getComment(wrapper).prop('isFocused')).toBe(false);
+        expect(getComment(wrapper, 1).prop('isFocused')).toBe(true);
 
-        wrapper
-            .find(threadselector)
-            .at(0)
-            .simulate('replySelect', true);
+        getActivityThread(wrapper).simulate('replySelect', true);
 
-        expect(
-            wrapper
-                .find(commentItemSelor)
-                .at(0)
-                .prop('isFocused'),
-        ).toBe(true);
-        expect(
-            wrapper
-                .find(commentItemSelor)
-                .at(1)
-                .prop('isFocused'),
-        ).toBe(false);
+        expect(getComment(wrapper, 0).prop('isFocused')).toBe(true);
+        expect(getComment(wrapper, 1).prop('isFocused')).toBe(false);
     });
 });
