@@ -20,8 +20,7 @@
     }
 
     .bcs-ActivityCard {
-        padding: $sidebarActivityFeedSpacingVertical $sidebarActivityFeedSpacingHorizontal;
-        padding-top: 10;
+        padding: 10px $sidebarActivityFeedSpacingHorizontal $sidebarActivityFeedSpacingVertical;
     }
 
     .bcs-Comment-timestamp {
