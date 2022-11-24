@@ -10,7 +10,7 @@
 
         &:hover,
         &:focus {
-            @include bcs-selected-item;
+            @include bcs-selectedItem;
         }
     }
 }

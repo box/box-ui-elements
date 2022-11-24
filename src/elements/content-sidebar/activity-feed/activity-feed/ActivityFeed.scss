@@ -75,7 +75,7 @@
                 }
 
                 .bcs-ActivityThread {
-                    @include bcs-selected-item;
+                    @include bcs-selectedItem;
 
                     .bcs-ActivityCard {
                         box-shadow: none;
