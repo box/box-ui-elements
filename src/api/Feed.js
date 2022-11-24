@@ -964,8 +964,8 @@ class Feed extends Base {
      * @return {void}
      */
     deleteReplySuccessCallback = (id: string, parentId: string, successCallback: Function): void => {
-        this.deleteReplyItem(id, parentId, successCallback);
         this.modifyFeedItemRepliesCountBy(parentId, -1);
+        this.deleteReplyItem(id, parentId, successCallback);
     };
 
     /**
