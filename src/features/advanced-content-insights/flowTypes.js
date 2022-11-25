@@ -1,22 +1,14 @@
 // @flow
-export type contentInsightsConfigType = {
-    isActive: boolean,
-    requireEmail: false,
-    requireNotification: false,
-};
-
-export type ContentInsightsSectionTypes = {
-    contentInsightsConfig?: contentInsightsConfigType,
+export type AdvancedContentInsightsType = {
     /** Whether the advanced content insights FF is enabled */
-    isAdvancedContentInsightsEnabled?: boolean,
-    onAdvancedInsightsEmailToggle?: (isEnabled: boolean) => void,
-    onAdvancedInsightsNotificationToggle?: (isEnabled: boolean) => void,
-    onAdvancedInsightsToggle?: (isEnabled: boolean) => void,
+    enabled: boolean,
+    isActive: boolean,
+    onChange?: (isEnabled: boolean) => void,
+    ownerEId?: number,
+    userId?: number,
 };
 
-export type AdvancedContentInsights = {
-    config: contentInsightsConfigType,
-    enabled: boolean,
-    ownerEId: number,
-    userId: number,
+export type AdvancedContentInsightsUSProps = {
+    advancedContentInsightsConfig?: AdvancedContentInsightsType,
+    onAdvancedContentInsightsToggle?: Function,
 };

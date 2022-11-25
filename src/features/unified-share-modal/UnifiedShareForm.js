@@ -12,11 +12,11 @@ import Button from '../../components/button';
 import { UpgradeBadge } from '../../components/badge';
 import InlineNotice from '../../components/inline-notice';
 import PlainButton from '../../components/plain-button';
-import { ITEM_TYPE_WEBLINK } from '../../common/constants';
+import { ITEM_TYPE_FILE, ITEM_TYPE_WEBLINK } from '../../common/constants';
 import Tooltip from '../../components/tooltip';
 import { CollaboratorAvatars, CollaboratorList } from '../collaborator-avatars';
 
-import ContentInsightsSection from '../advanced-content-insights/ContentInsightsSection';
+import AdvancedContentInsightsToggle from '../advanced-content-insights/AdvancedContentInsightsToggle';
 import InviteePermissionsMenu from './InviteePermissionsMenu';
 import messages from './messages';
 import SharedLinkSection from './SharedLinkSection';
@@ -666,25 +666,22 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     render() {
         // Shared link section props
         const {
+            advancedContentInsightsConfig = {},
             allShareRestrictionWarning,
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
             config,
-            contentInsightsConfig,
             createSharedLinkOnLoad,
             displayInModal,
             focusSharedLinkOnLoad,
             getSharedLinkContacts,
             getContactAvatarUrl,
             intl,
-            isAdvancedContentInsightsEnabled,
             isAllowEditSharedLinkForFileEnabled,
             isFetching,
             item,
             onAddLink,
-            onAdvancedInsightsEmailToggle,
-            onAdvancedInsightsNotificationToggle,
-            onAdvancedInsightsToggle,
+            onAdvancedContentInsightsToggle,
             onCopyError,
             onCopyInit,
             onCopySuccess,
@@ -713,10 +710,12 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             allShareRestrictionWarning;
 
         const showContentInsightsToggle =
+            advancedContentInsightsConfig.enabled &&
             !isEmailLinkSectionExpanded &&
             !isInviteSectionExpanded &&
             !showCollaboratorList &&
-            isAdvancedContentInsightsEnabled;
+            item &&
+            item.type === ITEM_TYPE_FILE;
 
         return (
             <div className={displayInModal ? '' : 'be bdl-UnifiedShareForm'}>
@@ -757,14 +756,16 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                     )}
 
                     {showContentInsightsToggle && (
-                        <ContentInsightsSection
-                            contentInsightsConfig={contentInsightsConfig}
-                            item={item}
-                            onAdvancedInsightsToggle={onAdvancedInsightsToggle}
-                            onAdvancedInsightsEmailToggle={onAdvancedInsightsEmailToggle}
-                            onAdvancedInsightsNotificationToggle={onAdvancedInsightsNotificationToggle}
-                            submitting={submitting || isFetching}
-                        />
+                        <>
+                            <div className="bdl-SharedLinkSection-separator" />
+                            <div className="shared-link-toggle-row">
+                                <AdvancedContentInsightsToggle
+                                    isActive={advancedContentInsightsConfig.isActive}
+                                    onChange={onAdvancedContentInsightsToggle}
+                                    submitting={submitting || isFetching}
+                                />
+                            </div>
+                        </>
                     )}
 
                     {isEmailLinkSectionExpanded && !showCollaboratorList && (

@@ -255,7 +255,8 @@
         justify-content: space-between;
         margin-top: 10px;
 
-        .share-toggle-container {
+        .share-toggle-container,
+        .AdvancedContentInsightsToggle {
             flex: 0 1 80%;
             margin-bottom: 0;
             overflow-y: hidden;
@@ -317,14 +318,6 @@
 
         .checkbox-container {
             margin: 5px 0 0 20px;
-        }
-    }
-
-    .ContentInsightsSection-toggle {
-        display: flex;
-
-        .toggle-container {
-            flex: 0 1 50%;
         }
     }
 

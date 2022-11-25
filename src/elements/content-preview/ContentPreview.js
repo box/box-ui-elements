@@ -55,7 +55,7 @@ import {
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
-import type { AdvancedContentInsights } from '../../features/advanced-content-insights/flowTypes';
+import type { AdvancedContentInsightsType } from '../../features/advanced-content-insights/flowTypes';
 import type { Annotation } from '../../common/types/feed';
 import type { TargetingApi } from '../../features/targeting/types';
 import type { ErrorType, AdditionalVersionInfo } from '../common/flowTypes';
@@ -76,7 +76,7 @@ type StartAt = {
 };
 
 type Props = {
-    advancedContentInsights: AdvancedContentInsights,
+    advancedContentInsights: AdvancedContentInsightsType,
     apiHost: string,
     appHost: string,
     autoFocus: boolean,

@@ -6,9 +6,8 @@ import { ModalDialogBase } from '../ModalDialog';
 const sandbox = sinon.sandbox.create();
 
 describe('components/modal/ModalDialog', () => {
-    let onBackClick;
+    let onRequestBack;
     let onRequestClose;
-    let showBackButton;
     let wrapper;
     let instance;
     const title = 'hello';
@@ -18,13 +17,12 @@ describe('components/modal/ModalDialog', () => {
             formatMessage: message => message.id,
         };
         onRequestClose = sinon.spy();
-        onBackClick = sinon.spy();
+        onRequestBack = sinon.spy();
         wrapper = shallow(
             <ModalDialogBase
                 intl={intlShape}
-                onBackClick={onBackClick}
+                onRequestBack={onRequestBack}
                 onRequestClose={onRequestClose}
-                showBackButton={showBackButton}
                 title={title}
             >
                 children
@@ -78,23 +76,17 @@ describe('components/modal/ModalDialog', () => {
         expect(wrapper.find('.modal-close-button').length).toBeFalsy();
     });
 
-    test('should not render back button when showBackButton is falsy', () => {
-        expect(wrapper.find('.modal-back-button').length).toBeFalsy();
-    });
-
-    test('render back button when showBackButton is truthy', () => {
-        wrapper.setProps({ showBackButton: true });
+    test('render back button when onRequestBack is defined', () => {
         expect(wrapper.find('.modal-back-button').length).toBeTruthy();
     });
 
-    test('should not render back button if onBackClick is undefined', () => {
-        wrapper.setProps({ onBackClick: null, showBackButton: true });
+    test('should not render back button if onRequestBack is null', () => {
+        wrapper.setProps({ onRequestBack: null });
         expect(wrapper.find('.modal-back-button').length).toBeFalsy();
     });
 
     test('should call onBackClick when back button is clicked on', () => {
-        wrapper.setProps({ showBackButton: true });
         wrapper.find('.modal-back-button').simulate('click');
-        sinon.assert.calledOnce(onBackClick);
+        sinon.assert.calledOnce(onRequestBack);
     });
 });

@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as constants from './constants';
 import type { BoxItemPermission, ItemType } from '../../common/types/core';
 import type { TargetingApi } from '../targeting/types';
-import type { ContentInsightsSectionTypes } from '../advanced-content-insights/flowTypes';
+import type { AdvancedContentInsightsUSProps } from '../advanced-content-insights/flowTypes';
 
 // DRY: Invert the constants so that we can construct the appropriate enum types
 const accessLevelValues = {
@@ -329,7 +329,7 @@ export type USMConfig = {
 
 // Prop types shared by both the Unified Share Modal and the Unified Share Form
 type BaseUnifiedShareProps = CollaboratorAvatarsTypes &
-    ContentInsightsSectionTypes &
+    AdvancedContentInsightsUSProps &
     EmailFormTypes &
     CollabRestrictionsTypes &
     InviteSectionTypes &
