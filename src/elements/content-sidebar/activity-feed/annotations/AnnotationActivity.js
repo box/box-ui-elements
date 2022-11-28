@@ -18,7 +18,7 @@ import messages from './messages';
 import SelectableActivityCard from '../SelectableActivityCard';
 import UserLink from '../common/user-link';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import { PLACEHOLDER_USER } from '../../../../constants';
+import { COMMENT_STATUS_RESOLVED, PLACEHOLDER_USER } from '../../../../constants';
 import type { Annotation, AnnotationPermission, FeedItemStatus } from '../../../../common/types/feed';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
@@ -65,14 +65,17 @@ const AnnotationActivity = ({
         file_version,
         id,
         isPending,
+        modified_at,
         permissions = {},
         status,
         target,
     } = item;
     const { can_delete: canDelete, can_edit: canEdit, can_resolve: canResolve } = permissions;
+    const isEdited = modified_at !== undefined && modified_at !== created_at;
     const isFileVersionUnavailable = file_version === null;
     const isCardDisabled = !!error || isConfirmingDelete || isMenuOpen || isEditing || isFileVersionUnavailable;
     const isMenuVisible = (canDelete || canEdit || canResolve) && !isPending;
+    const isResolved = status === COMMENT_STATUS_RESOLVED;
 
     const handleDelete = (): void => setIsConfirmingDelete(true);
     const handleDeleteCancel = (): void => setIsConfirmingDelete(false);
@@ -176,7 +179,12 @@ const AnnotationActivity = ({
                                 tagged_message={message}
                             />
                         ) : (
-                            <ActivityMessage id={id} tagged_message={message} getUserProfileUrl={getUserProfileUrl} />
+                            <ActivityMessage
+                                getUserProfileUrl={getUserProfileUrl}
+                                id={id}
+                                isEdited={isEdited && !isResolved}
+                                tagged_message={message}
+                            />
                         )}
                     </Media.Body>
                 </Media>
