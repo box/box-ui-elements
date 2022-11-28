@@ -4,10 +4,7 @@ about: Create a report to help us improve
 title: ''
 labels: ''
 assignees: ''
-
----
-
-**_If you are a Box employee, you do not need to create an issue to open a pull request_**
+---**_If you are a Box employee, you do not need to create an issue to open a pull request_**
 
 Please fill out the following template so we can reproduce and fix your issue as quickly as possible!
 
