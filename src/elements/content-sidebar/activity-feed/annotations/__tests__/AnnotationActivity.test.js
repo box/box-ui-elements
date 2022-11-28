@@ -17,6 +17,7 @@ const currentUser = {
 };
 const mentionSelectorContacts = [];
 const TIME_STRING_SEPT_27_2017 = '2017-09-27T10:40:41-07:00';
+const TIME_STRING_SEPT_28_2017 = '2017-09-28T10:40:41-07:00';
 
 const allHandlers = {
     contacts: {
@@ -214,6 +215,25 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
         expect(onActionSpy).toHaveBeenCalledTimes(1);
     });
+
+    test.each`
+        created_at                  | modified_at                 | status        | expectedIsEdited
+        ${TIME_STRING_SEPT_27_2017} | ${undefined}                | ${'open'}     | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_27_2017} | ${'open'}     | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_28_2017} | ${'open'}     | ${true}
+        ${TIME_STRING_SEPT_27_2017} | ${undefined}                | ${'resolved'} | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_27_2017} | ${'resolved'} | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_28_2017} | ${'resolved'} | ${false}
+    `(
+        `given created_at = $created_at, modified_at = $modified_at and status = $status, isEdited prop on ActivityMessage should be: $expectedIsEdited`,
+        ({ created_at, modified_at, status, expectedIsEdited }) => {
+            const wrapper = getWrapper({ item: { ...mockAnnotation, created_at, modified_at, status } });
+
+            expect(wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))').prop('isEdited')).toEqual(
+                expectedIsEdited,
+            );
+        },
+    );
 
     describe('delete confirmation behavior', () => {
         test('should render the DeleteConfirmation when delete menu item is selected', () => {

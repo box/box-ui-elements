@@ -253,7 +253,7 @@ class Comment extends React.Component<Props, State> {
                         ) : (
                             <ActivityMessage
                                 id={id}
-                                isEdited={isEdited}
+                                isEdited={isEdited && !isResolved}
                                 tagged_message={tagged_message}
                                 translatedTaggedMessage={translatedTaggedMessage}
                                 {...translations}
