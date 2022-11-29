@@ -64,6 +64,7 @@ type Props = {
         onError: ?Function,
     ) => void,
     onHideReplies?: (id: string, replies: Array<CommentType>) => void,
+    onItemFocus?: (itemId: string | null) => void,
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void,
     onReplyDelete?: ({ id: string, parentId: string, permissions: BoxCommentPermission }) => void,
     onReplyUpdate?: (
@@ -106,6 +107,7 @@ const ActiveState = ({
     onCommentDelete,
     onCommentEdit,
     onHideReplies = noop,
+    onItemFocus = noop,
     onReplyCreate = noop,
     onReplyDelete = noop,
     onReplyUpdate = noop,
@@ -118,10 +120,8 @@ const ActiveState = ({
     onVersionInfo,
     translations,
 }: Props): React.Node => {
-    const [selectedThreadParentId, setSelectedThreadParentId] = React.useState(null);
-
-    const onThreadSelected = (parentId: string) => (isSelected: boolean) => {
-        setSelectedThreadParentId(isSelected ? parentId : null);
+    const onItemFocusHandler = (itemId: string) => (isSelected: boolean) => {
+        onItemFocus(isSelected ? itemId : null);
     };
     const onHideRepliesHandler = (parentId: string) => (lastReply: CommentType) => {
         onHideReplies(parentId, [lastReply]);
@@ -150,9 +150,7 @@ const ActiveState = ({
     return (
         <ul className="bcs-activity-feed-active-state">
             {items.map((item: FeedItem) => {
-                const isFocused =
-                    selectedThreadParentId === item.id ||
-                    (selectedThreadParentId === null && activeFeedItem !== null && item === activeFeedItem);
+                const isFocused = item === activeFeedItem;
                 const refValue = isFocused ? activeFeedItemRef : undefined;
                 const itemFileVersionId = getProp(item, 'file_version.id');
 
@@ -178,7 +176,7 @@ const ActiveState = ({
                                     onReplyCreate={onReplyCreateHandler(item.id, item.type)}
                                     onReplyDelete={onReplyDeleteHandler(item.id)}
                                     onReplyEdit={onReplyUpdateHandler(item.id)}
-                                    onReplySelect={onThreadSelected(item.id)}
+                                    onReplySelect={onItemFocusHandler(item.id)}
                                     onShowReplies={onShowRepliesHandler(item.id, item.type)}
                                     replies={item.replies}
                                     repliesTotalCount={item.total_reply_count}
@@ -193,7 +191,7 @@ const ActiveState = ({
                                         mentionSelectorContacts={mentionSelectorContacts}
                                         onDelete={onCommentDelete}
                                         onEdit={onCommentEdit}
-                                        onSelect={onThreadSelected(item.id)}
+                                        onSelect={onItemFocusHandler(item.id)}
                                         permissions={{
                                             can_delete: getProp(item.permissions, 'can_delete', false),
                                             can_edit: getProp(item.permissions, 'can_edit', false),

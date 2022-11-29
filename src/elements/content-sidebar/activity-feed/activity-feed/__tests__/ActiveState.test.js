@@ -38,19 +38,11 @@ const annotation = {
     created_by: currentUser,
 };
 
-const comment1 = {
+const comment = {
     type: FEED_ITEM_TYPE_COMMENT,
     id: 'c_123',
     created_at: '2018-07-03T14:43:52-07:00',
     tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
-    created_by: otherUser,
-};
-
-const comment2 = {
-    type: FEED_ITEM_TYPE_COMMENT,
-    id: 'c_420',
-    created_at: '2022-11-18T14:43:52-07:00',
-    tagged_message: 'Hello there',
     created_by: otherUser,
 };
 
@@ -132,7 +124,7 @@ const getShallowWrapper = (params = {}) =>
     shallow(
         <ActiveState
             activeFeedItem={{ id: 'something', type: 'other' }}
-            items={[annotation, comment1, fileVersion, taskWithAssignment, appActivity]}
+            items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
             currentUser={currentUser}
             currentFileVersionId="123"
             {...params}
@@ -140,7 +132,6 @@ const getShallowWrapper = (params = {}) =>
     );
 const createGetElementBySelector = selector => (wrapper, index = 0) => wrapper.find(selector).at(index);
 const getComment = createGetElementBySelector('[data-testid="comment"]');
-const getActivityThread = createGetElementBySelector('[data-testid="comment"] > [data-testid="activity-thread"]');
 
 describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () => {
     test('should render empty state', () => {
@@ -195,49 +186,30 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
 
     test("should have ActivityItem focused when it's activeFeedEntry", () => {
         const wrapper = getShallowWrapper({
-            activeFeedItem: comment1,
+            activeFeedItem: comment,
         }).dive();
 
         expect(getComment(wrapper).prop('isFocused')).toBe(true);
     });
 
-    test('should have ActiveItem focused when AnnotationThead', () => {
-        const wrapper = getShallowWrapper().dive();
+    test.each`
+        isSelected | expectedValue
+        ${false}   | ${null}
+        ${true}    | ${comment.id}
+    `(
+        'should call onItemFocus wiht $expectedValue when Comment on select is triggered with $isSelected',
+        ({ isSelected, expectedValue }) => {
+            const onItemFocus = jest.fn();
+            const wrapper = getShallowWrapper({
+                activeFeedItem: comment,
+                onItemFocus,
+            }).dive();
 
-        expect(getComment(wrapper).prop('isFocused')).toBe(false);
+            getComment(wrapper)
+                .find('Comment')
+                .simulate('select', isSelected);
 
-        getActivityThread(wrapper).simulate('replySelect', true);
-
-        expect(getComment(wrapper).prop('isFocused')).toBe(true);
-    });
-
-    test('should have only one ActiveItem selected at a time', () => {
-        const wrapper = getShallowWrapper({
-            items: [comment1, comment2],
-            activeFeedItem: comment1,
-        }).dive();
-
-        expect(getComment(wrapper).prop('isFocused')).toBe(true);
-        expect(getComment(wrapper, 1).prop('isFocused')).toBe(false);
-
-        getActivityThread(wrapper, 1).simulate('replySelect', true);
-
-        expect(getComment(wrapper).prop('isFocused')).toBe(false);
-        expect(getComment(wrapper, 1).prop('isFocused')).toBe(true);
-    });
-
-    test('should have only one ActiveItem selected at a time no matter the order', () => {
-        const wrapper = getShallowWrapper({
-            items: [comment1, comment2],
-            activeFeedItem: comment2,
-        }).dive();
-
-        expect(getComment(wrapper).prop('isFocused')).toBe(false);
-        expect(getComment(wrapper, 1).prop('isFocused')).toBe(true);
-
-        getActivityThread(wrapper).simulate('replySelect', true);
-
-        expect(getComment(wrapper, 0).prop('isFocused')).toBe(true);
-        expect(getComment(wrapper, 1).prop('isFocused')).toBe(false);
-    });
+            expect(onItemFocus).toBeCalledWith(expectedValue);
+        },
+    );
 });

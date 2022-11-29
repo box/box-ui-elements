@@ -496,23 +496,31 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
     describe('isCommentFeedItemActive()', () => {
         test.each`
-            replies            | isFeedItemActiveResult | expected
-            ${[{ id: '123' }]} | ${false}               | ${true}
-            ${[{ id: '456' }]} | ${false}               | ${false}
-            ${[{ id: '456' }]} | ${true}                | ${true}
-            ${[]}              | ${false}               | ${false}
-            ${[]}              | ${true}                | ${true}
-            ${undefined}       | ${false}               | ${false}
-            ${undefined}       | ${true}                | ${true}
+            focusedItemId | replies            | isFeedItemActiveResult | expected
+            ${null}       | ${[{ id: '123' }]} | ${false}               | ${true}
+            ${null}       | ${[{ id: '456' }]} | ${false}               | ${false}
+            ${null}       | ${[{ id: '456' }]} | ${true}                | ${true}
+            ${null}       | ${[]}              | ${false}               | ${false}
+            ${null}       | ${[]}              | ${true}                | ${true}
+            ${null}       | ${undefined}       | ${false}               | ${false}
+            ${null}       | ${undefined}       | ${true}                | ${true}
+            ${'123'}      | ${[{ id: '123' }]} | ${false}               | ${true}
+            ${'123'}      | ${[{ id: '456' }]} | ${false}               | ${true}
+            ${'123'}      | ${[{ id: '456' }]} | ${true}                | ${true}
+            ${'123'}      | ${[]}              | ${false}               | ${true}
+            ${'123'}      | ${[]}              | ${true}                | ${true}
+            ${'123'}      | ${undefined}       | ${false}               | ${true}
+            ${'123'}      | ${undefined}       | ${true}                | ${true}
         `(
-            'should return $expected when replies=replies and isFeedItemActive results with $isFeedItemActiveResult',
-            ({ replies, isFeedItemActiveResult, expected }) => {
+            'should return $expected when replies=$replies and isFeedItemActive results with $isFeedItemActiveResult and focusedItemId is $focusedItemId',
+            ({ focusedItemId, replies, isFeedItemActiveResult, expected }) => {
                 const wrapper = getWrapper({
                     activeFeedEntryId: '123',
                 });
                 const instance = wrapper.instance();
+                instance.state.focusedItemId = focusedItemId;
                 instance.isFeedItemActive = jest.fn().mockImplementation(() => isFeedItemActiveResult);
-                expect(instance.isCommentFeedItemActive({ id: 'foo', replies, type: 'bar' })).toBe(expected);
+                expect(instance.isCommentFeedItemActive({ id: '123', replies, type: 'bar' })).toBe(expected);
             },
         );
     });

@@ -95,12 +95,14 @@ type Props = {
 };
 
 type State = {
+    focusedItemId: string | null,
     isInputOpen: boolean,
     isScrolled: boolean,
 };
 
 class ActivityFeed extends React.Component<Props, State> {
     state = {
+        focusedItemId: null,
         isScrolled: false,
         isInputOpen: false,
     };
@@ -244,6 +246,10 @@ class ActivityFeed extends React.Component<Props, State> {
         versionInfoHandler(data);
     };
 
+    focusItem = (itemId: string | null) => {
+        this.setState({ focusedItemId: itemId });
+    };
+
     isFeedItemActive = <T, U: { id: string, type: T }>({ id, type }: U): boolean => {
         const { activeFeedEntryId, activeFeedEntryType } = this.props;
 
@@ -252,10 +258,17 @@ class ActivityFeed extends React.Component<Props, State> {
 
     isCommentFeedItemActive = <T, U: { id: string, replies?: Array<Comment>, type: T }>(item: U): boolean => {
         const { activeFeedEntryId } = this.props;
+        const { focusedItemId } = this.state;
         const { replies } = item;
 
         const isActive = this.isFeedItemActive<T, U>(item);
-        return isActive || (!!replies && replies.some(reply => reply.id === activeFeedEntryId));
+        const isFocused = focusedItemId === item.id;
+
+        if (!focusedItemId) {
+            return isActive || (!!replies && replies.some(reply => reply.id === activeFeedEntryId));
+        }
+
+        return isFocused;
     };
 
     render(): React.Node {
@@ -383,6 +396,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
                             onHideReplies={onHideReplies}
+                            onItemFocus={this.focusItem}
                             onReplyCreate={hasCommentPermission ? onReplyCreate : noop}
                             onReplyDelete={hasCommentPermission ? onReplyDelete : noop}
                             onReplyUpdate={hasCommentPermission ? onReplyUpdate : noop}
