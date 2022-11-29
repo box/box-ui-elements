@@ -57,8 +57,6 @@ const AnnotationThreadContent = ({
         filePermissions: permissions,
         errorCallback: onError,
     });
-    // eslint-disable-next-line no-console
-    console.log('annotation', annotation);
 
     return (
         <>
