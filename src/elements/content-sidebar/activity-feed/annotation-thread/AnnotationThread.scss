@@ -1,7 +1,6 @@
 @import '../../../../styles/variables';
 
 .AnnotationThread {
-    max-width: 340px;
-    max-height: 600px;
+    min-width: $bdl-grid-unit * 85;
     background-color: $white;
 }

@@ -4,12 +4,14 @@ import type EventEmitter from 'events';
 import useAnnotationThread from './useAnnotationThread';
 import ActivityError from '../common/activity-error';
 import ActivityThread from '../activity-feed/ActivityThread';
+import ActivityThreadReplyForm from '../activity-feed/ActivityThreadReplyForm';
 import AnnotationActivity from '../annotations';
 import API from '../../../../api/APIFactory';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 
 import type { BoxItem, SelectorItems, User } from '../../../../common/types/core';
 import type { ErrorContextProps } from '../../../../common/types/api';
+import type { GetProfileUrlCallback } from '../../../common/flowTypes';
 
 import './AnnotationThreadContent.scss';
 
@@ -21,6 +23,7 @@ type Props = {
     file: BoxItem,
     getAvatarUrl: string => Promise<?string>,
     getMentionWithQuery: (searchStr: string) => void,
+    getUserProfileUrl?: GetProfileUrlCallback,
     mentionSelectorContacts: SelectorItems<>,
 } & ErrorContextProps;
 
@@ -32,6 +35,7 @@ const AnnotationThreadContent = ({
     file,
     getAvatarUrl,
     getMentionWithQuery,
+    getUserProfileUrl,
     mentionSelectorContacts,
     onError,
 }: Props) => {
@@ -53,41 +57,53 @@ const AnnotationThreadContent = ({
         filePermissions: permissions,
         errorCallback: onError,
     });
+    // eslint-disable-next-line no-console
+    console.log('annotation', annotation);
 
     return (
-        <ActivityThread
-            hasReplies
-            getAvatarUrl={getAvatarUrl}
-            getMentionWithQuery={getMentionWithQuery}
-            isAlwaysExpanded
-            isRepliesLoading={isLoading}
-            mentionSelectorContacts={mentionSelectorContacts}
-            onReplyCreate={handleReplyCreate}
-            onReplyDelete={handleReplyDelete}
-            onReplyEdit={handleReplyEdit}
-            replies={replies}
-            repliesTotalCount={replies.length}
-        >
-            {error && <ActivityError {...error} />}
-            {isLoading && (
-                <div className="AnnotationThreadContent-loading" data-testid="annotation-loading">
-                    <LoadingIndicator />
-                </div>
-            )}
+        <>
+            <ActivityThread
+                hasReplies
+                getAvatarUrl={getAvatarUrl}
+                getMentionWithQuery={getMentionWithQuery}
+                getUserProfileUrl={getUserProfileUrl}
+                isAlwaysExpanded
+                isRepliesLoading={isLoading}
+                mentionSelectorContacts={mentionSelectorContacts}
+                onReplyDelete={handleReplyDelete}
+                onReplyEdit={handleReplyEdit}
+                replies={replies}
+                repliesTotalCount={replies.length}
+            >
+                {error && <ActivityError {...error} />}
+                {isLoading && (
+                    <div className="AnnotationThreadContent-loading" data-testid="annotation-loading">
+                        <LoadingIndicator />
+                    </div>
+                )}
+                {annotation && (
+                    <AnnotationActivity
+                        getAvatarUrl={getAvatarUrl}
+                        currentUser={currentUser}
+                        isCurrentVersion
+                        item={annotation}
+                        getMentionWithQuery={getMentionWithQuery}
+                        getUserProfileUrl={getUserProfileUrl}
+                        mentionSelectorContacts={mentionSelectorContacts}
+                        onEdit={handleAnnotationEdit}
+                        onDelete={handleAnnotationDelete}
+                        onStatusChange={handleAnnotationStatusChange}
+                    />
+                )}
+            </ActivityThread>
             {annotation && (
-                <AnnotationActivity
-                    getAvatarUrl={getAvatarUrl}
-                    currentUser={currentUser}
-                    isCurrentVersion
-                    item={annotation}
+                <ActivityThreadReplyForm
                     getMentionWithQuery={getMentionWithQuery}
                     mentionSelectorContacts={mentionSelectorContacts}
-                    onEdit={handleAnnotationEdit}
-                    onDelete={handleAnnotationDelete}
-                    onStatusChange={handleAnnotationStatusChange}
+                    onReplyCreate={handleReplyCreate}
                 />
             )}
-        </ActivityThread>
+        </>
     );
 };
 

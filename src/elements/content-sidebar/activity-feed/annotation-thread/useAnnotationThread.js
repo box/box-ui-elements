@@ -78,6 +78,7 @@ const useAnnotationThread = ({
     fileId,
     filePermissions,
     errorCallback,
+    eventEmitter,
 }: Props): UseAnnotationThread => {
     const [annotation, setAnnotation] = React.useState<Annotation | typeof undefined>();
     const [replies, setReplies] = React.useState<{ [string]: Comment }>({});
@@ -98,6 +99,7 @@ const useAnnotationThread = ({
     };
 
     useAnnotatorEvents({
+        eventEmitter,
         onAnnotationDeleteStart: setAnnotationPending,
         onAnnotationUpdateEnd,
         onAnnotationUpdateStart: setAnnotationPending,
@@ -155,8 +157,10 @@ const useAnnotationThread = ({
     });
 
     React.useEffect(() => {
-        handleFetch({ annotationId, successCallback: handleFetchAnnotationSuccess });
-    }, [annotationId, handleFetch]);
+        if (!annotation || annotation.id !== annotationId) {
+            handleFetch({ annotationId, successCallback: handleFetchAnnotationSuccess });
+        }
+    }, [annotation, annotationId, handleFetch]);
 
     const { handleReplyCreate, handleReplyEdit, handleReplyDelete } = useRepliesAPI({
         annotationId,

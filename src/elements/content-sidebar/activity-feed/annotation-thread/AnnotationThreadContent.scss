@@ -3,3 +3,22 @@
 .AnnotationThreadContent-loading {
     padding: $bdl-grid-unit * 5 0;
 }
+
+.AnnotationThread {
+    .bcs-ActivityThread {
+        position: relative;
+        max-height: $bdl-grid-unit * 132;
+        margin-bottom: $bdl-grid-unit * 4;
+        overflow: auto;
+        box-shadow: none;
+
+        .bcs-AnnotationActivity-menu {
+            top: $sidebarActivityFeedSpacingVertical;
+        }
+    }
+
+    .bcs-ActivityThreadReplyForm-toggle,
+    .bcs-ActivityThreadReplyForm-toggle:hover {
+        margin: 0 $sidebarActivityFeedSpacingHorizontal $sidebarActivityFeedSpacingVertical;
+    }
+}
