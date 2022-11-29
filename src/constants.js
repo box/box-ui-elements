@@ -250,6 +250,7 @@ export const ERROR_CODE_FETCH_FILE_DUE_TO_POLICY = 'forbidden_by_policy';
 export const ERROR_CODE_FETCH_FOLDER = 'fetch_folder_error';
 export const ERROR_CODE_FETCH_WEBLINK = 'fetch_weblink_error';
 export const ERROR_CODE_FETCH_CLASSIFICATION = 'fetch_classification_error';
+export const ERROR_CODE_FETCH_COMMENT = 'fetch_comment_error';
 export const ERROR_CODE_FETCH_COMMENTS = 'fetch_comments_error';
 export const ERROR_CODE_FETCH_REPLIES = 'fetch_replies_error';
 export const ERROR_CODE_FETCH_VERSION = 'fetch_version_error';

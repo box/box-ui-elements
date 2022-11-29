@@ -477,4 +477,43 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             expect(instance.hasLoaded(prevCurrentUser, prevFeedItems)).toBe(expected);
         });
     });
+
+    describe('isFeedItemActive()', () => {
+        test.each`
+            id       | type            | expected
+            ${'123'} | ${'comment'}    | ${true}
+            ${'456'} | ${'annotation'} | ${false}
+            ${'456'} | ${'comment'}    | ${false}
+        `('should return $expected given id=$id and type=$type', ({ id, type, expected }) => {
+            const wrapper = getWrapper({
+                activeFeedEntryId: '123',
+                activeFeedEntryType: 'comment',
+            });
+            const instance = wrapper.instance();
+            expect(instance.isFeedItemActive({ id, type })).toBe(expected);
+        });
+    });
+
+    describe('isCommentFeedItemActive()', () => {
+        test.each`
+            replies            | isFeedItemActiveResult | expected
+            ${[{ id: '123' }]} | ${false}               | ${true}
+            ${[{ id: '456' }]} | ${false}               | ${false}
+            ${[{ id: '456' }]} | ${true}                | ${true}
+            ${[]}              | ${false}               | ${false}
+            ${[]}              | ${true}                | ${true}
+            ${undefined}       | ${false}               | ${false}
+            ${undefined}       | ${true}                | ${true}
+        `(
+            'should return $expected when replies=replies and isFeedItemActive results with $isFeedItemActiveResult',
+            ({ replies, isFeedItemActiveResult, expected }) => {
+                const wrapper = getWrapper({
+                    activeFeedEntryId: '123',
+                });
+                const instance = wrapper.instance();
+                instance.isFeedItemActive = jest.fn().mockImplementation(() => isFeedItemActiveResult);
+                expect(instance.isCommentFeedItemActive({ id: 'foo', replies, type: 'bar' })).toBe(expected);
+            },
+        );
+    });
 });

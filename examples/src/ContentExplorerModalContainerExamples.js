@@ -163,8 +163,6 @@ class ContentExplorerModalContainerExamples extends Component {
                         numItemsPerPage={100}
                         numTotalItems={items.length}
                         onLoadMoreItems={() => {}}
-                        listWidth={600}
-                        listHeight={350}
                     />
                 )}
             </div>

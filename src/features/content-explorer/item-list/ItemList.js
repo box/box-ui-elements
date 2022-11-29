@@ -125,6 +125,7 @@ const itemLoadingPlaceholderRenderer = rendererParams => {
 };
 
 const ItemList = ({
+    additionalColumns,
     contentExplorerMode,
     className = '',
     isResponsive = false,
@@ -136,6 +137,8 @@ const ItemList = ({
     onItemDoubleClick,
     onItemNameClick,
     onLoadMoreItems,
+    headerHeight,
+    headerRenderer,
     itemIconRenderer,
     itemNameLinkRenderer,
     itemButtonRenderer,
@@ -218,6 +221,8 @@ const ItemList = ({
                 headerClassName="table-header-item"
                 width={width}
                 height={height}
+                headerHeight={headerHeight}
+                headerRowRenderer={headerRenderer}
                 rowHeight={rowHeight}
                 rowCount={items.length}
                 onRowClick={onItemClick}
@@ -249,6 +254,7 @@ const ItemList = ({
                     flexGrow={1}
                     flexShrink={0}
                 />
+                {additionalColumns}
                 <Column
                     className="item-list-button-col"
                     cellRenderer={itemButtonCellRenderer}
@@ -268,6 +274,7 @@ const ItemList = ({
 ItemList.displayName = 'ItemList';
 
 ItemList.propTypes = {
+    additionalColumns: PropTypes.arrayOf(PropTypes.element),
     className: PropTypes.string,
     contentExplorerMode: ContentExplorerModePropType.isRequired,
     isResponsive: PropTypes.bool,
@@ -279,6 +286,8 @@ ItemList.propTypes = {
     onItemDoubleClick: PropTypes.func,
     onItemNameClick: PropTypes.func,
     onLoadMoreItems: PropTypes.func,
+    headerHeight: PropTypes.number,
+    headerRenderer: PropTypes.func,
     itemIconRenderer: PropTypes.func,
     itemNameLinkRenderer: PropTypes.func,
     itemButtonRenderer: PropTypes.func,

@@ -8,6 +8,7 @@ exports[`elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed should
 >
   <div
     className="bcs-activity-feed-items-container"
+    onScroll={[Function]}
   >
     <div
       className="bcs-activity-feed-loading-state"
@@ -26,6 +27,7 @@ exports[`elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed should
 >
   <div
     className="bcs-activity-feed-items-container"
+    onScroll={[Function]}
   >
     <div
       className="bcs-activity-feed-loading-state"
@@ -44,6 +46,7 @@ exports[`elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed should
 >
   <div
     className="bcs-activity-feed-items-container"
+    onScroll={[Function]}
   >
     <div
       className="bcs-activity-feed-loading-state"

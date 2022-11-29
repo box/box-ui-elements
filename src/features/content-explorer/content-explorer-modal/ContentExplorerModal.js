@@ -2,6 +2,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
+import Column from '@box/react-virtualized/dist/commonjs/Table/Column';
 import ContentExplorer from '../content-explorer';
 import { Modal } from '../../../components/modal';
 
@@ -10,16 +11,20 @@ import type { BreadcrumbProps } from '../../../components/breadcrumb/Breadcrumb'
 import './ContentExplorerModal.scss';
 
 type Props = {
+    additionalColumns?: Array<React.ComponentType<Column>>,
     breadcrumbProps?: BreadcrumbProps,
     className?: string,
     customInput?: React.ComponentType<any>,
     description?: string,
     isOpen?: boolean,
     isResponsive?: boolean,
+    itemRowHeight?: number,
+    itemRowRenderer?: Function,
+    listHeaderHeight?: number,
+    listHeaderRenderer?: Function,
     onRequestClose?: Function,
     onSelectItem?: (item: Object, index: number) => void,
     onSelectedClick?: () => void,
-    rowHeight?: number,
     title?: string,
 };
 

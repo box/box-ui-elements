@@ -1,6 +1,8 @@
 @import '../../../common/variables';
 
 .bcs-ActivityThread {
+    box-shadow: 0 1px 0 0 $bdl-gray-10;
+
     .bcs-ActivityThread-toggle {
         color: $bdl-box-blue;
 
@@ -16,6 +18,14 @@
     .bcs-ActivityCard {
         margin: $sidebarActivityFeedSpacingVertical $sidebarActivityFeedSpacingHorizontal;
         padding: 0;
+    }
+
+    .bcs-Comment-timestamp {
+        margin-bottom: 16px;
+
+        .bcs-ActivityTimestamp {
+            color: $bdl-gray;
+        }
     }
 
     .btn-plain:focus-visible {

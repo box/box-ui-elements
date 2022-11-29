@@ -6,10 +6,18 @@ import {
     FEED_ITEM_TYPE_ANNOTATION,
     FEED_ITEM_TYPE_APP_ACTIVITY,
     FEED_ITEM_TYPE_COMMENT,
+    FEED_ITEM_TYPE_VERSION,
     FEED_ITEM_TYPE_TASK,
 } from '../../constants';
 import type { BoxItemPermission, BoxItemVersion, Reply, User } from './core';
 import type { Annotation, AnnotationPermission, Annotations } from './annotations';
+
+type FeedItemType =
+    | typeof FEED_ITEM_TYPE_ANNOTATION
+    | typeof FEED_ITEM_TYPE_APP_ACTIVITY
+    | typeof FEED_ITEM_TYPE_COMMENT
+    | typeof FEED_ITEM_TYPE_VERSION
+    | typeof FEED_ITEM_TYPE_TASK;
 
 // Feed item types that can receive deeplinks inline in the feed
 type FocusableFeedItemType =
@@ -128,6 +136,10 @@ type FeedItem = Annotation | Comment | Task | BoxItemVersion | AppActivityItem;
 
 type FeedItems = Array<FeedItem>;
 
+type FocusableFeedItem = Annotation | Comment | Task;
+
+type CommentFeedItem = Annotation | Comment;
+
 type ActionItemError = {
     action?: {
         onAction: () => void,
@@ -150,11 +162,14 @@ export type {
     AppItem,
     BoxCommentPermission,
     Comment,
+    CommentFeedItem,
     CommentFeedItemType,
     Comments,
     FeedItem,
     FeedItems,
     FeedItemStatus,
+    FeedItemType,
+    FocusableFeedItem,
     FocusableFeedItemType,
     Reply,
     Task,

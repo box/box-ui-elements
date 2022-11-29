@@ -203,6 +203,7 @@ jest.mock('../Comments', () =>
 
 jest.mock('../ThreadedComments', () =>
     jest.fn().mockImplementation(() => ({
+        getComment: jest.fn().mockResolvedValue(mockThreadedComments[1]),
         getComments: jest.fn().mockReturnValue({
             entries: mockThreadedComments,
             limit: 1000,
@@ -624,6 +625,53 @@ describe('api/Feed', () => {
             const commentItems = feed.fetchComments();
             expect(commentItems instanceof Promise).toBeTruthy();
             expect(feed.commentsAPI.getComments).toBeCalled();
+        });
+    });
+
+    describe('fetchThreadedComment()', () => {
+        test('should throw if no file id', () => {
+            expect(() => feed.fetchThreadedComment({})).toThrow(fileError);
+        });
+
+        test('should throw if no file permissions', () => {
+            expect(() => feed.fetchReplies({ id: '1234' })).toThrow(fileError);
+        });
+
+        test('should call the threaded comments api', () => {
+            const commentId = '123';
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            const boundFetchThreadedCommentSuccessCallback = jest.fn();
+            feed.fetchThreadedCommentSuccessCallback = jest.fn();
+            feed.fetchThreadedCommentSuccessCallback.bind = jest.fn(() => boundFetchThreadedCommentSuccessCallback);
+
+            feed.fetchThreadedComment(file, commentId, successCallback, errorCallback);
+
+            expect(feed.threadedCommentsAPI.getComment).toBeCalledWith({
+                commentId,
+                errorCallback,
+                fileId: file.id,
+                permissions: file.permissions,
+                successCallback: boundFetchThreadedCommentSuccessCallback,
+            });
+            expect(feed.fetchThreadedCommentSuccessCallback.bind).toBeCalledWith(
+                feed,
+                expect.any(Function),
+                successCallback,
+            );
+        });
+    });
+
+    describe('fetchThreadedCommentSuccessCallback()', () => {
+        test('should call successCallback with given comment and call resolve function', () => {
+            const comment = { id: '123' };
+            const successCallback = jest.fn();
+            const resolve = jest.fn();
+
+            feed.fetchThreadedCommentSuccessCallback(resolve, successCallback, comment);
+
+            expect(successCallback).toBeCalledWith(comment);
+            expect(resolve).toBeCalledWith();
         });
     });
 

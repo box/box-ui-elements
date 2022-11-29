@@ -385,13 +385,16 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
     });
 
     test.each`
-        created_at                  | modified_at                 | expectedIsEdited
-        ${TIME_STRING_SEPT_27_2017} | ${undefined}                | ${false}
-        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_27_2017} | ${false}
-        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_28_2017} | ${true}
+        created_at                  | modified_at                 | status        | expectedIsEdited
+        ${TIME_STRING_SEPT_27_2017} | ${undefined}                | ${'open'}     | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_27_2017} | ${'open'}     | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_28_2017} | ${'open'}     | ${true}
+        ${TIME_STRING_SEPT_27_2017} | ${undefined}                | ${'resolved'} | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_27_2017} | ${'resolved'} | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_28_2017} | ${'resolved'} | ${false}
     `(
-        `given created_at = $created_at and modified_at = $modified_at, isEdited prop on ActivityMessage should be: $expectedIsEdited`,
-        ({ created_at, modified_at, expectedIsEdited }) => {
+        `given created_at = $created_at, modified_at = $modified_at and status = $status, isEdited prop on ActivityMessage should be: $expectedIsEdited`,
+        ({ created_at, modified_at, status, expectedIsEdited }) => {
             const comment = {
                 created_at,
                 modified_at,
@@ -408,6 +411,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                     currentUser={currentUser}
                     handlers={allHandlers}
                     mentionSelectorContacts={mentionSelectorContacts}
+                    status={status}
                 />,
             );
 

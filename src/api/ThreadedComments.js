@@ -12,6 +12,7 @@ import {
     ERROR_CODE_CREATE_COMMENT,
     ERROR_CODE_UPDATE_COMMENT,
     ERROR_CODE_DELETE_COMMENT,
+    ERROR_CODE_FETCH_COMMENT,
     ERROR_CODE_FETCH_COMMENTS,
     PERMISSION_CAN_RESOLVE,
     ERROR_CODE_FETCH_REPLIES,
@@ -225,6 +226,45 @@ class ThreadedComments extends MarkerBasedApi {
             url: this.getUrlForId(commentId),
             successCallback,
             errorCallback,
+        });
+    }
+
+    /**
+     * API for fetching comment
+     *
+     * @param {string} commentId - comment id
+     * @param {string} fileId - the file id
+     * @param {BoxItemPermission} permissions - the permissions for the file
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @returns {void}
+     */
+    getComment({
+        commentId,
+        errorCallback,
+        fileId,
+        permissions,
+        successCallback,
+    }: {
+        commentId: string,
+        errorCallback: (e: ElementsXhrError, code: string) => void,
+        fileId: string,
+        permissions: BoxItemPermission,
+        successCallback: (comment: Comment) => void,
+    }): void {
+        this.errorCode = ERROR_CODE_FETCH_COMMENT;
+        try {
+            this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, fileId);
+        } catch (e) {
+            errorCallback(e, this.errorCode);
+            return;
+        }
+
+        this.get({
+            id: fileId,
+            errorCallback,
+            successCallback,
+            url: this.getUrlForId(commentId),
         });
     }
 

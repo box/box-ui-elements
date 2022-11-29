@@ -463,6 +463,51 @@ class Feed extends Base {
     }
 
     /**
+     * Fetches a comment for a file
+     *
+     * @param {BoxItem} file - The file to which the comment belongs to
+     * @param {string} commentId - comment id
+     * @param {Function} successCallback
+     * @param {ErrorCallback} errorCallback
+     * @return {Promise} - the file comments
+     */
+    fetchThreadedComment(
+        file: BoxItem,
+        commentId: string,
+        successCallback: (comment: Comment) => void,
+        errorCallback: ErrorCallback,
+    ): Promise<?Comment> {
+        const { id, permissions } = file;
+        if (!id || !permissions) {
+            throw getBadItemError();
+        }
+
+        this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
+        return new Promise(resolve => {
+            this.threadedCommentsAPI.getComment({
+                commentId,
+                errorCallback,
+                fileId: id,
+                permissions,
+                successCallback: this.fetchThreadedCommentSuccessCallback.bind(this, resolve, successCallback),
+            });
+        });
+    }
+
+    /**
+     * Callback for successful fetch of a comment
+     *
+     * @param {Function} resolve - resolve function
+     * @param {Function} successCallback - success callback
+     * @param {Comment} comment - comment data
+     * @return {void}
+     */
+    fetchThreadedCommentSuccessCallback = (resolve: Function, successCallback: Function, comment: Comment): void => {
+        successCallback(comment);
+        resolve();
+    };
+
+    /**
      * Fetches the comments with replies for a file
      *
      * @param {Object} permissions - the file permissions
@@ -919,8 +964,8 @@ class Feed extends Base {
      * @return {void}
      */
     deleteReplySuccessCallback = (id: string, parentId: string, successCallback: Function): void => {
-        this.deleteReplyItem(id, parentId, successCallback);
         this.modifyFeedItemRepliesCountBy(parentId, -1);
+        this.deleteReplyItem(id, parentId, successCallback);
     };
 
     /**

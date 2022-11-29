@@ -8,6 +8,11 @@ import NewFolderModal from '../new-folder-modal';
 
 class ContentExplorerModalContainer extends Component {
     static propTypes = {
+        /**
+         * Extra columns displayed in the folders table after folder name column
+         * Each column has to be a Column element
+         */
+        additionalColumns: PropTypes.arrayOf(PropTypes.element),
         /** Breadcrumb component options */
         breadcrumbProps: BreadcrumbPropType,
         /** Adds class name. */
@@ -110,14 +115,20 @@ class ContentExplorerModalContainer extends Component {
         itemNameLinkRenderer: PropTypes.func,
         /** Used to render item buttons in the list. Overrides the default buttons. */
         itemButtonRenderer: PropTypes.func,
+        /** Height of an item row */
+        itemRowHeight: PropTypes.number,
+        /** Used to render the row element for items on the list */
+        itemRowRenderer: PropTypes.func,
+        /** Height of the item list header, defaults to 0, which makes header not visible */
+        listHeaderHeight: PropTypes.number,
+        /** Used to render the header row on the item list */
+        listHeaderRenderer: PropTypes.func,
         /** Whether the new folder button should be shown */
         showCreateNewFolderButton: PropTypes.bool,
         /** Props for the search input */
         searchInputProps: PropTypes.object,
         /** Custom text for the choose button */
         chooseButtonText: PropTypes.node,
-        /** Table row height */
-        rowHeight: PropTypes.number,
     };
 
     static defaultProps = {
