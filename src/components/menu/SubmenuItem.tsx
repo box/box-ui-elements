@@ -1,6 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
+import debounce from 'lodash/debounce';
 
 import './SubmenuItem.scss';
 import Arrow16 from '../../icon/fill/Arrow16';
