@@ -31,7 +31,7 @@ export const collapsible = () => (
                     Collapse or Expand
                 </NavListCollapseHeader>
             }
-            className="is-collapsible example-collapsible"
+            className="is-collapsible"
             collapsed={boolean('collapsed', false)}
         >
             <Link>Item 1-1</Link>
