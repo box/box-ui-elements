@@ -131,11 +131,11 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
         }
     };
 
-    closeSubmenu = () => {
+    closeSubmenu = debounce(() => {
         this.setState({
             isSubmenuOpen: false,
         });
-    };
+    }, 50);
 
     closeSubmenuAndFocusTrigger = (isKeyboardEvent: boolean | null | undefined) => {
         this.closeSubmenu();
@@ -145,6 +145,7 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
     };
 
     openSubmenu = () => {
+        this.closeSubmenu.cancel();
         const { onOpen } = this.props;
         if (onOpen) {
             onOpen();

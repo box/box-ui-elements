@@ -3,6 +3,13 @@ import { shallow } from 'enzyme';
 
 import SubmenuItem from '../SubmenuItem';
 
+jest.mock('lodash/debounce', () =>
+    jest.fn(fn => {
+        fn.cancel = jest.fn();
+        return fn;
+    }),
+);
+
 describe('components/menu/SubmenuItem', () => {
     const getWrapper = (props = {}) => {
         return shallow<SubmenuItem>(
