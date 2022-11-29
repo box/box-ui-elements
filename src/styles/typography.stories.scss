@@ -1,5 +1,4 @@
 @import './base';
-@import 'variables';
 
 .typography {
     display: flex;
@@ -41,7 +40,7 @@
 
     label {
         margin-right: 10px;
-        color: $great-balls-of-fire;
+        color: $bdl-watermelon-red;
     }
 
     .form-font-container label {
