@@ -157,9 +157,10 @@ const useAnnotationThread = ({
     });
 
     React.useEffect(() => {
-        if (!annotation || annotation.id !== annotationId) {
-            handleFetch({ annotationId, successCallback: handleFetchAnnotationSuccess });
+        if (annotation && annotation.id === annotationId) {
+            return;
         }
+        handleFetch({ annotationId, successCallback: handleFetchAnnotationSuccess });
     }, [annotation, annotationId, handleFetch]);
 
     const { handleReplyCreate, handleReplyEdit, handleReplyDelete } = useRepliesAPI({
