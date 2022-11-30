@@ -8,7 +8,7 @@ import Arrow16 from '../../icon/fill/Arrow16';
 
 const SUBMENU_LEFT_ALIGNED_CLASS = 'is-left-aligned';
 const SUBMENU_BOTTOM_ALIGNED_CLASS = 'is-bottom-aligned';
-const SUBMENU_INLINE_CLASS = 'is-inline-bottom';
+const SUBMENU_INLINE_BOTTOM_CLASS = 'is-inline-bottom';
 
 export interface SubmenuItemProps {
     /** 'aria-disabled' - ARIA attribute describing whether the submenu item is disabled */
