@@ -88,7 +88,7 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
         return {
             [SUBMENU_LEFT_ALIGNED_CLASS]: isLeftAligned,
             [SUBMENU_BOTTOM_ALIGNED_CLASS]: isBottomAligned,
-            [SUBMENU_INLINE_CLASS]: isInlineBottom, // Used only in medium-screen viewport sizes
+            [SUBMENU_INLINE_BOTTOM_CLASS]: isInlineBottom, // Used only in medium-screen viewport sizes
         };
     };
 
