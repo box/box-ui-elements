@@ -1,7 +1,26 @@
-@import '../../../../styles/variables';
+@import '../../../common/variables';
 
 .AnnotationThread {
-    max-width: 340px;
-    max-height: 600px;
+    min-width: 340px;
     background-color: $white;
+
+    .bcs-ActivityThread {
+        box-shadow: none;
+    }
+
+    .bcs-ActivityThread-content {
+        position: relative;
+        max-height: 528px;
+        margin-bottom: $bdl-grid-unit * 4;
+        overflow: auto;
+
+        .bcs-AnnotationActivity-menu {
+            top: $sidebarActivityFeedSpacingVertical;
+        }
+    }
+
+    .bcs-ActivityThreadReplyForm-toggle,
+    .bcs-ActivityThreadReplyForm-toggle:hover {
+        margin: 0 $sidebarActivityFeedSpacingHorizontal $sidebarActivityFeedSpacingVertical;
+    }
 }

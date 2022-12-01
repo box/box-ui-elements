@@ -110,24 +110,26 @@ const ActivityThread = ({
     }
     return (
         <div className="bcs-ActivityThread" data-testid="activity-thread">
-            {children}
+            <div className="bcs-ActivityThread-content">
+                {children}
 
-            {renderButton()}
+                {renderButton()}
 
-            {repliesTotalCount > 0 && repliesLength > 0 && (
-                <ActivityThreadReplies
-                    currentUser={currentUser}
-                    getAvatarUrl={getAvatarUrl}
-                    getMentionWithQuery={getMentionWithQuery}
-                    getUserProfileUrl={getUserProfileUrl}
-                    isRepliesLoading={isRepliesLoading}
-                    mentionSelectorContacts={mentionSelectorContacts}
-                    onDelete={onReplyDelete}
-                    onEdit={onReplyEdit}
-                    replies={replies}
-                    translations={translations}
-                />
-            )}
+                {repliesTotalCount > 0 && repliesLength > 0 && (
+                    <ActivityThreadReplies
+                        currentUser={currentUser}
+                        getAvatarUrl={getAvatarUrl}
+                        getMentionWithQuery={getMentionWithQuery}
+                        getUserProfileUrl={getUserProfileUrl}
+                        isRepliesLoading={isRepliesLoading}
+                        mentionSelectorContacts={mentionSelectorContacts}
+                        onDelete={onReplyDelete}
+                        onEdit={onReplyEdit}
+                        replies={replies}
+                        translations={translations}
+                    />
+                )}
+            </div>
 
             {onReplyCreate ? (
                 <ActivityThreadReplyForm
