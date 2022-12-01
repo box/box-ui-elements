@@ -5,11 +5,14 @@
     background-color: $white;
 
     .bcs-ActivityThread {
+        box-shadow: none;
+    }
+
+    .bcs-ActivityThread-content {
         position: relative;
         max-height: 528px;
         margin-bottom: $bdl-grid-unit * 4;
         overflow: auto;
-        box-shadow: none;
 
         .bcs-AnnotationActivity-menu {
             top: $sidebarActivityFeedSpacingVertical;

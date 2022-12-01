@@ -60,26 +60,27 @@ const AnnotationThreadContent = ({
 
     return (
         <>
-            <ActivityThread
-                hasReplies
-                getAvatarUrl={getAvatarUrl}
-                getMentionWithQuery={getMentionWithQuery}
-                getUserProfileUrl={getUserProfileUrl}
-                isAlwaysExpanded
-                isRepliesLoading={isLoading}
-                mentionSelectorContacts={mentionSelectorContacts}
-                onReplyDelete={handleReplyDelete}
-                onReplyEdit={handleReplyEdit}
-                replies={replies}
-                repliesTotalCount={replies.length}
-            >
-                {error && <ActivityError {...error} />}
-                {isLoading && (
-                    <div className="AnnotationThreadContent-loading" data-testid="annotation-loading">
-                        <LoadingIndicator />
-                    </div>
-                )}
-                {annotation && (
+            {error && <ActivityError {...error} />}
+            {isLoading && (
+                <div className="AnnotationThreadContent-loading" data-testid="annotation-loading">
+                    <LoadingIndicator />
+                </div>
+            )}
+            {annotation && (
+                <ActivityThread
+                    hasReplies
+                    getAvatarUrl={getAvatarUrl}
+                    getMentionWithQuery={getMentionWithQuery}
+                    getUserProfileUrl={getUserProfileUrl}
+                    isAlwaysExpanded
+                    isRepliesLoading={isLoading}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onReplyCreate={handleReplyCreate}
+                    onReplyDelete={handleReplyDelete}
+                    onReplyEdit={handleReplyEdit}
+                    replies={replies}
+                    repliesTotalCount={replies.length}
+                >
                     <AnnotationActivity
                         getAvatarUrl={getAvatarUrl}
                         currentUser={currentUser}
@@ -92,14 +93,7 @@ const AnnotationThreadContent = ({
                         onDelete={handleAnnotationDelete}
                         onStatusChange={handleAnnotationStatusChange}
                     />
-                )}
-            </ActivityThread>
-            {annotation && (
-                <ActivityThreadReplyForm
-                    getMentionWithQuery={getMentionWithQuery}
-                    mentionSelectorContacts={mentionSelectorContacts}
-                    onReplyCreate={handleReplyCreate}
-                />
+                </ActivityThread>
             )}
         </>
     );
