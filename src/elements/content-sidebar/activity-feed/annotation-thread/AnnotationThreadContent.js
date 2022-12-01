@@ -4,7 +4,6 @@ import type EventEmitter from 'events';
 import useAnnotationThread from './useAnnotationThread';
 import ActivityError from '../common/activity-error';
 import ActivityThread from '../activity-feed/ActivityThread';
-import ActivityThreadReplyForm from '../activity-feed/ActivityThreadReplyForm';
 import AnnotationActivity from '../annotations';
 import API from '../../../../api/APIFactory';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
