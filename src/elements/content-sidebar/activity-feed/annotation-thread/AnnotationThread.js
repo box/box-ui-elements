@@ -18,6 +18,7 @@ import type APICache from '../../../../utils/Cache';
 import type { BoxItem, SelectorItems, StringMap, Token, User } from '../../../../common/types/core';
 import type { ElementOrigin, ElementsXhrError } from '../../../../common/types/api';
 import type { Annotation, Target } from '../../../../common/types/annotations';
+import type { GetProfileUrlCallback } from '../../../common/flowTypes';
 
 import './AnnotationThread.scss';
 
@@ -25,11 +26,12 @@ type Props = {
     annotationId?: string,
     apiHost?: string,
     cache?: APICache,
-    className: string,
+    className?: string,
     clientName: string,
     currentUser: User,
     eventEmitter: EventEmitter,
     file: BoxItem,
+    getUserProfileUrl?: GetProfileUrlCallback,
     handleCancel: () => void,
     language?: string,
     messages?: StringMap,
@@ -48,6 +50,7 @@ const AnnotationThread = ({
     currentUser,
     eventEmitter,
     file,
+    getUserProfileUrl,
     handleCancel,
     language,
     messages,
@@ -107,6 +110,7 @@ const AnnotationThread = ({
                         file={file}
                         getAvatarUrl={getAvatarUrl}
                         getMentionWithQuery={getMentionWithQuery}
+                        getUserProfileUrl={getUserProfileUrl}
                         mentionSelectorContacts={mentionSelectorContacts}
                         onError={onError}
                     />

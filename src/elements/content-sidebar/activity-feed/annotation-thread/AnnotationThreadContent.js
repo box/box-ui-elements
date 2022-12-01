@@ -10,6 +10,7 @@ import LoadingIndicator from '../../../../components/loading-indicator/LoadingIn
 
 import type { BoxItem, SelectorItems, User } from '../../../../common/types/core';
 import type { ErrorContextProps } from '../../../../common/types/api';
+import type { GetProfileUrlCallback } from '../../../common/flowTypes';
 
 import './AnnotationThreadContent.scss';
 
@@ -21,6 +22,7 @@ type Props = {
     file: BoxItem,
     getAvatarUrl: string => Promise<?string>,
     getMentionWithQuery: (searchStr: string) => void,
+    getUserProfileUrl?: GetProfileUrlCallback,
     mentionSelectorContacts: SelectorItems<>,
 } & ErrorContextProps;
 
@@ -32,6 +34,7 @@ const AnnotationThreadContent = ({
     file,
     getAvatarUrl,
     getMentionWithQuery,
+    getUserProfileUrl,
     mentionSelectorContacts,
     onError,
 }: Props) => {
@@ -55,19 +58,7 @@ const AnnotationThreadContent = ({
     });
 
     return (
-        <ActivityThread
-            hasReplies
-            getAvatarUrl={getAvatarUrl}
-            getMentionWithQuery={getMentionWithQuery}
-            isAlwaysExpanded
-            isRepliesLoading={isLoading}
-            mentionSelectorContacts={mentionSelectorContacts}
-            onReplyCreate={handleReplyCreate}
-            onReplyDelete={handleReplyDelete}
-            onReplyEdit={handleReplyEdit}
-            replies={replies}
-            repliesTotalCount={replies.length}
-        >
+        <>
             {error && <ActivityError {...error} />}
             {isLoading && (
                 <div className="AnnotationThreadContent-loading" data-testid="annotation-loading">
@@ -75,19 +66,35 @@ const AnnotationThreadContent = ({
                 </div>
             )}
             {annotation && (
-                <AnnotationActivity
+                <ActivityThread
+                    hasReplies
                     getAvatarUrl={getAvatarUrl}
-                    currentUser={currentUser}
-                    isCurrentVersion
-                    item={annotation}
                     getMentionWithQuery={getMentionWithQuery}
+                    getUserProfileUrl={getUserProfileUrl}
+                    isAlwaysExpanded
+                    isRepliesLoading={isLoading}
                     mentionSelectorContacts={mentionSelectorContacts}
-                    onEdit={handleAnnotationEdit}
-                    onDelete={handleAnnotationDelete}
-                    onStatusChange={handleAnnotationStatusChange}
-                />
+                    onReplyCreate={handleReplyCreate}
+                    onReplyDelete={handleReplyDelete}
+                    onReplyEdit={handleReplyEdit}
+                    replies={replies}
+                    repliesTotalCount={replies.length}
+                >
+                    <AnnotationActivity
+                        getAvatarUrl={getAvatarUrl}
+                        currentUser={currentUser}
+                        isCurrentVersion
+                        item={annotation}
+                        getMentionWithQuery={getMentionWithQuery}
+                        getUserProfileUrl={getUserProfileUrl}
+                        mentionSelectorContacts={mentionSelectorContacts}
+                        onEdit={handleAnnotationEdit}
+                        onDelete={handleAnnotationDelete}
+                        onStatusChange={handleAnnotationStatusChange}
+                    />
+                </ActivityThread>
             )}
-        </ActivityThread>
+        </>
     );
 };
 
