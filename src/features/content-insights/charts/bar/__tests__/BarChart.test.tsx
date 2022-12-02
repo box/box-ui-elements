@@ -86,9 +86,9 @@ describe('features/content-insights/charts/bar/BarChart', () => {
         });
 
         test('should render with label', () => {
-            const wrapper = getWrapper({ showAxisLabel: true });
+            const wrapper = getWrapper({ hasAxisLabel: true });
             const element = getFirstChild(wrapper);
-            expect(element.querySelectorAll('.ca-Bar-Label').length).toBe(3);
+            expect(element.querySelectorAll('.ca-Bar-label').length).toBe(3);
         });
     });
 

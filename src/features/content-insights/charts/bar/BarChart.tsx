@@ -17,11 +17,11 @@ interface Props {
     className?: string;
     data: Array<any>;
     direction?: Direction;
+    hasAxisLabel?: boolean;
     label: string;
     labelAccessor: string;
     onBarMouseEnter?: (arg1: { datum: any }, arg2: OffsetPosition) => void;
     onBarMouseLeave?: (arg1: { datum: any }) => void;
-    showAxisLabel?: boolean;
     valueAccessor: ValueAccessor;
 }
 
@@ -33,12 +33,12 @@ function BarChart({
     className,
     data = [],
     direction = 'vertical',
+    hasAxisLabel = false,
     label,
+    labelAccessor,
     onBarMouseEnter,
     onBarMouseLeave,
-    labelAccessor,
     valueAccessor,
-    showAxisLabel = false,
 }: Props) {
     const isHorizontal = direction === 'horizontal';
     const isInteractive = !!onBarMouseEnter || !!onBarMouseLeave;
@@ -72,7 +72,7 @@ function BarChart({
                 <Bar
                     key={datum[labelAccessor]}
                     direction={direction}
-                    label={showAxisLabel && datum[labelAccessor]}
+                    label={hasAxisLabel && datum[labelAccessor]}
                     onMouseEnter={(position: OffsetPosition) => handleBarMouseEnter({ datum }, position)}
                     onMouseLeave={() => handleBarMouseLeave({ datum })}
                     size={getSize(datum)}

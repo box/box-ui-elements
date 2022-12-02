@@ -5,8 +5,8 @@ import omit from 'lodash/omit';
 import uniqueId from 'lodash/uniqueId';
 import { defineMessages, injectIntl } from 'react-intl';
 
-import IconClose from '../../icon/fill/X16';
 import IconBack from '../../icon/fill/Arrow16';
+import IconClose from '../../icon/fill/X16';
 
 const ALERT_TYPE = 'alert';
 const DIALOG_TYPE = 'dialog';
@@ -69,7 +69,7 @@ class ModalDialog extends React.Component<Props> {
     modalID: string = uniqueId('modal');
 
     /**
-     * Renders a button if onBackButtonClick is passed in
+     * Renders a button if onRequestBack is passed in
      * @return {ReactElement|null} - Returns the button, or null if the button shouldn't be rendered
      */
     renderBackButton() {

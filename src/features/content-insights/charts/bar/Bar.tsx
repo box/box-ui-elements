@@ -11,7 +11,7 @@ const DEFAULT_SIZE = 50;
 interface Props {
     color?: string;
     direction?: Direction;
-    label?: string | null;
+    label?: string | boolean;
     onMouseEnter?: (arg1: { left: number; top: number }) => void;
     onMouseLeave?: () => void;
     size: number;
@@ -22,7 +22,7 @@ function Bar({
     direction = 'vertical',
     onMouseEnter = noop,
     onMouseLeave = noop,
-    label = null,
+    label = false,
     size = DEFAULT_SIZE,
 }: Props) {
     const isHorizontal = direction === 'horizontal';
@@ -37,7 +37,7 @@ function Bar({
 
     const handleMouseEnter = React.useCallback(() => {
         const offsetPosition = { top: 0, left: 0 };
-        if (barRef && barRef.current) {
+        if (barRef?.current) {
             const boundingClientRect = barRef.current.getBoundingClientRect();
             offsetPosition.top = boundingClientRect.top;
             offsetPosition.left = boundingClientRect.left + boundingClientRect.width / 2;
@@ -61,7 +61,7 @@ function Bar({
             role="presentation"
         >
             <div className="ca-Bar-value" style={style} />
-            {label && <div className="ca-Bar-Label">{label}</div>}
+            {label && <div className="ca-Bar-label">{label}</div>}
         </div>
     );
 }

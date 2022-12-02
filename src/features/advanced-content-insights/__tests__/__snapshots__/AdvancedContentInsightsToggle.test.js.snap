@@ -15,35 +15,35 @@ exports[`features/advanced-content-insights/AdvancedContentInsightsToggle should
         <React.Fragment>
           <FormattedMessage
             defaultMessage="Advanced Insights"
-            id="be.advancedContentInsights.advancedContentInsightsTitle"
+            id="boxui.advancedContentInsights.advancedContentInsightsTitle"
           />
-          <div
-            className="AdvancedContentInsightsToggle-tooltip"
-          >
-            <Tooltip
-              constrainToScrollParent={false}
-              constrainToWindow={true}
-              isDisabled={false}
-              position="top-center"
-              text={
-                <FormattedMessage
-                  defaultMessage="Get actionable insights into how viewers are engaging with this content. Measure average time spent, page-by-page engagement, per person and per visit details. {helpLink}"
-                  id="be.advancedContentInsights.advancedContentInsightsDescription"
-                  values={
-                    Object {
-                      "helpLink": false,
-                    }
+          <Tooltip
+            constrainToScrollParent={false}
+            constrainToWindow={true}
+            isDisabled={false}
+            position="top-center"
+            text={
+              <FormattedMessage
+                defaultMessage="Get actionable insights into how viewers are engaging with this content. Measure average time spent, page-by-page engagement, per person and per visit details. {helpLink}"
+                id="boxui.advancedContentInsights.advancedContentInsightsDescription"
+                values={
+                  Object {
+                    "helpLink": false,
                   }
-                />
-              }
-              theme="default"
+                }
+              />
+            }
+            theme="default"
+          >
+            <div
+              className="AdvancedContentInsightsToggle-icon"
             >
               <InfoBadge16
                 height={14}
                 width={14}
               />
-            </Tooltip>
-          </div>
+            </div>
+          </Tooltip>
         </React.Fragment>
       }
       onChange={[Function]}
@@ -71,65 +71,60 @@ exports[`features/advanced-content-insights/AdvancedContentInsightsToggle should
           >
             <FormattedMessage
               defaultMessage="Advanced Insights"
-              id="be.advancedContentInsights.advancedContentInsightsTitle"
+              id="boxui.advancedContentInsights.advancedContentInsightsTitle"
             >
               <div />
             </FormattedMessage>
-            <div
-              className="AdvancedContentInsightsToggle-tooltip"
-            >
-              <Tooltip
-                constrainToScrollParent={false}
-                constrainToWindow={true}
-                isDisabled={false}
-                position="top-center"
-                text={
-                  <FormattedMessage
-                    defaultMessage="Get actionable insights into how viewers are engaging with this content. Measure average time spent, page-by-page engagement, per person and per visit details. {helpLink}"
-                    id="be.advancedContentInsights.advancedContentInsightsDescription"
-                    values={
-                      Object {
-                        "helpLink": false,
-                      }
+            <Tooltip
+              constrainToScrollParent={false}
+              constrainToWindow={true}
+              isDisabled={false}
+              position="top-center"
+              text={
+                <FormattedMessage
+                  defaultMessage="Get actionable insights into how viewers are engaging with this content. Measure average time spent, page-by-page engagement, per person and per visit details. {helpLink}"
+                  id="boxui.advancedContentInsights.advancedContentInsightsDescription"
+                  values={
+                    Object {
+                      "helpLink": false,
                     }
-                  />
-                }
-                theme="default"
-              >
-                <TetherComponent
-                  attachment="bottom center"
-                  bodyElement={<body />}
-                  classPrefix="tooltip"
-                  constraints={
-                    Array [
-                      Object {
-                        "attachment": "together",
-                        "to": "window",
-                      },
-                    ]
                   }
-                  enabled={false}
-                  renderElementTag="div"
-                  renderElementTo={null}
-                  targetAttachment="top center"
+                />
+              }
+              theme="default"
+            >
+              <TetherComponent
+                attachment="bottom center"
+                bodyElement={<body />}
+                classPrefix="tooltip"
+                constraints={
+                  Array [
+                    Object {
+                      "attachment": "together",
+                      "to": "window",
+                    },
+                  ]
+                }
+                enabled={false}
+                renderElementTag="div"
+                renderElementTo={null}
+                targetAttachment="top center"
+              >
+                <div
+                  className="AdvancedContentInsightsToggle-icon"
+                  key=".0"
+                  onBlur={[Function]}
+                  onFocus={[Function]}
+                  onMouseEnter={[Function]}
+                  onMouseLeave={[Function]}
+                  tabIndex="0"
                 >
                   <InfoBadge16
                     height={14}
-                    key=".0"
-                    onBlur={[Function]}
-                    onFocus={[Function]}
-                    onMouseEnter={[Function]}
-                    onMouseLeave={[Function]}
-                    tabIndex="0"
                     width={14}
                   >
                     <AccessibleSVG
                       height={14}
-                      onBlur={[Function]}
-                      onFocus={[Function]}
-                      onMouseEnter={[Function]}
-                      onMouseLeave={[Function]}
-                      tabIndex="0"
                       viewBox="0 0 16 16"
                       width={14}
                     >
@@ -137,12 +132,7 @@ exports[`features/advanced-content-insights/AdvancedContentInsightsToggle should
                         aria-hidden="true"
                         focusable="false"
                         height={14}
-                        onBlur={[Function]}
-                        onFocus={[Function]}
-                        onMouseEnter={[Function]}
-                        onMouseLeave={[Function]}
                         role="presentation"
-                        tabIndex="0"
                         viewBox="0 0 16 16"
                         width={14}
                       >
@@ -153,9 +143,9 @@ exports[`features/advanced-content-insights/AdvancedContentInsightsToggle should
                       </svg>
                     </AccessibleSVG>
                   </InfoBadge16>
-                </TetherComponent>
-              </Tooltip>
-            </div>
+                </div>
+              </TetherComponent>
+            </Tooltip>
           </div>
         </label>
       </div>

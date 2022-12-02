@@ -85,7 +85,7 @@ describe('components/modal/ModalDialog', () => {
         expect(wrapper.find('.modal-back-button').length).toBeFalsy();
     });
 
-    test('should call onBackClick when back button is clicked on', () => {
+    test('should call onRequestBack when back button is clicked on', () => {
         wrapper.find('.modal-back-button').simulate('click');
         sinon.assert.calledOnce(onRequestBack);
     });

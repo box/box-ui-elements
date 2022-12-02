@@ -1,6 +1,5 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import sinon from 'sinon';
 import AdvancedContentInsightsToggle from '../AdvancedContentInsightsToggle';
 
 describe('features/advanced-content-insights/AdvancedContentInsightsToggle', () => {
@@ -22,10 +21,11 @@ describe('features/advanced-content-insights/AdvancedContentInsightsToggle', () 
     });
 
     test('should call the callback function if the toggle changes', () => {
-        const onChange = sinon.spy();
+        const onChange = jest.fn();
         const wrapper = getWrapper({ onChange }, { isActive: true });
-        const toggle = wrapper.find('[data-testid="insights-toggle"]').at(1);
+        const toggle = wrapper.find('[data-testid="insights-toggle"] input');
+        expect(toggle.length).toBe(1);
         toggle.simulate('change');
-        expect(onChange.calledOnce).toBe(true);
+        expect(onChange).toBeCalled();
     });
 });

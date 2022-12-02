@@ -761,8 +761,8 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             <div className="shared-link-toggle-row">
                                 <AdvancedContentInsightsToggle
                                     isActive={advancedContentInsightsConfig.isActive}
+                                    isDisabled={submitting || isFetching}
                                     onChange={onAdvancedContentInsightsToggle}
-                                    submitting={submitting || isFetching}
                                 />
                             </div>
                         </>

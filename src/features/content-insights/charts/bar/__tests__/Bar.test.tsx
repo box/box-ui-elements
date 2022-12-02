@@ -52,14 +52,14 @@ describe('features/content-insights/charts/bar/Bar', () => {
         test('should render the label if provided', () => {
             const wrapper = getWrapper({ label: 'label' });
             const element = getFirstChild(wrapper);
-            expect(element.querySelectorAll('.ca-Bar-Label').length).toBe(1);
+            expect(element.querySelectorAll('.ca-Bar-label').length).toBe(1);
             expect(wrapper.queryByText('label')).toBeInTheDocument();
         });
 
         test('should not render the label if not provided', () => {
             const wrapper = getWrapper();
             const element = getFirstChild(wrapper);
-            expect(element.querySelectorAll('.ca-Bar-Label').length).toBe(0);
+            expect(element.querySelectorAll('.ca-Bar-label').length).toBe(0);
             expect(wrapper.queryByText('label')).not.toBeInTheDocument();
         });
     });
