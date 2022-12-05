@@ -67,5 +67,16 @@ describe('features/collaborator-avatars/CollaboratorList', () => {
             });
             expect(wrapper).toMatchSnapshot();
         });
+
+        test('should set link target to _self if inside an iframe', () => {
+            const { top } = window;
+            delete window.top;
+            window.top = {};
+
+            const wrapper = getWrapper();
+            expect(wrapper).toMatchSnapshot();
+
+            window.top = top;
+        });
     });
 });

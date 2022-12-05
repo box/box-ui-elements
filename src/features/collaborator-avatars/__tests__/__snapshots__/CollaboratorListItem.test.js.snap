@@ -153,3 +153,59 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
   </div>
 </li>
 `;
+
+exports[`features/collaborator-avatars/CollaboratorListItem render() should set link target to _self if inside an iframe 1`] = `
+<li>
+  <div
+    className="collaborator-list-item"
+  >
+    <div
+      className="user"
+    >
+      <CollaboratorAvatarItem
+        allowBadging={true}
+        email="testc@example.com"
+        expiration={
+          Object {
+            "expiresAt": "Jan 1, 1966",
+          }
+        }
+        hasCustomAvatar={true}
+        id={1}
+        name="test c"
+      />
+      <div
+        className="info"
+      >
+        <div
+          className="name"
+        >
+          <Link
+            className=""
+            href="/profile/undefined"
+            rel="noopener"
+            target="_self"
+            title="test c"
+          >
+            test c
+          </Link>
+        </div>
+        <div
+          className="email"
+        >
+          <Link
+            className=""
+            href="mailto:testc@example.com"
+            title="testc@example.com"
+          >
+            testc@example.com
+          </Link>
+        </div>
+      </div>
+    </div>
+    <div
+      className="role"
+    />
+  </div>
+</li>
+`;

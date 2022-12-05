@@ -12,6 +12,7 @@ import type {
     item as ItemType,
     collaboratorType,
 } from '../unified-share-modal/flowTypes';
+import { isInsideIframe } from '../../utils/iframe';
 
 import commonMessages from '../../common/messages';
 
@@ -41,7 +42,12 @@ class CollaboratorList extends React.Component<Props> {
         const collaboratorsPageLink = `/${type}/${id}/collaborators/`;
 
         return (
-            <Link href={collaboratorsPageLink} rel="noopener" target="_blank" {...trackingProp}>
+            <Link
+                href={collaboratorsPageLink}
+                rel="noopener"
+                target={isInsideIframe() ? '_self' : '_blank'}
+                {...trackingProp}
+            >
                 {children}
             </Link>
         );

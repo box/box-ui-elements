@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
 import { Link } from '../../components/link';
+import { isInsideIframe } from '../../utils/iframe';
 
 import { COLLAB_GROUP_TYPE, COLLAB_PENDING_TYPE } from './constants';
 import messages from './messages';
@@ -38,7 +39,7 @@ const CollaboratorListItem = (props: Props) => {
                 <Link
                     href={profileURL || `/profile/${userID}`}
                     rel="noopener"
-                    target="_blank"
+                    target={isInsideIframe() ? '_self' : '_blank'}
                     title={name}
                     {...usernameProps}
                 >

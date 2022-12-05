@@ -5,6 +5,15 @@
  */
 
 /**
+ * Check if the current window is inside an iframe
+ *
+ * @return {boolean}
+ */
+export function isInsideIframe() {
+    return window.top !== window.self;
+}
+
+/**
  * Creates an empty iframe or uses an existing one
  * for the purposes of downloading or printing
  *
