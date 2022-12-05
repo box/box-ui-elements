@@ -15,7 +15,7 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
     };
 
     const renderComponent = props =>
-        render(<ActivityThreadReplyForm onReplyCreate={noop} {...props} />, {
+        render(<ActivityThreadReplyForm onReplyCreate={noop} onHide={jest.fn()} onShow={jest.fn()} {...props} />, {
             wrapper: Wrapper,
         });
 
